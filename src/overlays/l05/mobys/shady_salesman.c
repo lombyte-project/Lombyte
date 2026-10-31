@@ -16,6 +16,7 @@
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern char  D_L05_001671C0[];
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -73,7 +74,6 @@ extern float                    fast_subtract_rotations(float, float);
 extern float                    vector_length_xy(void *);
 extern int                      scale_game_frames(int);
 extern char                     shady_salesman_dialogue_name[] __asm__("D_L05_00161EF8");
-extern void                     queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern L16WatchPlayer           D_0013E633_watch __asm__("D_0013E533");
 
 void shady_salesman_update(WM *m) __asm__("FUN_L05_003180a0");

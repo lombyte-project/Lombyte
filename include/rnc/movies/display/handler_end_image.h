@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_MOVIES_DISPLAY_HANDLER_END_IMAGE_H
+#define LOMBYTE_RNC_MOVIES_DISPLAY_HANDLER_END_IMAGE_H
+
+#include "types.h"
+
+s32 handler_end_image(void) __asm__("FUN_0023b540");
+
+#endif /* LOMBYTE_RNC_MOVIES_DISPLAY_HANDLER_END_IMAGE_H */

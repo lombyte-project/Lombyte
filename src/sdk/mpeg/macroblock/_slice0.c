@@ -1,16 +1,16 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/ipu/wait_bdec_out.h"
+#include "rnc/sdk/mpeg/bitstream/_peepBit.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/macroblock/_decMB0.h"
+#include "rnc/sdk/mpeg/macroblock/domc.h"
+#include "rnc/sdk/mpeg/macroblock/mb_address_increment.h"
+#include "rnc/sdk/mpeg/macroblock/skip_mb0.h"
+#include "rnc/sdk/mpeg/macroblock/slicea0.h"
 
 extern u8  too_many_macroblocks_error_message[] __asm__("D_00153848");
-extern s32 _Error();
-extern s32 _decMB0();
-extern s32 _doMC();
-extern s32 _mbAddressIncrement();
 extern s32 _motionComp0();
-extern s32 _peepBit();
-extern s32 _skipMB0();
-extern s32 _sliceA0();
-extern s32 _waitBdecOut();
 
 s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
     s32 blk[16];

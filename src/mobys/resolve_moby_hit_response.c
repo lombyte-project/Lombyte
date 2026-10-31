@@ -4,6 +4,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/hit_response_tables.h"
+#include "rnc/mobys/get_moby_hit_state.h"
 
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
 
@@ -50,13 +51,12 @@ typedef struct {
     f32 x, y;
 } O_25a478;
 
-extern u8        D_0013E533[];
-extern f32       hit_damage_override_table[2] __asm__("D_0015FFC8") __attribute__((sda));
-extern Q_25a478 *get_moby_hit_state(void *);
-extern s32       scale_game_frames(s32) __asm__("func_001F96F8");
-extern f32       fast_arc_tan(f32, f32) __asm__("func_001F9E90");
-extern f32       fast_cos(f32) __asm__("func_001F9DC8");
-extern f32       fast_sin(f32) __asm__("func_001F9DE0");
+extern u8  D_0013E533[];
+extern f32 hit_damage_override_table[2] __asm__("D_0015FFC8") __attribute__((sda));
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
 s32 resolve_moby_hit_response(O_25a478 *obj,
                               P_25a478 *p,

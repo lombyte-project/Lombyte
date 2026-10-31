@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_state.h"
 #include "qzero.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
 
 typedef struct {
     u8           pad0[0x40];
@@ -63,8 +64,6 @@ extern void         transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa
 extern void         transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void         transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32          vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern int          use_ammo(int, int) __asm__("FUN_L00_00233db8");
-extern int          get_ammo(int) __asm__("FUN_L00_00233e98");
 extern void         FUN_L00_0024f7c8(void *, int, void *);
 /* Float arguments first: the order they are evaluated in gives retail's registers. */
 extern void FUN_L00_002c1928_f(f32, f32, f32, f32 *, f32 *, f32 *) __asm__("FUN_L00_002c1928");

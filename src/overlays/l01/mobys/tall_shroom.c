@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 
 typedef struct {
     u8  pad0[0x2C];
@@ -20,7 +21,6 @@ extern s32   D_L01_0015F580;
 void        *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void  spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
-extern void  spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 
 void tall_shroom_update(TriggerMoby *obj) __asm__("FUN_L01_0030d0f0");
 

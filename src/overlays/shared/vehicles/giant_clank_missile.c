@@ -15,6 +15,8 @@
 #include "sda.h"
 #include "rnc/overlay/shared/vehicles/giant_clank_missile_data/update_giant_clank_missile_2.h"
 #include "rnc/overlay/shared/vehicles/giant_clank_missile_data/giant_clank_missile_update.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 typedef float V[4] __attribute__((aligned(16)));
 
@@ -221,7 +223,6 @@ typedef struct M_29E8A0 {
 extern float D_L15_001673C0[4];
 extern float fast_sin(float);
 extern float vector_length_xy(void *);
-extern int   random_integer_below(int);
 extern int   scale_game_frames(int);
 
 extern Cols       l15_missile_burst_primary_color_palette __asm__("D_L15_001E2660");
@@ -239,7 +240,6 @@ extern float spring_turn(float *vel, float cur, float target, float k, float d, 
 extern float fast_vec_dist(void *, void *);
 
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_00257b90(int, int);
 extern unsigned char *D_L15_001B26DC NOT_SDA;
 extern unsigned char                *FUN_L00_002712b8(void  *pos,
                                                       float *vec,
@@ -265,7 +265,6 @@ extern void spawn_particle(void *, void *, int, int, float, int, int, float, int
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int);
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern char D_0013F490[];
 extern char D_0013F350[];
 
@@ -592,7 +591,7 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
                         0x4F007FFF,
                         0x1F00007F,
                         40000.0f,
-                        FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x78)),
+                        random_int_between(scale_game_frames(0x3C), scale_game_frames(0x78)),
                         1,
                         -1,
                         -1);
@@ -625,7 +624,7 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
                     burst_position_or_velocity, burst_position_or_velocity, D_0015ED6C * 10.0f);
                 spawn_debris((char *)missile_moby->pos,
                              (char *)burst_position_or_velocity,
-                             FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x5A)),
+                             random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)),
                              0,
                              0);
                 {
@@ -649,9 +648,9 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
                         int *p1 = &c1.c[random_integer_below(6)];
                         int *p2 = &c2.c[random_integer_below(6)];
                         int  colored_burst_effect_frame_count =
-                            FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
+                            random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
                         int colored_burst_effect_secondary_frame_count =
-                            FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E));
+                            random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E));
                         int white_burst_effect_frame_count,
                             white_burst_effect_secondary_frame_count;
                         spawn_particle(missile_moby->pos,
@@ -665,9 +664,9 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
                                        0,
                                        0);
                         white_burst_effect_frame_count =
-                            FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(0xA));
+                            random_int_between(scale_game_frames(5), scale_game_frames(0xA));
                         white_burst_effect_secondary_frame_count =
-                            FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
+                            random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
                         spawn_particle(missile_moby->pos,
                                        burst_drift_velocity,
                                        0x7FFFFFFF,
@@ -705,7 +704,7 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
                             burst_particle_velocity,
                             *p1,
                             *p2,
-                            FUN_L00_00257b90(scale_game_frames(0x14), scale_game_frames(0x23)),
+                            random_int_between(scale_game_frames(0x14), scale_game_frames(0x23)),
                             200000.0f);
                     }
                 }

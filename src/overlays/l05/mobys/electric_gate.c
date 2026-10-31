@@ -7,6 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F130), where it is exact; names translated to the US level program. */
 
@@ -16,7 +17,6 @@ extern int   D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8");
 extern void  draw_electric_gate_beams(struct Moby *moby) __asm__("FUN_L05_0030de90");
-void         add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 
 extern short electric_gate_beam_callback_frame_gp __asm__("D_L05_00161D38") __attribute__((sda));
 void         electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");

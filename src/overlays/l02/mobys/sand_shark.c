@@ -12,14 +12,16 @@
 
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l02/mobys/sand_shark_globals.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/world/collision/ground_probe.h"
 
 extern float sand_shark_dust_vertical_velocity_scale_gp __asm__("D_L02_001619D4")
     __attribute__((sda));
 extern float sand_shark_dust_position_jitter_radius_gp __asm__("D_L02_001619DC")
     __attribute__((sda));
 unsigned short D_L02_001619E0 = 0;
-extern int     random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern float   randf_sym(float, float) __asm__("FUN_L00_00257c48");
 /* Dust puff emitter, declared in the argument order the other levels use (pos, three floats, n, vel, size, colour). */
 extern unsigned char *
 spawn_puff(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
@@ -223,9 +225,7 @@ extern char         sand_shark_missing_path_message_format[] __asm__("D_L02_001F
 extern char         sand_shark_empty_path_message_format[] __asm__("D_L02_001FA8C0");
 extern void         FUN_001e93b0_e50(char *, short) __asm__("FUN_001e93b0");
 extern int          rand_e50(void) __asm__("FUN_001160d8");
-extern float        probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float        approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern int          is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int          is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern int          allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void         FUN_L00_00257470_e50(void *, int, int) __asm__("FUN_L00_00257470");
@@ -238,7 +238,6 @@ extern void FUN_L00_0025a120_e50(void *) __asm__("FUN_L00_0025a120");
 extern void
            turn_angle_e50(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern int step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void FUN_L00_00263ac8_e50(void *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern void
 FUN_L00_00269958_e50(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
@@ -1230,12 +1229,11 @@ typedef struct {
 
 #include "rnc/overlay/l02/mobys/sand_shark_data/handle_sand_shark_damage_and_targeting.h"
 
-extern int  *D_L02_001B0AB0_5c88[] __asm__("D_L02_001B0AB0");
-extern float FUN_00213508(void *, int, float);
-extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern int   FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
-extern int   select_group_class_29c_moby(void *argp) __asm__("FUN_L02_002d5658");
-extern void  extend_group_sand_shark_timers(char *arg) __asm__("FUN_L02_002d5728");
+extern int *D_L02_001B0AB0_5c88[] __asm__("D_L02_001B0AB0");
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern int  FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
+extern int  select_group_class_29c_moby(void *argp) __asm__("FUN_L02_002d5658");
+extern void extend_group_sand_shark_timers(char *arg) __asm__("FUN_L02_002d5728");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void
@@ -1307,7 +1305,7 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
             moby_vars->f148 = 0.5f;
             qcopy(&ground_probe_position, moby + 0x10);
             ground_probe_position.f[2] += 2.0f;
-            ground_height = FUN_00213508(&ground_probe_position, 0, 0.5f);
+            ground_height = probe_ground_height(&ground_probe_position, 0, 0.5f);
             if (MOBY(moby)->pos.z < ground_height) {
                 MOBY(moby)->pos.z = ground_height;
             }

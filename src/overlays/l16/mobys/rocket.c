@@ -16,6 +16,8 @@
 #include "rnc/world/collision/collision_line.h"
 
 #include "qcopy.h"
+#include "rnc/math/random.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
@@ -42,32 +44,29 @@ spawn_particle(void *, void *, int, int, int, int, float, float, float, float, f
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, frame_time;
 extern float frame_time_sq;
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int   D_L16_0015F580_spark __asm__("D_L16_0015F580"); /* no foreign declaration */
 extern int   collision_line() __asm__("FUN_001efa68");
 extern void  spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
-extern void func_L00_0025F4A8_alt(void *,
-                                  void *,
-                                  void *,
-                                  float,
-                                  float,
-                                  int,
-                                  int,
-                                  int,
-                                  float,
-                                  float,
-                                  float,
-                                  float,
-                                  int,
-                                  float,
-                                  int,
-                                  int,
-                                  int,
-                                  int) __asm__("FUN_L00_0025e450");
-void        build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
-void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern void  func_L00_0025F4A8_alt(void *,
+                                   void *,
+                                   void *,
+                                   float,
+                                   float,
+                                   int,
+                                   int,
+                                   int,
+                                   float,
+                                   float,
+                                   float,
+                                   float,
+                                   int,
+                                   float,
+                                   int,
+                                   int,
+                                   int,
+                                   int) __asm__("FUN_L00_0025e450");
+void         build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern L16SparkHit D_L16_001742C0_hit __asm__("D_L16_00174240");
 extern float       func_L00_0025CCF0_spark(void *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
 

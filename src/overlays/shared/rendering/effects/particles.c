@@ -22,6 +22,7 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "rnc/ui/text/load_display_text_resource_entry.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern unsigned char *D_L00_001B2130 NOT_SDA;
 unsigned char                       *FUN_L00_002712b8(OvlQuad *pos,
@@ -255,7 +256,6 @@ void update_expanding_rotating_alpha_fade_particle(unsigned char *particle) {
 }
 
 extern unsigned char *D_L00_001B213C NOT_SDA;
-int                                  FUN_00213260(int);
 unsigned char                       *spawn_random_alpha_rotated_particle(u128 *position,
                                                                          u128 *initial_velocity,
                                                                          float x) __asm__("FUN_L00_00271b18");
@@ -266,14 +266,14 @@ spawn_random_alpha_rotated_particle(u128 *position, u128 *initial_velocity, floa
     unsigned char *particle = create_part(0x2f);
     if (particle) {
         qcopy(particle + 0x10, position);
-        *(int *)(particle + 4) = ((FUN_00213260(8) + 0x28) << 24) | 0x808080;
+        *(int *)(particle + 4) = ((random_integer_below(8) + 0x28) << 24) | 0x808080;
         particle[9] = truncate_float_to_s32(2.0f) + 0x20;
         particle[3] = 0x48;
         particle[1] = 0;
         particle[2] = *D_L00_001B213C;
         *(float *)(particle + 0xc) = x;
         qcopy(particle + 0x20, initial_velocity);
-        particle[8] = FUN_00213260(0x100);
+        particle[8] = random_integer_below(0x100);
     }
     return particle;
 }
@@ -1296,19 +1296,6 @@ struct EmberParticle {
     struct EmberMotion m;    /* 0x20 */
 };
 
-extern s32            FUN_L00_00257b90(s32, s32);
-extern unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
-    void *a,
-    void *b,
-    int   c,
-    int   d,
-    float f,
-    int   n,
-    int   e,
-    int   g,
-    int   h) __asm__("FUN_L00_0026bb70");
-extern unsigned char *
-mine_debris(void *a, void *b, int c, int d, float f, int n, int k) __asm__("FUN_L00_0026bed0");
 extern int FUN_L00_002371e0(int, int, float);
 extern u32 large_floor_burst_random_limit_plus_one_gp __asm__("D_L00_00160228")
     __attribute__((sda));
@@ -1339,7 +1326,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
         f = ember_particle->size;
         f *= 0.5f;
         emitted_lifetime_frames =
-            FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x78));
+            random_int_between(scale_game_frames(0x3C), scale_game_frames(0x78));
         spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&ember_particle->pos,
                                                                           &m->vel,
                                                                           ember_particle->color,
@@ -1357,7 +1344,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
         f = ember_particle->size;
         f *= 0.25f;
         emitted_lifetime_frames =
-            FUN_L00_00257b90(scale_game_frames(0x1E), scale_game_frames(0x3C));
+            random_int_between(scale_game_frames(0x1E), scale_game_frames(0x3C));
         spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&ember_particle->pos,
                                                                           &m->vel,
                                                                           ember_particle->color,
@@ -1393,7 +1380,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
             emitted_position.f[2] -= 1.5f;
             f = random_float_between(420000.0f, 630000.0f);
             emitted_lifetime_frames =
-                FUN_L00_00257b90(scale_game_frames(0x5A), scale_game_frames(0x96));
+                random_int_between(scale_game_frames(0x5A), scale_game_frames(0x96));
             mine_debris(&emitted_position,
                         &m->vel,
                         debris_initial_color,
@@ -1553,7 +1540,7 @@ unsigned char *spawn_mode_controlled_orbiting_trail_particle(int   k,
         particle[1] = 0;
         particle[3] = 0x48;
         *(float *)(particle + 0xc) = 52500.0f;
-        particle[8] = FUN_00213260(0xFF);
+        particle[8] = random_integer_below(0xFF);
         *(short *)(particle_data + 0x1C) = mode;
         *(short *)(particle_data + 0x18) = 0;
         if (mode == 0) {

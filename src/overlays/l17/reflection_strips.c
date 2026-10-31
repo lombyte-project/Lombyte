@@ -5,6 +5,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/rendering/mesh_batch.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Projects each direction pair into 2D texture coordinates (reflection mapping). */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7018), where it is exact; names translated to the US level program. */
@@ -72,7 +73,6 @@ void compute_reflection_sphere_map_uvs(
 
 extern char reflection_strip_uv_buffer[] __asm__("D_L17_001DE8A0");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 void        compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");
 
 int reflection_strip_pair0_vertex_counts[2] __asm__("D_L17_001623F0") = {26, 26};

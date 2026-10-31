@@ -18,10 +18,10 @@
 #include "rnc/overlay/l18/mobys/camera_transition_globals.h"
 
 #include "sda.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 
 extern float fast_add_rotations(float, float);
@@ -35,7 +35,6 @@ extern void  FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216
 extern void  FUN_L00_002ea9d8_q(void *) __asm__("FUN_L00_002ea9d8");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void  FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void  FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 
 extern int                D_L18_00179E10[] NOT_SDA;
 extern int D_L18_0017EF08 NOT_SDA;
@@ -123,7 +122,7 @@ void boss_camera_transition_update(struct Moby *moby) {
                 transition_scratch_vectors[10] = *(float *)(transition_private_vars + 0x4C);
                 FUN_L00_00216f90_q(
                     transition_private_vars + 0x40, transition_scratch_vectors + 8, 0, 0);
-                FUN_L00_002eac18_q(2);
+                jet_end_mount(2);
                 moby->state = 5;
             } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
                 clear_u64_value(transition_scratch_vectors + 8);
@@ -177,7 +176,7 @@ void boss_camera_transition_update(struct Moby *moby) {
                 transition_scratch_vectors[10] = *(float *)(transition_private_vars + 0x4C);
                 FUN_L00_00216f90_q(
                     transition_private_vars + 0x40, transition_scratch_vectors + 8, 0, 0);
-                FUN_L00_002eac18_q(3);
+                jet_end_mount(3);
                 moby->state = 5;
             }
         } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {

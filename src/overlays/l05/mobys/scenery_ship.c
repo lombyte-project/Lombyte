@@ -10,6 +10,9 @@
 #include "rnc/math/random.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/mobys/moby_spawn.h"
+#include "rnc/camera/sample_camera_path.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
 
@@ -46,7 +49,6 @@ extern float fast_sin(float);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int  lerp_2d7020(float, int, int) __asm__("FUN_001fa6e0");
 extern int  frame_number __asm__("D_L05_0015F5CC");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 /* Per-frame glow: updates three parts, pulses the colour, and queues a redraw
  * once per frame. */
@@ -137,7 +139,6 @@ extern float func_001F9B88_2D8388(float input) __asm__("FUN_001f99c0");
 extern float func_001F9FA8_2D8388(float) __asm__("FUN_001f9de0");
 extern int   func_001FA8A8_2D8388(int, int, float) __asm__("FUN_001fa6e0");
 extern void  advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
-extern int   func_L00_0028EB98_2D8388(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int   allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void  func_001F9BD8_2D8388(float *, float *, float *) __asm__("FUN_001f9a10");
 extern int   func_001F9850_2D8388(int) __asm__("FUN_001f96f8");
@@ -254,7 +255,7 @@ void scenery_ship_update(char *moby) {
         MOBY(moby)->glow_color =
             func_001FA8A8_2D8388(D_L05_001613D8, D_L05_001613DC, (wave + 1.0f) * 0.5f);
         advance_scenery_ship_along_path(moby, (int *)l05_paths[scenery_ship_instance_vars->path]);
-        if (func_L00_0028EB98_2D8388(moby, scenery_ship_instance_vars->f328) == 0) {
+        if (voice_is_playing(moby, scenery_ship_instance_vars->f328) == 0) {
             scenery_ship_instance_vars->f328 = allocate_voice_for_target_entry(1, 4, (int)moby);
         }
         if ((frame_number & 3) == 0) {
@@ -359,8 +360,6 @@ void scenery_ship_update(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8AD8), where it is exact; names translated to the US level program. */
 
-extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
-
 extern float scenery_ship_path_advance_scale_gp __asm__("D_L05_001613D0") __attribute__((sda));
 void         advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 
@@ -406,7 +405,6 @@ float D_L05_001CDD70[4][2] = {
     {1.0f, 0.5f},
 };
 
-extern u64          get_effect_texture(int) __asm__("FUN_001f44b8");
 extern int          interpolate_color_7920(float, int, int) __asm__("FUN_001fa6e0");
 extern void         draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern void         memset(void *, int, int) __asm__("FUN_001153fc");

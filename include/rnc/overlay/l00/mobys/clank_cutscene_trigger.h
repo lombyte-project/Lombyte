@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L00_MOBYS_CLANK_CUTSCENE_TRIGGER_H
+#define LOMBYTE_RNC_OVERLAY_L00_MOBYS_CLANK_CUTSCENE_TRIGGER_H
+
+#include "types.h"
+
+void clank_cutscene_trigger_update() __asm__("FUN_L00_002d9dc8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L00_MOBYS_CLANK_CUTSCENE_TRIGGER_H */

@@ -12,6 +12,9 @@
 #include "rnc/globals.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 
 #define BEAM_QUAD_YZ                                                                       \
     {                                                                                      \
@@ -363,15 +366,11 @@ typedef struct {
 extern long  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-extern void  font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void  func_L00_001FDE48_2b3628(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
-extern f32   random_angle_radians(void) __asm__("FUN_00213308");
 extern u8   *spawn_burst(V4 *, V4 *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
-extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern u8   *spawn_puff(V4 *, f32, f32, f32, f32, s32, V4 *, u32) __asm__("FUN_L00_0026d000");
 extern char *create_moby(int);
 extern void  FUN_L00_002b3628_4198(void) __asm__("FUN_L00_002b3628");
-extern s32   FUN_L00_0020d498_4198(s32) __asm__("FUN_L00_0020d498");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void  FUN_L00_002b3c50_4198(void *) __asm__("FUN_L00_002b3c50");
 
@@ -914,7 +913,7 @@ void thruster_pack_flame_update(void *moby) {
         beam_moby->u34 |= 1;
         break;
     case STATE_WAIT_FOR_BEAM:
-        if (FUN_L00_0020d498_4198(3) != 3) {
+        if (hero_slot_item_id(3) != 3) {
             mark_moby_for_removal(beam_moby);
         } else if (flag != 0) {
             beam_moby->state = 2;

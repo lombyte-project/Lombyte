@@ -8,6 +8,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 
 typedef struct {
     float x, y, z, w;
@@ -21,7 +22,6 @@ void  FUN_L00_0025d1b8_2d3838(void *) __asm__("FUN_L00_0025d1b8");
 
 extern int FUN_L00_001fefc8(void *);
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 unsigned char *
 mine_camera_blast(unsigned char *s, void *b, int c, void *d) __asm__("FUN_L00_002d3838");

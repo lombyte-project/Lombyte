@@ -12,6 +12,11 @@
 #include "rnc/overlay/l06/scripted_camera_sequence.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/ui/help/try_set_help_message.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
+#include "rnc/overlay/shared/camera/set_nonzero_follow_camera_parameters.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/ui/help/remove_help_message_for_selector.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 
 extern char D_0013F3D0[];
 
@@ -22,13 +27,7 @@ extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90
 extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void  set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void  jet_end_mount(int) __asm__("FUN_L00_002eac18");
 
-extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
-extern int  remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
-extern void fade_to_black(int) __asm__("FUN_001f4a58");
-
-extern int  random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 
 typedef struct {

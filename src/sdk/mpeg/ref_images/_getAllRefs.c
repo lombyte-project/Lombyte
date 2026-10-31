@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/mpeg/ref_images/_getRef0.h"
 
 /* libmpeg motion compensation: builds the forward and backward
    predictions of one macroblock (the MPEG-2 reference decoder's
@@ -12,18 +13,6 @@ extern char forward_field_invalid_motion_type_format[] __asm__("D_00153730");
 extern char backward_field_invalid_motion_type_format[] __asm__("D_00153750");
 extern void _Error1(struct MpegDecoder *d, char *fmt, int code);
 extern void _dualPrimeVector(struct MpegDecoder *d, int dmv[2][2], int *dmvector, int mvx, int mvy);
-extern void _getRef0(struct MpegDecoder  *d,
-                     struct MpegRefImage *ref,
-                     int                  sfield,
-                     int                  dfield,
-                     int                  yofs,
-                     int                  h,
-                     int                  bx,
-                     int                  by,
-                     int                  dx,
-                     int                  dy,
-                     int                  fieldpred,
-                     int                  avg);
 
 void _getAllRefs(struct MpegDecoder *decoder,
                  int                 bx,

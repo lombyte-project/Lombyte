@@ -6,12 +6,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6B60), where it is exact; names translated to the US level program. */
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
-
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 #include "qcopy.h"
 /* UpdateMoby_656: steps the moby's animation state from 0/2 (when flagged) and 1/3 (when the timer runs out) */

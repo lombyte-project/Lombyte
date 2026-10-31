@@ -33,6 +33,7 @@
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
+#include "rnc/math/random.h"
 
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float);
@@ -394,11 +395,7 @@ void update_rocket_tank_damage_and_aim(void *mv) {
     trooper_anim_finish(moby_bytes, tank_data + 0x60);
 }
 
-extern s32  random_integer_below(s32) __asm__("FUN_00213260");
-extern int  random_integer_below(int);
 extern int *D_L18_001B0EB0[];
-extern int  random_integer_below(int) __asm__("FUN_00213260");
-s32         random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 /* Steers the moby along its path toward the next node, slowing on sharp turns. */
 extern short rocket_tank_path_target_speed_gp __asm__("D_L18_00162478") __attribute__((sda));

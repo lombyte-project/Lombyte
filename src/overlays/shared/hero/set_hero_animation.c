@@ -24,6 +24,7 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/hero/set_second_hero_easing_parameters.h"
 
 extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 
@@ -422,8 +423,6 @@ extern char          D_L00_00196D00[] NOT_SDA;
 extern unsigned char D_0015EDB4_macro[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern int           FUN_L00_0024f698(void *);
 extern short         hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") __attribute__((sda));
-extern void          clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
-extern void          clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");
 extern void blend_hero_mapped_moby_animation(int, int, float) __asm__("FUN_L00_00232220");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
@@ -1761,8 +1760,6 @@ void animate_hero_slot4_and_slot5_visuals(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002352D0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0016C860[];
-extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
-extern void update_hero_item_mobys(void) __asm__("FUN_L00_0020f580");
 extern void animate_hero_slot4_and_slot5_visuals(void) __asm__("FUN_L00_00234808");
 
 void update_hero_slot4_and_slot5_mobys(int moby_override) __asm__("FUN_L00_00234a50");

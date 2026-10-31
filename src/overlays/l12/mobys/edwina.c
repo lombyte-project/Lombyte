@@ -16,6 +16,10 @@
 #include "rnc/overlay/l12/mobys/watcher.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
+#include "rnc/save/memcard_save_data.h"
 
 extern int scale_game_frames(int);
 
@@ -27,12 +31,8 @@ extern float vector_length_xy(void *);
 extern void  begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern int   D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern void  FUN_L00_00250df8_x(void *) __asm__("FUN_L00_00250df8");
-extern void  queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern int   update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int   initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
-extern int   memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void  grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void  update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void  jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void  build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");

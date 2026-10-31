@@ -10,93 +10,15 @@
 #include "sda.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern void update_falling_effect_particle() __asm__("FUN_L00_00268d48");
 extern void update_timed_effect_particle() __asm__("FUN_L00_00268fe8");
-extern void update_three_phase_effect_particle(void) __asm__("FUN_L00_00269290");
-extern void update_drifting_effect_particle_with_distance_fade(void) __asm__("FUN_L00_002694f8");
-extern void update_damped_effect_particle(void) __asm__("FUN_L00_00269a70");
-extern void update_scalar_and_fade_effect_particle(void) __asm__("FUN_L00_00269c70");
-extern void update_colliding_effect_particle(void) __asm__("FUN_L00_00269d20");
 extern void FUN_L00_0026a418(void);
-extern void update_animated_fading_effect_particle(void) __asm__("FUN_L00_0026a5b8");
-extern void update_rotating_grayscale_effect_particle(void) __asm__("FUN_L00_0026a6f0");
-extern void update_damped_blue_shift_effect_particle(void) __asm__("FUN_L00_0026a880");
-extern void update_branching_and_fading_effect_particle(void) __asm__("FUN_L00_0026ac78");
-extern void update_spinning_and_fading_effect_particle(void) __asm__("FUN_L00_0026b500");
-extern void update_spinning_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026b910");
-extern void update_attached_or_fading_effect_particle(void) __asm__("FUN_L00_0026ba68");
-extern void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(void) __asm__("FUN_L00_0026bca8");
-extern void update_fading_debris_particle_with_landing_spawn(void) __asm__("FUN_L00_0026c088");
 extern void FUN_L00_0026c3c8(void);
-extern void update_descending_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026c558");
-extern void move_and_fade_two_point_particle(void) __asm__("FUN_L00_0026c7f0");
-extern void update_spiraling_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026c860");
-extern void
-update_shrinking_effect_particle_with_secondary_spawns(void) __asm__("FUN_L00_0026ccb0");
 extern void FUN_L00_00267b10(void);
-extern void update_moving_spinning_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026d1b0");
-extern void update_source_bound_effect_particle(void) __asm__("FUN_L00_0026d470");
-extern void update_color_decaying_effect_particle_with_collision(void) __asm__("FUN_L00_0026d700");
-extern void update_source_attached_fading_effect_particle(void) __asm__("FUN_L00_0026dbe0");
-extern void move_and_fade_effect_particle_by_lifetime(void) __asm__("FUN_L00_0026de00");
-extern void update_moving_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026e150");
-extern void
-update_animated_source_attached_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026e3a8");
-extern void update_linked_effect_particle_with_collision_and_fade(void) __asm__("FUN_L00_0026e670");
-extern void update_target_relative_two_point_effect_particle(void) __asm__("FUN_L00_0026eb88");
-extern void update_moby_bound_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026ee48");
-extern void tick_effect_particle_lifetime(void) __asm__("FUN_L00_0026f048");
-extern void update_swaying_and_fading_effect_particle(void) __asm__("FUN_L00_0026f280");
-extern void update_ballistic_effect_particle_with_contact_spawns(void) __asm__("FUN_L00_0026f660");
-extern void update_flag_controlled_pulsing_effect_particle(void) __asm__("FUN_L00_0026f898");
-extern void update_offset_and_pulse_effect_particle(void) __asm__("FUN_L00_0026fa00");
-extern void update_damped_and_fading_effect_particle(void) __asm__("FUN_L00_0026fb00");
-extern void update_animated_offset_effect_particle(void) __asm__("FUN_L00_0026fc38");
-extern void
-update_splitting_effect_particle_with_collision_response_and_fade(void) __asm__("FUN_L00_0026ff10");
-extern void tick_finite_effect_particle_lifetime(void) __asm__("FUN_L00_00270710");
-extern void
-update_splitting_effect_particle_with_collision_and_fade(void) __asm__("FUN_L00_00270948");
-extern void update_accelerating_fade_in_out_effect_particle(void) __asm__("FUN_L00_002710a0");
-extern void update_moving_rotating_resizing_alpha_fade_particle(void) __asm__("FUN_L00_00271450");
-extern void
-update_moving_resizing_height_snapped_alpha_fade_particle(void) __asm__("FUN_L00_00271748");
-extern void update_expanding_rotating_alpha_fade_particle(void) __asm__("FUN_L00_002719f0");
-extern void update_expanding_damped_fading_particle(void) __asm__("FUN_L00_00271be8");
-extern void update_color_tween_particle(void) __asm__("FUN_L00_00271c88");
-extern void update_timed_line_collision_particle(void) __asm__("FUN_L00_00271d20");
-extern void update_moving_height_culled_particle(void) __asm__("FUN_L00_00271df8");
-extern void update_damped_fading_particle(void) __asm__("FUN_L00_00271ec8");
-extern void update_color_size_tween_particle(void) __asm__("FUN_L00_00271fc0");
-extern void update_moving_size_alpha_tween_particle(void) __asm__("FUN_L00_002721f0");
-extern void update_timed_sphere_probed_particle(void) __asm__("FUN_L00_00272438");
-extern void update_moby_point_attached_particle(void) __asm__("FUN_L00_002726d8");
-extern void update_expanding_damped_rgb_fading_particle(void) __asm__("FUN_L00_00272838");
-extern void update_expanding_alpha_pulse_particle(void) __asm__("FUN_L00_002728e8");
-extern void update_color_tween_emitter_particle(void) __asm__("FUN_L00_00272bc0");
-extern void update_timed_hero_relative_particle(void) __asm__("FUN_L00_00273088");
-extern void update_moving_hero_relative_alpha_fade_particle(void) __asm__("FUN_L00_00273298");
-extern void update_moby_point_attached_alpha_pulse_particle(void) __asm__("FUN_L00_00273448");
-extern void update_mode_controlled_alpha_fade_particle(void) __asm__("FUN_L00_00273800");
-extern void update_gravity_floor_burst_particle(void) __asm__("FUN_L00_00273a68");
 extern void FUN_L00_002738b0(void);
-extern void update_line_collision_rgb_fading_particle(void) __asm__("FUN_L00_00273ee0");
-extern void update_moving_resizing_periodic_alpha_fade_particle(void) __asm__("FUN_L00_00274308");
-extern void update_mode_controlled_orbiting_trail_particle(void) __asm__("FUN_L00_00274518");
-extern void update_randomized_moby_point_attached_particle(void) __asm__("FUN_L00_00274818");
-extern void update_mode_controlled_rotating_alpha_fade_particle(void) __asm__("FUN_L00_00274a70");
-extern void update_periodic_alpha_fade_particle(void) __asm__("FUN_L00_00274de0");
-extern void update_three_phase_motion_alpha_fade_particle(void) __asm__("FUN_L00_00274e48");
-extern void update_size_gated_rotating_particle(void) __asm__("FUN_L00_002752e0");
-extern void update_gravity_ground_culled_particle(void) __asm__("FUN_L00_00275320");
-extern void update_damped_moby_relative_color_size_tween_particle(void) __asm__("FUN_L00_00275510");
-extern void update_gravity_damped_resizing_particle(void) __asm__("FUN_L00_002756f0");
-extern void update_timed_alpha_fade_particle(void) __asm__("FUN_L00_00275810");
-extern void update_moving_lifetime_scaled_alpha_particle(void) __asm__("FUN_L00_00275860");
-extern void update_proximity_corrected_size_alpha_tween_particle(void) __asm__("FUN_L00_00275aa0");
-extern void update_moving_fading_particle(void) __asm__("FUN_L00_00275d68");
-extern void update_mode_controlled_shrinking_color_tween_particle(void) __asm__("FUN_L00_00275eb0");
 
 extern u32 effect_handlers[] __asm__("D_L00_001B1E80");
 

@@ -16,6 +16,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct {
     float x, y, z;
@@ -44,8 +45,7 @@ extern char *target_search_moby_list_head __asm__("D_L11_0015FFE4");
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char  D_L11_00174880[];
 extern void
-initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
-extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
+      initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
 char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__("FUN_L11_00308670");
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
@@ -239,11 +239,11 @@ void fighter_jet_missile_update(struct Moby *moby) {
             fast_vec_normalize(spark_velocity,
                                spark_velocity,
                                random_float_between(frame_time * 5.0f, frame_time * 9.0f));
-            FUN_L00_0026dd20_c(&moby->pos,
-                               spark_velocity,
-                               0x7F2F4F6F,
-                               random_int_between(scale_game_frames(10), scale_game_frames(15)),
-                               90000.0f);
+            FUN_L00_0026dd20(&moby->pos,
+                             spark_velocity,
+                             0x7F2F4F6F,
+                             random_int_between(scale_game_frames(10), scale_game_frames(15)),
+                             90000.0f);
         }
         mark_moby_for_removal(moby);
         return;

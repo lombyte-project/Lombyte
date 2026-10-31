@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/mpeg/api/reset_work_area.h"
+#include "rnc/sdk/mpeg/ref_images/init_ref_images.h"
+#include "rnc/sdk/mpeg/ref_images/initialize_reference_image.h"
 
-extern s32 InitializeReferenceImage();
-extern s32 _initRefImages();
-extern s32 reset_work_area() __asm__("func_0012BC10");
 extern s32 alloc_work_area() __asm__("func_0012BC20");
 
 void func_0012C4C8(struct sceMpeg *mpeg) {

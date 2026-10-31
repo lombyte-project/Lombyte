@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_SDK_MPEG_PICTURE__DECODEORSKIPFIELD_H
+#define LOMBYTE_RNC_SDK_MPEG_PICTURE__DECODEORSKIPFIELD_H
+
+#include "types.h"
+
+struct sceMpeg;
+
+s32 _decodeOrSkipField(struct sceMpeg *, s32, s32);
+
+#endif /* LOMBYTE_RNC_SDK_MPEG_PICTURE__DECODEORSKIPFIELD_H */

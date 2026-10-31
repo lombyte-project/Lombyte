@@ -7,9 +7,8 @@
 
 #include "types.h"
 #include "rnc/runtime/core_state.h"
-
-extern s32 sceTtyInit();
-extern s32 sceTtyWrite();
+#include "rnc/sdk/deci2/sce_tty_init.h"
+#include "rnc/sdk/deci2/sce_tty_write.h"
 
 s32 write(s32 fd, s32 source_buffer, s32 byte_count) {
     register s32 tty_arg = source_buffer;

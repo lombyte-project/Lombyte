@@ -20,6 +20,8 @@
 #include "rnc/overlay/shared/pickups/nanotech_ball_data/nanotech_ball_update_3.h"
 #include "rnc/overlay/shared/pickups/nanotech_ball_data/nanotech_ball_update_2.h"
 #include "rnc/overlay/shared/pickups/nanotech_ball_data/nanotech_ball_update.h"
+#include "rnc/overlay/shared/math/random/random_vector.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 
 typedef struct {
     char        pad[0x10];
@@ -186,12 +188,11 @@ void FUN_00214890_002d8418(Vec4_002d8418 *,
                            float) __asm__("FUN_00214890");
 void spawn_moving_hero_relative_alpha_fade_particle(
     void *, Vec4_002d8418 *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
-s32   FUN_001f96f8_2d8510(s32) __asm__("FUN_001f96f8");
-s32   FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
-u8   *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
-void  FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
-float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
-void  draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
+s32  FUN_001f96f8_2d8510(s32) __asm__("FUN_001f96f8");
+s32  FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
+u8  *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
+void FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
+void draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
 extern int   func_001F9850_2D9EA0(int) __asm__("FUN_001f96f8");
 extern void  func_L00_001FF4B0_2D9EA0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void  func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -209,7 +210,6 @@ extern void  func_L00_002688A8_2D9EA0(void *) __asm__("FUN_L00_00267a08");
 extern int   func_L00_0028EF68_2D9EA0(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern s64   get_effect_texture(s32) __asm__("func_001F44B8");
 extern void  vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-void         font_queue_vu_state(void) __asm__("FUN_001f76a0");
 void         FUN_L00_001fde98(int, void *, void *, void *, int);
 extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 float        FUN_L00_00200260(float, float);

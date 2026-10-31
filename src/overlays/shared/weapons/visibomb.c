@@ -11,6 +11,9 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/weapons/visibomb_missile.h"
 
 typedef struct {
     u8  pad0[0x1A4];
@@ -58,10 +61,6 @@ typedef struct {
     f32      fD8;
 } O_b3058;
 
-s32  FUN_L00_00233db8_b3058(s32, s32) __asm__("FUN_L00_00233db8");
-void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
-s32  FUN_L00_002b58d8_b3058(void *, void *, f32, f32) __asm__("FUN_L00_002b58d8");
-
 extern int D_0015EEA4;
 extern s32 D_0015EEA4;
 
@@ -108,7 +107,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
     if (((u8 *)g->ground_moby) != 0 && (*(s16 *)(((u8 *)g->ground_moby) + 0xA6) == 0x13E ||
                                         *(s16 *)(((u8 *)g->ground_moby) + 0xA6) == 0x46F))
         goto tail;
-    if (FUN_L00_00233db8_b3058(-1, 1) != 0) {
+    if (use_ammo(-1, 1) != 0) {
         b = 0.0f;
         launch_yaw = g->held_pose_yaw;
         if (g->state.current == 1 && (*(u16 *)((u8 *)g->moby + 0x34) & 1)) {
@@ -130,7 +129,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
             blend_moby_animation(visibomb_moby, 3, 0, 0);
         }
         jet_camera_mode();
-        v->i4 = FUN_L00_002b58d8_b3058(visibomb_moby, launch_position, launch_yaw, b);
+        v->i4 = spawn_visibomb_missile(visibomb_moby, launch_position, launch_yaw, b);
         r = (R_b3058 *)item_usage;
         if (r->u68 < 0xFFFF) {
             r->u68++;

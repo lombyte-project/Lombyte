@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/eetypes.h"
 #include "rnc/sdk/kernel.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 /* One of the two image buffers of the Sony libmpeg decoder state. */
 typedef struct MpegRefImageBuffer {
@@ -20,7 +21,6 @@ typedef struct MpegRefImageState {
 } MpegRefImageState;
 
 extern s32  DIntr(void);
-extern s32  EnableInterrupts(void);
 extern u128 mpeg_ref_image_chain[] __asm__("D_0015E840");
 
 #define D9_CHCR (*(volatile u32 *)0x1000D400)

@@ -8,10 +8,10 @@
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
 #include "rnc/overlay/l06/mobys/alien_queen_slider.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
-extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-void       alien_queen_slider_update(unsigned char *moby) __asm__("FUN_L06_002d9d10");
+void alien_queen_slider_update(unsigned char *moby) __asm__("FUN_L06_002d9d10");
 
 #include "sda.h"
 

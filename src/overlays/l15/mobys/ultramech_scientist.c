@@ -11,6 +11,10 @@
 #include "qcopy.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/level_state.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
@@ -26,13 +30,9 @@ extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
 extern char *D_L15_001600EC;
 
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
@@ -50,11 +50,7 @@ extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
-
 extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") MACRO_ADDR;
-
-extern void FUN_L00_002502a0(int);
 
 extern void FUN_L00_00284e50(void *, void *);
 
@@ -171,7 +167,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         if (update_npc_dialogue(moby, ultramech_scientist_private_data) == 0) {
             break;
         }
-        FUN_L00_002502a0(*(int *)(ultramech_scientist_private_data + 0x280));
+        jet_clear_persistent(*(int *)(ultramech_scientist_private_data + 0x280));
         moby->anim_speed = 0.0f;
         moby->state = 2;
         moby_list_cursor = (struct Moby *)D_L15_0015FFE4;
@@ -262,7 +258,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         *(short *)(ultramech_scientist_private_data + 0x36) = 1;
         *(unsigned char *)(ultramech_scientist_private_data + 0x8) = 1;
         unlock_planet(0x10);
-        FUN_L00_002502a0(*(int *)(ultramech_scientist_private_data + 0x284));
+        jet_clear_persistent(*(int *)(ultramech_scientist_private_data + 0x284));
         request_music_track(0, 5);
         if (*(int *)(ultramech_scientist_private_data + 0x154) != -1) {
             char *paths = D_L15_001600EC;

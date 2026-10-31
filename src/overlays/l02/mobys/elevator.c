@@ -8,6 +8,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 extern float D_0015ED6C;
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -18,9 +22,7 @@ extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022
 
 #include "qcopy.h"
 
-extern int  voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 
 typedef union {
     OvlQuad q;
@@ -59,7 +61,6 @@ extern float level02_elevator_vertical_acceleration_gp __asm__("D_L02_00161BE0")
 void draw_elevator_rotating_rings(struct Moby *moby) __asm__("FUN_L02_002dc2c8");
 
 extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L02_002dc2c8");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 /* Same platform routine as elevator_update, with a waiting state (1) and this level's tables. */
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L02_002dbd38");
@@ -255,7 +256,6 @@ int         D_L02_00161C00 = 1;
 int         D_L02_00161C04 = 0x206068;
 int         D_L02_00161C08 = 0x40107020;
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int);
 
 void draw_elevator_rotating_rings(struct Moby *moby) {

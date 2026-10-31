@@ -31,15 +31,15 @@
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
 
 #include "rnc/overlay/l02/mobys/watcher_npc.h"
+#include "rnc/overlay/l02/mobys/skid_mcmarx.h"
+#include "rnc/overlay/shared/streaming/start_indexed_disc_stream.h"
 
 extern u8 D_0013D506 NOT_SDA;
 extern u8            big_head_cheat_enabled_macro __asm__("D_0015EDB0") MACRO_ADDR;
 extern s32           level_game_mode_macro __asm__("D_L02_0015F5C4") MACRO_ADDR;
 extern WatcherReward D_L02_0016CE60;
 extern char          skid_mcmarx_dialogue_data[] __asm__("D_L02_00161D00");
-void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_002e1fb8");
 
-extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
@@ -56,7 +56,6 @@ extern f32              D_L02_0015F3FC;
 extern f32              skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] NOT_SDA; /* usage records 36 on (usage_stats + 0x120) */
 extern u8               item_available[] __asm__("D_0013D4C0") NOT_SDA; /* by item id */
-extern void             start_indexed_disc_stream(int) __asm__("FUN_L02_00298c68");
 extern void advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32  approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
 

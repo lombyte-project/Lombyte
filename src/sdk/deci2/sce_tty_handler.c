@@ -1,4 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/deci2/kprintf.h"
+#include "rnc/sdk/deci2/sce_deci2_ex_recv.h"
+#include "rnc/sdk/deci2/sce_deci2_ex_send.h"
 
 typedef struct {
     u8  pad0[0xC];
@@ -24,9 +27,6 @@ extern u8   tty_receive_error_message[] __asm__("D_00152738");
 extern u8   tty_send_error_format[] __asm__("D_00152750");
 extern u8   tty_pending_send_bytes_error_format[] __asm__("D_00152768");
 extern void QueuePeekWriteDone(TtyQueue *queue);
-extern s32  SceDeci2ExRecv(s32 socket, void *buffer, u16 byte_count);
-extern s32  SceDeci2ExSend(s32 socket, void *buffer, u16 byte_count);
-extern int  kprintf(const char *format, ...);
 
 void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
     enum {

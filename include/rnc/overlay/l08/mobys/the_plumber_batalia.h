@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_THE_PLUMBER_BATALIA_H
+#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_THE_PLUMBER_BATALIA_H
+
+#include "types.h"
+
+void the_plumber_batalia_update() __asm__("FUN_L08_003065d8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_THE_PLUMBER_BATALIA_H */

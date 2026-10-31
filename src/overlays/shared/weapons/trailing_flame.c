@@ -8,6 +8,8 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/shared/mobys/allocate_moby_animation_slot.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 typedef struct {
     char pad[0x10B0];
@@ -23,10 +25,8 @@ typedef struct {
 
 extern void  clear_u64_value() __asm__("FUN_001f99f8");
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 void         refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
 void         update_entity() __asm__("FUN_L00_00250df8");
-extern void  offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 extern float FUN_001fa580_2bb400(float, float) __asm__("FUN_001fa580");
 
 u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) __asm__("FUN_L00_002bb360");

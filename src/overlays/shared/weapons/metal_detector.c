@@ -18,6 +18,7 @@
 #include "qzero.h"
 #include "rnc/overlay/shared/weapons/metal_detector_data/draw_metal_detector_trail.h"
 #include "rnc/overlay/shared/weapons/metal_detector_data/metal_detector_update.h"
+#include "rnc/audio/voice_alloc.h"
 
 typedef struct PadState PadState;
 
@@ -84,7 +85,6 @@ typedef struct VoiceSlot2d2ee8 {
 } VoiceSlot2d2ee8;
 
 extern int D_0015ED84;
-float      absolute_float(float input) __asm__("func_001F99C0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 extern float D_0015ED6C;
@@ -110,7 +110,6 @@ extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8
 extern void spawn_bolt_by_value(void *, void *, void *, s32, s32, s32) __asm__("FUN_L00_002a7438");
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void FUN_L00_002d2a90_u(void) __asm__("FUN_L00_002d2a90");
 
 extern struct PadState controller_state_lui __asm__("D_0013C940") NOT_SDA;

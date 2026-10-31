@@ -17,6 +17,8 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern s32  fptodp(f32) __asm__("FUN_00120478");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -67,8 +69,6 @@ extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern char *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern int  random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
 extern char                       airship_part_missing_parent_format[] __asm__("D_L09_002082A0");
@@ -354,16 +354,16 @@ void airship_part_update(struct Moby *moby) {
         if (random_integer_below(3) == 0) {
             clear_u64_value(point_offset_and_effect_scratch);
             transform_and_effect_scratch.pair = D_L09_001613D0;
-            spawn_particle(((f32 *)&moby->pos),
-                           point_offset_and_effect_scratch,
-                           0x2F3F3F7F,
-                           transform_and_effect_scratch.pair.v[random_integer_below(2)],
-                           random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
-                           random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)),
-                           0,
-                           0,
-                           400000.0f,
-                           random_float_between(8.0f, 16.0f) * frame_time);
+            FUN_L00_0026a9f0(((f32 *)&moby->pos),
+                             point_offset_and_effect_scratch,
+                             0x2F3F3F7F,
+                             transform_and_effect_scratch.pair.v[random_integer_below(2)],
+                             random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
+                             random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)),
+                             0,
+                             0,
+                             400000.0f,
+                             random_float_between(8.0f, 16.0f) * frame_time);
         }
         if (moby->pos.z < 25.0f) {
             int i;

@@ -28,6 +28,8 @@
 #include "rnc/overlay/shared/enemies/plasmabot_hatch.h"
 #include "rnc/overlay/shared/enemies/plasmabot_death_debris.h"
 #include "rnc/overlay/shared/enemies/path_or_ballistic_debris.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
@@ -210,7 +212,6 @@ extern int   l14_plasmabot_aim_sweep_duration_frames __asm__("D_L14_001614EC") _
 extern float l14_plasmabot_beam_origin_offset_distance __asm__("D_L14_001614F4")
     __attribute__((sda));
 extern u8   D_L14_00174560[];
-extern void DebugPrint(char *, ...);
 extern void FUN_L00_0024f7c8(char *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025e450_c(struct Moby *,
@@ -1130,7 +1131,6 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
 /* steers the moby toward its target: queries the path, eases x/y, then turns to face the heading */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */
 
-extern int   sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern float func_L00_0025CE58_2B4668(
     float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
@@ -1141,13 +1141,13 @@ int follow_plasmabot_path(char *moby) {
     float pre_spring_position[4];
     float target_offset[4];
     char *plasmabot_private_state = ((char *)MOBY(moby)->pvars);
-    int   reached = sample_path(((int *)l14_paths[*(int *)(plasmabot_private_state + 0x240)]),
-                              path_target_position,
-                              plasmabot_private_state + 0x24C,
-                              plasmabot_private_state + 0x250,
-                              0,
-                              plasmabot_path_traversal_speed_gp * frame_time *
-                                  *(float *)(plasmabot_private_state + 0x27C));
+    int   reached = FUN_L00_0025d808(((int *)l14_paths[*(int *)(plasmabot_private_state + 0x240)]),
+                                   path_target_position,
+                                   plasmabot_private_state + 0x24C,
+                                   plasmabot_private_state + 0x250,
+                                   0,
+                                   plasmabot_path_traversal_speed_gp * frame_time *
+                                       *(float *)(plasmabot_private_state + 0x27C));
     float path_target_heading;
     float k;
     float turn_step_limit;

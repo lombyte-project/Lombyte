@@ -9,18 +9,18 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
 
 /* spawns a moby with random velocity and copies position */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030CE70), where it is exact; names translated to the US level program. */
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-char        *spawn_bombomatic_projectile(char *spawn_position,
-                                         char *initial_velocity,
-                                         int   spawning_moby,
-                                         short burst_index) __asm__("FUN_L07_0030ba90");
+char *spawn_bombomatic_projectile(char *spawn_position,
+                                  char *initial_velocity,
+                                  int   spawning_moby,
+                                  short burst_index) __asm__("FUN_L07_0030ba90");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
 extern char D_L07_00166E40[];
@@ -78,7 +78,6 @@ extern float D_0015ED70   MACRO_ADDR;
 extern float              D_L07_0015F580[] MACRO_ADDR;
 extern float              FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern int D_L07_0015F5CC MACRO_ADDR;
-extern int                FUN_L00_00257b90(int, int);
 extern void *
 FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void  FUN_L00_001fff28(void *, int, float);
@@ -316,7 +315,7 @@ eb20:
         int initial_delay_frames = scale_game_frames(*(int *)(moby_data + 0xB0));
         int random_initial_delay;
         int random_initial_delay_frames;
-        random_initial_delay = FUN_L00_00257b90(0, 10);
+        random_initial_delay = random_int_between(0, 10);
         random_initial_delay_frames = scale_game_frames(random_initial_delay);
         *(int *)(moby_data + 0xB4) =
             D_L07_0015F5CC + initial_delay_frames + random_initial_delay_frames;

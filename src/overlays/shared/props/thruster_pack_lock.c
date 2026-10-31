@@ -22,6 +22,7 @@
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/rendering/view/project_to_screen.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -857,9 +858,6 @@ void append_scaled_screen_triangle_strip(short             *pts,
     }
     l11_gif_packet_cursor += ((point_count + 1) / 2) * 16;
 }
-
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
 void update_moby_path_transform(char *moby) __asm__("FUN_L11_0031a438");
 

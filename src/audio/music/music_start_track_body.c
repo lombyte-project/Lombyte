@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/music.c, set_sound_handle_id). */
 #include "rnc/streaming/disc_table.h"
 #include "rnc/audio/music/music_stream_state.h"
+#include "rnc/audio/streaming/music_callbacks/music_primary_replace_callback.h"
 
 extern void snd_play_vag_stream_by_loc_ex_cb(int,
                                              int,
@@ -13,7 +14,6 @@ extern void snd_play_vag_stream_by_loc_ex_cb(int,
                                              int,
                                              void (*)(int, long),
                                              long) __asm__("func_0012EC08");
-extern void music_primary_replace_callback(int, long) __asm__("FUN_00216ad0");
 /* music_StartTrackBody(int, int, int): when the music record at +0x34 is
    already playing (its word neither 0 nor -1) and not in state 9, starts
    track track + 1 of the table at disc_table.music_tracks on it: state 9, the

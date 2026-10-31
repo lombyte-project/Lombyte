@@ -10,6 +10,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/l10/mobys/gate_state.h"
+#include "rnc/overlay/shared/mobys/spawn_type_52_particle_near_moby.h"
 
 typedef struct Moby Moby;
 
@@ -26,11 +27,9 @@ typedef struct {
 
 extern unsigned char D_001413F4_e9648[] __asm__("D_001413F4");
 extern unsigned char D_0013DD4C_e9648[] __asm__("D_0013DD4C");
-extern void          activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 
 /* Level 10 door: swings open once the hero enters its clip volume and sets its save bit; starts open when the bit is already set. */
 void gate_1_update(struct Moby *moby) __asm__("FUN_L10_002e9648");
-void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 
 /* Moby class 1421 */
 void gate_1_update(struct Moby *moby) {

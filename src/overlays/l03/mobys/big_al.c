@@ -17,6 +17,9 @@
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/l03/mobys/npc_dialogue_state.h"
 #include "rnc/save/memcard_save_data.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern int            D_L03_0015F5C4;
 extern s32            D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
@@ -25,10 +28,7 @@ extern LevelSaveState l03_moby_collection_state __asm__("D_L03_001BA6D0");
 extern void  initialize_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_002668a0");
 extern int   update_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_00266448");
 extern void  begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
-extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void  jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void  grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-extern void  queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void  build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void  update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");

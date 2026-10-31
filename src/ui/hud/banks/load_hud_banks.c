@@ -2,6 +2,7 @@
 #include "rnc/ui/hud/hud_state.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/ui/hud/banks/load_compressed_hud_bank.h"
 
 #define ALIGN64(x) (((x) + 0x3F) & ~0x3FU)
 
@@ -28,7 +29,6 @@ extern char            hud_bank_4_stash_label[] __asm__("D_0015FBF0");
 extern struct Vram     D_001940C0;
 extern u32             D_0019A420[];
 extern struct HudBank *hud_heap_alloc(u32, s32, char *, s32) __asm__("func_001FF288");
-extern void            load_compressed_hud_bank(s32, s32) __asm__("FUN_00202d10");
 extern s32             stash_send_data(void *, u32, u32, char *) __asm__("func_00232E40");
 extern void            hud_send_resident_bank(s32, s32, s32) __asm__("func_001FF128");
 extern void            link_hud_bank(s32, void *) __asm__("func_001FEFC0");

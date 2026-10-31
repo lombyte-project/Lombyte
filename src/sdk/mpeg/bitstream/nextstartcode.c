@@ -1,8 +1,7 @@
 #include "types.h"
-
-extern void _waitIpuIdle(s32 *ctx);
-extern s32  _peepBit(s32 *ctx, s32 count);
-extern void _flushBuf(s32 *ctx, s32 count);
+#include "rnc/sdk/ipu/wait_ipu_idle.h"
+#include "rnc/sdk/mpeg/bitstream/_flushBuf.h"
+#include "rnc/sdk/mpeg/bitstream/_peepBit.h"
 
 void _nextStartCode(s32 *decoder_state) {
     s32 raw;

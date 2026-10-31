@@ -7,6 +7,8 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/vehicles/gunship.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
@@ -57,9 +59,7 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_00263d40(int, int);
 extern void FUN_L01_0030be70(char *, void *, float);
-extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
 /* Per-frame update of a breakable moby: scales its speed by distance, and on a hit spawns the break effect, frees its child mobys and removes itself; otherwise fades its alpha by height. */
 void fighter_jet_update(char *moby) __asm__("FUN_L01_002f4428");
@@ -98,7 +98,7 @@ void fighter_jet_update(char *moby) {
         if (item_unlocked[0] == 0) {
             item_unlocked[0] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
         fast_vec_sub(hit_vec, fighter_jet_vars + 0xD0, fighter_jet_vars + 0xE0);
         moby[0x20] = 0x65;

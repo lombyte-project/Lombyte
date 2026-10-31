@@ -16,8 +16,6 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern float D_0015ED6C;
 
-extern int random_integer_below(int) __asm__("FUN_00213260");
-
 extern char D_L13_001670C0[];
 
 typedef struct {
@@ -257,8 +255,6 @@ extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458
 extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 extern void spawn_type_52_particle_near_moby(struct Moby *) __asm__("FUN_L10_002e3de8");
-
-extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
 
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 

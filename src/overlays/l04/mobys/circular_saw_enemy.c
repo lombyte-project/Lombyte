@@ -18,6 +18,9 @@
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/weapons/suckcannon.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/world/collision/ground_probe.h"
 
 /* The engine-sound fields of the moby's pvars. */
 typedef struct {
@@ -288,10 +291,8 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float D_L04_00166F40[4];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int   point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int   FUN_L00_001fefc8(void *);
-extern int   is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025a120(void *);
@@ -465,13 +466,11 @@ I4_35F0 D_L04_00161890 = {
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern int FUN_L00_002dc9f0(void *, void *);
 short      D_L04_00161878 = 0x101;
 extern void FUN_L01_0026d930(char *p);
 extern void update_circular_saw_engine_sound(struct Moby *) __asm__("FUN_L04_002c1b80");
-extern void release_voice_slot(int);
 extern void transform_vector_by_basis(void *, void *, void *);
 extern char D_0013E550[];
 extern void func_L00_002592B0_b(

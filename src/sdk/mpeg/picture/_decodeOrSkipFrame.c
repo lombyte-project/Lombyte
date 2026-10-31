@@ -1,10 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-
-extern s32  _decPicture(struct MpegDecoder *a0);
-extern void _dispatchMpegCbNodata(struct sceMpeg *a0);
-extern void _outputFrame(struct MpegDecoder *a0, s32 a1, s32 a2);
-extern s32  _updateRefImage(struct MpegDecoder *a0, s32 a1);
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_cb_nodata.h"
+#include "rnc/sdk/mpeg/picture/decpicture.h"
+#include "rnc/sdk/mpeg/ref_images/_updateRefImage.h"
+#include "rnc/sdk/mpeg/ref_images/outputframe.h"
 
 s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 skip_comparison_value, s32 skip_threshold) {
     s32                 decode_or_skip_result;
@@ -18,7 +17,7 @@ s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
             decoder->frameCount = 0;
             mpeg_decoder->started = 1;
         }
-        if (_updateRefImage(mpeg_decoder, 0) == 0) {
+        if (UpdateMpegReferenceImages(mpeg_decoder, 0) == 0) {
             decode_succeeded = 0;
         } else {
             decode_succeeded = 0;
@@ -27,8 +26,8 @@ s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
         decode_or_skip_result = decode_succeeded;
     } else {
         flag = 1;
-        decode_or_skip_result = _updateRefImage(mpeg_decoder, 0);
-        _dispatchMpegCbNodata(decoder);
+        decode_or_skip_result = UpdateMpegReferenceImages(mpeg_decoder, 0);
+        DispatchMpegCallbackNoData(decoder);
     }
     _outputFrame(mpeg_decoder, mpeg_decoder->frame_count, mpeg_decoder->decoded_pictures);
     if ((mpeg_decoder->picture_structure != 3) && (flag == 0)) {

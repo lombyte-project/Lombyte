@@ -6,6 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/shared/mobys/allocate_moby_animation_slot.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -33,8 +34,6 @@ char *spawn_qwarks_starfighter_shield(char *owner) {
     }
     return moby;
 }
-
-extern void offset_moby_class_point_pairs(unsigned char *, int, int) __asm__("FUN_L00_0024efb0");
 
 void qwarks_starfighter_shield_update(struct Moby *moby) __asm__("FUN_L13_002e84d8");
 

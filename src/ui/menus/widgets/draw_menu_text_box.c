@@ -1,10 +1,10 @@
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/rendering/texture/pack_image_descriptor.h"
 
 /* Ported from rac1-decomp (src/game/pause.c, func_00223810). */
 extern void  setup_gif_paging(int) __asm__("func_001F4280");
 extern void  do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(int) __asm__("func_001FDD10");
-extern void  pack_image_descriptor(void *, char *);
 extern void  font_print_window_regular(void *, long, void *, int) __asm__("func_001F7580");
 /* A text box on the menu's own geometry (pack_image_descriptor's box, then
    arg0+0x18..0x24: top y + 4, bottom y + h - 4, x, x + w, centre).

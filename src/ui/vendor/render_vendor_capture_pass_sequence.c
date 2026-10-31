@@ -7,6 +7,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/vendor/configure_capture_target.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/view/setup_view_context.h"
 
 typedef u128 CaptureVector;
 extern int   capture_primary_transition __asm__("D_00161298") MACRO_ADDR;
@@ -31,7 +32,6 @@ extern void render_vendor_buy_label_pass(char *, int, int) __asm__("func_00238F0
 extern void render_vendor_purchase_prompt_pass(char *) __asm__("func_00239160");
 extern void render_vendor_item_icon_strip_pass(char *) __asm__("FUN_002386e8");
 extern void render_vendor_capture_texture_overlays_pass(int, float, float) __asm__("func_00239328");
-extern void setup_view_context(void) __asm__("FUN_00239750");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 extern void append_subpixel_textured_screen_quad(
     float, float, float, float, int, int, int, int, long, long) __asm__("func_001F55D8");

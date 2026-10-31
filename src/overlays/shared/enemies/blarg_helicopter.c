@@ -15,6 +15,7 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/math/random.h"
 
 typedef float HVec49_2CDDC8[4] __attribute__((aligned(16)));
 
@@ -148,7 +149,6 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_homing_spark_projectile(char *a, char *pos, int c, int d, float f) __asm__("FUN_L03_002d5208");
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8") __attribute__((sda));
-extern f32   random_angle_radians(void) __asm__("FUN_00213308");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int   frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
@@ -172,7 +172,6 @@ extern float spring_turn(float *, float, float, float, float, float) __asm__("FU
 extern float func_00214D28_2CDDC8(float *, float, float) __asm__("FUN_00213ed8");
 extern float func_001F9878_2CDDC8(float) __asm__("FUN_001f96b0");
 extern void  raise_kernel_trap(void) __asm__("FUN_001f97b0");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern char *
 spawn_homing_spark_projectile(char *, char *, int, int, float) __asm__("FUN_L03_002d5208");
 extern void func_L00_002514B8_2CDDC8(void *) __asm__("FUN_0020d580");
@@ -199,7 +198,7 @@ hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN
 
 void blarg_helicopter_update(HMob49 *moby) __asm__("FUN_L03_002cca00");
 
-/* Moby class 631 */
+/* Moby classes 326, 631 */
 void blarg_helicopter_update(HMob49 *moby) {
     enum {
         BLARG_HELICOPTER_INITIALIZE = 0,

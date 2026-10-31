@@ -18,6 +18,7 @@
 #include "rnc/world/collision/collision_line.h"
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/overlay/l17/mobys/blarg_ship.h"
 
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
@@ -60,7 +61,6 @@ extern char *spawn_class_558_moby_toward_target(char  *src,
                                                 char  *pos,
                                                 float *v,
                                                 float  f) __asm__("FUN_L17_002e94d8");
-extern char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
 extern float vector_length_xy(void *);
 extern char  fleet_turret_aim_vertex_indices[4] __asm__("D_L17_00161980") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char  *src,

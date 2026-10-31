@@ -4,6 +4,8 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/rendering/mesh_batch.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct {
     f32 x, y, z, w;
@@ -1365,7 +1367,6 @@ u32 *level01_environment_mesh_vertex_attribute_addresses[5] __asm__("D_L01_00208
 
 /* UVs of the mesh being drawn: one f32[2] per vertex (at least 148, the largest mesh). */
 extern f32 level01_environment_mesh_uv_scratch[][2] __asm__("D_L01_00208170");
-extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void       generate_level01_environment_map_uvs();
 void       FUN_L00_001fde98(s32, void *, void *, void *, s32);
 
@@ -1398,8 +1399,7 @@ typedef struct {
     u8 state;
 } ScrollMoby;
 
-extern f32  frame_delta_time __asm__("D_0015ED7C");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
+extern f32 frame_delta_time __asm__("D_0015ED7C");
 
 void environment_map_scroll_update(ScrollMoby *moby) __asm__("FUN_L01_0030f208");
 

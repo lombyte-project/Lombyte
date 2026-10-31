@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/rpc/cmd/sce_sif_send_cmd_public.h"
+#include "rnc/sdk/rpc/rpc/free_rpc_packet.h"
 
 struct SifRpcPacket {
     u8  pad_0[0x14];
@@ -14,8 +16,6 @@ extern s32 CreateSema();
 extern s32 DeleteSema();
 extern s32 WaitSema();
 extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
-extern s32 free_rpc_packet() __asm__("func_0011AD90");
-extern s32 sceSifSendCmd();
 
 s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 mode) {
     s32                  sema_param[6];

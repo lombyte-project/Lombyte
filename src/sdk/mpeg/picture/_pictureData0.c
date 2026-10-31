@@ -1,4 +1,9 @@
 #include "types.h"
+#include "rnc/sdk/ipu/wait_bdec_out.h"
+#include "rnc/sdk/ipu/wait_ipu_idle.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/macroblock/_slice0.h"
+#include "rnc/sdk/mpeg/macroblock/domc.h"
 
 typedef struct {
     u8  pad0[0x12C];
@@ -12,11 +17,6 @@ typedef struct {
 } MpegDec;
 
 extern char skip_to_next_picture_error_message[] __asm__("D_001537E0");
-extern s32  _slice0(MpegDec *d, s32 mbs);
-extern void _waitIpuIdle(MpegDec *d);
-extern s32  _waitBdecOut(MpegDec *d);
-extern void _doMC(MpegDec *d, s32 flag);
-extern void _Error(MpegDec *d, char *msg);
 
 s32 _pictureData0(MpegDec *decoder) {
     s32 decode_status;

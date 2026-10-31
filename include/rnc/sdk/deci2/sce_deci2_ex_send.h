@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_EX_SEND_H
+#define LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_EX_SEND_H
+
+#include "types.h"
+
+s32 SceDeci2ExSend(s32, void *, u16);
+
+#endif /* LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_EX_SEND_H */

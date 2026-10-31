@@ -10,6 +10,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 
 extern struct Moby *D_L10_00178380[];
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -25,8 +26,6 @@ typedef struct {
 
 extern void
 send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
-extern void
-FUN_L00_00262360_c(int, float *, float *, void *, float, float) __asm__("FUN_L00_00262360");
 
 void path_spark_effect_update(char *moby) __asm__("FUN_L10_002dd3d8");
 
@@ -39,12 +38,12 @@ void path_spark_effect_update(char *moby) {
     ((EffectData *)effect_data)->phase += ((EffectData *)effect_data)->speed;
     ((EffectData *)effect_data)->speed *=
         (((EffectData *)effect_data)->growth - 1.0f) * frame_scale + 1.0f;
-    FUN_L00_00262360_c(((EffectData *)effect_data)->owner,
-                       &path_segment_index,
-                       &path_segment_remainder,
-                       moby + 0x10,
-                       ((EffectData *)effect_data)->phase,
-                       ((EffectData *)effect_data)->size);
+    path_sample_at_distance(((EffectData *)effect_data)->owner,
+                            &path_segment_index,
+                            &path_segment_remainder,
+                            moby + 0x10,
+                            ((EffectData *)effect_data)->phase,
+                            ((EffectData *)effect_data)->size);
     MOBY(moby)->rot.x = random_angle_radians();
     MOBY(moby)->rot.y = random_angle_radians();
     MOBY(moby)->rot.z = random_angle_radians();

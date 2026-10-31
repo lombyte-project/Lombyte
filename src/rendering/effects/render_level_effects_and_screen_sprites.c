@@ -20,6 +20,10 @@
 #include "rnc/rendering/view/reset_active_camera_position_and_basis.h"
 #include "rnc/rendering/view/configure_graphics_render_target_and_projection.h"
 #include "rnc/ui/menus/widgets/draw_menu_flashing_panel.h"
+#include "rnc/rendering/texture/draw_textured_quad.h"
+#include "rnc/rendering/view/project_graphics_bounds.h"
+#include "rnc/ui/hud/append_screen_rect_packet.h"
+#include "rnc/ui/hud/sprites/draw_hud_rect_depth.h"
 
 /* Retail 0x002196b8..0x00219d77: draws the level-effect moby lists, then
    projects each enabled menu panel slot to the screen, renders panel
@@ -56,13 +60,6 @@ struct RenderPanel {
 };
 
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
-
-extern void
-project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *) __asm__("FUN_00237a78");
-extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
-extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("FUN_00200f90");
-extern void
-    draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("FUN_001f5450");
 
 void render_level_effects_and_screen_sprites(void) __asm__("FUN_002196b8");
 

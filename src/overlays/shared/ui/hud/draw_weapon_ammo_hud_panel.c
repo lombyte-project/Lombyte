@@ -16,6 +16,9 @@
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 #include "rnc/mobys/animation/apply_pending_animation.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
+#include "rnc/mobys/animation/queue_animation_update.h"
+#include "rnc/overlay/shared/ui/hud/draw_hud_item_selector_panel.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 
 /* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
@@ -233,15 +236,10 @@ int update_hud_elements(int call) {
     return positive_timer_count;
 }
 
-extern int weapon_hud_updates_suspended_gp __asm__("D_L00_0015F968") __attribute__((sda));
-extern int D_L00_0015F96C;
-extern int D_L00_0015F970;
-extern int
-queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
+extern int  weapon_hud_updates_suspended_gp __asm__("D_L00_0015F968") __attribute__((sda));
+extern int  D_L00_0015F96C;
+extern int  D_L00_0015F970;
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
-extern void hud_weapon_update(void) __asm__("FUN_L00_0023cdb8");
-extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
-extern void draw_hud_cropped_gauge_panel(void) __asm__("FUN_L00_0023a640");
 
 void update_weapon_hud_state(void) {
     struct Hero *hero_state;
@@ -284,7 +282,6 @@ void update_weapon_hud_state(void) {
     }
 }
 
-void reset_hud_animation_channels() __asm__("FUN_L00_00235878");
 /* Resets via FUN_L00_00235878, then sets the three state words to 1, -1 and 0. */
 void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 

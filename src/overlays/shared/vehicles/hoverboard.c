@@ -13,10 +13,10 @@
 #include "rnc/overlay/l05/hero/hero_set_state.h"
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/vehicles/hoverboard_data/hoverboard_update.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern int  frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((sda));
 extern unsigned short D_00141938 NOT_SDA;
 extern unsigned short D_00141C60 NOT_SDA;
@@ -107,7 +107,7 @@ void hoverboard_update(unsigned char *moby) {
         }
         {
             int size = random_int_between(scale_game_frames(8), scale_game_frames(17));
-            spawn_burst(
+            FUN_L00_0026cbb0(
                 position, effect_position, D_L05_0016190C, D_L05_00161910, size, 1, 15000.0f);
         }
     }

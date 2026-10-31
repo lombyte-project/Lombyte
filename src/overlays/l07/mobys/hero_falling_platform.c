@@ -9,15 +9,14 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
-extern int   is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void  update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 /* Falling leaf: drops off its branch after a random delay, swaying, then falls faster and vanishes near the ground. */

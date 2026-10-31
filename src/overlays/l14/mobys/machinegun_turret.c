@@ -540,8 +540,6 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
 
 extern int D_L14_0016150C_gp __asm__("D_L14_0016150C") __attribute__((sda));
 
-extern int random_integer_below(int);
-
 extern void spawn_explosion(void *,
                             void *,
                             void *,

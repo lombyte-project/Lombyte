@@ -1,3 +1,4 @@
+#include "rnc/math/point_is_clockwise.h"
 /* Map reveal filters: the callbacks in the level-indexed table
    D_L00_00183F90[19][8] (map_filter_lNN_S is level NN, slot S). The map
    update calls the ones its filter flags select and reveals a pixel only
@@ -10,8 +11,6 @@
 #include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/math/vector.h"
-
-extern s32 point_is_clockwise(s32, s32, s32, s32, s32, s32) __asm__("func_00208818");
 
 void map_filter_l01_0(s32 x, s32 y) __asm__("func_00206978");
 

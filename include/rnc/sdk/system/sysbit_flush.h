@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_SYSTEM_SYSBIT_FLUSH_H
+#define LOMBYTE_RNC_SDK_SYSTEM_SYSBIT_FLUSH_H
+
+#include "types.h"
+
+s32 _sysbitFlush();
+
+#endif /* LOMBYTE_RNC_SDK_SYSTEM_SYSBIT_FLUSH_H */

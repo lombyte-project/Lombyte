@@ -35,8 +35,8 @@
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
+#include "rnc/rendering/clip_volume.h"
 
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 
 /* Update of the crate platform: hit reaction, then its seven states. */
@@ -135,7 +135,7 @@ func_L00_002592B0_path54(char *, float, float *, float, float, float) __asm__("F
 
 void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L16_002e37a0");
 
-/* Moby class 1401 */
+/* Moby classes 452, 1401 */
 void bolt_thief_update(L16CrateMoby *moby) {
     enum {
         BOLT_THIEF_INITIALIZE = 0,

@@ -3,6 +3,8 @@
 #include "rnc/ui/menus/menu_screen.h"
 
 #include "rnc/game/item_state.h"
+#include "rnc/rendering/texture/pack_image_descriptor.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
 
 extern char D_001602A0[];
 extern u8   ammo_count_decimal_format[] __asm__("D_001602B8");
@@ -18,13 +20,11 @@ struct ImageEntry {
 };
 
 extern struct ImageEntry D_001DFFB0[];
-extern void              pack_image_descriptor(s32 *, s32);
 extern void              setup_gif_paging(s32) __asm__("func_001F4280");
 extern void              do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
 extern u8  *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
-extern s32  sprintf();
 s32         draw_selected_item_ammo(s32 image_descriptor_input) __asm__("FUN_0021f158");
 
 s32 draw_selected_item_ammo(s32 image_descriptor_input) {

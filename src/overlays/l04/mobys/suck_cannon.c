@@ -11,6 +11,9 @@
 
 #include "rnc/overlay/l04/mobys/suck_cannon_globals.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/save/memcard_save_data.h"
 
 /* Warp portal: spins, opens once the hero is near, then warps to the exit moby. */
 struct PortalVars {
@@ -32,10 +35,8 @@ char suck_cannon_missing_segment_switch_warning_format[37] __asm__("D_L04_001DC7
 
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
-extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void suck_cannon_update(struct Moby *moby) __asm__("FUN_L04_002e1a10");
 
@@ -107,9 +108,7 @@ typedef struct {
     float d[4];
 } L10SpriteData;
 
-extern int            fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *func_L00_00273E08_298940(
-    void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern char D_L10_00167240_298940[] __asm__("D_L04_00166F40");
 extern int  D_L04_0015F5C4;
 void        update_suck_cannon_particles(char *moby) __asm__("FUN_L04_002e1d00");
@@ -142,14 +141,14 @@ void update_suck_cannon_particles(char *moby) {
         timer_progress = timer_progress / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_progress));
         if (D_L04_0015F5C4 != 2)
-            func_L00_00273E08_298940(d,
-                                     col,
-                                     truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
-                                     0x35,
-                                     1,
-                                     2,
-                                     0,
-                                     sprite_data->d[i]);
+            FUN_L00_00272f68(d,
+                             col,
+                             truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
+                             0x35,
+                             1,
+                             2,
+                             0,
+                             sprite_data->d[i]);
         fast_vec_add(d, d, particle_position_step);
     }
 }

@@ -9,6 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 
 /* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
    or state 0x1C, otherwise unk2FC while unk30E is clear. */
@@ -55,8 +56,6 @@ void begin_dialogue_camera_transition(float scale, char *moby) {
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
-
-extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
 void spawn_proximity_gated_bolts(char *moby) __asm__("FUN_L01_002787a0");
 

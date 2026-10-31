@@ -9,7 +9,6 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void shattering_prop_update(struct Moby *moby) __asm__("FUN_L08_0030bc00");
 

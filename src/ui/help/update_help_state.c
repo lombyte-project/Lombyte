@@ -6,6 +6,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/help/force_help_message.h"
 #include "rnc/ui/help/find_help_message_index.h"
+#include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
+#include "rnc/ui/text/link_localized_display_text.h"
 
 typedef struct {
     s32 state;    /* 0x00 */
@@ -35,9 +37,7 @@ typedef struct {
 extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern HelpState  D_001996D0;
 
-extern s32  fast_dec_timer(void *) __asm__("func_001F9740");
-extern void link_localized_display_text(void) __asm__("FUN_001fdd58");
-extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
+extern s32 fast_dec_timer(void *) __asm__("func_001F9740");
 
 void update_help_state(void) __asm__("FUN_001fde90");
 

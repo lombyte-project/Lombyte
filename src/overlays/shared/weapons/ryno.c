@@ -18,6 +18,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
 
 typedef struct Moby Moby;
 
@@ -90,12 +91,9 @@ extern int            D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern int D_0015ED84 MACRO_ADDR;
 extern struct Moby   *FUN_L00_002cc360_c(
       float *, float *, struct Moby **, float, float, float) __asm__("FUN_L00_002cc360");
-extern int  get_ammo(int) __asm__("FUN_L00_00233e98");
-extern int  use_ammo(int, int) __asm__("FUN_L00_00233db8");
 extern void suck_draw_reticle(
     struct Moby *, int, float, float, float *, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern void           hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void           start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void           add_2cc608(float *, void *, void *) __asm__("FUN_001f9a10");
 extern void           scale_2cc608(float *, float *, float) __asm__("FUN_001f9a68");
 extern unsigned char *FUN_L00_002ccee0_c(

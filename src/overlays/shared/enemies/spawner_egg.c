@@ -21,6 +21,7 @@
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* pvars of the class 0x75E bubble FUN_L09_0030b218 spawns */
 typedef struct {
@@ -42,7 +43,6 @@ extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
 extern s32  coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
-extern f32  normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
 extern char         spawner_child_respawn_failure_format[] __asm__("D_L09_00209280");
 extern CollisionHit D_L09_00173FC0;

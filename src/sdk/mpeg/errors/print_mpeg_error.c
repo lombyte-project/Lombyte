@@ -1,6 +1,5 @@
 #include "types.h"
-
-extern void scePrintf(const char *format, ...);
+#include "rnc/sdk/deci2/sce_printf.h"
 
 void print_mpeg_error(void *image) __asm__("JumpToImageSetup");
 

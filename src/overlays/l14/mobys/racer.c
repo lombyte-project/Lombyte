@@ -11,8 +11,10 @@
 #include "rnc/rendering/clip_volume.h"
 #include "sda.h"
 #include "rnc/overlay/l14/mobys/racer_globals.h"
-
-extern void FUN_0020c828(void *);
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/l14/mobys/racer_path_and_weapon.h"
+#include "rnc/overlay/shared/enemies/path_or_ballistic_debris.h"
+#include "rnc/overlay/shared/enemies/plasmabot_death_debris.h"
 
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 
@@ -80,11 +82,6 @@ extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 
 extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 
-extern unsigned char *spawn_plasmabot_death_debris(char *owner,
-                                                   char *pos) __asm__("FUN_L14_002dea98");
-
-extern void spawn_path_or_ballistic_debris(struct Moby *, s32 *, int) __asm__("FUN_L14_002e0170");
-
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -103,16 +100,6 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-
-void initialize_racer_path_tracking(struct Moby *m) __asm__("FUN_L14_002d6358");
-
-int interpolate_racer_to_path_start(struct Moby *m) __asm__("FUN_L14_002d64d0");
-
-void update_racer_path_and_weapon(struct Moby *m) __asm__("FUN_L14_002d67e8");
-
-void advance_moby_along_path(struct Moby *m) __asm__("FUN_L14_002d7198");
-
-void update_moby_joint_visual_effects(struct Moby *m) __asm__("FUN_L14_002d7490");
 
 void level14_racer_update(struct Moby *racer_moby) __asm__("FUN_L14_002d5f40");
 
@@ -140,7 +127,7 @@ void level14_racer_update(struct Moby *racer_moby) {
         if (racer_vars->path == -1 || l14_splines_gp[racer_vars->path].path->count == 0 ||
             racer_vars->start_point == -1 || *((int *)l14_paths[racer_vars->start_point]) != 3 ||
             racer_vars->volume == -1) {
-            FUN_0020c828(racer_moby);
+            mark_moby_for_removal(racer_moby);
             return;
         }
         initialize_racer_path_tracking(racer_moby);
@@ -227,7 +214,7 @@ void level14_racer_update(struct Moby *racer_moby) {
                             5,
                             -1,
                             0);
-            FUN_0020c828(racer_moby);
+            mark_moby_for_removal(racer_moby);
             return;
         }
         break;

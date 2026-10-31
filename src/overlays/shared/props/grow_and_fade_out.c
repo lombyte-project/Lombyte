@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
+#include "rnc/math/random.h"
 
 typedef struct Moby Moby;
 
@@ -20,14 +21,11 @@ typedef struct {
     float x, y, z, w;
 } V;
 
-f32         random_angle_radians(void) __asm__("FUN_00213308");
-extern f32  random_angle_radians(void) __asm__("FUN_00213308");
 extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void           copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 void           set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
-float          random_angle_radians(void) __asm__("FUN_00213308");
 void           update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 
 void mark_moby_for_removal() __asm__("FUN_0020c828");

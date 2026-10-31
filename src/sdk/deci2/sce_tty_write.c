@@ -3,6 +3,9 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/deci2/call_debug_character.h"
+#include "rnc/sdk/deci2/sce_deci2_poll.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 struct TtyState {
     volatile s32 unk0; /* deci2 handle from sceDeci2Open */
@@ -25,10 +28,7 @@ struct Mmio {
 };
 
 extern struct TtyState D_00154A50;
-extern s32             CallDebugCharacter(s32, s32);
 extern s32             DIntr();
-extern s32             EnableInterrupts();
-extern void            SceDeci2Poll(s32);
 
 s32 sceTtyWrite(s8 *text, s32 text_len) {
     s32          written_count; /* characters consumed -> return value */

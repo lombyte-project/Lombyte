@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
+#include "rnc/sdk/input/dbc/sceDbcInit.h"
 
 typedef struct {
     s32 port;
@@ -10,7 +11,6 @@ typedef struct {
 
 scePad2SocketParam D_001CD760 = {0};
 
-extern s32 sceDbcInit(void);
 extern s32 scePad2Init(s32);
 extern s32 scePad2CreateSocket(scePad2SocketParam *, void *);
 void       init_pads(void) __asm__("FUN_00217048");

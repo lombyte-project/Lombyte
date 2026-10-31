@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_UI_TEXT_DRAW_TIMED_TEXT_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_UI_TEXT_DRAW_TIMED_TEXT_H
+
+#include "types.h"
+
+void draw_timed_text(void *, s32) __asm__("FUN_L00_001fcca0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_TEXT_DRAW_TIMED_TEXT_H */

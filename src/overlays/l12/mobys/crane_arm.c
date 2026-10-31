@@ -7,7 +7,6 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
-extern int random_integer_below(int);
 extern int scale_game_frames(int);
 
 /* Idle critter: waits a random time, then plays one of its fidget animations (or reacts when the hero comes close). */

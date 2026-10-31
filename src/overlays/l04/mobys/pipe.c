@@ -11,7 +11,6 @@
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void  allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void  spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void pipe_update(struct Moby *m) __asm__("FUN_L04_002e79a8");
 

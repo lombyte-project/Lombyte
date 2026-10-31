@@ -8,6 +8,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/add_moby_frames_for_group_proximity.h"
 
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
@@ -54,7 +59,6 @@ void copy_racer_path_node(char *moby, int path_node_index, float *output_path_no
 }
 
 extern int   offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
@@ -214,7 +218,6 @@ void blend_racer_and_child_animations(char *moby,
 }
 
 extern int          scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int          random_int_between(int, int) __asm__("FUN_L00_00257b90");
 typedef struct Moby Moby;
 
 /* Same routine as FUN_L16_002d0058 without the pitch step: times the leap animation to the
@@ -233,8 +236,6 @@ struct LeapVars {
     s16          sequence; /* 0x272 */
 };
 
-extern int
-solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern float FUN_0020c9e0(struct Moby *);
 
 void update_racer_jump_animations(struct Moby *moby) __asm__("FUN_L05_00307570");
@@ -312,8 +313,6 @@ extern void  fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void  fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-float        absolute_float(float input) __asm__("func_001F99C0");
 extern char  D_L05_001671C0[];
 extern float fast_vec_dist(void *, void *);
 extern void
@@ -391,7 +390,6 @@ extern int   D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
 extern int   D_L05_00178300[];
 extern int   is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern void  copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
-extern void  add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 void         advance_racer_path_node(char *obj) __asm__("FUN_L05_00306e10");
 void         FUN_L05_00307570_c(struct Moby *m) __asm__("FUN_L05_00307570");
 extern char  D_001413DC[];

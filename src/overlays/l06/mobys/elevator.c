@@ -8,6 +8,11 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/ui/help/try_set_help_message.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/hero/hero_frame_update.h"
+#include "rnc/overlay/shared/hero/update_hero_vehicle_attachments_and_effects.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -16,13 +21,11 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
 #include "rnc/overlay/shared/world/cuboid.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
-extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 
 /* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
@@ -133,12 +136,9 @@ int D_L06_00161F74 = 0x80208020;
 
 int D_L06_00161F78 = -1;
 
-extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void enter_hero_vehicle_mode_and_set_moby(int, int, int) __asm__("FUN_L01_00231348");
-extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
-extern void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
-extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
-void        set_moby_and_links_to_states_2_and_3(char *a) __asm__("FUN_L06_002f54a0");
+extern void          start_scene(int) __asm__("FUN_L00_00298840");
+extern void          request_music_track(int, int) __asm__("FUN_L01_0027a248");
+void                 set_moby_and_links_to_states_2_and_3(char *a) __asm__("FUN_L06_002f54a0");
 extern unsigned char D_0013D5DD_2FDA70[] __asm__("D_0013D4C6");
 extern unsigned char D_0013D4AF_2FDA70[] __asm__("D_0013D3A8");
 extern unsigned char D_0013D5CA_2FDA70[] __asm__("D_0013D4C6");

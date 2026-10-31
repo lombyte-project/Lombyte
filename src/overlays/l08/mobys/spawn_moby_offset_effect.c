@@ -7,6 +7,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* Spawns an effect moby at the position of moby a. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
@@ -48,7 +49,6 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
 /* Spawns a coloured effect at pos with the given vector, size and lifetime. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027C218), where it is exact; names translated to the US level program. */
 
-extern s32                    rand(void);
 unsigned char *D_L08_001B292C NOT_SDA = 0;
 
 unsigned char *spawn_colored_effect(int           owner,
@@ -85,7 +85,7 @@ unsigned char *spawn_colored_effect(int           owner,
         effect[9] = truncate_float_to_s32(4.0f) + 0x40;
         effect[3] = 0x48;
         effect[1] = 0;
-        effect[8] = rand();
+        effect[8] = RandomNext();
         effect[2] = *D_L08_001B292C;
         *(float *)(effect + 0xC) = size;
         *(short *)(effect + 0xA) = 0;

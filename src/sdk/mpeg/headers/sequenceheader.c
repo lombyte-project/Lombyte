@@ -1,16 +1,16 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/ipu/send_ipu_command.h"
+#include "rnc/sdk/ipu/wait_ipu_idle.h"
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/headers/_extensionAndUserData.h"
+#include "rnc/sdk/mpeg/headers/setdefaultqm.h"
+#include "rnc/sdk/mpeg/headers/update_mpeg_frame_size.h"
 
-extern u8   default_intra_quantiser_matrix[] __asm__("D_00132FC0");
-extern u8   default_non_intra_quantiser_matrix[] __asm__("D_00133000");
-extern u8   vertical_size_limit_error_message[] __asm__("D_00153AE8");
-extern s32  _Error();
-extern void _extensionAndUserData(struct MpegDecoder *);
-extern u32  _nextBit(struct MpegDecoder *, s32);
-extern void _sendIpuCommand(struct MpegDecoder *, s32);
-extern void _setDefaultQM(struct MpegDecoder *, s32, u32);
-extern void _waitIpuIdle(struct MpegDecoder *);
-extern void func_0012C4C8(struct sceMpeg *);
+extern u8 default_intra_quantiser_matrix[] __asm__("D_00132FC0");
+extern u8 default_non_intra_quantiser_matrix[] __asm__("D_00133000");
+extern u8 vertical_size_limit_error_message[] __asm__("D_00153AE8");
 
 void _sequenceHeader(struct MpegDecoder *decoder) {
     u32 bits;
@@ -30,7 +30,7 @@ void _sequenceHeader(struct MpegDecoder *decoder) {
     decoder->load_intra_quantiser_matrix = _nextBit(decoder, 1);
     if (decoder->load_intra_quantiser_matrix != 0) {
         _waitIpuIdle(decoder);
-        _sendIpuCommand(decoder, 0x50000000);
+        SendIpuCommand(decoder, 0x50000000);
         _waitIpuIdle(decoder);
     } else {
         _setDefaultQM(decoder, 0x50000000, (u32)default_intra_quantiser_matrix);
@@ -38,7 +38,7 @@ void _sequenceHeader(struct MpegDecoder *decoder) {
     decoder->load_non_intra_quantiser_matrix = _nextBit(decoder, 1);
     if (decoder->load_non_intra_quantiser_matrix != 0) {
         _waitIpuIdle(decoder);
-        _sendIpuCommand(decoder, 0x58000000);
+        SendIpuCommand(decoder, 0x58000000);
         _waitIpuIdle(decoder);
     } else {
         _setDefaultQM(decoder, 0x58000000, (u32)default_non_intra_quantiser_matrix);

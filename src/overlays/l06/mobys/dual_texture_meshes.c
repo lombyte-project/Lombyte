@@ -8,6 +8,9 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct {
     u128  v[4];
@@ -488,7 +491,6 @@ float D_L06_001F19D0[50][4] = {
     { 0.306383f,  -0.30638f,  0.901255f, 1.0f},
 };
 
-extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 void        draw_dual_texture_50_quad_mesh(void) __asm__("FUN_L06_002fd1a0");
 
@@ -5381,8 +5383,6 @@ float D_L06_001E4A30[864][4] = {
 void draw_dual_texture_864_quad_mesh(void) __asm__("FUN_L06_002fd748");
 
 extern char D_0013E533[];
-extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-void        add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */

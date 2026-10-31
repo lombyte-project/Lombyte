@@ -1,5 +1,14 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/ipu/ipu_vdec.h"
+#include "rnc/sdk/ipu/receive_data_from_ipu.h"
+#include "rnc/sdk/ipu/send_ipu_command.h"
+#include "rnc/sdk/ipu/wait_ipu_idle.h"
+#include "rnc/sdk/mpeg/bitstream/_flushBuf.h"
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/macroblock/motion_vector.h"
+#include "rnc/sdk/mpeg/macroblock/motion_vectors.h"
 
 struct MpegMbState {
     int unk0;
@@ -12,24 +21,15 @@ struct MpegMbState {
     int unk1C;
 };
 
-extern u8   invalid_macroblock_type_error_message[] __asm__("D_00153898");
-extern void _Error();
-extern void _flushBuf();
-extern s16  _ipuVdec(struct MpegDecoder *, s32);
-extern void _motionVector();
-extern void _motionVectors();
-extern s32  _nextBit(struct MpegDecoder *, s32);
-extern void _sendIpuCommand();
-extern void _waitIpuIdle();
-extern void receiveDataFromIPU();
-int         _decMB0(struct MpegDecoder *decoder,
-                    int                *mb_type,
-                    int                *motion_type,
-                    int                *dct_type_out,
-                    struct MpegMbState *motion_vector_state,
-                    int                *motion_field_select,
+extern u8 invalid_macroblock_type_error_message[] __asm__("D_00153898");
+int       _decMB0(struct MpegDecoder *decoder,
+                  int                *mb_type,
+                  int                *motion_type,
+                  int                *dct_type_out,
+                  struct MpegMbState *motion_vector_state,
+                  int                *motion_field_select,
 
-                    int differential_motion_vector) {
+                  int differential_motion_vector) {
     int *dct_type_output;
     int *motion_field_select_output;
     u32  intra_quantiser_command_bits;
@@ -161,9 +161,9 @@ int         _decMB0(struct MpegDecoder *decoder,
                 intra_quantiser_command_bits =
                     (((*mb_type) & 1) << 0x1B) | (decoder->quantiser_scale_code << 0x10);
                 dc_reset_command_base = ((decoder->dc_reset) << 0x1A) | 0x20000000;
-                _sendIpuCommand(decoder,
-                                (intra_quantiser_command_bits | dc_reset_command_base) |
-                                    ((*dct_type_output) << 0x19));
+                SendIpuCommand(decoder,
+                               (intra_quantiser_command_bits | dc_reset_command_base) |
+                                   ((*dct_type_output) << 0x19));
             } else {
                 decoder->mb_buf[decoder->mb_buf_index].unk13C = 1;
             }

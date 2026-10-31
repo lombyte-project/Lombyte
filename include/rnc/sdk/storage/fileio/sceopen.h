@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_STORAGE_FILEIO_SCEOPEN_H
+#define LOMBYTE_RNC_SDK_STORAGE_FILEIO_SCEOPEN_H
+
+#include "types.h"
+
+s32 sceOpen(const u8 *, s32, ...);
+
+#endif /* LOMBYTE_RNC_SDK_STORAGE_FILEIO_SCEOPEN_H */

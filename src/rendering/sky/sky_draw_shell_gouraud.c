@@ -5,6 +5,7 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/vu1_registers.h"
 
 struct SkyTile {
     u128 bounds; /* 16-byte aligned: tile fields are addressed from the tile base */
@@ -31,7 +32,6 @@ extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
 extern void dma_to_spr_sync(void) __asm__("func_0020B3E0");
 extern s32  sky_transform_vertices(s32, s32, s32, s32) __asm__("FUN_0022bf94");
 extern void sky_build_gif_gouraud(s32, s32, s32, s32) __asm__("FUN_0022c0e0");
-extern s32  vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 void sky_draw_shell_gouraud(struct Shell *shell) __asm__("FUN_0022b928");
 

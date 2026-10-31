@@ -10,6 +10,8 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/props/energy_sphere_holder_data/update_energy_sphere_holder_beam_effects.h"
+#include "rnc/overlay/shared/props/initialize_energy_sphere_holder_vars.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
 
 typedef struct {
     float ph[4];
@@ -24,13 +26,8 @@ extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int   scale_game_frames(int);
 extern void
-spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
-extern void initialize_energy_sphere_holder_vars(char *) __asm__("FUN_L06_002f7548");
-void        update_energy_sphere_holder_beam_effects(char *moby) __asm__("FUN_L06_002f7628");
-extern unsigned char *func_L00_00273E08_g(
-    void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
-extern void
-func_L00_00273F80_g(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
+     spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
+void update_energy_sphere_holder_beam_effects(char *moby) __asm__("FUN_L06_002f7628");
 
 extern int  level_frame_count __asm__("D_L06_0015F5CC");
 extern char D_L06_00167540[];
@@ -160,14 +157,14 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
         beam_sprite_color = fast_tween_color(energy_sphere_holder_beam_color_start_gp,
                                              energy_sphere_holder_beam_color_end_gp,
                                              absolute_float(0.5f - timer_progress));
-        func_L00_00273E08_g(beam_sprite_position,
-                            beam_sprite_color,
-                            truncate_float_to_s32(beam->ph[i]),
-                            energy_sphere_holder_beam_texture_index_gp,
-                            energy_sphere_holder_beam_particle_variant_flag_gp,
-                            2,
-                            0,
-                            beam->sz[i]);
+        FUN_L00_00272f68(beam_sprite_position,
+                         beam_sprite_color,
+                         truncate_float_to_s32(beam->ph[i]),
+                         energy_sphere_holder_beam_texture_index_gp,
+                         energy_sphere_holder_beam_particle_variant_flag_gp,
+                         2,
+                         0,
+                         beam->sz[i]);
         fast_vec_add(beam_sprite_position, beam_sprite_position, step);
     }
     if ((level_frame_count & 3) == 3 && ((unsigned char *)moby)[0x31] != 0) {
@@ -182,14 +179,15 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
             -2.0f / (float)scale_game_frames(energy_sphere_holder_spark_lifetime_frames_gp));
         fast_vec_add(spark_position, spark_position, moby + 0x10);
         spark_position[2] += 0.85f;
-        func_L00_00273F80_g(spark_position,
-                            spark_velocity,
-                            energy_sphere_holder_spark_color_gp,
-                            (unsigned char)truncate_float_to_s32((float)scale_game_frames(
-                                energy_sphere_holder_spark_lifetime_frames_gp)),
-                            (unsigned char)random_integer_below(0xFF),
-                            0,
-                            energy_sphere_holder_spark_size_scale_gp);
+        spawn_moving_hero_relative_alpha_fade_particle(
+            spark_position,
+            spark_velocity,
+            energy_sphere_holder_spark_color_gp,
+            (unsigned char)truncate_float_to_s32(
+                (float)scale_game_frames(energy_sphere_holder_spark_lifetime_frames_gp)),
+            (unsigned char)random_integer_below(0xFF),
+            0,
+            energy_sphere_holder_spark_size_scale_gp);
     }
 }
 

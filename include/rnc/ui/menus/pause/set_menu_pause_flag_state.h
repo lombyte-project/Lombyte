@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_SET_MENU_PAUSE_FLAG_STATE_H
+#define LOMBYTE_RNC_UI_MENUS_PAUSE_SET_MENU_PAUSE_FLAG_STATE_H
+
+#include "types.h"
+
+int set_menu_pause_flag_state(char *) __asm__("FUN_0021ddd0");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_SET_MENU_PAUSE_FLAG_STATE_H */

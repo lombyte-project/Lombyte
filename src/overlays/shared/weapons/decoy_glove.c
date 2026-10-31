@@ -14,6 +14,8 @@
 #include "rnc/rendering/debug/debug_menu.h"
 #include "qzero.h"
 #include "rnc/game/game_globals.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/weapons/decoy.h"
 
 typedef struct Hero Hero;
 
@@ -70,14 +72,11 @@ extern void  func_L00_002C8680_2D3608(float *pos,
                                       float  unused,
                                       float  range) __asm__("FUN_L00_002c7320");
 extern int   D_0015EEA4;
-extern int   use_ammo(int, int) __asm__("FUN_L00_00233db8");
-extern int   get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int   spawn_decoy(void *, void *, void *) __asm__("FUN_L00_002c35c0");
 extern short D_L00_001B0830[];
 extern void  hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void  FUN_L00_0024f7c8(void *, int, void *);
 extern void  mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void  release_moby_with_collision_check(float *, char *, void *) __asm__("FUN_L00_002c3888");
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void  mark_moby_for_removal() __asm__("FUN_0020c828");
 extern u8    D_0013E539_lui __asm__("D_0013E539") NOT_SDA;

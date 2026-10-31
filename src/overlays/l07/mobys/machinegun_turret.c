@@ -9,9 +9,10 @@
 #include "sda.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/overlay/l07/mobys/machinegun_turret_projectile.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern int   resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void  FUN_L00_00257470(void *, int, int);
 extern void  trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -34,9 +35,7 @@ typedef struct {
 } MobyHit;
 
 extern float D_0015ED6C MACRO_ADDR;
-extern void
-     spawn_machinegun_turret_projectile(void *, void *, void *, int) __asm__("FUN_L07_0030b538");
-void machinegun_turret_update(unsigned char *moby) __asm__("FUN_L07_0031a250");
+void                    machinegun_turret_update(unsigned char *moby) __asm__("FUN_L07_0031a250");
 
 /* Moby class 1126 */
 void machinegun_turret_update(unsigned char *moby) {

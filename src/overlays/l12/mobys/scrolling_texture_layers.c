@@ -10,13 +10,13 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/rendering/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/effects/draw_scrolled_mesh_batch.h"
+#include "rnc/rendering/effect_texture.h"
 
 typedef struct Moby Moby;
 extern char         D_L12_00167240[];
 
 #include "rnc/overlay/l12/mobys/scrolling_texture_layers_globals.h"
-
-extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 
 /* Draws the moby's 10-piece overlay when its trigger is visible, with its own GS state. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
@@ -2516,7 +2516,6 @@ int *hoven_scrolling_clipped_vertex_color_tables[10] __asm__("D_L12_00205A58") =
 
 extern void FUN_L00_001fde98(int, MeshPoint *, int *, void *, int);
 extern void FUN_L08_00258090(void *, MeshUv *, int, void *);
-extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 
 void draw_hoven_scrolling_texture_layers(struct Moby *moby) __asm__("FUN_L12_0030be68");

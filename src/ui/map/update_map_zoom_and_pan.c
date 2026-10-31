@@ -1,9 +1,8 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
 
-extern void noop_memory_callback(void) __asm__("func_00208810");
-
 #include "rnc/ui/map/map_state.h"
+#include "rnc/runtime/callbacks/noop_memory_callback.h"
 
 int update_map_zoom_and_pan(void) __asm__("FUN_00205440");
 

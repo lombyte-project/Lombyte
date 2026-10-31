@@ -17,12 +17,16 @@
 #include "rnc/math/interpolation.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/l12/mobys/hoven_anklebiter.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/mobys/find_point_ahead.h"
+#include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/weapons/suckcannon.h"
 
 /* Suck cannon suction method: state 8 while sucked (alerting its group), back to 1 when released; no suction in states 9, 11 and 13. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E29C8), where it is exact; names translated to the US level program. */
 
-extern int  process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
-extern void FUN_L01_0026e090(int, int);
+extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 int process_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L12_002e16b8");
 
@@ -59,8 +63,6 @@ int store_hoven_anklebiter_in_suck_cannon(struct Moby *carried_moby) {
 
 /* Suck cannon cancel method: cancels the suction and moves the moby to state 8 unless it is in state 9 or 11. */
 /* Ported from rac1-decomp (src/overlays/l12/vendor_002C0310.c: func_L12_002E2B08), where it is exact; names translated to the US level program. */
-
-extern int cancel_suck_cannon_suction(struct Moby *) __asm__("FUN_L00_002dbe20");
 
 int cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L12_002e17f8");
 
@@ -105,7 +107,6 @@ void ease_hoven_anklebiter_height_to_ground(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2BF8), where it is exact; names translated to the US level program. */
 
-extern int random_integer_below(int);
 extern int scale_game_frames(int);
 
 void select_hoven_anklebiter_pursuit_animation(struct Moby *moby) __asm__("FUN_L12_002e18e8");
@@ -243,13 +244,10 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 int step_moby_motion(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 extern char D_0013E633_2E2EF0[] __asm__("D_001413D0");
 extern void process_hoven_anklebiter_damage_and_alerts(struct Moby *) __asm__("FUN_L12_002e3528");
-extern int  FUN_L01_00274b78_c(char *, char *, float) __asm__("FUN_L01_00274b78");
 extern void func_L01_0026E8E0_2E2EF0(char *) __asm__("FUN_L01_0026d930");
-extern int  random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int  rand(void) __asm__("FUN_001160d8");
 extern int  func_L00_0025A208_2E2EF0(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int  func_L00_0025A2F0_2E2EF0(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern void func_L01_0026F040_2E2EF0(int, int) __asm__("FUN_L01_0026e090");
 extern void approach_w(char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
 extern void select_hoven_anklebiter_pursuit_animation(struct Moby *) __asm__("FUN_L12_002e18e8");
 extern float
@@ -301,7 +299,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
     int             count, timer_range_min_frames, blocked, hit;
     process_hoven_anklebiter_damage_and_alerts((struct Moby *)moby);
     manipulator_set_scale(data->collision_data, 2.2f);
-    FUN_L01_00274b78_c((char *)moby, (char *)&target_report_or_vector_scratch, data->range);
+    find_point_ahead((char *)moby, (char *)&target_report_or_vector_scratch, data->range);
     target = target_report_or_vector_scratch.moby;
     if (!target)
         target = *(AnklebiterMoby **)D_0013E633_2E2EF0;
@@ -420,7 +418,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         if (fast_vec_length(target_report_or_vector_scratch.v0) < data->range &&
             absolute_float(moby->pos[2] - target->pos[2]) < 8.0f && random_integer_below(19) == 0) {
             if (moby->group != 255)
-                func_L01_0026F040_2E2EF0(moby->group, 1);
+                FUN_L01_0026e090(moby->group, 1);
         } else if (!((moby->proximity & 1) && fast_dec_timer_s16(&data->group_timer)) &&
                    moby->proximity != 7)
             break;
@@ -457,7 +455,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
              absolute_float(data->home[2] - target->pos[2]) < 8.0f) ||
             moby->proximity == 2) {
             if (moby->group != 255)
-                func_L01_0026F040_2E2EF0(moby->group, 2);
+                FUN_L01_0026e090(moby->group, 2);
             moby->joints = 0x40;
             data->zero = 0.0f;
             data->gravity = hoven_anklebiter_leap_gravity_gp * D_0015ED70;
@@ -534,7 +532,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             } else if (fast_vec_length(target_report_or_vector_scratch.v0) < data->range + 5.5f &&
                        absolute_float(moby->pos[2] - target->pos[2]) < 4.4f) {
                 if (moby->group != 255)
-                    func_L01_0026F040_2E2EF0(moby->group, 1);
+                    FUN_L01_0026e090(moby->group, 1);
             } else if (moby->proximity != 1 && random_integer_below(9) == 0) {
                 moby->state = 6;
                 data->return_timer = 0;
@@ -593,7 +591,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             if (return_distance < data->range) {
                 if (data->return_timer > scale_game_frames(70)) {
                     if (moby->group != 255)
-                        func_L01_0026F040_2E2EF0(moby->group, 1);
+                        FUN_L01_0026e090(moby->group, 1);
                     moby->state = 4;
                     data->blocked = 0;
                     select_hoven_anklebiter_pursuit_animation((struct Moby *)moby);
@@ -609,7 +607,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
     }
     case ANKLEBITER_KNOCKBACK_FALL:
         if (moby->group != 255)
-            func_L01_0026F040_2E2EF0(moby->group, 1);
+            FUN_L01_0026e090(moby->group, 1);
         if (step_moby_motion(moby, data->fall) & 1) {
             moby->state = 10;
             if (moby->anim != 13)
@@ -674,7 +672,6 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
 }
 
 extern int move_w(void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
-extern int path_w(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 
 int move_hoven_anklebiter_toward_heading(struct Moby *moby,
                                          float        speed) __asm__("FUN_L12_002e2eb8");
@@ -699,10 +696,10 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
         fast_vec_sub(path_test_offset, pre_move_position, &moby->pos);
         fast_vec_normalize(path_test_offset, path_test_offset, 0.05f);
         fast_vec_add(path_test_position, pre_move_position, path_test_offset);
-        if (path_w(*(int *)(moby_vars + 0x2D0),
-                   &moby->pos,
-                   path_test_position,
-                   path_corrected_position) != 0) {
+        if (FUN_L00_00261b48(*(int *)(moby_vars + 0x2D0),
+                             &moby->pos,
+                             path_test_position,
+                             path_corrected_position) != 0) {
             char *path = ((char *)l12_paths[*(int *)(moby_vars + 0x2D0)]);
             if (point_in_path_xy(&moby->pos, path + 0x10, *(int *)path) == 0)
                 *(OvlQuad *)&moby->pos = *(OvlQuad *)path_corrected_position;
@@ -855,9 +852,7 @@ typedef struct {
     s16 call_timer;   /* 0x2EA */
 } AnklebiterVars;
 
-extern s32  D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
-extern s32  count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
-extern void alert_group_e3528(s32, s32) __asm__("FUN_L01_0026e090");
+extern s32 D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern void
 call_for_help_e3528(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 
@@ -920,7 +915,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
     resolve_moby_hit_response(moby, coll, &anklebiter_vars->health, 0, &hit, &dmg, 0, 4);
     if (coll != 0 && moby->state != 0x63 && moby->state != 8) {
         if (moby->group != 0xFF) {
-            alert_group_e3528(moby->group, 7);
+            FUN_L01_0026e090(moby->group, 7);
         }
         if (dmg != 0.0f) {
             anklebiter_vars->health -= dmg;

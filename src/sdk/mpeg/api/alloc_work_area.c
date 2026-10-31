@@ -1,7 +1,7 @@
 #include "rnc/sdk/mpeg_work_area.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
 
-extern u8  work_area_too_small_message[] __asm__("D_00153A38");
-extern s32 _Error();
+extern u8 work_area_too_small_message[] __asm__("D_00153A38");
 
 s32 alloc_work_area(s32                  decoder_state,
                     struct MpegWorkArea *area,

@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/kernel.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 extern s32 _DisableIntc();
 extern s32 DIntr();
-extern s32 EnableInterrupts();
 
 s32 disable_intc(s32 intc_cause) __asm__("FUN_00119028");
 

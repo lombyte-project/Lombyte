@@ -33,6 +33,7 @@
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
+#include "rnc/audio/voice_alloc.h"
 
 extern float          approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern unsigned char *D_L18_0015FFD8;
@@ -43,7 +44,6 @@ extern int FUN_0022da68(int, int, int);
 void       draw_trespasser_barrier_quads(struct Moby *moby) __asm__("FUN_L18_002f1fd8");
 
 extern void draw_trespasser_barrier_quads(struct Moby *) __asm__("FUN_L18_002f1fd8");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void trespasser_barrier_update(struct Moby *moby) __asm__("FUN_L18_002f1e68");
 

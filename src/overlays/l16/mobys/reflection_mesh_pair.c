@@ -35,6 +35,8 @@
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* Bounding spheres for one mesh (two or three entries), then the renderer callback; same source as FUN_L16_002e93b0. */
 typedef struct {
@@ -52,8 +54,6 @@ extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001D
 
 #include "rnc/overlay/l16/mobys/reflection_mesh_trio.h"
 
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
-
 /* Sets up the draw state, then draws the two entries of the level's table. */
 
 extern char D_L16_001DF2D0[] NOT_SDA;
@@ -62,7 +62,6 @@ extern float
     reflection_mesh_pair_positions_0[330] __asm__("D_L16_001DE150"); /* 110 points x 3 floats */
 extern float
     reflection_mesh_pair_positions_1[39] __asm__("D_L16_001DE678"); /* 13 points x 3 floats */
-extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float D_L16_001DE720[];
 extern float D_L16_001DEA90[];
 
@@ -190,8 +189,6 @@ void reflection_mesh_pair_update(struct Moby *moby) {
         break;
     }
 }
-
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 /* Sets up the draw state then runs both per-slot calls over three entries. */

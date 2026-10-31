@@ -9,6 +9,8 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/mobys/prune_moby_references.h"
+#include "rnc/rendering/effects/draw_resident_textured_banner.h"
+#include "rnc/rendering/packets/append_dma_tag.h"
 
 struct LevelProjectionState {
     u8  pad_0[0xB0];
@@ -22,7 +24,6 @@ struct LevelProjectionState {
 extern s32                         D_0018CB54[];
 extern s32                         D_0018CC98[];
 extern struct LevelProjectionState view_context __asm__("D_0018CD00");
-extern void                        append_dma_tag(u32);
 extern void                        update_camera_view_matrices() __asm__("func_001F2260");
 extern void                        update_view_context() __asm__("func_001F2D98");
 extern void                        reset_gs_registers() __asm__("func_001F3868");
@@ -40,7 +41,6 @@ extern void draw_mobys(void) __asm__("func_0020D460");
 extern void draw_sky_shells() __asm__("func_0022B288");
 extern void build_resident_indexed_texture_warp_meshes(s32) __asm__("func_0022E420");
 extern void draw_resident_textured_quad() __asm__("func_0022E8C8");
-extern void draw_resident_textured_banner(s32) __asm__("FUN_0022ea08");
 extern void render_environment_mapped_object(s32) __asm__("func_002327A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 

@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
 
-extern void sceSifInitRpc(int mode);
-void        initialize_sif_rpc(void) __asm__("FUN_00232ce0");
+void initialize_sif_rpc(void) __asm__("FUN_00232ce0");
 
 void initialize_sif_rpc(void) {
     sceSifInitRpc(0);

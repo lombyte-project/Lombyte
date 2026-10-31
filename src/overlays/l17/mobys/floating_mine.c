@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
+#include "rnc/camera/resolve_camera_surface_height.h"
 
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
@@ -43,8 +44,6 @@ extern void  spawn_explosion(void *,
 extern short D_L17_00161D2C __attribute__((sda));
 extern short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") __attribute__((sda));
 extern void  update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-f32        resolve_camera_surface_height(struct CameraProbePosition *position,
-                                         s32 optional_output) __asm__("FUN_002135f0");
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
 void floating_mine_update(struct Moby *moby) __asm__("FUN_L17_002dc3f8");

@@ -17,6 +17,11 @@
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 #include "rnc/overlay/l06/mobys/alien_queen.h"
 #include "rnc/overlay/l06/mobys/alien_queen_slider.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/l06/hero/hero_set_state.h"
+#include "rnc/overlay/shared/camera/moby_controlled_camera.h"
 
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
@@ -56,13 +61,11 @@ extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 void activate_listed_state_15_mobys_at_raised_positions(char *moby) __asm__("FUN_L06_002fb090");
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
-extern char  D_L06_00167540[] NOT_SDA;
-extern float FUN_00213f38(float *, float *, float, float, float, float);
-int          update_alien_queen_intro_camera(char *moby) __asm__("FUN_L06_002fb2a8");
+extern char D_L06_00167540[] NOT_SDA;
+int         update_alien_queen_intro_camera(char *moby) __asm__("FUN_L06_002fb2a8");
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC8E0), where it is exact; names translated to the US level program. */
 extern int *D_L06_001B0C30[];
-extern int  hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void        finish_alien_queen_intro(char *moby) __asm__("FUN_L06_002fb4b0");
 
 /* Steers a moby's camera-like orientation toward a target point, returns 1 when done. */
@@ -76,7 +79,6 @@ int         update_alien_queen_first_recovery_camera(char *moby) __asm__("FUN_L0
 #include "rnc/overlay/shared/world/cuboid.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002EB140), where it is exact; names translated to the US level program. */
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void
 func_L00_0025D5B0_2eb140(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 
@@ -120,13 +122,12 @@ extern short D_L06_00161F00 __attribute__((sda));
 extern short D_L06_00161F04 __attribute__((sda));
 extern short D_L06_00161F08 __attribute__((sda));
 extern void  FUN_L06_002fa9c0_c(void *) __asm__("FUN_L06_002fa9c0");
-s32  allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
-void set_moby_list_state_18(int idx) __asm__("FUN_L06_002f9948");
-void FUN_L06_002fb870(char *arg);
-void FUN_L06_002fbc30(char *arg);
-int  FUN_L06_002fba28(char *moby);
-extern void func_L00_00264B40_q(void *, int, float, void *) __asm__("FUN_L00_00263ac8");
-extern void func_L00_0025B178_q(void *) __asm__("FUN_L00_0025a120");
+void         set_moby_list_state_18(int idx) __asm__("FUN_L06_002f9948");
+void         FUN_L06_002fb870(char *arg);
+void         FUN_L06_002fbc30(char *arg);
+int          FUN_L06_002fba28(char *moby);
+extern void  func_L00_00264B40_q(void *, int, float, void *) __asm__("FUN_L00_00263ac8");
+extern void  func_L00_0025B178_q(void *) __asm__("FUN_L00_0025a120");
 extern int
 queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void  func_L00_00236710_q(void) __asm__("FUN_L00_00235d80");
@@ -150,9 +151,6 @@ extern void  func_L00_00250800_q(void *, int, void *) __asm__("FUN_L00_0024f7c8"
 extern int   func_L00_001F2BE8_q(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void  func_L06_002F6790_q(void *) __asm__("FUN_L06_002f5360");
 extern void  func_L00_00260460_q(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
-extern int   allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void  func_L00_00264DB8_q(int, int) __asm__("FUN_L00_00263d40");
-extern void  func_L06_00317770_q(char *) __asm__("FUN_L06_00316330");
 extern char  D_L06_00167540_q[] __asm__("D_L06_00167540");
 extern int  *D_L06_001B0C30_q[] __asm__("D_L06_001B0C30");
 extern char *level_mobys_q __asm__("D_L06_0015FFD8");
@@ -680,7 +678,7 @@ void alien_queen_update(unsigned char *moby) {
             return;
         flag[0xA] = 1;
         allocate_voice_for_bank_entry(1, 0, 0);
-        func_L00_00264DB8_q(0x53D6, -1);
+        queue_dialogue_message(0x53D6, -1);
         return;
     }
     case 15: {
@@ -690,7 +688,7 @@ void alien_queen_update(unsigned char *moby) {
             if (D_L06_0016A010[i] != 0) {
                 other = D_L06_001678D0 + i * 0xA0;
                 if (*(short *)(other + 0x86) == 0x12) {
-                    func_L06_00317770_q(other);
+                    release_moby_camera_control(other);
                     break;
                 }
             }
@@ -945,12 +943,12 @@ int update_alien_queen_intro_camera(char *moby) {
         pos = moby + 0x10;
     } else {
         blend_acceleration_step = *(float *)&frame_time_sq * 3.0f;
-        FUN_00213f38((float *)(alien_queen_state + 0x118),
-                     (float *)(alien_queen_state + 0x11C),
-                     1.0f,
-                     blend_acceleration_step,
-                     blend_acceleration_step,
-                     frame_time + frame_time);
+        advance_accelerated_scalar((float *)(alien_queen_state + 0x118),
+                                   (float *)(alien_queen_state + 0x11C),
+                                   1.0f,
+                                   blend_acceleration_step,
+                                   blend_acceleration_step,
+                                   frame_time + frame_time);
         fast_vec_normalize(moby_offset_position, moby + 0xC0, 8.0f);
         fast_vec_add(moby_offset_position, moby_offset_position, moby + 0x10);
         x = &hero;
@@ -996,12 +994,12 @@ int update_alien_queen_first_recovery_camera(char *moby) {
         pos = moby + 0x10;
     } else {
         blend_acceleration_step = frame_time_sq * 0.5f;
-        FUN_00213f38((float *)(queen_recovery_vars + 0x118),
-                     (float *)(queen_recovery_vars + 0x11C),
-                     1.0f,
-                     blend_acceleration_step,
-                     blend_acceleration_step,
-                     frame_time * 0.5f);
+        advance_accelerated_scalar((float *)(queen_recovery_vars + 0x118),
+                                   (float *)(queen_recovery_vars + 0x11C),
+                                   1.0f,
+                                   blend_acceleration_step,
+                                   blend_acceleration_step,
+                                   frame_time * 0.5f);
         fast_vec_normalize(moby_offset_position, moby + 0xC0, 8.0f);
         fast_vec_add(moby_offset_position, moby_offset_position, moby + 0x10);
         x = &hero;

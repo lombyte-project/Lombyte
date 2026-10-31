@@ -3,10 +3,9 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/audio/voices/allocate_voice_slot.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028EF68), where it is exact; names translated to the US level program. */
-
-extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
 int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 

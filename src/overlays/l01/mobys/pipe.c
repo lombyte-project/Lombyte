@@ -6,8 +6,8 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
-extern int  FUN_L00_00257b90(int lo, int hi);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 extern void update_entity() __asm__("FUN_L00_00250df8");
@@ -71,7 +71,7 @@ void pipe_update(struct Moby *moby) {
                 0x207F7F7F,
                 0x272727,
                 velocity_component_or_size,
-                scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
+                scale_game_frames(random_int_between(0x2D, 0x3C)));
         }
         FUN_L01_002ffa90_c(moby);
         mark_moby_for_removal(moby);

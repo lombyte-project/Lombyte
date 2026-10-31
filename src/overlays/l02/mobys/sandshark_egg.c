@@ -6,8 +6,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern int step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 

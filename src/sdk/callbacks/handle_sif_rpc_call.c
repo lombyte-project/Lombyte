@@ -2,10 +2,10 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/sdk/kernel/i_wakeup_thread.h"
 
 /* Packet, server, and queue are handled as words to preserve the retail
  * copy order. The indices below are byte offsets divided by four. */
-extern void iWakeupThread(s32 thread_id);
 
 void handle_sif_rpc_call(u32 *packet, void *state) __asm__("FUN_0011b138");
 

@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_TEST_LINKED_MOBY_TURN_TRIGGER_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_TEST_LINKED_MOBY_TURN_TRIGGER_H
+
+#include "types.h"
+
+struct Moby;
+
+int test_linked_moby_turn_trigger(struct Moby *) __asm__("FUN_L11_0030f270");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_TEST_LINKED_MOBY_TURN_TRIGGER_H */

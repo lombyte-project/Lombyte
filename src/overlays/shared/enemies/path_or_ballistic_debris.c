@@ -17,6 +17,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern float D_0015ED60;
 extern s32   coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
@@ -284,10 +285,7 @@ typedef struct Particle_2E17B8 {
     ParticleFade_2E17B8 fade; /* 0x20 */
 } Particle_2E17B8;
 
-char *
-spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern int   D_L14_0015F580_c __asm__("D_L14_0015F580");
-int          FUN_L00_00257b90(int lo, int hi);
 extern float func_002140F8_2E17B8(float, float) __asm__("random_float_between");
 extern int   func_002140B0_2E17B8(int) __asm__("random_integer_below");
 extern void

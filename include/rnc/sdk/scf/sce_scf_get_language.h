@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_SCF_SCE_SCF_GET_LANGUAGE_H
+#define LOMBYTE_RNC_SDK_SCF_SCE_SCF_GET_LANGUAGE_H
+
+#include "types.h"
+
+int sceScfGetLanguage(void);
+
+#endif /* LOMBYTE_RNC_SDK_SCF_SCE_SCF_GET_LANGUAGE_H */

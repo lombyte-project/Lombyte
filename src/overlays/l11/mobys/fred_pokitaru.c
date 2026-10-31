@@ -22,8 +22,6 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/watch.h"
 
-void mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c828");
-
 #include "qcopy.h"
 
 extern void  begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");

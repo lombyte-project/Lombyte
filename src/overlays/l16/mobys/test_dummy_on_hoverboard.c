@@ -17,6 +17,9 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 #include "qcopy.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/world/collision/ground_probe.h"
 
 /* Copy the selected 16-byte vendor vector. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0D98), where it is exact; names translated to the US level program. */
@@ -42,7 +45,6 @@ void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby,
     qcopy(path_node_destination, moby->data->vectors + index * 16 + 16);
 }
 
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1310), where it is exact; names translated to the US level program. */
 
 extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
@@ -287,8 +289,6 @@ typedef struct {
     L16LeapData_u *data;
 } L16LeapMoby_u;
 
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-
 #include "rnc/game/interpolated_record.h"
 
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
@@ -381,35 +381,32 @@ void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) 
     }
 }
 
-f32        probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 extern int D_L16_0015F5CC;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
 #include "sda.h"
 
-extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void  spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern void  spawn_explosion(void *,
-                             void *,
-                             void *,
-                             float,
-                             float,
-                             int,
-                             int,
-                             int,
-                             float,
-                             float,
-                             float,
-                             int,
-                             float,
-                             float,
-                             int,
-                             int,
-                             int,
-                             int) __asm__("FUN_L00_0025e450");
-extern float probe_ground_height(void *, int, float);
+extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+extern void spawn_explosion(void *,
+                            void *,
+                            void *,
+                            float,
+                            float,
+                            int,
+                            int,
+                            int,
+                            float,
+                            float,
+                            float,
+                            int,
+                            float,
+                            float,
+                            int,
+                            int,
+                            int,
+                            int) __asm__("FUN_L00_0025e450");
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 

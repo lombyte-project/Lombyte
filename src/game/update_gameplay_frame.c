@@ -6,6 +6,9 @@
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
+#include "rnc/rendering/frame/callbacks/noop_callback_h.h"
+#include "rnc/rendering/frame/callbacks/noop_callback_i.h"
+#include "rnc/ui/menus/system/enter_main_menu.h"
 
 typedef struct {
     f32 x, y, z, w;
@@ -46,10 +49,7 @@ typedef struct {
 
 extern RenderSequenceState render_sequence __asm__("D_0018CB20");
 extern s32                 intro_overlay_timer __asm__("D_0015EF58");
-extern void                enter_main_menu(void);
 extern void                noop_callback_e(RenderSequenceActor *) __asm__("func_001E9410");
-extern void                noop_callback_h(void) __asm__("func_001E9428");
-extern void                noop_callback_i(void) __asm__("func_001E9430");
 extern void                transition_update_movie_camera(void) __asm__("func_001EAF88");
 extern s32                 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void                fast_vec_add(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9A10");

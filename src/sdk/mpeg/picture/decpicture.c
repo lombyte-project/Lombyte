@@ -1,4 +1,6 @@
 #include "types.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/picture/_pictureData0.h"
 
 struct MpegReferenceImage;
 
@@ -20,10 +22,8 @@ struct MpegReferenceImage {
     s32 decoded;
 };
 
-extern u8  odd_field_picture_count_error_message[] __asm__("D_00153940");
-extern u8  unknown_picture_structure_error_message[] __asm__("D_00153960");
-extern s32 _Error();
-extern s32 _pictureData0();
+extern u8 odd_field_picture_count_error_message[] __asm__("D_00153940");
+extern u8 unknown_picture_structure_error_message[] __asm__("D_00153960");
 
 s32 _decPicture(struct MpegDecoderState *decoder) {
     enum {

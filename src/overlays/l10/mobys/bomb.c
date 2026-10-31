@@ -14,6 +14,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/math/rotations/step_rotation_toward_target.h"
 
 extern float D_0015ED6C;
 extern float D_0015ED70;
@@ -28,7 +29,6 @@ extern f32 D_L10_00161BEC_gp __asm__("D_L10_00161BEC") __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l10_orxon/vendor_00296BD8.c (func_L10_002D9530) */
 
 extern float FUN_001f9e90_u(float, float) __asm__("FUN_001f9e90");
-extern float step_rotation_toward_target(float, float, float) __asm__("FUN_L00_00200510");
 
 int resolve_bouncing_projectile_collision(char  *moby,
                                           char  *motion_data,

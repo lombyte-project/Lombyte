@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_GRAPH_SCE_GS_PUT_DRAW_ENV_H
+#define LOMBYTE_RNC_SDK_GRAPH_SCE_GS_PUT_DRAW_ENV_H
+
+#include "types.h"
+
+s32 sceGsPutDrawEnv(u64 *);
+
+#endif /* LOMBYTE_RNC_SDK_GRAPH_SCE_GS_PUT_DRAW_ENV_H */

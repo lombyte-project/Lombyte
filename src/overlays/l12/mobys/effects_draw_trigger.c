@@ -5,21 +5,18 @@
 #include "rnc/mobys/moby.h"
 #include "asm.h"
 #include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/rendering/effects/draw_textured_effect_list.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 extern char         D_L12_00167240[];
-extern int          is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 typedef struct Moby Moby;
 
 #include "rnc/overlay/shared/world/level_globals.h"
 
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8588), where it is exact; names translated to the US level program. */
 
-extern void draw_level_12_effects(void) __asm__("FUN_L12_002e71b0");
-
-void       effects_draw_trigger_update(struct Moby *moby) __asm__("FUN_L12_002e7208");
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
+void effects_draw_trigger_update(struct Moby *moby) __asm__("FUN_L12_002e7208");
 
 /* Moby class 293 */
 void effects_draw_trigger_update(struct Moby *moby) {

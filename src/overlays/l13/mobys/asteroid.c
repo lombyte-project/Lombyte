@@ -13,14 +13,15 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 enum AsteroidSpinAxis {
     SPIN_AXIS_X = 0x0,
     SPIN_AXIS_Y = 0x1,
     SPIN_AXIS_Z = 0x2
 };
-
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
@@ -30,17 +31,9 @@ extern char *create_moby(int);
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
-extern int FUN_L00_00257b90(int, int);
-
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
-extern s32 rand(void);
-
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-
-extern s32 rand();
 
 char *spawn_asteroid_fragment(char *owner,
                               char *spawn_position,
@@ -74,7 +67,7 @@ char *spawn_asteroid_fragment(char *parent_asteroid,
         *(short *)(moby_data + 0x4E) = remaining_split_count;
         MOBY(moby)->collision = 0;
         spin_increment = random_float_between(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
-        switch (rand() % 3) {
+        switch (RandomNext() % 3) {
         case SPIN_AXIS_X:
             *(float *)(moby_data + 0x30) = spin_increment;
             break;
@@ -86,7 +79,7 @@ char *spawn_asteroid_fragment(char *parent_asteroid,
             break;
         }
         spin_increment = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
-        switch (rand() % 3) {
+        switch (RandomNext() % 3) {
         case SPIN_AXIS_X:
             *(float *)(moby_data + 0x30) = spin_increment;
             break;
@@ -166,7 +159,7 @@ void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio)
     }
     moby->unk72 = 0;
     if (*(short *)(blob_data + 0x4E) > 0) {
-        for (i = 0; i < FUN_L00_00257b90(1, 2); i++) {
+        for (i = 0; i < random_int_between(1, 2); i++) {
             float part = moby->scale * random_float_between(0.25f, 0.75f);
             random_vector(split_velocity, frame_time * 5.0f, frame_time * 10.0f);
             fast_vec_scale(blob_data, blob_data, 0.75f);
@@ -210,8 +203,6 @@ struct BlobVars {
     s16          cooldown;    /* 0x4C: frames before it can hit again */
     s16          pieces;      /* 0x4E: blobs left to split off */
 };
-
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 
 extern s32 rand_1638(void) __asm__("FUN_001160d8");
 
@@ -379,5 +370,3 @@ void asteroid_update(struct Moby *moby) {
     moby->rot.y = fast_add_rotations(moby->rot.y, asteroid_vars->spin.y);
     moby->rot.z = fast_add_rotations(moby->rot.z, asteroid_vars->spin.z);
 }
-
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");

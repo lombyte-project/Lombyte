@@ -1,14 +1,14 @@
 #include "types.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/ipu/send_ipu_command.h"
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
 
 typedef struct {
     u8    pad0[0x858];
     void *cbData;
 } MpegDec;
 
-extern s32  DIntr(void);
-extern s32  EnableInterrupts(void);
-extern void _sendIpuCommand(MpegDec *d, u32 cmd);
-extern void _dispatchMpegCallback(void *cb, s32 *arg);
+extern s32 DIntr(void);
 
 void _doCSC(MpegDec *decoder, u32 ipu_output_address, s32 mbs) {
     s32 cbarg[8];
@@ -23,7 +23,7 @@ void _doCSC(MpegDec *decoder, u32 ipu_output_address, s32 mbs) {
     if (intr) {
         EnableInterrupts();
     }
-    _sendIpuCommand(decoder, 0x70000000 | mbs);
+    SendIpuCommand(decoder, 0x70000000 | mbs);
     cbarg[0] = 4;
     _dispatchMpegCallback(decoder->cbData, cbarg);
     while ((*(volatile u32 *)0x1000B000 >> 8) & 1) {

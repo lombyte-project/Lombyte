@@ -12,6 +12,11 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/l13/mobys/hit_proxy.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
@@ -27,8 +32,6 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
-extern int FUN_L00_00257b90(int, int);
-
 extern void FUN_L00_00257470(struct Moby *, int, int);
 
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
@@ -38,10 +41,6 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 extern float D_L13_001670C0[];
-
-extern void DebugPrint(char *, ...);
-
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 typedef int u128z __attribute__((mode(TI)));
 
@@ -62,8 +61,6 @@ Blk24 D_L13_001F4968 = {
 extern float D_L13_0015F580;
 
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 
 extern unsigned char *
 spawn_spinning_fade_in_out_effect_particle(void *pos,
@@ -197,10 +194,10 @@ void emit_forcefield_tower_destruction_effects(unsigned char *source_moby,
             pb = (int *)(vH.b + rb * 4);
             A = scale_game_frames(15);
             B = scale_game_frames(20);
-            C = FUN_L00_00257b90(A, B);
+            C = random_int_between(A, B);
             D = scale_game_frames(25);
             E = scale_game_frames(30);
-            F = FUN_L00_00257b90(D, E);
+            F = random_int_between(D, E);
             FUN_L00_0026a9f0(pA, vC, *pa, *pb, C, F, 0, 1200000.0f, 0, yv);
         } while (j != 0);
     }
@@ -222,8 +219,6 @@ extern int fptodp(float) __asm__("FUN_00120478");
 
 extern int resolve_moby_hit_response(
     struct Moby *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
-
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 extern void emit_effect_l13(void *,
                             void *,
@@ -365,8 +360,6 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
 extern int FUN_001160d8(void);
 
 extern int start_moby_voice(int, int, void *) __asm__("FUN_L13_00297fa0");
-
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 
 extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 
@@ -543,5 +536,3 @@ void forcefield_tower_update(struct Moby *moby) {
         return;
     }
 }
-
-extern int random_integer_below(int) __asm__("FUN_00213260");

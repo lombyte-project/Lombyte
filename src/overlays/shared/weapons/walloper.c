@@ -13,6 +13,9 @@
 #include "rnc/math/random/random_spherical_offset.h"
 #include "rnc/overlay/shared/weapons/walloper_data/walloper_update_2.h"
 #include "rnc/overlay/shared/weapons/walloper_data/walloper_update.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 typedef struct {
     float previous[4];
@@ -53,16 +56,12 @@ extern void  fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int   truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
-extern long  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 void         transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern float FUN_L00_00257c48(float lo, float hi);
 extern void  FUN_L00_002bbb00_c(int) __asm__("FUN_L00_002bbb00");
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern int  func_001F9908_r(void *) __asm__("FUN_001f9740");
-void        draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002bbbc8");
+extern void  scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern int   func_001F9908_r(void *) __asm__("FUN_001f9740");
+void         draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002bbbc8");
 void        draw_walloper_camera_facing_quad(void *mv) __asm__("FUN_L00_002bc1a0");
 extern void draw_geometry_quad(void *, void *, int);
 void        FUN_001f9a68_2bc1a0(float, void *, void *) __asm__("FUN_001f9a68");
@@ -839,9 +838,9 @@ void walloper_update(char *walloper_moby) {
                 fast_vec_sub(point_offset,
                              D_L00_001DBBA0[i].point[k],
                              l00_walloper_arc_predecessor_rows[i].point[k - 1]);
-                point_offset[0] += FUN_L00_00257c48(0.0f, 0.1f);
-                point_offset[1] += FUN_L00_00257c48(0.0f, 0.1f);
-                point_offset[2] += FUN_L00_00257c48(0.0f, 0.1f);
+                point_offset[0] += randf_sym(0.0f, 0.1f);
+                point_offset[1] += randf_sym(0.0f, 0.1f);
+                point_offset[2] += randf_sym(0.0f, 0.1f);
             }
             next_arc_index = i + 1;
             qcopy(D_L00_001DBBA0[i].point[0], arc_origin);

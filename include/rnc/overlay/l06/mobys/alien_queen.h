@@ -12,4 +12,6 @@ void set_moby_and_links_to_states_8_and_9(char *moby) __asm__("FUN_L06_002f53e8"
 void set_moby_list_state_18(int moby_list_index) __asm__("FUN_L06_002f9948");
 void clear_moby_list_state_18(int index) __asm__("FUN_L06_002f99b0");
 
+void alien_queen_update(unsigned char *) __asm__("FUN_L06_002f9a28");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_ALIEN_QUEEN_H */

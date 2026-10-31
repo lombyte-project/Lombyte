@@ -1,11 +1,11 @@
 #include "types.h"
 #include "sda.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 extern s32 D_0012FCAC NOT_SDA;
 extern u8             D_00158040[];
 extern u32            D_00158080[];
 extern u8             D_001580C0[];
-extern s32            sceSifCallRpc();
 
 void *sceSifAllocIopHeap(s32 size) {
     if (D_0012FCAC < 0)

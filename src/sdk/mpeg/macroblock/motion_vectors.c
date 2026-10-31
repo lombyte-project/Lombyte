@@ -1,16 +1,8 @@
 #include "types.h"
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
+#include "rnc/sdk/mpeg/macroblock/motion_vector.h"
 
 typedef struct MpegDec MpegDec;
-
-extern s32  _nextBit(MpegDec *d, s32 n);
-extern void _motionVector(MpegDec *d,
-                          s32     *PMV,
-                          s32     *dmvector,
-                          s32      h_r_size,
-                          s32      v_r_size,
-                          s32      dmv,
-                          s32      mvscale,
-                          s32      full_pel_vector);
 
 void _motionVectors(MpegDec *decoder,
                     s32      PMV[2][2][2],

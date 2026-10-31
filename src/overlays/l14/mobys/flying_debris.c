@@ -13,17 +13,13 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/flying_debris_globals.h"
-
-extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
-
-extern void FUN_0020c828(void *);
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 void remove_flying_debris(u8 *self) __asm__("FUN_L14_002bb4d8");
 
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-
-extern char *
-spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 
 extern char D_L14_0015F580[] MACRO_ADDR;
 
@@ -67,8 +63,6 @@ extern void e450_b78(void *,
                      int,
                      int,
                      int) __asm__("FUN_L00_0025e450");
-
-extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
@@ -151,13 +145,13 @@ void flying_debris_update(struct Moby *moby) {
     fast_vec_add(at, joint, ofs);
     fast_vec_sub(moby_to_joint_direction, joint, &moby->pos);
     normalize_d(moby_to_joint_direction, moby_to_joint_direction, 0.05f);
-    spawn_burst(at,
-                moby_to_joint_direction,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                random_int_between(scale_game_frames(10), scale_game_frames(20)),
-                1,
-                40000.0f);
+    FUN_L00_0026cbb0(at,
+                     moby_to_joint_direction,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     random_int_between(scale_game_frames(10), scale_game_frames(20)),
+                     1,
+                     40000.0f);
     for (i = 0; i < 3; i++) {
         if (i != 2) {
             fast_vec_scale(ofs, (char *)moby + 0xC0, randf_sym(0.01f, 0.5f));
@@ -213,9 +207,6 @@ void flying_debris_update(struct Moby *moby) {
 
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
-
 unsigned char *
 spawn_flying_debris(struct Moby *owner, float angle, char *posp) __asm__("FUN_L14_002bb310");
 
@@ -267,5 +258,5 @@ void remove_flying_debris(u8 *debris_moby) {
         release_point_light_slot(light_index);
         *(s16 *)(debris_vars + 0x12) = -1;
     }
-    FUN_0020c828(debris_moby);
+    mark_moby_for_removal(debris_moby);
 }

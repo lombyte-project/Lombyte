@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L04_MOBYS_TRANSPORT_SHIP_H
+#define LOMBYTE_RNC_OVERLAY_L04_MOBYS_TRANSPORT_SHIP_H
+
+#include "types.h"
+
+void transport_ship_update(void *) __asm__("FUN_L04_002ce060");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L04_MOBYS_TRANSPORT_SHIP_H */

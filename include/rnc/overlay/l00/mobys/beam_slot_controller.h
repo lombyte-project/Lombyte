@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L00_MOBYS_BEAM_SLOT_CONTROLLER_H
+#define LOMBYTE_RNC_OVERLAY_L00_MOBYS_BEAM_SLOT_CONTROLLER_H
+
+#include "types.h"
+
+void beam_slot_controller_update() __asm__("FUN_L00_002e1df0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L00_MOBYS_BEAM_SLOT_CONTROLLER_H */

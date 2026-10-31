@@ -2,6 +2,8 @@
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/storage/memory_card/mce_store_pwd.h"
 
 struct McChdirRequest {
     s32 unk0;
@@ -15,10 +17,8 @@ struct McChdirRequest {
 extern struct McChdirRequest D_00159AB0;
 extern s32                   PollSema();
 extern s32                   SignalSema();
-extern s32                   sceSifCallRpc();
 extern s32                   sceSifWriteBackDCache();
 extern s32                   strncpy(s8 *, s8 *, s32);
-extern void                  mceStorePwd();
 
 s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
     s32 rpc_dispatch_status;

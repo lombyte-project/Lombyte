@@ -1,15 +1,14 @@
 /* Random: scales a value by one minus a squared random value. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_002785C0.c: func_L09_002785C0), where it is exact; names translated to the US level program. */
-
-extern s32 rand();
 
 float scale_by_one_minus_random_squared(float scale) __asm__("FUN_L09_00277688");
 
 float scale_by_one_minus_random_squared(float scale) {
-    int   x = (rand() >> 16) & 0xFFF;
+    int   x = (RandomNext() >> 16) & 0xFFF;
     float random_factor = (float)x;
     random_factor = random_factor * (1.0f / 4096.0f);
     random_factor = random_factor * random_factor;

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_ASSIGN_PAUSE_LEVEL_SPRITE_LIST_H
+#define LOMBYTE_RNC_UI_MENUS_PAUSE_ASSIGN_PAUSE_LEVEL_SPRITE_LIST_H
+
+#include "types.h"
+
+int assign_pause_level_sprite_list(char *) __asm__("FUN_00221d28");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_ASSIGN_PAUSE_LEVEL_SPRITE_LIST_H */

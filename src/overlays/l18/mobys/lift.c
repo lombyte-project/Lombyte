@@ -32,6 +32,8 @@
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Runs the lift's state machine, then queues the draw callback for its current look. */
 typedef struct {
@@ -39,9 +41,7 @@ typedef struct {
     unsigned short h34;
 } M_2310;
 
-f32 lift_texture_u_offset_gp __asm__("D_L18_00162308") = 0;
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+f32  lift_texture_u_offset_gp __asm__("D_L18_00162308") = 0;
 void synchronize_lift_group_height(void *source_moby) __asm__("FUN_L18_002f2598");
 
 extern void synchronize_lift_group_height(void *a) __asm__("FUN_L18_002f2598");
@@ -64,7 +64,7 @@ extern unsigned char D_00141400 NOT_SDA;
 extern unsigned char D_0013D406 NOT_SDA;
 void                            lift_update(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");
 
-/* Moby class 1402 */
+/* Moby classes 467, 472, 1402 */
 void lift_update(struct Moby *lift_moby) {
     enum {
         LIFT_INITIALIZE = 0,
@@ -287,7 +287,6 @@ short lift_25_quad_mesh_quads[25][4][2] __asm__("D_L18_001DA610") = {
     {{0x22, 0x1d},  {0x1b, 0xf}, {0x21, 0x1a}, {0x12, 0x20}},
 };
 
-extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_lift_25_quad_mesh(struct Moby *moby) {
@@ -431,8 +430,6 @@ short lift_38_quad_mesh_quads[38][4][2] __asm__("D_L18_001DAC20") = {
     {{0x2b, 0x24}, {0x32, 0x2e}, {0x26, 0x25}, {0x34, 0x1e}},
     {{0x32, 0x2e}, {0x2b, 0x24}, {0x31, 0x2f}, {0x22, 0x33}},
 };
-
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 
 void draw_lift_38_quad_mesh(struct Moby *moby) {
     FRow_l18      quad_positions[4];

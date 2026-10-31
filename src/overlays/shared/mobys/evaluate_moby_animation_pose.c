@@ -10,6 +10,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250df8.s", FUN_L00_00250df8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250e30.s", FUN_L00_00250e30);
@@ -33,7 +35,6 @@ extern int        D_0015ED84;
 extern int        D_0014C190[][64];
 extern u8         D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 extern Item257218 D_L00_001C40B0[] NOT_SDA;
-int               FUN_00213260(int);
 int               FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");
 
 /* Picks the weapon whose ammo a pickup gives (*out), preferring owned weapons that are not full, and returns how many pickups to drop (1 or 2). */
@@ -56,7 +57,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
         }
         idx = -1;
         if (not_full) {
-            i = FUN_00213260(not_full);
+            i = random_integer_below(not_full);
             while (i >= 0) {
                 idx++;
                 x = D_0015EDD0_macro[idx] & 0x3F;
@@ -66,7 +67,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             }
             *out = D_0015EDD0_macro[idx] & 0x3F;
         } else if (owned) {
-            i = FUN_00213260(with_max);
+            i = random_integer_below(with_max);
             while (i >= 0) {
                 idx++;
                 x = D_0015EDD0_macro[idx] & 0x3F;
@@ -79,7 +80,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             *out = 10;
         }
     }
-    if (FUN_00213260(5) == 0)
+    if (random_integer_below(5) == 0)
         drops = 2;
     return drops;
 }
@@ -99,7 +100,6 @@ extern S_257470      D_L00_001BB230_lui __asm__("D_L00_001BB230") NOT_SDA;
 extern unsigned char D_L00_0015FC88_257470[] __asm__("D_L00_0015FC88")
     __attribute__((section(".data")));
 extern void debug_print(void *, ...) __asm__("FUN_001e93b0");
-extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
 extern unsigned char D_L00_001E8F00[] NOT_SDA;
 extern unsigned char D_L00_001E8F28[] NOT_SDA;

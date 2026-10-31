@@ -28,6 +28,7 @@
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/world/collision/collision_line.h"
 #include "qzero.h"
+#include "rnc/audio/voices/allocate_voice_slot.h"
 
 extern float D_L14_0015F580[] MACRO_ADDR;
 
@@ -67,8 +68,6 @@ void tilting_platform_update(struct Moby *moby) {
 #include "rnc/sdk/eetypes.h"
 
 typedef int u128_s07 __attribute__((mode(TI)));
-
-extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
 #include "rnc/overlay/l14/mobys/platform_data/update_platform_tilt_basis.h"
 

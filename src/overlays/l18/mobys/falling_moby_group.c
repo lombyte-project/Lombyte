@@ -32,8 +32,9 @@
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/l18/mobys/child_carrier.h"
 
-extern s32  random_integer_below(s32) __asm__("FUN_00213260");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern short         *D_L18_001AC240[];
@@ -78,7 +79,6 @@ advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__
 extern float fast_add_rotations(float, float);
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int   random_integer_below(int);
 extern int   scale_game_frames(int);
 extern float D_L18_0015F580_macro[] __asm__("D_L18_0015F580") MACRO_ADDR;
 
@@ -245,7 +245,6 @@ void falling_moby_group_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3038), where it is exact; names translated to the US level program. */
 
 extern void mark_block_entries_within_transform_xy_bounds(int, int) __asm__("FUN_L18_002f1d08");
-extern void set_group_child_carrier_byte_bc(int, int) __asm__("FUN_L18_002fa888");
 
 #include "rnc/overlay/l18/mobys/falling_moby_group.h"
 

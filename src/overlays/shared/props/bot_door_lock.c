@@ -13,6 +13,7 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/math/random.h"
 
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -209,7 +210,6 @@ extern unsigned char D_001413F4 NOT_SDA;
 extern unsigned char            D_0015EDB4;
 extern unsigned char            D_0014C050[];
 extern unsigned int             fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
-extern float                    random_angle_radians(void) __asm__("FUN_00213308");
 extern void
 draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
 

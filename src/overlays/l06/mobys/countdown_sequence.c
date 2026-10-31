@@ -13,6 +13,10 @@
 #include "rnc/overlay/shared/audio/music/request_music_track.h"
 #include "rnc/overlay/l06/scripted_camera_sequence.h"
 #include "rnc/overlay/l06/mobys/countdown_sequence_globals.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/l06/mobys/draw_pulsing_timer_display.h"
+#include "rnc/overlay/l06/mobys/spark_emitter.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 
 extern int D_L06_001ABFC0_u[] __asm__("D_L06_001ABFC0");
 
@@ -48,7 +52,6 @@ float        D_L06_001620B0 = 0;
 extern float l06_linked_sequence_post_path_countdown_duration __asm__("D_L06_001620C4")
     __attribute__((sda));
 extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
-extern int  count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 void        begin_red_button_rotation(char *moby) __asm__("FUN_L06_003047b8");
 extern void begin_red_button_rotation(char *) __asm__("FUN_L06_003047b8");
 s32         get_red_button_sequence_status(const u8 *moby) __asm__("FUN_L06_003047f8");
@@ -59,14 +62,12 @@ extern void  select_localized_moby_voice_line(struct Moby *, int) __asm__("FUN_L
 extern void  set_moby_list_state_17(int) __asm__("FUN_L06_002ffc38");
 extern void  set_moby_list_state_15(int) __asm__("FUN_L06_002e9e30");
 extern void  clear_moby_list_state_4(int) __asm__("FUN_L06_002f45a0");
-extern void  activate_listed_spark_emitters(int) __asm__("FUN_L06_00309240");
 extern void  FUN_L06_002356a0(int, int);
 extern float scale_recovery_time(float) __asm__("FUN_L06_00216fa8");
 extern float FUN_002132a8(float, float);
 extern void  continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern int   hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void  FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
-extern void  draw_pulsing_timer_display(char *) __asm__("FUN_L06_003021d8");
 extern void  allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
 void         countdown_sequence_update(unsigned char *moby) __asm__("FUN_L06_00301b90");
 
@@ -80,7 +81,6 @@ struct TauntVoiceVars {
 s32 chatter_variant_used_flags[1] __asm__("D_L06_001620B8") = {0};
 
 extern s32 queued_dialogue_id[] __asm__("D_001516EC");
-extern s32 FUN_00213260(s32);
 extern int D_L06_0015F5C4;
 
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -356,7 +356,7 @@ void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
         id = voice_vars->greet[lang];
         break;
     case VOICE_KIND_CHATTER:
-        chatter_index = FUN_00213260(3);
+        chatter_index = random_integer_below(3);
         for (i = 0; i < 4; i++) {
             if (chatter_variant_used_flags[chatter_index] == 0) {
                 chatter_variant_used_flags[chatter_index] = 1;

@@ -15,6 +15,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/debug/debug_menu.h"
+#include "rnc/overlay/shared/math/random/random_vector.h"
 
 typedef union {
     u128 q;
@@ -69,7 +70,6 @@ extern char  collision_hit_point[] __asm__("D_L00_00173E60");
 extern float D_0015ED6C;
 extern Vec4  zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 extern float D_L00_00161890_gp __asm__("D_L00_00161890") __attribute__((sda));
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern int   collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
 extern unsigned char *

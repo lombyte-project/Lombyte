@@ -10,6 +10,8 @@
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/props/spinning_fragment.h"
 
 typedef struct {
     float corner[4][4];
@@ -23,10 +25,7 @@ typedef struct {
 
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(
     void *, int, int, float, float, float, float, float) __asm__("FUN_L00_0026b790");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern unsigned char              *
-spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");

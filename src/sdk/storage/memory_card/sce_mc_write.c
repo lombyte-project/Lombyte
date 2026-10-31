@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct MemoryCardWriteRequest {
     s32 file_descriptor;
@@ -18,7 +19,6 @@ extern struct MemoryCardWriteRequest D_00159A80;
 extern s32                           FlushCache();
 extern s32                           PollSema();
 extern s32                           SignalSema();
-extern s32                           sceSifCallRpc();
 
 s32 sceMcWrite(s32 fd, u8 *buffer, s32 size) {
     s32 rpc_result;

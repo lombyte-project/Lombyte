@@ -10,6 +10,7 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/loaders/register_moby_class.h"
+#include "rnc/sdk/graph/sce_gs_sync_path.h"
 
 /* Offsets of the bank's four packed images, from the bank start. */
 typedef struct ImageBank {
@@ -36,7 +37,6 @@ extern s32
 sceGsSetDefLoadImage_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32  sceGsExecLoadImage_23fa00(void *, void *) __asm__("FUN_00122658");
-extern s32  sceGsSyncPath(s32, u16) __asm__("FUN_00120558");
 
 s32                       first_record __asm__("D_L00_0015FC00") = 0;
 s32                       second_record __asm__("D_L00_0015FC10") = 0;

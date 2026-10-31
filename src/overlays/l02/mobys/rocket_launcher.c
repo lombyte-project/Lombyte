@@ -8,6 +8,9 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/l02/mobys/rocket_launcher_globals.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/l02/mobys/rocket_launcher_projectile.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
 extern float D_0015ED6C;
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -21,9 +24,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern char D_L02_001673C0[];
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-
-extern int  voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 #include "qcopy.h"
 
@@ -60,8 +60,7 @@ s32 D_L02_00161C7C = 0x80329600;
 void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");
 
 extern void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");
-extern char *spawn_projectile_moby(char *src, void *pos, float *dir) __asm__("FUN_L02_002ec228");
-extern f32   scale_time(f32) __asm__("FUN_001f96b0");
+extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern f32
 turret_approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
 extern void turret_spawn_debris(struct Moby *,

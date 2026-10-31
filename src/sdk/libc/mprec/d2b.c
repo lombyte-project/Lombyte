@@ -1,3 +1,5 @@
+#include "rnc/sdk/libc/mprec/hi0bits.h"
+#include "rnc/sdk/libc/mprec/lo0bits.h"
 /****************************************************************
  *
  * The author of this software is David M. Gay.
@@ -106,8 +108,6 @@ typedef union double_union {
 #define Bias      1023
 #define P         53
 extern _Bigint *_Balloc(struct _reent *, s32);
-extern s32      _hi0bits(u32);
-extern s32      _lo0bits(u32 *);
 
 _Bigint *_d2b(struct _reent *reent_context, f64 _d, s32 *binary_exponent, s32 *bits) {
     double_union d;
@@ -124,7 +124,7 @@ _Bigint *_d2b(struct _reent *reent_context, f64 _d, s32 *binary_exponent, s32 *b
     if (de = (s32)(d0 >> Exp_shift))
         z |= Exp_msk1;
     if (y = d1) {
-        if (k = _lo0bits(&y)) {
+        if (k = CountTrailingZeroBits(&y)) {
             x[0] = y | z << (32 - k);
             z >>= k;
         } else {
@@ -132,7 +132,7 @@ _Bigint *_d2b(struct _reent *reent_context, f64 _d, s32 *binary_exponent, s32 *b
         }
         i = significand_bigint->_wds = (x[1] = z) ? 2 : 1;
     } else {
-        k = _lo0bits(&z);
+        k = CountTrailingZeroBits(&z);
         x[0] = z;
         i = significand_bigint->_wds = 1;
         k += 32;
@@ -142,7 +142,7 @@ _Bigint *_d2b(struct _reent *reent_context, f64 _d, s32 *binary_exponent, s32 *b
         *bits = P - k;
     } else {
         *binary_exponent = de - Bias - (P - 1) + 1 + k;
-        *bits = 32 * i - _hi0bits(x[i - 1]);
+        *bits = 32 * i - CountLeadingZeroBits(x[i - 1]);
     }
     return significand_bigint;
 }

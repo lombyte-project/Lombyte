@@ -9,6 +9,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/camera/follow_camera_offset_effect.h"
 
 typedef struct Hero Hero;
 
@@ -23,9 +24,7 @@ float versatarget_particle_scale_gp __asm__("D_L02_00161CB8") = 1.25f;
 extern float D_L02_00161CBC;
 extern void  spawn_moving_hero_relative_alpha_fade_particle(
      void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
-void        try_select_camera_offset_effect_moby(char *m) __asm__("FUN_L02_002fa7c8");
 extern void func_L02_002FBB10_c(char *) __asm__("FUN_L02_002fa6d8");
-extern void try_select_camera_offset_effect_moby(char *) __asm__("FUN_L02_002fa7c8");
 extern float
 func_L00_0025CE58_f(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 

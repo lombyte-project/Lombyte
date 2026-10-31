@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/libc/stdio/printf.h"
 
 extern s32   snd_batch_index __asm__("D_0015ECC0");
 extern s32  *snd_batch_command_buffers[2] __asm__("D_0015ECA0");
@@ -8,7 +9,6 @@ extern u8    sound_command_client[] __asm__("D_0015EBC0");
 extern char  snd_non_idle_error_string[] __asm__("D_00153D20");
 extern void  snd_prepare_return_buffer(void *, s32, s32 *);
 extern s32   SceSifCheckStatRpc(void *);
-extern s32   printf(const char *, ...);
 extern void  FlushCache(s32);
 extern s32   sceSifCallRpc(void *, u32, u32, void *, s32, void *, s32, void (*)(void *), void *);
 void         snd_send_current_batch(void) __asm__("FUN_0012e9d8");
@@ -20,7 +20,7 @@ void snd_send_current_batch(void) {
                               *snd_batch_command_buffers[snd_batch_index],
                               snd_batch_command_buffers[snd_batch_index]);
     while (SceSifCheckStatRpc(sound_command_client) != 0) {
-        printf(snd_non_idle_error_string);
+        Printf(snd_non_idle_error_string);
         FlushCache(0);
     }
     sceSifCallRpc(sound_command_client,

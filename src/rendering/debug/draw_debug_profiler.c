@@ -6,6 +6,13 @@
 #include "rnc/rendering/texture/patch_tie_texture_fields.h"
 #include "rnc/rendering/tfrags/light_tfrags.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/effects/append_billboard_batch.h"
+#include "rnc/rendering/effects/render_queued_rotated_sprites.h"
+#include "rnc/rendering/frame/callbacks/noop_graphics_callback.h"
+#include "rnc/rendering/frame/copy_render_buffer_pair.h"
+#include "rnc/rendering/mobys/register_entity_render_resources.h"
+#include "rnc/rendering/occlusion/update_occlusion.h"
+#include "rnc/rendering/packets/append_dma_tag.h"
 
 typedef struct {
     u8  pad_0[4];
@@ -54,16 +61,13 @@ extern u8             tie_light_data[] __asm__("D_001E3200");
 extern u8             tfrag_patch_light_label[] __asm__("D_001E78A0");
 extern u8             shrub_patch_light_label[] __asm__("D_001E78B8");
 
-extern void append_dma_tag(u32);
 extern void FlushCache(s32);
 extern void transition_draw_sky(void) __asm__("func_001E9AB8");
 extern void draw_lens_flare(void) __asm__("func_001EDC50");
-extern void render_queued_rotated_sprites(void) __asm__("FUN_001ee338");
 extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
 extern void noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
 extern void update_camera_view_matrices(void) __asm__("func_001F2260");
 extern void update_fog(void) __asm__("func_001F2588");
-extern void update_occlusion(void) __asm__("FUN_001f2c10");
 extern void reset_gs_registers(void) __asm__("func_001F3868");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
@@ -78,7 +82,6 @@ extern void draw_screen_effect(void) __asm__("func_001F4FB8");
 extern void draw_fogged_fullscreen_sprite(void *) __asm__("func_001F5138");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
 extern void draw_debug_font(void) __asm__("func_001F79A8");
-extern void append_billboard_batch(void) __asm__("FUN_001f92b0");
 extern s32  truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void aa_blur_pass(void) __asm__("func_001FB680");
@@ -98,11 +101,8 @@ extern void vu1_add_data_ref(void *, s32) __asm__("func_00233830");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void vu1_gs_regs_normal(void) __asm__("func_00233BC8");
 extern void vu1_gs_regs_alt(void) __asm__("func_00233C28");
-extern void copy_render_buffer_pair(void) __asm__("FUN_00235840");
-extern void register_entity_render_resources(void) __asm__("FUN_00235898");
 extern void draw_ties_1(void) __asm__("func_002358C8");
 extern void draw_ties_2(void) __asm__("func_00235990");
-extern void noop_graphics_callback(void) __asm__("func_00237A70");
 
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 

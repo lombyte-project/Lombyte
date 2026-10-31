@@ -11,8 +11,10 @@
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/level_labels.h"
-
-extern float random_angle_radians(void) __asm__("FUN_00213308");
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/rotations/reorient_position_about_pivot.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
@@ -20,16 +22,12 @@ extern int   FUN_0022da68(int, int, int);
 extern void  update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
-void         FUN_L01_0026e090(int i, int v);
 void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int   rand(void) __asm__("FUN_001160d8");
 extern s32   rand(void);
 extern float step_angle_toward_target(float *, float, int, float) __asm__("FUN_L00_0025bc00");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void
-reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
-void command_falling_platform_update(char *moby) __asm__("FUN_L07_003112c8");
+void         command_falling_platform_update(char *moby) __asm__("FUN_L07_003112c8");
 
 /* Moby class 1069 */
 void command_falling_platform_update(char *moby) {

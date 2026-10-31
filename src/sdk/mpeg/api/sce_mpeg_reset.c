@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/mpeg/picture/_clearEach.h"
 
 typedef struct MpegDecoder MpegDecoder;
-extern void                ClearDecoderState(MpegDecoder *decoder) __asm__("_clearEach");
 extern void                set_mpeg1_mode(MpegDecoder *decoder) __asm__("SetImageBufferFlag");
 
 void sceMpegReset(struct sceMpeg *mpeg) __asm__("sceMpegReset");
@@ -16,7 +16,7 @@ void sceMpegReset(struct sceMpeg *mpeg) {
     mpeg->frameCount = 0;
     decoder->frame_base = 0;
     decoder->unk80 = -1;
-    ClearDecoderState(decoder);
+    _clearEach(decoder);
     decoder->frame_count = 0;
     set_mpeg1_mode(decoder);
 }

@@ -2,17 +2,17 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/audio/music/music_start_track_10000.h"
+#include "rnc/audio/music/music_start_track_20000.h"
+#include "rnc/audio/music/music_start_track_30000.h"
+#include "rnc/audio/music/music_start_track_40000.h"
+#include "rnc/audio/music/music_start_track_50000.h"
+#include "rnc/audio/music/music_start_track_60000.h"
 
 extern u8 scene_sounds[] __asm__("D_0013A664");
 // D_002169C0 is a code address retail passes as a pointer, not a data symbol;
 // config/us/pinned.yaml binds its absolute value so this extern links.
-extern s32  snd_play_vag_stream_by_loc_ex_cb() __asm__("func_0012EC08");
-extern void music_start_track_60000(s32, s32, s32) __asm__("FUN_00215440");
-extern void music_start_track_50000(s32, s32, s32) __asm__("FUN_00215518");
-extern void music_start_track_40000(s32, s32, s32) __asm__("FUN_00215600");
-extern void music_start_track_30000(s32, s32, s32) __asm__("FUN_002156d8");
-extern void music_start_track_20000(s32, s32, s32) __asm__("FUN_002157d0");
-extern void music_start_track_10000(s32, s32, s32) __asm__("FUN_002158a0");
+extern s32 snd_play_vag_stream_by_loc_ex_cb() __asm__("func_0012EC08");
 
 void music_start_track_by_id(s32 track, s32 track_flags, s32 volume) __asm__("FUN_00215970");
 

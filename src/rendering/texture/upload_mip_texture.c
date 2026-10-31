@@ -4,6 +4,8 @@
 #include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "rnc/globals.h"
+#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
+#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
 
 typedef struct {
     u8  pad0[8];
@@ -30,8 +32,6 @@ typedef struct {
 
 extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("FUN_001f97e8");
 extern void FlushCache(s32);
-extern s32  sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
-extern s32  sceGsExecLoadImage(sceGsLoadImage *, u128 *);
 extern s32  sceGsSyncPath(s32, s32) __asm__("func_00120558");
 extern s32  log2dim(s32) __asm__("func_001F97A0");
 

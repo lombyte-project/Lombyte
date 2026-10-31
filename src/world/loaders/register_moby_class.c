@@ -1,6 +1,7 @@
 #include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/mobys/assign_moby_class_data.h"
 
 /* Class data block of a moby class in the level file (not a Moby instance). */
 typedef struct MobyClassData {
@@ -8,7 +9,6 @@ typedef struct MobyClassData {
     s32 unk2C;
 } MobyClassData;
 
-extern void assign_moby_class_data(s32) __asm__("FUN_00212d68");
 extern void
      prepare_resident_class_render_data(MobyClassData *, s32, s32, s32) __asm__("FUN_00203338");
 void register_moby_class(MobyClassData *moby,

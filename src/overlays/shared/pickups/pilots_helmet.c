@@ -16,6 +16,8 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/pickups/infobot.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/save/memcard_save_data.h"
 
 typedef struct {
     u8  pad[0xB0];
@@ -66,12 +68,9 @@ extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
 extern f32  vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern void vscl_2e0788(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int  f9740_2e0788(void *) __asm__("FUN_001f9740");
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *
-spr_2e0788(OvlQuad *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 
 extern char            D_L00_00166DC0[] NOT_SDA;
 extern s32             D_L00_0015F5C4_2e03a0 __asm__("D_L00_0015F5C4");
@@ -199,14 +198,14 @@ void emit_moby_color_cycling_particles(unsigned char *moby) {
         color_cycle_progress = convert_integer_to_float(scale_game_frames(0xff) - moby_data->t[j]);
         color_cycle_progress = color_cycle_progress / (float)scale_game_frames(0xff);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - color_cycle_progress));
-        spr_2e0788(sprite_position_and_step,
-                   c,
-                   truncate_float_to_s32(*a++),
-                   0x35,
-                   1,
-                   2,
-                   0,
-                   moby_data->c[j]);
+        FUN_L00_00272f68(sprite_position_and_step,
+                         c,
+                         truncate_float_to_s32(*a++),
+                         0x35,
+                         1,
+                         2,
+                         0,
+                         moby_data->c[j]);
         j++;
         fast_vec_add(
             sprite_position_and_step, sprite_position_and_step, &sprite_position_and_step[1]);

@@ -18,6 +18,8 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/mobys/animation_start.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Spawns a particle (part type 0x4F) at pos moving by record_vector_source, following the parent moby when one is given. */
 extern unsigned char *D_L17_001B2A54 NOT_SDA;
@@ -60,8 +62,6 @@ spawn_fleet_beam_particle(struct Moby *parent, void *pos, float *record_vector_s
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002AA068), where it is exact; names translated to the US level program. */
 
 extern char *D_L17_0015FFD8;
-extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
-extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float fast_cos(float);
 extern int   D_L17_0015FFD8_t; /* no foreign declaration */
 extern short fleet_beam_endpoint_axis_offset __asm__("D_L17_00161498") __attribute__((sda));
@@ -282,7 +282,6 @@ typedef struct {
     long q88;
 } S_a95b8;
 
-extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void func_L00_001FD1D8_a95b8(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern struct {

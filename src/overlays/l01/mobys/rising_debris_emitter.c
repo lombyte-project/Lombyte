@@ -10,6 +10,7 @@
 
 #include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
@@ -52,7 +53,6 @@ SteamColors l01_rising_particle_variant_indices __asm__("D_L01_00161C18") = {
 
 extern void
 spawn_debris_chunk(void *, void *, u32, s32, f32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
-extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L00_0026bed0");
 
 void rising_debris_emitter_update(SteamMoby *steam_moby) __asm__("FUN_L01_002f8c58");
 

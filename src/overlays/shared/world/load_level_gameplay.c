@@ -29,6 +29,18 @@
 #include "rnc/world/loaders/relocate_sky_definition.h"
 #include "rnc/world/loaders/unpack_point_records.h"
 #include "rnc/world/loaders/upload_texture_images.h"
+#include "rnc/input/reset_pad_history.h"
+#include "rnc/overlay/shared/audio/voices/play_voice.h"
+#include "rnc/overlay/shared/camera/init_camera_system.h"
+#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
+#include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/hero/initialize_hero.h"
+#include "rnc/overlay/shared/ui/menus/ensure_menu_cache_entry.h"
+#include "rnc/overlay/shared/ui/menus/find_or_assign_bolt_source_slot.h"
+#include "rnc/rendering/frame/reset_draw_globals.h"
+#include "rnc/sdk/libc/stdlib/srand.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 
 typedef struct {
     s32 a, b, c, off;
@@ -455,42 +467,31 @@ extern int D_L00_00160FCC   MACRO_ADDR;
 
 #include "rnc/rendering/debug/debug_menu.h"
 
-extern int   D_L00_001AB840[];
-extern int   D_L00_001BA4D0[];
-extern int   find_or_assign_bolt_source_slot(int, int) __asm__("FUN_L00_00284d90");
-extern short gameplay_moby_index_remap[] __asm__("D_L00_001AC780");
-extern short D_L00_001B0770[];
-extern short D_L00_001B07B0[];
-extern short D_L00_001B0830[];
-extern u8    D_00100AE0[];
+extern int                           D_L00_001AB840[];
+extern int                           D_L00_001BA4D0[];
+extern short                         gameplay_moby_index_remap[] __asm__("D_L00_001AC780");
+extern short                         D_L00_001B0770[];
+extern short                         D_L00_001B07B0[];
+extern short                         D_L00_001B0830[];
+extern u8                            D_00100AE0[];
 extern unsigned char *D_L00_001604A0 MACRO_ADDR;
 extern unsigned char                 mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern unsigned char                 D_L00_001804C0[];
 extern unsigned char                 D_L00_001BC1B0[];
 extern unsigned char                 D_L00_001C5B00[];
-extern void                          enable_font_color_codes(void) __asm__("func_001F61E8");
 extern void                          scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern void                          FUN_0022a5e0(void *);
 extern void                          light_tfrags(void *) __asm__("FUN_00234f98");
-extern void                          setup_level_cameras(void) __asm__("FUN_L00_001ed358");
-extern void                          initialize_hero(void) __asm__("FUN_L00_00204c60");
-extern void                          reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
-extern void store_current_level_table_value(int, int) __asm__("FUN_L00_0024a798");
-extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
 extern void update_moby_proximity_interaction() __asm__("FUN_L00_0028e180");
-extern void initialize_moby_state_record(char *) __asm__("FUN_L00_0028e8a0");
 extern void FillTransferWords(void *, s32, s32);
 extern void FlushCache(s32);
 extern void set_background_color(unsigned long, unsigned long, unsigned long);
 extern void PackRenderCommandFields(void *, s32, s32, s32, s32);
-extern void reset_draw_globals(void) __asm__("FUN_001f37e8");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern void set_video_timing(s32) __asm__("func_00214970");
 extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_fog(void) __asm__("func_001F2588");
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
-void        reset_pad_history(void) __asm__("func_00217020");
-void        srand(int value) __asm__("func_001160C8");
 extern void read_disc_sectors_and_wait(void *, int, int) __asm__("FUN_00216828");
 
 char                *load_level_gameplay(int skip_gameplay_read) __asm__("FUN_L00_00241940");
@@ -1780,7 +1781,6 @@ register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00
 extern void  parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void  fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *FUN_L00_00241940_244110(s32) __asm__("FUN_L00_00241940");
-extern void  restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 
 #define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld)             \
     ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) |        \

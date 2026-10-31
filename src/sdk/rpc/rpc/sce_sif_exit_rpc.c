@@ -1,11 +1,10 @@
 #include "types.h"
 #include "rnc/runtime/core_state.h"
-
-extern void exit_rpc_command(void) __asm__("sceSifExitCmd");
+#include "rnc/sdk/rpc/cmd/sce_sif_exit_cmd.h"
 
 void sceSifExitRpc(void) __asm__("InitializeRpcCommand");
 
 void sceSifExitRpc(void) {
-    exit_rpc_command();
+    sceSifExitCmd();
     RpcCommandState = 0;
 }

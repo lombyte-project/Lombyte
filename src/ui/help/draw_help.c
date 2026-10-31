@@ -1,5 +1,7 @@
 /* Ported from rac1-decomp (src/game/help.c, func_001FF1B0). */
 #include "sda.h"
+#include "rnc/ui/help/help_draw_prompt.h"
+#include "rnc/ui/text/font/font_set_window.h"
 
 typedef struct {
     int state;  /* 0x00 */
@@ -22,11 +24,8 @@ typedef struct {
 extern HelpEntry     *help_msgs __asm__("D_0015F6A0") MACRO_ADDR;
 extern int D_0015EE1D MACRO_ADDR;
 extern int D_0015EE1C MACRO_ADDR;
-extern void           help_draw_prompt(void) __asm__("FUN_001fe898");
 #define D_0015EF1D_b (*(unsigned char *)&D_0015EE1D)
 #define D_0015EF1C_b (*(unsigned char *)&D_0015EE1C)
-extern void
-font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8);
 extern void font_print_window_small(void *a, long b, void *c, int d) __asm__("func_001F75F0");
 extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
 extern void

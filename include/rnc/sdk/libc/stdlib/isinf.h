@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_LIBC_STDLIB_ISINF_H
+#define LOMBYTE_RNC_SDK_LIBC_STDLIB_ISINF_H
+
+#include "types.h"
+
+s32 isinf(f64) __asm__("FUN_00116168");
+
+#endif /* LOMBYTE_RNC_SDK_LIBC_STDLIB_ISINF_H */

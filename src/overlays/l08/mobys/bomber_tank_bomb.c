@@ -13,6 +13,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 
@@ -34,9 +35,7 @@ extern float FUN_L08_002dc9a8_sin(float) __asm__("FUN_001f9dc8");
 extern float FUN_L08_002dc9a8_cos(float) __asm__("FUN_001f9de0");
 extern int   FUN_L08_002dc9a8_random_color(int) __asm__("FUN_001f96f8");
 extern int   FUN_L08_002dc9a8_color(float, int, int) __asm__("FUN_L08_00264930");
-extern void
-FUN_L08_002dc9a8_emit(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
-extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") NOT_SDA;
+extern int   D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") NOT_SDA;
 
 typedef struct __attribute__((packed)) EffectVectorCopy {
     unsigned long long values[2];
@@ -185,26 +184,26 @@ void bomber_tank_bomb_update(struct Moby *moby) {
                 color = FUN_L08_002dc9a8_random_color(60);
                 color2 = FUN_L08_002dc9a8_random_color(120);
                 alpha = random_int_between(color, color2);
-                FUN_L08_002dc9a8_emit(collision_and_effect_record.pos,
-                                      position,
-                                      0x1f101820,
-                                      0x101010,
-                                      size,
-                                      alpha,
-                                      0);
+                mine_debris(collision_and_effect_record.pos,
+                            position,
+                            0x1f101820,
+                            0x101010,
+                            size,
+                            alpha,
+                            0);
             } break;
             case DETONATION_EFFECT_TWO_COLOR_CHOICE: {
                 int color, color2, alpha;
                 color = random_integer_below(100) < 40 ? 0x5ff8f8f8 : 0x2f486078;
                 color2 = FUN_L08_002dc9a8_random_color(30);
                 alpha = FUN_L08_002dc9a8_random_color(45);
-                FUN_L08_002dc9a8_emit(collision_and_effect_record.pos,
-                                      position,
-                                      color,
-                                      0x0f000020,
-                                      150000.0f,
-                                      random_int_between(color2, alpha),
-                                      2);
+                mine_debris(collision_and_effect_record.pos,
+                            position,
+                            color,
+                            0x0f000020,
+                            150000.0f,
+                            random_int_between(color2, alpha),
+                            2);
             } break;
             case DETONATION_EFFECT_SPHERICAL_VELOCITY: {
                 int color, color2, alpha;
@@ -216,7 +215,7 @@ void bomber_tank_bomb_update(struct Moby *moby) {
                 radius = random_float_between(150000.0f, 200000.0f);
                 alpha = FUN_L08_002dc9a8_random_color(60);
                 alpha = random_int_between(alpha, FUN_L08_002dc9a8_random_color(120));
-                FUN_L08_002dc9a8_emit(
+                mine_debris(
                     collision_and_effect_record.pos, position, color, color2, radius, alpha, 3);
             } break;
             case DETONATION_EFFECT_NO_EMISSION:

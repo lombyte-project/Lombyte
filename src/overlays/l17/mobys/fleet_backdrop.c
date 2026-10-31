@@ -13,6 +13,7 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "rnc/overlay/l17/mobys/fleet_backdrop_globals.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Draws the Drek's Fleet reflection/backdrop quads around a moby. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
@@ -27,7 +28,6 @@ typedef struct {
 extern char  D_L17_001676C0[];
 extern float frame_delta_time __asm__("D_0015ED7C");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 float        D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f, 1.0f};
 
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");

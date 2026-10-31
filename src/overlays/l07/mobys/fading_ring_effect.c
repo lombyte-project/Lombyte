@@ -7,9 +7,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-
 #include "qcopy.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");

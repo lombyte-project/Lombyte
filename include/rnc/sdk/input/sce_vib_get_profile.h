@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_INPUT_SCE_VIB_GET_PROFILE_H
+#define LOMBYTE_RNC_SDK_INPUT_SCE_VIB_GET_PROFILE_H
+
+#include "types.h"
+
+s32 sceVibGetProfile(s32, u8 *);
+
+#endif /* LOMBYTE_RNC_SDK_INPUT_SCE_VIB_GET_PROFILE_H */

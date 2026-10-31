@@ -4,9 +4,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern s32  FUN_0022da68(s32, s32, void *);
-extern int  FUN_L00_00257b90(int lo, int hi);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 #include "rnc/overlay/shared/world/cuboid.h"
@@ -58,7 +58,7 @@ void smoke_emitter_update(SmokeMoby *smoke_emitter_moby) {
                                                  0x207F7F7F,
                                                  0x272727,
                                                  size,
-                                                 scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
+                                                 scale_game_frames(random_int_between(0x2D, 0x3C)));
     }
 }
 

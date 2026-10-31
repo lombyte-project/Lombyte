@@ -11,20 +11,18 @@
 #include "rnc/overlay/shared/camera/set_nonzero_follow_camera_parameters.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
+#include "rnc/rendering/clip_volume.h"
 
-extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int  test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
 extern int  test_point_in_transformed_unit_sphere(void *, int) __asm__("FUN_L00_0025faf0");
 extern int  point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
 extern int  try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
-extern void set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
-extern void FUN_L00_002e8620(void);
 extern void
 set_follow_camera_angle_blend_from_direction(float, float, float *) __asm__("FUN_L00_002e8918");
 extern void
 set_follow_camera_angle_blend_from_position(float, float, void *) __asm__("FUN_L00_002e8970");
-extern float absolute_float(float);
 
 extern char                *D_L02_001B0AB0[];
 extern char                *D_L02_00167400_d __asm__("D_L02_00167400") NOT_SDA;

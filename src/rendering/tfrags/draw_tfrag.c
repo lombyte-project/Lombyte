@@ -6,6 +6,7 @@
 #include "rnc/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/packets/write_vif_unpack_packet.h"
 
 struct Locals {
     u8  pad0[0x30];
@@ -22,7 +23,6 @@ extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
 extern void noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
 extern void dma_tfrag_textures(void) __asm__("func_002331C0");
 extern void tfrag_proc(void) __asm__("func_00233FB0");
-void        write_vif_unpack_packet(s32 addr, void *src, s32 qwc) __asm__("FUN_00233888");
 /* Draws the level terrain (tfrags). Each tfrag has a 0x40-byte header:
  *   0x10  where its data starts
  *   0x16, 0x18, 0x1a  where its data lists start (shared, lower detail, full detail)

@@ -2,13 +2,12 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/sdk/ipu/sce_ipu_restart_dma.h"
 
 typedef struct MpegVideoLibraryContext {
     u8    reserved[0x40];
     void *pDecoderState;
 } MpegVideoLibraryContext;
-
-extern void sceIpuRestartDMA(void *ipuDmaSnapshot);
 
 void resume_mpeg_decoder_ipu_dma(MpegVideoLibraryContext *pContext) __asm__("FUN_0012cb40");
 

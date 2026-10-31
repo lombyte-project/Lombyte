@@ -6,15 +6,14 @@
 #include "sda.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
-extern int   FUN_L00_00257b90(int, int);
 extern float line_puff_initial_z_velocity_range_end_gp __asm__("D_L08_00161998")
     __attribute__((sda));
 extern float line_puff_position_jitter_range_end_gp __asm__("D_L08_001619A0") __attribute__((sda));
 extern u16   line_puff_duration_frames_gp __asm__("D_L08_001619A8") __attribute__((sda));
 extern unsigned char *
 spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
-extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 
 /* Strings count glowing puffs from one point to another, growing from size0
  * to size1, then bursts a spark shower at each end. */
@@ -52,15 +51,15 @@ void spawn_particle_line_effect(
         effect_initial_velocity.f[2] =
             random_float_between(line_puff_initial_z_velocity_range_end_gp * 0.1f,
                                  line_puff_initial_z_velocity_range_end_gp);
-        alpha = FUN_L00_00257b90(0x30, 0x70);
-        grey = FUN_L00_00257b90(0x30, 0x7F);
+        alpha = random_int_between(0x30, 0x70);
+        grey = random_int_between(0x30, 0x7F);
         grey |= (grey << 16) | (grey << 8);
         size = random_float_between(1.0f, 1.02f);
         puff = spawn_puff(&puff_spawn_position,
                           line_puff_position_jitter_range_end_gp,
                           1.0f,
                           size,
-                          FUN_L00_00257b90(-2, 2),
+                          random_int_between(-2, 2),
                           &effect_initial_velocity,
                           grow + size0 * 210000.0f,
                           (alpha << 24) | grey);
@@ -68,7 +67,7 @@ void spawn_particle_line_effect(
             tail = puff + 0x20;
             if (random_integer_below(2)) {
                 puff[3] = 0x44;
-                grey = FUN_L00_00257b90(0x60, 0xE0);
+                grey = random_int_between(0x60, 0xE0);
                 grey |= (grey << 16) | (grey << 8);
                 *(u32 *)(puff + 4) = (alpha << 24) | grey;
             }
@@ -82,22 +81,22 @@ void spawn_particle_line_effect(
     effect_initial_velocity.f[1] = fast_sin(random_angle_radians()) * 0.05f;
     effect_initial_velocity.f[2] = 0.0f;
     effect_initial_velocity.f[2] = random_float_between(0.01f, 0.03f);
-    spawn_burst(from,
-                &effect_initial_velocity,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)),
-                1,
-                10000.0f);
+    FUN_L00_0026cbb0(from,
+                     &effect_initial_velocity,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     random_int_between(scale_game_frames(10), scale_game_frames(20)),
+                     1,
+                     10000.0f);
     effect_initial_velocity.f[0] = fast_cos(random_angle_radians()) * 0.05f;
     effect_initial_velocity.f[1] = fast_sin(random_angle_radians()) * 0.05f;
     effect_initial_velocity.f[2] = 0.0f;
     effect_initial_velocity.f[2] = random_float_between(0.01f, 0.03f);
-    spawn_burst(to,
-                &effect_initial_velocity,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)),
-                1,
-                20000.0f);
+    FUN_L00_0026cbb0(to,
+                     &effect_initial_velocity,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     random_int_between(scale_game_frames(10), scale_game_frames(20)),
+                     1,
+                     20000.0f);
 }

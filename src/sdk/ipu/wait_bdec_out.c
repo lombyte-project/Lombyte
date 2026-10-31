@@ -1,4 +1,8 @@
 #include "types.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/ipu/wait_ipu_idle.h"
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
 
 typedef struct {
     u8    pad0[0x838];
@@ -9,11 +13,7 @@ typedef struct {
 } MpegDec;
 
 extern char bdec_error_message[] __asm__("D_00153788");
-extern void _waitIpuIdle(MpegDec *d);
-extern void _dispatchMpegCallback(void *cb, s32 *arg);
-extern void _Error(MpegDec *d, char *msg);
 extern s32  DIntr(void);
-extern s32  EnableInterrupts(void);
 
 #define IPU_CTRL  ((volatile u32 *)0x10002010)
 #define IPU_BP    ((volatile u32 *)0x10002020)

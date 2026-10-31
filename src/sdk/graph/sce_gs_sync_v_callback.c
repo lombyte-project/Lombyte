@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/graph/sce_gs_get_gparam.h"
 
 struct VerticalSyncCallbackState {
     u8  reserved_00[8];
@@ -6,11 +7,10 @@ struct VerticalSyncCallbackState {
     s32 interrupt_handler_id;
 };
 
-extern struct VerticalSyncCallbackState *sceGsGetGParam() __asm__("GetCoreDataTable");
-extern s32                               disable_intc() __asm__("func_00119028");
-extern s32                               enable_intc() __asm__("func_00119090");
-extern s32                               RemoveIntcHandler();
-extern s32                               AddIntcHandler();
+extern s32 disable_intc() __asm__("func_00119028");
+extern s32 enable_intc() __asm__("func_00119090");
+extern s32 RemoveIntcHandler();
+extern s32 AddIntcHandler();
 
 s32 sceGsSyncVCallback(s32 callback) {
     s32                               previous_callback;

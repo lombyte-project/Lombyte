@@ -15,10 +15,8 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/rocket_globals.h"
-
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-
-extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
 extern unsigned char *D_L14_0015FFD8;
 

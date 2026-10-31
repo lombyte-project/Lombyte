@@ -10,21 +10,23 @@
 #include "rnc/rendering/packets/emit_rgba_draw_packet.h"
 #include "rnc/rendering/frame/reset_gs_registers.h"
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu.h"
+#include "rnc/overlay/shared/rendering/frame/queue_framebuffer_upload.h"
+#include "rnc/overlay/shared/ui/menus/get_pause_menu_mode.h"
+#include "rnc/overlay/shared/ui/text/draw_timed_text.h"
+#include "rnc/overlay/shared/ui/text/level_draw_dialog_text.h"
 
 extern int D_L00_0015F5D8;
-int        FUN_L00_00201720(void);
 /* The level overlay's own copy of draw_dialog_text: same code, own data. */
-void       level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 extern s32 D_L00_0015F3F4_gp __asm__("D_L00_0015F3F4") __attribute__((sda));
 void       draw_dialog_background_and_text(void) __asm__("FUN_L00_001f8ec8");
 
 void draw_dialog_background_and_text(void) {
     if (D_L00_0015F5D8 == 0) {
-        if (FUN_L00_00201720() == 0) {
+        if (get_pause_menu_mode() == 0) {
             append_gif_transfer_packet();
             D_L00_0015F3F4_gp = 0x100ff;
             draw_debug_profiler();
-        } else if (FUN_L00_00201720() == 3)
+        } else if (get_pause_menu_mode() == 3)
             draw_pause_menu_pages(1);
         emit_rgba_draw_packet(0, 0, 0, 0x40);
         level_draw_dialog_text();
@@ -45,8 +47,6 @@ extern volatile s32 D_L00_0015F628;
 #include "rnc/overlay/shared/ui/text/draw_dialog_background_and_text_globals.h"
 
 extern u8 timed_text_entries[] __asm__("D_L00_00173080");
-void      queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
-void      draw_timed_text(void *, s32) __asm__("FUN_L00_001fcca0");
 void      draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 
 void draw_framebuffer_with_timed_text(void) {

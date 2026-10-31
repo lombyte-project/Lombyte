@@ -12,18 +12,17 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/random.h"
 #include "sda.h"
+#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
+#include "rnc/overlay/shared/math/random/random_vector.h"
+#include "rnc/overlay/shared/mobys/show_tracked_moby.h"
 
 extern char D_L14_001674C0[];
 
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 #include "rnc/overlay/l14/mobys/path_lightning_controller_globals.h"
-
-extern float FUN_L00_00257c48(float, float);
 
 extern char D_0013D24D[];
 
@@ -47,11 +46,7 @@ extern short lightning_visibility_test_point_w_gp __asm__("D_L14_00161C60") __at
 
 extern short lightning_visibility_test_z_offset_gp __asm__("D_L14_00161C64") __attribute__((sda));
 
-extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
-
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-
-extern void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
 
 extern void update_branched_lightning_arc(char *) __asm__("FUN_L14_002ed530");
 
@@ -114,8 +109,8 @@ void path_lightning_controller_update(struct Moby *moby) {
             lightning_path_endpoint_w = 1.0f;
             qcopy(D_L14_00161CD0, D_L14_00161CC0);
             lightning_displaced_endpoint_z = *(float *)&lightning_displaced_endpoint_z_setting_gp;
-            D_L14_00161CD0_f += FUN_L00_00257c48(0.0f, 20.0f);
-            lightning_displaced_endpoint_y += FUN_L00_00257c48(0.0f, 20.0f);
+            D_L14_00161CD0_f += randf_sym(0.0f, 20.0f);
+            lightning_displaced_endpoint_y += randf_sym(0.0f, 20.0f);
             qcopy(&moby->pos, D_L14_00161CC0);
         }
     }
@@ -207,8 +202,8 @@ void update_branched_lightning_arc(char *moby) {
             main_arc_point[0] = lightning_main_arc_point_spacing_gp * (float)i;
             if (i < 39) {
                 main_arc_point[2] =
-                    main_arc_point[-2] + FUN_L00_00257c48(lightning_main_arc_z_step_range_start_gp,
-                                                          lightning_main_arc_z_step_range_end_gp);
+                    main_arc_point[-2] + randf_sym(lightning_main_arc_z_step_range_start_gp,
+                                                   lightning_main_arc_z_step_range_end_gp);
                 if (lightning_main_arc_z_displacement_limit_gp < (*&main_arc_point)[2]) {
                     main_arc_point[2] = lightning_main_arc_z_displacement_limit_gp;
                 } else if (main_arc_point[2] < -lightning_main_arc_z_displacement_limit_gp) {
@@ -250,7 +245,7 @@ void update_branched_lightning_arc(char *moby) {
                 float angle_step;
                 float na;
                 r = random_float_between(1.0f, 10.0f);
-                angle_step = FUN_L00_00257c48(0.0f, 40.0f) * 0.017453292f;
+                angle_step = randf_sym(0.0f, 40.0f) * 0.017453292f;
                 na = fast_add_rotations(branch_segment_angle, angle_step);
                 if (absolute_float(na) > 1.3962634f || (branch_segment_angle > 0.0f && na < 0.0f) ||
                     (branch_segment_angle < 0.0f && na > 0.0f)) {
@@ -629,9 +624,9 @@ void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spaw
                 velocity_horizontal_angle,
                 velocity_vertical_angle);
             qcopy(saved_position, particle_spawn_position);
-            particle_spawn_position[0] += FUN_L00_00257c48(0.0f, 0.15f);
-            particle_spawn_position[1] += FUN_L00_00257c48(0.0f, 0.15f);
-            particle_spawn_position[2] += FUN_L00_00257c48(0.0f, 0.15f);
+            particle_spawn_position[0] += randf_sym(0.0f, 0.15f);
+            particle_spawn_position[1] += randf_sym(0.0f, 0.15f);
+            particle_spawn_position[2] += randf_sym(0.0f, 0.15f);
             id = scale_game_frames(0x3C);
             particle = FUN_L00_00272060(particle_spawn_position,
                                         id,
@@ -663,8 +658,6 @@ void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spaw
 }
 
 extern float fast_sin(float);
-
-float absolute_float(float input) __asm__("func_001F99C0");
 
 short lightning_arc_interval_frames_gp __asm__("D_L14_00161C54") = 0xb4;
 

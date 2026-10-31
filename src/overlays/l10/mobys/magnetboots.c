@@ -14,14 +14,14 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "rnc/overlay/l10/mobys/magnetboots_globals.h"
+#include "rnc/overlay/shared/enemies/blarg_ship_rocket.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
 extern char *D_L10_0015FFD8 __asm__("D_L10_0015FFD8");
 extern void  initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
-extern void  emit_moby_sprite_particles(void *) __asm__("FUN_L10_00298940");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void  start_scene(int) __asm__("FUN_L00_00298840");
-extern void  grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void  jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 
 void magnetboots_update(struct Moby *m) __asm__("FUN_L10_00298668");

@@ -14,6 +14,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_line.h"
 #include "qzero.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
@@ -85,8 +86,6 @@ struct L13Ent00178480 {
 };
 
 extern float fast_vec_dist(void *, void *);
-
-extern int FUN_L00_00257b90(int, int);
 
 extern struct L13Ent00178480 l13_moby_hit_entries[] __asm__("D_L13_00178400");
 
@@ -208,7 +207,7 @@ void gemlik_projectile_update(struct Moby *moby) {
             FUN_L00_0026dd20(&moby->pos,
                              &work.direction,
                              0x7F2F4F6F,
-                             FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)),
+                             random_int_between(scale_game_frames(10), scale_game_frames(15)),
                              30000.0f);
         }
     }

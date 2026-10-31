@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/enemies/spawner_egg.h"
+#include "rnc/overlay/shared/math/random/generate_random_scaled_vector2.h"
 
 typedef struct {
     char  pad0[0xB0];
@@ -29,7 +30,6 @@ extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 extern int
 activate_effect_l08(void *, void *, float, void *, int, void *, int) __asm__("FUN_L00_0025ff38");
-extern void generate_random_scaled_vector2(float *, float) __asm__("FUN_L09_00277758");
 extern void add_random_offset_to_vector_xyz(float *, float) __asm__("FUN_L00_0025f8e0");
 extern float
 FUN_L00_0025abf0_30ab80(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font/font_set_window.h"
 
 typedef struct {
     int state;  /* 0x00 */
@@ -21,7 +22,6 @@ extern TextEntry *help_msgs __asm__("D_0015F6A0");
 #include "rnc/rendering/screen.h"
 
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("func_0022DB10");
-extern void font_set_window(u16 *, u16, u16, u16, u16, u16, u16, u16, u32);
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
 
 void link_localized_display_text(void) __asm__("FUN_001fdd58");

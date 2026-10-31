@@ -19,6 +19,7 @@
 #include "rnc/overlay/l11/mobys/watcher.h"
 
 #include "qcopy.h"
+#include "rnc/rendering/clip_volume.h"
 
 typedef struct {
     char  pad00[4];
@@ -44,9 +45,7 @@ typedef struct {
 } WD11;
 
 extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
-extern int  FUN_00214720(void *, int);
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern unsigned char D_0013D4C3 NOT_SDA;
 extern int                      D_L11_0015F5C4;
 extern float                    random_float_between(float, float) __asm__("FUN_002132a8");
@@ -81,7 +80,7 @@ void bob_update(WatcherMoby *moby) {
         moby_vars->f0C = 3.7f;
         break;
     case BOB_CHECK_DIALOGUE:
-        if (FUN_00214720(hero.motion.pos.f, moby_vars->region)) {
+        if (is_point_inside_clip_volume(hero.motion.pos.f, moby_vars->region)) {
             if (update_npc_dialogue(moby, moby_vars)) {
                 begin_dialogue_camera_transition(moby, 2.7f);
                 moby->state = 2;

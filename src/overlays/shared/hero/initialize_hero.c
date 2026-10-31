@@ -1,3 +1,5 @@
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
 /* Hero creation FUN_L00_00204c60, split out of hero_idle_sequence.c because only SN
    cc1 2.95.2 reproduces it (OVERLAY_SN_UNITS): the 0x17A680 loop keeps one
    pointer per cleared field, which the game compiler folds into one. */
@@ -22,8 +24,6 @@ extern struct Moby    *D_L00_0015FFDC; /* end of the moby table */
 extern s32             D_L00_00160540;
 extern struct HeroEase hero_eases_lui[] __asm__("D_L00_0017A680") NOT_SDA;
 extern void            fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
-extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 
 /* Clears the hero, binds it to the first moby of class 0 (snapped to the
    ground, its position and yaw copied in, the camera start set from it unless

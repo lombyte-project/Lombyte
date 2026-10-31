@@ -9,6 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */
@@ -139,7 +140,6 @@ void draw_oscillating_target_link_strips(Moby *moby) {
 }
 
 extern void  random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void  add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern float oscillating_link_strip_scroll_rate_gp __asm__("D_L12_00161DFC") __attribute__((sda));
 extern float oscillating_link_strip_random_delta_magnitude_rate_gp __asm__("D_L12_00161E00")
     __attribute__((sda));

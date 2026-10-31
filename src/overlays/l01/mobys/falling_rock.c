@@ -14,9 +14,12 @@
 
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/camera/follow_cam.h"
+#include "rnc/overlay/shared/camera/follow_camera_angle_blend.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
-extern int  cutscene_active __asm__("D_L01_0015F404");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
+extern int cutscene_active __asm__("D_L01_0015F404");
 
 #include "sda.h"
 
@@ -45,12 +48,7 @@ f32        falling_rock_camera_offset_scale_gp __asm__("D_L01_00161C34") = 3.5f;
 extern f32 falling_rock_camera_override_companion_value_gp __asm__("D_L01_00161C38")
     __attribute__((sda));
 
-extern void
-     build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
-void set_follow_camera_angle_blend_from_direction(void *, f32, f32) __asm__("FUN_L00_002e8918");
 void follow_camera_set_distance(s32, f32, f32) __asm__("FUN_L00_002e8450");
-void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
-void follow_camera_set_offset_scale(s32, f32, f32) __asm__("FUN_L00_002e84f0");
 
 void apply_falling_rock_camera_overrides(Obj *falling_rock_moby) __asm__("FUN_L01_002f9000");
 

@@ -1,6 +1,5 @@
 #include "types.h"
-
-extern s32 _dispatchMpegCbNodata();
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_cb_nodata.h"
 
 void _waitIpuIdle(s32 *ctx) {
     long new_var;
@@ -10,7 +9,7 @@ void _waitIpuIdle(s32 *ctx) {
             new_var = 0x1389;
             if (count >= new_var) {
                 count = *((s32 *)(((u8 *)ctx) + 0x858));
-                _dispatchMpegCbNodata(count);
+                DispatchMpegCallbackNoData(count);
                 count = 0;
             } else {
                 count++;

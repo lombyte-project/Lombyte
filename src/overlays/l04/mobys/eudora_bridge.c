@@ -7,9 +7,9 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
 extern void refresh_moby_spatial_bounds_from_basis(void *);
-extern s32  voice_is_playing(long moby, s32 voice) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int);
 
 /* Pvars of a moby that follows a linked switch moby. */

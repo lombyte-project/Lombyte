@@ -5,6 +5,13 @@
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_state.h"
 #include "rnc/sdk/library/sif_file_slot.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/rpc/cmd/sce_sif_add_cmd_handler.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
+#include "rnc/sdk/storage/fileio/_sceFs_Rcv_Intr.h"
+#include "rnc/sdk/storage/fileio/sce_fs_iob_sema_mk.h"
 
 typedef struct SifFileCommandCallbackRecord {
     void (*callback)(void *);
@@ -22,18 +29,11 @@ extern char *fs_init_completion_buffer_addresses[] __asm__("D_00156840");
 extern u8    FsResetBuffer[] __asm__("D_00157FA8");
 extern u8    D_00157500[];
 extern s32   D_0012FC98[];
-extern void  _sceFs_Rcv_Intr();
 extern void  invoke_sif_file_command_callback(
      void *packet, SifFileCommandCallbackRecord *callback_record) __asm__("func_0011B980");
-extern void sceSifInitRpc(u32 mode);
-extern s32  DIntr();
-extern s32  EnableInterrupts();
-extern s32  SignalSema();
-extern s32  WaitSema();
-extern s32  _sceFsIobSemaMK();
-extern void sceSifAddCmdHandler(s32 command, u32 handler, u32 data);
-extern s32  sceSifBindRpc();
-extern s32  sceSifCallRpc();
+extern s32 DIntr();
+extern s32 SignalSema();
+extern s32 WaitSema();
 
 s32 sceFsInit(void) {
     s32                  initialization_call_status, delay;

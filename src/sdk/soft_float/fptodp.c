@@ -1,3 +1,4 @@
+#include "rnc/sdk/soft_float/__make_dp.h"
 /* This is a software floating point library which can be used instead of
    the floating point routines in libgcc1.c for targets without hardware
    floating point. 
@@ -45,8 +46,6 @@ typedef struct FloatParts {
 } FloatParts;
 
 extern void UnpackFloat(const f32 *input_value, FloatParts *parts) __asm__("__unpack_f");
-extern u64
-MakeDoublePacket(s32 category, s32 sign, s32 exponent, u64 mantissa) __asm__("__make_dp");
 
 u64 ConvertFloatToPackedDouble(f32 input_value) __asm__("fptodp");
 

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_READ_H
+#define LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_READ_H
+
+#include "types.h"
+
+s32 scePad2Read(s32, u8 *);
+
+#endif /* LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_READ_H */

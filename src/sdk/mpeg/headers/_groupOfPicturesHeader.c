@@ -1,3 +1,6 @@
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
+#include "rnc/sdk/mpeg/headers/_extensionAndUserData.h"
+
 typedef struct GroupOfPicturesContext GroupOfPicturesContext;
 
 struct GroupOfPicturesContext {
@@ -5,9 +8,6 @@ struct GroupOfPicturesContext {
 };
 
 #define FIELD(type, object, offset) (*(type *)((unsigned char *)(object) + (offset)))
-
-int  _nextBit(GroupOfPicturesContext *context, int count) __asm__("_nextBit");
-void _extensionAndUserData(GroupOfPicturesContext *context) __asm__("_extensionAndUserData");
 
 void _groupOfPicturesHeader(GroupOfPicturesContext *context) __asm__("_groupOfPicturesHeader");
 

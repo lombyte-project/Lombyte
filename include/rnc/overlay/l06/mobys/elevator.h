@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_ELEVATOR_H
+#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_ELEVATOR_H
+
+#include "types.h"
+
+void elevator_update() __asm__("FUN_L06_002fc640");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_ELEVATOR_H */

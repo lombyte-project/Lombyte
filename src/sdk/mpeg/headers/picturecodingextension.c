@@ -1,7 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-
-extern s32 _nextBit();
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
 
 void _pictureCodingExtension(struct MpegDecoder *mpeg) {
     s32 structure;

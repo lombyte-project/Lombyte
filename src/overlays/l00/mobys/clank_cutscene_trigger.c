@@ -25,29 +25,13 @@
 #include "qzero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 
 void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 
 extern void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
-extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
-extern void draw_sky_shells_with_fast_and_slow_rotation(void) __asm__("FUN_L00_00289a90");
-extern void
-draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
-extern void
-draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
-extern void draw_sky_shells_with_modulo_40000_rotation(void) __asm__("FUN_L00_0028a2f0");
-extern void draw_sky_shells_with_modulo_25000_rotation(void) __asm__("FUN_L00_0028a3a8");
-extern void draw_sky_shells_with_scaled_phase_rotation(void) __asm__("FUN_L00_0028a480");
-extern void draw_sky_shells_with_slow_medium_and_fast_rotation(void) __asm__("FUN_L00_0028a620");
 extern void FUN_L00_0028a7a0(void);
 extern void FUN_L00_0028ab08(void);
-extern void draw_three_sky_shells_with_particles(void) __asm__("FUN_L00_0028a920");
-extern void
-draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) __asm__("FUN_L00_0028a998");
-extern void draw_two_sky_shells_with_particles(void) __asm__("FUN_L00_0028aa98");
-extern void
-draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
-extern void draw_sky_shells_with_rotation_and_scaling(void) __asm__("FUN_L00_0028b1a0");
 
 void draw_level_sky(void) __asm__("FUN_L00_0023d968");
 
@@ -173,9 +157,7 @@ typedef union {
     f32  f[4];
 } VeldinVec;
 
-extern void glow_quads_draw() __asm__("FUN_L00_0023db30");
 extern void FUN_L00_002935b8();
-extern void emit_moby_particle_pairs(VeldinMoby *) __asm__("FUN_L00_0023e008");
 extern void FUN_L00_00257024(void *);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0026ced0");
 extern VeldinLevelState D_L00_0016C860;

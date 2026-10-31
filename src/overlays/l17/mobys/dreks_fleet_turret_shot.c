@@ -105,7 +105,6 @@ extern char D_L17_00174740_lui[] __asm__("D_L17_00174740") NOT_SDA;
 extern int  D_0015EEA4;
 extern int  FUN_001efa68_q(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int  FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int  random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char                      *
 spawn_moving_hero_relative_alpha_fade_particle(float        *pos,
                                                                     char         *vel,

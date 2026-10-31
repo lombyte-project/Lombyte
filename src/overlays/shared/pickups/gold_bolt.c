@@ -21,6 +21,7 @@
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/options.h"
+#include "rnc/overlay/shared/hero/hero_frame_update.h"
 
 typedef struct {
     s32   id; /* collected flag index (D_0014BEC0 + level * 4), -1 none */
@@ -41,7 +42,6 @@ typedef struct {
 
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
 extern void set_hero_animation(f32, s32, s32) __asm__("FUN_L00_002323b8");
 
 typedef struct {

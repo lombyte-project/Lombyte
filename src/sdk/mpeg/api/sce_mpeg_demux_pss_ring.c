@@ -3,6 +3,8 @@
 
 #include "types.h"
 #include "rnc/sdk/mpeg/bitstream/peek_bits.h"
+#include "rnc/sdk/mpeg/demux/_PES_packet.h"
+#include "rnc/sdk/mpeg/demux/_pack_header.h"
 
 /* libmpeg: demultiplex the PSS (MPEG-2 program stream) data of a ring
    buffer and hand each PES packet to the callback registered for its
@@ -66,8 +68,6 @@ typedef struct {
 
 extern void _sysbitInit(SysBit *bs, u8 *start, u8 *bufstart, s32 bufsize);
 extern u8  *GetSysbitPointer(SysBit *bs, s32 pos);
-extern s32  _pack_header(SysBit *bs, PackHdr *pack);
-extern s32  _PES_packet(MpegSys *sys, SysBit *bs, PesHdr *pes);
 
 int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufsize) {
     SysBit           bs;

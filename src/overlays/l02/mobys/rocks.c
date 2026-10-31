@@ -5,8 +5,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
-
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern float D_0015ED6C;
 

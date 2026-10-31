@@ -10,6 +10,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/globals.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 
 typedef struct {
     float f[4];
@@ -29,7 +30,6 @@ typedef struct {
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void        set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 void        FUN_L00_00250df8_2af450(void *) __asm__("FUN_L00_00250df8");
-int         FUN_L00_0025c0e8_c(int, int) __asm__("FUN_L00_0025c0e8");
 void        spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 
 extern C_2af5b8 D_L00_00161438 NOT_SDA;
@@ -165,9 +165,10 @@ void debris_update(unsigned char *debris_moby) {
             *(OvlQuad *)&emission_direction = *(OvlQuad *)&random_direction;
             fast_vec_normalize(&emission_direction, &emission_direction, frame_time);
             if (debris_moby[0xBC] & 0xFE) {
-                int adjusted_color =
-                    FUN_L00_0025c0e8_c(c.c[random_integer_below(4)], debris_moby[0xBC] >> 1);
-                int adjusted_secondary_color = FUN_L00_0025c0e8_c(0x4FFF, debris_moby[0xBC] >> 1);
+                int adjusted_color = swap_packed_color_channels(c.c[random_integer_below(4)],
+                                                                debris_moby[0xBC] >> 1);
+                int adjusted_secondary_color =
+                    swap_packed_color_channels(0x4FFF, debris_moby[0xBC] >> 1);
                 spawn_effect(debris_moby + 0x10,
                              &emission_direction,
                              adjusted_color,

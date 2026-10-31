@@ -15,7 +15,7 @@ extern struct {
 
 void cutscene_camera_target_update(struct Moby *moby) __asm__("FUN_L17_002f2e78");
 
-/* Moby class 1562 */
+/* Moby classes 1549-1551, 1553, 1557, 1562 */
 void cutscene_camera_target_update(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,

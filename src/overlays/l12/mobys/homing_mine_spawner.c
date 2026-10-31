@@ -15,12 +15,11 @@
 #include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct Moby Moby;
 
 /* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
-extern void
-spawn_jittered_effect_particle_with_optional_basis(char *, int, float) __asm__("FUN_L00_0026de90");
 
 void spawn_next_linked_moby(struct Moby *spawner) __asm__("FUN_L12_003076e0");
 

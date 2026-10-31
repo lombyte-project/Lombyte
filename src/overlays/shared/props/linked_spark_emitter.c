@@ -11,6 +11,10 @@
 #include "rnc/audio/voice_pool.h"
 #include "qzero.h"
 #include "rnc/overlay/shared/props/linked_spark_emitter_data/draw_spark_emitter_effect_quads.h"
+#include "rnc/overlay/shared/enemies/sentrybot.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_owner_target_particle.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct {
     float              v[4][4];
@@ -29,21 +33,15 @@ typedef struct {
     char         *owner;
 } Voice;
 
-extern float          fast_sin(float);
-extern struct Moby   *l15_moby_array __asm__("D_L15_0015FFD8");
-extern int            random_integer_below(int);
-extern int            scale_game_frames(int);
-extern void           add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern char           D_0013F420[];
-extern long long      get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void           draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-extern unsigned char  D_0014C190[];
-extern int            D_0015ED84;
-extern int            draw_spark_emitter_effect_quads() __asm__("FUN_L15_002a3138");
-extern void           func_L15_002A47B8_2A3DD0(void *) __asm__("FUN_L15_002a35d8");
-extern void           func_L15_002A4318_2A3DD0(void) __asm__("FUN_L15_002a3138");
-extern unsigned char *func_L15_002655D0_2A3DD0(
-    void *, void *, void *, int, int, int, int, int, void *) __asm__("FUN_L15_002647f0");
+extern float         fast_sin(float);
+extern struct Moby  *l15_moby_array __asm__("D_L15_0015FFD8");
+extern int           scale_game_frames(int);
+extern char          D_0013F420[];
+extern void          draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+extern unsigned char D_0014C190[];
+extern int           D_0015ED84;
+extern int           draw_spark_emitter_effect_quads() __asm__("FUN_L15_002a3138");
+extern void          func_L15_002A4318_2A3DD0(void) __asm__("FUN_L15_002a3138");
 
 extern int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 
@@ -105,7 +103,7 @@ void linked_spark_emitter_update(unsigned char *moby) {
         int linked_moby_index = *(int *)(moby_data + 0x10);
         if ((linked_moby_index != -1 && l15_moby_array[linked_moby_index].state == 2) ||
             visited52[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
-            func_L15_002A47B8_2A3DD0(moby);
+            mark_moby_killed_and_release_owned_voice(moby);
         } else {
             Voice *e = (Voice *)((unsigned char *)&voice_pool + moby[0xBC] * 0x70);
             float  lo, hi, z, one;
@@ -152,7 +150,7 @@ void linked_spark_emitter_update(unsigned char *moby) {
                 fa = truncate_float_to_s32((float)(scale_game_frames(30) / 4));
                 fb = truncate_float_to_s32((float)(scale_game_frames(30) / 2));
                 fc = truncate_float_to_s32((float)(scale_game_frames(30) / 4));
-                func_L15_002655D0_2A3DD0(A, B, C, col, 0x60808080, fa, fb, fc, moby);
+                create_type_47_particle(A, B, C, col, 0x60808080, fa, fb, fc, moby);
             } while (i >= 0);
             if (absolute_float(V[1]) < hi && z < V[2] && V[2] < hi) {
                 transform_vector_by_basis(moby_data, V, moby + 0xC0);

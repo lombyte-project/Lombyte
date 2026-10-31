@@ -18,6 +18,8 @@
  */
 
 #include "rnc/sdk/library/stdio.h"
+#include "rnc/sdk/libc/stdio/fflush.h"
+#include "rnc/sdk/libc/stdio/swsetup.h"
 
 typedef u32 size_t;
 #define _CONST const
@@ -32,8 +34,6 @@ typedef u32 size_t;
 #define __SERR 0x40
 extern void *memmove(void *, const void *, u32);
 extern void *memchr(const void *, s32, u32);
-extern s32   fflush(RncFile *);
-extern s32   __swsetup(RncFile *);
 #define cantwrite(fp) ((((fp)->_flags & 8) == 0 || (fp)->_bf._base == 0) && __swsetup(fp))
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_COMMANDO_H
+#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_COMMANDO_H
+
+#include "types.h"
+
+void commando_update() __asm__("FUN_L08_00302ce8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_COMMANDO_H */

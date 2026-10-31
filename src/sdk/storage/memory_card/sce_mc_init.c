@@ -1,6 +1,11 @@
 #include "types.h"
 #include "rnc/sdk/kernel.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_sync.h"
 
 extern char mc_rpc_bind_error_message[] __asm__("D_00153450");
 extern char mcserv_old_release_message[] __asm__("D_00153468");
@@ -9,12 +14,6 @@ extern u8   D_00159A80[];
 extern s32  CreateSema(struct SemaParam *);
 extern s32  WaitSema(s32);
 extern s32  SignalSema(s32);
-extern s32  sceMcSync(s32, s32 *, s32 *);
-extern void sceSifInitRpc(u32);
-extern s32  sceSifBindRpc(struct sceSifClientData *, u32, u32);
-extern s32
-sceSifCallRpc(struct sceSifClientData *, u32, u32, void *, s32, void *, s32, void *, void *);
-extern s32 scePrintf(const char *, ...);
 
 s32 sceMcInit(void) {
     struct SemaParam param;

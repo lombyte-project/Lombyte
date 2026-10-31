@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/kernel.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 extern s32 DIntr();
-extern s32 EnableInterrupts();
 
 void VSync(void) {
     s32 interrupts_were_enabled;

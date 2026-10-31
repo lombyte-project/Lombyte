@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/rendering/dma_tag.h"
 #include "sda.h"
+#include "rnc/overlay/shared/props/pool_set_scale.h"
 
 typedef struct {
     u8  pad0[0x190];
@@ -37,7 +38,6 @@ extern L01Camera l01_water_render_camera_state __asm__("D_L01_0016CEC0");
 
 extern void FUN_L01_00261c10(void *, void *) __asm__("FUN_L01_00261c10");
 extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
-extern void update_animated_offset_pairs(f32 *) __asm__("FUN_L01_002b80d0");
 
 void build_height_grid_positions(f32 *grid_base_position) __asm__("FUN_L01_002b8c08");
 

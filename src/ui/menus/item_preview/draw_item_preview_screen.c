@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/rendering/texture/pack_image_descriptor.h"
 
 struct Descriptor {
     u8  pad0[0x10];
@@ -11,7 +12,6 @@ struct Descriptor {
 
 #include "rnc/game/item_state.h"
 
-extern void pack_image_descriptor(struct Descriptor *, struct MenuScreen *);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(struct Descriptor *, u64, u8 *, s32) __asm__("func_001F7580");

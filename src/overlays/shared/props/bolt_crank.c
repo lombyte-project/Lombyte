@@ -19,6 +19,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/game/options.h"
 #include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
 
 /* Bolt-crank Moby.state, including the callback-only state. */
 enum BoltCrankState {
@@ -46,7 +47,6 @@ typedef struct {
 } BoltCrankVars;
 
 extern char D_L01_00167240[];
-float       absolute_float(float input) __asm__("func_001F99C0");
 
 extern int           D_0015ED84;
 extern unsigned char menu_item_enabled_1_lui __asm__("D_0013D395") NOT_SDA;
@@ -64,8 +64,6 @@ extern void  jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void  set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void  jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void  set_camera_5_track_acceleration_yz(f32, f32) __asm__("FUN_L01_00316e88");
 
 /* On level 1, when a state-5 moby of type 0x118 has sub-id 0x34 or 0x35, sets the matching flag byte (D_0013D394 / D_0013D395). */
 

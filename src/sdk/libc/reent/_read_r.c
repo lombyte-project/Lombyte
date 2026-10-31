@@ -1,13 +1,13 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_globals.h"
+#include "rnc/sdk/kernel/read.h"
 
 struct _reent {
     s32 _errno;
 };
 
-extern s32 read(s32, s32, s32);
-s32        _read_r(struct _reent *ptr, s32 a, s32 b, s32 c) __asm__("FUN_00116108");
+s32 _read_r(struct _reent *ptr, s32 a, s32 b, s32 c) __asm__("FUN_00116108");
 
 s32 _read_r(struct _reent *reent_context,
             s32            file_descriptor,

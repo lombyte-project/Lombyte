@@ -1,4 +1,8 @@
 #include "types.h"
+#include "rnc/sdk/input/sce_pad2_get_button_profile.h"
+#include "rnc/sdk/input/sce_pad2_get_state.h"
+#include "rnc/sdk/input/sce_pad2_read.h"
+#include "rnc/sdk/input/sce_vib_get_profile.h"
 
 struct PAD {
     u8  pad0[0x180];
@@ -30,10 +34,6 @@ struct PAD {
     s32 unk348;
 };
 
-extern s32  scePad2GetState(s32 socket);
-extern s32  scePad2GetButtonProfile(s32 socket, u8 *profile);
-extern s32  sceVibGetProfile(s32 port, u8 *profile);
-extern s32  scePad2Read(s32 socket, void *buf);
 extern void clear_pad_input(struct PAD *p) __asm__("func_002172C0");
 extern void process_pad_input(struct PAD *p, u8 *buf, s32 len) __asm__("func_00217328");
 

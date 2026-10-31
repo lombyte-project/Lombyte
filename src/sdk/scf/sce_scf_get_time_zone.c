@@ -1,6 +1,6 @@
 #include "sda.h"
+#include "rnc/sdk/scf/is_t10_k.h"
 
-extern int   IsT10K(void);
 extern void  GetOsdConfigParam(int *config);
 extern short D_001330D0[] NOT_SDA;
 

@@ -8,8 +8,11 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
-
-extern int is_point_inside_clip_volume() __asm__("FUN_00214720");
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/l07/clear_bit_grid_rectangle.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/save/memcard_save_data.h"
 
 /* Update for moby class 436 on level 07: steps through its scenes as the hero enters its clip volumes. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_002F6F20), where it is exact; names translated to the US level program. */
@@ -28,18 +31,12 @@ extern u8 umbris_open_volume_triggered[] __asm__("D_0013D3B1");
 
 #include "rnc/overlay/shared/world/cuboid.h"
 
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void clear_bit_grid_rectangle(int x, int y, int w, int h) __asm__("FUN_L07_00270248");
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
-extern int  memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void request_space_load(int) __asm__("FUN_0022e188");
 void        umbris_scene_progression_update(struct Moby *moby) __asm__("FUN_L07_002f5ba0");
-void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 /* Moby class 436 */
 void umbris_scene_progression_update(struct Moby *moby) {

@@ -18,6 +18,7 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/input/pad_globals.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 typedef struct Hero Hero;
 
@@ -49,7 +50,6 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V_2e01b0;
 
-extern int   hero_set_state() __asm__("FUN_L00_002223f8");
 void         emit_hydrodisplacer_effect(char *m) __asm__("FUN_L00_002e01b0");
 void         end_hydrodisplacer_interaction(char *a) __asm__("FUN_L00_002e0340");
 extern int   func_001F9850_2E0E50(int) __asm__("FUN_001f96f8");
@@ -58,8 +58,6 @@ extern int   func_L00_002E1790_2E0E50(Moby *) __asm__("FUN_L00_002e02e0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int   func_001FA898_2E0E50(float) __asm__("FUN_001fa6d0");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void  func_001F9C08_2E0E50(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float func_001FA790_2E0E50(float, float) __asm__("FUN_001fa5c8");
 extern float func_001FA748_2E0E50(float, float) __asm__("FUN_001fa580");

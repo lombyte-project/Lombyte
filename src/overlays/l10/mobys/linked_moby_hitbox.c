@@ -12,6 +12,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/mobys/spawn_nearby_effect_without_direction.h"
 
 extern int   debug_print() __asm__("FUN_001e93b0");
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
@@ -34,8 +35,6 @@ typedef struct {
 extern struct Moby *D_L10_00178380_u[] __asm__("D_L10_00178380");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *memcpy(void *, const void *, u32);
-extern void  spawn_nearby_effect_without_direction(
-     unsigned char *m, int x, int y, void *p, float f) __asm__("FUN_L10_0024c7f0");
 
 void spawn_linked_hitbox_contact_effects(struct Moby *moby,
                                          HitBox      *box) __asm__("FUN_L10_002c9958");

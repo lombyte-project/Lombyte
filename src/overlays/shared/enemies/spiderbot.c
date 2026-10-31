@@ -10,6 +10,11 @@
 #include "rnc/world/collision/collision_line.h"
 #include "sda.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 typedef int u128_2A8090 __attribute__((mode(TI)));
 
@@ -34,33 +39,21 @@ typedef struct {
     long  a, b, c, d;
 } Quad;
 
-extern float D_L15_001673C0[4];
-extern float fast_sin(float);
-extern int   random_integer_below(int);
-extern void  add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern float D_0015ED6C;
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern float            D_L15_001673C0[4];
+extern float            fast_sin(float);
+extern float            D_0015ED6C;
 extern float D_0015ED6C MACRO_ADDR;
 extern void             draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern float          FUN_L04_001f1978(float);
-extern s32            rand(void);
-int                   spiderbot_effect_spawn_count_gp __asm__("D_L15_00161558") = 40;
-float                 spiderbot_effect_scale_gp __asm__("D_L15_0016155C") = 0.75f;
-float                 spiderbot_effect_lifetime_range_end_gp __asm__("D_L15_00161560") = 5.0f;
-extern u8             D_L15_00174460[];
-extern void           draw_spiderbot_effect_quad() __asm__("FUN_L15_002a7628");
-void                  normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
-extern unsigned char *func_L00_00273F80_r(float        *pos,
-                                          char         *vel,
-                                          int           color,
-                                          unsigned char life,
-                                          unsigned char b,
-                                          int           mode,
-                                          float         scale) __asm__("FUN_L00_002730e0");
+extern float FUN_L04_001f1978(float);
+int          spiderbot_effect_spawn_count_gp __asm__("D_L15_00161558") = 40;
+float        spiderbot_effect_scale_gp __asm__("D_L15_0016155C") = 0.75f;
+float        spiderbot_effect_lifetime_range_end_gp __asm__("D_L15_00161560") = 5.0f;
+extern u8    D_L15_00174460[];
+extern void  draw_spiderbot_effect_quad() __asm__("FUN_L15_002a7628");
+void         normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 
 extern float spiderbot_effect_quad_uvs[] __asm__("D_L15_001E27F0");
-extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 
 void draw_spiderbot_effect_quad(char *moby) __asm__("FUN_L15_002a7628");
 
@@ -218,7 +211,7 @@ void spiderbot_update(unsigned char *moby) {
             int           k;
             unsigned char life;
             effect_direction_sign = -1.0f;
-            if (rand() & 1)
+            if (RandomNext() & 1)
                 effect_direction_sign = 1.0f;
             k = truncate_float_to_s32(
                 FUN_L04_001f1978(random_float_between(spiderbot_effect_lifetime_range_end_gp * 0.5f,
@@ -237,13 +230,13 @@ void spiderbot_update(unsigned char *moby) {
                 B,
                 random_float_between(D_0015ED6C * 10.0f,
                                      effect_segment_length / convert_integer_to_float(k * 4)));
-            func_L00_00273F80_r(A,
-                                (char *)B,
-                                0x604040FF,
-                                life,
-                                random_integer_below(0xFF),
-                                0,
-                                spiderbot_effect_scale_gp);
+            spawn_moving_hero_relative_alpha_fade_particle(A,
+                                                           (char *)B,
+                                                           0x604040FF,
+                                                           life,
+                                                           random_integer_below(0xFF),
+                                                           0,
+                                                           spiderbot_effect_scale_gp);
         }
     }
     add_draw_callback(draw_spiderbot_effect_quad, moby);

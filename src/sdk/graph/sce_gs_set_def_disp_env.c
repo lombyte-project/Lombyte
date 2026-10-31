@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
 #include "rnc/sdk/graph/sce_gs_get_gparam.h"
+#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/storage/cdvd/checkModelVersion.h"
 
 typedef struct {
     s16 nSInterlace;
@@ -10,10 +12,8 @@ typedef struct {
     s32 pad08[2];
 } GsVideoModeState;
 
-extern s32  checkModelVersion(void);
 extern void InvokeKernelSyscall0080(
     s32 mode, s32 *horizontal, s32 *vertical, s32 *display_width, s32 *display_height);
-extern void scePrintf(const char *format, ...);
 extern char unsupported_display_mode_format[] __asm__("D_00153040");
 
 /* The progressive arms spell this out three times: cc1 merges the divides but keeps

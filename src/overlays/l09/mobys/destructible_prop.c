@@ -13,15 +13,14 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "sda.h"
-
-extern int FUN_L00_00257b90(int, int);
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF460), where it is exact; names translated to the US level program. */
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vx;
 
-extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char *
 spawn_destructible_prop_wreck(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
 extern void          trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -69,7 +68,7 @@ void destructible_prop_update(struct Moby *moby) {
                                    &effect_velocity_or_spawn_position,
                                    random_float_between(frame_time * 3.0f, frame_time * 6.0f));
                 moby_vars_or_random_frames =
-                    (char *)FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(10));
+                    (char *)random_int_between(scale_game_frames(5), scale_game_frames(10));
                 FUN_L00_0026dd20(pos,
                                  (char *)&effect_velocity_or_spawn_position,
                                  0x5F7F4F2F,

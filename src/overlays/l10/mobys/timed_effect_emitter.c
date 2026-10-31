@@ -13,12 +13,11 @@
 
 #include "qcopy.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
 
-extern int   FUN_L00_0028dc90(int i, int a1, int v, int k);
-extern void *spawn_splitting_effect_particle_with_collision_response_and_fade(
-    char *a, char *b, unsigned char c, int d) __asm__("FUN_L00_0026fd28");
+extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 
 void timed_effect_emitter_update(struct Moby *moby) __asm__("FUN_L10_002c7a20");
 

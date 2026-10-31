@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_WIDGETS_LEAVE_MENU_CHOICE_LIST_H
+#define LOMBYTE_RNC_UI_MENUS_WIDGETS_LEAVE_MENU_CHOICE_LIST_H
+
+#include "types.h"
+
+int leave_menu_choice_list(void) __asm__("FUN_0021a310");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_WIDGETS_LEAVE_MENU_CHOICE_LIST_H */

@@ -23,6 +23,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_container.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_pad.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 #define GB_FLAG                (*(unsigned char *)0x15EDB3)
 #define PVARS(p)               (*(char **)((p) + 0x78))
@@ -219,7 +220,6 @@ typedef struct {
 
 typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
 
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void  add_draw_callback(int, int) __asm__("FUN_001f4600");
@@ -233,7 +233,6 @@ extern void
 resolve_point_path_segment_xy_clearance(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern char *spawn_source_attached_fading_effect_particle(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -266,7 +265,6 @@ extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern unsigned char *get_moby_target_info(int);
 extern int            get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int            get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern int            FUN_L00_00257b90(int, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_0022da68(int, int, void *);
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
@@ -297,7 +295,7 @@ GbStats D_L10_0017E958 = {0};
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F1470), where it is exact; names translated to the US level program. */
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 
-/* Moby class 857 */
+/* Moby classes 857, 1906 */
 void gadgebot_update(GbMoby *moby) {
     enum {
         GADGEBOT_INITIALIZE = 0,
@@ -1465,9 +1463,9 @@ int process_gadgebot_interaction_candidate(
             int   r16, r17, r18, r2, gc;
             float f0, lift, f20, f21;
             f21 = random_float_between(0.1f, 1.0f);
-            r18 = FUN_L00_00257b90(0x40, 0xFF);
-            r17 = FUN_L00_00257b90(0x40, 0xFF);
-            r16 = FUN_L00_00257b90(0x40, 0xFF);
+            r18 = random_int_between(0x40, 0xFF);
+            r17 = random_int_between(0x40, 0xFF);
+            r16 = random_int_between(0x40, 0xFF);
             f20 = fast_cos(random_angle_radians()) * random_float_between(0.0f, 0.25f);
             vA[0] = f20;
             f20 = fast_sin(random_angle_radians());
@@ -1481,7 +1479,7 @@ int process_gadgebot_interaction_candidate(
             fast_vec_normalize(vB, vB, f0);
             f0 = random_float_between(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             vB[2] = f0;
-            r2 = scale_game_frames(FUN_L00_00257b90(0xF, 0x1E));
+            r2 = scale_game_frames(random_int_between(0xF, 0x1E));
             gc = (r17 << 8) | 0x7F000000;
             FUN_L00_00272060(vA,
                              r2,
@@ -1507,9 +1505,9 @@ int process_gadgebot_interaction_candidate(
             int   r16, r17, r18, r2, gc;
             float f0, lift, f20, f21;
             f21 = random_float_between(0.1f, 1.0f);
-            r18 = FUN_L00_00257b90(0x40, 0xFF);
-            r17 = FUN_L00_00257b90(0x40, 0xFF);
-            r16 = FUN_L00_00257b90(0x40, 0xFF);
+            r18 = random_int_between(0x40, 0xFF);
+            r17 = random_int_between(0x40, 0xFF);
+            r16 = random_int_between(0x40, 0xFF);
             f20 = fast_cos(random_angle_radians()) * random_float_between(0.0f, 0.25f);
             vC[0] = f20;
             f20 = fast_sin(random_angle_radians());
@@ -1523,7 +1521,7 @@ int process_gadgebot_interaction_candidate(
             fast_vec_normalize(vA, vA, f0);
             f0 = random_float_between(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             vA[2] = f0;
-            r2 = scale_game_frames(FUN_L00_00257b90(0xF, 0x1E));
+            r2 = scale_game_frames(random_int_between(0xF, 0x1E));
             gc = (r17 << 8) | 0x7F000000;
             FUN_L00_00272060(vC,
                              r2,

@@ -9,6 +9,8 @@
 #include "rnc/mobys/moby.h"
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 /* Cutscene state at D_L01_0016CCE0 (as struct L10Data in l10/mobys/cutscene_camera_target.c). */
 typedef struct {
@@ -47,7 +49,6 @@ extern s32        D_L01_0015F580;
 /* MACRO_ADDR: retail rebuilds this address with lui/addiu at each use */
 extern u128  fx_prev_pos __asm__("D_L01_00162070") MACRO_ADDR;
 extern void  moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern s32   random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern char *spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern void  spawn_debris_chunk(void *, void *, s32, s32) __asm__("FUN_L00_0026f548");
 extern FxSpark             *
@@ -70,7 +71,6 @@ extern void spawn_explosion(void *,
                             s32,
                             s32,
                             s32) __asm__("FUN_L00_0025e450");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 
 /* Cutscene effects: camera targets, splashes, sparks and trails keyed on the cutscene scene and frame. */

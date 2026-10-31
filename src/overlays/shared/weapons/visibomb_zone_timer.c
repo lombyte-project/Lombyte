@@ -11,6 +11,8 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/rendering/screen.h"
+#include "rnc/overlay/shared/weapons/visibomb_missile.h"
+#include "rnc/rendering/texture/draw_textured_quad.h"
 
 /* pvars of the moby run by FUN_L01_00302648: 20 trigger zones and a hold counter */
 typedef struct {
@@ -25,10 +27,7 @@ typedef struct {
     s32  count;
 } ZoneVars;
 
-extern void
-    draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64) __asm__("FUN_001f5450");
-extern s32  point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
-extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
+extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 
 extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
 extern s32 visibomb_outside_zone_overlay_enabled_gp __asm__("D_L01_0015F30C") __attribute__((sda));

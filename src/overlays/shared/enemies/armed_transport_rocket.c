@@ -8,6 +8,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "qcopy.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/enemies/blarg_elite_commando_rocket.h"
 
 extern char *create_moby(int);
 extern int   trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
@@ -31,12 +33,10 @@ extern void  spawn_explosion(void *,
                              int,
                              int,
                              int) __asm__("FUN_L00_0025e450");
-extern void  spawn_rocket_trail_spark(char *) __asm__("FUN_L15_0029ae18");
 void         build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float fast_add_rotations(float, float);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int   scale_game_frames(int);
 
 extern char  D_L16_001671C0[];

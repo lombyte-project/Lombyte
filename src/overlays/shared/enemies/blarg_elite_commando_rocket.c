@@ -12,7 +12,6 @@
 #include "sda.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_rocket_data/spawn_rocket_trail_spark.h"
 
-extern int   random_integer_below(int);
 extern int   scale_game_frames(int);
 extern float scale_time(float) __asm__("FUN_001f96b0");
 

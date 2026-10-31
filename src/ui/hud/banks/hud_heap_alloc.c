@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/ui/hud/hud_state.h"
+#include "rnc/ui/hud/banks/hud_heap_reset.h"
 
-extern s32 hud_heap_reset() __asm__("InitializeResourceEntry");
-s32        hud_heap_alloc(s32 size) __asm__("FUN_001ff288");
+s32 hud_heap_alloc(s32 size) __asm__("FUN_001ff288");
 
 s32 hud_heap_alloc(s32 size) {
     struct HudState *hud_state_ptr = &hud_state;

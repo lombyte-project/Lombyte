@@ -1,10 +1,9 @@
 #include "types.h"
-
-extern s32 initialize_mpeg_decoder(s32 command, s32 mode) __asm__("_ipuVdec");
+#include "rnc/sdk/ipu/ipu_vdec.h"
 
 s32 decode_dmvector(s32 command, s32 requested_mode) __asm__("InitializeMemoryCardDirectory");
 
 s32 decode_dmvector(s32 command, s32 requested_mode) {
     (void)requested_mode;
-    return initialize_mpeg_decoder(command, 3);
+    return _ipuVdec(command, 3);
 }

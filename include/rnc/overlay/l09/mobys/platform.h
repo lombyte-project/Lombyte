@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L09_MOBYS_PLATFORM_H
+#define LOMBYTE_RNC_OVERLAY_L09_MOBYS_PLATFORM_H
+
+#include "types.h"
+
+void platform_update() __asm__("FUN_L09_002f86a0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L09_MOBYS_PLATFORM_H */

@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/sdk/syscalls/update_rfu_dispatch_state.h"
 
-extern void  UpdateRfuDispatchState(void);
 extern void  startlevel(void) __asm__("func_001E9658");
 extern void *parse_bin(void) __asm__("func_0012D8F8");
 extern s32   FlushCache(s32);

@@ -3,6 +3,21 @@
 #include "rnc/streaming/disc_table.h"
 #include "rnc/audio/streaming/start_audio_stream_read.h"
 #include "rnc/save/memcard_get_data_size.h"
+#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_chdir.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_close.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_delete.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_format.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_get_dir.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_get_info.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_mkdir.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_open.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_read.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_seek.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_sync.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_unformat.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_write.h"
 
 typedef struct {
     s32 x0;
@@ -29,25 +44,10 @@ extern u8   D_001A0880[];
 extern char D_001A08A0[];
 extern char memcard_deleting_directory_message[] __asm__("D_001E81E8");
 
-extern void  DebugPrint(char *fmt, ...);
 extern void  RaiseKernelTrap();
-extern s32   SceMcFormat(s32 port, s32 slot);
-extern s32   SceMcUnformat(s32 port, s32 slot);
 extern void  calculate_ring_buffer_bounds(s32, McChunk **, s32 *) __asm__("func_001FD6E0");
 extern void  memcard_restore_info(u8 *, s32, s32) __asm__("func_0020AE60");
 extern s32   memcard_restore_data(u8 *, s32, u32 *) __asm__("func_0020AF20");
-extern s32   sceMcChdir(s32, s32, char *, s32);
-extern s32   sceMcClose(s32 fd);
-extern s32   sceMcDelete(s32 port, s32 slot, char *name);
-extern s32   sceMcGetDir(s32, s32, char *, s32, s32, void *);
-extern s32   sceMcGetInfo(s32, s32, s32 *, s32 *, s32 *);
-extern s32   sceMcMkdir(s32 port, s32 slot, char *name);
-extern s32   sceMcOpen(s32 port, s32 slot, char *name, s32 mode);
-extern s32   sceMcRead(s32 fd, void *buf, s32 size);
-extern s32   sceMcSeek(s32 fd, s32 offset, s32 origin);
-extern s32   sceMcSync(s32 mode, s32 *cmd, s32 *result);
-extern s32   sceMcWrite(s32 fd, void *buf, s32 size);
-extern s32   sprintf(char *str, const char *format, ...);
 extern char *strcpy(char *, const char *);
 
 #define MC   memory_card_state

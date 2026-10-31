@@ -9,8 +9,6 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/initonce_00252E80.c: func_L01_00252E80), where it is exact; names translated to the US level program. */
 
-extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
-
 void render_sky_shells(void) __asm__("FUN_L01_00252570");
 
 void render_sky_shells(void) {

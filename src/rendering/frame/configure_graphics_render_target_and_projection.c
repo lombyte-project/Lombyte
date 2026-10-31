@@ -3,19 +3,13 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/rendering/frame/setup_render_target.h"
+#include "rnc/rendering/view/configure_graphics_projection.h"
 
 /* Ported from rac1-decomp (src/game/draw.c:func_001F7A50), which matched our retail at the instruction level before the address space was translated. */
 
 /* data paired by order (exact), deltas ['0x100']: D_001519EE->D_001518EE, D_0015EF8C->D_0015EE8C */
 
-extern void configure_graphics_projection(s32 viewport_width,
-                                          s32 viewport_height,
-                                          f32 horizontal_fov,
-                                          f32 fog_near_distance,
-                                          f32 fog_far_distance,
-                                          f32 fog_near_intensity,
-                                          f32 fog_far_intensity) __asm__("FUN_001f33b8");
-extern s16  fixed_render_target_framebuffer_page[] __asm__("D_001518EE");
+extern s16 fixed_render_target_framebuffer_page[] __asm__("D_001518EE");
 
 void configure_graphics_render_target_and_projection(s32 tw,
                                                      s32 th,

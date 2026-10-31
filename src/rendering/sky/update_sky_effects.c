@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/rendering/sky_shell.h"
 #include "rnc/math/random.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/sdk/libc/stdlib/srand.h"
 
 struct LevelSkyEffectData {
     u8                pad_0[4];
@@ -36,8 +38,6 @@ struct SkyEffect {
 
 extern struct LevelSkyEffectData *level_sky_effect_data __asm__("D_0016045C");
 extern u8                         sky_matrix[] __asm__("D_001D96E0");
-extern void                       srand(s32) __asm__("func_001160C8");
-extern f32                        absolute_float(f32) __asm__("func_001F99C0");
 extern f32                        fast_cos(f32) __asm__("func_001F9DC8");
 extern f32                        fast_sin(f32) __asm__("func_001F9DE0");
 extern void                       set_identity_matrix(u8 *) __asm__("func_001F9FC8");

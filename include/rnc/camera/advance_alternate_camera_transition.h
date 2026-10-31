@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_CAMERA_ADVANCE_ALTERNATE_CAMERA_TRANSITION_H
+#define LOMBYTE_RNC_CAMERA_ADVANCE_ALTERNATE_CAMERA_TRANSITION_H
+
+#include "types.h"
+
+int advance_alternate_camera_transition(char *, f32 *) __asm__("FUN_001eccd8");
+
+#endif /* LOMBYTE_RNC_CAMERA_ADVANCE_ALTERNATE_CAMERA_TRANSITION_H */

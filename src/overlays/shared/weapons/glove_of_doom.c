@@ -22,6 +22,7 @@
 #include "rnc/input/pad_globals.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "qzero.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
 
 typedef union {
     u128 q;
@@ -93,8 +94,6 @@ extern void    transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8")
 extern void    transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void    transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32     vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern int     use_ammo(int, int) __asm__("FUN_L00_00233db8");
-extern int     get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int     collision_line_2c7548(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void    FUN_L00_002c7320_2c7548(float *pos,
                                        float *tgt,

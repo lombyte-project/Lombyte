@@ -14,6 +14,8 @@
 #include "rnc/overlay/shared/weapons/tesla_claw_beam_data/draw_beam_and_arc_two_pass_quads.h"
 #include "rnc/overlay/shared/weapons/tesla_claw_beam.h"
 #include "rnc/rendering/debug/debug_menu.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 typedef struct {
     Vec4  direction;
@@ -81,8 +83,6 @@ extern int   truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int   fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int   get_moby_target_info() __asm__("FUN_002141f8");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern int   FUN_L00_00257b90(int, int), FUN_00213260(int);
 extern void  make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void  record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern int   test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
@@ -93,12 +93,10 @@ extern void           FUN_0022da68(int, int, void *);
 extern unsigned char *FUN_L00_00272060(
     void *, int, float, float, int, int, int, float *, float) __asm__("FUN_L00_00272060");
 void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002baae0");
-void        draw_beam_anchor_camera_facing_quads(void *mv) __asm__("FUN_L00_002bb0b0");
-extern long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-void        transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+void         draw_beam_anchor_camera_facing_quads(void *mv) __asm__("FUN_L00_002bb0b0");
+extern long  get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+void         transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void  draw_geometry_quad(void *, void *, int);
 extern float fast_vec_dist(void *, void *);
 unsigned char *
@@ -1311,8 +1309,8 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
         beam_origin_particle_direction_scale * frame_scale_macro, &target_delta, &direction);
     build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5d0, phase);
     build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5e0, angle);
-    spin = FUN_L00_00257b90(1, 8);
-    if (FUN_00213260(2))
+    spin = random_int_between(1, 8);
+    if (random_integer_below(2))
         spin = -spin;
     amplitude = random_float_between(0.2f, 0.6f);
     FUN_L00_00272060(beam_state,
@@ -1334,8 +1332,8 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
                      spin,
                      (float *)&target_delta,
                      0.0f);
-    spin = FUN_L00_00257b90(1, 8);
-    if (FUN_00213260(2))
+    spin = random_int_between(1, 8);
+    if (random_integer_below(2))
         spin = -spin;
     amplitude = random_float_between(0.15f, 3.0f);
     {

@@ -13,6 +13,7 @@
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/overlay/shared/ui/help/remove_help_message_for_selector.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/rendering/mobys/render_environment_mapped_object.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern int           D_L00_0015F5C4;
@@ -20,7 +21,6 @@ extern char          ship_proximity_local_offsets[] __asm__("D_L00_001BD880");
 extern int           D_L00_0015F630 __asm__("D_L00_0015F630");
 extern unsigned char D_0013CAE4[];
 extern unsigned char l00_moby_followup_scene_gate[] __asm__("D_0013DD4B");
-extern void          render_environment_mapped_object(void) __asm__("FUN_002327a0");
 extern void          start_scene(int) __asm__("FUN_L00_00298840");
 extern void          queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void          draw_light_flare() __asm__("func_0022DF40");

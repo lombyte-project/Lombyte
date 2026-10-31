@@ -11,6 +11,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -65,8 +66,6 @@ typedef struct {
     u8 flag19;
     u8 pad1A[0x16];
 } L14BoltSweep;
-
-extern int FUN_L00_00257b90(int, int);
 
 extern void FUN_L00_00259888(void *, struct Moby *, s32, void *, f32);
 
@@ -164,7 +163,7 @@ void flying_bolt_update(struct Moby *projectile_moby) {
                 FUN_L00_0026dd20((char *)&projectile_moby->pos,
                                  (char *)&particle_launch_vector,
                                  0x7F2F4F6F,
-                                 FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)),
+                                 random_int_between(scale_game_frames(10), scale_game_frames(15)),
                                  30000.0f);
             }
         }

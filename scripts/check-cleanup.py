@@ -558,10 +558,13 @@ def moby_update_defs(tree: Tree) -> list[tuple[str, str, int, str]]:
     """(file, name, line, expected comment) of every function a level class table names as an
     update, except empty ones (the shared no-op callbacks)."""
     classes = collections.defaultdict(set)
+    # Header prototypes bind a C name to its label for every file that includes them.
+    header_names = {m.group(1): norm_label(m.group(3)) for rel, text in tree.code.items()
+                    if rel.endswith(".h") for m in PROTO.finditer(text) if m.group(3)}
     for rel, text in tree.code.items():
         if not rel.endswith("/level_class_tables.c"):
             continue
-        names = {m.group(1): norm_label(m.group(3) or m.group(1)) for m in PROTO.finditer(text)}
+        names = {**header_names, **{m.group(1): norm_label(m.group(3) or m.group(1)) for m in PROTO.finditer(text)}}
         for table in CLASS_TABLE.finditer(text):
             for row in CLASS_ROW.finditer(table.group(1)):
                 oclass, name = int(row.group(1), 0), row.group(2)

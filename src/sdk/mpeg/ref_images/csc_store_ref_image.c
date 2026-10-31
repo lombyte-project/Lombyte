@@ -1,5 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/eeregs.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/ipu/send_ipu_command.h"
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
 
 typedef struct {
     u32 qwc;
@@ -24,11 +27,8 @@ extern s32  csc_dma_chunk_handler() __asm__("D_0012A5D8");
 extern s32  AddDmacHandlerSecondary(s32 channel, void *handler, s32 next, void *arg);
 extern s32  RemoveDmacHandler(s32 channel, s32 handle);
 extern s32  DIntr(void);
-extern s32  EnableInterrupts(void);
-extern s32  _dispatchMpegCallback(void *callback_data, s32 *callback_args);
 extern void _doCSC(CscDecoder *decoder, u32 source, s32 macroblocks);
 extern void _doCSC2(CscDecoder *decoder, u32 source, s32 macroblocks);
-extern void _sendIpuCommand(CscDecoder *decoder, u32 command);
 extern s32  disable_dmac(s32 channel) __asm__("func_001190F8");
 extern s32  enable_dmac(s32 channel) __asm__("func_00119160");
 
@@ -49,7 +49,7 @@ void _csc_storeRefImage(CscDecoder *decoder, CscImage *image) {
     few_macroblocks = macroblocks < 0x400;
     while ((s32)*IPU_CTRL < 0) {
     }
-    _sendIpuCommand(decoder, 0);
+    SendIpuCommand(decoder, 0);
     while ((s32)*IPU_CTRL < 0) {
     }
     dma.qwc = macroblocks * 0x18;

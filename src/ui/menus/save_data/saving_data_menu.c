@@ -2,6 +2,7 @@
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
+#include "rnc/ui/menus/save_data/prepare_save_game.h"
 
 typedef struct __attribute__((packed)) {
     s64 v;
@@ -17,7 +18,6 @@ extern Unaligned64 D_0015EE98[1];
 #include "rnc/ui/menus/menu_pages.h"
 
 extern void mode_freeze_init() __asm__("func_001FBAB8");
-extern s32  prepare_save_game() __asm__("FUN_002269c0");
 extern s32  allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32         saving_data_menu(struct MenuScreen *menu) __asm__("FUN_00222f88");
 

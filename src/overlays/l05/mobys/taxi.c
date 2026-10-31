@@ -12,10 +12,11 @@
 #include "rnc/overlay/shared/vehicles/taxi_path.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
 extern char          D_0013E550[];
 extern int           allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern int           voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern unsigned char D_0014C050[][16];
 extern void          FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern float         fast_add_rotations(float, float);
@@ -23,12 +24,6 @@ extern float         fast_subtract_rotations(float, float);
 /* Same source as the exact taxi_update, with its moby data 8 bytes further on, an x range on the pickup test and a table test for state 6. */
 
 extern char D_0013CAE4[];
-extern f32  advance_accelerated_scalar(f32 *value,
-                                       f32 *velocity,
-                                       f32  target,
-                                       f32  acceleration_step,
-                                       f32  braking_step,
-                                       f32  maximum_speed) __asm__("FUN_00213f38");
 void        initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
 extern void select_taxi_route(struct Moby *) __asm__("FUN_L05_003193a8");
 extern void sample_camera_path(int  *path,

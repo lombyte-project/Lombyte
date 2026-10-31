@@ -14,6 +14,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/text/font/disable_font_color_codes.h"
 #include "rnc/ui/text/font/enable_font_color_codes.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
 
 extern int  panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
 extern int  text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));
@@ -36,7 +37,6 @@ extern char *get_help_message_text(int) __asm__("func_001FDD10");
 extern int   find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
 extern s32   fade_menu_color(s32, s32, s32) __asm__("func_0021B6D8");
 extern void *memset(void *, int, unsigned int);
-extern int   sprintf(char *, const char *, ...);
 
 int render_configured_text_label(struct MenuScreen *label) __asm__("FUN_0021a328");
 

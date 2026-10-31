@@ -7,9 +7,10 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern float D_0015ED70;
-extern int   FUN_L00_00257b90(int, int);
 
 /* Update function for moby classes 441-443 on level 08 (falling debris): picks its spin, falls with a smoke trail, bursts into particles near the ground, then falls on until out of bounds. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E2A38), where it is exact; names translated to the US level program. */
@@ -48,10 +49,8 @@ extern int l08_falling_debris_burst_second_particle_word __asm__("D_L08_00161C08
 
 #include "rnc/overlay/l08/mobys/falling_debris_data/falling_debris_update.h"
 
-extern int  spawn_spark() __asm__("FUN_00218888");
-extern void func_L00_0026B890_2E2A38(
-    void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
-void falling_debris_update(Moby_2E2A38 *debris_moby) __asm__("FUN_L08_002e16c0");
+extern int spawn_spark() __asm__("FUN_00218888");
+void       falling_debris_update(Moby_2E2A38 *debris_moby) __asm__("FUN_L08_002e16c0");
 
 Pair_2E2A38 D_L08_00161C30 = {
     {0x2f000000, 0x3f000000}
@@ -100,22 +99,22 @@ void falling_debris_update(Moby_2E2A38 *debris_moby) {
             trail_parameter_entry = &tab.v[random_integer_below(2)];
             {
                 int lo = scale_game_frames(15), hi = scale_game_frames(20);
-                trail_frame_count = FUN_L00_00257b90(lo, hi);
+                trail_frame_count = random_int_between(lo, hi);
             }
             {
                 int lo = scale_game_frames(25);
-                trail_secondary_frame_count = FUN_L00_00257b90(lo, scale_game_frames(30));
+                trail_secondary_frame_count = random_int_between(lo, scale_game_frames(30));
             }
-            func_L00_0026B890_2E2A38(debris_moby->pos,
-                                     particle_primary_vector,
-                                     0x2F3F3F7F,
-                                     *trail_parameter_entry,
-                                     trail_frame_count,
-                                     trail_secondary_frame_count,
-                                     0,
-                                     0,
-                                     400000.0f,
-                                     random_float_between(8.0f, 16.0f) * D_0015ED6C_gp);
+            FUN_L00_0026a9f0(debris_moby->pos,
+                             particle_primary_vector,
+                             0x2F3F3F7F,
+                             *trail_parameter_entry,
+                             trail_frame_count,
+                             trail_secondary_frame_count,
+                             0,
+                             0,
+                             400000.0f,
+                             random_float_between(8.0f, 16.0f) * D_0015ED6C_gp);
         }
         if (debris_moby->pos[2] < 15.2f) {
             for (i = 0; i < falling_debris_burst_particle_count; i++) {

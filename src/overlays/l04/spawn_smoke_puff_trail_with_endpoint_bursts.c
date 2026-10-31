@@ -4,10 +4,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/math/vector.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 typedef struct {
     u8  pad0[4];
@@ -28,7 +28,6 @@ typedef struct {
     PuffTail tail; /* 0x20 */
 } Puff;
 
-extern f32   randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 extern void  spawn_burst(void *, void *, int, int, int, int, f32) __asm__("FUN_L00_0026cbb0");
 extern f32   smoke_trail_puff_vertical_velocity_scale_gp __asm__("D_L04_001618B4")

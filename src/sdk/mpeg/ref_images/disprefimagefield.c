@@ -1,4 +1,8 @@
 #include "types.h"
+#include "rnc/sdk/mpeg/demux/_getPtsDtsFlags.h"
+#include "rnc/sdk/mpeg/macroblock/cpr8.h"
+#include "rnc/sdk/mpeg/ref_images/csc_store_ref_image.h"
+#include "rnc/sdk/mpeg/ref_images/is_out_size_ok.h"
 
 struct MpegPictureBuffer {
     u8  pad0[0x10];
@@ -62,11 +66,6 @@ struct MpegFieldTransferState {
     struct MpegPictureTransfer *transfer;
 };
 
-extern void
-_getPtsDtsFlags(struct MpegFieldTransferState *, struct MpegPictureBuffer *, s64 *, s64 *, s64 *);
-extern s32  _isOutSizeOK(struct MpegFieldTransferState *, struct MpegPictureBuffer *);
-extern void _cpr8(struct MpegFieldTransferState *, struct MpegPictureBuffer *);
-extern void _csc_storeRefImage(struct MpegFieldTransferState *, struct MpegPictureBuffer *);
 extern void FinishMpegReferenceImage(struct MpegFieldTransferState *state) __asm__("func_00129B38");
 
 void PrepareMpegPictureFieldTransfers(
@@ -98,20 +97,20 @@ void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
         secondary = first_field_ref_image;
     }
     transfer = state->transfer;
-    _getPtsDtsFlags(state,
-                    primary,
-                    &transfer->first_timestamp.value,
-                    &transfer->first_decode_timestamp,
-                    &transfer->first_flags);
+    GetMpegPictureTimestampsAndFlags(state,
+                                     primary,
+                                     &transfer->first_timestamp.value,
+                                     &transfer->first_decode_timestamp,
+                                     &transfer->first_flags);
     second_transfer = state->transfer;
     timestamp = second_transfer->first_timestamp.words.low;
     state->timestamp_step = 1;
     state->last_timestamp = timestamp;
-    _getPtsDtsFlags(state,
-                    secondary,
-                    &second_transfer->second_timestamp.value,
-                    &second_transfer->second_decode_timestamp,
-                    &second_transfer->second_flags);
+    GetMpegPictureTimestampsAndFlags(state,
+                                     secondary,
+                                     &second_transfer->second_timestamp.value,
+                                     &second_transfer->second_decode_timestamp,
+                                     &second_transfer->second_flags);
     final_transfer = state->transfer;
     second_timestamp = final_transfer->second_timestamp.words.low;
     state->timestamp_step = 1;

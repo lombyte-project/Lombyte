@@ -13,6 +13,8 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/overlay/l06/hero/hero_set_state.h"
 #include "rnc/overlay/l06/scripted_camera_sequence.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/props/spinning_fragment.h"
 
 extern float          D_L06_00167540[];
 extern void           draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -22,8 +24,6 @@ extern unsigned char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
 #include "rnc/overlay/shared/world/cuboid.h"
 
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
-extern void
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
@@ -48,8 +48,6 @@ extern float camera_sequence_moby_scale_multiplier_gp __asm__("D_L06_00162048")
 extern float camera_sequence_rotation_x_degrees_gp __asm__("D_L06_00162050") __attribute__((sda));
 void         breakable_window_update(char *moby) __asm__("FUN_L06_002ffcb0");
 extern void  update_entity(char *) __asm__("FUN_L00_00250df8");
-extern unsigned char              *
-spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 extern float moby_breakup_z_offset_gp __asm__("D_L06_0016204C") __attribute__((sda));
 
 typedef struct {

@@ -32,6 +32,8 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "rnc/game/usage_stats.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
+#include "rnc/ui/help/try_set_help_message.h"
 
 typedef struct {
     int target;
@@ -47,11 +49,9 @@ int          D_L10_00161388 = 1;
 extern char *D_L10_0015FFD8_98b68 __asm__("D_L10_0015FFD8");
 extern int   D_L10_001BA950[];
 extern u8    D_001413F4_98b68[] __asm__("D_001413F4");
-extern int   try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void  enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
 extern void  request_music_track(int, int) __asm__("FUN_L01_0027a248");
-extern void  exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 
 extern short D_00141948 NOT_SDA;
 /* Level 10 pickup: saves its collected bit, flips the linked switch pair and moves the hero to the spot for the current state. */

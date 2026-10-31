@@ -9,6 +9,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void release_voice_slot(int);
@@ -30,7 +31,6 @@ typedef struct {
     f32 rate; /* 0x30 */
 } LeverVars;
 
-extern int          FUN_L00_0028d8c0(void *, int);
 extern int          allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern struct Moby *moby_array_macro __asm__("D_L04_0015FFD8") MACRO_ADDR;
 
@@ -82,11 +82,11 @@ void platform_booster_update(struct Moby *moby) {
         }
         if (moby->anim_time != previous_anim_time) {
             if (lv->travel != 1.0f && lv->travel != 0.0f) {
-                if (FUN_L00_0028d8c0(moby, door_vars->voice) == 0) {
+                if (voice_is_playing(moby, door_vars->voice) == 0) {
                     door_vars->voice = allocate_voice_for_target_entry(0, 4, (int)moby);
                 }
             } else {
-                if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
+                if (voice_is_playing(moby, door_vars->voice) != 0) {
                     if (door_vars->voice != -1) {
                         slot = (u8 *)&voice_pool + door_vars->voice * 0x70;
                         if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
@@ -97,7 +97,7 @@ void platform_booster_update(struct Moby *moby) {
                 }
                 allocate_voice_for_target_entry(1, 0, (int)moby);
             }
-        } else if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
+        } else if (voice_is_playing(moby, door_vars->voice) != 0) {
             if (door_vars->voice != -1) {
                 slot = (u8 *)&voice_pool + door_vars->voice * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
@@ -132,7 +132,7 @@ void platform_booster_update(struct Moby *moby) {
         }
         if (moby->anim_time != previous_anim_time) {
             if (link_vars->travel == 1.0f || link_vars->travel == 0.0f) {
-                if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
+                if (voice_is_playing(moby, door_vars->voice) != 0) {
                     if (door_vars->voice != -1) {
                         slot = (u8 *)&voice_pool + door_vars->voice * 0x70;
                         if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
@@ -142,10 +142,10 @@ void platform_booster_update(struct Moby *moby) {
                     door_vars->voice = -1;
                 }
                 allocate_voice_for_target_entry(1, 0, (int)moby);
-            } else if (FUN_L00_0028d8c0(moby, door_vars->voice) == 0) {
+            } else if (voice_is_playing(moby, door_vars->voice) == 0) {
                 door_vars->voice = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
-        } else if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
+        } else if (voice_is_playing(moby, door_vars->voice) != 0) {
             if (door_vars->voice != -1) {
                 slot = (u8 *)&voice_pool + door_vars->voice * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {

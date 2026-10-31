@@ -14,6 +14,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/world/level_spline.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern void
 make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
@@ -23,8 +24,6 @@ make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FU
 #include "sda.h"
 #include "rnc/overlay/shared/math/quad.h"
 
-extern char *
-spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern float          random_float_between(float, float) __asm__("FUN_002132a8");
 extern int            collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void           func_L00_0025F4A8_alt(void *,
@@ -156,13 +155,13 @@ void rocket_tank_rocket_update(char *moby) {
         *(OvlQuad *)world_effect_direction = 0;
         world_effect_direction[2] = 0.02f;
         transform_vector_by_basis(world_effect_direction, world_effect_direction, moby + 0xC0);
-        spawn_burst(effect_spawn_position,
-                    world_effect_direction,
-                    0x4F007FFF,
-                    0x1FFFFFFF,
-                    scale_game_frames(10),
-                    1,
-                    20000.0f);
+        FUN_L00_0026cbb0(effect_spawn_position,
+                         world_effect_direction,
+                         0x4F007FFF,
+                         0x1FFFFFFF,
+                         scale_game_frames(10),
+                         1,
+                         20000.0f);
     }
 }
 

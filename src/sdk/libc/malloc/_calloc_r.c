@@ -9,9 +9,9 @@
 /* _calloc_r q5: exact mallocr.c else-form with p/csz locals. */
 
 #include "types.h"
+#include "rnc/sdk/libc/malloc/malloc_r.h"
 
 struct _reent;
-extern void *_malloc_r(struct _reent *ptr, u32 size);
 extern void *memset(void *dst, s32 value, u32 size);
 
 #define SIZE_SZ 4

@@ -7,6 +7,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 
 extern float D_L06_00167540[];
 
@@ -33,10 +37,8 @@ extern float D_0015ED6C;
 #include "rnc/overlay/l06/mobys/switchable_beam_barrier_data/update_switchable_beam_barrier_3.h"
 
 extern float D_L06_001FE890[];
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int   D_L06_00162234;
 extern int   D_L06_00162238;
-extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern float D_L06_001621F8 __attribute__((sda));
 
 #include "rnc/overlay/l06/mobys/switchable_beam_barrier_data/update_switchable_beam_barrier_2.h"
@@ -48,7 +50,6 @@ extern float D_L06_00162208 __attribute__((sda));
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);
 extern void add_draw_callback(int, char *) __asm__("FUN_001f4600");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void        test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00305000");
 void        draw_moby_vector_streams(char *m) __asm__("FUN_L06_00305170");
 extern void
@@ -267,7 +268,6 @@ extern float vector_stream_texture_u_step_gp __asm__("D_L06_001621F4") __attribu
 extern f32   D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
 extern f32   D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
 extern void  FUN_L06_00216b88(int *, float *);
-extern void  font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void  vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void draw_moby_vector_streams(char *moby) {

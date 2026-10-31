@@ -9,6 +9,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -18,11 +20,9 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 /* raise each listed moby's position z by a fixed amount and notify it */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC4C0), where it is exact; names translated to the US level program. */
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float FUN_00213f38(float *, float *, float, float, float, float);
 
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 /* Sparks thrown off the swinging hazard while the camera is near it. */
 extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -132,18 +132,18 @@ void split_door_update(char *moby) {
         child = *(char **)(pair_transform_vars + 0x40);
         parent_distance = target_delta;
         child_distance = fast_vec_dist(child + 0x10, pair_transform_vars + 0x10);
-        FUN_00213f38(&parent_distance,
-                     &((float *)pair_transform_vars)[2],
-                     moby_pair_parent_fixed_distance_gp,
-                     frame_time_sq * 10.0f,
-                     frame_time_sq * 20.0f,
-                     frame_time * 5.0f);
-        FUN_00213f38(&child_distance,
-                     &((float *)pair_transform_vars)[0x11],
-                     moby_pair_child_fixed_distance_gp,
-                     frame_time_sq * 10.0f,
-                     frame_time_sq * 20.0f,
-                     frame_time * 5.0f);
+        advance_accelerated_scalar(&parent_distance,
+                                   &((float *)pair_transform_vars)[2],
+                                   moby_pair_parent_fixed_distance_gp,
+                                   frame_time_sq * 10.0f,
+                                   frame_time_sq * 20.0f,
+                                   frame_time * 5.0f);
+        advance_accelerated_scalar(&child_distance,
+                                   &((float *)pair_transform_vars)[0x11],
+                                   moby_pair_child_fixed_distance_gp,
+                                   frame_time_sq * 10.0f,
+                                   frame_time_sq * 20.0f,
+                                   frame_time * 5.0f);
         fast_vec_normalize(position_offset, pair_transform_vars + 0x30, parent_distance);
         fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
         fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -child_distance);
@@ -214,30 +214,30 @@ void split_door_update(char *moby) {
             random_float_between((float)moby_pair_phase_one_duration_min_frames_gp,
                                  (float)moby_pair_phase_one_duration_max_frames_gp));
     phase_join:
-        FUN_00213f38(&phase_a,
-                     &((float *)pair_transform_vars)[2],
-                     target_a,
-                     acceleration * frame_time_sq,
-                     max_speed * frame_time_sq,
-                     damping * frame_time);
-        FUN_00213f38(&phase_b,
-                     &((float *)pair_transform_vars)[0x11],
-                     target_b,
-                     acceleration * frame_time_sq,
-                     max_speed * frame_time_sq,
-                     damping * frame_time);
-        FUN_00213f38((float *)&MOBY(moby)->rot.y,
-                     &((float *)pair_transform_vars)[3],
-                     target_rot_a,
-                     rotation_acceleration * DEG_TO_RAD * frame_time_sq,
-                     rotation_speed * DEG_TO_RAD * frame_time_sq,
-                     rotation_damping * DEG_TO_RAD * frame_time);
-        FUN_00213f38((float *)(*(char **)(pair_transform_vars + 0x40) + 0x44),
-                     &((float *)pair_transform_vars)[0x12],
-                     target_rot_b,
-                     rotation_acceleration * DEG_TO_RAD * frame_time_sq,
-                     rotation_speed * DEG_TO_RAD * frame_time_sq,
-                     rotation_damping * DEG_TO_RAD * frame_time);
+        advance_accelerated_scalar(&phase_a,
+                                   &((float *)pair_transform_vars)[2],
+                                   target_a,
+                                   acceleration * frame_time_sq,
+                                   max_speed * frame_time_sq,
+                                   damping * frame_time);
+        advance_accelerated_scalar(&phase_b,
+                                   &((float *)pair_transform_vars)[0x11],
+                                   target_b,
+                                   acceleration * frame_time_sq,
+                                   max_speed * frame_time_sq,
+                                   damping * frame_time);
+        advance_accelerated_scalar((float *)&MOBY(moby)->rot.y,
+                                   &((float *)pair_transform_vars)[3],
+                                   target_rot_a,
+                                   rotation_acceleration * DEG_TO_RAD * frame_time_sq,
+                                   rotation_speed * DEG_TO_RAD * frame_time_sq,
+                                   rotation_damping * DEG_TO_RAD * frame_time);
+        advance_accelerated_scalar((float *)(*(char **)(pair_transform_vars + 0x40) + 0x44),
+                                   &((float *)pair_transform_vars)[0x12],
+                                   target_rot_b,
+                                   rotation_acceleration * DEG_TO_RAD * frame_time_sq,
+                                   rotation_speed * DEG_TO_RAD * frame_time_sq,
+                                   rotation_damping * DEG_TO_RAD * frame_time);
         fast_vec_normalize(position_offset, pair_transform_vars + 0x30, phase_a);
         fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
         fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -phase_b);

@@ -9,9 +9,10 @@
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/random.h"
+#include "rnc/mobys/animation/queue_animation_update.h"
+#include "rnc/overlay/l08/mobys/spawn_moby_offset_effect.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002B9438), where it is exact; names translated to the US level program. */
-extern int   spawn_moby_offset_effect(char *) __asm__("FUN_L08_00279f00");
 extern void  copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern float bolt_pickup_spin_increment_range_start_gp __asm__("D_L08_00161468")
     __attribute__((sda));
@@ -77,8 +78,6 @@ extern int   D_L08_0015F5CC;
 extern void  mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern int   func_L00_001F39B0_2B94B0(void *, void *, int, int, int) __asm__("FUN_L08_002025d0");
 extern void  func_L00_001FF610_2B94B0(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern int
-queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern float func_001F9FA8_2B94B0(float) __asm__("FUN_001f9de0");
 extern void  initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void  update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");

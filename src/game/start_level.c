@@ -3,6 +3,10 @@
 #include "rnc/streaming/disc_table.h"
 #include "types.h"
 #include "rnc/runtime/callbacks/count_vsync.h"
+#include "rnc/sdk/graph/sce_gs_sync_path.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/graph/sce_gs_sync_v_callback.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
 extern int decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
 
@@ -19,10 +23,6 @@ extern void fade_to_black(int) __asm__("func_001F4A58");
 extern void snd_stream_safe_cd_sync(int) __asm__("func_0012EE08");
 extern void memcard_update_state(void) __asm__("func_002093D8");
 extern void play_mpeg_movie(int, int, int, int, int) __asm__("func_0023A3B8");
-extern void sceCdSync(int);
-extern void sceGsSyncV(int);
-extern void sceGsSyncPath(int, int) __asm__("FUN_00120558");
-extern void sceGsSyncVCallback(void (*)(void));
 extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B10");
 /* Start level `level`: pick its two load parameters from the level
    table in disc_table (the alternate set while D_0015ED80 is set), stop

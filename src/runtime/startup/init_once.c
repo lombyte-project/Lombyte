@@ -5,27 +5,42 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/audio/sound/initialize_gameplay_sound_system.h"
+#include "rnc/rendering/view/update_view_context.h"
+#include "rnc/runtime/callbacks/count_vsync.h"
+#include "rnc/runtime/iop/initialize_sif_rpc.h"
+#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/dma/sce_dma_reset.h"
+#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
+#include "rnc/sdk/graph/sce_gs_reset_graph.h"
+#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
+#include "rnc/sdk/graph/sce_gs_sync_path.h"
+#include "rnc/sdk/graph/sce_gs_sync_v_callback.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/rpc/iop/sce_sif_init_iop_heap.h"
+#include "rnc/sdk/rpc/iop/sce_sif_reboot_iop.h"
+#include "rnc/sdk/rpc/iop/sce_sif_sync_iop.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
+#include "rnc/sdk/scf/sce_scf_get_language.h"
+#include "rnc/sdk/storage/cdvd/sceCdDiskReady.h"
+#include "rnc/sdk/storage/cdvd/sceCdInit.h"
+#include "rnc/sdk/storage/cdvd/scecdmmode.h"
+#include "rnc/sdk/storage/fileio/sceFsReset.h"
+#include "rnc/streaming/wad_get_sectors.h"
+#include "rnc/ui/text/font/load_debug_font.h"
 
 extern u8   vu0_micro_program[] __asm__("D_0010E4C0");
-extern void count_vsync() __asm__("FUN_0012f1c8");
 extern u8   rebooted_iop_message[] __asm__("D_0015FA88");
 extern u8   iop_reboot_image_path[] __asm__("D_001E7AE0");
 extern u8   loaded_irx_modules_message[] __asm__("D_001E7AF8");
 extern u8   unsupported_lang_message[] __asm__("D_001E7B10");
 extern s32  DIntr();
-extern s32  DebugPrint();
 extern s32  EnableCache();
-extern s32  EnableInterrupts();
 extern s32  fill_transfer_words() __asm__("func_001F97E8");
 extern void FlushCache();
 extern s32  reset_vif1_gif() __asm__("FUN_001204b8");
-extern s32  sceGsSyncPath() __asm__("FUN_00120558");
-extern s32  sceCdDiskReady() __asm__("FUN_00121190");
-extern s32  wad_get_sectors() __asm__("FUN_0012f208");
 extern s32  load_disc_sectors_into_global_buffer() __asm__("func_0012F2B8");
-extern s32  load_debug_font() __asm__("FUN_001e9338");
 extern s32  init_view_context() __asm__("func_001F2C60");
-extern s32  update_view_context() __asm__("FUN_001f2d98");
 extern s32  set_pal_mode() __asm__("func_001F34E8");
 extern s32  initialize_alpha_lookup_table() __asm__("func_001F7A30");
 extern s32  load_irx_module() __asm__("func_00201520");
@@ -35,23 +50,8 @@ extern s32  memcard_initialize() __asm__("func_0020AC58");
 extern s32  init_dma() __asm__("func_0020B418");
 extern s32  decompress_wad() __asm__("FUN_0020b618");
 extern s32  init_pads() __asm__("func_00217048");
-extern s32  initialize_gameplay_sound_system() __asm__("FUN_0022c8d0");
-extern s32  initialize_sif_rpc() __asm__("FUN_00232ce0");
 extern s32  vu0_load_micro_program() __asm__("func_002334D8");
 extern s32  vu1_init_chain() __asm__("func_002335D0");
-extern s32  sceCdInit();
-extern s32  sceCdMmode();
-extern s32  sceDmaReset();
-extern s32  sceFsReset();
-extern s32  sceGsExecLoadImage();
-extern s32  sceGsResetGraph();
-extern s32  sceGsSetDefLoadImage();
-extern s32  sceGsSyncVCallback();
-extern s32  sceScfGetLanguage();
-extern s32  sceSifInitIopHeap();
-extern s32  sceSifInitRpc();
-extern s32  sceSifRebootIop();
-extern s32  sceSifSyncIop();
 void        init_once(void) __asm__("FUN_00201650");
 
 void init_once(void) {
@@ -86,7 +86,7 @@ void init_once(void) {
     sceCdInit(0);
     sceCdDiskReady(0);
     sceCdMmode(2);
-    sceFsReset();
+    SceFsReset();
     wad_get_sectors(0x121, 1, disc_sector_and_image_descriptor_buffer);
     FlushCache(0);
     flag = disc_sector_and_image_descriptor_buffer[0x33] != 0x4E;

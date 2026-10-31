@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_H
+#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_H
+
+#include "types.h"
+
+void bomber_tank_update() __asm__("FUN_L08_002d42d8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_H */

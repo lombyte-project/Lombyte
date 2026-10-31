@@ -2,8 +2,7 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/world/level_labels.h"
-
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+#include "rnc/mobys/moby_spawn.h"
 
 void tracked_group_watcher_update(struct Moby *moby) __asm__("FUN_L13_0030be60");
 

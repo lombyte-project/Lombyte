@@ -16,6 +16,10 @@
 #include "rnc/overlay/shared/hero/update_hero_vehicle_attachments_and_effects.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/item_state.h"
+#include "rnc/overlay/shared/camera/follow_camera_angle_blend.h"
+#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
@@ -29,18 +33,12 @@ char fleet_camera_box_configuration_error_format[58] __asm__("D_L17_001E6F60") =
 
 extern int D_00141DC4           NOT_SDA;
 extern int                      fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
-extern int                      hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int                      scale_game_frames(int);
 extern unsigned char            D_0013D408[];
 extern unsigned char D_0013D4DF NOT_SDA;
 extern int                      pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
-extern void                     DebugPrint();
-extern void                     clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
-extern void
-set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
-extern char fleet_dwell_help_gate_value[] __asm__("D_00141D54");
-extern char fleet_clip_volume_help_suppression_flags[] __asm__("D_00141D7C");
+extern char                     fleet_dwell_help_gate_value[] __asm__("D_00141D54");
+extern char                     fleet_clip_volume_help_suppression_flags[] __asm__("D_00141D7C");
 
 void fleet_camera_box_watcher_update(struct Moby *moby) __asm__("FUN_L17_002f26d0");
 

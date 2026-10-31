@@ -18,6 +18,9 @@
 #include "rnc/overlay/shared/weapons/mine.h"
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 #include "rnc/game/item_state.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 typedef struct {
     char  p0[0x80];
@@ -110,10 +113,8 @@ typedef struct {
 
 extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_00257b90(int, int);
-extern unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
-extern void    *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
-       void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
+extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
+    void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -140,10 +141,9 @@ unsigned char *spawn_glow_particle_u8(void         *owner,
                                       unsigned char green,
                                       unsigned char blue,
                                       unsigned char alpha) __asm__("FUN_L00_002ac910");
-extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
-void        spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+extern void  FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
+extern void  FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+void         spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern float FUN_L00_001ff430_c(void *) __asm__("FUN_L00_001ff430");
 extern void  FUN_L00_001ff2c0_c(void *, void *, void *) __asm__("FUN_L00_001ff2c0");
 extern float spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_00258110");
@@ -913,7 +913,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
                     if (fast_vec_length(&predicted) > 1.0f)
                         fast_vec_normalize(&predicted, &predicted, D_0015ED6C * 8.0f);
                     particle_scale = size * 40000.0f;
-                    life = FUN_L00_00257b90(scale_game_frames(60), scale_game_frames(120)) -
+                    life = random_int_between(scale_game_frames(60), scale_game_frames(120)) -
                            particle_reduction * 35;
                     spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
                         (&missile_moby->pos),
@@ -945,7 +945,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         clamp_vector_length(&predicted, &predicted, D_0015ED6C * 10.0f);
         FUN_L00_002af450((char *)(&missile_moby->pos),
                          (char *)&predicted,
-                         FUN_L00_00257b90(scale_game_frames(60), scale_game_frames(90)),
+                         random_int_between(scale_game_frames(60), scale_game_frames(90)),
                          0,
                          0);
         if (distance < 6.0f)
@@ -965,16 +965,16 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             int        c =
                 swap_packed_color_channels(color.colors[random_integer_below(6)], D_0013E520.bB);
             int f = swap_packed_color_channels(fade.colors[random_integer_below(6)], D_0013E520.bB);
-            int life = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20)) -
+            int life = random_int_between(scale_game_frames(15), scale_game_frames(20)) -
                        particle_reduction * 7;
-            int end = FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30)) -
+            int end = random_int_between(scale_game_frames(25), scale_game_frames(30)) -
                       particle_reduction * 10;
             int white_life, white_end;
             FUN_L00_0026a9f0(
                 (&missile_moby->pos), &blast_velocity, c, f, 400000.0f, life, end, 0, 0, speed);
-            white_life = FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(10)) -
+            white_life = random_int_between(scale_game_frames(5), scale_game_frames(10)) -
                          particle_reduction * 5;
-            white_end = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20)) -
+            white_end = random_int_between(scale_game_frames(15), scale_game_frames(20)) -
                         particle_reduction * 7;
             FUN_L00_0026a9f0((&missile_moby->pos),
                              &blast_velocity,
@@ -1005,7 +1005,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             c = swap_packed_color_channels(color.colors[random_integer_below(6)], D_0013E520.bB);
             f = swap_packed_color_channels(fade.colors[random_integer_below(6)], D_0013E520.bB);
             debris_scale = size * 200000.0f;
-            life = FUN_L00_00257b90(scale_game_frames(20), scale_game_frames(35)) -
+            life = random_int_between(scale_game_frames(20), scale_game_frames(35)) -
                    particle_reduction * 10;
             FUN_L00_0026a4c8_c((&missile_moby->pos), &v, c, f, debris_scale, life);
         }

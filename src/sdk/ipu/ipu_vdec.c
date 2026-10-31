@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/ipu_command_table.h"
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_cb_nodata.h"
 
 typedef struct {
     u8    pad0[0x11C];
@@ -12,8 +13,6 @@ typedef struct {
     u8    pad840[0x18];
     void *cbData;
 } MpegDec;
-
-extern void _dispatchMpegCbNodata(void *cb);
 
 #define IPU_CMD  ((volatile u64 *)0x10002000)
 #define IPU_CTRL ((volatile u32 *)0x10002010)
@@ -32,7 +31,7 @@ s32 _ipuVdec(MpegDec *decoder, s32 vlc_table_selector) {
     j = 0;
     while ((*IPU_CTRL & 0x80004000) == 0x80000000) {
         if (j++ > 5000) {
-            _dispatchMpegCbNodata(decoder->cbData);
+            DispatchMpegCallbackNoData(decoder->cbData);
             j = 0;
         }
     }
@@ -42,7 +41,7 @@ s32 _ipuVdec(MpegDec *decoder, s32 vlc_table_selector) {
     command_result = *IPU_CMD;
     while (command_result < 0) {
         if (i++ > 5000) {
-            _dispatchMpegCbNodata(decoder->cbData);
+            DispatchMpegCallbackNoData(decoder->cbData);
             i = 0;
         }
         command_result = *IPU_CMD;

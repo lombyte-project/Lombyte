@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_PACKETS_PUT_DISP_BUFFER_H
+#define LOMBYTE_RNC_RENDERING_PACKETS_PUT_DISP_BUFFER_H
+
+#include "types.h"
+
+void put_disp_buffer(void) __asm__("FUN_001fb2a8");
+
+#endif /* LOMBYTE_RNC_RENDERING_PACKETS_PUT_DISP_BUFFER_H */

@@ -15,6 +15,8 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern char D_0013E550[];
 extern int  allocate_voice_for_target_entry() __asm__("FUN_0022da68");
@@ -105,8 +107,6 @@ create_particle_with_velocity_and_randomized_parameters(void *initial_position_s
 void emit_drain_cover_particles(char *, float, float) __asm__("FUN_L05_0030f218");
 
 void         update_drain_cover_tilt(char *, float, float) __asm__("FUN_L05_0030f408");
-extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -403,7 +403,6 @@ void drain_cover_update(DrainCoverMoby *moby) {
 /* Scatters points along a range, placing each one with a heading and radius. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_00257c48(float lo, float hi);
 extern short D_L05_00161DB8_gp __asm__("D_L05_00161DB8") __attribute__((sda));
 
 extern short drain_cover_particle_height_span_per_particle_gp __asm__("D_L05_00161DB4")
@@ -452,7 +451,7 @@ void emit_drain_cover_particles(char *particle_source_moby,
                                  *(float *)&drain_cover_particle_scalar_upper_bound_gp);
         k = scale_game_frames(*(int *)&D_L05_00161DB8_gp);
         particle_size = truncate_float_to_s32(
-            FUN_L00_00257c48(fi, (float)*(int *)&drain_cover_particle_size_sampling_bound_gp));
+            randf_sym(fi, (float)*(int *)&drain_cover_particle_size_sampling_bound_gp));
         particle_color = *(int *)&drain_cover_particle_color_gp;
         create_particle_with_velocity_and_lifetime(
             u, particle_position, v, k, particle_size, particle_color);

@@ -9,9 +9,8 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 
-extern int FUN_L00_00257b90(int lo, int hi);
-
 #include "rnc/math/vector.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 typedef struct {
     u32 c[3];
@@ -85,7 +84,7 @@ void bridge_piece_1_update(BurstMoby *bridge_piece_moby) {
             FUN_L01_002f8530(&pos,
                              &debris_velocity,
                              colors.c[random_integer_below(3)],
-                             FUN_L00_00257b90(0xB4, 0x12C),
+                             random_int_between(0xB4, 0x12C),
                              0.05f,
                              1.0f,
                              1.0f,

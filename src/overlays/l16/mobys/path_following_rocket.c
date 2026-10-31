@@ -19,16 +19,16 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern float D_0015ED6C;
-extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern float D_0015ED6C, frame_time;
 /* Migrated from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C5030). */
 
 extern char *D_L16_001B0930[];
 extern s32   allocate_voice_for_target_entry_u(s32, s32, void *) __asm__("func_0022DA68");
 extern void  sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
-s32          is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void path_following_rocket_update(struct Moby *moby) __asm__("FUN_L16_002c3d38");
 

@@ -12,9 +12,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/audio/voice_alloc.h"
-
-extern void
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030FE40), where it is exact; names translated to the US level program. */
 

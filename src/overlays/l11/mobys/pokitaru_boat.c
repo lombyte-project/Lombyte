@@ -20,6 +20,8 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 
 #include "qcopy.h"
+#include "rnc/camera/follow_cam.h"
+#include "rnc/math/random.h"
 
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
@@ -65,11 +67,9 @@ struct PokPv {
 };
 
 extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void  scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
 extern void  update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
-extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
 void        update_pokitaru_boat_joint_effects(struct Moby *moby) __asm__("FUN_L11_0030a500");
 
 extern void update_pokitaru_boat_joint_effects(struct Moby *) __asm__("FUN_L11_0030a500");

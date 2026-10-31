@@ -5,6 +5,7 @@
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/mobys/moby_spawn.h"
 
 typedef struct {
     int            w0;
@@ -15,8 +16,7 @@ typedef struct {
     unsigned char *p[4];
 } V_2b3458;
 
-int  find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+int find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
 int linked_moby_selection_delay_gp __asm__("D_L00_00161478") = 0;
 int owned_record_cooldown_gp __asm__("D_L00_00161480") = 0;

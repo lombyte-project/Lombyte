@@ -12,13 +12,18 @@
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
+#include "rnc/audio/voices/sound_update.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/mobys/update_moby_proximity_interaction.h"
+#include "rnc/overlay/shared/streaming/load_scene_chunks_with_fade.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Start the moby's camera-follow state: stash it in the global record, point its update at func_L00_0028F458. */
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
 
 extern char D_0013E030_c[] __asm__("D_0013E030");
 extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
-extern void update_moby_proximity_interaction(void) __asm__("FUN_L00_0028e180");
 
 extern s32 D_L00_00160540_gp __asm__("D_L00_00160540") __attribute__((sda));
 void       initialize_moby_state_record(char *moby) __asm__("FUN_L00_0028e8a0");
@@ -107,9 +112,6 @@ extern O_28e9c8     *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
 extern unsigned char D_0013D4C6_lui __asm__("D_0013D4C6") NOT_SDA;
 void                 fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void                 select_level_vu_chain(void) __asm__("FUN_002335a0");
-void                 f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
-void                 load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
-void                 sound_update(void) __asm__("FUN_0022ca50");
 int                  sce_gs_sync_v(int) __asm__("FUN_00122298");
 void initialize_level_transition_with_audio(int audio_selection_mode) __asm__("FUN_L00_0028e9c8");
 
@@ -134,7 +136,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     D_001413F5_lui = 1;
-    f232fe8_28e9c8();
+    FUN_L00_00232fe8();
     D_0013E030_28e9c8.x0->flags |= 1;
     for (moby = D_L00_0015FFDC_28e9c8; moby->st != 0xFF; moby++) {
         if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
@@ -187,7 +189,6 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
 
 extern short D_0013E05C NOT_SDA;
 void                    music_pause(int) __asm__("FUN_00216050");
-void                    clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 void                    initialize_level_transition_with_audio(int) __asm__("FUN_L00_0028e9c8");
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
@@ -354,7 +355,6 @@ typedef struct {
     short h26;
 } G_28efc8;
 
-long get_effect_texture(int) __asm__("FUN_001f44b8");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* FUN_L00_0028efc8 is the executable function of the same bytes (src/gameplay). */
 

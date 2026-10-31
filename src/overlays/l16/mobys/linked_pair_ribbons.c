@@ -14,16 +14,16 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 /* Updates a moby: waits for trigger, registers a draw callback and a sound handle. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0870), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int  voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 int         is_linked_pair_ribbon_enabled(void *mv) __asm__("FUN_L16_002cf738");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void FUN_L16_002cf7a8_u(void) __asm__("FUN_L16_002cf7a8");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void func_L16_002D0990_2D0870(void *) __asm__("FUN_L16_002cf5c8");
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 

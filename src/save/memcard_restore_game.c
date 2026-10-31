@@ -2,9 +2,9 @@
 #include "rnc/data_labels.h"
 #include "rnc/save/mc_data.h"
 #include "rnc/save/memcard_get_data_size.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 extern char out_of_date_save_message[] __asm__("D_001E81D0");
-extern void DebugPrint(char *, ...);
 extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
 void        memcard_restore_game(u8 *p) __asm__("FUN_00209298");
 

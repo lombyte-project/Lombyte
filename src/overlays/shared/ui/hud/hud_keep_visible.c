@@ -13,14 +13,16 @@
 #include "rnc/mobys/animation/apply_pending_animation.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
 #include "rnc/ui/frames/draw_framed_text.h"
+#include "rnc/mobys/animation/queue_animation_update.h"
+#include "rnc/ui/hud/append_screen_rect_packet.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite_subpixel.h"
+#include "rnc/ui/text/font/font_print_center.h"
 
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
    0xFFFF, 0, 0, 0, 0, 1), +0x7C = 0, +0x6C = -6, then reloads it with
    func_001FFC48. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236208), where it is exact; names translated to the US level program. */
-
-s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
 
 void reset_hud_animation_channels(void) __asm__("FUN_L00_00235878");
 
@@ -414,11 +416,9 @@ extern int   D_L00_0015F760 __attribute__((sda));
 extern int   D_L00_0015F764 __attribute__((sda));
 extern float D_L00_0015F768 __attribute__((sda));
 extern float D_L00_0015F76C __attribute__((sda));
-extern void  append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void  allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void  FUN_L00_001ff348(void *, void *, void *);
-extern void  draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("FUN_00200080");
 
 int draw_hud_stars(HudElem *element) __asm__("FUN_L00_002365a8");
 
@@ -635,7 +635,6 @@ extern u8   D_L00_0017E530[] NOT_SDA;
 extern char D_0013F3D0[];
 extern char freeze_stats_time_format[] __asm__("D_L00_001E84C0") NOT_SDA;
 extern char freeze_stats_score_format[] __asm__("D_L00_0015F778") NOT_SDA;
-extern s32  font_print_center(s32, s32, s32, s32, s32) __asm__("FUN_001f6af0");
 extern s32  sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 
 int draw_hud_text_panel(HudElem *hud_element) __asm__("FUN_L00_00237200");

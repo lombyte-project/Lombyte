@@ -21,31 +21,25 @@
 #include "rnc/overlay/l14/mobys/rocket.h"
 #include "rnc/overlay/l14/mobys/enemy_fighter.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
+#include "rnc/overlay/shared/props/initialize_energy_sphere_holder_vars.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
+#include "rnc/overlay/shared/vendor/flag_vendor_item.h"
 
 extern float vector_length_xy(void *);
 
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 
-extern int FUN_L00_00257b90(int, int);
-
-extern int
-FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
-
 extern int D_L14_001BABD0[];
-
-extern void FUN_L00_00263d40(int, int);
-
-extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
 extern char D_L14_0015F580[] MACRO_ADDR;
 
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-
-float absolute_float(float input) __asm__("func_001F99C0");
 
 extern struct Moby *D_L14_0015FFD8_t __asm__("D_L14_0015FFD8");
 
@@ -57,8 +51,6 @@ extern char rocket_strike_fighter_empty_flight_path_error_format[] __asm__("D_L1
 
 extern s32 rocket_strike_fighter_respawn_delay_frames_gp __asm__("D_L14_00161F8C")
     __attribute__((sda));
-
-extern void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
 
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 
@@ -120,7 +112,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
                 if (enemy_fighter_destruction_count >= 3 && item_unlocked[0x18] == 0) {
                     item_unlocked[0x18] = 1;
                     allocate_voice_for_bank_entry(1, 0, 0);
-                    FUN_L00_00263d40(0x53D6, -1);
+                    queue_dialogue_message(0x53D6, -1);
                 }
             }
             moby->state = 3;
@@ -337,7 +329,7 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     size = 300000.0f;
     fast_vec_scale(&step, &moby->rot_row0, rocket_strike_fighter_exhaust_grey_puff_row0_offset_gp);
     fast_vec_add(&pos, &common_exhaust_origin, &step);
-    grey = FUN_L00_00257b90(0x40, 0x80);
+    grey = random_int_between(0x40, 0x80);
     grey = 0x7F000000 | grey << 16 | grey << 8 | grey;
     if (random_integer_below(3) != 0) {
         L14Puff *grey_puff;
@@ -419,8 +411,6 @@ extern float rocket_strike_fighter_bank_yaw_error_scale_gp __asm__("D_L14_00161F
 
 extern float rocket_strike_fighter_path_step_rate_gp __asm__("D_L14_00161F78") __attribute__((sda));
 
-extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
-
 int advance_rocket_strike_fighter_along_flight_path(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float path_target_position[4];
@@ -428,13 +418,12 @@ int advance_rocket_strike_fighter_along_flight_path(struct Moby *moby) {
     float yaw;
     float yaw_error_factor;
     int   path_boundary_reached;
-    path_boundary_reached =
-        FUN_L00_0025d808_2f05d8(((int *)l14_paths[*(int *)(moby_vars + 0x68)]),
-                                path_target_position,
-                                moby_vars + 0x60,
-                                moby_vars + 0x64,
-                                (unsigned int)*(int *)(moby_vars + 0x8C) >> 31,
-                                rocket_strike_fighter_path_step_rate_gp * frame_time);
+    path_boundary_reached = FUN_L00_0025d808(((int *)l14_paths[*(int *)(moby_vars + 0x68)]),
+                                             path_target_position,
+                                             moby_vars + 0x60,
+                                             moby_vars + 0x64,
+                                             (unsigned int)*(int *)(moby_vars + 0x8C) >> 31,
+                                             rocket_strike_fighter_path_step_rate_gp * frame_time);
     if (*(int *)(moby_vars + 0x8C) != 0 &&
         (path_boundary_reached != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
         flag_vendor_item(*(int *)(moby_vars + 0x90));

@@ -8,6 +8,8 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
 u8 *create_unfolding_column_pivot(u8 *self) __asm__("FUN_L14_00306158");
 
@@ -48,8 +50,6 @@ typedef struct Snd {
     UnfoldingColumnMoby *f88;
 } Snd;
 
-extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
-
 extern int D_L14_0015FFD8_c __asm__("D_L14_0015FFD8");
 
 extern float unfolding_column_initial_position_offset_scale __asm__("D_L14_001621F4")
@@ -66,13 +66,7 @@ extern int unfolding_column_piece_unfold_frames __asm__("D_L14_00162204") __attr
 
 extern int unfolding_column_pivot_swing_frames __asm__("D_L14_0016220C") __attribute__((sda));
 
-f32 interpolate_scalar_linear(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
-
-int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
-
 int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
-
-extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
 
 void unfolding_column_update(UnfoldingColumnMoby *moby) __asm__("FUN_L14_00305d28");
 

@@ -9,6 +9,7 @@
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/l05/mobys/taxi.h"
 
 typedef struct {
     char  pad[0x78];
@@ -17,7 +18,6 @@ typedef struct {
 } M_9598;
 
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
-extern void  initialize_taxi_stop_state(void *) __asm__("FUN_L05_00319208");
 
 extern unsigned short *D_L05_001ABCC0_9598[] __asm__("D_L05_001ABCC0");
 extern char           *D_L05_0015FFD8_9598 __asm__("D_L05_0015FFD8");

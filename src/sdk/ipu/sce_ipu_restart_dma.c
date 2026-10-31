@@ -1,4 +1,6 @@
 #include "types.h"
+#include "rnc/sdk/dma/set_d3_chcr.h"
+#include "rnc/sdk/dma/set_d4_chcr.h"
 
 struct IpuContext {
     s32 unk0;
@@ -10,9 +12,6 @@ struct IpuContext {
     s32 unk18;
     s32 unk1C;
 };
-
-extern s32 SetD3Chcr();
-extern s32 SetD4Chcr();
 
 void sceIpuRestartDMA(struct IpuContext *ctx) {
     u32 bits;

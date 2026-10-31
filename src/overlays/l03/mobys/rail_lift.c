@@ -14,6 +14,12 @@
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "sda.h"
+#include "rnc/mobys/animation/queue_animation_update.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
+#include "rnc/overlay/shared/ui/hud/initialize_numeric_hud_element.h"
+#include "rnc/rendering/clip_volume.h"
 
 int is_rail_lift_started(struct Moby *moby) __asm__("FUN_L03_002dcb30");
 
@@ -30,11 +36,8 @@ int is_rail_lift_started(struct Moby *moby) {
 /* Shows a help message for the mode, then keeps a hud queue entry alive. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
 
-extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
-extern void FUN_L00_002371e0(void);
 extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
-s32         queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
 
 void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) __asm__("FUN_L03_002dcbc8");
 
@@ -63,7 +66,7 @@ void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) {
         *(int *)(lift_vars + 0xA4) = queue_animation_update(0xC,
                                                             0,
                                                             (int)initialize_numeric_hud_element,
-                                                            (int)FUN_L00_002371e0,
+                                                            (int)hud_counter_update,
                                                             (int)draw_hud_text_panel,
                                                             0,
                                                             0);
@@ -73,10 +76,7 @@ void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) {
 }
 
 extern s32  D_L03_0015F594 __attribute__((sda));
-extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int  is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
-extern s32  get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 /* Pvars of a rail lift that carries the hero between the ends of two rail paths. */

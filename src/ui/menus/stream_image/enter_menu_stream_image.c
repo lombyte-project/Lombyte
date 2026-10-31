@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/ui/menus/stream_buffers/acquire_menu_stream_buffer.h"
 
-extern s32 acquire_menu_stream_buffer() __asm__("FUN_00225c18");
-s32        enter_menu_stream_image(struct MenuScreen *menu) __asm__("FUN_0021fce0");
+s32 enter_menu_stream_image(struct MenuScreen *menu) __asm__("FUN_0021fce0");
 
 s32 enter_menu_stream_image(struct MenuScreen *menu) {
     menu->data.stream.state = 0;

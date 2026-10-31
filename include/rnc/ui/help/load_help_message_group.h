@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_HELP_LOAD_HELP_MESSAGE_GROUP_H
+#define LOMBYTE_RNC_UI_HELP_LOAD_HELP_MESSAGE_GROUP_H
+
+#include "types.h"
+
+void load_help_message_group(s32);
+
+#endif /* LOMBYTE_RNC_UI_HELP_LOAD_HELP_MESSAGE_GROUP_H */

@@ -14,11 +14,11 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern char D_L11_00174880[];
 
-extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
-extern int   projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
+extern int projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
 int projectile_trail_color_end_gp __asm__("D_L11_00161DC4") = 0x80808020; /* RGBA, 0xAABBGGRR */
 extern int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute__((sda));
 extern int l11_projectile_trail_initial_particle_scalar __asm__("D_L11_00161DCC")

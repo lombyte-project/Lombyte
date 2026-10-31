@@ -15,6 +15,8 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/l16/mobys/wall_button_blocker.h"
 
 extern float D_0015ED6C;
 
@@ -25,7 +27,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 #include "sda.h"
 
 extern float D_0015ED6C, frame_time;
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 extern float D_0015ED6C, D_0015EE70;
 
@@ -37,7 +38,6 @@ extern float         fast_sin(float);
 extern int           scale_game_frames(int);
 extern int           truncate_float_to_s32(float);
 extern unsigned char visited52_lui[] __asm__("D_0014C050") NOT_SDA;
-extern void          set_wall_button_blocker_collision(void *, int) __asm__("FUN_L16_002e3770");
 
 void wall_button_update(struct Moby *m) __asm__("FUN_L16_002cf198");
 

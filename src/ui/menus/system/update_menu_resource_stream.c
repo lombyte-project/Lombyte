@@ -7,6 +7,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/globals.h"
 #include "rnc/game/item_state.h"
+#include "rnc/ui/menus/stream_buffers/clear_menu_stream_buffer_read_active.h"
 
 typedef struct {
     s32 values[6];
@@ -23,7 +24,6 @@ extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 extern s32 FUN_00216788();
 extern s32 get_menu_stream_buffer_size() __asm__("func_00225D88");
 extern s32 mark_menu_stream_buffer_read_active() __asm__("FUN_00225dd8");
-extern s32 clear_menu_stream_buffer_read_active() __asm__("FUN_00225e20");
 s32        update_menu_resource_stream(struct MenuScreen *stream) __asm__("FUN_0021fdc8");
 
 s32 update_menu_resource_stream(struct MenuScreen *stream) {

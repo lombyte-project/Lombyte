@@ -14,11 +14,10 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/game/level_save_state.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int   is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void  update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-float        absolute_float(float input) __asm__("func_001F99C0");
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Path mover gated by an activation trigger and its collectable flag; plays the arrival cue on the way back. */

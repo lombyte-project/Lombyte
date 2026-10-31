@@ -18,6 +18,8 @@
 #include "rnc/mobys/resolve_moby_hit_response.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* Ground enemy update: damage reaction, leash and wake checks, then its chase / attack / return state machine. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_002E39E0), where it is exact; names translated to the US level program. */
@@ -112,7 +114,6 @@ typedef struct {
 
 extern int  D_L09_001618D8; /* no foreign declaration */
 extern int  FUN_L00_002dc9f0();
-extern s32  rand(void);
 extern void FUN_L00_00257470_c2(void *, int, int) __asm__("FUN_L00_00257470");
 int         select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
 int         select_list_point_toward_target(char *a0,
@@ -124,7 +125,6 @@ void        FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, flo
 void        FUN_L00_0025a120_c(char *o) __asm__("FUN_L00_0025a120");
 void        FUN_L00_00263ac8_c(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
 void        FUN_L01_0026d930_c(char *p) __asm__("FUN_L01_0026d930");
-void        FUN_L01_0026e090_c2(int i, int v) __asm__("FUN_L01_0026e090");
 extern char D_0013E633_2E39E0[] __asm__("D_0013F3D0");
 extern unsigned char D_001413F4[];
 extern float         D_L09_00166FC0_2E39E0[] __asm__("D_L09_00166F40");
@@ -132,7 +132,6 @@ extern Moby         *D_L09_00160064_2E39E0 __asm__("D_L09_0015FFE4");
 float                impulse __asm__("D_L09_001618C8") = 7.0f;
 float                lift_2E39E0 __asm__("D_L09_001618CC") = 3.0f;
 extern unsigned char settings_2E39E0 __asm__("D_L09_001618D8") __attribute__((sda));
-extern void          FUN_L01_0026e090(int, int);
 extern void          knock_2E39E0(Moby *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void          explode_2E39E0(Moby *, int, int) __asm__("FUN_L00_00257470");
 extern void          effects_start_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d458");

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_CUTSCENE_CAMERA_TARGET_H
+#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_CUTSCENE_CAMERA_TARGET_H
+
+#include "types.h"
+
+void cutscene_camera_target_update(unsigned char *) __asm__("FUN_L05_0031d5c8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_CUTSCENE_CAMERA_TARGET_H */

@@ -1,6 +1,7 @@
 /* _pictureDisplayExtension p5: MPEG2 picture display extension offsets. */
 
 #include "types.h"
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
 
 typedef struct PdeContext {
     u8  pad_0[0x124];
@@ -20,8 +21,6 @@ typedef struct PdeContext {
     s32 arr1[3];
     s32 arr2[3];
 } PdeContext;
-
-extern s32 _nextBit();
 
 void _pictureDisplayExtension(PdeContext *ctx) {
     s32 num;

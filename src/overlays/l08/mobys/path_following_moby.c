@@ -15,6 +15,8 @@
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 #include "qcopy.h"
+#include "rnc/camera/sample_camera_path.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern float D_0015ED70;
 
@@ -45,12 +47,9 @@ extern void             spawn_explosion(void *,
                                         int,
                                         int) __asm__("FUN_L00_0025e450");
 extern float            D_0015ED6C;
-extern void             FUN_L00_00263d40(int, int);
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D6C58), where it is exact; names translated to the US level program. */
 extern float scale_time(float) __asm__("FUN_001f96b0");
-
-extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002DFBC0) */
 /* Update function: switch on the state byte at +0x20. State 0 reads the table D_L08_001B0FB0[*data] (deleting
@@ -195,7 +194,7 @@ void path_following_moby_update(char *moby) {
         if (camera_secondary_mode_lui == 0x32 && D_0013D408[0xC] == 0) {
             D_0013D408[0xC] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
         fast_vec_sub(frame_displacement, moby + 0x10, previous_position);
         qcopy(moby_vars + 0x10, frame_displacement);

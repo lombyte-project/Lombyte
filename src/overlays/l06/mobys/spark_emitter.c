@@ -10,6 +10,7 @@
 
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
+#include "rnc/math/random.h"
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -27,7 +28,6 @@ typedef struct SparkData {
     int  f28;
 } SparkData;
 
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");

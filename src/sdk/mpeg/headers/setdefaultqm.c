@@ -1,12 +1,12 @@
 #include "types.h"
 #include "rnc/sdk/eeregs.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/ipu/send_ipu_command.h"
+#include "rnc/sdk/ipu/wait_ipu_idle.h"
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
 
-extern s32  DIntr(void);
-extern void EnableInterrupts(void);
-extern void _dispatchMpegCallback(struct sceMpeg *, struct sceMpegCbData *);
-extern void _sendIpuCommand(struct MpegDecoder *, s32);
-extern void _waitIpuIdle(struct MpegDecoder *);
+extern s32 DIntr(void);
 
 void _setDefaultQM(struct MpegDecoder *decoder, s32 command, u32 matrix) {
     s32                  interrupts_enabled;
@@ -24,7 +24,7 @@ void _setDefaultQM(struct MpegDecoder *decoder, s32 command, u32 matrix) {
     if (interrupts_enabled != 0) {
         EnableInterrupts();
     }
-    _sendIpuCommand(decoder, command);
+    SendIpuCommand(decoder, command);
     _waitIpuIdle(decoder);
     callback.type = 3;
     _dispatchMpegCallback(decoder->mpeg, &callback);

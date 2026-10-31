@@ -1,10 +1,10 @@
-extern int  FormatErrorMessage(char *buffer, const char *format, ...) __asm__("sprintf");
-extern void _Error(void *error_state, char *message) __asm__("_Error");
+#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
 
 void ErrorWithMessage(void *error_state, const char *format) __asm__("_Error1");
 
 void ErrorWithMessage(void *error_state, const char *format) {
     char message[0x100];
-    FormatErrorMessage(message, format);
+    sprintf(message, format);
     _Error(error_state, message);
 }

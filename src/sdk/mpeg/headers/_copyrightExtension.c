@@ -1,6 +1,5 @@
 #include "types.h"
-
-extern s32 _nextBit();
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
 
 void _copyrightExtension(s32 decoder) {
     _nextBit(decoder, 1);

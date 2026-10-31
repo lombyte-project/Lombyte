@@ -1,3 +1,8 @@
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
+#include "rnc/sdk/mpeg/headers/_extensionAndUserData.h"
+#include "rnc/sdk/mpeg/headers/extrainfo.h"
+#include "rnc/sdk/mpeg/picture/update_temp_track_data.h"
+
 typedef struct PictureHeaderContext PictureHeaderContext;
 
 struct PictureHeaderContext {
@@ -5,12 +10,6 @@ struct PictureHeaderContext {
 };
 
 #define FIELD(type, object, offset) (*(type *)((unsigned char *)(object) + (offset)))
-
-extern int  _nextBit(PictureHeaderContext *context, int count) __asm__("_nextBit");
-extern void ExtraInfo(PictureHeaderContext *context) __asm__("_extrainfo");
-extern void _extensionAndUserData(PictureHeaderContext *context) __asm__("_extensionAndUserData");
-extern void UpdateTempTrackData(PictureHeaderContext *context,
-                                int temporal_reference) __asm__("UpdateTempTrackData");
 
 void PictureHeader(PictureHeaderContext *context) __asm__("_pictureHeader");
 

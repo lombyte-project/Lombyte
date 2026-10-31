@@ -6,9 +6,9 @@
 #include "rnc/camera/camera_globals.h"
 
 #include "rnc/camera/update_cam.h"
+#include "rnc/camera/advance_alternate_camera_transition.h"
 
 extern int step_camera_blend(void *, void *) __asm__("func_001ECAF8");
-extern int advance_alternate_camera_transition(void *, void *) __asm__("FUN_001eccd8");
 
 /* Picks the update path by the flag at D_001871B0+2 (step_camera_blend when
    clear, advance_alternate_camera_transition when set), each passed arg0 and a slot inside

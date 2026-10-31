@@ -13,6 +13,7 @@
 #include "rnc/overlay/shared/props/pool_init_tiles.h"
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
 #include "qcopy.h"
+#include "rnc/rendering/clip_volume.h"
 
 typedef struct {
     float position[3];
@@ -47,18 +48,14 @@ extern void
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
 extern int  FUN_L01_00275690_c(float, void *) __asm__("FUN_L01_00275690");
-extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void register_callback_c(void *, void *) __asm__("FUN_L12_0021be50");
 void        copy_moby_z_to_group_records(struct Moby *moby) __asm__("FUN_L12_002bf6d0");
 void        render_level_12_water_grids(void) __asm__("FUN_L12_002bf748");
 
 void                level_12_water_tile_update(struct Moby *moby) __asm__("FUN_L12_002bf140");
-extern int          random_integer_below(int);
 typedef struct Moby Moby;
 
 #include "rnc/overlay/shared/world/level_globals.h"
-
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
 /* Moby class 19 */
 void level_12_water_tile_update(struct Moby *moby) {

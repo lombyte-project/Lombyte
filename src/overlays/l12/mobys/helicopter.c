@@ -10,6 +10,9 @@
 #include "rnc/overlay/shared/world/level_path.h"
 
 #include "qcopy.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 
 extern int          scale_game_frames(int);
 typedef struct Moby Moby;
@@ -44,8 +47,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int  helicopter_help_message_hit_count_gp __asm__("D_0015EE04") __attribute__((sda));
 extern s32  D_L12_001619B4 __attribute__((sda));
 extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
-extern void FUN_L00_00263d40(int, int);
-s32         allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void process_helicopter_hits_and_reactivation(struct Moby *moby,
                                               int          flag) __asm__("FUN_L12_002ebca8");
@@ -63,7 +64,7 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
                 if (help_message_state[0x15] == 0) {
                     help_message_state[0x15] = 1;
                     allocate_voice_for_bank_entry(1, 0, 0);
-                    FUN_L00_00263d40(0x53D6, -1);
+                    queue_dialogue_message(0x53D6, -1);
                 }
             }
         }
@@ -108,7 +109,6 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002ED228), where it is exact; names translated to the US level program. */
 
-extern void initialize_path_descriptor(char *p) __asm__("FUN_L01_0028b410");
 extern void FUN_L12_002ebca8_c(char *m, int flag) __asm__("FUN_L12_002ebca8");
 extern int  func_L01_00276680_i(char *vec, float scale) __asm__("FUN_L01_00275690");
 

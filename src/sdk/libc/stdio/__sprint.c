@@ -18,14 +18,13 @@
 /* Source: newlib (UC Berkeley). */
 
 #include "types.h"
+#include "rnc/sdk/libc/stdio/sfvwrite.h"
 
 struct PrintIoVector {
     u8  reserved_00[4];
     s32 remaining_bytes;
     s32 vector_count;
 };
-
-extern s32 __sfvwrite();
 
 s32 __sprint(s32 reent, struct PrintIoVector *vectors) {
     s32 write_status;

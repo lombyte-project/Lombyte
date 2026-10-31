@@ -2,6 +2,7 @@
 #include "rnc/rendering/draw_config.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 extern struct TagPtr D_001603F0;
 
@@ -10,7 +11,6 @@ extern struct TagPtr D_001603F0;
 extern char shrub_texture_overflow_message[] __asm__("D_001E88D0");
 extern s32  build_shrub_texture_dma(s32) __asm__("FUN_0022a330");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
-extern void DebugPrint(char *, ...);
 void        dma_shrub_textures(void) __asm__("FUN_002288f0");
 
 void dma_shrub_textures(void) {

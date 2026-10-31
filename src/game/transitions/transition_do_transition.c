@@ -15,6 +15,14 @@
 #include "rnc/ui/hud/banks/hud_heap_reset.h"
 #include "rnc/ui/hud/init_hud.h"
 #include "rnc/game/transitions/transition_do_transition.h"
+#include "rnc/audio/voices/allocate_voice_for_group_entry.h"
+#include "rnc/audio/voices/is_voice_active.h"
+#include "rnc/game/start_level.h"
+#include "rnc/game/transitions/transition_load_wad.h"
+#include "rnc/sdk/graph/sce_gs_reset_graph.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/ui/help/load_help_message_group.h"
 
 typedef struct {
     s32 off;
@@ -45,18 +53,11 @@ extern s32           game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 extern TransferState render_sequence __asm__("D_0018CB20");
 extern WadHeader *volatile D_001940C8[];
 
-extern void load_help_message_group(s32 index);
-extern s32  rand(void);
-extern void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff);
-extern s32  sceGsSyncV(s32 mode);
 extern s32  reset_vif1_gif() __asm__("FUN_001204b8");
 extern s32  snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32  snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
-extern void start_level(int level) __asm__("FUN_001e9488");
-extern void transition_load_wad(void) __asm__("FUN_001ea830");
 extern void update_gameplay_frame(void) __asm__("func_001EB0A8");
 extern void transition_default_draw() __asm__("FUN_001eb410");
-extern s32  is_voice_active(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 extern s32  set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
@@ -66,8 +67,6 @@ extern s32  load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32  memcard_update_state() __asm__("func_002093D8");
 extern s32  read_disc_sectors_and_wait(u8 *dst, s32 a, s32 b) __asm__("func_00216828");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
-extern s32
-allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) __asm__("FUN_0022dba0");
 extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern void swap_render_buffer_chain(void) __asm__("func_00233630");
 extern void vu1_send_chain(void) __asm__("func_002336A0");
@@ -144,7 +143,7 @@ void transition_do_transition(void) {
     while (snd_flush_sound_commands() != 0) {
     }
     wait = 0;
-    level = rand() % 4;
+    level = RandomNext() % 4;
     snd_hold_command_batches();
     while (space_load_pending == 0) {
         vu1_send_chain();

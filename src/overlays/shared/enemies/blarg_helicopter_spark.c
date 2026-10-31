@@ -11,6 +11,11 @@
 #include "rnc/world/collision/collision_line.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/create_type_31_part.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct {
     char           pad0[0x10];
@@ -66,15 +71,12 @@ typedef struct {
     void      *moby;
 } Tgt;
 
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
-
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void  FUN_L00_0024f7c8(void *, int, void *);
 extern int select_moby_target_with_hero_fallback(void *, void *, float) __asm__("FUN_L03_0024e830");
 
 extern Moby *D_L03_00173F58 NOT_SDA;
-extern char                *FUN_L00_0026dd20(void *pos, void *vel, int c, int d, float f);
 extern char                 D_0013E533[];
 extern CollisionHit         coll_hit __asm__("D_L03_00173F60");
 extern char                 D_L03_00173F80[];
@@ -82,10 +84,7 @@ extern float                frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 float                       homing_spark_turn_rate_degrees_gp __asm__("D_L03_00161B30") = 9e+01f;
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FUN_L03_00260130");
 
 /* Update of moby class 848: a spark that homes on its target moby, sheds particles and an arc when close, and dies on a hit. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002D5B88), where it is exact; names translated to the US level program. */

@@ -1,5 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/runtime/memory/init_ring_buffer.h"
+#include "rnc/sdk/deci2/sce_deci2_open.h"
+#include "rnc/sdk/deci2/sce_tty_handler.h"
 
 struct TtyState {
     s32          unk0;
@@ -23,9 +26,6 @@ struct Mmio {
 extern struct TtyState D_00154A50;
 extern u8              tty_receive_packet[] __asm__("D_00154BC0");
 extern s32             FlushCache();
-extern s32             init_ring_buffer() __asm__("func_00119568");
-extern s32             sceDeci2Open();
-extern void            sceTtyHandler();
 
 s32 sceTtyInit(void) {
     struct TtyState *state = &D_00154A50;

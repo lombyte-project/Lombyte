@@ -20,6 +20,7 @@
 #include "rnc/data_labels.h"
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct {
     u8  pad[0x60];
@@ -115,7 +116,6 @@ extern void           fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68"
 extern f32            scale_ticks(s32) __asm__("FUN_001fa6c0");
 extern s32            scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char *FUN_L00_002603d0(int);
-extern void           FUN_001f4600(void *, void *);
 extern void           draw_moby_oscillating_textured_quads(void) __asm__("FUN_L00_002c31c0");
 extern float          FUN_00200240_2c4380(int) __asm__("FUN_001fa6c0");
 extern int            FUN_L00_0025a420(void *, int, int);
@@ -428,7 +428,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
             goto ret0;
     }
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0(coll_hit.moby))
-        FUN_001f4600(draw_moby_oscillating_textured_quads, thrown_moby);
+        add_draw_callback(draw_moby_oscillating_textured_quads, thrown_moby);
     throw_vars->normal.q = coll_hit_normal.q;
     fast_vec_sub(&position_scratch, &throw_vars->landing, &D_L00_00166DC0);
     fast_vec_scale(&position_scratch, &position_scratch, 0.94999998807907104492f);

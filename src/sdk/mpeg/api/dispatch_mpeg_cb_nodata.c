@@ -1,12 +1,10 @@
 #include "types.h"
-
-extern void DispatchMpegCallback(void *callback,
-                                 u32  *callback_data) __asm__("_dispatchMpegCallback");
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
 
 void DispatchMpegCallbackNoData(void *callback) __asm__("_dispatchMpegCbNodata");
 
 void DispatchMpegCallbackNoData(void *callback) {
     u32 callback_data[8];
     callback_data[0] = 1;
-    DispatchMpegCallback(callback, callback_data);
+    _dispatchMpegCallback(callback, callback_data);
 }

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/mpeg/picture/_getpic.h"
 
 typedef struct MpegPictureDecoder MpegPictureDecoder;
 
@@ -17,8 +18,6 @@ struct MpegPictureDecoder {
     MpegPictureState *picture_state;
 };
 
-extern s32 DecodeMpegPicture(MpegPictureDecoder *decoder) __asm__("_getpic");
-
 s32 sceMpegGetPicture(MpegPictureDecoder *decoder,
                       void               *picture_buffer,
                       s32                 macroblock_count) __asm__("sceMpegGetPicture");
@@ -31,5 +30,5 @@ s32 sceMpegGetPicture(MpegPictureDecoder *decoder, void *picture_buffer, s32 mac
     picture_state->macroblock_count = macroblock_count;
     picture_state->reserved_e0 = 0;
     picture_state->reserved_dc = 0;
-    return DecodeMpegPicture(decoder);
+    return _getpic(decoder);
 }

@@ -1,11 +1,11 @@
 /* Draw buffers: transfers draw buffer chunks and appends their upload packets. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/sdk/graph/sce_gs_sync_path.h"
 
 void FUN_00122518(void *, short, int, int, int, int, int, int);
 void flush_cache(int) __asm__("FUN_00118a80");
 void FUN_001227d8(void *, int);
-void sceGsSyncPath(int, int) __asm__("FUN_00120558");
 void transfer_draw_buffer_chunks(int dst,
                                  int draw_buffer_byte_address,
                                  int size) __asm__("FUN_L00_002a0f18");

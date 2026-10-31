@@ -12,8 +12,10 @@
 #include "rnc/overlay/shared/world/water_grid.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/l05/render_level_water_grids.h"
 
-extern int          random_integer_below(int) __asm__("FUN_00213260");
 extern float        random_float_between(float, float) __asm__("FUN_002132a8");
 extern float        fast_cos(float);
 extern float        fast_sin(float);
@@ -65,13 +67,10 @@ typedef struct {
 extern void *D_L05_001612D0_macro __asm__("D_L05_001612D0") MACRO_ADDR;
 extern void  record_grid_entry_neighbor_indices(int) __asm__("FUN_L05_0030d6a0");
 extern void  set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
 extern void synchronize_group_water_heights(char *) __asm__("FUN_L05_0030d5c0");
 extern void pool_splash(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern int  check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
-extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
 extern Cam   l05_water_light_heading_source __asm__("D_L05_00180340");
 extern Light light __asm__("D_L05_001CAD00");

@@ -2,9 +2,9 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
 
-const u8    D_00153B48[] = "_sequenceScalableExtension() is not implemented";
-extern void _Error(void *pState, u8 *message);
+const u8 D_00153B48[] = "_sequenceScalableExtension() is not implemented";
 
 void report_mpeg_sequence_scalable_unsupported(void *pState) __asm__("FUN_0012caf0");
 

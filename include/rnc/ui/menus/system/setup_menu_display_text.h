@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_SYSTEM_SETUP_MENU_DISPLAY_TEXT_H
+#define LOMBYTE_RNC_UI_MENUS_SYSTEM_SETUP_MENU_DISPLAY_TEXT_H
+
+#include "types.h"
+
+int setup_menu_display_text(char *) __asm__("FUN_0021ef78");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_SYSTEM_SETUP_MENU_DISPLAY_TEXT_H */

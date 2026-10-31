@@ -39,6 +39,8 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/camera/sample_camera_path.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
@@ -59,12 +61,6 @@ typedef struct {
 extern L16PickupPose *D_L16_001600EC;
 extern char          *find_group_moby_by_data_id(struct Moby *, int) __asm__("FUN_L16_002e4be0");
 extern char           D_0013CAE4[];
-extern f32            advance_accelerated_scalar(f32 *value,
-                                                 f32 *velocity,
-                                                 f32  target,
-                                                 f32  acceleration_step,
-                                                 f32  braking_step,
-                                                 f32  maximum_speed) __asm__("FUN_00213f38");
 extern float          D_0015EE6C_u;
 extern int            advance_taxi_path(struct Moby *) __asm__("FUN_L16_002e4c40");
 extern s32            D_L16_0015F594;
@@ -75,17 +71,10 @@ extern void apply_taxi_wobble(struct Moby *) __asm__("FUN_L16_002e4d88");
 extern void transform_moby_table_entry_vectors(struct Moby *) __asm__("FUN_L16_002e4f30");
 extern void initialize_taxi_stop_state(void *) __asm__("FUN_L16_002e4900");
 extern void FUN_L16_002e4a58_c(char *) __asm__("FUN_L16_002e4a58");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void sample_camera_path(int  *path,
-                               s32   loop,
-                               void *position,
-                               f32  *rotation,
-                               s32   flags,
-                               f32   progress) __asm__("FUN_00214e58");
 
 void taxi_update(struct Moby *moby) __asm__("FUN_L16_002e43e0");
 
-/* Moby class 1410 */
+/* Moby classes 998, 1410 */
 void taxi_update(struct Moby *moby) {
     enum {
         TAXI_INITIALIZE = 0,

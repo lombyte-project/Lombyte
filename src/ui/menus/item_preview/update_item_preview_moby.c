@@ -6,9 +6,9 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/mobys/delete_moby.h"
+#include "rnc/ui/menus/item_preview/rotate_item_preview_moby.h"
 
 extern void *create_menu_preview_moby(int) __asm__("func_00225490");
-extern void  rotate_item_preview_moby(struct MenuScreen *) __asm__("FUN_0021e1f8");
 /* Keeps the item preview moby in step with the highlighted entry: drop it
    when the entry's class (menu_item_info preview_class) is -1, spawn it in
    front of the camera focus when there is none yet, or respawn it with

@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/effects/fade_to_black.h"
+#include "rnc/audio/streaming/update_audio_stream_until_idle.h"
 
 typedef struct {
     u8  pad[0x5C];
@@ -13,7 +14,6 @@ typedef struct {
 
 extern H D_L00_0016C860;
 void     start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
-void     update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 void     load_scene_chunks_with_fade(s32 i) __asm__("FUN_L00_002454c8");
 
 void load_scene_chunks_with_fade(s32 i) {

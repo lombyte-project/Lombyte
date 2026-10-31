@@ -10,6 +10,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 typedef union {
     u128 q;
@@ -56,7 +57,6 @@ extern unsigned char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern float D_0015ED70;
 extern float FUN_L00_001ff430(void *);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
-extern s32   rand(void);
 extern s32   scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void  func_L00_0025F4A8_alt(void *,
@@ -375,11 +375,11 @@ del:
 keep:
     if (*(int *)(rocket_vars + 0x24) % scale_game_frames_c(0x20) != 0)
         return;
-    if (rand() & 1) {
+    if (RandomNext() & 1) {
         *(float *)(rocket_vars + 0x50) =
             *(float *)(rocket_vars + 0x50) * random_float_between(-0.7f, -1.5f);
     }
-    if (rand() & 1) {
+    if (RandomNext() & 1) {
         *(float *)(rocket_vars + 0x54) =
             *(float *)(rocket_vars + 0x54) * random_float_between(-0.6f, -1.6f);
     }

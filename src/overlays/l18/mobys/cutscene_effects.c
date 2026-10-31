@@ -12,6 +12,7 @@
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/l18/mobys/cutscene_effects_globals.h"
+#include "rnc/math/random.h"
 
 extern int D_L18_0015F5C4;
 
@@ -25,7 +26,6 @@ typedef struct {
 
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int              D_L18_0015F5C4;
-extern s32              random_integer_below(s32) __asm__("FUN_00213260");
 extern void             enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002020c8");
 void                    spawn_deplanetizer_gun_trail_effects(void *first_position_source,
                                                              void *second_position_source,

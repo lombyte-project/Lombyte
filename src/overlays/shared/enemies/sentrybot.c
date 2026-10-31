@@ -21,6 +21,7 @@
 #include "rnc/overlay/shared/enemies/sentrybot_data/sentrybot_update.h"
 #include "sda.h"
 #include "rnc/overlay/shared/enemies/sentrybot_data/update_sentrybot_hit_response_and_target_visibility.h"
+#include "rnc/overlay/shared/mobys/animation_start.h"
 
 typedef struct {
     char  pad0[0x2084];
@@ -57,7 +58,6 @@ extern float        D_L15_001673C0[4];
 extern float        sentrybot_positive_heading_delta_offsets_degrees[] __asm__("D_L15_001CBFE0");
 extern float        sentrybot_negative_heading_delta_offsets_degrees[] __asm__("D_L15_001CC060");
 extern float        sentrybot_turn_around_heading_offsets_degrees[] __asm__("D_L15_001CC0E0");
-extern float        animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float        fast_sin(float);
 extern float        vector_length_xy(void *);
 extern int         *D_L15_001B0AB0[];
@@ -80,7 +80,6 @@ extern int find_sentrybot_attention_target(char *m) __asm__("FUN_L15_00299dd8");
 int        can_sentrybot_advance_patrol(void *input_moby) __asm__("FUN_L15_00299ff8");
 
 extern int can_sentrybot_advance_patrol(void *) __asm__("FUN_L15_00299ff8");
-extern int random_integer_below(int);
 extern int scale_game_frames(int);
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");

@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include "rnc/sdk/top_thread.h"
+#include "rnc/sdk/deci2/kprintf.h"
 
 extern u8 thread_command_error_message[] __asm__("D_001526E8");
 
@@ -9,7 +10,6 @@ extern s32 WaitSema(s32 sema);
 extern s32 WakeupThread(s32 id);
 extern s32 RotateThreadReadyQueue(s32 priority);
 extern s32 SuspendThread(s32 id);
-extern s32 kprintf(const char *fmt, ...);
 
 void topThread(TopThreadQueue *queue) {
     enum {

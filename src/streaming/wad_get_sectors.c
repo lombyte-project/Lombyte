@@ -1,11 +1,11 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/storage/cdvd/sceCdGetError.h"
+#include "rnc/sdk/storage/cdvd/sceCdRead.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
-extern s32 sceCdGetError();
-extern s32 sceCdRead();
-extern s32 sceCdSync();
-extern s32 sceGsSyncV();
-s32        wad_get_sectors(s32 lsn, s32 sector_count, s32 dst) __asm__("FUN_0012f208");
+s32 wad_get_sectors(s32 lsn, s32 sector_count, s32 dst) __asm__("FUN_0012f208");
 
 s32 wad_get_sectors(s32 lsn, s32 sector_count, s32 sector_read_destination) {
     u8  sp_slot[0x8];

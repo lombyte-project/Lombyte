@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_RESPAWN_VOLUME_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_RESPAWN_VOLUME_H
+
+#include "types.h"
+
+void respawn_volume_update(char *) __asm__("FUN_L06_002f7930");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_RESPAWN_VOLUME_H */

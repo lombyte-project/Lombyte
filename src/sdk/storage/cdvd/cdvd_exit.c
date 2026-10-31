@@ -1,13 +1,13 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/rpc/cmd/sce_sif_remove_cmd_handler.h"
 
 extern s32 D_001312D4[];
 extern s32 D_00131314[];
 extern s32 DIntr();
 extern s32 DeleteSema();
 extern s32 SignalSema();
-extern s32 sceSifRemoveCmdHandler();
-extern s32 EnableInterrupts();
 
 void cdvd_exit(void) {
     s32 interrupts_enabled;

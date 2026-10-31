@@ -1,12 +1,11 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-
-extern s32  _decPicture();
-extern s32  _dispatchMpegCbNodata();
-extern s32  _nextHeader();
-extern s32  _sceMpegFlush();
-extern s32  _updateRefImage();
-extern void _outputFrame();
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_cb_nodata.h"
+#include "rnc/sdk/mpeg/api/sce_mpeg_flush.h"
+#include "rnc/sdk/mpeg/headers/next_header.h"
+#include "rnc/sdk/mpeg/picture/decpicture.h"
+#include "rnc/sdk/mpeg/ref_images/_updateRefImage.h"
+#include "rnc/sdk/mpeg/ref_images/outputframe.h"
 
 s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 skip_threshold) {
     struct MpegDecoder *mpeg_decoder;
@@ -28,7 +27,7 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
         decoder->frameCount = 0;
         mpeg_decoder->started = 1;
     }
-    helper_result = _updateRefImage(mpeg_decoder, 0);
+    helper_result = UpdateMpegReferenceImages(mpeg_decoder, 0);
     if ((helper_result != 0) && (should_decode != 0)) {
         _decPicture(mpeg_decoder);
     }
@@ -46,7 +45,7 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
     if (mpeg_decoder->picture_structure != expected_second_field_structure) {
         return -1;
     }
-    new_var2 = _updateRefImage(mpeg_decoder, 1);
+    new_var2 = UpdateMpegReferenceImages(mpeg_decoder, 1);
     gate = 0;
     if (new_var2 != 0) {
         gate = 1;
@@ -70,7 +69,7 @@ out:
     mpeg_decoder->frame_count = mpeg_decoder->frame_count + 1;
     mpeg_decoder->decoded_pictures = (unsigned long long)(mpeg_decoder->decoded_pictures + 1);
     if (should_decode == 0) {
-        _dispatchMpegCbNodata(decoder);
+        DispatchMpegCallbackNoData(decoder);
     }
     return second_field_decode_nonzero;
 }

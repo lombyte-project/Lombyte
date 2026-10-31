@@ -3,6 +3,7 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/ui/text/font/disable_font_color_codes.h"
 #include "rnc/ui/text/font/enable_font_color_codes.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
 
 struct ThreeOptionMenu {
     u8  pad0[0x20];
@@ -17,7 +18,6 @@ extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32   count_gold_bolts(void) __asm__("func_00215290");
 extern s32   count_gold_weapons(void) __asm__("func_00215300");
 extern s32   count_skill_points(void) __asm__("func_00215348");
-extern s32   sprintf(char *, const char *, ...);
 extern s32   measure_text_width_regular(char *, s32) __asm__("func_001F6250");
 extern void  font_print_center(s32, s32, u64, char *, s32) __asm__("func_001F6AF0");
 extern void  draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");

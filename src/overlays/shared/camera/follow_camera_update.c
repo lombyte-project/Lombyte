@@ -5,6 +5,8 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/shared/camera/follow_camera_turn_and_pitch.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 typedef struct {
     char  p0[0x80];
@@ -25,24 +27,21 @@ typedef struct {
     int r[6];
 } E_9aa0;
 
-f32         FUN_001f9ab0_2e9010(void *, void *) __asm__("FUN_001f9ab0");
-void        FUN_001f9a68_2e9010(void *, void *, f32) __asm__("FUN_001f9a68");
-void        FUN_001f9bf8_2e9010(void *, void *, f32) __asm__("FUN_001f9bf8");
-f32         FUN_001f9af0_2e9010(void *) __asm__("FUN_001f9af0");
-f32         cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
-f32         rope_spring_turn(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_001eb328");
-s32         FUN_001f96f8_2e9010(s32) __asm__("FUN_001f96f8");
-extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
-extern void subtract_vector_xyz(float *, float *, float *) __asm__("FUN_001f9a28");
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+f32          FUN_001f9ab0_2e9010(void *, void *) __asm__("FUN_001f9ab0");
+void         FUN_001f9a68_2e9010(void *, void *, f32) __asm__("FUN_001f9a68");
+void         FUN_001f9bf8_2e9010(void *, void *, f32) __asm__("FUN_001f9bf8");
+f32          FUN_001f9af0_2e9010(void *) __asm__("FUN_001f9af0");
+f32          cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
+f32          rope_spring_turn(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_001eb328");
+s32          FUN_001f96f8_2e9010(s32) __asm__("FUN_001f96f8");
+extern void  follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
+extern void  subtract_vector_xyz(float *, float *, float *) __asm__("FUN_001f9a28");
 extern float FUN_001f9af0_9aa0(void *) __asm__("FUN_001f9af0");
 extern void  noop_main_callback() __asm__("FUN_001e93e8");
 extern void  follow_camera_avoid_mobies(int) __asm__("FUN_L00_002e7d20");
 extern void  run_follow_camera_noop(int) __asm__("FUN_L00_002e8378");
 extern void  follow_camera_read_stick(int, float *, float *) __asm__("FUN_L00_002e89b0");
 extern void  follow_camera_turn_and_pitch(int, float, float) __asm__("FUN_L00_002e8bb8");
-extern void  follow_camera_auto_turn(int) __asm__("FUN_L00_002e8f40");
 void         apply_follow_camera_translation() __asm__("FUN_L00_002e46b8");
 void         follow_camera_apply_overrides() __asm__("FUN_L00_002e6000");
 void         follow_camera_springs() __asm__("FUN_L00_002e5830");

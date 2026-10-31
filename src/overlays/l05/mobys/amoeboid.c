@@ -7,9 +7,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "qcopy.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/math/random.h"
 
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern float fast_cos(float);
 extern float fast_sin(float);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
@@ -124,7 +124,6 @@ void handle_amoeboid_hits(unsigned char *moby) {
 
 extern void  fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 /* Emits up to two particle effects around the moby, each in a random direction. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC2A8), where it is exact; names translated to the US level program. */
 

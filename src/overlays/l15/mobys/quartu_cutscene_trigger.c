@@ -9,6 +9,9 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/save/memcard_save_data.h"
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern int D_L15_0015F5C4;
 
@@ -20,17 +23,9 @@ extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
 extern char *D_L15_001600EC;
 
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-
-extern void FUN_L00_00232fe8_v(void) __asm__("FUN_L00_00232fe8");
-
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 
-extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
-
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 
@@ -62,7 +57,7 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
         start_scene(3);
         moby->state = 2;
         jet_clear_persistent(moby->mission);
-        FUN_L00_00232fe8_v();
+        FUN_L00_00232fe8();
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 != 2) {
@@ -74,7 +69,7 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
         if (D_L15_0015F5C4 != 2) {
             start_scene(4);
             moby->state = 3;
-            FUN_L00_002330d0_v();
+            FUN_L00_002330d0();
             if (*(int *)(trigger_data + 4) != -1) {
                 char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
                 set_race_camera(o + 0x30, o + 0x70, 0, 1);

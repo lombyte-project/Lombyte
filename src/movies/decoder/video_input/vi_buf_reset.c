@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/movies/decoder/vi_buf.h"
 #include "rnc/sdk/eetypes.h"
+#include "rnc/movies/decoder/dma/sc_tag2.h"
 #define DPUT(a, v)  (*(volatile u32 *)(a) = (v))
 #define DMA_ADDR(p) ((u32)(p) & 0x0FFFFFFF)
-extern void sc_tag2(u128 *, u32, s32, s32) __asm__("func_0023BC20");
 extern void set_d4_chcr(s32) __asm__("FUN_0023bbb0");
 s32         vi_buf_reset(struct ViBuf *f) __asm__("FUN_0023bcc0");
 

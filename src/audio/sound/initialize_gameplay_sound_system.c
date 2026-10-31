@@ -6,6 +6,11 @@
 #include "rnc/game/options.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"
 #include "rnc/audio/mixer/snd_set_playback_mode.h"
+#include "rnc/audio/effects/snd_pre_alloc_reverb_work_area.h"
+#include "rnc/audio/mixer/snd_set_group_voice_range.h"
+#include "rnc/audio/mixer/snd_set_mixer_mode.h"
+#include "rnc/audio/music/reset_music.h"
+#include "rnc/audio/snd_start_sound_system.h"
 
 /* The 0x70-byte header in front of the voices, then thirty 0x70-byte voices. */
 typedef struct {
@@ -22,13 +27,8 @@ typedef struct {
     u8  pad5[0x6B];
 } VoicePoolSlot;
 
-extern u8   voice_pool[] __asm__("D_0013E550");
-extern s32  snd_start_sound_system(void) __asm__("FUN_0012da28");
-extern void snd_set_mixer_mode(s32, s32) __asm__("FUN_0012e280");
-extern void snd_set_group_voice_range(s32, s32, s32) __asm__("FUN_0012e2b8");
-extern void snd_pre_alloc_reverb_work_area(s32, s32) __asm__("FUN_0012efa8");
-extern void reset_music(void) __asm__("FUN_00215390");
-void        initialize_gameplay_sound_system(void) __asm__("FUN_0022c8d0");
+extern u8 voice_pool[] __asm__("D_0013E550");
+void      initialize_gameplay_sound_system(void) __asm__("FUN_0022c8d0");
 
 #define POOL ((VoicePoolHeader *)voice_pool)
 

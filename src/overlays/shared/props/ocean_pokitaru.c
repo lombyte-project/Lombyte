@@ -11,6 +11,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "qcopy.h"
+#include "rnc/rendering/effect_texture.h"
 
 typedef struct {
     float u, v;
@@ -75,7 +76,6 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 
-extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void  func_L00_001FDE48_30a908(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
 extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L11_001677C0_30a908[] __asm__("D_L11_001677C0");

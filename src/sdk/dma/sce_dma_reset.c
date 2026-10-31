@@ -14,7 +14,7 @@
  *
  * NOTE on the last DMA register write: the retail oracle keeps the masked
  * read in a temp and commits it with a plain store, which is what lets the
- * EE-GCC 2.9 scheduler place the store in the Memclr call delay slot.
+ * EE-GCC 2.9 scheduler place the store in the ClearMemoryRange call delay slot.
  * Spelling it as a `volatile` read-modify-write compiles to the same
  * instructions but the store moves one slot earlier (100 -> 97.09).
  */
@@ -22,10 +22,10 @@
 #include "types.h"
 
 #include "rnc/sdk/sce_dma_chan.h"
+#include "rnc/sdk/dma/sce_dma_put_env.h"
+#include "rnc/sdk/graph/memclr.h"
 
 extern s32 DmaChannelsUsed[] __asm__("D_001533F8");
-extern s32 Memclr();
-extern s32 sceDmaPutEnv();
 
 s32 sceDmaReset(s32 enable_dma) {
     s32 dma_environment[5];
@@ -48,7 +48,7 @@ s32 sceDmaReset(s32 enable_dma) {
     *(volatile u32 *)0x1000E010 = 0xFF1F;
     mask = *(volatile u32 *)0x1000E010 & 0xFF1F0000;
     *(u32 *)0x1000E010 = mask;
-    Memclr(dma_environment, 0x14);
+    ClearMemoryRange(dma_environment, 0x14);
     sceDmaPutEnv(dma_environment);
     if (enable_dma == 1) {
         *(volatile u32 *)0x1000E000 |= 1;

@@ -5,6 +5,11 @@
 #include "rnc/streaming/disc_table.h"
 #include "rnc/audio/streaming/submit_audio_stream_io_request.h"
 #include "rnc/audio/banks/snd_unload_bank.h"
+#include "rnc/audio/banks/snd_resolve_bank_xrefs.h"
+#include "rnc/audio/sound/store_sound_bank_handle_callback.h"
+#include "rnc/sdk/storage/cdvd/sceCdGetError.h"
+#include "rnc/sdk/storage/cdvd/scecdbreak.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
 struct LevelArchiveDiscEntry {
     u8  pad_0[0x12C8];
@@ -28,14 +33,9 @@ extern u8                        *level_archive_base __asm__("D_0015EE54") MACRO
 extern s32                        D_0015EEBC __attribute__((sda));
 extern s32 D_0015EEC0             MACRO_ADDR;
 extern u8                         D_1FF8000[];
-extern void                       store_async_sound_bank_handle() __asm__("FUN_0022dd78");
 extern s32                        snd_flush_sound_commands() __asm__("func_0012DC80");
 extern void                       snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("FUN_0012e088");
-extern void                       snd_resolve_bank_xrefs() __asm__("FUN_0012e1a8");
 extern void                       snd_stop_all_sounds() __asm__("func_0012E3B8");
-extern s32                        sceCdBreak();
-extern s32                        sceCdGetError();
-extern s32                        sceCdSync(s32);
 
 s32 service_level_archive_load(void) __asm__("FUN_00204428");
 
@@ -173,7 +173,7 @@ s32 service_level_archive_load(void) {
         shared_header = level_root;
         sound_bank_handle = 0xFFFFFFFFU;
         snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header,
-                                 (s32)store_async_sound_bank_handle,
+                                 (s32)store_sound_bank_handle_callback,
                                  (u32)&sound_bank_handle);
         D_0015EE48 = D_0015EE48 + 1;
         break;

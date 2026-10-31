@@ -130,7 +130,6 @@ typedef union {
     float   f[4];
 } U289bd8;
 
-void FUN_00233980(int, long);
 void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
 
 void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
@@ -141,7 +140,7 @@ void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
         sky_particles_init(0x78, 8);
     sky_particles_update();
     sky_sprite_proc();
-    FUN_00233980(0x42, (0x8000L << 24) | 0x44);
+    vu1_add_g_sregister(0x42, (0x8000L << 24) | 0x44);
     qzero(shell_rotation_angles);
     shell_rotation_angles[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
     euler_to_matrix_ee(D_L00_001BD7E0, shell_rotation_angles);
@@ -158,7 +157,7 @@ void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) {
         sky_particles_init(0x78, 8);
     sky_particles_update();
     sky_sprite_proc();
-    FUN_00233980(0x42, (0x8000L << 24) | 0x44);
+    vu1_add_g_sregister(0x42, (0x8000L << 24) | 0x44);
     sky_draw_shell(1);
     qzero(third_shell_rotation_angles);
     third_shell_rotation_angles[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;

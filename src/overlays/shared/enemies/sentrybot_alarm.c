@@ -10,6 +10,9 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/enemies/sentrybot.h"
+#include "rnc/overlay/shared/rendering/emit_sine_modulated_rgba_draw_packet.h"
 
 typedef struct {
     int w[20];
@@ -24,7 +27,6 @@ extern int          D_L15_0015F5C4;
 extern int          D_L15_0015F5CC;
 extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern int          scale_game_frames(int);
-extern void         set_sentrybot_alarm_duration(char *m, int a) __asm__("FUN_L15_002cbac0");
 extern void         add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -41,11 +43,9 @@ void         update_sentrybot_alarm_effect(void *moby) __asm__("FUN_L15_002cbc30
 
 extern void update_sentrybot_alarm_effect(void *) __asm__("FUN_L15_002cbc30");
 
-extern int  voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int  FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");
-extern s32  D_L15_00161AB8;
-extern s32  D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
-extern void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
+extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");
+extern s32 D_L15_00161AB8;
+extern s32 D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
 
 int          sentrybot_alarm_voice_slot_index_gp __asm__("D_L15_00161AC4") = -1;
 extern short sentrybot_alarm_voice_owner_gp __asm__("D_L15_00161AC8") __attribute__((sda));

@@ -15,6 +15,7 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/vehicles/gunship.h"
 #include "rnc/overlay/l14/mobys/shuttle_globals.h"
+#include "rnc/mobys/moby_spawn.h"
 
 typedef struct {
     u8  pad0[0x74];
@@ -55,8 +56,6 @@ extern f32 shuttle_horizontal_rider_correction_limit_scale_gp __asm__("D_L14_001
     __attribute__((sda));
 
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
-
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern void FUN_L00_001fff28(void *, int, float);
 

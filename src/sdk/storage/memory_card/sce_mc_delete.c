@@ -2,6 +2,7 @@
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct MemoryCardNameParam {
     s32  port;
@@ -14,7 +15,6 @@ struct MemoryCardNameParam {
 
 extern s32   PollSema();
 extern s32   SignalSema();
-extern s32   sceSifCallRpc();
 extern char *strncpy();
 
 s32 sceMcDelete(s32 port, s32 slot, char *name) {

@@ -16,6 +16,12 @@
 #include "rnc/game/options.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_data/blarg_elite_commando_update.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_rocket.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct {
     char          pad00[0x20];
@@ -102,11 +108,8 @@ approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_00
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int   step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
-extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int   is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern int   scale_game_frames(int);
 extern int   truncate_float_to_s32(float);
 extern void  moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -130,16 +133,10 @@ extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void
 randomize_blarg_elite_commando_group_pursuit_timers(void *, int, int) __asm__("FUN_L16_002d3f78");
-s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void  spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
-extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
+extern void  spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern char *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -799,16 +796,16 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
                 int lo = scale_game_frames(25), hi = scale_game_frames(30);
                 duration2 = random_int_between(lo, hi);
             }
-            spawn_particle(origin,
-                           movement,
-                           *first_choice,
-                           *second_choice,
-                           duration1,
-                           duration2,
-                           0,
-                           0,
-                           400000.0f,
-                           delay);
+            FUN_L00_0026a9f0(origin,
+                             movement,
+                             *first_choice,
+                             *second_choice,
+                             duration1,
+                             duration2,
+                             0,
+                             0,
+                             400000.0f,
+                             delay);
         } while (remaining != 0);
     }
     if (blarg_elite_commando_extra_glow_gate < 0.95f && distance > 9.0f) {

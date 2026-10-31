@@ -27,6 +27,9 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/math/random/random_spherical_offset.h"
+#include "rnc/math/rotations/matrix_to_quaternion.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
@@ -126,8 +129,6 @@ typedef struct {
 extern int FUN_L00_0025df68_c(
     void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void
-FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 
 void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) __asm__("FUN_L14_002d6570");
 
@@ -187,7 +188,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         path_step_distance = -racer_path_lead_distance_gp;
         *(int *)(od + 0x64) = hero.rail_segment;
         *(float *)(od + 0x68) = hero.rail_seg_frac;
-        FUN_L00_0025d808_6570(path, o + 0x10, od + 0x64, od + 0x68, 0, path_step_distance);
+        FUN_L00_0025d808(path, o + 0x10, od + 0x64, od + 0x68, 0, path_step_distance);
         clear_u64_value(od + 0x90);
         *(int *)(od + 0xF8) = i * 2;
         *(int *)(od + 0xFC) = i * 2 + 1;
@@ -235,9 +236,7 @@ int D_L14_00161A3C = 0x8c;
 
 extern char D_L14_001809C0[];
 extern char D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
-extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void vendor_spring(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void register_beam_slot(struct Moby *, int, int) __asm__("FUN_L00_002e1f28");
 extern int
@@ -295,7 +294,8 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
                      20.0f,
                      5.0f,
                      z);
-    track_67e8(path, &near, moby_data + 0x64, moby_data + 0x68, 0, -*(float *)(moby_data + 0x74));
+    FUN_L00_0025d808(
+        path, &near, moby_data + 0x64, moby_data + 0x68, 0, -*(float *)(moby_data + 0x74));
     vendor_spring(&racer_moby->pos.x, moby_data + 0x90, near.x, 0.01f, 0.2f, z);
     vendor_spring(&racer_moby->pos.y, moby_data + 0x94, near.y, 0.01f, 0.2f, z);
     vendor_spring(&racer_moby->pos.z, moby_data + 0x98, near.z, 0.01f, 0.2f, z);
@@ -337,12 +337,12 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         k = weapon_aim_final_path_step;
         ti = ((RacerSeg_67e8 *)moby_data)->seg;
         tf = ((RacerSeg_67e8 *)moby_data)->frac;
-        track_67e8(path,
-                   &joint_transform_and_aim_vectors[0],
-                   &ti,
-                   &tf,
-                   0,
-                   k + (1.0f - k) * aim_timer_fraction);
+        FUN_L00_0025d808(path,
+                         &joint_transform_and_aim_vectors[0],
+                         &ti,
+                         &tf,
+                         0,
+                         k + (1.0f - k) * aim_timer_fraction);
         qcopy(moby_data + 0x1E0, &joint_transform_and_aim_vectors[0]);
         fast_vec_sub(&joint_transform_and_aim_vectors[1],
                      &joint_transform_and_aim_vectors[0],
@@ -496,21 +496,18 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 
-extern void
-sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
-
 extern float D_L14_00161A30 __attribute__((sda));
 void         advance_moby_along_path(struct Moby *moby) __asm__("FUN_L14_002d7198");
 
 void advance_moby_along_path(struct Moby *moby) {
     char *path_tracking_state = (char *)moby->pvars;
     int   path_index = *(int *)(path_tracking_state + 0x60);
-    sample_path((int)l14_splines[path_index].path,
-                &moby->pos,
-                path_tracking_state + 0x64,
-                path_tracking_state + 0x68,
-                0,
-                D_L14_00161A30 * frame_time);
+    FUN_L00_0025d808((int)l14_splines[path_index].path,
+                     &moby->pos,
+                     path_tracking_state + 0x64,
+                     path_tracking_state + 0x68,
+                     0,
+                     D_L14_00161A30 * frame_time);
 }
 
 /* Draws the racer's two glow quads, at its lamp (0xE0) and its tail (0x200), turned to face the camera. */
@@ -591,7 +588,6 @@ extern float D_L14_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/l14/mobys/racer_path_and_weapon_globals.h"
 
 float       joint_light_position_w_gp __asm__("D_L14_00161A60") = 6.0f;
-extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");
 
 void update_moby_joint_visual_effects(struct Moby *moby) __asm__("FUN_L14_002d7490");

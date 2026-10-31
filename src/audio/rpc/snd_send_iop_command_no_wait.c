@@ -1,5 +1,9 @@
 #include "types.h"
 #include "rnc/audio/rpc/snd_send_iop_command_no_wait_globals.h"
+#include "rnc/audio/rpc/snd_returns.h"
+#include "rnc/sdk/libc/stdio/printf.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
 
 struct SndCb {
     s32 func;
@@ -15,13 +19,9 @@ extern struct SndCb *snd_stream_buffers[2] __asm__("D_0015ECB0") __attribute__((
 extern u8            sound_command_client[] __asm__("D_0015EBC0");
 extern char          snd_non_idle_error_string[] __asm__("D_00153D20");
 extern char          snd_no_wait_continuing_string[] __asm__("D_00154070");
-extern s32           printf(const char *, ...);
 extern s32           snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void          snd_post_message(void) __asm__("func_0012E9A0");
 extern s32           FlushCache(s32);
-extern s32           snd_prepare_return_buffer(void *, s32);
-extern s32           SceSifCheckStatRpc(void *);
-extern s32           sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_data) __asm__("FUN_0012e6e0");
 
 extern s32 snd_batches_held __asm__("D_0015ECC4") __attribute__((sda));
@@ -37,7 +37,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     if (snd_batches_held == 0 && snd_current_buffer == 0 && size == 0 && cb == 0) {
         snd_prepare_return_buffer(snd_sync_buffer, 1);
         while (SceSifCheckStatRpc(sound_command_client) != 0) {
-            printf(snd_non_idle_error_string);
+            Printf(snd_non_idle_error_string);
             snd_flush_sound_commands();
             FlushCache(0);
         }
@@ -57,7 +57,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
         }
         snd_flush_sound_commands();
         if (tries == 1) {
-            printf(
+            Printf(
                 "snd_SendIOPCommandNoWait: BUFFER %d FULL(%d)! Sound stalled waiting for IOP comands to finish!\n",
                 snd_batch_index,
                 *snd_batch_command_buffers[snd_batch_index]);
@@ -65,7 +65,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
         tries++;
     }
     if (tries != 0) {
-        printf(snd_no_wait_continuing_string, tries);
+        Printf(snd_no_wait_continuing_string, tries);
     }
     if (held != 0) {
         snd_batches_held = 1;

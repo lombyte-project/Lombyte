@@ -2,13 +2,13 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 
 extern s32  SubtractIntegerWithClamp();
 extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern s32  get_icon_frame() __asm__("func_001FF960");
 extern void draw_hud_sprite() __asm__("func_001FFC30");
-extern void draw_hud_sprite_flipped() __asm__("FUN_001ffe18");
 extern void draw_hud_sprite_subpixel() __asm__("func_00200080");
 extern void append_screen_rect_packet() __asm__("func_00200E08");
 

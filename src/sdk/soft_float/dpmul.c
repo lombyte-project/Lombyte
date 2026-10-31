@@ -1,3 +1,4 @@
+#include "rnc/sdk/soft_float/__pack_d.h"
 #define US_SOFTWARE_GOFAST     1
 #define FINE_GRAINED_LIBRARIES 1
 #define L_mul_df               1
@@ -502,8 +503,6 @@ INLINE
 static void flip_sign(fp_number_type *x) {
     x->sign = !x->sign;
 }
-
-extern FLO_type pack_d(fp_number_type *);
 
 #if defined(L_pack_df) || defined(L_pack_sf)
 FLO_type pack_d(fp_number_type *src) {

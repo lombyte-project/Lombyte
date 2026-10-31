@@ -19,6 +19,8 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/overlay/shared/mobys/is_moby_class_23e_in_state_14.h"
 
 /* Places a train: puts the engine at `at` facing ang (offset back by its length), then lays each linked
  * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */
@@ -361,11 +363,8 @@ char train_end_path_missing_stop_node_warning[124] __asm__("D_L03_001E2478") =
     "train end path has no STOP NODE!!!\n  Bailing out of the end cutscene before the train goes out of control and kills us all!";
 
 extern int  FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
-extern int  is_hero_on_moby(char *) __asm__("FUN_L01_00277fb8");
-extern int  is_moby_class_23e_in_state_14(char *) __asm__("FUN_L03_002c6c60");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
-extern void set_moby_state_14(char *) __asm__("FUN_L03_002c6c90");
 extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
 
 /* Heading of a path's first segment. */

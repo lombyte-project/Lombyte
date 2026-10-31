@@ -1,7 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-
-extern s32 sceSifCallRpc();
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 s32 free_sif_system_memory(void *addr) __asm__("FUN_0011c938");
 

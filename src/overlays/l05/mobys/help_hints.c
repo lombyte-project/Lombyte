@@ -9,6 +9,7 @@
 #include "rnc/overlay/l05/mobys/help_hints_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/enemies/horny_toad.h"
 
 extern char D_0013F3D0[];
 extern int  camera_secondary_mode_lui __asm__("D_001413D4") NOT_SDA, D_001413DC NOT_SDA,
@@ -20,7 +21,6 @@ extern int           D_0014EE90[];
 extern unsigned char D_0014C050[];
 extern f32           D_0013F3D8, D_0013F3DC;
 extern void          help_request(int, int) __asm__("FUN_L00_00203908");
-extern void          collect_moby_and_clear_path_keys(void *) __asm__("FUN_L00_002d5830");
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
 
 typedef struct {

@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_MISSIONS_ENTER_MENU_MISSION_LIST_H
+#define LOMBYTE_RNC_UI_MENUS_MISSIONS_ENTER_MENU_MISSION_LIST_H
+
+#include "types.h"
+
+struct Obj;
+
+s32 enter_menu_mission_list(struct Obj *) __asm__("FUN_0021c420");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_MISSIONS_ENTER_MENU_MISSION_LIST_H */

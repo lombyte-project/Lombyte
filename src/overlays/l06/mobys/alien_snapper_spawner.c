@@ -7,17 +7,14 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/l06/mobys/alien_queen.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Trigger moby: waits for the hero in its zone, plays its open animation, then launches a listed moby. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_002FEE60), where it is exact; names translated to the US level program. */
 extern int    D_L06_0015FFD8;
-extern int    is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern short *D_L06_001ABFC0[];
 extern void   blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void          alien_snapper_spawner_update(char *moby) __asm__("FUN_L06_002fda30");
-
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int is_point_inside_clip_volume(void *, int);
 
 /* Moby class 1066 */
 void alien_snapper_spawner_update(char *moby) {

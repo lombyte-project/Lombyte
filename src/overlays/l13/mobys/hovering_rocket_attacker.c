@@ -12,10 +12,11 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l13/mobys/attached_rocket.h"
 #include "rnc/overlay/l13/mobys/hovering_rocket_attacker_globals.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern char D_0013F350[];
-
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
@@ -305,8 +306,6 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
     }
 }
 
-extern int FUN_L13_002c2d30_update(void *, int) __asm__("FUN_L00_0028d8c0");
-
 extern int FUN_L13_002c2d30_allocate(int, int, void *) __asm__("FUN_L13_00297fa0");
 
 extern void update_moby_vertical_oscillation(float, float, void *, float *, float *) __asm__("FUN_L00_00262b00");
@@ -316,8 +315,6 @@ extern void update_moby_rotation_oscillation(void *, void *, void *, float, floa
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern void FUN_L00_0024f7c8(void *, int, void *);
-
-extern int FUN_L00_00257b90(int, int);
 
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 
@@ -368,7 +365,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     if (moby[0x20] == 0)
         return;
     if (*(int *)(moby_data + 0x110) == -1 ||
-        FUN_L13_002c2d30_update(moby, *(int *)(moby_data + 0x110)) == 0) {
+        voice_is_playing(moby, *(int *)(moby_data + 0x110)) == 0) {
         *(int *)(moby_data + 0x110) = -1;
         *(int *)(moby_data + 0x110) = FUN_L13_002c2d30_allocate(1, 4, moby);
     }
@@ -397,7 +394,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                      downward_effect_vector,
                      0xCF0000FF,
                      0xCF,
-                     scale_game_frames(FUN_L00_00257b90(0x12, 0x16)),
+                     scale_game_frames(random_int_between(0x12, 0x16)),
                      0x32,
                      -0xA,
                      1);
@@ -405,7 +402,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                      downward_effect_vector,
                      0xCF0000FF,
                      0xCF,
-                     scale_game_frames(FUN_L00_00257b90(0x12, 0x16)),
+                     scale_game_frames(random_int_between(0x12, 0x16)),
                      0x32,
                      -0xA,
                      1);
@@ -414,7 +411,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                      downward_effect_vector,
                      0x6000FFFF,
                      0x80,
-                     scale_game_frames(FUN_L00_00257b90(0x14, 0x18)),
+                     scale_game_frames(random_int_between(0x14, 0x18)),
                      0x64,
                      -0xA,
                      1);
@@ -422,14 +419,14 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                      downward_effect_vector,
                      0x6000FFFF,
                      0x80,
-                     scale_game_frames(FUN_L00_00257b90(0x14, 0x18)),
+                     scale_game_frames(random_int_between(0x14, 0x18)),
                      0x64,
                      -0xA,
                      1);
     }
     {
-        int ra = FUN_L00_00257b90(0xA, 0x19);
-        int rb = FUN_L00_00257b90(0xA, 0xF);
+        int ra = random_int_between(0xA, 0x19);
+        int rb = random_int_between(0xA, 0xF);
         spawn_effect(point_2_position,
                      downward_effect_vector,
                      0xEFFF7F4F,
@@ -438,8 +435,8 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                      ra,
                      -ra,
                      1);
-        ra = FUN_L00_00257b90(0xA, 0x19);
-        rb = FUN_L00_00257b90(0xA, 0xF);
+        ra = random_int_between(0xA, 0x19);
+        rb = random_int_between(0xA, 0xF);
         spawn_effect(point_3_position,
                      downward_effect_vector,
                      0xEFFF7F4F,
@@ -529,7 +526,3 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
 }
 
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-
-float absolute_float(float input) __asm__("func_001F99C0");
-
-extern float random_angle_radians(void) __asm__("FUN_00213308");

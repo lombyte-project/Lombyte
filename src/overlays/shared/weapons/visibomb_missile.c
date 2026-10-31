@@ -20,6 +20,11 @@
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/weapons/visibomb_missile_data/moby_save_globals_state.h"
 #include "rnc/overlay/shared/weapons/visibomb_missile_data/visibomb_missile_update.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct {
     u8  p0[0x2084];
@@ -103,12 +108,8 @@ typedef struct Hit_2b6140 {
     V_2b6140     v60;
 } Hit_2b6140;
 
-void         jet_camera_mode(void) __asm__("FUN_L00_00203b18");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern char *create_moby(int);
-extern int   FUN_L00_00257b90(int, int);
-extern int   hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void  set_background_color(s32 red, unsigned long green, unsigned long blue);
 int          FUN_L00_002603d0_2b58d8(void *) __asm__("FUN_L00_002603d0");
 void         FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
@@ -133,7 +134,6 @@ spawn_spinning_fade_in_out_effect_particle(void *pos,
                                                        float f2,
                                                        float f3,
                                                        float scale) __asm__("FUN_L00_0026b790");
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_glow_particle(void *, void *, void *, int, int, int, int, int, float) __asm__("FUN_L00_002ac910");
 extern int   update_orbit_camera_from_target_moby(void *, void *) __asm__("FUN_L00_002eb648");
 extern void  func_L00_002B6AE0_2b6140(void *, int) __asm__("FUN_L00_002b57f0");
@@ -757,19 +757,19 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
                 pa = A.v + random_integer_below(6);
                 pb = B.v + random_integer_below(6);
                 particle_frame_count =
-                    FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20));
+                    random_int_between(scale_game_frames(15), scale_game_frames(20));
                 particle_random_frame_value =
-                    FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30));
-                spawn_particle(source_moby + 0x10,
-                               particle_velocity,
-                               *pa,
-                               *pb,
-                               particle_frame_count,
-                               particle_random_frame_value,
-                               0,
-                               0,
-                               400000.0f,
-                               sc);
+                    random_int_between(scale_game_frames(25), scale_game_frames(30));
+                FUN_L00_0026a9f0(source_moby + 0x10,
+                                 particle_velocity,
+                                 *pa,
+                                 *pb,
+                                 particle_frame_count,
+                                 particle_random_frame_value,
+                                 0,
+                                 0,
+                                 400000.0f,
+                                 sc);
             } while (--i);
         }
         if (D_L00_0015F5D0 < 0.95f) {

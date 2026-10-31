@@ -9,12 +9,12 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 
 extern void interpolate_vector(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
 extern s32
 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
-extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char camera_pos[] __asm__("D_L01_00167240");
 
 extern char point_light_slot_parameters[] __asm__("D_L01_00180740");

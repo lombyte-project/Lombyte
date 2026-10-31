@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_LOAD_FAILED_H
+#define LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_LOAD_FAILED_H
+
+#include "types.h"
+
+void save_card_state_load_failed(void) __asm__("FUN_00208ed8");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_LOAD_FAILED_H */

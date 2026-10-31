@@ -16,6 +16,7 @@
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/math/split_float_fraction.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* Smooth noise: linearly interpolates between two entries of an 8-float ring at arg+0x90. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F7258), where it is exact; names translated to the US level program. */
@@ -163,7 +164,6 @@ typedef struct {
    real prototype evaluates the operands in the other order and moves two words. */
 extern float interpolate_sample_ring_data_first(char *, float) __asm__("FUN_L08_002f5d98");
 extern int   l08_effect_animation_time __asm__("D_L08_0015F3F8");
-extern f32   normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 extern char  D_L08_001675C0[];

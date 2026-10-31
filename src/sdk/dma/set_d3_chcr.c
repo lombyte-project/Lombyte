@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 extern s32 DIntr();
-extern s32 EnableInterrupts();
 
 void SetD3Chcr(s32 channel_control) {
     DIntr();

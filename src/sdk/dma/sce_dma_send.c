@@ -1,4 +1,6 @@
 #include "types.h"
+#include "rnc/sdk/dma/wait_dma.h"
+#include "rnc/sdk/system/check_address.h"
 
 struct DmaChannelRegs {
     s32 unk0;
@@ -7,9 +9,6 @@ struct DmaChannelRegs {
     u8  pad_24[0xC];
     s32 unk30;
 };
-
-extern s32  CheckAddress();
-extern void WaitDma();
 
 void sceDmaSend(struct DmaChannelRegs *channel, s32 addr) {
     s32          phys_addr;

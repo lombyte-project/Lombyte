@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_ASSIGN_HELI_PACK_LABEL_TEXT_TABLE_H
+#define LOMBYTE_RNC_UI_MENUS_PAUSE_ASSIGN_HELI_PACK_LABEL_TEXT_TABLE_H
+
+#include "types.h"
+
+int assign_heli_pack_label_text_table(void *) __asm__("FUN_0021ca98");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_ASSIGN_HELI_PACK_LABEL_TEXT_TABLE_H */

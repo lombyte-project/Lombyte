@@ -11,6 +11,11 @@
 #include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/game_globals.h"
+#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
+#include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/mobys/show_tracked_moby.h"
+#include "rnc/rendering/clip_volume.h"
 
 typedef struct {
     u8  pad0[0xA6];
@@ -133,15 +138,10 @@ extern char         D_L01_001BAAA0[] __asm__("D_L01_001BAAA0");
 extern void         apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
 extern void         blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void         start_scene(int) __asm__("FUN_L00_00298840");
-extern void         deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
-extern int          is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void         set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void         queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void         unlock_planet(int) __asm__("FUN_L00_002607d0");
-extern void         queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
 
 extern unsigned char D_L01_0015FC88[] MACRO_ADDR;
 extern f32           frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;

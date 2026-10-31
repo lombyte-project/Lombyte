@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_GIANT_CLANK_HIT_SPHERE_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_GIANT_CLANK_HIT_SPHERE_H
+
+#include "types.h"
+
+struct Moby;
+
+void giant_clank_hit_sphere_update(struct Moby *) __asm__("FUN_L15_0029ead0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_GIANT_CLANK_HIT_SPHERE_H */

@@ -1,11 +1,10 @@
 #include "types.h"
 #include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
-
-extern s32 sceCdGetError();
-extern s32 sceCdRead();
-extern s32 sceCdSync();
-extern s32 sceGsSyncV();
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/storage/cdvd/sceCdGetError.h"
+#include "rnc/sdk/storage/cdvd/sceCdRead.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
 s32 load_disc_sectors_into_global_buffer(void) __asm__("FUN_0012f2b8");
 

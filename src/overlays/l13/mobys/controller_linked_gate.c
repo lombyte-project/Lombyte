@@ -4,12 +4,11 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
+#include "rnc/overlay/shared/mobys/allocate_moby_animation_slot.h"
 
 extern int D_L13_0015FFD8;
 
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-
-extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 
 extern char gate_missing_controller_format[] __asm__("D_L13_001F51E0");
 

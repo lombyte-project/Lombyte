@@ -1,10 +1,10 @@
-extern int  NextBit(void *bitstream, int bit_count) __asm__("_nextBit");
-extern void FlushBuffer(void *bitstream, int byte_count) __asm__("_flushBuf");
+#include "rnc/sdk/mpeg/bitstream/_flushBuf.h"
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
 
 void ExtraInfo(void *bitstream) __asm__("_extrainfo");
 
 void ExtraInfo(void *bitstream) {
-    while (NextBit(bitstream, 1) != 0) {
-        FlushBuffer(bitstream, 8);
+    while (_nextBit(bitstream, 1) != 0) {
+        _flushBuf(bitstream, 8);
     }
 }

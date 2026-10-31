@@ -3,6 +3,7 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/rendering/packets/emit_textured_rectangle.h"
 
 struct Glyph {
     u8 u;
@@ -12,8 +13,6 @@ struct Glyph {
 };
 
 #include "rnc/ui/text/font_palette.h"
-
-extern void emit_textured_rectangle(f32, f32, f32, f32, s32, s32, s32, s32, u64, s32) __asm__("FUN_001f5808");
 
 void process_bgm_display_text_event(u64           color,
                                     u8           *s,

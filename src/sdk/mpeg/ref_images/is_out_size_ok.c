@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/mpeg/errors/_Error.h"
 
-const u8   D_00153980[] = "Too small buffer size for %dx%d picture\n";
-extern s32 _Error(void *a, void *b);
-extern s32 sprintf(char *d, char *f, ...);
+const u8 D_00153980[] = "Too small buffer size for %dx%d picture\n";
 
 s32 _isOutSizeOK(struct MpegDecoder *decoder, struct MpegRefImage *reference_image) {
     char                 sp_slot[0x100];

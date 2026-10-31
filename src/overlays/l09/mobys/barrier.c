@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/l09/mobys/display.h"
 
 typedef struct Moby Moby;
 
@@ -44,8 +45,6 @@ typedef struct Flags_309688 {
 
 #include "rnc/overlay/l09/mobys/barrier_data/barrier_update.h"
 
-struct Moby *spawn_tumbling_debris(
-    struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) __asm__("FUN_L09_002ef868");
 extern int   func_001F9850_309688(int) __asm__("FUN_001f96f8");
 extern float func_001F9F90_309688(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_309688(float) __asm__("FUN_001f9de0");

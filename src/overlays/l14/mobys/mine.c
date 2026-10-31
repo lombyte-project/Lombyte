@@ -11,10 +11,11 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/l14/mobys/mine_globals.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
-
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 typedef struct {
     u8  pad0[0x20];
@@ -49,11 +50,6 @@ extern char mine_empty_path_error_format[] __asm__("D_L14_001FCAD8");
 f32 mine_path_step_rate_gp __asm__("D_L14_00161C44") = 6.0f;
 
 f32 mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") = 0.05235988f;
-
-extern float FUN_L00_00257c48(float, float);
-
-extern int
-FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
 
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 
@@ -128,15 +124,15 @@ void looping_path_mine_update(struct Moby *moby) {
         mine_vars->spin[1] = random_float_between(0.034906585f, 0.06981317f);
         mine_vars->spin[2] = random_float_between(0.017453292f, 0.034906585f);
         clear_u64_value(mine_vars->vel);
-        mine_vars->phase = FUN_L00_00257c48(0.0f, 3.1415927f);
+        mine_vars->phase = randf_sym(0.0f, 3.1415927f);
         break;
     case MINE_STATE_FOLLOW_PATH:
-        FUN_L00_0025d808_mine(((L14MinePath *)l14_paths[mine_vars->path]),
-                              path_target_position,
-                              &mine_vars->segment,
-                              &mine_vars->along,
-                              1,
-                              mine_path_step_rate_gp * frame_time * mine_vars->dir);
+        FUN_L00_0025d808(((L14MinePath *)l14_paths[mine_vars->path]),
+                         path_target_position,
+                         &mine_vars->segment,
+                         &mine_vars->along,
+                         1,
+                         mine_path_step_rate_gp * frame_time * mine_vars->dir);
         FUN_L00_0025b8c0(
             &moby->pos.x, &mine_vars->vel[0], path_target_position[0], 0.02f, 0.2f, 0.0f);
         FUN_L00_0025b8c0(

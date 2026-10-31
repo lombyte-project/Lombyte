@@ -1,11 +1,11 @@
 #include "types.h"
 #include "rnc/streaming/stash/stash.h"
 #include "rnc/sdk/sifrpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
 
-extern s32 sceSifBindRpc(struct sceSifClientData *, u32, s32);
-extern s32 SceSifCheckStatRpc(struct sceSifClientData *);
-extern s32 sceSifCallRpc(void *, u32, u32, void *, s32, void *, s32, void (*)(void *), void *);
-void       init_stash(void) __asm__("FUN_00232d00");
+void init_stash(void) __asm__("FUN_00232d00");
 
 void init_stash(void) {
     s32 info_reply[4];

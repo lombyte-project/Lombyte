@@ -18,6 +18,8 @@
 #include "qcopy.h"
 
 #include "sda.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/world/collision/ground_probe.h"
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D79F0), where it is exact; names translated to the US level program. */
@@ -46,14 +48,11 @@ typedef struct {
 
 extern char *D_L18_00174858_lui __asm__("D_L18_00174858") NOT_SDA;
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern int  D_L18_0015F5C4_d __asm__("D_L18_0015F5C4");
-extern int  D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
-extern void FUN_001f9bf8_q(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-f32         probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
-void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern int   D_L18_0015F5C4_d __asm__("D_L18_0015F5C4");
+extern int   D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
+extern void  FUN_001f9bf8_q(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
+void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L18_00161998 __attribute__((sda));
 

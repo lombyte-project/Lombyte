@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/audio/voice_alloc.h"
 
 extern s32 FUN_0022da68(s32, s32, void *);
 
@@ -36,8 +37,7 @@ typedef struct {
     u8            trigger;
 } PendulumMoby;
 
-extern u8   D_0014C050[];
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern u8 D_0014C050[];
 
 void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
 

@@ -9,6 +9,10 @@
 #include "rnc/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/swing_volume_camera.h"
+#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
+#include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
+#include "rnc/rendering/clip_volume.h"
 
 typedef float CameraVec[4] __attribute__((aligned(16)));
 
@@ -34,14 +38,9 @@ typedef struct {
 } AimCameraParams;
 
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
-extern s32  is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern s32  test_point_in_transformed_unit_cylinder(void *, s32) __asm__("FUN_L00_0025fa38");
 extern s32  test_point_in_transformed_unit_sphere(void *, s32) __asm__("FUN_L00_0025faf0");
 extern s32  try_select_follow_camera_volume(struct UpdateCam *) __asm__("FUN_L00_002e83c0");
 extern void clear_follow_camera_volume_if_current(struct UpdateCam *) __asm__("FUN_L00_002e8388");
-extern void fun_l00_002e8540(f32) __asm__("FUN_L00_002e8540");
-extern void set_follow_camera_orbit_clamp_mode(s32) __asm__("FUN_L00_002e8568");
-extern void fun_l00_002e8620(void) __asm__("FUN_L00_002e8620");
 
 extern CameraDescriptor *camera_descriptors __asm__("D_L00_0015EF50");
 extern u8                D_001413F4 __asm__("D_001413F4") NOT_SDA;
@@ -185,7 +184,7 @@ run:
     }
     if (params->distance != 0.0f) {
         follow_camera_set_distance(0, params->distance, 0.003f);
-        fun_l00_002e8620();
+        FUN_L00_002e8620();
     }
     if (params->height != 0.0f) {
         follow_camera_set_height(params->height, 0.003f);
@@ -194,7 +193,7 @@ run:
         follow_camera_set_offset_scale(0, params->offset_scale, 0.005f);
     }
     if (params->unk28 != 0.0f) {
-        fun_l00_002e8540(params->unk28 * 0.017453292f);
+        FUN_L00_002e8540(params->unk28 * 0.017453292f);
     }
     if (params->keep_unk10 == 0) {
         set_follow_camera_orbit_clamp_mode(0);

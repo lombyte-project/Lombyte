@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_CAMERA_OBJECT_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_CAMERA_OBJECT_H
+
+#include "types.h"
+
+void camera_object_update(char *) __asm__("FUN_L00_002a4e48");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_CAMERA_OBJECT_H */

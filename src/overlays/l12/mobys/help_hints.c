@@ -13,6 +13,7 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 /* Plays a dialogue once the moby group is cleared, updates the help records (count, time, level mask)
  * and requests help messages 0x6D (in the clip volume), 0x6E (too long in hero state 0x81
  * without steering) and 0x3E. */
@@ -20,11 +21,10 @@
 
 extern char D_00141968_h[] __asm__("D_00141968");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
-extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
 void help_hints_update(struct Moby *moby) __asm__("FUN_L12_002ed280");
 
-/* Moby class 422 */
+/* Moby classes 422, 1000, 1342, 1343, 1347-1349, 1413 */
 void help_hints_update(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     if (count_active_moby_group_members(moby_vars[3], -1) == 0) {

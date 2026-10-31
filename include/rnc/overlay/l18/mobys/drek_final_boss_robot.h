@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_FINAL_BOSS_ROBOT_H
+#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_FINAL_BOSS_ROBOT_H
+
+#include "types.h"
+
+void drek_final_boss_robot_update() __asm__("FUN_L18_002f2bf0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_FINAL_BOSS_ROBOT_H */

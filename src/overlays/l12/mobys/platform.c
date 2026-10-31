@@ -12,22 +12,21 @@
 #include "rnc/overlay/shared/world/level_path.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern int          scale_game_frames(int);
 typedef struct Moby Moby;
 extern float        D_0015ED6C;
 extern float        D_0015ED70;
-int                 FUN_L00_00257b90(int lo, int hi);
 
 #include "rnc/overlay/shared/world/level_globals.h"
 
-extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 /* Hoven engine exhaust: emits a flame and a smoke puff from each of the moby's two nozzles (the second one
  * mirrored across its local Y axis), with random jitter. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E4C58), where it is exact; names translated to the US level program. */
 
-extern char *
-spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
 float D_L12_00161920[4] __attribute__((section(".sdata"))) = {-1.5f, 0.8f, -0.5f, 0.0f};
@@ -59,13 +58,13 @@ void emit_platform_exhaust_effects(struct Moby *moby) {
     transform_vector_by_basis(
         mirrored_emission_position, mirrored_emission_position, &moby->rot_row0);
     fast_vec_add(mirrored_emission_position, mirrored_emission_position, &moby->pos);
-    spawn_burst(emission_position,
-                emission_direction,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)),
-                1,
-                10000.0f);
+    FUN_L00_0026cbb0(emission_position,
+                     emission_direction,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     random_int_between(scale_game_frames(8), scale_game_frames(0x11)),
+                     1,
+                     10000.0f);
     func_L00_0026DEA0_x(emission_position,
                         0.05f,
                         1.01f,
@@ -74,13 +73,13 @@ void emit_platform_exhaust_effects(struct Moby *moby) {
                         secondary_emission_direction,
                         30000.0f,
                         0x404040);
-    spawn_burst(mirrored_emission_position,
-                emission_direction,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)),
-                1,
-                10000.0f);
+    FUN_L00_0026cbb0(mirrored_emission_position,
+                     emission_direction,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     random_int_between(scale_game_frames(8), scale_game_frames(0x11)),
+                     1,
+                     10000.0f);
     func_L00_0026DEA0_x(mirrored_emission_position,
                         0.05f,
                         1.01f,
@@ -255,7 +254,7 @@ extern void func_L12_002E4F18_2E51E8(void *, void *, void *, int, int) __asm__("
 
 void platform_update(Moby *moby) __asm__("FUN_L12_002e3ed8");
 
-/* Moby class 240 */
+/* Moby classes 240, 664 */
 void platform_update(Moby *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,

@@ -17,6 +17,7 @@
 #include "rnc/rendering/effect_texture.h"
 
 #include "sda.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 typedef struct {
     float f[4];
@@ -57,10 +58,9 @@ UVec130 billboard_quad_pair_uvs[4] __asm__("D_L18_001D9CE0") = {
     {1.0f, 1.0f},
 };
 
-extern void  vscl_ec130(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void  vmul_ec130(float, void *, void *) __asm__("FUN_001f9a68");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern void  draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
+extern void vscl_ec130(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void vmul_ec130(float, void *, void *) __asm__("FUN_001f9a68");
+extern void draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_moby_billboard_quad_pair(void *mv) __asm__("FUN_L18_002ec130");
 

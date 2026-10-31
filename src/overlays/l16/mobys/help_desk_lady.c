@@ -37,6 +37,7 @@
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Activate the watcher and steer its body and head toward the player. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
@@ -96,7 +97,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 extern float vector_length_xy(void *);
-extern int   is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int   scale_game_frames(int);
 extern s32   D_L16_0015F5C4;
 extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");

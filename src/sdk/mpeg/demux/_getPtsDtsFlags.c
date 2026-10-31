@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/soft_float/__muldi3.h"
 
 struct MpegTimestampState {
     u8  pad_0[0x70];
@@ -26,8 +27,6 @@ struct MpegPictureTimestampRecord {
     s32 top_field_first;
     s32 repeat_first_field;
 };
-
-extern s64 __muldi3(s64 a, s64 b);
 
 void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState         *state,
                                       struct MpegPictureTimestampRecord *picture,

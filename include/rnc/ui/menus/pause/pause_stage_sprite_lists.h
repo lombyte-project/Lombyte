@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_PAUSE_STAGE_SPRITE_LISTS_H
+#define LOMBYTE_RNC_UI_MENUS_PAUSE_PAUSE_STAGE_SPRITE_LISTS_H
+
+#include "types.h"
+
+int pause_stage_sprite_lists(u32 *) __asm__("FUN_0021ca60");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_PAUSE_STAGE_SPRITE_LISTS_H */

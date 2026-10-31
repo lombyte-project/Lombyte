@@ -2,6 +2,7 @@
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct McGetDirRequest {
     s32 unk0;
@@ -16,7 +17,6 @@ struct McGetDirRequest {
 extern struct McGetDirRequest D_00159AB0;
 extern s32                    PollSema();
 extern s32                    SignalSema();
-extern s32                    sceSifCallRpc();
 extern s32                    sceSifWriteBackDCache();
 extern s32                    strncpy(s8 *, s8 *, s32);
 

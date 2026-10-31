@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 struct MpegCopyParams {
     s32 unk0;
@@ -17,7 +18,6 @@ struct MpegDecoderFrame {
 };
 
 extern s32 DIntr();
-extern s32 EnableInterrupts();
 
 void _cpr8(struct MpegDecoder *decoder, struct MpegCopyParams *copy_params) {
     struct MpegDecoderFrame *decoder_transfer_layout;

@@ -41,6 +41,7 @@
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
+#include "rnc/world/collision/ground_probe.h"
 
 extern float D_0015ED6C;
 
@@ -175,7 +176,6 @@ extern char *D_L16_0015FFD8;
 char *find_group_chicken_in_state_6(int moby_group_index) __asm__("FUN_L16_002e8b08");
 
 char *find_group_chicken_in_state_6(int idx) __asm__("FUN_L16_002e8b08");
-f32   probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 s32   is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void chicken_relocator_update(struct Moby *moby) __asm__("FUN_L16_002e8970");

@@ -3,6 +3,7 @@
 #include "rnc/ui/map/map_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
 
 extern void        setup_gif_paging(int) __asm__("func_001F4280");
 extern void        do_gif_paging(void) __asm__("func_001F4398");
@@ -14,7 +15,6 @@ extern int         menu_display_value_by_level[] __asm__("D_001E0888");
 
 #include "rnc/rendering/screen.h"
 
-extern int  sprintf(char *, const char *, ...);
 extern void font_print_right(int, int, long, char *, int) __asm__("func_001F6940");
 int         setup_menu_display_text(char *menu) __asm__("FUN_0021ef78");
 

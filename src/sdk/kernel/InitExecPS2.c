@@ -3,8 +3,8 @@
  * for the loop-test sltiu (retail v0; i5 ties at v1). */
 
 #include "types.h"
+#include "rnc/sdk/kernel/PatchIsNeeded.h"
 
-extern s32  PatchIsNeeded();
 extern void Rfu116SetSyscallLate();
 extern s32  Rfu091Mid();
 extern void InvokeKernelSyscall005A_RfuWorker(void *addr, void *table, s32 size);

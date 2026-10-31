@@ -7,11 +7,11 @@
 #include "qcopy.h"
 #include "rnc/overlay/l05/mobys/floating_platform_globals.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/math/random.h"
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_sin(float);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030D230), where it is exact; names translated to the US level program. */
 
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PICKUPS_CRATE_FRAGMENT_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_PICKUPS_CRATE_FRAGMENT_H
+
+#include "types.h"
+
+void nanotech_crate_fragment_update() __asm__("FUN_L00_002afa48");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PICKUPS_CRATE_FRAGMENT_H */

@@ -15,4 +15,6 @@ char *spawn_homing_rocket(void        *heading_vector,
                           float        initial_speed,
                           float        unread_value) __asm__("FUN_L03_002d4288");
 
+void homing_rocket_update(struct Moby *) __asm__("FUN_L03_002d43c8");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_HOMING_ROCKET_H */

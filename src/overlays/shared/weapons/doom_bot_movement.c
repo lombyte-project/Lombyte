@@ -8,6 +8,7 @@
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/overlay/shared/world/collision.h"
 #include "qzero.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 
 typedef struct {
     float x, y, z, w;
@@ -117,10 +118,6 @@ extern f32   FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern s32   FUN_001efa68_c(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern void  FUN_001f9a68(void *, void *, float);
 extern float FUN_L00_0025abf0(void *, void *, int, float, float);
-float        calculate_triangular_corrected_scalar(float *a,
-                                                   float *b,
-                                                   int   *out,
-                                                   float  f) __asm__("FUN_L00_00259468");
 extern void  func_001F9BF0_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int   func_L00_001FF5B0_2C0CF8(float, void *, void *) __asm__("FUN_L00_001ff600");
 extern void  func_001F9BD8_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a10");

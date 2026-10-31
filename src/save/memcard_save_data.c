@@ -2,11 +2,11 @@
 #include "sda.h"
 #include "types.h"
 #include "rnc/ui/map/copy_level_object_positions.h"
+#include "rnc/sdk/scf/sce_scf_get_local_timefrom_rtc.h"
+#include "rnc/sdk/storage/cdvd/scecdreadclock.h"
 
 extern char D_0013D290[];
 extern int  memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
-extern void sceCdReadClock(void *);
-extern void sceScfGetLocalTimefromRTC(void *);
 extern void save_map_coverage(void *) __asm__("func_00207B08");
 extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];

@@ -13,6 +13,7 @@
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
@@ -41,8 +42,6 @@ extern struct L03HelpState l03_help_message_playback_state __asm__("D_L03_001795
 extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry  D_L03_00179BC0[];
 extern struct Moby         *D_L03_0015FFE4;
-
-extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 
 /* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
 void help_hints_update(struct Moby *moby) __asm__("FUN_L03_002df520");

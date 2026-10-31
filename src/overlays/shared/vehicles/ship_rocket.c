@@ -12,6 +12,8 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct {
     Vec4         step;       /* moved by this each frame; its length is speed */
@@ -23,37 +25,24 @@ typedef struct {
     f32          turn_speed; /* 0x30 */
 } Missile_94f8;
 
-extern void
-FUN_L00_0026cbb0_94f8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern unsigned char *FUN_L00_002712b8_94f8(void *,
-                                            void *,
-                                            int,
-                                            int,
-                                            int,
-                                            int,
-                                            float,
-                                            float,
-                                            float,
-                                            float,
-                                            float) __asm__("FUN_L00_002712b8");
-extern void           FUN_L00_0025e450_94f8(void *,
-                                            void *,
-                                            void *,
-                                            float,
-                                            float,
-                                            int,
-                                            int,
-                                            int,
-                                            float,
-                                            float,
-                                            float,
-                                            float,
-                                            int,
-                                            float,
-                                            int,
-                                            int,
-                                            int,
-                                            int) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_0025e450_94f8(void *,
+                                  void *,
+                                  void *,
+                                  float,
+                                  float,
+                                  int,
+                                  int,
+                                  int,
+                                  float,
+                                  float,
+                                  float,
+                                  float,
+                                  int,
+                                  float,
+                                  int,
+                                  int,
+                                  int,
+                                  int) __asm__("FUN_L00_0025e450");
 
 extern char rocket_smoke_texture[] __asm__("D_L11_001B2A80");
 extern char rocket_impact_effect_origin[] __asm__("D_L11_00174860");
@@ -84,17 +73,17 @@ void ship_rocket_update(struct Moby *moby) {
     fast_vec_normalize(
         &offset, &rocket_vars->step, -random_float_between(frame_time * 0.1f, frame_time));
     fast_vec_add(&velocity, &velocity, &offset);
-    FUN_L00_002712b8_94f8(&moby->pos,
-                          &velocity,
-                          scale_game_frames(6),
-                          0x7f,
-                          0xb0b0b0,
-                          3,
-                          40000.0f,
-                          1000.0f,
-                          1.0f,
-                          -0.0004f,
-                          0.0f);
+    FUN_L00_002712b8(&moby->pos,
+                     &velocity,
+                     scale_game_frames(6),
+                     0x7f,
+                     0xb0b0b0,
+                     3,
+                     40000.0f,
+                     1000.0f,
+                     1.0f,
+                     -0.0004f,
+                     0.0f);
     texture = rocket_smoke_texture;
     for (fraction = 0.0f; fraction < 1.0f; fraction += 0.33333334f) {
         unsigned char *particle;
@@ -103,17 +92,17 @@ void ship_rocket_update(struct Moby *moby) {
                            random_float_between(fraction, fraction + 0.33333334f) *
                                rocket_vars->speed);
         fast_vec_add(&offset, &offset, &moby->pos);
-        particle = FUN_L00_002712b8_94f8(&offset,
-                                         &velocity,
-                                         scale_game_frames(60),
-                                         0x7f,
-                                         0x606060,
-                                         3,
-                                         40000.0f,
-                                         1000.0f,
-                                         1.0f,
-                                         -0.0002f,
-                                         0.0f);
+        particle = FUN_L00_002712b8(&offset,
+                                    &velocity,
+                                    scale_game_frames(60),
+                                    0x7f,
+                                    0x606060,
+                                    3,
+                                    40000.0f,
+                                    1000.0f,
+                                    1.0f,
+                                    -0.0002f,
+                                    0.0f);
         if (particle != 0) {
             unsigned char *texture_pixels = *(unsigned char **)(texture + 0x5c);
             unsigned char  texture_pixel = texture_pixels[0];
@@ -124,7 +113,7 @@ void ship_rocket_update(struct Moby *moby) {
         random.f[2] = 0.02f;
         transform_vector_by_basis(&random, &random, &moby->rot_row0);
         build_look_at_matrix(&random, &random, &moby->rot_row0, random_angle_radians());
-        FUN_L00_0026cbb0_94f8(
+        FUN_L00_0026cbb0(
             &offset, &random, 0x4f007fff, 0x1fffffff, scale_game_frames(5), 1, 20000.0f);
     }
     pos = &moby->pos;

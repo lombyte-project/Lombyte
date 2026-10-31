@@ -3,8 +3,7 @@
 #include "rnc/sdk/libgraph.h"
 #include "rnc/sdk/eetypes.h"
 #include "rnc/sdk/kernel.h"
-
-extern void scePrintf(const char *message, ...);
+#include "rnc/sdk/deci2/sce_printf.h"
 
 s32 sceGsSetDefLoadImage(sceGsLoadImage *image,
                          s16             destination_base,

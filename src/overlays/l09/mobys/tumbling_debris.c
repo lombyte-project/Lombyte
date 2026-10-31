@@ -15,9 +15,9 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
-extern char  D_L09_00166F40_2ef430[] __asm__("D_L09_00166F40");
-extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
+extern char D_L09_00166F40_2ef430[] __asm__("D_L09_00166F40");
 
 /* Per-frame update of a tumbling debris moby: moves and spins it under gravity, bounces it off what it hits, and
    bursts it into two sparks and removes it when its timer runs out or it leaves the area. */
@@ -55,11 +55,11 @@ void tumbling_debris_update(struct Moby *moby) {
             fast_vec_normalize(spark_velocity,
                                spark_velocity,
                                random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-            spawn_spark_2ef430(&moby->pos,
-                               spark_velocity,
-                               0x7F2F4F6F,
-                               random_int_between(scale_game_frames(10), scale_game_frames(15)),
-                               30000.0f);
+            FUN_L00_0026dd20(&moby->pos,
+                             spark_velocity,
+                             0x7F2F4F6F,
+                             random_int_between(scale_game_frames(10), scale_game_frames(15)),
+                             30000.0f);
         }
         mark_moby_for_removal(moby);
         return;

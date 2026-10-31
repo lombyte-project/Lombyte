@@ -10,6 +10,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
@@ -173,7 +174,6 @@ unsigned char *spawn_type_52_particle(void *spawn_position,
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028B570), where it is exact; names translated to the US level program. */
 
 extern int           D_L01_001B2628; /* no foreign declaration */
-extern s32           rand(void);
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
 unsigned char *spawn_type_74_particle(char  *source_moby,
@@ -201,7 +201,7 @@ unsigned char *spawn_type_74_particle(char  *source_moby,
         particle[1] = 0;
         particle_data = (char *)particle + 0x20;
         particle[2] = **(unsigned char **)D_L01_001B2928_b;
-        particle[8] = rand();
+        particle[8] = RandomNext();
         *(int *)(particle + 0xc) = 0;
         qcopy(particle + 0x10, particle_spawn_position);
         *(float *)particle_data = initial_particle_velocity[0];

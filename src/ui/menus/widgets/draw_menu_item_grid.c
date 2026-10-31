@@ -3,6 +3,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/ui/hud/get_icon_frame.h"
+#include "rnc/rendering/vu1_registers.h"
 
 typedef struct {
     u8  pad_0[0x40];
@@ -35,7 +36,6 @@ extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
-extern s32  vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 s32 draw_menu_item_grid(struct MenuScreen *grid) __asm__("FUN_0021d948");
 

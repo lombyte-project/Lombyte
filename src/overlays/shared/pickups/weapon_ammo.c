@@ -13,6 +13,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/hero/item_defs.h"
 #include "rnc/globals.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 typedef struct {
     float x;
@@ -35,7 +36,6 @@ typedef struct {
 
 int          FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
 extern int   add_ammo(int, int) __asm__("FUN_L00_00233e40");
-extern void  queue_formatted_dialogue_message(int, int, int) __asm__("FUN_L00_00263db0");
 extern void  clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int   f99a8_2c5be8(int) __asm__("FUN_001f99a8");
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");

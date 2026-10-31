@@ -1,3 +1,4 @@
+#include "rnc/sdk/libc/malloc/malloc_extend_top.h"
 /* _malloc_r exact recovery: the smallbin branch expresses bck/bin_at(0) from the unsorted-bin
    head (u8*)&D_0012F790 - 8 so the compiler keeps &D_0012F790 in a1 and derives the bins base
    with `addiu a1,a1,-8`, matching retail's register reuse and store order. */
@@ -9,7 +10,6 @@
 struct _reent;
 extern void __malloc_lock(struct _reent *) __asm__("func_001154C0");
 extern void __malloc_unlock(struct _reent *) __asm__("func_001154C8");
-extern void malloc_extend_top(struct _reent *ptr, u32 nb);
 struct malloc_chunk;
 extern struct malloc_chunk   malloc_split_remainder_bin_head __asm__("D_0012F790");
 typedef struct malloc_chunk *mchunkptr;

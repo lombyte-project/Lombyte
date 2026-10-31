@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/overlay/l15/mobys/construction_arm_globals.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
@@ -50,8 +51,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
 extern float FUN_L15_001f8648(float);
-
-extern int FUN_L00_00257b90(int, int);
 
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 
@@ -135,7 +134,7 @@ void construction_arm_update(struct Moby *moby) {
         }
         break;
     case CONSTRUCTION_ARM_TURN_TO_TARGET_YAW:
-        arm_vars->side = FUN_L00_00257b90(0, 1);
+        arm_vars->side = random_int_between(0, 1);
         if (fast_difference_between_rotations(arm_vars->yaw, arm_vars->target_yaw) < 0.008726646f) {
             animation = arm_vars->side;
             animation *= 2;
@@ -151,7 +150,7 @@ void construction_arm_update(struct Moby *moby) {
         break;
     case CONSTRUCTION_ARM_WAIT_FOR_ENTRY_ANIMATION:
         if (moby->prev_seq == arm_vars->side * 2 + 1 && (moby->anim_flags & 2)) {
-            arm_vars->timer = scale_game_frames(FUN_L00_00257b90(15, 45));
+            arm_vars->timer = scale_game_frames(random_int_between(15, 45));
             animation = arm_vars->side;
             animation *= 2;
             blend_moby_animation(moby, animation + 2, 0, scale_game_frames(3));
@@ -180,7 +179,7 @@ void construction_arm_update(struct Moby *moby) {
             minimum_effect_duration_frames =
                 scale_game_frames(construction_arm_effect_duration_min_frames_gp);
             duration = scale_game_frames(construction_arm_effect_duration_max_frames_gp);
-            duration = FUN_L00_00257b90(minimum_effect_duration_frames, duration);
+            duration = random_int_between(minimum_effect_duration_frames, duration);
             spawn_burst(40000.0f, &origin, &velocity, D_L15_001619EC, D_L15_001619EC, duration, 1);
         }
         if (fast_dec_timer_s16(&arm_vars->timer)) {

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/mpeg/demux/type2id.h"
 
 typedef struct {
     u64 id;
@@ -24,7 +25,6 @@ typedef struct {
 } StrTypeEntry;
 
 extern StrTypeEntry D_00132ED8[];
-extern u64          _type2id(s32 strType, s32 ch);
 
 s32 sceMpegAddStrCallback(sceMpeg *mp, s32 strType, s32 ch, s32 func, s32 data) {
     MpegSys     *sys;

@@ -10,8 +10,9 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/mobys/get_moby_target_info.h"
+#include "rnc/world/collision/ground_probe.h"
 
-void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 /* Calls probe_ground_height(a, 0x20, 0.5f). */
 void FUN_L00_00259710(void *a);
 
@@ -320,8 +321,6 @@ extern int D_L00_0015F434 __asm__("D_L00_0015F434");
 
 #include "rnc/overlay/shared/world/collision.h"
 
-extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
-
 extern E_259fe8_00259fe8 D_L00_0016E080[] NOT_SDA;
 void                     jet_animate(unsigned char *m, float r) __asm__("FUN_L00_00259fe8");
 
@@ -332,7 +331,7 @@ void jet_animate(unsigned char *moby, float output_scale) {
     if (D_L00_0015F434 >= 32)
         return;
     qcopy(&D_L00_0016E080[D_L00_0015F434].u_00259fe8.a_00259fe8, moby + 0x10);
-    ground_height = FUN_00213508_00259fe8(moby + 0x10, 0, 0.5f);
+    ground_height = probe_ground_height(moby + 0x10, 0, 0.5f);
     if (collision_hit_material() == 0)
         return;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = ground_height + 0.025f;
@@ -446,10 +445,9 @@ typedef struct {
     f32 x, y;
 } G_25a478;
 
-extern f32       D_L00_00160080[2] __attribute__((sda));
-extern f32       D_L00_001B01C8[][8];
-extern u8        D_L00_001B0180[][4];
-extern Q_25a478 *get_moby_target_info(void *) __asm__("FUN_002141f8");
+extern f32 D_L00_00160080[2] __attribute__((sda));
+extern f32 D_L00_001B01C8[][8];
+extern u8  D_L00_001B0180[][4];
 
 /* hit_reaction is the executable function of the same bytes (src/gameplay). */
 
@@ -825,7 +823,6 @@ extern void  approach_w(void *, void *, float, float, float, float) __asm__("FUN
 extern float FUN_001f9dc8_25b440(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_25b440(float) __asm__("FUN_001f9de0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float FUN_00213508_25b440(void *, int, float) __asm__("FUN_00213508");
 
 int update_arc_motion(O_25b440 *moving_object,
                       S_25b440 *arc_motion_state) __asm__("FUN_L00_0025b440");
@@ -879,7 +876,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
     case DESCEND_TO_GROUND:
         moving_object->z += arc_motion_state->f10;
         arc_motion_state->f10 -= arc_motion_state->f1C;
-        ground_height = FUN_00213508_25b440(moving_object->pos, 0, 0.5f);
+        ground_height = probe_ground_height(moving_object->pos, 0, 0.5f);
         if (moving_object->z <= ground_height) {
             moving_object->z = ground_height;
             arc_motion_state->state = 3;
