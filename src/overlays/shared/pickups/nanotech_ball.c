@@ -1262,7 +1262,7 @@ void nanotech_ball_update(Moby *moby) {
     case NANOTECH_BALL_STATE_INITIALIZE: {
         Moby *owner;
         int   i;
-        moby->state = 1;
+        moby->state = NANOTECH_BALL_STATE_FOLLOW_OWNER;
         moby->flags |= 0x41;
         moby->collision = 0;
         moby->command = 0;
@@ -1325,12 +1325,12 @@ void nanotech_ball_update(Moby *moby) {
         qcopy(&nanotech_ball_state->pos, &owner->pos);
         nanotech_ball_state->pos.z += 0.5f;
         if ((signed char)owner->state < 0 || owner == moby) {
-            moby->state = 2;
+            moby->state = NANOTECH_BALL_STATE_DETACHED_PICKUP;
             nanotech_ball_state->f50 = 0;
         }
     }
     case NANOTECH_BALL_STATE_DETACHED_PICKUP:
-        if (moby->state == 2) {
+        if (moby->state == NANOTECH_BALL_STATE_DETACHED_PICKUP) {
             int i;
             qcopy(&nanotech_ball_state->pos, &moby->pos);
             nanotech_ball_state->pos.z += 0.5f;
@@ -1348,9 +1348,9 @@ void nanotech_ball_update(Moby *moby) {
         {
             Hero *player = &hero;
             int   max_hp = hero_max_health;
-            if (player->vehicle_mode == 1)
+            if (player->vehicle_mode == HERO_VEHICLE_MODE_CLANK)
                 max_hp = 4;
-            if (moby->state != 1 && D_L00_0015F63C != 0 &&
+            if (moby->state != NANOTECH_BALL_STATE_FOLLOW_OWNER && D_L00_0015F63C != 0 &&
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && player->health.hp != 0 &&
                 (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < max_hp ||
                  (nanotech_ball_invulnerability_pickup_enabled != 0 &&
@@ -1358,7 +1358,7 @@ void nanotech_ball_update(Moby *moby) {
                 fast_vec_dist(&moby->pos, &player->motion.pos) < 10.0f &&
                 func_L00_002D9E30_2D9EA0(moby)) {
                 int i;
-                moby->state = 3;
+                moby->state = NANOTECH_BALL_STATE_COLLECTING;
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (nanotech_ball_invulnerability_pickup_enabled != 0)
                     player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
@@ -1448,7 +1448,7 @@ void nanotech_ball_update(Moby *moby) {
                     ext->b.x = part->pos.x - moby->pos.x;
                     ext->b.y = part->pos.y - moby->pos.y;
                     ext->b.z = part->pos.z - moby->pos.z;
-                    if (moby->state == 2)
+                    if (moby->state == NANOTECH_BALL_STATE_DETACHED_PICKUP)
                         ext->u.s.owner = moby;
                     else
                         ext->u.s.owner = nanotech_ball_state->owner;
@@ -1487,7 +1487,7 @@ void nanotech_ball_update(Moby *moby) {
         {
             Hero *player = &hero;
             int   max_hp = hero_max_health;
-            if (player->vehicle_mode == 1)
+            if (player->vehicle_mode == HERO_VEHICLE_MODE_CLANK)
                 max_hp = 4;
             if (player->health.hp == max_hp && player->invulnerable_frames != 0 &&
                 nanotech_ball_invulnerability_pickup_enabled != 0) {
@@ -1510,7 +1510,7 @@ void nanotech_ball_update(Moby *moby) {
                 }
             }
             if (D_L00_0015F63C == moby)
-                moby->state = 4;
+                moby->state = NANOTECH_BALL_STATE_BASIS_ONLY;
             else
                 mark_moby_for_removal(moby);
         } else {
@@ -1528,7 +1528,7 @@ void nanotech_ball_update(Moby *moby) {
                     if (nanotech_ball_state->h56 == 0) {
                         Hero *player = &hero;
                         int   max_hp = hero_max_health;
-                        if (player->vehicle_mode == 1)
+                        if (player->vehicle_mode == HERO_VEHICLE_MODE_CLANK)
                             max_hp = 4;
                         if (player->health.hp != 0) {
                             int new_hp = player->health.hp + 1;
