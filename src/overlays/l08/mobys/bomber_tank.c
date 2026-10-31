@@ -1167,6 +1167,9 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
 
 /* Remove active mobys of the selected classes from this moby's linked group. */
 void remove_bomber_tank_linked_debris(struct Moby *moby) {
+    enum {
+        LINKED_MOBY_ACTIVE_STATE_LIMIT = 0x7f
+    };
     short *list =
         D_L08_001AC040[(((struct Moby *)D_L08_0015FFD8) + *(s32 *)(moby->pvars + 0x144))->group];
     struct Moby *linked_group_moby;
@@ -1176,7 +1179,7 @@ void remove_bomber_tank_linked_debris(struct Moby *moby) {
         index = *list & 0x7fff;
         linked_group_moby = (struct Moby *)D_L08_0015FFD8 + index;
         while (1) {
-            if (linked_group_moby->state < 0x7f && linked_group_moby != moby) {
+            if (linked_group_moby->state < LINKED_MOBY_ACTIVE_STATE_LIMIT && linked_group_moby != moby) {
                 u16 class_id = linked_group_moby->oclass;
                 if ((u32)(class_id - 0x24c) < 0xb) {
                     mark_moby_for_removal(linked_group_moby);
