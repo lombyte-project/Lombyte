@@ -45,15 +45,15 @@ void gate_1_update(struct Moby *moby) {
                 ((D_0014C190_257218[current_level_index][(short)save_id >> 5] >> (save_id & 31)) &
                  1) == 0) {
                 gate_control->home_yaw = moby->rot.y;
-                moby->state = 1;
+                moby->state = GATE_STATE_CLOSED;
                 return;
             }
         }
         moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f);
-        moby->state = 3;
+        moby->state = GATE_STATE_OPEN;
         return;
     case GATE_STATE_CLOSED:
-        if (hero.vehicle_mode != 0)
+        if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT)
             goto open;
         save_id = moby->save_id;
         if (l10_save_state.cleared[(short)save_id] != 0 ||
@@ -61,7 +61,7 @@ void gate_1_update(struct Moby *moby) {
                 0) {
         open:
             moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f);
-            moby->state = 3;
+            moby->state = GATE_STATE_OPEN;
             return;
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, gate_control->clip_volume) == 0 &&
@@ -76,12 +76,12 @@ void gate_1_update(struct Moby *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, gate_control->clip_volume))
             activate_descriptor(gate_control->sound);
         gate_control->timer = truncate_float_to_s32(FUN_L04_001f1978(90.0f));
-        moby->state = 2;
+        moby->state = GATE_STATE_OPENING;
         return;
     case GATE_STATE_OPENING:
         moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f / FUN_L04_001f1978(90.0f));
         if (fast_dec_timer(&gate_control->timer))
-            moby->state = 3;
+            moby->state = GATE_STATE_OPEN;
         return;
     case GATE_STATE_OPEN:
         if (D_001413F4_e9648[0] != 0)
@@ -93,7 +93,7 @@ void gate_1_update(struct Moby *moby) {
              1) == 0)
             return;
         moby->rot.y = fast_add_rotations(moby->rot.y, 1.3962634f);
-        moby->state = 0;
+        moby->state = GATE_STATE_INITIALIZE;
         return;
     }
 }
