@@ -93,6 +93,9 @@ void taxi_update(struct Moby *moby) {
         TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
         TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
     };
+    enum {
+        TAXI_STATE_HIDDEN = 2
+    };
     L14TaxiVars *taxi_vars = (L14TaxiVars *)moby->pvars;
     float        previous_position[4], previous_rotation[4], position_delta[4],
         blend_from_position_or_rotation_matrix[4], blend_to_position[4], blend_from_rotation[4],
@@ -128,7 +131,7 @@ void taxi_update(struct Moby *moby) {
                     moby->state = TAXI_STATE_BLEND_STOP_TO_PATH_START;
                     m = find_group_moby_by_tag(moby, taxi_vars->target);
                     if (m != 0) {
-                        m->state = 2;
+                        m->state = TAXI_STATE_HIDDEN;
                         m->flags |= 1;
                         m->visible = 0;
                         m->collision = 0;
@@ -320,7 +323,7 @@ void taxi_update(struct Moby *moby) {
                     {
                         struct Moby *m = find_group_moby_by_tag(moby, taxi_vars->target);
                         if (m != 0) {
-                            m->state = 2;
+                            m->state = TAXI_STATE_HIDDEN;
                             m->flags |= 1;
                             m->visible = 0;
                             m->collision = 0;
