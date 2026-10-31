@@ -70,6 +70,10 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
         WATER_TILE_MODE_SKIP_CLIP_TESTS = 0,
         WATER_TILE_MODE_TEST_FAR_CLIP = 1
     };
+    enum {
+        WATER_TILE_VU_ENTRY_NO_FAR_CLIP = 0xc,
+        WATER_TILE_VU_ENTRY_FAR_CLIP_PENDING = 0xe
+    };
     f32 corners[4][4];
     f32 near_clip[4];
     f32 far_clip[4];
@@ -155,9 +159,9 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
     }
     tile_vertex_offset = (index & 3) * 4 + (index >> 2) * 0x44;
     if (mode != WATER_TILE_MODE_SKIP_CLIP_TESTS) {
-        mode = 0xe;
+        mode = WATER_TILE_VU_ENTRY_FAR_CLIP_PENDING;
     } else {
-        mode = 0xc;
+        mode = WATER_TILE_VU_ENTRY_NO_FAR_CLIP;
     }
     FUN_L01_00262388(mode, tile_vertex_offset);
 }
