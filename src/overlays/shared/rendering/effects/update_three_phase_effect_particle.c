@@ -1351,6 +1351,9 @@ extern int hud_counter_update(int, int, float) __asm__("FUN_L00_002371e0");
 void update_fading_debris_particle_with_landing_spawn(Part *particle) __asm__("FUN_L00_0026c088");
 
 void update_fading_debris_particle_with_landing_spawn(Part *particle) {
+    enum {
+        DEBRIS_KIND_UPWARD_ACCELERATING = 3
+    };
     float saved[4];
     float grav[4] = {
         D_0015ED70 * 4.8f, D_0015ED70 * 24.5f, D_0015ED70 * 9.8f, -(D_0015ED70 * 0.24f)};
@@ -1358,7 +1361,7 @@ void update_fading_debris_particle_with_landing_spawn(Part *particle) {
     int   alpha, spawn_lifetime, k;
     float reference_distance_or_spawn_size;
 
-    if (particle_data->kind == 3 && D_L00_0015F5D0 > 0.95f)
+    if (particle_data->kind == DEBRIS_KIND_UPWARD_ACCELERATING && D_L00_0015F5D0 > 0.95f)
         fast_dec_timer_s16(&particle->timer);
     if (fast_dec_timer_s16(&particle->timer)) {
         free_effect_particle(particle);
