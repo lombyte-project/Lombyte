@@ -1415,7 +1415,7 @@ void environment_map_scroll_update(ScrollMoby *moby) {
     case UV_SCROLL_STATE_INITIALIZE:
         level01_environment_map_uv_scroll_offsets[0] = 0.0f;
         level01_environment_map_uv_scroll_offsets[1] = 0.0f;
-        moby->state = 1;
+        moby->state = UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW;
         break;
     case UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW:
         uv_scroll_delta = frame_delta_time * 0.025f;
