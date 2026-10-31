@@ -138,12 +138,12 @@ void water_tile_update(struct Moby *water_tile_moby) {
         l11_water_grids[water_tile_vars[1]].visible_subtiles = 0xFFFF;
         pool_bind_tile(&l11_water_grids[water_tile_vars[1]],
                        water_tile_binding_records[water_tile_vars[1]]);
-        water_tile_moby->state = 1;
+        water_tile_moby->state = WATER_TILE_STATE_FIND_NEIGHBORS;
         break;
     case WATER_TILE_STATE_FIND_NEIGHBORS:
         D_L11_00161F64 = 0;
         populate_water_tile_neighbor_indices(water_tile_vars[1]);
-        water_tile_moby->state = 2;
+        water_tile_moby->state = WATER_TILE_STATE_APPROACH_UPPER_HEIGHT;
         break;
     case WATER_TILE_STATE_APPROACH_LOWER_HEIGHT:
         if (water_tile_moby->command & 4) {
