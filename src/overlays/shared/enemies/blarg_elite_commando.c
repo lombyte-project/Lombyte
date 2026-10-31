@@ -681,9 +681,9 @@ void start_blarg_elite_commando_return_to_initial_position(
 void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
 
                                                            int return_countdown_ticks) {
-    L16DamageData *commando_data = (L16DamageData *)moby->pvars;
-    if (moby->state == 10) {
-        moby->state = 1;
+    enum { COMMANDO_STATE_RETURN_TO_INITIAL_POSITION = 1 , COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10 } ;L16DamageData *commando_data = (L16DamageData *)moby->pvars;
+    if (moby->state == COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM) {
+        moby->state = COMMANDO_STATE_RETURN_TO_INITIAL_POSITION;
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
         }
