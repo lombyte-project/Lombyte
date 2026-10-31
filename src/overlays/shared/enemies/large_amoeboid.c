@@ -1085,17 +1085,22 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
 int process_amoeboid_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L01_002efa88");
 
 int process_amoeboid_suck_cannon_suction(struct Moby *moby) {
+    enum {
+        LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
+        LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
+        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 0xE
+    };
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result != 0) {
         if (moby->oclass != 0x362) {
             return 0;
-        } else if (moby->state == 8) {
+        } else if (moby->state == LARGE_AMOEBOID_PROCESS_KNOCKBACK) {
             return 0;
         } else {
-            moby->state = 0xE;
+            moby->state = LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION;
         }
-    } else if (moby->state == 0xE) {
-        moby->state = 1;
+    } else if (moby->state == LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION) {
+        moby->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
     }
     return suction_result;
 }
