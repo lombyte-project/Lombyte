@@ -117,7 +117,7 @@ void snow_plow_update(struct Moby *moby) {
         SNOW_PLOW_CLASS_OFFSET_WITH_FOUR_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ONE = 0x1d,
         SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ZERO = 0x20,
         SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO = 0x59
-    };
+    } ; enum { SNOW_PLOW_WAIT_TO_RESUME_PATH = 3};
     Vec4 update_start_position;
     Vec4 delta, *return_delta_ptr;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -186,7 +186,7 @@ void snow_plow_update(struct Moby *moby) {
                     snow_plow_vars->unk149 = 1;
                     snow_plow_vars->unk14C = moby->rot.z;
                     *(int *)&snow_plow_vars->unk7C = 0;
-                    moby->state = 3;
+                    moby->state = SNOW_PLOW_WAIT_TO_RESUME_PATH;
                     snow_plow_vars->unk11C = scale_game_frames(36000);
                     break;
                 }
