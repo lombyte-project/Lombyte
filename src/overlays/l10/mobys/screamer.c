@@ -488,6 +488,9 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
 extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 
 void activate_waiting_moby_group_members(struct Moby *moby) {
+    enum {
+        MOBY_GROUP_MEMBER_WAITING_FOR_ACTIVATION = 1
+    };
     short *group_entry;
     if (moby->group != 0xFF) {
         group_entry = moby_group_member_lists[moby->group];
@@ -497,7 +500,7 @@ void activate_waiting_moby_group_members(struct Moby *moby) {
                 struct Moby *listed_entity =
                     (struct Moby *)((*(unsigned short *)group_entry & 0x7FFF) * 256 +
                                     (int)moby_array_base);
-                if (listed_entity->state == 1)
+                if (listed_entity->state == MOBY_GROUP_MEMBER_WAITING_FOR_ACTIVATION)
                     listed_entity->state = 2;
             } while (*group_entry++ >= 0);
         }
