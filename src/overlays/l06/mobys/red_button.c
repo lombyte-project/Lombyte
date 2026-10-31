@@ -98,6 +98,9 @@ void red_button_update(struct Moby *moby) {
         RAISE_CAMERA_AND_TRIGGER_LISTED_EFFECTS = 5,
         HOLD_OFFSET_CAMERA_UNTIL_PROGRESS_COMPLETE = 6
     };
+    enum {
+        IDLE_AFTER_CAMERA_SEQUENCE = 7
+    };
     Data_304098  *red_button_vars = *(struct Data_304098 **)&moby->pvars;
     Vector_304098 camera_position;
     Vector_304098 camera_rotation;
@@ -246,7 +249,7 @@ void red_button_update(struct Moby *moby) {
         set_camera_position(&camera_rotation);
         set_camera_rotation(&camera_position);
         if (2.0f <= red_button_vars->t) {
-            moby->state = 7;
+            moby->state = IDLE_AFTER_CAMERA_SEQUENCE;
             red_button_vars->timer2 = scale_game_frames(0xE10);
             set_race_camera(&l06_cuboids[red_button_vars->cut2].pos,
                             &l06_cuboids[red_button_vars->cut2].rot,
