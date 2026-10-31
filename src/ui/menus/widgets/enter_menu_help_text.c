@@ -17,7 +17,7 @@ extern s32  start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 s32 enter_menu_help_text(struct MenuScreen *menu) __asm__("FUN_0021d1f8");
 
 s32 enter_menu_help_text(struct MenuScreen *menu) {
-    s32                i;
+    enum { CD_READ_STATE_IDLE = 0 } ;s32                i;
     struct MenuSystem *menu_system_state;
 
     initialize_menu_stream_buffers(1);
@@ -31,7 +31,7 @@ s32 enter_menu_help_text(struct MenuScreen *menu) {
         }
     }
     menu->data.help.load_state = 0;
-    if (music_stream_state.read_state == 0) {
+    if (music_stream_state.read_state == CD_READ_STATE_IDLE) {
         if (start_audio_stream_read(help_text_read_destination[0],
                                     disc_table.help_text.sector,
                                     disc_table.help_text.size) != 0) {
