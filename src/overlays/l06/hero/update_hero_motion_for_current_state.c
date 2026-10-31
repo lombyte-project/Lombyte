@@ -1687,7 +1687,7 @@ void update_hero_motion_for_current_state(void) {
                 if (hero.anim_changing == 0 && hero.anim_frame > 6.0f) {
                     ok = 0;
                 }
-                if (ok && hero.gravity_mode == 0) {
+                if (ok && hero.gravity_mode == HERO_GRAVITY_WORLD_DOWN) {
                     update_hero_target_heading(14.0f, 0.5235988f, 0.7853982f);
                 }
             }
@@ -1729,11 +1729,11 @@ void update_hero_motion_for_current_state(void) {
             if (d < 0.0f) {
                 d = 0.0f;
             }
-            if (tb->kind == 0) {
+            if (tb->kind == HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE) {
                 off = 0.75f;
                 tol = 0.8f;
                 mx = 4.0f;
-            } else if (tb->kind == 1) {
+            } else if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION) {
                 off = 0.6f;
                 tol = 1.7f;
                 mx = 4.0f;
@@ -1778,7 +1778,7 @@ void update_hero_motion_for_current_state(void) {
         }
         approach_value(&hero.anim_speed, 1.0f, 0.2f);
         if (hero.heading_locked != 0 || (struct MobyView *)hero.melee_target != NULL) {
-            if (tb->kind == 1 &&
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
                 fast_subtract_rotations(hero.attack_target_yaw, hero.motion.rot.f[2]) > 0.0f) {
                 hero.anim_speed = 1.0f / (fast_difference_between_rotations(hero.attack_target_yaw,
                                                                             hero.motion.rot.f[2]) +
@@ -1788,7 +1788,7 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, D_0015ED6C_c * 15.009831f);
         } else {
             s32 ok = 1;
-            if (tb->kind == 1 && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {
@@ -2777,10 +2777,10 @@ void update_hero_motion_for_current_state(void) {
                 hero.jump_gravity = hero.fall_gravity;
             }
         }
-        if (hero.vehicle_mode == 0) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             adjust_hero_pose_targets_from_motion();
         }
-        if (hero.vehicle_mode == 1) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
             update_hero_motion_response_parameters();
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
@@ -2853,7 +2853,7 @@ void update_hero_motion_for_current_state(void) {
             }
             if (hero.vehicle_mode == 3) {
                 hero.target_speed = D_0015ED6C_a * 1.5f;
-            } else if (hero.vehicle_mode == 1) {
+            } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
                 hero.target_speed = D_0015ED6C_a * 0.9f;
             }
         } else {
@@ -2864,9 +2864,9 @@ void update_hero_motion_for_current_state(void) {
         k = 1.0f;
         if (hero.vehicle_mode == 3) {
             turn_to(0, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, D_0015ED6C_c * 5.5850534f);
-        } else if (hero.vehicle_mode == 1) {
+        } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
             turn_to(0, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, D_0015ED6C_c * 7.8539815f);
-        } else if (hero.vehicle_mode == 0) {
+        } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             if (hero.state.step == 1) {
                 turn_to(
                     0, frame_scale_sq * 0.016f, frame_scale_sq * 0.15f, D_0015ED6C_c * 9.948377f);
@@ -2874,12 +2874,12 @@ void update_hero_motion_for_current_state(void) {
                 turn_hero_toward_move_direction_with_stick_scale();
             }
         }
-        if (hero.vehicle_mode == 0) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             adjust_hero_pose_targets_from_motion();
         }
         FUN_L00_00212088(frame_time_sq * 7.5f * k, frame_time_sq * 8.5f);
         set_planar_vel(99999.0f);
-        if (hero.vehicle_mode == 0) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             adjust_hero_velocity_from_collision_probes(1);
         }
         if (hero.air_frames.s != 0) {
@@ -2941,12 +2941,12 @@ void update_hero_motion_for_current_state(void) {
         s32                    ok;
         tb = &D_L06_0017C3A8[hero.attack_record];
         hero.target_speed = 0.0f;
-        if ((tb->kind == 0 ? 1 : tb->kind == 1) && hero.anim_frame < 5.5f) {
+        if ((tb->kind == HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE ? 1 : tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION) && hero.anim_frame < 5.5f) {
             hero.target_speed = D_0015ED6C_c * 3.5f;
         }
         if (hero.anim_changing == 0 && (f32)tb->f1C <= hero.anim_frame &&
             hero.anim_frame <= (f32)tb->f20) {
-            s32 k = tb->kind == 1 ? 0 : 2;
+            s32 k = tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION ? 0 : 2;
             moby_point_position((struct MobyView *)hero.moby, k, &v10);
             moby_point_position((struct MobyView *)hero.moby, k | 1, &vector_or_descriptor_scratch);
             fast_vec_add(&vector_or_hit_descriptor_scratch, &v10, &vector_or_descriptor_scratch);
@@ -2964,7 +2964,7 @@ void update_hero_motion_for_current_state(void) {
         }
         approach_value(&hero.anim_speed, 1.0f, 0.2f);
         if (hero.heading_locked != 0 || (struct MobyView *)hero.melee_target != NULL) {
-            if (tb->kind == 1 &&
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
                 fast_subtract_rotations(hero.attack_target_yaw, hero.motion.rot.f[2]) > 0.0f) {
                 hero.anim_speed = 1.0f / (fast_difference_between_rotations(hero.attack_target_yaw,
                                                                             hero.motion.rot.f[2]) +
@@ -2974,7 +2974,7 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, D_0015ED6C_c * 15.009831f);
         } else {
             ok = 1;
-            if (tb->kind == 1 && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {
