@@ -321,6 +321,11 @@ extern u8   D_L00_001BD7B0[] NOT_SDA;
 void draw_three_sky_shells_with_three_particle_types(void) __asm__("FUN_L00_00289cb8");
 
 void draw_three_sky_shells_with_three_particle_types(void) {
+    enum {
+        THREE_SHELL_PARTICLE_PHASE_ORBIT = 0,
+        THREE_SHELL_PARTICLE_COLOR_HIGH_BYTE_PULSE = 2,
+        THREE_SHELL_PARTICLE_RANDOM_COLOR = 3
+    };
     Part *init_particle;
     Part *update_particle;
     PU   *update_state;
@@ -344,7 +349,7 @@ void draw_three_sky_shells_with_three_particle_types(void) {
         for (i = 0; i < D_L00_0016051C_c3->count; i++) {
             init_particle = &D_L00_0016051C_c3->parts[i];
             if (i >= 0xF0) {
-                init_particle->type = 0;
+                init_particle->type = THREE_SHELL_PARTICLE_PHASE_ORBIT;
                 init_phases = &init_particle->u;
                 init_phases->h.h0 = rand() >> 16;
                 init_phases->h.h2 = rand() >> 16;
@@ -359,7 +364,7 @@ void draw_three_sky_shells_with_three_particle_types(void) {
                 init_particle->b3 = 0x48;
                 j = r & 1;
                 init_particle->f8 = random_angle_radians();
-                init_particle->type = 2;
+                init_particle->type = THREE_SHELL_PARTICLE_COLOR_HIGH_BYTE_PULSE;
                 init_particle->col = sky_type2_base_colors[k];
                 qcopy(&init_particle->f10, D_L00_001BD7B0 + k * 16);
                 init_particle->u.c.c0 = k;
@@ -369,7 +374,7 @@ void draw_three_sky_shells_with_three_particle_types(void) {
                     qq->c.c2 = j * 0x18;
                 }
             } else {
-                init_particle->type = 3;
+                init_particle->type = THREE_SHELL_PARTICLE_RANDOM_COLOR;
                 init_particle->u.h.h0 = random_integer_below(0x100);
                 init_particle->b2 = (rand() >> 16) & 1;
                 init_particle->b3 = 0x48;
@@ -401,7 +406,7 @@ void draw_three_sky_shells_with_three_particle_types(void) {
     }
     for (i2 = 0; i2 < D_L00_0016051C_c3->count; i2++) {
         update_particle = &D_L00_0016051C_c3->parts[i2];
-        if (update_particle->type == 0) {
+        if (update_particle->type == THREE_SHELL_PARTICLE_PHASE_ORBIT) {
             update_state = &update_particle->u;
             update_particle->u.h.h0++;
             update_state->h.h2++;
@@ -420,7 +425,7 @@ void draw_three_sky_shells_with_three_particle_types(void) {
             } else {
                 update_particle->col |= 0x24000000;
             }
-        } else if (update_particle->type == 2) {
+        } else if (update_particle->type == THREE_SHELL_PARTICLE_COLOR_HIGH_BYTE_PULSE) {
             update_state = &update_particle->u;
             update_state->c.c2 = (update_state->c.c2 + 1) % 0x30;
             if (update_state->c.c2 == 0) {
@@ -441,7 +446,7 @@ void draw_three_sky_shells_with_three_particle_types(void) {
                 x += k2 << 24;
                 update_particle->col = x;
             }
-        } else if (update_particle->type == 3) {
+        } else if (update_particle->type == THREE_SHELL_PARTICLE_RANDOM_COLOR) {
             s32 rs = rand() >> 16;
             u32 x;
             {
