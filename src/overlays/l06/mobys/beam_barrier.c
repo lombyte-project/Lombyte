@@ -51,7 +51,7 @@ extern float                  l06_beam_barrier_segment_euler_rotations[] __asm__
 extern int                    D_L06_00161E40[] MACRO_ADDR;
 extern int                    D_L06_00161E50;
 extern int                    D_L06_00161E54;
-extern f32                    D_L06_00161E08 __attribute__((sda));
+extern f32                    l06_beam_barrier_strand_length __asm__("D_L06_00161E08") __attribute__((sda));
 extern float                  l06_beam_barrier_transform_scale __asm__("D_L06_00161E0C") __attribute__((sda));
 float                         beam_barrier_collision_z_offset_gp __asm__("D_L06_00161E18") = 2.25f;
 extern int beam_barrier_burst_color_from_gp __asm__("D_L06_00161E1C") __attribute__((sda));
@@ -304,7 +304,7 @@ void beam_barrier_update(struct Moby *moby) {
             fast_vec_add(work.shared.collision.delta, work.point, pos);
             work.shared.collision.delta[3] = 1.0f;
             do {
-                radius = randf_sym(0.0f, D_L06_00161E08 * 0.5f);
+                radius = randf_sym(0.0f, l06_beam_barrier_strand_length * 0.5f);
                 fast_vec_normalize(work.offset, column, radius);
                 fast_vec_add(work.offset, work.offset, work.shared.collision.delta);
                 blend = random_float_between(0.0f, 1.0f);
@@ -462,8 +462,8 @@ void animate_beam_barrier_strands(struct Moby *moby) {
     if (phase > 1.0f) {
         D_L06_00161DFC = phase - 1.0f;
     }
-    step = D_L06_00161E08 / 30.0f;
-    y = -(D_L06_00161E08 * 0.5f);
+    step = l06_beam_barrier_strand_length / 30.0f;
+    y = -(l06_beam_barrier_strand_length * 0.5f);
     for (i = 0; i < 4; i++) {
         if (D_L06_00161E40[i] == 0) {
             for (k = 0; k < 30; k++) {
