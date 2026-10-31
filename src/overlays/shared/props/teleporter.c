@@ -261,7 +261,7 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_ENTER_WAIT_FOR_USE = 6,
         TELEPORTER_EFFECT_CYCLE_PREPARE = 7,
         TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE = 8
-    };
+    } ; enum { TELEPORTER_WAIT_FOR_ACTIVATION = 5};
     TeleporterVars *teleporter_vars = (TeleporterVars *)moby->pvars;
     int             active = 0;
 
@@ -272,12 +272,12 @@ void teleporter_update(struct Moby *moby) {
         active = 1;
     }
     active = active != 0;
-    if (moby->state != 0 && teleporter_vars->unk4 != -1 && !active &&
+    if (moby->state != TELEPORTER_INITIALIZE && teleporter_vars->unk4 != -1 && !active &&
         FUN_00214720(&hero.motion.pos, teleporter_vars->unk4) != 0) {
         active = 1;
         activate_teleporter_and_record_state(moby);
         show_teleporter_and_children(moby);
-        if (moby->state == 5)
+        if (moby->state == TELEPORTER_WAIT_FOR_ACTIVATION)
             moby->state = active;
     }
     if (teleporter_vars->unk3C != 0) {
@@ -309,9 +309,9 @@ void teleporter_update(struct Moby *moby) {
                 fast_add_rotations(MOBY(child_moby)->rot.z, (float)i * 2.0943952f);
         }
         if (teleporter_vars->unk38 != 0 || active) {
-            moby->state = 6;
+            moby->state = TELEPORTER_ENTER_WAIT_FOR_USE;
         } else {
-            moby->state = 5;
+            moby->state = TELEPORTER_WAIT_FOR_ACTIVATION;
             hide_teleporter_and_children((L01Moby *)moby);
         }
         update_teleporter_child_transforms(moby);
@@ -321,7 +321,7 @@ void teleporter_update(struct Moby *moby) {
         if (moby->group != 0xFF) {
             set_moby_list_state((char *)moby->group, 1);
         }
-        moby->state = 1;
+        moby->state = TELEPORTER_WAIT_FOR_USE;
     case TELEPORTER_WAIT_FOR_USE: {
         struct Hero *g;
         if (teleporter_vars->unk8 >= 0 &&
@@ -330,7 +330,7 @@ void teleporter_update(struct Moby *moby) {
         if (*(int *)teleporter_vars == -1)
             break;
         g = &hero;
-        if (g->vehicle_mode == 2)
+        if (g->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK)
             break;
         if (((char *)g->ground_moby) != moby)
             break;
@@ -340,7 +340,7 @@ void teleporter_update(struct Moby *moby) {
         if (!(pad_pressed_words[0] & 0x10))
             break;
         allocate_voice_for_target_entry(0, 0, (void *)moby);
-        moby->state = 2;
+        moby->state = TELEPORTER_PREPARE_TRANSFER;
         teleporter_vars->unk30 = -1;
         *(int *)&teleporter_vars->unk2C = 0;
         *(int *)&teleporter_vars->unk28 = 0;
@@ -365,7 +365,7 @@ void teleporter_update(struct Moby *moby) {
                                        teleporter_child_motion_max_speed_gp * frame_time);
         } else {
             allocate_voice_for_target_entry(1, 0, (void *)moby);
-            moby->state = 8;
+            moby->state = TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE;
             teleporter_vars->unk34 = 0.0f;
         }
         update_teleporter_child_transforms(moby);
@@ -389,9 +389,9 @@ void teleporter_update(struct Moby *moby) {
         } else if (D_L01_0015F594 != 4 || !(teleporter_vars->unk14[3] > 0.25f)) {
             if (transfer_preparation_status == 2) {
                 teleporter_vars->unk34 = 1.95f;
-                moby->state = 3;
+                moby->state = TELEPORTER_TRANSFER_TO_DESTINATION;
             } else if (transfer_preparation_status == 0) {
-                moby->state = 4;
+                moby->state = TELEPORTER_RETURN_TO_IDLE;
             }
         }
         update_teleporter_child_transforms(moby);
@@ -412,14 +412,14 @@ void teleporter_update(struct Moby *moby) {
             if (teleporter_vars->unk40 != -1 && teleporter_vars->unk44 != -1) {
                 request_music_track(teleporter_vars->unk40, teleporter_vars->unk44);
             }
-            MOBY(destination_moby)->state = 4;
+            MOBY(destination_moby)->state = TELEPORTER_RETURN_TO_IDLE;
             td->unk34 = 0.0f;
             td->unk28 = 0.0f;
             td->unk2C = 0.0f;
             td->unk14[3] = 1.0f;
             td->unk24 = 1.0f;
             allocate_voice_for_target_entry(1, 0, (void *)destination_moby);
-            moby->state = 1;
+            moby->state = TELEPORTER_WAIT_FOR_USE;
             teleporter_vars->unk14[3] = 0.0f;
             teleporter_vars->unk24 = 0.0f;
             teleporter_vars->unk28 = 0.0f;
@@ -448,7 +448,7 @@ void teleporter_update(struct Moby *moby) {
                                        teleporter_child_motion_deceleration_gp * frame_time_sq,
                                        teleporter_child_motion_max_speed_gp * frame_time);
         } else {
-            moby->state = 1;
+            moby->state = TELEPORTER_WAIT_FOR_USE;
         }
         update_teleporter_child_transforms(moby);
         break;
