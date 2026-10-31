@@ -42,7 +42,7 @@ s32 draw_hud_segment_meter(u8 *meter_state) {
     {
         if (level == 13) {
             y = 18;
-            if (pal_mode != 0)
+            if (pal_mode != FALSE)
                 y = 10;
         }
         alpha = convert_integer_to_float(meter_state[0x70]) * 0.125f;
