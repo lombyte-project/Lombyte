@@ -36,6 +36,10 @@ extern struct FrameTextureTables hud_state __asm__("D_0019A3E8");
 u64 get_frame_texture(s32 frame_id) __asm__("FUN_001ffa10");
 
 u64 get_frame_texture(s32 frame_id) {
+    enum {
+        PSMT8 = 0x13,
+        PSMT8H = 0x1B
+    };
     struct FrameTextureRef  *frame;
     struct FramePalettePage *palette_page;
     struct FrameImagePage   *image_page;
@@ -115,9 +119,9 @@ u64 get_frame_texture(s32 frame_id) {
     if (return_shift < 0) {
         return_shift = 0;
     }
-    return_mode = 0x13;
+    return_mode = PSMT8;
     if (image_page->gs_block_offset < (gs_texture_allocation_base >> 8)) {
-        return_mode = 0x1B;
+        return_mode = PSMT8H;
     }
     return_shift = 1 << return_shift;
     tex0_word = image_page->gs_block_offset | ((u64)return_shift << 14);
