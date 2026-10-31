@@ -982,6 +982,13 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
         HIT_REACTION_DAMAGE_WITHOUT_KNOCKBACK_ALTERNATE = 10,
         HIT_REACTION_NONE = 11
     };
+    enum {
+        ULTRAMECH_WAIT_FOR_ACTIVATION = 1,
+        ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
+        ULTRAMECH_KNOCKBACK_RECOVERY = 9,
+        ULTRAMECH_DEATH_EFFECTS = 10,
+        ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
+    };
     UMoby        *ultramech_moby = ultramech_instance;
     UData        *ultramech_vars = ultramech_moby->data;
     char         *slot = 0;
@@ -1019,12 +1026,12 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     }
     code = FUN_00249d60(ultramech_moby, slot, &ultramech_vars->f20, 0, &kind, &impact, 0, 4);
     if (slot != 0) {
-        if (kind != 1 && (state = ultramech_moby->state) != 10 && state != 0x40 &&
+        if (kind != 1 && (state = ultramech_moby->state) != 10 && state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
             *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
             ultramech_vars->f20 -= impact;
             if (*(unsigned short *)(slot + 0x2A) == 0x100)
                 code = 9;
-            if (ultramech_moby->state == 2)
+            if (ultramech_moby->state == ULTRAMECH_FOLLOW_ENTRY_PATH)
                 code = 9;
             if (ultramech_vars->f20 <= 0.0f)
                 code = 1;
@@ -1074,7 +1081,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
                 trooper_start_knockback(
                     direction, ultramech_moby, (char *)ultramech_vars + 0x70, 8, 1, 0);
                 trooper_play_sound(0, 0, ultramech_moby, 0x79);
-                ultramech_moby->state = 9;
+                ultramech_moby->state = ULTRAMECH_KNOCKBACK_RECOVERY;
                 *(unsigned char *)((char *)ultramech_vars + 0x67) = 0x78;
                 break;
             case HIT_REACTION_DEATH:
@@ -1102,7 +1109,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
                              hit,
                              0);
                 trooper_play_sound(0, 0, ultramech_moby, 0x79);
-                ultramech_moby->state = 10;
+                ultramech_moby->state = ULTRAMECH_DEATH_EFFECTS;
                 *(unsigned char *)((char *)ultramech_vars + 0x67) = 0xF0;
                 mark_moby_for_removal_cf(ultramech_moby, 0x200, -1);
                 break;
@@ -1117,7 +1124,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     *(float *)((char *)ultramech_moby + 0x2C) =
         *(float *)(ultramech_moby->cls + 0x24) * ultramech_post_hit_scale_multiplier_gp;
     ultramech_vars->w164 = 0;
-    if (ultramech_moby->state != 1) {
+    if (ultramech_moby->state != ULTRAMECH_WAIT_FOR_ACTIVATION) {
         if (ultramech_vars->w1D0 != -1)
             goto follow_path;
         ultramech_vars->f1B8 = *(float *)((char *)ultramech_vars + 0x178);
