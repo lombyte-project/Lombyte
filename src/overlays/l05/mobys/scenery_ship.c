@@ -242,7 +242,7 @@ void scenery_ship_update(char *moby) {
         }
         scenery_ship_instance_vars->fC =
             fast_vec_dist((float *)(path + 0x10), (float *)(path + 0x20));
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = SCENERY_SHIP_FOLLOW_PATH;
         scenery_ship_instance_vars->f8 = (float)*(int *)path * scenery_ship_instance_vars->f4;
         break;
     }
@@ -307,7 +307,7 @@ void scenery_ship_update(char *moby) {
         if (hit != 0 && 0.0f < *(float *)(hit + 0x2C))
             damaged = 1;
         if (damaged)
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE;
         break;
     }
     case SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE: {
