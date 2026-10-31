@@ -651,7 +651,7 @@ int draw_hud_text_panel(HudElem *hud_element) {
     int   text_color;
     int   never = 0;
 
-    if (pal_mode != 0) {
+    if (pal_mode != FALSE) {
         y = l00_hud_text_panel_base_y + 0xa;
     } else {
         y = l00_hud_text_panel_base_y + 0x12;
@@ -727,7 +727,7 @@ int draw_hud_text_panel(HudElem *hud_element) {
             elapsed = freeze_stats_time_ref[current_level_index == 0x10];
             score = freeze_stats_score_ref_a[current_level_index == 0x10];
             if (elapsed != 0) {
-                interval = pal_mode != 0 ? 3000 : 3600;
+                interval = pal_mode != FALSE ? 3000 : 3600;
                 unit = interval / 60;
                 minutes = elapsed / interval;
                 rest = elapsed - minutes * interval;
