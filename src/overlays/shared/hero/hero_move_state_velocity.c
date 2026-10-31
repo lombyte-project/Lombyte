@@ -1246,6 +1246,9 @@ extern void  create_moby_transform_history_entry(char *, int, int) __asm__("FUN_
 void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 
 void launch_hero_wrench(void) {
+    enum {
+        WRENCH_STATE_LAUNCH = 10
+    };
     f32          aim_origin_or_euler_angles[4];
     f32          delta[4];
     f32          item_rotation_matrix[12];
@@ -1260,7 +1263,7 @@ void launch_hero_wrench(void) {
     s32          state;
 
     state = hero.state.current;
-    aimed = (state == 1 || state == 0x1E) && scale_game_frames(0x14) < hero.state_timer;
+    aimed = (state == HERO_STATE_LOOK || state == HERO_STATE_LOOK_RELEASE_WAIT) && scale_game_frames(0x14) < hero.state_timer;
     if (aimed) {
         target = hero.items[0].moby;
         has_target = 0;
@@ -1287,7 +1290,7 @@ void launch_hero_wrench(void) {
     if (aimed) {
         allocate_hero_voice_for_entry(0x1B, 0);
     }
-    equipped_wrench_moby->state = 10;
+    equipped_wrench_moby->state = WRENCH_STATE_LAUNCH;
     launched_item_vars = (ThrowPvars *)equipped_wrench_moby->pvars;
     if (hero.wall_probe_distance < 1.2f && 0.6632251f < hero.wall_normal_pitch &&
         !hero.wall_probe_moby_in_class_range) {
