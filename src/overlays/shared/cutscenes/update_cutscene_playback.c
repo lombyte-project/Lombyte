@@ -846,17 +846,17 @@ void queue_scene_movie_with_game_language(s32 i) {
 void queue_language_zero_movie(s32 i) __asm__("FUN_L00_002994f8");
 
 void queue_language_zero_movie(s32 i) {
-    s32 a, b;
+    s32 queued_movie_sector, queued_movie_size;
     if (i < 0)
         return;
     if (D_0015ED80) {
-        a = disc_table.unk1A50[i].sector;
-        b = disc_table.unk1A50[i].size;
+        queued_movie_sector = disc_table.unk1A50[i].sector;
+        queued_movie_size = disc_table.unk1A50[i].size;
     } else {
-        a = disc_table.unk1A28[i].sector;
-        b = disc_table.unk1A28[i].size;
+        queued_movie_sector = disc_table.unk1A28[i].sector;
+        queued_movie_size = disc_table.unk1A28[i].size;
     }
-    prepare_movie_playback(a, b, 0);
+    prepare_movie_playback(queued_movie_sector, queued_movie_size, 0);
 }
 
 /* Passes movie i (the alt table while D_0015ED80 is set) and the language to FUN_L00_002995d0. */
