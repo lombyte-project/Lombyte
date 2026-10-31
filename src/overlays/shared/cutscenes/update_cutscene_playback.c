@@ -823,22 +823,22 @@ void hero_respawn() __asm__("FUN_L00_00211250");
 void queue_scene_movie_with_game_language(s32 i) __asm__("FUN_L00_00299460");
 
 void queue_scene_movie_with_game_language(s32 i) {
-    s32          a, b;
+    s32          scene_movie_sector, scene_movie_size;
     struct Hero *hero_ptr;
     if (i < 0)
         return;
     if (D_0015ED80) {
-        a = disc_table.unk18A0[i].sector;
-        b = disc_table.unk18A0[i].size;
+        scene_movie_sector = disc_table.unk18A0[i].sector;
+        scene_movie_size = disc_table.unk18A0[i].size;
     } else {
-        a = disc_table.unk1808[i].sector;
-        b = disc_table.unk1808[i].size;
+        scene_movie_sector = disc_table.unk1808[i].sector;
+        scene_movie_size = disc_table.unk1808[i].size;
     }
     hero_ptr = &hero;
     if (hero_ptr->health.hp == 0) {
         hero_respawn();
     } else if (hero_ptr->fall_fade_pending == 0) {
-        prepare_movie_playback(a, b, game_language);
+        prepare_movie_playback(scene_movie_sector, scene_movie_size, game_language);
     }
 }
 
