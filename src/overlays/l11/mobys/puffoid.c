@@ -994,19 +994,29 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int process_puffoid_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L11_00316160");
 
 int process_puffoid_suck_cannon_suction(struct Moby *moby) {
+    enum {
+        PUFFOID_STATE_IDLE = 2,
+        PUFFOID_STATE_CHASE_TARGET = 4,
+        PUFFOID_STATE_SPRAY_ATTACK = 5,
+        PUFFOID_STATE_RETURN_HOME = 6,
+        PUFFOID_STATE_CARRIER_IDLE = 0xE,
+        PUFFOID_STATE_CARRIER_CHASE_TARGET = 0xF,
+        PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 0x10,
+        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 0x14
+    };
     int grab_check_result = process_moby_suck_cannon_suction(moby);
     if (grab_check_result != 0) {
-        if (moby->state == 2 || moby->state == 4 || moby->state == 5 || moby->state == 6 ||
-            moby->state == 0xE || moby->state == 0xF || moby->state == 0x10 ||
-            moby->state == 0x14) {
-            if (moby->state != 0x14) {
+        if (moby->state == PUFFOID_STATE_IDLE || moby->state == PUFFOID_STATE_CHASE_TARGET || moby->state == PUFFOID_STATE_SPRAY_ATTACK || moby->state == PUFFOID_STATE_RETURN_HOME ||
+            moby->state == PUFFOID_STATE_CARRIER_IDLE || moby->state == PUFFOID_STATE_CARRIER_CHASE_TARGET || moby->state == PUFFOID_STATE_CARRIER_SPRAY_ATTACK ||
+            moby->state == PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
+            if (moby->state != PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
                 moby->command = moby->state;
-                moby->state = 0x14;
+                moby->state = PUFFOID_STATE_WAIT_TO_RESUME_COMMAND;
             }
         } else {
             grab_check_result = 0;
         }
-    } else if (moby->state == 0x14) {
+    } else if (moby->state == PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
         moby->state = moby->command;
     }
     return grab_check_result;
