@@ -52,7 +52,7 @@ char *spawn_blarg_ship_shot(int    firing_moby,
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(size);
         *(int *)(spawned_moby + 0x40) = 0;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->rot.y =
             -fast_arc_tan(vector_length_xy(launch_direction), launch_direction[2]);
         MOBY(spawned_moby)->rot.z = fast_arc_tan(launch_direction[0], launch_direction[1]);
@@ -63,7 +63,7 @@ char *spawn_blarg_ship_shot(int    firing_moby,
             qcopy(moby_vars, launch_direction);
             step_length = fast_vec_length(launch_direction);
         }
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         size_length_ratio = truncate_float_to_s32(size / step_length);
         *(int *)(moby_vars + 0x14) = size_length_ratio;
         *(float *)(moby_vars + 0x20) = z;

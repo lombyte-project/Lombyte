@@ -748,7 +748,7 @@ void walloper_update(char *walloper_moby) {
     }
     switch (MOBY(walloper_moby)->state) {
     case WALLOPER_STATE_INITIALIZE:
-        walloper_moby[0x20] = 2;
+        MOBY(walloper_moby)->state = 2;
         for (arc_init_index = 0; arc_init_index < 10; arc_init_index++) {
             D_L00_001DBEC0[arc_init_index] = 0;
             D_L00_001DBEF0[arc_init_index] = 2;
@@ -789,7 +789,7 @@ void walloper_update(char *walloper_moby) {
         }
     }
     scale_vector_xyz(arc_origin, walloper_moby + 0xD0, -0.5f);
-    fast_vec_add(arc_origin, arc_origin, walloper_moby + 0x10);
+    fast_vec_add(arc_origin, arc_origin, &MOBY(walloper_moby)->pos);
     any = 0;
     for (j = 0; j < 10; j++) {
         if (D_L00_001DBEC0[j] != 0) {

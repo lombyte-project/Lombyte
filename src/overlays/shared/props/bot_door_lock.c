@@ -179,20 +179,20 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
     switch (MOBY(target_moby)->oclass) {
     case 0x3F7:
     case 0x502:
-        if (target_moby[0x20] == 2) {
-            target_moby[0x20] = 3;
+        if (MOBY(target_moby)->state == 2) {
+            MOBY(target_moby)->state = 3;
             allocate_voice_for_target_entry(0, 0, (int)target_moby);
         }
         break;
     case 0x404:
-        if (target_moby[0x20] == 1)
-            target_moby[0x20] = 2;
+        if (MOBY(target_moby)->state == 1)
+            MOBY(target_moby)->state = 2;
         break;
     case 0x542:
-        target_moby[0x20] = 2;
+        MOBY(target_moby)->state = 2;
         trooper_play_sound(0, 0, (int)target_moby, 0x434);
-        target_moby[0x30] = 0xFF;
-        jet_clear_persistent(lock_moby[0xB0]);
+        MOBY(target_moby)->update_dist = 0xFF;
+        jet_clear_persistent(MOBY(lock_moby)->mission);
         break;
     }
 }

@@ -60,20 +60,20 @@ int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
     do {
         unsigned char *listed_moby =
             (unsigned char *)l15_moby_array + ((*(unsigned short *)group_moby_entry & 0x7FFF) << 8);
-        unsigned char state = listed_moby[0x20];
+        unsigned char state = MOBY(listed_moby)->state;
         if (state == 1) {
             char *activated_moby_data;
-            listed_moby[0x20] = 2;
-            if (listed_moby[0x53] != 0)
+            MOBY(listed_moby)->state = 2;
+            if (MOBY(listed_moby)->prev_seq != 0)
                 blend_moby_animation(listed_moby, 0, 0, 0);
             MOBY(listed_moby)->flags |= 1;
-            listed_moby[0x31] = 0;
+            MOBY(listed_moby)->visible = 0;
             activated_moby_data = ((char *)MOBY(listed_moby)->pvars);
             MOBY(listed_moby)->collision = *(int *)(((char *)MOBY(listed_moby)->pclass) + 0x10);
             *(float *)(activated_moby_data + 0x64) =
                 random_float_between(-15.0f, 15.0f) * DEG_TO_RAD;
             *(int *)(activated_moby_data + 0x68) = scale_game_frames(0x3C);
-            qcopy(listed_moby + 0x10, pos);
+            qcopy(&MOBY(listed_moby)->pos, pos);
             MOBY(listed_moby)->pos.z -= 1.0f;
             MOBY(listed_moby)->rot.z =
                 fast_arc_tan(hero_data->motion.pos.f[0] - MOBY(listed_moby)->pos.x,

@@ -54,11 +54,11 @@ void draw_red_orb_group_effect_quads(struct Moby *reference_moby) {
     get_first_moby_in_group(it, reference_moby->group, 0, 0);
     while (it[0] != 0) {
         u8 *candidate_moby = it[0];
-        if (candidate_moby[0x31] != 0) {
+        if (MOBY(candidate_moby)->visible != 0) {
             void **moby_data = ((void **)MOBY(candidate_moby)->pvars);
             if (MOBY(candidate_moby)->oclass == reference_moby->oclass) {
                 draw_offset_textured_effect_quad(
-                    candidate_moby + 0x10, moby_data[1], quad_scale, 0.5f);
+                    &MOBY(candidate_moby)->pos, moby_data[1], quad_scale, 0.5f);
             }
         }
         get_next_moby_in_group(it, it[0], 0, 0);

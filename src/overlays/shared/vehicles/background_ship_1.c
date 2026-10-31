@@ -107,7 +107,7 @@ void draw_background_ship_1_joint_billboards(char *reference_moby) {
     while (current_moby != 0) {
         if (current_moby->visible != 0) {
             char *joint_billboard_data = ((char *)current_moby->pvars);
-            if (current_moby->oclass == *(short *)(reference_moby + 0xA6)) {
+            if (current_moby->oclass == MOBY(reference_moby)->oclass) {
                 if ((*(int *)(joint_billboard_data + 0xB0) & 0xFF) > 0x80) {
                     char *joint_position = joint_billboard_data + 0x80;
                     int   i;

@@ -678,11 +678,11 @@ void update_hero_bone_attachment(void) {
     struct Hero *hero_state = &hero;
     char        *destination_moby = ((char *)hero_state->unkA88);
     struct Moby *hero_moby;
-    destination_moby[0x7F] = 0;
+    MOBY(destination_moby)->shadow_range = 0;
     hero_moby = ((char *)hero_state->moby);
     if ((hero_moby->flags ^ 1) & 1) {
         build_moby_bone_transform(hero_moby, 5, bone_transform);
-        qcopy(destination_moby + 0x10, &bone_transform[12]);
+        qcopy(&MOBY(destination_moby)->pos, &bone_transform[12]);
         copy_matrix3x4(destination_moby + 0xC0, bone_transform);
         matrix_to_euler(bone_transform, destination_moby + 0x40);
         MOBY(destination_moby)->flags &= 0xFFBE;
@@ -1499,7 +1499,7 @@ void apply_hero_vertical_oscillation(void) {
             P->moby, &P->unk6A8, &P->unk6AC, 1.1f, D_0015ED6C * 5.2359877f);
         if (P->hoverboard_moby) {
             char *hero_moby = P->moby;
-            qcopy(((char *)P->hoverboard_moby) + 0x10, hero_moby + 0x10);
+            qcopy(((char *)P->hoverboard_moby) + 0x10, &MOBY(hero_moby)->pos);
             position_offset.q = 0;
             position_offset.f[2] = 0.21f;
             transform_vector_by_basis(&position_offset, &position_offset, hero_moby + 0xC0);
@@ -1561,11 +1561,12 @@ void apply_hero_and_item_scale_sequence(void) {
                     if (item_moby) {
                         fast_vec_scale(item_moby + 0xC0, item_moby + 0xC0, item_scale);
                         fast_vec_scale(item_moby + 0xD0, item_moby + 0xD0, item_scale);
-                        fast_vec_sub(planar_offset, item_moby + 0x10, &hero.motion.body_center);
+                        fast_vec_sub(
+                            planar_offset, &MOBY(item_moby)->pos, &hero.motion.body_center);
                         gravity_set_z(planar_offset, planar_offset, 0.0f);
-                        fast_vec_sub(item_moby + 0x10, item_moby + 0x10, planar_offset);
+                        fast_vec_sub(&MOBY(item_moby)->pos, &MOBY(item_moby)->pos, planar_offset);
                         fast_vec_scale(planar_offset, planar_offset, sequence_scale);
-                        fast_vec_add(item_moby + 0x10, item_moby + 0x10, planar_offset);
+                        fast_vec_add(&MOBY(item_moby)->pos, &MOBY(item_moby)->pos, planar_offset);
                     }
                 }
             }
@@ -1982,7 +1983,7 @@ void update_hero_vehicle_moby(void) {
     FUN_L00_00232fe8_00208a10();
     ((unsigned char *)hero.moby)[0xA4] = 0xFF;
     hero_moby = ((unsigned char *)hero.moby);
-    qcopy(hero_moby + 0x10, &hero.motion.pos);
+    qcopy(&MOBY(hero_moby)->pos, &hero.motion.pos);
     qcopy(hero_moby + 0x40, &hero.motion.rot);
     copy_memory_aligned(hero_moby + 0xC0, &hero, 0x30);
     update_entity(((unsigned char *)hero.moby));
@@ -3034,7 +3035,7 @@ void update_hero_target_tracking(void) {
             candidate_targeting_metadata = (char *)get_moby_target_info(candidate_moby);
             if (candidate_targeting_metadata != 0) {
                 float candidate_distance, candidate_yaw_difference, sc, pri;
-                candidate_distance = vector_distance_xy(hero_pos + 0x0, candidate_moby + 0x10);
+                candidate_distance = vector_distance_xy(hero_pos + 0x0, &MOBY(candidate_moby)->pos);
                 if ((float)*(unsigned char *)(candidate_targeting_metadata + 0x38) <
                     candidate_distance)
                     continue;
@@ -3047,10 +3048,11 @@ void update_hero_target_tracking(void) {
                     *(float *)(candidate_reference_hero_state + 0x98));
                 if (1.91986215f < candidate_yaw_difference)
                     continue;
-                if (1.04719758f < absolute_float(fast_arc_tan(
-                                      vector_distance_xy(candidate_moby + 0x10, hero_pos + 0x0),
-                                      *(float *)(candidate_reference_hero_state + 0x88) -
-                                          MOBY(candidate_moby)->pos.z)))
+                if (1.04719758f <
+                    absolute_float(
+                        fast_arc_tan(vector_distance_xy(&MOBY(candidate_moby)->pos, hero_pos + 0x0),
+                                     *(float *)(candidate_reference_hero_state + 0x88) -
+                                         MOBY(candidate_moby)->pos.z)))
                     continue;
                 sc = candidate_yaw_difference * candidate_distance + candidate_distance;
                 if ((int)candidate_moby == *(int *)(candidate_reference_hero_state + 0x2274)) {
@@ -3085,7 +3087,7 @@ void update_hero_target_tracking(void) {
     selected_moby = *(char **)(target_aim_owner + 0x2274);
     if (selected_moby == 0)
         return;
-    qcopy(aim_position_scratch, selected_moby + 0x10);
+    qcopy(aim_position_scratch, &MOBY(selected_moby)->pos);
     selected_targeting_metadata = (char *)get_moby_target_info(selected_moby);
     if (selected_targeting_metadata != 0)
         aim_position_scratch[2] +=

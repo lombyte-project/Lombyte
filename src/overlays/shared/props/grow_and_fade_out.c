@@ -37,10 +37,10 @@ unsigned char *spawn_burst_moby(u128 *spawn_position, float scale_multiplier) {
     if (spawned_moby) {
         copy_hero_moby_field_38(spawned_moby);
         set_moby_color(spawned_moby, 0x28, 0x28, 0x46);
-        spawned_moby[0x30] = 0xff;
+        MOBY(spawned_moby)->update_dist = 0xff;
         MOBY(spawned_moby)->draw_dist = 0x40;
         MOBY(spawned_moby)->scale *= scale_multiplier;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         MOBY(spawned_moby)->rot.z = random_angle_radians();
         update_entity(spawned_moby);
     }

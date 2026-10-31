@@ -68,13 +68,13 @@ void spawn_timed_projected_sprite_effect(char *world_position,
     if (effect_moby) {
         char *effect_data = ((char *)MOBY(effect_moby)->pvars);
         float duration_as_float;
-        qcopy(effect_moby + 0x10, vp);
+        qcopy(&MOBY(effect_moby)->pos, vp);
         duration_as_float = convert_integer_to_float(duration_updates);
         *(int *)(effect_data + 0xC) = end_color;
         *(int *)(effect_data + 0x8) = start_color;
         *(float *)(effect_data + 0x4) = 2.0f / duration_as_float;
-        effect_moby[0x30] = 0xFF;
-        effect_moby[0x20] = 1;
+        MOBY(effect_moby)->update_dist = 0xFF;
+        MOBY(effect_moby)->state = 1;
     }
 }
 

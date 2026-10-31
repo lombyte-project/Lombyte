@@ -923,7 +923,7 @@ char *spawn_homing_spark_projectile(char *velocity,
         MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->state = 1;
         projectile_pvars = ((char *)MOBY(spawned_moby)->pvars);
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         qcopy(projectile_pvars, velocity);
         *(float *)(projectile_pvars + 0xC) = target_height;
         *(int *)(projectile_pvars + 0x14) = lifetime_frames;

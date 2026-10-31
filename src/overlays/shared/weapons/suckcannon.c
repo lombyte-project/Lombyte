@@ -1244,7 +1244,7 @@ int process_suck_cannon_suction_candidate(
                 *(int *)(suction_record + 0x6C) = 0;
                 MOBY(candidate_moby)->anim_speed = 1.0f;
                 *(float *)(suction_record + 0x64) =
-                    vector_distance_xy(candidate_moby + 0x10, suction_origin);
+                    vector_distance_xy(&MOBY(candidate_moby)->pos, suction_origin);
                 for (i = 0; i < (D_0013E529 == 0 ? 5 : 10); i++) {
                     G_2db508 *gg = (G_2db508 *)&hero;
                     if (suck_cannon_moby_slots[i] == 0) {
@@ -1326,7 +1326,7 @@ void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) {
             *(void **)*(u8 **)(candidate_moby->p24 + 0x2c) != (void *)FUN_L00_002db848) {
             suction_record = FUN_L00_002db890_c(candidate_moby);
             if (suction_record != 0 && suction_record->h68 < 6) {
-                distance_xy = vector_distance_xy(cannon_moby + 0x10, &candidate_moby->pos);
+                distance_xy = vector_distance_xy(&MOBY(cannon_moby)->pos, &candidate_moby->pos);
                 if (distance_xy < 15.0f && !is_suck_cannon_suction_blocked_by_hero_state() &&
                     ((stored_moby_count = hero.sucked_moby_count),
                      G1->b9 == 0 ? stored_moby_count < 5 : stored_moby_count < 10)) {
@@ -2070,7 +2070,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
     if ((&D_0013E520)->b9 == 0)
         step = 2;
     fast_vec_scale(spray_bias_vector, spray_bias_vector, variant_effect_scale);
-    fast_vec_sub(to_camera, D_L00_00166DC0, projectile_moby + 0x10);
+    fast_vec_sub(to_camera, D_L00_00166DC0, &MOBY(projectile_moby)->pos);
     camera_distance = fast_vec_length(to_camera);
     for (; i < 10 / step; i++) {
         *(u128_DD3D8 *)random_spray_seed = 0;
@@ -2091,7 +2091,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
             spray_vector_or_effect_position, spray_vector_or_effect_position, spray_bias_vector);
         {
             int h = scale_game_frames_c(60);
-            spawn_debris(projectile_moby + 0x10,
+            spawn_debris(&MOBY(projectile_moby)->pos,
                          (char *)spray_vector_or_effect_position,
                          random_int_between(h, scale_game_frames_c(120)),
                          0,
@@ -2117,7 +2117,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
             spray_vector_or_effect_position, spray_vector_or_effect_position, spray_bias_vector);
         {
             int h = scale_game_frames_c(60);
-            spawn_debris(projectile_moby + 0x10,
+            spawn_debris(&MOBY(projectile_moby)->pos,
                          (char *)spray_vector_or_effect_position,
                          random_int_between(h, scale_game_frames_c(90)),
                          1,
@@ -2139,7 +2139,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
         spray_vector_or_effect_position, spray_vector_or_effect_position, D_0015ED6C * 10.0f);
     {
         int h = scale_game_frames_c(60);
-        spawn_debris(projectile_moby + 0x10,
+        spawn_debris(&MOBY(projectile_moby)->pos,
                      (char *)spray_vector_or_effect_position,
                      random_int_between(h, scale_game_frames_c(90)),
                      1,
@@ -2171,7 +2171,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
             r1 = random_int_between(scale_game_frames_c(15), scale_game_frames_c(20));
             color_effect_random_frames =
                 random_int_between(scale_game_frames_c(25), scale_game_frames_c(30));
-            spawn_particle(projectile_moby + 0x10,
+            spawn_particle(&MOBY(projectile_moby)->pos,
                            spray_bias_vector,
                            A,
                            B,
@@ -2187,7 +2187,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
         float size = variant_effect_scale * 4.0f;
         func_L00_002E0CB8_DD3D8(size,
                                 projectile_moby,
-                                projectile_moby + 0x10,
+                                &MOBY(projectile_moby)->pos,
                                 spray_bias_vector,
                                 scale_game_frames_c(15),
                                 0x7F,
@@ -2200,7 +2200,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
         swap_color_channel_words(&r0, &g0, &b0, (&D_0013E520)->b9);
         func_L00_002E0CB8_DD3D8(size,
                                 projectile_moby,
-                                projectile_moby + 0x10,
+                                &MOBY(projectile_moby)->pos,
                                 spray_bias_vector,
                                 scale_game_frames_c(24),
                                 r0,
@@ -2216,7 +2216,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
         float s = variant_effect_scale * 4.0f;
         func_L00_002E0CB8_DD3D8(s,
                                 projectile_moby,
-                                projectile_moby + 0x10,
+                                &MOBY(projectile_moby)->pos,
                                 spray_bias_vector,
                                 scale_game_frames_c(20),
                                 r1,
@@ -2232,7 +2232,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
         float s = variant_effect_scale * 3.5f;
         func_L00_002E0CB8_DD3D8(s,
                                 projectile_moby,
-                                projectile_moby + 0x10,
+                                &MOBY(projectile_moby)->pos,
                                 spray_bias_vector,
                                 scale_game_frames_c(27),
                                 r1,
@@ -2248,7 +2248,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
         float s = variant_effect_scale * 3.0f;
         func_L00_002E0CB8_DD3D8(s,
                                 projectile_moby,
-                                projectile_moby + 0x10,
+                                &MOBY(projectile_moby)->pos,
                                 spray_bias_vector,
                                 scale_game_frames_c(29),
                                 r1,
@@ -2259,10 +2259,10 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
     l00_camera.shake_amount =
         (camera_distance < 20.0f) ? 0.4f - camera_distance * 0.0175f : 0.050000012f;
     l00_camera.shake_frames = scale_game_frames_c(25);
-    mine_camera_blast((char *)&blk, projectile_moby + 0x10, 0, 0);
+    mine_camera_blast((char *)&blk, &MOBY(projectile_moby)->pos, 0, 0);
     if ((&D_0013E520)->b9) {
-        k = func_L00_001F2BE8_DD3D8(3.0f, projectile_moby + 0x10, 0x10, projectile_moby, 0);
-        *(u128_DD3D8 *)spray_vector_or_effect_position = *(u128_DD3D8 *)(projectile_moby + 0x10);
+        k = func_L00_001F2BE8_DD3D8(3.0f, &MOBY(projectile_moby)->pos, 0x10, projectile_moby, 0);
+        *(u128_DD3D8 *)spray_vector_or_effect_position = *(u128_DD3D8 *)&MOBY(projectile_moby)->pos;
         send_blast_hits(projectile_moby,
                         spray_vector_or_effect_position,
                         D_L00_00177F00,

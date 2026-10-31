@@ -966,7 +966,7 @@ void consider_moby_target_candidate(
     float *best,
 
     float thresh) {
-    float candidate_distance = vector_distance_xy(&MOBY(moby)->pos, candidate_moby + 0x10);
+    float candidate_distance = vector_distance_xy(&MOBY(moby)->pos, &MOBY(candidate_moby)->pos);
     if (!(thresh < candidate_distance)) {
         float ang = fast_arc_tan(MOBY(candidate_moby)->pos.x - MOBY(moby)->pos.x,
                                  MOBY(candidate_moby)->pos.y - MOBY(moby)->pos.y);
@@ -992,8 +992,8 @@ void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) {
         gadgebot_target_cache_frame_gp = level_frame_count;
         cached_gadgebot_target_count_gp = 0;
         for (i = 0; (candidate_moby = D_L06_001AC180_2f34d8[i]) != 0; i++) {
-            if (MOBY(candidate_moby)->oclass == 0x359 && (u8)candidate_moby[0x20] >= 2 &&
-                (u8)candidate_moby[0x20] != 9) {
+            if (MOBY(candidate_moby)->oclass == 0x359 && (u8)MOBY(candidate_moby)->state >= 2 &&
+                (u8)MOBY(candidate_moby)->state != 9) {
                 s32 candidate_slot_index = cached_gadgebot_target_count_gp;
                 cached_gadgebot_target_count_gp = candidate_slot_index + 1;
                 cached_gadgebot_target_mobies[candidate_slot_index] = candidate_moby;

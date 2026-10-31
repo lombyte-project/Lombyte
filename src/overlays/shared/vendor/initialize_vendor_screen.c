@@ -80,7 +80,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     *(char *)&hero_state->unk20A5 = 1;
     FUN_L00_00232fe8();
     transform_vector_by_basis(sc, &vendor_camera_local_position_offset, vendor_moby + 0xC0);
-    fast_vec_add(sc, sc, vendor_moby + 0x10);
+    fast_vec_add(sc, sc, &MOBY(vendor_moby)->pos);
     *(float *)(vendor_screen_state + 0xC8) = probe_ground_height(sc, 0, 0.5f);
     clear_u64_value(vendor_screen_state + 0xB0);
     *(float *)(vendor_screen_state + 0xB8) =

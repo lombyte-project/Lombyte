@@ -644,7 +644,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
         }
         skip = 1;
         trail_moby = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
-        other_class = *(short *)(trail_moby + 0xA6);
+        other_class = MOBY(trail_moby)->oclass;
         own_class = moby->oclass;
         visible = *(unsigned char *)(trail_moby + 0x31);
         if ((other_class ^ own_class) == 0) {

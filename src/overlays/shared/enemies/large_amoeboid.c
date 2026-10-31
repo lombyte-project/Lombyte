@@ -647,7 +647,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
                     qcopy(&line_test_endpoint, &scratch_vector);
                     wp = &line_test_endpoint.q;
                 } else {
-                    qcopy(&line_test_endpoint, hit_record_moby + 0x10);
+                    qcopy(&line_test_endpoint, &MOBY(hit_record_moby)->pos);
                     wp = &line_test_endpoint.q;
                 }
             }
@@ -876,8 +876,8 @@ char *find_nearest_class_26f_moby_in_list(char *reference_moby, int candidate_li
         if ((*(Ent **)&D_L01_0015FFD8)[i].flags & 0x1000) {
             if ((*(Ent **)&D_L01_0015FFD8)[i].type == 0x26F) {
                 if ((*(Ent **)&D_L01_0015FFD8)[i].state < 0x7F) {
-                    float candidate_distance =
-                        fast_vec_dist((*(Ent **)&D_L01_0015FFD8)[i].pos, reference_moby + 0x10);
+                    float candidate_distance = fast_vec_dist((*(Ent **)&D_L01_0015FFD8)[i].pos,
+                                                             &MOBY(reference_moby)->pos);
                     if (candidate_distance < best) {
                         best = candidate_distance;
                         nearest_entity = D_L01_0015FFD8 + (i << 8);

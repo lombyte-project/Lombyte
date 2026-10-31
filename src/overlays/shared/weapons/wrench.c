@@ -555,7 +555,7 @@ void process_mobies_near_returning_wrench(unsigned char *wrench_moby) {
         if (scanned_moby->type == 0xFD)
             return;
         if (scanned_moby && scanned_moby->info && *(short *)(scanned_moby->info + 0x46) == 0x13) {
-            if (fast_vec_dist((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
+            if (fast_vec_dist((char *)&MOBY(scanned_moby)->pos, &MOBY(wrench_moby)->pos) < 2.7f) {
                 moby_processing_result =
                     begin_bolt_attraction(scanned_moby,
                                           ((void *)hero_context->moby),
@@ -564,7 +564,8 @@ void process_mobies_near_returning_wrench(unsigned char *wrench_moby) {
                 goto check;
             }
         } else if (is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(scanned_moby) &&
-                   fast_vec_dist((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
+                   fast_vec_dist((char *)&MOBY(scanned_moby)->pos, &MOBY(wrench_moby)->pos) <
+                       2.7f) {
             moby_processing_result = try_collect_ammo_pickup(scanned_moby);
         check:
             if (moby_processing_result)

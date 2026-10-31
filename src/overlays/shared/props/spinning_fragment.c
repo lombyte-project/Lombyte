@@ -60,10 +60,10 @@ unsigned char *spawn_spinning_moby_fragment(char  *unused_source_moby,
         fragment_vars = ((char *)MOBY(fragment_moby)->pvars);
         MOBY(fragment_moby)->scale = *(float *)(((char *)MOBY(fragment_moby)->pclass) + 0x24) *
                                      spinning_fragment_scale_factor_gp;
-        fragment_moby[0x30] = 0xFF;
+        MOBY(fragment_moby)->update_dist = 0xFF;
         MOBY(fragment_moby)->draw_dist = 0x7E;
-        fragment_moby[0x31] = 1;
-        qcopy(fragment_moby + 0x10, pp);
+        MOBY(fragment_moby)->visible = 1;
+        qcopy(&MOBY(fragment_moby)->pos, pp);
         qcopy(fragment_vars, saved_velocity);
         *(float *)(fragment_vars + 0x10) =
             random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
@@ -71,7 +71,7 @@ unsigned char *spawn_spinning_moby_fragment(char  *unused_source_moby,
             random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
         *(float *)(fragment_vars + 0x18) =
             random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
-        fragment_moby[0xBC] =
+        MOBY(fragment_moby)->command =
             truncate_float_to_s32(scale_time(random_float_between(60.0f, 120.0f)));
         update_entity(fragment_moby);
     }

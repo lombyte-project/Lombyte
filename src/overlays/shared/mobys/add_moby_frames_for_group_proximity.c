@@ -40,7 +40,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                 char *candidate_moby = group_member_moby;
                 qcopy(offset_test_position, proximity_moby_vars + 0x200);
                 offset_test_position[2] += 0.8f;
-                fast_vec_sub(position_delta, candidate_moby + 0x10, offset_test_position);
+                fast_vec_sub(position_delta, &MOBY(candidate_moby)->pos, offset_test_position);
                 if (!(8.0f < fast_vec_length(position_delta))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, group_member_moby + 0xC0);
@@ -61,8 +61,9 @@ void add_moby_frames_for_group_proximity(char *moby) {
         while (proximity_candidate_moby) {
             if (MOBY(proximity_candidate_moby)->oclass == 0x474) {
                 float m[16];
-                fast_vec_sub(
-                    position_delta, proximity_candidate_moby + 0x10, proximity_moby_vars + 0x200);
+                fast_vec_sub(position_delta,
+                             &MOBY(proximity_candidate_moby)->pos,
+                             proximity_moby_vars + 0x200);
                 if (!(8.0f < fast_vec_length(position_delta))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, proximity_candidate_moby + 0xC0);

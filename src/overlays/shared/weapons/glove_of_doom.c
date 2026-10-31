@@ -432,19 +432,18 @@ spawn_glove_of_doom_held_moby(int spawning_moby, u128 *spawn_position, u128 *ini
     if (spawned_moby) {
         char *moby_vars;
         moby_vars = *(char **)(spawned_moby + 0x78);
-        spawned_moby[0x30] = 0xff;
-        *(short *)(spawned_moby + 0x32) = 0xff;
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 0;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        MOBY(spawned_moby)->update_dist = 0xff;
+        MOBY(spawned_moby)->draw_dist = 0xff;
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 0;
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         qcopy(moby_vars, initial_velocity);
         *(int *)(moby_vars + 0x30) = spawning_moby;
         *(int *)(moby_vars + 0x34) = 0;
         *(short *)(moby_vars + 0x38) = 0;
-        *(float *)(spawned_moby + 0x2c) =
-            *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.01f;
+        MOBY(spawned_moby)->scale = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.01f;
         if (hero.unk20A5 || hero.unk20AF)
-            *(unsigned short *)(spawned_moby + 0x34) |= 0x41;
+            MOBY(spawned_moby)->flags |= 0x41;
     }
     return spawned_moby;
 }
@@ -466,13 +465,13 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position,
     if (P->ground_moby && FUN_L00_002603d0_002c82f0(P->ground_moby)) {
         FUN_001f9a10_002c82f0(q, q, &P->motion.displacement);
     }
-    released_moby_position = released_moby + 0x10;
+    released_moby_position = &MOBY(released_moby)->pos;
     qcopy(released_moby_position, release_position);
     {
         struct Hero *P2 = &hero;
         collision_reference_moby = (char *)P2->moby;
     }
-    collision_start.q = ((Vec4_2c82f0 *)(collision_reference_moby + 0x10))->q;
+    collision_start.q = ((Vec4_2c82f0 *)&MOBY(collision_reference_moby)->pos)->q;
     collision_start.f[2] = release_position->f[2];
     if (FUN_001efa68_002c82f0(&collision_start, release_position, 0, collision_reference_moby, 0)) {
         char *collision_hit_cursor = collision_hit_point;
@@ -487,5 +486,5 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position,
         reflect_vector(q, q, collision_hit_cursor);
         FUN_001f9a68_002c82f0(q, q, 0.6f);
     }
-    released_moby[0x20] = 2;
+    MOBY(released_moby)->state = 2;
 }

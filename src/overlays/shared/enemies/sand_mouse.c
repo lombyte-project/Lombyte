@@ -232,10 +232,10 @@ void *select_sand_mouse_spawn_target(void *moby,
         candidate_class = *(short *)(((char *)MOBY(candidate_moby)->pclass) + 0x46);
         if (candidate_class != 5 || hp == 0 || !(0.0f < *hp))
             continue;
-        candidate_distance = fast_vec_dist(from, candidate_moby + 0x10);
+        candidate_distance = fast_vec_dist(from, &MOBY(candidate_moby)->pos);
         if (!(candidate_distance < range))
             continue;
-        qcopy(tp, candidate_moby + 0x10);
+        qcopy(tp, &MOBY(candidate_moby)->pos);
         tp[2] += 0.4f;
         score = fast_difference_between_rotations(
             ((float *)reference_rotation)[2],
@@ -302,7 +302,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
             if (fast_difference_between_rotations(MOBY(moby)->rot.z, target_yaw) < 0.5235988f) {
                 if (cutscene_mode != 2) {
                     char *target_aim_data;
-                    qcopy(&target_aim_position, target_moby + 0x10);
+                    qcopy(&target_aim_position, &MOBY(target_moby)->pos);
                     target_aim_data = get_moby_target_info(target_moby);
                     if (target_aim_data != 0)
                         target_aim_position.f[2] =

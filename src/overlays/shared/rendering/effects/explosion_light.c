@@ -34,13 +34,13 @@ unsigned char *mine_camera_blast(unsigned char *blast_settings,
     unsigned char *spawned_moby = create_moby(0x27F);
     if (spawned_moby) {
         unsigned char *blast_vars;
-        spawned_moby[0x30] = 0xFF;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->flags |= 1;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         blast_vars = ((unsigned char *)MOBY(spawned_moby)->pvars);
-        spawned_moby[0x20] = 0;
-        spawned_moby[0xBC] = 0;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->command = 0;
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         if (position_offset_override)
             qcopy(blast_vars, position_offset_override);
         else

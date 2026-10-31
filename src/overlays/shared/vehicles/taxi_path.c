@@ -56,7 +56,7 @@ char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby,
                                     int            id) __asm__("FUN_L05_00319598");
 
 char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int id) {
-    unsigned short *moby_index_entry = D_L05_001ABCC0_9598[list_owner_moby[0x21]];
+    unsigned short *moby_index_entry = D_L05_001ABCC0_9598[MOBY(list_owner_moby)->group];
     char           *pool;
     int             candidate_moby_pool_index;
     if (moby_index_entry != 0) {

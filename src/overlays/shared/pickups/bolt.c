@@ -621,7 +621,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
         if (ground_moby != 0 && *(unsigned char *)(grounded_bolt_vars + 0x57) == 0) {
             int   should_detach_from_ground;
             char *x;
-            if ((unsigned char)ground_moby[0x20] == 0xFE ||
+            if ((unsigned char)MOBY(ground_moby)->state == 0xFE ||
                 (*(unsigned char **)(grounded_bolt_vars + 0x5C))[0x20] == 0xFD) {
                 should_detach_from_ground = 1;
             } else {
@@ -692,7 +692,8 @@ int begin_bolt_attraction(void *ov,
         *(float *)(bolt_vars + 0x48) = attraction_pitch_angle;
         *(int *)(bolt_vars + 0x64) = 0;
         *(char **)(bolt_vars + 0x60) = target_moby;
-        fast_vec_sub(attraction_geometry_scratch[1], target_moby + 0x10, bolt_moby + 0x10);
+        fast_vec_sub(
+            attraction_geometry_scratch[1], &MOBY(target_moby)->pos, &MOBY(bolt_moby)->pos);
         fast_vec_cross(
             attraction_geometry_scratch[0], bolt_vars + 0x20, attraction_geometry_scratch[1]);
         fast_vec_normalize(bolt_vars + 0x30, attraction_geometry_scratch[0], 1.0f);

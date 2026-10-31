@@ -404,7 +404,7 @@ void restore_hero_from_vehicle_mode(void) {
         {
             unsigned char *restored_hero_moby = hero_restore_context->unkA88;
             hero_restore_context->moby = (struct Moby *)restored_hero_moby;
-            qcopy(restored_hero_moby + 0x10, &hero_restore_context->motion.pos);
+            qcopy(&MOBY(restored_hero_moby)->pos, &hero_restore_context->motion.pos);
             MOBY(restored_hero_moby)->collision_disable = 0;
         }
         hero_restore_context->anim_frame_rate = 1.0f;

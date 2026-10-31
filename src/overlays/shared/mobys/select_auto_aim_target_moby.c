@@ -508,7 +508,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
             for (i = 0; i < consecutive_class_fragment_count; i++) {
                 FUN_L00_00263fd8_263e30(source_moby,
                                         first_fragment_class + i,
-                                        source_moby + 0x10,
+                                        &MOBY(source_moby)->pos,
                                         source_moby + 0x40,
                                         0,
                                         mode,
@@ -615,12 +615,12 @@ void *FUN_L00_00263fd8(char  *source_moby,
             MOBY(source_moby)->scale / *(float *)(((char *)MOBY(source_moby)->pclass) + 0x24);
         MOBY(fragment_moby)->scale =
             *(float *)(((char *)MOBY(fragment_moby)->pclass) + 0x24) * source_class_ratio;
-        fragment_moby[0x31] = 1;
+        MOBY(fragment_moby)->visible = 1;
         MOBY(fragment_moby)->flags |= 0x100;
         fragment_pvars = ((char *)MOBY(fragment_moby)->pvars);
         MOBY(fragment_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
-        fragment_moby[0x20] = 1;
-        qcopy(fragment_moby + 0x10, fragment_spawn_position);
+        MOBY(fragment_moby)->state = 1;
+        qcopy(&MOBY(fragment_moby)->pos, fragment_spawn_position);
         euler_rotation_basis(fragment_moby + 0xC0, fragment_euler_rotation);
         MOBY(fragment_moby)->update_dist = 0xFF;
         MOBY(fragment_moby)->draw_dist = 0x80;

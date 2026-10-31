@@ -73,16 +73,16 @@ char *spawn_sentrybot_projectile(char *source_moby, float *direction_vector, cha
         char *moby_vars;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 0;
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 0;
         MOBY(spawned_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 20.0f;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         FUN_001f9a68(moby_vars, direction_vector, 5.0f);
         *(int *)(moby_vars + 0x38) = scale_game_frames(0xF0);
         *(char **)(moby_vars + 0x3C) = source_moby;
-        spawned_moby[0x23] = 0x30;
+        MOBY(spawned_moby)->alpha = 0x30;
         MOBY(spawned_moby)->flags |= 0x200;
         MOBY(spawned_moby)->rot.z = fast_arc_tan(direction_vector[0], direction_vector[1]);
         MOBY(spawned_moby)->rot.y =

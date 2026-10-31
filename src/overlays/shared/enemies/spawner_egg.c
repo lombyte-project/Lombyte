@@ -166,7 +166,7 @@ char *spawn_spawner_egg(int           spawner_moby,
     if (spawned_moby) {
         char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(int *)(moby_vars + 0x10) = spawner_moby;
-        qcopy(spawned_moby + 0x10, initial_position);
+        qcopy(&MOBY(spawned_moby)->pos, initial_position);
         qcopy(moby_vars, initial_velocity);
         MOBY(spawned_moby)->rot.x = random_float_between(-3.1415927f, 3.1415927f);
         MOBY(spawned_moby)->rot.y = random_float_between(-3.1415927f, 3.1415927f);
@@ -174,8 +174,8 @@ char *spawn_spawner_egg(int           spawner_moby,
         *(short *)(moby_vars + 0x18) = scale_game_frames(500);
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0x40;
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 0;
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 0;
         MOBY(spawned_moby)->scale = *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) * 0.3f;
         moby_vars[0x1C] = owner_slot_index;
         moby_vars[0x1A] = grow_held_moby;

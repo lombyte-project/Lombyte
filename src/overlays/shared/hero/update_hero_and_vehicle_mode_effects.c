@@ -213,7 +213,7 @@ void update_hero_bobbing_and_target_position(void) {
         if (position_target != 0) {
             char *hero_moby;
             hero_moby = ((char *)hero_instance->moby);
-            qcopy(position_target + 0x10, hero_moby + 0x10);
+            qcopy(position_target + 0x10, &MOBY(hero_moby)->pos);
             *(u128 *)position_offset = 0;
             position_offset[2] = 0.21f;
             transform_vector_by_basis(position_offset, position_offset, hero_moby + 0xC0);
@@ -265,7 +265,7 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
     release_and_clear_hero_voice_slots();
     restored_hero_moby = *(char **)(hero_state_bytes + 0xA88);
     *(char **)(hero_state_bytes + 0x2080) = restored_hero_moby;
-    qcopy(restored_hero_moby + 0x10, hero_state_bytes + 0x80);
+    qcopy(&MOBY(restored_hero_moby)->pos, hero_state_bytes + 0x80);
     MOBY(restored_hero_moby)->collision_disable = 0;
     *(float *)(hero_state_bytes + 0xA94) = 1.0f;
     clear_hero_queued_animation();

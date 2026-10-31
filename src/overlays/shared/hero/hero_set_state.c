@@ -542,7 +542,7 @@ int select_hero_grapple_target(void) {
             continue;
         if (*(float *)(candidate_data + 0x20) != 0.0f &&
             *(float *)(candidate_data + 0x20) <
-                fast_vec_dist((char *)(&hero.motion.pos), candidate_moby + 0x10))
+                fast_vec_dist((char *)(&hero.motion.pos), &MOBY(candidate_moby)->pos))
             continue;
         hero_angle_state_base = (char *)((char *)&D_0013F350);
         k = *(int *)(hero_angle_state_base + 0x2084);
@@ -568,7 +568,7 @@ int select_hero_grapple_target(void) {
         if (grapple_candidate_rejected != 0)
             continue;
         gb += 0x80;
-        if (vector_distance_xy(gb, candidate_moby + 0x10) < 4.0f)
+        if (vector_distance_xy(gb, &MOBY(candidate_moby)->pos) < 4.0f)
             continue;
         if (MOBY(candidate_moby)->visible == 0)
             target_score += 10.0f;

@@ -146,10 +146,10 @@ unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *ya
     bestd = 20.0f;
     for (candidate_moby = D_L00_0015FFE4_2b46a8; candidate_moby != 0;
          candidate_moby = ((unsigned char *)MOBY(candidate_moby)->next)) {
-        if ((signed char)candidate_moby[0x20] < 0) {
+        if ((signed char)MOBY(candidate_moby)->state < 0) {
             continue;
         }
-        qcopy(&tp, candidate_moby + 0x10);
+        qcopy(&tp, &MOBY(candidate_moby)->pos);
         r = get_moby_target_info(candidate_moby);
         if (r != 0) {
             tp.f[2] += *(float *)(r + 0x10);

@@ -120,12 +120,12 @@ unsigned char *spawn_debris(void *spawn_position,
         unsigned char *debris_data;
         float          rotation_x_increment, frame_dt;
         debris_data = ((unsigned char *)MOBY(debris_moby)->pvars);
-        debris_moby[0x30] = 0xFF;
+        MOBY(debris_moby)->update_dist = 0xFF;
         MOBY(debris_moby)->draw_dist = 0xFF;
-        debris_moby[0x31] = 1;
-        debris_moby[0x23] = 0x80;
+        MOBY(debris_moby)->visible = 1;
+        MOBY(debris_moby)->alpha = 0x80;
         set_moby_color(debris_moby, 0x7F, 0x7F, 0x7F);
-        qcopy(debris_moby + 0x10, spawn_position);
+        qcopy(&MOBY(debris_moby)->pos, spawn_position);
         qcopy(debris_data, initial_velocity);
         rotation_x_increment =
             random_float_between(frame_time * 6.2831855f, frame_time * 12.566371f);
@@ -139,7 +139,7 @@ unsigned char *spawn_debris(void *spawn_position,
             MOBY(debris_moby)->scale *= random_float_between(0.5f, 0.75f);
         }
         *(float *)(debris_data + 0x1C) = MOBY(debris_moby)->scale;
-        debris_moby[0xBC] = flag | (trail_color_mask << 1);
+        MOBY(debris_moby)->command = flag | (trail_color_mask << 1);
         FUN_L00_00250df8_2af450(debris_moby);
     }
     return debris_moby;
@@ -155,7 +155,7 @@ void debris_update(unsigned char *debris_moby) {
     V_2af5b8  random_direction;
     int       i;
     float     f;
-    if (debris_moby[0xBC] & 1) {
+    if (MOBY(debris_moby)->command & 1) {
         for (i = 0; i < 1; i++) {
             c = D_L00_00161438;
             *(OvlQuad *)&random_direction = 0;
@@ -164,12 +164,12 @@ void debris_update(unsigned char *debris_moby) {
             random_direction.f[2] = random_float_between(-1.0f, 1.0f);
             *(OvlQuad *)&emission_direction = *(OvlQuad *)&random_direction;
             fast_vec_normalize(&emission_direction, &emission_direction, frame_time);
-            if (debris_moby[0xBC] & 0xFE) {
+            if (MOBY(debris_moby)->command & 0xFE) {
                 int adjusted_color = swap_packed_color_channels(c.c[random_integer_below(4)],
-                                                                debris_moby[0xBC] >> 1);
+                                                                MOBY(debris_moby)->command >> 1);
                 int adjusted_secondary_color =
-                    swap_packed_color_channels(0x4FFF, debris_moby[0xBC] >> 1);
-                spawn_effect(debris_moby + 0x10,
+                    swap_packed_color_channels(0x4FFF, MOBY(debris_moby)->command >> 1);
+                spawn_effect(&MOBY(debris_moby)->pos,
                              &emission_direction,
                              adjusted_color,
                              adjusted_secondary_color,
@@ -178,7 +178,7 @@ void debris_update(unsigned char *debris_moby) {
                              0x78,
                              1);
             } else {
-                spawn_effect(debris_moby + 0x10,
+                spawn_effect(&MOBY(debris_moby)->pos,
                              &emission_direction,
                              c.c[random_integer_below(4)],
                              0x4FFF,
@@ -191,7 +191,7 @@ void debris_update(unsigned char *debris_moby) {
     }
     MOBY(debris_moby)->rot.x = fast_add_rotations(MOBY(debris_moby)->rot.x, debris_data->x10);
     MOBY(debris_moby)->rot.y = fast_add_rotations(MOBY(debris_moby)->rot.y, debris_data->x14);
-    fast_vec_add(debris_moby + 0x10, debris_moby + 0x10, debris_data);
+    fast_vec_add(&MOBY(debris_moby)->pos, &MOBY(debris_moby)->pos, debris_data);
     debris_data->x8 -= frame_time_sq * 14.6f;
     if (MOBY(debris_moby)->pos.x < 0.0f || MOBY(debris_moby)->pos.y < 0.0f ||
         MOBY(debris_moby)->pos.z < 0.0f) {

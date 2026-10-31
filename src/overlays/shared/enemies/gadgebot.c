@@ -1498,7 +1498,7 @@ int process_gadgebot_interaction_candidate(
         vB[0] = fast_cos(fast_add_rotations(MOBY(destination_moby)->rot.z, f20));
         vB[1] = fast_sin(fast_add_rotations(MOBY(destination_moby)->rot.z, f20));
         vB[2] = 0.0f;
-        fast_vec_add(ctx + 0x10, vB, destination_moby + 0x10);
+        fast_vec_add(ctx + 0x10, vB, &MOBY(destination_moby)->pos);
         *(u128_F4058 *)(ow + 0x2F0) = *(u128_F4058 *)(ow + 0x2E0) = *(u128_F4058 *)(ctx + 0x10);
 
         for (k = 0; k < 10; k++) {
@@ -1620,7 +1620,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
             float knockback_angle;
             knockback_angle = base_angle;
             if (hit_source_moby != D_001413D0 &&
-                *(short *)(hit_source_moby + 0xA6) != MOBY(moby)->oclass) {
+                MOBY(hit_source_moby)->oclass != MOBY(moby)->oclass) {
                 int frames_sq = scale_game_frames(0x50);
                 frames_sq *= scale_game_frames(0x50);
                 state[0xBD] = 0;
@@ -1661,7 +1661,7 @@ void draw_gadgebot_group_glow_effects(char *group_reference_moby) {
     while (list != 0) {
         if (*(unsigned char *)(list + 0x31) != 0) {
             moby_vars = *(char **)(list + 0x78);
-            if (*(short *)(list + 0xA6) == *(short *)(group_reference_moby + 0xA6)) {
+            if (*(short *)(list + 0xA6) == MOBY(group_reference_moby)->oclass) {
                 effect_position = moby_vars + 0x140;
                 for (i = 2; i >= 0; i--) {
                     draw_offset_textured_effect_quad(

@@ -283,7 +283,7 @@ void teleporter_update(struct Moby *moby) {
             *(long *)(slots[i] + 0x38) = *(long *)(((char *)g->moby) + 0x38);
             *(unsigned short *)(slots[i] + 0x34) = moby->flags;
             child_moby = slots[i];
-            qcopy(child_moby + 0x10, &moby->pos);
+            qcopy(&MOBY(child_moby)->pos, &moby->pos);
             qcopy(child_moby + 0x40, &moby->rot);
             *(float *)(slots[i] + 0x48) =
                 fast_add_rotations(MOBY(child_moby)->rot.z, (float)i * 2.0943952f);
@@ -385,7 +385,7 @@ void teleporter_update(struct Moby *moby) {
             char *destination_moby = D_L01_0015FFD8 + (*(int *)teleporter_vars << 8);
             char *td = ((char *)MOBY(destination_moby)->pvars);
             float destination_position[4];
-            qcopy(destination_position, destination_moby + 0x10);
+            qcopy(destination_position, &MOBY(destination_moby)->pos);
             destination_position[2] += 0.2f;
             set_race_camera(destination_position, destination_moby + 0x40, 0, 1);
             hero.unk20A5 = 1;
@@ -447,7 +447,7 @@ void update_teleporter_child_transforms(char *parent_moby) {
         float child_offset_length;
         float u;
         char *child_moby = *child_slot;
-        qcopy(child_moby + 0x10, parent_moby + 0x10);
+        qcopy(&MOBY(child_moby)->pos, &MOBY(parent_moby)->pos);
         u = teleporter_child_displacement_angle_degrees_gp * DEG_TO_RAD;
         MOBY(child_moby)->pos.z += teleporter_child_position_z_offset_gp;
         *(float *)(*child_slot + 0x44) = u;

@@ -374,7 +374,7 @@ void open_vendor_menu(void *vendor_moby_arg) {
     if (vendor_moby == 0) {
         vendor_moby = create_moby(0xB);
         *(s16 *)((char *)vendor_moby + 0x32) = 0x40;
-        *(f32 *)((char *)vendor_moby + 0x10) =
+        *(f32 *)((char *)&MOBY(vendor_moby)->pos) =
             l00_camera.pos.f[0] + vendor_camera_eye_local_offset_x_gp;
         *(f32 *)((char *)vendor_moby + 0x14) = l00_camera.pos.f[1];
         *(f32 *)((char *)vendor_moby + 0x18) =

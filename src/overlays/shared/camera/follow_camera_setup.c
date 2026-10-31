@@ -551,9 +551,9 @@ void rebuild_follow_camera_pose(int snap) {
     fast_vec_sub(look, eye, (float *)&MOBY(camera_moby)->update_dist);
     fast_vec_normalize(camera_moby, look, 1.0f);
     qcopy(camera_moby + 0x20, up);
-    fast_vec_cross(camera_moby + 0x10, camera_moby, camera_moby + 0x20);
-    fast_vec_normalize(camera_moby + 0x10, camera_moby + 0x10, 1.0f);
-    fast_vec_cross(camera_moby + 0x20, camera_moby + 0x10, camera_moby);
+    fast_vec_cross(&MOBY(camera_moby)->pos, camera_moby, camera_moby + 0x20);
+    fast_vec_normalize(&MOBY(camera_moby)->pos, &MOBY(camera_moby)->pos, 1.0f);
+    fast_vec_cross(camera_moby + 0x20, &MOBY(camera_moby)->pos, camera_moby);
     qcopy(camera_moby + 0x40, camera_moby);
 }
 
@@ -1486,7 +1486,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
                 MOBY(nearby_moby)->collision = 0;
                 goto next;
             }
-            fast_vec_sub(&moby_offset_or_camera_endpoint, nearby_moby + 0x10, (x + 0x90));
+            fast_vec_sub(&moby_offset_or_camera_endpoint, &MOBY(nearby_moby)->pos, (x + 0x90));
             fast_vec_scale(
                 &v20,
                 camera_tracking_state + 0x30,

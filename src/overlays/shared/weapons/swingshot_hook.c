@@ -24,19 +24,19 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hoo
         char *moby_vars = *(char **)(spawned_moby + 0x78);
         *(float *)(moby_vars + 4) = initial_hook_speed;
         *(unsigned char **)moby_vars = owner_moby;
-        spawned_moby[0x30] = 0xff;
-        *(short *)(spawned_moby + 0x32) = 0xff;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->update_dist = 0xff;
+        MOBY(spawned_moby)->draw_dist = 0xff;
+        MOBY(spawned_moby)->visible = 1;
         set_moby_color(spawned_moby, 0x80, 0x80, 0x80);
-        moby_point_position(owner_moby, 0, spawned_moby + 0x10);
+        moby_point_position(owner_moby, 0, &MOBY(spawned_moby)->pos);
         *(u128 *)(spawned_moby + 0xc0) = *(u128 *)(owner_moby + 0xc0);
         *(u128 *)(spawned_moby + 0xd0) = *(u128 *)(owner_moby + 0xd0);
         *(u128 *)(spawned_moby + 0xe0) = *(u128 *)(owner_moby + 0xe0);
-        if (spawned_moby[0x53])
+        if (MOBY(spawned_moby)->prev_seq)
             blend_moby_animation(spawned_moby, 0, 0, scale_game_frames(10));
         update_entity(spawned_moby);
-        spawned_moby[0x20] = 0;
-        *(unsigned short *)(spawned_moby + 0x34) |= 4;
+        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->flags |= 4;
     }
     return spawned_moby;
 }
@@ -69,72 +69,72 @@ void swingshot_hook_update(unsigned char *hook_moby) {
         goto kill;
     }
     if ((owner_moby->flags & 1) || D_001413FF) {
-        *(unsigned short *)(hook_moby + 0x34) |= 0x41;
+        MOBY(hook_moby)->flags |= 0x41;
     } else {
-        *(unsigned short *)(hook_moby + 0x34) &= ~0x41;
+        MOBY(hook_moby)->flags &= ~0x41;
     }
-    switch (hook_moby[0x20]) {
+    switch (MOBY(hook_moby)->state) {
     case HOOK_INITIAL_ANIMATION:
-        if (hook_moby[0x70] & 2) {
-            if (hook_moby[0x53] != 1)
+        if (MOBY(hook_moby)->anim_flags & 2) {
+            if (MOBY(hook_moby)->prev_seq != 1)
                 blend_moby_animation(hook_moby, 1, 0, FUN_001f96f8_2c7070(10));
-            hook_moby[0x20] = 1;
-            *(float *)(hook_moby + 0x58) = 1.0f;
+            MOBY(hook_moby)->state = 1;
+            MOBY(hook_moby)->anim_speed = 1.0f;
         }
         break;
     case HOOK_IDLE_ANIMATION:
         if (hook_vars[0][0x20] == 2) {
-            if (hook_moby[0x53] != 3)
+            if (MOBY(hook_moby)->prev_seq != 3)
                 blend_moby_animation(hook_moby, 3, 0, FUN_001f96f8_2c7070(10));
-            hook_moby[0x20] = 3;
-            *(float *)(hook_moby + 0x58) = 1.0f;
+            MOBY(hook_moby)->state = 3;
+            MOBY(hook_moby)->anim_speed = 1.0f;
         } else if (hook_vars[0][0x20] == 8) {
-            if (hook_moby[0x53] != 2)
+            if (MOBY(hook_moby)->prev_seq != 2)
                 blend_moby_animation(hook_moby, 2, 0, FUN_001f96f8_2c7070(10));
-            hook_moby[0x20] = 2;
-            *(float *)(hook_moby + 0x58) = 1.0f;
+            MOBY(hook_moby)->state = 2;
+            MOBY(hook_moby)->anim_speed = 1.0f;
         }
         break;
     case HOOK_REMOVAL_ANIMATION:
-        if (hook_moby[0x70] & 2) {
+        if (MOBY(hook_moby)->anim_flags & 2) {
         kill:
             mark_moby_for_removal(hook_moby);
             return;
         }
         break;
     case HOOK_LAUNCH_ANIMATION:
-        if (hook_moby[0x70] & 2) {
-            if (hook_moby[0x53] != 4)
+        if (MOBY(hook_moby)->anim_flags & 2) {
+            if (MOBY(hook_moby)->prev_seq != 4)
                 blend_moby_animation(hook_moby, 4, 0, FUN_001f96f8_2c7070(10));
-            hook_moby[0x20] = 4;
+            MOBY(hook_moby)->state = 4;
         }
         break;
     case HOOK_FLIGHT_ANIMATION:
         if ((unsigned char)(hook_vars[0][0x20] - 3) < 3) {
-            if (hook_moby[0x53] != 5)
+            if (MOBY(hook_moby)->prev_seq != 5)
                 blend_moby_animation(hook_moby, 5, 0, FUN_001f96f8_2c7070(10));
-            hook_moby[0x20] = 5;
+            MOBY(hook_moby)->state = 5;
         }
         break;
     case HOOK_ATTACHED_ANIMATION:
-        if (hook_moby[0x70] & 2)
+        if (MOBY(hook_moby)->anim_flags & 2)
             *(int *)(hook_moby + 0x58) = 0;
         if ((unsigned char)(hook_vars[0][0x20] - 6) < 2) {
-            *(float *)(hook_moby + 0x58) = 1.0f;
-            if (hook_moby[0x53] != 7)
+            MOBY(hook_moby)->anim_speed = 1.0f;
+            if (MOBY(hook_moby)->prev_seq != 7)
                 blend_moby_animation(hook_moby, 7, 0, FUN_001f96f8_2c7070(10));
-            hook_moby[0x20] = 7;
+            MOBY(hook_moby)->state = 7;
         }
         break;
     case HOOK_SKIP_ANIMATION_TRANSITIONS:
         break;
     case HOOK_RETURN_ANIMATION:
-        if (!(hook_moby[0x70] & 2))
+        if (!(MOBY(hook_moby)->anim_flags & 2))
             break;
     default:
-        if (hook_moby[0x53] != 1)
+        if (MOBY(hook_moby)->prev_seq != 1)
             blend_moby_animation(hook_moby, 1, 0, FUN_001f96f8_2c7070(10));
-        hook_moby[0x20] = 1;
+        MOBY(hook_moby)->state = 1;
         break;
     }
     refresh_moby_spatial_bounds_from_basis(hook_moby);

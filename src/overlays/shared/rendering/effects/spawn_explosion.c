@@ -680,7 +680,7 @@ void spawn_explosion(char *owner_moby,
     if (explosion_position == 0) {
         if (owner_moby == 0)
             return;
-        explosion_position = owner_moby + 0x10;
+        explosion_position = &MOBY(owner_moby)->pos;
     }
     {
         if (fA > 0.0f) {
@@ -994,8 +994,8 @@ void cart_burst(u8 *burst_owner_moby, u128 *burst_position, int sound, float sca
             l00_camera.shake_frames = scale_game_frames(0x14);
         }
     }
-    if (burst_owner_moby != 0 && burst_owner_moby[0x20] != 0xFE && burst_owner_moby[0x20] != 0xFD &&
-        sound != -1) {
+    if (burst_owner_moby != 0 && MOBY(burst_owner_moby)->state != 0xFE &&
+        MOBY(burst_owner_moby)->state != 0xFD && sound != -1) {
         allocate_voice_for_target_entry(sound, 0, burst_owner_moby);
     }
     if (flash != 0.0f) {

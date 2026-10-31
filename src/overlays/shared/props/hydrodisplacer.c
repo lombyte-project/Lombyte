@@ -368,10 +368,10 @@ s32 test_hydrodisplacer_activation_flag(void) {
     flags = (u8)activation_hero->hydro_tank_full;
     linked_moby += *(s32 *)*(s32 *)((u8 *)ground_moby_address + 0x78) << 8;
     if (!flags) {
-        if (linked_moby[0xBC] & 2)
+        if (MOBY(linked_moby)->command & 2)
             return 1;
     } else {
-        if (linked_moby[0xBC] & 1)
+        if (MOBY(linked_moby)->command & 1)
             return 1;
     }
     return 0;

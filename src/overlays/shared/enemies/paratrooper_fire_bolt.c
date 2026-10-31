@@ -35,9 +35,9 @@ char *spawn_paratrooper_projectile(char *initial_velocity,
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0x7E;
         moby_data = ((char *)MOBY(spawned_moby)->pvars);
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 1;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 1;
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         qcopy(moby_data, initial_velocity);
         *(int *)(moby_data + 0x18) = scale_game_frames(lifetime_frames);
         *(int *)(moby_data + 0x10) = collision_ignore_moby;

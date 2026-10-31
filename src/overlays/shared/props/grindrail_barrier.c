@@ -133,7 +133,7 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
     float  phase, angle_step, phase_step;
     int    i;
     qcopy(rotation, barrier_moby + 0x40);
-    qcopy(transform[3], barrier_moby + 0x10);
+    qcopy(transform[3], &MOBY(barrier_moby)->pos);
     quad.texture = get_effect_texture(*(int *)&grindrail_barrier_ring_texture_id);
     u = &quad.uv[0][0];
     v = &quad.uv[0][1];
@@ -236,7 +236,8 @@ void group_trigger_nearest(int moby_list_index) {
             char *candidate_moby =
                 D_L16_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8);
             if (MOBY(candidate_moby)->oclass != 0x5A3) {
-                float candidate_distance = fast_vec_dist(D_0013E533 + 0xE9D, candidate_moby + 0x10);
+                float candidate_distance =
+                    fast_vec_dist(D_0013E533 + 0xE9D, &MOBY(candidate_moby)->pos);
                 if (candidate_distance < bestd) {
                     bestd = candidate_distance;
                     best = candidate_moby;

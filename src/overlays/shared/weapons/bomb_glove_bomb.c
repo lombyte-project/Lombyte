@@ -816,10 +816,10 @@ unsigned char *spawn_bomb(int bomb_holder_moby, void *spawn_position) {
         random_rotation.f[1] = random_float_between(-3.1415927f, 3.1415927f);
         random_rotation.f[2] = random_float_between(-3.1415927f, 3.1415927f);
         u.q = random_rotation.q;
-        bomb_moby[0x30] = 0xFF;
+        MOBY(bomb_moby)->update_dist = 0xFF;
         MOBY(bomb_moby)->draw_dist = 0xFF;
-        bomb_moby[0x31] = 1;
-        bomb_moby[0x20] = 0;
+        MOBY(bomb_moby)->visible = 1;
+        MOBY(bomb_moby)->state = 0;
         *(int *)(v + 0x50) = bomb_holder_moby;
         *(short *)(v + 0x56) = 0;
         *(short *)(v + 0x6A) = 0;
@@ -827,7 +827,7 @@ unsigned char *spawn_bomb(int bomb_holder_moby, void *spawn_position) {
         hero_context = &hero;
         *(float *)(v + 0x6C) = fast_arc_tan(hero_context->facing_x, hero_context->facing_y);
         *(int *)(v + 0x64) = 0;
-        qcopy(bomb_moby + 0x10, spawn_position);
+        qcopy(&MOBY(bomb_moby)->pos, spawn_position);
         clear_u64_value(v);
         qcopy(bomb_moby + 0x40, &u);
         frame_scaled_random_angle =

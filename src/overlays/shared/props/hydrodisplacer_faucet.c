@@ -39,7 +39,7 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
     if (((char *)player_hero->ground_moby) == faucet_moby) {
         hero_on_faucet_in_mode_13 = player_hero->state.control_mode == 0x13;
     }
-    switch ((unsigned char)faucet_moby[0x53]) {
+    switch ((unsigned char)MOBY(faucet_moby)->prev_seq) {
     case HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_1:
         if (faucet_vars[0] >= 0 &&
             (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + faucet_vars[0] * 256 + 0xBC) & 1) &&
@@ -53,11 +53,11 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
             blend_moby_animation(faucet_moby, 3, 0, 0);
         break;
     case HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_1_WAIT:
-        if (faucet_moby[0x70] & 2)
+        if (MOBY(faucet_moby)->anim_flags & 2)
             blend_moby_animation(faucet_moby, 0, 0, 0);
         break;
     case HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_2_WAIT:
-        if (faucet_moby[0x70] & 2)
+        if (MOBY(faucet_moby)->anim_flags & 2)
             blend_moby_animation(faucet_moby, 2, 0, 0);
         break;
     }

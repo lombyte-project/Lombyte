@@ -168,14 +168,14 @@ unsigned char *spawn_plasmabot_death_debris(char *debris_source_moby, char *pos)
     if (spawned_moby != 0) {
         spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(char **)(spawned_vars + 0x24) = debris_source_moby;
-        qcopy(spawned_moby + 0x10, pos);
-        MOBY(spawned_moby)->rot.z = *(float *)(debris_source_moby + 0x48);
-        spawned_moby[0x20] = 0;
-        spawned_moby[0x30] = 0xFF;
+        qcopy(&MOBY(spawned_moby)->pos, pos);
+        MOBY(spawned_moby)->rot.z = MOBY(debris_source_moby)->rot.z;
+        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         hero_launch_reference = (char *)&hero.motion.pos;
-        fast_vec_sub(launch_vector_scratch, spawned_moby + 0x10, hero_launch_reference);
+        fast_vec_sub(launch_vector_scratch, &MOBY(spawned_moby)->pos, hero_launch_reference);
         hero_launch_reference = hero_launch_reference + 0x210;
         launch_vector_scratch[2] = 0.0f;
         fast_vec_normalize(

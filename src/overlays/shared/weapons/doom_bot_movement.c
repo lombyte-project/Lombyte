@@ -297,8 +297,7 @@ select_class5_target_or_hero(
             angles[1], fast_arc_tan(distance, target[2] - position[2]));
         heightError *= heightError;
         if (checkCollision) {
-            if (8.0f <
-                FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18)))
+            if (8.0f < FUN_001f99c0(*(float *)(candidate + 0x18) - MOBY(reference_moby)->pos.z))
                 valid = 1;
             else
                 valid = FUN_001efa68_2bed90(position, target, 6, candidate, 0) != 0;
@@ -308,7 +307,7 @@ select_class5_target_or_hero(
         if (mode != 0 || !valid) {
             bonus = 0.0f;
             score = fast_vec_dist(position, target);
-            if (*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18) > 3.25f)
+            if (*(float *)(candidate + 0x18) - MOBY(reference_moby)->pos.z > 3.25f)
                 score += 15.0f;
             if (valid)
                 bonus = 5.0f;
@@ -323,7 +322,7 @@ select_class5_target_or_hero(
     }
     if (best == 0) {
         char *playerPosition = D_0013F3D0;
-        if (vector_distance(reference_moby + 0x10, playerPosition) > 3.2f)
+        if (vector_distance(&MOBY(reference_moby)->pos, playerPosition) > 3.2f)
             best = *(char **)(playerPosition + 0x2000);
     }
     return best;
@@ -537,7 +536,7 @@ void initialize_moby_hop_trajectory(unsigned char *hopping_moby,
 #define F2BF(p, x) (*(float *)((p) + (x)))
     *(int *)(hop_trajectory + 0x30) = 0;
     qcopy(hop_trajectory, landing_position);
-    squared_horizontal_distance = vector_distance(hopping_moby + 0x10, hop_trajectory);
+    squared_horizontal_distance = vector_distance(&MOBY(hopping_moby)->pos, hop_trajectory);
     squared_horizontal_distance = squared_horizontal_distance * squared_horizontal_distance;
     uncapped_horizontal_speed =
         F2BF(hop_trajectory, 0x1C) * 35.0f * F2BF(hop_trajectory, 0x20) /
@@ -548,7 +547,7 @@ void initialize_moby_hop_trajectory(unsigned char *hopping_moby,
         F2BF(hop_trajectory, 0x14) = F2BF(hop_trajectory, 0x20);
     F2BF(hop_trajectory, 0x18) = fast_arc_tan(F2BF(hop_trajectory, 0) - F2BF(hopping_moby, 0x10),
                                               F2BF(hop_trajectory, 4) - F2BF(hopping_moby, 0x14));
-    uncapped_vertical_launch_speed = FUN_L00_0025abf0(hopping_moby + 0x10,
+    uncapped_vertical_launch_speed = FUN_L00_0025abf0(&MOBY(hopping_moby)->pos,
                                                       hop_trajectory,
                                                       0,
                                                       F2BF(hop_trajectory, 0x14),

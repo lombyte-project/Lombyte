@@ -131,7 +131,7 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
         return 1;
     }
     g = (char *)&l02_camera_lui;
-    fast_vec_sub(target_displacement, target_moby + 0x10, *(char **)(g + 0x180) + 0x30);
+    fast_vec_sub(target_displacement, &MOBY(target_moby)->pos, *(char **)(g + 0x180) + 0x30);
     dot1 = fast_vec_dot(target_displacement, (shared_axis_data + 0x30));
     fast_vec_scale(scaled_axis_vector, (shared_axis_data + 0x30), dot1);
     fast_vec_sub(target_axis_residual, target_displacement, scaled_axis_vector);

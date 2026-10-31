@@ -191,15 +191,15 @@ unsigned char *spawn_path_or_ballistic_debris(char *debris_origin_moby, float *s
     if (spawned_moby != 0) {
         char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         float launch_vector_scratch[8];
-        pos = spawned_moby + 0x10;
-        qcopy(pos, debris_origin_moby + 0x10);
-        MOBY(spawned_moby)->rot.z = *(float *)(debris_origin_moby + 0x48);
-        spawned_moby[0x20] = mode;
-        spawned_moby[0x30] = 0xFF;
+        pos = &MOBY(spawned_moby)->pos;
+        qcopy(pos, &MOBY(debris_origin_moby)->pos);
+        MOBY(spawned_moby)->rot.z = MOBY(debris_origin_moby)->rot.z;
+        MOBY(spawned_moby)->state = mode;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         *(char **)spawned_vars = debris_origin_moby;
-        if (spawned_moby[0x20] == 0) {
+        if (MOBY(spawned_moby)->state == 0) {
             int          index;
             LevelSpline *splines;
             int         *fields = (int *)spawned_vars;

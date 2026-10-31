@@ -512,10 +512,10 @@ void set_hero_animation_sequence_and_frame(int animation_id,
 
 void set_hero_animation_sequence_and_frame(int animation_id, int frame_index) {
     char *animation_moby = D_001413D0_2325a0[0];
-    animation_moby[0x50] = frame_index;
-    animation_moby[0x51] = frame_index + 1;
-    animation_moby[0x52] = animation_id;
-    animation_moby[0x53] = animation_id;
+    MOBY(animation_moby)->frame = frame_index;
+    MOBY(animation_moby)->prev_frame = frame_index + 1;
+    MOBY(animation_moby)->seq = animation_id;
+    MOBY(animation_moby)->prev_seq = animation_id;
     *(int *)(animation_moby + 0x54) = 0;
     update_moby_animation_state(animation_moby);
 }
@@ -1863,7 +1863,7 @@ void      configure_moby_from_source_bone4(void *source_moby,
 void configure_moby_from_source_bone4(void *source_moby, char *destination_moby) {
     u128 mt[4];
     build_moby_bone_transform(source_moby, 4, mt);
-    qcopy(destination_moby + 0x10, &mt[3]);
+    qcopy(&MOBY(destination_moby)->pos, &mt[3]);
     copy_matrix3x4(destination_moby + 0xc0, mt);
     refresh_moby_spatial_bounds_from_basis(destination_moby);
     if (MOBY(destination_moby)->oclass == 0x1b1)

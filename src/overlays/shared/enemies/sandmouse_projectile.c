@@ -39,12 +39,12 @@ char *spawn_sandmouse_projectile(char *firing_moby,
         *(char **)(moby_vars + 0x10) = firing_moby;
         ((unsigned char *)spawned_moby)[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0x7F;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->spawn_frame = *(long *)(firing_moby + 0x38);
         MOBY(spawned_moby)->rot.y = initial_pitch;
         MOBY(spawned_moby)->rot.z = initial_yaw;
         *(int *)(spawned_moby + 0x40) = 0;
-        qcopy(spawned_moby + 0x10, cp);
+        qcopy(&MOBY(spawned_moby)->pos, cp);
         *(float *)(moby_vars + 8) = target_yaw;
         *(float *)(moby_vars + 0xC) = target_pitch;
         *(int *)moby_vars = 0;
@@ -52,7 +52,7 @@ char *spawn_sandmouse_projectile(char *firing_moby,
         lifetime_frames = scale_game_frames(0x23);
         *(short *)(moby_vars + 0x14) = lifetime_frames;
         *(short *)(moby_vars + 0x16) = lifetime_frames;
-        spawned_moby[0x23] = 0x40;
+        MOBY(spawned_moby)->alpha = 0x40;
         MOBY(spawned_moby)->flags |= 0xA00;
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 0.5f;
     }

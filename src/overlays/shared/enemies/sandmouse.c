@@ -190,7 +190,7 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
                 0.5235988f) {
                 if (cutscene_mode_gp != 2) {
                     char *target_aim_height_data;
-                    qcopy(&target_aim_position, target_moby + 0x10);
+                    qcopy(&target_aim_position, &MOBY(target_moby)->pos);
                     target_aim_height_data = get_moby_target_info(target_moby);
                     if (target_aim_height_data != 0)
                         target_aim_position.f[2] =

@@ -77,23 +77,23 @@ void energy_sphere_holder_update(char *holder_moby) {
             (current_level_index != 10 ||
              (visited_table = (unsigned char *)((char *)visited52),
               (visited_table + ((unsigned char *)holder_moby)[0xB0]))[0xA0] == 0xFF)) {
-            holder_moby[0x20] = 2;
-            holder_moby[0xBC] = 1;
+            MOBY(holder_moby)->state = 2;
+            MOBY(holder_moby)->command = 1;
             break;
         }
         spawned_moby = create_moby(0x410);
-        spawned_moby[0x30] = 0x40;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->update_dist = 0x40;
+        MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->draw_dist = 0x40;
         MOBY(spawned_moby)->spawn_frame = ((long)MOBY(holder_moby)->spawn_frame);
         MOBY(spawned_moby)->flags = MOBY(holder_moby)->flags | 0x5000;
-        qcopy(spawned_moby + 0x10, holder_moby + 0x10);
+        qcopy(&MOBY(spawned_moby)->pos, &MOBY(holder_moby)->pos);
         MOBY(spawned_moby)->rot.x = random_angle_radians();
         MOBY(spawned_moby)->rot.y = random_angle_radians();
         MOBY(spawned_moby)->rot.z = random_angle_radians();
         MOBY(spawned_moby)->pos.z += 0.85f;
         *(char **)(holder_vars + 0x40) = spawned_moby;
-        holder_moby[0x20] = 1;
+        MOBY(holder_moby)->state = 1;
         initialize_energy_sphere_holder_vars(holder_moby);
         *(int *)(current_level_index * 256 + ((short)MOBY(holder_moby)->save_id >> 5) * 4 +
                  (char *)D_0014C190_257218) &= ~(1 << (MOBY(holder_moby)->save_id & 0x1F));
@@ -112,8 +112,8 @@ void energy_sphere_holder_update(char *holder_moby) {
             ((unsigned char *)holder_moby)[0xA4] = 0xFF;
         }
         if ((*(char **)(holder_vars + 0x40))[0x20] < 0) {
-            holder_moby[0xBC] = 1;
-            holder_moby[0x20] = 2;
+            MOBY(holder_moby)->command = 1;
+            MOBY(holder_moby)->state = 2;
             *(int *)(current_level_index * 256 + ((short)MOBY(holder_moby)->save_id >> 5) * 4 +
                      (char *)D_0014C190_257218) |= 1 << (MOBY(holder_moby)->save_id & 0x1F);
             energy_sphere_holder_completion_bits[(short)MOBY(holder_moby)->save_id >> 5] |=

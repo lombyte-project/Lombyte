@@ -251,7 +251,7 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
     target_private_data = ((char *)MOBY(target_moby)->pvars);
     transform_vector_by_basis(
         target_orbit_origin_offset, target_orbit_origin_offset, target_moby + 0xC0);
-    FUN_001f9a10_2eb648(target_orbit_origin, target_moby + 0x10, target_orbit_origin_offset);
+    FUN_001f9a10_2eb648(target_orbit_origin, &MOBY(target_moby)->pos, target_orbit_origin_offset);
     pw = target_orbit_origin;
     if (*(int *)(target_private_data + 0x10) == -1) {
         copy_five_floats_with_rotation_offset(

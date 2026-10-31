@@ -39,7 +39,7 @@ void gadgebot_spawn_pad_update(char *moby) __asm__("FUN_L06_002d8c20");
 /* Moby class 303 */
 void gadgebot_spawn_pad_update(char *moby) {
     char *owner_moby = ((char *)MOBY(moby)->parent);
-    if (owner_moby != 0 && (unsigned char)owner_moby[0x20] < 2) {
+    if (owner_moby != 0 && (unsigned char)MOBY(owner_moby)->state < 2) {
         int   frame_count_snapshot = *(int *)&level_frame_count;
         float color_pulse_value = (float)(frame_count_snapshot % 150) / 150.0f * 2.0f * 3.14159274f;
         if (color_pulse_value > 3.14159274f)

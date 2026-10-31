@@ -35,12 +35,12 @@ u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
     u8 *spawned_moby = create_moby(0xB3);
     if (spawned_moby) {
         u8 *spawned_moby_vars = ((u8 *)MOBY(spawned_moby)->pvars);
-        spawned_moby[0x30] = 0xFF;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->flags = 0x204;
-        spawned_moby[0x23] = 0x50;
-        spawned_moby[0x20] = 0;
+        MOBY(spawned_moby)->alpha = 0x50;
+        MOBY(spawned_moby)->state = 0;
         *(u8 **)(spawned_moby_vars + 8) = basis_source_moby;
         clear_u64_value(spawned_moby + 0x40);
         *(OvlQuad *)&MOBY(spawned_moby)->rot_row0 = *(OvlQuad *)&MOBY(basis_source_moby)->rot_row0;

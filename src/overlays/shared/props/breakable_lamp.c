@@ -300,14 +300,14 @@ void draw_moby_glow_sprite(char *m) {
 char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
     unsigned char *destination_moby = (unsigned char *)create_moby(0x5EA);
     if (destination_moby != 0) {
-        destination_moby[0x30] = source_moby[0x30];
+        MOBY(destination_moby)->update_dist = MOBY(source_moby)->update_dist;
         MOBY(destination_moby)->draw_dist = ((unsigned short)MOBY(source_moby)->draw_dist);
-        destination_moby[0x31] = 1;
+        MOBY(destination_moby)->visible = 1;
         MOBY(destination_moby)->rot.x = MOBY(source_moby)->rot.x;
         MOBY(destination_moby)->rot.y = MOBY(source_moby)->rot.y;
         MOBY(destination_moby)->rot.z = MOBY(source_moby)->rot.z;
         MOBY(destination_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
-        qcopy(destination_moby + 0x10, source_moby + 0x10);
+        qcopy(&MOBY(destination_moby)->pos, &MOBY(source_moby)->pos);
         update_entity(destination_moby);
     }
     return (char *)destination_moby;

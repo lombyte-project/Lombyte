@@ -288,12 +288,12 @@ void *spawn_moby_attachment(char *source_moby, char *spawn_position) {
     if (spawned_moby != 0) {
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = ((unsigned short)MOBY(source_moby)->draw_dist);
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         *(int *)(spawned_moby + 0x40) = 0;
         *(int *)(spawned_moby + 0x44) = 0;
         MOBY(spawned_moby)->rot.z = MOBY(source_moby)->rot.z;
         MOBY(spawned_moby)->spawn_frame = MOBY(source_moby)->spawn_frame;
-        qcopy(spawned_moby + 0x10, position_copy_ptr);
+        qcopy(&MOBY(spawned_moby)->pos, position_copy_ptr);
         update_entity(spawned_moby);
     }
     return spawned_moby;

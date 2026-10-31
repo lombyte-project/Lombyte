@@ -463,19 +463,19 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
     s32            index;
     unsigned char *effect;
 
-    if (toad_moby[0x20] == 0)
+    if (MOBY(toad_moby)->state == 0)
         return;
     if (D_L00_0015F5C4_2d5160 == 2) {
-        toad_moby[0x31] = 0;
-        *(u16 *)(toad_moby + 0x34) |= 1;
+        MOBY(toad_moby)->visible = 0;
+        MOBY(toad_moby)->flags |= 1;
     } else {
-        toad_moby[0x31] = 1;
-        *(u16 *)(toad_moby + 0x34) &= ~1;
+        MOBY(toad_moby)->visible = 1;
+        MOBY(toad_moby)->flags &= ~1;
     }
     damage = 0.0f;
     hit = find_moby_hit(toad_moby, 0x330000, 0);
     hit_reaction(toad_moby, hit, toad_vars + 0x20, 0, &hit_response_status, &damage, 0, 4);
-    if (hit_response_status != 1 && toad_moby[0x20] != 12 && damage != 0.0f) {
+    if (hit_response_status != 1 && MOBY(toad_moby)->state != 12 && damage != 0.0f) {
         /* Fakematch: register pins give retail's choices: 41 in $t0, the frame time and
            later 0.75 in $f4, the squared frame time first in $f0. */
         register s32 hit_state __asm__("$8") = 0x29;
@@ -499,7 +499,7 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
         *(f32 *)(toad_vars + 0x88) = forceZ;
         *(f32 *)(toad_vars + 0x8C) = forceW;
         *(f32 *)(toad_vars + 0xBC) = duration;
-        *(u16 *)(toad_moby + 0x34) &= ~0x1000;
+        MOBY(toad_moby)->flags &= ~0x1000;
         *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
         trooper_knockback_arc(hit_knockback_vector, &angle, toad_vars + 0x88, toad_vars + 0x8C);
         trooper_start_knockback(
@@ -508,14 +508,14 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
         reactionC4 = D_L00_00161988_gp;
         *(f32 *)(toad_vars + 0xC0) = reactionC0;
         *(f32 *)(toad_vars + 0xC4) = reactionC4;
-        toad_moby[0x20] = 12;
+        MOBY(toad_moby)->state = 12;
         toad_vars[0x67] = 0x78;
         trooper_anim_update(toad_moby, toad_vars + 0x60);
         FUN_L00_00257470_2d5160(toad_moby, 0, -1);
     }
-    toad_moby[0xA4] = 0xFF;
+    MOBY(toad_moby)->hit_slot = 0xFF;
     trooper_anim_finish(toad_moby, toad_vars + 0x60);
-    if (toad_moby[0x20] == 3) {
+    if (MOBY(toad_moby)->state == 3) {
         index = *(s32 *)(toad_vars + 0x1E4);
         effect = toad_vars + 0x180;
         activate_effect_l08(64.0f,
@@ -547,9 +547,10 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
             truncate_float_to_s32(scale_time(FUN_L00_00257be8_2d5160(180.0f, 240.0f)));
     }
     *(s32 *)(toad_vars + 0x38) = 0;
-    if ((toad_moby[0x20] == 5 || toad_moby[0x20] == 8) && *(s16 *)(toad_vars + 0x276) != 0) {
-        toad_moby[0x20] = 10;
-        if (toad_moby[0x53] != 4)
+    if ((MOBY(toad_moby)->state == 5 || MOBY(toad_moby)->state == 8) &&
+        *(s16 *)(toad_vars + 0x276) != 0) {
+        MOBY(toad_moby)->state = 10;
+        if (MOBY(toad_moby)->prev_seq != 4)
             FUN_L00_00257880_2d5160(toad_moby, 4, 0, scale_game_frames(20));
     }
 }

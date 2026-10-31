@@ -107,7 +107,8 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
     for (i = 0, slot = (char **)(spawner_vars + 0xB0); i < 20; i++, slot++) {
         char *slot_moby = *slot;
         if (slot_moby != 0 && MOBY(slot_moby)->oclass == 0x75E &&
-            (unsigned char)slot_moby[0x20] != 0xFE && (unsigned char)slot_moby[0x20] != 0xFD) {
+            (unsigned char)MOBY(slot_moby)->state != 0xFE &&
+            (unsigned char)MOBY(slot_moby)->state != 0xFD) {
             spawner_vars[0x91]++;
         } else {
             last = i;
@@ -171,9 +172,9 @@ void spawner_update(char *moby) {
                                 region_count);
         } else {
             char *target_moby = *(char **)(spawner_vars + 0x140);
-            if (target_moby != 0 && (unsigned char)target_moby[0x20] != 0xFE &&
-                (unsigned char)target_moby[0x20] != 0xFD) {
-                qcopy(spawner_vars + 0x100, target_moby + 0x10);
+            if (target_moby != 0 && (unsigned char)MOBY(target_moby)->state != 0xFE &&
+                (unsigned char)MOBY(target_moby)->state != 0xFD) {
+                qcopy(spawner_vars + 0x100, &MOBY(target_moby)->pos);
             } else {
                 *(int *)(spawner_vars + 0x140) = 0;
                 *(int *)(spawner_vars + 0x144) = 2;

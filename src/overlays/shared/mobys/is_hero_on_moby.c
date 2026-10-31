@@ -79,14 +79,14 @@ void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) {
     char *destination_moby = create_moby(oClass);
     if (destination_moby != 0) {
         MOBY(destination_moby)->draw_dist = 0xFF;
-        destination_moby[0x31] = 1;
+        MOBY(destination_moby)->visible = 1;
         MOBY(destination_moby)->scale =
             MOBY(destination_moby)->scale *
             (placement_source_moby->scale / placement_source_moby->pclass->scale);
-        qcopy(destination_moby + 0x10, &placement_source_moby->pos);
+        qcopy(&MOBY(destination_moby)->pos, &placement_source_moby->pos);
         qcopy(destination_moby + 0x40, &placement_source_moby->rot);
         MOBY(destination_moby)->spawn_frame = placement_source_moby->spawn_frame;
-        destination_moby[0x30] = 0;
+        MOBY(destination_moby)->update_dist = 0;
         MOBY(destination_moby)->flags = 0;
         update_entity(destination_moby);
     }

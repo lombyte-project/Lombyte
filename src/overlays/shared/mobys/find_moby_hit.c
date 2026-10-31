@@ -234,8 +234,8 @@ void spawn_nearby_effect(unsigned char *owner_moby,
                          float f) {
     int      i = D_L00_00173E40.idx;
     MobyHit *hit_record;
-    if (owner_moby[0xA4] != 0xFF) {
-        MobyHit *existing_hit = &moby_hits[owner_moby[0xA4]];
+    if (MOBY(owner_moby)->hit_slot != 0xFF) {
+        MobyHit *existing_hit = &moby_hits[MOBY(owner_moby)->hit_slot];
         if (existing_hit->owner == owner_moby && f < existing_hit->damage)
             return;
     }
@@ -252,7 +252,7 @@ void spawn_nearby_effect(unsigned char *owner_moby,
     }
     qcopy(&moby_hits[i].position, hit_vector_source);
     qcopy(&moby_hits[i].direction, direction_vector);
-    owner_moby[0xA4] = i;
+    MOBY(owner_moby)->hit_slot = i;
     D_L00_00173E40.idx = (i + 1) & 0x3F;
 }
 

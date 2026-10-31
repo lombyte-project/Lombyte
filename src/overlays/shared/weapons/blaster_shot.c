@@ -180,7 +180,7 @@ char *spawn_homing_shot(
         *(int *)(homing_shot_vars + 0x28) = 0;
         *(short *)(homing_shot_vars + 0x24) = timer;
         *(short *)(homing_shot_vars + 0x26) = timer;
-        *(w128 *)probe = *(w128 *)(firing_moby + 0x10);
+        *(w128 *)probe = *(w128 *)&MOBY(firing_moby)->pos;
         probe[2] = start[2];
         collision_hit_lifetime_min_and_alpha_scratch =
             collision_line(probe, start, 0, (int)firing_moby, 0);
@@ -483,7 +483,7 @@ void clear_homing_shot_trail_and_spawn_end_effects(u8 *shot_moby, s32 enabled) {
             free_effect_particle(*handle);
         *handle++ = 0;
     }
-    shot_position = shot_moby + 0x10;
+    shot_position = &MOBY(shot_moby)->pos;
 
     if (enabled != 0) {
         V4 *vector = &vectors[1];

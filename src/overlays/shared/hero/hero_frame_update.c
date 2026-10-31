@@ -791,7 +791,7 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
     release_and_clear_hero_voice_slots();
     restored_moby = *(char **)(hero_state_base + 0xA88);
     *(char **)(hero_state_base + 0x2080) = restored_moby;
-    qcopy(restored_moby + 0x10, hero_state_base + 0x80);
+    qcopy(&MOBY(restored_moby)->pos, hero_state_base + 0x80);
     MOBY(restored_moby)->collision_disable = 0;
     *(float *)(hero_state_base + 0xA94) = 1.0f;
     clear_hero_queued_animation();
@@ -842,10 +842,10 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     }
     G.damage_source_moby = 0;
     hero_moby = (u8 *)G.moby;
-    if (hero_moby[0xA4] == 0xFF) {
+    if (MOBY(hero_moby)->hit_slot == 0xFF) {
         return 0;
     }
-    hero_moby_entry = &l01_moby_hit_response_entries[hero_moby[0xA4]];
+    hero_moby_entry = &l01_moby_hit_response_entries[MOBY(hero_moby)->hit_slot];
     if (hero_moby_entry->owner != hero_moby) {
         return 0;
     }
