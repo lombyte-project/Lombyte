@@ -79,7 +79,7 @@ void rocket_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby->state = 1;
+        moby->state = ROCKET_STATE_IDLE;
         moby->update_dist = 0xFF;
         moby->pos.z += 1.5f;
         rocket_vars->sound = -1;
