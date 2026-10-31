@@ -866,7 +866,9 @@ int cancel_suck_cannon_suction_and_set_moby_state_5(struct Moby *moby) {
 
 /* Returns the word at +0x14 of the moby data, or 0 when either pointer is null. */
 
-s32 FUN_L00_002caf40(s32 moby_address) {
+s32 get_morphoray_chicken_slot_record(s32 moby_address) __asm__("FUN_L00_002caf40");
+
+s32 get_morphoray_chicken_slot_record(s32 moby_address) {
     s32 moby_vars_address;
     if (moby_address != 0) {
         moby_vars_address = *(s32 *)((u8 *)moby_address + 0x78);

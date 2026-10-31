@@ -6,7 +6,7 @@
 #include "rnc/camera/update_cam.h"
 #include "rnc/mobys/moby_class_tables.h"
 
-void FUN_L00_002caf40();
+void get_morphoray_chicken_slot_record() __asm__("FUN_L00_002caf40");
 void FUN_L00_002ea7a0();
 void blarg_helicopter_update() __asm__("FUN_L03_002cca00");
 void blaster_update() __asm__("FUN_L00_002b49a8");
@@ -147,7 +147,7 @@ void *D_L07_002125DC[6]
                                             moby_set_state_from_check,
                                             launch_suck_cannon_projectile_and_update_moby_state,
                                             cancel_suck_cannon_suction_and_set_moby_state_5,
-                                            FUN_L00_002caf40,
+                                            get_morphoray_chicken_slot_record,
                                             hud_counter_update};
 
 struct MobyClassUpdate moby_classes[187] __asm__("D_L07_00211D00")

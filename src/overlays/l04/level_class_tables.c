@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/overlay/shared/vendor.h"
 #include "rnc/overlay/shared/weapons.h"
+s32            get_morphoray_chicken_slot_record(s32) __asm__("FUN_L00_002caf40");
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 #include "rnc/overlay/shared/weapons/devastator.h"
 #include "rnc/overlay/shared/weapons/mine.h"
@@ -50,7 +51,7 @@ void *D_L04_001DD104[6]
                                             moby_set_state_from_check,
                                             launch_suck_cannon_projectile_and_update_moby_state,
                                             cancel_suck_cannon_suction_and_set_moby_state_5,
-                                            FUN_L00_002caf40,
+                                            get_morphoray_chicken_slot_record,
                                             hud_counter_update};
 
 void *D_L04_001DD11C[6]

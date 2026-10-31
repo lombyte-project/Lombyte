@@ -26,7 +26,7 @@ void           linked_moby_states_update(unsigned char *) __asm__("FUN_L00_002b3
 void           metal_detector_update(struct Moby *) __asm__("FUN_L00_002d2ee8");
 void           mine_glove_update(struct Moby *) __asm__("FUN_L00_002c1ad0");
 void           morphoray_update() __asm__("FUN_L00_002bc7e8");
-s32            FUN_L00_002caf40(s32);
+s32            get_morphoray_chicken_slot_record(s32) __asm__("FUN_L00_002caf40");
 int  cancel_suck_cannon_suction_and_set_moby_state_5(struct Moby *) __asm__("FUN_L00_002caf10");
 int  launch_suck_cannon_projectile_and_update_moby_state(struct Moby *,
                                                          int,
