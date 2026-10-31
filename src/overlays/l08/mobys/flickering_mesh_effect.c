@@ -626,7 +626,7 @@ void flickering_mesh_effect_update(struct Moby *moby) __asm__("FUN_L08_002f70a0"
 
 /* Moby class 671 */
 void flickering_mesh_effect_update(struct Moby *moby) {
-    FlickerLightVars *light_vars;
+    enum { FLICKERING_MESH_STATE_UNINITIALIZED = 0 , FLICKERING_MESH_STATE_INITIALIZED = 1 } ;FlickerLightVars *light_vars;
     Vec4              pos;
     f32               view, draw_fade_distance, fade;
     s32               hidden;
@@ -641,7 +641,7 @@ void flickering_mesh_effect_update(struct Moby *moby) {
         return;
     hidden = 0;
     at = &moby->pos;
-    if (moby->state == 0) {
+    if (moby->state == FLICKERING_MESH_STATE_UNINITIALIZED) {
         light_vars->light = -1;
         light_vars->particle_timer = light_vars->particle_ticks;
         qcopy(&light_vars->light_pos, at);
@@ -662,7 +662,7 @@ void flickering_mesh_effect_update(struct Moby *moby) {
             light_vars->noise[i] = random_float_between(light_vars->jitter, 1.0f);
             light_vars->goal[i] = random_float_between(light_vars->jitter, 1.0f);
         }
-        moby->state = 1;
+        moby->state = FLICKERING_MESH_STATE_INITIALIZED;
     }
     moby->scale =
         moby->pclass->scale *
