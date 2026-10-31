@@ -63,6 +63,9 @@ extern u8 *pool_bubbles_texture_table[] __asm__("D_L01_001B25E4");
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");
 
 Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 speed) {
+    enum {
+        POOL_BUBBLE_PARTICLE_KIND = 0x48
+    };
     Particle   *particle;
     PartMotion *m;
     f32         random_spin;
@@ -73,7 +76,7 @@ Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 s
         m = &particle->m;
         particle->color = (random_integer_below(0x10) << 25) | 0x808080;
         particle->alpha = truncate_float_to_s32(12.0f) + 0x20;
-        particle->kind = 0x48;
+        particle->kind = POOL_BUBBLE_PARTICLE_KIND;
         particle->active = 1;
         particle->tex = *pool_bubbles_texture_table[0];
         particle->life = 0x80;
