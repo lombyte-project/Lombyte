@@ -251,14 +251,18 @@ extern void mark_block_entries_within_transform_xy_bounds(int, int) __asm__("FUN
 void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
 
 void activate_drek_boss_class_0565_moby(struct Moby *moby) {
+    enum {
+        FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1,
+        MOBY_APPROACH_TARGET_TRANSFORM = 2
+    };
     char *state = (char *)moby->pvars;
-    if (moby->oclass == 0x565 && moby->state == 1) {
+    if (moby->oclass == 0x565 && moby->state == FALLING_MOBY_GROUP_AWAIT_ACTIVATION) {
         if (*(int *)(state + 0xC) != -1) {
             mark_block_entries_within_transform_xy_bounds(0x802, *(int *)(state + 0xC));
             mark_block_entries_within_transform_xy_bounds(0x908, *(int *)(state + 0xC));
             mark_block_entries_within_transform_xy_bounds(0x954, *(int *)(state + 0xC));
         }
-        moby->state = 2;
+        moby->state = MOBY_APPROACH_TARGET_TRANSFORM;
         set_group_child_carrier_byte_bc(moby->group, 1);
     }
 }
