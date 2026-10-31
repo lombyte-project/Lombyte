@@ -148,6 +148,10 @@ extern char D_L14_0015F580[] MACRO_ADDR;
 extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
 
 void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
+    enum {
+        ENEMY_FIGHTER_STATE_INITIALIZE = 0,
+        ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
+    };
     Vec4     step;
     Vec4     pos;
     Vec4     paired_exhaust_origin;
@@ -159,7 +163,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     int      life;
     float    size;
 
-    if (emitter_moby->state == 0 || emitter_moby->state == 2 || emitter_moby->visible == 0)
+    if (emitter_moby->state == ENEMY_FIGHTER_STATE_INITIALIZE || emitter_moby->state == ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN || emitter_moby->visible == 0)
         return;
     fast_vec_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_base_row0_offset_gp);
     fast_vec_add(&pos, &emitter_moby->pos, &step);
