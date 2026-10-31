@@ -1012,6 +1012,14 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE = 10,
         SUPPRESSED_HIT_RESPONSE = 11
     };
+    enum {
+        TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION = 1,
+        TOXIC_CRAB_STATE_ACTIVATE = 2,
+        TOXIC_CRAB_STATE_RETURN_HOME = 8,
+        TOXIC_CRAB_STATE_HIT_KNOCKBACK = 10,
+        TOXIC_CRAB_STATE_DEATH_EFFECTS = 0xB,
+        TOXIC_CRAB_STATE_FALL_TO_DEATH = 0xC
+    };
     Moby        *moby = mv;
     AlignedVec4f vA;
     AlignedVec4f vB;
@@ -1029,8 +1037,8 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     if (((Hero *)(((char *)&hero)))->items[0].item_id == 0x15) {
         if (((D_2E52B0 *)((Hero *)(((char *)&hero)))->items[0].moby->pvars)->f10 == moby) {
             func_L10_002E14F8_2E52B0(moby);
-            if (moby->state == 1)
-                moby->state = 2;
+            if (moby->state == TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION)
+                moby->state = TOXIC_CRAB_STATE_ACTIVATE;
         }
     }
     if (moby_data->f38 != 0) {
@@ -1046,7 +1054,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     hit_response_code =
         resolve_moby_hit_response(moby, hit_record, &moby_data->f20, 0, &A, &B, 0, 4);
     fast_dec_timer_s16(&moby_data->h26);
-    if ((unsigned int)A >= 2 && moby->state != 0xB && moby->state != 0xC) {
+    if ((unsigned int)A >= 2 && moby->state != TOXIC_CRAB_STATE_DEATH_EFFECTS && moby->state != TOXIC_CRAB_STATE_FALL_TO_DEATH) {
         if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 &&
             hit_record->f20->oclass == 0x31A) {
             if (moby_data->f1AC != 0 && item_unlocked[0x11] == 0) {
@@ -1119,7 +1127,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         case ANIMATED_KNOCKBACK_HIT_RESPONSE:
         case HIT_DIRECTED_KNOCKBACK_HIT_RESPONSE:
         case ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE:
-            moby->state = 10;
+            moby->state = TOXIC_CRAB_STATE_HIT_KNOCKBACK;
             moby_data->h26 = scale_game_frames(60);
             moby_data->f80 = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
             trooper_set_knockback(moby_data->a70, 0.5f, 0.5f);
@@ -1134,7 +1142,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         case VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE:
         case VEHICLE_DEPENDENT_KNOCKBACK_HIT_RESPONSE: {
             float knockback_strength;
-            moby->state = 10;
+            moby->state = TOXIC_CRAB_STATE_HIT_KNOCKBACK;
             moby_data->h26 = scale_game_frames(60);
             moby_data->f80 = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
             knockback_strength = ((Hero *)(((char *)&hero)))->vehicle_mode == 1 ? 1.0f : 3.0f;
@@ -1151,7 +1159,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         }
         case LETHAL_HIT_RESPONSE:
         case DEATH_HIT_RESPONSE:
-            moby->state = 11;
+            moby->state = TOXIC_CRAB_STATE_DEATH_EFFECTS;
             moby->flags &= 0xEFFF;
             break;
         case NO_STATE_TRANSITION_HIT_RESPONSE:
@@ -1167,7 +1175,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     }
     if (moby_data->f1AC != 0) {
         moby_data->f1A0 = D_L10_00161E40_gp + 6.0f;
-    } else if (moby->state == 1) {
+    } else if (moby->state == TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION) {
         if (moby == ((Moby *)((Hero *)(((char *)&hero)))->unk240) ||
             moby == ((Moby *)((Hero *)(((char *)&hero)))->coll_hit_moby)) {
             moby_data->f1A0 = 6.0f;
@@ -1198,15 +1206,15 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
                             l10_paths[moby_data->f1B0]->points,
                             l10_paths[moby_data->f1B0]->count);
     }
-    if (moby->state != 1 && moby_data->f164 == 2) {
+    if (moby->state != TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION && moby_data->f164 == 2) {
         moby_data->f1D4++;
         if (scale_game_frames(300) < moby_data->f1D4) {
             if (1.0f < fast_vec_dist(&moby->pos, &moby_data->a170)) {
-                moby->state = 8;
+                moby->state = TOXIC_CRAB_STATE_RETURN_HOME;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(12));
             } else if (((Hero *)(((char *)&hero)))->vehicle_mode != 1) {
-                moby->state = 1;
+                moby->state = TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION;
                 if (moby->prev_seq != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }
