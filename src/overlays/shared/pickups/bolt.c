@@ -539,6 +539,9 @@ void collect_bolt(struct Moby *bolt) {
 void update_bolt_grounded_pose(char *moby, void *out1, void *out2) __asm__("FUN_L00_002a6de8");
 
 void update_bolt_grounded_pose(char *moby, void *base_position_output, void *base_rotation_output) {
+    enum {
+        BOLT_IDLE = 3
+    };
     char *grounded_bolt_vars = ((char *)MOBY(moby)->pvars);
     float local_rotation_basis[12];
     float base_rotation_basis[12];
@@ -616,7 +619,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
         qcopy(base_position_output, A);
     if (base_rotation_output != 0)
         qcopy(base_rotation_output, B);
-    if (MOBY(moby)->state == 3) {
+    if (MOBY(moby)->state == BOLT_IDLE) {
         char *ground_moby = *(char **)(grounded_bolt_vars + 0x5C);
         if (ground_moby != 0 && *(unsigned char *)(grounded_bolt_vars + 0x57) == 0) {
             int   should_detach_from_ground;
