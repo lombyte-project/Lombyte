@@ -137,10 +137,10 @@ extern float horny_toad_target_animation_start_index_gp __asm__("D_L00_00161984"
 extern short D_L00_00161960 __attribute__((sda));
 
 extern s32            D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
-extern f32            D_L00_00161970_gp __asm__("D_L00_00161970") __attribute__((sda));
-extern f32            D_L00_00161974_gp __asm__("D_L00_00161974") __attribute__((sda));
-extern f32            D_L00_00161978_gp __asm__("D_L00_00161978") __attribute__((sda));
-extern f32            D_L00_0016197C_gp __asm__("D_L00_0016197C") __attribute__((sda));
+extern f32            l00_horny_toad_knockback_gravity __asm__("D_L00_00161970") __attribute__((sda));
+extern f32            l00_horny_toad_knockback_horizontal_deceleration __asm__("D_L00_00161974") __attribute__((sda));
+extern f32            l00_horny_toad_knockback_horizontal_speed __asm__("D_L00_00161978") __attribute__((sda));
+extern f32            l00_horny_toad_knockback_vertical_speed __asm__("D_L00_0016197C") __attribute__((sda));
 extern f32            D_L00_00161988_gp __asm__("D_L00_00161988") __attribute__((sda));
 extern f32            D_L00_0016198C_gp __asm__("D_L00_0016198C") __attribute__((sda));
 extern unsigned char *D_L00_001B04B0_2d5160[] __asm__("D_L00_001B04B0");
@@ -491,10 +491,10 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
         register f32 frame_time_reg __asm__("$f4") = frame_time;
         register f32 knockback_scale __asm__("$f4");
         register f32 frame_time_sq_reg __asm__("$f0") = D_0015ED70;
-        forceX = D_L00_00161970_gp * frame_time_sq_reg;
-        forceY = D_L00_00161974_gp * frame_time_sq_reg;
-        forceZ = D_L00_00161978_gp * frame_time_reg;
-        forceW = D_L00_0016197C_gp * frame_time_reg;
+        forceX = l00_horny_toad_knockback_gravity * frame_time_sq_reg;
+        forceY = l00_horny_toad_knockback_horizontal_deceleration * frame_time_sq_reg;
+        forceZ = l00_horny_toad_knockback_horizontal_speed * frame_time_reg;
+        forceW = l00_horny_toad_knockback_vertical_speed * frame_time_reg;
         health = *(f32 *)(toad_vars + 0x20) - damage;
         toad_vars[0xAD] = 0;
         duration = frame_time + frame_time;
