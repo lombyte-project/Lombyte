@@ -113,7 +113,7 @@ void turret_update(struct Moby *moby) {
     moby->flags &= ~4;
     moby_point_position(moby, 3, &seat);
     seat.f[2] += 0.4f;
-    if (moby->state >= 4) {
+    if (moby->state >= TURRET_STATE_IDLE) {
         if (fast_dec_timer_s16(&turret_vars->mount_delay) != 0 && moby->command == 1 &&
             hero.state.control_mode != 0x14 && hero.state.control_mode != 7 &&
             hero.state.current != 0x3D) {
@@ -129,17 +129,17 @@ void turret_update(struct Moby *moby) {
                 jet_end_mount(0);
                 hero_set_state(0, 1);
                 moby->command = 2;
-                moby->state = 4;
+                moby->state = TURRET_STATE_IDLE;
                 blend_moby_animation(moby, 0, 0, 1);
             } else {
-                if (moby->state != 5) {
+                if (moby->state != TURRET_STATE_MOUNTED) {
                     turret_vars->dismount_delay = 2;
                     jet_mount(&moby->pos, &moby->rot, 0, 0, 0);
                     if (moby->prev_seq != 5) {
                         blend_moby_animation(moby, 5, 0, scale_game_frames(5));
                     }
                 }
-                moby->state = 5;
+                moby->state = TURRET_STATE_MOUNTED;
             }
         } else if (moby->command == 2) {
             if (fast_vec_dist(&seat, &hero.moby->pos) > 1.2f || hero.ground_moby != moby) {
@@ -158,7 +158,7 @@ void turret_update(struct Moby *moby) {
         attach_manipulator(moby, 0, turret_vars);
         work_vector.q = *(u128 *)&moby->pos;
         spawn_turret_base(moby, &work_vector);
-        moby->state = 4;
+        moby->state = TURRET_STATE_IDLE;
         turret_vars->rest_z = moby->pos.z;
         turret_vars->pitch = 0.0f;
         moby->rot.z = 0.0f;
