@@ -227,7 +227,7 @@ void sync_hero_slot3_animation_speed(void) {
     struct Hero *hero_slot3_animation_speed_state = &hero;
     int          mapped_animation_ids[2];
 
-    if (hero_slot3_animation_speed_state->vehicle_mode != 0) {
+    if (hero_slot3_animation_speed_state->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         return;
     }
     if (hero_slot3_animation_speed_state->items[3].state != 2) {
