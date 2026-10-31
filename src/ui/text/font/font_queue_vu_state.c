@@ -14,6 +14,9 @@ extern void vu1_gs_regs_font(void) __asm__("func_00233C90");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void font_queue_vu_state(void) {
+    enum {
+        FONT_STATE_VU_PROGRAM_QUEUED = 7
+    };
     f32            camera_relative_scale_matrix[4][4];
     struct DmaTag *dma_packet_start;
     u8            *packet_write_ptr;
@@ -21,9 +24,9 @@ void font_queue_vu_state(void) {
     set_scale_matrix(camera_relative_scale_matrix, 1024.0f);
     fast_vec_scale(camera_relative_scale_matrix[3], camera_position, -1024.0f);
     camera_relative_scale_matrix[3][3] = 1.0f;
-    if (font_state != 7) {
+    if (font_state != FONT_STATE_VU_PROGRAM_QUEUED) {
         vu1_add_data_ref(font_vu_program, font_vu_program_tag[0]);
-        font_state = 7;
+        font_state = FONT_STATE_VU_PROGRAM_QUEUED;
     }
     render_packet_cursor.tag->tag = 0x10000000;
     render_packet_cursor.tag->addr = 0;
