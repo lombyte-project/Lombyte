@@ -217,11 +217,11 @@ void update_hero_airborne_planar_motion(void) {
     s32    state;
 
     state = hero.state.current;
-    if (state == 10) {
+    if (state == HERO_STATE_PACK_JUMP) {
         build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         hero.ground_speed = hero.motion.flat_speed;
-    } else if (state == 16) {
+    } else if (state == HERO_STATE_PACK_LONG_JUMP) {
         if (scale_game_frames(0x36) < hero.state_timer) {
             approach_value(frame_time_sq * 25.0f, frame_time_sq * 7.0f, &hero.jump_gravity);
         }
@@ -233,7 +233,7 @@ void update_hero_airborne_planar_motion(void) {
         speed_step(frame_time_sq * 44.0f, frame_time_sq * 45.0f);
         set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
         add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
-    } else if (state == 0x1C) {
+    } else if (state == HERO_STATE_LEDGE_JUMP) {
         if (scale_game_frames(0x28) < hero.state_timer) {
             turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
             air_accel(frame_time_sq * 20.0f);
@@ -247,7 +247,7 @@ void update_hero_airborne_planar_motion(void) {
         }
         hero.motion.velocity.f[0] = fast_cos(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
         hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
-    } else if (state == 11 || state == 12) {
+    } else if (state == HERO_STATE_HIGH_JUMP || state == HERO_STATE_STORED_HEADING_JUMP) {
         hero.motion.move_yaw = hero.takeoff_yaw;
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.981317f);
         if (hero.unk450 != 3) {
@@ -272,7 +272,7 @@ void update_hero_airborne_planar_motion(void) {
         hero.motion.velocity.f[1] += fast_sin(hero.takeoff_yaw) * additional_planar_speed;
         build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
-    } else if (state == 0x11) {
+    } else if (state == HERO_STATE_REPEATABLE_JUMP) {
         hero.motion.move_yaw = hero.unk470.f[3];
         qcopy(&hero.motion.move_dir, &hero.unk470);
         if (scale_game_frames(9) < hero.state_timer) {
