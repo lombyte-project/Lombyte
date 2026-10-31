@@ -5,6 +5,9 @@ extern s32 snd_start_movie_sound() __asm__("func_0012F108");
 void       audio_dec_start(struct AudioDec *dec) __asm__("FUN_0023acb8");
 
 void audio_dec_start(struct AudioDec *dec) {
+    enum {
+        AUDIO_DEC_STATE_STARTED = 2
+    };
     s32 buff_size;
     s32 channel_count;
     s32 four;
@@ -18,7 +21,7 @@ void audio_dec_start(struct AudioDec *dec) {
                           dec->iopZero,
                           dec->hdr.rate,
                           channel_count);
-    dec->state = 2;
+    dec->state = AUDIO_DEC_STATE_STARTED;
     /* Fakematch: GCC removes both stores, but the read-modify-write
        sequence gives hdr.ch retail's register. */
     dec->hdr.ch++;
