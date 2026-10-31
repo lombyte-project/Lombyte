@@ -965,6 +965,9 @@ extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_0030405
 void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) __asm__("FUN_L05_00303b08");
 
 void move_extermibot_along_path(struct Moby *moby, s32 destination_position, f32 side) {
+    enum {
+        EXTERMIBOT_TARGET_PATH_UNAVAILABLE = 2
+    };
     PathWalkerVars *walker_vars = (PathWalkerVars *)moby->pvars;
     Vec4f           facing_direction, movement_displacement, goal;
     f32             offset_heading;
@@ -978,7 +981,7 @@ void move_extermibot_along_path(struct Moby *moby, s32 destination_position, f32
                         destination_position,
                         &walker_vars->goal,
                         D_L05_00161A98_gp * 0.4f) == 0)
-            walker_vars->mode = 2;
+            walker_vars->mode = EXTERMIBOT_TARGET_PATH_UNAVAILABLE;
     }
     qcopy(&goal, &walker_vars->goal);
     distance_to_goal = vector_distance_xy(&moby->pos, &goal);
