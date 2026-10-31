@@ -24,9 +24,9 @@ extern float          D_L00_0015EF44_macro __asm__("D_L00_0015EF44") MACRO_ADDR;
 extern unsigned char *D_L00_00168FC0_lui __asm__("D_L00_00168FC0") NOT_SDA;
 extern int            D_L00_0015EF60_macro __asm__("D_L00_0015EF60") MACRO_ADDR;
 extern float          D_L00_00161CA0_gp __asm__("D_L00_00161CA0") __attribute__((sda));
-extern float          D_L00_00161CDC_gp __asm__("D_L00_00161CDC") __attribute__((sda));
-extern float          D_L00_00161CE0_gp __asm__("D_L00_00161CE0") __attribute__((sda));
-extern float          D_L00_00161CE4_gp __asm__("D_L00_00161CE4") __attribute__((sda));
+extern float          l00_follow_camera_collision_probe_step_growth_factor __asm__("D_L00_00161CDC") __attribute__((sda));
+extern float          l00_follow_camera_collision_probe_count __asm__("D_L00_00161CE0") __attribute__((sda));
+extern float          l00_follow_camera_collision_probe_scale __asm__("D_L00_00161CE4") __attribute__((sda));
 extern float          D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
 
 typedef struct {
@@ -163,9 +163,9 @@ void follow_camera_approach(unsigned char *moby) {
     ((CamTarget *)target)->unkE8 = 0.2f;
     ((CamTarget *)target)->unkD6 = 0;
     spring_reset = (CamSpring *)(*(unsigned char **)(moby + 0x70) + 0x1D0);
-    spring_reset->unk44 = D_L00_00161CDC_gp;
-    spring_reset->unk3C = D_L00_00161CE4_gp;
-    spring_reset->unk40 = D_L00_00161CE0_gp;
+    spring_reset->unk44 = l00_follow_camera_collision_probe_step_growth_factor;
+    spring_reset->unk3C = l00_follow_camera_collision_probe_scale;
+    spring_reset->unk40 = l00_follow_camera_collision_probe_count;
     spring_reset->unk48 = D_L00_0015EF60_macro;
     reset = *(unsigned char **)(moby + 0x70) + 0x220;
     ((CamEnd *)reset)->unkC = D_L00_00161D1C_gp;
@@ -866,9 +866,9 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     g->h38 = 0;
     g->i4C = 0;
     g->h34 = r;
-    g->f44 = D_L00_00161CDC_gp;
-    g->f3C = D_L00_00161CE4_gp;
-    g->f40 = D_L00_00161CE0_gp;
+    g->f44 = l00_follow_camera_collision_probe_step_growth_factor;
+    g->f3C = l00_follow_camera_collision_probe_scale;
+    g->f40 = l00_follow_camera_collision_probe_count;
     g->i48 = D_L00_0015EF60;
     clear_u64_value(camera_state_base->g.v10);
 
