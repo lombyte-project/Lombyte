@@ -319,7 +319,7 @@ void process_gunship_part_hits(struct Moby *moby) {
             ((char *)moby)[0x20] = 99;
         }
     }
-    if (state >= 0)
+    if (state >= GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY)
         allocate_voice_for_target_entry(state, 0, moby);
 }
 
