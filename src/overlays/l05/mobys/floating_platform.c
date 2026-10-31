@@ -29,34 +29,45 @@ extern int floating_platform_voice_interval_min_gp __asm__("D_L05_00161CE4") __a
 extern int floating_platform_voice_interval_max_gp __asm__("D_L05_00161CE8") __attribute__((sda));
 void       floating_platform_update(unsigned char *moby) __asm__("FUN_L05_0030bdd8");
 
+typedef struct FloatingPlatformVars {
+    u8  pad_0[0x20];
+    f32 unk20[4];
+    u8  pad_30[0x30];
+    f32 unk60;
+    u8  pad_64[0x8];
+    f32 unk6C;
+    u8  pad_70[0x8];
+    s32 timer_78;
+} FloatingPlatformVars;
+
 /* Moby class 810 */
 void floating_platform_update(unsigned char *moby) {
     enum {
         FLOATING_PLATFORM_INITIALIZE = 0,
         FLOATING_PLATFORM_UPDATE_ROCKING = 1
     };
-    char  *floating_platform_vars = ((char *)MOBY(moby)->pvars);
-    float  previous_position[4];
-    float  previous_rotation[4];
-    float  position_delta[4];
-    char  *position;
-    char  *current_rotation;
-    float *previous_rotation_ptr;
-    float  k;
-    float  rotation_y_phase;
+    FloatingPlatformVars *floating_platform_vars = (FloatingPlatformVars *)MOBY(moby)->pvars;
+    float                 previous_position[4];
+    float                 previous_rotation[4];
+    float                 position_delta[4];
+    char                 *position;
+    char                 *current_rotation;
+    float                *previous_rotation_ptr;
+    float                 k;
+    float                 rotation_y_phase;
     switch (MOBY(moby)->state) {
     case FLOATING_PLATFORM_INITIALIZE:
-        *(int *)(floating_platform_vars + 0x78) = truncate_float_to_s32(
+        floating_platform_vars->timer_78 = truncate_float_to_s32(
             scale_time(random_float_between((float)floating_platform_voice_interval_min_gp,
                                             (float)floating_platform_voice_interval_max_gp)));
-        *(float *)(floating_platform_vars + 0x60) = random_angle_radians();
-        *(float *)(floating_platform_vars + 0x6C) = random_angle_radians();
+        floating_platform_vars->unk60 = random_angle_radians();
+        floating_platform_vars->unk6C = random_angle_radians();
         MOBY(moby)->state = 1;
         break;
     case FLOATING_PLATFORM_UPDATE_ROCKING:
-        if (fast_dec_timer((int *)(floating_platform_vars + 0x78))) {
+        if (fast_dec_timer(&floating_platform_vars->timer_78)) {
             allocate_voice_for_target_entry(0, 0, moby);
-            *(int *)(floating_platform_vars + 0x78) = truncate_float_to_s32(
+            floating_platform_vars->timer_78 = truncate_float_to_s32(
                 scale_time(random_float_between((float)floating_platform_voice_interval_min_gp,
                                                 (float)floating_platform_voice_interval_max_gp)));
         }
@@ -65,20 +76,19 @@ void floating_platform_update(unsigned char *moby) {
         previous_rotation_ptr = previous_rotation;
         current_rotation = (char *)moby + 0x40;
         qcopy(previous_rotation_ptr, current_rotation);
-        rotation_y_phase = fast_add_rotations(*(float *)(floating_platform_vars + 0x60),
+        rotation_y_phase = fast_add_rotations(floating_platform_vars->unk60,
                                               floating_platform_rotation_y_phase_rate_degrees_gp *
                                                   DEG_TO_RAD * frame_time);
         k = floating_platform_rotation_x_phase_rate_degrees_gp * DEG_TO_RAD * frame_time;
-        *(float *)(floating_platform_vars + 0x60) = rotation_y_phase;
-        *(float *)(floating_platform_vars + 0x6C) =
-            fast_add_rotations(*(float *)(floating_platform_vars + 0x6C), k);
+        floating_platform_vars->unk60 = rotation_y_phase;
+        floating_platform_vars->unk6C = fast_add_rotations(floating_platform_vars->unk6C, k);
         MOBY(moby)->rot.y = floating_platform_rotation_y_amplitude_degrees_gp * DEG_TO_RAD *
-                            fast_sin(*(float *)(floating_platform_vars + 0x60));
+                            fast_sin(floating_platform_vars->unk60);
         MOBY(moby)->rot.x = floating_platform_rotation_x_amplitude_degrees_gp * DEG_TO_RAD *
-                            fast_sin(*(float *)(floating_platform_vars + 0x6C));
+                            fast_sin(floating_platform_vars->unk6C);
         fast_vec_sub(position_delta, position, previous_position);
         update_entity_matrix(
-            floating_platform_vars + 0x20, position_delta, previous_rotation_ptr, current_rotation);
+            floating_platform_vars->unk20, position_delta, previous_rotation_ptr, current_rotation);
         break;
     }
 }

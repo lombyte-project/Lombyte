@@ -51,11 +51,30 @@ extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_
 void process_helicopter_hits_and_reactivation(struct Moby *moby,
                                               int          flag) __asm__("FUN_L12_002ebca8");
 
+typedef struct HelicopterVars {
+    u8    pad_0[0x28];
+    u8    unk28;
+    u8    pad_29[0x1];
+    u8    unk2A;
+    u8    unk2B;
+    u8    unk2C;
+    u8    pad_2D[0x3];
+    f32   unk30;
+    u8    pad_34[0x2C];
+    s32   unk60;
+    u8    pad_64[0xC];
+    char *unk70;
+    s32   path_74;
+    u8    pad_78[0x28];
+    s32   unkA0;
+    s32   timer_A4;
+} HelicopterVars;
+
 void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
-    char          *moby_vars = (char *)moby->pvars;
-    float          explosion_position[4];
-    float          explosion_vector[4];
-    unsigned char *help_message_state;
+    HelicopterVars *moby_vars = (HelicopterVars *)moby->pvars;
+    float           explosion_position[4];
+    float           explosion_vector[4];
+    unsigned char  *help_message_state;
     if (find_moby_hit(moby, 0xA30000, 0) != 0) {
         if (hero.state.current != 0x32) {
             helicopter_help_message_hit_count_gp += 1;
@@ -71,7 +90,7 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
         qcopy(explosion_position, &moby->pos);
         clear_u64_value(explosion_vector);
         spawn_randomized_bolt_drop(moby, 0x1F, 0x4A, 2, -1);
-        *(int *)(moby_vars + 0xA4) = scale_game_frames(500);
+        moby_vars->timer_A4 = scale_game_frames(500);
         spawn_explosion(moby,
                         explosion_vector,
                         explosion_position,
@@ -96,10 +115,9 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
     }
-    if (*(int *)(moby_vars + 0xA4) == 0 && (moby->flags & 1) == 0)
+    if (moby_vars->timer_A4 == 0 && (moby->flags & 1) == 0)
         return;
-    if (fast_dec_timer((int *)(moby_vars + 0xA4)) != 0 && flag != 0 &&
-        *(int *)&D_L12_001619B4 == 0) {
+    if (fast_dec_timer(&moby_vars->timer_A4) != 0 && flag != 0 && *(int *)&D_L12_001619B4 == 0) {
         moby->collision = moby->pclass->collision;
         moby->flags = (moby->flags & 0xFFBE) | 0x1000;
     } else {
@@ -124,42 +142,42 @@ void helicopter_update(char *moby) {
         HELICOPTER_INITIALIZE_PATH = 0,
         HELICOPTER_FOLLOW_PATH = 1
     };
-    char *moby_vars = ((char *)MOBY(moby)->pvars);
-    float A[4];
-    float B[4];
-    float C[4];
-    float E[4];
+    HelicopterVars *moby_vars = (HelicopterVars *)MOBY(moby)->pvars;
+    float           A[4];
+    float           B[4];
+    float           C[4];
+    float           E[4];
     if (moby_vars != 0) {
         int moby_query_result =
             func_L01_00276680_i(moby, convert_integer_to_float(MOBY(moby)->draw_dist));
         FUN_L12_002ebca8_c(moby, moby_query_result == -1);
         switch ((unsigned char)MOBY(moby)->state) {
         case HELICOPTER_INITIALIZE_PATH:
-            if (*(int *)(moby_vars + 0x74) != -1) {
+            if (moby_vars->path_74 != -1) {
                 char *tbl;
                 int   initial_node_index;
                 int   last_node_index;
-                initialize_path_descriptor(moby_vars + 0x60);
-                tbl = ((char *)l12_paths[*(int *)(moby_vars + 0x74)]);
-                *(char **)(moby_vars + 0x70) = tbl;
-                initial_node_index = *(int *)(moby_vars + 0xA0);
+                initialize_path_descriptor(&moby_vars->unk60);
+                tbl = ((char *)l12_paths[moby_vars->path_74]);
+                moby_vars->unk70 = tbl;
+                initial_node_index = moby_vars->unkA0;
                 last_node_index = *(int *)tbl - 1;
                 if (last_node_index < initial_node_index)
                     initial_node_index = last_node_index;
                 qcopy((moby + 0x10), tbl + initial_node_index * 16 + 0x10);
-                moby_vars[0x2A] = 0x10;
-                moby_vars[0x28] = 2;
-                moby_vars[0x2C] = 0x2C;
-                *(float *)(moby_vars + 0x30) = 1.4f;
-                moby_vars[0x2B] = 1;
-                *(int *)(moby_vars + 0x60) = initial_node_index;
+                moby_vars->unk2A = 0x10;
+                moby_vars->unk28 = 2;
+                moby_vars->unk2C = 0x2C;
+                moby_vars->unk30 = 1.4f;
+                moby_vars->unk2B = 1;
+                moby_vars->unk60 = initial_node_index;
                 MOBY(moby)->state = 1;
                 MOBY(moby)->draw_dist = 0xAA;
                 MOBY(moby)->flags |= 0x1000;
             }
             break;
         case HELICOPTER_FOLLOW_PATH: {
-            char *path_state = moby_vars + 0x60;
+            char *path_state = &moby_vars->unk60;
             int   current_node_index = *(int *)path_state;
             char *tbl = *(char **)(path_state + 0x10);
             int   step = *(char *)(path_state + 4);
@@ -184,7 +202,7 @@ void helicopter_update(char *moby) {
                     helicopter_rotation_smoothing_divisor_gp);
             if (fast_vec_dist(moby + 0x10, C) < helicopter_path_speed_gp * D_0015ED6C) {
                 char *path;
-                *(int *)(moby_vars + 0x60) = next_node_index;
+                moby_vars->unk60 = next_node_index;
                 path = *(char **)(path_state + 0x10);
                 if (next_node_index == *(int *)path - 1) {
                     qcopy((moby + 0x10), path + 0x10);

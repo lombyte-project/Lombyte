@@ -27,6 +27,24 @@ s32         allocate_voice_for_target_entry(s32   entry_index,
                                             void *target) __asm__("FUN_0022da68");
 void        hero_falling_platform_update(char *moby) __asm__("FUN_L07_00311bc8");
 
+typedef struct HeroFallingPlatformVars {
+    u8  pad_0[0x20];
+    s32 unk20;
+    s16 unk24;
+    u8  pad_26[0x2];
+    u8  unk28;
+    u8  pad_29[0x15];
+    s16 unk3E;
+    u8  pad_40[0x20];
+    f32 unk60[4];
+    u8  pad_70[0x30];
+    s16 timer_A0;
+    s16 unkA2;
+    f32 unkA4;
+    f32 unkA8;
+    f32 unkAC;
+} HeroFallingPlatformVars;
+
 /* Moby class 1080 */
 void hero_falling_platform_update(char *moby) {
     enum {
@@ -35,23 +53,23 @@ void hero_falling_platform_update(char *moby) {
         LEAF_TIMED_SWAY_AND_DESCENT = 2,
         LEAF_ACCELERATED_FALL = 3
     };
-    char *moby_data;
-    float previous_position[4];
-    float position_delta[4];
-    float tilt_descent_work_value;
-    float gravity_step;
+    HeroFallingPlatformVars *moby_data;
+    float                    previous_position[4];
+    float                    position_delta[4];
+    float                    tilt_descent_work_value;
+    float                    gravity_step;
     if (moby == 0)
         return;
-    moby_data = ((char *)MOBY(moby)->pvars);
+    moby_data = (HeroFallingPlatformVars *)MOBY(moby)->pvars;
     if (moby_data == 0)
         return;
     qcopy(previous_position, moby + 0x10);
     switch (((unsigned char *)moby)[0x20]) {
     case LEAF_INITIALIZE:
-        *(int *)(moby_data + 0x20) = 0;
-        *(short *)(moby_data + 0x24) = 0;
-        moby_data[0x28] = 4;
-        *(short *)(moby_data + 0x3E) = 0xD;
+        moby_data->unk20 = 0;
+        moby_data->unk24 = 0;
+        moby_data->unk28 = 4;
+        moby_data->unk3E = 0xD;
         set_moby_color(moby, 0x50, 0x40, 0x10);
         MOBY(moby)->rot.x += random_float_between(-0.034906585f, 0.034906585f);
         MOBY(moby)->rot.y += random_float_between(-0.034906585f, 0.034906585f);
@@ -60,27 +78,27 @@ void hero_falling_platform_update(char *moby) {
         break;
     case LEAF_WAIT_FOR_HERO_CONTACT:
         if (is_hero_on_moby(moby)) {
-            *(float *)(moby_data + 0xA8) = MOBY(moby)->rot.x;
-            *(float *)(moby_data + 0xAC) = MOBY(moby)->rot.y;
-            *(short *)(moby_data + 0xA0) = scale_game_frames(0x1E);
-            if (*(short *)(moby_data + 0xA2) != -1)
-                allocate_voice_for_target_entry(*(short *)(moby_data + 0xA2), 0, (int)moby);
+            moby_data->unkA8 = MOBY(moby)->rot.x;
+            moby_data->unkAC = MOBY(moby)->rot.y;
+            moby_data->timer_A0 = scale_game_frames(0x1E);
+            if (moby_data->unkA2 != -1)
+                allocate_voice_for_target_entry(moby_data->unkA2, 0, (int)moby);
             MOBY(moby)->state = 2;
         }
         break;
     case LEAF_TIMED_SWAY_AND_DESCENT:
-        MOBY(moby)->rot.x = fast_sin(normalize_angle(
-                                convert_integer_to_float(*(short *)(moby_data + 0xA0)) * 0.75f)) *
-                            DEG_TO_RAD;
+        MOBY(moby)->rot.x =
+            fast_sin(normalize_angle(convert_integer_to_float(moby_data->timer_A0) * 0.75f)) *
+            DEG_TO_RAD;
         {
-            float c = fast_cos(
-                normalize_angle(convert_integer_to_float(*(short *)(moby_data + 0xA0)) * 0.89f));
+            float c =
+                fast_cos(normalize_angle(convert_integer_to_float(moby_data->timer_A0) * 0.89f));
             float descent_frame_scale = frame_scale;
             MOBY(moby)->rot.y = c * DEG_TO_RAD;
             MOBY(moby)->pos.z -= descent_frame_scale * 0.002f;
         }
-        if (fast_dec_timer_s16(moby_data + 0xA0)) {
-            *(float *)(moby_data + 0xA4) = frame_scale * 0.002f;
+        if (fast_dec_timer_s16(&moby_data->timer_A0)) {
+            moby_data->unkA4 = frame_scale * 0.002f;
             MOBY(moby)->state = 3;
         }
         break;
@@ -90,8 +108,8 @@ void hero_falling_platform_update(char *moby) {
         tilt_descent_work_value = fast_sin(tilt_descent_work_value);
         gravity_step = frame_time_sq * 9.8f;
         MOBY(moby)->pos.z -= tilt_descent_work_value + tilt_descent_work_value;
-        *(float *)(moby_data + 0xA4) += gravity_step;
-        MOBY(moby)->pos.z -= *(float *)(moby_data + 0xA4);
+        moby_data->unkA4 += gravity_step;
+        MOBY(moby)->pos.z -= moby_data->unkA4;
         if (MOBY(moby)->pos.z < 2.0f) {
             mark_moby_for_removal(moby);
             return;
@@ -101,5 +119,5 @@ void hero_falling_platform_update(char *moby) {
         break;
     }
     fast_vec_sub(position_delta, moby + 0x10, previous_position);
-    update_entity_matrix(moby_data + 0x60, position_delta, moby + 0x40, moby + 0x40);
+    update_entity_matrix(moby_data->unk60, position_delta, moby + 0x40, moby + 0x40);
 }

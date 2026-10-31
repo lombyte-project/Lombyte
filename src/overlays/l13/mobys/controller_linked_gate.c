@@ -18,6 +18,13 @@ extern int debug_print_alt() __asm__("FUN_001e93b0");
 
 void controller_linked_gate_update(struct Moby *moby) __asm__("FUN_L13_002f8a78");
 
+typedef struct ControllerLinkedGateVars {
+    u8  pad_0[0x10];
+    f32 unk10;
+    s32 unk14;
+    s32 unk18;
+} ControllerLinkedGateVars;
+
 /* Moby classes 674, 677, 680 */
 void controller_linked_gate_update(struct Moby *moby) {
     enum {
@@ -27,11 +34,11 @@ void controller_linked_gate_update(struct Moby *moby) {
         GATE_STATE_CLOSED = 3,
         GATE_STATE_OPENING = 4
     };
-    char *gate_data = ((char *)moby->pvars);
-    char *controller_moby = 0;
-    int   open;
-    int   close;
-    int   step;
+    ControllerLinkedGateVars *gate_data = (ControllerLinkedGateVars *)moby->pvars;
+    char                     *controller_moby = 0;
+    int                       open;
+    int                       close;
+    int                       step;
     if (*(int *)gate_data != -1) {
         controller_moby = D_L13_0015FFD8 + (*(int *)gate_data << 8);
     }
@@ -40,13 +47,13 @@ void controller_linked_gate_update(struct Moby *moby) {
     if (((unsigned char *)moby)[0x20] != 0) {
         int i;
         for (i = 0; i < 6; i++) {
-            if (((unsigned char *)controller_moby)[0x20] == (gate_data + i)[4]) {
+            if (((unsigned char *)controller_moby)[0x20] == ((char *)gate_data + i)[4]) {
                 open = 1;
                 break;
             }
         }
         for (i = 0; i < 6; i++) {
-            if (((unsigned char *)controller_moby)[0x20] == (gate_data + i)[0xA]) {
+            if (((unsigned char *)controller_moby)[0x20] == ((char *)gate_data + i)[0xA]) {
                 close = 1;
                 break;
             }
@@ -61,13 +68,13 @@ void controller_linked_gate_update(struct Moby *moby) {
         }
         set_moby_color(moby, 0x80, 0x80, 0x80);
         moby->flags |= 0xA08;
-        if (*(int *)(gate_data + 0x18) == 0) {
-            *(float *)(gate_data + 0x10) = 1.0f;
+        if (gate_data->unk18 == 0) {
+            gate_data->unk10 = 1.0f;
             moby->state = 1;
             moby->collision = moby->pclass->collision;
             moby->alpha = 0x14;
         } else {
-            *(float *)(gate_data + 0x10) = 0.0f;
+            gate_data->unk10 = 0.0f;
             moby->state = 3;
             moby->collision = 0;
             moby->alpha = 0;
@@ -84,9 +91,9 @@ void controller_linked_gate_update(struct Moby *moby) {
             moby->state = 4;
             moby->collision = moby->pclass->collision;
         }
-        *(float *)(gate_data + 0x10) -= frame_scale * 0.05f;
-        if (*(float *)(gate_data + 0x10) < 0.0f) {
-            *(float *)(gate_data + 0x10) = 0.0f;
+        gate_data->unk10 -= frame_scale * 0.05f;
+        if (gate_data->unk10 < 0.0f) {
+            gate_data->unk10 = 0.0f;
             moby->state = 3;
             moby->collision = 0;
             moby->visible = 0;
@@ -106,22 +113,22 @@ void controller_linked_gate_update(struct Moby *moby) {
             moby->collision = 0;
             moby->state = 2;
         }
-        *(float *)(gate_data + 0x10) += frame_scale * 0.05f;
-        if (1.0f < *(float *)(gate_data + 0x10)) {
-            *(float *)(gate_data + 0x10) = 1.0f;
+        gate_data->unk10 += frame_scale * 0.05f;
+        if (1.0f < gate_data->unk10) {
+            gate_data->unk10 = 1.0f;
             moby->state = 1;
             moby->collision = moby->pclass->collision;
         }
         break;
     }
-    moby->alpha = truncate_float_to_s32(*(float *)(gate_data + 0x10) * 20.0f);
+    moby->alpha = truncate_float_to_s32(gate_data->unk10 * 20.0f);
     step = 0xC0;
-    *(int *)(gate_data + 0x14) += step;
-    if (*(int *)(gate_data + 0x14) > 0x1000) {
-        *(int *)(gate_data + 0x14) -= 0x1000;
+    gate_data->unk14 += step;
+    if (gate_data->unk14 > 0x1000) {
+        gate_data->unk14 -= 0x1000;
         step -= 0x1000;
-    } else if (*(int *)(gate_data + 0x14) < 0) {
-        *(int *)(gate_data + 0x14) += 0x1000;
+    } else if (gate_data->unk14 < 0) {
+        gate_data->unk14 += 0x1000;
         step += 0x1000;
     }
     offset_moby_class_point_pairs(((unsigned char *)moby->pclass), step, 0);
