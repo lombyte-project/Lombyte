@@ -1665,7 +1665,7 @@ void draw_hero_glow_quads(void) {
         }
         return;
     }
-    if (vehicle_mode == 0) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         if ((hero_slot_item_id(3) == 3 || hero_slot_item_id(3) == 2) && P.h22D8 == 0) {
             P.v1D80.f[2] += 0.015f;
             draw_offset_textured_effect_quad(&P.v1D80, 0x280000C0, 0.057f, 0.08f);
@@ -1675,13 +1675,13 @@ void draw_hero_glow_quads(void) {
             draw_offset_textured_effect_quad(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
         return;
     }
-    if (vehicle_mode == 2) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         P.v1D80.f[2] -= 0.07f;
         draw_offset_textured_effect_quad(&P.v1D80, 0x300000C0, 0.25f, 0.08f);
         P.v1D80.f[2] += 0.07f;
         return;
     }
-    if (vehicle_mode == 1) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         k = 0.07f;
         if (P.h22FC)
             k = 0.101500004529953f;
