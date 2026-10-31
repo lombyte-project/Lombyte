@@ -834,6 +834,9 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         DESCEND_TO_GROUND = 2,
         WAIT_AFTER_GROUND_CLAMP = 3
     };
+    enum {
+        ARC_MOTION_FINISHED = 4
+    };
     float motion_displacement[4];
     float prediction_time;
     float ground_height;
@@ -848,7 +851,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         }
         if (moving_object->b70 & 2) {
             blend_moby_animation(moving_object, arc_motion_state->b2D, 0, 10);
-            arc_motion_state->state = 1;
+            arc_motion_state->state = INTEGRATE_ARC_MOTION;
         }
     case INTEGRATE_ARC_MOTION:
         approach_w(moving_object,
@@ -869,7 +872,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
                     (arc_motion_state->f10 * prediction_time -
                      arc_motion_state->f1C * 0.5f * prediction_time * prediction_time)) {
                 blend_moby_animation(moving_object, arc_motion_state->b2E, 0, 10);
-                arc_motion_state->state = 2;
+                arc_motion_state->state = DESCEND_TO_GROUND;
             }
         }
         break;
@@ -879,7 +882,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         ground_height = probe_ground_height(moving_object->pos, 0, 0.5f);
         if (moving_object->z <= ground_height) {
             moving_object->z = ground_height;
-            arc_motion_state->state = 3;
+            arc_motion_state->state = WAIT_AFTER_GROUND_CLAMP;
         } else {
             motion_displacement[0] =
                 FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
@@ -890,7 +893,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         }
     case WAIT_AFTER_GROUND_CLAMP:
         if (moving_object->b70 & 2) {
-            arc_motion_state->state = 4;
+            arc_motion_state->state = ARC_MOTION_FINISHED;
         }
         break;
     }
