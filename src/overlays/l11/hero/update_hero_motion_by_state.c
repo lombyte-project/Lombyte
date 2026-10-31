@@ -34,6 +34,10 @@ float       absolute_float(float input) __asm__("func_001F99C0");
 void update_hero_surface_condition_flags(void) __asm__("FUN_L11_0023c7a0");
 
 void update_hero_surface_condition_flags(void) {
+    enum {
+        HERO_GROUND_TYPE_WATER = 0,
+        HERO_GROUND_TYPE_MAGNETIC = 2
+    };
     struct Hero  *hero_object_ptr = &hero;
     unsigned char saved;
     int           state;
@@ -46,10 +50,10 @@ void update_hero_surface_condition_flags(void) {
     hero_object_ptr->unk308 = 0;
     if (state == -1)
         return;
-    if (state == 2) {
+    if (state == HERO_GROUND_TYPE_MAGNETIC) {
         if (hero_object_ptr->frames_off_ground.s == 0 || hero_object_ptr->ground_distance < 0.3f) {
             hero_object_ptr->on_magnet_ground = 1;
-            if (hero_object_ptr->vehicle_mode == 0) {
+            if (hero_object_ptr->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 if (((int)hero_object_ptr->items[1].moby) != 0 &&
                     *(short *)(((int)hero_object_ptr->items[1].moby) + 0xA6) == 0xAD)
                     hero_object_ptr->unk308 = 1;
@@ -62,7 +66,7 @@ void update_hero_surface_condition_flags(void) {
         hero_ptr->water_depth = 0.2f;
         hero_ptr->water_surface_z = hero_ptr->ground_z.f + 0.2f;
     }
-    if (state == 0) {
+    if (state == HERO_GROUND_TYPE_WATER) {
         struct Hero *hero_ptr = &hero;
         struct Hero *base_condition_hero_ptr;
         float        water_surface_to_ground_z_difference =
