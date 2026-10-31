@@ -456,16 +456,16 @@ s32 hero_is_in_special_state(void) {
         goto one;
     }
     current_state = hero_state->state.current;
-    if (current_state == 0x6A) {
+    if (current_state == HERO_STATE_DROWN) {
         goto one;
     }
-    if (current_state == 0x82) {
+    if (current_state == HERO_STATE_DYING_ZERO_HEALTH) {
         goto one;
     }
-    if (current_state == 0x76) {
+    if (current_state == HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY) {
         goto one;
     }
-    if (current_state != 0x75) {
+    if (current_state != HERO_STATE_WATER_SURFACE_HURT) {
         goto zero;
     }
 one:
