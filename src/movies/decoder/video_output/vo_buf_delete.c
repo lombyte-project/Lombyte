@@ -3,7 +3,7 @@
 
 void vo_buf_delete(struct VoBuf *buf) __asm__("func_0023D1E0");
 
-void vo_buf_delete(struct VoBuf *buf) {
+void vo_buf_delete(struct VoBuf *video_output_buffer) {
 }
 
 /* Recovered original symbol name. */
