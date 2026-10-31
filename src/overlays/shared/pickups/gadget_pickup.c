@@ -90,7 +90,7 @@ void tresspasser_update(struct Moby *moby) {
             *(float *)((char *)moby + 0x40) = 1.57079637f;
             *(float *)((char *)moby + 0x44) = 3.14159274f;
             moby->pos.z = D_L02_00174468 + ground_offset;
-            moby->state = 1;
+            moby->state = GADGET_PICKUP_STATE_WAIT_FOR_PLAYER;
             return;
         }
         mark_moby_for_removal(moby);
@@ -103,7 +103,7 @@ void tresspasser_update(struct Moby *moby) {
         if (!(vector_distance_xy(&moby->pos, D_0013F3D0) < 1.0f))
             return;
         if (absolute_float(moby->pos.z - *(float *)(D_0013F3D0 + 8)) < 2.0f) {
-            moby->state = 3;
+            moby->state = GADGET_PICKUP_STATE_GRANT_ITEM;
             moby->flags |= 1;
             moby->visible = 0;
             moby->collision = 0;
@@ -132,7 +132,7 @@ void tresspasser_update(struct Moby *moby) {
             clear_active_help_record();
             help_request(0x7D9, 0x13);
             D_L02_0015F3FC = 1.0f;
-            moby->state = 4;
+            moby->state = GADGET_PICKUP_STATE_CAMERA_SEQUENCE;
             set_race_camera(D_0013F3D0, D_0013F3D0 + 16, 0x72, 1);
             return;
         }
@@ -187,7 +187,7 @@ void tresspasser_update(struct Moby *moby) {
             return;
         set_race_camera(D_0013F3D0, D_0013F3D0 + 16, 0, 0);
         jet_end_mount(0);
-        moby->state = 5;
+        moby->state = GADGET_PICKUP_STATE_SAVE_AND_REMOVE;
         return;
     }
     case GADGET_PICKUP_STATE_SAVE_AND_REMOVE:
