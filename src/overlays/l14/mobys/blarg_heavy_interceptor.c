@@ -772,7 +772,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *m, int a, int b, int c) __asm__("FUN_00212f90");
 
 void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
     enum {

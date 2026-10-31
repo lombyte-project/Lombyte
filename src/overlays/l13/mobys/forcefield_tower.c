@@ -67,9 +67,9 @@ spawn_spinning_fade_in_out_effect_particle(void *pos,
                                            int   spin,
                                            int   col,
                                            float range,
-                                           float f1,
-                                           float f2,
-                                           float f3,
+                                           float lo,
+                                           float hi,
+                                           float vertical_position_step,
                                            float scale) __asm__("FUN_L00_0026b790");
 
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, float, int, float);

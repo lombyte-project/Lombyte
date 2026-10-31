@@ -235,8 +235,11 @@ int advance_minibomber_along_path(struct Moby *moby,
 
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 
-extern char *
-func_L14_00302968_2B5938(int a0, float *a1, float *a2, float f, int a3) __asm__("FUN_L14_003014e0");
+extern char *func_L14_00302968_2B5938(int    owner,
+                                      float *pos,
+                                      float *initial_velocity,
+                                      float  f,
+                                      int    gravity) __asm__("FUN_L14_003014e0");
 
 extern void func_L00_0025F4A8_2B5938(void *,
                                      void *,

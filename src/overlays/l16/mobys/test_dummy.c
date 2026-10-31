@@ -24,9 +24,9 @@ extern char *create_moby(int);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 extern float D_0015ED6C;
-f32          probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
+f32          probe_ground_height(void *pos, s32 flags, f32 height_offset) __asm__("FUN_00213508");
 
-s32         random_integer_below(s32 arg0) __asm__("FUN_00213260");
+s32         random_integer_below(s32 limit) __asm__("FUN_00213260");
 extern void FUN_L00_00257470(void *, int, int);
 
 #include "sda.h"

@@ -43,7 +43,7 @@ extern int   scale_game_frames(int);
 
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern s32   allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-s32          is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
+s32          is_value_within_interpolated_window(void *anim, f32 fparg0) __asm__("FUN_00214cc8");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F90A0), where it is exact; names translated to the US level program. */
 
@@ -72,12 +72,14 @@ typedef struct {
     D1454        *data;
 } M1454;
 
-extern char *
-create_class_29_moby(char *owner, float *pos, float *vec, int arg3) __asm__("FUN_L18_002a75f0");
+extern char *create_class_29_moby(char  *owner,
+                                  float *pos,
+                                  float *vec,
+                                  int    homing_enabled) __asm__("FUN_L18_002a75f0");
 extern char *create_moby(int);
 extern short D_L18_0016247C_gp __asm__("D_L18_0016247C") __attribute__((sda));
 extern void  emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
-f32          compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
+f32          compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 extern short D_L18_0016247C __asm__("D_L18_0016247C");
 extern void  func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 

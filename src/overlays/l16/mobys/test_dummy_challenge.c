@@ -24,7 +24,7 @@
 
 #include "sda.h"
 
-s32        is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+s32        is_point_inside_clip_volume(s32 point, s32 volume_index) __asm__("FUN_00214720");
 extern int D_L16_001600EC;
 extern int scale_game_frames(int);
 

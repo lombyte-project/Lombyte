@@ -140,7 +140,7 @@ void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
 
 void update_robot_dog_glow_effects(struct Moby *moby) __asm__("FUN_L17_002f0210");
 
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(void *m, int a, int b, int c) __asm__("FUN_00212f90");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
 void         robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");

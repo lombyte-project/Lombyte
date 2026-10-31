@@ -176,7 +176,7 @@ extern char *D_L16_0015FFD8;
 char *find_group_chicken_in_state_6(int moby_group_index) __asm__("FUN_L16_002e8b08");
 
 char *find_group_chicken_in_state_6(int idx) __asm__("FUN_L16_002e8b08");
-s32   is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+s32   is_point_inside_clip_volume(s32 point, s32 volume_index) __asm__("FUN_00214720");
 
 void chicken_relocator_update(struct Moby *moby) __asm__("FUN_L16_002e8970");
 

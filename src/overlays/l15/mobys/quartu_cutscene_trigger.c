@@ -111,7 +111,8 @@ extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 
 extern int strlen_alt(char *) __asm__("FUN_001166cc");
 
-extern void print_text_with_texture_3(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_L00_001fb470");
+extern void
+print_text_with_texture_3(s32 x, s32 y, s32 color, s32 text, s32 len) __asm__("FUN_L00_001fb470");
 
 int D_L15_00162180 = 150;
 

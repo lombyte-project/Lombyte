@@ -66,7 +66,7 @@ extern int unfolding_column_piece_unfold_frames __asm__("D_L14_00162204") __attr
 
 extern int unfolding_column_pivot_swing_frames __asm__("D_L14_0016220C") __attribute__((sda));
 
-int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
+int trooper_play_sound(int i, int voice_flags, int v, int k) __asm__("FUN_L00_0028dc90");
 
 void unfolding_column_update(UnfoldingColumnMoby *moby) __asm__("FUN_L14_00305d28");
 

@@ -113,8 +113,10 @@ extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FU
 
 #include "rnc/game/item_state.h"
 
-extern void
-emit_hero_animation_voice_and_ground_particle(int a0, int a1, int a2) __asm__("FUN_L00_00205f60");
+extern void emit_hero_animation_voice_and_ground_particle(
+    int record_group_index,
+    int joint_index_offset,
+    int enable_record_dispatch) __asm__("FUN_L00_00205f60");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");

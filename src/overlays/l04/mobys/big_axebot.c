@@ -240,7 +240,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int   point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int   D_L04_0015F5C4;
 extern int   FUN_L00_001fefc8(void *);
-extern int   is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int   is_point_inside_clip_volume(void *point, int volume_index) __asm__("FUN_00214720");
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L04_00295de8_cf(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");

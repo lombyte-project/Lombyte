@@ -156,7 +156,7 @@ typedef struct {
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 extern unsigned char *
-FUN_L00_00272f68(float f, void *pos, int a1, unsigned char a2, int idx, int flag, int s, int mode);
+FUN_L00_00272f68(float f, void *pos, int b, unsigned char a2, int idx, int flag, int s, int mode);
 
 void update_morphoray_particles(struct Moby *morphoray_moby) {
     float     particle_position_and_step[8];

@@ -24,7 +24,7 @@ extern float FUN_L04_001f1978(float);
 extern int   D_L18_0015F5C4;
 
 extern int scale_game_frames(int);
-f32        probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
+f32        probe_ground_height(void *pos, s32 flags, f32 height_offset) __asm__("FUN_00213508");
 
 extern char *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -388,7 +388,8 @@ make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FU
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD270), where it is exact; names translated to the US level program. */
 
-extern void FUN_L18_002dc0c8_u(char *moby, void *a1, void *a2) __asm__("FUN_L18_002dc0c8");
+extern void
+FUN_L18_002dc0c8_u(char *moby, void *segment_start, void *segment_end) __asm__("FUN_L18_002dc0c8");
 
 void process_expanding_ring_collisions(struct Moby *moby) {
     char  hit[0x30];

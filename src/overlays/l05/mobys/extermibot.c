@@ -38,7 +38,7 @@ extern int   D_L05_0015FFD8;
 extern int   D_L05_0015F5C4;
 extern int   step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 extern int   FUN_L00_00261b48(int, void *, void *, void *);
-extern int   is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
+extern int   is_point_inside_clip_volume(void *point, int volume_index) __asm__("func_00214720");
 extern s32   follow_path(void *, s32, s32, void *, s32, void *, f32) __asm__("FUN_L01_00276fe8");
 extern s32
 spawn_spark_c(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");

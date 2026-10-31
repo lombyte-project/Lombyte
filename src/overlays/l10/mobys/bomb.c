@@ -185,7 +185,9 @@ extern int   get_moby_color() __asm__("FUN_L00_00250320");
 extern int   FUN_L00_0025a9f8(float, void *, int, void *, void *);
 extern void  FUN_L00_0025a420(void *, void *, void *);
 extern void  FUN_L00_0025f090(void *, void *, void *, int, int, int, int, int, float, float, float);
-int resolve_bouncing_projectile_collision(char *m, char *c, float *a2) __asm__("FUN_L10_002d8170");
+int          resolve_bouncing_projectile_collision(char  *m,
+                                                   char  *c,
+                                                   float *previous_position) __asm__("FUN_L10_002d8170");
 extern int
 resolve_bouncing_projectile_collision(char *, char *, float *) __asm__("FUN_L10_002d8170");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");

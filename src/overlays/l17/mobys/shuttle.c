@@ -58,7 +58,7 @@ extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0"
 extern char D_L17_001B0DB0[];
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(void *m, int a, int b, int c) __asm__("FUN_00212f90");
 
 /* UpdateMoby 1448: a moby that alternates between two camera points and starts a cutscene on a button press. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F3450), where it is exact; names translated to the US level program. */

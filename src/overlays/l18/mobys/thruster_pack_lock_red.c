@@ -151,7 +151,9 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9358), where it is exact; names translated to the US level program. */
 
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-s32        allocate_voice_for_group_entry(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0022dba0");
+s32        allocate_voice_for_group_entry(s32 group_entry_index,
+                                          s32 flags,
+                                          s32 owner) __asm__("FUN_0022dba0");
 
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) __asm__("FUN_L18_002d7f68");
 

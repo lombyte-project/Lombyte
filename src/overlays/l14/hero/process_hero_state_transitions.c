@@ -91,15 +91,17 @@ extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int
 sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
-extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
-extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
-extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
-extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
-extern int process_hero_hit_reaction(int) __asm__("FUN_L14_00222aa8");
-extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
-extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern void
-emit_hero_animation_voice_and_ground_particle(int a0, int a1, int a2) __asm__("FUN_L00_00205f60");
+extern int  FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
+extern int  pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
+extern int  check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
+extern int  test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
+extern int  process_hero_hit_reaction(int) __asm__("FUN_L14_00222aa8");
+extern int  hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
+extern int  queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
+extern void emit_hero_animation_voice_and_ground_particle(
+    int record_group_index,
+    int joint_index_offset,
+    int enable_record_dispatch) __asm__("FUN_L00_00205f60");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");

@@ -23,7 +23,7 @@ void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_ve
 extern void  add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, frame_time;
-s32          is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+s32          is_point_inside_clip_volume(s32 point, s32 volume_index) __asm__("FUN_00214720");
 
 extern float D_0015ED6C, D_0015EE70;
 /* Updates a linked moby's movement and follows it while its state is active. */

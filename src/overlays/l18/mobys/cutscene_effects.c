@@ -30,8 +30,8 @@ extern void             enqueue_callback_list_1_overlay(void *, void *) __asm__(
 void                    spawn_deplanetizer_gun_trail_effects(void *first_position_source,
                                                              void *second_position_source,
                                                              void *effect_velocity_source,
-                                                             float f0,
-                                                             float f1) __asm__("FUN_L18_002fa250");
+                                                             float first_effect_size,
+                                                             float second_effect_size) __asm__("FUN_L18_002fa250");
 
 extern void spawn_deplanetizer_gun_trail_effects(void *, void *, void *, float, float) __asm__("FUN_L18_002fa250");
 void draw_three_scaled_camera_facing_quads(void) __asm__("FUN_L18_002f9780");

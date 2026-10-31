@@ -313,9 +313,11 @@ extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, 
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void initialize_woodcut_bot_movement_data(void *) __asm__("FUN_L04_002d1418");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void
-transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3) __asm__("FUN_0020cd48");
-void emit_woodcut_bot_death_effects(void *m) __asm__("FUN_L04_002d1608");
+extern void transform_scaled_vertex_batch(char *object,
+                                          int   count,
+                                          void *point_indices,
+                                          char *cursor) __asm__("FUN_0020cd48");
+void        emit_woodcut_bot_death_effects(void *m) __asm__("FUN_L04_002d1608");
 
 void woodcut_bot_update(WBMoby *m) __asm__("FUN_L04_002d16b8");
 

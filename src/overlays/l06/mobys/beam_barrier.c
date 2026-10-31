@@ -30,7 +30,7 @@ extern char D_L06_00167540[] NOT_SDA;
 /* Steers a moby's camera-like orientation toward a target point, returns 1 when done. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FCA98), where it is exact; names translated to the US level program. */
 extern char D_L06_00167540[];
-void        add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void        add_draw_callback(s32 callback, s32 callback_argument) __asm__("FUN_001f4600");
 extern int  voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 

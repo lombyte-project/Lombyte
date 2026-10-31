@@ -52,7 +52,7 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 void update_chomper_hit_reaction_and_target(void *chomper_instance) __asm__("FUN_L16_002e6208");
 
 void update_chomper_hit_reaction_and_target(void *arg) __asm__("FUN_L16_002e6208");
-s32  is_value_within_interpolated_window(struct InterpolatedStateEntry *arg0,
+s32  is_value_within_interpolated_window(struct InterpolatedStateEntry *anim,
                                          f32 fparg0) __asm__("FUN_00214cc8");
 
 short D_L16_00161E48 = 0;

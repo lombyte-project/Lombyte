@@ -361,8 +361,8 @@ extern void  spawn_drek_boss_ring_projectile(
      char *pos, float *vec, int arg, float fa, float fb) __asm__("FUN_L18_002db938");
 extern void refresh_ring_effect(char *moby, void *pos, float f) __asm__("FUN_L18_002dc458");
 extern void start_camera_transition(char *moby,
-                                    void *v0,
-                                    void *v1,
+                                    void *transition_start_position,
+                                    void *transition_target_position,
                                     void *v2,
                                     void *v3,
                                     void *v4,
@@ -399,9 +399,9 @@ void        render_drek_boss_joint_glows(struct Moby *moby) __asm__("FUN_L18_002
 extern void render_drek_boss_joint_glows(struct Moby *moby) __asm__("FUN_L18_002f7880");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
-f32         probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
-s32         is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
-s32         is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
+f32         probe_ground_height(void *pos, s32 flags, f32 height_offset) __asm__("FUN_00213508");
+s32         is_point_inside_clip_volume(s32 point, s32 volume_index) __asm__("FUN_00214720");
+s32         is_value_within_interpolated_window(void *anim, f32 fparg0) __asm__("FUN_00214cc8");
 void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern void func_L00_0025F4A8_alt(void *,
                                   void *,
@@ -2396,7 +2396,7 @@ void show_drek_boss_moby_group(int unused, int group_index) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8518), where it is exact; names translated to the US level program. */
 
 extern short drek_boss_action_eligibility_by_phase[] __asm__("D_L18_001DFB40");
-s32          random_integer_below(s32 arg0) __asm__("FUN_00213260");
+s32          random_integer_below(s32 limit) __asm__("FUN_00213260");
 
 int select_drek_boss_next_action(struct Moby *moby) {
     enum {

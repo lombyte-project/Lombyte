@@ -78,9 +78,11 @@ extern void  process_dreks_fleet_turret_hits(struct Moby *m) __asm__("FUN_L17_00
 void distribute_group_blarg_ships_along_path(struct Moby *turret_moby) __asm__("FUN_L17_002cbd38");
 
 extern void distribute_group_blarg_ships_along_path(struct Moby *m) __asm__("FUN_L17_002cbd38");
-extern void
-transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3) __asm__("FUN_0020cd48");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern void transform_scaled_vertex_batch(char *object,
+                                          int   count,
+                                          void *point_indices,
+                                          char *cursor) __asm__("FUN_0020cd48");
+extern int  func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
 

@@ -18,7 +18,7 @@
 
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *m, int a, int b, int c) __asm__("FUN_00212f90");
 
 extern void spawn_explosion(void *,
                             void *,
@@ -76,7 +76,7 @@ extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_0
 
 #include "rnc/overlay/l14/mobys/racer_data/level14_racer_update.h"
 
-extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 

@@ -584,7 +584,7 @@ void draw_branched_lightning_arc(void) {
 }
 
 extern unsigned char *FUN_L00_00272060(
-    float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
+    float *pos, int a, float x, float y, int col, int mode, int b, float *vel, float z);
 
 extern short lightning_arc_particle_speed_range_start_gp __asm__("D_L14_00161CA0")
     __attribute__((sda));
