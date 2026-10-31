@@ -459,6 +459,9 @@ void taunter_update(Moby *taunter_moby) {
         TAUNTER_STATE_INITIALIZE = 0,
         TAUNTER_STATE_ACTIVE = 2
     };
+    enum {
+        TAUNTER_STATE_WAIT_FOR_ENABLE_FLAG = 1
+    };
     Vars *taunter_vars;
     s32   taunter_state;
     s32   voice_slot_index;
@@ -485,7 +488,7 @@ void taunter_update(Moby *taunter_moby) {
         taunter_effect_reset_pending = 1;
     }
     taunter_state = taunter_moby->state;
-    if ((u8)taunter_state == 1) {
+    if ((u8)taunter_state == TAUNTER_STATE_WAIT_FOR_ENABLE_FLAG) {
         if (taunter_moby->flags & 2) {
             taunter_moby->state = taunter_state + 1;
             taunter_vars->retry = 0;
