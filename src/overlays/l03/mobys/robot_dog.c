@@ -491,6 +491,9 @@ extern void FUN_L01_0026e090(int, int);
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
 
 void update_robot_dog_hit_reaction(struct Moby *moby) {
+    enum {
+        ROBOT_DOG_DEATH_FALL = 21
+    };
     float vector[4];
     int   hit_reaction_code;
     float damage;
@@ -509,7 +512,7 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
     hit_reaction(moby, hit, robot_dog_pvars + 0x20, 0, &hit_reaction_code, &damage, 0, 4);
-    if (hit_reaction_code != 1 && moby->state != 21) {
+    if (hit_reaction_code != 1 && moby->state != ROBOT_DOG_DEATH_FALL) {
         char *hit_source_moby;
         if (moby->group != 255)
             FUN_L01_0026e090(moby->group, 1);
@@ -535,7 +538,7 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
         *(OvlQuad *)vector = *(OvlQuad *)(hit + 0x10);
         trooper_knockback_arc(vector, &angle, robot_dog_pvars + 0x138, robot_dog_pvars + 0x13C);
         trooper_start_knockback(angle, moby, robot_dog_pvars + 0x120, 4, 1, 0);
-        moby->state = 21;
+        moby->state = ROBOT_DOG_DEATH_FALL;
         *(unsigned char *)(robot_dog_pvars + 0x117) = 240;
         trooper_anim_update(moby, (short *)(robot_dog_pvars + 0x110));
     }
