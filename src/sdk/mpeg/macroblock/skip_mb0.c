@@ -22,6 +22,9 @@ s32       _skipMB0(struct MpegDecoder   *decoder,
                    struct MpegMotionRef *motion_reference,
 
                    s32 *flags) {
+    enum {
+        MPEG_PICTURE_CODING_TYPE_I = 1
+    };
     s32 buf_offset;
     s32 bottom_field;
     s32 ok;
@@ -44,7 +47,7 @@ s32       _skipMB0(struct MpegDecoder   *decoder,
         motion_reference->unk4 = bottom_field;
         motion_reference->unk0 = bottom_field;
     }
-    if (decoder->picture_coding_type == 1) {
+    if (decoder->picture_coding_type == MPEG_PICTURE_CODING_TYPE_I) {
         _Error(decoder, skipped_macroblock_in_i_picture_error_message);
         ok = 0;
     }
