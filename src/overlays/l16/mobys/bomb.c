@@ -119,12 +119,12 @@ void thrown_bomb_update(L16FallingMoby *moby) {
             qcopy(moby->position, D_L16_hitN.position);
             moby->position[2] += normal[2];
             if (normal[2] >= 0.3f && fast_vec_length(bomb_data->velocity) < D_0015ED6C * 0.25f) {
-                moby->state = 2;
+                moby->state = BOMB_STATE_RESTING;
                 bomb_data->timer = scale_game_frames(90);
             }
         }
         if (fast_dec_timer(&bomb_data->timer)) {
-            moby->state = 3;
+            moby->state = BOMB_STATE_EXPLODE;
         } else if (bomb_data->timer < scale_game_frames(45) &&
                    bomb_data->timer % scale_game_frames(10) == 0) {
             bomb_data->reaction = 250;
@@ -134,7 +134,7 @@ void thrown_bomb_update(L16FallingMoby *moby) {
         break;
     case BOMB_STATE_RESTING:
         if (fast_dec_timer(&bomb_data->timer)) {
-            moby->state = 3;
+            moby->state = BOMB_STATE_EXPLODE;
         } else if (bomb_data->timer < scale_game_frames(61) &&
                    bomb_data->timer % scale_game_frames(20) == 0) {
             bomb_data->reaction = 250;
