@@ -127,6 +127,10 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     enum {
         TEXTURED_GRID_FOG_SOURCE_CAMERA = 1
     };
+    enum {
+        TEXTURED_GRID_BLEND_MODE_ABOVE_ALPHA_LIMIT = 0x5360A,
+        TEXTURED_GRID_BLEND_MODE_AT_OR_BELOW_ALPHA_LIMIT = 0x5370B
+    };
     float        view_matrix[16];
     int         *view_setup_dma_packet;
     int         *cursor;
@@ -226,9 +230,9 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     }
     words = (long *)PACKET_CURSOR;
     alpha_limit = 0x60;
-    blend_mode = 0x5360A;
+    blend_mode = TEXTURED_GRID_BLEND_MODE_ABOVE_ALPHA_LIMIT;
     if (!(alpha_limit < draw_parameters->alpha)) {
-        blend_mode = 0x5370B;
+        blend_mode = TEXTURED_GRID_BLEND_MODE_AT_OR_BELOW_ALPHA_LIMIT;
     }
     words[0] = 0x8000000000008001;
     words[1] = 0xEEEEEEEE;
