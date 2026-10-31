@@ -381,6 +381,9 @@ struct L14PickVars {
 };
 
 void initialize_taxi_stop_from_position(struct Moby *moby) {
+    enum {
+        TAXI_STATE_WAIT_AT_STOP = 1
+    };
     struct L14PickVars *taxi_vars = (struct L14PickVars *)moby->pvars;
     int                 i;
     taxi_vars->picked = -1;
@@ -390,7 +393,7 @@ void initialize_taxi_stop_from_position(struct Moby *moby) {
             break;
         }
     }
-    moby->state = 1;
+    moby->state = TAXI_STATE_WAIT_AT_STOP;
     {
         int          k = taxi_vars->points[taxi_vars->picked];
         LevelCuboid *taxi_stops = l14_cuboids;
