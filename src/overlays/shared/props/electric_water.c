@@ -133,7 +133,7 @@ void electric_water_update(struct Moby *moby) {
     unsigned short     save_id;
     float              distance, theta, phi, radius;
 
-    if (moby->state != 0 &&
+    if (moby->state != ELECTRIC_WATER_INITIALIZE &&
         is_point_inside_clip_volume(D_0013F3D0, electric_water_controller_vars->active_area) == 0) {
         if (electric_water_controller_vars->owner != 0) {
             if (electric_water_controller_vars->voice0 != -1) {
@@ -196,7 +196,7 @@ void electric_water_update(struct Moby *moby) {
         electric_water_controller_vars->off_timer = scale_game_frames(200);
         electric_water_controller_vars->shock_count = 0;
         electric_water_controller_vars->light = -1;
-        moby->state = 1;
+        moby->state = ELECTRIC_WATER_ON;
         electric_water_controller_vars->voice0 = -1;
         electric_water_controller_vars->voice1 = -1;
         break;
@@ -207,7 +207,7 @@ void electric_water_update(struct Moby *moby) {
         if (fast_dec_timer_s16(&electric_water_controller_vars->on_timer) != 0) {
             electric_water_controller_vars->off_timer =
                 truncate_float_to_s32(scale_time(electric_water_off_duration_seconds_gp * 60.0f));
-            moby->state = 2;
+            moby->state = ELECTRIC_WATER_OFF;
             if (electric_water_controller_vars->owner != 0) {
                 if (electric_water_controller_vars->voice1 != -1) {
                     VoicePoolWindow *voice =
@@ -229,7 +229,7 @@ void electric_water_update(struct Moby *moby) {
                 break;
             }
         }
-        if (moby->state == 2) {
+        if (moby->state == ELECTRIC_WATER_OFF) {
             for (dim_lamp = 0; dim_lamp < 3; dim_lamp++) {
                 if (electric_water_controller_vars->lamps[dim_lamp] != -1) {
                     set_moby_color(&l15_moby_array[electric_water_controller_vars->lamps[dim_lamp]],
@@ -378,7 +378,7 @@ void electric_water_update(struct Moby *moby) {
             hit.v[3] = 5627.9248f;
             hit.unk18 = 0;
             record_moby_hit(hero.moby, &hit);
-            if (moby->state == 2) {
+            if (moby->state == ELECTRIC_WATER_OFF) {
                 D_L15_0015F448 = electric_water_controller_vars->saved_fog[0];
                 D_L15_0015F44C = electric_water_controller_vars->saved_fog[1];
                 D_L15_0015F450 = electric_water_controller_vars->saved_fog[2];
@@ -440,18 +440,18 @@ void electric_water_update(struct Moby *moby) {
             electric_water_controller_vars->voice0 =
                 trooper_play_sound(0, 5, electric_water_controller_vars->owner, 0x28F);
         }
-        if (moby->state == 1 && voice_is_playing(electric_water_controller_vars->owner,
+        if (moby->state == ELECTRIC_WATER_ON && voice_is_playing(electric_water_controller_vars->owner,
                                                  electric_water_controller_vars->voice1) == 0) {
             electric_water_controller_vars->voice1 =
                 trooper_play_sound(1, 5, electric_water_controller_vars->owner, 0x28F);
         }
         if (fast_dec_timer_s16(&electric_water_controller_vars->off_timer) != 0 &&
-            moby->state == 2) {
+            moby->state == ELECTRIC_WATER_OFF) {
             electric_water_controller_vars->on_timer =
                 truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
             electric_water_controller_vars->off_timer = scale_game_frames(200);
             electric_water_controller_vars->shock_count = 0;
-            moby->state = 1;
+            moby->state = ELECTRIC_WATER_ON;
         }
         for (sw = 0; sw < 4; sw++) {
             /* Fakematch: the press action is written in both arms so CSE keeps the second sw load. */
@@ -460,7 +460,7 @@ void electric_water_update(struct Moby *moby) {
                 l15_moby_array[electric_water_controller_vars->switches[sw]].state == 2) {
                 electric_water_controller_vars->off_timer = truncate_float_to_s32(
                     scale_time(electric_water_controller_vars->off_seconds * 60.0f));
-                moby->state = 3;
+                moby->state = ELECTRIC_WATER_SWITCH_DISABLED;
                 trooper_play_sound(
                     2, 0, &l15_moby_array[electric_water_controller_vars->switches[sw]], 0x28F);
                 electric_water_controller_vars->armed = 0;
@@ -469,7 +469,7 @@ void electric_water_update(struct Moby *moby) {
                            &l15_moby_array[electric_water_controller_vars->switches[sw]]) != 0) {
                 electric_water_controller_vars->off_timer = truncate_float_to_s32(
                     scale_time(electric_water_controller_vars->off_seconds * 60.0f));
-                moby->state = 3;
+                moby->state = ELECTRIC_WATER_SWITCH_DISABLED;
                 trooper_play_sound(
                     2, 0, &l15_moby_array[electric_water_controller_vars->switches[sw]], 0x28F);
                 electric_water_controller_vars->armed = 0;
@@ -561,7 +561,7 @@ void electric_water_update(struct Moby *moby) {
             truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
         electric_water_controller_vars->off_timer = scale_game_frames(200);
         electric_water_controller_vars->shock_count = 0;
-        moby->state = 1;
+        moby->state = ELECTRIC_WATER_ON;
         break;
     }
 
