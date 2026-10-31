@@ -375,7 +375,7 @@ void armed_transport_update(char *transport_moby) {
 
         transport_data->unk194 -= dt + dt;
         MOBY(transport_moby)->rot.x += dt * 0.2617994f;
-        if (fast_dec_timer((int *)(&transport_data->unk160)) || hero.vehicle_mode == 2) {
+        if (fast_dec_timer((int *)(&transport_data->unk160)) || hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             spawn_explosion(transport_moby,
                             D_L16_0015F580,
                             &MOBY(transport_moby)->pos,
