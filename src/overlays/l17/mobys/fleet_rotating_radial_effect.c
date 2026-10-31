@@ -86,7 +86,7 @@ void fleet_rotating_radial_effect_update(char *moby) {
         switch (MOBY(moby)->state) {
         case RING_INITIALIZE:
             MOBY(moby)->update_dist = 0xFF;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = RING_ROTATE_AND_DRAW;
             ring_vars[1] = ring_vars[0] * *(float *)&fleet_radial_rotation_rate_degrees_factor *
                            DEG_TO_RAD * frame_time;
             break;
