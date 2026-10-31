@@ -314,6 +314,10 @@ extern float FUN_001ebd78(void *, float, float, float, float, float);
 void update_hero_follow_camera_orbit(Camera *cam) __asm__("FUN_L05_003298d8");
 
 void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
+    enum {
+        CAMERA_ORBIT_MODE_FOLLOW = 0,
+        CAMERA_ORBIT_MODE_ORBITING = 1
+    };
     Vec4         up;
     Vec4         side;
     Vec4         fwd;
@@ -332,8 +336,8 @@ void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
     f32          tilt;
 
     fast_vec_normalize(&up, &hero.gravity_dir, -1.0f);
-    if (orbit->mode == 0 && hero.vert_ramp_launch != 0) {
-        orbit->mode = 1;
+    if (orbit->mode == CAMERA_ORBIT_MODE_FOLLOW && hero.vert_ramp_launch != 0) {
+        orbit->mode = CAMERA_ORBIT_MODE_ORBITING;
         fast_vec_cross(&side, &hero.moby->rot_row2, &up);
         fast_vec_normalize(&side, &side, 1.0f);
         fast_vec_cross(&fwd, &up, &side);
@@ -381,7 +385,7 @@ void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
         spring[8] = 0.005f;
         spring[11] = 0.2f;
     }
-    if (orbit->mode == 1) {
+    if (orbit->mode == CAMERA_ORBIT_MODE_ORBITING) {
         fast_vec_normalize(&side, &focus->side, hero_follow_camera->dist);
         build_look_at_matrix(&side, &side, &up, hero_follow_camera->yaw);
         fast_vec_cross(&fwd, &side, &up);
@@ -395,7 +399,7 @@ void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
         hero_follow_camera->dist = FUN_001ebd78(
             &spring[5], hero_follow_camera->dist, spring[2], spring[8], spring[11], 0.0f);
         if (hero.vert_ramp_launch == 0) {
-            orbit->mode = 0;
+            orbit->mode = CAMERA_ORBIT_MODE_FOLLOW;
             fast_vec_scale(orbit, orbit, -1.0f);
         }
     }
