@@ -31,6 +31,12 @@ float       absolute_float(float input) __asm__("func_001F99C0");
 void update_hero_ground_material_flags(void) __asm__("FUN_L12_0022de30");
 
 void update_hero_ground_material_flags(void) {
+    enum {
+        GROUND_MATERIAL_WATER = 0,
+        GROUND_MATERIAL_MAGNET = 2,
+        GROUND_MATERIAL_ICE = 7,
+        GROUND_MATERIAL_SINK_TRIGGER = 0xD
+    };
     struct Hero  *hero_for_ground_flags_update = &hero;
     unsigned char saved;
     int           state;
@@ -43,11 +49,11 @@ void update_hero_ground_material_flags(void) {
     hero_for_ground_flags_update->unk308 = 0;
     if (state == -1)
         return;
-    if (state == 2) {
+    if (state == GROUND_MATERIAL_MAGNET) {
         if (hero_for_ground_flags_update->frames_off_ground.s == 0 ||
             hero_for_ground_flags_update->ground_distance < 0.3f) {
             hero_for_ground_flags_update->on_magnet_ground = 1;
-            if (hero_for_ground_flags_update->vehicle_mode == 0) {
+            if (hero_for_ground_flags_update->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 if ((s32)hero_for_ground_flags_update->items[1].moby != 0 &&
                     *(short *)((s32)hero_for_ground_flags_update->items[1].moby + 0xA6) == 0xAD)
                     hero_for_ground_flags_update->unk308 = 1;
@@ -60,7 +66,7 @@ void update_hero_ground_material_flags(void) {
         hero_for_surface_update->water_depth = 0.2f;
         hero_for_surface_update->water_surface_z = hero_for_surface_update->ground_z.f + 0.2f;
     }
-    if (state == 0) {
+    if (state == GROUND_MATERIAL_WATER) {
         struct Hero *hero_for_water_height_check = &hero;
         struct Hero *hero_for_base_condition_update;
         float        water_surface_ground_z_delta =
@@ -71,15 +77,15 @@ void update_hero_ground_material_flags(void) {
         hero_for_base_condition_update = &hero;
         hero_for_base_condition_update->base_condition = 1;
     }
-    if (state == 2) {
+    if (state == GROUND_MATERIAL_MAGNET) {
         struct Hero *d = &hero;
         d->on_magnet_ground = 1;
     }
-    if (state == 7) {
+    if (state == GROUND_MATERIAL_ICE) {
         struct Hero *d = &hero;
         d->on_ice_ground = 1;
     }
-    if (state == 0xD) {
+    if (state == GROUND_MATERIAL_SINK_TRIGGER) {
         struct Hero *d = &hero;
         d->selector_13 = 1;
     }
