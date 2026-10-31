@@ -298,6 +298,10 @@ void devastator_update(struct Moby *m) __asm__("FUN_L00_002b2100");
 
 /* Moby class 157 */
 void devastator_update(struct Moby *devastator_moby) {
+    enum {
+        DEVASTATOR_STATE_UNINITIALIZED = 0,
+        DEVASTATOR_STATE_INITIALIZED = 1
+    };
     Matrix3            rotation;
     Matrix4            inverse;
     Vec_2b2100         velocity;
@@ -318,8 +322,8 @@ void devastator_update(struct Moby *devastator_moby) {
     emit_object_offset_particles(devastator_moby);
     height = 0.75f;
     limit = 10000.0f;
-    if ((unsigned char)devastator_moby->state == 0) {
-        devastator_moby->state = 1;
+    if ((unsigned char)devastator_moby->state == DEVASTATOR_STATE_UNINITIALIZED) {
+        devastator_moby->state = DEVASTATOR_STATE_INITIALIZED;
         devastator_vars->light = -1;
         devastator_vars->glow = 0;
     }
