@@ -439,7 +439,7 @@ void draw_trail(void *first_spawn_position,
 }
 
 extern int D_L00_0015F640;
-extern u8  D_L00_00179118[];
+extern u8  l00_dialogue_message_text_buffer[] __asm__("D_L00_00179118");
 int        get_help_message_text(int) __asm__("FUN_001fdd10");
 void       FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
 /* Calls strcpy with D_L00_00179118 and get_help_message_text(a); stores b (default 0xB4 frames). */
@@ -448,7 +448,7 @@ void queue_dialogue_message(int a, int b) __asm__("FUN_L00_00263d40");
 void queue_dialogue_message(int message_id, int message_duration_frames) {
     if (message_duration_frames == -1)
         message_duration_frames = scale_game_frames(0xB4);
-    FUN_001165b8_00263d40(D_L00_00179118, get_help_message_text(message_id));
+    FUN_001165b8_00263d40(l00_dialogue_message_text_buffer, get_help_message_text(message_id));
     D_L00_0015F640 = message_duration_frames;
 }
 
@@ -463,7 +463,7 @@ void queue_formatted_dialogue_message(s32 help_message_selector,
                                       s32 message_duration_frames) {
     if (message_duration_frames == -1)
         message_duration_frames = scale_game_frames(0xB4);
-    sprintf(D_L00_00179118, get_help_message_text(help_message_selector), format_argument);
+    sprintf(l00_dialogue_message_text_buffer, get_help_message_text(help_message_selector), format_argument);
     D_L00_0015F640 = message_duration_frames;
 }
 
