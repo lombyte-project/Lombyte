@@ -288,7 +288,7 @@ void shuttle_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x80;
         moby->spawn_frame = hero.moby->spawn_frame;
-        moby->state = 1;
+        moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
         if (moby->prev_seq != 2) {
             blend_moby_animation(moby, 2, 0, 0);
         }
@@ -385,7 +385,7 @@ void shuttle_update(struct Moby *moby) {
         }
         if (shuttle_vars->go != 0) {
             shuttle_vars->go = 0;
-            moby->state = 3;
+            moby->state = UPDATE_SHUTTLE_PATH_RIDE;
             remove_help_message_for_selector(10);
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
@@ -411,7 +411,7 @@ void shuttle_update(struct Moby *moby) {
         if (update_shuttle_path_ride((char *)moby, shuttle_vars->side) != 0) {
             int ofs;
             int base;
-            moby->state = 4;
+            moby->state = RESTORE_SHUTTLE_IDLE_ANIMATION;
             shuttle_vars->fF4 = 0;
             ofs = shuttle_vars->cam[shuttle_vars->sel] << 7;
             base = (int)l06_cuboids;
@@ -439,7 +439,7 @@ void shuttle_update(struct Moby *moby) {
                 initialize_moby_particle_effect_state(D_L06_0015FFD8_302578 +
                                                       (shuttle_vars->f10C << 8));
                 shuttle_vars->f114 = 0;
-                moby->state = 6;
+                moby->state = WAIT_FOR_HERO_NEAR_LINKED_MOBY;
                 if (moby->prev_seq != 2) {
                     blend_moby_animation(moby, 2, 0, scale_game_frames(30));
                 }
@@ -459,7 +459,7 @@ void shuttle_update(struct Moby *moby) {
             start_scene(12);
             mark_moby_for_removal(linked_moby);
             unlock_planet(5);
-            moby->state = 8;
+            moby->state = WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW;
             jet_clear_persistent(shuttle_vars->fF8);
             jet_reset_camera(b, rot);
         }
@@ -472,11 +472,11 @@ void shuttle_update(struct Moby *moby) {
             shuttle_vars->sel = 0;
             shuttle_vars->go = 1;
             shuttle_vars->f114 = 1;
-            moby->state = 1;
+            moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
         }
         break;
     case RESTORE_SHUTTLE_IDLE_ANIMATION:
-        moby->state = 1;
+        moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
         if (moby->prev_seq != 2) {
             blend_moby_animation(moby, 2, 0, scale_game_frames(30));
         }
@@ -485,10 +485,10 @@ void shuttle_update(struct Moby *moby) {
         if (D_L06_0015F5C4 != 2) {
             if (D_0013D4D5[9] != 0) {
                 start_scene(5);
-                moby->state = 9;
+                moby->state = WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS;
             } else {
                 queue_planet_unlock_message(5);
-                moby->state = 1;
+                moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
                 enter_hero_idle_state_for_current_vehicle_mode();
                 memcard_save_data(0, -1);
             }
@@ -498,13 +498,13 @@ void shuttle_update(struct Moby *moby) {
         if (D_L06_0015F5C4 != 2) {
             queue_planet_unlock_message(5);
             memcard_save_data(0, -1);
-            moby->state = 1;
+            moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
         }
         break;
     case WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW:
         if (D_L06_0015F5C4 != 2) {
             queue_scene_movie_with_game_language(5);
-            moby->state = 7;
+            moby->state = WAIT_TO_SELECT_SHUTTLE_SAVE_FLOW;
         }
         break;
     }
