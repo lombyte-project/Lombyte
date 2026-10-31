@@ -1153,7 +1153,7 @@ void bomb_update(BombMoby *bomb_moby) {
                     Vec_2adb30 spark_velocity;
                     Vec_2adb30 v2;
                     Vec_2adb30 random_velocity_offset;
-                    int        p0;
+                    int        spark_primary_color;
                     int        spark_secondary_color;
                     int        spark_random_frame_count;
                     int        spark_vertical_offset_scale;
@@ -1168,7 +1168,7 @@ void bomb_update(BombMoby *bomb_moby) {
                         random_float_between(*(float *)&D_L00_0016140C, *(float *)&D_L00_00161410);
                     v2.f[3] =
                         random_float_between(*(float *)&D_L00_00161414, *(float *)&D_L00_00161418);
-                    p0 = fast_tween_color(*(int *)&bomb_spark_primary_color_start,
+                    spark_primary_color = fast_tween_color(*(int *)&bomb_spark_primary_color_start,
                                           *(int *)&bomb_spark_primary_color_end,
                                           random_float_between(0.0f, 1.0f));
                     spark_secondary_color =
@@ -1194,7 +1194,7 @@ void bomb_update(BombMoby *bomb_moby) {
                     spawn_spark(&bomb_moby->pos,
                                 &spark_velocity,
                                 &v2,
-                                p0,
+                                spark_primary_color,
                                 spark_secondary_color,
                                 spark_random_frame_count,
                                 spark_vertical_offset_scale,
