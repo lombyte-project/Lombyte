@@ -58,7 +58,7 @@ void platform_booster_update(struct Moby *moby) {
     switch (moby->state) {
     case PLATFORM_BOOSTER_STATE_INITIALIZE:
         blend_moby_animation(moby, 1, 0, scale_game_frames(300));
-        moby->state = 1;
+        moby->state = PLATFORM_BOOSTER_STATE_FOLLOW_LEVER;
         moby->anim_speed = 0;
         door_vars->voice = -1;
         break;
@@ -78,7 +78,7 @@ void platform_booster_update(struct Moby *moby) {
                     ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9 ||
                      hero.state.control_mode == 12) &&
                     hero.ground_moby == &((struct Moby *)moby_array)[door_vars->target])) {
-            moby->state = 2;
+            moby->state = PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION;
         }
         if (moby->anim_time != previous_anim_time) {
             if (lv->travel != 1.0f && lv->travel != 0.0f) {
@@ -125,7 +125,7 @@ void platform_booster_update(struct Moby *moby) {
         link_vars = (LeverVars *)link->pvars;
         if (link->state == 3) {
             moby->anim_time = 1.0f - link_vars->travel;
-            moby->state = 1;
+            moby->state = PLATFORM_BOOSTER_STATE_FOLLOW_LEVER;
         } else {
             link_vars->travel = 1.0f - moby->anim_time;
             link_vars->spin = link_vars->travel * (link_vars->rate * 6.2831855f);
