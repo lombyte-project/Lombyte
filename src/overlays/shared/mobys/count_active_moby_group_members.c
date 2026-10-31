@@ -36,6 +36,9 @@ extern O_26e008       *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8");
 int count_active_moby_group_members(int i, int st) __asm__("FUN_L01_0026e008");
 
 int count_active_moby_group_members(int i, int excluded_moby_state) {
+    enum {
+        MIN_ACTIVE_MOBY_STATE = 0
+    };
     unsigned short *moby_index_entry;
     int             qualifying_moby_count = 0;
     O_26e008       *moby;
@@ -46,7 +49,7 @@ int count_active_moby_group_members(int i, int excluded_moby_state) {
     moby_index_entry = D_L01_001ABCC0_lui[i];
     do {
         moby = (O_26e008 *)(((*moby_index_entry & 0x7FFF) << 8) + (int)D_L01_0015FFD8_26e008);
-        if (moby->state >= 0 &&
+        if (moby->state >= MIN_ACTIVE_MOBY_STATE &&
             (excluded_moby_state == -1 || (unsigned char)moby->state != excluded_moby_state)) {
             qualifying_moby_count++;
         }
