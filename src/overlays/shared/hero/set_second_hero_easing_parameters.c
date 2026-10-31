@@ -17,10 +17,10 @@ extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 /* Sets the accel and max_speed of one hero ease. */
 void set_third_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a210");
 
-void set_third_hero_easing_parameters(float a, float b) {
+void set_third_hero_easing_parameters(float hero_ease_acceleration, float hero_ease_max_speed) {
     struct HeroEase *destination = hero_eases;
-    destination[2].accel = a;
-    destination[2].max_speed = b;
+    destination[2].accel = hero_ease_acceleration;
+    destination[2].max_speed = hero_ease_max_speed;
 }
 
 extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
