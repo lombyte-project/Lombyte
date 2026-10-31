@@ -97,6 +97,9 @@ void shuttle_update(struct Moby *moby) {
         SHUTTLE_STATE_WAIT_FOR_DEPARTURE = 2,
         SHUTTLE_STATE_TRAVEL = 3
     };
+    enum {
+        SHUTTLE_STATE_NO_PATH = 4
+    };
     LiftVars *shuttle_vars = (LiftVars *)moby->pvars;
     Vec4      old_pos;
     Vec4      old_rot;
@@ -122,7 +125,7 @@ void shuttle_update(struct Moby *moby) {
         if (shuttle_vars->path == -1) {
             qcopy(&shuttle_vars->home_pos, &moby->pos);
             qcopy(&shuttle_vars->home_rot, &moby->rot);
-            moby->state = 4;
+            moby->state = SHUTTLE_STATE_NO_PATH;
             shuttle_vars->ridable = 1;
         } else {
             shuttle_vars->unk100 = -1;
