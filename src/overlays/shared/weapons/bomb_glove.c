@@ -212,7 +212,7 @@ void bomb_glove_update(struct Moby *moby) {
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
             allocate_hero_voice_for_entry(0x1A, 0);
             use_ammo(-1, 1);
-            moby->state = 3;
+            moby->state = BOMB_GLOVE_RELEASE_HELD_MOBY;
         }
     }
     if (bomb_glove_vars->held != 0) {
@@ -339,7 +339,7 @@ void bomb_glove_update(struct Moby *moby) {
     case BOMB_GLOVE_INITIALIZE:
         bomb_glove_vars->held = 0;
         if (!(moby->anim_flags & 2))
-            moby->state = 1;
+            moby->state = BOMB_GLOVE_WAIT_FOR_ANIMATION;
         else
             moby->state = 2;
     case BOMB_GLOVE_WAIT_FOR_ANIMATION:
@@ -364,7 +364,7 @@ void bomb_glove_update(struct Moby *moby) {
                 (((DeliveryStats_2c26c8 *)item_usage)->levels | (1u << current_level_index)) |
                 0x80000000;
             bomb_glove_vars->held = 0;
-            moby->state = 4;
+            moby->state = BOMB_GLOVE_POST_RELEASE_WAIT;
             bomb_glove_vars->timer = scale_game_frames(0x14);
         }
         break;
@@ -373,7 +373,7 @@ void bomb_glove_update(struct Moby *moby) {
             moby->state = 2;
         break;
     case BOMB_GLOVE_BEGIN_HELD_MOBY_REMOVAL:
-        moby->state = 6;
+        moby->state = BOMB_GLOVE_REMOVE_HELD_MOBY;
         break;
     case BOMB_GLOVE_REMOVE_HELD_MOBY:
         /* Retail reloads held after destruction before the common tail. */
