@@ -92,11 +92,11 @@ typedef struct ResortOwnerVars {
 } ResortOwnerVars;
 
 void trigger_pokitaru_paired_rotation(struct Moby *moby) {
-    ResortOwnerVars *state = (ResortOwnerVars *)moby->pvars;
-    if (moby->oclass == 0x41 && moby->state == 1) {
+    enum { POKITARU_PAIRED_ROTATION_WAITING = 1 , POKITARU_PAIRED_ROTATION_ROTATING = 2 } ;ResortOwnerVars *state = (ResortOwnerVars *)moby->pvars;
+    if (moby->oclass == 0x41 && moby->state == POKITARU_PAIRED_ROTATION_WAITING) {
         char *child;
         D_0013D3E2[0] = moby->state;
-        moby->state = 2;
+        moby->state = POKITARU_PAIRED_ROTATION_ROTATING;
         child = state->unk8;
         if (child)
             child[0x20] = 2;
