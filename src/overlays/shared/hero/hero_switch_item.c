@@ -669,12 +669,15 @@ char *find_best_hero_heading_target(float range_limit,
 s32 select_hero_condition_animation_id(s32 animation_selector) __asm__("FUN_L00_0020da10");
 
 s32 select_hero_condition_animation_id(s32 animation_selector) {
+    enum {
+        HERO_CONDITION_ANIMATION_ITEM_SWITCH = 3
+    };
     switch (animation_selector) {
     case 1:
         return 0x79;
     case 2:
         return 0x77;
-    case 3:
+    case HERO_CONDITION_ANIMATION_ITEM_SWITCH:
         return 0x75;
     }
     return 0;
