@@ -113,6 +113,9 @@ void bolt_thief_update(struct Moby *moby) {
         BOLT_PICKUP_CONTROLLED_BY_THIEF = 3,
         BOLT_PICKUP_COLLECTION_TRIGGERED = 4
     };
+    enum {
+        BOLT_PICKUP_RELEASED_FROM_THIEF = 1
+    };
     Vec4           point;
     Vec4           step;
     BoltThiefVars *bolt_thief_instance_vars;
@@ -132,7 +135,7 @@ void bolt_thief_update(struct Moby *moby) {
             struct Moby *other = bolt_thief_instance_vars->list[i];
 
             if (other != 0 && other->state == BOLT_PICKUP_CONTROLLED_BY_THIEF) {
-                other->state = 1;
+                other->state = BOLT_PICKUP_RELEASED_FROM_THIEF;
             }
         }
         {
