@@ -3101,7 +3101,7 @@ void set_planar_vel(float radians) {
     }
     ground_speed = hero_state->ground_speed;
 
-    if (hero_state->gravity_mode != 0) {
+    if (hero_state->gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
         float matrix[16];
         float velocity_vector[4];
 
