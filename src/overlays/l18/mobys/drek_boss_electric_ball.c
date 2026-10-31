@@ -206,59 +206,59 @@ extern int  D_L18_00161EE8 __attribute__((sda));
 extern int  D_L18_00161EEC __attribute__((sda));
 extern int  D_L18_00161EF0 __attribute__((sda));
 extern int  D_L18_00161EF8 __attribute__((sda));
-extern int  D_L18_00161F08 __attribute__((sda));
+extern int  l18_homing_spark_quad_texture_ids __asm__("D_L18_00161F08") __attribute__((sda));
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
 void homing_spark_draw(char *moby) __asm__("FUN_L18_002ea1f8");
 
 void homing_spark_draw(char *moby) {
     Pkt   pkt[4];
-    float rot[4];
-    float m[4][4][4];
-    char *data = ((char *)MOBY(moby)->pvars);
+    float quad_euler_angles[4];
+    float quad_transform_matrices[4][4][4];
+    char *homing_spark_private_vars = ((char *)MOBY(moby)->pvars);
 
-    clear_u64_value(rot);
-    rot[2] = fast_arc_tan(l18_camera_lui.pos.f[0] - MOBY(moby)->pos.x,
+    clear_u64_value(quad_euler_angles);
+    quad_euler_angles[2] = fast_arc_tan(l18_camera_lui.pos.f[0] - MOBY(moby)->pos.x,
                           l18_camera_lui.pos.f[1] - MOBY(moby)->pos.y);
-    rot[1] = -fast_arc_tan(vector_distance_xy(moby + 0x10, &l18_camera_lui.pos.f[0]),
+    quad_euler_angles[1] = -fast_arc_tan(vector_distance_xy(moby + 0x10, &l18_camera_lui.pos.f[0]),
                            l18_camera_lui.pos.f[2] - MOBY(moby)->pos.z);
-    euler_rotation_matrix(m[0][0], rot);
-    euler_rotation_matrix(m[1][0], rot);
-    fast_vec_scale(m[1][1], m[1][1], *(float *)(data + 0x24));
-    fast_vec_scale(m[1][2], m[1][2], *(float *)(data + 0x24));
-    qcopy(m[0][3], moby + 0x10);
-    qcopy(m[1][3], moby + 0x10);
-    rot[0] = *(float *)(data + 0x2C);
-    euler_rotation_matrix(m[2][0], rot);
-    fast_vec_scale(m[2][1], m[2][1], *(float *)(data + 0x24));
-    fast_vec_scale(m[2][2], m[2][2], *(float *)(data + 0x24));
-    qcopy(m[2][3], moby + 0x10);
-    rot[0] = *(float *)(data + 0x30);
-    euler_rotation_matrix(m[3][0], rot);
-    fast_vec_scale(m[3][1], m[3][1], *(float *)(data + 0x24));
-    fast_vec_scale(m[3][2], m[3][2], *(float *)(data + 0x24));
-    qcopy(m[3][3], moby + 0x10);
+    euler_rotation_matrix(quad_transform_matrices[0][0], quad_euler_angles);
+    euler_rotation_matrix(quad_transform_matrices[1][0], quad_euler_angles);
+    fast_vec_scale(quad_transform_matrices[1][1], quad_transform_matrices[1][1], *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[1][2], quad_transform_matrices[1][2], *(float *)(homing_spark_private_vars + 0x24));
+    qcopy(quad_transform_matrices[0][3], moby + 0x10);
+    qcopy(quad_transform_matrices[1][3], moby + 0x10);
+    quad_euler_angles[0] = *(float *)(homing_spark_private_vars + 0x2C);
+    euler_rotation_matrix(quad_transform_matrices[2][0], quad_euler_angles);
+    fast_vec_scale(quad_transform_matrices[2][1], quad_transform_matrices[2][1], *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[2][2], quad_transform_matrices[2][2], *(float *)(homing_spark_private_vars + 0x24));
+    qcopy(quad_transform_matrices[2][3], moby + 0x10);
+    quad_euler_angles[0] = *(float *)(homing_spark_private_vars + 0x30);
+    euler_rotation_matrix(quad_transform_matrices[3][0], quad_euler_angles);
+    fast_vec_scale(quad_transform_matrices[3][1], quad_transform_matrices[3][1], *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[3][2], quad_transform_matrices[3][2], *(float *)(homing_spark_private_vars + 0x24));
+    qcopy(quad_transform_matrices[3][3], moby + 0x10);
     {
         int  i;
         int  j;
-        Pkt *p;
+        Pkt *quad_packet;
         for (i = 0; i < 4; i++) {
             {
                 long r =
-                    ((long (*)(int))get_effect_texture_c)(((int *)&(*(short *)&D_L18_00161F08))[i]);
-                p = &pkt[i];
-                p->b = r;
+                    ((long (*)(int))get_effect_texture_c)(((int *)&(*(short *)&l18_homing_spark_quad_texture_ids))[i]);
+                quad_packet = &pkt[i];
+                quad_packet->b = r;
             }
-            p->c = 0xFF9000000260;
-            p->d = (D_L18_00161EE4) | (long)(D_L18_00161EE8) << 2 | (long)(D_L18_00161EEC) << 4 |
+            quad_packet->c = 0xFF9000000260;
+            quad_packet->d = (D_L18_00161EE4) | (long)(D_L18_00161EE8) << 2 | (long)(D_L18_00161EEC) << 4 |
                    (long)(D_L18_00161EF0) << 6 | 0x8000L << 24;
-            p->a = 0;
+            quad_packet->a = 0;
             for (j = 0; j < 4; j++) {
                 pkt[i].uv[j][0] = homing_spark_quad_uvs[j][0];
                 pkt[i].uv[j][1] = homing_spark_quad_uvs[j][1];
                 if (i == 0) {
                     pkt[0].color[j] = fast_tween_color_c(
-                        D_L18_00161EF8 & 0xFFFFFF, D_L18_00161EF8, *(float *)(data + 0x24));
+                        D_L18_00161EF8 & 0xFFFFFF, D_L18_00161EF8, *(float *)(homing_spark_private_vars + 0x24));
                 } else {
                     pkt[i].color[j] = ((int *)&(*(short *)&D_L18_00161EF8))[i];
                 }
@@ -266,10 +266,10 @@ void homing_spark_draw(char *moby) {
             }
         }
     }
-    fast_draw_quad_real(&pkt[0], m[0], 0);
-    fast_draw_quad_real(&pkt[1], m[1], 0);
-    fast_draw_quad_real(&pkt[2], m[2], 0);
-    fast_draw_quad_real(&pkt[3], m[3], 0);
+    fast_draw_quad_real(&pkt[0], quad_transform_matrices[0], 0);
+    fast_draw_quad_real(&pkt[1], quad_transform_matrices[1], 0);
+    fast_draw_quad_real(&pkt[2], quad_transform_matrices[2], 0);
+    fast_draw_quad_real(&pkt[3], quad_transform_matrices[3], 0);
 }
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
