@@ -606,10 +606,10 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
         if (moby->prev_seq != 0)
             FUN_00212f90(moby, 0, 0, scale_game_frames(0x14));
-        if (moby->state == 14)
+        if (moby->state == RESORT_OWNER_CHECK_POST_PATH_DIALOGUE)
             moby_vars->unk2C = 10.0f;
         clear_u64_value(moby_vars->unk130);
-        if (moby->state == 14)
+        if (moby->state == RESORT_OWNER_CHECK_POST_PATH_DIALOGUE)
             moby_vars->unk56 = 2;
         break;
     case RESORT_OWNER_FOLLOW_HERO:
