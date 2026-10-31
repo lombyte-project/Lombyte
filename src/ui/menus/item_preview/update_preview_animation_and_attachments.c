@@ -79,6 +79,9 @@ s32 update_preview_animation_and_attachments(Moby  *source_moby,
                                              Moby **attachment1,
 
                                              Moby **attachment2) {
+    enum {
+        CD_READ_STATE_IDLE = 0
+    };
     s32 animation_complete;
     s32 delay_expired;
     s32 activate_request;
@@ -96,7 +99,7 @@ s32 update_preview_animation_and_attachments(Moby  *source_moby,
             delay_expired = 1;
         }
     }
-    if (menu_system.pending_buffer != 0 && music_stream_state.read_state == 0) {
+    if (menu_system.pending_buffer != 0 && music_stream_state.read_state == CD_READ_STATE_IDLE) {
         s32  buffer_index = menu_system.pending_buffer - 1;
         s32 *buffer_slot = &menu_system.stream_buffer[buffer_index];
         s32  buffer_address = *buffer_slot;
@@ -112,7 +115,7 @@ s32 update_preview_animation_and_attachments(Moby  *source_moby,
                                       preview_animation_requests[0].animation_id);
         menu_system.pending_buffer = 0;
     }
-    if (menu_system.pending_buffer == 0 && music_stream_state.read_state == 0 &&
+    if (menu_system.pending_buffer == 0 && music_stream_state.read_state == CD_READ_STATE_IDLE &&
         preview_request_count > 0) {
         if (preview_animation_requests[0].status == 0) {
             u32                animation_id = preview_animation_requests[0].animation_id;
