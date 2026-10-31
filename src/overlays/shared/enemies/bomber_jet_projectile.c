@@ -96,7 +96,7 @@ void explosive_projectile_update(struct Moby *moby) __asm__("FUN_L01_002f6a30");
 
 /* Moby class 686 */
 void explosive_projectile_update(struct Moby *moby) {
-    Vec_2F7E08 old_pos;
+    enum { EXPLOSIVE_PROJECTILE_STATE_FLYING = 0 , EXPLOSIVE_PROJECTILE_STATE_BURST = 1 } ;Vec_2F7E08 old_pos;
     Vec_2F7E08 smoke_pos;
     Data      *projectile_vars;
     int        rate_divisor;
@@ -169,9 +169,9 @@ void explosive_projectile_update(struct Moby *moby) {
     if (fast_vec_dist(&projectile_vars->target, &(*(Vec_2F7E08 *)&moby->pos)) <
         projectile_vars->f38) {
         qcopy(&(*(Vec_2F7E08 *)&moby->pos), &projectile_vars->target);
-        moby->state = 1;
+        moby->state = EXPLOSIVE_PROJECTILE_STATE_BURST;
     }
-    if (moby->state != 0) {
+    if (moby->state != EXPLOSIVE_PROJECTILE_STATE_FLYING) {
         size_scale = 8.0f;
         camera_distance = fast_vec_dist(camera_pos, &(*(Vec_2F7E08 *)&moby->pos));
         if (cutscene_active_macro != 0) {
