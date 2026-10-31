@@ -151,7 +151,7 @@ void drek_boss_ring_projectile_update(struct Moby *moby) {
         {
             float ground_height = probe_ground_height(&moby->pos, 0, 0.5f);
             if (moby->pos.z - 0.333f < ground_height) {
-                moby->state = 1;
+                moby->state = STATE_GROUND_IMPACT_DELAY;
                 moby->pos.z = ground_height + 0.333f;
                 *(int *)(moby_vars + 11) = scale_game_frames(1);
             }
@@ -171,7 +171,7 @@ void drek_boss_ring_projectile_update(struct Moby *moby) {
                                         (fast_sin(moby_vars[12]) + 1.0f) * 0.5f);
         if (fast_dec_timer((int *)(moby_vars + 11))) {
             trooper_play_sound(0xF, 0, (int)moby, 0x58E);
-            moby->state = 2;
+            moby->state = STATE_EXPANDING_RING;
             moby_vars[9] = 0.5f;
             moby->collision = 0;
             moby->visible = 0;
@@ -183,7 +183,7 @@ void drek_boss_ring_projectile_update(struct Moby *moby) {
         process_expanding_ring_collisions(moby);
         add_draw_callback(draw_expanding_projectile_ring, moby);
         if (moby_vars[9] > moby_vars[10]) {
-            moby->state = 3;
+            moby->state = STATE_REMOVE;
         }
         break;
     case STATE_REMOVE:
