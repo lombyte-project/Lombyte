@@ -240,7 +240,7 @@ extern void
 extern int step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 extern void FUN_L00_00263ac8_e50(void *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern void
-FUN_L00_00269958_e50(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int  FUN_L00_002dc9f0_e50(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern void FUN_L01_0026d930_e50(void *) __asm__("FUN_L01_0026d930");
 extern void emit_sand_shark_dust_burst(void *) __asm__("FUN_L02_002d3dd0");
@@ -842,7 +842,7 @@ void sand_shark_update(struct Moby *moby) {
         fast_vec_add(&position_or_offset_scratch, &target_or_particle_vector, &moby->pos);
         fast_vec_scale(&target_or_particle_vector, &target_or_particle_vector, D_0015ED6C * 5.0f);
         life = scale_game_frames(random_int_between(0x14, 0x28));
-        FUN_L00_00269958_e50(&moby->pos,
+        spawn_effect(&moby->pos,
                              &target_or_particle_vector,
                              D_L02_001619E4,
                              D_L02_001619E8,

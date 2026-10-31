@@ -2639,7 +2639,7 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
 }
 
 void        spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
-void        FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+void        spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern char D_0013F7EE[] NOT_SDA;
 void        emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
 
@@ -2690,7 +2690,7 @@ void emit_hero_timed_effects(void) {
         theta = random_angle_radians();
         phi = random_angle_radians();
         build_spherical_offset(pt, spherical_offset_scale, theta, phi);
-        FUN_L00_00269958(
+        spawn_effect(
             hero_position_copy, pt, col, 0x70F0, life, small_effect_sample, large_effect_sample, 1);
     }
     frame_count = random_int_between(scale_game_frames(3), scale_game_frames(7));

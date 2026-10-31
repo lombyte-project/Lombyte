@@ -199,8 +199,8 @@ after:
 unsigned char                       *FUN_L00_002678b8_00269958(int) __asm__("FUN_L00_002678b8");
 int                                  FUN_001160d8_00269958(void) __asm__("FUN_001160d8");
 extern unsigned char *D_L00_001B2090 NOT_SDA;
-void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag);
-void FUN_L00_00269958(u128 *spawn_position,
+void spawn_effect(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag) __asm__("FUN_L00_00269958");
+void spawn_effect(u128 *spawn_position,
                       u128 *initial_velocity,
                       int   initial_color,
                       int   color_endpoint,

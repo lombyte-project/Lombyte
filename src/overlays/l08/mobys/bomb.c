@@ -77,7 +77,7 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 extern void
-FUN_L00_00269958_c(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") MACRO_ADDR;
 void         moby_248_update(char *moby) __asm__("FUN_L08_002d23f0");
 extern float D_0015ED6C;
@@ -155,7 +155,7 @@ void moby_248_update(char *moby) {
             *(v128_36F8 *)normalized_direction = *(v128_36F8 *)random_direction;
             fast_vec_normalize(normalized_direction, normalized_direction, D_0015ED6C);
             selected_table_entry = (int *)table_or_bounce_scratch.b + random_integer_below(4);
-            FUN_L00_00269958_c((moby + 0x10),
+            spawn_effect((moby + 0x10),
                                normalized_direction,
                                *selected_table_entry,
                                0x4FFF,
