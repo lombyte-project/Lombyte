@@ -300,9 +300,12 @@ extern int select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_002
 void update_blarg_turret_target_and_state(struct Moby *moby) __asm__("FUN_L13_002b48d8");
 
 void update_blarg_turret_target_and_state(struct Moby *moby) {
+    enum {
+        BLARG_TURRET_STATE_TRACK_TARGET = 3
+    };
     char *turret_vars = (char *)moby->pvars;
     float distance;
-    if (moby->state == 3)
+    if (moby->state == BLARG_TURRET_STATE_TRACK_TARGET)
         distance = 22.0f;
     else
         distance = 20.0f;
