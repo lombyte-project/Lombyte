@@ -267,9 +267,9 @@ void initialize_hero_aligned_camera_pose(char *camera_object) {
     u128         scaled_hero_up_axis;
     struct Hero *hero_state = &hero;
     FUN_001f9bf8_2e9dd0(&hero_up_axis, ((char *)hero_state->moby) + 0xE0, 1.0f);
-    if (hero_state->vehicle_mode == 2) {
+    if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 9.5f);
-    } else if (hero_state->vehicle_mode == 1) {
+    } else if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 0.9f);
     } else {
         FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 1.6f);
