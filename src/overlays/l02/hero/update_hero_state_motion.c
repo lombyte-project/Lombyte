@@ -342,6 +342,10 @@ void update_hero_ground_contact(void) {
     enum {
         GROUND_MATERIAL_SINK_TRIGGER = 0xD
     };
+    enum {
+        GROUND_MATERIAL_WATER_SURFACE_TRIGGER = 0,
+        GROUND_MATERIAL_SINK_SURFACE_TRIGGER = 3
+    };
     V collision_ray_end, collision_ray_start, ground_geometry_scratch, probe_ray_start,
         unused_probe_point, probe_surface_angles, normalized_probe_hit_normal;
     f32 f;
@@ -385,7 +389,7 @@ void update_hero_ground_contact(void) {
     }
     hero.ground_sound_class = collision_sound_class;
     hero.ground_type = collision_hit_material();
-    if (hero.ground_type == 0) {
+    if (hero.ground_type == GROUND_MATERIAL_WATER_SURFACE_TRIGGER) {
         hero.water_surface_z =
             resolve_camera_surface_height(D_L02_00174460, (u8 *)&hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
@@ -408,7 +412,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
     }
-    if (hero.ground_type == 3) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_SURFACE_TRIGGER) {
         hero.sink_surface_z = HH.point.f[2];
         collision_ray_start.f[2] = HH.point.f[2] - 0.01f;
         if (collision_line(&collision_ray_start, &collision_ray_end, 4, (s32)hero.moby, 0) == 0) {
