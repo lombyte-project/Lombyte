@@ -36,7 +36,7 @@ extern void spawn_explosion(void *,
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002BA898.c: func_L01_002F5800), where it is exact; names translated to the US level program. */
 
-extern char  D_L01_00167240[];
+extern char  camera_pos[] __asm__("D_L01_00167240");
 extern short fighter_jet_minimum_distance_scale_gp __asm__("D_L01_00161AF4") __attribute__((sda));
 extern short fighter_jet_minimum_scale_camera_distance_gp __asm__("D_L01_00161AF8")
     __attribute__((sda));
@@ -78,7 +78,7 @@ void fighter_jet_update(char *moby) {
         *(float *)(fighter_jet_vars + 0x174) = *(float *)(fighter_jet_vars + 0xFC);
     }
     {
-        float camera_distance = fast_vec_dist(moby + 0x10, D_L01_00167240);
+        float camera_distance = fast_vec_dist(moby + 0x10, camera_pos);
         float min_scale = *(float *)&fighter_jet_minimum_distance_scale_gp;
         float near_dist = *(float *)&fighter_jet_full_scale_camera_distance_gp;
         float slope = -((1.0f - min_scale) /
