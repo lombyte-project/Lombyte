@@ -16,10 +16,13 @@ extern void         init_moby_instance(struct Moby *, s32) __asm__("func_0020C5F
 struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 
 struct Moby *create_moby(s32 oclass) {
+    enum {
+        MOBY_STATE_REUSE_THRESHOLD = 0xFE
+    };
     struct Moby *moby_slot;
 
     for (moby_slot = moby_instance_end; moby_slot < moby_instance_perm_end; moby_slot++) {
-        if (moby_slot->state >= 0xFE && moby_slot->spawn_frame <= (u32)world_update_time) {
+        if (moby_slot->state >= MOBY_STATE_REUSE_THRESHOLD && moby_slot->spawn_frame <= (u32)world_update_time) {
             if (moby_slot->state == 0xFF) {
                 moby_slot[1].state = 0xFF;
             }
