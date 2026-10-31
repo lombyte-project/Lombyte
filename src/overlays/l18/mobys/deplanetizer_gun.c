@@ -37,11 +37,11 @@ void deplanetizer_gun_update(DeplanetizerGunSceneMoby *moby) {
     };
     switch (moby->state) {
     case MOBY_INITIALIZE:
-        moby->state = 1;
+        moby->state = MOBY_WAIT_FOR_SCENE_TRIGGER;
     case MOBY_WAIT_FOR_SCENE_TRIGGER:
         if ((D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) ||
             (game_frame < 5 && D_L18_001623A0_gp != 0 && moby->f40 == 0.0f)) {
-            moby->state = 2;
+            moby->state = MOBY_WAIT_FOR_SCENE_END;
             moby->flags |= 1;
             moby->substate = 0;
         }
@@ -55,7 +55,7 @@ void deplanetizer_gun_update(DeplanetizerGunSceneMoby *moby) {
         }
         if (D_L18_0015F5C4 != 2) {
             moby->substate = 1;
-            moby->state = 1;
+            moby->state = MOBY_WAIT_FOR_SCENE_TRIGGER;
             moby->flags &= 0xFFFE;
         }
         break;
