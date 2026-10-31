@@ -68,7 +68,7 @@ void exploding_prop_update(struct Moby *moby) __asm__("FUN_L15_002aa280");
 
 /* Moby class 154 */
 void exploding_prop_update(struct Moby *moby) {
-    char *hit = 0;
+    enum { EXPLODING_PROP_STATE_UNINITIALIZED = 0 , EXPLODING_PROP_STATE_INITIALIZED = 1 } ;char *hit = 0;
     Vec4  velocity, hit_direction, push, offset, center;
     u32   palette[4];
     u32   colors[4];
@@ -78,7 +78,7 @@ void exploding_prop_update(struct Moby *moby) {
     float size;
     void *debris;
 
-    if (D_001413F4[0] != 2 && moby->state == 1)
+    if (D_001413F4[0] != 2 && moby->state == EXPLODING_PROP_STATE_INITIALIZED)
         return;
 
     for (hit_record_index = 0; hit_record_index < 64; hit_record_index++) {
@@ -186,11 +186,11 @@ void exploding_prop_update(struct Moby *moby) {
         mark_moby_for_removal(moby);
     } else {
         moby->hit_slot = 0xff;
-        if (moby->state != 0)
+        if (moby->state != EXPLODING_PROP_STATE_UNINITIALIZED)
             return;
         moby->draw_dist = 0x80;
         moby->update_dist = 0xff;
-        moby->state = 1;
+        moby->state = EXPLODING_PROP_STATE_INITIALIZED;
         if (D_0013DD50 != 0) {
             u16 save_id = moby->save_id;
             if ((*(s32 *)(D_0014C190 + (((s16)save_id >> 5) * 4) + current_level_index * 0x100) >>
