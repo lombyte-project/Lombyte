@@ -32,7 +32,7 @@ void escalator_update(char *moby) {
     float          y;
     int            state;
 
-    if (escalator_motion_state == 0)
+    if (escalator_motion_state == NULL)
         return;
     state = MOBY(moby)->state;
     if (state == ESCALATOR_STATE_TIMED_NEGATIVE_YAW_MOTION)
