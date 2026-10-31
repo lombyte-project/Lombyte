@@ -73,12 +73,12 @@ void test_dummy_challenge_update(struct Moby *moby) {
             return;
         }
         if (scene_data->hidden == -1) {
-            moby->state = 5;
+            moby->state = SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER;
             moby->flags |= 1;
             moby->visible = 0;
             moby->collision = 0;
         } else {
-            moby->state = 1;
+            moby->state = SCENE_STATE_WAIT_FOR_TRIGGER;
             set_class_0287_group_activation_and_find_nearest(scene_data->helper, 1);
         }
         break;
@@ -87,7 +87,7 @@ void test_dummy_challenge_update(struct Moby *moby) {
         if (!is_point_inside_clip_volume(player, scene_data->trigger))
             break;
         scene_data->timer_q = scale_game_frames(60);
-        moby->state = 2;
+        moby->state = SCENE_STATE_WAIT_TO_HIDE;
         if (scene_data->camera >= 0)
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&scene_data->camera;
         jet_mount(D_L16_001671C0_lui, D_L16_001671C0_lui + 0x10, 1, 0, 0);
@@ -98,7 +98,7 @@ void test_dummy_challenge_update(struct Moby *moby) {
         if (scene_data->camera >= 0)
             *(unsigned short *)(D_0014162A_lui) = *(unsigned short *)&scene_data->camera;
         if (fast_dec_timer(&scene_data->timer_q)) {
-            moby->state = 3;
+            moby->state = SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER;
             scene_data->timer_q = scale_game_frames(60);
             moby->visible = 0;
             moby->flags |= 1;
@@ -116,7 +116,7 @@ void test_dummy_challenge_update(struct Moby *moby) {
         if (!fast_dec_timer(&scene_data->timer_q))
             break;
         moby->visible = 1;
-        moby->state = 4;
+        moby->state = SCENE_STATE_COMPLETE;
         moby->flags &= 0xFFFE;
         jet_end_mount(3);
         set_race_camera(D_L16_001600EC + (scene_data->pose << 7) + 0x30,
@@ -144,7 +144,7 @@ void test_dummy_challenge_update(struct Moby *moby) {
         if (is_point_inside_clip_volume(D_0013F3D0, scene_data->trigger)) {
             activate_class_0287_group_and_find_nearest(scene_data->helper, 0);
             activate_test_dummy_group(scene_data->path);
-            moby->state = 6;
+            moby->state = SCENE_STATE_HIDDEN_WAIT_FOR_LINKED_MOBYS;
         }
         break;
     case SCENE_STATE_HIDDEN_WAIT_FOR_LINKED_MOBYS: {
@@ -152,7 +152,7 @@ void test_dummy_challenge_update(struct Moby *moby) {
         if (is_point_inside_clip_volume(player, scene_data->trigger) && scene_data->camera >= 0)
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&scene_data->camera;
         if (!count_active_moby_group_members(scene_data->path, -1)) {
-            moby->state = 4;
+            moby->state = SCENE_STATE_COMPLETE;
             helper = set_class_0287_group_activation_and_find_nearest(scene_data->helper, 0);
             if (helper)
                 allocate_voice_for_target_entry(1, 0, helper);
