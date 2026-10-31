@@ -39,13 +39,17 @@ void fan_update(SwayMoby *m) __asm__("FUN_L01_002f9bf0");
 
 /* Moby class 705 */
 void fan_update(SwayMoby *fan_moby) {
+    enum {
+        FAN_STATE_UNINITIALIZED = 0,
+        FAN_STATE_INITIALIZED = 1
+    };
     SwayVars *sway_vars;
     CollQuery collision_query;
 
     sway_vars = fan_moby->pvars;
-    if (fan_moby->state == 0) {
+    if (fan_moby->state == FAN_STATE_UNINITIALIZED) {
         copy_hero_moby_field_38(fan_moby);
-        fan_moby->state = 1;
+        fan_moby->state = FAN_STATE_INITIALIZED;
         sway_vars->sway = random_float_between(-1.0f, 1.0f);
         sway_vars->dir = (rand() & 1) ? 1.0f : -1.0f;
     }
