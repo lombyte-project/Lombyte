@@ -31,6 +31,11 @@ extern s32 check_mission_condition(s16, s32) __asm__("func_0020BAF0");
 s32        update_mission_list(void) __asm__("FUN_0020b950");
 
 s32 update_mission_list(void) {
+    enum {
+        MISSION_STATE_UNAVAILABLE = 0,
+        MISSION_STATE_AVAILABLE = 1,
+        MISSION_STATE_BOTH_CONDITIONS_MET = 2
+    };
     struct MenuItem *it;
     struct MenuItem *items;
 
@@ -41,13 +46,13 @@ s32 update_mission_list(void) {
     }
     for (it = items; it->id != 0; it++) {
         if ((it->flags & 4) && level_visit_state[level_map_selection.level] == 0) {
-            it->state = 0;
+            it->state = MISSION_STATE_UNAVAILABLE;
         } else if (!check_mission_condition(it->kind1, it->value1)) {
-            it->state = 0;
+            it->state = MISSION_STATE_UNAVAILABLE;
         } else if (!check_mission_condition(it->kind2, it->value2)) {
-            it->state = 1;
+            it->state = MISSION_STATE_AVAILABLE;
         } else {
-            it->state = 2;
+            it->state = MISSION_STATE_BOTH_CONDITIONS_MET;
         }
     }
     for (it = D_001A2C10.items; it->id != 0; it++) {
@@ -57,7 +62,7 @@ s32 update_mission_list(void) {
     }
     D_001A2C10.available = 0;
     for (it = D_001A2C10.items; it->id != 0; it++) {
-        if (it->state == 1 && !(it->flags & 2)) {
+        if (it->state == MISSION_STATE_AVAILABLE && !(it->flags & 2)) {
             D_001A2C10.available++;
         }
     }
