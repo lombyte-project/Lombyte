@@ -209,7 +209,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
     if (thrown_moby->pos.x < 2.0f || 1021.0f < thrown_moby->pos.x || thrown_moby->pos.y < 2.0f ||
         1021.0f < thrown_moby->pos.y || thrown_moby->pos.z < 2.0f || 1021.0f < thrown_moby->pos.z)
         goto remove;
-    if (hero.unk20A5 && thrown_moby->state < 2)
+    if (hero.unk20A5 && thrown_moby->state < THROWN_MOBY_STATE_MOVE_WITH_COLLISION)
         thrown_moby->flags |= 0x41;
     else
         thrown_moby->flags &= 0xffbe;
@@ -222,7 +222,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
     }
     switch (thrown_moby->state) {
     case THROWN_MOBY_STATE_INITIALIZE:
-        thrown_moby->state = 1;
+        thrown_moby->state = THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE;
         spawner_throw_vars->effect_timer = scale_game_frames(4);
         spawner_throw_vars->timer = 0;
         spawner_throw_vars->spawn_count = 0;
@@ -310,7 +310,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
                     spawner_throw_vars->timer = settled;
                     if (!coll_hit.moby || coll_hit.unk1C > 0 ||
                         (settled_frames = (s16)settled, scale_game_frames(240) < settled_frames)) {
-                        thrown_moby->state = 3;
+                        thrown_moby->state = THROWN_MOBY_STATE_SPAWN_SEQUENCE;
                         spawner_throw_vars->timer = 0;
                     }
                 }
@@ -368,7 +368,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
                     s32 spawned = spawner_throw_vars->spawn_count + 1;
                     spawner_throw_vars->spawn_count = spawned;
                     if (spawned > 3)
-                        thrown_moby->state = 4;
+                        thrown_moby->state = THROWN_MOBY_STATE_FADE_OUT;
                 }
             }
         }
@@ -399,6 +399,6 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
     }
     case THROWN_MOBY_STATE_RESET_TO_INITIALIZE:
     default:
-        thrown_moby->state = 0;
+        thrown_moby->state = THROWN_MOBY_STATE_INITIALIZE;
     }
 }
