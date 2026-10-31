@@ -86,7 +86,7 @@ void lift_update(struct Moby *lift_moby) {
         }
         *(int *)(lift_vars + 0x1C) = next_lift_instance_index_gp++;
         lift_moby->update_dist = 0xFF;
-        lift_moby->state = 1;
+        lift_moby->state = LIFT_SELECT_INITIAL_HEIGHT;
         ((M_2310 *)lift_moby)->h34 |= 1;
         lift_moby->draw_dist = 0;
         lift_moby->collision = 0;
@@ -98,17 +98,17 @@ void lift_update(struct Moby *lift_moby) {
         initial_height_selector = *(int *)(lift_vars + 8);
         next_lift_instance_index_gp = 0;
         if (initial_height_selector != 0 && D_00141400 == 0) {
-            lift_moby->state = 2;
+            lift_moby->state = LIFT_APPROACH_BASE_HEIGHT;
             lift_moby->pos.z = *(float *)(lift_vars + 0);
         } else {
-            lift_moby->state = 3;
+            lift_moby->state = LIFT_APPROACH_ALTERNATE_HEIGHT;
             lift_moby->pos.z = *(float *)(lift_vars + 4);
         }
         break;
     case LIFT_APPROACH_ALTERNATE_HEIGHT:
         if (lift_moby->command & 4) {
             lift_alternate_height_requested_gp = 0;
-            lift_moby->state = 2;
+            lift_moby->state = LIFT_APPROACH_BASE_HEIGHT;
             if (*(int *)(lift_vars + 8) == 0) {
                 D_0013D406 = 1;
             }
@@ -124,7 +124,7 @@ void lift_update(struct Moby *lift_moby) {
         break;
     case LIFT_APPROACH_BASE_HEIGHT:
         if (lift_moby->command & 8) {
-            lift_moby->state = 3;
+            lift_moby->state = LIFT_APPROACH_ALTERNATE_HEIGHT;
             lift_alternate_height_requested_gp = 1;
         }
         lift_moby->command = 2;
