@@ -147,6 +147,10 @@ void         robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 
 /* Moby classes 573, 1382 */
 void robot_dog_update(unsigned char *robot_dog_moby) {
+    enum {
+        ROBOT_DOG_DETECTION_LINE_BLOCKED = 0,
+        ROBOT_DOG_DETECTION_CLEAR_LINE_IN_FACING_CONE = 2
+    };
     Vars1382    *robot_dog_vars;
     struct Moby *facing_target_moby;
     int          clip_volume_suppressed;
@@ -222,7 +226,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         }
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER:
-        if (robot_dog_vars->mode != 0 && random_integer_below(0x1F) == 0) {
+        if (robot_dog_vars->mode != ROBOT_DOG_DETECTION_LINE_BLOCKED && random_integer_below(0x1F) == 0) {
             robot_dog_moby[0x20] = 2;
             if (robot_dog_moby[0x53] != 1) {
                 blend_moby_animation(robot_dog_moby, 1, 0, scale_game_frames(10));
@@ -285,7 +289,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             }
             MOBY(robot_dog_moby)->anim_speed = 1.7f;
             mode = robot_dog_vars->mode;
-            if (mode == 2 &&
+            if (mode == ROBOT_DOG_DETECTION_CLEAR_LINE_IN_FACING_CONE &&
                 (fast_dec_timer_s16(&robot_dog_vars->t1E2) || D_0013E533[0x2EC1] != 3)) {
                 if (random_integer_below(3) == 0) {
                     if (robot_dog_moby[0x53] != mode) {
@@ -302,7 +306,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                         blend_moby_animation(robot_dog_moby, 7, 0, scale_game_frames(10));
                     }
                 }
-            } else if (robot_dog_vars->t1E0 == 0 && robot_dog_vars->mode == 0) {
+            } else if (robot_dog_vars->t1E0 == 0 && robot_dog_vars->mode == ROBOT_DOG_DETECTION_LINE_BLOCKED) {
                 robot_dog_moby[0x20] = 3;
                 if (robot_dog_moby[0x53] != 0) {
                     clip_volume_id_or_animation_value = random_integer_below(
