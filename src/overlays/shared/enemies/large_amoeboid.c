@@ -1123,8 +1123,11 @@ extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) __asm__("FUN_L01_002efb98");
 
 int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) {
+    enum {
+        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 0xe
+    };
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby->state = 0xe;
+    moby->state = LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION;
     return helper_result;
 }
 
