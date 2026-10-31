@@ -421,6 +421,10 @@ extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 void               update_hero_ground_contact(void) __asm__("FUN_L06_00229650");
 
 void update_hero_ground_contact(void) {
+    enum {
+        HERO_GROUND_MATERIAL_WATER = 0,
+        HERO_GROUND_MATERIAL_SINK_SURFACE = 0xD
+    };
     V collision_ray_end, ground_ray_start, ground_offset_or_angles, surface_probe_start,
         unused_surface_probe_point, hit_surface_angles, normalized_hit_normal;
     f32 f;
@@ -464,7 +468,7 @@ void update_hero_ground_contact(void) {
     }
     hero_lui.ground_sound_class = ground_sound_class;
     hero_lui.ground_type = collision_hit_material();
-    if (hero_lui.ground_type == 0) {
+    if (hero_lui.ground_type == HERO_GROUND_MATERIAL_WATER) {
         hero_lui.water_surface_z =
             resolve_camera_surface_height(D_L06_001745E0, (u8 *)&hero_lui + 0x280);
         if (hero_lui.motion.pos.f[2] < hero_lui.water_surface_z && hero_lui.in_water_frames <= 0) {
@@ -479,7 +483,7 @@ void update_hero_ground_contact(void) {
         }
         hero_lui.ground_sound_class = ground_sound_class;
     }
-    if (hero_lui.ground_type == 0xD) {
+    if (hero_lui.ground_type == HERO_GROUND_MATERIAL_SINK_SURFACE) {
         hero_lui.water_surface_z = D_L06_001745E8;
         ground_ray_start.f[2] = D_L06_001745E8 - 0.01f;
         if (collision_line(&ground_ray_start, &collision_ray_end, 4, hero_lui.moby, 0) == 0) {
@@ -512,7 +516,7 @@ void update_hero_ground_contact(void) {
         }
         if (hero_lui.ground_distance < 0.02f) {
             hero_lui.frames_off_ground.s = 0;
-            if (hero_lui.ground_slope.f <= 0.87266463f || hero_lui.gravity_mode == 1 ||
+            if (hero_lui.ground_slope.f <= 0.87266463f || hero_lui.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero_lui.state.control_mode == 0x16) {
                 hero_lui.air_frames.s = 0;
                 hero_lui.last_landed_moby = HH.moby;
