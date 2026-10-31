@@ -20,6 +20,11 @@ extern void            draw_rect_overlay(s32, s32, s32, s32, u64) __asm__("func_
 void draw_screen_effect(void) __asm__("FUN_001f4fb8");
 
 void draw_screen_effect(void) {
+    enum {
+        BACKGROUND_ALPHA_STATE_SKIP_WRITE = 0,
+        FIRST_STRIPE_ALPHA_STATE_SKIP_WRITE = 0,
+        SECOND_STRIPE_ALPHA_STATE_SKIP_WRITE = 0
+    };
     s32 i;
     s16 height;
     u64 mask;
@@ -33,7 +38,7 @@ void draw_screen_effect(void) {
     i = 0;
     height = fs_aa_buffer.display_height;
     background_alpha_state = screen_color_effect_now->enable;
-    if (background_alpha_state != 0) {
+    if (background_alpha_state != BACKGROUND_ALPHA_STATE_SKIP_WRITE) {
         vu1_add_g_sregister(0x42, background_alpha_state & 0xFF000000FFULL);
     }
     background_color = screen_color_effect_now->color;
@@ -45,7 +50,7 @@ void draw_screen_effect(void) {
         mask = 0xFF000000FFULL;
         do {
             first_stripe_alpha_state = screen_color_effect_now->unk18;
-            if (first_stripe_alpha_state != 0) {
+            if (first_stripe_alpha_state != FIRST_STRIPE_ALPHA_STATE_SKIP_WRITE) {
                 vu1_add_g_sregister(0x42, first_stripe_alpha_state & mask);
             }
             first_stripe_color = screen_color_effect_now->unk14;
@@ -60,7 +65,7 @@ void draw_screen_effect(void) {
             }
             i = i + screen_color_effect_now->unk10;
             second_stripe_alpha_state = screen_color_effect_now->unk28;
-            if (second_stripe_alpha_state != 0) {
+            if (second_stripe_alpha_state != SECOND_STRIPE_ALPHA_STATE_SKIP_WRITE) {
                 vu1_add_g_sregister(0x42, second_stripe_alpha_state & mask);
             }
             second_stripe_color = screen_color_effect_now->unk24;
