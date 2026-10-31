@@ -671,7 +671,9 @@ int update_shuttle_path_ride(char *moby, int path) {
     return ride->progress == 1.0f;
 }
 
-void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count) {
+void spawn_shuttle_explosion_effect(float scale, char *moby, char *pos, char *push, int count) __asm__("FUN_L06_00303748");
+
+void spawn_shuttle_explosion_effect(float scale, char *moby, char *pos, char *push, int count) {
     float  position[4], direction[4], velocity[4], acceleration[4];
     Colors first_colors, second_colors;
     int    i;
@@ -779,7 +781,7 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     do {
         id = *list & 0x7FFF;
         random_vector(push, 1.0f, 2.0f);
-        FUN_L06_00303748(
+        spawn_shuttle_explosion_effect(
             30.0f, moby, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos, push, 1);
         fast_vec_add(middle, middle, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
         count++;
