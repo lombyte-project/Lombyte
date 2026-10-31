@@ -518,6 +518,9 @@ void update_debug_menu(void) {
         DEBUG_CAPTURE_STATUS_NO = 110,
         DEBUG_CAPTURE_STATUS_YES = 121
     };
+    enum {
+        DEBUG_OCCLUSION_MODE_NO_DATA_FALLBACK = 0
+    };
     DebugRowCounts row_counts;
     union {
         struct {
@@ -629,15 +632,15 @@ void update_debug_menu(void) {
             break;
         case DEBUG_OPTION_ROW_OCCLUSION_MODE:
             if (!D_L00_0015F600) {
-                g_debug_menu.occlusion_mode = 0;
+                g_debug_menu.occlusion_mode = DEBUG_OCCLUSION_MODE_NO_DATA_FALLBACK;
                 break;
             }
             if (controller_words.buttons.w.pressed & 0x40) {
                 if (++g_debug_menu.occlusion_mode >= DEBUG_OCCLUSION_MODE_COUNT)
-                    g_debug_menu.occlusion_mode = 0;
+                    g_debug_menu.occlusion_mode = DEBUG_OCCLUSION_MODE_NO_DATA_FALLBACK;
             }
             if (controller_words.buttons.w.pressed & 0x10) {
-                if (--g_debug_menu.occlusion_mode < 0)
+                if (--g_debug_menu.occlusion_mode < DEBUG_OCCLUSION_MODE_NO_DATA_FALLBACK)
                     g_debug_menu.occlusion_mode = 2;
             }
             break;
