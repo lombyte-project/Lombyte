@@ -244,6 +244,11 @@ void update_moby_joint_attachments(struct Moby *parent_moby,
                                    char        *attachment_data) __asm__("FUN_L13_002e8d28");
 
 void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_data) {
+    enum {
+        STARFIGHTER_STATE_TRACTOR_BEAM = 5,
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     int   i;
     int   attachment_joint_index;
     char *attached_moby;
@@ -271,7 +276,7 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
         }
     }
     attachment_joint_index = attachment_joint_indices_by_command[parent_moby->command];
-    if (parent_moby->state == 5)
+    if (parent_moby->state == STARFIGHTER_STATE_TRACTOR_BEAM)
         attachment_joint_index = -1;
     if (attachment_joint_index != -1) {
         if (*(char **)(attachment_data + 0xF0) == 0 ||
@@ -280,8 +285,8 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
             *(char **)(attachment_data + 0xF0) =
                 spawn_moby_joint_attachment(parent_moby, attachment_joint_index, 0x191);
         attached_moby = *(char **)(attachment_data + 0xF0);
-        if (attached_moby != 0 && MOBY(attached_moby)->state != 0xFE &&
-            MOBY(attached_moby)->state != 0xFD) {
+        if (attached_moby != 0 && MOBY(attached_moby)->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+            MOBY(attached_moby)->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             moby_point_position(parent_moby, attachment_joint_index, attached_moby + 0x10);
             if (MOBY(attached_moby)->pos.x < 22.0f)
                 MOBY(attached_moby)->pos.x = 22.0f;
