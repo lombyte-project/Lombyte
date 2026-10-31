@@ -130,7 +130,7 @@ typedef struct {
 extern float D_0015ED70;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float D_L06_00161EB0 __attribute__((sda));
-extern float D_L06_00161EB4 __attribute__((sda));
+extern float l06_alien_snapper_gravity __asm__("D_L06_00161EB4") __attribute__((sda));
 extern float l06_alien_snapper_bite_approach_radius __asm__("D_L06_00161EC4") __attribute__((sda));
 extern float l06_alien_snapper_max_home_distance __asm__("D_L06_00161EC8") __attribute__((sda));
 extern float l06_alien_snapper_base_targeting_radius __asm__("D_L06_00161ED0") __attribute__((sda));
@@ -246,7 +246,7 @@ approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00
 
 /* Moby class 1048 */
 void alien_snapper_update(Moby *moby) {
-    enum { ALIEN_SNAPPER_STATE_INITIALIZE = 0 , ALIEN_SNAPPER_STATE_WAIT_FOR_CLIP_TRIGGER = 3 , ALIEN_SNAPPER_STATE_WAIT_TO_APPROACH = 7 , ALIEN_SNAPPER_STATE_APPROACH_TARGET = 8 , ALIEN_SNAPPER_STATE_REPOSITION_AROUND_TARGET = 9 , ALIEN_SNAPPER_STATE_BITE_TARGET = 11 , ALIEN_SNAPPER_STATE_RETURN_HOME = 12 , ALIEN_SNAPPER_STATE_RETREAT_FROM_TARGET = 13 , ALIEN_SNAPPER_STATE_HIT_KNOCKBACK = 14 , ALIEN_SNAPPER_STATE_FACE_HERO = 15 , ALIEN_SNAPPER_STATE_BITE_HERO = 16 , ALIEN_SNAPPER_STATE_DEATH_MOTION = 17 } ;SnapperVars_91A8 *snapper_behavior = (SnapperVars_91A8 *)moby->pvars;
+    enum { ALIEN_SNAPPER_STATE_INITIALIZE = 0 , ALIEN_SNAPPER_STATE_WAIT_FOR_ACTIVATION = 1 , ALIEN_SNAPPER_STATE_ACTIVATION_SEQUENCE = 2 ,ALIEN_SNAPPER_STATE_WAIT_FOR_CLIP_TRIGGER = 3 , ALIEN_SNAPPER_STATE_PREPARE_HOME_NODE_JUMP = 4 , ALIEN_SNAPPER_STATE_JUMP_TO_HOME_NODE = 5 , ALIEN_SNAPPER_STATE_FACE_GOAL_AND_WAIT = 6, ALIEN_SNAPPER_STATE_WAIT_TO_APPROACH = 7 , ALIEN_SNAPPER_STATE_APPROACH_TARGET = 8 , ALIEN_SNAPPER_STATE_REPOSITION_AROUND_TARGET = 9 , ALIEN_SNAPPER_STATE_WAIT_FOR_REPOSITION_ANIMATION = 10, ALIEN_SNAPPER_STATE_BITE_TARGET = 11 , ALIEN_SNAPPER_STATE_RETURN_HOME = 12 , ALIEN_SNAPPER_STATE_RETREAT_FROM_TARGET = 13 , ALIEN_SNAPPER_STATE_HIT_KNOCKBACK = 14 , ALIEN_SNAPPER_STATE_FACE_HERO = 15 , ALIEN_SNAPPER_STATE_BITE_HERO = 16 , ALIEN_SNAPPER_STATE_DEATH_MOTION = 17 } ; enum { ALIEN_SNAPPER_ANIM_HOME_NODE_JUMP_WINDUP = 6} ;SnapperVars_91A8 *snapper_behavior = (SnapperVars_91A8 *)moby->pvars;
     Moby             *target;
     float             target_goal_radius;
     float             target_gap_angle_radians;
@@ -290,7 +290,7 @@ void alien_snapper_update(Moby *moby) {
         snapper_behavior->speed = snapper_behavior->base_speed * frame_time;
         snapper_behavior->f90 = truncate_float_to_s32(768.0f);
         snapper_behavior->f98 = 0.75f;
-        snapper_behavior->f80 = D_L06_00161EB4 * D_0015ED70;
+        snapper_behavior->f80 = l06_alien_snapper_gravity * D_0015ED70;
         snapper_behavior->fAD = 0;
         snapper_behavior->f84 = 0.0005f;
         snapper_behavior->f94 = 9;
@@ -319,7 +319,7 @@ void alien_snapper_update(Moby *moby) {
             snapper_behavior->f1A0 = l06_alien_snapper_base_targeting_radius;
         }
         break;
-    case 1:
+    case ALIEN_SNAPPER_STATE_WAIT_FOR_ACTIVATION:
         if (snapper_behavior->f164 != 2) {
             moby->state = 2;
             snapper_behavior->timer = scale_game_frames(1);
@@ -328,7 +328,7 @@ void alien_snapper_update(Moby *moby) {
             }
         }
         break;
-    case 2:
+    case ALIEN_SNAPPER_STATE_ACTIVATION_SEQUENCE:
         if (moby->prev_seq == 0) {
             if (snapper_behavior->timer == 0) {
                 snapper_behavior->timer = truncate_float_to_s32(scale_time(random_float_between(0.0f, 20.0f)));
@@ -366,13 +366,13 @@ void alien_snapper_update(Moby *moby) {
             }
         }
         break;
-    case 4:
+    case ALIEN_SNAPPER_STATE_PREPARE_HOME_NODE_JUMP:
         if (moby->anim_flags & 2) {
             switch (moby->prev_seq) {
             case 3:
                 blend_moby_animation(moby, 6, 0, scale_game_frames(5));
                 break;
-            case 6:
+            case ALIEN_SNAPPER_ANIM_HOME_NODE_JUMP_WINDUP:
                 moby->state = 5;
                 qcopy(&snapper_behavior->home, &l06_cuboids[snapper_behavior->node].pos);
                 snapper_behavior->return_speed =
@@ -395,7 +395,7 @@ void alien_snapper_update(Moby *moby) {
             }
         }
         break;
-    case 5:
+    case ALIEN_SNAPPER_STATE_JUMP_TO_HOME_NODE:
         if (func_L00_0025D6F0_91A8(moby, snapper_behavior->f70) & 1) {
             moby->state = 6;
             if (moby->prev_seq != 2) {
@@ -403,7 +403,7 @@ void alien_snapper_update(Moby *moby) {
             }
         }
         break;
-    case 6:
+    case ALIEN_SNAPPER_STATE_FACE_GOAL_AND_WAIT:
         func_L00_002592B0_91A8(moby,
                                fast_arc_tan(snapper_behavior->goal_x - moby->pos.x, snapper_behavior->goal_y - moby->pos.y),
                                &snapper_behavior->turn_speed,
@@ -469,7 +469,7 @@ void alien_snapper_update(Moby *moby) {
         }
         break;
     }
-    case 10:
+    case ALIEN_SNAPPER_STATE_WAIT_FOR_REPOSITION_ANIMATION:
         if (moby->anim_flags & 2) {
             moby->state = 9;
             if (moby->prev_seq != 1) {
