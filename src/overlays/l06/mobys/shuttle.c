@@ -673,12 +673,12 @@ int update_shuttle_path_ride(char *moby, int path) {
 
 void spawn_shuttle_explosion_effect(float scale, char *moby, char *pos, char *push, int count) __asm__("FUN_L06_00303748");
 
-void spawn_shuttle_explosion_effect(float scale, char *moby, char *pos, char *push, int count) {
+void spawn_shuttle_explosion_effect(float scale, char *moby, char *explosion_origin, char *push, int count) {
     float  position[4], direction[4], velocity[4], acceleration[4];
     Colors first_colors, second_colors;
     int    i;
     float  strength;
-    cart_burst(moby, pos, -1, 2.0f, 13.0f);
+    cart_burst(moby, explosion_origin, -1, 2.0f, 13.0f);
     first_colors = D_L06_00201948;
     second_colors = D_L06_00201960;
     {
@@ -701,7 +701,7 @@ void spawn_shuttle_explosion_effect(float scale, char *moby, char *pos, char *pu
                 high = scale_game_frames(30);
                 second_time = random_int_between(low, high);
             }
-            spawn_particle(pos,
+            spawn_particle(explosion_origin,
                            push,
                            *first_color,
                            *second_color,
@@ -717,7 +717,7 @@ void spawn_shuttle_explosion_effect(float scale, char *moby, char *pos, char *pu
         int color1, color2, life, size, fade;
         i++;
         random_vector(position, 0.0f, 1.0f);
-        fast_vec_add(position, position, pos);
+        fast_vec_add(position, position, explosion_origin);
         random_vector(direction, 0.0f, 0.9f);
         fast_vec_add(direction, direction, push);
         fast_vec_scale(
