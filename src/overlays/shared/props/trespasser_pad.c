@@ -487,7 +487,7 @@ void align_hero_to_tresspasser_pad(struct Moby *moby) {
 
 void draw_tresspasser_puzzle(char *moby) {
     /* Fakematch: the texture sits at retail's stack offset inside this frame. */
-    struct {
+    enum { TRESSPASSER_MARKER_ABSENT = 0 , TRESSPASSER_SELECTED_RING_FIRST = 1 , TRESSPASSER_SELECTED_RING_SECOND = 2 , TRESSPASSER_MARKER_REACHED = 2 } ;struct {
         char pad0[0x78];
         u64  texture;
         char pad80[0x10];
@@ -517,17 +517,17 @@ void draw_tresspasser_puzzle(char *moby) {
     third_step = 0;
     if (puzzle_state->unkE4 > 0.31415927f) {
         state = puzzle_state->unkE0;
-        if (state == 1)
+        if (state == TRESSPASSER_SELECTED_RING_FIRST)
             first_step = 1;
-        else if (state == 2)
+        else if (state == TRESSPASSER_SELECTED_RING_SECOND)
             second_step = 1;
         else
             third_step = 1;
     } else if (puzzle_state->unkE4 < -0.31415927f) {
         state = puzzle_state->unkE0;
-        if (state == 1)
+        if (state == TRESSPASSER_SELECTED_RING_FIRST)
             first_step = -1;
-        else if (state == 2)
+        else if (state == TRESSPASSER_SELECTED_RING_SECOND)
             second_step = -1;
         else
             third_step = -1;
@@ -845,8 +845,8 @@ void draw_tresspasser_puzzle(char *moby) {
             angle = fast_add_rotations(-0.08726646f, (float)(i * 30) * 0.017453292f);
             phase = fast_add_rotations(angle, 0.17453292f);
             marker_state = markers->slot[i];
-            if (marker_state != 0) {
-                if (marker_state == 2)
+            if (marker_state != TRESSPASSER_MARKER_ABSENT) {
+                if (marker_state == TRESSPASSER_MARKER_REACHED)
                     color = tresspasser_reached_marker_arc_color_gp;
                 else if (D_L02_0015F5CC & 0x20)
                     color = tresspasser_unreached_marker_arc_flag_set_color_gp;
