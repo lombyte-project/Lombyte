@@ -54,7 +54,7 @@ void eudora_bridge_update(struct Moby *moby) {
     switch (moby->state) {
     case EUDORA_BRIDGE_STATE_INITIALIZE:
         blend_moby_animation(moby, 1, 0, scale_game_frames(300));
-        moby->state = 1;
+        moby->state = EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH;
         moby->anim_speed = 0;
         switch_follower_vars->voice = -1;
         if (moby->oclass == 0x1B0) {
@@ -100,7 +100,7 @@ void eudora_bridge_update(struct Moby *moby) {
                     moby->unk72 = ((MobyClassHeader *)moby->pclass)->unkE;
                     moby->collision = ((MobyClassHeader *)moby->pclass)->unk10;
                     refresh_moby_spatial_bounds_from_basis(moby);
-                    moby->state = 2;
+                    moby->state = EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE;
                 }
             } else if (!voice_is_playing(moby, switch_follower_vars->voice)) {
                 switch_follower_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
