@@ -43,7 +43,7 @@ void magnetboots_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby->state = 1;
+        moby->state = MAGNETBOOTS_STATE_WAIT_FOR_HERO_PROXIMITY;
         moby->pos.z = moby->pos.z + 0.5f;
         moby->scale = moby->scale * 0.667f;
         break;
@@ -55,7 +55,7 @@ void magnetboots_update(struct Moby *moby) {
                 hero_ref->health.hp != 0) {
                 moby->flags |= 0x41;
                 start_scene(2);
-                moby->state = 2;
+                moby->state = MAGNETBOOTS_STATE_WAIT_FOR_SCENE_EXIT;
             }
         }
         break;
@@ -69,7 +69,7 @@ void magnetboots_update(struct Moby *moby) {
                 jet_reset_camera(linked_moby + 0x10, linked_moby + 0x40);
             }
             memcard_save_data(0, -1);
-            moby->state = 3;
+            moby->state = MAGNETBOOTS_STATE_REMOVE;
         }
         break;
     case MAGNETBOOTS_STATE_REMOVE:
