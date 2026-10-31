@@ -88,7 +88,7 @@ s32 draw_hud_counter(HudElem *hud_element) {
         x = D_L02_0015F948;
     }
     bottom = frame_size[0];
-    y = pal_mode != 0 ? bottom - 0x2A : bottom - 0x32;
+    y = pal_mode != FALSE ? bottom - 0x2A : bottom - 0x32;
     grow = convert_integer_to_float(fade[0]) /
            convert_integer_to_float(hud_counter_bar_growth_divisor_gp);
     if (1.0f < grow) {
