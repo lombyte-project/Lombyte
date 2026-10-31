@@ -738,6 +738,10 @@ extern unsigned char D_00141968[];
 void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
 
 void update_moby_hit_stats_and_state(char *moby) {
+    enum {
+        BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE = 2,
+        BLARG_SHIP_BURST_AND_DEACTIVATE = 6
+    };
     char        *moby_vars = ((char *)MOBY(moby)->pvars);
     char        *hit_record = find_moby_hit(moby, 0x330000, 0);
     struct Hero *player_hero;
@@ -771,11 +775,11 @@ void update_moby_hit_stats_and_state(char *moby) {
             }
         }
         if (*(int *)(moby_vars + 0x88) != 0) {
-            next_moby_state = 6;
+            next_moby_state = BLARG_SHIP_BURST_AND_DEACTIVATE;
             current_moby_state = ((unsigned char *)moby)[0x20];
         } else {
             current_moby_state = ((unsigned char *)moby)[0x20];
-            next_moby_state = 2;
+            next_moby_state = BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE;
         }
         if (current_moby_state != next_moby_state) {
             MOBY(moby)->state = next_moby_state;
