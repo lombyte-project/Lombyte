@@ -78,6 +78,9 @@ void unfolding_column_update(UnfoldingColumnMoby *moby) {
         UNFOLDING_COLUMN_UNFOLD_PIECES = 2,
         UNFOLDING_COLUMN_SWING_PIVOT = 3
     };
+    enum {
+        UNFOLDING_COLUMN_COMPLETE = 4
+    };
     UnfoldingColumnVars *data = moby->data;
     float                position_offset[4];
 
@@ -103,13 +106,13 @@ void unfolding_column_update(UnfoldingColumnMoby *moby) {
         }
         data->voice = -1;
         if (data->pivot != 0) {
-            moby->state = 1;
+            moby->state = UNFOLDING_COLUMN_WAIT_FOR_TRIGGER;
         }
         break;
     }
     case UNFOLDING_COLUMN_WAIT_FOR_TRIGGER:
         if (((UnfoldingColumnMoby *)(D_L14_0015FFD8_c + (data->trigger << 8)))->state == 2) {
-            moby->state = 2;
+            moby->state = UNFOLDING_COLUMN_UNFOLD_PIECES;
             data->cur = 5;
             data->timer = scale_game_frames(unfolding_column_piece_unfold_frames);
             data->rate = 1.0f / convert_integer_to_float(data->timer);
@@ -126,7 +129,7 @@ void unfolding_column_update(UnfoldingColumnMoby *moby) {
             data->timer = scale_game_frames(unfolding_column_piece_unfold_frames);
             data->cur--;
             if (data->cur < 0) {
-                moby->state = 3;
+                moby->state = UNFOLDING_COLUMN_SWING_PIVOT;
                 data->timer = scale_game_frames(unfolding_column_pivot_swing_frames);
                 data->rate = 1.0f / convert_integer_to_float(data->timer);
             } else {
@@ -166,7 +169,7 @@ void unfolding_column_update(UnfoldingColumnMoby *moby) {
                 }
             }
             data->voice = -1;
-            moby->state = 4;
+            moby->state = UNFOLDING_COLUMN_COMPLETE;
             for (j = 0; j < 6; j++) {
                 pieces[j]->state = 2;
             }
