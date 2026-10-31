@@ -225,7 +225,7 @@ void gunship_update(struct Moby *moby) {
         return;
     }
     path_cursor = &v->path;
-    if (moby->group != 0xFF && moby->state != 0 && moby->state != 3) {
+    if (moby->group != 0xFF && moby->state != GUNSHIP_PATH_STATE_INITIALIZE && moby->state != GUNSHIP_PATH_STATE_WAIT_FOR_RESUME_TIMER) {
         s32 bad = 0;
         get_first_moby_in_group(&it, moby->group, 0, 0);
         if (it == moby) {
@@ -253,7 +253,7 @@ void gunship_update(struct Moby *moby) {
     }
     if ((moby->oclass == 0x33 || moby->oclass == 0x46A || moby->oclass == 0x473 ||
          moby->oclass == 0x474) &&
-        (level_frame_count & 7) == (((s32)moby >> 8) & 7) && v->unk13A <= 0 && moby->state != 0 &&
+        (level_frame_count & 7) == (((s32)moby >> 8) & 7) && v->unk13A <= 0 && moby->state != GUNSHIP_PATH_STATE_INITIALIZE &&
         FUN_L00_0028d8c0(moby, v->unk11E) == 0) {
         v->unk11E = allocate_voice_for_target_entry(0, 4, moby);
     }
@@ -301,7 +301,7 @@ void gunship_update(struct Moby *moby) {
         if (500.0f < v->unk134)
             v->unk134 = FUN_002132a8(-1.0f, 1.0f) * v->unk134 / 1000.0f;
         if (path_cursor->path_id == -1) {
-            moby->state = 2;
+            moby->state = GUNSHIP_PATH_STATE_WAIT_FOR_PATH;
             return;
         }
         v->unk121 = (moby - (struct Moby *)D_L01_0015FFD8) / 2 % 7;
@@ -364,18 +364,18 @@ void gunship_update(struct Moby *moby) {
             }
         }
         if (v->unk11C > 0) {
-            moby->state = 3;
+            moby->state = GUNSHIP_PATH_STATE_WAIT_FOR_RESUME_TIMER;
             return;
         }
         if (D_0015ED84 == 3 || D_0015ED84 == 9)
             v->unk13A = 0;
-        moby->state = 1;
+        moby->state = GUNSHIP_PATH_STATE_FOLLOW_PATH;
         return;
 
     case GUNSHIP_PATH_STATE_WAIT_FOR_PATH:
         if (path_cursor->path_id == -1)
             return;
-        moby->state = 0;
+        moby->state = GUNSHIP_PATH_STATE_INITIALIZE;
         if (v->unk11E != -1) {
             u8 *e = (u8 *)((char *)&voice_pool) + v->unk11E * 0x70;
             if (*(struct Moby **)(e + 0x88) == moby && e[0x74] != 0)
@@ -387,7 +387,7 @@ void gunship_update(struct Moby *moby) {
     case GUNSHIP_PATH_STATE_WAIT_FOR_RESUME_TIMER:
         if (fast_dec_timer_s16(&v->unk11C)) {
             v->unk11C = 0;
-            moby->state = 1;
+            moby->state = GUNSHIP_PATH_STATE_FOLLOW_PATH;
         }
         return;
 
