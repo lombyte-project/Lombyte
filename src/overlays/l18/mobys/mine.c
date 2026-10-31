@@ -373,15 +373,18 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int update_moby_state_pause(struct Moby *moby) __asm__("FUN_L18_002d6108");
 
 int update_moby_state_pause(struct Moby *moby) {
+    enum {
+        STATE_WAIT_TO_RESUME_APPROACH = 4
+    };
     char *moby_vars = (char *)moby->pvars;
     int   state_pause_result = process_moby_suck_cannon_suction(moby);
     if (state_pause_result != 0) {
         unsigned char current_state = moby->state;
         if ((unsigned)(current_state - 3) < 2) {
             state_pause_result = 2;
-            if (current_state != 4) {
+            if (current_state != STATE_WAIT_TO_RESUME_APPROACH) {
                 moby->command = current_state;
-                moby->state = 4;
+                moby->state = STATE_WAIT_TO_RESUME_APPROACH;
             }
         } else {
             *(short *)(moby_vars + 0xC8) = 0;
