@@ -6,7 +6,7 @@
 extern s32 FUN_0022da68(s32, s32, void *);
 
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern u8  D_L01_00167240[];
+extern u8  camera_pos[] __asm__("D_L01_00167240");
 
 #include "qcopy.h"
 
@@ -73,7 +73,7 @@ void door_left_update(HoverMoby *door_moby) {
     case DOOR_OPEN:
         k = 1.1f;
         if (vector_distance_xy(door_vars, &hero.motion.pos) > door_vars->radius * k &&
-            vector_distance_xy(door_vars, D_L01_00167240) > door_vars->radius * k) {
+            vector_distance_xy(door_vars, camera_pos) > door_vars->radius * k) {
             door_moby->state = 4;
             if (door_moby->oclass == 0x300) {
                 FUN_0022da68(0, 0, door_moby);
