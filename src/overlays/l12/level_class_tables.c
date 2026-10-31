@@ -68,7 +68,7 @@ void process_hoven_anklebiter_suck_cannon_suction() __asm__("FUN_L12_002e16b8");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void remove_moby_when_near_hero() __asm__("FUN_L11_002cb790");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void rocket_update() __asm__("FUN_L12_002ece00");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void sandmouse_house_update() __asm__("FUN_L01_002f2b68");
@@ -298,7 +298,7 @@ struct MobyClassUpdate moby_classes[140] __asm__("D_L12_0020CB80")
         {1818,                          sandmouse_update, default_moby_methods},
         {1862,                               lamp_update, default_moby_methods},
         {1863,                        noop_main_callback, default_moby_methods},
-        {1864,                          robot_arm_update, default_moby_methods},
+        {1864,                      tumbling_part_update, default_moby_methods},
         {1900,                              decoy_update, default_moby_methods},
         {1901,     update_hoven_scrolling_texture_layers, default_moby_methods},
         {  -1,                                         0, default_moby_methods},

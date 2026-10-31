@@ -10,7 +10,6 @@ void FUN_L00_002caf40();
 void FUN_L00_002ea7a0();
 void FUN_L00_002ed230();
 void FUN_L10_002f5f18();
-void FUN_L14_00305758();
 void blaster_update() __asm__("FUN_L00_002b49a8");
 void bolt_thief_update() __asm__("FUN_L14_002fe2a0");
 void bolt_update() __asm__("FUN_L00_002a5dd8");
@@ -60,6 +59,7 @@ void mine_glove_update() __asm__("FUN_L00_002c1ad0");
 void mine_update() __asm__("FUN_L00_002aa670");
 void minibomber_update() __asm__("FUN_L14_002b46e8");
 void moby_set_state_from_check() __asm__("FUN_L00_002cadc0");
+void morphoray_pickup_update() __asm__("FUN_L14_00305758");
 void morphoray_update() __asm__("FUN_L00_002bc7e8");
 void nanotech_ball_update() __asm__("FUN_L00_002d89f0");
 void nanotech_crate_fragment_update() __asm__("FUN_L00_002afa48");
@@ -71,7 +71,6 @@ void plasmabot_hatch_update() __asm__("FUN_L14_002d96e0");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void qwark_oltanis_update() __asm__("FUN_L14_002fba20");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
 void rocket_strike_fighter_update() __asm__("FUN_L14_002fcbb0");
 void rocket_update() __asm__("FUN_L14_002fdbb8");
 void ryno_update() __asm__("FUN_L00_002cc608");
@@ -93,6 +92,7 @@ void taunter_update() __asm__("FUN_L00_002b6f10");
 void taxi_update() __asm__("FUN_L14_002f0538");
 void tesla_claw_update() __asm__("FUN_L00_002b87e0");
 void trespasser_update() __asm__("FUN_L00_002c1718");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void update_animated_point_light_moby() __asm__("FUN_L00_002d3a10");
 void update_audio_stream_callback_keeper() __asm__("FUN_L14_00303370");
 void update_beam_slots() __asm__("FUN_L14_003039e0");
@@ -311,7 +311,7 @@ struct MobyClassUpdate moby_classes[154] __asm__("D_L14_001FD280")
         {1290,                      pilots_helmet_update, default_moby_methods},
         {1331,                         update_beam_slots, default_moby_methods},
         {1352,         update_unlock_sequence_controller, default_moby_methods},
-        {1354,                          FUN_L14_00305758, default_moby_methods},
+        {1354,                   morphoray_pickup_update, default_moby_methods},
         {1395,                   update_unfolding_column, default_moby_methods},
         {1396,                        noop_main_callback, default_moby_methods},
         {1397,             update_unfolding_column_piece, default_moby_methods},
@@ -324,14 +324,14 @@ struct MobyClassUpdate moby_classes[154] __asm__("D_L14_001FD280")
         {1449,                    devestator_ammo_update, default_moby_methods},
         {1511,    update_moby_glow_and_contact_explosion, default_moby_methods},
         {1514,                        noop_main_callback, default_moby_methods},
-        {1517,                          robot_arm_update, default_moby_methods},
-        {1518,                          robot_arm_update, default_moby_methods},
+        {1517,                      tumbling_part_update, default_moby_methods},
+        {1518,                      tumbling_part_update, default_moby_methods},
         {1559,                update_group_clear_trigger, default_moby_methods},
         {1629,               spawn_moby_radial_particles, default_moby_methods},
         {1633,               update_sandmouse_projectile, default_moby_methods},
-        {1733,                          robot_arm_update, default_moby_methods},
-        {1734,                          robot_arm_update, default_moby_methods},
-        {1735,                          robot_arm_update, default_moby_methods},
+        {1733,                      tumbling_part_update, default_moby_methods},
+        {1734,                      tumbling_part_update, default_moby_methods},
+        {1735,                      tumbling_part_update, default_moby_methods},
         {1818,                          sandmouse_update, default_moby_methods},
         {1900,                              decoy_update, default_moby_methods},
         {  -1,                                         0, default_moby_methods},

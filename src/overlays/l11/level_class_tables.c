@@ -74,7 +74,7 @@ void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void remove_moby_when_near_hero() __asm__("FUN_L11_002cb790");
 void resort_owner_update() __asm__("FUN_L11_002d0fa8");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void sandmouse_house_update() __asm__("FUN_L01_002f2b68");
 void sandmouse_update() __asm__("FUN_L01_0030df40");
@@ -316,20 +316,20 @@ struct MobyClassUpdate moby_classes[146] __asm__("D_L11_0021B900")
         {1447,                              devestator_ammo_update, default_moby_methods},
         {1449,                              devestator_ammo_update, default_moby_methods},
         {1524,                      update_bubble_motion_and_scale, default_moby_methods},
-        {1538,                                    robot_arm_update, default_moby_methods},
-        {1539,                                    robot_arm_update, default_moby_methods},
+        {1538,                                tumbling_part_update, default_moby_methods},
+        {1539,                                tumbling_part_update, default_moby_methods},
         {1633,                         update_sandmouse_projectile, default_moby_methods},
         {1818,                                    sandmouse_update, default_moby_methods},
         {1859,                                         lamp_update, default_moby_methods},
         {1860,                                  noop_main_callback, default_moby_methods},
-        {1861,                                    robot_arm_update, default_moby_methods},
+        {1861,                                tumbling_part_update, default_moby_methods},
         {1900,                                        decoy_update, default_moby_methods},
         {1903,        update_level11_layered_effect_and_queue_draw, default_moby_methods},
         {1919, update_level11_distance_faded_effect_and_queue_draw, default_moby_methods},
-        {1924,                                    robot_arm_update, default_moby_methods},
-        {1925,                                    robot_arm_update, default_moby_methods},
-        {1926,                                    robot_arm_update, default_moby_methods},
-        {1927,                                    robot_arm_update, default_moby_methods},
+        {1924,                                tumbling_part_update, default_moby_methods},
+        {1925,                                tumbling_part_update, default_moby_methods},
+        {1926,                                tumbling_part_update, default_moby_methods},
+        {1927,                                tumbling_part_update, default_moby_methods},
         {  -1,                                                   0, default_moby_methods},
 };
 

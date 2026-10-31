@@ -69,7 +69,7 @@ void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void refresh_point_light() __asm__("FUN_00201f58");
 void reset_camera_from_source_transform() __asm__("FUN_L05_0032a6e0");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void run_moby_helper_and_set_state_7() __asm__("FUN_L01_002f1dc8");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void seeker_update() __asm__("FUN_L09_002c5990");
@@ -294,22 +294,22 @@ struct MobyClassUpdate moby_classes[152] __asm__("D_L16_001E8900")
         {1455,                      gadgetron_ceo_update, default_moby_methods},
         {1475,                  update_homing_projectile, default_moby_methods},
         {1561,       update_clip_volume_dialogue_trigger, default_moby_methods},
-        {1588,                          robot_arm_update, default_moby_methods},
-        {1589,                          robot_arm_update, default_moby_methods},
-        {1590,                          robot_arm_update, default_moby_methods},
-        {1621,                          robot_arm_update, default_moby_methods},
-        {1622,                          robot_arm_update, default_moby_methods},
-        {1623,                          robot_arm_update, default_moby_methods},
+        {1588,                      tumbling_part_update, default_moby_methods},
+        {1589,                      tumbling_part_update, default_moby_methods},
+        {1590,                      tumbling_part_update, default_moby_methods},
+        {1621,                      tumbling_part_update, default_moby_methods},
+        {1622,                      tumbling_part_update, default_moby_methods},
+        {1623,                      tumbling_part_update, default_moby_methods},
         {1667,                        update_path_walker, default_moby_methods},
         {1668,                        update_path_walker, default_moby_methods},
         {1669,                        update_path_walker, default_moby_methods},
         {1670,                        update_path_walker, default_moby_methods},
         {1671,                        update_path_walker, default_moby_methods},
-        {1786,                          robot_arm_update, default_moby_methods},
-        {1787,                          robot_arm_update, default_moby_methods},
+        {1786,                      tumbling_part_update, default_moby_methods},
+        {1787,                      tumbling_part_update, default_moby_methods},
         {1812,              update_cutscene_joint_trails, default_moby_methods},
         {1826,                           elevator_update, default_moby_methods},
-        {1870,                          robot_arm_update, default_moby_methods},
+        {1870,                      tumbling_part_update, default_moby_methods},
         {1891,                     gadgetron_sign_update, default_moby_methods},
         {1900,                              decoy_update, default_moby_methods},
         {1923,                  update_chicken_relocator, default_moby_methods},

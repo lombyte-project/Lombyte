@@ -74,7 +74,7 @@ void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void qwark_rilgar_update() __asm__("FUN_L03_002dc478");
 void robosquawker_update() __asm__("FUN_L13_002b50d8");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void run_moby_helper_and_set_state_7() __asm__("FUN_L01_002f1dc8");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
@@ -355,13 +355,13 @@ struct MobyClassUpdate moby_classes[189] __asm__("D_L13_001F5880")
         {1577,              update_tracked_group_watcher, default_moby_methods},
         {1632,                forward_moby_hits_to_owner, default_moby_methods},
         {1634,             update_poison_vessel_fragment, default_moby_methods},
-        {1733,                          robot_arm_update, default_moby_methods},
-        {1734,                          robot_arm_update, default_moby_methods},
-        {1735,                          robot_arm_update, default_moby_methods},
-        {1801,                          robot_arm_update, default_moby_methods},
-        {1802,                          robot_arm_update, default_moby_methods},
-        {1803,                          robot_arm_update, default_moby_methods},
-        {1804,                          robot_arm_update, default_moby_methods},
+        {1733,                      tumbling_part_update, default_moby_methods},
+        {1734,                      tumbling_part_update, default_moby_methods},
+        {1735,                      tumbling_part_update, default_moby_methods},
+        {1801,                      tumbling_part_update, default_moby_methods},
+        {1802,                      tumbling_part_update, default_moby_methods},
+        {1803,                      tumbling_part_update, default_moby_methods},
+        {1804,                      tumbling_part_update, default_moby_methods},
         {1805,                         blarg_ship_update, default_moby_methods},
         {1885,                            spawner_update, default_moby_methods},
         {1886,                        spawner_egg_update, default_moby_methods},

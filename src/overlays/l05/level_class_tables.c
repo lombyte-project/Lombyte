@@ -77,7 +77,7 @@ void qwarks_trailer_update() __asm__("FUN_L05_00319c28");
 void red_orb_update() __asm__("FUN_L00_002df4f8");
 void refresh_point_light() __asm__("FUN_00201f58");
 void reset_camera_from_source_transform() __asm__("FUN_L05_0032a6e0");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void sandmouse_house_update() __asm__("FUN_L01_002f2b68");
 void sandmouse_update() __asm__("FUN_L01_0030df40");
@@ -321,20 +321,20 @@ struct MobyClassUpdate moby_classes[154] __asm__("D_L05_00218C80")
         {1449,                             devestator_ammo_update, default_moby_methods},
         {1511,             update_moby_glow_and_contact_explosion, default_moby_methods},
         {1514,                                 noop_main_callback, default_moby_methods},
-        {1517,                                   robot_arm_update, default_moby_methods},
-        {1518,                                   robot_arm_update, default_moby_methods},
+        {1517,                               tumbling_part_update, default_moby_methods},
+        {1518,                               tumbling_part_update, default_moby_methods},
         {1550,                      update_cutscene_camera_target, default_moby_methods},
         {1633,                        update_sandmouse_projectile, default_moby_methods},
-        {1754,                                   robot_arm_update, default_moby_methods},
-        {1755,                                   robot_arm_update, default_moby_methods},
-        {1756,                                   robot_arm_update, default_moby_methods},
-        {1757,                                   robot_arm_update, default_moby_methods},
-        {1759,                                   robot_arm_update, default_moby_methods},
-        {1760,                                   robot_arm_update, default_moby_methods},
-        {1790,                                   robot_arm_update, default_moby_methods},
-        {1791,                                   robot_arm_update, default_moby_methods},
+        {1754,                               tumbling_part_update, default_moby_methods},
+        {1755,                               tumbling_part_update, default_moby_methods},
+        {1756,                               tumbling_part_update, default_moby_methods},
+        {1757,                               tumbling_part_update, default_moby_methods},
+        {1759,                               tumbling_part_update, default_moby_methods},
+        {1760,                               tumbling_part_update, default_moby_methods},
+        {1790,                               tumbling_part_update, default_moby_methods},
+        {1791,                               tumbling_part_update, default_moby_methods},
         {1818,                                   sandmouse_update, default_moby_methods},
-        {1838,                                   robot_arm_update, default_moby_methods},
+        {1838,                               tumbling_part_update, default_moby_methods},
         {1900,                                       decoy_update, default_moby_methods},
         {  -1,                                                  0, default_moby_methods},
 };

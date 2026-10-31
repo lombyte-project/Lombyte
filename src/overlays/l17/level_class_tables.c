@@ -67,7 +67,7 @@ void pilots_helmet_update() __asm__("FUN_L00_002e03a0");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void ripple_strips_moby_update() __asm__("FUN_L15_002eb0a0");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void robot_dog_update() __asm__("FUN_L17_002eeb68");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
@@ -307,25 +307,25 @@ struct MobyClassUpdate moby_classes[163] __asm__("D_L17_001E7080")
         {1449,                    devestator_ammo_update, default_moby_methods},
         {1470,           update_fleet_camera_box_watcher, default_moby_methods},
         {1562,             update_cutscene_camera_target, default_moby_methods},
-        {1594,                          robot_arm_update, default_moby_methods},
-        {1595,                          robot_arm_update, default_moby_methods},
-        {1742,                          robot_arm_update, default_moby_methods},
-        {1743,                          robot_arm_update, default_moby_methods},
+        {1594,                      tumbling_part_update, default_moby_methods},
+        {1595,                      tumbling_part_update, default_moby_methods},
+        {1742,                      tumbling_part_update, default_moby_methods},
+        {1743,                      tumbling_part_update, default_moby_methods},
         {1772,           update_fleet_backdrop_animation, default_moby_methods},
         {1843,                         blarg_ship_update, default_moby_methods},
         {1873,                    update_shattering_prop, default_moby_methods},
         {1874,                        noop_main_callback, default_moby_methods},
-        {1875,                          robot_arm_update, default_moby_methods},
+        {1875,                      tumbling_part_update, default_moby_methods},
         {1876,                     update_breakaway_prop, default_moby_methods},
         {1877,                        noop_main_callback, default_moby_methods},
-        {1878,                          robot_arm_update, default_moby_methods},
+        {1878,                      tumbling_part_update, default_moby_methods},
         {1900,                              decoy_update, default_moby_methods},
         {1907,                     moby_update_draw_only, default_moby_methods},
         {1908,                     moby_update_draw_only, default_moby_methods},
         {1910,                     moby_update_draw_only, default_moby_methods},
         {1911,                     moby_update_draw_only, default_moby_methods},
         {1913,                     moby_update_draw_only, default_moby_methods},
-        {1917,                          robot_arm_update, default_moby_methods},
+        {1917,                      tumbling_part_update, default_moby_methods},
         {1918,                     moby_update_draw_only, default_moby_methods},
         {1958,                    underwater_door_update, default_moby_methods},
         {  -1,                                         0, default_moby_methods},

@@ -62,7 +62,7 @@ void pilots_helmet_update() __asm__("FUN_L00_002e03a0");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void red_plant_update() __asm__("FUN_L00_002e3ca8");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void sandmouse_house_update() __asm__("FUN_L01_002f2b68");
 void sandmouse_update() __asm__("FUN_L01_0030df40");
@@ -344,24 +344,24 @@ struct MobyClassUpdate moby_classes[190] __asm__("D_L08_001FC900")
         {1633,               update_sandmouse_projectile, default_moby_methods},
         {1641,                     update_effect_emitter, default_moby_methods},
         {1649,            update_batalia_textured_effect, default_moby_methods},
-        {1692,                          robot_arm_update, default_moby_methods},
-        {1693,                          robot_arm_update, default_moby_methods},
-        {1694,                          robot_arm_update, default_moby_methods},
-        {1728,                          robot_arm_update, default_moby_methods},
-        {1729,                          robot_arm_update, default_moby_methods},
-        {1730,                          robot_arm_update, default_moby_methods},
-        {1731,                          robot_arm_update, default_moby_methods},
-        {1732,                          robot_arm_update, default_moby_methods},
-        {1733,                          robot_arm_update, default_moby_methods},
-        {1734,                          robot_arm_update, default_moby_methods},
-        {1735,                          robot_arm_update, default_moby_methods},
-        {1790,                          robot_arm_update, default_moby_methods},
-        {1791,                          robot_arm_update, default_moby_methods},
+        {1692,                      tumbling_part_update, default_moby_methods},
+        {1693,                      tumbling_part_update, default_moby_methods},
+        {1694,                      tumbling_part_update, default_moby_methods},
+        {1728,                      tumbling_part_update, default_moby_methods},
+        {1729,                      tumbling_part_update, default_moby_methods},
+        {1730,                      tumbling_part_update, default_moby_methods},
+        {1731,                      tumbling_part_update, default_moby_methods},
+        {1732,                      tumbling_part_update, default_moby_methods},
+        {1733,                      tumbling_part_update, default_moby_methods},
+        {1734,                      tumbling_part_update, default_moby_methods},
+        {1735,                      tumbling_part_update, default_moby_methods},
+        {1790,                      tumbling_part_update, default_moby_methods},
+        {1791,                      tumbling_part_update, default_moby_methods},
         {1818,                          sandmouse_update, default_moby_methods},
         {1844,                    update_shattering_prop, default_moby_methods},
         {1845,                        noop_main_callback, default_moby_methods},
-        {1846,                          robot_arm_update, default_moby_methods},
-        {1847,                          robot_arm_update, default_moby_methods},
+        {1846,                      tumbling_part_update, default_moby_methods},
+        {1847,                      tumbling_part_update, default_moby_methods},
         {1900,                              decoy_update, default_moby_methods},
         {  -1,                                         0, default_moby_methods},
 };

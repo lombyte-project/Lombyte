@@ -69,7 +69,7 @@ void poison_vessel_update() __asm__("FUN_L15_002e7f68");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void ripple_strips_moby_update() __asm__("FUN_L15_002eb0a0");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void rock_update() __asm__("FUN_L01_002f8718");
 void run_moby_helper_and_set_state_7() __asm__("FUN_L01_002f1dc8");
 void ryno_update() __asm__("FUN_L00_002cc608");
@@ -334,18 +334,18 @@ struct MobyClassUpdate moby_classes[171] __asm__("D_L15_001E3680")
         {1560,             update_cutscene_camera_target, default_moby_methods},
         {1565,                 ripple_strips_moby_update, default_moby_methods},
         {1567,                 ripple_strips_moby_update, default_moby_methods},
-        {1591,                          robot_arm_update, default_moby_methods},
-        {1592,                          robot_arm_update, default_moby_methods},
-        {1593,                          robot_arm_update, default_moby_methods},
-        {1610,                          robot_arm_update, default_moby_methods},
-        {1611,                          robot_arm_update, default_moby_methods},
-        {1612,                          robot_arm_update, default_moby_methods},
-        {1867,                          robot_arm_update, default_moby_methods},
-        {1868,                          robot_arm_update, default_moby_methods},
-        {1869,                          robot_arm_update, default_moby_methods},
+        {1591,                      tumbling_part_update, default_moby_methods},
+        {1592,                      tumbling_part_update, default_moby_methods},
+        {1593,                      tumbling_part_update, default_moby_methods},
+        {1610,                      tumbling_part_update, default_moby_methods},
+        {1611,                      tumbling_part_update, default_moby_methods},
+        {1612,                      tumbling_part_update, default_moby_methods},
+        {1867,                      tumbling_part_update, default_moby_methods},
+        {1868,                      tumbling_part_update, default_moby_methods},
+        {1869,                      tumbling_part_update, default_moby_methods},
         {1900,                              decoy_update, default_moby_methods},
-        {1961,                          robot_arm_update, default_moby_methods},
-        {1962,                          robot_arm_update, default_moby_methods},
+        {1961,                      tumbling_part_update, default_moby_methods},
+        {1962,                      tumbling_part_update, default_moby_methods},
         {  -1,                                         0, default_moby_methods},
 };
 

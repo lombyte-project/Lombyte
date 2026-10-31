@@ -58,7 +58,7 @@ void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void red_orb_update() __asm__("FUN_L00_002df4f8");
 void red_plant_update() __asm__("FUN_L00_002e3ca8");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
 void suckcannon_update() __asm__("FUN_L00_002da790");
@@ -224,10 +224,10 @@ struct MobyClassUpdate moby_classes[101] __asm__("D_L00_001EA300")
         {1781,                          red_plant_update, default_moby_methods},
         {1782,                          red_plant_update, default_moby_methods},
         {1900,                              decoy_update, default_moby_methods},
-        {1933,                          robot_arm_update, default_moby_methods},
-        {1934,                          robot_arm_update, default_moby_methods},
-        {1935,                          robot_arm_update, default_moby_methods},
-        {1963,                          robot_arm_update, default_moby_methods},
+        {1933,                      tumbling_part_update, default_moby_methods},
+        {1934,                      tumbling_part_update, default_moby_methods},
+        {1935,                      tumbling_part_update, default_moby_methods},
+        {1963,                      tumbling_part_update, default_moby_methods},
         {  -1,                                         0, default_moby_methods},
 };
 

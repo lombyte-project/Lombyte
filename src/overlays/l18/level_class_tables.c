@@ -69,7 +69,7 @@ void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void red_orb_update() __asm__("FUN_L00_002df4f8");
 void register_audio_stream_callback() __asm__("FUN_00215420");
-void robot_arm_update() __asm__("FUN_L00_002e3d88");
+void tumbling_part_update() __asm__("FUN_L00_002e3d88");
 void rock_update() __asm__("FUN_L01_002f8718");
 void rocket_tank_update() __asm__("FUN_L18_002f7c40");
 void run_moby_helper_and_set_state_7() __asm__("FUN_L01_002f1dc8");
@@ -332,16 +332,16 @@ struct MobyClassUpdate moby_classes[158] __asm__("D_L18_001F2D00")
         {1564,                                  pterodactyl_update, default_moby_methods},
         {1568,                update_moby_visibility_and_half_turn, default_moby_methods},
         {1584,                     update_moby_transform_and_child, default_moby_methods},
-        {1588,                                    robot_arm_update, default_moby_methods},
-        {1589,                                    robot_arm_update, default_moby_methods},
-        {1590,                                    robot_arm_update, default_moby_methods},
+        {1588,                                tumbling_part_update, default_moby_methods},
+        {1589,                                tumbling_part_update, default_moby_methods},
+        {1590,                                tumbling_part_update, default_moby_methods},
         {1750,                      register_audio_stream_callback, default_moby_methods},
-        {1790,                                    robot_arm_update, default_moby_methods},
-        {1791,                                    robot_arm_update, default_moby_methods},
-        {1792,                                    robot_arm_update, default_moby_methods},
-        {1793,                                    robot_arm_update, default_moby_methods},
-        {1794,                                    robot_arm_update, default_moby_methods},
-        {1796,                                    robot_arm_update, default_moby_methods},
+        {1790,                                tumbling_part_update, default_moby_methods},
+        {1791,                                tumbling_part_update, default_moby_methods},
+        {1792,                                tumbling_part_update, default_moby_methods},
+        {1793,                                tumbling_part_update, default_moby_methods},
+        {1794,                                tumbling_part_update, default_moby_methods},
+        {1796,                                tumbling_part_update, default_moby_methods},
         {1799,                         update_cutscene_joint_trail, default_moby_methods},
         {1890,                            grindrail_barrier_update, default_moby_methods},
         {1898,                          update_timed_sprite_effect, default_moby_methods},
