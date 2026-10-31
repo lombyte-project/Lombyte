@@ -1178,6 +1178,10 @@ float score_gadgebot_target_candidate(char *moby, char *candidate_moby, int targ
    by score, each target goes to its best-scoring mobys, and their approach angles
    are spread apart. */
 void assign_gadgebot_attack_targets(void) {
+    enum {
+        GADGEBOT_TARGET_KIND_UNAVAILABLE = 0,
+        GADGEBOT_TARGET_KIND_ATTACKABLE = 5
+    };
     char       *mobys[50];
     char        end[16];
     char        start[16];
@@ -1219,10 +1223,10 @@ void assign_gadgebot_attack_targets(void) {
                 float range;
                 float score;
                 int   kind;
-                kind = 0;
+                kind = GADGEBOT_TARGET_KIND_UNAVAILABLE;
                 if (*(char **)(candidate + 0x24) != 0)
                     kind = *(short *)(*(char **)(candidate + 0x24) + 0x46);
-                if (kind != 5)
+                if (kind != GADGEBOT_TARGET_KIND_ATTACKABLE)
                     continue;
                 range = 12.0f;
                 if (S16(vars, 0x198) != 0)
