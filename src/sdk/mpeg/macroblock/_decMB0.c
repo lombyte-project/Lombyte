@@ -42,7 +42,7 @@ int       _decMB0(struct MpegDecoder *decoder,
     int  field_in_frame;
     int  dct_type;
     int  motion_flag;
-    int  result;
+    int  decode_success;
     int  coded;
     *((int *)0x10002010) =
         ((*((int *)0x10002010)) & 0xF8FFFFFF) | (decoder->picture_coding_type << 0x18);
@@ -114,7 +114,7 @@ int       _decMB0(struct MpegDecoder *decoder,
                           decoder->full_pel_forward_vector);
         }
     }
-    result = 0;
+    decode_success = 0;
     if (decoder->slice_error == 0) {
         if ((*mb_type) & 4) {
             if (decoder->mpeg2 != 0) {
@@ -141,7 +141,7 @@ int       _decMB0(struct MpegDecoder *decoder,
                               decoder->full_pel_backward_vector);
             }
         }
-        result = 0;
+        decode_success = 0;
         if (decoder->slice_error == 0) {
             type = *mb_type;
             coded = type & 3;
@@ -181,9 +181,9 @@ int       _decMB0(struct MpegDecoder *decoder,
                 motion_vector_state->unk8 = 0;
             }
             coding_type = decoder->picture_coding_type;
-            result = 1;
+            decode_success = 1;
             if (coding_type == 2) {
-                result = 1;
+                decode_success = 1;
                 if (!((*mb_type) & 9)) {
                     motion_vector_state->unk0 =
                         (motion_vector_state->unk4 =
@@ -194,12 +194,12 @@ int       _decMB0(struct MpegDecoder *decoder,
                         *motion_type = 1;
                         *motion_field_select_output = decoder->picture_structure == 2;
                     }
-                    result = 1;
+                    decode_success = 1;
                 }
             }
-            return result;
+            return decode_success;
         }
-        return result;
+        return decode_success;
     }
-    return result;
+    return decode_success;
 }
