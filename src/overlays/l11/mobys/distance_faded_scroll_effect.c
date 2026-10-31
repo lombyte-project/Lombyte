@@ -29,7 +29,7 @@ typedef struct {
     int a, b;
 } PairB;
 
-extern PairB D_L11_00217758[];
+extern PairB l11_distance_faded_effect_uv_offsets[] __asm__("D_L11_00217758");
 extern PairB D_L11_00162618[] MACRO_ADDR;
 
 /* The 17-batch set (emit_render_batches_with_pair_offset, loop of 0x11) and the 9-batch
@@ -5887,7 +5887,7 @@ void emit_render_batches_with_pair_offset(int pair_index) {
         FUN_L08_00258090(D_L11_00217770,
                          render_batch_pair_sources[i],
                          distance_faded_effect_batch_vertex_counts[i],
-                         &D_L11_00217758[pair_index]);
+                         &l11_distance_faded_effect_uv_offsets[pair_index]);
         FUN_L00_001fde98(distance_faded_effect_batch_vertex_counts[i],
                          render_batch_triplet_sources[i],
                          distance_faded_effect_batch_color_tables[i],
@@ -6046,8 +6046,8 @@ void distance_faded_effect_update(struct Moby *moby) {
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
-            D_L11_00217758[i].a = 0;
-            D_L11_00217758[i].b = 0;
+            l11_distance_faded_effect_uv_offsets[i].a = 0;
+            l11_distance_faded_effect_uv_offsets[i].b = 0;
             distance_faded_effect_sine_phases[0] = 0;
             distance_faded_effect_sine_phases[1] = 0;
         }
