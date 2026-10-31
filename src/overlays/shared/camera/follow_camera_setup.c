@@ -943,7 +943,7 @@ int update_follow_camera_orbit_after_collision(unsigned char *camera_moby,
         return sphere_collision_found;
     }
     adjusted_orbit_length = fast_vec_length(A);
-    if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_lui[0]) > 0.05f &&
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK && absolute_float(D_0013CA40_lui[0]) > 0.05f &&
         sphere_collision_found) {
         adjusted_orbit_length -= follow_camera_collision_retraction_rate_gp * frame_scale;
         *(short *)(B + 0x34) = scale_game_frames(0x884);
