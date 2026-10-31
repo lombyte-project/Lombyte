@@ -568,6 +568,12 @@ extern void anim_update_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d538")
    more members, hands off inside its clip volume, and takes hits from other
    classes (dying, or staggering back). */
 void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
+    enum {
+        BLARG_TROOPER_INITIALIZE = 0,
+        BLARG_TROOPER_WAIT_FOR_ACTIVATION = 2,
+        BLARG_TROOPER_KNOCKBACK_RECOVERY = 4,
+        BLARG_TROOPER_DEATH_FALL = 9
+    };
     BlargTrooperVars *trooper_damage_alert_vars = (BlargTrooperVars *)moby->pvars;
     Vec4              help_direction_or_hit_position;
     s32               hit;
@@ -580,13 +586,13 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
         trooper_damage_alert_vars->reset_alert = 0;
         trooper_damage_alert_vars->alert_timer = scale_game_frames(0xF0);
     }
-    if (moby->state != 0) {
+    if (moby->state != BLARG_TROOPER_INITIALIZE) {
         trooper_damage_alert_vars->speed =
             fast_dec_timer_s16(&trooper_damage_alert_vars->alert_timer)
                 ? trooper_damage_alert_vars->alert_speed
                 : 20.0f;
     }
-    if (trooper_damage_alert_vars->call_enabled != 0 && moby->state != 2) {
+    if (trooper_damage_alert_vars->call_enabled != 0 && moby->state != BLARG_TROOPER_WAIT_FOR_ACTIVATION) {
         trooper_damage_alert_vars->call_timer++;
         if (scale_game_frames(0x3C) * 17 < trooper_damage_alert_vars->call_timer) {
             s32 count = 0;
@@ -622,7 +628,7 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
     dmg = 0.0f;
     resolve_moby_hit_response(moby, coll, &trooper_damage_alert_vars->health, 0, &hit, &dmg, 0, 4);
     if (coll != 0 && coll->moby->oclass != moby->oclass && coll->moby->oclass != 0xB8 &&
-        moby->state != 9 && dmg != 0.0f) {
+        moby->state != BLARG_TROOPER_DEATH_FALL && dmg != 0.0f) {
         if (moby->group != 0xFF) {
             alert_group_e81e0(moby->group, 1);
         }
@@ -645,7 +651,7 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
             start_fall_e81e0(moby, trooper_damage_alert_vars->fall, 9, 1, 0, angle);
             trooper_damage_alert_vars->unkC0 = 10.0f;
             trooper_damage_alert_vars->unkC4 = 19.0f;
-            moby->state = 9;
+            moby->state = BLARG_TROOPER_DEATH_FALL;
             trooper_damage_alert_vars->unk67 = 0x78;
             anim_reset_e81e0(moby, trooper_damage_alert_vars->anim);
         } else {
@@ -659,7 +665,7 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
             start_fall_e81e0(moby, trooper_damage_alert_vars->fall, 6, 1, 0, unused);
             trooper_damage_alert_vars->unkC0 = 4.0f;
             trooper_damage_alert_vars->unkC4 = 8.0f;
-            moby->state = 4;
+            moby->state = BLARG_TROOPER_KNOCKBACK_RECOVERY;
             trooper_damage_alert_vars->unk67 = 0xFA;
             trooper_damage_alert_vars->stun_timer = scale_game_frames(0x3C);
             anim_reset_e81e0(moby, trooper_damage_alert_vars->anim);
