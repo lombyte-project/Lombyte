@@ -141,6 +141,14 @@ struct MemoryCardSaveClock {
     u8 year;
 };
 
+/* The start of a whole save file: the sizes of its main block and of one
+   record (memcard_make_whole_save writes them, memcard_restore_game and
+   the card reads check them). */
+struct MemoryCardSaveSizes {
+    s32 main_size;
+    s32 record_size;
+};
+
 /* One save entry in the card directory listing (0x1C bytes, five per card). */
 struct MemoryCardSaveEntry {
     s32                        id;       /* 0x00: -1 = empty; the load menu reads it */
