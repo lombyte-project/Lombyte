@@ -145,12 +145,16 @@ void refresh_moby_position_and_activate(struct Moby *moby,
 void refresh_moby_position_and_activate(
 
     struct Moby *moby, void *moby_position, void *position, int active, float speed) {
+    enum {
+        STATE_TIMED_REMOVAL_WAIT = 0,
+        STATE_TRAVEL_TO_TARGET = 1
+    };
     char *refreshed_moby_private_vars = (char *)moby->pvars;
     qcopy(&moby->pos, moby_position);
     *(int *)(refreshed_moby_private_vars + 0x28) = scale_game_frames(5);
     *(float *)(refreshed_moby_private_vars + 0x24) = speed;
-    if (active && moby->state == 0) {
-        moby->state = 1;
+    if (active && moby->state == STATE_TIMED_REMOVAL_WAIT) {
+        moby->state = STATE_TRAVEL_TO_TARGET;
         *(int *)(refreshed_moby_private_vars + 0x28) = 0;
         qcopy(refreshed_moby_private_vars, position);
     }
