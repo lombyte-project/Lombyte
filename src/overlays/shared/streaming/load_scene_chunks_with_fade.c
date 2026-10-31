@@ -56,9 +56,12 @@ void load_chunks_with_optional_fade(s32 i, s32 fade_frame_count) __asm__("FUN_L0
 void load_chunks_with_optional_fade(s32 i, s32 p) __asm__("FUN_L00_00245610");
 
 void load_chunks_with_optional_fade(s32 i, s32 fade_frame_count) {
+    enum {
+        PAL_MODE_DISABLED = 0
+    };
     s32  pointer_index;
     s32 *offset_entry;
-    if (pal_mode == 0) {
+    if (pal_mode == PAL_MODE_DISABLED) {
         start_audio_stream_read(
             H245610.buf, disc_table.unk12E8[i].sector, disc_table.unk12E8[i].size);
     } else {
