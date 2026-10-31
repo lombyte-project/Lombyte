@@ -174,7 +174,7 @@ void homing_mine_update(struct Moby *moby) {
         moby->flags |= 0x1000;
         qcopy(&homing_mine_vars->home, &moby->pos);
         moby->collision = moby->pclass->collision;
-        moby->state = 1;
+        moby->state = HOMING_MINE_WAIT_FOR_PROXIMITY;
         break;
     case HOMING_MINE_WAIT_FOR_PROXIMITY:
         timer = scale_game_frames(600);
@@ -189,16 +189,16 @@ void homing_mine_update(struct Moby *moby) {
             homing_mine_vars->timeout = scale_game_frames(600);
             moby->command = 1;
             homing_mine_vars->bob_timer = scale_game_frames(7);
-            moby->state = 3;
+            moby->state = HOMING_MINE_CHASE;
             if (homing_mine_vars->sound != -1)
                 set_moby_list_state(homing_mine_vars->sound, 2);
-            moby->state = 2;
+            moby->state = HOMING_MINE_START_CHASE;
         }
         break;
     case HOMING_MINE_START_CHASE:
         if (moby->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, 10);
-        moby->state = 3;
+        moby->state = HOMING_MINE_CHASE;
     case HOMING_MINE_CHASE:
         if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             FUN_00212f90(moby, 2, 0, 10);
