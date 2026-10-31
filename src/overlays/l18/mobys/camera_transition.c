@@ -71,12 +71,12 @@ void boss_camera_transition_update(struct Moby *moby) {
         STATE_INTERPOLATE_TRANSITION = 3,
         STATE_INTERPOLATE_TRANSITION_WITH_RAMP_UP = 4,
         STATE_POST_TRANSITION_RAMP_DOWN = 5
-    };
+    } ; enum { STATE_IDLE = 1};
     BossCameraTransitionVars *transition_private_vars = (BossCameraTransitionVars *)moby->pvars;
     float                     transition_scratch_vectors[12];
     switch (moby->state) {
     case STATE_INITIALIZE:
-        moby->state = 1;
+        moby->state = STATE_IDLE;
         moby->update_dist = 0xFF;
         break;
     case STATE_PRE_TRANSITION_RAMP_UP:
@@ -97,9 +97,9 @@ void boss_camera_transition_update(struct Moby *moby) {
                     transition_private_vars, &transition_private_vars->unk20, 1, 0, 0);
                 if (transition_private_vars->unk78 == 1) {
                     help_request(0x4650, 0x85);
-                    moby->state = 4;
+                    moby->state = STATE_INTERPOLATE_TRANSITION_WITH_RAMP_UP;
                 } else {
-                    moby->state = 3;
+                    moby->state = STATE_INTERPOLATE_TRANSITION;
                 }
             }
         }
@@ -142,7 +142,7 @@ void boss_camera_transition_update(struct Moby *moby) {
                 FUN_L00_00216f90_q(
                     &transition_private_vars->unk40, transition_scratch_vectors + 8, 0, 0);
                 jet_end_mount(2);
-                moby->state = 5;
+                moby->state = STATE_POST_TRANSITION_RAMP_DOWN;
             } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
                 clear_u64_value(transition_scratch_vectors + 8);
                 transition_scratch_vectors[10] = transition_private_vars->unk4C;
@@ -193,7 +193,7 @@ void boss_camera_transition_update(struct Moby *moby) {
                 FUN_L00_00216f90_q(
                     &transition_private_vars->unk40, transition_scratch_vectors + 8, 0, 0);
                 jet_end_mount(3);
-                moby->state = 5;
+                moby->state = STATE_POST_TRANSITION_RAMP_DOWN;
             }
         } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
             clear_u64_value(transition_scratch_vectors + 8);
@@ -211,7 +211,7 @@ void boss_camera_transition_update(struct Moby *moby) {
             approach_value(&transition_private_vars->unk6C, 0.0f, (*(float *)&frame_time) * 4.0f);
             D_L18_0015F3FC_d = transition_private_vars->unk6C;
         } else {
-            moby->state = 1;
+            moby->state = STATE_IDLE;
         }
         break;
     }
