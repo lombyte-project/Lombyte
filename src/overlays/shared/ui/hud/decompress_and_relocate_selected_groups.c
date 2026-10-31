@@ -28,6 +28,10 @@ extern int D_L00_0017E520 NOT_SDA;
 void decompress_and_relocate_selected_groups(int mode) __asm__("FUN_L00_00234fd0");
 
 void decompress_and_relocate_selected_groups(int mode) {
+    enum {
+        HUD_DECOMPRESS_OPTIONAL_BANK_3 = 0,
+        HUD_DECOMPRESS_BOTH_OPTIONAL_BANKS = 2
+    };
     G_234fd0 *decompression_slot_state = &D_L00_0017E4D8_lui;
     int       decompression_destination = D_L00_001B9CF0.unk104;
     void     *compressed_data_buffer = (void *)D_L00_001B9CF0.unk10;
@@ -57,7 +61,7 @@ void decompress_and_relocate_selected_groups(int mode) {
             decompression_destination += slot_3_size;
         }
     }
-    if (mode == 0 || mode == 2) {
+    if (mode == HUD_DECOMPRESS_OPTIONAL_BANK_3 || mode == HUD_DECOMPRESS_BOTH_OPTIONAL_BANKS) {
         {
             int slot_4_size;
             if ((slot_4_size = decompression_slot_state->t->sz[4])) {
