@@ -422,9 +422,12 @@ void begin_red_button_rotation(char *moby) {
 }
 
 s32 get_red_button_sequence_status(const u8 *moby) {
+    enum {
+        RED_BUTTON_STATE_SEQUENCE_COMPLETE = 7
+    };
     u32 state = moby[0x20];
 
-    if (state == 7) {
+    if (state == RED_BUTTON_STATE_SEQUENCE_COMPLETE) {
         return 2;
     }
     if (state > 3) {
