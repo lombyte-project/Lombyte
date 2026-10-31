@@ -93,7 +93,7 @@ int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 int hero_idle_sequence(int allow_item_idle_sequence) {
     struct Hero *vehicle_mode_owner = &hero;
     int          vehicle_mode = vehicle_mode_owner->vehicle_mode;
-    if (vehicle_mode == 2 || (vehicle_mode < 3 ? vehicle_mode == 1 : vehicle_mode == 3)) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK || (vehicle_mode < 3 ? vehicle_mode == HERO_VEHICLE_MODE_CLANK : vehicle_mode == 3)) {
         return 0;
     }
     {
