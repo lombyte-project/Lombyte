@@ -42,11 +42,11 @@ void help_hints_update(struct Moby *moby) {
     case VENDOR_EVENT_WAIT_FOR_ARMING:
         if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->third) &&
             hero.state.control_mode == 15)
-            event_trigger_data->state = 1;
+            event_trigger_data->state = VENDOR_EVENT_ARMED;
         break;
     case VENDOR_EVENT_ARMED:
         if (hero.state.current == 0x42) {
-            event_trigger_data->state = 0;
+            event_trigger_data->state = VENDOR_EVENT_WAIT_FOR_ARMING;
         } else if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->fourth) &&
                    item_unlocked[11] == 0) {
             item_unlocked[11] = 1;
