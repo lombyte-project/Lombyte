@@ -30,7 +30,7 @@ void set_pal_mode(void) {
     s16            display_width;
 
     FlushCache(0);
-    if (pal_mode != 0) {
+    if (pal_mode != FALSE) {
         draw_buffer_address = 0x100000;
         depth_buffer_address = 0x1E0000;
         display_buffer_address = 0;
