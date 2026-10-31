@@ -496,6 +496,47 @@ extern void
 update_spline_moby_destruction_and_respawn(char *, void *, int) __asm__("FUN_L03_0029d2e0");
 extern void report_29dba8(void *, int, int) __asm__("FUN_001e93b0");
 
+typedef struct RedShip1Vars {
+    u8  pad_0[0x2B];
+    s8  unk2B;
+    s8  unk2C;
+    u8  pad_2D[0x33];
+    u8  unk60;
+    u8  pad_61[0x2F];
+    f32 unk90[4];
+    f32 unkA0;
+    f32 unkA4;
+    f32 unkA8;
+    u8  pad_AC[0x4];
+    f32 unkB0[4];
+    f32 unkC0[4];
+    f32 unkD0[4];
+    f32 unkE0[4];
+    u8  pad_F0[0x10];
+    f32 unk100;
+    f32 unk104;
+    f32 unk108;
+    f32 unk10C;
+    u8  pad_110[0x4];
+    f32 unk114;
+    u8  pad_118[0x4];
+    f32 unk11C;
+    u8  pad_120[0xC];
+    s16 timer_12C;
+    u8  pad_12E[0x3];
+    s8  unk131;
+    u8  pad_132[0x2];
+    f32 unk134;
+    f32 unk138;
+    f32 unk13C;
+    f32 unk140;
+    f32 unk144;
+    u8  pad_148[0x2];
+    s16 unk14A;
+    u8  pad_14C[0x4];
+    s32 unk150;
+} RedShip1Vars;
+
 /* Train car update: keeps the cars of a group in step (stops them all when none can move), and on its
  * first frame snaps to the nearest path node and sets up the spline; then runs along the path spline,
  * steering, banking and spawning its hit/smoke effects; state 2 waits without a path, 3 waits a timer. */
@@ -513,7 +554,7 @@ void red_ship_1_update(char *moby) {
     float          culling_sphere_or_motion_delta[4];
     float          position_delta[4];
     char          *iterated_group_moby;
-    char          *spline_moby_pvars;
+    RedShip1Vars  *spline_moby_pvars;
     char          *pm;
     char          *path_tangent_or_moby_position;
     char          *initial_path_tangent;
@@ -532,7 +573,7 @@ void red_ship_1_update(char *moby) {
 
     *(OvlQuad *)zero = 0;
     flag = 0;
-    spline_moby_pvars = ((char *)MOBY(moby)->pvars);
+    spline_moby_pvars = (RedShip1Vars *)MOBY(moby)->pvars;
     if (((unsigned char *)moby)[0x31] == 0) {
         *(OvlQuad *)culling_sphere_or_motion_delta = *(OvlQuad *)&MOBY(moby)->pos;
         culling_sphere_or_motion_delta[3] = 7.0f;
@@ -541,7 +582,7 @@ void red_ship_1_update(char *moby) {
     if (spline_moby_pvars == 0) {
         return;
     }
-    pm = spline_moby_pvars + 0x60;
+    pm = &spline_moby_pvars->unk60;
     if (((unsigned char *)moby)[0x21] != 0xFF && ((unsigned char *)moby)[0x20] != 0 &&
         ((unsigned char *)moby)[0x20] != 3) {
         found = 0;
@@ -590,22 +631,22 @@ void red_ship_1_update(char *moby) {
                           truncate_float_to_s32((moby - D_L03_0015FFD8_29dba8) >> 8));
         }
         ((unsigned char *)moby)[0x30] = 0xFF;
-        spline_moby_pvars[0x2B] = 1;
-        spline_moby_pvars[0x2C] = 0x25;
-        if (*(float *)(spline_moby_pvars + 0x140) > 500.0f) {
-            *(float *)(spline_moby_pvars + 0x140) =
-                random_float_between(-1.0f, 1.0f) * *(float *)(spline_moby_pvars + 0x140) / 1000.0f;
+        spline_moby_pvars->unk2B = 1;
+        spline_moby_pvars->unk2C = 0x25;
+        if (spline_moby_pvars->unk140 > 500.0f) {
+            spline_moby_pvars->unk140 =
+                random_float_between(-1.0f, 1.0f) * spline_moby_pvars->unk140 / 1000.0f;
         }
-        if (*(float *)(spline_moby_pvars + 0x144) > 500.0f) {
-            *(float *)(spline_moby_pvars + 0x144) =
-                random_float_between(-1.0f, 1.0f) * *(float *)(spline_moby_pvars + 0x144) / 1000.0f;
+        if (spline_moby_pvars->unk144 > 500.0f) {
+            spline_moby_pvars->unk144 =
+                random_float_between(-1.0f, 1.0f) * spline_moby_pvars->unk144 / 1000.0f;
         }
         if (*(int *)(pm + 0x14) == -1) {
             MOBY(moby)->state = 2;
             break;
         }
         moby_position = moby + 0x10;
-        spline_moby_pvars[0x131] = ((moby - D_L03_0015FFD8_29dba8) >> 8) / 2 % 7;
+        spline_moby_pvars->unk131 = ((moby - D_L03_0015FFD8_29dba8) >> 8) / 2 % 7;
         initialize_path_descriptor(pm);
         if (((unsigned char *)pm)[5] == 0) {
             if (*(int *)pm <= 0) {
@@ -627,44 +668,40 @@ void red_ship_1_update(char *moby) {
             *(int *)(pm + 0x8) = 0;
             *(int *)(pm + 0x1C) = 0;
         }
-        initial_path_tangent = spline_moby_pvars + 0xA0;
-        *(OvlQuad *)(spline_moby_pvars + 0xE0) =
+        initial_path_tangent = &spline_moby_pvars->unkA0;
+        *(OvlQuad *)&spline_moby_pvars->unkE0[0] =
             *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
-        *(float *)(spline_moby_pvars + 0x100) = 1.0f;
+        spline_moby_pvars->unk100 = 1.0f;
         compute_path_node_tangent(initial_path_tangent,
                                   (int *)pm,
                                   0,
-                                  *(float *)(spline_moby_pvars + 0x104),
-                                  *(float *)(spline_moby_pvars + 0x108));
-        *(OvlQuad *)(spline_moby_pvars + 0xB0) = *(OvlQuad *)(spline_moby_pvars + 0xC0) =
+                                  spline_moby_pvars->unk104,
+                                  spline_moby_pvars->unk108);
+        *(OvlQuad *)&spline_moby_pvars->unkB0[0] = *(OvlQuad *)&spline_moby_pvars->unkC0[0] =
             *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
         MOBY(moby)->rot.x = 0.0f;
-        MOBY(moby)->rot.y = -fast_arc_tan(vector_length_xy(initial_path_tangent),
-                                          *(float *)(spline_moby_pvars + 0xA8));
-        MOBY(moby)->rot.z = fast_arc_tan(*(float *)(spline_moby_pvars + 0xA0) - zero[0],
-                                         *(float *)(spline_moby_pvars + 0xA4) - zero[1]);
-        *(float *)(spline_moby_pvars + 0x114) = 0.0f;
-        *(float *)(spline_moby_pvars + 0x11C) = 0.0f;
-        *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)(spline_moby_pvars + 0xE0);
+        MOBY(moby)->rot.y =
+            -fast_arc_tan(vector_length_xy(initial_path_tangent), spline_moby_pvars->unkA8);
+        MOBY(moby)->rot.z =
+            fast_arc_tan(spline_moby_pvars->unkA0 - zero[0], spline_moby_pvars->unkA4 - zero[1]);
+        spline_moby_pvars->unk114 = 0.0f;
+        spline_moby_pvars->unk11C = 0.0f;
+        *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)&spline_moby_pvars->unkE0[0];
         add_moby_rotation_based_offsets(moby, moby_position);
-        spline_moby_pvars[0x131] = 7;
-        initial_speed_oscillation_phase = *(float *)(spline_moby_pvars + 0x13C);
+        spline_moby_pvars->unk131 = 7;
+        initial_speed_oscillation_phase = spline_moby_pvars->unk13C;
         if (initial_speed_oscillation_phase > 6.2831855f) {
-            *(float *)(spline_moby_pvars + 0x13C) = initial_speed_oscillation_phase * DEG_TO_RAD;
-        } else if (*(float *)(spline_moby_pvars + 0x134) != 0.0f &&
-                   initial_speed_oscillation_phase == -1.0f) {
-            *(float *)(spline_moby_pvars + 0x13C) = random_angle_radians();
+            spline_moby_pvars->unk13C = initial_speed_oscillation_phase * DEG_TO_RAD;
+        } else if (spline_moby_pvars->unk134 != 0.0f && initial_speed_oscillation_phase == -1.0f) {
+            spline_moby_pvars->unk13C = random_angle_radians();
         }
-        *(OvlQuad *)(spline_moby_pvars + 0xD0) = *(OvlQuad *)(spline_moby_pvars + 0xC0);
-        compute_sampled_spline_path_lengths(pm,
-                                            0,
-                                            moby,
-                                            *(float *)(spline_moby_pvars + 0x104),
-                                            *(float *)(spline_moby_pvars + 0x108));
-        if (*(short *)(spline_moby_pvars + 0x12C) > 0) {
+        *(OvlQuad *)&spline_moby_pvars->unkD0[0] = *(OvlQuad *)&spline_moby_pvars->unkC0[0];
+        compute_sampled_spline_path_lengths(
+            pm, 0, moby, spline_moby_pvars->unk104, spline_moby_pvars->unk108);
+        if (spline_moby_pvars->timer_12C > 0) {
             MOBY(moby)->state = 3;
         } else {
-            *(short *)(spline_moby_pvars + 0x14A) = 0;
+            spline_moby_pvars->unk14A = 0;
             MOBY(moby)->state = 1;
         }
         break;
@@ -672,63 +709,61 @@ void red_ship_1_update(char *moby) {
         if (*(int *)(pm + 0x14) != -1) {
             MOBY(moby)->state = 0;
         }
-        voice_slot_index = *(int *)(spline_moby_pvars + 0x150);
+        voice_slot_index = spline_moby_pvars->unk150;
         if (voice_slot_index != -1) {
             voice_slot_entry = (unsigned char *)&voice_pool + voice_slot_index * 0x70;
             if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
                 release_voice_slot(voice_slot_index);
             }
         }
-        *(int *)(spline_moby_pvars + 0x150) = -1;
+        spline_moby_pvars->unk150 = -1;
         break;
     case RED_SHIP_WAIT_FOR_MOVEMENT_TIMER:
-        if (fast_dec_timer_s16(spline_moby_pvars + 0x12C)) {
+        if (fast_dec_timer_s16(&spline_moby_pvars->timer_12C)) {
             MOBY(moby)->state = 1;
         }
         break;
     case RED_SHIP_FOLLOW_PATH_SPLINE:
         *(OvlQuad *)old_rot = *(OvlQuad *)&MOBY(moby)->rot;
         *(OvlQuad *)old_pos = *(OvlQuad *)&MOBY(moby)->pos;
-        path_tangent_or_moby_position = spline_moby_pvars + 0xA0;
-        if (*(float *)(spline_moby_pvars + 0x100) >= 1.0f) {
-            *(float *)(spline_moby_pvars + 0x100) -= 1.0f;
+        path_tangent_or_moby_position = &spline_moby_pvars->unkA0;
+        if (spline_moby_pvars->unk100 >= 1.0f) {
+            spline_moby_pvars->unk100 -= 1.0f;
             advanced_path_node_index = advance_path_node_index(pm);
-            *(OvlQuad *)(spline_moby_pvars + 0x90) = *(OvlQuad *)(spline_moby_pvars + 0xA0);
+            *(OvlQuad *)&spline_moby_pvars->unk90[0] = *(OvlQuad *)&spline_moby_pvars->unkA0;
             compute_path_node_tangent(path_tangent_or_moby_position,
                                       (int *)pm,
                                       1,
-                                      *(float *)(spline_moby_pvars + 0x104),
-                                      *(float *)(spline_moby_pvars + 0x108));
-            *(OvlQuad *)(spline_moby_pvars + 0xB0) = *(OvlQuad *)(spline_moby_pvars + 0xC0);
-            *(OvlQuad *)(spline_moby_pvars + 0xC0) = *(
+                                      spline_moby_pvars->unk104,
+                                      spline_moby_pvars->unk108);
+            *(OvlQuad *)&spline_moby_pvars->unkB0[0] = *(OvlQuad *)&spline_moby_pvars->unkC0[0];
+            *(OvlQuad *)&spline_moby_pvars->unkC0[0] = *(
                 OvlQuad *)(*(char **)(pm + 0x10) +
                            resolve_path_node_index(pm, advanced_path_node_index + 1) * 0x10 + 0x10);
         }
-        step = (*(float *)(spline_moby_pvars + 0x10C) +
-                *(float *)(spline_moby_pvars + 0x134) *
-                    fast_sin(*(float *)(spline_moby_pvars + 0x13C))) /
-               *(float *)(spline_moby_pvars + 0xBC);
-        *(float *)(spline_moby_pvars + 0x13C) =
-            fast_add_rotations(*(float *)(spline_moby_pvars + 0x13C),
-                               *(float *)(spline_moby_pvars + 0x138) * DEG_TO_RAD);
-        *(OvlQuad *)(spline_moby_pvars + 0xE0) = *(OvlQuad *)(spline_moby_pvars + 0xD0);
-        evaluate_cubic_hermite_segment(*(float *)(spline_moby_pvars + 0x100) + step,
-                                       spline_moby_pvars + 0xD0,
-                                       spline_moby_pvars + 0xB0,
-                                       spline_moby_pvars + 0xC0,
-                                       spline_moby_pvars + 0x90,
+        step = (spline_moby_pvars->unk10C +
+                spline_moby_pvars->unk134 * fast_sin(spline_moby_pvars->unk13C)) /
+               spline_moby_pvars->unkB0[3];
+        spline_moby_pvars->unk13C =
+            fast_add_rotations(spline_moby_pvars->unk13C, spline_moby_pvars->unk138 * DEG_TO_RAD);
+        *(OvlQuad *)&spline_moby_pvars->unkE0[0] = *(OvlQuad *)&spline_moby_pvars->unkD0[0];
+        evaluate_cubic_hermite_segment(spline_moby_pvars->unk100 + step,
+                                       spline_moby_pvars->unkD0,
+                                       spline_moby_pvars->unkB0,
+                                       spline_moby_pvars->unkC0,
+                                       spline_moby_pvars->unk90,
                                        path_tangent_or_moby_position);
         if (!flag) {
             update_spline_moby_orientation(moby);
         } else {
             clear_u64_value(moby + 0x40);
-            MOBY(moby)->rot.z = fast_arc_tan(
-                *(float *)(spline_moby_pvars + 0xD0) - *(float *)(spline_moby_pvars + 0xE0),
-                *(float *)(spline_moby_pvars + 0xD4) - *(float *)(spline_moby_pvars + 0xE4));
+            MOBY(moby)->rot.z =
+                fast_arc_tan(spline_moby_pvars->unkD0[0] - spline_moby_pvars->unkE0[0],
+                             spline_moby_pvars->unkD0[1] - spline_moby_pvars->unkE0[1]);
         }
         path_tangent_or_moby_position = moby + 0x10;
-        *(float *)(spline_moby_pvars + 0x100) += step;
-        *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)(spline_moby_pvars + 0xE0);
+        spline_moby_pvars->unk100 += step;
+        *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)&spline_moby_pvars->unkE0[0];
         if (!flag) {
             add_moby_rotation_based_offsets(moby, path_tangent_or_moby_position);
         }
