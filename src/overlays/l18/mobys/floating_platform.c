@@ -188,17 +188,21 @@ extern float floating_platform_bob_amplitude_gp __asm__("D_L18_00161A48") __attr
 extern float floating_platform_bob_phase_rate_gp __asm__("D_L18_00161A4C") __attribute__((sda));
 
 void update_floating_platform_tilt_and_bob(struct Moby *moby) {
+    enum {
+        STATE_WAIT_FOR_SINK_TRIGGER = 4,
+        STATE_SINKING = 5
+    };
     char *floating_platform_private_vars = (char *)moby->pvars;
     float unclamped_rotation_y =
         fast_add_rotations(moby->rot.y, *(float *)(floating_platform_private_vars + 0x6C));
     moby->rot.y = unclamped_rotation_y;
-    if (moby->state == 5) {
+    if (moby->state == STATE_SINKING) {
         if (unclamped_rotation_y > 0.5235988f) {
             moby->rot.y = 0.5235988f;
         } else if (unclamped_rotation_y < -0.5235988f) {
             moby->rot.y = -0.5235988f;
         }
-    } else if (moby->state == 4) {
+    } else if (moby->state == STATE_WAIT_FOR_SINK_TRIGGER) {
         if (unclamped_rotation_y > 0.08726646f) {
             moby->rot.y = 0.08726646f;
         } else if (unclamped_rotation_y < -0.08726646f) {
