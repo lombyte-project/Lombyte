@@ -920,7 +920,7 @@ void update_hero_in_vehicle_mode(void) {
         }
     }
     reveal_map_around_position(&hero.motion.pos);
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         struct Hero *g = &hero;
         if (D_0015EDB3_macro)
             *(f32 *)((char *)&D_L00_0017B85C_lui + 0x210) = 1.4f * D_0015EE18_gp;
