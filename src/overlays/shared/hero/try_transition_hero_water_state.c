@@ -48,10 +48,10 @@ int try_transition_hero_water_state(void) {
         if (hero.underwater_air == 0 && (!(hero.water_surface_z - 2.0f < hero.motion.pos.f[2]) ||
                                          !(hero.motion.rot.f[1] < -0.87266463f) ||
                                          !(frame_time < hero.motion.displacement.f[2]))) {
-            state = 0x6A;
+            state = HERO_STATE_DROWN;
         } else if (hero.water_surface_z + 0.4f < hero.motion.pos.f[2]) {
             D_L00_00167014[0] = 0;
-            state = 6;
+            state = HERO_STATE_FALL;
         } else {
             goto collision_mode;
         }
@@ -70,7 +70,7 @@ collision_mode:
     end.f[2] += 0.3f;
     if (collision_line(&start, &end, 2, hero.moby, 0)) {
         if (item_available[4] != 0 && (((u32)pad_held_lui) & 10) != 0) {
-            state = 0x35;
+            state = HERO_STATE_SWIM_WITH_CROUCH_INPUT;
             goto change_state;
         }
         /* Retail keeps this as its own call site. Through the int-returning
