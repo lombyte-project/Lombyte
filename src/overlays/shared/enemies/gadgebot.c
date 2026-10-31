@@ -1363,6 +1363,9 @@ void assign_gadgebot_attack_targets(void) {
 }
 
 void select_nearest_gadgebot_interaction_target(void *moby_arg) {
+    enum {
+        GADGEBOT_ABSORPTION_DISABLED = 2
+    };
     GbMoby *moby = moby_arg;
     GbVars *gadgebot_vars = moby->vars;
     GbMoby *candidate;
@@ -1400,7 +1403,7 @@ void select_nearest_gadgebot_interaction_target(void *moby_arg) {
                     !(0.2f < absolute_float(moby->pos[2] - candidate->pos[2])) &&
                     !(1.5f < absolute_float(moby->pos[2] - candidate->pos[2]))) {
                     if ((candidate->cls_id != 0x400 && candidate->cls_id != 0x516) ||
-                        candidate->state != 2) {
+                        candidate->state != GADGEBOT_ABSORPTION_DISABLED) {
                         if (candidate->cls_id != 0x515 || *(int *)candidate->vars != -1) {
                             best = vector_distance_xy(moby->pos, candidate->pos);
                             gadgebot_vars->target = candidate;
