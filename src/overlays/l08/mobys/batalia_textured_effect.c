@@ -252,7 +252,7 @@ void batalia_textured_effect_update(struct Moby *moby) {
                               1);
             batalia_rgba_tables_initialized = 1;
         }
-        moby->state = 1;
+        moby->state = MOBY_ACTIVE;
         for (i = 0; i < 3; i++) {
             D_L08_001F8548[i].a = 0;
             D_L08_001F8548[i].b = 0;
