@@ -914,9 +914,12 @@ void update_blarg_elite_commando_joint_aim(char *commando_moby) {
 /* Emit randomized joint particles while the moby is active. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5CD0), where it is exact; names translated to the US level program. */
 void emit_blarg_elite_commando_joint_sparks(char *commando_moby) {
+    enum {
+        COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
+    };
     float matrix[16], velocity[4], acceleration[4], scatter[4];
     int   i;
-    if (MOBY(commando_moby)->visible == 0 || MOBY(commando_moby)->state == 10)
+    if (MOBY(commando_moby)->visible == 0 || MOBY(commando_moby)->state == COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM)
         return;
     for (i = 0; i < 2; i++) {
         float speed, z;
