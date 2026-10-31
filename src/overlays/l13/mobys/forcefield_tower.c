@@ -262,6 +262,9 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
+    enum {
+        TOWER_STATE_DESTRUCTION = 2
+    };
     char            *hit_record;
     int              hit;
     float            position[4];
@@ -269,7 +272,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
     int              link;
     VoicePoolWindow *voice_slot_record;
 
-    if (moby->state != 2) {
+    if (moby->state != TOWER_STATE_DESTRUCTION) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
         if (hit_record != 0) {
             DebugPrint(D_L13_001f4980, moby->oclass, fptodp(*(float *)(hit_record + 0x2c)));
@@ -342,7 +345,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
                         }
                     }
                     *(int *)(moby_data + 0x70) = -1;
-                    moby->state = 2;
+                    moby->state = TOWER_STATE_DESTRUCTION;
                 } else {
                     *health -= *(float *)(hit_record + 0x2c);
                     moby_data[0x67] = 0xfa;
