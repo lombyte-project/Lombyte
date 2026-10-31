@@ -362,8 +362,11 @@ void axis_angle_rotation_to_euler(AxisAngleQuad *axis, AxisAngleQuad *point, flo
 int is_kerwan_path_enemy_in_state_9(struct Moby *moby) __asm__("FUN_L03_002c6d58");
 
 int is_kerwan_path_enemy_in_state_9(struct Moby *moby) {
+    enum {
+        ENEMY_FOLLOW_ALTERNATE_PATH = 0x9
+    };
     if (moby && moby->state != 0xFE && moby->state != 0xFD && moby->oclass == 0x23e &&
-        moby->state == 0x9) {
+        moby->state == ENEMY_FOLLOW_ALTERNATE_PATH) {
         return 1;
     }
     return 0;
