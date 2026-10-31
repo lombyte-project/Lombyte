@@ -714,7 +714,7 @@ void update_hero_condition_animation(void) {
     }
     if (hero.health.hp == 1) {
         on = 1;
-        hero_animation_id = (unsigned char)((char *)hero.moby)[0x53];
+        hero_animation_id = (unsigned char)hero.moby->prev_seq;
         if (hero_animation_id == 0x54 || hero_animation_id == 0x82 || hero_animation_id == 0x5A) {
             if (!hero.anim_changing)
                 on = 0;
@@ -860,14 +860,14 @@ void update_hero_item_slot_blends(void) {
                 s32 slot_target_animation_id =
                     return_hero_animation_id_unchanged(item_slot_blend[0x23]);
                 if (slot_target_animation_id !=
-                    return_hero_animation_id_unchanged(((u8 *)h->moby)[0x53])) {
+                    return_hero_animation_id_unchanged(h->moby->prev_seq)) {
                     w.v = item_slot_blend[0x22] != item_slot_blend[0x23];
                 }
             }
         }
         *(s16 *)(item_slot_blend + 0x30) = w.v;
 
-        r = hero_get_state_aim_pitch(((u8 *)hero_blend_owner->moby)[0x53], &state_aim_pitch);
+        r = hero_get_state_aim_pitch(hero_blend_owner->moby->prev_seq, &state_aim_pitch);
         if (r != 0 || item_slot_blend[0x32] != 0) {
             if (state_aim_pitch != 0.0f) {
                 f32 x = frame_scale_sq;
@@ -947,17 +947,15 @@ void update_hero_item_slot_blends(void) {
                 }
             } else {
                 if (!hero_animation_ids_differ) {
-                    item_slot_blend[0x20] = ((u8 *)hero_blend_owner->moby)[0x50];
+                    item_slot_blend[0x20] = hero_blend_owner->moby->frame;
                 }
                 /* Fakematch: o is never null; the jump merges the same arms and keeps retail's registers. */
                 if (item_slot_blend) {
-                    item_slot_blend[0x21] = ((u8 *)hero_blend_owner->moby)[0x51];
-                    *(f32 *)(item_slot_blend + 0x24) =
-                        *(f32 *)((u8 *)hero_blend_owner->moby + 0x54);
+                    item_slot_blend[0x21] = hero_blend_owner->moby->prev_frame;
+                    *(f32 *)(item_slot_blend + 0x24) = hero_blend_owner->moby->anim_time;
                 } else {
-                    item_slot_blend[0x21] = ((u8 *)hero_blend_owner->moby)[0x51];
-                    *(f32 *)(item_slot_blend + 0x24) =
-                        *(f32 *)((u8 *)hero_blend_owner->moby + 0x54);
+                    item_slot_blend[0x21] = hero_blend_owner->moby->prev_frame;
+                    *(f32 *)(item_slot_blend + 0x24) = hero_blend_owner->moby->anim_time;
                 }
             }
             for (j = 0; j < 2; j++) {
@@ -2334,7 +2332,7 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
     hero_update_items();
     hero_state->moby = (struct Moby *)hero_state->unkA88;
     clear_moby_transform_history(&hero_state->trail);
-    *(int *)((char *)hero_state->moby + 0x98) = -1;
+    hero_state->moby->collision_disable = -1;
     FUN_L00_00232fe8_210a08();
     release_and_clear_hero_voice_slots();
     reset_hero_easing_records();
@@ -2344,7 +2342,7 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
     update_hero_collision_capsule_dimensions();
     hero_state->capsule_top = hero_state->capsule_top_target;
     hero_state->capsule_bottom = hero_state->capsule_bottom_target;
-    *(unsigned short *)((char *)hero_state->moby + 0x34) |= 6;
+    hero_state->moby->flags |= 6;
     hero_state->anim_speed = 1.0f;
     hero_state->anim_frame_rate = 1.0f;
     clear_hero_queued_animation();

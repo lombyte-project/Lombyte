@@ -1,5 +1,6 @@
 /* Hero: primary item input, item slot selection, water and ground transitions, and the hoverboard tricks, race progress and respawn. */
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/hero/hero_tables.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/collision.h"
@@ -72,7 +73,7 @@ int hero_anim_tilt_lookup(int id, float *out) __asm__("FUN_L05_0023b378");
 int hero_anim_tilt_lookup(int id, float *out_tilt_radians) {
     *out_tilt_radians = 0.0f;
     if (hero.state.control_mode == 0x16 && hero.race_ammo &&
-        (unsigned)(*(unsigned char *)(((char *)hero.moby) + 0x53) - 0x69) < 4)
+        (unsigned)(hero.moby->prev_seq - 0x69) < 4)
         return 1;
     switch (id) {
     case 0x37:
@@ -627,7 +628,6 @@ int try_apply_hero_water_and_ground_transitions(void) {
 }
 
 #include "rnc/input/pad_state.h"
-#include "rnc/mobys/moby.h"
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002523C8), where it is exact; names translated to the US level program. */

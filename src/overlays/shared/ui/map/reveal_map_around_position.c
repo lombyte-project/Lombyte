@@ -1,5 +1,6 @@
 /* Map: reveals the map around a position. */
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "asm.h"
 
 #include "rnc/globals.h"
@@ -111,7 +112,7 @@ void reveal_map_around_position(f32 *position) {
             continue;
         }
         if (D_L00_00182BA0[level][i].lower != D_L00_00182BA0[level][i].upper) {
-            f32 height = *(f32 *)((u8 *)hero.moby + 0x18);
+            f32 height = hero.moby->pos.z;
             if (D_L00_00182BA0[level][i].lower > height ||
                 height > D_L00_00182BA0[level][i].upper) {
                 *filter = 0;

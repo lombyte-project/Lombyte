@@ -167,7 +167,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
         }
         {
             struct Hero *g = &hero;
-            if ((*(u16 *)(((char *)g->moby) + 0x34) ^ 1) & 1) {
+            if ((g->moby->flags ^ 1) & 1) {
                 moby_point_position(((char *)g->moby), 7, scratch.rotation);
                 qcopy((char *)g + 0x1d80, &scratch.rotation[0]);
                 enqueue_hero_glow_draw_callback_once();
@@ -258,7 +258,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                     euler_rotation_matrix(scratch.help.inverse, (scratch.rotation + 4));
                     multiply_matrix(scratch.rotation, scratch.rotation, scratch.help.inverse);
                     copy_matrix3x4(((char *)g->unk1620) + 0xc0, scratch.rotation);
-                    *(u64 *)(((char *)g->unk1620) + 0x38) = *(u64 *)(((char *)g->moby) + 0x38);
+                    *(u64 *)(((char *)g->unk1620) + 0x38) = g->moby->spawn_frame;
                     if (g->state.current == 0x4f) {
                         if (*(u8 *)(((char *)g->unk1620) + 0x53) != 1)
                             blend_moby_animation(((char *)g->unk1620), 1, 0, scale_game_frames(10));
@@ -307,7 +307,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                 s32 span = red < 0x100;
                 s32 i = green < 0x100;
                 green = i ? green : 0xff;
-                *(u16 *)(((char *)g->moby) + 0x34) |= 0x10;
+                g->moby->flags |= 0x10;
                 red = span ? red : 0xff;
             }
             if (g->glow_pulse_level == 2)

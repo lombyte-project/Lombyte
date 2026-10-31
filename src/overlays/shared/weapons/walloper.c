@@ -743,7 +743,7 @@ void walloper_update(char *walloper_moby) {
     int          arc_init_index;
     int          any;
 
-    if (*(unsigned char *)(((char *)walloper_hero_state->moby) + 0x53) != 0x82) {
+    if (walloper_hero_state->moby->prev_seq != 0x82) {
         D_L00_0017AEBC = 0.1f;
     }
     switch (MOBY(walloper_moby)->state) {

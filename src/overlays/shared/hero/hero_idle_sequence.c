@@ -603,7 +603,7 @@ void emit_hero_animation_voice_and_ground_particle(int   record_group_index,
         struct Hero *g = &hero;
         int          item_moby_is_type_ad = 0;
         if (((char *)g->items[1].moby)) {
-            item_moby_is_type_ad = *(s16 *)(((char *)g->items[1].moby) + 0xA6) == 0xAD;
+            item_moby_is_type_ad = g->items[1].moby->oclass == 0xAD;
         }
         request_grouped_voice(
             record_group_index, joint_index_offset, item_moby_is_type_ad, 0, ((int)g->moby));
@@ -640,7 +640,7 @@ void dispatch_hero_animation_timed_events(void) {
     if (hero_state->state.current == 2 && hero_state->state_timer == scale_game_frames(0x16)) {
         emit_hero_animation_voice_and_ground_particle(k, 0, 1);
     }
-    switch (((unsigned char *)hero.moby)[0x53]) {
+    switch (hero.moby->prev_seq) {
     case 3:
         if (hero.anim_changing) {
             return;
@@ -801,7 +801,7 @@ void update_hero_in_vehicle_mode(void) {
         }
         {
             struct Hero *g = &hero;
-            if ((*(u16 *)(((char *)g->moby) + 0x34) ^ 1) & 1) {
+            if ((g->moby->flags ^ 1) & 1) {
                 FUN_L00_0024f7c8(((char *)g->moby), 7, scratch.rotation);
                 qcopy((char *)g + 0x1d80, &scratch.rotation[0]);
                 enqueue_hero_glow_draw_callback_once();
@@ -893,7 +893,7 @@ void update_hero_in_vehicle_mode(void) {
                     euler_rotation_matrix(scratch.help.inverse, (scratch.rotation + 4));
                     multiply_matrix(scratch.rotation, scratch.rotation, scratch.help.inverse);
                     copy_matrix3x4(((char *)g->unk1620) + 0xc0, scratch.rotation);
-                    *(u64 *)(((char *)g->unk1620) + 0x38) = *(u64 *)(((char *)g->moby) + 0x38);
+                    *(u64 *)(((char *)g->unk1620) + 0x38) = g->moby->spawn_frame;
                     if (g->state.current == 0x4f) {
                         if (*(u8 *)(((char *)g->unk1620) + 0x53) != 1)
                             blend_moby_animation_2062b0(
@@ -923,7 +923,7 @@ void update_hero_in_vehicle_mode(void) {
         update_hero_glow_and_extra_manipulators();
         update_hero_bone_attachment();
         g = (char *)&hero;
-        if ((*(u16 *)(((char *)g->moby) + 0x34) ^ 1) & 1) {
+        if ((g->moby->flags ^ 1) & 1) {
             FUN_L00_0024f7c8(((char *)g->moby), 6, scratch.rotation);
             /* Retail uses &hero.motion.pos + 0x1d00, hence hero + 0x1d80. */
             qcopy((char *)g + 0x1d80, &scratch.rotation[0]);
@@ -956,7 +956,7 @@ void update_hero_in_vehicle_mode(void) {
                 s32 span = red < 0x100;
                 s32 i = green < 0x100;
                 green = i ? green : 0xff;
-                *(u16 *)(((char *)g->moby) + 0x34) |= 0x10;
+                g->moby->flags |= 0x10;
                 red = span ? red : 0xff;
             }
             if (g->glow_pulse_level == 2)
@@ -1915,13 +1915,13 @@ void update_hero_moby(void) {
     float        minimum_top_gap, second_position_offset, top_gap;
     struct Moby *hero_moby;
 
-    ((unsigned char *)hero.moby)[0xA4] = 0xFF;
+    hero.moby->hit_slot = 0xFF;
     if (hero.unk20A5) {
         FUN_L00_00232fe8();
     } else {
         FUN_L00_002330d0();
     }
-    qcopy(((unsigned char *)hero.moby) + 0x10, &hero.motion.pos);
+    qcopy(&hero.moby->pos, &hero.motion.pos);
     apply_hero_vertical_oscillation();
     qcopy(((unsigned char *)hero.moby) + 0x40, &hero.motion.rot);
     apply_hero_rotation_oscillation();
@@ -1977,7 +1977,7 @@ void update_hero_vehicle_moby(void) {
         clear_hero_moby_flag_bit0();
     }
     FUN_L00_00232fe8_00208a10();
-    ((unsigned char *)hero.moby)[0xA4] = 0xFF;
+    hero.moby->hit_slot = 0xFF;
     hero_moby = ((unsigned char *)hero.moby);
     qcopy(&MOBY(hero_moby)->pos, &hero.motion.pos);
     qcopy(hero_moby + 0x40, &hero.motion.rot);

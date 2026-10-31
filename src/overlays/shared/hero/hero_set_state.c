@@ -985,7 +985,7 @@ int hero_set_state(int a, int b) {
                 }
                 {
                     struct Hero *w = &hero;
-                    *(float *)(((char *)w->moby) + 0x54) =
+                    w->moby->anim_time =
                         D_L00_0017BDF0[w->anim_blend_curve][(w->anim_blend_step)++];
                 }
             }
@@ -1089,7 +1089,7 @@ int hero_set_state(int a, int b) {
         *(int *)&D_L00_0015F688 = scale_game_frames(0x3C);
         if (p->unk20AA == 0) {
             t = hero_idle_sequence(1);
-            if (*(unsigned char *)(((char *)p->moby) + 0x53) != t && b) {
+            if (p->moby->prev_seq != t && b) {
                 set_hero_animation(t, 0, (float)scale_game_frames(0x12));
             }
         }
@@ -1311,7 +1311,7 @@ int hero_set_state(int a, int b) {
             if (frame_time * 3.5f < q->motion.forward_speed)
                 allocate_hero_voice_for_entry(0xC, 0);
             if (b) {
-                if (*(unsigned char *)(((char *)q->moby) + 0x52) == hero_idle_sequence(0)) {
+                if (q->moby->seq == hero_idle_sequence(0)) {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(9));
                 } else {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(0xE));
@@ -2266,7 +2266,7 @@ int hero_set_state(int a, int b) {
             q->unkA7C = q->unkA7C == 0;
             if (b) {
                 int n = scale_game_frames(0xA);
-                if (*(unsigned char *)(((char *)q->moby) + 0x53) == 0x1A)
+                if (q->moby->prev_seq == 0x1A)
                     n = scale_game_frames(3);
                 if (q->state.prev == 1)
                     n = scale_game_frames(0x11);
@@ -2346,7 +2346,7 @@ int hero_set_state(int a, int b) {
             int             k = 0;
             if ((q->state.prev_control_mode == 6 ||
                  (q->state.prev2_control_mode == 6 &&
-                  (unsigned int)(*(unsigned char *)(((char *)q->moby) + 0x53) - 0xF) < 2)) &&
+                  (unsigned int)(q->moby->prev_seq - 0xF) < 2)) &&
                 e->unk0 == 0 && q->anim_frame < (float)e->unk8) {
                 k = (e->kind + 1) % 2;
             }
@@ -2479,8 +2479,7 @@ int hero_set_state(int a, int b) {
             q->invulnerable_frames = scale_game_frames(0x4D);
             if (b) {
                 set_hero_animation(0x10, 3, -3.0f);
-                *(float *)(((char *)q->moby) + 0x54) =
-                    D_L00_0017BDF0[q->anim_blend_curve][(q->anim_blend_step)++];
+                q->moby->anim_time = D_L00_0017BDF0[q->anim_blend_curve][(q->anim_blend_step)++];
             }
         }
         break;
@@ -2617,8 +2616,7 @@ int hero_set_state(int a, int b) {
         p->invulnerable_frames = scale_game_frames(0x32);
         if (b) {
             set_hero_animation(6, 3, -3.0f);
-            *(float *)(((char *)p->moby) + 0x54) =
-                D_L00_0017BDF0[p->anim_blend_curve][(p->anim_blend_step)++];
+            p->moby->anim_time = D_L00_0017BDF0[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
@@ -2781,8 +2779,7 @@ int hero_set_state(int a, int b) {
         p->invulnerable_frames = scale_game_frames(0x4D);
         if (b) {
             set_hero_animation(6, 3, -3.0f);
-            *(float *)(((char *)p->moby) + 0x54) =
-                D_L00_0017BDF0[p->anim_blend_curve][(p->anim_blend_step)++];
+            p->moby->anim_time = D_L00_0017BDF0[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
@@ -2862,8 +2859,7 @@ int hero_set_state(int a, int b) {
         p->invulnerable_frames = scale_game_frames(0x4D);
         if (b) {
             set_hero_animation(2, 3, -3.0f);
-            *(float *)(((char *)p->moby) + 0x54) =
-                D_L00_0017BDF0[p->anim_blend_curve][(p->anim_blend_step)++];
+            p->moby->anim_time = D_L00_0017BDF0[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
@@ -2897,8 +2893,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
-        if (return_hero_animation_id_unchanged(*(unsigned char *)(((char *)p->moby) + 0x53)) !=
-            hero_idle_sequence(1)) {
+        if (return_hero_animation_id_unchanged(p->moby->prev_seq) != hero_idle_sequence(1)) {
             set_hero_animation(hero_idle_sequence(1), 0, (float)scale_game_frames(5));
         }
         break;

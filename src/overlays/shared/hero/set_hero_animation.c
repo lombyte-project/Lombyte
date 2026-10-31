@@ -233,14 +233,13 @@ void sync_hero_slot3_animation_speed(void) {
     if (hero_slot3_animation_speed_state->items[3].state != 2) {
         return;
     }
-    if (select_hero_slot3_animation_pair(
-            *(unsigned char *)(((char *)hero_slot3_animation_speed_state->moby) + 0x53),
-            &mapped_animation_ids[0],
-            &mapped_animation_ids[1]) == 0) {
+    if (select_hero_slot3_animation_pair(hero_slot3_animation_speed_state->moby->prev_seq,
+                                         &mapped_animation_ids[0],
+                                         &mapped_animation_ids[1]) == 0) {
         return;
     }
     if (((char *)hero_slot3_animation_speed_state->items[3].moby) != 0) {
-        *(float *)(((char *)hero_slot3_animation_speed_state->items[3].moby) + 0x58) =
+        hero_slot3_animation_speed_state->items[3].moby->anim_speed =
             hero_slot3_animation_speed_state->anim_speed;
     }
     if (((char *)hero_slot3_animation_speed_state->items[3].moby2) != 0) {
@@ -316,8 +315,8 @@ void sync_hero_mapped_moby_animation_speed(void) {
 
     if (((void *)hero_animation_speed_state->unk2278) != 0 &&
         hero_animation_speed_state->unk227C != 0 &&
-        lookup_s16_pair_value(*(unsigned char *)(((char *)hero_animation_speed_state->moby) + 0x53),
-                              mapped_animation_id) != 0) {
+        lookup_s16_pair_value(hero_animation_speed_state->moby->prev_seq, mapped_animation_id) !=
+            0) {
         *(float *)(((char *)hero_animation_speed_state->unk2278) + 0x58) =
             hero_animation_speed_state->anim_speed;
     }
@@ -365,11 +364,9 @@ void sync_hero_mapped_moby_animation_frames(void) {
         return;
     }
     animation_sync_target->f5C = hero_animation_sync_state->anim_frame_rate;
-    animation_sync_target->f54 = *(float *)(((char *)hero_animation_sync_state->moby) + 0x54);
-    animation_sync_target->seq[0] =
-        *(unsigned char *)(((char *)hero_animation_sync_state->moby) + 0x51);
-    animation_sync_target->seq[1] =
-        *(unsigned char *)(((char *)hero_animation_sync_state->moby) + 0x51);
+    animation_sync_target->f54 = hero_animation_sync_state->moby->anim_time;
+    animation_sync_target->seq[0] = hero_animation_sync_state->moby->prev_frame;
+    animation_sync_target->seq[1] = hero_animation_sync_state->moby->prev_frame;
     animation_sync_target->id[0] =
         animation_sync_target->model->banks[animation_sync_target->bank[0]]
             ->ids[animation_sync_target->seq[0]];
@@ -819,7 +816,7 @@ void set_hero_moby_flag_bit0(void) {
     struct Hero *hero_flag_state = &hero;
     char        *optional_hero_flag_target;
 
-    *(unsigned short *)(((char *)hero_flag_state->moby) + 0x34) |= 1;
+    hero_flag_state->moby->flags |= 1;
     optional_hero_flag_target = ((char *)hero_flag_state->unk1620);
     if (optional_hero_flag_target != 0) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) |= 1;
@@ -836,7 +833,7 @@ void clear_hero_moby_flag_bit0(void) {
     struct Hero *hero_flag_clear_state = &hero;
     char        *optional_hero_flag_target;
 
-    *(unsigned short *)(((char *)hero_flag_clear_state->moby) + 0x34) &= ~1;
+    hero_flag_clear_state->moby->flags &= ~1;
     optional_hero_flag_target = ((char *)hero_flag_clear_state->unk1620);
     if (optional_hero_flag_target != 0) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) &= ~1;
@@ -1056,10 +1053,8 @@ void add_hero_forward_offset(Vec4_00233708 *forward_offset_adjusted_vector,
     switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         *(u128_00233708 *)forward_offset_adjusted_vector = *(u128_00233708 *)in;
-        forward_offset_adjusted_vector->x +=
-            fast_cos(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
-        forward_offset_adjusted_vector->y +=
-            fast_sin(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
+        forward_offset_adjusted_vector->x += fast_cos(hero_base->moby->rot.z) * offset_scale;
+        forward_offset_adjusted_vector->y += fast_sin(hero_base->moby->rot.z) * offset_scale;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:

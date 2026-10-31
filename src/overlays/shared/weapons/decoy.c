@@ -546,7 +546,7 @@ void decoy_update(char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if ((hero.items[0].moby == 0 || *(short *)((char *)hero.items[0].moby + 0xa6) != 0x232) &&
+    if ((hero.items[0].moby == 0 || hero.items[0].moby->oclass != 0x232) &&
         (u8)MOBY(moby)->state == 1) {
         mine_spawn_drops(moby, D_L00_001B0830_lui);
         mark_moby_for_removal(moby);
@@ -584,7 +584,7 @@ void decoy_update(char *moby) {
         *(short *)(decoy_instance_vars + 0x44) = 0;
         target = *(char **)(decoy_instance_vars + 0x40);
         if (target && (((u8)target[0x20] & 0xf0) != 0xf0) && hero.items[0].moby &&
-            *(short *)((char *)hero.items[0].moby + 0xa6) == 0x232)
+            hero.items[0].moby->oclass == 0x232)
             return;
         mine_spawn_drops(moby, D_L00_001B0830_lui);
         mark_moby_for_removal(moby);

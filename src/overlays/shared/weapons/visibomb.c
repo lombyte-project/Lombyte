@@ -1,6 +1,7 @@
 /* Shared moby class visibomb: the visibomb gun held by the hero. */
 
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/math/fast_math.h"
@@ -110,7 +111,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
     if (use_ammo(-1, 1) != 0) {
         b = 0.0f;
         launch_yaw = g->held_pose_yaw;
-        if (g->state.current == 1 && (*(u16 *)((u8 *)g->moby + 0x34) & 1)) {
+        if (g->state.current == 1 && (g->moby->flags & 1)) {
             launch_yaw = fast_arc_tan(camera->unk350[0], camera->unk350[1]);
             b = -fast_arc_tan(vector_length_xy(camera->unk350), camera->unk350[2]);
             fast_vec_normalize(launch_position, camera->unk350, 0.3f);

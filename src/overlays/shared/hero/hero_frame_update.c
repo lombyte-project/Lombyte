@@ -737,7 +737,7 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     hero_update_items();
     *(int *)&hero_state_base->moby = *(int *)&hero_state_base->unkA88;
     clear_moby_transform_history(&hero_state_base->trail.pos);
-    *(int *)(((char *)hero_state_base->moby) + 0x98) = -1;
+    hero_state_base->moby->collision_disable = -1;
     FUN_L00_00232fe8();
     release_and_clear_hero_voice_slots();
     reset_hero_easing_records();
@@ -747,7 +747,7 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     update_hero_collision_dimensions();
     hero_state_base->capsule_top = hero_state_base->capsule_top_target;
     hero_state_base->capsule_bottom = hero_state_base->capsule_bottom_target;
-    *(unsigned short *)(((char *)hero_state_base->moby) + 0x34) |= 6;
+    hero_state_base->moby->flags |= 6;
     hero_state_base->anim_speed = 1.0f;
     hero_state_base->anim_frame_rate = 1.0f;
     clear_hero_queued_animation();

@@ -277,11 +277,10 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
     hero_to_camera_bearing_difference = fast_difference_between_rotations(
         hero_to_camera_bearing_difference, *(float *)(camera_globals + 0x158));
     hero_to_camera_distance = vector_distance_xy(pp, cp);
-    if (hero_to_camera_distance <
-        vector_distance_xy(((char *)hero_state->items[0].moby) + 0x10, cp)) {
+    if (hero_to_camera_distance < vector_distance_xy(&hero_state->items[0].moby->pos, cp)) {
         x = vector_distance_xy(pp, cp);
     } else {
-        x = vector_distance_xy(((char *)hero_state->items[0].moby) + 0x10, cp);
+        x = vector_distance_xy(&hero_state->items[0].moby->pos, cp);
     }
     if (x < 0.77f) {
         if (hero_to_camera_bearing_difference < 1.5707964f) {
