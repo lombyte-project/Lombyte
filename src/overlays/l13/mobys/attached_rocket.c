@@ -64,7 +64,7 @@ void launch_attached_rocket(struct Moby *moby,
                             int          distance_reference_moby,
 
                             float max_travel_distance) {
-    AttachedRocketVars *moby_vars = (AttachedRocketVars *)moby->pvars;
+    enum { ATTACHED_ROCKET_STATE_FLIGHT = 0 } ;AttachedRocketVars *moby_vars = (AttachedRocketVars *)moby->pvars;
     char               *source_moby = (char *)moby_vars->unk20;
     char               *mp;
     moby_vars->unk28 = max_travel_distance;
@@ -77,7 +77,7 @@ void launch_attached_rocket(struct Moby *moby,
     qcopy(&moby_vars->unk10, mp);
     qcopy(moby_vars, pos);
     moby_vars->unk2C = distance_reference_moby;
-    moby->state = 0;
+    moby->state = ATTACHED_ROCKET_STATE_FLIGHT;
     moby->flags &= 0xFFFE;
     moby->collision = moby->pclass->collision;
     update_entity(moby);
