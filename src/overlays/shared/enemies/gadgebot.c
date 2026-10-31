@@ -1675,6 +1675,12 @@ void draw_gadgebot_group_glow_effects(char *group_reference_moby) {
 }
 
 void update_gadgebot_glow_effects(char *moby) {
+    enum {
+        GADGEBOT_FOLLOW_HERO = 3,
+        GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
+        GADGEBOT_SEEK_INTERACTION_TARGET = 7,
+        GADGEBOT_UPDATE_KNOCKBACK = 9
+    };
     char *moby_vars;
     int   tint;
     int   i;
@@ -1686,11 +1692,11 @@ void update_gadgebot_glow_effects(char *moby) {
     }
     moby_vars = ((char *)MOBY(moby)->pvars);
     tint = 0x3228AAAA;
-    if (MOBY(moby)->state == 3 || MOBY(moby)->state == 6) {
+    if (MOBY(moby)->state == GADGEBOT_FOLLOW_HERO || MOBY(moby)->state == 6) {
         tint = 0x3228AA28;
-    } else if (MOBY(moby)->state == 5 || MOBY(moby)->state == 9) {
+    } else if (MOBY(moby)->state == GADGEBOT_SEEK_AND_ATTACK_TARGET || MOBY(moby)->state == GADGEBOT_UPDATE_KNOCKBACK) {
         tint = 0x322828AA;
-    } else if (MOBY(moby)->state == 7) {
+    } else if (MOBY(moby)->state == GADGEBOT_SEEK_INTERACTION_TARGET) {
         tint = 0x32AA2828;
     }
 
