@@ -42,6 +42,9 @@ extern void copy_memory_aligned(void *, void *, s32) __asm__("func_001F9838");
 s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) __asm__("FUN_0020af20");
 
 s32 memcard_restore_data(u8 *save_packet, s32 slot, struct RestoreEntry *restore_entries) {
+    enum {
+        RESTORE_STATUS_SIZE_MATCH = 1
+    };
     struct RestoreEntry *matched_entry;
     s32                  errors;
     s32                  total;
@@ -75,7 +78,7 @@ s32 memcard_restore_data(u8 *save_packet, s32 slot, struct RestoreEntry *restore
             s32 entrySize = matched_entry->size;
             slot_destination = matched_entry->data + slot * entrySize;
             if (blockSize == entrySize) {
-                s32 status = 1;
+                s32 status = RESTORE_STATUS_SIZE_MATCH;
                 copySize = entrySize;
                 matched_entry->status = status;
             } else if (blockSize < entrySize) {
