@@ -1401,9 +1401,9 @@ void follow_camera_springs(void *camera_moby) {
         fast_vec_add(camera_state->follow.look_target, look, blended_focus_or_collision_origin);
     }
     follow_camera_transition(camera_moby, look);
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         scale_vector_xyz(look, view + 0x20, 3.0f);
-    } else if (hero.vehicle_mode == 1) {
+    } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         scale_vector_xyz(look, view + 0x20, 0.4f);
     } else {
         scale_vector_xyz(look, view + 0x20, 0.5f);
