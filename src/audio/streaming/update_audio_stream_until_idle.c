@@ -10,15 +10,18 @@ extern s32 music_update() __asm__("func_00216290");
 s16        update_audio_stream_until_idle(s32 wait_for_completion) __asm__("FUN_002168a8");
 
 s16 update_audio_stream_until_idle(s32 wait_for_completion) {
+    enum {
+        AUDIO_STREAM_READ_IDLE = 0
+    };
     if (wait_for_completion != 0) {
-        if (music_stream_state.read_state != 0) {
+        if (music_stream_state.read_state != AUDIO_STREAM_READ_IDLE) {
             do {
                 sceGsSyncV(0);
                 music_update();
                 snd_reset_state_and_flush_commands();
                 snd_flush_sound_commands();
                 snd_hold_command_batches();
-            } while (music_stream_state.read_state != 0);
+            } while (music_stream_state.read_state != AUDIO_STREAM_READ_IDLE);
         }
     } else {
         music_update();
