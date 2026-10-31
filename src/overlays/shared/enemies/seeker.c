@@ -142,7 +142,7 @@ void seeker_update(struct Moby *moby) {
         seeker_instance_vars->unkD8 = 0.5f;
         seeker_instance_vars->unkD0 = truncate_float_to_s32(512.0f);
         seeker_instance_vars->speed = frame_time * 7.75f;
-        moby->state = 1;
+        moby->state = SEEKER_STATE_IDLE_HOVER;
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
@@ -174,7 +174,7 @@ void seeker_update(struct Moby *moby) {
                 seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
             seeker_instance_vars->moving = 1;
-            moby->state = 2;
+            moby->state = SEEKER_STATE_CHASE;
         }
         break;
     case SEEKER_STATE_CHASE_ANIMATION_WAIT:
@@ -183,7 +183,7 @@ void seeker_update(struct Moby *moby) {
                 FUN_L01_0026e090(moby->group, 1);
             }
             seeker_instance_vars->moving = 1;
-            moby->state = 4;
+            moby->state = SEEKER_STATE_TIMED_CHASE;
             if (seeker_instance_vars->voice == -1) {
                 seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
@@ -252,8 +252,8 @@ void seeker_update(struct Moby *moby) {
             }
             FUN_L00_00258830(moby, &vel, 0, 0.0f, 0.5f, 0.0f);
         }
-        if (target_distance_xy < 6.0f && moby->state == 2) {
-            moby->state = 3;
+        if (target_distance_xy < 6.0f && moby->state == SEEKER_STATE_CHASE) {
+            moby->state = SEEKER_STATE_CHASE_ANIMATION_WAIT;
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             }
@@ -269,7 +269,7 @@ void seeker_update(struct Moby *moby) {
                 seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
             seeker_instance_vars->moving = 1;
-            moby->state = 4;
+            moby->state = SEEKER_STATE_TIMED_CHASE;
             if (seeker_instance_vars->timer == 0) {
                 seeker_instance_vars->timer = scale_game_frames(180);
             }
