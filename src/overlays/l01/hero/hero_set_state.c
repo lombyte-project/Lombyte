@@ -1624,7 +1624,7 @@ int handle_hero_gadget_button(void) {
 
     if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1))
         return 0;
-    if (hero.vehicle_mode != 0)
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT)
         return 0;
     if (hero.items[0].moby == 0)
         return 0;
@@ -1702,7 +1702,7 @@ int handle_hero_gadget_button(void) {
         }
         break;
     case ITEM_VEHICLE_MODE_TOGGLE:
-        if (hero.vehicle_mode == 0 && can_select_hero_item_31() != 0 &&
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT && can_select_hero_item_31() != 0 &&
             pad_pressed_within(buttons, scale_game_frames(7), 0) != 0 && D_00141660 == 0x1f &&
             hero.items[0].moby->oclass == 0x1e3 && hero.vehicle_toggle_timer == 0) {
             allocate_hero_voice_for_entry(0x18, 0);
