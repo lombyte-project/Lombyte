@@ -32,15 +32,15 @@ extern s32 D_L09_0015F5CC NOT_SDA;
 
 /* Moby class 1206 */
 void damage_causer_update(struct Moby *moby) {
-    char *damage_causer_vars = (char *)moby->pvars;
+    enum { DAMAGE_CAUSER_STATE_UNINITIALIZED = 0 , DAMAGE_CAUSER_STATE_INITIALIZED = 1 } ;char *damage_causer_vars = (char *)moby->pvars;
     float sphere_query_workspace[24];
     int   i;
     float count_as_float;
     float start;
     float end;
 
-    if (moby->state == 0) {
-        moby->state = 1;
+    if (moby->state == DAMAGE_CAUSER_STATE_UNINITIALIZED) {
+        moby->state = DAMAGE_CAUSER_STATE_INITIALIZED;
         *(s32 *)(damage_causer_vars + 0x14) = -1;
     }
     if ((D_L09_0015F5CC & 7) == (((int)moby >> 8) & 7)) {
