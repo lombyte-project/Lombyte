@@ -27,7 +27,7 @@ void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
 
 /* Moby classes 296, 652, 653 */
 void escalator_update(char *moby) {
-    EscalatorVars *escalator_motion_state = (EscalatorVars *)MOBY(moby)->pvars;
+    enum { ESCALATOR_STATE_INITIALIZE = 0 , ESCALATOR_STATE_TIMED_NEGATIVE_YAW_MOTION = 1 , ESCALATOR_STATE_TIMED_POSITIVE_YAW_MOTION = 2 , ESCALATOR_STATE_CONSTANT_SPEED_MOTION = 3 } ;EscalatorVars *escalator_motion_state = (EscalatorVars *)MOBY(moby)->pvars;
     float          limit;
     float          y;
     int            state;
@@ -35,16 +35,16 @@ void escalator_update(char *moby) {
     if (escalator_motion_state == 0)
         return;
     state = MOBY(moby)->state;
-    if (state == 1)
+    if (state == ESCALATOR_STATE_TIMED_NEGATIVE_YAW_MOTION)
         goto state1;
-    if (state < 2) {
-        if (state == 0)
+    if (state < ESCALATOR_STATE_TIMED_POSITIVE_YAW_MOTION) {
+        if (state == ESCALATOR_STATE_INITIALIZE)
             goto state0;
         goto move;
     }
-    if (state == 2)
+    if (state == ESCALATOR_STATE_TIMED_POSITIVE_YAW_MOTION)
         goto state2;
-    if (state == 3)
+    if (state == ESCALATOR_STATE_CONSTANT_SPEED_MOTION)
         goto state3;
     goto move;
 state0:
@@ -52,9 +52,9 @@ state0:
     escalator_motion_state->unkA0 = scale_game_frames(escalator_direction_timer_frames_gp);
     escalator_motion_state->unk9C |= 4;
     if (escalator_motion_state->unkA4 != 0)
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = ESCALATOR_STATE_CONSTANT_SPEED_MOTION;
     else
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = ESCALATOR_STATE_TIMED_NEGATIVE_YAW_MOTION;
     goto move;
 state1: {
     float speed;
@@ -65,7 +65,7 @@ state1: {
                 escalator_acceleration_gp * frame_time_sq;
         if (speed <= 0.0f) {
             escalator_motion_state->unkA0 = scale_game_frames(escalator_direction_timer_frames_gp);
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = ESCALATOR_STATE_TIMED_POSITIVE_YAW_MOTION;
         } else {
             escalator_motion_state->unk40 = fast_cos(MOBY(moby)->rot.z) * -speed;
             y = fast_sin(MOBY(moby)->rot.z) * -speed;
@@ -94,7 +94,7 @@ state2: {
                 escalator_acceleration_gp * frame_time_sq;
         if (speed <= 0.0f) {
             escalator_motion_state->unkA0 = scale_game_frames(escalator_direction_timer_frames_gp);
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = ESCALATOR_STATE_TIMED_NEGATIVE_YAW_MOTION;
         } else {
             escalator_motion_state->unk40 = fast_cos(MOBY(moby)->rot.z) * speed;
             escalator_motion_state->unk44 = fast_sin(MOBY(moby)->rot.z) * speed;
