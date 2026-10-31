@@ -30,6 +30,9 @@ void floor_button_update(struct Moby *moby) {
         FLOOR_BUTTON_STATE_INITIALIZE = 0,
         FLOOR_BUTTON_STATE_WAIT_FOR_PRESS = 1
     };
+    enum {
+        FLOOR_BUTTON_STATE_DISABLED = 2
+    };
     s32  *floor_button_private_state = (s32 *)moby->pvars;
     s16   id;
     s32   i;
@@ -50,7 +53,7 @@ void floor_button_update(struct Moby *moby) {
             (floor_button_private_state[2] != 0 && D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
             moby->command = 2;
             moby->glow_color = 0x80208020;
-            moby->state = 2;
+            moby->state = FLOOR_BUTTON_STATE_DISABLED;
             list = floor_button_private_state[0];
             if (list != -1) {
                 i = 0;
@@ -65,7 +68,7 @@ void floor_button_update(struct Moby *moby) {
                 }
             }
         } else {
-            moby->state = 1;
+            moby->state = FLOOR_BUTTON_STATE_WAIT_FOR_PRESS;
         }
         break;
     case FLOOR_BUTTON_STATE_WAIT_FOR_PRESS:
@@ -86,7 +89,7 @@ void floor_button_update(struct Moby *moby) {
                  D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
                 l05_mission_gated_moby_save_flags.collected[(s16)moby->save_id] = moby->mission + 2;
             }
-            moby->state = 2;
+            moby->state = FLOOR_BUTTON_STATE_DISABLED;
             moby->command = 1;
             moby->glow_color = 0x80208020;
             allocate_voice_for_target_entry(0, 0, moby);
