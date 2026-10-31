@@ -547,7 +547,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
     if (sandmouse_vars == 0)
         return;
     if (sandmouse_vars->link != -1) {
-        if (sandmouse_moby->state >= 5) {
+        if (sandmouse_moby->state >= SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE) {
             *(f32 *)LNK(sandmouse_vars->link)->pvars =
                 fast_arc_tan(sandmouse_moby->pos.x - LNK(sandmouse_vars->link)->pos.x,
                              sandmouse_moby->pos.y - LNK(sandmouse_vars->link)->pos.y);
@@ -561,7 +561,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             LNK(sandmouse_vars->link)->collision = 0;
         }
     }
-    if (sandmouse_moby->state >= 3) {
+    if (sandmouse_moby->state >= SANDMOUSE_STATE_MOVE_TO_GOAL) {
         if (big_head_cheat_enabled != 0) {
             if (*((u8 *)sandmouse_vars + 0x91) == 0) {
                 attach_manipulator(sandmouse_moby, 5, (u8 *)sandmouse_vars + 0x90);
@@ -620,7 +620,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         D_L01_001DEB38_lui.unk44 = frame_time * 11.519173f;
         D_L01_001DEB38_lui.unk48 = scale_game_frames(4);
         D_L01_001DEB38_lui.unk28 = 3.1415927f;
-        sandmouse_moby->state = 1;
+        sandmouse_moby->state = SANDMOUSE_STATE_WAIT_FOR_ACTIVATION;
         sandmouse_moby->draw_dist = 0;
         break;
     case SANDMOUSE_STATE_WAIT_FOR_ACTIVATION:
@@ -682,13 +682,13 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 set_hero_animation((float)scale_game_frames(6), 0, 0);
                 if (sandmouse_vars->link != -1) {
                     LNK(sandmouse_vars->link)->command = 5;
-                    sandmouse_moby->state = 2;
+                    sandmouse_moby->state = SANDMOUSE_STATE_WAIT_FOR_LINK;
                 } else {
                     sandmouse_moby->draw_dist = 0xFF;
                     if (sandmouse_moby->prev_seq != 0) {
                         blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(10));
                     }
-                    sandmouse_moby->state = 3;
+                    sandmouse_moby->state = SANDMOUSE_STATE_MOVE_TO_GOAL;
                 }
             }
         }
@@ -699,7 +699,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 if (sandmouse_moby->prev_seq != 0) {
                     blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(10));
                 }
-                sandmouse_moby->state = 3;
+                sandmouse_moby->state = SANDMOUSE_STATE_MOVE_TO_GOAL;
                 sandmouse_vars->timer = 0;
                 sandmouse_moby->draw_dist = 0xFF;
             }
@@ -713,7 +713,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 sandmouse_vars->slot =
                     allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
             }
-            sandmouse_moby->state = 3;
+            sandmouse_moby->state = SANDMOUSE_STATE_MOVE_TO_GOAL;
         }
         break;
     case SANDMOUSE_STATE_MOVE_TO_GOAL: {
@@ -753,7 +753,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 blend_moby_animation(sandmouse_moby, 2, 0, scale_game_frames(10));
             }
             qzero(&sandmouse_vars->vel);
-            sandmouse_moby->state = 4;
+            sandmouse_moby->state = SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE;
             sandmouse_vars->timer = scale_game_frames(0x78);
         }
         if (sandmouse_moby->anim_flags & 2) {
@@ -778,7 +778,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         if (sandmouse_vars->link != -1) {
             LNK(sandmouse_vars->link)->flags &= 0xFFBE;
         }
-        sandmouse_moby->state = 5;
+        sandmouse_moby->state = SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE;
         break;
     case SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE: {
         char *v = VOICE(sandmouse_vars->slot);
@@ -821,7 +821,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 }
                 sandmouse_vars->slot = -1;
                 allocate_voice_for_target_entry(2, 0, (struct VoiceTarget *)sandmouse_moby);
-                sandmouse_moby->state = 6;
+                sandmouse_moby->state = SANDMOUSE_STATE_FADE_OUT;
                 if (sandmouse_vars->link != -1) {
                     LNK(sandmouse_vars->link)->command = 5;
                 }
@@ -842,7 +842,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             qcopy(&sandmouse_moby->pos, &sandmouse_vars->a30);
             qcopy(sandmouse_vars, &sandmouse_vars->a30);
             qzero(&sandmouse_vars->vel);
-            sandmouse_moby->state = 7;
+            sandmouse_moby->state = SANDMOUSE_STATE_RESET;
             sandmouse_moby->flags &= 0xFDFF;
         } else {
             Vec4 pos;
@@ -905,13 +905,13 @@ void sandmouse_update(Moby *sandmouse_moby) {
             blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(6));
         }
         LNK(sandmouse_vars->link)->command = 1;
-        sandmouse_moby->state = 1;
+        sandmouse_moby->state = SANDMOUSE_STATE_WAIT_FOR_ACTIVATION;
         sandmouse_moby->draw_dist = 0;
         break;
     case 8:
         break;
     }
-    if (sandmouse_moby->state >= 2) {
+    if (sandmouse_moby->state >= SANDMOUSE_STATE_WAIT_FOR_LINK) {
         jet_animate(sandmouse_moby, 0.3f);
         ((void (*)(void *, void *))emit_sandmouse_particles)(sandmouse_moby, sandmouse_vars);
     }
