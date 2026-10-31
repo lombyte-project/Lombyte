@@ -44,11 +44,14 @@ void handle_linked_moby_damage(struct Moby *moby,
         DAMAGE_RESULT_UNAVAILABLE = 0,
         DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
     };
+    enum {
+        LINKED_MOBY_STATE_DESTROYED = 3
+    };
     VendorHitSource *damage_hit_record;
     struct Moby     *link;
     s32              hit;
 
-    if (moby->state != 3) {
+    if (moby->state != LINKED_MOBY_STATE_DESTROYED) {
         damage_hit_record = find_moby_hit(moby, 0x330000, 0);
         if (damage_hit_record != 0) {
             debug_print(D_L09_00208FF0, moby->oclass, fptodp(damage_hit_record->damage));
@@ -90,7 +93,7 @@ void handle_linked_moby_damage(struct Moby *moby,
                     }
                 }
                 FUN_L00_00257470(moby, 0, -1);
-                moby->state = 3;
+                moby->state = LINKED_MOBY_STATE_DESTROYED;
             } else {
                 *health -= damage_hit_record->damage;
                 linked_moby_damage_vars->hurt_timer = scale_game_frames(60);
