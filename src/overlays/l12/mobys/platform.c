@@ -284,6 +284,9 @@ void platform_update(Moby *moby) {
         PLATFORM_KIND_DISABLE_DRAWING_AND_COLLISION = 3,
         PLATFORM_KIND_TRACK_REFERENCED_MOBY_HEIGHT = 4
     };
+    enum {
+        PLATFORM_DRAWING_AND_COLLISION_DISABLED = 1
+    };
     float        oldPos[4];
     float        oldRot[4];
     float        delta[4];
@@ -295,12 +298,12 @@ void platform_update(Moby *moby) {
     platform_vars = (*(Data_2E51E8 **)&moby->pvars);
     qcopy(oldPos, (*(float(*)[4]) & moby->pos));
     qcopy(oldRot, (*(float(*)[4]) & moby->rot));
-    if (moby->state != 0 && platform_vars->fFC != -1 &&
+    if (moby->state != PLATFORM_INITIALIZE && platform_vars->fFC != -1 &&
         (signed char)(*(Moby **)&D_L12_0015FFD8_p)[platform_vars->fFC].state >= 0) {
         emit_platform_exhaust_effects((char *)moby);
         return;
     }
-    if (moby->state != 0 && platform_vars->fDC != -1 &&
+    if (moby->state != PLATFORM_INITIALIZE && platform_vars->fDC != -1 &&
         count_active_moby_group_members(platform_vars->fDC, -1) != 0) {
         emit_platform_exhaust_effects((char *)moby);
         return;
@@ -319,7 +322,7 @@ void platform_update(Moby *moby) {
                 platform_vars->fD4 = 6.0f;
             platform_vars->f3E |= 9;
             clear_u64_value(platform_vars->vel);
-            moby->state = 7;
+            moby->state = PLATFORM_FOLLOW_WAYPOINTS;
             break;
         case PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
@@ -333,7 +336,7 @@ void platform_update(Moby *moby) {
             platform_vars->fD8 = random_angle_radians();
             platform_vars->f3E |= 9;
             clear_u64_value(platform_vars->vel);
-            moby->state = 2;
+            moby->state = PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS;
             break;
         case PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
@@ -347,15 +350,15 @@ void platform_update(Moby *moby) {
             if (platform_vars->fD0 == 0.0f)
                 platform_vars->fD0 = 8.0f;
             clear_u64_value(platform_vars->vel);
-            moby->state = 4;
+            moby->state = PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH;
             break;
         case PLATFORM_KIND_DISABLE_DRAWING_AND_COLLISION:
             moby->draw_dist = 0;
-            moby->state = 1;
+            moby->state = PLATFORM_DRAWING_AND_COLLISION_DISABLED;
             (*(int *)&moby->collision) = 0;
             break;
         case PLATFORM_KIND_TRACK_REFERENCED_MOBY_HEIGHT:
-            moby->state = 9;
+            moby->state = PLATFORM_TRACK_REFERENCED_MOBY_HEIGHT;
             platform_vars->fD4 = 4.0f;
             platform_vars->fD0 = 4.0f;
             platform_vars->f3E &= 0xFFFE;
@@ -443,7 +446,7 @@ void platform_update(Moby *moby) {
             } else {
                 platform_vars->walk.dir = 1;
             }
-            moby->state = 2;
+            moby->state = PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS;
         }
         if (is_hero_on_moby(moby)) {
             compute_platform_target_tilt((char *)moby, angles, 1);
@@ -460,7 +463,7 @@ void platform_update(Moby *moby) {
             } else {
                 platform_vars->walk.dir = 1;
             }
-            moby->state = 4;
+            moby->state = PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH;
         }
         if (platform_vars->walk.dir == 2) {
             emit_platform_exhaust_effects((char *)moby);
@@ -512,7 +515,7 @@ void platform_update(Moby *moby) {
         if (platform_vars->walk.path != 0 &&
             vector_distance_xy((*(float(*)[4]) & moby->pos), &platform_vars->walk.path->nodes[0]) <
                 0.5f) {
-            moby->state = 0;
+            moby->state = PLATFORM_INITIALIZE;
         }
         if ((*(float(*)[4]) & moby->pos)[2] < 0.0f) {
             mark_moby_for_removal(moby);
