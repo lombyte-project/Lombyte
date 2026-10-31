@@ -365,6 +365,9 @@ void morphoray_chicken_update(Moby *chicken_moby) {
         CHICKEN_STATE_CLOSE_RANGE_FLEE_FROM_HERO = 4,
         CHICKEN_STATE_EMIT_FEATHERS = 5
     };
+    enum {
+        CHICKEN_STATE_DEAD = 6
+    };
     Vec4A        next_pos;
     Vec4A        ahead;
     Vec4A        motion_and_normal_scratch;
@@ -389,15 +392,15 @@ void morphoray_chicken_update(Moby *chicken_moby) {
     anim_speed = chicken_moby->anim_speed;
     flee_angle = fast_arc_tan(chicken_moby->pos.x - player->motion.pos.f[0],
                               chicken_moby->pos.y - player->motion.pos.f[1]);
-    if (chicken_moby->state == 0) {
-        chicken_moby->state = 1;
+    if (chicken_moby->state == CHICKEN_STATE_INITIALIZE) {
+        chicken_moby->state = CHICKEN_STATE_IDLE;
         chicken_vars->flee_timer = 0;
         chicken_vars->expire_timer = -1;
         chicken_vars->sound_timer =
             random_int_between(scale_game_frames(0x78), scale_game_frames(0x12C));
         chicken_vars->health = 1.0f;
     }
-    if (chicken_moby->state == 6) {
+    if (chicken_moby->state == CHICKEN_STATE_DEAD) {
         return;
     }
     if (D_0013E520[0x15] != 0) {
@@ -529,7 +532,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
         chicken_moby->collision = 0;
         chicken_moby->flags = (chicken_moby->flags & 0xEFFF) | 0x41;
         chicken_vars->gold = 0;
-        chicken_moby->state = 6;
+        chicken_moby->state = CHICKEN_STATE_DEAD;
         chicken_moby->command = 0;
         return;
     }
@@ -565,7 +568,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
                                                                 next_pos.y - chicken_moby->pos.y)) <
                      1.5707964f &&
                  fast_vec_dist(&chicken_moby->pos, &next_pos) > size * 0.01f)) {
-                chicken_moby->state = 3;
+                chicken_moby->state = CHICKEN_STATE_FLEE_FROM_HERO;
                 blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
             } else {
                 chicken_vars->flee_timer =
@@ -576,7 +579,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
                        fast_difference_between_rotations(flee_angle, chicken_moby->rot.z)) {
             move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-            chicken_moby->state = 2;
+            chicken_moby->state = CHICKEN_STATE_TURN_AWAY_FROM_HERO;
             blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
         } else {
             move_moby_xy_with_collision_constraints(
@@ -600,13 +603,13 @@ void morphoray_chicken_update(Moby *chicken_moby) {
             fast_vec_add(&ahead, &ahead, &next_pos);
             if (absolute_float(probe_ground_height(&ahead, 0, 0.5f) - ahead.z) <=
                 (frame_time + frame_time) * size) {
-                chicken_moby->state = 3;
+                chicken_moby->state = CHICKEN_STATE_FLEE_FROM_HERO;
                 blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
             }
         } else if (fast_difference_between_rotations(flee_angle, chicken_moby->rot.z) <
                        0.08726646f ||
                    vector_distance_xy(&chicken_moby->pos, &hero.motion.pos) > size * 6.0f) {
-            chicken_moby->state = 1;
+            chicken_moby->state = CHICKEN_STATE_IDLE;
             chicken_vars->flee_timer =
                 random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
             blend_moby_animation(
@@ -615,7 +618,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
         break;
     case CHICKEN_STATE_FLEE_FROM_HERO:
         if (vector_distance_xy(&chicken_moby->pos, &hero.motion.pos) > size * 6.0f) {
-            chicken_moby->state = 1;
+            chicken_moby->state = CHICKEN_STATE_IDLE;
             chicken_vars->flee_timer =
                 random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
             blend_moby_animation(
@@ -641,13 +644,13 @@ void morphoray_chicken_update(Moby *chicken_moby) {
                                   fast_arc_tan(next_pos.x - chicken_moby->pos.x,
                                                next_pos.y - chicken_moby->pos.y)) ||
                  fast_vec_dist(&chicken_moby->pos, &next_pos) < size * 0.01f)) {
-                chicken_moby->state = 1;
+                chicken_moby->state = CHICKEN_STATE_IDLE;
                 chicken_vars->flee_timer =
                     random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
                 blend_moby_animation(
                     chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
             } else {
-                chicken_moby->state = 4;
+                chicken_moby->state = CHICKEN_STATE_CLOSE_RANGE_FLEE_FROM_HERO;
                 blend_moby_animation(chicken_moby, 2, 0, scale_game_frames(10));
             }
         } else {
@@ -669,7 +672,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
                                   fast_arc_tan(next_pos.x - chicken_moby->pos.x,
                                                next_pos.y - chicken_moby->pos.y)) ||
                  fast_vec_dist(&chicken_moby->pos, &next_pos) < size * 0.01f)) {
-                chicken_moby->state = 1;
+                chicken_moby->state = CHICKEN_STATE_IDLE;
                 chicken_vars->flee_timer =
                     random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
                 blend_moby_animation(
@@ -698,13 +701,13 @@ void morphoray_chicken_update(Moby *chicken_moby) {
                                   fast_arc_tan(next_pos.x - chicken_moby->pos.x,
                                                next_pos.y - chicken_moby->pos.y)) ||
                  fast_vec_dist(&chicken_moby->pos, &next_pos) < size * 0.01f)) {
-                chicken_moby->state = 1;
+                chicken_moby->state = CHICKEN_STATE_IDLE;
                 chicken_vars->flee_timer =
                     random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
                 blend_moby_animation(
                     chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
             } else {
-                chicken_moby->state = 3;
+                chicken_moby->state = CHICKEN_STATE_FLEE_FROM_HERO;
                 blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
             }
         } else {
@@ -726,7 +729,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
                                   fast_arc_tan(next_pos.x - chicken_moby->pos.x,
                                                next_pos.y - chicken_moby->pos.y)) ||
                  fast_vec_dist(&chicken_moby->pos, &next_pos) < size * 0.01f)) {
-                chicken_moby->state = 1;
+                chicken_moby->state = CHICKEN_STATE_IDLE;
                 chicken_vars->flee_timer =
                     random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
                 blend_moby_animation(
@@ -736,7 +739,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
         break;
     case CHICKEN_STATE_EMIT_FEATHERS:
         if (FUN_L00_002dc9f0(chicken_moby, chicken_vars->unk10) != 0) {
-            chicken_moby->state = 0;
+            chicken_moby->state = CHICKEN_STATE_INITIALIZE;
             *(short *)(chicken_vars->unk14 + 0x68) = 0;
         }
         if (random_integer_below(4) != 0) {
@@ -790,7 +793,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
     if (collision_hit_material() == 0) {
         chicken_vars->health = 0.0f;
     }
-    if (chicken_moby->state != 5) {
+    if (chicken_moby->state != CHICKEN_STATE_EMIT_FEATHERS) {
         float pitch;
         float roll;
         chicken_moby->pos.z = coll_hit.point.f[2];
