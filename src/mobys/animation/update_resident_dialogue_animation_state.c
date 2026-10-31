@@ -86,7 +86,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != 2) {
                 blend_moby_animation(resident_moby, 2, 0, scale_game_frames(0x12));
             }
-            resident_moby->state = 12;
+            resident_moby->state = RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION;
             D_001E63C0.timer = 0;
         }
         D_001E63C0.timer++;
@@ -96,7 +96,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != 3) {
                 blend_moby_animation(resident_moby, 3, 0, scale_game_frames(0x12));
             }
-            resident_moby->state = 3;
+            resident_moby->state = RESIDENT_WAIT_TO_RESTORE_IDLE_ANIMATION;
             D_001E63C0.timer = 0;
         }
         D_001E63C0.timer++;
@@ -106,7 +106,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != 0) {
                 blend_moby_animation(resident_moby, 0, 0, scale_game_frames(0x12));
             }
-            resident_moby->state = 0;
+            resident_moby->state = RESIDENT_IDLE_WAIT_TO_REQUEST_DIALOGUE;
         }
         break;
     case RESIDENT_DIALOGUE_ANIMATION_AFTER_COMPLETION_WAIT:
@@ -121,7 +121,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != 2) {
                 blend_moby_animation(resident_moby, 2, 0, scale_game_frames(0x12));
             }
-            resident_moby->state = 2;
+            resident_moby->state = RESIDENT_TIMED_WAIT_TO_RESTORE_IDLE_ANIMATION;
             D_001E63C0.timer = 0;
         }
         break;
@@ -137,7 +137,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != 2) {
                 blend_moby_animation(resident_moby, 2, 0, scale_game_frames(0x12));
             }
-            resident_moby->state = 2;
+            resident_moby->state = RESIDENT_TIMED_WAIT_TO_RESTORE_IDLE_ANIMATION;
             D_001E63C0.timer = 0;
         }
         break;
@@ -153,7 +153,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != 2) {
                 blend_moby_animation(resident_moby, 2, 0, scale_game_frames(0x12));
             }
-            resident_moby->state = 2;
+            resident_moby->state = RESIDENT_TIMED_WAIT_TO_RESTORE_IDLE_ANIMATION;
             D_001E63C0.timer = 0;
         }
         break;
@@ -167,7 +167,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != target_animation) {
                 blend_moby_animation(resident_moby, target_animation, 0, scale_game_frames(0xC));
             }
-            resident_moby->state = 4;
+            resident_moby->state = RESIDENT_DIALOGUE_ANIMATION_AFTER_COMPLETION_WAIT;
         }
         break;
     case RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION:
@@ -178,7 +178,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != target_animation) {
                 blend_moby_animation(resident_moby, target_animation, 0, scale_game_frames(0x12));
             }
-            resident_moby->state = 5;
+            resident_moby->state = RESIDENT_DIALOGUE_ANIMATION_AFTER_START_WAIT;
         }
         break;
     case RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION_BEFORE_TIMED_IDLE_RESTORE:
@@ -189,7 +189,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
             if (resident_moby->anim != target_animation) {
                 blend_moby_animation(resident_moby, target_animation, 0, scale_game_frames(0x12));
             }
-            resident_moby->state = 6;
+            resident_moby->state = RESIDENT_DIALOGUE_ANIMATION_WAIT_TO_RESTORE_TIMED_IDLE;
         }
         break;
     }
