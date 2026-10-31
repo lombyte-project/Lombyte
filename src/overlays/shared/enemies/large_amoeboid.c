@@ -1107,12 +1107,16 @@ extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 int moby_hold_state_if_found(struct Moby *a) __asm__("FUN_L01_002efaf8");
 
 int moby_hold_state_if_found(struct Moby *target_moby) {
+    enum {
+        LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
+        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 0xe
+    };
     int suck_cannon_store_result = store_moby_in_suck_cannon(target_moby);
     if (suck_cannon_store_result == 0) {
-        if (target_moby->state == 0xe)
-            target_moby->state = 1;
+        if (target_moby->state == LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION)
+            target_moby->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
     } else {
-        target_moby->state = 0xe;
+        target_moby->state = LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION;
     }
     return suck_cannon_store_result;
 }
