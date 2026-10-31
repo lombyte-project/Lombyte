@@ -324,7 +324,7 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
         }
         alternate_item_available[8] = 1;
         moby->alpha = 0xFF;
-        moby->state = 1;
+        moby->state = CLANK_TRIGGER_POLL_DIALOGUE;
         break;
     case CLANK_TRIGGER_POLL_DIALOGUE:
         if (vars->unk56 != 0) {
@@ -335,7 +335,7 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
             }
         }
         if (update_npc_dialogue(moby, vars->unk20) != 0) {
-            moby->state = 2;
+            moby->state = CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE;
             vars->unk2C = 3.0f;
         }
         if (vars->unk24 >= 4 && D_L00_0015F5C4 != 6) {
@@ -344,7 +344,7 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
         break;
     case CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE:
         if (D_L00_0015F5C4 != 2) {
-            moby->state = 1;
+            moby->state = CLANK_TRIGGER_POLL_DIALOGUE;
         }
         break;
     }
