@@ -1016,6 +1016,10 @@ extern Pt  l00_health_hud_five_capacity_icon_offsets[] __asm__("D_L00_0017E460")
 s32 draw_health_hud_panel(Hud *hud_element) __asm__("FUN_L00_00239810");
 
 s32 draw_health_hud_panel(Hud *hud_element) {
+    enum {
+        HEALTH_HUD_FIVE_ICON_CAPACITY = 5,
+        HEALTH_HUD_EIGHT_ICON_CAPACITY = 8
+    };
     s32  x;
     s32  y;
     s32  cnt;
@@ -1038,12 +1042,12 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     Pt  *e;
     u8  *visibility_counters;
 
-    if (hero.vehicle_mode == 2)
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK)
         goto out;
     if (hero.state.current == 0x32)
         goto out;
     x = hud_element->x;
-    if (pal_mode != 0)
+    if (pal_mode != FALSE)
         y = health_hud_base_y_offset + 10;
     else
         y = health_hud_base_y_offset + 0x12;
@@ -1070,13 +1074,13 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     mode = hero_max_health;
     if (cnt == 0)
         sel = 0x1E;
-    if (hero.vehicle_mode == 1)
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK)
         mode = hero.health.vehicle_mode_hp;
-    if (mode == 8) {
+    if (mode == HEALTH_HUD_EIGHT_ICON_CAPACITY) {
         tab = l00_health_hud_eight_capacity_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
         second_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
-    } else if (mode == 5) {
+    } else if (mode == HEALTH_HUD_FIVE_ICON_CAPACITY) {
         tab = l00_health_hud_five_capacity_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 32.0f);
         second_panel_half_width = truncate_float_to_s32(ratio_x * 16.0f);
