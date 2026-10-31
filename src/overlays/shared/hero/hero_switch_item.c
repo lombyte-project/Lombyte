@@ -62,7 +62,7 @@ int probe_hero_ledge_edge(Vec4 *ledge_probe_origin, f32 *facing_yaw) {
     up = 1.5f;
     reach = 1.15f;
     min_height = 1.8f;
-    if (hero.vehicle_mode == 1) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         min_height = 0.7f;
         drop = -0.4f;
         fwd = 0.25f;
