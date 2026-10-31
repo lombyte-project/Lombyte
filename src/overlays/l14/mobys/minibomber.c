@@ -651,13 +651,17 @@ void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
         HIT_REACTION_FLASH_RED = 10,
         HIT_REACTION_NONE = 11
     };
+    enum {
+        MINIBOMBER_STATE_INITIALIZE = 0,
+        MINIBOMBER_STATE_DESTROY = 9
+    };
     unsigned char *moby_vars = hit_owner_moby->pvars;
     int            loc0;
     float          damage_amount;
     char          *hit_record;
     int            k;
     float          remaining_health;
-    if (hit_owner_moby->state == 0 || hit_owner_moby->state == 9)
+    if (hit_owner_moby->state == MINIBOMBER_STATE_INITIALIZE || hit_owner_moby->state == MINIBOMBER_STATE_DESTROY)
         return;
     hit_owner_moby->scale = hit_owner_moby->pclass->scale;
     damage_amount = 0.0f;
@@ -671,7 +675,7 @@ void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
     }
     k = FUN_L00_0025a478_c(
         hit_owner_moby, hit_record, moby_vars + 0x20, 0, &loc0, &damage_amount, 0, 4);
-    if (loc0 != 1 && hit_owner_moby->state != 9) {
+    if (loc0 != 1 && hit_owner_moby->state != MINIBOMBER_STATE_DESTROY) {
         remaining_health = *(float *)(moby_vars + 0x20) - damage_amount;
         *(float *)(moby_vars + 0x20) = remaining_health;
         if (remaining_health <= 0.0f)
@@ -694,7 +698,7 @@ void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_DESTROY:
-            hit_owner_moby->state = 9;
+            hit_owner_moby->state = MINIBOMBER_STATE_DESTROY;
             hit_owner_moby->flags &= 0xEFFF;
             moby_vars[0x67] = 0xFA;
             FUN_L00_00257470(hit_owner_moby, 0, -1);
