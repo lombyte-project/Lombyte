@@ -56,23 +56,23 @@ void giant_clank_pad_update(struct Moby *moby) {
     case GIANT_CLANK_PAD_ARM_ACTIVATION:
         /* Fakematch: the second store gives retail's register for moby. */
         if (moby)
-            moby->state = 2;
+            moby->state = GIANT_CLANK_PAD_CHECK_ACTIVATION;
         else
-            moby->state = 2;
+            moby->state = GIANT_CLANK_PAD_CHECK_ACTIVATION;
         return;
     case GIANT_CLANK_PAD_CHECK_ACTIVATION:
         if (hero.ground_moby == moby && hero.air_frames.s == 0 && D_L15_0015F5C4 != 2 &&
             hero.state.current != 0x1d) {
-            if (hero.vehicle_mode == 0) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 try_set_help_message(4, 0x3aa4);
-            } else if (hero.vehicle_mode == 2 && current_level_index != 0x12) {
+            } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && current_level_index != 0x12) {
                 try_set_help_message(4, 0x3aa5);
             }
             if (!(((u32)pad_pressed_lui) & 0x10))
                 return;
             if (D_L15_0015F594 != 4)
                 return;
-            if (hero.vehicle_mode == 2 && current_level_index == 0xf) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && current_level_index == 0xf) {
                 pad = l15_moby_array;
                 pad += *(int *)((u8 *)linked + 0x60);
                 pad->flags |= 1;
@@ -86,7 +86,7 @@ void giant_clank_pad_update(struct Moby *moby) {
                 request_music_track(0, 5);
                 return;
             }
-            if (hero.vehicle_mode != 0)
+            if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT)
                 return;
             pad = l15_moby_array;
             pad += *(int *)((u8 *)linked + 0x60);
