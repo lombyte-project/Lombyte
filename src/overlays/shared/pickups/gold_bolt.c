@@ -71,7 +71,7 @@ extern void           spawn_moving_hero_relative_alpha_fade_particle(
               void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
 extern s32  D_0015ED84;
-extern char D_L01_00167240[];
+extern char camera_pos[] __asm__("D_L01_00167240");
 extern int  D_0015ED84; /* no foreign declaration */
 extern int  cutscene_active __asm__("D_L01_0015F404");
 extern u8   D_0014BEC0[];
@@ -683,7 +683,7 @@ void update_gold_bolt_glow_rings(struct Moby *moby) {
         if (1.0f < scale)
             scale = 1.0f;
     }
-    fast_vec_sub(glow_particle_position, D_L01_00167240, glow_origin_position);
+    fast_vec_sub(glow_particle_position, camera_pos, glow_origin_position);
     fast_vec_normalize(glow_particle_position, glow_particle_position, -0.3f);
     fast_vec_normalize(step, glow_particle_position, 0.1f);
     fast_vec_add(glow_particle_position, glow_particle_position, glow_origin_position);
