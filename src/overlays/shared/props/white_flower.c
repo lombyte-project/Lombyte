@@ -26,13 +26,13 @@ void white_flower_update(struct Moby *moby) {
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case WHITE_FLOWER_INITIALIZE:
-        moby->state = 1;
+        moby->state = WHITE_FLOWER_WAIT_FOR_HIT;
         break;
     case WHITE_FLOWER_WAIT_FOR_HIT:
         if (hit_record != 0 && *(float *)(hit_record + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
-            moby->state = 2;
+            moby->state = WHITE_FLOWER_REMOVE;
         break;
     case WHITE_FLOWER_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
