@@ -10,7 +10,7 @@ void save_card_state_format_pending(void) {
     card_state->card[0].sync_result = 0;
     if (pending < 0) {
         card_state->pending_card = 0;
-        card_state->pending_state = 3;
+        card_state->pending_state = MEMCARD_REQUEST_FORMAT;
     }
     mode_freeze_state = 8;
 }
