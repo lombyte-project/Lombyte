@@ -208,8 +208,8 @@ extern int   l06_shuttle_explosion_spark_timing_random_min_frames __asm__("D_L06
 extern int   l06_shuttle_explosion_spark_timing_base_a_frames __asm__("D_L06_00162148") __attribute__((sda));
 extern int   l06_shuttle_explosion_spark_timing_base_b_frames __asm__("D_L06_0016214C") __attribute__((sda));
 extern int   D_L06_00162150 __attribute__((sda));
-extern int   D_L06_00162154 __attribute__((sda));
-extern int   D_L06_00162158 __attribute__((sda));
+extern int   l06_shuttle_explosion_spark_table_index __asm__("D_L06_00162154") __attribute__((sda));
+extern int   l06_shuttle_explosion_spark_alternate_mode_flag __asm__("D_L06_00162158") __attribute__((sda));
 extern void  random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u8 *
@@ -745,7 +745,7 @@ void spawn_shuttle_explosion_effect(float scale, char *moby, char *pos, char *pu
                     life,
                     size,
                     fade,
-                    D_L06_00162154 + (D_L06_00162158 << 16));
+                    l06_shuttle_explosion_spark_table_index + (l06_shuttle_explosion_spark_alternate_mode_flag << 16));
     }
 }
 
