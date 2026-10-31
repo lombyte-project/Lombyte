@@ -557,9 +557,9 @@ typedef union {
 } V_22a1d0;
 
 extern OvlVec4 coll_hit_pos __asm__("D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
-extern void f2347c0_22a1d0(void) __asm__("FUN_L00_002347c0");
-extern void f233810_22a1d0(void *, void *, f32) __asm__("FUN_L00_00233810");
-extern void f2334d0_22a1d0(void *, void *, f32) __asm__("FUN_L00_002334d0");
+extern void FUN_L00_002347c0(void);
+extern void FUN_L00_00233810(void *, void *, f32);
+extern void FUN_L00_002334d0(void *, void *, f32);
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32  coll3_22a1d0(void *, f32) __asm__("FUN_L00_001f3170");
@@ -579,15 +579,15 @@ s32 resolve_hero_position_collisions(s32 mode) {
     qcopy(&pre_collision_position, &hero.motion.pos.q);
     clear_u64_value(&collision_query_offset);
     if (hero.path_constrain_pending != 0) {
-        f2347c0_22a1d0();
+        FUN_L00_002347c0();
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != 0x11) {
         if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
             if (hero.gravity_mode == 1 || hero.unk1F8 != 0) {
-                f233810_22a1d0(&collision_query_offset, &collision_query_offset, 0.6f);
+                FUN_L00_00233810(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
-                f2334d0_22a1d0(
+                FUN_L00_002334d0(
                     &collision_query_offset, &collision_query_offset, -hero.capsule_bottom);
             }
         } else {

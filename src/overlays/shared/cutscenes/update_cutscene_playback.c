@@ -399,11 +399,11 @@ void             music_pause(int) __asm__("FUN_00216050");
 extern int       update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
 void             fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void             clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-void             f232fe8_298840(void) __asm__("FUN_L00_00232fe8");
+void             FUN_L00_00232fe8(void);
 int              start_cutscene_chunk_read(int) __asm__("FUN_L00_002451b8");
 void             update_world_object_animation(void) __asm__("FUN_00204790");
 void             sound_update(void) __asm__("FUN_0022ca50");
-int              f122298_298840(int) __asm__("FUN_00122298");
+int              FUN_00122298(int);
 extern char      D_L00_0017C440[] NOT_SDA;
 extern float     D_L00_0015F59C;
 void             start_scene(int a) __asm__("FUN_L00_00298840");
@@ -441,7 +441,7 @@ void start_scene(int scene_id) {
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     hero.unk20A5 = 1;
-    f232fe8_298840();
+    FUN_L00_00232fe8();
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags |= 1;
     if (D_L00_001B9CF0.unkEC)
@@ -457,13 +457,13 @@ void start_scene(int scene_id) {
     music_stream_state.queued_secondary_track = D_L00_0016C860_lui.x30;
     while (music_stream_state.secondary.state != 3) {
         sound_update();
-        f122298_298840(0);
+        FUN_00122298(0);
     }
     D_L00_0016C860_lui.x48 = -3;
     continue_audio_stream_if_ready();
     start_cutscene_chunk_read(1);
     for (i = 0; D_L00_0016C860_lui.x48 < i; i--)
-        f122298_298840(0);
+        FUN_00122298(0);
 }
 
 typedef struct {
@@ -506,7 +506,7 @@ extern float     D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18  D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void             select_level_vu_chain(void) __asm__("FUN_002335a0");
-void             f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
+void             FUN_L00_002330d0(void);
 void             set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void             process_menu_entry(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void             music_set_active_track_value(int) __asm__("FUN_L00_00265880");
@@ -542,7 +542,7 @@ void finish_cutscene(void) {
     if (2.0f < hero_candidate_z && absolute_float(hero.motion.pos.f[2] - hero_candidate_z) < 4.5f)
         hero.motion.pos.f[2] = hero_candidate_z;
     hero.unk20A5 = 0;
-    f2330d0_298b18();
+    FUN_L00_002330d0();
     if (D_L00_0016C860_298b18.x46) {
         f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
         if (2.0f < f && absolute_float(D_L00_0016C860_298b18.x18 - f) < 2.0f)
@@ -974,7 +974,7 @@ void movie_exit_to_gameplay(void) {
     s32                        large_count, small_count, gs_address, source, i, j;
     struct ActiveSceneTrigger *active;
     D_L00_0015F5D8 = 1;
-    f122298_298840(0);
+    FUN_00122298(0);
     sceGsSyncPath(0, 0);
     FUN_00122e68_2997c8(count_vsync);
     source = D_L00_00161058_macro;

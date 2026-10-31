@@ -168,7 +168,7 @@ extern char *tresspasser_radial_strip_fixed_fourth_vertex_uv_gp __asm__("D_L02_0
 
 extern void FUN_L02_0020bc88_u(void *, void *, void *, s32, s32) __asm__("FUN_L02_0020bc88");
 
-void            f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
+void append_textured_quad_packet(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
 extern Q_2dae88 l02_tresspasser_textured_quad_packed_vertices[] __asm__("D_L02_001D3310");
 extern int      tresspasser_textured_quad_color_gp __asm__("D_L02_00161B94") __attribute__((sda));
 extern int      tresspasser_quad_first_vertex_uv_gp __asm__("D_L02_00161AAC") __attribute__((sda));
@@ -1129,7 +1129,7 @@ void draw_tresspasser_puzzle_textured_quads(void) {
         vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] =
             tresspasser_textured_quad_color_gp;
         packed_vertices = *vertex_quad_cursor++;
-        f20bc88_2dae88(
+        append_textured_quad_packet(
             &packed_vertices,
             vertex_uvs,
             vertex_colors,

@@ -497,7 +497,7 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4_29ab70;
 
-extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
+extern void FUN_L00_002330d0(void);
 extern void decrement_resource_counter(void) __asm__("FUN_001ff768");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern int  vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
@@ -518,7 +518,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
-    f2330d0_29ab70();
+    FUN_L00_002330d0();
     if (*(int *)(vendor_state_base + 0x40) == 0) {
         transform_vector_by_basis(&world_position,
                                   &vendor_close_hero_local_offset_gp,

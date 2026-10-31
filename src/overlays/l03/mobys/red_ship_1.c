@@ -741,7 +741,7 @@ void red_ship_1_update(char *moby) {
 }
 
 void set_moby_color(char *, int, int, int) __asm__("FUN_L00_002502f0");
-void f250df8_2bad40(char *) __asm__("FUN_L00_00250df8");
+void FUN_L00_00250df8(char *);
 /* Spawns a child effect (moby 0xEB) on the parent: copies its position and rotation, then sets the colour, timers and scale. */
 char *spawn_emitter_child_effect(struct Moby *parent,
                                  int          unused,
@@ -772,7 +772,7 @@ char *spawn_emitter_child_effect(struct Moby *parent,
         *(int *)(child_data + 0x4) = color;
         *(int *)(child_data + 0x8) = secondary_color;
         set_moby_color(child_moby, r, g, b);
-        f250df8_2bad40(child_moby);
+        FUN_L00_00250df8(child_moby);
     }
     return child_moby;
 }
