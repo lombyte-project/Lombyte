@@ -221,14 +221,14 @@ void blarg_ship_update(Ship_5E48 *ship) {
         ship->s34 |= 0x41;
         if (ship->b53 != 0)
             blend_moby_animation(ship, 0, 0, 0);
-        ship->state = 1;
+        ship->state = BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME;
         if (visited52[ship->bB0 + (D_0015ED84 << 4)] != 0xFF)
             break;
         goto del;
     case BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME:
         if (!is_point_inside_clip_volume(&tgt->pos, d->i148))
             break;
-        ship->state = 2;
+        ship->state = BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH;
         if (ship->b53 != 1)
             blend_moby_animation(ship, 1, 0, scale_game_frames(20));
         ship->s34 &= 0xFFBE;
@@ -250,7 +250,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
             blend_moby_animation(ship, 2, 0, scale_game_frames(20));
         ship->pos.z += D_0015ED6C * 4.0f;
         if (fast_vec_dist(&ship->pos, &l10_paths[d->i140]->points[0]) < 0.5f) {
-            ship->state = 3;
+            ship->state = BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH;
             if (ship->b53 != 2)
                 blend_moby_animation(ship, 2, 0, scale_game_frames(10));
         }
@@ -273,14 +273,14 @@ void blarg_ship_update(Ship_5E48 *ship) {
                 d->i158 = n;
             } else {
                 d->i158 = 0;
-                ship->state = 4;
+                ship->state = BLARG_SHIP_STATE_FIRE_AT_TARGET;
                 d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f160 * 60.0f));
             }
         }
         break;
     case BLARG_SHIP_STATE_FIRE_AT_TARGET:
         if (is_point_inside_clip_volume(&(&hero)->motion.pos, d->i1B0)) {
-            ship->state = 6;
+            ship->state = BLARG_SHIP_STATE_FLY_AWAY;
             break;
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
@@ -330,7 +330,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         if (fast_dec_timer(&d->i168)) {
             if (ship->b53 != 2)
                 blend_moby_animation(ship, 2, 0, scale_game_frames(10));
-            ship->state = 5;
+            ship->state = BLARG_SHIP_STATE_FIRE_COOLDOWN;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f164 * 60.0f));
         }
         qcopy(&B, &l10_paths[d->i144]->points[d->i158]);
@@ -345,7 +345,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         break;
     case BLARG_SHIP_STATE_FIRE_COOLDOWN:
         if (is_point_inside_clip_volume(&(&hero)->motion.pos, d->i1B0)) {
-            ship->state = 6;
+            ship->state = BLARG_SHIP_STATE_FLY_AWAY;
             break;
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
@@ -371,7 +371,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         if (fast_dec_timer(&d->i168)) {
             blend_moby_animation(ship, 3, 0, scale_game_frames(10));
             ship->f58 = blarg_ship_firing_animation_speed_gp;
-            ship->state = 4;
+            ship->state = BLARG_SHIP_STATE_FIRE_AT_TARGET;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f160 * 60.0f));
         }
         qcopy(&B, &l10_paths[d->i144]->points[d->i158]);
@@ -399,17 +399,17 @@ void blarg_ship_update(Ship_5E48 *ship) {
         if (!(ship->b70 & 2))
             break;
         pre_hit_state = ship->bBC;
-        if (pre_hit_state == 4) {
+        if (pre_hit_state == BLARG_SHIP_STATE_FIRE_AT_TARGET) {
             blend_moby_animation(ship, 3, 0, scale_game_frames(10));
             ship->f58 = blarg_ship_firing_animation_speed_gp;
             ship->state = pre_hit_state;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f160 * 60.0f));
-        } else if (pre_hit_state == 6) {
+        } else if (pre_hit_state == BLARG_SHIP_STATE_FLY_AWAY) {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
             ship->state = pre_hit_state;
         } else {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
-            ship->state = 5;
+            ship->state = BLARG_SHIP_STATE_FIRE_COOLDOWN;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f164 * 60.0f));
         }
         break;
