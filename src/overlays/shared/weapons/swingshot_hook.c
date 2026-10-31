@@ -58,6 +58,9 @@ void swingshot_hook_update(unsigned char *hook_moby) {
     enum {
         MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
     };
+    enum {
+        MOBY_STATE_REMOVAL_PENDING = 0xFD
+    };
     unsigned char **hook_vars;
     struct Moby    *owner_moby;
     if (hook_moby == 0)
@@ -67,7 +70,7 @@ void swingshot_hook_update(unsigned char *hook_moby) {
         return;
     owner_moby = hook_vars[0];
     if (owner_moby == 0 || owner_moby->oclass != 0xD0 || owner_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
-        owner_moby->state == 0xFD ||
+        owner_moby->state == MOBY_STATE_REMOVAL_PENDING ||
         *(unsigned char **)(((unsigned char *)owner_moby->pvars) + 0x14) != hook_moby) {
         goto kill;
     }
