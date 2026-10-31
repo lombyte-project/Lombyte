@@ -83,14 +83,14 @@ void two_door_gate_update(struct Moby *moby) {
         door_vars = gate_vars->right->pvars;
         *(u8 **)(door_vars + 8) = door_vars + 0x20;
         *(u32 *)(door_vars + 0x5C) |= 1;
-        moby->state = 1;
+        moby->state = GATE_WAIT_FOR_HERO_TRIGGER;
         break;
     }
     case GATE_WAIT_FOR_HERO_TRIGGER:
         if (vector_distance_xy(&moby->pos.x, &hero.motion.pos.f[0]) < 12.0f &&
             is_point_inside_clip_volume(&hero.motion.pos, gate_vars->unk10) != 0) {
             gate_vars->t = 0.0f;
-            moby->state = 2;
+            moby->state = GATE_RAISE_DOORS;
             FUN_0022da68(0, 4, gate_vars->left);
         }
         break;
@@ -110,7 +110,7 @@ void two_door_gate_update(struct Moby *moby) {
         update_entity(gate_vars->right);
         if (gate_vars->t >= 1.0f) {
             gate_vars->t = 0.0f;
-            moby->state = 3;
+            moby->state = GATE_ZERO_DOOR_Y_ROTATION;
         }
         break;
     case GATE_ZERO_DOOR_Y_ROTATION: {
@@ -128,7 +128,7 @@ void two_door_gate_update(struct Moby *moby) {
         update_entity(gate_vars->right);
         if (gate_vars->t >= 1.0f) {
             gate_vars->t = 0.0f;
-            moby->state = 4;
+            moby->state = GATE_TILT_DOORS_APART;
         }
         break;
     }
@@ -149,7 +149,7 @@ void two_door_gate_update(struct Moby *moby) {
         update_entity(gate_vars->right);
         if (gate_vars->t >= 1.0f) {
             gate_vars->t = 0.0f;
-            moby->state = 5;
+            moby->state = GATE_OPEN_IDLE;
         }
         break;
     }
