@@ -146,7 +146,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
     pickup_vars = (AmmoPickup *)pickup_moby->pvars;
     FUN_001f9740_2c53c0(&pickup_vars->timer);
     state = pickup_moby->state;
-    if (state == 1 || state == 4 || state == 3) {
+    if (state == AMMO_PICKUP_WAIT_FOR_COLLECTION || state == AMMO_PICKUP_RESTORE_SCALE || state == AMMO_PICKUP_PULSE_ALPHA) {
         magnitude = FUN_001f9af0_2c53c0(&pickup_vars->velocity);
         if (magnitude != 0.0f) {
             qcopy(&position, &pickup_moby->pos);
@@ -170,7 +170,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
     }
     switch (pickup_moby->state) {
     case AMMO_PICKUP_INITIALIZE:
-        pickup_moby->state = 1;
+        pickup_moby->state = AMMO_PICKUP_WAIT_FOR_COLLECTION;
         break;
     case AMMO_PICKUP_WAIT_FOR_COLLECTION: {
         struct Hero *player;
@@ -237,7 +237,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
             }
             account_idx = pickup_vars->weapon;
             weapon_ammo_pickup_totals[account_idx] += weapon_ammo_counts[account_idx] - before;
-            pickup_moby->state = 2;
+            pickup_moby->state = AMMO_PICKUP_COLLECTED;
             pickup_moby->scale *= frame_scale_macro * 0.20000005f + 1.0f;
             clear_u64_value(&pickup_vars->velocity);
             elapsed = D_L00_0015F5CC_macro - D_L00_00161838_macro;
@@ -253,7 +253,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         if (pickup_moby->alpha < 0xFF)
             ++pickup_moby->alpha;
         if (jet_distance(pickup_moby, hero.moby) <= -0.2f) {
-            pickup_moby->state = 3;
+            pickup_moby->state = AMMO_PICKUP_PULSE_ALPHA;
             pickup_vars->recovery_timer = FUN_001f96f8_2c53c0(60);
         }
         return;
@@ -310,12 +310,12 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         approach_value(value_ptr, target, (float)(128 / random));
         pickup_moby->alpha = FUN_001fa6d0_2c53c0(*value_ptr);
         if (jet_distance(pickup_moby, hero.moby) >= 0.0f) {
-            pickup_moby->state = 1;
+            pickup_moby->state = AMMO_PICKUP_WAIT_FOR_COLLECTION;
             return;
         }
         idx = pickup_vars->weapon;
         if (weapon_ammo_counts[idx] < D_L00_001C40B0[idx].hE) {
-            pickup_moby->state = 1;
+            pickup_moby->state = AMMO_PICKUP_WAIT_FOR_COLLECTION;
         }
         return;
     }
@@ -329,7 +329,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         remaining = (target - current) / target;
         if (remaining < 0.01f) {
             pickup_moby->scale = target;
-            pickup_moby->state = 1;
+            pickup_moby->state = AMMO_PICKUP_WAIT_FOR_COLLECTION;
             pickup_moby->collision = pickup_moby->pclass->collision;
         }
         break;
