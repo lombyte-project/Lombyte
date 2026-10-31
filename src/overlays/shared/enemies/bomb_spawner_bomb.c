@@ -80,6 +80,10 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
     enum {
         SPAWNER_CHILD_STATE_INITIAL = 0
     };
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     Vec4         pos;
     Vec4        *spawn_position_source;
     Spawner     *spawner_data;
@@ -107,7 +111,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
             continue;
         }
         current_moby = &D_L03_0015FFD8_gp[pooled_child_moby_index];
-        if (current_moby != NULL && current_moby->state != 0xFE && current_moby->state != 0xFD) {
+        if (current_moby != NULL && current_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && current_moby->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             spawner_data->live++;
             continue;
         }
@@ -172,8 +176,8 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         }
     }
     for (current_moby = D_L03_0015FFE4; current_moby != NULL; current_moby = current_moby->next) {
-        if (current_moby->oclass == 0x221 && current_moby->state != 0xFE &&
-            current_moby->state != 0xFD) {
+        if (current_moby->oclass == 0x221 && current_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+            current_moby->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             spawner_data->live++;
         }
     }
