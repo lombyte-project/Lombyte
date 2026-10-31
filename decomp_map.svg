@@ -490,7 +490,7 @@
 <rect x="377.21" y="218" width="1.23" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/devastator.c: 4/4 functions matching C, 5,560/5,560 B</title></rect>
 <rect x="379.44" y="218" width="2.04" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/enemies/plasmabot.c: 17/17 functions matching C, 9,204/9,204 B</title></rect>
 <rect x="382.48" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/visibomb.c: 1/1 functions matching C, 1,020/1,020 B</title></rect>
-<rect x="383.71" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/update_linked_moby_states.c: 1/1 functions matching C, 456/456 B</title></rect>
+<rect x="383.71" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/linked_moby_states_update.c: 1/1 functions matching C, 456/456 B</title></rect>
 <rect x="384.81" y="218" width="0.93" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/thruster_pack_flame.c: 4/4 functions matching C, 4,208/4,208 B</title></rect>
 <rect x="386.75" y="218" width="1.19" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/visibomb_missile.c: 7/7 functions matching C, 5,348/5,348 B</title></rect>
 <rect x="388.93" y="218" width="0.69" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/taunter.c: 4/4 functions matching C, 3,108/3,108 B</title></rect>
@@ -522,7 +522,7 @@
 <rect x="429.75" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/enemies/billboard_projectile.c: 2/2 functions matching C, 1,168/1,168 B</title></rect>
 <rect x="431.01" y="218" width="0.83" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/glove_of_doom_bomb.c: 2/2 functions matching C, 3,732/3,732 B</title></rect>
 <rect x="432.84" y="218" width="0.91" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/blaster_shot.c: 3/3 functions matching C, 4,080/4,080 B</title></rect>
-<rect x="434.75" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/remove_moby_when_near_hero.c: 1/1 functions matching C, 128/128 B</title></rect>
+<rect x="434.75" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/remove_when_near_hero_update.c: 1/1 functions matching C, 128/128 B</title></rect>
 <rect x="435.77" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/trackdrive_left.c: 1/1 functions matching C, 44/44 B</title></rect>
 <rect x="436.78" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/emit_sine_modulated_rgba_draw_packet.c: 2/2 functions matching C, 368/368 B</title></rect>
 <rect x="437.87" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/weapons/morphoray_chicken_feather.c: 1/1 functions matching C, 324/324 B</title></rect>
@@ -556,7 +556,7 @@
 <rect x="488.56" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/cutscenes/fred_1.c: 1/1 functions matching C, 112/112 B</title></rect>
 <rect x="489.58" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/cutscenes/qwark_rilgar.c: 1/1 functions matching C, 1,304/1,304 B</title></rect>
 <rect x="490.87" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/escalator.c: 1/1 functions matching C, 864/864 B</title></rect>
-<rect x="492.07" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/update_falling_moby.c: 1/1 functions matching C, 224/224 B</title></rect>
+<rect x="492.07" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/falling_moby_update.c: 1/1 functions matching C, 224/224 B</title></rect>
 <rect x="493.11" y="218" width="0.44" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/enemies/plasmabot_death_debris.c: 3/3 functions matching C, 1,972/1,972 B</title></rect>
 <rect x="494.55" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/red_orb.c: 3/3 functions matching C, 604/604 B</title></rect>
 <rect x="495.69" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/vendor/vendor_orb.c: 1/1 functions matching C, 216/216 B</title></rect>
@@ -591,7 +591,7 @@
 <rect x="541.25" y="218" width="0.71" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/camera/follow_camera_update.c: 6/6 functions matching C, 3,220/3,220 B</title></rect>
 <rect x="542.96" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/updraft_vent.c: 2/2 functions matching C, 1,560/1,560 B</title></rect>
 <rect x="544.31" y="218" width="0.74" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/camera/hero_aligned_camera.c: 7/7 functions matching C, 3,340/3,340 B</title></rect>
-<rect x="546.05" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/moby_update_draw_only.c: 1/1 functions matching C, 76/76 B</title></rect>
+<rect x="546.05" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/draw_only_moby_update.c: 1/1 functions matching C, 76/76 B</title></rect>
 <rect x="547.07" y="218" width="0.50" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/pickups/gadget_pickup.c: 3/3 functions matching C, 2,240/2,240 B</title></rect>
 <rect x="548.56" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/ripple_strips.c: 1/1 functions matching C, 100/100 B</title></rect>
 <rect x="549.59" y="218" width="0.52" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/camera/orbit_camera.c: 8/8 functions matching C, 2,332/2,332 B</title></rect>
@@ -615,7 +615,7 @@
 <rect x="577.15" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/pickups/buried_bolts.c: 1/1 functions matching C, 520/520 B</title></rect>
 <rect x="578.27" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/group_rotator.c: 1/1 functions matching C, 1,120/1,120 B</title></rect>
 <rect x="579.52" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/moby_state_trigger.c: 3/3 functions matching C, 1,168/1,168 B</title></rect>
-<rect x="580.78" y="218" width="0.95" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/vehicles/gunship_follow_path.c: 2/2 functions matching C, 4,280/4,280 B</title></rect>
+<rect x="580.78" y="218" width="0.95" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/vehicles/gunship.c: 2/2 functions matching C, 4,280/4,280 B</title></rect>
 <rect x="582.73" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/directional_spark_emitter.c: 1/1 functions matching C, 1,380/1,380 B</title></rect>
 <rect x="584.03" y="218" width="0.70" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/camera/path_flythrough_camera.c: 5/5 functions matching C, 3,168/3,168 B</title></rect>
 <rect x="585.74" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/grindrail.c: 1/1 functions matching C, 1,400/1,400 B</title></rect>
@@ -625,7 +625,7 @@
 <rect x="591.15" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/initialize_energy_sphere_holder_vars.c: 2/2 functions matching C, 236/236 B</title></rect>
 <rect x="592.20" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/respawn_volume.c: 1/1 functions matching C, 392/392 B</title></rect>
 <rect x="593.29" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/energy_sphere.c: 2/2 functions matching C, 700/700 B</title></rect>
-<rect x="594.45" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/update_moby_draw_registration.c: 1/1 functions matching C, 112/112 B</title></rect>
+<rect x="594.45" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/moby_draw_registration_update.c: 1/1 functions matching C, 112/112 B</title></rect>
 <rect x="595.47" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/hydrodisplacer_faucet.c: 2/2 functions matching C, 668/668 B</title></rect>
 <rect x="596.62" y="218" width="0.41" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/rock.c: 2/2 functions matching C, 1,828/1,828 B</title></rect>
 <rect x="598.03" y="218" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/vehicles/hoverboard.c: 1/1 functions matching C, 920/920 B</title></rect>
@@ -714,7 +714,7 @@
 <rect x="495.17" y="306" width="2.39" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/mobys/bounded_scroll_layers.c: 2/2 functions matching C, 468/468 B</title></rect>
 <rect x="498.56" y="306" width="15.89" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/mobys/bomber_jet.c: 2/2 functions matching C, 3,116/3,116 B</title></rect>
 <rect x="515.44" y="306" width="4.41" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/mobys/water_lily.c: 2/2 functions matching C, 864/864 B</title></rect>
-<rect x="520.85" y="306" width="4.77" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/mobys/rising_particle_and_debris_emitter.c: 1/1 functions matching C, 936/936 B</title></rect>
+<rect x="520.85" y="306" width="4.77" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/mobys/rising_debris_emitter.c: 1/1 functions matching C, 936/936 B</title></rect>
 <rect x="526.62" y="306" width="7.51" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/mobys/falling_rock.c: 2/2 functions matching C, 1,472/1,472 B</title></rect>
 <rect x="535.13" y="306" width="3.00" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/mobys/piston_platform.c: 1/1 functions matching C, 588/588 B</title></rect>
 <rect x="539.13" y="306" width="5.06" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/mobys/rock_formation.c: 1/1 functions matching C, 992/992 B</title></rect>
@@ -803,7 +803,7 @@
 <rect x="604.60" y="394" width="3.67" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/mobys/path_mover_spawner.c: 2/2 functions matching C, 740/740 B</title></rect>
 <rect x="609.27" y="394" width="10.43" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/mobys/big_al.c: 1/1 functions matching C, 2,104/2,104 B</title></rect>
 <rect x="620.70" y="394" width="6.98" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/mobys/robot_qwark.c: 1/1 functions matching C, 1,408/1,408 B</title></rect>
-<rect x="628.68" y="394" width="0.61" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/update_moby_draw_callback.c: 1/1 functions matching C, 124/124 B</title></rect>
+<rect x="628.68" y="394" width="0.61" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/mobys/moby_draw_callback_update.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="630.30" y="394" width="1.25" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/props/garage_door.c: 1/1 functions matching C, 252/252 B</title></rect>
 <rect x="632.55" y="394" width="7.58" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/mobys/rail_lift.c: 4/4 functions matching C, 1,528/1,528 B</title></rect>
 <rect x="641.13" y="394" width="16.11" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/mobys/help_hints.c: 1/1 functions matching C, 3,248/3,248 B</title></rect>
@@ -818,7 +818,7 @@
 <rect x="44.00" y="438" width="56.67" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/butterfly_swarm.c: 8/8 functions matching C, 5,692/5,692 B</title></rect>
 <rect x="101.67" y="438" width="1.23" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/draw_sky_shells_with_gif_paging.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="103.91" y="438" width="51.42" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/leg_walker.c: 8/8 functions matching C, 5,164/5,164 B</title></rect>
-<rect x="156.32" y="438" width="2.07" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/moby_random_interval_animation.c: 1/1 functions matching C, 208/208 B</title></rect>
+<rect x="156.32" y="438" width="2.07" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/random_interval_animation.c: 1/1 functions matching C, 208/208 B</title></rect>
 <rect x="159.39" y="438" width="73.80" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/big_axebot.c: 5/5 functions matching C, 7,412/7,412 B</title></rect>
 <rect x="234.19" y="438" width="95.58" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/circular_saw_enemy.c: 7/7 functions matching C, 9,600/9,600 B</title></rect>
 <rect x="330.77" y="438" width="9.76" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/spawn_smoke_puff_trail_with_endpoint_bursts.c: 1/1 functions matching C, 980/980 B</title></rect>
@@ -829,7 +829,7 @@
 <rect x="486.16" y="438" width="6.97" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/floating_platform.c: 1/1 functions matching C, 700/700 B</title></rect>
 <rect x="494.13" y="438" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/transport_ship.c: 1/1 functions matching C, 28/28 B</title></rect>
 <rect x="495.41" y="438" width="83.44" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/woodcut_bot.c: 3/3 functions matching C, 8,380/8,380 B</title></rect>
-<rect x="579.84" y="438" width="1.63" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/moby_translation_delta_matrix.c: 1/1 functions matching C, 164/164 B</title></rect>
+<rect x="579.84" y="438" width="1.63" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/translation_delta_matrix.c: 1/1 functions matching C, 164/164 B</title></rect>
 <rect x="582.48" y="438" width="3.23" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/path_progress_mover.c: 1/1 functions matching C, 324/324 B</title></rect>
 <rect x="586.70" y="438" width="15.65" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/leaf.c: 1/1 functions matching C, 1,572/1,572 B</title></rect>
 <rect x="603.35" y="438" width="6.73" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/mobys/upper_door.c: 2/2 functions matching C, 676/676 B</title></rect>
@@ -863,13 +863,13 @@
 <rect x="555.71" y="482" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/render_level_water_grids.c: 1/1 functions matching C, 36/36 B</title></rect>
 <rect x="556.87" y="482" width="6.22" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/electric_gate.c: 2/2 functions matching C, 1,420/1,420 B</title></rect>
 <rect x="564.09" y="482" width="3.43" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/fog_zone.c: 1/1 functions matching C, 784/784 B</title></rect>
-<rect x="568.52" y="482" width="3.28" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/triggered_moby_slide_and_lowering.c: 1/1 functions matching C, 748/748 B</title></rect>
+<rect x="568.52" y="482" width="3.28" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/triggered_slide.c: 1/1 functions matching C, 748/748 B</title></rect>
 <rect x="572.80" y="482" width="5.06" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/pipe_mounted_grating.c: 1/1 functions matching C, 1,156/1,156 B</title></rect>
 <rect x="578.86" y="482" width="2.52" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/rising_gate.c: 1/1 functions matching C, 576/576 B</title></rect>
-<rect x="582.39" y="482" width="6.57" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/triggered_particle_spray_emitter.c: 1/1 functions matching C, 1,500/1,500 B</title></rect>
+<rect x="582.39" y="482" width="6.57" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/triggered_spray_emitter.c: 1/1 functions matching C, 1,500/1,500 B</title></rect>
 <rect x="589.96" y="482" width="10.77" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/elevator_with_button.c: 3/3 functions matching C, 2,460/2,460 B</title></rect>
 <rect x="601.73" y="482" width="2.12" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/ocean_rilgar.c: 2/2 functions matching C, 484/484 B</title></rect>
-<rect x="604.85" y="482" width="4.78" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/triggered_moby_motion_and_manipulator_angle.c: 1/1 functions matching C, 1,092/1,092 B</title></rect>
+<rect x="604.85" y="482" width="4.78" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/triggered_motion.c: 1/1 functions matching C, 1,092/1,092 B</title></rect>
 <rect x="610.63" y="482" width="1.61" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/triggered_moby_yaw.c: 1/1 functions matching C, 368/368 B</title></rect>
 <rect x="613.24" y="482" width="12.89" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/hoverboard_girl.c: 3/3 functions matching C, 2,944/2,944 B</title></rect>
 <rect x="627.14" y="482" width="5.85" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/mobys/qwarks_bouncer.c: 1/1 functions matching C, 1,336/1,336 B</title></rect>
@@ -938,13 +938,13 @@
 <rect x="163.41" y="570" width="15.74" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/bombomatic.c: 2/2 functions matching C, 2,060/2,060 B</title></rect>
 <rect x="180.15" y="570" width="7.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/bomb.c: 1/1 functions matching C, 968/968 B</title></rect>
 <rect x="188.54" y="570" width="20.51" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/water.c: 3/3 functions matching C, 2,684/2,684 B</title></rect>
-<rect x="210.05" y="570" width="8.92" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/linked_state_sliding_platform.c: 1/1 functions matching C, 1,168/1,168 B</title></rect>
+<rect x="210.05" y="570" width="8.92" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/linked_sliding_platform.c: 1/1 functions matching C, 1,168/1,168 B</title></rect>
 <rect x="219.97" y="570" width="1.13" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/ocean_umbris.c: 1/1 functions matching C, 148/148 B</title></rect>
 <rect x="222.10" y="570" width="15.13" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/fading_ring_effect.c: 4/4 functions matching C, 1,980/1,980 B</title></rect>
 <rect x="238.23" y="570" width="7.21" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/growing_ballistic_moby.c: 2/2 functions matching C, 944/944 B</title></rect>
 <rect x="246.44" y="570" width="75.60" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/sharkigator.c: 14/14 functions matching C, 9,896/9,896 B</title></rect>
-<rect x="323.05" y="570" width="16.90" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/command_triggered_falling_platform.c: 1/1 functions matching C, 2,212/2,212 B</title></rect>
-<rect x="340.94" y="570" width="5.65" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/hero_triggered_falling_platform.c: 1/1 functions matching C, 740/740 B</title></rect>
+<rect x="323.05" y="570" width="16.90" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/command_falling_platform.c: 1/1 functions matching C, 2,212/2,212 B</title></rect>
+<rect x="340.94" y="570" width="5.65" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/hero_falling_platform.c: 1/1 functions matching C, 740/740 B</title></rect>
 <rect x="347.60" y="570" width="20.54" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/snagglebeast_effects.c: 5/5 functions matching C, 2,688/2,688 B</title></rect>
 <rect x="369.13" y="570" width="200.20" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/snagglebeast.c: 18/18 functions matching C, 26,204/26,204 B</title></rect>
 <rect x="570.33" y="570" width="12.41" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/mobys/homing_mine.c: 1/1 functions matching C, 1,624/1,624 B</title></rect>
@@ -1052,7 +1052,7 @@
 <rect x="228.17" y="702" width="24.61" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/mobys/data_processor_linked_effect.c: 2/2 functions matching C, 2,332/2,332 B</title></rect>
 <rect x="253.78" y="702" width="10.00" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/mobys/jitter_strand_grid.c: 1/1 functions matching C, 948/948 B</title></rect>
 <rect x="264.78" y="702" width="6.67" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/mobys/path_spark_effect.c: 1/1 functions matching C, 632/632 B</title></rect>
-<rect x="272.45" y="702" width="5.32" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/mobys/block_cave.c: 1/1 functions matching C, 504/504 B</title></rect>
+<rect x="272.45" y="702" width="5.32" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/mobys/tunnel_barrier.c: 1/1 functions matching C, 504/504 B</title></rect>
 <rect x="278.77" y="702" width="40.99" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/mobys/screamer.c: 3/3 functions matching C, 3,884/3,884 B</title></rect>
 <rect x="320.75" y="702" width="74.38" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/mobys/darter.c: 3/3 functions matching C, 7,048/7,048 B</title></rect>
 <rect x="396.13" y="702" width="118.44" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/mobys/toxic_crab.c: 4/4 functions matching C, 11,224/11,224 B</title></rect>
@@ -1217,7 +1217,7 @@
 <rect x="597.16" y="878" width="7.78" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/mobys/bouncing_spark.c: 2/2 functions matching C, 1,992/1,992 B</title></rect>
 <rect x="605.94" y="878" width="0.48" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/mobys/audio_stream_callback_keeper.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="607.42" y="878" width="3.31" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/mobys/unlock_sequence_controller.c: 3/3 functions matching C, 848/848 B</title></rect>
-<rect x="611.73" y="878" width="5.81" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/mobys/morphoray.c: 3/3 functions matching C, 1,488/1,488 B</title></rect>
+<rect x="611.73" y="878" width="5.81" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/mobys/morphoray_pickup.c: 3/3 functions matching C, 1,488/1,488 B</title></rect>
 <rect x="618.54" y="878" width="4.65" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/mobys/unfolding_column.c: 2/2 functions matching C, 1,192/1,192 B</title></rect>
 <rect x="624.20" y="878" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/mobys/unfolding_column_piece.c: 1/1 functions matching C, 88/88 B</title></rect>
 <rect x="625.54" y="878" width="3.41" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/mobys/button.c: 1/1 functions matching C, 872/872 B</title></rect>

@@ -3372,7 +3372,7 @@
           "bytes_matching_c": 1020
         },
         {
-          "file": "src/overlays/shared/weapons/update_linked_moby_states.c",
+          "file": "src/overlays/shared/weapons/linked_moby_states_update.c",
           "functions": 1,
           "matching_c": 1,
           "bytes_total": 456,
@@ -3596,7 +3596,7 @@
           "bytes_matching_c": 4080
         },
         {
-          "file": "src/overlays/shared/mobys/remove_moby_when_near_hero.c",
+          "file": "src/overlays/shared/mobys/remove_when_near_hero_update.c",
           "functions": 1,
           "matching_c": 1,
           "bytes_total": 128,
@@ -3834,7 +3834,7 @@
           "bytes_matching_c": 864
         },
         {
-          "file": "src/overlays/shared/mobys/update_falling_moby.c",
+          "file": "src/overlays/shared/mobys/falling_moby_update.c",
           "functions": 1,
           "matching_c": 1,
           "bytes_total": 224,
@@ -4079,7 +4079,7 @@
           "bytes_matching_c": 3340
         },
         {
-          "file": "src/overlays/shared/mobys/moby_update_draw_only.c",
+          "file": "src/overlays/shared/mobys/draw_only_moby_update.c",
           "functions": 1,
           "matching_c": 1,
           "bytes_total": 76,
@@ -4247,7 +4247,7 @@
           "bytes_matching_c": 1168
         },
         {
-          "file": "src/overlays/shared/vehicles/gunship_follow_path.c",
+          "file": "src/overlays/shared/vehicles/gunship.c",
           "functions": 2,
           "matching_c": 2,
           "bytes_total": 4280,
@@ -4317,7 +4317,7 @@
           "bytes_matching_c": 700
         },
         {
-          "file": "src/overlays/shared/mobys/update_moby_draw_registration.c",
+          "file": "src/overlays/shared/mobys/moby_draw_registration_update.c",
           "functions": 1,
           "matching_c": 1,
           "bytes_total": 112,
@@ -4901,7 +4901,7 @@
             "bytes_matching_c": 864
           },
           {
-            "file": "src/overlays/l01/mobys/rising_particle_and_debris_emitter.c",
+            "file": "src/overlays/l01/mobys/rising_debris_emitter.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 936,
@@ -5484,7 +5484,7 @@
             "bytes_matching_c": 1408
           },
           {
-            "file": "src/overlays/shared/mobys/update_moby_draw_callback.c",
+            "file": "src/overlays/shared/mobys/moby_draw_callback_update.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 124,
@@ -5569,7 +5569,7 @@
             "bytes_matching_c": 5164
           },
           {
-            "file": "src/overlays/l04/mobys/moby_random_interval_animation.c",
+            "file": "src/overlays/l04/mobys/random_interval_animation.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 208,
@@ -5646,7 +5646,7 @@
             "bytes_matching_c": 8380
           },
           {
-            "file": "src/overlays/l04/mobys/moby_translation_delta_matrix.c",
+            "file": "src/overlays/l04/mobys/translation_delta_matrix.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 164,
@@ -5864,7 +5864,7 @@
             "bytes_matching_c": 784
           },
           {
-            "file": "src/overlays/l05/mobys/triggered_moby_slide_and_lowering.c",
+            "file": "src/overlays/l05/mobys/triggered_slide.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 748,
@@ -5885,7 +5885,7 @@
             "bytes_matching_c": 576
           },
           {
-            "file": "src/overlays/l05/mobys/triggered_particle_spray_emitter.c",
+            "file": "src/overlays/l05/mobys/triggered_spray_emitter.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 1500,
@@ -5906,7 +5906,7 @@
             "bytes_matching_c": 484
           },
           {
-            "file": "src/overlays/l05/mobys/triggered_moby_motion_and_manipulator_angle.c",
+            "file": "src/overlays/l05/mobys/triggered_motion.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 1092,
@@ -6349,7 +6349,7 @@
             "bytes_matching_c": 2684
           },
           {
-            "file": "src/overlays/l07/mobys/linked_state_sliding_platform.c",
+            "file": "src/overlays/l07/mobys/linked_sliding_platform.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 1168,
@@ -6384,14 +6384,14 @@
             "bytes_matching_c": 9896
           },
           {
-            "file": "src/overlays/l07/mobys/command_triggered_falling_platform.c",
+            "file": "src/overlays/l07/mobys/command_falling_platform.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 2212,
             "bytes_matching_c": 2212
           },
           {
-            "file": "src/overlays/l07/mobys/hero_triggered_falling_platform.c",
+            "file": "src/overlays/l07/mobys/hero_falling_platform.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 740,
@@ -7087,7 +7087,7 @@
             "bytes_matching_c": 632
           },
           {
-            "file": "src/overlays/l10/mobys/block_cave.c",
+            "file": "src/overlays/l10/mobys/tunnel_barrier.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 504,
@@ -8162,7 +8162,7 @@
             "bytes_matching_c": 848
           },
           {
-            "file": "src/overlays/l14/mobys/morphoray.c",
+            "file": "src/overlays/l14/mobys/morphoray_pickup.c",
             "functions": 3,
             "matching_c": 3,
             "bytes_total": 1488,

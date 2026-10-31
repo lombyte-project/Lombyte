@@ -32068,7 +32068,7 @@
       }
     },
     {
-      "name": "level_04/mobys/moby_random_interval_animation",
+      "name": "level_04/mobys/random_interval_animation",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "208",
@@ -33575,7 +33575,7 @@
       }
     },
     {
-      "name": "shared/weapons/update_linked_moby_states",
+      "name": "shared/weapons/linked_moby_states_update",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "456",
@@ -37073,7 +37073,7 @@
       }
     },
     {
-      "name": "shared/mobys/remove_moby_when_near_hero",
+      "name": "shared/mobys/remove_when_near_hero_update",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "128",
@@ -38818,7 +38818,7 @@
       }
     },
     {
-      "name": "level_04/mobys/moby_translation_delta_matrix",
+      "name": "level_04/mobys/translation_delta_matrix",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "164",
@@ -42236,7 +42236,7 @@
       }
     },
     {
-      "name": "level_03/mobys/update_moby_draw_callback",
+      "name": "level_03/mobys/moby_draw_callback_update",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "124",
@@ -42561,7 +42561,7 @@
       }
     },
     {
-      "name": "level_10/mobys/block_cave",
+      "name": "level_10/mobys/tunnel_barrier",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "504",
@@ -42737,7 +42737,7 @@
       }
     },
     {
-      "name": "shared/mobys/update_falling_moby",
+      "name": "shared/mobys/falling_moby_update",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "224",
@@ -48524,7 +48524,7 @@
       }
     },
     {
-      "name": "shared/mobys/moby_update_draw_only",
+      "name": "shared/mobys/draw_only_moby_update",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "76",
@@ -53322,7 +53322,7 @@
       }
     },
     {
-      "name": "shared/vehicles/gunship_follow_path",
+      "name": "shared/vehicles/gunship",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "4280",
@@ -54386,7 +54386,7 @@
       }
     },
     {
-      "name": "shared/mobys/update_moby_draw_registration",
+      "name": "shared/mobys/moby_draw_registration_update",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "112",
@@ -54929,7 +54929,7 @@
       }
     },
     {
-      "name": "level_01/mobys/rising_particle_and_debris_emitter",
+      "name": "level_01/mobys/rising_debris_emitter",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "936",
@@ -58123,7 +58123,7 @@
       }
     },
     {
-      "name": "level_14/mobys/morphoray",
+      "name": "level_14/mobys/morphoray_pickup",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1488",
@@ -61710,7 +61710,7 @@
       }
     },
     {
-      "name": "level_07/mobys/linked_state_sliding_platform",
+      "name": "level_07/mobys/linked_sliding_platform",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1168",
@@ -62229,7 +62229,7 @@
       }
     },
     {
-      "name": "level_05/mobys/triggered_moby_slide_and_lowering",
+      "name": "level_05/mobys/triggered_slide",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "748",
@@ -63039,7 +63039,7 @@
       }
     },
     {
-      "name": "level_07/mobys/command_triggered_falling_platform",
+      "name": "level_07/mobys/command_falling_platform",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "2212",
@@ -63199,7 +63199,7 @@
       }
     },
     {
-      "name": "level_07/mobys/hero_triggered_falling_platform",
+      "name": "level_07/mobys/hero_falling_platform",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "740",
@@ -63731,7 +63731,7 @@
       }
     },
     {
-      "name": "level_05/mobys/triggered_particle_spray_emitter",
+      "name": "level_05/mobys/triggered_spray_emitter",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1500",
@@ -63925,7 +63925,7 @@
       }
     },
     {
-      "name": "level_05/mobys/triggered_moby_motion_and_manipulator_angle",
+      "name": "level_05/mobys/triggered_motion",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1092",
