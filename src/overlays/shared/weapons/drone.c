@@ -351,7 +351,7 @@ void drone_update(struct Moby *updated_moby) __asm__("FUN_L00_002ce358");
 
 /* Moby class 479 */
 void drone_update(struct Moby *updated_moby) {
-    DroneVars   *drone_vars = (DroneVars *)updated_moby->pvars;
+    enum { DRONE_STATE_ORBIT = 2 , DRONE_STATE_PURSUE_TARGET = 3 , DRONE_STATE_FADE = 4 , DRONE_STATE_REMOVE = 5 } ;DroneVars   *drone_vars = (DroneVars *)updated_moby->pvars;
     Vec4         collision_data[1], old_pos;
     Vec4         direction, rotated;
     Vec4         target_pos, matrix[4];
@@ -370,7 +370,7 @@ void drone_update(struct Moby *updated_moby) {
         return;
     }
     updated_moby->flags &= 0xFFBE;
-    if (updated_moby->state < 5) {
+    if (updated_moby->state < DRONE_STATE_REMOVE) {
         ((DroneSlots *)&hero)->counter++;
         if (((DroneSlots *)&hero)->ammo_used < ((DroneSlots *)&hero)->counter) {
             closest = 0;
@@ -392,7 +392,7 @@ void drone_update(struct Moby *updated_moby) {
                             ((DroneSlots *)&hero)->exclusions[count] =
                                 *(struct Moby **)(drone->pvars + 0x30);
                             count++;
-                            if (drone->state < 4)
+                            if (drone->state < DRONE_STATE_FADE)
                                 ((DroneSlots *)&hero)->ammo_capacity++;
                             if (count > 8)
                                 break;
@@ -436,7 +436,7 @@ void drone_update(struct Moby *updated_moby) {
                     if (target_height_data != 0)
                         old_pos.f[2] += *(f32 *)(target_height_data + 0x10);
                     qcopy(&assigned->offset, &old_pos);
-                    closest->state = 3;
+                    closest->state = DRONE_STATE_PURSUE_TARGET;
                     random = rand_2cc608() % 3;
                     allocate_voice_for_target_entry(random + (random > 0), 0, updated_moby);
                     ((DroneSlots *)&hero)->exclusions[count] = assigned->target;
@@ -468,22 +468,22 @@ void drone_update(struct Moby *updated_moby) {
                 if (cat >= 5) {
                     if (hit == 0 || h == 0 || *(s16 *)(h + 0xA6) != 0x4D6 ||
                         fast_dec_timer_s16(&drone_vars->health))
-                        updated_moby->state = 4;
+                        updated_moby->state = DRONE_STATE_FADE;
                 }
             }
         }
     }
 dispatch_state:
     state = updated_moby->state;
-    if (state == 3)
+    if (state == DRONE_STATE_PURSUE_TARGET)
         goto state3;
-    if (state < 4) {
-        if (state == 2)
+    if (state < DRONE_STATE_FADE) {
+        if (state == DRONE_STATE_ORBIT)
             goto state2;
     } else {
-        if (state == 4)
+        if (state == DRONE_STATE_FADE)
             goto state4;
-        if (state == 5)
+        if (state == DRONE_STATE_REMOVE)
             goto state5;
     }
     goto update_effects;
@@ -574,7 +574,7 @@ state2: {
                                              1,
                                              -1,
                                              0);
-                    updated_moby->state = 4;
+                    updated_moby->state = DRONE_STATE_FADE;
                 }
             }
         }
@@ -667,13 +667,13 @@ state3: {
                                                  1,
                                                  -1,
                                                  0);
-                        updated_moby->state = 4;
+                        updated_moby->state = DRONE_STATE_FADE;
                     }
                 }
             }
         }
     } else {
-        updated_moby->state = 2;
+        updated_moby->state = DRONE_STATE_ORBIT;
         drone_vars->target_oclass = -1;
         drone_vars->target = 0;
     }
@@ -709,7 +709,7 @@ fade_clear:
 fade_alpha:
     updated_moby->alpha -= 4;
     if (updated_moby->alpha < 6)
-        updated_moby->state = 5;
+        updated_moby->state = DRONE_STATE_REMOVE;
     goto update_effects;
 }
 state5: {
