@@ -859,6 +859,9 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
 }
 
 char *activate_smaller_amoeboid(void *source_moby) {
+    enum {
+        LARGE_AMOEBOID_DORMANT = 12
+    };
     struct Moby *source_amoeboid = source_moby;
     short       *list;
     char        *entities;
@@ -891,7 +894,7 @@ char *activate_smaller_amoeboid(void *source_moby) {
         group_index_or_list_entry = index;
         index &= 0x7FFF;
         smaller_amoeboid = (struct Moby *)(entities + (index << 8));
-        if (smaller_amoeboid->state != 12 || smaller_amoeboid->oclass != next_class)
+        if (smaller_amoeboid->state != LARGE_AMOEBOID_DORMANT || smaller_amoeboid->oclass != next_class)
             goto advance;
         {
             /* Retail reads both pvars pointers and update_dist before writing the entity. */
