@@ -86,7 +86,7 @@ void path_walker_update(unsigned char *walker_moby) {
         PATH_WALKER_INITIALIZE_GROUP = 0,
         PATH_WALKER_FOLLOW_PATH = 1
     };
-    float            old[4], rotation[4], trial[4];
+    float            walker_previous_position[4], rotation[4], trial[4];
     char            *path;
     L16WalkerData_c *walker_data;
     int              playing = 0;
@@ -100,7 +100,7 @@ void path_walker_update(unsigned char *walker_moby) {
             playing = 1;
         }
     } else {
-        qcopy(old, walker_moby + 0x10);
+        qcopy(walker_previous_position, walker_moby + 0x10);
     }
     switch (walker_moby[0x20]) {
     case PATH_WALKER_INITIALIZE_GROUP:
@@ -111,8 +111,8 @@ void path_walker_update(unsigned char *walker_moby) {
         initialize_path_walker_group(walker_moby);
         break;
     case PATH_WALKER_FOLLOW_PATH: {
-        L16WalkerData_c *other = *(L16WalkerData_c **)(walker_data->owner + 0x78);
-        float            gap, step, next, height, acceleration;
+        L16WalkerData_c *linked_walker_data = *(L16WalkerData_c **)(walker_data->owner + 0x78);
+        float            gap, step, candidate_path_parameter, height, acceleration;
         /* `playing` again, in a variable of case 1's own. The logic does not need it: tested directly,
            `playing` is one value from the top of the function to the test, the compiler ranks it below
            `path` and gives them $s5 and $s4, the reverse of retail. The narrowing copy ends that value
@@ -130,46 +130,46 @@ void path_walker_update(unsigned char *walker_moby) {
         MOBY(walker_moby)->pos.z += walker_data->height_step;
         walker_data->parameter += walker_data->speed;
         approach_value(&walker_data->speed, walker_data->target_speed, acceleration);
-        gap = other->parameter - walker_data->parameter;
+        gap = linked_walker_data->parameter - walker_data->parameter;
         if (gap < 0.0f) {
             gap += walker_data->period;
         }
         if (gap < path_walker_gap_range_start_gp &&
-            walker_data->target_speed > other->target_speed) {
+            walker_data->target_speed > linked_walker_data->target_speed) {
             float saved = walker_data->target_speed;
-            float theirs = other->target_speed;
+            float theirs = linked_walker_data->target_speed;
 
-            other->target_speed = saved;
+            linked_walker_data->target_speed = saved;
             walker_data->target_speed = theirs;
         }
         if (gap < 1.5f) {
             step = frame_time_sq * 50.0f;
             approach_value(&walker_data->speed, walker_data->target_speed, step);
-            approach_value(&other->speed, other->target_speed, step);
+            approach_value(&linked_walker_data->speed, linked_walker_data->target_speed, step);
         }
         if (walker_moby[0x31] == 0 && blocked == 0) {
             if (gap > path_walker_gap_range_end_gp + 1.0f) {
                 height = random_float_between(path_walker_height_range_start_gp,
                                               path_walker_height_range_end_gp);
                 if (walker_data->owner[0x31] != 0 && walker_data->countdown != 0) {
-                    next = other->parameter - random_float_between(path_walker_gap_range_start_gp,
+                    candidate_path_parameter = linked_walker_data->parameter - random_float_between(path_walker_gap_range_start_gp,
                                                                    path_walker_gap_range_end_gp);
                     walker_data->countdown--;
                 } else {
-                    next = walker_data->parameter +
+                    candidate_path_parameter = walker_data->parameter +
                            path_walker_reposition_advance_rate_gp * frame_time;
                 }
-                if (next < 0.0f) {
-                    next += walker_data->period;
+                if (candidate_path_parameter < 0.0f) {
+                    candidate_path_parameter += walker_data->period;
                 }
-                sample_camera_path(path, next, 0, trial, rotation, 1);
+                sample_camera_path(path, candidate_path_parameter, 0, trial, rotation, 1);
                 trial[2] += height;
                 trial[3] = 2.0f;
                 if (fast_bsphere_check((char *)trial, (float)path_walker_draw_distance_gp) == -1) {
                     float random = random_float_between(path_walker_speed_range_start_gp,
                                                         path_walker_speed_range_end_gp);
 
-                    walker_data->parameter = next;
+                    walker_data->parameter = candidate_path_parameter;
                     walker_data->height_step = height;
                     walker_data->target_speed = random * frame_time;
                 }
@@ -184,7 +184,7 @@ void path_walker_update(unsigned char *walker_moby) {
     }
     }
     if (((unsigned short)MOBY(walker_moby)->oclass) & 1) {
-        emit_path_walker_particle(walker_moby, old);
+        emit_path_walker_particle(walker_moby, walker_previous_position);
     }
 }
 
