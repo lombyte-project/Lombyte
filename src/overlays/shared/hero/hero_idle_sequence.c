@@ -501,7 +501,7 @@ void update_hero_glow_and_extra_manipulators(void) {
     }
     moby->glow_color = (alpha << 24) | (blue << 16) | (green << 8) | red;
     manip_owner = &hero;
-    if (manip_owner->vehicle_mode != 0)
+    if (manip_owner->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT)
         return;
     if (fast_dec_timer_s16(&HERO_EXTRA->delay) && moby->prev_seq == 1) {
         min_delay = scale_game_frames(50);
