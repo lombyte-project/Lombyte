@@ -3,11 +3,11 @@
 
 struct VoData *vo_buf_get_data(struct VoBuf *buf) __asm__("FUN_0023d288");
 
-struct VoData *vo_buf_get_data(struct VoBuf *buf) {
-    if (vo_buf_is_full(buf) != 0) {
+struct VoData *vo_buf_get_data(struct VoBuf *video_output_buffer) {
+    if (vo_buf_is_full(video_output_buffer) != 0) {
         return 0;
     }
-    return buf->data + buf->write;
+    return video_output_buffer->data + video_output_buffer->write;
 }
 
 /* Recovered original symbol name. */
