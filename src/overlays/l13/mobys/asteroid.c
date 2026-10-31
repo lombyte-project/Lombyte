@@ -144,6 +144,9 @@ void process_asteroid_hit(struct Moby *moby,
                           float        scale_ratio) __asm__("FUN_L13_002e1348");
 
 void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio) {
+    enum {
+        ASTEROID_WAIT_TO_RESPAWN = 4
+    };
     float split_velocity[4];
     float split_spawn_position[4];
     float nearby_effect_scale = scale_ratio * 7.0f;
@@ -198,7 +201,7 @@ void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio)
         moby->collision = 0;
         *(short *)(blob_data + 0x4C) = scale_game_frames(0x1E);
     } else if (*(int *)(blob_data + 0x40) == 0) {
-        moby->state = 4;
+        moby->state = ASTEROID_WAIT_TO_RESPAWN;
         moby->flags |= 1;
         moby->collision = 0;
         moby->visible = 0;
