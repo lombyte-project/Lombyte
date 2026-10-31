@@ -471,6 +471,10 @@ int launch_first_idle_group_class_0772_moby(int   group,
                                             float speed) __asm__("FUN_L18_002fc668");
 
 int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, float speed) {
+    enum {
+        GADGEBOT_LAUNCH_FLIGHT = 1,
+        GADGEBOT_IDLE = 8
+    };
     unsigned short *group_moby_entry = (unsigned short *)D_L18_001AC240[group];
     struct Moby    *table;
     struct Moby    *moby;
@@ -481,13 +485,13 @@ int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, flo
     for (;;) {
         moby = &table[*group_moby_entry & 0x7FFF];
         if (moby->oclass == 0x772) {
-            if (moby->state == 8) {
+            if (moby->state == GADGEBOT_IDLE) {
                 LaunchedMobyVars *launched_moby_vars = (LaunchedMobyVars *)moby->pvars;
                 moby->flags &= ~0x41;
                 moby->collision = moby->pclass->collision;
                 moby->flags |= 0x1000;
                 qcopy(&moby->pos, from);
-                moby->state = 1;
+                moby->state = GADGEBOT_LAUNCH_FLIGHT;
                 launched_moby_vars->unk1F4 = 1.0f;
                 fast_vec_sub(launched_moby_vars->velocity, to, from);
                 launched_moby_vars->velocity[2] = 0.0f;
