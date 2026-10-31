@@ -667,9 +667,13 @@ s32 get_moby_private_data_d0_address(T6 *moby) {
 void collect_moby_and_clear_path_keys(struct Moby *moby) __asm__("FUN_L00_002d5830");
 
 void collect_moby_and_clear_path_keys(struct Moby *moby) {
+    enum {
+        PICKUP_MOBY_AVAILABLE = 1,
+        PICKUP_MOBY_COLLECTED = 2
+    };
     KeyVars *key_vars = (KeyVars *)moby->pvars;
     s32      i;
-    if (moby->state != 1) {
+    if (moby->state != PICKUP_MOBY_AVAILABLE) {
         return;
     }
     D_L00_001BA5D0.killed[(s16)moby->save_id] = moby->mission + 2;
@@ -677,7 +681,7 @@ void collect_moby_and_clear_path_keys(struct Moby *moby) {
                                   D_0014C050[current_level_index][moby->mission] == 0xFF)) {
         D_L00_001BB230.killed[(s16)moby->save_id] = moby->mission + 2;
     }
-    moby->state = 2;
+    moby->state = PICKUP_MOBY_COLLECTED;
     moby->command = 1;
     moby->glow_color = 0x80208020;
     allocate_voice_for_target_entry(0, 0, moby);
