@@ -20,7 +20,7 @@ s32 sceDmaPause(volatile u32 *chcr) {
     masked = chan & 0xFFFFFEFF;
     *chcr = masked;
     *(volatile u32 *)0x1000F590 = ctrl;
-    if (state != 0) {
+    if (state != FALSE) {
         EnableInterrupts(masked, dstat, ctrl, state);
     }
     return chan;
