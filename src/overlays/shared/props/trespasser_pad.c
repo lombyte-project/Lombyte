@@ -111,7 +111,7 @@ extern float      frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern int        D_L02_0017EB08_lui __asm__("D_L02_0017EB08") NOT_SDA;
 extern Idle       D_L02_00179A10;
 extern int        D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
-extern int        D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
+extern int        l02_tresspasser_puzzle_texture_index_offset __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int        D_L02_00161AA8_gp __asm__("D_L02_00161AA8") __attribute__((sda));
 extern int        D_L02_00161AA4_gp __asm__("D_L02_00161AA4") __attribute__((sda));
 extern int        D_L02_00161AA0_gp __asm__("D_L02_00161AA0") __attribute__((sda));
@@ -263,7 +263,7 @@ void tresspasser_pad_update(Moby *moby) {
         D_L02_001D33B0[3][0] = -17.0f;
         D_L02_001D33B0[3][1] = -17.0f;
         D_L02_001D33B0[0][0] = 17.0f;
-        D_L02_00161B1C_gp = pad_puzzle_state->iEC;
+        l02_tresspasser_puzzle_texture_index_offset = pad_puzzle_state->iEC;
         if (moby->mission != 0xFF) {
             if (D_L02_001BBB40_2D9F08.collected[(short)moby->save_id] != 0 ||
                 (((int *)((char *)D_0014C190_257218 +
@@ -990,7 +990,7 @@ void draw_tresspasser_puzzle_arrow(
     xy[2] += truncate_float_to_s32(M[2][1] * 16.0f);
     xy[3] += truncate_float_to_s32(M[3][0] * 16.0f) << 16;
     xy[3] += truncate_float_to_s32(M[3][1] * 16.0f);
-    texture_tex0 = get_effect_texture(D_L02_00161B1C_gp + 0x29);
+    texture_tex0 = get_effect_texture(l02_tresspasser_puzzle_texture_index_offset + 0x29);
     FUN_L02_0020bc88(xy, uv, col, texture_tex0, 1);
     FUN_L02_0020bc88(xy, uv, col, texture_tex0, 1);
 }
@@ -1134,7 +1134,7 @@ void draw_tresspasser_puzzle_textured_quads(void) {
             vertex_uvs,
             vertex_colors,
             /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
-            ((int (*)(int))get_effect_texture)(D_L02_00161B1C_gp + 0x28),
+            ((int (*)(int))get_effect_texture)(l02_tresspasser_puzzle_texture_index_offset + 0x28),
             1);
     }
 }
