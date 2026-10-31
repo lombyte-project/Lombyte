@@ -103,14 +103,19 @@ typedef struct {
 int refresh_plasmabot_hatch_reset_delay(int i) __asm__("FUN_L14_002d9870");
 
 int refresh_plasmabot_hatch_reset_delay(int i) {
+    enum {
+        HATCH_WAIT_ACTIVATION = 0,
+        HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY = 5,
+        HATCH_WAIT_RESET_DELAY = 6
+    };
     struct Moby *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int         *hatch_vars = ((int *)moby->pvars);
     int          hatch_reset_delay_active = 0;
-    if (moby->state == 0) {
-        moby->state = 5;
+    if (moby->state == HATCH_WAIT_ACTIVATION) {
+        moby->state = HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY;
         set_moby_animation(moby, 1, 0);
     } else {
-        hatch_reset_delay_active = moby->state == 6;
+        hatch_reset_delay_active = moby->state == HATCH_WAIT_RESET_DELAY;
     }
     hatch_vars[2] = scale_game_frames(0x3C);
     return hatch_reset_delay_active;
