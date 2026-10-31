@@ -1782,10 +1782,10 @@ void fighter_jet_update(Jet *jet_moby) {
     jet_data->hit_class = 0;
     fast_dec_timer((int *)&jet_data->timer);
     initial_state = jet_moby->state;
-    if ((unsigned int)(initial_state - 6) >= 2 && (unsigned char)initial_state != 1 &&
-        (unsigned char)initial_state != 2) {
+    if ((unsigned int)(initial_state - 6) >= 2 && (unsigned char)initial_state != FIGHTER_JET_STATE_WAIT_FOR_ENTRY &&
+        (unsigned char)initial_state != FIGHTER_JET_STATE_MOUNT_PLAYER) {
         JetHit *hit = (JetHit *)find_moby_hit(jet_moby, 0x30001, 0);
-        if (hit && jet_moby->state == 4) {
+        if (hit && jet_moby->state == FIGHTER_JET_STATE_FLIGHT) {
             if (((JetPlayer *)(&hero))->health > hit->damage) {
                 ((JetPlayer *)(&hero))->health -= hit->damage;
                 if (hit->source && (unsigned int)(hit->source->class_id - 0x52) < 2)
@@ -1839,7 +1839,7 @@ void fighter_jet_update(Jet *jet_moby) {
                                 0);
                 jet_moby->animation = 0;
                 jet_data->death_timer = scale_game_frames(240);
-                jet_moby->state = 6;
+                jet_moby->state = FIGHTER_JET_STATE_STOP_DEATH_SOUNDS;
             }
         }
     }
@@ -1854,7 +1854,7 @@ void fighter_jet_update(Jet *jet_moby) {
         JetTexture  *texture_table;
         unsigned int palette_data;
         int          texture_index, initialized;
-        jet_moby->state = 1;
+        jet_moby->state = FIGHTER_JET_STATE_WAIT_FOR_ENTRY;
         jet_data->animation_frame = 0;
         jet_moby->scale = jet_moby->model->scale;
         *(float *)((char *)jet_data + 0x20) = jet_data->angles[0];
@@ -1883,7 +1883,7 @@ void fighter_jet_update(Jet *jet_moby) {
         jet_data->energy = 1;
         if (jet_moby->persistent != 0xFF &&
             (visited52)[jet_moby->persistent + (persistence_table_row_index << 4)] == 0xFF)
-            jet_moby->state = 9;
+            jet_moby->state = FIGHTER_JET_STATE_DELETE;
         if (jet_data->group_a > 0)
             jet_group_state(jet_data->group_a, 0, 0, 0);
         if (jet_data->group_b > 0)
@@ -1899,7 +1899,7 @@ void fighter_jet_update(Jet *jet_moby) {
         short enter = 0;
         if (jet_moby->persistent != 0xFF &&
             (visited52)[jet_moby->persistent + (persistence_table_row_index << 4)] == 0xFF)
-            jet_moby->state = 9;
+            jet_moby->state = FIGHTER_JET_STATE_DELETE;
         else if (jet_data->trigger != -1 &&
                  is_point_inside_clip_volume(D_0013F3D0, jet_data->trigger)) {
             jet_data->blend = 0.99f;
@@ -1924,7 +1924,7 @@ void fighter_jet_update(Jet *jet_moby) {
             qcopy(jet_data->angles, jet_moby->rotation);
             jet_data->wait_timer = 1;
             jet_data->energy = 1;
-            jet_moby->state = 2;
+            jet_moby->state = FIGHTER_JET_STATE_MOUNT_PLAYER;
             jet_data->lock_index = -1;
         } else if (jet_data->blend != 0.0f) {
             approach_value(&jet_data->blend, 0.0f, frame_time * 4.0f);
@@ -2002,7 +2002,7 @@ void fighter_jet_update(Jet *jet_moby) {
             update_fighter_jet_flight(jet_moby, jet_data);
             jet_camera_mode();
             request_music_track(2, 4);
-            jet_moby->state = 4;
+            jet_moby->state = FIGHTER_JET_STATE_FLIGHT;
         }
         break;
     case FIGHTER_JET_STATE_FLIGHT: {
@@ -2020,10 +2020,10 @@ void fighter_jet_update(Jet *jet_moby) {
         }
         update_fighter_jet_flight(jet_moby, jet_data);
         if (((JetPlayer *)(&hero))->pad160F & 1)
-            jet_moby->state = 5;
+            jet_moby->state = FIGHTER_JET_STATE_EXIT_PLAYER;
         if (jet_data->energy <= 0) {
             jet_data->wait_timer = scale_game_frames(1200);
-            jet_moby->state = 8;
+            jet_moby->state = FIGHTER_JET_STATE_FORCED_EXIT;
         }
         break;
     }
@@ -2070,7 +2070,7 @@ void fighter_jet_update(Jet *jet_moby) {
         request_music_track(0, 5);
         jet_data->blend = 0.99f;
         D_L13_0015F3FC = 0.99f;
-        jet_moby->state = 1;
+        jet_moby->state = FIGHTER_JET_STATE_WAIT_FOR_ENTRY;
         break;
     case FIGHTER_JET_STATE_STOP_DEATH_SOUNDS:
         D_L13_0015F608 = 2;
@@ -2091,7 +2091,7 @@ void fighter_jet_update(Jet *jet_moby) {
             }
             jet_data->weapon_sound = -1;
         }
-        jet_moby->state = 7;
+        jet_moby->state = FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET;
         break;
     case FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET: {
         struct MusicStreamState *transition;
@@ -2123,7 +2123,7 @@ void fighter_jet_update(Jet *jet_moby) {
                         }
                         jet_data->weapon_sound = -1;
                     }
-                    jet_moby->state = 0;
+                    jet_moby->state = FIGHTER_JET_STATE_INITIALIZE;
                 }
             }
         }
@@ -2181,7 +2181,7 @@ void fighter_jet_update(Jet *jet_moby) {
             jet_data->weapon_sound = -1;
         }
         jet_reset_camera((char *)&hero + 0x80, (char *)&hero + 0x90);
-        jet_moby->state = 9;
+        jet_moby->state = FIGHTER_JET_STATE_DELETE;
         break;
     case FIGHTER_JET_STATE_DELETE:
         mark_moby_for_removal(jet_moby);
@@ -2204,10 +2204,10 @@ void fighter_jet_update(Jet *jet_moby) {
     if (jet_moby->position[2] > 1008.0f)
         jet_moby->position[2] = 1008.0f;
     state = jet_moby->state;
-    if ((unsigned char)state == 4) {
+    if ((unsigned char)state == FIGHTER_JET_STATE_FLIGHT) {
         qcopy_nc((char *)&hero + 0x80, jet_moby->position);
         qcopy_nc((char *)&hero + 0x90, jet_data->angles);
     }
-    if ((unsigned int)(state - 3) < 2 || (unsigned char)state == 8)
+    if ((unsigned int)(state - 3) < 2 || (unsigned char)state == FIGHTER_JET_STATE_FORCED_EXIT)
         spawn_fighter_jet_joint_particles(jet_moby, (char *)jet_data);
 }
