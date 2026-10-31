@@ -2551,6 +2551,9 @@ extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L0
 void emit_hero_randomized_motion_effects(int iteration_count, int mode) __asm__("FUN_L00_00209a40");
 
 void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
+    enum {
+        HERO_MOTION_EFFECT_RANDOMIZED_HERO_POSITION = 0
+    };
     float        pos[4];
     V_209a40     randomized_displacement;
     int          i;
@@ -2560,7 +2563,7 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
     for (i = 0; i < iteration_count; i++) {
         hero_state = &hero;
         hero_displacement_source = (V_209a40 *)&hero_state->motion.displacement;
-        if (mode == 0) {
+        if (mode == HERO_MOTION_EFFECT_RANDOMIZED_HERO_POSITION) {
             pos[0] = hero_state->motion.pos.f[0] + random_float_between(-0.1f, 0.1f);
             pos[1] = hero_state->motion.pos.f[1] + random_float_between(-0.1f, 0.1f);
             pos[2] = hero_state->motion.pos.f[2] + random_float_between(-0.5f, 0.1f);
