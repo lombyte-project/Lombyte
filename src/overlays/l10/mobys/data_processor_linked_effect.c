@@ -100,7 +100,7 @@ void data_processor_linked_effect_update(struct Moby *moby) {
             float timer;
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
             moby->update_dist = 0x60;
-            moby->state = 1;
+            moby->state = MOBY_STATE_ACTIVE_WITH_SOUND;
             timer = data_processor_linked_effect_fade_duration_seconds_gp * 60.0f;
             moby->rot.z = new_rotation;
             linked_effect_vars->voice = -1;
