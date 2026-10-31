@@ -133,7 +133,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
     if (hero.coll_hit_moby == moby && moby->animation != 1 && moby->frame != 1)
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
     hit = find_moby_hit(moby, 0x210000, 0);
-    if (hit && moby->state != 6) {
+    if (hit && moby->state != BOLT_THIEF_STATE_KNOCKBACK) {
         struct Hero *player = &hero;
 
         moby_data->knock_drag = 0.008f;
@@ -151,13 +151,13 @@ void bolt_thief_update(L16CrateMoby *moby) {
                                              moby->position[1] - player->motion.pos.f[1]));
         moby_data->ticks = 0x78;
         FUN_L00_00257470(moby, 0, -1);
-        moby->state = 6;
+        moby->state = BOLT_THIEF_STATE_KNOCKBACK;
     }
     moby->opacity = 0xFF;
     switch (moby->state) {
     case BOLT_THIEF_STATE_INITIALIZE:
         if (moby_data->mode == 2) {
-            moby->state = 1;
+            moby->state = BOLT_THIEF_STATE_FACE_HERO;
             moby_data->turn = 0.0f;
             set_moby_animation(moby, 4, 0);
         } else {
@@ -189,7 +189,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                 return;
             }
             initialize_moby_path_state(moby);
-            moby->state = 2;
+            moby->state = BOLT_THIEF_STATE_WAIT_FOR_TRIGGER;
             moby->collision = 0x80;
             moby->flags |= 0x41;
             moby->bounds = 0;
@@ -220,14 +220,14 @@ void bolt_thief_update(L16CrateMoby *moby) {
             }
             moby->flags &= 0xFFBE;
             moby->bounds = moby->model->bounds;
-            moby->state = 4;
+            moby->state = BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH;
         }
         break;
     case BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH:
         if (moby_data->mode == 0)
             update_linked_moby_position(moby);
         if (update_bolt_thief_path_movement((char *)moby)) {
-            moby->state = 3;
+            moby->state = BOLT_THIEF_STATE_SETTLE_AT_PATH_END;
             blend_moby_animation(moby, 3, 0, 5);
         }
         emit_moby_offset_particles(moby);
@@ -262,7 +262,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                       zero);
         if ((moby->status & 2) && moby->frame == moby->animation) {
             if (settle_data->mode == 1) {
-                moby->state = 1;
+                moby->state = BOLT_THIEF_STATE_FACE_HERO;
                 settle_data->turn = zero;
                 set_moby_animation(moby, 4, 0);
             } else {
@@ -270,7 +270,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                     moby_set_state_one(settle_data->child);
                     settle_data->child = 0;
                 }
-                moby->state = 5;
+                moby->state = BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH;
                 blend_moby_animation(moby, 0, 0, 20);
                 settle_data->timer = zero;
                 settle_data->counter = 0;
@@ -283,7 +283,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         if (update_bolt_thief_path_movement((char *)moby)) {
             char *path;
 
-            moby->state = 2;
+            moby->state = BOLT_THIEF_STATE_WAIT_FOR_TRIGGER;
             moby->bounds = 0;
             moby->flags |= 0x41;
             moby_data->timer = 0.0f;
