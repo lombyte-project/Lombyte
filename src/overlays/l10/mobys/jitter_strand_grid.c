@@ -18,7 +18,7 @@ extern s32           D_L10_00161D68;
 
 extern int   D_L10_00161D64;
 extern int   D_L10_00161D68;
-extern float D_L10_00161D54 __attribute__((sda));
+extern float l10_jitter_strand_random_vector_time_scale __asm__("D_L10_00161D54") __attribute__((sda));
 float        jitter_strand_row_y_span_gp __asm__("D_L10_00161D58") = 2.5f;
 float        jitter_strand_phase_advance_rate_gp __asm__("D_L10_00161D5C") = 2.0f;
 
@@ -76,7 +76,7 @@ void jitter_strand_grid_update(struct Moby *moby) {
                             jitter_strand_row_y_span_gp * 0.5f;
                         jitter_strand_grid_vars->pos[group][row][strand_column].f[3] = 1.0f;
                         random_vector(
-                            &jitter[row][strand_column], 0.0f, D_L10_00161D54 * frame_time);
+                            &jitter[row][strand_column], 0.0f, l10_jitter_strand_random_vector_time_scale * frame_time);
                     }
                     for (row = 1; row < 19; row++) {
                         fast_vec_add(&jitter_strand_grid_vars->vel[group][row][strand_column],
