@@ -489,7 +489,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         CIRCULAR_SAW_STATE_POINT_ATTACK = 5,
         CIRCULAR_SAW_STATE_HIT_RECOVERY = 6,
         CIRCULAR_SAW_STATE_MELEE_ATTACK = 7,
-        CIRCULAR_SAW_STATE_DYING = 8
+        CIRCULAR_SAW_STATE_DYING = 8,
+        CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED = 9
     };
     enum {
         CIRCULAR_SAW_HIT_REACTION_NONE = 0,
@@ -966,7 +967,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             return;
         }
         break;
-    case 9:
+    case CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED:
         if (FUN_L00_002dc9f0(moby, data->fC0) != 0) {
             moby->state = 0;
             data->f1E8 = 0;
