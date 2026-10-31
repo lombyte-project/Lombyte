@@ -160,12 +160,16 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int moby_hold_state_if_grabbed(struct Moby *a) __asm__("FUN_L01_002f1c78");
 
 int moby_hold_state_if_grabbed(struct Moby *suction_moby) {
+    enum {
+        GROUND_ENEMY_STATE_IDLE = 1,
+        GROUND_ENEMY_STATE_RECOVER_TO_IDLE = 0x7
+    };
     int suction_result = process_moby_suck_cannon_suction(suction_moby);
     if (suction_result == 0) {
-        if (suction_moby->state == 0x7)
-            suction_moby->state = 1;
+        if (suction_moby->state == GROUND_ENEMY_STATE_RECOVER_TO_IDLE)
+            suction_moby->state = GROUND_ENEMY_STATE_IDLE;
     } else {
-        suction_moby->state = 0x7;
+        suction_moby->state = GROUND_ENEMY_STATE_RECOVER_TO_IDLE;
     }
     return suction_result;
 }
