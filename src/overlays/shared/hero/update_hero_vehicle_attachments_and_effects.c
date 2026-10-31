@@ -370,7 +370,7 @@ void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
 void restore_hero_from_vehicle_mode(void) {
     struct Hero   *hero_context = &hero;
     unsigned char *flag_clear_target;
-    if (hero_context->vehicle_mode == 1) {
+    if (hero_context->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_context->health.vehicle_mode_hp = hero_context->health.hp;
         hero_context->health.hp = hero_context->health.unk22B0;
         if (hero_context->unk1620) {
@@ -385,7 +385,7 @@ void restore_hero_from_vehicle_mode(void) {
     {
         struct Hero *hero_restore_context = &hero;
         reset_hero_easing_records();
-        hero_restore_context->vehicle_mode = 0;
+        hero_restore_context->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
         flag_clear_target = hero_restore_context->unkA84;
         if (flag_clear_target) {
             *(u16 *)(flag_clear_target + 0x34) &= ~6;
