@@ -571,7 +571,7 @@ void decoy_update(char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (hero.vehicle_mode != 0 && (u8)MOBY(moby)->state == 1) {
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT && (u8)MOBY(moby)->state == 1) {
         mine_spawn_drops(moby, D_L00_001B0830_lui);
         mark_moby_for_removal(moby);
         return;
