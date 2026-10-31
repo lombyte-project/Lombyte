@@ -363,7 +363,7 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
             moby_data->vel[0] = fast_cos(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
             moby_data->vel[1] = fast_sin(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
             moby_data->vel[2] = 0.0f;
-            moby->state = 1;
+            moby->state = EXPANDING_BLAST;
             moby_data->f14 = 0;
         }
         break;
