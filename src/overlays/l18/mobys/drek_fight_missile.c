@@ -374,7 +374,7 @@ void select_drek_fight_missile_wander_target(struct Moby *moby,
     *(int *)(missile_private_vars + 0x160) = scale_game_frames(180);
 }
 
-extern int D_L18_00162238_gp __asm__("D_L18_00162238") __attribute__((sda));
+extern int l18_drek_missile_group_effects_disabled __asm__("D_L18_00162238") __attribute__((sda));
 
 #include "rnc/overlay/l18/mobys/drek_fight_missile_globals.h"
 
@@ -413,7 +413,7 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
     int                 trail_segment_index;
     int                 trail_segment_start_slot;
 
-    if (D_L18_00162238_gp != 0) {
+    if (l18_drek_missile_group_effects_disabled != 0) {
         return;
     }
     for (i = 0; i < 16; i++) {
@@ -495,7 +495,7 @@ void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
     float          moving_phase_step;
     float          wait_to_explode_phase_step;
     int            phase_blended_color;
-    if (D_L18_00162238_gp != 0) {
+    if (l18_drek_missile_group_effects_disabled != 0) {
         return;
     }
     group_entry = D_L18_001AC240_c7[group_moby->group];
