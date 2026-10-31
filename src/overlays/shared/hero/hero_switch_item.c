@@ -2493,7 +2493,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
     if (hero_hit_entry->owner != hero_moby) {
         return 0;
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         if (!(hero_hit_entry->flags & 2)) {
             return 0;
         }
@@ -2507,7 +2507,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
         hero.unk5BE = 1;
         return 0;
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         hero.vehicle_hp -= truncate_float_to_s32(hero_hit_entry->damage);
         if (hero.vehicle_hp < 0) {
             hero.vehicle_hp = 0;
