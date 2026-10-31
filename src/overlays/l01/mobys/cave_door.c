@@ -33,7 +33,7 @@ void cave_door_update(struct Moby *cave_door_moby) {
     case CAVE_DOOR_STATE_INITIALIZE:
         cave_door_vars->angle = cave_door_moby->rot.x;
         cave_door_vars->speed = cave_door_vars->speed * DEG_TO_RAD;
-        cave_door_moby->state = 1;
+        cave_door_moby->state = CAVE_DOOR_STATE_UPDATE_ROTATION;
         break;
     case CAVE_DOOR_STATE_UPDATE_ROTATION:
         if (cave_door_vars->target != -1) {
