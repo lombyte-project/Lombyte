@@ -440,12 +440,12 @@ void grant_inventory_item(int id, int flag) {
             }
         }
         if (flag != 0) {
-            int t = item_defs_lui[id].slot;
-            if (t == 0) {
+            int item_slot = item_defs_lui[id].slot;
+            if (item_slot == 0) {
                 D_00141408 = id;
-            } else if (t == 3) {
+            } else if (item_slot == 3) {
                 D_00141414 = id;
-            } else if (t == 2) {
+            } else if (item_slot == 2) {
                 D_00141410 = id;
             }
         }
