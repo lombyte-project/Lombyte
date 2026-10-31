@@ -37,6 +37,9 @@ void rocket_door1_update(struct Moby *moby) {
         ROCKET_DOOR1_WAIT_FOR_COMMAND = 1,
         ROCKET_DOOR1_TURN_TO_GOAL_ROTATION = 2
     };
+    enum {
+        ROCKET_DOOR1_GOAL_ROTATION_APPLIED = 3
+    };
     Vec4        qx;
     Vec4        qy;
     Vec4        qz;
@@ -59,9 +62,9 @@ void rocket_door1_update(struct Moby *moby) {
             moby->rot.x = door_vars->goal.f[0] * 0.017453292f;
             moby->rot.y = door_vars->goal.f[1] * 0.017453292f;
             moby->rot.z = door_vars->goal.f[2] * 0.017453292f;
-            moby->state = 3;
+            moby->state = ROCKET_DOOR1_GOAL_ROTATION_APPLIED;
         } else {
-            moby->state = 1;
+            moby->state = ROCKET_DOOR1_WAIT_FOR_COMMAND;
             moby->flags |= 0x100;
             build_axis_rotation_quaternion(&qx, 0, door_vars->goal.f[0] * 0.017453292f);
             build_axis_rotation_quaternion(&qy, 1, door_vars->goal.f[1] * 0.017453292f);
@@ -77,7 +80,7 @@ void rocket_door1_update(struct Moby *moby) {
         break;
     case ROCKET_DOOR1_WAIT_FOR_COMMAND:
         if (moby->command != 0) {
-            moby->state = 2;
+            moby->state = ROCKET_DOOR1_TURN_TO_GOAL_ROTATION;
             door_vars->speed = 0.0f;
             door_vars->t = 0.0f;
         }
