@@ -891,9 +891,9 @@ void ease_minibomber_position_and_heading(char  *moby,
                                           float  heading_velocity_damping,
 
                                           float heading_velocity_limit) {
-    int minibomber_private_vars_base;
+    enum { MINIBOMBER_STATE_HOLD_AT_PATH_END = 4 , MINIBOMBER_STATE_RELEASE_BOMB = 6 } ;int minibomber_private_vars_base;
     int moby_state = MOBY(moby)->state & 0xFF;
-    if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
+    if ((moby_state >= MINIBOMBER_STATE_HOLD_AT_PATH_END && moby_state <= MINIBOMBER_STATE_RELEASE_BOMB) || moby_state == 8) {
         minibomber_private_vars_base = *(int *)(moby + 0x78);
         vendor_spring((float *)&MOBY(moby)->pos,
                       (float *)(minibomber_private_vars_base + 0xF0),
