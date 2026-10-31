@@ -83,7 +83,11 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
-    if (moby->state != 3) {
+    enum {
+        HIT_PROCESSING_DAMAGE_THRESHOLD = 2,
+        FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3
+    };
+    if (moby->state != FIGHTER_EMIT_DESTRUCTION_EFFECTS) {
         int   hit_processing_status;
         float hit_position_offset[4];
         char *hit_record = find_moby_hit(moby, 0x330000, 0);
@@ -104,13 +108,13 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
         case HIT_REACTION_NO_HIT:
             break;
         }
-        if (hit_processing_status >= 2) {
+        if (hit_processing_status >= HIT_PROCESSING_DAMAGE_THRESHOLD) {
             if (*fp <= *(float *)(hit_record + 0x2C)) {
                 *fp = 0;
                 moby->flags &= 0xEFFF;
                 moby_data[0x67] = 0x78;
                 trooper_anim_update(moby, (short *)(moby_data + 0x60));
-                moby->state = 3;
+                moby->state = FIGHTER_EMIT_DESTRUCTION_EFFECTS;
             } else {
                 *fp = *fp - *(float *)(hit_record + 0x2C);
                 moby_data[0x67] = 0xFA;
