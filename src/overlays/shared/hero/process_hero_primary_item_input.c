@@ -1543,6 +1543,10 @@ extern s32   current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
 
 void update_hero_hoverboard_race_progress(void) {
+    enum {
+        RACE_RESPAWN_GATE_WAITING = 0,
+        RACE_RESPAWN_GATE_READY = 1
+    };
     float world_position_scratch[4] __attribute__((aligned(16)));
     float course_point_or_respawn_rotation[4] __attribute__((aligned(16)));
     Data *race_pvars;
@@ -1634,11 +1638,11 @@ void update_hero_hoverboard_race_progress(void) {
         if (hero.off_course_frames > FUN_001f96f8_254608(0xB4)) {
             if (race_respawn_request_active == 0) {
                 race_respawn_request_active = 1;
-                race_respawn_gate_state = 0;
+                race_respawn_gate_state = RACE_RESPAWN_GATE_WAITING;
                 D_L05_0015F67C = frame_scale * 0.08f;
             }
             hero.off_course_reset_pending = 1;
-            if (race_respawn_gate_state == 1) {
+            if (race_respawn_gate_state == RACE_RESPAWN_GATE_READY) {
                 hero.off_course_reset_pending = 0;
                 compute_hero_hoverboard_respawn_transform(world_position_scratch,
                                                           course_point_or_respawn_rotation);
@@ -1717,7 +1721,7 @@ void update_hero_hoverboard_race_progress(void) {
     if (D_0015ED84_lui == 5) {
         int fast_finish_threshold_frames;
 
-        if (pal_mode != 0) {
+        if (pal_mode != FALSE) {
             fast_finish_threshold_frames = FUN_001f96f8_254608(0x1680);
         } else {
             fast_finish_threshold_frames = FUN_001f96f8_254608(0x1644);
