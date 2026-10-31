@@ -1948,6 +1948,10 @@ extern int FUN_001f96f8_b45(int) __asm__("FUN_001f96f8");
 extern float FUN_001fa6c0_b45(short) __asm__("FUN_001fa6c0");
 
 int try_retract_turret_group(int index) {
+    enum {
+        TURRET_STATE_WAITING = 1,
+        TURRET_STATE_RETRACTING = 5
+    };
     short         *list_entry = D_L14_001ABF40_b45[index];
     unsigned char *moby_array_start;
     unsigned char *checked_moby;
@@ -1966,7 +1970,7 @@ int try_retract_turret_group(int index) {
         checked_moby = moby_array_start + (moby_index_or_state << 8);
         if ((((unsigned char *)MOBY(checked_moby)->pvars))[0x8B] == 0) {
             moby_index_or_state = checked_moby[0x20];
-            if (moby_index_or_state != 5 && moby_index_or_state != 1) {
+            if (moby_index_or_state != TURRET_STATE_RETRACTING && moby_index_or_state != TURRET_STATE_WAITING) {
                 return 0;
             }
         }
