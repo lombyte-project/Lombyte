@@ -509,7 +509,8 @@ void sentrybot_update(unsigned char *moby) {
                 if (MOBY(moby)->prev_seq != sentrybot_instance_data[0x15D])
                     blend_moby_animation(
                         moby, sentrybot_instance_data[0x15D], 0, scale_game_frames(10));
-            } else if (MOBY(moby)->seq == MOBY(moby)->prev_seq && turn_heading_offsets_degrees != 0) {
+            } else if (MOBY(moby)->seq == MOBY(moby)->prev_seq &&
+                       turn_heading_offsets_degrees != 0) {
                 float t = compute_interpolated_record_value(moby);
                 int   k = truncate_float_to_s32(t);
                 t -= convert_integer_to_float(k);
@@ -758,7 +759,8 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     case SENTRYBOT_ACTIVATE_LINKED_MOBY:
-        if (MOBY(moby)->seq == MOBY(moby)->prev_seq && compute_interpolated_record_value(moby) >= 12.0f) {
+        if (MOBY(moby)->seq == MOBY(moby)->prev_seq &&
+            compute_interpolated_record_value(moby) >= 12.0f) {
             set_sentrybot_alarm_duration(
                 (char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)),
                 0xB4);
