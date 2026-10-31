@@ -24,11 +24,14 @@ void pokitaru_paired_rotation_update(struct Moby *moby) {
         ROTATION_WAIT_FOR_TRIGGER = 1,
         ROTATION_APPROACH_OFFSET = 2
     };
+    enum {
+        ROTATION_OFFSET_REACHED = 3
+    };
     char *paired_rotation_vars = (char *)moby->pvars;
     int   state = (unsigned char)MOBY(moby)->state;
     switch (state) {
     case ROTATION_INITIALIZE:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = ROTATION_WAIT_FOR_TRIGGER;
         *(float *)(paired_rotation_vars + 4) = moby->rot.z;
         if ((moby->flags & 0x8000) == 0) {
             char *partner_moby = create_moby(0x41);
@@ -56,7 +59,7 @@ void pokitaru_paired_rotation_update(struct Moby *moby) {
                            frame_time_sq * 0.34906584f,
                            frame_time_sq * 0.34906584f,
                            frame_time * 0.7853982f) == 0.0f)
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = ROTATION_OFFSET_REACHED;
         break;
     }
     }
