@@ -224,6 +224,9 @@ void shrub_update(struct Moby *moby) {
         SHRUB_BEGIN_PRIMARY_PATH = 3,
         SHRUB_BREAK_APART_AND_REMOVE = 0x63
     };
+    enum {
+        SHRUB_PART_RELEASED = 1
+    };
     SwarmVars         *shrub_control_vars = (SwarmVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby       *target;
@@ -391,7 +394,7 @@ void shrub_update(struct Moby *moby) {
                 cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 fast_vec_sub(drift, &part->pos, &moby->pos);
                 fast_vec_normalize(drift, drift, frame_time * 5.0f);
-                part->state = 1;
+                part->state = SHRUB_PART_RELEASED;
                 shrub_control_vars->parts[i].moby = NULL;
             }
         }
