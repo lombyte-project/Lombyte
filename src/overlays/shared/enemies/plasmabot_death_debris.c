@@ -220,7 +220,7 @@ typedef struct {
 } GlowQuad_bfa8;
 
 extern GlowVec_bfa8 l01_moby_offset_quad_source_corners[4] __asm__("D_L01_0020B9D0");
-extern char         D_L01_00167240[];
+extern char         camera_pos[] __asm__("D_L01_00167240");
 extern GlowVec_bfa8 D_0013F5E0[];
 
 extern f32  moby_quad_c0_offset_scale_gp __asm__("D_L01_00162064") __attribute__((sda));
@@ -273,7 +273,7 @@ void draw_moby_offset_textured_quad(char *moby) {
     fast_vec_add(&local.basis.offset, &local.basis.offset, &local.basis.partial);
     basis_axis_or_source_corner = &local.basis.mat0;
     fast_vec_add(&local.basis.point, &local.basis.offset, &MOBY(moby)->pos);
-    fast_vec_sub(basis_axis_or_source_corner, D_L01_00167240, &local.basis.point);
+    fast_vec_sub(basis_axis_or_source_corner, camera_pos, &local.basis.point);
     fast_vec_normalize(basis_axis_or_source_corner, basis_axis_or_source_corner, one);
     basis_axis_or_quad_corner = &local.basis.mat1;
     fast_vec_cross(basis_axis_or_quad_corner, basis_axis_or_source_corner, D_0013F5E0);
