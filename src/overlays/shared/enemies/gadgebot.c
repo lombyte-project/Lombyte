@@ -352,35 +352,35 @@ void gadgebot_update(GbMoby *moby) {
     hero_distance = vector_distance_xy(moby->pos, hero.motion.pos.f);
     dz = absolute_float(moby->pos[2] - hero.ground_point.f[2]);
     *(OvlQuad *)save1 = *(OvlQuad *)save0 = *(OvlQuad *)moby->pos;
-    if (moby->state != 1) {
+    if (moby->state != GADGEBOT_WAIT_FOR_SPAWN_PAD) {
         FUN_L06_002f3640_u(moby);
         if (hero_distance < 16.0f && absolute_float(moby->pos[2] - hero.motion.pos.f[2]) < 1.5f) {
             int ok = 0;
-            if (moby->state == 2 || moby->state == 5 || moby->state == 3 || moby->state == 6 ||
-                moby->state == 7 || moby->state == 4) {
+            if (moby->state == GADGEBOT_WANDER_NEAR_HOME || moby->state == GADGEBOT_SEEK_AND_ATTACK_TARGET || moby->state == GADGEBOT_FOLLOW_HERO || moby->state == 6 ||
+                moby->state == GADGEBOT_SEEK_INTERACTION_TARGET || moby->state == GADGEBOT_STAND_AND_FACE_HERO) {
                 ok = 1;
             }
             if (ok) {
                 l06_gadgebot_command_range_stats.unk2C++;
                 switch (D_00141610[0]) {
                 case GADGEBOT_COMMAND_FOLLOW_HERO:
-                    if (moby->state != 3) {
-                        moby->state = 3;
+                    if (moby->state != GADGEBOT_FOLLOW_HERO) {
+                        moby->state = GADGEBOT_FOLLOW_HERO;
                         moby->sub = 0;
                     }
                     break;
                 case GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET:
-                    if (moby->state != 5) {
-                        moby->state = 5;
+                    if (moby->state != GADGEBOT_SEEK_AND_ATTACK_TARGET) {
+                        moby->state = GADGEBOT_SEEK_AND_ATTACK_TARGET;
                         moby->sub = 0;
                     }
                     break;
                 case GADGEBOT_COMMAND_STAND_AND_FACE_HERO:
-                    moby->state = 4;
+                    moby->state = GADGEBOT_STAND_AND_FACE_HERO;
                     break;
                 case GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET:
                     moby->sub = 0;
-                    moby->state = 7;
+                    moby->state = GADGEBOT_SEEK_INTERACTION_TARGET;
                     break;
                 }
             }
@@ -390,7 +390,7 @@ void gadgebot_update(GbMoby *moby) {
         if (gadgebot_vars->unk101 == 0) {
             attach_manipulator((char *)moby, 0, &gadgebot_vars->unk100);
         }
-        if (moby->state != 1) {
+        if (moby->state != GADGEBOT_WAIT_FOR_SPAWN_PAD) {
             approach_value(&gadgebot_vars->unk308, 2.3f, frame_scale * 0.1f);
         } else {
             approach_value(&gadgebot_vars->unk308, 1.0f, frame_scale * 0.1f);
@@ -440,7 +440,7 @@ void gadgebot_update(GbMoby *moby) {
         }
         gadgebot_vars->unk28C = random_angle_radians();
         gadgebot_vars->unk27C = -1;
-        moby->state = 1;
+        moby->state = GADGEBOT_WAIT_FOR_SPAWN_PAD;
         moby->unk94 = 0;
         break;
     }
@@ -473,9 +473,9 @@ void gadgebot_update(GbMoby *moby) {
             }
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
             moby->unk94 = moby->cls->unk10;
-            moby->state = 3;
+            moby->state = GADGEBOT_FOLLOW_HERO;
         } else {
-            if (hero.vehicle_mode == 0) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 moby->flags |= 0x41;
                 gadgebot_vars->unk170->flags |= 0x41;
                 moby->flags &= 0xEFFF;
@@ -543,12 +543,12 @@ void gadgebot_update(GbMoby *moby) {
             if (referenced_moby->cls_id == 0x3F7 && referenced_moby->state != 4 &&
                 is_point_inside_clip_volume(((GbMoby *)hero.moby)->pos, *tb) != 0 &&
                 is_point_inside_clip_volume(moby->pos, *tb) == 0) {
-                moby->state = 4;
+                moby->state = GADGEBOT_STAND_AND_FACE_HERO;
                 *(OvlQuad *)moby->pos = *(OvlQuad *)vector_and_hit_scratch;
                 break;
             }
         }
-        if (moby->state != 4) {
+        if (moby->state != GADGEBOT_STAND_AND_FACE_HERO) {
             switch (moby->sub) {
             case GADGEBOT_FOLLOW_INITIALIZE:
                 moby->sub = 1;
@@ -645,7 +645,7 @@ void gadgebot_update(GbMoby *moby) {
                     }
                 }
                 if (flags & 0x20) {
-                    moby->state = 4;
+                    moby->state = GADGEBOT_STAND_AND_FACE_HERO;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
                 }
                 if (hero_distance < 0.8f || hit != 0 || dz > 1.75f) {
@@ -786,7 +786,7 @@ void gadgebot_update(GbMoby *moby) {
                                      movement_displacement_output,
                                      1.0f) &
                     0x20) {
-                    moby->state = 4;
+                    moby->state = GADGEBOT_STAND_AND_FACE_HERO;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
                 }
                 if (vector_distance_xy(moby->pos, gadgebot_vars->target->pos) < 1.5f) {
@@ -856,7 +856,7 @@ void gadgebot_update(GbMoby *moby) {
             }
             if (fast_dec_timer(&gadgebot_vars->unk194) != 0 &&
                 gadgebot_vars->target_searched != 0 && gadgebot_vars->target == 0) {
-                moby->state = 3;
+                moby->state = GADGEBOT_FOLLOW_HERO;
                 moby->sub = 0;
             } else if (gadgebot_vars->target_searched != 0 && gadgebot_vars->target == 0) {
                 gadgebot_vars->target_searched = 0;
@@ -899,12 +899,12 @@ void gadgebot_update(GbMoby *moby) {
                                      movement_displacement_output,
                                      1.0f) &
                     0x20) {
-                    moby->state = 4;
+                    moby->state = GADGEBOT_STAND_AND_FACE_HERO;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
                 }
             } else if (gadgebot_vars->target_searched != 0) {
                 moby->sub = 0;
-                moby->state = 3;
+                moby->state = GADGEBOT_FOLLOW_HERO;
             }
             break;
         case 2:
@@ -957,7 +957,7 @@ void gadgebot_update(GbMoby *moby) {
 
             cart_burst(moby, moby->pos, -1, 0.5f, 13.0f);
             qcopy(moby->pos, gadgebot_vars->unkE0);
-            moby->state = 4;
+            moby->state = GADGEBOT_STAND_AND_FACE_HERO;
             for (i = 0; i < 10; i++) {
                 float effect_scale_factor = random_float_between(0.1f, 1.0f);
                 int   cr = random_int_between(0x40, 0xFF);
@@ -998,11 +998,11 @@ void gadgebot_update(GbMoby *moby) {
         }
         break;
     }
-    interaction_result = FUN_L06_002f32f0_u(moby, moby->state != 7);
+    interaction_result = FUN_L06_002f32f0_u(moby, moby->state != GADGEBOT_SEEK_INTERACTION_TARGET);
     if (interaction_result == 2) {
         return;
     }
-    if (moby->state != 1) {
+    if (moby->state != GADGEBOT_WAIT_FOR_SPAWN_PAD) {
         float saved_control_f10;
         float saved_control_f24;
 
@@ -1049,7 +1049,7 @@ void gadgebot_update(GbMoby *moby) {
             gadgebot_vars->unk284 = 0.0f;
             qcopy(moby->pos, vector_and_hit_scratch);
         }
-        if (moby->state != 9) {
+        if (moby->state != GADGEBOT_UPDATE_KNOCKBACK) {
             float ground_height;
 
             if (interaction_result == 0) {
@@ -1108,7 +1108,7 @@ void gadgebot_update(GbMoby *moby) {
             moby->pos[0] > 1021.0f || moby->pos[1] < 2.0f || moby->pos[1] > 1021.0f ||
             moby->pos[2] < 2.0f || moby->pos[2] > 1021.0f) {
             qcopy(moby->pos, gadgebot_vars->unkE0);
-            moby->state = 4;
+            moby->state = GADGEBOT_STAND_AND_FACE_HERO;
             return;
         }
     }
