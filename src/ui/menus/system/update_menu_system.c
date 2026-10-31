@@ -37,6 +37,10 @@ extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 void update_menu_system(void) __asm__("FUN_002192a8");
 
 void update_menu_system(void) {
+    enum {
+        MENU_SYSTEM_STATE_PAGE_TRANSITION_PENDING = 1,
+        MENU_SYSTEM_STATE_FINALIZE_CLOSE = 0x14
+    };
     s32                 i;
     s32                 j;
     s32                 k;
@@ -47,7 +51,7 @@ void update_menu_system(void) {
 
     menu_system.update_count = menu_system.update_count + 1;
     reset_active_camera_position_and_basis();
-    if (menu_system.state == 0x14) {
+    if (menu_system.state == MENU_SYSTEM_STATE_FINALIZE_CLOSE) {
         if (menu_system.timer != 0) {
             menu_system.timer = menu_system.timer - 1;
             if (menu_system.timer != 0) {
@@ -75,7 +79,7 @@ void update_menu_system(void) {
         mode_freeze_init(3, menu_system.current);
         return;
     }
-    if (menu_system.state == 1) {
+    if (menu_system.state == MENU_SYSTEM_STATE_PAGE_TRANSITION_PENDING) {
         menu_system.timer = (menu_system.timer < 1) ? 0 : menu_system.timer - 1;
         if (menu_system.timer == 0) {
             struct MenuPage *incoming_page = menu_system.next;
@@ -122,7 +126,7 @@ void update_menu_system(void) {
                 ((struct Ent *)panel_slots[j])->unk58 = 1.0f;
             }
         }
-        menu_system.state = 1;
+        menu_system.state = MENU_SYSTEM_STATE_PAGE_TRANSITION_PENDING;
         menu_system.timer = 12;
         menu_system.previous = menu_system.current;
         menu_system.current = 0;
