@@ -642,11 +642,11 @@ void update_hero_airborne_planar_velocity(void) {
     s32    state;
 
     state = hero.state.current;
-    if (state == 10) {
+    if (state == HERO_STATE_PACK_JUMP) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         hero.ground_speed = hero.motion.flat_speed;
-    } else if (state == 16) {
+    } else if (state == HERO_STATE_PACK_LONG_JUMP) {
         if (FUN_001f96f8_2b438(0x36) < hero.state_timer) {
             approach_value_2b438(ED70 * 25.0f, ED70 * 7.0f, &hero.jump_gravity);
         }
@@ -658,7 +658,7 @@ void update_hero_airborne_planar_velocity(void) {
         speed_step(ED70 * 44.0f, ED70 * 45.0f);
         set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
         add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
-    } else if (state == 0x1C) {
+    } else if (state == HERO_STATE_LEDGE_JUMP) {
         if (FUN_001f96f8_2b438(0x28) < hero.state_timer) {
             turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);
             air_accel(ED70 * 20.0f);
@@ -674,7 +674,7 @@ void update_hero_airborne_planar_velocity(void) {
             FUN_001f9dc8_2b438(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
         hero.motion.velocity.f[1] =
             FUN_001f9de0_2b438(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
-    } else if (state == 0x4C) {
+    } else if (state == HERO_STATE_ALT_LEDGE_JUMP) {
         if (5.0f <= hero.anim_frame && hero.anim_frame <= 18.0f) {
             if (15.0f < hero.anim_frame) {
                 approach_value_2b438(0.0f, ED70 * 8.0f, &hero.ledge_jump_speed);
@@ -686,7 +686,7 @@ void update_hero_airborne_planar_velocity(void) {
             FUN_001f9dc8_2b438(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
         hero.motion.velocity.f[1] =
             FUN_001f9de0_2b438(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
-    } else if (state == 11 || state == 12) {
+    } else if (state == HERO_STATE_HIGH_JUMP || state == HERO_STATE_STORED_HEADING_JUMP) {
         hero.motion.move_yaw = hero.takeoff_yaw;
         turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
         if (hero.unk450 != 3) {
@@ -714,7 +714,7 @@ void update_hero_airborne_planar_velocity(void) {
             FUN_001f9de0_2b438(hero.takeoff_yaw) * speed_component_or_yaw_delta;
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
-    } else if (state == 0x11) {
+    } else if (state == HERO_STATE_REPEATABLE_JUMP) {
         hero.motion.move_yaw = hero.unk470.f[3];
         qcopy(&hero.motion.move_dir, &hero.unk470);
         if (FUN_001f96f8_2b438(9) < hero.state_timer) {
@@ -736,7 +736,7 @@ void update_hero_airborne_planar_velocity(void) {
         }
         hero.ground_speed = hero.motion.flat_speed;
     } else {
-        if (state == 0x2D) {
+        if (state == HERO_STATE_ITEM_RELEASE_FALL) {
             x = hero.motion.rot.f[2];
             hero.motion.yaw_error = FUN_L00_0025bc98_2b438(&x,
                                                            &hero.motion.yaw_rate,
