@@ -334,6 +334,9 @@ void update_hero_ground_material_effects(void) {
         GROUND_MATERIAL_WATER = 0,
         GROUND_MATERIAL_MAGNETIC = 2
     };
+    enum {
+        GROUND_MATERIAL_SINK_TRIGGER = 0xD
+    };
     struct Hero  *hero_ptr = &hero;
     int           saved_ground_type;
     int           x;
@@ -391,7 +394,7 @@ void update_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->selector_4 = 1;
     }
-    if (saved_ground_type == 0xD) {
+    if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
