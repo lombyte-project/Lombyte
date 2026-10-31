@@ -1850,9 +1850,9 @@ int hero_pick_help_mode(void) {
                 if (fast_difference_between_rotations(
                         fast_arc_tan(player->motion.velocity.f[0], player->motion.velocity.f[1]),
                         player->unk8A4) < 0.7853982f) {
-                    state = 0x6F;
+                    state = HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT;
                     if (!(player->ground_distance < 1.0f))
-                        state = 0x6D;
+                        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
                     goto change_state;
                 }
             }
@@ -1862,7 +1862,7 @@ int hero_pick_help_mode(void) {
     if ((&hero)->wall_hit) {
         float distance = vector_length_xy(&(&hero)->motion.displacement);
         if (distance < vector_length_xy(&(&hero)->motion.velocity) * 0.25f) {
-            state = 0x6D;
+            state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
             goto change_state;
         }
         level = *(int *)0x0015ED84;
@@ -1870,18 +1870,18 @@ int hero_pick_help_mode(void) {
     if (level == 5) {
         if ((&hero)->motion.pos.f[2] < 61.4f) {
             (&hero)->board_floor_z = 61.4f;
-            state = 0x6E;
+            state = HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT;
             goto change_state;
         }
     }
     if (level == 0x10) {
         if ((&hero)->motion.pos.f[2] < 76.0f) {
             (&hero)->board_floor_z = 76.0f;
-            state = 0x6E;
+            state = HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT;
             goto change_state;
         }
         if ((&hero)->on_slip_ground && (&hero)->ground_distance < 0.1f) {
-            state = 0x6D;
+            state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
             goto change_state;
         }
     }
@@ -1903,7 +1903,7 @@ int hero_pick_help_mode(void) {
                     minimum = previous_path_point_height;
                 distance = vector_distance_xy(&(&hero)->motion.pos, &path->p[index]);
                 if (0.5f < minimum - (&hero)->motion.pos.f[2] && 4.0f < distance) {
-                    state = 0x6D;
+                    state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
                     goto change_state;
                 }
             }
@@ -1929,21 +1929,21 @@ int hero_pick_help_mode(void) {
     if (!((&hero)->motion.velocity.f[2] < 0.0f))
         return 0;
     if (1.0471976f < absolute_float((&hero)->motion.rot.f[1])) {
-        state = 0x6D;
+        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }
     if (1.0471976f < absolute_float((&hero)->motion.rot.f[0])) {
-        state = 0x6D;
+        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }
     if (1.3962634f <
         fast_difference_between_rotations((&hero)->motion.rot.f[2], (&hero)->board_air_yaw)) {
-        state = 0x6D;
+        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }
     if ((unsigned)(*((unsigned char *)(&hero)->moby + 0x53) - 0x69) < 4 &&
         (&hero)->anim_frame < (float)(&l05_hoverboard_trick_landing_frame_thresholds)[(&hero)->air_pose_index]) {
-        state = 0x6D;
+        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }
     goto continue_fall;
