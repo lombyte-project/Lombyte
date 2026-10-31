@@ -90,7 +90,7 @@ void render_level_frame(void) {
     if ((current_level_index != 0) && ((current_level_index != 1) || (level_available[3] != 0))) {
         render_environment_mapped_object(D_0018CC98[0]);
     }
-    if ((memory_card_state.state >= 3) || (memory_card_state.pending_state >= 0)) {
+    if ((memory_card_state.state >= MEMCARD_REQUEST_FORMAT) || (memory_card_state.pending_state >= MEMCARD_QUERY_INFO)) {
         vu1_add_g_sregister(0x47, 0x3004B);
         quad_extent = 272.0f;
         texture = get_effect_texture(2);
