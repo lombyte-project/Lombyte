@@ -2962,14 +2962,14 @@ spawn_random_planar_drift_particle(void *, int, float, float) __asm__("FUN_L00_0
 void update_ballistic_effect_particle_with_contact_spawns(struct EffectParticle *) __asm__("FUN_L00_0026f660");
 
 void update_ballistic_effect_particle_with_contact_spawns(struct EffectParticle *particle) {
-    char *particle_data = particle->data;
+    enum { BALLISTIC_PARTICLE_MODE_NO_CONTACT_TEST = 0 , BALLISTIC_PARTICLE_MODE_LINE_CONTACT_HEIGHT_SNAPPED_SPAWN = 1 , BALLISTIC_PARTICLE_MODE_WATER_SURFACE_CONTACT_SPAWN = 3 } ;char *particle_data = particle->data;
     int   mode = *(int *)(particle_data + 0x10);
     V     next_position;
     char *particle_position;
 
-    if (mode == 0) {
+    if (mode == BALLISTIC_PARTICLE_MODE_NO_CONTACT_TEST) {
         fast_vec_add(particle->pos.f, particle->pos.f, particle_data);
-    } else if (mode == 1) {
+    } else if (mode == BALLISTIC_PARTICLE_MODE_LINE_CONTACT_HEIGHT_SNAPPED_SPAWN) {
         particle_position = particle->pos.f;
         fast_vec_add(&next_position, particle_position, particle_data);
         if (collision_line(particle_position, &next_position, 2, 0, 0)) {
@@ -2981,7 +2981,7 @@ void update_ballistic_effect_particle_with_contact_spawns(struct EffectParticle 
             return;
         }
         qcopy(particle_position, &next_position);
-    } else if (mode == 3) {
+    } else if (mode == BALLISTIC_PARTICLE_MODE_WATER_SURFACE_CONTACT_SPAWN) {
         float water_surface_z;
         particle_position = particle->pos.f;
         fast_vec_add(particle_position, particle_position, particle_data);
