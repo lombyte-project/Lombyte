@@ -936,11 +936,14 @@ unsigned char *spawn_timed_hero_relative_particle(u128         *position,
                                 int           mode,
 
                                 float size_scale) {
+    enum {
+        PARTICLE_MODE_HERO_RELATIVE = 1
+    };
     unsigned char *particle = create_part(0x3B);
     if (particle) {
         int *particle_data = (int *)(particle + 0x20);
         particle_data[4] = mode;
-        if (mode == 1)
+        if (mode == PARTICLE_MODE_HERO_RELATIVE)
             fast_vec_sub(particle_data, position, D_0013F3D0);
         qcopy(particle + 0x10, position);
         *(int *)(particle + 4) = packed_color;
