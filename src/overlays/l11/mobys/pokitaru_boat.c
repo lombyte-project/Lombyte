@@ -330,6 +330,9 @@ struct DataA500 {
 };
 
 void update_pokitaru_boat_joint_effects(struct Moby *moby) {
+    enum {
+        POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1
+    };
     struct DataA500 *moby_vars = (struct DataA500 *)moby->pvars;
     float            joint_world_position[4];
     float            pos[4];
@@ -347,7 +350,7 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
         if (!((u8 *)moby_vars)[i * 0x40 + 0x101])
             attach_manipulator(moby, i, &moby_vars->parts[i]);
         step = frame_time * 12.217304f;
-        if (moby->state == 1)
+        if (moby->state == POKITARU_BOAT_WAIT_FOR_ACTIVATION)
             step = frame_time * 2.6179938f;
         if (((u8 *)moby_vars)[i * 0x40 + 0x101]) {
             moby_vars->angle[i] = fast_add_rotations(moby_vars->angle[i], step);
@@ -356,20 +359,20 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
     }
     if (vector_distance_xy(&moby->pos, camera_pos_b358) > 38.0f)
         return;
-    if (moby->state == 1 && (level_frame & 1))
+    if (moby->state == POKITARU_BOAT_WAIT_FOR_ACTIVATION && (level_frame & 1))
         return;
     if (!(moby->pos.z < 224.5f))
         return;
     for (j = 0; j < 4; j++) {
         moby_point_position(moby, j, joint_world_position);
-        iterations_per_joint = moby->state == 1 ? 1 : 2;
+        iterations_per_joint = moby->state == POKITARU_BOAT_WAIT_FOR_ACTIVATION ? 1 : 2;
         for (k = 0; k < iterations_per_joint; k++) {
             pos[0] = joint_world_position[0] + randf_sym(0.0f, 0.3f);
             pos[1] = joint_world_position[1] + randf_sym(0.0f, 0.3f);
             pos[2] = joint_world_position[2] + randf_sym(0.0f, 0.3f);
             heading = fast_add_rotations(moby->rot.z, randf_sym(0.0f, 0.122173049f) + 3.1415927f);
             speed = random_float_between(2.0f, 5.0f) * frame_time;
-            if (moby->state == 1)
+            if (moby->state == POKITARU_BOAT_WAIT_FOR_ACTIVATION)
                 speed *= 0.4f;
             initial_velocity[0] = fast_cos(heading) * speed;
             initial_velocity[1] = fast_sin(heading) * speed;
