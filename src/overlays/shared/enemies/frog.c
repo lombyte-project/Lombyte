@@ -596,6 +596,9 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         FROG_TARGET_MODE_EXPLICIT_TARGET = 1,
         FROG_TARGET_MODE_NO_PURSUIT_TARGET = 2
     };
+    enum {
+        FROG_STATE_RESPAWN = 0xF
+    };
     struct RespawnVars *frog_state;
     struct MobyHit     *hit;
     int                 kind;
@@ -642,7 +645,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
             frog_state->lives = frog_state->lives - 1;
             frog_state->health = frog_state->max_health;
             qcopy(&moby->pos, &frog_state->spawn_pos);
-            moby->state = 0xF;
+            moby->state = FROG_STATE_RESPAWN;
             moby->collision = 0;
             moby->flags = (moby->flags & 0xEFFF) | 0x41;
             break;
