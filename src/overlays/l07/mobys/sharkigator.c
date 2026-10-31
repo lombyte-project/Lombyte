@@ -420,6 +420,11 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
         SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE = 10,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
+    enum {
+        SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 0xC,
+        SHARKIGATOR_HIT_ANIMATION_RECOVERY = 0xD,
+        SHARKIGATOR_DEATH_FALL_AND_REMOVE = 0xE
+    };
     char *hit_record;
     int   hit;
     int   hit_reaction_result;
@@ -442,14 +447,14 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
         case SHARKIGATOR_LAUNCH_HIT_KNOCKBACK_RECOVERY:
         case SHARKIGATOR_ENTER_HIT_KNOCKBACK_RECOVERY:
             start_sharkigator_hit_knockback(moby, x + 0x70, hit_record + 0x10);
-            moby->state = 0xC;
+            moby->state = SHARKIGATOR_HIT_KNOCKBACK_RECOVERY;
             break;
         case SHARKIGATOR_HIT_ANIMATION_RESPONSE:
         case SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE:
             if (((unsigned char *)moby)[0x53] != 4) {
                 blend_moby_animation(moby, 4, 4, 4);
             }
-            moby->state = 0xD;
+            moby->state = SHARKIGATOR_HIT_ANIMATION_RECOVERY;
             break;
         case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
@@ -462,7 +467,7 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
                 FUN_L00_00257470(moby, 0, -1);
                 x[0x67] = 0x78;
                 trooper_anim_update(moby, (short *)(x + 0x60));
-                moby->state = 0xE;
+                moby->state = SHARKIGATOR_DEATH_FALL_AND_REMOVE;
             } else {
                 *hp -= *(float *)(hit_record + 0x2C);
                 ((unsigned char *)x)[0x67] = 0xFA;
