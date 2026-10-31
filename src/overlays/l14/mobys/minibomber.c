@@ -309,8 +309,8 @@ void minibomber_update(Moby_2B5938 *moby) {
     FUN_L14_002b5428_c((char *)moby);
     FUN_L14_002b5dd8_c((char *)moby);
     if (moby->f31 != 0) {
-        if (fast_vec_dist(moby->pos, D_L14_001674C0) < 40.0f && moby->state != 0 &&
-            moby->state != 1 && moby->state != 9) {
+        if (fast_vec_dist(moby->pos, D_L14_001674C0) < 40.0f && moby->state != MINIBOMBER_STATE_INITIALIZE &&
+            moby->state != MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH && moby->state != MINIBOMBER_STATE_DESTROY) {
             FUN_L00_0025a120(moby);
         }
     }
@@ -369,7 +369,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         FUN_L14_002b55b0_c((char *)moby);
         d->f108 = -1;
         moby->f30 = 0x80;
-        moby->state = 1;
+        moby->state = MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH;
         FUN_L14_002b5c98_c((char *)moby);
         fill_transfer_words(manipulator_state, 0, 0x40);
         attach_manipulator(moby, 0, manipulator_state);
@@ -378,7 +378,7 @@ void minibomber_update(Moby_2B5938 *moby) {
     }
     case MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH:
         if (d->fB4 != 2) {
-            moby->state = 2;
+            moby->state = MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH;
             moby->f34 &= 0xFFBE;
             moby->f94 = moby->cls->f10;
             FUN_L14_002b5d18_c((char *)moby);
@@ -392,7 +392,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             path = ((PathNode *)l14_paths[d->f150]);
         }
         if (d->fB4 == 2) {
-            moby->state = 3;
+            moby->state = MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH;
         } else if (advance_minibomber_along_path((char *)moby,
                                                  (char *)path,
                                                  (int)&d->fE8,
@@ -424,7 +424,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             d->f154 = minibomber_intro_exit_heading_error_gain_gp;
             d->f158 = minibomber_heading_velocity_damping_gp;
             d->f15C = minibomber_heading_velocity_limit_gp;
-            moby->state = 4;
+            moby->state = MINIBOMBER_STATE_HOLD_AT_PATH_END;
             d->f104 = 0.0f;
             d->f102 = 0;
         }
@@ -438,7 +438,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             path = ((PathNode *)l14_paths[d->f150]);
         }
         if (d->fB4 != 2) {
-            moby->state = 2;
+            moby->state = MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH;
         } else if (advance_minibomber_along_path(
                        (char *)moby,
                        (char *)path,
@@ -453,7 +453,7 @@ void minibomber_update(Moby_2B5938 *moby) {
                        minibomber_retrace_and_traversal_heading_error_gain_gp,
                        minibomber_heading_velocity_damping_gp,
                        minibomber_heading_velocity_limit_gp) != 0) {
-            moby->state = 1;
+            moby->state = MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH;
             FUN_L14_002b5c98_c((char *)moby);
         }
         break;
@@ -477,15 +477,15 @@ void minibomber_update(Moby_2B5938 *moby) {
                 q = ((PathNode *)l14_paths[d->fDC]) + d->fE8;
                 d->fEC = q[1].v[3];
             }
-            moby->state = 7;
+            moby->state = MINIBOMBER_STATE_TRAVERSE_PATH;
             d->fE4 = 0.0f;
             clear_u64_value(d->fF0);
         } else if (d->fB4 == 2) {
-            moby->state = 3;
+            moby->state = MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH;
             FUN_L14_002b5c30_c((char *)moby);
         } else if (fast_dec_timer_s16(&d->f102) != 0) {
             if (moby->f53 != 2) {
-                moby->state = 5;
+                moby->state = MINIBOMBER_STATE_AIM_AT_BOMB_POINT;
                 d->f102 = scale_game_frames(minibomber_bomb_aim_duration_frames);
                 d->f104 = 0.0f;
                 d->f100 = 0;
@@ -511,7 +511,7 @@ void minibomber_update(Moby_2B5938 *moby) {
                                           minibomber_heading_velocity_damping_gp,
                                           minibomber_heading_velocity_limit_gp) != 0) {
             PathNode *path;
-            moby->state = 4;
+            moby->state = MINIBOMBER_STATE_HOLD_AT_PATH_END;
             if (d->f10C == 0) {
                 d->f10C = 1;
             } else {
@@ -547,11 +547,11 @@ void minibomber_update(Moby_2B5938 *moby) {
                 convert_integer_to_float(scale_game_frames(minibomber_bomb_aim_duration_frames)));
         build_axis_rotation_quaternion(d->f120, 2, blended_aim_angle);
         if (moby->f53 == 2) {
-            moby->state = 4;
+            moby->state = MINIBOMBER_STATE_HOLD_AT_PATH_END;
             d->f102 = scale_game_frames(minibomber_aim_return_duration_frames);
         } else if (fast_dec_timer_s16(&d->f102) != 0) {
             d->f104 = blended_aim_angle;
-            moby->state = 6;
+            moby->state = MINIBOMBER_STATE_RELEASE_BOMB;
             set_moby_animation_c(moby, 1, 0);
         }
         break;
@@ -576,11 +576,11 @@ void minibomber_update(Moby_2B5938 *moby) {
             FUN_L14_002b5968_u((char *)moby, v, d->f104);
             d->f100++;
             if (d->f100 >= ((PathNode *)l14_paths[d->fD8])->n) {
-                moby->state = 4;
+                moby->state = MINIBOMBER_STATE_HOLD_AT_PATH_END;
                 d->f102 = scale_game_frames(minibomber_aim_return_duration_frames);
             } else {
                 d->f102 = scale_game_frames(minibomber_bomb_aim_duration_frames);
-                moby->state = 5;
+                moby->state = MINIBOMBER_STATE_AIM_AT_BOMB_POINT;
             }
         }
         break;
@@ -621,7 +621,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         return;
     }
     }
-    if (moby->state > 1 && moby->state != 9) {
+    if (moby->state > MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH && moby->state != MINIBOMBER_STATE_DESTROY) {
         if (voice_is_playing(moby, d->f108) == 0) {
             d->f108 = allocate_voice_for_target_entry(0, 4, (int)moby);
         }
