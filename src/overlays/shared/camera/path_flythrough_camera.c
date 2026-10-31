@@ -189,9 +189,9 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
 }
 
 extern char                *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
-extern f32                  D_L10_0015F3FC;
-extern s32                  D_L10_0015F404;
-extern char                 D_L10_00167450[];
+extern f32                  l10_path_camera_transition_amount __asm__("D_L10_0015F3FC");
+extern s32                  l10_path_flythrough_active __asm__("D_L10_0015F404");
+extern char                 l10_path_camera_anchor_offset_basis[] __asm__("D_L10_00167450");
 extern float D_L10_00167358 NOT_SDA;
 extern float                D_0013F5E0_5f18[] __asm__("D_0013F5E0");
 extern void                 debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
@@ -219,12 +219,12 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
     stops = (VendorCamStops_5f18 *)(saved + 0x58);
 
     if (run->started == 0) {
-        D_L10_0015F3FC += 0.05f;
-        if (D_L10_0015F3FC >= 1.0f) {
+        l10_path_camera_transition_amount += 0.05f;
+        if (l10_path_camera_transition_amount >= 1.0f) {
             char *start_path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
             char *look_path = ((char *)l10_paths[*(int *)(rec + 0x24)]);
-            D_L10_0015F3FC = 1.0f;
-            D_L10_0015F404 = 1;
+            l10_path_camera_transition_amount = 1.0f;
+            l10_path_flythrough_active = 1;
             run->started = 1;
             qcopy(&cam->pos, start_path + 0x10);
             if (*(int *)(rec + 0x28) >= 0) {
@@ -235,7 +235,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
                 offset[1] = ofs[1];
                 offset[2] = ofs[2];
                 offset[3] = 0.0f;
-                transform_vector_by_basis(offset, offset, D_L10_00167450);
+                transform_vector_by_basis(offset, offset, l10_path_camera_anchor_offset_basis);
                 fast_vec_add(point, &anchor->pos, offset);
                 fast_vec_sub(dir, point, &cam->pos);
             } else {
@@ -250,18 +250,18 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
         return;
     }
     if (run->started == 2) {
-        D_L10_0015F3FC += 0.05f;
-        if (D_L10_0015F3FC >= 1.0f) {
+        l10_path_camera_transition_amount += 0.05f;
+        if (l10_path_camera_transition_amount >= 1.0f) {
             float ang;
             run->started = 3;
-            D_L10_0015F3FC = 1.0f;
+            l10_path_camera_transition_amount = 1.0f;
             ang = stops->fov_end * 0.5f;
             l10_camera_view.tan_half_fov = fast_sin(ang) / fast_cos(ang);
             update_view_context();
             *(u8 *)(rec + 0x39) = 1;
             D_L10_00167358 = 0.05f;
             cam->transition_state = 4;
-            D_L10_0015F404 = 0;
+            l10_path_flythrough_active = 0;
             if (*(int *)(rec + 0x4C) == 0)
                 hero_set_state(0, 1);
         }
@@ -270,9 +270,9 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
     } else if (run->started == 3) {
         return;
     } else {
-        D_L10_0015F3FC -= 0.05f;
-        if (D_L10_0015F3FC < 0.0f)
-            D_L10_0015F3FC = 0.0f;
+        l10_path_camera_transition_amount -= 0.05f;
+        if (l10_path_camera_transition_amount < 0.0f)
+            l10_path_camera_transition_amount = 0.0f;
     }
     path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
     qcopy(dir, &cam->pos);
@@ -320,7 +320,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
         point[1] = ofs[1];
         point[2] = ofs[2];
         point[3] = 0.0f;
-        transform_vector_by_basis(point, point, D_L10_00167450);
+        transform_vector_by_basis(point, point, l10_path_camera_anchor_offset_basis);
         fast_vec_add(look_point, &anchor->pos, point);
         fast_vec_sub(offset, look_point, &cam->pos);
     } else {
