@@ -46,7 +46,7 @@ void spinning_sprite_effect_update(struct Moby *moby) {
         if (vertical_distance_to_ground < 1.0f) {
             moby->pos.z = ground_height + 0.9f;
         }
-        moby->state = 1;
+        moby->state = MOBY_STATE_SPIN_AND_DRAW_SPRITES;
         break;
     }
     case MOBY_STATE_SPIN_AND_DRAW_SPRITES:
