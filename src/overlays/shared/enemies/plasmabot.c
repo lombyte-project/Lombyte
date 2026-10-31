@@ -1087,7 +1087,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         HIT_REACTION_DEATH = 2,
         HIT_REACTION_STAGGER = 3,
         HIT_REACTION_NONE = 11
-    };
+    } ; enum { HIT_KIND_SKIP_DAMAGE_AND_REACTION = 1 , PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 0xA , PLASMABOT_FALL_THEN_EXPLODE = 0xB , PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 0xC};
     PlasmabotVars *state = (PlasmabotVars *)moby->pvars;
     int            hit_kind;
     float          damage;
@@ -1108,7 +1108,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         hit_info = 0;
     }
     reaction_outcome = hit_reaction(moby, hit_info, &state->health, 0, &hit_kind, &damage, 0, 4);
-    if (hit_kind != 1 && ((unsigned char *)moby)[0x20] != 0xB) {
+    if (hit_kind != HIT_KIND_SKIP_DAMAGE_AND_REACTION && ((unsigned char *)moby)[0x20] != 0xB) {
         state->health -= damage;
         if (state->health <= 0.0f)
             reaction_outcome = 1;
@@ -1125,7 +1125,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
             int   stagger_duration_frames;
             float frame_duration, stagger_motion_z, k;
             release_beam_slot_by_id(moby);
-            moby->state = 0xA;
+            moby->state = PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM;
             stagger_duration_frames = scale_game_frames(0x3C);
             frame_duration = frame_time;
             stagger_motion_z = plasmabot_stagger_motion_z_scale_gp * frame_duration;
@@ -1149,9 +1149,9 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         case HIT_REACTION_DEATH: {
             float y;
             if (*(int *)(hit_info + 0x24) & 0x800000) {
-                moby->state = 0xC;
+                moby->state = PLASMABOT_SPAWN_DEBRIS_AND_REMOVE;
             } else {
-                moby->state = 0xB;
+                moby->state = PLASMABOT_FALL_THEN_EXPLODE;
             }
             moby->flags &= 0xEFFF;
             {
