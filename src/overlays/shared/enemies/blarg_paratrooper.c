@@ -601,7 +601,7 @@ void blarg_paratrooper_update(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00303998), where it is exact; names translated to the US level program. */
 
 void update_blarg_paratrooper_damage_and_state(char *moby) {
-    enum { PARATROOPER_HIT_REACTION_LETHAL = 1 , PARATROOPER_HIT_REACTION_NONE = 11} ;Paratrooper302618 *data;
+    enum { PARATROOPER_HIT_REACTION_LETHAL = 1 , PARATROOPER_HIT_REACTION_DEATH_KNOCKBACK = 2, PARATROOPER_HIT_REACTION_NONE = 11} ;Paratrooper302618 *data;
     char              *target, *child, *attached, *chased;
     float              pos[4] __attribute__((aligned(16)));
     float              matrix[16] __attribute__((aligned(16)));
@@ -699,7 +699,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 data->unk67 = 0x78;
                 break;
             case PARATROOPER_HIT_REACTION_LETHAL:
-            case 2: {
+            case PARATROOPER_HIT_REACTION_DEATH_KNOCKBACK: {
                 float push_limit = 16.0f;
                 float pose_rate = D_L08_00162184;
                 float timer_rate = l08_paratrooper_death_knockback_xy_speed;
