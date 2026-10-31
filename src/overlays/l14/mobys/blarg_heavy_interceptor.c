@@ -789,7 +789,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
     } ; enum { INTERCEPTOR_STATE_PATROL_AND_SCAN = 1 , INTERCEPTOR_STATE_ALERT_GROUP = 2 , INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7};
-    BlargHeavyInterceptorVars *blarg_heavy_interceptor_vars =
+    enum { HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE = 1 } ;BlargHeavyInterceptorVars *blarg_heavy_interceptor_vars =
         (BlargHeavyInterceptorVars *)moby->pvars;
     int   hit_reaction_status;
     float damage_amount;
@@ -803,7 +803,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
                                        &damage_amount,
                                        0,
                                        4);
-    if (hit_reaction_status != 1 && moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
+    if (hit_reaction_status != HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE && moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
         float remaining_health = blarg_heavy_interceptor_vars->health - damage_amount;
         blarg_heavy_interceptor_vars->health = remaining_health;
         if (remaining_health <= 0.0f)
