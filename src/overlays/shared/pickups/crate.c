@@ -653,6 +653,9 @@ struct Vars;
 void ground_attached_update(M_2cfcb8 *moby) __asm__("FUN_L00_002cfcb8");
 
 void ground_attached_update(M_2cfcb8 *moby) {
+    enum {
+        ROUTE_ENTRY_ADVANCE_LIMIT = 0x111
+    };
     V_2cfcb8  probe_top;
     V_2cfcb8  probe_bottom;
     V_2cfcb8  probe_up;
@@ -828,7 +831,7 @@ void ground_attached_update(M_2cfcb8 *moby) {
                         s32 entry_state = route->entries[0].state;
                         if (entry_state == 1 || entry_state == 3) {
                             vars->route_index = -1;
-                        } else if (entry_state == 0x111) {
+                        } else if (entry_state == ROUTE_ENTRY_ADVANCE_LIMIT) {
                             vars->route_index = -1;
                         } else if ((u32)(entry_state - 0x11) < 0x100) {
                             if (entry_state - 0x10 >= route->count) {
