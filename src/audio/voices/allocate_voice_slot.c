@@ -28,6 +28,9 @@ s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *, s32)
 s32 allocate_voice_slot(
 
     VoiceDefinition *definition, u32 flags, VoiceMoby *moby, VoiceVector *position, s32 volume) {
+    enum {
+        VOICE_DEFINITION_SOURCE_INACTIVE = 0
+    };
     s32              volume_offset;
     s32              pitch_bend_max;
     s32              pitch_bend_min;
@@ -41,7 +44,7 @@ s32 allocate_voice_slot(
     VoicePoolWindow *pitch_slot;
     VoicePoolWindow *position_slot;
 
-    source_inactive = definition->source_state == 0;
+    source_inactive = definition->source_state == VOICE_DEFINITION_SOURCE_INACTIVE;
     if ((flags & 4) == 0) {
         if ((source_inactive ^ 1) != 0) {
             volume_or_slot_index = -1;
