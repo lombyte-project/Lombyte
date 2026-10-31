@@ -90,7 +90,7 @@ void miner_update(L16WatchMoby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby->state = 1;
+        moby->state = MINER_UPDATE_DIALOGUE;
         initialize_npc_dialogue(moby, &moby_data->activation);
         initialize_moby_grounding(moby);
         break;
@@ -98,7 +98,7 @@ void miner_update(L16WatchMoby *moby) {
         if (alternate_item_available[1] == 0 && update_npc_dialogue(moby, &moby_data->activation)) {
             begin_dialogue_camera_transition(moby, 2.5f);
             *(int *)((char *)moby + 0x58) = 0;
-            moby->state = 2;
+            moby->state = MINER_APPLY_DIALOGUE_COMPLETION;
         }
         break;
     case MINER_APPLY_DIALOGUE_COMPLETION:
@@ -113,7 +113,7 @@ void miner_update(L16WatchMoby *moby) {
                 jet_reset_camera(p + 0x30, p + 0x70);
             }
             memcard_save_data(0, -1);
-            moby->state = 1;
+            moby->state = MINER_UPDATE_DIALOGUE;
         }
     }
     rate = 0.02f;
