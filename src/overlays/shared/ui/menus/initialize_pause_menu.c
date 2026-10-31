@@ -488,6 +488,13 @@ void update_pause_menu(void) {
     enum {
         SCENE_STATE_DEFAULT = 2
     };
+    enum {
+        PAUSE_MENU_STATE_PAGE_TRANSITION = 1,
+        PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY = 0xE,
+        PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14,
+        PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY = 0x21,
+        PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY = 0x23
+    };
     Own *owner;
     Own *u8p;
     Mth *active_callback_object;
@@ -509,7 +516,7 @@ void update_pause_menu(void) {
         D_L00_0015F5AC = 1;
         break;
     }
-    if (D_L00_001B9CF0.state == 0x14) {
+    if (D_L00_001B9CF0.state == PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION) {
         if (D_L00_001B9CF0.unk14 != 0) {
             D_L00_001B9CF0.unk14 = D_L00_001B9CF0.unk14 - 1;
             if (D_L00_001B9CF0.unk14 != 0) {
@@ -584,8 +591,8 @@ void update_pause_menu(void) {
         return;
     }
     scene_state = D_L00_001B9CF0.state;
-    if (scene_state == 0 || scene_state == 0xA || scene_state == 0xE || scene_state == 0x11 ||
-        scene_state == 0x21 || scene_state == 0x2D || scene_state == 0x23) {
+    if (scene_state == 0 || scene_state == 0xA || scene_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY || scene_state == 0x11 ||
+        scene_state == PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY || scene_state == 0x2D || scene_state == PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY) {
         initialize_pause_menu();
     }
     if ((mode_freeze_flags & 1) && !(level_timer < 8)) {
@@ -593,7 +600,7 @@ void update_pause_menu(void) {
         return;
     }
     process_unlock_code_input();
-    if (D_L00_001B9CF0.state == 1) {
+    if (D_L00_001B9CF0.state == PAUSE_MENU_STATE_PAGE_TRANSITION) {
         D_L00_001B9CF0.unk14 = (D_L00_001B9CF0.unk14 < 1) ? 0 : D_L00_001B9CF0.unk14 - 1;
         if (D_L00_001B9CF0.unk14 == 0) {
             u8p = D_L00_001B9CF0.unk8;
@@ -626,7 +633,7 @@ void update_pause_menu(void) {
             D_L00_001B9CF0.owner != &D_L00_001B7DD0 && D_L00_001B9CF0.owner != &D_L00_001B80E0 &&
             D_L00_001B9CF0.owner != &l00_pause_menu_self_transition_animation_guard_page_owner &&
             D_L00_001B9CF0.owner != &D_L00_001B78F0 && D_L00_001B9CF0.owner != &D_L00_001B6820) {
-            if (D_L00_001B9CF0.state != 0x23) {
+            if (D_L00_001B9CF0.state != PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY) {
                 flag = flag ^ 1;
             }
         }
@@ -645,7 +652,7 @@ void update_pause_menu(void) {
                 l00_pause_menu_page_mobys[j]->anim_speed = 1.0f;
             }
         }
-        D_L00_001B9CF0.state = 1;
+        D_L00_001B9CF0.state = PAUSE_MENU_STATE_PAGE_TRANSITION;
         D_L00_001B9CF0.unk14 = 12;
         D_L00_001B9CF0.unkD0 = D_L00_001B9CF0.owner;
         D_L00_001B9CF0.owner = 0;
