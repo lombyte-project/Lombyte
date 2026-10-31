@@ -270,14 +270,14 @@ class ProgressReportTests(unittest.TestCase):
         an INCLUDE_ASM stub is pending; exe rows belong to the executable."""
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
-            (repo / "config" / "overlays" / "us").mkdir(parents=True)
-            (repo / "config" / "overlays" / "us" / "functions.tsv").write_text(
+            (repo / "config" / "us" / "levels").mkdir(parents=True)
+            (repo / "config" / "us" / "levels" / "functions.tsv").write_text(
                 "# name\tkind\tsize\tfingerprint\tlevels\tplaces\texe unit\n"
                 "FUN_00112400\texe\t256\tf0\t19\t00:001EAA08\ttextbin/promoted\n"
                 "FUN_L00_00200000\tshared\t64\tf1\t19\t00:00200000,01:00210000\t\n"
                 "FUN_L03_00300000\tlevel\t32\tf2\t1\t03:00300000\t\n"
             )
-            (repo / "config" / "overlays" / "us" / "levels.json").write_text(json.dumps({
+            (repo / "config" / "us" / "levels" / "levels.json").write_text(json.dumps({
                 "schema": "rnc-overlay-levels-v1",
                 "levels": [{"index": 3, "id": "level-03", "planet": "Kerwan", "description": "Metropolis"}],
             }))
@@ -311,12 +311,12 @@ class ProgressReportTests(unittest.TestCase):
         to require the parameter list to close the line."""
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
-            (repo / "config" / "overlays" / "us").mkdir(parents=True)
-            (repo / "config" / "overlays" / "us" / "functions.tsv").write_text(
+            (repo / "config" / "us" / "levels").mkdir(parents=True)
+            (repo / "config" / "us" / "levels" / "functions.tsv").write_text(
                 "# name\tkind\tsize\tfingerprint\tlevels\tplaces\texe unit\n"
                 "FUN_L00_00200000\tshared\t40\tf1\t19\t00:00200000\t\n"
             )
-            (repo / "config" / "overlays" / "us" / "levels.json").write_text(json.dumps({
+            (repo / "config" / "us" / "levels" / "levels.json").write_text(json.dumps({
                 "schema": "rnc-overlay-levels-v1",
                 "levels": [],
             }))
@@ -365,7 +365,7 @@ class ProgressReportTests(unittest.TestCase):
 
     def test_data_counts_blobs_c_entries_and_levels(self):
         """Data totals come from the preserved blobs and the level records;
-        matched data from the *_OVERLAYS sizes and config/overlays/us/data.tsv."""
+        matched data from the *_OVERLAYS sizes and config/us/levels/data.tsv."""
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
             config = repo / "config" / "us" / "rnc1.us.yaml"
@@ -377,7 +377,7 @@ class ProgressReportTests(unittest.TestCase):
             (repo / "configure.py").write_text(
                 'DATA_OVERLAYS = {\n    "textbin/promoted": (0x112680, 0x13680, 16),\n'
                 '    "gone/unit": (0x112690, 0x13690, 8),\n}\n')
-            overlays = repo / "config" / "overlays" / "us"
+            overlays = repo / "config" / "us" / "levels"
             overlays.mkdir(parents=True)
             (overlays / "level-02.json").write_text(json.dumps({"sections": [
                 {"name": ".lit", "size": 64}, {"name": ".bss", "size": 999},
@@ -397,7 +397,7 @@ class ProgressReportTests(unittest.TestCase):
         D_XXXXXXXX row counts once per level."""
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
-            overlays = repo / "config" / "overlays" / "us"
+            overlays = repo / "config" / "us" / "levels"
             overlays.mkdir(parents=True)
             for level in (1, 2):
                 (overlays / f"level-{level:02d}.json").write_text("{}")
@@ -432,7 +432,7 @@ class OverlayHelperTimestampTests(unittest.TestCase):
             sources.mkdir(parents=True)
             (sources / "sample.c").write_text("void sample(void) {}\n")
             (root / "config/us/overlays/asm").mkdir(parents=True)
-            catalogue = root / "config/overlays/us/functions.tsv"
+            catalogue = root / "config/us/levels/functions.tsv"
             catalogue.parent.mkdir(parents=True)
             catalogue.write_text("")
             build = root / "build/overlays"

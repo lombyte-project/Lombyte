@@ -14,10 +14,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RECORDS_DIR = ROOT / "config/us/overlays"
 ASM_DIR = RECORDS_DIR / "asm"
-CATALOGUE = ROOT / "config/overlays/us/functions.tsv"
-DATA_CATALOGUE = ROOT / "config/overlays/us/data.tsv"
-COMPILER_DATA = ROOT / "config/overlays/us/compiler_data.tsv"
-EXE_DATA = ROOT / "config/overlays/us/exe_data.tsv"
+CATALOGUE = ROOT / "config/us/levels/functions.tsv"
+DATA_CATALOGUE = ROOT / "config/us/levels/data.tsv"
+COMPILER_DATA = ROOT / "config/us/levels/compiler_data.tsv"
+EXE_DATA = ROOT / "config/us/levels/exe_data.tsv"
 
 RECORD_NAMES = ("lit", "bss", "data", "vtbl", "camvtbl", "sndvtbl", "text")
 GP = 0x166C00              # _gp of the executable; every level inherits it

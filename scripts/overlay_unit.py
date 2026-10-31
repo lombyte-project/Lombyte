@@ -86,7 +86,7 @@ def check(name: str) -> dict:
     """check-unit for one overlay function."""
     result = {"unit": name, "ok": False, "promotable": False}
     if name not in ov.read_catalogue():
-        return {**result, "error": f"{name} is not in config/overlays/us/functions.tsv"}
+        return {**result, "error": f"{name} is not in config/us/levels/functions.tsv"}
     source = find_source(name)
     if source is None:
         return {**result, "error": f"no file under src/overlays holds {name}"}
@@ -200,7 +200,7 @@ def verify_all(write: bool = False) -> int:
                 pools.update(verdict.get("pools", ()))
     for name in sorted(data_defined.keys() | data_rows.keys()):
         if data_rows.get(name) != data_defined.get(name):
-            bad.append(f"{name:24s} config/overlays/us/data.tsv says {data_rows.get(name)} bytes, "
+            bad.append(f"{name:24s} config/us/levels/data.tsv says {data_rows.get(name)} bytes, "
                        f"src/overlays defines {data_defined.get(name)}")
     import overlay_exe_data
     for path, rows in ((ov.COMPILER_DATA, pools), (ov.EXE_DATA, overlay_exe_data.proven_copies())):

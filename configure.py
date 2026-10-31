@@ -2712,7 +2712,7 @@ def build_overlays() -> Path:
         ninja.build(outputs=[c_only], rule="c-only", inputs=[f"{rel_root}/{src}"])
         game_edge(f"{c_only}.o", c_only, "overlay-sn" if str(rel) in sn_units else "overlay-game")
         objects += [obj, f"{c_only}.o"]
-    catalogue = Path("config/overlays/us/functions.tsv")
+    catalogue = Path("config/us/levels/functions.tsv")
     sn_functions = overlay_sn_functions(sn_units)
     for line in catalogue.read_text().splitlines():
         parts = line.split("\t")

@@ -62,7 +62,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ELF_PATH = ROOT / "config" / "us" / "SCUS_971.99"
 CONFIG_PATH = ROOT / "config" / "us" / "rnc1.us.yaml"
 OUT_DIR = ROOT / "build" / "data-refs"
-FUNCTIONS_PATH = ROOT / "config" / "overlays" / "us" / "functions.tsv"
+FUNCTIONS_PATH = ROOT / "config" / "us" / "levels" / "functions.tsv"
 DEFAULT_GP = 0x166C00
 DEFAULT_CATALOG = ROOT / "build" / "data-refs" / "boot" / "data.yaml"
 LEVEL_DATA_START = 0x15EF00  # D_LNN_ labels begin here; below it a level keeps the executable's names
@@ -676,7 +676,7 @@ def level_symbols(level: int) -> dict[int, str]:
 def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | None = None) -> Path:
     """Append the definition of the declared object at ``addr`` to ``into``,
     the C file of the only unit that reads it, and say where it is listed:
-    a configure.py table (boot) or config/overlays/us/data.tsv (level N)."""
+    a configure.py table (boot) or config/us/levels/data.tsv (level N)."""
     clang = shutil.which("clang")
     if clang is None:
         raise SystemExit("--emit needs clang to read the struct layout")
@@ -800,7 +800,7 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
     else:
         out.write_text("\n".join(lines) + f"\n\n{definition}\n")
     if level is not None:
-        catalogue = ROOT / "config" / "overlays" / "us" / "data.tsv"
+        catalogue = ROOT / "config" / "us" / "levels" / "data.tsv"
         entries = catalogue.read_text().splitlines()
         notes = [entry for entry in entries if entry.startswith("#")]
         rows = [entry for entry in entries if entry and not entry.startswith("#")]
@@ -965,7 +965,7 @@ def main(argv=None) -> int:
                         help="define the declared objects at these addresses (with --into)")
     parser.add_argument("--into", type=Path, metavar="FILE",
                         help="with --emit: the C file of the only unit that reads them "
-                             "(with --level N: level N's data, listed in config/overlays/us/data.tsv)")
+                             "(with --level N: level N's data, listed in config/us/levels/data.tsv)")
     args = parser.parse_args(argv)
 
     if args.emit:

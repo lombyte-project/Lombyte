@@ -38,7 +38,7 @@ SCRIPTS = Path(__file__).resolve().parent
 
 # Files read from the base revision.
 TREE = ["src", "include", "configure.py", "config/us/rnc1.us.yaml",
-        "config/us/symbol_addrs.txt", "config/overlays/us/functions.tsv"]
+        "config/us/symbol_addrs.txt", "config/us/levels/functions.tsv"]
 YAML = "config/us/rnc1.us.yaml"
 TEXT_SUFFIXES = {".c", ".h", ".py", ".md", ".json", ".yaml", ".yml", ".sh", ".txt",
                  ".tsv", ".s", ".inc", ".ld", ".toml", ".cfg"}
@@ -503,13 +503,13 @@ def check_config_paths(tree: Tree) -> list[Problem]:
     for rel in sorted(sources - configured):
         if Path(rel).name not in {Path(i).name for i in included}:
             out.append(Problem("config-paths", rel, f"file is not a unit in {YAML}"))
-    tsv = read(tree.root, "config/overlays/us/functions.tsv")
+    tsv = read(tree.root, "config/us/levels/functions.tsv")
     for row in tsv.splitlines():
         cols = row.split("\t")
         if row.startswith("#") or len(cols) < 7 or not cols[6].strip():
             continue
         if cols[6].strip() not in tree.units:
-            out.append(Problem("config-paths", "config/overlays/us/functions.tsv",
+            out.append(Problem("config-paths", "config/us/levels/functions.tsv",
                                f"{cols[0]}: exe unit {cols[6].strip()} is not in {YAML}"))
     return out
 

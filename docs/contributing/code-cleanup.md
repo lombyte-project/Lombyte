@@ -168,7 +168,7 @@ edit fails at once.
 - **Where it lives:** data that only one file reads is defined after that
   file's functions and listed in `DATA_OVERLAYS` (`BSS_OVERLAYS` when
   uninitialised) in `configure.py`; level data is a row in
-  `config/overlays/us/data.tsv`. `data-refs.py --emit ADDR --into FILE`
+  `config/us/levels/data.tsv`. `data-refs.py --emit ADDR --into FILE`
   (`--level N` for level data) writes both. Shared data and raw bytes stay in
   assembly, with their type in a header.
 - **Never guess a size.** When `--emit` stops (no declaration, `T x[]` with no
@@ -202,7 +202,7 @@ preserves a source-owned small-data placement entry.
 - Folders follow what the code is in the game ([src/README.md](../../src/README.md)),
   for example `ui/menus/<screen>`, `overlays/shared/enemies` or `lNN/mobys`.
 - In the same commit, update the unit path in `config/us/rnc1.us.yaml`, or in
-  `config/overlays/us/functions.tsv` for level code.
+  `config/us/levels/functions.tsv` for level code.
 - The config decides the link order, so a correct move can't change the
   output.
 

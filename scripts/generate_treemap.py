@@ -132,7 +132,7 @@ def load_overlay_names(repo: Path) -> dict[int, str]:
     function (or its beginning), so the name is display-safe.
     """
     names: dict[int, str] = {}
-    names_dir = repo / "config" / "overlays" / "us" / "names"
+    names_dir = repo / "config" / "us" / "levels" / "names"
     if not names_dir.is_dir():
         return names
     for path in sorted(names_dir.glob("level-*.json")):

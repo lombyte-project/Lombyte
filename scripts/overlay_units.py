@@ -1,6 +1,6 @@
 """The level overlay functions as progress units (docs/build/overlays.md).
 
-Reads ``config/overlays/us/functions.tsv`` (the catalogue: every distinct
+Reads ``config/us/levels/functions.tsv`` (the catalogue: every distinct
 function of the 19 level programs, once) and ``src/overlays/``: a shared or
 level function is C_EXACT when its C is in ``src/overlays/`` (it is promoted
 there only after the byte proof) and pending while its line there is an
@@ -19,8 +19,8 @@ import json
 import re
 from pathlib import Path
 
-CATALOGUE = Path("config/overlays/us/functions.tsv")
-LEVELS = Path("config/overlays/us/levels.json")
+CATALOGUE = Path("config/us/levels/functions.tsv")
+LEVELS = Path("config/us/levels/levels.json")
 CATEGORIES = Path("config/us/unit_categories.json")
 SOURCES = Path("src/overlays")
 OVERLAY_FUNC_RE = re.compile(r"^FUN_L(\d{2})_([0-9a-f]{8})$")

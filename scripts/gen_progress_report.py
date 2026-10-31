@@ -16,7 +16,7 @@ What the report counts (the same contract as ``assets/decomp_map.json``):
 * every recoverable configured C unit (``config/us/rnc1.us.yaml`` rows
   ``[0xADDR, c, owner]``) with its byte size, nested under a logical group;
 * every shared and level function of the 19 level overlays
-  (``config/overlays/us/functions.tsv``, ``docs/build/overlays.md``), once each,
+  (``config/us/levels/functions.tsv``, ``docs/build/overlays.md``), once each,
   grouped by its ``src/overlays/`` file; it is matched when its C is there
   (promotion follows the byte proof) and pending while it is an
   ``INCLUDE_ASM`` stub. The top-level measures cover the executable and the
@@ -33,7 +33,7 @@ What the report counts (the same contract as ``assets/decomp_map.json``):
   (``core_data`` .. ``lvl_sndvtbl``) and each level's ``.lit``, ``.data`` and
   vtables; matched are the bytes C defines and the proofs check: the
   ``*_OVERLAYS`` entries of ``configure.py`` (the boot gate) and
-  ``config/overlays/us/data.tsv`` plus the switch tables and literals the
+  ``config/us/levels/data.tsv`` plus the switch tables and literals the
   overlay C compiles to (``compiler_data.tsv``), both proven by ``make
   overlays``. bss is not counted.
 * report units are grouped by their source folder; a clicked group shows
@@ -169,7 +169,7 @@ def data_totals(repo: Path) -> dict[str, tuple[int, int]]:
                        for unit in units))
     totals = {"boot": (boot, owned)}
     level_c = read_level_data(repo)
-    for path in sorted((repo / "config" / "overlays" / "us").glob("level-??.json")):
+    for path in sorted((repo / "config" / "us" / "levels").glob("level-??.json")):
         level = int(path.stem[-2:])
         sections = json.loads(path.read_text()).get("sections", [])
         total = sum(sec["size"] for sec in sections if sec["name"] in LEVEL_DATA)
@@ -181,11 +181,11 @@ def data_totals(repo: Path) -> dict[str, tuple[int, int]]:
 
 
 def read_level_data(repo: Path) -> dict[int, int]:
-    """Level -> bytes of its data in C: the objects config/overlays/us/data.tsv
+    """Level -> bytes of its data in C: the objects config/us/levels/data.tsv
     lists, and the switch tables and float literals the overlay C compiles to
-    (config/overlays/us/compiler_data.tsv), and the levels' copies of the
+    (config/us/levels/compiler_data.tsv), and the levels' copies of the
     executable's data in C (exe_data.tsv). A byte two of them cover counts once."""
-    folder = repo / "config" / "overlays" / "us"
+    folder = repo / "config" / "us" / "levels"
     levels = [int(p.stem[-2:]) for p in folder.glob("level-??.json")]
     spans: dict[int, list[tuple[int, int]]] = {}
     path = folder / "data.tsv"
@@ -221,8 +221,8 @@ def zero_level_data(repo: Path) -> int:
         for label, bare in re.findall(r'^(?!extern\b)[^;=\n]*?(?:__asm__\("(D_\w+)"\)|\b(D_(?:L\d\d_)?[0-9A-Fa-f]{8})\b)'
                                       r'[^;=\n]*=\s*(?:\{\s*0\s*\}|0)\s*;', path.read_text(errors="replace"), re.M):
             zero.add(label or bare)
-    levels = len(list((repo / "config" / "overlays" / "us").glob("level-??.json")))
-    rows = (repo / "config" / "overlays" / "us" / "data.tsv")
+    levels = len(list((repo / "config" / "us" / "levels").glob("level-??.json")))
+    rows = (repo / "config" / "us" / "levels" / "data.tsv")
     total = 0
     for line in rows.read_text().splitlines() if rows.is_file() else []:
         name, _, size = line.partition("\t")
