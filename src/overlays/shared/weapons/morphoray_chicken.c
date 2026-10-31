@@ -237,6 +237,10 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
         CHICKEN_STATE_IDLE = 1,
         CHICKEN_STATE_EMIT_FEATHERS = 5
     };
+    enum {
+        MOBY_STATE_NON_SPAWN_POOL_REMOVAL = 0xFD,
+        MOBY_STATE_SPAWN_POOL_REMOVAL = 0xFE
+    };
     struct Moby *spawned_moby;
     Sub         *moby_vars;
     Loc          loc;
@@ -315,7 +319,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
         fill_transfer_words(moby_vars, 0, 0x20);
         previous_slot_moby = D_L00_001DD100[D_L00_00161854];
         if (previous_slot_moby != NULL && previous_slot_moby->oclass == 0x10E &&
-            previous_slot_moby->state != 0xFE && previous_slot_moby->state != 0xFD) {
+            previous_slot_moby->state != MOBY_STATE_SPAWN_POOL_REMOVAL && previous_slot_moby->state != MOBY_STATE_NON_SPAWN_POOL_REMOVAL) {
             if (previous_slot_moby->state == CHICKEN_STATE_EMIT_FEATHERS) {
                 moby_vars->unk78 = yaw_cosine_scratch;
                 spawned_moby->flags &= ~0x20;
