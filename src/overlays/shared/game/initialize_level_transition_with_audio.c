@@ -116,6 +116,9 @@ int                  sce_gs_sync_v(int) __asm__("FUN_00122298");
 void initialize_level_transition_with_audio(int audio_selection_mode) __asm__("FUN_L00_0028e9c8");
 
 void initialize_level_transition_with_audio(int audio_selection_mode) {
+    enum {
+        AUDIO_SELECTION_MODE_ALWAYS_FADE = 0
+    };
     O_28e9c8 *moby;
     int       secondary_track_index, base_audio_selection_index, audio_stream_table_index,
         alternate_audio_stream_table_index, shared_table_offset;
@@ -142,7 +145,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
         if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
             moby->flags |= 0x80;
     }
-    if (audio_selection_mode == 0) {
+    if (audio_selection_mode == AUDIO_SELECTION_MODE_ALWAYS_FADE) {
         base_audio_selection_index = D_0013E030_28e9c8.x26;
         audio_stream_table_index = base_audio_selection_index + 1;
         secondary_track_index = base_audio_selection_index + 6;
