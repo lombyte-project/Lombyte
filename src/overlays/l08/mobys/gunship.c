@@ -242,6 +242,11 @@ void update_linked_moby_parts(struct Moby *moby) {
 }
 
 void process_gunship_part_hits(struct Moby *moby) {
+    enum {
+        GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY = 0,
+        GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY = 1,
+        GUNSHIP_TARGET_HIT_VOICE_ENTRY = 2
+    };
     char *gunship_instance_vars = *(char **)((char *)moby + 0x78);
     char *entries = gunship_instance_vars + 0x60;
     char *part_entry_cursor = entries;
@@ -256,18 +261,18 @@ void process_gunship_part_hits(struct Moby *moby) {
             if (i < 7) {
                 if (score <= 0) {
                     score = 1;
-                    state = 1;
+                    state = GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY;
                 }
             } else if (i < 10) {
                 if (score < 2) {
                     score = 2;
-                    state = 1;
+                    state = GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY;
                 }
             } else {
                 if (score < 4) {
                     score += 4;
                     chosen = i;
-                    state = 2;
+                    state = GUNSHIP_TARGET_HIT_VOICE_ENTRY;
                 }
             }
             (*(unsigned char **)part_entry_cursor)[0xA4] = 0xFF;
@@ -275,7 +280,7 @@ void process_gunship_part_hits(struct Moby *moby) {
     }
     *(short *)(gunship_instance_vars + 0x28C) += score;
     if (*(short *)(gunship_instance_vars + 0x28C) >= 8) {
-        state = 0;
+        state = GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY;
         *(short *)(gunship_instance_vars + 0x28C) = *(short *)(gunship_instance_vars + 0x28C) % 8;
         if (chosen != 0) {
             int   off = chosen * 16;
