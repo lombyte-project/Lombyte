@@ -889,6 +889,9 @@ void process_helicopter_hits(struct Moby *moby) {
         HELICOPTER_DEATH_EFFECTS = 7,
         HELICOPTER_DEAD_WAIT_FOR_RESET = 0x40
     };
+    enum {
+        HIT_REACTION_SKIP_DAMAGE = 1
+    };
     int   hit_reaction_status;
     float fv;
     int   hit_reaction_code;
@@ -900,7 +903,7 @@ void process_helicopter_hits(struct Moby *moby) {
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_reaction_code =
         hit_reaction(moby, hit_record, helicopter_vars + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-    if (hit_reaction_status != 1 && moby->state != HELICOPTER_DEATH_EFFECTS && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET) {
+    if (hit_reaction_status != HIT_REACTION_SKIP_DAMAGE && moby->state != HELICOPTER_DEATH_EFFECTS && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET) {
         float remaining_health = *(float *)(helicopter_vars + 0x20) - fv;
         *(float *)(helicopter_vars + 0x20) = remaining_health;
         if (hit_reaction_code == 1 || remaining_health <= 0.0f) {
