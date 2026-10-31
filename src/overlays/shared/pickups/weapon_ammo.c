@@ -339,12 +339,15 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
 int try_collect_ammo_pickup(struct Moby *pickup_moby) __asm__("FUN_L00_002c5be8");
 
 int try_collect_ammo_pickup(struct Moby *pickup_moby) {
+    enum {
+        AMMO_PICKUP_COLLECTED = 2
+    };
     int  *pickup_vars = ((int *)pickup_moby->pvars);
     int   before;
     float excess_ammo_amount;
     int   ammo_added;
 
-    if (pickup_moby->state == 2) {
+    if (pickup_moby->state == AMMO_PICKUP_COLLECTED) {
     fail:
         return 0;
     }
@@ -362,7 +365,7 @@ int try_collect_ammo_pickup(struct Moby *pickup_moby) {
         -1);
     if (excess_ammo_amount < (float)pickup_vars[0]) {
         weapon_ammo_pickup_totals[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
-        pickup_moby->state = 2;
+        pickup_moby->state = AMMO_PICKUP_COLLECTED;
         pickup_moby->scale *= frame_scale * 0.200000048f + 1.0f;
         clear_u64_value(pickup_vars + 4);
         {
