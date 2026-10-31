@@ -120,15 +120,15 @@ void bolt_pickup_update(Moby_2B94B0 *moby) {
     int       hit, ok, bob_period_ticks;
 
     moby_data->ticks++;
-    if (moby->state != 0)
+    if (moby->state != MOBY_STATE_INITIALIZE)
         moby->pos[2] = moby_data->f8;
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
         initialize_bolt_pickup(moby);
         if (moby_data->f2C != 0)
-            moby->state = 1;
+            moby->state = MOBY_STATE_PHYSICS_MOVEMENT;
         else
-            moby->state = 2;
+            moby->state = MOBY_STATE_CHECK_COLLECTION;
         break;
     case MOBY_STATE_PHYSICS_MOVEMENT:
         qcopy(P, moby->pos);
@@ -170,7 +170,7 @@ void bolt_pickup_update(Moby_2B94B0 *moby) {
                     P[2] = P[2] + bolt_pickup_collision_clearance_distance_gp;
                     if (*(int *)D_L08_001746D8_2B94B0 == 0) {
                         clear_u64_value(moby_data->vel);
-                        moby->state = 2;
+                        moby->state = MOBY_STATE_CHECK_COLLECTION;
                     }
                 }
             } else {
