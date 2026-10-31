@@ -21,6 +21,9 @@ extern void                    sceSifWriteBackDCache();
 s32 sceCdDiskReady(s32 mode) __asm__("FUN_00121190");
 
 s32 sceCdDiskReady(s32 mode) {
+    enum {
+        CD_DISK_READY_MODE_NEGATIVE_FAILURE_RETURN = 8
+    };
     s32 response;
     s32 spin;
 
@@ -33,7 +36,7 @@ s32 sceCdDiskReady(s32 mode) {
     }
     if (sceCdSyncS(1) != 0) {
         SignalSema(cd_scmd_sema);
-        if (mode == 8) {
+        if (mode == CD_DISK_READY_MODE_NEGATIVE_FAILURE_RETURN) {
             return -1;
         }
         return 6;
@@ -62,7 +65,7 @@ s32 sceCdDiskReady(s32 mode) {
     if (sceSifCallRpc(&cd_disk_ready_rpc_client, 0, 0, D_001599D0, 4, cd_scmd_result, 4, 0, 0) <
         0) {
         SignalSema(cd_scmd_sema);
-        if (mode == 8) {
+        if (mode == CD_DISK_READY_MODE_NEGATIVE_FAILURE_RETURN) {
             return -1;
         }
         return 6;
