@@ -372,7 +372,7 @@ void gunship_update(struct Moby *moby) {
             truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
         qcopy(&moby->pos, &gunship_control_vars->follow[1].path->points[0]);
         spawn_gunship_parts(moby);
-        moby->state = 2;
+        moby->state = GUNSHIP_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY;
         moby->rot.z =
             fast_arc_tan(gunship_control_vars->follow[1].path->points[1].f[0] - moby->pos.x,
                          gunship_control_vars->follow[1].path->points[1].f[1] - moby->pos.y);
@@ -491,7 +491,7 @@ void gunship_update(struct Moby *moby) {
     case GUNSHIP_BEGIN_PRIMARY_PATH: {
         LevelPath *path;
 
-        moby->state = 1;
+        moby->state = GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET;
         path = gunship_control_vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z =
