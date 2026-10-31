@@ -36,7 +36,7 @@ s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
     D_00159A80.unk4 = port;
     D_00159A80.unk8 = slot;
     D_00159A80.unk1C = D_00159F00;
-    if (type != 0) {
+    if (type != NULL) {
         D_00159A80.unk14 = 1;
     } else {
         D_00159A80.unk14 = 0;
