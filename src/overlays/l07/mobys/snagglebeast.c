@@ -1761,14 +1761,14 @@ void snagglebeast_update(unsigned char *moby) {
                                0x78);
                 if (*(int *)(linked_moby_vars + 0x28) != -1 &&
                     *(int *)(paired_linked_moby_vars + 0x28) != -1) {
-                    float d1 = vector_distance_xy(
+                    float hero_to_linked_cuboid_distance = vector_distance_xy(
                         ((char *)&hero) + 0x80,
                         (char *)l07_cuboids + (*(int *)(linked_moby_vars + 0x28) << 7) + 0x30);
                     int sel;
                     if (vector_distance_xy(((char *)&hero) + 0x80,
                                            (char *)l07_cuboids +
                                                (*(int *)(paired_linked_moby_vars + 0x28) << 7) +
-                                               0x30) < d1) {
+                                               0x30) < hero_to_linked_cuboid_distance) {
                         sel = *(int *)(paired_linked_moby_vars + 0x28);
                         k = k2;
                     } else {
@@ -1880,12 +1880,12 @@ void snagglebeast_update(unsigned char *moby) {
                     snagglebeast_instance_state->navigation_mask &= 0xFD;
                     break;
                 case SNAGGLEBEAST_PATH_SELECT_FARTHER_PAIRED_POINT: {
-                    float d1 = vector_distance_xy(
+                    float hero_to_first_paired_path_point_distance = vector_distance_xy(
                         ((char *)&hero) + 0x80,
                         D_L07_001B0530[snagglebeast_instance_state->path_1A0] + 0x30);
                     if (vector_distance_xy(((char *)&hero) + 0x80,
                                            D_L07_001B0530[snagglebeast_instance_state->path_1A0] +
-                                               0x40) < d1) {
+                                               0x40) < hero_to_first_paired_path_point_distance) {
                         qcopy(snagglebeast_instance_state->unk120,
                               D_L07_001B0530[snagglebeast_instance_state->path_1A0] + 0x30);
                     } else {
@@ -2057,7 +2057,7 @@ void snagglebeast_update(unsigned char *moby) {
                             char *path = D_L07_001B0530[snagglebeast_instance_state->measured_path];
                             int   pidx = 0;
                             float pfrac = 0.0f;
-                            float d1;
+                            float hero_to_sample_distance;
                             float moby_to_sample_distance;
                             pidx =
                                 select_point_index_by_distance(((char *)&hero) + 0x80, path, 0.0f);
@@ -2069,9 +2069,9 @@ void snagglebeast_update(unsigned char *moby) {
                                             &pfrac,
                                             snagglebeast_instance_state->unk1AC,
                                             1);
-                                d1 = vector_distance_xy(((char *)&hero) + 0x80, &start);
+                                hero_to_sample_distance = vector_distance_xy(((char *)&hero) + 0x80, &start);
                                 moby_to_sample_distance = vector_distance_xy(moby + 0x10, &start);
-                            } while (d1 < 8.0f || moby_to_sample_distance < 12.0f);
+                            } while (hero_to_sample_distance < 8.0f || moby_to_sample_distance < 12.0f);
                             add_random_xy_offset((float *)&start, 0.5f);
                             fast_vec_sub(&direction, &start, ((char *)&hero) + 0x80);
                             zv = start.f[2];
