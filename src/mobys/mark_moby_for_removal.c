@@ -10,10 +10,14 @@ extern void         update_moby_grids(struct Moby *, u32) __asm__("func_0020DC20
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
 void mark_moby_for_removal(struct Moby *moby) {
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     if (moby < moby_instance_end) {
-        moby->state = 0xFD;
+        moby->state = MOBY_STATE_REMOVAL_BELOW_INSTANCE_END;
     } else {
-        moby->state = 0xFE;
+        moby->state = MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END;
     }
     moby->spawn_frame = world_update_time + 2;
     update_moby_grids(moby, 0x80807F7F);
