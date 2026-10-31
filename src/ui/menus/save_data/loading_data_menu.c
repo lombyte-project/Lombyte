@@ -44,7 +44,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
     s32              scaled_volume_70;
     previous_save_slot = menu->selected_save_slot;
     if (menu_system.card_op_pending != 0) {
-        if ((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) {
+        if ((memory_card_state.state < MEMCARD_REQUEST_FORMAT) && (memory_card_state.pending_state < MEMCARD_QUERY_INFO)) {
             menu_system.card_op_pending = 0;
             if (memory_card_state.err != 0) {
                 mode_freeze_flags |= 0x100;
@@ -84,7 +84,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         menu_system.next = menu_system.current->back;
         return 0;
     }
-    if (((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) &&
+    if (((memory_card_state.state < MEMCARD_REQUEST_FORMAT) && (memory_card_state.pending_state < MEMCARD_QUERY_INFO)) &&
         (memory_card_state.card[0].type == 2)) {
         if (menu->flags & 1) {
             buttons = controller_state.raw_pressed;
@@ -106,9 +106,9 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
             allocate_voice_for_target_entry(0, 0x11, menu->sound_owner);
             memory_card_state.active_card = 0;
             memory_card_state.card[0].save_index = (s32)menu->selected_save_slot;
-            if (memory_card_state.pending_state < 0) {
+            if (memory_card_state.pending_state < MEMCARD_QUERY_INFO) {
                 memory_card_state.pending_card = 0;
-                memory_card_state.pending_state = 0xD;
+                memory_card_state.pending_state = MEMCARD_BEGIN_READ_SAVE;
             }
             menu_system.card_op_pending = 1;
             menu_system.card_op_text = 0x4FB6;
