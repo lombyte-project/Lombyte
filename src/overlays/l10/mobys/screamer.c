@@ -389,6 +389,9 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
         SCREAMER_STATE_DEATH_KNOCKBACK = 11
     };
+    enum {
+        TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED = 2
+    };
     MobyData_2DFC38 *screamer_vars = (MobyData_2DFC38 *)moby->pvars;
     Hit_2DFC38      *hit_record;
     float            relative_offset[4];
@@ -455,7 +458,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
 
     if (screamer_vars->f174 == 2) {
         target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
-        if (target_selection_status != 2) {
+        if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
             LevelCuboid *bp = &l10_cuboids[screamer_vars->f194];
             fast_vec_sub(relative_offset, D_0013F3D0, &bp->pos);
             relative_offset[3] = 0.0f;
@@ -476,7 +479,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     } else {
         target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
     }
-    if (target_selection_status != 2) {
+    if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
         if (screamer_vars->f180 < vector_distance_xy(screamer_vars->f130, screamer_vars->fC0))
             screamer_vars->f104 = 2;
         else if (moby->visible == 0)
