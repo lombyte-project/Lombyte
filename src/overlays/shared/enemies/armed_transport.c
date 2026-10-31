@@ -443,7 +443,7 @@ void armed_transport_update(char *transport_moby) {
 /* Update interaction ownership, damage responses and pursuit tracking. */
 
 void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
-    enum { ARMED_TRANSPORT_STATE_DYING = 8 } ;L16Hit_e            hit;
+    enum { ARMED_TRANSPORT_STATE_DYING = 8 } ; enum { HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE = 1} ;L16Hit_e            hit;
     ArmedTransportVars *transport_data = (ArmedTransportVars *)transport_moby->pvars;
     float               zero;
     char               *hit_record;
@@ -466,7 +466,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
     hit_record = find_moby_hit(transport_moby, 0x330000, 0);
     response = hit_reaction(
         transport_moby, hit_record, &transport_data->health, 0, &hit.status, &hit.amount, 0, 4);
-    if (hit.status != 1 && transport_moby->state != ARMED_TRANSPORT_STATE_DYING) {
+    if (hit.status != HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE && transport_moby->state != ARMED_TRANSPORT_STATE_DYING) {
         transport_data->health -= hit.amount;
         if (transport_data->health <= zero || (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && hit.amount >= 2.0f))
             response = 1;
