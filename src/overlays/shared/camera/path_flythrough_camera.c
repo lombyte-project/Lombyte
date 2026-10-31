@@ -18,13 +18,13 @@
 #include "rnc/overlay/shared/camera/path_flythrough_camera.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
-extern char *D_L10_0015EF50;
+extern char *l10_descriptor_table __asm__("D_L10_0015EF50");
 
 void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 
 void activate_descriptor(int i) {
     unsigned char *descriptor_record;
-    descriptor_record = *(unsigned char **)(D_L10_0015EF50 + i * 0x20 + 0x1C);
+    descriptor_record = *(unsigned char **)(l10_descriptor_table + i * 0x20 + 0x1C);
     descriptor_record[0x38] = 1;
     descriptor_record[0x39] = 0;
 }
@@ -34,7 +34,7 @@ extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");
 int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
 
 int check_descriptor_hero_trigger(char *moby) {
-    unsigned char *e = *(unsigned char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    unsigned char *e = *(unsigned char **)(l10_descriptor_table + *(short *)(moby + 0x84) * 32 + 0x1C);
 
     if (*(int *)(e + 0x0C) >= 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(e + 0x0C)))
@@ -89,7 +89,7 @@ extern VendorView_5f18 D_L10_0016CEC0;
 void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f5b58");
 
 void initialize_path_camera(struct UpdateCam *path_camera) {
-    char              *rec = *(char **)(D_L10_0015EF50 + path_camera->descriptor_index * 32 + 0x1C);
+    char              *rec = *(char **)(l10_descriptor_table + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5f18 *run;
     VendorCamStops_5f18 *stops;
     f32                 *fov;
@@ -214,7 +214,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
     int                  i;
 
     saved = (char *)cam->saved_state;
-    rec = *(char **)(D_L10_0015EF50 + cam->descriptor_index * 32 + 0x1C);
+    rec = *(char **)(l10_descriptor_table + cam->descriptor_index * 32 + 0x1C);
     run = (VendorCamRun_5f18 *)(saved + 0x40);
     stops = (VendorCamStops_5f18 *)(saved + 0x58);
 
@@ -353,7 +353,7 @@ int evaluate_descriptor_eligibility(char *descriptor_owner,
 
 int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_object) {
     unsigned char *descriptor_record =
-        *(unsigned char **)(D_L10_0015EF50 + *(short *)(descriptor_owner + 0x84) * 32 + 0x1C);
+        *(unsigned char **)(l10_descriptor_table + *(short *)(descriptor_owner + 0x84) * 32 + 0x1C);
     int x;
     int y;
     if (descriptor_record[0x39] != 0) {
