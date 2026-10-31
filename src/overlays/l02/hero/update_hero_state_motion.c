@@ -39,6 +39,9 @@ void process_hero_ground_material_effects(void) {
         GROUND_MATERIAL_MAGNETIC = 2,
         GROUND_MATERIAL_SINK_TRIGGER = 0xD
     };
+    enum {
+        GROUND_MATERIAL_SINK_SURFACE_TRIGGER = 3
+    };
     struct Hero *hero_state = &hero;
     int          keep = hero_state->ground_sound_class;
     int          saved_ground_type = hero_state->ground_type;
@@ -61,7 +64,7 @@ void process_hero_ground_material_effects(void) {
         }
     }
     sphere_probe_selector = D_0015ED84_c;
-    if (saved_ground_type == 3) {
+    if (saved_ground_type == GROUND_MATERIAL_SINK_SURFACE_TRIGGER) {
         struct Hero *q = &hero;
         q->selector_3 = 1;
         sphere_probe_selector = D_0015ED84_d;
