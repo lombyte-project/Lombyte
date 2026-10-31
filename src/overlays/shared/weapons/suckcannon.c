@@ -1418,6 +1418,9 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
         SUCKCANNON_STATE_LOADED_AIM = 4,
         SUCKCANNON_STATE_FIRE_STORED_MOBY = 5
     };
+    enum {
+        SUCKCANNON_ANIMATION_SUCTION_LOOP = 3
+    };
     SuckWork    aim_and_fire_scratch;
     SuckCannon *cannon;
     SuckStats  *stats;
@@ -1513,7 +1516,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
         }
         break;
     case SUCKCANNON_STATE_SUCTION_ACTIVE:
-        if (suck_cannon_moby->anim_state != 3 &&
+        if (suck_cannon_moby->anim_state != SUCKCANNON_ANIMATION_SUCTION_LOOP &&
             (suck_cannon_moby->anim_state != 0 || (suck_cannon_moby->anim_flags & 2)))
             blend_moby_animation(suck_cannon_moby, 3, 0, scale_game_frames(5));
         fast_dec_timer(&cannon->cooldown);
