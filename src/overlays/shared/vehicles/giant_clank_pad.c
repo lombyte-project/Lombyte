@@ -31,6 +31,9 @@ void giant_clank_pad_update(struct Moby *moby) {
         GIANT_CLANK_PAD_ARM_ACTIVATION = 1,
         GIANT_CLANK_PAD_CHECK_ACTIVATION = 2
     };
+    enum {
+        GIANT_CLANK_PAD_ACTIVATION_DISABLED = 3
+    };
     struct Moby *linked = moby->pvars;
     struct Moby *linked_vehicle_moby;
     struct Moby *pad;
@@ -109,7 +112,7 @@ void giant_clank_pad_update(struct Moby *moby) {
             start_scene(6);
             *(u128 *)hero.saved_pos_rot = *(u128 *)&hero.motion.pos;
             *(u128 *)(hero.saved_pos_rot + 16) = *(u128 *)&hero.motion.rot;
-            moby->state = 3;
+            moby->state = GIANT_CLANK_PAD_ACTIVATION_DISABLED;
             return;
         }
         break;
