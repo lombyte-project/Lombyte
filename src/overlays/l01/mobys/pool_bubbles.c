@@ -34,6 +34,9 @@ extern u8 *pool_bubble_texture_table[] __asm__("D_L01_001B25E0");
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
 
 Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
+    enum {
+        POOL_BUBBLE_PARTICLE_KIND = 0x48
+    };
     Particle *particle;
     s32       gray_channel;
     u32       col;
@@ -45,7 +48,7 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
         col = (gray_channel << 8) | 0x40000000;
         particle->color = (gray_channel << 16) | col | gray_channel;
         particle->alpha = truncate_float_to_s32(4.0f) + 0x20;
-        particle->kind = 0x48;
+        particle->kind = POOL_BUBBLE_PARTICLE_KIND;
         particle->active = 0;
         particle->tex = *pool_bubble_texture_table[0];
         particle->scale = scale;
