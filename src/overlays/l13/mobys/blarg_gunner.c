@@ -226,7 +226,7 @@ void blarg_gunner_update(struct Moby *moby) {
     switch (moby->state) {
     case BLARG_GUNNER_STATE_INITIALIZE:
         moby_vars[0x29] = 1;
-        moby->state = 1;
+        moby->state = BLARG_GUNNER_STATE_ACTIVE;
         moby_vars[0x5A] = 6;
         moby_vars[0x58] = 8;
         break;
