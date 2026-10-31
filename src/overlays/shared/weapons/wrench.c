@@ -645,7 +645,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         float           difference, yaw;
         wrench_moby->parent = player->moby;
         player_state = player->state;
-        if (player_state == 1) {
+        if (player_state == HERO_STATE_LOOK) {
             if (pad_held_words[0] & 0xA)
                 draw_target_reticle(
                     (int)wrench_moby, 0xFF917267, 1.0f, 0.0f, 0, 0x25, -1, 90.0f, 4);
@@ -684,8 +684,8 @@ void wrench_update(WrenchMoby *wrench_moby) {
         FUN_L00_002a7c70_c((char *)wrench_moby);
         {
             int current_state = wrench_hero()->state;
-            if (current_state != 19 && current_state != 33 && current_state != 43 &&
-                current_state != 112 && current_state != 20) {
+            if (current_state != HERO_STATE_WRENCH_COMBO && current_state != HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE && current_state != HERO_STATE_GRIND_ATTACK &&
+                current_state != HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT && current_state != HERO_STATE_WRENCH_SLAM) {
                 int current = wrench_moby->current_animation;
                 if ((unsigned int)current >= 3 && wrench_moby->current_animation < 6)
                     blend_moby_animation(wrench_moby, 1, 0, scale_game_frames(4));
@@ -898,7 +898,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             update_moby_transform_history(control, 0);
             wrench_moby->parent = control_player->moby;
             control_player->wrench_state = 2;
-            if (wrench_moby->state == 10 && control_player->thrown_sound == -1)
+            if (wrench_moby->state == WRENCH_THROW_OUTBOUND && control_player->thrown_sound == -1)
                 control_player->thrown_sound =
                     allocate_voice_for_target_entry(14, 4, control_player->moby);
         }
@@ -917,7 +917,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             }
         }
         qcopy(wrench_collision_scratch.v[0], position);
-        if (wrench_moby->state == 10) {
+        if (wrench_moby->state == WRENCH_THROW_OUTBOUND) {
             qcopy(wrench_collision_scratch.v[1], hero_velocity());
             fast_vec_scale(wrench_collision_scratch.v[1], wrench_collision_scratch.v[1], 0.7f);
             fast_vec_add(position, position, wrench_collision_scratch.v[1]);
@@ -927,7 +927,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             wrench_vars->acceleration += frame_time_cube * 170.0f;
             approach_value(&wrench_vars->speed, 0.0f, wrench_vars->acceleration);
             if (wrench_vars->speed == 0.0f)
-                wrench_moby->state = 11;
+                wrench_moby->state = WRENCH_THROW_RETURNING;
         } else {
             int   arrived = 0;
             float length, steps;
@@ -973,7 +973,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 wrench_hero()->thrown_sound = -1;
                 clear_moby_transform_history((char *)wrench_hero() + 0x17B0);
                 wrench_hero()->thrown = 0;
-                wrench_moby->state = 0;
+                wrench_moby->state = WRENCH_NORMAL;
             }
         }
         collided = 0;
@@ -988,14 +988,14 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 wrench_hero()->attack_cooldown = 1;
                 allocate_voice_for_target_entry(2, 0, wrench_moby);
             }
-            if (wrench_moby->state == 10) {
+            if (wrench_moby->state == WRENCH_THROW_OUTBOUND) {
                 spawn_wrench_impact_effects((char *)wrench_moby);
                 wrench_vars->speed *= 0.5f;
-                wrench_moby->state = 11;
+                wrench_moby->state = WRENCH_THROW_RETURNING;
             }
         }
         radius = 1.2f;
-        if (wrench_moby->state == 11)
+        if (wrench_moby->state == WRENCH_THROW_RETURNING)
             radius = -0.37f;
         fast_vec_normalize(wrench_collision_scratch.v[4], wrench_vars->direction, radius);
         make_hit_descriptor(wrench_collision_scratch.v[1],
