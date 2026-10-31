@@ -253,7 +253,7 @@ void background_ship_2_update(char *moby) {
         qcopy(&MOBY(moby)->pos, D_L02_001B0AB0[moby_data->unk60] + 0x10);
         moby_data->unk68 = random_angle_radians();
         moby_data->unk6C = invalid_index;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = BACKGROUND_SHIP_2_FOLLOW_PATH;
         MOBY(moby)->flags |= 0x10;
         moby_data->unk64 = moby_data->unk74 * (float)*(int *)path;
         break;
@@ -300,7 +300,7 @@ void background_ship_2_update(char *moby) {
             flag = 1;
         }
         if (flag) {
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = BACKGROUND_SHIP_2_REMOVE;
         }
         break;
     case BACKGROUND_SHIP_2_REMOVE:
