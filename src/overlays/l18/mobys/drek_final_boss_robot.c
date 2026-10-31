@@ -525,7 +525,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     case DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER:
         if (is_point_inside_clip_volume(hero.motion.pos.f, boss_data->f274) != 0 &&
-            hero.vehicle_mode == 2) {
+            hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             moby->f20 = 7;
             moby->f34 |= 0x41;
             start_scene(0);
@@ -624,7 +624,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (boss_data->f38C <= 301.0f) {
-            if (hero.vehicle_mode != 0) {
+            if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
                 ((BossMoby *)hero.moby)->f94 = 0;
                 ((BossMoby *)hero.moby)->f34 |= 0x41;
             }
