@@ -91,7 +91,7 @@ void edwina_update(L16WatchMoby *moby) {
     }
     switch (moby->state) {
     case EDWINA_INITIALIZE:
-        moby->state = 1;
+        moby->state = EDWINA_UPDATE_DIALOGUE;
         initialize_npc_dialogue(moby, &moby_data->activation);
         moby_data->activation.radius = 1.7f;
         initialize_moby_grounding(moby);
@@ -103,7 +103,7 @@ void edwina_update(L16WatchMoby *moby) {
             update_npc_dialogue(moby, &moby_data->activation)) {
             begin_dialogue_camera_transition(moby, 2.52f);
             *(int *)((char *)moby + 0x58) = 0;
-            moby->state = 2;
+            moby->state = EDWINA_APPLY_DIALOGUE_COMPLETION;
         }
         break;
     case EDWINA_APPLY_DIALOGUE_COMPLETION:
@@ -114,7 +114,7 @@ void edwina_update(L16WatchMoby *moby) {
                 char *p = D_L12_001600EC + (moby_data->region << 7);
                 jet_reset_camera(p + 0x30, p + 0x70);
             }
-            moby->state = 1;
+            moby->state = EDWINA_UPDATE_DIALOGUE;
             if (*(short *)((char *)moby_data + 0x24) == 2) {
                 grant_inventory_item(4, 0);
                 queue_dialogue_message(0x2EE6, -1);
