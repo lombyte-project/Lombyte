@@ -766,7 +766,7 @@ void update_hero_condition_animation(void) {
     }
 }
 
-extern s32             D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
+extern s32             l00_hero_item_animation_slot_ids[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 extern u8              D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
 extern char           *D_L00_00197300[];
 extern u8              D_L00_0017CA80[] NOT_SDA;
@@ -820,7 +820,7 @@ void update_hero_item_slot_blends(void) {
                 struct Hero *h = &hero;
                 if (hero.item_slot_blends[i] == 0) {
                     u8 *allocated_item_slot_blend =
-                        allocate_moby_animation_slot((u8 *)h->moby, D_L00_0015F6A0_gp[i]);
+                        allocate_moby_animation_slot((u8 *)h->moby, l00_hero_item_animation_slot_ids[i]);
                     hero.item_slot_blends[i] = allocated_item_slot_blend;
                     *(f32 *)(allocated_item_slot_blend + 8) = 0.0f;
                     *(u8 **)(hero.item_slot_blends[i] + 0x18) =
@@ -1009,7 +1009,7 @@ void create_missing_hero_item_slot_animations(s32 suppress_slot_animation_creati
             break;
         {
             slot_animation_object =
-                allocate_moby_animation_slot((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
+                allocate_moby_animation_slot((u8 *)hero.moby, l00_hero_item_animation_slot_ids[i]);
             hero.held_item_anim_blend[i] = slot_animation_object;
             if (slot_animation_object) {
                 hero.unkD14 = 0;
@@ -1062,7 +1062,7 @@ void start_equipped_item_animation(void) {
         if (hero.held_item_anim_blend[i] != 0) {
             release_moby_animation_slot((u8 *)hero.moby, &hero.held_item_anim_blend[i]);
         }
-        slot_animation_object = allocate_moby_animation_slot((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
+        slot_animation_object = allocate_moby_animation_slot((u8 *)hero.moby, l00_hero_item_animation_slot_ids[i]);
         hero.held_item_anim_blend[i] = slot_animation_object;
         if (slot_animation_object != 0) {
             hero.item_hold_anim = slot_animation_id;
