@@ -491,7 +491,7 @@ void set_hero_animation(int requested_animation_id,
         blend_frames_or_selector = *(int *)((char *)&hero_blend_curve_frame_counts +
                                             hero_animation_dispatch_state->anim_blend_curve * 4);
     }
-    if (hero_animation_dispatch_state->vehicle_mode == 0) {
+    if (hero_animation_dispatch_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         blend_hero_slot3_mapped_animation_pair(
             requested_animation_id, starting_frame_index, blend_frames_or_selector);
     }
