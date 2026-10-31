@@ -411,14 +411,19 @@ int advance_taxi_path(struct Moby *moby) {
 void request_taxi_destination_help_message(struct Moby *moby) __asm__("FUN_L16_002e4cd8");
 
 void request_taxi_destination_help_message(struct Moby *moby) {
+    enum {
+        TAXI_DESTINATION_FIRST_STOP = 0,
+        TAXI_DESTINATION_SECOND_STOP = 1,
+        TAXI_DESTINATION_THIRD_STOP = 2
+    };
     switch (*(short *)((char *)moby->pvars + 0xae)) {
-    case 0:
+    case TAXI_DESTINATION_FIRST_STOP:
         try_set_help_message(8, 0x3e89);
         break;
-    case 1:
+    case TAXI_DESTINATION_SECOND_STOP:
         try_set_help_message(8, 0x3e8a);
         break;
-    case 2:
+    case TAXI_DESTINATION_THIRD_STOP:
         try_set_help_message(8, 0x139A);
         break;
     case 3:
