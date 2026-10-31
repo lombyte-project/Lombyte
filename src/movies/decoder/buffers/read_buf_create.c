@@ -3,11 +3,11 @@
 void read_buf_create(struct ReadBuf *buf) __asm__("func_0023B940");
 
 void read_buf_create(struct ReadBuf *buf) {
-    struct ReadBuf *b = buf;
+    struct ReadBuf *buffer_to_initialize = buf;
 
-    b->size = READ_BUF_SIZE;
-    b->put = 0;
-    b->count = 0;
+    buffer_to_initialize->size = READ_BUF_SIZE;
+    buffer_to_initialize->put = 0;
+    buffer_to_initialize->count = 0;
 }
 
 /* Recovered original symbol name. */
