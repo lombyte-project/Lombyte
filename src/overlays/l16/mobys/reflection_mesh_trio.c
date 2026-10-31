@@ -253,7 +253,7 @@ void reflection_mesh_trio_update(struct Moby *moby) {
                     mesh_bounding_sphere_components[3] = vertex_to_center_distance;
             }
         }
-        moby->state = 1;
+        moby->state = MESH_RENDER_QUEUE_CALLBACK;
         break;
     }
     case MESH_RENDER_QUEUE_CALLBACK:
