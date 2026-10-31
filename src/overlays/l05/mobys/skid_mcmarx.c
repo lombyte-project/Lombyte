@@ -464,7 +464,7 @@ void skid_mcmarx_update(Moby *moby) {
             racer_instance_vars->launch_speed *= handicap;
         }
         racer_instance_vars->bob_phase = random_angle_radians();
-        moby->state = 1;
+        moby->state = SKID_MCMARX_WAIT_FOR_RACE_MODE;
         break;
     }
     case SKID_MCMARX_WAIT_FOR_RACE_MODE:
@@ -492,14 +492,14 @@ void skid_mcmarx_update(Moby *moby) {
                     racer_instance_vars->child->flags |= 0x8000;
                 }
             }
-            moby->state = 2;
+            moby->state = SKID_MCMARX_FOLLOW_PATH;
         }
         break;
     case SKID_MCMARX_FOLLOW_PATH: {
         Hero *hero = (Hero *)(((char *)&D_0013F350));
 
         if (hero->state.control_mode != 0x16) {
-            moby->state = 0;
+            moby->state = SKID_MCMARX_INITIALIZE;
         } else {
             float ground;
             float height_above_ground;
