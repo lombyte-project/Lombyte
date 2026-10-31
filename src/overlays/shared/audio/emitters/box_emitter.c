@@ -11,7 +11,7 @@
 #include "rnc/overlay/shared/vendor/vendor_volume.h"
 #include "rnc/math/random.h"
 
-extern char D_L01_00167240[];
+extern char camera_pos[] __asm__("D_L01_00167240");
 
 extern char *D_L00_0015F5F4;
 extern char  D_0013E550[];
@@ -27,7 +27,7 @@ void update_box_emitter(char *moby) {
     float   box_length, listener_length;
 
     radius.f[2] = radius.f[1] = radius.f[0] = MOBY(moby)->bsphere.w;
-    fast_vec_sub(&delta, D_L01_00167240, moby + 0x40);
+    fast_vec_sub(&delta, camera_pos, moby + 0x40);
     delta.f[3] = 0.0f;
     transform_vector_by_basis(&box_size, &delta, moby + 0x50);
     transform_vector_by_basis(&listener, &radius, moby + 0x50);
