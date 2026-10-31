@@ -114,7 +114,7 @@ void red_button_update(struct Moby *moby) {
     case INITIALIZE_RED_BUTTON:
         moby->update_dist = 0xFF;
         moby->rot.x = fast_subtract_rotations(moby->rot.x, 0.78539819f);
-        moby->state = 1;
+        moby->state = IDLE_AFTER_INITIALIZATION;
         red_button_vars->f48 = -1;
         break;
     case IDLE_AFTER_INITIALIZATION:
@@ -136,7 +136,7 @@ void red_button_update(struct Moby *moby) {
         update_moby_304098(&D_L06_0015FFD8_304098[red_button_vars->moby1]);
         update_moby_304098(&D_L06_0015FFD8_304098[red_button_vars->moby2]);
         if (1.0f <= red_button_vars->t) {
-            moby->state = 3;
+            moby->state = WAIT_FOR_NEARBY_HELP_TRIGGER;
             allocate_voice_for_target_entry(1, 0, moby);
             D_0013D3AA = 1;
         }
@@ -148,7 +148,7 @@ void red_button_update(struct Moby *moby) {
             if ((*(int *)(D_0013A5E0 + 0x2504) & 0x10) && help_message_available) {
                 allocate_voice_for_target_entry(2, 0, moby);
                 remove_help_message_for_selector(4);
-                moby->state = 4;
+                moby->state = WAIT_CAMERA_START_DELAY;
                 red_button_vars->timer = scale_game_frames(0x1E);
             }
         }
@@ -157,7 +157,7 @@ void red_button_update(struct Moby *moby) {
         if (fast_dec_timer(&red_button_vars->timer)) {
             qcopy_nc(&camera_position, &l06_cuboids[red_button_vars->cut].pos);
             qcopy(&camera_rotation, &l06_cuboids[red_button_vars->cut].rot);
-            moby->state = 5;
+            moby->state = RAISE_CAMERA_AND_TRIGGER_LISTED_EFFECTS;
             red_button_vars->t = 0.0f;
             red_button_vars->vel = 0.0f;
             fade_to_black(scale_game_frames(0xF));
@@ -216,7 +216,7 @@ void red_button_update(struct Moby *moby) {
                             0x72,
                             0);
             fade_to_black(scale_game_frames(10));
-            moby->state = 6;
+            moby->state = HOLD_OFFSET_CAMERA_UNTIL_PROGRESS_COMPLETE;
             jet_end_mount(3);
             qcopy(&next_position, &l06_cuboids[red_button_vars->cut2].pos);
             next_position.z = next_position.z + 1.0f;
