@@ -142,13 +142,13 @@ void commando_update(WM *moby) {
         commando_vars->f2C = 3.0f;
         commando_vars->p40 = commando_name_string;
         if (!D_0013D3B4) {
-            moby->state = 1;
+            moby->state = COMMANDO_DIALOGUE_BEFORE_REPOSITION;
         } else {
             char *b = D_L08_001600EC;
             int   j = commando_vars->joint;
             qcopy(moby->position, b + j * 0x80 + 0x30);
             qcopy((char *)moby + 0x40, b + j * 0x80 + 0x70);
-            moby->state = 2;
+            moby->state = COMMANDO_DIALOGUE_AFTER_REPOSITION;
         }
         initialize_npc_dialogue(moby, (char *)commando_vars + 0x20);
         break;
@@ -158,7 +158,7 @@ void commando_update(WM *moby) {
             int   j = commando_vars->joint;
             qcopy(moby->position, b + j * 0x80 + 0x30);
             qcopy((char *)moby + 0x40, b + j * 0x80 + 0x70);
-            moby->state = 2;
+            moby->state = COMMANDO_DIALOGUE_AFTER_REPOSITION;
             D_0013D3B4 = 1;
         }
         break;
@@ -168,7 +168,7 @@ void commando_update(WM *moby) {
                 blend_moby_animation(moby, random_integer_below(2) + 1, 0, scale_game_frames(20));
         }
         if (update_npc_dialogue(moby, (char *)commando_vars + 0x20)) {
-            moby->state = 3;
+            moby->state = COMMANDO_POST_DIALOGUE;
             begin_dialogue_camera_transition(moby, 2.2f);
         }
         break;
@@ -185,7 +185,7 @@ void commando_update(WM *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            moby->state = 2;
+            moby->state = COMMANDO_DIALOGUE_AFTER_REPOSITION;
         }
         break;
     }
