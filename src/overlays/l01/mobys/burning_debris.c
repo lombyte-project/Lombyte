@@ -194,6 +194,9 @@ DebrisMoby *spawn_debris(DebrisMoby *parent_moby,
                          f32         scale) __asm__("FUN_L01_0030be70");
 
 DebrisMoby *spawn_debris(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) {
+    enum {
+        BURNING_DEBRIS_STATE_INITIAL = 0
+    };
     DebrisMoby *spawned_moby;
     DebrisVars *debris_vars;
 
@@ -203,7 +206,7 @@ DebrisMoby *spawn_debris(DebrisMoby *parent_moby, void *debris_vector_source, f3
         debris_vars->parent = parent_moby;
         qcopy(&spawned_moby->pos, &parent_moby->pos);
         spawned_moby->rot = parent_moby->rot;
-        spawned_moby->state = 0;
+        spawned_moby->state = BURNING_DEBRIS_STATE_INITIAL;
         spawned_moby->b30 = 0xFF;
         spawned_moby->h32 = 0xFF;
         spawned_moby->b31 = 1;
