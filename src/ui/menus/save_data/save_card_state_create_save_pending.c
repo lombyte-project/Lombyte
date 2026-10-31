@@ -6,7 +6,7 @@ void save_card_state_create_save_pending(void) __asm__("FUN_00208d20");
 
 void save_card_state_create_save_pending(void) {
     struct MemoryCardState *card_state = &memory_card_state;
-    if (card_state->state == MEMCARD_DISPATCH_PENDING_OPERATION && card_state->pending_state < 0) {
+    if (card_state->state == MEMCARD_DISPATCH_PENDING_OPERATION && card_state->pending_state < MEMCARD_QUERY_INFO) {
         card_state->pending_state = MEMCARD_BEGIN_CREATE_SAVE_DIRECTORY;
         card_state->pending_card = 0;
         mode_freeze_state = 0xF;
