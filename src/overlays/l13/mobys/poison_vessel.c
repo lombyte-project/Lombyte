@@ -287,6 +287,9 @@ void poison_vessel_update(struct Moby *moby) {
         HIT_RESULT_STUN_KNOCKBACK = 3,
         HIT_RESULT_NO_REACTION = 11
     };
+    enum {
+        HIT_STATUS_DAMAGE_PROCESSING_MINIMUM = 2
+    };
     struct BlastVars *poison_vessel_vars = (struct BlastVars *)moby->pvars;
     struct BlastHit  *hit;
     float            *health;
@@ -317,7 +320,7 @@ void poison_vessel_update(struct Moby *moby) {
             break;
         }
         effects = poison_vessel_vars->effects;
-        if (kind >= 2) {
+        if (kind >= HIT_STATUS_DAMAGE_PROCESSING_MINIMUM) {
             if (*health <= hit->damage) {
                 *health = 0;
                 moby->flags &= 0xEFFF;
