@@ -37,6 +37,9 @@ int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *heal
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
+    enum {
+        HIT_PROCESSING_DAMAGE_THRESHOLD = 2
+    };
     char *hit_record = find_moby_hit(moby, 0x330000, 0);
     int   hit_processing_status;
     int   health_depleted = 0;
@@ -62,7 +65,7 @@ int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *heal
         break;
     }
     color_animation_state = moby_data + 0x60;
-    if (hit_processing_status >= 2) {
+    if (hit_processing_status >= HIT_PROCESSING_DAMAGE_THRESHOLD) {
         float          damage_amount = *(float *)(hit_record + 0x2C);
         unsigned short fl;
         if (*health <= damage_amount) {
