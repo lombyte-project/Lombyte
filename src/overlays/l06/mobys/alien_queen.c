@@ -776,7 +776,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         REDUCED_DAMAGE_SOURCE_CLASS = 0x131,
         DAMAGE_BOOSTING_SOURCE_CLASS = 0x33B
     };
-    AlienQueenVars *alien_queen_hit_recovery_vars;
+    enum { ALIEN_QUEEN_STATE_INITIALIZE = 0 , HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1 } ;AlienQueenVars *alien_queen_hit_recovery_vars;
     char           *hit;
     int             hit_status;
     float           dmg;
@@ -786,7 +786,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     float           recovery_hp;
     int            *path;
     alien_queen_hit_recovery_vars = ((char *)MOBY(moby)->pvars);
-    if (MOBY(moby)->state == 0)
+    if (MOBY(moby)->state == ALIEN_QUEEN_STATE_INITIALIZE)
         return;
     if ((unsigned int)(MOBY(moby)->state - 4) < 10 && alien_queen_hit_recovery_vars->unk108 != -1)
         D_L06_0014162A = *(short *)&alien_queen_hit_recovery_vars->unk108;
@@ -796,7 +796,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
     kind = resolve_moby_hit_response(
         moby, hit, &alien_queen_hit_recovery_vars->health, 0, &hit_status, &dmg, 0, 4);
-    if (hit_status != 1 && (unsigned char)moby[0x20] != 14 && (unsigned char)moby[0x20] != 3 &&
+    if (hit_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION && (unsigned char)moby[0x20] != 14 && (unsigned char)moby[0x20] != 3 &&
         (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {
             int oclass = *(short *)(*(char **)(hit + 0x20) + 0xA6);
@@ -835,9 +835,9 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
             alien_queen_hit_recovery_vars->health = alien_queen_hit_recovery_vars->recovery_health;
         }
         if (alien_queen_hit_recovery_vars->health <= 0.0f)
-            kind = 1;
-        else if (kind == 1)
-            kind = 5;
+            kind = HIT_RESPONSE_DEATH;
+        else if (kind == HIT_RESPONSE_DEATH)
+            kind = HIT_RESPONSE_NONLETHAL_FALLBACK;
         switch (kind) {
         case HIT_RESPONSE_SKIP_REACTION:
         case HIT_RESPONSE_NO_REACTION:
