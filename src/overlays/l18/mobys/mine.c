@@ -234,7 +234,7 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
         moby[0x20] = 1;
         MOBY(moby)->flags = (MOBY(moby)->flags & 0xFFBE) | 0x1000;
         moby[0xBC] = 0;
-        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         if (((unsigned char *)moby)[0x53] != 0) {
             blend_moby_animation(moby, 0, 0, 1);
         }

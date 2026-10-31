@@ -253,7 +253,7 @@ int activate_drek_fight_missiles_in_group(char *moby,
             *(char **)(missile_vars + 0x16C) = moby;
             group_moby[0x31] = 1;
             MOBY(group_moby)->flags &= 0xFFFE;
-            MOBY(group_moby)->collision = *(int *)(((char *)MOBY(group_moby)->pclass) + 0x10);
+            MOBY(group_moby)->collision = MOBY(group_moby)->pclass->collision;
             group_moby[0x20] = 2;
         }
         if (*group_entry++ < 0)

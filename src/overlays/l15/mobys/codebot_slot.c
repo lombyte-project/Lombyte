@@ -63,7 +63,7 @@ void set_moby_list_visibility(int moby_list_index, int show) {
         unsigned char *moby =
             (unsigned char *)((int)l15_moby_array + ((*moby_index_entry & 0x7FFF) << 8));
         if (show) {
-            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+            MOBY(moby)->collision = MOBY(moby)->pclass->collision;
             moby[0x31] = 1;
             MOBY(moby)->flags &= 0xFFFC;
         } else {

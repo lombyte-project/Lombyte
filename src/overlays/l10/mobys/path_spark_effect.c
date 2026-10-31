@@ -54,17 +54,17 @@ void path_spark_effect_update(char *moby) {
     if (*(int *)(effect_data + 0x14) < truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 2) {
         float numerator = convert_integer_to_float(*(int *)(effect_data + 0x14));
         MOBY(moby)->scale =
-            *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * numerator /
+            MOBY(moby)->pclass->scale * numerator /
             convert_integer_to_float(truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 2) * 0.5f;
     } else if ((truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 4) * 3 <
                *(int *)(effect_data + 0x14)) {
         float numerator = convert_integer_to_float(
             truncate_float_to_s32(10.0f / (frame_time * 5.0f)) - *(int *)(effect_data + 0x14));
         MOBY(moby)->scale =
-            *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * numerator /
+            MOBY(moby)->pclass->scale * numerator /
             convert_integer_to_float(truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 4) * 0.5f;
     }
-    if (*(float *)(((char *)MOBY(moby)->pclass) + 0x24) * 0.25f < MOBY(moby)->scale) {
+    if (MOBY(moby)->pclass->scale * 0.25f < MOBY(moby)->scale) {
         int count =
             collect_mobies_in_sphere(moby + 0x10, 0.15f, 16, *(void **)(effect_data + 0x10), 0);
         *(OvlQuad *)blast_hit_position = *(OvlQuad *)&MOBY(moby)->pos;

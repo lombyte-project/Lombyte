@@ -66,8 +66,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         *(unsigned short *)(thruster_pack_lock_red_private_vars + 0x3E) |= 8;
         if (*(int *)(thruster_pack_lock_red_private_vars + 0x60) != 0) {
             moby->state = 1;
-            moby->scale = *(float *)((char *)moby->pclass + 0x24) *
-                          l18_thruster_pack_lock_red_scale_multiplier;
+            moby->scale = moby->pclass->scale * l18_thruster_pack_lock_red_scale_multiplier;
             return;
         }
         moby->state = 4;

@@ -570,7 +570,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
     case HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE:
         if (hero.state.control_mode == 22) {
             moby[0x30] = 255;
-            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+            MOBY(moby)->collision = MOBY(moby)->pclass->collision;
             MOBY(moby)->flags &= ~0x41;
             *(short *)(hoverboard_dummy_data + 0x2F4) = 0;
             *(short *)(hoverboard_dummy_data + 0x2F6) = scale_game_frames(180);
@@ -601,7 +601,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                         fast_arc_tan(MOBY(moby)->pos.x - player->pos.f[0],
                                      MOBY(moby)->pos.y - player->pos.f[1]),
                         player->yaw) > 1.5707964f) {
-                    MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+                    MOBY(moby)->collision = MOBY(moby)->pclass->collision;
                     MOBY(moby)->flags &= ~0x41;
                     moby[0xA4] = 255;
                     moby[0x20] = 2;

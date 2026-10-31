@@ -80,7 +80,7 @@ void spawn_shrub_parts(char *moby) {
     *(int *)(shrub_instance_vars + 0x7C) = 2;
     *(char **)(shrub_instance_vars + 0x74) = moby;
     *(int *)(shrub_instance_vars + 0x78) = 0;
-    child_moby->scale = *(float *)(((char *)child_moby->pclass) + 0x24) * 0.75f;
+    child_moby->scale = child_moby->pclass->scale * 0.75f;
     muzzle_anchor_moby = FUN_L08_002e1c98_c(moby, 0x1BA, 1, 1);
     *(char **)(shrub_instance_vars + 0x80) = muzzle_anchor_moby;
     *(char **)(shrub_instance_vars + 0x84) = moby;

@@ -202,7 +202,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
     case FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP: {
         struct Hero *g = &hero;
         if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
-            *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
+            g->ship_moby->oclass != 0x563) {
             turret_moby->state = 1;
         } else {
             Aim347 aim;

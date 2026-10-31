@@ -560,8 +560,8 @@ void metropolis_train_locomotive_update(char *moby) {
             td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[train_engine_pvars->i100] + 0x78);
             AIM_AT_HERO(td);
         }
-        if (hero.ground_moby != 0 && (*(short *)((char *)hero.ground_moby + 0xA6) == 0x336 ||
-                                      *(short *)((char *)hero.ground_moby + 0xA6) == 0x4BA)) {
+        if (hero.ground_moby != 0 &&
+            (hero.ground_moby->oclass == 0x336 || hero.ground_moby->oclass == 0x4BA)) {
             set_moby_dialogue_record_value(hero.ground_moby, 3);
         }
         if (!is_hero_on_moby(moby)) {

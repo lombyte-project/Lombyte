@@ -118,7 +118,7 @@ void extermibot_update(unsigned char *moby) {
     }
     FUN_L05_00303390_c((Moby *)moby);
     target_moby = *(char **)(moby_data + 0x160);
-    MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * (D_L05_00161A98);
+    MOBY(moby)->scale = MOBY(moby)->pclass->scale * (D_L05_00161A98);
     switch (moby[0x20]) {
     case EXTERMIBOT_INITIALIZE:
         MOBY(moby)->flags |= 0x1000;

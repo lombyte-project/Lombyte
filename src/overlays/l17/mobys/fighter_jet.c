@@ -248,7 +248,7 @@ int select_fighter_jet_target_and_draw_contacts(int   ship_moby,
         scr = (int *)(D_0013E500);
         if ((MOBY(scanned_moby)->flags & 0x1000) && MOBY(scanned_moby)->visible != 0 &&
             scanned_moby != 0 && ((char *)MOBY(scanned_moby)->pclass) != 0 &&
-            *(short *)(((char *)MOBY(scanned_moby)->pclass) + 0x46) == 5) {
+            MOBY(scanned_moby)->pclass->type == 5) {
             project_world_point_to_screen_pixels(scanned_moby + 0x10, &sx, &sy, 0);
             dx = sx - *(int *)(ship_vars + 0xE0);
             dy = sy - *(int *)(ship_vars + 0xE4);
@@ -484,7 +484,7 @@ int select_fighter_jet_target_and_draw_contacts(int   ship_moby,
             break;
         default:
             if (scanned_moby != 0 && ((char *)MOBY(scanned_moby)->pclass) != 0 &&
-                *(short *)(((char *)MOBY(scanned_moby)->pclass) + 0x46) == 5) {
+                MOBY(scanned_moby)->pclass->type == 5) {
                 draw_fighter_jet_radar_contact_icon(radar_rotation,
                                                     radar_origin,
                                                     scanned_moby,

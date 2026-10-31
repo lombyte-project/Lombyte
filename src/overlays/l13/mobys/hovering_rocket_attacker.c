@@ -446,8 +446,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                      -ra,
                      1);
     }
-    MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
-                        hovering_rocket_attacker_scale_multiplier_gp;
+    MOBY(moby)->scale = MOBY(moby)->pclass->scale * hovering_rocket_attacker_scale_multiplier_gp;
     damage_amount = 0.0f;
     hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
     hit_reaction_code = resolve_moby_hit_response(

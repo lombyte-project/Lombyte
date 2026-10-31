@@ -195,8 +195,8 @@ void scenery_ship_update(char *moby) {
     case SCENERY_SHIP_INITIALIZE: {
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
-                            scenery_ship_initialization_scale_multiplier_gp;
+        MOBY(moby)->scale =
+            MOBY(moby)->pclass->scale * scenery_ship_initialization_scale_multiplier_gp;
         scenery_ship_instance_vars->f1C = random_angle_radians();
         scenery_ship_instance_vars->f328 = -1;
         scenery_ship_instance_vars->f368 = random_angle_radians();
@@ -302,7 +302,7 @@ void scenery_ship_update(char *moby) {
         } else if (MOBY(moby)->pos.y < 8.0f) {
             MOBY(moby)->collision = 0;
         } else {
-            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+            MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         }
         if (hit != 0 && 0.0f < *(float *)(hit + 0x2C))
             damaged = 1;

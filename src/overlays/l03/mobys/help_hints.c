@@ -132,7 +132,7 @@ void help_hints_update(struct Moby *moby) {
         count = 0;
         for (candidate_moby = D_L03_0015FFE4; candidate_moby != 0;
              candidate_moby = candidate_moby->next) {
-            if (candidate_moby->pclass != 0 && *(s16 *)((u8 *)candidate_moby->pclass + 0x46) == 5 &&
+            if (candidate_moby->pclass != 0 && candidate_moby->pclass->type == 5 &&
                 vector_distance_xy(&candidate_moby->pos, &hero.motion.pos) < 8.0f) {
                 count++;
             }

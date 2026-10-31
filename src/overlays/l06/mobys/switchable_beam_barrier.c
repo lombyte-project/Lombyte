@@ -77,8 +77,7 @@ void switchable_beam_barrier_update(char *moby) {
 
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_VECTOR_STREAMS:
-        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
-                            vector_stream_moby_scale_multiplier_gp;
+        MOBY(moby)->scale = MOBY(moby)->pclass->scale * vector_stream_moby_scale_multiplier_gp;
         D_L06_00162238 = 0x16;
         D_L06_00162234 = 0x2D;
         vector_stream_vars->timer[1] = 0xB;
@@ -99,7 +98,7 @@ void switchable_beam_barrier_update(char *moby) {
             return;
         }
         moby[0x20] = 2;
-        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         break;
     }
     case UPDATE_VECTOR_STREAMS: {

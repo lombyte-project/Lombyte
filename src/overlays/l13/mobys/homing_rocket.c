@@ -58,7 +58,7 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
         if (*(char **)(homing_rocket_vars + 0x24) != 0) {
             qcopy(homing_rocket_vars + 0x10, *(char **)(homing_rocket_vars + 0x24) + 0x10);
         }
-        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
+        MOBY(moby)->scale = MOBY(moby)->pclass->scale;
         update_entity(moby);
         spawn_source_attached_fading_effect_particle(
             (char *)moby, 0x60808080, initial_expiry_countdown, 0, 500000.0f);

@@ -45,7 +45,7 @@ void child_carrier_update(char *moby) {
             *(long *)(*(char **)(transform_and_child_vars + 0x84) + 0x38) =
                 ((long)MOBY(moby)->spawn_frame);
             *(float *)(*(char **)(transform_and_child_vars + 0x84) + 0x2C) *=
-                MOBY(moby)->scale / *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
+                MOBY(moby)->scale / MOBY(moby)->pclass->scale;
         }
     }
     qcopy(transform_and_child_vars + 0x60, moby + 0x10);

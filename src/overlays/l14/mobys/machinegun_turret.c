@@ -280,7 +280,7 @@ void machinegun_turret_update(char *moby) {
         }
         if (*(short *)(machinegun_turret_private_vars + 0x74) <
             func_001F9850_2B4E40(D_L14_0016150C >> 1)) {
-            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+            MOBY(moby)->collision = MOBY(moby)->pclass->collision;
             MOBY(moby)->flags = MOBY(moby)->flags | 0x1000;
         }
         if (fast_dec_timer_s16(machinegun_turret_private_vars + 0x74) == 0) {

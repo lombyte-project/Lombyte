@@ -212,7 +212,7 @@ int activate_state_15_moby_at_position(void *m_, void *activation_position) {
     float doubled_frame_time, scaled_frame_time_squared;
     if (((unsigned char *)moby)[0x20] == 0xF) {
         qcopy(moby + 0x10, activation_position);
-        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         MOBY(moby)->flags = (MOBY(moby)->flags & 0xFFBE) | 0x1000;
         moby[0x20] = 6;
         clear_u64_value(moby + 0x40);
@@ -324,7 +324,7 @@ void clear_moby_list_state_18(int index) {
                 moby[0x20] = 0;
                 flags &= 0xFFFE;
                 flags |= 0x1000;
-                MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+                MOBY(moby)->collision = MOBY(moby)->pclass->collision;
                 MOBY(moby)->flags = flags;
             }
         } while (*moby_index_cursor++ >= 0);
@@ -401,7 +401,7 @@ void alien_queen_update(unsigned char *moby) {
         set_listed_alien_queen_sliders_state_2_and_data_28_to_one(*(int *)(data + 0x104));
         *(int *)(data + 0x170) = 0;
         moby[0x20] = 2;
-        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         MOBY(moby)->flags = (MOBY(moby)->flags | 0x1000) & 0xFFFE;
         if ((unsigned char)moby[0x53] != 8) {
             blend_moby_animation(moby, 8, 0, scale_game_frames(1));

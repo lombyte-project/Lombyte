@@ -208,8 +208,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         blend_moby_animation(
             robot_dog_moby,
             0,
-            random_integer_below(*(
-                unsigned char *)(*(char **)(((char *)MOBY(robot_dog_moby)->pclass) + 0x48) + 0x10)),
+            random_integer_below(
+                *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10)),
             0);
         if (robot_dog_vars->i1E8 == -1) {
             robot_dog_vars->i1E8 = robot_dog_vars->path;
@@ -305,9 +305,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             } else if (robot_dog_vars->t1E0 == 0 && robot_dog_vars->mode == 0) {
                 robot_dog_moby[0x20] = 3;
                 if (robot_dog_moby[0x53] != 0) {
-                    clip_volume_id_or_animation_value = random_integer_below(*(
-                        unsigned char *)(*(char **)(((char *)MOBY(robot_dog_moby)->pclass) + 0x48) +
-                                         0x10));
+                    clip_volume_id_or_animation_value = random_integer_below(
+                        *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10));
                     blend_moby_animation(robot_dog_moby,
                                          0,
                                          clip_volume_id_or_animation_value,
@@ -318,8 +317,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             robot_dog_moby[0x20] = 3;
             if (robot_dog_moby[0x53] != 0) {
                 clip_volume_id_or_animation_value = random_integer_below(
-                    *(unsigned char *)(*(char **)(((char *)MOBY(robot_dog_moby)->pclass) + 0x48) +
-                                       0x10));
+                    *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10));
                 blend_moby_animation(
                     robot_dog_moby, 0, clip_volume_id_or_animation_value, scale_game_frames(10));
             }
@@ -330,9 +328,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             robot_dog_moby[0x20] = 1;
             if (robot_dog_moby[0x53] != 0) {
                 clip_volume_id_or_animation_value = random_integer_below(
-                    *(unsigned char *)(*(char **)(((char *)MOBY(robot_dog_moby)->pclass) + 0x48) +
-                                       0x10) -
-                    1);
+                    *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10) - 1);
                 blend_moby_animation(
                     robot_dog_moby, 0, clip_volume_id_or_animation_value, scale_game_frames(10));
             }

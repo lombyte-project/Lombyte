@@ -644,7 +644,7 @@ int update_shuttle_path_ride(char *moby, int path) {
         set_camera_rotation(rotation);
     }
     MOBY(moby)->scale =
-        *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
+        MOBY(moby)->pclass->scale *
         (ride->scale_start - (ride->scale_start - ride->scale_end) * ride->progress);
     if (ride->progress > 0.8f) {
         rate = frame_time_sq * 12.566371f;

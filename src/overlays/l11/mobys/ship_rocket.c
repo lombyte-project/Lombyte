@@ -62,8 +62,7 @@ unsigned char *spawn_ship_rocket(struct Moby *spawning_moby,
             qcopy(projectile_vars + 0x10, *(char **)(projectile_vars + 0x24) + 0x10);
         }
         MOBY(moby)->scale =
-            *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
-            (spawning_moby->scale / *(float *)(((char *)spawning_moby->pclass) + 0x24));
+            MOBY(moby)->pclass->scale * (spawning_moby->scale / spawning_moby->pclass->scale);
         update_entity(moby);
     }
     return moby;

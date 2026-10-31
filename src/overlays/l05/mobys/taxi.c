@@ -248,7 +248,7 @@ void initialize_taxi_stop_state(void *moby_v) {
             MOBY(moby)->collision = 0;
             break;
         } else {
-            int v = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+            int v = MOBY(moby)->pclass->collision;
             moby[0x31] = 1;
             MOBY(moby)->collision = v;
             MOBY(moby)->flags = MOBY(moby)->flags & 0xFFFE;
@@ -260,7 +260,7 @@ void initialize_taxi_stop_state(void *moby_v) {
     case TAXI_PAIRED_ROUTE_SECOND_STOP:
     case TAXI_PRIMARY_BRANCH_STOP:
     case TAXI_FALLBACK_BRANCH_STOP: {
-        int v = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        int v = MOBY(moby)->pclass->collision;
         moby[0x31] = 1;
         MOBY(moby)->collision = v;
         MOBY(moby)->flags = MOBY(moby)->flags & 0xFFFE;

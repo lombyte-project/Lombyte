@@ -30,7 +30,7 @@ char *spawn_qwarks_starfighter_shield(char *owner) {
         MOBY(moby)->flags |= 0x200;
         update_entity(moby);
         copy_hero_moby_field_38(moby);
-        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
+        MOBY(moby)->scale = MOBY(moby)->pclass->scale;
     }
     return moby;
 }

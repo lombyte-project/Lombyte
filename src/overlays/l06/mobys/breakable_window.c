@@ -574,8 +574,7 @@ void breakable_window_update(char *moby) {
         offset[4];
     int base;
     int state;
-    MOBY(moby)->scale =
-        *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * camera_sequence_moby_scale_multiplier_gp;
+    MOBY(moby)->scale = MOBY(moby)->pclass->scale * camera_sequence_moby_scale_multiplier_gp;
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_DRAW_SELECTION:
         camera_sequence_and_draw_vars[1] = 1;

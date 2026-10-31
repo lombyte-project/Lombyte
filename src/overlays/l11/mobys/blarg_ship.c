@@ -389,7 +389,7 @@ char *activate_listed_blarg_ship(int list) {
         if (MOBY(selected_moby)->prev_seq)
             blend_moby_animation(selected_moby, 0, 0, scale_game_frames(10));
         MOBY(selected_moby)->flags &= 0xFFFE;
-        MOBY(selected_moby)->collision = *(int *)(((char *)MOBY(selected_moby)->pclass) + 0x10);
+        MOBY(selected_moby)->collision = MOBY(selected_moby)->pclass->collision;
         return selected_moby;
     } while (*moby_list_entry++ >= 0);
     return 0;

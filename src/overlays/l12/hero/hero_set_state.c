@@ -371,7 +371,7 @@ int hero_set_state(int a, int b) {
                 }
                 {
                     struct Hero *w = &hero;
-                    *(float *)(((char *)w->moby) + 0x54) =
+                    w->moby->anim_time =
                         level12_hero_animation_blend_curves[w->anim_blend_curve]
                                                            [(w->anim_blend_step)++];
                 }
@@ -476,7 +476,7 @@ int hero_set_state(int a, int b) {
         *(int *)&D_L12_0015F688 = scale_game_frames(0x3C);
         if (p->unk20AA == 0) {
             t = hero_get_gadget_anim_id(1);
-            if (*(unsigned char *)(((char *)p->moby) + 0x53) != t && b) {
+            if (p->moby->prev_seq != t && b) {
                 set_hero_animation(t, 0, (float)scale_game_frames(0x12));
             }
         }
@@ -684,7 +684,7 @@ int hero_set_state(int a, int b) {
             if (frame_time * 3.5f < q->motion.forward_speed)
                 allocate_hero_voice_for_entry(0xC, 0);
             if (b) {
-                if (*(unsigned char *)(((char *)q->moby) + 0x52) == hero_get_gadget_anim_id(0)) {
+                if (q->moby->seq == hero_get_gadget_anim_id(0)) {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(9));
                 } else {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(0xE));
@@ -709,9 +709,8 @@ int hero_set_state(int a, int b) {
             *(unsigned int *)(h + 0x64) =
                 *(unsigned int *)(h + 0x64) | (1 << current_level_index) | 0x80000000;
         }
-        p->motion.move_yaw =
-            fast_arc_tan(*(float *)(((char *)p->grapple_target) + 0x10) - p->motion.pos.f[0],
-                         *(float *)(((char *)p->grapple_target) + 0x14) - p->motion.pos.f[1]);
+        p->motion.move_yaw = fast_arc_tan(p->grapple_target->pos.x - p->motion.pos.f[0],
+                                          p->grapple_target->pos.y - p->motion.pos.f[1]);
         if (b) {
             set_hero_animation(0x2F, 2, (float)scale_game_frames(5));
             hero_queue_sequence(0xA, 0xE);
@@ -736,7 +735,7 @@ int hero_set_state(int a, int b) {
         p->item_use_locked = 1;
         *(int *)&p->grapple_pull_speed = 0;
         p->grapple_pull_ending = 0;
-        p->tether_radius = fast_vec_dist(&p->motion.pos, ((char *)p->grapple_target) + 0x10);
+        p->tether_radius = fast_vec_dist(&p->motion.pos, &p->grapple_target->pos);
         if (b)
             set_hero_animation(0x30, 1, (float)scale_game_frames(5));
         break;
@@ -785,10 +784,9 @@ int hero_set_state(int a, int b) {
                 q->unk9C8 = *(float *)(d + 0x28);
             if (*(float *)(d + 0x2C) != 0.0f)
                 q->swing_rope_max_speed = *(float *)(d + 0x2C);
-            q->swing_yaw = fast_arc_tan(
-                *(float *)(((char *)q->swing_target_moby) + 0x10) - q->motion.pos.f[0],
-                *(float *)(((char *)q->swing_target_moby) + 0x14) - q->motion.pos.f[1]);
-            q->unk9A4 = fast_vec_dist(&q->motion.pos, ((char *)q->swing_target_moby) + 0x10);
+            q->swing_yaw = fast_arc_tan(q->swing_target_moby->pos.x - q->motion.pos.f[0],
+                                        q->swing_target_moby->pos.y - q->motion.pos.f[1]);
+            q->unk9A4 = fast_vec_dist(&q->motion.pos, &q->swing_target_moby->pos);
             q->swing_gravity = frame_time_sq * 27.0f;
             if (q->state.prev_control_mode == 4) {
                 q->swing_gravity = q->jump_gravity;
@@ -1385,7 +1383,7 @@ int hero_set_state(int a, int b) {
             q->unkA7C = q->unkA7C == 0;
             if (b) {
                 int n = scale_game_frames(0xA);
-                if (*(unsigned char *)(((char *)q->moby) + 0x53) == 0x1A)
+                if (q->moby->prev_seq == 0x1A)
                     n = scale_game_frames(3);
                 if (q->state.prev == 1)
                     n = scale_game_frames(0x11);
@@ -1552,9 +1550,8 @@ int hero_set_state(int a, int b) {
             q->invulnerable_frames = scale_game_frames(0x4D);
             if (b) {
                 set_hero_animation(0x10, 3, -3.0f);
-                *(float *)(((char *)q->moby) + 0x54) =
-                    level12_hero_animation_blend_curves[q->anim_blend_curve]
-                                                       [(q->anim_blend_step)++];
+                q->moby->anim_time = level12_hero_animation_blend_curves[q->anim_blend_curve]
+                                                                        [(q->anim_blend_step)++];
             }
         }
         break;
@@ -1635,7 +1632,7 @@ int hero_set_state(int a, int b) {
         p->invulnerable_frames = scale_game_frames(0x4D);
         if (b) {
             set_hero_animation(2, 3, -3.0f);
-            *(float *)(((char *)p->moby) + 0x54) =
+            p->moby->anim_time =
                 level12_hero_animation_blend_curves[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
@@ -1670,8 +1667,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
-        if (return_hero_animation_id_unchanged(*(unsigned char *)(((char *)p->moby) + 0x53)) !=
-            hero_get_gadget_anim_id(1)) {
+        if (return_hero_animation_id_unchanged(p->moby->prev_seq) != hero_get_gadget_anim_id(1)) {
             set_hero_animation(hero_get_gadget_anim_id(1), 0, (float)scale_game_frames(5));
         }
         break;

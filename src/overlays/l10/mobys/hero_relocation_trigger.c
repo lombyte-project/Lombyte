@@ -126,7 +126,7 @@ void hero_relocation_trigger_update(struct Moby *moby) {
     if (D_0013D4C6[0] == 0) {
         target =
             (struct Moby *)((relocation_trigger_vars->target << 8) + (int)D_L10_0015FFD8_98b68);
-        target->collision = *(u32 *)((char *)target->pclass + 0x10);
+        target->collision = target->pclass->collision;
         if (visited52[moby->mission + current_level_index * 16] == 0xFF ||
             relocation_trigger_vars->spot_alt == -1) {
             set_race_camera(&l10_cuboids[relocation_trigger_vars->spot_alt].pos,

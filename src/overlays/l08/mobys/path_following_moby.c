@@ -188,7 +188,7 @@ void path_following_moby_update(char *moby) {
     if (MOBY(moby)->pos.x < 4.0f || MOBY(moby)->pos.y < 4.0f || MOBY(moby)->pos.z < 4.0f) {
         MOBY(moby)->collision = 0;
     } else {
-        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
     }
     if (find_moby_hit(moby, 0x10000, 0) != 0 && MOBY(moby)->state != 2) {
         if (camera_secondary_mode_lui == 0x32 && D_0013D408[0xC] == 0) {

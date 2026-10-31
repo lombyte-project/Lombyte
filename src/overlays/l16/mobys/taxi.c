@@ -264,7 +264,7 @@ void initialize_taxi_stop_state(void *moby_v) {
     }
     {
         if (item_available[0x21] != 0 || *(short *)(taxi_stop_data + 0xAC) == 2) {
-            int model_collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+            int model_collision = MOBY(moby)->pclass->collision;
             moby[0x31] = 1;
             MOBY(moby)->collision = model_collision;
             MOBY(moby)->flags = MOBY(moby)->flags & 0xFFFE;

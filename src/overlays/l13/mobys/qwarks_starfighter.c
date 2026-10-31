@@ -1073,16 +1073,16 @@ unsigned char *fire_level_13_mine(char *firing_moby, char *velocity_source_data)
     unsigned char *spawned_projectile_moby;
     moby_point_position(firing_moby, 0xE, spawn_position);
     x = &hero;
-    if (((char *)x->ship_moby) != 0 && *(short *)(((char *)x->ship_moby) + 0xA6) == 0x45) {
+    if (((char *)x->ship_moby) != 0 && x->ship_moby->oclass == 0x45) {
         predict_hero_ship_projectile_lead_position(
             (char *)predicted_target_position, (char *)spawn_position, frame_time * 20.0f);
         fast_vec_sub(scratch_vector, predicted_target_position, spawn_position);
         fast_vec_normalize(projectile_velocity, scratch_vector, frame_time * 20.0f);
         fast_vec_normalize(random_velocity_offset,
-                           ((char *)x->ship_moby) + 0xD0,
+                           &x->ship_moby->rot_row1,
                            random_float_between(-(frame_time * 30.0f), frame_time * 30.0f));
         fast_vec_normalize(scratch_vector,
-                           ((char *)x->ship_moby) + 0xE0,
+                           &x->ship_moby->rot_row2,
                            random_float_between(-(frame_time * 30.0f), frame_time * 30.0f));
         fast_vec_add(random_velocity_offset, random_velocity_offset, scratch_vector);
         fast_vec_normalize(random_velocity_offset,
@@ -2332,8 +2332,8 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
     char *moby = create_moby(id);
     if (moby != 0) {
         char *attachment_vars;
-        float f = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * MOBY(parent_moby)->scale /
-                  *(float *)(((char *)MOBY(parent_moby)->pclass) + 0x24);
+        float f =
+            MOBY(moby)->pclass->scale * MOBY(parent_moby)->scale / MOBY(parent_moby)->pclass->scale;
         attachment_vars = ((char *)MOBY(moby)->pvars);
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;

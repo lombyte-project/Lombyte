@@ -1852,8 +1852,8 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     float          V90[4];
     float          VA0[4];
 
-    MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
-                        *(float *)&l18_drek_boss_class_scale_multiplier_gp;
+    MOBY(moby)->scale =
+        MOBY(moby)->pclass->scale * *(float *)&l18_drek_boss_class_scale_multiplier_gp;
     set_moby_attached_effect_alpha_from_distance(moby, 0.5f);
     health_floor_or_transition_offset =
         (7.0f - (float)*(int *)(boss_data + 0x34C) - 2.0f) / 7.0f * 350.0f;
@@ -2386,7 +2386,7 @@ void show_drek_boss_moby_group(int unused, int group_index) {
             if (group_moby != 0 && group_moby[0x20] != 0xFE && group_moby[0x20] != 0xFD) {
                 group_moby[0x31] = 1;
                 MOBY(group_moby)->flags &= 0xFFFE;
-                MOBY(group_moby)->collision = *(int *)(((char *)MOBY(group_moby)->pclass) + 0x10);
+                MOBY(group_moby)->collision = MOBY(group_moby)->pclass->collision;
             }
         } while (*group_entry++ >= 0);
     }

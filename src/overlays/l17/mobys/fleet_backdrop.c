@@ -193,7 +193,7 @@ void fleet_backdrop_animation_update(struct Moby *moby) {
     if (*(int *)(moby_pvars + 0x4C) != -1) {
         struct Hero *hero_data = &hero;
         if (hero_data->state.current != 0x32 || ((char *)hero_data->ship_moby) == 0 ||
-            *(short *)(((char *)hero_data->ship_moby) + 0xA6) != 0x563) {
+            hero_data->ship_moby->oclass != 0x563) {
             if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(moby_pvars + 0x4C))) {
                 D_L17_0015F638 = 150.0f;
                 goto done;

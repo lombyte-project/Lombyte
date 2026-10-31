@@ -76,8 +76,7 @@ void moving_platform_small_update(char *moby) {
         }
         qcopy_nc(moby + 0x10, initial_path_position);
         *(int *)pa = pa[4] < 0 ? 0 : **(int **)(pa + 0x10) - 1;
-        MOBY(moby)->scale =
-            *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * *(float *)(platform_pvars + 0xFC);
+        MOBY(moby)->scale = MOBY(moby)->pclass->scale * *(float *)(platform_pvars + 0xFC);
         *(int *)(platform_pvars + 0x104) = -1;
         if (fast_dec_timer(platform_pvars + 0x100)) {
             *(float *)(platform_pvars + 0x110) = fast_vec_dist(

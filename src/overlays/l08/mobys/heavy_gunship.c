@@ -68,7 +68,7 @@ void spawn_heavy_gunship_parts(struct Moby *moby) {
     *(int *)(part_hierarchy_vars + 0x7C) = 2;
     *(char **)(part_hierarchy_vars + 0x74) = moby;
     *(int *)(part_hierarchy_vars + 0x78) = 0;
-    child_moby->scale = *(float *)(((char *)child_moby->pclass) + 0x24) * 0.75f;
+    child_moby->scale = child_moby->pclass->scale * 0.75f;
     attachment_anchor_moby =
         FUN_L08_002e1c98_c2(*(char **)(part_hierarchy_vars + 0x90), 0x1BA, 1, 1);
     *(char **)(part_hierarchy_vars + 0x80) = attachment_anchor_moby;

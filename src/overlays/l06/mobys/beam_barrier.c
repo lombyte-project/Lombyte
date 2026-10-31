@@ -457,7 +457,7 @@ void animate_beam_barrier_strands(struct Moby *moby) {
     moby->rot.x = fast_add_rotations(
         moby->rot.x, beam_barrier_rotation_x_speed_degrees_gp * DEG_TO_RAD * frame_time);
     phase = D_L06_00161DFC + beam_barrier_render_phase_speed_gp * frame_time;
-    moby->scale = *(f32 *)((char *)moby->pclass + 0x24) * beam_barrier_class_scale_multiplier_gp;
+    moby->scale = moby->pclass->scale * beam_barrier_class_scale_multiplier_gp;
     D_L06_00161DFC = phase;
     if (phase > 1.0f) {
         D_L06_00161DFC = phase - 1.0f;

@@ -1324,7 +1324,7 @@ void jet_fighter_update(struct Moby *moby) {
         case JET_FIGHTER_STATE_INITIALIZE:
             moby->state = 1;
             ship_vars->sel = 0;
-            moby->scale = *(float *)((char *)moby->pclass + 0x24);
+            moby->scale = moby->pclass->scale;
             ship_vars->f20 = ship_vars->f30;
             ship_vars->f24 = ship_vars->f34;
             fov = fast_arc_tan(1.0f, D_L11_0016D4F0_a[0]) * 2.0f;
@@ -1426,7 +1426,7 @@ void jet_fighter_update(struct Moby *moby) {
                 ship_vars->fBC = jet_fighter_camera_base_local_z_offset_gp * D_L11_0016208C;
                 ship_vars->fB8 = 0.0f;
                 g->moby->collision_disable = -1;
-                moby->scale = *(float *)((char *)moby->pclass + 0x24) * D_L11_0016208C;
+                moby->scale = moby->pclass->scale * D_L11_0016208C;
                 g->unk20A5 = 1;
             }
             break;
@@ -1464,7 +1464,7 @@ void jet_fighter_update(struct Moby *moby) {
             request_music_track(0, 8);
             qcopy_nc(&moby->pos, ship_vars->home_pos);
             qcopy_nc(&moby->rot, ship_vars->home_rot);
-            moby->scale = *(float *)((char *)moby->pclass + 0x24);
+            moby->scale = moby->pclass->scale;
             refresh_moby_spatial_bounds_from_basis(moby);
             p = (char *)l11_cuboids + (ship_vars->exit_path << 7);
             set_race_camera(p + 0x30, p + 0x70, 0, 1);

@@ -456,7 +456,7 @@ void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int fl
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (*(short *)(destruction_respawn_pvars + 0x14A) != 0) {
         if (fast_dec_timer_s16(destruction_respawn_pvars + 0x14A) && flag) {
-            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+            MOBY(moby)->collision = MOBY(moby)->pclass->collision;
             MOBY(moby)->flags = (MOBY(moby)->flags & 0xFFBE) | 0x1000;
         } else {
             MOBY(moby)->collision = 0;

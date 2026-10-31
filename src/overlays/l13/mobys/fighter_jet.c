@@ -167,7 +167,7 @@ void jet_group_switch(short *ids,
                 }
                 if (copy_data_pointer != -1) {
                     if (copy_data_pointer != 0)
-                        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+                        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
                     else
                         MOBY(moby)->collision = 0;
                 }
@@ -512,7 +512,7 @@ int select_fighter_jet_target_and_draw_indicators(int   source_moby,
         if ((((Moby_2B9E50 *)candidate_moby)->f34 & 0x1000) &&
             !(((Moby_2B9E50 *)candidate_moby)->f34 & 3) && MOBY(candidate_moby)->visible != 0 &&
             candidate_moby != 0 && ((char *)MOBY(candidate_moby)->pclass) != 0 &&
-            *(short *)(((char *)MOBY(candidate_moby)->pclass) + 0x46) == 5) {
+            MOBY(candidate_moby)->pclass->type == 5) {
             project_world_point_to_screen_pixels(candidate_moby + 0x10, &sx, &sy, 0);
             dx = sx - *(int *)(moby_vars + 0xE0);
             dy = sy - *(int *)(moby_vars + 0xE4);

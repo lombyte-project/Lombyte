@@ -154,7 +154,7 @@ spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, void *ow
         MOBY(moby)->draw_dist = 0xFF;
         ((unsigned char *)moby)[0x30] = 0xFF;
         moby[0x31] = 1;
-        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * scale;
+        MOBY(moby)->scale = MOBY(moby)->pclass->scale * scale;
         *(void **)(spawned_moby_vars + 0x24) = owner;
         qcopy(spawned_moby_vars, vector);
     }

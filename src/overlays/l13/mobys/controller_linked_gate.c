@@ -64,7 +64,7 @@ void controller_linked_gate_update(struct Moby *moby) {
         if (*(int *)(gate_data + 0x18) == 0) {
             *(float *)(gate_data + 0x10) = 1.0f;
             moby->state = 1;
-            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
+            moby->collision = moby->pclass->collision;
             moby->alpha = 0x14;
         } else {
             *(float *)(gate_data + 0x10) = 0.0f;
@@ -82,7 +82,7 @@ void controller_linked_gate_update(struct Moby *moby) {
     case GATE_STATE_CLOSING:
         if (open) {
             moby->state = 4;
-            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
+            moby->collision = moby->pclass->collision;
         }
         *(float *)(gate_data + 0x10) -= frame_scale * 0.05f;
         if (*(float *)(gate_data + 0x10) < 0.0f) {
@@ -96,7 +96,7 @@ void controller_linked_gate_update(struct Moby *moby) {
     case GATE_STATE_CLOSED:
         if (open) {
             moby->state = 4;
-            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
+            moby->collision = moby->pclass->collision;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
         }
@@ -110,7 +110,7 @@ void controller_linked_gate_update(struct Moby *moby) {
         if (1.0f < *(float *)(gate_data + 0x10)) {
             *(float *)(gate_data + 0x10) = 1.0f;
             moby->state = 1;
-            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
+            moby->collision = moby->pclass->collision;
         }
         break;
     }
