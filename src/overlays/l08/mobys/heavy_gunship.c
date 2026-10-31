@@ -119,6 +119,9 @@ void spawn_heavy_gunship_parts(struct Moby *moby) {
 void process_heavy_gunship_part_hits(struct Moby *moby) __asm__("FUN_L08_002e9758");
 
 void process_heavy_gunship_part_hits(struct Moby *moby) {
+    enum {
+        HEAVY_GUNSHIP_DISPERSE_AND_REMOVE = 99
+    };
     int        selected = 0;
     char      *linked_part_hit_vars = (char *)moby->pvars;
     SwarmPart *slots = (SwarmPart *)(linked_part_hit_vars + 0x60);
@@ -197,7 +200,7 @@ void process_heavy_gunship_part_hits(struct Moby *moby) {
                 }
                 i++;
             } while (i < 8);
-            moby->state = 99;
+            moby->state = HEAVY_GUNSHIP_DISPERSE_AND_REMOVE;
         }
     }
     if (sound >= 0)
