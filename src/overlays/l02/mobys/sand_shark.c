@@ -290,6 +290,9 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27,
         SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE = 29
     };
+    enum {
+        SAND_SHARK_LANDED_AFTER_KNOCKBACK = 0xB
+    };
     Varsd3e50 *sand_shark_behavior_vars;
     OvlVec4    position_or_offset_scratch;
     OvlVec4    target_or_particle_vector;
@@ -784,7 +787,7 @@ void sand_shark_update(struct Moby *moby) {
         break;
     case SAND_SHARK_KNOCKBACK_UNTIL_LANDING:
         if (step_moby_motion(moby, sand_shark_behavior_vars->unk120) & 1) {
-            moby->state = 0xB;
+            moby->state = SAND_SHARK_LANDED_AFTER_KNOCKBACK;
             if (moby->prev_seq != 4) {
                 blend_moby_animation(moby, 4, 8, scale_game_frames(3));
             }
