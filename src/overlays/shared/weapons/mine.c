@@ -512,7 +512,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) __asm__("FUN_L00_002aa2a8");
 
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
-    enum { MINE_STATE_OWNER_ATTACHED = 0 } ;float trajectory_position[4];
+    enum { MINE_STATE_OWNER_ATTACHED = 0 } ; enum { MINE_PREDICTION_REQUIRE_LINKED_MOBY_HIT = 0 , MINE_PREDICTION_HIDE_LINKED_MOBY_HIT_MARKER = 2} ;float trajectory_position[4];
     float B[4];
     float C[4];
     float box[4];
@@ -541,7 +541,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         trajectory_position[2] = trajectory_position[2] + 0.49082f;
         qcopy(B, trajectory_state);
         if (*(int *)(hero_state + 0x2FC) != 0 &&
-            FUN_L00_002603d0_u((void *)*(int *)(hero_state + 0x2FC)) != 0 && mode != 0) {
+            FUN_L00_002603d0_u((void *)*(int *)(hero_state + 0x2FC)) != 0 && mode != MINE_PREDICTION_REQUIRE_LINKED_MOBY_HIT) {
             fast_vec_add(B, B, hero_state + 0x100);
         }
         x = scale_game_frames(0x78);
@@ -585,13 +585,13 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         }
     }
     if (x != 0) {
-        if (mode == 0) {
+        if (mode == MINE_PREDICTION_REQUIRE_LINKED_MOBY_HIT) {
             if (coll_hit_moby == 0)
                 return 0;
             if (FUN_L00_002603d0_u(coll_hit_moby) == 0)
                 return 0;
         }
-        if (mode != 2 || coll_hit_moby == 0 || FUN_L00_002603d0_u(coll_hit_moby) == 0) {
+        if (mode != MINE_PREDICTION_HIDE_LINKED_MOBY_HIT_MARKER || coll_hit_moby == 0 || FUN_L00_002603d0_u(coll_hit_moby) == 0) {
             add_draw_callback(FUN_L00_002a9c50_c, moby);
         }
         {
