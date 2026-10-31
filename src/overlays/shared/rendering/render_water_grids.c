@@ -66,6 +66,10 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position,
                                      s32  mode) __asm__("FUN_L01_002b8cb0");
 
 void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 mode) {
+    enum {
+        WATER_TILE_MODE_SKIP_CLIP_TESTS = 0,
+        WATER_TILE_MODE_TEST_FAR_CLIP = 1
+    };
     f32 corners[4][4];
     f32 near_clip[4];
     f32 far_clip[4];
@@ -76,7 +80,7 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
     u32 near_bits, far_bits;
     s32 i, tile_vertex_offset, row, column;
 
-    if (mode != 0) {
+    if (mode != WATER_TILE_MODE_SKIP_CLIP_TESTS) {
         row = index >> 2;
         column = index & 3;
         half_x = 0.5f * -pool_light[2];
@@ -122,7 +126,7 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
             far_bits = (far_bits << 8) | is_vector_outside_clip(far_clip);
             near_bits = (near_bits << 8) | is_vector_outside_clip(near_clip);
         }
-        if (mode == 1) {
+        if (mode == WATER_TILE_MODE_TEST_FAR_CLIP) {
             if ((near_bits & 0x01010101) == 0x01010101)
                 return;
             if ((near_bits & 0x02020202) == 0x02020202)
@@ -132,7 +136,7 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
             if ((near_bits & 0x08080808) == 0x08080808)
                 return;
             if (far_bits == 0)
-                mode = 0;
+                mode = WATER_TILE_MODE_SKIP_CLIP_TESTS;
             if ((near_bits & 0x20202020) == 0x20202020)
                 return;
         } else {
@@ -146,11 +150,11 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
                 return;
             if ((near_bits & 0x20202020) == 0x20202020)
                 return;
-            mode = 0;
+            mode = WATER_TILE_MODE_SKIP_CLIP_TESTS;
         }
     }
     tile_vertex_offset = (index & 3) * 4 + (index >> 2) * 0x44;
-    if (mode != 0) {
+    if (mode != WATER_TILE_MODE_SKIP_CLIP_TESTS) {
         mode = 0xe;
     } else {
         mode = 0xc;
