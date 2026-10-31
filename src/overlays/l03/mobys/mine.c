@@ -83,7 +83,7 @@ void mine_layer_mine_update(struct Moby *mine_moby) {
         break;
     case MINE_FALL_UNTIL_LANDING:
         if (step_moby_motion(mine_moby, mine_vars) & 1) {
-            mine_moby->state = 3;
+            mine_moby->state = MINE_ARM_AND_MONITOR_PROXIMITY;
             if (mine_moby->prev_seq != 1) {
                 blend_moby_animation(mine_moby, 1, 0, scale_game_frames(10));
             }
@@ -109,17 +109,17 @@ void mine_layer_mine_update(struct Moby *mine_moby) {
         if (target_moby != 0 && target_moby->state != 0xFE && target_moby->state != 0xFD &&
             vector_distance_xy(&mine_moby->pos, &target_moby->pos) < 3.0f &&
             mine_vars->timer == 0) {
-            mine_moby->state = 2;
+            mine_moby->state = MINE_HOME_ON_TARGET;
             allocate_voice_for_target_entry(2, 0, mine_moby);
         }
         if (scale_game_frames(3600) < mine_vars->age &&
             (mine_vars->target == 0 || mine_vars->target->state == 0xFE ||
              mine_vars->target->state == 0xFD || scale_game_frames(5400) < mine_vars->age)) {
-            mine_moby->state = 5;
+            mine_moby->state = MINE_SHRINK_AND_REMOVE;
         }
         if (vector_distance_xy(&hero.moby->pos, &mine_moby->pos) < 0.5f &&
             absolute_float(mine_moby->pos.z - hero.motion.pos.f[2]) < 0.25f) {
-            mine_moby->state = 4;
+            mine_moby->state = MINE_EXPLODE_AND_REMOVE;
             break;
         }
         nearby_moby_count = collect_mobies_in_sphere(&mine_moby->pos, 0x10, mine_moby, 0, 1.0f);
@@ -128,7 +128,7 @@ void mine_layer_mine_update(struct Moby *mine_moby) {
 
             if ((nearby_moby->flags & 0x1000) &&
                 (nearby_moby != mine_vars->target || mine_vars->timer == 0)) {
-                mine_moby->state = 4;
+                mine_moby->state = MINE_EXPLODE_AND_REMOVE;
                 break;
             }
         }
@@ -170,7 +170,7 @@ void mine_layer_mine_update(struct Moby *mine_moby) {
                 debris_vector_scratch[2] =
                     random_float_between(frame_time * 4.0f, vector_scratch[kind]);
                 *(OvlQuad *)debris_velocity = *(OvlQuad *)debris_vector_scratch;
-                rr = random_float_between(0.0f, kind == 1 ? 0.5f : 0.25f);
+                rr = random_float_between(0.0f, kind == MINE_DEBRIS_WIDE_SPAWN_RADIUS ? 0.5f : 0.25f);
                 debris_azimuth = random_angle_radians();
                 debris_vector_scratch[0] = fast_cos(debris_azimuth) * rr;
                 debris_vector_scratch[1] = fast_sin(debris_azimuth) * rr;
