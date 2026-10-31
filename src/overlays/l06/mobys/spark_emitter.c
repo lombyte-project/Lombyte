@@ -68,6 +68,9 @@ void spark_emitter_update(struct Moby *emitter) {
         SPARK_EMITTER_RANDOMIZED_SPRAY = 3,
         SPARK_EMITTER_TIMED_BURSTS = 4
     };
+    enum {
+        SPARK_EMITTER_AWAITING_ACTIVATION = 1
+    };
     SparkData  *emitter_data = *(void **)&emitter->pvars;
     SparkVector position_test_vector;
     SparkVector rotation_based_spark_vector;
@@ -83,20 +86,20 @@ void spark_emitter_update(struct Moby *emitter) {
     case SPARK_EMITTER_INITIALIZE:
         euler_rotation_basis(&*(SparkVector *)&emitter->rot_row0, &*(SparkVector *)&emitter->rot);
         if (emitter_data->f4 != 0) {
-            emitter->state = 1;
+            emitter->state = SPARK_EMITTER_AWAITING_ACTIVATION;
         } else if (emitter_data->f0 != 0) {
-            emitter->state = 4;
+            emitter->state = SPARK_EMITTER_TIMED_BURSTS;
         } else {
-            emitter->state = 3;
+            emitter->state = SPARK_EMITTER_RANDOMIZED_SPRAY;
         }
         break;
     case SPARK_EMITTER_DELAYED_ACTION:
         if (fast_dec_timer(&emitter_data->f28)) {
             cart_burst(emitter, &*(SparkVector *)&emitter->pos, -1, 0.333f, 13.0f);
             if (emitter_data->f0 != 0) {
-                emitter->state = 4;
+                emitter->state = SPARK_EMITTER_TIMED_BURSTS;
             } else {
-                emitter->state = 3;
+                emitter->state = SPARK_EMITTER_RANDOMIZED_SPRAY;
             }
         }
         break;
