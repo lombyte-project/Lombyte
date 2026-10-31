@@ -34,6 +34,9 @@ char *spawn_poison_vessel_fragment(void *position,
                                    int   duration_frames,
 
                                    int effect_mode) {
+    enum {
+        POISON_VESSEL_FRAGMENT_MODE_REDUCED_SCALE = 0
+    };
     unsigned char *moby = (unsigned char *)create_moby(0x662);
     if (moby != 0) {
         char *effect_moby_vars;
@@ -54,7 +57,7 @@ char *spawn_poison_vessel_fragment(void *position,
             random_float_between(dd * 6.2831855f, dd * 12.566371f);
         *(short *)(effect_moby_vars + 0x18) = duration_frames;
         *(short *)(effect_moby_vars + 0x1A) = duration_frames;
-        if (effect_mode == 0) {
+        if (effect_mode == POISON_VESSEL_FRAGMENT_MODE_REDUCED_SCALE) {
             MOBY(moby)->scale = MOBY(moby)->scale * random_float_between(0.5f, 0.75f);
         }
         *(float *)(effect_moby_vars + 0x1C) = MOBY(moby)->scale;
