@@ -149,6 +149,9 @@ extern void store_sound_bank_handle_callback() __asm__("func_0022DD78");
 extern s32  snd_flush_sound_commands(void) __asm__("func_0012DC80");
 
 void initialize_level_runtime(void) {
+    enum {
+        LEVEL_SCENE_MODE_EARLY_PROGRESSION = 4
+    };
     s64          texture_packet[4];
     LevelHeader *header;
     s32          data_base;
@@ -276,7 +279,7 @@ void initialize_level_runtime(void) {
     level_render_state.history_count = 0;
     qcopy(&D_001604F0, &D_001604E0);
     if (current_level_index == 0 || (current_level_index == 1 && level_available[3] == 0)) {
-        level_render_state.scene_mode = 4;
+        level_render_state.scene_mode = LEVEL_SCENE_MODE_EARLY_PROGRESSION;
         level_render_state.scene_state = 2;
     }
     fill_transfer_words(&render_sequence, 0, 0x1C0);
