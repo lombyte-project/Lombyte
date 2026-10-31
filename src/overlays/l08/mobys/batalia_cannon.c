@@ -754,7 +754,7 @@ void batalia_cannon_update(Moby *moby) {
             (*(float(*)[4]) & moby->rot)[1] = 0.0f;
             moby->command = 2;
             jet_end_mount(0);
-            moby->state = 4;
+            moby->state = CANNON_UNMOUNTED_IDLE;
             node = (Moby *)(D_L08_0015FFD8 + (cannon_control_vars->platform_index << 8));
             qcopy(direction, (*(float(*)[4]) & node->rot));
             direction[2] = fast_add_rotations(direction[2], 3.1415927f);
@@ -782,15 +782,15 @@ void batalia_cannon_update(Moby *moby) {
             func_L00_00217718_2E16A0(work, direction, 0, 1);
             jet_end_mount(0);
             hero.motion.rot.f[2] = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
-            moby->state = 4;
+            moby->state = CANNON_UNMOUNTED_IDLE;
         } else {
             int *indices;
             int  count;
-            if (moby->state != 5) {
+            if (moby->state != CANNON_MOUNTED_CONTROL) {
                 cannon_control_vars->camera_timer = 2;
                 jet_mount((*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->rot), 1, 0, 0);
             }
-            moby->state = 5;
+            moby->state = CANNON_MOUNTED_CONTROL;
             {
                 int waiting = 2, activated = 3;
                 indices = cannon_control_vars->indices;
@@ -819,7 +819,7 @@ void batalia_cannon_update(Moby *moby) {
         Moby *node;
         int  *indices;
         int   count;
-        moby->state = 4;
+        moby->state = CANNON_UNMOUNTED_IDLE;
         cannon_control_vars->health = 200;
         cannon_control_vars->range = 10.0f;
         node = create_moby(0x710);
@@ -1048,7 +1048,7 @@ void batalia_cannon_update(Moby *moby) {
                         (*(float(*)[4]) & moby->rot)[1] = 0.0f;
                         moby->command = 2;
                         jet_end_mount(0);
-                        moby->state = 4;
+                        moby->state = CANNON_UNMOUNTED_IDLE;
                         node =
                             (Moby *)(D_L08_0015FFD8 + (cannon_control_vars->platform_index << 8));
                         qcopy(muzzle, (*(float(*)[4]) & node->rot));
