@@ -102,7 +102,7 @@ void water_lily_update(HoverMoby *water_lily) {
     switch (water_lily->state) {
     case WATER_LILY_STATE_INITIALIZE:
         *(u128 *)v = previous_water_lily_position.q;
-        water_lily->state = 1;
+        water_lily->state = WATER_LILY_STATE_UPDATE_POSITION;
         break;
     case WATER_LILY_STATE_UPDATE_POSITION:
         spring_axis_to(&water_lily->pos.v.x,
