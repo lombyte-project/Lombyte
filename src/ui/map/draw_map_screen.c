@@ -57,6 +57,9 @@ extern void allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 draw_map_screen(struct MenuScreen *screen) __asm__("FUN_0021be60");
 
 s32 draw_map_screen(struct MenuScreen *screen) {
+    enum {
+        MUSIC_STREAM_READ_IDLE = 0
+    };
     s32              previous_selected_level_id;
     s32              selected_level_table_index;
     s32              next_level_id;
@@ -196,7 +199,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         update_map_icons(level_map_selection.level, 0);
     }
 
-    if (music_stream_state.read_state == 0) {
+    if (music_stream_state.read_state == MUSIC_STREAM_READ_IDLE) {
         if (level_map_selection.sel != -1) {
             menu_system.pending_buffer = 0;
             level_map_selection.slot_id[level_map_selection.sel] ^= 0x1000;
@@ -204,7 +207,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
     }
     pick = -1;
-    if (music_stream_state.read_state == 0) {
+    if (music_stream_state.read_state == MUSIC_STREAM_READ_IDLE) {
         pick = promote_first_available_map_entry();
         if (pick != -1) {
             next = pick_next_map();
@@ -235,7 +238,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     }
     slot = find_map_entry_slot(id);
     if (level_map_selection.level != level_map_selection.loaded) {
-        if (music_stream_state.read_state == 0 && slot == -1 && pick == slot) {
+        if (music_stream_state.read_state == MUSIC_STREAM_READ_IDLE && slot == -1 && pick == slot) {
             pick_map_slot_to_evict(level_map_selection.loaded);
         }
     }
