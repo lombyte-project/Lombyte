@@ -78,7 +78,7 @@ void falling_debris_update(Moby_2E2A38 *debris_moby) {
             random_float_between(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
         debris_data->life = (int)random_float_between((float)scale_game_frames(0x5A),
                                                       (float)scale_game_frames(0x96));
-        debris_moby->state = 2;
+        debris_moby->state = FALLING_DEBRIS_BEFORE_BURST;
     case FALLING_DEBRIS_BEFORE_BURST:
         debris_data->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
         fast_vec_add(debris_moby->pos, debris_moby->pos, debris_data);
@@ -160,7 +160,7 @@ void falling_debris_update(Moby_2E2A38 *debris_moby) {
                             burst_tertiary_frame_count,
                             -1);
             }
-            debris_moby->state = 3;
+            debris_moby->state = FALLING_DEBRIS_AFTER_BURST;
         }
         break;
     case FALLING_DEBRIS_AFTER_BURST:
