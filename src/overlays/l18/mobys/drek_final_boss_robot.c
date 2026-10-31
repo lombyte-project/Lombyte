@@ -2519,7 +2519,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
             f +
         drek_boss_second_scalar_near_hero_target_gp;
     boss_state = MOBY(moby)->state;
-    if (boss_state == 0x13) {
+    if (boss_state == DREK_BOSS_FOLLOW_HERO) {
         char *g = D_0013E533 + 0xe1d;
         if ((*(int *)(g + 0x208c) == 0xf || *(int *)(g + 0x2084) == 0x42) &&
             *(int *)(boss_data + 0x364) == 0 && *(float *)(boss_data + 0x390) <= 25.0f &&
@@ -2542,15 +2542,15 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                 y = l18_drek_boss_second_scalar_near_node_follow_target_gp;
             }
         }
-    } else if (boss_state == 9 || boss_state == 6) {
+    } else if (boss_state == DREK_BOSS_APPROACH_PATH_START || boss_state == 6) {
         x = drek_boss_follow_camera_distance_target_gp;
         y = drek_boss_follow_camera_height_target_gp;
         first_scalar_value = (float *)(selected_scalar_record + 0x34);
         second_scalar_value = (float *)(selected_scalar_record + 0x38);
         first_scalar_update_state = (float *)(boss_data + 0x378);
         second_scalar_update_state = (float *)(boss_data + 0x37c);
-    } else if (boss_state == 0 || boss_state == 10 || boss_state == 11 || boss_state == 1 ||
-               boss_state == 0x1b) {
+    } else if (boss_state == DREK_BOSS_INITIALIZE || boss_state == DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS || boss_state == DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO || boss_state == DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER ||
+               boss_state == DREK_BOSS_RUN_ENDING_SEQUENCE) {
         int   i;
         char *g;
         char *follow_camera_gate_source;
