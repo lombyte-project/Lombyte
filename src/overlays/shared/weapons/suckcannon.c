@@ -1433,7 +1433,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
                            5);
     cannon = suck_cannon_moby->data;
     slot_released = ((SuckHero *)&hero)->slot_state == 3;
-    if ((u8)suck_cannon_moby->state != 3 && (u8)suck_cannon_moby->state != 0)
+    if ((u8)suck_cannon_moby->state != SUCKCANNON_STATE_SUCTION_ACTIVE && (u8)suck_cannon_moby->state != SUCKCANNON_STATE_INITIALIZE)
         suck_beam_queue_draw((int)suck_cannon_moby);
     refresh_suck_cannon_slots();
     switch ((u8)suck_cannon_moby->state) {
@@ -1448,10 +1448,10 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
         if (((SuckHero *)&hero)->count > 0) {
             cannon->blocked = 1;
             blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
-            suck_cannon_moby->state = 4;
+            suck_cannon_moby->state = SUCKCANNON_STATE_LOADED_AIM;
         } else {
             cannon->cooldown = 0;
-            suck_cannon_moby->state = 1;
+            suck_cannon_moby->state = SUCKCANNON_STATE_EMPTY_IDLE;
         }
         suck_reset(suck_cannon_moby);
         break;
@@ -1463,7 +1463,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             cancel_hero_item_animation();
         if (((SuckHero *)&hero)->count > 0) {
             blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
-            suck_cannon_moby->state = 4;
+            suck_cannon_moby->state = SUCKCANNON_STATE_LOADED_AIM;
             break;
         }
         if ((controller_state.held & ((SuckHero *)&hero)->fire_buttons) && cannon->cooldown == 0 &&
@@ -1479,7 +1479,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
             stats->level_mask = (stats->level_mask | (1 << current_level_index)) | 0x80000000;
-            suck_cannon_moby->state = 2;
+            suck_cannon_moby->state = SUCKCANNON_STATE_SUCTION_STARTUP;
         }
         break;
     case SUCKCANNON_STATE_SUCTION_STARTUP:
@@ -1498,17 +1498,17 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             ((SuckHero *)&hero)->firing = 0;
             if (((SuckHero *)&hero)->count > 0) {
                 blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
-                next_state = 4;
+                next_state = SUCKCANNON_STATE_LOADED_AIM;
                 goto changed;
             } else {
                 cannon->cooldown = 0;
                 blend_moby_animation(suck_cannon_moby, 1, 0, scale_game_frames(4));
-                next_state = 1;
+                next_state = SUCKCANNON_STATE_EMPTY_IDLE;
                 goto changed;
             }
         } else if (fast_dec_timer(&cannon->cooldown)) {
             cannon->cooldown = scale_game_frames(20);
-            next_state = 3;
+            next_state = SUCKCANNON_STATE_SUCTION_ACTIVE;
             goto changed;
         }
         break;
@@ -1536,12 +1536,12 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
                 blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
                 cannon->cooldown = 0;
                 cannon->blocked = 1;
-                suck_cannon_moby->state = 4;
+                suck_cannon_moby->state = SUCKCANNON_STATE_LOADED_AIM;
                 goto done;
             } else {
                 cannon->cooldown = 0;
                 blend_moby_animation(suck_cannon_moby, 1, 0, scale_game_frames(4));
-                suck_cannon_moby->state = 1;
+                suck_cannon_moby->state = SUCKCANNON_STATE_EMPTY_IDLE;
                 goto done;
             }
         } else {
@@ -1620,7 +1620,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
             stats->level_mask = (stats->level_mask | (1 << current_level_index)) | 0x80000000;
-            suck_cannon_moby->state = 5;
+            suck_cannon_moby->state = SUCKCANNON_STATE_FIRE_STORED_MOBY;
         }
         break;
     case 6:
@@ -1774,11 +1774,11 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             ((SuckHero *)&hero)->count--;
             if (((SuckHero *)&hero)->count > 0) {
                 ((SuckHero *)&hero)->firing = 0;
-                suck_cannon_moby->state = 4;
+                suck_cannon_moby->state = SUCKCANNON_STATE_LOADED_AIM;
                 goto done;
             } else {
                 cannon->cooldown = scale_game_frames(20);
-                next_state = 1;
+                next_state = SUCKCANNON_STATE_EMPTY_IDLE;
                 ((SuckHero *)&hero)->firing = 0;
                 suck_cannon_moby->state = next_state;
                 goto done;
