@@ -143,7 +143,7 @@ void sam_update(L14WatchMoby *moby) {
         }
         moby_data->p20 = (void *)sam_dialogue_name_text;
         initialize_npc_dialogue(moby, moby_data);
-        moby->state = 1;
+        moby->state = SAM_STATE_DIALOGUE;
         moby_data->b8 = 1;
         break;
     }
@@ -165,12 +165,12 @@ void sam_update(L14WatchMoby *moby) {
             qcopy(D_L14_0016CF60.q10, t + 0x30);
             clear_u64_value((char *)&D_L14_0016CF60 + 0x20);
             D_L14_0016CF60.f28 = *(float *)(t + 0x78);
-            moby->state = 2;
+            moby->state = SAM_STATE_POST_DIALOGUE_WAIT;
         }
         break;
     case SAM_STATE_POST_DIALOGUE_WAIT:
         if (D_L14_0015F5C4 != 2) {
-            moby->state = 1;
+            moby->state = SAM_STATE_DIALOGUE;
             if ((short)moby_data->sub == 4) {
                 unlock_planet(0xF);
                 queue_planet_unlock_message(0xF);
