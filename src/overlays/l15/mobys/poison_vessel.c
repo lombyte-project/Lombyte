@@ -139,6 +139,9 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         POISON_VESSEL_FREE_FLIGHT = 0,
         POISON_VESSEL_FOLLOW_TARGET = 1
     };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     Vec           previous_position;
     Vec           collision_scratch_vector;
     Vec           temporary_vector;
@@ -189,7 +192,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         if (data->target != 0) {
             Moby_2E9358 *target_moby = data->target;
 
-            if (target_moby->state == 0xFE || data->target->state == 0xFD) {
+            if (target_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL || data->target->state == 0xFD) {
                 moby->bBC = state;
                 data->target = 0;
             } else if (D_L15_00174458_lui[0] != 0) {
