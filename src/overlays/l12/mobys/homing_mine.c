@@ -116,7 +116,7 @@ void homing_mine_update(struct Moby *moby) {
     case HOMING_MINE_STATE_INITIALIZE:
         moby->flags |= 0x1000;
         qcopy(&homing_mine_state->start, &moby->pos);
-        moby->state = 1;
+        moby->state = HOMING_MINE_STATE_HOMING;
         homing_mine_state->turn = 0.6981317f;
         if (moby->parent != NULL && ((struct Moby *)moby->parent)->command != 0)
             homing_mine_state->turn = -homing_mine_state->turn;
@@ -179,9 +179,9 @@ void homing_mine_update(struct Moby *moby) {
                 qcopy(&probe, &moby->pos);
                 probe.f[2] += 0.35f;
                 if (coll_sphere(&probe, 0, moby, 0.35f))
-                    moby->state = 2;
+                    moby->state = HOMING_MINE_STATE_DETONATE;
             } else {
-                moby->state = 2;
+                moby->state = HOMING_MINE_STATE_DETONATE;
             }
         }
         break;
