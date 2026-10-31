@@ -196,7 +196,9 @@ extern float D_L10_00167358 NOT_SDA;
 extern float                D_0013F5E0_5f18[] __asm__("D_0013F5E0");
 extern void                 debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 
-void FUN_L10_002f5f18(struct UpdateCam *cam) {
+void update_path_flythrough_camera(struct UpdateCam *cam) __asm__("FUN_L10_002f5f18");
+
+void update_path_flythrough_camera(struct UpdateCam *cam) {
     float                dir[4];
     float                offset[4];
     float                point[4];

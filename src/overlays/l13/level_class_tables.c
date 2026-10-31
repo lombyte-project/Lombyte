@@ -8,7 +8,7 @@
 
 void FUN_L00_002caf40();
 void FUN_L00_002ea7a0();
-void FUN_L10_002f5f18();
+void update_path_flythrough_camera() __asm__("FUN_L10_002f5f18");
 void ammocrate_update() __asm__("FUN_L13_002e1cc8");
 void asteroid_update() __asm__("FUN_L13_002e1638");
 void attached_rocket_update() __asm__("FUN_L13_00305a58");
@@ -383,7 +383,7 @@ struct CameraType level_camera_types[8] __asm__("D_L13_001F6200") __attribute__(
      update_target_tracking_camera,        conditionally_set_camera_state_three                                                           },
     {19,
      evaluate_descriptor_eligibility,            initialize_path_camera,
-     FUN_L10_002f5f18,                          noop_main_callback                                                                        },
+     update_path_flythrough_camera,                          noop_main_callback                                                                        },
     {23,         volume_camera_check,                noop_main_callback,   noop_main_callback,                          noop_main_callback},
     {-1,                           0,                                 0,                    0,                                           0},
 };

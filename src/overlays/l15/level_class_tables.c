@@ -9,7 +9,7 @@
 void FUN_L00_002caf40();
 void FUN_L00_002ea7a0();
 void FUN_L00_002ed230();
-void FUN_L10_002f5f18();
+void update_path_flythrough_camera() __asm__("FUN_L10_002f5f18");
 void beam_slots_update() __asm__("FUN_L14_003039e0");
 void billboard_projectile_update() __asm__("FUN_L01_002c7530");
 void blarg_commander_update() __asm__("FUN_L12_00308918");
@@ -364,7 +364,7 @@ struct CameraType level_camera_types[10] __asm__("D_L15_001E3F00") __attribute__
     {17,               FUN_L00_002ed230,                noop_main_callback,   noop_main_callback,                          noop_main_callback},
     {19,
      evaluate_descriptor_eligibility,            initialize_path_camera,
-     FUN_L10_002f5f18,                          noop_main_callback                                                                           },
+     update_path_flythrough_camera,                          noop_main_callback                                                                           },
     {22,
      dispatch_moby_follow_camera_update,                noop_main_callback,
      noop_main_callback,                          noop_main_callback                                                                         },
