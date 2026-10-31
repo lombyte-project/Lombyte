@@ -773,7 +773,7 @@ void update_hero_timers_and_spatial_state(void) {
     hero.still_frames = 0;
 skip:
     update_hero_planar_distance_spring_motion();
-    if (hero.vehicle_mode == 1) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         transform_hero_local_offset_to_world(&hero.motion.body_center, 0.0f, 0.0f, 0.4f);
         hero.reach_distance = 2.125f;
         hero.reach_height = 1.25f;
