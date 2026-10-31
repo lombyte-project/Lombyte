@@ -25,6 +25,12 @@ int       _decMB0(struct MpegDecoder *decoder,
                   int                *motion_field_select,
 
                   int differential_motion_vector) {
+    enum {
+        DCT_TYPE_FRAME = 0,
+        MOTION_TYPE_FIELD = 1,
+        MOTION_TYPE_FRAME = 2,
+        PICTURE_CODING_TYPE_PREDICTIVE = 2
+    };
     int *dct_type_output;
     int *motion_field_select_output;
     u32  intra_quantiser_command_bits;
@@ -57,7 +63,7 @@ int       _decMB0(struct MpegDecoder *decoder,
     }
     if (type_code & 0xC) {
         if ((decoder->picture_structure == 3) && (decoder->frame_pred_frame_dct != 0)) {
-            *motion_type = 2;
+            *motion_type = MOTION_TYPE_FRAME;
         } else {
             *motion_type = _nextBit(decoder, 2);
         }
@@ -78,12 +84,12 @@ int       _decMB0(struct MpegDecoder *decoder,
     if (frame_motion == 0) {
         field_in_frame = structure == 3;
     }
-    dct_type = 0;
+    dct_type = DCT_TYPE_FRAME;
     if (((decoder->picture_structure == 3) && (decoder->frame_pred_frame_dct == 0)) &&
         (((*mb_type) & 3) != 0)) {
         dct_type = _nextBit(decoder, 1);
     } else {
-        dct_type = 0;
+        dct_type = DCT_TYPE_FRAME;
     }
     *dct_type_output = dct_type;
     if ((*mb_type) & 0x10) {
@@ -182,7 +188,7 @@ int       _decMB0(struct MpegDecoder *decoder,
             }
             coding_type = decoder->picture_coding_type;
             decode_success = 1;
-            if (coding_type == 2) {
+            if (coding_type == PICTURE_CODING_TYPE_PREDICTIVE) {
                 decode_success = 1;
                 if (!((*mb_type) & 9)) {
                     motion_vector_state->unk0 =
@@ -191,7 +197,7 @@ int       _decMB0(struct MpegDecoder *decoder,
                     if (decoder->picture_structure == 3) {
                         *motion_type = coding_type;
                     } else {
-                        *motion_type = 1;
+                        *motion_type = MOTION_TYPE_FIELD;
                         *motion_field_select_output = decoder->picture_structure == 2;
                     }
                     decode_success = 1;
