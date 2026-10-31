@@ -1503,6 +1503,10 @@ void morphoray_update(Moby *moby) __asm__("FUN_L00_002bc7e8");
 
 /* Moby class 185 */
 void morphoray_update(Moby *moby) {
+    enum {
+        MORPHORAY_STATE_UNINITIALIZED = 0,
+        MORPHORAY_STATE_INITIALIZED = 1
+    };
     Vq    direction;
     Vq    points[3];
     Vq    matrix[4];
@@ -1517,8 +1521,8 @@ void morphoray_update(Moby *moby) {
         busy = 1;
     }
     morphoray_state = (struct Ray *)moby->pvars;
-    if (moby->state == 0) {
-        moby->state = 1;
+    if (moby->state == MORPHORAY_STATE_UNINITIALIZED) {
+        moby->state = MORPHORAY_STATE_INITIALIZED;
         morphoray_point_light_slot = -1;
         D_L00_001617C8 = -1;
         morphoray_light_fade_countdown = 0;
