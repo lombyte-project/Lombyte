@@ -59,6 +59,9 @@ typedef struct {
 void draw_timed_text(LevelTextEntry *entry, s32 frame) __asm__("FUN_L00_001fcca0");
 
 void draw_timed_text(LevelTextEntry *timed_text_entry, s32 frame) {
+    enum {
+        TEXT_SEPARATOR_JOIN_WITH_HYPHEN = 1
+    };
     int            start = timed_text_entry->start;
     int            end = start + timed_text_entry->duration;
     float          scale, alpha;
@@ -91,7 +94,7 @@ void draw_timed_text(LevelTextEntry *timed_text_entry, s32 frame) {
             alpha = 0.0f;
     }
     source = (unsigned char *)get_help_message_text(timed_text_entry->text_id);
-    if (timed_text_entry->separator_mode == 1) {
+    if (timed_text_entry->separator_mode == TEXT_SEPARATOR_JOIN_WITH_HYPHEN) {
         text_write_cursor = formatted_text;
     joined_text:
         while (*source != 0) {
