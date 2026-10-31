@@ -132,7 +132,7 @@ void ocean_aridia_update(struct Moby *moby) {
     switch (moby->state) {
     case OCEAN_ARIDIA_INITIALIZE:
         prepare_scaled_table_on_stack(0.16666667f);
-        moby->state = 1;
+        moby->state = OCEAN_ARIDIA_REGISTER_DRAW_CALLBACK;
         moby->update_dist = 0xFF;
         break;
     case OCEAN_ARIDIA_REGISTER_DRAW_CALLBACK:
