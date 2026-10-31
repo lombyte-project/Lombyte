@@ -121,23 +121,23 @@ void magnet_elevator_update(struct Moby *moby) {
                                    frame_time_sq * 4.0f,
                                    frame_time * 4.0f);
         if ((*(float *)((char *)(state) + (0x70))) < 1.0f) {
-            float t = (1.0f - (*(float *)((char *)(state) + (0x70)))) /
+            float remaining_camera_blend_ratio = (1.0f - (*(float *)((char *)(state) + (0x70)))) /
                       (1.0f - previous_camera_blend_progress);
             char *camera_pose_base;
             FUN_L17_002ee9c0_c(moby, (char *)camera_position, (char *)camera_rotation);
             fast_vec_sub(camera_position_offset, D_L17_001676C0, camera_position);
             camera_pose_base = D_L17_001676C0 - 0x140;
-            fast_vec_scale(camera_position_offset, camera_position_offset, t);
+            fast_vec_scale(camera_position_offset, camera_position_offset, remaining_camera_blend_ratio);
             fast_vec_add(camera_position, camera_position, camera_position_offset);
             camera_rotation[1] = fast_add_rotations(
                 fast_subtract_rotations((*(float *)((char *)(camera_pose_base) + (0x154))),
                                         camera_rotation[1]) *
-                    t,
+                    remaining_camera_blend_ratio,
                 camera_rotation[1]);
             camera_rotation[2] = fast_add_rotations(
                 fast_subtract_rotations((*(float *)((char *)(camera_pose_base) + (0x158))),
                                         camera_rotation[2]) *
-                    t,
+                    remaining_camera_blend_ratio,
                 camera_rotation[2]);
             set_camera_position(camera_position);
             set_camera_rotation(camera_rotation);
@@ -225,8 +225,8 @@ void magnet_elevator_update(struct Moby *moby) {
             i = 0x20;
         }
         {
-            int t = (i << 8) | 0x80000000;
-            W(moby, 0x90) = (i << 16) | t | i;
+            int pulse_color_green_alpha_bits = (i << 8) | 0x80000000;
+            W(moby, 0x90) = (i << 16) | pulse_color_green_alpha_bits | i;
         }
         hero_state = (char *)((char *)&hero);
         if (H(hero_state, 0x308) != 0 || W(state, 0x7C) == 0) {
