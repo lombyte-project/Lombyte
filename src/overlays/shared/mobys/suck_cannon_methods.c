@@ -24,11 +24,14 @@ int launch_suck_cannon_projectile_and_sync_moby_state(struct Moby *moby,
                                                       int          position_source_moby,
 
                                                       float position_z_offset) {
+    enum {
+        MOBY_STATE_SUCK_CANNON_LAUNCHED = 7
+    };
     char *callback_record = get_moby_suck_cannon_record(moby);
     int   projectile_launch_result = launch_suck_cannon_projectile(
         moby, launch_data_source, position_source_moby, position_z_offset);
     if (projectile_launch_result != 0) {
-        moby->state = 7;
+        moby->state = MOBY_STATE_SUCK_CANNON_LAUNCHED;
     } else if ((unsigned char)((char)moby->state) == 7) {
         moby->state = 1;
     }
