@@ -833,25 +833,25 @@ void toxic_crab_update(Moby2E30F8 *m) {
     }
 }
 
-extern int   D_L10_00161E74 __attribute__((sda));
-extern int   D_L10_00161E78 __attribute__((sda));
-extern float D_L10_00161E7C __attribute__((sda));
-extern float D_L10_00161E80 __attribute__((sda));
-extern float D_L10_00161E84 __attribute__((sda));
-extern float D_L10_00161E88 __attribute__((sda));
-extern float D_L10_00161E8C __attribute__((sda));
-extern float D_L10_00161E90 __attribute__((sda));
-extern float D_L10_00161E94 __attribute__((sda));
-extern float D_L10_00161E98 __attribute__((sda));
+extern int   l10_toxic_crab_particle_group_count __asm__("D_L10_00161E74") __attribute__((sda));
+extern int   l10_toxic_crab_particles_per_group __asm__("D_L10_00161E78") __attribute__((sda));
+extern float l10_toxic_crab_particle_group_position_jitter __asm__("D_L10_00161E7C") __attribute__((sda));
+extern float l10_toxic_crab_particle_position_jitter __asm__("D_L10_00161E80") __attribute__((sda));
+extern float l10_toxic_crab_particle_adjusted_velocity_jitter __asm__("D_L10_00161E84") __attribute__((sda));
+extern float l10_toxic_crab_particle_speed_lower_bound __asm__("D_L10_00161E88") __attribute__((sda));
+extern float l10_toxic_crab_particle_speed_upper_bound __asm__("D_L10_00161E8C") __attribute__((sda));
+extern float l10_toxic_crab_particle_rise_lower_bound __asm__("D_L10_00161E90") __attribute__((sda));
+extern float l10_toxic_crab_particle_rise_upper_bound __asm__("D_L10_00161E94") __attribute__((sda));
+extern float l10_toxic_crab_particle_vertical_velocity_drop_scale __asm__("D_L10_00161E98") __attribute__((sda));
 extern float D_L10_00161E9C __attribute__((sda));
 extern float D_L10_00161EA0 __attribute__((sda));
-extern int   D_L10_00161EA4 __attribute__((sda));
-extern int   D_L10_00161EA8 __attribute__((sda));
-extern int   D_L10_00161EAC __attribute__((sda));
-extern int   D_L10_00161EB0 __attribute__((sda));
-extern int   D_L10_00161EB4 __attribute__((sda));
-extern int   D_L10_00161EB8 __attribute__((sda));
-extern int   D_L10_00161EBC __attribute__((sda));
+extern int   l10_toxic_crab_particle_start_color_a __asm__("D_L10_00161EA4") __attribute__((sda));
+extern int   l10_toxic_crab_particle_end_color_a __asm__("D_L10_00161EA8") __attribute__((sda));
+extern int   l10_toxic_crab_particle_start_color_b __asm__("D_L10_00161EAC") __attribute__((sda));
+extern int   l10_toxic_crab_particle_end_color_b __asm__("D_L10_00161EB0") __attribute__((sda));
+extern int   l10_toxic_crab_particle_life_frames __asm__("D_L10_00161EB4") __attribute__((sda));
+extern int   l10_toxic_crab_particle_fade_frames __asm__("D_L10_00161EB8") __attribute__((sda));
+extern int   l10_toxic_crab_particle_random_duration_base __asm__("D_L10_00161EBC") __attribute__((sda));
 extern void  add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern int   fast_tween_color_3a90(int, int, float) __asm__("FUN_001fa6e0");
 
@@ -859,13 +859,13 @@ void emit_moby_particles(struct Moby *moby) __asm__("FUN_L10_002e3a90");
 
 void emit_moby_particles(struct Moby *moby) {
     float  pos[4];
-    float  vel[4];
-    float  accel[4];
+    float  particle_velocity[4];
+    float  adjusted_particle_velocity[4];
     float  push[4];
-    char  *vars;
+    char  *particle_moby_data;
     int    count;
     float *pos_ptr;
-    void  *src;
+    void  *moby_position_source;
     int    i;
     int    j;
     float  angle;
@@ -878,46 +878,46 @@ void emit_moby_particles(struct Moby *moby) {
     int    life;
     int    fade;
 
-    count = D_L10_00161E74;
-    vars = (char *)moby->pvars;
+    count = l10_toxic_crab_particle_group_count;
+    particle_moby_data = (char *)moby->pvars;
     for (i = 0; i < count; i++) {
         pos_ptr = pos;
-        src = &moby->pos;
-        qcopy_nc(pos, src);
-        add_random_offset_to_vector_xyz(pos_ptr, D_L10_00161E7C);
+        moby_position_source = &moby->pos;
+        qcopy_nc(pos, moby_position_source);
+        add_random_offset_to_vector_xyz(pos_ptr, l10_toxic_crab_particle_group_position_jitter);
         pos[2] += 0.55f;
         angle = random_angle_radians();
-        speed = random_float_between(D_L10_00161E88, D_L10_00161E8C);
-        rise = random_float_between(D_L10_00161E90, D_L10_00161E94);
+        speed = random_float_between(l10_toxic_crab_particle_speed_lower_bound, l10_toxic_crab_particle_speed_upper_bound);
+        rise = random_float_between(l10_toxic_crab_particle_rise_lower_bound, l10_toxic_crab_particle_rise_upper_bound);
         if (*((u8 *)moby + 0x20) == 11) {
             speed *= 0.55f;
             rise *= 0.55f;
             pos[2] -= 0.2f;
         }
-        vel[0] = fast_cos(angle) * (speed * D_0015ED6C);
-        vel[1] = fast_sin(angle) * (speed * D_0015ED6C);
-        vel[2] = 0.0f + rise * D_0015ED6C;
-        fast_vec_scale(push, vars + 0x70, 0.5f);
+        particle_velocity[0] = fast_cos(angle) * (speed * D_0015ED6C);
+        particle_velocity[1] = fast_sin(angle) * (speed * D_0015ED6C);
+        particle_velocity[2] = 0.0f + rise * D_0015ED6C;
+        fast_vec_scale(push, particle_moby_data + 0x70, 0.5f);
         push[2] = 0.0f;
-        fast_vec_add(vel, vel, push);
-        qcopy(accel, vel);
-        accel[2] -= D_L10_00161E98 * D_0015ED70 * (float)scale_game_frames(D_L10_00161EB8);
-        for (j = 0; j < D_L10_00161E78; j++) {
+        fast_vec_add(particle_velocity, particle_velocity, push);
+        qcopy(adjusted_particle_velocity, particle_velocity);
+        adjusted_particle_velocity[2] -= l10_toxic_crab_particle_vertical_velocity_drop_scale * D_0015ED70 * (float)scale_game_frames(l10_toxic_crab_particle_fade_frames);
+        for (j = 0; j < l10_toxic_crab_particles_per_group; j++) {
             size = random_float_between(0.5f, 1.5f);
-            vel[3] = size * D_L10_00161E9C;
-            accel[3] = size * D_L10_00161EA0;
-            add_random_offset_to_vector_xyz(pos, D_L10_00161E80);
-            add_random_offset_to_vector_xyz(accel, D_L10_00161E84 * D_0015ED6C);
+            particle_velocity[3] = size * D_L10_00161E9C;
+            adjusted_particle_velocity[3] = size * D_L10_00161EA0;
+            add_random_offset_to_vector_xyz(pos, l10_toxic_crab_particle_position_jitter);
+            add_random_offset_to_vector_xyz(adjusted_particle_velocity, l10_toxic_crab_particle_adjusted_velocity_jitter * D_0015ED6C);
             start_color = fast_tween_color_3a90(
-                D_L10_00161EA4, D_L10_00161EAC, random_float_between(0.0f, 1.0f));
+                l10_toxic_crab_particle_start_color_a, l10_toxic_crab_particle_start_color_b, random_float_between(0.0f, 1.0f));
             end_color = fast_tween_color_3a90(
-                D_L10_00161EA8, D_L10_00161EB0, random_float_between(0.0f, 1.0f));
-            life = scale_game_frames(D_L10_00161EB4);
-            fade = scale_game_frames(D_L10_00161EB8);
-            time_base = (float)D_L10_00161EBC;
+                l10_toxic_crab_particle_end_color_a, l10_toxic_crab_particle_end_color_b, random_float_between(0.0f, 1.0f));
+            life = scale_game_frames(l10_toxic_crab_particle_life_frames);
+            fade = scale_game_frames(l10_toxic_crab_particle_fade_frames);
+            time_base = (float)l10_toxic_crab_particle_random_duration_base;
             spawn_spark(pos,
-                        vel,
-                        accel,
+                        particle_velocity,
+                        adjusted_particle_velocity,
                         start_color,
                         end_color,
                         life,
