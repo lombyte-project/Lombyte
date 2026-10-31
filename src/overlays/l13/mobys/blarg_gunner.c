@@ -111,11 +111,14 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
     enum {
         HIT_REACTION_NONE = 11
     };
+    enum {
+        BLARG_GUNNER_STATE_DESTROY = 2
+    };
     float *tm = (float *)(moby_vars + 0x20);
     char  *hit_record;
     int    k;
     int    hit_reaction_result;
-    if (moby->state != 2) {
+    if (moby->state != BLARG_GUNNER_STATE_DESTROY) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
         hit_reaction_result = hit_reaction(moby, hit_record, tm, 0, &k, 0, 0, 4);
         if (hit_record != 0) {
@@ -175,7 +178,7 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
                 trooper_anim_update(moby, (short *)(moby_vars + 0x60));
                 if (moby->prev_seq != 3)
                     blend_moby_animation(moby, 3, 1, 0);
-                moby->state = 2;
+                moby->state = BLARG_GUNNER_STATE_DESTROY;
             } else {
                 *tm = current_health - hit_damage;
                 *(unsigned char *)(moby_vars + 0x67) = 0xFA;
