@@ -5,7 +5,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"

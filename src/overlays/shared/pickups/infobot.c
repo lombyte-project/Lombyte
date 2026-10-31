@@ -9,7 +9,7 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/pickups/infobot_data/update_infobot_slot_path_motion.h"
 #include "rnc/globals.h"
 #include "rnc/game/level_state.h"

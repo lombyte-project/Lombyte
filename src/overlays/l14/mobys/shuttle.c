@@ -1,6 +1,6 @@
 /* Level 14 shuttle moby class. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"

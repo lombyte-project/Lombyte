@@ -15,7 +15,7 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "rnc/overlay/l10/mobys/data_processor_linked_effect_globals.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/audio/voice_pool.h"
 
 extern int   debug_print() __asm__("FUN_001e93b0");

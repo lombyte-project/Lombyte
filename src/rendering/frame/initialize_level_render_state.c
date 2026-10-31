@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 

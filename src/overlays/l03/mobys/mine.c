@@ -1,6 +1,6 @@
 /* Level 03 moby class mine: the mine a mine_layer drops. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
@@ -8,7 +8,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/hero/hero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 void        handle_mine_hit(unsigned char *mine_moby) __asm__("FUN_L03_002cc828");
 extern char D_L03_00166EC0[];

@@ -1,6 +1,6 @@
 /* Level 10 moby class gate_2: the second of the paired gates. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
@@ -13,7 +13,7 @@
 
 typedef struct Moby Moby;
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern float         FUN_L04_001f1978(float);
 extern float         fast_cos(float);

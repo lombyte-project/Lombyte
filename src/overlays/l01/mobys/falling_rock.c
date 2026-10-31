@@ -1,6 +1,6 @@
 /* Level 01 moby class falling_rock. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 
@@ -12,8 +12,8 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
 
-#include "rnc/overlay/cuboid.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int  cutscene_active __asm__("D_L01_0015F404");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
@@ -114,7 +114,7 @@ typedef struct {
     f32 x, y, z;
 } CapVec3;
 
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 CapColors D_L01_00161C40 = {
     {0x2b8, 0x2b9, 0x2ba}

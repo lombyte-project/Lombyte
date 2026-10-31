@@ -3,13 +3,13 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/view/update_view_context.h"
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/camera/update_cam.h"
 
 typedef struct {

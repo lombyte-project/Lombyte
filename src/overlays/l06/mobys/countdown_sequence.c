@@ -1,7 +1,7 @@
 /* Level 06 moby class 0x454: countdown sequence; once its group is cleared it runs the red button camera path, voice lines and the timed countdown. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -21,7 +21,7 @@ extern int D_L06_001ABFC0_u[] __asm__("D_L06_001ABFC0");
  * the US level program (data still reached through the MACRO_ADDR form). */
 void set_moby_list_state_17(int moby_list_index) __asm__("FUN_L06_002ffc38");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");

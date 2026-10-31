@@ -8,7 +8,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/interpolation.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/camera/scripted_camera.h"

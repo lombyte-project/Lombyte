@@ -14,7 +14,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/pickups/nanotech_ball_data/spawn_nanotech_ball_collection_effect_pair.h"
 #include "rnc/overlay/shared/pickups/nanotech_ball_data/update_nanotech_ball_collection_effects.h"
 #include "rnc/overlay/shared/pickups/nanotech_ball_data/nanotech_ball_update_3.h"

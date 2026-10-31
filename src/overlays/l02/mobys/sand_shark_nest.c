@@ -15,7 +15,7 @@ extern int D_L02_001ABE40[];
 extern int D_L02_0015FFD8; /* no foreign declaration */
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");

@@ -1,6 +1,6 @@
 /* Scrolling mesh and texture batches: draws the scrolled batches, scales their colour tables and advances their scroll offsets. */
 #include "types.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

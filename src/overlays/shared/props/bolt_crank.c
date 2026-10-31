@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -15,10 +15,10 @@
 #include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "rnc/overlay/shared/mobys/record_moby_context_bytes.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/options.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 /* Bolt-crank Moby.state, including the callback-only state. */
 enum BoltCrankState {

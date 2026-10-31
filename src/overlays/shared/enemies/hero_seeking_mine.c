@@ -1,6 +1,6 @@
 /* Shared moby class mine (0x4D): a group moby that seeks the hero. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"

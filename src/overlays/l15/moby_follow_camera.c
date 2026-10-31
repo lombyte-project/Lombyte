@@ -1,6 +1,6 @@
 /* Level 15 moby follow camera type: region and angle checks, update and dispatch. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/math_consts.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

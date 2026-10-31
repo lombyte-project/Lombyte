@@ -13,7 +13,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern char D_L11_00174880[];
 

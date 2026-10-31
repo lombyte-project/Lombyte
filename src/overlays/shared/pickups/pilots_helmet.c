@@ -1,13 +1,13 @@
 /* Shared moby class pilots_helmet: the pilot's helmet item, collected once with a cutscene. */
 
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"

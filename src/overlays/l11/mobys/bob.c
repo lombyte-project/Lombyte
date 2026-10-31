@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/overlay/l11/mobys/watcher.h"
 
 #include "qcopy.h"

@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/vendor.c: func_0023AA38). */
 #include "types.h"
 #include "rnc/ui/vendor/vendor_capture.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/rendering/vu1_registers.h"

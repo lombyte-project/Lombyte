@@ -7,7 +7,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");

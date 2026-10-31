@@ -73,7 +73,7 @@ void update_linked_moby_parts(struct Moby *moby) __asm__("FUN_L08_002e2078");
 extern void *FUN_L00_0025a420(void *, int, int);
 void         process_gunship_part_hits(struct Moby *moby) __asm__("FUN_L08_002e2250");
 
-#include "rnc/overlay/swarm_path.h"
+#include "rnc/overlay/shared/world/swarm_path.h"
 
 /* Gun turret on a gunship: cruises one path firing at its target, or circles a second path firing at random. */
 typedef struct {

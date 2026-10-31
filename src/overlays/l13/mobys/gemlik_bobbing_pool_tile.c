@@ -9,7 +9,7 @@
 #include "rnc/math/random.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/water_grid.h"
 
 extern int random_integer_below(int) __asm__("FUN_00213260");
 

@@ -17,7 +17,7 @@
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 /* Ground enemy update: damage reaction, leash and wake checks, then its chase / attack / return state machine. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_002E39E0), where it is exact; names translated to the US level program. */

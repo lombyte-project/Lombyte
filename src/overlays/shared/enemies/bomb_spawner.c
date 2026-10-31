@@ -9,7 +9,7 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "qcopy.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 typedef struct {
     f32 x;

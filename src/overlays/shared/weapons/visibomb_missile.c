@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/input/pad_state.h"
@@ -17,7 +17,7 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/weapons/visibomb_missile_data/moby_save_globals_state.h"
 #include "rnc/overlay/shared/weapons/visibomb_missile_data/visibomb_missile_update.h"
 

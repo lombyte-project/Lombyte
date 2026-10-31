@@ -8,8 +8,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
-#include "rnc/overlay/cuboid.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l13/mobys/attached_rocket.h"
 #include "rnc/overlay/l13/mobys/hovering_rocket_attacker_globals.h"
 
@@ -331,7 +331,7 @@ extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 
 extern char *D_L13_001B07B0[];
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern float hovering_rocket_attacker_scale_multiplier_gp __asm__("D_L13_00161490")
     __attribute__((sda));

@@ -1,7 +1,7 @@
 /* Level 01 moby class fighter_jet. */
 #include "types.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -29,7 +29,7 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002BA898.c: func_L01_002F5800), where it is exact; names translated to the US level program. */
 

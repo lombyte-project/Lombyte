@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/rendering/dma_tag.h"
 
 extern s32  sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);

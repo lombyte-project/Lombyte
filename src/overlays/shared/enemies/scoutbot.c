@@ -18,8 +18,8 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct Moby Moby;
 

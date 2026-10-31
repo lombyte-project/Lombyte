@@ -1,6 +1,6 @@
 /* Level 03 moby class path_mover_spawner: spawns path_mover mobys along its path. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/asm_helpers.h"

@@ -5,7 +5,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/math/normalize_vector_triplet.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l17/mobys/fleet_rotating_radial_effect_globals.h"
 
 /* Fleet moby 669 update: spins up, then sprays particles from points on a rotating ring. */

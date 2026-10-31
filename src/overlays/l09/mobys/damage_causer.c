@@ -4,7 +4,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"

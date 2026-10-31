@@ -6,7 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/rendering/effects/ground_particle_scatter_globals.h"
 #include "rnc/overlay/shared/rendering/effects/ground_particle_scatter.h"
 

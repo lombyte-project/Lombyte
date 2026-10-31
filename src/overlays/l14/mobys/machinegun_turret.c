@@ -13,9 +13,9 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/rendering/clip_volume.h"
 #include "sda.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/l14/mobys/flying_bolt.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");

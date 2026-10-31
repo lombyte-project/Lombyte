@@ -1,7 +1,7 @@
 /* Camera type 4: a camera aligned with the hero, steered by the pad, and its transition step. */
 
 #include "types.h"
-#include "rnc/overlay/camera.h"
+#include "rnc/overlay/shared/camera/camera.h"
 #include "rnc/hero/hero.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -9,8 +9,8 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 #define P D_0013F350_lui
 #define Q l00_camera_lui

@@ -53,7 +53,7 @@ typedef struct {
 
 #include "rnc/overlay/shared/enemies/seeker_globals.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern Vec4f D_L09_00166F40;
 extern u8    seeker_invalid_bound_path_format[] __asm__("D_L09_00208320");

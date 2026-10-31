@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"

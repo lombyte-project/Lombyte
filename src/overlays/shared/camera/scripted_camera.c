@@ -6,7 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/interpolation/cosine_interpolate.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
 #define F(p, o) (*(float *)((char *)(p) + (o)))

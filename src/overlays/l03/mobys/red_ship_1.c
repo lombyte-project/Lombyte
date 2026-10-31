@@ -19,8 +19,8 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/game/item_state.h"
 

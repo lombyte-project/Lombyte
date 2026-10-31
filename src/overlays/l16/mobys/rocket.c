@@ -1,6 +1,6 @@
 /* Level 16 rocket (class 0x5c3): a homing projectile. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -22,7 +22,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float D_0015ED6C;
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Advance a homing spark, emit its trail, and test its collision or impact state. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002A50F0), where it is exact; names translated to the US level program. */

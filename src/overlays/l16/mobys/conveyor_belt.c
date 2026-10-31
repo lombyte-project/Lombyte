@@ -1,6 +1,6 @@
 /* Level 16 conveyor_belt: group motion, voice and belt strips. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"

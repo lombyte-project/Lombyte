@@ -9,7 +9,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 typedef union {
     u128 q;

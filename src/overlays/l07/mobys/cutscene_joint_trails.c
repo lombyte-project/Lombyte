@@ -1,7 +1,7 @@
 /* Level 07 moby class cutscene_joint_trails (0x6fd): during the cutscene draws three trails between joint pairs of the current cutscene moby. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"

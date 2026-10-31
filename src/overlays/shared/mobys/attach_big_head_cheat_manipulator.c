@@ -4,7 +4,7 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "qcopy.h"
 #include "rnc/game/options.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 typedef struct {
     char  pad0[0x44];

@@ -7,7 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
 
-#include "rnc/overlay/swarm_path.h"
+#include "rnc/overlay/shared/world/swarm_path.h"
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/mobys/moby_spawn.h"

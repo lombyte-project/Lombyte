@@ -1,6 +1,6 @@
 /* Shared moby class plasmabot: its update, path walk, aiming, beam, hit reaction and effects. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"

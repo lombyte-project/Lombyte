@@ -4,7 +4,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 #include "rnc/overlay/l03/mobys/path_mover_globals.h"
 

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 
 struct sceGsDrawEnv1 {
     unsigned long frame1;

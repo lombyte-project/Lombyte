@@ -20,7 +20,7 @@
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern int D_L06_0015F5C4;
 

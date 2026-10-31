@@ -13,8 +13,8 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l03/mobys/robot_dog.h"
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */

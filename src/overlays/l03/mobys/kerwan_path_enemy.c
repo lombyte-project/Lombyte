@@ -1,7 +1,7 @@
 /* Level 03 moby class kerwan_path_enemy: an enemy that walks a path ring and turns toward its target. */
 #include "types.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -18,7 +18,7 @@
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l03/mobys/homing_rocket.h"
 #include "rnc/overlay/l03/mobys/robot_dog.h"
 

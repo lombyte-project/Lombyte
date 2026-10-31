@@ -9,7 +9,7 @@
 #include "rnc/overlay/shared/props/pool_set_scale.h"
 #include "rnc/overlay/shared/props/pool_init_tiles.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/water_grid.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 

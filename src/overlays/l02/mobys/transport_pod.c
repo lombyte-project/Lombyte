@@ -19,16 +19,16 @@ extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022
 extern int D_L02_0015FFD8; /* no foreign declaration */
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern char D_L02_001673C0[];
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 #include "rnc/game/usage_stats.h"
 

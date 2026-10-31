@@ -16,7 +16,7 @@
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/streaming/disc_table.h"

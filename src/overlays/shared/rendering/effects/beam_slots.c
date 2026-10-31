@@ -3,7 +3,7 @@
 #include "qcopy.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "sda.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"

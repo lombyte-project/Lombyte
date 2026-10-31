@@ -10,7 +10,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 

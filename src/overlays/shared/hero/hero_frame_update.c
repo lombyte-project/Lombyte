@@ -4,13 +4,13 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/collision.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "qcopy.h"
 #include "rnc/math/circle_offset.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -1419,7 +1419,7 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
     return 1;
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/input/pad_state.h"
 
 typedef struct {

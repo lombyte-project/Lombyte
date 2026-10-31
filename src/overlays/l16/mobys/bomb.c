@@ -1,6 +1,6 @@
 /* Level 16 bomb (class 0x119): the thrown bomb and its spawner. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"

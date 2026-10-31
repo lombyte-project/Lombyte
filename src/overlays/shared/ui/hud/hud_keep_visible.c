@@ -1,7 +1,7 @@
 /* HUD: element visibility, numeric elements, HUD particles and stars, and the text panel. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -623,7 +623,7 @@ void hud_counter_update(void) {
     hud_update_counter();
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/game/game_globals.h"

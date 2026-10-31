@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/core/00119D88.c: func_0011BCB0). */
 #include "types.h"
 #include "sda.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_state.h"
 #include "rnc/sdk/library/sif_file_slot.h"

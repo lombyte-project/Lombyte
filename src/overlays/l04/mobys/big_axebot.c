@@ -15,8 +15,8 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/math/normalize_vector_triplet.h"
 #include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
 

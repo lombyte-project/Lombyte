@@ -12,10 +12,10 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/overlay/shared/mobys/update_object_wander_movement.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l04/mobys/circular_saw_enemy_globals.h"
-#include "rnc/overlay/cuboid.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/weapons/suckcannon.h"
 #include "rnc/audio/voice_alloc.h"
 

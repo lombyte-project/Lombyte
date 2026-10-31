@@ -9,7 +9,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 typedef struct {
     void         *o;

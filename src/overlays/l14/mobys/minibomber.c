@@ -17,7 +17,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/math/interpolation/cosine_interpolate.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "sda.h"
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/minibomber_globals.h"

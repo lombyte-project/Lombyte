@@ -1,7 +1,7 @@
 /* Path or ballistic debris (class 0x193): a piece that follows a race path until its timer ends, then flies and falls; its spawner and trail particles. */
 #include "types.h"
 #include "rnc/overlay/shared/enemies/path_or_ballistic_debris.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"

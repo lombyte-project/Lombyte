@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_RENDERING_RESIDENT_CLASS_H
 
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 /* One texture of a resident render class (tfrag, shrub and object
    classes). The block offsets are relative to gs_texture_allocation_base

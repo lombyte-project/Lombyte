@@ -19,7 +19,7 @@ extern void           draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7
 extern char           D_0013F3D0[];
 extern unsigned char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 extern void

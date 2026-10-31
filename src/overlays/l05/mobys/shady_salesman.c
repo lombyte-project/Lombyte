@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/game/options.h"
 #include "rnc/math_consts.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

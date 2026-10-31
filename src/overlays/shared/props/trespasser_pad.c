@@ -1,6 +1,6 @@
 /* Shared moby class tresspasser_pad: the pad the hero uses the trespasser on, and its puzzle display. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -17,7 +17,7 @@
 #include "rnc/ui/help/force_help_message.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/overlay/shared/props/trespasser_pad_data/draw_tresspasser_puzzle_radial_strip.h"
 #include "rnc/overlay/shared/props/trespasser_pad_data/draw_tresspasser_puzzle.h"

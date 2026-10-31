@@ -11,7 +11,7 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern int   debug_print() __asm__("FUN_001e93b0");
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");

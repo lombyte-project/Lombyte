@@ -16,7 +16,7 @@
 extern Vec4           D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
 extern s32 D_00141660 NOT_SDA;
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern struct Moby    *D_L00_0015FFDC; /* end of the moby table */
 extern s32             D_L00_00160540;

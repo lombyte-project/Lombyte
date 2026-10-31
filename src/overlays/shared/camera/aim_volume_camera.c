@@ -3,7 +3,7 @@
 #include "types.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/hero/hero.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
 #include "rnc/camera/follow_cam.h"

@@ -1,6 +1,6 @@
 /* Level 05 moby class extermitank. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/audio/voice_alloc.h"

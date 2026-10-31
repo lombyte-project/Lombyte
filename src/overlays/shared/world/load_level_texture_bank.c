@@ -1,12 +1,12 @@
 /* World: loads the level texture bank. */
 #include "types.h"
-#include "rnc/overlay/texture_ref.h"
+#include "rnc/overlay/shared/rendering/texture_ref.h"
 #include "asm.h"
 
 #include "rnc/streaming/disc_table.h"
 #include "rnc/rendering/level_render_state.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/loaders/register_moby_class.h"

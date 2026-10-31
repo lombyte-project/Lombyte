@@ -5,7 +5,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int FUN_L00_00257b90(int lo, int hi);
 

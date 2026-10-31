@@ -4,7 +4,7 @@
 #include "asm.h"
 #include "qcopy.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -274,7 +274,7 @@ void FUN_L00_0025da70(u128_0025da70 *first_point,
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 float project_level_path_point_onto_segment(float   *out,
                                             float   *query_point,
@@ -601,7 +601,7 @@ typedef struct {
 
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern S6       burst_first_color_palette __asm__("D_L00_001E9030");
 extern S6       burst_second_color_palette __asm__("D_L00_001E9048");
@@ -1108,7 +1108,7 @@ void FUN_L00_0025f730(void *vector, float x) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 /* Adds the moby index of a to the short list unless present or the list holds max. */
 void append_unique_moby_index(int moby_address, short *list, short max) __asm__("FUN_L00_0025f780");

@@ -24,7 +24,7 @@
 #include "rnc/overlay/shared/hero/update_hero_vehicle_attachments_and_effects.h"
 #include "rnc/overlay/shared/hero/update_hero_and_vehicle_mode_effects.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l15_quartu/help_00217348.c: func_L15_00217348), where it is exact; names translated to the US level program. */
 

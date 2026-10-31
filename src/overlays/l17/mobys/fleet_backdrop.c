@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -10,7 +10,7 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "rnc/overlay/l17/mobys/fleet_backdrop_globals.h"
 

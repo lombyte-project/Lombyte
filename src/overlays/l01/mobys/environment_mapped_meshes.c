@@ -3,7 +3,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
-#include "rnc/overlay/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
 
 typedef struct {
     f32 x, y, z, w;

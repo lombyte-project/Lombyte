@@ -2,7 +2,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/audio/voice_pool.h"
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"

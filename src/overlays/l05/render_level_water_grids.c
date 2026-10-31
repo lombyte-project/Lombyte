@@ -4,8 +4,8 @@
 
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/water_grid.h"
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
 
 void render_level_water_grids(void) __asm__("FUN_L05_0030d678");

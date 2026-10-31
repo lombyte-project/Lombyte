@@ -1,7 +1,7 @@
 /* HUD: updates a counter. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/ui/hud/draw_weapon_ammo_hud_panel.h"

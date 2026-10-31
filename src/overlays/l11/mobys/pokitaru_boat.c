@@ -17,7 +17,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 #include "qcopy.h"
 
@@ -27,7 +27,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern int   D_L11_0015FFD8;
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l11/mobys/puffoid.h"
 
 extern short *D_L11_001AC240[];

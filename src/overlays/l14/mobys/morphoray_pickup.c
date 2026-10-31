@@ -6,7 +6,7 @@
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"

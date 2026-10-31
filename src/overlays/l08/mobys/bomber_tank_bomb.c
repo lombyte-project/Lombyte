@@ -5,7 +5,7 @@
 #include "rnc/math/random.h"
 #include "qcopy.h"
 #include "rnc/overlay/l08/mobys/bomber_tank_bomb.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -20,7 +20,7 @@ extern float D_0015ED70;
 
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern CollisionHit D_L08_00174640;
 extern float        D_0015ED6C_lui __asm__("D_0015ED6C");

@@ -12,7 +12,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 /* UpdateMoby_1343: tutorial hint and statistic triggers around the player on Eudora. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002E57F8), where it is exact; names translated to the US level program. */

@@ -14,13 +14,13 @@
 #include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "rnc/overlay/shared/vehicles/gunship.h"
 
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int   cutscene_active __asm__("D_L01_0015F404");

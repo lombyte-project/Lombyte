@@ -39,7 +39,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002EB140), where it is exact; names translated to the US level program. */
 extern float random_angle_radians(void) __asm__("FUN_00213308");

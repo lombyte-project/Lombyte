@@ -10,7 +10,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 
 extern int

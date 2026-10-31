@@ -1,6 +1,6 @@
 /* Hero idle sequence and per-frame helpers: health, easing records, random timers, rotation targets, glow and HUD effects. */
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -9,7 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "rnc/game/options.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
@@ -86,7 +86,7 @@ void reset_hero_to_idle(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205618), where it is exact; names translated to the US level program. */
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 
@@ -694,7 +694,7 @@ void update_hero_bone_attachment(void) {
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern char               D_0013F350_002062b0[] __asm__("D_0013F350");
 extern f32                D_0015EE18_macro __asm__("D_0015EE18") MACRO_ADDR;
@@ -1695,7 +1695,7 @@ void draw_hero_glow_quads(void) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef struct {
     char  pad[0x1dd0];
@@ -2757,7 +2757,7 @@ s32 probe_hero_forward_collision(f32 *hit_distance_xy_out,
 extern V               collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
 extern struct HeroEase hero_eases_lui[] __asm__("D_L00_0017A680") NOT_SDA;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 void update_hero_collision_ease_target(void) {
     char            *hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;

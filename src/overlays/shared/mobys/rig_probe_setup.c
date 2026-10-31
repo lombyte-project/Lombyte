@@ -1,7 +1,7 @@
 /* Mobys: sets up a rig probe. */
 #include "types.h"
 #include "asm.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "qcopy.h"

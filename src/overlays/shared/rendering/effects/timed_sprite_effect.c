@@ -7,7 +7,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "qcopy.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");

@@ -1,6 +1,6 @@
 /* Level 08 moby class 0x14d: blarg bombthrower. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"

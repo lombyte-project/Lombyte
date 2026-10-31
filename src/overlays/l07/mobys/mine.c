@@ -8,10 +8,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 
 extern s32  collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00258278(struct Moby *, f32, void *, f32, f32, f32);

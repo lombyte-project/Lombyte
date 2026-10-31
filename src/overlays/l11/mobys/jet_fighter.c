@@ -10,8 +10,8 @@
 #include "rnc/game/usage_stats.h"
 #include "rnc/game/item_state.h"
 #include "sda.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -28,7 +28,7 @@
 extern float D_L11_0015F580[] MACRO_ADDR;
 extern float D_L11_0015F3FC;
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void

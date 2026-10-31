@@ -1,11 +1,11 @@
 /* Level 12 moby class hoven_anklebiter: its suck cannon callbacks, pursuit, movement, sparks, damage and alerts. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -75,7 +75,7 @@ int cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) {
 
 extern char D_L12_00167240[];
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 #include "sda.h"
 
@@ -136,7 +136,7 @@ void select_hoven_anklebiter_pursuit_animation(struct Moby *moby) {
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Scatters 27 particles around a point with random offsets and velocities. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2CB8), where it is exact; names translated to the US level program. */
@@ -268,7 +268,7 @@ extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 
 void hoven_anklebiter_update(AnklebiterMoby *moby) __asm__("FUN_L12_002e1be0");
 
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 
 extern float fast_subtract_rotations(float, float);
 

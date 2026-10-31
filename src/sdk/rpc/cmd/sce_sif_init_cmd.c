@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/core/00119D88.c: func_0011A780). */
 #include "types.h"
-#include "eeregs.h"
+#include "rnc/sdk/eeregs.h"
 
 typedef void (*SifCmdHandler)(void *packet, void *argument);
 

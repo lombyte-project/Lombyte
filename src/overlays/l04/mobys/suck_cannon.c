@@ -10,7 +10,7 @@
 #include "rnc/overlay/shared/pickups/infobot.h"
 
 #include "rnc/overlay/l04/mobys/suck_cannon_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 /* Warp portal: spins, opens once the hero is near, then warps to the exit moby. */
 struct PortalVars {

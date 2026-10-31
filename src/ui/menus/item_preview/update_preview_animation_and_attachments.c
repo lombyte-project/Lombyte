@@ -9,7 +9,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/streaming/disc_table.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 

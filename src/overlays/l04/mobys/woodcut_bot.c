@@ -14,9 +14,9 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern void initialize_leg_rig_angle_defaults(void *, char *) __asm__("FUN_L04_00292370");
 extern void initialize_leg_rig(void *, char *) __asm__("FUN_L04_002923b8");

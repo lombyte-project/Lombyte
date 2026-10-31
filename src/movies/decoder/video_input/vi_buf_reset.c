@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/movies/decoder/vi_buf.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #define DPUT(a, v)  (*(volatile u32 *)(a) = (v))
 #define DMA_ADDR(p) ((u32)(p) & 0x0FFFFFFF)
 extern void sc_tag2(u128 *, u32, s32, s32) __asm__("func_0023BC20");

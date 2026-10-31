@@ -1,7 +1,7 @@
 /* Draws a level's water grids: culls each tile, builds its height grid and submits it. */
 #include "types.h"
 #include "rnc/ui/text/font_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/effect_texture.h"

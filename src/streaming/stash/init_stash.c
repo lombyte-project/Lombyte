@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/streaming/stash/stash.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 
 extern s32 sceSifBindRpc(struct sceSifClientData *, u32, s32);
 extern s32 SceSifCheckStatRpc(struct sceSifClientData *);

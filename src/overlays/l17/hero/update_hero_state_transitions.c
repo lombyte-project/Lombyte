@@ -5,8 +5,8 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"
@@ -82,7 +82,7 @@ extern int                collision_line(void *, void *, int, int, int) __asm__(
 extern int                return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int                probe_hero_ledge_edge(float *, float *) __asm__("FUN_L00_0020c758");
 
-#include "rnc/overlay/path.h"
+#include "rnc/overlay/shared/world/path.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"

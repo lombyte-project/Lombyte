@@ -16,9 +16,9 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/rendering/debug/debug_menu.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct Moby Moby;
 typedef float       ToadVec[4] __attribute__((aligned(16)));

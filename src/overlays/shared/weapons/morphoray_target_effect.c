@@ -3,7 +3,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/mobys/moby_spawn.h"

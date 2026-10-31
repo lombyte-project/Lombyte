@@ -19,7 +19,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 typedef struct {
     u8  pad0[0x24];

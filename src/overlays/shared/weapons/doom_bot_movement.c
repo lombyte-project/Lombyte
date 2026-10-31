@@ -6,7 +6,7 @@
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "qzero.h"
 
 typedef struct {

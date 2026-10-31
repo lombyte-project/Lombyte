@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 
 #include "sda.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/fs_aa_packets.h"
 

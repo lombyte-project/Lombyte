@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
@@ -95,7 +95,7 @@ unsigned char *spawn_colored_effect(int           owner,
     return effect;
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 unsigned char *D_L08_001B29B4 NOT_SDA = 0;
 

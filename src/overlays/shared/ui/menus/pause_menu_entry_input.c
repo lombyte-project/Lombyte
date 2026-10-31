@@ -3,8 +3,8 @@
 #include "rnc/game/overlay_game_state.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/globals.h"
 #include "sda.h"
 

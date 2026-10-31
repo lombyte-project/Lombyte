@@ -1,6 +1,6 @@
 /* Level 18 moby class inert_moby (0x598): sets state 1 and flags 3 once, then does nothing. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
 #include "rnc/hero/hero.h"

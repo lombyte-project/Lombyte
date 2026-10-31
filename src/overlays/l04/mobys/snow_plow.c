@@ -13,8 +13,8 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/overlay/shared/vehicles/gunship.h"
-#include "rnc/overlay/cuboid.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l04/mobys/snow_plow_globals.h"
 
 extern int D_L04_0015FFD8;

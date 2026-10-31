@@ -1,6 +1,6 @@
 /* Level 11 moby class two_door_gate: spawns both doors and swings them open. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "eeregs.h"
+#include "rnc/sdk/eeregs.h"
 #include "rnc/sdk/libmpeg.h"
 
 extern s32  DIntr(void);

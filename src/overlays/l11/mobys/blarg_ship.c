@@ -6,7 +6,7 @@
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -18,7 +18,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern char *
 spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L11_0030f5a8");
@@ -51,7 +51,7 @@ extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern void approach_angle(char *, char *, float, float, float, float) __asm__("FUN_L00_0025be00");
 

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libmc.h"
 
 struct MemoryCardReadRequest {

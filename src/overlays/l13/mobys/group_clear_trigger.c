@@ -3,7 +3,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/weapons/suckcannon.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern char D_0013E533[];
 

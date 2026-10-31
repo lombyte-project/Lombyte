@@ -1,6 +1,6 @@
 /* Level 18 drek_fight_missile: wander, trails and group activation. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
 #include "rnc/hero/hero.h"

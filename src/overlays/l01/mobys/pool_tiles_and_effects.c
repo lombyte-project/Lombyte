@@ -18,7 +18,7 @@ extern int   is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 typedef struct {
     f32 x;

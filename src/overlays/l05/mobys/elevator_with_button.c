@@ -13,8 +13,8 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");

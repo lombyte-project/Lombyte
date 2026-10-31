@@ -1,10 +1,10 @@
 /* Level 03 moby class taxi (0x330): the rail taxi that carries Ratchet along its routes, its rail path flight and its bobbing. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -14,7 +14,7 @@
 #include "rnc/hero/hero.h"
 #include "qcopy.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/overlay/l03/mobys/taxi.h"
 #include "rnc/overlay/l03/mobys/taxi_globals.h"
 

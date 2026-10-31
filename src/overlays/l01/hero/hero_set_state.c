@@ -13,7 +13,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/usage_stats.h"
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
@@ -30,7 +30,7 @@
 #include "rnc/overlay/shared/hero/hero_frame_update.h"
 #include "rnc/overlay/shared/input/pad_pressed_within.h"
 #include "rnc/overlay/shared/vendor/vendor_menu.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_0023D688.c: func_L01_0023D688), where it is exact; names translated to the US level program. */
 

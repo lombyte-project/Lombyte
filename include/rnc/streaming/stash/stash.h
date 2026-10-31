@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_STREAMING_STASH_STASH_H
 
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 
 #define STASH_SLOT_COUNT       64
 #define STASH_QWORD_BYTES      16

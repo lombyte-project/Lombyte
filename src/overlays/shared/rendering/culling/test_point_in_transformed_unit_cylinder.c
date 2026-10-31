@@ -1,7 +1,7 @@
 /* Culling: point tests against a transformed unit cylinder and unit sphere. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 

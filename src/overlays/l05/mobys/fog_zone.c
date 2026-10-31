@@ -5,7 +5,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 

@@ -1,16 +1,16 @@
 /* Level 08 hero motion: update_hero_motion_for_current_state, with the ground type effects. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/game/usage_stats.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -141,7 +141,7 @@ void apply_hero_ground_type_effects(void) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"

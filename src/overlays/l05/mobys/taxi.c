@@ -10,8 +10,8 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/vehicles/taxi_path.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern char          D_0013E550[];
 extern int           allocate_voice_for_target_entry() __asm__("FUN_0022da68");

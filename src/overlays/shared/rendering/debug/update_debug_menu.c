@@ -1,10 +1,10 @@
 /* Debug: debug text queue, debug camera and debug menu. */
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
@@ -168,7 +168,7 @@ void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
 
 extern struct PadStateWords D_0013C940;
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
 extern void reset_follow_camera_state_from_position(void *) __asm__("FUN_L00_002e6bf8");
@@ -448,7 +448,7 @@ typedef struct {
 
 extern u8 D_L00_0016CA40[];
 #define level_view_context (*(LevelViewContext *)D_L00_0016CA40)
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 /* 13 item ids, declared as 8 bytes: the most gas reaches through $gp, as retail does. */
 extern u8 debug_menu_item_ids[8] __asm__("D_L00_0015EFD0") __attribute__((sda));

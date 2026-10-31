@@ -1,16 +1,16 @@
 /* Level 14 tilting platform moby class and its tilt basis. */
 #include "types.h"
-#include "rnc/overlay/level_spline.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_spline.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/vector.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -64,7 +64,7 @@ void tilting_platform_update(struct Moby *moby) {
 }
 
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef int u128_s07 __attribute__((mode(TI)));
 

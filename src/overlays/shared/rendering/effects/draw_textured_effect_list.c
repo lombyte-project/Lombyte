@@ -3,7 +3,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/mobys/attach_manipulator.h"

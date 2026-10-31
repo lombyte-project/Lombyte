@@ -11,9 +11,9 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/l14/mobys/wind_control_globals.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 

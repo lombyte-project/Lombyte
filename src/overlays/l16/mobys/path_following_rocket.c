@@ -1,6 +1,6 @@
 /* Level 16 moby class path_following_rocket (0x101): a rocket that follows a path. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -18,7 +18,7 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 
 extern float D_0015ED6C;
 extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");

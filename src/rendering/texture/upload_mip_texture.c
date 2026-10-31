@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/pixel_format.h"
 #include "rnc/sdk/libgraph.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "rnc/globals.h"
 

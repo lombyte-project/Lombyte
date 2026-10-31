@@ -28,7 +28,7 @@ allowed only:
 - in the approved header macros: the quadword copy in `include/qcopy.h` and
   `include/qzero.h`, and the privileged instructions C cannot write
   (`CpuEnableInt`, `CpuSync`, `CpuReadStatus`, `CpuSyscall`, ...) in
-  `include/kernel.h`;
+  `include/rnc/sdk/kernel.h`;
 - as a fakematch: a register pin or a small helper that forces the retail
   schedule, with a `Fakematch:` comment in the 15 lines above it.
 
@@ -57,7 +57,7 @@ Units marked `intentional_asm` in `config/us/unit_categories.json` are left
 out of the numbers: SIMD, VU0/MMI and COP2 helpers whose C would not be
 faithful, and code written in assembly by hand (syscall stubs, code using
 `$at` or trapping `add`). Code that only needs `ei`, `di`, `sync`, `mfc0` or
-`syscall` is not on the list; it is C with the `include/kernel.h` macros.
+`syscall` is not on the list; it is C with the `include/rnc/sdk/kernel.h` macros.
 
 `check-unit.py` refuses these units, and they have **no C body**: such a body
 could never be checked, so it would be a perfect place for a wrong one to hide.

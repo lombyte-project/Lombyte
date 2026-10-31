@@ -1,6 +1,6 @@
 /* Level 16 gadgetron_ceo and the challenge layout parameter. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -18,9 +18,9 @@
 #include "rnc/audio/voice_pool.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"

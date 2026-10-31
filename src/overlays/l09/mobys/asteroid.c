@@ -3,7 +3,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -13,7 +13,7 @@
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/vendor/vendor_volume.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern float D_L09_00166F40[];
 

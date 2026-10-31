@@ -8,13 +8,13 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/hero.h"
+#include "rnc/overlay/shared/hero/hero.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -27,7 +27,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/hero/process_hero_item_action_input.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
 

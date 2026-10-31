@@ -1,7 +1,7 @@
 /* Shared moby class 0x131: a homing shot, and the function that spawns it. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"

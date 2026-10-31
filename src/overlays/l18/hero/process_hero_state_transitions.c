@@ -1,13 +1,13 @@
 /* Level 18 hero state transitions: process_hero_state_transitions. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"
@@ -84,7 +84,7 @@ extern int D_L18_0016D180 NOT_SDA;
 extern int                collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int                return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 
-#include "rnc/overlay/path.h"
+#include "rnc/overlay/shared/world/path.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"

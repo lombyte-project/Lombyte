@@ -1,7 +1,7 @@
 /* Level 10 moby class hero_relocation_trigger. */
 #include "types.h"
-#include "rnc/overlay/cuboid.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -10,7 +10,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/audio/sound_state.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/camera/follow_cam.h"

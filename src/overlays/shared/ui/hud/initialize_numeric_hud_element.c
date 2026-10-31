@@ -1,7 +1,7 @@
 /* HUD: initializes a numeric element. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 #include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00237B20), where it is exact; names translated to the US level program. */

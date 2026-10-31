@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

@@ -1,7 +1,7 @@
 /* Level 12 moby class planetbuster_maximus_part: the Planetbuster Maximus parts, their guns, glow and detached pieces. */
 #include "rnc/hero/hero.h"
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -24,7 +24,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 typedef struct Moby Moby;
 

@@ -6,12 +6,12 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
 #include "rnc/game/usage_stats.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/random.h"
@@ -169,7 +169,7 @@ extern f32  vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_002
 extern f32  forward_component(void *) __asm__("FUN_L00_00213350");
 extern struct HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #define Q l00_camera
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
@@ -225,7 +225,7 @@ extern s32  offset_path_index(void *, s32, s32, s32) __asm__("FUN_L00_0025d7a0")
 extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");

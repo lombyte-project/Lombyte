@@ -1,7 +1,7 @@
 /* Shared moby class 0x340: times the visibomb missile while it is outside every zone and ends it past a limit. */
 
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

@@ -1,16 +1,16 @@
 /* Level 12 hero motion: update_hero_motion_for_current_state, with the ground material flags, smoothing targets and ground contact and gravity helpers. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -177,7 +177,7 @@ void update_hero_smoothing_targets_and_values(void) {
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef union {
     OvlQuad q;
@@ -398,7 +398,7 @@ d1:
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"

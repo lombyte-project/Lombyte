@@ -1,7 +1,7 @@
 /* Level 13 moby class tracked_group_watcher (0x629): remembers the classes of up to eight listed mobys and removes itself once fewer than its threshold of them are still alive. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 

@@ -6,7 +6,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -441,7 +441,7 @@ void update_hero_lean_and_sway_parameters(void) {
 }
 
 #include "rnc/math/vector.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern char *D_001413D0 NOT_SDA;
 void                    euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
@@ -1227,7 +1227,7 @@ typedef struct {
     s16 unk7E;
 } ThrowPvars;
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern int  is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");

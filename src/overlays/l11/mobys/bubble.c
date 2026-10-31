@@ -1,9 +1,9 @@
 /* Level 11 moby class bubble (class 0x5F4): rises, pops and fades, with its surface effects and sparks. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"

@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char D_0013E550[];

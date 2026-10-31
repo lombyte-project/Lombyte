@@ -1,7 +1,7 @@
 /* Mobys: captures and applies the transforms of linked mobys relative to their parent. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/rotations/matrix_to_euler.h"

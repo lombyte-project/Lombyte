@@ -11,10 +11,10 @@
 #include "rnc/overlay/shared/mobys/record_moby_context_bytes.h"
 #include "rnc/hero/hero.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/game/options.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/l03/mobys/npc_dialogue_state.h"
 
 #include "rnc/overlay/l03/mobys/helga_globals.h"

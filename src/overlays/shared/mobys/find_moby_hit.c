@@ -1,6 +1,6 @@
 /* Moby hits and blasts: hit descriptors, hit lookup, blast hits and knockback, plus sound, effect, path and interpolation helpers. */
 #include "types.h"
-#include "rnc/overlay/moby_hit.h"
+#include "rnc/overlay/shared/mobys/moby_hit.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 
@@ -88,7 +88,7 @@ void make_hit_descriptor(char *hit_descriptor,
     qcopy(hit_descriptor, direction_vector);
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/mobys/moby.h"
 
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -306,7 +306,7 @@ void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_r
     multiply_quaternions(output_quaternion, output_quaternion, &z_axis_quaternion);
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     union {
@@ -318,7 +318,7 @@ typedef struct {
 
 extern int D_L00_0015F434 __asm__("D_L00_0015F434");
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
 

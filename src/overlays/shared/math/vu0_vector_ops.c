@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd108.s", FUN_L00_001fd108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd1c8.s", FUN_L00_001fd1c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fde98.s", FUN_L00_001fde98);
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 extern char D_L00_0016EA40_001fe990[] __asm__("D_L00_0016EA40");

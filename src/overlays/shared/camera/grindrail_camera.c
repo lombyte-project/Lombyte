@@ -1,13 +1,13 @@
 /* Camera type 3: follows a path beside the grind rail the hero rides and turns toward a look-at point on it; its setup and mode check. */
 #include "types.h"
 #include "rnc/hero/hero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/overlay/shared/camera/init_camera_system.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/camera/camera_spring.h"
 #include "sda.h"
 

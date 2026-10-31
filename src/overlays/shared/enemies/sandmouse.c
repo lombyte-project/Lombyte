@@ -16,8 +16,8 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/mobys/detach_manipulator.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
-#include "rnc/overlay/collision.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 

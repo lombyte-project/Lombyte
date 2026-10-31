@@ -11,7 +11,7 @@
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/camera/update_cam.h"
 

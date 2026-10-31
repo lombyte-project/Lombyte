@@ -3,7 +3,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "types.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/camera/update_cam.h"

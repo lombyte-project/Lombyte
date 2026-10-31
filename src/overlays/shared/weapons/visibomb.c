@@ -5,7 +5,7 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/input/pad_state.h"

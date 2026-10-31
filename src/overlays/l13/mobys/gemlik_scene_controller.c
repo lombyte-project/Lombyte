@@ -5,9 +5,9 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/save/memcard_save_data.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 

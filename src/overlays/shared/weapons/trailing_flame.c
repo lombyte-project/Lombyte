@@ -1,7 +1,7 @@
 /* Moby class 0xB3: a flame that follows the moby that spawned it (the visibomb missile, the pyrocitor), flickering in size and spinning, and the function that spawns it. */
 
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/random.h"

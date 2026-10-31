@@ -6,7 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern int   debug_print() __asm__("FUN_001e93b0");
 extern float scale_time(float) __asm__("FUN_001f96b0");

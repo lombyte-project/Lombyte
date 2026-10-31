@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/enemies/spawner_egg.h"
 
 typedef struct {

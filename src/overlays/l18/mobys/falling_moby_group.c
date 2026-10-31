@@ -1,6 +1,6 @@
 /* Level 18 class 0x565: a linked moby group that moves to a target transform and falls, and the boss helpers that drive it. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
 #include "rnc/hero/hero.h"

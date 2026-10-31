@@ -13,8 +13,8 @@
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/math/normalize_vector_triplet.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
 

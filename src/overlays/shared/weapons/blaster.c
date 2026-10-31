@@ -1,7 +1,7 @@
 /* Shared moby class blaster: the blaster held by the hero, with its auto-aim target selection. */
 
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/input/pad_state.h"
@@ -13,8 +13,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_camera.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
 typedef union {

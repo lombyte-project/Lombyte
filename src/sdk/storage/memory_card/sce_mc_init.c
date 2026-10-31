@@ -1,5 +1,5 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 #include "rnc/sdk/libmc.h"
 
 extern char mc_rpc_bind_error_message[] __asm__("D_00153450");

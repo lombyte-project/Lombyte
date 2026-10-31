@@ -13,10 +13,10 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/animation/get_moby_joint_matrices.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern s32  fptodp(f32) __asm__("FUN_00120478");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");

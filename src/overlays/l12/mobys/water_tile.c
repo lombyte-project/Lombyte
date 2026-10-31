@@ -1,7 +1,7 @@
 /* Level 12 moby class water_tile: the tiles of the water grid, the group height copy and water grid draw they use, and their neighbour slots. */
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -56,7 +56,7 @@ void                level_12_water_tile_update(struct Moby *moby) __asm__("FUN_L
 extern int          random_integer_below(int);
 typedef struct Moby Moby;
 
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 

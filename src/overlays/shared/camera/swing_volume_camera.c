@@ -5,7 +5,7 @@
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/input/pad_globals.h"

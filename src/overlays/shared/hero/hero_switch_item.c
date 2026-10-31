@@ -1,6 +1,6 @@
 /* Hero items and targeting: item slots and switching, ledge and grind rail probes, aim pitch, target scoring and selection. */
 #include "types.h"
-#include "rnc/overlay/moby_hit.h"
+#include "rnc/overlay/shared/mobys/moby_hit.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/hero/hero_state.h"
@@ -8,10 +8,10 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/circle_offset.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "sda.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
@@ -223,8 +223,8 @@ int FUN_L00_0020cd08(Vec4 *from,
     return 0;
 }
 
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     f32 x, y, z, w;
@@ -232,7 +232,7 @@ typedef struct {
 
 extern u8 D_0013D4DD_lui __asm__("D_0013D4DD") NOT_SDA;
 
-#include "rnc/overlay/path.h"
+#include "rnc/overlay/shared/world/path.h"
 
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 
@@ -559,7 +559,7 @@ typedef struct {
     float f158;
 } C_20d6b0;
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 float score_hero_target_candidate(char *target_moby,
                                   float yaw,
@@ -976,7 +976,7 @@ void update_hero_item_slot_blends(void) {
     }
 }
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 extern ItemDef item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 s32            FUN_L00_0020d498_0020e360(s32) __asm__("FUN_L00_0020d498");
@@ -1572,7 +1572,7 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *join
     matrix_to_euler(vv, moby_euler_angles);
 }
 
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 extern s32             D_L00_0015F5C4 __asm__("D_L00_0015F5C4");
 extern s32             game_frame __asm__("D_L00_0015F5CC");
@@ -3764,7 +3764,7 @@ void resolve_hero_collisions_with_history(void) {
 }
 
 #include "rnc/game/usage_stats.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 /*
  * Hero movement step (FUN_L01_00233de0 twin; control mode 0xF caps the horizontal speed, 0xD and 0xE skip the cap): clamps the velocity, moves the hero by it (plus the
  * one-frame impulse at unk920 and the push at unkF0), runs collision, then

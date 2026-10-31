@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/spherical_offset.h"
@@ -15,7 +15,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     float x, y, z;

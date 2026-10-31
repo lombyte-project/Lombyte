@@ -1,6 +1,6 @@
 /* Level 08 moby class 0x1b3: rocket. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
@@ -14,7 +14,7 @@
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int  FUN_L08_002025d0(void *, int, int, void *, int);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");

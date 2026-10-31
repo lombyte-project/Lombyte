@@ -10,9 +10,9 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -161,7 +161,7 @@ extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Start the knock-back when the moby is hit, then steer it along its path and note when it strays. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7670), where it is exact; names translated to the US level program. */

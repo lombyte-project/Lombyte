@@ -1,5 +1,5 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 
 extern s32 _EnableDmac();
 extern s32 DIntr();

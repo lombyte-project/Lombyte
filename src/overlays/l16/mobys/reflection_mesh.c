@@ -11,9 +11,9 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"

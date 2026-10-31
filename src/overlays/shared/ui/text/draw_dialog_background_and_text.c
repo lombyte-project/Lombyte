@@ -1,7 +1,7 @@
 /* Text: draws the dialog background and text, and the page contents. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/texture/do_gif_paging.h"
 #include "rnc/rendering/texture/setup_gif_paging.h"

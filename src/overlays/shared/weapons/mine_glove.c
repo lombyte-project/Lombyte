@@ -5,7 +5,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
@@ -14,7 +14,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_state.h"
 #include "qzero.h"
 

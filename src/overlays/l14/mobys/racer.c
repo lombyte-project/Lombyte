@@ -1,10 +1,10 @@
 /* Level 14 racer moby class. */
 #include "types.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"

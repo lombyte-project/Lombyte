@@ -1,6 +1,6 @@
 /* Level 12 moby class platform: the Hoven flying platform, its exhaust, steering and tilt. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -9,7 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 #include "qcopy.h"
 
@@ -19,7 +19,7 @@ extern float        D_0015ED6C;
 extern float        D_0015ED70;
 int                 FUN_L00_00257b90(int lo, int hi);
 
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 
 extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 /* Hoven engine exhaust: emits a flame and a smoke puff from each of the moby's two nozzles (the second one

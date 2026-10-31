@@ -1,5 +1,5 @@
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
 
 extern s32                     sif_load_module_bind_status[] __asm__("D_0012FCB0");

@@ -1,6 +1,6 @@
 /* Level 03 moby class metropolis_train_locomotive: the train engine that pulls the carriages along its path. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
@@ -16,9 +16,9 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/effects/fade_to_black.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 /* Places a train: puts the engine at `at` facing ang (offset back by its length), then lays each linked
  * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */

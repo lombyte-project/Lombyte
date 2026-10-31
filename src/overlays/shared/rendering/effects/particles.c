@@ -8,8 +8,8 @@
 
 #include "qcopy.h"
 #include "rnc/math/vector.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -197,7 +197,7 @@ void update_moving_resizing_height_snapped_alpha_fade_particle(unsigned char *pa
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 extern unsigned char *D_L00_001B2138 NOT_SDA;
 unsigned char *

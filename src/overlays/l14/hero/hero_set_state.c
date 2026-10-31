@@ -24,7 +24,7 @@
 #include "rnc/overlay/shared/hero/hero_frame_update.h"
 #include "rnc/overlay/shared/hero/hero_update_hop_movement.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/help_002306C8.c: func_L14_002306C8), where it is exact; names translated to the US level program. */
 

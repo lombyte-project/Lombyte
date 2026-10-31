@@ -7,8 +7,8 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 typedef struct {
     char  p0[0x98];

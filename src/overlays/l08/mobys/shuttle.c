@@ -14,7 +14,7 @@
 
 extern float D_0015ED70;
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int   D_L08_0015F5CC;
 extern void  attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");

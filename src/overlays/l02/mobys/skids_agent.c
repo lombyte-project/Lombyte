@@ -11,7 +11,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
@@ -50,7 +50,7 @@ update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_00
 extern WatcherReward talk_camera __asm__("D_L02_0016CE60") NOT_SDA; /* dialogue camera spot */
 extern char          skids_agent_dialogue_data[] __asm__("D_L02_00161CF0");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern f32              D_L02_0015F3FC;
 extern f32              skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */

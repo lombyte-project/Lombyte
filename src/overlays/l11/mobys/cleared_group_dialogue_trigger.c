@@ -1,6 +1,6 @@
 /* Level 11 moby class cleared_group_dialogue_trigger (class 1350): plays a dialogue once its moby group is empty. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"

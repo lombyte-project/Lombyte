@@ -10,7 +10,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/rendering/frame/log2dim.h"
 #include "rnc/game/clear_scene_state_buffers.h"

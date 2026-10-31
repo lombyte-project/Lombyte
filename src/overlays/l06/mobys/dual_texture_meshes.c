@@ -1,6 +1,6 @@
 /* Level 06 moby class 0x426: draws its dual-texture quad meshes, choosing them by the clip volumes the camera is in. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "asm.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"

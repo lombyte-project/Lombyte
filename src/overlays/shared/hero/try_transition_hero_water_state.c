@@ -6,7 +6,7 @@
 #include "qcopy.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/vector.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"

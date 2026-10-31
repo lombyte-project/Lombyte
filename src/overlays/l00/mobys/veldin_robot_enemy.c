@@ -1,6 +1,6 @@
 /* Level 00 moby class veldin_robot_enemy: its update, damage and targeting, and its effect quad. */
 #include "types.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math/asm_helpers.h"
@@ -22,7 +22,7 @@
 #include "rnc/overlay/shared/rendering/effects/beam_slots.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/l00/mobys/veldin_robot_enemy_globals.h"
 
 typedef union {

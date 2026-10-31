@@ -5,7 +5,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"

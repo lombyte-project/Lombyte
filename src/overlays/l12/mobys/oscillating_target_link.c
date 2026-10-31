@@ -1,6 +1,6 @@
 /* Level 12 moby class oscillating_target_link (class 1259): the oscillating link strips drawn from it toward its target. */
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 
@@ -42,7 +42,7 @@ extern float oscillating_link_strip_transform_rotations[][4] __asm__("D_L12_001F
 
 #include "rnc/overlay/l12/mobys/oscillating_target_link_data/draw_oscillating_target_link_strips.h"
 #include "rnc/overlay/l12/mobys/oscillating_target_link_globals.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern float oscillating_link_strip_segment_u_step_gp __asm__("D_L12_00161DF4")
     __attribute__((sda));

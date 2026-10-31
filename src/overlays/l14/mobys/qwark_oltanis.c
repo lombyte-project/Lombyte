@@ -1,6 +1,6 @@
 /* Level 14 Qwark (Oltanis) moby class and the elevator state it sets. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -18,7 +18,7 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern char D_L14_001674C0[];
 

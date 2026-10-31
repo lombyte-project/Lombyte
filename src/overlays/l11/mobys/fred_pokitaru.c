@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 
 void mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c828");
 
@@ -38,7 +38,7 @@ extern void  FUN_00212f90(void *, int, int, int);
 extern int   D_0015ED84;
 extern unsigned char D_0014C050[];
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 /* Pokitaru sentry pvars (class of fred_pokitaru_update). */
 struct PokSentryVars {

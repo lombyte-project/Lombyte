@@ -1,7 +1,7 @@
 /* InitThread i4: create the kernel patch sema and top-level thread. */
 
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 #include "rnc/sdk/top_thread.h"
 
 struct ThreadParam {

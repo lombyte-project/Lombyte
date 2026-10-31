@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "qcopy.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");

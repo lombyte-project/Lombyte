@@ -3,7 +3,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "sda.h"
 

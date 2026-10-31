@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"

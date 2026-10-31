@@ -4,8 +4,8 @@
 
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/l11/mobys/distance_faded_scroll_effect_globals.h"
 /* Recognize the active vendor object state. */

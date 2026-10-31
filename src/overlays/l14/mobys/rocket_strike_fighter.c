@@ -1,7 +1,7 @@
 /* Level 14 moby class rocket_strike_fighter (921, "Enemy Fighter (moby921)"): once three missions are done and the hero sees the target, it flies in during a flythrough and fires its rocket (class 922) at the target. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
@@ -20,7 +20,7 @@
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/rocket.h"
 #include "rnc/overlay/l14/mobys/enemy_fighter.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern float vector_length_xy(void *);
 

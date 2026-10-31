@@ -1,6 +1,6 @@
 /* Level 05 moby class skid_mcmarx: the hoverboard racer, its path and jump animations. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"

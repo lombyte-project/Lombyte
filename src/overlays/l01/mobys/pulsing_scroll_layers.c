@@ -1,7 +1,7 @@
 /* Level 01 moby class pulsing_scroll_layers (0x4c9): queues the draw of three scrolling layers whose glow pulses with a sine. */
 #include "types.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/scroll_layer.h"
+#include "rnc/overlay/l01/scroll_layer.h"
 
 typedef struct {
     u8  pad0[0x30];

@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -17,7 +17,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "sda.h"
 #include "rnc/overlay/l14/mobys/blarg_heavy_interceptor_globals.h"
 

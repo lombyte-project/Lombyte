@@ -30,7 +30,7 @@ float        shrub_part_spin_speed_degrees_gp __asm__("D_L08_00161D28") = 3e+01f
 void         update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8ba0");
 extern u8    D_0014C050[];
 
-#include "rnc/overlay/swarm_path.h"
+#include "rnc/overlay/shared/world/swarm_path.h"
 
 extern struct Moby *D_L08_0015FFD8;
 extern f32          scale_time(f32) __asm__("FUN_001f96b0");

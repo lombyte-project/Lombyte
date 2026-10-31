@@ -1,5 +1,5 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 #include "sda.h"
 
 extern void *EndOfHeap(void);

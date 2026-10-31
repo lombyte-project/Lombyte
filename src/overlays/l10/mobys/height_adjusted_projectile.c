@@ -12,7 +12,7 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern float D_0015ED6C;
 

@@ -1,6 +1,6 @@
 #include "types.h"
-#include "kernel.h"
-#include "eetypes.h"
+#include "rnc/sdk/kernel.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/movies/decoder/video_input/vi_buf_reset.h"
 
 /* viBufCreate(ViBuf *, u128 *, u128 *, int, TimeStamp *, int) */

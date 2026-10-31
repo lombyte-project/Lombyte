@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -17,7 +17,7 @@
 #include "rnc/world/collision/collision_line.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Spawns a particle (part type 0x4F) at pos moving by record_vector_source, following the parent moby when one is given. */
 extern unsigned char *D_L17_001B2A54 NOT_SDA;

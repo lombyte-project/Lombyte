@@ -1,6 +1,6 @@
 /* Shared part of the bolt thief class (l14/mobys/bolt_thief.c, l16/mobys/bolt_thief.c): its path setup, linked moby placement and exhaust particles. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

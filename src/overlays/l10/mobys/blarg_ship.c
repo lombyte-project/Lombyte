@@ -18,7 +18,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l10/mobys/aligned_vector.h"
 
 typedef struct Moby Moby;
@@ -36,7 +36,7 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 extern char D_L10_00167240[];
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/game_globals.h"
 
 extern void FUN_L00_00257470(void *, int, int);

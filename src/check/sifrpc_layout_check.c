@@ -5,7 +5,7 @@
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 
 OFFSET_CHECK(command, struct sceSifClientData, command, 0x10);
 OFFSET_CHECK(buff, struct sceSifClientData, buff, 0x14);

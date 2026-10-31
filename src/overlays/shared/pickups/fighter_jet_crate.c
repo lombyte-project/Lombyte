@@ -10,7 +10,7 @@
 #include "qcopy.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int D_L13_00174158_lui __asm__("D_L13_00174158") NOT_SDA;
 

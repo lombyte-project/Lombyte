@@ -19,7 +19,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/options.h"
 
 typedef struct {

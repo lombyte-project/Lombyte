@@ -45,7 +45,7 @@ make it clearer, add a comment that explains why it looks odd.
 
 - add inline assembly (other than the name label or a marked fakematch, see
   below); for `ei`, `di`, `sync`, `mfc0` or `syscall` use the macros in
-  `include/kernel.h`;
+  `include/rnc/sdk/kernel.h`;
 - use `#ifdef` tricks;
 - change which compiler a unit uses;
 - edit files in `asm/`;

@@ -2,7 +2,7 @@
  * -fno-schedule-insns entry in configure.py (SDK_COMPILER_FLAG_UNITS). */
 
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 
 extern u8                      D_0012FCAC[];
 extern struct sceSifClientData D_00158040;

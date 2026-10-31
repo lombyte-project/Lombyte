@@ -13,8 +13,8 @@
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/game/interpolated_record.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"

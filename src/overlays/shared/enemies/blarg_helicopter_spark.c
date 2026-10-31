@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_pool.h"
@@ -10,7 +10,7 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
 #include "qcopy.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 
 typedef struct {
     char           pad0[0x10];

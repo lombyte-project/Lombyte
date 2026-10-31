@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -75,7 +75,7 @@ typedef struct {
     T001eb448 *p;
 } S001eb448;
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 /* Sets h and clears b in the block l00_camera.unk180 points to. */
 void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
@@ -311,7 +311,7 @@ int compute_spherical_offset_from_positions(float *angles_and_distance) {
     return 0;
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     char    pad[0x140];
@@ -320,7 +320,7 @@ typedef struct {
     char   *o;
 } C_1ed6a8;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern OvlQuad     g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;

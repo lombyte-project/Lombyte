@@ -1,7 +1,7 @@
 /* Level 03 moby class cutscene_effects (0x60c): starts the cutscene, then emits two particle beams from the listed moby. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"

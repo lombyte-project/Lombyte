@@ -1,7 +1,7 @@
 /* Level 12 moby class homing_mine_spawner: spawns linked homing mines toward its target. */
 #include "rnc/hero/hero.h"
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"

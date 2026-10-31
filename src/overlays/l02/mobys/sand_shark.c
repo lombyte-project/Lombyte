@@ -10,7 +10,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l02/mobys/sand_shark_globals.h"
 
 extern float sand_shark_dust_vertical_velocity_scale_gp __asm__("D_L02_001619D4")

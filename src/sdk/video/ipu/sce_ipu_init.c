@@ -1,5 +1,5 @@
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 extern volatile u128 ipu_default_quantization_matrices[] __asm__("D_00133050");
 extern u128          ipu_default_vq_table[] __asm__("D_001330A0");

@@ -1,6 +1,6 @@
 /* Level 05 moby class scenery_ship: ships flying a path, with glow quads and trails. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "sda.h"

@@ -1,6 +1,6 @@
 /* Level 18 drek_final_boss_robot: the final boss fight. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
 #include "rnc/hero/hero.h"
@@ -36,7 +36,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/game/options.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int D_L18_0015F5C4;
 
@@ -145,7 +145,7 @@ extern int   scale_game_frames(int);
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Update of the final boss robot (class 1422): one step of its state machine, then its bob, aim and tint. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F4050), where it is exact; names translated to the US level program. */

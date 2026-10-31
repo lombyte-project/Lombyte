@@ -22,7 +22,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 typedef struct Moby Moby;
 

@@ -5,7 +5,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
 #include "rnc/camera/camera_globals.h"
@@ -561,7 +561,7 @@ void hero_set_attack_ticks(int id) {
     hero.queued_frame_request = id;
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
 
@@ -570,7 +570,7 @@ typedef union {
     f32       f[4];
 } V4;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern f32  collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
 extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");

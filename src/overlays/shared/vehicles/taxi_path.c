@@ -7,8 +7,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/help/try_set_help_message.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 typedef struct {
     char  pad[0x78];

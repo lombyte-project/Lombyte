@@ -10,9 +10,9 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -36,7 +36,7 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/audio/voice_alloc.h"
 

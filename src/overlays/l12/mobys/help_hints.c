@@ -7,7 +7,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/rendering/clip_volume.h"

@@ -1,8 +1,8 @@
 /* Mobys: builds symmetric adjacency bitmasks from pairwise tests. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 /* Build a symmetric adjacency bitmask over a table's entries from pairwise tests. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0028AA68.c: func_L05_0028CEE8), where it is exact; names translated to the US level program. */

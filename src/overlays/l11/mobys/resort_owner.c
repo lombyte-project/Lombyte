@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
 #include "rnc/overlay/shared/mobys/build_symmetric_adjacency_masks.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/overlay/l11/mobys/watcher.h"
 #include "rnc/overlay/l11/mobys/resort_owner.h"
 
@@ -283,7 +283,7 @@ extern unsigned char D_0013D3DC NOT_SDA;
 extern int                      D_0015ED84;
 extern unsigned char            D_0014C050[];
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 #include "rnc/camera/camera_globals.h"
 
@@ -658,7 +658,7 @@ struct TgtData {
     int  idx;
 };
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");

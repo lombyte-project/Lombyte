@@ -25,7 +25,7 @@ enum ShuttleRoute {
 extern int  is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");

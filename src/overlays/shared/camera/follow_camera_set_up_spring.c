@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/camera/follow_cam.h"

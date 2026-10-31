@@ -1,11 +1,11 @@
 /* Shared moby class tesla_claw: the lightning gun held by the hero, and the beam and arcs it draws. */
 
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/input/pad_state.h"
@@ -17,7 +17,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/weapons/tesla_claw_globals.h"
 #include "qzero.h"
-#include "rnc/overlay/beam_vector.h"
+#include "rnc/overlay/shared/weapons/beam_vector.h"
 
 typedef struct {
     u8  p0[0x2084];

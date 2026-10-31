@@ -23,7 +23,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/hero/hero_frame_update.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/help_00231228.c: func_L08_00231228), where it is exact; names translated to the US level program. */
 

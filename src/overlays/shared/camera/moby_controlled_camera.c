@@ -1,7 +1,7 @@
 /* Camera type 18, the moby-controlled camera: takes over while the hero is inside its moby's volume, and the release a moby calls to hand it back for a frame. */
 
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/math/fast_math.h"

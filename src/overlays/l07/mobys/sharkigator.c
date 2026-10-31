@@ -8,8 +8,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
 extern void
@@ -60,7 +60,7 @@ int                       test_sharkigator_target_sphere_collision(void *moby,
 /* Moves a moby along a path, easing between nodes and tracking the hero. */
 extern char *D_L07_001B0530[];
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -111,7 +111,7 @@ extern void  spawn_explosion(void *,
                              int) __asm__("FUN_L00_0025e450");
 
 /* Ported from rac1-decomp src/overlays/l07_umbris/vendor_002CE470.c (func_L07_0030D8E8) */
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/water_grid.h"
 
 extern WaterGrid *D_L07_001612D0;
 extern int        D_L07_001612D8;

@@ -1,13 +1,13 @@
 /* Follow camera: setup, per-frame approach and overrides, pose rebuild, and the collision probes that keep it clear of the level. */
 #include "types.h"
-#include "rnc/overlay/camera.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/camera/camera.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/globals.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/random.h"
@@ -223,7 +223,7 @@ typedef struct {
     s32 i2000;
 } L_2e6000;
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern C_2e6000 D_0013C940_2e6000 __asm__("D_0013C940");
 extern L_2e6000 D_0013F3D0_2e6000 __asm__("D_0013F3D0");
@@ -436,7 +436,7 @@ typedef float V[4] __attribute__((aligned(16)));
 
 extern V D_L00_00173E60;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float D_L00_00166E40[];
 extern int   FUN_001efa68(void *, void *, int, int, int);

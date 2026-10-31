@@ -1,6 +1,6 @@
 /* Level 10 moby class gate_1: the first of the paired gates. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"

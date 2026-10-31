@@ -7,7 +7,7 @@
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 typedef struct {

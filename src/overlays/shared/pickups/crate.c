@@ -19,7 +19,7 @@
 #include "sda.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/pickups/crate_data/crate_drop_bolts.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
 /* Class header view: pclass + 0xE and + 0x10. */

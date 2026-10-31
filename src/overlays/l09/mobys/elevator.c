@@ -11,7 +11,7 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 #define F(p, o) (*(float *)((p) + (o)))
 

@@ -7,7 +7,7 @@
 #include "rnc/rendering/lights/refresh_point_light.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/interpolated_frame_packet.h"
+#include "rnc/overlay/shared/rendering/interpolated_frame_packet.h"
 
 #include "rnc/overlay/l02/mobys/ocean_aridia_globals.h"
 

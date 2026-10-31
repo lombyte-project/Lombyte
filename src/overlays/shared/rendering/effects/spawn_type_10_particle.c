@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
@@ -166,8 +166,8 @@ unsigned char *spawn_type_52_particle(void *spawn_position,
 }
 
 #include "qzero.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 /* spawns a type-74 particle with transformed offset and velocity */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028B570), where it is exact; names translated to the US level program. */

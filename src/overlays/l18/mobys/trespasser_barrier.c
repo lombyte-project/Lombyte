@@ -1,6 +1,6 @@
 /* Level 18 moby class trespasser_barrier (0x570): a glowing, humming barrier that fades out once its linked tresspasser_pad (0x267) reaches state 3. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
 #include "rnc/hero/hero.h"

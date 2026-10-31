@@ -2,10 +2,10 @@
 #include "types.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "sda.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
-#include "rnc/overlay/scroll_layer.h"
+#include "rnc/overlay/l01/scroll_layer.h"
 
 extern s32 level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
 

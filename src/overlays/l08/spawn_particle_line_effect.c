@@ -1,6 +1,6 @@
 /* Level 08 particle line effect (no caller in C). */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"

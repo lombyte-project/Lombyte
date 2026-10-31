@@ -7,7 +7,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 
 typedef struct {
     char           pad0[0x10];

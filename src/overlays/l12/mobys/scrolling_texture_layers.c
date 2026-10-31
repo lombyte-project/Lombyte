@@ -1,7 +1,7 @@
 /* Level 12 moby class scrolling_texture_layers (class 1901): draws Hoven's scrolling texture layers. */
 #include "rnc/hero/hero.h"
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
 #include "sda.h"
@@ -9,7 +9,7 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
-#include "rnc/overlay/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
 
 typedef struct Moby Moby;
 extern char         D_L12_00167240[];

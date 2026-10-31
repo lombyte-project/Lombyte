@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/sound.c, func_0022DBE8). */
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qzero.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"

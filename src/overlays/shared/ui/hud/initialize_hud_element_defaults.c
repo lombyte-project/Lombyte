@@ -1,7 +1,7 @@
 /* HUD: element defaults, progress and rank, and the timer. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 #include "rnc/hero/hero.h"
 #include "rnc/data_labels.h"
 #include "rnc/globals.h"

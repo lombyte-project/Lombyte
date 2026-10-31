@@ -7,7 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/camera/follow_cam.h"
 
 typedef struct {

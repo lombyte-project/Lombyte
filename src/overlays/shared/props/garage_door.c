@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 typedef struct Moby Moby;
 

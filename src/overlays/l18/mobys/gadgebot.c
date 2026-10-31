@@ -17,7 +17,7 @@
 #include "rnc/overlay/l18/mobys/gadgebot_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int            D_L18_0015F5C4;
 extern unsigned char *D_L18_0015FFD8;

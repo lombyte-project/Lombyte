@@ -1,6 +1,6 @@
 /* Level 16 moby class chicken_relocator (0x783): triggers its target moby, then moves a morphoray chicken of its group there. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -18,9 +18,9 @@
 #include "rnc/audio/voice_alloc.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -44,7 +44,7 @@
 
 extern float D_0015ED6C;
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern float D_0015ED6C, frame_time;
 

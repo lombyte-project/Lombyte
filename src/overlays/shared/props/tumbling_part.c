@@ -8,7 +8,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void  normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");

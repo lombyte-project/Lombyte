@@ -188,7 +188,7 @@ void trooper_start_knockback(u8       *moby,
 /* Steps moby MOBY's motion from state ST and returns the flag bits it set. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float approach_value(float *p, float target, float maxstep);
 extern int  *D_L00_00177F00[];

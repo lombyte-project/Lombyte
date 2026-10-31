@@ -4,7 +4,7 @@
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/overlay/swarm_path.h"
+#include "rnc/overlay/shared/world/swarm_path.h"
 
 SIZE_CHECK(path, LevelPath, 0x20);
 OFFSET_CHECK(count, LevelPath, count, 0);

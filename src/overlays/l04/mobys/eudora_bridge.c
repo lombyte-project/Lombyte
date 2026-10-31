@@ -6,7 +6,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/animation/update_moby_animation_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 extern s32  voice_is_playing(long moby, s32 voice) __asm__("FUN_L00_0028d8c0");

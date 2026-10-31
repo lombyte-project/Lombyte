@@ -8,8 +8,8 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/save/memcard_save_data.h"
 
-#include "rnc/overlay/level_save_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/game_globals.h"
 
 typedef struct {
@@ -118,7 +118,7 @@ typedef struct {
     /* 0x3C */ int   f3C;
 } Data;
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 typedef struct {
     unsigned char pad0[0x454];

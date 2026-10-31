@@ -1,6 +1,6 @@
 /* Level 10 moby class destructible_object (class 1047): explodes into debris when hit, stays destroyed and leaves its wreck mobys. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"

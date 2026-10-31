@@ -1,5 +1,5 @@
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "rnc/globals.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR

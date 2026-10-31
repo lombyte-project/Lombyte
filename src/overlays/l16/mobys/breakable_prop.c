@@ -1,6 +1,6 @@
 /* Level 16 moby class breakable_prop (0x320): once hit, drops bolts, breaks into fragments and removes itself. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/mobys/moby_spawn.h"

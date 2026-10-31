@@ -1,8 +1,8 @@
 /* Vendor menu: loads the vendor moby assets, builds the item rows, opens, updates and closes the menu, handles purchases and plays the exit cutscene. */
 #include "types.h"
 #include "sda.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/vendor_menu.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/vendor/vendor_menu.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -42,9 +42,9 @@
 #include "rnc/overlay/shared/vendor/vendor_menu_globals.h"
 #include "rnc/game/item_state.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 /* Clears D_L00_0015F424..0015F434, D_L00_0017E504[0] and D_L00_0015F2F0/2F4. */
 void reset_frame_counters(void) __asm__("FUN_L00_00297e30");
@@ -552,7 +552,7 @@ extern s32 vendor_exit_cutscene_ids_by_item[] __asm__("D_L00_001CA020");
 extern s32 vendor_exit_hero_local_offset_gp __asm__("D_L00_00161100") __attribute__((sda));
 extern s32 vendor_exit_cutscene_local_offset_gp __asm__("D_L00_001610F0") __attribute__((sda));
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 extern float probe_ground_height(float, void *, s32) __asm__("FUN_00213508");
 extern void  clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");

@@ -1,10 +1,10 @@
 /* Shared moby class bot_door_lock: its update, glow and the targets it activates. */
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 #include "rnc/rendering/geometry_quad.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -16,7 +16,7 @@
 
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern OvlVec4 D_L06_001fe8d0[];
 extern float   D_L06_001fe960[][2];

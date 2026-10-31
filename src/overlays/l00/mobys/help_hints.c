@@ -1,6 +1,6 @@
 /* Level 00 moby class help_hints (0x585): requests the Veldin help messages when the hero enters their clip volumes or the guarded mobys fall. */
 #include "types.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/rendering/clip_volume.h"

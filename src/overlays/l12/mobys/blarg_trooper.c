@@ -1,11 +1,11 @@
 /* Level 12 moby class blarg_trooper: path following, aiming, attack, damage and its attachment. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -18,7 +18,7 @@
 
 extern char D_L12_00167240[];
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L01_0026e090(int, int);
@@ -30,7 +30,7 @@ extern void FUN_L01_0026e090(int, int);
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 #include "rnc/math/vector.h"
 
@@ -46,7 +46,7 @@ extern int  func_001160D8_2E2EF0(void) __asm__("FUN_001160d8");
 extern int  step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 extern int  point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 
 extern s32   count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern void  trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");

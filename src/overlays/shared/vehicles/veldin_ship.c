@@ -7,7 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
 typedef struct {

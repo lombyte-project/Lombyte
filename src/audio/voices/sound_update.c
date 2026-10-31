@@ -3,7 +3,7 @@
 #include "rnc/camera/camera_globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/options.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "qzero.h"

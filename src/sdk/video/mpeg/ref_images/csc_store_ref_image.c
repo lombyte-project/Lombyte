@@ -1,5 +1,5 @@
 #include "types.h"
-#include "eeregs.h"
+#include "rnc/sdk/eeregs.h"
 
 typedef struct {
     u32 qwc;

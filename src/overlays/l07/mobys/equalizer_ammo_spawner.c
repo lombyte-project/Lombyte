@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"

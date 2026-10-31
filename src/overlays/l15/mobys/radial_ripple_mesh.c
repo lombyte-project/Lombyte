@@ -8,7 +8,7 @@
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/game/level_state.h"
 #include "rnc/overlay/l15/mobys/radial_ripple_mesh_globals.h"
-#include "rnc/overlay/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
 
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 

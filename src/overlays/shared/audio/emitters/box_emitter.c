@@ -1,7 +1,7 @@
 /* Sound emitter type 1: plays a voice at the point of the emitter box nearest the listener. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

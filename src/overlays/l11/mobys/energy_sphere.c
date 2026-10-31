@@ -1,6 +1,6 @@
 /* Level 11 moby class energy_sphere (class 0x511): spawning, moving and timing the sphere, its particles and sparks. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"

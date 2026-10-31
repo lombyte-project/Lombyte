@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_OVERLAY_L16_MOBYS_HIT_DESCRIPTOR_H
 
 #include "types.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Types rocket.c and test_dummy.c share: a quadword vector they also read as
    floats, and the hit descriptor make_hit_descriptor fills and collision_line

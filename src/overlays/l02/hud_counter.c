@@ -33,7 +33,7 @@ void update_hud_counter_transition(char *transition_state) {
     *(int *)(transition_state + 0x74) = **(int **)(transition_state + 0xC);
 }
 
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 
 extern int  hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
 extern int  sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");

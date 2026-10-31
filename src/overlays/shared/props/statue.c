@@ -4,7 +4,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "qcopy.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 
 typedef struct {
     char           pad0[0x10];

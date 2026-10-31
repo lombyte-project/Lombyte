@@ -1,6 +1,6 @@
 /* HUD: decompresses and relocates the selected groups. */
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/game/overlay_game_state.h"
 #include "asm.h"
 #include "sda.h"
@@ -145,7 +145,7 @@ extern volatile int l00_inactive_loaded_moby_end __asm__("D_L00_0015FA74");
 extern volatile int l00_inactive_moby_pool_last_slot __asm__("D_L00_0015FA78");
 extern volatile int l00_inactive_moby_pool_end __asm__("D_L00_0015FA7C");
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern volatile int D_L00_0015FFE0;
 extern volatile int l00_active_moby_pool_end __asm__("D_L00_0015FFE8");

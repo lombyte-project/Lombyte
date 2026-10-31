@@ -10,7 +10,7 @@
 
 #include "rnc/math/vector.h"
 #include "rnc/overlay/l01/mobys/debris_class_choices.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern s32  FUN_0022da68(s32, s32, void *);
 extern int  FUN_L00_00257b90(int lo, int hi);
@@ -18,7 +18,7 @@ extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, f
 extern struct Moby *
 spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 DebrisClassChoices l01_cave_wall_debris_oclass_choices __asm__("D_L01_00161C70") = {
     {0x2b8, 0x2b9, 0x2ba}

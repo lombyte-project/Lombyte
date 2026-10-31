@@ -1,7 +1,7 @@
 /* Level 10 moby class cutscene_camera_target (class 1555): points the cutscene camera at the moby the current level mode selects. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 
 /* update: wait for state 1, then act on the level's current mode */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EC098), where it is exact; names translated to the US level program. */

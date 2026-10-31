@@ -12,9 +12,9 @@
 #include "rnc/overlay/shared/vendor/vendor_menu.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/vendor/vendor_data/vendor_update.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 typedef unsigned int Q_2A62D0 __attribute__((mode(TI), aligned(16)));
 

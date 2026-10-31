@@ -5,7 +5,7 @@
 #include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -72,7 +72,7 @@ int get_hero_help_value(int allow_item_help) {
 }
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern char D_0013F350_lui[] __asm__("D_0013F350") NOT_SDA;
 /* Separate linker alias keeps GP and macro accesses independent in SN. */
@@ -651,7 +651,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     return 1;
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/input/pad_state.h"
 
 typedef struct {

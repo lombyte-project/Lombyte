@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -26,7 +26,7 @@ typedef struct {
 
 extern u8 umbris_open_volume_triggered[] __asm__("D_0013D3B1");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void start_scene(int) __asm__("FUN_L00_00298840");

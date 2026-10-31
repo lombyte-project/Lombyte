@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_OVERLAY_L18_MOBYS_FALLING_MOBY_GROUP_H
 
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"

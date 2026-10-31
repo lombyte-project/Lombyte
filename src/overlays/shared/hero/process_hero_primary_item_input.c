@@ -1,8 +1,8 @@
 /* Hero: primary item input, item slot selection, water and ground transitions, and the hoverboard tricks, race progress and respawn. */
 #include "types.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/game/usage_stats.h"
@@ -64,7 +64,7 @@ void smooth_and_clamp_value_pair(float *clamped_values, float *smoothed_values, 
 }
 
 #include "sda.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 int hero_anim_tilt_lookup(int id, float *out) __asm__("FUN_L05_0023b378");
 

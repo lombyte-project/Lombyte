@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_H
 
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 

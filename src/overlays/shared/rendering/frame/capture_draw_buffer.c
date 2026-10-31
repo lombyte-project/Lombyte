@@ -1,7 +1,7 @@
 /* Frame: captures the draw buffer. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"

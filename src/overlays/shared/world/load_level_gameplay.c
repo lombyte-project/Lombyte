@@ -1,9 +1,9 @@
 /* World: loads the level gameplay and assets, resolves asset blocks and starts cutscene chunk reads. */
 #include "types.h"
 #include "rnc/streaming/disc_table.h"
-#include "rnc/overlay/point_light.h"
-#include "rnc/overlay/texture_ref.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
+#include "rnc/overlay/shared/rendering/texture_ref.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "asm.h"
 
 #include "sda.h"
@@ -404,7 +404,7 @@ extern char *D_L00_0015F318        MACRO_ADDR;
 extern char                       *toad_paths[] __asm__("D_L00_001B04B0");
 extern char                       *create_moby(int);
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern char D_L00_0016C780[];
 extern char D_L00_0016C7B0[];

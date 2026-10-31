@@ -12,7 +12,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_globals.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/game/options.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_data/blarg_elite_commando_update.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_rocket.h"

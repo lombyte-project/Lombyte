@@ -9,7 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
 /* spawns a moby of class 0x370 at a position moving along a direction */

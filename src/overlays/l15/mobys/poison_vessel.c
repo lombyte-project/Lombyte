@@ -6,7 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/game/level_state.h"
 #include "rnc/overlay/l15/mobys/poison_vessel_globals.h"
 

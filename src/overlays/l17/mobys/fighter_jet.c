@@ -1,6 +1,6 @@
 /* Level 17 moby class fighter_jet: flight, HUD and lock marker, targeting and weapons, and the class flags helper it uses. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/mobys/moby_class_id.h"
@@ -12,9 +12,9 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/effect_texture.h"

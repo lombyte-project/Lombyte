@@ -9,7 +9,7 @@
 #include "rnc/math/random.h"
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 typedef struct {
     float corner[4][4];

@@ -1,7 +1,7 @@
 /* Billboard projectile (class 0x9C): flies along its velocity, bursts into particles on collision and times out. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"

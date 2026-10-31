@@ -4,7 +4,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");

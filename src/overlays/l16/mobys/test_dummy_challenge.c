@@ -1,6 +1,6 @@
 /* Level 16 moby class test_dummy_challenge (0x28e): in its volume, activates a test dummy group and the doors, and completes the objective once the dummies are gone. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -17,7 +17,7 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/audio/voice_alloc.h"
 
 #include "rnc/overlay/l16/mobys/test_dummy.h"

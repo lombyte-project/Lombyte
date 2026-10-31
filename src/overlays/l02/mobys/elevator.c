@@ -13,7 +13,7 @@ extern float D_0015ED6C;
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l02/mobys/elevator_globals.h"
 
 #include "qcopy.h"

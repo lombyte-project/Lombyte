@@ -1,6 +1,6 @@
 #include "types.h"
-#include "eetypes.h"
-#include "kernel.h"
+#include "rnc/sdk/eetypes.h"
+#include "rnc/sdk/kernel.h"
 
 /* One of the two image buffers of the Sony libmpeg decoder state. */
 typedef struct MpegRefImageBuffer {

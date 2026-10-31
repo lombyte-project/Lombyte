@@ -11,7 +11,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_00296DC0), where it is exact; names translated to the US level program. */
 

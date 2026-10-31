@@ -1,6 +1,6 @@
 /* Level 16 test_dummy: the training dummies. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -30,7 +30,7 @@ s32         random_integer_below(s32 arg0) __asm__("FUN_00213260");
 extern void FUN_L00_00257470(void *, int, int);
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 #include "rnc/overlay/l16/mobys/hit_descriptor.h"
 

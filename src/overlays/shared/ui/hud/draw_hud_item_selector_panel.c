@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 #include "rnc/game/usage_stats.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
@@ -155,7 +155,7 @@ extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
 extern D00237ae8 l00_eight_slot_hud_selector_entries[] __asm__("D_L00_0017DAC0");
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) __asm__("FUN_L00_00237ae8");
 
@@ -404,7 +404,7 @@ typedef struct {
 
 extern unsigned char D_00141EA0[];
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern char  D_L00_0015F7C8[];
 extern void *D_L00_0015FAC0;

@@ -432,7 +432,7 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/input/pad_state.h"
 
 typedef struct {

@@ -31,7 +31,7 @@ typedef struct {
     Vec4  end_b; /* 0x640: end of the line along -axis 1 */
 } D1224;
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern int  D_L14_001620C8;   /* no foreign declaration */
 extern int  D_L14_001620D8_t; /* no foreign declaration */

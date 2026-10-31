@@ -1,6 +1,6 @@
 /* Level 08 moby class 0xfd: bomber tank. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -36,7 +36,7 @@ extern float        D_0015ED70;
 extern int          D_0015ED84;
 extern char        *D_L08_0015FFD8;
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 

@@ -19,10 +19,10 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/mobys/record_moby_context_bytes.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/options.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 typedef struct {
     char  pad0[0x44];

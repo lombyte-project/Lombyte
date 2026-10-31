@@ -9,7 +9,7 @@ extern s32  FUN_0022da68(s32, s32, void *);
 extern int  FUN_L00_00257b90(int lo, int hi);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern float random_float_between(float, float);
 extern int   scale_game_frames(int);

@@ -1,6 +1,6 @@
 /* Level 15 ultramech unlimited moby class: flocking, hits and targeting. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -21,7 +21,7 @@
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/world/collision/collision_line.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l15/mobys/ultramech_unlimited_globals.h"
 
 extern char D_0014C190[];

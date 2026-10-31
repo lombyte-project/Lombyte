@@ -1,14 +1,14 @@
 /* Level 01 hero motion: update_hero_motion_for_current_state, with the movement integration and airborne planar motion helpers. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/game/item_state.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/game/usage_stats.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
@@ -190,7 +190,7 @@ void integrate_hero_movement(void) {
     }
 }
 
-#include "rnc/overlay/hero.h"
+#include "rnc/overlay/shared/hero/hero.h"
 #include "rnc/input/pad_state.h"
 
 typedef union {
@@ -312,7 +312,7 @@ void update_hero_airborne_planar_motion(void) {
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Hero state machine: per-frame movement and physics for the current hero state (level 01 build). */
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_002343F8.c: func_L01_002377A8), where it is exact; names translated to the US level program. */
@@ -416,7 +416,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int scale_game_frames(int);
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern s32  D_L01_0015F68C __attribute__((sda));
 extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810");

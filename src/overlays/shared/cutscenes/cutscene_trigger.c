@@ -12,10 +12,10 @@
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 #include "rnc/overlay/shared/hero/hero_frame_update.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
-#include "rnc/overlay/cuboid.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 typedef struct {
     u8  pad0[0xA6];

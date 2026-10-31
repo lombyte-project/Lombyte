@@ -1,19 +1,19 @@
 /* Level 18 rocket (class 0x29): the rocket_tank's rocket, with collision and trail, and its spawner. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 
 extern void
 make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
@@ -21,7 +21,7 @@ make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FU
 #include "qcopy.h"
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern char *
 spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");

@@ -6,7 +6,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 extern char *D_L14_0015FFD8;
 

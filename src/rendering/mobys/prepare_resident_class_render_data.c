@@ -5,7 +5,7 @@
 
 #include "types.h"
 #include "qcopy.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef struct {
     s32 draw_high;

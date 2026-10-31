@@ -3,7 +3,7 @@
    update calls the ones its filter flags select and reveals a pixel only
    when they return nonzero. */
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"

@@ -12,7 +12,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"

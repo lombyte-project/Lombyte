@@ -4,7 +4,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/interpolation.h"
@@ -45,7 +45,7 @@ int hero_get_gadget_anim_id(int allow_item_lookup) {
     return *(int *)(item_table_entry + 0x24);
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 typedef union {

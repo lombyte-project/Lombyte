@@ -6,12 +6,12 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/collision.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
 #include "sda.h"
@@ -595,7 +595,7 @@ d1:
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef union {
     u128 q;
@@ -952,7 +952,7 @@ extern f32  vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_002
 extern f32  forward_component(void *) __asm__("FUN_L00_00213350");
 extern struct HeroTableRow2C D_L06_0017C3A8[];
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");

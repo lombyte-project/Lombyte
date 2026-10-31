@@ -7,7 +7,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 #define F(p, o) (*(float *)((char *)(p) + (o)))
 #define F(p, o) (*(float *)((char *)(p) + (o)))

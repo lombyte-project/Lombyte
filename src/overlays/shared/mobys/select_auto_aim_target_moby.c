@@ -111,7 +111,7 @@ struct Moby *select_auto_aim_target_moby(
     return best;
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 extern int            D_L00_0015FC98;
 extern unsigned char *D_L00_0015FCA8;
@@ -144,7 +144,7 @@ typedef struct {
 extern float D_L00_0015FCA0_002634f8 __asm__("D_L00_0015FCA0");
 extern float D_L00_0015FCA4_002634f8 __asm__("D_L00_0015FCA4");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
@@ -174,7 +174,7 @@ void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) {
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     float m[4][4];

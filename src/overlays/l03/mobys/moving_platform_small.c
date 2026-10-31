@@ -8,8 +8,8 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 

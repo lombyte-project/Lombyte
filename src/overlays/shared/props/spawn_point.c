@@ -11,8 +11,8 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
-#include "rnc/overlay/level_save_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 /* pvars of the respawning pickup spawn_point_update updates */
 typedef struct {

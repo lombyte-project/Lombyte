@@ -1,11 +1,11 @@
 /* Level 15 codebot slot moby class and its helpers. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/game/item_state.h"
 
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");

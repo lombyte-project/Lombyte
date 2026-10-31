@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/input/pad_globals.h"
 

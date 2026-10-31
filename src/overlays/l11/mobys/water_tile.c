@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/props/pool_set_scale.h"
 #include "rnc/overlay/shared/props/pool_init_tiles.h"
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/water_grid.h"
 
 extern void
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");

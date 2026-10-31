@@ -5,7 +5,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern short D_L05_0015FFD8;

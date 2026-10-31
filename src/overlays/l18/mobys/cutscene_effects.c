@@ -1,7 +1,7 @@
 /* Level 18 moby class cutscene_effects (0x61b): the deplanetizer gun cutscene sequence, with its camera-facing quads, glows and trails. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

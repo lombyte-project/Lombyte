@@ -1,6 +1,6 @@
 #include "types.h"
 #include "sda.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/math/fast_math.h"
 
 extern f32 D_00160370[] MACRO_ADDR;

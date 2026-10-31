@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

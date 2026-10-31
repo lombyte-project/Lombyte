@@ -37,7 +37,7 @@ void update_hero_stick_target_magnitude(void) {
 }
 
 #include "rnc/game/usage_stats.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 /*
  * Hero movement step (FUN_L01_00233de0 twin; control modes 0xD and 0xE skip the speed cap): clamps the velocity, moves the hero by it (plus the
@@ -349,7 +349,7 @@ void hero_update_hop_velocity(void) {
 #include "sda.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 /* pvars of the gadget moby in slot 0 for item 15 */
 struct HeldGadgetVars {

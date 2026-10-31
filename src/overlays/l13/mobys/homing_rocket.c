@@ -7,9 +7,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/l13/mobys/projectile_moby.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 

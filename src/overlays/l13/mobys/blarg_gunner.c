@@ -1,7 +1,7 @@
 /* Level 13 Blarg gunner moby class (0x24), its hits and the spawn helper the turret uses. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"

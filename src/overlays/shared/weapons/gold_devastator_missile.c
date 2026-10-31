@@ -14,7 +14,7 @@
 #include "rnc/overlay/shared/rendering/effects/explosion_light.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/weapons/mine.h"
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 #include "rnc/game/item_state.h"

@@ -25,7 +25,7 @@
 #include "rnc/overlay/shared/hero/update_hero_vehicle_attachments_and_effects.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00235E08.c: func_L06_00235E08), where it is exact; names translated to the US level program. */
 

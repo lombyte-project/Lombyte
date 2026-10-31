@@ -6,7 +6,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"

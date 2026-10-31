@@ -43,7 +43,7 @@ union Coll_36F8 {
     struct Probe_36F8 p;
 };
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern CollisionHit     D_L08_00174640;
 extern blk16            l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868");

@@ -6,11 +6,11 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/water_grid.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/random.h"
@@ -437,7 +437,7 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
         truncate_float_to_s32((projected_point[1] - (float)screen_extent_data[5]) * 0.0625f) + yoff;
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 

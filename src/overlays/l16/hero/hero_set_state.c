@@ -26,7 +26,7 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/hero/process_hero_primary_item_input.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_0021EA88.c: func_L16_0021EA88), where it is exact; names translated to the US level program. */
 

@@ -5,13 +5,13 @@
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/enemies/trooper_play_sound.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "qcopy.h"
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 #include "rnc/globals.h"
 
 typedef struct {

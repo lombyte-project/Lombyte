@@ -16,7 +16,7 @@
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l14/mobys/bolt_thief_globals.h"
 
 typedef struct {

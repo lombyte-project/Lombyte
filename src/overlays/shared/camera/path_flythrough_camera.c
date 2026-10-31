@@ -14,7 +14,7 @@
 #include "qcopy.h"
 #include "rnc/camera/update_cam.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/camera/path_flythrough_camera.h"
 
 extern char *D_L10_0015EF50;

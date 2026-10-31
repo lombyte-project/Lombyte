@@ -1,6 +1,6 @@
 /* Level 17 class 0x558: the shot dreks_fleet_turret fires at the hero, and its spawner. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/mobys/moby_class_id.h"
 
@@ -14,9 +14,9 @@
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "qcopy.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"

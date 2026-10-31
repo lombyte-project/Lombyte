@@ -11,7 +11,7 @@
 #ifndef MACRO_ADDR
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int debug_print() __asm__("FUN_001e93b0");
 

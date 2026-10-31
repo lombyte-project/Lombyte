@@ -1,6 +1,6 @@
 /* Linked spark emitter (class 0x4E): sprays sparks around itself and counts down, and stops once its linked moby reaches state 2. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

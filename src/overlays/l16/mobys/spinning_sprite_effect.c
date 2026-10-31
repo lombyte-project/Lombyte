@@ -1,6 +1,6 @@
 /* Level 16 moby class spinning_sprite_effect (0x1d6, named rocket in the class record): a spinning moby with four glowing sprites. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"

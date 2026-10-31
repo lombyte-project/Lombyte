@@ -7,7 +7,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int FUN_L00_00257b90(int lo, int hi);
 
@@ -38,7 +38,7 @@ typedef struct {
 
 extern s32 pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 BurstColors l01_bridge_piece_debris_oclass_choices __asm__("D_L01_00161C60") = {
     {0x2b8, 0x2b9, 0x2ba}

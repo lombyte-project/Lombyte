@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/fast_math.h"

@@ -1,6 +1,6 @@
 /* Level 18 class 0x57a: a lift and its quad meshes. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
 #include "rnc/hero/hero.h"

@@ -1,19 +1,19 @@
 /* Level 18 class 0x3d7: the electric ball Drek's boss robot fires, travelling to a target with bolts and exploding. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 

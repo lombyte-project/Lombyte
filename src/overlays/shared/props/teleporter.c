@@ -16,9 +16,9 @@
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/ui/help/try_set_help_message.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 typedef struct L01Moby L01Moby;
 

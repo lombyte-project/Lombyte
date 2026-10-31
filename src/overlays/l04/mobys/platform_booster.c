@@ -8,7 +8,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void release_voice_slot(int);

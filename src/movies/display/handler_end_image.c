@@ -1,5 +1,5 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 
 #include "rnc/movies/display/handler_end_image_globals.h"
 #include "rnc/movies/decoder/decoder_globals.h"

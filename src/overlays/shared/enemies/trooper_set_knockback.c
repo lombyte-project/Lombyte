@@ -22,7 +22,7 @@ void trooper_set_knockback(float *knockback_state,
     knockback_state[5] = (horizontal_knockback_scale + horizontal_knockback_scale) / (x * x);
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/math/fast_math.h"
 
 extern void *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");

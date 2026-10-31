@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/leg_rig.h"
+#include "rnc/overlay/l04/leg_rig.h"
 
 #include "qcopy.h"
 #include "rnc/globals.h"
@@ -173,7 +173,7 @@ typedef struct {
 
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 

@@ -1,8 +1,8 @@
 /* Level 03 moby class rail_lift (0x3f4): carries the hero between the ends of two rail paths, with its help message and hud. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"

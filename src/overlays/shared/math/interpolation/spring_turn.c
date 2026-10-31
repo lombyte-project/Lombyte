@@ -139,8 +139,8 @@ void FUN_L00_00258278(struct Moby *moby,
     moby->rot.z = fast_add_rotations(moby->rot.z, *turn_step);
 }
 
-#include "eetypes.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/sdk/eetypes.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef union {
     u128 q;
@@ -186,7 +186,7 @@ extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
     __attribute__((section(".data")));
 extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern int   FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -623,7 +623,7 @@ extern char           *D_L00_00160114;
 extern unsigned short *moby_group_entry_cursor __asm__("D_L00_0016010C");
 extern short           D_L00_00160110;
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
 /* Looks up table entry idx and makes it current; the flag test reads the

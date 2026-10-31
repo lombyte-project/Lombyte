@@ -1,7 +1,7 @@
 /* Level 06 moby class 0x45e: red button. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
@@ -15,7 +15,7 @@
 
 extern char D_0013F3D0[];
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");

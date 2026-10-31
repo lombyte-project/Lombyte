@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "macros.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
@@ -196,7 +196,7 @@ after:
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 unsigned char                       *FUN_L00_002678b8_00269958(int) __asm__("FUN_L00_002678b8");
 int                                  FUN_001160d8_00269958(void) __asm__("FUN_001160d8");
@@ -332,7 +332,7 @@ subtract_homogeneous_scaled_vector_xyz(float, void *, void *, void *) __asm__("F
 extern void  particle_matrix_269d20(float, void *, void *) __asm__("FUN_001f9bf8");
 extern float D_0015ED60_269d20 __asm__("D_0015ED60");
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 void update_colliding_effect_particle(unsigned char *m) __asm__("FUN_L00_00269d20");
 
@@ -498,7 +498,7 @@ void update_colliding_effect_particle(unsigned char *particle) {
         free_effect_particle(particle);
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern unsigned char *D_L00_001B20A0_0026a4c8 __asm__("D_L00_001B20A0")
     __attribute__((section(".data")));

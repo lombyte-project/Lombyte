@@ -1,12 +1,12 @@
 /* Level 15 hero state machine: update_hero_state_machine. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/hero.h"
+#include "rnc/overlay/shared/hero/hero.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"

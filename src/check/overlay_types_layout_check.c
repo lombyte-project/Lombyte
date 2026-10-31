@@ -5,8 +5,8 @@
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/overlay/collision.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 
 OFFSET_CHECK(hit_moby, CollisionHit, moby, 0x18);
 OFFSET_CHECK(hit_point, CollisionHit, point, 0x20);

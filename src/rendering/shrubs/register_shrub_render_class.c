@@ -1,5 +1,5 @@
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/rendering/shrub_render_class.h"
 #include "qcopy.h"
 

@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c,
    func_002153E8). */
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef union {
     float m[4][4];

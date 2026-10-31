@@ -9,7 +9,7 @@
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/hero/hero_move_state_velocity.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "qzero.h"

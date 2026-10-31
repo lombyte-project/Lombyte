@@ -21,10 +21,10 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/globals.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/overlay/shared/pickups/bolt.h"
 

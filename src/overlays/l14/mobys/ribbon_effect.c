@@ -10,7 +10,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/audio/voice_alloc.h"

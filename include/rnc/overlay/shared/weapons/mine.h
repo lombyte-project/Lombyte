@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_MINE_H
 
 #include "types.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef union {
     OvlQuad q;

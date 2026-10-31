@@ -1,6 +1,6 @@
 /* Moby paths: clear path point masks, and following a path. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "asm.h"
 
 /* 0x00276c40, 112 bytes.
@@ -31,7 +31,7 @@ int expand_path_mask_to_intersection(int path_index, int from_mask, int mask) {
     return 0;
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

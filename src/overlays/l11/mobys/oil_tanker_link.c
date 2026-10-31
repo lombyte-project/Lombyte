@@ -1,6 +1,6 @@
 /* Level 11 moby class oil_tanker_link (class 0x4F1): link effects, bubbles and destruction. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"

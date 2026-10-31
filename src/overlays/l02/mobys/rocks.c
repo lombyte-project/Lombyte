@@ -10,7 +10,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 extern float D_0015ED6C;
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 

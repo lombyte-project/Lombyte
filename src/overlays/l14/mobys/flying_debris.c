@@ -10,7 +10,7 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/flying_debris_globals.h"
 

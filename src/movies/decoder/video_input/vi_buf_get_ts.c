@@ -1,6 +1,6 @@
 #include "types.h"
-#include "eetypes.h"
-#include "eeregs.h"
+#include "rnc/sdk/eetypes.h"
+#include "rnc/sdk/eeregs.h"
 
 /* viBufGetTs(ViBuf *, TimeStamp *) */
 

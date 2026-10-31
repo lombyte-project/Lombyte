@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/effects/space_effect_tables.h"
 #include "rnc/globals.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby_spawn.h"

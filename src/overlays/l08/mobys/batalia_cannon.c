@@ -4,7 +4,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/mobys/moby.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"

@@ -1,6 +1,6 @@
 /* Level 14 taxi moby class: stops, routes and prompts. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 enum TaxiStop {
     TAXI_STOP_RETURN_HUB = 0x0,

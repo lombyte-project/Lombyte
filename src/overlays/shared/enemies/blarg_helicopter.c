@@ -14,7 +14,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 typedef float HVec49_2CDDC8[4] __attribute__((aligned(16)));
 

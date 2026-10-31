@@ -12,7 +12,7 @@ extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, f
 
 extern void update_entity() __asm__("FUN_L00_00250df8");
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 #include "qcopy.h"
 

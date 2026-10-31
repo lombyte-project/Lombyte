@@ -8,7 +8,7 @@
 
 #include "sda.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;

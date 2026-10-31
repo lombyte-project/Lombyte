@@ -4,8 +4,8 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/get_moby_target_info.h"
@@ -126,7 +126,7 @@ void apply_hero_ground_material_effects(void) {
 }
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef union {
     OvlQuad q;

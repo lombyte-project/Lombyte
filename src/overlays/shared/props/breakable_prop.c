@@ -1,12 +1,12 @@
 /* Breakable prop (class 0x677): breaks into three pieces and drops a tumbling part (0x678) when hit; same source as the l07 mushroom and robot_head. */
 #include "types.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "qcopy.h"
 
 typedef struct {

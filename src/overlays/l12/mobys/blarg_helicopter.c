@@ -1,12 +1,12 @@
 /* Level 12 moby class blarg_helicopter: path following, tilt and hits. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -14,7 +14,7 @@
 
 extern char D_L12_00167240[];
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
@@ -24,13 +24,13 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 extern int scale_game_frames(int);
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct Moby Moby;
 int                 FUN_L00_00257b90(int lo, int hi);
 void                FUN_L00_0025a120(char *o);
 
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 
 extern void  spawn_explosion(void *,
                              void *,

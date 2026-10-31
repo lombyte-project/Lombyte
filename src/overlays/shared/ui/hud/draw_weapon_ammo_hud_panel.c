@@ -1,6 +1,6 @@
 /* HUD: the weapon ammo panel and the HUD element updates. */
 #include "types.h"
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"

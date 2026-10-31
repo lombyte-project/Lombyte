@@ -6,8 +6,8 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"
@@ -37,11 +37,11 @@ typedef struct {
 
 extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern struct HeroEase      hero_eases[] __asm__("D_L00_0017A680");
 extern float                D_L00_0015F638;
@@ -79,7 +79,7 @@ extern int                hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 extern int                return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int                probe_hero_ledge_edge(float *, float *) __asm__("FUN_L00_0020c758");
 
-#include "rnc/overlay/path.h"
+#include "rnc/overlay/shared/world/path.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"

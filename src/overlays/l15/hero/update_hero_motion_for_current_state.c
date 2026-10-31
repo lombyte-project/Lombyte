@@ -1,13 +1,13 @@
 /* Level 15 hero motion: update_hero_motion_for_current_state, with the ground type effect and incoming hit helpers. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/game/usage_stats.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/asm_helpers.h"
@@ -154,7 +154,7 @@ void apply_hero_ground_type_effects(void) {
 }
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     u8      pad0[0x10];
@@ -338,7 +338,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
     return 1;
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"

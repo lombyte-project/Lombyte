@@ -242,7 +242,7 @@ void spark_emitter_update(struct Moby *emitter) {
     }
 }
 
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 
 /* finds the mobys of type 0x5E8 in state 1 in a level list and starts those within range */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */

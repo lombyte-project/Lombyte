@@ -1,6 +1,6 @@
 /* Level 14 moby class enemy_fighter (908, "Enemy Fighter (moby908)"): flies its path in a loop, puffs exhaust, and respawns after it is shot down. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/globals.h"
 #include "qcopy.h"

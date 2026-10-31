@@ -28,10 +28,10 @@
 #endif
 #include "qcopy.h"
 #include "qzero.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/ui/help/get_help_message_text.h"
 
 extern int debug_print() __asm__("FUN_001e93b0");

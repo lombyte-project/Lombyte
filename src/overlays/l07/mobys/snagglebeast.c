@@ -11,7 +11,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/world/collision/ground_probe.h"
@@ -342,7 +342,7 @@ extern void FUN_L00_00200228(float, void *);
 extern int  FUN_0022da68(int, int, void *);
 extern int  camera_secondary_mode_lui __asm__("D_001413D4") NOT_SDA;
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern char voice_slot_state_base[] __asm__("D_0013E5C4");
 void process_snagglebeast_damage(char *moby, char *data, float *health) __asm__("FUN_L07_00313420");
@@ -780,7 +780,7 @@ typedef struct {
     int   kind;
 } ChaserSight;
 
-#include "rnc/overlay/swarm_path.h"
+#include "rnc/overlay/shared/world/swarm_path.h"
 
 typedef struct {
     char          pad[0x1D4];

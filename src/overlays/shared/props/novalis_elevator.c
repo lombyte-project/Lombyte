@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -12,8 +12,8 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int   is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");

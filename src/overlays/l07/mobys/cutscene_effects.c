@@ -1,7 +1,7 @@
 /* Level 07 moby class cutscene_effects (0x610): aims the cutscene camera and bursts effects from the cutscene moby's points. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"

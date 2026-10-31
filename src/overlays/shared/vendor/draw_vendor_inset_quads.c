@@ -1,6 +1,6 @@
 /* Vendor screen drawing: inset quads, purchase panel and hologram cone. */
 #include "types.h"
-#include "rnc/overlay/vendor_menu.h"
+#include "rnc/overlay/shared/vendor/vendor_menu.h"
 #include "asm.h"
 #include "rnc/streaming/disc_table.h"
 #include "rnc/math/fast_math.h"
@@ -9,7 +9,7 @@
 #include "rnc/rendering/render_globals.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "sda.h"
 #include "rnc/rendering/texture/do_gif_paging.h"
 #include "rnc/rendering/texture/setup_gif_paging.h"
@@ -102,7 +102,7 @@ void draw_vendor_inset_quads(char *vertex_batch) {
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     int a, b, c;
@@ -269,7 +269,7 @@ void draw_vendor_hologram_cone(void) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qzero.h"
 
 typedef struct {
@@ -297,7 +297,7 @@ extern u128         camera_lateral_axis[] __asm__("D_L00_00166FE0");
 extern u128         D_L00_00166FF0[];
 extern u128         D_L00_00166FD0[];
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern A02b0_tab D_L00_001C8FF0[];
 

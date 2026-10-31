@@ -1,10 +1,10 @@
 /* Level 17 reflection strips: sphere-map UVs for the reflective mesh strips and the draw callbacks that build and draw them. */
 #include "types.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
-#include "rnc/overlay/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
 
 /* Projects each direction pair into 2D texture coordinates (reflection mapping). */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7018), where it is exact; names translated to the US level program. */

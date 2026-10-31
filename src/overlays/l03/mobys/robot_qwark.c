@@ -6,9 +6,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_save_state.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern char  D_L03_00166EC0[];
 extern void  FUN_L00_0025a120(struct Moby *);

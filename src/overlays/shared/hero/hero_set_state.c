@@ -7,7 +7,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/game/usage_stats.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -105,11 +105,11 @@ void update_hero_motion_and_collision_probes(void) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
 typedef struct {
     s32 w0;
@@ -383,7 +383,7 @@ int stick_direction_vs_facing(void) {
     return stick_direction;
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     u8 p0[0x80];

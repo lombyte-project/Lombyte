@@ -4,7 +4,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 
 /* Finds the table entry nearest the object's position (within 8 units) and applies its fields to the object and globals. */

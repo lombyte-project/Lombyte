@@ -1,13 +1,13 @@
 /* Level 11 hero motion: update_hero_motion_by_state, and update_hero_surface_condition_flags. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/game/usage_stats.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/asm_helpers.h"
@@ -126,7 +126,7 @@ void update_hero_surface_condition_flags(void) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"

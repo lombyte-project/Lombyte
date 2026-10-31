@@ -1,19 +1,19 @@
 /* Level 18 rocket (class 0x234): flight, trail, explosion and target pulse. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 
 #include "rnc/overlay/l18/mobys/rocket_globals.h"
 
@@ -237,7 +237,7 @@ void spawn_rocket_trail_effects(void *mobyp, void *movement_step) {
 extern void
 play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern void func_L00_0025F4A8_alt(void *,
                                   void *,

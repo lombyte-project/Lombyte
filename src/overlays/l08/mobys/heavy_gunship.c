@@ -6,7 +6,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/swarm_path.h"
+#include "rnc/overlay/shared/world/swarm_path.h"
 #include "rnc/game/game_globals.h"
 #include "sda.h"
 #include "rnc/math/random.h"

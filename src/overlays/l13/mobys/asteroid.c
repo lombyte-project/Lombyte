@@ -11,8 +11,8 @@
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/overlay/collision.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 enum AsteroidSpinAxis {
     SPIN_AXIS_X = 0x0,

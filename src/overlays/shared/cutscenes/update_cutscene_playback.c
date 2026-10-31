@@ -1,6 +1,6 @@
 /* Cutscene, movie and slideshow playback, the game frame and idle counters and pause input; also defines the vendor menu data (vendor/vendor_menu.c holds its code). */
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/game/scene_trigger.h"
 #include "rnc/game/overlay_game_state.h"
 #include "rnc/audio/voice_pool.h"
@@ -566,7 +566,7 @@ void finish_cutscene(void) {
 }
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     char  pad[0x38];
@@ -581,7 +581,7 @@ extern unsigned char D_0015EDB0_298de8 __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB0_298de8b __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB4_298de8 __asm__("D_0015EDB4");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern void        sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");

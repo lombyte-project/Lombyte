@@ -262,7 +262,7 @@ int           FUN_L00_00260400(int    unused_subject_object,
     return 1;
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
 u8           *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
@@ -382,7 +382,7 @@ void unlock_planet(s32 id) {
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 extern ItemDef        item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern int            D_L00_001B0340[] NOT_SDA;

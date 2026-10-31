@@ -1,6 +1,6 @@
 /* Level 16 moby class linked_pair_ribbons (0x228): pairs of mobys joined by ribbons, off while a wall_button of the group is pressed. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"

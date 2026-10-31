@@ -1,7 +1,7 @@
 /* Camera offset effect: picks a moby ahead of the hero and pulls the follow camera's offset towards it. */
 
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

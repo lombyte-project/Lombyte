@@ -8,7 +8,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
 

@@ -6,8 +6,8 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/math/spherical_offset.h"
@@ -145,7 +145,7 @@ void draw_level_sky(void) {
     vu1_add_g_sregister(0x4E, 0x1000000 | (depth_buffer_address >> 13));
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef struct {
     u8  pad0[0x34];
