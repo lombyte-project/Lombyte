@@ -1707,7 +1707,9 @@ extern G_00208038 D_0013F350_00208038 __asm__("D_0013F350");
 void              enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 
 /* Appends v, b, x and y to the list in ((char *)&hero) and calls FUN_L00_00207d00. */
-void FUN_L00_00208038(u128 *glow_position, int b, float x, float y) {
+void enqueue_hero_glow_quad(u128 *glow_position, int b, float x, float y) __asm__("FUN_L00_00208038");
+
+void enqueue_hero_glow_quad(u128 *glow_position, int b, float x, float y) {
     G_00208038 *hero_glow_queue_owner = &D_0013F350_00208038;
     short       n = hero_glow_queue_owner->n;
     u128       *pos = hero_glow_queue_owner->pos;
