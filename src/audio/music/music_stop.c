@@ -8,6 +8,9 @@ extern s32 snd_stream_safe_check_cd_idle() __asm__("func_0012ED30");
 void       music_stop(void) __asm__("FUN_00215ee8");
 
 void music_stop(void) {
+    enum {
+        MUSIC_CROSSFADE_IDLE = 0
+    };
     s32 requested_track;
 
     if (music_stream_state.primary.handle == 0xFFFFFFFF) {
@@ -42,7 +45,7 @@ void music_stop(void) {
     music_stream_state.transition.state = 0;
     music_stream_state.transition.flags = 0;
     music_stream_state.transition.handle = 0;
-    music_stream_state.crossfade_state = 0;
+    music_stream_state.crossfade_state = MUSIC_CROSSFADE_IDLE;
     music_stream_state.requested_track = -1;
     music_stream_state.requested_transition_track = -1;
 }
