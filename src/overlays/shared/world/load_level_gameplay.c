@@ -2155,7 +2155,7 @@ s32 start_cutscene_chunk_read(s32 i) {
     s32 start;
     s32 size;
 
-    if (pal_mode != 0) {
+    if (pal_mode != FALSE) {
         size = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] -
                disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
