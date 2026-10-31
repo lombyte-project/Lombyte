@@ -46,13 +46,13 @@ extern int  help_request(int, int) __asm__("FUN_L00_00203908");
 
 typedef struct GbMoby         GbMoby;
 extern GbMoby *D_L06_001745D8 NOT_SDA;
-extern float                  D_L06_001DAFD0[];
-extern float                  D_L06_001DB060[];
+extern float                  l06_beam_barrier_segment_local_offsets[] __asm__("D_L06_001DAFD0");
+extern float                  l06_beam_barrier_segment_euler_rotations[] __asm__("D_L06_001DB060");
 extern int                    D_L06_00161E40[] MACRO_ADDR;
 extern int                    D_L06_00161E50;
 extern int                    D_L06_00161E54;
 extern f32                    D_L06_00161E08 __attribute__((sda));
-extern float                  D_L06_00161E0C __attribute__((sda));
+extern float                  l06_beam_barrier_transform_scale __asm__("D_L06_00161E0C") __attribute__((sda));
 float                         beam_barrier_collision_z_offset_gp __asm__("D_L06_00161E18") = 2.25f;
 extern int beam_barrier_burst_color_from_gp __asm__("D_L06_00161E1C") __attribute__((sda));
 int   beam_barrier_burst_color_to_gp __asm__("D_L06_00161E20") = 0x80802080; /* RGBA, 0xAABBGGRR */
@@ -289,7 +289,7 @@ void beam_barrier_update(struct Moby *moby) {
         int spark;
         int segment_offset;
         euler_rotation_matrix(work.matrix, &moby->rot);
-        set_scale_matrix(work.shared.local, D_L06_00161E0C);
+        set_scale_matrix(work.shared.local, l06_beam_barrier_transform_scale);
         segment = 0;
         pos = (float *)&moby->pos;
         multiply_matrix(work.matrix, work.matrix, work.shared.local);
@@ -297,10 +297,10 @@ void beam_barrier_update(struct Moby *moby) {
         do {
             segment_offset = segment * 16;
             spark = 19;
-            euler_rotation_matrix(work.shared.local, (char *)D_L06_001DB060 + segment_offset);
+            euler_rotation_matrix(work.shared.local, (char *)l06_beam_barrier_segment_euler_rotations + segment_offset);
             next_segment = segment + 1;
             multiply_matrix(work.shared.local, work.matrix, work.shared.local);
-            transform_vector(work.point, (char *)D_L06_001DAFD0 + segment_offset, work.matrix);
+            transform_vector(work.point, (char *)l06_beam_barrier_segment_local_offsets + segment_offset, work.matrix);
             fast_vec_add(work.shared.collision.delta, work.point, pos);
             work.shared.collision.delta[3] = 1.0f;
             do {
@@ -381,7 +381,7 @@ void draw_beam_barrier_segments(char *moby) {
     int          j;
 
     euler_rotation_matrix(base_matrix, moby + 0x40);
-    set_scale_matrix(yaw_matrix, D_L06_00161E0C);
+    set_scale_matrix(yaw_matrix, l06_beam_barrier_transform_scale);
     multiply_matrix(base_matrix, base_matrix, yaw_matrix);
     vu1_add_g_sregister(6, get_effect_texture(14));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
@@ -393,8 +393,8 @@ void draw_beam_barrier_segments(char *moby) {
     font_queue_vu_state();
     first_matrix = segment_matrix[0];
     segment_params = beam_segment_draw_params;
-    rotation = D_L06_001DB060;
-    offset_src = D_L06_001DAFD0;
+    rotation = l06_beam_barrier_segment_euler_rotations;
+    offset_src = l06_beam_barrier_segment_local_offsets;
     translation = segment_matrix[0] + 12;
     matrix = first_matrix;
     for (i = 8; i >= 0; i--) {
