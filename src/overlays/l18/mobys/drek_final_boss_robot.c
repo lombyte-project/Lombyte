@@ -1813,6 +1813,10 @@ extern short l18_drek_boss_class_scale_multiplier_gp __asm__("D_L18_00162330") _
 
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F72E0) */
 void update_drek_boss_damage_and_phase_transitions(char *moby) {
+    enum {
+        HIT_PROCESSING_NO_DAMAGE = 1,
+        LINKED_MOBY_REARMED = 1
+    };
     char          *boss_data = ((char *)MOBY(moby)->pvars);
     int            hit_processing_status;
     float          step;
@@ -1846,9 +1850,9 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     }
     resolve_moby_hit_response(
         moby, hit_record, boss_data + 0x20, 0, &hit_processing_status, &step, 0, 4);
-    if (hit_processing_status != 1) {
+    if (hit_processing_status != HIT_PROCESSING_NO_DAMAGE) {
         int type = MOBY(moby)->state;
-        if ((type >= 0xC && type <= 0x13) || type == 2) {
+        if ((type >= DREK_BOSS_SELECT_NEXT_ACTION && type <= DREK_BOSS_FOLLOW_HERO) || type == DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO) {
             char *o = *(char **)(hit_record + 0x20);
             if (o != 0) {
                 short h = *(short *)(o + 0xA6);
@@ -1947,10 +1951,10 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     }
     {
         int type = MOBY(moby)->state;
-        if (type >= 0xC && type <= 0x13) {
+        if (type >= DREK_BOSS_SELECT_NEXT_ACTION && type <= DREK_BOSS_FOLLOW_HERO) {
             int linked_moby_state_transition_status = poll_moby_state_and_rearm(
                 (char *)*(int *)&D_L18_0015FFD8_5e80 + (*(int *)(boss_data + 0x21C) << 8));
-            if (linked_moby_state_transition_status == 1) {
+            if (linked_moby_state_transition_status == LINKED_MOBY_REARMED) {
                 moby[0x20] = 0x13;
                 if (MOBY(moby)->prev_seq != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
