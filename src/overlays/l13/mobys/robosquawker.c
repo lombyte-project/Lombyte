@@ -51,6 +51,11 @@ int                select_robosquawker_target(char *source_object,
                                               float best) __asm__("FUN_L13_0026bd00");
 
 int select_robosquawker_target(char *source_object, char *selection_output, float best) {
+    enum {
+        ROBOSQUAWKER_TARGET_DEFAULT_HERO = 0,
+        ROBOSQUAWKER_TARGET_CANDIDATE_SELECTED = 1,
+        ROBOSQUAWKER_TARGET_HERO_SUPPRESSED = 2
+    };
     struct Hero *hero = &hero_lui;
     char        *selected_object;
     char        *candidate_object;
@@ -60,10 +65,10 @@ int select_robosquawker_target(char *source_object, char *selection_output, floa
     float        candidate_metric;
 
     selected_object = ((char *)hero->moby);
-    selection_status = 0;
+    selection_status = ROBOSQUAWKER_TARGET_DEFAULT_HERO;
     if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_object = 0;
-        selection_status = 2;
+        selection_status = ROBOSQUAWKER_TARGET_HERO_SUPPRESSED;
     }
     for (i = 1; i <= D_L13_001B0B30[0]; i++) {
         candidate_object = (char *)moby_base + (D_L13_001B0B30[i] << 8);
@@ -82,7 +87,7 @@ int select_robosquawker_target(char *source_object, char *selection_output, floa
         if (candidate_metric < best) {
             selected_object = candidate_object;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = ROBOSQUAWKER_TARGET_CANDIDATE_SELECTED;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -101,7 +106,7 @@ int select_robosquawker_target(char *source_object, char *selection_output, floa
         if (candidate_metric < best) {
             selected_object = candidate_object;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = ROBOSQUAWKER_TARGET_CANDIDATE_SELECTED;
         }
     }
     if (selected_object != 0) {
