@@ -168,6 +168,9 @@ void bomb_glove_update(struct Moby *moby) {
         BOMB_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
         BOMB_GLOVE_REMOVE_HELD_MOBY = 6
     };
+    enum {
+        BOMB_GLOVE_READY = 2
+    };
     CarrierVars_2c26c8 *bomb_glove_vars;
     OvlVec4             local[4], saved, offset, rotatedOffset, pos, target, basis[3], matrix[4];
     OvlVec4             launch;
@@ -341,10 +344,10 @@ void bomb_glove_update(struct Moby *moby) {
         if (!(moby->anim_flags & 2))
             moby->state = BOMB_GLOVE_WAIT_FOR_ANIMATION;
         else
-            moby->state = 2;
+            moby->state = BOMB_GLOVE_READY;
     case BOMB_GLOVE_WAIT_FOR_ANIMATION:
         if (moby->anim_flags & 2)
-            moby->state = 2;
+            moby->state = BOMB_GLOVE_READY;
         break;
     case BOMB_GLOVE_RELEASE_HELD_MOBY:
         if (bomb_glove_vars->held == 0) {
@@ -370,7 +373,7 @@ void bomb_glove_update(struct Moby *moby) {
         break;
     case BOMB_GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.item_anim_active)
-            moby->state = 2;
+            moby->state = BOMB_GLOVE_READY;
         break;
     case BOMB_GLOVE_BEGIN_HELD_MOBY_REMOVAL:
         moby->state = BOMB_GLOVE_REMOVE_HELD_MOBY;
