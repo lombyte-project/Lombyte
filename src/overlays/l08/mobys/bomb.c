@@ -125,9 +125,9 @@ void moby_248_update(char *moby) {
             if (sphere_hit_moby != 0 &&
                 (sphere_hit_moby != bomb_vars->unk30 || bomb_vars->unk24 != 0)) {
                 if (!(MOBY(moby)->command & 2))
-                    MOBY(moby)->state = 0x62;
+                    MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                 else
-                    MOBY(moby)->state = 0x63;
+                    MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
                 qcopy((moby + 0x10), ((char *)D_L08_00174660));
                 FUN_L00_001ff660_c(
                     &bomb_vars->unk10, &bomb_vars->unk10, ((char *)D_L08_00174660) + 0x20);
@@ -182,9 +182,9 @@ void moby_248_update(char *moby) {
             if (v != 0) {
                 if (v != bomb_vars->unk30 || bomb_vars->unk24 != 0) {
                     if (!(MOBY(moby)->command & 2))
-                        MOBY(moby)->state = 0x62;
+                        MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                     else
-                        MOBY(moby)->state = 0x63;
+                        MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
                     qcopy((moby + 0x10), ((char *)D_L08_00174660));
                     {
                         char *v = &bomb_vars->unk10;
@@ -220,7 +220,7 @@ void moby_248_update(char *moby) {
                         clear_u64_value((&bomb_vars->unk10));
                     }
                 } else {
-                    MOBY(moby)->state = 0x62;
+                    MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                     qcopy((moby + 0x10), collision_result + 0x20);
                     FUN_L00_001ff660_c(
                         (&bomb_vars->unk10), (&bomb_vars->unk10), collision_result + 0x40);
@@ -230,16 +230,16 @@ void moby_248_update(char *moby) {
             }
         } else if (fast_dec_timer(&bomb_vars->timer_20)) {
             if (MOBY(moby)->command & 2) {
-                MOBY(moby)->state = 0x63;
+                MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
             } else {
-                MOBY(moby)->state = 0x62;
+                MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
             }
         }
         break;
     }
     case BOMB_STATE_STATIONARY_FUSE:
         if (fast_dec_timer(&bomb_vars->timer_20)) {
-            MOBY(moby)->state = 0x63;
+            MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
         } else if (bomb_vars->timer_20 == scale_game_frames(0x3C) ||
                    bomb_vars->timer_20 == scale_game_frames(0x28) ||
                    bomb_vars->timer_20 == scale_game_frames(0x14)) {
