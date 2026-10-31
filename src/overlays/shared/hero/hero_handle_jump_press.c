@@ -195,7 +195,7 @@ int hero_handle_jump_press(void) {
                                    (void *)0x1F000,
                                    input_history_window_padding + input_history_separation_limit,
                                    input_history_separation_limit)) {
-        next_state = 0xB;
+        next_state = HERO_STATE_HIGH_JUMP;
     found:
         hero_set_state(next_state, 1);
         return 1;
@@ -207,7 +207,7 @@ int hero_handle_jump_press(void) {
         if (hero_slot_item_id(3) == 2 && D_0013D4C2_lui != 0 && hero.pack_disabled == 0) {
             if ((2.5f < hero.wall_probe_distance || hero.wall_normal_pitch < 0.7853982f) &&
                 0.7f < hero.stick_magnitude && frame_time * 0.9f < hero.motion.forward_speed) {
-                next_state = 0xA;
+                next_state = HERO_STATE_PACK_JUMP;
                 goto found;
             }
         }
@@ -216,15 +216,15 @@ int hero_handle_jump_press(void) {
             frame_time * 0.9f < hero.motion.forward_speed) {
             if (hero.long_jump_lockout)
                 return 1;
-            next_state = 0x10;
+            next_state = HERO_STATE_PACK_LONG_JUMP;
             goto found;
         }
         if (hero_slot_item_id(3) == 3 && hero.pack_disabled == 0) {
-            next_state = 0xD;
+            next_state = HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL;
             goto found;
         }
         if (hero_slot_item_id(3) == 2 && hero.pack_disabled == 0 && D_0013D4C2_lui) {
-            next_state = 0xF;
+            next_state = HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE;
             goto found;
         }
         hero_set_state_2(7, 1);
