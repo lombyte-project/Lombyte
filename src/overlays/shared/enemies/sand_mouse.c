@@ -349,6 +349,9 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
         HOVER_FACE_GOAL_AND_WAIT = 0,
         HOVER_MOVE_TOWARD_GOAL = 2
     };
+    enum {
+        SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6
+    };
     Vec4         velocity_adjustment;
     f32          reference_distance, direction_yaw, movement_magnitude, ground, near;
     s32          hit;
@@ -356,7 +359,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
     struct Moby *target;
 
     fast_vec_sub(&velocity_adjustment, movement_state, &moby->pos);
-    if (moby->state == 6)
+    if (moby->state == SAND_MOUSE_FADE_OUT_AND_RESET_HOME)
         reference_distance = vector_distance_xy(&moby->pos, movement_state + 0x30);
     else
         reference_distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
@@ -421,7 +424,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
     velocity_adjustment.f[2] *= frame_scale * -0.100000024f + 1.0f;
     fast_vec_add(
         ((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), &velocity_adjustment);
-    if (moby->state == 6)
+    if (moby->state == SAND_MOUSE_FADE_OUT_AND_RESET_HOME)
         clamp_vector_length(
             ((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), frame_time * 2.7f);
     hit = move_moby_with_collision_integer_radius(moby,
@@ -466,7 +469,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
         }
     }
 collision_done:
-    if (moby->state == 6 || !(reference_distance < 1.1f))
+    if (moby->state == SAND_MOUSE_FADE_OUT_AND_RESET_HOME || !(reference_distance < 1.1f))
         return;
     near = 1.1f - reference_distance;
     direction_yaw =
