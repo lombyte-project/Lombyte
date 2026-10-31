@@ -155,6 +155,9 @@ extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 void update_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L14_00315290");
 
 void update_path_camera(struct UpdateCam *path_camera) {
+    enum {
+        PATH_CAMERA_TRANSITION_PATH_FINISHED = 4
+    };
     float initial_look_direction_or_previous_position[4];
     float t[4];
     float u[4];
@@ -216,7 +219,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         l14_camera_projection_state.fB0 = fast_sin(ang) / fast_cos(ang);
         update_view_context();
         D_L14_001675D8 = 0.25f;
-        path_camera->transition_state = 4;
+        path_camera->transition_state = PATH_CAMERA_TRANSITION_PATH_FINISHED;
         path_camera_active = 0;
         mb = D_L14_0015FFD8_5290;
         reset_racer_group_to_hero_path_position((struct Moby *)(mb + *(int *)(rec + 0x50) * 256));
