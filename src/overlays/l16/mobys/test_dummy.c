@@ -529,6 +529,12 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 
 /* Per-frame update of a hit-point moby: handles a hit (respawn at the spawn point or removal when out of lives) and its state timers. */
 void update_test_dummy_damage_and_respawn(void *moby) {
+    enum {
+        TEST_DUMMY_STATE_IDLE = 1,
+        TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
+        TEST_DUMMY_STATE_BURST = 10,
+        TEST_DUMMY_STATE_RESPAWN = 11
+    };
     L16HitMoby *hit_moby = moby;
     float       matrix[16];
     int         status;
@@ -536,7 +542,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     L16HitData *hit_data;
     char       *dummy_hit_record;
 
-    if (hit_moby->state == 1) {
+    if (hit_moby->state == TEST_DUMMY_STATE_IDLE) {
         return;
     }
     hit_data = hit_moby->data;
@@ -548,7 +554,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
         hit_moby->flags &= 0xEFFF;
         hit_data->lives--;
         if (hit_data->lives != -1) {
-            hit_moby->state = 11;
+            hit_moby->state = TEST_DUMMY_STATE_RESPAWN;
             qcopy(hit_moby->position, hit_data->spawn);
             hit_data->timer = scale_game_frames(60);
         } else {
@@ -565,12 +571,12 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     amount = 0.0f;
     dummy_hit_record = find_moby_hit(hit_moby, 0x330000, 0);
     hit_reaction(hit_moby, dummy_hit_record, &hit_data->health, 0, &status, &amount, 0, 4);
-    if (status != 1 && hit_moby->state != 10 && hit_moby->state != 11) {
+    if (status != 1 && hit_moby->state != TEST_DUMMY_STATE_BURST && hit_moby->state != TEST_DUMMY_STATE_RESPAWN) {
         hit_data->health -= amount;
         if (hit_data->health <= 0.0f) {
-            hit_moby->state = 10;
+            hit_moby->state = TEST_DUMMY_STATE_BURST;
         } else {
-            if (hit_moby->state != 9) {
+            if (hit_moby->state != TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE) {
                 hit_data->next_state = hit_moby->state;
                 hit_data->next_anim = hit_moby->animation;
             }
@@ -580,7 +586,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
                 hit_data->heading =
                     fast_arc_tan(player->motion.pos.f[0] - x, player->motion.pos.f[1] - y);
             }
-            hit_moby->state = 9;
+            hit_moby->state = TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE;
             /* No pointer local for the reaction record anywhere: d->reaction is written at each call and the
                compiler caches it itself (formed before the hit query, and formed again here with a copy after
                the call). It only forms it again here when this place cannot be reached along one straight path
