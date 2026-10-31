@@ -60,6 +60,13 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
         CAMERA_DESCRIPTOR_FRAME_COUNT_TRANSITION = 5,
         CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION = 6
     };
+    enum {
+        CAMERA_TRANSITION_STATE_CLEARED = 0,
+        CAMERA_TRANSITION_STATE_REQUEST_TRANSITION = 2,
+        CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM = 3,
+        CAMERA_TRANSITION_STATE_BLOCK_ACTIVATION = 4,
+        CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM_WITH_RATE_TRANSITION = 5
+    };
     struct UpdateCam     *previous_camera;
     CameraDescriptorInfo *descriptor;
     f32                   transition_duration;
@@ -76,9 +83,9 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     if (descriptor != 0) {
         descriptor_kind = descriptor->descriptor_kind;
     }
-    if (previous_transition_state == 4) {
+    if (previous_transition_state == CAMERA_TRANSITION_STATE_BLOCK_ACTIVATION) {
         next_camera->activation_blocked = 1;
-    } else if (previous_transition_state == 2 || descriptor_kind == CAMERA_DESCRIPTOR_RATE_TRANSITION || descriptor_kind == CAMERA_DESCRIPTOR_FRAME_COUNT_TRANSITION) {
+    } else if (previous_transition_state == CAMERA_TRANSITION_STATE_REQUEST_TRANSITION || descriptor_kind == CAMERA_DESCRIPTOR_RATE_TRANSITION || descriptor_kind == CAMERA_DESCRIPTOR_FRAME_COUNT_TRANSITION) {
         if (descriptor_kind == CAMERA_DESCRIPTOR_RATE_TRANSITION) {
             mode_one_duration = next_camera->transition_duration;
             preview_camera.transition_mode = CAMERA_TRANSITION_RATE_BASED;
@@ -103,14 +110,14 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
         } else {
             preview_camera.transition_phase = 2;
         }
-    } else if (previous_transition_state == 3 || previous_transition_state == 5 ||
+    } else if (previous_transition_state == CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM || previous_transition_state == CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM_WITH_RATE_TRANSITION ||
                descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM || descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION) {
         qcopy(&next_camera->pos, &previous_camera->pos);
         qcopy(&next_camera->m0, &previous_camera->m0);
         qcopy(&next_camera->m1, &previous_camera->m1);
         qcopy(&next_camera->m2, &previous_camera->m2);
         next_camera->handoff_state = CAMERA_HANDOFF_INHERITED_TRANSFORM;
-        if (previous_camera->transition_state == 5 || descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION) {
+        if (previous_camera->transition_state == CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM_WITH_RATE_TRANSITION || descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION) {
             handoff_duration = next_camera->transition_duration;
             preview_camera.transition_mode = CAMERA_TRANSITION_RATE_BASED;
             if (handoff_duration > 0.0f) {
@@ -135,7 +142,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     }
 
     position = &next_camera->pos;
-    previous_camera->transition_state = 0;
+    previous_camera->transition_state = CAMERA_TRANSITION_STATE_CLEARED;
     previous_camera->handoff_state = CAMERA_HANDOFF_NONE;
     previous_camera->activation_blocked = 0;
     preview_camera.previous = previous_camera;
