@@ -106,7 +106,7 @@ void taxi_update(struct Moby *moby) {
                 select_taxi_route(moby);
                 request_moby_variant_help_message(moby);
                 if (pad_pressed_words[0] & 0x10) {
-                    moby->state = 3;
+                    moby->state = TAXI_BLEND_TO_PATH_START;
                     destination_stop_moby = find_moby_in_owner_list_by_id(moby, taxi_data->unkB6);
                     if (destination_stop_moby != 0) {
                         destination_stop_moby->state = 2;
@@ -151,14 +151,14 @@ void taxi_update(struct Moby *moby) {
         if (1.0f <= taxi_data->unkC0) {
             taxi_data->unkC0 = z;
             *(float *)&taxi_data->unkC4 = z;
-            moby->state = 4;
+            moby->state = TAXI_FOLLOW_PATH;
         }
         break;
     case TAXI_FOLLOW_PATH:
         if (advance_moby_path(moby)) {
             *(int *)&taxi_data->unkC0 = 0;
             taxi_data->unkC4 = 0;
-            moby->state = 5;
+            moby->state = TAXI_BLEND_TO_DESTINATION;
         }
         break;
     case TAXI_BLEND_TO_DESTINATION:
@@ -196,7 +196,7 @@ void taxi_update(struct Moby *moby) {
         if (1.0f <= taxi_data->unkC0) {
             *(int *)&taxi_data->unkC0 = 0;
             taxi_data->unkC4 = 0;
-            moby->state = 1;
+            moby->state = TAXI_WAIT_FOR_PICKUP;
             reset_selected_moby_to_current_placement(moby);
         }
         break;
@@ -209,12 +209,12 @@ void taxi_update(struct Moby *moby) {
             moby->visible = 1;
             moby->collision = class_collision;
             moby->flags = flags & 0xFFFE;
-            moby->state = 1;
+            moby->state = TAXI_WAIT_FOR_PICKUP;
         }
         break;
     }
     apply_moby_position_and_rotation_wobble(moby);
-    if (moby->state >= 3 && moby->state <= 5) {
+    if (moby->state >= TAXI_BLEND_TO_PATH_START && moby->state <= TAXI_BLEND_TO_DESTINATION) {
         travel_hero = &hero;
         travel_hero->jump_lock_timer = 2;
         travel_hero->unk1F4 = 2;
