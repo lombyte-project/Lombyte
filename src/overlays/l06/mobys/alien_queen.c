@@ -388,7 +388,7 @@ typedef struct AlienQueenVars {
 
 /* Moby class 1051 */
 void alien_queen_update(unsigned char *moby) {
-    enum { ALIEN_QUEEN_STATE_INITIALIZE = 0 , ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO = 1 , ALIEN_QUEEN_STATE_INTRO = 2 , ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA = 3 , ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT = 4 , ALIEN_QUEEN_STATE_SECOND_RECOVERY_CAMERA = 5 , ALIEN_QUEEN_STATE_GROUP_RECOVERY_ORBIT = 6 , ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET = 7 , ALIEN_QUEEN_STATE_APPROACH_TARGET = 8 , ALIEN_QUEEN_STATE_ATTACK_WINDUP = 9 , ALIEN_QUEEN_STATE_ATTACK_HIT_QUERIES = 10 , ALIEN_QUEEN_STATE_TIMED_ORBIT = 12 , ALIEN_QUEEN_STATE_RETURN_HOME = 13 , ALIEN_QUEEN_STATE_DEATH = 14 , ALIEN_QUEEN_STATE_POST_DEATH = 15 } ;AlienQueenVars *alien_queen_update_vars = (AlienQueenVars *)MOBY(moby)->pvars;
+    enum { ALIEN_QUEEN_STATE_INITIALIZE = 0 , ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO = 1 , ALIEN_QUEEN_STATE_INTRO = 2 , ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA = 3 , ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT = 4 , ALIEN_QUEEN_STATE_SECOND_RECOVERY_CAMERA = 5 , ALIEN_QUEEN_STATE_GROUP_RECOVERY_ORBIT = 6 , ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET = 7 , ALIEN_QUEEN_STATE_APPROACH_TARGET = 8 , ALIEN_QUEEN_STATE_ATTACK_WINDUP = 9 , ALIEN_QUEEN_STATE_ATTACK_HIT_QUERIES = 10 , ALIEN_QUEEN_STATE_WAIT_FOR_ORBIT_ANIMATION_END = 11, ALIEN_QUEEN_STATE_TIMED_ORBIT = 12 , ALIEN_QUEEN_STATE_RETURN_HOME = 13 , ALIEN_QUEEN_STATE_DEATH = 14 , ALIEN_QUEEN_STATE_POST_DEATH = 15 } ;AlienQueenVars *alien_queen_update_vars = (AlienQueenVars *)MOBY(moby)->pvars;
     char           *target;
     float           step[4];
 
@@ -649,7 +649,7 @@ void alien_queen_update(unsigned char *moby) {
         }
         return;
     }
-    case 11:
+    case ALIEN_QUEEN_STATE_WAIT_FOR_ORBIT_ANIMATION_END:
         if (moby[0x70] & 2) {
             moby[0x20] = moby[0xBC];
             if ((unsigned char)moby[0x53] != 1) {
@@ -736,12 +736,12 @@ void alien_queen_update(unsigned char *moby) {
     }
     case ALIEN_QUEEN_STATE_POST_DEATH: {
         int   i;
-        char *other = 0;
+        char *post_death_scan_record = 0;
         for (i = 0; i < 0x30; i++) {
             if (D_L06_0016A010[i] != 0) {
-                other = D_L06_001678D0 + i * 0xA0;
-                if (*(short *)(other + 0x86) == 0x12) {
-                    release_moby_camera_control(other);
+                post_death_scan_record = D_L06_001678D0 + i * 0xA0;
+                if (*(short *)(post_death_scan_record + 0x86) == 0x12) {
+                    release_moby_camera_control(post_death_scan_record);
                     break;
                 }
             }
