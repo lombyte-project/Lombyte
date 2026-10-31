@@ -800,6 +800,9 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
 void update_pyrocitor_flame_effect_slots(char *moby) __asm__("FUN_L00_002b8438");
 
 void update_pyrocitor_flame_effect_slots(char *moby) {
+    enum {
+        PYROCITOR_FLAME_SUBTYPE_SPARK_BURST = 10
+    };
     float          hit_direction_vector[4];
     char           hit_descriptor[0x30];
     char           qv[16];
@@ -832,7 +835,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
             collect_mobies_in_sphere(
                 (flame_effect + 0x10), hit_sphere_radius, 0, moby, hit_descriptor);
             sub_type = *(short *)(flame_effect + 0xA);
-            if (sub_type == 10) {
+            if (sub_type == PYROCITOR_FLAME_SUBTYPE_SPARK_BURST) {
                 int j;
                 for (j = 0; j < *(int *)&pyrocitor_spark_burst_count_gp; j++) {
                     int spark_initial_color;
