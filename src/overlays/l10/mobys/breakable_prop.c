@@ -22,7 +22,7 @@ void breakable_prop_update(struct Moby *moby) {
     char *hit_result = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case HIT_RESPONSE_STATE_INITIALIZE:
-        moby->state = 1;
+        moby->state = HIT_RESPONSE_STATE_WAIT_FOR_HIT;
         break;
     case HIT_RESPONSE_STATE_WAIT_FOR_HIT:
         if (hit_result != 0) {
@@ -30,7 +30,7 @@ void breakable_prop_update(struct Moby *moby) {
                 ok = 1;
         }
         if (ok != 0)
-            moby->state = 2;
+            moby->state = HIT_RESPONSE_STATE_RESPOND_AND_REMOVE;
         break;
     case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
