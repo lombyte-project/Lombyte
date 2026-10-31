@@ -22,13 +22,13 @@ extern s32                    strncpy(s8 *, s8 *, s32);
 
 s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
     s32          rpc_submission_status;
-    s32          ret;
+    s32          request_status;
     register s32 path_arg = slot;
 
     if (mc_rpc_client.serve == 0) {
         return -0x64;
     }
-    ret = -0xC8;
+    request_status = -0xC8;
     if (PollSema(mc_sema) >= 0) {
         if ((name == NULL) || (*name == 0)) {
             SignalSema(mc_sema);
@@ -51,9 +51,9 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
         } else {
             SignalSema(mc_sema);
         }
-        ret = rpc_submission_status;
+        request_status = rpc_submission_status;
         /* Duplicate return node #12. Try simplifying control flow for better match */
-        return ret;
+        return request_status;
     }
-    return ret;
+    return request_status;
 }
