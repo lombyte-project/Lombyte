@@ -455,6 +455,10 @@ void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
 
 /* Moby class 175 */
 void taunter_update(Moby *taunter_moby) {
+    enum {
+        TAUNTER_STATE_INITIALIZE = 0,
+        TAUNTER_STATE_ACTIVE = 2
+    };
     Vars *taunter_vars;
     s32   taunter_state;
     s32   voice_slot_index;
@@ -475,7 +479,7 @@ void taunter_update(Moby *taunter_moby) {
     if (taunter_moby->type == 2)
         taunter_moby->state = 3;
     taunter_effect_emission_disabled = 1;
-    if (taunter_moby->state == 0) {
+    if (taunter_moby->state == TAUNTER_STATE_INITIALIZE) {
         taunter_vars->anim = -1;
         taunter_moby->state++;
         taunter_effect_reset_pending = 1;
@@ -488,7 +492,7 @@ void taunter_update(Moby *taunter_moby) {
         }
         goto end;
     }
-    if ((u8)taunter_state != 2)
+    if ((u8)taunter_state != TAUNTER_STATE_ACTIVE)
         goto end;
     if (taunter_moby->type == 3 && hero.item_use_locked == 0) {
         taunter_effect_emission_disabled = 0;
