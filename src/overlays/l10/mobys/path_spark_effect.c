@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 
-extern struct Moby *D_L10_00178380[];
+extern struct Moby *nearby_mobys[] __asm__("D_L10_00178380");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 /* Advances an effect, scales its size over its lifetime and emits hits. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DE798), where it is exact; names translated to the US level program. */
@@ -75,7 +75,7 @@ void path_spark_effect_update(char *moby) {
         *(OvlQuad *)blast_hit_position = *(OvlQuad *)&MOBY(moby)->pos;
         send_blast_hits(effect_data->unk10,
                         blast_hit_position,
-                        D_L10_00178380,
+                        nearby_mobys,
                         count,
                         0,
                         0x810001,
