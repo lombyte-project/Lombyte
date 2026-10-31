@@ -59,27 +59,31 @@ void gemlik_scene_controller_update(struct Moby *moby) {
         WAIT_TO_REMOVE_LINKED_MOBY = 13,
         FINALIZE_LINKED_MOBY_CLEANUP = 14
     };
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xfd,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xfe
+    };
     int *scene_controller_vars = (int *)moby->pvars;
     switch (moby->state) {
     case WAIT_TO_START_INITIAL_SCENE:
         if (D_L13_0015F5C4 == 0)
-            moby->state = 1;
+            moby->state = START_INITIAL_SCENE;
         break;
     case START_INITIAL_SCENE:
         if (alternate_item_available[0x64] == 0) {
             alternate_item_available[0x64] = 1;
-            moby->state = 2;
+            moby->state = WAIT_INITIAL_SCENE;
             start_scene(0);
             return;
         }
-        moby->state = 3;
+        moby->state = ENTER_CLIP_VOLUME_CHECK;
         break;
     case WAIT_INITIAL_SCENE:
         if (D_L13_0015F5C4 != 2)
-            moby->state = 3;
+            moby->state = ENTER_CLIP_VOLUME_CHECK;
         break;
     case ENTER_CLIP_VOLUME_CHECK:
-        moby->state = 4;
+        moby->state = CHECK_CLIP_VOLUME_FOR_SCENE;
         break;
     case CHECK_CLIP_VOLUME_FOR_SCENE: {
         if (alternate_item_available[0x65] == 0) {
@@ -92,16 +96,16 @@ void gemlik_scene_controller_update(struct Moby *moby) {
                 struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[5] * 0x100);
                 other->flags |= 0x41;
             }
-            moby->state = 5;
+            moby->state = WAIT_CLIP_VOLUME_SCENE;
             start_scene(1);
         } else {
-            moby->state = 6;
+            moby->state = ENTER_LINKED_MOBY_REMOVAL_WAIT;
             goto after_state_4;
         set_state_4:
-            moby->state = 7;
+            moby->state = WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE;
         }
     after_state_4:
-        if (moby->state != 4 && scene_controller_vars[3] != -1) {
+        if (moby->state != CHECK_CLIP_VOLUME_FOR_SCENE && scene_controller_vars[3] != -1) {
             mark_moby_for_removal((char *)(moby_base + scene_controller_vars[3] * 0x100));
         }
         break;
@@ -128,24 +132,24 @@ void gemlik_scene_controller_update(struct Moby *moby) {
                 D_L13_0015F3FC = 0.99f;
                 entity[0x20] = 2;
             }
-            moby->state = 6;
+            moby->state = ENTER_LINKED_MOBY_REMOVAL_WAIT;
         }
         break;
     }
     case ENTER_LINKED_MOBY_REMOVAL_WAIT:
-        moby->state = 7;
+        moby->state = WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE;
         break;
     case WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE: {
         char *object;
         if (alternate_item_available[0x66] == 0) {
             struct Moby *other;
             if (scene_controller_vars[5] == -1) {
-                moby->state = 13;
+                moby->state = WAIT_TO_REMOVE_LINKED_MOBY;
                 break;
             }
             other = (struct Moby *)(moby_base + scene_controller_vars[5] * 0x100);
-            if (other != 0 && other->oclass == 0x184 && other->state != 0xfe &&
-                other->state != 0xfd)
+            if (other != 0 && other->oclass == 0x184 && other->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+                other->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
                 return;
             if (scene_controller_vars[4] != -1) {
                 struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[4] * 0x100);
@@ -159,23 +163,23 @@ void gemlik_scene_controller_update(struct Moby *moby) {
                 other->flags |= 0x41;
             }
             request_music_track(0, 5);
-            moby->state = 8;
+            moby->state = WAIT_SCENE_BEFORE_FOLLOWUP;
             start_scene(2);
             return;
         }
-        moby->state = 12;
+        moby->state = ENTER_LINKED_MOBY_CLEANUP_WAIT;
         break;
     }
     case WAIT_SCENE_BEFORE_FOLLOWUP:
         if (D_L13_0015F5C4 != 2) {
-            moby->state = 9;
+            moby->state = START_FOLLOWUP_SCENE;
             queue_scene_movie_with_game_language(14);
         }
         break;
     case START_FOLLOWUP_SCENE:
         if (D_L13_0015F5C4 != 2) {
             start_scene(3);
-            moby->state = 10;
+            moby->state = WAIT_FOLLOWUP_SCENE;
         }
         break;
     case WAIT_FOLLOWUP_SCENE: {
@@ -195,24 +199,24 @@ void gemlik_scene_controller_update(struct Moby *moby) {
                 D_0013E030.unk78 = 2.77f;
             }
             D_L13_0015F404 = 0;
-            moby->state = 11;
+            moby->state = WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE;
         }
         break;
     }
     case WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE: {
         if (scene_controller_vars[4] != -1) {
             struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[4] * 0x100);
-            if (other != 0 && other->oclass == 0x45 && other->state != 0xfe && other->state != 0xfd)
+            if (other != 0 && other->oclass == 0x45 && other->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && other->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
                 return;
             memcard_save_data(0, -1);
-            moby->state = 12;
+            moby->state = ENTER_LINKED_MOBY_CLEANUP_WAIT;
             return;
         }
-        moby->state = 12;
+        moby->state = ENTER_LINKED_MOBY_CLEANUP_WAIT;
         break;
     }
     case ENTER_LINKED_MOBY_CLEANUP_WAIT:
-        moby->state = 13;
+        moby->state = WAIT_TO_REMOVE_LINKED_MOBY;
         break;
     case WAIT_TO_REMOVE_LINKED_MOBY:
         if (scene_controller_vars[4] != -1) {
@@ -220,7 +224,7 @@ void gemlik_scene_controller_update(struct Moby *moby) {
                                                   0xb0)] == 0xff) {
                 if (scene_controller_vars[8] != -1)
                     mark_moby_for_removal((char *)(moby_base + scene_controller_vars[8] * 0x100));
-                moby->state = 14;
+                moby->state = FINALIZE_LINKED_MOBY_CLEANUP;
             }
         } else {
             mark_moby_for_removal(moby);
