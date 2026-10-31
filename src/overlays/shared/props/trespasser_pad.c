@@ -244,17 +244,20 @@ void tresspasser_pad_update(Moby *moby) {
         TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE = 2,
         TRESSPASSER_PAD_STATE_COMMIT_COMPLETION = 3
     };
+    enum {
+        TRESSPASSER_PAD_STATE_COMPLETED = 4
+    };
     Vec_2D9F08 camera_pos, camera_rot;
     Data      *pad_puzzle_state = (struct Data *)moby->pvars;
     int        i;
 
-    if (pad_puzzle_state == 0) {
+    if (pad_puzzle_state == NULL) {
         return;
     }
     switch (moby->state) {
     case TRESSPASSER_PAD_STATE_INITIALIZE:
         pad_puzzle_state->h12 = 0;
-        moby->state = 1;
+        moby->state = TRESSPASSER_PAD_STATE_WAIT_FOR_TOOL_ACTIVATION;
         D_L02_001D33B0[2][1] = 17.0f;
         D_L02_001D33B0[0][1] = 17.0f;
         D_L02_001D33B0[1][0] = 17.0f;
@@ -270,7 +273,7 @@ void tresspasser_pad_update(Moby *moby) {
                           (current_level_index_macro << 8)))[(short)moby->save_id >> 5] >>
                  (moby->save_id & 0x1F)) &
                     1) {
-                moby->state = 4;
+                moby->state = TRESSPASSER_PAD_STATE_COMPLETED;
             }
         }
         break;
@@ -299,7 +302,7 @@ void tresspasser_pad_update(Moby *moby) {
                 hero_set_state(0x72, 0);
                 set_hero_animation(0x57, 0, scale_game_frames(6));
                 jet_mount(&D_L02_00167440_2D9F08[0], &D_L02_00167440_2D9F08[1], 1, 0, 0);
-                moby->state = 2;
+                moby->state = TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE;
                 pad_puzzle_state->h10 = scale_game_frames(0x3C);
                 pad_puzzle_state->f110 = 0.0f;
                 qcopy(&pad_puzzle_state->vF0, &D_L02_00167440_2D9F08[0]);
@@ -378,7 +381,7 @@ void tresspasser_pad_update(Moby *moby) {
                 }
             } else if (i == 12) {
                 if (fast_dec_timer_s16(&pad_puzzle_state->h10)) {
-                    moby->state = 3;
+                    moby->state = TRESSPASSER_PAD_STATE_COMMIT_COMPLETION;
                 }
             } else if (((struct PadStateWords *)&controller_state)->unmasked.held_pressed &
                        0xA00000000000) {
@@ -413,7 +416,7 @@ void tresspasser_pad_update(Moby *moby) {
             if (((pad_pressed_lui & 0x10) && D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1) ||
                 ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->state.current != 0x72 ||
                 ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id != 0x1A) {
-                moby->state = 1;
+                moby->state = TRESSPASSER_PAD_STATE_WAIT_FOR_TOOL_ACTIVATION;
                 jet_end_mount(1);
                 request_hero_idle_state_for_vehicle_mode();
                 pad_puzzle_state->h10 = scale_game_frames(0x3C);
@@ -431,7 +434,7 @@ void tresspasser_pad_update(Moby *moby) {
             jet_end_mount(1);
             hero_set_state(0, 1);
             moby->command = 1;
-            moby->state = 4;
+            moby->state = TRESSPASSER_PAD_STATE_COMPLETED;
         }
         break;
     }
