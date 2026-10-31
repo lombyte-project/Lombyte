@@ -102,7 +102,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
     process_dreks_fleet_turret_hits(turret_moby);
     switch (turret_moby->state) {
     case FLEET_TURRET_INITIALIZE:
-        turret_moby->state = 1;
+        turret_moby->state = FLEET_TURRET_WAIT_FOR_TARGET;
         turret_vars->f20 = 15.0f;
         turret_vars->s24 = 0xF;
         distribute_group_blarg_ships_along_path(turret_moby);
@@ -121,13 +121,13 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             fast_vec_add(from, from, targeting_vector_scratch);
             from[2] += 0.5f;
             if (collision_line(targeting_vector_scratch, from, 2, turret_moby, 0) == 0) {
-                turret_moby->state = 2;
+                turret_moby->state = FLEET_TURRET_AIM_AND_FIRE_AT_ZONE;
             }
         } else if (g->state.current == 0x32) {
             char *hero_ship_moby = ((char *)g->ship_moby);
             if (hero_ship_moby != 0 && MOBY(hero_ship_moby)->oclass == 0x563) {
                 if (vector_distance_xy(&turret_moby->pos, &g->motion.pos) < 254.0f) {
-                    turret_moby->state = 3;
+                    turret_moby->state = FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP;
                 }
             }
         }
@@ -135,7 +135,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
     }
     case FLEET_TURRET_AIM_AND_FIRE_AT_ZONE: {
         if (hero.unk308 == 0) {
-            turret_moby->state = 1;
+            turret_moby->state = FLEET_TURRET_WAIT_FOR_TARGET;
         }
         {
             float  j[8];
@@ -205,7 +205,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         struct Hero *g = &hero;
         if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
             g->ship_moby->oclass != 0x563) {
-            turret_moby->state = 1;
+            turret_moby->state = FLEET_TURRET_WAIT_FOR_TARGET;
         } else {
             Aim347 aim;
             float  j[8];
