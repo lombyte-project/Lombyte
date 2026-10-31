@@ -771,13 +771,13 @@ extern float D_L11_0016204C __attribute__((sda));
 extern float D_L11_0016207C __attribute__((sda));
 extern float D_L11_00162080 __attribute__((sda));
 extern float D_L11_0016208C __attribute__((sda));
-extern float D_L11_0016209C __attribute__((sda));
-extern float D_L11_001620A0 __attribute__((sda));
+extern float l11_jet_fighter_horizontal_steering_spring_error_gain __asm__("D_L11_0016209C") __attribute__((sda));
+extern float l11_jet_fighter_horizontal_steering_spring_damping_coefficient __asm__("D_L11_001620A0") __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_10.h"
 
-extern float D_L11_001620AC __attribute__((sda));
-extern float D_L11_001620B0 __attribute__((sda));
+extern float l11_jet_fighter_vertical_steering_spring_error_gain __asm__("D_L11_001620AC") __attribute__((sda));
+extern float l11_jet_fighter_vertical_steering_spring_damping_coefficient __asm__("D_L11_001620B0") __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_9.h"
 
@@ -801,18 +801,18 @@ extern float D_L11_001620FC __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_5.h"
 
-extern float D_L11_00162104 __attribute__((sda));
-extern float D_L11_00162108 __attribute__((sda));
+extern float l11_jet_fighter_camera_local_x_spring_error_gain __asm__("D_L11_00162104") __attribute__((sda));
+extern float l11_jet_fighter_camera_local_x_spring_damping_coefficient __asm__("D_L11_00162108") __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_4.h"
 
-extern float D_L11_00162110 __attribute__((sda));
-extern float D_L11_00162114 __attribute__((sda));
+extern float l11_jet_fighter_camera_local_y_spring_error_gain __asm__("D_L11_00162110") __attribute__((sda));
+extern float l11_jet_fighter_camera_local_y_spring_damping_coefficient __asm__("D_L11_00162114") __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_3.h"
 
-extern float D_L11_0016211C __attribute__((sda));
-extern float D_L11_00162120 __attribute__((sda));
+extern float l11_jet_fighter_camera_local_z_spring_error_gain __asm__("D_L11_0016211C") __attribute__((sda));
+extern float l11_jet_fighter_camera_local_z_spring_damping_coefficient __asm__("D_L11_00162120") __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_2.h"
 
@@ -954,14 +954,14 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         vendor_spring(&ship_vars->f6C,
                       &ship_vars->f90,
                       horizontal_steering_input,
-                      D_L11_0016209C,
-                      D_L11_001620A0,
+                      l11_jet_fighter_horizontal_steering_spring_error_gain,
+                      l11_jet_fighter_horizontal_steering_spring_damping_coefficient,
                       ka);
         vendor_spring(&ship_vars->f70,
                       &ship_vars->f94,
                       vertical_steering_input,
-                      D_L11_001620AC,
-                      D_L11_001620B0,
+                      l11_jet_fighter_vertical_steering_spring_error_gain,
+                      l11_jet_fighter_vertical_steering_spring_damping_coefficient,
                       kb);
         spring_angle(&ship_vars->f30,
                      &ship_vars->f98,
@@ -1014,20 +1014,20 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         vendor_spring(&ship_vars->fB4,
                       &ship_vars->fC8,
                       camera_offset_targets.e[ship_vars->sel].v[0],
-                      D_L11_00162104,
-                      D_L11_00162108,
+                      l11_jet_fighter_camera_local_x_spring_error_gain,
+                      l11_jet_fighter_camera_local_x_spring_damping_coefficient,
                       jet_fighter_camera_local_x_snap_threshold_scale_gp);
         vendor_spring(&ship_vars->fB8,
                       &ship_vars->fCC,
                       camera_offset_targets.e[ship_vars->sel].v[1],
-                      D_L11_00162110,
-                      D_L11_00162114,
+                      l11_jet_fighter_camera_local_y_spring_error_gain,
+                      l11_jet_fighter_camera_local_y_spring_damping_coefficient,
                       jet_fighter_camera_local_y_snap_threshold_scale_gp);
         vendor_spring(&ship_vars->fBC,
                       &ship_vars->fD0,
                       camera_offset_targets.e[ship_vars->sel].v[2],
-                      D_L11_0016211C,
-                      D_L11_00162120,
+                      l11_jet_fighter_camera_local_z_spring_error_gain,
+                      l11_jet_fighter_camera_local_z_spring_damping_coefficient,
                       jet_fighter_camera_local_z_snap_threshold_scale_gp);
         camera_local_offset[0] = ship_vars->fB4;
         camera_local_offset[1] = ship_vars->fB8;
