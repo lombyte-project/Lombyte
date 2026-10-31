@@ -299,6 +299,15 @@ extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp __asm_
 
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
 void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
+    enum {
+        GADGEBOT_INITIALIZE = 0,
+        GADGEBOT_TARGET_HERO = 2,
+        GADGEBOT_FACE_TARGET = 4,
+        GADGEBOT_DEATH_FALL = 5,
+        GADGEBOT_EXPLODE = 6,
+        GADGEBOT_SUCK_CANNON_SUCTION = 7,
+        GADGEBOT_IDLE = 8
+    };
     SentryVars_c100 *sentry_vars = (SentryVars_c100 *)moby->pvars;
     union {
         u128  q;
@@ -312,28 +321,28 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     int   reaction_value_or_path_address; /* the reaction kind, later the path */
     int fall_setup_value_or_path_slot_address; /* the reaction flags, later the path's slot in the table */
 
-    if (moby->state == 0 || moby->state == 8) {
+    if (moby->state == GADGEBOT_INITIALIZE || moby->state == GADGEBOT_IDLE) {
         return;
     }
-    if (moby->state != 7 && game_frame != gadgebot_joint_glows_last_queued_frame_gp) {
+    if (moby->state != GADGEBOT_SUCK_CANNON_SUCTION && game_frame != gadgebot_joint_glows_last_queued_frame_gp) {
         gadgebot_joint_glows_last_queued_frame_gp = game_frame;
         add_draw_callback(draw_group_gadgebot_joint_glows, moby);
     }
     speed = gadgebot_glow_default_phase_speed_degrees_per_second_gp;
-    if (moby->state == 4 || moby->state == 5) {
+    if (moby->state == GADGEBOT_FACE_TARGET || moby->state == GADGEBOT_DEATH_FALL) {
         speed = gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp;
     }
     sentry_vars->spin = fast_add_rotations(sentry_vars->spin, speed * DEG_TO_RAD * frame_time);
     moby->glow_color = fast_tween_color(gadgebot_glow_tint_start_gp,
                                         gadgebot_glow_tint_end_gp,
                                         fast_sin(sentry_vars->spin) * 0.5f + 0.5f);
-    if (moby->pos.z < 100.0f && moby->state != 7) {
-        moby->state = 6;
+    if (moby->pos.z < 100.0f && moby->state != GADGEBOT_SUCK_CANNON_SUCTION) {
+        moby->state = GADGEBOT_EXPLODE;
     }
     moby->scale = moby->pclass->scale * D_L18_001625FC;
     if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
-        if (moby->state != 7) {
-            moby->state = 8;
+        if (moby->state != GADGEBOT_SUCK_CANNON_SUCTION) {
+            moby->state = GADGEBOT_IDLE;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
@@ -345,11 +354,11 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     dmg = 0.0f;
     coll = find_moby_hit(moby, 0x330000, 0);
     resolve_moby_hit_response(moby, coll, &sentry_vars->health, 0, &hit, &dmg, 0, 4);
-    if (hit != 1 && moby->state != 6 && dmg != 0.0f) {
+    if (hit != 1 && moby->state != GADGEBOT_EXPLODE && dmg != 0.0f) {
         sentry_vars->health -= dmg;
         if (sentry_vars->health <= 0.0f) {
             if (random_integer_below(2) != 0) {
-                moby->state = 6;
+                moby->state = GADGEBOT_EXPLODE;
             } else {
                 fall_setup_value_or_path_slot_address = 0x200;
                 sentry_vars->unk90 = fall_setup_value_or_path_slot_address;
@@ -369,7 +378,7 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 trooper_start_knockback(moby, sentry_vars->fall, 3, 1, 0, angle);
                 sentry_vars->unkC0 = 7.5f;
                 sentry_vars->unkC4 = 15.0f;
-                moby->state = 5;
+                moby->state = GADGEBOT_DEATH_FALL;
                 moby->collision = 0;
                 sentry_vars->anim_flags = 0x78;
                 trooper_anim_update(moby, sentry_vars->anim);
@@ -387,7 +396,7 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                           0,
                           (int *)(reaction_value_or_path_address + 0x10),
                           *(int *)reaction_value_or_path_address);
-    if (sentry_vars->target_mode == 2) {
+    if (sentry_vars->target_mode == GADGEBOT_TARGET_HERO) {
         if (hero.state.control_mode == 0xF) {
             int *list = (int *)hero.rail_spline;
             qcopy(&sentry_vars->target, (char *)list + *list * 16);
