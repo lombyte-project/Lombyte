@@ -23,13 +23,13 @@ void shattering_prop_update(struct Moby *moby) {
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case HIT_RESPONSE_STATE_INITIALIZE:
-        moby->state = 1;
+        moby->state = HIT_RESPONSE_STATE_WAIT_FOR_HIT;
         break;
     case HIT_RESPONSE_STATE_WAIT_FOR_HIT:
         if (hit_record != 0 && *(float *)(hit_record + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
-            moby->state = 2;
+            moby->state = HIT_RESPONSE_STATE_RESPOND_AND_REMOVE;
         break;
     case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
