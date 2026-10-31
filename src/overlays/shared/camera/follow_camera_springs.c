@@ -111,14 +111,14 @@ extern float D_L00_00166EEC NOT_SDA;
 extern s32                  D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 extern short follow_camera_ground_aware_focus_transition_frames_gp __asm__("D_L00_00161D38")
     __attribute__((sda));
-extern short D_L00_00161D3C_gp __asm__("D_L00_00161D3C") __attribute__((sda));
+extern short l00_follow_camera_ground_focus_exit_transition_frames_gp __asm__("D_L00_00161D3C") __attribute__((sda));
 extern short D_L00_00161D40_gp __asm__("D_L00_00161D40") __attribute__((sda));
 extern short follow_camera_blend_out_focus_offset_gp __asm__("D_L00_00161D48") __attribute__((sda));
 extern short follow_camera_project_hero_focus_blend_base_frames_gp __asm__("D_L00_00161D4C")
     __attribute__((sda));
 extern short follow_camera_focus_blend_transition_frames_gp __asm__("D_L00_00161D50")
     __attribute__((sda));
-extern short D_L00_00161D54_gp __asm__("D_L00_00161D54") __attribute__((sda));
+extern short l00_follow_camera_post_blend_focus_transition_frames_gp __asm__("D_L00_00161D54") __attribute__((sda));
 extern short follow_camera_project_hero_focus_offset_gp __asm__("D_L00_00161D58")
     __attribute__((sda));
 extern short follow_camera_hold_focus_blend_base_frames_gp __asm__("D_L00_00161D5C")
@@ -840,7 +840,7 @@ void FUN_L00_002e4930(char *camera) {
         if (player->state.control_mode == 2) {
             attach_state->prev = attach_state->state;
             attach_state->state = 1;
-            attach_state->timer = D_L00_00161D3C_gp;
+            attach_state->timer = l00_follow_camera_ground_focus_exit_transition_frames_gp;
             attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         } else {
             struct Hero *current_player = &hero;
@@ -963,7 +963,7 @@ void FUN_L00_002e4930(char *camera) {
         if (p->state.control_mode == 2) {
             attach_state->prev = attach_state->state;
             attach_state->state = 1;
-            attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+            attach_state->timer = scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
             attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
             return;
         }
@@ -972,12 +972,12 @@ void FUN_L00_002e4930(char *camera) {
         if (D_001413DC == 2) {
             attach_state->prev = 4;
             attach_state->state = 1;
-            attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+            attach_state->timer = scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
             attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         } else {
             attach_state->prev = 4;
             attach_state->state = 0;
-            attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+            attach_state->timer = scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
             attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         }
         return;
@@ -1015,14 +1015,14 @@ void FUN_L00_002e4930(char *camera) {
     if (attach_state->state == 6 && camera_secondary_mode_lui != 0xB) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
-        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+        attach_state->timer = scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
     if ((attach_state->state == 3 || attach_state->state == 5) && D_001413DC != 4) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
-        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+        attach_state->timer = scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
@@ -1039,7 +1039,7 @@ void FUN_L00_002e4930(char *camera) {
         to_one:
             attach_state->prev = attach_state->state;
             attach_state->state = 1;
-            attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+            attach_state->timer = scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
             r = 1.0f / convert_integer_to_float(attach_state->timer);
             camera_timer_base_frames = *(int *)&D_L00_00161D24_gp;
             attach_state->invTimer = r;
@@ -1059,7 +1059,7 @@ void FUN_L00_002e4930(char *camera) {
     if (attach_state->state == 0xA && FUN_001f9770_c2(&attach_state->moveTimer)) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
-        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+        attach_state->timer = scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
@@ -1117,7 +1117,7 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
               *(float *)&follow_camera_ground_focus_angle_upper_bound_gp < y))) {
             int v;
             *(unsigned char *)(attach_state + 0xC4) = 1;
-            v = *(unsigned short *)&D_L00_00161D3C_gp;
+            v = *(unsigned short *)&l00_follow_camera_ground_focus_exit_transition_frames_gp;
             *(short *)(attach_state + 0xC6) = v;
             *(float *)(attach_state + 0xC8) = 1.0f / convert_integer_to_float((short)v);
         }
@@ -1195,7 +1195,7 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
             } else {
                 int v;
                 *(unsigned char *)(attach_state + 0xC4) = 4;
-                v = *(unsigned short *)&D_L00_00161D54_gp;
+                v = *(unsigned short *)&l00_follow_camera_post_blend_focus_transition_frames_gp;
                 *(short *)(attach_state + 0xC6) = v;
                 *(float *)(attach_state + 0xC8) = 1.0f / convert_integer_to_float((short)v);
             }
