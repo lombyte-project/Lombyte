@@ -847,6 +847,9 @@ void emit_beam_trail_particles(X *x) {
 char *spawn_thruster_pack_flame(int instance_index) __asm__("FUN_L00_002b4138");
 
 char *spawn_thruster_pack_flame(int instance_index) {
+    enum {
+        STATE_INITIALIZE = 0
+    };
     char *spawned_moby = create_moby(0xA7);
     if (spawned_moby != 0) {
         int *moby_vars = ((int *)MOBY(spawned_moby)->pvars);
@@ -857,7 +860,7 @@ char *spawn_thruster_pack_flame(int instance_index) {
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0x7E;
         MOBY(spawned_moby)->visible = 0;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = STATE_INITIALIZE;
     }
     return spawned_moby;
 }
