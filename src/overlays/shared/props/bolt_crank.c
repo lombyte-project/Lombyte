@@ -46,7 +46,7 @@ typedef struct {
     f32 rest_height;       /* 0x3C */
 } BoltCrankVars;
 
-extern char D_L01_00167240[];
+extern char camera_pos[] __asm__("D_L01_00167240");
 
 extern int           D_0015ED84;
 extern unsigned char menu_item_enabled_1_lui __asm__("D_0013D395") NOT_SDA;
@@ -166,8 +166,8 @@ void bolt_crank_update(struct Moby *moby) {
                                     goto done;
                                 }
                                 l01_hero_set_state(HERO_STATE_CRANK, 1);
-                                jet_mount(D_L01_00167240,
-                                          D_L01_00167240 + 0x10,
+                                jet_mount(camera_pos,
+                                          camera_pos + 0x10,
                                           3,
                                           scale_game_frames(0xB4),
                                           0);
