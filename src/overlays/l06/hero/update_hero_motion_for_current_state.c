@@ -34,6 +34,10 @@ float       absolute_float(float input) __asm__("func_001F99C0");
 void apply_hero_ground_material_response(void) __asm__("FUN_L06_00222fb8");
 
 void apply_hero_ground_material_response(void) {
+    enum {
+        HERO_GROUND_MATERIAL_MAGNETIC = 2,
+        HERO_GROUND_MATERIAL_SINK_SURFACE = 0xD
+    };
     struct Hero *hero_state = &hero;
     struct Hero *vehicle_response_check_hero;
     struct Hero *grounded_response_check_hero;
@@ -47,17 +51,17 @@ void apply_hero_ground_material_response(void) {
     hero_state->unk308 = 0;
     if (previous_ground_type == -1)
         return;
-    if (previous_ground_type == 2) {
+    if (previous_ground_type == HERO_GROUND_MATERIAL_MAGNETIC) {
         if (hero_state->frames_off_ground.s == 0 || hero_state->ground_distance < 0.3f) {
             hero_state->on_magnet_ground = 1;
-            if (hero_state->vehicle_mode == 0) {
+            if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_slot_1_moby = ((char *)hero_state->items[1].moby);
                 if (item_slot_1_moby != 0 && MOBY(item_slot_1_moby)->oclass == 0xAD)
                     hero_state->unk308 = 1;
             }
         }
     }
-    if (previous_ground_type == 0xD) {
+    if (previous_ground_type == HERO_GROUND_MATERIAL_SINK_SURFACE) {
         struct Hero *gx = &hero;
         gx->selector_13 = 1;
     }
@@ -80,7 +84,7 @@ void apply_hero_ground_material_response(void) {
     vehicle_response_check_hero = &hero;
     if (vehicle_response_check_hero->selector_1 != 0) {
         if (vehicle_response_check_hero->grounded_frames != 0 &&
-            vehicle_response_check_hero->vehicle_mode == 1 &&
+            vehicle_response_check_hero->vehicle_mode == HERO_VEHICLE_MODE_CLANK &&
             vehicle_response_check_hero->state.current != 0x7D) {
             hero_set_state(0x7D, 1);
             return;
