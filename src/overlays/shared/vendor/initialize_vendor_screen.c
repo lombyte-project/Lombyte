@@ -53,6 +53,9 @@ extern short D_L01_0015F400 __attribute__((sda));
 void         initialize_vendor_screen(char *vendor_moby, int lvl) __asm__("FUN_L01_002aea70");
 
 void initialize_vendor_screen(char *vendor_moby, int lvl) {
+    enum {
+        CUTSCENE_MODE_VENDOR_SCREEN = 5
+    };
     struct Hero             *hero_state = &hero;
     char                    *vendor_screen_state = vendor_screen_state_storage;
     char                    *relocated_address_block = fx_cutscene;
@@ -69,7 +72,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     D_L01_0015F5D8 = 1;
     fill_transfer_words(vendor_screen_state, 0, 0x220);
     *(int *)vendor_screen_state_storage = 3;
-    cutscene_mode = 5;
+    cutscene_mode = CUTSCENE_MODE_VENDOR_SCREEN;
     *(int *)(vendor_screen_state + 4) = 0;
     *(char **)(vendor_screen_state + 0x28) = vendor_moby;
     sc = vendor_screen_state + 0xC0;
