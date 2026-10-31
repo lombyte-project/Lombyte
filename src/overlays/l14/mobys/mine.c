@@ -119,7 +119,7 @@ void looping_path_mine_update(struct Moby *moby) {
         mine_vars->along = 0;
         mine_vars->dir = random_integer_below(2) != 0 ? 1.0f : -1.0f;
         qcopy(&moby->pos, path->points[0].pos);
-        moby->state = 1;
+        moby->state = MINE_STATE_FOLLOW_PATH;
         mine_vars->spin[0] = random_float_between(0.05235988f, 0.10471976f);
         mine_vars->spin[1] = random_float_between(0.034906585f, 0.06981317f);
         mine_vars->spin[2] = random_float_between(0.017453292f, 0.034906585f);
