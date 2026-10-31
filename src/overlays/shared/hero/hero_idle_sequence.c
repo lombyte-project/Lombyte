@@ -788,7 +788,7 @@ void update_hero_in_vehicle_mode(void) {
                 MOBY(moby)->glow_color = 0x801432d7;
                 *(u32 *)(g + 0x2300) = 0x301432d7;
                 moby = *(char **)(g + 0x1624);
-                qcopy(moby + 0x10, g + 0x80);
+                qcopy(&MOBY(moby)->pos, g + 0x80);
                 qcopy(moby + 0x40, g + 0x90);
                 MOBY(moby)->draw_dist = 0x40;
                 (*(char **)(g + 0x1624))[0x31] = 1;
@@ -873,7 +873,7 @@ void update_hero_in_vehicle_mode(void) {
                     *(char **)(g + 0x1620) = create_moby(0x47a);
                     if (*(char **)(g + 0x1620)) {
                         char *moby = *(char **)(g + 0x1620);
-                        qcopy(moby + 0x10, g + 0x80);
+                        qcopy(&MOBY(moby)->pos, g + 0x80);
                         qcopy(moby + 0x40, g + 0x90);
                         MOBY(moby)->draw_dist = 0x40;
                         (*(char **)(g + 0x1620))[0x31] = 1;
@@ -887,7 +887,7 @@ void update_hero_in_vehicle_mode(void) {
                     {
                         OvlQuad *position = &scratch.rotation[3];
                         char    *moby = *(char **)(g + 0x1620);
-                        qcopy_nc(moby + 0x10, position);
+                        qcopy_nc(&MOBY(moby)->pos, position);
                         update_entity(moby);
                     }
                     clear_u64_value((scratch.rotation + 4));

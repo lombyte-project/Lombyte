@@ -504,7 +504,7 @@ void draw_moby_radius_ring(char *moby) {
     int   i, j, nj;
     moby_data = ((char *)MOBY(moby)->pvars);
     copy_matrix_rotation(rotation_matrix, moby + 0xC0);
-    qcopy(moby_position_snapshot, moby + 0x10);
+    qcopy(moby_position_snapshot, &MOBY(moby)->pos);
     quad.g[1] = get_effect_texture(moby_radius_ring_texture_index_gp);
     quad.g[3] = (long)moby_radius_ring_blend_minuend_selector_gp |
                 ((long)moby_radius_ring_blend_subtrahend_selector_gp << 2) |

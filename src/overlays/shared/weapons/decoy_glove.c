@@ -187,7 +187,7 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
                              (controller_state.held & 5) ? 3.5f : 2.5f);
 }
 
-/* Decoy glove update: state machine on moby[0x20], per-object data block at moby[0x78]. */
+/* Decoy glove update: state machine on MOBY(moby)->state, per-object data block at moby[0x78]. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D3B20), where it is exact; names translated to the US level program. */
 
 void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
@@ -269,21 +269,21 @@ target_valid:
 L3D10:
     allocate_hero_voice_for_entry(0x1A, 0);
     use_ammo(-1, 1);
-    moby[0x20] = 3;
+    MOBY(moby)->state = 3;
 L3D34:
     *(u128_D3B20 *)&loc = *(u128_D3B20 *)(glove_vars + 0x40);
     decoy_glove_aim_throw((int)moby, (void *)glove_vars, (float *)&loc);
 
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case DECOY_GLOVE_INITIALIZE:
         *(int *)(glove_vars + 0x50) = 0;
-        if (!(moby[0x70] & 2))
-            moby[0x20] = 1;
+        if (!(MOBY(moby)->anim_flags & 2))
+            MOBY(moby)->state = 1;
         else
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
     case DECOY_GLOVE_WAIT_FOR_MOBY_FLAG:
-        if (moby[0x70] & 2)
-            moby[0x20] = 2;
+        if (MOBY(moby)->anim_flags & 2)
+            MOBY(moby)->state = 2;
         break;
     case DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN:
         break;
@@ -304,17 +304,17 @@ L3D34:
         } else {
             allocate_voice_for_target_entry(0, 0, (int)moby);
         }
-        moby[0x20] = 4;
+        MOBY(moby)->state = 4;
         *(int *)(glove_vars + 0x54) = scale_game_frames(0x14);
         break;
     case DECOY_GLOVE_WAIT_AFTER_RELEASE: {
         char *h = ((char *)&hero);
         if (*(int *)(h + 0x2084) != 0x23 && *(unsigned char *)(h + 0x20A8) == 0)
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         break;
     }
     case DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN:
-        moby[0x20] = 6;
+        MOBY(moby)->state = 6;
         break;
     case DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN:
         return;

@@ -95,7 +95,7 @@ void draw_projected_fading_quad(char *moby) {
     s32    *screen_center;
     float   screen_offset;
 
-    qcopy(&world_position, moby + 0x10);
+    qcopy(&world_position, &MOBY(moby)->pos);
     size = effect_data[0];
     if (1.0f < size)
         size = 1.0f;

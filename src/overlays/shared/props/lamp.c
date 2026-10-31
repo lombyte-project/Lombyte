@@ -56,7 +56,7 @@ void moby_wobble_update(unsigned char *moby) {
     };
     char *wobble_vars = ((char *)MOBY(moby)->pvars);
     float random_angular_sample, lo, hi;
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case MOBY_WOBBLE_STATE_INITIALIZE:
         *(float *)(wobble_vars + 0x40) = MOBY(moby)->rot.z;
         *(float *)(wobble_vars + 0x48) = random_angle_radians();
@@ -71,7 +71,7 @@ void moby_wobble_update(unsigned char *moby) {
         *(float *)(wobble_vars + 0x4C) = randf_sym(lo, hi);
         set_moby_color(moby, 0x80, 0x80, 0x80);
         attach_manipulator((char *)moby, 0, wobble_vars);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case MOBY_WOBBLE_STATE_ANIMATE: {
         float k = 0.5235988f;

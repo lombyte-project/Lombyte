@@ -24,7 +24,7 @@ void initialize_moby_path_state(char *moby) {
     }
     *(int *)(moby_path_state + 0xD0) = 0;
     *(int *)(moby_path_state + 0xD4) = 0;
-    qcopy(moby + 0x10, path + 0x10);
+    qcopy(&MOBY(moby)->pos, path + 0x10);
     MOBY(moby)->rot.z = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                      *(float *)(path + 0x24) - *(float *)(path + 0x14));
     *(float *)(moby_path_state + 0xF0) = *(float *)(moby_path_state + 0xE4) =
@@ -50,7 +50,8 @@ void update_linked_moby_position(char *moby) {
     if (*(char **)(moby_private_vars + 0xF4) != 0) {
         char *linked_position;
         fast_vec_normalize(position_offset, moby + 0xC0, linked_moby_initial_offset_length_gp);
-        fast_vec_add(*(char **)(moby_private_vars + 0xF4) + 0x10, moby + 0x10, position_offset);
+        fast_vec_add(
+            *(char **)(moby_private_vars + 0xF4) + 0x10, &MOBY(moby)->pos, position_offset);
         fast_vec_normalize(position_offset, moby + 0xE0, linked_moby_additional_offset_length_gp);
         linked_position = *(char **)(moby_private_vars + 0xF4) + 0x10;
         fast_vec_add(linked_position, linked_position, position_offset);
@@ -97,7 +98,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
     int   life;
     float size;
     fast_vec_scale(emission_position_offset, moby + 0xC0, particle_pair_moby_c0_offset_scale_gp);
-    fast_vec_add(particle_spawn_position, moby + 0x10, emission_position_offset);
+    fast_vec_add(particle_spawn_position, &MOBY(moby)->pos, emission_position_offset);
     fast_vec_scale(emission_position_offset, moby + 0xE0, particle_pair_moby_e0_offset_scale_gp);
     fast_vec_add(particle_spawn_position, particle_spawn_position, emission_position_offset);
     for (i = 0; i < 2; i++) {
@@ -122,7 +123,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
         }
     }
     fast_vec_scale(emission_position_offset, moby + 0xC0, particle_trio_moby_c0_offset_scale_gp);
-    fast_vec_add(particle_spawn_position, moby + 0x10, emission_position_offset);
+    fast_vec_add(particle_spawn_position, &MOBY(moby)->pos, emission_position_offset);
     fast_vec_scale(emission_position_offset, moby + 0xE0, particle_trio_moby_e0_offset_scale_gp);
     fast_vec_add(particle_spawn_position, particle_spawn_position, emission_position_offset);
     signed_particle_variation = 0x10;

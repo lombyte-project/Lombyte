@@ -48,7 +48,7 @@ int rig_probe_setup(
         qcopy(probe_position, probe_entry + 0x10);
         fast_vec_scale(probe_position, probe_position, scale);
         transform_vector(probe_position, probe_position, matrix);
-        fast_vec_add(probe_position, probe_position, moby + 0x10);
+        fast_vec_add(probe_position, probe_position, &MOBY(moby)->pos);
         *radius = probe_position[3] * scale;
         if (*type < 2) {
             *distance = 0.0f;
@@ -64,7 +64,7 @@ int rig_probe_setup(
         qcopy(probe_position, (void *)(JOINT_POSITIONS + *(int *)(probe_entry + 4) * 0x10));
         fast_vec_scale(probe_position, probe_position, scale);
         transform_vector(probe_position, probe_position, matrix);
-        fast_vec_add(probe_position, probe_position, moby + 0x10);
+        fast_vec_add(probe_position, probe_position, &MOBY(moby)->pos);
         *radius = *(float *)(probe_entry + 0xc) * scale;
         *distance = 0.0f;
         return 1;
@@ -82,7 +82,7 @@ int rig_probe_setup(
             qcopy(probe_position, second_joint_position);
         }
         transform_vector(probe_position, probe_position, matrix);
-        fast_vec_add(probe_position, probe_position, moby + 0x10);
+        fast_vec_add(probe_position, probe_position, &MOBY(moby)->pos);
         *radius = *(float *)(probe_entry + 0xc) * scale;
         fast_vec_sub(second_joint_position, second_joint_position, first_joint_position);
         *distance = fast_vec_length(second_joint_position);

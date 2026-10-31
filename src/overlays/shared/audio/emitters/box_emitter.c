@@ -77,7 +77,7 @@ void update_box_emitter(char *moby) {
         }
         if (sound_data[4] != -1) {
             vendor_volume(sound_data[4], volume);
-            transform_vector_by_basis(&delta, &box_size, moby + 0x10);
+            transform_vector_by_basis(&delta, &box_size, &MOBY(moby)->pos);
             fast_vec_add(&delta, &delta, moby + 0x40);
             qcopy(voice_positions + sound_data[4] * 0x70, &delta);
         }

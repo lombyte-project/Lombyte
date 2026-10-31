@@ -23,12 +23,12 @@ char *create_class_5c3_moby(int   source_item_moby,
         char *moby_vars = ((char *)MOBY(moby)->pvars);
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
+        MOBY(moby)->visible = 1;
         MOBY(moby)->rot.z = initial_rotation_z;
         MOBY(moby)->rot.y = initial_rotation_y;
-        moby[0x20] = 0;
+        MOBY(moby)->state = 0;
         *(int *)moby_vars = source_item_moby;
-        qcopy(moby + 0x10, initial_position);
+        qcopy(&MOBY(moby)->pos, initial_position);
         *(float *)(moby_vars + 0x10) = frame_time * 30.0f * 0.7f;
         *(int *)(moby_vars + 8) = arg;
         *(int *)(moby_vars + 0x14) = 0;

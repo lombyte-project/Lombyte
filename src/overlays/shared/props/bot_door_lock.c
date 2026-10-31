@@ -241,22 +241,22 @@ void bot_door_lock_update(char *moby) {
                                                     0.017453292f * frame_time);
     MOBY(moby)->glow_color =
         fast_tween_color((fast_cos(bot_door_lock_data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case BOT_DOOR_LOCK_STATE_INITIALIZE:
         idata[5] = idata[4];
         bot_door_lock_data[6] = random_angle_radians();
         bot_door_lock_data[10] = random_angle_radians();
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         bot_door_lock_data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
         *(OvlQuad *)number_anchor_position = *(OvlQuad *)&MOBY(moby)->pos;
         number_anchor_position[2] += 2.75f;
-        if (fast_vec_dist(D_L06_00167540, moby + 0x10) < 32.0f) {
+        if (fast_vec_dist(D_L06_00167540, &MOBY(moby)->pos) < 32.0f) {
             bot_door_lock_data[9] += frame_time + frame_time;
             if (bot_door_lock_max_effect_horizontal_scale_gp < bot_door_lock_data[9])
                 bot_door_lock_data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
-        } else if (36.0f < fast_vec_dist(D_L06_00167540, moby + 0x10)) {
+        } else if (36.0f < fast_vec_dist(D_L06_00167540, &MOBY(moby)->pos)) {
             bot_door_lock_data[9] -= frame_time + frame_time;
             if (bot_door_lock_data[9] < 0.0f)
                 bot_door_lock_data[9] = 0.0f;
@@ -313,13 +313,13 @@ void bot_door_lock_update(char *moby) {
             }
         }
         if (idata[5] < 1 ||
-            D_0014C050[(unsigned char)moby[0xb0] + current_level_index * 16] == 0xff) {
+            D_0014C050[(unsigned char)MOBY(moby)->mission + current_level_index * 16] == 0xff) {
             for (i = 0; i < 4; i++) {
                 if (idata[i] != -1)
                     activate_bot_door_lock_target(
                         (unsigned char *)moby, (unsigned char *)(level_mobys_q + idata[i] * 0x100));
             }
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:

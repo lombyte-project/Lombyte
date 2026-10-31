@@ -64,8 +64,8 @@ void electric_beam_update(unsigned char *moby) {
     float  beam_culling_sphere[4] __attribute__((aligned(16)));
     int    beam_state;
     int    phase_duration_frames;
-    if (moby[0x20] != 0) {
-        qcopy(beam_culling_sphere, moby + 0x10);
+    if (MOBY(moby)->state != 0) {
+        qcopy(beam_culling_sphere, &MOBY(moby)->pos);
         beam_culling_sphere[3] = beam_vars->f624;
         if (fast_bsphere_check(beam_culling_sphere, 52.0f) < 0) {
             return;
@@ -74,12 +74,12 @@ void electric_beam_update(unsigned char *moby) {
     if (D_L14_001620CC_gp != 0) {
         return;
     }
-    beam_state = moby[0x20];
+    beam_state = MOBY(moby)->state;
     switch (beam_state) {
     case BEAM_STATE_INITIALIZE:
         start_electric_beam_pulse((char *)moby);
         beam_vars->s10 = scale_game_frames(beam_vars->wC);
-        moby[0x20] = 2;
+        MOBY(moby)->state = 2;
         beam_vars->f624 = fast_vec_length(&l14_cuboids[beam_vars->w0].axes[1]);
         beam_vars->s8 = 1;
         beam_vars->sA = 1;
@@ -94,7 +94,7 @@ void electric_beam_update(unsigned char *moby) {
         break;
     case BEAM_STATE_WAIT_FOR_TIMED_PULSE:
         if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
             beam_vars->s10 = scale_game_frames(beam_vars->s4);
             start_electric_beam_pulse((char *)moby);
         }
@@ -102,7 +102,7 @@ void electric_beam_update(unsigned char *moby) {
     case BEAM_STATE_REPEAT_PULSES:
         if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
             if (beam_vars->s6 != 0) {
-                moby[0x20] = 2;
+                MOBY(moby)->state = 2;
                 phase_duration_frames = beam_vars->s6;
             } else {
                 phase_duration_frames = beam_vars->s4;
@@ -114,7 +114,7 @@ void electric_beam_update(unsigned char *moby) {
         break;
     }
     if (electric_beam_damage_disabled_gp == 0) {
-        if (vector_distance_xy(moby + 0x10, &hero.motion.pos) < 10.0f) {
+        if (vector_distance_xy(&MOBY(moby)->pos, &hero.motion.pos) < 10.0f) {
             apply_electric_beam_damage((char *)moby);
         }
     }

@@ -1652,7 +1652,7 @@ void update_hero_item_mobys(void) {
                     update_entity(moby);
                     *((u16 *)&MOBY(moby)->flags) &= 0xfffb;
                 } else {
-                    qcopy(moby + 0x10, (((u8 *)(&hero)) + 0xaf0) + (joint * 0x40));
+                    qcopy(&MOBY(moby)->pos, (((u8 *)(&hero)) + 0xaf0) + (joint * 0x40));
                     if ((large_font_height == 0) || (item_defs[item_id].slot_anim_count == 0)) {
                         is_item_10_17_20_or_25 = is_hero_slot_item_id_10_17_20_or_25(i);
                         is_item_5_to_7 = is_hero_slot_item_id_5_to_7(i);

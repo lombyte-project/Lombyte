@@ -98,7 +98,7 @@ void blarg_ship_shot_update(char *moby) {
     projectile_vars = ((char *)MOBY(moby)->pvars);
     if (projectile_vars == 0)
         return;
-    moby_position = moby + 0x10;
+    moby_position = &MOBY(moby)->pos;
     qcopy(previous_moby_position, moby_position);
     trail_color = fast_tween_color(projectile_trail_color_start_gp,
                                    projectile_trail_color_end_gp,
@@ -129,7 +129,7 @@ void blarg_ship_shot_update(char *moby) {
             fast_vec_normalize(spark_velocity,
                                spark_velocity,
                                random_float_between(frame_time * 5.0f, frame_time * 9.0f));
-            FUN_L00_0026dd20(moby + 0x10,
+            FUN_L00_0026dd20(&MOBY(moby)->pos,
                              (char *)spark_velocity,
                              0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)),

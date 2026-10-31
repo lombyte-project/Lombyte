@@ -400,7 +400,7 @@ void spawn_moby_collision_particles(unsigned char *moby) {
     case 12:
     case 13:
         for (i = 0; i < 20; i++) {
-            qcopy(particle_spawn_position, moby + 0x10);
+            qcopy(particle_spawn_position, &MOBY(moby)->pos);
             particle_spawn_position[0] += random_float_between(-0.3f, 0.3f);
             particle_spawn_position[1] += random_float_between(-0.3f, 0.3f);
             particle_spawn_position[2] += random_float_between(-0.3f, 0.3f);
@@ -416,7 +416,7 @@ void spawn_moby_collision_particles(unsigned char *moby) {
                            0.0f,
                            scale_game_frames(rand() % 40 + 10));
         }
-        moby[0x20] = 4;
+        MOBY(moby)->state = 4;
         break;
     }
 }

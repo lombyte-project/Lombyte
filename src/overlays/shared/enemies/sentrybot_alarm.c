@@ -95,19 +95,19 @@ void sentrybot_alarm_update(unsigned char *moby) {
     int   color;
     int   mode;
     int  *data = ((int *)MOBY(moby)->pvars);
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case 0:
         mode = data[0];
         D_L15_00161AB4 = 0;
         D_L15_00161AB8 = 0;
         *(int *)&D_L15_00161ABC_gp = 0;
         if (mode == 2) {
-            moby[0x20] = 6;
-            if (moby[0x53] != 4)
+            MOBY(moby)->state = 6;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, 0);
         } else {
-            moby[0x20] = 3;
-            if (moby[0x53] != 2)
+            MOBY(moby)->state = 3;
+            if (MOBY(moby)->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, 0);
         }
         break;
@@ -121,18 +121,18 @@ void sentrybot_alarm_update(unsigned char *moby) {
             goto update;
         if (D_L15_0015F5C4 != 2) {
             if (data[0] == 1) {
-                moby[0x20] = 6;
-                if (moby[0x53] != 4)
+                MOBY(moby)->state = 6;
+                if (MOBY(moby)->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(30));
             } else {
-                moby[0x20] = 5;
+                MOBY(moby)->state = 5;
             }
         }
         break;
     case 2:
-        if (moby[0x70] & 2) {
-            moby[0x20] = 3;
-            if (moby[0x53] != 2)
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 3;
+            if (MOBY(moby)->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
         }
         break;
@@ -140,33 +140,33 @@ void sentrybot_alarm_update(unsigned char *moby) {
         if (data[2] == 0)
             goto update;
         if (D_L15_0015F5C4 != 2) {
-            moby[0x20] = 4;
-            if (moby[0x53] != 3)
+            MOBY(moby)->state = 4;
+            if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
         }
         break;
     case 4:
-        if (moby[0x70] & 2) {
+        if (MOBY(moby)->anim_flags & 2) {
             if (data[2] == 0 || D_L15_0015F5C4 == 2)
                 goto stop_animation;
             if (data[0] == 1) {
-                moby[0x20] = 7;
-                if (moby[0x53] != 5)
+                MOBY(moby)->state = 7;
+                if (MOBY(moby)->prev_seq != 5)
                     blend_moby_animation(moby, 5, 0, scale_game_frames(10));
             } else {
-                if (moby[0x53] != 8)
+                if (MOBY(moby)->prev_seq != 8)
                     blend_moby_animation(moby, 8, 0, scale_game_frames(10));
-                moby[0x20] = 5;
+                MOBY(moby)->state = 5;
             }
         }
         break;
     stop_animation:
-        if (moby[0x53] != 8)
+        if (MOBY(moby)->prev_seq != 8)
             blend_moby_animation(moby, 8, 0, scale_game_frames(10));
-        moby[0x20] = 10;
+        MOBY(moby)->state = 10;
         break;
     case 5:
-        if ((moby[0x70] & 2) && moby[0x53] != 0)
+        if ((MOBY(moby)->anim_flags & 2) && MOBY(moby)->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         color = interpolate_color_2a3138(
             (fast_sin(*(float *)(data + 5)) + 1.0f) * 0.5f, 0x801414dc, 0x8004048c);
@@ -176,22 +176,22 @@ void sentrybot_alarm_update(unsigned char *moby) {
         if (fast_dec_timer(data + 6) || D_L15_0015F5C4 == 2) {
             set_sentrybot_alarm_duration((char *)moby, 0);
             data[2] = 0;
-            if (moby[0x53] != 8)
+            if (MOBY(moby)->prev_seq != 8)
                 blend_moby_animation(moby, 8, 0, scale_game_frames(10));
-            moby[0x20] = 10;
+            MOBY(moby)->state = 10;
         }
         break;
     case 6:
         if (data[2] == 0)
             goto update;
-        moby[0x20] = 7;
-        if (moby[0x53] != 5)
+        MOBY(moby)->state = 7;
+        if (MOBY(moby)->prev_seq != 5)
             blend_moby_animation(moby, 5, 0, scale_game_frames(10));
         break;
     case 7:
-        if (moby[0x70] & 2) {
-            moby[0x20] = 8;
-            if (moby[0x53] != 6)
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 8;
+            if (MOBY(moby)->prev_seq != 6)
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
         }
         break;
@@ -209,29 +209,29 @@ void sentrybot_alarm_update(unsigned char *moby) {
         if (fast_dec_timer(data + 6) || D_L15_0015F5C4 == 2) {
             set_sentrybot_alarm_duration((char *)moby, 0);
             data[2] = 0;
-            moby[0x20] = 9;
-            if (moby[0x53] != 7)
+            MOBY(moby)->state = 9;
+            if (MOBY(moby)->prev_seq != 7)
                 blend_moby_animation(moby, 7, 0, scale_game_frames(10));
         }
         break;
     }
     case 9:
-        if (moby[0x70] & 2) {
+        if (MOBY(moby)->anim_flags & 2) {
             if (data[0] == 2) {
-                moby[0x20] = 6;
-                if (moby[0x53] != 4)
+                MOBY(moby)->state = 6;
+                if (MOBY(moby)->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             } else {
-                moby[0x20] = 10;
-                if (moby[0x53] != 8)
+                MOBY(moby)->state = 10;
+                if (MOBY(moby)->prev_seq != 8)
                     blend_moby_animation(moby, 8, 0, scale_game_frames(10));
             }
         }
         break;
     case 10:
-        if (moby[0x70] & 2) {
-            moby[0x20] = 2;
-            if (moby[0x53] != 1)
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 2;
+            if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
         break;

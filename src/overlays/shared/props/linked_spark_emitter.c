@@ -81,37 +81,37 @@ void linked_spark_emitter_update(unsigned char *moby) {
     float          B[4];
     float          C[4];
 
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case INITIALIZE_EFFECT: {
         unsigned short id;
         MOBY(moby)->flags |= 1;
-        moby[0x31] = 0;
+        MOBY(moby)->visible = 0;
         id = MOBY(moby)->save_id;
         if (l15_save_state.cleared[(short)id] == 0 &&
             (((*(int *)(D_0014C190 + (((short)id >> 5) * 4) + (D_0015ED84 << 8)) >> (id & 0x1F)) ^
               1) &
              1)) {
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
         } else {
-            moby[0xBC] = 0xFF;
+            MOBY(moby)->command = 0xFF;
             MOBY(moby)->collision = 0;
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
         }
         break;
     }
     case EMIT_SPARKS: {
         int linked_moby_index = *(int *)(moby_data + 0x10);
         if ((linked_moby_index != -1 && l15_moby_array[linked_moby_index].state == 2) ||
-            visited52[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
+            visited52[(unsigned char)MOBY(moby)->mission + (D_0015ED84 << 4)] == 0xFF) {
             mark_moby_killed_and_release_owned_voice(moby);
         } else {
-            Voice *e = (Voice *)((unsigned char *)&voice_pool + moby[0xBC] * 0x70);
+            Voice *e = (Voice *)((unsigned char *)&voice_pool + MOBY(moby)->command * 0x70);
             float  lo, hi, z, one;
             int    i;
             if (e->owner != (char *)moby || e->active == 0) {
-                moby[0xBC] = allocate_voice_for_target_entry(0, 4, moby);
+                MOBY(moby)->command = allocate_voice_for_target_entry(0, 4, moby);
             }
-            fast_vec_sub(V, D_0013F420, moby + 0x10);
+            fast_vec_sub(V, D_0013F420, &MOBY(moby)->pos);
             transpose_rotation_matrix(W, moby + 0xC0);
             transform_vector(V, V, W);
             V[0] = 0.0f;
@@ -135,7 +135,7 @@ void linked_spark_emitter_update(unsigned char *moby) {
                 transform_vector_by_basis(A, A, moby + 0xC0);
                 transform_vector_by_basis(B, B, moby + 0xC0);
                 transform_vector_by_basis(C, C, moby + 0xC0);
-                fast_vec_add(A, A, moby + 0x10);
+                fast_vec_add(A, A, &MOBY(moby)->pos);
                 fast_vec_normalize(B, B, one / (float)scale_game_frames(30));
                 fast_vec_normalize(C, C, one / (float)scale_game_frames(30));
                 B[3] = 0.125f;
@@ -154,7 +154,7 @@ void linked_spark_emitter_update(unsigned char *moby) {
             } while (i >= 0);
             if (absolute_float(V[1]) < hi && z < V[2] && V[2] < hi) {
                 transform_vector_by_basis(moby_data, V, moby + 0xC0);
-                fast_vec_add(moby_data, moby_data, moby + 0x10);
+                fast_vec_add(moby_data, moby_data, &MOBY(moby)->pos);
             } else {
                 qzero(moby_data);
             }
@@ -164,7 +164,7 @@ void linked_spark_emitter_update(unsigned char *moby) {
     }
     case WAIT_FOR_EFFECT_TIMEOUT:
         if ((*(int *)(moby_data + 0x14))++ >= 0x3D) {
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
         } else {
             qzero(moby_data);
             add_draw_callback(func_L15_002A4318_2A3DD0, moby);
@@ -188,7 +188,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
     float(*firstUv)[2];
 
     copy_matrix_rotation(transform, moby + 0xc0);
-    qcopy(position, moby + 0x10);
+    qcopy(position, &MOBY(moby)->pos);
     position[3] = 1.0f;
     uniform_color_quad.texture = get_effect_texture(0x2c);
     uniform_color_quad.r80 = 0xff9000000260ULL;

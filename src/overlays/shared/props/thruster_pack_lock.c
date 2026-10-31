@@ -704,8 +704,9 @@ void update_moby_trail_points(char *moby) {
     first_trail_offset[0] = -1.2f;
     first_trail_offset[2] = 0.3f;
     transform_vector_by_basis(first_trail_offset, first_trail_offset, moby + 0xC0);
-    fast_vec_add(
-        trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), first_trail_offset, moby + 0x10);
+    fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0),
+                 first_trail_offset,
+                 &MOBY(moby)->pos);
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0xCC) = 1.0f;
     *(OvlQuad *)second_trail_offset = 0;
     second_trail_offset[0] = -1.2f;
@@ -714,7 +715,7 @@ void update_moby_trail_points(char *moby) {
     transform_vector_by_basis(second_trail_offset, second_trail_offset, moby + 0xC0);
     fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0),
                  second_trail_offset,
-                 moby + 0x10);
+                 &MOBY(moby)->pos);
     current_frame = level_frame;
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0x1CC) = 1.0f;
     if (current_frame != 0) {
@@ -777,7 +778,7 @@ void update_moby_hit_stats_and_state(char *moby) {
             next_moby_state = 2;
         }
         if (current_moby_state != next_moby_state) {
-            moby[0x20] = next_moby_state;
+            MOBY(moby)->state = next_moby_state;
             if (((unsigned char *)moby)[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -785,12 +786,12 @@ void update_moby_hit_stats_and_state(char *moby) {
     } else if (((unsigned char *)moby)[0x20] == 5) {
         struct Hero *hero_for_state_check = &hero;
         if (hero_for_state_check->state.current != 0x32) {
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags |= 1;
         }
-        if (coll_sphere(1.0f, moby + 0x10, 0, moby)) {
-            moby[0x20] = 6;
+        if (coll_sphere(1.0f, &MOBY(moby)->pos, 0, moby)) {
+            MOBY(moby)->state = 6;
             if (((unsigned char *)moby)[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }

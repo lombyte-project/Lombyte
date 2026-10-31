@@ -40,14 +40,14 @@ void beam_slots_update(unsigned char *moby) {
     int started_slot_count;
     int slot_state;
 
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case SLOT_UPDATE_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
             D_L14_00162148[j] = 0;
             D_L14_001621D8[j] = 0;
         }
-        moby[0x20] = 1;
-        moby[0x30] = 0xFF;
+        MOBY(moby)->state = 1;
+        MOBY(moby)->update_dist = 0xFF;
         break;
     case SLOT_UPDATE_STATE_PROCESS_SLOTS:
         started_slot_count = 0;

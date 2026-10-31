@@ -134,8 +134,8 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     lvl = current_level_index;
     level_moby_killed[lvl][((short)MOBY(moby)->save_id) >> 5] |= 1 << (MOBY(moby)->save_id & 0x1F);
     D_L00_001BA4D0_lui[((short)MOBY(moby)->save_id) >> 5] |= 1 << (MOBY(moby)->save_id & 0x1F);
-    D_L00_001BA5D0_lui.a[((short)MOBY(moby)->save_id)] = moby[0xB0] + 2;
-    k = moby[0xB0];
+    D_L00_001BA5D0_lui.a[((short)MOBY(moby)->save_id)] = MOBY(moby)->mission + 2;
+    k = MOBY(moby)->mission;
     {
         unsigned int moby_lookup_index = k & 0xFF;
         if (k == 0xFF || (D_L00_0015FC88_257470[moby_lookup_index] != 0xFF &&
@@ -165,7 +165,8 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     if (hero_lui.unk20B2 || (flags & 0x200)) {
         call_flags |= 2;
     }
-    if (hero_lui.state.current == 0x10 && fast_vec_dist(&hero_lui.motion.pos, moby + 0x10) < 4.0f) {
+    if (hero_lui.state.current == 0x10 &&
+        fast_vec_dist(&hero_lui.motion.pos, &MOBY(moby)->pos) < 4.0f) {
         call_flags |= 2;
     }
     cnt = D_L00_0015FFBC;

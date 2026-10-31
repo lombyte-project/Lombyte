@@ -33,12 +33,12 @@ void hoverboard_ring_update(char *moby) {
     case HOVERBOARD_RING_STATE_INIT:
         ((unsigned char *)moby)[0x30] = 0x80;
         MOBY(moby)->flags |= 0x41;
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case HOVERBOARD_RING_STATE_ACTIVE: {
         float bounding_sphere[4];
         int   i;
-        qcopy(bounding_sphere, moby + 0x10);
+        qcopy(bounding_sphere, &MOBY(moby)->pos);
         bounding_sphere[3] = 8.0f;
         if (fast_bsphere_check((char *)bounding_sphere, 128.0f) != -1) {
             if (hero.state.control_mode == 0x16) {

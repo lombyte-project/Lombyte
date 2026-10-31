@@ -319,7 +319,7 @@ int move_moby_with_step_collision(char *moby,
     Vs    scaled_displacement;
     int   result = 0;
     int   coll_flags = (flags * 2) & 0x20;
-    char *movement_position = moby + 0x10;
+    char *movement_position = &MOBY(moby)->pos;
     int   i;
     char *collision_position;
 
@@ -334,21 +334,21 @@ int move_moby_with_step_collision(char *moby,
         if (collision_line(&raised_position, &probe_end, coll_flags, (int)moby, 0)) {
             fast_vec_sub(movement_position, (char *)&D_94C8_60, &scaled_displacement);
             result = 1;
-            *(float *)(moby + 0x18) -= step_height;
+            MOBY(moby)->pos.z -= step_height;
         }
     }
-    for (i = 0, collision_position = moby + 0x10; i < 6; i++) {
+    for (i = 0, collision_position = &MOBY(moby)->pos; i < 6; i++) {
         qcopy(&raised_position, collision_position);
         raised_position.a[2] += step_height;
         if (func_L00_001F10E0_l(&raised_position, radius, coll_flags | 4, moby)) {
             qcopy(collision_position, &coll_hit_position);
             result |= 1;
-            *(float *)(moby + 0x18) -= step_height;
+            MOBY(moby)->pos.z -= step_height;
         } else {
             break;
         }
     }
-    radius = *(float *)(moby + 0x18) - height;
+    radius = MOBY(moby)->pos.z - height;
     qcopy(&raised_position, collision_position);
     qcopy(&probe_end, collision_position);
     raised_position.a[2] += step_height;
@@ -364,7 +364,7 @@ int move_moby_with_step_collision(char *moby,
             }
             g = *(float *)((char *)D_L00_00173E40 + 0x28);
             if (radius < g) {
-                *(float *)(moby + 0x18) += (g - radius) * 0.3f;
+                MOBY(moby)->pos.z += (g - radius) * 0.3f;
             }
         }
     }
@@ -586,7 +586,7 @@ int  FUN_L00_00259028(unsigned char *moby,
     int   navigation_result_flags = 0;
     float target_heading, heading_error;
     clear_u64_value(movement_displacement_output);
-    if (fast_vec_dist(moby + 0x10, target_position) < *(float *)(movement_control + 0x2C))
+    if (fast_vec_dist(&MOBY(moby)->pos, target_position) < *(float *)(movement_control + 0x2C))
         navigation_result_flags = 4;
     target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                   target_position[1] - MOBY(moby)->pos.y);

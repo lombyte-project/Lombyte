@@ -171,7 +171,7 @@ void spawn_energy_sphere_destruction_particles(char *moby) {
         }
         particle_lifetime = l06_energy_sphere_destruction_particle_lifetime;
         random_particle_byte = random_integer_below(0xFF);
-        spawn_moving_hero_relative_alpha_fade_particle(moby + 0x10,
+        spawn_moving_hero_relative_alpha_fade_particle(&MOBY(moby)->pos,
                                                        particle_scale,
                                                        particle_velocity,
                                                        particle_color,

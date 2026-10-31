@@ -78,18 +78,18 @@ void blarg_elite_commando_rocket_update(unsigned char *moby) {
     char  col[0x30];
     float collision_setup_value;
     if (*(int *)(rocket_data + 0x10) == 0) {
-        if (fast_vec_dist(moby + 0x10, D_L15_001673C0_y) < 15.0f) {
+        if (fast_vec_dist(&MOBY(moby)->pos, D_L15_001673C0_y) < 15.0f) {
             trooper_play_sound(9, 0, moby, 0x27E);
             *(int *)(rocket_data + 0x10) = 1;
         }
     }
-    if (moby[0x20] != 0)
+    if (MOBY(moby)->state != 0)
         return;
     collision_setup_value = 1.0f;
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, D_0015ED6C * 6.2831855f);
-    fast_vec_add(rocket_next_position, moby + 0x10, rocket_data);
+    fast_vec_add(rocket_next_position, &MOBY(moby)->pos, rocket_data);
     fast_vec_scale(back, rocket_data, -2.0f);
-    fast_vec_add(back, back, moby + 0x10);
+    fast_vec_add(back, back, &MOBY(moby)->pos);
     if (hero.vehicle_mode == 2 && random_integer_below(5) != 0)
         collision_setup_value = 0.0f;
     make_hit_descriptor(col, moby, 0x10003, collision_setup_value, rocket_data);
@@ -103,7 +103,7 @@ void blarg_elite_commando_rocket_update(unsigned char *moby) {
             return;
         }
     }
-    qcopy(moby + 0x10, rocket_next_position);
+    qcopy(&MOBY(moby)->pos, rocket_next_position);
     spawn_rocket_trail_spark((char *)moby);
 }
 
@@ -137,7 +137,7 @@ void spawn_rocket_trail_spark(char *moby) {
     third_frame_count = truncate_float_to_s32(
         scale_time(random_float_between(rocket_trail_spark_third_frame_count_range_start_gp,
                                         rocket_trail_spark_third_frame_count_range_end_gp)));
-    spawn_spark(moby + 0x10,
+    spawn_spark(&MOBY(moby)->pos,
                 spark_a,
                 spark_b,
                 rocket_trail_spark_initial_configuration_word_gp,
@@ -151,7 +151,7 @@ void spawn_rocket_trail_spark(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
 
 void spawn_rocket_detonation_glow(char *moby) {
-    char *glow_spawn_position = moby + 0x10;
+    char *glow_spawn_position = &MOBY(moby)->pos;
     int   scaled_frame_count = scale_game_frames(rocket_detonation_glow_lifetime_frames_gp);
     spawn_glow_particle(moby,
                         glow_spawn_position,
@@ -180,11 +180,11 @@ char *spawn_blarg_elite_commando_rocket(char  *firing_commando_moby,
         float elevation_angle;
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
-        moby[0x20] = 0;
+        MOBY(moby)->visible = 1;
+        MOBY(moby)->state = 0;
         MOBY(moby)->spawn_frame = *(unsigned long *)(firing_commando_moby + 0x38);
         MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
-        qcopy(moby + 0x10, spawn_position);
+        qcopy(&MOBY(moby)->pos, spawn_position);
         spawned_rocket_data = ((char *)MOBY(moby)->pvars);
         qcopy(spawned_rocket_data, initial_movement_vector);
         *(int *)(spawned_rocket_data + 0x14) = scale_game_frames(0xF0);
@@ -194,7 +194,7 @@ char *spawn_blarg_elite_commando_rocket(char  *firing_commando_moby,
         xy_length = vector_length_xy(initial_movement_vector);
         elevation_angle = fast_arc_tan(xy_length, initial_movement_vector[2]);
         MOBY(moby)->rot.y = -elevation_angle;
-        moby[0x31] = 0;
+        MOBY(moby)->visible = 0;
         MOBY(moby)->flags |= 1;
     }
     return moby;

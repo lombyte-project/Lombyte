@@ -214,7 +214,7 @@ void compute_tresspasser_pad_camera_transform(float *pos,
                           l02_camera_lui.pos.f[1] - MOBY(moby)->pos.y);
         dl = fast_difference_between_rotations(to, left);
         pick = dl < fast_difference_between_rotations(to, right) ? left : right;
-        fast_vec_add(midpoint_position, &hero.motion.pos, moby + 0x10);
+        fast_vec_add(midpoint_position, &hero.motion.pos, &MOBY(moby)->pos);
         fast_vec_scale(midpoint_position, midpoint_position, 0.5f);
         qcopy(pos, midpoint_position);
         pos[0] += fast_cos(pick) * 2.0f;

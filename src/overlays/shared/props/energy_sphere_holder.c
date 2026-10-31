@@ -177,7 +177,7 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
             spark_velocity,
             spark_position,
             -2.0f / (float)scale_game_frames(energy_sphere_holder_spark_lifetime_frames_gp));
-        fast_vec_add(spark_position, spark_position, moby + 0x10);
+        fast_vec_add(spark_position, spark_position, &MOBY(moby)->pos);
         spark_position[2] += 0.85f;
         spawn_moving_hero_relative_alpha_fade_particle(
             spark_position,

@@ -54,6 +54,6 @@ void grow_and_fade_out_update(u8 *moby) __asm__("FUN_L00_002d7f38");
 /* Moby class 775 */
 void grow_and_fade_out_update(u8 *moby) {
     MOBY(moby)->scale *= 1.025f;
-    if ((u8)(moby[0x23] -= 3) < 4)
+    if ((u8)(MOBY(moby)->alpha -= 3) < 4)
         mark_moby_for_removal();
 }

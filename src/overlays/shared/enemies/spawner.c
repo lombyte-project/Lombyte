@@ -135,13 +135,13 @@ void spawner_update(char *moby) {
     float offset[4];
 
     process_spawner_hit_record(moby, spawner_vars);
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case SPAWNER_STATE_INITIALIZE: {
         int moby_to_remove = 0;
         while (get_first_moby_in_group(&moby_to_remove, *(int *)(spawner_vars + 0x94), 0, 0) == 0) {
             mark_moby_for_removal((void *)moby_to_remove);
         }
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         return;
     }
     case SPAWNER_STATE_SPAWN: {
@@ -204,13 +204,13 @@ void spawner_update(char *moby) {
                     }
                 }
                 if (sel == 0) {
-                    fast_vec_sub(target, spawner_vars + 0x100, moby + 0x10);
+                    fast_vec_sub(target, spawner_vars + 0x100, &MOBY(moby)->pos);
                     fast_vec_scale(target, target, 0.5f);
                     if (3.0f < *(float *)(spawner_vars + 0x80))
                         clamp_vector_length(target, target, 3.0f);
                     if (fast_vec_length(target) < 3.0f)
                         fast_vec_normalize(target, target, 3.0f);
-                    fast_vec_add(target, target, moby + 0x10);
+                    fast_vec_add(target, target, &MOBY(moby)->pos);
                 } else {
                     qcopy(target, sel + 0x30);
                 }
@@ -230,7 +230,7 @@ void spawner_update(char *moby) {
                     if (target_offset_scale < 3.0f)
                         target_offset_scale = 3.0f;
                     generate_random_scaled_vector2(target, target_offset_scale);
-                    fast_vec_add(target, target, moby + 0x10);
+                    fast_vec_add(target, target, &MOBY(moby)->pos);
                 } else {
                     qcopy(target, sel + 0x30);
                 }
@@ -246,7 +246,7 @@ void spawner_update(char *moby) {
                 if (ground != 0.0f)
                     target[2] = ground;
             }
-            fast_vec_sub(launch_velocity, target, moby + 0x10);
+            fast_vec_sub(launch_velocity, target, &MOBY(moby)->pos);
             {
                 float target_distance = fast_vec_length(launch_velocity);
                 float speed = target_distance * (frame_time_macro * 0.6f);
@@ -290,7 +290,7 @@ void spawner_update(char *moby) {
                                 0);
         FUN_L00_00263fd8_30ab80(moby,
                                 0x6C5,
-                                moby + 0x10,
+                                &MOBY(moby)->pos,
                                 moby + 0x40,
                                 0,
                                 0,
@@ -300,7 +300,7 @@ void spawner_update(char *moby) {
                                 D_L09_0015F580);
         FUN_L00_00263fd8_30ab80(moby,
                                 0x6C6,
-                                moby + 0x10,
+                                &MOBY(moby)->pos,
                                 moby + 0x40,
                                 0,
                                 0,
@@ -310,7 +310,7 @@ void spawner_update(char *moby) {
                                 D_L09_0015F580);
         FUN_L00_00263fd8_30ab80(moby,
                                 0x6C7,
-                                moby + 0x10,
+                                &MOBY(moby)->pos,
                                 moby + 0x40,
                                 0,
                                 0,

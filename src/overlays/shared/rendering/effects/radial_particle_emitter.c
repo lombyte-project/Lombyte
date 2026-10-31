@@ -27,7 +27,7 @@ void radial_particle_emitter_update(char *moby) {
     float randomized_spawn_vector[4];
     char *moby_data = ((char *)MOBY(moby)->pvars);
     int   i;
-    fast_vec_sub(range_check_delta_or_spawn_position, D_L08_001675C0, moby + 0x10);
+    fast_vec_sub(range_check_delta_or_spawn_position, D_L08_001675C0, &MOBY(moby)->pos);
     range_check_delta_or_spawn_position[2] = 0.0f;
     if (fast_vec_dot(range_check_delta_or_spawn_position, range_check_delta_or_spawn_position) <
         *(float *)(moby_data + 4) * *(float *)(moby_data + 4)) {

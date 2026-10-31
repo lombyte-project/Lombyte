@@ -731,22 +731,22 @@ void select_blarg_elite_commando_movement_animation(char *moby) {
                                *(float *)(target + 0x14) - MOBY(moby)->pos.y);
     float delta = fast_subtract_rotations(angle, MOBY(moby)->rot.z);
     if (delta < 0.78539819f && -0.78539819f < delta) {
-        if ((unsigned char)moby[0x53] != 1) {
+        if ((unsigned char)MOBY(moby)->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
         }
     } else if (delta < 0.0f) {
         if (MOBY(moby)->flags & 0x8000) {
-            if ((unsigned char)moby[0x53] != 4)
+            if ((unsigned char)MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(0x14));
         } else {
-            if ((unsigned char)moby[0x53] != 5)
+            if ((unsigned char)MOBY(moby)->prev_seq != 5)
                 blend_moby_animation(moby, 5, 0, scale_game_frames(0x14));
         }
     } else if (MOBY(moby)->flags & 0x8000) {
-        if ((unsigned char)moby[0x53] != 5)
+        if ((unsigned char)MOBY(moby)->prev_seq != 5)
             blend_moby_animation(moby, 5, 0, scale_game_frames(0x14));
     } else {
-        if ((unsigned char)moby[0x53] != 4)
+        if ((unsigned char)MOBY(moby)->prev_seq != 4)
             blend_moby_animation(moby, 4, 0, scale_game_frames(0x14));
     }
 }

@@ -1006,7 +1006,7 @@ float         D_L18_00161E2C = 1.125f;
 int is_moby_in_state_one(unsigned char *moby) __asm__("FUN_L00_002d8128");
 
 int is_moby_in_state_one(unsigned char *moby) {
-    return moby[0x20] == 1;
+    return MOBY(moby)->state == 1;
 }
 
 /* Creates a class 0x326 moby linked to p at p's position; 0 when p's state is negative. */
@@ -1035,7 +1035,7 @@ void update_nanotech_ball_grounding_and_fall(unsigned char *moby) {
     D_2d81b8 *moby_data = ((D_2d81b8 *)MOBY(moby)->pvars);
     int       hit = 0;
     float     z, f;
-    qcopy(&probe_start_position, moby + 0x10);
+    qcopy(&probe_start_position, &MOBY(moby)->pos);
     probe_start_position.f[2] += 0.5f;
     qcopy(&probe_end_position, &probe_start_position);
     probe_end_position.f[2] -= 1.5f;
@@ -1074,14 +1074,14 @@ void update_nanotech_ball_grounding_and_fall(unsigned char *moby) {
     }
     f = MOBY(moby)->pos.z;
     if (f <= z) {
-        moby[0xBC] = 0;
+        MOBY(moby)->command = 0;
         if (moby_data->hA)
             moby_data->f78 += z - f;
         MOBY(moby)->pos.z = z;
         *(int *)&moby_data->f50 = 0;
     } else {
         float capped_fall_step, acc;
-        moby[0xBC] = 1;
+        MOBY(moby)->command = 1;
         acc = frame_time_sq * 9.8f;
         MOBY(moby)->pos.z = f - moby_data->f50;
         moby_data->f50 += acc;
@@ -1101,7 +1101,7 @@ void spawn_nanotech_ball_collection_effect_pair(char *moby) {
     Vec4_002d8418 to_camera;
     Vec4_002d8418 scaled_gravity_vector;
     Vec4_002d8418 effect_vector;
-    char         *moby_position = moby + 0x10;
+    char         *moby_position = &MOBY(moby)->pos;
     fast_vec_sub(&to_camera, g_debug_camera, moby_position);
     fast_vec_scale(
         &scaled_gravity_vector,
@@ -1209,7 +1209,7 @@ void compute_nanotech_ball_slot_position(unsigned char *moby, float *out_slot_po
     build_look_at_matrix(
         &slot_offset, &D_L00_001E3CA0_002d8850[i], &moby_data->p20, moby_data->p20.f[3]);
     e = moby_data->e[i];
-    if (e && moby[0x20] == 2)
+    if (e && MOBY(moby)->state == 2)
         FUN_001f9bf8_002d8850(&slot_offset, &slot_offset, *(float *)(e + 0x28));
     fast_vec_add(out_slot_position, &moby_data->p10, &slot_offset);
     out_slot_position[2] += moby_data->f0_002d8850;
@@ -1234,7 +1234,7 @@ int is_nanotech_ball_target_line_clear(char *moby) __asm__("FUN_L00_002d8980");
 
 int is_nanotech_ball_target_line_clear(char *moby) {
     Vec4 raised_moby_position, raised_target_position;
-    qcopy(&raised_moby_position, moby + 0x10);
+    qcopy(&raised_moby_position, &MOBY(moby)->pos);
     raised_moby_position.f[2] += 0.5f;
     qcopy(&raised_target_position, (*(char **)&D_001413D0_lui) + 0x10);
     raised_target_position.f[2] += 0.5f;

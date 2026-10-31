@@ -1836,7 +1836,7 @@ s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
     s16 state;
     if (moby_suction_record == 0)
         goto missing;
-    if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD ||
+    if (moby == 0 || MOBY(moby)->state == 0xFE || MOBY(moby)->state == 0xFD ||
         *(s16 *)(moby_suction_record + 0x68) == 8)
         goto fail;
     qcopy_nc(moby_suction_record, position);
@@ -1848,7 +1848,7 @@ s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
         if (1.0f <= *(f32 *)(moby_suction_record + 0x6C)) {
             {
                 u8 *seq = *(u8 **)(moby_suction_record + 0x70);
-                if (moby[0x53] != seq[2]) {
+                if (MOBY(moby)->prev_seq != seq[2]) {
                     blend_moby_animation(moby, seq[2], 0, scale_game_frames(10));
                 }
             }
@@ -1858,7 +1858,7 @@ s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
         }
         {
             u8 *seq = *(u8 **)(moby_suction_record + 0x70);
-            if (moby[0x53] != seq[1]) {
+            if (MOBY(moby)->prev_seq != seq[1]) {
                 blend_moby_animation(moby, seq[1], 0, scale_game_frames(10));
             }
         }
@@ -1875,18 +1875,18 @@ s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
     case SUCK_DISPATCH_ROLLING_PROJECTILE:
     case SUCK_DISPATCH_FALLING_AFTER_CANCEL: {
         u8 *seq = *(u8 **)(moby_suction_record + 0x70);
-        if (moby[0x53] != seq[3]) {
+        if (MOBY(moby)->prev_seq != seq[3]) {
             blend_moby_animation(moby, seq[3], 0, scale_game_frames(10));
         }
     }
         *(s16 *)(moby_suction_record + 0x68) = 3;
         *(s32 *)(moby_suction_record + 0x6C) = 0;
         MOBY(moby)->anim_speed = 1.0f;
-        *(f32 *)(moby_suction_record + 0x64) = vector_distance_xy(moby + 0x10, target + 0x10);
+        *(f32 *)(moby_suction_record + 0x64) = vector_distance_xy(&MOBY(moby)->pos, target + 0x10);
         break;
     default: {
         u8 *seq = *(u8 **)(moby_suction_record + 0x70);
-        if (moby[0x53] != seq[1]) {
+        if (MOBY(moby)->prev_seq != seq[1]) {
             blend_moby_animation(moby, seq[1], 0, scale_game_frames(10));
         }
     }
@@ -1908,9 +1908,9 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
     struct Moby *sound_source_moby;
     if (suction_record == 0)
         return 0;
-    if (moby != 0 && moby[0x20] != 0xFE && moby[0x20] != 0xFD &&
+    if (moby != 0 && MOBY(moby)->state != 0xFE && MOBY(moby)->state != 0xFD &&
         *(s16 *)(suction_record + 0x68) != 8) {
-        qcopy(moby + 0x10, position);
+        qcopy(&MOBY(moby)->pos, position);
         FUN_L00_002d9fd0_002dbb20(
             *(void **)(suction_record + 0x60), moby, suck_cannon_storage_euler_offset);
         refresh_moby_spatial_bounds_from_basis(moby);
@@ -1920,7 +1920,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
         }
         mark_moby_for_removal_cf(moby, 0, -1);
         *(s16 *)(suction_record + 0x68) = 4;
-        if (moby[0x53] != *(u8 *)(*(u8 **)(suction_record + 0x70) + 4)) {
+        if (MOBY(moby)->prev_seq != *(u8 *)(*(u8 **)(suction_record + 0x70) + 4)) {
             u8 stored_animation = *(u8 *)(*(u8 **)(suction_record + 0x70) + 4);
             blend_moby_animation(moby, stored_animation, 0, FUN_001f96f8_002dbb20(10));
         }
@@ -1945,20 +1945,20 @@ s32 launch_suck_cannon_projectile(u8 *moby,
     u8 *d;
     if (projectile_record == 0)
         return 0;
-    if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD ||
+    if (moby == 0 || MOBY(moby)->state == 0xFE || MOBY(moby)->state == 0xFD ||
         *(s16 *)(projectile_record + 0x68) == 8)
         goto fail;
-    moby[0x31] = 1;
+    MOBY(moby)->visible = 1;
     MOBY(moby)->flags &= 0xFFFC;
     if (*(f32 *)(launch_velocity + 0xC) == 1.23456f) {
-        if (moby[0x53] != *(u8 *)(*(u8 **)(projectile_record + 0x70) + 6)) {
+        if (MOBY(moby)->prev_seq != *(u8 *)(*(u8 **)(projectile_record + 0x70) + 6)) {
             u8 c = *(u8 *)(*(u8 **)(projectile_record + 0x70) + 6);
             blend_moby_animation(moby, c, 0, FUN_001f96f8_002dbc30(0x14));
         }
         MOBY(moby)->collision_disable = *(s32 *)(projectile_record + 0x88);
         *(s16 *)(projectile_record + 0x68) = 6;
     } else {
-        if (moby[0x53] != *(u8 *)(*(u8 **)(projectile_record + 0x70) + 5)) {
+        if (MOBY(moby)->prev_seq != *(u8 *)(*(u8 **)(projectile_record + 0x70) + 5)) {
             u8 c = *(u8 *)(*(u8 **)(projectile_record + 0x70) + 5);
             blend_moby_animation(moby, c, 0, FUN_001f96f8_002dbc30(0));
         }
@@ -1975,8 +1975,8 @@ s32 launch_suck_cannon_projectile(u8 *moby,
         *(f32 *)(projectile_record + 0x90) = target_height_offset;
         *(f32 *)(projectile_record + 0x48) += target_height_offset;
     }
-    if (vector_distance_xy(moby + 0x10, D_0013F3D0_lui) < 1.0f) {
-        FUN_001f9a10_002dbc30(moby + 0x10, moby + 0x10, projectile_record + 0x10);
+    if (vector_distance_xy(&MOBY(moby)->pos, D_0013F3D0_lui) < 1.0f) {
+        FUN_001f9a10_002dbc30(&MOBY(moby)->pos, &MOBY(moby)->pos, projectile_record + 0x10);
     }
     if (*(s16 *)(projectile_record + 0x9C) >= 0) {
         allocate_voice_for_target_entry(*(s16 *)(projectile_record + 0x9C), 0, moby);

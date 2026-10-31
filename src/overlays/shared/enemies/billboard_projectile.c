@@ -81,20 +81,23 @@ void billboard_projectile_update(char *moby) {
     float normal[4];
     float distance;
 
-    distance = vector_distance_xy(camera, moby + 0x10);
+    distance = vector_distance_xy(camera, &MOBY(moby)->pos);
     camera -= 0x140;
     MOBY(moby)->rot.y = -fast_arc_tan(distance, *(float *)(camera + 0x148) - MOBY(moby)->pos.z);
     MOBY(moby)->rot.z = fast_arc_tan(*(float *)(camera + 0x140) - MOBY(moby)->pos.x,
                                      *(float *)(camera + 0x144) - MOBY(moby)->pos.y);
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(motion_lifetime_vars + 3));
-    fast_vec_add(moby + 0x10, moby + 0x10, motion_lifetime_vars + 8);
-    switch ((u8)moby[0x20]) {
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, motion_lifetime_vars + 8);
+    switch ((u8)MOBY(moby)->state) {
     case COLLISION_CHECK_AND_COUNTDOWN:
         spawn_type_14_particle(moby_motion_particle_random_sign_base_gp, moby);
         fast_vec_normalize(normal, motion_lifetime_vars + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
-        if (collect_mobies_in_sphere(
-                moby_motion_collision_radius_gp, moby + 0x10, 0x10, motion_lifetime_vars[6], hit) &&
+        if (collect_mobies_in_sphere(moby_motion_collision_radius_gp,
+                                     &MOBY(moby)->pos,
+                                     0x10,
+                                     motion_lifetime_vars[6],
+                                     hit) &&
             !noop_callback_l(moby)) {
             CollisionHit *contact = (CollisionHit *)D_L01_001742C0;
             if (contact->moby != 0)
@@ -105,7 +108,7 @@ void billboard_projectile_update(char *moby) {
         }
         if (fast_dec_timer(motion_lifetime_vars)) {
             motion_lifetime_vars[0] = scale_game_frames(0x1e);
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             if (motion_lifetime_vars[4] != 0)
                 motion_lifetime_vars[4] = 0;
         }
@@ -118,7 +121,7 @@ void billboard_projectile_update(char *moby) {
             mark_moby_for_removal(moby);
         } else {
             int duration = scale_game_frames(0x1e);
-            moby[0x23] =
+            MOBY(moby)->alpha =
                 truncate_float_to_s32((float)motion_lifetime_vars[0] * (127.0f / (float)duration));
         }
         break;

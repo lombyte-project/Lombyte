@@ -23,5 +23,5 @@ void moby_point_position(char *moby, int joint_index, void *world_position_out) 
     get_moby_joint_matrices(moby, 1, &joint_index_copy, joint_point_data);
     fast_vec_scale(world_position_out, joint_point_data + 0x30, point_scale);
     transform_vector_by_basis(world_position_out, world_position_out, moby + 0xC0);
-    fast_vec_add(world_position_out, world_position_out, moby + 0x10);
+    fast_vec_add(world_position_out, world_position_out, &MOBY(moby)->pos);
 }

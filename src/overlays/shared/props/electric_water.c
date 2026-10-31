@@ -1185,7 +1185,7 @@ void reset_electric_water_switch(char *moby) __asm__("FUN_L15_002d95a0");
 
 void reset_electric_water_switch(char *moby) {
     if (is_moby_class_23e_in_state_14(moby)) {
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         MOBY(moby)->pos.z += 1.5f;
     }
 }

@@ -620,7 +620,7 @@ void process_blarg_space_commando_hits(char *moby) {
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_response_index =
         resolve_moby_hit_response(moby, hit_record, commando_state + 0x20, 0, &hit, &dt, 0, 4);
-    if (hit != 1 && (unsigned char)moby[0x20] != 0x10) {
+    if (hit != 1 && (unsigned char)MOBY(moby)->state != 0x10) {
         if (current_level_index_gp == 0xA && hit_record != 0 &&
             *(char **)(hit_record + 0x20) != 0 &&
             *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
@@ -646,7 +646,7 @@ void process_blarg_space_commando_hits(char *moby) {
             char *q;
             int   knockback_frames;
             float b, a;
-            moby[0x20] = 0xF;
+            MOBY(moby)->state = 0xF;
             q = commando_state + 0x60;
             knockback_frames = scale_game_frames(0x3C);
             a = nonfatal_knockback_horizontal_speed_gp * D_0015ED6C;
@@ -670,7 +670,7 @@ void process_blarg_space_commando_hits(char *moby) {
         case FRAGMENTING_FATAL_HIT_RESPONSE: {
             char *q;
             float a, b;
-            moby[0x20] = 0x10;
+            MOBY(moby)->state = 0x10;
             q = commando_state + 0x60;
             a = fatal_knockback_horizontal_speed_gp * D_0015ED6C;
             b = fatal_knockback_vertical_speed_gp * D_0015ED6C;
@@ -691,7 +691,7 @@ void process_blarg_space_commando_hits(char *moby) {
             pull = *(float *)&bits;
             for (k = 0; k < 10; k++) {
                 float fragment_scatter_angle;
-                qcopy(vv, moby + 0x10);
+                qcopy(vv, &MOBY(moby)->pos);
                 vv[2] = vv[2] + 2.5f;
                 vv[0] = vv[0] + randf_sym(lo, hi);
                 vv[1] = vv[1] + randf_sym(lo, hi);
@@ -769,7 +769,7 @@ void initialize_blarg_space_commando_beam(char *moby) {
     char *commando_beam_state = ((char *)MOBY(moby)->pvars);
     float point_offset[4];
     int   i;
-    probe_ground_height(moby + 0x10, 0, 0.5f);
+    probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
     fast_vec_normalize(commando_beam_state + 0x220, D_L06_00174600_lui, 1.0f);
     moby_point_position(moby, 0, commando_beam_state + 0x210);
     *(float *)(commando_beam_state + 0x218) = MOBY(moby)->pos.z;
@@ -857,7 +857,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
         point[2] = 0.0f;
         fast_vec_normalize(point, point, step);
         fast_vec_add(point, (float *)&beam_state->pts[i], point);
-        fast_vec_sub(relative, point, moby + 0x10);
+        fast_vec_sub(relative, point, &MOBY(moby)->pos);
         alignment = fast_vec_dot(relative, &beam_state->dir);
         if (0.4f < alignment) {
             point[2] = point[2] - (frame_time + frame_time);

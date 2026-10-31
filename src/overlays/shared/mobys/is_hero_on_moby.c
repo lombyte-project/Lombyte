@@ -48,7 +48,7 @@ void begin_dialogue_camera_transition(float scale, char *moby) __asm__("FUN_L01_
 
 void begin_dialogue_camera_transition(float scale, char *moby) {
     D_L01_0016CCE0_lui.f = 1;
-    qcopy(D_L01_0016CCE0_lui.p, moby + 0x10);
+    qcopy(D_L01_0016CCE0_lui.p, &MOBY(moby)->pos);
     D_L01_0016CCE0_lui.p[0] += fast_cos(MOBY(moby)->rot.z) * scale;
     D_L01_0016CCE0_lui.p[1] += fast_sin(MOBY(moby)->rot.z) * scale;
     clear_u64_value(D_L01_0016CCE0_lui.q);
@@ -61,7 +61,7 @@ void spawn_proximity_gated_bolts(char *moby) __asm__("FUN_L01_002787a0");
 
 void spawn_proximity_gated_bolts(char *moby) {
     int bolt_spawn_flags = 0;
-    if (vector_distance_xy(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
+    if (vector_distance_xy(&MOBY(moby)->pos, D_0013E533 + 0xE9D) < 7.0f) {
         bolt_spawn_flags = 2;
     }
     spawn_randomized_bolt_drop(moby, 4, 7, bolt_spawn_flags, -1);

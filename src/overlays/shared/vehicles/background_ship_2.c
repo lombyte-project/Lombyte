@@ -234,7 +234,7 @@ void background_ship_2_update(char *moby) {
         *(unsigned char *)(moby_data + 0x2C) = 0x28;
         *(float *)(moby_data + 0x70) = first_path_segment_length;
         *(unsigned char *)(moby_data + 0x2B) = 1;
-        qcopy(moby + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10);
+        qcopy(&MOBY(moby)->pos, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10);
         *(float *)(moby_data + 0x68) = random_angle_radians();
         *(int *)(moby_data + 0x6C) = invalid_index;
         MOBY(moby)->state = 1;
@@ -247,7 +247,7 @@ void background_ship_2_update(char *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        qcopy(tv, moby + 0x10);
+        qcopy(tv, &MOBY(moby)->pos);
         if (voice_is_playing(moby, *(int *)(moby_data + 0x6C)) == 0) {
             *(int *)(moby_data + 0x6C) = allocate_voice_for_target_entry(1, 4, (int)moby);
         }
@@ -263,14 +263,14 @@ void background_ship_2_update(char *moby) {
         if ((unsigned int)(current_level_index - 9) < 2) {
             sample_camera_path((int *)path,
                                1,
-                               moby + 0x10,
+                               &MOBY(moby)->pos,
                                (float *)&MOBY(moby)->rot,
                                0,
                                *(float *)(moby_data + 0x64));
         } else {
             sample_camera_path((int *)path,
                                0,
-                               moby + 0x10,
+                               &MOBY(moby)->pos,
                                (float *)&MOBY(moby)->rot,
                                0,
                                *(float *)(moby_data + 0x64));
@@ -388,7 +388,7 @@ void spawn_background_ship_2_joint_sparks(char *moby, void *previous_position) {
         emission_position[4];
     int i;
 
-    fast_vec_sub(position_delta, moby + 0x10, previous_position);
+    fast_vec_sub(position_delta, &MOBY(moby)->pos, previous_position);
     for (i = 0; i < 2; i++) {
         int first_spark_color, second_spark_color, frame_count, second_frame_count,
             third_frame_count;
@@ -456,7 +456,7 @@ void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *previous_po
         emission_position[4];
     int i;
 
-    fast_vec_sub(position_delta, moby + 0x10, previous_position);
+    fast_vec_sub(position_delta, &MOBY(moby)->pos, previous_position);
     for (i = 0; i < 2; i++) {
         int first_spark_color, second_spark_color, frame_count, second_frame_count,
             third_frame_count;

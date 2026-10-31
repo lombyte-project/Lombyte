@@ -35,10 +35,10 @@ void emit_moby_sprite_particles(char *moby) {
     float          color_blend_offset;
 
     MOBY(moby)->pos.z += 0.5f;
-    fast_vec_sub(d, D_L10_00167240, moby + 0x10);
+    fast_vec_sub(d, D_L10_00167240, &MOBY(moby)->pos);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(particle_position_step, d, 0.1f);
-    fast_vec_add(d, d, moby + 0x10);
+    fast_vec_add(d, d, &MOBY(moby)->pos);
     MOBY(moby)->pos.z -= 0.5f;
     for (i = 0; i < 4; i++) {
         float phase_sum = sprite_data->a[i] + sprite_data->b[i];

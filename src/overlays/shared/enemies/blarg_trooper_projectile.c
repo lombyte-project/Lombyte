@@ -34,12 +34,12 @@ void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) {
     qcopy(first_world_position, pi);
     first_world_position[3] = 1.0f;
     transform_vector_by_basis(first_world_position, first_world_position, moby + 0xC0);
-    fast_vec_add(first_world_position, first_world_position, moby + 0x10);
+    fast_vec_add(first_world_position, first_world_position, &MOBY(moby)->pos);
     pj = moby_segment_puff_local_endpoint_table + j * 16;
     qcopy(second_world_position, pj);
     second_world_position[3] = 1.0f;
     transform_vector_by_basis(second_world_position, second_world_position, moby + 0xC0);
-    fast_vec_add(second_world_position, second_world_position, moby + 0x10);
+    fast_vec_add(second_world_position, second_world_position, &MOBY(moby)->pos);
     spawn_smoke_puff_trail_with_endpoint_bursts(
         moby,
         first_world_position,

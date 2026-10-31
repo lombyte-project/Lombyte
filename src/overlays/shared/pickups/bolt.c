@@ -608,10 +608,10 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
     euler_rotation_basis(local_rotation_basis, local_rotation_angles);
     euler_rotation_basis(base_rotation_basis, B);
     multiply_matrix3x3(moby + 0xC0, base_rotation_basis, local_rotation_basis);
-    fast_vec_scale(moby + 0x10, &base_rotation_basis[8], base_axis_offset_distance);
+    fast_vec_scale(&MOBY(moby)->pos, &base_rotation_basis[8], base_axis_offset_distance);
     fast_vec_scale(rotated_position_offset, moby + 0xC0, rotated_axis_offset_distance);
-    fast_vec_add(moby + 0x10, moby + 0x10, rotated_position_offset);
-    fast_vec_add(moby + 0x10, moby + 0x10, A);
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, rotated_position_offset);
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, A);
     if (base_position_output != 0)
         qcopy(base_position_output, A);
     if (base_rotation_output != 0)
@@ -626,10 +626,10 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
                 should_detach_from_ground = 1;
             } else {
                 should_detach_from_ground =
-                    coll_sphere(ground_collision_radius, moby + 0x10, 0x22, moby) == 0;
+                    coll_sphere(ground_collision_radius, &MOBY(moby)->pos, 0x22, moby) == 0;
             }
             if (should_detach_from_ground) {
-                moby[0x20] = 1;
+                MOBY(moby)->state = 1;
                 clear_u64_value(grounded_bolt_vars + 0x30);
                 *(float *)(grounded_bolt_vars + 0x3C) = 1.0f;
                 x = FUN_L00_002603d0_c(*(char **)(grounded_bolt_vars + 0x5C));
@@ -642,7 +642,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
                 fast_vec_normalize(D, (float *)&MOBY(moby)->rot_row0, D_0015ED6C);
                 fast_vec_add(C, C, D);
                 fast_vec_add(grounded_bolt_vars + 0x20, grounded_bolt_vars + 0x20, C);
-                fast_vec_add(moby + 0x10, moby + 0x10, grounded_bolt_vars + 0x20);
+                fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, grounded_bolt_vars + 0x20);
                 *(char **)(grounded_bolt_vars + 0x5C) = 0;
             }
         }

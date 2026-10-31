@@ -1151,7 +1151,7 @@ float score_gadgebot_target_candidate(char *moby,
                                       int   target_kind) __asm__("FUN_L06_002f2148");
 
 float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) {
-    float r = vector_distance_xy(moby + 0x10, b + 0x10);
+    float r = vector_distance_xy(&MOBY(moby)->pos, b + 0x10);
     float t =
         fast_difference_between_rotations(l06_camera.yaw,
                                           fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
@@ -1227,11 +1227,11 @@ void assign_gadgebot_attack_targets(void) {
                 range = 12.0f;
                 if (S16(vars, 0x198) != 0)
                     range = 5.0f;
-                if (range < vector_distance_xy(moby + 0x10, candidate + 0x10))
+                if (range < vector_distance_xy(&MOBY(moby)->pos, candidate + 0x10))
                     continue;
                 if (1.0f < absolute_float(F32(moby, 0x18) - F32(candidate, 0x18)))
                     continue;
-                *(u128_c *)start = *(u128_c *)(moby + 0x10);
+                *(u128_c *)start = *(u128_c *)&MOBY(moby)->pos;
                 *(u128_c *)end = *(u128_c *)(candidate + 0x10);
                 *(float *)(start + 8) += 0.25f;
                 *(float *)(end + 8) += 0.25f;
@@ -1433,9 +1433,9 @@ int process_gadgebot_interaction_candidate(
     float f20;
 
     if (MOBY(moby)->oclass != 0x515 && MOBY(moby)->oclass != 0x15F) {
-        fast_vec_add(candidate_position, moby + 0x10, moby + 0xC0);
+        fast_vec_add(candidate_position, &MOBY(moby)->pos, moby + 0xC0);
     } else {
-        *(u128_F4058 *)candidate_position = *(u128_F4058 *)(moby + 0x10);
+        *(u128_F4058 *)candidate_position = *(u128_F4058 *)&MOBY(moby)->pos;
     }
 
     switch (MOBY(moby)->oclass) {
@@ -1611,7 +1611,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) __asm__("FUN_L06_002f364
 
 void handle_gadgebot_hit_knockback(unsigned char *moby) {
     char *state = ((char *)MOBY(moby)->pvars);
-    if (moby[0x20] != 9 && moby[0x52] != 2 && moby[0x53] != 2) {
+    if (MOBY(moby)->state != 9 && MOBY(moby)->seq != 2 && MOBY(moby)->prev_seq != 2) {
         char *target = find_moby_hit(moby, 0x330001, 0);
         if (target != 0) {
             Q     hit_vector_copy;
@@ -1638,11 +1638,11 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
                     *(float *)(state + 0xCC) = doubled_frame_time;
                 }
                 FUN_0022da68(2, 0, moby);
-                moby[0x20] = 9;
+                MOBY(moby)->state = 9;
             }
         }
     }
-    moby[0xA4] = 0xFF;
+    MOBY(moby)->hit_slot = 0xFF;
 }
 
 /* for each moby in a search list with the owner's id, start three effects on its data */

@@ -41,7 +41,7 @@ void novalis_elevator_update(unsigned char *moby) {
     path = ((char *)l01_paths[*(int *)(elevator_vars + 0xB4)]);
     if (*(int *)(elevator_vars + 0xCC) != -1) {
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(elevator_vars + 0xCC)) == 0) {
-            moby[0x30] = 0xFF;
+            MOBY(moby)->update_dist = 0xFF;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags |= 0x41;
             return;
@@ -69,9 +69,9 @@ void novalis_elevator_update(unsigned char *moby) {
     } else {
         on = 1;
     }
-    qcopy(orig, moby + 0x10);
+    qcopy(orig, &MOBY(moby)->pos);
     fast_dec_timer_s16(elevator_vars + 0xBA);
-    if (moby[0x20] == 0) {
+    if (MOBY(moby)->state == 0) {
         float f;
         char *pts;
         elevator_vars[0x28] = 4;
@@ -79,28 +79,28 @@ void novalis_elevator_update(unsigned char *moby) {
         *(int *)(elevator_vars + 0x20) = 0;
         *(short *)(elevator_vars + 0x24) = 0;
         f = 0.0f;
-        if ((moby[0xBC] = elevator_vars[0xA0]) == 0) {
+        if ((MOBY(moby)->command = elevator_vars[0xA0]) == 0) {
             f = 1.0f;
         }
         F(elevator_vars, 0xA4) = f;
         pts = path + 0x10;
-        qcopy((moby + 0x10), truncate_float_to_s32(f) ? pts + (*(int *)path - 1) * 16 : pts);
+        qcopy(&MOBY(moby)->pos, truncate_float_to_s32(f) ? pts + (*(int *)path - 1) * 16 : pts);
         *(short *)(elevator_vars + 0xBA) = 0;
         *(int *)(elevator_vars + 0xA8) = 0;
         *(int *)(elevator_vars + 0xBC) = 0;
-        moby[0x20] = 1;
-        moby[0x30] = 0xFF;
+        MOBY(moby)->state = 1;
+        MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         *(int *)(elevator_vars + 0xC4) = -1;
     }
-    switch (moby[0xBC]) {
+    switch (MOBY(moby)->command) {
     case NOVALIS_ELEVATOR_WAIT_AT_PATH_END:
         if (on) {
             float far;
             if ((*(short *)(elevator_vars + 0xB8) != 0 && is_hero_on_moby(moby)) ||
                 (far = fast_vec_dist(&hero.motion.pos, path + *(int *)path * 16),
                  fast_vec_dist(&hero.motion.pos, path + 0x10) < far)) {
-                moby[0xBC] = 2;
+                MOBY(moby)->command = 2;
                 F(elevator_vars, 0xAC) = -1.0f / scale_time(F(elevator_vars, 0xB0) * 60.0f);
                 *(short *)(elevator_vars + 0xB8) = 0;
             }
@@ -112,7 +112,7 @@ void novalis_elevator_update(unsigned char *moby) {
             if ((*(short *)(elevator_vars + 0xB8) != 0 && is_hero_on_moby(moby)) ||
                 (near = fast_vec_dist(&hero.motion.pos, path + 0x10),
                  fast_vec_dist(&hero.motion.pos, path + *(int *)path * 16) < near)) {
-                moby[0xBC] = 2;
+                MOBY(moby)->command = 2;
                 F(elevator_vars, 0xAC) = 1.0f / scale_time(F(elevator_vars, 0xB0) * 60.0f);
                 *(short *)(elevator_vars + 0xB8) = 0;
             }
@@ -126,7 +126,7 @@ void novalis_elevator_update(unsigned char *moby) {
         }
         if (*(short *)(elevator_vars + 0xBA) != 0 ||
             (F(elevator_vars, 0xBC) < 0.0f &&
-             vector_distance_xy((moby + 0x10), &hero.motion.pos) < 2.83f &&
+             vector_distance_xy(&MOBY(moby)->pos, &hero.motion.pos) < 2.83f &&
              absolute_float(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
              F(moby, 0x18) - hero.motion.pos.f[2] > 0.9f)) {
             int r;
@@ -157,10 +157,10 @@ void novalis_elevator_update(unsigned char *moby) {
             if (0.5f < absolute_float(F(elevator_vars, 0xA4) - 0.5f)) {
                 int r;
                 if (0.0f < F(elevator_vars, 0xAC)) {
-                    moby[0xBC] = 0;
+                    MOBY(moby)->command = 0;
                     F(elevator_vars, 0xA4) = 1.0f;
                 } else {
-                    moby[0xBC] = 1;
+                    MOBY(moby)->command = 1;
                     F(elevator_vars, 0xA4) = 0.0f;
                 }
                 *(int *)(elevator_vars + 0xA8) = 0;
@@ -181,21 +181,21 @@ void novalis_elevator_update(unsigned char *moby) {
             segment_interpolation_fraction *= F(elevator_vars, 0xA4);
             segment_interpolation_fraction -= path_point_index_float;
             if (i == *(int *)path - 1) {
-                qcopy((moby + 0x10), path + 0x10 + i * 16);
+                qcopy(&MOBY(moby)->pos, path + 0x10 + i * 16);
             } else {
                 segment_start = path + 0x10 + i * 16;
                 fast_vec_sub(segment_offset, path + 0x20 + i * 16, segment_start);
                 fast_vec_scale(segment_offset, segment_offset, segment_interpolation_fraction);
-                fast_vec_add((moby + 0x10), segment_offset, segment_start);
+                fast_vec_add(&MOBY(moby)->pos, segment_offset, segment_start);
             }
             F(elevator_vars, 0xBC) = F(moby, 0x18) - orig[2];
         }
         break;
     }
-    fast_vec_sub(delta, (moby + 0x10), orig);
+    fast_vec_sub(delta, &MOBY(moby)->pos, orig);
     update_entity_matrix(elevator_vars + 0x60, delta, moby + 0x40, moby + 0x40);
     if (!is_hero_on_moby(moby)) {
-        if (2.0f < vector_distance_xy((moby + 0x10), &hero.motion.pos)) {
+        if (2.0f < vector_distance_xy(&MOBY(moby)->pos, &hero.motion.pos)) {
             if (*(short *)(elevator_vars + 0xBA) == 0) {
                 *(short *)(elevator_vars + 0xB8) = 1;
             }

@@ -112,12 +112,12 @@ void explosion_light_update(unsigned char *moby) {
     radius_reset_this_update = 0;
     if (animated_point_light_vars == 0)
         return;
-    if (moby[0x20] == 0) {
+    if (MOBY(moby)->state == 0) {
         unsigned char b1c;
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
         b1c = animated_point_light_vars[0x1C];
-        moby[0xBC] = b1c;
-        qcopy(animated_point_light_vars + 0x10, moby + 0x10);
+        MOBY(moby)->command = b1c;
+        qcopy(animated_point_light_vars + 0x10, &MOBY(moby)->pos);
         *(int *)(animated_point_light_vars + 0x50) = -1;
         animated_point_light_vars[0x1C] = b1c;
         *(int *)(animated_point_light_vars + 0xC) = *(int *)(animated_point_light_vars + 0x4C);
@@ -150,10 +150,10 @@ void explosion_light_update(unsigned char *moby) {
         if (*(float *)(animated_point_light_vars + 0x44) < 0.0f)
             *(float *)(animated_point_light_vars + 0x44) =
                 -*(float *)(animated_point_light_vars + 0x44);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
     }
-    if (moby[0xBC] != 0) {
-        moby[0xBC] = moby[0xBC] - 1;
+    if (MOBY(moby)->command != 0) {
+        MOBY(moby)->command = MOBY(moby)->command - 1;
         return;
     }
     if (*(int *)(animated_point_light_vars + 0x48) != -1 &&
@@ -166,7 +166,7 @@ void explosion_light_update(unsigned char *moby) {
         return;
     }
     {
-        unsigned char *position_or_sphere_ptr = moby + 0x10;
+        unsigned char *position_or_sphere_ptr = &MOBY(moby)->pos;
         qcopy(&tp, position_or_sphere_ptr);
         tp.w = *(float *)(animated_point_light_vars + 0x60);
         moby_position = position_or_sphere_ptr;

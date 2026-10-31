@@ -47,11 +47,11 @@ void smoke_trail_projectile_update(char *moby) {
     float      gz;
     switch (((unsigned char *)moby)[0x20]) {
     case MOVE_UNTIL_COLLISION_OR_TIMEOUT:
-        qcopy(previous_position, moby + 0x10);
-        fast_vec_add(moby + 0x10, moby + 0x10, moby_vars);
+        qcopy(previous_position, &MOBY(moby)->pos);
+        fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, moby_vars);
         MOBY(moby)->rot.z = fast_arc_tan(*(float *)(moby_vars + 0), *(float *)(moby_vars + 4));
         clear_u64_value(z);
-        spawn_effect(moby + 0x10,
+        spawn_effect(&MOBY(moby)->pos,
                      z,
                      0x6F00AFFF,
                      0xFF,
@@ -59,7 +59,7 @@ void smoke_trail_projectile_update(char *moby) {
                      0x28,
                      random_int_between(0x14, 0x23),
                      1);
-        spawn_effect(moby + 0x10,
+        spawn_effect(&MOBY(moby)->pos,
                      z,
                      0x1FFFFFFF,
                      0x4F4F4F,
@@ -67,7 +67,7 @@ void smoke_trail_projectile_update(char *moby) {
                      0x28,
                      random_int_between(0x32, 0x4B),
                      0);
-        gz = MOBY(moby)->pos.z - probe_ground_height(moby + 0x10, 0, 0.5f);
+        gz = MOBY(moby)->pos.z - probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
         if (gz < *(float *)(moby_vars + 0x18)) {
             MOBY(moby)->pos.z = MOBY(moby)->pos.z + (*(float *)(moby_vars + 0x18) - gz);
             *(int *)(moby_vars + 8) = 0;
@@ -76,7 +76,8 @@ void smoke_trail_projectile_update(char *moby) {
         } else {
             *(float *)(moby_vars + 8) -= frame_time_sq * 10.8f;
         }
-        if (collision_line(moby + 0x10, previous_position, 0, *(int *)(moby_vars + 0x10), 0) != 0) {
+        if (collision_line(&MOBY(moby)->pos, previous_position, 0, *(int *)(moby_vars + 0x10), 0) !=
+            0) {
             char *collision_result = D_L01_00174340_c;
             if (*(int *)(collision_result + 0x18) != 0) {
                 make_hit_descriptor(&hit_descriptor, moby, 0x10001, 1.0f, moby_vars);
@@ -88,13 +89,13 @@ void smoke_trail_projectile_update(char *moby) {
                 hit_descriptor.b18 = 0;
                 record_moby_hit(*(void **)(collision_result + 0x18), &hit_descriptor);
             }
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         if (fast_dec_timer(moby_vars + 0x14) != 0)
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         break;
     case BURST_AND_REMOVE:
-        cart_burst(moby, moby + 0x10, -1, 0.25f, 13.0f);
+        cart_burst(moby, &MOBY(moby)->pos, -1, 0.25f, 13.0f);
         mark_moby_for_removal(moby);
         break;
     }

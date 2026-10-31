@@ -569,10 +569,10 @@ float move_horny_toad_toward_position(unsigned char *moby,
     desired_yaw = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                target_position[1] - MOBY(moby)->pos.y);
     z = MOBY(moby)->pos.z;
-    target_distance = fast_vec_dist(moby + 0x10, target_position);
+    target_distance = fast_vec_dist(&MOBY(moby)->pos, target_position);
     if (2.0f < target_distance)
         desired_yaw = fast_add_rotations(desired_yaw, *(float *)(moby_vars + 0x1FC));
-    if (moby[0x52] != moby[0x53])
+    if (MOBY(moby)->seq != MOBY(moby)->prev_seq)
         return target_distance;
     approach_angle(moby + 0x48,
                    desired_yaw,
@@ -602,7 +602,7 @@ float move_horny_toad_toward_position(unsigned char *moby,
     *(float *)(moby_vars + 0x270) = vertical_displacement;
     if (maximum_vertical_displacement < vertical_displacement)
         *(float *)(moby_vars + 0x270) = maximum_vertical_displacement;
-    if (moby[0x70] & 2)
+    if (MOBY(moby)->anim_flags & 2)
         return target_distance;
     return 37.0f;
 }
@@ -617,9 +617,9 @@ int process_suck_cannon_suction_and_update_moby_state(char *moby) {
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
         if (MOBY(moby)->state == 0x9)
-            moby[0x20] = 0x5;
+            MOBY(moby)->state = 0x5;
     } else {
-        moby[0x20] = 0x9;
+        MOBY(moby)->state = 0x9;
     }
     return suction_result;
 }
@@ -631,7 +631,7 @@ int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) __asm__("FUN_L00
 
 int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby[0x20] = 0x9;
+    MOBY(moby)->state = 0x9;
     return helper_result;
 }
 

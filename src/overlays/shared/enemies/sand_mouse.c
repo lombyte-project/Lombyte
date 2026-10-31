@@ -282,7 +282,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
     if (fast_dec_timer_s16(state + 0x4E) == 0)
         return;
     qzero(&spawn_position);
-    fast_vec_add(&spawn_position, &spawn_position, moby + 0x10);
+    fast_vec_add(&spawn_position, &spawn_position, &MOBY(moby)->pos);
     spawn_position.f[2] = spawn_position.f[2] + sand_mouse_spawn_and_fallback_aim_height_offset_gp;
     target_moby =
         select_sand_mouse_spawn_target(moby,

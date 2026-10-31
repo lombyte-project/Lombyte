@@ -132,7 +132,7 @@ void apply_moby_position_and_rotation_wobble(char *moby) __asm__("FUN_L05_003197
 void apply_moby_position_and_rotation_wobble(char *moby) {
     char *moby_vars = ((char *)MOBY(moby)->pvars);
     float wobble_phase, wobble_result, wobble_phase_step;
-    qcopy(moby + 0x10, moby_vars + 0x60);
+    qcopy(&MOBY(moby)->pos, moby_vars + 0x60);
     qcopy(moby + 0x40, moby_vars + 0x70);
     wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xC8), frame_time * 2.0943951f);
     *(float *)(moby_vars + 0xC8) = wobble_phase;
@@ -176,7 +176,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
                                           moby + 0xC0);
                 fast_vec_add(vector_table_entry + 0x10 + i * 16,
                              vector_table_entry + 0x10 + i * 16,
-                             moby + 0x10);
+                             &MOBY(moby)->pos);
             }
             player_hero = &hero;
             *(unsigned short *)&player_hero->path_constrain_pending =

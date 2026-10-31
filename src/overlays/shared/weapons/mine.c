@@ -506,7 +506,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         return 0;
     if (D_L00_0015F5C4_c != 0)
         return 0;
-    qcopy(C, moby + 0x10);
+    qcopy(C, &MOBY(moby)->pos);
     if (MOBY(moby)->state == 0) {
         trajectory_position[0] =
             fast_cos(fast_add_rotations(
@@ -529,7 +529,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         x = scale_game_frames(0x78);
     } else {
         owner_moby_vars = *(char **)(*(char **)(trajectory_state + 0x30) + 0x78);
-        qcopy(trajectory_position, moby + 0x10);
+        qcopy(trajectory_position, &MOBY(moby)->pos);
         qcopy(B, trajectory_state);
         {
             short xs = *(short *)(trajectory_state + 0x34);

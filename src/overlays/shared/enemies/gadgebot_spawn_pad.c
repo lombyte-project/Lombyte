@@ -20,14 +20,14 @@ char *spawn_gadgebot_pad(char *gadgebot) {
     char *moby = create_moby(0x12F);
     if (moby != 0) {
         MOBY(moby)->draw_dist = 0x60;
-        moby[0x31] = 1;
+        MOBY(moby)->visible = 1;
         ((unsigned char *)moby)[0x30] = 0;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         MOBY(moby)->rot.z = *(float *)(gadgebot + 0x48);
         MOBY(moby)->spawn_frame = *(long *)(gadgebot + 0x38);
         MOBY(moby)->parent = gadgebot;
-        qcopy(moby + 0x10, gadgebot + 0x10);
+        qcopy(&MOBY(moby)->pos, gadgebot + 0x10);
         update_entity(moby);
     }
     return moby;

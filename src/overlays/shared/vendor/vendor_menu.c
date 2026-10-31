@@ -584,7 +584,7 @@ void start_vendor_exit_cutscene(void) {
                               &vendor_exit_cutscene_local_offset_gp,
                               (char *)vendor_state->vendor_moby + 0xC0);
     moby = (VendorMoby_29a6b0 *)vendor_state->vendor_moby;
-    fast_vec_add(cutscene_world_origin, cutscene_world_origin, (char *)moby + 0x10);
+    fast_vec_add(cutscene_world_origin, cutscene_world_origin, (char *)&MOBY(moby)->pos);
     *(f32 *)((char *)vendor_state + 0xC8) += 2.0f;
     *(f32 *)((char *)vendor_state + 0xC8) = probe_ground_height(0.5f, cutscene_world_origin, 0);
     clear_u64_value((char *)vendor_state + 0xB0);

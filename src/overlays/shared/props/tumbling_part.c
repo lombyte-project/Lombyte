@@ -69,14 +69,15 @@ void tumbling_part_update(char *moby) {
         return;
     case TUMBLING_PART_WAIT_FOR_TIMER:
         if (func_001F9908_r((int *)(moby_data + 0x30))) {
-            moby[0x20] = (*(int *)(moby_data + 0x34) & 1) ? 3 : 2;
+            MOBY(moby)->state = (*(int *)(moby_data + 0x34) & 1) ? 3 : 2;
             *(int *)(moby_data + 0x30) = truncate_float_to_s32(scale_time(10.0f));
             return;
         }
         break;
     case TUMBLING_PART_SPAWN_EFFECT_AND_REMOVE:
         transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
-        fast_vec_add(effect_offset_or_world_position, effect_offset_or_world_position, moby + 0x10);
+        fast_vec_add(
+            effect_offset_or_world_position, effect_offset_or_world_position, &MOBY(moby)->pos);
         if (*(int *)(moby_data + 0x34) & 2) {
             spawn_color_swapped_explosion_burst(moby,
                                                 effect_offset_or_world_position,
@@ -111,7 +112,7 @@ void tumbling_part_update(char *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby[0x23] =
+        MOBY(moby)->alpha =
             truncate_float_to_s32((float)*(int *)(moby_data + 0x30) / scale_time(10.0f) * 128.0f);
         break;
     }
@@ -122,11 +123,11 @@ void tumbling_part_update(char *moby) {
     transform_vector_by_basis(offset_after_rotation, moby_data + 0x20, moby + 0xC0);
     fast_vec_sub(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
     fast_vec_sub((float *)&MOBY(moby)->pos, (float *)&MOBY(moby)->pos, rotation_offset_delta);
-    fast_vec_add(moby + 0x10, moby + 0x10, moby_data);
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, moby_data);
     collision_radius = *(float *)(moby_data + 0x2C);
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - *(float *)(moby_data + 0x38);
     transform_vector_by_basis(collision_probe_position, moby_data + 0x20, moby + 0xC0);
-    fast_vec_add(collision_probe_position, collision_probe_position, moby + 0x10);
+    fast_vec_add(collision_probe_position, collision_probe_position, &MOBY(moby)->pos);
     if (func_L00_001F10E0_s(collision_probe_position, collision_radius, 0, moby)) {
         float speed, approach;
         collision_normal = coll_hit_normal.f;

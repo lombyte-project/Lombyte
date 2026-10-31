@@ -212,7 +212,7 @@ void frog_update(unsigned char *moby) {
         *(short *)(data + 0x1EA) = 0;
         MOBY(moby)->flags &= 0xFFBE;
     }
-    if (moby[0x20] != 0x10) {
+    if (MOBY(moby)->state != 0x10) {
         if (*(int *)&D_L06_0015FDF8 != 0) {
             if (*(short *)(data + 0x242) == 0)
                 return;
@@ -223,12 +223,12 @@ void frog_update(unsigned char *moby) {
     }
     FUN_L00_00263ac8(2.1f, (int)moby, 1, (unsigned char *)(data + 0x250));
     update_frog_health_respawn_and_target(moby);
-    if (moby[0x31] != 0 && fast_vec_dist(moby + 0x10, D_L06_00167540) < 14.0f) {
+    if (MOBY(moby)->visible != 0 && fast_vec_dist(&MOBY(moby)->pos, D_L06_00167540) < 14.0f) {
         FUN_L00_0025a120(moby);
-        moby[0x7F] = 0xB;
+        MOBY(moby)->shadow_range = 0xB;
     }
     target = *(unsigned char **)(data + 0x1C0);
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case 0: {
         float wait;
         int   spawn_count = D_L06_00161C14;
@@ -241,8 +241,8 @@ void frog_update(unsigned char *moby) {
         MOBY(moby)->flags |= 0x100;
         data[0x58] = truncate_float_to_s32(8.0f);
         data[0x5A] = truncate_float_to_s32(3.2f);
-        qcopy(data + 0x210, moby + 0x10);
-        qcopy(data + 0x230, moby + 0x10);
+        qcopy(data + 0x210, &MOBY(moby)->pos);
+        qcopy(data + 0x230, &MOBY(moby)->pos);
         qcopy(data + 0x220, moby + 0x40);
         *(short *)(data + 0x208) = 0;
         wait = random_float_between(0.5f, 3.0f);
@@ -256,7 +256,7 @@ void frog_update(unsigned char *moby) {
         data[0x29] = 1;
         if (*(short *)(data + 0x200) != 0) {
             char *child;
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             child = create_moby(0x1F4);
             *(char **)(data + 0x20C) = child;
             if (child == 0) {
@@ -267,7 +267,7 @@ void frog_update(unsigned char *moby) {
             *(unsigned short *)(*(char **)(data + 0x20C) + 0x34) |= 0x4002;
             {
                 char *child = *(char **)(data + 0x20C);
-                qcopy(child + 0x10, moby + 0x10);
+                qcopy(child + 0x10, &MOBY(moby)->pos);
                 qcopy(child + 0x40, moby + 0x40);
                 *(short *)(child + 0x32) = 0x40;
             }
@@ -275,16 +275,16 @@ void frog_update(unsigned char *moby) {
             update_entity(*(char **)(data + 0x20C));
             MOBY(moby)->flags |= 0x41;
         } else if (*(short *)(data + 0x202) != 0) {
-            moby[0x20] = 0xF;
+            MOBY(moby)->state = 0xF;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags = (MOBY(moby)->flags | 0x41) & 0xEFFF;
         } else if (*(int *)(data + 0x1F8) >= 0) {
-            moby[0x20] = 3;
-            if (moby[0x53] != 0)
+            MOBY(moby)->state = 3;
+            if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 0);
         } else {
-            moby[0x20] = 8;
-            if (moby[0x53] != 4)
+            MOBY(moby)->state = 8;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(
                     moby,
                     4,
@@ -295,21 +295,22 @@ void frog_update(unsigned char *moby) {
         break;
     }
     case 1:
-        if (vector_distance_xy(moby + 0x10, target + 0x10) < 4.0f) {
+        if (vector_distance_xy(&MOBY(moby)->pos, target + 0x10) < 4.0f) {
             MOBY(moby)->flags &= 0xFFBE;
             destroy_frog_child_moby(moby);
-            moby[0x20] = 8;
-            if (moby[0x53] != 4)
+            MOBY(moby)->state = 8;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(5));
         }
         break;
     case 3:
-        fast_vec_sub(A, target + 0x10, moby + 0x10);
+        fast_vec_sub(A, target + 0x10, &MOBY(moby)->pos);
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, A);
-        if (vector_distance_xy(((char *)&D_0013F3D0), moby + 0x10) < *(float *)(data + 0x24C)) {
-            moby[0x20] = 4;
-            if (moby[0x53] != 4)
+        if (vector_distance_xy(((char *)&D_0013F3D0), &MOBY(moby)->pos) <
+            *(float *)(data + 0x24C)) {
+            MOBY(moby)->state = 4;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(5));
         }
         break;
@@ -319,7 +320,7 @@ void frog_update(unsigned char *moby) {
         qcopy(B,
               (char *)D_L06_001B0C30[*(int *)(data + 0x1F8)] + *(short *)(data + 0x208) * 16 +
                   0x10);
-        fast_vec_sub(A, B, moby + 0x10);
+        fast_vec_sub(A, B, &MOBY(moby)->pos);
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, A);
         fast_vec_normalize(C, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
@@ -336,11 +337,11 @@ void frog_update(unsigned char *moby) {
             }
             qcopy(data + 0x210, (char *)path + point_count * 16);
             qcopy(data + 0x230, data + 0x210);
-            dist = vector_distance_xy(moby + 0x10, data + 0x210);
+            dist = vector_distance_xy(&MOBY(moby)->pos, data + 0x210);
             return_speed = dist / (float)scale_game_frames(30);
             *(float *)(data + 0x138) = return_speed;
             *(float *)(data + 0x13C) = FUN_L00_0025abf0(
-                moby + 0x10, data + 0x210, 0, return_speed, -*(float *)(data + 0x130));
+                &MOBY(moby)->pos, data + 0x210, 0, return_speed, -*(float *)(data + 0x130));
             data[0x15D] = 3;
             *(int *)(data + 0x144) = 5;
             trooper_start_knockback(moby,
@@ -350,7 +351,7 @@ void frog_update(unsigned char *moby) {
                                     0,
                                     fast_arc_tan(*(float *)(data + 0x210) - MOBY(moby)->pos.x,
                                                  *(float *)(data + 0x214) - MOBY(moby)->pos.y));
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     }
@@ -358,21 +359,21 @@ void frog_update(unsigned char *moby) {
         set_vector_unit_z(A);
         blend_frog_rotation_to_facing_frame((char *)moby, A, (float *)(data + 0x120));
         if (step_moby_motion(moby, data + 0x120) & 1) {
-            moby[0x20] = 7;
-            if (moby[0x53] != 3)
+            MOBY(moby)->state = 7;
+            if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, 1);
             MOBY(moby)->anim_time = 1.0f;
-            MOBY(moby)->pos.z = probe_ground_height(moby + 0x10, 0, 0.5f);
+            MOBY(moby)->pos.z = probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
         }
         break;
     case 6: {
         int hit = step_moby_motion(moby, data + 0x120);
         if (hit & 1) {
-            moby[0x20] = 7;
-            if (moby[0x53] != 3)
+            MOBY(moby)->state = 7;
+            if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, 1);
             MOBY(moby)->anim_time = 1.0f;
-            MOBY(moby)->pos.z = probe_ground_height(moby + 0x10, 0, 0.5f);
+            MOBY(moby)->pos.z = probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
         } else if (hit & 0x120) {
             FUN_L00_00257470(moby, 0, -1);
             mark_moby_for_removal(moby);
@@ -381,15 +382,15 @@ void frog_update(unsigned char *moby) {
         break;
     }
     case 7:
-        if (moby[0x70] & 2) {
-            moby[0x20] = 8;
-            if (moby[0x53] != 4)
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 8;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(5));
         }
         break;
     case 8:
-        if (moby[0x31] != 0) {
-            if (fast_vec_dist(moby + 0x10, data + 0x230) < 0.05f ||
+        if (MOBY(moby)->visible != 0) {
+            if (fast_vec_dist(&MOBY(moby)->pos, data + 0x230) < 0.05f ||
                 fast_dec_timer((int *)(data + 0x1FC)) != 0) {
                 float angle = random_angle_radians();
                 float radius = random_float_between(0.5f, 2.0f);
@@ -400,7 +401,7 @@ void frog_update(unsigned char *moby) {
                 *(int *)(data + 0x1FC) =
                     scale_game_frames(truncate_float_to_s32(random_float_between(45.0f, 75.0f)));
             }
-            fast_vec_sub(C, data + 0x230, moby + 0x10);
+            fast_vec_sub(C, data + 0x230, &MOBY(moby)->pos);
             probe_frog_local_z_collision((char *)moby);
             blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, C);
             fast_vec_normalize(B, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
@@ -410,15 +411,15 @@ void frog_update(unsigned char *moby) {
             *(float *)(data + 0x1D4) =
                 random_float_between(-*(float *)(data + 0x1D8), *(float *)(data + 0x1D8)) *
                 0.017453292f;
-            moby[0x20] = 9;
-            if (moby[0x53] != 4)
+            MOBY(moby)->state = 9;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, 0);
         } else if (*(short *)(data + 0x1E8) != 0) {
             *(float *)(data + 0x1D4) =
                 random_float_between(-*(float *)(data + 0x1D8), *(float *)(data + 0x1D8)) *
                 0.017453292f;
-            moby[0x20] = 10;
-            if (moby[0x53] != 4)
+            MOBY(moby)->state = 10;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, 0);
         }
         break;
@@ -434,12 +435,12 @@ void frog_update(unsigned char *moby) {
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
         fast_vec_normalize(A, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
-        if (vector_distance_xy(moby + 0x10, target + 0x10) < 2.0f) {
-            moby[0x20] = 0xC;
-            if (moby[0x53] != 5)
+        if (vector_distance_xy(&MOBY(moby)->pos, target + 0x10) < 2.0f) {
+            MOBY(moby)->state = 0xC;
+            if (MOBY(moby)->prev_seq != 5)
                 blend_moby_animation(moby, 5, 4, scale_game_frames(10));
         } else if (*(int *)(data + 0x1C4) == 2) {
-            moby[0x20] = 0xD;
+            MOBY(moby)->state = 0xD;
         }
         break;
     }
@@ -449,7 +450,7 @@ void frog_update(unsigned char *moby) {
             fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                             *(float *)(target + 0x14) - MOBY(moby)->pos.y),
                                *(float *)(data + 0x1D4));
-        qcopy(C, moby + 0x10);
+        qcopy(C, &MOBY(moby)->pos);
         B[0] = fast_cos(angle);
         B[1] = fast_sin(angle);
         B[2] = 0.0f;
@@ -458,27 +459,27 @@ void frog_update(unsigned char *moby) {
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
         fast_vec_normalize(A, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
-        if (FUN_L00_00261b48(*(int *)(data + 0x1EC), moby + 0x10, target + 0x10, D) != 0 &&
-            fast_vec_dist(moby + 0x10, D) < *(float *)(data + 0x244)) {
+        if (FUN_L00_00261b48(*(int *)(data + 0x1EC), &MOBY(moby)->pos, target + 0x10, D) != 0 &&
+            fast_vec_dist(&MOBY(moby)->pos, D) < *(float *)(data + 0x244)) {
             near = 1;
         }
         if (*(short *)(data + 0x1E8) == 0) {
-            moby[0x20] = 0xD;
+            MOBY(moby)->state = 0xD;
         } else if (near) {
-            moby[0x20] = 0xB;
-            if (moby[0x53] != 6)
+            MOBY(moby)->state = 0xB;
+            if (MOBY(moby)->prev_seq != 6)
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
-        } else if (vector_distance_xy(moby + 0x10, target + 0x10) < 2.0f) {
-            moby[0x20] = 0xC;
-            if (moby[0x53] != 5)
+        } else if (vector_distance_xy(&MOBY(moby)->pos, target + 0x10) < 2.0f) {
+            MOBY(moby)->state = 0xC;
+            if (MOBY(moby)->prev_seq != 5)
                 blend_moby_animation(moby, 5, 0, scale_game_frames(10));
         }
         break;
     }
     case 11:
-        if (moby[0x70] & 2) {
-            moby[0x20] = 0xA;
-            if (moby[0x53] != 4)
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 0xA;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(20));
         }
         break;
@@ -491,7 +492,7 @@ void frog_update(unsigned char *moby) {
         B[2] = 0.0f;
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)&MOBY(moby)->rot_row2, B);
         wait = compute_interpolated_record_value(moby);
-        if (moby[0x52] == moby[0x53] && wait >= 10.0f && wait <= 15.0f &&
+        if (MOBY(moby)->seq == MOBY(moby)->prev_seq && wait >= 10.0f && wait <= 15.0f &&
             *(int *)(((char *)&camera_secondary_mode)) != 0x51) {
             fast_vec_normalize(A,
                                moby + 0xC0,
@@ -501,33 +502,34 @@ void frog_update(unsigned char *moby) {
             collect_mobies_in_sphere_at_moby_point(moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
             return;
         }
-        if ((moby[0x70] & 2) && vector_distance_xy(moby + 0x10, target + 0x10) > 2.0f) {
-            moby[0x20] = 9;
-            if (moby[0x53] != 4)
+        if ((MOBY(moby)->anim_flags & 2) &&
+            vector_distance_xy(&MOBY(moby)->pos, target + 0x10) > 2.0f) {
+            MOBY(moby)->state = 9;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
         break;
     }
     case 13:
-        fast_vec_sub(B, data + 0x210, moby + 0x10);
+        fast_vec_sub(B, data + 0x210, &MOBY(moby)->pos);
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
         fast_vec_normalize(A, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
-        if (vector_distance_xy(moby + 0x10, data + 0x210) < 2.0f) {
-            moby[0x20] = 8;
-            if (moby[0x53] != 4)
+        if (vector_distance_xy(&MOBY(moby)->pos, data + 0x210) < 2.0f) {
+            MOBY(moby)->state = 8;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         } else if (*(int *)(data + 0x1C4) != 2) {
-            moby[0x20] = 9;
+            MOBY(moby)->state = 9;
         } else if (*(short *)(data + 0x1E8) != 0) {
-            moby[0x20] = 0xA;
+            MOBY(moby)->state = 0xA;
         }
         break;
     case 16:
         if (FUN_L00_002dc9f0(moby, data + 0x120) != 0) {
-            moby[0x20] = 8;
-            if (moby[0x53] != 0)
+            MOBY(moby)->state = 8;
+            if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             *(short *)(data + 0xC8) = 0;
         }
@@ -680,10 +682,10 @@ void probe_frog_local_z_collision(char *moby) {
     float collision_line_end[4];
     float collision_line_start[4];
     float axis_offset[4];
-    qcopy(collision_line_start, moby + 0x10);
+    qcopy(collision_line_start, &MOBY(moby)->pos);
     fast_vec_normalize(axis_offset, moby + 0xE0, 1.0f);
     fast_vec_add(collision_line_start, collision_line_start, axis_offset);
-    qcopy(collision_line_end, moby + 0x10);
+    qcopy(collision_line_end, &MOBY(moby)->pos);
     fast_vec_normalize(axis_offset, moby + 0xE0, -1.0f);
     fast_vec_add(collision_line_end, collision_line_end, axis_offset);
     collision_line(collision_line_start, collision_line_end, 2, 0, 0);
@@ -708,27 +710,29 @@ void move_frog_with_collision_resolution(
     fast_vec_normalize(forward, moby + 0xE0, scale);
     fast_vec_normalize(backward, forward, -D_0015ED6C);
     fast_vec_add(movement_displacement, movement_displacement, backward);
-    qcopy(start, moby + 0x10);
+    qcopy(start, &MOBY(moby)->pos);
     fast_vec_add(start, start, forward);
-    fast_vec_add(moby + 0x10, moby + 0x10, movement_displacement);
-    fast_vec_add(end, moby + 0x10, forward);
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, movement_displacement);
+    fast_vec_add(end, &MOBY(moby)->pos, forward);
 
     if (threshold < fast_vec_length(movement_displacement) &&
         collision_line(start, end, 0, moby, 0) != 0) {
         qcopy(end, &D_L06_001745E0);
-        fast_vec_sub(moby + 0x10, end, forward);
+        fast_vec_sub(&MOBY(moby)->pos, end, forward);
     }
     for (i = 0; i < 6; i++) {
         if (coll_sphere(end, threshold, 4, moby) != 0) {
             qcopy(end, &coll_hit_pos);
-            fast_vec_sub(moby + 0x10, end, forward);
+            fast_vec_sub(&MOBY(moby)->pos, end, forward);
         } else {
             break;
         }
     }
     if (follow_path != 0) {
-        resolve_point_path_segment_xy_clearance(
-            0.5f, *(int *)(((char *)MOBY(moby)->pvars) + 0x1EC), moby + 0x10, moby + 0x10);
+        resolve_point_path_segment_xy_clearance(0.5f,
+                                                *(int *)(((char *)MOBY(moby)->pvars) + 0x1EC),
+                                                &MOBY(moby)->pos,
+                                                &MOBY(moby)->pos);
     }
 }
 
@@ -871,7 +875,7 @@ void spawn_moby_death_effect_burst(char *moby) {
         build_spherical_offset(spherical_offset, frame_time * 1.8f, azimuth_angle, elevation_angle);
         spherical_offset[2] += frame_time * 0.9f;
         random_vector(spawn_position, 0.0f, 0.5f);
-        fast_vec_add(spawn_position, spawn_position, moby + 0x10);
+        fast_vec_add(spawn_position, spawn_position, &MOBY(moby)->pos);
         spawn_position[2] += 0.5f;
         random_frame_count = scale_game_frames(random_int_between(0x14, 0x23));
         random_effect_parameter = random_int_between(0x28, 0x3C);
@@ -917,13 +921,13 @@ int update_moby_suck_cannon_storage_state(unsigned char *moby) __asm__("FUN_L06_
 int update_moby_suck_cannon_storage_state(unsigned char *moby) {
     int suck_cannon_store_result = store_moby_in_suck_cannon(moby);
     if (suck_cannon_store_result != 0) {
-        if (moby[0x20] != 0x10) {
-            moby[0xBC] = moby[0x20];
-            moby[0x20] = 0x10;
+        if (MOBY(moby)->state != 0x10) {
+            MOBY(moby)->command = MOBY(moby)->state;
+            MOBY(moby)->state = 0x10;
         }
-    } else if (moby[0x20] == 0x10) {
-        moby[0x20] = 8;
-        if (moby[0x53] != 0) {
+    } else if (MOBY(moby)->state == 0x10) {
+        MOBY(moby)->state = 8;
+        if (MOBY(moby)->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         }
     }
@@ -936,10 +940,10 @@ s32 cancel_moby_suction_and_save_state(unsigned char *moby) {
     u8  previous_state;
     s32 helper_result;
     helper_result = cancel_suck_cannon_suction(moby);
-    previous_state = moby[0x20];
+    previous_state = MOBY(moby)->state;
     if (previous_state != 0x10) {
-        moby[0xBC] = previous_state;
-        moby[0x20] = 0x10;
+        MOBY(moby)->command = previous_state;
+        MOBY(moby)->state = 0x10;
     }
     return helper_result;
 }
@@ -962,7 +966,7 @@ void consider_moby_target_candidate(
     float *best,
 
     float thresh) {
-    float candidate_distance = vector_distance_xy(moby + 0x10, candidate_moby + 0x10);
+    float candidate_distance = vector_distance_xy(&MOBY(moby)->pos, candidate_moby + 0x10);
     if (!(thresh < candidate_distance)) {
         float ang = fast_arc_tan(MOBY(candidate_moby)->pos.x - MOBY(moby)->pos.x,
                                  MOBY(candidate_moby)->pos.y - MOBY(moby)->pos.y);

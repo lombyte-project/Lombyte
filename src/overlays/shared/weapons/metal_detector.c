@@ -195,7 +195,7 @@ void increment_metal_detector_collection_counter(unsigned char *moby) __asm__("F
 void increment_metal_detector_collection_counter(unsigned char *moby) {
     int row = D_0015ED84;
     if (row < 20) {
-        int index = moby[0xBC] - 1;
+        int index = MOBY(moby)->command - 1;
         if (index & 1) {
             unsigned char *p = D_0014BF10 + (index / 2 + row * 16);
             unsigned int   value = *p;

@@ -36,22 +36,22 @@ void hoverboard_update(unsigned char *moby) {
     char        *hoverboard_vars = ((char *)MOBY(moby)->pvars);
     float        delta[4], position[4], effect_position[4], offset[4], second_position[4];
     float        angle, distance_scale, delta_length;
-    int          state = (u8)moby[0x20];
+    int          state = (u8)MOBY(moby)->state;
     struct Hero *player_hero;
 
     switch (state) {
     case HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH: {
         char        *player_position = D_0013F3D0;
         struct Hero *player;
-        if (fast_vec_dist(player_position, moby + 0x10) < 5.5f && frame_number_gp > 3 &&
+        if (fast_vec_dist(player_position, &MOBY(moby)->pos) < 5.5f && frame_number_gp > 3 &&
             (player = (struct Hero *)(player_position - 0x80))->state.control_mode != 0x15 &&
             player->state.control_mode != 0x16) {
             player->hoverboard_moby = moby;
             hero_set_state(0x6b, 1);
             if (*(int *)(hoverboard_vars + 0x50) == 0) {
-                qcopy(hoverboard_vars + 0x10, moby + 0x10);
+                qcopy(hoverboard_vars + 0x10, &MOBY(moby)->pos);
             }
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             MOBY(moby)->update_dist = 0xff;
         }
         break;
@@ -64,11 +64,11 @@ void hoverboard_update(unsigned char *moby) {
             help_request(0x138f, 0x5f);
         }
         if (hero.state.control_mode != 0x16) {
-            moby[0x30] = 0x10;
+            MOBY(moby)->update_dist = 0x10;
             if (*(int *)(hoverboard_vars + 0x50) == 0) {
-                qcopy(moby + 0x10, hoverboard_vars + 0x10);
+                qcopy(&MOBY(moby)->pos, hoverboard_vars + 0x10);
             }
-            moby[0x20] = 0;
+            MOBY(moby)->state = 0;
         }
         break;
     case 2:
@@ -78,12 +78,12 @@ void hoverboard_update(unsigned char *moby) {
         break;
     }
     {
-        unsigned char *position_ptr = moby + 0x10;
+        unsigned char *position_ptr = &MOBY(moby)->pos;
         fast_vec_sub(delta, position_ptr, hoverboard_vars);
         qcopy(hoverboard_vars, position_ptr);
     }
     delta_length = fast_vec_length(delta);
-    if ((unsigned char)moby[0xbc] != 2 && delta_length < 2.0f) {
+    if ((unsigned char)MOBY(moby)->command != 2 && delta_length < 2.0f) {
         moby_point_position(moby, frame_number_gp & 1, position);
         angle = random_angle_radians();
         distance_scale = frame_time * 0.25f;
@@ -93,11 +93,11 @@ void hoverboard_update(unsigned char *moby) {
         fast_vec_add(effect_position, effect_position, offset);
         qcopy(effect_position, delta);
         effect_position[3] = (float)hoverboard_effect_displacement_w_gp;
-        if ((unsigned char)moby[0xbc] == 0) {
+        if ((unsigned char)MOBY(moby)->command == 0) {
             int size = random_int_between(scale_game_frames(10), scale_game_frames(13));
             spawn_effect(
                 position, effect_position, D_L05_0016190C, D_L05_00161910, size, 15, 15, 1);
-            moby[0xbc] = 0;
+            MOBY(moby)->command = 0;
             return;
         }
         fast_vec_scale(second_position, delta, 0.920f);
@@ -111,7 +111,7 @@ void hoverboard_update(unsigned char *moby) {
                 position, effect_position, D_L05_0016190C, D_L05_00161910, size, 1, 15000.0f);
         }
     }
-    moby[0xbc] = 0;
+    MOBY(moby)->command = 0;
 }
 
 int D_L16_0015F6A8 = 0;

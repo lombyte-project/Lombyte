@@ -101,7 +101,7 @@ void cutscene_trigger_update(char *moby) {
             return;
         }
         *(int *)(trigger_vars + 0x2C) = scale_game_frames(*(int *)(trigger_vars + 0x2C));
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         {
             int ff = 0xFF;
             MOBY(moby)->draw_dist = ff;
@@ -111,14 +111,14 @@ void cutscene_trigger_update(char *moby) {
     case CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER: {
         char *hero_position;
         if (l01_save_state.cleared[(short)MOBY(moby)->save_id] != 0) {
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             break;
         }
         if ((*(int *)((((short)MOBY(moby)->save_id >> 5) << 2) + (D_0015ED84 << 8) +
                       (char *)D_0014C190_257218) >>
              (MOBY(moby)->save_id & 0x1F)) &
             1) {
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             break;
         }
         hero_position = (char *)&hero.motion.pos;
@@ -141,8 +141,8 @@ void cutscene_trigger_update(char *moby) {
             jet_mount(&o->pos, &o->rot, 0, 0, 0);
         }
         cutscene_active = 1;
-        moby[0x20] = 2;
-        moby[0xBC] = 1;
+        MOBY(moby)->state = 2;
+        MOBY(moby)->command = 1;
         {
             int   o = *(int *)(trigger_vars + 0x24) << 7;
             char *record_table_base = (char *)l01_cuboids;
@@ -160,8 +160,8 @@ void cutscene_trigger_update(char *moby) {
             }
             request_hero_idle_state_for_vehicle_mode();
             cutscene_active = 0;
-            moby[0x20] = 3;
-            moby[0xBC] = 0;
+            MOBY(moby)->state = 3;
+            MOBY(moby)->command = 0;
         } else {
             set_camera_position(trigger_vars);
             set_camera_rotation(trigger_vars + 0x10);
@@ -169,7 +169,7 @@ void cutscene_trigger_update(char *moby) {
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_REARM:
         if (((unsigned char *)moby)[0xBC] == 1)
-            moby[0x20] = ((unsigned char *)moby)[0xBC];
+            MOBY(moby)->state = ((unsigned char *)moby)[0xBC];
         break;
     }
 }

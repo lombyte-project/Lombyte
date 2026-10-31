@@ -326,12 +326,12 @@ void                     jet_animate(unsigned char *m, float r) __asm__("FUN_L00
 
 void jet_animate(unsigned char *moby, float output_scale) {
     float ground_height, y;
-    if (moby[0x31] == 0)
+    if (MOBY(moby)->visible == 0)
         return;
     if (D_L00_0015F434 >= 32)
         return;
-    qcopy(&D_L00_0016E080[D_L00_0015F434].u_00259fe8.a_00259fe8, moby + 0x10);
-    ground_height = probe_ground_height(moby + 0x10, 0, 0.5f);
+    qcopy(&D_L00_0016E080[D_L00_0015F434].u_00259fe8.a_00259fe8, &MOBY(moby)->pos);
+    ground_height = probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
     if (collision_hit_material() == 0)
         return;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = ground_height + 0.025f;
@@ -352,7 +352,7 @@ void FUN_L00_0025a120(char *o);
 void FUN_L00_0025a120(char *moby) {
     float probe_end[4];
     float probe_start[4];
-    void *moby_position = moby + 0x10;
+    void *moby_position = &MOBY(moby)->pos;
     qcopy(probe_end, moby_position);
     probe_end[2] = probe_end[2] - 16.0f;
     if (probe_end[2] < 0.5f) {

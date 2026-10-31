@@ -49,7 +49,7 @@ void directional_spark_emitter_update(char *moby) {
     if (*(s32 *)(spark_data + 0x38) != 0) {
         *(s32 *)(spark_data + 0x3C) = spark_emitter_default_timer_reset_gp;
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
-        qcopy(spark_position, moby + 0x10);
+        qcopy(spark_position, &MOBY(moby)->pos);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
         spark_position[1] += random_float_between(-0.05f, 0.05f);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
@@ -110,7 +110,7 @@ void directional_spark_emitter_update(char *moby) {
     } else {
         *(s32 *)(spark_data + 0x3C) = *(s32 *)(spark_data + 0x14);
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
-        qcopy(spark_position, moby + 0x10);
+        qcopy(spark_position, &MOBY(moby)->pos);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
         spark_position[1] += random_float_between(-0.05f, 0.05f);
         spark_position[2] += random_float_between(-0.05f, 0.05f);

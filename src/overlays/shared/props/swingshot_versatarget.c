@@ -53,12 +53,12 @@ void swingshot_versatarget_update(char *moby) {
              ((unsigned char *)linked_moby)[0x20] != 0xFE &&
              ((unsigned char *)linked_moby)[0x20] != 0xFD)) {
             ((unsigned char *)moby)[0x30] = 0xFF;
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             MOBY(moby)->flags |= 0x41;
         } else {
             set_moby_color(moby, 0xC0, 0xC0, 0xC0);
             func_L02_002FBB10_c(moby);
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
         }
         break;
     case VERSATARGET_STATE_ACTIVE:
@@ -84,7 +84,7 @@ void swingshot_versatarget_update(char *moby) {
                     fast_vec_normalize(particle_velocity,
                                        particle_position,
                                        -2.0f / scale_time(versatarget_particle_base_lifetime_gp));
-                    fast_vec_add(particle_position, particle_position, moby + 0x10);
+                    fast_vec_add(particle_position, particle_position, &MOBY(moby)->pos);
                     particle_lifetime =
                         truncate_float_to_s32(scale_time(versatarget_particle_base_lifetime_gp)) &
                         0xFF;
@@ -113,7 +113,7 @@ void swingshot_versatarget_update(char *moby) {
               ((unsigned char *)linked_moby)[0x20] == 0xFD))) {
             MOBY(moby)->flags &= 0xFFBE;
             *(int *)(moby_data + 0x30) = -1;
-            moby[0x20] = 0;
+            MOBY(moby)->state = 0;
         }
         break;
     }

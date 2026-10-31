@@ -119,7 +119,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     case PILOTS_HELMET_WAIT_FOR_HERO_PROXIMITY:
         FUN_L00_002e0788_2e03a0(moby);
         hero_data = (char *)&hero.motion.pos;
-        if (vector_distance((char *)moby + 0x10, hero_data) < 3.0f) {
+        if (vector_distance((char *)&MOBY(moby)->pos, hero_data) < 3.0f) {
             hero_data -= 0x80;
             if (absolute_float(moby->z - *(f32 *)(hero_data + 0x88)) < 2.0f &&
                 *(s32 *)(hero_data + 0x22A8)) {

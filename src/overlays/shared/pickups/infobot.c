@@ -671,10 +671,10 @@ void update_infobot_particle_effect(char *moby) {
     }
     v.q = *(OvlQuad *)&MOBY(moby)->pos;
     v.f[2] += 0.333000004f;
-    fast_vec_sub(d, g_debug_camera.position, moby + 0x10);
+    fast_vec_sub(d, g_debug_camera.position, &MOBY(moby)->pos);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(particle_position_step, d, 0.1f);
-    fast_vec_add(d, d, moby + 0x10);
+    fast_vec_add(d, d, &MOBY(moby)->pos);
     v.f[2] -= 0.333000004f;
     for (i = 0; i < 4; i++) {
         {

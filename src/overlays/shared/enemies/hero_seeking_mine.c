@@ -94,7 +94,7 @@ void hero_seeking_mine_update(char *moby) {
     }
     if (((unsigned char *)moby)[0x20] != 1) {
         random_vector(va, 0.0f, D_0015ED6C + D_0015ED6C);
-        qcopy(pb, moby + 0x10);
+        qcopy(pb, &MOBY(moby)->pos);
         pb[2] = pb[2] + *(float *)&group_moby_effect_z_offset_gp;
         if (D_L15_00161AB8_lui == 0) {
             ((unsigned char *)moby)[0x20] = 1;
@@ -178,8 +178,8 @@ s3:
     return;
 
 s4:
-    cart_burst(moby, moby + 0x10, -1, 0.25f, 13.0f);
-    func_L00_0025A8E8_m(moby, moby + 0x10, 0x10001, 1.0f, 1.0f, 1.0f, 0, 1, 0);
+    cart_burst(moby, &MOBY(moby)->pos, -1, 0.25f, 13.0f);
+    func_L00_0025A8E8_m(moby, &MOBY(moby)->pos, 0x10001, 1.0f, 1.0f, 1.0f, 0, 1, 0);
 
 s0:
     ((unsigned char *)moby)[0x20] = 1;

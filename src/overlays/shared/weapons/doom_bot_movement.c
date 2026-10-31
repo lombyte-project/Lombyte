@@ -152,7 +152,7 @@ int probe_moby_raised_sphere_collision(char *moby, int b, Vx *position_override)
     if (position_override != 0) {
         qcopy(&probe_position, position_override);
     } else {
-        qcopy(&probe_position, moby + 0x10);
+        qcopy(&probe_position, &MOBY(moby)->pos);
     }
     vertical_offset = probe_scale * 0.2f;
     probe_position.z = probe_position.z + vertical_offset;
@@ -670,9 +670,9 @@ int compute_moby_state_from_vertical_probe(unsigned char *moby) {
         COLLISION_MATERIAL_WATER = 0
     };
     Vec4 lower_probe_point, upper_probe_point;
-    int  resulting_moby_state = moby[0x20];
-    qcopy(&lower_probe_point, moby + 0x10);
-    qcopy(&upper_probe_point, moby + 0x10);
+    int  resulting_moby_state = MOBY(moby)->state;
+    qcopy(&lower_probe_point, &MOBY(moby)->pos);
+    qcopy(&upper_probe_point, &MOBY(moby)->pos);
     lower_probe_point.f[2] -= 0.3f;
     upper_probe_point.f[2] += 1.0f;
     if (FUN_001efa68(&upper_probe_point, &lower_probe_point, 6, moby, 0)) {

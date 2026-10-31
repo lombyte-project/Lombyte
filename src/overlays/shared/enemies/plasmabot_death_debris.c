@@ -272,7 +272,7 @@ void draw_moby_offset_textured_quad(char *moby) {
     fast_vec_scale(&local.basis.partial, moby + 0xe0, moby_quad_e0_offset_scale_gp);
     fast_vec_add(&local.basis.offset, &local.basis.offset, &local.basis.partial);
     basis_axis_or_source_corner = &local.basis.mat0;
-    fast_vec_add(&local.basis.point, &local.basis.offset, moby + 0x10);
+    fast_vec_add(&local.basis.point, &local.basis.offset, &MOBY(moby)->pos);
     fast_vec_sub(basis_axis_or_source_corner, D_L01_00167240, &local.basis.point);
     fast_vec_normalize(basis_axis_or_source_corner, basis_axis_or_source_corner, one);
     basis_axis_or_quad_corner = &local.basis.mat1;

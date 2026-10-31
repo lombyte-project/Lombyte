@@ -8,7 +8,7 @@
 void initialize_moby_particle_effect_state(char *moby) __asm__("FUN_L06_002e6148");
 
 void initialize_moby_particle_effect_state(char *moby) {
-    moby[0x20] = 2;
+    MOBY(moby)->state = 2;
     MOBY(moby)->flags &= 0xFFBE;
     initialize_moby_particle_effect(moby);
 }
