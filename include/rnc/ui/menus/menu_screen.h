@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+struct Moby;
+
 /*
  * Front-end menu screens. A MenuScreen (end of this file) is one screen of a
  * MenuPage; 0x0-0x2F are shared, and from 0x30 on each kind of screen keeps
@@ -121,6 +123,21 @@ struct MenuPromptData {
     s32 buffer; /* 0x54: stream buffer */
 };
 
+/* Timed text screen (the credits: update_timed_menu_sequence, draw_menu_text_box).
+   Each phase shows one text id or a -1 terminated list of them in text;
+   draw_menu_text_box scrolls a list up by scroll / 16 and sets list_done once
+   its end is on screen. */
+struct MenuTimedTextData {
+    u8  pad_30[0x4];
+    s32 text; /* 0x34: text id, or the address of a text id list */
+    u8  pad_38[0x4];
+    s32 scroll; /* 0x3C */
+    s32 timer;  /* 0x40: frames left in the phase */
+    u8  pad_44[0xC];
+    u32 phase;     /* 0x50 */
+    s32 list_done; /* 0x54 */
+};
+
 /* Item slot screen (update_menu_item_slots). Confirm stores the grid's selected item
    at cursor, clears its old slot and advances the cursor. */
 struct MenuItemSlotsData {
@@ -218,12 +235,12 @@ struct MenuStreamData {
 /* Item preview screen (draw_item_preview_screen, draw_available_item_preview_mobys,
    update_item_preview_moby). */
 struct MenuItemPreviewData {
-    s32   flags;          /* 0x30: update_item_preview_binding */
-    s32   state;          /* 0x34 */
-    f32   rotation_angle; /* 0x38 */
-    u8    pad_3C[0x8];
-    char *moby;        /* 0x44: preview moby (create_menu_preview_moby) */
-    char *second_moby; /* 0x48: optional, drawn after moby */
+    s32          flags;          /* 0x30: update_item_preview_binding */
+    s32          state;          /* 0x34 */
+    f32          rotation_angle; /* 0x38 */
+    u8           pad_3C[0x8];
+    struct Moby *moby;        /* 0x44: preview moby (create_menu_preview_moby) */
+    struct Moby *second_moby; /* 0x48: optional, drawn after moby */
 };
 
 /* Label screen (render_configured_text_label). flags: 8/0x10 font; value source 0x20
@@ -343,6 +360,7 @@ struct MenuScreen {
         struct MenuItemPreviewData preview; /* draw_item_preview_screen, update_item_preview_moby */
         struct MenuLabelData       label;   /* render_configured_text_label */
         struct MenuPromptData      prompt;  /* draw_prompt_box, enter_menu_prompt */
+        struct MenuTimedTextData   timed;   /* update_timed_menu_sequence, draw_menu_text_box */
     } data;                                 /* 0x30 */
 };
 

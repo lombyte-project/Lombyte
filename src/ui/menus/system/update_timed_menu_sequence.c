@@ -1,24 +1,14 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
 
-struct Menu {
-    u8  pad0[0x34];
-    s32 str;
-    u8  pad38[4];
-    s32 unk3C;
-    s32 unk40;
-    u8  pad44[0xC];
-    u32 unk50;
-    s32 unk54;
-};
-
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 
 extern s32 D_001D2AF4[];
 
-/* The text ids each progress phase shows (menu->str), each list ending in -1. */
+/* The text ids each progress phase shows (menu->data.timed.text), each list ending in -1. */
 s32 timed_menu_first_progress_string_ids[43] __asm__("D_001D5098") = {
     0x50AA, 0x50AB, 0x50AC, 0x50AD, 0x50AE, 0x50AF, 0x50B0, 0x50B1, 0x50B2, 0x50B3, 0x50B4,
     0x50B5, 0x50B6, 0x50B7, 0x50B8, 0x50B9, 0x50BA, 0x50BB, 0x50BC, 0x50BD, 0x50BE, 0x50BF,
@@ -64,9 +54,9 @@ s32 timed_menu_fifth_progress_string_ids[13] __asm__("D_001D52B0") = {
     -1,
 };
 
-s32 update_timed_menu_sequence(struct Menu *menu) __asm__("FUN_002223f0");
+s32 update_timed_menu_sequence(struct MenuScreen *menu) __asm__("FUN_002223f0");
 
-s32 update_timed_menu_sequence(struct Menu *menu) {
+s32 update_timed_menu_sequence(struct MenuScreen *menu) {
     enum {
         INITIALIZE_MENU_SEQUENCE = 0,
         WAIT_FOR_INITIAL_DELAY = 1,
@@ -108,21 +98,21 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
             }
         }
     }
-    previous_counter_value = menu->unk40;
-    menu->unk40 = previous_counter_value - 1;
+    previous_counter_value = menu->data.timed.timer;
+    menu->data.timed.timer = previous_counter_value - 1;
     if (flag) {
-        menu->unk40 = previous_counter_value - 2;
+        menu->data.timed.timer = previous_counter_value - 2;
     }
-    if (menu->unk40 < 0) {
-        menu->unk40 = 0;
+    if (menu->data.timed.timer < 0) {
+        menu->data.timed.timer = 0;
     }
-    switch (menu->unk50) {
+    switch (menu->data.timed.phase) {
     case INITIALIZE_MENU_SEQUENCE:
-        menu->unk50 = menu->unk50 + 1;
-        menu->unk40 = scale_game_frames(0xB4);
-        menu->unk3C = 0;
+        menu->data.timed.phase = menu->data.timed.phase + 1;
+        menu->data.timed.timer = scale_game_frames(0xB4);
+        menu->data.timed.scroll = 0;
         D_001D2AF4[0] = 0x50A9;
-        menu->str = (s32)timed_menu_first_progress_string_ids;
+        menu->data.timed.text = (s32)timed_menu_first_progress_string_ids;
         break;
 
     case WAIT_FOR_INITIAL_DELAY:
@@ -134,9 +124,9 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
     case WAIT_BEFORE_FOURTH_PROGRESS_PHASE:
 
     case WAIT_BEFORE_FIFTH_PROGRESS_PHASE:
-        if (menu->unk40 == 0) {
-            menu->unk54 = 0;
-            menu->unk50 = *(volatile u32 *)(&menu->unk50) + 1;
+        if (menu->data.timed.timer == 0) {
+            menu->data.timed.list_done = 0;
+            menu->data.timed.phase = *(volatile u32 *)(&menu->data.timed.phase) + 1;
         }
         break;
 
@@ -149,98 +139,98 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
     case ADVANCE_FOURTH_PROGRESS_PHASE:
 
     case ADVANCE_FIFTH_PROGRESS_PHASE:
-        previous_counter_value = menu->unk3C;
-        menu->unk3C = previous_counter_value + 0xA;
+        previous_counter_value = menu->data.timed.scroll;
+        menu->data.timed.scroll = previous_counter_value + 0xA;
         if (flag) {
-            menu->unk3C = previous_counter_value + 0x14;
+            menu->data.timed.scroll = previous_counter_value + 0x14;
         }
-        if (menu->unk54 != 0) {
-            menu->unk40 = scale_game_frames(0xB4);
-            menu->unk50 = menu->unk50 + 1;
+        if (menu->data.timed.list_done != 0) {
+            menu->data.timed.timer = scale_game_frames(0xB4);
+            menu->data.timed.phase = menu->data.timed.phase + 1;
         }
         break;
 
     case PREPARE_SECOND_PROGRESS_PHASE:
-        if (menu->unk40 == 0) {
-            menu->unk50 = 5;
-            menu->unk40 = scale_game_frames(0xB4);
-            menu->unk3C = 0;
+        if (menu->data.timed.timer == 0) {
+            menu->data.timed.phase = 5;
+            menu->data.timed.timer = scale_game_frames(0xB4);
+            menu->data.timed.scroll = 0;
             D_001D2AF4[0] = 0x50D6;
-            menu->str = (s32)timed_menu_second_progress_string_ids;
+            menu->data.timed.text = (s32)timed_menu_second_progress_string_ids;
         }
         break;
 
     case BEGIN_DELAY_AFTER_FIRST_PROGRESS_PHASE:
-        if (menu->unk40 == 0) {
+        if (menu->data.timed.timer == 0) {
             D_001D2AF4[0] = 0x50D4;
-            menu->str = 0x50D5;
-            menu->unk40 = scale_game_frames(0xF0);
-            menu->unk3C = 0;
-            menu->unk50 = menu->unk50 + 1;
+            menu->data.timed.text = 0x50D5;
+            menu->data.timed.timer = scale_game_frames(0xF0);
+            menu->data.timed.scroll = 0;
+            menu->data.timed.phase = menu->data.timed.phase + 1;
         }
         break;
 
     case BEGIN_DELAY_AFTER_SECOND_PROGRESS_PHASE:
-        if (menu->unk40 == 0) {
+        if (menu->data.timed.timer == 0) {
             D_001D2AF4[0] = 0x5106;
-            menu->str = (s32)timed_menu_third_progress_string_ids;
-            menu->unk40 = scale_game_frames(0xF0);
-            menu->unk3C = 0;
-            menu->unk50 = menu->unk50 + 1;
+            menu->data.timed.text = (s32)timed_menu_third_progress_string_ids;
+            menu->data.timed.timer = scale_game_frames(0xF0);
+            menu->data.timed.scroll = 0;
+            menu->data.timed.phase = menu->data.timed.phase + 1;
         }
         break;
 
     case BEGIN_DELAY_AFTER_THIRD_PROGRESS_PHASE:
-        if (menu->unk40 == 0) {
+        if (menu->data.timed.timer == 0) {
             D_001D2AF4[0] = 0x5136;
-            menu->str = 0x5137;
-            menu->unk40 = scale_game_frames(0xF0);
-            menu->unk3C = 0;
-            menu->unk50 = menu->unk50 + 1;
+            menu->data.timed.text = 0x5137;
+            menu->data.timed.timer = scale_game_frames(0xF0);
+            menu->data.timed.scroll = 0;
+            menu->data.timed.phase = menu->data.timed.phase + 1;
         }
         break;
 
     case PREPARE_FOURTH_PROGRESS_PHASE:
-        if (menu->unk40 == 0) {
-            menu->unk40 = scale_game_frames(0xB4);
-            menu->unk3C = 0;
+        if (menu->data.timed.timer == 0) {
+            menu->data.timed.timer = scale_game_frames(0xB4);
+            menu->data.timed.scroll = 0;
             D_001D2AF4[0] = 0x5138;
-            menu->str = (s32)timed_menu_fourth_progress_string_ids;
-            menu->unk50 = 0xC;
+            menu->data.timed.text = (s32)timed_menu_fourth_progress_string_ids;
+            menu->data.timed.phase = 0xC;
         }
         break;
 
     case BEGIN_DELAY_AFTER_FOURTH_PROGRESS_PHASE:
-        if (menu->unk40 == 0) {
+        if (menu->data.timed.timer == 0) {
             D_001D2AF4[0] = 0;
-            menu->str = 0x5143;
-            menu->unk40 = scale_game_frames(0xF0);
-            menu->unk3C = 0;
-            menu->unk50 = menu->unk50 + 1;
+            menu->data.timed.text = 0x5143;
+            menu->data.timed.timer = scale_game_frames(0xF0);
+            menu->data.timed.scroll = 0;
+            menu->data.timed.phase = menu->data.timed.phase + 1;
         }
         break;
 
     case PREPARE_FIFTH_PROGRESS_PHASE:
-        if (menu->unk40 == 0) {
-            menu->unk40 = scale_game_frames(0xB4);
-            menu->unk3C = 0;
+        if (menu->data.timed.timer == 0) {
+            menu->data.timed.timer = scale_game_frames(0xB4);
+            menu->data.timed.scroll = 0;
             D_001D2AF4[0] = 0x5144;
-            menu->str = (s32)timed_menu_fifth_progress_string_ids;
-            menu->unk50 = 0x10;
+            menu->data.timed.text = (s32)timed_menu_fifth_progress_string_ids;
+            menu->data.timed.phase = 0x10;
         }
         break;
 
     case BEGIN_FINAL_DELAY:
-        if (menu->unk40 == 0) {
+        if (menu->data.timed.timer == 0) {
             D_001D2AF4[0] = 0;
-            menu->str = 0x5175;
-            menu->unk50 = menu->unk50 + 1;
-            menu->unk40 = scale_game_frames(0x12C);
+            menu->data.timed.text = 0x5175;
+            menu->data.timed.phase = menu->data.timed.phase + 1;
+            menu->data.timed.timer = scale_game_frames(0x12C);
         }
         break;
 
     case WAIT_FOR_FINAL_DELAY:
-        if (menu->unk40 == 0) {
+        if (menu->data.timed.timer == 0) {
             if (menu_system.unkDC != 0) {
                 return 1;
             }
