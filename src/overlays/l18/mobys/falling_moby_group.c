@@ -99,6 +99,9 @@ void falling_moby_group_update(struct Moby *moby) {
         MOBY_APPROACH_TARGET_TRANSFORM = 2,
         MOBY_FALL_AND_REMOVE = 4
     };
+    enum {
+        FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1
+    };
     VData *moby_vars = (VData *)moby->pvars;
     if (moby_vars) {
         float initial_acceleration_step = group_transform_initial_acceleration_gp * frame_time_sq;
@@ -132,7 +135,7 @@ void falling_moby_group_update(struct Moby *moby) {
             moby_vars->f34C = scale_game_frames(30);
             moby_vars->cnt = j;
             capture_linked_moby_relative_transforms(moby, (char *)moby_vars + 0x30, j);
-            moby->state = 1;
+            moby->state = FALLING_MOBY_GROUP_AWAIT_ACTIVATION;
             break;
         }
         case MOBY_APPROACH_TARGET_TRANSFORM: {
@@ -162,7 +165,7 @@ void falling_moby_group_update(struct Moby *moby) {
             }
             if (moby_vars->f330 > group_transform_fall_progress_threshold_gp &&
                 moby_vars->i8 != 0) {
-                moby->state = 4;
+                moby->state = MOBY_FALL_AND_REMOVE;
             }
             hero_on_group_or_class_764_moby = 0;
             for (i = 0; i < moby_vars->cnt; i++) {
@@ -182,7 +185,7 @@ void falling_moby_group_update(struct Moby *moby) {
             if (moby_vars->f348 != 0 && hero_on_group_or_class_764_moby == 0 &&
                 hero.air_frames.s == 0) {
                 if (fast_dec_timer(&moby_vars->f34C))
-                    moby->state = 4;
+                    moby->state = MOBY_FALL_AND_REMOVE;
             }
             break;
         }
@@ -213,7 +216,7 @@ void falling_moby_group_update(struct Moby *moby) {
         }
         apply_linked_moby_relative_transforms(moby, (char *)moby_vars + 0x30, moby_vars->cnt);
         if (moby_vars->f344 != 0.0f) {
-            if (moby->state != 4) {
+            if (moby->state != MOBY_FALL_AND_REMOVE) {
                 float debris_spawn_position[4];
                 float s, z, debris_spawn_angle;
                 int   debris_spawn_frames;
