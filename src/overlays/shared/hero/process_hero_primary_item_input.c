@@ -131,6 +131,10 @@ void           set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020
 void apply_hero_item_slot_selection(int i) __asm__("FUN_L05_0023dc88");
 
 void apply_hero_item_slot_selection(int i) {
+    enum {
+        ITEM_SWITCH_GATE_RELOAD_ZERO_TIMER = 1,
+        ITEM_SWITCH_GATE_BLOCK_SWITCH = 2
+    };
     int           changed;
     int           flag6;
     int           flag4;
@@ -388,10 +392,10 @@ void apply_hero_item_slot_selection(int i) {
     {
         struct Hero *s = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
         item_switch_gate_state = s->items[0].switch_lock;
-        if (item_switch_gate_state == 2) {
+        if (item_switch_gate_state == ITEM_SWITCH_GATE_BLOCK_SWITCH) {
             changed = 0;
         }
-        if (item_switch_gate_state == 1 && s->items[0].timer == 0) {
+        if (item_switch_gate_state == ITEM_SWITCH_GATE_RELOAD_ZERO_TIMER && s->items[0].timer == 0) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
