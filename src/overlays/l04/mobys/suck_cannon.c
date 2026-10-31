@@ -64,7 +64,7 @@ void suck_cannon_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             break;
         }
-        moby->state = 1;
+        moby->state = SUCK_CANNON_WAIT_FOR_HERO;
         moby->pos.z += 1.0f;
         break;
     case SUCK_CANNON_WAIT_FOR_HERO:
@@ -72,7 +72,7 @@ void suck_cannon_update(struct Moby *moby) {
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             start_scene(2);
-            moby->state = 2;
+            moby->state = SUCK_CANNON_WAIT_TO_RESET_CAMERA;
         }
         break;
     case SUCK_CANNON_WAIT_TO_RESET_CAMERA:
@@ -91,7 +91,7 @@ void suck_cannon_update(struct Moby *moby) {
             debug_print(suck_cannon_missing_segment_switch_warning_format,
                         ((struct PortalMobyView *)moby)->uid);
         }
-        moby->state = 3;
+        moby->state = SUCK_CANNON_REMOVE;
         memcard_save_data(0, -1);
         break;
     case SUCK_CANNON_REMOVE:
