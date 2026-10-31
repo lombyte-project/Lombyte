@@ -143,7 +143,7 @@ int queue_starfighter_voice_line(void          *unused,
     return 0;
 }
 
-extern int D_L13_001D3478[] __asm__("D_L13_001D3478");
+extern int l13_starfighter_attachment_slot_indices_by_command[] __asm__("D_L13_001D3478");
 
 typedef struct {
     char pad[0xC4];
@@ -179,7 +179,7 @@ void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate
                              -100,
                              1);
             } else if (source_moby->command == 0 ||
-                       D_L13_001D3478[source_moby->command - 1] !=
+                       l13_starfighter_attachment_slot_indices_by_command[source_moby->command - 1] !=
                            joint_effect_gate_slot_indices[i] ||
                        random_integer_below(9) == 0) {
                 effect_frame_count = scale_game_frames(random_int_between(0xF, 0x16));
@@ -774,7 +774,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                         v->f118 = 0;
                     }
                 } else if (dd->health < hi) {
-                    int tv = D_L13_001D3478[moby->bBC - 1];
+                    int tv = l13_starfighter_attachment_slot_indices_by_command[moby->bBC - 1];
 
                     if (tv != -1) {
                         allocate_voice_for_target_entry(7, 0, moby);
@@ -805,7 +805,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     mode = 2;
                     if (moby->bBC == 7) {
                         for (j = moby->bBC - 1; j < 10; j++) {
-                            func_L13_002EAAB8_2EAE80(moby, moby_data, D_L13_001D3478[j]);
+                            func_L13_002EAAB8_2EAE80(moby, moby_data, l13_starfighter_attachment_slot_indices_by_command[j]);
                         }
                         allocate_voice_for_target_entry(7, 0, moby);
                     }
@@ -866,7 +866,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     v->f118 = 0;
                 }
             } else if (dd->health < hi) {
-                int tv = D_L13_001D3478[moby->bBC - 1];
+                int tv = l13_starfighter_attachment_slot_indices_by_command[moby->bBC - 1];
 
                 if (tv != -1) {
                     func_L13_002EAAB8_2EAE80(moby, moby_data, tv);
@@ -897,7 +897,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 mode = 2;
                 if (moby->bBC == 7) {
                     for (k = moby->bBC - 1; k < 10; k++) {
-                        func_L13_002EAAB8_2EAE80(moby, moby_data, D_L13_001D3478[k]);
+                        func_L13_002EAAB8_2EAE80(moby, moby_data, l13_starfighter_attachment_slot_indices_by_command[k]);
                     }
                     allocate_voice_for_target_entry(7, 0, moby);
                 }
