@@ -19,7 +19,7 @@ void hero_path_constraint_trigger_update(struct Moby *moby) {
     switch (moby->state) {
     case MOBY_INITIALIZE:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = MOBY_COPY_PVAR_TO_HERO;
         if (*(int *)state == -1)
             mark_moby_for_removal(moby);
         break;
