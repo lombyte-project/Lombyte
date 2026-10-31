@@ -771,6 +771,9 @@ extern int  font_print_center_small(int, int, long, void *, int) __asm__("FUN_00
 void draw_fighter_jet_hud(struct Moby *moby) __asm__("FUN_L17_002eb9a8");
 
 void draw_fighter_jet_hud(struct Moby *moby) {
+    enum {
+        FIGHTER_JET_STATE_VICTORY_EXIT = 8
+    };
     char         *ship_vars = (char *)moby->pvars;
     char         *screen_dimensions;
     int           locked_target_screen_x;
@@ -925,7 +928,7 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     if (hero.ship_hp < hero.ship_hp_max / 10.0f && (D_L17_0015F5CC / 90) & 1) {
         font_print_center_small(0x100, 0x186, 0x80000080L, get_help_message_text(0x5269), 0x64);
     }
-    if (moby->state == 8) {
+    if (moby->state == FIGHTER_JET_STATE_VICTORY_EXIT) {
         font_print_center_small(0x100, 0xC8, 0x80005080L, get_help_message_text(0x523E), 0x64);
     }
     hp_display_step = hero.ship_hp - *(float *)(ship_vars + 0xF0);
