@@ -93,9 +93,9 @@ void bolt_thief_mine_update(struct Moby *moby) {
             floating_mine_private_vars->spin[0] = random_float_between(0.010471975f, 0.020943951f);
             floating_mine_private_vars->spin[1] = random_float_between(0.006981317f, 0.013962634f);
             floating_mine_private_vars->spin[2] = random_float_between(0.0034906585f, 0.006981317f);
-            moby->state = 1;
+            moby->state = FLOAT_MINE_ACTIVE;
         } else if ((s8)floating_mine_private_vars->link->state < 0) {
-            moby->state = 1;
+            moby->state = FLOAT_MINE_ACTIVE;
         }
         break;
     case FLOAT_MINE_ACTIVE: {
@@ -163,7 +163,7 @@ void bolt_thief_mine_update(struct Moby *moby) {
                               -1,
                               0);
             if ((char *)moby < floating_mine_respawn_address_limit) {
-                moby->state = 2;
+                moby->state = FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN;
                 moby->flags |= 0x41;
                 moby->hit_slot = 0xFF;
                 moby->collision = 0;
@@ -180,7 +180,7 @@ void bolt_thief_mine_update(struct Moby *moby) {
         qcopy(scratch.sphere, &moby->pos);
         scratch.sphere[3] = 3.0f;
         if (fast_bsphere_check(scratch.sphere, 64.0f) == -1) {
-            moby->state = 1;
+            moby->state = FLOAT_MINE_ACTIVE;
             moby->flags &= 0xFFBE;
             moby->collision = moby->pclass->collision;
         }
