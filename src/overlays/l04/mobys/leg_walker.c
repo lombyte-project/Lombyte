@@ -468,10 +468,10 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     fast_vec_add(pos, pos, &shift);
     {
         f32 max_step = rig->unkC4;
-        s32 old = rig->mode;
+        s32 previous_mode = rig->mode;
 
         rig->mode = mode;
-        changed = (mode ^ old) & mode;
+        changed = (mode ^ previous_mode) & mode;
         if (max_step < step)
             step = max_step;
     }
@@ -521,19 +521,19 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     moby->anim_speed = 1.0f;
     if (rig->unkB7 != 0) {
         LegRigAnim **fallback = rig->anims;
-        LegRigAnim **entry;
+        LegRigAnim **animation_record_cursor;
         s32          seq = moby->seq;
         f32          min_turn = 0.09239978f;
 
-        for (i = 0, entry = fallback; i < 13; i++) {
-            if ((*entry)->id == seq) {
+        for (i = 0, animation_record_cursor = fallback; i < 13; i++) {
+            if ((*animation_record_cursor)->id == seq) {
                 LegRigAnim *anim;
                 f32         rate;
 
                 if (!(rig->speed < frame_time * 0.19f) ||
                     !(min_turn < fast_difference_between_rotations(moby->rot.z, heading)) ||
                     !(speed < (rate = frame_time * 0.19f))) {
-                    anim = *entry;
+                    anim = *animation_record_cursor;
                     rate = rig->speed;
                 } else {
                     anim = *fallback;
@@ -541,7 +541,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
                 moby->anim_speed = frame_scale_inv * absolute_float(rate / anim->rate);
                 break;
             }
-            entry++;
+            animation_record_cursor++;
             fallback++;
         }
     }
