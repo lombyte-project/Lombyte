@@ -90,6 +90,9 @@ f32 D_L17_001677B4 NOT_SDA = 0;
 s32 volume_camera_swing_active(struct UpdateCam *cam) __asm__("FUN_L00_002ec7e8");
 
 s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
+    enum {
+        SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4
+    };
     SwingCameraParams *params;
     s32                forced = 0;
     u16                type;
@@ -101,7 +104,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
     type = *(u16 *)&params->type;
     if (params->type == 2 && D_001413DC == 0x1A && params->timer > 0) {
         forced = 1;
-    } else if ((s16)type == 4 && hero_requested_camera_mode[0] == 3) {
+    } else if ((s16)type == SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST && hero_requested_camera_mode[0] == 3) {
         forced = 0 < params->timer;
     }
     if (params->clip_volume >= 0 &&
