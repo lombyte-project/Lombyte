@@ -2842,7 +2842,7 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
     D_L00_00161B84 = 1.7f;
     suck_beam_reset_pending = 0;
     hero_state = hero.state.current;
-    if ((hero_state == 0x1E || hero_state == 1) && (hero.moby->flags & 1)) {
+    if ((hero_state == HERO_STATE_LOOK_RELEASE_WAIT || hero_state == HERO_STATE_LOOK) && (hero.moby->flags & 1)) {
         qcopy((char *)beam_initialization_vectors, D_L00_00166FD0);
         qcopy((char *)beam_initialization_vectors + 0x10, D_L00_00166FD0 + 0x10);
         qcopy((char *)beam_initialization_vectors + 0x20, D_L00_00166FD0 + 0x20);
