@@ -190,6 +190,9 @@ void horny_toad_update(Moby *moby) {
         HORNY_TOAD_RECOVER_FROM_REACTION = 11,
         HORNY_TOAD_DYING = 12
     };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     ToadVars *horny_toad_vars;
     Moby     *target;
     ToadVec   reference_point_or_movement_endpoint;
@@ -256,7 +259,7 @@ void horny_toad_update(Moby *moby) {
         break;
     case HORNY_TOAD_FACE_FOLLOW_MOBY: {
         Moby *followed_moby = (Moby *)(moby_table + (horny_toad_vars->follow_moby << 8));
-        if (followed_moby != 0 && followed_moby->state != 0xFE && followed_moby->state != 0xFD) {
+        if (followed_moby != 0 && followed_moby->state != MOBY_STATE_MARKED_FOR_REMOVAL && followed_moby->state != 0xFD) {
             approach_angle(
                 &moby->rot.z,
                 fast_arc_tan((*(ToadVec *)&followed_moby->pos)[0] - (*(ToadVec *)&moby->pos)[0],
