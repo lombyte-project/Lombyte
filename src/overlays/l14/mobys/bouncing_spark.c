@@ -102,10 +102,10 @@ void bouncing_spark_update(struct Moby *spark_moby) {
     float       hi;
     if (((coll_sphere(&spark_moby->pos, 0, spark_moby, 0.65f) != 0) && (D_L14_00174558 != 0)) &&
         (D_L14_00174558 != spark_data->owner)) {
-        spark_moby->state = 3;
+        spark_moby->state = SPARK_BURST_AND_REMOVE;
     }
     if (fast_dec_timer(&spark_data->fade) != 0) {
-        spark_moby->state = 3;
+        spark_moby->state = SPARK_BURST_AND_REMOVE;
     }
     switch (spark_moby->state) {
     case SPARK_COUNT_NEXT_BOUNCE:
@@ -113,8 +113,8 @@ void bouncing_spark_update(struct Moby *spark_moby) {
     case SPARK_WAIT_FOR_DESCENT: {
         fast_vec_add(&predicted_position_or_fade_rgb, &spark_moby->pos, &spark_data->vel);
         spark_data->vel.z -= spark_data->vel.w;
-        if ((spark_moby->state == 1) && (spark_data->vel.z < 0.0f)) {
-            spark_moby->state = 0;
+        if ((spark_moby->state == SPARK_WAIT_FOR_DESCENT) && (spark_data->vel.z < 0.0f)) {
+            spark_moby->state = SPARK_COUNT_NEXT_BOUNCE;
         }
         fast_dec_timer_s16(&spark_data->trail);
         if (spark_data->trail != 0) {
@@ -160,15 +160,15 @@ void bouncing_spark_update(struct Moby *spark_moby) {
             qcopy(&spark_moby->pos, &predicted_position_or_fade_rgb);
         }
         if (((coll_sphere(&spark_moby->pos, 0, spark_moby, spark_contact_clearance_gp) != 0) &&
-             ((spark_moby->state == 0) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) &&
+             ((spark_moby->state == SPARK_COUNT_NEXT_BOUNCE) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) &&
             ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner))) {
             fast_vec_normalize(
                 &position_scratch, &D_L14_00174540.normal, spark_contact_clearance_gp);
             fast_vec_add(&spark_moby->pos, &D_L14_00174540.hit, &position_scratch);
             reflect_vector(&spark_data->vel, &spark_data->vel, &D_L14_00174540.normal);
             allocate_voice_for_target_entry(1, 0, spark_moby);
-            if (spark_moby->state == 0) {
-                spark_moby->state = 1;
+            if (spark_moby->state == SPARK_COUNT_NEXT_BOUNCE) {
+                spark_moby->state = SPARK_WAIT_FOR_DESCENT;
                 if ((++spark_data->bounces) == 1) {
                     set_vector_length_xy(&spark_data->vel,
                                          &spark_data->vel,
@@ -188,7 +188,7 @@ void bouncing_spark_update(struct Moby *spark_moby) {
             }
             if (spark_data->bounces >= 4) {
                 float min;
-                spark_moby->state = 2;
+                spark_moby->state = SPARK_ROLL_AND_FADE;
                 spark_data->vel.z = 0.0f;
                 spark_data->vel.w = vector_length_xy(&spark_data->vel);
                 spark_data->vel.w *= D_L14_001620A0;
@@ -253,9 +253,9 @@ void bouncing_spark_update(struct Moby *spark_moby) {
         return;
     }
 
-    if (spark_moby->state < 2) {
+    if (spark_moby->state < SPARK_ROLL_AND_FADE) {
         speed = vector_length_xy(&spark_data->vel);
-    } else if (spark_moby->state == 2) {
+    } else if (spark_moby->state == SPARK_ROLL_AND_FADE) {
         speed = spark_data->vel.w;
     } else {
         return;
