@@ -55,13 +55,13 @@ extern short sentrybot_alarm_voice_owner_gp __asm__("D_L15_00161AC8") __attribut
 int activate_first_inactive_group_moby(int moby_group_index, void *pos) __asm__("FUN_L15_002a2868");
 
 int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
-    short       *group_moby_entry = (short *)D_L15_001ABE40[moby_group_index];
+    enum { GROUP_MOBY_STATE_INACTIVE = 1 } ;short       *group_moby_entry = (short *)D_L15_001ABE40[moby_group_index];
     struct Hero *hero_data = &hero;
     do {
         unsigned char *listed_moby =
             (unsigned char *)l15_moby_array + ((*(unsigned short *)group_moby_entry & 0x7FFF) << 8);
         unsigned char state = MOBY(listed_moby)->state;
-        if (state == 1) {
+        if (state == GROUP_MOBY_STATE_INACTIVE) {
             char *activated_moby_data;
             MOBY(listed_moby)->state = 2;
             if (MOBY(listed_moby)->prev_seq != 0)
