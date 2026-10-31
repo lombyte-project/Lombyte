@@ -963,7 +963,7 @@ void count_vsync(void) __asm__("FUN_0012f1c8");
 void movie_exit_to_gameplay(void) __asm__("FUN_L00_002997c8");
 
 void movie_exit_to_gameplay(void) {
-    char                       buf[0x70] __attribute__((aligned(16)));
+    char                       gs_image_transfer_descriptor[0x70] __attribute__((aligned(16)));
     s32                        large_count, small_count, gs_address, source, i, j;
     struct ActiveSceneTrigger *active;
     D_L00_0015F5D8 = 1;
@@ -976,22 +976,22 @@ void movie_exit_to_gameplay(void) {
     small_count = D_0015ED80 != 0 ? 0xE : 0x11;
     i = 0;
     while (i < large_count) {
-        FUN_00122518_2997c8(buf, gs_address >> 8, 2, 1, 0, 0, 0x80, 0x80);
+        FUN_00122518_2997c8(gs_image_transfer_descriptor, gs_address >> 8, 2, 1, 0, 0, 0x80, 0x80);
         i++;
         gs_address += 0x10000;
         flush_cache(0);
-        FUN_001227d8_2997c8(buf, source);
+        FUN_001227d8_2997c8(gs_image_transfer_descriptor, source);
         source += 0xC000;
         sceGsSyncPath(0, 0);
     }
     gs_address = D_0015EE78_macro[0];
     j = 0;
     while (j < small_count) {
-        FUN_00122518_2997c8(buf, gs_address >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        FUN_00122518_2997c8(gs_image_transfer_descriptor, gs_address >> 8, 1, 0, 0, 0, 0x40, 0x40);
         j++;
         gs_address += 0x4000;
         flush_cache(0);
-        FUN_001227d8_2997c8(buf, source);
+        FUN_001227d8_2997c8(gs_image_transfer_descriptor, source);
         source += 0x4000;
         sceGsSyncPath(0, 0);
     }
