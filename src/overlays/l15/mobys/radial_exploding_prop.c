@@ -71,7 +71,7 @@ void radial_exploding_prop_update(struct Moby *moby) __asm__("FUN_L15_002a7880")
 
 /* Moby classes 148, 255 */
 void radial_exploding_prop_update(struct Moby *moby) {
-    char *slot = 0;
+    enum { RADIAL_EXPLODING_PROP_STATE_UNINITIALIZED = 0 , RADIAL_EXPLODING_PROP_STATE_INITIALIZED = 1 } ;char *slot = 0;
     Vec   velocity, hit_direction_step, doubled_hit_direction_step, offset, debris_origin;
     u32   palette[4];
     u32   colors[4];
@@ -83,7 +83,7 @@ void radial_exploding_prop_update(struct Moby *moby) {
     void *effect;
     Vec  *base_position;
 
-    if (D_001413F4[0] != 2 && moby->state == 1)
+    if (D_001413F4[0] != 2 && moby->state == RADIAL_EXPLODING_PROP_STATE_INITIALIZED)
         return;
 
     for (slot_index = 0; slot_index < 64; slot_index++) {
@@ -216,10 +216,10 @@ void radial_exploding_prop_update(struct Moby *moby) {
 
 no_hit:
     moby->hit_slot = 0xff;
-    if (moby->state != 0)
+    if (moby->state != RADIAL_EXPLODING_PROP_STATE_UNINITIALIZED)
         return;
     moby->update_dist = 0xff;
-    moby->state = 1;
+    moby->state = RADIAL_EXPLODING_PROP_STATE_INITIALIZED;
     moby->draw_dist = 0x80;
     moby->scale = moby->scale + moby->scale;
     {
