@@ -19,7 +19,7 @@ void _clearEach(u8 *ctx) {
     *(volatile u32 *)0x1000D400 = 0;
     *(volatile u32 *)0x1000F590 = *(volatile u32 *)0x1000F520 & 0xFFFEFFFF;
 
-    if (state != 0)
+    if (state != FALSE)
         EnableInterrupts();
 
     *(volatile u32 *)0x1000B020 = 0;
