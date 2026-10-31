@@ -239,6 +239,9 @@ extern u8 D_0013D4DD_lui __asm__("D_0013D4DD") NOT_SDA;
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 
 void find_grind_rail(void) {
+    enum {
+        HERO_CONTROL_MODE_JUMP = 4
+    };
     V_cf58 proximity_or_rail_point, proximity_or_query_position, third_proximity_point;
 
     s32 rail_owner, rail_query_integer_value, rail_kind;
@@ -295,7 +298,7 @@ void find_grind_rail(void) {
         if ((u32)(hero.state.current - 41) < 2 &&
             (hero.rail_off_frames != 0 || hero.rail_gap_jump != 0)) {
         } else {
-            if (control_mode != 4)
+            if (control_mode != HERO_CONTROL_MODE_JUMP)
                 return;
             if (hero.past_jump_apex == 0 && hero.rail_catch_grace == 0)
                 return;
