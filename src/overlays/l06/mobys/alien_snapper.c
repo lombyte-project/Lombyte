@@ -133,7 +133,7 @@ extern float D_L06_00161EB0 __attribute__((sda));
 extern float D_L06_00161EB4 __attribute__((sda));
 extern float D_L06_00161EC4 __attribute__((sda));
 extern float D_L06_00161EC8 __attribute__((sda));
-extern float D_L06_00161ED0 __attribute__((sda));
+extern float l06_alien_snapper_base_targeting_radius __asm__("D_L06_00161ED0") __attribute__((sda));
 extern float D_L06_00161ED4 __attribute__((sda));
 extern int   D_L06_00161EDC __attribute__((sda));
 extern int   D_L06_00161EE0 __attribute__((sda));
@@ -316,7 +316,7 @@ void alien_snapper_update(Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
             }
-            vars->f1A0 = D_L06_00161ED0;
+            vars->f1A0 = l06_alien_snapper_base_targeting_radius;
         }
         break;
     case 1:
@@ -338,7 +338,7 @@ void alien_snapper_update(Moby *moby) {
                 }
             }
         } else if (moby->anim_flags & 2) {
-            if (vector_distance_xy(&moby->pos, ((char *)&D_0013F3D0)) < D_L06_00161ED0) {
+            if (vector_distance_xy(&moby->pos, ((char *)&D_0013F3D0)) < l06_alien_snapper_base_targeting_radius) {
                 moby->state = 8;
                 vars->angle_jitter = random_float_between(vars->jitter_degrees * 0.017453292f,
                                                           -(vars->jitter_degrees * 0.017453292f));
@@ -814,7 +814,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         D_L06_00161EE8, D_L06_00161EEC, (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
 
     if (snapper_vars->f1AC != 0) {
-        snapper_vars->f1A0 = D_L06_00161ED0 + 6.0f;
+        snapper_vars->f1A0 = l06_alien_snapper_base_targeting_radius + 6.0f;
     } else if (moby->state == 1) {
         if (moby == ((Moby *)hero.unk240) || moby == ((Moby *)hero.coll_hit_moby)) {
             snapper_vars->f1A0 = 6.0f;
@@ -822,7 +822,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             snapper_vars->f1A0 = 0.0f;
         }
     } else {
-        snapper_vars->f1A0 = D_L06_00161ED0;
+        snapper_vars->f1A0 = l06_alien_snapper_base_targeting_radius;
     }
 
     if (activate_effect_l08(snapper_vars->f1A0,
