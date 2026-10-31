@@ -365,17 +365,17 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
     float                 position_scratch[4];
     float                 dialogue_rotation[4];
 
-    if (moby->state >= 3 && moby->state <= 5 && proximity == 0) {
+    if (moby->state >= RESORT_OWNER_WAIT_TO_FOLLOW_HERO && moby->state <= RESORT_OWNER_FOLLOW_DISTANT_HERO && proximity == 0) {
         FUN_L11_002d2088_c(moby, 6);
         return;
     }
-    if (moby->state >= 4 && moby->state <= 6) {
+    if (moby->state >= RESORT_OWNER_FOLLOW_HERO && moby->state <= RESORT_OWNER_MOVE_TO_PATH_POINT) {
         fast_vec_normalize(position_scratch, &moby->rot_row0, 3.0f);
         fast_vec_add(position_scratch, position_scratch, &moby->pos);
         if (try_find_resort_owner_jump_target(moby, position_scratch)) {
             qcopy(&moby_vars->target, position_scratch);
             moby_vars->target.z = ground_height_14b0(&moby_vars->target);
-            moby_vars->next_state = 3;
+            moby_vars->next_state = RESORT_OWNER_WAIT_TO_FOLLOW_HERO;
             FUN_L11_002d2088_c(moby, 7);
         }
     }
@@ -480,7 +480,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                                    &o->rot_row2,
                                    resort_owner_gate_jump_target_local_z_offset_gp);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                moby_vars->next_state = 8;
+                moby_vars->next_state = RESORT_OWNER_MOVE_TO_GATE_TARGET;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
             }
@@ -500,7 +500,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                                    resort_owner_gate_jump_target_local_z_offset_gp);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
                 l11_cuboids[moby_vars->unk110].pos.z += 500.0f;
-                moby_vars->next_state = 8;
+                moby_vars->next_state = RESORT_OWNER_MOVE_TO_GATE_TARGET;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
             }
@@ -558,7 +558,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         if (vector_distance_xy(&moby->pos, &moby_vars->target) < 0.5f) {
             int next_leg_index = ++moby_vars->leg;
             qcopy(&moby_vars->target, &l11_cuboids[moby_vars->unkD0[next_leg_index]].pos);
-            moby_vars->next_state = 4;
+            moby_vars->next_state = RESORT_OWNER_FOLLOW_HERO;
             FUN_L11_002d2088_c(moby, 7);
         }
         break;
