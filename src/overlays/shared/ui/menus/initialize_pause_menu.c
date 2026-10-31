@@ -193,6 +193,11 @@ extern void FUN_L00_002df638(Ent *);
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00277208). */
 void initialize_pause_menu(void) {
+    enum {
+        PAUSE_MENU_PENDING_STATE_CLEARED = 0,
+        SCENE_STATE_DEFAULT = 2,
+        PAUSE_MENU_STATE_EXIT_GUARDED = 0x22
+    };
     struct GameState *state = &D_L00_001B9CF0;
     Own              *page;
     s32               small_buffers = 0;
@@ -216,7 +221,7 @@ void initialize_pause_menu(void) {
         state->unk8 = page;
         small_buffers = 1;
     } else if (state_id == 0x21) {
-        D_L00_001B9CF0.state = 0x22;
+        D_L00_001B9CF0.state = PAUSE_MENU_STATE_EXIT_GUARDED;
         page = &l00_pause_menu_exit_guarded_page_owner;
         state->owner = page;
         state->unk8 = page;
@@ -227,12 +232,12 @@ void initialize_pause_menu(void) {
         state->unk8 = page;
     } else if (state_id == 0x2D) {
         page = &D_L00_001B86C8;
-        D_L00_001B9CF0.state = 2;
+        D_L00_001B9CF0.state = SCENE_STATE_DEFAULT;
         state->owner = page;
         state->unk8 = page;
     } else {
         page = &l00_pause_menu_default_page_owner;
-        D_L00_001B9CF0.state = 2;
+        D_L00_001B9CF0.state = SCENE_STATE_DEFAULT;
         state->owner = page;
         state->unk8 = page;
     }
@@ -249,7 +254,7 @@ void initialize_pause_menu(void) {
             D_L00_001841F0.w224 = (s32)D_L00_001B9CF0.unkE4;
         }
         D_L00_001B9CF0.pending_owner = 0;
-        D_L00_001B9CF0.pending_state = 0;
+        D_L00_001B9CF0.pending_state = PAUSE_MENU_PENDING_STATE_CLEARED;
     }
 
     {
