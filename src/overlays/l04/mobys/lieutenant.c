@@ -72,12 +72,12 @@ void lieutenant_update(struct Moby *moby) {
     switch (moby->state) {
     case LIEUTENANT_STATE_INITIALIZE:
         if (D_0014C050[((struct VendorMobyView *)moby)->slot + current_level_index * 16] == 0xFF) {
-            moby->state = 3;
+            moby->state = LIEUTENANT_STATE_DISABLED;
             moby->flags |= 0x41;
             moby->collision = 0;
             break;
         }
-        moby->state = 1;
+        moby->state = LIEUTENANT_STATE_UPDATE_DIALOGUE;
         initialize_npc_dialogue(moby, lieutenant_dialogue_vars);
         break;
     case LIEUTENANT_STATE_UPDATE_DIALOGUE:
@@ -86,7 +86,7 @@ void lieutenant_update(struct Moby *moby) {
         else
             lieutenant_dialogue_vars->alpha = 1.0f;
         if (update_npc_dialogue(moby, lieutenant_dialogue_vars))
-            moby->state = 2;
+            moby->state = LIEUTENANT_STATE_UNLOCK_PLANET_AND_DISABLE;
         break;
     case LIEUTENANT_STATE_UNLOCK_PLANET_AND_DISABLE:
         if (lieutenant_dialogue_vars->phase == 2) {
@@ -101,7 +101,7 @@ void lieutenant_update(struct Moby *moby) {
             qcopy(&l04_lieutenant_shop_camera.rot, rotation_ptr);
             l04_lieutenant_shop_camera.active = 1;
             memcard_save_data(0, -1);
-            moby->state = 3;
+            moby->state = LIEUTENANT_STATE_DISABLED;
             moby->flags |= 0x41;
             moby->collision = 0;
             break;
