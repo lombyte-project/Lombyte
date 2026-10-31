@@ -10,6 +10,9 @@ void initialize_menu_stream_buffers(s32 mode) __asm__("FUN_00225ac0");
  * the first two groups and 0x4F000 for the final group. The flag word
  * is one only for the final group. */
 void initialize_menu_stream_buffers(s32 mode) {
+    enum {
+        MENU_STREAM_MODE_SINGLE_PRIMARY_BUFFER = 0
+    };
     s32                      secondary_address;
     s32                      primary_address;
     s32                      primary_count;
@@ -22,7 +25,7 @@ void initialize_menu_stream_buffers(s32 mode) {
 
     primary_address = menu_system.help_text_buffer;
     secondary_address = menu_system.unk10C;
-    if (mode == 0) {
+    if (mode == MENU_STREAM_MODE_SINGLE_PRIMARY_BUFFER) {
         primary_count = 1;
         secondary_count = 0;
         large_count = 0;
