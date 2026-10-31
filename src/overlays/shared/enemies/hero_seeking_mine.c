@@ -190,6 +190,9 @@ tailA:
 }
 
 void draw_group_moby_effect_quads(unsigned char *moby) {
+    enum {
+        GROUP_MOBY_STATE_INACTIVE = 1
+    };
     EffectQuad      effect_quad;
     float           angles[4] __attribute__((aligned(16)));
     float           rotation[12] __attribute__((aligned(16)));
@@ -219,7 +222,7 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
     do {
         unsigned char *group_member_moby =
             (unsigned char *)((int)l15_moby_array + ((*group_moby_entry & 0x7fff) << 8));
-        if (MOBY(group_member_moby)->state != 1) {
+        if (MOBY(group_member_moby)->state != GROUP_MOBY_STATE_INACTIVE) {
             clear_u64_value(angles);
             angles[2] = fast_arc_tan(l15_camera.pos.f[0] - MOBY(group_member_moby)->pos.x,
                                      l15_camera.pos.f[1] - MOBY(group_member_moby)->pos.y);
