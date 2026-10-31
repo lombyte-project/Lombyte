@@ -211,7 +211,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
 
     qcopy(old_position, moby->pos);
     qcopy(old_rotation, moby->rot);
-    if (moby->state >= 2) {
+    if (moby->state >= DRAIN_COVER_RISE) {
         if (voice_is_playing(moby, drain_cover_data->sound) == 0) {
             drain_cover_data->sound = allocate_voice_for_target_entry(0, 4, moby);
         }
@@ -228,7 +228,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
     }
     switch (moby->state) {
     case DRAIN_COVER_INITIALIZE:
-        moby->state = 1;
+        moby->state = DRAIN_COVER_WAIT_TO_RISE;
         drain_cover_data->timer = scale_game_frames(0x78);
         drain_cover_data->sound = 0xFF;
         qcopy(drain_cover_data->home, moby->pos);
@@ -245,7 +245,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         update_drain_cover_tilt((char *)moby, 0.0f, 8.0f);
         if (D_L05_0015F5C4 == 0 && vector_distance_xy(moby->pos, D_0013F3D0) < 24.0f &&
             fast_dec_timer(&drain_cover_data->timer) != 0) {
-            moby->state = 2;
+            moby->state = DRAIN_COVER_RISE;
             clear_u64_value(drain_cover_data->vel);
             drain_cover_data->vel[2] = square_root(drain_cover_data->f80 * 2.0f *
                                                    (l05_drain_cover_gravity * frame_time_sq));
@@ -314,7 +314,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         drain_cover_data->vel[2] =
             drain_cover_data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
         if (drain_cover_data->vel[2] <= 0.0f) {
-            moby->state = 3;
+            moby->state = DRAIN_COVER_HOVER;
             drain_cover_data->home[3] = drain_cover_data->f84 - 0.5f;
             drain_cover_data->timer = truncate_float_to_s32(scale_time(drain_cover_data->f88));
         }
@@ -336,7 +336,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             }
         }
         if (fast_dec_timer(&drain_cover_data->timer) != 0) {
-            moby->state = 4;
+            moby->state = DRAIN_COVER_FALL_TO_HOME;
         }
         break;
     case DRAIN_COVER_FALL_TO_HOME:
@@ -354,7 +354,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             drain_cover_data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
         if (moby->pos[2] < drain_cover_data->home[2]) {
             allocate_voice_for_target_entry(1, 0, moby);
-            moby->state = 1;
+            moby->state = DRAIN_COVER_WAIT_TO_RISE;
             drain_cover_data->timer = scale_game_frames(0x78);
             qcopy(moby->pos, drain_cover_data->home);
             drain_cover_data->f98 = random_angle_radians();
