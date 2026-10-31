@@ -3037,7 +3037,7 @@ int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
 int try_start_hero_weapon_fire_state(void) {
     struct Hero *hero_base = (struct Hero *)((char *)D_0013E533 + 0xE1D);
     int          current_state = hero_base->state.current;
-    if ((unsigned)(current_state - 2) < 2 || current_state == 0) {
+    if ((unsigned)(current_state - 2) < 2 || current_state == HERO_STATE_IDLE) {
         if (hero_base->item_anim_active != 0) {
             if (hero_base->item_anim_frames < scale_game_frames(6)) {
                 if (hero_base->stick_magnitude < 0.7f) {
