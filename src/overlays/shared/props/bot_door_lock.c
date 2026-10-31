@@ -26,6 +26,9 @@ extern int     D_L06_001fe9d0[][4];
 void           draw_bot_door_lock_glow(struct Moby *moby) __asm__("FUN_L06_00307578");
 
 void draw_bot_door_lock_glow(struct Moby *moby) {
+    enum {
+        GEOMETRY_QUAD_TEX1_FIXED_LOD = 1
+    };
     struct GeometryQuad quad;
     OvlVec4             rotated_quad_corners[4];
     float               rotation[4];
@@ -45,7 +48,7 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     bot_door_lock_private_data[7] += 0.01f;
     if (1.0f < bot_door_lock_private_data[7])
         bot_door_lock_private_data[7] -= 1.0f;
-    quad.texture_state = 1;
+    quad.texture_state = GEOMETRY_QUAD_TEX1_FIXED_LOD;
     quad.primitive = 0x4000000044ULL;
     quad.reserved.value = 0;
     quad.texture = get_effect_texture(0x18);
