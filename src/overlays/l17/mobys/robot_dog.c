@@ -710,9 +710,9 @@ int enemy_stun_update(struct Moby *moby) __asm__("FUN_L17_002efea8");
 int enemy_stun_update(struct Moby *moby) {
     int suction_status = process_moby_suck_cannon_suction(moby);
     if (suction_status) {
-        moby->state = 12;
-    } else if (moby->state == 12) {
-        moby->state = 6;
+        moby->state = ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE;
+    } else if (moby->state == ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE) {
+        moby->state = ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER;
         if (moby->prev_seq != 7) {
             int animation_blend_frames = scale_game_frames(10);
             blend_moby_animation(moby, 7, 0, animation_blend_frames);
