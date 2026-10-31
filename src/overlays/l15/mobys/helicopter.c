@@ -422,19 +422,19 @@ void helicopter_update(struct Moby *moby) {
     if (helicopter_instance_vars->pilot == 0) {
         helicopter_instance_vars->pilot = create_class_55b_moby_from_source(moby);
     }
-    if (moby->state != 0 && moby->state != 0x40 && helicopter_instance_vars->unk1A4 != 0 &&
-        hero.vehicle_mode != 2) {
+    if (moby->state != HELICOPTER_INITIALIZE && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET && helicopter_instance_vars->unk1A4 != 0 &&
+        hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         helicopter_instance_vars->unk58 = 0;
         if (helicopter_instance_vars->pilot != 0)
             helicopter_instance_vars->pilot->flags |= 0x41;
-        moby->state = 1;
+        moby->state = HELICOPTER_WAIT_FOR_ACTIVATION;
         return;
     }
     process_helicopter_hits(moby);
     goal.status = 0;
-    if (moby->state == 1) {
+    if (moby->state == HELICOPTER_WAIT_FOR_ACTIVATION) {
         helicopter_instance_vars->range = helicopter_instance_vars->wake_range;
         goto near;
     }
@@ -454,7 +454,7 @@ void helicopter_update(struct Moby *moby) {
     if (goal.target == 0)
         goal.target = hero.moby;
     target = goal.target;
-    if (moby->state != 0 && helicopter_instance_vars->unk2E != 1) {
+    if (moby->state != HELICOPTER_INITIALIZE && helicopter_instance_vars->unk2E != 1) {
         if (helicopter_instance_vars->pilot != 0)
             mark_moby_for_removal(helicopter_instance_vars->pilot);
         mark_moby_for_removal(moby);
@@ -484,7 +484,7 @@ void helicopter_update(struct Moby *moby) {
             }
             *(u128 *)&moby->pos = path->points[0].q;
         }
-        moby->state = 1;
+        moby->state = HELICOPTER_WAIT_FOR_ACTIVATION;
         helicopter_instance_vars->speed = 0.0f;
         helicopter_instance_vars->pitch_velocity = 0.0f;
         helicopter_instance_vars->yaw_velocity = 0.0f;
@@ -505,7 +505,7 @@ void helicopter_update(struct Moby *moby) {
             helicopter_instance_vars->pilot->flags |= 0x41;
         break;
     case HELICOPTER_WAIT_FOR_ACTIVATION:
-        if (helicopter_instance_vars->unk1A4 != 0 && hero.vehicle_mode != 2) {
+        if (helicopter_instance_vars->unk1A4 != 0 && hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
             helicopter_instance_vars->unk58 = 0;
@@ -524,9 +524,9 @@ void helicopter_update(struct Moby *moby) {
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
             helicopter_instance_vars->unk58 = 0x19;
             if (helicopter_instance_vars->entry_path != -1)
-                moby->state = 2;
+                moby->state = HELICOPTER_FOLLOW_ENTRY_PATH;
             else
-                moby->state = 3;
+                moby->state = HELICOPTER_APPROACH_AREA_PATH;
         } else {
             if (helicopter_instance_vars->trigger_volume != -1)
                 break;
@@ -536,9 +536,9 @@ void helicopter_update(struct Moby *moby) {
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
             helicopter_instance_vars->unk58 = 0x19;
             if (helicopter_instance_vars->entry_path != -1)
-                moby->state = 2;
+                moby->state = HELICOPTER_FOLLOW_ENTRY_PATH;
             else
-                moby->state = 3;
+                moby->state = HELICOPTER_APPROACH_AREA_PATH;
         }
         if (helicopter_instance_vars->pilot != 0)
             helicopter_instance_vars->pilot->flags &= 0xFFBE;
@@ -574,10 +574,10 @@ void helicopter_update(struct Moby *moby) {
                              D_L15_001B0AB0[helicopter_instance_vars->area_path]->points,
                              D_L15_001B0AB0[helicopter_instance_vars->area_path]->count)) {
             if (goal.status != 2) {
-                moby->state = 5;
+                moby->state = HELICOPTER_ENGAGE_AND_FIRE;
                 helicopter_instance_vars->fire_timer = 0;
             } else {
-                moby->state = 4;
+                moby->state = HELICOPTER_HOLD_POSITION_WAIT_FOR_TARGET;
             }
         }
         if (segment + 1 < path->count - 8) {
@@ -644,10 +644,10 @@ void helicopter_update(struct Moby *moby) {
         if (vector_distance_xy(&move, &moby->pos) < 1.0f ||
             point_in_path_xy(&moby->pos, path->points, path->count)) {
             if (goal.status != 2) {
-                moby->state = 5;
+                moby->state = HELICOPTER_ENGAGE_AND_FIRE;
                 helicopter_instance_vars->fire_timer = 0;
             } else {
-                moby->state = 4;
+                moby->state = HELICOPTER_HOLD_POSITION_WAIT_FOR_TARGET;
             }
         }
         break;
@@ -661,10 +661,10 @@ void helicopter_update(struct Moby *moby) {
         if (goal.status == 2)
             break;
         if (point_in_path_xy(&moby->pos, path->points, path->count)) {
-            moby->state = 5;
+            moby->state = HELICOPTER_ENGAGE_AND_FIRE;
             helicopter_instance_vars->fire_timer = 0;
         } else {
-            moby->state = 3;
+            moby->state = HELICOPTER_APPROACH_AREA_PATH;
         }
         break;
     }
@@ -688,7 +688,7 @@ void helicopter_update(struct Moby *moby) {
             aim.q = *(u128 *)&moby->pos;
             target_pos.q = *(u128 *)&target->pos;
             steer_helicopter(moby, (SteeringVec_4f88 *)&aim, (SteeringVec_4f88 *)&target_pos);
-            moby->state = 4;
+            moby->state = HELICOPTER_HOLD_POSITION_WAIT_FOR_TARGET;
         }
         break;
     case HELICOPTER_RECOIL:
@@ -764,7 +764,7 @@ void helicopter_update(struct Moby *moby) {
         FUN_L00_00257470(moby, 0x200, -1);
         detach_manipulator(moby, helicopter_instance_vars->turret_yaw_joint);
         detach_manipulator(moby, helicopter_instance_vars->turret_pitch_joint);
-        moby->state = 0x40;
+        moby->state = HELICOPTER_DEAD_WAIT_FOR_RESET;
         return;
     }
     case HELICOPTER_DEAD_WAIT_FOR_RESET:
@@ -778,17 +778,17 @@ void helicopter_update(struct Moby *moby) {
         *(int *)(D_0014C190 + (((short)moby->save_id >> 5) * 4 + (current_level_index << 8))) &=
             ~(1 << (moby->save_id & 0x1F));
         D_L15_001BAAD0[(short)moby->save_id >> 5] &= ~(1 << (moby->save_id & 0x1F));
-        if (hero.vehicle_mode != 2) {
+        if (hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
             moby->pos.z = helicopter_instance_vars->height - 7.5f;
             moby->scale *= 2.0f;
-            moby->state = 0;
+            moby->state = HELICOPTER_INITIALIZE;
         }
         return;
     }
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L15_001673C0) < 40.0f) {
         FUN_L00_0025a120(moby);
     }
-    if (moby->state != 1) {
+    if (moby->state != HELICOPTER_WAIT_FOR_ACTIVATION) {
         float climb = absolute_float(moby->pos.z - previous_pos.f[2]);
         float limit = frame_time * 10.0f;
         if (limit < climb) {
