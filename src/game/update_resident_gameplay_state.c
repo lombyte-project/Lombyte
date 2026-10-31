@@ -145,6 +145,9 @@ void update_resident_gameplay_state(void) {
         LEVEL_RENDER_STATE_GAMEPLAY = 4,
         LEVEL_RENDER_STATE_PLAYBACK_WITH_MUSIC_RESUME = 8
     };
+    enum {
+        RESIDENT_OBJECT_STATE_LIST_END = 0xFF
+    };
     Vector4               scratch_vectors[4];
     s32                   keyframe_flags;
     s32                   ticks_per_bank;
@@ -188,13 +191,13 @@ void update_resident_gameplay_state(void) {
         skip = level_render_state.skip;
         if ((controller_state.pressed & (PAD_TRIANGLE | PAD_CROSS)) &&
             scale_game_frames(30) < render_sequence.time && sequence == 0.0f) {
-            if (level_render_state.state == 0 &&
+            if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU &&
                 render_sequence.time <
                     scale_game_frames(
                         playback_skip_target_frames[level_render_state.content_variant] - 30)) {
                 skip = 1;
             }
-            if (level_render_state.state == 8 &&
+            if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_WITH_MUSIC_RESUME &&
                 render_sequence.time < render_sequence.end - scale_game_frames(30)) {
                 skip = 1;
             }
@@ -204,7 +207,7 @@ void update_resident_gameplay_state(void) {
                 music_stream_state.secondary.state != 7) {
                 music_stream_state.secondary.state = 5;
             }
-            if (level_render_state.state == 0) {
+            if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU) {
                 render_sequence.time = scale_game_frames(
                     playback_skip_target_frames[level_render_state.content_variant]);
                 render_sequence.sequence_frame = render_sequence.time / ticks_per_bank;
@@ -241,13 +244,13 @@ void update_resident_gameplay_state(void) {
                 }
             }
             level_render_state.player->flags &= ~1;
-            for (object_cursor = moby_instance_end; object_cursor->state != 0xFF; object_cursor++) {
+            for (object_cursor = moby_instance_end; object_cursor->state != RESIDENT_OBJECT_STATE_LIST_END; object_cursor++) {
                 if (!(object_cursor->state & 0x80) &&
                     (object_cursor->class_id == 0x4A || object_cursor->class_id == 0xCB)) {
                     object_cursor->flags &= ~0x80;
                 }
             }
-            if (level_render_state.state == 0) {
+            if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU) {
                 pause_all_sounds(0);
                 menu_system.state = 0xE;
                 space_load_in_progress[0] = 1;
@@ -328,7 +331,7 @@ void update_resident_gameplay_state(void) {
             playback_object->cached_selector = 0xFF;
             refresh_moby_spatial_bounds(playback_object);
             if (playback_object->class_id == 0) {
-                if (level_render_state.state == 0) {
+                if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU) {
                     if (current_level_index == 10 && item_available[6] == 0) {
                         playback_object->unk7F = 0;
                     } else if (render_sequence.time <= scale_game_frames(0x3E)) {
@@ -346,7 +349,7 @@ void update_resident_gameplay_state(void) {
                     playback_object->unk7F = 0;
                 }
             } else if (playback_object->class_id == 10) {
-                if (level_render_state.state == 0) {
+                if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU) {
                     if (render_sequence.time <= scale_game_frames(350)) {
                         playback_object->unk7F = 0x18;
                     } else {
@@ -384,7 +387,7 @@ void update_resident_gameplay_state(void) {
             if ((u16)playback_object->class_id - 0x213U < 3) {
                 enqueue_callback_list_4(render_environment_mapped_object, playback_object);
                 add_draw_callback(draw_light_flare, playback_object);
-                if (level_render_state.state == 0) {
+                if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU) {
                     if (render_sequence.time < scale_game_frames(360)) {
                         s32 color_intensity =
                             (s32)(fast_cos(
