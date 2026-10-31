@@ -53,7 +53,7 @@ void amoeboid_update(struct Moby *moby) {
     handle_amoeboid_hits(moby);
     switch (moby->state) {
     case AMOEBOID_INITIALIZE:
-        moby->state = 1;
+        moby->state = AMOEBOID_FOLLOW_PATH;
         moby->update_dist = 0x40;
         if (moby->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, 0);
@@ -98,7 +98,7 @@ void amoeboid_update(struct Moby *moby) {
     }
     case AMOEBOID_WAIT_FOR_HERO_TO_LEAVE:
         if (48.0f < vector_distance_xy(&moby->pos, &hero.motion.pos)) {
-            moby->state = 1;
+            moby->state = AMOEBOID_FOLLOW_PATH;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
             moby->collision = moby->pclass->collision;
