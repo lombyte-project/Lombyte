@@ -550,7 +550,7 @@ void integrate_hero_motion_with_collisions(void) {
     player = (L16MovementPlayer *)((char *)position - 0x80);
     update_hero_attachment(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
     /* Limit the velocity by state and mode. Inside an arm `position` moves on to the velocity; it is formed again below. */
-    if (player->state == 34 || player->state == 20) {
+    if (player->state == HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY || player->state == HERO_STATE_WRENCH_SLAM) {
         float  limit;
         float *limited_velocity;
 
