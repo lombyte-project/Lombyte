@@ -113,7 +113,7 @@ void spawn_attached_rocket_explosion(struct Moby *moby) __asm__("FUN_L13_003060b
 
 /* Moby class 1233 */
 void attached_rocket_update(struct Moby *moby) {
-    AttachedRocketVars *attached_rocket_vars = (AttachedRocketVars *)moby->pvars;
+    enum { ATTACHED_ROCKET_STATE_ATTACHED = 1 } ;AttachedRocketVars *attached_rocket_vars = (AttachedRocketVars *)moby->pvars;
     struct Moby        *source;
     struct Moby        *target;
     struct {
@@ -130,7 +130,7 @@ void attached_rocket_update(struct Moby *moby) {
     float other_distance;
 
     qcopy(&work.old_pos, &moby->pos);
-    if (moby->state == 1) {
+    if (moby->state == ATTACHED_ROCKET_STATE_ATTACHED) {
         source = attached_rocket_vars->unk20;
         if (source == 0 || source->oclass != 0x65 || source->state == 0xfe || source->state == 0xfd)
             goto remove;
