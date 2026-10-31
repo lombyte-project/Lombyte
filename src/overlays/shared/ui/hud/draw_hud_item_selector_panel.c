@@ -80,9 +80,9 @@ int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
         screen_position[1] = gauge_element->unk54;
         gauge_element->w = ww;
         {
-            int *src = (int *)&(*(short *)&D_L00_0015F764);
-            int *dst = &gauge_element->h;
-            __builtin_memcpy(dst, src, 4);
+            int *vertical_scale_source = (int *)&(*(short *)&D_L00_0015F764);
+            int *gauge_height_destination = &gauge_element->h;
+            __builtin_memcpy(gauge_height_destination, vertical_scale_source, 4);
         }
     }
     hud_screen_position(gauge_element, &screen_position[0], &screen_position[1]);
