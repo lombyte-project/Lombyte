@@ -64,8 +64,8 @@ void command_falling_platform_update(char *moby) {
         parent_data = *(char **)(parent + 0x78);
     }
     if (((unsigned char *)moby)[0xBC] == 2) {
-        moby[0x20] = 2;
-        moby[0xBC] = 3;
+        MOBY(moby)->state = 2;
+        MOBY(moby)->command = 3;
         *(int *)(falling_platform_vars + 0xAC) = ((unsigned char *)falling_platform_vars)[0xBD];
     }
     switch (((unsigned char *)moby)[0x20]) {
@@ -80,8 +80,8 @@ void command_falling_platform_update(char *moby) {
         *(float *)(falling_platform_vars + 0xA4) = MOBY(moby)->rot.x;
         *(float *)(falling_platform_vars + 0xA8) = MOBY(moby)->rot.y;
         *(int *)(falling_platform_vars + 0xC8) = -1;
-        moby[0x20] = 1;
-        moby[0xBC] = 0;
+        MOBY(moby)->state = 1;
+        MOBY(moby)->command = 0;
         if (((unsigned char *)moby)[0xB0] != 0xFF) {
             if (visited52[((unsigned char *)moby)[0xB0] + current_level_index * 16] != 0xFF)
                 break;
@@ -90,7 +90,7 @@ void command_falling_platform_update(char *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     case PLATFORM_COMMAND_GATED_SWAY:
@@ -128,7 +128,7 @@ void command_falling_platform_update(char *moby) {
             parent_data[0x19D] = falling_platform_vars[0xBF];
             parent[0x20] = 12;
         }
-        moby[0x20] = 3;
+        MOBY(moby)->state = 3;
         break;
     case PLATFORM_TILT_AND_FALL:
         speed = 1.3962634f;
@@ -148,7 +148,7 @@ void command_falling_platform_update(char *moby) {
                 break;
             if (((unsigned char *)falling_platform_vars)[0xBC] != 0) {
                 *(float *)(falling_platform_vars + 0xB0) = 0.0f;
-                moby[0x20] = 4;
+                MOBY(moby)->state = 4;
             } else {
                 mark_moby_for_removal(moby);
                 return;
@@ -162,7 +162,7 @@ void command_falling_platform_update(char *moby) {
             random_float_between(frame_time, frame_time * 4.0f);
         *(float *)(falling_platform_vars + 0xC0) = random_angle_radians();
         *(float *)(falling_platform_vars + 0xC4) = random_angle_radians();
-        moby[0x20] = 5;
+        MOBY(moby)->state = 5;
         MOBY(moby)->rot.x = 0.0f;
         MOBY(moby)->rot.y = 0.0f;
         *(int *)(falling_platform_vars + 0xAC) = 0;

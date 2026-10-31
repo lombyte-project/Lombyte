@@ -575,10 +575,10 @@ void breakable_window_update(char *moby) {
     int base;
     int state;
     MOBY(moby)->scale = MOBY(moby)->pclass->scale * camera_sequence_moby_scale_multiplier_gp;
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_DRAW_SELECTION:
         camera_sequence_and_draw_vars[1] = 1;
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case WAIT_FOR_LINKED_MOBY_TRIGGER:
         if ((camera_sequence_and_draw_vars[2] < 0 ||
@@ -588,11 +588,11 @@ void breakable_window_update(char *moby) {
             break;
         }
         if (vector_distance_xy(moby + 0x10, D_0013F3D0) < 32.0f) {
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             camera_sequence_and_draw_vars[9] = scale_game_frames(30);
         } else {
             spawn_moby_breakup_effect(moby);
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
         }
         break;
     case WAIT_CAMERA_START_DELAY:
@@ -600,7 +600,7 @@ void breakable_window_update(char *moby) {
             {
                 int state;
                 int base;
-                moby[0x20] = 3;
+                MOBY(moby)->state = 3;
                 scripted_camera_sequence_active = 1;
                 D_L06_0015F408 = 0x12;
                 state = camera_sequence_and_draw_vars[5];
@@ -655,7 +655,7 @@ void breakable_window_update(char *moby) {
         }
         /* This field holds float bits; retail completes only on an ordered >= comparison. */
         if (*(float *)(camera_sequence_and_draw_vars + 6) >= 0.99999f) {
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
             hero_set_state(0, 0);
             FUN_L06_00312ce8(2);
             scripted_camera_sequence_active = 0;
@@ -722,7 +722,7 @@ void breakable_window_update(char *moby) {
             qcopy((void *)(state + base + 0x30), D_0013F3D0);
             *(float *)(state + base + 0x38) -= 0.5f;
             camera_sequence_and_draw_vars[3] = -1;
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     }

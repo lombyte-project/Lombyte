@@ -56,7 +56,7 @@ void hero_falling_platform_update(char *moby) {
         MOBY(moby)->rot.x += random_float_between(-0.034906585f, 0.034906585f);
         MOBY(moby)->rot.y += random_float_between(-0.034906585f, 0.034906585f);
         MOBY(moby)->pos.z += random_float_between(-0.02f, 0.02f);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case LEAF_WAIT_FOR_HERO_CONTACT:
         if (is_hero_on_moby(moby)) {
@@ -65,7 +65,7 @@ void hero_falling_platform_update(char *moby) {
             *(short *)(moby_data + 0xA0) = scale_game_frames(0x1E);
             if (*(short *)(moby_data + 0xA2) != -1)
                 allocate_voice_for_target_entry(*(short *)(moby_data + 0xA2), 0, (int)moby);
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     case LEAF_TIMED_SWAY_AND_DESCENT:
@@ -81,7 +81,7 @@ void hero_falling_platform_update(char *moby) {
         }
         if (fast_dec_timer_s16(moby_data + 0xA0)) {
             *(float *)(moby_data + 0xA4) = frame_scale * 0.002f;
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
         }
         break;
     case LEAF_ACCELERATED_FALL:

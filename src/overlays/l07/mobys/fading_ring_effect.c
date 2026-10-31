@@ -72,9 +72,9 @@ unsigned char *spawn_fading_ring_effect(int   spawning_moby,
         char *distance_reference_position;
         char *distance_response_state;
         spawned_moby_vars = ((char *)MOBY(moby)->pvars);
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
+        MOBY(moby)->visible = 1;
         qcopy(moby + 0x10, spawn_position);
         *(int *)(spawned_moby_vars + 0x14) = spawning_moby;
         *(float *)(spawned_moby_vars + 4) = f1;
@@ -220,11 +220,11 @@ void fading_ring_effect_update(unsigned char *moby) {
     radius_progress = (*(float *)(moby_data + 8) - *(float *)moby_data) /
                       (*(float *)(moby_data + 4) - *(float *)moby_data);
     if (radius_progress < 0.2f) {
-        moby[0x23] = truncate_float_to_s32(radius_progress * 5.0f * 127.0f);
+        MOBY(moby)->alpha = truncate_float_to_s32(radius_progress * 5.0f * 127.0f);
     } else if (radius_progress > 0.8f) {
-        moby[0x23] = truncate_float_to_s32((1.0f - radius_progress) * 5.0f * 127.0f);
+        MOBY(moby)->alpha = truncate_float_to_s32((1.0f - radius_progress) * 5.0f * 127.0f);
     } else {
-        moby[0x23] = 0x80;
+        MOBY(moby)->alpha = 0x80;
     }
     if (radius_progress >= 1.0f) {
         mark_moby_for_removal(moby);

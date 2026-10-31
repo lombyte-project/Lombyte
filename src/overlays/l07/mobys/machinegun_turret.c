@@ -64,7 +64,7 @@ void machinegun_turret_update(unsigned char *moby) {
     animation = turret_instance_vars + 0x60;
     hit = find_moby_hit(moby, 0x230000, 0);
     resolve_moby_hit_response((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
-    if ((u8)moby[0x20] < 2 && contact[0] > 1) {
+    if ((u8)MOBY(moby)->state < 2 && contact[0] > 1) {
         FUN_0022da68(1, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
         MOBY(moby)->flags &= 0xefff;
@@ -72,13 +72,13 @@ void machinegun_turret_update(unsigned char *moby) {
         *(s16 *)(turret_instance_vars + 0x26) = scale_game_frames(60);
         trooper_anim_update(moby, animation);
         *(s16 *)(turret_instance_vars + 0x7c) = scale_game_frames(60);
-        if ((u8)moby[0x53] != 2)
+        if ((u8)MOBY(moby)->prev_seq != 2)
             FUN_00212f90(moby, 2, 0, 5);
-        moby[0x20] = 2;
+        MOBY(moby)->state = 2;
     }
     MOBY(moby)->hit_slot = 0xff;
     trooper_anim_finish(moby, animation);
-    switch ((u8)moby[0x20]) {
+    switch ((u8)MOBY(moby)->state) {
     case TURRET_INITIALIZE:
         if (*(int *)(turret_instance_vars + 0x70) != -1) {
             char *target =
@@ -109,14 +109,15 @@ void machinegun_turret_update(unsigned char *moby) {
         MOBY(moby)->rot.z = normalize_angle(*(float *)(turret_instance_vars + 0x80));
         *(float *)(turret_instance_vars + 0x90) = MOBY(moby)->pos.z;
         turret_instance_vars[0x29] = 0;
-        moby[0xbc] = 0;
+        MOBY(moby)->command = 0;
         *(u16 *)(turret_instance_vars + 0x9c) = *(u16 *)(turret_instance_vars + 0x94);
-        if ((u8)moby[0x53] != 1)
+        if ((u8)MOBY(moby)->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, 0);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case TURRET_SWEEP_AND_FIRE:
-        if ((u8)moby[0x52] != 1 && ((u8)moby[0x70] & 2) != 0 && (u8)moby[0x53] != 1)
+        if ((u8)MOBY(moby)->seq != 1 && ((u8)MOBY(moby)->anim_flags & 2) != 0 &&
+            (u8)MOBY(moby)->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, 1);
         if (*(s16 *)(turret_instance_vars + 0x7e) != 0) {
             *(float *)(turret_instance_vars + 0x88) -=
@@ -137,7 +138,7 @@ void machinegun_turret_update(unsigned char *moby) {
                                             *(float *)(turret_instance_vars + 0x88));
         if (fast_dec_timer_s16(turret_instance_vars + 0x7c) == 0)
             return;
-        if ((u8)moby[0xbc] == 0) {
+        if ((u8)MOBY(moby)->command == 0) {
             if (*(int *)(turret_instance_vars + 0x98) == 0 ||
                 (*(u16 *)(turret_instance_vars + 0x9c) & 1)) {
                 FUN_L00_0024f7c8(moby, 0, position);
@@ -150,20 +151,20 @@ void machinegun_turret_update(unsigned char *moby) {
             }
             if (*(int *)(turret_instance_vars + 0x98) != 0) {
                 if (fast_dec_timer_s16(turret_instance_vars + 0x9c) != 0) {
-                    moby[0xbc] = 1;
+                    MOBY(moby)->command = 1;
                     *(u16 *)(turret_instance_vars + 0x9c) = *(u16 *)(turret_instance_vars + 0x98);
                 }
             } else {
                 *(u16 *)(turret_instance_vars + 0x9c) ^= 1;
             }
         } else if (fast_dec_timer_s16(turret_instance_vars + 0x9c) != 0) {
-            moby[0xbc] = 0;
+            MOBY(moby)->command = 0;
             *(u16 *)(turret_instance_vars + 0x9c) = *(u16 *)(turret_instance_vars + 0x94);
         }
         *(s16 *)(turret_instance_vars + 0x7c) = scale_game_frames(6);
         distance = vector_distance_xy(moby + 0x10, D_0013F3D0);
         if (!(55.0f < distance)) {
-            if (!(35.0f < distance) || (u8)moby[0x31] != 0)
+            if (!(35.0f < distance) || (u8)MOBY(moby)->visible != 0)
                 return;
         }
         if (distance > 80.0f)
@@ -178,7 +179,8 @@ void machinegun_turret_update(unsigned char *moby) {
         break;
     case TURRET_HIT_SPIN:
         direction = frame_time;
-        if ((u8)moby[0x52] != 4 && ((u8)moby[0x70] & 2) && (u8)moby[0x53] != 4) {
+        if ((u8)MOBY(moby)->seq != 4 && ((u8)MOBY(moby)->anim_flags & 2) &&
+            (u8)MOBY(moby)->prev_seq != 4) {
             FUN_00212f90(moby, 4, 0, 1);
             direction = D_0015ED6C;
         }
@@ -186,10 +188,11 @@ void machinegun_turret_update(unsigned char *moby) {
         if (fast_dec_timer_s16(turret_instance_vars + 0x7c) == 0)
             return;
         *(s16 *)(turret_instance_vars + 0x7c) = scale_game_frames(180);
-        moby[0x20] = 3;
+        MOBY(moby)->state = 3;
         break;
     case TURRET_LOWER_AND_REALIGN:
-        if ((u8)moby[0x52] != 4 && ((u8)moby[0x70] & 2) && (u8)moby[0x53] != 4)
+        if ((u8)MOBY(moby)->seq != 4 && ((u8)MOBY(moby)->anim_flags & 2) &&
+            (u8)MOBY(moby)->prev_seq != 4)
             FUN_00212f90(moby, 4, 0, 0);
         if (*(float *)(turret_instance_vars + 0x90) - 0.7f < MOBY(moby)->pos.z)
             MOBY(moby)->pos.z -= frame_time * 5.0f;
@@ -205,9 +208,9 @@ void machinegun_turret_update(unsigned char *moby) {
                                                 *(float *)(turret_instance_vars + 0x88));
         if (fast_dec_timer_s16(turret_instance_vars + 0x7c) != 0) {
             FUN_0022da68(2, 0, moby);
-            if ((u8)moby[0x53] != 3)
+            if ((u8)MOBY(moby)->prev_seq != 3)
                 FUN_00212f90(moby, 3, 0, 5);
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
         }
         break;
     case TURRET_RESTORE_HEIGHT:
@@ -217,9 +220,9 @@ void machinegun_turret_update(unsigned char *moby) {
         }
         MOBY(moby)->pos.z = *(float *)(turret_instance_vars + 0x90);
         MOBY(moby)->flags |= 0x1000;
-        if ((u8)moby[0x53] != 1)
+        if ((u8)MOBY(moby)->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, 5);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case 5:
         break;

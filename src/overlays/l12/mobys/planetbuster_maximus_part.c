@@ -396,8 +396,8 @@ void update_planetbuster_maximus_guns(char *moby) {
     update_planetbuster_maximus_detached_parts(moby);
     if (*(short *)(owner_data + 0x5FC) <= 0 && D_L12_00161F04_gp == 0) {
         D_L12_00161F24 = 1;
-        moby[0x20] = 4;
-        moby[0xBC] = 0;
+        MOBY(moby)->state = 4;
+        MOBY(moby)->command = 0;
     }
 }
 
@@ -668,10 +668,10 @@ void planetbuster_maximus_part_update(char *moby) {
         qcopy(moby + 0x10, (char *)&D_L12_00161F60_gp);
         qcopy(moby + 0x40, (char *)&D_L12_00161F70_gp);
     }
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case PLANETBUSTER_INITIALIZE_LINKED_PARTS:
         D_L12_001619B4 = 0;
-        if (visited52[(unsigned char)moby[0xB0] + (current_level_index_gp << 4)] == 0xFF) {
+        if (visited52[(unsigned char)MOBY(moby)->mission + (current_level_index_gp << 4)] == 0xFF) {
             int i;
             for (i = 0; i < 17; i++) {
                 int s = *(int *)(moby_data + i * 0x30 + 0x20);
@@ -704,7 +704,7 @@ void planetbuster_maximus_part_update(char *moby) {
                 D_L12_001FB688[j] = 0;
             *(int *)(moby_data + 0x604) = -1;
             *(short *)(moby_data + 0x5FC) = 100;
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
         }
         break;
     case PLANETBUSTER_WAIT_FOR_PATH_TRIGGER: {
@@ -775,7 +775,7 @@ void planetbuster_maximus_part_update(char *moby) {
                 ((unsigned char *)D_L12_0015FFD8_gp +
                  (*(int *)(moby_data + k * 0x30 + 0x20) << 8))[0xA4] = 0xFF;
             }
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     }
@@ -804,7 +804,7 @@ void planetbuster_maximus_part_update(char *moby) {
         } else {
             approach_value((float *)(moby_data + 0x5F0), 0.0f, frame_time_sq_macro * 8.0f);
             if (*(float *)(moby_data + 0x5F0) == 0.0f) {
-                moby[0x20] = 3;
+                MOBY(moby)->state = 3;
                 break;
             }
         }
@@ -867,9 +867,9 @@ void planetbuster_maximus_part_update(char *moby) {
         break;
     case PLANETBUSTER_DROP_PARTS_AND_TRANSITION:
         if (*(int *)(moby_data + 0x608) != -1 && *(int *)(moby_data + 0x60C) != -1) {
-            switch ((unsigned char)moby[0xBC]) {
+            switch ((unsigned char)MOBY(moby)->command) {
             case PLANETBUSTER_TRANSITION_SETUP:
-                moby[0xBC] = 1;
+                MOBY(moby)->command = 1;
                 set_camera_position(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x30);
                 set_camera_rotation(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x70);
                 D_L12_0015F404 = 1;
@@ -915,7 +915,7 @@ void planetbuster_maximus_part_update(char *moby) {
                     set_camera_position(v);
                     set_camera_rotation(transition_rotation);
                 } else {
-                    moby[0xBC] = 2;
+                    MOBY(moby)->command = 2;
                     D_L12_0015F404 = 0;
                     jet_end_mount(3);
                 }
@@ -958,7 +958,7 @@ void planetbuster_maximus_part_update(char *moby) {
         break;
     }
     update_planetbuster_maximus_glow_color(moby);
-    if ((unsigned char)moby[0x20] >= 1 && (unsigned char)moby[0x20] <= 3) {
+    if ((unsigned char)MOBY(moby)->state >= 1 && (unsigned char)MOBY(moby)->state <= 3) {
         if (*(int *)(moby_data + 0x604) == -1)
             *(int *)(moby_data + 0x604) = allocate_voice_for_target_entry(0, 4, moby);
     } else {

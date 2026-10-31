@@ -59,7 +59,7 @@ void wall_button_blocker_update(struct Moby *moby) {
 void set_wall_button_blocker_collision(void *moby, int on) __asm__("FUN_L16_002e3770");
 
 void set_wall_button_blocker_collision(void *moby, int on) {
-    if (*(short *)((char *)moby + 0xA6) == 0x56B) {
+    if (MOBY(moby)->oclass == 0x56B) {
         if (on != 0) {
             *(int *)((char *)moby + 0x94) = *(int *)(*(char **)((char *)moby + 0x24) + 0x10);
         } else {

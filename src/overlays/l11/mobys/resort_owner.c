@@ -146,8 +146,8 @@ void update_resort_owner_state_actions(void *mp) {
     case RESORT_OWNER_MOVE_TO_GATE_TARGET:
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET: {
         char *yaw_ptr = (char *)moby + 0x48;
-        target_yaw = fast_arc_tan(*(float *)(pvars + 0x120) - *(float *)((char *)moby + 0x10),
-                                  *(float *)(pvars + 0x124) - *(float *)((char *)moby + 0x14));
+        target_yaw = fast_arc_tan(*(float *)(pvars + 0x120) - MOBY(moby)->pos.x,
+                                  *(float *)(pvars + 0x124) - MOBY(moby)->pos.y);
         approach_angle((float *)(yaw_ptr),
                        target_yaw,
                        (float *)(pvars + 0x150),
@@ -180,14 +180,14 @@ void update_resort_owner_state_actions(void *mp) {
             motion_scalar = vector_length_xy(pvars + 0x130);
             *(float *)(pvars + 0x138) = FUN_L00_0025abf0(
                 (char *)moby + 0x10, pvars + 0x120, motion_scalar, 0, -(D_0015ED70 * 10.8f));
-            *(float *)((char *)moby + 0x58) = 0.6666667f;
+            MOBY(moby)->anim_speed = 0.6666667f;
         }
         motion_scalar = fast_vec_length(pvars + 0x130);
         if (0.0f < motion_scalar)
             *(float *)(pvars + 0x138) = *(float *)(pvars + 0x138) - D_0015ED70 * 10.8f;
         if (is_value_within_interpolated_window(moby, 29.0f)) {
             clear_u64_value(pvars + 0x130);
-            *(float *)((char *)moby + 0x58) = 1.0f;
+            MOBY(moby)->anim_speed = 1.0f;
         }
         break;
     case RESORT_OWNER_WAIT_AT_GATE: {
@@ -237,8 +237,8 @@ void apply_resort_owner_movement(void *mp) {
     qcopy(A, moby + 0x10);
     qcopy(B, moby_vars + 0x130);
     FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
-    if ((moby[0x20] >= 4 && moby[0x20] <= 6) ||
-        (moby[0x20] == 7 && *(int *)(moby_vars + 0x15C) == 3)) {
+    if ((MOBY(moby)->state >= 4 && MOBY(moby)->state <= 6) ||
+        (MOBY(moby)->state == 7 && *(int *)(moby_vars + 0x15C) == 3)) {
         resolve_point_path_segment_xy_clearance(
             0.3f,
             *(void **)(moby_vars + 0x60 - -(*(int *)(moby_vars + 0x158) * 4)),

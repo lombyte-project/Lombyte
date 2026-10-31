@@ -489,7 +489,7 @@ void metropolis_train_locomotive_update(char *moby) {
                 }
             }
         }
-        moby[0xBC] = 1;
+        MOBY(moby)->command = 1;
         train_engine_pvars->i9C = 3;
         *(unsigned short *)(coupling + 0x34) |= 6;
         break;
@@ -499,13 +499,13 @@ void metropolis_train_locomotive_update(char *moby) {
         cdata->i74 = train_engine_pvars->iA4;
         cdata->fFC = train_engine_pvars->fC0;
         gunship_update(coupling);
-        moby[0xBC] = 2;
+        MOBY(moby)->command = 2;
         break;
     case TRAIN_POSITION_FOR_BOARDING:
         *(OvlQuad *)start = *(OvlQuad *)(((char *)l03_paths[train_engine_pvars->iA8]) + 0x10);
         place_metropolis_train(
             moby, start, PATH_HEADING(((char *)l03_paths[train_engine_pvars->iA8])));
-        moby[0xBC] = 3;
+        MOBY(moby)->command = 3;
         cdata->i74 = train_engine_pvars->iA4;
         cdata->path = ((char *)l03_paths[cdata->i74]);
         cdata->i60 = 1;
@@ -521,7 +521,7 @@ void metropolis_train_locomotive_update(char *moby) {
         }
         mode = hero.state.control_mode;
         if (mode < 2 || mode == 9 || mode == 12) {
-            moby[0xBC] = 4;
+            MOBY(moby)->command = 4;
             D_L03_0015FDFC = 1;
             request_music_track(4, 7);
             set_moby_dialogue_record_value(moby, 1);
@@ -621,7 +621,7 @@ void metropolis_train_locomotive_update(char *moby) {
         train_engine_pvars->fC0 = 2.0f * train_engine_pvars->fC0;
         cdata->fFC = train_engine_pvars->fC0;
         gunship_update(coupling);
-        moby[0xBC] = 5;
+        MOBY(moby)->command = 5;
         request_music_track(0, 8);
         break;
     case TRAIN_FOLLOW_SECOND_PATH_AND_BRAKE:
@@ -638,7 +638,7 @@ void metropolis_train_locomotive_update(char *moby) {
             }
             if (train_engine_pvars->fC8 == braking_speed_floor) {
                 ((char *)&D_L03_0015FFD8_m292[train_engine_pvars->iD8])[0xBC] = 0;
-                moby[0xBC] = 6;
+                MOBY(moby)->command = 6;
                 train_engine_pvars->fC0 *= 0.5f;
                 RELEASE_VOICE(train_engine_pvars->i108);
                 train_engine_pvars->i108 = -1;
@@ -659,7 +659,7 @@ void metropolis_train_locomotive_update(char *moby) {
             }
             train_engine_pvars->fC8 = train_engine_pvars->fC0;
             train_engine_pvars->fDC = 20.0f;
-            moby[0xBC] = 1;
+            MOBY(moby)->command = 1;
         } else {
             update_metropolis_train_idle_motion(moby);
         }

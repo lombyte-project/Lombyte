@@ -111,15 +111,15 @@ void extermibot_update(unsigned char *moby) {
         *(int *)(moby_data + 0x2DC) = 0;
         MOBY(moby)->flags &= 0xFFBE;
     }
-    if (moby[0x31] != 0 &&
+    if (MOBY(moby)->visible != 0 &&
         fast_vec_dist((float *)&MOBY(moby)->pos, (float *)D_L05_001671C0) < 28.0f) {
         FUN_L00_0025a120(moby);
-        moby[0x7F] = 0x16;
+        MOBY(moby)->shadow_range = 0x16;
     }
     FUN_L05_00303390_c((Moby *)moby);
     target_moby = *(char **)(moby_data + 0x160);
     MOBY(moby)->scale = MOBY(moby)->pclass->scale * (D_L05_00161A98);
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case EXTERMIBOT_INITIALIZE:
         MOBY(moby)->flags |= 0x1000;
         qcopy(moby_data + 0x270, moby + 0x10);
@@ -150,20 +150,20 @@ void extermibot_update(unsigned char *moby) {
             MOBY(moby)->flags &= 0x7FFF;
         }
         if (*(int *)(moby_data + 0x2B4) != 0) {
-            moby[0x20] = 0xC;
-            moby[0x31] = 0;
+            MOBY(moby)->state = 0xC;
+            MOBY(moby)->visible = 0;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags &= 0xEFFF;
             MOBY(moby)->pos.z -= 20.0f;
             MOBY(moby)->draw_dist = 0;
         } else if (*(long *)(moby_data + 0x2B8) != -1) {
             MOBY(moby)->flags &= 0xEFFF;
-            moby[0x20] = 0xF;
-            if (moby[0x53] != 0)
+            MOBY(moby)->state = 0xF;
+            if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 0);
         } else {
-            moby[0x20] = 1;
-            if (moby[0x53] != 0)
+            MOBY(moby)->state = 1;
+            if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 0);
         }
         build_symmetric_adjacency_masks((int *)(moby_data + 0x2C0), 1, *(int *)(moby_data + 0x2C4));
@@ -183,28 +183,28 @@ void extermibot_update(unsigned char *moby) {
                 *(float *)(moby_data + 0x294) = *(float *)(moby_data + 0x298) * 0.017453292f;
                 *(int *)(moby_data + 0x2AC) =
                     scale_game_frames((int)random_float_between(30.0f, 90.0f));
-                moby[0x20] = 4;
-                if (moby[0x53] != 1)
+                MOBY(moby)->state = 4;
+                if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             } else {
                 *(int *)(moby_data + 0x164) = 2;
             }
         }
         if (*(int *)(moby_data + 0x164) == 2 && *(int *)(moby_data + 0x2B0) != 0) {
-            moby[0x20] = 6;
-            if (moby[0x53] != 1)
+            MOBY(moby)->state = 6;
+            if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
-        } else if (moby[0x70] & 2) {
-            if (moby[0x31] != 0 && (random_integer_below(0xFF) & 1)) {
+        } else if (MOBY(moby)->anim_flags & 2) {
+            if (MOBY(moby)->visible != 0 && (random_integer_below(0xFF) & 1)) {
                 FUN_L00_00257d78((float *)(moby_data + 0x280), 0.0f, 4.0f);
                 *(float *)(moby_data + 0x288) = 0.0f;
                 fast_vec_add(moby_data + 0x280, moby_data + 0x280, moby_data + 0x270);
                 *(short *)(moby_data + 0x2D2) = 0;
-                moby[0xBC] = moby[0x20];
-                moby[0x20] = 2;
-                if (moby[0x53] != 1)
+                MOBY(moby)->command = MOBY(moby)->state;
+                MOBY(moby)->state = 2;
+                if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
-            } else if (moby[0x53] != 0) {
+            } else if (MOBY(moby)->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
         }
@@ -239,8 +239,8 @@ void extermibot_update(unsigned char *moby) {
         if ((vector_distance_xy(moby_position, moby_data + 0x280) < 1.0f &&
              *(short *)(moby_data + 0x2D2) > scale_game_frames(0x3C)) ||
             *(short *)(moby_data + 0x2D2) > scale_game_frames(0xB4)) {
-            moby[0x20] = moby[0xBC];
-            if (moby[0x53] != 0)
+            MOBY(moby)->state = MOBY(moby)->command;
+            if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(20));
         }
         break;
@@ -279,33 +279,33 @@ void extermibot_update(unsigned char *moby) {
             near = 1;
         }
         if (near) {
-            moby[0x20] = 5;
-            if (moby[0x53] != 4)
+            MOBY(moby)->state = 5;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(20));
         } else if (*(int *)(moby_data + 0x2B0) != 0) {
             if (vector_distance_xy(moby_position, target_moby + 0x10) < 3.0f) {
-                moby[0x20] = 7;
+                MOBY(moby)->state = 7;
                 *(short *)(moby_data + 0x2D0) =
                     scale_game_frames(extermibot_pre_strike_delay_frames_gp);
-                if (moby[0x53] != 2)
+                if (MOBY(moby)->prev_seq != 2)
                     blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             }
         } else {
-            moby[0x20] = 10;
+            MOBY(moby)->state = 10;
         }
         break;
     }
     case EXTERMIBOT_WAIT_FOR_TARGET_IN_STRIKE_RANGE:
         if (*(int *)(moby_data + 0x2B0) == 0) {
             *(float *)(moby_data + 0xF4) = 0.0f;
-            moby[0x20] = 10;
-            if (moby[0x53] != 1)
+            MOBY(moby)->state = 10;
+            if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
         } else if (vector_distance_xy(moby + 0x10, target_moby + 0x10) < 3.0f) {
-            moby[0x20] = 7;
+            MOBY(moby)->state = 7;
             *(short *)(moby_data + 0x2D0) =
                 scale_game_frames(extermibot_pre_strike_delay_frames_gp);
-            if (moby[0x53] != 2)
+            if (MOBY(moby)->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
         }
         break;
@@ -317,18 +317,18 @@ void extermibot_update(unsigned char *moby) {
              is_point_inside_clip_volume(((char *)D_0013F3D0), *(int *)(moby_data + 0x2BC)) != 0)) {
             MOBY(moby)->draw_dist = 0x40;
             MOBY(moby)->flags |= 0x1000;
-            moby[0x20] = 1;
-        } else if (moby[0x70] & 2) {
+            MOBY(moby)->state = 1;
+        } else if (MOBY(moby)->anim_flags & 2) {
             if (random_integer_below(0xFF) & 1) {
                 FUN_L00_00257d78((float *)(moby_data + 0x280), 0.0f, 4.0f);
                 *(float *)(moby_data + 0x288) = 0.0f;
                 fast_vec_add(moby_data + 0x280, moby_data + 0x280, moby_data + 0x270);
                 *(short *)(moby_data + 0x2D2) = scale_game_frames(0x5A);
-                moby[0xBC] = moby[0x20];
-                moby[0x20] = 2;
-                if (moby[0x53] != 1)
+                MOBY(moby)->command = MOBY(moby)->state;
+                MOBY(moby)->state = 2;
+                if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
-            } else if (moby[0x53] != 0) {
+            } else if (MOBY(moby)->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
         }
@@ -342,14 +342,14 @@ void extermibot_update(unsigned char *moby) {
                 MOBY(moby)->rot.z,
                 fast_arc_tan(MOBY(target_moby)->pos.x - MOBY(moby)->pos.x,
                              MOBY(target_moby)->pos.y - MOBY(moby)->pos.y)) < 0.7853982f) {
-            moby[0x20] = 7;
+            MOBY(moby)->state = 7;
             *(short *)(moby_data + 0x2D0) =
                 scale_game_frames(extermibot_pre_strike_delay_frames_gp);
-            if (moby[0x53] != 2)
+            if (MOBY(moby)->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
         }
         if (*(int *)(moby_data + 0x164) == 2) {
-            moby[0x20] = 10;
+            MOBY(moby)->state = 10;
         }
         break;
     }
@@ -363,14 +363,14 @@ void extermibot_update(unsigned char *moby) {
                          D_0015ED70 * 12.566371f,
                          D_0015ED70 * 12.566371f,
                          D_0015ED6C * 25.132742f);
-        if ((moby[0x70] & 2) && moby[0x53] == 2) {
+        if ((MOBY(moby)->anim_flags & 2) && MOBY(moby)->prev_seq == 2) {
             blend_moby_animation(moby, 7, 0, scale_game_frames(5));
         }
         if (fast_dec_timer_s16(moby_data + 0x2D0) != 0) {
             float a;
-            moby[0x20] = 8;
+            MOBY(moby)->state = 8;
             *(short *)(moby_data + 0x2D0) = 0;
-            if (moby[0x53] != 3)
+            if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(1));
             a = fast_add_rotations(MOBY(moby)->rot.z, 0.0f);
             path_goal_or_facing_vector[0] =
@@ -474,29 +474,29 @@ void extermibot_update(unsigned char *moby) {
                 path_goal_or_facing_vector,
                 1.0f);
         }
-        if (moby[0x70] & 2) {
-            moby[0x20] = 9;
-            if (moby[0x53] != 4)
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 9;
+            if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
         break;
     }
     case EXTERMIBOT_RECOVER_AFTER_STRIKE:
-        if (moby[0x70] & 2) {
+        if (MOBY(moby)->anim_flags & 2) {
             if (vector_distance_xy(moby + 0x10, target_moby + 0x10) < 3.0f &&
                 fast_difference_between_rotations(
                     MOBY(moby)->rot.z,
                     fast_arc_tan(MOBY(target_moby)->pos.x - MOBY(moby)->pos.x,
                                  MOBY(target_moby)->pos.y - MOBY(moby)->pos.y)) < 0.2617994f) {
-                moby[0x20] = 7;
+                MOBY(moby)->state = 7;
                 *(short *)(moby_data + 0x2D0) =
                     scale_game_frames(extermibot_pre_strike_delay_frames_gp);
-                if (moby[0x53] != 7)
+                if (MOBY(moby)->prev_seq != 7)
                     blend_moby_animation(moby, 7, 0, scale_game_frames(5));
             } else {
                 *(float *)(moby_data + 0xF4) = 0.0f;
-                moby[0x20] = 4;
-                if (moby[0x53] != 1)
+                MOBY(moby)->state = 4;
+                if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         }
@@ -504,15 +504,15 @@ void extermibot_update(unsigned char *moby) {
     case EXTERMIBOT_RETURN_TO_START:
         FUN_L05_00303b08_c((struct Moby *)moby, (s32)(moby_data + 0x270), 0.0f);
         if (vector_distance_xy(moby + 0x10, moby_data + 0x270) < 1.0f) {
-            moby[0x20] = 1;
-            if (moby[0x53] != 0)
+            MOBY(moby)->state = 1;
+            if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(3));
         } else if (*(int *)(moby_data + 0x164) != 2) {
-            moby[0x20] = 4;
-            if (moby[0x53] != 1)
+            MOBY(moby)->state = 4;
+            if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(3));
         } else if (*(int *)(moby_data + 0x2B0) != 0) {
-            moby[0x20] = 6;
+            MOBY(moby)->state = 6;
         }
         break;
     case EXTERMIBOT_NONLETHAL_KNOCKBACK:
@@ -524,8 +524,8 @@ void extermibot_update(unsigned char *moby) {
                             (s32)(moby_data + 0x270),
                             path_goal_or_facing_vector,
                             (D_L05_00161A98) * 0.4f) != 0) {
-                moby[0x20] = 4;
-                if (moby[0x53] != 1)
+                MOBY(moby)->state = 4;
+                if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                 break;
             }
@@ -539,9 +539,9 @@ void extermibot_update(unsigned char *moby) {
         }
         break;
     case EXTERMIBOT_WAIT_FOR_ANIMATION_BEFORE_IDLE:
-        if (moby[0x70] & 2) {
-            moby[0x20] = 1;
-            if (moby[0x53] != 0)
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 1;
+            if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         }
         break;

@@ -108,7 +108,7 @@ void edwina_update(L16WatchMoby *moby) {
         break;
     case EDWINA_APPLY_DIALOGUE_COMPLETION:
         if (D_L12_0015F5C4 != 2) {
-            *(float *)((char *)moby + 0x58) = 1.0f;
+            MOBY(moby)->anim_speed = 1.0f;
             jet_clear_persistent(moby->widget);
             if (moby_data->region != -1) {
                 char *p = D_L12_001600EC + (moby_data->region << 7);

@@ -104,9 +104,9 @@ void moby_volume_trigger_update(char *moby) {
                 set_moby_list_state(*(int *)(volume_trigger_vars + 0x20),
                                     volume_trigger_vars[0x2F]);
             if (volume_trigger_vars[0x34] != -1)
-                moby[0x20] = volume_trigger_vars[0x34];
+                MOBY(moby)->state = volume_trigger_vars[0x34];
             if (volume_trigger_vars[0x36] != -1)
-                moby[0xBC] = volume_trigger_vars[0x36];
+                MOBY(moby)->command = volume_trigger_vars[0x36];
             volume_trigger_vars[0x38] = 1;
         }
     } else {
@@ -184,9 +184,9 @@ void moby_volume_trigger_update(char *moby) {
                 set_moby_list_state(*(int *)(volume_trigger_vars + 0x20),
                                     volume_trigger_vars[0x33]);
             if (volume_trigger_vars[0x35] != -1)
-                moby[0x20] = volume_trigger_vars[0x35];
+                MOBY(moby)->state = volume_trigger_vars[0x35];
             if (volume_trigger_vars[0x37] != -1)
-                moby[0xBC] = volume_trigger_vars[0x37];
+                MOBY(moby)->command = volume_trigger_vars[0x37];
             volume_trigger_vars[0x38] = 0;
         }
     }

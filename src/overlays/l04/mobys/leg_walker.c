@@ -132,7 +132,7 @@ int FUN_L04_002927d0(char *moby, char *rig) {
     int   i;
     for (i = 12; i >= 0; i--) {
         int *candidate_record = *record_cursor++;
-        if (*candidate_record == (int)(unsigned char)moby[0x52])
+        if (*candidate_record == (int)(unsigned char)MOBY(moby)->seq)
             found = candidate_record;
     }
     if (found == 0)

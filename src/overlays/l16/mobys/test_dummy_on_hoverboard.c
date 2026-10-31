@@ -529,12 +529,12 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
     /* No pointer locals: every address is written where it is used. The compiler caches them itself
        (d + 0x1E0 from here on, the others at the top of the active state). */
     manipulator_set_scale(hoverboard_dummy_data + 0x1E0, 2.5f);
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case HOVERBOARD_DUMMY_STATE_INITIALIZE: {
         float time;
         char *path;
 
-        moby[0x30] = 24;
+        MOBY(moby)->update_dist = 24;
         MOBY(moby)->flags |= 0x41;
         path = D_L16_001B0930[*(int *)(hoverboard_dummy_data + 0x2B0)];
         *(char **)(hoverboard_dummy_data + 0x2C0) = path;
@@ -564,12 +564,12 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         }
         *(float *)(hoverboard_dummy_data + 0x2E8) = random_angle_radians();
         *(unsigned char *)(hoverboard_dummy_data + 0x29) = 0;
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     }
     case HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE:
         if (hero.state.control_mode == 22) {
-            moby[0x30] = 255;
+            MOBY(moby)->update_dist = 255;
             MOBY(moby)->collision = MOBY(moby)->pclass->collision;
             MOBY(moby)->flags &= ~0x41;
             *(short *)(hoverboard_dummy_data + 0x2F4) = 0;
@@ -582,13 +582,13 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             if (*(int *)(hoverboard_dummy_data + 0x2CC) % 2 == 1) {
                 MOBY(moby)->flags |= 0x8000;
             }
-            moby[0xA4] = 255;
-            moby[0x20] = 2;
+            MOBY(moby)->hit_slot = 255;
+            MOBY(moby)->state = 2;
         }
         break;
     case HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION:
         if (hero.state.control_mode != 22) {
-            moby[0x20] = 0;
+            MOBY(moby)->state = 0;
         } else {
             int   count = *(unsigned short *)(hoverboard_dummy_data + 0x2F2) + 1;
             short timer = count;
@@ -603,8 +603,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                         player->yaw) > 1.5707964f) {
                     MOBY(moby)->collision = MOBY(moby)->pclass->collision;
                     MOBY(moby)->flags &= ~0x41;
-                    moby[0xA4] = 255;
-                    moby[0x20] = 2;
+                    MOBY(moby)->hit_slot = 255;
+                    MOBY(moby)->state = 2;
                 }
             }
         }
@@ -612,7 +612,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
     case HOVERBOARD_DUMMY_STATE_RACING:
         hero_base = ((char *)&hero);
         if (*(int *)(hero_base + 0x208C) != 22) {
-            moby[0x20] = 0;
+            MOBY(moby)->state = 0;
             break;
         }
         if (find_moby_hit(moby, mask, 0)) {
@@ -640,12 +640,12 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             spawn_moby_break_fragments(moby, 0x6FA, 1, 0x6FB, 1, 1, 0);
             *(short *)(hoverboard_dummy_data + 0x2F2) = 0;
             *(int *)(hero_base + 0x8A8) += 250;
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags |= 0x41;
             break;
         }
-        moby[0xA4] = 255;
+        MOBY(moby)->hit_slot = 255;
         advance_hoverboard_dummy_path_node((char *)moby);
         collect_hoverboard_dummy_boosts((struct Moby *)moby);
         prepare_hoverboard_dummy_path_jump((char *)moby);

@@ -27,7 +27,7 @@ void draw_group_moby_glow_quads(unsigned char *moby) {
     int            i;
     char          *group_member_vars;
     char          *glow_position;
-    get_first_moby_in_group((int *)&it, moby[0x21], 0, 0);
+    get_first_moby_in_group((int *)&it, MOBY(moby)->group, 0, 0);
     while (it != 0) {
         if (it[0x31] != 0) {
             group_member_vars = *(char **)(it + 0x78);

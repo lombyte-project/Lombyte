@@ -269,7 +269,7 @@ float get_camera_transition_progress(Level18VendorFloatMoby *moby) {
 s32 classify_moby_state_two_or_three(const u8 *moby) __asm__("FUN_L18_002dfba0");
 
 s32 classify_moby_state_two_or_three(const u8 *moby) {
-    u32 state = moby[0x20];
+    u32 state = MOBY(moby)->state;
     s32 state_classification = 2;
 
     if (state == 2) {

@@ -113,13 +113,13 @@ void extermitank_update(unsigned char *moby) {
         mark_moby_for_removal_c3(moby);
         return;
     }
-    if (moby[0x31] != 0) {
+    if (MOBY(moby)->visible != 0) {
         if (fast_vec_dist(moby + 0x10, D_L05_001671C0) < 27.0f) {
             FUN_L00_0025a120(moby);
-            moby[0x7F] = 0x15;
+            MOBY(moby)->shadow_range = 0x15;
         }
     }
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case EXTERMITANK_INITIALIZE: {
         char *child_moby;
         char *g;
@@ -171,8 +171,8 @@ void extermitank_update(unsigned char *moby) {
             ((char *)l05_paths[*(int *)(extermitank_vars + 0xD4)]);
         *(int *)(extermitank_vars + 0xC0) = 1;
         qcopy(moby + 0x10, *(char **)(extermitank_vars + 0xD0) + 0x10);
-        moby[0x20] = 1;
-        if (moby[0x53] != 0)
+        MOBY(moby)->state = 1;
+        if (MOBY(moby)->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, 0);
         *(float *)(extermitank_vars + 0x94) = D_L05_00161AF8 * D_0015ED6C_gp;
         clear_u64_value(extermitank_vars + 0x40);
@@ -227,9 +227,9 @@ void extermitank_update(unsigned char *moby) {
                     qcopy(origin_position, moby + 0x10);
                     origin_position[2] = origin_position[2] + 3.0f;
                     if (collision_line(origin_position, h + 0x50, 2, moby, 0) == 0) {
-                        if (moby[0x53] != 0)
+                        if (MOBY(moby)->prev_seq != 0)
                             blend_moby_animation(moby, 0, 0, 3);
-                        moby[0x20] = 2;
+                        MOBY(moby)->state = 2;
                     }
                 }
             }
@@ -412,9 +412,9 @@ void extermitank_update(unsigned char *moby) {
                               ((char *)l05_paths[*(int *)(extermitank_vars + 0x190)]) + 0x10,
                               *(int *)l05_paths[*(int *)(extermitank_vars + 0x190)]) == 0) ||
             collision_line(working_position, D_0013E533 + 0xEED, 2, moby, 0) != 0) {
-            if (moby[0x53] != 0)
+            if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 3);
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
         }
         {
             char *g = ((char *)&D_0013F350);
@@ -514,7 +514,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     hit = part0;
     resolve_moby_hit_response(
         moby, hit, extermitank_hit_sync_vars + 0x20, 0, &hit_processing_status, &remaining, 0, 4);
-    if (hit_processing_status == 1 || (unsigned char)moby[0x20] == 3)
+    if (hit_processing_status == 1 || (unsigned char)MOBY(moby)->state == 3)
         goto mark_children;
     {
         *(float *)(extermitank_hit_sync_vars + 0x20) -= remaining;
@@ -590,7 +590,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
                             -1,
                             0);
             *(short *)(extermitank_hit_sync_vars + 0x19e) = scale_game_frames(D_L05_00161B74);
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
             clear_u64_value(effect_data);
             *(float *)(effect_data + 8) = *(float *)(extermitank_hit_sync_vars + 0x194);
             spawn_particle_305178(moby,

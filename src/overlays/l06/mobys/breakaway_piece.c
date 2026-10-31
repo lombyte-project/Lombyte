@@ -25,13 +25,13 @@ void breakaway_piece_update(char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    state = (unsigned char)moby[0x20];
+    state = (unsigned char)MOBY(moby)->state;
     switch (state) {
     case INITIALIZE_BOBBING_HEIGHT:
         MOBY(moby)->draw_dist = 0x200;
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(float *)(bobbing_and_motion_vars + 0xC) = MOBY(moby)->pos.z;
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case UPDATE_BOBBING_HEIGHT:
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {

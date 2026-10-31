@@ -103,7 +103,7 @@ void miner_update(L16WatchMoby *moby) {
         break;
     case MINER_APPLY_DIALOGUE_COMPLETION:
         if (D_L12_0015F5C4 != 2) {
-            *(float *)((char *)moby + 0x58) = 1.0f;
+            MOBY(moby)->anim_speed = 1.0f;
             alternate_item_available[1] = 1;
             queue_dialogue_message(0x2EE7, scale_game_frames(300));
             alternate_item_available[0x61] = 1;

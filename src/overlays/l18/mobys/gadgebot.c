@@ -85,16 +85,16 @@ void gadgebot_update(unsigned char *moby) {
     unsigned char *moby_vars = ((unsigned char *)MOBY(moby)->pvars);
     unsigned char *moby_transform_ptr;
     update_gadgebot_damage_target_and_glow((struct Moby *)moby);
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case GADGEBOT_INITIALIZE: {
         unsigned short moby_flags;
-        moby[0x20] = 8;
+        MOBY(moby)->state = 8;
         if (random_integer_below(2))
             MOBY(moby)->flags |= 0x8000;
         else
             MOBY(moby)->flags &= 0x7FFF;
         MOBY(moby)->flags |= 0x100;
-        moby[0x73] = D_L18_00162608;
+        MOBY(moby)->unk73 = D_L18_00162608;
         *(void **)(moby_vars + 0x140) = &D_L18_001625F0;
         *(float *)(moby_vars + 0x20) = 1.0f;
         moby_vars[0x58] = 8;
@@ -102,11 +102,11 @@ void gadgebot_update(unsigned char *moby) {
         moby_vars[0x5C] = 1;
         *(float *)(moby_vars + 0x30) = 0.5f;
         *(float *)(moby_vars + 0x1F8) = random_angle_radians();
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
         moby_flags = MOBY(moby)->flags;
         MOBY(moby)->draw_dist = 0xFF;
         moby_flags |= 1;
-        moby[0x31] = 0;
+        MOBY(moby)->visible = 0;
         moby_flags &= 0xEFFF;
         MOBY(moby)->collision = 0;
         MOBY(moby)->flags = moby_flags;
@@ -124,17 +124,17 @@ void gadgebot_update(unsigned char *moby) {
         r = probe_ground_height(position_scratch, 0, 0.5f);
         if (MOBY(moby)->pos.z < r) {
             MOBY(moby)->pos.z = r;
-            moby[0x20] = 2;
-            if (moby[0x53])
+            MOBY(moby)->state = 2;
+            if (MOBY(moby)->prev_seq)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         } else if (MOBY(moby)->pos.z < launch_gravity_and_minimum_z) {
-            moby[0x20] = 6;
+            MOBY(moby)->state = 6;
         }
         break;
     }
     case 7:
         if (FUN_L00_002dc9f0(moby, moby_vars + 0x70)) {
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             *(short *)(moby_vars + 0x138) = 0;
         }
         break;
@@ -143,8 +143,8 @@ void gadgebot_update(unsigned char *moby) {
             if (!(10.0f < vector_distance_xy(moby + 0x10, moby_vars + 0x180)))
                 break;
         }
-        moby[0x20] = 3;
-        if (moby[0x53] != 1)
+        MOBY(moby)->state = 3;
+        if (MOBY(moby)->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         break;
     case GADGEBOT_APPROACH_TARGET: {
@@ -152,14 +152,14 @@ void gadgebot_update(unsigned char *moby) {
         *(QVd058 *)position_scratch = *(QVd058 *)(moby_vars + 0x180);
         target_distance = move_gadgebot_toward_target(moby, position_scratch);
         if (*(int *)(moby_vars + 0x1C4) == 2 && target_distance < 5.0f) {
-            moby[0x20] = 2;
-            if (moby[0x53])
+            MOBY(moby)->state = 2;
+            if (MOBY(moby)->prev_seq)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             break;
         }
         if (target_distance < 1.5f) {
-            moby[0x20] = 4;
-            if (moby[0x53] != 2) {
+            MOBY(moby)->state = 4;
+            if (MOBY(moby)->prev_seq != 2) {
                 int animation_frame_index = (int)gadgebot_sequence_2_start_frame_gp;
                 blend_moby_animation(moby, 2, animation_frame_index, scale_game_frames(5));
             }
@@ -178,17 +178,17 @@ void gadgebot_update(unsigned char *moby) {
             (float *)moby_transform_ptr, (float *)(moby_vars + 0x1E8), r, b, b, max_turn_step);
         if (is_value_within_interpolated_window((char *)moby, 14.0f))
             collect_mobies_in_sphere_at_moby_point(moby, 0.5f, 1.0f, 1.0f, 1, 1, 0, 1, 0);
-        if (moby[0x70] & 2) {
+        if (MOBY(moby)->anim_flags & 2) {
             if (*(int *)(moby_vars + 0x1C4) == 2) {
-                moby[0x20] = 2;
-                if (moby[0x53])
+                MOBY(moby)->state = 2;
+                if (MOBY(moby)->prev_seq)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                 break;
             }
             if (!(2.5f < vector_distance_xy(moby + 0x10, moby_vars + 0x180)))
                 break;
-            moby[0x20] = 3;
-            if (moby[0x53] != 1)
+            MOBY(moby)->state = 3;
+            if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             break;
         }
@@ -218,8 +218,8 @@ void gadgebot_update(unsigned char *moby) {
                               1,
                               -1,
                               0);
-        moby[0x20] = 8;
-        if (moby[0x53])
+        MOBY(moby)->state = 8;
+        if (MOBY(moby)->prev_seq)
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         MOBY(moby)->collision = 0;
         MOBY(moby)->flags = (MOBY(moby)->flags | 0x41) & 0xEFFF;
@@ -516,7 +516,7 @@ short count_group_gadgebots_not_in_state_8(int group_index) {
     while (1) {
         unsigned char *moby =
             (unsigned char *)(moby_table_address + ((group_moby_entry[0] & 0x7FFF) << 8));
-        if (MOBY(moby)->oclass == 0x772 && moby[0x20] != 8)
+        if (MOBY(moby)->oclass == 0x772 && MOBY(moby)->state != 8)
             n++;
         if ((short)*group_moby_entry++ < 0)
             return n;

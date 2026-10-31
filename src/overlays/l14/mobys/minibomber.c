@@ -879,7 +879,7 @@ void ease_minibomber_position_and_heading(char  *moby,
 
                                           float heading_velocity_limit) {
     int minibomber_private_vars_base;
-    int moby_state = moby[0x20] & 0xFF;
+    int moby_state = MOBY(moby)->state & 0xFF;
     if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
         minibomber_private_vars_base = *(int *)(moby + 0x78);
         vendor_spring((float *)&MOBY(moby)->pos,

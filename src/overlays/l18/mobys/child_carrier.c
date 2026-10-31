@@ -25,7 +25,7 @@ void child_carrier_update(char *moby) {
     char *child;
     switch (MOBY(moby)->state) {
     case INITIALIZE_TRANSFORM_HISTORY:
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case UPDATE_TRANSFORM_FROM_HISTORY:
         fast_vec_sub(position_delta, moby + 0x10, transform_and_child_vars + 0x60);
@@ -76,7 +76,7 @@ void set_group_child_carrier_byte_bc(int group_index, int moby_byte_bc_value) {
                 (unsigned char *)(((group_moby_entry[0] & 0x7FFF) << 8) + D_L18_0015FFD8);
 
             if (MOBY(moby)->oclass == 0x630) {
-                moby[0xBC] = moby_byte_bc_value;
+                MOBY(moby)->command = moby_byte_bc_value;
             }
         } while ((short)*group_moby_entry++ >= 0);
     }

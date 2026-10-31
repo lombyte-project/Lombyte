@@ -76,7 +76,7 @@ char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class
         unsigned char state;
         ((unsigned char *)moby)[0x30] = 0xFF;
         state = 0xFF;
-        *(short *)(moby + 0x32) = state;
+        MOBY(moby)->draw_dist = state;
         moby[0x31] = 1;
         moby[0x20] = 0;
         qcopy(moby + 0x10, &source_moby->pos);
@@ -84,8 +84,8 @@ char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class
         moby[0xBC] = scale_game_frames(10);
         update_entity(moby);
         copy_hero_moby_field_38(moby);
-        *(float *)(moby + 0x2C) = source_moby->scale;
-        *(unsigned short *)(moby + 0x34) = source_moby->flags;
+        MOBY(moby)->scale = source_moby->scale;
+        MOBY(moby)->flags = source_moby->flags;
         **(int **)(moby + 0x78) = *(int *)source_moby->pvars;
     }
     return moby;

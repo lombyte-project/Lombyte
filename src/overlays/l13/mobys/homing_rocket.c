@@ -34,10 +34,10 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
     unsigned char *moby = (unsigned char *)create_moby(0x52);
     if (moby != 0) {
         char *homing_rocket_vars = ((char *)MOBY(moby)->pvars);
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
-        moby[0x20] = 0;
+        MOBY(moby)->visible = 1;
+        MOBY(moby)->state = 0;
         *(char **)(homing_rocket_vars + 0x24) = target;
         *(char **)(homing_rocket_vars + 0x20) = owner_moby;
         qcopy(moby + 0x10, rocket_spawn_position);
@@ -51,7 +51,7 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
         *(int *)(homing_rocket_vars + 0x30) = 0;
         *(int *)(homing_rocket_vars + 0x34) = 0;
         qcopy(homing_rocket_vars, ((char *)MOBY(owner_moby)->pvars) + 0xC0);
-        if (moby[0x53] != 1) {
+        if (MOBY(moby)->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
         fast_vec_add(moby + 0x10, moby + 0x10, homing_rocket_vars);

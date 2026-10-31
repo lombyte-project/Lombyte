@@ -64,11 +64,11 @@ void set_moby_list_visibility(int moby_list_index, int show) {
             (unsigned char *)((int)l15_moby_array + ((*moby_index_entry & 0x7FFF) << 8));
         if (show) {
             MOBY(moby)->collision = MOBY(moby)->pclass->collision;
-            moby[0x31] = 1;
+            MOBY(moby)->visible = 1;
             MOBY(moby)->flags &= 0xFFFC;
         } else {
             MOBY(moby)->collision = 0;
-            moby[0x31] = 0;
+            MOBY(moby)->visible = 0;
             MOBY(moby)->flags |= 3;
         }
         if (*moby_index_entry++ < 0)
@@ -88,7 +88,7 @@ int count_missing_or_dying_mobys_in_list(int moby_list_index) {
     do {
         unsigned char *moby =
             (unsigned char *)(moby_array_base + ((moby_index_entry[0] & 0x7FFF) << 8));
-        if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
+        if (moby == 0 || MOBY(moby)->state == 0xFE || MOBY(moby)->state == 0xFD)
             missing_or_dying_count++;
     } while ((short)*moby_index_entry++ >= 0);
     return missing_or_dying_count;

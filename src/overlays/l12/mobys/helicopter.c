@@ -133,7 +133,7 @@ void helicopter_update(char *moby) {
         int moby_query_result =
             func_L01_00276680_i(moby, convert_integer_to_float(MOBY(moby)->draw_dist));
         FUN_L12_002ebca8_c(moby, moby_query_result == -1);
-        switch ((unsigned char)moby[0x20]) {
+        switch ((unsigned char)MOBY(moby)->state) {
         case HELICOPTER_INITIALIZE_PATH:
             if (*(int *)(moby_vars + 0x74) != -1) {
                 char *tbl;
@@ -153,7 +153,7 @@ void helicopter_update(char *moby) {
                 *(float *)(moby_vars + 0x30) = 1.4f;
                 moby_vars[0x2B] = 1;
                 *(int *)(moby_vars + 0x60) = initial_node_index;
-                moby[0x20] = 1;
+                MOBY(moby)->state = 1;
                 MOBY(moby)->draw_dist = 0xAA;
                 MOBY(moby)->flags |= 0x1000;
             }

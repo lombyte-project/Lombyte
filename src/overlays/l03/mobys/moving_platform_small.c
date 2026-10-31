@@ -86,7 +86,7 @@ void moving_platform_small_update(char *moby) {
                 *(float *)(platform_pvars + 0x110) * 4.0f /
                 convert_integer_to_float(easing_frame_count * scale_game_frames(240));
             *(int *)(platform_pvars + 0x10C) = 0;
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
         }
         break;
     case PLATFORM_EASED_ENDPOINT_TRAVEL:
@@ -125,14 +125,14 @@ void moving_platform_small_update(char *moby) {
                 }
             }
             *(int *)(platform_pvars + 0x104) = -1;
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             *(int *)(platform_pvars + 0xE8) = scale_game_frames(*(int *)(platform_pvars + 0xF0));
         }
         break;
     case PLATFORM_PAUSE_BEFORE_EASED_TRAVEL:
         if (fast_dec_timer(platform_pvars + 0xE8)) {
             *(int *)(platform_pvars + 0x10C) = 0;
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
         }
         break;
     case PLATFORM_FOLLOW_PATH_NODES:
@@ -181,7 +181,7 @@ void moving_platform_small_update(char *moby) {
                     }
                 }
                 *(int *)(platform_pvars + 0x104) = -1;
-                moby[0x20] = 4;
+                MOBY(moby)->state = 4;
                 *(int *)(platform_pvars + 0xE8) =
                     scale_game_frames(*(int *)(platform_pvars + 0xF0));
             }
@@ -189,7 +189,7 @@ void moving_platform_small_update(char *moby) {
         break;
     case PLATFORM_PAUSE_BEFORE_NODE_TRAVEL:
         if (fast_dec_timer(platform_pvars + 0xE8)) {
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
         }
         break;
     }

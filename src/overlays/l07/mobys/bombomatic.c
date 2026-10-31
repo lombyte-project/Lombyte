@@ -201,7 +201,7 @@ void bombomatic_update(char *moby) {
     if (((unsigned char *)moby)[0x31] != 0) {
         if (fast_vec_dist(moby + 0x10, D_L07_00166E40) < 27.0f) {
             FUN_L00_0025a120(moby);
-            moby[0x7F] = 0x15;
+            MOBY(moby)->shadow_range = 0x15;
         }
     }
     if (moby_data == 0) {
@@ -322,7 +322,7 @@ eb20:
         attach_manipulator(moby, 0, moby_data + 0x70);
         *(int *)(moby_data + 0xC0) = 0;
         allocate_voice_for_target_entry(0, 4, (int)moby);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         *(int *)(moby_data + 0xC4) = 0;
         break;
     }
@@ -333,7 +333,7 @@ eb20:
             *(short *)(moby_data + 0xB8) = 0;
             *(float *)(moby_data + 0xBC) = random_angle_radians();
             *(short *)(moby_data + 0xBA) = 0;
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     }
@@ -394,7 +394,7 @@ eb20:
         if (*(int *)(moby_data + 0xB4) <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0x78);
             *(int *)(moby_data + 0xB4) = D_L07_0015F5CC + r9;
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
         }
         break;
     }

@@ -49,7 +49,7 @@ void taxi_platform_update(unsigned char *moby) {
     path = D_L07_001B0530[*(int *)(taxi_platform_vars + 0xB4)];
     qcopy(orig, moby + 0x10);
     fast_dec_timer_s16(taxi_platform_vars + 0xBA);
-    if (moby[0x20] == 0) {
+    if (MOBY(moby)->state == 0) {
         float f;
         char *pts;
         taxi_platform_vars[0x28] = 4;
@@ -57,7 +57,7 @@ void taxi_platform_update(unsigned char *moby) {
         *(int *)(taxi_platform_vars + 0x20) = 0;
         *(short *)(taxi_platform_vars + 0x24) = 0;
         f = 0.0f;
-        if ((moby[0xBC] = taxi_platform_vars[0xA0]) == 0) {
+        if ((MOBY(moby)->command = taxi_platform_vars[0xA0]) == 0) {
             f = 1.0f;
         }
         F(taxi_platform_vars, 0xA4) = f;
@@ -66,12 +66,12 @@ void taxi_platform_update(unsigned char *moby) {
         *(short *)(taxi_platform_vars + 0xBA) = 0;
         *(int *)(taxi_platform_vars + 0xA8) = 0;
         *(int *)(taxi_platform_vars + 0xBC) = 0;
-        moby[0x20] = 1;
-        moby[0x30] = 0xFF;
+        MOBY(moby)->state = 1;
+        MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         *(int *)(taxi_platform_vars + 0xC4) = -1;
     }
-    switch (moby[0xBC]) {
+    switch (MOBY(moby)->command) {
     case TAXI_SHRINK_AND_RESET_TO_PATH_START: {
         char *class_defaults = ((char *)MOBY(moby)->pclass);
         float t = F(moby, 0x2C) - F(class_defaults, 0x24) / 60.0f;
@@ -79,7 +79,7 @@ void taxi_platform_update(unsigned char *moby) {
         if (t < 0.0f) {
             F(moby, 0x2C) = F(class_defaults, 0x24);
             qcopy((moby + 0x10), path + 0x10);
-            moby[0xBC] = 1;
+            MOBY(moby)->command = 1;
             F(taxi_platform_vars, 0xA4) = 0.0f;
         }
         break;
@@ -92,7 +92,7 @@ void taxi_platform_update(unsigned char *moby) {
                         hero_set_state(0x72, 1);
                     }
                 }
-                moby[0xBC] = 2;
+                MOBY(moby)->command = 2;
                 F(taxi_platform_vars, 0xAC) =
                     1.0f / scale_time(F(taxi_platform_vars, 0xB0) * 60.0f);
                 *(short *)(taxi_platform_vars + 0xB8) = 0;
@@ -138,10 +138,10 @@ void taxi_platform_update(unsigned char *moby) {
                     set_hero_idle_state_for_vehicle_mode();
                 }
                 if (0.0f < F(taxi_platform_vars, 0xAC)) {
-                    moby[0xBC] = 0;
+                    MOBY(moby)->command = 0;
                     F(taxi_platform_vars, 0xA4) = 1.0f;
                 } else {
-                    moby[0xBC] = 1;
+                    MOBY(moby)->command = 1;
                     F(taxi_platform_vars, 0xA4) = 0.0f;
                 }
                 *(int *)(taxi_platform_vars + 0xA8) = 0;

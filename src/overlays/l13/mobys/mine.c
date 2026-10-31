@@ -1,5 +1,6 @@
 /* Level 13 mine moby class (0x53) that Qwark's starfighter launches: it drifts to the hero's ship and explodes on contact, and its spawn helper. */
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -45,12 +46,12 @@ spawn_level_13_mine(char *firing_moby, char *spawn_position, char *initial_veloc
     unsigned char *moby = (unsigned char *)create_moby(0x53);
     if (moby != 0) {
         char *projectile_data;
-        moby[0x30] = 0xFF;
-        *(short *)((char *)moby + 0x32) = 0xFF;
-        moby[0x31] = 1;
-        moby[0x20] = 0;
-        moby[0xBC] = 0;
-        *(float *)((char *)moby + 0x2C) = *(float *)(*(char **)((char *)moby + 0x24) + 0x24) * 0.1f;
+        MOBY(moby)->update_dist = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
+        MOBY(moby)->visible = 1;
+        MOBY(moby)->state = 0;
+        MOBY(moby)->command = 0;
+        MOBY(moby)->scale = *(float *)(*(char **)((char *)moby + 0x24) + 0x24) * 0.1f;
         projectile_data = *(char **)((char *)moby + 0x78);
         qcopy((char *)moby + 0x10, spawn_position);
         qcopy(projectile_data + 0x60, initial_velocity);
@@ -61,7 +62,7 @@ spawn_level_13_mine(char *firing_moby, char *spawn_position, char *initial_veloc
         *(float *)(projectile_data + 0x30) = 0.5f;
         projectile_data[0x29] = 1;
         *(int *)(projectile_data + 0x70) = scale_game_frames(0x168);
-        if (moby[0x53] != 1) {
+        if (MOBY(moby)->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
         update_entity(moby);

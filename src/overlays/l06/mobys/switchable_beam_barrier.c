@@ -75,7 +75,7 @@ void switchable_beam_barrier_update(char *moby) {
         } m;
     } u;
 
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_VECTOR_STREAMS:
         MOBY(moby)->scale = MOBY(moby)->pclass->scale * vector_stream_moby_scale_multiplier_gp;
         D_L06_00162238 = 0x16;
@@ -86,10 +86,10 @@ void switchable_beam_barrier_update(char *moby) {
         vector_stream_vars->timer[0] = 0;
         vector_stream_vars->f18 = -1;
         if (vector_stream_vars->f10 != -1) {
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             MOBY(moby)->collision = 0;
         } else {
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     case WAIT_FOR_LINKED_MOBY: {
@@ -97,7 +97,7 @@ void switchable_beam_barrier_update(char *moby) {
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
         }
-        moby[0x20] = 2;
+        MOBY(moby)->state = 2;
         MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         break;
     }
@@ -154,7 +154,7 @@ void switchable_beam_barrier_update(char *moby) {
             *(unsigned char *)(D_L06_0015FFD8 + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
             int voice_slot_index;
             MOBY(moby)->collision = 0;
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
             voice_slot_index = vector_stream_vars->f18;
             if (voice_slot_index != -1) {
                 char *e = ((char *)&voice_pool) + voice_slot_index * 0x70;
@@ -209,7 +209,7 @@ void switchable_beam_barrier_update(char *moby) {
                                     0);
             }
         }
-        moby[0x20] = 4;
+        MOBY(moby)->state = 4;
         break;
     }
     }

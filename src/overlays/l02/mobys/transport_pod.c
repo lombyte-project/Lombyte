@@ -140,12 +140,12 @@ void transport_pod_update(unsigned char *moby) {
                         0.1f);
         }
     }
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case TRANSPORT_POD_INITIALIZE:
-        moby[0x30] = 0xFF;
-        moby[0xBC] = 1;
+        MOBY(moby)->update_dist = 0xFF;
+        MOBY(moby)->command = 1;
         qcopy(moby + 0x10, &l02_cuboids[transport_pod_vars->node_b].pos);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         ((struct Moby *)moby)->pos.z -= 6.0f;
         transport_pod_vars->rail_a = create_moby(0x421);
         *(short *)(transport_pod_vars->rail_a + 0x32) = 0x40;
@@ -170,9 +170,9 @@ void transport_pod_update(unsigned char *moby) {
         snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         break;
     case TRANSPORT_POD_WAIT_FOR_GEAR_MOVEMENT_TRIGGER:
-        if (visited52[moby[0xB0] + current_level_index * 16] == 0xFF) {
+        if (visited52[MOBY(moby)->mission + current_level_index * 16] == 0xFF) {
             transport_pod_vars->timer = scale_game_frames(30);
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     case TRANSPORT_POD_TIMED_GEAR_MOVEMENT:
@@ -206,7 +206,7 @@ void transport_pod_update(unsigned char *moby) {
         update_entity((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[2] << 8));
         update_entity((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[3] << 8));
         if (fast_dec_timer(&transport_pod_vars->timer)) {
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
             allocate_voice_for_target_entry(1, 0, moby);
         }
         break;
@@ -220,7 +220,7 @@ void transport_pod_update(unsigned char *moby) {
         snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (l02_cuboids[transport_pod_vars->node_a].pos.z - 0.0001f <=
             ((struct Moby *)moby)->pos.z) {
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
             allocate_voice_for_target_entry(0, 0, moby);
         }
         break;
@@ -232,11 +232,11 @@ void transport_pod_update(unsigned char *moby) {
                            ((struct Moby *)moby)->pos.z - 2.0f) < 0.0001f &&
             absolute_float(*(float *)(transport_pod_vars->rail_b + 0x18) -
                            ((struct Moby *)moby)->pos.z + 4.0f) < 0.0001f) {
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     case TRANSPORT_POD_WAIT_FOR_RIDER_OR_RECALL:
-        if (moby[0xBC] == 0 &&
+        if (MOBY(moby)->command == 0 &&
             vector_distance_xy(&hero.motion.pos, &l02_cuboids[transport_pod_vars->node_b].pos) <
                 16.0f) {
             qcopy(moby + 0x10, &l02_cuboids[transport_pod_vars->node_b].pos);
@@ -244,10 +244,10 @@ void transport_pod_update(unsigned char *moby) {
             transport_pod_vars->rail_a_off = -1.0f;
             transport_pod_vars->rail_b_off = -1.0f;
             snap_transport_pod_rails_to_offsets((struct Moby *)moby);
-            moby[0x20] = 3;
-            moby[0xBC] = 1;
+            MOBY(moby)->state = 3;
+            MOBY(moby)->command = 1;
             allocate_voice_for_target_entry(1, 0, moby);
-        } else if (moby[0xBC] == 1 &&
+        } else if (MOBY(moby)->command == 1 &&
                    vector_distance_xy(&hero.motion.pos,
                                       &l02_cuboids[transport_pod_vars->node_a].pos) < 16.0f) {
             qcopy(moby + 0x10, &l02_cuboids[transport_pod_vars->node_a].pos);
@@ -255,14 +255,14 @@ void transport_pod_update(unsigned char *moby) {
             transport_pod_vars->rail_a_off = -1.0f;
             transport_pod_vars->rail_b_off = -1.0f;
             snap_transport_pod_rails_to_offsets((struct Moby *)moby);
-            moby[0xBC] = 0;
-            moby[0x20] = 3;
+            MOBY(moby)->command = 0;
+            MOBY(moby)->state = 3;
             allocate_voice_for_target_entry(1, 0, moby);
         } else if ((unsigned char *)hero.ground_moby == (struct Moby *)moby &&
                    hero.air_frames.s == 0 && hero.vehicle_mode == 0) {
             qcopy(&camera_target_or_hero_position_or_rotation, moby + 0x10);
             camera_target_or_hero_position_or_rotation.f[2] += 2.0f;
-            if (moby[0xBC] == 0) {
+            if (MOBY(moby)->command == 0) {
                 transport_pod_vars->cam_goal = 0;
                 transport_pod_vars->cam_pos =
                     (float)(*D_L02_001B0AB0_dc88[transport_pod_vars->path] - 1);
@@ -302,7 +302,7 @@ void transport_pod_update(unsigned char *moby) {
                                   camera_target_or_hero_position_or_rotation.f[2] -
                                       camera_position_or_stop_look.f[2]);
             }
-            moby[0x20] = 6;
+            MOBY(moby)->state = 6;
             transport_pod_vars->ride_timer = scale_game_frames(0xB4);
             request_hero_target_pose(
                 moby + 0x10,
@@ -322,15 +322,15 @@ void transport_pod_update(unsigned char *moby) {
     case TRANSPORT_POD_WAIT_FOR_RIDER_READY_FOR_DEPARTURE: {
         int rider_readiness_status = get_hero_target_pose_status();
         if (rider_readiness_status == 2) {
-            moby[0x20] = 7;
+            MOBY(moby)->state = 7;
             allocate_voice_for_target_entry(2, 0, moby);
             hero_set_state(0x72, 0);
         } else if (rider_readiness_status == 0) {
             jet_end_mount(2);
-            moby[0x20] = 0xD;
+            MOBY(moby)->state = 0xD;
         } else if (fast_dec_timer(&transport_pod_vars->ride_timer)) {
             jet_end_mount(2);
-            moby[0x20] = 0xD;
+            MOBY(moby)->state = 0xD;
             enter_hero_idle_or_stop();
         }
         break;
@@ -343,7 +343,7 @@ void transport_pod_update(unsigned char *moby) {
                            ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
             absolute_float(*(float *)(transport_pod_vars->rail_b + 0x18) -
                            ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
-            moby[0x20] = 8;
+            MOBY(moby)->state = 8;
         }
         break;
     case TRANSPORT_POD_LOWER_AND_TRANSFER_TO_OTHER_STOP:
@@ -355,8 +355,8 @@ void transport_pod_update(unsigned char *moby) {
                      D_L02_00161C30_gp * D_0015ED6C);
         snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (((struct Moby *)moby)->pos.z < l02_cuboids[transport_pod_vars->node_a].pos.z - 5.999f) {
-            if (moby[0xBC] == 0) {
-                moby[0xBC] = 1;
+            if (MOBY(moby)->command == 0) {
+                MOBY(moby)->command = 1;
                 qcopy_nc(moby + 0x10, &l02_cuboids[transport_pod_vars->node_b].pos);
                 qcopy_nc(&camera_position_or_stop_look,
                          &l02_cuboids[transport_pod_vars->node_b].rot);
@@ -365,7 +365,7 @@ void transport_pod_update(unsigned char *moby) {
                     &l02_cuboids[transport_pod_vars->node_b].pos,
                     &l02_cuboids[transport_pod_vars->node_a].pos);
             } else {
-                moby[0xBC] = 0;
+                MOBY(moby)->command = 0;
                 qcopy_nc(moby + 0x10, &l02_cuboids[transport_pod_vars->node_a].pos);
                 qcopy_nc(&camera_position_or_stop_look,
                          &l02_cuboids[transport_pod_vars->node_a].rot);
@@ -383,7 +383,7 @@ void transport_pod_update(unsigned char *moby) {
                             0x72,
                             0);
             transport_pod_vars->speed = -transport_pod_vars->speed;
-            moby[0x20] = 9;
+            MOBY(moby)->state = 9;
             set_active_camera_mode(2, scale_game_frames(0xB4));
         }
         break;
@@ -397,7 +397,7 @@ void transport_pod_update(unsigned char *moby) {
         if (transport_pod_vars->cam_goal != 0
                 ? (float)transport_pod_vars->cam_goal <= transport_pod_vars->cam_pos
                 : transport_pod_vars->cam_pos <= (float)transport_pod_vars->cam_goal) {
-            moby[0x20] = 10;
+            MOBY(moby)->state = 10;
         }
         sample_camera_path(D_L02_001B0AB0_dc88[transport_pod_vars->path],
                            0,
@@ -432,7 +432,7 @@ void transport_pod_update(unsigned char *moby) {
                      D_L02_00161C30_gp * D_0015ED6C);
         snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (l02_cuboids[transport_pod_vars->node_a].pos.z <= ((struct Moby *)moby)->pos.z) {
-            moby[0x20] = 0xB;
+            MOBY(moby)->state = 0xB;
             allocate_voice_for_target_entry(0, 0, moby);
         }
         break;
@@ -455,7 +455,7 @@ void transport_pod_update(unsigned char *moby) {
                     help_request(0x7DD, 0x48);
                 }
             }
-            moby[0x20] = 0xD;
+            MOBY(moby)->state = 0xD;
             jet_end_mount(2);
             hero_set_state(0, 1);
         }
@@ -463,12 +463,12 @@ void transport_pod_update(unsigned char *moby) {
     case TRANSPORT_POD_RAISE_TO_STOP_HEIGHT:
         ((struct Moby *)moby)->pos.z += D_0015ED6C * 4.0f;
         if (l02_cuboids[transport_pod_vars->node_a].pos.z <= ((struct Moby *)moby)->pos.z) {
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     case TRANSPORT_POD_WAIT_FOR_RIDER_TO_LEAVE:
         if ((unsigned char *)hero.ground_moby != (struct Moby *)moby) {
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     case TRANSPORT_POD_CREATE_RAILS:
@@ -486,14 +486,14 @@ void transport_pod_update(unsigned char *moby) {
         *(unsigned short *)(transport_pod_vars->rail_b + 0x34) = MOBY(moby)->flags;
         qcopy_nc(transport_pod_vars->rail_b + 0x10, moby + 0x10);
         qcopy_nc(transport_pod_vars->rail_b + 0x40, moby + 0x40);
-        moby[0x20] = 0xF;
+        MOBY(moby)->state = 0xF;
         break;
     case TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS:
         transport_pod_vars->rail_a_off = transport_pod_configured_rail_a_height_offset_gp;
         transport_pod_vars->rail_b_off = transport_pod_configured_rail_b_height_offset_gp;
         advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (transport_pod_rail_cycle_enabled_gp != 0.0f) {
-            moby[0x20] = 0x10;
+            MOBY(moby)->state = 0x10;
         }
         break;
     case TRANSPORT_POD_CYCLE_RAILS_TO_SPLIT_HEIGHTS:
@@ -501,12 +501,12 @@ void transport_pod_update(unsigned char *moby) {
         transport_pod_vars->rail_b_off = -4.0f;
         advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (transport_pod_rail_cycle_enabled_gp == 0.0f) {
-            moby[0x20] = 0xF;
+            MOBY(moby)->state = 0xF;
         } else if (absolute_float(*(float *)(transport_pod_vars->rail_a + 0x18) -
                                   ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
                    absolute_float(*(float *)(transport_pod_vars->rail_b + 0x18) -
                                   ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
-            moby[0x20] = 0x11;
+            MOBY(moby)->state = 0x11;
         }
         break;
     case TRANSPORT_POD_CYCLE_RAILS_TO_SHARED_LOWER_HEIGHT:
@@ -514,12 +514,12 @@ void transport_pod_update(unsigned char *moby) {
         transport_pod_vars->rail_b_off = -1.0f;
         advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (transport_pod_rail_cycle_enabled_gp == 0.0f) {
-            moby[0x20] = 0xF;
+            MOBY(moby)->state = 0xF;
         } else if (absolute_float(*(float *)(transport_pod_vars->rail_a + 0x18) -
                                   ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
                    absolute_float(*(float *)(transport_pod_vars->rail_b + 0x18) -
                                   ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
-            moby[0x20] = 0x10;
+            MOBY(moby)->state = 0x10;
         }
         break;
     }

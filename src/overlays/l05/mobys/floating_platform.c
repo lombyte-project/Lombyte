@@ -44,14 +44,14 @@ void floating_platform_update(unsigned char *moby) {
     float *previous_rotation_ptr;
     float  k;
     float  rotation_y_phase;
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case FLOATING_PLATFORM_INITIALIZE:
         *(int *)(floating_platform_vars + 0x78) = truncate_float_to_s32(
             scale_time(random_float_between((float)floating_platform_voice_interval_min_gp,
                                             (float)floating_platform_voice_interval_max_gp)));
         *(float *)(floating_platform_vars + 0x60) = random_angle_radians();
         *(float *)(floating_platform_vars + 0x6C) = random_angle_radians();
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case FLOATING_PLATFORM_UPDATE_ROCKING:
         if (fast_dec_timer((int *)(floating_platform_vars + 0x78))) {

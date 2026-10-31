@@ -290,7 +290,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                     (color & 0xffffff) +
                     (truncate_float_to_s32(fade * fade * convert_integer_to_float((int)color >> 24))
                      << 24);
-                if (moby[0x20] == 2) {
+                if (MOBY(moby)->state == 2) {
                     float alpha =
                         convert_integer_to_float(*(int *)(linked_effect_render_vars + 0x34));
                     float duration =

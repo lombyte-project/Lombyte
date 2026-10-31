@@ -31,10 +31,10 @@ unsigned char *spawn_ship_rocket(struct Moby *spawning_moby,
     unsigned char *moby = create_moby(0x40A);
     if (moby != 0) {
         char *projectile_vars = ((char *)MOBY(moby)->pvars);
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
-        moby[0x20] = 0;
+        MOBY(moby)->visible = 1;
+        MOBY(moby)->state = 0;
         *(char **)(projectile_vars + 0x20) = spawning_moby;
         *(char **)(projectile_vars + 0x24) = target;
         qcopy(moby + 0x10, spawn_position);
@@ -54,7 +54,7 @@ unsigned char *spawn_ship_rocket(struct Moby *spawning_moby,
                                scale,
                                *(float *)(spawn_rotation + 8),
                                -*(float *)(spawn_rotation + 4));
-        if (moby[0x53] != 1) {
+        if (MOBY(moby)->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
         fast_vec_add(moby + 0x10, moby + 0x10, projectile_vars);

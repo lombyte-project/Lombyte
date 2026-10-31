@@ -149,10 +149,10 @@ void set_moby_and_links_to_states_2_and_3(char *moby) {
     char  *moby_data = ((char *)MOBY(moby)->pvars);
     char **linked_mobys;
     int    i;
-    moby[0xBC] = 1;
+    MOBY(moby)->command = 1;
     if (MOBY(moby)->state == 6) {
-        moby[0x20] = 2;
-        moby[0x31] = 1;
+        MOBY(moby)->state = 2;
+        MOBY(moby)->visible = 1;
         MOBY(moby)->flags &= 0xFFFE;
         *(int *)(moby_data + 0x14) = 0;
         MOBY(moby)->rot.x =

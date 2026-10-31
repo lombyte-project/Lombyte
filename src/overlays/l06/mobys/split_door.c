@@ -82,7 +82,7 @@ void split_door_update(char *moby) {
     unsigned char next_phase;
     int           phase;
 
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_CHILD_AND_TRANSFORMS:
         qcopy(pair_transform_vars + 0x10, moby + 0x10);
         qcopy(pair_transform_vars + 0x20, moby + 0x40);
@@ -96,11 +96,11 @@ void split_door_update(char *moby) {
         qcopy(child, moby + 0x10);
         qcopy(child + 0x30, moby + 0x40);
         if (*(int *)pair_transform_vars >= 0) {
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             return;
         }
         if (*(int *)(pair_transform_vars + 4) == 2) {
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             return;
         }
         fast_vec_normalize(
@@ -112,18 +112,18 @@ void split_door_update(char *moby) {
                      pair_transform_vars + 0x10,
                      position_offset);
         update_entity(*(char **)(pair_transform_vars + 0x40));
-        moby[0x20] = 5;
+        MOBY(moby)->state = 5;
         return;
     case WAIT_FOR_HERO_IN_CLIP_VOLUME:
         if (!is_point_inside_clip_volume(&hero.motion.pos, *(int *)pair_transform_vars))
             return;
         if (*(int *)(pair_transform_vars + 4) == 1) {
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
             *(int *)(pair_transform_vars + 0x4c) = scale_game_frames(0x14);
-        } else if ((unsigned char)moby[0x21] != 0xff) {
-            set_moby_list_state((unsigned char)moby[0x21], 3);
+        } else if ((unsigned char)MOBY(moby)->group != 0xff) {
+            set_moby_list_state((unsigned char)MOBY(moby)->group, 3);
         } else {
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
         }
         allocate_voice_for_target_entry(0, 0, (int)*(char **)(pair_transform_vars + 0x40));
         return;
@@ -153,14 +153,14 @@ void split_door_update(char *moby) {
         update_entity(*(char **)(pair_transform_vars + 0x40));
         if (absolute_float(parent_distance - moby_pair_parent_fixed_distance_gp) < 0.01f &&
             absolute_float(child_distance - moby_pair_child_fixed_distance_gp) < 0.01f)
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         return;
     case ANIMATE_PAIR_WITH_TIMED_PHASES:
         target_delta = fast_vec_dist(moby + 0x10, pair_transform_vars + 0x10);
         child = *(char **)(pair_transform_vars + 0x40);
         phase_a = target_delta;
         phase_b = fast_vec_dist(child + 0x10, pair_transform_vars + 0x10);
-        phase = (unsigned char)moby[0xbc];
+        phase = (unsigned char)MOBY(moby)->command;
         if (phase == 1)
             goto phase_one;
         if (phase < 2)
@@ -247,19 +247,19 @@ void split_door_update(char *moby) {
         update_entity(*(char **)(pair_transform_vars + 0x40));
         if (!fast_dec_timer(pair_transform_vars + 0x4c))
             return;
-        moby[0xbc] = next_phase;
+        MOBY(moby)->command = next_phase;
         *(int *)(pair_transform_vars + 0x4c) = scale_game_frames(next_timer);
         target_delta = moby_pair_parent_phase_target_distance_gp;
         if (absolute_float(phase_a - target_delta) < 0.01f) {
             if (absolute_float(phase_b - moby_pair_child_phase_target_distance_gp) < 0.01f)
-                moby[0x20] = 5;
+                MOBY(moby)->state = 5;
         }
         return;
     case WAIT_FOR_RESET:
         if (moby_pair_reset_enabled_gp == 0.0f)
             return;
-        moby[0xbc] = 0;
-        moby[0x20] = 1;
+        MOBY(moby)->command = 0;
+        MOBY(moby)->state = 1;
         qcopy(moby + 0x10, pair_transform_vars + 0x10);
         qcopy(moby + 0x40, pair_transform_vars + 0x20);
         child = *(char **)(pair_transform_vars + 0x40) + 0x10;
