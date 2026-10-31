@@ -125,7 +125,7 @@ void helicopter_spark_update(Moby *moby) {
     } else if (homing_spark_pvars->target->oclass == 0xE9) {
         voice_slot = (int *)(((char *)homing_spark_pvars->target->pvars) + 0x1B8);
         if (homing_spark_pvars->target->state == 0x40 || homing_spark_pvars->target->state == 1) {
-            moby->state = 2;
+            moby->state = SPARK_CLEANUP_AND_REMOVE;
         }
     }
     state = moby->state;
@@ -266,7 +266,7 @@ void helicopter_spark_update(Moby *moby) {
                         D_L03_00173F58 != 0 &&
                         (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby ||
                          D_L03_00173F58->oclass == 0x1DF)) {
-                        moby->state = 2;
+                        moby->state = SPARK_CLEANUP_AND_REMOVE;
                     }
                     qcopy(&ray_end, &muzzle);
                     ray_end.z += 2.0f;
@@ -275,13 +275,13 @@ void helicopter_spark_update(Moby *moby) {
                         D_L03_00173F58 != 0 &&
                         (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby ||
                          D_L03_00173F58->oclass == 0x1DF)) {
-                        moby->state = 2;
+                        moby->state = SPARK_CLEANUP_AND_REMOVE;
                     }
                     if (collect_mobies_in_sphere(0.5f, &moby->pos, 0x10, moby, &hit) != 0 &&
                         D_L03_00173F58 != 0 &&
                         (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby ||
                          D_L03_00173F58->oclass == 0x1DF)) {
-                        moby->state = 2;
+                        moby->state = SPARK_CLEANUP_AND_REMOVE;
                     }
                 }
             }
@@ -289,7 +289,7 @@ void helicopter_spark_update(Moby *moby) {
         if (fast_dec_timer(&homing_spark_pvars->timer) != 0 || homing_spark_pvars->target == 0 ||
             homing_spark_pvars->target->state == 0xFE ||
             homing_spark_pvars->target->state == 0xFD) {
-            moby->state = 2;
+            moby->state = SPARK_CLEANUP_AND_REMOVE;
         }
         break;
     case SPARK_CLEANUP_AND_REMOVE:
