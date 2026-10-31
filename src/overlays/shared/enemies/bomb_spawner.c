@@ -182,6 +182,9 @@ void bomb_spawner_update(struct Moby *moby) {
         MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
         MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
     };
+    enum {
+        HIT_STATUS_DAMAGE_PROCESSING_THRESHOLD = 2
+    };
     int          used[4];
     Vec4A_2bef68 launch_origin;
     Vec4A_2bef68 launch_velocity;
@@ -259,7 +262,7 @@ void bomb_spawner_update(struct Moby *moby) {
     }
     r = (Hit_2C0330 *)find_moby_hit(moby, 0xC30000, 0);
     resolve_moby_hit_response(moby, r, &spawner_data->hp, 0, &damage_query_status, 0, 0, 4);
-    if (damage_query_status >= 2) {
+    if (damage_query_status >= HIT_STATUS_DAMAGE_PROCESSING_THRESHOLD) {
         float remaining_health = spawner_data->hp - r->f2C;
         spawner_data->hp = remaining_health;
         if (remaining_health > 0.0f) {
