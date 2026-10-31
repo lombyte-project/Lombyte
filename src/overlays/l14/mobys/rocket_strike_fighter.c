@@ -94,7 +94,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
     Vec4                     target_view_point_or_rocket_offset;
     Vec4                     rocket_position;
 
-    if (moby->state == 0) {
+    if (moby->state == ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE) {
         u16 id = moby->save_id;
         if (D_L14_001BB930.cleared[(short)id] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
@@ -106,7 +106,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
     {
         void *hit = find_moby_hit(moby, 0x800000, 0);
         moby->hit_slot = 0xFF;
-        if (hit != 0 && moby_vars->rocket == -1 && moby->state != 3) {
+        if (hit != 0 && moby_vars->rocket == -1 && moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN) {
             if (current_level_index == 14) {
                 enemy_fighter_destruction_count = enemy_fighter_destruction_count + 1;
                 if (enemy_fighter_destruction_count >= 3 && item_unlocked[0x18] == 0) {
@@ -115,7 +115,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
                     queue_dialogue_message(0x53D6, -1);
                 }
             }
-            moby->state = 3;
+            moby->state = ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN;
             FUN_L00_0025f090(moby, &moby->pos, -1, 5.0f, 13.0f);
             moby->collision = 0;
             moby->flags |= 0x41;
@@ -146,7 +146,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
         initialize_flight_path_state(moby);
         if (moby_vars->rocket != 0) {
             struct Moby *c;
-            moby->state = 1;
+            moby->state = ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS;
             moby->update_dist = 0xFF;
             moby->flags |= 0x41;
             moby->collision = 0;
@@ -154,7 +154,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
             c->flags |= 0x41;
             moby_vars->stage = 0;
         } else {
-            moby->state = 2;
+            moby->state = ROCKET_STRIKE_FIGHTER_STATE_FOLLOW_PATH;
             moby->update_dist = 0x80;
         }
         moby->draw_dist = 0x80;
@@ -198,7 +198,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
                         moby->flags &= 0xFFBE;
                         moby->collision = moby->pclass->collision;
                         rocket->flags &= 0xFFBE;
-                        moby->state = 2;
+                        moby->state = ROCKET_STRIKE_FIGHTER_STATE_FOLLOW_PATH;
                         activate_descriptor(moby_vars->flythrough);
                         target->draw_dist = 0xFF;
                         target->update_dist = 0xFF;
@@ -234,7 +234,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
             moby->flags &= 0xFFBE;
             moby->collision = moby->pclass->collision;
             moby_vars->timer = scale_game_frames(rocket_strike_fighter_respawn_delay_frames_gp);
-            moby->state = 2;
+            moby->state = ROCKET_STRIKE_FIGHTER_STATE_FOLLOW_PATH;
             moby_vars->segment = 0;
             moby_vars->along = 0;
             qcopy(&moby->pos, path + 0x10);
@@ -246,7 +246,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
         break;
     }
     spawn_rocket_strike_fighter_exhaust(moby);
-    if (moby->state != 0 && moby->state != 3 && moby->state != 1 &&
+    if (moby->state != ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE && moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN && moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS &&
         voice_is_playing(moby, moby_vars->sound) == 0)
         moby_vars->sound = allocate_voice_for_target_entry(0, 4, moby);
 }
