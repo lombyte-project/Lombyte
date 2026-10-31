@@ -34,7 +34,7 @@ void update_hud_counter_cap_and_visibility(char *hud_element) {
         *(int *)(hud_element + 8) = 10;
     else
         *(int *)(hud_element + 8) = 5;
-    if (hero.items[0].item_id == 9 && hero.vehicle_mode == 0) {
+    if (hero.items[0].item_id == 9 && hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         *(int *)(hud_element + 0x7C) = scale_game_frames(0x78) + 30;
     } else if (*(int *)(hud_element + 0x7C) > 30) {
         *(int *)(hud_element + 0x7C) = 30;
