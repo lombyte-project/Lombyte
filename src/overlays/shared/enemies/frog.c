@@ -936,19 +936,26 @@ void spawn_moby_death_effect_burst(char *moby) {
 int update_moby_grab_state(struct Moby *moby) __asm__("FUN_L06_002ea5e0");
 
 int update_moby_grab_state(struct Moby *moby) {
+    enum {
+        FROG_STATE_WANDER = 8,
+        FROG_STATE_APPROACH_TARGET = 9,
+        FROG_STATE_ATTACK = 0xC,
+        FROG_STATE_RETURN_HOME = 0xD,
+        FROG_STATE_SUCK_CANNON_HELD = 0x10
+    };
     int grab_check_result = process_moby_suck_cannon_suction(moby);
     if (grab_check_result != 0) {
-        if (moby->state == 8 || moby->state == 9 || moby->state == 0xC || moby->state == 0xD ||
-            moby->state == 0x10) {
-            if (moby->state != 0x10) {
+        if (moby->state == FROG_STATE_WANDER || moby->state == FROG_STATE_APPROACH_TARGET || moby->state == FROG_STATE_ATTACK || moby->state == FROG_STATE_RETURN_HOME ||
+            moby->state == FROG_STATE_SUCK_CANNON_HELD) {
+            if (moby->state != FROG_STATE_SUCK_CANNON_HELD) {
                 moby->command = moby->state;
-                moby->state = 0x10;
+                moby->state = FROG_STATE_SUCK_CANNON_HELD;
             }
         } else {
             grab_check_result = 0;
         }
-    } else if (moby->state == 0x10) {
-        moby->state = 8;
+    } else if (moby->state == FROG_STATE_SUCK_CANNON_HELD) {
+        moby->state = FROG_STATE_WANDER;
         if (moby->prev_seq != 0) {
             blend_moby_animation((MobyAnim *)moby, 0, 0, scale_game_frames(10));
         }
