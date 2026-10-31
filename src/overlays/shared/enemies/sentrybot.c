@@ -337,9 +337,9 @@ void sentrybot_update(unsigned char *moby) {
     fast_dec_timer_s16(&sentrybot_instance_data->attention_timer);
     if (sentrybot_instance_data->alert_timer != 0 &&
         sentrybot_instance_data->alarm_moby_index != -1) {
-        char *o = (char *)((sentrybot_instance_data->alarm_moby_index << 8) + (int)l15_moby_array);
-        if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-            set_sentrybot_alarm_duration(o, 0xB4);
+        char *linked_alarm_moby = (char *)((sentrybot_instance_data->alarm_moby_index << 8) + (int)l15_moby_array);
+        if (*(int *)(*(char **)(linked_alarm_moby + 0x78) + 8) != 0)
+            set_sentrybot_alarm_duration(linked_alarm_moby, 0xB4);
     }
     if (MOBY(moby)->command == 0)
         sentrybot_instance_data->unk15F = 0;
@@ -706,10 +706,10 @@ void sentrybot_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 0xD)
                 blend_moby_animation(moby, 0xD, 0, scale_game_frames(10));
             if (sentrybot_instance_data->alarm_moby_index != -1) {
-                char *o = (char *)((sentrybot_instance_data->alarm_moby_index << 8) +
+                char *linked_alarm_moby = (char *)((sentrybot_instance_data->alarm_moby_index << 8) +
                                    (int)l15_moby_array);
-                if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                    set_sentrybot_alarm_duration(o, scale_game_frames(0x1E));
+                if (*(int *)(*(char **)(linked_alarm_moby + 0x78) + 8) != 0)
+                    set_sentrybot_alarm_duration(linked_alarm_moby, scale_game_frames(0x1E));
             }
         }
         break;
@@ -1024,10 +1024,10 @@ void sentrybot_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 0xD)
                 blend_moby_animation(moby, 0xD, 0, scale_game_frames(10));
             if (sentrybot_instance_data->alarm_moby_index != -1) {
-                char *o = (char *)((sentrybot_instance_data->alarm_moby_index << 8) +
+                char *linked_alarm_moby = (char *)((sentrybot_instance_data->alarm_moby_index << 8) +
                                    (int)l15_moby_array);
-                if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                    set_sentrybot_alarm_duration(o, -1);
+                if (*(int *)(*(char **)(linked_alarm_moby + 0x78) + 8) != 0)
+                    set_sentrybot_alarm_duration(linked_alarm_moby, -1);
             }
         } else {
             int mode = sentrybot_instance_data->unk114;
@@ -1042,10 +1042,10 @@ void sentrybot_update(unsigned char *moby) {
                 if (MOBY(moby)->prev_seq != 0xD)
                     blend_moby_animation(moby, 0xD, 0, scale_game_frames(10));
                 if (sentrybot_instance_data->alarm_moby_index != -1) {
-                    char *o = (char *)((sentrybot_instance_data->alarm_moby_index << 8) +
+                    char *linked_alarm_moby = (char *)((sentrybot_instance_data->alarm_moby_index << 8) +
                                        (int)l15_moby_array);
-                    if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                        set_sentrybot_alarm_duration(o, scale_game_frames(0x1E));
+                    if (*(int *)(*(char **)(linked_alarm_moby + 0x78) + 8) != 0)
+                        set_sentrybot_alarm_duration(linked_alarm_moby, scale_game_frames(0x1E));
                 }
             } else if (sentrybot_instance_data->has_line_of_sight != 0) {
                 if (mode != 2 && sentrybot_instance_data->unk15B == 0) {
