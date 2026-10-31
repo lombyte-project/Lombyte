@@ -2995,7 +2995,7 @@ void turn_to(int a, float x, float y, float z) __asm__("FUN_L00_00211e30");
 
 void turn_to(int rotation_direction, float x, float y, float z) {
     struct Hero *hero_state = &hero;
-    if (hero_state->gravity_mode != 0) {
+    if (hero_state->gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
         turn_hero_toward_transformed_move_direction(rotation_direction, x, y, z);
     } else {
         hero_state->motion.yaw_error = spring_angle(&hero_state->motion.rot.f[2],
