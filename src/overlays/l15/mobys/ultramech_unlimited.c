@@ -876,10 +876,10 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     if (moving) {
         int i;
         int j;
-        int n;
+        int next_particle_batch_index;
     spawn:
-        for (i = 0; i < 10; i = n) {
-            n = i + 1;
+        for (i = 0; i < 10; i = next_particle_batch_index) {
+            next_particle_batch_index = i + 1;
             for (j = 2; j < 6; j++) {
                 int k;
                 position_or_motion_vector.q = 0;
