@@ -165,7 +165,7 @@ extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
 extern Own  l00_pause_menu_default_page_owner __asm__("D_L00_001B2588");
 extern Own  D_L00_001B3518;
-extern Own  D_L00_001B6088;
+extern Own  l00_pause_menu_level_transition_on_action_page_owner __asm__("D_L00_001B6088");
 extern Own  l00_pause_menu_state_preserving_entry_page_owner __asm__("D_L00_001B6B38");
 extern Own  D_L00_001B86C8;
 
@@ -198,6 +198,9 @@ void initialize_pause_menu(void) {
         SCENE_STATE_DEFAULT = 2,
         PAUSE_MENU_STATE_EXIT_GUARDED = 0x22
     };
+    enum {
+        PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION = 15
+    };
     struct GameState *state = &D_L00_001B9CF0;
     Own              *page;
     s32               small_buffers = 0;
@@ -215,8 +218,8 @@ void initialize_pause_menu(void) {
         state->unk8 = page;
         small_buffers = 1;
     } else if (state_id == 14) {
-        D_L00_001B9CF0.state = 15;
-        page = &D_L00_001B6088;
+        D_L00_001B9CF0.state = PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION;
+        page = &l00_pause_menu_level_transition_on_action_page_owner;
         state->owner = page;
         state->unk8 = page;
         small_buffers = 1;
@@ -249,7 +252,7 @@ void initialize_pause_menu(void) {
         D_L00_001B9CF0.unk8 = D_L00_001B9CF0.pending_owner;
         pending_state = D_L00_001B9CF0.pending_state;
         D_L00_001B9CF0.state = pending_state;
-        if (pending_state == 11 || pending_state == 15) {
+        if (pending_state == 11 || pending_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
             small_buffers = 1;
             D_L00_001841F0.w224 = (s32)D_L00_001B9CF0.unkE4;
         }
@@ -319,11 +322,11 @@ void initialize_pause_menu(void) {
     D_L00_0015F578 = 0x2000;
     vu1_init_chain();
 
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
+    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
         initialize_render_archive_transfer();
     }
     apply_group_entry_adjustment(0);
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15 || D_L00_001B9CF0.state == 0x12) {
+    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION || D_L00_001B9CF0.state == 0x12) {
         decompress_and_relocate_selected_groups(1);
     } else {
         decompress_and_relocate_selected_groups(0);
@@ -331,7 +334,7 @@ void initialize_pause_menu(void) {
     transfer_draw_buffer_chunks(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
     texture_start = gs_texture_allocation_start;
     D_L00_001B9CF0.saved_texture_start = texture_start;
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
+    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
         D_L00_001841F0.unk240 = texture_start;
         texture_region_end = texture_start + 0x40000;
         D_L00_001841F0.unk244 = texture_region_end;
