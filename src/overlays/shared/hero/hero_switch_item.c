@@ -3215,10 +3215,10 @@ void clip_hero_velocity_against_probed_surfaces(int force) {
     if ((u32)(hero.state.control_mode - 0x11) < 2) {
         primary_probe_height_offset = 0.0f;
         k = 0.7f;
-    } else if (hero.vehicle_mode == 1) {
+    } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         primary_probe_height_offset = 0.35f;
         k = 0.27000001072883606f;
-    } else if (hero.vehicle_mode == 2) {
+    } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         primary_probe_height_offset = 1.5f;
         k = 5.0f;
     }
