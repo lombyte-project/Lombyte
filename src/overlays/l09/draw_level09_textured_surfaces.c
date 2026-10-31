@@ -218,6 +218,9 @@ void build_packet_and_draw_scaled_entries(void *data_ptr,
                                           int   count) __asm__("FUN_L09_002c1978");
 
 void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int count) {
+    enum {
+        TEXTURED_GRID_USE_CURRENT_VIEW_SETTINGS = 1
+    };
     char  *surface_draw_settings = data_ptr;
     char  *list = list_ptr;
     int    i;
@@ -240,7 +243,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     saved_textured_grid_fog_far_distance = saved1;
     saved_textured_grid_fog_near_intensity = saved2;
     D_L09_00161304 = saved3;
-    if (textured_grid_view_settings_mode != 1) {
+    if (textured_grid_view_settings_mode != TEXTURED_GRID_USE_CURRENT_VIEW_SETTINGS) {
         current[0x218 / 4] = *(float *)(surface_draw_settings + 0x20);
         current[0x21c / 4] = *(float *)(surface_draw_settings + 0x24);
         current[0x228 / 4] = *(float *)(surface_draw_settings + 0x28);
@@ -311,7 +314,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
             (unsigned char)surface_draw_settings[0x31] << 8 |
             (unsigned char)surface_draw_settings[0x32] << 16;
     /* Retail reads the mode after the packet cursor stores. */
-    if (*(volatile int *)&textured_grid_view_settings_mode == 1)
+    if (*(volatile int *)&textured_grid_view_settings_mode == TEXTURED_GRID_USE_CURRENT_VIEW_SETTINGS)
         color = (long)(*(int *)(current + 0x230 / 4) | (*(int *)(current + 0x234 / 4) << 8) |
                        (*(int *)(current + 0x238 / 4) << 16));
     {
