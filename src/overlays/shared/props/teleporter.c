@@ -232,6 +232,9 @@ float D_L18_001621D0 = 1.0f;
 void activate_teleporter_and_record_state(struct Moby *moby) __asm__("FUN_L01_00308b28");
 
 void activate_teleporter_and_record_state(struct Moby *moby) {
+    enum {
+        TELEPORTER_WAIT_FOR_USE = 1
+    };
     int           level_bitset_byte_offset = D_0015ED84 << 8;
     unsigned char moby_group_index;
     *(int *)((u8 *)D_0014C190 + (((short)moby->save_id >> 5) * 4 + level_bitset_byte_offset)) |=
@@ -241,7 +244,7 @@ void activate_teleporter_and_record_state(struct Moby *moby) {
     if (moby_group_index != 0xFF)
         set_moby_list_state((char *)moby_group_index, 1);
     else
-        moby->state = 1;
+        moby->state = TELEPORTER_WAIT_FOR_USE;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309FB0). */
