@@ -573,6 +573,9 @@ void start_vendor_exit_cutscene(void) {
     enum {
         VENDOR_MENU_EXIT_CUTSCENE = 3
     };
+    enum {
+        SECONDARY_MUSIC_STREAM_READY_TO_CONTINUE = 3
+    };
     VendorMenu              *vendor_state;
     VendorMoby_29a6b0       *moby;
     s32                      index, exit_cutscene_id, offset;
@@ -625,7 +628,7 @@ void start_vendor_exit_cutscene(void) {
     state->queued_secondary_track = 0x2734;
     FUN_L00_002455c0(0);
     mode = music_stream_state.secondary.state;
-    while (mode != 3) {
+    while (mode != SECONDARY_MUSIC_STREAM_READY_TO_CONTINUE) {
         sound_update();
         sce_gs_sync_v(0);
         mode = music_stream_state.secondary.state;
