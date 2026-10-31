@@ -40,6 +40,9 @@ void resolve_hero_surface_reactions(void) {
         HERO_GROUND_TYPE_ICE = 7,
         HERO_GROUND_TYPE_SINKING_SURFACE = 0xD
     };
+    enum {
+        HERO_GROUND_TYPE_SLIP = 8
+    };
     struct Hero *hero_ptr;
     struct Hero *hero_data = &hero;
     int          keep = hero_data->ground_sound_class;
@@ -89,7 +92,7 @@ void resolve_hero_surface_reactions(void) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
-    if (saved_ground_type == 8) {
+    if (saved_ground_type == HERO_GROUND_TYPE_SLIP) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
