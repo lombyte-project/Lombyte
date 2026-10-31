@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/pickups/infobot.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
+unsigned char *spawn_timed_hero_relative_particle(u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 #include "rnc/save/memcard_save_data.h"
 
 typedef struct {
@@ -198,7 +199,7 @@ void emit_moby_color_cycling_particles(unsigned char *moby) {
         color_cycle_progress = convert_integer_to_float(scale_game_frames(0xff) - moby_data->t[j]);
         color_cycle_progress = color_cycle_progress / (float)scale_game_frames(0xff);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - color_cycle_progress));
-        FUN_L00_00272f68(sprite_position_and_step,
+        spawn_timed_hero_relative_particle(sprite_position_and_step,
                          c,
                          truncate_float_to_s32(*a++),
                          0x35,

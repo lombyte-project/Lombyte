@@ -57,7 +57,7 @@ extern float                    D_0015ED6C;
 extern float                    D_L02_0015F3FC;
 
 extern int            func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *func_L00_00273E08_ea8b0(
+extern unsigned char *spawn_timed_hero_relative_particle(
     void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
 
@@ -258,7 +258,7 @@ void update_collectible_sprite_effect(char *moby) {
         timer_elapsed_fraction = timer_elapsed_fraction / (float)scale_game_frames(0xFF);
         col = func_001FA8A8_2ebce8_ea8b0(
             0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_elapsed_fraction));
-        func_L00_00273E08_ea8b0(d,
+        spawn_timed_hero_relative_particle(d,
                                 col,
                                 truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
                                 0x35,

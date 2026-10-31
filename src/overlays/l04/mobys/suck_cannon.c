@@ -13,6 +13,7 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
+unsigned char *spawn_timed_hero_relative_particle(u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 #include "rnc/save/memcard_save_data.h"
 
 /* Warp portal: spins, opens once the hero is near, then warps to the exit moby. */
@@ -141,7 +142,7 @@ void update_suck_cannon_particles(char *moby) {
         timer_progress = timer_progress / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_progress));
         if (D_L04_0015F5C4 != 2)
-            FUN_L00_00272f68(d,
+            spawn_timed_hero_relative_particle(d,
                              col,
                              truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
                              0x35,

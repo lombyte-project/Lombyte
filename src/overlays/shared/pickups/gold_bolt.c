@@ -66,7 +66,7 @@ extern void           FUN_L01_003089f0_f(struct Moby *) __asm__("FUN_L01_003089f
 void                  update_gold_bolt_glow_rings(struct Moby *m) __asm__("FUN_L01_00308550");
 extern void           FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 extern int            fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
+extern unsigned char *spawn_timed_hero_relative_particle(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 extern void           spawn_moving_hero_relative_alpha_fade_particle(
               void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
@@ -709,7 +709,7 @@ void update_gold_bolt_glow_rings(struct Moby *moby) {
         packed_color = fast_tween_color(gold_bolt_glow_ring_tween_start_color_gp,
                                         gold_bolt_glow_ring_tween_end_color_gp,
                                         absolute_float(0.5f - pulse_progress));
-        FUN_L00_00272f68(glow_particle_position,
+        spawn_timed_hero_relative_particle(glow_particle_position,
                          packed_color,
                          truncate_float_to_s32(ring_rotations[i]),
                          gold_bolt_glow_ring_particle_texture_index_gp,

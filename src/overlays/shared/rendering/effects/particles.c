@@ -915,9 +915,19 @@ void update_color_tween_emitter_particle(struct EffectParticle *particle) {
 }
 
 extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") NOT_SDA;
+unsigned char *spawn_timed_hero_relative_particle(u128         *position,
+                                int           packed_color,
+                                unsigned char initial_rotation,
+                                int           particle_texture_index,
+                                int           flag,
+                                int           lifetime_frames,
+                                int           mode,
+
+                                float size_scale) __asm__("FUN_L00_00272f68");
+
 unsigned char *
-FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
-unsigned char *FUN_L00_00272f68(u128         *position,
+spawn_timed_hero_relative_particle(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
+unsigned char *spawn_timed_hero_relative_particle(u128         *position,
                                 int           packed_color,
                                 unsigned char initial_rotation,
                                 int           particle_texture_index,

@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/props/energy_sphere_holder_data/update_energy_sphere_holder_beam_effects.h"
 #include "rnc/overlay/shared/props.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
+unsigned char *spawn_timed_hero_relative_particle(u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 
 typedef struct {
     float ph[4];
@@ -157,7 +158,7 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
         beam_sprite_color = fast_tween_color(energy_sphere_holder_beam_color_start_gp,
                                              energy_sphere_holder_beam_color_end_gp,
                                              absolute_float(0.5f - timer_progress));
-        FUN_L00_00272f68(beam_sprite_position,
+        spawn_timed_hero_relative_particle(beam_sprite_position,
                          beam_sprite_color,
                          truncate_float_to_s32(beam->ph[i]),
                          energy_sphere_holder_beam_texture_index_gp,

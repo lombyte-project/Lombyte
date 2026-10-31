@@ -23,7 +23,7 @@ typedef struct {
 } L10SpriteData;
 
 extern int            fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *func_L00_00273E08_298940(
+extern unsigned char *spawn_timed_hero_relative_particle(
     void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 void emit_moby_sprite_particles(char *moby) __asm__("FUN_L10_00298940");
 
@@ -54,7 +54,7 @@ void emit_moby_sprite_particles(char *moby) {
         color_blend_offset = convert_integer_to_float(scale_game_frames(0xFF) - sprite_data->c[i]);
         color_blend_offset = color_blend_offset / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - color_blend_offset));
-        func_L00_00273E08_298940(d,
+        spawn_timed_hero_relative_particle(d,
                                  col,
                                  truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
                                  0x35,
