@@ -310,6 +310,10 @@ extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 
 void handle_sand_shark_nest_damage(struct Moby *moby) {
+    enum {
+        SAND_SHARK_NEST_HIT_RECOVERY = 3,
+        SAND_SHARK_NEST_DEATH_KNOCKBACK = 4
+    };
     char *nest_vars = (char *)moby->pvars;
     float hit_knockback_vector[4];
     int   hit;
@@ -329,7 +333,7 @@ void handle_sand_shark_nest_damage(struct Moby *moby) {
     }
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_reaction(moby, hit_record, nest_vars + 0x20, 0, &hit, &dmg, 0, 4);
-    if (hit_record != 0 && hit != 1 && moby->state != 4) {
+    if (hit_record != 0 && hit != 1 && moby->state != SAND_SHARK_NEST_DEATH_KNOCKBACK) {
         if (hit == 3) {
             *(float *)(nest_vars + 0x20) = 0.0f;
         } else {
@@ -348,7 +352,7 @@ void handle_sand_shark_nest_damage(struct Moby *moby) {
             trooper_start_knockback(k1, moby, nest_vars + 0x70, 3, 1, 0);
             if (1.0f <= dmg) {
                 nest_vars[0x67] = 0x78;
-                moby->state = 3;
+                moby->state = SAND_SHARK_NEST_HIT_RECOVERY;
                 blend_moby_animation(moby, 2, 0, 0);
             } else {
                 nest_vars[0x67] = 0x78;
@@ -356,7 +360,7 @@ void handle_sand_shark_nest_damage(struct Moby *moby) {
         } else {
             moby->flags &= 0xEFFF;
             ((unsigned char *)nest_vars)[0x67] = 0xFA;
-            moby->state = 4;
+            moby->state = SAND_SHARK_NEST_DEATH_KNOCKBACK;
             {
                 float b = D_0015ED6C * 11.0f;
                 float a = D_0015ED6C * 3.0f;
