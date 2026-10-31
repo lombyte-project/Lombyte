@@ -378,7 +378,7 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
             do {
                 state = FUN_L00_0025c338_b6bc8(taunter_candidate_moby);
             } while (0);
-            if (state != 0) {
+            if (state != NULL) {
                 /* Fakematch: &hero through the motion label keeps retail's &hero + 0x98 load below. */
                 player = (struct Hero *)(D_0013F3D0 - 0x80);
                 distance = vector_distance_xy(&pos, (u8 *)taunter_candidate_moby + 0x10);
