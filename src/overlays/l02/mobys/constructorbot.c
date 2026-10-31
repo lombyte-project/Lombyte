@@ -209,31 +209,31 @@ void constructorbot_update(struct Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
             }
-            moby->state = 7;
+            moby->state = L02_BOT_SELECT_ATTACK_OR_WANDER;
             break;
         case L02_BOT_START_WAIT_FOR_WAKE_TRIGGER:
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
             }
-            moby->state = 10;
+            moby->state = L02_BOT_WAIT_FOR_WAKE_TRIGGER;
             break;
         case L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT:
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 0);
             }
-            moby->state = 8;
+            moby->state = L02_BOT_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT;
             break;
         case L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION:
             if (moby->prev_seq != 15) {
                 blend_moby_animation(moby, 15, 0, 0);
             }
-            moby->state = 9;
+            moby->state = L02_BOT_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION;
             break;
         }
         break;
     case L02_BOT_WAIT_FOR_WAKE_ANIMATION:
         if (moby->anim_flags & 2) {
-            moby->state = 3;
+            moby->state = L02_BOT_ALIGN_TO_GROUND_AT_POST;
             if (moby->prev_seq != 4) {
                 blend_moby_animation(moby, 4, 0, 0);
             }
@@ -259,7 +259,7 @@ void constructorbot_update(struct Moby *moby) {
                        constructorbot_gravity_gp * frame_time_sq);
         approach_value(&moby->pos.z, ground, bot_private_vars->velocity[2]);
         if (moby->pos.z == ground) {
-            moby->state = 4;
+            moby->state = L02_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVE_TO_POST;
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 4, scale_game_frames(10));
             }
@@ -267,7 +267,7 @@ void constructorbot_update(struct Moby *moby) {
         break;
     case L02_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVE_TO_POST:
         if (moby->anim_flags & 2) {
-            moby->state = 5;
+            moby->state = L02_BOT_MOVE_TO_POST;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(6));
             }
@@ -281,7 +281,7 @@ void constructorbot_update(struct Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(30));
             }
-            moby->state = 7;
+            moby->state = L02_BOT_SELECT_ATTACK_OR_WANDER;
         }
         break;
     case L02_BOT_WANDER:
@@ -293,13 +293,13 @@ void constructorbot_update(struct Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
-            moby->state = 7;
+            moby->state = L02_BOT_SELECT_ATTACK_OR_WANDER;
         } else if (fast_vec_dist(bot_private_vars->target + 0x10,
                                  &l02_cuboids[bot_private_vars->post].pos) <
                        bot_private_vars->attack_range &&
                    absolute_float(*(float *)(bot_private_vars->target + 0x18) - moby->pos.z) <
                        4.0f) {
-            moby->state = 5;
+            moby->state = L02_BOT_MOVE_TO_POST;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
@@ -317,13 +317,13 @@ void constructorbot_update(struct Moby *moby) {
                 FUN_L00_00258278(
                     (char *)moby, angle, &bot_private_vars->turn_speed, 0.02f, 0.3f, 0.1f);
                 if (fast_difference_between_rotations(moby->rot.z, angle) < 0.08726646f) {
-                    moby->state = 0xB;
+                    moby->state = L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK;
                     if (moby->prev_seq != 8) {
                         blend_moby_animation(moby, 8, 0, scale_game_frames(6));
                     }
                 }
             } else {
-                moby->state = 5;
+                moby->state = L02_BOT_MOVE_TO_POST;
                 if (moby->prev_seq != 6) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(10));
                 }
@@ -338,7 +338,7 @@ void constructorbot_update(struct Moby *moby) {
             fast_vec_add(bot_private_vars->wander,
                          bot_private_vars->wander,
                          &l02_cuboids[bot_private_vars->post].pos);
-            moby->state = 6;
+            moby->state = L02_BOT_WANDER;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
@@ -374,18 +374,18 @@ void constructorbot_update(struct Moby *moby) {
             triggered = 1;
         }
         if (triggered) {
-            if (moby->state == 8) {
+            if (moby->state == L02_BOT_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT) {
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                 }
-                moby->state = 2;
-            } else if (moby->state == 9) {
+                moby->state = L02_BOT_WAIT_FOR_WAKE_ANIMATION;
+            } else if (moby->state == L02_BOT_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION) {
                 if (moby->prev_seq != 0x10) {
                     blend_moby_animation(moby, 0x10, 0, scale_game_frames(10));
                 }
-                moby->state = 2;
+                moby->state = L02_BOT_WAIT_FOR_WAKE_ANIMATION;
             } else {
-                moby->state = 5;
+                moby->state = L02_BOT_MOVE_TO_POST;
                 if (moby->prev_seq != 6) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(6));
                 }
@@ -400,7 +400,7 @@ void constructorbot_update(struct Moby *moby) {
         FUN_L00_00258278((char *)moby, angle, &bot_private_vars->turn_speed, 0.02f, 0.3f, 0.1f);
         if (moby->anim_flags & 2) {
             moby->anim_speed = 1.0f;
-            moby->state = 0xC;
+            moby->state = L02_BOT_UPDATE_ATTACK_SHOTS;
             if (moby->prev_seq != 9) {
                 blend_moby_animation(moby, 9, 0, scale_game_frames(6));
             }
@@ -425,7 +425,7 @@ void constructorbot_update(struct Moby *moby) {
         collect_mobies_around_tracked_objects(bot_private_vars->shots, (int)moby, (int)shot);
         if (moby->anim_flags & 2) {
             moby->anim_speed = 1.0f;
-            moby->state = 0xD;
+            moby->state = L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK_RECHECK;
             if (random_integer_below(0xFF) & 1) {
                 if (moby->prev_seq != 10) {
                     blend_moby_animation(moby, 10, 0, scale_game_frames(6));
@@ -444,12 +444,12 @@ void constructorbot_update(struct Moby *moby) {
             if (vector_distance_xy(&moby->pos, bot_private_vars->target + 0x10) <
                     bot_private_vars->attack_range + 1.0f &&
                 absolute_float(*(float *)(bot_private_vars->target + 0x18) - moby->pos.z) < 3.0f) {
-                moby->state = 0xC;
+                moby->state = L02_BOT_UPDATE_ATTACK_SHOTS;
                 if (moby->prev_seq != 9) {
                     blend_moby_animation(moby, 9, 0, scale_game_frames(6));
                 }
             } else {
-                moby->state = 7;
+                moby->state = L02_BOT_SELECT_ATTACK_OR_WANDER;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(6));
                 }
@@ -458,7 +458,7 @@ void constructorbot_update(struct Moby *moby) {
         break;
     case L02_BOT_HIT_KNOCKBACK_RECOVERY:
         if (step_moby_motion(moby, bot_private_vars->knockback) & 0x40) {
-            moby->state = 7;
+            moby->state = L02_BOT_SELECT_ATTACK_OR_WANDER;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(6));
             }
