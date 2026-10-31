@@ -526,7 +526,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 
-extern float D_L14_00161A30 __attribute__((sda));
+extern float l14_racer_path_follow_speed __asm__("D_L14_00161A30") __attribute__((sda));
 void         advance_moby_along_path(struct Moby *moby) __asm__("FUN_L14_002d7198");
 
 void advance_moby_along_path(struct Moby *moby) {
@@ -537,7 +537,7 @@ void advance_moby_along_path(struct Moby *moby) {
                      &path_tracking_state->unk64,
                      &path_tracking_state->unk68,
                      0,
-                     D_L14_00161A30 * frame_time);
+                     l14_racer_path_follow_speed * frame_time);
 }
 
 /* Draws the racer's two glow quads, at its lamp (0xE0) and its tail (0x200), turned to face the camera. */
