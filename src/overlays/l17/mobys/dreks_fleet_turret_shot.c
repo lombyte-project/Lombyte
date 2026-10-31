@@ -120,45 +120,54 @@ extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale, void *
 extern char D_L17_00174760_lui[] __asm__("D_L17_00174760") NOT_SDA;
 void        fleet_turret_shot_update(struct Moby *moby) __asm__("FUN_L17_002e8e08");
 
+typedef struct FleetTurretShotVars {
+    u8  pad_0[0x10];
+    f32 unk10;
+    f32 unk14;
+    u8  pad_18[0x20];
+    s32 timer_38;
+    s32 unk3C;
+    f32 unk40;
+} FleetTurretShotVars;
+
 /* Moby class 1368 */
 void fleet_turret_shot_update(struct Moby *moby) {
     enum {
         DRONE_STATE_FLIGHT = 0,
         DRONE_STATE_SPARKS_UNTIL_REMOVAL = 1
     };
-    float        flight_position_or_spark_velocity[4];
-    float        b[4];
-    float        flight_offset_scratch[4];
-    float        lowered_hero_position[4];
-    float        movement_midpoint[4];
-    float        hit_descriptor[12];
-    char        *drone_vars = (char *)moby->pvars;
-    char        *target_position;
-    struct Hero *g;
-    struct Hero *hero_state;
-    char        *r;
-    int          step;
-    int          hit;
-    int          scaled_frame_blocks;
+    float                flight_position_or_spark_velocity[4];
+    float                b[4];
+    float                flight_offset_scratch[4];
+    float                lowered_hero_position[4];
+    float                movement_midpoint[4];
+    float                hit_descriptor[12];
+    FleetTurretShotVars *drone_vars = (FleetTurretShotVars *)moby->pvars;
+    char                *target_position;
+    struct Hero         *g;
+    struct Hero         *hero_state;
+    char                *r;
+    int                  step;
+    int                  hit;
+    int                  scaled_frame_blocks;
 
     switch (moby->state) {
     case DRONE_STATE_FLIGHT:
         moby->draw_dist = 0;
         moby->visible = 0;
-        target_position = drone_vars + 0x10;
+        target_position = &drone_vars->unk10;
         *(OvlQuad *)lowered_hero_position = *(OvlQuad *)(&hero.motion.body_center);
         lowered_hero_position[2] = lowered_hero_position[2] - 0.5f;
         if (vector_distance_xy(lowered_hero_position, target_position) < 8.0f) {
             lerp_vector(target_position, lowered_hero_position, target_position, 0.99f);
         }
         if (vector_distance_xy(&moby->pos, target_position) > 4.0f) {
-            if (fast_difference_between_rotations(
-                    moby->rot.z,
-                    fast_arc_tan(*(float *)(drone_vars + 0x10) - moby->pos.x,
-                                 *(float *)(drone_vars + 0x14) - moby->pos.y)) < 0.7853982f) {
+            if (fast_difference_between_rotations(moby->rot.z,
+                                                  fast_arc_tan(drone_vars->unk10 - moby->pos.x,
+                                                               drone_vars->unk14 - moby->pos.y)) <
+                0.7853982f) {
                 fast_vec_sub(flight_offset_scratch, target_position, &moby->pos);
-                fast_vec_normalize(
-                    drone_vars, flight_offset_scratch, *(float *)(drone_vars + 0x40));
+                fast_vec_normalize(drone_vars, flight_offset_scratch, drone_vars->unk40);
             }
         }
         fast_vec_scale(flight_offset_scratch, drone_vars, -20.0f);
@@ -166,8 +175,8 @@ void fleet_turret_shot_update(struct Moby *moby) {
         fast_vec_add(flight_position_or_spark_velocity, &moby->pos, drone_vars);
         fast_vec_add(b, &moby->pos, flight_offset_scratch);
         lerp_vector(movement_midpoint, flight_position_or_spark_velocity, &moby->pos, 0.5f);
-        if (*(int *)(drone_vars + 0x38) < 0x3C) {
-            step = (0x3C - *(int *)(drone_vars + 0x38)) >> 2;
+        if (drone_vars->timer_38 < 0x3C) {
+            step = (0x3C - drone_vars->timer_38) >> 2;
         }
         create_drone_flight_trail_record((char *)flight_position_or_spark_velocity, 1, step);
         create_drone_flight_trail_record((char *)movement_midpoint, 1, step);
@@ -182,7 +191,7 @@ void fleet_turret_shot_update(struct Moby *moby) {
             FUN_L00_001f0d60_q(0.5f, &moby->pos, 0, moby) != 0) {
             hit = *(int *)(r + 0x18);
             if (hit != 0) {
-                if (hit != *(int *)(drone_vars + 0x3C)) {
+                if (hit != drone_vars->unk3C) {
                     g = &hero;
                     if (g->unk308 != 0 && hit == ((int)g->moby)) {
                         unsigned char *rec = D_00141968_x_q;
@@ -214,26 +223,26 @@ void fleet_turret_shot_update(struct Moby *moby) {
                                 *(int *)(rec + 0x45C) | (1 << current_level_index) | 0x80000000;
                         }
                     }
-                    *(int *)(drone_vars + 0x38) = scale_game_frames(0x1E);
+                    drone_vars->timer_38 = scale_game_frames(0x1E);
                     moby->state = 1;
                     return;
                 }
-            } else if (vector_distance_xy(&moby->pos, *(char **)(drone_vars + 0x3C) + 0x10) >
+            } else if (vector_distance_xy(&moby->pos, *(char **)&drone_vars->unk3C + 0x10) >
                        10.0f) {
                 qcopy(&moby->pos, r + 0x20);
-                *(int *)(drone_vars + 0x38) = scale_game_frames(0x1E);
+                drone_vars->timer_38 = scale_game_frames(0x1E);
                 moby->state = 1;
                 return;
             }
         }
-        if (scale_game_frames(0x46) < *(int *)(drone_vars + 0x38)) {
+        if (scale_game_frames(0x46) < drone_vars->timer_38) {
             if (moby->pos.x > 890.0f || moby->pos.y > 890.0f || moby->pos.z > 890.0f ||
                 moby->pos.x < 80.0f || moby->pos.x < 80.0f || moby->pos.y < 80.0f ||
                 moby->pos.z < 80.0f) {
-                *(int *)(drone_vars + 0x38) = scale_game_frames(0x46);
+                drone_vars->timer_38 = scale_game_frames(0x46);
             }
         }
-        if (fast_dec_timer(drone_vars + 0x38) != 0 || moby->pos.x > 968.0f ||
+        if (fast_dec_timer(&drone_vars->timer_38) != 0 || moby->pos.x > 968.0f ||
             moby->pos.y > 968.0f || moby->pos.z > 968.0f || moby->pos.x < 10.0f ||
             moby->pos.x < 10.0f || moby->pos.y < 10.0f || moby->pos.z < 10.0f) {
             mark_moby_for_removal(moby);
@@ -251,7 +260,7 @@ void fleet_turret_shot_update(struct Moby *moby) {
                                                        random_integer_below(0xFF),
                                                        0,
                                                        3.0f);
-        if (fast_dec_timer(drone_vars + 0x38) != 0) {
+        if (fast_dec_timer(&drone_vars->timer_38) != 0) {
             mark_moby_for_removal(moby);
         }
         break;

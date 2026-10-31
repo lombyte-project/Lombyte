@@ -23,6 +23,14 @@ extern unsigned char D_0014C050[][16];
  * hero to step on, then plays the driver's up or down animation (2/4) with its loop sound until it ends. */
 void liftcar_platform_update(struct Moby *moby) __asm__("FUN_L02_002e2228");
 
+typedef struct LiftcarPlatformVars {
+    u8  pad_0[0x60];
+    f32 unk60[4];
+    u8  pad_70[0x30];
+    s32 unkA0;
+    s32 unkA4;
+} LiftcarPlatformVars;
+
 /* Moby class 792 */
 void liftcar_platform_update(struct Moby *moby) {
     enum {
@@ -34,14 +42,14 @@ void liftcar_platform_update(struct Moby *moby) {
         LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW = 5,
         LIFTCAR_PLATFORM_FOLLOW_DRIVER_ONLY = 6
     };
-    char        *platform_vars = (char *)moby->pvars;
-    struct Moby *driver = &D_L02_0015FFD8[*(int *)(platform_vars + 0xA0)];
-    Vec4         delta;
-    Vec4         old_rot;
-    float        joint_mtx[16];
-    Vec4         pos;
-    int          ride;
-    int          voice;
+    LiftcarPlatformVars *platform_vars = (LiftcarPlatformVars *)moby->pvars;
+    struct Moby         *driver = &D_L02_0015FFD8[platform_vars->unkA0];
+    Vec4                 delta;
+    Vec4                 old_rot;
+    float                joint_mtx[16];
+    Vec4                 pos;
+    int                  ride;
+    int                  voice;
 
     fast_vec_scale(&delta, &moby->pos, -1.0f);
     qcopy(&old_rot, &moby->rot);
@@ -75,11 +83,11 @@ void liftcar_platform_update(struct Moby *moby) {
             if (moby->state == 5 || moby->state == 1) {
                 moby->state = 2;
                 set_moby_animation(driver, 0, 0);
-                *(int *)(platform_vars + 0xA4) = allocate_voice_for_target_entry(2, 4, driver);
+                platform_vars->unkA4 = allocate_voice_for_target_entry(2, 4, driver);
             } else {
                 moby->state = 4;
                 set_moby_animation(driver, 2, 0);
-                *(int *)(platform_vars + 0xA4) = allocate_voice_for_target_entry(0, 4, driver);
+                platform_vars->unkA4 = allocate_voice_for_target_entry(0, 4, driver);
             }
         } else if (hero.ground_moby != moby) {
             moby->command = 0;
@@ -92,34 +100,34 @@ void liftcar_platform_update(struct Moby *moby) {
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 1.5f &&
             hero.motion.pos.f[2] < moby->pos.z - 1.5f) {
             driver->anim_speed = 0.0f;
-            voice = *(int *)(platform_vars + 0xA4);
+            voice = platform_vars->unkA4;
             if (voice != -1) {
                 char *e = ((char *)&voice_pool) + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice);
                 }
             }
-            *(int *)(platform_vars + 0xA4) = -1;
+            platform_vars->unkA4 = -1;
         }
         if (driver->anim_speed == 0.0f &&
             (vector_distance_xy(&moby->pos, &hero.motion.pos) > 2.0f ||
              moby->pos.z - 1.25f < hero.motion.pos.f[2])) {
             driver->anim_speed = 1.0f;
             if (moby->state == 2) {
-                *(int *)(platform_vars + 0xA4) = allocate_voice_for_target_entry(2, 4, driver);
+                platform_vars->unkA4 = allocate_voice_for_target_entry(2, 4, driver);
             } else {
-                *(int *)(platform_vars + 0xA4) = allocate_voice_for_target_entry(0, 4, driver);
+                platform_vars->unkA4 = allocate_voice_for_target_entry(0, 4, driver);
             }
         }
         if (driver->anim_flags & 2) {
-            voice = *(int *)(platform_vars + 0xA4);
+            voice = platform_vars->unkA4;
             if (voice != -1) {
                 char *e = ((char *)&voice_pool) + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice);
                 }
             }
-            *(int *)(platform_vars + 0xA4) = -1;
+            platform_vars->unkA4 = -1;
             if (moby->state == 2) {
                 moby->state = 3;
                 blend_moby_animation(driver, 1, 0, 0);
@@ -136,5 +144,5 @@ void liftcar_platform_update(struct Moby *moby) {
         break;
     }
     fast_vec_add(&delta, &delta, &moby->pos);
-    update_entity_matrix(platform_vars + 0x60, &delta, &old_rot, &moby->rot);
+    update_entity_matrix(platform_vars->unk60, &delta, &old_rot, &moby->rot);
 }

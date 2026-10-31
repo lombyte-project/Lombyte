@@ -33,6 +33,12 @@ void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
 void quartu_cutscene_trigger_update(struct Moby *moby) __asm__("FUN_L15_002eb4c0");
 
+typedef struct QuartuCutsceneTriggerVars {
+    u8  pad_0[0x4];
+    s32 unk4;
+    s32 unk8;
+} QuartuCutsceneTriggerVars;
+
 /* Moby class 1419 */
 void quartu_cutscene_trigger_update(struct Moby *moby) {
     enum {
@@ -42,7 +48,7 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
         CUTSCENE_TRIGGER_FINALIZE_AND_SAVE = 3,
         CUTSCENE_TRIGGER_COMPLETED = 4
     };
-    char *trigger_data = (char *)moby->pvars;
+    QuartuCutsceneTriggerVars *trigger_data = (QuartuCutsceneTriggerVars *)moby->pvars;
     moby->update_dist = 0x80;
     switch (moby->state) {
     case CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS:
@@ -52,7 +58,7 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
             break;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)trigger_data) == 0)
             break;
-        if (((unsigned char *)l15_moby_array)[(*(int *)(trigger_data + 8) << 8) + 0x20] != 3)
+        if (((unsigned char *)l15_moby_array)[(trigger_data->unk8 << 8) + 0x20] != 3)
             break;
         start_scene(3);
         moby->state = 2;
@@ -70,8 +76,8 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
             start_scene(4);
             moby->state = 3;
             FUN_L00_002330d0();
-            if (*(int *)(trigger_data + 4) != -1) {
-                char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
+            if (trigger_data->unk4 != -1) {
+                char *o = D_L15_001600EC + (trigger_data->unk4 << 7);
                 set_race_camera(o + 0x30, o + 0x70, 0, 1);
             }
         }
@@ -79,8 +85,8 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
     case CUTSCENE_TRIGGER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             unlock_planet(0x11);
-            if (*(int *)(trigger_data + 4) != -1) {
-                char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
+            if (trigger_data->unk4 != -1) {
+                char *o = D_L15_001600EC + (trigger_data->unk4 << 7);
                 jet_reset_camera(o + 0x30, o + 0x70);
             }
             queue_planet_unlock_message(0x11);

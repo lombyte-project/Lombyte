@@ -143,25 +143,40 @@ void advance_racer_path_node(char *patrol_moby) {
 
 void start_racer_branch_jump(char *moby) __asm__("FUN_L05_00307358");
 
+typedef struct SkidMcmarxVars {
+    u8    pad_0[0x210];
+    f32   unk210[4];
+    s32   path_220;
+    u8    pad_224[0x20];
+    char *unk244;
+    u8    pad_248[0x4];
+    f32   unk24C;
+    u8    pad_250[0x8];
+    s16   unk258;
+    u8    pad_25A[0x12];
+    s32   unk26C;
+    u8    pad_270[0xC];
+    s32   unk27C;
+} SkidMcmarxVars;
+
 void start_racer_branch_jump(char *moby) {
-    char *moby_data = ((char *)MOBY(moby)->pvars);
-    char *active_path = *(char **)(moby_data + 0x244);
-    int   path_node_index;
-    int   path_node_byte_offset;
-    if (active_path != ((char *)l05_paths[*(int *)(moby_data + 0x220)])) {
-        if (*(float *)(moby_data + 0x24C) <= 0.0f) {
-            path_node_index = *(short *)(moby_data + 0x258);
+    SkidMcmarxVars *moby_data = (SkidMcmarxVars *)MOBY(moby)->pvars;
+    char           *active_path = moby_data->unk244;
+    int             path_node_index;
+    int             path_node_byte_offset;
+    if (active_path != ((char *)l05_paths[moby_data->path_220])) {
+        if (moby_data->unk24C <= 0.0f) {
+            path_node_index = moby_data->unk258;
             path_node_byte_offset = path_node_index * 16;
             if (*(float *)(active_path + path_node_byte_offset + 0x1C) == 1.0f) {
                 while (*(float *)(active_path + path_node_byte_offset + 0x1C) != 2.0f) {
                     path_node_index = offset_path_index(active_path, path_node_index, 1, 1);
-                    active_path = *(char **)(moby_data + 0x244);
+                    active_path = moby_data->unk244;
                     path_node_byte_offset = path_node_index * 16;
                 }
-                *(int *)(moby_data + 0x27C) = path_node_index;
-                qcopy(moby_data + 0x210,
-                      *(char **)(moby_data + 0x244) + path_node_index * 16 + 0x10);
-                *(int *)(moby_data + 0x26C) = 1;
+                moby_data->unk27C = path_node_index;
+                qcopy(moby_data->unk210, moby_data->unk244 + path_node_index * 16 + 0x10);
+                moby_data->unk26C = 1;
             }
         }
     }

@@ -167,6 +167,29 @@ void set_moby_list_state_17(int moby_list_index) {
     }
 }
 
+typedef struct CountdownSequenceVars {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    s32 cuboid_28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    u8  pad_38[0x78];
+    s32 unkB0;
+    s32 timer_B4;
+    f32 unkB8;
+    s32 timer_BC;
+    s32 timer_C0;
+} CountdownSequenceVars;
+
 /* Moby class 1108 */
 void countdown_sequence_update(unsigned char *moby) {
     enum {
@@ -177,28 +200,28 @@ void countdown_sequence_update(unsigned char *moby) {
         UPDATE_POST_PATH_TIMED_EVENTS = 4,
         RAMP_SHARED_VALUE_AFTER_DELAY = 5
     };
-    char *moby_vars = ((char *)MOBY(moby)->pvars);
-    float va[4] __attribute__((aligned(16)));
-    float vc[4] __attribute__((aligned(16)));
-    float vb[4] __attribute__((aligned(16)));
+    CountdownSequenceVars *moby_vars = (CountdownSequenceVars *)MOBY(moby)->pvars;
+    float                  va[4] __attribute__((aligned(16)));
+    float                  vc[4] __attribute__((aligned(16)));
+    float                  vb[4] __attribute__((aligned(16)));
     switch (moby[0x20]) {
     case INITIALIZE_ENTITY:
         if (visited52[moby[0xB0] + (current_level_index << 4)] != 0) {
             mark_moby_for_removal((struct Obj *)moby);
             return;
         }
-        set_moby_list_state_4(*(int *)(moby_vars + 0));
-        set_moby_list_state_18(*(int *)(moby_vars + 4));
-        set_moby_list_state_18(*(int *)(moby_vars + 8));
+        set_moby_list_state_4(moby_vars->unk0);
+        set_moby_list_state_18(moby_vars->unk4);
+        set_moby_list_state_18(moby_vars->unk8);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         return;
     case TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE:
-        if (count_active_moby_group_members(*(int *)(moby_vars + 0x1C), -1) != 0)
+        if (count_active_moby_group_members(moby_vars->unk1C, -1) != 0)
             return;
-        begin_red_button_rotation(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8));
+        begin_red_button_rotation(D_L06_0015FFD8_301b90 + (moby_vars->unk2C << 8));
         if (get_red_button_sequence_status((const u8 *)D_L06_0015FFD8_301b90 +
-                                           (*(int *)(moby_vars + 0x2C) << 8)) != 1)
+                                           (moby_vars->unk2C << 8)) != 1)
             return;
         moby[0x20] = 2;
         select_localized_moby_voice_line((struct Moby *)moby, 0);
@@ -207,23 +230,23 @@ void countdown_sequence_update(unsigned char *moby) {
         int  *p;
         float r;
         if (get_red_button_sequence_status((const u8 *)D_L06_0015FFD8_301b90 +
-                                           (*(int *)(moby_vars + 0x2C) << 8)) != 2)
+                                           (moby_vars->unk2C << 8)) != 2)
             return;
         moby[0x20] = 3;
-        *(int *)(moby_vars + 0xB0) = 1;
+        moby_vars->unkB0 = 1;
         request_music_track(6, 9);
         if (*(short *)dialogue_playback_phase == 3)
             continue_audio_stream_if_ready();
-        set_moby_list_state_17(*(int *)(moby_vars + 0x10));
-        set_moby_list_state_15(*(int *)(moby_vars + 0x14));
-        set_moby_list_state_15(*(int *)(moby_vars + 0x18));
-        clear_moby_list_state_4(*(int *)(moby_vars + 0));
-        clear_moby_list_state_18(*(int *)(moby_vars + 4));
-        clear_moby_list_state_18(*(int *)(moby_vars + 8));
-        set_moby_state_3(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x20) << 8));
+        set_moby_list_state_17(moby_vars->unk10);
+        set_moby_list_state_15(moby_vars->unk14);
+        set_moby_list_state_15(moby_vars->unk18);
+        clear_moby_list_state_4(moby_vars->unk0);
+        clear_moby_list_state_18(moby_vars->unk4);
+        clear_moby_list_state_18(moby_vars->unk8);
+        set_moby_state_3(D_L06_0015FFD8_301b90 + (moby_vars->unk20 << 8));
         {
-            ((LevelCuboid *)((*(int *)(moby_vars + 0xC) << 7) + (int)l06_cuboids))->pos.z += 10.0f;
-            p = D_L06_001B0C30_301b90[*(int *)(moby_vars + 0x24)];
+            ((LevelCuboid *)((moby_vars->unkC << 7) + (int)l06_cuboids))->pos.z += 10.0f;
+            p = D_L06_001B0C30_301b90[moby_vars->unk24];
             qcopy(va, (char *)p + 0x20);
             qcopy(vb, (char *)p + 0x10);
             clear_u64_value(vc);
@@ -240,7 +263,7 @@ void countdown_sequence_update(unsigned char *moby) {
             FUN_L06_00312a78(va);
             FUN_L06_00312ad0(vc);
             {
-                LevelCuboid *q = &l06_cuboids[*(int *)(moby_vars + 0x28)];
+                LevelCuboid *q = &l06_cuboids[moby_vars->cuboid_28];
                 set_race_camera(&q->pos, &q->rot, 0x72, 0);
             }
         }
@@ -250,26 +273,26 @@ void countdown_sequence_update(unsigned char *moby) {
         int **p;
         int   x, nb;
         float r;
-        p = &D_L06_001B0C30_301b90[*(int *)(moby_vars + 0x24)];
-        nb = *(int *)(moby_vars + 0xB0);
+        p = &D_L06_001B0C30_301b90[moby_vars->unk24];
+        nb = moby_vars->unkB0;
         qcopy(vb, (char *)((nb << 4) + (int)*p) + 0x10);
         nb++;
-        *(int *)(moby_vars + 0xB0) = nb;
+        moby_vars->unkB0 = nb;
         if (nb == **p - 1) {
             moby[0x20] = 4;
             select_localized_moby_voice_line((struct Moby *)moby, 1);
-            *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(
+            moby_vars->timer_B4 = truncate_float_to_s32(
                 scale_recovery_time(l06_linked_sequence_post_path_countdown_duration));
             FUN_L06_00312ce8(2);
             FUN_L06_002356a0(0, 1);
             scripted_camera_sequence_active = 0;
             return;
         }
-        activate_listed_spark_emitters(*(int *)(moby_vars + 0x34));
-        x = *(int *)(moby_vars + 0xB0) - 30;
+        activate_listed_spark_emitters(moby_vars->unk34);
+        x = moby_vars->unkB0 - 30;
         if (x < 0)
             x = 0;
-        qcopy(va, (char *)D_L06_001B0C30_301b90[*(int *)(moby_vars + 0x24)] + 0x10 + (x << 4));
+        qcopy(va, (char *)D_L06_001B0C30_301b90[moby_vars->unk24] + 0x10 + (x << 4));
         clear_u64_value(vc);
         vc[2] = fast_arc_tan(va[0] - vb[0], va[1] - vb[1]);
         r = vector_distance_xy(vb, va);
@@ -282,22 +305,22 @@ void countdown_sequence_update(unsigned char *moby) {
         int   x;
         char *q;
         x = scale_game_frames(0x708);
-        if (*(int *)(moby_vars + 0xB4) == x) {
+        if (moby_vars->timer_B4 == x) {
             if (*(short *)dialogue_playback_phase == 3)
                 continue_audio_stream_if_ready();
         } else {
             x = scale_game_frames(900);
-            if (*(int *)(moby_vars + 0xB4) == x)
+            if (moby_vars->timer_B4 == x)
                 select_localized_moby_voice_line((struct Moby *)moby, 2);
             else {
                 x = scale_game_frames(300);
-                if (*(int *)(moby_vars + 0xB4) == x && *(short *)dialogue_playback_phase == 3)
+                if (moby_vars->timer_B4 == x && *(short *)dialogue_playback_phase == 3)
                     continue_audio_stream_if_ready();
             }
         }
-        if (fast_dec_timer(moby_vars + 0xC0) != 0) {
+        if (fast_dec_timer(&moby_vars->timer_C0) != 0) {
             allocate_voice_for_group_entry(0, 0, (int)hero.moby);
-            *(int *)(moby_vars + 0xC0) =
+            moby_vars->timer_C0 =
                 truncate_float_to_s32(scale_recovery_time(FUN_002132a8(480.0f, 600.0f)));
             l06_camera.shake_amount = 0.4f;
             l06_camera.shake_frames = scale_game_frames(60);
@@ -310,27 +333,27 @@ void countdown_sequence_update(unsigned char *moby) {
         }
         if (D_L06_0015F5C4 != 0)
             return;
-        if (fast_dec_timer(moby_vars + 0xB4) == 0)
+        if (fast_dec_timer(&moby_vars->timer_B4) == 0)
             return;
         moby[0x20] = 5;
         x = scale_game_frames(15);
-        q = D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x30) << 8);
-        *(float *)(moby_vars + 0xB8) = 0.0f;
-        *(int *)(moby_vars + 0xBC) = x;
+        q = D_L06_0015FFD8_301b90 + (moby_vars->unk30 << 8);
+        moby_vars->unkB8 = 0.0f;
+        moby_vars->timer_BC = x;
         set_moby_state_5(q);
         allocate_voice_for_group_entry(1, 0, (int)hero.moby);
         return;
     }
     case RAMP_SHARED_VALUE_AFTER_DELAY:
-        if (*(float *)(moby_vars + 0xB8) == 1.0f) {
+        if (moby_vars->unkB8 == 1.0f) {
             hero_respawn();
             linked_sequence_exit_ramp_progress = 0.0f;
             return;
         }
-        if (fast_dec_timer(moby_vars + 0xBC) == 0)
+        if (fast_dec_timer(&moby_vars->timer_BC) == 0)
             return;
-        approach_value((float *)(moby_vars + 0xB8), 1.0f, frame_time * 6.0f);
-        linked_sequence_exit_ramp_progress = *(float *)(moby_vars + 0xB8);
+        approach_value(&moby_vars->unkB8, 1.0f, frame_time * 6.0f);
+        linked_sequence_exit_ramp_progress = moby_vars->unkB8;
         return;
     }
 }

@@ -467,21 +467,31 @@ extern float
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float fast_add_rotations(float, float);
 
+typedef struct DrainCoverVars {
+    u8  pad_0[0x90];
+    f32 unk90;
+    f32 unk94;
+    f32 unk98;
+    f32 unk9C;
+    f32 unkA0;
+    f32 unkA4;
+} DrainCoverVars;
+
 void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
-    char        *drain_cover_vars = (char *)MOBY(moby)->pvars;
-    struct Hero *game = &hero;
-    float        offset[4];
-    float        horizontal;
-    float        vertical;
-    float        angle0;
-    float        angle1;
-    float        target0;
-    float        target1;
-    float        rate0;
-    float        rate1;
-    float        limit;
-    float        dot0;
-    float        dot1;
+    DrainCoverVars *drain_cover_vars = (DrainCoverVars *)MOBY(moby)->pvars;
+    struct Hero    *game = &hero;
+    float           offset[4];
+    float           horizontal;
+    float           vertical;
+    float           angle0;
+    float           angle1;
+    float           target0;
+    float           target1;
+    float           rate0;
+    float           rate1;
+    float           limit;
+    float           dot0;
+    float           dot1;
 
     if ((char *)game->ground_moby == moby && game->air_frames.s == 0) {
         fast_vec_sub(offset, &game->motion.pos, &MOBY(moby)->pos);
@@ -494,23 +504,20 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
         vertical = 0.0f;
     }
 
-    *(float *)(drain_cover_vars + 0x98) = fast_add_rotations(*(float *)(drain_cover_vars + 0x98),
-                                                             *(float *)(drain_cover_vars + 0xa0));
-    *(float *)(drain_cover_vars + 0x9c) = fast_add_rotations(*(float *)(drain_cover_vars + 0x9c),
-                                                             *(float *)(drain_cover_vars + 0xa4));
-    angle0 = fast_sin(*(float *)(drain_cover_vars + 0x98));
+    drain_cover_vars->unk98 = fast_add_rotations(drain_cover_vars->unk98, drain_cover_vars->unkA0);
+    drain_cover_vars->unk9C = fast_add_rotations(drain_cover_vars->unk9C, drain_cover_vars->unkA4);
+    angle0 = fast_sin(drain_cover_vars->unk98);
     target0 = fast_add_rotations(vertical, angle0 * turn_scale * D_L05_00161DD8);
-    angle1 = fast_sin(*(float *)(drain_cover_vars + 0x9c));
+    angle1 = fast_sin(drain_cover_vars->unk9C);
     target1 = fast_add_rotations(horizontal, angle1 * turn_scale * D_L05_00161DD8);
 
     rate0 = drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
     rate1 = drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
     limit = drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time;
-    approach_angle(
-        &MOBY(moby)->rot.x, target0, (float *)(drain_cover_vars + 0x90), rate0, rate1, limit);
+    approach_angle(&MOBY(moby)->rot.x, target0, &drain_cover_vars->unk90, rate0, rate1, limit);
     approach_angle(&MOBY(moby)->rot.y,
                    target1,
-                   (float *)(drain_cover_vars + 0x94),
+                   &drain_cover_vars->unk94,
                    drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq,
                    drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq,
                    drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time);
