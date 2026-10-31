@@ -245,7 +245,7 @@ void frog_update(unsigned char *moby) __asm__("FUN_L06_002e8678");
 
 /* Moby class 827 */
 void frog_update(unsigned char *moby) {
-    enum { FROG_STATE_INITIALIZE = 0 , FROG_STATE_WAIT_WITH_CHILD = 1 , FROG_STATE_WAIT_TO_FOLLOW_PATH = 3 , FROG_STATE_FOLLOW_PATH = 4 , FROG_STATE_JUMP_TO_HOME = 5 , FROG_STATE_LANDING_ANIMATION = 7 , FROG_STATE_WANDER = 8 , FROG_STATE_APPROACH_TARGET = 9 , FROG_STATE_BLINKING_APPROACH_TARGET = 10 , FROG_STATE_APPROACH_PAUSE = 11 , FROG_STATE_ATTACK = 12 , FROG_STATE_RETURN_HOME = 13 , FROG_STATE_SUCK_CANNON_HELD = 16 } ;float          A[4] __attribute__((aligned(16)));
+    enum { FROG_STATE_INITIALIZE = 0 , FROG_STATE_WAIT_WITH_CHILD = 1 , FROG_STATE_WAIT_TO_FOLLOW_PATH = 3 , FROG_STATE_FOLLOW_PATH = 4 , FROG_STATE_JUMP_TO_HOME = 5 , FROG_STATE_AIRBORNE_MOTION = 6, FROG_STATE_LANDING_ANIMATION = 7 , FROG_STATE_WANDER = 8 , FROG_STATE_APPROACH_TARGET = 9 , FROG_STATE_BLINKING_APPROACH_TARGET = 10 , FROG_STATE_APPROACH_PAUSE = 11 , FROG_STATE_ATTACK = 12 , FROG_STATE_RETURN_HOME = 13 , FROG_STATE_SUCK_CANNON_HELD = 16 } ;float          A[4] __attribute__((aligned(16)));
     float          B[4] __attribute__((aligned(16)));
     float          C[4] __attribute__((aligned(16)));
     float          D[4] __attribute__((aligned(16)));
@@ -416,7 +416,7 @@ void frog_update(unsigned char *moby) {
             MOBY(moby)->pos.z = probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
         }
         break;
-    case 6: {
+    case FROG_STATE_AIRBORNE_MOTION: {
         int hit = step_moby_motion(moby, &data->motion);
         if (hit & 1) {
             MOBY(moby)->state = 7;
