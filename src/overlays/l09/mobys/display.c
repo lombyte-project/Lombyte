@@ -89,6 +89,10 @@ void display_update(struct Moby *moby) {
         BREAKABLE_STACK_ANTEPENULTIMATE_CLASS = 0x512,
         BREAKABLE_STACK_PENULTIMATE_CLASS = 0x513
     };
+    enum {
+        BREAKABLE_STACK_STATE_UNINITIALIZED = 0,
+        BREAKABLE_STACK_STATE_INITIALIZED = 1
+    };
     float center[4];
     float top[4];
     float push[4];
@@ -107,8 +111,8 @@ void display_update(struct Moby *moby) {
     }
     replaced = 0;
     hit = find_moby_hit(moby, 0x40000, 0);
-    if (moby->state == 0) {
-        moby->state = 1;
+    if (moby->state == BREAKABLE_STACK_STATE_UNINITIALIZED) {
+        moby->state = BREAKABLE_STACK_STATE_INITIALIZED;
     }
     if (FUN_L00_001fefc8(&moby->command) == 0 || hit == 0) {
         return;
