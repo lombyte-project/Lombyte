@@ -2372,7 +2372,7 @@ void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 void exit_hero_vehicle_mode(void) {
     struct Hero   *hero_state = &hero;
     unsigned char *vehicle_moby;
-    if (hero_state->vehicle_mode == 1) {
+    if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_state->health.vehicle_mode_hp = hero_state->health.hp;
         hero_state->health.hp = hero_state->health.unk22B0;
         if (hero_state->unk1620) {
@@ -2386,7 +2386,7 @@ void exit_hero_vehicle_mode(void) {
     }
     {
         struct Hero *vehicle_animation_owner = &hero;
-        if (vehicle_animation_owner->vehicle_mode == 2 && vehicle_animation_owner->unk1634 != -1) {
+        if (vehicle_animation_owner->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && vehicle_animation_owner->unk1634 != -1) {
             set_animation_parameter(vehicle_animation_owner->unk1634, 0);
             vehicle_animation_owner->unk1634 = -1;
         }
@@ -2394,7 +2394,7 @@ void exit_hero_vehicle_mode(void) {
     }
     {
         struct Hero *vehicle_exit_owner = &hero;
-        vehicle_exit_owner->vehicle_mode = 0;
+        vehicle_exit_owner->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
         vehicle_moby = vehicle_exit_owner->unkA84;
         if (vehicle_moby) {
             MOBY(vehicle_moby)->flags &= ~6;
