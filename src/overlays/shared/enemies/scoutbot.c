@@ -218,7 +218,7 @@ void scoutbot_update(Moby *moby) {
         if (moby->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, 0);
         }
-        moby->state = 1;
+        moby->state = SCOUTBOT_STATE_IDLE;
         qcopy(scoutbot_instance_vars->home, &moby->pos);
         if (probe_ground_height(&moby->pos, 0, 0.5f) > moby->pos.z - 10.0f) {
             scoutbot_instance_vars->home[2] = probe_ground_height(&moby->pos, 0, 0.5f);
@@ -237,7 +237,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
-            moby->state = 2;
+            moby->state = SCOUTBOT_STATE_APPROACH_TARGET;
         } else if (moby->anim_flags & 2) {
             float heading = random_angle_radians();
             float radius = random_float_between(0.0f, 3.0f);
@@ -249,7 +249,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
-            moby->state = 7;
+            moby->state = SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL;
         }
         break;
     case SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL: {
@@ -265,7 +265,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 3);
             }
-            moby->state = 1;
+            moby->state = SCOUTBOT_STATE_IDLE;
         }
         break;
     }
@@ -280,7 +280,7 @@ void scoutbot_update(Moby *moby) {
         if (vector_distance_xy(&moby->pos, &scoutbot_instance_vars->current_target->pos) < 3.0f &&
             absolute_float(scoutbot_instance_vars->current_target->pos.z - moby->pos.z) < 2.0f) {
             scoutbot_instance_vars->voice = allocate_voice_for_target_entry(0, 0, moby);
-            moby->state = 6;
+            moby->state = SCOUTBOT_STATE_WAIT_FOR_VOICE;
         } else if (vector_distance_xy(target_pos, scoutbot_instance_vars->home) > 15.0f ||
                    absolute_float(scoutbot_instance_vars->home[2] - target_pos[2]) > 4.0f) {
             scoutbot_instance_vars->f200 = 4.0f;
@@ -288,7 +288,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
-            moby->state = 3;
+            moby->state = SCOUTBOT_STATE_RETURN_HOME;
         }
         break;
     }
@@ -308,7 +308,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 3);
             }
-            moby->state = 1;
+            moby->state = SCOUTBOT_STATE_IDLE;
         }
         break;
     }
@@ -348,7 +348,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 3);
             }
-            moby->state = 3;
+            moby->state = SCOUTBOT_STATE_RETURN_HOME;
         }
         break;
     }
@@ -360,7 +360,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, 3);
             }
-            moby->state = 4;
+            moby->state = SCOUTBOT_STATE_ATTACK;
         }
         break;
     }
@@ -403,7 +403,7 @@ void scoutbot_update(Moby *moby) {
     if (moby->state != 5 && (signed char)moby->state >= 0) {
         int col = 0x7F20FF20;
 
-        if (moby->state == 4 || moby->state == 6) {
+        if (moby->state == SCOUTBOT_STATE_ATTACK || moby->state == SCOUTBOT_STATE_WAIT_FOR_VOICE) {
             col = 0x7F2828A0;
         }
         moby->glow_color = colorlerp_3DF8(moby->glow_color, col, 0.1f);
