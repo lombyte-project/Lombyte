@@ -159,9 +159,12 @@ s32        allocate_voice_for_group_entry(s32 group_entry_index,
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) __asm__("FUN_L18_002d7f68");
 
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int wait_duration_frames) {
+    enum {
+        THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2
+    };
     char *red_lock_vars = (char *)moby->pvars;
-    if (moby->state != 2) {
-        moby->state = 2;
+    if (moby->state != THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER) {
+        moby->state = THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER;
         *(int *)(red_lock_vars + 0x6C) = wait_duration_frames;
     }
     if (!voice_is_playing(moby, *(int *)(red_lock_vars + 0x70))) {
