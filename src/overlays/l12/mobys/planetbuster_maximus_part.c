@@ -63,7 +63,7 @@ extern float
 spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_00161F24 MACRO_ADDR;
-extern int                D_L12_00161F34 __attribute__((sda));
+extern int                l12_planetbuster_maximus_proximity_fire_counter __asm__("D_L12_00161F34") __attribute__((sda));
 extern int                planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
 extern int                D_L12_001FB688[];
 extern int                FUN_L00_001fefc8(void *);
@@ -157,13 +157,13 @@ void update_planetbuster_maximus_guns(char *moby) {
             hp = (float *)(((char *)&hero) + 0x80);
             owner_to_hero_distance_xy = vector_distance_xy(moby + 0x10, hp);
             dz = absolute_float(hp[2] - MOBY(moby)->pos.z);
-            if (scale_game_frames(0x4B0) < D_L12_00161F34) {
+            if (scale_game_frames(0x4B0) < l12_planetbuster_maximus_proximity_fire_counter) {
                 if (owner_to_hero_distance_xy < 80.0f && dz < 4.0f) {
                     flag = 1;
                 }
             }
             if (owner_to_hero_distance_xy > 90.0f || dz > 7.0f) {
-                D_L12_00161F34 = 0;
+                l12_planetbuster_maximus_proximity_fire_counter = 0;
             }
             if ((D_L12_00161F00_gp != 0 || flag) && md->f80 > 0.0f) {
                 fast_dec_timer_s16(&md->h98);
@@ -280,7 +280,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                         }
                     }
                     if (D_L12_00161F00_gp == 0) {
-                        D_L12_00161F34 = scale_game_frames(0xFA0);
+                        l12_planetbuster_maximus_proximity_fire_counter = scale_game_frames(0xFA0);
                         goto done;
                     }
                     md->w84 = scale_game_frames(0x14);
@@ -862,7 +862,7 @@ void planetbuster_maximus_part_update(char *moby) {
         break;
     }
     case PLANETBUSTER_POST_PATH_GUN_UPDATE:
-        D_L12_00161F34++;
+        l12_planetbuster_maximus_proximity_fire_counter++;
         spring_angle(moby + 0x48,
                      3.0543261f,
                      &moby_data->unk5F4,
