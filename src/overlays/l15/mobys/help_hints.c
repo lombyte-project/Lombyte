@@ -81,7 +81,7 @@ void help_hints_update(struct Moby *moby) {
     case HINT_DIALOGUE_INITIALIZE:
         moby->update_dist = 0xFF;
         hint_dialogue_data->wait = scale_game_frames(0x4B0);
-        moby->state = 1;
+        moby->state = HINT_DIALOGUE_CHECK_TRIGGERS;
         break;
     case HINT_DIALOGUE_CHECK_TRIGGERS:
         if (hint_dialogue_data->npc[0] != -1) {
@@ -180,11 +180,11 @@ void help_hints_update(struct Moby *moby) {
                 hint_dialogue_data->hold3C = 0;
             }
         }
-        if (hero.moby->seq == 0xC && hero.vehicle_mode == 2) {
+        if (hero.moby->seq == 0xC && hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             ((Items *)alternate_item_available)->f6F = 1;
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol1C) != 0 &&
-            hero.vehicle_mode == 2 && ((Items *)alternate_item_available)->f6F == 0 &&
+            hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && ((Items *)alternate_item_available)->f6F == 0 &&
             ((Help *)quartu_help_message_state)->busy == 0 &&
             ((Help *)quartu_help_message_state)->cur == -1 && *(int *)(item_usage + 0x6EC) >= 0) {
             help_request(0x3A9C, 0x80);
