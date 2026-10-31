@@ -902,15 +902,23 @@ extern void set_scrolling_status_message(int) __asm__("FUN_00237e90");
 
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.item])
 void update_vendor_purchase(void) {
+    enum {
+        VENDOR_PURCHASE_INACTIVE = 0,
+        VENDOR_MENU_MODE_EXISTING_VENDOR = 0,
+        VENDOR_PURCHASE_INITIALIZE = 1,
+        VENDOR_PURCHASE_AWAIT_INPUT = 2,
+        VENDOR_PURCHASE_WAIT_DECISION_ANIMATION = 3,
+        VENDOR_PURCHASE_FINALIZE = 4
+    };
     u128 lv;
     s32  purchase_state;
     s32  purchase_cost, k, last_row_index;
 
     purchase_state = vendor_menu.purchase_state;
-    if (purchase_state == 0) {
+    if (purchase_state == VENDOR_PURCHASE_INACTIVE) {
         return;
     }
-    if (purchase_state == 1) {
+    if (purchase_state == VENDOR_PURCHASE_INITIALIZE) {
         D_L00_00161E34 = 1;
         vendor_purchase_confirmed_gp = 0;
         init_moby_instance(&vendor_menu.menu_mobys[4], 0x471);
@@ -945,10 +953,10 @@ void update_vendor_purchase(void) {
                 allocate_voice_for_target_entry(2, 0, vendor_menu.vendor_moby);
             }
         }
-        vendor_menu.purchase_state = 2;
+        vendor_menu.purchase_state = VENDOR_PURCHASE_AWAIT_INPUT;
         return;
     }
-    if (purchase_state == 2) {
+    if (purchase_state == VENDOR_PURCHASE_AWAIT_INPUT) {
         if (vendor_ammo_quantity_adjustment_enabled_gp == 1) {
             if (controller_state.held_unmasked & 0x8000) {
                 vendor_ammo_decrease_held_frames++;
@@ -995,7 +1003,7 @@ void update_vendor_purchase(void) {
         }
         if (controller_state.pressed_unmasked & 0x10) {
             if (!(l00_vendor_previous_pressed_buttons & 0x10)) {
-                vendor_menu.purchase_state = 3;
+                vendor_menu.purchase_state = VENDOR_PURCHASE_WAIT_DECISION_ANIMATION;
                 vendor_purchase_confirmed_gp = 0;
                 blend_moby_animation(&vendor_menu.menu_mobys[4],
                                      0,
@@ -1007,7 +1015,7 @@ void update_vendor_purchase(void) {
         }
         if (controller_state.pressed_unmasked & 0x40) {
             if (!(l00_vendor_previous_pressed_buttons & 0x40)) {
-                vendor_menu.purchase_state = 3;
+                vendor_menu.purchase_state = VENDOR_PURCHASE_WAIT_DECISION_ANIMATION;
                 vendor_purchase_confirmed_gp = 1;
                 blend_moby_animation(&vendor_menu.menu_mobys[4],
                                      0,
@@ -1024,16 +1032,16 @@ void update_vendor_purchase(void) {
         update_entity(&vendor_menu.menu_mobys[4]);
         return;
     }
-    if (purchase_state == 3) {
+    if (purchase_state == VENDOR_PURCHASE_WAIT_DECISION_ANIMATION) {
         advance_moby_animation(&vendor_menu.menu_mobys[4]);
         if (!vendor_menu.menu_mobys[4].b53 && (vendor_menu.menu_mobys[4].b70 & 2)) {
             vendor_menu.menu_mobys[4].f58 = -1.0f;
-            vendor_menu.purchase_state = 4;
+            vendor_menu.purchase_state = VENDOR_PURCHASE_FINALIZE;
         }
         update_entity(&vendor_menu.menu_mobys[4]);
         return;
     }
-    if (purchase_state != 4) {
+    if (purchase_state != VENDOR_PURCHASE_FINALIZE) {
         return;
     }
     advance_moby_animation(&vendor_menu.menu_mobys[4]);
@@ -1069,7 +1077,7 @@ void update_vendor_purchase(void) {
                         ammo_bought_stats[CUR_ITEM.item] += k;
                         handle_vendor_auxiliary_moby_event(3);
                         D_0015ED98 = D_0015ED98 - purchase_cost;
-                        build_vendor_menu_rows(vendor_menu.mode != 0);
+                        build_vendor_menu_rows(vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR);
                         set_scrolling_status_message(get_help_message_text(0x4F5F));
                         allocate_voice_for_target_entry(7, 0, vendor_menu.vendor_moby);
                     } else {
@@ -1089,7 +1097,7 @@ void update_vendor_purchase(void) {
                         vendor_item_0x18_purchased[0] = 1;
                     }
                     D_0015ED98 = D_0015ED98 - purchase_cost;
-                    build_vendor_menu_rows(vendor_menu.mode != 0);
+                    build_vendor_menu_rows(vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR);
                     if (vendor_menu.item_text != -1) {
                         set_animation_parameter(vendor_menu.item_text, 0);
                     }
@@ -1122,7 +1130,7 @@ void update_vendor_purchase(void) {
         } else {
             allocate_voice_for_target_entry(0, 0, vendor_menu.vendor_moby);
         }
-        vendor_menu.purchase_state = 0;
+        vendor_menu.purchase_state = VENDOR_PURCHASE_INACTIVE;
     }
     update_entity(&vendor_menu.menu_mobys[4]);
 }
