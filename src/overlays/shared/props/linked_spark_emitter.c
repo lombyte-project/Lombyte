@@ -105,10 +105,10 @@ void linked_spark_emitter_update(unsigned char *moby) {
             visited52[(unsigned char)MOBY(moby)->mission + (D_0015ED84 << 4)] == 0xFF) {
             mark_moby_killed_and_release_owned_voice(moby);
         } else {
-            Voice *e = (Voice *)((unsigned char *)&voice_pool + MOBY(moby)->command * 0x70);
+            Voice *emitter_voice_slot = (Voice *)((unsigned char *)&voice_pool + MOBY(moby)->command * 0x70);
             float  lo, hi, z, one;
             int    i;
-            if (e->owner != (char *)moby || e->active == 0) {
+            if (emitter_voice_slot->owner != (char *)moby || emitter_voice_slot->active == 0) {
                 MOBY(moby)->command = allocate_voice_for_target_entry(0, 4, moby);
             }
             fast_vec_sub(V, D_0013F420, &MOBY(moby)->pos);
