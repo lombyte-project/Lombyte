@@ -75,9 +75,12 @@ void set_class_mobys_flags_and_collision(int class_id,
                                          int collision) __asm__("FUN_L17_00253a90");
 
 void set_class_mobys_flags_and_collision(int class_id, int flag2, int flag1, int collision) {
+    enum {
+        MOBY_STATE_MIN_LIVE = 0
+    };
     Level17Moby *moby;
     for (moby = (Level17Moby *)D_L17_0015FFD8; moby <= l17_moby_array_last; moby++) {
-        if (moby->class_id == class_id && moby->state >= 0) {
+        if (moby->class_id == class_id && moby->state >= MOBY_STATE_MIN_LIVE) {
             if (flag2 != -1) {
                 if (flag2 != 0)
                     moby->flags &= ~2;
