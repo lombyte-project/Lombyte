@@ -753,6 +753,11 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
         EXTERMIBOT_HIT_FLASH_ONLY = 10,
         EXTERMIBOT_HIT_NO_REACTION = 11
     };
+    enum {
+        EXTERMIBOT_HIT_STATUS_SKIP_RESPONSE = 1,
+        EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
+        EXTERMIBOT_DEATH_KNOCKBACK = 14
+    };
     Vec_3047E8  working_vector;
     Vec_3047E8  hit_test_endpoint;
     int         collision_hit_status;
@@ -791,7 +796,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
     }
     hit_response = resolve_moby_hit_response(
         moby, hit_record, &moby_data->hp, 0, &collision_hit_status, &dmg, 0, 4);
-    if (collision_hit_status != 1 && moby->state != 14) {
+    if (collision_hit_status != EXTERMIBOT_HIT_STATUS_SKIP_RESPONSE && moby->state != EXTERMIBOT_DEATH_KNOCKBACK) {
         moby_data->hp = moby_data->hp - dmg;
         if (moby_data->hp <= 0.0f) {
             hit_response = 1;
@@ -826,7 +831,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             trooper_knockback_arc(
                 working_vector, &nonlethal_knockback_heading, &moby_data->f88, &moby_data->f8C);
             trooper_start_knockback(moby, moby_data->f70, nonlethal_knockback_heading, 5, 1, 0);
-            moby->state = 11;
+            moby->state = EXTERMIBOT_NONLETHAL_KNOCKBACK;
             moby_data->b67 = 0x78;
             break;
         case EXTERMIBOT_HIT_LETHAL:
@@ -843,7 +848,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             trooper_knockback_arc(
                 working_vector, &death_knockback_heading, &moby_data->f88, &moby_data->f8C);
             trooper_start_knockback(moby, moby_data->f70, death_knockback_heading, 6, 1, 0);
-            moby->state = 14;
+            moby->state = EXTERMIBOT_DEATH_KNOCKBACK;
             moby_data->b67 = 0xF0;
             if (hit_record->who != 0 && *(struct Moby **)&hit_record->who->pclass != 0 &&
                 *(short *)((u8 *)((struct Moby *)hit_record->who->pclass) + 0x46) == 5) {
