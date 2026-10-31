@@ -77,7 +77,7 @@ void memcard_update_state(void) {
         break;
 
     case MEMCARD_DISPATCH_PENDING_OPERATION:
-        if (MC.pending_state >= 0) {
+        if (MC.pending_state >= MEMCARD_QUERY_INFO) {
             if (MC.card[0].sync_result == 0) {
                 if (MC.pending_card >= 0) {
                     MC.cur = MC.pending_card;
