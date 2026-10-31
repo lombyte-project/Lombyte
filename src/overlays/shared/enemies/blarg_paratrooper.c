@@ -155,11 +155,11 @@ extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int
 activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
-extern float D_L08_00162180 __attribute__((sda));
+extern float l08_paratrooper_model_scale_multiplier __asm__("D_L08_00162180") __attribute__((sda));
 extern float D_L08_00162184 __attribute__((sda));
-extern float D_L08_0016218C __attribute__((sda));
-extern float D_L08_00162190 __attribute__((sda));
-extern float D_L08_00162194 __attribute__((sda));
+extern float l08_paratrooper_recovery_knockback_xy_speed __asm__("D_L08_0016218C") __attribute__((sda));
+extern float l08_paratrooper_death_knockback_z_speed __asm__("D_L08_00162190") __attribute__((sda));
+extern float l08_paratrooper_death_knockback_xy_speed __asm__("D_L08_00162194") __attribute__((sda));
 extern float D_L08_001621B0 __attribute__((sda));
 
 /* Paratrooper: initializes its path and steering, patrols, attacks its target,
@@ -601,7 +601,7 @@ void blarg_paratrooper_update(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00303998), where it is exact; names translated to the US level program. */
 
 void update_blarg_paratrooper_damage_and_state(char *moby) {
-    Paratrooper302618 *data;
+    enum { PARATROOPER_HIT_REACTION_LETHAL = 1 } ;Paratrooper302618 *data;
     char              *target, *child, *attached, *chased;
     float              pos[4] __attribute__((aligned(16)));
     float              matrix[16] __attribute__((aligned(16)));
@@ -609,12 +609,12 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     int                hit_state, reaction, turn, state;
     float              angle, distance, height, dx, dy;
 
-    data = (Paratrooper302618 *)MOBY(moby)->pvars;
+    paratrooper_instance_state = (Paratrooper302618 *)MOBY(moby)->pvars;
     if (MOBY(moby)->state == 0)
         return;
     {
         float timer_scale = D_L08_001621B0 * frame_time;
-        ((Moby *)moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * D_L08_00162180;
+        ((Moby *)moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * l08_paratrooper_model_scale_multiplier;
         data->unkF4 = timer_scale;
     }
 
@@ -677,7 +677,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
             case 6:
             case 7:
             case 8: {
-                float pose_scale = D_L08_0016218C * frame_time;
+                float pose_scale = l08_paratrooper_recovery_knockback_xy_speed * frame_time;
                 float timer_scale = frame_time * 3.0f;
                 data->unk88 = pose_scale;
                 data->unk8C = timer_scale;
@@ -698,12 +698,12 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 MOBY(moby)->state = 10;
                 data->unk67 = 0x78;
                 break;
-            case 1:
+            case PARATROOPER_HIT_REACTION_LETHAL:
             case 2: {
                 float push_limit = 16.0f;
                 float pose_rate = D_L08_00162184;
-                float timer_rate = D_L08_00162194;
-                float angle_rate = D_L08_00162190;
+                float timer_rate = l08_paratrooper_death_knockback_xy_speed;
+                float angle_rate = l08_paratrooper_death_knockback_z_speed;
                 float step, pose_scale, timer_scale, angle_scale;
                 ((Moby *)moby)->flags &= 0xefff;
                 step = frame_time;
