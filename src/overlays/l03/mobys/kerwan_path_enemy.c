@@ -1495,6 +1495,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         ENEMY_KNOCKBACK_RECOVERY = 10,
         ENEMY_DEATH_KNOCKBACK = 0xD
     };
+    enum {
+        HIT_REACTION_SUPPRESSED = 1
+    };
     float       hit_knockback_vector[4];
     int         kind;
     float       damage;
@@ -1518,7 +1521,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     hit = find_moby_hit(moby, 0x330000, 0);
     hit_response_code =
         resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
-    if (hit != 0 && kind != 1 && moby->state != ENEMY_DEATH_KNOCKBACK) {
+    if (hit != 0 && kind != HIT_REACTION_SUPPRESSED && moby->state != ENEMY_DEATH_KNOCKBACK) {
         hit_record_source_moby = *(char **)(hit + 0x20);
         if (hit_record_source_moby != 0) {
             if (hit_record_source_moby != (char *)hero.items[0].moby) {
