@@ -41,7 +41,7 @@ void grindrail_gate_update(struct Moby *gate_moby) {
                          D_L16_00161DE0);
     switch (gate_moby->state) {
     case GRINDRAIL_GATE_INITIALIZE:
-        gate_moby->state = 1;
+        gate_moby->state = GRINDRAIL_GATE_CHECK_HERO_BOUNDS;
         gate_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_GATE_CHECK_HERO_BOUNDS:
@@ -57,7 +57,7 @@ void grindrail_gate_update(struct Moby *gate_moby) {
                 grindrail_gate_local_trigger_bounds[4] < hero_offset_from_gate[2] &&
                 hero_offset_from_gate[2] < grindrail_gate_local_trigger_bounds[5]) {
                 gate_moby->command = 1;
-                gate_moby->state = 2;
+                gate_moby->state = GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT;
                 *(int *)command_timer = scale_game_frames(D_L16_00161DD8);
                 func_0022ED80_6478(1, 0, gate_moby);
             }
@@ -65,7 +65,7 @@ void grindrail_gate_update(struct Moby *gate_moby) {
         break;
     case GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT:
         if (fast_dec_timer((int *)command_timer)) {
-            gate_moby->state = 1;
+            gate_moby->state = GRINDRAIL_GATE_CHECK_HERO_BOUNDS;
             gate_moby->command = 0;
         }
         break;
