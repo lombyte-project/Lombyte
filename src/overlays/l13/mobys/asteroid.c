@@ -41,6 +41,19 @@ char *spawn_asteroid_fragment(char *owner,
                               int   remaining_split_count,
                               float scale) __asm__("FUN_L13_002e1140");
 
+typedef struct AsteroidVars {
+    u8    pad_0[0x30];
+    f32   unk30;
+    f32   unk34;
+    f32   unk38;
+    u8    pad_3C[0x4];
+    s32   unk40;
+    u8    pad_44[0x4];
+    char *unk48;
+    s16   unk4C;
+    s16   unk4E;
+} AsteroidVars;
+
 char *spawn_asteroid_fragment(char *parent_asteroid,
                               char *spawn_position,
                               char *initial_velocity,
@@ -49,10 +62,10 @@ char *spawn_asteroid_fragment(char *parent_asteroid,
                               float scale) {
     char *moby = create_moby(0x584);
     if (moby != 0) {
-        char *moby_data;
-        float spin_increment;
+        AsteroidVars *moby_data;
+        float         spin_increment;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        moby_data = ((char *)MOBY(moby)->pvars);
+        moby_data = (AsteroidVars *)MOBY(moby)->pvars;
         MOBY(moby)->draw_dist = *(unsigned short *)(parent_asteroid + 0x32);
         moby[0x31] = 1;
         moby[0x20] = 2;
@@ -61,33 +74,33 @@ char *spawn_asteroid_fragment(char *parent_asteroid,
         qcopy(moby + 0x10, spawn_position);
         qcopy(moby_data, initial_velocity);
         MOBY(moby)->scale = scale;
-        *(char **)(moby_data + 0x48) = parent_asteroid;
-        *(int *)(moby_data + 0x40) = 1;
-        *(short *)(moby_data + 0x4C) = scale_game_frames(0x1E);
-        *(short *)(moby_data + 0x4E) = remaining_split_count;
+        moby_data->unk48 = parent_asteroid;
+        moby_data->unk40 = 1;
+        moby_data->unk4C = scale_game_frames(0x1E);
+        moby_data->unk4E = remaining_split_count;
         MOBY(moby)->collision = 0;
         spin_increment = random_float_between(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (RandomNext() % 3) {
         case SPIN_AXIS_X:
-            *(float *)(moby_data + 0x30) = spin_increment;
+            moby_data->unk30 = spin_increment;
             break;
         case SPIN_AXIS_Y:
-            *(float *)(moby_data + 0x34) = spin_increment;
+            moby_data->unk34 = spin_increment;
             break;
         case SPIN_AXIS_Z:
-            *(float *)(moby_data + 0x38) = spin_increment;
+            moby_data->unk38 = spin_increment;
             break;
         }
         spin_increment = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (RandomNext() % 3) {
         case SPIN_AXIS_X:
-            *(float *)(moby_data + 0x30) = spin_increment;
+            moby_data->unk30 = spin_increment;
             break;
         case SPIN_AXIS_Y:
-            *(float *)(moby_data + 0x34) = spin_increment;
+            moby_data->unk34 = spin_increment;
             break;
         case SPIN_AXIS_Z:
-            *(float *)(moby_data + 0x38) = spin_increment;
+            moby_data->unk38 = spin_increment;
             break;
         }
         MOBY(moby)->rot.x = random_angle_radians();

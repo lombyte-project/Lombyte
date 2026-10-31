@@ -81,6 +81,27 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 
 #include "sda.h"
 
+typedef struct ToxicGasVentVars {
+    u8  pad_0[0x50];
+    f32 unk50;
+    f32 unk54;
+    u8  pad_58[0x8];
+    s32 unk60;
+    f32 unk64;
+    f32 unk68;
+    f32 unk6C;
+    f32 unk70;
+    f32 unk74;
+    f32 unk78;
+    f32 unk7C;
+    f32 unk80;
+    f32 unk84;
+    s32 timer_88;
+    u8  pad_8C[0x4];
+    s32 clip_volume_90;
+    s32 voice;
+} ToxicGasVentVars;
+
 /* Moby class 911 */
 void toxic_gas_vent_update(char *vent_moby) {
     enum {
@@ -89,72 +110,68 @@ void toxic_gas_vent_update(char *vent_moby) {
         VENT_TIMED_ACTIVE = 2,
         VENT_WAIT_FOR_ACTIVATION = 3
     };
-    char *vent_data = ((char *)MOBY(vent_moby)->pvars);
-    float heading_offset_radians;
-    if (*(int *)(vent_data + 0x90) >= 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(vent_data + 0x90)) != 0) {
+    ToxicGasVentVars *vent_data = (ToxicGasVentVars *)MOBY(vent_moby)->pvars;
+    float             heading_offset_radians;
+    if (vent_data->clip_volume_90 >= 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, vent_data->clip_volume_90) != 0) {
             float x = *(float *)&D_L06_00161D24;
             float y = *(float *)&D_L06_00161D28;
-            *(float *)(vent_data + 0x50) = x;
-            *(float *)(vent_data + 0x54) = y;
+            vent_data->unk50 = x;
+            vent_data->unk54 = y;
         } else {
-            *(int *)(vent_data + 0x50) = 0;
-            *(int *)(vent_data + 0x54) = 0;
+            *(int *)&vent_data->unk50 = 0;
+            *(int *)&vent_data->unk54 = 0;
         }
     }
     switch (((unsigned char *)vent_moby)[0x20]) {
     case VENT_INITIALIZE:
-        if (*(int *)(vent_data + 0x60) != 0) {
+        if (vent_data->unk60 != 0) {
             vent_moby[0x20] = 1;
-            *(float *)(vent_data + 0x80) =
-                360.0f / *(float *)(vent_data + 0x68) * DEG_TO_RAD * frame_time;
-            *(float *)(vent_data + 0x7C) = *(float *)(vent_data + 0x6C) * DEG_TO_RAD;
-            *(float *)(vent_data + 0x84) = MOBY(vent_moby)->rot.z;
+            vent_data->unk80 = 360.0f / vent_data->unk68 * DEG_TO_RAD * frame_time;
+            vent_data->unk7C = vent_data->unk6C * DEG_TO_RAD;
+            vent_data->unk84 = MOBY(vent_moby)->rot.z;
         } else {
             vent_moby[0x20] = 3;
-            *(int *)(vent_data + 0x88) = scale_game_frames(truncate_float_to_s32(
-                *(float *)(vent_data + 0x74) + *(float *)(vent_data + 0x78) * 60.0f));
+            vent_data->timer_88 = scale_game_frames(
+                truncate_float_to_s32(vent_data->unk74 + vent_data->unk78 * 60.0f));
         }
-        *(int *)(vent_data + 0x94) = -1;
+        vent_data->voice = -1;
         break;
     case VENT_OSCILLATE:
-        if (voice_is_playing(vent_moby, *(int *)(vent_data + 0x94)) == 0) {
-            *(int *)(vent_data + 0x94) = allocate_voice_for_target_entry(0, 4, (int)vent_moby);
+        if (voice_is_playing(vent_moby, vent_data->voice) == 0) {
+            vent_data->voice = allocate_voice_for_target_entry(0, 4, (int)vent_moby);
         }
         emit_toxic_gas_vent_sparks(vent_moby);
         check_oscillating_toxic_gas_vent_collisions(vent_moby);
-        heading_offset_radians =
-            *(float *)(vent_data + 0x64) * DEG_TO_RAD * fast_sin(*(float *)(vent_data + 0x7C));
-        *(float *)(vent_data + 0x7C) =
-            fast_add_rotations(*(float *)(vent_data + 0x7C), *(float *)(vent_data + 0x80));
-        MOBY(vent_moby)->rot.z =
-            fast_add_rotations(*(float *)(vent_data + 0x84), heading_offset_radians);
+        heading_offset_radians = vent_data->unk64 * DEG_TO_RAD * fast_sin(vent_data->unk7C);
+        vent_data->unk7C = fast_add_rotations(vent_data->unk7C, vent_data->unk80);
+        MOBY(vent_moby)->rot.z = fast_add_rotations(vent_data->unk84, heading_offset_radians);
         break;
     case VENT_TIMED_ACTIVE:
-        if (voice_is_playing(vent_moby, *(int *)(vent_data + 0x94)) == 0) {
-            *(int *)(vent_data + 0x94) = allocate_voice_for_target_entry(0, 4, (int)vent_moby);
+        if (voice_is_playing(vent_moby, vent_data->voice) == 0) {
+            vent_data->voice = allocate_voice_for_target_entry(0, 4, (int)vent_moby);
         }
         emit_toxic_gas_vent_sparks(vent_moby);
         check_timed_toxic_gas_vent_collisions(vent_moby);
-        if (fast_dec_timer(vent_data + 0x88) != 0) {
+        if (fast_dec_timer(&vent_data->timer_88) != 0) {
             vent_moby[0x20] = 3;
-            *(int *)(vent_data + 0x88) =
-                scale_game_frames(truncate_float_to_s32(*(float *)(vent_data + 0x74) * 60.0f));
-            if (*(int *)(vent_data + 0x94) != -1) {
-                char *voice_slot = ((char *)&D_0013E550) + *(int *)(vent_data + 0x94) * 0x70;
+            vent_data->timer_88 =
+                scale_game_frames(truncate_float_to_s32(vent_data->unk74 * 60.0f));
+            if (vent_data->voice != -1) {
+                char *voice_slot = ((char *)&D_0013E550) + vent_data->voice * 0x70;
                 if (*(char **)(voice_slot + 0x88) == vent_moby &&
                     ((unsigned char *)voice_slot)[0x74] != 0) {
-                    release_voice_slot(*(int *)(vent_data + 0x94));
+                    release_voice_slot(vent_data->voice);
                 }
             }
-            *(int *)(vent_data + 0x94) = -1;
+            vent_data->voice = -1;
         }
         break;
     case VENT_WAIT_FOR_ACTIVATION:
-        if (fast_dec_timer(vent_data + 0x88) != 0) {
+        if (fast_dec_timer(&vent_data->timer_88) != 0) {
             vent_moby[0x20] = 2;
-            *(int *)(vent_data + 0x88) =
-                scale_game_frames(truncate_float_to_s32(*(float *)(vent_data + 0x70) * 60.0f));
+            vent_data->timer_88 =
+                scale_game_frames(truncate_float_to_s32(vent_data->unk70 * 60.0f));
         }
         break;
     }
@@ -302,17 +319,17 @@ void check_timed_toxic_gas_vent_collisions(char *vent_moby) {
         float f1C;
         int   i20;
     } q;
-    float segment_start[4];
-    float segment_end[4];
-    char *vent_data;
-    float sp;
-    int   fl;
+    float             segment_start[4];
+    float             segment_end[4];
+    ToxicGasVentVars *vent_data;
+    float             sp;
+    int               fl;
 
     fl = 0x10000;
     if (hero.items[2].item_id != 6)
         fl = 0x10001;
     q.flags = fl;
-    vent_data = ((char *)MOBY(vent_moby)->pvars);
+    vent_data = (ToxicGasVentVars *)MOBY(vent_moby)->pvars;
     q.owner = vent_moby;
     q.f1C = 1.0f;
     q.i20 = 1;
@@ -322,7 +339,7 @@ void check_timed_toxic_gas_vent_collisions(char *vent_moby) {
     q.b18 = 3;
     q.b19 = 1;
     q.s1A = ((unsigned short)MOBY(vent_moby)->oclass);
-    sp = (*(float *)(vent_data + 0x70) * 60.0f - (float)*(int *)(vent_data + 0x88)) *
+    sp = (vent_data->unk70 * 60.0f - (float)vent_data->timer_88) *
          (*(float *)&spark_speed_gp * frame_time);
     if (*(float *)&toxic_gas_vent_max_collision_range_gp < sp)
         sp = *(float *)&toxic_gas_vent_max_collision_range_gp;
