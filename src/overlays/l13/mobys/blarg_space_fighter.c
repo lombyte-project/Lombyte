@@ -551,6 +551,10 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE = 8,
         FIGHTER_DESTRUCTION_SKIP_SPAWN_SECOND_ALTERNATE = 9
     };
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     Data_2C56B0 *fighter_data;
     Moby_2C56B0 *veh;
     Veh         *vehd = 0;
@@ -589,7 +593,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         fighter_data->fA8 = scale_game_frames(0x14) + 5;
         moby->b30 = 0xFF;
         moby->h32 = 0xFF;
-        moby->state = 1;
+        moby->state = FIGHTER_WAIT_TO_JOIN_PATH;
         moby->bBC = 0;
         moby->flags = (moby->flags | 1) & 0xEFFF;
         moby->f94 = 0;
@@ -600,7 +604,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         Moby_2C56B0 *p;
         if (fighter_data->fBC == -1 ||
             (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->fBC << 8))) == 0 ||
-            p->state == 0xFE || p->state == 0xFD || p->bBC == 4) {
+            p->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END || p->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END || p->bBC == 4) {
             fast_vec_normalize(scratch_vector, D_L13_001670C0 + 0x84, 40.0f);
             fast_vec_sub(scratch_vector, D_L13_001670C0, scratch_vector);
             fighter_data->hB6 = fighter_data->hB4 =
@@ -610,7 +614,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             moby->f94 = moby->cls->f10;
             moby->b31 = 1;
             moby->flags = (moby->flags & 0xFFFE) | 0x1000;
-            moby->state = 2;
+            moby->state = FIGHTER_FOLLOW_PATH_AND_ATTACK;
         }
         break;
     }
@@ -621,7 +625,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
 
         FUN_L13_002c37e0_c(
             (unsigned char *)moby, (unsigned char *)fighter_data, &fighter_data->f20);
-        if (veh != 0 && veh->state != 0xFE && veh->state != 0xFD) {
+        if (veh != 0 && veh->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && veh->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             vehd = veh->data;
             qcopy(hpos, &((Hero_2C56B0 *)(((char *)&D_0013F350)))->veh->pos);
             close = 0;
@@ -644,13 +648,13 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         bossd = 0;
         if (fighter_data->fBC != -1) {
             Moby_2C56B0 *p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->fBC << 8));
-            if (p != 0 && p->state != 0xFE && p->state != 0xFD) {
+            if (p != 0 && p->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && p->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 boss = p;
                 bossd = p->data;
             }
         }
-        if (boss == 0 || boss->state == 0xFE || boss->state == 0xFD || boss->state == 1) {
-            moby->state = 4;
+        if (boss == 0 || boss->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END || boss->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END || boss->state == 1) {
+            moby->state = FIGHTER_WAIT_TO_REINITIALIZE;
             moby->f94 = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
             return;
@@ -808,7 +812,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         bossd = 0;
         if (fighter_data->fBC != -1) {
             Moby_2C56B0 *p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->fBC << 8));
-            if (p != 0 && p->state != 0xFE && p->state != 0xFD) {
+            if (p != 0 && p->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && p->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 boss = p;
                 bossd = p->data;
             }
@@ -818,7 +822,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
                 bossd->b10E--;
             }
         }
-        moby->state = 4;
+        moby->state = FIGHTER_WAIT_TO_REINITIALIZE;
         moby->f94 = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         break;
@@ -827,9 +831,9 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         Moby_2C56B0 *p;
         if (fighter_data->fBC != -1 &&
             (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->fBC << 8))) != 0 &&
-            p->state != 0xFE && p->state != 0xFD && p->bBC != 4) {
+            p->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && p->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END && p->bBC != 4) {
             fighter_data->f20 = fighter_data->h24;
-            moby->state = 0;
+            moby->state = FIGHTER_INITIALIZE;
         }
         break;
     }
