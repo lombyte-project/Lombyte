@@ -86,6 +86,10 @@ void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera
 void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
 
 void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_frames, s32 x) {
+    enum {
+        JET_MOUNT_COSINE_POSE_TRANSITION = 2,
+        JET_MOUNT_SPHERICAL_TRANSITION = 3
+    };
     u8      *camera_record = find_camera_record_by_id(5);
     V_2eaaa0 requested_position, requested_rotation, saved_camera_position, saved_camera_rotation;
     u8      *camera_state;
@@ -108,8 +112,8 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
     qcopy(camera_state + 0x90, &requested_rotation);
     *(s32 *)(transition_state + 0x40) = x;
     camera_record[0x88] = mode;
-    if (mode != 2) {
-        if (mode != 3)
+    if (mode != JET_MOUNT_COSINE_POSE_TRANSITION) {
+        if (mode != JET_MOUNT_SPHERICAL_TRANSITION)
             return;
         *(f32 *)(transition_state + 0x44) = 1.0f;
         *(f32 *)(transition_state + 0x48) = 0.0f;
