@@ -106,6 +106,11 @@ int                select_moby_by_xy_distance(char *selection_reference,
                                               float best) __asm__("FUN_L14_00268038");
 
 int select_moby_by_xy_distance(char *selection_reference, char *selection_output, float best) {
+    enum {
+        MOBY_SELECTION_HERO_FALLBACK = 0,
+        MOBY_SELECTION_DISTANCE_CANDIDATE = 1,
+        MOBY_SELECTION_NO_TARGET = 2
+    };
     struct Hero *hero = &hero_lui;
     char        *selected_moby;
     char        *candidate_moby;
@@ -115,10 +120,10 @@ int select_moby_by_xy_distance(char *selection_reference, char *selection_output
     float        candidate_metric;
 
     selected_moby = ((char *)hero->moby);
-    selection_status = 0;
+    selection_status = MOBY_SELECTION_HERO_FALLBACK;
     if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_moby = 0;
-        selection_status = 2;
+        selection_status = MOBY_SELECTION_NO_TARGET;
     }
     for (i = 1; i <= D_L14_001B0F30[0]; i++) {
         candidate_moby = D_L14_0015FFD8 + (D_L14_001B0F30[i] << 8);
@@ -136,7 +141,7 @@ int select_moby_by_xy_distance(char *selection_reference, char *selection_output
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = MOBY_SELECTION_DISTANCE_CANDIDATE;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -155,7 +160,7 @@ int select_moby_by_xy_distance(char *selection_reference, char *selection_output
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = MOBY_SELECTION_DISTANCE_CANDIDATE;
         }
     }
     if (selected_moby != 0) {
