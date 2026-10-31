@@ -125,7 +125,10 @@ typedef struct {
 void activate_grindrail_button(Level16VendorTurnMoby *moby) __asm__("FUN_L16_002e56e0");
 
 void activate_grindrail_button(Level16VendorTurnMoby *moby) {
+    enum {
+        GRINDRAIL_BUTTON_ACTIVATED = 2
+    };
     moby->data->value = -3.1415925f;
     moby->active = 1;
-    moby->state = 2;
+    moby->state = GRINDRAIL_BUTTON_ACTIVATED;
 }
