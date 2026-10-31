@@ -141,8 +141,8 @@ extern f32            l00_horny_toad_knockback_gravity __asm__("D_L00_00161970")
 extern f32            l00_horny_toad_knockback_horizontal_deceleration __asm__("D_L00_00161974") __attribute__((sda));
 extern f32            l00_horny_toad_knockback_horizontal_speed __asm__("D_L00_00161978") __attribute__((sda));
 extern f32            l00_horny_toad_knockback_vertical_speed __asm__("D_L00_0016197C") __attribute__((sda));
-extern f32            D_L00_00161988_gp __asm__("D_L00_00161988") __attribute__((sda));
-extern f32            D_L00_0016198C_gp __asm__("D_L00_0016198C") __attribute__((sda));
+extern f32            l00_horny_toad_knockback_landing_animation_frame __asm__("D_L00_00161988") __attribute__((sda));
+extern f32            l00_horny_toad_knockback_apex_animation_frame __asm__("D_L00_0016198C") __attribute__((sda));
 extern unsigned char *D_L00_001B04B0_2d5160[] __asm__("D_L00_001B04B0");
 extern void
 hit_reaction(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
@@ -513,8 +513,8 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
         trooper_knockback_arc(hit_knockback_vector, &angle, toad_vars + 0x88, toad_vars + 0x8C);
         trooper_start_knockback(
             toad_moby, toad_vars + 0x70, angle, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
-        reactionC0 = D_L00_0016198C_gp;
-        reactionC4 = D_L00_00161988_gp;
+        reactionC0 = l00_horny_toad_knockback_apex_animation_frame;
+        reactionC4 = l00_horny_toad_knockback_landing_animation_frame;
         *(f32 *)(toad_vars + 0xC0) = reactionC0;
         *(f32 *)(toad_vars + 0xC4) = reactionC4;
         MOBY(toad_moby)->state = 12;
