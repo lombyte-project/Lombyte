@@ -33,6 +33,11 @@ float       absolute_float(float input) __asm__("func_001F99C0");
 void apply_hero_ground_type_effects(void) __asm__("FUN_L15_002044c8");
 
 void apply_hero_ground_type_effects(void) {
+    enum {
+        HERO_GROUND_TYPE_WATER = 0,
+        HERO_GROUND_TYPE_MAGNET = 2,
+        HERO_GROUND_TYPE_FIXED_SHALLOW_WATER = 0xE
+    };
     struct Hero *hero_state = &hero;
     int          keep = hero_state->ground_sound_class;
     int          saved_ground_type = hero_state->ground_type;
@@ -44,23 +49,23 @@ void apply_hero_ground_type_effects(void) {
     hero_state->unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == HERO_GROUND_TYPE_MAGNET) {
         if (hero_state->frames_off_ground.s == 0 || hero_state->ground_distance < 0.3f) {
             hero_state->on_magnet_ground = 1;
-            if (hero_state->vehicle_mode == 0) {
+            if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_slot_one_moby = ((char *)hero_state->items[1].moby);
                 if (item_slot_one_moby != 0 && MOBY(item_slot_one_moby)->oclass == 0xAD)
                     hero_state->unk308 = 1;
             }
         }
     }
-    if (saved_ground_type == 0xE) {
+    if (saved_ground_type == HERO_GROUND_TYPE_FIXED_SHALLOW_WATER) {
         struct Hero *q = &hero;
         *(char *)&q->base_condition = 1;
         q->water_depth = 0.2f;
         q->water_surface_z = q->ground_z.f + 0.2f;
     }
-    if (saved_ground_type == 0) {
+    if (saved_ground_type == HERO_GROUND_TYPE_WATER) {
         struct Hero *q = &hero;
         float        water_depth = q->water_surface_z - q->ground_z.f;
         q->water_depth = water_depth;
