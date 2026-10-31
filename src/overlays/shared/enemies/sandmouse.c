@@ -72,6 +72,9 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby,
                                                 f32          nearYaw,
 
                                                 f32 nearPitch) {
+    enum {
+        TARGET_KIND_LOCK_ON = 5
+    };
     f32          tp[4];
     struct Moby *best = 0;
     f32          bestScore = 1.0e9f;
@@ -90,7 +93,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby,
         if (candidate_moby == 0 || candidate_moby->pclass == 0)
             continue;
         candidate_target_kind = ((TargetClass *)candidate_moby->pclass)->kind;
-        if (candidate_target_kind != 5 || hp == 0 || !(0.0f < *hp))
+        if (candidate_target_kind != TARGET_KIND_LOCK_ON || hp == 0 || !(0.0f < *hp))
             continue;
         candidate_distance = fast_vec_dist(from, &candidate_moby->pos);
         if (!(candidate_distance < range))
