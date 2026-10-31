@@ -100,6 +100,9 @@ void thruster_pack_lock_update(Lock *moby) {
         THRUSTER_PACK_LOCK_STATE_INIT = 0,
         THRUSTER_PACK_LOCK_STATE_ACTIVE = 1
     };
+    enum {
+        THRUSTER_PACK_LOCK_STATE_LOWERED = 2
+    };
     char *vars = moby->vars;
 
     switch (moby->state) {
@@ -113,13 +116,13 @@ void thruster_pack_lock_update(Lock *moby) {
                 ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >>
                   (moby->uid & 0x1F)) &
                  1)) {
-                moby->state = 2;
+                moby->state = THRUSTER_PACK_LOCK_STATE_LOWERED;
                 moby->z = moby->z - 1.5f;
                 allocate_voice_for_target_entry(0, 0, moby);
                 return;
             }
         }
-        moby->state = 1;
+        moby->state = THRUSTER_PACK_LOCK_STATE_ACTIVE;
         break;
     }
     case THRUSTER_PACK_LOCK_STATE_ACTIVE:
@@ -138,7 +141,7 @@ void thruster_pack_lock_update(Lock *moby) {
                     l11_thruster_pack_lock_restore_state.collected[(short)moby->uid] = group + 2;
                 }
             }
-            moby->state = 2;
+            moby->state = THRUSTER_PACK_LOCK_STATE_LOWERED;
             moby->z = moby->z - 1.5f;
             allocate_voice_for_target_entry(0, 0, moby);
         }
