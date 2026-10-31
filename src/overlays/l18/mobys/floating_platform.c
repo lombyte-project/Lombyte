@@ -79,9 +79,9 @@ void floating_platform_update(struct Moby *moby) {
         *(int *)(floating_platform_update_private_vars + 0x5C) |= 1;
         *(float *)(floating_platform_update_private_vars + 0x74) = angle;
         if (*(int *)(floating_platform_update_private_vars + 0x88) != 0) {
-            moby->state = 2;
+            moby->state = STATE_WAIT_FOR_SINK_REQUEST;
         } else {
-            moby->state = 1;
+            moby->state = STATE_WAIT_FOR_TILT_REQUEST;
         }
         break;
     case STATE_TILT_DELAY:
@@ -104,7 +104,7 @@ void floating_platform_update(struct Moby *moby) {
             rate = floating_platform_tilt_rate_degrees_config_84_zero_gp * tilt_rate_scale;
         }
         *(float *)(floating_platform_update_private_vars + 0x6C) = rate * DEG_TO_RAD * frame_time;
-        moby->state = 4;
+        moby->state = STATE_WAIT_FOR_SINK_TRIGGER;
         break;
     case STATE_WAIT_FOR_SINK_TRIGGER:
         if (moby->visible != 0 &&
@@ -115,7 +115,7 @@ void floating_platform_update(struct Moby *moby) {
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             *(int *)(floating_platform_update_private_vars + 0x8C) = 0;
-            moby->state = 5;
+            moby->state = STATE_SINKING;
             *(short *)(floating_platform_update_private_vars + 0x92) =
                 allocate_voice_for_target_entry(1, 0, moby);
         }
@@ -124,7 +124,7 @@ void floating_platform_update(struct Moby *moby) {
         }
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) <
             floating_platform_sink_trigger_distance_gp) {
-            moby->state = 5;
+            moby->state = STATE_SINKING;
             *(short *)(floating_platform_update_private_vars + 0x92) =
                 allocate_voice_for_target_entry(1, 0, moby);
         }
