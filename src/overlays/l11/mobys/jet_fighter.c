@@ -355,6 +355,9 @@ void        draw_ship_hud(struct Moby *moby) __asm__("FUN_L11_00311d50");
 extern void draw_ship_hud();
 
 void draw_ship_hud(struct Moby *moby) {
+    enum {
+        JET_FIGHTER_STATE_DELAYED_EXIT = 8
+    };
     ShipVars *ship_hud_vars = (ShipVars *)moby->pvars;
     short    *list;
     void     *found[12];
@@ -564,7 +567,7 @@ void draw_ship_hud(struct Moby *moby) {
         help_request(0x2AFD, 0x56);
     }
 
-    if (moby->state == 8) {
+    if (moby->state == JET_FIGHTER_STATE_DELAYED_EXIT) {
         font_print_center_large(0x100, 0xC8, 0x80005080, get_help_message_text(0x523E), 0x11);
     }
 
