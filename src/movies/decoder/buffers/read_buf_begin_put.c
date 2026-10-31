@@ -2,11 +2,11 @@
 
 s32 read_buf_begin_put(struct ReadBuf *buf, u8 **ptr) __asm__("func_0023B960");
 
-s32 read_buf_begin_put(struct ReadBuf *buf, u8 **ptr) {
+s32 read_buf_begin_put(struct ReadBuf *buf, u8 **put_destination_out) {
     s32 free = buf->size - buf->count;
 
     if (free != 0) {
-        *ptr = buf->data + buf->put;
+        *put_destination_out = buf->data + buf->put;
     }
     return free;
 }
