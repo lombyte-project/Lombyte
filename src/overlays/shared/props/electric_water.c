@@ -1031,15 +1031,15 @@ extern float frame_scale __asm__("D_0015ED60");
 extern char  D_L15_001D3750_8710[] __asm__("D_L15_001D3750");
 extern char  D_L15_001D3BB0_8710[] __asm__("D_L15_001D3BB0");
 extern int   D_L15_00161CC8_8710 __asm__("D_L15_00161CC8");
-extern short D_L15_00161C58_gp __asm__("D_L15_00161C58") __attribute__((sda));
-extern short D_L15_00161C54_gp __asm__("D_L15_00161C54") __attribute__((sda));
-extern short D_L15_00161C3C_gp __asm__("D_L15_00161C3C") __attribute__((sda));
-extern short D_L15_00161C44_gp __asm__("D_L15_00161C44") __attribute__((sda));
+extern short l15_electric_water_bolt_draw_accumulator_decrement_rate __asm__("D_L15_00161C58") __attribute__((sda));
+extern short l15_electric_water_bolt_draw_wrapped_accumulator __asm__("D_L15_00161C54") __attribute__((sda));
+extern short l15_electric_water_first_bolt_path_first_pass_alpha __asm__("D_L15_00161C3C") __attribute__((sda));
+extern short l15_electric_water_first_bolt_path_second_pass_alpha __asm__("D_L15_00161C44") __attribute__((sda));
 extern short D_L15_00161C64_gp __asm__("D_L15_00161C64") __attribute__((sda));
 extern short D_L15_00161C68_gp __asm__("D_L15_00161C68") __attribute__((sda));
 extern short D_L15_00161C9C_gp __asm__("D_L15_00161C9C") __attribute__((sda));
-extern short D_L15_00161C6C_gp __asm__("D_L15_00161C6C") __attribute__((sda));
-extern short D_L15_00161C70_gp __asm__("D_L15_00161C70") __attribute__((sda));
+extern short l15_electric_water_second_bolt_path_first_pass_alpha __asm__("D_L15_00161C6C") __attribute__((sda));
+extern short l15_electric_water_second_bolt_path_second_pass_alpha __asm__("D_L15_00161C70") __attribute__((sda));
 extern short D_L15_00161C74_gp __asm__("D_L15_00161C74") __attribute__((sda));
 extern short D_L15_00161C78_gp __asm__("D_L15_00161C78") __attribute__((sda));
 extern short D_L15_00161CA0_gp __asm__("D_L15_00161CA0") __attribute__((sda));
@@ -1047,21 +1047,21 @@ extern void  draw_beam_and_arc_two_pass_quads(char *, int, int, int, float, floa
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
 void draw_electric_water_bolt_effect(char *moby) {
-    float decremented_accumulator = F(D_L15_00161C54_gp) - F(D_L15_00161C58_gp) * frame_scale;
-    F(D_L15_00161C54_gp) = decremented_accumulator;
+    float decremented_accumulator = F(l15_electric_water_bolt_draw_wrapped_accumulator) - F(l15_electric_water_bolt_draw_accumulator_decrement_rate) * frame_scale;
+    F(l15_electric_water_bolt_draw_wrapped_accumulator) = decremented_accumulator;
     if (decremented_accumulator <= -8.0f) {
-        F(D_L15_00161C54_gp) = decremented_accumulator + 8.0f;
+        F(l15_electric_water_bolt_draw_wrapped_accumulator) = decremented_accumulator + 8.0f;
     }
     draw_beam_and_arc_two_pass_quads(D_L15_001D3750_8710,
-                                     W(D_L15_00161C3C_gp),
-                                     W(D_L15_00161C44_gp),
+                                     W(l15_electric_water_first_bolt_path_first_pass_alpha),
+                                     W(l15_electric_water_first_bolt_path_second_pass_alpha),
                                      0x14,
                                      F(D_L15_00161C64_gp),
                                      F(D_L15_00161C68_gp),
                                      F(D_L15_00161C9C_gp));
     draw_beam_and_arc_two_pass_quads(D_L15_001D3750_8710 + 0x140,
-                                     W(D_L15_00161C6C_gp),
-                                     W(D_L15_00161C70_gp),
+                                     W(l15_electric_water_second_bolt_path_first_pass_alpha),
+                                     W(l15_electric_water_second_bolt_path_second_pass_alpha),
                                      0x14,
                                      F(D_L15_00161C74_gp),
                                      F(D_L15_00161C78_gp),
