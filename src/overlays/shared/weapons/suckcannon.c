@@ -604,7 +604,7 @@ extern E04                  D_L00_001E4C80[];
 extern char                 D_L00_00161B60[] MACRO_ADDR;
 extern char                 D_L00_00161B70[] MACRO_ADDR;
 extern char                 D_L00_00166FD0[];
-extern char                 D_L00_001E5F30[];
+extern char                 l00_suck_beam_previous_segment_positions[] __asm__("D_L00_001E5F30");
 extern char                 D_L00_001E5F40[];
 extern float D_L00_00161B80 MACRO_ADDR;
 extern float D_L00_00161B84 MACRO_ADDR;
@@ -2867,7 +2867,7 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
     D_L00_001E6008[0] = 0;
     for (i = 1; i < 10; i++) {
         fast_vec_add(D_L00_001E5F40 + i * 0x10,
-                     D_L00_001E5F30 + i * 0x10,
+                     l00_suck_beam_previous_segment_positions + i * 0x10,
                      (char *)beam_initialization_vectors + 0x30);
         D_L00_001E6008[i] = 0;
     }
@@ -2994,7 +2994,7 @@ void suck_beam_update(void *moby, void *position) {
         int i;
         for (i = 1; i < 10; i++) {
             anchor = (V41 *)(D_L00_001E5F40 + i * 16);
-            previous = (V41 *)(D_L00_001E5F30 + i * 16);
+            previous = (V41 *)(l00_suck_beam_previous_segment_positions + i * 16);
             fast_vec_sub(&tmp_a, anchor, previous);
             qcopy(&tmp_b, &step);
             fast_vec_cross(&tmp_c, &tmp_b, &tmp_a);
@@ -3105,7 +3105,7 @@ void suck_beam_update(void *moby, void *position) {
             }
             if (D_L00_001E4C80_lui[i].p) {
                 fast_vec_sub(&tmp_a,
-                             D_L00_001E5F30 + D_L00_001E4C80_lui[i].idx * 16,
+                             l00_suck_beam_previous_segment_positions + D_L00_001E4C80_lui[i].idx * 16,
                              D_L00_001E5F40 + D_L00_001E4C80_lui[i].idx * 16);
                 length = fast_vec_length(&tmp_a);
                 D_L00_001E4C80_lui[i].f += D_L00_001E4C80_lui[i].speed;
@@ -3118,7 +3118,7 @@ void suck_beam_update(void *moby, void *position) {
                     } else {
                         D_L00_001E4C80_lui[i].f -= length;
                         fast_vec_sub(&tmp_a,
-                                     D_L00_001E5F30 + D_L00_001E4C80_lui[i].idx * 16,
+                                     l00_suck_beam_previous_segment_positions + D_L00_001E4C80_lui[i].idx * 16,
                                      D_L00_001E5F40 + D_L00_001E4C80_lui[i].idx * 16);
                         length = fast_vec_length(&tmp_a);
                     }
@@ -3156,7 +3156,7 @@ void suck_beam_update(void *moby, void *position) {
                         fast_vec_sub(&tmp_c,
                                      (char *)((V41 *)D_L00_001E5EE0) +
                                          D_L00_001E4C80_lui[i].idx * 320 + j * 16,
-                                     D_L00_001E5F30 + D_L00_001E4C80_lui[i].idx * 16);
+                                     l00_suck_beam_previous_segment_positions + D_L00_001E4C80_lui[i].idx * 16);
                         interpolate_vector(&motion, &tmp_b, &tmp_c, amount);
                         j = (j + 19) % 20;
                         fast_vec_sub(&tmp_d,
@@ -3166,7 +3166,7 @@ void suck_beam_update(void *moby, void *position) {
                         fast_vec_sub(&tmp_e,
                                      (char *)((V41 *)D_L00_001E5EE0) +
                                          D_L00_001E4C80_lui[i].idx * 320 + j * 16,
-                                     D_L00_001E5F30 + D_L00_001E4C80_lui[i].idx * 16);
+                                     l00_suck_beam_previous_segment_positions + D_L00_001E4C80_lui[i].idx * 16);
                         interpolate_vector(&interp, &tmp_d, &tmp_e, amount);
                         interpolate_vector(&motion, &motion, &interp, D_L00_001E4C80_lui[i].phase);
                         D_L00_001E4C80_lui[i].phase += D_L00_001E4C80_lui[i].phase_step;
@@ -3215,7 +3215,7 @@ void stop_suck_cannon_suction_effect(int callback_context) {
         if (p != 0) {
             D_L00_001E4C80[i].p = 0;
             fast_vec_sub(segment_offset,
-                         D_L00_001E5F30 + D_L00_001E4C80[i].idx * 16,
+                         l00_suck_beam_previous_segment_positions + D_L00_001E4C80[i].idx * 16,
                          D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16);
             segment_length = vector_length_xyz(segment_offset);
             scale_vector_xyz(segment_offset, segment_offset, D_L00_001E4C80[i].f / segment_length);
