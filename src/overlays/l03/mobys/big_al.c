@@ -117,7 +117,7 @@ void big_al_update(struct Moby *guide_moby) {
             }
         }
         guide_moby->spawn_frame = *(u64 *)(D_001413D0_db558[0] + 0x38);
-        guide_moby->state = 1;
+        guide_moby->state = BIG_AL_UPDATE_DIALOGUE;
         initialize_npc_dialogue(guide_moby, (struct TalkState *)&v->talk);
         initialize_moby_grounding(guide_moby);
         if (D_0013D4C2[0] != 0) {
@@ -154,7 +154,7 @@ void big_al_update(struct Moby *guide_moby) {
             }
             begin_dialogue_camera_transition(guide_moby, 2.7f);
             guide_moby->anim_speed = 0.0f;
-            guide_moby->state = 2;
+            guide_moby->state = BIG_AL_RESOLVE_DIALOGUE;
         }
         break;
     case BIG_AL_RESOLVE_DIALOGUE:
@@ -174,7 +174,7 @@ void big_al_update(struct Moby *guide_moby) {
                 jet_reset_camera(&l03_cuboids[v->warp].pos, &l03_cuboids[v->warp].rot);
             }
         }
-        guide_moby->state = 1;
+        guide_moby->state = BIG_AL_UPDATE_DIALOGUE;
         if (v->talk.mode != 2) {
             break;
         }
