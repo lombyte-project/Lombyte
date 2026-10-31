@@ -818,9 +818,9 @@ void emit_beam_trail_particles(X *x) {
         fast_vec_sub(&previous_position_delta, &trail_state->v10, &emission_position);
         hero_state = hero.state.current;
         trail_sample_limit = 4;
-        if (hero_state == 8)
+        if (hero_state == HERO_STATE_LAND)
             trail_sample_limit = 2;
-        if (hero_state == 0x81)
+        if (hero_state == HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT)
             trail_sample_limit = 1;
         for (i = 1; i < trail_sample_limit; i++) {
             fast_vec_normalize(
