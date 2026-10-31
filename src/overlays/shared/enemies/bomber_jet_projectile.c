@@ -64,7 +64,7 @@ extern Cols l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020
 extern struct Moby *D_L01_001742D8 NOT_SDA;
 extern char                       *ents_macro __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern char                        D_0013E533[];
-extern char                        D_L01_00167240[];
+extern char                        camera_pos[] __asm__("D_L01_00167240");
 extern float D_0015ED6C            MACRO_ADDR;
 extern float D_L01_0015F5D0        MACRO_ADDR;
 extern int                         cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
@@ -173,7 +173,7 @@ void explosive_projectile_update(struct Moby *moby) {
     }
     if (moby->state != 0) {
         size_scale = 8.0f;
-        camera_distance = fast_vec_dist(D_L01_00167240, &(*(Vec_2F7E08 *)&moby->pos));
+        camera_distance = fast_vec_dist(camera_pos, &(*(Vec_2F7E08 *)&moby->pos));
         if (cutscene_active_macro != 0) {
             size_scale = 4.0f;
         }
@@ -199,7 +199,7 @@ void explosive_projectile_update(struct Moby *moby) {
                 }
             }
         }
-        view_distance = fast_vec_dist(&(*(Vec_2F7E08 *)&moby->pos), D_L01_00167240);
+        view_distance = fast_vec_dist(&(*(Vec_2F7E08 *)&moby->pos), camera_pos);
         max_rings = 5;
         if (cutscene_active_macro != 0) {
             max_rings = 2;
@@ -393,7 +393,7 @@ void explosive_projectile_update(struct Moby *moby) {
                         (*(void **)&((struct Moby *)ents_macro)[projectile_vars->ids[link]].pvars);
                     if (target->h4 == 0 && target->timer == 0 &&
                         is_point_inside_clip_volume(((char *)&D_0013F3D0), target->vol) != 0 &&
-                        is_point_inside_clip_volume(D_L01_00167240, target->vol) != 0) {
+                        is_point_inside_clip_volume(camera_pos, target->vol) != 0) {
                         target->timer = scale_game_frames(random_int_between(0x3C, 0xB4));
                     }
                 }
