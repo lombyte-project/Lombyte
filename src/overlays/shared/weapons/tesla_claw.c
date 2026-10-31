@@ -687,12 +687,12 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
         if ((controller_state.pressed & (player_hero = &hero)->items[0].button_mask) &&
             !player_hero->item_use_locked) {
             if (active) {
-                Stats *st = (Stats *)(D_0014161B + 0x65);
-                if (st->uses < 65535)
-                    st->uses++;
-                if (scale_game_frames(D_0015EEA4) / 600 > st->longest)
-                    st->longest = scale_game_frames(D_0015EEA4) / 600;
-                st->levels = (st->levels | (1 << current_level_index)) | 0x80000000;
+                Stats *firing_start_stats = (Stats *)(D_0014161B + 0x65);
+                if (firing_start_stats->uses < 65535)
+                    firing_start_stats->uses++;
+                if (scale_game_frames(D_0015EEA4) / 600 > firing_start_stats->longest)
+                    firing_start_stats->longest = scale_game_frames(D_0015EEA4) / 600;
+                firing_start_stats->levels = (firing_start_stats->levels | (1 << current_level_index)) | 0x80000000;
                 start_equipped_item_animation();
                 tesla_claw_moby->state = 3;
             } else {
