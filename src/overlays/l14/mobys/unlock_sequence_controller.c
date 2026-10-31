@@ -92,7 +92,7 @@ void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
             float *target_moby = (float *)(moby_array_base + ((*moby_id_cursor & 0x7FFF) << 8));
             *saved_moby_height_write_cursor++ = target_moby[6];
             target_moby[6] -= 20.0f;
-            *(unsigned short *)((char *)target_moby + 0x34) |= 0x41;
+            MOBY(target_moby)->flags |= 0x41;
         } while (*(short *)moby_id_cursor++ >= 0);
     }
 }

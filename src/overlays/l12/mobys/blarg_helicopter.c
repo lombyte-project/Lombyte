@@ -117,6 +117,48 @@ void cache_consecutive_point_distances(int point_data_index) {
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
+typedef struct BlargHelicopterVars {
+    u8  pad_0[0x20];
+    f32 health;
+    s16 max_health;
+    u8  pad_26[0x2];
+    u8  unk28;
+    u8  unk29;
+    u8  pad_2A[0x2E];
+    u8  unk58;
+    u8  unk59;
+    u8  unk5A;
+    u8  pad_5B[0x5];
+    u8  anim_state;
+    u8  pad_61[0x6];
+    u8  unk67;
+    u8  pad_68[0x8];
+    f32 unk70[4];
+    s32 unk80;
+    u8  pad_84[0x4];
+    f32 yaw_turn_velocity;
+    s16 unk8C;
+    s16 unk8E;
+    f32 bob_angle;
+    f32 unk94;
+    f32 unk98;
+    f32 unk9C;
+    s32 unkA0;
+    s32 unkA4;
+    u8  pad_A8[0x4];
+    u8  unkAC;
+    u8  pad_AD[0x3];
+    s32 unkB0;
+    s32 unkB4;
+    s32 unkB8;
+    s16 unkBC;
+    s16 unkBE;
+    s32 unkC0;
+    s32 unkC4;
+    u8  pad_C8[0x8];
+    u8  unkD0;
+} BlargHelicopterVars;
+
 /* Moby class 326 */
 void blarg_helicopter_update(struct Moby *moby) {
     enum {
@@ -128,59 +170,59 @@ void blarg_helicopter_update(struct Moby *moby) {
         BLARG_HELICOPTER_KNOCKBACK = 5,
         BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6
     };
-    char        *blarg_helicopter_vars = (char *)moby->pvars;
-    struct Moby *child;
-    float        target[20] __attribute__((aligned(16)));
-    OvlVec4      position, delta, aim, velocity;
-    int          index, count, limit, a, b, color, life, size, triggered;
-    float        distance, angle, value, spread;
+    BlargHelicopterVars *blarg_helicopter_vars = (BlargHelicopterVars *)moby->pvars;
+    struct Moby         *child;
+    float                target[20] __attribute__((aligned(16)));
+    OvlVec4              position, delta, aim, velocity;
+    int                  index, count, limit, a, b, color, life, size, triggered;
+    float                distance, angle, value, spread;
     if (D_L12_0015F5C4 == 2)
         return;
     find_point_ahead(moby, target, 70.0f);
-    child = *(struct Moby **)(blarg_helicopter_vars + 0xac);
+    child = *(struct Moby **)(&blarg_helicopter_vars->unkAC);
     if (child != 0 && (signed char)child->state >= 0)
-        FUN_L00_00263ac8(child, 0, blarg_helicopter_vars + 0xd0, 2.7f);
+        FUN_L00_00263ac8(child, 0, &blarg_helicopter_vars->unkD0, 2.7f);
     process_blarg_helicopter_hits(moby);
     if (D_001413F4 == 2) {
         moby->scale = moby->pclass->scale * 0.5f;
         {
-            struct Moby *child = *(struct Moby **)(blarg_helicopter_vars + 0xac);
+            struct Moby *child = *(struct Moby **)(&blarg_helicopter_vars->unkAC);
             if (child != 0)
                 child->scale = child->pclass->scale * 0.5f;
         }
     } else {
         moby->scale = moby->pclass->scale;
         {
-            struct Moby *child = *(struct Moby **)(blarg_helicopter_vars + 0xac);
+            struct Moby *child = *(struct Moby **)(&blarg_helicopter_vars->unkAC);
             if (child != 0)
                 child->scale = child->pclass->scale;
         }
     }
     if ((unsigned int)(moby->state - 2) < 4) {
-        if (*(int *)(blarg_helicopter_vars + 0xb0) == -1)
-            *(int *)(blarg_helicopter_vars + 0xb0) = allocate_voice_for_target_entry(3, 4, moby);
+        if (blarg_helicopter_vars->unkB0 == -1)
+            blarg_helicopter_vars->unkB0 = allocate_voice_for_target_entry(3, 4, moby);
     } else {
-        int index = *(int *)(blarg_helicopter_vars + 0xb0);
+        int index = blarg_helicopter_vars->unkB0;
         if (index != -1 &&
             (void *)((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.owner == (void *)moby &&
             ((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.state)
             release_voice_slot(index);
-        *(int *)(blarg_helicopter_vars + 0xb0) = -1;
+        blarg_helicopter_vars->unkB0 = -1;
     }
-    index = *(int *)(blarg_helicopter_vars + 0xc0);
+    index = blarg_helicopter_vars->unkC0;
     if (current_level_index == 12 && D_L12_00161F00 != 0) {
         if (index == 0) {
             if (l12_camera.focus_moby == moby)
                 l12_camera.focus_moby = 0;
             if (!moby->visible) {
-                if (*(struct Moby **)(blarg_helicopter_vars + 0xac)) {
-                    mark_moby_for_removal(*(struct Moby **)(blarg_helicopter_vars + 0xac));
-                    *(struct Moby **)(blarg_helicopter_vars + 0xac) = 0;
+                if (*(struct Moby **)(&blarg_helicopter_vars->unkAC)) {
+                    mark_moby_for_removal(*(struct Moby **)(&blarg_helicopter_vars->unkAC));
+                    *(struct Moby **)(&blarg_helicopter_vars->unkAC) = 0;
                 }
                 mark_moby_for_removal(moby);
                 return;
             }
-            index = *(int *)(blarg_helicopter_vars + 0xc0);
+            index = blarg_helicopter_vars->unkC0;
             goto check_mode;
         }
     } else {
@@ -189,9 +231,9 @@ void blarg_helicopter_update(struct Moby *moby) {
             goto update_state;
     }
     if (visited52[moby->mission + current_level_index * 16] == 255) {
-        if (*(struct Moby **)(blarg_helicopter_vars + 0xac)) {
-            mark_moby_for_removal(*(struct Moby **)(blarg_helicopter_vars + 0xac));
-            *(struct Moby **)(blarg_helicopter_vars + 0xac) = 0;
+        if (*(struct Moby **)(&blarg_helicopter_vars->unkAC)) {
+            mark_moby_for_removal(*(struct Moby **)(&blarg_helicopter_vars->unkAC));
+            *(struct Moby **)(&blarg_helicopter_vars->unkAC) = 0;
         }
         mark_moby_for_removal(moby);
         return;
@@ -199,9 +241,9 @@ void blarg_helicopter_update(struct Moby *moby) {
     if (index == 0)
         goto update_state;
     if (D_L12_001619A0 != 0) {
-        if (*(struct Moby **)(blarg_helicopter_vars + 0xac)) {
-            start_blarg_commander_knockback(moby, *(struct Moby **)(blarg_helicopter_vars + 0xac));
-            *(struct Moby **)(blarg_helicopter_vars + 0xac) = 0;
+        if (*(struct Moby **)(&blarg_helicopter_vars->unkAC)) {
+            start_blarg_commander_knockback(moby, *(struct Moby **)(&blarg_helicopter_vars->unkAC));
+            *(struct Moby **)(&blarg_helicopter_vars->unkAC) = 0;
         }
         mark_moby_for_removal(moby);
         return;
@@ -210,43 +252,42 @@ update_state:
     switch (moby->state) {
     case BLARG_HELICOPTER_INITIALIZE: {
         int a, b, limit;
-        *(short *)(blarg_helicopter_vars + 0x24) = 6;
-        *(float *)(blarg_helicopter_vars + 0x20) = 6.0f;
-        blarg_helicopter_vars[0x28] = 2;
-        blarg_helicopter_vars[0x29] = 0;
-        *(float *)(blarg_helicopter_vars + 0x94) = 0.0f;
-        *(float *)(blarg_helicopter_vars + 0x98) = 0.0f;
-        *(float *)(blarg_helicopter_vars + 0x9c) = 0.0f;
+        blarg_helicopter_vars->max_health = 6;
+        blarg_helicopter_vars->health = 6.0f;
+        blarg_helicopter_vars->unk28 = 2;
+        blarg_helicopter_vars->unk29 = 0;
+        blarg_helicopter_vars->unk94 = 0.0f;
+        blarg_helicopter_vars->unk98 = 0.0f;
+        blarg_helicopter_vars->unk9C = 0.0f;
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xefff;
-        cache_consecutive_point_distances(*(int *)(blarg_helicopter_vars + 0xa0));
-        cache_consecutive_point_distances(*(int *)(blarg_helicopter_vars + 0xa0));
-        cache_consecutive_point_distances(*(int *)(blarg_helicopter_vars + 0xa4));
+        cache_consecutive_point_distances(blarg_helicopter_vars->unkA0);
+        cache_consecutive_point_distances(blarg_helicopter_vars->unkA0);
+        cache_consecutive_point_distances(blarg_helicopter_vars->unkA4);
         if (moby->draw_dist < 128)
             moby->draw_dist = 128;
-        if (*(struct Moby **)(blarg_helicopter_vars + 0xac) == 0) {
-            *(struct Moby **)(blarg_helicopter_vars + 0xac) =
+        if (*(struct Moby **)(&blarg_helicopter_vars->unkAC) == 0) {
+            *(struct Moby **)(&blarg_helicopter_vars->unkAC) =
                 create_class_55b_moby_from_source(moby);
-            (*(struct Moby **)(blarg_helicopter_vars + 0xac))->update_dist = 0;
-            (*(struct Moby **)(blarg_helicopter_vars + 0xac))->flags |= 0x41;
+            (*(struct Moby **)(&blarg_helicopter_vars->unkAC))->update_dist = 0;
+            (*(struct Moby **)(&blarg_helicopter_vars->unkAC))->flags |= 0x41;
         }
-        qcopy(&moby->pos, ((char *)l12_paths[*(int *)(blarg_helicopter_vars + 0xa0)]) + 0x10);
-        if (*(int *)(blarg_helicopter_vars + 0xc0) != 0 &&
-            *(int *)(blarg_helicopter_vars + 0xc4) == 0) {
+        qcopy(&moby->pos, ((char *)l12_paths[blarg_helicopter_vars->unkA0]) + 0x10);
+        if (blarg_helicopter_vars->unkC0 != 0 && blarg_helicopter_vars->unkC4 == 0) {
             a = scale_game_frames(240);
             b = scale_game_frames(400);
             a = FUN_L00_00257b90(a, b);
             {
                 int limit = D_L12_00161F20 - 1;
-                *(int *)(blarg_helicopter_vars + 0xc4) = a;
+                blarg_helicopter_vars->unkC4 = a;
                 if (limit > 10)
                     limit = 10;
                 if (limit < 0)
                     limit = 0;
-                *(int *)(blarg_helicopter_vars + 0xc4) += limit * scale_game_frames(35);
+                blarg_helicopter_vars->unkC4 += limit * scale_game_frames(35);
             }
         }
-        *(int *)(blarg_helicopter_vars + 0xb4) = 0;
+        blarg_helicopter_vars->unkB4 = 0;
         moby->state = 1;
         break;
     }
@@ -254,18 +295,17 @@ update_state:
         int          triggered, a;
         struct Moby *child;
         triggered = 0;
-        if (*(int *)(blarg_helicopter_vars + 0xc0) && D_L12_00161F00)
-            triggered = fast_dec_timer((int *)(blarg_helicopter_vars + 0xc4)) != 0;
-        if ((*(int *)(blarg_helicopter_vars + 0x80) != -1 &&
-             is_point_inside_clip_volume(&hero.motion.pos,
-                                         *(int *)(blarg_helicopter_vars + 0x80))) ||
+        if (blarg_helicopter_vars->unkC0 && D_L12_00161F00)
+            triggered = fast_dec_timer(&blarg_helicopter_vars->unkC4) != 0;
+        if ((blarg_helicopter_vars->unk80 != -1 &&
+             is_point_inside_clip_volume(&hero.motion.pos, blarg_helicopter_vars->unk80)) ||
             triggered) {
-            blarg_helicopter_vars[0x58] = 22;
-            blarg_helicopter_vars[0x59] = 1;
-            blarg_helicopter_vars[0x5a] = 7;
+            blarg_helicopter_vars->unk58 = 22;
+            blarg_helicopter_vars->unk59 = 1;
+            blarg_helicopter_vars->unk5A = 7;
             moby->hit_slot = 255;
             moby->flags &= 0xffbe;
-            child = *(struct Moby **)(blarg_helicopter_vars + 0xac);
+            child = *(struct Moby **)(&blarg_helicopter_vars->unkAC);
             if (child)
                 child->flags &= 0xffbe;
             moby->flags |= 0x1000;
@@ -276,21 +316,21 @@ update_state:
         break;
     }
     case BLARG_HELICOPTER_FOLLOW_INITIAL_PATH:
-        if (*(int *)(blarg_helicopter_vars + 0xc0) == 0 && l12_camera.focus_moby == 0) {
+        if (blarg_helicopter_vars->unkC0 == 0 && l12_camera.focus_moby == 0) {
             l12_camera.focus_moby = moby;
             l12_camera.focus_time = 0;
         }
-        if (*(int *)(blarg_helicopter_vars + 0xc0)) {
-            count = *(short *)(blarg_helicopter_vars + 0x8c);
+        if (blarg_helicopter_vars->unkC0) {
+            count = blarg_helicopter_vars->unk8C;
             limit = D_L12_00161F20 - 3;
             if (limit > 5)
                 limit = 5;
             if (limit < 0)
                 limit = 0;
             if (count < limit * scale_game_frames(15))
-                *(short *)(blarg_helicopter_vars + 0x8c) = limit * scale_game_frames(15);
+                blarg_helicopter_vars->unk8C = limit * scale_game_frames(15);
         }
-        if (follow_blarg_helicopter_path(moby, *(int *)(blarg_helicopter_vars + 0xa0)))
+        if (follow_blarg_helicopter_path(moby, blarg_helicopter_vars->unkA0))
             moby->state = 3;
         break;
     case BLARG_HELICOPTER_AIM_AND_FIRE: {
@@ -299,7 +339,7 @@ update_state:
         if (current_level_index == 12 && !D_0013D4CB && !D_00141C50)
             help_request(0x2ee2, 0x5d);
         distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
-        if (*(int *)(blarg_helicopter_vars + 0xc0) == 0) {
+        if (blarg_helicopter_vars->unkC0 == 0) {
             if (distance < 21.0f && moby->pos.z - hero.motion.pos.f[2] > 1.0f) {
                 if (l12_camera.focus_moby == 0) {
                     l12_camera.focus_moby = moby;
@@ -309,10 +349,9 @@ update_state:
                 l12_camera.focus_moby = 0;
         }
         distance = vector_distance_xy(&moby->pos, target);
-        if ((distance < 40.0f && moby->pos.z - target[2] > -2.0f) ||
-            *(int *)(blarg_helicopter_vars + 0xc0)) {
+        if ((distance < 40.0f && moby->pos.z - target[2] > -2.0f) || blarg_helicopter_vars->unkC0) {
             angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
-            moby->rot.z = spring_turn((float *)(blarg_helicopter_vars + 0x88),
+            moby->rot.z = spring_turn(&blarg_helicopter_vars->yaw_turn_velocity,
                                       moby->rot.z,
                                       angle,
                                       0.004f,
@@ -320,27 +359,26 @@ update_state:
                                       frame_time * 0.7853982f);
             value = vector_distance_xy(target, &moby->pos);
             angle = fast_arc_tan(value, moby->pos.z - target[2]);
-            moby->rot.y = spring_turn((float *)(blarg_helicopter_vars + 0x9c),
+            moby->rot.y = spring_turn(&blarg_helicopter_vars->unk9C,
                                       moby->rot.y,
                                       angle,
                                       0.004f,
                                       0.3f,
                                       frame_time * 0.7853982f);
-            clear_u64_value(blarg_helicopter_vars + 0x70);
+            clear_u64_value(blarg_helicopter_vars->unk70);
             update_blarg_helicopter_motion_tilt(moby);
-            if (fast_dec_timer_s16(blarg_helicopter_vars + 0x8c)) {
-                ++*(short *)(blarg_helicopter_vars + 0xbc);
-                moby_point_position(moby, *(int *)(blarg_helicopter_vars + 0xb8), &position);
-                *(int *)(blarg_helicopter_vars + 0xb8) =
-                    *(int *)(blarg_helicopter_vars + 0xb8) == 0;
+            if (fast_dec_timer_s16(&blarg_helicopter_vars->unk8C)) {
+                ++blarg_helicopter_vars->unkBC;
+                moby_point_position(moby, blarg_helicopter_vars->unkB8, &position);
+                blarg_helicopter_vars->unkB8 = blarg_helicopter_vars->unkB8 == 0;
                 qcopy(&aim, target + 8);
-                if (*(int *)(blarg_helicopter_vars + 0xc0)) {
+                if (blarg_helicopter_vars->unkC0) {
                     qcopy(&aim, D_L12_00167240);
                     aim.f[2] += random_float_between(-0.5f, 0.1f);
                     aim.f[0] += randf_sym(0.0f, 0.4f);
                 }
                 fast_vec_sub(&delta, &aim, &position);
-                if (*(int *)(blarg_helicopter_vars + 0xc0))
+                if (blarg_helicopter_vars->unkC0)
                     fast_vec_normalize(&delta, &delta, frame_time * 22.0f);
                 else
                     fast_vec_normalize(&delta, &delta, frame_time * 15.0f);
@@ -364,66 +402,63 @@ update_state:
                     spawn_effect(&position, &velocity, color, 255, life, 30, size, 1);
                 }
                 limit = 4;
-                if (*(int *)(blarg_helicopter_vars + 0xc0)) {
+                if (blarg_helicopter_vars->unkC0) {
                     if (D_L12_00161F20 > 10)
                         limit = 2;
                     if (D_L12_00161F20 > 6)
                         limit = 3;
                 }
-                if (*(short *)(blarg_helicopter_vars + 0xbc) >= limit &&
-                    *(int *)(blarg_helicopter_vars + 0xa4) != -1) {
-                    *(short *)(blarg_helicopter_vars + 0xbc) = 0;
+                if (blarg_helicopter_vars->unkBC >= limit && blarg_helicopter_vars->unkA4 != -1) {
+                    blarg_helicopter_vars->unkBC = 0;
                     moby->state = 4;
                 } else
-                    *(short *)(blarg_helicopter_vars + 0x8c) = scale_game_frames(40);
+                    blarg_helicopter_vars->unk8C = scale_game_frames(40);
             }
         }
         break;
     }
     case BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS:
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
-        moby->rot.z = spring_turn((float *)(blarg_helicopter_vars + 0x88),
+        moby->rot.z = spring_turn(&blarg_helicopter_vars->yaw_turn_velocity,
                                   moby->rot.z,
                                   angle,
                                   0.004f,
                                   0.3f,
                                   frame_time * 0.7853982f);
         {
-            char *path = ((char *)l12_paths[*(int *)(blarg_helicopter_vars + 0xa4)]);
-            if (*(short *)(blarg_helicopter_vars + 0xbe) != 0)
+            char *path = ((char *)l12_paths[blarg_helicopter_vars->unkA4]);
+            if (blarg_helicopter_vars->unkBE != 0)
                 fast_vec_sub(&position, path + 16, &moby->pos);
             else
                 fast_vec_sub(&position, path + *(int *)path * 16, &moby->pos);
         }
         distance = fast_vec_length(&position);
         if (!(distance > 5.5f)) {
-            approach_value(blarg_helicopter_vars + 0x94, 0.0f, frame_time_sq * 9.0f);
-            if (*(float *)(blarg_helicopter_vars + 0x94) == 0.0f) {
-                *(short *)(blarg_helicopter_vars + 0x8c) = scale_game_frames(50);
-                *(short *)(blarg_helicopter_vars + 0xbe) =
-                    *(short *)(blarg_helicopter_vars + 0xbe) == 0;
+            approach_value(&blarg_helicopter_vars->unk94, 0.0f, frame_time_sq * 9.0f);
+            if (blarg_helicopter_vars->unk94 == 0.0f) {
+                blarg_helicopter_vars->unk8C = scale_game_frames(50);
+                blarg_helicopter_vars->unkBE = blarg_helicopter_vars->unkBE == 0;
                 moby->state = 3;
                 break;
             }
         } else
-            approach_value(blarg_helicopter_vars + 0x94, frame_time * 10.0f, frame_time_sq * 7.0f);
-        fast_vec_normalize(
-            blarg_helicopter_vars + 0x70, &position, *(float *)(blarg_helicopter_vars + 0x94));
-        fast_vec_add(&moby->pos, &moby->pos, blarg_helicopter_vars + 0x70);
+            approach_value(&blarg_helicopter_vars->unk94, frame_time * 10.0f, frame_time_sq * 7.0f);
+        fast_vec_normalize(blarg_helicopter_vars->unk70, &position, blarg_helicopter_vars->unk94);
+        fast_vec_add(&moby->pos, &moby->pos, blarg_helicopter_vars->unk70);
         update_blarg_helicopter_motion_tilt(moby);
         break;
     case BLARG_HELICOPTER_KNOCKBACK:
-        if (fast_dec_timer_s16(blarg_helicopter_vars + 0x8e)) {
+        if (fast_dec_timer_s16(&blarg_helicopter_vars->unk8E)) {
             moby->state = moby->command;
         } else {
-            value = *(float *)(blarg_helicopter_vars + 0x94) - frame_time_sq * 4.0f;
-            *(float *)(blarg_helicopter_vars + 0x94) = value;
+            value = blarg_helicopter_vars->unk94 - frame_time_sq * 4.0f;
+            blarg_helicopter_vars->unk94 = value;
             if (value < 0.0f)
-                *(float *)(blarg_helicopter_vars + 0x94) = 0.0f;
+                blarg_helicopter_vars->unk94 = 0.0f;
             value = fast_cos(moby->rot.z);
-            position.f[0] = value * -*(float *)(blarg_helicopter_vars + 0x94);
+            position.f[0] = value * -blarg_helicopter_vars->unk94;
             value = fast_sin(moby->rot.z);
-            position.f[1] = value * -*(float *)(blarg_helicopter_vars + 0x94);
+            position.f[1] = value * -blarg_helicopter_vars->unk94;
             position.f[2] = 0.0f;
             fast_vec_add(&moby->pos, &moby->pos, &position);
         }
@@ -432,9 +467,9 @@ update_state:
         int index;
         if (l12_camera.focus_moby == moby)
             l12_camera.focus_moby = 0;
-        if (*(struct Moby **)(blarg_helicopter_vars + 0xac)) {
-            start_blarg_commander_knockback(moby, *(struct Moby **)(blarg_helicopter_vars + 0xac));
-            *(struct Moby **)(blarg_helicopter_vars + 0xac) = 0;
+        if (*(struct Moby **)(&blarg_helicopter_vars->unkAC)) {
+            start_blarg_commander_knockback(moby, *(struct Moby **)(&blarg_helicopter_vars->unkAC));
+            *(struct Moby **)(&blarg_helicopter_vars->unkAC) = 0;
         }
         spawn_explosion(moby,
                         ((char *)&D_L12_0015F580_gp),
@@ -454,45 +489,45 @@ update_state:
                         1,
                         -1,
                         0);
-        if (*(int *)(blarg_helicopter_vars + 0xc0) == 0)
+        if (blarg_helicopter_vars->unkC0 == 0)
             FUN_L00_00257470(moby, 0, -1);
-        index = *(int *)(blarg_helicopter_vars + 0xb0);
+        index = blarg_helicopter_vars->unkB0;
         if (index != -1 &&
             (void *)((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.owner == (void *)moby &&
             ((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.state)
             release_voice_slot(index);
-        *(int *)(blarg_helicopter_vars + 0xb0) = -1;
-        if (*(int *)(blarg_helicopter_vars + 0xc0) == 0) {
+        blarg_helicopter_vars->unkB0 = -1;
+        if (blarg_helicopter_vars->unkC0 == 0) {
         remove:
             mark_moby_for_removal(moby);
             return;
         }
         a = scale_game_frames(240);
         b = scale_game_frames(400);
-        *(int *)(blarg_helicopter_vars + 0xc4) = FUN_L00_00257b90(a, b);
+        blarg_helicopter_vars->unkC4 = FUN_L00_00257b90(a, b);
         moby->collision = 0;
         moby->state = 0;
         moby->flags = (moby->flags | 0x41) & 0xefff;
         break;
     }
     }
-    moby->pos.z -= fast_cos(*(float *)(blarg_helicopter_vars + 0x90)) * 0.17f;
+    moby->pos.z -= fast_cos(blarg_helicopter_vars->bob_angle) * 0.17f;
     a = scale_game_frames(120);
-    angle = fast_add_rotations(*(float *)(blarg_helicopter_vars + 0x90), 6.2831855f / (float)a);
-    *(float *)(blarg_helicopter_vars + 0x90) = angle;
+    angle = fast_add_rotations(blarg_helicopter_vars->bob_angle, 6.2831855f / (float)a);
+    blarg_helicopter_vars->bob_angle = angle;
     moby->pos.z += fast_cos(angle) * 0.17f;
     {
-        struct Moby *child = *(struct Moby **)(blarg_helicopter_vars + 0xac);
+        struct Moby *child = *(struct Moby **)(&blarg_helicopter_vars->unkAC);
         if (child) {
             *(OvlQuad *)&child->pos = *(OvlQuad *)&moby->pos;
-            child = *(struct Moby **)(blarg_helicopter_vars + 0xac);
+            child = *(struct Moby **)(&blarg_helicopter_vars->unkAC);
             *(OvlQuad *)&child->rot = *(OvlQuad *)&moby->rot;
-            advance_moby_animation(*(struct Moby **)(blarg_helicopter_vars + 0xac));
-            FUN_L00_00250df8_x(*(struct Moby **)(blarg_helicopter_vars + 0xac));
-            (*(struct Moby **)(blarg_helicopter_vars + 0xac))->flags |= 6;
+            advance_moby_animation(*(struct Moby **)(&blarg_helicopter_vars->unkAC));
+            FUN_L00_00250df8_x(*(struct Moby **)(&blarg_helicopter_vars->unkAC));
+            (*(struct Moby **)(&blarg_helicopter_vars->unkAC))->flags |= 6;
         }
     }
-    if (*(int *)(blarg_helicopter_vars + 0xc0) == 0 && moby->state > 1 && moby->visible &&
+    if (blarg_helicopter_vars->unkC0 == 0 && moby->state > 1 && moby->visible &&
         fast_vec_dist(&moby->pos, D_L12_00167240) < 30.0f) {
         FUN_L00_0025a120((char *)moby);
         moby->shadow_range = 24;
@@ -500,21 +535,20 @@ update_state:
 }
 
 void update_blarg_helicopter_motion_tilt(struct Moby *moby) {
-    char *blarg_helicopter_motion_vars = (char *)moby->pvars;
-    float ang =
-        fast_subtract_rotations(fast_arc_tan(*(float *)(blarg_helicopter_motion_vars + 0x70),
-                                             *(float *)(blarg_helicopter_motion_vars + 0x74)),
-                                moby->rot.z);
-    float target_rotation_y = *(float *)(blarg_helicopter_motion_vars + 0x94) * 0.2268928f *
-                              fast_cos(ang) / (frame_time * 10.0f);
-    float target_rotation_x = *(float *)(blarg_helicopter_motion_vars + 0x94) * -0.2268928f *
-                              fast_sin(ang) / (frame_time * 10.0f);
+    BlargHelicopterVars *blarg_helicopter_motion_vars = (BlargHelicopterVars *)moby->pvars;
+    float ang = fast_subtract_rotations(fast_arc_tan(blarg_helicopter_motion_vars->unk70[0],
+                                                     blarg_helicopter_motion_vars->unk70[1]),
+                                        moby->rot.z);
+    float target_rotation_y =
+        blarg_helicopter_motion_vars->unk94 * 0.2268928f * fast_cos(ang) / (frame_time * 10.0f);
+    float target_rotation_x =
+        blarg_helicopter_motion_vars->unk94 * -0.2268928f * fast_sin(ang) / (frame_time * 10.0f);
     float updated_rotation_y, k0, rotation_y_damping, rotation_y_step_limit, k1, rotation_x_damping,
         rotation_x_step_limit;
     k0 = frame_time_sq * 0.5235988f;
     rotation_y_damping = frame_time_sq * 1.0471976f;
     rotation_y_step_limit = frame_time * 0.7853982f;
-    updated_rotation_y = spring_turn((float *)(blarg_helicopter_motion_vars + 0x9C),
+    updated_rotation_y = spring_turn(&blarg_helicopter_motion_vars->unk9C,
                                      moby->rot.y,
                                      target_rotation_y,
                                      k0,
@@ -524,7 +558,7 @@ void update_blarg_helicopter_motion_tilt(struct Moby *moby) {
     rotation_x_damping = frame_time_sq * 2.0943952f;
     rotation_x_step_limit = frame_time * 1.2217305f;
     moby->rot.y = updated_rotation_y;
-    moby->rot.x = spring_turn((float *)(blarg_helicopter_motion_vars + 0x98),
+    moby->rot.x = spring_turn(&blarg_helicopter_motion_vars->unk98,
                               moby->rot.x,
                               target_rotation_x,
                               k1,
@@ -545,51 +579,48 @@ typedef struct {
 
 /* Follows a path: steers toward the current node, slows to a stop near the end, returns 1 once stopped. */
 int follow_blarg_helicopter_path(struct Moby *moby, int path_index) {
-    char *path = ((char *)l12_paths[path_index]);
-    char *moby_vars = (char *)moby->pvars;
-    float sum = 0.0f;
+    char                *path = ((char *)l12_paths[path_index]);
+    BlargHelicopterVars *moby_vars = (BlargHelicopterVars *)moby->pvars;
+    float                sum = 0.0f;
     float
         target_record_or_node_offset[20]; /* target record from the finder; also the step vector */
     int i;
     float target_heading;
-    for (i = *(int *)(moby_vars + 0xB4); i < *(int *)path - 1; i++)
+    for (i = moby_vars->unkB4; i < *(int *)path - 1; i++)
         sum += *(float *)(path + i * 16 + 0x1C);
     if (sum > 5.0f) {
         target_heading =
-            fast_arc_tan(*(float *)((*(int *)(moby_vars + 0xB4) << 4) + path + 0x10) - moby->pos.x,
-                         *(float *)((*(int *)(moby_vars + 0xB4) << 4) + path + 0x14) - moby->pos.y);
-        ((M_af68 *)moby)->rz = spring_turn((float *)(moby_vars + 0x88),
+            fast_arc_tan(*(float *)((moby_vars->unkB4 << 4) + path + 0x10) - moby->pos.x,
+                         *(float *)((moby_vars->unkB4 << 4) + path + 0x14) - moby->pos.y);
+        ((M_af68 *)moby)->rz = spring_turn(&moby_vars->yaw_turn_velocity,
                                            ((M_af68 *)moby)->rz,
                                            target_heading,
                                            0.004f,
                                            0.3f,
                                            frame_time * 0.7853982f);
-        approach_value(moby_vars + 0x94, frame_time * 10.0f, frame_time_sq * 7.0f);
+        approach_value(&moby_vars->unk94, frame_time * 10.0f, frame_time_sq * 7.0f);
     } else {
         ahead_f(moby, target_record_or_node_offset, 48.0f);
         target_heading = fast_arc_tan(target_record_or_node_offset[0] - moby->pos.x,
                                       target_record_or_node_offset[1] - moby->pos.y);
-        ((M_af68 *)moby)->rz = spring_turn((float *)(moby_vars + 0x88),
+        ((M_af68 *)moby)->rz = spring_turn(&moby_vars->yaw_turn_velocity,
                                            ((M_af68 *)moby)->rz,
                                            target_heading,
                                            0.004f,
                                            0.3f,
                                            frame_time * 0.7853982f);
-        approach_value(moby_vars + 0x94, 0.0f, frame_time_sq * 9.0f);
-        sum = *(float *)(moby_vars + 0x94);
+        approach_value(&moby_vars->unk94, 0.0f, frame_time_sq * 9.0f);
+        sum = moby_vars->unk94;
         if (sum == 0.0f)
             return 1;
     }
-    fast_vec_sub(target_record_or_node_offset,
-                 &((N_af68 *)path)[*(int *)(moby_vars + 0xB4) + 1],
-                 &moby->pos);
-    fast_vec_normalize(
-        moby_vars + 0x70, target_record_or_node_offset, *(float *)(moby_vars + 0x94));
-    fast_vec_add(&moby->pos, &moby->pos, moby_vars + 0x70);
-    if (fast_vec_dist(&moby->pos, &((N_af68 *)path)[*(int *)(moby_vars + 0xB4) + 1]) < 2.0f) {
-        (*(int *)(moby_vars + 0xB4))++;
-        if (*(int *)path - 1 < *(int *)(moby_vars + 0xB4))
-            *(int *)(moby_vars + 0xB4) = *(int *)path - 1;
+    fast_vec_sub(target_record_or_node_offset, &((N_af68 *)path)[moby_vars->unkB4 + 1], &moby->pos);
+    fast_vec_normalize(moby_vars->unk70, target_record_or_node_offset, moby_vars->unk94);
+    fast_vec_add(&moby->pos, &moby->pos, moby_vars->unk70);
+    if (fast_vec_dist(&moby->pos, &((N_af68 *)path)[moby_vars->unkB4 + 1]) < 2.0f) {
+        (moby_vars->unkB4)++;
+        if (*(int *)path - 1 < moby_vars->unkB4)
+            moby_vars->unkB4 = *(int *)path - 1;
     }
     update_blarg_helicopter_motion_tilt(moby);
     return 0;
@@ -603,31 +634,31 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_blarg_helicopter_hits(struct Moby *moby) {
-    int   hit_processing_status;
-    float fv;
-    int   hit_reaction_code;
-    char *blarg_helicopter_hit_vars;
-    char *hit_record;
+    int                  hit_processing_status;
+    float                fv;
+    int                  hit_reaction_code;
+    BlargHelicopterVars *blarg_helicopter_hit_vars;
+    char                *hit_record;
     float hit_to_moby_angle, hit_yaw_offset, knockback_rotation_y, knockback_rotation_x;
     blarg_helicopter_hit_vars = (char *)moby->pvars;
     fv = 0.0f;
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_reaction_code = hit_reaction(
-        moby, hit_record, blarg_helicopter_hit_vars + 0x20, 0, &hit_processing_status, &fv, 0, 4);
+        moby, hit_record, &blarg_helicopter_hit_vars->health, 0, &hit_processing_status, &fv, 0, 4);
     if (hit_processing_status != 1 && moby->state != 6 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0xB8 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x199) {
         float remaining_health;
         if (*(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x1CA)
             fv = 10.0f;
-        remaining_health = *(float *)(blarg_helicopter_hit_vars + 0x20) - fv;
-        *(float *)(blarg_helicopter_hit_vars + 0x20) = remaining_health;
+        remaining_health = blarg_helicopter_hit_vars->health - fv;
+        blarg_helicopter_hit_vars->health = remaining_health;
         if (hit_reaction_code == 1 || remaining_health <= 0.0f) {
             allocate_voice_for_target_entry(2, 0, moby);
             moby->state = 6;
         } else if (hit_reaction_code != 0xB) {
-            *(unsigned char *)(blarg_helicopter_hit_vars + 0x67) = 0xB4;
-            trooper_anim_update(moby, (short *)(blarg_helicopter_hit_vars + 0x60));
+            blarg_helicopter_hit_vars->unk67 = 0xB4;
+            trooper_anim_update(moby, (short *)&blarg_helicopter_hit_vars->anim_state);
             if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != 5) {
                 hit_to_moby_angle = fast_arc_tan(moby->pos.x - *(float *)(hit_record + 0),
                                                  moby->pos.y - *(float *)(hit_record + 4));
@@ -636,14 +667,14 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
                 knockback_rotation_x = fast_sin(hit_yaw_offset) * -0.34906584f;
                 if (absolute_float(moby->rot.x) < absolute_float(knockback_rotation_x)) {
                     moby->rot.x = knockback_rotation_x;
-                    *(float *)(blarg_helicopter_hit_vars + 0x98) = 0.0f;
+                    blarg_helicopter_hit_vars->unk98 = 0.0f;
                 }
                 if (absolute_float(moby->rot.y) < absolute_float(knockback_rotation_y)) {
                     moby->rot.y = knockback_rotation_y;
-                    *(float *)(blarg_helicopter_hit_vars + 0x9C) = 0.0f;
+                    blarg_helicopter_hit_vars->unk9C = 0.0f;
                 }
-                *(float *)(blarg_helicopter_hit_vars + 0x94) = frame_time * 4.0f;
-                *(short *)(blarg_helicopter_hit_vars + 0x8E) = scale_game_frames(0x3C);
+                blarg_helicopter_hit_vars->unk94 = frame_time * 4.0f;
+                blarg_helicopter_hit_vars->unk8E = scale_game_frames(0x3C);
                 moby->command = moby->state;
                 moby->state = 5;
                 allocate_voice_for_target_entry(1, 0, moby);
@@ -651,5 +682,5 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, blarg_helicopter_hit_vars + 0x60);
+    trooper_anim_finish(moby, &blarg_helicopter_hit_vars->anim_state);
 }
