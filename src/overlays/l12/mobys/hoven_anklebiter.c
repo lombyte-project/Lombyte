@@ -893,6 +893,14 @@ extern void anim_update_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d538")
 void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) __asm__("FUN_L12_002e3528");
 
 void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
+    enum {
+        ANKLEBITER_INITIALIZE = 0,
+        ANKLEBITER_KNOCKBACK_FALL = 7,
+        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
+        ANKLEBITER_DORMANT = 9,
+        ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 0xB,
+        ANKLEBITER_DEATH_FALL = 0x63
+    };
     AnklebiterVars *anklebiter_vars = (AnklebiterVars *)moby->pvars;
     Vec4            help_direction_or_hit_position;
     s32             hit;
@@ -905,14 +913,14 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
         anklebiter_vars->reset_alert = 0;
         anklebiter_vars->alert_timer = scale_game_frames(0xF0);
     }
-    if (moby->state != 9 && moby->state != 0xB && moby->state != 0) {
+    if (moby->state != ANKLEBITER_DORMANT && moby->state != ANKLEBITER_WAIT_FOR_LEAP_TRIGGER && moby->state != ANKLEBITER_INITIALIZE) {
         if (fast_dec_timer(&anklebiter_vars->alert_timer)) {
             anklebiter_vars->speed = 12.0f;
         } else {
             anklebiter_vars->speed = 20.0f;
         }
     }
-    if (anklebiter_vars->call_enabled != 0 && moby->state != 9) {
+    if (anklebiter_vars->call_enabled != 0 && moby->state != ANKLEBITER_DORMANT) {
         s16 updated_call_timer = ++anklebiter_vars->call_timer;
         if (scale_game_frames(0x3C) * 15 < updated_call_timer && moby->visible == 0 &&
             moby->group < 0xFF && count_active_moby_group_members(moby->group, -1) >= 4 &&
@@ -929,7 +937,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
     coll = find_hit_e3528(moby, 0x330000, 0);
     dmg = 0.0f;
     resolve_moby_hit_response(moby, coll, &anklebiter_vars->health, 0, &hit, &dmg, 0, 4);
-    if (coll != 0 && moby->state != 0x63 && moby->state != 8) {
+    if (coll != 0 && moby->state != ANKLEBITER_DEATH_FALL && moby->state != ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME) {
         if (moby->group != 0xFF) {
             FUN_L01_0026e090(moby->group, 7);
         }
@@ -956,7 +964,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                 start_fall_e3528(moby, anklebiter_vars->fall, 6, 1, 0, angle);
                 anklebiter_vars->unk170 = 11.0f;
                 anklebiter_vars->unk174 = 18.0f;
-                moby->state = 0x63;
+                moby->state = ANKLEBITER_DEATH_FALL;
                 anklebiter_vars->unk117 = 0x78;
                 anim_reset_e3528(moby, anklebiter_vars->anim);
             } else {
@@ -967,7 +975,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                                       &anklebiter_vars->unk13C);
                 start_fall_e3528(moby, anklebiter_vars->fall, 0xE, 1, 0, unused);
                 anklebiter_vars->unk174 = anklebiter_vars->unk170 = -1.0f;
-                moby->state = 7;
+                moby->state = ANKLEBITER_KNOCKBACK_FALL;
                 anklebiter_vars->unk117 = 0xFA;
                 anklebiter_vars->stun_timer = scale_game_frames(0x3C);
                 anim_reset_e3528(moby, anklebiter_vars->anim);
