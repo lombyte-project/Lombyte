@@ -35,6 +35,12 @@ float       absolute_float(float input) __asm__("func_001F99C0");
 void apply_hero_ground_type_effects(void) __asm__("FUN_L08_0021d9c0");
 
 void apply_hero_ground_type_effects(void) {
+    enum {
+        HERO_GROUND_TYPE_WATER = 0,
+        HERO_GROUND_TYPE_MAGNET = 2,
+        HERO_GROUND_TYPE_SINK_TRIGGER = 0xD,
+        HERO_GROUND_TYPE_FIXED_SHALLOW_WATER = 0xE
+    };
     struct Hero  *hero_ptr = &hero;
     int           saved_ground_type;
     int           x;
@@ -47,23 +53,23 @@ void apply_hero_ground_type_effects(void) {
     hero_ptr->unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == HERO_GROUND_TYPE_MAGNET) {
         if (hero_ptr->frames_off_ground.s == 0 || hero_ptr->ground_distance < 0.3f) {
             hero_ptr->on_magnet_ground = 1;
-            if (hero_ptr->vehicle_mode == 0) {
+            if (hero_ptr->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_moby = ((char *)hero_ptr->items[1].moby);
                 if (item_moby != 0 && MOBY(item_moby)->oclass == 0xAD)
                     hero_ptr->unk308 = 1;
             }
         }
     }
-    if (saved_ground_type == 0xE) {
+    if (saved_ground_type == HERO_GROUND_TYPE_FIXED_SHALLOW_WATER) {
         struct Hero *q = &hero;
         q->base_condition = 1;
         q->water_depth = 0.2f;
         q->water_surface_z = q->ground_z.f + 0.2f;
     }
-    if (saved_ground_type == 0) {
+    if (saved_ground_type == HERO_GROUND_TYPE_WATER) {
         struct Hero *q = &hero;
         q->water_depth = q->water_surface_z - q->ground_z.f;
         if (q->water_depth < 0.85f) {
@@ -88,7 +94,7 @@ void apply_hero_ground_type_effects(void) {
         struct Hero *q = &hero;
         *(char *)&q->selector_11 = 1;
     }
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == HERO_GROUND_TYPE_MAGNET) {
         struct Hero *q = &hero;
         *(char *)&q->on_magnet_ground = 1;
     }
@@ -96,7 +102,7 @@ void apply_hero_ground_type_effects(void) {
         struct Hero *q = &hero;
         *(char *)&q->selector_4 = 1;
     }
-    if (saved_ground_type == 0xD) {
+    if (saved_ground_type == HERO_GROUND_TYPE_SINK_TRIGGER) {
         struct Hero *q = &hero;
         *(char *)&q->selector_13 = 1;
     }
