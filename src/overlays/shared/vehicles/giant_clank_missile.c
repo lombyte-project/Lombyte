@@ -260,7 +260,7 @@ extern void FUN_L00_001ffd48(void *, void *, float);
 extern void FUN_L00_001ffe20(void *, void *, void *);
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void FUN_L00_0026a4c8(void *pos, void *vel, int color, int tag, int life, float size);
+extern void spawn_particle_alt_9768(void *pos, void *vel, int color, int tag, int life, float size) __asm__("FUN_L00_0026a4c8");
 extern void spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__("FUN_L00_0026a9f0");
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int);
@@ -699,7 +699,7 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
                     {
                         int *p1 = &c1.c[random_integer_below(6)];
                         int *p2 = &c2.c[random_integer_below(6)];
-                        FUN_L00_0026a4c8(
+                        spawn_particle_alt_9768(
                             missile_moby->pos,
                             burst_particle_velocity,
                             *p1,

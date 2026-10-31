@@ -54,7 +54,7 @@ typedef struct {
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
+extern void spawn_particle_alt_9768(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
     void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
@@ -257,7 +257,7 @@ void explosive_projectile_update(struct Moby *moby) {
                 fast_vec_normalize(&flash_emission_vector,
                                    &flash_emission_vector,
                                    size_scale * (random_float_between(0.0f, 3.0f) * D_0015ED6C));
-                FUN_L00_0026a4c8(
+                spawn_particle_alt_9768(
                     &(*(Vec_2F7E08 *)&moby->pos),
                     &flash_emission_vector,
                     start_colors.c[random_integer_below(6)],

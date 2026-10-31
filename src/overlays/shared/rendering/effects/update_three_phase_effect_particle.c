@@ -501,8 +501,8 @@ void update_colliding_effect_particle(struct EffectParticle *particle) {
 extern unsigned char *D_L00_001B20A0_0026a4c8 __asm__("D_L00_001B20A0")
     __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8_0026a4c8(int) __asm__("FUN_L00_002678b8");
-void           FUN_L00_0026a4c8(u128 *a, u128 *b, int c, int d, int n, float f);
-void           FUN_L00_0026a4c8(u128 *spawn_position,
+void           spawn_particle_alt_9768(u128 *a, u128 *b, int c, int d, int n, float f) __asm__("FUN_L00_0026a4c8");
+void           spawn_particle_alt_9768(u128 *spawn_position,
                                 u128 *initial_velocity,
                                 int   initial_color,
                                 int   final_color,

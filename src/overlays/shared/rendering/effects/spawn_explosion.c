@@ -613,7 +613,7 @@ extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
 extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
 extern void  spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void
-func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
+spawn_particle_alt_9768(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
@@ -830,7 +830,7 @@ void spawn_explosion(char *owner_moby,
                                fF * (random_float_between(0.0f, 3.0f) * frame_time_macro));
             first_packed_color = swap_packed_color_channels(c0.v[random_integer_below(6)], flag);
             second_packed_color = swap_packed_color_channels(c1.v[random_integer_below(6)], flag);
-            func_L00_0026B368_25e450(
+            spawn_particle_alt_9768(
                 explosion_position,
                 &randomized_particle_vector,
                 first_packed_color,
