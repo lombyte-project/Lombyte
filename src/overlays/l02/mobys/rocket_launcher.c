@@ -103,7 +103,7 @@ void rocket_launcher_update(struct Moby *moby) {
     case ROCKET_LAUNCHER_WAIT_BETWEEN_SHOTS:
         if (fast_dec_timer_s16(&rocket_launcher_vars->wait_timer)) {
             rocket_launcher_vars->target_yaw = random_float_between(0.0f, 3.14159f);
-            moby->state = 1;
+            moby->state = ROCKET_LAUNCHER_TURN_AND_FIRE;
             allocate_voice_for_target_entry(4, 0, moby);
         }
         break;
@@ -130,7 +130,7 @@ void rocket_launcher_update(struct Moby *moby) {
             rocket_launcher_vars->voice = -1;
             allocate_voice_for_target_entry(3, 0, moby);
             rocket_launcher_vars->recoil = rocket_launcher_shot_sound_initial_distance_gp;
-            moby->state = 2;
+            moby->state = ROCKET_LAUNCHER_WAIT_FOR_POST_SHOT_ANIMATION;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, 1);
             moby_point_position(moby, 1, &muzzle);
@@ -169,7 +169,7 @@ void rocket_launcher_update(struct Moby *moby) {
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 1);
-            moby->state = 0;
+            moby->state = ROCKET_LAUNCHER_WAIT_BETWEEN_SHOTS;
             rocket_launcher_vars->wait_timer =
                 truncate_float_to_s32(scale_time(random_float_between(60.0f, 180.0f)));
         }
