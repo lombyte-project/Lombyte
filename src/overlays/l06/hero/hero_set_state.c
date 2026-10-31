@@ -79,7 +79,7 @@ int hero_set_state(int requested_state, int b) {
     } d;
     {
         struct Hero *p = &hero;
-        if (p->state.control_mode == 0x14 && (requested_state != 0x64 || b != 2))
+        if (p->state.control_mode == 0x14 && (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || b != 2))
             return 0;
     }
     if ((D_L06_0015F5C4 == 2 || D_L06_0015F5C4 == 6) && b != 2)
@@ -87,8 +87,8 @@ int hero_set_state(int requested_state, int b) {
     {
         struct Hero *p = &hero;
         if (p->health.hp == 0 && (p->state.control_mode == 2 || p->state.control_mode == 7) &&
-            requested_state != 6 && requested_state != 0x3D && requested_state != 0x47 && requested_state != 0x57 && requested_state != 0x62 && requested_state != 0x77 && requested_state != 0x7B &&
-            requested_state != 0x7C && requested_state != 0x7F && requested_state != 0x6A && requested_state != 0x80 && requested_state != 0x82)
+            requested_state != HERO_STATE_FALL && requested_state != HERO_STATE_DYING && requested_state != HERO_STATE_VEHICLE_MODE_1_DYING && requested_state != HERO_STATE_VEHICLE_MODE_3_DYING && requested_state != HERO_STATE_VEHICLE_MODE_2_DYING && requested_state != HERO_STATE_FATAL_FALL && requested_state != HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT &&
+            requested_state != HERO_STATE_DEATH_DESCENT && requested_state != HERO_STATE_SINK && requested_state != HERO_STATE_DROWN && requested_state != HERO_STATE_DYING_SPEED_LIMITED && requested_state != HERO_STATE_DYING_ZERO_HEALTH)
             return 0;
     }
     {
@@ -105,7 +105,7 @@ int hero_set_state(int requested_state, int b) {
         p->state.step = 0;
         p->unk20A5 = 0;
         p->item_use_locked = 0;
-        if (p->vehicle_mode == 0) {
+        if (p->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             MOBY(moby)->collision_disable = 0;
             p->tilt_disabled = 0;
             p->item_select_blocked = 0;
@@ -133,7 +133,7 @@ int hero_set_state(int requested_state, int b) {
         p->unk2284 = 0;
         p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         clear_hero_idle_rotation_targets();
-        if (p->vehicle_mode != 0) {
+        if (p->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
             enter_hero_idle_state_for_current_vehicle_mode();
             return 1;
         }
@@ -322,14 +322,14 @@ int hero_set_state(int requested_state, int b) {
         p->unk2284 = 0;
         p->ground_speed = vector_length_xy(&p->motion.resolved_velocity);
         p->item_use_locked = 1;
-        if (p->vehicle_mode == 0)
+        if (p->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT)
             cancel_hero_item_animation();
         if (b) {
             if (p->vehicle_mode == 3) {
                 set_hero_animation(1, 0, (float)scale_game_frames(8));
-            } else if (p->vehicle_mode == 1) {
+            } else if (p->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
                 set_hero_animation(2, 0, (float)scale_game_frames(8));
-            } else if (p->vehicle_mode == 0) {
+            } else if (p->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 set_hero_animation(
                     p->state.step + 3, D_L06_0015F6D8[p->state.step], (float)scale_game_frames(8));
             }
@@ -659,7 +659,7 @@ int hero_set_state(int requested_state, int b) {
         p->fall_state_gravity = frame_time_sq * 24.0f;
         p->stickless_decel = frame_time_sq * 7.0f;
         if (p->state.current == 0x77) {
-            if (p->vehicle_mode == 0) {
+            if (p->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 p->health.unk22B2 = allocate_hero_voice_for_entry(0x17, 0x20);
             }
             p->pivot_rot_x_target = randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
@@ -672,7 +672,7 @@ int hero_set_state(int requested_state, int b) {
             q->state.step = 0;
             qcopy(&q->motion.velocity, &q->motion.resolved_velocity);
             if (b) {
-                if (q->vehicle_mode == 1) {
+                if (q->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
                     set_hero_animation(4, 0, (float)scale_game_frames(8));
                     return 1;
                 }
@@ -748,7 +748,7 @@ int hero_set_state(int requested_state, int b) {
             return 0;
         }
         p->state.control_mode = 4;
-        if (requested_state >= 0x29 && requested_state <= 0x2A) {
+        if (requested_state >= HERO_STATE_GRIND_JUMP && requested_state <= HERO_STATE_GRIND_RAIL_TRANSFER) {
             p->unk2284 = 3;
         } else {
             p->unk2284 = 0x50;
