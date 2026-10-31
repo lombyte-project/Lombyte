@@ -210,7 +210,7 @@ void update_hero_timers_and_reach_state(void) {
             }
         }
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         fast_dec_timer_s16(&hero.vehicle_triangle_cooldown);
     }
     for (i = 0; i < 5; i++) {
