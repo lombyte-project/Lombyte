@@ -101,7 +101,7 @@ void red_orb_update(struct Moby *moby) {
     switch (state) {
     case RED_ORB_STATE_INITIALIZE_PHASE:
         *(float *)orb_data = *(float *)orb_data * DEG_TO_RAD;
-        moby->state = 1;
+        moby->state = RED_ORB_STATE_PULSE_COLOR;
         break;
     case RED_ORB_STATE_PULSE_COLOR:
         pulse_phase_or_sine = fast_add_rotations(
