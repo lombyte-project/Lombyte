@@ -541,6 +541,9 @@ extern OvlVec4                D_0013F3D0_315de0 __asm__("D_0013F3D0");
 void initialize_camera_transform_and_paths(Camera *destination_camera) __asm__("FUN_L01_00315de0");
 
 void initialize_camera_transform_and_paths(Camera *destination_camera) {
+    enum {
+        CAMERA_PRESET_KIND_GRINDRAIL_PATH = 3
+    };
     CameraPresetRow *rows = l01_camera_preset_rows;
     Camera          *source_camera = D_L01_00167284;
     CameraPreset    *camera_preset = rows[destination_camera->preset].preset;
@@ -566,7 +569,7 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
     }
 
     camera_preset->unk36 = 0;
-    if (camera_preset->kind == 3) {
+    if (camera_preset->kind == CAMERA_PRESET_KIND_GRINDRAIL_PATH) {
         CameraPath *path;
         s32         next;
         path = ((CameraPath *)l01_paths[camera_preset->track_path]);
