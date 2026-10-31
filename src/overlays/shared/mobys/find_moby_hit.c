@@ -231,18 +231,18 @@ void spawn_nearby_effect(unsigned char *owner_moby,
                          u128          *hit_vector_source,
                          u128          *direction_vector,
 
-                         float f) {
+                         float hit_damage) {
     int      i = D_L00_00173E40.idx;
     MobyHit *hit_record;
     if (MOBY(owner_moby)->hit_slot != 0xFF) {
         MobyHit *existing_hit = &moby_hits[MOBY(owner_moby)->hit_slot];
-        if (existing_hit->owner == owner_moby && f < existing_hit->damage)
+        if (existing_hit->owner == owner_moby && hit_damage < existing_hit->damage)
             return;
     }
     hit_record = &moby_hits[i];
     hit_record->source_moby = (u8 *)x;
     hit_record->flags = y;
-    hit_record->damage = f;
+    hit_record->damage = hit_damage;
     hit_record->owner = owner_moby;
     hit_record->unk38 = 0;
     if (fast_vec_length(direction_vector) > 0.0001f) {
