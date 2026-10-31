@@ -5,7 +5,10 @@ extern s32 send_adpcm() __asm__("FUN_0023afc0");
 void       audio_dec_send(struct AudioDec *dec) __asm__("FUN_0023aef0");
 
 void audio_dec_send(struct AudioDec *dec) {
-    if (dec->state != 0) {
+    enum {
+        AUDIO_DEC_SEND_DISABLED = 0
+    };
+    if (dec->state != AUDIO_DEC_SEND_DISABLED) {
         send_adpcm();
     }
 }
