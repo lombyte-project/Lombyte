@@ -1185,6 +1185,9 @@ extern s32 bolt_text_fade_steps_gp __asm__("D_L00_0015F828") __attribute__((sda)
 void       update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) __asm__("FUN_L00_00239d00");
 
 void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
+    enum {
+        BOLT_COUNTER_HUD_STATE_CLOSING = 1
+    };
     u8 *visibility_counters = &hud_element->a;
     s32 icon_cycle_period = 60;
     s32 bolt_count_snapshot;
@@ -1201,7 +1204,7 @@ void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
             visibility_counters[1]++;
         }
     } else {
-        hud_element->state = 1;
+        hud_element->state = BOLT_COUNTER_HUD_STATE_CLOSING;
         if (visibility_counters[1] != 0) {
             visibility_counters[1]--;
         } else if (hud_element->a != 0) {
