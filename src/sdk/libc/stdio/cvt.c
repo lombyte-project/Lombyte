@@ -34,7 +34,7 @@ typedef union {
 #define ALT      0x001
 
 static s8 *cvt(struct _reent *reentrancy_state,
-               f64            value,
+               f64            number_to_format,
                s32            ndigits,
                s32            flags,
                s8            *sign,
@@ -54,23 +54,23 @@ static s8 *cvt(struct _reent *reentrancy_state,
         }
         mode = 2;
     }
-    value_bits.d = value;
+    value_bits.d = number_to_format;
     if (word0(value_bits) & Sign_bit) {
-        value = -value;
+        number_to_format = -number_to_format;
         *sign = '-';
     } else {
         *sign = '\000';
     }
-    digits = _dtoa_r(reentrancy_state, value, mode, ndigits, decpt, &dsgn, &rve);
+    digits = _dtoa_r(reentrancy_state, number_to_format, mode, ndigits, decpt, &dsgn, &rve);
     if ((ch != 'g' && ch != 'G') || (flags & ALT)) {
         bp = digits + ndigits;
         if (ch == 'f') {
-            if (*digits == '0' && value) {
+            if (*digits == '0' && number_to_format) {
                 *decpt = -ndigits + 1;
             }
             bp += *decpt;
         }
-        if (value == 0) {
+        if (number_to_format == 0) {
             rve = bp;
         }
         while (rve < bp) {
