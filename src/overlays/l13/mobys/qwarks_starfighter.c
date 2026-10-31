@@ -1630,6 +1630,9 @@ void qwarks_starfighter_update(Moby388 *moby) {
         MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
         MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
     };
+    enum {
+        STARFIGHTER_SHIELD_STATE_DEACTIVATE_REQUESTED = 3
+    };
     Ship388 *starfighter_vars = moby->d;
     float    offset[4];
     float    joint[4];
@@ -2271,8 +2274,8 @@ void qwarks_starfighter_update(Moby388 *moby) {
                 starfighter_vars->child110 = 0;
             } else if (child->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 starfighter_vars->child110 = 0;
-            } else if (child->state < 3) {
-                child->state = 3;
+            } else if (child->state < STARFIGHTER_SHIELD_STATE_DEACTIVATE_REQUESTED) {
+                child->state = STARFIGHTER_SHIELD_STATE_DEACTIVATE_REQUESTED;
             }
         }
     }
