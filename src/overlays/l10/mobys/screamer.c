@@ -127,20 +127,20 @@ void screamer_update(Moby *moby) {
         if (screamer_data->f174 != 1) {
             mark_moby_for_removal(moby);
         } else {
-            moby->state = 1;
+            moby->state = SCREAMER_STATE_WAIT_FOR_ACTIVATION;
         }
         break;
     case SCREAMER_STATE_WAIT_FOR_ACTIVATION:
         if (screamer_data->f104 == 2 && screamer_data->f174 != 0)
             break;
-        moby->state = 2;
+        moby->state = SCREAMER_STATE_WAIT_TO_RISE;
         if (moby->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         break;
     case SCREAMER_STATE_WAIT_TO_RISE:
         if ((moby->anim_flags & 2) == 0)
             break;
-        moby->state = 4;
+        moby->state = SCREAMER_STATE_RISE_FROM_HOME;
         clear_u64_value(&screamer_data->vel);
         if (moby->prev_seq != 4)
             blend_moby_animation(moby, 4, 0, scale_game_frames(10));
@@ -155,7 +155,7 @@ void screamer_update(Moby *moby) {
                                        D_0015ED70 * 18.0f,
                                        D_0015ED70 * 18.0f,
                                        D_0015ED6C * 6.0f) == 0.0f) {
-            moby->state = 5;
+            moby->state = SCREAMER_STATE_FOLLOW_PATH;
         }
         break;
     case SCREAMER_STATE_FOLLOW_PATH: {
@@ -191,13 +191,13 @@ void screamer_update(Moby *moby) {
         {
             int node_index = screamer_data->node_index++;
             if (0.0f < l10_paths[screamer_data->path]->points[node_index].f[3]) {
-                moby->state = 6;
+                moby->state = SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT;
                 if (moby->prev_seq != 3)
                     blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             } else {
                 if (node_index + 1 != l10_paths[screamer_data->path]->count)
                     break;
-                moby->state = 10;
+                moby->state = SCREAMER_STATE_WANDER;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                 probe_ground_height(&moby->pos, 0, 0.5f);
@@ -230,14 +230,14 @@ void screamer_update(Moby *moby) {
                 activate_waiting_moby_group_members(linked);
         }
         if (screamer_data->node_index == l10_paths[screamer_data->path]->count) {
-            moby->state = 10;
+            moby->state = SCREAMER_STATE_WANDER;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             probe_ground_height(&moby->pos, 0, 0.5f);
             qcopy(&screamer_data->home, &D_L10_00174360_2E0630);
             qcopy(&screamer_data->wander_goal, &moby->pos);
         } else {
-            moby->state = 5;
+            moby->state = SCREAMER_STATE_FOLLOW_PATH;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
@@ -267,7 +267,7 @@ void screamer_update(Moby *moby) {
         screamer_data->vel.z = climb;
         func_L00_00259B08_2E0630(moby, &screamer_data->vel, 0.5f, 0x200, 0.0f, 0);
         if (vector_distance_xy(&moby->pos, &screamer_data->home) < 2.0f)
-            moby->state = 7;
+            moby->state = SCREAMER_STATE_IDLE_AT_HOME;
         break;
     }
     case SCREAMER_STATE_WAIT_TO_WANDER: {
@@ -285,7 +285,7 @@ void screamer_update(Moby *moby) {
         waypoint[2] = zero;
         waypoint[2] = random_float_between(5.0f, 7.0f);
         fast_vec_add(&screamer_data->wander_goal, waypoint, &screamer_data->home);
-        moby->state = 10;
+        moby->state = SCREAMER_STATE_WANDER;
         break;
     }
     case SCREAMER_STATE_WANDER:
@@ -301,12 +301,12 @@ void screamer_update(Moby *moby) {
         fast_vec_add(waypoint, &screamer_data->step, &moby->pos);
         if (func_L00_001F10E0_2E0630(0.4f, waypoint, 0, moby)) {
             clear_u64_value(&screamer_data->step);
-            moby->state = 9;
+            moby->state = SCREAMER_STATE_WAIT_TO_WANDER;
         } else {
             qcopy(&moby->pos, waypoint);
         }
         if (fast_vec_length(&screamer_data->step) == 0.0f)
-            moby->state = 9;
+            moby->state = SCREAMER_STATE_WAIT_TO_WANDER;
         break;
     case SCREAMER_STATE_DEATH_KNOCKBACK:
         if ((step_moby_motion(moby, screamer_data->react) & 1) == 0)
