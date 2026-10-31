@@ -823,12 +823,16 @@ void morphoray_chicken_update(Moby *chicken_moby) {
 int moby_set_state_from_check(struct Moby *a) __asm__("FUN_L00_002cadc0");
 
 int moby_set_state_from_check(struct Moby *checked_moby) {
+    enum {
+        CHICKEN_STATE_IDLE = 1,
+        CHICKEN_STATE_EMIT_FEATHERS = 5
+    };
     int suction_result = process_moby_suck_cannon_suction(checked_moby);
     if (suction_result == 0) {
-        if (checked_moby->state == 5)
-            checked_moby->state = 1;
+        if (checked_moby->state == CHICKEN_STATE_EMIT_FEATHERS)
+            checked_moby->state = CHICKEN_STATE_IDLE;
     } else {
-        checked_moby->state = 5;
+        checked_moby->state = CHICKEN_STATE_EMIT_FEATHERS;
     }
     return suction_result;
 }
