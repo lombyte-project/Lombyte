@@ -305,9 +305,9 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
         missile_data->speed + (missile_data->speed_end - missile_data->speed) / 10.0f * D_0015ED64;
     fast_dec_timer_s16(&missile_data->f3C);
     {
-        float a = convert_integer_to_float(missile_data->f3C);
-        float b = convert_integer_to_float(missile_data->f3E);
-        fast_vec_scale(up, ((char *)&D_0013F490), a / b);
+        float velocity_inheritance_frames_remaining = convert_integer_to_float(missile_data->f3C);
+        float velocity_inheritance_frames_total = convert_integer_to_float(missile_data->f3E);
+        fast_vec_scale(up, ((char *)&D_0013F490), velocity_inheritance_frames_remaining / velocity_inheritance_frames_total);
     }
     {
         float delta[4];
@@ -336,18 +336,18 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
             tp[2] = tp[2] + missile_data->zoff;
             fast_vec_sub(delta, tp, missile_moby->pos);
             if (missile_data->f38 != 0) {
-                float a, b, c, intercept_time_plus_root, intercept_time_minus_root,
+                float intercept_quadratic_coefficient, intercept_linear_coefficient, c, intercept_time_plus_root, intercept_time_minus_root,
                     discriminant_sqrt;
                 fast_vec_sub(dv, tp, missile_data->v);
                 FUN_L00_001ff2c0(ip, dv, up);
                 qcopy(missile_data->v, tp);
                 c = FUN_L00_001ff430(dv);
-                b = (dv[0] * delta[0] + dv[1] * delta[1] + dv[2] * delta[2]) * -2.0f;
-                a = missile_data->speed * missile_data->speed - c;
+                intercept_linear_coefficient = (dv[0] * delta[0] + dv[1] * delta[1] + dv[2] * delta[2]) * -2.0f;
+                intercept_quadratic_coefficient = missile_data->speed * missile_data->speed - c;
                 c = -FUN_L00_001ff430(delta);
-                discriminant_sqrt = square_root(b * b - a * 4.0f * c);
-                intercept_time_plus_root = (-b + discriminant_sqrt) / (a + a);
-                intercept_time_minus_root = (-b - discriminant_sqrt) / (a + a);
+                discriminant_sqrt = square_root(intercept_linear_coefficient * intercept_linear_coefficient - intercept_quadratic_coefficient * 4.0f * c);
+                intercept_time_plus_root = (-intercept_linear_coefficient + discriminant_sqrt) / (intercept_quadratic_coefficient + intercept_quadratic_coefficient);
+                intercept_time_minus_root = (-intercept_linear_coefficient - discriminant_sqrt) / (intercept_quadratic_coefficient + intercept_quadratic_coefficient);
                 if (intercept_time_plus_root > 0.0f && intercept_time_minus_root > 0.0f) {
                     if (intercept_time_minus_root < intercept_time_plus_root)
                         intercept_time = intercept_time_plus_root;
