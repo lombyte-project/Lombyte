@@ -850,13 +850,17 @@ int launch_suck_cannon_projectile_and_update_moby_state(struct Moby *moby,
                                                         int          target_moby,
 
                                                         float target_height_offset) {
+    enum {
+        CHICKEN_STATE_IDLE = 1,
+        CHICKEN_STATE_EMIT_FEATHERS = 5
+    };
     char *class_callback_data = get_moby_suck_cannon_record(moby);
     int   projectile_launch_result = launch_suck_cannon_projectile(
         moby, launch_vector_address, target_moby, target_height_offset);
     if (projectile_launch_result != 0) {
-        moby->state = 5;
+        moby->state = CHICKEN_STATE_EMIT_FEATHERS;
     } else if ((unsigned char)((char)moby->state) == 5) {
-        moby->state = 1;
+        moby->state = CHICKEN_STATE_IDLE;
     }
     if (*(short *)(class_callback_data + 0x68) == 6) {
         allocate_voice_for_target_entry(1, 0, moby);
