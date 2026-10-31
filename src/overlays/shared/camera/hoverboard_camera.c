@@ -482,6 +482,9 @@ extern float D_L05_00174278 NOT_SDA;
 void update_orbit_camera_position(Camera_32B1F8 *camera) __asm__("FUN_L05_00329ce8");
 
 void update_orbit_camera_position(Camera_32B1F8 *camera) {
+    enum {
+        CAMERA_ORBIT_MODE_FOLLOW = 0
+    };
     V_32B1F8      down;
     V_32B1F8      focus;
     V_32B1F8      rel;
@@ -512,7 +515,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     spring = &orbit->spring;
     fast_vec_normalize(&down, up_axis, -1.0f);
     qcopy(&focus, &focus_state->pos);
-    if (orbit->mode == 0) {
+    if (orbit->mode == CAMERA_ORBIT_MODE_FOLLOW) {
         fast_vec_sub(&rel, pos = &camera->pos, &focus);
         probe_step = 0;
         along = fast_vec_dot(&rel, &focus_state->axis);
