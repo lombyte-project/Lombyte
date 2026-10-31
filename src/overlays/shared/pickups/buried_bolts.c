@@ -32,13 +32,13 @@ void buried_bolts_update(struct Moby *moby) __asm__("FUN_L01_002f2eb8");
 
 /* Moby class 605 */
 void buried_bolts_update(struct Moby *moby) {
-    AreaVars *area_vars = (AreaVars *)moby->pvars;
+    enum { AREA_MOBY_STATE_UNINITIALIZED = 0 , AREA_MOBY_STATE_INITIALIZED = 1 } ;AreaVars *area_vars = (AreaVars *)moby->pvars;
     Vec4      target;
     s32       k;
     s32      *path;
     f32       target_distance;
 
-    if (moby->state == 0) {
+    if (moby->state == AREA_MOBY_STATE_UNINITIALIZED) {
         if (area_vars == 0) {
             mark_moby_for_removal(moby);
             return;
@@ -46,7 +46,7 @@ void buried_bolts_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         qcopy(&area_vars->home, &moby->pos);
         moby->flags |= 0x41;
-        moby->state = 1;
+        moby->state = AREA_MOBY_STATE_INITIALIZED;
         if (moby->command == 0 && D_0015ED84 < 20) {
             k = D_0014BF10[D_L01_00161AF0 / 2 + D_0015ED84 * 16];
             if (D_L01_00161AF0 & 1) {
