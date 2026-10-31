@@ -61,6 +61,9 @@ extern float FUN_L04_001f1978(float);
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_002923b8");
 
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
+    enum {
+        LEG_RIG_FALLBACK_GAIT_MASK = 5
+    };
     int   joints[6];
     float matrix[4][4];
     int   i;
@@ -119,7 +122,7 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
     rig->unkD8 = 0;
     rig->unkE4 = 0;
     rig->unkEC = 0;
-    rig->mode = 5;
+    rig->mode = LEG_RIG_FALLBACK_GAIT_MASK;
     debug_print(rig_size_message, 0x250);
 }
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
