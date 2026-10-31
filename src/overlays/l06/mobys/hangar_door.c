@@ -11,7 +11,7 @@
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
 #include "rnc/overlay/shared/world/cuboid.h"
 
-extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern int   D_L06_0015F5C4;
 void         hangar_door_update(char *m) __asm__("FUN_L06_002b4770");
 
@@ -58,7 +58,7 @@ void hangar_door_update(char *door_moby) {
         door_data->unk10 = 0;
     }
     if (door_data->unk18 != door_data->unk14) {
-        FUN_L00_0025be00(&door_data->unk18,
+        approach_angle(&door_data->unk18,
                          &door_data->unk8,
                          door_data->unk14,
                          frame_time_sq * 1.5707964f,

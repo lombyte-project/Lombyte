@@ -14,7 +14,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern int   FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern void  FUN_L01_0026d930(char *p);
 extern void  handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
@@ -75,7 +75,7 @@ void amoeboid_update(struct Moby *moby) {
         char *path_node_base = ((char *)l05_paths[moby_data->path_B0]) + moby_data->unkB4 * 16;
         float yaw = fast_arc_tan(*(float *)(path_node_base + 0x10) - moby->pos.x,
                                  *(float *)(path_node_base + 0x14) - moby->pos.y);
-        FUN_L00_0025be00(&moby->rot.z,
+        approach_angle(&moby->rot.z,
                          &moby_data->unkBC,
                          yaw,
                          frame_time_sq * 1.0471976f,

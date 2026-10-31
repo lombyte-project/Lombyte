@@ -1,5 +1,6 @@
 /* Level 18 drek_final_boss_robot: the final boss fight. */
 #include "types.h"
+#include "rnc/overlay/l18/drek_boss_states.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
@@ -427,31 +428,6 @@ void spawn_drek_boss_firing_effects(char *moby, void *effect_position) __asm__("
 
 /* Moby class 1422 */
 void drek_final_boss_robot_update(BossMoby *moby) {
-    enum {
-        DREK_BOSS_INITIALIZE = 0,
-        DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER = 1,
-        DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO = 2,
-        DREK_BOSS_WAIT_TO_RESTORE_SAVED_TRANSFORM = 3,
-        DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE = 4,
-        DREK_BOSS_INITIALIZE_PAIRED_TRANSFORM_TRANSITION = 5,
-        DREK_BOSS_WAIT_FOR_SCENE = 7,
-        DREK_BOSS_WAIT_FOR_PAIRED_TRANSFORM_TRANSITION = 8,
-        DREK_BOSS_APPROACH_PATH_START = 9,
-        DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS = 10,
-        DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO = 0xB,
-        DREK_BOSS_SELECT_NEXT_ACTION = 0xC,
-        DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET = 0xD,
-        DREK_BOSS_ACTION_REPOSITION_AND_AIM = 0xE,
-        DREK_BOSS_TARGET_GROUND_POINTS = 0xF,
-        DREK_BOSS_TARGET_RANDOM_ARENA_POINTS = 0x10,
-        DREK_BOSS_TARGET_SIDE_GROUND_POINTS = 0x11,
-        DREK_BOSS_APPROACH_AIM_NODE = 0x12,
-        DREK_BOSS_FOLLOW_HERO = 0x13,
-        DREK_BOSS_ACTIVATE_MISSILE_GROUP = 0x14,
-        DREK_BOSS_APPROACH_SELECTED_MOBY = 0x15,
-        DREK_BOSS_DEATH_EXPLOSIONS = 0x1A,
-        DREK_BOSS_RUN_ENDING_SEQUENCE = 0x1B
-    };
     enum {
         DREK_BOSS_PHASE_FIRST_ARENA_PATH = 0,
         DREK_BOSS_PHASE_SECOND_ARENA_PATH = 1,
@@ -1891,7 +1867,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
             }
             if (step != 0.0f) {
                 float unclamped_health;
-                if (MOBY(moby)->state == 2) {
+                if (MOBY(moby)->state == DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO) {
                     if (hit_record != 0 && (*(int *)(hit_record + 0x24) & 0x80000) &&
                         MOBY(moby)->prev_seq != 0xE) {
                         blend_moby_animation(moby, 0xE, 5, 1);
@@ -2246,7 +2222,7 @@ void update_drek_boss_arena_circling_movement(struct Moby *moby) {
     else if (circling_goal_angle < -0.17453292f)
         circling_goal_angle = -0.17453292f;
     circling_goal_angle = fast_add_rotations(circling_goal_angle, self_ang);
-    if (moby->state == 2) {
+    if (moby->state == DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO) {
         goal.f[0] = fast_cos(circling_goal_angle) * drek_boss_circle_and_fire_radius_gp;
         goal.f[1] = fast_sin(circling_goal_angle) * drek_boss_circle_and_fire_radius_gp;
         goal.f[2] = 0.0f;
@@ -2265,12 +2241,12 @@ void update_drek_boss_arena_circling_movement(struct Moby *moby) {
         far = drek_boss_circling_base_far_hero_distance_gp;
         slow = drek_boss_circling_default_far_hero_speed_gp;
         fast = drek_boss_circling_default_near_hero_speed_gp;
-        if (moby->state == 0xD) {
+        if (moby->state == DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET) {
             slow = 2.0f;
             fast = 5.5f;
             near *= 0.5f;
             far *= 0.5f;
-        } else if (moby->state == 0xF) {
+        } else if (moby->state == DREK_BOSS_TARGET_GROUND_POINTS) {
             slow = 6.0f;
             near *= 1.5f;
             fast = 10.0f;
@@ -2598,7 +2574,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                         set_animation_parameter(*(int *)(boss_data + 0x368), 0);
                         *(int *)(boss_data + 0x368) = -1;
                     }
-                    if (MOBY(moby)->state >= 2) {
+                    if (MOBY(moby)->state >= DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO) {
                         if (*(int *)(boss_data + 0x3ec) != 0 || D_L18_001623A0_gp != 0) {
                             char *follow_camera_gate_record;
                             follow_camera_gate_source = (char *)&l18_camera;
