@@ -114,7 +114,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby->state = 1;
+        moby->state = PILOTS_HELMET_WAIT_FOR_HERO_PROXIMITY;
         moby->z += 1.0f;
         break;
     case PILOTS_HELMET_WAIT_FOR_HERO_PROXIMITY:
@@ -129,7 +129,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
                     start_scene(p->fa_2e03a0);
                 else
                     debug_print(pilots_helmet_missing_cutscene_format, moby->h);
-                moby->state = 2;
+                moby->state = PILOTS_HELMET_GRANT_REWARD;
             }
         }
         break;
@@ -158,7 +158,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
         if (moby->b0 != 0xFF)
             jet_clear_persistent(moby->b0);
         D_00141410_2e03a0[0] = 7;
-        moby->state = 3;
+        moby->state = PILOTS_HELMET_SAVE_AND_REMOVE;
         break;
     case PILOTS_HELMET_SAVE_AND_REMOVE:
         memcard_save_data(0, -1);
