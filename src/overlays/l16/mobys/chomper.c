@@ -254,6 +254,10 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 void update_chomper_hit_reaction_and_target(void *chomper_instance) {
+    enum {
+        CHOMPER_INITIALIZE = 0,
+        CHOMPER_KNOCKBACK = 8
+    };
     L16PursuitMoby *chomper_moby = chomper_instance;
     L16PursuitData *pursuit_data = chomper_moby->data;
     char           *hit;
@@ -262,7 +266,7 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
     float knockback_vector_and_heading
         [8]; /* [0..3] where the hit came from, [4] the heading that gives */
 
-    if (chomper_moby->state == 0) {
+    if (chomper_moby->state == CHOMPER_INITIALIZE) {
         return;
     }
     hit = find_moby_hit(chomper_moby, 0x330000, 0);
@@ -289,7 +293,7 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
             chomper_moby, pursuit_data->knock, 5, 1, 0, knockback_vector_and_heading[4]);
         pursuit_data->f170 = 8.0f;
         pursuit_data->f174 = 16.0f;
-        chomper_moby->state = 8;
+        chomper_moby->state = CHOMPER_KNOCKBACK;
         chomper_moby->i94 = 0;
         pursuit_data->reaction_time = 0x78;
         trooper_anim_update(chomper_moby, pursuit_data->reaction);
