@@ -742,12 +742,16 @@ void pyrocitor_update(struct Moby *moby) {
 void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) __asm__("FUN_L00_002b8230");
 
 void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
+    enum {
+        PYROCITOR_STATE_FIRING = 3,
+        PYROCITOR_STATE_CLEANUP = 4
+    };
     unsigned char     *pyrocitor_vars = ((unsigned char *)pyrocitor_moby->pvars);
     struct UsageStats *P;
     unsigned char     *voice;
     int                voice_slot_or_time_stat, firing_frame_count;
     if (pyrocitor_moby->prev_seq == 2) {
-        pyrocitor_moby->state = 4;
+        pyrocitor_moby->state = PYROCITOR_STATE_CLEANUP;
         if (*(void **)pyrocitor_vars)
             mark_moby_for_removal(*(void **)pyrocitor_vars);
         if (*(short *)(pyrocitor_vars + 0x44) != -1) {
@@ -768,7 +772,7 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
     P = &usage_stats;
     if (P->stat[10].count)
         return;
-    if (pyrocitor_moby->state == 3) {
+    if (pyrocitor_moby->state == PYROCITOR_STATE_FIRING) {
         (*(unsigned short *)(pyrocitor_vars + 0x50))++;
         return;
     }
