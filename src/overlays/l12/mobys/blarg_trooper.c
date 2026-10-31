@@ -183,7 +183,7 @@ void blarg_trooper_update(struct Moby *moby) {
     manipulator_set_scale(trooper_update_vars + 0x120, 3.0f);
     if (D_L12_0015F5C4 == 2)
         goto hide;
-    if (moby->state >= 3) {
+    if (moby->state >= BLARG_TROOPER_APPROACH_TARGET) {
         moby->flags &= 0xffbe;
         if (TROOPER_CHILD__blarg_trooper_update)
             TROOPER_CHILD__blarg_trooper_update->flags &= 0xffbe;
@@ -268,7 +268,7 @@ void blarg_trooper_update(struct Moby *moby) {
             if (TROOPER_CHILD__blarg_trooper_update)
                 TROOPER_CHILD__blarg_trooper_update->flags |= 0x41;
         }
-        moby->state = 2;
+        moby->state = BLARG_TROOPER_WAIT_FOR_ACTIVATION;
         break;
     }
     case BLARG_TROOPER_WAIT_FOR_ACTIVATION: {
@@ -305,7 +305,7 @@ void blarg_trooper_update(struct Moby *moby) {
         else {
             TROOPER_I__blarg_trooper_update(0x260) = select_point_index_by_distance(
                 &moby->pos, ((char *)l12_paths[TROOPER_I__blarg_trooper_update(0x254)]), 0.0f);
-            moby->state = 1;
+            moby->state = BLARG_TROOPER_FOLLOW_WAYPOINTS;
         }
         break;
     }
@@ -330,7 +330,7 @@ void blarg_trooper_update(struct Moby *moby) {
             goto state3;
         else if (vector_distance_xy(&moby->pos, &target->pos) <
                  TROOPER_F__blarg_trooper_update(0x264))
-            moby->state = 3;
+            moby->state = BLARG_TROOPER_APPROACH_TARGET;
         break;
     }
     case BLARG_TROOPER_APPROACH_TARGET: {
@@ -387,7 +387,7 @@ void blarg_trooper_update(struct Moby *moby) {
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 10 && moby->seq == moby->prev_seq)
                 blend_moby_animation_ex(moby, 10, 0, scale_game_frames(5), 5);
-            moby->state = 6;
+            moby->state = BLARG_TROOPER_FIRE_PROJECTILE;
         }
         break;
     }
@@ -417,7 +417,7 @@ void blarg_trooper_update(struct Moby *moby) {
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 5 && moby->seq == moby->prev_seq)
                 blend_moby_animation_ex(moby, 5, 0, scale_game_frames(8), 5);
-            moby->state = 7;
+            moby->state = BLARG_TROOPER_WAIT_BETWEEN_SHOTS;
         }
         break;
     }
@@ -435,7 +435,7 @@ void blarg_trooper_update(struct Moby *moby) {
             goto state3;
         angle = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
         if (fast_difference_between_rotations(moby->rot.z, angle) > 0.4886922f)
-            moby->state = 3;
+            moby->state = BLARG_TROOPER_APPROACH_TARGET;
         break;
     }
     case BLARG_TROOPER_RETURN_HOME: {
@@ -449,7 +449,7 @@ void blarg_trooper_update(struct Moby *moby) {
         TROOPER_F__blarg_trooper_update(0x188) = angle * 0.7f;
         TROOPER_F__blarg_trooper_update(0x208) = angle * 0.4f;
         if (vector_distance_xy(&moby->pos, trooper_update_vars + 0x220) < 1.0f)
-            moby->state = 2;
+            moby->state = BLARG_TROOPER_WAIT_FOR_ACTIVATION;
         break;
     }
     case BLARG_TROOPER_KNOCKBACK_RECOVERY: {
@@ -461,12 +461,12 @@ void blarg_trooper_update(struct Moby *moby) {
                 angle = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
                 if (fast_difference_between_rotations(moby->rot.z, angle) < 0.12217305f) {
                 state5:
-                    moby->state = 5;
+                    moby->state = BLARG_TROOPER_PREPARE_SHOT;
                     break;
                 }
             }
         state3:
-            moby->state = 3;
+            moby->state = BLARG_TROOPER_APPROACH_TARGET;
             break;
         }
         if (!(moby->pos.z < 2.0f))
