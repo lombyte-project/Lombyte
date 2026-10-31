@@ -146,6 +146,11 @@ void bolt_thief_update(L16CrateMoby *moby) {
         BOLT_THIEF_FOLLOW_OTHER_PATH = 5,
         BOLT_THIEF_KNOCKBACK = 6
     };
+    enum {
+        BOLT_THIEF_MODE_LINKED_MOBY_PATH_CYCLE = 0,
+        BOLT_THIEF_MODE_SINGLE_PATH_THEN_FACE_HERO = 1,
+        BOLT_THIEF_MODE_FACE_HERO_IN_PLACE = 2
+    };
     L16CrateData *bolt_thief_data = moby->data;
     char         *hit;
 
@@ -179,7 +184,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
     moby->opacity = 0xFF;
     switch (moby->state) {
     case BOLT_THIEF_INITIALIZE:
-        if (bolt_thief_data->mode == 2) {
+        if (bolt_thief_data->mode == BOLT_THIEF_MODE_FACE_HERO_IN_PLACE) {
             moby->state = BOLT_THIEF_FACE_HERO;
             bolt_thief_data->turn = 0.0f;
             set_moby_animation(moby, 4, 0);
@@ -194,7 +199,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            if (bolt_thief_data->mode != 1) {
+            if (bolt_thief_data->mode != BOLT_THIEF_MODE_SINGLE_PATH_THEN_FACE_HERO) {
                 if (bolt_thief_data->other_path == -1) {
                     debug_print(D_L16_001E8720, moby->id);
                     mark_moby_for_removal(moby);
@@ -234,7 +239,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
     }
     case BOLT_THIEF_WAIT_FOR_HERO_TRIGGER:
         if (is_point_inside_clip_volume(&hero.motion.pos, bolt_thief_data->trigger)) {
-            if (bolt_thief_data->mode == 1) {
+            if (bolt_thief_data->mode == BOLT_THIEF_MODE_SINGLE_PATH_THEN_FACE_HERO) {
                 set_moby_animation(moby, 0, 0);
             } else {
                 bolt_thief_data->child = spawn_bolt_thief_mine(moby, moby->position);
@@ -247,7 +252,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     case BOLT_THIEF_FOLLOW_PRIMARY_PATH:
-        if (bolt_thief_data->mode == 0)
+        if (bolt_thief_data->mode == BOLT_THIEF_MODE_LINKED_MOBY_PATH_CYCLE)
             update_linked_moby_position(moby);
         if (advance_bolt_thief_path((char *)moby)) {
             moby->state = BOLT_THIEF_SETTLE_AT_PATH_END;
@@ -261,7 +266,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         float         target[4];
         float         zero;
 
-        if (settle_data->mode == 0)
+        if (settle_data->mode == BOLT_THIEF_MODE_LINKED_MOBY_PATH_CYCLE)
             update_linked_moby_position(moby);
         qcopy(target, path + *(int *)path * 16);
         zero = 0.0f;
@@ -284,7 +289,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                       *(float *)&D_L16_00161D98_gp,
                       zero);
         if ((moby->status & 2) && moby->frame == moby->animation) {
-            if (settle_data->mode == 1) {
+            if (settle_data->mode == BOLT_THIEF_MODE_SINGLE_PATH_THEN_FACE_HERO) {
                 moby->state = BOLT_THIEF_FACE_HERO;
                 settle_data->turn = zero;
                 set_moby_animation(moby, 4, 0);
