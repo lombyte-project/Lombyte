@@ -261,7 +261,7 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_ENTER_WAIT_FOR_USE = 6,
         TELEPORTER_EFFECT_CYCLE_PREPARE = 7,
         TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE = 8
-    } ; enum { TELEPORTER_WAIT_FOR_ACTIVATION = 5};
+    } ; enum { TELEPORTER_WAIT_FOR_ACTIVATION = 5} ; enum { HERO_TARGET_POSE_STATUS_INACTIVE = 0 , HERO_TARGET_POSE_STATUS_TRANSFER_READY = 2};
     TeleporterVars *teleporter_vars = (TeleporterVars *)moby->pvars;
     int             active = 0;
 
@@ -387,10 +387,10 @@ void teleporter_update(struct Moby *moby) {
                                        teleporter_child_motion_deceleration_gp * frame_time_sq,
                                        teleporter_child_motion_max_speed_gp * frame_time);
         } else if (D_L01_0015F594 != 4 || !(teleporter_vars->unk14[3] > 0.25f)) {
-            if (transfer_preparation_status == 2) {
+            if (transfer_preparation_status == HERO_TARGET_POSE_STATUS_TRANSFER_READY) {
                 teleporter_vars->unk34 = 1.95f;
                 moby->state = TELEPORTER_TRANSFER_TO_DESTINATION;
-            } else if (transfer_preparation_status == 0) {
+            } else if (transfer_preparation_status == HERO_TARGET_POSE_STATUS_INACTIVE) {
                 moby->state = TELEPORTER_RETURN_TO_IDLE;
             }
         }
