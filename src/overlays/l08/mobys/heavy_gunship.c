@@ -303,7 +303,7 @@ void heavy_gunship_update(struct Moby *moby) {
         moby->flags |= 0x4000;
         qcopy(&moby->pos, &swarm_vars->follow[1].path->points[0]);
         spawn_heavy_gunship_parts(moby);
-        moby->state = 2;
+        moby->state = HEAVY_GUNSHIP_FOLLOW_SECONDARY_PATH;
         moby->rot.z = fast_arc_tan(swarm_vars->follow[1].path->points[1].f[0] - moby->pos.x,
                                    swarm_vars->follow[1].path->points[1].f[1] - moby->pos.y);
         break;
@@ -407,7 +407,7 @@ void heavy_gunship_update(struct Moby *moby) {
     case HEAVY_GUNSHIP_START_PRIMARY_PATH: {
         LevelPath *path;
 
-        moby->state = 1;
+        moby->state = HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH;
         path = swarm_vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z =
