@@ -36,20 +36,26 @@ extern void set_sound_handle_id(int, long) __asm__("func_00216B68");
 void music_update_stream(MusicPlaying *p) __asm__("FUN_002160a8");
 
 void music_update_stream(MusicPlaying *music_stream) {
+    enum {
+        MUSIC_STREAM_STATE_INACTIVE = 0,
+        MUSIC_STREAM_STATE_WAITING_FOR_BUFFER = 2,
+        MUSIC_STREAM_STATE_STOP_REQUESTED = 5,
+        MUSIC_STREAM_STATE_STOPPING = 6
+    };
     int sound_handle;
 
     if (music_stream->state != 9 && music_stream->handle != 0 &&
         music_stream->handle != 0xFFFFFFFF) {
-        if (music_stream->state == 5) {
+        if (music_stream->state == MUSIC_STREAM_STATE_STOP_REQUESTED) {
             if (music_stream->handle != 0) {
                 snd_stop_sound(music_stream->handle);
-                music_stream->state = 6;
+                music_stream->state = MUSIC_STREAM_STATE_STOPPING;
             } else {
-                music_stream->state = 0;
+                music_stream->state = MUSIC_STREAM_STATE_INACTIVE;
             }
-        } else if (music_stream->state == 6) {
+        } else if (music_stream->state == MUSIC_STREAM_STATE_STOPPING) {
             if (music_stream->handle == 0) {
-                music_stream->state = 0;
+                music_stream->state = MUSIC_STREAM_STATE_INACTIVE;
             }
         }
         if (music_stream->handle == 0) {
@@ -73,7 +79,7 @@ void music_update_stream(MusicPlaying *music_stream) {
         if (music_stream->state == 1 || music_stream->state == 8 || music_stream->state == 9) {
             return;
         }
-        if (music_stream->state != 2 && music_stream->state != 3) {
+        if (music_stream->state != MUSIC_STREAM_STATE_WAITING_FOR_BUFFER && music_stream->state != 3) {
             sound_handle = music_stream->handle;
             music_stream->handle = 0xFFFFFFFF;
             snd_get_vag_stream_time_remaining_cb(
@@ -82,13 +88,13 @@ void music_update_stream(MusicPlaying *music_stream) {
                 sound_handle, set_sound_handle_id, (long)(unsigned int)music_stream);
             return;
         }
-        if (music_stream->handle != 0xFFFFFFFF && music_stream->state == 2) {
+        if (music_stream->handle != 0xFFFFFFFF && music_stream->state == MUSIC_STREAM_STATE_WAITING_FOR_BUFFER) {
             snd_is_vag_stream_buffered_cb(music_stream->handle,
                                           music_channel_ready_callback,
                                           (long)(unsigned int)music_stream);
         }
     } else if (music_stream->state == 7 || music_stream->handle == 0) {
-        music_stream->state = 0;
+        music_stream->state = MUSIC_STREAM_STATE_INACTIVE;
     }
 }
 
