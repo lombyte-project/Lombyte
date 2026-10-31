@@ -59,13 +59,13 @@ void bridge_half_update(PendulumMoby *bridge_half_moby) {
     case BRIDGE_HALF_INITIALIZE:
         qcopy(&pendulum_vars->pivot, &bridge_half_moby->pos);
         pendulum_vars->swing = 1.0f;
-        bridge_half_moby->state = 1;
+        bridge_half_moby->state = BRIDGE_HALF_WAIT_FOR_TRIGGER;
         pendulum_vars->sound = -1;
         break;
     case BRIDGE_HALF_WAIT_FOR_TRIGGER:
         if (bridge_half_moby->trigger == 2 ||
             D_0014C050[bridge_half_moby->id + current_level_index * 16] == 0xFF) {
-            bridge_half_moby->state = 2;
+            bridge_half_moby->state = BRIDGE_HALF_REDUCE_SWING_TO_ZERO;
             bridge_half_moby->trigger = 0;
         }
         break;
@@ -83,7 +83,7 @@ void bridge_half_update(PendulumMoby *bridge_half_moby) {
                 }
             }
             pendulum_vars->sound = -1;
-            bridge_half_moby->state = 1;
+            bridge_half_moby->state = BRIDGE_HALF_WAIT_FOR_TRIGGER;
         } else if (!voice_is_playing(bridge_half_moby, pendulum_vars->sound)) {
             pendulum_vars->sound = FUN_0022da68(0, 4, bridge_half_moby);
         }
