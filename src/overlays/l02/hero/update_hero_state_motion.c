@@ -35,6 +35,10 @@ extern int  hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 void process_hero_ground_material_effects(void) __asm__("FUN_L02_0021b698");
 
 void process_hero_ground_material_effects(void) {
+    enum {
+        GROUND_MATERIAL_MAGNETIC = 2,
+        GROUND_MATERIAL_SINK_TRIGGER = 0xD
+    };
     struct Hero *hero_state = &hero;
     int          keep = hero_state->ground_sound_class;
     int          saved_ground_type = hero_state->ground_type;
@@ -46,10 +50,10 @@ void process_hero_ground_material_effects(void) {
     hero_state->unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == GROUND_MATERIAL_MAGNETIC) {
         if (hero_state->frames_off_ground.s == 0 || hero_state->ground_distance < 0.3f) {
             hero_state->on_magnet_ground = 1;
-            if (hero_state->vehicle_mode == 0) {
+            if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *slot_one_moby = (char *)hero_state->items[1].moby;
                 if (slot_one_moby != 0 && *(short *)(slot_one_moby + 0xA6) == 0xAD)
                     hero_state->unk308 = 1;
@@ -77,11 +81,11 @@ void process_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->selector_11 = 1;
     }
-    if (saved_ground_type == 0x2) {
+    if (saved_ground_type == GROUND_MATERIAL_MAGNETIC) {
         struct Hero *q = &hero;
         q->on_magnet_ground = 1;
     }
-    if (saved_ground_type == 0xD) {
+    if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
