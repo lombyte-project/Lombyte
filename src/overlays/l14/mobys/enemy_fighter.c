@@ -73,7 +73,7 @@ void enemy_fighter_update(struct Moby *moby) {
     int               path_index;
     char             *path;
     moby->hit_slot = 0xff;
-    if (hit && moby->state != 2) {
+    if (hit && moby->state != ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN) {
         if (current_level_index == 14) {
             enemy_fighter_destruction_count = enemy_fighter_destruction_count + 1;
             if (enemy_fighter_destruction_count > 2 && D_0013D408.flag == 0) {
@@ -82,7 +82,7 @@ void enemy_fighter_update(struct Moby *moby) {
                 queue_dialogue_message(0x53d6, -1);
             }
         }
-        moby->state = 2;
+        moby->state = ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN;
         cart_burst(5.0f, 13.0f, moby, &moby->pos, -1);
         moby->collision = 0;
         moby->flags |= 0x41;
@@ -109,7 +109,7 @@ void enemy_fighter_update(struct Moby *moby) {
             return;
         }
         initialize_flight_path_state(moby);
-        moby->state = 1;
+        moby->state = ENEMY_FIGHTER_STATE_FOLLOW_PATH;
         moby->update_dist = 0xff;
         moby->draw_dist = 0xff;
         enemy_fighter_vars->sound = -1;
@@ -124,7 +124,7 @@ void enemy_fighter_update(struct Moby *moby) {
             moby->flags &= 0xffbe;
             moby->collision = moby->pclass->collision;
             enemy_fighter_vars->timer = scale_game_frames(enemy_fighter_respawn_delay_frames_gp);
-            moby->state = 1;
+            moby->state = ENEMY_FIGHTER_STATE_FOLLOW_PATH;
             enemy_fighter_vars->segment = 0;
             enemy_fighter_vars->along = 0;
             qcopy(&moby->pos, path + 0x10);
@@ -136,7 +136,7 @@ void enemy_fighter_update(struct Moby *moby) {
         break;
     }
     spawn_enemy_fighter_exhaust(moby);
-    if (moby->state != 0 && moby->state != 2 &&
+    if (moby->state != ENEMY_FIGHTER_STATE_INITIALIZE && moby->state != ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN &&
         voice_is_playing(moby, enemy_fighter_vars->sound) == 0)
         enemy_fighter_vars->sound = allocate_voice_for_target_entry(0, 4, moby);
 }
