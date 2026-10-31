@@ -78,7 +78,7 @@ void help_hints_update(Moby *moby) {
     switch (moby->state) {
     case TUTORIAL_TRIGGER_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS;
         tutorial_trigger_vars->f14 = -1;
         break;
     case TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS:
