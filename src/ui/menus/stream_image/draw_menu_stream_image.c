@@ -14,9 +14,12 @@ extern s64  load_texture_file() __asm__("func_00204CF0");
 s32         draw_menu_stream_image(struct MenuStreamImageScreen *screen) __asm__("FUN_00220790");
 
 s32 draw_menu_stream_image(struct MenuStreamImageScreen *screen) {
+    enum {
+        MENU_STREAM_IMAGE_MIN_DRAW_STATE = 4
+    };
     s64 modulate_color;
 
-    if (screen->state < 4) {
+    if (screen->state < MENU_STREAM_IMAGE_MIN_DRAW_STATE) {
         return 0;
     }
     modulate_color = (s64)0x80808080;
