@@ -1176,6 +1176,10 @@ unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position,
                                                          int   alpha_fade_divisor,
 
                                                          int particle_mode) {
+    enum {
+        PARTICLE_MODE_STATIONARY_ALPHA_FADE = 0,
+        PARTICLE_MODE_PARENT_RELATIVE_ALPHA_FADE = 2
+    };
     unsigned char *particle = create_part(0x3E);
     if (particle != 0) {
         unsigned char *particle_data = particle + 0x20;
@@ -1187,8 +1191,8 @@ unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position,
         *(float *)(particle + 0xC) = 30000.0f;
         particle[8] = random_integer_below(0xFF);
         *(short *)(particle_data + 2) = particle_mode;
-        if (particle_mode >= 2)
-            particle_mode = 0;
+        if (particle_mode >= PARTICLE_MODE_PARENT_RELATIVE_ALPHA_FADE)
+            particle_mode = PARTICLE_MODE_STATIONARY_ALPHA_FADE;
         particle[2] = D_L00_001B2178[particle_mode];
         *(short *)(particle + 0x20) =
             truncate_float_to_s32(127.0f / convert_integer_to_float(alpha_fade_divisor));
