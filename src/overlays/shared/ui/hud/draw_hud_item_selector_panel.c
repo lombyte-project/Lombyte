@@ -1377,7 +1377,7 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
         s32 panel_y = frame_size - 42;
         s32 alternate_y = frame_size - 50;
         y = panel_y;
-        if (*(volatile s32 *)&pal_mode == 0)
+        if (*(volatile s32 *)&pal_mode == FALSE)
             y = alternate_y;
     }
     x = hud_element->x;
