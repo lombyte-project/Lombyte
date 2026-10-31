@@ -21,22 +21,25 @@ void hidden_deplanetizer_gun_update(struct Moby *moby) {
         WAIT_TO_HIDE_AND_TURN = 1,
         HIDDEN_WAIT_TO_SHOW = 2
     };
+    enum {
+        VISIBLE_RESTORED = 3
+    };
     switch (moby->state) {
     case INITIALIZE_STATE_MACHINE:
-        moby->state = 1;
+        moby->state = WAIT_TO_HIDE_AND_TURN;
         break;
     case WAIT_TO_HIDE_AND_TURN:
         if (D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) {
             moby->flags |= 1;
             moby->visible = 0;
             moby->rot.x = fast_add_rotations(moby->rot.x, 3.1415927f);
-            moby->state = 2;
+            moby->state = HIDDEN_WAIT_TO_SHOW;
         }
         break;
     case HIDDEN_WAIT_TO_SHOW:
         if (D_L18_0015F5C4 != 2) {
             unsigned short fl = moby->flags;
-            moby->state = 3;
+            moby->state = VISIBLE_RESTORED;
             fl &= 0xFFFE;
             moby->visible = 1;
             moby->flags = fl;
