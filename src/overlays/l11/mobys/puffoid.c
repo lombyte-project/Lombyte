@@ -942,6 +942,10 @@ extern short *D_L11_001AC240[];
 short count_group_puffoids_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
 
 short count_group_puffoids_in_states_13_to_17(struct Moby *group_source_moby) {
+    enum {
+        PUFFOID_STATE_CARRIER_JUMP = 13,
+        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18
+    };
     unsigned short *moby_list_entry;
     short           matching_moby_count;
     char           *level_moby_array_base;
@@ -957,8 +961,8 @@ short count_group_puffoids_in_states_13_to_17(struct Moby *group_source_moby) {
         struct Moby *moby =
             (struct Moby *)(level_moby_array_base + ((*moby_list_entry & 0x7FFF) << 8));
         if (moby->oclass == 0x4DE) {
-            if (moby->state >= 13) {
-                if (moby->state < 18)
+            if (moby->state >= PUFFOID_STATE_CARRIER_JUMP) {
+                if (moby->state < PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK)
                     matching_moby_count++;
             }
         }
