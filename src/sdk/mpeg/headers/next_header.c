@@ -30,6 +30,9 @@ s32 _nextHeader(MpegDec *decoder) {
         MPEG_SEQUENCE_END_CODE = 0x1B7,
         MPEG_GROUP_START_CODE = 0x1B8
     };
+    enum {
+        MPEG_CALLBACK_TIMESTAMP = 5
+    };
     MpegCbTimeStamp cb;
     u32             code;
 
@@ -45,7 +48,7 @@ s32 _nextHeader(MpegDec *decoder) {
             break;
         case MPEG_PICTURE_START_CODE:
             _pictureHeader(decoder);
-            cb.type = 5;
+            cb.type = MPEG_CALLBACK_TIMESTAMP;
             cb.pts = -1;
             cb.dts = -1;
             _dispatchMpegCallback(decoder->cbData, &cb);
