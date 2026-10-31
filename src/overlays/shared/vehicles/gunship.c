@@ -97,7 +97,7 @@ typedef struct {
     u16 kind;
 } HitInfo;
 
-extern char D_L01_00167240[];
+extern char camera_pos[] __asm__("D_L01_00167240");
 
 extern int              D_0015ED84;
 extern void             FUN_0022da68(int, int, char *);
@@ -264,7 +264,7 @@ void gunship_update(struct Moby *moby) {
         if (v->unk138 != -1) {
             if (!fast_dec_timer_s16(&v->unk138))
                 break;
-            if (fast_vec_dist(&moby->pos, D_L01_00167240) < 30.0f)
+            if (fast_vec_dist(&moby->pos, camera_pos) < 30.0f)
                 allocate_voice_for_target_entry(1, 0, moby);
         }
         v->unk138 = scale_game_frames(random_int_between(v->unk13C, v->unk13C + v->unk13E));
