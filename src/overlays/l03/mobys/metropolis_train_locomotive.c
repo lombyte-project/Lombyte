@@ -101,7 +101,7 @@ void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
 }
 
 extern char *D_L03_0015FFD8_292890 __asm__("D_L03_0015FFD8");
-extern char  D_L03_001E2410[];
+extern char  l03_train_engine_no_cars_warning_format[] __asm__("D_L03_001E2410");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern void debug_print(void *, int) __asm__("FUN_001e93b0");
 extern void gunship_update(char *) __asm__("FUN_L01_002f5168");
@@ -240,7 +240,7 @@ void update_metropolis_train_motion(char *moby) {
         fast_vec_sub(delta, moby + 0x10, old_pos);
         update_entity_matrix(locomotive_state->motion, delta, old_rot, moby + 0x40);
     } else {
-        debug_print(D_L03_001E2410, locomotive_state->iB8);
+        debug_print(l03_train_engine_no_cars_warning_format, locomotive_state->iB8);
         mark_moby_for_removal(moby);
         return;
     }
@@ -290,7 +290,7 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
         fast_vec_sub(dp, &moby->pos, old_pos);
         update_entity_matrix(motion, dp, old_rot, &moby->rot);
     } else {
-        debug_print(D_L03_001E2410, *(int *)(locomotive_pvars + 0xB8));
+        debug_print(l03_train_engine_no_cars_warning_format, *(int *)(locomotive_pvars + 0xB8));
         mark_moby_for_removal(moby);
         return;
     }
