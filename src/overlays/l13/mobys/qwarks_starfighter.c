@@ -1626,6 +1626,10 @@ void qwarks_starfighter_update(Moby388 *moby) {
         STARFIGHTER_STATE_EXPLODE_AND_REMOVE = 8,
         STARFIGHTER_STATE_RESET = 9
     };
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     Ship388 *starfighter_vars = moby->d;
     float    offset[4];
     float    joint[4];
@@ -1680,7 +1684,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
         starfighter_vars->b10C = 1;
         starfighter_vars->bFE = 0;
         starfighter_vars->bFC = 0;
-        moby->state = 1;
+        moby->state = STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP;
         starfighter_vars->b10E = 8;
         starfighter_vars->child110 = 0;
         starfighter_vars->snd114 = -1;
@@ -1728,7 +1732,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
                     *(int *)(ship + 0x138) = 0x234;
                 }
             }
-            moby->state = 2;
+            moby->state = STARFIGHTER_STATE_FOLLOW_INITIAL_PATH;
         }
         break;
     }
@@ -1759,7 +1763,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
             *(int *)(ship + 0x118) = 0;
             starfighter_vars->b13B = qwarks_starfighter_command_path_slots[moby->bBC];
             starfighter_vars->iF8 = scale_game_frames(0x14);
-            moby->state = 3;
+            moby->state = STARFIGHTER_STATE_FOLLOW_COMMAND_PATH;
             starfighter_vars->s9C = select_point_index_by_distance(
                 moby->pos, walker_paths[starfighter_vars->paths[starfighter_vars->b13B]], 0.0f);
             starfighter_vars->s9C =
@@ -2024,7 +2028,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
             starfighter_vars->s9C >=
                 *(int *)walker_paths[starfighter_vars->paths[starfighter_vars->b13B]] - 1) {
             starfighter_vars->iF8 = scale_game_frames(0xB4);
-            moby->state = 8;
+            moby->state = STARFIGHTER_STATE_EXPLODE_AND_REMOVE;
         }
         moby->rot[0] = fast_add_rotations(moby->rot[0], frame_time * 4.1887903f);
         {
@@ -2216,7 +2220,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
         moby->bBC = 0;
         qzero(&starfighter_vars->f70);
         qzero(starfighter_vars->v80);
-        moby->state = 0;
+        moby->state = STARFIGHTER_STATE_INITIALIZE;
         return;
     }
     }
@@ -2263,9 +2267,9 @@ void qwarks_starfighter_update(Moby388 *moby) {
                 starfighter_vars->child110 = 0;
             } else if (child->cls_id != 0x160) {
                 starfighter_vars->child110 = 0;
-            } else if (child->state == 0xFE) {
+            } else if (child->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END) {
                 starfighter_vars->child110 = 0;
-            } else if (child->state == 0xFD) {
+            } else if (child->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 starfighter_vars->child110 = 0;
             } else if (child->state < 3) {
                 child->state = 3;
@@ -2273,9 +2277,9 @@ void qwarks_starfighter_update(Moby388 *moby) {
         }
     }
 
-    if (moby->state >= 2) {
+    if (moby->state >= STARFIGHTER_STATE_FOLLOW_INITIAL_PATH) {
         update_moby_joint_attachments(moby, starfighter_vars);
-        if (moby->state != 8 || scale_game_frames(0x78) < starfighter_vars->iF8) {
+        if (moby->state != STARFIGHTER_STATE_EXPLODE_AND_REMOVE || scale_game_frames(0x78) < starfighter_vars->iF8) {
             emit_gated_moby_joint_effects(moby, starfighter_vars);
         }
         if (starfighter_vars->snd114 != -1) {
@@ -2302,10 +2306,10 @@ void qwarks_starfighter_update(Moby388 *moby) {
 
     {
         Moby388 *owner = (Moby388 *)((char *)moby_base + (starfighter_vars->i134 << 8));
-        if (moby->state != 6) {
-            if (owner == 0 || owner->cls_id != 0x45 || owner->state == 0xFE ||
-                owner->state == 0xFD || owner->state == 7) {
-                moby->state = 6;
+        if (moby->state != STARFIGHTER_STATE_OWNER_UNAVAILABLE) {
+            if (owner == 0 || owner->cls_id != 0x45 || owner->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+                owner->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END || owner->state == 7) {
+                moby->state = STARFIGHTER_STATE_OWNER_UNAVAILABLE;
                 if (queue_starfighter_voice_line(
                         moby, starfighter_vars, D_L13_00161950 + 0x1D, 1) != 0) {
                     D_L13_00161950 = (D_L13_00161950 + 1) % 4;
@@ -2325,7 +2329,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
             starfighter_vars->b13A = 0;
         }
     } else {
-        if (moby->state != 6) {
+        if (moby->state != STARFIGHTER_STATE_OWNER_UNAVAILABLE) {
             char *hero = ((char *)&D_0013F350);
             if (*(int *)(hero + 0x2084) == 0x32) {
                 if (*(Moby388 **)(hero + 0x15F0) != 0 &&
@@ -2340,8 +2344,8 @@ void qwarks_starfighter_update(Moby388 *moby) {
     }
     fast_dec_timer_s16(&starfighter_vars->h144);
     fast_dec_timer_s16(&starfighter_vars->h146);
-    if (moby->state >= 2 && moby->state <= 5 && (((unsigned char *)D_0013E533)[0x242C] & 1)) {
-        moby->state = 9;
+    if (moby->state >= STARFIGHTER_STATE_FOLLOW_INITIAL_PATH && moby->state <= STARFIGHTER_STATE_TRACTOR_BEAM && (((unsigned char *)D_0013E533)[0x242C] & 1)) {
+        moby->state = STARFIGHTER_STATE_RESET;
     }
 }
 
