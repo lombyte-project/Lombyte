@@ -289,7 +289,7 @@ void oscillating_target_link_update(Moby *moby) {
         oscillating_target_link_state->f2308 = 0x17;
         oscillating_target_link_state->f230C = 0x22;
         oscillating_target_link_state->f2300 = 0;
-        moby->state = 1;
+        moby->state = TARGET_TRACKING_STATE_ACTIVE;
         break;
     case TARGET_TRACKING_STATE_ACTIVE:
         moby->rot.z =
