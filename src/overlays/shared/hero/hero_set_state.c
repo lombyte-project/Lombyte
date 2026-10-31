@@ -3697,7 +3697,7 @@ void update_hero_animation_for_movement_speed(void) {
         player->anim_speed = speed;
         if (speed < 0.7f)
             player->anim_speed = 0.7f;
-    } else if (mode == 1) {
+    } else if (mode == HERO_VEHICLE_MODE_CLANK) {
         float speed = player->motion.speed_xy * 90.0f;
         player->anim_speed = speed;
         if (speed < 0.5f)
