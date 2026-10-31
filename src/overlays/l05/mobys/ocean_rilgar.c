@@ -45,7 +45,7 @@ void ocean_rilgar_update(struct Moby *moby) {
     switch ((unsigned char)((char)moby->state)) {
     case OCEAN_RILGAR_INITIALIZE:
         prepare_scaled_table_with_byte_128(D_L05_00211B20, 1.0f);
-        moby->state = 1;
+        moby->state = OCEAN_RILGAR_UPDATE_BOBBING;
         ((unsigned char *)moby)[0x30] = 0xFF;
         break;
     case OCEAN_RILGAR_UPDATE_BOBBING:
