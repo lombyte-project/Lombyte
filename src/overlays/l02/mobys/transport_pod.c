@@ -110,7 +110,7 @@ void transport_pod_update(unsigned char *moby) {
         TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS = 15,
         TRANSPORT_POD_CYCLE_RAILS_TO_SPLIT_HEIGHTS = 16,
         TRANSPORT_POD_CYCLE_RAILS_TO_SHARED_LOWER_HEIGHT = 17
-    };
+    } ; enum { HERO_TARGET_POSE_STATUS_INACTIVE = 0 , HERO_TARGET_POSE_STATUS_READY = 2};
     Varsdc88 *transport_pod_vars = ((Varsdc88 *)MOBY(moby)->pvars);
     int       i;
     int      *path;
@@ -259,7 +259,7 @@ void transport_pod_update(unsigned char *moby) {
             MOBY(moby)->state = 3;
             allocate_voice_for_target_entry(1, 0, moby);
         } else if ((unsigned char *)hero.ground_moby == (struct Moby *)moby &&
-                   hero.air_frames.s == 0 && hero.vehicle_mode == 0) {
+                   hero.air_frames.s == 0 && hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             qcopy(&camera_target_or_hero_position_or_rotation, moby + 0x10);
             camera_target_or_hero_position_or_rotation.f[2] += 2.0f;
             if (MOBY(moby)->command == 0) {
@@ -321,11 +321,11 @@ void transport_pod_update(unsigned char *moby) {
         break;
     case TRANSPORT_POD_WAIT_FOR_RIDER_READY_FOR_DEPARTURE: {
         int rider_readiness_status = get_hero_target_pose_status();
-        if (rider_readiness_status == 2) {
+        if (rider_readiness_status == HERO_TARGET_POSE_STATUS_READY) {
             MOBY(moby)->state = 7;
             allocate_voice_for_target_entry(2, 0, moby);
             hero_set_state(0x72, 0);
-        } else if (rider_readiness_status == 0) {
+        } else if (rider_readiness_status == HERO_TARGET_POSE_STATUS_INACTIVE) {
             jet_end_mount(2);
             MOBY(moby)->state = 0xD;
         } else if (fast_dec_timer(&transport_pod_vars->ride_timer)) {
