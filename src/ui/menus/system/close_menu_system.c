@@ -8,6 +8,9 @@
 void close_menu_system(void) __asm__("FUN_002191b8");
 
 void close_menu_system(void) {
+    enum {
+        MENU_SYSTEM_STATE_FINALIZE_CLOSE = 20
+    };
     s32                i;
     s32                j;
     struct MenuScreen *screen;
@@ -28,7 +31,7 @@ void close_menu_system(void) {
     for (j = 0; j < 14; j++) {
         panel_slots[j] = (void *)delete_moby(panel_slots[j]);
     }
-    menu_system.state = 20;
+    menu_system.state = MENU_SYSTEM_STATE_FINALIZE_CLOSE;
     menu_system.timer = 2;
 }
 
