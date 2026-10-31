@@ -61,8 +61,11 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *position) {
 void maintain_emitter_sound_voice(struct Moby *moby) __asm__("FUN_L03_0029c9d0");
 
 void maintain_emitter_sound_voice(struct Moby *moby) {
+    enum {
+        RED_SHIP_INITIALIZE = 0
+    };
     char *emitter_pvars = (char *)moby->pvars;
-    if (moby->state == 0) {
+    if (moby->state == RED_SHIP_INITIALIZE) {
         *(int *)(emitter_pvars + 0x150) = -1;
         return;
     }
