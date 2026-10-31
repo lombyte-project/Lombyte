@@ -66,6 +66,9 @@ void mine_layer_mine_update(struct Moby *mine_moby) {
         MINE_DEBRIS_RANDOM_PALETTE_COLOR = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     MineBlast    blast = l03_mine_camera_blast_template;
     MineVec      vector_scratch;
     MineVars    *mine_vars = (MineVars *)mine_moby->pvars;
@@ -106,7 +109,7 @@ void mine_layer_mine_update(struct Moby *mine_moby) {
     case MINE_ARM_AND_MONITOR_PROXIMITY:
         fast_dec_timer(&mine_vars->timer);
         target_moby = mine_vars->target;
-        if (target_moby != 0 && target_moby->state != 0xFE && target_moby->state != 0xFD &&
+        if (target_moby != 0 && target_moby->state != MOBY_STATE_MARKED_FOR_REMOVAL && target_moby->state != 0xFD &&
             vector_distance_xy(&mine_moby->pos, &target_moby->pos) < 3.0f &&
             mine_vars->timer == 0) {
             mine_moby->state = MINE_HOME_ON_TARGET;
