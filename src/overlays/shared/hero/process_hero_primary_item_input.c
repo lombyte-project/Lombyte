@@ -683,6 +683,9 @@ int process_hero_primary_item_input(void) {
         ITEM_AMMO_MENU_DEVICE = 32,
         ITEM_RACE_PROJECTILE = 36
     };
+    enum {
+        WRENCH_MOBY_STATE_READY = 0
+    };
     float joint_pos[4];
     int   press_time0, press_time1, press_time2;
     int   start_timer;
@@ -725,7 +728,7 @@ int process_hero_primary_item_input(void) {
             if (!is_wrench_moby(item)) {
                 break;
             }
-            if (item->state != 0) {
+            if (item->state != WRENCH_MOBY_STATE_READY) {
                 break;
             }
             if ((controller_state.held & 0xA) ||
