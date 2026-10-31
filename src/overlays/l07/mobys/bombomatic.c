@@ -23,7 +23,7 @@ char *spawn_bombomatic_projectile(char *spawn_position,
                                   short burst_index) __asm__("FUN_L07_0030ba90");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
-extern char D_L07_00166E40[];
+extern char debris_far_point[] __asm__("D_L07_00166E40");
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int  resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int);
@@ -222,7 +222,7 @@ void bombomatic_update(char *moby) {
     }
     moby_data = (BombomaticVars *)MOBY(moby)->pvars;
     if (((unsigned char *)moby)[0x31] != 0) {
-        if (fast_vec_dist(moby + 0x10, D_L07_00166E40) < 27.0f) {
+        if (fast_vec_dist(moby + 0x10, debris_far_point) < 27.0f) {
             FUN_L00_0025a120(moby);
             MOBY(moby)->shadow_range = 0x15;
         }
@@ -364,9 +364,9 @@ eb20:
         if (fast_dec_timer_s16(&moby_data->timer_B8) != 0) {
             moby_data->timer_B8 = scale_game_frames(7);
             if (((unsigned char *)moby)[0x31] == 0) {
-                if (!(vector_distance_xy(moby + 0x10, D_L07_00166E40) < 90.0f &&
+                if (!(vector_distance_xy(moby + 0x10, debris_far_point) < 90.0f &&
                       (moby_data->unkC4 & 1) != 0)) {
-                    if (!(vector_distance_xy(moby + 0x10, D_L07_00166E40) < 40.0f)) {
+                    if (!(vector_distance_xy(moby + 0x10, debris_far_point) < 40.0f)) {
                         goto eeE4;
                     }
                 }
