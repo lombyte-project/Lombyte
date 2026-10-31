@@ -54,6 +54,10 @@ s32        sceSifCallRpc(struct SifRpcClient *client,
                          s32                  end_func,
 
                          s32 end_data) {
+    enum {
+        RPC_COMPLETION_DISABLED = 0,
+        RPC_COMPLETION_ENABLED = 1
+    };
     s32                  semaphore_parameters[6];
     struct SifRpcPacket *packet;
     s32                  semaphore_id;
@@ -92,9 +96,9 @@ s32        sceSifCallRpc(struct SifRpcClient *client,
     }
     if (mode & 1) {
         if (end_func == 0) {
-            packet->completion_mode = 0;
+            packet->completion_mode = RPC_COMPLETION_DISABLED;
         } else {
-            packet->completion_mode = 1;
+            packet->completion_mode = RPC_COMPLETION_ENABLED;
         }
         client->semaphore_id = -1;
         if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) !=
@@ -113,7 +117,7 @@ s32        sceSifCallRpc(struct SifRpcClient *client,
             free_rpc_packet(packet);
             return -3;
         }
-        packet->completion_mode = 1;
+        packet->completion_mode = RPC_COMPLETION_ENABLED;
         if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) ==
             0) {
             DeleteSema(client->semaphore_id);
