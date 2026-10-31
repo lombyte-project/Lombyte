@@ -345,30 +345,30 @@ void path_sample_at_distance(PointPath *path,
                              f32        spacing) __asm__("FUN_L00_00262360");
 void path_sample_at_distance(
 
-    PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) {
-    Vec4 tmp;
+    PointPath *path, s32 *seg_out, f32 *along, Vec4 *sampled_position, f32 path_distance, f32 spacing) {
+    Vec4 sampling_intermediate;
     s32  seg;
 
-    seg = truncate_float_to_s32(dist / spacing);
+    seg = truncate_float_to_s32(path_distance / spacing);
     *seg_out = seg;
     if (seg >= path->count - 1) {
         *seg_out = path->count - 1;
         *along = 0.0f;
-        out->q = (path->points + *seg_out)->q;
+        sampled_position->q = (path->points + *seg_out)->q;
         return;
     }
     if (seg < 0) {
         *seg_out = 0;
         *along = 0.0f;
-        out->q = (path->points + *seg_out)->q;
+        sampled_position->q = (path->points + *seg_out)->q;
         return;
     }
-    *along = dist - convert_integer_to_float(seg) * spacing;
-    fast_vec_sub(&tmp, &path->points[*seg_out + 1], &path->points[*seg_out]);
-    out->q = tmp.q;
-    fast_vec_normalize(out, out, *along);
-    fast_vec_add(&tmp, out, &path->points[*seg_out]);
-    out->q = tmp.q;
+    *along = path_distance - convert_integer_to_float(seg) * spacing;
+    fast_vec_sub(&sampling_intermediate, &path->points[*seg_out + 1], &path->points[*seg_out]);
+    sampled_position->q = sampling_intermediate.q;
+    fast_vec_normalize(sampled_position, sampled_position, *along);
+    fast_vec_add(&sampling_intermediate, sampled_position, &path->points[*seg_out]);
+    sampled_position->q = sampling_intermediate.q;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
