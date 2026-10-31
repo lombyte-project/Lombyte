@@ -63,10 +63,10 @@ extern void      draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30")
 /* Shared level 15/17 moby update (class 77): steers the moby toward its target and runs its state machine. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3668), where it is exact; names translated to the US level program. */
 
-void update_hero_seeking_group_moby(char *moby) __asm__("FUN_L15_002a2488");
+void hero_seeking_group_moby_update(char *moby) __asm__("FUN_L15_002a2488");
 
 /* Moby class 77 */
-void update_hero_seeking_group_moby(char *moby) {
+void hero_seeking_group_moby_update(char *moby) {
     float         va[4];
     float         pb[4];
     char         *group_moby_data;

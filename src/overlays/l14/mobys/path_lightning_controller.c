@@ -57,10 +57,10 @@ extern void update_branched_lightning_arc(char *) __asm__("FUN_L14_002ed530");
 
 extern float D_L14_00161CD0_f __asm__("D_L14_00161CD0");
 
-void update_path_lightning_controller(struct Moby *moby) __asm__("FUN_L14_002ed280");
+void path_lightning_controller_update(struct Moby *moby) __asm__("FUN_L14_002ed280");
 
 /* Moby class 684 */
-void update_path_lightning_controller(struct Moby *moby) {
+void path_lightning_controller_update(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int   visible_path_point_indices[5];
     float visibility_test_point[4];

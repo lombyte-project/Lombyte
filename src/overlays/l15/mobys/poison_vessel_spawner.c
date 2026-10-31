@@ -8,10 +8,10 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 
 extern short poison_vessel_spawn_interval __asm__("D_L15_0016207C");
 
-void update_poison_vessel_spawner(struct Moby *moby) __asm__("FUN_L15_002eabd8");
+void poison_vessel_spawner_update(struct Moby *moby) __asm__("FUN_L15_002eabd8");
 
 /* Moby class 1394 */
-void update_poison_vessel_spawner(struct Moby *moby) {
+void poison_vessel_spawner_update(struct Moby *moby) {
     enum {
         INITIALIZE_SPAWN_TIMER = 0,
         WAIT_FOR_SPAWN_TIMER = 1

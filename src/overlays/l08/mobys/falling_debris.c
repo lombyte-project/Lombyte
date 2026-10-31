@@ -46,19 +46,19 @@ extern int l08_falling_debris_burst_initial_particle_word __asm__("D_L08_00161C0
 extern int l08_falling_debris_burst_second_particle_word __asm__("D_L08_00161C08")
     __attribute__((sda));
 
-#include "rnc/overlay/l08/mobys/falling_debris_data/update_falling_debris.h"
+#include "rnc/overlay/l08/mobys/falling_debris_data/falling_debris_update.h"
 
 extern int  spawn_spark() __asm__("FUN_00218888");
 extern void func_L00_0026B890_2E2A38(
     void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
-void update_falling_debris(Moby_2E2A38 *debris_moby) __asm__("FUN_L08_002e16c0");
+void falling_debris_update(Moby_2E2A38 *debris_moby) __asm__("FUN_L08_002e16c0");
 
 Pair_2E2A38 D_L08_00161C30 = {
     {0x2f000000, 0x3f000000}
 };
 
 /* Moby classes 441-443, 445, 448-451, 464, 465 */
-void update_falling_debris(Moby_2E2A38 *debris_moby) {
+void falling_debris_update(Moby_2E2A38 *debris_moby) {
     enum {
         FALLING_DEBRIS_INITIALIZE = 1,
         FALLING_DEBRIS_BEFORE_BURST = 2,

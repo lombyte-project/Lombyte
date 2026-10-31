@@ -69,10 +69,10 @@ extern unsigned char l15_rocket_detonation_glow_blue __asm__("D_L15_0016146C") _
 
 /* Flies the moby along its velocity, spinning; it dies with a sound when it hits something or times out. */
 
-void update_blarg_elite_commando_rocket(unsigned char *m) __asm__("FUN_L15_0029ac30");
+void blarg_elite_commando_rocket_update(unsigned char *m) __asm__("FUN_L15_0029ac30");
 
 /* Moby class 49 */
-void update_blarg_elite_commando_rocket(unsigned char *moby) {
+void blarg_elite_commando_rocket_update(unsigned char *moby) {
     char *rocket_data = ((char *)MOBY(moby)->pvars);
     float rocket_next_position[4];
     float back[4];

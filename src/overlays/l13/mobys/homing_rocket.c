@@ -159,12 +159,12 @@ extern void func_L00_0025F4A8_alt(void *,
                                   int,
                                   int) __asm__("FUN_L00_0025e450");
 
-void update_level_13_homing_rocket(ProjectileMoby *rocket_moby) __asm__("FUN_L13_002c1528");
+void level_13_homing_rocket_update(ProjectileMoby *rocket_moby) __asm__("FUN_L13_002c1528");
 
-void update_level_13_homing_rocket(ProjectileMoby *m) __asm__("FUN_L13_002c1528");
+void level_13_homing_rocket_update(ProjectileMoby *m) __asm__("FUN_L13_002c1528");
 
 /* Moby class 82 */
-void update_level_13_homing_rocket(ProjectileMoby *rocket_moby) {
+void level_13_homing_rocket_update(ProjectileMoby *rocket_moby) {
     Rocket        *rocket_data = rocket_moby->data;
     ProjectileVec4 previous_rocket_position;
     ProjectileVec4 hitpos;

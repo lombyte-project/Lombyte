@@ -63,10 +63,10 @@ extern void create_spark_particle(void *,
                                   u8,
                                   u8) __asm__("FUN_L01_0027e900");
 
-void update_spark_particle_emitter(EmitterMoby *self) __asm__("FUN_L01_002bd100");
+void spark_particle_emitter_update(EmitterMoby *self) __asm__("FUN_L01_002bd100");
 
 /* Moby class 27 */
-void update_spark_particle_emitter(EmitterMoby *emitter_moby) {
+void spark_particle_emitter_update(EmitterMoby *emitter_moby) {
     Emitter *emitter_vars;
     EmitVec  rotated_particle_velocity;
     EmitVec  position_scratch;

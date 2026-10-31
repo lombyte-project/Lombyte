@@ -1,4 +1,4 @@
-/* Level 06 timer display: draws the level timer as "H:MM:SS.t" text with a pulsing colour (for update_countdown_sequence). */
+/* Level 06 timer display: draws the level timer as "H:MM:SS.t" text with a pulsing colour (for countdown_sequence_update). */
 #include "types.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"

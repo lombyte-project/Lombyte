@@ -15,10 +15,10 @@
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
-void update_pokitaru_paired_rotation(struct Moby *moby) __asm__("FUN_L11_002cb810");
+void pokitaru_paired_rotation_update(struct Moby *moby) __asm__("FUN_L11_002cb810");
 
 /* Moby class 65 */
-void update_pokitaru_paired_rotation(struct Moby *moby) {
+void pokitaru_paired_rotation_update(struct Moby *moby) {
     enum {
         ROTATION_INITIALIZE = 0,
         ROTATION_WAIT_FOR_TRIGGER = 1,

@@ -106,10 +106,10 @@ void draw_level16_visible_single_reflection_mesh(void) {
 
 extern void draw_level16_visible_single_reflection_mesh(void) __asm__("FUN_L16_002e9270");
 
-void update_reflection_mesh(struct Moby *moby) __asm__("FUN_L16_002e93b0");
+void reflection_mesh_update(struct Moby *moby) __asm__("FUN_L16_002e93b0");
 
 /* Moby class 1947 */
-void update_reflection_mesh(struct Moby *moby) {
+void reflection_mesh_update(struct Moby *moby) {
     enum {
         SINGLE_MESH_RENDER_INITIALIZE_BOUNDING_SPHERE = 0,
         SINGLE_MESH_RENDER_QUEUE_CALLBACK = 1

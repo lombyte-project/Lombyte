@@ -70,13 +70,13 @@ extern int   hero_inside_conditional_help_volume __asm__("D_L10_00161F38") __att
 extern unsigned char l10_help_message_2710_gate[] __asm__("D_00141B10");
 extern unsigned char l10_help_message_2711_gate[] __asm__("D_00141B18");
 extern unsigned char l10_help_message_2717_gate[] __asm__("D_00141CB8");
-void                 update_help_hints(Moby *moby) __asm__("FUN_L10_002e85b8");
+void                 help_hints_update(Moby *moby) __asm__("FUN_L10_002e85b8");
 /* no foreign declaration */
 
 /* no foreign declaration */
 
 /* Moby class 1344 */
-void update_help_hints(Moby *moby) {
+void help_hints_update(Moby *moby) {
     enum {
         HELP_MESSAGE_STATE_INITIALIZE = 0,
         HELP_MESSAGE_STATE_CHECK_CONDITIONS = 1

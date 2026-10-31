@@ -29,7 +29,7 @@ extern char *ring_hit_candidate_list_head __asm__("D_L07_0015FFE4");
 extern int   FUN_L07_0030e0e0_c() __asm__("FUN_L07_0030e0e0");
 extern void  draw_fading_ring_effect(struct Moby *) __asm__("FUN_L07_0030dcf0");
 void         mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
-void         update_fading_ring_effect(unsigned char *moby) __asm__("FUN_L07_0030e1f8");
+void         fading_ring_effect_update(unsigned char *moby) __asm__("FUN_L07_0030e1f8");
 
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
@@ -212,7 +212,7 @@ void register_fading_ring_hit(char *affected_moby, char *effect_moby, char *effe
 }
 
 /* Moby class 1046 */
-void update_fading_ring_effect(unsigned char *moby) {
+void fading_ring_effect_update(unsigned char *moby) {
     char *moby_data = ((char *)MOBY(moby)->pvars);
     float radius_progress;
     char *affected_moby;

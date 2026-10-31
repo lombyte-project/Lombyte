@@ -81,10 +81,10 @@ extern f32  approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00
 /* Rail taxi: waits at its stop until the hero enters a route's trigger volume,
    flies the outbound path, lets the hero off, flies back (or onward) and returns
    to waiting. With the debug flag set it draws its first route's paths. */
-void update_rail_taxi(struct Moby *taxi_moby) __asm__("FUN_L03_002d3198");
+void rail_taxi_update(struct Moby *taxi_moby) __asm__("FUN_L03_002d3198");
 
 /* Moby class 816 */
-void update_rail_taxi(struct Moby *taxi_moby) {
+void rail_taxi_update(struct Moby *taxi_moby) {
     enum {
         TAXI_INITIALIZE = 0,
         TAXI_WAIT_FOR_ROUTE_TRIGGER = 1,

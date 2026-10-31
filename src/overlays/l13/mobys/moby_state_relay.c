@@ -10,10 +10,10 @@ extern int debug_print_alt_q() __asm__("FUN_001e93b0");
 
 extern char D_L13_001F51B0[] NOT_SDA;
 
-void update_moby_state_relay(struct Moby *moby) __asm__("FUN_L13_002f8880");
+void moby_state_relay_update(struct Moby *moby) __asm__("FUN_L13_002f8880");
 
 /* Moby class 667 */
-void update_moby_state_relay(struct Moby *moby) {
+void moby_state_relay_update(struct Moby *moby) {
     enum {
         STATE_RELAY_INITIALIZE = 0,
         STATE_RELAY_WAIT_FOR_SECOND_STATE_SET = 1,

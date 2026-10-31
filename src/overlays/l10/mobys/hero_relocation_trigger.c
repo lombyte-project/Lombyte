@@ -55,12 +55,12 @@ extern void  exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 
 extern short D_00141948 NOT_SDA;
 /* Level 10 pickup: saves its collected bit, flips the linked switch pair and moves the hero to the spot for the current state. */
-void update_hero_relocation_trigger(struct Moby *moby) __asm__("FUN_L10_00298b68");
+void hero_relocation_trigger_update(struct Moby *moby) __asm__("FUN_L10_00298b68");
 
 #include "sda.h"
 
 /* Moby class 22 */
-void update_hero_relocation_trigger(struct Moby *moby) {
+void hero_relocation_trigger_update(struct Moby *moby) {
     PickupVars  *relocation_trigger_vars;
     struct Moby *target;
     moby->update_dist = 0xFF;

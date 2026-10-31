@@ -50,7 +50,7 @@ extern PointLight l08_point_light_slots[] __asm__("D_L08_00180AC0");
 /* Builds the animated grid, draws its quads, and updates attached effects. */
 /* Ported from rac1-decomp (nonmatching/l08_batalia/func_L08_002F7318.c: func_L08_002F7318). */
 
-/* Flickering mesh / point light pvars, 0x160 bytes (update_flickering_mesh_effect
+/* Flickering mesh / point light pvars, 0x160 bytes (flickering_mesh_effect_update
    initialises the ring and the light slot, draw_flickering_mesh_effect draws). */
 typedef struct {
     f32  size_x;  /* 0x00: quad width; the larger of size_x/size_y sets the draw scale */
@@ -622,10 +622,10 @@ extern char flickering_mesh_texture_width_tile_limit_warning[] __asm__("D_L08_00
 extern s32  DebugPrint();
 extern int  allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
-void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
+void flickering_mesh_effect_update(struct Moby *moby) __asm__("FUN_L08_002f70a0");
 
 /* Moby class 671 */
-void update_flickering_mesh_effect(struct Moby *moby) {
+void flickering_mesh_effect_update(struct Moby *moby) {
     FlickerLightVars *light_vars;
     Vec4              pos;
     f32               view, draw_fade_distance, fade;

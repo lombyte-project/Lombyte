@@ -92,10 +92,10 @@ int D_L16_0015F404 = 0;
 int D_L17_0015F404 = 0;
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002F7E08), where it is exact; names translated to the US level program. */
-void update_explosive_projectile(struct Moby *moby) __asm__("FUN_L01_002f6a30");
+void explosive_projectile_update(struct Moby *moby) __asm__("FUN_L01_002f6a30");
 
 /* Moby class 686 */
-void update_explosive_projectile(struct Moby *moby) {
+void explosive_projectile_update(struct Moby *moby) {
     Vec_2F7E08 old_pos;
     Vec_2F7E08 smoke_pos;
     Data      *projectile_vars;

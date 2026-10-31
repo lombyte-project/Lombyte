@@ -45,10 +45,10 @@ extern struct Moby         *D_L03_0015FFE4;
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 
 /* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
-void update_help_hints(struct Moby *moby) __asm__("FUN_L03_002df520");
+void help_hints_update(struct Moby *moby) __asm__("FUN_L03_002df520");
 
 /* Moby class 1342 */
-void update_help_hints(struct Moby *moby) {
+void help_hints_update(struct Moby *moby) {
     enum {
         TUTORIAL_HINTS_INITIALIZE = 0,
         TUTORIAL_HINTS_UPDATE = 1

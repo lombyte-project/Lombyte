@@ -19,10 +19,10 @@ extern char D_00141968[];
 
 extern char statistics_level_flags[] __asm__("D_00141CE4");
 
-void update_help_hints(struct Moby *moby) __asm__("FUN_L13_002f3778");
+void help_hints_update(struct Moby *moby) __asm__("FUN_L13_002f3778");
 
 /* Moby class 558 */
-void update_help_hints(struct Moby *moby) {
+void help_hints_update(struct Moby *moby) {
     char          *linked_moby_volume_config;
     unsigned char *menu_item_enable_base;
     moby->update_dist = 0xFF;

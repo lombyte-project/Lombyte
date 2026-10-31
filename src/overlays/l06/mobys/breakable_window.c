@@ -43,10 +43,10 @@ extern int   D_L06_0015F408;
 extern float camera_sequence_moby_scale_multiplier_gp __asm__("D_L06_00162048")
     __attribute__((sda));
 
-#include "rnc/overlay/l06/mobys/breakable_window_data/update_breakable_window.h"
+#include "rnc/overlay/l06/mobys/breakable_window_data/breakable_window_update.h"
 
 extern float camera_sequence_rotation_x_degrees_gp __asm__("D_L06_00162050") __attribute__((sda));
-void         update_breakable_window(char *moby) __asm__("FUN_L06_002ffcb0");
+void         breakable_window_update(char *moby) __asm__("FUN_L06_002ffcb0");
 extern void  update_entity(char *) __asm__("FUN_L00_00250df8");
 extern unsigned char              *
 spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
@@ -563,7 +563,7 @@ short l06_second_backdrop_mesh_quad_corner_indices[96][4][2] __asm__("D_L06_001F
 extern char D_0013F3D0[] NOT_SDA;
 
 /* Moby class 1083 */
-void update_breakable_window(char *moby) {
+void breakable_window_update(char *moby) {
     enum {
         INITIALIZE_DRAW_SELECTION = 0,
         WAIT_FOR_LINKED_MOBY_TRIGGER = 1,

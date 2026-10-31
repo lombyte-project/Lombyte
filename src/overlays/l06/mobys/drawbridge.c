@@ -88,7 +88,7 @@ extern void  release_voice_slot(int) __asm__("FUN_0022d798");
 extern void  enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int   help_request(int, int) __asm__("FUN_L00_00203908");
 extern void  queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-void         update_drawbridge(Moby *moby) __asm__("FUN_L06_002f55a0");
+void         drawbridge_update(Moby *moby) __asm__("FUN_L06_002f55a0");
 
 /* Blarg drawbridge pieces: places and rotates the 20 + 10 chained segment mobys. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F71A8), where it is exact; names translated to the US level program. */
@@ -122,7 +122,7 @@ float drawbridge_pitch_degrees_gp __asm__("D_L06_00161D7C") = 0;
 float drawbridge_yaw_degrees_gp __asm__("D_L06_00161D80") = 0;
 
 /* Moby class 1028 */
-void update_drawbridge(Moby *moby) {
+void drawbridge_update(Moby *moby) {
     enum {
         INITIALIZE_DRAWBRIDGE_SEGMENTS = 0,
         WAIT_FOR_DRAWBRIDGE_ACTIVATION = 1,

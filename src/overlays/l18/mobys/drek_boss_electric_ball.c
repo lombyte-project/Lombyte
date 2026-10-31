@@ -41,16 +41,16 @@ void        FUN_L18_002ea598_c(char *moby) __asm__("FUN_L18_002ea598");
 extern void
 spark_s(int, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
-#include "rnc/overlay/l18/mobys/drek_boss_electric_ball_data/update_moby_target_travel_and_electric_effects.h"
+#include "rnc/overlay/l18/mobys/drek_boss_electric_ball_data/moby_target_travel_and_electric_effects_update.h"
 
 #include "rnc/overlay/l18/mobys/drek_boss_electric_ball_globals.h"
 
 extern float electric_arc_endpoint_radius_scale_gp __asm__("D_L18_00161ED8") __attribute__((sda));
 extern float target_travel_speed_gp __asm__("D_L18_00161EE0") __attribute__((sda));
-void update_moby_target_travel_and_electric_effects(struct Moby *moby) __asm__("FUN_L18_002e9e70");
+void moby_target_travel_and_electric_effects_update(struct Moby *moby) __asm__("FUN_L18_002e9e70");
 
 /* Moby class 983 */
-void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
+void moby_target_travel_and_electric_effects_update(struct Moby *moby) {
     enum {
         STATE_TIMED_REMOVAL_WAIT = 0,
         STATE_TRAVEL_TO_TARGET = 1

@@ -30,10 +30,10 @@ f32 swinging_door_swing_angle_degrees_gp __asm__("D_L15_001614FC") = -35.0f;
 
 f32 swinging_door_swing_duration_gp __asm__("D_L15_00161500") = 0.2f;
 
-void update_swinging_door(struct Moby *moby) __asm__("FUN_L15_002a3ba8");
+void swinging_door_update(struct Moby *moby) __asm__("FUN_L15_002a3ba8");
 
 /* Moby class 93 */
-void update_swinging_door(struct Moby *moby) {
+void swinging_door_update(struct Moby *moby) {
     enum {
         SWINGING_DOOR_INITIALIZE = 0,
         SWINGING_DOOR_CLOSED = 1,

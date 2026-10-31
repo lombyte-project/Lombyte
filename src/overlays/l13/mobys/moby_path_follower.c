@@ -15,10 +15,10 @@ extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float,
 
 extern int compute_advanced_moby_path_position(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
 
-void update_moby_path_follower(struct Moby *moby) __asm__("FUN_L13_0030bb70");
+void moby_path_follower_update(struct Moby *moby) __asm__("FUN_L13_0030bb70");
 
 /* Moby class 1403 */
-void update_moby_path_follower(struct Moby *moby) {
+void moby_path_follower_update(struct Moby *moby) {
     int  *moby_vars = (int *)moby->pvars;
     char *path;
     char *pth;

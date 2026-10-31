@@ -8,12 +8,12 @@ extern short D_L05_0015FFD8 __asm__("D_L05_0015FFD8");
 extern float
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 
-void         update_triggered_moby_yaw(struct Moby *moby) __asm__("FUN_L05_003166a0");
+void         triggered_moby_yaw_update(struct Moby *moby) __asm__("FUN_L05_003166a0");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 
 /* Moby class 895 */
-void update_triggered_moby_yaw(struct Moby *moby) {
+void triggered_moby_yaw_update(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE_YAW = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,

@@ -59,10 +59,10 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
 
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 
-void update_path_mover(struct Moby *moby) __asm__("FUN_L14_002aba80");
+void path_mover_update(struct Moby *moby) __asm__("FUN_L14_002aba80");
 
 /* Moby class 903 */
-void update_path_mover(struct Moby *moby) {
+void path_mover_update(struct Moby *moby) {
     enum {
         PATH_MOVER_COMMAND_WAIT_AT_LAST_POINT = 0,
         PATH_MOVER_COMMAND_WAIT_AT_FIRST_POINT = 1,

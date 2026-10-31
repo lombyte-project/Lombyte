@@ -52,7 +52,7 @@ typedef struct EffectRecord {
     int   state;
 } EffectRecord;
 
-void update_bomber_tank_bomb(struct Moby *moby) __asm__("FUN_L08_002dc9a8");
+void bomber_tank_bomb_update(struct Moby *moby) __asm__("FUN_L08_002dc9a8");
 
 extern char *create_moby(int);
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
@@ -87,7 +87,7 @@ char *spawn_bomber_tank_bomb(char *source_moby, char *spawn_position, char *init
 }
 
 /* Moby class 425 */
-void update_bomber_tank_bomb(struct Moby *moby) {
+void bomber_tank_bomb_update(struct Moby *moby) {
     enum {
         PROJECTILE_STATE_FLYING = 1,
         PROJECTILE_STATE_DETONATE = 99

@@ -14,10 +14,10 @@ extern short vertical_effect_motion_scale_gp __asm__("D_L15_00162198") __attribu
 
 int D_L15_0016219C = 3;
 
-void update_puff_emitter(struct Moby *moby) __asm__("FUN_L15_002eb928");
+void puff_emitter_update(struct Moby *moby) __asm__("FUN_L15_002eb928");
 
 /* Moby class 1425 */
-void update_puff_emitter(struct Moby *moby) {
+void puff_emitter_update(struct Moby *moby) {
     float  vertical_motion_vector[4];
     float *effect_height_setting = (float *)moby->pvars;
     if (random_integer_below(D_L15_0016219C - 1) == 0) {

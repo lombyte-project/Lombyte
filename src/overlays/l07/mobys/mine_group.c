@@ -95,7 +95,7 @@ typedef struct {
     int  next_segment;
 } MineSegmentView;
 
-void        update_mine_group(struct Moby *moby) __asm__("FUN_L07_0030b000");
+void        mine_group_update(struct Moby *moby) __asm__("FUN_L07_0030b000");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -183,7 +183,7 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
 }
 
 /* Moby class 871 */
-void update_mine_group(struct Moby *moby) {
+void mine_group_update(struct Moby *moby) {
     enum {
         INITIALIZE_PATH_CHILDREN = 0x0,
         ADVANCE_PATH_CHILDREN = 0x1

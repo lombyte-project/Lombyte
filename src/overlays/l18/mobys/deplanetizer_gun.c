@@ -26,10 +26,10 @@ typedef struct {
     float          f40;
 } DeplanetizerGunSceneMoby;
 
-void update_moby_scene_visibility_and_height_reflection(DeplanetizerGunSceneMoby *moby) __asm__("FUN_L18_002f7ad8");
+void moby_scene_visibility_and_height_reflection_update(DeplanetizerGunSceneMoby *moby) __asm__("FUN_L18_002f7ad8");
 
 /* Moby classes 1434, 1435 */
-void update_moby_scene_visibility_and_height_reflection(DeplanetizerGunSceneMoby *moby) {
+void moby_scene_visibility_and_height_reflection_update(DeplanetizerGunSceneMoby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_WAIT_FOR_SCENE_TRIGGER = 1,

@@ -94,14 +94,14 @@ typedef struct {
 
 extern CollisionHit coll_hit_1638 __asm__("D_L13_00174140");
 
-void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
+void attached_rocket_update(struct Moby *moby) __asm__("FUN_L13_00305a58");
 
 void spawn_attached_rocket_non_damaging_explosion(struct Moby *moby) __asm__("FUN_L13_00306148");
 
 void spawn_attached_rocket_explosion(struct Moby *moby) __asm__("FUN_L13_003060b8");
 
 /* Moby class 1233 */
-void update_attached_rocket(struct Moby *moby) {
+void attached_rocket_update(struct Moby *moby) {
     char        *attached_rocket_vars = (char *)moby->pvars;
     struct Moby *source;
     struct Moby *target;

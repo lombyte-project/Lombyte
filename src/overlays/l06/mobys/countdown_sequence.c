@@ -68,7 +68,7 @@ extern int   hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void  FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
 extern void  draw_pulsing_timer_display(char *) __asm__("FUN_L06_003021d8");
 extern void  allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
-void         update_countdown_sequence(unsigned char *moby) __asm__("FUN_L06_00301b90");
+void         countdown_sequence_update(unsigned char *moby) __asm__("FUN_L06_00301b90");
 
 struct TauntVoiceVars {
     u8  pad0[0x38];
@@ -168,7 +168,7 @@ void set_moby_list_state_17(int moby_list_index) {
 }
 
 /* Moby class 1108 */
-void update_countdown_sequence(unsigned char *moby) {
+void countdown_sequence_update(unsigned char *moby) {
     enum {
         INITIALIZE_ENTITY = 0,
         TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE = 1,

@@ -144,10 +144,10 @@ extern void
 spawn_nearby_effect(float, int, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
 extern void trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
-void update_blarg_ship_rocket(char *m) __asm__("FUN_L10_002cc2e8");
+void blarg_ship_rocket_update(char *m) __asm__("FUN_L10_002cc2e8");
 
 /* Moby class 819 */
-void update_blarg_ship_rocket(char *rocket) {
+void blarg_ship_rocket_update(char *rocket) {
     enum {
         ROCKET_STATE_FLYING = 1,
         ROCKET_STATE_BURST = 2

@@ -267,10 +267,10 @@ void reset_listed_plasmabot_beam_cooldowns(int idx) __asm__("FUN_L14_002b3890");
                int))FUN_L00_0025e450_c)
 #define call_D678 ((void (*)(char *))mark_moby_for_removal)
 
-void update_plasmabot(char *moby) __asm__("FUN_L14_002b17d8");
+void plasmabot_update(char *moby) __asm__("FUN_L14_002b17d8");
 
 /* Moby class 28 */
-void update_plasmabot(char *moby) {
+void plasmabot_update(char *moby) {
     enum {
         PLASMABOT_INITIALIZE = 0,
         PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL = 1,

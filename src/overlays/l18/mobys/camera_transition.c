@@ -39,10 +39,10 @@ extern void  FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 
 extern int                D_L18_00179E10[] NOT_SDA;
 extern int D_L18_0017EF08 NOT_SDA;
-void                      update_camera_transition(struct Moby *moby) __asm__("FUN_L18_002df608");
+void boss_camera_transition_update(struct Moby *moby) __asm__("FUN_L18_002df608");
 
 /* Moby class 644 */
-void update_camera_transition(struct Moby *moby) {
+void boss_camera_transition_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_PRE_TRANSITION_RAMP_UP = 2,

@@ -178,10 +178,10 @@ char *find_group_chicken_in_state_6(int idx) __asm__("FUN_L16_002e8b08");
 f32   probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 s32   is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-void update_chicken_relocator(struct Moby *moby) __asm__("FUN_L16_002e8970");
+void chicken_relocator_update(struct Moby *moby) __asm__("FUN_L16_002e8970");
 
 /* Moby class 1923 */
-void update_chicken_relocator(struct Moby *moby) {
+void chicken_relocator_update(struct Moby *moby) {
     enum {
         TARGET_CYCLE_INITIALIZE_DELAY = 0,
         TARGET_CYCLE_WAIT_TO_TRIGGER = 1,

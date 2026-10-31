@@ -58,10 +58,10 @@ int        spark_spray_lookup_index_and_flags __asm__("D_L06_0016237C") =
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
-void update_spark_emitter(struct Moby *emitter) __asm__("FUN_L06_00308c68");
+void spark_emitter_update(struct Moby *emitter) __asm__("FUN_L06_00308c68");
 
 /* Moby class 1512 */
-void update_spark_emitter(struct Moby *emitter) {
+void spark_emitter_update(struct Moby *emitter) {
     enum {
         SPARK_EMITTER_INITIALIZE = 0,
         SPARK_EMITTER_DELAYED_ACTION = 2,

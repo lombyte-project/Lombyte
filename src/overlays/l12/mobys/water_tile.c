@@ -52,7 +52,7 @@ extern void register_callback_c(void *, void *) __asm__("FUN_L12_0021be50");
 void        copy_moby_z_to_group_records(struct Moby *moby) __asm__("FUN_L12_002bf6d0");
 void        render_level_12_water_grids(void) __asm__("FUN_L12_002bf748");
 
-void                update_level_12_water_tile(struct Moby *moby) __asm__("FUN_L12_002bf140");
+void                level_12_water_tile_update(struct Moby *moby) __asm__("FUN_L12_002bf140");
 extern int          random_integer_below(int);
 typedef struct Moby Moby;
 
@@ -61,7 +61,7 @@ typedef struct Moby Moby;
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
 /* Moby class 19 */
-void update_level_12_water_tile(struct Moby *moby) {
+void level_12_water_tile_update(struct Moby *moby) {
     enum {
         SLOT_INITIALIZE = 0,
         SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT = 1,

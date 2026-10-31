@@ -27,10 +27,10 @@ typedef struct {
     u128       mtx[4];
 } SmokeMoby;
 
-void update_smoke_emitter(SmokeMoby *self) __asm__("FUN_L01_002ffb28");
+void smoke_emitter_update(SmokeMoby *self) __asm__("FUN_L01_002ffb28");
 
 /* Moby class 779 */
-void update_smoke_emitter(SmokeMoby *smoke_emitter_moby) {
+void smoke_emitter_update(SmokeMoby *smoke_emitter_moby) {
     SmokeVars *smoke_vars;
     Vec4       pos;
     Vec4       particle_velocity;

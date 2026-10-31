@@ -33,13 +33,13 @@ typedef struct {
 
 /* Slides out from its origin once its linked moby reaches one state and back when it reaches
    another; a level flag is set while it is out. */
-void update_linked_state_sliding_platform(struct Moby *moby) __asm__("FUN_L07_0030cf90");
+void linked_state_sliding_platform_update(struct Moby *moby) __asm__("FUN_L07_0030cf90");
 s32  allocate_voice_for_target_entry(s32   entry_index,
                                      s32   flags,
                                      void *target) __asm__("FUN_0022da68");
 
 /* Moby classes 1013, 1014, 1064, 1065 */
-void update_linked_state_sliding_platform(struct Moby *moby) {
+void linked_state_sliding_platform_update(struct Moby *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,
         PLATFORM_WAIT_TO_MOVE_OUTWARD = 1,

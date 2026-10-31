@@ -32,10 +32,10 @@ void draw_pulsing_scroll_layers(void) {
 }
 
 /* Sets both flag fields to 0xFF and queues draw_pulsing_scroll_layers for the moby. */
-void update_pulsing_scroll_layers(FlagMoby *moby) __asm__("FUN_L01_00309c98");
+void pulsing_scroll_layers_update(FlagMoby *moby) __asm__("FUN_L01_00309c98");
 
 /* Moby class 1225 */
-void update_pulsing_scroll_layers(FlagMoby *moby) {
+void pulsing_scroll_layers_update(FlagMoby *moby) {
     int flag_init_value = 0xFF;
     moby->h32 = flag_init_value;
     moby->b30 = flag_init_value;

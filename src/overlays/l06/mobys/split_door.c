@@ -46,7 +46,7 @@ extern float moby_pair_child_phase_two_target_rotation_y_gp __asm__("D_L06_00161
 
 extern float moby_pair_phase_distance_max_speed_gp __asm__("D_L06_00161F3C") __attribute__((sda));
 
-#include "rnc/overlay/l06/mobys/split_door_data/update_split_door.h"
+#include "rnc/overlay/l06/mobys/split_door_data/split_door_update.h"
 
 extern float moby_pair_phase_rotation_y_max_speed_degrees_gp __asm__("D_L06_00161F48")
     __attribute__((sda));
@@ -59,10 +59,10 @@ extern int moby_pair_phase_two_duration_min_frames_gp __asm__("D_L06_00161F54")
 extern int moby_pair_phase_two_duration_max_frames_gp __asm__("D_L06_00161F58")
     __attribute__((sda));
 extern float moby_pair_reset_enabled_gp __asm__("D_L06_00161F5C") __attribute__((sda));
-void         update_split_door(char *moby) __asm__("FUN_L06_002fbfb0");
+void         split_door_update(char *moby) __asm__("FUN_L06_002fbfb0");
 
 /* Moby class 1054 */
-void update_split_door(char *moby) {
+void split_door_update(char *moby) {
     enum {
         INITIALIZE_CHILD_AND_TRANSFORMS = 0,
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 1,

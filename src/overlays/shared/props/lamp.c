@@ -27,7 +27,7 @@ void        draw_moby_wobble_quads(struct Moby *moby) __asm__("FUN_L05_0030c220"
 
 extern void draw_moby_wobble_quads(struct Moby *m) __asm__("FUN_L05_0030c220");
 
-void update_moby_wobble(unsigned char *moby) __asm__("FUN_L05_0030c0a8");
+void moby_wobble_update(unsigned char *moby) __asm__("FUN_L05_0030c0a8");
 
 extern void  draw_geometry_quad(void *, float *, int) __asm__("FUN_001f7d30");
 extern float wobble_quad_texcoords[][2] __asm__("D_L05_001D67B0");
@@ -46,10 +46,10 @@ extern int wobble_quad_texture_index_gp __asm__("D_L05_00161D0C") __attribute__(
 /* UpdateMoby_823: pick random wobble parameters, then animate them each frame */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
-void update_moby_wobble(unsigned char *m) __asm__("FUN_L05_0030c0a8");
+void moby_wobble_update(unsigned char *m) __asm__("FUN_L05_0030c0a8");
 
 /* Moby class 823 */
-void update_moby_wobble(unsigned char *moby) {
+void moby_wobble_update(unsigned char *moby) {
     enum {
         MOBY_WOBBLE_STATE_INITIALIZE = 0,
         MOBY_WOBBLE_STATE_ANIMATE = 1

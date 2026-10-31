@@ -77,10 +77,10 @@ extern f32     D_L01_00167240_30c9a8[] __asm__("D_L01_00167240");
 extern OvlQuad D_0013F3D0_30c9a8 __asm__("D_0013F3D0");
 
 extern OvlQuad D_L01_001742E0;
-void           update_sandmouse_projectile(char *moby) __asm__("FUN_L01_0030c9a8");
+void           sandmouse_projectile_update(char *moby) __asm__("FUN_L01_0030c9a8");
 
 /* Moby class 1633 */
-void update_sandmouse_projectile(char *moby) {
+void sandmouse_projectile_update(char *moby) {
     char     *moby_vars = ((char *)MOBY(moby)->pvars);
     f32      *moby_position;
     OvlVec4   old_pos;

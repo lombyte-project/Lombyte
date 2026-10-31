@@ -1,4 +1,4 @@
-/* Shared moby class code: update_moby_draw_registration (classes 0x13d and 0x1cc). */
+/* Shared moby class code: moby_draw_registration_update (classes 0x13d and 0x1cc). */
 #include "types.h"
 #include "qcopy.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
@@ -9,10 +9,10 @@ extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F9438.c: func_L07_002F9438), where it is exact; names translated to the US level program. */
 
-void update_moby_draw_registration(unsigned char *moby) __asm__("FUN_L07_002f8058");
+void moby_draw_registration_update(unsigned char *moby) __asm__("FUN_L07_002f8058");
 
 /* Moby classes 317, 460 */
-void update_moby_draw_registration(unsigned char *moby) {
+void moby_draw_registration_update(unsigned char *moby) {
     enum {
         DRAW_REGISTRATION_INITIALIZE = 0,
         DRAW_REGISTRATION_ENQUEUE_CALLBACK = 1

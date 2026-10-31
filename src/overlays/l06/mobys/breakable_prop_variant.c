@@ -36,10 +36,10 @@ extern void  FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void
 void         mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
-void update_breakable_prop_variant(char *self) __asm__("FUN_L06_00309fa8");
+void breakable_prop_variant_update(char *self) __asm__("FUN_L06_00309fa8");
 
 /* Moby class 1664 */
-void update_breakable_prop_variant(char *spawner_moby) {
+void breakable_prop_variant_update(char *spawner_moby) {
     enum {
         INITIALIZE = 0,
         WAIT_FOR_HIT = 1,

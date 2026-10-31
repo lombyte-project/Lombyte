@@ -30,10 +30,10 @@ extern s32   allocate_voice_for_target_entry_u(s32, s32, void *) __asm__("func_0
 extern void  sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 s32          is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-void update_path_following_rocket(struct Moby *moby) __asm__("FUN_L16_002c3d38");
+void path_following_rocket_update(struct Moby *moby) __asm__("FUN_L16_002c3d38");
 
 /* Moby class 257 */
-void update_path_following_rocket(struct Moby *moby) {
+void path_following_rocket_update(struct Moby *moby) {
     enum {
         ROCKET_STATE_INITIALIZE = 0,
         ROCKET_STATE_WAIT_FOR_TRIGGER = 1,

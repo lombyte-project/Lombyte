@@ -27,10 +27,10 @@ void draw_level14_textured_effect_list(void) {
 
 void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 
-void update_level_effects(struct Moby *moby) __asm__("FUN_L14_00307a80");
+void level_effects_update(struct Moby *moby) __asm__("FUN_L14_00307a80");
 
 /* Moby class 1418 */
-void update_level_effects(struct Moby *moby) {
+void level_effects_update(struct Moby *moby) {
     enum {
         DRAW_CALLBACK_INITIALIZE = 0,
         DRAW_CALLBACK_ENQUEUE = 1

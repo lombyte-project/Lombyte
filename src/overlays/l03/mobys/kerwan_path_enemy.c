@@ -361,10 +361,10 @@ int is_kerwan_path_enemy_in_state_9(struct Moby *moby) {
     return 0;
 }
 
-void update_kerwan_path_enemy(Moby2C8398 *m) __asm__("FUN_L03_002c6fd0");
+void kerwan_path_enemy_update(Moby2C8398 *m) __asm__("FUN_L03_002c6fd0");
 
 /* Moby class 574 */
-void update_kerwan_path_enemy(Moby2C8398 *m) {
+void kerwan_path_enemy_update(Moby2C8398 *m) {
     enum {
         ENEMY_INITIALIZE = 0,
         ENEMY_WAIT_FOR_ACTIVATION = 1,

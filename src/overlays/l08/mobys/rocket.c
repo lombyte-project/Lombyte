@@ -146,13 +146,13 @@ extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L
 extern float approach_value(float *, float, float);
 extern int   D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") MACRO_ADDR;
 
-#include "rnc/overlay/l08/mobys/rocket_data/update_rocket.h"
+#include "rnc/overlay/l08/mobys/rocket_data/rocket_update.h"
 
 extern unsigned int D_L08_0015FFDC MACRO_ADDR;
 extern void                        FUN_L00_00262cf0(void *, void *, float, float, float);
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void  FUN_L08_002de528_u(void *, int, int, int) __asm__("FUN_L08_002de528");
-void         update_rocket(M46 *moby) __asm__("FUN_L08_002dd3c0");
+void         rocket_update(M46 *moby) __asm__("FUN_L08_002dd3c0");
 extern void  set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int   rocket_color_red_gp __asm__("D_L08_00161A34") __attribute__((sda));
 extern int   rocket_color_green_gp __asm__("D_L08_00161A38") __attribute__((sda));
@@ -166,7 +166,7 @@ void spawn_rocket_explosion_and_debris(char *moby,
                                        int   flag) __asm__("FUN_L08_002de528");
 
 /* Moby class 435 */
-void update_rocket(M46 *moby) {
+void rocket_update(M46 *moby) {
     enum {
         ROCKET_STATE_INITIALIZE = 0,
         ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,

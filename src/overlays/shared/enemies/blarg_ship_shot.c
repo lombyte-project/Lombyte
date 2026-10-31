@@ -79,10 +79,10 @@ char *spawn_blarg_ship_shot(int    firing_moby,
 /* Per-frame update of a projectile moby: moves it by its velocity and leaves a trail particle; on impact it bursts into
    five sparks and removes itself, otherwise it shrinks when its timer runs out and is removed once tiny. */
 
-void update_blarg_ship_shot(char *moby) __asm__("FUN_L11_00309098");
+void blarg_ship_shot_update(char *moby) __asm__("FUN_L11_00309098");
 
 /* Moby class 1017 */
-void update_blarg_ship_shot(char *moby) {
+void blarg_ship_shot_update(char *moby) {
     float previous_moby_position[4];
     float trail_position[4];
     float trail_velocity[4];

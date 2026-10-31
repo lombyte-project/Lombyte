@@ -24,10 +24,10 @@ extern void draw_active_beam_slots(char *) __asm__("FUN_L00_002e2af0");
 
 /* Slot update of moby class 1331: state 0 clears the two slot arrays, state 1 services the pending slots and frees a slot whose moby has died. Level 14 relative of func_L00_002E32A0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00304E68), where it is exact; names translated to the US level program. */
-void update_beam_slots(unsigned char *moby) __asm__("FUN_L14_003039e0");
+void beam_slots_update(unsigned char *moby) __asm__("FUN_L14_003039e0");
 
 /* Moby class 1331 */
-void update_beam_slots(unsigned char *moby) {
+void beam_slots_update(unsigned char *moby) {
     enum {
         SLOT_UPDATE_STATE_INITIALIZE = 0,
         SLOT_UPDATE_STATE_PROCESS_SLOTS = 1

@@ -249,10 +249,10 @@ extern void  func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void  make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
-void update_oscillating_target_link(Moby *moby) __asm__("FUN_L12_00302f30");
+void oscillating_target_link_update(Moby *moby) __asm__("FUN_L12_00302f30");
 
 /* Moby class 1259 */
-void update_oscillating_target_link(Moby *moby) {
+void oscillating_target_link_update(Moby *moby) {
     enum {
         TARGET_TRACKING_STATE_INITIALIZE = 0,
         TARGET_TRACKING_STATE_ACTIVE = 1

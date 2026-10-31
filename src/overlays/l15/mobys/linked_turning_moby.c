@@ -9,10 +9,10 @@ extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
 extern short linked_state_yaw_rate_degrees_gp __asm__("D_L15_00161EC0") __attribute__((sda));
 
-void update_linked_turning_moby(struct Moby *moby) __asm__("FUN_L15_002e46b0");
+void linked_turning_moby_update(struct Moby *moby) __asm__("FUN_L15_002e46b0");
 
 /* Moby class 937 */
-void update_linked_turning_moby(struct Moby *moby) {
+void linked_turning_moby_update(struct Moby *moby) {
     int linked_moby_index = *(int *)moby->pvars;
     if (linked_moby_index != -1) {
         char *linked_moby = (char *)(linked_moby_index * 256 + (int)l15_moby_array);

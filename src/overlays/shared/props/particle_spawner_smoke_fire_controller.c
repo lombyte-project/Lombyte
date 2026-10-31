@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/overlay/shared/props/particle_spawner_smoke_fire_controller_data/update_frame_timing_and_wrapped_value_2.h"
-#include "rnc/overlay/shared/props/particle_spawner_smoke_fire_controller_data/update_frame_timing_and_wrapped_value.h"
+#include "rnc/overlay/shared/props/particle_spawner_smoke_fire_controller_data/frame_timing_and_wrapped_value_update.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
 
@@ -17,10 +17,10 @@ float        wrapped_value_decrement_rate_gp __asm__("D_L00_00161378") = 0.0025f
 extern float D_L00_00161384_gp __asm__("D_L00_00161384") __attribute__((sda));
 extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 
-void update_frame_timing_and_wrapped_value(unsigned char *state_object) __asm__("FUN_L00_002a4cd8");
+void frame_timing_and_wrapped_value_update(unsigned char *state_object) __asm__("FUN_L00_002a4cd8");
 
 /* Moby class 809 */
-void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
+void frame_timing_and_wrapped_value_update(unsigned char *state_object) {
     enum {
         INITIALIZE_FRAME_TIMING = 0,
         UPDATE_WRAPPED_VALUE = 1

@@ -58,10 +58,10 @@ extern void        spawn_burst(void *, void *, s32, s32, f32, s32, s32) __asm__(
 extern int         FUN_L00_00257b90(int lo, int hi);
 extern u8 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 
-void update_burning_debris(struct Moby *moby) __asm__("FUN_L01_0030ba18");
+void burning_debris_update(struct Moby *moby) __asm__("FUN_L01_0030ba18");
 
 /* Moby class 1510 */
-void update_burning_debris(struct Moby *moby) {
+void burning_debris_update(struct Moby *moby) {
     BlobVars *blob_vars;
     s32       hit;
     s32       i;

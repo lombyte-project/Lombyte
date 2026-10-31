@@ -12,10 +12,10 @@
 
 extern unsigned char l14_scaled_table_setup_target[] __asm__("D_L14_001E9C60");
 
-void update_audio_stream_callback_keeper(struct Moby *moby) __asm__("FUN_L14_00303370");
+void audio_stream_callback_keeper_update(struct Moby *moby) __asm__("FUN_L14_00303370");
 
 /* Moby class 1260 */
-void update_audio_stream_callback_keeper(struct Moby *moby) {
+void audio_stream_callback_keeper_update(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_REGISTER_DRAW_CALLBACK = 1

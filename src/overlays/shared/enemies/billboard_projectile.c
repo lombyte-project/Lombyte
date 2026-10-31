@@ -67,10 +67,10 @@ void spawn_collision_particle_bursts(void) {
     }
 }
 
-void update_billboard_projectile(char *moby) __asm__("FUN_L01_002c7530");
+void billboard_projectile_update(char *moby) __asm__("FUN_L01_002c7530");
 
 /* Moby class 156 */
-void update_billboard_projectile(char *moby) {
+void billboard_projectile_update(char *moby) {
     enum {
         UPDATE_TRANSFORM_ONLY = 0,
         COLLISION_CHECK_AND_COUNTDOWN = 1,

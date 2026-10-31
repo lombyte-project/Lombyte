@@ -38,10 +38,10 @@ f32         woodcut_debris_bounce_spin_min_degrees_gp __asm__("D_L04_00161D78") 
 f32         woodcut_debris_bounce_spin_max_degrees_gp __asm__("D_L04_00161D7C") = 3.6e+02f;
 extern u128 coll_hit_normal_lui[] __asm__("D_L04_00174000") NOT_SDA;
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
-void        update_woodcut_bot_debris(M2e5178 *entity) __asm__("FUN_L04_002e5178");
+void        woodcut_bot_debris_update(M2e5178 *entity) __asm__("FUN_L04_002e5178");
 
 /* Moby class 1516 */
-void update_woodcut_bot_debris(M2e5178 *entity) {
+void woodcut_bot_debris_update(M2e5178 *entity) {
     enum {
         ENTITY_MOTION_STATE_BOUNCE = 0,
         ENTITY_MOTION_STATE_DECAY_AND_REMOVE = 1

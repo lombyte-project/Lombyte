@@ -16,10 +16,10 @@ extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
 extern void update_slot_panes_and_effects(s32, s32) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
 
-void update_beam_slot_controller(SlotMoby *slot_controller) __asm__("FUN_L00_002e1df0");
+void beam_slot_controller_update(SlotMoby *slot_controller) __asm__("FUN_L00_002e1df0");
 
 /* Moby class 1471 */
-void update_beam_slot_controller(SlotMoby *slot_controller) {
+void beam_slot_controller_update(SlotMoby *slot_controller) {
     enum {
         SLOT_CONTROLLER_STATE_INITIALIZE = 0,
         SLOT_CONTROLLER_STATE_PROCESS_SLOTS = 1

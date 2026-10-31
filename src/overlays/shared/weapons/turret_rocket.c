@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/overlay/shared/weapons/turret_rocket_data/spawn_turret_rocket.h"
-#include "rnc/overlay/shared/weapons/turret_rocket_data/update_turret_rocket.h"
+#include "rnc/overlay/shared/weapons/turret_rocket_data/turret_rocket_update.h"
 
 typedef union {
     float float_value;
@@ -179,10 +179,10 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
     return moby;
 }
 
-void update_turret_rocket(char *moby) __asm__("FUN_L08_002e8210");
+void turret_rocket_update(char *moby) __asm__("FUN_L08_002e8210");
 
 /* Moby class 458 */
-void update_turret_rocket(char *moby) {
+void turret_rocket_update(char *moby) {
     char *position_ptr = moby + 0x10;
     char *homing_projectile_private_state = ((char *)MOBY(moby)->pvars);
     float position_copy[4] __attribute__((aligned(16)));

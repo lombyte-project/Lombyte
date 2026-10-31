@@ -37,10 +37,10 @@ extern char                      D_00141968[];
 extern s32                       D_0014EE90[];
 extern int                       scale_game_frames(int) __asm__("FUN_001f96f8");
 
-void update_help_hints(struct Moby *moby) __asm__("FUN_L02_002ee890");
+void help_hints_update(struct Moby *moby) __asm__("FUN_L02_002ee890");
 
 /* Moby class 1324 */
-void update_help_hints(struct Moby *moby) {
+void help_hints_update(struct Moby *moby) {
     enum {
         AIRBORNE_DIALOGUE_UNARMED = 0,
         AIRBORNE_DIALOGUE_ARMED = 1

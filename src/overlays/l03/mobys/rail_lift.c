@@ -100,10 +100,10 @@ struct RailLiftVars {
 
 void update_rail_lift_oscillation(struct Moby *moby) __asm__("FUN_L03_002dd0f0");
 
-void update_rail_lift(struct Moby *lift_moby) __asm__("FUN_L03_002dccc0");
+void rail_lift_update(struct Moby *lift_moby) __asm__("FUN_L03_002dccc0");
 
 /* Moby class 1012 */
-void update_rail_lift(struct Moby *lift_moby) {
+void rail_lift_update(struct Moby *lift_moby) {
     enum {
         LIFT_INITIALIZE = 0,
         LIFT_WAIT_FOR_DEPARTURE = 1,

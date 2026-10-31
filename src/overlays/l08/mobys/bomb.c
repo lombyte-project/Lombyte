@@ -79,7 +79,7 @@ extern void spawn_explosion(void *,
 extern void
 FUN_L00_00269958_c(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") MACRO_ADDR;
-void         update_bomb(char *moby) __asm__("FUN_L08_002d23f0");
+void         moby_248_update(char *moby) __asm__("FUN_L08_002d23f0");
 extern float D_0015ED6C;
 
 blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868") = {
@@ -87,7 +87,7 @@ blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868") = {
 };
 
 /* Moby class 248 */
-void update_bomb(char *moby) {
+void moby_248_update(char *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
         BOMB_STATE_STATIONARY_FUSE = 2,

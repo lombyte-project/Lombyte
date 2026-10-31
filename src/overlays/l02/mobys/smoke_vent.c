@@ -93,7 +93,7 @@ extern s32 alternating_smoke_burst_second_timing_base_gp __asm__("D_L02_00162130
 extern s32 alternating_smoke_burst_third_timing_base_gp __asm__("D_L02_00162134")
     __attribute__((sda));
 
-#include "rnc/overlay/l02/mobys/smoke_vent_data/update_smoke_vent.h"
+#include "rnc/overlay/l02/mobys/smoke_vent_data/smoke_vent_update.h"
 
 extern f32 alternating_smoke_burst_velocity_w_random_range_start_gp __asm__("D_L02_0016213C")
     __attribute__((sda));
@@ -114,10 +114,10 @@ s32        D_L02_00162164 = 0x10019;
 /* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)
  * on a timer plus occasional single puffs (D_L02_00162088 / D_L02_00162048); state 2 alternates its puff life.
  * Each burst and puff block has its own locals: shared ones become long-lived pseudos and shift the allocation. */
-void update_smoke_vent(struct Moby *moby) __asm__("FUN_L02_002ef020");
+void smoke_vent_update(struct Moby *moby) __asm__("FUN_L02_002ef020");
 
 /* Moby class 1479 */
-void update_smoke_vent(struct Moby *moby) {
+void smoke_vent_update(struct Moby *moby) {
     enum {
         SMOKE_VENT_STATE_INITIALIZE = 0,
         SMOKE_VENT_STATE_VIEW_GATED_EMISSION = 1,

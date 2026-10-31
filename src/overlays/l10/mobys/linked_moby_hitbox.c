@@ -122,10 +122,10 @@ char linked_moby_present_message[42] __asm__("D_L10_001DCDD0") =
 char linked_moby_missing_message[36] __asm__("D_L10_001DCE00") =
     "M794 %d trigger %d = NO MOBY! (-1)\n";
 
-void update_linked_moby_hitbox(struct Moby *moby) __asm__("FUN_L10_002c9c70");
+void linked_moby_hitbox_update(struct Moby *moby) __asm__("FUN_L10_002c9c70");
 
 /* Moby class 794 */
-void update_linked_moby_hitbox(struct Moby *moby) {
+void linked_moby_hitbox_update(struct Moby *moby) {
     enum {
         LINKED_HITBOX_STATE_INITIALIZE = 0,
         LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES = 1,

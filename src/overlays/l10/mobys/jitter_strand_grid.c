@@ -29,10 +29,10 @@ typedef struct {
     f32  phase;
 } PlatformWaveVars;
 
-void update_jitter_strand_grid(struct Moby *moby) __asm__("FUN_L10_002dcc58");
+void jitter_strand_grid_update(struct Moby *moby) __asm__("FUN_L10_002dcc58");
 
 /* Moby class 1073 */
-void update_jitter_strand_grid(struct Moby *moby) {
+void jitter_strand_grid_update(struct Moby *moby) {
     enum {
         JITTER_STRAND_GRID_STATE_INITIALIZE = 0,
         JITTER_STRAND_GRID_STATE_UPDATE = 1

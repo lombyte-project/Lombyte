@@ -22,10 +22,10 @@ struct SwingGateVars {
     float vel;       /* 0x18 */
 };
 
-void update_swing_gate(struct Moby *moby) __asm__("FUN_L07_0031b3f0");
+void swing_gate_update(struct Moby *moby) __asm__("FUN_L07_0031b3f0");
 
 /* Moby class 1133 */
-void update_swing_gate(struct Moby *moby) {
+void swing_gate_update(struct Moby *moby) {
     enum {
         SWING_GATE_INITIALIZE = 0,
         SWING_GATE_WAIT_FOR_OPEN_CONDITION = 1,

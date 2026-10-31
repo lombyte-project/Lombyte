@@ -92,10 +92,10 @@ extern struct L13Ent00178480 l13_moby_hit_entries[] __asm__("D_L13_00178400");
 
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 
-void update_gemlik_projectile(struct Moby *moby) __asm__("FUN_L13_00306300");
+void gemlik_projectile_update(struct Moby *moby) __asm__("FUN_L13_00306300");
 
 /* Moby class 1238 */
-void update_gemlik_projectile(struct Moby *moby) {
+void gemlik_projectile_update(struct Moby *moby) {
     char *projectile_vars = (char *)moby->pvars;
     struct {
         L13Vec_p old_pos;
