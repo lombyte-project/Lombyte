@@ -2392,29 +2392,29 @@ int select_drek_boss_next_action(struct Moby *moby) {
         boss_action_choice_index = random_integer_below(6);
         switch (boss_action_choice_index) {
         case BOSS_ACTION_CHOICE_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
-            state = 0xD;
+            state = DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET;
             break;
         case BOSS_ACTION_CHOICE_REPOSITION_AND_AIM:
-            state = 0xE;
+            state = DREK_BOSS_ACTION_REPOSITION_AND_AIM;
             break;
         case BOSS_ACTION_CHOICE_TARGET_GROUND_POINTS:
-            state = 0xF;
+            state = DREK_BOSS_TARGET_GROUND_POINTS;
             break;
         case BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS:
-            state = 0x10;
+            state = DREK_BOSS_TARGET_RANDOM_ARENA_POINTS;
             break;
         case BOSS_ACTION_CHOICE_TARGET_SIDE_GROUND_POINTS:
-            state = 0x11;
+            state = DREK_BOSS_TARGET_SIDE_GROUND_POINTS;
             break;
         case BOSS_ACTION_CHOICE_FOLLOW_HERO:
-            state = 0x13;
+            state = DREK_BOSS_FOLLOW_HERO;
             break;
         }
         ok = *(short *)((char *)drek_boss_action_eligibility_by_phase +
                         boss_action_choice_index * 2 + *(int *)(boss_action_vars + 0x34C) * 12);
         if (state == *(int *)(boss_action_vars + 0x350))
             ok = 0;
-        if (state == 0x13) {
+        if (state == DREK_BOSS_FOLLOW_HERO) {
             if (*(int *)(boss_action_vars + 0x364) != 0) {
                 ok = 0;
             } else {
@@ -2425,7 +2425,7 @@ int select_drek_boss_next_action(struct Moby *moby) {
                     ok = 0;
             }
         }
-        if (state == 0x11) {
+        if (state == DREK_BOSS_TARGET_SIDE_GROUND_POINTS) {
             if (*(int *)(boss_action_vars + 0x350) == 0xE)
                 ok = 0;
         }
