@@ -97,7 +97,7 @@ void floating_mine_update(struct Moby *moby) {
     case BOBBING_INITIALIZE:
         *(float *)(bobbing_moby_vars + 0x60) = random_angle_radians();
         *(int *)(bobbing_moby_vars + 0x64) = 0;
-        moby->state = 1;
+        moby->state = BOBBING_UPDATE_AND_CHECK_CONTACT;
         break;
     case BOBBING_UPDATE_AND_CHECK_CONTACT:
         update_moby_vertical_oscillation(*(float *)&l17_bobbing_vertical_amplitude,
