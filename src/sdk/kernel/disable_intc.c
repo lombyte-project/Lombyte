@@ -8,17 +8,20 @@ extern s32 DIntr();
 s32 disable_intc(s32 intc_cause) __asm__("FUN_00119028");
 
 s32 disable_intc(s32 intc_cause) {
+    enum {
+        EE_INTERRUPT_ENABLE_CLEAR = 0
+    };
     u32 status;
     s32 result;
 
     status = CpuReadStatus();
     status &= 0x10000;
-    if (status != 0) {
+    if (status != EE_INTERRUPT_ENABLE_CLEAR) {
         DIntr();
     }
     result = _DisableIntc(intc_cause);
     CpuSync();
-    if (status != 0) {
+    if (status != EE_INTERRUPT_ENABLE_CLEAR) {
         EnableInterrupts();
     }
     return result;
