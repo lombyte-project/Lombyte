@@ -119,7 +119,7 @@ void chomper_update(struct Moby *chomper_moby) {
         if (rand() & 1)
             chomper_moby->flags |= 0x8000;
         qcopy(chomper_data->unk1D0, &chomper_moby->pos);
-        chomper_moby->state = 1;
+        chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
         if (chomper_moby->prev_seq != 2)
             blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
         chomper_data->unk58 = truncate_float_to_s32(8.0f);
@@ -127,7 +127,7 @@ void chomper_update(struct Moby *chomper_moby) {
         break;
     case CHOMPER_WAIT_TO_APPROACH_TARGET:
         if (chomper_data->unk1C4 != 2) {
-            chomper_moby->state = 4;
+            chomper_moby->state = CHOMPER_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 0)
                 blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
         }
@@ -137,11 +137,11 @@ void chomper_update(struct Moby *chomper_moby) {
         break;
     case CHOMPER_APPROACH_TARGET:
         if (move_chomper_toward_position(chomper_moby, chomper_data->unk180) < 1.25f) {
-            chomper_moby->state = 5;
+            chomper_moby->state = CHOMPER_FACE_TARGET;
             if (chomper_moby->prev_seq != 1)
                 blend_moby_animation(chomper_moby, 1, 0, scale_game_frames(20));
         } else if (chomper_data->unk1C4 == 2)
-            chomper_moby->state = 6;
+            chomper_moby->state = CHOMPER_RETURN_HOME;
         break;
     case CHOMPER_FACE_TARGET: {
         float *yaw = &chomper_moby->rot.z;
@@ -157,7 +157,7 @@ void chomper_update(struct Moby *chomper_moby) {
             collect_mobies_in_sphere_at_moby_point(chomper_moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
         } else if ((chomper_moby->anim_flags & 2) &&
                    fast_vec_dist(&chomper_moby->pos, chomper_data->unk180) > 1.5f) {
-            chomper_moby->state = 4;
+            chomper_moby->state = CHOMPER_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 0)
                 blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
         }
@@ -165,15 +165,15 @@ void chomper_update(struct Moby *chomper_moby) {
     }
     case CHOMPER_RETURN_HOME:
         if (move_chomper_toward_position(chomper_moby, chomper_data->unk1D0) < 1.0f) {
-            chomper_moby->state = 1;
+            chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 2)
                 blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
         } else if (chomper_data->unk1C4 != 2)
-            chomper_moby->state = 4;
+            chomper_moby->state = CHOMPER_APPROACH_TARGET;
         break;
     case 7:
         if (FUN_L00_002dc9f0(chomper_moby, &chomper_data->unk120)) {
-            chomper_moby->state = 1;
+            chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
             chomper_data->unkC8 = 0;
         }
         break;
