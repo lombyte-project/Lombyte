@@ -62,6 +62,7 @@ extern char          *D_L18_001B2ADC_lui __asm__("D_L18_001B2ADC") NOT_SDA;
 
 void update_projectile_motion_collision_and_trail(char *moby) __asm__("FUN_L18_002a7220");
 
+/* Moby class 41 */
 void update_projectile_motion_collision_and_trail(char *moby) {
     float  next_position[4];
     char   hit_descriptor[0x30];

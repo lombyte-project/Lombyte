@@ -23,6 +23,7 @@ spawn_mode_controlled_orbiting_trail_particle(float  f0,
 
 void hoverboard_ring_update(char *moby) __asm__("FUN_L05_0031abe0");
 
+/* Moby class 1139 */
 void hoverboard_ring_update(char *moby) {
     enum {
         HOVERBOARD_RING_STATE_INIT = 0,

@@ -67,6 +67,7 @@ extern s32 D_0015EEA4;
 
 void visibomb_update(O_b3058 *o) __asm__("FUN_L00_002b3058");
 
+/* Moby class 163 */
 void visibomb_update(O_b3058 *visibomb_moby) {
     V_b3058     *v;
     struct Hero *g;

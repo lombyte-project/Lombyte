@@ -19,6 +19,7 @@ extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 
 void update_frame_timing_and_wrapped_value(unsigned char *state_object) __asm__("FUN_L00_002a4cd8");
 
+/* Moby class 809 */
 void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
     enum {
         INITIALIZE_FRAME_TIMING = 0,

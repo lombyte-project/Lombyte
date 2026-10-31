@@ -29,6 +29,7 @@ typedef struct {
 
 void update_smoke_emitter(SmokeMoby *self) __asm__("FUN_L01_002ffb28");
 
+/* Moby class 779 */
 void update_smoke_emitter(SmokeMoby *smoke_emitter_moby) {
     SmokeVars *smoke_vars;
     Vec4       pos;

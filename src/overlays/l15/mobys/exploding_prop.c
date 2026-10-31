@@ -71,6 +71,7 @@ mine_debris(void *pos, void *vel, int color, int color2, float size, int life, i
 
 void update_exploding_prop(struct Moby *moby) __asm__("FUN_L15_002aa280");
 
+/* Moby class 154 */
 void update_exploding_prop(struct Moby *moby) {
     char *hit = 0;
     Vec4  velocity, hit_direction, push, offset, center;

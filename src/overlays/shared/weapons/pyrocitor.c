@@ -518,6 +518,7 @@ short D_L18_001615CC = 2;
 
 void pyrocitor_update(struct Moby *moby) __asm__("FUN_L00_002b77f0");
 
+/* Moby class 176 */
 void pyrocitor_update(struct Moby *moby) {
     enum {
         PYROCITOR_STATE_INITIALIZE = 0,

@@ -115,6 +115,7 @@ extern s32 D_L05_001612D8 MACRO_ADDR;
 /* Update of the level 05 water mobys: sets up the 48-record water chain, moves the surface by state and keeps its record in step. */
 void water_update(struct Moby *moby) __asm__("FUN_L05_0030ca80");
 
+/* Moby class 831 */
 void water_update(struct Moby *moby) {
     enum {
         WATER_INITIALIZE = 0,

@@ -74,6 +74,7 @@ extern int allocate_colored_effect_slot(float *, float, float, float, float, flo
 
 void update_flying_debris(struct Moby *moby) __asm__("FUN_L14_002bac78");
 
+/* Moby class 81 */
 void update_flying_debris(struct Moby *moby) {
     char  *debris_vars = (char *)moby->pvars;
     float  joint[4];

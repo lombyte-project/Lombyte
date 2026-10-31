@@ -60,6 +60,7 @@ int D_L18_001614F0 = 0;
 
 void update_linked_moby_states(unsigned char *source_moby) __asm__("FUN_L00_002b3458");
 
+/* Moby class 166 */
 void update_linked_moby_states(unsigned char *source_moby) {
     enum {
         STATE_INITIALIZE = 0,

@@ -120,6 +120,7 @@ typedef struct {
 
 void update_linked_switch_group(char *moby) __asm__("FUN_L13_002e4448");
 
+/* Moby class 231 */
 void update_linked_switch_group(char *moby) {
     enum {
         INITIALIZE_LINKED_GROUP = 0,

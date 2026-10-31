@@ -76,6 +76,7 @@ extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_002
 
 void update_unfolding_column(UnfoldingColumnMoby *moby) __asm__("FUN_L14_00305d28");
 
+/* Moby class 1395 */
 void update_unfolding_column(UnfoldingColumnMoby *moby) {
     enum {
         UNFOLDING_COLUMN_INITIALIZE = 0,

@@ -48,6 +48,7 @@ extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, 
 extern char D_L09_00209518_30A560[] __asm__("D_L09_00209228");
 void        update_floating_ship_piece(char *moby) __asm__("FUN_L09_003091b0");
 
+/* Moby classes 1293, 1320 */
 void update_floating_ship_piece(char *moby) {
     enum {
         PLATFORM_STATE_INITIALIZE = 0,

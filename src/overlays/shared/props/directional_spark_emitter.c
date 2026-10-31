@@ -36,6 +36,7 @@ extern f32 spark_emitter_default_secondary_spread_limit_gp __asm__("D_L08_00161F
 
 void update_directional_spark_emitter(char *moby) __asm__("FUN_L08_002f5830");
 
+/* Moby class 648 */
 void update_directional_spark_emitter(char *moby) {
     f32 spark_motion_primary[4], spark_motion_secondary[4], spark_position[4],
         spark_motion_offset[4], spark_rotation_matrix[16];

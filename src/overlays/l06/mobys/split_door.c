@@ -61,6 +61,7 @@ extern int moby_pair_phase_two_duration_max_frames_gp __asm__("D_L06_00161F58")
 extern float moby_pair_reset_enabled_gp __asm__("D_L06_00161F5C") __attribute__((sda));
 void         update_split_door(char *moby) __asm__("FUN_L06_002fbfb0");
 
+/* Moby class 1054 */
 void update_split_door(char *moby) {
     enum {
         INITIALIZE_CHILD_AND_TRANSFORMS = 0,

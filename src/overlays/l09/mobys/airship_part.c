@@ -174,6 +174,7 @@ char *find_nearest_moby_by_class(void *search_position, int type, float *nearest
 /* Update for the airship parts (classes 0x49E-0x4A5): attach to the hull, ride it, then break off, tumble away and fall with smoke and sparks. */
 void update_airship_part(struct Moby *moby) __asm__("FUN_L09_002c26c8");
 
+/* Moby classes 1182-1189 */
 void update_airship_part(struct Moby *moby) {
     enum {
         AIRSHIP_PART_STATE_INITIALIZE = 0,

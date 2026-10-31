@@ -11,6 +11,7 @@ extern short linked_state_yaw_rate_degrees_gp __asm__("D_L15_00161EC0") __attrib
 
 void update_linked_turning_moby(struct Moby *moby) __asm__("FUN_L15_002e46b0");
 
+/* Moby class 937 */
 void update_linked_turning_moby(struct Moby *moby) {
     int linked_moby_index = *(int *)moby->pvars;
     if (linked_moby_index != -1) {

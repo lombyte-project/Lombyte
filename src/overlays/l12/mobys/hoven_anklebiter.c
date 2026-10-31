@@ -272,6 +272,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) __asm__("FUN_L12_002e1be0");
 
 extern float fast_subtract_rotations(float, float);
 
+/* Moby class 238 */
 void update_hoven_anklebiter(AnklebiterMoby *moby) {
     enum {
         ANKLEBITER_INITIALIZE = 0,

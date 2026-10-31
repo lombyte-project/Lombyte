@@ -122,6 +122,7 @@ extern void FUN_L00_0025a120(struct Moby *);
    when it drops into a pit. */
 void mine_layer_update(struct Moby *m) __asm__("FUN_L03_002c9eb8");
 
+/* Moby class 578 */
 void mine_layer_update(struct Moby *mine_layer_moby) {
     enum {
         MINE_LAYER_INITIALIZE = 0,

@@ -1591,6 +1591,7 @@ extern char D_0013E633_snd[] __asm__("D_0013E533");
 
 void update_qwarks_starfighter(Moby388 *moby) __asm__("FUN_L13_002eb098");
 
+/* Moby class 388 */
 void update_qwarks_starfighter(Moby388 *moby) {
     enum {
         STARFIGHTER_STATE_INITIALIZE = 0,

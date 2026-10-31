@@ -146,6 +146,7 @@ extern float scoutbot_glow_quad_vertex_scale_gp __asm__("D_L08_0016189C") __attr
 
 void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
 
+/* Moby class 252 */
 void scoutbot_update(Moby *moby) {
     enum {
         SCOUTBOT_STATE_INITIALIZE = 0,

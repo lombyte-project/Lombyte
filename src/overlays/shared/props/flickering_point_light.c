@@ -20,6 +20,7 @@ extern char camera_pos[] __asm__("D_L01_00167240");
 extern char point_light_slot_parameters[] __asm__("D_L01_00180740");
 void        update_moby_interpolated_point_light(u8 *moby) __asm__("FUN_L01_0030b618");
 
+/* Moby class 1504 */
 void update_moby_interpolated_point_light(u8 *moby) {
     enum {
         EFFECT_STATE_INITIALIZE = 0,

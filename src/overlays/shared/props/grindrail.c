@@ -38,6 +38,7 @@ extern int D_0015ED84; /* no foreign declaration */
    point in range and pulls it along, faster on level 1 the more rail is left. */
 void update_rail_hero_motion(struct Moby *rail_moby) __asm__("FUN_L01_002f6328");
 
+/* Moby class 679 */
 void update_rail_hero_motion(struct Moby *rail_moby) {
     RailVars *rail_vars = (RailVars *)rail_moby->pvars;
     RailPath *path;

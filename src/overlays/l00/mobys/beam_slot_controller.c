@@ -18,6 +18,7 @@ extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
 
 void update_beam_slot_controller(SlotMoby *slot_controller) __asm__("FUN_L00_002e1df0");
 
+/* Moby class 1471 */
 void update_beam_slot_controller(SlotMoby *slot_controller) {
     enum {
         SLOT_CONTROLLER_STATE_INITIALIZE = 0,

@@ -83,6 +83,7 @@ extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern Pair D_L08_00161E20[] MACRO_ADDR;
 void        update_layered_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f1548");
 
+/* Moby class 600 */
 void update_layered_mesh_effect(struct Moby *moby) {
     enum {
         DRAW_ELEMENTS_INITIALIZE = 0,

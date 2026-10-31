@@ -137,6 +137,7 @@ extern void spawn_explosion(void *,
 
 void blarg_commander_update(char *m) __asm__("FUN_L12_00308918");
 
+/* Moby class 1371 */
 void blarg_commander_update(char *moby) {
     int   moby_state;
     char *moby_pvars;

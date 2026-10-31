@@ -52,6 +52,7 @@ void update_child_grid_controller(struct Moby *grid_controller) __asm__("FUN_L11
 
 extern float fast_add_rotations(float, float);
 
+/* Moby class 1157 */
 void update_child_grid_controller(struct Moby *grid_controller) {
     enum {
         CHILD_GRID_STATE_CREATE_CHILDREN = 0,

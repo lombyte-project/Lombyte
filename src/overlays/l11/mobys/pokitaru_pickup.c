@@ -19,6 +19,7 @@ void                 mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c8
 
 void update_pokitaru_pickup(struct Moby *moby) __asm__("FUN_L11_002cb668");
 
+/* Moby class 23 */
 void update_pokitaru_pickup(struct Moby *moby) {
     enum {
         PICKUP_INITIALIZE = 0,

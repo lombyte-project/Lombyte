@@ -22,6 +22,7 @@ extern void update_moby_rotation_oscillation(void *, char *, char *, float, floa
 
 void update_sinking_platform(struct Moby *moby) __asm__("FUN_L10_00295c20");
 
+/* Moby class 1117 */
 void update_sinking_platform(struct Moby *moby) {
     enum {
         PLATFORM_STATE_INITIALIZE = 0,

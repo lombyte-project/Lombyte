@@ -52,6 +52,7 @@ extern f32 D_L14_00161B1C __attribute__((sda));
 extern f32 D_L14_00161B20 __attribute__((sda));
 void       update_spinning_moby_with_particle_trail(struct Moby *moby) __asm__("FUN_L14_002de670");
 
+/* Moby class 325 */
 void update_spinning_moby_with_particle_trail(struct Moby *moby) {
     f32 *velocity = (f32 *)moby->pvars;
     s32  i;

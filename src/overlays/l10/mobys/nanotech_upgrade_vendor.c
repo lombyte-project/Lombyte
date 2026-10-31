@@ -29,6 +29,7 @@ extern int D_L10_0013F640 __asm__("D_L10_0013F640") MACRO_ADDR;
 
 void nanotech_upgrade_vendor_update(struct Moby *moby) __asm__("FUN_L10_002e8358");
 
+/* Moby class 1326 */
 void nanotech_upgrade_vendor_update(struct Moby *moby) {
     int  *timer;
     float angle;

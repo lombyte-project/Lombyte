@@ -28,6 +28,7 @@ extern void func_L10_002EBDC8_a01(float, void *, short *, short *) __asm__("FUN_
 
 void update_configurable_particle_emitter(char *moby) __asm__("FUN_L10_002ea1f0");
 
+/* Moby class 1544 */
 void update_configurable_particle_emitter(char *moby) {
     enum {
         EFFECT_STATE_INITIALIZE = 0,

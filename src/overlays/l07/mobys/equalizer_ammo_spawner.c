@@ -42,6 +42,7 @@ extern L07ScaleRow l07_ammo_spawner_scaling_rows[] __asm__("D_L07_001C4130");
  * range spawns batches of pickups along the path, away from the target moby. */
 void update_equalizer_ammo_spawner(struct Moby *moby) __asm__("FUN_L07_0031d2e0");
 
+/* Moby class 1142 */
 void update_equalizer_ammo_spawner(struct Moby *moby) {
     int *ammo_spawner_state = ((int *)moby->pvars);
     int  state = moby->state;

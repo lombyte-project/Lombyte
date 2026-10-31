@@ -29,6 +29,7 @@ extern float frame_time_sq;
 
 void door_update(unsigned char *moby) __asm__("FUN_L16_002d59e0");
 
+/* Moby class 647 */
 void door_update(unsigned char *moby) {
     enum {
         DOOR_STATE_INITIALIZE = 0,

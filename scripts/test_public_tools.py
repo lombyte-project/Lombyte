@@ -2084,6 +2084,27 @@ class CleanupCheckTests(unittest.TestCase):
         self.assertNotIn("message", out)
         self.assertNotIn("small_table", out)
 
+    def test_moby_update_needs_its_class_comment(self):
+        self.write("src/overlays/l10/level_class_tables.c", textwrap.dedent("""\
+            void new_helper() __asm__("FUN_00100100");
+            struct MobyClassUpdate moby_classes[5] = {
+                {13, new_helper, 0},
+                {14, new_helper, 0},
+                {15, new_helper, 0},
+                {1100, new_helper, 0},
+                {-1, 0, 0},
+            };
+        """))
+        self.write("src/new_helper.c", "void new_helper(s32 count) __asm__(\"FUN_00100100\");\n"
+                   "void new_helper(s32 count) {\n    count = 1;\n}\n")
+        code, out = self.check()
+        self.assertEqual(code, 1)
+        self.assertIn("src/new_helper.c:2: [moby-class] new_helper is a moby update: put "
+                      "`/* Moby classes 13-15, 1100 */` on the line above it", out)
+        self.write("src/new_helper.c", "void new_helper(s32 count) __asm__(\"FUN_00100100\");\n"
+                   "/* Moby classes 13-15, 1100 */\nvoid new_helper(s32 count) {\n    count = 1;\n}\n")
+        self.assertNotIn("[moby-class]", self.check()[1])
+
     def test_fakematch_needs_a_comment(self):
         self.write("src/new_helper.c", textwrap.dedent("""\
             #define ONCE(x) do { x; } while (0)

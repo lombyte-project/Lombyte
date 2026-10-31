@@ -81,6 +81,7 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 
 #include "sda.h"
 
+/* Moby class 911 */
 void toxic_gas_vent_update(char *vent_moby) {
     enum {
         VENT_INITIALIZE = 0,

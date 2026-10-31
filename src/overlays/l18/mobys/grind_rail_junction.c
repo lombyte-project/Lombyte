@@ -39,6 +39,7 @@ extern char *create_nanotech_ball(void *vector) __asm__("FUN_L18_002e22c0");
 
 void update_grind_rail_junction(struct Moby *moby) __asm__("FUN_L18_002d62e8");
 
+/* Moby class 582 */
 void update_grind_rail_junction(struct Moby *moby) {
     enum {
         STATE_INITIALIZE_PATH_PAIRS = 0,

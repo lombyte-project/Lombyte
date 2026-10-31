@@ -92,6 +92,7 @@ extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FU
 
 void update_homing_spark_projectile(Moby *moby) __asm__("FUN_L03_002d47c0");
 
+/* Moby class 848 */
 void update_homing_spark_projectile(Moby *moby) {
     enum {
         SPARK_HOME_AND_EMIT = 1,

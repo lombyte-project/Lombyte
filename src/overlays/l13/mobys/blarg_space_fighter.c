@@ -530,6 +530,7 @@ extern int func_L13_002C5248_56B0(void *, void *, int) __asm__("FUN_L13_002c3fc0
 
 void update_blarg_space_fighter(Moby_2C56B0 *moby) __asm__("FUN_L13_002c4428");
 
+/* Moby class 111 */
 void update_blarg_space_fighter(Moby_2C56B0 *moby) {
     enum {
         FIGHTER_INITIALIZE = 0,

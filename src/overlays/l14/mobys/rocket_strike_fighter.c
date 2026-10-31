@@ -90,6 +90,7 @@ typedef struct {
 
 void rocket_strike_fighter_update(struct Moby *moby) __asm__("FUN_L14_002fcbb0");
 
+/* Moby class 921 */
 void rocket_strike_fighter_update(struct Moby *moby) {
     enum {
         ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE = 0,

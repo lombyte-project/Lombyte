@@ -145,6 +145,7 @@ void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
 void         robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 
+/* Moby class 1382 */
 void robot_dog_update(unsigned char *robot_dog_moby) {
     Vars1382    *robot_dog_vars;
     struct Moby *facing_target_moby;

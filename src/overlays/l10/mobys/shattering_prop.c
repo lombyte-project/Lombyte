@@ -12,6 +12,7 @@
 
 void update_shattering_prop(struct Moby *moby) __asm__("FUN_L10_002eb6f0");
 
+/* Moby class 1855 */
 void update_shattering_prop(struct Moby *moby) {
     enum {
         HIT_RESPONSE_STATE_INITIALIZE = 0,

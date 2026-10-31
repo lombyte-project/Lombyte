@@ -144,6 +144,7 @@ void veldin_ship_draw(struct Moby *moby) {
 
 void veldin_ship_update(M2d1e80 *m) __asm__("FUN_L00_002d1e80");
 
+/* Moby class 530 */
 void veldin_ship_update(M2d1e80 *moby) {
     s32 *ship_vars = moby->vars;
     if (moby->state == 0) {

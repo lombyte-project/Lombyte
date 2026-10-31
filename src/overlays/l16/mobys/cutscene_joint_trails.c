@@ -48,6 +48,7 @@ extern int  D_L16_0015F5C4;
 
 void update_cutscene_joint_trails(struct Moby *moby) __asm__("FUN_L16_002e7e00");
 
+/* Moby class 1812 */
 void update_cutscene_joint_trails(struct Moby *moby) {
     enum {
         JOINT_TRAIL_INITIALIZE = 0,

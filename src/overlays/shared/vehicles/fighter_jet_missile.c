@@ -162,6 +162,7 @@ static inline void copy_xyz_089d0(float *dst, float *src) {
 
 void update_fighter_jet_missile(struct Moby *moby) __asm__("FUN_L11_003089d0");
 
+/* Moby class 1009 */
 void update_fighter_jet_missile(struct Moby *moby) {
     MissileVars *missile_vars = (MissileVars *)moby->pvars;
     float        previous_missile_position[4];

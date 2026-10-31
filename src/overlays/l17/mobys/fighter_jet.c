@@ -1741,6 +1741,7 @@ extern char          *fighter_jet_hp_bar_clut_lookup_base __asm__("D_L17_0015F42
 extern ShipLevelEntry l17_fighter_jet_hp_bar_clut_entries[] __asm__("D_L17_0016DA80");
 void                  fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed018");
 
+/* Moby class 1379 */
 void fighter_jet_update(ShipMoby *moby) {
     enum {
         FIGHTER_JET_STATE_INITIALIZE = 0,

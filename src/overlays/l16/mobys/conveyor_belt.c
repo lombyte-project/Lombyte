@@ -38,6 +38,7 @@ void        draw_conveyor_belt_strips(struct Moby *m) __asm__("FUN_L16_002c9cd0"
 float conveyor_belt_base_speed_gp __asm__("D_L16_0016198C") = 4.0f;
 void  conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 
+/* Moby class 471 */
 void conveyor_belt_update(struct Moby *moby) {
     enum {
         CONVEYOR_BELT_STATE_INITIALIZE = 0,

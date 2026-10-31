@@ -13,6 +13,7 @@ extern float fast_add_rotations(float, float);
 extern short television_scale_multiplier_gp __asm__("D_L05_00161F08") __attribute__((sda));
 void         television_update(struct Moby *moby) __asm__("FUN_L05_00318b98");
 
+/* Moby class 984 */
 void television_update(struct Moby *moby) {
     enum {
         TELEVISION_INITIALIZE = 0,

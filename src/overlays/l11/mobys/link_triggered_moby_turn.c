@@ -22,6 +22,7 @@ approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("
 
 void update_link_triggered_moby_turn(struct Moby *turning_moby) __asm__("FUN_L11_0030f2a8");
 
+/* Moby class 1180 */
 void update_link_triggered_moby_turn(struct Moby *turning_moby) {
     enum {
         LINKED_TURN_STATE_INITIALIZE = 0,

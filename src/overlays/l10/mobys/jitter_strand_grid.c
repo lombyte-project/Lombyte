@@ -31,6 +31,7 @@ typedef struct {
 
 void update_jitter_strand_grid(struct Moby *moby) __asm__("FUN_L10_002dcc58");
 
+/* Moby class 1073 */
 void update_jitter_strand_grid(struct Moby *moby) {
     enum {
         JITTER_STRAND_GRID_STATE_INITIALIZE = 0,

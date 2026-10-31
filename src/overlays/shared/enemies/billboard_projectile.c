@@ -69,6 +69,7 @@ void spawn_collision_particle_bursts(void) {
 
 void update_billboard_projectile(char *moby) __asm__("FUN_L01_002c7530");
 
+/* Moby class 156 */
 void update_billboard_projectile(char *moby) {
     enum {
         UPDATE_TRANSFORM_ONLY = 0,

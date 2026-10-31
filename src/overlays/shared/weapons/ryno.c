@@ -212,6 +212,7 @@ M_2cc360 *select_ryno_target(
 
 void ryno_update(struct Moby *m) __asm__("FUN_L00_002cc608");
 
+/* Moby class 454 */
 void ryno_update(struct Moby *ryno_moby) {
     enum {
         RYNO_STATE_INITIALIZE = 0,

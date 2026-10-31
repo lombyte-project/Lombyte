@@ -22,6 +22,7 @@ extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
 void timed_activation_pads_update(unsigned char *moby) __asm__("FUN_L07_0030bf90");
 
+/* Moby class 886 */
 void timed_activation_pads_update(unsigned char *moby) {
     enum {
         PAD_INITIALIZE = 0,

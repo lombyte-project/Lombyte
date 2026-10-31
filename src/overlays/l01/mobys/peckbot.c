@@ -201,6 +201,7 @@ extern s32 reserve_expired_frame_slot(void *, s32, s32) __asm__("FUN_L01_002efbf
 
 void peckbot_update(Mob577 *self) __asm__("FUN_L01_002efc60");
 
+/* Moby class 577 */
 void peckbot_update(Mob577 *peckbot_moby) {
     enum {
         PECKBOT_STATE_INITIALIZE = 0,

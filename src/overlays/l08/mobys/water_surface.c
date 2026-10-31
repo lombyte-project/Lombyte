@@ -35,6 +35,7 @@ void update_water_surface(struct Moby *moby) __asm__("FUN_L08_002da0f0");
 
 float water_entry_plane_data[4] __asm__("D_L08_001D7060") = {-2.6e+02f, -2.2e+02f, 15.0f, 1.6e+05f};
 
+/* Moby class 327 */
 void update_water_surface(struct Moby *moby) {
     Vec4         pos;
     Vec4         spray_velocity_or_splash_position;

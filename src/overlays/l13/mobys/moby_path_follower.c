@@ -17,6 +17,7 @@ extern int compute_advanced_moby_path_position(void *, void *, void *, int, int,
 
 void update_moby_path_follower(struct Moby *moby) __asm__("FUN_L13_0030bb70");
 
+/* Moby class 1403 */
 void update_moby_path_follower(struct Moby *moby) {
     int  *moby_vars = (int *)moby->pvars;
     char *path;

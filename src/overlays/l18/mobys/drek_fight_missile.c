@@ -96,6 +96,7 @@ extern int  func_0022ED80_2F0F78(int, int, int) __asm__("FUN_0022da68");
 
 void drek_fight_missile_update(struct Moby *moby) __asm__("FUN_L18_002efb88");
 
+/* Moby class 1355 */
 void drek_fight_missile_update(struct Moby *moby) {
     char *missile_vars = (char *)moby->pvars;
     if (moby->state != 4) {

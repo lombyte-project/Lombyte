@@ -20,6 +20,7 @@ extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void update_cutscene_camera_target(struct Moby *moby) __asm__("FUN_L04_002e53a0");
 
+/* Moby class 1549 */
 void update_cutscene_camera_target(struct Moby *moby) {
     enum {
         MODE_SLOT_STATE_INITIALIZE = 0,

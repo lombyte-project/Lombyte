@@ -118,6 +118,7 @@ void update_level14_racer(struct Moby *racer_moby) __asm__("FUN_L14_002d5f40");
 
 void update_level14_racer(struct Moby *m) __asm__("FUN_L14_002d5f40");
 
+/* Moby class 211 */
 void update_level14_racer(struct Moby *racer_moby) {
     enum {
         RACER_STATE_INITIALIZE = 0,

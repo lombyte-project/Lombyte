@@ -28,6 +28,7 @@ void        register_hero_hit_in_clip_volume(struct Moby *moby) __asm__("FUN_L14
 
 void update_ribbon_effect_moby(struct Moby *moby) __asm__("FUN_L14_002dee28");
 
+/* Moby class 386 */
 void update_ribbon_effect_moby(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,

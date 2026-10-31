@@ -30,6 +30,7 @@ void                  update_damage_causer(struct Moby *moby) __asm__("FUN_L09_0
 
 extern s32 D_L09_0015F5CC NOT_SDA;
 
+/* Moby class 1206 */
 void update_damage_causer(struct Moby *moby) {
     char *damage_causer_vars = (char *)moby->pvars;
     float sphere_query_workspace[24];

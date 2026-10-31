@@ -25,6 +25,7 @@ extern short D_0015EE6C_s __asm__("D_0015ED6C");
 
 void hydrodisplacer_faucet_update(char *m) __asm__("FUN_L05_002f8080");
 
+/* Moby class 341 */
 void hydrodisplacer_faucet_update(char *faucet_moby) {
     enum {
         HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_1 = 0,

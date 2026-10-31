@@ -413,6 +413,7 @@ extern char voice_pool[] __asm__("D_0013E550");
  * behind, switches to the second path when the cars are done and brakes at its end (state 6 resets). */
 void metropolis_train_locomotive_update(char *moby) __asm__("FUN_L03_00292e98");
 
+/* Moby class 822 */
 void metropolis_train_locomotive_update(char *moby) {
     enum {
         TRAIN_INITIALIZE = 0,

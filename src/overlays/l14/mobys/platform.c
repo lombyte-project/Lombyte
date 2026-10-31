@@ -39,6 +39,7 @@ extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002d
 
 void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
+/* Moby class 309 */
 void update_tilting_platform(struct Moby *moby) {
     char *tilting_platform_state = (char *)moby->pvars;
     void *rotation;

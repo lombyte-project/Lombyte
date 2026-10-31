@@ -23,6 +23,7 @@ extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195
 
 void floating_platform_update(char *moby) __asm__("FUN_L04_002cdda0");
 
+/* Moby class 481 */
 void floating_platform_update(char *moby) {
     enum {
         FLOATING_PLATFORM_INITIALIZE = 0,

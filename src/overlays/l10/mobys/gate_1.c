@@ -32,6 +32,7 @@ extern void          activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 void gate_1_update(struct Moby *moby) __asm__("FUN_L10_002e9648");
 void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 
+/* Moby class 1421 */
 void gate_1_update(struct Moby *moby) {
     DoorVars      *gate_control = (DoorVars *)moby->pvars;
     unsigned short save_id;

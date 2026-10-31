@@ -183,6 +183,7 @@ extern V4_2E8040 fighter_jet_rocket_explosion_effect_vector __asm__("D_L13_00174
 
 void update_fighter_jet_rocket(Moby *m) __asm__("FUN_L13_002e6c08");
 
+/* Moby class 295 */
 void update_fighter_jet_rocket(Moby *rocket) {
     Rocket        *rocket_data = *(void **)&rocket->pvars;
     V4_2E8040      rocket_position_before_move;

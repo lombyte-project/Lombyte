@@ -31,6 +31,7 @@ extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 /* Gate: waits for its trigger moby, then rises to topZ and swings its yaw back to 0, with sounds per class. */
 void update_rising_gate(struct Moby *gate_moby) __asm__("FUN_L05_00314eb0");
 
+/* Moby classes 852, 853 */
 void update_rising_gate(struct Moby *gate_moby) {
     enum {
         GATE_INITIALIZE = 0,

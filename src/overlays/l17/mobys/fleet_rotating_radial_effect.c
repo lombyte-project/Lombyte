@@ -63,6 +63,7 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7
 
 void update_fleet_rotating_radial_effect(char *moby) __asm__("FUN_L17_002d77f0");
 
+/* Moby class 669 */
 void update_fleet_rotating_radial_effect(char *moby) {
     enum {
         RING_INITIALIZE = 0,

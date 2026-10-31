@@ -86,6 +86,7 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
 
 void update_owner_linked_moby_state(struct Moby *moby) __asm__("FUN_L11_00310028");
 
+/* Moby class 1219 */
 void update_owner_linked_moby_state(struct Moby *moby) {
     enum {
         LINKED_MOBY_STATE_START_ANIMATION = 0,

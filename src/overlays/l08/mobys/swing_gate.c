@@ -38,6 +38,7 @@ extern struct Moby *D_L08_0015FFD8;
  * moves and out when it stops, and latches its flag once fully open. */
 void update_swing_gate(struct Moby *moby) __asm__("FUN_L08_002ea4c0");
 
+/* Moby classes 468, 469 */
 void update_swing_gate(struct Moby *moby) {
     SwingGateVars *swing_gate_vars = (SwingGateVars *)moby->pvars;
     f32            progress = *(f32 *)D_L08_0015FFD8[swing_gate_vars->driver].pvars;

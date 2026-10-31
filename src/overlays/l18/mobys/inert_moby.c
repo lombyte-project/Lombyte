@@ -47,6 +47,7 @@ typedef struct {
 
 void update_inert_moby(Level18VendorMobyShort *moby) __asm__("FUN_L18_002f7ab0");
 
+/* Moby class 1432 */
 void update_inert_moby(Level18VendorMobyShort *moby) {
     if (moby->state == 0) {
         moby->state = 1;

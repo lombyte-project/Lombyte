@@ -15,6 +15,7 @@ void       update_alien_queen_slider(unsigned char *moby) __asm__("FUN_L06_002d9
 
 #include "sda.h"
 
+/* Moby class 367 */
 void update_alien_queen_slider(unsigned char *moby) {
     enum {
         INITIALIZE_POSITION_ENDPOINTS = 0,

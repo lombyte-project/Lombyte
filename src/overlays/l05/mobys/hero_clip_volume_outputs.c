@@ -18,6 +18,7 @@ extern int   D_L05_0015F5C4_macro[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
  * target position and sets the bob height from the frame counter. */
 void update_hero_clip_volume_outputs(struct Moby *moby) __asm__("FUN_L05_00318a68");
 
+/* Moby class 982 */
 void update_hero_clip_volume_outputs(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,

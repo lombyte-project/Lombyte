@@ -26,6 +26,7 @@ f32         probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_002
 
 void update_spinning_sprite_effect(struct Moby *moby) __asm__("FUN_L16_002c9480");
 
+/* Moby class 470 */
 void update_spinning_sprite_effect(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,

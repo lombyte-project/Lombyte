@@ -47,6 +47,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void update_trespasser_barrier(struct Moby *moby) __asm__("FUN_L18_002f1e68");
 
+/* Moby class 1392 */
 void update_trespasser_barrier(struct Moby *moby) {
     enum {
         GLOW_INITIALIZE = 0,

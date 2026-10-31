@@ -24,6 +24,7 @@ void update_timed_effect_emitter(struct Moby *moby) __asm__("FUN_L10_002c7a20");
 
 extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
+/* Moby class 702 */
 void update_timed_effect_emitter(struct Moby *moby) {
     enum {
         MOBY_STATE_WAIT_FOR_ACTIVATION = 0,

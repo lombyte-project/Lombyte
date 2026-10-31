@@ -24,6 +24,7 @@ void draw_rippling_scroll_layers(void) {
 /* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues draw_rippling_scroll_layers. */
 void update_rippling_scroll_layers(void *callback_argument) __asm__("FUN_L01_002feb58");
 
+/* Moby class 761 */
 void update_rippling_scroll_layers(void *callback_argument) {
     s32    i;
     s32    glow_layer_index;

@@ -484,6 +484,7 @@ inactive:
 
 void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 
+/* Moby class 437 */
 void sand_mouse_update(struct Moby *moby) {
     enum {
         SAND_MOUSE_INITIALIZE = 0,

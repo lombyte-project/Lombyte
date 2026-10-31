@@ -70,6 +70,7 @@ extern void func_L00_0025F4A8_alt(void *,
 
 void gadgebot_update(unsigned char *m) __asm__("FUN_L18_002fbb98");
 
+/* Moby class 1906 */
 void gadgebot_update(unsigned char *moby) {
     enum {
         GADGEBOT_INITIALIZE = 0,

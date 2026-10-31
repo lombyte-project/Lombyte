@@ -8,6 +8,7 @@ extern int D_L05_0015F5C4_c __asm__("D_L05_0015F5C4");
 
 void qwarks_trailer_update(struct Moby *moby) __asm__("FUN_L05_00319c28");
 
+/* Moby class 1099 */
 void qwarks_trailer_update(struct Moby *moby) {
     if (D_L05_0015F5C4_c == 2) {
         moby->visible = 0;

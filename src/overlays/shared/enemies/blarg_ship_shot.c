@@ -81,6 +81,7 @@ char *spawn_blarg_ship_shot(int    firing_moby,
 
 void update_blarg_ship_shot(char *moby) __asm__("FUN_L11_00309098");
 
+/* Moby class 1017 */
 void update_blarg_ship_shot(char *moby) {
     float previous_moby_position[4];
     float trail_position[4];

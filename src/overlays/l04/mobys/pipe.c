@@ -15,6 +15,7 @@ extern void  spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void pipe_update(struct Moby *m) __asm__("FUN_L04_002e79a8");
 
+/* Moby class 1834 */
 void pipe_update(struct Moby *pipe_moby) {
     enum {
         PIPE_INITIALIZE = 0,

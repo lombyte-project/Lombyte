@@ -58,6 +58,7 @@ extern void spawn_debris_chunk(
 
 void update_destructible_object(char *moby) __asm__("FUN_L10_002d9eb8");
 
+/* Moby class 1047 */
 void update_destructible_object(char *moby) {
     typedef union {
         u128  q;

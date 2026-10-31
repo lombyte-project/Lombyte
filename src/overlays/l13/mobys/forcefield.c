@@ -95,6 +95,7 @@ extern char forcefield_missing_trigger_format[] __asm__("D_L13_001F4FB0");
 
 void forcefield_update(struct Moby *m) __asm__("FUN_L13_002ed4a8");
 
+/* Moby classes 404, 405 */
 void forcefield_update(struct Moby *moby) {
     enum {
         FORCEFIELD_STATE_INITIALIZE = 0,

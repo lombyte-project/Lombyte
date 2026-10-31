@@ -12,6 +12,7 @@
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F1390), where it is exact; names translated to the US level program. */
 void update_drifting_moby(struct Moby *moby) __asm__("FUN_L09_002f0040");
 
+/* Moby class 417 */
 void update_drifting_moby(struct Moby *moby) {
     char *drift_velocity = (char *)moby->pvars;
     fast_vec_add(&moby->pos, &moby->pos, drift_velocity);

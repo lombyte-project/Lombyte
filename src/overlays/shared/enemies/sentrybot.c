@@ -167,6 +167,7 @@ extern int D_L15_001ABE40_lui[] __asm__("D_L15_001ABE40") NOT_SDA;
 
 void sentrybot_update(unsigned char *moby) __asm__("FUN_L15_002979d8");
 
+/* Moby class 44 */
 void sentrybot_update(unsigned char *moby) {
     enum {
         SENTRYBOT_INITIALIZE = 0,

@@ -399,6 +399,7 @@ extern int func_L00_001F2BE8_308D68(void *, int, void *, void *, float) __asm__(
 
 void skid_mcmarx_update(Moby *moby) __asm__("FUN_L05_00307910");
 
+/* Moby class 717 */
 void skid_mcmarx_update(Moby *moby) {
     enum {
         SKID_MCMARX_INITIALIZE = 0,

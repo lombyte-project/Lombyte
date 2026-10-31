@@ -4,6 +4,7 @@
 
 void update_unfolding_column_piece(void *updated_moby) __asm__("FUN_L14_003061d8");
 
+/* Moby class 1397 */
 void update_unfolding_column_piece(void *updated_moby) {
     enum {
         MOBY_PVARS_INITIALIZE = 0

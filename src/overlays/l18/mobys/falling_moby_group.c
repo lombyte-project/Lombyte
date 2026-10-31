@@ -92,6 +92,7 @@ extern void remove_child_carrier_and_child(void *) __asm__("FUN_L18_002fa8e0");
 
 void update_linked_moby_group_transform_and_fall(struct Moby *moby) __asm__("FUN_L18_002f16f0");
 
+/* Moby class 1381 */
 void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,

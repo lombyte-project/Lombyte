@@ -66,6 +66,7 @@ extern void explode_ff640(struct Moby *,
 /* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */
 void update_bolt_thief_mine(struct Moby *moby) __asm__("FUN_L14_002ff640");
 
+/* Moby class 933 */
 void update_bolt_thief_mine(struct Moby *moby) {
     enum {
         FLOAT_MINE_INITIALIZE = 0,

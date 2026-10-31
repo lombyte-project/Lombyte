@@ -21,6 +21,7 @@ extern char moby_volume_trigger_missing_volume_format[] __asm__("D_L13_001F41F8"
 
 void update_moby_volume_trigger(char *moby) __asm__("FUN_L13_002b0e80");
 
+/* Moby class 6 */
 void update_moby_volume_trigger(char *moby) {
     char *volume_trigger_vars = ((char *)MOBY(moby)->pvars);
     if (*(int *)volume_trigger_vars == -1) {

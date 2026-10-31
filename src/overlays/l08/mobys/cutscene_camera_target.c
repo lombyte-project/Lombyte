@@ -26,6 +26,7 @@ extern struct G08c D_L08_0016D060_c __asm__("D_L08_0016D060");
 extern void        cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 void               update_cutscene_camera_target(struct Moby *moby) __asm__("FUN_L08_003084d8");
 
+/* Moby class 1553 */
 void update_cutscene_camera_target(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,

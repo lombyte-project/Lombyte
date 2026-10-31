@@ -42,6 +42,7 @@ extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
 
 void update_gemlik_scene_controller(struct Moby *moby) __asm__("FUN_L13_0030b628");
 
+/* Moby class 1353 */
 void update_gemlik_scene_controller(struct Moby *moby) {
     enum {
         WAIT_TO_START_INITIAL_SCENE = 0,

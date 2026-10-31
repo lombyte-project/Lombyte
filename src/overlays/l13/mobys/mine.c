@@ -87,6 +87,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 
 void update_level_13_mine(ProjectileMoby *moby) __asm__("FUN_L13_002c2048");
 
+/* Moby class 83 */
 void update_level_13_mine(ProjectileMoby *moby) {
     char           *moby_data = (char *)moby->data;
     ProjectileVec4  steering_and_collision_vector;

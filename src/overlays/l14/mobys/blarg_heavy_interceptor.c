@@ -180,6 +180,7 @@ extern Vec4 D_L14_00174560;
 
 void update_blarg_heavy_interceptor(struct Moby *m) __asm__("FUN_L14_002ac618");
 
+/* Moby class 8 */
 void update_blarg_heavy_interceptor(struct Moby *moby) {
     enum {
         INTERCEPTOR_STATE_INITIALIZE = 0,

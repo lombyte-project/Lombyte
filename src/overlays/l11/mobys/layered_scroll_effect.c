@@ -963,6 +963,7 @@ extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern unsigned char l11_layered_effect_texture_29_distance_fade_alpha __asm__("D_L11_00162590");
 void update_level11_layered_effect_and_queue_draw(struct Moby *moby) __asm__("FUN_L11_0031e2f0");
 
+/* Moby class 1903 */
 void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
     enum {
         EFFECT_INITIALIZE = 0,

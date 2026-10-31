@@ -45,6 +45,7 @@ void         energy_sphere_update(unsigned char *moby) __asm__("FUN_L11_00318b30
 extern float approach_value(float *p, float target, float maxstep);
 extern int   scale_game_frames(int);
 
+/* Moby class 1297 */
 void energy_sphere_update(unsigned char *moby) {
     enum {
         ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,

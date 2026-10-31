@@ -19,6 +19,7 @@ extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
 void update_triggered_moby_motion_and_manipulator_angle(char *moby) __asm__("FUN_L05_00316258");
 
+/* Moby class 893 */
 void update_triggered_moby_motion_and_manipulator_angle(char *moby) {
     enum {
         MOBY_INITIALIZE = 0,

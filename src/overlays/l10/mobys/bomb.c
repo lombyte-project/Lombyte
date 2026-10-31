@@ -196,6 +196,7 @@ extern int func_L00_001F2BE8_2D9988(float, void *, int, void *, void *) __asm__(
 extern void
 send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 
+/* Moby class 938 */
 void bombthrower_bomb_update(char *m) {
     char *data;
     char *r16;
@@ -333,6 +334,7 @@ extern void send_blast_hits(
     float, float, float, char *, void *, int, int, int, int, int, int) __asm__("FUN_L00_0025a9f8");
 extern void cart_burst(float, float, char *, void *, int) __asm__("FUN_L00_0025f090");
 
+/* Moby class 938 */
 void bombthrower_bomb_update(char *m) {
     char *c = *(char **)(m + 0x78);
     float prev[4] __attribute__((aligned(16)));

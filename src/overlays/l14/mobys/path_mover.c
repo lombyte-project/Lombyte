@@ -61,6 +61,7 @@ extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 
 void update_path_mover(struct Moby *moby) __asm__("FUN_L14_002aba80");
 
+/* Moby class 903 */
 void update_path_mover(struct Moby *moby) {
     enum {
         PATH_MOVER_COMMAND_WAIT_AT_LAST_POINT = 0,

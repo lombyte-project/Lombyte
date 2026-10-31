@@ -1093,6 +1093,7 @@ return_zero:
 
 void bomb_update(BombMoby *m) __asm__("FUN_L00_002adb30");
 
+/* Moby class 121 */
 void bomb_update(BombMoby *bomb_moby) {
     B910       rec = l00_bomb_camera_blast_parameters;
     Vec_2adb30 delta;

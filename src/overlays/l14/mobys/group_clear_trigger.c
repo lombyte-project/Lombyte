@@ -20,6 +20,7 @@ s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_002
 
 void update_group_clear_trigger(struct Moby *moby) __asm__("FUN_L14_003087c0");
 
+/* Moby class 1559 */
 void update_group_clear_trigger(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,

@@ -15,6 +15,7 @@ extern char          raritanium_acquired_text[] __asm__("D_L11_0021A900");
 
 void remove_moby_when_near_hero(char *moby) __asm__("FUN_L11_002cb790");
 
+/* Moby class 37 */
 void remove_moby_when_near_hero(char *moby) {
     if (fast_vec_dist(moby + 0x10, &hero.motion.pos) < 2.0f) {
         l11_proximity_removal_flag[0] = 1;

@@ -91,6 +91,7 @@ extern L05Fields_0013D4C0 item_available __asm__("D_0013D4C0");
 
 void update_help_hints(struct Moby *moby) __asm__("FUN_L05_0031bf40");
 
+/* Moby class 1347 */
 void update_help_hints(struct Moby *moby) {
     int *gameplay_event_pvars = ((int *)moby->pvars);
     int  value, elapsed, limit;

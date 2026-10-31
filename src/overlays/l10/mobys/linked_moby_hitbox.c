@@ -124,6 +124,7 @@ char linked_moby_missing_message[36] __asm__("D_L10_001DCE00") =
 
 void update_linked_moby_hitbox(struct Moby *moby) __asm__("FUN_L10_002c9c70");
 
+/* Moby class 794 */
 void update_linked_moby_hitbox(struct Moby *moby) {
     enum {
         LINKED_HITBOX_STATE_INITIALIZE = 0,

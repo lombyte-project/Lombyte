@@ -89,6 +89,7 @@ typedef char *(*Spawn_305778)(void *, void *, void *, int, int, long, long, long
 
 void extermitank_update(unsigned char *m) __asm__("FUN_L05_00304320");
 
+/* Moby class 625 */
 void extermitank_update(unsigned char *moby) {
     enum {
         EXTERMITANK_INITIALIZE = 0,

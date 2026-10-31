@@ -22,6 +22,7 @@ extern void  FUN_L00_0025f730(void *, float);
  * or steps node to node towards the path end, pausing between runs and playing its loop sound. */
 void moving_platform_small_update(char *moby) __asm__("FUN_L03_00294c08");
 
+/* Moby classes 868, 905, 928 */
 void moving_platform_small_update(char *moby) {
     enum {
         PLATFORM_INITIALIZE_AND_WAIT = 0,

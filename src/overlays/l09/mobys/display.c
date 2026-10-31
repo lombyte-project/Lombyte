@@ -84,6 +84,7 @@ char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_clas
     return moby;
 }
 
+/* Moby classes 276, 1298, 1299 */
 void display_update(struct Moby *moby) {
     enum {
         BREAKABLE_STACK_ANTEPENULTIMATE_CLASS = 0x512,

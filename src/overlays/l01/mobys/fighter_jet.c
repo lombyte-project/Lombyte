@@ -64,6 +64,7 @@ extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10")
 /* Per-frame update of a breakable moby: scales its speed by distance, and on a hit spawns the break effect, frees its child mobys and removes itself; otherwise fades its alpha by height. */
 void fighter_jet_update(char *moby) __asm__("FUN_L01_002f4428");
 
+/* Moby class 660 */
 void fighter_jet_update(char *moby) {
     float hit_dir[4];
     float hit_vec[4];

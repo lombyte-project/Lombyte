@@ -14,6 +14,7 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_moby_transform_and_child(char *moby) __asm__("FUN_L18_002fa728");
 
+/* Moby class 1584 */
 void update_moby_transform_and_child(char *moby) {
     enum {
         INITIALIZE_TRANSFORM_HISTORY = 0,

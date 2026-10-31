@@ -453,6 +453,7 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
 
 void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
 
+/* Moby class 175 */
 void taunter_update(Moby *taunter_moby) {
     Vars *taunter_vars;
     s32   taunter_state;

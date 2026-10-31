@@ -20,6 +20,7 @@ int  D_L16_00161DDC = 0x80808080;
 int  D_L16_00161DE0 = 0x80202020;
 void update_grindrail_gate(struct Moby *gate_moby) __asm__("FUN_L16_002e5010");
 
+/* Moby class 1439 */
 void update_grindrail_gate(struct Moby *gate_moby) {
     enum {
         GRINDRAIL_GATE_INITIALIZE = 0,

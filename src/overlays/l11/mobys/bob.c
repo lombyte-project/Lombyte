@@ -57,6 +57,7 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
 /* Watcher update, same routine as commando_update with this level's states and data layout. */
 void bob_update(WatcherMoby *m) __asm__("FUN_L11_002d0710");
 
+/* Moby class 90 */
 void bob_update(WatcherMoby *moby) {
     enum {
         BOB_INITIALIZE = 0,

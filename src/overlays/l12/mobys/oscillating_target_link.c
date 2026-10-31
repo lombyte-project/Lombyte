@@ -251,6 +251,7 @@ extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
 void update_oscillating_target_link(Moby *moby) __asm__("FUN_L12_00302f30");
 
+/* Moby class 1259 */
 void update_oscillating_target_link(Moby *moby) {
     enum {
         TARGET_TRACKING_STATE_INITIALIZE = 0,

@@ -147,6 +147,7 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void qwark_oltanis_update(L14WatchMoby *m) __asm__("FUN_L14_002fba20");
 
+/* Moby class 851 */
 void qwark_oltanis_update(L14WatchMoby *moby) {
     enum {
         QWARK_OLTANIS_STATE_INITIALIZE_DIALOGUE = 0,

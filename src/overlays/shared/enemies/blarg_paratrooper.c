@@ -143,6 +143,7 @@ extern float D_L08_001621B0 __attribute__((sda));
 
 void blarg_paratrooper_update(char *moby) __asm__("FUN_L08_00301158");
 
+/* Moby class 1023 */
 void blarg_paratrooper_update(char *moby) {
     enum {
         PARATROOPER_STATE_INITIALIZE = 0,

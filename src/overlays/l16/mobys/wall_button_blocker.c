@@ -42,6 +42,7 @@
 
 void update_wall_button_blocker(struct Moby *moby) __asm__("FUN_L16_002e36e8");
 
+/* Moby class 1387 */
 void update_wall_button_blocker(struct Moby *moby) {
     float *rotation_scale_data = (float *)moby->pvars;
     if (moby->state == 0) {

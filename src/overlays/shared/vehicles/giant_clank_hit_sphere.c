@@ -56,6 +56,7 @@ extern void play_entity_sound(float, char *, char *, float, float, int, int, int
 
 void update_giant_clank_hit_sphere(struct Moby *moby) __asm__("FUN_L15_0029ead0");
 
+/* Moby class 1427 */
 void update_giant_clank_hit_sphere(struct Moby *moby) {
     char        *moby_class = moby->pclass;
     char        *state = (char *)moby->pvars;

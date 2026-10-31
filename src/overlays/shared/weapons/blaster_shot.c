@@ -263,6 +263,7 @@ char *spawn_homing_shot(
 
 void update_homing_shot(Moby *shot_moby) __asm__("FUN_L00_002cb418");
 
+/* Moby class 305 */
 void update_homing_shot(Moby *shot_moby) {
     Vec4A     start;
     Vec4A     step;

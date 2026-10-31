@@ -27,6 +27,7 @@ extern int FUN_0022da68(int, int, int);
 extern short crane_animation_speed_gp __asm__("D_L02_00161C68") __attribute__((sda));
 void         crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
 
+/* Moby class 732 */
 void crane_update(struct Moby *moby) {
     enum {
         CRANE_ANIM_RESTART_WAIT = 0,

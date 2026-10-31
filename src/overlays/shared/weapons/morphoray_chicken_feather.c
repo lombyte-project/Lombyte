@@ -15,6 +15,7 @@ extern float falling_moby_horizontal_velocity_scale_gp __asm__("D_L00_001618A8")
 
 void update_damped_falling_moby(unsigned char *updated_moby) __asm__("FUN_L00_002cc210");
 
+/* Moby class 428 */
 void update_damped_falling_moby(unsigned char *updated_moby) {
     float *moby_vars = *(float **)(updated_moby + 0x78);
     float  sc;

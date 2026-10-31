@@ -189,6 +189,7 @@ extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
  */
 void update_blarg_trooper_projectile(struct Moby *moby) __asm__("FUN_L04_002af058");
 
+/* Moby class 184 */
 void update_blarg_trooper_projectile(struct Moby *moby) {
     Vec4            previous_position;
     CollisionProbe  pr;

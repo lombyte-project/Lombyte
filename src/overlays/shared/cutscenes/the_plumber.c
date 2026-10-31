@@ -140,6 +140,7 @@ void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) {
 /* Watcher moby update with a level-specific state script, then turns its head toward the hero or a random target. */
 void the_plumber_update(L01WatchMoby *m) __asm__("FUN_L01_002ff118");
 
+/* Moby class 774 */
 void the_plumber_update(L01WatchMoby *plumber_moby) {
     enum {
         PLUMBER_INITIALIZE = 0,

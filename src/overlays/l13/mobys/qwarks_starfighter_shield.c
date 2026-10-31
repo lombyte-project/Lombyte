@@ -38,6 +38,7 @@ extern void offset_moby_class_point_pairs(unsigned char *, int, int) __asm__("FU
 
 void update_qwarks_starfighter_shield(struct Moby *moby) __asm__("FUN_L13_002e84d8");
 
+/* Moby class 352 */
 void update_qwarks_starfighter_shield(struct Moby *moby) {
     enum {
         INITIALIZE_COLLISION = 0,

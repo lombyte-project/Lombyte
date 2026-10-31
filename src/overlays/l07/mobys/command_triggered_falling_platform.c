@@ -31,6 +31,7 @@ extern void
 reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
 void update_command_triggered_falling_platform(char *moby) __asm__("FUN_L07_003112c8");
 
+/* Moby class 1069 */
 void update_command_triggered_falling_platform(char *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,

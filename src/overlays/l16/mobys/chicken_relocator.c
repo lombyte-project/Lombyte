@@ -180,6 +180,7 @@ s32   is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void update_chicken_relocator(struct Moby *moby) __asm__("FUN_L16_002e8970");
 
+/* Moby class 1923 */
 void update_chicken_relocator(struct Moby *moby) {
     enum {
         TARGET_CYCLE_INITIALIZE_DELAY = 0,

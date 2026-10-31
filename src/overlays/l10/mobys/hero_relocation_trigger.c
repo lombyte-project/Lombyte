@@ -59,6 +59,7 @@ void update_hero_relocation_trigger(struct Moby *moby) __asm__("FUN_L10_00298b68
 
 #include "sda.h"
 
+/* Moby class 22 */
 void update_hero_relocation_trigger(struct Moby *moby) {
     PickupVars  *relocation_trigger_vars;
     struct Moby *target;

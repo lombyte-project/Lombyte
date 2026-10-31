@@ -84,6 +84,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
 
+/* Moby class 347 */
 void dreks_fleet_turret_update(struct Moby *turret_moby) {
     enum {
         FLEET_TURRET_INITIALIZE = 0,

@@ -236,6 +236,7 @@ void compute_tresspasser_pad_camera_transform(float *pos,
 
 void tresspasser_pad_update(Moby *moby) __asm__("FUN_L02_002d8ad0");
 
+/* Moby class 615 */
 void tresspasser_pad_update(Moby *moby) {
     enum {
         TRESSPASSER_PAD_STATE_INITIALIZE = 0,

@@ -17,6 +17,7 @@ void         hangar_door_update(char *m) __asm__("FUN_L06_002b4770");
 
 #include "sda.h"
 
+/* Moby class 55 */
 void hangar_door_update(char *door_moby) {
     enum {
         HANGAR_DOOR_INITIALIZE = 0,

@@ -44,6 +44,7 @@ extern char fleet_clip_volume_help_suppression_flags[] __asm__("D_00141D7C");
 
 void update_fleet_camera_box_watcher(struct Moby *moby) __asm__("FUN_L17_002f26d0");
 
+/* Moby class 1470 */
 void update_fleet_camera_box_watcher(struct Moby *moby) {
     enum {
         CAMERA_BOX_WATCHER_INITIALIZE = 0,

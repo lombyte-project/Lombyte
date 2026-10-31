@@ -98,6 +98,7 @@ int moby_motion_spark_initial_color_end_gp __asm__("D_L08_00161A78") = 0x6020a0c
 
 int moby_motion_spark_second_color_end_gp __asm__("D_L08_00161A80") = 0x20601020;
 
+/* Moby class 438 */
 void update_path_following_moby(char *moby) {
     enum {
         MOBY_STATE_INITIALIZE_PATH = 0,

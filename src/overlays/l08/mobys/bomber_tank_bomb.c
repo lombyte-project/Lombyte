@@ -86,6 +86,7 @@ char *spawn_bomber_tank_bomb(char *source_moby, char *spawn_position, char *init
     return moby;
 }
 
+/* Moby class 425 */
 void update_bomber_tank_bomb(struct Moby *moby) {
     enum {
         PROJECTILE_STATE_FLYING = 1,

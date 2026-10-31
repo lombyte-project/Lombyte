@@ -212,6 +212,7 @@ extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern int  func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void        update_batalia_textured_effect(struct Moby *moby) __asm__("FUN_L08_003097b0");
 
+/* Moby class 1649 */
 void update_batalia_textured_effect(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,

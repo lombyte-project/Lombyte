@@ -11,6 +11,7 @@ extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 
 void update_moby_draw_registration(unsigned char *moby) __asm__("FUN_L07_002f8058");
 
+/* Moby classes 317, 460 */
 void update_moby_draw_registration(unsigned char *moby) {
     enum {
         DRAW_REGISTRATION_INITIALIZE = 0,

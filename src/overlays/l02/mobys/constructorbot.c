@@ -135,6 +135,7 @@ extern void handle_constructorbot_damage_and_retargeting(void *) __asm__("FUN_L0
 
 void constructorbot_update(struct Moby *moby) __asm__("FUN_L02_002d7748");
 
+/* Moby class 612 */
 void constructorbot_update(struct Moby *moby) {
     enum {
         L02_BOT_INITIALIZE = 0,

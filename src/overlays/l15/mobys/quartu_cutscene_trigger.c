@@ -38,6 +38,7 @@ void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
 void update_quartu_cutscene_trigger(struct Moby *moby) __asm__("FUN_L15_002eb4c0");
 
+/* Moby class 1419 */
 void update_quartu_cutscene_trigger(struct Moby *moby) {
     enum {
         CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS = 0,

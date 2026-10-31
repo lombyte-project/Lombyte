@@ -47,6 +47,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 /* Sinking platform update: arms its tilt, then sinks it under the hero until it is removed. */
 void floating_platform_update(struct Moby *moby) __asm__("FUN_L18_002d82c0");
 
+/* Moby class 587 */
 void floating_platform_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,

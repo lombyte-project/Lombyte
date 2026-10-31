@@ -103,6 +103,7 @@ extern CollisionHit D_L03_00173F40;
 extern Vec4 D_0013F490_v __asm__("D_0013F490");
 void        update_homing_rocket(struct Moby *rocket_moby) __asm__("FUN_L03_002d43c8");
 
+/* Moby class 833 */
 void update_homing_rocket(struct Moby *rocket_moby) {
     enum {
         ROCKET_FLY = 1,

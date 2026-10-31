@@ -42,6 +42,7 @@ float D_L18_001620FC = 3.109f;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F6330), where it is exact; names translated to the US level program. */
 void update_moby_rotation_group(Moby *moby) __asm__("FUN_L06_002f4f00");
 
+/* Moby class 1021 */
 void update_moby_rotation_group(Moby *moby) {
     enum {
         SPAWN_CHILD_MOBYS = 0,

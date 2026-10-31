@@ -167,6 +167,7 @@ void set_moby_list_state_17(int moby_list_index) {
     }
 }
 
+/* Moby class 1108 */
 void update_countdown_sequence(unsigned char *moby) {
     enum {
         INITIALIZE_ENTITY = 0,

@@ -32,6 +32,7 @@ typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 char *
 spawn_destructible_prop_wreck(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
 
+/* Moby class 279 */
 void update_destructible_prop(struct Moby *moby) {
     char *moby_vars_or_random_frames = (char *)moby->pvars;
     char *hit_record = find_moby_hit(moby, 0x10000, 0);

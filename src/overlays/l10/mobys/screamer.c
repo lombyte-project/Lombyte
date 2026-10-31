@@ -87,6 +87,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float fast_vec_dist(void *, void *);
 
+/* Moby class 1196 */
 void screamer_update(Moby *moby) {
     enum {
         SCREAMER_STATE_INITIALIZE = 0,

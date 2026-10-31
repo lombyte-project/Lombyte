@@ -386,6 +386,7 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 
 void helicopter_update(struct Moby *moby) __asm__("FUN_L15_002c5630");
 
+/* Moby class 233 */
 void helicopter_update(struct Moby *moby) {
     enum {
         HELICOPTER_INITIALIZE = 0,

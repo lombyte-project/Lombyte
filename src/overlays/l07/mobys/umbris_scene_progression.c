@@ -41,6 +41,7 @@ extern void request_space_load(int) __asm__("FUN_0022e188");
 void        update_umbris_scene_progression(struct Moby *moby) __asm__("FUN_L07_002f5ba0");
 void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
+/* Moby class 436 */
 void update_umbris_scene_progression(struct Moby *moby) {
     enum {
         CONTROLLER_WAIT_FOR_SCENE_IDLE = 0,

@@ -64,6 +64,7 @@ extern char rocket_impact_effect_origin[] __asm__("D_L11_00174860");
 
 void update_ship_rocket(struct Moby *moby) __asm__("FUN_L11_003094f8");
 
+/* Moby class 1034 */
 void update_ship_rocket(struct Moby *moby) {
     Missile_94f8 *rocket_vars = (Missile_94f8 *)moby->pvars;
     Vec4f        *pos;

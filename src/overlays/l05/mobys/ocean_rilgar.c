@@ -36,6 +36,7 @@ extern float D_L05_00211B20[];
 
 void ocean_rilgar_update(struct Moby *moby) __asm__("FUN_L05_00316110");
 
+/* Moby class 879 */
 void ocean_rilgar_update(struct Moby *moby) {
     enum {
         OCEAN_RILGAR_INITIALIZE = 0,

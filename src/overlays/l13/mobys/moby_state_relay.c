@@ -12,6 +12,7 @@ extern char D_L13_001F51B0[] NOT_SDA;
 
 void update_moby_state_relay(struct Moby *moby) __asm__("FUN_L13_002f8880");
 
+/* Moby class 667 */
 void update_moby_state_relay(struct Moby *moby) {
     enum {
         STATE_RELAY_INITIALIZE = 0,

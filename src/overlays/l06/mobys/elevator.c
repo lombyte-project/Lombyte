@@ -174,6 +174,7 @@ void set_moby_and_links_to_states_2_and_3(char *moby) {
     }
 }
 
+/* Moby class 1061 */
 void update_elevator(Moby_2FDA70 *moby) {
     enum {
         INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,

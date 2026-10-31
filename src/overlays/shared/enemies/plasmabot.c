@@ -269,6 +269,7 @@ void reset_listed_plasmabot_beam_cooldowns(int idx) __asm__("FUN_L14_002b3890");
 
 void update_plasmabot(char *moby) __asm__("FUN_L14_002b17d8");
 
+/* Moby class 28 */
 void update_plasmabot(char *moby) {
     enum {
         PLASMABOT_INITIALIZE = 0,

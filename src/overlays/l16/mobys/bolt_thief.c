@@ -135,6 +135,7 @@ func_L00_002592B0_path54(char *, float, float *, float, float, float) __asm__("F
 
 void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L16_002e37a0");
 
+/* Moby class 1401 */
 void bolt_thief_update(L16CrateMoby *moby) {
     enum {
         BOLT_THIEF_INITIALIZE = 0,

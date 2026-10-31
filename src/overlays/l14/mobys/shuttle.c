@@ -62,6 +62,7 @@ extern void FUN_L00_001fff28(void *, int, float);
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
 
+/* Moby class 557 */
 void shuttle_update(struct Moby *shuttle_moby) {
     L14LiftVars *shuttle_vars;
     Vec4         previous_shuttle_position;

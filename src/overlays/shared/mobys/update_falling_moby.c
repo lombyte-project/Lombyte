@@ -10,6 +10,7 @@
 
 void update_falling_moby(char *moby) __asm__("FUN_L03_002de370");
 
+/* Moby classes 1221, 1222 */
 void update_falling_moby(char *moby) {
     float unused_vector_add_argument[4];
     char *moby_data = ((char *)MOBY(moby)->pvars);

@@ -165,6 +165,7 @@ void spawn_rocket_explosion_and_debris(char *moby,
                                        int   spawn_count,
                                        int   flag) __asm__("FUN_L08_002de528");
 
+/* Moby class 435 */
 void update_rocket(M46 *moby) {
     enum {
         ROCKET_STATE_INITIALIZE = 0,

@@ -103,6 +103,7 @@ typedef union {
 
 void update_poison_vessel_fragment(struct Moby *moby) __asm__("FUN_L13_0030c3b8");
 
+/* Moby class 1634 */
 void update_poison_vessel_fragment(struct Moby *moby) {
     char           *motion_and_lifetime_vars = (char *)moby->pvars;
     L13EffectVector old_pos, position, velocity, acceleration, second_pos;

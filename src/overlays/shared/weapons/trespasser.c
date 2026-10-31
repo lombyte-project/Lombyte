@@ -62,6 +62,7 @@ float D_L18_001618A0 = 0;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C2A20), where it is exact; names translated to the US level program. */
 void trespasser_update(struct Moby *m) __asm__("FUN_L00_002c1718");
 
+/* Moby class 188 */
 void trespasser_update(struct Moby *trespasser_moby) {
     if (*(int *)(((char *)trespasser_moby->pvars) + 4) != 0) {
         update_trespasser_pickup(trespasser_moby);

@@ -18,6 +18,7 @@ advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__
    it toward the end point, 3 lowers it to 5.9 below the entry's height. */
 void update_triggered_moby_slide_and_lowering(char *moby) __asm__("FUN_L05_0030e508");
 
+/* Moby class 843 */
 void update_triggered_moby_slide_and_lowering(char *moby) {
     enum {
         MOBY_PLACE_AT_POSE_OFFSET = 0,

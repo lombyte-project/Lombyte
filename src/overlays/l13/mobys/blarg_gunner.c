@@ -211,6 +211,7 @@ extern void spawn_explosion(void *,
 
 void blarg_gunner_update(struct Moby *moby) __asm__("FUN_L13_002b4c80");
 
+/* Moby class 36 */
 void blarg_gunner_update(struct Moby *moby) {
     enum {
         BLARG_GUNNER_STATE_INITIALIZE = 0,

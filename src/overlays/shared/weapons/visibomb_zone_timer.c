@@ -96,6 +96,7 @@ void draw_visibomb_outside_zone_overlay(struct Moby *moby) {
  * Entering a zone resets the count; past a random threshold FUN_L00_002b5b20 runs on that moby. */
 void update_target_outside_zone_timeout(struct Moby *moby) __asm__("FUN_L01_00302648");
 
+/* Moby class 832 */
 void update_target_outside_zone_timeout(struct Moby *moby) {
     ZoneVars    *zone_vars = (ZoneVars *)moby->pvars;
     struct Moby *target_moby = 0;

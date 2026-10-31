@@ -1228,6 +1228,7 @@ extern int   activate_listed_blarg_ship(int) __asm__("FUN_L11_0031a7d8");
 s32  hp_bar_saved __asm__("D_L11_00162170") = 0;
 void jet_fighter_update(struct Moby *moby) __asm__("FUN_L11_00313290");
 
+/* Moby class 1242 */
 void jet_fighter_update(struct Moby *moby) {
     enum {
         JET_FIGHTER_STATE_INITIALIZE = 0,

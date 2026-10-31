@@ -37,6 +37,7 @@ extern struct Moby *moby_array_macro __asm__("D_L04_0015FFD8") MACRO_ADDR;
 /* Door update: follows its lever's travel, pushes the lever back while opening, and runs the motor sounds. */
 void platform_booster_update(struct Moby *m) __asm__("FUN_L04_002c6bb8");
 
+/* Moby class 434 */
 void platform_booster_update(struct Moby *moby) {
     enum {
         PLATFORM_BOOSTER_STATE_INITIALIZE = 0,

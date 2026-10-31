@@ -85,6 +85,7 @@ extern char bolt_impact_reflection_normal[] __asm__("D_L14_00174580");
 
 void update_flying_bolt(struct Moby *projectile_moby) __asm__("FUN_L14_002ece00");
 
+/* Moby class 681 */
 void update_flying_bolt(struct Moby *projectile_moby) {
     L14BoltVars *bolt_vars = (L14BoltVars *)projectile_moby->pvars;
     Vec4         collision_line_start;

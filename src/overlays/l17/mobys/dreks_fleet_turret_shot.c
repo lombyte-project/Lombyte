@@ -121,6 +121,7 @@ extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale, void *
 extern char D_L17_00174760_lui[] __asm__("D_L17_00174760") NOT_SDA;
 void        update_drone_flight_and_sparks(struct Moby *moby) __asm__("FUN_L17_002e8e08");
 
+/* Moby class 1368 */
 void update_drone_flight_and_sparks(struct Moby *moby) {
     enum {
         DRONE_STATE_FLIGHT = 0,

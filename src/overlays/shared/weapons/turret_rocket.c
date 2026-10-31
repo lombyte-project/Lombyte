@@ -181,6 +181,7 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
 
 void update_turret_rocket(char *moby) __asm__("FUN_L08_002e8210");
 
+/* Moby class 458 */
 void update_turret_rocket(char *moby) {
     char *position_ptr = moby + 0x10;
     char *homing_projectile_private_state = ((char *)MOBY(moby)->pvars);

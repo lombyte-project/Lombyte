@@ -192,6 +192,7 @@ void apply_gunship_path_position_offsets(char *moby, float *path_position) {
 
 void gunship_follow_path(struct Moby *m) __asm__("FUN_L01_002f5168");
 
+/* Moby class 845 */
 void gunship_follow_path(struct Moby *moby) {
     enum {
         GUNSHIP_PATH_STATE_INITIALIZE = 0,

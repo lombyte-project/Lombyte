@@ -184,6 +184,7 @@ typedef struct {
 void       drain_cover_update(DrainCoverMoby *moby) __asm__("FUN_L05_0030e7f8");
 extern int scale_game_frames(int);
 
+/* Moby class 844 */
 void drain_cover_update(DrainCoverMoby *moby) {
     enum {
         DRAIN_COVER_INITIALIZE = 0,

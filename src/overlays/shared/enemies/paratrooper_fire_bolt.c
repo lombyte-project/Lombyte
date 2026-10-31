@@ -62,6 +62,7 @@ void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void update_fire_bolt(char *fire_bolt) __asm__("FUN_L08_00307298");
 
+/* Moby class 1292 */
 void update_fire_bolt(char *fire_bolt) {
     enum {
         FIRE_BOLT_STATE_FLYING = 1,

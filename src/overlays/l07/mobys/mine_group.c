@@ -182,6 +182,7 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
         animation_timer->frames = animation_timer->length;
 }
 
+/* Moby class 871 */
 void update_mine_group(struct Moby *moby) {
     enum {
         INITIALIZE_PATH_CHILDREN = 0x0,

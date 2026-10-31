@@ -20,6 +20,7 @@ extern int FUN_L00_001fefc8(void *);
 
 void grab_crane_update(struct Moby *moby) __asm__("FUN_L02_002dd370");
 
+/* Moby class 675 */
 void grab_crane_update(struct Moby *moby) {
     enum {
         GRAB_CRANE_ANIM_TRANSITION_TO_TIMED_WAIT = 0,

@@ -23,6 +23,7 @@ extern unsigned char D_0014C050[][16];
  * hero to step on, then plays the driver's up or down animation (2/4) with its loop sound until it ends. */
 void liftcar_platform_update(struct Moby *moby) __asm__("FUN_L02_002e2228");
 
+/* Moby class 792 */
 void liftcar_platform_update(struct Moby *moby) {
     enum {
         LIFTCAR_PLATFORM_INITIALIZE = 0,

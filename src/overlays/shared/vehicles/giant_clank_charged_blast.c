@@ -254,6 +254,7 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 
 void update_giant_clank_charged_blast(Moby29FF90 *moby) __asm__("FUN_L15_0029edb0");
 
+/* Moby class 1523 */
 void update_giant_clank_charged_blast(Moby29FF90 *moby) {
     enum {
         CHARGING = 0,

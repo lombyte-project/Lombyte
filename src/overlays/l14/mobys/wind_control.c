@@ -72,6 +72,7 @@ extern s32 wind_push_decay_frames_gp __asm__("D_L14_00161C04") __attribute__((sd
 
 void update_wind_control(struct Moby *wind_control_moby) __asm__("FUN_L14_002eaf88");
 
+/* Moby class 610 */
 void update_wind_control(struct Moby *wind_control_moby) {
     L14WindVars *wind_vars = (L14WindVars *)wind_control_moby->pvars;
     float        wind_direction_or_push_delta[4];

@@ -274,6 +274,7 @@ void emit_woodcut_bot_death_effects(void *m) __asm__("FUN_L04_002d1608");
 
 void woodcut_bot_update(WBMoby *m) __asm__("FUN_L04_002d16b8");
 
+/* Moby class 563 */
 void woodcut_bot_update(WBMoby *m) {
     enum {
         WOODCUT_BOT_INITIALIZE = 0,

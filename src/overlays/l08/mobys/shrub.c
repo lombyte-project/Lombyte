@@ -212,6 +212,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
     }
 }
 
+/* Moby class 462 */
 void shrub_update(struct Moby *moby) {
     enum {
         SHRUB_INITIALIZE = 0,

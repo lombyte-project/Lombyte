@@ -57,6 +57,7 @@ Pair_2E2A38 D_L08_00161C30 = {
     {0x2f000000, 0x3f000000}
 };
 
+/* Moby classes 441-443, 445, 448-451, 464, 465 */
 void update_falling_debris(Moby_2E2A38 *debris_moby) {
     enum {
         FALLING_DEBRIS_INITIALIZE = 1,

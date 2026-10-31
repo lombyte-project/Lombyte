@@ -29,6 +29,7 @@ extern void FUN_L00_00257470(void *, s32, s32);
 /* Once hit hard enough: bursts into 200 smoke puffs and 40 debris chunks, then removes itself. */
 void rock_formation_update(struct Moby *m) __asm__("FUN_L01_002f9810");
 
+/* Moby class 704 */
 void rock_formation_update(struct Moby *rock_formation_moby) {
     DebrisHit *hit;
     s32        i;

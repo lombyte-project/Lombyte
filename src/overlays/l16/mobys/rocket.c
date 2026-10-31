@@ -73,6 +73,7 @@ extern float       func_L00_0025CCF0_spark(void *, void *, float, float, float, 
 
 void update_homing_projectile(unsigned char *moby) __asm__("FUN_L16_002a3f38");
 
+/* Moby class 1475 */
 void update_homing_projectile(unsigned char *moby) {
     enum {
         PROJECTILE_STATE_FLYING = 0,

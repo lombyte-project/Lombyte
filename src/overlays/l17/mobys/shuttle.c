@@ -103,6 +103,7 @@ extern char D_0013CAE4[];
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L17_002f1940");
 
+/* Moby class 1448 */
 void shuttle_update(struct Moby *shuttle_moby) {
     enum {
         SHUTTLE_STATE_INITIALIZE = 0,

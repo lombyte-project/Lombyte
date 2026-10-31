@@ -46,6 +46,7 @@ void                 mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c82
 
 void door_update(struct Moby *m) __asm__("FUN_L17_002e87d8");
 
+/* Moby classes 1359-1364, 1367, 1369, 1372, 1373 */
 void door_update(struct Moby *door_moby) {
     enum {
         DOOR_STATE_INITIALIZE = 0,

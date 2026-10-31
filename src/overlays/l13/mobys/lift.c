@@ -50,6 +50,7 @@ compute_lift_mount_transform(struct Moby *, float *, float *) __asm__("FUN_L13_0
 
 void update_lift(struct Moby *moby) __asm__("FUN_L13_0030a6d8");
 
+/* Moby class 1270 */
 void update_lift(struct Moby *moby) {
     enum {
         LIFT_INITIALIZE = 0,

@@ -203,6 +203,7 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 void       hoven_turret_update(struct Moby *moby) __asm__("FUN_L12_00303540");
 
+/* Moby class 1267 */
 void hoven_turret_update(struct Moby *moby) {
     enum {
         HOVEN_TURRET_STATE_INITIALIZE = 0,

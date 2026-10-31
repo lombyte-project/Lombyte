@@ -29,6 +29,7 @@ extern struct Moby *D_L07_0015FFD8;
 
 void update_sliding_gate(struct Moby *moby) __asm__("FUN_L07_0031a9e8");
 
+/* Moby class 1128 */
 void update_sliding_gate(struct Moby *moby) {
     enum {
         MOVING_MOBY_INITIALIZE = 0,

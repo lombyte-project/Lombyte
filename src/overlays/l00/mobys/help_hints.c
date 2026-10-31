@@ -25,6 +25,7 @@ extern u16  D_00141968[];
 
 void update_help_hints(HelpMoby *moby) __asm__("FUN_L00_002e0988");
 
+/* Moby class 1413 */
 void update_help_hints(HelpMoby *moby) {
     s32         *vars;
     s32         *target_index_ptr;

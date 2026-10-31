@@ -11,6 +11,7 @@ extern s32 rand();
 void        update_moby_random_interval_animation(struct Moby *moby) __asm__("FUN_L04_002a5a08");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 
+/* Moby class 161 */
 void update_moby_random_interval_animation(struct Moby *moby) {
     int *animation_countdown;
     if (moby != 0) {

@@ -38,6 +38,7 @@ extern unsigned char *spawn_gravity_floor_burst_particle(
 
 void update_directional_particle_emitter(struct Moby *moby) __asm__("FUN_L10_002e5be0");
 
+/* Moby class 1240 */
 void update_directional_particle_emitter(struct Moby *moby) {
     f32  *pvars = (f32 *)moby->pvars;
     Vec4 *moby_position;

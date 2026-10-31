@@ -64,6 +64,7 @@ extern struct Moby *hit_moby __asm__("D_L12_001742D8") NOT_SDA;
 /* A homing mine: rises, then steers toward the point ahead and blows up near it or on contact. */
 void update_homing_mine(struct Moby *moby) __asm__("FUN_L12_00304e00");
 
+/* Moby class 1269 */
 void update_homing_mine(struct Moby *moby) {
     enum {
         HOMING_MINE_STATE_INITIALIZE = 0,

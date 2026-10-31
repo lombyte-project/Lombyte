@@ -146,6 +146,7 @@ s16 D_L00_001D5740[1200] = {0};
 
 void particle_spawner_smoke_fire_update(P *p) __asm__("FUN_L00_002d6f28");
 
+/* Moby class 760 */
 void particle_spawner_smoke_fire_update(P *spawner) {
     enum {
         PARTICLE_SPAWNER_INITIALIZE = 0,

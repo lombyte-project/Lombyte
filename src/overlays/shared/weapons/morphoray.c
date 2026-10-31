@@ -1517,6 +1517,7 @@ done:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BDAF0), where it is exact; names translated to the US level program. */
 void morphoray_update(Moby *moby) __asm__("FUN_L00_002bc7e8");
 
+/* Moby class 185 */
 void morphoray_update(Moby *moby) {
     Vq    direction;
     Vq    points[3];

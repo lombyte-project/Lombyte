@@ -647,6 +647,7 @@ extern char D_0013F3D0[];
 
 void planetbuster_maximus_part_update(char *moby) __asm__("FUN_L12_003069d0");
 
+/* Moby class 1274 */
 void planetbuster_maximus_part_update(char *moby) {
     enum {
         PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,

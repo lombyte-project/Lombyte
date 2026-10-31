@@ -9,6 +9,7 @@ extern unsigned int l02_trackdrive_left_moby_address_cutoff __asm__("D_L02_0015F
 
 void trackdrive_left_update(char *moby) __asm__("FUN_L02_002cb978");
 
+/* Moby class 331 */
 void trackdrive_left_update(char *moby) {
     if ((unsigned int)moby < l02_trackdrive_left_moby_address_cutoff) {
         *(int *)(moby + 0x58) = 0;

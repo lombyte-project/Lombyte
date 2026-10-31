@@ -83,6 +83,7 @@ extern void  func_L00_0025F4A8_alt(void *,
 
 void update_ryno_rocket(char *m) __asm__("FUN_L00_002cd1f0");
 
+/* Moby class 457 */
 void update_ryno_rocket(char *rocket_moby) {
     char *rocket_vars;
     char *target_moby;

@@ -150,6 +150,7 @@ void mark_mine_for_removal(struct Moby *moby, MineSpawnerVars *spawner_vars) {
     mark_moby_for_removal(moby);
 }
 
+/* Moby class 1112 */
 void update_mine(struct Moby *moby) {
     enum {
         MINE_INITIALIZE = 0,

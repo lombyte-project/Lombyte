@@ -12,6 +12,7 @@ void         update_triggered_moby_yaw(struct Moby *moby) __asm__("FUN_L05_00316
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 
+/* Moby class 895 */
 void update_triggered_moby_yaw(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE_YAW = 0,

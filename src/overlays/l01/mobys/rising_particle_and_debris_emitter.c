@@ -56,6 +56,7 @@ extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L
 
 void update_rising_particle_and_debris_emitter(SteamMoby *steam_moby) __asm__("FUN_L01_002f8c58");
 
+/* Moby class 700 */
 void update_rising_particle_and_debris_emitter(SteamMoby *steam_moby) {
     SteamVars     *steam_vars;
     SteamColors    colors;

@@ -16,6 +16,7 @@ extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_0
 void        ocean_umbris_update(unsigned char *moby) __asm__("FUN_L07_0030d440");
 extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
+/* Moby class 1018 */
 void ocean_umbris_update(unsigned char *moby) {
     enum {
         OCEAN_UMBRIS_INITIALIZE = 0,

@@ -12,6 +12,7 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 
 void update_moby_translation_delta_matrix(char *moby) __asm__("FUN_L04_002d3580");
 
+/* Moby class 584 */
 void update_moby_translation_delta_matrix(char *moby) {
     char *moby_vars = ((char *)MOBY(moby)->pvars);
     float position_delta[4];

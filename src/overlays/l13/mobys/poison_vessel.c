@@ -278,6 +278,7 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 
 void poison_vessel_update(struct Moby *moby) __asm__("FUN_L13_00307b10");
 
+/* Moby class 1261 */
 void poison_vessel_update(struct Moby *moby) {
     enum {
         POISON_VESSEL_INTACT = 0,

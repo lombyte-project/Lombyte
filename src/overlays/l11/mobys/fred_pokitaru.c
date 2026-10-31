@@ -68,6 +68,7 @@ extern struct UsageStat         help_records[] __asm__("D_00141968") NOT_SDA;
 
 void fred_pokitaru_update(struct Moby *moby) __asm__("FUN_L11_002f0e40");
 
+/* Moby class 298 */
 void fred_pokitaru_update(struct Moby *moby) {
     enum {
         FRED_POKITARU_INITIALIZE = 0,

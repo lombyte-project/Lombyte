@@ -30,6 +30,7 @@ extern s32 D_L01_00161AF0 __attribute__((sda));
 
 void update_nearest_area_moby_selection(struct Moby *moby) __asm__("FUN_L01_002f2eb8");
 
+/* Moby class 605 */
 void update_nearest_area_moby_selection(struct Moby *moby) {
     AreaVars *area_vars = (AreaVars *)moby->pvars;
     Vec4      target;

@@ -859,6 +859,7 @@ extern void  jet_animate(struct Moby *, float) __asm__("FUN_L00_00259fe8");
 extern void  update_timed_point_light_color(char *) __asm__("FUN_L07_00312150");
 void         snagglebeast_update(unsigned char *moby) __asm__("FUN_L07_00314150");
 
+/* Moby class 1106 */
 void snagglebeast_update(unsigned char *moby) {
     enum {
         SNAGGLEBEAST_INITIALIZE = 0,

@@ -17,6 +17,7 @@ extern int FUN_L00_001fefc8(void *);
 
 void bulldozer_update(struct Moby *moby) __asm__("FUN_L02_002dca10");
 
+/* Moby class 656 */
 void bulldozer_update(struct Moby *moby) {
     enum {
         BULLDOZER_ANIM_TRANSITION_TO_TIMED_WAIT = 0,

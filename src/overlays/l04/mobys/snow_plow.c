@@ -59,6 +59,7 @@ extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void 
 /* Class-dependent movement, manipulator rotation, hit effects and visibility. */
 void snow_plow_update(struct Moby *moby) __asm__("FUN_L04_002ca420");
 
+/* Moby classes 466, 480, 485, 486, 488, 490, 493-495, 498, 555 */
 void snow_plow_update(struct Moby *moby) {
     enum {
         SNOW_PLOW_SCAN_CLIP_VOLUMES = 0,

@@ -1403,6 +1403,7 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 void update_level01_environment_map_uv_scroll(ScrollMoby *moby) __asm__("FUN_L01_0030f208");
 
+/* Moby class 1848 */
 void update_level01_environment_map_uv_scroll(ScrollMoby *moby) {
     enum {
         UV_SCROLL_STATE_INITIALIZE = 0,

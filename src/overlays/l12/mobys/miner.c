@@ -71,6 +71,7 @@ void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
 void miner_update(L16WatchMoby *m) __asm__("FUN_L12_002e6c48");
 
+/* Moby class 282 */
 void miner_update(L16WatchMoby *moby) {
     enum {
         MINER_INITIALIZE = 0,

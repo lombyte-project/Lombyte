@@ -73,6 +73,7 @@ extern int  FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
 
 void update_path_mover_spawner(struct RailSpawnerMoby *moby) __asm__("FUN_L03_002db280");
 
+/* Moby class 899 */
 void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
     struct RailSpawnerVars *vars = moby->vars;
     LevelPath              *path;

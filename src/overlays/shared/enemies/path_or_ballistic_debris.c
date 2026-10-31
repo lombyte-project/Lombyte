@@ -66,6 +66,7 @@ extern f32 ballistic_debris_planar_damping_speed_threshold_gp __asm__("D_L14_001
 /* A piece of debris: follows its race path until its timer runs out, then flies, spins and falls until it hits something or leaves the map. */
 void update_path_or_ballistic_debris(struct Moby *moby) __asm__("FUN_L14_002dfd10");
 
+/* Moby class 403 */
 void update_path_or_ballistic_debris(struct Moby *moby) {
     Data *debris_private_vars = (Data *)moby->pvars;
     Vec4  probe;

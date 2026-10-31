@@ -26,6 +26,7 @@ typedef struct Data {
 
 void update_linked_moby_rotation(struct Moby *moby) __asm__("FUN_L13_002c7f38");
 
+/* Moby classes 127, 128, 159, 169 */
 void update_linked_moby_rotation(struct Moby *moby) {
     enum {
         INITIALIZE_ROTATION = 0,

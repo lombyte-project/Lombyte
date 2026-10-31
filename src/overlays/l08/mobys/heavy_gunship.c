@@ -250,6 +250,7 @@ void update_heavy_gunship_parts(struct Moby *parent_moby) {
 
 void update_heavy_gunship(struct Moby *moby) __asm__("FUN_L08_002e9b70");
 
+/* Moby class 463 */
 void update_heavy_gunship(struct Moby *moby) {
     enum {
         HEAVY_GUNSHIP_INITIALIZE = 0,

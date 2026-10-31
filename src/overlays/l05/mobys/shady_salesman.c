@@ -78,6 +78,7 @@ extern L16WatchPlayer           D_0013E633_watch __asm__("D_0013E533");
 
 void shady_salesman_update(WM *m) __asm__("FUN_L05_003180a0");
 
+/* Moby class 925 */
 void shady_salesman_update(WM *moby) {
     enum {
         SHADY_SALESMAN_INITIALIZE = 0,

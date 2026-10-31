@@ -2,6 +2,7 @@
 extern void update_instance_attachment_points_and_lengths(void *) __asm__("func_0023A318");
 void        quad_moby_update(char *instance) __asm__("FUN_0023a2c0");
 
+/* Moby class 1138 */
 void quad_moby_update(char *instance) {
     if (*(unsigned char *)(instance + 0x70) & 2) {
         float selected_reset_value = 1.0f;

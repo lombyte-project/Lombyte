@@ -83,6 +83,7 @@ extern void sample_camera_path(s32 *, int, void *, void *, int, float) __asm__("
 
 void taxi_update(struct Moby *moby) __asm__("FUN_L14_002f0538");
 
+/* Moby class 712 */
 void taxi_update(struct Moby *moby) {
     enum {
         TAXI_STATE_INITIALIZE = 0,

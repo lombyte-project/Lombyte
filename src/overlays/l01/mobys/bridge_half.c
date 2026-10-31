@@ -41,6 +41,7 @@ extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
 
+/* Moby class 746 */
 void bridge_half_update(PendulumMoby *bridge_half_moby) {
     enum {
         BRIDGE_HALF_INITIALIZE = 0,

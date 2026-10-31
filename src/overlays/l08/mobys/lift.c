@@ -13,6 +13,7 @@ extern void  approach_value(char *, float, float) __asm__("FUN_00213ed8");
 
 void update_lift(char *moby) __asm__("FUN_L08_002ea398");
 
+/* Moby classes 467, 472 */
 void update_lift(char *moby) {
     enum {
         POSITION_BASELINE_INITIALIZE = 0,

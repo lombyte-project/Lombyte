@@ -6,10 +6,7 @@
 #include "rnc/camera/update_cam.h"
 #include "rnc/mobys/moby_class_tables.h"
 
-void FUN_L00_002b6140();
-void FUN_L00_002c89e8();
 void FUN_L00_002caf40();
-void FUN_L00_002cc608();
 void FUN_L00_002ea7a0();
 void FUN_L00_002ed230();
 void blaster_update() __asm__("FUN_L00_002b49a8");
@@ -62,7 +59,7 @@ void quad_moby_update() __asm__("FUN_0023a2c0");
 void red_orb_update() __asm__("FUN_L00_002df4f8");
 void red_plant_update() __asm__("FUN_L00_002e3ca8");
 void robot_arm_update() __asm__("FUN_L00_002e3d88");
-void update_ryno_rocket() __asm__("FUN_L00_002cd1f0");
+void ryno_update() __asm__("FUN_L00_002cc608");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
 void suckcannon_update() __asm__("FUN_L00_002da790");
 void swingshot_hook_update() __asm__("FUN_L00_002c7070");
@@ -71,28 +68,31 @@ void taunter_update() __asm__("FUN_L00_002b6f10");
 void tesla_claw_update() __asm__("FUN_L00_002b87e0");
 void trespasser_update() __asm__("FUN_L00_002c1718");
 void update_animated_point_light_moby() __asm__("FUN_L00_002d3a10");
-void update_thruster_pack_flame() __asm__("FUN_L00_002b4198");
 void update_beam_slot_controller() __asm__("FUN_L00_002e1df0");
 void update_camera_pose_with_optional_collision() __asm__("FUN_L00_002eb218");
 void update_damped_falling_moby() __asm__("FUN_L00_002cc210");
+void update_doom_bot_spawner() __asm__("FUN_L00_002c89e8");
 void update_drone() __asm__("FUN_L00_002ce358");
 void update_frame_timing_and_wrapped_value() __asm__("FUN_L00_002a4cd8");
 void update_glow_particle() __asm__("FUN_L00_002acad8");
+void update_help_hints() __asm__("FUN_L00_002e0988");
 void update_hero_aligned_camera_from_input() __asm__("FUN_L00_002e9f38");
 void update_homing_shot() __asm__("FUN_L00_002cb418");
-void update_help_hints() __asm__("FUN_L00_002e0988");
 void update_linked_moby_scale_and_rotation() __asm__("FUN_L00_002bb400");
 void update_linked_moby_states() __asm__("FUN_L00_002b3458");
 void update_linked_moby_transform_and_lifetime() __asm__("FUN_L00_002d7f88");
 void update_morphoray_chicken() __asm__("FUN_L00_002c97e0");
 void update_phase_effect_controller() __asm__("FUN_L00_002e3800");
+void update_ryno_rocket() __asm__("FUN_L00_002cd1f0");
 void update_sound_emitter_playback_at_random_position() __asm__("FUN_L00_002edad8");
 void update_sound_emitter_playback_by_distance() __asm__("FUN_L00_002ed950");
 void update_target_tracking_camera() __asm__("FUN_L00_002ec6c0");
+void update_thruster_pack_flame() __asm__("FUN_L00_002b4198");
 void veldin_robot_enemy_update() __asm__("FUN_L00_002e0b88");
 void veldin_ship_update() __asm__("FUN_L00_002d1e80");
 void vendor_orb_update() __asm__("FUN_L00_002df730");
 void vendor_update() __asm__("FUN_L00_002a57a8");
+void visibomb_missile_update() __asm__("FUN_L00_002b6140");
 void visibomb_update() __asm__("FUN_L00_002b3058");
 void volume_camera_check() __asm__("FUN_L00_002ed8b0");
 void walloper_update() __asm__("FUN_L00_002bb558");
@@ -128,107 +128,107 @@ void *D_L00_001EA7EC[6]
 struct MobyClassUpdate moby_classes[101] __asm__("D_L00_001EA300")
 
     __attribute__((section("lvl.vtbl"))) = {
-        {0x329,     update_frame_timing_and_wrapped_value, default_moby_methods},
-        {0x3ef,                      camera_object_update, default_moby_methods},
-        {  0xb,                             vendor_update, default_moby_methods},
-        {  0xd,                               bolt_update, default_moby_methods},
-        {  0xe,                               bolt_update, default_moby_methods},
-        {  0xf,                               bolt_update, default_moby_methods},
-        { 0x10,                               bolt_update, default_moby_methods},
-        { 0x47,                             wrench_update, default_moby_methods},
-        { 0x4a,                               mine_update, default_moby_methods},
-        { 0x70,                      update_glow_particle, default_moby_methods},
-        { 0x79,                               bomb_update, default_moby_methods},
-        { 0x7a,                             debris_update, default_moby_methods},
-        { 0x95,            nanotech_crate_fragment_update, default_moby_methods},
-        { 0x99,            gold_devastator_missile_update, default_moby_methods},
-        { 0x9d,                         devastator_update, default_moby_methods},
-        { 0xa3,                           visibomb_update, default_moby_methods},
-        { 0xa6,                 update_linked_moby_states, default_moby_methods},
-        { 0xa7,                update_thruster_pack_flame, default_moby_methods},
-        { 0xa8,                            blaster_update, default_moby_methods},
-        { 0xac,                          FUN_L00_002b6140, default_moby_methods},
-        { 0xaf,                            taunter_update, default_moby_methods},
-        { 0xb0,                          pyrocitor_update, default_moby_methods},
-        { 0xb1,                         tesla_claw_update, default_moby_methods},
-        { 0xb3,     update_linked_moby_scale_and_rotation, default_moby_methods},
-        { 0xb4,                           walloper_update, default_moby_methods},
-        { 0xb9,                          morphoray_update, default_moby_methods},
-        { 0xba,                           doom_bot_update, default_moby_methods},
-        { 0xbc,                         trespasser_update, default_moby_methods},
-        { 0xbe,                         mine_glove_update, default_moby_methods},
-        { 0xc0,                         bomb_glove_update, default_moby_methods},
-        { 0xcb,                              decoy_update, default_moby_methods},
-        { 0xcc,                    devestator_ammo_update, default_moby_methods},
-        { 0xd0,                          swingshot_update, default_moby_methods},
-        { 0xd1,                     swingshot_hook_update, default_moby_methods},
-        { 0xd5,                    devestator_ammo_update, default_moby_methods},
-        { 0xd6,                    devestator_ammo_update, default_moby_methods},
-        { 0xde,                    devestator_ammo_update, default_moby_methods},
-        { 0xdf,                    devestator_ammo_update, default_moby_methods},
-        { 0xe1,                    devestator_ammo_update, default_moby_methods},
-        { 0xe2,                    devestator_ammo_update, default_moby_methods},
-        { 0xe5,                      glove_of_doom_update, default_moby_methods},
-        { 0xe6,                          FUN_L00_002c89e8, default_moby_methods},
-        {0x10e,                  update_morphoray_chicken,       D_L00_001EA7D4},
-        {0x131,                        update_homing_shot, default_moby_methods},
-        {0x15c,            nanotech_crate_fragment_update, default_moby_methods},
-        {0x15d,            nanotech_crate_fragment_update, default_moby_methods},
-        {0x162,            nanotech_crate_fragment_update, default_moby_methods},
-        {0x163,            nanotech_crate_fragment_update, default_moby_methods},
-        {0x164,            nanotech_crate_fragment_update, default_moby_methods},
-        {0x165,            nanotech_crate_fragment_update, default_moby_methods},
-        {0x166,            nanotech_crate_fragment_update, default_moby_methods},
-        {0x167,            nanotech_crate_fragment_update, default_moby_methods},
-        {0x1ac,                update_damped_falling_moby, default_moby_methods},
-        {0x1b1,                        noop_main_callback, default_moby_methods},
-        {0x1c6,                          FUN_L00_002cc608, default_moby_methods},
-        {0x1c9,                        update_ryno_rocket, default_moby_methods},
-        {0x1df,                              update_drone, default_moby_methods},
-        {0x1e3,                                         0, default_moby_methods},
-        {0x1f4,                              crate_update, default_moby_methods},
-        {0x1f5,                              crate_update, default_moby_methods},
-        {0x1ff,                              crate_update, default_moby_methods},
-        {0x212,                        veldin_ship_update, default_moby_methods},
-        {0x232,                        decoy_glove_update, default_moby_methods},
-        {0x249,                     metal_detector_update, default_moby_methods},
-        {0x25f,                           helipack_update, default_moby_methods},
-        {0x26a,                        noop_main_callback, default_moby_methods},
-        {0x27a,                                         0, default_moby_methods},
-        {0x27f,          update_animated_point_light_moby, default_moby_methods},
-        {0x2ed,                         horny_toad_update,       D_L00_001EA7EC},
-        {0x2ee,                            infobot_update, default_moby_methods},
-        {0x2f8,        particle_spawner_smoke_fire_update, default_moby_methods},
-        {0x307,                  grow_and_fade_out_update, default_moby_methods},
-        {0x324, update_linked_moby_transform_and_lifetime, default_moby_methods},
-        {0x326,                      nanotech_ball_update, default_moby_methods},
-        {0x342,             clank_cutscene_trigger_update, default_moby_methods},
-        {0x351,                         suckcannon_update, default_moby_methods},
-        {0x3ee,                    devestator_ammo_update, default_moby_methods},
-        {0x424,                            red_orb_update, default_moby_methods},
-        {0x472,                          quad_moby_update, default_moby_methods},
-        {0x477,                         vendor_orb_update, default_moby_methods},
-        {0x4a8,                      update_glow_particle, default_moby_methods},
-        {0x4e1,                        noop_main_callback, default_moby_methods},
-        {0x4e3,                     hydrodisplacer_update, default_moby_methods},
-        {0x509,                        noop_main_callback, default_moby_methods},
-        {0x50a,                      pilots_helmet_update, default_moby_methods},
-        {0x585,                         update_help_hints, default_moby_methods},
-        {0x59e,                    devestator_ammo_update, default_moby_methods},
-        {0x5a0,                 veldin_robot_enemy_update, default_moby_methods},
-        {0x5a7,                    devestator_ammo_update, default_moby_methods},
-        {0x5a9,                    devestator_ammo_update, default_moby_methods},
-        {0x5bf,               update_beam_slot_controller, default_moby_methods},
-        {0x609,            update_phase_effect_controller, default_moby_methods},
-        {0x61c,                        pterodactyl_update, default_moby_methods},
-        {0x6f5,                          red_plant_update, default_moby_methods},
-        {0x6f6,                          red_plant_update, default_moby_methods},
-        {0x76c,                              decoy_update, default_moby_methods},
-        {0x78d,                          robot_arm_update, default_moby_methods},
-        {0x78e,                          robot_arm_update, default_moby_methods},
-        {0x78f,                          robot_arm_update, default_moby_methods},
-        {0x7ab,                          robot_arm_update, default_moby_methods},
-        {   -1,                                         0, default_moby_methods},
+        { 809,     update_frame_timing_and_wrapped_value, default_moby_methods},
+        {1007,                      camera_object_update, default_moby_methods},
+        {  11,                             vendor_update, default_moby_methods},
+        {  13,                               bolt_update, default_moby_methods},
+        {  14,                               bolt_update, default_moby_methods},
+        {  15,                               bolt_update, default_moby_methods},
+        {  16,                               bolt_update, default_moby_methods},
+        {  71,                             wrench_update, default_moby_methods},
+        {  74,                               mine_update, default_moby_methods},
+        { 112,                      update_glow_particle, default_moby_methods},
+        { 121,                               bomb_update, default_moby_methods},
+        { 122,                             debris_update, default_moby_methods},
+        { 149,            nanotech_crate_fragment_update, default_moby_methods},
+        { 153,            gold_devastator_missile_update, default_moby_methods},
+        { 157,                         devastator_update, default_moby_methods},
+        { 163,                           visibomb_update, default_moby_methods},
+        { 166,                 update_linked_moby_states, default_moby_methods},
+        { 167,                update_thruster_pack_flame, default_moby_methods},
+        { 168,                            blaster_update, default_moby_methods},
+        { 172,                   visibomb_missile_update, default_moby_methods},
+        { 175,                            taunter_update, default_moby_methods},
+        { 176,                          pyrocitor_update, default_moby_methods},
+        { 177,                         tesla_claw_update, default_moby_methods},
+        { 179,     update_linked_moby_scale_and_rotation, default_moby_methods},
+        { 180,                           walloper_update, default_moby_methods},
+        { 185,                          morphoray_update, default_moby_methods},
+        { 186,                           doom_bot_update, default_moby_methods},
+        { 188,                         trespasser_update, default_moby_methods},
+        { 190,                         mine_glove_update, default_moby_methods},
+        { 192,                         bomb_glove_update, default_moby_methods},
+        { 203,                              decoy_update, default_moby_methods},
+        { 204,                    devestator_ammo_update, default_moby_methods},
+        { 208,                          swingshot_update, default_moby_methods},
+        { 209,                     swingshot_hook_update, default_moby_methods},
+        { 213,                    devestator_ammo_update, default_moby_methods},
+        { 214,                    devestator_ammo_update, default_moby_methods},
+        { 222,                    devestator_ammo_update, default_moby_methods},
+        { 223,                    devestator_ammo_update, default_moby_methods},
+        { 225,                    devestator_ammo_update, default_moby_methods},
+        { 226,                    devestator_ammo_update, default_moby_methods},
+        { 229,                      glove_of_doom_update, default_moby_methods},
+        { 230,                   update_doom_bot_spawner, default_moby_methods},
+        { 270,                  update_morphoray_chicken,       D_L00_001EA7D4},
+        { 305,                        update_homing_shot, default_moby_methods},
+        { 348,            nanotech_crate_fragment_update, default_moby_methods},
+        { 349,            nanotech_crate_fragment_update, default_moby_methods},
+        { 354,            nanotech_crate_fragment_update, default_moby_methods},
+        { 355,            nanotech_crate_fragment_update, default_moby_methods},
+        { 356,            nanotech_crate_fragment_update, default_moby_methods},
+        { 357,            nanotech_crate_fragment_update, default_moby_methods},
+        { 358,            nanotech_crate_fragment_update, default_moby_methods},
+        { 359,            nanotech_crate_fragment_update, default_moby_methods},
+        { 428,                update_damped_falling_moby, default_moby_methods},
+        { 433,                        noop_main_callback, default_moby_methods},
+        { 454,                               ryno_update, default_moby_methods},
+        { 457,                        update_ryno_rocket, default_moby_methods},
+        { 479,                              update_drone, default_moby_methods},
+        { 483,                                         0, default_moby_methods},
+        { 500,                              crate_update, default_moby_methods},
+        { 501,                              crate_update, default_moby_methods},
+        { 511,                              crate_update, default_moby_methods},
+        { 530,                        veldin_ship_update, default_moby_methods},
+        { 562,                        decoy_glove_update, default_moby_methods},
+        { 585,                     metal_detector_update, default_moby_methods},
+        { 607,                           helipack_update, default_moby_methods},
+        { 618,                        noop_main_callback, default_moby_methods},
+        { 634,                                         0, default_moby_methods},
+        { 639,          update_animated_point_light_moby, default_moby_methods},
+        { 749,                         horny_toad_update,       D_L00_001EA7EC},
+        { 750,                            infobot_update, default_moby_methods},
+        { 760,        particle_spawner_smoke_fire_update, default_moby_methods},
+        { 775,                  grow_and_fade_out_update, default_moby_methods},
+        { 804, update_linked_moby_transform_and_lifetime, default_moby_methods},
+        { 806,                      nanotech_ball_update, default_moby_methods},
+        { 834,             clank_cutscene_trigger_update, default_moby_methods},
+        { 849,                         suckcannon_update, default_moby_methods},
+        {1006,                    devestator_ammo_update, default_moby_methods},
+        {1060,                            red_orb_update, default_moby_methods},
+        {1138,                          quad_moby_update, default_moby_methods},
+        {1143,                         vendor_orb_update, default_moby_methods},
+        {1192,                      update_glow_particle, default_moby_methods},
+        {1249,                        noop_main_callback, default_moby_methods},
+        {1251,                     hydrodisplacer_update, default_moby_methods},
+        {1289,                        noop_main_callback, default_moby_methods},
+        {1290,                      pilots_helmet_update, default_moby_methods},
+        {1413,                         update_help_hints, default_moby_methods},
+        {1438,                    devestator_ammo_update, default_moby_methods},
+        {1440,                 veldin_robot_enemy_update, default_moby_methods},
+        {1447,                    devestator_ammo_update, default_moby_methods},
+        {1449,                    devestator_ammo_update, default_moby_methods},
+        {1471,               update_beam_slot_controller, default_moby_methods},
+        {1545,            update_phase_effect_controller, default_moby_methods},
+        {1564,                        pterodactyl_update, default_moby_methods},
+        {1781,                          red_plant_update, default_moby_methods},
+        {1782,                          red_plant_update, default_moby_methods},
+        {1900,                              decoy_update, default_moby_methods},
+        {1933,                          robot_arm_update, default_moby_methods},
+        {1934,                          robot_arm_update, default_moby_methods},
+        {1935,                          robot_arm_update, default_moby_methods},
+        {1963,                          robot_arm_update, default_moby_methods},
+        {  -1,                                         0, default_moby_methods},
 };
 
 struct CameraType level_camera_types[8] __asm__("D_L00_001EA880") __attribute__((section("lvl.camvtbl"))) = {

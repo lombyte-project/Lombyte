@@ -62,6 +62,7 @@ void update_child_set_poses(struct Moby *m) __asm__("FUN_L11_0030d1b0");
    moby, fades in, then unfolds the sets one after another while blending between two l11_cuboids points. */
 void update_child_sets_controller(struct Moby *child_sets_controller) __asm__("FUN_L11_0030c788");
 
+/* Moby class 1156 */
 void update_child_sets_controller(struct Moby *child_sets_controller) {
     enum {
         CHILD_SETS_STATE_CREATE_CHILDREN = 0,

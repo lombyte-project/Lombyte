@@ -79,6 +79,7 @@ void attach_cutscene_fixed_scale_manipulator(void) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FC988), where it is exact; names translated to the US level program. */
 void update_cutscene_trigger(char *moby) __asm__("FUN_L01_002fb5b0");
 
+/* Moby class 737 */
 void update_cutscene_trigger(char *moby) {
     enum {
         CUTSCENE_TRIGGER_INITIALIZE = 0,

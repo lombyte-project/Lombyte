@@ -160,6 +160,7 @@ extern void spawn_blarg_trooper_projectile(void *, void *, void *, int) __asm__(
 void       blarg_trooper_update(struct Moby *moby) __asm__("FUN_L12_002e72c0");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
+/* Moby class 294 */
 void blarg_trooper_update(struct Moby *moby) {
     enum {
         BLARG_TROOPER_INITIALIZE = 0,

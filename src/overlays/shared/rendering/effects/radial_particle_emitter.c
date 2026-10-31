@@ -19,6 +19,7 @@ extern void  spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08
 
 void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
 
+/* Moby class 1629 */
 void spawn_moby_radial_particles(char *moby) {
     float range_check_delta_or_spawn_position[4];
     float spawn_center_position[4];

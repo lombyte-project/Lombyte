@@ -333,6 +333,7 @@ void clear_moby_list_state_18(int index) {
     }
 }
 
+/* Moby class 1051 */
 void alien_queen_update(unsigned char *moby) {
     unsigned char *data = ((unsigned char *)MOBY(moby)->pvars);
     char          *target;

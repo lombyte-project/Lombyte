@@ -34,6 +34,7 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_hit_triggered_moby_breakup(char *self) __asm__("FUN_L06_00309860");
 
+/* Moby class 1655 */
 void update_hit_triggered_moby_breakup(char *breakup_moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,

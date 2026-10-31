@@ -100,6 +100,7 @@ void spawn_attached_rocket_non_damaging_explosion(struct Moby *moby) __asm__("FU
 
 void spawn_attached_rocket_explosion(struct Moby *moby) __asm__("FUN_L13_003060b8");
 
+/* Moby class 1233 */
 void update_attached_rocket(struct Moby *moby) {
     char        *attached_rocket_vars = (char *)moby->pvars;
     struct Moby *source;

@@ -162,8 +162,9 @@ extern u8                       D_0014C050[][16] NOT_SDA;
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D5AC0), where it is exact; names translated to the US level program. */
 
-/* Class 749 update (horny toad): state machine that walks a path or follows a target moby, hops, turns and dies; then settles its height and checks a pickup moby. */
+/* State machine that walks a path or follows a target moby, hops, turns and dies; then settles its height and checks a pickup moby. */
 
+/* Moby class 749 */
 void horny_toad_update(Moby *moby) {
     enum {
         HORNY_TOAD_INITIALIZE = 0,

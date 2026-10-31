@@ -48,6 +48,7 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 void morphoray_update(struct Moby *moby) __asm__("FUN_L14_00305758");
 
+/* Moby class 1354 */
 void morphoray_update(struct Moby *moby) {
     enum {
         MORPHORAY_INITIALIZE = 0,

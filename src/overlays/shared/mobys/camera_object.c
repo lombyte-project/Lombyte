@@ -47,6 +47,7 @@ unsigned char *create_camera_collision_moby(u128 *spawn_position) {
 
 void camera_object_update(char *o) __asm__("FUN_L00_002a4e48");
 
+/* Moby class 1007 */
 void camera_object_update(char *camera_object) {
     OvlQuad      difference_vector[1];
     OvlQuad      scaled_vector[1];

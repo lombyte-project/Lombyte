@@ -15,6 +15,7 @@ extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void lamp_update(struct Moby *m) __asm__("FUN_L12_0030b6c8");
 
+/* Moby class 1862 */
 void lamp_update(struct Moby *lamp_moby) {
     enum {
         LAMP_STATE_INITIALIZE = 0,

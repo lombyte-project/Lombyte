@@ -89,6 +89,7 @@ extern s32             current_level_index_gp __asm__("D_0015ED84") __attribute_
 
 void pilots_helmet_update(M_2e03a0_2e03a0 *m) __asm__("FUN_L00_002e03a0");
 
+/* Moby class 1290 */
 void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     enum {
         PILOTS_HELMET_INITIALIZE = 0,

@@ -43,6 +43,7 @@ extern void spawn_explosion(char *,
 f32  landmine_spin_rate_degrees_gp __asm__("D_L08_00161F70") = 1.8e+02f;
 void update_landmine(struct Moby *moby) __asm__("FUN_L08_002f44c0");
 
+/* Moby class 621 */
 void update_landmine(struct Moby *moby) {
     enum {
         PATH_FOLLOWER_INITIALIZE_HEIGHT_OFFSET = 0,

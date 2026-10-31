@@ -183,6 +183,7 @@ extern float backdrop_heading_radius_numerator_addend_gp __asm__("D_L17_001623D4
     __attribute__((sda));
 void update_fleet_backdrop_animation(struct Moby *moby) __asm__("FUN_L17_002f3848");
 
+/* Moby class 1772 */
 void update_fleet_backdrop_animation(struct Moby *moby) {
     char *moby_pvars = (char *)moby->pvars;
     float offset_accumulator[4];

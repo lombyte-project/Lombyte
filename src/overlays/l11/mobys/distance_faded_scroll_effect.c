@@ -6003,6 +6003,7 @@ extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
 
 void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) __asm__("FUN_L11_0031f150");
 
+/* Moby class 1919 */
 void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
     enum {
         EFFECT_INITIALIZE = 0,

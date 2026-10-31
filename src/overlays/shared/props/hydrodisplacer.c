@@ -102,6 +102,7 @@ float D_L18_001621F4 = 1e+02f;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E0E50), where it is exact; names translated to the US level program. */
 void hydrodisplacer_update(Moby *moby) __asm__("FUN_L00_002df9a0");
 
+/* Moby class 1251 */
 void hydrodisplacer_update(Moby *moby) {
     enum {
         HYDRODISPLACER_INITIALIZE = 0,

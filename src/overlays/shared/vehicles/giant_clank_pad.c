@@ -24,6 +24,7 @@ extern u32 D_0013CAE4 NOT_SDA;
 
 void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
 
+/* Moby classes 1451, 1899 */
 void giant_clank_pad_update(struct Moby *moby) {
     enum {
         GIANT_CLANK_PAD_INITIALIZE = 0,

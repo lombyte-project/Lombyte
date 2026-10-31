@@ -29,6 +29,7 @@ void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
 
 void update_timed_sprite_effect(struct Moby *moby) __asm__("FUN_L06_0030be60");
 
+/* Moby class 1898 */
 void update_timed_sprite_effect(struct Moby *moby) {
     enum {
         SPRITE_EFFECT_STATE_REMOVE = 0,

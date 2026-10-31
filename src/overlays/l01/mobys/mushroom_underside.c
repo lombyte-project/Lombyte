@@ -7,6 +7,7 @@
 
 void mushroom_underside_update(void *self) __asm__("FUN_L01_00307c48");
 
+/* Moby class 1042 */
 void mushroom_underside_update(void *mushroom_underside_moby) {
     u8 *hit;
 

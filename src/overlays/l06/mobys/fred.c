@@ -107,6 +107,7 @@ extern int is_point_inside_clip_volume(void *, int);
 
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 
+/* Moby class 1105 */
 void fred_update(struct Moby *moby) {
     enum {
         INITIALIZE_FRED_DIALOGUE = 0,

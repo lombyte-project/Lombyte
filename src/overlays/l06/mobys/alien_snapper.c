@@ -244,6 +244,7 @@ extern int *D_L06_001B0FB0_2FA618[] __asm__("D_L06_001B0C30");
 extern f32
 approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
 
+/* Moby class 1048 */
 void alien_snapper_update(Moby *moby) {
     SnapperVars_91A8 *vars = (SnapperVars_91A8 *)moby->pvars;
     Moby             *target;

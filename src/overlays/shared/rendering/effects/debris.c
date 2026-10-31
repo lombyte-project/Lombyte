@@ -147,6 +147,7 @@ unsigned char *spawn_debris(void *spawn_position,
 
 void debris_update(unsigned char *m) __asm__("FUN_L00_002af5b8");
 
+/* Moby class 122 */
 void debris_update(unsigned char *debris_moby) {
     W_2af5b8 *debris_data = ((W_2af5b8 *)MOBY(debris_moby)->pvars);
     C_2af5b8  c;

@@ -40,6 +40,7 @@ extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 /* Novalis tutorial hint triggers: plays help messages and counts usage stats. */
 void update_help_hints(struct Moby *moby) __asm__("FUN_L01_0030acb8");
 
+/* Moby class 1341 */
 void update_help_hints(struct Moby *moby) {
     enum {
         TUTORIAL_HINT_STATE_INITIALIZE = 0,

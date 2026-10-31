@@ -48,6 +48,7 @@ extern int wobble_quad_texture_index_gp __asm__("D_L05_00161D0C") __attribute__(
 
 void update_moby_wobble(unsigned char *m) __asm__("FUN_L05_0030c0a8");
 
+/* Moby class 823 */
 void update_moby_wobble(unsigned char *moby) {
     enum {
         MOBY_WOBBLE_STATE_INITIALIZE = 0,

@@ -129,6 +129,7 @@ spawn_growing_ballistic_moby(char *spawn_position, char *initial_velocity, int s
     return spawned_moby;
 }
 
+/* Moby class 1049 */
 void update_growing_ballistic_moby(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     float previous_position[4];

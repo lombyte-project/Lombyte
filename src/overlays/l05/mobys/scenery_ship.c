@@ -158,6 +158,7 @@ extern float D_L05_001672C8_2D8388[] __asm__("D_L05_001671C8");
 void         scenery_ship_update(char *moby) __asm__("FUN_L05_002d7140");
 extern float fast_vec_dist(void *, void *);
 
+/* Moby class 79 */
 void scenery_ship_update(char *moby) {
     enum {
         SCENERY_SHIP_INITIALIZE = 0,

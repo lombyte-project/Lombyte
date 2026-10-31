@@ -50,6 +50,7 @@ extern char             D_L05_0015F580_macro[] __asm__("D_L05_0015F580") MACRO_A
 
 void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
 
+/* Moby class 855 */
 void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
     enum {
         EMITTER_INITIALIZE = 0,

@@ -34,6 +34,7 @@ extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
 void update_smoke_trail_projectile(char *moby) __asm__("FUN_L01_002eda00");
 
+/* Moby class 567 */
 void update_smoke_trail_projectile(char *moby) {
     enum {
         MOVE_UNTIL_COLLISION_OR_TIMEOUT = 1,

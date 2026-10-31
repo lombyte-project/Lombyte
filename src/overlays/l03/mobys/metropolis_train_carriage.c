@@ -12,6 +12,7 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 
 void metropolis_train_carriage_update(struct Moby *moby) __asm__("FUN_L03_002953f8");
 
+/* Moby class 1210 */
 void metropolis_train_carriage_update(struct Moby *moby) {
     float position_delta[4];
     float joint_zero_world_position[4];

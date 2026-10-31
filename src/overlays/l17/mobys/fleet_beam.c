@@ -73,6 +73,7 @@ extern void transform_vector_by_basis(void *, void *, void *);
 extern char *D_L17_0015FFD0[] MACRO_ADDR;
 void         update_fleet_beam(struct Moby *beam_moby) __asm__("FUN_L17_002a8da0");
 
+/* Moby class 99 */
 void update_fleet_beam(struct Moby *beam_moby) {
     enum {
         BEAM_INITIALIZE = 0,

@@ -14,6 +14,7 @@ extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
 void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
 
+/* Moby class 1568 */
 void update_moby_visibility_and_half_turn(struct Moby *moby) {
     enum {
         INITIALIZE_STATE_MACHINE = 0,

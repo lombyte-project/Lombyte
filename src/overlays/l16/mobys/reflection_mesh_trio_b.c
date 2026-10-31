@@ -76,6 +76,7 @@ extern u32 reflection_mesh_trio_b_colours_2[45] __asm__("D_L16_001E52D0"); /* 45
 extern L16SingleSphere_2ea128 D_L16_001E5390[] NOT_SDA;
 void update_reflection_mesh_trio_b(struct Moby *moby) __asm__("FUN_L16_002ea128");
 
+/* Moby class 1953 */
 void update_reflection_mesh_trio_b(struct Moby *moby) {
     enum {
         MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,

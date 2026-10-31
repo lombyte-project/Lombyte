@@ -139,6 +139,7 @@ extern void  spawn_explosion(void *,
    projectile at it (state 2) and bursts into debris when its hit animation flags it (state 4). */
 void sand_shark_nest_update(unsigned char *moby) __asm__("FUN_L02_002dcb38");
 
+/* Moby class 668 */
 void sand_shark_nest_update(unsigned char *moby) {
     enum {
         SAND_SHARK_NEST_INITIALIZE = 0,

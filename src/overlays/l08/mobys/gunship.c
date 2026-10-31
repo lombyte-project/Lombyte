@@ -318,6 +318,7 @@ void process_gunship_part_hits(struct Moby *moby) {
         allocate_voice_for_target_entry(state, 0, moby);
 }
 
+/* Moby class 444 */
 void update_gunship(struct Moby *moby) {
     enum {
         GUNSHIP_INITIALIZE = 0,

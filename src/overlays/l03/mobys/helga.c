@@ -115,6 +115,7 @@ extern void  update_joint_animation(float, float, void *, void *, int) __asm__("
    While idle it turns its head toward the hero or toward random points. */
 void helga_update(struct Moby *m) __asm__("FUN_L03_002da870");
 
+/* Moby class 890 */
 void helga_update(struct Moby *helga_moby) {
     enum {
         HELGA_INITIALIZE = 0,

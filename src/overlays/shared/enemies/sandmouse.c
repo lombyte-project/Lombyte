@@ -525,6 +525,7 @@ void        attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__
 
 void sandmouse_update(Moby *m) __asm__("FUN_L01_0030df40");
 
+/* Moby class 1818 */
 void sandmouse_update(Moby *sandmouse_moby) {
     enum {
         SANDMOUSE_STATE_INITIALIZE = 0,

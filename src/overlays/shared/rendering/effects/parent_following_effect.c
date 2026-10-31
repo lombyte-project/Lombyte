@@ -15,6 +15,7 @@ void        mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_parent_following_effect(char *moby) __asm__("FUN_L03_002bae48");
 
+/* Moby class 235 */
 void update_parent_following_effect(char *moby) {
     char *moby_pvars = ((char *)MOBY(moby)->pvars);
     float ratio;

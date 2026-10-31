@@ -106,6 +106,7 @@ extern unsigned char D_0013F420_2b0e80[] __asm__("D_0013F420");
 
 void blarg_turret_update(Moby_2B5368 *m) __asm__("FUN_L13_002b41b8");
 
+/* Moby class 29 */
 void blarg_turret_update(Moby_2B5368 *turret_moby) {
     enum {
         BLARG_TURRET_STATE_INITIALIZE = 0,

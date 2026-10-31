@@ -183,6 +183,7 @@ unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
 
 void nanotech_crate_fragment_update(M_2afa48 *m) __asm__("FUN_L00_002afa48");
 
+/* Moby classes 149, 348, 349, 354-359, 363, 364 */
 void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
     enum {
         NANOTECH_CRATE_FRAGMENT_BOUNCING = 0,

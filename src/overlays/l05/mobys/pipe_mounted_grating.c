@@ -24,6 +24,7 @@ void         pipe_mounted_grating_update(struct Moby *moby) __asm__("FUN_L05_003
 extern float fast_add_rotations(float, float);
 extern int   scale_game_frames(int);
 
+/* Moby class 846 */
 void pipe_mounted_grating_update(struct Moby *moby) {
     float        piece_initial_motion_step[4];
     float        spin_vel[4];

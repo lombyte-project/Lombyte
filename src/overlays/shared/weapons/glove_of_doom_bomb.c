@@ -181,6 +181,7 @@ ret0:
 
 void update_doom_bot_spawner(struct Moby *thrown_moby) __asm__("FUN_L00_002c89e8");
 
+/* Moby class 230 */
 void update_doom_bot_spawner(struct Moby *thrown_moby) {
     enum {
         THROWN_MOBY_STATE_INITIALIZE = 0,

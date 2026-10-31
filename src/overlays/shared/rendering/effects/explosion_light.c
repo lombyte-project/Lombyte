@@ -86,11 +86,12 @@ unsigned char *mine_camera_blast(unsigned char *blast_settings,
     return spawned_moby;
 }
 
-/* moby class 639 update: runs its state machine and eases its tracked values toward their targets */
+/* Runs its state machine and eases its tracked values toward their targets */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D4EC0), where it is exact; names translated to the US level program. */
 
 void update_animated_point_light_moby(unsigned char *moby) __asm__("FUN_L00_002d3a10");
 
+/* Moby class 639 */
 void update_animated_point_light_moby(unsigned char *moby) {
     unsigned char *animated_point_light_vars;
     Vx             tp;

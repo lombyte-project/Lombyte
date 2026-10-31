@@ -86,6 +86,7 @@ extern L16SparkHitN D_L16_hitN __asm__("D_L16_00174240");
 
 void update_thrown_bomb(L16FallingMoby *moby) __asm__("FUN_L16_002c5eb0");
 
+/* Moby class 281 */
 void update_thrown_bomb(L16FallingMoby *moby) {
     enum {
         BOMB_STATE_MOVING = 1,

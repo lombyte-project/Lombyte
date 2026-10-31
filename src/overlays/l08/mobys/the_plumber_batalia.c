@@ -161,6 +161,7 @@ void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
     }
 }
 
+/* Moby class 1283 */
 void the_plumber_batalia_update(L14WatchMoby *moby) {
     enum {
         PLUMBER_INITIALIZE = 0,

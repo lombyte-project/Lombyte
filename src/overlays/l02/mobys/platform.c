@@ -15,6 +15,7 @@ extern float D_0015ED6C;
 
 void platform_update(struct Moby *moby) __asm__("FUN_L02_002ddc00");
 
+/* Moby classes 707, 734 */
 void platform_update(struct Moby *moby) {
     char  zero[16];
     char  previous_rotation[16];

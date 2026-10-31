@@ -88,6 +88,7 @@ int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
 
 void sentrybot_alarm_update(unsigned char *moby) __asm__("FUN_L15_002cb4c8");
 
+/* Moby class 408 */
 void sentrybot_alarm_update(unsigned char *moby) {
     float position[4];
     float step;

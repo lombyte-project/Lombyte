@@ -191,6 +191,7 @@ char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
     }
 }
 
+/* Moby class 333 */
 void blarg_bombthrower_update(struct Moby *moby) {
     enum {
         BOMBTHROWER_STATE_INITIALIZE = 0,

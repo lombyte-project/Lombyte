@@ -52,6 +52,7 @@ extern int  D_L14_001620D4_gp __asm__("D_L14_001620D4") __attribute__((sda));
 extern int electric_beam_damage_disabled_gp __asm__("D_L14_001620D8") __attribute__((sda));
 void       update_electric_beam(unsigned char *moby) __asm__("FUN_L14_003015d0");
 
+/* Moby class 1224 */
 void update_electric_beam(unsigned char *moby) {
     enum {
         BEAM_STATE_INITIALIZE = 0,

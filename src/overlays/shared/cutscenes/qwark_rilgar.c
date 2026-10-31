@@ -78,6 +78,7 @@ extern void attach_cutscene_fixed_scale_manipulator(void *) __asm__("FUN_L01_002
 
 void qwark_rilgar_update(L03WatchMoby *m) __asm__("FUN_L03_002dc478");
 
+/* Moby classes 447, 920 */
 void qwark_rilgar_update(L03WatchMoby *moby) {
     enum {
         QWARK_RILGAR_INITIALIZE = 0,

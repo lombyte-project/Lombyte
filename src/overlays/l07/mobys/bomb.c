@@ -107,6 +107,7 @@ s32         allocate_voice_for_target_entry(s32   entry_index,
                                             s32   flags,
                                             void *target) __asm__("FUN_0022da68");
 
+/* Moby class 882 */
 void update_bomb(struct Moby *moby) {
     Vec4f      *pos = &moby->pos;
     DebrisVars *debris_vars = (DebrisVars *)moby->pvars;

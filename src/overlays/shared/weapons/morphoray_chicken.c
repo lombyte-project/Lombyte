@@ -346,6 +346,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
 
 void update_morphoray_chicken(Moby *chicken_moby) __asm__("FUN_L00_002c97e0");
 
+/* Moby class 270 */
 void update_morphoray_chicken(Moby *chicken_moby) {
     enum {
         CHICKEN_STATE_INITIALIZE = 0,

@@ -440,6 +440,7 @@ void update_robosquawker_ground_height(struct Moby *m, char *d) __asm__("FUN_L13
 
 void robosquawker_update(RsMoby *m) __asm__("FUN_L13_002b50d8");
 
+/* Moby class 63 */
 void robosquawker_update(RsMoby *robosquawker_moby) {
     enum {
         ROBOSQUAWKER_STATE_INITIALIZE = 0,

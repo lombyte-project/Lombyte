@@ -71,6 +71,7 @@ extern unsigned char l15_rocket_detonation_glow_blue __asm__("D_L15_0016146C") _
 
 void update_blarg_elite_commando_rocket(unsigned char *m) __asm__("FUN_L15_0029ac30");
 
+/* Moby class 49 */
 void update_blarg_elite_commando_rocket(unsigned char *moby) {
     char *rocket_data = ((char *)MOBY(moby)->pvars);
     float rocket_next_position[4];

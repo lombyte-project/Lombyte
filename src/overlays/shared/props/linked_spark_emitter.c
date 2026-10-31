@@ -69,6 +69,7 @@ int spark_emitter_alpha_d_by_pass_parity[2] __asm__("D_L15_001614F0") = {1, 2};
 
 void update_linked_spark_emitter(unsigned char *moby) __asm__("FUN_L15_002a2bf0");
 
+/* Moby class 78 */
 void update_linked_spark_emitter(unsigned char *moby) {
     enum {
         INITIALIZE_EFFECT = 0,

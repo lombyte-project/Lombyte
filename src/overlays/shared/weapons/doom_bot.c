@@ -155,6 +155,7 @@ unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initi
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002C12B0.c: func_L00_002C12B0). */
 void doom_bot_update(struct Moby *moby) __asm__("FUN_L00_002bffa8");
 
+/* Moby class 186 */
 void doom_bot_update(struct Moby *moby) {
     enum {
         DOOM_BOT_INITIALIZE = 0,

@@ -85,6 +85,7 @@ extern void sample_camera_path(int  *path,
 
 void taxi_update(struct Moby *moby) __asm__("FUN_L16_002e43e0");
 
+/* Moby class 1410 */
 void taxi_update(struct Moby *moby) {
     enum {
         TAXI_INITIALIZE = 0,

@@ -22,6 +22,7 @@ extern G D_L05_0016CC60;
 
 void update_cutscene_camera_target(unsigned char *m) __asm__("FUN_L05_0031d5c8");
 
+/* Moby class 1550 */
 void update_cutscene_camera_target(unsigned char *m) {
     enum {
         INITIALIZE = 0,

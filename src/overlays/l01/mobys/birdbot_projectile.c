@@ -230,6 +230,7 @@ extern u128 D_L01_001742E0;
 
 void update_birdbot_projectile(DropMoby *) __asm__("FUN_L01_002fa4c0");
 
+/* Moby class 722 */
 void update_birdbot_projectile(DropMoby *projectile) {
     DropVars *projectile_vars;
     u128     *pos;

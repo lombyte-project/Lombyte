@@ -211,6 +211,7 @@ void register_fading_ring_hit(char *affected_moby, char *effect_moby, char *effe
     }
 }
 
+/* Moby class 1046 */
 void update_fading_ring_effect(unsigned char *moby) {
     char *moby_data = ((char *)MOBY(moby)->pvars);
     float radius_progress;

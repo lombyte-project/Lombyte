@@ -44,6 +44,7 @@ float D_L17_001623A0 = 1.0f;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002ED168), where it is exact; names translated to the US level program. */
 void codebot_update(struct Moby *moby) __asm__("FUN_L15_002ebd78");
 
+/* Moby class 1428 */
 void codebot_update(struct Moby *moby) {
     enum {
         CODEBOT_INITIALIZE = 0,

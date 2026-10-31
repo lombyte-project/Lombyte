@@ -116,6 +116,7 @@ s32        D_L02_00162164 = 0x10019;
  * Each burst and puff block has its own locals: shared ones become long-lived pseudos and shift the allocation. */
 void update_smoke_vent(struct Moby *moby) __asm__("FUN_L02_002ef020");
 
+/* Moby class 1479 */
 void update_smoke_vent(struct Moby *moby) {
     enum {
         SMOKE_VENT_STATE_INITIALIZE = 0,

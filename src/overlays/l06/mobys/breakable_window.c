@@ -562,6 +562,7 @@ short l06_second_backdrop_mesh_quad_corner_indices[96][4][2] __asm__("D_L06_001F
 
 extern char D_0013F3D0[] NOT_SDA;
 
+/* Moby class 1083 */
 void update_breakable_window(char *moby) {
     enum {
         INITIALIZE_DRAW_SELECTION = 0,

@@ -220,6 +220,7 @@ extern void initialize_gemlik_pool_tile_neighbors(int) __asm__("FUN_L13_0030a488
 
 void update_gemlik_bobbing_pool_tile(struct Moby *moby) __asm__("FUN_L13_00309e88");
 
+/* Moby classes 1263, 1393 */
 void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
     enum {
         BOBBING_PLATFORM_INITIALIZE = 0,

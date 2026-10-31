@@ -88,6 +88,7 @@ extern float pokitaru_boat_max_turn_speed_degrees_gp __asm__("D_L11_00161DDC") _
 
 void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
 
+/* Moby class 1075 */
 void pokitaru_boat_update(struct Moby *moby) {
     enum {
         POKITARU_BOAT_INITIALIZE = 0,

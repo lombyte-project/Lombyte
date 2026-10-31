@@ -56,6 +56,7 @@ compute_elevator_camera_pose(struct Moby *, float *, float *) __asm__("FUN_L13_0
 
 void elevator_update(struct Moby *moby) __asm__("FUN_L13_002b39e0");
 
+/* Moby classes 21, 244 */
 void elevator_update(struct Moby *moby) {
     enum {
         ELEVATOR_STATE_INITIALIZE = 0,

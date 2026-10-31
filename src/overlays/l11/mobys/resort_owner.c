@@ -97,6 +97,7 @@ void update_resort_owner_look_tracking(WatcherMoby *m) __asm__("FUN_L11_002d27b0
 
 void resort_owner_update(struct Moby *moby) __asm__("FUN_L11_002d0fa8");
 
+/* Moby class 114 */
 void resort_owner_update(struct Moby *moby) {
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
     if (moby->visible && fast_vec_dist(&moby->pos, camera_pos_b358) < 38.0f) {

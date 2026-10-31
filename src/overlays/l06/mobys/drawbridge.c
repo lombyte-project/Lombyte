@@ -121,6 +121,7 @@ float drawbridge_pitch_degrees_gp __asm__("D_L06_00161D7C") = 0;
 
 float drawbridge_yaw_degrees_gp __asm__("D_L06_00161D80") = 0;
 
+/* Moby class 1028 */
 void update_drawbridge(Moby *moby) {
     enum {
         INITIALIZE_DRAWBRIDGE_SEGMENTS = 0,

@@ -86,6 +86,7 @@ extern float approach_value(float *p, float target, float maxstep);
 extern float vector_length_xy(void *);
 extern int   scale_game_frames(int);
 
+/* Moby class 1319 */
 void blarg_ship_update(struct Moby *moby) {
     enum {
         BLARG_SHIP_INITIALIZE = 0,

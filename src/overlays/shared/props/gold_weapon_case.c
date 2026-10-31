@@ -36,6 +36,7 @@ extern s32       alternate_animation_sequence_gp __asm__("D_0015EE20") __attribu
 
 void gold_weapon_case_update(struct Moby *m) __asm__("FUN_L01_002e1ac0");
 
+/* Moby classes 304, 1456-1465 */
 void gold_weapon_case_update(struct Moby *moby) {
     enum {
         GOLD_WEAPON_CASE_INITIALIZE = 0,

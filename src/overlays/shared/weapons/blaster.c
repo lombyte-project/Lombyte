@@ -208,6 +208,7 @@ unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *ya
 /* NEAR: a dozen spots; this compiler hoists the 3.0f spray constant out of the loop and rebuilds the zero target before its conditional move. */
 void blaster_update(struct Moby *moby) __asm__("FUN_L00_002b49a8");
 
+/* Moby class 168 */
 void blaster_update(struct Moby *moby) {
     BlasterVec     velocity;
     BlasterVec     aim_point;

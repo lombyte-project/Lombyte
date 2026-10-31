@@ -15,6 +15,7 @@ extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10")
 
 void update_moby_list_empty_dialogue_trigger(struct Moby *moby) __asm__("FUN_L11_0031aa80");
 
+/* Moby class 1350 */
 void update_moby_list_empty_dialogue_trigger(struct Moby *moby) {
     int *dialogue_trigger_vars = (int *)moby->pvars;
     if (dialogue_trigger_vars[0] == -1) {

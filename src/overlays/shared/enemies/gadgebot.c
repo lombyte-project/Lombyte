@@ -297,6 +297,7 @@ GbStats D_L10_0017E958 = {0};
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F1470), where it is exact; names translated to the US level program. */
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 
+/* Moby class 857 */
 void gadgebot_update(GbMoby *moby) {
     enum {
         GADGEBOT_INITIALIZE = 0,

@@ -38,6 +38,7 @@ extern int D_L15_001BAAD0[];
 
 void update_sliding_gate(struct Moby *gate_moby) __asm__("FUN_L15_0029aff0");
 
+/* Moby class 67 */
 void update_sliding_gate(struct Moby *gate_moby) {
     enum {
         GATE_INITIALIZE = 0,

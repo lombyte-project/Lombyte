@@ -528,9 +528,71 @@ def route_exceptions(root: Path) -> dict:
     return {}
 
 
+CLASS_TABLE = re.compile(r"struct\s+MobyClassUpdate\s+\w+\s*\[[^\]]*\][^=;]*=\s*\{(.*?)\}\s*;", re.S)
+CLASS_ROW = re.compile(r"\{\s*(-?(?:0[xX][0-9A-Fa-f]+|\d+))\s*,\s*(\w+)\s*,")
+
+
+def norm_label(label: str) -> str:
+    return re.sub(r"^FUNC_", "FUN_", label.upper())
+
+
+def moby_class_comment(classes: list[int]) -> str:
+    """The comment above a moby update (docs/contributing/code-cleanup.md, Moby classes)."""
+    parts, i = [], 0
+    while i < len(classes):
+        j = i
+        while j + 1 < len(classes) and classes[j + 1] == classes[j] + 1:
+            j += 1
+        if j - i >= 2:
+            parts.append(f"{classes[i]}-{classes[j]}")
+        else:
+            parts += [str(c) for c in classes[i:j + 1]]
+        i = j + 1
+    if len(classes) == 1:
+        return f"/* Moby class {classes[0]} */"
+    text = f"/* Moby classes {', '.join(parts)} */"
+    return text if len(text) <= 100 else f"/* Moby classes: {len(classes)}, listed in the level class tables */"
+
+
+def moby_update_defs(tree: Tree) -> list[tuple[str, str, int, str]]:
+    """(file, name, line, expected comment) of every function a level class table names as an
+    update, except empty ones (the shared no-op callbacks)."""
+    classes = collections.defaultdict(set)
+    for rel, text in tree.code.items():
+        if not rel.endswith("/level_class_tables.c"):
+            continue
+        names = {m.group(1): norm_label(m.group(3) or m.group(1)) for m in PROTO.finditer(text)}
+        for table in CLASS_TABLE.finditer(text):
+            for row in CLASS_ROW.finditer(table.group(1)):
+                oclass, name = int(row.group(1), 0), row.group(2)
+                if oclass >= 0 and name != "0":
+                    classes[names.get(name, norm_label(name))].add(oclass)
+    out = []
+    for rel, text in tree.code.items():
+        if rel.endswith("/level_class_tables.c"):
+            continue
+        labels = {m.group(1): norm_label(m.group(3)) for m in PROTO.finditer(text) if m.group(3)}
+        for m in FUNC_DEF.finditer(text):
+            label = labels.get(m.group(1), norm_label(m.group(1)))
+            if label in classes and text[m.end():].lstrip()[:1] != "}":
+                out.append((rel, m.group(1), line_of(text, m.start()), moby_class_comment(sorted(classes[label]))))
+    return out
+
+
+def check_moby_class_comments(tree: Tree) -> list[Problem]:
+    """Every moby update has the class comment on the line above it."""
+    out = []
+    for rel, name, line, comment in moby_update_defs(tree):
+        lines = tree.files[rel].splitlines()
+        if line < 2 or lines[line - 2].strip() != comment:
+            out.append(Problem("moby-class", rel, f"{name} is a moby update: put `{comment}` on the line "
+                               "above it", line, ident=f"{name} {comment}"))
+    return out
+
+
 def tree_problems(tree: Tree, base: bool = False) -> list[Problem]:
     return (check_label_names(tree, base) + check_header_duplicates(tree, base) + check_symbol_addrs(tree)
-            + check_config_paths(tree))
+            + check_config_paths(tree) + check_moby_class_comments(tree))
 
 
 # —— Commit and pull request text ——

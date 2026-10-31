@@ -274,6 +274,7 @@ extern char D_0013F350[];
 
 void update_giant_clank_missile(M_29E8A0 *missile_moby) __asm__("FUN_L15_0029d6c0");
 
+/* Moby class 256 */
 void update_giant_clank_missile(M_29E8A0 *missile_moby) {
     Tbl_29E8A0 camera_blast_parameters;
     float      effect_bias_velocity[4];

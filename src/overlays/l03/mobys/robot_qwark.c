@@ -69,6 +69,7 @@ extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, s
  * it breaks, records its save bit, and keeps sparking. */
 void robot_qwark_update(struct Moby *m) __asm__("FUN_L03_002dbd90");
 
+/* Moby class 914 */
 void robot_qwark_update(struct Moby *robot_qwark_moby) {
     enum {
         ROBOT_QWARK_INITIALIZE = 0,

@@ -75,6 +75,7 @@ void                 update_help_hints(Moby *moby) __asm__("FUN_L10_002e85b8");
 
 /* no foreign declaration */
 
+/* Moby class 1344 */
 void update_help_hints(Moby *moby) {
     enum {
         HELP_MESSAGE_STATE_INITIALIZE = 0,

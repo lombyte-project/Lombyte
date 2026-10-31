@@ -62,6 +62,7 @@ f32 D_L17_001617BC = 8.0f;
 
 void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) __asm__("FUN_L00_002d7f88");
 
+/* Moby class 804 */
 void update_linked_moby_transform_and_lifetime(S_002d7f88 *follower_moby) {
     D_002d7f88 *moby_data = follower_moby->p78;
     O_002d7f88 *o;

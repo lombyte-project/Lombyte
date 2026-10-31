@@ -38,6 +38,7 @@ s32          allocate_voice_for_target_entry(s32   entry_index,
                                              s32   flags,
                                              void *target) __asm__("FUN_0022da68");
 
+/* Moby class 38 */
 void update_taxi_platform(unsigned char *moby) {
     char *taxi_platform_vars = ((char *)MOBY(moby)->pvars);
     char *path;

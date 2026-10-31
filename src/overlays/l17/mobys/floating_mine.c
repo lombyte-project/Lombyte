@@ -49,6 +49,7 @@ extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FU
 
 void update_floating_mine(struct Moby *moby) __asm__("FUN_L17_002dc3f8");
 
+/* Moby class 835 */
 void update_floating_mine(struct Moby *moby) {
     enum {
         BOBBING_INITIALIZE = 0,

@@ -19,6 +19,7 @@ void          update_alien_snapper_spawner(char *moby) __asm__("FUN_L06_002fda30
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_point_inside_clip_volume(void *, int);
 
+/* Moby class 1066 */
 void update_alien_snapper_spawner(char *moby) {
     enum {
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 0,

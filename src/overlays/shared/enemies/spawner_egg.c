@@ -203,6 +203,7 @@ void remove_spawner_egg(void *moby, char *egg_vars) {
 /* Bubble update: drifts, bounces off level geometry and other bubbles, settles on the ground, then shrinks away. */
 void spawner_egg_update(struct Moby *moby) __asm__("FUN_L09_0030b3b0");
 
+/* Moby class 1886 */
 void spawner_egg_update(struct Moby *moby) {
     enum {
         SPAWNER_EGG_STATE_MOVING = 0,

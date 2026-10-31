@@ -123,6 +123,7 @@ void draw_aridia_ocean_parts(struct Moby *moby) {
 
 void ocean_aridia_update(struct Moby *moby) __asm__("FUN_L02_002ea198");
 
+/* Moby class 854 */
 void ocean_aridia_update(struct Moby *moby) {
     enum {
         OCEAN_ARIDIA_INITIALIZE = 0,

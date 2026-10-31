@@ -21,6 +21,7 @@ void update_clip_volume_scene_trigger(struct Moby *moby) __asm__("FUN_L12_003093
 /* Vendor-counter moby update: once the shared block is ready, latch its data and copy two vectors. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
 
+/* Moby class 1404 */
 void update_clip_volume_scene_trigger(struct Moby *moby) {
     char *scene_trigger_config = (char *)moby->pvars;
     char *scene_trigger_latch_base;

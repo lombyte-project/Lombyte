@@ -593,6 +593,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AB910), where it is exact; names translated to the US level program. */
 void mine_update(M910 *m) __asm__("FUN_L00_002aa670");
 
+/* Moby class 74 */
 void mine_update(M910 *mine_moby) {
     enum {
         MINE_DEBRIS_FIXED_SECONDARY_COLOR = 0,

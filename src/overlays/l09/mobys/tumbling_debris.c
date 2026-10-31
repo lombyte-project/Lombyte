@@ -23,6 +23,7 @@ extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L0
    bursts it into two sparks and removes it when its timer runs out or it leaves the area. */
 void update_tumbling_debris(struct Moby *moby) __asm__("FUN_L09_002ef430");
 
+/* Moby class 313 */
 void update_tumbling_debris(struct Moby *moby) {
     float  previous_debris_position[4];
     float  spark_velocity[4];

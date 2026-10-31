@@ -102,6 +102,7 @@ void update_rail_lift_oscillation(struct Moby *moby) __asm__("FUN_L03_002dd0f0")
 
 void update_rail_lift(struct Moby *lift_moby) __asm__("FUN_L03_002dccc0");
 
+/* Moby class 1012 */
 void update_rail_lift(struct Moby *lift_moby) {
     enum {
         LIFT_INITIALIZE = 0,

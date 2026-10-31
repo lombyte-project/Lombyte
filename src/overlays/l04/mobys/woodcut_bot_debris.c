@@ -40,6 +40,7 @@ extern u128 coll_hit_normal_lui[] __asm__("D_L04_00174000") NOT_SDA;
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 void        update_woodcut_bot_debris(M2e5178 *entity) __asm__("FUN_L04_002e5178");
 
+/* Moby class 1516 */
 void update_woodcut_bot_debris(M2e5178 *entity) {
     enum {
         ENTITY_MOTION_STATE_BOUNCE = 0,

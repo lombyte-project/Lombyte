@@ -620,6 +620,7 @@ static __inline__ WrenchHero *sweep_hero(void) {
 
 void wrench_update(WrenchMoby *m) __asm__("FUN_L00_002a84c8");
 
+/* Moby class 71 */
 void wrench_update(WrenchMoby *wrench_moby) {
     enum {
         WRENCH_NORMAL = 0,

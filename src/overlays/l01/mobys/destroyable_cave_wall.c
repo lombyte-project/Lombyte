@@ -29,6 +29,7 @@ extern u8 D_0013D388[];
 /* Removed once collected; when hit, bursts into 500 smoke puffs and 100 chunks, marks itself collected and sets D_0013D388[0xE] (an item-availability flag). */
 void destroyable_cave_wall_update(struct Moby *m) __asm__("FUN_L01_002fa800");
 
+/* Moby class 729 */
 void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
     s32 i;
     s32 j;

@@ -38,6 +38,7 @@ s32  allocate_voice_for_target_entry(s32   entry_index,
                                      s32   flags,
                                      void *target) __asm__("FUN_0022da68");
 
+/* Moby classes 1013, 1014, 1064, 1065 */
 void update_linked_state_sliding_platform(struct Moby *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,

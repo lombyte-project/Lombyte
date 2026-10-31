@@ -259,6 +259,7 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /* Ported from rac1-decomp src/overlays/l01_novalis/vendor_002BA898.c (func_L01_002F8B00) */
 void bomber_jet_update(GunshipMoby *m) __asm__("FUN_L01_002f7728");
 
+/* Moby class 688 */
 void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
     GunshipVars   *gunship_vars = bomber_jet_moby->vars;
     GunshipFollow *sub = &gunship_vars->sub;

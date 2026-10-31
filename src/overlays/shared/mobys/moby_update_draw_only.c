@@ -8,6 +8,7 @@ extern void draw_level16_reflection_mesh_batch(void) __asm__("FUN_L16_002e9ce0")
 
 void moby_update_draw_only(struct Moby *moby) __asm__("FUN_L16_002e9df0");
 
+/* Moby classes 1907, 1908, 1910, 1911, 1913, 1918, 1952 */
 void moby_update_draw_only(struct Moby *moby) {
     enum {
         MOBY_DRAW_ONLY_STATE_INITIALIZE = 0,

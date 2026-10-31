@@ -89,6 +89,7 @@ unsigned char *spawn_machinegun_turret_projectile(void  *spawn_position,
     return spawned_moby;
 }
 
+/* Moby class 880 */
 void update_machinegun_turret_projectile(struct Moby *moby) {
     BoltVars *bolt_vars = (BoltVars *)moby->pvars;
     Vec4      previous_projectile_position;

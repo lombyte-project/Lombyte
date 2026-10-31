@@ -21,6 +21,7 @@ void draw_bounded_scroll_layers(void) {
 
 void update_bounded_scroll_layers(void *callback_argument) __asm__("FUN_L01_002f6180");
 
+/* Moby class 678 */
 void update_bounded_scroll_layers(void *callback_argument) {
     Vec4   bounding_sphere;
     Vec4   point_to_center;

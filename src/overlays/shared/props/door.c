@@ -15,6 +15,7 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 void door_update(u8 *moby) __asm__("FUN_L07_00310df0");
 
+/* Moby classes 129, 130, 182, 183, 360, 1063, 1078, 1079, 1131 */
 void door_update(u8 *moby) {
     enum {
         DOOR_INITIALIZE = 0,

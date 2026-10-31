@@ -136,6 +136,7 @@ mine_blast_mobys(void *, void *, void *, int, int, int, int, int, float, float, 
 
 void poison_vessel_update(Moby_2E9358 *moby) __asm__("FUN_L15_002e7f68");
 
+/* Moby class 1257 */
 void poison_vessel_update(Moby_2E9358 *moby) {
     enum {
         POISON_VESSEL_FREE_FLIGHT = 0,

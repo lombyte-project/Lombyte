@@ -31,6 +31,7 @@ typedef struct {
 
 void update_help_hints(struct Moby *moby) __asm__("FUN_L08_00307540");
 
+/* Moby class 1349 */
 void update_help_hints(struct Moby *moby) {
     enum {
         VENDOR_EVENT_WAIT_FOR_ARMING = 0,

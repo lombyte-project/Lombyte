@@ -16,6 +16,7 @@ extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
 void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");
 
+/* Moby classes 344, 547-551, 588-598, 782-785, 980, 981 */
 void blarg_gun_update(char *moby) {
     enum {
         BLARG_GUN_STATE_INITIALIZE = 0,

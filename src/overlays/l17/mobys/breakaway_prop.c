@@ -27,6 +27,7 @@ extern void *FUN_L00_00263fd8(char  *src,
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
 void         update_breakaway_prop(struct Moby *moby) __asm__("FUN_L17_002f5390");
 
+/* Moby class 1876 */
 void update_breakaway_prop(struct Moby *moby) {
     enum {
         HIT_EFFECT_INITIALIZE = 0,

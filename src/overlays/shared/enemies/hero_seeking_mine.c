@@ -65,6 +65,7 @@ extern void      draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30")
 
 void update_hero_seeking_group_moby(char *moby) __asm__("FUN_L15_002a2488");
 
+/* Moby class 77 */
 void update_hero_seeking_group_moby(char *moby) {
     float         va[4];
     float         pb[4];

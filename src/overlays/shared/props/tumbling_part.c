@@ -42,6 +42,7 @@ extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5238), where it is exact; names translated to the US level program. */
 void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
 
+/* Moby classes: 203, listed in the level class tables */
 void robot_arm_update(char *moby) {
     enum {
         ROBOT_ARM_REMOVE = 0,

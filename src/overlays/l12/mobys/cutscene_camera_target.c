@@ -28,6 +28,7 @@ static inline unsigned char camera_target_index(int phase) {
 
 void update_cutscene_camera_target(struct Moby *moby) __asm__("FUN_L12_003094a0");
 
+/* Moby class 1557 */
 void update_cutscene_camera_target(struct Moby *moby) {
     enum {
         INITIALIZE_UPDATE_DISTANCE = 0,

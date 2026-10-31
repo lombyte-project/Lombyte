@@ -14,6 +14,7 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
  * current segment, and dies at the end of the path. */
 void update_path_mover(struct Moby *path_moby) __asm__("FUN_L03_002db020");
 
+/* Moby class 898 */
 void update_path_mover(struct Moby *path_moby) {
     float previous_position[4];
     float movement_scratch[4];

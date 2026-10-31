@@ -27,6 +27,7 @@ extern void spawn_moby_point_offset_particle(void *, float, int, float) __asm__(
 
 void update_sentrybot_projectile(unsigned char *moby) __asm__("FUN_L15_002e4380");
 
+/* Moby class 934 */
 void update_sentrybot_projectile(unsigned char *moby) {
     char *moby_vars = ((char *)MOBY(moby)->pvars);
     float next_position[4];

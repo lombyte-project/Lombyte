@@ -165,6 +165,7 @@ void prepare_background_ship_1_joint_billboards(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED8F0), where it is exact; names translated to the US level program. */
 void background_ship_1_update(char *moby) __asm__("FUN_L02_002ec4b8");
 
+/* Moby class 1212 */
 void background_ship_1_update(char *moby) {
     enum {
         BACKGROUND_SHIP_1_INITIALIZE = 0,

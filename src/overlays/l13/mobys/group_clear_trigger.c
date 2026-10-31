@@ -38,6 +38,7 @@ int count_live_mobys_in_list(int moby_list_index, int excluded_moby_state) {
 
 void update_group_clear_trigger(struct Moby *moby) __asm__("FUN_L13_0030af50");
 
+/* Moby class 1271 */
 void update_group_clear_trigger(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int  *moby_list_index_cursor = (int *)moby_vars;

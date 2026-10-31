@@ -184,6 +184,7 @@ int select_moby_by_xy_distance(char *selection_reference, char *selection_output
 
 void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
 
+/* Moby class 30 */
 void machinegun_turret_update(char *moby) {
     enum {
         TURRET_STATE_INITIALIZE = 0,

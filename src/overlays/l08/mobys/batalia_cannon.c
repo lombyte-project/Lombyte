@@ -723,6 +723,7 @@ int find_batalia_cannon_aim_target(struct Moby *moby) {
     return 0;
 }
 
+/* Moby class 440 */
 void update_batalia_cannon(Moby *moby) {
     enum {
         CANNON_INITIALIZE = 0,

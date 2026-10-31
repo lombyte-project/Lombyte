@@ -258,6 +258,7 @@ extern f32 D_L01_00161210 MACRO_ADDR;
 extern f32 D_L01_00161214 MACRO_ADDR;
 void update_pool_tiles_and_effects(struct Moby *moby) __asm__("FUN_L01_002fd0e8");
 
+/* Moby class 751 */
 void update_pool_tiles_and_effects(struct Moby *moby) {
     enum {
         POOL_INITIALIZE = 0,

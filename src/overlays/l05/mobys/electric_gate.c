@@ -21,6 +21,7 @@ void         add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern short electric_gate_beam_callback_frame_gp __asm__("D_L05_00161D38") __attribute__((sda));
 void         electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
 
+/* Moby class 838 */
 void electric_gate_update(char *gate_moby) {
     enum {
         ELECTRIC_GATE_INITIALIZE = 0,

@@ -24,6 +24,7 @@ extern void *spawn_spark_2ef9b0(void *, void *, int, int, float) __asm__("FUN_L0
    slows down or bounces off, shrinking, with a new random spin. */
 void update_shrinking_tumbling_debris(struct Moby *moby) __asm__("FUN_L09_002ef9b0");
 
+/* Moby classes 320, 321 */
 void update_shrinking_tumbling_debris(struct Moby *moby) {
     float  previous_debris_position[4];
     float  spark_velocity[4];

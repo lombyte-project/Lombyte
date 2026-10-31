@@ -1408,6 +1408,7 @@ void refresh_suck_cannon_slots(void) {
 
 void suckcannon_update(SuckMoby *self) __asm__("FUN_L00_002da790");
 
+/* Moby class 849 */
 void suckcannon_update(SuckMoby *suck_cannon_moby) {
     enum {
         SUCKCANNON_STATE_INITIALIZE = 0,

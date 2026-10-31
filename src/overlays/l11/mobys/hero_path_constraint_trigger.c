@@ -11,6 +11,7 @@ void mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c828");
 void copy_pokitaru_pvar_to_hero(struct Moby *moby) __asm__("FUN_L11_002f3350");
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F46C0), where it is exact; names translated to the US level program. */
 
+/* Moby class 361 */
 void copy_pokitaru_pvar_to_hero(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,

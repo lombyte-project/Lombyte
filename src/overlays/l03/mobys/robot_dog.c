@@ -133,6 +133,7 @@ extern void spawn_debris_c5bb8(char *,
  * (its partner moby data->0x248 is a class 0x23E), attacks in range, returns home, dies (states 8, 9, 21). */
 void robot_dog_update(char *moby) __asm__("FUN_L03_002c5bb8");
 
+/* Moby class 573 */
 void robot_dog_update(char *moby) {
     enum {
         ROBOT_DOG_INITIALIZE = 0,

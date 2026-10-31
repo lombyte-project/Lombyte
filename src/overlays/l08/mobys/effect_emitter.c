@@ -15,6 +15,7 @@ extern void
      spawn_effect_with_initial_motion(float *, float *, int, float) __asm__("FUN_L08_0027fe00");
 void update_effect_emitter(struct Moby *moby) __asm__("FUN_L08_00308c90");
 
+/* Moby class 1641 */
 void update_effect_emitter(struct Moby *moby) {
     char *effect_spawn_settings = (char *)moby->pvars;
     float effect_position[4];

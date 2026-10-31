@@ -30,6 +30,7 @@ FUN_L00_00262360_c(int, float *, float *, void *, float, float) __asm__("FUN_L00
 
 void update_path_spark_effect(char *moby) __asm__("FUN_L10_002dd3d8");
 
+/* Moby class 1090 */
 void update_path_spark_effect(char *moby) {
     float spark_position_before_path_update[4], blast_hit_position[4], path_segment_index,
         path_segment_remainder;

@@ -21,6 +21,7 @@ extern void draw_level_12_effects(void) __asm__("FUN_L12_002e71b0");
 void       update_effects_draw_trigger(struct Moby *moby) __asm__("FUN_L12_002e7208");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
+/* Moby class 293 */
 void update_effects_draw_trigger(struct Moby *moby) {
     enum {
         DRAW_CALLBACK_INITIALIZE = 0,

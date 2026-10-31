@@ -36,6 +36,7 @@ char *spawn_gadgebot_pad(char *gadgebot) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9FF0), where it is exact; names translated to the US level program. */
 void gadgebot_spawn_pad_update(char *moby) __asm__("FUN_L06_002d8c20");
 
+/* Moby class 303 */
 void gadgebot_spawn_pad_update(char *moby) {
     char *owner_moby = ((char *)MOBY(moby)->parent);
     if (owner_moby != 0 && (unsigned char)owner_moby[0x20] < 2) {

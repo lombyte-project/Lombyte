@@ -24,6 +24,7 @@ extern char D_L07_0016C960_c[] __asm__("D_L07_0016C8E0");
 
 void update_cutscene_effects(struct Moby *moby) __asm__("FUN_L07_0031eba8");
 
+/* Moby class 1552 */
 void update_cutscene_effects(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,

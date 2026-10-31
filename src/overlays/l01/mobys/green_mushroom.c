@@ -38,6 +38,7 @@ extern void  spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 
 void green_mushroom_update(SparkMoby *m) __asm__("FUN_L01_002fd9a0");
 
+/* Moby class 754 */
 void green_mushroom_update(SparkMoby *mushroom_moby) {
     enum {
         GREEN_MUSHROOM_INITIALIZE = 0,

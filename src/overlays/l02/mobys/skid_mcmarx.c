@@ -44,6 +44,7 @@ extern f32 frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
 /* Watcher NPC update (twin of qwarks_bouncer_update): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */
 void skid_mcmarx_update(struct Moby *m) __asm__("FUN_L02_002e1950");
 
+/* Moby class 788 */
 void skid_mcmarx_update(struct Moby *moby) {
     enum {
         SKID_MCMARX_INITIALIZE = 0,

@@ -36,6 +36,7 @@ char *spawn_hit_proxy(char *owner_moby, void *position, float scale) {
 
 void forward_moby_hits_to_owner(struct Moby *moby) __asm__("FUN_L13_0030c060");
 
+/* Moby class 1632 */
 void forward_moby_hits_to_owner(struct Moby *moby) {
     char *owner_tracking_vars = (char *)moby->pvars;
     char *hit_recipient_moby = *(char **)(owner_tracking_vars + 0x60);

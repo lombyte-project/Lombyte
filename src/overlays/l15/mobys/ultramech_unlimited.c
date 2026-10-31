@@ -266,6 +266,7 @@ extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b
 
 void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 
+/* Moby class 491 */
 void ultramech_unlimited_update(UMoby *ultramech_moby) {
     enum {
         ULTRAMECH_INITIALIZE = 0,

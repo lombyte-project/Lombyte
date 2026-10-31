@@ -13,6 +13,7 @@ extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void update_shattering_prop(struct Moby *moby) __asm__("FUN_L08_0030bc00");
 
+/* Moby class 1844 */
 void update_shattering_prop(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,

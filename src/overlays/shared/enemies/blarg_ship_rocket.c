@@ -146,6 +146,7 @@ extern void trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90"
 
 void update_blarg_ship_rocket(char *m) __asm__("FUN_L10_002cc2e8");
 
+/* Moby class 819 */
 void update_blarg_ship_rocket(char *rocket) {
     enum {
         ROCKET_STATE_FLYING = 1,

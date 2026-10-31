@@ -156,6 +156,7 @@ void attach_batalia_deserter_class_manipulator(struct Moby *moby) {
     }
 }
 
+/* Moby class 1144 */
 void batalia_deserter_update(WM *moby) {
     enum {
         DESERTER_INITIALIZE = 0,

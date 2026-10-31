@@ -25,6 +25,7 @@ extern void  FUN_L00_00257470(void *, int, int);
 
 void update_breakable_prop(struct Moby *moby) __asm__("FUN_L16_002d6740");
 
+/* Moby class 800 */
 void update_breakable_prop(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,

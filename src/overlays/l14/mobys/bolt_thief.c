@@ -114,6 +114,7 @@ extern void FUN_L00_00258278(char *, float, float *, float, float, float);
 
 void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L14_002fe2a0");
 
+/* Moby class 923 */
 void bolt_thief_update(L16CrateMoby *moby) {
     enum {
         BOLT_THIEF_STATE_INITIALIZE = 0,

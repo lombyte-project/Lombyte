@@ -486,6 +486,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void birdbot_update(PeMoby *m) __asm__("FUN_L01_002e6bf0");
 
+/* Moby class 459 */
 void birdbot_update(PeMoby *birdbot_moby) {
     enum {
         BIRDBOT_STATE_INITIALIZE = 0,

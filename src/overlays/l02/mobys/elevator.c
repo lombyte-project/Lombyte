@@ -64,6 +64,7 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 /* Same platform routine as elevator_update, with a waiting state (1) and this level's tables. */
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L02_002dbd38");
 
+/* Moby class 651 */
 void elevator_update(L16PlatformMoby *moby) {
     enum {
         ELEVATOR_INITIALIZE = 0,

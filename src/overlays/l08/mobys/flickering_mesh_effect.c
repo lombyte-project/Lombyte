@@ -624,6 +624,7 @@ extern int  allocate_colored_effect_slot(float *, float, float, float, float, fl
 
 void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
 
+/* Moby class 671 */
 void update_flickering_mesh_effect(struct Moby *moby) {
     FlickerLightVars *light_vars;
     Vec4              pos;

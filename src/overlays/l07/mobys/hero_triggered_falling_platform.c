@@ -28,6 +28,7 @@ s32         allocate_voice_for_target_entry(s32   entry_index,
                                             void *target) __asm__("FUN_0022da68");
 void        update_hero_triggered_falling_platform(char *moby) __asm__("FUN_L07_00311bc8");
 
+/* Moby class 1080 */
 void update_hero_triggered_falling_platform(char *moby) {
     enum {
         LEAF_INITIALIZE = 0,

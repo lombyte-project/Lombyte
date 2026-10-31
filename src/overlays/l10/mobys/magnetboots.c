@@ -26,6 +26,7 @@ extern void  jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 
 void magnetboots_update(struct Moby *m) __asm__("FUN_L10_00298668");
 
+/* Moby class 18 */
 void magnetboots_update(struct Moby *moby) {
     enum {
         MAGNETBOOTS_STATE_INITIALIZE = 0,

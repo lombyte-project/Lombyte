@@ -118,6 +118,7 @@ extern float helicopter_rotation_smoothing_divisor_gp __asm__("D_L12_001619B0")
     __attribute__((sda));
 void helicopter_update(char *m) __asm__("FUN_L12_002ebea8");
 
+/* Moby class 336 */
 void helicopter_update(char *moby) {
     enum {
         HELICOPTER_INITIALIZE_PATH = 0,

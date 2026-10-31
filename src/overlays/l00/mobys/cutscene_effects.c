@@ -51,6 +51,7 @@ spawn_puff(void *, s32, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_0026d0
 
 void update_phase_effect_controller(FlockMoby *moby) __asm__("FUN_L00_002e3800");
 
+/* Moby class 1545 */
 void update_phase_effect_controller(FlockMoby *moby) {
     enum {
         FLOCK_EFFECT_STATE_INITIALIZE = 0,

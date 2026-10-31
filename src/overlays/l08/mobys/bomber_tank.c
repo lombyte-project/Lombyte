@@ -128,6 +128,7 @@ typedef struct {
 
 void update_bomber_tank(Moby *moby) __asm__("FUN_L08_002d42d8");
 
+/* Moby class 253 */
 void update_bomber_tank(Moby *moby) {
     enum {
         BOMBER_TANK_STATE_INITIALIZE = 0,

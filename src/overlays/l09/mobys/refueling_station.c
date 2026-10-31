@@ -149,6 +149,7 @@ void handle_refueling_station_damage(struct Moby *moby,
     trooper_anim_finish(moby, refueling_station_vars->anim);
 }
 
+/* Moby class 1172 */
 void refueling_station_update(struct Moby *moby) {
     enum {
         REFUELING_STATION_STATE_INITIALIZE = 0,

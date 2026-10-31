@@ -55,6 +55,7 @@ extern void
      func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm__("FUN_L00_002730e0");
 void update_switchable_beam_barrier(char *moby) __asm__("FUN_L06_003049f8");
 
+/* Moby class 1123 */
 void update_switchable_beam_barrier(char *moby) {
     enum {
         INITIALIZE_VECTOR_STREAMS = 0,

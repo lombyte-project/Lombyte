@@ -60,6 +60,7 @@ typedef struct Moby Moby;
 
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
+/* Moby class 19 */
 void update_level_12_water_tile(struct Moby *moby) {
     enum {
         SLOT_INITIALIZE = 0,

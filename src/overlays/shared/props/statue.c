@@ -34,6 +34,7 @@ extern float D_L03_0015F580[] MACRO_ADDR;
 
 void statue_update(unsigned char *m) __asm__("FUN_L03_002d3cd8");
 
+/* Moby class 817 */
 void statue_update(unsigned char *statue_moby) {
     enum {
         STATUE_INITIALIZE = 0,

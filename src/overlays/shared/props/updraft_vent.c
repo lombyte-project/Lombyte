@@ -20,6 +20,7 @@ extern void draw_moby_animated_quad_layers(unsigned char *m) __asm__("FUN_L10_00
 
 void update_hero_flag_from_moby_local_box(unsigned char *moby) __asm__("FUN_L10_002e9028");
 
+/* Moby class 1378 */
 void update_hero_flag_from_moby_local_box(unsigned char *moby) {
     enum {
         MOBY_UPDATE_INITIALIZE = 0,

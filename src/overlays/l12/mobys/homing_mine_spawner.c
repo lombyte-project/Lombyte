@@ -71,6 +71,7 @@ extern void update_homing_mine_spawner_target(struct Moby *m) __asm__("FUN_L12_0
 
 void homing_mine_spawner_update(struct Moby *m) __asm__("FUN_L12_00307840");
 
+/* Moby class 1281 */
 void homing_mine_spawner_update(struct Moby *spawner) {
     enum {
         HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0,

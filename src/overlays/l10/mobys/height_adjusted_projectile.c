@@ -43,6 +43,7 @@ extern struct Moby *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
 void update_height_adjusted_projectile(struct Moby *moby) __asm__("FUN_L10_002d7b80");
 
+/* Moby class 859 */
 void update_height_adjusted_projectile(struct Moby *moby) {
     enum {
         HEIGHT_MODE_SKIP_ADJUSTMENT = 0,

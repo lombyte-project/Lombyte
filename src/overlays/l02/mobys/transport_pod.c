@@ -89,6 +89,7 @@ extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
 /* Aridia lift: carries the hero between two stops, with its two rail mobys, gears and a camera path. */
 void transport_pod_update(unsigned char *moby) __asm__("FUN_L02_002ddc88");
 
+/* Moby class 713 */
 void transport_pod_update(unsigned char *moby) {
     enum {
         TRANSPORT_POD_INITIALIZE = 0,

@@ -18,6 +18,7 @@ extern short scene_trail_first_spawn_particle_value __asm__("D_L07_00161CDC") __
 extern short scene_trail_second_spawn_particle_value __asm__("D_L07_00161CE0") __attribute__((sda));
 void         update_cutscene_joint_trails(struct Moby *moby) __asm__("FUN_L07_0031f900");
 
+/* Moby class 1789 */
 void update_cutscene_joint_trails(struct Moby *moby) {
     enum {
         TRAIL_STATE_INITIALIZE = 0,

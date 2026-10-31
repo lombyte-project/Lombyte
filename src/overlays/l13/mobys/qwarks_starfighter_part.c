@@ -43,6 +43,7 @@ struct PieceVars {
 
 void update_qwarks_starfighter_part(struct Moby *moby) __asm__("FUN_L13_002ece00");
 
+/* Moby classes 389-396, 399-401 */
 void update_qwarks_starfighter_part(struct Moby *moby) {
     enum {
         PART_STATE_INITIALIZE = 0,

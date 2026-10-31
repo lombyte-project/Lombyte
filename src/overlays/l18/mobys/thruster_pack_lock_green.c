@@ -65,6 +65,7 @@ extern float thruster_pack_lock_green_rest_height_offset_gp __asm__("D_L18_00161
     __attribute__((sda));
 void thruster_pack_lock_green_update(char *moby) __asm__("FUN_L18_002d6600");
 
+/* Moby class 583 */
 void thruster_pack_lock_green_update(char *moby) {
     enum {
         STATE_INITIALIZE = 0,

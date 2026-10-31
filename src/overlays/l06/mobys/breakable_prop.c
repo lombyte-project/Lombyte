@@ -38,6 +38,7 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_breakable_prop(char *self) __asm__("FUN_L06_00309e08");
 
+/* Moby class 1660 */
 void update_breakable_prop(char *replaced_moby) {
     enum {
         MOBY_INITIALIZE = 0,

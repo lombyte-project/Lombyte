@@ -67,6 +67,7 @@ extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 D_0015EEAC_macro __asm__("D_0015EEAC") MACRO_ADDR;
 void       update_help_hints(Moby *moby) __asm__("FUN_L04_002e4418");
 
+/* Moby class 1343 */
 void update_help_hints(Moby *moby) {
     enum {
         TUTORIAL_TRIGGER_STATE_INITIALIZE = 0,

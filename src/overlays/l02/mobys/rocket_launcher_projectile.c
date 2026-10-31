@@ -34,6 +34,7 @@ extern u8     *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32,
 /* Rocket launcher projectile update: drifts along its velocity, sheds particle trails and expires when its timer runs out. */
 void update_rocket_launcher_projectile(struct Moby *moby) __asm__("FUN_L02_002ebf20");
 
+/* Moby class 1208 */
 void update_rocket_launcher_projectile(struct Moby *moby) {
     enum {
         PROJECTILE_STATE_REMOVE = 0,

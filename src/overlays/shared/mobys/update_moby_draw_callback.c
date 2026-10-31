@@ -12,6 +12,7 @@ extern unsigned char l03_draw_callback_setup_byte_target[] __asm__("D_L03_001DC1
 
 void update_moby_draw_callback(struct Moby *moby) __asm__("FUN_L03_002dc9b0");
 
+/* Moby class 994 */
 void update_moby_draw_callback(struct Moby *moby) {
     enum {
         DRAW_CALLBACK_INITIALIZE = 0,

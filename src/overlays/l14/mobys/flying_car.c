@@ -113,6 +113,7 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
 void update_flying_car(struct Moby *m) __asm__("FUN_L14_00306ee0");
 
+/* Moby class 1417 */
 void update_flying_car(struct Moby *flying_car_moby) {
     enum {
         FLYING_CAR_INITIALIZE = 0,

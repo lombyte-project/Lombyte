@@ -106,6 +106,7 @@ void initialize_bolt_pickup(struct Moby *moby) {
     *(int *)(moby_vars + 0x24) = spawn_moby_offset_effect(moby);
 }
 
+/* Moby class 152 */
 void update_bolt_pickup(Moby_2B94B0 *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,

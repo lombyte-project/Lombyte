@@ -80,6 +80,7 @@ extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("f
 
 void update_path_walker(unsigned char *walker_moby) __asm__("FUN_L16_002e76b8");
 
+/* Moby classes 1667-1671 */
 void update_path_walker(unsigned char *walker_moby) {
     enum {
         PATH_WALKER_INITIALIZE_GROUP = 0,

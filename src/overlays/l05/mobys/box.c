@@ -12,6 +12,7 @@ extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L0
 
 void box_update(char *moby) __asm__("FUN_L05_0030bf98");
 
+/* Moby class 812 */
 void box_update(char *moby) {
     enum {
         BOX_INITIALIZE = 0,

@@ -51,6 +51,7 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void lieutenant_update(struct Moby *moby) __asm__("FUN_L04_002e3078");
 
+/* Moby class 1190 */
 void lieutenant_update(struct Moby *moby) {
     enum {
         LIEUTENANT_STATE_INITIALIZE = 0,

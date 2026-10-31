@@ -34,6 +34,7 @@ extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
 /* Per-frame update of a falling debris moby: moves it, bursts into particles when it hits the ground, and removes it when its timer runs out. */
 void update_falling_splash_moby(struct Moby *moby) __asm__("FUN_L01_002ffdc0");
 
+/* Moby class 787 */
 void update_falling_splash_moby(struct Moby *moby) {
     float next_pos[4];
     float effect_pos[4];

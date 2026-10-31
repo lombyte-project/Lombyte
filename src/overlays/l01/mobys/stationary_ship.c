@@ -100,6 +100,7 @@ extern void           update_entity(void *) __asm__("FUN_L00_00250df8");
 /* Rider carrier: waits for the hero in its clip volume, then follows its path carrying up to eight rider mobys (and steers its camera moby), drops them off one by one at the marked node and removes itself at the end of the path. */
 void stationary_ship_update(CarrierMoby *m) __asm__("FUN_L01_002f4960");
 
+/* Moby class 666 */
 void stationary_ship_update(CarrierMoby *carrier_moby) {
     enum {
         CARRIER_STATE_INITIALIZE = 0,

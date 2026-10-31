@@ -53,6 +53,7 @@ float D_L18_001613E4 = 2e+01f;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1C50), where it is exact; names translated to the US level program. */
 void update_armed_transport_rocket(char *m) __asm__("FUN_L16_002a0a98");
 
+/* Moby class 50 */
 void update_armed_transport_rocket(char *rocket_moby) {
     float desired[4], next_position[4], delta[4], blend[4];
     char *rocket_data = ((char *)MOBY(rocket_moby)->pvars);

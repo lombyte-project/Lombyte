@@ -24,6 +24,7 @@ extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10")
 
 void update_help_hints(struct Moby *moby) __asm__("FUN_L12_002ed280");
 
+/* Moby class 422 */
 void update_help_hints(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     if (count_active_moby_group_members(moby_vars[3], -1) == 0) {

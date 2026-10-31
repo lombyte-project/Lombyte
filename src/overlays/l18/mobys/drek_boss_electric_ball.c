@@ -49,6 +49,7 @@ extern float electric_arc_endpoint_radius_scale_gp __asm__("D_L18_00161ED8") __a
 extern float target_travel_speed_gp __asm__("D_L18_00161EE0") __attribute__((sda));
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) __asm__("FUN_L18_002e9e70");
 
+/* Moby class 983 */
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
     enum {
         STATE_TIMED_REMOVAL_WAIT = 0,

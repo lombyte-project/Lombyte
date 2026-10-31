@@ -228,6 +228,7 @@ extern CollisionHit coll_hit_1638 __asm__("D_L13_00174140");
 
 void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
 
+/* Moby classes 212, 1412 */
 void asteroid_update(struct Moby *moby) {
     enum {
         ASTEROID_INITIALIZE = 0,

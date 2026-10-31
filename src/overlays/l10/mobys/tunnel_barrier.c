@@ -1,4 +1,4 @@
-/* Level 10 moby class block_cave. */
+/* Level 10 tunnel barrier (class record block_cave). */
 #include "types.h"
 #include "rnc/overlay/level_save_state.h"
 #include "rnc/hero/hero.h"
@@ -18,9 +18,10 @@ extern int D_L10_001BA950[];
 extern char          moby_pair_records[] __asm__("D_L10_00178580");
 extern unsigned char D_0014C190[];
 
-void block_cave_update(struct Moby *m) __asm__("FUN_L10_002dd650");
+void tunnel_barrier_update(struct Moby *m) __asm__("FUN_L10_002dd650");
 
-void block_cave_update(struct Moby *moby) {
+/* Moby class 1100 */
+void tunnel_barrier_update(struct Moby *moby) {
     int            i;
     char          *table_entry;
     float          transposed_rotation_matrix[16];

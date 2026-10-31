@@ -29,6 +29,7 @@ extern void draw_hoven_jittered_quad_layers(struct Moby *) __asm__("FUN_L12_0030
 /* Pvars: d[0] is the moby to watch, d[1] the voice slot held for this moby. */
 void update_jittered_quad_layers(struct Moby *moby) __asm__("FUN_L12_003081b0");
 
+/* Moby class 1345 */
 void update_jittered_quad_layers(struct Moby *moby) {
     enum {
         CHECK_PERSISTENT_REMOVAL = 0,

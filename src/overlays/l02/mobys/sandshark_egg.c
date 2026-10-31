@@ -22,6 +22,7 @@ int  D_L02_00161C9C = 0x6f707070;
 int  D_L02_00161CA0 = 0x707070;
 void sandshark_egg_update(struct Moby *moby) __asm__("FUN_L02_002e0280");
 
+/* Moby class 755 */
 void sandshark_egg_update(struct Moby *moby) {
     enum {
         SANDSHARK_EGG_FALL_UNTIL_LANDING = 1,

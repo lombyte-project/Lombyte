@@ -68,6 +68,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void update_drek_boss_ring_projectile(struct Moby *moby) __asm__("FUN_L18_002db460");
 
+/* Moby class 624 */
 void update_drek_boss_ring_projectile(struct Moby *moby) {
     enum {
         STATE_BALLISTIC_FLIGHT = 0,

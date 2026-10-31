@@ -68,6 +68,7 @@ extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 
 void update_help_hints(struct Moby *moby) __asm__("FUN_L15_002ed398");
 
+/* Moby class 1469 */
 void update_help_hints(struct Moby *moby) {
     enum {
         HINT_DIALOGUE_INITIALIZE = 0,

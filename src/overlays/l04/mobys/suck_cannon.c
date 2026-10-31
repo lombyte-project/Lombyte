@@ -39,6 +39,7 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void suck_cannon_update(struct Moby *moby) __asm__("FUN_L04_002e1a10");
 
+/* Moby class 1120 */
 void suck_cannon_update(struct Moby *moby) {
     enum {
         SUCK_CANNON_INITIALIZE = 0,

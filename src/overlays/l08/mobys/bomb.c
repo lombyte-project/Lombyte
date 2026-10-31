@@ -86,6 +86,7 @@ blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868") = {
     {-1, -1, -1, 0x2f, -1, -1, 0, 0x2f, -1, 0x7f, 0, 0x2f, -1, 0x4f, 0, 0x2f}
 };
 
+/* Moby class 248 */
 void update_bomb(char *moby) {
     enum {
         BOMB_STATE_MOVING = 1,

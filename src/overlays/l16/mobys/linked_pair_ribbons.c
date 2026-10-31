@@ -29,6 +29,7 @@ extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022d
 
 void update_linked_pair_ribbons(struct Moby *moby) __asm__("FUN_L16_002cf4a8");
 
+/* Moby class 552 */
 void update_linked_pair_ribbons(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE_LINKED_PAIRS = 0,

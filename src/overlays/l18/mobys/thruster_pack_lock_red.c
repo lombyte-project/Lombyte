@@ -47,6 +47,7 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 
 void thruster_pack_lock_red_update(struct Moby *moby) __asm__("FUN_L18_002d7b20");
 
+/* Moby class 586 */
 void thruster_pack_lock_red_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,

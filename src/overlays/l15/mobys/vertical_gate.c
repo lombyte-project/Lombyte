@@ -59,6 +59,7 @@ extern int l15_key_gate_open_lui __asm__("D_L15_00184AA8") NOT_SDA;
 
 void update_vertical_gate(GateMoby *gate_moby) __asm__("FUN_L15_002a36d0");
 
+/* Moby class 92 */
 void update_vertical_gate(GateMoby *gate_moby) {
     enum {
         GATE_INITIALIZE = 0,
