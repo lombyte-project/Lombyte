@@ -63,6 +63,10 @@ void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
 
 /* Moby class 557 */
 void shuttle_update(struct Moby *shuttle_moby) {
+    enum {
+        SHUTTLE_STATE_INITIALIZE = 0,
+        SHUTTLE_RIDER_MODE_ATTACHED = 0x3039
+    };
     L14LiftVars *shuttle_vars;
     Vec4         previous_shuttle_position;
     Vec4         rot;
@@ -102,7 +106,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
     }
     qcopy(&previous_shuttle_position, &shuttle_moby->pos);
     qcopy(&rot, &shuttle_moby->rot);
-    if (shuttle_moby->state == 0) {
+    if (shuttle_moby->state == SHUTTLE_STATE_INITIALIZE) {
         qcopy(&shuttle_moby->pos, ((char *)l14_paths[shuttle_vars->path]) + 0x10);
         shuttle_vars->angle = 0.0f;
         shuttle_vars->sound = -1;
@@ -118,7 +122,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
     }
     gunship_update(shuttle_moby);
     rider = &D_L14_0015FFD8_lift[shuttle_vars->rider];
-    if (shuttle_vars->mode == 0x3039) {
+    if (shuttle_vars->mode == SHUTTLE_RIDER_MODE_ATTACHED) {
         if (shuttle_vars->anchor != -1)
             moby_point_position(
                 shuttle_moby, shuttle_vars->anchor, &rider_attachment_origin_or_hero_position);
