@@ -56,7 +56,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT = 3,
         STATE_WAIT_FOR_DEPRESSION_TRIGGER = 4,
         STATE_SETTLE_DEPRESSED_HEIGHT = 5
-    };
+    } ; enum { STATE_DEPRESSED_HEIGHT_SETTLED = 6};
     char *thruster_pack_lock_red_private_vars = (char *)moby->pvars;
     int   index;
 
@@ -65,11 +65,11 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         *(float *)(thruster_pack_lock_red_private_vars + 0x64) = moby->pos.z;
         *(unsigned short *)(thruster_pack_lock_red_private_vars + 0x3E) |= 8;
         if (*(int *)(thruster_pack_lock_red_private_vars + 0x60) != 0) {
-            moby->state = 1;
+            moby->state = STATE_APPROACH_CONFIGURED_HEIGHT;
             moby->scale = moby->pclass->scale * l18_thruster_pack_lock_red_scale_multiplier;
             return;
         }
-        moby->state = 4;
+        moby->state = STATE_WAIT_FOR_DEPRESSION_TRIGGER;
         return;
     case STATE_APPROACH_CONFIGURED_HEIGHT:
     case STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT:
@@ -91,7 +91,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             frame_time_sq * 10.0f,
             frame_time * 20.0f);
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
-            moby->state = 3;
+            moby->state = STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT;
             allocate_voice_for_target_entry(0, 0, (int)moby);
             index = *(int *)(thruster_pack_lock_red_private_vars + 0x70);
             if (index != -1) {
@@ -110,7 +110,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         break;
     case STATE_WAIT_FOR_DEPRESSION_TRIGGER:
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
-            moby->state = 5;
+            moby->state = STATE_SETTLE_DEPRESSED_HEIGHT;
             moby->command = 1;
             moby->pos.z -= 1.5f;
             if (current_level_index == 0x12)
@@ -145,7 +145,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
                            *(float *)(thruster_pack_lock_red_private_vars + 0x64) - 1.5f,
                            0.15f) != 0.0f)
             return;
-        moby->state = 6;
+        moby->state = STATE_DEPRESSED_HEIGHT_SETTLED;
         break;
     }
 }
