@@ -95,6 +95,9 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
     enum {
         FALLBACK_RESPONSE_HIT_STATE = 8
     };
+    enum {
+        FALLBACK_HIT_KIND = 0x47
+    };
     V_25a478  hit_blend_vector;
     V_25a478  combined_hit_vector;
     s32       hit_response_index;
@@ -144,7 +147,7 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
                        hit_vector_scale_table[hit_vector_scale_row][hit_record->state]);
         kind = hit_record->kind;
         hit_record->u.s.f1C = 5627.9248f;
-        if (kind == 0x47) {
+        if (kind == FALLBACK_HIT_KIND) {
             hit_blend_vector.f[0] =
                 fast_cos(fast_arc_tan(hit_recipient_moby->x - hero.motion.pos.f[0],
                                       hit_recipient_moby->y - hero.motion.pos.f[1]));
@@ -162,7 +165,7 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
     } else {
         if (!hit_record->tgt) {
             hit_record->state = FALLBACK_RESPONSE_HIT_STATE;
-            kind = 0x47;
+            kind = FALLBACK_HIT_KIND;
         } else {
             kind = hit_record->tgt->hA6;
             hit_record->state = FALLBACK_RESPONSE_HIT_STATE;
