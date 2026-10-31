@@ -127,20 +127,20 @@ typedef struct {
 } MorphorayPrivateState;
 
 void initialize_morphoray_private_state(struct Moby *moby) {
-    MorphorayPrivateState *m = (MorphorayPrivateState *)moby->pvars;
+    MorphorayPrivateState *morphoray_private_state = (MorphorayPrivateState *)moby->pvars;
     s32                    i;
     for (i = 0; i < 4; i++)
-        m->r[i] = random_integer_below(0xFF);
-    m->a[0] = -1.0f;
-    m->a[1] = -2.25f;
-    m->a[2] = 1.25f;
-    m->a[3] = 2.5f;
+        morphoray_private_state->r[i] = random_integer_below(0xFF);
+    morphoray_private_state->a[0] = -1.0f;
+    morphoray_private_state->a[1] = -2.25f;
+    morphoray_private_state->a[2] = 1.25f;
+    morphoray_private_state->a[3] = 2.5f;
     for (i = 0; i < 4; i++)
-        m->c[i] = scale_game_frames(i * 0x40 + 0x3F);
-    m->x40 = 2.0f;
-    m->x44 = 2.5f;
-    m->x4c = 2.0f;
-    m->x48 = 2.5f;
+        morphoray_private_state->c[i] = scale_game_frames(i * 0x40 + 0x3F);
+    morphoray_private_state->x40 = 2.0f;
+    morphoray_private_state->x44 = 2.5f;
+    morphoray_private_state->x4c = 2.0f;
+    morphoray_private_state->x48 = 2.5f;
 }
 
 typedef struct {
