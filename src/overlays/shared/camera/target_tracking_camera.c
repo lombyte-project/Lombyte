@@ -323,7 +323,7 @@ void update_target_tracking_camera(char *camera_object) {
     int          hero_state = b->state.current;
     char        *camera_position;
     int          x, y;
-    if (hero_state == 0x2C) {
+    if (hero_state == HERO_STATE_GRAPPLE_SWING_ENTRY) {
         camera_position = camera_object + 0x30;
         x = *(int *)(camera_target_state + 8);
         y = ((int)b->swing_target_moby);
