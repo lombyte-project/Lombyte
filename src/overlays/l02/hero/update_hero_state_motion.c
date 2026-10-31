@@ -336,6 +336,9 @@ extern CollisionHit HH __asm__("D_L02_00174440") NOT_SDA;
 void update_hero_ground_contact(void) __asm__("FUN_L02_002216a0");
 
 void update_hero_ground_contact(void) {
+    enum {
+        GROUND_MATERIAL_SINK_TRIGGER = 0xD
+    };
     V collision_ray_end, collision_ray_start, ground_geometry_scratch, probe_ray_start,
         unused_probe_point, probe_surface_angles, normalized_probe_hit_normal;
     f32 f;
@@ -395,7 +398,7 @@ void update_hero_ground_contact(void) {
         }
         hero.ground_sound_class = collision_sound_class;
     }
-    if (hero.ground_type == 0xD) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         hero.water_surface_z = HH.point.f[2];
         collision_ray_start.f[2] = HH.point.f[2] - 0.01f;
         if (collision_line(&collision_ray_start, &collision_ray_end, 4, (s32)hero.moby, 0) == 0) {
@@ -436,7 +439,7 @@ void update_hero_ground_contact(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 ||
+            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;
