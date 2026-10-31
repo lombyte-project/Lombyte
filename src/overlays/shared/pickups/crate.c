@@ -1020,6 +1020,15 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     enum {
         CRATE_STATE_BROKEN = 3
     };
+    enum {
+        CRATE_DEBRIS_FALLBACK_BASE = 0x95,
+        CRATE_DEBRIS_MISSION_THRESHOLD_GATED_BASE = 0x15C,
+        CRATE_DEBRIS_DAMAGE_FLAG_GATED_BASE = 0x162,
+        CRATE_DEBRIS_OPTIONAL_TURN_OR_RESPAWN_BASE = 0x165,
+        CRATE_DEBRIS_IMPACT_TRIGGERED_BASE = 0x16B,
+        CRATE_DEBRIS_CLASS_OVERRIDE_BREAK_SOUND_BASE = 0x16E,
+        CRATE_DEBRIS_DAMAGE_STAGE_BASE = 0x171
+    };
     u8      *vars = (u8 *)moby->vars;
     V2d09b8  position, away, rotation, basis[3], launch, spawn_pos, spin;
     s32      kind;
@@ -1071,7 +1080,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             fast_vec_sub(&away, &moby->pos, (*(u8 **)D_001413D0) + 0x10);
         switch ((s16)((u16)moby->oclass - 500)) {
         case CRATE_VARIANT_MISSION_THRESHOLD_GATED:
-            kind = 0x15C;
+            kind = CRATE_DEBRIS_MISSION_THRESHOLD_GATED_BASE;
             break;
         case 3:
             kind = 0x15F;
@@ -1079,29 +1088,29 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         case CRATE_VARIANT_DAMAGE_FLAG_GATED:
             if (!angle) {
             }
-            kind = 0x162;
+            kind = CRATE_DEBRIS_DAMAGE_FLAG_GATED_BASE;
             break;
         case CRATE_VARIANT_OPTIONAL_QUARTER_TURN:
         case CRATE_VARIANT_CONDITIONAL_RESPAWN_START:
-            kind = 0x165;
+            kind = CRATE_DEBRIS_OPTIONAL_TURN_OR_RESPAWN_BASE;
             break;
         case 4:
             kind = 0x168;
             break;
         case CRATE_VARIANT_IMPACT_TRIGGERED:
-            kind = 0x16B;
+            kind = CRATE_DEBRIS_IMPACT_TRIGGERED_BASE;
             break;
         case CRATE_VARIANT_CLASS_OVERRIDE_BREAK_SOUND:
-            kind = 0x16E;
+            kind = CRATE_DEBRIS_CLASS_OVERRIDE_BREAK_SOUND_BASE;
             break;
         case CRATE_VARIANT_INITIAL_DAMAGE_STAGE:
         case CRATE_VARIANT_SECOND_DAMAGE_STAGE:
         case CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE:
         case CRATE_VARIANT_FINAL_DAMAGE_STAGE:
-            kind = 0x171;
+            kind = CRATE_DEBRIS_DAMAGE_STAGE_BASE;
             break;
         default:
-            kind = 0x95;
+            kind = CRATE_DEBRIS_FALLBACK_BASE;
             break;
         }
         if (D_L00_0015FFBC >= 201) {
