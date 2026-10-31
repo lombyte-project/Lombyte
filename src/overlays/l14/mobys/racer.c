@@ -131,7 +131,7 @@ void level14_racer_update(struct Moby *racer_moby) {
             return;
         }
         initialize_racer_path_tracking(racer_moby);
-        racer_moby->state = 1;
+        racer_moby->state = RACER_STATE_WAIT_FOR_RACE_START;
         racer_moby->flags = (racer_moby->flags & 0xEFFF) | 0x41;
         racer_moby->collision = 0;
         racer_vars->unkF4 = -1;
@@ -146,7 +146,7 @@ void level14_racer_update(struct Moby *racer_moby) {
     case RACER_STATE_WAIT_FOR_RACE_START:
         if (race_state->phase == 0x14) {
             racer_vars->timer = scale_game_frames(racer_vars->delay);
-            racer_moby->state = 2;
+            racer_moby->state = RACER_STATE_WAIT_FOR_START_DELAY;
         }
         return;
     case RACER_STATE_WAIT_FOR_START_DELAY:
@@ -154,7 +154,7 @@ void level14_racer_update(struct Moby *racer_moby) {
             return;
         racer_moby->flags = (racer_moby->flags | 0x1000) & 0xFFBE;
         racer_moby->collision = racer_moby->pclass->collision;
-        racer_moby->state = 3;
+        racer_moby->state = RACER_STATE_WAIT_FOR_START_ANIMATION;
         set_moby_animation(racer_moby, 2, 0);
         racer_moby->anim_speed = 0.5f;
         racer_vars->timer = scale_game_frames(level14_racer_start_interpolation_duration_frames_gp);
@@ -164,14 +164,14 @@ void level14_racer_update(struct Moby *racer_moby) {
         if (compute_interpolated_record_value(racer_moby) >= 3.0f)
             interpolate_racer_to_path_start(racer_moby);
         if ((racer_moby->anim_flags & 2) && racer_moby->seq == racer_moby->prev_seq) {
-            racer_moby->state = 4;
+            racer_moby->state = RACER_STATE_COMPLETE_START_INTERPOLATION;
             blend_moby_animation((MobyAnim *)racer_moby, 0, 0, 10);
             racer_moby->anim_speed = 1.0f;
         }
         break;
     case RACER_STATE_COMPLETE_START_INTERPOLATION:
         if (interpolate_racer_to_path_start(racer_moby)) {
-            racer_moby->state = 5;
+            racer_moby->state = RACER_STATE_FOLLOW_PATH;
             racer_vars->timer =
                 scale_game_frames(level14_racer_path_follow_initial_timer_frames_gp);
         }
