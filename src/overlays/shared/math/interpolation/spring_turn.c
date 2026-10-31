@@ -198,91 +198,91 @@ int move_moby_xy_with_collision_constraints(
 
 int move_moby_xy_with_collision_constraints(
 
-    void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim, float slope) {
-    V_258490       d;
-    V_258490       n;
-    V_258490       a;
-    V_258490       b;
+    void *ign, V_258490 *to, V_258490 *proposed_position, int flags, float collision_height_offset, float collision_radius, float ground_height_difference_limit, float slope) {
+    V_258490       movement_displacement;
+    V_258490       line_probe_displacement;
+    V_258490       line_probe_start;
+    V_258490       line_probe_end;
     V_258490       up;
-    V_258490       t;
+    V_258490       sphere_probe_center;
     int            ok;
     int            i;
-    int            m2;
+    int            line_collision_flag_bit_2;
     float          gz;
     float          zz;
-    float          ang;
-    unsigned char *c;
+    float          sphere_contact_angle;
+    unsigned char *line_collision_result;
     float         *nrm;
-    unsigned char *q60;
-    unsigned char *q40;
+    unsigned char *sphere_contact_position;
+    unsigned char *sphere_collision_result;
 
     ok = 1;
-    m2 = flags & 2;
-    pos->f[2] += h;
-    gz = allocate_voice_for_target_entry_cf(pos);
-    pos->f[2] -= h;
-    if (lim < absolute_float(gz - to->f[2])) {
+    line_collision_flag_bit_2 = flags & 2;
+    proposed_position->f[2] += collision_height_offset;
+    gz = allocate_voice_for_target_entry_cf(proposed_position);
+    proposed_position->f[2] -= collision_height_offset;
+    if (ground_height_difference_limit < absolute_float(gz - to->f[2])) {
         if ((((flags ^ 1) & 1) && gz < to->f[2]) || to->f[2] < gz) {
-            qcopy(pos, to);
+            qcopy(proposed_position, to);
             ok = 0;
         }
     }
-    fast_vec_sub(&d, pos, to);
-    fast_vec_normalize(&n, &d, r * 1.2f);
+    fast_vec_sub(&movement_displacement, proposed_position, to);
+    fast_vec_normalize(&line_probe_displacement, &movement_displacement, collision_radius * 1.2f);
     up.q = 0;
-    up.f[2] = h;
-    fast_vec_add(&a, to, &up);
-    fast_vec_add(&b, &a, &n);
-    if (ok && FUN_001efa68_258490(&a, &b, m2 | 0x24, ign, 0)) {
-        c = D_L00_00173E40_258490;
-        if (*(int *)(c + 0x1C) > 0) {
-            nrm = (float *)(c + 0x40);
-            if (slope <= fast_arc_tan(*(float *)(c + 0x48), vector_length_xy(nrm))) {
-                *(int *)(c + 0x48) = 0;
+    up.f[2] = collision_height_offset;
+    fast_vec_add(&line_probe_start, to, &up);
+    fast_vec_add(&line_probe_end, &line_probe_start, &line_probe_displacement);
+    if (ok && FUN_001efa68_258490(&line_probe_start, &line_probe_end, line_collision_flag_bit_2 | 0x24, ign, 0)) {
+        line_collision_result = D_L00_00173E40_258490;
+        if (*(int *)(line_collision_result + 0x1C) > 0) {
+            nrm = (float *)(line_collision_result + 0x40);
+            if (slope <= fast_arc_tan(*(float *)(line_collision_result + 0x48), vector_length_xy(nrm))) {
+                *(int *)(line_collision_result + 0x48) = 0;
                 sceVu0Normalize(nrm, nrm);
                 {
-                    float k = -d.f[0] * *(float *)(c + 0x40) - d.f[1] * *(float *)(c + 0x44);
+                    float k = -movement_displacement.f[0] * *(float *)(line_collision_result + 0x40) - movement_displacement.f[1] * *(float *)(line_collision_result + 0x44);
                     if (0.0f < k) {
                         fast_vec_scale(nrm, nrm, k);
                         ok = 0;
-                        fast_vec_add(&d, &d, nrm);
+                        fast_vec_add(&movement_displacement, &movement_displacement, nrm);
                     }
                 }
             }
-            fast_vec_add(pos, to, &d);
+            fast_vec_add(proposed_position, to, &movement_displacement);
         }
     }
     if (!(flags & 2)) {
-        zz = h + r;
-        q60 = (unsigned char *)&D_L00_00173E60_lui;
-        q40 = q60 - 0x20;
+        zz = collision_height_offset + collision_radius;
+        sphere_contact_position = (unsigned char *)&D_L00_00173E60_lui;
+        sphere_collision_result = sphere_contact_position - 0x20;
         i = 0;
         do {
-            qcopy(&t, pos);
-            t.f[2] += zz;
-            if (!FUN_L00_001f0d60_258490(&t, r, 0x24, ign)) {
+            qcopy(&sphere_probe_center, proposed_position);
+            sphere_probe_center.f[2] += zz;
+            if (!FUN_L00_001f0d60_258490(&sphere_probe_center, collision_radius, 0x24, ign)) {
                 break;
             }
-            ang = fast_arc_tan(vector_distance_xy(pos, q60), *(float *)(q40 + 0x28) - pos->f[2]);
-            if (*(int *)(q40 + 0x18) != 0 || slope < ang) {
-                qcopy(pos, &coll_hit_position);
+            sphere_contact_angle = fast_arc_tan(vector_distance_xy(proposed_position, sphere_contact_position), *(float *)(sphere_collision_result + 0x28) - proposed_position->f[2]);
+            if (*(int *)(sphere_collision_result + 0x18) != 0 || slope < sphere_contact_angle) {
+                qcopy(proposed_position, &coll_hit_position);
                 ok = 0;
-                pos->f[2] -= zz;
+                proposed_position->f[2] -= zz;
             }
             i++;
         } while (i < 6);
     }
-    pos->f[2] += h;
-    gz = allocate_voice_for_target_entry_cf(pos);
-    pos->f[2] -= h;
-    if (lim < absolute_float(gz - to->f[2])) {
+    proposed_position->f[2] += collision_height_offset;
+    gz = allocate_voice_for_target_entry_cf(proposed_position);
+    proposed_position->f[2] -= collision_height_offset;
+    if (ground_height_difference_limit < absolute_float(gz - to->f[2])) {
         if ((((flags ^ 1) & 1) && gz < to->f[2]) || to->f[2] < gz) {
-            qcopy(pos, to);
+            qcopy(proposed_position, to);
             ok = 0;
         }
     }
-    to->f[0] = pos->f[0];
-    to->f[1] = pos->f[1];
+    to->f[0] = proposed_position->f[0];
+    to->f[1] = proposed_position->f[1];
     return ok;
 }
 
