@@ -166,47 +166,44 @@ void update_hero_vehicle_attachments_and_effects(void) {
             }
         }
         {
-            char *g = (char *)&hero;
-            if ((*(u16 *)(*(char **)(g + 0x2080) + 0x34) ^ 1) & 1) {
-                moby_point_position(*(char **)(g + 0x2080), 7, scratch.rotation);
-                qcopy(g + 0x1d80, &scratch.rotation[0]);
+            struct Hero *g = &hero;
+            if ((*(u16 *)(((char *)g->moby) + 0x34) ^ 1) & 1) {
+                moby_point_position(((char *)g->moby), 7, scratch.rotation);
+                qcopy((char *)g + 0x1d80, &scratch.rotation[0]);
                 enqueue_hero_glow_draw_callback_once();
-                if (*(char **)(g + 0x1624) != 0) {
-                    build_moby_bone_transform(*(char **)(g + 0x2080), 7, scratch.help.transform);
-                    qcopy_nc(*(char **)(g + 0x1624) + 0x10, &scratch.help.transform[3]);
-                    copy_matrix3x4(*(char **)(g + 0x1624) + 0xc0, scratch.help.transform);
+                if (((char *)g->unk1624) != 0) {
+                    build_moby_bone_transform(((char *)g->moby), 7, scratch.help.transform);
+                    qcopy_nc(((char *)g->unk1624) + 0x10, &scratch.help.transform[3]);
+                    copy_matrix3x4(((char *)g->unk1624) + 0xc0, scratch.help.transform);
                     scratch.help.offset = 0;
                     ((f32 *)&scratch.help.offset)[2] = 0.0257f;
                     transform_vector_by_basis(
-                        &scratch.help.offset, &scratch.help.offset, *(char **)(g + 0x1624) + 0xc0);
-                    *(f32 *)(*(char **)(g + 0x1624) + 0x18) -= ((f32 *)&scratch.help.offset)[2];
-                    update_entity(*(char **)(g + 0x1624));
+                        &scratch.help.offset, &scratch.help.offset, ((char *)g->unk1624) + 0xc0);
+                    *(f32 *)(((char *)g->unk1624) + 0x18) -= ((f32 *)&scratch.help.offset)[2];
+                    update_entity(((char *)g->unk1624));
                     scale = 1.7f;
                     if (D_0015EDB3_macro)
                         scale = 3.1f;
-                    if (*(s16 *)(g + 0x22fc))
+                    if (g->unk22FC)
                         scale *= 1.4f;
-                    approach_value(*(f32 *)(*(char **)(*(char **)(g + 0x1624) + 0x24) + 0x24) *
-                                       scale,
+                    approach_value(*(f32 *)(*(char **)(((char *)g->unk1624) + 0x24) + 0x24) * scale,
                                    0.02f,
-                                   *(char **)(g + 0x1624) + 0x2c);
+                                   ((char *)g->unk1624) + 0x2c);
                 }
             }
         }
         {
-            char *g = (char *)&hero;
+            struct Hero *g = &hero;
             color = 0x281414c8;
             color2 = 0x1e00004b;
             {
-                char *g = (char *)&hero;
-                *(f32 *)(g + 0x1628) =
-                    fast_add_rotations(*(f32 *)(g + 0x1628), frame_time_macro * 2.9670596f);
+                struct Hero *g = &hero;
+                g->glow_phase = fast_add_rotations(g->glow_phase, frame_time_macro * 2.9670596f);
             }
-            if (fast_dec_timer_s16(g + 0x22fc) == 0) {
-                char *g = (char *)&hero;
-                *(f32 *)(g + 0x1628) =
-                    fast_add_rotations(*(f32 *)(g + 0x1628), frame_time_macro * 12.217304f);
-                switch (*(s16 *)(g + 0x22fe)) {
+            if (fast_dec_timer_s16(&g->unk22FC) == 0) {
+                struct Hero *g = &hero;
+                g->glow_phase = fast_add_rotations(g->glow_phase, frame_time_macro * 12.217304f);
+                switch (*(s16 *)((char *)g + 0x22fe)) {
                 case ATTACHMENT_PULSE_GREEN:
                     color = 0x2814c814;
                     color2 = 0x1e004b00;
@@ -226,63 +223,61 @@ void update_hero_vehicle_attachments_and_effects(void) {
                 }
             }
             {
-                char *g = (char *)&hero;
-                s32   tint;
-                wave = fast_sin(*(f32 *)(g + 0x1628));
+                struct Hero *g = &hero;
+                s32          tint;
+                wave = fast_sin(g->glow_phase);
                 tint = fast_tween_color(wave * 0.5f + 0.5f, color, color2);
-                if (*(char **)(g + 0x1624))
-                    *(u32 *)(*(char **)(g + 0x1624) + 0x90) = fast_tween_color(
-                        D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), tint);
-                *(u32 *)(g + 0x2300) =
-                    fast_tween_color(frame_scale_macro * 0.1f, *(u32 *)(g + 0x2300), tint);
-                if (*(char **)(g + 0x1620) == 0) {
-                    *(char **)(g + 0x1620) = create_moby(0x47a);
-                    if (*(char **)(g + 0x1620)) {
-                        char *moby = *(char **)(g + 0x1620);
-                        qcopy(&MOBY(moby)->pos, g + 0x80);
-                        qcopy(moby + 0x40, g + 0x90);
+                if (((char *)g->unk1624))
+                    *(u32 *)(((char *)g->unk1624) + 0x90) = fast_tween_color(
+                        D_0015ED60_gp * 0.1f, *(u32 *)(((char *)g->unk1624) + 0x90), tint);
+                *(u32 *)((char *)g + 0x2300) =
+                    fast_tween_color(frame_scale_macro * 0.1f, *(u32 *)((char *)g + 0x2300), tint);
+                if (((char *)g->unk1620) == 0) {
+                    g->unk1620 = create_moby(0x47a);
+                    if (((char *)g->unk1620)) {
+                        char *moby = ((char *)g->unk1620);
+                        qcopy(&MOBY(moby)->pos, &g->motion.pos);
+                        qcopy(moby + 0x40, &g->motion.rot);
                         MOBY(moby)->draw_dist = 0x40;
-                        (*(char **)(g + 0x1620))[0x31] = 1;
-                        (*(char **)(g + 0x1620))[0x30] = 0;
-                        *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
-                        update_entity(*(char **)(g + 0x1620));
+                        (((char *)g->unk1620))[0x31] = 1;
+                        (((char *)g->unk1620))[0x30] = 0;
+                        *(u16 *)(((char *)g->unk1620) + 0x34) = 0;
+                        update_entity(((char *)g->unk1620));
                     }
                 }
-                if (*(char **)(g + 0x1620)) {
-                    build_moby_bone_transform(*(char **)(g + 0x2080), 5, scratch.rotation);
+                if (((char *)g->unk1620)) {
+                    build_moby_bone_transform(((char *)g->moby), 5, scratch.rotation);
                     {
                         OvlQuad *position = &scratch.rotation[3];
-                        char    *moby = *(char **)(g + 0x1620);
+                        char    *moby = ((char *)g->unk1620);
                         qcopy_nc(&MOBY(moby)->pos, position);
                         update_entity(moby);
                     }
                     clear_u64_value((scratch.rotation + 4));
-                    ((f32 *)(scratch.rotation + 4))[2] = -*(f32 *)(g + 0x98);
+                    ((f32 *)(scratch.rotation + 4))[2] = -g->motion.rot.f[2];
                     euler_rotation_matrix(scratch.help.inverse, (scratch.rotation + 4));
                     multiply_matrix(scratch.rotation, scratch.rotation, scratch.help.inverse);
-                    copy_matrix3x4(*(char **)(g + 0x1620) + 0xc0, scratch.rotation);
-                    *(u64 *)(*(char **)(g + 0x1620) + 0x38) =
-                        *(u64 *)(*(char **)(g + 0x2080) + 0x38);
-                    if (*(s32 *)(g + 0x2084) == 0x4f) {
-                        if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 1)
-                            blend_moby_animation(
-                                *(char **)(g + 0x1620), 1, 0, scale_game_frames(10));
-                    } else if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 0) {
-                        blend_moby_animation(*(char **)(g + 0x1620), 0, 0, scale_game_frames(0x11));
+                    copy_matrix3x4(((char *)g->unk1620) + 0xc0, scratch.rotation);
+                    *(u64 *)(((char *)g->unk1620) + 0x38) = *(u64 *)(((char *)g->moby) + 0x38);
+                    if (g->state.current == 0x4f) {
+                        if (*(u8 *)(((char *)g->unk1620) + 0x53) != 1)
+                            blend_moby_animation(((char *)g->unk1620), 1, 0, scale_game_frames(10));
+                    } else if (*(u8 *)(((char *)g->unk1620) + 0x53) != 0) {
+                        blend_moby_animation(((char *)g->unk1620), 0, 0, scale_game_frames(0x11));
                     }
                 }
             }
         }
         {
-            char *g = (char *)&hero;
-            if (*(char **)(g + 0x22c0)) {
+            struct Hero *g = &hero;
+            if (*(char **)((char *)g + 0x22c0)) {
                 allocate_voice_for_target_entry(
-                    *(char **)(g + 0x22c0) + 0x10, 0, *(char **)(g + 0x2080));
+                    *(char **)((char *)g + 0x22c0) + 0x10, 0, ((char *)g->moby));
                 /* Retail copies the low halfword of this pending pointer. */
-                *(s16 *)(g + 0x22fe) = *(u16 *)(g + 0x22c0);
-                *(s16 *)(g + 0x22fc) = scale_game_frames(0x39);
+                *(s16 *)((char *)g + 0x22fe) = *(u16 *)((char *)g + 0x22c0);
+                g->unk22FC = scale_game_frames(0x39);
             }
-            *(u32 *)(g + 0x22c0) = 0;
+            *(u32 *)((char *)g + 0x22c0) = 0;
         }
     }
     reveal_map_around_position(&hero.motion.pos);
@@ -292,12 +287,12 @@ void update_hero_vehicle_attachments_and_effects(void) {
         if (*((u8 *)&D_0015EDB3_macro - 2))
             *(f32 *)((char *)&D_L06_0017BFDC_lui + 0x370) = 1.9f;
         {
-            char *g = (char *)&hero;
+            struct Hero *g = &hero;
             alpha = 0x80;
             span = scale_game_frames(0xaa);
-            if (*(s16 *)(g + 0x22e0) == 2)
+            if (g->glow_pulse_level == 2)
                 span = scale_game_frames(0x32);
-            else if (*(s16 *)(g + 0x22e0) == 1)
+            else if (g->glow_pulse_level == 1)
                 span = scale_game_frames(0x5a);
             phase = convert_integer_to_float(span);
             phase = (f32)(D_L06_0015F5CC_macro % span) / phase;
@@ -307,15 +302,15 @@ void update_hero_vehicle_attachments_and_effects(void) {
         green = truncate_float_to_s32(wave * 70.0f) + 0xb4;
         blue = truncate_float_to_s32(wave * 10.0f) + 0x14;
         {
-            char *g = (char *)&hero;
+            struct Hero *g = &hero;
             {
                 s32 span = red < 0x100;
                 s32 i = green < 0x100;
                 green = i ? green : 0xff;
-                *(u16 *)(*(char **)(g + 0x2080) + 0x34) |= 0x10;
+                *(u16 *)(((char *)g->moby) + 0x34) |= 0x10;
                 red = span ? red : 0xff;
             }
-            if (*(s16 *)(g + 0x22e0) == 2)
+            if (g->glow_pulse_level == 2)
                 color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)(red / 2) << 8) | (u32)green;
             else
                 color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
@@ -323,9 +318,9 @@ void update_hero_vehicle_attachments_and_effects(void) {
         {
             char *g;
             {
-                char *g = (char *)&hero;
-                *(u32 *)(*(char **)(g + 0x2080) + 0x90) =
-                    fast_tween_color(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
+                struct Hero *g = &hero;
+                *(u32 *)(((char *)g->moby) + 0x90) =
+                    fast_tween_color(0.1f, *(u32 *)(((char *)g->moby) + 0x90), color);
             }
             g = (char *)&hero;
             for (i = 0; i < 3; i++)
@@ -351,13 +346,13 @@ void update_hero_vehicle_attachments_and_effects(void) {
                         *(s16 *)(g + 0x22dc) = 1;
                     }
                 } else {
-                    char *g = (char *)&hero;
-                    *(s32 *)(g + 0x20b8) = 0;
-                    if (*(u8 *)(g + 0x12e7) && *(s32 *)(g + 0x300) &&
-                        *(u8 *)(D_0013F350_lui - 0x1e74) && *(s16 *)(g + 0x22de) == 0) {
+                    struct Hero *g = &hero;
+                    g->pending_item[0] = 0;
+                    if (g->on_magnet_ground && g->grounded_frames &&
+                        *(u8 *)(D_0013F350_lui - 0x1e74) && g->vehicle_toggle_timer == 0) {
                         allocate_hero_voice_for_entry(0x19, 0);
-                        *(s16 *)(g + 0x22de) = 0x12;
-                        *(s16 *)(g + 0x22dc) = 1;
+                        g->vehicle_toggle_timer = 0x12;
+                        g->unk22DC = 1;
                     }
                 }
             }

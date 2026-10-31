@@ -1434,18 +1434,18 @@ select_morphoray_target_and_adjust_aim(char  *morphoray_moby,
             headingError = fast_difference_between_rotations(*heading, angle);
             distance = fast_vec_dist(position, target);
             if (distance < 2.5f) {
-                float toward;
-                char *close_range_hero_base = ((char *)&hero);
-                moby = *(char **)(close_range_hero_base + 0x2080);
+                float        toward;
+                struct Hero *close_range_hero_base = &hero;
+                moby = ((char *)close_range_hero_base->moby);
                 toward = fast_arc_tan(
-                    *(float *)(candidate + 0x10) - *(float *)(close_range_hero_base + 0x80),
-                    *(float *)(candidate + 0x14) - *(float *)(close_range_hero_base + 0x84));
+                    *(float *)(candidate + 0x10) - close_range_hero_base->motion.pos.f[0],
+                    *(float *)(candidate + 0x14) - close_range_hero_base->motion.pos.f[1]);
                 if (fast_difference_between_rotations(moby->rot.z, toward) < 1.0471976f &&
                     absolute_float(position[2] - target[2]) < 2.0f &&
                     !collision_line((Vec4f *)position,
                                     (Vec4f *)target,
                                     6,
-                                    *(char **)(close_range_hero_base + 0x2080),
+                                    ((char *)close_range_hero_base->moby),
                                     0)) {
                     selected_target[0] = (int)candidate;
                     *pitch = -elevation;
@@ -1456,11 +1456,11 @@ select_morphoray_target_and_adjust_aim(char  *morphoray_moby,
             if (distance > limit)
                 continue;
             {
-                char *aim_offset_hero_base = ((char *)&hero);
+                struct Hero *aim_offset_hero_base = &hero;
                 build_spherical_offset(offset,
                                        distance,
                                        *heading,
-                                       *pitch + *(float *)(aim_offset_hero_base + 0x2E4) * 0.5f);
+                                       *pitch + aim_offset_hero_base->ground_pitch.f * 0.5f);
             }
             fast_vec_add(offset, offset, position);
             apparentAngle = fast_arc_sin(fast_vec_dist(offset, target) / (distance + distance));

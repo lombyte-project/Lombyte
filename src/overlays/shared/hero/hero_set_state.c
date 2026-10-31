@@ -288,55 +288,54 @@ extern int           scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 
 void update_hero_planar_distance_spring_motion(void) {
-    char *hero_check_base = (char *)D_0013E533 + 0xE1D;
-    char *hero_base;
-    char *hero_timer_base;
-    float distance_error;
-    float xy_distance;
-    float xy_distance_threshold;
-    float spring_projection_yaw;
-    int   control_mode_or_timer_frames;
+    struct Hero *hero_check_base = (struct Hero *)((char *)D_0013E533 + 0xE1D);
+    struct Hero *hero_base;
+    struct Hero *hero_timer_base;
+    float        distance_error;
+    float        xy_distance;
+    float        xy_distance_threshold;
+    float        spring_projection_yaw;
+    int          control_mode_or_timer_frames;
 
-    if (*(unsigned char *)(hero_check_base + 0x257) != 0 &&
-        *(float *)(hero_check_base + 0x2DC) > 0.0f &&
-        *(float *)(hero_check_base + 0x160) < frame_time * 3.0f &&
-        fast_vec_length(hero_check_base + 0xE0) < frame_time * 3.0f &&
-        *(float *)(hero_check_base + 0x229C) < 0.2f) {
-        control_mode_or_timer_frames = *(int *)(hero_check_base + 0x208C);
+    if (hero_check_base->wall_hit != 0 && hero_check_base->ground_distance > 0.0f &&
+        hero_check_base->motion.speed_xy < frame_time * 3.0f &&
+        fast_vec_length(&hero_check_base->motion.velocity) < frame_time * 3.0f &&
+        hero_check_base->stick_magnitude < 0.2f) {
+        control_mode_or_timer_frames = hero_check_base->state.control_mode;
         if (control_mode_or_timer_frames == 0 || control_mode_or_timer_frames == 2 ||
             control_mode_or_timer_frames == 4 || control_mode_or_timer_frames == 10 ||
             control_mode_or_timer_frames == 1) {
             control_mode_or_timer_frames = scale_game_frames(5);
-            hero_timer_base = (char *)D_0013E533 + 0xE1D;
-            *(short *)(hero_timer_base + 0x1EA) = control_mode_or_timer_frames;
+            hero_timer_base = (struct Hero *)((char *)D_0013E533 + 0xE1D);
+            hero_timer_base->unk1EA = control_mode_or_timer_frames;
         }
     }
-    hero_base = (char *)D_0013E533 + 0xE1D;
-    if (*(short *)(hero_base + 0x1EA) != 0) {
-        xy_distance = vector_distance_xy(hero_base + 0x80, hero_base + 0x210);
-        xy_distance_threshold = *(float *)(hero_base + 0x234) * 0.9f;
+    hero_base = (struct Hero *)((char *)D_0013E533 + 0xE1D);
+    if (hero_base->unk1EA != 0) {
+        xy_distance = vector_distance_xy(&hero_base->motion.pos, &hero_base->wall_contact_point);
+        xy_distance_threshold = hero_base->capsule_radius * 0.9f;
         if (xy_distance < xy_distance_threshold) {
             spring_projection_yaw =
-                fast_arc_tan(*(float *)(hero_base + 0x80) - *(float *)(hero_base + 0x210),
-                             *(float *)(hero_base + 0x84) - *(float *)(hero_base + 0x214));
-            if (xy_distance < *(float *)(hero_base + 0x234) * 0.05f) {
-                spring_projection_yaw = *(float *)(hero_base + 0x98);
+                fast_arc_tan(hero_base->motion.pos.f[0] - hero_base->wall_contact_point.f[0],
+                             hero_base->motion.pos.f[1] - hero_base->wall_contact_point.f[1]);
+            if (xy_distance < hero_base->capsule_radius * 0.05f) {
+                spring_projection_yaw = hero_base->motion.rot.f[2];
             }
             distance_error = xy_distance - xy_distance_threshold;
             vendor_spring(&distance_error,
-                          (float *)(hero_base + 0x244),
+                          (float *)(&hero_base->unk244),
                           0.0f,
                           frame_scale_sq * 0.03f,
                           frame_scale_sq * 0.3f,
                           frame_time * 2.8f);
-            *(float *)(hero_base + 0xF0) =
-                fast_cos(spring_projection_yaw) * *(float *)(hero_base + 0x244);
-            *(float *)(hero_base + 0xF4) =
-                fast_sin(spring_projection_yaw) * *(float *)(hero_base + 0x244);
-            *(float *)(hero_base + 0xF8) = 0.0f;
+            hero_base->motion.platform_delta.f[0] =
+                fast_cos(spring_projection_yaw) * hero_base->unk244.f;
+            hero_base->motion.platform_delta.f[1] =
+                fast_sin(spring_projection_yaw) * hero_base->unk244.f;
+            hero_base->motion.platform_delta.f[2] = 0.0f;
         }
     } else {
-        *(int *)(hero_base + 0x244) = 0;
+        hero_base->unk244.i = 0;
     }
 }
 
@@ -3041,15 +3040,15 @@ void set_hero_idle_state_for_vehicle_mode(void) {
 int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
 
 int try_start_hero_weapon_fire_state(void) {
-    char *hero_base = (char *)D_0013E533 + 0xE1D;
-    int   current_state = *(int *)(hero_base + 0x2084);
+    struct Hero *hero_base = (struct Hero *)((char *)D_0013E533 + 0xE1D);
+    int          current_state = hero_base->state.current;
     if ((unsigned)(current_state - 2) < 2 || current_state == 0) {
-        if (*(unsigned char *)(hero_base + 0x20A8) != 0) {
-            if (*(int *)(hero_base + 0x1BC) < scale_game_frames(6)) {
-                if (*(float *)(hero_base + 0x229C) < 0.7f) {
-                    if (*(unsigned char *)(hero_base + 0x20AB) == 0) {
+        if (hero_base->item_anim_active != 0) {
+            if (hero_base->item_anim_frames < scale_game_frames(6)) {
+                if (hero_base->stick_magnitude < 0.7f) {
+                    if (hero_base->item_slot_anim_count == 0) {
                         cancel_hero_item_animation();
-                        *(int *)(hero_base + 0xD14) = 2;
+                        hero_base->unkD14 = 2;
                         hero_set_state(0x23, 1);
                         return 1;
                     }

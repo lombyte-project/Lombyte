@@ -71,7 +71,7 @@ void hero_seeking_mine_update(char *moby) {
     float         pb[4];
     char         *group_moby_data;
     char         *callback_frame_stamp;
-    char         *hero_base;
+    struct Hero  *hero_base;
     float         fa;
     float         fb;
     float         yaw_cosine;
@@ -146,11 +146,11 @@ s2:
     return;
 
 s3:
-    hero_base = (char *)&hero;
-    fa = *(float *)(hero_base + 0x80) - MOBY(moby)->pos.x;
-    fb = *(float *)(hero_base + 0x84) - MOBY(moby)->pos.y;
+    hero_base = &hero;
+    fa = hero_base->motion.pos.f[0] - MOBY(moby)->pos.x;
+    fb = hero_base->motion.pos.f[1] - MOBY(moby)->pos.y;
     yaw = fast_add_rotations(*(float *)(group_moby_data + 0x64), fast_arc_tan(fa, fb));
-    target_z = *(float *)(hero_base + 0xC8);
+    target_z = hero_base->motion.near_ground_point.f[2];
     yaw_cosine = fast_cos(yaw);
     va[0] = yaw_cosine * (*(float *)&group_moby_seeking_speed_gp * D_0015ED6C);
     yaw_sine = fast_sin(yaw);

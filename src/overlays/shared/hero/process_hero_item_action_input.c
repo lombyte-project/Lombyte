@@ -17,21 +17,21 @@ extern void  stick_target(int, float) __asm__("FUN_L00_002118c8");
 void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
 
 void update_hero_stick_target_magnitude(void) {
-    char *x;
+    struct Hero *x;
     stick_target(0, 1.0f);
-    x = D_0013E533 + 0xE1D;
-    if (*(int *)(x + 0x2084) == 0x3F) {
+    x = (struct Hero *)(D_0013E533 + 0xE1D);
+    if (x->state.current == 0x3F) {
         float two = frame_time + frame_time;
-        float frame_scaled_value = frame_time * 3.5f * *(float *)(x + 0x190);
-        *(float *)(x + 0x190) = frame_scaled_value;
+        float frame_scaled_value = frame_time * 3.5f * x->target_speed;
+        x->target_speed = frame_scaled_value;
         if (frame_scaled_value < two) {
-            *(float *)(x + 0x190) = two;
+            x->target_speed = two;
         }
-    } else if (0.0f < *(float *)(x + 0x190)) {
-        if (*(float *)(x + 0x190) < D_L02_0017C3B8[3]) {
-            *(float *)(x + 0x190) = D_L02_0017C3B8[2] * frame_time;
+    } else if (0.0f < x->target_speed) {
+        if (x->target_speed < D_L02_0017C3B8[3]) {
+            x->target_speed = D_L02_0017C3B8[2] * frame_time;
         } else {
-            *(float *)(x + 0x190) = D_L02_0017C3B8[6] * frame_time;
+            x->target_speed = D_L02_0017C3B8[6] * frame_time;
         }
     }
 }

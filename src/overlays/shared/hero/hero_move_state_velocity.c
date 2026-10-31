@@ -900,18 +900,18 @@ extern char D_0013E533[];
 int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
 
 int allocate_hero_voice_for_entry(int entry_index, int voice_allocation_flags) {
-    char *hero_base = D_0013E533 + 0xE1D;
-    int   voice_target;
-    if (*(unsigned char *)(hero_base + 0x20A4) == 3) {
-        voice_target = *(int *)(hero_base + 0xA88);
+    struct Hero *hero_base = (struct Hero *)(D_0013E533 + 0xE1D);
+    int          voice_target;
+    if (hero_base->vehicle_mode == 3) {
+        voice_target = *(int *)&hero_base->unkA88;
         if (voice_target != 0) {
-            qcopy((char *)voice_target + 0x10, hero_base + 0x80);
+            qcopy((char *)voice_target + 0x10, &hero_base->motion.pos);
             return allocate_voice_for_target_entry(
                 entry_index, voice_allocation_flags, voice_target);
         }
     } else {
         return allocate_voice_for_target_entry(
-            entry_index, voice_allocation_flags, *(int *)(hero_base + 0x2080));
+            entry_index, voice_allocation_flags, *(int *)&hero_base->moby);
     }
     return -1;
 }
@@ -1133,11 +1133,11 @@ void emit_filtered_entry_sparkles(int voice_target, int entry_count) __asm__("FU
 
 void emit_filtered_entry_sparkles(int voice_target, int entry_count) {
     if (entry_count != 0) {
-        char *hero_base = D_0013E533 + 0xE1D;
-        int   i;
-        if (*(int *)(hero_base + 0xA64) == 0) {
+        struct Hero *hero_base = (struct Hero *)(D_0013E533 + 0xE1D);
+        int          i;
+        if (hero_base->unkA64 == 0) {
             allocate_voice_for_target_entry(1, 0, voice_target);
-            *(int *)(hero_base + 0xA64) = 1;
+            hero_base->unkA64 = 1;
         }
         for (i = 0; i < entry_count; i++) {
             int *entry_type_lookup_pointer = D_L00_00177F00[i];
