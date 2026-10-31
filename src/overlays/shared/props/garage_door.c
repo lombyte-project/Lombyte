@@ -40,12 +40,12 @@ void garage_door_update(struct Moby *door_moby) {
                   1))
                 return;
         }
-        door_moby->state = 1;
+        door_moby->state = GARAGE_DOOR_RISING;
         return;
     case GARAGE_DOOR_RISING:
         door_moby->pos.z += frame_time;
         if (target->f[2] + 4.0f <= door_moby->pos.z)
-            door_moby->state = 2;
+            door_moby->state = GARAGE_DOOR_RAISED;
         return;
     case GARAGE_DOOR_RAISED:
         door_moby->pos.z = target->f[2] + 4.0f;
