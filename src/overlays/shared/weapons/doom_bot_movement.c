@@ -668,6 +668,9 @@ int compute_moby_state_from_vertical_probe(unsigned char *moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
+    enum {
+        DOOM_BOT_DETONATE = 11
+    };
     Vec4 lower_probe_point, upper_probe_point;
     int  resulting_moby_state = MOBY(moby)->state;
     qcopy(&lower_probe_point, &MOBY(moby)->pos);
@@ -678,7 +681,7 @@ int compute_moby_state_from_vertical_probe(unsigned char *moby) {
         char *hit_moby = (char *)coll_hit_moby;
         if (hit_moby && ((char *)MOBY(hit_moby)->pclass) &&
             *(short *)(((char *)MOBY(hit_moby)->pclass) + 0x46) == 5) {
-            resulting_moby_state = 11;
+            resulting_moby_state = DOOM_BOT_DETONATE;
         } else {
             switch (collision_hit_material()) {
             case COLLISION_MATERIAL_WATER:
@@ -688,7 +691,7 @@ int compute_moby_state_from_vertical_probe(unsigned char *moby) {
             case 11:
             case 12:
             case 13:
-                resulting_moby_state = 11;
+                resulting_moby_state = DOOM_BOT_DETONATE;
                 break;
             }
         }
