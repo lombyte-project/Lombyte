@@ -569,6 +569,9 @@ extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_
 void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_00295de8");
 
 void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
+    enum {
+        LEG_RIG_FALLBACK_GAIT_MASK = 5
+    };
     int          joints[6];
     float        mtx[4][4];
     float        animation_time;
@@ -599,7 +602,7 @@ void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
         animation_time = convert_integer_to_float(moby->prev_frame);
         animation_time += animation_start(moby->class_slot, moby->prev_seq);
     }
-    rig->mode = 5;
+    rig->mode = LEG_RIG_FALLBACK_GAIT_MASK;
     rig->speed = 0.0f;
     rig->unkB7 = 0;
     animation_cursor = rig->anims;
