@@ -42,17 +42,21 @@ static s8 *cvt(struct _reent *reentrancy_state,
                s32            ch,
 
                s32 *length) {
+    enum {
+        DTOA_MODE_SIGNIFICANT_DIGITS = 2,
+        DTOA_MODE_FRACTIONAL_DIGITS = 3
+    };
     s32          mode, dsgn;
     s8          *digits, *bp, *rve;
     double_union value_bits;
 
     if (ch == 'f') {
-        mode = 3;
+        mode = DTOA_MODE_FRACTIONAL_DIGITS;
     } else {
         if (ch == 'e' || ch == 'E') {
             ndigits++;
         }
-        mode = 2;
+        mode = DTOA_MODE_SIGNIFICANT_DIGITS;
     }
     value_bits.d = number_to_format;
     if (word0(value_bits) & Sign_bit) {
