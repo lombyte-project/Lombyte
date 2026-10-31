@@ -155,7 +155,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
 
     switch (spawner->state) {
     case PARTICLE_SPAWNER_INITIALIZE:
-        spawner->state = 1;
+        spawner->state = PARTICLE_SPAWNER_ACTIVE;
         spawner->b30 = 0xFF;
         if (q->idx == -1) {
             mark_moby_for_removal(spawner);
