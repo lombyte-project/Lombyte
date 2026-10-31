@@ -5,31 +5,7 @@
 
 extern int find_or_allocate_moby_render_slot(int v) __asm__("func_0020CC18");
 
-typedef struct {
-    char          _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char     _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char          _pad00[0x24];
-    AnimClass    *pClass; /* 0x24 */
-    char          _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char          _pad54[0x5C - 0x54];
-    float         unk5C; /* 0x5C */
-    char          _pad60[0x68 - 0x60];
-    float        *frameData; /* 0x68 */
-    char          _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
+#include "rnc/mobys/animation/moby_anim.h"
 
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 extern void FUN_0020ede8(void *, int);
@@ -58,16 +34,15 @@ void blend_moby_animation_ex(
     unsigned char oldSeq;
     float         scale;
 
-    if (*(float *)((char *)moby + 0x54) > 0.025f || *(int *)((char *)moby + 0x60) != 0 ||
-        *(int *)((char *)moby + 0x64) != 0 || (options & 4)) {
+    if (moby->anim_time > 0.025f || moby->unk60 != 0 || moby->manips != 0 || (options & 4)) {
         slot = find_or_allocate_moby_render_slot((int)moby);
         if (slot >= 0) {
             flags = (options & 1) ? (slot | 0x100) : slot;
             FUN_0020ede8(moby, (options & 2) ? (flags | 0x200) : flags);
-            qcopy(D_001B2C00 + slot * 0x10, (char *)moby + 0xF0);
+            qcopy(D_001B2C00 + slot * 0x10, moby->unkF0);
             oldSeq = moby->seq;
             if (oldSeq != 0xFF) {
-                *(unsigned char *)((char *)moby + 0xA5) = oldSeq;
+                moby->saved_seq = oldSeq;
             }
             moby->seq = 0xFF;
             moby->frame = slot;
@@ -76,13 +51,12 @@ void blend_moby_animation_ex(
     moby->nextFrame = frame_index;
     moby->prevSeq = new_seq;
     update_moby_animation_state(moby);
-    *(float *)((char *)moby + 0x58) = 1.0f;
+    moby->anim_speed = 1.0f;
     scale = 1.0f / convert_integer_to_float(blend_frames);
-    *(float *)((char *)moby + 0x54) = 0.0f;
+    moby->anim_time = 0.0f;
     moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
     moby->unk5C = scale;
-    *(unsigned char *)((char *)moby + 0x7C) =
-        *((unsigned char *)moby->pClass->seqs[new_seq] + 0x11);
+    moby->unk7C = moby->pClass->seqs[new_seq]->unk11;
 }
 
 extern __typeof__(blend_moby_animation_ex) func_002130D8 __attribute__((alias("FUN_002130d8")));

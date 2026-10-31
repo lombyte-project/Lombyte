@@ -5,6 +5,17 @@
 #include "rnc/rendering/lights/create_point_light.h"
 #include "rnc/rendering/lights/point_light.h"
 
+/* One directional light (0x40 bytes); levels load up to 12 from their
+   header. */
+struct DirectionalLight {
+    f32 color[4];
+    f32 direction[4];
+    u8  pad_20[0x20];
+};
+
+/* The light update_all_point_lights points along the camera. */
+#define CAMERA_DIRECTIONAL_LIGHT 13
+
 extern char              camera_lighting_reference_angle[] __asm__("D_00187098");
 extern char              dir_lights[] __asm__("D_0019BDC0");
 extern struct PointLight point_lights[] __asm__("D_0019C1C0");
@@ -16,19 +27,19 @@ extern void              refresh_point_light(int) __asm__("FUN_00201f58");
 void                     update_all_point_lights(void) __asm__("FUN_00201a28");
 
 void update_all_point_lights(void) {
-    char *lighting_presets_base = dir_lights;
-    float lighting_direction_angle;
-    int   light_index;
+    struct DirectionalLight *lights = (struct DirectionalLight *)dir_lights;
+    float                    lighting_direction_angle;
+    int                      light_index;
 
-    *(float *)(lighting_presets_base + 0x34C) = -0.3f;
-    *(float *)(lighting_presets_base + 0x340) = 0.8f;
-    *(float *)(lighting_presets_base + 0x344) = 0.8f;
-    *(float *)(lighting_presets_base + 0x348) = 0.8f;
+    lights[CAMERA_DIRECTIONAL_LIGHT].color[3] = -0.3f;
+    lights[CAMERA_DIRECTIONAL_LIGHT].color[0] = 0.8f;
+    lights[CAMERA_DIRECTIONAL_LIGHT].color[1] = 0.8f;
+    lights[CAMERA_DIRECTIONAL_LIGHT].color[2] = 0.8f;
     lighting_direction_angle = fast_add_rotations(*(float *)camera_lighting_reference_angle, -0.8f);
-    *(float *)(lighting_presets_base + 0x350) = fast_cos(lighting_direction_angle) * 0.866f;
-    *(float *)(lighting_presets_base + 0x354) = fast_sin(lighting_direction_angle) * 0.866f;
-    *(float *)(lighting_presets_base + 0x358) = -0.5f;
-    *(int *)(lighting_presets_base + 0x35C) = 0;
+    lights[CAMERA_DIRECTIONAL_LIGHT].direction[0] = fast_cos(lighting_direction_angle) * 0.866f;
+    lights[CAMERA_DIRECTIONAL_LIGHT].direction[1] = fast_sin(lighting_direction_angle) * 0.866f;
+    lights[CAMERA_DIRECTIONAL_LIGHT].direction[2] = -0.5f;
+    *(int *)&lights[CAMERA_DIRECTIONAL_LIGHT].direction[3] = 0;
     for (light_index = 0; light_index < 8; light_index++) {
         struct PointLight     *light = &point_lights[light_index];
         struct PointLightSlot *slot = &((struct PointLightSlot *)point_light_data)[light_index];
