@@ -151,6 +151,9 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         PLUMBER_LEVEL_EIGHT_POST_DIALOGUE = 5,
         PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED = 6
     };
+    enum {
+        PLUMBER_FALLBACK_DIALOGUE_INITIALIZED = 7
+    };
     L01WatchScratch look_tracking_vectors;
     L01WatchData   *plumber_vars = (L01WatchData *)plumber_moby->data;
     float           rate;
@@ -181,7 +184,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
             plumber_moby->state = PLUMBER_LEVEL_EIGHT_DIALOGUE;
         } else {
             plumber_vars->p20 = (void *)plumber_fallback_dialogue_data;
-            plumber_moby->state = 7;
+            plumber_moby->state = PLUMBER_FALLBACK_DIALOGUE_INITIALIZED;
         }
         initialize_npc_dialogue(plumber_moby, plumber_vars);
         break;
