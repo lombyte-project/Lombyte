@@ -136,8 +136,8 @@ int          shuttle_forced_return_requested_gp __asm__("D_L06_00162100") = 0;
 
 #include "rnc/overlay/l06/mobys/shuttle_data/shuttle_update.h"
 
-extern int           D_L06_0016210C __attribute__((sda));
-extern int           D_L06_00162110 __attribute__((sda));
+extern int           l06_shuttle_projected_sprite_start_color __asm__("D_L06_0016210C") __attribute__((sda));
+extern int           l06_shuttle_projected_sprite_end_color __asm__("D_L06_00162110") __attribute__((sda));
 extern unsigned char D_0013D4D5[] NOT_SDA;
 
 /* Update of moby class 1109 (shuttle): waits at one of three camera points, takes the hero's choice of destination, flies there through a cutscene and hands over to the level's travel sequence. */
@@ -273,8 +273,8 @@ void shuttle_update(struct Moby *moby) {
         *(u128_302578 *)b = *(u128_302578 *)((char *)&hero.motion.pos + 0x50);
         spawn_timed_projected_sprite_effect((char *)b,
                                             scale_game_frames(class_076a_moby_rate_input_frames_gp),
-                                            D_L06_0016210C,
-                                            D_L06_00162110);
+                                            l06_shuttle_projected_sprite_start_color,
+                                            l06_shuttle_projected_sprite_end_color);
     }
     switch (moby->state) {
     case INITIALIZE_SHUTTLE:
@@ -772,8 +772,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     center[2] = 173.07f;
     spawn_timed_projected_sprite_effect(center,
                                         scale_game_frames(class_076a_moby_rate_input_frames_gp),
-                                        D_L06_0016210C,
-                                        D_L06_00162110);
+                                        l06_shuttle_projected_sprite_start_color,
+                                        l06_shuttle_projected_sprite_end_color);
     largest = 0.0f;
     clear_u64_value(middle);
     list = D_L06_001ABFC0_03b68[*(int *)(shuttle_linkage_vars + 0xCC)];
