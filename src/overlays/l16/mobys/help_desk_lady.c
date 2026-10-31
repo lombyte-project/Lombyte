@@ -115,6 +115,9 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         HELP_DESK_POLL_DIALOGUE = 1,
         HELP_DESK_REQUEST_HELP_AND_SAVE = 2
     };
+    enum {
+        HELP_DESK_HELP_AND_SAVE_REQUESTED = 3
+    };
     L16WatchScratch gaze_vectors;
     L16WatchData   *watch_data = moby->data;
     L16WatchFlags  *flags;
@@ -127,7 +130,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
     switch (moby->state) {
     case HELP_DESK_INITIALIZE_DIALOGUE:
         initialize_npc_dialogue(moby, activation);
-        moby->state = 1;
+        moby->state = HELP_DESK_POLL_DIALOGUE;
         watch_data->activation.radius = 20.0f;
         moby->opacity = 0xFF;
         break;
@@ -136,14 +139,14 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         if (player->disabled == 0 && player->mode != 15 && player->mode != 22) {
             if (is_point_inside_clip_volume((char *)player + 0x80, watch_data->activation_region) &&
                 update_npc_dialogue(moby, activation))
-                moby->state = 2;
+                moby->state = HELP_DESK_REQUEST_HELP_AND_SAVE;
         }
         break;
     }
     case HELP_DESK_REQUEST_HELP_AND_SAVE:
         if (*(int *)&D_L16_0015F5C4 != 2) {
             char *player;
-            moby->state = 1;
+            moby->state = HELP_DESK_POLL_DIALOGUE;
             set_race_camera(D_L16_001D96C0, D_L16_001D96C0 + 4, 0, 1);
             help_request(0x3E82, 0x84);
             grant_inventory_item(0x21, 1);
@@ -151,7 +154,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
             player = (char *)&D_0013E533 + 0xE9D;
             jet_reset_camera(player, player + 0x10);
             memcard_save_data(0, -1);
-            moby->state = 3;
+            moby->state = HELP_DESK_HELP_AND_SAVE_REQUESTED;
         }
         break;
     }
