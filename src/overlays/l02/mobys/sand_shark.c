@@ -1352,18 +1352,22 @@ extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 void *handle_sand_shark_suck_cannon_storage(struct Moby *moby) __asm__("FUN_L02_002d6210");
 
 void *handle_sand_shark_suck_cannon_storage(struct Moby *moby) {
+    enum {
+        SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET = 1,
+        SAND_SHARK_SUCK_CANNON_INTERACTION = 9
+    };
     void *helper_result = store_moby_in_suck_cannon(moby);
     if (helper_result) {
         int spawner_moby_index;
-        moby->state = 9;
+        moby->state = SAND_SHARK_SUCK_CANNON_INTERACTION;
         spawner_moby_index = *(int *)((char *)moby->pvars + 0x288);
         if (spawner_moby_index >= 0) {
             char *spawner_vars =
                 *(char **)(*(int *)&D_L02_0015FFD8_c + spawner_moby_index * 256 + 0x78);
             (*(int *)(spawner_vars + 0x14C))--;
         }
-    } else if (moby->state == 9) {
-        moby->state = 1;
+    } else if (moby->state == SAND_SHARK_SUCK_CANNON_INTERACTION) {
+        moby->state = SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET;
     }
     return helper_result;
 }
