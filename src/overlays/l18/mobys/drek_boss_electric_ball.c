@@ -201,10 +201,10 @@ float homing_spark_quad_vertices[4][4][4] __asm__("D_L18_001D9B70") = {
 
 extern s32  fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
 extern s64  get_effect_texture_c(s32) __asm__("func_001F44B8");
-extern int  D_L18_00161EE4 __attribute__((sda));
-extern int  D_L18_00161EE8 __attribute__((sda));
-extern int  D_L18_00161EEC __attribute__((sda));
-extern int  D_L18_00161EF0 __attribute__((sda));
+extern int  l18_homing_spark_blend_minuend_selector __asm__("D_L18_00161EE4") __attribute__((sda));
+extern int  l18_homing_spark_blend_subtrahend_selector __asm__("D_L18_00161EE8") __attribute__((sda));
+extern int  l18_homing_spark_blend_alpha_factor_selector __asm__("D_L18_00161EEC") __attribute__((sda));
+extern int  l18_homing_spark_blend_addend_selector __asm__("D_L18_00161EF0") __attribute__((sda));
 extern int  D_L18_00161EF8 __attribute__((sda));
 extern int  l18_homing_spark_quad_texture_ids __asm__("D_L18_00161F08") __attribute__((sda));
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
@@ -250,8 +250,8 @@ void homing_spark_draw(char *moby) {
                 quad_packet->b = r;
             }
             quad_packet->c = 0xFF9000000260;
-            quad_packet->d = (D_L18_00161EE4) | (long)(D_L18_00161EE8) << 2 | (long)(D_L18_00161EEC) << 4 |
-                   (long)(D_L18_00161EF0) << 6 | 0x8000L << 24;
+            quad_packet->d = (l18_homing_spark_blend_minuend_selector) | (long)(l18_homing_spark_blend_subtrahend_selector) << 2 | (long)(l18_homing_spark_blend_alpha_factor_selector) << 4 |
+                   (long)(l18_homing_spark_blend_addend_selector) << 6 | 0x8000L << 24;
             quad_packet->a = 0;
             for (j = 0; j < 4; j++) {
                 pkt[i].uv[j][0] = homing_spark_quad_uvs[j][0];
