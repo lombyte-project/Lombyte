@@ -1256,9 +1256,9 @@ void jet_fighter_update(struct Moby *moby) {
     if (moby != 0) {
         ship_vars = (ShipVars_2838 *)moby->pvars;
         fast_dec_timer(&ship_vars->iDC);
-        if (moby->state != 7 && moby->state != 1 && moby->state != 2) {
+        if (moby->state != JET_FIGHTER_STATE_WAIT_FOR_RESPAWN && moby->state != JET_FIGHTER_STATE_WAIT_FOR_BOARDING && moby->state != JET_FIGHTER_STATE_BOARD) {
             hit = find_moby_hit(moby, 0x30001, 0);
-            if (hit != 0 && moby->state == 4) {
+            if (hit != 0 && moby->state == JET_FIGHTER_STATE_FLIGHT) {
                 struct Hero *g = &hero;
                 if (hit->damage < g->ship_hp) {
                     g->ship_hp -= hit->damage;
@@ -1288,7 +1288,7 @@ void jet_fighter_update(struct Moby *moby) {
                     build_spherical_offset(
                         ship_velocity_scratch, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
                     g->ship_hp = 0.0f;
-                    moby->state = 7;
+                    moby->state = JET_FIGHTER_STATE_WAIT_FOR_RESPAWN;
                     ship_vars->s62 = 0xB4;
                     g->motion.pos.f[2] += 0.2f;
                     g->moby->collision_disable = 0;
@@ -1326,7 +1326,7 @@ void jet_fighter_update(struct Moby *moby) {
         }
         switch (moby->state) {
         case JET_FIGHTER_STATE_INITIALIZE:
-            moby->state = 1;
+            moby->state = JET_FIGHTER_STATE_WAIT_FOR_BOARDING;
             ship_vars->sel = 0;
             moby->scale = moby->pclass->scale;
             ship_vars->f20 = ship_vars->f30;
@@ -1348,7 +1348,7 @@ void jet_fighter_update(struct Moby *moby) {
             ship_vars->sE8 = 1;
             ship_vars->fade = 0.0f;
             if (moby->mission != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF) {
-                moby->state = 9;
+                moby->state = JET_FIGHTER_STATE_INACTIVE;
                 moby->collision = 0;
                 moby->flags |= 1;
                 moby->visible = 0;
@@ -1372,7 +1372,7 @@ void jet_fighter_update(struct Moby *moby) {
                     }
                 }
                 if (item_available[7] != 0 && (((u32)pad_pressed_lui) & 0x10)) {
-                    moby->state = 2;
+                    moby->state = JET_FIGHTER_STATE_BOARD;
                     ship_vars->i118 = -1;
                 }
             } else {
@@ -1400,7 +1400,7 @@ void jet_fighter_update(struct Moby *moby) {
                     help_request(0x2AFC, 0x55);
                 }
                 g = &hero;
-                moby->state = 4;
+                moby->state = JET_FIGHTER_STATE_FLIGHT;
                 g->ship_moby = moby;
                 g->ship_oclass = moby->oclass;
                 g->ship_ammo = l11_jet_fighter_initial_ammo;
@@ -1452,10 +1452,10 @@ void jet_fighter_update(struct Moby *moby) {
             }
             if (ship_vars->sE8 <= 0) {
                 ship_vars->iF8 = D_L11_00162168;
-                moby->state = 8;
+                moby->state = JET_FIGHTER_STATE_DELAYED_EXIT;
             }
             if (hero.ship_flags & 1) {
-                moby->state = 5;
+                moby->state = JET_FIGHTER_STATE_DISMOUNT;
             }
             break;
         case JET_FIGHTER_STATE_DISMOUNT: {
@@ -1491,7 +1491,7 @@ void jet_fighter_update(struct Moby *moby) {
                 }
             }
             ship_vars->voice2 = -1;
-            moby->state = 1;
+            moby->state = JET_FIGHTER_STATE_WAIT_FOR_BOARDING;
             ship_vars->fade = 0.99f;
             D_L11_0015F3FC = 0.99f;
             break;
@@ -1539,7 +1539,7 @@ void jet_fighter_update(struct Moby *moby) {
                     if (moby->mission != 0xFF) {
                         jet_clear_persistent(moby->mission);
                     }
-                    moby->state = 9;
+                    moby->state = JET_FIGHTER_STATE_INACTIVE;
                 }
             }
             break;
@@ -1570,11 +1570,11 @@ void jet_fighter_update(struct Moby *moby) {
         if (moby->pos.z > 1008.0f) {
             moby->pos.z = 1008.0f;
         }
-        if (moby->state == 4) {
+        if (moby->state == JET_FIGHTER_STATE_FLIGHT) {
             qcopy_nc(&hero.motion.pos, &moby->pos);
             qcopy_nc(&hero.motion.rot, &ship_vars->f30);
         }
-        if (moby->state == 3 || moby->state == 4) {
+        if (moby->state == 3 || moby->state == JET_FIGHTER_STATE_FLIGHT) {
             emit_type_74_particles_from_moby_joints(moby, ship_vars);
             if (voice_is_playing(moby, ship_vars->voice) == 0) {
                 ship_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
