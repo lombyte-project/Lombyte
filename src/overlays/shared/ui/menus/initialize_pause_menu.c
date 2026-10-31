@@ -389,6 +389,9 @@ void initialize_pause_menu(void) {
 /* Closes the scene once its progress reaches 10: releases its objects, restores the hero's
    items and HUD bank, deletes the 14 scene mobies, shows the health and bolt HUD, enters state 0x14. */
 void close_pause_menu(void) {
+    enum {
+        PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14
+    };
     s32   i;
     s32   value;
     s32   handle;
@@ -456,7 +459,7 @@ void close_pause_menu(void) {
                                         &current_bolt_count,
                                         9999999);
         hud_keep_visible(handle, scale_game_frames(0xb4));
-        D_L00_001B9CF0.state = 0x14;
+        D_L00_001B9CF0.state = PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION;
         D_L00_001B9CF0.unk14 = 2;
         {
             s32 value = D_L00_001B9CF0.saved_seq_count;
