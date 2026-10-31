@@ -433,6 +433,12 @@ void update_seeker_damage_and_target(Moby *moby) {
         RESPONSE_REACTION_ONLY = 9,
         RESPONSE_NO_REACTION = 11
     };
+    enum {
+        SEEKER_STATE_INITIALIZE = 0,
+        SEEKER_STATE_HURT_KNOCKBACK = 5,
+        SEEKER_STATE_FATAL_KNOCKBACK = 6,
+        SEEKER_STATE_EXPLODE = 7
+    };
     char        hit_pos[16];
     int         hit;
     float       damage;
@@ -445,13 +451,13 @@ void update_seeker_damage_and_target(Moby *moby) {
     int         lost_state;
 
     seeker_vars = (struct Data *)moby->pvars;
-    if (moby->state == 0) {
+    if (moby->state == SEEKER_STATE_INITIALIZE) {
         return;
     }
     moby->scale =
         moby->scale + ((((Cls *)moby->pclass)->scale * D_L09_0016140C) - moby->scale) * 0.1f;
     if (fast_dec_timer(&seeker_vars->timer) == 2) {
-        moby->state = 7;
+        moby->state = SEEKER_STATE_EXPLODE;
         return;
     }
     if (seeker_vars->timer == scale_game_frames(0xA) ||
@@ -467,7 +473,7 @@ void update_seeker_damage_and_target(Moby *moby) {
     source = find_moby_hit(moby, 0x330000, 0);
     response =
         resolve_moby_hit_response(moby, source, &seeker_vars->health, 0, &hit, &damage, 0, 4);
-    if (hit != 1 && moby->state != 6) {
+    if (hit != 1 && moby->state != SEEKER_STATE_FATAL_KNOCKBACK) {
         seeker_vars->health = seeker_vars->health - damage;
         if (seeker_vars->health <= 0.0f) {
             response = 1;
@@ -500,7 +506,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             *(Q_2C73D0 *)hit_pos = source->pos;
             func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle, &seeker_vars->f88, &seeker_vars->f8C);
             func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle, 4, 1, 0);
-            moby->state = 5;
+            moby->state = SEEKER_STATE_HURT_KNOCKBACK;
             if (moby->group != 0xFF) {
                 func_L01_0026F040_2C73D0(moby->group, 1);
             }
@@ -521,7 +527,7 @@ void update_seeker_damage_and_target(Moby *moby) {
                 hit_pos, &knock_angle_fatal, &seeker_vars->f88, &seeker_vars->f8C);
             func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle_fatal, 4, 1, 0);
             mark_moby_for_removal_cf(moby, 0, -1);
-            moby->state = 6;
+            moby->state = SEEKER_STATE_FATAL_KNOCKBACK;
             seeker_vars->reactTime = 0xF0;
             break;
         case RESPONSE_NONE:
