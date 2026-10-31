@@ -211,7 +211,7 @@ void bolt_update(Bolt *bolt_moby) {
     }
     switch (bolt_moby->state) {
     case BOLT_INITIALIZE:
-        bolt_moby->state = 3;
+        bolt_moby->state = BOLT_IDLE;
         bolt_moby->unk73 = 0x14;
         bolt_moby->flags |= 0x100;
         bolt_moby->unk30 = 0x20;
@@ -312,7 +312,7 @@ void bolt_update(Bolt *bolt_moby) {
               settling_inclination_limit)) {
             return;
         }
-        bolt_moby->state = 2;
+        bolt_moby->state = BOLT_SETTLING;
         v->hop_frames = v->hop_left =
             truncate_float_to_s32(scale_time(random_float_between(30.0f, 40.0f)));
         if (D_L00_00173E40.moby != 0 && FUN_L00_002603d0((void *)D_L00_00173E40.moby) != 0) {
@@ -341,7 +341,7 @@ void bolt_update(Bolt *bolt_moby) {
         if (--v->hop_left != 0) {
             return;
         }
-        bolt_moby->state = 3;
+        bolt_moby->state = BOLT_IDLE;
         v->hop_frames = v->hop_left =
             truncate_float_to_s32(scale_time(random_float_between(10.0f, 20.0f)));
         return;
