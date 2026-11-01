@@ -72,6 +72,9 @@ void tresspasser_update(struct Moby *moby) {
         GADGET_PICKUP_STATE_CAMERA_SEQUENCE = 4,
         GADGET_PICKUP_STATE_SAVE_AND_REMOVE = 5
     };
+    enum {
+        LEVEL_GAME_MODE_SCENE = 2
+    };
     char *gadget_pickup_state;
     int   which;
     int   frames;
@@ -115,7 +118,7 @@ void tresspasser_update(struct Moby *moby) {
         }
         return;
     case GADGET_PICKUP_STATE_GRANT_ITEM:
-        if (level_game_mode == 2)
+        if (level_game_mode == LEVEL_GAME_MODE_SCENE)
             return;
         if (D_001413F4 != 0) {
             if (which == 0x16) {
