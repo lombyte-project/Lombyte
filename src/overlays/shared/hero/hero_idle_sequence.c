@@ -2561,6 +2561,10 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
     enum {
         HERO_MOTION_EFFECT_RANDOMIZED_HERO_POSITION = 0
     };
+    enum {
+        HERO_MOTION_EFFECT_ALTERNATING_MOBY_POINTS_0_AND_14 = 1,
+        HERO_MOTION_EFFECT_ALTERNATING_MOBY_POINTS_23_AND_22 = 2
+    };
     float        pos[4];
     V_209a40     randomized_displacement;
     int          i;
@@ -2574,13 +2578,13 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
             pos[0] = hero_state->motion.pos.f[0] + random_float_between(-0.1f, 0.1f);
             pos[1] = hero_state->motion.pos.f[1] + random_float_between(-0.1f, 0.1f);
             pos[2] = hero_state->motion.pos.f[2] + random_float_between(-0.5f, 0.1f);
-        } else if (mode == 1) {
+        } else if (mode == HERO_MOTION_EFFECT_ALTERNATING_MOBY_POINTS_0_AND_14) {
             if (!(i & 1)) {
                 moby_point_position(hero_state->moby, 0, pos);
             } else {
                 moby_point_position(hero_state->moby, 0xE, pos);
             }
-        } else if (mode == 2) {
+        } else if (mode == HERO_MOTION_EFFECT_ALTERNATING_MOBY_POINTS_23_AND_22) {
             if (!(i & 1)) {
                 moby_point_position(hero_state->moby, 0x17, pos);
             } else {
