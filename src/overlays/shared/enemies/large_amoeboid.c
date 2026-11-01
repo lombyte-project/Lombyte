@@ -153,8 +153,10 @@ extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern float       D_0013F420[];
 extern int         D_001413D0[];
-extern const float D_L01_001619A0_gp __asm__("D_L01_001619A0") __attribute__((sda));
-extern const float D_L01_001619A4_gp __asm__("D_L01_001619A4") __attribute__((sda));
+extern const float l01_smaller_amoeboid_knockback_xy_scale __asm__("D_L01_001619A0")
+    __attribute__((sda));
+extern const float l01_smaller_amoeboid_knockback_z_scale __asm__("D_L01_001619A4")
+    __attribute__((sda));
 extern const float frame_time_macro __asm__("D_0015ED6C");
 
 extern short *l01_moby_index_lists_by_group[] __asm__("D_L01_001ABCC0");

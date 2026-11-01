@@ -60,7 +60,8 @@ extern int   update_drek_fight_missile_wander_movement(char  *moby,
                                                        float *vec) __asm__("FUN_L18_002f0120");
 extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern short l18_drek_missile_roll_rate_degrees_gp __asm__("D_L18_00162210") __attribute__((sda));
-extern short D_L18_00162214_gp __asm__("D_L18_00162214") __attribute__((sda));
+extern short l18_drek_missile_wander_horizontal_speed_gp __asm__("D_L18_00162214")
+    __attribute__((sda));
 extern short l18_drek_missile_dive_speed_gp __asm__("D_L18_00162218") __attribute__((sda));
 extern short l18_drek_missile_wander_to_dive_random_bound_gp __asm__("D_L18_00162234")
     __attribute__((sda));

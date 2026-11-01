@@ -172,9 +172,11 @@ extern char D_L14_0015F580[] MACRO_ADDR;
 
 #include "rnc/overlay/l14/mobys/blarg_heavy_interceptor_data/blarg_heavy_interceptor_update.h"
 
-extern f32 D_L14_001613A0_gp __asm__("D_L14_001613A0") __attribute__((sda));
+extern f32 l14_blarg_heavy_interceptor_path_easing_error_gain __asm__("D_L14_001613A0")
+    __attribute__((sda));
 
-extern f32 D_L14_001613A4_gp __asm__("D_L14_001613A4") __attribute__((sda));
+extern f32 l14_blarg_heavy_interceptor_path_easing_damping_coefficient __asm__("D_L14_001613A4")
+    __attribute__((sda));
 
 extern Vec4 D_L14_00174560;
 

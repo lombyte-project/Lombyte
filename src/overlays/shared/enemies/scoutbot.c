@@ -150,10 +150,10 @@ func_L00_00260FB0_f(char *, void *, float, int, int, void *, int) __asm__("FUN_L
 extern void  scale_vector_002d3878(float, void *) __asm__("FUN_L00_0025f730");
 extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L08_00161894_lui __asm__("D_L08_00161894") NOT_SDA;
-extern u32   D_00151878_gp __asm__("D_00151878") __attribute__((sda));
-extern u32   D_0015187C_gp __asm__("D_0015187C") __attribute__((sda));
-extern u32   D_00151880_gp __asm__("D_00151880") __attribute__((sda));
-extern u32   D_00151884_gp __asm__("D_00151884") __attribute__((sda));
+extern u32   scoutbot_target_beam_vertex_0_color __asm__("D_00151878") __attribute__((sda));
+extern u32   scoutbot_target_beam_vertex_1_color __asm__("D_0015187C") __attribute__((sda));
+extern u32   scoutbot_target_beam_vertex_2_color __asm__("D_00151880") __attribute__((sda));
+extern u32   scoutbot_target_beam_vertex_3_color __asm__("D_00151884") __attribute__((sda));
 void         draw_target_beam(struct Moby *moby) __asm__("FUN_L08_002d3878");
 
 extern float scoutbot_probe_correction_target_position[] __asm__("D_L08_00174670");
