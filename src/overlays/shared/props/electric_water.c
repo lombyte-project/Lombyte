@@ -1193,8 +1193,11 @@ extern int is_moby_class_23e_in_state_14(void *) __asm__("FUN_L03_002c6c60");
 void reset_electric_water_switch(char *moby) __asm__("FUN_L15_002d95a0");
 
 void reset_electric_water_switch(char *moby) {
+    enum {
+        ELECTRIC_WATER_SWITCH_RESET = 1
+    };
     if (is_moby_class_23e_in_state_14(moby)) {
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = ELECTRIC_WATER_SWITCH_RESET;
         MOBY(moby)->pos.z += 1.5f;
     }
 }
