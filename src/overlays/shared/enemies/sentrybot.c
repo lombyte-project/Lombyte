@@ -1844,8 +1844,11 @@ void prepare_sentrybot_alarm(unsigned char *moby) {
     enum {
         SENTRYBOT_ALARM_PREPARING = 2
     };
+    enum {
+        SENTRYBOT_ALARM_AWAITING_PREPARATION = 1
+    };
     char *alarm_moby_data = ((char *)MOBY(moby)->pvars);
-    if (MOBY(moby)->state == 1) {
+    if (MOBY(moby)->state == SENTRYBOT_ALARM_AWAITING_PREPARATION) {
         MOBY(moby)->state = SENTRYBOT_ALARM_PREPARING;
         if (MOBY(moby)->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
