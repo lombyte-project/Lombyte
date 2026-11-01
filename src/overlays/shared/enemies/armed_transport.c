@@ -195,13 +195,13 @@ void armed_transport_update(char *transport_moby) {
         transport_data->unk170[0] = speed;
         transport_data->unk194 = MOBY(transport_moby)->pos.z;
         if (transport_data->path_index == -1) {
-            MOBY(transport_moby)->state = 6;
+            MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_TRACK_TARGET;
             break;
         }
         path = D_L16_001B0930[transport_data->path_index];
         transport_data->unk170[1] = fast_vec_dist(path + 0x10, path + 0x20);
         qcopy(&MOBY(transport_moby)->pos, path + 0x10);
-        MOBY(transport_moby)->state = 1;
+        MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION;
         MOBY(transport_moby)->visible = 0;
         MOBY(transport_moby)->collision = 0;
         MOBY(transport_moby)->flags = (MOBY(transport_moby)->flags | 1) & 0xEFFF;
@@ -215,7 +215,7 @@ void armed_transport_update(char *transport_moby) {
              point_in_path_xy(hero.motion.pos.f,
                               D_L16_001B0930[transport_data->unkD4] + 0x10,
                               *(int *)D_L16_001B0930[transport_data->unkD4]))) {
-            MOBY(transport_moby)->state = 2;
+            MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_FOLLOW_FIRST_PATH;
             MOBY(transport_moby)->flags &= 0xFFFE;
             MOBY(transport_moby)->visible = 1;
             MOBY(transport_moby)->collision =
@@ -256,11 +256,11 @@ void armed_transport_update(char *transport_moby) {
         }
         if (advance_armed_transport_along_path(transport_moby, path)) {
             if (loaded) {
-                MOBY(transport_moby)->state = 3;
+                MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_RELEASE_PASSENGERS;
             } else if (transport_data->unkDC == -1) {
-                MOBY(transport_moby)->state = 6;
+                MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_TRACK_TARGET;
             } else {
-                MOBY(transport_moby)->state = 4;
+                MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH;
             }
         }
         break;
@@ -288,9 +288,9 @@ void armed_transport_update(char *transport_moby) {
             }
             if (i == 3) {
                 if (transport_data->unkDC != -1) {
-                    MOBY(transport_moby)->state = 4;
+                    MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH;
                 } else {
-                    MOBY(transport_moby)->state = 6;
+                    MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_TRACK_TARGET;
                 }
             }
         }
@@ -306,7 +306,7 @@ void armed_transport_update(char *transport_moby) {
                                    frame_time_sq * 6.2831855f,
                                    frame_time * 6.2831855f);
         if (fast_difference_between_rotations(MOBY(transport_moby)->rot.z, heading) < 0.01f) {
-            MOBY(transport_moby)->state = 5;
+            MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH;
             transport_data->path_point = 0;
             transport_data->unk16C = 0;
         }
@@ -325,7 +325,7 @@ void armed_transport_update(char *transport_moby) {
                 mark_moby_for_removal(transport_moby);
                 return;
             }
-            MOBY(transport_moby)->state = 6;
+            MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_TRACK_TARGET;
         }
         break;
     case ARMED_TRANSPORT_STATE_TRACK_TARGET: {
@@ -353,7 +353,7 @@ void armed_transport_update(char *transport_moby) {
                                    frame_time_sq * 1.5707964f,
                                    frame_time * 6.2831855f);
         if (fast_dec_timer((int *)(&transport_data->unk164)) && transport_data->unkB4 != 2)
-            MOBY(transport_moby)->state = 7;
+            MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY;
         break;
     }
     case ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY:
@@ -367,7 +367,7 @@ void armed_transport_update(char *transport_moby) {
                                      vector.f,
                                      &transport_data->unk70,
                                      scale_game_frames(45));
-        MOBY(transport_moby)->state = 6;
+        MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_TRACK_TARGET;
         transport_data->unk164 = scale_game_frames(180);
         break;
     case ARMED_TRANSPORT_STATE_DYING: {
