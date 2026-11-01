@@ -592,6 +592,10 @@ void process_blarg_space_commando_hits(char *moby) {
         SIXTY_FRAME_KNOCKBACK_HIT_RESPONSE = 10,
         HIT_RESPONSE_PRESERVING_MOBY_STATE = 11
     };
+    enum {
+        BLARG_COMMANDO_STATE_KNOCKBACK = 0xF,
+        BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 0x10
+    };
     extern unsigned char D_0013D408[];
     char                *commando_state;
     char                *hit_record;
@@ -620,7 +624,7 @@ void process_blarg_space_commando_hits(char *moby) {
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_response_index =
         resolve_moby_hit_response(moby, hit_record, commando_state + 0x20, 0, &hit, &dt, 0, 4);
-    if (hit != 1 && (unsigned char)MOBY(moby)->state != 0x10) {
+    if (hit != 1 && (unsigned char)MOBY(moby)->state != BLARG_COMMANDO_STATE_DEATH_KNOCKBACK) {
         if (current_level_index_gp == 0xA && hit_record != 0 &&
             *(char **)(hit_record + 0x20) != 0 &&
             *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
@@ -646,7 +650,7 @@ void process_blarg_space_commando_hits(char *moby) {
             char *q;
             int   knockback_frames;
             float b, a;
-            MOBY(moby)->state = 0xF;
+            MOBY(moby)->state = BLARG_COMMANDO_STATE_KNOCKBACK;
             q = commando_state + 0x60;
             knockback_frames = scale_game_frames(0x3C);
             a = nonfatal_knockback_horizontal_speed_gp * D_0015ED6C;
@@ -670,7 +674,7 @@ void process_blarg_space_commando_hits(char *moby) {
         case FRAGMENTING_FATAL_HIT_RESPONSE: {
             char *q;
             float a, b;
-            MOBY(moby)->state = 0x10;
+            MOBY(moby)->state = BLARG_COMMANDO_STATE_DEATH_KNOCKBACK;
             q = commando_state + 0x60;
             a = fatal_knockback_horizontal_speed_gp * D_0015ED6C;
             b = fatal_knockback_vertical_speed_gp * D_0015ED6C;
