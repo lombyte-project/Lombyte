@@ -11,6 +11,9 @@ extern void         helper_moby_update_noop(struct Moby *) __asm__("func_00225AB
 int enter_streamed_moby_screen(struct MenuStreamedMobyScreen *screen) __asm__("FUN_00225588");
 
 int enter_streamed_moby_screen(struct MenuStreamedMobyScreen *screen) {
+    enum {
+        STREAMED_MOBY_SCREEN_STATE_SETUP_FAILED = 3
+    };
     struct Moby *preview_moby;
     int          stream_buffer_address;
     preview_moby = create_menu_preview_moby(0x7A5);
@@ -30,12 +33,12 @@ int enter_streamed_moby_screen(struct MenuStreamedMobyScreen *screen) {
         *(int *)(moby_sidecar + 4) = 0;
         *(int *)(moby_sidecar + 8) = 0;
     } else {
-        screen->state = 3;
+        screen->state = STREAMED_MOBY_SCREEN_STATE_SETUP_FAILED;
     }
     stream_buffer_address = acquire_menu_stream_buffer(1);
     screen->buffer = stream_buffer_address;
     if (stream_buffer_address == 0) {
-        screen->state = 3;
+        screen->state = STREAMED_MOBY_SCREEN_STATE_SETUP_FAILED;
     }
     return 0;
 }
