@@ -34,13 +34,16 @@ unsigned char *spawn_fighter_jet_rocket(struct Moby *firing_moby,
                                         int          lifetime_frames,
 
                                         float scale) {
+    enum {
+        FIGHTER_JET_ROCKET_STATE_INITIAL = 0
+    };
     unsigned char *moby = create_moby(0x127);
     if (moby != 0) {
         char *rocket_private_state = ((char *)MOBY(moby)->pvars);
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;
-        MOBY(moby)->state = 0;
+        MOBY(moby)->state = FIGHTER_JET_ROCKET_STATE_INITIAL;
         *(char **)(rocket_private_state + 0x20) = firing_moby;
         *(char **)(rocket_private_state + 0x24) = target;
         qcopy(&MOBY(moby)->pos, spawn_position);
