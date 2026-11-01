@@ -158,7 +158,7 @@ void sand_shark_nest_update(unsigned char *moby) {
     OvlVec4   launch_position;
 
     handle_sand_shark_nest_damage((struct Moby *)moby);
-    if ((signed char)MOBY(moby)->state < 0) {
+    if ((signed char)MOBY(moby)->state < SAND_SHARK_NEST_INITIALIZE) {
         return;
     }
     if (MOBY(moby)->visible != 0 && fast_vec_dist(moby + 0x10, D_L02_001673C0) < 28.0f) {
@@ -171,7 +171,7 @@ void sand_shark_nest_update(unsigned char *moby) {
         if (MOBY(moby)->unkB4 <= 0) {
             MOBY(moby)->unkB4 = 1;
         }
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = SAND_SHARK_NEST_WAIT_FOR_SPAWN;
         nest_vars->f20 = 3.0f;
         nest_vars->s24 = 3;
         nest_vars->b2E = 1;
@@ -183,7 +183,7 @@ void sand_shark_nest_update(unsigned char *moby) {
     case SAND_SHARK_NEST_WAIT_FOR_SPAWN:
         if (fast_dec_timer(&nest_vars->timer)) {
             if (FUN_L02_002dd2a8_c(moby)) {
-                MOBY(moby)->state = 2;
+                MOBY(moby)->state = SAND_SHARK_NEST_LAUNCH_SAND_SHARK;
                 if (MOBY(moby)->prev_seq != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                 }
@@ -194,7 +194,7 @@ void sand_shark_nest_update(unsigned char *moby) {
         break;
     case SAND_SHARK_NEST_LAUNCH_SAND_SHARK:
         if (MOBY(moby)->anim_flags & 2) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = SAND_SHARK_NEST_WAIT_FOR_SPAWN;
             if (MOBY(moby)->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
@@ -228,7 +228,7 @@ void sand_shark_nest_update(unsigned char *moby) {
     case SAND_SHARK_NEST_HIT_RECOVERY:
         step_moby_motion(moby, nest_vars->anim);
         if (MOBY(moby)->anim_flags & 2) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = SAND_SHARK_NEST_WAIT_FOR_SPAWN;
             if (MOBY(moby)->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }
