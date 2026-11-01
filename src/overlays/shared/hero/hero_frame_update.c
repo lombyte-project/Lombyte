@@ -791,7 +791,7 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
     reset_hero_easing_records();
     hero_state_base = (struct Hero *)((char *)D_0013E533 + 0xE1D);
     previous_active_moby = ((char *)hero_state_base->unkA84);
-    hero_state_base->vehicle_mode = 0;
+    hero_state_base->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
     if (previous_active_moby != 0) {
         MOBY(previous_active_moby)->flags &= 0xFFF9;
     }
