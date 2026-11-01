@@ -288,7 +288,9 @@ void flying_car_update(struct Moby *flying_car_moby) {
         }
         break;
     }
-    if (flying_car_moby->state == FLYING_CAR_INITIALIZE || flying_car_moby->state == FLYING_CAR_WAIT_FOR_PATH_RESET || flying_car_moby->state == FLYING_CAR_WAIT_FOR_TRIGGER) {
+    if (flying_car_moby->state == FLYING_CAR_INITIALIZE ||
+        flying_car_moby->state == FLYING_CAR_WAIT_FOR_PATH_RESET ||
+        flying_car_moby->state == FLYING_CAR_WAIT_FOR_TRIGGER) {
         return;
     }
     if (voice_is_playing(flying_car_moby, flying_car_data->sound) == 0) {

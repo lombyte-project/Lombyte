@@ -66,9 +66,10 @@ extern void           FUN_L01_003089f0_f(struct Moby *) __asm__("FUN_L01_003089f
 void                  update_gold_bolt_glow_rings(struct Moby *m) __asm__("FUN_L01_00308550");
 extern void           FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 extern int            fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *spawn_timed_hero_relative_particle(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
-extern void           spawn_moving_hero_relative_alpha_fade_particle(
-              void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
+extern unsigned char *spawn_timed_hero_relative_particle(
+    void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+extern void spawn_moving_hero_relative_alpha_fade_particle(
+    void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
 extern s32  D_0015ED84;
 extern char camera_pos[] __asm__("D_L01_00167240");
@@ -83,7 +84,8 @@ extern s32 cutscene_active __asm__("D_L01_0015F404");
 extern f32 D_L01_00161F10_gp __asm__("D_L01_00161F10") __attribute__((sda));
 extern f32 l01_gold_bolt_bobbing_height_offset_gp __asm__("D_L01_00161F14") __attribute__((sda));
 extern f32 l01_gold_bolt_bobbing_amplitude_gp __asm__("D_L01_00161F18") __attribute__((sda));
-extern f32 l01_gold_bolt_bobbing_phase_degrees_per_second_gp __asm__("D_L01_00161F2C") __attribute__((sda));
+extern f32 l01_gold_bolt_bobbing_phase_degrees_per_second_gp __asm__("D_L01_00161F2C")
+    __attribute__((sda));
 extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
 extern f32 gold_bolt_spin_x_degrees_per_second_gp __asm__("D_L01_00161F20") __attribute__((sda));
 extern f32 gold_bolt_spin_y_degrees_per_second_gp __asm__("D_L01_00161F24") __attribute__((sda));
@@ -512,8 +514,9 @@ void gold_bolt_update(struct Moby *moby) {
             moby->rot.y, gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro);
         moby->rot.z = fast_add_rotations(
             moby->rot.z, gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro);
-        moby->rot.w =
-            fast_add_rotations(moby->rot.w, l01_gold_bolt_bobbing_phase_degrees_per_second_gp * 0.017453292f * frame_time_macro);
+        moby->rot.w = fast_add_rotations(moby->rot.w,
+                                         l01_gold_bolt_bobbing_phase_degrees_per_second_gp *
+                                             0.017453292f * frame_time_macro);
         FUN_L01_00308550_f(moby);
         if (!random_integer_below(D_L01_00161F50_gp)) {
             FUN_L01_003089f0_f(moby);
@@ -630,7 +633,8 @@ void update_gold_bolt_visuals(struct Moby *moby) {
     moby->scale = moby->pclass->scale * *(float *)&D_L01_00161F10_gp;
     if (moby->state == GOLD_BOLT_WAIT_FOR_PICKUP) {
         bobbing_sine = fast_sin(moby->rot.w);
-        moby->pos.z = *(float *)(gold_bolt_visual_vars + 0x18) + *(float *)&l01_gold_bolt_bobbing_height_offset_gp +
+        moby->pos.z = *(float *)(gold_bolt_visual_vars + 0x18) +
+                      *(float *)&l01_gold_bolt_bobbing_height_offset_gp +
                       *(float *)&l01_gold_bolt_bobbing_amplitude_gp * bobbing_sine;
         moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(gold_bolt_visual_vars + 0x68));
         moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(gold_bolt_visual_vars + 0x64));
@@ -713,13 +717,13 @@ void update_gold_bolt_glow_rings(struct Moby *moby) {
                                         gold_bolt_glow_ring_tween_end_color_gp,
                                         absolute_float(0.5f - pulse_progress));
         spawn_timed_hero_relative_particle(glow_particle_position,
-                         packed_color,
-                         truncate_float_to_s32(ring_rotations[i]),
-                         gold_bolt_glow_ring_particle_texture_index_gp,
-                         gold_bolt_glow_ring_particle_use_flags_44_gp,
-                         2,
-                         0,
-                         sz[i] * scale);
+                                           packed_color,
+                                           truncate_float_to_s32(ring_rotations[i]),
+                                           gold_bolt_glow_ring_particle_texture_index_gp,
+                                           gold_bolt_glow_ring_particle_use_flags_44_gp,
+                                           2,
+                                           0,
+                                           sz[i] * scale);
         fast_vec_add(glow_particle_position, glow_particle_position, step);
     }
 }

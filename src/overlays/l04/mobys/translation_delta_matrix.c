@@ -14,7 +14,10 @@ void translation_delta_matrix_update(char *moby) __asm__("FUN_L04_002d3580");
 
 /* Moby class 584 */
 void translation_delta_matrix_update(char *moby) {
-    enum { MOBY_TRANSLATION_DELTA_STATE_INITIALIZE = 0 } ;char *moby_vars = ((char *)MOBY(moby)->pvars);
+    enum {
+        MOBY_TRANSLATION_DELTA_STATE_INITIALIZE = 0
+    };
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float position_delta[4];
     fast_vec_sub(position_delta, moby + 0x10, moby_vars + 0xA0);
     update_entity_matrix(moby_vars + 0x60, position_delta, moby + 0x40, moby + 0x40);

@@ -136,8 +136,8 @@ int          shuttle_forced_return_requested_gp __asm__("D_L06_00162100") = 0;
 
 #include "rnc/overlay/l06/mobys/shuttle_data/shuttle_update.h"
 
-extern int           l06_shuttle_projected_sprite_start_color __asm__("D_L06_0016210C") __attribute__((sda));
-extern int           l06_shuttle_projected_sprite_end_color __asm__("D_L06_00162110") __attribute__((sda));
+extern int l06_shuttle_projected_sprite_start_color __asm__("D_L06_0016210C") __attribute__((sda));
+extern int l06_shuttle_projected_sprite_end_color __asm__("D_L06_00162110") __attribute__((sda));
 extern unsigned char D_0013D4D5[] NOT_SDA;
 
 /* Update of moby class 1109 (shuttle): waits at one of three camera points, takes the hero's choice of destination, flies there through a cutscene and hands over to the level's travel sequence. */
@@ -192,26 +192,42 @@ Colors D_L06_00201948 = {
     {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
 };
 
-extern float l06_shuttle_explosion_spark_velocity_scale_random_bound_a __asm__("D_L06_00162114") __attribute__((sda));
-extern float l06_shuttle_explosion_spark_velocity_scale_random_bound_b __asm__("D_L06_00162118") __attribute__((sda));
-extern float l06_shuttle_explosion_spark_velocity_w_random_bound_a __asm__("D_L06_0016211C") __attribute__((sda));
-extern float l06_shuttle_explosion_spark_velocity_w_random_bound_b __asm__("D_L06_00162120") __attribute__((sda));
-extern float l06_shuttle_explosion_spark_acceleration_scale_random_bound_a __asm__("D_L06_00162124") __attribute__((sda));
-extern float l06_shuttle_explosion_spark_acceleration_scale_random_bound_b __asm__("D_L06_00162128") __attribute__((sda));
-extern float l06_shuttle_explosion_spark_acceleration_w_random_bound_a __asm__("D_L06_0016212C") __attribute__((sda));
-extern float l06_shuttle_explosion_spark_acceleration_w_random_bound_b __asm__("D_L06_00162130") __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_first_color_blend_a __asm__("D_L06_00162134") __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_first_color_blend_b __asm__("D_L06_00162138") __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_second_color_blend_a __asm__("D_L06_0016213C") __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_second_color_blend_b __asm__("D_L06_00162140") __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_timing_random_min_frames __asm__("D_L06_00162144") __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_timing_base_a_frames __asm__("D_L06_00162148") __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_timing_base_b_frames __asm__("D_L06_0016214C") __attribute__((sda));
-extern int   D_L06_00162150 __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_table_index __asm__("D_L06_00162154") __attribute__((sda));
-extern int   l06_shuttle_explosion_spark_alternate_mode_flag __asm__("D_L06_00162158") __attribute__((sda));
-extern void  random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
-extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern float l06_shuttle_explosion_spark_velocity_scale_random_bound_a __asm__("D_L06_00162114")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_velocity_scale_random_bound_b __asm__("D_L06_00162118")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_velocity_w_random_bound_a __asm__("D_L06_0016211C")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_velocity_w_random_bound_b __asm__("D_L06_00162120")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_acceleration_scale_random_bound_a __asm__("D_L06_00162124")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_acceleration_scale_random_bound_b __asm__("D_L06_00162128")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_acceleration_w_random_bound_a __asm__("D_L06_0016212C")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_acceleration_w_random_bound_b __asm__("D_L06_00162130")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_first_color_blend_a __asm__("D_L06_00162134")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_first_color_blend_b __asm__("D_L06_00162138")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_second_color_blend_a __asm__("D_L06_0016213C")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_second_color_blend_b __asm__("D_L06_00162140")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_timing_random_min_frames __asm__("D_L06_00162144")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_timing_base_a_frames __asm__("D_L06_00162148")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_timing_base_b_frames __asm__("D_L06_0016214C")
+    __attribute__((sda));
+extern int D_L06_00162150 __attribute__((sda));
+extern int l06_shuttle_explosion_spark_table_index __asm__("D_L06_00162154") __attribute__((sda));
+extern int l06_shuttle_explosion_spark_alternate_mode_flag __asm__("D_L06_00162158")
+    __attribute__((sda));
+extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
+extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u8 *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -671,9 +687,12 @@ int update_shuttle_path_ride(char *moby, int path) {
     return ride->progress == 1.0f;
 }
 
-void spawn_shuttle_explosion_effect(float scale, char *moby, char *pos, char *push, int count) __asm__("FUN_L06_00303748");
+void spawn_shuttle_explosion_effect(
+    float scale, char *moby, char *pos, char *push, int count) __asm__("FUN_L06_00303748");
 
-void spawn_shuttle_explosion_effect(float scale, char *moby, char *explosion_origin, char *push, int count) {
+void spawn_shuttle_explosion_effect(
+
+    float scale, char *moby, char *explosion_origin, char *push, int count) {
     float  position[4], direction[4], velocity[4], acceleration[4];
     Colors first_colors, second_colors;
     int    i;
@@ -721,22 +740,41 @@ void spawn_shuttle_explosion_effect(float scale, char *moby, char *explosion_ori
         random_vector(direction, 0.0f, 0.9f);
         fast_vec_add(direction, direction, push);
         fast_vec_scale(
-            velocity, direction, random_float_between(l06_shuttle_explosion_spark_velocity_scale_random_bound_a, l06_shuttle_explosion_spark_velocity_scale_random_bound_b) * frame_time);
+            velocity,
+            direction,
+            random_float_between(l06_shuttle_explosion_spark_velocity_scale_random_bound_a,
+                                 l06_shuttle_explosion_spark_velocity_scale_random_bound_b) *
+                frame_time);
         random_vector(direction, 0.0f, 0.9f);
         fast_vec_add(direction, direction, push);
-        fast_vec_scale(acceleration,
-                       direction,
-                       random_float_between(l06_shuttle_explosion_spark_acceleration_scale_random_bound_a, l06_shuttle_explosion_spark_acceleration_scale_random_bound_b) * frame_time);
-        velocity[3] = random_float_between(l06_shuttle_explosion_spark_velocity_w_random_bound_a, l06_shuttle_explosion_spark_velocity_w_random_bound_b) * scale;
-        acceleration[3] = random_float_between(l06_shuttle_explosion_spark_acceleration_w_random_bound_a, l06_shuttle_explosion_spark_acceleration_w_random_bound_b) * scale;
-        color1 = fast_tween_color(l06_shuttle_explosion_spark_first_color_blend_a, l06_shuttle_explosion_spark_first_color_blend_b, random_float_between(0.0f, 1.0f));
-        color2 = fast_tween_color(l06_shuttle_explosion_spark_second_color_blend_a, l06_shuttle_explosion_spark_second_color_blend_b, random_float_between(0.0f, 1.0f));
-        life = truncate_float_to_s32(
-            scale_time(random_float_between((float)l06_shuttle_explosion_spark_timing_random_min_frames, (float)(l06_shuttle_explosion_spark_timing_random_min_frames << 1))));
-        size = truncate_float_to_s32(
-            scale_time(random_float_between((float)l06_shuttle_explosion_spark_timing_base_a_frames, (float)l06_shuttle_explosion_spark_timing_base_a_frames * 1.2f)));
-        fade = truncate_float_to_s32(
-            scale_time(random_float_between((float)l06_shuttle_explosion_spark_timing_base_b_frames * 0.8f, (float)l06_shuttle_explosion_spark_timing_base_b_frames)));
+        fast_vec_scale(
+            acceleration,
+            direction,
+            random_float_between(l06_shuttle_explosion_spark_acceleration_scale_random_bound_a,
+                                 l06_shuttle_explosion_spark_acceleration_scale_random_bound_b) *
+                frame_time);
+        velocity[3] = random_float_between(l06_shuttle_explosion_spark_velocity_w_random_bound_a,
+                                           l06_shuttle_explosion_spark_velocity_w_random_bound_b) *
+                      scale;
+        acceleration[3] =
+            random_float_between(l06_shuttle_explosion_spark_acceleration_w_random_bound_a,
+                                 l06_shuttle_explosion_spark_acceleration_w_random_bound_b) *
+            scale;
+        color1 = fast_tween_color(l06_shuttle_explosion_spark_first_color_blend_a,
+                                  l06_shuttle_explosion_spark_first_color_blend_b,
+                                  random_float_between(0.0f, 1.0f));
+        color2 = fast_tween_color(l06_shuttle_explosion_spark_second_color_blend_a,
+                                  l06_shuttle_explosion_spark_second_color_blend_b,
+                                  random_float_between(0.0f, 1.0f));
+        life = truncate_float_to_s32(scale_time(random_float_between(
+            (float)l06_shuttle_explosion_spark_timing_random_min_frames,
+            (float)(l06_shuttle_explosion_spark_timing_random_min_frames << 1))));
+        size = truncate_float_to_s32(scale_time(
+            random_float_between((float)l06_shuttle_explosion_spark_timing_base_a_frames,
+                                 (float)l06_shuttle_explosion_spark_timing_base_a_frames * 1.2f)));
+        fade = truncate_float_to_s32(scale_time(
+            random_float_between((float)l06_shuttle_explosion_spark_timing_base_b_frames * 0.8f,
+                                 (float)l06_shuttle_explosion_spark_timing_base_b_frames)));
         spawn_spark(position,
                     velocity,
                     acceleration,
@@ -745,7 +783,8 @@ void spawn_shuttle_explosion_effect(float scale, char *moby, char *explosion_ori
                     life,
                     size,
                     fade,
-                    l06_shuttle_explosion_spark_table_index + (l06_shuttle_explosion_spark_alternate_mode_flag << 16));
+                    l06_shuttle_explosion_spark_table_index +
+                        (l06_shuttle_explosion_spark_alternate_mode_flag << 16));
     }
 }
 

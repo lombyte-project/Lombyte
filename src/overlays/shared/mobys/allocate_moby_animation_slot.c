@@ -197,7 +197,8 @@ void advance_moby_animation_blend(void *unused, unsigned char *animation_state) 
     float unscaled_frame_step = *(float *)(animation_state + 0x28);
     animation_state[5] = 0;
     if (unscaled_frame_step != 0.0f && *(float *)(animation_state + 0x2C) != 0.0f) {
-        float advanced_frame_progress = *(float *)(animation_state + 0x24) + unscaled_frame_step * *(float *)(animation_state + 0x2C);
+        float advanced_frame_progress = *(float *)(animation_state + 0x24) +
+                                        unscaled_frame_step * *(float *)(animation_state + 0x2C);
         *(float *)(animation_state + 0x24) = advanced_frame_progress;
         if (unscaled_frame_step > 0.0f) {
             if (advanced_frame_progress > 0.99f && advanced_frame_progress < 1.01f) {
@@ -217,28 +218,37 @@ void advance_moby_animation_blend(void *unused, unsigned char *animation_state) 
                     animation_state[0x21]++;
                     o = animation_state[0x23] * 4;
                     if (animation_state[0x21] >=
-                        *(unsigned char *)(*(int *)(*(unsigned char **)(animation_state + 0x14) + o + 0x48) +
+                        *(unsigned char *)(*(int *)(*(unsigned char **)(animation_state + 0x14) +
+                                                    o + 0x48) +
                                            0x10)) {
                         animation_state[0x21] = 0;
                         animation_state[5] |= 2;
                     }
                     {
-                        float unscaled_frame_remainder = (*(float *)(animation_state + 0x24) - 1.0f) / *(float *)(animation_state + 0x2C);
+                        float unscaled_frame_remainder =
+                            (*(float *)(animation_state + 0x24) - 1.0f) /
+                            *(float *)(animation_state + 0x2C);
                         float frame_progress_scale;
                         animation_table_byte_offset = animation_state[0x22] * 4;
                         p = animation_state[0x20] * 4;
                         *(float *)(animation_state + 0x24) = unscaled_frame_remainder;
-                        frame_progress_scale = **(float **)(*(int *)(*(unsigned char **)(animation_state + 0x14) + animation_table_byte_offset + 0x48) + p +
-                                         0x1C);
+                        frame_progress_scale =
+                            **(float **)(*(int *)(*(unsigned char **)(animation_state + 0x14) +
+                                                  animation_table_byte_offset + 0x48) +
+                                         p + 0x1C);
                         *(float *)(animation_state + 0x2C) = frame_progress_scale;
-                        *(float *)(animation_state + 0x24) = unscaled_frame_remainder * frame_progress_scale;
+                        *(float *)(animation_state + 0x24) =
+                            unscaled_frame_remainder * frame_progress_scale;
                     }
                 } while (*(float *)(animation_state + 0x24) >= 1.0f);
             }
         }
     }
     if (animation_state[6]) {
-        FUN_L00_0024f440(animation_state, animation_state[0x22], animation_state[0x20], *(int *)(animation_state + 0x38));
+        FUN_L00_0024f440(animation_state,
+                         animation_state[0x22],
+                         animation_state[0x20],
+                         *(int *)(animation_state + 0x38));
     } else {
         int o = animation_state[0x22] * 4;
         int p = animation_state[0x20] * 4;
@@ -246,7 +256,10 @@ void advance_moby_animation_blend(void *unused, unsigned char *animation_state) 
             *(int *)(*(int *)(*(unsigned char **)(animation_state + 0x14) + o + 0x48) + p + 0x1C);
     }
     if (animation_state[7]) {
-        FUN_L00_0024f440(animation_state, animation_state[0x23], animation_state[0x21], *(int *)(animation_state + 0x3C));
+        FUN_L00_0024f440(animation_state,
+                         animation_state[0x23],
+                         animation_state[0x21],
+                         *(int *)(animation_state + 0x3C));
     } else {
         int o = animation_state[0x23] * 4;
         int p = animation_state[0x21] * 4;

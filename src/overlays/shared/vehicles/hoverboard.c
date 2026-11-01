@@ -95,20 +95,38 @@ void hoverboard_update(unsigned char *moby) {
         effect_position[3] = (float)hoverboard_effect_displacement_w_gp;
         if ((unsigned char)MOBY(moby)->command == 0) {
             int size = random_int_between(scale_game_frames(10), scale_game_frames(13));
-            spawn_effect(
-                position, effect_position, l05_hoverboard_effect_initial_color, l05_hoverboard_effect_color_endpoint, size, 15, 15, 1);
+            spawn_effect(position,
+                         effect_position,
+                         l05_hoverboard_effect_initial_color,
+                         l05_hoverboard_effect_color_endpoint,
+                         size,
+                         15,
+                         15,
+                         1);
             MOBY(moby)->command = 0;
             return;
         }
         fast_vec_scale(second_position, delta, 0.920f);
         {
             int size = random_int_between(scale_game_frames(15), scale_game_frames(18));
-            spawn_effect(position, second_position, 0x5032f0d2, l05_hoverboard_effect_color_endpoint, size, 30, 20, 1);
+            spawn_effect(position,
+                         second_position,
+                         0x5032f0d2,
+                         l05_hoverboard_effect_color_endpoint,
+                         size,
+                         30,
+                         20,
+                         1);
         }
         {
             int size = random_int_between(scale_game_frames(8), scale_game_frames(17));
-            FUN_L00_0026cbb0(
-                position, effect_position, l05_hoverboard_effect_initial_color, l05_hoverboard_effect_color_endpoint, size, 1, 15000.0f);
+            FUN_L00_0026cbb0(position,
+                             effect_position,
+                             l05_hoverboard_effect_initial_color,
+                             l05_hoverboard_effect_color_endpoint,
+                             size,
+                             1,
+                             15000.0f);
         }
     }
     MOBY(moby)->command = 0;

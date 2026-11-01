@@ -61,7 +61,12 @@ s32 predict_doom_bot_spawner_landing(ThrowVars   *throw_vars,
                                      s32          mode) __asm__("FUN_L00_002c8440");
 
 s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode) {
-    enum { DOOM_LANDING_MODE_REQUIRE_LINKED_MOBY = 0 , THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1 , DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK = 2 } ;Vec4 simulated_position, simulated_velocity, position_scratch, q, landing_probe_position;
+    enum {
+        DOOM_LANDING_MODE_REQUIRE_LINKED_MOBY = 0,
+        THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1,
+        DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK = 2
+    };
+    Vec4 simulated_position, simulated_velocity, position_scratch, q, landing_probe_position;
     s32  prediction_timer;
     s32  found = 0;
     s32  i;
@@ -162,7 +167,8 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
         if (get_moby_pvars_link(coll_hit.moby) == 0)
             goto ret0;
     }
-    if (mode != DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK || coll_hit.moby == 0 || !get_moby_pvars_link(coll_hit.moby))
+    if (mode != DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK || coll_hit.moby == 0 ||
+        !get_moby_pvars_link(coll_hit.moby))
         add_draw_callback(FUN_L00_002c7df8_2c8440, thrown_moby);
     throw_vars->normal.q = coll_hit_normal.q;
     fast_vec_sub(&position_scratch, &throw_vars->landing, &g_debug_camera_lui);

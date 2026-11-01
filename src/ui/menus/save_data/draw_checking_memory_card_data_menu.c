@@ -44,7 +44,8 @@ s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) {
         if (memory_card_state.card[0].type != 2) {
             goto done;
         }
-        if (memory_card_state.state < MEMCARD_REQUEST_FORMAT && memory_card_state.pending_state < MEMCARD_QUERY_INFO) {
+        if (memory_card_state.state < MEMCARD_REQUEST_FORMAT &&
+            memory_card_state.pending_state < MEMCARD_QUERY_INFO) {
             goto done;
         }
         setup_gif_paging(0);

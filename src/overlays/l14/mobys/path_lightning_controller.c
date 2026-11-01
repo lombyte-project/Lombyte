@@ -56,7 +56,13 @@ void path_lightning_controller_update(struct Moby *moby) __asm__("FUN_L14_002ed2
 
 /* Moby class 684 */
 void path_lightning_controller_update(struct Moby *moby) {
-    enum { PATH_LIGHTNING_STATE_INITIALIZE = 0 , PATH_LIGHTNING_STATE_WAIT_SCENE_START = 1 , PATH_LIGHTNING_STATE_WAIT_TRACKED_MOBY_RESTORE = 2 , PATH_LIGHTNING_STATE_ACTIVE = 3 } ;char *moby_vars = (char *)moby->pvars;
+    enum {
+        PATH_LIGHTNING_STATE_INITIALIZE = 0,
+        PATH_LIGHTNING_STATE_WAIT_SCENE_START = 1,
+        PATH_LIGHTNING_STATE_WAIT_TRACKED_MOBY_RESTORE = 2,
+        PATH_LIGHTNING_STATE_ACTIVE = 3
+    };
+    char *moby_vars = (char *)moby->pvars;
     int   visible_path_point_indices[5];
     float visibility_test_point[4];
     int   moby_state;

@@ -104,7 +104,8 @@ extern float l10_darter_max_wander_height_offset __asm__("D_L10_00161E08") __att
 extern float l10_darter_bob_amplitude __asm__("D_L10_00161E0C") __attribute__((sda));
 extern float l10_darter_bob_period_seconds __asm__("D_L10_00161E10") __attribute__((sda));
 extern float l10_darter_max_height_offset __asm__("D_L10_00161E14") __attribute__((sda));
-extern float l10_darter_height_change_interval_seconds __asm__("D_L10_00161E18") __attribute__((sda));
+extern float l10_darter_height_change_interval_seconds __asm__("D_L10_00161E18")
+    __attribute__((sda));
 extern float D_L10_00161E1C __attribute__((sda));
 extern float D_L10_00161E20 __attribute__((sda));
 extern int   coll_sphere_mobys(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -191,8 +192,9 @@ void darter_update(Moby *moby) {
             moby->pos.z = l10_cuboids[darter_vars->f194].pos.z;
             add_vectors(&vector_and_collision_scratch[4], &moby->pos, vector_and_collision_scratch);
             darter_vars->height_offset = random_float_between(0.0f, l10_darter_max_height_offset);
-            darter_vars->height_timer = truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
-                                                       random_float_between(0.75f, 1.25f));
+            darter_vars->height_timer = truncate_float_to_s32(
+                scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
+                random_float_between(0.75f, 1.25f));
             if (moby->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             break;
@@ -228,8 +230,8 @@ void darter_update(Moby *moby) {
             D_0015ED70 * 25.132742f,
             frame_time * 50.265484f);
         if (fast_difference_between_rotations(
-                fast_arc_tan(darter_vars->goal.x - moby->pos.x, darter_vars->goal.y - moby->pos.y), moby->rot.z) <
-            0.78539819f) {
+                fast_arc_tan(darter_vars->goal.x - moby->pos.x, darter_vars->goal.y - moby->pos.y),
+                moby->rot.z) < 0.78539819f) {
             advance_accelerated_scalar(&travelled,
                                        dist,
                                        &speed,
@@ -248,7 +250,8 @@ void darter_update(Moby *moby) {
             vector_and_collision_scratch[0] = fast_cos(angle) * radius;
             vector_and_collision_scratch[1] = fast_sin(angle) * radius;
             vector_and_collision_scratch[2] = zero;
-            vector_and_collision_scratch[2] = random_float_between(l10_darter_min_wander_height_offset, l10_darter_max_wander_height_offset);
+            vector_and_collision_scratch[2] = random_float_between(
+                l10_darter_min_wander_height_offset, l10_darter_max_wander_height_offset);
             fast_vec_add(&darter_vars->goal, vector_and_collision_scratch, &darter_vars->home);
         } else if (dist < 0.1f) {
             moby->state = DARTER_STATE_WAIT_BETWEEN_WANDER_GOALS;
@@ -287,7 +290,8 @@ void darter_update(Moby *moby) {
             vector_and_collision_scratch[0] = fast_cos(angle) * radius;
             vector_and_collision_scratch[1] = fast_sin(angle) * radius;
             vector_and_collision_scratch[2] = 0.0f;
-            vector_and_collision_scratch[2] = random_float_between(l10_darter_min_wander_height_offset, l10_darter_max_wander_height_offset);
+            vector_and_collision_scratch[2] = random_float_between(
+                l10_darter_min_wander_height_offset, l10_darter_max_wander_height_offset);
             fast_vec_add(&darter_vars->goal, vector_and_collision_scratch, &darter_vars->home);
             moby->state = DARTER_STATE_WANDER;
         }
@@ -323,7 +327,9 @@ void darter_update(Moby *moby) {
         ground_height = probe_ground_height(&moby->pos, 0, 0.5f);
         qcopy(vector_and_collision_scratch, &target->pos);
         if (vector_and_collision_scratch[2] < moby->pos.z) {
-            vector_and_collision_scratch[2] = vector_and_collision_scratch[2] - (moby->pos.z - vector_and_collision_scratch[2]) * 4.0f;
+            vector_and_collision_scratch[2] =
+                vector_and_collision_scratch[2] -
+                (moby->pos.z - vector_and_collision_scratch[2]) * 4.0f;
         } else {
             vector_and_collision_scratch[2] = moby->pos.z;
         }
@@ -335,10 +341,11 @@ void darter_update(Moby *moby) {
         darter_vars->velocity.x = fast_cos(moby->rot.z) * vector_length_xy(&darter_vars->velocity);
         darter_vars->velocity.y = fast_sin(moby->rot.z) * vector_length_xy(&darter_vars->velocity);
         func_L00_00259B08_2E0630(moby, &darter_vars->velocity, 0.5f, 0x200, 0.0f, 0);
-        func_L00_0025CC58_2E0630(&moby->rot.y,
-                                 0,
-                                 -fast_arc_tan(vector_length_xy(&darter_vars->velocity), darter_vars->velocity.z),
-                                 frame_time * 6.2831855f);
+        func_L00_0025CC58_2E0630(
+            &moby->rot.y,
+            0,
+            -fast_arc_tan(vector_length_xy(&darter_vars->velocity), darter_vars->velocity.z),
+            frame_time * 6.2831855f);
         if (vector_distance_xy(&moby->pos, &target->pos) < l10_darter_attack_distance) {
             if (absolute_float(moby->pos.z - ((Hero_2e01a8 *)((char *)&hero))->motion.pos.f[2]) <
                 2.0f) {
@@ -364,11 +371,11 @@ void darter_update(Moby *moby) {
                    0.02f,
                    0.3f,
                    frame_time * 6.2831855f);
-        func_L00_0025CC58_2E0630(
-            &moby->rot.y,
-            0,
-            -fast_arc_tan(vector_distance_xy(&moby->pos, &darter_vars->vE0), darter_vars->vE0.z - moby->pos.z),
-            frame_time * 12.566371f);
+        func_L00_0025CC58_2E0630(&moby->rot.y,
+                                 0,
+                                 -fast_arc_tan(vector_distance_xy(&moby->pos, &darter_vars->vE0),
+                                               darter_vars->vE0.z - moby->pos.z),
+                                 frame_time * 12.566371f);
         if (is_value_within_interpolated_window((char *)moby, 20.0f)) {
             float one = 1.0f;
             *(int *)&vector_and_collision_scratch[13] = 1;
@@ -383,8 +390,13 @@ void darter_update(Moby *moby) {
             *(short *)((char *)vector_and_collision_scratch + 0x3A) = moby->oclass;
             ((unsigned char *)vector_and_collision_scratch)[0x38] = 0;
             FUN_L00_0024f7c8(moby, 0, vector_and_collision_scratch);
-            coll_sphere_mobys(0.4f, vector_and_collision_scratch, 0, moby, &vector_and_collision_scratch[8]);
-            collision_line(&moby->pos, vector_and_collision_scratch, 9, moby, &vector_and_collision_scratch[8]);
+            coll_sphere_mobys(
+                0.4f, vector_and_collision_scratch, 0, moby, &vector_and_collision_scratch[8]);
+            collision_line(&moby->pos,
+                           vector_and_collision_scratch,
+                           9,
+                           moby,
+                           &vector_and_collision_scratch[8]);
         }
         if (darter_vars->f104 != 2 && (moby->anim_flags & 2) == 0)
             break;
@@ -396,12 +408,13 @@ void darter_update(Moby *moby) {
         float zero = 0.0f;
         float climb;
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, frame_time * 12.566371f);
-        approach_w(moby,
-                   fast_arc_tan(darter_vars->home.x - moby->pos.x, darter_vars->home.y - moby->pos.y),
-                   &darter_vars->turn_speed,
-                   0.02f,
-                   0.3f,
-                   frame_time * 6.2831855f);
+        approach_w(
+            moby,
+            fast_arc_tan(darter_vars->home.x - moby->pos.x, darter_vars->home.y - moby->pos.y),
+            &darter_vars->turn_speed,
+            0.02f,
+            0.3f,
+            frame_time * 6.2831855f);
         darter_vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 6.0f);
         darter_vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 6.0f);
         darter_vars->velocity.z = zero;
@@ -420,19 +433,21 @@ void darter_update(Moby *moby) {
     case DARTER_STATE_CUBOID_PATROL: {
         float dist = fast_vec_dist(&moby->pos, &target->pos);
         float climb;
-        approach_w(moby,
-                   fast_arc_tan(darter_vars->home.x - moby->pos.x, darter_vars->home.y - moby->pos.y),
-                   &darter_vars->turn_speed,
-                   0.02f,
-                   0.3f,
-                   frame_time * 0.78539819f);
+        approach_w(
+            moby,
+            fast_arc_tan(darter_vars->home.x - moby->pos.x, darter_vars->home.y - moby->pos.y),
+            &darter_vars->turn_speed,
+            0.02f,
+            0.3f,
+            frame_time * 0.78539819f);
         darter_vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 4.0f);
         darter_vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 4.0f);
         darter_vars->velocity.z = 0.0f;
         if (fast_dec_timer(&darter_vars->height_timer)) {
             darter_vars->height_offset = random_float_between(0.0f, l10_darter_max_height_offset);
-            darter_vars->height_timer = truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
-                                                       random_float_between(0.75f, 1.25f));
+            darter_vars->height_timer = truncate_float_to_s32(
+                scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
+                random_float_between(0.75f, 1.25f));
         }
         climb = l10_cuboids[darter_vars->f194].pos.z - moby->pos.z - darter_vars->height_offset;
         if (frame_time + frame_time < climb) {
@@ -489,8 +504,9 @@ void darter_update(Moby *moby) {
             break;
         moby->state = DARTER_STATE_CUBOID_PATROL;
         darter_vars->height_offset = random_float_between(0.0f, l10_darter_max_height_offset);
-        darter_vars->height_timer = truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
-                                                   random_float_between(0.75f, 1.25f));
+        darter_vars->height_timer =
+            truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
+                                  random_float_between(0.75f, 1.25f));
         break;
     }
     case DARTER_STATE_CUBOID_CHARGE_ATTACK: {
@@ -524,7 +540,8 @@ void darter_update(Moby *moby) {
         vector_and_collision_scratch[11] = one;
         clear_u64_value(&vector_and_collision_scratch[4]);
         FUN_L00_0024f7c8(moby, 0, vector_and_collision_scratch);
-        coll_sphere_mobys(0.2f, vector_and_collision_scratch, 0, moby, &vector_and_collision_scratch[4]);
+        coll_sphere_mobys(
+            0.2f, vector_and_collision_scratch, 0, moby, &vector_and_collision_scratch[4]);
         if (fast_vec_dist(&moby->pos, &target->pos) < one ||
             *(int *)(((char *)&hero) + 0x208C) == 7 || (moby->anim_flags & 2)) {
             moby->state = DARTER_STATE_CUBOID_RETURN_HOME;
@@ -536,18 +553,20 @@ void darter_update(Moby *moby) {
             break;
         moby->state = DARTER_STATE_CUBOID_PATROL;
         darter_vars->height_offset = random_float_between(zero, l10_darter_max_height_offset);
-        darter_vars->height_timer = truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
-                                                   random_float_between(0.75f, 1.25f));
+        darter_vars->height_timer =
+            truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
+                                  random_float_between(0.75f, 1.25f));
         break;
     }
     case DARTER_STATE_CUBOID_RETURN_HOME: {
         float climb;
-        approach_w(moby,
-                   fast_arc_tan(darter_vars->home.x - moby->pos.x, darter_vars->home.y - moby->pos.y),
-                   &darter_vars->turn_speed,
-                   0.02f,
-                   0.3f,
-                   frame_time * 1.0471976f);
+        approach_w(
+            moby,
+            fast_arc_tan(darter_vars->home.x - moby->pos.x, darter_vars->home.y - moby->pos.y),
+            &darter_vars->turn_speed,
+            0.02f,
+            0.3f,
+            frame_time * 1.0471976f);
         darter_vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 4.0f);
         darter_vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 4.0f);
         darter_vars->velocity.z = 0.0f;
@@ -563,8 +582,9 @@ void darter_update(Moby *moby) {
             moby->state = DARTER_STATE_CUBOID_PATROL;
             moby->command = scale_game_frames(0x78);
             darter_vars->height_offset = random_float_between(0.0f, l10_darter_max_height_offset);
-            darter_vars->height_timer = truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
-                                                       random_float_between(0.75f, 1.25f));
+            darter_vars->height_timer = truncate_float_to_s32(
+                scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
+                random_float_between(0.75f, 1.25f));
         }
         break;
     }
@@ -579,7 +599,8 @@ void darter_update(Moby *moby) {
     if (moby->state != DARTER_STATE_INITIALIZE && moby->state != DARTER_STATE_DYING) {
         darter_vars->bob_angle = fast_add_rotations(
             darter_vars->bob_angle,
-            360.0f / (float)truncate_float_to_s32(scale_time(l10_darter_bob_period_seconds * 60.0f)) *
+            360.0f /
+                (float)truncate_float_to_s32(scale_time(l10_darter_bob_period_seconds * 60.0f)) *
                 0.017453292f);
         moby->pos.z = moby->pos.z + l10_darter_bob_amplitude * fast_cos(darter_vars->bob_angle);
     }

@@ -8,7 +8,12 @@ void tracked_group_watcher_update(struct Moby *moby) __asm__("FUN_L13_0030be60")
 
 /* Moby class 1577 */
 void tracked_group_watcher_update(struct Moby *moby) {
-    enum { TRACKED_GROUP_WATCHER_STATE_INITIALIZE_TRACKING = 0 , TRACKED_GROUP_WATCHER_STATE_MONITOR_TRACKED_MOBYS = 1 , TRACKED_GROUP_WATCHER_STATE_ZERO_THRESHOLD_IDLE = 2 } ;int *moby_vars = (int *)moby->pvars;
+    enum {
+        TRACKED_GROUP_WATCHER_STATE_INITIALIZE_TRACKING = 0,
+        TRACKED_GROUP_WATCHER_STATE_MONITOR_TRACKED_MOBYS = 1,
+        TRACKED_GROUP_WATCHER_STATE_ZERO_THRESHOLD_IDLE = 2
+    };
+    int *moby_vars = (int *)moby->pvars;
     if (moby->state == TRACKED_GROUP_WATCHER_STATE_INITIALIZE_TRACKING) {
         int  *ids = moby_vars + 4;
         int  *cls = moby_vars + 12;

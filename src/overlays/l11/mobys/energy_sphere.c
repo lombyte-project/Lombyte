@@ -229,13 +229,13 @@ void spawn_moby_radial_spark(struct Moby *source_moby) {
 extern float          D_L11_001677C0_lui[] __asm__("D_L11_001677C0") NOT_SDA;
 extern int            FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
 extern unsigned char *spawn_timed_hero_relative_particle(float         f,
-                                         void         *pos,
-                                         int           a1,
-                                         unsigned char a2,
-                                         int           idx,
-                                         int           flag,
-                                         int           s,
-                                         int           mode) __asm__("FUN_L00_00272f68");
+                                                         void         *pos,
+                                                         int           a1,
+                                                         unsigned char a2,
+                                                         int           idx,
+                                                         int           flag,
+                                                         int           s,
+                                                         int mode) __asm__("FUN_L00_00272f68");
 
 extern short energy_sphere_particle_color_end_gp __asm__("D_L11_00162384") __attribute__((sda));
 extern short energy_sphere_particle_color_start_gp __asm__("D_L11_00162380") __attribute__((sda));
@@ -261,14 +261,15 @@ void spawn_energy_sphere_particles(struct Moby *moby) {
         effect_byte_cursor[0] += effect_byte_cursor[4];
         updated_effect_byte = truncate_float_to_s32((float)effect_byte_cursor[0]);
         spawn_timed_hero_relative_particle(*(float *)(energy_sphere_vars + 0x1C) *
-                               convert_integer_to_float(effect_byte_cursor[8]) * 0.025f,
-                           effect_position,
-                           a,
-                           updated_effect_byte,
-                           0x35,
-                           1,
-                           2,
-                           0);
+                                               convert_integer_to_float(effect_byte_cursor[8]) *
+                                               0.025f,
+                                           effect_position,
+                                           a,
+                                           updated_effect_byte,
+                                           0x35,
+                                           1,
+                                           2,
+                                           0);
         effect_byte_cursor++;
         fast_vec_add(effect_position, effect_position, position_step);
     }

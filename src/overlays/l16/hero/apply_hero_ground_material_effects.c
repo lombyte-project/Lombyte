@@ -300,7 +300,8 @@ void update_hero_ground_contact(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+            if (hero.ground_slope.f <= 0.87266463f ||
+                hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;
@@ -587,7 +588,8 @@ void integrate_hero_motion(void) {
     player = (L16MovementPlayer *)((char *)position - 0x80);
     update_hero_attachment(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
     /* Limit the velocity by state and mode. Inside an arm `position` moves on to the velocity; it is formed again below. */
-    if (player->state == HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY || player->state == HERO_STATE_WRENCH_SLAM) {
+    if (player->state == HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY ||
+        player->state == HERO_STATE_WRENCH_SLAM) {
         float  limit;
         float *limited_velocity;
 

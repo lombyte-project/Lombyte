@@ -184,7 +184,8 @@ void help_hints_update(struct Moby *moby) {
             ((Items *)alternate_item_available)->f6F = 1;
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol1C) != 0 &&
-            hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && ((Items *)alternate_item_available)->f6F == 0 &&
+            hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
+            ((Items *)alternate_item_available)->f6F == 0 &&
             ((Help *)quartu_help_message_state)->busy == 0 &&
             ((Help *)quartu_help_message_state)->cur == -1 && *(int *)(item_usage + 0x6EC) >= 0) {
             help_request(0x3A9C, 0x80);

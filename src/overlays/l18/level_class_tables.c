@@ -19,7 +19,9 @@
 #include "rnc/overlay/shared/vehicles.h"
 #include "rnc/overlay/shared/vendor.h"
 #include "rnc/overlay/shared/weapons.h"
-s32            get_morphoray_chicken_slot_record(s32) __asm__("FUN_L00_002caf40");
+
+s32 get_morphoray_chicken_slot_record(s32) __asm__("FUN_L00_002caf40");
+
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 #include "rnc/overlay/shared/weapons/devastator.h"
 #include "rnc/overlay/shared/weapons/mine.h"

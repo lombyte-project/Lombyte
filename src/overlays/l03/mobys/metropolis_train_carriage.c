@@ -33,7 +33,10 @@ typedef struct MetropolisTrainCarriageVars {
 
 /* Moby class 1210 */
 void metropolis_train_carriage_update(struct Moby *moby) {
-    enum { METROPOLIS_TRAIN_CARRIAGE_STATE_INITIALIZE = 0 } ;float                        position_delta[4];
+    enum {
+        METROPOLIS_TRAIN_CARRIAGE_STATE_INITIALIZE = 0
+    };
+    float                        position_delta[4];
     float                        joint_zero_world_position[4];
     MetropolisTrainCarriageVars *carriage_pvars;
     char                        *current_position;

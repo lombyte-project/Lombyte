@@ -347,7 +347,12 @@ s32 predict_thrown_moby_landing(ThrowVars   *throw_vars,
                                 s32          mode) __asm__("FUN_L00_002c3af8");
 
 s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode) {
-    enum { LANDING_REQUIRE_MOBY_PVARS_LINK = 0 , DECOY_HELD = 1 , LANDING_SKIP_LINKED_MOBY_DRAW = 2 } ;Vec4 predicted_position, predicted_velocity, position_scratch, q, ground_probe_position;
+    enum {
+        LANDING_REQUIRE_MOBY_PVARS_LINK = 0,
+        DECOY_HELD = 1,
+        LANDING_SKIP_LINKED_MOBY_DRAW = 2
+    };
+    Vec4 predicted_position, predicted_velocity, position_scratch, q, ground_probe_position;
     s32  prediction_countdown;
     s32  found = 0;
     s32  i;
@@ -444,7 +449,8 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
         if (FUN_L00_002603d0(coll_hit.moby) == 0)
             goto ret0;
     }
-    if (mode != LANDING_SKIP_LINKED_MOBY_DRAW || coll_hit.moby == 0 || !FUN_L00_002603d0(coll_hit.moby))
+    if (mode != LANDING_SKIP_LINKED_MOBY_DRAW || coll_hit.moby == 0 ||
+        !FUN_L00_002603d0(coll_hit.moby))
         add_draw_callback(draw_moby_oscillating_textured_quads, thrown_moby);
     throw_vars->normal.q = coll_hit_normal.q;
     fast_vec_sub(&position_scratch, &throw_vars->landing, &D_L00_00166DC0);

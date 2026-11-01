@@ -324,7 +324,8 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     if (moby->state == GADGEBOT_INITIALIZE || moby->state == GADGEBOT_IDLE) {
         return;
     }
-    if (moby->state != GADGEBOT_SUCK_CANNON_SUCTION && game_frame != gadgebot_joint_glows_last_queued_frame_gp) {
+    if (moby->state != GADGEBOT_SUCK_CANNON_SUCTION &&
+        game_frame != gadgebot_joint_glows_last_queued_frame_gp) {
         gadgebot_joint_glows_last_queued_frame_gp = game_frame;
         add_draw_callback(draw_group_gadgebot_joint_glows, moby);
     }

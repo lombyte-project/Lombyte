@@ -15,7 +15,10 @@ extern int step_camera_blend(void *, struct CameraBlend *) __asm__("func_001ECAF
 void update_camera_blend(char *to_cam) __asm__("FUN_001ed2b0");
 
 void update_camera_blend(char *to_cam) {
-    enum { CAMERA_TRANSITION_PHASE_IDLE = 0 } ;struct CameraTransition *transition = &cam_trans_state;
+    enum {
+        CAMERA_TRANSITION_PHASE_IDLE = 0
+    };
+    struct CameraTransition *transition = &cam_trans_state;
     int                      transition_complete;
 
     if (transition->kind == 0) {

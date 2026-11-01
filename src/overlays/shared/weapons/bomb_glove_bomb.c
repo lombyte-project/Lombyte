@@ -1069,7 +1069,8 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
         if (!FUN_L00_002603d0_2ad410(coll_hit.moby))
             goto return_zero;
     }
-    if (mode != THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER || !coll_hit.moby || !FUN_L00_002603d0_2ad410(coll_hit.moby))
+    if (mode != THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER || !coll_hit.moby ||
+        !FUN_L00_002603d0_2ad410(coll_hit.moby))
         add_draw_callback(draw_bomb_landing_marker, thrown_moby);
     if (!object_hit && v->last_hit) {
         if (v->last_hit->state == 0xfe) {
@@ -1173,8 +1174,8 @@ void bomb_update(BombMoby *bomb_moby) {
                     v2.f[3] =
                         random_float_between(*(float *)&D_L00_00161414, *(float *)&D_L00_00161418);
                     spark_primary_color = fast_tween_color(*(int *)&bomb_spark_primary_color_start,
-                                          *(int *)&bomb_spark_primary_color_end,
-                                          random_float_between(0.0f, 1.0f));
+                                                           *(int *)&bomb_spark_primary_color_end,
+                                                           random_float_between(0.0f, 1.0f));
                     spark_secondary_color =
                         fast_tween_color(*(int *)&bomb_spark_secondary_color_start,
                                          *(int *)&bomb_spark_secondary_color_end,
@@ -1416,14 +1417,16 @@ void bomb_update(BombMoby *bomb_moby) {
                     for (i = 0; i < blast_effect_count; i++) {
                         float spd = s * random_float_between(8.0f, 10.0f) * frame_time_macro -
                                     g * frame_time_macro;
-                        Colors6 blast_effect_primary_palette = l00_bomb_blast_effect_primary_palette;
+                        Colors6 blast_effect_primary_palette =
+                            l00_bomb_blast_effect_primary_palette;
                         Colors6 blast_effect_secondary_palette =
                             l00_bomb_blast_effect_secondary_palette;
                         FUN_L00_0026a9f0_2adb30(
                             &bomb_moby->pos,
                             &blast_velocity,
-                            swap_packed_color_channels(blast_effect_primary_palette.c[random_integer_below(6)],
-                                                       (unsigned char)item_text_variant[0xA]),
+                            swap_packed_color_channels(
+                                blast_effect_primary_palette.c[random_integer_below(6)],
+                                (unsigned char)item_text_variant[0xA]),
                             swap_packed_color_channels(
                                 blast_effect_secondary_palette.c[random_integer_below(6)],
                                 (unsigned char)item_text_variant[0xA]),

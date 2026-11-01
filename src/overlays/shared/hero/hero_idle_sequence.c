@@ -93,7 +93,8 @@ int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 int hero_idle_sequence(int allow_item_idle_sequence) {
     struct Hero *vehicle_mode_owner = &hero;
     int          vehicle_mode = vehicle_mode_owner->vehicle_mode;
-    if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK || (vehicle_mode < 3 ? vehicle_mode == HERO_VEHICLE_MODE_CLANK : vehicle_mode == 3)) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK ||
+        (vehicle_mode < 3 ? vehicle_mode == HERO_VEHICLE_MODE_CLANK : vehicle_mode == 3)) {
         return 0;
     }
     {
@@ -1556,7 +1557,8 @@ void apply_hero_and_item_scale_sequence(void) {
                     if (j == 1)
                         item_moby = *(unsigned char **)&hero_state->items[i].moby2;
                     item_scale = sequence_scale;
-                    if (i == 0 && hero_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT && 1.0f < sequence_scale)
+                    if (i == 0 && hero_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT &&
+                        1.0f < sequence_scale)
                         item_scale = 1.0f;
                     if (item_moby) {
                         fast_vec_scale(item_moby + 0xC0, item_moby + 0xC0, item_scale);
@@ -1711,7 +1713,10 @@ extern G_00208038 D_0013F350_00208038 __asm__("D_0013F350");
 void              enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 
 /* Appends v, b, x and y to the list in ((char *)&hero) and calls FUN_L00_00207d00. */
-void enqueue_hero_glow_quad(u128 *glow_position, int b, float x, float y) __asm__("FUN_L00_00208038");
+void enqueue_hero_glow_quad(u128 *glow_position,
+                            int   b,
+                            float x,
+                            float y) __asm__("FUN_L00_00208038");
 
 void enqueue_hero_glow_quad(u128 *glow_position, int b, float x, float y) {
     G_00208038 *hero_glow_queue_owner = &D_0013F350_00208038;

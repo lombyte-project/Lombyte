@@ -114,7 +114,10 @@ void ultramech_scientist_update(struct Moby *moby) {
         ULTRAMECH_SCIENTIST_WAIT_FOR_FIRST_SCENE = 6,
         ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE = 7,
         ULTRAMECH_SCIENTIST_SAVE_AND_DISABLE = 8
-    } ; enum { ULTRAMECH_SCIENTIST_DISABLED = 9};
+    };
+    enum {
+        ULTRAMECH_SCIENTIST_DISABLED = 9
+    };
     UltramechScientistVars *ultramech_scientist_private_data;
     char                   *hero_pos;
     struct Moby            *moby_list_cursor;

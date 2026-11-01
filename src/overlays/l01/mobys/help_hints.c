@@ -38,7 +38,10 @@ void help_hints_update(struct Moby *moby) {
     enum {
         TUTORIAL_HINT_STATE_INITIALIZE = 0,
         TUTORIAL_HINT_STATE_UPDATE = 1
-    } ; enum { HELP_STATE_INACTIVE = 0};
+    };
+    enum {
+        HELP_STATE_INACTIVE = 0
+    };
     s32         *tutorial_hint_vars;
     struct Moby *hint_candidate_moby;
     struct Moby *health_hint_candidate_moby;
@@ -72,8 +75,9 @@ void help_hints_update(struct Moby *moby) {
             }
         }
         if (cutscene_mode_macro == 0) {
-            if (level_available[3] != 0 && level_available[2] == 0 && help_state.state == HELP_STATE_INACTIVE &&
-                help_state.cur == -1 && help_records[4].count == 0) {
+            if (level_available[3] != 0 && level_available[2] == 0 &&
+                help_state.state == HELP_STATE_INACTIVE && help_state.cur == -1 &&
+                help_records[4].count == 0) {
                 help_request(0x3E8, 4);
             } else if (level_available[3] == 0 && level_available[2] != 0 &&
                        help_state.state == HELP_STATE_INACTIVE && help_state.cur == -1 &&
@@ -104,9 +108,9 @@ void help_hints_update(struct Moby *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
-            hero.state.current == 1 && D_L01_0015F688 == -1 && help_state.state == HELP_STATE_INACTIVE &&
-            help_state.cur == -1 && help_records[0x40].count != 0 &&
-            help_records[0x41].count == 0) {
+            hero.state.current == 1 && D_L01_0015F688 == -1 &&
+            help_state.state == HELP_STATE_INACTIVE && help_state.cur == -1 &&
+            help_records[0x40].count != 0 && help_records[0x41].count == 0) {
             help_request(0x3ED, 0x41);
         }
         if (help_records[0x42].count < 2 &&
@@ -167,8 +171,9 @@ void help_hints_update(struct Moby *moby) {
              health_hint_candidate_moby = health_hint_candidate_moby->next) {
             if (health_hint_candidate_moby->oclass == 0x326 &&
                 fast_vec_dist(&health_hint_candidate_moby->pos, &hero.motion.pos) < 10.0f &&
-                help_state.state == HELP_STATE_INACTIVE && help_state.cur == -1 && help_records[1].count == 0 &&
-                help_records[2].count == 0 && usage_stats.stat[13].count == 0 &&
+                help_state.state == HELP_STATE_INACTIVE && help_state.cur == -1 &&
+                help_records[1].count == 0 && help_records[2].count == 0 &&
+                usage_stats.stat[13].count == 0 &&
                 is_moby_in_state_one(health_hint_candidate_moby) == 0) {
                 if (hero.health.hp < hero_max_health) {
                     if (usage_stats.stat[13].count < 0xFFFF) {

@@ -486,7 +486,12 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE = 10,
         COLOR_EFFECT_ONLY_HIT_RESPONSE = 12,
         NO_REACTION_HIT_RESPONSE = 13
-    } ; enum { HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1 , BLARG_SHIP_STATE_HIT_REACTION = 7 , BLARG_SHIP_STATE_EXPLODE = 8};
+    };
+    enum {
+        HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1,
+        BLARG_SHIP_STATE_HIT_REACTION = 7,
+        BLARG_SHIP_STATE_EXPLODE = 8
+    };
     BlargShipVars *pvars = (BlargShipVars *)moby->pvars;
     char          *ship_hit_record = find_moby_hit(moby, 0x370000, 0);
     int            ship_hit_processing_status;
@@ -495,7 +500,8 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     dmg = 0.0f;
     hit_response_code = resolve_moby_hit_response(
         moby, ship_hit_record, &pvars->unk20, 5, &ship_hit_processing_status, &dmg, 0, 4);
-    if (ship_hit_record != 0 && ship_hit_processing_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION && moby->state != BLARG_SHIP_STATE_EXPLODE) {
+    if (ship_hit_record != 0 && ship_hit_processing_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION &&
+        moby->state != BLARG_SHIP_STATE_EXPLODE) {
         if ((pvars->unk20 -= dmg) <= 0.0f) {
             hit_response_code = 1;
         }

@@ -681,7 +681,11 @@ void start_blarg_elite_commando_return_to_initial_position(
 void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
 
                                                            int return_countdown_ticks) {
-    enum { COMMANDO_STATE_RETURN_TO_INITIAL_POSITION = 1 , COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10 } ;L16DamageData *commando_data = (L16DamageData *)moby->pvars;
+    enum {
+        COMMANDO_STATE_RETURN_TO_INITIAL_POSITION = 1,
+        COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
+    };
+    L16DamageData *commando_data = (L16DamageData *)moby->pvars;
     if (moby->state == COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM) {
         moby->state = COMMANDO_STATE_RETURN_TO_INITIAL_POSITION;
         if (moby->prev_seq != 1) {
@@ -919,7 +923,8 @@ void emit_blarg_elite_commando_joint_sparks(char *commando_moby) {
     };
     float matrix[16], velocity[4], acceleration[4], scatter[4];
     int   i;
-    if (MOBY(commando_moby)->visible == 0 || MOBY(commando_moby)->state == COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM)
+    if (MOBY(commando_moby)->visible == 0 ||
+        MOBY(commando_moby)->state == COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM)
         return;
     for (i = 0; i < 2; i++) {
         float speed, z;

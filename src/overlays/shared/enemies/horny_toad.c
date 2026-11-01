@@ -136,13 +136,16 @@ extern float horny_toad_target_animation_start_index_gp __asm__("D_L00_00161984"
     __attribute__((sda));
 extern short D_L00_00161960 __attribute__((sda));
 
-extern s32            D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
-extern f32            l00_horny_toad_knockback_gravity __asm__("D_L00_00161970") __attribute__((sda));
-extern f32            l00_horny_toad_knockback_horizontal_deceleration __asm__("D_L00_00161974") __attribute__((sda));
-extern f32            l00_horny_toad_knockback_horizontal_speed __asm__("D_L00_00161978") __attribute__((sda));
-extern f32            l00_horny_toad_knockback_vertical_speed __asm__("D_L00_0016197C") __attribute__((sda));
-extern f32            l00_horny_toad_knockback_landing_animation_frame __asm__("D_L00_00161988") __attribute__((sda));
-extern f32            l00_horny_toad_knockback_apex_animation_frame __asm__("D_L00_0016198C") __attribute__((sda));
+extern s32 D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
+extern f32 l00_horny_toad_knockback_gravity __asm__("D_L00_00161970") __attribute__((sda));
+extern f32 l00_horny_toad_knockback_horizontal_deceleration __asm__("D_L00_00161974")
+    __attribute__((sda));
+extern f32 l00_horny_toad_knockback_horizontal_speed __asm__("D_L00_00161978") __attribute__((sda));
+extern f32 l00_horny_toad_knockback_vertical_speed __asm__("D_L00_0016197C") __attribute__((sda));
+extern f32 l00_horny_toad_knockback_landing_animation_frame __asm__("D_L00_00161988")
+    __attribute__((sda));
+extern f32 l00_horny_toad_knockback_apex_animation_frame __asm__("D_L00_0016198C")
+    __attribute__((sda));
 extern unsigned char *D_L00_001B04B0_2d5160[] __asm__("D_L00_001B04B0");
 extern void
 hit_reaction(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
@@ -259,7 +262,8 @@ void horny_toad_update(Moby *moby) {
         break;
     case HORNY_TOAD_FACE_FOLLOW_MOBY: {
         Moby *followed_moby = (Moby *)(moby_table + (horny_toad_vars->follow_moby << 8));
-        if (followed_moby != 0 && followed_moby->state != MOBY_STATE_MARKED_FOR_REMOVAL && followed_moby->state != 0xFD) {
+        if (followed_moby != 0 && followed_moby->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
+            followed_moby->state != 0xFD) {
             approach_angle(
                 &moby->rot.z,
                 fast_arc_tan((*(ToadVec *)&followed_moby->pos)[0] - (*(ToadVec *)&moby->pos)[0],
@@ -439,7 +443,8 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     }
-    if (moby->state != HORNY_TOAD_RECOVER_FROM_REACTION && moby->state != HORNY_TOAD_DYING && moby->state != HORNY_TOAD_RUN_MOVEMENT_SEQUENCE) {
+    if (moby->state != HORNY_TOAD_RECOVER_FROM_REACTION && moby->state != HORNY_TOAD_DYING &&
+        moby->state != HORNY_TOAD_RUN_MOVEMENT_SEQUENCE) {
         approach_value(probe_ground_height((*(ToadVec *)&moby->pos), 0, 0.5f),
                        frame_time * 7.0f,
                        &(*(ToadVec *)&moby->pos)[2]);
@@ -463,7 +468,10 @@ void horny_toad_update(Moby *moby) {
 void process_horny_toad_hit_reaction(unsigned char *m) __asm__("FUN_L00_002d5160");
 
 void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
-    enum { HIT_RESPONSE_NO_HIT = 1 } ;unsigned char *toad_vars = *(unsigned char **)(toad_moby + 0x78);
+    enum {
+        HIT_RESPONSE_NO_HIT = 1
+    };
+    unsigned char *toad_vars = *(unsigned char **)(toad_moby + 0x78);
     unsigned char *hit;
     s32            hit_response_status;
     f32            damage;
@@ -487,7 +495,8 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
     damage = 0.0f;
     hit = find_moby_hit(toad_moby, 0x330000, 0);
     hit_reaction(toad_moby, hit, toad_vars + 0x20, 0, &hit_response_status, &damage, 0, 4);
-    if (hit_response_status != HIT_RESPONSE_NO_HIT && MOBY(toad_moby)->state != 12 && damage != 0.0f) {
+    if (hit_response_status != HIT_RESPONSE_NO_HIT && MOBY(toad_moby)->state != 12 &&
+        damage != 0.0f) {
         /* Fakematch: register pins give retail's choices: 41 in $t0, the frame time and
            later 0.75 in $f4, the squared frame time first in $f0. */
         register s32 hit_state __asm__("$8") = 0x29;
@@ -626,7 +635,10 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int process_suck_cannon_suction_and_update_moby_state(char *a) __asm__("FUN_L00_002d56e0");
 
 int process_suck_cannon_suction_and_update_moby_state(char *moby) {
-    enum { MOBY_STATE_SUCK_CANNON_ACTIVE = 0x9 } ;int suction_result = process_moby_suck_cannon_suction(moby);
+    enum {
+        MOBY_STATE_SUCK_CANNON_ACTIVE = 0x9
+    };
+    int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
         if (MOBY(moby)->state == MOBY_STATE_SUCK_CANNON_ACTIVE)
             MOBY(moby)->state = 0x5;

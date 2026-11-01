@@ -115,7 +115,8 @@ void umbris_scene_progression_update(struct Moby *moby) {
         } else {
             moby->state = CONTROLLER_CLEAR_LINKED_MOBY_FLAGS;
         }
-        if (moby->state != CONTROLLER_WAIT_FOR_OPEN_VOLUME && scene_controller_vars->removed_moby != -1) {
+        if (moby->state != CONTROLLER_WAIT_FOR_OPEN_VOLUME &&
+            scene_controller_vars->removed_moby != -1) {
             mark_moby_for_removal(
                 &((struct Moby *)level_mobys)[scene_controller_vars->removed_moby]);
         }
@@ -158,7 +159,8 @@ void umbris_scene_progression_update(struct Moby *moby) {
             struct Moby *e;
             if (scene_controller_vars->moby_0c == -1 ||
                 (e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_0c]) == 0 ||
-                e->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END || e->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
+                e->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+                e->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 if (scene_controller_vars->finish_volume != -1) {
                     if (is_point_inside_clip_volume(&hero.motion.pos,
                                                     scene_controller_vars->finish_volume) != 0) {
@@ -177,7 +179,8 @@ void umbris_scene_progression_update(struct Moby *moby) {
         } else {
             moby->state = CONTROLLER_CLEANUP_LINKED_MOBY;
         }
-        if (moby->state != CONTROLLER_WAIT_FOR_FINISH_VOLUME && scene_controller_vars->moby_10 != -1) {
+        if (moby->state != CONTROLLER_WAIT_FOR_FINISH_VOLUME &&
+            scene_controller_vars->moby_10 != -1) {
             struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_10];
             e->flags |= 0x41;
         }
@@ -218,7 +221,8 @@ void umbris_scene_progression_update(struct Moby *moby) {
     case CONTROLLER_CLEANUP_LINKED_MOBY:
         if (scene_controller_vars->moby_10 != -1) {
             struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_10];
-            if (e != 0 && e->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && e->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
+            if (e != 0 && e->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+                e->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 mark_moby_for_removal(e);
             }
         }

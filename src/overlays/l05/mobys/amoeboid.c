@@ -14,12 +14,13 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
 
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern int   FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern void  FUN_L01_0026d930(char *p);
-extern void  handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
-extern void  spawn_amoeboid_particles(unsigned char *moby) __asm__("FUN_L05_002db018");
-void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern float
+           approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
+extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
+extern void FUN_L01_0026d930(char *p);
+extern void handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
+extern void spawn_amoeboid_particles(unsigned char *moby) __asm__("FUN_L05_002db018");
+void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void                amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
 typedef struct Moby Moby;
@@ -76,11 +77,11 @@ void amoeboid_update(struct Moby *moby) {
         float yaw = fast_arc_tan(*(float *)(path_node_base + 0x10) - moby->pos.x,
                                  *(float *)(path_node_base + 0x14) - moby->pos.y);
         approach_angle(&moby->rot.z,
-                         &moby_data->unkBC,
-                         yaw,
-                         frame_time_sq * 1.0471976f,
-                         frame_time_sq * 1.0471976f,
-                         frame_time * 3.1415927f);
+                       &moby_data->unkBC,
+                       yaw,
+                       frame_time_sq * 1.0471976f,
+                       frame_time_sq * 1.0471976f,
+                       frame_time * 3.1415927f);
         facing_direction[0] = fast_cos(moby->rot.z);
         facing_direction[1] = fast_sin(moby->rot.z);
         facing_direction[2] = 0.0f;

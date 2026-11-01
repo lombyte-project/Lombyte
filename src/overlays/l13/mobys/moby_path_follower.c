@@ -17,7 +17,13 @@ void moby_path_follower_update(struct Moby *moby) __asm__("FUN_L13_0030bb70");
 
 /* Moby class 1403 */
 void moby_path_follower_update(struct Moby *moby) {
-    enum { PATH_FOLLOWER_STATE_INITIALIZE = 0 , PATH_FOLLOWER_STATE_PROJECT_TARGET_ONTO_PATH = 1 , PATH_FOLLOWER_STATE_ADVANCE_ALONG_PATH = 2 , PATH_FOLLOWER_STATE_PATH_END_REACHED = 3 } ;int  *moby_vars = (int *)moby->pvars;
+    enum {
+        PATH_FOLLOWER_STATE_INITIALIZE = 0,
+        PATH_FOLLOWER_STATE_PROJECT_TARGET_ONTO_PATH = 1,
+        PATH_FOLLOWER_STATE_ADVANCE_ALONG_PATH = 2,
+        PATH_FOLLOWER_STATE_PATH_END_REACHED = 3
+    };
+    int  *moby_vars = (int *)moby->pvars;
     char *path;
     char *pth;
     char *target_moby;

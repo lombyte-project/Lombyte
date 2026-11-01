@@ -231,7 +231,10 @@ void machinegun_turret_update(char *moby) {
     enum {
         TURRET_SPAWN_CENTER = 0,
         TURRET_SPAWN_UNNEGATED_OFFSET = 1
-    } ; enum { MOBY_SELECTION_NO_TARGET = 2};
+    };
+    enum {
+        MOBY_SELECTION_NO_TARGET = 2
+    };
     MachinegunTurretVars *machinegun_turret_private_vars;
     float                 target_point_scratch[4];
     float                 spawn_position[4];
@@ -515,7 +518,10 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
         HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH = 9,
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
-    } ; enum { TURRET_STATE_DESTROY = 6};
+    };
+    enum {
+        TURRET_STATE_DESTROY = 6
+    };
     MachinegunTurretVars *moby_vars = (MachinegunTurretVars *)moby->pvars;
     int                   loc0;
     float                 damage_amount = 0.0f;

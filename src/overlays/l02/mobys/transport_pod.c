@@ -110,7 +110,11 @@ void transport_pod_update(unsigned char *moby) {
         TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS = 15,
         TRANSPORT_POD_CYCLE_RAILS_TO_SPLIT_HEIGHTS = 16,
         TRANSPORT_POD_CYCLE_RAILS_TO_SHARED_LOWER_HEIGHT = 17
-    } ; enum { HERO_TARGET_POSE_STATUS_INACTIVE = 0 , HERO_TARGET_POSE_STATUS_READY = 2};
+    };
+    enum {
+        HERO_TARGET_POSE_STATUS_INACTIVE = 0,
+        HERO_TARGET_POSE_STATUS_READY = 2
+    };
     Varsdc88 *transport_pod_vars = ((Varsdc88 *)MOBY(moby)->pvars);
     int       i;
     int      *path;

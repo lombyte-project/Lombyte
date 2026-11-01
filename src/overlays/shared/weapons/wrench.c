@@ -690,8 +690,11 @@ void wrench_update(WrenchMoby *wrench_moby) {
         FUN_L00_002a7c70_c((char *)wrench_moby);
         {
             int current_state = wrench_hero()->state;
-            if (current_state != HERO_STATE_WRENCH_COMBO && current_state != HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE && current_state != HERO_STATE_GRIND_ATTACK &&
-                current_state != HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT && current_state != HERO_STATE_WRENCH_SLAM) {
+            if (current_state != HERO_STATE_WRENCH_COMBO &&
+                current_state != HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE &&
+                current_state != HERO_STATE_GRIND_ATTACK &&
+                current_state != HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT &&
+                current_state != HERO_STATE_WRENCH_SLAM) {
                 int current = wrench_moby->current_animation;
                 if ((unsigned int)current >= 3 && wrench_moby->current_animation < 6)
                     blend_moby_animation(wrench_moby, 1, 0, scale_game_frames(4));

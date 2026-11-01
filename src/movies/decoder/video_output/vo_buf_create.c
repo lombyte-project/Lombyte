@@ -6,7 +6,11 @@ void vo_buf_create(struct VoBuf  *buf,
                    struct VoTag  *tag,
                    s32            size) __asm__("FUN_0023d190");
 
-void vo_buf_create(struct VoBuf *buffer_descriptor, struct VoData *data, struct VoTag *tag, s32 size) {
+void vo_buf_create(struct VoBuf  *buffer_descriptor,
+                   struct VoData *data,
+                   struct VoTag  *tag,
+
+                   s32 size) {
     s32 i;
 
     buffer_descriptor->count = 0;

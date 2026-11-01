@@ -213,7 +213,8 @@ extern float approach_angle(void *, float, void *, float, float, float) __asm__(
 extern float
 compute_ultramech_flocking_steering_point(void *, void *, float) __asm__("FUN_L15_002cf110");
 
-extern int move_moby_xy_with_collision_constraints(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
+extern int move_moby_xy_with_collision_constraints(
+    void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 
 extern int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");
 
@@ -299,7 +300,9 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     ultramech_vars = ultramech_moby->data;
     process_ultramech_hits_and_update_target(ultramech_moby);
     combat_target = ultramech_vars->target;
-    if (ultramech_moby->state != ULTRAMECH_INITIALIZE && ultramech_moby->state != ULTRAMECH_DEAD_WAIT_FOR_RESET && hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
+    if (ultramech_moby->state != ULTRAMECH_INITIALIZE &&
+        ultramech_moby->state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
+        hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
         ultramech_moby->w94 = 0;
         ultramech_moby->flags |= 0x41;
         idx = ultramech_vars->snd;
@@ -358,7 +361,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         }
         if (ultramech_vars->w164 != 2 && ultramech_vars->path != -1) {
             struct Hero *pl = &hero;
-            if (pl->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && (ultramech_moby->flags & 0x1000)) {
+            if (pl->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
+                (ultramech_moby->flags & 0x1000)) {
                 if (ultramech_vars->w1D0 != -1 &&
                     !point_in_path_xy(&pl->motion.pos,
                                       D_L15_001B0AB0[ultramech_vars->w1D0]->points,
@@ -682,13 +686,13 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             &position_or_motion_vector, &position_or_motion_vector, frame_time * 6.5f);
         add_vectors(&vector_arithmetic_result, &position_or_motion_vector, &ultramech_moby->pos);
         if (!move_moby_xy_with_collision_constraints(ultramech_moby,
-                              &vector_or_hit_descriptor,
-                              &position_or_motion_vector,
-                              1,
-                              2.25f,
-                              1.75f,
-                              0.5f,
-                              0.5235988f) ||
+                                                     &vector_or_hit_descriptor,
+                                                     &position_or_motion_vector,
+                                                     1,
+                                                     2.25f,
+                                                     1.75f,
+                                                     0.5f,
+                                                     0.5235988f) ||
             point_in_path_xy(&vector_or_hit_descriptor,
                              D_L15_001B0AB0[ultramech_vars->side]->points,
                              D_L15_001B0AB0[ultramech_vars->side]->count)) {
@@ -904,7 +908,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                                         : FUN_L00_00257b90(0x14, 0x1E)));
             }
         }
-    } else if (ultramech_moby->state > ULTRAMECH_WAIT_FOR_ACTIVATION && ultramech_moby->state != ULTRAMECH_DEAD_WAIT_FOR_RESET) {
+    } else if (ultramech_moby->state > ULTRAMECH_WAIT_FOR_ACTIVATION &&
+               ultramech_moby->state != ULTRAMECH_DEAD_WAIT_FOR_RESET) {
         float z;
         ultramech_vars->fE8 += frame_time_sq * 30.0f;
         ultramech_moby->pos.f[2] -= ultramech_vars->fE8 - 2.0f;
@@ -1029,7 +1034,8 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     }
     code = FUN_00249d60(ultramech_moby, slot, &ultramech_vars->f20, 0, &kind, &impact, 0, 4);
     if (slot != 0) {
-        if (kind != HIT_CLASSIFICATION_NO_DAMAGE && (state = ultramech_moby->state) != 10 && state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
+        if (kind != HIT_CLASSIFICATION_NO_DAMAGE && (state = ultramech_moby->state) != 10 &&
+            state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
             *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
             ultramech_vars->f20 -= impact;
             if (*(unsigned short *)(slot + 0x2A) == 0x100)

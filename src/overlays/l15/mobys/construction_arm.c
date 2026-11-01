@@ -119,7 +119,8 @@ void construction_arm_update(struct Moby *moby) {
                     group_member_moby =
                         (struct Moby *)((*list & 0x7fff) * 0x100 + (int)l15_moby_array);
                     if ((signed char)group_member_moby->state >= 0 &&
-                        group_member_moby->oclass == moby->oclass && group_member_moby->state != CONSTRUCTION_ARM_WAIT_TO_TURN)
+                        group_member_moby->oclass == moby->oclass &&
+                        group_member_moby->state != CONSTRUCTION_ARM_WAIT_TO_TURN)
                         count++;
                 } while ((short)*list++ >= 0);
                 if (count != 0) {

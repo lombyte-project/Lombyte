@@ -179,7 +179,8 @@ void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate
                              -100,
                              1);
             } else if (source_moby->command == 0 ||
-                       l13_starfighter_attachment_slot_indices_by_command[source_moby->command - 1] !=
+                       l13_starfighter_attachment_slot_indices_by_command[source_moby->command -
+                                                                          1] !=
                            joint_effect_gate_slot_indices[i] ||
                        random_integer_below(9) == 0) {
                 effect_frame_count = scale_game_frames(random_int_between(0xF, 0x16));
@@ -285,7 +286,8 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
             *(char **)(attachment_data + 0xF0) =
                 spawn_moby_joint_attachment(parent_moby, attachment_joint_index, 0x191);
         attached_moby = *(char **)(attachment_data + 0xF0);
-        if (attached_moby != 0 && MOBY(attached_moby)->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+        if (attached_moby != 0 &&
+            MOBY(attached_moby)->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
             MOBY(attached_moby)->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             moby_point_position(parent_moby, attachment_joint_index, attached_moby + 0x10);
             if (MOBY(attached_moby)->pos.x < 22.0f)
@@ -826,7 +828,10 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     mode = ATTACHMENT_DAMAGE_STAGE_ADVANCED;
                     if (moby->bBC == 7) {
                         for (j = moby->bBC - 1; j < 10; j++) {
-                            func_L13_002EAAB8_2EAE80(moby, moby_data, l13_starfighter_attachment_slot_indices_by_command[j]);
+                            func_L13_002EAAB8_2EAE80(
+                                moby,
+                                moby_data,
+                                l13_starfighter_attachment_slot_indices_by_command[j]);
                         }
                         allocate_voice_for_target_entry(7, 0, moby);
                     }
@@ -918,7 +923,8 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 mode = ATTACHMENT_DAMAGE_STAGE_ADVANCED;
                 if (moby->bBC == 7) {
                     for (k = moby->bBC - 1; k < 10; k++) {
-                        func_L13_002EAAB8_2EAE80(moby, moby_data, l13_starfighter_attachment_slot_indices_by_command[k]);
+                        func_L13_002EAAB8_2EAE80(
+                            moby, moby_data, l13_starfighter_attachment_slot_indices_by_command[k]);
                     }
                     allocate_voice_for_target_entry(7, 0, moby);
                 }
@@ -2282,7 +2288,8 @@ void qwarks_starfighter_update(Moby388 *moby) {
 
     if (moby->state >= STARFIGHTER_STATE_FOLLOW_INITIAL_PATH) {
         update_moby_joint_attachments(moby, starfighter_vars);
-        if (moby->state != STARFIGHTER_STATE_EXPLODE_AND_REMOVE || scale_game_frames(0x78) < starfighter_vars->iF8) {
+        if (moby->state != STARFIGHTER_STATE_EXPLODE_AND_REMOVE ||
+            scale_game_frames(0x78) < starfighter_vars->iF8) {
             emit_gated_moby_joint_effects(moby, starfighter_vars);
         }
         if (starfighter_vars->snd114 != -1) {
@@ -2310,7 +2317,8 @@ void qwarks_starfighter_update(Moby388 *moby) {
     {
         Moby388 *owner = (Moby388 *)((char *)moby_base + (starfighter_vars->i134 << 8));
         if (moby->state != STARFIGHTER_STATE_OWNER_UNAVAILABLE) {
-            if (owner == 0 || owner->cls_id != 0x45 || owner->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+            if (owner == 0 || owner->cls_id != 0x45 ||
+                owner->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
                 owner->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END || owner->state == 7) {
                 moby->state = STARFIGHTER_STATE_OWNER_UNAVAILABLE;
                 if (queue_starfighter_voice_line(
@@ -2347,7 +2355,9 @@ void qwarks_starfighter_update(Moby388 *moby) {
     }
     fast_dec_timer_s16(&starfighter_vars->h144);
     fast_dec_timer_s16(&starfighter_vars->h146);
-    if (moby->state >= STARFIGHTER_STATE_FOLLOW_INITIAL_PATH && moby->state <= STARFIGHTER_STATE_TRACTOR_BEAM && (((unsigned char *)D_0013E533)[0x242C] & 1)) {
+    if (moby->state >= STARFIGHTER_STATE_FOLLOW_INITIAL_PATH &&
+        moby->state <= STARFIGHTER_STATE_TRACTOR_BEAM &&
+        (((unsigned char *)D_0013E533)[0x242C] & 1)) {
         moby->state = STARFIGHTER_STATE_RESET;
     }
 }

@@ -86,7 +86,8 @@ int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
         }
     }
     hud_screen_position(gauge_element, &screen_position[0], &screen_position[1]);
-    apply_hud_slide_offset(gauge_element, &screen_position[0], &screen_position[1], gauge_element->unk6C, 0);
+    apply_hud_slide_offset(
+        gauge_element, &screen_position[0], &screen_position[1], gauge_element->unk6C, 0);
     w = D_L00_0015F760 * 0xD0;
     h = D_L00_0015F764 * 0xA0;
     bh = D_L00_0015F760 * 0x260;
@@ -120,8 +121,12 @@ int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
             append_screen_rect_packet(left, top, right, top + 32, 0x80000000, 1);
         } while (i < gauge_element->unk74);
     w = get_icon_frame(*(int *)gauge_element, 0);
-    draw_rotated_hud_sprite(
-        w, screen_position[0] + gauge_element->unk48, screen_position[1] + gauge_element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+    draw_rotated_hud_sprite(w,
+                            screen_position[0] + gauge_element->unk48,
+                            screen_position[1] + gauge_element->unk4A,
+                            D_L00_0015F760,
+                            D_L00_0015F764,
+                            0x80);
     return gauge_element->w;
 }
 
@@ -204,7 +209,7 @@ typedef struct {
 
 extern int D_L00_0017E504 NOT_SDA;
 extern int                D_L00_0015FA90;
-extern int                l00_hud_selector_fade_counter_limit_gp __asm__("D_L00_0015F780") __attribute__((sda));
+extern int   l00_hud_selector_fade_counter_limit_gp __asm__("D_L00_0015F780") __attribute__((sda));
 extern int   saved_hud_selector_slot_index_gp __asm__("D_L00_0015FA9C") __attribute__((sda));
 extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
 extern int D_L00_0017DC38 NOT_SDA;
@@ -435,12 +440,14 @@ int draw_hud_item_selector_panel(HudElem *rec) {
     unsigned char *counters = rec->cnt;
     char           formatted[80];
 
-    open = convert_integer_to_float(counters[0]) / convert_integer_to_float(l00_hud_selector_fade_counter_limit_gp);
+    open = convert_integer_to_float(counters[0]) /
+           convert_integer_to_float(l00_hud_selector_fade_counter_limit_gp);
     if (1.0f < open)
         open = 1.0f;
     else if (open < 0.0f)
         open = 0.0f;
-    fade = convert_integer_to_float(counters[1]) / convert_integer_to_float(l00_hud_selector_fade_counter_limit_gp);
+    fade = convert_integer_to_float(counters[1]) /
+           convert_integer_to_float(l00_hud_selector_fade_counter_limit_gp);
     if (1.0f < fade)
         fade = 1.0f;
     else if (fade < 0.0f)

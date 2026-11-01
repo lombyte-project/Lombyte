@@ -205,7 +205,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_WAIT_FOR_HOME_JUMP: {
         char *path = (char *)l11_paths[puffoid_vars->path];
         float home_jump_heading = fast_arc_tan(*(float *)(path + 0x20) - moby->pos.x,
-                                 *(float *)(path + 0x24) - moby->pos.y);
+                                               *(float *)(path + 0x24) - moby->pos.y);
         approach_angle(&moby->rot.z,
                        &puffoid_vars->unk250,
                        home_jump_heading,
@@ -315,7 +315,7 @@ void puffoid_update(struct Moby *moby) {
         if (test_path_segment_strict_crossing(puffoid_vars->unk230, &moby->pos, pos)) {
             float *rz = &moby->rot.z;
             float  target_facing_heading = fast_arc_tan(puffoid_vars->target->pos.x - moby->pos.x,
-                                     puffoid_vars->target->pos.y - moby->pos.y);
+                                                       puffoid_vars->target->pos.y - moby->pos.y);
             approach_angle(rz,
                            &puffoid_vars->unk250,
                            target_facing_heading,
@@ -640,7 +640,10 @@ void puffoid_update(struct Moby *moby) {
         break;
     }
     if (puffoid_vars->smoke != 0.0f) {
-        if (moby->state == PUFFOID_STATE_KNOCKBACK || moby->state == PUFFOID_STATE_DEATH_KNOCKBACK || moby->state == PUFFOID_STATE_CARRIER_KNOCKBACK || moby->state == PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK) {
+        if (moby->state == PUFFOID_STATE_KNOCKBACK ||
+            moby->state == PUFFOID_STATE_DEATH_KNOCKBACK ||
+            moby->state == PUFFOID_STATE_CARRIER_KNOCKBACK ||
+            moby->state == PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK) {
             for (i = 0; i < 3; i++) {
                 float vel[4];
                 float a;
@@ -782,8 +785,11 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
 
     moby->scale = moby->pclass->scale * D_L11_001622CC;
     patrol_vars->unk1A4 = l11_puffoid_horizontal_speed_limit * frame_time;
-    if (patrol_vars->carrier != -1 && moby->state != PUFFOID_STATE_DEATH_KNOCKBACK && moby->state != PUFFOID_STATE_KNOCKBACK &&
-        moby->state != PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK && moby->state != PUFFOID_STATE_CARRIER_KNOCKBACK && moby->state != PUFFOID_STATE_INITIALIZE && moby->state != PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP &&
+    if (patrol_vars->carrier != -1 && moby->state != PUFFOID_STATE_DEATH_KNOCKBACK &&
+        moby->state != PUFFOID_STATE_KNOCKBACK &&
+        moby->state != PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK &&
+        moby->state != PUFFOID_STATE_CARRIER_KNOCKBACK && moby->state != PUFFOID_STATE_INITIALIZE &&
+        moby->state != PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP &&
         moby->state != PUFFOID_STATE_CARRIER_JUMP) {
         if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier].pos.z + 0.5f) {
             spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
@@ -807,7 +813,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     {
         s32 kind = resolve_moby_hit_response(
             moby, hit, &patrol_vars->hp, 0, &hit_processing_status, &dmg, 0, 4);
-        if (hit_processing_status != HIT_PROCESSING_SKIP_DAMAGE_AND_REACTION && moby->state != PUFFOID_STATE_DEATH_KNOCKBACK) {
+        if (hit_processing_status != HIT_PROCESSING_SKIP_DAMAGE_AND_REACTION &&
+            moby->state != PUFFOID_STATE_DEATH_KNOCKBACK) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {
                 kind = HIT_RESPONSE_KNOCKBACK;
@@ -884,7 +891,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, patrol_vars->move);
     if (patrol_vars->timer != 0) {
-        if (moby->state == PUFFOID_STATE_IDLE || (moby->state == PUFFOID_STATE_WANDER_NEAR_HOME && (moby->anim_flags & 2))) {
+        if (moby->state == PUFFOID_STATE_IDLE ||
+            (moby->state == PUFFOID_STATE_WANDER_NEAR_HOME && (moby->anim_flags & 2))) {
             moby->state = PUFFOID_STATE_REPOSITION_AND_FACE_TARGET;
             if (moby->prev_seq != 2) {
                 FUN_00212f90(moby, 2, 0, scale_game_frames(10));
@@ -1002,7 +1010,10 @@ s32 is_moby_in_bob_target_exclusion_state(const u8 *moby) {
         PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 0x14
     };
     u32 moby_state = moby[0x20];
-    if (moby_state == PUFFOID_STATE_WAIT_TO_RESUME_COMMAND || moby_state == PUFFOID_STATE_DEATH_KNOCKBACK || moby_state == PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK || moby_state == PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP) {
+    if (moby_state == PUFFOID_STATE_WAIT_TO_RESUME_COMMAND ||
+        moby_state == PUFFOID_STATE_DEATH_KNOCKBACK ||
+        moby_state == PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK ||
+        moby_state == PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP) {
         return 1;
     }
     return 0;
@@ -1026,8 +1037,11 @@ int process_puffoid_suck_cannon_suction(struct Moby *moby) {
     };
     int grab_check_result = process_moby_suck_cannon_suction(moby);
     if (grab_check_result != 0) {
-        if (moby->state == PUFFOID_STATE_IDLE || moby->state == PUFFOID_STATE_CHASE_TARGET || moby->state == PUFFOID_STATE_SPRAY_ATTACK || moby->state == PUFFOID_STATE_RETURN_HOME ||
-            moby->state == PUFFOID_STATE_CARRIER_IDLE || moby->state == PUFFOID_STATE_CARRIER_CHASE_TARGET || moby->state == PUFFOID_STATE_CARRIER_SPRAY_ATTACK ||
+        if (moby->state == PUFFOID_STATE_IDLE || moby->state == PUFFOID_STATE_CHASE_TARGET ||
+            moby->state == PUFFOID_STATE_SPRAY_ATTACK || moby->state == PUFFOID_STATE_RETURN_HOME ||
+            moby->state == PUFFOID_STATE_CARRIER_IDLE ||
+            moby->state == PUFFOID_STATE_CARRIER_CHASE_TARGET ||
+            moby->state == PUFFOID_STATE_CARRIER_SPRAY_ATTACK ||
             moby->state == PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
             if (moby->state != PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
                 moby->command = moby->state;

@@ -156,7 +156,12 @@ extern void build_object_rotation_matrix(void) __asm__("func_0022DE10");
 void update_level_gameplay_frame(void) __asm__("FUN_0022eaa8");
 
 void update_level_gameplay_frame(void) {
-    enum { LEVEL_RENDER_PHASE_SELECT_RANDOM_MODE = 0 , LEVEL_RENDER_PHASE_REQUEST_LOAD = 2 , LEVEL_RENDER_MODE_FADE_OUT = 4 } ;Vector4             first_position;
+    enum {
+        LEVEL_RENDER_PHASE_SELECT_RANDOM_MODE = 0,
+        LEVEL_RENDER_PHASE_REQUEST_LOAD = 2,
+        LEVEL_RENDER_MODE_FADE_OUT = 4
+    };
+    Vector4             first_position;
     Vector4             second_position;
     Matrix4x4           first_transform;
     Matrix4x4           second_transform;

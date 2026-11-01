@@ -915,27 +915,27 @@ void update_color_tween_emitter_particle(struct EffectParticle *particle) {
 }
 
 extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") NOT_SDA;
+unsigned char        *spawn_timed_hero_relative_particle(u128         *position,
+                                                         int           packed_color,
+                                                         unsigned char initial_rotation,
+                                                         int           particle_texture_index,
+                                                         int           flag,
+                                                         int           lifetime_frames,
+                                                         int           mode,
+
+                                                         float size_scale) __asm__("FUN_L00_00272f68");
+
+unsigned char *spawn_timed_hero_relative_particle(
+    u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
 unsigned char *spawn_timed_hero_relative_particle(u128         *position,
-                                int           packed_color,
-                                unsigned char initial_rotation,
-                                int           particle_texture_index,
-                                int           flag,
-                                int           lifetime_frames,
-                                int           mode,
+                                                  int           packed_color,
+                                                  unsigned char initial_rotation,
+                                                  int           particle_texture_index,
+                                                  int           flag,
+                                                  int           lifetime_frames,
+                                                  int           mode,
 
-                                float size_scale) __asm__("FUN_L00_00272f68");
-
-unsigned char *
-spawn_timed_hero_relative_particle(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
-unsigned char *spawn_timed_hero_relative_particle(u128         *position,
-                                int           packed_color,
-                                unsigned char initial_rotation,
-                                int           particle_texture_index,
-                                int           flag,
-                                int           lifetime_frames,
-                                int           mode,
-
-                                float size_scale) {
+                                                  float size_scale) {
     enum {
         PARTICLE_MODE_HERO_RELATIVE = 1
     };

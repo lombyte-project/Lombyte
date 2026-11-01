@@ -326,7 +326,8 @@ void process_dreks_fleet_turret_hits(struct Moby *turret_moby) {
         hit_animation_state = turret_vars + 0x60;
         hit_reaction(
             turret_moby, hit_record, turret_vars + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-        if (hit_reaction_status != HIT_REACTION_NO_DAMAGE && turret_moby->state != FLEET_TURRET_DESTROY) {
+        if (hit_reaction_status != HIT_REACTION_NO_DAMAGE &&
+            turret_moby->state != FLEET_TURRET_DESTROY) {
             float remaining_value = *(float *)(turret_vars + 0x20) - fv;
             *(float *)(turret_vars + 0x20) = remaining_value;
             depletion_status = FLEET_TURRET_NOT_DEPLETED;

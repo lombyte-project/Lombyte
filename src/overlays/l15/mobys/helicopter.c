@@ -428,7 +428,8 @@ void helicopter_update(struct Moby *moby) {
     if (helicopter_instance_vars->pilot == 0) {
         helicopter_instance_vars->pilot = create_class_55b_moby_from_source(moby);
     }
-    if (moby->state != HELICOPTER_INITIALIZE && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET && helicopter_instance_vars->unk1A4 != 0 &&
+    if (moby->state != HELICOPTER_INITIALIZE && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET &&
+        helicopter_instance_vars->unk1A4 != 0 &&
         hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
@@ -511,7 +512,8 @@ void helicopter_update(struct Moby *moby) {
             helicopter_instance_vars->pilot->flags |= 0x41;
         break;
     case HELICOPTER_WAIT_FOR_ACTIVATION:
-        if (helicopter_instance_vars->unk1A4 != 0 && hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
+        if (helicopter_instance_vars->unk1A4 != 0 &&
+            hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
             helicopter_instance_vars->unk58 = 0;
@@ -845,11 +847,11 @@ void helicopter_update(struct Moby *moby) {
                         frame_time_sq * 6.2831855f,
                         frame_time * 1.5707964f);
         build_axis_rotation_quaternion(helicopter_instance_vars->turret_yaw_joint + 0x10,
-                         2,
-                         helicopter_instance_vars->turret_yaw);
+                                       2,
+                                       helicopter_instance_vars->turret_yaw);
         build_axis_rotation_quaternion(helicopter_instance_vars->turret_pitch_joint + 0x10,
-                         2,
-                         helicopter_instance_vars->turret_pitch);
+                                       2,
+                                       helicopter_instance_vars->turret_pitch);
         helicopter_instance_vars->shot = 0;
     } else {
         moby_point_position(moby, 0, &turret_pos);
@@ -874,11 +876,11 @@ void helicopter_update(struct Moby *moby) {
                         frame_time_sq * 6.2831855f,
                         frame_time * 1.5707964f);
         build_axis_rotation_quaternion(helicopter_instance_vars->turret_yaw_joint + 0x10,
-                         2,
-                         helicopter_instance_vars->turret_yaw);
+                                       2,
+                                       helicopter_instance_vars->turret_yaw);
         build_axis_rotation_quaternion(helicopter_instance_vars->turret_pitch_joint + 0x10,
-                         2,
-                         helicopter_instance_vars->turret_pitch);
+                                       2,
+                                       helicopter_instance_vars->turret_pitch);
     }
 }
 
@@ -909,7 +911,8 @@ void process_helicopter_hits(struct Moby *moby) {
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_reaction_code =
         hit_reaction(moby, hit_record, helicopter_vars + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-    if (hit_reaction_status != HIT_REACTION_SKIP_DAMAGE && moby->state != HELICOPTER_DEATH_EFFECTS && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET) {
+    if (hit_reaction_status != HIT_REACTION_SKIP_DAMAGE &&
+        moby->state != HELICOPTER_DEATH_EFFECTS && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET) {
         float remaining_health = *(float *)(helicopter_vars + 0x20) - fv;
         *(float *)(helicopter_vars + 0x20) = remaining_health;
         if (hit_reaction_code == 1 || remaining_health <= 0.0f) {

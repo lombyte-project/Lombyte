@@ -228,7 +228,8 @@ void ground_melee_enemy_update(Moby *moby) {
     int           expired;
     float         ground;
 
-    if (moby->state != GROUND_ENEMY_STATE_FATAL_KNOCKBACK && moby->state != GROUND_ENEMY_STATE_RECOVER_TO_IDLE) {
+    if (moby->state != GROUND_ENEMY_STATE_FATAL_KNOCKBACK &&
+        moby->state != GROUND_ENEMY_STATE_RECOVER_TO_IDLE) {
         Hit_2E39E0 *hit;
         damage = 0.0f;
         hit = find_moby_hit(moby, 0x330000, 0);

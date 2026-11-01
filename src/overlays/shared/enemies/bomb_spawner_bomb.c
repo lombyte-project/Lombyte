@@ -111,7 +111,9 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
             continue;
         }
         current_moby = &D_L03_0015FFD8_gp[pooled_child_moby_index];
-        if (current_moby != NULL && current_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && current_moby->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
+        if (current_moby != NULL &&
+            current_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+            current_moby->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             spawner_data->live++;
             continue;
         }
@@ -176,7 +178,8 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         }
     }
     for (current_moby = D_L03_0015FFE4; current_moby != NULL; current_moby = current_moby->next) {
-        if (current_moby->oclass == 0x221 && current_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+        if (current_moby->oclass == 0x221 &&
+            current_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
             current_moby->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             spawner_data->live++;
         }
@@ -195,7 +198,16 @@ void bomb_spawner_bomb_update(struct Moby *moby) __asm__("FUN_L03_002c4718");
 /* Drifts and bounces off walls (state 0), lands and spawns its child moby (1), then shrinks while the child grows (2). */
 /* Moby class 545 */
 void bomb_spawner_bomb_update(struct Moby *moby) {
-    enum { SPAWNER_BOMB_STATE_MOVING = 0 , SPAWNER_BOMB_STATE_SPAWN_CHILD = 1 , SPAWNER_BOMB_STATE_SHRINKING = 2 } ; enum { MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xfd , MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xfe} ;float       *bomb_runtime;
+    enum {
+        SPAWNER_BOMB_STATE_MOVING = 0,
+        SPAWNER_BOMB_STATE_SPAWN_CHILD = 1,
+        SPAWNER_BOMB_STATE_SHRINKING = 2
+    };
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xfd,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xfe
+    };
+    float       *bomb_runtime;
     Vec4        *pos;
     struct Moby *other;
     Vec4         old_pos;
@@ -285,7 +297,9 @@ void bomb_spawner_bomb_update(struct Moby *moby) {
             }
         }
         for (other = D_L03_0015FFE4; other != NULL; other = other->next) {
-            if (other == moby || (int)other == 0 || other->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END || other->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
+            if (other == moby || (int)other == 0 ||
+                other->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+                other->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
                 continue;
             fast_vec_sub(&delta, (Vec4 *)&moby->pos, &other->pos);
             delta.f[2] = 0.0f;
@@ -328,7 +342,8 @@ void bomb_spawner_bomb_update(struct Moby *moby) {
         if (moby->scale < moby->pclass->scale * (frame_scale * 0.05f)) {
             moby->scale = 0.0001f;
             other = *(struct Moby **)(bomb_runtime + 6);
-            if (other == NULL || other->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END || other->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END ||
+            if (other == NULL || other->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+                other->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END ||
                 !(*(int *)(bomb_runtime + 7) & 4) || other->pclass->scale - 0.01f <= other->scale)
                 goto remove_moby;
         }

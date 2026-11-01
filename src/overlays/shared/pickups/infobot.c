@@ -18,7 +18,10 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
-unsigned char *spawn_timed_hero_relative_particle(u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+
+unsigned char *spawn_timed_hero_relative_particle(
+    u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+
 #include "rnc/save/memcard_save_data.h"
 
 typedef struct Moby Moby;
@@ -696,13 +699,14 @@ void update_infobot_particle_effect(char *moby) {
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - f));
         if (D_15F5C4_2d6cd0 != 2) {
             spawn_timed_hero_relative_particle(d,
-                             col,
-                             truncate_float_to_s32(infobot_particle_state->a[i]) & 0xFF,
-                             0x35,
-                             1,
-                             2,
-                             0,
-                             infobot_particle_state->d[i]);
+                                               col,
+                                               truncate_float_to_s32(infobot_particle_state->a[i]) &
+                                                   0xFF,
+                                               0x35,
+                                               1,
+                                               2,
+                                               0,
+                                               infobot_particle_state->d[i]);
         }
         fast_vec_add(d, d, particle_position_step);
     }

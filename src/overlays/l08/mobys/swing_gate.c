@@ -40,7 +40,12 @@ void swing_gate_update(struct Moby *moby) __asm__("FUN_L08_002ea4c0");
 
 /* Moby classes 468, 469 */
 void swing_gate_update(struct Moby *moby) {
-    enum { SWING_GATE_STATE_INITIALIZE = 0 , SWING_GATE_STATE_FOLLOW_DRIVER = 1 , SWING_GATE_STATE_OPEN_LATCHED = 2 } ;SwingGateVars *swing_gate_vars = (SwingGateVars *)moby->pvars;
+    enum {
+        SWING_GATE_STATE_INITIALIZE = 0,
+        SWING_GATE_STATE_FOLLOW_DRIVER = 1,
+        SWING_GATE_STATE_OPEN_LATCHED = 2
+    };
+    SwingGateVars *swing_gate_vars = (SwingGateVars *)moby->pvars;
     f32            progress = *(f32 *)D_L08_0015FFD8[swing_gate_vars->driver].pvars;
     Vec4           gate_rotation_matrix[4];
     Vec4           gate_position_offset;

@@ -1243,8 +1243,10 @@ void birdbot_update(PeMoby *birdbot_moby) {
     }
     trooper_anim_finish(birdbot_moby, birdbot_vars->x60);
     birdbot_vars->f1CC = frame;
-    if (birdbot_moby->state == BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION || birdbot_moby->state == 5 || birdbot_moby->state == BIRDBOT_STATE_FIRE_BURST ||
-        birdbot_moby->state == BIRDBOT_STATE_RECOVER_FROM_BURST || birdbot_moby->state == BIRDBOT_STATE_BRAKE_AND_FACE_TARGET) {
+    if (birdbot_moby->state == BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION ||
+        birdbot_moby->state == 5 || birdbot_moby->state == BIRDBOT_STATE_FIRE_BURST ||
+        birdbot_moby->state == BIRDBOT_STATE_RECOVER_FROM_BURST ||
+        birdbot_moby->state == BIRDBOT_STATE_BRAKE_AND_FACE_TARGET) {
         birdbot_vars->fE8 += frame_time_sq * 9.8f;
         birdbot_moby->pos.f[2] -= birdbot_vars->fE8 - 2.0f;
         ground = probe_ground_height(&birdbot_moby->pos, 0, 0.5f);

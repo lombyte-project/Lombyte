@@ -110,7 +110,11 @@ typedef struct {
 
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
 
-int FUN_L00_00261b48(int segment_path_index, void *segment_start, void *segment_end, void *adjusted_endpoint) {
+int FUN_L00_00261b48(int   segment_path_index,
+                     void *segment_start,
+                     void *segment_end,
+
+                     void *adjusted_endpoint) {
     float  v[4], perpendicular_xy_axis[4], z[4], previous_path_point_in_basis[4], u[4];
     float  best;
     float  zero;
@@ -128,7 +132,9 @@ int FUN_L00_00261b48(int segment_path_index, void *segment_start, void *segment_
     clear_u64_value(z);
     z[2] = 1.0f;
     best = 1.0f;
-    fast_vec_sub(previous_path_point_in_basis, (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] + 0x10, segment_start);
+    fast_vec_sub(previous_path_point_in_basis,
+                 (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] + 0x10,
+                 segment_start);
     transform_vector_by_basis(previous_path_point_in_basis, previous_path_point_in_basis, v);
     previous_path_point_slot = previous_path_point_in_basis;
     current_path_point_slot = u;
@@ -136,11 +142,16 @@ int FUN_L00_00261b48(int segment_path_index, void *segment_start, void *segment_
         offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(current_path_point_slot, (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] + offset, segment_start);
+            fast_vec_sub(current_path_point_slot,
+                         (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] +
+                             offset,
+                         segment_start);
             transform_vector_by_basis(current_path_point_slot, current_path_point_slot, v);
             if (previous_path_point_in_basis[3] != zero || u[3] != zero) {
                 if (u[1] * previous_path_point_in_basis[1] < 0.0f) {
-                    float x = (previous_path_point_in_basis[0] - u[0]) / (previous_path_point_in_basis[1] - u[1]) * -u[1] + u[0];
+                    float x = (previous_path_point_in_basis[0] - u[0]) /
+                                  (previous_path_point_in_basis[1] - u[1]) * -u[1] +
+                              u[0];
                     if (x > 0.0f && x < best) {
                         best = x;
                         found = 1;
@@ -345,7 +356,13 @@ void path_sample_at_distance(PointPath *path,
                              f32        spacing) __asm__("FUN_L00_00262360");
 void path_sample_at_distance(
 
-    PointPath *path, s32 *seg_out, f32 *along, Vec4 *sampled_position, f32 path_distance, f32 spacing) {
+    PointPath *path,
+    s32       *seg_out,
+    f32       *along,
+    Vec4      *sampled_position,
+    f32        path_distance,
+
+    f32 spacing) {
     Vec4 sampling_intermediate;
     s32  seg;
 

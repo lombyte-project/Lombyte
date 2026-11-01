@@ -174,20 +174,21 @@ void       spawn_explosion(char         *m,
 extern void
 send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 unsigned char *spawn_feather_moby(int unused, void *pos, float *vel) __asm__("FUN_L00_002cbf68");
-extern int     move_moby_xy_with_collision_constraints(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
-extern void    FUN_L00_00258278(void *, float *, float, float, float, float);
-extern float   FUN_L00_00259710(void *);
-extern int     FUN_L00_002dc9f0(void *, void *);
-extern float   D_L00_0015F5D0;
-extern float   D_L00_0015F5D4;
-extern int     chicken_manipulator_joint __asm__("D_L00_00161850") __attribute__((sda));
-float          feather_pitch_deg __asm__("D_L00_00161858") = 7e+01f;
-float          feather_speed_min __asm__("D_L00_0016185C") = 5.0f;
-float          feather_speed_max __asm__("D_L00_00161860") = 9.0f;
-float          feather_height __asm__("D_L00_00161864") = 0.25f;
-float          feather_radius_min __asm__("D_L00_00161868") = 0;
-float          feather_radius_max __asm__("D_L00_0016186C") = 0.35f;
-extern char    D_L00_00177F00[];
+extern int     move_moby_xy_with_collision_constraints(
+        void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
+extern void  FUN_L00_00258278(void *, float *, float, float, float, float);
+extern float FUN_L00_00259710(void *);
+extern int   FUN_L00_002dc9f0(void *, void *);
+extern float D_L00_0015F5D0;
+extern float D_L00_0015F5D4;
+extern int   chicken_manipulator_joint __asm__("D_L00_00161850") __attribute__((sda));
+float        feather_pitch_deg __asm__("D_L00_00161858") = 7e+01f;
+float        feather_speed_min __asm__("D_L00_0016185C") = 5.0f;
+float        feather_speed_max __asm__("D_L00_00161860") = 9.0f;
+float        feather_height __asm__("D_L00_00161864") = 0.25f;
+float        feather_radius_min __asm__("D_L00_00161868") = 0;
+float        feather_radius_max __asm__("D_L00_0016186C") = 0.35f;
+extern char  D_L00_00177F00[];
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
@@ -319,7 +320,8 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
         fill_transfer_words(moby_vars, 0, 0x20);
         previous_slot_moby = D_L00_001DD100[D_L00_00161854];
         if (previous_slot_moby != NULL && previous_slot_moby->oclass == 0x10E &&
-            previous_slot_moby->state != MOBY_STATE_SPAWN_POOL_REMOVAL && previous_slot_moby->state != MOBY_STATE_NON_SPAWN_POOL_REMOVAL) {
+            previous_slot_moby->state != MOBY_STATE_SPAWN_POOL_REMOVAL &&
+            previous_slot_moby->state != MOBY_STATE_NON_SPAWN_POOL_REMOVAL) {
             if (previous_slot_moby->state == CHICKEN_STATE_EMIT_FEATHERS) {
                 moby_vars->unk78 = yaw_cosine_scratch;
                 spawned_moby->flags &= ~0x20;

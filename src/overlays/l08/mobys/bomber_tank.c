@@ -299,7 +299,8 @@ void bomber_tank_update(Moby *moby) {
             bomber_tank_update_vars->part_b->collision =
                 bomber_tank_update_vars->part_b->pclass->collision;
             moby->flags |= 0x1000;
-            if (bomber_tank_update_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
+            if (bomber_tank_update_vars->mode !=
+                BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
                 moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -325,7 +326,8 @@ void bomber_tank_update(Moby *moby) {
             bomber_tank_update_vars->part_b->collision =
                 bomber_tank_update_vars->part_b->pclass->collision;
             moby->flags |= 0x1000;
-            if (bomber_tank_update_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
+            if (bomber_tank_update_vars->mode !=
+                BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
                 moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -675,7 +677,8 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                         ((Path *)l08_paths[bomber_tank_damage_and_aim_vars->path])->count);
     if (bomber_tank_damage_and_aim_vars->fF0 == 0)
         bomber_tank_damage_and_aim_vars->fF0 = *(int *)D_001413D0;
-    if (bomber_tank_damage_and_aim_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
+    if (bomber_tank_damage_and_aim_vars->mode !=
+        BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
         float yaw, distance, pitch;
         fast_vec_sub(burst_position_or_aim_scratch,
                      bomber_tank_damage_and_aim_vars->target,
@@ -716,8 +719,10 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                         D_0015ED70 * 12.566371f,
                         D_0015ED6C_lui * 9.424778f);
     }
-    build_axis_rotation_quaternion(burst_position_or_aim_scratch, 1, bomber_tank_damage_and_aim_vars->pitch);
-    build_axis_rotation_quaternion(bomber_tank_damage_and_aim_vars->f110, 2, bomber_tank_damage_and_aim_vars->yaw);
+    build_axis_rotation_quaternion(
+        burst_position_or_aim_scratch, 1, bomber_tank_damage_and_aim_vars->pitch);
+    build_axis_rotation_quaternion(
+        bomber_tank_damage_and_aim_vars->f110, 2, bomber_tank_damage_and_aim_vars->yaw);
     multiply_quaternions(bomber_tank_damage_and_aim_vars->f110,
                          burst_position_or_aim_scratch,
                          bomber_tank_damage_and_aim_vars->f110);
@@ -1183,7 +1188,8 @@ void remove_bomber_tank_linked_debris(struct Moby *moby) {
         index = *list & 0x7fff;
         linked_group_moby = (struct Moby *)D_L08_0015FFD8 + index;
         while (1) {
-            if (linked_group_moby->state < LINKED_MOBY_ACTIVE_STATE_LIMIT && linked_group_moby != moby) {
+            if (linked_group_moby->state < LINKED_MOBY_ACTIVE_STATE_LIMIT &&
+                linked_group_moby != moby) {
                 u16 class_id = linked_group_moby->oclass;
                 if ((u32)(class_id - 0x24c) < 0xb) {
                     mark_moby_for_removal(linked_group_moby);

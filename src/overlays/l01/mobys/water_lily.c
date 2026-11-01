@@ -12,7 +12,9 @@
 #include "qcopy.h"
 #include "rnc/camera.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
-void  move_moby_xy_with_collision_constraints(void *, void *, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_00258490");
+
+void move_moby_xy_with_collision_constraints(
+    void *, void *, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_00258490");
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
@@ -131,13 +133,13 @@ void water_lily_update(HoverMoby *water_lily) {
             }
         }
         move_moby_xy_with_collision_constraints(water_lily,
-                         &collision_adjusted_position,
-                         &water_lily->pos,
-                         3,
-                         0.1f,
-                         water_lily_collision_radius_gp,
-                         600.0f,
-                         1.5707964f);
+                                                &collision_adjusted_position,
+                                                &water_lily->pos,
+                                                3,
+                                                0.1f,
+                                                water_lily_collision_radius_gp,
+                                                600.0f,
+                                                1.5707964f);
         water_lily->pos.v.x = collision_adjusted_position.v.x;
         water_lily->pos.v.y = collision_adjusted_position.v.y;
         water_lily->pos.v.z = previous_water_lily_position.v.z;

@@ -439,8 +439,9 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
             int i;
 
             for (i = 0; i < 12; i++) {
-                Part29FF90 *blast_center_particle = (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(
-                    moby->pos, D_L15_0015F580, 0x7F, moby);
+                Part29FF90 *blast_center_particle =
+                    (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(
+                        moby->pos, D_L15_0015F580, 0x7F, moby);
 
                 if (blast_center_particle != 0) {
                     PartSub29FF90 *particle_subrecord = &blast_center_particle->sub;
@@ -452,7 +453,8 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
                     }
                     blast_center_particle->fC = blast_center_particle->fC * r;
                     blast_center_particle->fA = scale_game_frames(2);
-                    particle_subrecord->f10 = 1.0f / convert_integer_to_float(blast_center_particle->fA);
+                    particle_subrecord->f10 =
+                        1.0f / convert_integer_to_float(blast_center_particle->fA);
                     particle_subrecord->f18 = 0x7F7F7F;
                     particle_subrecord->f16 = 3;
                 }

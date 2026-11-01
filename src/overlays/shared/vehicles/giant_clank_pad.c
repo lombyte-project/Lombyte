@@ -68,7 +68,8 @@ void giant_clank_pad_update(struct Moby *moby) {
             hero.state.current != 0x1d) {
             if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 try_set_help_message(4, 0x3aa4);
-            } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && current_level_index != 0x12) {
+            } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
+                       current_level_index != 0x12) {
                 try_set_help_message(4, 0x3aa5);
             }
             if (!(((u32)pad_pressed_lui) & 0x10))

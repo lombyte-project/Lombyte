@@ -232,44 +232,47 @@ extern float                D_L00_001616DC_gp __asm__("D_L00_001616DC") __attrib
 extern int                  D_L00_00161818;
 extern int                  D_L00_00161824;
 extern float                D_L00_001616F0_gp __asm__("D_L00_001616F0") __attribute__((sda));
-extern int                  l00_beam_target_bend_after_node_index __asm__("D_L00_001616F4") __attribute__((sda));
-extern float                l00_beam_rail_wave_phase_increment __asm__("D_L00_001616F8") __attribute__((sda));
-extern float                l00_beam_rail_wave_phase_step_per_node __asm__("D_L00_001616FC") __attribute__((sda));
-extern float                D_L00_00161704_gp __asm__("D_L00_00161704") __attribute__((sda));
-extern float                l00_beam_ring_start_radius __asm__("D_L00_00161708") __attribute__((sda));
-extern float                l00_beam_ring_end_radius __asm__("D_L00_0016170C") __attribute__((sda));
-extern float                l00_beam_rail_wave_start_amplitude __asm__("D_L00_0016172C") __attribute__((sda));
-extern float                l00_beam_rail_wave_end_amplitude __asm__("D_L00_00161730") __attribute__((sda));
-extern float                l00_beam_origin_particle_speed __asm__("D_L00_00161734") __attribute__((sda));
-extern float                l00_beam_origin_particle_angular_spread __asm__("D_L00_0016173C") __attribute__((sda));
-extern float                l00_beam_origin_particle_basis_offset_length __asm__("D_L00_00161740") __attribute__((sda));
-extern float                l00_beam_pulse_travel_speed __asm__("D_L00_00161748") __attribute__((sda));
-extern int                  l00_beam_pulse_lifetime_frames __asm__("D_L00_0016174C") __attribute__((sda));
-extern int                  l00_beam_pulse_alpha_fade_remaining_frames_threshold __asm__("D_L00_00161750") __attribute__((sda));
-extern float                l00_beam_pulse_end_corner_scale __asm__("D_L00_00161758") __attribute__((sda));
-extern float                l00_beam_pulse_start_corner_scale __asm__("D_L00_0016175C") __attribute__((sda));
-extern float                l00_beam_pulse_alpha_decrement_per_update __asm__("D_L00_00161768") __attribute__((sda));
-extern signed char          D_L00_00161763_macro[] __asm__("D_L00_00161763") MACRO_ADDR;
-extern float                D_L00_001617CC_macro __asm__("D_L00_001617CC") MACRO_ADDR;
-extern int                  D_L00_00161824_macro __asm__("D_L00_00161824") MACRO_ADDR;
-extern float                D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
-extern int                  D_L00_001617D8_macro[3] __asm__("D_L00_001617D8") MACRO_ADDR;
-extern float                D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001617E8") MACRO_ADDR;
-extern float                D_L00_001617F8_macro[3] __asm__("D_L00_001617F8") MACRO_ADDR;
-extern float                D_L00_001618D8_2BE3A8[3] __asm__("D_L00_00161808") MACRO_ADDR;
-extern int                  D_L00_001618E8_2BE3A8[3] __asm__("D_L00_00161818") MACRO_ADDR;
-extern Vec_2BE3A8           beam_rail_a_points[12] __asm__("D_L00_001DC020");
-extern Vec_2BE3A8           beam_rail_b_points[12] __asm__("D_L00_001DC0E0");
-extern Vec_2BE3A8           beam_pulse_positions[3] __asm__("D_L00_001DD0A0");
-extern Vec_2BE3A8           D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
-extern Tab                  l00_beam_origin_particle_color_palette __asm__("D_L00_001E9AB0");
-extern u8 D_0013E535        NOT_SDA;
-extern float                D_L00_00161718 __attribute__((sda));
-extern float                D_L00_00161720 __attribute__((sda));
-extern float                D_L00_00161724 __attribute__((sda));
-extern int                  D_L00_00161798 __attribute__((sda));
-extern OvlQuad              D_L00_001DC060[][20] NOT_SDA;
-extern OvlQuad              D_L00_001DC1A0[][20] NOT_SDA;
+extern int   l00_beam_target_bend_after_node_index __asm__("D_L00_001616F4") __attribute__((sda));
+extern float l00_beam_rail_wave_phase_increment __asm__("D_L00_001616F8") __attribute__((sda));
+extern float l00_beam_rail_wave_phase_step_per_node __asm__("D_L00_001616FC") __attribute__((sda));
+extern float D_L00_00161704_gp __asm__("D_L00_00161704") __attribute__((sda));
+extern float l00_beam_ring_start_radius __asm__("D_L00_00161708") __attribute__((sda));
+extern float l00_beam_ring_end_radius __asm__("D_L00_0016170C") __attribute__((sda));
+extern float l00_beam_rail_wave_start_amplitude __asm__("D_L00_0016172C") __attribute__((sda));
+extern float l00_beam_rail_wave_end_amplitude __asm__("D_L00_00161730") __attribute__((sda));
+extern float l00_beam_origin_particle_speed __asm__("D_L00_00161734") __attribute__((sda));
+extern float l00_beam_origin_particle_angular_spread __asm__("D_L00_0016173C") __attribute__((sda));
+extern float l00_beam_origin_particle_basis_offset_length __asm__("D_L00_00161740")
+    __attribute__((sda));
+extern float l00_beam_pulse_travel_speed __asm__("D_L00_00161748") __attribute__((sda));
+extern int   l00_beam_pulse_lifetime_frames __asm__("D_L00_0016174C") __attribute__((sda));
+extern int   l00_beam_pulse_alpha_fade_remaining_frames_threshold __asm__("D_L00_00161750")
+    __attribute__((sda));
+extern float l00_beam_pulse_end_corner_scale __asm__("D_L00_00161758") __attribute__((sda));
+extern float l00_beam_pulse_start_corner_scale __asm__("D_L00_0016175C") __attribute__((sda));
+extern float l00_beam_pulse_alpha_decrement_per_update __asm__("D_L00_00161768")
+    __attribute__((sda));
+extern signed char   D_L00_00161763_macro[] __asm__("D_L00_00161763") MACRO_ADDR;
+extern float         D_L00_001617CC_macro __asm__("D_L00_001617CC") MACRO_ADDR;
+extern int           D_L00_00161824_macro __asm__("D_L00_00161824") MACRO_ADDR;
+extern float         D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
+extern int           D_L00_001617D8_macro[3] __asm__("D_L00_001617D8") MACRO_ADDR;
+extern float         D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001617E8") MACRO_ADDR;
+extern float         D_L00_001617F8_macro[3] __asm__("D_L00_001617F8") MACRO_ADDR;
+extern float         D_L00_001618D8_2BE3A8[3] __asm__("D_L00_00161808") MACRO_ADDR;
+extern int           D_L00_001618E8_2BE3A8[3] __asm__("D_L00_00161818") MACRO_ADDR;
+extern Vec_2BE3A8    beam_rail_a_points[12] __asm__("D_L00_001DC020");
+extern Vec_2BE3A8    beam_rail_b_points[12] __asm__("D_L00_001DC0E0");
+extern Vec_2BE3A8    beam_pulse_positions[3] __asm__("D_L00_001DD0A0");
+extern Vec_2BE3A8    D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
+extern Tab           l00_beam_origin_particle_color_palette __asm__("D_L00_001E9AB0");
+extern u8 D_0013E535 NOT_SDA;
+extern float         D_L00_00161718 __attribute__((sda));
+extern float         D_L00_00161720 __attribute__((sda));
+extern float         D_L00_00161724 __attribute__((sda));
+extern int           D_L00_00161798 __attribute__((sda));
+extern OvlQuad       D_L00_001DC060[][20] NOT_SDA;
+extern OvlQuad       D_L00_001DC1A0[][20] NOT_SDA;
 extern int beam_rail_first_pass_base_vertex_color_gp __asm__("D_L00_00161780") __attribute__((sda));
 extern int beam_rail_first_pass_texture_index_gp __asm__("D_L00_001617A4") __attribute__((sda));
 extern int beam_rail_second_pass_texture_index_gp __asm__("D_L00_001617A8") __attribute__((sda));
@@ -1808,7 +1811,8 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             func_L00_001FF4B0_2BE3A8(&side,
                                      &side,
                                      l00_beam_ring_start_radius +
-                                         (l00_beam_ring_end_radius - l00_beam_ring_start_radius) * progress);
+                                         (l00_beam_ring_end_radius - l00_beam_ring_start_radius) *
+                                             progress);
             {
                 Vec_2BE3A8 ring;
                 Vec_2BE3A8 fwd;
@@ -1829,9 +1833,10 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                 func_L00_001FF4B0_2BE3A8(&out, &side, 1.0f);
                 func_001F9CA0_2BE3A8(&up, &out, &fwd);
                 wave_width = l00_beam_rail_wave_start_amplitude;
-                wave_width = wave_width + (l00_beam_rail_wave_end_amplitude - wave_width) * progress;
-                factor =
-                    normalize_angle(D_L00_001617D0 + l00_beam_rail_wave_phase_step_per_node * func_001FA888_2BE3A8(i));
+                wave_width =
+                    wave_width + (l00_beam_rail_wave_end_amplitude - wave_width) * progress;
+                factor = normalize_angle(D_L00_001617D0 + l00_beam_rail_wave_phase_step_per_node *
+                                                              func_001FA888_2BE3A8(i));
                 wave_offset.y = wave_width * func_001F9FA8_2BE3A8(factor);
                 wave_width = wave_width * func_001F9F90_2BE3A8(factor);
                 wave_offset.z = wave_width;
@@ -1892,10 +1897,12 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                          0.003f);
     }
     func_001F9BF0_2BE3A8(&beam_segment_direction, &beam_nodes[1], &beam_nodes[0]);
-    func_L00_001FF4B0_2BE3A8(
-        &beam_segment_direction, &beam_segment_direction, l00_beam_origin_particle_speed * frame_scale);
+    func_L00_001FF4B0_2BE3A8(&beam_segment_direction,
+                             &beam_segment_direction,
+                             l00_beam_origin_particle_speed * frame_scale);
     if (random_integer_below(2) == 0) {
-        func_L00_001FF4B0_2BE3A8(&side, &moby->rot_row1, l00_beam_origin_particle_basis_offset_length);
+        func_L00_001FF4B0_2BE3A8(
+            &side, &moby->rot_row1, l00_beam_origin_particle_basis_offset_length);
         func_001F9BD8_2BE3A8(&point, &beam_nodes[0], &side);
         {
             Tab        colors;
@@ -1905,12 +1912,14 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             colors = l00_beam_origin_particle_color_palette;
             color = colors.c[random_integer_below(5)];
             wave_width = randf_sym(0.0f, l00_beam_origin_particle_angular_spread);
-            build_look_at_matrix(
-                &out, &beam_segment_direction, D_0013F5E0_r, randf_sym(0.0f, l00_beam_origin_particle_angular_spread));
+            build_look_at_matrix(&out,
+                                 &beam_segment_direction,
+                                 D_0013F5E0_r,
+                                 randf_sym(0.0f, l00_beam_origin_particle_angular_spread));
             func_001F9CA0_2BE3A8(&up, &beam_segment_direction, D_0013F5E0_r);
             build_look_at_matrix(&out, &out, &up, wave_width);
-            node_index =
-                func_001FA898_2BE3A8(beam_length * 1.2f / (l00_beam_origin_particle_speed * frame_scale));
+            node_index = func_001FA898_2BE3A8(beam_length * 1.2f /
+                                              (l00_beam_origin_particle_speed * frame_scale));
             if (beam_effect_state->target != 0) {
                 node_index = node_index * 3;
             }
@@ -1967,7 +1976,8 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             continue;
         }
         if (D_L00_001617D8_macro[pulse] < l00_beam_pulse_alpha_fade_remaining_frames_threshold) {
-            D_L00_001618B8_2BE3A8[pulse] = D_L00_001618B8_2BE3A8[pulse] - l00_beam_pulse_alpha_decrement_per_update;
+            D_L00_001618B8_2BE3A8[pulse] =
+                D_L00_001618B8_2BE3A8[pulse] - l00_beam_pulse_alpha_decrement_per_update;
         }
         dt = l00_beam_pulse_travel_speed * D_0015ED6C_gp;
         travelled = D_L00_001617F8_macro[pulse] + dt;
@@ -1978,7 +1988,8 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             ratio = 1.0f;
         }
         D_L00_001618D8_2BE3A8[pulse] =
-            l00_beam_pulse_start_corner_scale + (l00_beam_pulse_end_corner_scale - l00_beam_pulse_start_corner_scale) * ratio;
+            l00_beam_pulse_start_corner_scale +
+            (l00_beam_pulse_end_corner_scale - l00_beam_pulse_start_corner_scale) * ratio;
         if (max_length <= travelled) {
             func_001F9C30_2BE3A8(&side, &beam_pulse_directions[pulse], dt);
             func_001F9BD8_2BE3A8(&beam_pulse_positions[pulse], &beam_pulse_positions[pulse], &side);

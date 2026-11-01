@@ -54,7 +54,11 @@ typedef struct TiltingPlatformVars {
 
 /* Moby class 309 */
 void tilting_platform_update(struct Moby *moby) {
-    enum { TILTING_PLATFORM_STATE_UNINITIALIZED = 0 , TILTING_PLATFORM_STATE_INITIALIZED = 1 } ;TiltingPlatformVars *tilting_platform_state = (TiltingPlatformVars *)moby->pvars;
+    enum {
+        TILTING_PLATFORM_STATE_UNINITIALIZED = 0,
+        TILTING_PLATFORM_STATE_INITIALIZED = 1
+    };
+    TiltingPlatformVars *tilting_platform_state = (TiltingPlatformVars *)moby->pvars;
     void                *rotation;
     u128                 old_rotation;
     qcopy(&old_rotation, &moby->rot);

@@ -349,7 +349,8 @@ void taxi_update(struct Moby *moby) {
     }
     }
     apply_moby_position_and_rotation_wobble((char *)moby);
-    if (moby->state >= TAXI_STATE_BLEND_STOP_TO_PATH_START && moby->state <= TAXI_STATE_FOLLOW_PATH) {
+    if (moby->state >= TAXI_STATE_BLEND_STOP_TO_PATH_START &&
+        moby->state <= TAXI_STATE_FOLLOW_PATH) {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             g->jump_lock_timer = 2;

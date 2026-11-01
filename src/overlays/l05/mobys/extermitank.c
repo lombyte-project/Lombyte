@@ -264,9 +264,9 @@ void extermitank_update(unsigned char *moby) {
             last = n - 1;
         idx = (extermitank_vars->unkC0 + n + dir) % n;
         step_mover_2e3f20((char *)moby,
-                         &extermitank_vars->unk70,
-                         (float *)(path + (idx * 16 + 0x10)),
-                         extermitank_vars->unk40);
+                          &extermitank_vars->unk70,
+                          (float *)(path + (idx * 16 + 0x10)),
+                          extermitank_vars->unk40);
         if (vector_distance_xy(moby + 0x10, *(char **)(pp + 0x10) + (idx * 16 + 0x10)) < 1.0f) {
             if (idx == last) {
                 char *q = *(char **)(pp + 0x10);
@@ -308,9 +308,10 @@ void extermitank_update(unsigned char *moby) {
                 &extermitank_vars->unk198, 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
         }
         build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
-        build_axis_rotation_quaternion(extermitank_vars->unk100,
-                         2,
-                         fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
+        build_axis_rotation_quaternion(
+            extermitank_vars->unk100,
+            2,
+            fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
         break;
     }
     case EXTERMITANK_FIRE_PARTICLES: {
@@ -327,9 +328,9 @@ void extermitank_update(unsigned char *moby) {
             last = n - 1;
         idx = (extermitank_vars->unkC0 + n + dir) % n;
         step_mover_2e3f20((char *)moby,
-                         &extermitank_vars->unk70,
-                         (float *)(path + (idx * 16 + 0x10)),
-                         extermitank_vars->unk40);
+                          &extermitank_vars->unk70,
+                          (float *)(path + (idx * 16 + 0x10)),
+                          extermitank_vars->unk40);
         if (vector_distance_xy(moby + 0x10, *(char **)(pp + 0x10) + (idx * 16 + 0x10)) < 1.0f) {
             if (idx == last) {
                 char *q = *(char **)(pp + 0x10);
@@ -481,9 +482,10 @@ void extermitank_update(unsigned char *moby) {
                 &extermitank_vars->unk198, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         }
         build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
-        build_axis_rotation_quaternion(extermitank_vars->unk100,
-                         2,
-                         fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
+        build_axis_rotation_quaternion(
+            extermitank_vars->unk100,
+            2,
+            fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
         break;
     }
     case EXTERMITANK_REMOVE:
@@ -535,7 +537,10 @@ extern float extermitank_child_animation_speed_offset_scale_gp __asm__("D_L05_00
 typedef struct Hero Hero;
 
 void handle_extermitank_hits_and_sync_children(char *moby) {
-    enum { MOBY_HIT_RESPONSE_SKIP_DAMAGE = 1 } ;ExtermitankVars *extermitank_hit_sync_vars = (ExtermitankVars *)MOBY(moby)->pvars;
+    enum {
+        MOBY_HIT_RESPONSE_SKIP_DAMAGE = 1
+    };
+    ExtermitankVars *extermitank_hit_sync_vars = (ExtermitankVars *)MOBY(moby)->pvars;
     char            *first;
     char            *second;
     char            *part0;
@@ -568,7 +573,8 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     hit = part0;
     resolve_moby_hit_response(
         moby, hit, &extermitank_hit_sync_vars->health, 0, &hit_processing_status, &remaining, 0, 4);
-    if (hit_processing_status == MOBY_HIT_RESPONSE_SKIP_DAMAGE || (unsigned char)MOBY(moby)->state == 3)
+    if (hit_processing_status == MOBY_HIT_RESPONSE_SKIP_DAMAGE ||
+        (unsigned char)MOBY(moby)->state == 3)
         goto mark_children;
     {
         extermitank_hit_sync_vars->health -= remaining;

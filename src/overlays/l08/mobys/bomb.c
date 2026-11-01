@@ -54,30 +54,29 @@ extern int              collision_line(void *, void *, int, void *, int) __asm__
 extern int              coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 float      bomb_downward_acceleration_gp __asm__("D_L08_00161860") = 15.0f;
-extern void FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void spawn_explosion(void *,
-                            void *,
-                            void *,
-                            float,
-                            float,
-                            int,
-                            int,
-                            int,
-                            float,
-                            float,
-                            float,
-                            float,
-                            int,
-                            float,
-                            int,
-                            int,
-                            int,
-                            int) __asm__("FUN_L00_0025e450");
-extern void
-spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+extern void  FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
+extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  spawn_explosion(void *,
+                             void *,
+                             void *,
+                             float,
+                             float,
+                             int,
+                             int,
+                             int,
+                             float,
+                             float,
+                             float,
+                             float,
+                             int,
+                             float,
+                             int,
+                             int,
+                             int,
+                             int) __asm__("FUN_L00_0025e450");
+extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") MACRO_ADDR;
 void         moby_248_update(char *moby) __asm__("FUN_L08_002d23f0");
 extern float D_0015ED6C;
@@ -156,13 +155,13 @@ void moby_248_update(char *moby) {
             fast_vec_normalize(normalized_direction, normalized_direction, D_0015ED6C);
             selected_table_entry = (int *)table_or_bounce_scratch.b + random_integer_below(4);
             spawn_effect((moby + 0x10),
-                               normalized_direction,
-                               *selected_table_entry,
-                               0x4FFF,
-                               scale_game_frames(0x2D),
-                               0x32,
-                               0x78,
-                               1);
+                         normalized_direction,
+                         *selected_table_entry,
+                         0x4FFF,
+                         scale_game_frames(0x2D),
+                         0x32,
+                         0x78,
+                         1);
         }
         qcopy(c.r.start, moby + 0x10);
         collision_z_offset = 0.16f;

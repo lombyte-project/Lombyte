@@ -309,8 +309,10 @@ void minibomber_update(Moby_2B5938 *moby) {
     FUN_L14_002b5428_c((char *)moby);
     FUN_L14_002b5dd8_c((char *)moby);
     if (moby->f31 != 0) {
-        if (fast_vec_dist(moby->pos, D_L14_001674C0) < 40.0f && moby->state != MINIBOMBER_STATE_INITIALIZE &&
-            moby->state != MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH && moby->state != MINIBOMBER_STATE_DESTROY) {
+        if (fast_vec_dist(moby->pos, D_L14_001674C0) < 40.0f &&
+            moby->state != MINIBOMBER_STATE_INITIALIZE &&
+            moby->state != MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH &&
+            moby->state != MINIBOMBER_STATE_DESTROY) {
             FUN_L00_0025a120(moby);
         }
     }
@@ -621,7 +623,8 @@ void minibomber_update(Moby_2B5938 *moby) {
         return;
     }
     }
-    if (moby->state > MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH && moby->state != MINIBOMBER_STATE_DESTROY) {
+    if (moby->state > MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH &&
+        moby->state != MINIBOMBER_STATE_DESTROY) {
         if (voice_is_playing(moby, d->f108) == 0) {
             d->f108 = allocate_voice_for_target_entry(0, 4, (int)moby);
         }
@@ -661,7 +664,8 @@ void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
     char          *hit_record;
     int            k;
     float          remaining_health;
-    if (hit_owner_moby->state == MINIBOMBER_STATE_INITIALIZE || hit_owner_moby->state == MINIBOMBER_STATE_DESTROY)
+    if (hit_owner_moby->state == MINIBOMBER_STATE_INITIALIZE ||
+        hit_owner_moby->state == MINIBOMBER_STATE_DESTROY)
         return;
     hit_owner_moby->scale = hit_owner_moby->pclass->scale;
     damage_amount = 0.0f;
@@ -742,7 +746,8 @@ void update_minibomber_oscillation(struct Moby *moby) {
     unsigned char state = raw;
     char         *minibomber_instance_vars = (char *)moby->pvars;
     float         spring_target;
-    if (state == MINIBOMBER_STATE_INITIALIZE || state == MINIBOMBER_STATE_DESTROY || state == MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH)
+    if (state == MINIBOMBER_STATE_INITIALIZE || state == MINIBOMBER_STATE_DESTROY ||
+        state == MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH)
         return;
     spring_target = *(float *)&D_L14_00161540_gp;
     if ((raw >= 2 && raw <= 3) || state == MINIBOMBER_STATE_TRAVERSE_PATH) {
@@ -895,9 +900,15 @@ void ease_minibomber_position_and_heading(char  *moby,
                                           float  heading_velocity_damping,
 
                                           float heading_velocity_limit) {
-    enum { MINIBOMBER_STATE_HOLD_AT_PATH_END = 4 , MINIBOMBER_STATE_RELEASE_BOMB = 6 } ;int minibomber_private_vars_base;
+    enum {
+        MINIBOMBER_STATE_HOLD_AT_PATH_END = 4,
+        MINIBOMBER_STATE_RELEASE_BOMB = 6
+    };
+    int minibomber_private_vars_base;
     int moby_state = MOBY(moby)->state & 0xFF;
-    if ((moby_state >= MINIBOMBER_STATE_HOLD_AT_PATH_END && moby_state <= MINIBOMBER_STATE_RELEASE_BOMB) || moby_state == 8) {
+    if ((moby_state >= MINIBOMBER_STATE_HOLD_AT_PATH_END &&
+         moby_state <= MINIBOMBER_STATE_RELEASE_BOMB) ||
+        moby_state == 8) {
         minibomber_private_vars_base = *(int *)(moby + 0x78);
         vendor_spring((float *)&MOBY(moby)->pos,
                       (float *)(minibomber_private_vars_base + 0xF0),
@@ -1138,7 +1149,8 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
     int   signed_puff_value;
     int   life;
     float size;
-    if (moby->state < MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH || moby->state == MINIBOMBER_STATE_DESTROY)
+    if (moby->state < MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH ||
+        moby->state == MINIBOMBER_STATE_DESTROY)
         return;
     fast_vec_scale(exhaust_position_offset, &moby->rot_row0, -1.25f);
     fast_vec_add(pos, &moby->pos, exhaust_position_offset);

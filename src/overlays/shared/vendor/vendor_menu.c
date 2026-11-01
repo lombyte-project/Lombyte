@@ -1080,7 +1080,8 @@ void update_vendor_purchase(void) {
                         ammo_bought_stats[CUR_ITEM.item] += k;
                         handle_vendor_auxiliary_moby_event(3);
                         D_0015ED98 = D_0015ED98 - purchase_cost;
-                        build_vendor_menu_rows(vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR);
+                        build_vendor_menu_rows(vendor_menu.mode !=
+                                               VENDOR_MENU_MODE_EXISTING_VENDOR);
                         set_scrolling_status_message(get_help_message_text(0x4F5F));
                         allocate_voice_for_target_entry(7, 0, vendor_menu.vendor_moby);
                     } else {
@@ -1182,7 +1183,8 @@ void update_vendor_menu(void) {
     switch (vendor_menu.state) {
     case VENDOR_MENU_OPENING:
     case VENDOR_MENU_CLOSING:
-        if (vendor_menu.mode == VENDOR_MENU_MODE_EXISTING_VENDOR || vendor_menu.state == VENDOR_MENU_CLOSING) {
+        if (vendor_menu.mode == VENDOR_MENU_MODE_EXISTING_VENDOR ||
+            vendor_menu.state == VENDOR_MENU_CLOSING) {
             if ((g_debug_menu.update_flags & 2) ||
                 ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
                 reset_frame_counters();
@@ -1211,7 +1213,8 @@ void update_vendor_menu(void) {
                 fade_level = 0.0f;
             }
             vendor_menu.frames++;
-            if (vendor_menu.frames >= scale_game_frames(40) || vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR) {
+            if (vendor_menu.frames >= scale_game_frames(40) ||
+                vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR) {
                 fade_level = 0.0f;
                 vendor_menu.unk0C = 1;
                 vendor_menu.state = VENDOR_MENU_OPEN;
@@ -1224,13 +1227,15 @@ void update_vendor_menu(void) {
             }
         } else if (vendor_menu_state == VENDOR_MENU_CLOSING) {
             ok = 0;
-            if (vendor_menu.mode == VENDOR_MENU_MODE_EXISTING_VENDOR && vendor_menu.purchased_item >= 0) {
+            if (vendor_menu.mode == VENDOR_MENU_MODE_EXISTING_VENDOR &&
+                vendor_menu.purchased_item >= 0) {
                 if (vendor_exit_cutscene_ids_by_item[vendor_menu.purchased_item] >= 0) {
                     ok = 1;
                 }
             }
             vendor_menu.frames++;
-            if (vendor_menu.frames >= scale_game_frames(40) || vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR) {
+            if (vendor_menu.frames >= scale_game_frames(40) ||
+                vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR) {
                 FUN_00212f90(vendor_menu.vendor_moby, 1, 0, 8);
                 row = vendor_slots;
                 for (k = 0; k < 4; k++) {
@@ -1371,9 +1376,11 @@ void update_vendor_menu(void) {
                      &vendor_menu.menu_mobys[3].pos,
                      &position_contribution_scratch);
         vendor_menu.frames++;
-        if (vendor_menu.purchase_state == VENDOR_PURCHASE_INACTIVE && l00_vendor_close_pending == 0) {
+        if (vendor_menu.purchase_state == VENDOR_PURCHASE_INACTIVE &&
+            l00_vendor_close_pending == 0) {
             if (vendor_menu.row_count < 8) {
-                if ((controller_state.pressed_unmasked & 0x2000) && !(l00_vendor_previous_pressed_buttons & 0x2000)) {
+                if ((controller_state.pressed_unmasked & 0x2000) &&
+                    !(l00_vendor_previous_pressed_buttons & 0x2000)) {
                     if (vendor_menu.cursor < vendor_menu.row_count - 1) {
                         D_L00_00161E38 = 1;
                         handle_vendor_auxiliary_moby_event(0);
@@ -1396,7 +1403,8 @@ void update_vendor_menu(void) {
                         }
                     }
                 }
-                if ((controller_state.pressed_unmasked & 0x8000) && !(l00_vendor_previous_pressed_buttons & 0x8000)) {
+                if ((controller_state.pressed_unmasked & 0x8000) &&
+                    !(l00_vendor_previous_pressed_buttons & 0x8000)) {
                     if (vendor_menu.cursor > 0) {
                         D_L00_00161E38 = 1;
                         handle_vendor_auxiliary_moby_event(0);
@@ -1420,7 +1428,8 @@ void update_vendor_menu(void) {
                     }
                 }
             } else {
-                if ((controller_state.pressed_unmasked & 0x2000) && !(l00_vendor_previous_pressed_buttons & 0x2000)) {
+                if ((controller_state.pressed_unmasked & 0x2000) &&
+                    !(l00_vendor_previous_pressed_buttons & 0x2000)) {
                     if (vendor_menu.scroll <= 0x38) {
                         D_L00_00161E38 = 1;
                         vendor_menu.scroll += 0x38;
@@ -1448,7 +1457,8 @@ void update_vendor_menu(void) {
                         }
                     }
                 }
-                if ((controller_state.pressed_unmasked & 0x8000) && !(l00_vendor_previous_pressed_buttons & 0x8000)) {
+                if ((controller_state.pressed_unmasked & 0x8000) &&
+                    !(l00_vendor_previous_pressed_buttons & 0x8000)) {
                     if (vendor_menu.scroll >= -0x38) {
                         D_L00_00161E38 = 1;
                         vendor_menu.scroll -= 0x38;
@@ -1477,7 +1487,8 @@ void update_vendor_menu(void) {
                     }
                 }
             }
-            if ((controller_state.pressed_unmasked & 0x40) && !(l00_vendor_previous_pressed_buttons & 0x40) &&
+            if ((controller_state.pressed_unmasked & 0x40) &&
+                !(l00_vendor_previous_pressed_buttons & 0x40) &&
                 CUR_ITEM.state == VENDOR_ROW_PURCHASE_REQUEST_ENABLED) {
                 vendor_menu.purchase_state = VENDOR_PURCHASE_INITIALIZE;
                 allocate_voice_for_target_entry(0, 0, vendor_menu.vendor_moby);

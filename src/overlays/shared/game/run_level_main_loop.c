@@ -231,7 +231,8 @@ void run_level_main_loop(void) {
         }
         memcard_update_state();
         run_state_handler();
-        if (memory_card_state.state >= MEMCARD_REQUEST_FORMAT || memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
+        if (memory_card_state.state >= MEMCARD_REQUEST_FORMAT ||
+            memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
             if (D_L00_001B9CF0.unk13C == 0) {
                 int   rotation_period_frames = 55;
                 float size;
@@ -269,7 +270,8 @@ void run_level_main_loop(void) {
         if (hero.fall_fade_pending == 0) {
             int mode = D_L00_0015F5C4;
 
-            if (mode == LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE || mode == LEVEL_MODE_DEBUG_PROFILER_RENDER) {
+            if (mode == LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE ||
+                mode == LEVEL_MODE_DEBUG_PROFILER_RENDER) {
                 int frame_timer_threshold = 9600;
 
                 if (pal_mode != PAL_MODE_DISABLED) {

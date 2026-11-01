@@ -261,7 +261,14 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_ENTER_WAIT_FOR_USE = 6,
         TELEPORTER_EFFECT_CYCLE_PREPARE = 7,
         TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE = 8
-    } ; enum { TELEPORTER_WAIT_FOR_ACTIVATION = 5} ; enum { HERO_TARGET_POSE_STATUS_INACTIVE = 0 , HERO_TARGET_POSE_STATUS_TRANSFER_READY = 2};
+    };
+    enum {
+        TELEPORTER_WAIT_FOR_ACTIVATION = 5
+    };
+    enum {
+        HERO_TARGET_POSE_STATUS_INACTIVE = 0,
+        HERO_TARGET_POSE_STATUS_TRANSFER_READY = 2
+    };
     TeleporterVars *teleporter_vars = (TeleporterVars *)moby->pvars;
     int             active = 0;
 

@@ -181,7 +181,8 @@ void draw_debug_profiler(void) {
     }
     append_dma_tag(0x02080000);
     setup_gif_paging(0);
-    if ((draw_enable_mask & 0x20) && draw_config.unk30 != 0 && font_state != FONT_STATE_EFFECTS_DATA) {
+    if ((draw_enable_mask & 0x20) && draw_config.unk30 != 0 &&
+        font_state != FONT_STATE_EFFECTS_DATA) {
         vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
         font_state = FONT_STATE_EFFECTS_DATA;
     }

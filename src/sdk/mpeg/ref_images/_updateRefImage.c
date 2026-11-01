@@ -139,13 +139,15 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
         state->selected_top_field = state->previous_top_field;
         state->selected_bottom_field = state->previous_bottom_field;
         if (state->picture_structure == 3) {
-            if (state->coding_type != MPEG_PICTURE_CODING_TYPE_P || state->current_frame->status == 1) {
+            if (state->coding_type != MPEG_PICTURE_CODING_TYPE_P ||
+                state->current_frame->status == 1) {
                 references_ready = 1;
             }
         } else {
             predicted_field = (state->picture_structure == 1) ? state->selected_bottom_field
                                                               : state->selected_top_field;
-            if (state->coding_type != MPEG_PICTURE_CODING_TYPE_P || (force_reorder != 0 && predicted_field->status == MPEG_REFERENCE_STATUS_READY) ||
+            if (state->coding_type != MPEG_PICTURE_CODING_TYPE_P ||
+                (force_reorder != 0 && predicted_field->status == MPEG_REFERENCE_STATUS_READY) ||
                 (state->current_top_field->status == 1 &&
                  state->current_bottom_field->status == 1)) {
                 references_ready = 1;

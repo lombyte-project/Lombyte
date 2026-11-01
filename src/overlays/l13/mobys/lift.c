@@ -214,7 +214,8 @@ void compute_lift_mount_transform(struct Moby *moby, float *mount_position, floa
     char *mount_facing_target_base;
     clear_u64_value(mount_rotation);
     k = 2.25f;
-    if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= LIFT_MOVE_TO_TOP && (moby->state & 1))) {
+    if ((moby->command >= 2 && (moby->command & 1)) ||
+        (moby->state >= LIFT_MOVE_TO_TOP && (moby->state & 1))) {
         mount_offset_angle = -1.5707964f;
         mount_rotation[0] = moby->rot.y;
     } else {

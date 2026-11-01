@@ -34,16 +34,20 @@ extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");
 int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
 
 int check_descriptor_hero_trigger(char *moby) {
-    unsigned char *trigger_descriptor_record = *(unsigned char **)(l10_descriptor_table + *(short *)(moby + 0x84) * 32 + 0x1C);
+    unsigned char *trigger_descriptor_record =
+        *(unsigned char **)(l10_descriptor_table + *(short *)(moby + 0x84) * 32 + 0x1C);
 
     if (*(int *)(trigger_descriptor_record + 0x0C) >= 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(trigger_descriptor_record + 0x0C)))
+        if (is_point_inside_clip_volume(&hero.motion.pos,
+                                        *(int *)(trigger_descriptor_record + 0x0C)))
             return 1;
     } else if (*(int *)(trigger_descriptor_record + 0x10) >= 0) {
-        if (test_point_in_transformed_unit_cylinder(&hero.motion.pos, *(int *)(trigger_descriptor_record + 0x10)))
+        if (test_point_in_transformed_unit_cylinder(&hero.motion.pos,
+                                                    *(int *)(trigger_descriptor_record + 0x10)))
             return 1;
     } else if (*(int *)(trigger_descriptor_record + 0x08) >= 0) {
-        if (test_point_in_transformed_unit_sphere((float *)(&hero.motion.pos), *(int *)(trigger_descriptor_record + 0x08)))
+        if (test_point_in_transformed_unit_sphere((float *)(&hero.motion.pos),
+                                                  *(int *)(trigger_descriptor_record + 0x08)))
             return 1;
     } else if (*(int *)(trigger_descriptor_record + 0x14) >= 0) {
         int i = *(int *)(trigger_descriptor_record + 0x14);
@@ -89,8 +93,8 @@ extern VendorView_5f18 l10_camera_view __asm__("D_L10_0016CEC0");
 void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f5b58");
 
 void initialize_path_camera(struct UpdateCam *path_camera) {
-    char              *rec = *(char **)(l10_descriptor_table + path_camera->descriptor_index * 32 + 0x1C);
-    VendorCamRun_5f18 *run;
+    char *rec = *(char **)(l10_descriptor_table + path_camera->descriptor_index * 32 + 0x1C);
+    VendorCamRun_5f18   *run;
     VendorCamStops_5f18 *stops;
     f32                 *fov;
     Vec4f               *m1, *m2, *pos;

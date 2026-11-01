@@ -71,7 +71,10 @@ void boss_camera_transition_update(struct Moby *moby) {
         STATE_INTERPOLATE_TRANSITION = 3,
         STATE_INTERPOLATE_TRANSITION_WITH_RAMP_UP = 4,
         STATE_POST_TRANSITION_RAMP_DOWN = 5
-    } ; enum { STATE_IDLE = 1};
+    };
+    enum {
+        STATE_IDLE = 1
+    };
     BossCameraTransitionVars *transition_private_vars = (BossCameraTransitionVars *)moby->pvars;
     float                     transition_scratch_vectors[12];
     switch (moby->state) {
@@ -243,7 +246,10 @@ void start_camera_transition(struct Moby *moby,
                              int          transition_delay_frames,
 
                              int transition_mode) {
-    enum { CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2 } ;BossCameraTransitionVars *position_rotation_transition_vars =
+    enum {
+        CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2
+    };
+    BossCameraTransitionVars *position_rotation_transition_vars =
         (BossCameraTransitionVars *)moby->pvars;
     *(int *)&position_rotation_transition_vars->unk60 = 0;
     position_rotation_transition_vars->unk64 = 0;
@@ -284,7 +290,11 @@ float get_camera_transition_progress(Level18VendorFloatMoby *moby) {
 s32 classify_moby_state_two_or_three(const u8 *moby) __asm__("FUN_L18_002dfba0");
 
 s32 classify_moby_state_two_or_three(const u8 *moby) {
-    enum { CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2 , CAMERA_TRANSITION_STATE_INTERPOLATE_TRANSITION = 3 } ;u32 state = MOBY(moby)->state;
+    enum {
+        CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2,
+        CAMERA_TRANSITION_STATE_INTERPOLATE_TRANSITION = 3
+    };
+    u32 state = MOBY(moby)->state;
     s32 state_classification = 2;
 
     if (state == CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP) {

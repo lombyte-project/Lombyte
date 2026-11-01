@@ -67,7 +67,13 @@ void hero_seeking_mine_update(char *moby) __asm__("FUN_L15_002a2488");
 
 /* Moby class 77 */
 void hero_seeking_mine_update(char *moby) {
-    enum { GROUP_MOBY_STATE_RESET = 0 , GROUP_MOBY_STATE_RISING = 2 , GROUP_MOBY_STATE_HERO_SEEKING = 3 , GROUP_MOBY_STATE_BURST = 4 } ;float         va[4];
+    enum {
+        GROUP_MOBY_STATE_RESET = 0,
+        GROUP_MOBY_STATE_RISING = 2,
+        GROUP_MOBY_STATE_HERO_SEEKING = 3,
+        GROUP_MOBY_STATE_BURST = 4
+    };
+    float         va[4];
     float         pb[4];
     char         *group_moby_data;
     char         *callback_frame_stamp;

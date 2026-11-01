@@ -100,21 +100,25 @@ extern void func_L02_002DA728_2D9F08(Moby *) __asm__("FUN_L02_002d92f0");
 extern void func_L02_002D9D48_2D9F08(void *, void *, Moby *) __asm__("FUN_L02_002d8910");
 extern float
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void           func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
-extern void           func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
-extern float          D_L02_001D33B0[4][4];
-extern Lvl            D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
-extern int            current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
-extern Vec_2D9F08     D_L02_00167440_2D9F08[] __asm__("D_L02_001673C0");
-extern float          frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
-extern float          frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
-extern int            D_L02_0017EB08_lui __asm__("D_L02_0017EB08") NOT_SDA;
-extern Idle           D_L02_00179A10;
-extern int            D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
-extern int            l02_tresspasser_puzzle_texture_index_offset __asm__("D_L02_00161B1C") __attribute__((sda));
-extern int            l02_tresspasser_pad_no_ground_contact_glow_color __asm__("D_L02_00161AA8") __attribute__((sda));
-extern int            l02_tresspasser_pad_without_tool_glow_color __asm__("D_L02_00161AA4") __attribute__((sda));
-extern int            l02_tresspasser_pad_tool_equipped_glow_color __asm__("D_L02_00161AA0") __attribute__((sda));
+extern void       func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
+extern void       func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
+extern float      D_L02_001D33B0[4][4];
+extern Lvl        D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
+extern int        current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern Vec_2D9F08 D_L02_00167440_2D9F08[] __asm__("D_L02_001673C0");
+extern float      frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern float      frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern int        D_L02_0017EB08_lui __asm__("D_L02_0017EB08") NOT_SDA;
+extern Idle       D_L02_00179A10;
+extern int        D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
+extern int        l02_tresspasser_puzzle_texture_index_offset __asm__("D_L02_00161B1C")
+    __attribute__((sda));
+extern int l02_tresspasser_pad_no_ground_contact_glow_color __asm__("D_L02_00161AA8")
+    __attribute__((sda));
+extern int l02_tresspasser_pad_without_tool_glow_color __asm__("D_L02_00161AA4")
+    __attribute__((sda));
+extern int l02_tresspasser_pad_tool_equipped_glow_color __asm__("D_L02_00161AA0")
+    __attribute__((sda));
 extern char           D_0013E633_2D9F08[] __asm__("D_0013E533");
 
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
@@ -490,7 +494,13 @@ void align_hero_to_tresspasser_pad(struct Moby *moby) {
 
 void draw_tresspasser_puzzle(char *moby) {
     /* Fakematch: the texture sits at retail's stack offset inside this frame. */
-    enum { TRESSPASSER_MARKER_ABSENT = 0 , TRESSPASSER_SELECTED_RING_FIRST = 1 , TRESSPASSER_SELECTED_RING_SECOND = 2 , TRESSPASSER_MARKER_REACHED = 2 } ;struct {
+    enum {
+        TRESSPASSER_MARKER_ABSENT = 0,
+        TRESSPASSER_SELECTED_RING_FIRST = 1,
+        TRESSPASSER_SELECTED_RING_SECOND = 2,
+        TRESSPASSER_MARKER_REACHED = 2
+    };
+    struct {
         char pad0[0x78];
         u64  texture;
         char pad80[0x10];

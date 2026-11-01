@@ -43,11 +43,11 @@ extern float              D_L02_00174460[];
 extern float              FUN_L04_001f1978(float);
 extern float              fast_vec_dist(void *, void *);
 extern int D_L02_0015F5CC MACRO_ADDR;
-extern float              l02_effect_particle_travel_step_limit __asm__("D_L02_001600D0") __attribute__((sda));
-extern int                l02_effect_alternate_particle_count __asm__("D_L02_001600D4") __attribute__((sda));
-extern int                l02_effect_default_particle_count __asm__("D_L02_001600D8") __attribute__((sda));
-extern float              l02_effect_particle_full_travel_spread __asm__("D_L02_001600DC") __attribute__((sda));
-extern float              l02_effect_particle_zero_travel_spread __asm__("D_L02_001600E0") __attribute__((sda));
+extern float l02_effect_particle_travel_step_limit __asm__("D_L02_001600D0") __attribute__((sda));
+extern int   l02_effect_alternate_particle_count __asm__("D_L02_001600D4") __attribute__((sda));
+extern int   l02_effect_default_particle_count __asm__("D_L02_001600D8") __attribute__((sda));
+extern float l02_effect_particle_full_travel_spread __asm__("D_L02_001600DC") __attribute__((sda));
+extern float l02_effect_particle_zero_travel_spread __asm__("D_L02_001600E0") __attribute__((sda));
 
 void effect_slots_fire(char  *slots,
                        float *position,
@@ -104,7 +104,9 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
         random_vector(
             offset,
             0.0f,
-            (((l02_effect_particle_full_travel_spread) - (l02_effect_particle_zero_travel_spread)) * (travel / distance) + (l02_effect_particle_zero_travel_spread)) *
+            (((l02_effect_particle_full_travel_spread) - (l02_effect_particle_zero_travel_spread)) *
+                 (travel / distance) +
+             (l02_effect_particle_zero_travel_spread)) *
                 frame_time_macro);
         fast_vec_add(offset, offset, adjusted);
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));

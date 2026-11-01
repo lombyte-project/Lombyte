@@ -168,17 +168,18 @@ void tresspasser_update(struct Moby *moby) {
                                    gadget_pickup_state + 0x40,
                                    gadget_pickup_state + 0x44);
         lerp_vector(position, (void *)a, (void *)b, *(float *)(gadget_pickup_state + 0x40));
-        output[2] =
-            fast_add_rotations(fast_subtract_rotations(d[2], c[2]) * *(float *)(gadget_pickup_state + 0x40), c[2]);
-        output[1] =
-            fast_add_rotations(fast_subtract_rotations(d[1], c[1]) * *(float *)(gadget_pickup_state + 0x40), c[1]);
-        output[0] =
-            fast_add_rotations(fast_subtract_rotations(d[0], c[0]) * *(float *)(gadget_pickup_state + 0x40), c[0]);
+        output[2] = fast_add_rotations(
+            fast_subtract_rotations(d[2], c[2]) * *(float *)(gadget_pickup_state + 0x40), c[2]);
+        output[1] = fast_add_rotations(
+            fast_subtract_rotations(d[1], c[1]) * *(float *)(gadget_pickup_state + 0x40), c[1]);
+        output[0] = fast_add_rotations(
+            fast_subtract_rotations(d[0], c[0]) * *(float *)(gadget_pickup_state + 0x40), c[0]);
         if (D_L02_00167400 && *(short *)(D_L02_00167400 + 0x86) != 5)
             jet_mount(position, output, 1, 0, 0);
         set_camera_position(position);
         set_camera_rotation(output);
-        if (D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1 && 0.2f < *(float *)(gadget_pickup_state + 0x40)) {
+        if (D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1 &&
+            0.2f < *(float *)(gadget_pickup_state + 0x40)) {
             approach_value(1.0f, frame_time * 4.0f, &D_L02_0015F3FC);
         } else {
             approach_value(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
@@ -259,13 +260,13 @@ void update_collectible_sprite_effect(char *moby) {
         col = func_001FA8A8_2ebce8_ea8b0(
             0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_elapsed_fraction));
         spawn_timed_hero_relative_particle(d,
-                                col,
-                                truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
-                                0x35,
-                                1,
-                                2,
-                                0,
-                                sprite_data->d[i]);
+                                           col,
+                                           truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
+                                           0x35,
+                                           1,
+                                           2,
+                                           0,
+                                           sprite_data->d[i]);
         fast_vec_add(d, d, sprite_position_step);
     }
 }

@@ -132,8 +132,8 @@ typedef struct {
 } HeightGridLayout;
 
 extern HeightGridLayout l00_pool_height_grid_layout __asm__("D_L00_001CA880");
-extern s32              l00_pool_height_write_bank_index __asm__("D_L00_00161218") __attribute__((sda));
-extern s32              l00_pool_height_additive_read_bank_index __asm__("D_L00_00161220") __attribute__((sda));
+extern s32 l00_pool_height_write_bank_index __asm__("D_L00_00161218") __attribute__((sda));
+extern s32 l00_pool_height_additive_read_bank_index __asm__("D_L00_00161220") __attribute__((sda));
 
 /* Splash on the pool height tiles: raises the heights around (x, z) and copies the edges into the neighbour tiles. */
 void pool_splash(HeightTile *tile,
@@ -157,7 +157,8 @@ void pool_splash(
     for (i = 0; i < count; i++) {
         float tile_z = tile->z + l00_pool_height_grid_layout.origin_z;
         float cell_z = (z - tile_z) / l00_pool_height_grid_layout.cell_height;
-        float cell_x = (x - (tile->x + l00_pool_height_grid_layout.origin_x)) / l00_pool_height_grid_layout.cell_width;
+        float cell_x = (x - (tile->x + l00_pool_height_grid_layout.origin_x)) /
+                       l00_pool_height_grid_layout.cell_width;
         int   row_first, row_last, col_first, col_last;
         float row_z;
 
@@ -176,8 +177,8 @@ void pool_splash(
         row_z = tile_z + l00_pool_height_grid_layout.cell_height * (float)row_first;
 
         for (row = row_first; row <= row_last; row++) {
-            float col_x =
-                (tile->x + l00_pool_height_grid_layout.origin_x) + l00_pool_height_grid_layout.cell_width * (float)col_first;
+            float col_x = (tile->x + l00_pool_height_grid_layout.origin_x) +
+                          l00_pool_height_grid_layout.cell_width * (float)col_first;
             int col;
 
             for (col = col_first; col <= col_last; col++) {
@@ -191,7 +192,8 @@ void pool_splash(
                 }
                 if (mode == POOL_SPLASH_KEEP_GREATER_MAGNITUDE) {
                     float magnitude = absolute_float(height);
-                    if (magnitude < absolute_float(tile->heights[l00_pool_height_write_bank_index][row][col])) {
+                    if (magnitude <
+                        absolute_float(tile->heights[l00_pool_height_write_bank_index][row][col])) {
                         height = tile->heights[l00_pool_height_write_bank_index][row][col];
                     }
                 } else {
@@ -212,10 +214,12 @@ void pool_splash(
                 }
                 if (col < 2 && tile->neighbours[1] != 0xFF) {
                     if (col == 0) {
-                        tiles[tile->neighbours[1]].heights[l00_pool_height_write_bank_index][19][row] =
+                        tiles[tile->neighbours[1]]
+                            .heights[l00_pool_height_write_bank_index][19][row] =
                             tile->heights[l00_pool_height_write_bank_index][row][0];
                     } else {
-                        tiles[tile->neighbours[1]].heights[l00_pool_height_write_bank_index][21][row] =
+                        tiles[tile->neighbours[1]]
+                            .heights[l00_pool_height_write_bank_index][21][row] =
                             tile->heights[l00_pool_height_write_bank_index][row][col];
                     }
                 }

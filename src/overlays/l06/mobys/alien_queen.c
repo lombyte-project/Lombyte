@@ -121,14 +121,15 @@ extern short l06_alien_queen_movement_speed __asm__("D_L06_00161EF4") __attribut
 f32          alien_queen_movement_acceleration_gp __asm__("D_L06_00161EFC") = 8.0f;
 extern short l06_alien_queen_attack_distance __asm__("D_L06_00161F00") __attribute__((sda));
 extern short l06_alien_queen_retreat_distance __asm__("D_L06_00161F04") __attribute__((sda));
-extern short l06_alien_queen_attack_heading_tolerance_degrees __asm__("D_L06_00161F08") __attribute__((sda));
-extern void  FUN_L06_002fa9c0_c(void *) __asm__("FUN_L06_002fa9c0");
-void         set_moby_list_state_18(int idx) __asm__("FUN_L06_002f9948");
-void         FUN_L06_002fb870(char *arg);
-void         FUN_L06_002fbc30(char *arg);
-int          FUN_L06_002fba28(char *moby);
-extern void  func_L00_00264B40_q(void *, int, float, void *) __asm__("FUN_L00_00263ac8");
-extern void  func_L00_0025B178_q(void *) __asm__("FUN_L00_0025a120");
+extern short l06_alien_queen_attack_heading_tolerance_degrees __asm__("D_L06_00161F08")
+    __attribute__((sda));
+extern void FUN_L06_002fa9c0_c(void *) __asm__("FUN_L06_002fa9c0");
+void        set_moby_list_state_18(int idx) __asm__("FUN_L06_002f9948");
+void        FUN_L06_002fb870(char *arg);
+void        FUN_L06_002fbc30(char *arg);
+int         FUN_L06_002fba28(char *moby);
+extern void func_L00_00264B40_q(void *, int, float, void *) __asm__("FUN_L00_00263ac8");
+extern void func_L00_0025B178_q(void *) __asm__("FUN_L00_0025a120");
 extern int
 queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void  func_L00_00236710_q(void) __asm__("FUN_L00_00235d80");
@@ -388,7 +389,25 @@ typedef struct AlienQueenVars {
 
 /* Moby class 1051 */
 void alien_queen_update(unsigned char *moby) {
-    enum { ALIEN_QUEEN_STATE_INITIALIZE = 0 , ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO = 1 , ALIEN_QUEEN_STATE_INTRO = 2 , ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA = 3 , ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT = 4 , ALIEN_QUEEN_STATE_SECOND_RECOVERY_CAMERA = 5 , ALIEN_QUEEN_STATE_GROUP_RECOVERY_ORBIT = 6 , ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET = 7 , ALIEN_QUEEN_STATE_APPROACH_TARGET = 8 , ALIEN_QUEEN_STATE_ATTACK_WINDUP = 9 , ALIEN_QUEEN_STATE_ATTACK_HIT_QUERIES = 10 , ALIEN_QUEEN_STATE_WAIT_FOR_ORBIT_ANIMATION_END = 11, ALIEN_QUEEN_STATE_TIMED_ORBIT = 12 , ALIEN_QUEEN_STATE_RETURN_HOME = 13 , ALIEN_QUEEN_STATE_DEATH = 14 , ALIEN_QUEEN_STATE_POST_DEATH = 15 } ;AlienQueenVars *alien_queen_update_vars = (AlienQueenVars *)MOBY(moby)->pvars;
+    enum {
+        ALIEN_QUEEN_STATE_INITIALIZE = 0,
+        ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO = 1,
+        ALIEN_QUEEN_STATE_INTRO = 2,
+        ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA = 3,
+        ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT = 4,
+        ALIEN_QUEEN_STATE_SECOND_RECOVERY_CAMERA = 5,
+        ALIEN_QUEEN_STATE_GROUP_RECOVERY_ORBIT = 6,
+        ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET = 7,
+        ALIEN_QUEEN_STATE_APPROACH_TARGET = 8,
+        ALIEN_QUEEN_STATE_ATTACK_WINDUP = 9,
+        ALIEN_QUEEN_STATE_ATTACK_HIT_QUERIES = 10,
+        ALIEN_QUEEN_STATE_WAIT_FOR_ORBIT_ANIMATION_END = 11,
+        ALIEN_QUEEN_STATE_TIMED_ORBIT = 12,
+        ALIEN_QUEEN_STATE_RETURN_HOME = 13,
+        ALIEN_QUEEN_STATE_DEATH = 14,
+        ALIEN_QUEEN_STATE_POST_DEATH = 15
+    };
+    AlienQueenVars *alien_queen_update_vars = (AlienQueenVars *)MOBY(moby)->pvars;
     char           *target;
     float           step[4];
 
@@ -572,7 +591,8 @@ void alien_queen_update(unsigned char *moby) {
             moby[0x20] = 0xC;
             break;
         }
-        if (dist < *(float *)&l06_alien_queen_attack_distance && turn < *(float *)&l06_alien_queen_attack_heading_tolerance_degrees * 0.017453292f) {
+        if (dist < *(float *)&l06_alien_queen_attack_distance &&
+            turn < *(float *)&l06_alien_queen_attack_heading_tolerance_degrees * 0.017453292f) {
             moby[0x20] = 9;
             moby[0xBC] = 7;
             if ((unsigned char)moby[0x53] != 4) {
@@ -776,7 +796,11 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         REDUCED_DAMAGE_SOURCE_CLASS = 0x131,
         DAMAGE_BOOSTING_SOURCE_CLASS = 0x33B
     };
-    enum { ALIEN_QUEEN_STATE_INITIALIZE = 0 , HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1 } ;AlienQueenVars *alien_queen_hit_recovery_vars;
+    enum {
+        ALIEN_QUEEN_STATE_INITIALIZE = 0,
+        HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1
+    };
+    AlienQueenVars *alien_queen_hit_recovery_vars;
     char           *hit;
     int             hit_status;
     float           dmg;
@@ -796,8 +820,8 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
     kind = resolve_moby_hit_response(
         moby, hit, &alien_queen_hit_recovery_vars->health, 0, &hit_status, &dmg, 0, 4);
-    if (hit_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION && (unsigned char)moby[0x20] != 14 && (unsigned char)moby[0x20] != 3 &&
-        (unsigned char)moby[0x20] != 5) {
+    if (hit_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION && (unsigned char)moby[0x20] != 14 &&
+        (unsigned char)moby[0x20] != 3 && (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {
             int oclass = *(short *)(*(char **)(hit + 0x20) + 0xA6);
             switch (oclass) {

@@ -72,11 +72,11 @@ int test_moby_camera_control_activation(char *moby) __asm__("FUN_L02_002fb648");
 
 int test_moby_camera_control_activation(char *moby) {
     char              *special = D_L02_001674DC;
-    MobyCameraControl *camera_control_entry =
-        (MobyCameraControl *)(*(char **)(l02_moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1c));
-    char *target = camera_control_entry->target;
-    int  *activation_path_record;
-    int   hero_containment_result;
+    MobyCameraControl *camera_control_entry = (MobyCameraControl *)(*(
+        char **)(l02_moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1c));
+    char              *target = camera_control_entry->target;
+    int               *activation_path_record;
+    int                hero_containment_result;
 
     if (special != 0 && special == target) {
         return 1;
@@ -191,23 +191,23 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
 void apply_moby_camera_control(char *moby) __asm__("FUN_L02_002fb9c8");
 
 void apply_moby_camera_control(char *moby) {
-    MobyCameraControl *moby_camera_control_record =
-        (MobyCameraControl *)(*(char **)(l02_moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1c));
-    char           *target;
-    unsigned short *group;
-    int             id;
-    int             index;
-    int             duration;
-    int             count;
-    int             end;
-    int             frames;
-    int             active;
-    int             hit;
-    float           scale;
-    float           angle;
-    float           heading;
-    float           amount;
-    float           heading_vector[3];
+    MobyCameraControl *moby_camera_control_record = (MobyCameraControl *)(*(
+        char **)(l02_moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1c));
+    char              *target;
+    unsigned short    *group;
+    int                id;
+    int                index;
+    int                duration;
+    int                count;
+    int                end;
+    int                frames;
+    int                active;
+    int                hit;
+    float              scale;
+    float              angle;
+    float              heading;
+    float              amount;
+    float              heading_vector[3];
 
     if (moby_camera_control_record->unk50 != 0) {
         moby_camera_control_record->unk20 = 0;

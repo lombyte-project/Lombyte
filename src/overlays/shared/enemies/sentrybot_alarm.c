@@ -55,7 +55,10 @@ extern short sentrybot_alarm_voice_owner_gp __asm__("D_L15_00161AC8") __attribut
 int activate_first_inactive_group_moby(int moby_group_index, void *pos) __asm__("FUN_L15_002a2868");
 
 int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
-    enum { GROUP_MOBY_STATE_INACTIVE = 1 } ;short       *group_moby_entry = (short *)D_L15_001ABE40[moby_group_index];
+    enum {
+        GROUP_MOBY_STATE_INACTIVE = 1
+    };
+    short       *group_moby_entry = (short *)D_L15_001ABE40[moby_group_index];
     struct Hero *hero_data = &hero;
     do {
         unsigned char *listed_moby =
@@ -90,7 +93,23 @@ void sentrybot_alarm_update(unsigned char *moby) __asm__("FUN_L15_002cb4c8");
 
 /* Moby class 408 */
 void sentrybot_alarm_update(unsigned char *moby) {
-    enum { SENTRYBOT_ALARM_STATE_INITIALIZE = 0 , SENTRYBOT_ALARM_STATE_STANDBY_PULSE = 1 , SENTRYBOT_ALARM_STATE_STANDBY_RETURN_TRANSITION = 2 , SENTRYBOT_ALARM_STATE_WAIT_FOR_ALARM_TRIGGER = 3 , SENTRYBOT_ALARM_STATE_ALARM_START_TRANSITION = 4 ,SENTRYBOT_ALARM_STATE_ACTIVE_PULSE = 5 , SENTRYBOT_ALARM_STATE_WAIT_FOR_GROUP_RELEASE_TRIGGER = 6 , SENTRYBOT_ALARM_STATE_GROUP_RELEASE_START_TRANSITION = 7 ,SENTRYBOT_ALARM_STATE_RELEASE_GROUP_MOBYS = 8 , SENTRYBOT_ALARM_STATE_GROUP_RELEASE_STOP_TRANSITION = 9 , SENTRYBOT_ALARM_STATE_ALARM_STOP_TRANSITION = 10} ; enum { SENTRYBOT_ALARM_MODE_GROUP_RELEASE_ONLY = 2} ;float position[4];
+    enum {
+        SENTRYBOT_ALARM_STATE_INITIALIZE = 0,
+        SENTRYBOT_ALARM_STATE_STANDBY_PULSE = 1,
+        SENTRYBOT_ALARM_STATE_STANDBY_RETURN_TRANSITION = 2,
+        SENTRYBOT_ALARM_STATE_WAIT_FOR_ALARM_TRIGGER = 3,
+        SENTRYBOT_ALARM_STATE_ALARM_START_TRANSITION = 4,
+        SENTRYBOT_ALARM_STATE_ACTIVE_PULSE = 5,
+        SENTRYBOT_ALARM_STATE_WAIT_FOR_GROUP_RELEASE_TRIGGER = 6,
+        SENTRYBOT_ALARM_STATE_GROUP_RELEASE_START_TRANSITION = 7,
+        SENTRYBOT_ALARM_STATE_RELEASE_GROUP_MOBYS = 8,
+        SENTRYBOT_ALARM_STATE_GROUP_RELEASE_STOP_TRANSITION = 9,
+        SENTRYBOT_ALARM_STATE_ALARM_STOP_TRANSITION = 10
+    };
+    enum {
+        SENTRYBOT_ALARM_MODE_GROUP_RELEASE_ONLY = 2
+    };
+    float position[4];
     float step;
     int   color;
     int   mode;
@@ -116,7 +135,8 @@ void sentrybot_alarm_update(unsigned char *moby) {
             (fast_sin(*(float *)(alarm_state + 5)) + 1.0f) * 0.5f, 0x801414bc, 0x801414dc);
         step = frame_time;
         MOBY(moby)->glow_color = color;
-        *(float *)(alarm_state + 5) = fast_add_rotations(*(float *)(alarm_state + 5), step * 6.2831855f);
+        *(float *)(alarm_state + 5) =
+            fast_add_rotations(*(float *)(alarm_state + 5), step * 6.2831855f);
         if (alarm_state[2] == 0)
             goto update;
         if (D_L15_0015F5C4 != 2) {
@@ -172,7 +192,8 @@ void sentrybot_alarm_update(unsigned char *moby) {
             (fast_sin(*(float *)(alarm_state + 5)) + 1.0f) * 0.5f, 0x801414dc, 0x8004048c);
         step = frame_time;
         MOBY(moby)->glow_color = color;
-        *(float *)(alarm_state + 5) = fast_add_rotations(*(float *)(alarm_state + 5), step * 12.566371f);
+        *(float *)(alarm_state + 5) =
+            fast_add_rotations(*(float *)(alarm_state + 5), step * 12.566371f);
         if (fast_dec_timer(alarm_state + 6) || D_L15_0015F5C4 == 2) {
             set_sentrybot_alarm_duration((char *)moby, 0);
             alarm_state[2] = 0;

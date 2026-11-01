@@ -201,14 +201,14 @@ int                                  FUN_001160d8_00269958(void) __asm__("FUN_00
 extern unsigned char *D_L00_001B2090 NOT_SDA;
 void spawn_effect(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag) __asm__("FUN_L00_00269958");
 void spawn_effect(u128 *spawn_position,
-                      u128 *initial_velocity,
-                      int   initial_color,
-                      int   color_endpoint,
-                      int   lifetime,
-                      int   scalar_base,
-                      int   scalar_delta,
+                  u128 *initial_velocity,
+                  int   initial_color,
+                  int   color_endpoint,
+                  int   lifetime,
+                  int   scalar_base,
+                  int   scalar_delta,
 
-                      int flag) {
+                  int flag) {
     unsigned char *particle = FUN_L00_002678b8_00269958(4);
     if (particle) {
         int           *particle_data;
@@ -502,13 +502,13 @@ extern unsigned char *D_L00_001B20A0_0026a4c8 __asm__("D_L00_001B20A0")
     __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8_0026a4c8(int) __asm__("FUN_L00_002678b8");
 void           spawn_particle_alt_9768(u128 *a, u128 *b, int c, int d, int n, float f) __asm__("FUN_L00_0026a4c8");
-void           spawn_particle_alt_9768(u128 *spawn_position,
-                                u128 *initial_velocity,
-                                int   initial_color,
-                                int   final_color,
-                                int   lifetime,
+void spawn_particle_alt_9768(u128 *spawn_position,
+                             u128 *initial_velocity,
+                             int   initial_color,
+                             int   final_color,
+                             int   lifetime,
 
-                                float particle_scalar_change) {
+                             float particle_scalar_change) {
     if (lifetime) {
         unsigned char *particle = FUN_L00_002678b8_0026a4c8(8);
         if (particle) {
@@ -2965,7 +2965,12 @@ spawn_random_planar_drift_particle(void *, int, float, float) __asm__("FUN_L00_0
 void update_ballistic_effect_particle_with_contact_spawns(struct EffectParticle *) __asm__("FUN_L00_0026f660");
 
 void update_ballistic_effect_particle_with_contact_spawns(struct EffectParticle *particle) {
-    enum { BALLISTIC_PARTICLE_MODE_NO_CONTACT_TEST = 0 , BALLISTIC_PARTICLE_MODE_LINE_CONTACT_HEIGHT_SNAPPED_SPAWN = 1 , BALLISTIC_PARTICLE_MODE_WATER_SURFACE_CONTACT_SPAWN = 3 } ;char *particle_data = particle->data;
+    enum {
+        BALLISTIC_PARTICLE_MODE_NO_CONTACT_TEST = 0,
+        BALLISTIC_PARTICLE_MODE_LINE_CONTACT_HEIGHT_SNAPPED_SPAWN = 1,
+        BALLISTIC_PARTICLE_MODE_WATER_SURFACE_CONTACT_SPAWN = 3
+    };
+    char *particle_data = particle->data;
     int   mode = *(int *)(particle_data + 0x10);
     V     next_position;
     char *particle_position;

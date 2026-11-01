@@ -626,7 +626,11 @@ void flickering_mesh_effect_update(struct Moby *moby) __asm__("FUN_L08_002f70a0"
 
 /* Moby class 671 */
 void flickering_mesh_effect_update(struct Moby *moby) {
-    enum { FLICKERING_MESH_STATE_UNINITIALIZED = 0 , FLICKERING_MESH_STATE_INITIALIZED = 1 } ;FlickerLightVars *light_vars;
+    enum {
+        FLICKERING_MESH_STATE_UNINITIALIZED = 0,
+        FLICKERING_MESH_STATE_INITIALIZED = 1
+    };
+    FlickerLightVars *light_vars;
     Vec4              pos;
     f32               view, draw_fade_distance, fade;
     s32               hidden;

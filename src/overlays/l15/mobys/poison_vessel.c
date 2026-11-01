@@ -192,7 +192,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         if (data->target != 0) {
             Moby_2E9358 *target_moby = data->target;
 
-            if (target_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL || data->target->state == 0xFD) {
+            if (target_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
+                data->target->state == 0xFD) {
                 moby->bBC = state;
                 data->target = 0;
             } else if (D_L15_00174458_lui[0] != 0) {

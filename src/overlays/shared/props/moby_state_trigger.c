@@ -111,7 +111,10 @@ void moby_spatial_trigger_update(struct Moby *trigger_moby) __asm__("FUN_L05_002
 
 /* Moby class 258 */
 void moby_spatial_trigger_update(struct Moby *trigger_moby) {
-    enum { SPATIAL_TRIGGER_STATE_UNINITIALIZED = 0 } ;TriggerVars *trigger_vars = (TriggerVars *)trigger_moby->pvars;
+    enum {
+        SPATIAL_TRIGGER_STATE_UNINITIALIZED = 0
+    };
+    TriggerVars *trigger_vars = (TriggerVars *)trigger_moby->pvars;
     Vec4         target;
     s32          inside;
     s32          i;

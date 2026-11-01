@@ -79,7 +79,8 @@ void music_update_stream(MusicPlaying *music_stream) {
         if (music_stream->state == 1 || music_stream->state == 8 || music_stream->state == 9) {
             return;
         }
-        if (music_stream->state != MUSIC_STREAM_STATE_WAITING_FOR_BUFFER && music_stream->state != 3) {
+        if (music_stream->state != MUSIC_STREAM_STATE_WAITING_FOR_BUFFER &&
+            music_stream->state != 3) {
             sound_handle = music_stream->handle;
             music_stream->handle = 0xFFFFFFFF;
             snd_get_vag_stream_time_remaining_cb(
@@ -88,7 +89,8 @@ void music_update_stream(MusicPlaying *music_stream) {
                 sound_handle, set_sound_handle_id, (long)(unsigned int)music_stream);
             return;
         }
-        if (music_stream->handle != 0xFFFFFFFF && music_stream->state == MUSIC_STREAM_STATE_WAITING_FOR_BUFFER) {
+        if (music_stream->handle != 0xFFFFFFFF &&
+            music_stream->state == MUSIC_STREAM_STATE_WAITING_FOR_BUFFER) {
             snd_is_vag_stream_buffered_cb(music_stream->handle,
                                           music_channel_ready_callback,
                                           (long)(unsigned int)music_stream);

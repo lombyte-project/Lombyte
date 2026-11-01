@@ -1436,7 +1436,8 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
                            5);
     cannon = suck_cannon_moby->data;
     slot_released = ((SuckHero *)&hero)->slot_state == 3;
-    if ((u8)suck_cannon_moby->state != SUCKCANNON_STATE_SUCTION_ACTIVE && (u8)suck_cannon_moby->state != SUCKCANNON_STATE_INITIALIZE)
+    if ((u8)suck_cannon_moby->state != SUCKCANNON_STATE_SUCTION_ACTIVE &&
+        (u8)suck_cannon_moby->state != SUCKCANNON_STATE_INITIALIZE)
         suck_beam_queue_draw((int)suck_cannon_moby);
     refresh_suck_cannon_slots();
     switch ((u8)suck_cannon_moby->state) {
@@ -2845,7 +2846,8 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
     D_L00_00161B84 = 1.7f;
     suck_beam_reset_pending = 0;
     hero_state = hero.state.current;
-    if ((hero_state == HERO_STATE_LOOK_RELEASE_WAIT || hero_state == HERO_STATE_LOOK) && (hero.moby->flags & 1)) {
+    if ((hero_state == HERO_STATE_LOOK_RELEASE_WAIT || hero_state == HERO_STATE_LOOK) &&
+        (hero.moby->flags & 1)) {
         qcopy((char *)beam_initialization_vectors, D_L00_00166FD0);
         qcopy((char *)beam_initialization_vectors + 0x10, D_L00_00166FD0 + 0x10);
         qcopy((char *)beam_initialization_vectors + 0x20, D_L00_00166FD0 + 0x20);
@@ -2957,8 +2959,8 @@ void suck_beam_update(void *moby, void *position) {
     fast_vec_add(&start, &start, &step);
     transform_vector_by_basis(&end, &(*(V41 *)D_L00_00161B70), orientation);
     fast_vec_add(&end, &end, &step);
-    beam_step_blend_fraction =
-        (float)l00_suck_beam_step_blend_elapsed_frames / convert_integer_to_float(scale_game_frames(60));
+    beam_step_blend_fraction = (float)l00_suck_beam_step_blend_elapsed_frames /
+                               convert_integer_to_float(scale_game_frames(60));
     l00_suck_beam_step_blend_elapsed_frames++;
     step.f.x = start.f.x + (end.f.x - start.f.x) * beam_step_blend_fraction;
     step.f.y = start.f.y + (end.f.y - start.f.y) * beam_step_blend_fraction;
@@ -3108,7 +3110,8 @@ void suck_beam_update(void *moby, void *position) {
             }
             if (D_L00_001E4C80_lui[i].p) {
                 fast_vec_sub(&tmp_a,
-                             l00_suck_beam_previous_segment_positions + D_L00_001E4C80_lui[i].idx * 16,
+                             l00_suck_beam_previous_segment_positions +
+                                 D_L00_001E4C80_lui[i].idx * 16,
                              D_L00_001E5F40 + D_L00_001E4C80_lui[i].idx * 16);
                 length = fast_vec_length(&tmp_a);
                 D_L00_001E4C80_lui[i].f += D_L00_001E4C80_lui[i].speed;
@@ -3121,7 +3124,8 @@ void suck_beam_update(void *moby, void *position) {
                     } else {
                         D_L00_001E4C80_lui[i].f -= length;
                         fast_vec_sub(&tmp_a,
-                                     l00_suck_beam_previous_segment_positions + D_L00_001E4C80_lui[i].idx * 16,
+                                     l00_suck_beam_previous_segment_positions +
+                                         D_L00_001E4C80_lui[i].idx * 16,
                                      D_L00_001E5F40 + D_L00_001E4C80_lui[i].idx * 16);
                         length = fast_vec_length(&tmp_a);
                     }
@@ -3159,7 +3163,8 @@ void suck_beam_update(void *moby, void *position) {
                         fast_vec_sub(&tmp_c,
                                      (char *)((V41 *)D_L00_001E5EE0) +
                                          D_L00_001E4C80_lui[i].idx * 320 + j * 16,
-                                     l00_suck_beam_previous_segment_positions + D_L00_001E4C80_lui[i].idx * 16);
+                                     l00_suck_beam_previous_segment_positions +
+                                         D_L00_001E4C80_lui[i].idx * 16);
                         interpolate_vector(&motion, &tmp_b, &tmp_c, amount);
                         j = (j + 19) % 20;
                         fast_vec_sub(&tmp_d,
@@ -3169,7 +3174,8 @@ void suck_beam_update(void *moby, void *position) {
                         fast_vec_sub(&tmp_e,
                                      (char *)((V41 *)D_L00_001E5EE0) +
                                          D_L00_001E4C80_lui[i].idx * 320 + j * 16,
-                                     l00_suck_beam_previous_segment_positions + D_L00_001E4C80_lui[i].idx * 16);
+                                     l00_suck_beam_previous_segment_positions +
+                                         D_L00_001E4C80_lui[i].idx * 16);
                         interpolate_vector(&interp, &tmp_d, &tmp_e, amount);
                         interpolate_vector(&motion, &motion, &interp, D_L00_001E4C80_lui[i].phase);
                         D_L00_001E4C80_lui[i].phase += D_L00_001E4C80_lui[i].phase_step;

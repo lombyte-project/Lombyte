@@ -159,32 +159,32 @@ extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_00161F24 MACRO_ADDR;
 extern int                random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int                hero_set_state(int, int) __asm__("FUN_L12_002400d0");
-extern void               build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
-extern void               hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void               set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void               moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void               jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void               spawn_explosion(void *,
-                                          void *,
-                                          void *,
-                                          float,
-                                          float,
-                                          int,
-                                          int,
-                                          int,
-                                          float,
-                                          float,
-                                          float,
-                                          int,
-                                          float,
-                                          float,
-                                          int,
-                                          int,
-                                          int,
-                                          int) __asm__("FUN_L00_0025e450");
-extern void               FUN_L00_00262cf0(void *, void *, float, float, float);
-extern void               start_scene(int) __asm__("FUN_L00_00298840");
-extern void               queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
+extern void  hero_respawn(void) __asm__("FUN_L00_00211250");
+extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void  moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
+extern void  spawn_explosion(void *,
+                             void *,
+                             void *,
+                             float,
+                             float,
+                             int,
+                             int,
+                             int,
+                             float,
+                             float,
+                             float,
+                             int,
+                             float,
+                             float,
+                             int,
+                             int,
+                             int,
+                             int) __asm__("FUN_L00_0025e450");
+extern void  FUN_L00_00262cf0(void *, void *, float, float, float);
+extern void  start_scene(int) __asm__("FUN_L00_00298840");
+extern void  queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void  spawn_turret_rocket(void *, void *, void *, int) __asm__("FUN_L08_002e7eb0");
 extern void  update_hoven_turret_target_alignment_timer(void *) __asm__("FUN_L12_00303370");
 extern void  draw_hoven_turret_hud() __asm__("FUN_L12_00304218");

@@ -64,7 +64,15 @@ char *spawn_giant_clank_missile(void *owner,
 
 char *spawn_giant_clank_missile(
 
-    void *firing_moby, void *spawn_position, float fallback_yaw, float fallback_pitch, float target_height_offset, char *target_moby, float rz, float ry) {
+    void *firing_moby,
+    void *spawn_position,
+    float fallback_yaw,
+    float fallback_pitch,
+    float target_height_offset,
+    char *target_moby,
+    float rz,
+
+    float ry) {
     char      *spawned_missile;
     char      *missile_spawn_data;
     BoltVector aim_direction_or_collision_start;
@@ -82,7 +90,13 @@ char *spawn_giant_clank_missile(
         if (target_moby == 0) {
             build_spherical_offset(&aim_direction_or_collision_start, D_0015ED6C * 20.0f, rz, ry);
             auto_aim_position.q = *(Q_2aa998 *)spawn_position;
-            target_moby = select_auto_aim_target_moby(firing_moby, &auto_aim_position, &aim_direction_or_collision_start, &fallback_yaw, &fallback_pitch, &target_height_offset, 0.34906584f);
+            target_moby = select_auto_aim_target_moby(firing_moby,
+                                                      &auto_aim_position,
+                                                      &aim_direction_or_collision_start,
+                                                      &fallback_yaw,
+                                                      &fallback_pitch,
+                                                      &target_height_offset,
+                                                      0.34906584f);
         }
         *(void **)(missile_spawn_data + 0x10) = firing_moby;
         qcopy(spawned_missile + 0x10, spawn_position);
@@ -99,7 +113,8 @@ char *spawn_giant_clank_missile(
                 if (target_aim_bounds[0xB] != 0)
                     *(int *)(missile_spawn_data + 0x38) = 0;
                 if (target_aim_bounds[0xC] != 0)
-                    *(float *)(missile_spawn_data + 0x34) = (float)target_aim_bounds[0xC] * D_0015ED6C;
+                    *(float *)(missile_spawn_data + 0x34) =
+                        (float)target_aim_bounds[0xC] * D_0015ED6C;
             }
         }
         *(float *)(missile_spawn_data + 0x2C) = fallback_yaw;
@@ -124,7 +139,11 @@ char *spawn_giant_clank_missile(
         }
         aim_direction_or_collision_start.q = ((BoltOwner *)firing_moby)->position.q;
         aim_direction_or_collision_start.f[2] = ((float *)spawn_position)[2];
-        if (FUN_001efa68(&aim_direction_or_collision_start, spawn_position, 0, *(int *)(((char *)&D_001413D0)), 0) != 0) {
+        if (FUN_001efa68(&aim_direction_or_collision_start,
+                         spawn_position,
+                         0,
+                         *(int *)(((char *)&D_001413D0)),
+                         0) != 0) {
             spawned_missile[0xBC] = 1;
             qcopy(spawned_missile + 0x10, &D_L00_00173E60);
         }
@@ -260,7 +279,8 @@ extern void FUN_L00_001ffd48(void *, void *, float);
 extern void FUN_L00_001ffe20(void *, void *, void *);
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void spawn_particle_alt_9768(void *pos, void *vel, int color, int tag, int life, float size) __asm__("FUN_L00_0026a4c8");
+extern void spawn_particle_alt_9768(
+    void *pos, void *vel, int color, int tag, int life, float size) __asm__("FUN_L00_0026a4c8");
 extern void spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__("FUN_L00_0026a9f0");
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int);
@@ -307,7 +327,9 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
     {
         float velocity_inheritance_frames_remaining = convert_integer_to_float(missile_data->f3C);
         float velocity_inheritance_frames_total = convert_integer_to_float(missile_data->f3E);
-        fast_vec_scale(up, ((char *)&D_0013F490), velocity_inheritance_frames_remaining / velocity_inheritance_frames_total);
+        fast_vec_scale(up,
+                       ((char *)&D_0013F490),
+                       velocity_inheritance_frames_remaining / velocity_inheritance_frames_total);
     }
     {
         float delta[4];
@@ -336,18 +358,25 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
             tp[2] = tp[2] + missile_data->zoff;
             fast_vec_sub(delta, tp, missile_moby->pos);
             if (missile_data->f38 != 0) {
-                float intercept_quadratic_coefficient, intercept_linear_coefficient, c, intercept_time_plus_root, intercept_time_minus_root,
-                    discriminant_sqrt;
+                float intercept_quadratic_coefficient, intercept_linear_coefficient, c,
+                    intercept_time_plus_root, intercept_time_minus_root, discriminant_sqrt;
                 fast_vec_sub(dv, tp, missile_data->v);
                 FUN_L00_001ff2c0(ip, dv, up);
                 qcopy(missile_data->v, tp);
                 c = FUN_L00_001ff430(dv);
-                intercept_linear_coefficient = (dv[0] * delta[0] + dv[1] * delta[1] + dv[2] * delta[2]) * -2.0f;
+                intercept_linear_coefficient =
+                    (dv[0] * delta[0] + dv[1] * delta[1] + dv[2] * delta[2]) * -2.0f;
                 intercept_quadratic_coefficient = missile_data->speed * missile_data->speed - c;
                 c = -FUN_L00_001ff430(delta);
-                discriminant_sqrt = square_root(intercept_linear_coefficient * intercept_linear_coefficient - intercept_quadratic_coefficient * 4.0f * c);
-                intercept_time_plus_root = (-intercept_linear_coefficient + discriminant_sqrt) / (intercept_quadratic_coefficient + intercept_quadratic_coefficient);
-                intercept_time_minus_root = (-intercept_linear_coefficient - discriminant_sqrt) / (intercept_quadratic_coefficient + intercept_quadratic_coefficient);
+                discriminant_sqrt =
+                    square_root(intercept_linear_coefficient * intercept_linear_coefficient -
+                                intercept_quadratic_coefficient * 4.0f * c);
+                intercept_time_plus_root =
+                    (-intercept_linear_coefficient + discriminant_sqrt) /
+                    (intercept_quadratic_coefficient + intercept_quadratic_coefficient);
+                intercept_time_minus_root =
+                    (-intercept_linear_coefficient - discriminant_sqrt) /
+                    (intercept_quadratic_coefficient + intercept_quadratic_coefficient);
                 if (intercept_time_plus_root > 0.0f && intercept_time_minus_root > 0.0f) {
                     if (intercept_time_minus_root < intercept_time_plus_root)
                         intercept_time = intercept_time_plus_root;

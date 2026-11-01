@@ -226,7 +226,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         }
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER:
-        if (robot_dog_vars->mode != ROBOT_DOG_DETECTION_LINE_BLOCKED && random_integer_below(0x1F) == 0) {
+        if (robot_dog_vars->mode != ROBOT_DOG_DETECTION_LINE_BLOCKED &&
+            random_integer_below(0x1F) == 0) {
             robot_dog_moby[0x20] = 2;
             if (robot_dog_moby[0x53] != 1) {
                 blend_moby_animation(robot_dog_moby, 1, 0, scale_game_frames(10));
@@ -306,7 +307,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                         blend_moby_animation(robot_dog_moby, 7, 0, scale_game_frames(10));
                     }
                 }
-            } else if (robot_dog_vars->t1E0 == 0 && robot_dog_vars->mode == ROBOT_DOG_DETECTION_LINE_BLOCKED) {
+            } else if (robot_dog_vars->t1E0 == 0 &&
+                       robot_dog_vars->mode == ROBOT_DOG_DETECTION_LINE_BLOCKED) {
                 robot_dog_moby[0x20] = 3;
                 if (robot_dog_moby[0x53] != 0) {
                     clip_volume_id_or_animation_value = random_integer_below(

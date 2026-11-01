@@ -11,9 +11,11 @@
 #include "rnc/ui/hud.h"
 
 extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
-extern s32  l06_hud_segment_meter_center_x __asm__("D_L06_0015F8E8") __attribute__((sda));
-extern f32  l06_hud_segment_meter_last_segment_fill_scale __asm__("D_L06_0015F8F0") __attribute__((sda));
-extern f32  l06_hud_segment_meter_first_segment_fill_scale __asm__("D_L06_0015F8F4") __attribute__((sda));
+extern s32 l06_hud_segment_meter_center_x __asm__("D_L06_0015F8E8") __attribute__((sda));
+extern f32 l06_hud_segment_meter_last_segment_fill_scale __asm__("D_L06_0015F8F0")
+    __attribute__((sda));
+extern f32 l06_hud_segment_meter_first_segment_fill_scale __asm__("D_L06_0015F8F4")
+    __attribute__((sda));
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 
 s32 draw_hud_segment_meter(u8 *p) __asm__("FUN_L06_00249738");
@@ -63,7 +65,8 @@ s32 draw_hud_segment_meter(u8 *meter_state) {
         x = 0;
         color = 0x800000ff;
         if (*(s32 *)(meter_state + 0x74) != 0) {
-            fill = (f32) * (s32 *)(meter_state + 0x74) / convert_integer_to_float(*(s32 *)(meter_state + 8));
+            fill = (f32) * (s32 *)(meter_state + 0x74) /
+                   convert_integer_to_float(*(s32 *)(meter_state + 8));
             step = 1.0f / convert_integer_to_float(segments);
             limit = remaining * step;
             if (limit < fill) {

@@ -239,8 +239,7 @@ extern void
            turn_angle_e50(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern int step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 extern void FUN_L00_00263ac8_e50(void *, int, void *, float) __asm__("FUN_L00_00263ac8");
-extern void
-spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int  FUN_L00_002dc9f0_e50(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern void FUN_L01_0026d930_e50(void *) __asm__("FUN_L01_0026d930");
 extern void emit_sand_shark_dust_burst(void *) __asm__("FUN_L02_002d3dd0");
@@ -447,7 +446,8 @@ void sand_shark_update(struct Moby *moby) {
                 }
             }
         } else if (sand_shark_behavior_vars->unk25E != 0 && random_integer_below(0x13) == 0) {
-            moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK;
+            moby->state =
+                SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK;
             allocate_voice_for_target_entry(4, 0, moby);
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
@@ -555,7 +555,8 @@ void sand_shark_update(struct Moby *moby) {
             if (moby->prev_seq != 0xC) {
                 blend_moby_animation(moby, 0xC, 0, scale_game_frames(5));
             }
-            if (moby->state == SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET) {
+            if (moby->state ==
+                SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET) {
                 moby->state = SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET;
             } else {
                 moby->state = SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET;
@@ -771,7 +772,8 @@ void sand_shark_update(struct Moby *moby) {
                     }
                 }
             } else if (sand_shark_behavior_vars->unk25E != 0 && random_integer_below(0x13) == 0) {
-                moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK;
+                moby->state =
+                    SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK;
                 allocate_voice_for_target_entry(4, 0, moby);
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, 0);
@@ -846,13 +848,13 @@ void sand_shark_update(struct Moby *moby) {
         fast_vec_scale(&target_or_particle_vector, &target_or_particle_vector, D_0015ED6C * 5.0f);
         life = scale_game_frames(random_int_between(0x14, 0x28));
         spawn_effect(&moby->pos,
-                             &target_or_particle_vector,
-                             D_L02_001619E4,
-                             D_L02_001619E8,
-                             life,
-                             0x64,
-                             random_int_between(0x78, 0x96),
-                             0);
+                     &target_or_particle_vector,
+                     D_L02_001619E4,
+                     D_L02_001619E8,
+                     life,
+                     0x64,
+                     random_int_between(0x78, 0x96),
+                     0);
     }
         /* fallthrough */
     case SAND_SHARK_BALLISTIC_FLIGHT: {

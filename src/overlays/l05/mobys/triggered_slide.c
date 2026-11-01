@@ -35,7 +35,10 @@ void triggered_slide_update(char *moby) {
         MOBY_WAIT_FOR_TRIGGER = 1,
         MOBY_SLIDE_TO_END_POINT = 2,
         MOBY_LOWER_BELOW_POSE_HEIGHT = 3
-    } ; enum { MOBY_LOWERING_COMPLETE = 4};
+    };
+    enum {
+        MOBY_LOWERING_COMPLETE = 4
+    };
     TriggeredSlideVars *slide_and_lowering_vars = (TriggeredSlideVars *)MOBY(moby)->pvars;
     float               slide_motion_scratch[4];
     float               slide_step_distance;

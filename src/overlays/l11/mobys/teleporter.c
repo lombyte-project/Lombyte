@@ -71,7 +71,10 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_OPEN_PARTS = 2,
         TELEPORTER_CONTRACT_RING = 3,
         TELEPORTER_RESET = 4
-    } ; enum { HERO_TARGET_POSE_INACTIVE = 0};
+    };
+    enum {
+        HERO_TARGET_POSE_INACTIVE = 0
+    };
     TeleporterVars *teleporter_instance_vars = (TeleporterVars *)moby->pvars;
 
     switch (moby->state) {

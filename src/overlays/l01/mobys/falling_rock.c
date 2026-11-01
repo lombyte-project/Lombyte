@@ -137,8 +137,8 @@ void falling_rock_update(CapMoby *falling_rock) {
     LevelCuboid *camera_record;
 
     falling_rock_vars = falling_rock->pvars;
-    if (falling_rock->state != FALLING_ROCK_STATE_WAIT_FOR_TRIGGER && !fast_dec_timer_s16(&falling_rock_vars->wait) &&
-        random_integer_below(100) < 5) {
+    if (falling_rock->state != FALLING_ROCK_STATE_WAIT_FOR_TRIGGER &&
+        !fast_dec_timer_s16(&falling_rock_vars->wait) && random_integer_below(100) < 5) {
         CapColors colors;
         CapVec    debris_initial_velocity;
         CapVec    pos;

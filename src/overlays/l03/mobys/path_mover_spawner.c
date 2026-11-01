@@ -75,7 +75,11 @@ void path_mover_spawner_update(struct RailSpawnerMoby *moby) __asm__("FUN_L03_00
 
 /* Moby class 899 */
 void path_mover_spawner_update(struct RailSpawnerMoby *moby) {
-    enum { PATH_MOVER_SPAWNER_STATE_UNINITIALIZED = 0 , PATH_MOVER_SPAWNER_STATE_INITIALIZED = 1 } ;struct RailSpawnerVars *vars = moby->vars;
+    enum {
+        PATH_MOVER_SPAWNER_STATE_UNINITIALIZED = 0,
+        PATH_MOVER_SPAWNER_STATE_INITIALIZED = 1
+    };
+    struct RailSpawnerVars *vars = moby->vars;
     LevelPath              *path;
     float                   spawn_distance;
     int                     i;

@@ -463,7 +463,9 @@ void queue_formatted_dialogue_message(s32 help_message_selector,
                                       s32 message_duration_frames) {
     if (message_duration_frames == -1)
         message_duration_frames = scale_game_frames(0xB4);
-    sprintf(l00_dialogue_message_text_buffer, get_help_message_text(help_message_selector), format_argument);
+    sprintf(l00_dialogue_message_text_buffer,
+            get_help_message_text(help_message_selector),
+            format_argument);
     D_L00_0015F640 = message_duration_frames;
 }
 

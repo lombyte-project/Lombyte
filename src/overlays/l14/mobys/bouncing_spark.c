@@ -160,7 +160,8 @@ void bouncing_spark_update(struct Moby *spark_moby) {
             qcopy(&spark_moby->pos, &predicted_position_or_fade_rgb);
         }
         if (((coll_sphere(&spark_moby->pos, 0, spark_moby, spark_contact_clearance_gp) != 0) &&
-             ((spark_moby->state == SPARK_COUNT_NEXT_BOUNCE) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) &&
+             ((spark_moby->state == SPARK_COUNT_NEXT_BOUNCE) ||
+              ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) &&
             ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner))) {
             fast_vec_normalize(
                 &position_scratch, &D_L14_00174540.normal, spark_contact_clearance_gp);

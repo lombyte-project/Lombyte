@@ -514,7 +514,8 @@ void update_hero_motion_for_current_state(void) {
         } else {
             s32 idx = hero.pack_swim_voice;
             if (idx != -1) {
-                struct VoiceSlot *swim_voice_slot = (struct VoiceSlot *)(((u8 *)&voice_pool) + idx * 0x70);
+                struct VoiceSlot *swim_voice_slot =
+                    (struct VoiceSlot *)(((u8 *)&voice_pool) + idx * 0x70);
                 if (swim_voice_slot->pm88 == MV(hero.moby) && swim_voice_slot->b74 != 0) {
                     release_voice_slot(idx);
                 }
@@ -1478,7 +1479,8 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else {
             s32 ok = 1;
-            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
+                hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {
@@ -2090,7 +2092,8 @@ void update_hero_motion_for_current_state(void) {
             if (hero.unk2224 != -1) {
                 struct VoiceSlot *alternate_landing_voice_slot =
                     (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.unk2224 * 0x70);
-                if (alternate_landing_voice_slot->pm88 == MV(hero.moby) && alternate_landing_voice_slot->b74 != 0) {
+                if (alternate_landing_voice_slot->pm88 == MV(hero.moby) &&
+                    alternate_landing_voice_slot->b74 != 0) {
                     release_voice_slot(hero.unk2224);
                 }
             }

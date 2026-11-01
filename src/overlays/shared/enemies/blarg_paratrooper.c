@@ -157,9 +157,11 @@ extern int
 activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float l08_paratrooper_model_scale_multiplier __asm__("D_L08_00162180") __attribute__((sda));
 extern float D_L08_00162184 __attribute__((sda));
-extern float l08_paratrooper_recovery_knockback_xy_speed __asm__("D_L08_0016218C") __attribute__((sda));
+extern float l08_paratrooper_recovery_knockback_xy_speed __asm__("D_L08_0016218C")
+    __attribute__((sda));
 extern float l08_paratrooper_death_knockback_z_speed __asm__("D_L08_00162190") __attribute__((sda));
-extern float l08_paratrooper_death_knockback_xy_speed __asm__("D_L08_00162194") __attribute__((sda));
+extern float l08_paratrooper_death_knockback_xy_speed __asm__("D_L08_00162194")
+    __attribute__((sda));
 extern float D_L08_001621B0 __attribute__((sda));
 
 /* Paratrooper: initializes its path and steering, patrols, attacks its target,
@@ -289,9 +291,9 @@ void blarg_paratrooper_update(char *moby) {
             }
         }
         step_mover_2e3f20(moby,
-                           (char *)paratrooper_private_state + 0xD0,
-                           path + 0x10 + paratrooper_private_state->f1F4 * 16,
-                           pos);
+                          (char *)paratrooper_private_state + 0xD0,
+                          path + 0x10 + paratrooper_private_state->f1F4 * 16,
+                          pos);
         if (target && paratrooper_private_state->f164 != 2 &&
             fast_dec_timer((char *)paratrooper_private_state + 0x1F0)) {
             paratrooper_private_state->f1F4 = select_point_index_by_distance(
@@ -311,10 +313,10 @@ void blarg_paratrooper_update(char *moby) {
             (*(unsigned char *)((char *)(moby) + 0x20)) = 3;
         } else {
             step_mover_2e3f20(moby,
-                               (char *)paratrooper_private_state + 0xD0,
-                               ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
-                                   paratrooper_private_state->f1F4 * 16,
-                               pos);
+                              (char *)paratrooper_private_state + 0xD0,
+                              ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
+                                  paratrooper_private_state->f1F4 * 16,
+                              pos);
             if ((*(unsigned char *)((char *)(moby) + 0x53)) != 2)
                 blend_moby_animation(moby, 2, 0, random302618() % 4 + 7);
         }
@@ -601,7 +603,13 @@ void blarg_paratrooper_update(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00303998), where it is exact; names translated to the US level program. */
 
 void update_blarg_paratrooper_damage_and_state(char *moby) {
-    enum { PARATROOPER_HIT_REACTION_LETHAL = 1 , PARATROOPER_HIT_REACTION_DEATH_KNOCKBACK = 2, PARATROOPER_HIT_REACTION_RECOVERY_KNOCKBACK = 3, PARATROOPER_HIT_REACTION_NONE = 11} ;Paratrooper302618 *data;
+    enum {
+        PARATROOPER_HIT_REACTION_LETHAL = 1,
+        PARATROOPER_HIT_REACTION_DEATH_KNOCKBACK = 2,
+        PARATROOPER_HIT_REACTION_RECOVERY_KNOCKBACK = 3,
+        PARATROOPER_HIT_REACTION_NONE = 11
+    };
+    Paratrooper302618 *data;
     char              *target, *child, *attached, *chased;
     float              pos[4] __attribute__((aligned(16)));
     float              matrix[16] __attribute__((aligned(16)));
@@ -614,7 +622,8 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         return;
     {
         float timer_scale = D_L08_001621B0 * frame_time;
-        ((Moby *)moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * l08_paratrooper_model_scale_multiplier;
+        ((Moby *)moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
+                                l08_paratrooper_model_scale_multiplier;
         data->unkF4 = timer_scale;
     }
 

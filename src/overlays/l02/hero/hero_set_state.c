@@ -75,7 +75,8 @@ int hero_set_state(int requested_state, int b) {
     int   old20A7;
     {
         struct Hero *p = &hero;
-        if (p->state.control_mode == 0x14 && (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || b != 2))
+        if (p->state.control_mode == 0x14 &&
+            (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || b != 2))
             return 0;
     }
     if ((level_game_mode == 2 || level_game_mode == 6) && b != 2)
@@ -83,8 +84,16 @@ int hero_set_state(int requested_state, int b) {
     {
         struct Hero *p = &hero;
         if (p->health.hp == 0 && (p->state.control_mode == 2 || p->state.control_mode == 7) &&
-            requested_state != HERO_STATE_FALL && requested_state != HERO_STATE_DYING && requested_state != HERO_STATE_VEHICLE_MODE_1_DYING && requested_state != HERO_STATE_VEHICLE_MODE_3_DYING && requested_state != HERO_STATE_VEHICLE_MODE_2_DYING && requested_state != HERO_STATE_FATAL_FALL && requested_state != HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT &&
-            requested_state != HERO_STATE_DEATH_DESCENT && requested_state != HERO_STATE_SINK && requested_state != HERO_STATE_DROWN && requested_state != HERO_STATE_DYING_SPEED_LIMITED && requested_state != HERO_STATE_DYING_ZERO_HEALTH)
+            requested_state != HERO_STATE_FALL && requested_state != HERO_STATE_DYING &&
+            requested_state != HERO_STATE_VEHICLE_MODE_1_DYING &&
+            requested_state != HERO_STATE_VEHICLE_MODE_3_DYING &&
+            requested_state != HERO_STATE_VEHICLE_MODE_2_DYING &&
+            requested_state != HERO_STATE_FATAL_FALL &&
+            requested_state != HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT &&
+            requested_state != HERO_STATE_DEATH_DESCENT && requested_state != HERO_STATE_SINK &&
+            requested_state != HERO_STATE_DROWN &&
+            requested_state != HERO_STATE_DYING_SPEED_LIMITED &&
+            requested_state != HERO_STATE_DYING_ZERO_HEALTH)
             return 0;
     }
     {
@@ -705,7 +714,8 @@ int hero_set_state(int requested_state, int b) {
             return 0;
         }
         p->state.control_mode = 4;
-        if (requested_state >= HERO_STATE_GRIND_JUMP && requested_state <= HERO_STATE_GRIND_RAIL_TRANSFER) {
+        if (requested_state >= HERO_STATE_GRIND_JUMP &&
+            requested_state <= HERO_STATE_GRIND_RAIL_TRANSFER) {
             p->unk2284 = 3;
         } else {
             p->unk2284 = 0x50;
@@ -1861,8 +1871,10 @@ void update_hero_state_transitions(void) {
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].switch_lock != 2 && item_selector_hud_inhibit == 0 &&
-                    (hero.item_use_locked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
-                    (hero.item_select_blocked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
+                    (hero.item_use_locked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK ||
+                     hero.unk1B2 != 0) &&
+                    (hero.item_select_blocked == 0 ||
+                     hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
                     (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT || hero.vehicle_mode == 3)) {
                     int id;
 
@@ -2442,7 +2454,8 @@ void update_hero_state_transitions(void) {
                                 break;
                             }
                         }
-                        if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT && frame_time * 2.7f <= hero.motion.speed_xy) {
+                        if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT &&
+                            frame_time * 2.7f <= hero.motion.speed_xy) {
                             hero_set_state(0x66, 1);
                         }
                         break;

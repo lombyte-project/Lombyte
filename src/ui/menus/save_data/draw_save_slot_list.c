@@ -54,15 +54,16 @@ s32 draw_save_slot_list(SaveMenu *menu) {
         inner_right = width - 3;
         inner_top = y - 1;
         inner_bottom = y + 0x31;
-        if (memory_card_state.state < MEMCARD_REQUEST_FORMAT && memory_card_state.pending_state < MEMCARD_QUERY_INFO &&
-            menu->selected_slot == i) {
+        if (memory_card_state.state < MEMCARD_REQUEST_FORMAT &&
+            memory_card_state.pending_state < MEMCARD_QUERY_INFO && menu->selected_slot == i) {
             append_screen_rect_packet(0, highlight_top, width, highlight_bottom, 0x8020FFFF, 0);
             append_screen_rect_packet(
                 3, inner_top, inner_right, inner_bottom, panel_clear_color, 0);
         }
         append_screen_rect_packet(3, inner_top, inner_right, inner_bottom, 0x80303030, 0);
         slot = &memory_card_state.card[0].entries[i];
-        if (memory_card_state.state >= MEMCARD_REQUEST_FORMAT || memory_card_state.pending_state >= MEMCARD_QUERY_INFO ||
+        if (memory_card_state.state >= MEMCARD_REQUEST_FORMAT ||
+            memory_card_state.pending_state >= MEMCARD_QUERY_INFO ||
             memory_card_state.card[0].type != 2) {
             y += 0x30;
         } else {

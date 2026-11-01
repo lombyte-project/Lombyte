@@ -54,7 +54,8 @@ typedef struct {
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void spawn_particle_alt_9768(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
+extern void
+spawn_particle_alt_9768(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
     void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
@@ -96,7 +97,11 @@ void explosive_projectile_update(struct Moby *moby) __asm__("FUN_L01_002f6a30");
 
 /* Moby class 686 */
 void explosive_projectile_update(struct Moby *moby) {
-    enum { EXPLOSIVE_PROJECTILE_STATE_FLYING = 0 , EXPLOSIVE_PROJECTILE_STATE_BURST = 1 } ;Vec_2F7E08 old_pos;
+    enum {
+        EXPLOSIVE_PROJECTILE_STATE_FLYING = 0,
+        EXPLOSIVE_PROJECTILE_STATE_BURST = 1
+    };
+    Vec_2F7E08 old_pos;
     Vec_2F7E08 smoke_pos;
     Data      *projectile_vars;
     int        rate_divisor;

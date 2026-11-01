@@ -12,7 +12,8 @@ extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern short D_L05_0015FFD8 __asm__("D_L05_0015FFD8");
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
+extern float
+approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 
 extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
@@ -43,7 +44,10 @@ void triggered_motion_update(char *moby) {
         MOBY_RETURN_TO_SAVED_POSITION = 4,
         MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE = 5,
         MOBY_SETTLE_AT_ZERO_MANIPULATOR_ANGLE = 6
-    } ; enum { MOBY_MOTION_SEQUENCE_COMPLETE = 7};
+    };
+    enum {
+        MOBY_MOTION_SEQUENCE_COMPLETE = 7
+    };
     TriggeredMotionVars *motion_and_manipulator_vars = (TriggeredMotionVars *)MOBY(moby)->pvars;
     float                target[4];
     float                delta[4];
@@ -100,11 +104,11 @@ void triggered_motion_update(char *moby) {
             approach = -0.5934119f;
         }
         approach_angle(&motion_and_manipulator_vars->unk60,
-                         &motion_and_manipulator_vars->unk64,
-                         approach,
-                         frame_time_sq * 4.1887903f,
-                         frame_time_sq * 4.1887903f,
-                         frame_time * 12.566371f);
+                       &motion_and_manipulator_vars->unk64,
+                       approach,
+                       frame_time_sq * 4.1887903f,
+                       frame_time_sq * 4.1887903f,
+                       frame_time * 12.566371f);
         if (motion_and_manipulator_vars->unk60 > 0.5934119f ||
             motion_and_manipulator_vars->unk60 < 0.0f) {
             if (motion_and_manipulator_vars->unk60 > 0.5934119f)

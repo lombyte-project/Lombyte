@@ -244,7 +244,9 @@ void update_resident_gameplay_state(void) {
                 }
             }
             level_render_state.player->flags &= ~1;
-            for (object_cursor = moby_instance_end; object_cursor->state != RESIDENT_OBJECT_STATE_LIST_END; object_cursor++) {
+            for (object_cursor = moby_instance_end;
+                 object_cursor->state != RESIDENT_OBJECT_STATE_LIST_END;
+                 object_cursor++) {
                 if (!(object_cursor->state & 0x80) &&
                     (object_cursor->class_id == 0x4A || object_cursor->class_id == 0xCB)) {
                     object_cursor->flags &= ~0x80;

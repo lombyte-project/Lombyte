@@ -172,8 +172,9 @@ s32 sound_update(void) {
         }
         {
             s32 state = voice_pool.voices[slot_index].state;
-            if (state == VOICE_SLOT_STOP_REQUESTED || (state != VOICE_SLOT_STOP_PENDING && owner_removed &&
-                               voice_pool.voices[slot_index].definition->source_state != 0)) {
+            if (state == VOICE_SLOT_STOP_REQUESTED ||
+                (state != VOICE_SLOT_STOP_PENDING && owner_removed &&
+                 voice_pool.voices[slot_index].definition->source_state != 0)) {
                 voice_flags[slot_index] = 0x20;
                 continue;
             }

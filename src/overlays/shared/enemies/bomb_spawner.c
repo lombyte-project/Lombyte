@@ -224,14 +224,16 @@ void bomb_spawner_update(struct Moby *moby) {
         if (id == -1)
             continue;
         o = (struct Moby *)(D_L03_0015FFD8_macro + (id << 8));
-        if (o != 0 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
+        if (o != 0 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+            o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             spawner_data->count++;
         }
     }
     {
         struct Moby *o;
         for (o = (struct Moby *)D_L03_0015FFE4_macro; o != 0; o = o->next) {
-            if (o->oclass == 0x221 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
+            if (o->oclass == 0x221 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+                o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 spawner_data->count++;
             }
         }
@@ -285,7 +287,8 @@ void bomb_spawner_update(struct Moby *moby) {
             if (id == -1)
                 continue;
             o = (struct Moby *)(D_L03_0015FFD8_macro + (id << 8));
-            if (o != 0 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
+            if (o != 0 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+                o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 mark_moby_for_removal(o);
             }
         }

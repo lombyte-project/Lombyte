@@ -109,7 +109,8 @@ void mine_layer_mine_update(struct Moby *mine_moby) {
     case MINE_ARM_AND_MONITOR_PROXIMITY:
         fast_dec_timer(&mine_vars->timer);
         target_moby = mine_vars->target;
-        if (target_moby != 0 && target_moby->state != MOBY_STATE_MARKED_FOR_REMOVAL && target_moby->state != 0xFD &&
+        if (target_moby != 0 && target_moby->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
+            target_moby->state != 0xFD &&
             vector_distance_xy(&mine_moby->pos, &target_moby->pos) < 3.0f &&
             mine_vars->timer == 0) {
             mine_moby->state = MINE_HOME_ON_TARGET;
@@ -173,7 +174,8 @@ void mine_layer_mine_update(struct Moby *mine_moby) {
                 debris_vector_scratch[2] =
                     random_float_between(frame_time * 4.0f, vector_scratch[kind]);
                 *(OvlQuad *)debris_velocity = *(OvlQuad *)debris_vector_scratch;
-                rr = random_float_between(0.0f, kind == MINE_DEBRIS_WIDE_SPAWN_RADIUS ? 0.5f : 0.25f);
+                rr = random_float_between(0.0f,
+                                          kind == MINE_DEBRIS_WIDE_SPAWN_RADIUS ? 0.5f : 0.25f);
                 debris_azimuth = random_angle_radians();
                 debris_vector_scratch[0] = fast_cos(debris_azimuth) * rr;
                 debris_vector_scratch[1] = fast_sin(debris_azimuth) * rr;

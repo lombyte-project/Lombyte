@@ -652,7 +652,7 @@ struct ChaserTarget {
 extern s32                 level_frame_count_lui __asm__("D_L07_0015F5CC");
 extern float               D_0015ED6C;
 extern struct ChaserTarget D_L07_00173EC0;
-extern int                 step_mover_2e3f20(struct Moby *, void *, int, void *) __asm__("FUN_L00_00259028");
+extern int step_mover_2e3f20(struct Moby *, void *, int, void *) __asm__("FUN_L00_00259028");
 extern int probe_vertical_ground_collision(void *, struct Moby *, int, float, float) __asm__("FUN_L00_002583f0");
 int update_snagglebeast_chase_movement(struct Moby       *chaser_moby,
                                        struct ChaserVars *chaser_vars,
@@ -2069,9 +2069,11 @@ void snagglebeast_update(unsigned char *moby) {
                                             &pfrac,
                                             snagglebeast_instance_state->unk1AC,
                                             1);
-                                hero_to_sample_distance = vector_distance_xy(((char *)&hero) + 0x80, &start);
+                                hero_to_sample_distance =
+                                    vector_distance_xy(((char *)&hero) + 0x80, &start);
                                 moby_to_sample_distance = vector_distance_xy(moby + 0x10, &start);
-                            } while (hero_to_sample_distance < 8.0f || moby_to_sample_distance < 12.0f);
+                            } while (hero_to_sample_distance < 8.0f ||
+                                     moby_to_sample_distance < 12.0f);
                             add_random_xy_offset((float *)&start, 0.5f);
                             fast_vec_sub(&direction, &start, ((char *)&hero) + 0x80);
                             zv = start.f[2];

@@ -332,9 +332,9 @@ void blarg_bombthrower_update(struct Moby *moby) {
         break;
     case BOMBTHROWER_STATE_APPROACH_WAYPOINT:
         step_mover_2e3f20((char *)moby,
-                         bombthrower_vars->blkD0,
-                         (float *)&bombthrower_vars->waypoint->pos,
-                         (char *)bombthrower_vars->v40);
+                          bombthrower_vars->blkD0,
+                          (float *)&bombthrower_vars->waypoint->pos,
+                          (char *)bombthrower_vars->v40);
         if (fast_vec_dist(&moby->pos, &bombthrower_vars->waypoint->pos) < 3.0f) {
             if (fast_difference_between_rotations(
                     moby->rot.z,
@@ -374,9 +374,9 @@ void blarg_bombthrower_update(struct Moby *moby) {
         break;
     case BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT:
         step_mover_2e3f20((char *)moby,
-                         bombthrower_vars->blkD0,
-                         (float *)&bombthrower_vars->waypoint->pos,
-                         (char *)bombthrower_vars->v40);
+                          bombthrower_vars->blkD0,
+                          (float *)&bombthrower_vars->waypoint->pos,
+                          (char *)bombthrower_vars->v40);
         if (moby->anim_flags & 2) {
             FUN_00212f90(bombthrower_vars->waypoint, 1, 0, scale_game_frames(6));
             qcopy(&moby->pos, &bombthrower_vars->waypoint->pos);

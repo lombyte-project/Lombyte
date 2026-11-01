@@ -75,7 +75,8 @@ int hero_set_state(int requested_state, int b) {
     float grind_vector_scratch[4];
     {
         struct Hero *p = &hero;
-        if (p->state.control_mode == 0x14 && (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || b != 2))
+        if (p->state.control_mode == 0x14 &&
+            (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || b != 2))
             return 0;
     }
     if ((level_game_mode == 2 || level_game_mode == 6) && b != 2)
@@ -83,8 +84,16 @@ int hero_set_state(int requested_state, int b) {
     {
         struct Hero *p = &hero;
         if (p->health.hp == 0 && (p->state.control_mode == 2 || p->state.control_mode == 7) &&
-            requested_state != HERO_STATE_FALL && requested_state != HERO_STATE_DYING && requested_state != HERO_STATE_VEHICLE_MODE_1_DYING && requested_state != HERO_STATE_VEHICLE_MODE_3_DYING && requested_state != HERO_STATE_VEHICLE_MODE_2_DYING && requested_state != HERO_STATE_FATAL_FALL && requested_state != HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT &&
-            requested_state != HERO_STATE_DEATH_DESCENT && requested_state != HERO_STATE_SINK && requested_state != HERO_STATE_DROWN && requested_state != HERO_STATE_DYING_SPEED_LIMITED && requested_state != HERO_STATE_DYING_ZERO_HEALTH)
+            requested_state != HERO_STATE_FALL && requested_state != HERO_STATE_DYING &&
+            requested_state != HERO_STATE_VEHICLE_MODE_1_DYING &&
+            requested_state != HERO_STATE_VEHICLE_MODE_3_DYING &&
+            requested_state != HERO_STATE_VEHICLE_MODE_2_DYING &&
+            requested_state != HERO_STATE_FATAL_FALL &&
+            requested_state != HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT &&
+            requested_state != HERO_STATE_DEATH_DESCENT && requested_state != HERO_STATE_SINK &&
+            requested_state != HERO_STATE_DROWN &&
+            requested_state != HERO_STATE_DYING_SPEED_LIMITED &&
+            requested_state != HERO_STATE_DYING_ZERO_HEALTH)
             return 0;
     }
     {
@@ -1002,7 +1011,8 @@ int hero_set_state(int requested_state, int b) {
             return 0;
         }
         p->state.control_mode = 4;
-        if (requested_state >= HERO_STATE_GRIND_JUMP && requested_state <= HERO_STATE_GRIND_RAIL_TRANSFER) {
+        if (requested_state >= HERO_STATE_GRIND_JUMP &&
+            requested_state <= HERO_STATE_GRIND_RAIL_TRANSFER) {
             p->unk2284 = 3;
         } else {
             p->unk2284 = 0x50;

@@ -188,7 +188,8 @@ void update_hero_ground_contact(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+            if (hero.ground_slope.f <= 0.87266463f ||
+                hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;

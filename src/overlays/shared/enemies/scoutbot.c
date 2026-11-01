@@ -416,7 +416,10 @@ void scoutbot_update(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_health_and_target(struct Moby *moby) {
-    enum { SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63 } ;ScoutbotVars *scoutbot_pvars = (ScoutbotVars *)moby->pvars;
+    enum {
+        SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63
+    };
+    ScoutbotVars *scoutbot_pvars = (ScoutbotVars *)moby->pvars;
     int           hit;
     float         dmg;
     int           hit_reaction_code;
@@ -644,7 +647,10 @@ void update_scoutbot_movement(struct Moby *moby) {
 void *enter_scoutbot_return_home_state(struct Moby *moby) __asm__("FUN_L08_002d4050");
 
 void *enter_scoutbot_return_home_state(struct Moby *moby) {
-    enum { SCOUTBOT_STATE_RETURN_HOME = 3 } ;void         *suction_cancel_status = cancel_suck_cannon_suction(moby);
+    enum {
+        SCOUTBOT_STATE_RETURN_HOME = 3
+    };
+    void         *suction_cancel_status = cancel_suck_cannon_suction(moby);
     ScoutbotVars *scoutbot_data = (ScoutbotVars *)moby->pvars;
     moby->state = SCOUTBOT_STATE_RETURN_HOME;
     scoutbot_data->unk200 = 4.0f;

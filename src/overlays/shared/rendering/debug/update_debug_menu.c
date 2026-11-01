@@ -385,7 +385,8 @@ void update_debug_camera(void) {
             copy_matrix3x4(l00_camera.unk350, r);
         }
     }
-    if (g_debug_menu.control_mode == DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET && l00_camera.unk180 != 0) {
+    if (g_debug_menu.control_mode == DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET &&
+        l00_camera.unk180 != 0) {
         target = (DebugCameraTarget *)l00_camera.unk180;
         qcopy(target->position, l00_camera.pos.f);
         qcopy(target->basis, l00_camera.unk350);

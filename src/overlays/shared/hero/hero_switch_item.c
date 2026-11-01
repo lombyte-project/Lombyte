@@ -772,10 +772,10 @@ void update_hero_condition_animation(void) {
     }
 }
 
-extern s32             l00_hero_item_animation_slot_ids[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
-extern u8              D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
-extern char           *D_L00_00197300[];
-extern u8              D_L00_0017CA80[] NOT_SDA;
+extern s32   l00_hero_item_animation_slot_ids[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
+extern u8    D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
+extern char *D_L00_00197300[];
+extern u8    D_L00_0017CA80[] NOT_SDA;
 extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 extern void  advance_moby_animation_blend(void *, unsigned char *) __asm__("FUN_L00_0024f190");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -825,8 +825,8 @@ void update_hero_item_slot_blends(void) {
             if (want) {
                 struct Hero *h = &hero;
                 if (hero.item_slot_blends[i] == 0) {
-                    u8 *allocated_item_slot_blend =
-                        allocate_moby_animation_slot((u8 *)h->moby, l00_hero_item_animation_slot_ids[i]);
+                    u8 *allocated_item_slot_blend = allocate_moby_animation_slot(
+                        (u8 *)h->moby, l00_hero_item_animation_slot_ids[i]);
                     hero.item_slot_blends[i] = allocated_item_slot_blend;
                     *(f32 *)(allocated_item_slot_blend + 8) = 0.0f;
                     *(u8 **)(hero.item_slot_blends[i] + 0x18) =
@@ -1068,7 +1068,8 @@ void start_equipped_item_animation(void) {
         if (hero.held_item_anim_blend[i] != 0) {
             release_moby_animation_slot((u8 *)hero.moby, &hero.held_item_anim_blend[i]);
         }
-        slot_animation_object = allocate_moby_animation_slot((u8 *)hero.moby, l00_hero_item_animation_slot_ids[i]);
+        slot_animation_object =
+            allocate_moby_animation_slot((u8 *)hero.moby, l00_hero_item_animation_slot_ids[i]);
         hero.held_item_anim_blend[i] = slot_animation_object;
         if (slot_animation_object != 0) {
             hero.item_hold_anim = slot_animation_id;
@@ -2183,7 +2184,8 @@ void hero_switch_item(int i) {
         if (item_switch_mode == HERO_ITEM_SWITCH_MODE_BLOCKED) {
             changed = 0;
         }
-        if (item_switch_mode == HERO_ITEM_SWITCH_MODE_RELOAD_TIMER_WHEN_ZERO && s->items[0].timer == 0) {
+        if (item_switch_mode == HERO_ITEM_SWITCH_MODE_RELOAD_TIMER_WHEN_ZERO &&
+            s->items[0].timer == 0) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
@@ -2393,7 +2395,8 @@ void exit_hero_vehicle_mode(void) {
     }
     {
         struct Hero *vehicle_animation_owner = &hero;
-        if (vehicle_animation_owner->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && vehicle_animation_owner->unk1634 != -1) {
+        if (vehicle_animation_owner->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
+            vehicle_animation_owner->unk1634 != -1) {
             set_animation_parameter(vehicle_animation_owner->unk1634, 0);
             vehicle_animation_owner->unk1634 = -1;
         }
@@ -3434,7 +3437,8 @@ void update_hero_ground_contact_and_surface_slopes(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+            if (hero.ground_slope.f <= 0.87266463f ||
+                hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;

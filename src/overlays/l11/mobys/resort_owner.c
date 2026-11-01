@@ -92,7 +92,11 @@ typedef struct ResortOwnerVars {
 } ResortOwnerVars;
 
 void trigger_pokitaru_paired_rotation(struct Moby *moby) {
-    enum { POKITARU_PAIRED_ROTATION_WAITING = 1 , POKITARU_PAIRED_ROTATION_ROTATING = 2 } ;ResortOwnerVars *state = (ResortOwnerVars *)moby->pvars;
+    enum {
+        POKITARU_PAIRED_ROTATION_WAITING = 1,
+        POKITARU_PAIRED_ROTATION_ROTATING = 2
+    };
+    ResortOwnerVars *state = (ResortOwnerVars *)moby->pvars;
     if (moby->oclass == 0x41 && moby->state == POKITARU_PAIRED_ROTATION_WAITING) {
         char *child;
         D_0013D3E2[0] = moby->state;
@@ -365,7 +369,8 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
     float                 position_scratch[4];
     float                 dialogue_rotation[4];
 
-    if (moby->state >= RESORT_OWNER_WAIT_TO_FOLLOW_HERO && moby->state <= RESORT_OWNER_FOLLOW_DISTANT_HERO && proximity == 0) {
+    if (moby->state >= RESORT_OWNER_WAIT_TO_FOLLOW_HERO &&
+        moby->state <= RESORT_OWNER_FOLLOW_DISTANT_HERO && proximity == 0) {
         FUN_L11_002d2088_c(moby, 6);
         return;
     }

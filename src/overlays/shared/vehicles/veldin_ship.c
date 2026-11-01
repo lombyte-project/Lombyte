@@ -107,7 +107,8 @@ void veldin_ship_draw(struct Moby *moby) {
             reflection.z += 1.0f;
             reflection_projection_factor = square_root(reflection.z + reflection.z);
             reflection_projection_factor += reflection_projection_factor;
-            if (moby->state == VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING || *(s32 *)(ship_render_state + 0x40) == 0) {
+            if (moby->state == VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING ||
+                *(s32 *)(ship_render_state + 0x40) == 0) {
                 ship_reflection_uvs[i][0] = reflection.x / reflection_projection_factor + 0.5f;
                 ship_reflection_uvs[i][1] = reflection.y / reflection_projection_factor + 0.5f;
             } else {

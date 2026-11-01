@@ -93,10 +93,13 @@ void print_moby_class_sizes(int *moby_class_record_cursor, int moby_class_record
             entries[i].size = 0;
         } else {
             if (moby_class_record_cursor[8] != 0) {
-                entries[i].size = convert_integer_to_float(moby_class_record_cursor[8] - moby_class_record_cursor[0]) * 0.0009765625f;
+                entries[i].size = convert_integer_to_float(moby_class_record_cursor[8] -
+                                                           moby_class_record_cursor[0]) *
+                                  0.0009765625f;
             } else {
-                entries[i].size =
-                    convert_integer_to_float(moby_class_record_cursor[0x10] - moby_class_record_cursor[0]) * 0.0009765625f;
+                entries[i].size = convert_integer_to_float(moby_class_record_cursor[0x10] -
+                                                           moby_class_record_cursor[0]) *
+                                  0.0009765625f;
             }
             entries[i + 1].class_id = -1.0f;
             entries[i + 1].size = 0;

@@ -314,7 +314,8 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
             (unsigned char)surface_draw_settings[0x31] << 8 |
             (unsigned char)surface_draw_settings[0x32] << 16;
     /* Retail reads the mode after the packet cursor stores. */
-    if (*(volatile int *)&textured_grid_view_settings_mode == TEXTURED_GRID_USE_CURRENT_VIEW_SETTINGS)
+    if (*(volatile int *)&textured_grid_view_settings_mode ==
+        TEXTURED_GRID_USE_CURRENT_VIEW_SETTINGS)
         color = (long)(*(int *)(current + 0x230 / 4) | (*(int *)(current + 0x234 / 4) << 8) |
                        (*(int *)(current + 0x238 / 4) << 16));
     {

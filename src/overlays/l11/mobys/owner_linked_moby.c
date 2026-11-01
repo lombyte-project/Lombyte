@@ -108,11 +108,15 @@ void owner_linked_moby_update(struct Moby *moby) {
         LINKED_MOBY_STATE_HANDLE_HITS = 2,
         LINKED_MOBY_STATE_FADE_OUT = 3,
         LINKED_MOBY_STATE_REMOVE = 4
-    } ; enum { MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE};
+    };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     OwnerLinkedMobyVars *owner_linked_moby_vars = (OwnerLinkedMobyVars *)moby->pvars;
     char                *health_ptr = &owner_linked_moby_vars->unk20;
     struct Moby         *owner_moby = owner_linked_moby_vars->unk70;
-    if (owner_moby == 0 || owner_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL || owner_moby->state == 0xFD) {
+    if (owner_moby == 0 || owner_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
+        owner_moby->state == 0xFD) {
         if (moby->state < LINKED_MOBY_STATE_FADE_OUT) {
             moby->state = LINKED_MOBY_STATE_REMOVE;
         }

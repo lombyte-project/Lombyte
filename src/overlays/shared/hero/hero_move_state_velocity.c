@@ -665,8 +665,10 @@ void update_hero_tilt(void) {
         if (k == 0x11 || k == 0x15 || k == 0x16) {
             return;
         }
-        if (current_hero_state == HERO_STATE_FATAL_FALL || current_hero_state == HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT ||
-            current_hero_state == HERO_STATE_ITEM_RELEASE_FALL || current_hero_state == HERO_STATE_GRAPPLE_SWING_ENTRY) {
+        if (current_hero_state == HERO_STATE_FATAL_FALL ||
+            current_hero_state == HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT ||
+            current_hero_state == HERO_STATE_ITEM_RELEASE_FALL ||
+            current_hero_state == HERO_STATE_GRAPPLE_SWING_ENTRY) {
             return;
         }
         tilt_targets[0] = 0.0f;
@@ -1263,7 +1265,8 @@ void launch_hero_wrench(void) {
     s32          state;
 
     state = hero.state.current;
-    aimed = (state == HERO_STATE_LOOK || state == HERO_STATE_LOOK_RELEASE_WAIT) && scale_game_frames(0x14) < hero.state_timer;
+    aimed = (state == HERO_STATE_LOOK || state == HERO_STATE_LOOK_RELEASE_WAIT) &&
+            scale_game_frames(0x14) < hero.state_timer;
     if (aimed) {
         target = hero.items[0].moby;
         has_target = 0;

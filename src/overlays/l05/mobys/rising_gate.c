@@ -26,7 +26,8 @@ float      gate_swing_max_speed_gp __asm__("D_L05_00161E94") = 1.44e+03f;
 extern int gate_mobys_314eb0 __asm__("D_L05_0015FFD8");
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
+extern float
+approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 
 /* Gate: waits for its trigger moby, then rises to topZ and swings its yaw back to 0, with sounds per class. */
 void rising_gate_update(struct Moby *gate_moby) __asm__("FUN_L05_00314eb0");
@@ -77,11 +78,11 @@ void rising_gate_update(struct Moby *gate_moby) {
         }
         if (fast_dec_timer(&gate_vars->swingTimer)) {
             approach_angle(&gate_moby->rot.y,
-                             &gate_vars->swingSpeed,
-                             0.0f,
-                             gate_swing_acceleration_gp * 0.017453292f * frame_time_sq,
-                             gate_swing_deceleration_gp * 0.017453292f * frame_time_sq,
-                             gate_swing_max_speed_gp * 0.017453292f * frame_time);
+                           &gate_vars->swingSpeed,
+                           0.0f,
+                           gate_swing_acceleration_gp * 0.017453292f * frame_time_sq,
+                           gate_swing_deceleration_gp * 0.017453292f * frame_time_sq,
+                           gate_swing_max_speed_gp * 0.017453292f * frame_time);
             if (gate_moby->rot.y == 0.0f)
                 gate_moby->state = GATE_YAW_ALIGNED;
         } else if (gate_vars->swingTimer == 1 && gate_moby->oclass == 0x354) {

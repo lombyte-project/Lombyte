@@ -43,7 +43,10 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                                              struct Moby *moby,
 
                                              struct Moby *target) {
-    enum { ENEMY_TURN_TO_HEADING = 0xC } ;KerwanPathEnemyVars *enemy_pvars = (KerwanPathEnemyVars *)moby->pvars;
+    enum {
+        ENEMY_TURN_TO_HEADING = 0xC
+    };
+    KerwanPathEnemyVars *enemy_pvars = (KerwanPathEnemyVars *)moby->pvars;
     int                  linked_moby_index;
     float                heading_delta;
     unsigned char        previous_state;
@@ -417,7 +420,8 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         m->flags &= 0xFFBE;
     }
     if (m->pos[0] < 2.0f || 1021.0f < m->pos[0] || m->pos[1] < 2.0f || 1021.0f < m->pos[1] ||
-        m->pos[2] < 2.0f || 1021.0f < m->pos[2] || (moby_data->pf.id == -1 && m->state != ENEMY_DEATH_KNOCKBACK)) {
+        m->pos[2] < 2.0f || 1021.0f < m->pos[2] ||
+        (moby_data->pf.id == -1 && m->state != ENEMY_DEATH_KNOCKBACK)) {
         mark_moby_for_removal(m);
         return;
     }
@@ -804,9 +808,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             }
         }
         if (!(step_mover_2e3f20((char *)m,
-                                  (char *)&moby_data->mv,
-                                  (float *)(pf->path + 0x10 + pf->idx * 0x10),
-                                  (char *)moby_data->v40) &
+                                (char *)&moby_data->mv,
+                                (float *)(pf->path + 0x10 + pf->idx * 0x10),
+                                (char *)moby_data->v40) &
               0x14)) {
             break;
         }
@@ -862,9 +866,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                 pf->idx = seg;
             }
             if (!(step_mover_2e3f20((char *)m,
-                                      (char *)&moby_data->mv,
-                                      (float *)(pf->path + 0x10 + pf->idx * 0x10),
-                                      (char *)moby_data->v40) &
+                                    (char *)&moby_data->mv,
+                                    (float *)(pf->path + 0x10 + pf->idx * 0x10),
+                                    (char *)moby_data->v40) &
                   0x14)) {
                 break;
             }
@@ -895,9 +899,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                 moby_data->i298 = seg;
             }
             if (!(step_mover_2e3f20((char *)m,
-                                      (char *)&moby_data->mv,
-                                      (float *)(path + 0x10 + moby_data->i298 * 0x10),
-                                      (char *)moby_data->v40) &
+                                    (char *)&moby_data->mv,
+                                    (float *)(path + 0x10 + moby_data->i298 * 0x10),
+                                    (char *)moby_data->v40) &
                   0x14)) {
                 break;
             }

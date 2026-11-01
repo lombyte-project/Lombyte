@@ -1303,7 +1303,8 @@ void update_hero_motion_by_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else {
             s32 ok = 1;
-            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
+                hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {
@@ -1965,14 +1966,16 @@ void update_hero_motion_by_state(void) {
                 vector_and_hit_descriptor_scratch.f[2] - hero.rail_point.f[2]);
             if (rail_lookahead_slope_angle > 0.0f) {
                 sp = rail_lookahead_slope_angle * 1.9098593f * (frame_time * -2.5f);
-                if (rail_lookahead_slope_angle > 0.2617994f && hero.grind_pose != 2 && hero.grind_pose != 3) {
+                if (rail_lookahead_slope_angle > 0.2617994f && hero.grind_pose != 2 &&
+                    hero.grind_pose != 3) {
                     hero.grind_pose = 0;
                 } else if (rail_lookahead_slope_angle < 0.13962634f && hero.grind_pose == 0) {
                     hero.grind_pose = -1;
                 }
             } else {
                 sp = -rail_lookahead_slope_angle * 2.864789f * (frame_time * 8.0f);
-                if (rail_lookahead_slope_angle < -0.19198622f && hero.grind_pose != 2 && hero.grind_pose != 3) {
+                if (rail_lookahead_slope_angle < -0.19198622f && hero.grind_pose != 2 &&
+                    hero.grind_pose != 3) {
                     hero.grind_pose = 1;
                 } else if (rail_lookahead_slope_angle > -0.12217305f && hero.grind_pose == 1) {
                     hero.grind_pose = -1;
@@ -2246,7 +2249,8 @@ void update_hero_motion_by_state(void) {
             if (hero.unk2224 != -1) {
                 struct VoiceSlot *alternate_landing_voice_slot =
                     (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.unk2224 * 0x70);
-                if (alternate_landing_voice_slot->pm88 == MV(hero.moby) && alternate_landing_voice_slot->b74 != 0) {
+                if (alternate_landing_voice_slot->pm88 == MV(hero.moby) &&
+                    alternate_landing_voice_slot->b74 != 0) {
                     release_voice_slot(hero.unk2224);
                 }
             }

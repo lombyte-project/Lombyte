@@ -69,7 +69,10 @@ void path_or_ballistic_debris_update(struct Moby *moby) __asm__("FUN_L14_002dfd1
 
 /* Moby class 403 */
 void path_or_ballistic_debris_update(struct Moby *moby) {
-    enum { DEBRIS_STATE_FOLLOW_PATH = 0 } ;Data *debris_private_vars = (Data *)moby->pvars;
+    enum {
+        DEBRIS_STATE_FOLLOW_PATH = 0
+    };
+    Data *debris_private_vars = (Data *)moby->pvars;
     Vec4  probe;
     f32   position_offset[4];
     f32  *velocity;

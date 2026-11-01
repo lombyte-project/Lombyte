@@ -63,10 +63,11 @@ extern float
 spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_00161F24 MACRO_ADDR;
-extern int                l12_planetbuster_maximus_proximity_fire_counter __asm__("D_L12_00161F34") __attribute__((sda));
-extern int                planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
-extern int                D_L12_001FB688[];
-extern int                FUN_L00_001fefc8(void *);
+extern int                l12_planetbuster_maximus_proximity_fire_counter __asm__("D_L12_00161F34")
+    __attribute__((sda));
+extern int planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
+extern int D_L12_001FB688[];
+extern int FUN_L00_001fefc8(void *);
 extern void             *
 spawn_blarg_trooper_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");

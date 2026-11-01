@@ -27,7 +27,13 @@ void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
 
 /* Moby classes 296, 652, 653 */
 void escalator_update(char *moby) {
-    enum { ESCALATOR_STATE_INITIALIZE = 0 , ESCALATOR_STATE_TIMED_NEGATIVE_YAW_MOTION = 1 , ESCALATOR_STATE_TIMED_POSITIVE_YAW_MOTION = 2 , ESCALATOR_STATE_CONSTANT_SPEED_MOTION = 3 } ;EscalatorVars *escalator_motion_state = (EscalatorVars *)MOBY(moby)->pvars;
+    enum {
+        ESCALATOR_STATE_INITIALIZE = 0,
+        ESCALATOR_STATE_TIMED_NEGATIVE_YAW_MOTION = 1,
+        ESCALATOR_STATE_TIMED_POSITIVE_YAW_MOTION = 2,
+        ESCALATOR_STATE_CONSTANT_SPEED_MOTION = 3
+    };
+    EscalatorVars *escalator_motion_state = (EscalatorVars *)MOBY(moby)->pvars;
     float          limit;
     float          y;
     int            state;

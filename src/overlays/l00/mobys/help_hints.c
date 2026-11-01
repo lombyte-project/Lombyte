@@ -27,7 +27,11 @@ void help_hints_update(HelpMoby *moby) __asm__("FUN_L00_002e0988");
 
 /* Moby class 1413 */
 void help_hints_update(HelpMoby *moby) {
-    enum { HELP_HINTS_STATE_UNINITIALIZED = 0 , HELP_HINTS_STATE_INITIALIZED = 1 } ;s32         *vars;
+    enum {
+        HELP_HINTS_STATE_UNINITIALIZED = 0,
+        HELP_HINTS_STATE_INITIALIZED = 1
+    };
+    s32         *vars;
     s32         *target_index_ptr;
     s32          i;
     HelpTarget  *target_moby;

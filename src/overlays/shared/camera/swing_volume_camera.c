@@ -104,7 +104,8 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
     type = *(u16 *)&params->type;
     if (params->type == 2 && D_001413DC == 0x1A && params->timer > 0) {
         forced = 1;
-    } else if ((s16)type == SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST && hero_requested_camera_mode[0] == 3) {
+    } else if ((s16)type == SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST &&
+               hero_requested_camera_mode[0] == 3) {
         forced = 0 < params->timer;
     }
     if (params->clip_volume >= 0 &&
@@ -132,7 +133,22 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
 void volume_camera_swing(struct UpdateCam *cam) __asm__("FUN_L00_002ec988");
 
 void volume_camera_swing(struct UpdateCam *swing_camera_record) {
-    enum { SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END = 1 , SWING_CAMERA_TYPE_ONE_FRAME_SWING = 3 , SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4 , SWING_CAMERA_TYPE_SNAP_ON_ENTRY = 5 , SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10 } ; enum { SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE = 6 , SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE = 8 , SWING_CAMERA_TYPE_RELEASE_ANGLE_AT_END = 9} ; enum { SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY = 7} ;CameraVec          gravity_offset_or_yaw_direction;
+    enum {
+        SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END = 1,
+        SWING_CAMERA_TYPE_ONE_FRAME_SWING = 3,
+        SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4,
+        SWING_CAMERA_TYPE_SNAP_ON_ENTRY = 5,
+        SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10
+    };
+    enum {
+        SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE = 6,
+        SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE = 8,
+        SWING_CAMERA_TYPE_RELEASE_ANGLE_AT_END = 9
+    };
+    enum {
+        SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY = 7
+    };
+    CameraVec          gravity_offset_or_yaw_direction;
     SwingCameraParams *params;
     struct UpdateCam  *rec;
     Vec4f             *pos;
@@ -148,10 +164,12 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     f32                lateral_spring_blend_fraction;
 
     params = camera_descriptors[swing_camera_record->descriptor_index].params;
-    if (params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE && FOLLOW_CAM_STATE(current_follow_cam)->tail.mode == 0) {
+    if (params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE &&
+        FOLLOW_CAM_STATE(current_follow_cam)->tail.mode == 0) {
         return;
     }
-    if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE && FOLLOW_CAM_STATE(current_follow_cam)->tail.mode != 0) {
+    if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE &&
+        FOLLOW_CAM_STATE(current_follow_cam)->tail.mode != 0) {
         return;
     }
     if (volume_camera_swing_active(swing_camera_record) == 0) {
@@ -247,7 +265,10 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             params->timer = scale_game_frames(200);
         }
         FUN_L00_002e8620();
-    } else if (params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END || params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY || params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END || params->type == SWING_CAMERA_TYPE_RELEASE_ANGLE_AT_END) {
+    } else if (params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END ||
+               params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY ||
+               params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END ||
+               params->type == SWING_CAMERA_TYPE_RELEASE_ANGLE_AT_END) {
         /* Moving the left stick skips to the end of the swing. */
         struct PadState *pad = &controller_state;
         if (pad->analog[0] != 0.0f || pad->analog[1] != 0.0f) {
@@ -281,12 +302,16 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         fast_sin(camera_descriptors[swing_camera_record->descriptor_index].yaw);
     *(s32 *)&gravity_offset_or_yaw_direction[2] = 0;
     swing = params->swing * 0.017453292f * (params->timer / total);
-    if ((params->type != SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END && params->type != SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY && params->type != SWING_CAMERA_TYPE_RELEASE_ANGLE_AT_END) || at_end == 0) {
+    if ((params->type != SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END &&
+         params->type != SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY &&
+         params->type != SWING_CAMERA_TYPE_RELEASE_ANGLE_AT_END) ||
+        at_end == 0) {
         set_follow_camera_angle_blend_from_direction(
             gravity_offset_or_yaw_direction, swing, params->pitch * 0.017453292f);
     }
     if (params->distance != 0.0f) {
-        if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE || params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE) {
+        if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE ||
+            params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE) {
             follow_camera_set_distance(0, params->distance, 0.002f);
             FUN_L00_002e8490(params->distance + 1.36f);
         } else {
@@ -295,14 +320,16 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         }
     }
     if (params->height != 0.0f) {
-        if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE || params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE) {
+        if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE ||
+            params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE) {
             follow_camera_set_height(params->height, 0.002f);
         } else {
             follow_camera_set_height(params->height, 0.003f);
         }
     }
     if (params->offset_scale != 0.0f) {
-        if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE || params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE) {
+        if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE ||
+            params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE) {
             follow_camera_set_offset_scale(0, params->offset_scale, 0.002f);
         } else {
             follow_camera_set_offset_scale(0, params->offset_scale, 0.005f);
@@ -341,7 +368,9 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
                         lateral_spring_blend_fraction);
         }
     }
-    if (params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END || params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY || params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) {
+    if (params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END ||
+        params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY ||
+        params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) {
         FUN_L00_002e8620();
         follow_camera_start_slide();
         follow_camera_set_up_spring(0.01f, 0.2f);
@@ -362,7 +391,9 @@ s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {
         return 0;
     if (params->type == 11 && D_001413F4 != 2)
         return 0;
-    if ((params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END || params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) && params->timer == 0) {
+    if ((params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END ||
+         params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) &&
+        params->timer == 0) {
         struct Hero *hero_data = &hero;
         if (hero_data->frames_off_ground.s != 0) {
             if (current_level_index != 14)

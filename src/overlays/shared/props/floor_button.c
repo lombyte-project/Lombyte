@@ -50,7 +50,8 @@ void floor_button_update(struct Moby *moby) {
         id = (s16)moby->save_id;
         if (l05_mission_gated_moby_save_flags.collected[id] != 0 ||
             (D_0014C190_257218[current_level_index][id >> 5] >> (moby->save_id & 31) & 1) != 0 ||
-            (floor_button_private_state[2] != 0 && D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
+            (floor_button_private_state[2] != 0 &&
+             D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
             moby->command = 2;
             moby->glow_color = 0x80208020;
             moby->state = FLOOR_BUTTON_STATE_DISABLED;
@@ -60,7 +61,8 @@ void floor_button_update(struct Moby *moby) {
                 if (*(s32 *)l05_paths[list] > 0) {
                     do {
                         path_key_cursor = ((char *)l05_paths[list]) + i * 16;
-                        if (*(f32 *)(path_key_cursor + 0x1C) == ((f32 *)floor_button_private_state)[1])
+                        if (*(f32 *)(path_key_cursor + 0x1C) ==
+                            ((f32 *)floor_button_private_state)[1])
                             *(s32 *)(path_key_cursor + 0x1C) = 0;
                         list = floor_button_private_state[0];
                         i++;
@@ -72,7 +74,8 @@ void floor_button_update(struct Moby *moby) {
         }
         break;
     case FLOOR_BUTTON_STATE_WAIT_FOR_PRESS:
-        angle = fast_add_rotations(*(f32 *)(floor_button_private_state + 3), frame_time * 6.2831855f);
+        angle =
+            fast_add_rotations(*(f32 *)(floor_button_private_state + 3), frame_time * 6.2831855f);
         *(f32 *)(floor_button_private_state + 3) = angle;
         color = truncate_float_to_s32((fast_sin(angle) * 4.0f - 3.0f) * 128.0f);
         if (color > 0x80)
@@ -99,7 +102,8 @@ void floor_button_update(struct Moby *moby) {
                 if (*(s32 *)l05_paths[list] > 0) {
                     do {
                         path_key_cursor = ((char *)l05_paths[list]) + i * 16;
-                        if (*(f32 *)(path_key_cursor + 0x1C) == ((f32 *)floor_button_private_state)[1])
+                        if (*(f32 *)(path_key_cursor + 0x1C) ==
+                            ((f32 *)floor_button_private_state)[1])
                             *(s32 *)(path_key_cursor + 0x1C) = 0;
                         list = floor_button_private_state[0];
                         i++;

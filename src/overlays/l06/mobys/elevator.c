@@ -346,7 +346,8 @@ void elevator_update(Moby_2FDA70 *moby) {
                 moby_data->f90 = scale_game_frames(0x78);
             }
         } else if (vector_distance_xy(&moby->pos, &((Hero_2FDA70 *)(D_0013F350))->pos) < 24.0f &&
-                   moby->state == WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT && ((Hero_2FDA70 *)(D_0013F350))->pos.z + 5.0f < moby->pos.z) {
+                   moby->state == WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT &&
+                   ((Hero_2FDA70 *)(D_0013F350))->pos.z + 5.0f < moby->pos.z) {
             moby_data->f84 = 1;
             moby_data->f94 = 1;
             moby->state = MOVE_TO_NODE_BASE_HEIGHT;
@@ -354,7 +355,8 @@ void elevator_update(Moby_2FDA70 *moby) {
             set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro + (moby_data->f60 << 8));
             moby_data->f90 = scale_game_frames(0x78);
         } else if (vector_distance_xy(&moby->pos, &((Hero_2FDA70 *)(D_0013F350))->pos) < 24.0f &&
-                   moby->state == WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT && moby->pos.z < ((Hero_2FDA70 *)(D_0013F350))->pos.z - 5.0f) {
+                   moby->state == WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT &&
+                   moby->pos.z < ((Hero_2FDA70 *)(D_0013F350))->pos.z - 5.0f) {
             moby->state = MOVE_TO_NODE_OFFSET_HEIGHT;
             set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro + (moby_data->f68 << 8));
             moby_data->f90 = scale_game_frames(0x78);
@@ -402,7 +404,8 @@ void elevator_update(Moby_2FDA70 *moby) {
     } else {
         ((Hero_2FDA70 *)(D_0013F350))->f22CB = 0;
     }
-    if (moby->state >= MOVE_TO_NODE_BASE_HEIGHT && moby->state <= WAIT_FOR_HERO_CLEARANCE_AT_NODE_BASE_HEIGHT) {
+    if (moby->state >= MOVE_TO_NODE_BASE_HEIGHT &&
+        moby->state <= WAIT_FOR_HERO_CLEARANCE_AT_NODE_BASE_HEIGHT) {
         moby_data->f9C = 0.0f;
         moby->f90 = D_L06_00161F74;
     } else {

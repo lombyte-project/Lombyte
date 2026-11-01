@@ -143,7 +143,8 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
             1 << (robot_qwark_moby->save_id & 0x1F);
     }
     robot_qwark_moby->hit_slot = 0xFF;
-    if (npc_dialogue_suppression_flags[0] != 0 && robot_qwark_moby->state != ROBOT_QWARK_BROKEN_SPARKING) {
+    if (npc_dialogue_suppression_flags[0] != 0 &&
+        robot_qwark_moby->state != ROBOT_QWARK_BROKEN_SPARKING) {
         return;
     }
     switch (robot_qwark_moby->state) {

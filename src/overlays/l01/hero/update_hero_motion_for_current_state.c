@@ -1423,7 +1423,8 @@ void update_hero_motion_for_current_state(void) {
             int ok;
 
             ok = 1;
-            if (r->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (r->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 &&
+                hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {

@@ -68,7 +68,11 @@ void exploding_prop_update(struct Moby *moby) __asm__("FUN_L15_002aa280");
 
 /* Moby class 154 */
 void exploding_prop_update(struct Moby *moby) {
-    enum { EXPLODING_PROP_STATE_UNINITIALIZED = 0 , EXPLODING_PROP_STATE_INITIALIZED = 1 } ;char *hit = 0;
+    enum {
+        EXPLODING_PROP_STATE_UNINITIALIZED = 0,
+        EXPLODING_PROP_STATE_INITIALIZED = 1
+    };
+    char *hit = 0;
     Vec4  velocity, hit_direction, push, offset, center;
     u32   palette[4];
     u32   colors[4];

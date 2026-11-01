@@ -258,7 +258,10 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         INTERCEPTOR_STATE_REJOIN_PATROL = 6,
         INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
         INTERCEPTOR_STATE_DEATH_FALL = 9
-    } ; enum { INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER = 8};
+    };
+    enum {
+        INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER = 8
+    };
     BlargHeavyInterceptorVars *moby_vars = (BlargHeavyInterceptorVars *)moby->pvars;
     float                      vector_scratch[4];
     float                      secondary_vector_scratch[4];
@@ -289,7 +292,8 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         }
     }
     process_blarg_heavy_interceptor_hit_reactions(moby);
-    if (moby->state > INTERCEPTOR_STATE_INITIALIZE && moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
+    if (moby->state > INTERCEPTOR_STATE_INITIALIZE &&
+        moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
         if (fast_vec_dist(&moby->pos, D_L14_001674C0) < 40.0f) {
             FUN_L00_0025a120(moby);
         }
@@ -754,10 +758,12 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
     } else {
         moby->command = 0;
     }
-    if (moby->state == INTERCEPTOR_STATE_PATROL_AND_SCAN && !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
+    if (moby->state == INTERCEPTOR_STATE_PATROL_AND_SCAN &&
+        !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
         *(s32 *)&moby_vars->unk1D0[0] = allocate_voice_c618(0, 4, moby);
     }
-    if ((moby->state == INTERCEPTOR_STATE_TRACK_TARGET || moby->state == INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY) &&
+    if ((moby->state == INTERCEPTOR_STATE_TRACK_TARGET ||
+         moby->state == INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY) &&
         !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
         *(s32 *)&moby_vars->unk1D0[0] = allocate_voice_c618(2, 4, moby);
     }
@@ -788,8 +794,19 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH = 9,
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
-    } ; enum { INTERCEPTOR_STATE_PATROL_AND_SCAN = 1 , INTERCEPTOR_STATE_ALERT_GROUP = 2 , INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7};
-    enum { HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE = 1 } ; enum { HIT_REACTION_STATUS_ENABLE_HIT_PARTICLES = 3} ;BlargHeavyInterceptorVars *blarg_heavy_interceptor_vars =
+    };
+    enum {
+        INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
+        INTERCEPTOR_STATE_ALERT_GROUP = 2,
+        INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7
+    };
+    enum {
+        HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE = 1
+    };
+    enum {
+        HIT_REACTION_STATUS_ENABLE_HIT_PARTICLES = 3
+    };
+    BlargHeavyInterceptorVars *blarg_heavy_interceptor_vars =
         (BlargHeavyInterceptorVars *)moby->pvars;
     int   hit_reaction_status;
     float damage_amount;
@@ -803,7 +820,8 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
                                        &damage_amount,
                                        0,
                                        4);
-    if (hit_reaction_status != HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE && moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
+    if (hit_reaction_status != HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE &&
+        moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
         float remaining_health = blarg_heavy_interceptor_vars->health - damage_amount;
         blarg_heavy_interceptor_vars->health = remaining_health;
         if (remaining_health <= 0.0f)
@@ -1698,7 +1716,10 @@ update_moby_rotation_oscillation(u8 *, u8 *, u8 *, f32, f32, f32) __asm__("FUN_L
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) __asm__("FUN_L14_002aea08");
 
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) {
-    enum { INTERCEPTOR_STATE_PATROL_AND_SCAN = 1 } ;BlargHeavyInterceptorVars *interceptor_private_vars = (BlargHeavyInterceptorVars *)moby->pvars;
+    enum {
+        INTERCEPTOR_STATE_PATROL_AND_SCAN = 1
+    };
+    BlargHeavyInterceptorVars *interceptor_private_vars = (BlargHeavyInterceptorVars *)moby->pvars;
     f32                        heading_offset;
     update_moby_vertical_oscillation(
         blarg_heavy_interceptor_vertical_oscillation_amplitude_gp,
@@ -1782,10 +1803,12 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
                            1.0f);
         rotation_angle = fast_subtract_rotations(
             fast_arc_tan(half_span_vector[0], half_span_vector[1]), moby->rot.z);
-        build_axis_rotation_quaternion(blarg_heavy_interceptor_private_vars->unkF0, 2, rotation_angle);
+        build_axis_rotation_quaternion(
+            blarg_heavy_interceptor_private_vars->unkF0, 2, rotation_angle);
         blarg_heavy_interceptor_private_vars->unk1B0[3] = rotation_angle;
         rotation_angle = -fast_arc_tan(vector_length_xy(half_span_vector), half_span_vector[2]);
-        build_axis_rotation_quaternion(blarg_heavy_interceptor_private_vars->unk130, 1, rotation_angle);
+        build_axis_rotation_quaternion(
+            blarg_heavy_interceptor_private_vars->unk130, 1, rotation_angle);
         blarg_heavy_interceptor_private_vars->unk1C0[0] = rotation_angle;
         qcopy(blarg_heavy_interceptor_private_vars->unk90,
               blarg_heavy_interceptor_private_vars->unk170);
@@ -1970,7 +1993,8 @@ int try_retract_turret_group(int index) {
         checked_moby = moby_array_start + (moby_index_or_state << 8);
         if ((((unsigned char *)MOBY(checked_moby)->pvars))[0x8B] == 0) {
             moby_index_or_state = checked_moby[0x20];
-            if (moby_index_or_state != TURRET_STATE_RETRACTING && moby_index_or_state != TURRET_STATE_WAITING) {
+            if (moby_index_or_state != TURRET_STATE_RETRACTING &&
+                moby_index_or_state != TURRET_STATE_WAITING) {
                 return 0;
             }
         }

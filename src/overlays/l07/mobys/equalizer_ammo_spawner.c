@@ -44,7 +44,12 @@ void equalizer_ammo_spawner_update(struct Moby *moby) __asm__("FUN_L07_0031d2e0"
 
 /* Moby class 1142 */
 void equalizer_ammo_spawner_update(struct Moby *moby) {
-    enum { EQUALIZER_AMMO_SPAWNER_INITIALIZE_PATH = 0 , EQUALIZER_AMMO_SPAWNER_WAIT_FOR_TRIGGER = 1 , EQUALIZER_AMMO_SPAWNER_COMPLETE = 2 } ;int *ammo_spawner_state = ((int *)moby->pvars);
+    enum {
+        EQUALIZER_AMMO_SPAWNER_INITIALIZE_PATH = 0,
+        EQUALIZER_AMMO_SPAWNER_WAIT_FOR_TRIGGER = 1,
+        EQUALIZER_AMMO_SPAWNER_COMPLETE = 2
+    };
+    int *ammo_spawner_state = ((int *)moby->pvars);
     int  state = moby->state;
     if (state == EQUALIZER_AMMO_SPAWNER_WAIT_FOR_TRIGGER)
         goto state_one;

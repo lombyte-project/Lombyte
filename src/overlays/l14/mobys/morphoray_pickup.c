@@ -155,8 +155,14 @@ typedef struct {
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
-extern unsigned char *
-spawn_timed_hero_relative_particle(float f, void *pos, int b, unsigned char a2, int idx, int flag, int s, int mode) __asm__("FUN_L00_00272f68");
+extern unsigned char *spawn_timed_hero_relative_particle(float         f,
+                                                         void         *pos,
+                                                         int           b,
+                                                         unsigned char a2,
+                                                         int           idx,
+                                                         int           flag,
+                                                         int           s,
+                                                         int mode) __asm__("FUN_L00_00272f68");
 
 void update_morphoray_particles(struct Moby *morphoray_moby) {
     float     particle_position_and_step[8];
@@ -191,7 +197,8 @@ void update_morphoray_particles(struct Moby *morphoray_moby) {
         elapsed_timer_fraction = elapsed_timer_fraction / (float)scale_game_frames(255);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_timer_fraction));
         k = truncate_float_to_s32(*a++);
-        spawn_timed_hero_relative_particle(effect_data->c[j], particle_position_and_step, c, k, 0x35, 1, 2, 0);
+        spawn_timed_hero_relative_particle(
+            effect_data->c[j], particle_position_and_step, c, k, 0x35, 1, 2, 0);
         j++;
         fast_vec_add(
             particle_position_and_step, particle_position_and_step, &particle_position_and_step[4]);

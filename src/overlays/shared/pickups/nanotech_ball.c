@@ -188,11 +188,11 @@ void FUN_00214890_002d8418(Vec4_002d8418 *,
                            float) __asm__("FUN_00214890");
 void spawn_moving_hero_relative_alpha_fade_particle(
     void *, Vec4_002d8418 *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
-s32  FUN_001f96f8_2d8510(s32) __asm__("FUN_001f96f8");
-s32  FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
-u8  *spawn_timed_hero_relative_particle(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
-void FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
-void draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
+s32 FUN_001f96f8_2d8510(s32) __asm__("FUN_001f96f8");
+s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
+u8 *spawn_timed_hero_relative_particle(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
+void         FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
+void         draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
 extern int   func_001F9850_2D9EA0(int) __asm__("FUN_001f96f8");
 extern void  func_L00_001FF4B0_2D9EA0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void  func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1170,27 +1170,27 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
              << 24;
         c = al | (c & 0xFFFFFF);
         effect_position.z = z + nanotech_ball_collection_particle_z_offsets[i];
-        effect_record = spawn_timed_hero_relative_particle(&effect_position,
-                                                c,
-                                                truncate_float_to_s32(effect_data->f60[i]),
-                                                nanotech_ball_collection_particle_byte_source_index,
-                                                0,
-                                                2,
-                                                1,
-                                                nanotech_ball_collection_particle_scale_factors[i] *
-                                                    color_progress_or_size_factor);
+        effect_record = spawn_timed_hero_relative_particle(
+            &effect_position,
+            c,
+            truncate_float_to_s32(effect_data->f60[i]),
+            nanotech_ball_collection_particle_byte_source_index,
+            0,
+            2,
+            1,
+            nanotech_ball_collection_particle_scale_factors[i] * color_progress_or_size_factor);
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_lui.pF8;
-        effect_record =
-            spawn_timed_hero_relative_particle(&effect_position,
-                                    al | 0xFFFFFF,
-                                    truncate_float_to_s32(effect_data->f60[i]),
-                                    nanotech_ball_collection_particle_byte_source_index,
-                                    nanotech_ball_collection_second_particle_mode_selector,
-                                    2,
-                                    1,
-                                    nanotech_ball_collection_particle_scale_factors[i] *
-                                        (color_progress_or_size_factor * 0.7f));
+        effect_record = spawn_timed_hero_relative_particle(
+            &effect_position,
+            al | 0xFFFFFF,
+            truncate_float_to_s32(effect_data->f60[i]),
+            nanotech_ball_collection_particle_byte_source_index,
+            nanotech_ball_collection_second_particle_mode_selector,
+            2,
+            1,
+            nanotech_ball_collection_particle_scale_factors[i] *
+                (color_progress_or_size_factor * 0.7f));
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_lui.pF8;
         fast_vec_add(&effect_position, &effect_position, &effect_position_step);

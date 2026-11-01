@@ -51,10 +51,10 @@ extern float                  l06_beam_barrier_segment_euler_rotations[] __asm__
 extern int                    D_L06_00161E40[] MACRO_ADDR;
 extern int                    D_L06_00161E50;
 extern int                    D_L06_00161E54;
-extern f32                    l06_beam_barrier_strand_length __asm__("D_L06_00161E08") __attribute__((sda));
-extern float                  l06_beam_barrier_transform_scale __asm__("D_L06_00161E0C") __attribute__((sda));
-float                         beam_barrier_collision_z_offset_gp __asm__("D_L06_00161E18") = 2.25f;
-extern int beam_barrier_burst_color_from_gp __asm__("D_L06_00161E1C") __attribute__((sda));
+extern f32   l06_beam_barrier_strand_length __asm__("D_L06_00161E08") __attribute__((sda));
+extern float l06_beam_barrier_transform_scale __asm__("D_L06_00161E0C") __attribute__((sda));
+float        beam_barrier_collision_z_offset_gp __asm__("D_L06_00161E18") = 2.25f;
+extern int   beam_barrier_burst_color_from_gp __asm__("D_L06_00161E1C") __attribute__((sda));
 int   beam_barrier_burst_color_to_gp __asm__("D_L06_00161E20") = 0x80802080; /* RGBA, 0xAABBGGRR */
 float beam_barrier_burst_scale_min_gp __asm__("D_L06_00161E24") = 0.125f;
 float beam_barrier_burst_scale_max_gp __asm__("D_L06_00161E28") = 0.333f;
@@ -297,10 +297,14 @@ void beam_barrier_update(struct Moby *moby) {
         do {
             segment_offset = segment * 16;
             spark = 19;
-            euler_rotation_matrix(work.shared.local, (char *)l06_beam_barrier_segment_euler_rotations + segment_offset);
+            euler_rotation_matrix(work.shared.local,
+                                  (char *)l06_beam_barrier_segment_euler_rotations +
+                                      segment_offset);
             next_segment = segment + 1;
             multiply_matrix(work.shared.local, work.matrix, work.shared.local);
-            transform_vector(work.point, (char *)l06_beam_barrier_segment_local_offsets + segment_offset, work.matrix);
+            transform_vector(work.point,
+                             (char *)l06_beam_barrier_segment_local_offsets + segment_offset,
+                             work.matrix);
             fast_vec_add(work.shared.collision.delta, work.point, pos);
             work.shared.collision.delta[3] = 1.0f;
             do {

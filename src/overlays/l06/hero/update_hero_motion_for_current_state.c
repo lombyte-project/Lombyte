@@ -519,7 +519,8 @@ void update_hero_ground_contact(void) {
         }
         if (hero_lui.ground_distance < 0.02f) {
             hero_lui.frames_off_ground.s = 0;
-            if (hero_lui.ground_slope.f <= 0.87266463f || hero_lui.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+            if (hero_lui.ground_slope.f <= 0.87266463f ||
+                hero_lui.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero_lui.state.control_mode == 0x16) {
                 hero_lui.air_frames.s = 0;
                 hero_lui.last_landed_moby = HH.moby;
@@ -1788,7 +1789,8 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, D_0015ED6C_c * 15.009831f);
         } else {
             s32 ok = 1;
-            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
+                hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {
@@ -2044,7 +2046,8 @@ void update_hero_motion_for_current_state(void) {
             if (hero.grind_voice != -1) {
                 struct VoiceSlot *grind_voice_slot =
                     (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.grind_voice * 0x70);
-                if (grind_voice_slot->pm88 == (struct MobyView *)hero.moby && grind_voice_slot->b74 != 0) {
+                if (grind_voice_slot->pm88 == (struct MobyView *)hero.moby &&
+                    grind_voice_slot->b74 != 0) {
                     release_voice_slot(hero.grind_voice);
                 }
             }
@@ -2354,7 +2357,8 @@ void update_hero_motion_for_current_state(void) {
                         &sf,
                         0.3f,
                         hero.rail_spline_loops);
-            rail_ahead_pitch = fast_arc_tan(vector_distance_xy(&hero.rail_point, &vector_or_descriptor_scratch),
+            rail_ahead_pitch =
+                fast_arc_tan(vector_distance_xy(&hero.rail_point, &vector_or_descriptor_scratch),
                              vector_or_descriptor_scratch.f[2] - hero.rail_point.f[2]);
             if (rail_ahead_pitch > 0.0f) {
                 sp = rail_ahead_pitch * 1.9098593f * (D_0015ED6C_c * -2.5f);
@@ -2365,7 +2369,8 @@ void update_hero_motion_for_current_state(void) {
                 }
             } else {
                 sp = -rail_ahead_pitch * 2.864789f * (D_0015ED6C_c * 8.0f);
-                if (rail_ahead_pitch < -0.19198622f && hero.grind_pose != 2 && hero.grind_pose != 3) {
+                if (rail_ahead_pitch < -0.19198622f && hero.grind_pose != 2 &&
+                    hero.grind_pose != 3) {
                     hero.grind_pose = 1;
                 } else if (rail_ahead_pitch > -0.12217305f && hero.grind_pose == 1) {
                     hero.grind_pose = -1;
@@ -2631,7 +2636,8 @@ void update_hero_motion_for_current_state(void) {
             if (hero.voice_slot4 != -1) {
                 struct VoiceSlot *landing_item_voice_slot =
                     (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.voice_slot4 * 0x70);
-                if (landing_item_voice_slot->pm88 == (struct MobyView *)hero.moby && landing_item_voice_slot->b74 != 0) {
+                if (landing_item_voice_slot->pm88 == (struct MobyView *)hero.moby &&
+                    landing_item_voice_slot->b74 != 0) {
                     release_voice_slot(hero.voice_slot4);
                 }
             }
@@ -2641,7 +2647,8 @@ void update_hero_motion_for_current_state(void) {
             if (hero.unk2224 != -1) {
                 struct VoiceSlot *landing_entry4_voice_slot =
                     (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.unk2224 * 0x70);
-                if (landing_entry4_voice_slot->pm88 == (struct MobyView *)hero.moby && landing_entry4_voice_slot->b74 != 0) {
+                if (landing_entry4_voice_slot->pm88 == (struct MobyView *)hero.moby &&
+                    landing_entry4_voice_slot->b74 != 0) {
                     release_voice_slot(hero.unk2224);
                 }
             }
@@ -2941,7 +2948,10 @@ void update_hero_motion_for_current_state(void) {
         s32                    ok;
         tb = &D_L06_0017C3A8[hero.attack_record];
         hero.target_speed = 0.0f;
-        if ((tb->kind == HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE ? 1 : tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION) && hero.anim_frame < 5.5f) {
+        if ((tb->kind == HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE
+                 ? 1
+                 : tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION) &&
+            hero.anim_frame < 5.5f) {
             hero.target_speed = D_0015ED6C_c * 3.5f;
         }
         if (hero.anim_changing == 0 && (f32)tb->f1C <= hero.anim_frame &&
@@ -2974,7 +2984,8 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, D_0015ED6C_c * 15.009831f);
         } else {
             ok = 1;
-            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
+                hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {

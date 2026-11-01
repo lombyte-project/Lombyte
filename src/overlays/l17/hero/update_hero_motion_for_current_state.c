@@ -1474,7 +1474,8 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else {
             s32 ok = 1;
-            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
+                hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {
@@ -2899,7 +2900,10 @@ void update_hero_motion_for_current_state(void) {
         s32                    ok;
         tb = &D_L17_0017C528[hero.attack_record];
         hero.target_speed = 0.0f;
-        if ((tb->kind == HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE ? 1 : tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION) && hero.anim_frame < 5.5f) {
+        if ((tb->kind == HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE
+                 ? 1
+                 : tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION) &&
+            hero.anim_frame < 5.5f) {
             hero.target_speed = frame_time * 3.5f;
         }
         if (hero.anim_changing == 0 && (f32)tb->f1C <= hero.anim_frame &&
@@ -2924,7 +2928,8 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else {
             ok = 1;
-            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
+                hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {

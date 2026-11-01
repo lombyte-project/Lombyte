@@ -122,7 +122,10 @@ typedef struct DrekFightMissileVars {
 
 /* Moby class 1355 */
 void drek_fight_missile_update(struct Moby *moby) {
-    enum { DREK_MISSILE_WAIT_FOR_ACTIVATION = 1 } ;DrekFightMissileVars *missile_vars = (DrekFightMissileVars *)moby->pvars;
+    enum {
+        DREK_MISSILE_WAIT_FOR_ACTIVATION = 1
+    };
+    DrekFightMissileVars *missile_vars = (DrekFightMissileVars *)moby->pvars;
     if (moby->state != DREK_MISSILE_WAIT_TO_EXPLODE) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
                                          *(float *)&l18_drek_missile_roll_rate_degrees_gp *
@@ -163,9 +166,11 @@ void drek_fight_missile_update(struct Moby *moby) {
         }
         moby->state = DREK_MISSILE_DIVE;
         missile_vars->unk130[0] =
-            fast_cos(moby->rot.z) * (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
+            fast_cos(moby->rot.z) *
+            (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
         missile_vars->unk130[1] =
-            fast_sin(moby->rot.z) * (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
+            fast_sin(moby->rot.z) *
+            (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
         missile_vars->unk130[2] = missile_vars->unk144;
         missile_vars->unk14C = 0;
         break;
@@ -310,8 +315,10 @@ int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_p
                    *(float *)(missile_vars + 0x150),
                    *(float *)(missile_vars + 0x150),
                    *(float *)(missile_vars + 0x154));
-    MOBY(moby)->pos.x += fast_cos(MOBY(moby)->rot.z) * (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
-    MOBY(moby)->pos.y += fast_sin(MOBY(moby)->rot.z) * (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
+    MOBY(moby)->pos.x += fast_cos(MOBY(moby)->rot.z) *
+                         (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
+    MOBY(moby)->pos.y += fast_sin(MOBY(moby)->rot.z) *
+                         (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
     FUN_00213f38_c((float *)&MOBY(moby)->pos.z,
                    (float *)(missile_vars + 0x144),
                    wander_target_position[2],

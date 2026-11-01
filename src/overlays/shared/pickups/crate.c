@@ -664,7 +664,8 @@ void ground_attached_update(M_2cfcb8 *moby) {
     M_2cfcb8 *later_group_member;
     Vars     *vars;
     Vars     *below_vars;
-    V_2cfcb8 *ungrouped_crate_position, *group_crate_probe_position, *stacked_crate_position, *stack_base_probe_position;
+    V_2cfcb8 *ungrouped_crate_position, *group_crate_probe_position, *stacked_crate_position,
+        *stack_base_probe_position;
     R_2cfcb8 *route;
     s32       group, flags_before, i, member_flags;
     M_2cfcb8 *below;
@@ -762,7 +763,8 @@ void ground_attached_update(M_2cfcb8 *moby) {
                         stacked_crate_position = &moby->pos;
                         below = (*(H_2cfcb8 *)&D_L00_00173E40).moby;
                         qcopy(stacked_crate_position, &below->pos);
-                        FUN_001f9a10_2cfcb8(stacked_crate_position, stacked_crate_position, (u8 *)below + 0xE0);
+                        FUN_001f9a10_2cfcb8(
+                            stacked_crate_position, stacked_crate_position, (u8 *)below + 0xE0);
                         vars = (*(H_2cfcb8 *)&D_L00_00173E40).moby->vars;
                         if (is_moby_in_class_range_500_to_540(moby) != 0) {
                             vars->next_member = moby;

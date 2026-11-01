@@ -76,7 +76,11 @@ void breakable_lamp_update(struct Moby *moby) __asm__("FUN_L05_0031c8e0");
 
 /* Moby class 1511 */
 void breakable_lamp_update(struct Moby *moby) {
-    enum { BREAKABLE_LAMP_STATE_UNINITIALIZED = 0 , BREAKABLE_LAMP_STATE_INITIALIZED = 1 } ;struct MineVars_c8e0  *glow_and_spark_state = (struct MineVars_c8e0 *)moby->pvars;
+    enum {
+        BREAKABLE_LAMP_STATE_UNINITIALIZED = 0,
+        BREAKABLE_LAMP_STATE_INITIALIZED = 1
+    };
+    struct MineVars_c8e0  *glow_and_spark_state = (struct MineVars_c8e0 *)moby->pvars;
     Vec4                   tip;
     Vec4                   debris_velocity;
     Vec4                   effect_motion;

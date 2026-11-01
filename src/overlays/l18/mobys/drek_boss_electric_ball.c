@@ -203,11 +203,13 @@ float homing_spark_quad_vertices[4][4][4] __asm__("D_L18_001D9B70") = {
      {0.0f, -3.0f, 3.0f, 1.0f}},
 };
 
-extern s32  fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
-extern s64  get_effect_texture_c(s32) __asm__("func_001F44B8");
-extern int  l18_homing_spark_blend_minuend_selector __asm__("D_L18_00161EE4") __attribute__((sda));
-extern int  l18_homing_spark_blend_subtrahend_selector __asm__("D_L18_00161EE8") __attribute__((sda));
-extern int  l18_homing_spark_blend_alpha_factor_selector __asm__("D_L18_00161EEC") __attribute__((sda));
+extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
+extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
+extern int l18_homing_spark_blend_minuend_selector __asm__("D_L18_00161EE4") __attribute__((sda));
+extern int l18_homing_spark_blend_subtrahend_selector __asm__("D_L18_00161EE8")
+    __attribute__((sda));
+extern int l18_homing_spark_blend_alpha_factor_selector __asm__("D_L18_00161EEC")
+    __attribute__((sda));
 extern int  l18_homing_spark_blend_addend_selector __asm__("D_L18_00161EF0") __attribute__((sda));
 extern int  D_L18_00161EF8 __attribute__((sda));
 extern int  l18_homing_spark_quad_texture_ids __asm__("D_L18_00161F08") __attribute__((sda));
@@ -223,24 +225,36 @@ void homing_spark_draw(char *moby) {
 
     clear_u64_value(quad_euler_angles);
     quad_euler_angles[2] = fast_arc_tan(l18_camera_lui.pos.f[0] - MOBY(moby)->pos.x,
-                          l18_camera_lui.pos.f[1] - MOBY(moby)->pos.y);
+                                        l18_camera_lui.pos.f[1] - MOBY(moby)->pos.y);
     quad_euler_angles[1] = -fast_arc_tan(vector_distance_xy(moby + 0x10, &l18_camera_lui.pos.f[0]),
-                           l18_camera_lui.pos.f[2] - MOBY(moby)->pos.z);
+                                         l18_camera_lui.pos.f[2] - MOBY(moby)->pos.z);
     euler_rotation_matrix(quad_transform_matrices[0][0], quad_euler_angles);
     euler_rotation_matrix(quad_transform_matrices[1][0], quad_euler_angles);
-    fast_vec_scale(quad_transform_matrices[1][1], quad_transform_matrices[1][1], *(float *)(homing_spark_private_vars + 0x24));
-    fast_vec_scale(quad_transform_matrices[1][2], quad_transform_matrices[1][2], *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[1][1],
+                   quad_transform_matrices[1][1],
+                   *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[1][2],
+                   quad_transform_matrices[1][2],
+                   *(float *)(homing_spark_private_vars + 0x24));
     qcopy(quad_transform_matrices[0][3], moby + 0x10);
     qcopy(quad_transform_matrices[1][3], moby + 0x10);
     quad_euler_angles[0] = *(float *)(homing_spark_private_vars + 0x2C);
     euler_rotation_matrix(quad_transform_matrices[2][0], quad_euler_angles);
-    fast_vec_scale(quad_transform_matrices[2][1], quad_transform_matrices[2][1], *(float *)(homing_spark_private_vars + 0x24));
-    fast_vec_scale(quad_transform_matrices[2][2], quad_transform_matrices[2][2], *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[2][1],
+                   quad_transform_matrices[2][1],
+                   *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[2][2],
+                   quad_transform_matrices[2][2],
+                   *(float *)(homing_spark_private_vars + 0x24));
     qcopy(quad_transform_matrices[2][3], moby + 0x10);
     quad_euler_angles[0] = *(float *)(homing_spark_private_vars + 0x30);
     euler_rotation_matrix(quad_transform_matrices[3][0], quad_euler_angles);
-    fast_vec_scale(quad_transform_matrices[3][1], quad_transform_matrices[3][1], *(float *)(homing_spark_private_vars + 0x24));
-    fast_vec_scale(quad_transform_matrices[3][2], quad_transform_matrices[3][2], *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[3][1],
+                   quad_transform_matrices[3][1],
+                   *(float *)(homing_spark_private_vars + 0x24));
+    fast_vec_scale(quad_transform_matrices[3][2],
+                   quad_transform_matrices[3][2],
+                   *(float *)(homing_spark_private_vars + 0x24));
     qcopy(quad_transform_matrices[3][3], moby + 0x10);
     {
         int  i;
@@ -248,21 +262,25 @@ void homing_spark_draw(char *moby) {
         Pkt *quad_packet;
         for (i = 0; i < 4; i++) {
             {
-                long r =
-                    ((long (*)(int))get_effect_texture_c)(((int *)&(*(short *)&l18_homing_spark_quad_texture_ids))[i]);
+                long r = ((long (*)(int))get_effect_texture_c)(
+                    ((int *)&(*(short *)&l18_homing_spark_quad_texture_ids))[i]);
                 quad_packet = &pkt[i];
                 quad_packet->b = r;
             }
             quad_packet->c = 0xFF9000000260;
-            quad_packet->d = (l18_homing_spark_blend_minuend_selector) | (long)(l18_homing_spark_blend_subtrahend_selector) << 2 | (long)(l18_homing_spark_blend_alpha_factor_selector) << 4 |
-                   (long)(l18_homing_spark_blend_addend_selector) << 6 | 0x8000L << 24;
+            quad_packet->d = (l18_homing_spark_blend_minuend_selector) |
+                             (long)(l18_homing_spark_blend_subtrahend_selector) << 2 |
+                             (long)(l18_homing_spark_blend_alpha_factor_selector) << 4 |
+                             (long)(l18_homing_spark_blend_addend_selector) << 6 | 0x8000L << 24;
             quad_packet->a = 0;
             for (j = 0; j < 4; j++) {
                 pkt[i].uv[j][0] = homing_spark_quad_uvs[j][0];
                 pkt[i].uv[j][1] = homing_spark_quad_uvs[j][1];
                 if (i == 0) {
-                    pkt[0].color[j] = fast_tween_color_c(
-                        D_L18_00161EF8 & 0xFFFFFF, D_L18_00161EF8, *(float *)(homing_spark_private_vars + 0x24));
+                    pkt[0].color[j] =
+                        fast_tween_color_c(D_L18_00161EF8 & 0xFFFFFF,
+                                           D_L18_00161EF8,
+                                           *(float *)(homing_spark_private_vars + 0x24));
                 } else {
                     pkt[i].color[j] = ((int *)&(*(short *)&D_L18_00161EF8))[i];
                 }

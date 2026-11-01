@@ -655,7 +655,11 @@ void large_amoeboid_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0040), where it is exact; names translated to the US level program. */
 
 void process_amoeboid_hits_and_update_targeting(char *moby) {
-    enum { LARGE_AMOEBOID_INITIALIZE = 0 , LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8 } ;V_2F0040           scratch_vector;
+    enum {
+        LARGE_AMOEBOID_INITIALIZE = 0,
+        LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8
+    };
+    V_2F0040           scratch_vector;
     V_2F0040           line_test_endpoint;
     int                flag;
     float              amount;
@@ -894,7 +898,8 @@ char *activate_smaller_amoeboid(void *source_moby) {
         group_index_or_list_entry = index;
         index &= 0x7FFF;
         smaller_amoeboid = (struct Moby *)(entities + (index << 8));
-        if (smaller_amoeboid->state != LARGE_AMOEBOID_DORMANT || smaller_amoeboid->oclass != next_class)
+        if (smaller_amoeboid->state != LARGE_AMOEBOID_DORMANT ||
+            smaller_amoeboid->oclass != next_class)
             goto advance;
         {
             /* Retail reads both pvars pointers and update_dist before writing the entity. */

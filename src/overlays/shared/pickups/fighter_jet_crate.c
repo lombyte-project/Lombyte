@@ -92,7 +92,8 @@ void ammocrate_update(char *moby) {
         int          target_index = pickup_private_state[0];
         int          target_base = (int)moby_base;
         struct Moby *target = (struct Moby *)(target_base + target_index * 0x100);
-        if (target != 0 && target->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && target->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END &&
+        if (target != 0 && target->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+            target->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END &&
             pickup_private_state[1] != -1 && target->state != pickup_private_state[1]) {
             goto frame_tail;
         }
@@ -133,7 +134,8 @@ void ammocrate_update(char *moby) {
             if (moby_class == 0x4da || moby_class == 0x45 || moby_class == 0x563)
                 hit = 1;
         }
-        if (hero.state.current == 0x32 && hero_moby != 0 && MOBY(hero_moby)->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+        if (hero.state.current == 0x32 && hero_moby != 0 &&
+            MOBY(hero_moby)->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
             MOBY(hero_moby)->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             short moby_class = MOBY(hero_moby)->oclass;
             if (moby_class == 0x4da || moby_class == 0x45 || moby_class == 0x563)

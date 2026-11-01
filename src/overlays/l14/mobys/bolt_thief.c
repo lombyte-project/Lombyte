@@ -339,7 +339,10 @@ typedef struct BoltThiefVars {
 } BoltThiefVars;
 
 int update_bolt_thief_path_movement(struct Moby *moby) {
-    enum { BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH = 5 } ;float          pos[4];
+    enum {
+        BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH = 5
+    };
+    float          pos[4];
     float          delta[4];
     BoltThiefVars *bolt_thief_state = (BoltThiefVars *)moby->pvars;
     float          path_sample_step = bolt_thief_default_path_sample_rate_gp * frame_time;

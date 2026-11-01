@@ -72,7 +72,10 @@ void taxi_update(struct Moby *moby) {
         TAXI_FOLLOW_PATH = 4,
         TAXI_BLEND_TO_DESTINATION = 5,
         TAXI_WAIT_FOR_ACTIVATION = 6
-    } ; enum { TAXI_HIDDEN_STOP = 2};
+    };
+    enum {
+        TAXI_HIDDEN_STOP = 2
+    };
     TaxiVars *taxi_data = (TaxiVars *)moby->pvars;
     float     old_position[4], old_rotation[4], position_delta[4],
         rotation_or_start_position_scratch[4], interpolation_end_position[4],

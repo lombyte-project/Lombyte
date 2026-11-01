@@ -322,11 +322,14 @@ void initialize_pause_menu(void) {
     D_L00_0015F578 = 0x2000;
     vu1_init_chain();
 
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
+    if (D_L00_001B9CF0.state == 11 ||
+        D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
         initialize_render_archive_transfer();
     }
     apply_group_entry_adjustment(0);
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION || D_L00_001B9CF0.state == 0x12) {
+    if (D_L00_001B9CF0.state == 11 ||
+        D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION ||
+        D_L00_001B9CF0.state == 0x12) {
         decompress_and_relocate_selected_groups(1);
     } else {
         decompress_and_relocate_selected_groups(0);
@@ -334,7 +337,8 @@ void initialize_pause_menu(void) {
     transfer_draw_buffer_chunks(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
     texture_start = gs_texture_allocation_start;
     D_L00_001B9CF0.saved_texture_start = texture_start;
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
+    if (D_L00_001B9CF0.state == 11 ||
+        D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
         D_L00_001841F0.unk240 = texture_start;
         texture_region_end = texture_start + 0x40000;
         D_L00_001841F0.unk244 = texture_region_end;
@@ -594,8 +598,10 @@ void update_pause_menu(void) {
         return;
     }
     scene_state = D_L00_001B9CF0.state;
-    if (scene_state == 0 || scene_state == 0xA || scene_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY || scene_state == 0x11 ||
-        scene_state == PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY || scene_state == 0x2D || scene_state == PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY) {
+    if (scene_state == 0 || scene_state == 0xA ||
+        scene_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY || scene_state == 0x11 ||
+        scene_state == PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY || scene_state == 0x2D ||
+        scene_state == PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY) {
         initialize_pause_menu();
     }
     if ((mode_freeze_flags & 1) && !(level_timer < 8)) {

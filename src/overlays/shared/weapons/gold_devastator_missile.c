@@ -174,7 +174,8 @@ extern void FUN_L00_001ff290_c(void *, void *, void *) __asm__("FUN_L00_001ff290
 extern int  collision1688(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_001ffd48_c(void *, void *, float) __asm__("FUN_L00_001ffd48");
 extern void FUN_L00_001ffe20_c(void *, void *, void *) __asm__("FUN_L00_001ffe20");
-extern void spawn_particle_alt_9768(void *, void *, int, int, float, int) __asm__("FUN_L00_0026a4c8");
+extern void
+spawn_particle_alt_9768(void *, void *, int, int, float, int) __asm__("FUN_L00_0026a4c8");
 
 extern E             D_0013E520;
 extern char         *active_mobies[] __asm__("D_L00_001ABA00");

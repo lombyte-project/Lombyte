@@ -148,7 +148,8 @@ void gemlik_scene_controller_update(struct Moby *moby) {
                 break;
             }
             other = (struct Moby *)(moby_base + scene_controller_vars[5] * 0x100);
-            if (other != 0 && other->oclass == 0x184 && other->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+            if (other != 0 && other->oclass == 0x184 &&
+                other->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
                 other->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
                 return;
             if (scene_controller_vars[4] != -1) {
@@ -206,7 +207,9 @@ void gemlik_scene_controller_update(struct Moby *moby) {
     case WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE: {
         if (scene_controller_vars[4] != -1) {
             struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[4] * 0x100);
-            if (other != 0 && other->oclass == 0x45 && other->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && other->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
+            if (other != 0 && other->oclass == 0x45 &&
+                other->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+                other->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
                 return;
             memcard_save_data(0, -1);
             moby->state = ENTER_LINKED_MOBY_CLEANUP_WAIT;

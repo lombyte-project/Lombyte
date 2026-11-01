@@ -364,7 +364,7 @@ struct CameraType level_camera_types[10] __asm__("D_L15_001E3F00") __attribute__
     {17,               FUN_L00_002ed230,                noop_main_callback,   noop_main_callback,                          noop_main_callback},
     {19,
      evaluate_descriptor_eligibility,            initialize_path_camera,
-     update_path_flythrough_camera,                          noop_main_callback                                                                           },
+     update_path_flythrough_camera,                          noop_main_callback                                                              },
     {22,
      dispatch_moby_follow_camera_update,                noop_main_callback,
      noop_main_callback,                          noop_main_callback                                                                         },

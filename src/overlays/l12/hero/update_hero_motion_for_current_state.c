@@ -318,7 +318,8 @@ void update_hero_ground_contact_and_gravity(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+            if (hero.ground_slope.f <= 0.87266463f ||
+                hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = D_L12_001742C0_lui.moby;
@@ -1886,7 +1887,8 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else {
             s32 ok = 1;
-            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION && hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
+            if (tb->kind == HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION &&
+                hero.anim_changing == 0 && hero.anim_frame > 7.0f) {
                 ok = 0;
             }
             if (ok) {

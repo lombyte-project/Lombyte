@@ -456,7 +456,8 @@ void doom_bot_update(struct Moby *moby) {
             } else
                 clearance = 5.0f;
         }
-        if (moby->state == DOOM_BOT_MOVE_HIGH_TURN_RATE && old_state == DOOM_BOT_MOVE_LOW_TURN_RATE) {
+        if (moby->state == DOOM_BOT_MOVE_HIGH_TURN_RATE &&
+            old_state == DOOM_BOT_MOVE_LOW_TURN_RATE) {
             moby->state = DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));

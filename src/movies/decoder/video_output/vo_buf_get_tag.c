@@ -8,5 +8,7 @@ struct VoTag *vo_buf_get_tag(struct VoBuf *picture_queue) {
     if (vo_buf_is_empty(picture_queue) != 0) {
         return 0;
     }
-    return picture_queue->tag + (picture_queue->write - picture_queue->count + picture_queue->size) % picture_queue->size;
+    return picture_queue->tag +
+           (picture_queue->write - picture_queue->count + picture_queue->size) %
+               picture_queue->size;
 }

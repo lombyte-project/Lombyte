@@ -436,7 +436,14 @@ f32         veldin_robot_knockback_xy_scale_gp __asm__("D_L00_00161BDC") = 1e+01
 f32         veldin_robot_knockback_z_scale_gp __asm__("D_L00_00161BE0") = 9.5f;
 
 void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
-    enum { VELDIN_ROBOT_STATE_INITIALIZE = 0 , VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH = 1 , VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES = 5 , VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK = 7 , VELDIN_ROBOT_STATE_DEATH_KNOCKBACK = 8 } ;ElectroidVars *vars;
+    enum {
+        VELDIN_ROBOT_STATE_INITIALIZE = 0,
+        VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH = 1,
+        VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES = 5,
+        VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK = 7,
+        VELDIN_ROBOT_STATE_DEATH_KNOCKBACK = 8
+    };
+    ElectroidVars *vars;
     void          *anim;
     ElectroidHit  *coll;
     Path          *path;

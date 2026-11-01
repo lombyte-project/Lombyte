@@ -248,7 +248,8 @@ extern int   FUN_L00_001fefc8(void *);
 extern int   is_point_inside_clip_volume(void *point, int volume_index) __asm__("FUN_00214720");
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int move_moby_xy_with_collision_constraints(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
+extern int move_moby_xy_with_collision_constraints(
+    void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 extern int step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 extern int allocate_voice_for_target_entry(int, int, char *);
 extern int mark_moby_for_removal_cf() __asm__("FUN_L04_002ba470");

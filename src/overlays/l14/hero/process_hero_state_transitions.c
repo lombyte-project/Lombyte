@@ -174,8 +174,10 @@ void process_hero_state_transitions(void) {
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].switch_lock != 2 && D_L14_0015F594 == 0 &&
-                    (hero.item_use_locked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
-                    (hero.item_select_blocked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
+                    (hero.item_use_locked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK ||
+                     hero.unk1B2 != 0) &&
+                    (hero.item_select_blocked == 0 ||
+                     hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
                     (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT || hero.vehicle_mode == 3)) {
                     int id;
 
@@ -825,7 +827,8 @@ void process_hero_state_transitions(void) {
                                 break;
                             }
                         }
-                        if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT && frame_time * 2.7f <= hero.motion.speed_xy) {
+                        if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT &&
+                            frame_time * 2.7f <= hero.motion.speed_xy) {
                             hero_set_state(0x66, 1);
                         }
                         break;

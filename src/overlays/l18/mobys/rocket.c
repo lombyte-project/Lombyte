@@ -48,7 +48,10 @@ void rocket_moby_update(struct Moby *moby) __asm__("FUN_L18_002d5050");
 
 /* Moby class 564 */
 void rocket_moby_update(struct Moby *moby) {
-    enum { ROCKET_STATE_FLYING = 0 } ;L18D *moby_vars = (L18D *)moby->pvars;
+    enum {
+        ROCKET_STATE_FLYING = 0
+    };
+    L18D *moby_vars = (L18D *)moby->pvars;
     float target_movement_step[4];
     float movement_step[4];
     float rotation_angles[4];

@@ -1771,7 +1771,9 @@ void fighter_jet_update(ShipMoby *moby) {
     if (moby != 0) {
         ship_vars = (ShipVars *)moby->vars;
         fast_dec_timer(&ship_vars->timerDC);
-        if (moby->state != FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY && moby->state != FIGHTER_JET_STATE_WAIT_FOR_BOARDING && moby->state != FIGHTER_JET_STATE_BOARDING_FADE) {
+        if (moby->state != FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY &&
+            moby->state != FIGHTER_JET_STATE_WAIT_FOR_BOARDING &&
+            moby->state != FIGHTER_JET_STATE_BOARDING_FADE) {
             hit = (ShipHit *)find_moby_hit(moby, 0x30001, 0);
             if (hit != 0 && moby->state == FIGHTER_JET_STATE_PILOTED_FLIGHT) {
                 struct Hero *g = &hero;

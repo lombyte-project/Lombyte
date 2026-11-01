@@ -227,7 +227,8 @@ void blarg_helicopter_update(HMob49 *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (data->route_a.path_id == -1 || (moby->state != BLARG_HELICOPTER_INITIALIZE && data->enabled != 1)) {
+    if (data->route_a.path_id == -1 ||
+        (moby->state != BLARG_HELICOPTER_INITIALIZE && data->enabled != 1)) {
         if (data->child_index != -1)
             mark_moby_for_removal((HMob49 *)(D_L03_0015FFD8_c + (data->child_index << 8)));
         mark_moby_for_removal(moby);
@@ -426,7 +427,8 @@ void blarg_helicopter_update(HMob49 *moby) {
         moby->rotation[2] =
             spring_turn(&data->yaw_velocity, moby->rotation[2], angle, 0.01f, 0.3f, 0.1f);
         projectile = data->projectile;
-        if (!projectile || projectile->class_id != 0x350 || projectile->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+        if (!projectile || projectile->class_id != 0x350 ||
+            projectile->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
             projectile->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             moby_point_position(moby, 0, helicopter_update_scratch.movement);
             fast_vec_sub(helicopter_update_scratch.direction,
@@ -879,7 +881,8 @@ void handle_blarg_helicopter_hits(char *helicopter_moby) {
     hit_record = find_moby_hit(helicopter_moby, 0x330000, 0);
     hit_reaction_result = hit_reaction(
         helicopter_moby, hit_record, helicopter_data + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-    if (hit_reaction_status != HIT_REACTION_SKIP_DAMAGE && MOBY(helicopter_moby)->state != BLARG_HELICOPTER_DESTROY) {
+    if (hit_reaction_status != HIT_REACTION_SKIP_DAMAGE &&
+        MOBY(helicopter_moby)->state != BLARG_HELICOPTER_DESTROY) {
         float remaining_health = *(float *)(helicopter_data + 0x20) - fv;
         *(float *)(helicopter_data + 0x20) = remaining_health;
         if (hit_reaction_result == 1 || remaining_health <= 0.0f) {
@@ -887,7 +890,8 @@ void handle_blarg_helicopter_hits(char *helicopter_moby) {
         } else if (hit_reaction_result != 0xB) {
             *(unsigned char *)(helicopter_data + 0x67) = 0xB4;
             trooper_anim_update(helicopter_moby, (short *)(helicopter_data + 0x60));
-            if (*(float *)(hit_record + 0x1C) == 5627.925f && MOBY(helicopter_moby)->state != BLARG_HELICOPTER_TIMED_REACTION) {
+            if (*(float *)(hit_record + 0x1C) == 5627.925f &&
+                MOBY(helicopter_moby)->state != BLARG_HELICOPTER_TIMED_REACTION) {
                 reaction_heading_angle =
                     fast_arc_tan(MOBY(helicopter_moby)->pos.x - *(float *)(hit_record + 0),
                                  MOBY(helicopter_moby)->pos.y - *(float *)(hit_record + 4));

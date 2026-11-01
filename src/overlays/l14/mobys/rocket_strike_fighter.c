@@ -106,7 +106,8 @@ void rocket_strike_fighter_update(struct Moby *moby) {
     {
         void *hit = find_moby_hit(moby, 0x800000, 0);
         moby->hit_slot = 0xFF;
-        if (hit != 0 && moby_vars->rocket == -1 && moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN) {
+        if (hit != 0 && moby_vars->rocket == -1 &&
+            moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN) {
             if (current_level_index == 14) {
                 enemy_fighter_destruction_count = enemy_fighter_destruction_count + 1;
                 if (enemy_fighter_destruction_count >= 3 && item_unlocked[0x18] == 0) {
@@ -246,7 +247,9 @@ void rocket_strike_fighter_update(struct Moby *moby) {
         break;
     }
     spawn_rocket_strike_fighter_exhaust(moby);
-    if (moby->state != ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE && moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN && moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS &&
+    if (moby->state != ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE &&
+        moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN &&
+        moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS &&
         voice_is_playing(moby, moby_vars->sound) == 0)
         moby_vars->sound = allocate_voice_for_target_entry(0, 4, moby);
 }
@@ -285,7 +288,9 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     int      grey;
     float    size;
 
-    if (moby->state == ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE || moby->state == ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN || moby->state == ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS)
+    if (moby->state == ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE ||
+        moby->state == ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN ||
+        moby->state == ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS)
         return;
     fast_vec_scale(&step, &moby->rot_row0, rocket_strike_fighter_exhaust_base_row0_offset_gp);
     fast_vec_add(&pos, &moby->pos, &step);

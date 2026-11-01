@@ -36,11 +36,12 @@ compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_
 void initialize_path_key_camera(struct UpdateCam *cam) __asm__("FUN_L14_003159d8");
 
 void initialize_path_key_camera(struct UpdateCam *path_key_camera_object) {
-    float        camera_placement_parameters[4];
-    float        pad[4]; /* unused; keeps the frame layout */
-    float        hero_look_direction[4];
-    float        up[4];
-    char        *rec = *(char **)(l14_camera_preset_rows + path_key_camera_object->descriptor_index * 32 + 0x1C);
+    float camera_placement_parameters[4];
+    float pad[4]; /* unused; keeps the frame layout */
+    float hero_look_direction[4];
+    float up[4];
+    char *rec =
+        *(char **)(l14_camera_preset_rows + path_key_camera_object->descriptor_index * 32 + 0x1C);
     char        *path;
     LevelSpline *path_record_table;
     char        *camera_saved_state;
@@ -103,14 +104,16 @@ void initialize_path_key_camera(struct UpdateCam *path_key_camera_object) {
     camera_placement_parameters[1] = camera_parameters[1];
     camera_placement_parameters[0] = hero_heading_radians;
     camera_placement_parameters[2] = camera_parameters[2];
-    compute_position_from_spherical_offset(&path_key_camera_object->pos, camera_placement_parameters, &hero.motion);
+    compute_position_from_spherical_offset(
+        &path_key_camera_object->pos, camera_placement_parameters, &hero.motion);
     fast_vec_sub(hero_look_direction, &hero.motion, &path_key_camera_object->pos);
     fast_vec_scale(up, &hero.gravity_dir, -1.5f);
     fast_vec_add(hero_look_direction, hero_look_direction, up);
     fast_vec_normalize(&path_key_camera_object->m0, hero_look_direction, 1.0f);
     fast_vec_cross(&path_key_camera_object->m1, &path_key_camera_object->m0, up);
     fast_vec_normalize(&path_key_camera_object->m1, &path_key_camera_object->m1, 1.0f);
-    fast_vec_cross(&path_key_camera_object->m2, &path_key_camera_object->m1, &path_key_camera_object->m0);
+    fast_vec_cross(
+        &path_key_camera_object->m2, &path_key_camera_object->m1, &path_key_camera_object->m0);
     /* give every key without a duration (+0x44) the default 10000 */
     camera_key_default_cursor = (int *)&D_L14_001F6488_59d8[0x11];
     for (j = 38; j >= 0; j--) {

@@ -1786,7 +1786,8 @@ void fighter_jet_update(Jet *jet_moby) {
     jet_data->hit_class = 0;
     fast_dec_timer((int *)&jet_data->timer);
     initial_state = jet_moby->state;
-    if ((unsigned int)(initial_state - 6) >= 2 && (unsigned char)initial_state != FIGHTER_JET_STATE_WAIT_FOR_ENTRY &&
+    if ((unsigned int)(initial_state - 6) >= 2 &&
+        (unsigned char)initial_state != FIGHTER_JET_STATE_WAIT_FOR_ENTRY &&
         (unsigned char)initial_state != FIGHTER_JET_STATE_MOUNT_PLAYER) {
         JetHit *hit = (JetHit *)find_moby_hit(jet_moby, 0x30001, 0);
         if (hit && jet_moby->state == FIGHTER_JET_STATE_FLIGHT) {

@@ -136,7 +136,8 @@ void enemy_fighter_update(struct Moby *moby) {
         break;
     }
     spawn_enemy_fighter_exhaust(moby);
-    if (moby->state != ENEMY_FIGHTER_STATE_INITIALIZE && moby->state != ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN &&
+    if (moby->state != ENEMY_FIGHTER_STATE_INITIALIZE &&
+        moby->state != ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN &&
         voice_is_playing(moby, enemy_fighter_vars->sound) == 0)
         enemy_fighter_vars->sound = allocate_voice_for_target_entry(0, 4, moby);
 }
@@ -163,7 +164,8 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     int      life;
     float    size;
 
-    if (emitter_moby->state == ENEMY_FIGHTER_STATE_INITIALIZE || emitter_moby->state == ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN || emitter_moby->visible == 0)
+    if (emitter_moby->state == ENEMY_FIGHTER_STATE_INITIALIZE ||
+        emitter_moby->state == ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN || emitter_moby->visible == 0)
         return;
     fast_vec_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_base_row0_offset_gp);
     fast_vec_add(&pos, &emitter_moby->pos, &step);

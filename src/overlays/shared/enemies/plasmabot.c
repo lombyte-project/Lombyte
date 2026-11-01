@@ -794,7 +794,8 @@ void plasmabot_update(char *moby) {
     }
     }
     state = ((unsigned char *)moby)[0x20];
-    if (!(state >= PLASMABOT_AIM_AT_TARGET && state <= PLASMABOT_WAIT_ANIMATION_BEFORE_AIM) && state != PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL) {
+    if (!(state >= PLASMABOT_AIM_AT_TARGET && state <= PLASMABOT_WAIT_ANIMATION_BEFORE_AIM) &&
+        state != PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL) {
         update_plasmabot_aim_quaternion(moby, 0, MOBY(moby)->rot.z);
         update_plasmabot_aim_joint_rotation(moby, MOBY(moby)->rot.z);
     }
@@ -1087,7 +1088,13 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         HIT_REACTION_DEATH = 2,
         HIT_REACTION_STAGGER = 3,
         HIT_REACTION_NONE = 11
-    } ; enum { HIT_KIND_SKIP_DAMAGE_AND_REACTION = 1 , PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 0xA , PLASMABOT_FALL_THEN_EXPLODE = 0xB , PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 0xC};
+    };
+    enum {
+        HIT_KIND_SKIP_DAMAGE_AND_REACTION = 1,
+        PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 0xA,
+        PLASMABOT_FALL_THEN_EXPLODE = 0xB,
+        PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 0xC
+    };
     PlasmabotVars *state = (PlasmabotVars *)moby->pvars;
     int            hit_kind;
     float          damage;

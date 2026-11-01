@@ -56,7 +56,10 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT = 3,
         STATE_WAIT_FOR_DEPRESSION_TRIGGER = 4,
         STATE_SETTLE_DEPRESSED_HEIGHT = 5
-    } ; enum { STATE_DEPRESSED_HEIGHT_SETTLED = 6};
+    };
+    enum {
+        STATE_DEPRESSED_HEIGHT_SETTLED = 6
+    };
     char *thruster_pack_lock_red_private_vars = (char *)moby->pvars;
     int   index;
 
@@ -210,7 +213,8 @@ int poll_moby_state_and_rearm(struct Moby *moby) {
         moby->state = THRUSTER_PACK_LOCK_RED_STATE_APPROACH_CONFIGURED_HEIGHT;
         return 1;
     }
-    if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER && moby_private_vars[0x6C / 4] == 0) {
+    if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER &&
+        moby_private_vars[0x6C / 4] == 0) {
         return -1;
     }
     return 0;

@@ -135,7 +135,9 @@ void handle_refueling_station_damage(struct Moby *moby,
                 moby->flags &= ~0x1000;
                 if (refueling_station_vars->link != -1) {
                     link = &moby_list[refueling_station_vars->link];
-                    if (link != 0 && link->state != MOBY_STATE_REMOVAL_PENDING_AT_OR_ABOVE_ADDRESS_BOUNDARY && link->state != MOBY_STATE_REMOVAL_PENDING_BELOW_ADDRESS_BOUNDARY &&
+                    if (link != 0 &&
+                        link->state != MOBY_STATE_REMOVAL_PENDING_AT_OR_ABOVE_ADDRESS_BOUNDARY &&
+                        link->state != MOBY_STATE_REMOVAL_PENDING_BELOW_ADDRESS_BOUNDARY &&
                         (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
                         link->command = 1;
                     }

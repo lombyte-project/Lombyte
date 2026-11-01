@@ -28,8 +28,8 @@ int is_robot_dog_in_state_5(struct Moby *moby) {
     enum {
         MOBY_STATE_PENDING_REMOVAL = 0xFE
     };
-    if (moby && moby->state != MOBY_STATE_PENDING_REMOVAL && moby->state != 0xFD && moby->oclass == 0x23D &&
-        moby->state == ROBOT_DOG_FOLLOW_PATH) {
+    if (moby && moby->state != MOBY_STATE_PENDING_REMOVAL && moby->state != 0xFD &&
+        moby->oclass == 0x23D && moby->state == ROBOT_DOG_FOLLOW_PATH) {
         return 1;
     }
     return 0;
@@ -312,9 +312,9 @@ void robot_dog_update(char *moby) {
             robot_dog_state->i278 = seg;
         }
         if (step_mover_2e3f20(moby,
-                             (char *)&robot_dog_state->i180,
-                             (char *)path + (robot_dog_state->i278 * 0x10 + 0x10),
-                             (char *)robot_dog_state->v40) &
+                              (char *)&robot_dog_state->i180,
+                              (char *)path + (robot_dog_state->i278 * 0x10 + 0x10),
+                              (char *)robot_dog_state->v40) &
             0x14) {
             if (robot_dog_state->i278 < *path - 1) {
                 robot_dog_state->i278++;

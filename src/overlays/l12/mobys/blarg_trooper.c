@@ -592,7 +592,8 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
                 ? trooper_damage_alert_vars->alert_speed
                 : 20.0f;
     }
-    if (trooper_damage_alert_vars->call_enabled != 0 && moby->state != BLARG_TROOPER_WAIT_FOR_ACTIVATION) {
+    if (trooper_damage_alert_vars->call_enabled != 0 &&
+        moby->state != BLARG_TROOPER_WAIT_FOR_ACTIVATION) {
         trooper_damage_alert_vars->call_timer++;
         if (scale_game_frames(0x3C) * 17 < trooper_damage_alert_vars->call_timer) {
             s32 count = 0;

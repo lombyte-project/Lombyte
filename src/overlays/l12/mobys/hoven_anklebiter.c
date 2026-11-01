@@ -39,7 +39,8 @@ int process_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) {
         ANKLEBITER_ACTIVATE_FROM_DORMANCY = 13
     };
     int active;
-    if (moby->state == ANKLEBITER_DORMANT || moby->state == ANKLEBITER_WAIT_FOR_LEAP_TRIGGER || moby->state == ANKLEBITER_ACTIVATE_FROM_DORMANCY)
+    if (moby->state == ANKLEBITER_DORMANT || moby->state == ANKLEBITER_WAIT_FOR_LEAP_TRIGGER ||
+        moby->state == ANKLEBITER_ACTIVATE_FROM_DORMANCY)
         return 0;
     active = process_moby_suck_cannon_suction(moby);
     if (active) {
@@ -679,7 +680,8 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             return;
         }
     }
-    if (moby->enabled && moby->state != ANKLEBITER_DORMANT && moby->state != ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME) {
+    if (moby->enabled && moby->state != ANKLEBITER_DORMANT &&
+        moby->state != ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME) {
         func_L00_00263950_2E2EF0(
             (char *)moby, data->collision_data, 0, D_0015ED64 * 0.018f, D_0015ED64 * 0.3f);
         if (moby->enabled && fast_vec_dist(moby->pos, D_L12_00167240) < 28.0f) {
@@ -736,14 +738,21 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
 
 int          D_L12_0016183C = 0xa;
 int          D_L12_00161840 = 8;
-extern float l12_anklebiter_spark_burst_origin_jitter __asm__("D_L12_00161844") __attribute__((sda));
+extern float l12_anklebiter_spark_burst_origin_jitter __asm__("D_L12_00161844")
+    __attribute__((sda));
 extern float l12_anklebiter_spark_position_jitter __asm__("D_L12_00161848") __attribute__((sda));
-extern float l12_anklebiter_spark_velocity_jitter_scale __asm__("D_L12_0016184C") __attribute__((sda));
-extern float l12_anklebiter_spark_horizontal_speed_range_start __asm__("D_L12_00161850") __attribute__((sda));
-extern float l12_anklebiter_spark_horizontal_speed_range_end __asm__("D_L12_00161854") __attribute__((sda));
-extern float l12_anklebiter_spark_vertical_speed_range_start __asm__("D_L12_00161858") __attribute__((sda));
-extern float l12_anklebiter_spark_vertical_speed_range_end __asm__("D_L12_0016185C") __attribute__((sda));
-extern float l12_anklebiter_spark_downward_velocity_scale __asm__("D_L12_00161860") __attribute__((sda));
+extern float l12_anklebiter_spark_velocity_jitter_scale __asm__("D_L12_0016184C")
+    __attribute__((sda));
+extern float l12_anklebiter_spark_horizontal_speed_range_start __asm__("D_L12_00161850")
+    __attribute__((sda));
+extern float l12_anklebiter_spark_horizontal_speed_range_end __asm__("D_L12_00161854")
+    __attribute__((sda));
+extern float l12_anklebiter_spark_vertical_speed_range_start __asm__("D_L12_00161858")
+    __attribute__((sda));
+extern float l12_anklebiter_spark_vertical_speed_range_end __asm__("D_L12_0016185C")
+    __attribute__((sda));
+extern float l12_anklebiter_spark_downward_velocity_scale __asm__("D_L12_00161860")
+    __attribute__((sda));
 extern float D_L12_00161864 __attribute__((sda));
 extern float D_L12_00161868 __attribute__((sda));
 int          D_L12_0016186C = 0x8000eeee;
@@ -795,8 +804,10 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
         add_random_offset_to_vector_xyz(pos_ptr, l12_anklebiter_spark_burst_origin_jitter);
         pos[2] += 0.55f;
         angle = random_angle_radians();
-        speed = random_float_between(l12_anklebiter_spark_horizontal_speed_range_start, l12_anklebiter_spark_horizontal_speed_range_end);
-        rise = random_float_between(l12_anklebiter_spark_vertical_speed_range_start, l12_anklebiter_spark_vertical_speed_range_end);
+        speed = random_float_between(l12_anklebiter_spark_horizontal_speed_range_start,
+                                     l12_anklebiter_spark_horizontal_speed_range_end);
+        rise = random_float_between(l12_anklebiter_spark_vertical_speed_range_start,
+                                    l12_anklebiter_spark_vertical_speed_range_end);
         if (moby->state == ANKLEBITER_DEATH_EFFECTS_AND_REMOVE) {
             speed *= 0.55f;
             rise *= 0.55f;
@@ -809,13 +820,16 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
         push[2] = 0.0f;
         fast_vec_add(spark_launch_velocity, spark_launch_velocity, push);
         qcopy(gravity_adjusted_spark_velocity, spark_launch_velocity);
-        gravity_adjusted_spark_velocity[2] -= l12_anklebiter_spark_downward_velocity_scale * D_0015ED70 * (float)scale_game_frames(D_L12_00161880);
+        gravity_adjusted_spark_velocity[2] -= l12_anklebiter_spark_downward_velocity_scale *
+                                              D_0015ED70 * (float)scale_game_frames(D_L12_00161880);
         for (j = 0; j < D_L12_00161840; j++) {
             size = random_float_between(0.5f, 1.5f);
             spark_launch_velocity[3] = size * D_L12_00161864;
             gravity_adjusted_spark_velocity[3] = size * D_L12_00161868;
             add_random_offset_to_vector_xyz(pos, l12_anklebiter_spark_position_jitter);
-            add_random_offset_to_vector_xyz(gravity_adjusted_spark_velocity, l12_anklebiter_spark_velocity_jitter_scale * D_0015ED6C);
+            add_random_offset_to_vector_xyz(gravity_adjusted_spark_velocity,
+                                            l12_anklebiter_spark_velocity_jitter_scale *
+                                                D_0015ED6C);
             start_color =
                 fast_tween_color(D_L12_0016186C, D_L12_00161874, random_float_between(0.0f, 1.0f));
             end_color =
@@ -919,7 +933,8 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
         anklebiter_vars->reset_alert = 0;
         anklebiter_vars->alert_timer = scale_game_frames(0xF0);
     }
-    if (moby->state != ANKLEBITER_DORMANT && moby->state != ANKLEBITER_WAIT_FOR_LEAP_TRIGGER && moby->state != ANKLEBITER_INITIALIZE) {
+    if (moby->state != ANKLEBITER_DORMANT && moby->state != ANKLEBITER_WAIT_FOR_LEAP_TRIGGER &&
+        moby->state != ANKLEBITER_INITIALIZE) {
         if (fast_dec_timer(&anklebiter_vars->alert_timer)) {
             anklebiter_vars->speed = 12.0f;
         } else {
@@ -943,7 +958,8 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
     coll = find_hit_e3528(moby, 0x330000, 0);
     dmg = 0.0f;
     resolve_moby_hit_response(moby, coll, &anklebiter_vars->health, 0, &hit, &dmg, 0, 4);
-    if (coll != 0 && moby->state != ANKLEBITER_DEATH_FALL && moby->state != ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME) {
+    if (coll != 0 && moby->state != ANKLEBITER_DEATH_FALL &&
+        moby->state != ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME) {
         if (moby->group != 0xFF) {
             FUN_L01_0026e090(moby->group, 7);
         }

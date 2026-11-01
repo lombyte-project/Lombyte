@@ -55,7 +55,10 @@ void armed_transport_rocket_update(char *m) __asm__("FUN_L16_002a0a98");
 
 /* Moby class 50 */
 void armed_transport_rocket_update(char *rocket_moby) {
-    enum { ARMED_TRANSPORT_ROCKET_STATE_FLYING = 0 } ;float desired[4], next_position[4], delta[4], blend[4];
+    enum {
+        ARMED_TRANSPORT_ROCKET_STATE_FLYING = 0
+    };
+    float desired[4], next_position[4], delta[4], blend[4];
     char *rocket_data = ((char *)MOBY(rocket_moby)->pvars);
     void *remaining;
     float yaw, pitch;

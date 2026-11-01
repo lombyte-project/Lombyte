@@ -495,7 +495,8 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                          20.0f,
                          1.0f,
                          0.0f);
-        if (current_level_index_macro == 0xE && camera_path_preset->kind == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
+        if (current_level_index_macro == 0xE &&
+            camera_path_preset->kind == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
             sample_path(path, delta, &segment, &fraction, lead, 0);
         } else {
             sample_path(path, delta, &segment, &fraction, lead, 1);

@@ -88,7 +88,11 @@ void split_door_update(char *moby) {
         MOVE_PAIR_TO_FIXED_OFFSETS = 3,
         ANIMATE_PAIR_WITH_TIMED_PHASES = 4,
         WAIT_FOR_RESET = 5
-    } ; enum { SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS = 1 , SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS = 2};
+    };
+    enum {
+        SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS = 1,
+        SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS = 2
+    };
     SplitDoorVars *pair_transform_vars = (SplitDoorVars *)MOBY(moby)->pvars;
     char          *child;
     float          position_offset[4];

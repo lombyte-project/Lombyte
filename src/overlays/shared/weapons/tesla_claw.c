@@ -515,8 +515,10 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
         if ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == 9)
             help_request(0x4E30, 0x81);
     }
-    if ((controller_state.held & hero.items[0].button_mask) && tesla_claw_moby->state != TESLA_CLAW_STATE_FINISHED &&
-        tesla_claw_moby->state != TESLA_CLAW_STATE_INITIALIZE && !hero.item_use_locked && hero.state.current != 0x72) {
+    if ((controller_state.held & hero.items[0].button_mask) &&
+        tesla_claw_moby->state != TESLA_CLAW_STATE_FINISHED &&
+        tesla_claw_moby->state != TESLA_CLAW_STATE_INITIALIZE && !hero.item_use_locked &&
+        hero.state.current != 0x72) {
         if (tesla_claw_vars->timer == 0) {
             if (ready > 0) {
                 if (fast_dec_timer_s16(&tesla_claw_vars->tick)) {
@@ -692,7 +694,8 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                     firing_start_stats->uses++;
                 if (scale_game_frames(D_0015EEA4) / 600 > firing_start_stats->longest)
                     firing_start_stats->longest = scale_game_frames(D_0015EEA4) / 600;
-                firing_start_stats->levels = (firing_start_stats->levels | (1 << current_level_index)) | 0x80000000;
+                firing_start_stats->levels =
+                    (firing_start_stats->levels | (1 << current_level_index)) | 0x80000000;
                 start_equipped_item_animation();
                 tesla_claw_moby->state = TESLA_CLAW_STATE_FIRING;
             } else {

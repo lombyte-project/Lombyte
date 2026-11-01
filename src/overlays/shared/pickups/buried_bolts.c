@@ -32,7 +32,11 @@ void buried_bolts_update(struct Moby *moby) __asm__("FUN_L01_002f2eb8");
 
 /* Moby class 605 */
 void buried_bolts_update(struct Moby *moby) {
-    enum { AREA_MOBY_STATE_UNINITIALIZED = 0 , AREA_MOBY_STATE_INITIALIZED = 1 } ;AreaVars *area_vars = (AreaVars *)moby->pvars;
+    enum {
+        AREA_MOBY_STATE_UNINITIALIZED = 0,
+        AREA_MOBY_STATE_INITIALIZED = 1
+    };
+    AreaVars *area_vars = (AreaVars *)moby->pvars;
     Vec4      target;
     s32       k;
     s32      *path;

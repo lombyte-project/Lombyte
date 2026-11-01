@@ -311,7 +311,8 @@ void water_update(Moby_30D8E8 *water_moby) {
     l07_water_grids[water_data->idx].z = water_moby->pos[2];
     on = 0.0f;
     if (water_moby->f94 != 0 && FUN_L01_00275690_2cd2b0(water_moby, 48.0f) != -1) {
-        if (!(water_moby->state >= WATER_WAIT_FOR_HERO_IN_VOLUME && water_moby->state <= WATER_REMOVE_ABOVE_HIGH_HEIGHT) ||
+        if (!(water_moby->state >= WATER_WAIT_FOR_HERO_IN_VOLUME &&
+              water_moby->state <= WATER_REMOVE_ABOVE_HIGH_HEIGHT) ||
             (water_moby->pos[2] > water_data->lo && water_moby->pos[2] < water_data->hi)) {
             on = 1.0f;
         }

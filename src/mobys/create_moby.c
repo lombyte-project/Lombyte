@@ -22,7 +22,8 @@ struct Moby *create_moby(s32 oclass) {
     struct Moby *moby_slot;
 
     for (moby_slot = moby_instance_end; moby_slot < moby_instance_perm_end; moby_slot++) {
-        if (moby_slot->state >= MOBY_STATE_REUSE_THRESHOLD && moby_slot->spawn_frame <= (u32)world_update_time) {
+        if (moby_slot->state >= MOBY_STATE_REUSE_THRESHOLD &&
+            moby_slot->spawn_frame <= (u32)world_update_time) {
             if (moby_slot->state == 0xFF) {
                 moby_slot[1].state = 0xFF;
             }

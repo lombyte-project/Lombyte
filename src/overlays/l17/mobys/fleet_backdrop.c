@@ -198,7 +198,11 @@ void fleet_backdrop_animation_update(struct Moby *moby) __asm__("FUN_L17_002f384
 
 /* Moby class 1772 */
 void fleet_backdrop_animation_update(struct Moby *moby) {
-    enum { FLEET_BACKDROP_STATE_UNINITIALIZED = 0 , FLEET_BACKDROP_STATE_INITIALIZED = 1 } ;FleetBackdropAnimationVars *moby_pvars = (FleetBackdropAnimationVars *)moby->pvars;
+    enum {
+        FLEET_BACKDROP_STATE_UNINITIALIZED = 0,
+        FLEET_BACKDROP_STATE_INITIALIZED = 1
+    };
+    FleetBackdropAnimationVars *moby_pvars = (FleetBackdropAnimationVars *)moby->pvars;
     float                       offset_accumulator[4];
     float                       pvar_angle_offset[4];
     float                       vector_sum[4];

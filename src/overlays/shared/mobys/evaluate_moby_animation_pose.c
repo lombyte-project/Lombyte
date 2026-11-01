@@ -44,7 +44,9 @@ int FUN_L00_00257218_u3(Moby257218 *drop_source_moby, int *pickup_item_type) {
     int drops = 1;
 
     if (*pickup_item_type <= 0 ||
-        (drop_source_moby != 0 && (D_0014C190[D_0015ED84][(s16)drop_source_moby->uid >> 5] >> (drop_source_moby->uid & 0x1F)) & 1)) {
+        (drop_source_moby != 0 && (D_0014C190[D_0015ED84][(s16)drop_source_moby->uid >> 5] >>
+                                   (drop_source_moby->uid & 0x1F)) &
+                                      1)) {
         for (i = 0; i < 12 && D_0015EDD0_macro[i] != 0xFF; i++) {
             x = D_0015EDD0_macro[i] & 0x3F;
             if (item_available[x]) {

@@ -212,9 +212,9 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         pt = &mine_layer_vars->patrol;
         patrol_point_index = pt->idx;
         step_mover_2e3f20(mine_layer_moby,
-                         mine_layer_vars->walk,
-                         &pt->path->points[patrol_point_index],
-                         mine_layer_vars->effect);
+                          mine_layer_vars->walk,
+                          &pt->path->points[patrol_point_index],
+                          mine_layer_vars->effect);
         mine_layer_moby->anim_speed = mine_layer_patrol_animation_speed_gp;
         fast_dec_timer_s16(&mine_layer_vars->patrol_timer);
         if (fast_vec_dist(&mine_layer_moby->pos, &pt->path->points[patrol_point_index]) < 1.0f) {

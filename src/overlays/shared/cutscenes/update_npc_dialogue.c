@@ -157,7 +157,8 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) {
         /* a fresh block-local pointer (not `entry`) keeps retail's registers */
         struct SceneEntry *unpaid = &trigger->entries[trigger->entry];
 
-        if (unpaid->cost_kind == MENU_CONDITION_PURCHASE_PRICE_MET || unpaid->cost_kind == MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET) {
+        if (unpaid->cost_kind == MENU_CONDITION_PURCHASE_PRICE_MET ||
+            unpaid->cost_kind == MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET) {
             handle = queue_animation_update(2,
                                             0x754E,
                                             initialize_bolt_counter_hud,

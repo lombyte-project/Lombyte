@@ -66,7 +66,11 @@ typedef struct MissionGatedTaxiPlatformVars {
 
 /* Moby class 1474 */
 void mission_gated_taxi_platform_update(struct Moby *moby) {
-    enum { TAXI_PLATFORM_STATE_UNINITIALIZED = 0 , TAXI_PLATFORM_STATE_INITIALIZED = 1 } ;MissionGatedTaxiPlatformVars *mission_gated_taxi_vars =
+    enum {
+        TAXI_PLATFORM_STATE_UNINITIALIZED = 0,
+        TAXI_PLATFORM_STATE_INITIALIZED = 1
+    };
+    MissionGatedTaxiPlatformVars *mission_gated_taxi_vars =
         (MissionGatedTaxiPlatformVars *)moby->pvars;
     char *path;
     float orig[4], delta[4], path_segment_offset[4];

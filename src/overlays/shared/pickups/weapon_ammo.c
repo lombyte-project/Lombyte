@@ -146,7 +146,8 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
     pickup_vars = (AmmoPickup *)pickup_moby->pvars;
     FUN_001f9740_2c53c0(&pickup_vars->timer);
     state = pickup_moby->state;
-    if (state == AMMO_PICKUP_WAIT_FOR_COLLECTION || state == AMMO_PICKUP_RESTORE_SCALE || state == AMMO_PICKUP_PULSE_ALPHA) {
+    if (state == AMMO_PICKUP_WAIT_FOR_COLLECTION || state == AMMO_PICKUP_RESTORE_SCALE ||
+        state == AMMO_PICKUP_PULSE_ALPHA) {
         magnitude = FUN_001f9af0_2c53c0(&pickup_vars->velocity);
         if (magnitude != 0.0f) {
             qcopy(&position, &pickup_moby->pos);

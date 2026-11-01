@@ -261,7 +261,10 @@ void bomber_jet_update(GunshipMoby *m) __asm__("FUN_L01_002f7728");
 
 /* Moby class 688 */
 void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
-    enum { BOMBER_JET_STATE_INITIALIZE = 0 } ;GunshipVars   *gunship_vars = bomber_jet_moby->vars;
+    enum {
+        BOMBER_JET_STATE_INITIALIZE = 0
+    };
+    GunshipVars   *gunship_vars = bomber_jet_moby->vars;
     GunshipFollow *sub = &gunship_vars->sub;
     float          distance_scale;
     void          *hit;

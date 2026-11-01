@@ -24,10 +24,11 @@ extern float          D_L00_0015EF44_macro __asm__("D_L00_0015EF44") MACRO_ADDR;
 extern unsigned char *D_L00_00168FC0_lui __asm__("D_L00_00168FC0") NOT_SDA;
 extern int            D_L00_0015EF60_macro __asm__("D_L00_0015EF60") MACRO_ADDR;
 extern float          D_L00_00161CA0_gp __asm__("D_L00_00161CA0") __attribute__((sda));
-extern float          l00_follow_camera_collision_probe_step_growth_factor __asm__("D_L00_00161CDC") __attribute__((sda));
-extern float          l00_follow_camera_collision_probe_count __asm__("D_L00_00161CE0") __attribute__((sda));
-extern float          l00_follow_camera_collision_probe_scale __asm__("D_L00_00161CE4") __attribute__((sda));
-extern float          D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
+extern float          l00_follow_camera_collision_probe_step_growth_factor __asm__("D_L00_00161CDC")
+    __attribute__((sda));
+extern float l00_follow_camera_collision_probe_count __asm__("D_L00_00161CE0") __attribute__((sda));
+extern float l00_follow_camera_collision_probe_scale __asm__("D_L00_00161CE4") __attribute__((sda));
+extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
 
 typedef struct {
     char  pad0[0x2C];
@@ -943,8 +944,8 @@ int update_follow_camera_orbit_after_collision(unsigned char *camera_moby,
         return sphere_collision_found;
     }
     adjusted_orbit_length = fast_vec_length(A);
-    if (hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK && absolute_float(D_0013CA40_lui[0]) > 0.05f &&
-        sphere_collision_found) {
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK &&
+        absolute_float(D_0013CA40_lui[0]) > 0.05f && sphere_collision_found) {
         adjusted_orbit_length -= follow_camera_collision_retraction_rate_gp * frame_scale;
         *(short *)(B + 0x34) = scale_game_frames(0x884);
     }

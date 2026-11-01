@@ -55,7 +55,11 @@ void ship_rocket_update(struct Moby *moby) __asm__("FUN_L11_003094f8");
 
 /* Moby class 1034 */
 void ship_rocket_update(struct Moby *moby) {
-    enum { MOBY_STATE_PENDING_REMOVAL_BELOW_BOUNDARY = 0xfd , MOBY_STATE_PENDING_REMOVAL_AT_OR_ABOVE_BOUNDARY = 0xfe } ;Missile_94f8 *rocket_vars = (Missile_94f8 *)moby->pvars;
+    enum {
+        MOBY_STATE_PENDING_REMOVAL_BELOW_BOUNDARY = 0xfd,
+        MOBY_STATE_PENDING_REMOVAL_AT_OR_ABOVE_BOUNDARY = 0xfe
+    };
+    Missile_94f8 *rocket_vars = (Missile_94f8 *)moby->pvars;
     Vec4f        *pos;
     Vec4          previous_pos, spray, offset, velocity, random;
     float         fraction;
@@ -118,7 +122,8 @@ void ship_rocket_update(struct Moby *moby) {
     }
     pos = &moby->pos;
     target = rocket_vars->target;
-    if (target != 0 && target->state != MOBY_STATE_PENDING_REMOVAL_AT_OR_ABOVE_BOUNDARY && target->state != MOBY_STATE_PENDING_REMOVAL_BELOW_BOUNDARY &&
+    if (target != 0 && target->state != MOBY_STATE_PENDING_REMOVAL_AT_OR_ABOVE_BOUNDARY &&
+        target->state != MOBY_STATE_PENDING_REMOVAL_BELOW_BOUNDARY &&
         fast_vec_dist(&rocket_vars->target_pos, &target->pos) < 3.0f) {
         moby->rot.z = fast_arc_tan(rocket_vars->target->pos.x - moby->pos.x,
                                    rocket_vars->target->pos.y - moby->pos.y);

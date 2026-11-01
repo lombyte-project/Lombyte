@@ -382,7 +382,10 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
-    } ; enum { TARGET_SELECTION_NO_TARGET = 2};
+    };
+    enum {
+        TARGET_SELECTION_NO_TARGET = 2
+    };
     HoveringRocketAttackerVars *moby_data;
     char                       *hit_record;
     int                         hit_reaction_code;

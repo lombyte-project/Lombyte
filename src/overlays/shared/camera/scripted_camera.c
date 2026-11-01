@@ -130,7 +130,10 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
 void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
 
 void jet_end_mount(int mode) {
-    enum { JET_END_MOUNT_REPOSITION_BEHIND_HERO = 0 } ;LevelCamera *camera_globals = &l00_camera_lui;
+    enum {
+        JET_END_MOUNT_REPOSITION_BEHIND_HERO = 0
+    };
+    LevelCamera *camera_globals = &l00_camera_lui;
     char        *current_follow_camera = ((char *)camera_globals->unk180);
     initialize_camera_record_handoff_defaults();
     if (mode == JET_END_MOUNT_REPOSITION_BEHIND_HERO) {

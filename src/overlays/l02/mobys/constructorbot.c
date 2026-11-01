@@ -275,9 +275,9 @@ void constructorbot_update(struct Moby *moby) {
         break;
     case L02_BOT_MOVE_TO_POST:
         if (step_mover_2e3f20((char *)moby,
-                             bot_private_vars->walk,
-                             (float *)&l02_cuboids[bot_private_vars->post].pos,
-                             (char *)bot_private_vars->velocity) == 4) {
+                              bot_private_vars->walk,
+                              (float *)&l02_cuboids[bot_private_vars->post].pos,
+                              (char *)bot_private_vars->velocity) == 4) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(30));
             }
@@ -286,9 +286,9 @@ void constructorbot_update(struct Moby *moby) {
         break;
     case L02_BOT_WANDER:
         if (step_mover_2e3f20((char *)moby,
-                             bot_private_vars->walk,
-                             bot_private_vars->wander,
-                             (char *)bot_private_vars->velocity) &
+                              bot_private_vars->walk,
+                              bot_private_vars->wander,
+                              (char *)bot_private_vars->velocity) &
             6) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));

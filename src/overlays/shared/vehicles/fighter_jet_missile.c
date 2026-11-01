@@ -164,7 +164,10 @@ void fighter_jet_missile_update(struct Moby *moby) __asm__("FUN_L11_003089d0");
 
 /* Moby class 1009 */
 void fighter_jet_missile_update(struct Moby *moby) {
-    enum { MOBY_STATE_PENDING_REMOVAL = 0xFE } ;MissileVars *missile_vars = (MissileVars *)moby->pvars;
+    enum {
+        MOBY_STATE_PENDING_REMOVAL = 0xFE
+    };
+    MissileVars *missile_vars = (MissileVars *)moby->pvars;
     float        previous_missile_position[4];
     float        look[4];
     MissileHit   hit;

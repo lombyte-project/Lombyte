@@ -73,14 +73,17 @@ void liftcar_platform_update(struct Moby *moby) {
         if (hero.ground_moby == moby && hero.air_frames.s == 0 && moby->command == 0) {
             ride = 1;
         } else if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 16.0f) {
-            if (moby->state == LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW && hero.motion.pos.f[2] < moby->pos.z - 5.0f) {
+            if (moby->state == LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW &&
+                hero.motion.pos.f[2] < moby->pos.z - 5.0f) {
                 ride = 1;
-            } else if (moby->state == LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_ABOVE && moby->pos.z + 5.0f < hero.motion.pos.f[2]) {
+            } else if (moby->state == LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_ABOVE &&
+                       moby->pos.z + 5.0f < hero.motion.pos.f[2]) {
                 ride = 1;
             }
         }
         if (ride) {
-            if (moby->state == LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW || moby->state == LIFTCAR_PLATFORM_WAIT_FOR_MISSION_GATE) {
+            if (moby->state == LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW ||
+                moby->state == LIFTCAR_PLATFORM_WAIT_FOR_MISSION_GATE) {
                 moby->state = LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_ABOVE;
                 set_moby_animation(driver, 0, 0);
                 platform_vars->unkA4 = allocate_voice_for_target_entry(2, 4, driver);

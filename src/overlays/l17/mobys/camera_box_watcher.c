@@ -115,7 +115,8 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
     case CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP: {
         struct Hero *h = &hero;
         int          hero_current_state = h->state.current;
-        if (hero_current_state == HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY || hero_current_state == HERO_STATE_OPTIONAL_IDLE_ANIMATION) {
+        if (hero_current_state == HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY ||
+            hero_current_state == HERO_STATE_OPTIONAL_IDLE_ANIMATION) {
             pvars->unk6C = 0;
         } else if (is_point_inside_clip_volume(&h->motion.pos, pvars->unk64) ||
                    is_point_inside_clip_volume(&h->motion.pos, pvars->unk68)) {

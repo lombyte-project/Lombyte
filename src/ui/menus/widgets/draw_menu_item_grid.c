@@ -110,7 +110,8 @@ s32 draw_menu_item_grid(struct MenuScreen *grid) {
                 append_screen_rect_packet(
                     left - 0x10, top - 0x10, right + 0x10, bottom + 0x10, panel_clear_color, 1);
             }
-            if (cell->kind == MENU_GRID_CELL_EQUIPPABLE_ITEM ? item_available[cell->id] : alternate_item_available[cell->id]) {
+            if (cell->kind == MENU_GRID_CELL_EQUIPPABLE_ITEM ? item_available[cell->id]
+                                                             : alternate_item_available[cell->id]) {
                 frame_offset = 0;
                 if ((u16)cell->kind == MENU_GRID_CELL_EQUIPPABLE_ITEM) {
                     id = cell->id;

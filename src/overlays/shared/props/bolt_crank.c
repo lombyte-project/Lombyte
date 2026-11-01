@@ -166,11 +166,8 @@ void bolt_crank_update(struct Moby *moby) {
                                     goto done;
                                 }
                                 l01_hero_set_state(HERO_STATE_CRANK, 1);
-                                jet_mount(camera_pos,
-                                          camera_pos + 0x10,
-                                          3,
-                                          scale_game_frames(0xB4),
-                                          0);
+                                jet_mount(
+                                    camera_pos, camera_pos + 0x10, 3, scale_game_frames(0xB4), 0);
                                 set_camera_rotation(&l01_cuboids[crank->camera_point].rot);
                                 set_camera_position(&l01_cuboids[crank->camera_point].pos);
                                 set_camera_5_track_acceleration_yz(crank->camera_params[0],

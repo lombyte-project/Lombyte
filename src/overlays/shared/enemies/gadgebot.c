@@ -356,8 +356,11 @@ void gadgebot_update(GbMoby *moby) {
         FUN_L06_002f3640_u(moby);
         if (hero_distance < 16.0f && absolute_float(moby->pos[2] - hero.motion.pos.f[2]) < 1.5f) {
             int ok = 0;
-            if (moby->state == GADGEBOT_WANDER_NEAR_HOME || moby->state == GADGEBOT_SEEK_AND_ATTACK_TARGET || moby->state == GADGEBOT_FOLLOW_HERO || moby->state == 6 ||
-                moby->state == GADGEBOT_SEEK_INTERACTION_TARGET || moby->state == GADGEBOT_STAND_AND_FACE_HERO) {
+            if (moby->state == GADGEBOT_WANDER_NEAR_HOME ||
+                moby->state == GADGEBOT_SEEK_AND_ATTACK_TARGET ||
+                moby->state == GADGEBOT_FOLLOW_HERO || moby->state == 6 ||
+                moby->state == GADGEBOT_SEEK_INTERACTION_TARGET ||
+                moby->state == GADGEBOT_STAND_AND_FACE_HERO) {
                 ok = 1;
             }
             if (ok) {
@@ -1152,14 +1155,14 @@ float score_gadgebot_target_candidate(char *moby,
 
 float score_gadgebot_target_candidate(char *moby, char *candidate_moby, int target_kind) {
     float candidate_score = vector_distance_xy(&MOBY(moby)->pos, candidate_moby + 0x10);
-    float t =
-        fast_difference_between_rotations(l06_camera.yaw,
-                                          fast_arc_tan(*(float *)(candidate_moby + 0x10) - MOBY(moby)->pos.x,
-                                                       *(float *)(candidate_moby + 0x14) - MOBY(moby)->pos.y));
-    float u =
-        fast_difference_between_rotations(MOBY(moby)->rot.z,
-                                          fast_arc_tan(*(float *)(candidate_moby + 0x10) - MOBY(moby)->pos.x,
-                                                       *(float *)(candidate_moby + 0x14) - MOBY(moby)->pos.y));
+    float t = fast_difference_between_rotations(
+        l06_camera.yaw,
+        fast_arc_tan(*(float *)(candidate_moby + 0x10) - MOBY(moby)->pos.x,
+                     *(float *)(candidate_moby + 0x14) - MOBY(moby)->pos.y));
+    float u = fast_difference_between_rotations(
+        MOBY(moby)->rot.z,
+        fast_arc_tan(*(float *)(candidate_moby + 0x10) - MOBY(moby)->pos.x,
+                     *(float *)(candidate_moby + 0x14) - MOBY(moby)->pos.y));
     candidate_score = candidate_score + u * 10.0f;
     candidate_score = candidate_score + t * 3.0f;
     if (((unsigned char *)candidate_moby)[0x31] == 0) {
@@ -1704,7 +1707,8 @@ void update_gadgebot_glow_effects(char *moby) {
     tint = 0x3228AAAA;
     if (MOBY(moby)->state == GADGEBOT_FOLLOW_HERO || MOBY(moby)->state == 6) {
         tint = 0x3228AA28;
-    } else if (MOBY(moby)->state == GADGEBOT_SEEK_AND_ATTACK_TARGET || MOBY(moby)->state == GADGEBOT_UPDATE_KNOCKBACK) {
+    } else if (MOBY(moby)->state == GADGEBOT_SEEK_AND_ATTACK_TARGET ||
+               MOBY(moby)->state == GADGEBOT_UPDATE_KNOCKBACK) {
         tint = 0x322828AA;
     } else if (MOBY(moby)->state == GADGEBOT_SEEK_INTERACTION_TARGET) {
         tint = 0x32AA2828;

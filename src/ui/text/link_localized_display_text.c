@@ -18,7 +18,10 @@ void link_localized_display_text(void) __asm__("FUN_001fdd58");
 void link_localized_display_text(void) {
     /* win is unsigned (lhu) but w/h are signed: the narrowing gives the
        sll 16 / sra 17 shift-by-one retail has instead of a plain sra. */
-    enum { HELP_STATE_DISPLAY_START_DELAY = 1 } ;u16        win[16];
+    enum {
+        HELP_STATE_DISPLAY_START_DELAY = 1
+    };
+    u16        win[16];
     HelpState *box;
     void      *text;
     s32        screenY;

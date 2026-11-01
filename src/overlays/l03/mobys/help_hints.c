@@ -44,7 +44,10 @@ void help_hints_update(struct Moby *moby) {
     enum {
         TUTORIAL_HINTS_INITIALIZE = 0,
         TUTORIAL_HINTS_UPDATE = 1
-    } ; enum { HELP_PLAYBACK_IDLE = 0};
+    };
+    enum {
+        HELP_PLAYBACK_IDLE = 0
+    };
     s32         *tutorial_hint_state = ((s32 *)moby->pvars);
     struct Moby *candidate_moby;
     s32          count;
@@ -191,7 +194,8 @@ void help_hints_update(struct Moby *moby) {
         }
         if (usage_stats.stat[15].count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
-            tutorial_hint_state[21] >= 3 && l03_help_message_playback_state.state == HELP_PLAYBACK_IDLE &&
+            tutorial_hint_state[21] >= 3 &&
+            l03_help_message_playback_state.state == HELP_PLAYBACK_IDLE &&
             l03_help_message_playback_state.cur == -1 && help_records[0x1A].count == 0) {
             help_request(0xBBE, 0x1A);
         }
@@ -206,7 +210,8 @@ void help_hints_update(struct Moby *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_state[11]) &&
             usage_stats.stat[16].count == 0 && hero.state.control_mode == 6 &&
-            hero.items[0].item_id == 8 && l03_help_message_playback_state.state == HELP_PLAYBACK_IDLE &&
+            hero.items[0].item_id == 8 &&
+            l03_help_message_playback_state.state == HELP_PLAYBACK_IDLE &&
             l03_help_message_playback_state.cur == -1 && help_records[0x1B].count == 0) {
             help_request(0xBBF, 0x1B);
         }

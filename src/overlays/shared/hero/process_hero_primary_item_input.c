@@ -395,7 +395,8 @@ void apply_hero_item_slot_selection(int i) {
         if (item_switch_gate_state == ITEM_SWITCH_GATE_BLOCK_SWITCH) {
             changed = 0;
         }
-        if (item_switch_gate_state == ITEM_SWITCH_GATE_RELOAD_ZERO_TIMER && s->items[0].timer == 0) {
+        if (item_switch_gate_state == ITEM_SWITCH_GATE_RELOAD_ZERO_TIMER &&
+            s->items[0].timer == 0) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
@@ -1824,7 +1825,8 @@ extern s32   current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 extern void  fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int   offset_path_index(void *, int, int, int) __asm__("FUN_L00_0025d7a0");
-extern int   l05_hoverboard_trick_landing_frame_thresholds __asm__("D_L05_0015F698") __attribute__((sda));
+extern int   l05_hoverboard_trick_landing_frame_thresholds __asm__("D_L05_0015F698")
+    __attribute__((sda));
 
 int hero_pick_help_mode(void) __asm__("FUN_L05_00255208");
 
@@ -1945,7 +1947,8 @@ int hero_pick_help_mode(void) {
         goto change_state;
     }
     if ((unsigned)(*((unsigned char *)(&hero)->moby + 0x53) - 0x69) < 4 &&
-        (&hero)->anim_frame < (float)(&l05_hoverboard_trick_landing_frame_thresholds)[(&hero)->air_pose_index]) {
+        (&hero)->anim_frame <
+            (float)(&l05_hoverboard_trick_landing_frame_thresholds)[(&hero)->air_pose_index]) {
         state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }

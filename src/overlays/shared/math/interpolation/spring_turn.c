@@ -194,11 +194,26 @@ extern int   FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L0
 
 int move_moby_xy_with_collision_constraints(
 
-    void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim, float slope) __asm__("FUN_L00_00258490");
+    void     *ign,
+    V_258490 *to,
+    V_258490 *pos,
+    int       flags,
+    float     h,
+    float     r,
+    float     lim,
+    float     slope) __asm__("FUN_L00_00258490");
 
 int move_moby_xy_with_collision_constraints(
 
-    void *ign, V_258490 *to, V_258490 *proposed_position, int flags, float collision_height_offset, float collision_radius, float ground_height_difference_limit, float slope) {
+    void     *ign,
+    V_258490 *to,
+    V_258490 *proposed_position,
+    int       flags,
+    float     collision_height_offset,
+    float     collision_radius,
+    float     ground_height_difference_limit,
+
+    float slope) {
     V_258490       movement_displacement;
     V_258490       line_probe_displacement;
     V_258490       line_probe_start;
@@ -233,15 +248,19 @@ int move_moby_xy_with_collision_constraints(
     up.f[2] = collision_height_offset;
     fast_vec_add(&line_probe_start, to, &up);
     fast_vec_add(&line_probe_end, &line_probe_start, &line_probe_displacement);
-    if (ok && FUN_001efa68_258490(&line_probe_start, &line_probe_end, line_collision_flag_bit_2 | 0x24, ign, 0)) {
+    if (ok && FUN_001efa68_258490(
+                  &line_probe_start, &line_probe_end, line_collision_flag_bit_2 | 0x24, ign, 0)) {
         line_collision_result = D_L00_00173E40_258490;
         if (*(int *)(line_collision_result + 0x1C) > 0) {
             nrm = (float *)(line_collision_result + 0x40);
-            if (slope <= fast_arc_tan(*(float *)(line_collision_result + 0x48), vector_length_xy(nrm))) {
+            if (slope <=
+                fast_arc_tan(*(float *)(line_collision_result + 0x48), vector_length_xy(nrm))) {
                 *(int *)(line_collision_result + 0x48) = 0;
                 sceVu0Normalize(nrm, nrm);
                 {
-                    float k = -movement_displacement.f[0] * *(float *)(line_collision_result + 0x40) - movement_displacement.f[1] * *(float *)(line_collision_result + 0x44);
+                    float k =
+                        -movement_displacement.f[0] * *(float *)(line_collision_result + 0x40) -
+                        movement_displacement.f[1] * *(float *)(line_collision_result + 0x44);
                     if (0.0f < k) {
                         fast_vec_scale(nrm, nrm, k);
                         ok = 0;
@@ -263,7 +282,9 @@ int move_moby_xy_with_collision_constraints(
             if (!FUN_L00_001f0d60_258490(&sphere_probe_center, collision_radius, 0x24, ign)) {
                 break;
             }
-            sphere_contact_angle = fast_arc_tan(vector_distance_xy(proposed_position, sphere_contact_position), *(float *)(sphere_collision_result + 0x28) - proposed_position->f[2]);
+            sphere_contact_angle =
+                fast_arc_tan(vector_distance_xy(proposed_position, sphere_contact_position),
+                             *(float *)(sphere_collision_result + 0x28) - proposed_position->f[2]);
             if (*(int *)(sphere_collision_result + 0x18) != 0 || slope < sphere_contact_angle) {
                 qcopy(proposed_position, &coll_hit_position);
                 ok = 0;
@@ -361,7 +382,8 @@ int move_moby_with_step_collision(char *moby,
         if (D_L00_00173E40[7] > 0) {
             float ground_normal_angle_or_hit_height;
             movement_collision_result_flags |= 2;
-            ground_normal_angle_or_hit_height = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48),
+            ground_normal_angle_or_hit_height =
+                fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48),
                              vector_length_xy((char *)D_L00_00173E40 + 0x40));
             if (ground_normal_angle_or_hit_height > 0.5f) {
                 movement_collision_result_flags |= 4;
@@ -581,8 +603,8 @@ done:
 
 void approach_w(unsigned char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
 int  move_w(unsigned char *, char *, float *, void *, float) __asm__("FUN_L00_00258b50");
-int  step_mover_2e3f20(unsigned char *m, char *c, float *tgt, void *out) __asm__("FUN_L00_00259028");
-int  step_mover_2e3f20(unsigned char *moby,
+int step_mover_2e3f20(unsigned char *m, char *c, float *tgt, void *out) __asm__("FUN_L00_00259028");
+int step_mover_2e3f20(unsigned char *moby,
                       char          *movement_control,
                       float         *target_position,
 

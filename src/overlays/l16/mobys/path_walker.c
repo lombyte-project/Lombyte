@@ -152,12 +152,13 @@ void path_walker_update(unsigned char *walker_moby) {
                 height = random_float_between(path_walker_height_range_start_gp,
                                               path_walker_height_range_end_gp);
                 if (walker_data->owner[0x31] != 0 && walker_data->countdown != 0) {
-                    candidate_path_parameter = linked_walker_data->parameter - random_float_between(path_walker_gap_range_start_gp,
-                                                                   path_walker_gap_range_end_gp);
+                    candidate_path_parameter = linked_walker_data->parameter -
+                                               random_float_between(path_walker_gap_range_start_gp,
+                                                                    path_walker_gap_range_end_gp);
                     walker_data->countdown--;
                 } else {
                     candidate_path_parameter = walker_data->parameter +
-                           path_walker_reposition_advance_rate_gp * frame_time;
+                                               path_walker_reposition_advance_rate_gp * frame_time;
                 }
                 if (candidate_path_parameter < 0.0f) {
                     candidate_path_parameter += walker_data->period;

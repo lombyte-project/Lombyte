@@ -55,13 +55,13 @@ void emit_moby_sprite_particles(char *moby) {
         color_blend_offset = color_blend_offset / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - color_blend_offset));
         spawn_timed_hero_relative_particle(d,
-                                 col,
-                                 truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
-                                 0x35,
-                                 1,
-                                 2,
-                                 0,
-                                 sprite_data->d[i]);
+                                           col,
+                                           truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
+                                           0x35,
+                                           1,
+                                           2,
+                                           0,
+                                           sprite_data->d[i]);
         fast_vec_add(d, d, particle_position_step);
     }
 }

@@ -93,7 +93,8 @@ void elevator_update(struct Moby *elevator_moby) {
     Vec4           delta;
     float          level;
 
-    if (elevator_moby->state != ELEVATOR_STATE_INITIALIZE && elevator_moby->command == 2 && elevator_vars->dir < 0.0f) {
+    if (elevator_moby->state != ELEVATOR_STATE_INITIALIZE && elevator_moby->command == 2 &&
+        elevator_vars->dir < 0.0f) {
         int *path = (int *)l14_paths[elevator_vars->path2];
         elevator_vars->dir = -elevator_vars->dir;
         elevator_vars->segment = *path - 2;
@@ -227,7 +228,8 @@ void elevator_update(struct Moby *elevator_moby) {
             elevator_moby->state = ELEVATOR_STATE_WAIT_FOR_RIDER;
         break;
     }
-    if (elevator_moby->state != ELEVATOR_STATE_FOLLOW_PATH && elevator_moby->state != ELEVATOR_STATE_INITIALIZE) {
+    if (elevator_moby->state != ELEVATOR_STATE_FOLLOW_PATH &&
+        elevator_moby->state != ELEVATOR_STATE_INITIALIZE) {
         settle_elevator_at_path_endpoint(elevator_moby);
         if (hero.ground_moby == elevator_moby) {
             fast_vec_sub(&delta, &elevator_moby->pos, &previous_elevator_position);

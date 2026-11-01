@@ -30,7 +30,10 @@ void update_camera(void) __asm__("FUN_001edaa8");
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
 void update_camera(void) {
-    enum { CAMERA_TRANSITION_PHASE_IDLE = 0 } ;struct PreviewCamera *camera;
+    enum {
+        CAMERA_TRANSITION_PHASE_IDLE = 0
+    };
+    struct PreviewCamera *camera;
     struct UpdateCam     *target;
     char                 *camera_shake_base;
     float                 rotation_matrix[16];
