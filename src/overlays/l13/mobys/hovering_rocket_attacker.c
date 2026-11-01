@@ -147,9 +147,9 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         moby_data->rocket0 = create_attached_rocket(moby, 0);
         moby_data->rocket1 = create_attached_rocket(moby, 1);
         if (moby_data->unkD4 != -1)
-            MOBY(moby)->state = 5;
+            MOBY(moby)->state = WAIT_TO_MOVE_TO_TABLE_POINT;
         else
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = TRACK_TARGET_BEFORE_ATTACK;
         moby_data->unk100[0] = random_angle_radians();
         moby_data->unk100[2] = random_angle_radians();
         moby_data->unk100[3] = random_angle_radians();
@@ -159,7 +159,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         if (moby_data->unkB4 == 2)
             return;
         MOBY(moby)->command = 0;
-        MOBY(moby)->state = 6;
+        MOBY(moby)->state = MOVE_TO_TABLE_POINT;
         break;
     case MOVE_TO_TABLE_POINT:
         index = moby_data->unkD4 * 128;
@@ -180,7 +180,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 10);
             MOBY(moby)->command = 0;
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = TRACK_TARGET_BEFORE_ATTACK;
         }
         break;
     case TRACK_TARGET_BEFORE_ATTACK:
@@ -199,7 +199,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         MOBY(moby)->command = 1;
         if (MOBY(moby)->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, 0);
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = UPDATE_ATTACK_SEQUENCE;
         break;
     case UPDATE_ATTACK_SEQUENCE:
         moby_yaw = (float *)&MOBY(moby)->rot.z;
@@ -294,7 +294,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
             if (moby_data->unkB4 == 2) {
                 if (MOBY(moby)->prev_seq != 0)
                     blend_moby_animation(moby, 0, 0, 2);
-                MOBY(moby)->state = 2;
+                MOBY(moby)->state = TRACK_TARGET_BEFORE_ATTACK;
                 MOBY(moby)->command = 0;
                 break;
             }
@@ -336,7 +336,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
             return;
         if (MOBY(moby)->prev_seq != MOBY(moby)->command)
             blend_moby_animation(moby, MOBY(moby)->command, 0, 10);
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = UPDATE_ATTACK_SEQUENCE;
         break;
     }
 }
