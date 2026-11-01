@@ -32,7 +32,7 @@ void sandmouse_house_update(unsigned char *moby) {
         return;
     house_vars = ((char *)MOBY(moby)->pvars);
     if (house_vars != 0) {
-        if (MOBY(moby)->state != 0) {
+        if (MOBY(moby)->state != SANDMOUSE_HOUSE_INITIALIZE) {
             if (D_0013D4C5 != 0) {
                 if (hero.items[2].item_id == 5) {
                     float yaw_response_scale = D_0015ED70_lui;
@@ -51,7 +51,7 @@ void sandmouse_house_update(unsigned char *moby) {
         if (MOBY(moby)->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(0));
         }
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND;
         *(float *)house_vars = MOBY(moby)->rot.z;
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND:
@@ -59,7 +59,7 @@ void sandmouse_house_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END:
@@ -67,7 +67,7 @@ void sandmouse_house_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(3));
             }
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND:
@@ -75,12 +75,12 @@ void sandmouse_house_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(3));
             }
-            MOBY(moby)->state = 4;
+            MOBY(moby)->state = SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END;
         } else if (MOBY(moby)->command == 7 || MOBY(moby)->command == 1) {
             if (MOBY(moby)->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(3));
             }
-            MOBY(moby)->state = 7;
+            MOBY(moby)->state = SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END:
@@ -88,7 +88,7 @@ void sandmouse_house_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 4) {
                 blend_moby_animation(moby, 4, 0, scale_game_frames(3));
             }
-            MOBY(moby)->state = 5;
+            MOBY(moby)->state = SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND:
@@ -97,7 +97,7 @@ void sandmouse_house_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(3));
             }
-            MOBY(moby)->state = 6;
+            MOBY(moby)->state = SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND_ANIMATION_END;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND_ANIMATION_END:
@@ -106,12 +106,12 @@ void sandmouse_house_update(unsigned char *moby) {
                 if (MOBY(moby)->prev_seq != 6) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(3));
                 }
-                MOBY(moby)->state = 7;
+                MOBY(moby)->state = SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION;
             } else {
                 if (MOBY(moby)->prev_seq != 2) {
                     blend_moby_animation(moby, 2, 0, scale_game_frames(3));
                 }
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND;
             }
         }
         break;
@@ -120,7 +120,7 @@ void sandmouse_house_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(3));
             }
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND;
         }
         break;
     case 8:
