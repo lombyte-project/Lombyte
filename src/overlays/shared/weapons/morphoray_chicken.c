@@ -870,7 +870,7 @@ int cancel_suck_cannon_suction_and_set_moby_state_5(struct Moby *moby) __asm__("
 
 int cancel_suck_cannon_suction_and_set_moby_state_5(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby->state = 5;
+    moby->state = CHICKEN_STATE_EMIT_FEATHERS;
     return helper_result;
 }
 
