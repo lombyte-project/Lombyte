@@ -9,7 +9,7 @@ typedef struct {
     u8  reserve[4];
 } scePad2SocketParam;
 
-scePad2SocketParam D_001CD760 = {0};
+scePad2SocketParam controller_socket_params __asm__("D_001CD760") = {0};
 
 extern s32 scePad2Init(s32);
 extern s32 scePad2CreateSocket(scePad2SocketParam *, void *);
@@ -22,11 +22,11 @@ void init_pads(void) {
     };
     sceDbcInit();
     scePad2Init(0);
-    D_001CD760.port = 2;
-    D_001CD760.slot = 0;
-    controller_state.socket = scePad2CreateSocket(&D_001CD760, &controller_state);
-    D_001CD760.port = 2;
-    D_001CD760.slot = 1;
+    controller_socket_params.port = 2;
+    controller_socket_params.slot = 0;
+    controller_state.socket = scePad2CreateSocket(&controller_socket_params, &controller_state);
+    controller_socket_params.port = 2;
+    controller_socket_params.slot = 1;
     controller_state.profile_state = CONTROLLER_PROFILE_INITIAL_STATE;
     controller_state.device_state = CONTROLLER_DEVICE_INITIAL_STATE;
 }
