@@ -3,6 +3,8 @@
 
 #include "types.h"
 
-int enter_streamed_moby_screen(char *) __asm__("FUN_00225588");
+struct MenuStreamedMobyScreen;
+
+int enter_streamed_moby_screen(struct MenuStreamedMobyScreen *) __asm__("FUN_00225588");
 
 #endif /* LOMBYTE_RNC_UI_MENUS_STREAMED_MOBY_ENTER_STREAMED_MOBY_SCREEN_H */

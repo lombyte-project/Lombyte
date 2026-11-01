@@ -17,7 +17,7 @@ struct MenuScreenWords {
     u8  pad_30[0x4];
     s32 unk34; /* 0x34: flags 0x40 / 0x80 (draw_map_screen) */
     s32 unk38; /* 0x38: cleared by enter_menu_help_text */
-    s32 unk3C; /* 0x3C: stream buffer (leave_streamed_moby_screen) */
+    s32 unk3C; /* 0x3C */
     u8  pad_40[0x10];
     s32 unk50; /* 0x50: 0, 1 or 3 (enter_menu_help_text) */
     s32 unk54; /* 0x54: cleared by enter_menu_help_text */
@@ -518,6 +518,19 @@ struct MenuItemPreviewScreen {
 struct MenuPlainScreenC0 {
     struct MenuScreenHead head;
     u8                    pad_30[0x90];
+}; /* size 0xC0 */
+
+/* The helpdesk screen's streamed moby (enter_streamed_moby_screen, leave_streamed_moby_screen,
+   update_streamed_moby_animation, draw_moby_entries_from_object). */
+struct MenuStreamedMobyScreen {
+    struct MenuScreenHead head;
+    u8                    pad_30[0x4];
+    s32                   state; /* 0x34: update_streamed_moby_animation's step, 3 stops it */
+    u8                    pad_38[0x4];
+    s32                   buffer;      /* 0x3C: acquire_menu_stream_buffer(1) */
+    s32                   read_offset; /* 0x40 */
+    struct Moby          *mobys[24];   /* 0x44: drawn and deleted as a list */
+    u8                    pad_A4[0x1C];
 }; /* size 0xC0 */
 
 #endif /* LOMBYTE_RNC_UI_MENUS_MENU_SCREEN_H */

@@ -96,17 +96,17 @@ void pause_all_sounds(s32 mode) {
             D_0015EEA0_macro != 0 || alternate_animation_sequence_macro != 0 || g->unkF8 != 0;
     }
     {
-        struct MenuSystem *g = &menu_system;
-        char              *menu_entry_base = (char *)&pause_menu_chain_head;
+        struct MenuSystem         *g = &menu_system;
+        struct MenuTextListScreen *head = &pause_menu_chain_head;
         g->unkDC = mode == 0x23;
-        *(char **)(menu_entry_base + 0x38) =
-            g->unkD8 ? (char *)&pause_goodies_tab : (char *)&pause_menu_chain_tail;
+        head->list.up = g->unkD8 ? (struct MenuScreen *)&pause_goodies_tab
+                                 : (struct MenuScreen *)&pause_menu_chain_tail;
     }
     {
-        struct MenuSystem *g = &menu_system;
-        char              *menu_record_base = (char *)&pause_menu_chain_tail;
-        *(char **)(menu_record_base + 0x3C) =
-            g->unkD8 ? (char *)&pause_goodies_tab : (char *)&pause_menu_chain_head;
+        struct MenuSystem         *g = &menu_system;
+        struct MenuTextListScreen *tail = &pause_menu_chain_tail;
+        tail->list.down = g->unkD8 ? (struct MenuScreen *)&pause_goodies_tab
+                                   : (struct MenuScreen *)&pause_menu_chain_head;
     }
     {
         struct MenuSystem *g = &menu_system;

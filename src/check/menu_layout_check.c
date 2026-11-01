@@ -105,6 +105,8 @@ SIZE_CHECK(MenuMapScreen, 0x68);
 SIZE_CHECK(MenuPlainScreen68, 0x68);
 SIZE_CHECK(MenuItemPreviewScreen, 0xC0);
 SIZE_CHECK(MenuPlainScreenC0, 0xC0);
+SIZE_CHECK(MenuStreamedMobyScreen, 0xC0);
+CHECK(MenuStreamedMobyScreen, streamed_mobys, mobys, 0x44);
 CHECK(MenuScreen, draw, draw, 0x4);
 CHECK(MenuScreen, options_flags, data.options.flags, 0x30);
 CHECK(MenuScreen, cycle_side, data.cycle.side, 0x38);
