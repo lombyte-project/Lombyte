@@ -249,9 +249,9 @@ extern float level02_elevator_ring_segment_half_height_gp __asm__("D_L02_00161BF
     __attribute__((sda));
 extern float level02_elevator_ring_segment_angle_degrees_gp __asm__("D_L02_00161C10")
     __attribute__((sda));
-int         D_L02_00161BF4 = 0;
+int         level02_elevator_ring_blend_color_a_selector __asm__("D_L02_00161BF4") = 0;
 int         D_L02_00161BF8 = 2;
-int         D_L02_00161BFC = 0;
+int         level02_elevator_ring_blend_alpha_selector __asm__("D_L02_00161BFC") = 0;
 int         D_L02_00161C00 = 1;
 int         D_L02_00161C04 = 0x206068;
 int         D_L02_00161C08 = 0x40107020;
@@ -296,7 +296,7 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     matrix.position[3] = 1.0f;
     packet.texture = get_effect_texture(14);
     packet.flags = 0xFF9000000260L;
-    packet.mode = (long)D_L02_00161BF4 | ((long)D_L02_00161BF8 << 2) | ((long)D_L02_00161BFC << 4) |
+    packet.mode = (long)level02_elevator_ring_blend_color_a_selector | ((long)D_L02_00161BF8 << 2) | ((long)level02_elevator_ring_blend_alpha_selector << 4) |
                   ((long)D_L02_00161C00 << 6) | 0x8000000000L;
     packet.zero = 0;
     uv = level02_elevator_ring_segment_uvs;
