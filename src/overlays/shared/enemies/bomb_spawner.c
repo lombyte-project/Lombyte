@@ -565,6 +565,9 @@ void bomb_spawner_update(struct Moby *moby) {
 char *spawn_class_221_moby(
 
     char *spawning_moby, float *pos, float *launch_velocity, short ang, int spawn_options) {
+    enum {
+        CLASS_221_INITIAL_STATE = 0
+    };
     char *spawned_moby;
     char *moby_pvars;
     spawned_moby = create_moby(0x221);
@@ -581,7 +584,7 @@ char *spawn_class_221_moby(
         MOBY(spawned_moby)->update_dist = (*(unsigned char **)(moby_pvars + 0x10))[0x30];
         MOBY(spawned_moby)->draw_dist = *(unsigned short *)(*(char **)(moby_pvars + 0x10) + 0x32);
         MOBY(spawned_moby)->visible = 1;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = CLASS_221_INITIAL_STATE;
         MOBY(spawned_moby)->scale =
             *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) * 0.001f;
         *(int *)(moby_pvars + 0x1C) = spawn_options;
