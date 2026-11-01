@@ -1104,6 +1104,10 @@ void bomb_update(BombMoby *m) __asm__("FUN_L00_002adb30");
 
 /* Moby class 121 */
 void bomb_update(BombMoby *bomb_moby) {
+    enum {
+        BOMB_STATE_THROWN = 1,
+        BOMB_STATE_EXPANDING_BLAST = 2
+    };
     B910       rec = l00_bomb_camera_blast_parameters;
     Vec_2adb30 delta;
     Vec_2adb30 bomb_pre_motion_position;
@@ -1118,15 +1122,15 @@ void bomb_update(BombMoby *bomb_moby) {
     b.f[2] = 1.0f;
     d = bomb_moby->d;
     if ((((G910 *)&hero)->hero == 0 || ((G910 *)&hero)->hero->cls != 0xC0) &&
-        bomb_moby->state == 0) {
+        bomb_moby->state == BOMB_STATE_HELD) {
         mark_moby_for_removal(bomb_moby);
         return;
     }
-    if (((G910 *)&hero)->b20A4 != 0 && bomb_moby->state == 0) {
+    if (((G910 *)&hero)->b20A4 != 0 && bomb_moby->state == BOMB_STATE_HELD) {
         mark_moby_for_removal(bomb_moby);
         return;
     }
-    if ((((G910 *)&hero)->b20A5 != 0 || ((G910 *)&hero)->b20AF != 0) && bomb_moby->state == 0) {
+    if ((((G910 *)&hero)->b20A5 != 0 || ((G910 *)&hero)->b20AF != 0) && bomb_moby->state == BOMB_STATE_HELD) {
         bomb_moby->flags |= 0x41;
     } else {
         bomb_moby->flags &= ~0x41;
@@ -1138,7 +1142,7 @@ void bomb_update(BombMoby *bomb_moby) {
             FUN_L00_002ad410_2adb30(d, bomb_moby, 2);
         }
     }
-    if (bomb_moby->state == 1) {
+    if (bomb_moby->state == BOMB_STATE_THROWN) {
         Vec_2adb30 c;
         float      t;
         int        cr;
@@ -1335,7 +1339,7 @@ void bomb_update(BombMoby *bomb_moby) {
                                     2.0f,
                                     1.0f,
                                     1.0f);
-                    bomb_moby->state = 2;
+                    bomb_moby->state = BOMB_STATE_EXPANDING_BLAST;
                 }
                 {
                     int k;
@@ -1636,13 +1640,13 @@ void bomb_update(BombMoby *bomb_moby) {
                 l00_camera.shake_frames = FUN_001f96f8_2adb30(0x19);
                 fast_vec_dist(&bomb_moby->pos, ((G910 *)&hero)->pos);
                 mine_camera_blast((char *)&rec, (char *)&bomb_moby->pos, 0, 0);
-                if (bomb_moby->state != 2) {
+                if (bomb_moby->state != BOMB_STATE_EXPANDING_BLAST) {
                     mark_moby_for_removal(bomb_moby);
                     return;
                 }
             }
         }
-    } else if (bomb_moby->state != 2) {
+    } else if (bomb_moby->state != BOMB_STATE_EXPANDING_BLAST) {
         int v;
         d->h6a++;
         v = truncate_float_to_s32(FUN_001f9de0_2adb30(normalize_angle((float)d->h6a * 0.068f)) *
@@ -1650,7 +1654,7 @@ void bomb_update(BombMoby *bomb_moby) {
             0x9F;
         bomb_moby->color = (v << 16) | (0xFF << 24) | (v << 8) | v;
     }
-    if (bomb_moby->state == 2) {
+    if (bomb_moby->state == BOMB_STATE_EXPANDING_BLAST) {
         Vec_2adb30 p;
         float      r;
         int        n;
