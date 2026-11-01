@@ -29,6 +29,9 @@ void sentrybot_projectile_update(unsigned char *moby) __asm__("FUN_L15_002e4380"
 
 /* Moby class 934 */
 void sentrybot_projectile_update(unsigned char *moby) {
+    enum {
+        SENTRYBOT_PROJECTILE_STATE_FLYING = 0
+    };
     char *moby_vars = ((char *)MOBY(moby)->pvars);
     float next_position[4];
     char  col[0x30];
@@ -37,7 +40,7 @@ void sentrybot_projectile_update(unsigned char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (MOBY(moby)->state != 0)
+    if (MOBY(moby)->state != SENTRYBOT_PROJECTILE_STATE_FLYING)
         return;
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, frame_time * 6.2831855f);
     fast_vec_add(next_position, &MOBY(moby)->pos, moby_vars);
