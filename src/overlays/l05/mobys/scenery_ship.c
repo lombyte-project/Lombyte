@@ -389,9 +389,9 @@ typedef struct {
 
 int                  l05_scenery_ship_trail_callback_disabled __asm__("D_L05_001613F0") = 0;
 int                  l05_scenery_ship_trail_ribbon_draw_disabled __asm__("D_L05_001613F4") = 0;
-int                  D_L05_001613F8 = 0;
+int                  l05_scenery_ship_trail_blend_a_selector __asm__("D_L05_001613F8") = 0;
 int                  D_L05_001613FC = 2;
-int                  D_L05_00161400 = 0;
+int                  l05_scenery_ship_trail_blend_c_selector __asm__("D_L05_00161400") = 0;
 int                  D_L05_00161404 = 1;
 int                  D_L05_00161408 = 0x40806060;
 int                  D_L05_0016140C = 0x802020;
@@ -438,8 +438,8 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
         glow_packet->effect_texture = texture;
         glow_packet->texture = 0xff9000000260ULL;
         glow_packet->zero = 0;
-        glow_packet->flags = (u64)D_L05_001613F8 | ((u64)D_L05_001613FC << 2) |
-                             ((u64)D_L05_00161400 << 4) | ((u64)D_L05_00161404 << 6) |
+        glow_packet->flags = (u64)l05_scenery_ship_trail_blend_a_selector | ((u64)D_L05_001613FC << 2) |
+                             ((u64)l05_scenery_ship_trail_blend_c_selector << 4) | ((u64)D_L05_00161404 << 6) |
                              0x8000000000ULL;
         phase = convert_integer_to_float((frame_number + 3) & 3) / (D_L05_001613E0 * 4.0f);
         for (j = 0; j < 4; j++) {
