@@ -279,7 +279,9 @@ void compute_lift_camera_view(char *lift_moby, char *camera_position, char *came
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
 
-void FUN_L05_00315f70(char *moby) {
+void position_lift_marker_ring_points(char *moby) __asm__("FUN_L05_00315f70");
+
+void position_lift_marker_ring_points(char *moby) {
     int   i = 0;
     char *lift_vars = ((char *)MOBY(moby)->pvars);
     char *tab = ((char *)l05_paths[*(int *)(lift_vars + 0x68)]);
