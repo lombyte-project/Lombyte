@@ -89,10 +89,10 @@ void smoke_trail_projectile_update(char *moby) {
                 hit_descriptor.b18 = 0;
                 record_moby_hit(*(void **)(collision_result + 0x18), &hit_descriptor);
             }
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = BURST_AND_REMOVE;
         }
         if (fast_dec_timer(moby_vars + 0x14) != 0)
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = BURST_AND_REMOVE;
         break;
     case BURST_AND_REMOVE:
         cart_burst(moby, &MOBY(moby)->pos, -1, 0.25f, 13.0f);
