@@ -148,7 +148,7 @@ extern void  FUN_00212f90(void *, int, int, int);
 extern float D_0015ED70;
 extern float D_0015ED6C;
 float        D_L11_001613E0 = 3.2f;
-int          D_L11_001613F0 = 0;
+int          l11_resort_owner_gate_attachment_rotation __asm__("D_L11_001613F0") = 0;
 extern int   resort_owner_completion_rotation_trigger_state[] __asm__("D_L11_0016D260");
 extern int   D_L11_0015FFD8;
 
@@ -231,7 +231,7 @@ void update_resort_owner_state_actions(void *mp) {
         transform_attachment_pose(moby,
                                   gate_moby,
                                   &D_L11_001613E0,
-                                  &D_L11_001613F0,
+                                  &l11_resort_owner_gate_attachment_rotation,
                                   (char *)moby + 0x10,
                                   (char *)moby + 0x40);
         if (try_activate_pokitaru_gate((struct Moby *)gate_moby) == 0)
