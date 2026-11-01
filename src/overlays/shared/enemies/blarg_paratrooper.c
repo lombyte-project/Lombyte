@@ -609,6 +609,14 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         PARATROOPER_HIT_REACTION_RECOVERY_KNOCKBACK = 3,
         PARATROOPER_HIT_REACTION_NONE = 11
     };
+    enum {
+        PARATROOPER_STATE_INITIALIZE = 0,
+        PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS = 4,
+        PARATROOPER_STATE_FIRE_PROJECTILES = 5,
+        PARATROOPER_STATE_MELEE_ATTACK = 7,
+        PARATROOPER_STATE_KNOCKBACK_RECOVERY = 10,
+        PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE = 11
+    };
     Paratrooper302618 *paratrooper_instance_state;
     char              *target, *child, *attached, *chased;
     float              pos[4] __attribute__((aligned(16)));
@@ -618,7 +626,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     float              angle, distance, height, dx, dy;
 
     paratrooper_instance_state = (Paratrooper302618 *)MOBY(moby)->pvars;
-    if (MOBY(moby)->state == 0)
+    if (MOBY(moby)->state == PARATROOPER_STATE_INITIALIZE)
         return;
     {
         float timer_scale = D_L08_001621B0 * frame_time;
@@ -652,7 +660,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     target = find_moby_hit(moby, 0x330000, 0);
     reaction = resolve_moby_hit_response(
         moby, target, &paratrooper_instance_state->health, 0, &hit_state, &damage, 0, 4);
-    if (hit_state != 1 && MOBY(moby)->state != 11) {
+    if (hit_state != 1 && MOBY(moby)->state != PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE) {
         {
             float health = paratrooper_instance_state->health - damage;
             paratrooper_instance_state->health = health;
@@ -708,7 +716,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                                       (float *)(&paratrooper_instance_state->unk8C));
                 trooper_start_knockback(
                     moby, &paratrooper_instance_state->unk70, knock_angle, 8, 1, 0);
-                MOBY(moby)->state = 10;
+                MOBY(moby)->state = PARATROOPER_STATE_KNOCKBACK_RECOVERY;
                 paratrooper_instance_state->unk67 = 0x78;
                 break;
             case PARATROOPER_HIT_REACTION_LETHAL:
@@ -745,7 +753,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                                       (float *)(&paratrooper_instance_state->unk8C));
                 trooper_start_knockback(
                     moby, &paratrooper_instance_state->unk70, second_knock_angle, 12, 1, 0);
-                MOBY(moby)->state = 11;
+                MOBY(moby)->state = PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE;
                 paratrooper_instance_state->unk67 = 0xf0;
                 spawn_randomized_bolt_drop(moby, 2, 3, 0, -1);
                 break;
@@ -801,7 +809,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         paratrooper_instance_state->f160 = (char *)hero.moby;
 
     state = MOBY(moby)->state;
-    if (state == 0 || state == 5 || state == 7 || state == 4) {
+    if (state == PARATROOPER_STATE_INITIALIZE || state == PARATROOPER_STATE_FIRE_PROJECTILES || state == PARATROOPER_STATE_MELEE_ATTACK || state == PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS) {
         height = probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
         if (height < MOBY(moby)->pos.z)
             MOBY(moby)->pos.z = height;
