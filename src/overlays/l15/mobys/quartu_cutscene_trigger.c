@@ -11,6 +11,7 @@
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
+void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 #include "rnc/rendering/clip_volume.h"
 
@@ -76,7 +77,7 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
         if (D_L15_0015F5C4 != 2) {
             start_scene(4);
             moby->state = CUTSCENE_TRIGGER_FINALIZE_AND_SAVE;
-            FUN_L00_002330d0();
+            update_hero_item_moby_flags();
             if (trigger_data->unk4 != -1) {
                 char *o = D_L15_001600EC + (trigger_data->unk4 << 7);
                 set_race_camera(o + 0x30, o + 0x70, 0, 1);

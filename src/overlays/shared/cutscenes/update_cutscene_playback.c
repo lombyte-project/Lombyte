@@ -498,7 +498,7 @@ extern float     D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18  D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void             select_level_vu_chain(void) __asm__("FUN_002335a0");
-void             FUN_L00_002330d0(void);
+void             update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 void             set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void             process_menu_entry(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void             music_set_active_track_value(int) __asm__("FUN_L00_00265880");
@@ -534,7 +534,7 @@ void finish_cutscene(void) {
     if (2.0f < hero_candidate_z && absolute_float(hero.motion.pos.f[2] - hero_candidate_z) < 4.5f)
         hero.motion.pos.f[2] = hero_candidate_z;
     hero.unk20A5 = 0;
-    FUN_L00_002330d0();
+    update_hero_item_moby_flags();
     if (D_L00_0016C860_298b18.x46) {
         f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
         if (2.0f < f && absolute_float(D_L00_0016C860_298b18.x18 - f) < 2.0f)

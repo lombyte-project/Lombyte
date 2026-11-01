@@ -1915,7 +1915,7 @@ extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 
 
 extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
-extern void FUN_L00_002330d0(void);
+extern void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 extern void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 extern void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 extern void offset_hero_position_against_gravity(void *, void *, float) __asm__("FUN_L00_002336e8");
@@ -1932,7 +1932,7 @@ void update_hero_moby(void) {
     if (hero.unk20A5) {
         set_hero_item_moby_flag_bit0();
     } else {
-        FUN_L00_002330d0();
+        update_hero_item_moby_flags();
     }
     qcopy(&hero.moby->pos, &hero.motion.pos);
     apply_hero_vertical_oscillation();

@@ -504,7 +504,7 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4_29ab70;
 
-extern void FUN_L00_002330d0(void);
+extern void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 extern void decrement_resource_counter(void) __asm__("FUN_001ff768");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern int  vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
@@ -525,7 +525,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
-    FUN_L00_002330d0();
+    update_hero_item_moby_flags();
     if (*(int *)(vendor_state_base + 0x40) == 0) {
         transform_vector_by_basis(&world_position,
                                   &vendor_close_hero_local_offset_gp,
@@ -637,7 +637,7 @@ void start_vendor_exit_cutscene(void) {
 }
 
 extern int D_L00_0015F5D8;
-void       FUN_L00_002330d0(void);
+void       update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 void       restore_hero_after_vendor_exit_cutscene(void) __asm__("FUN_L00_0029af80");
 
 void restore_hero_after_vendor_exit_cutscene(void) {
@@ -648,7 +648,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
-    FUN_L00_002330d0();
+    update_hero_item_moby_flags();
     vendor_state_base = (char *)&vendor_menu;
     transform_vector_by_basis(&world_position,
                               &vendor_exit_hero_local_offset_gp,

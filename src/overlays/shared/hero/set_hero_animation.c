@@ -750,9 +750,9 @@ void set_hero_item_moby_flag_bit0(void) {
    block, as retail re-forms it from the saved %hi before each one. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233950), where it is exact; names translated to the US level program. */
 
-void FUN_L00_002330d0(void);
+void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 
-void FUN_L00_002330d0(void) {
+void update_hero_item_moby_flags(void) {
     struct Hero *hero_item_flag_clear_state = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
