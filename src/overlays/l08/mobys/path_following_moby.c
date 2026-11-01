@@ -135,7 +135,7 @@ void path_following_moby_update(char *moby) {
             moby_vars->unk4 = moby_vars->unk4 * (float)*path;
             moby_vars->unkC = randf_sym(0.0f, 5.0f);
         }
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = MOBY_STATE_FOLLOW_PATH;
         MOBY(moby)->update_dist = 0xFF;
     case MOBY_STATE_FOLLOW_PATH: {
         float path_point_count;
@@ -224,7 +224,7 @@ void path_following_moby_update(char *moby) {
                         1,
                         -1,
                         0);
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = MOBY_STATE_FALLING;
     }
     MOBY(moby)->hit_slot = 0xFF;
     if (MOBY(moby)->visible != 0) {
