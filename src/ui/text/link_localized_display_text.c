@@ -4,12 +4,9 @@
 
 #include "rnc/ui/help/help_state.h"
 
-typedef struct {
-    void *text;
-    s32   pad[3];
-} TextEntry;
+#include "rnc/ui/help/message_entry.h"
 
-extern TextEntry *help_msgs __asm__("D_0015F6A0");
+extern HelpMessageEntry *help_msgs __asm__("D_0015F6A0");
 
 #include "rnc/rendering/screen.h"
 

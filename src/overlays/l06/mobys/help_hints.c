@@ -50,8 +50,8 @@ void help_hints_update(struct Moby *moby) {
                 if (help_records[0x2F].count <= 0xFFFE) {
                     help_records[0x2F].count++;
                 }
-                if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x2F].unk2) {
-                    help_records[0x2F].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x2F].latest_time_bucket) {
+                    help_records[0x2F].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                 }
                 help_records[0x2F].level_mask =
                     help_records[0x2F].level_mask | (1 << current_level_index) | 0x80000000;
@@ -60,8 +60,8 @@ void help_hints_update(struct Moby *moby) {
                 if (help_records[0x2E].count <= 0xFFFE) {
                     help_records[0x2E].count++;
                 }
-                if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x2E].unk2) {
-                    help_records[0x2E].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x2E].latest_time_bucket) {
+                    help_records[0x2E].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                 }
                 help_records[0x2E].level_mask =
                     help_records[0x2E].level_mask | (1 << current_level_index) | 0x80000000;
@@ -77,19 +77,22 @@ void help_hints_update(struct Moby *moby) {
                 indexed_moby->state != 0xFE && indexed_moby->state != 0xFD &&
                 indexed_moby->state != 1) {
                 if (help_records[0x28].count != 0) {
-                    elapsed = scale_game_frames(D_0015EEA4) - help_records[0x28].unk2 * 600;
+                    elapsed =
+                        scale_game_frames(D_0015EEA4) - help_records[0x28].latest_time_bucket * 600;
                     if ((int)(scale_game_frames(18) * 60.0f) < elapsed ||
-                        help_records[0x28].unk2 * 600 == 0) {
+                        help_records[0x28].latest_time_bucket * 600 == 0) {
                         help_request(0x1771, 0x28);
-                    } else if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x28].unk2) {
-                        help_records[0x28].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    } else if (scale_game_frames(D_0015EEA4) / 600 >
+                               help_records[0x28].latest_time_bucket) {
+                        help_records[0x28].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                     }
                 } else {
                     if (help_records[0x28].count <= 0xFFFE) {
                         help_records[0x28].count++;
                     }
-                    if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x28].unk2) {
-                        help_records[0x28].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (scale_game_frames(D_0015EEA4) / 600 >
+                        help_records[0x28].latest_time_bucket) {
+                        help_records[0x28].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                     }
                     help_records[0x28].level_mask =
                         help_records[0x28].level_mask | (1 << current_level_index) | 0x80000000;

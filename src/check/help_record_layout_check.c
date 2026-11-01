@@ -8,5 +8,5 @@
 
 SIZE_CHECK(record, HelpRecord, 8);
 OFFSET_CHECK(count, HelpRecord, count, 0);
-OFFSET_CHECK(best, HelpRecord, best, 2);
-OFFSET_CHECK(flags, HelpRecord, flags, 4);
+OFFSET_CHECK(latest_time_bucket, HelpRecord, latest_time_bucket, 2);
+OFFSET_CHECK(level_flags, HelpRecord, level_flags, 4);

@@ -275,12 +275,12 @@ void beam_barrier_update(struct Moby *moby) {
             }
             {
                 int best = scale_game_frames(D_0015EEA4_macro) / 600;
-                if ((int)D_00141968[43].best < best) {
+                if ((int)D_00141968[43].latest_time_bucket < best) {
                     int new_best = scale_game_frames(D_0015EEA4_macro) / 600;
-                    D_00141968[43].best = new_best;
+                    D_00141968[43].latest_time_bucket = new_best;
                 }
-                D_00141968[43].flags =
-                    D_00141968[43].flags | (1 << current_level_index_macro) | 0x80000000;
+                D_00141968[43].level_flags =
+                    D_00141968[43].level_flags | (1 << current_level_index_macro) | 0x80000000;
             }
         }
         return;

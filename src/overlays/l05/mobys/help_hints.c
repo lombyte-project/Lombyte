@@ -23,29 +23,24 @@ extern f32           D_0013F3D8, D_0013F3DC;
 extern void          help_request(int, int) __asm__("FUN_L00_00203908");
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
 
-typedef struct {
-    unsigned short count, best;
-    int            flags;
-} VendorEventRecord;
-
-extern VendorEventRecord D_00141968[];
-#define D_00141B8C (D_00141968[68].flags)
-#define D_00141BAC (D_00141968[72].flags)
-#define D_00141BF4 (D_00141968[81].flags)
-#define D_00141CFC (D_00141968[114].flags)
-#define D_00141A82 (D_00141968[35].best)
+extern struct UsageStat D_00141968[];
+#define D_00141B8C (D_00141968[68].level_mask)
+#define D_00141BAC (D_00141968[72].level_mask)
+#define D_00141BF4 (D_00141968[81].level_mask)
+#define D_00141CFC (D_00141968[114].level_mask)
+#define D_00141A82 (D_00141968[35].latest_time_bucket)
 #define D_00141A88 (D_00141968[36].count)
-#define D_00141A8A (D_00141968[36].best)
-#define D_00141A8C (D_00141968[36].flags)
+#define D_00141A8A (D_00141968[36].latest_time_bucket)
+#define D_00141A8C (D_00141968[36].level_mask)
 #define D_00141A90 (D_00141968[37].count)
-#define D_00141A92 (D_00141968[37].best)
-#define D_00141A94 (D_00141968[37].flags)
+#define D_00141A92 (D_00141968[37].latest_time_bucket)
+#define D_00141A94 (D_00141968[37].level_mask)
 #define D_00141A98 (D_00141968[38].count)
-#define D_00141A9C (D_00141968[38].flags)
+#define D_00141A9C (D_00141968[38].level_mask)
 #define D_00141A78 (D_00141968[34].count)
 #define D_00141C58 (D_00141968[94].count)
-#define D_00141C5A (D_00141968[94].best)
-#define D_00141C5C (D_00141968[94].flags)
+#define D_00141C5A (D_00141968[94].latest_time_bucket)
+#define D_00141C5C (D_00141968[94].level_mask)
 #define D_00141B88 (D_00141968[68].count)
 #define D_00141BB8 (D_00141968[74].count)
 typedef struct {
@@ -107,7 +102,8 @@ void help_hints_update(struct Moby *moby) {
         }
     }
     if (is_point_inside_clip_volume(D_0013F3D0, gameplay_event_pvars[16])) {
-        elapsed = scale_game_frames(gameplay_event_frame_count) - usage_stats.stat[9].unk2 * 600;
+        elapsed = scale_game_frames(gameplay_event_frame_count) -
+                  usage_stats.stat[9].latest_time_bucket * 600;
         limit = (int)((float)scale_game_frames(0xe10) * 60.0f);
         if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << gameplay_event_level_index)) < 1)
             help_request(0x7dd, 0x48);

@@ -11,37 +11,32 @@
 
 #include "rnc/ui/help/help_state.h"
 
-typedef struct {
-    void *text;
-    s32   pad04;
-    s32   id;
-    s32   pad0C;
-} TextEntry;
+#include "rnc/ui/help/message_entry.h"
 
 #include "rnc/ui/help/help_record.h"
 #include "rnc/math/fast_math.h"
 
-extern TextEntry *help_msgs __asm__("D_0015F6A0");
+extern HelpMessageEntry *help_msgs __asm__("D_0015F6A0");
 
 extern s32 fast_dec_timer(void *) __asm__("func_001F9740");
 
 void update_help_state(void) __asm__("FUN_001fde90");
 
-#define PLAY_TIME (scale_game_frames(D_0015EEA4) / 600)
+#define PLAY_TIME_BUCKET (scale_game_frames(D_0015EEA4) / 600)
 
 #define RECORD_COUNT()                                 \
     if (D_00141968[help_state.entry].count < 0xFFFF) { \
         D_00141968[help_state.entry].count++;          \
     }
 
-#define RECORD_BEST()                                    \
-    if (PLAY_TIME > D_00141968[help_state.entry].best) { \
-        D_00141968[help_state.entry].best = PLAY_TIME;   \
+#define RECORD_LATEST_TIME()                                                  \
+    if (PLAY_TIME_BUCKET > D_00141968[help_state.entry].latest_time_bucket) { \
+        D_00141968[help_state.entry].latest_time_bucket = PLAY_TIME_BUCKET;   \
     }
 
-#define RECORD_FLAGS()                   \
-    D_00141968[help_state.entry].flags = \
-        D_00141968[help_state.entry].flags | (1 << current_level_index) | 0x80000000
+#define RECORD_FLAGS()                         \
+    D_00141968[help_state.entry].level_flags = \
+        D_00141968[help_state.entry].level_flags | (1 << current_level_index) | 0x80000000
 
 void update_help_state(void) {
     enum {
@@ -91,7 +86,7 @@ void update_help_state(void) {
             }
             RECORD_COUNT();
         }
-        RECORD_BEST();
+        RECORD_LATEST_TIME();
         RECORD_FLAGS();
         help_state.msg = -1;
         help_state.state = 0;
@@ -112,14 +107,14 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        id = help_msgs[help_state.msg].id;
+        id = help_msgs[help_state.msg].audio_track_offset;
         if (id >= 0 && music_stream_state.secondary.handle == 0 &&
             music_stream_state.queued_secondary_track == -1) {
             music_stream_state.queued_secondary_track = id + 0x7530;
         }
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
-            RECORD_BEST();
+            RECORD_LATEST_TIME();
             RECORD_FLAGS();
             help_state.timer = 8 - help_state.timer;
             help_state.state = 7;
@@ -136,13 +131,13 @@ void update_help_state(void) {
         force_help_message(5, 0);
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
-            RECORD_BEST();
+            RECORD_LATEST_TIME();
             help_state.state = 7;
             help_state.timer = 0;
             RECORD_FLAGS();
         } else if (help_state.timer >= scale_game_frames(0x18)) {
             if (music_stream_state.secondary.state == 3 ||
-                (id = help_msgs[help_state.msg].id) == -1 ||
+                (id = help_msgs[help_state.msg].audio_track_offset) == -1 ||
                 id != music_stream_state.secondary.track - 0x7530) {
                 help_state.state = 3;
                 help_state.timer = 0;
@@ -155,7 +150,7 @@ void update_help_state(void) {
         force_help_message(5, 0);
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
-            RECORD_BEST();
+            RECORD_LATEST_TIME();
             help_state.state = 7;
             help_state.timer = 0;
             RECORD_FLAGS();
@@ -171,12 +166,12 @@ void update_help_state(void) {
         force_help_message(5, 0);
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
-            RECORD_BEST();
+            RECORD_LATEST_TIME();
             help_state.state = 6;
             RECORD_FLAGS();
             help_state.timer = 4 - help_state.timer;
         } else if (help_state.timer >= 4) {
-            id = help_msgs[help_state.msg].id;
+            id = help_msgs[help_state.msg].audio_track_offset;
             if (id != -1 && id == music_stream_state.secondary.track - 0x7530 &&
                 music_stream_state.secondary.state == 3) {
                 continue_audio_stream_if_ready();
@@ -192,13 +187,13 @@ void update_help_state(void) {
 
         force_help_message(5, 0);
         if ((help_state.timer >= scale_game_frames(0x1A4) &&
-             ((id = help_msgs[help_state.msg].id) == -1 ||
+             ((id = help_msgs[help_state.msg].audio_track_offset) == -1 ||
               id != music_stream_state.secondary.track - 0x7530 ||
               (music_stream_state.secondary.handle == 0 &&
                music_stream_state.queued_secondary_track == -1))) ||
             (controller_state.pressed & PAD_TRIANGLE)) {
             RECORD_COUNT();
-            RECORD_BEST();
+            RECORD_LATEST_TIME();
             help_state.state = 6;
             help_state.timer = 0;
             RECORD_FLAGS();
@@ -217,7 +212,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        id = help_msgs[help_state.msg].id;
+        id = help_msgs[help_state.msg].audio_track_offset;
         if (id != -1 && id == music_stream_state.secondary.track - 0x7530 &&
             (u16)music_stream_state.secondary.state - 6U >= 2) {
             music_stream_state.secondary.state = 5;

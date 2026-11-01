@@ -153,8 +153,8 @@ void run_level_main_loop(void) {
         item_usage[current_level_index].count++;
     }
     per = 600;
-    if (scale_game_frames(D_0015EEA4) / per > item_usage[current_level_index].unk2) {
-        item_usage[current_level_index].unk2 = scale_game_frames(D_0015EEA4) / 600;
+    if (scale_game_frames(D_0015EEA4) / per > item_usage[current_level_index].latest_time_bucket) {
+        item_usage[current_level_index].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
     }
     item_usage[current_level_index].level_mask =
         item_usage[current_level_index].level_mask | (1 << current_level_index) | 0x80000000;
@@ -312,8 +312,10 @@ void run_level_main_loop(void) {
             init_hud();
         }
         per = 600;
-        if (scale_game_frames(D_0015EEA4) / per > item_usage[current_level_index].unk2) {
-            item_usage[current_level_index].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / per >
+            item_usage[current_level_index].latest_time_bucket) {
+            item_usage[current_level_index].latest_time_bucket =
+                scale_game_frames(D_0015EEA4) / 600;
         }
     }
     do_space_transition();
