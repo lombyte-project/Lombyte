@@ -91,6 +91,9 @@ int D_L18_001618A8 = 0;
 unsigned char *spawn_on_path(u128 *a, int b, int c, int d) __asm__("FUN_L00_002c52a8");
 
 unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_amount, int d) {
+    enum {
+        AMMO_PICKUP_WAIT_FOR_COLLECTION = 1
+    };
     unsigned char *spawned_moby = 0;
     {
         ItemDef *spawn_config_entry = (ItemDef *)(weapon_index * 0x4C + (u8 *)item_defs_lui);
@@ -103,7 +106,7 @@ unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_am
         MOBY(spawned_moby)->draw_dist = 0xff;
         moby_vars = *(int **)(spawned_moby + 0x78);
         MOBY(spawned_moby)->visible = 1;
-        MOBY(spawned_moby)->state = 1;
+        MOBY(spawned_moby)->state = AMMO_PICKUP_WAIT_FOR_COLLECTION;
         MOBY(spawned_moby)->command = 0;
         qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         if (ammo_amount == -1)
