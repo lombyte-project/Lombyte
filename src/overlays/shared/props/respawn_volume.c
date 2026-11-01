@@ -29,7 +29,7 @@ void respawn_volume_update(char *moby) {
     int          j;
     switch (((unsigned char *)moby)[0x20]) {
     case INITIALIZE_TRIGGER_MONITOR:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = CHECK_HERO_TRIGGER_VOLUMES;
         ((unsigned char *)moby)[0x30] = 0xFF;
         return;
     case CHECK_HERO_TRIGGER_VOLUMES:
