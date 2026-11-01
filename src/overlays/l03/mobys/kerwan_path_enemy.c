@@ -1651,7 +1651,9 @@ extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__(
 
 /* Picks the path node to head for next: walks the path ring from the start and keeps the node best aligned
  * with the target direction, else the one nearest the target (but at least 16 units away). */
-void FUN_L03_002c9ca0(Moby2C8398 *moby) {
+void select_kerwan_path_enemy_next_node(Moby2C8398 *moby) __asm__("FUN_L03_002c9ca0");
+
+void select_kerwan_path_enemy_next_node(Moby2C8398 *moby) {
     Tgt2C8398    target;
     float        near[4];
     float        pt[4];
