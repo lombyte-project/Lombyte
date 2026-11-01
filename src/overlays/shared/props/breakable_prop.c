@@ -45,14 +45,14 @@ void prop_breakup_update(char *breakup_moby) {
     struct Moby *hit_moby = find_moby_hit(breakup_moby, 0x10000, 0);
     switch (((unsigned char *)breakup_moby)[0x20]) {
     case MOBY_STATE_INITIALIZE:
-        MOBY(breakup_moby)->state = 1;
+        MOBY(breakup_moby)->state = MOBY_STATE_WAIT_FOR_HIT;
         break;
     case MOBY_STATE_WAIT_FOR_HIT:
         if (hit_moby != 0 && hit_moby->scale > 0.0f) {
             flag = 1;
         }
         if (flag) {
-            MOBY(breakup_moby)->state = 2;
+            MOBY(breakup_moby)->state = MOBY_STATE_SPAWN_AND_REMOVE;
         }
         break;
     case MOBY_STATE_SPAWN_AND_REMOVE: {
