@@ -82,6 +82,9 @@ extern int  D_L12_00161F24 __attribute__((sda));
 void update_planetbuster_maximus_guns(char *moby) __asm__("FUN_L12_003054b0");
 
 void update_planetbuster_maximus_guns(char *moby) {
+    enum {
+        PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
+    };
     char  *owner_data = ((char *)MOBY(moby)->pvars);
     int    i;
     float  position_buffer[4];
@@ -397,7 +400,7 @@ void update_planetbuster_maximus_guns(char *moby) {
     update_planetbuster_maximus_detached_parts(moby);
     if (*(short *)(owner_data + 0x5FC) <= 0 && D_L12_00161F04_gp == 0) {
         D_L12_00161F24 = 1;
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = PLANETBUSTER_DROP_PARTS_AND_TRANSITION;
         MOBY(moby)->command = 0;
     }
 }
