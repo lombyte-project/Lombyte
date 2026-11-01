@@ -14,6 +14,9 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("func_00212F90")
 void update_menu_preview_animation_pose(void *preview) __asm__("FUN_00224fc0");
 
 void update_menu_preview_animation_pose(void *preview) {
+    enum {
+        MENU_PREVIEW_ANIMATION_COUNTDOWN_EXPIRED = 0
+    };
     PauseMoby   *moby = preview;
     struct Moby *anim = (struct Moby *)moby;
     f32          transform[16];
@@ -22,7 +25,7 @@ void update_menu_preview_animation_pose(void *preview) {
     if (anim->anim_flags & 2) {
         if (moby->oclass == 0x25F) {
             if (anim->seq == 6) {
-                if (--anim->state == 0) {
+                if (--anim->state == MENU_PREVIEW_ANIMATION_COUNTDOWN_EXPIRED) {
                     if (anim->prev_seq != 1) {
                         blend_moby_animation(moby, 1, 0, 10);
                     }
