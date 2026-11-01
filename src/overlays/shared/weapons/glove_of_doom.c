@@ -455,6 +455,9 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position,
                                      u8          *released_moby,
 
                                      void *initial_velocity) {
+    enum {
+        GLOVE_HELD_MOBY_RELEASED = 2
+    };
     char        *q = *(char **)(released_moby + 0x78);
     struct Hero *P;
     char        *released_moby_position, *collision_reference_moby;
@@ -485,5 +488,5 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position,
         reflect_vector(q, q, collision_hit_cursor);
         FUN_001f9a68_002c82f0(q, q, 0.6f);
     }
-    MOBY(released_moby)->state = 2;
+    MOBY(released_moby)->state = GLOVE_HELD_MOBY_RELEASED;
 }
