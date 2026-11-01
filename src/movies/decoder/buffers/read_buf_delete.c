@@ -2,7 +2,7 @@
 
 void read_buf_delete(struct ReadBuf *buf) __asm__("func_0023B958");
 
-void read_buf_delete(struct ReadBuf *buf) {
+void read_buf_delete(struct ReadBuf *stream_read_buffer) {
 }
 
 /* Recovered original symbol name. */
