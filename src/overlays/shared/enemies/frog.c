@@ -1037,7 +1037,7 @@ s32 cancel_moby_suction_and_save_state(unsigned char *moby) {
     previous_state = MOBY(moby)->state;
     if (previous_state != FROG_STATE_SUCK_CANNON_HELD) {
         MOBY(moby)->command = previous_state;
-        MOBY(moby)->state = 0x10;
+        MOBY(moby)->state = FROG_STATE_SUCK_CANNON_HELD;
     }
     return helper_result;
 }
