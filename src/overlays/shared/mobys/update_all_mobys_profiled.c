@@ -32,6 +32,9 @@ extern s32          fptodp(f32) __asm__("FUN_00120478");
 void update_all_mobys_profiled(void) __asm__("FUN_L00_002648e0");
 
 void update_all_mobys_profiled(void) {
+    enum {
+        MOBY_STATE_UPDATE_MIN = 0
+    };
     struct Moby *moby;
     MobyProfile *profile;
     s32          i;
@@ -58,7 +61,7 @@ void update_all_mobys_profiled(void) {
     moby = suck_moby_list = FUN_L00_00250768();
     while (moby != 0) {
         s32 current_ticks;
-        if ((s8)moby->state >= 0) {
+        if ((s8)moby->state >= MOBY_STATE_UPDATE_MIN) {
             *(volatile u32 *)0x10000000 = 0;
             if (!(moby->flags & 0x40)) {
                 FUN_L00_00250480(moby);
