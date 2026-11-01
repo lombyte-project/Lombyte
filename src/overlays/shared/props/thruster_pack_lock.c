@@ -745,6 +745,9 @@ void update_moby_hit_stats_and_state(char *moby) {
         BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE = 2,
         BLARG_SHIP_BURST_AND_DEACTIVATE = 6
     };
+    enum {
+        BLARG_SHIP_INACTIVE = 4
+    };
     char        *moby_vars = ((char *)MOBY(moby)->pvars);
     char        *hit_record = find_moby_hit(moby, 0x330000, 0);
     struct Hero *player_hero;
@@ -793,12 +796,12 @@ void update_moby_hit_stats_and_state(char *moby) {
     } else if (((unsigned char *)moby)[0x20] == 5) {
         struct Hero *hero_for_state_check = &hero;
         if (hero_for_state_check->state.current != 0x32) {
-            MOBY(moby)->state = 4;
+            MOBY(moby)->state = BLARG_SHIP_INACTIVE;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags |= 1;
         }
         if (coll_sphere(1.0f, &MOBY(moby)->pos, 0, moby)) {
-            MOBY(moby)->state = 6;
+            MOBY(moby)->state = BLARG_SHIP_BURST_AND_DEACTIVATE;
             if (((unsigned char *)moby)[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
