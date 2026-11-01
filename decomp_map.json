@@ -2596,10 +2596,17 @@
         },
         {
           "file": "src/overlays/shared/math/interpolation/spring_turn.c",
-          "functions": 17,
-          "matching_c": 17,
-          "bytes_total": 5928,
-          "bytes_matching_c": 5928
+          "functions": 16,
+          "matching_c": 16,
+          "bytes_total": 5012,
+          "bytes_matching_c": 5012
+        },
+        {
+          "file": "src/overlays/shared/mobys/update_object_wander_movement.c",
+          "functions": 2,
+          "matching_c": 2,
+          "bytes_total": 1468,
+          "bytes_matching_c": 1468
         },
         {
           "file": "src/overlays/shared/mobys/find_moby_hit.c",
@@ -2698,13 +2705,6 @@
           "matching_c": 1,
           "bytes_total": 48,
           "bytes_matching_c": 48
-        },
-        {
-          "file": "src/overlays/shared/mobys/update_object_wander_movement.c",
-          "functions": 1,
-          "matching_c": 1,
-          "bytes_total": 552,
-          "bytes_matching_c": 552
         },
         {
           "file": "src/overlays/shared/mobys/test_path_segment_strict_crossing.c",

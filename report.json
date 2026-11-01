@@ -23058,13 +23058,13 @@
       "name": "shared/math/interpolation/spring_turn",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "5928",
-        "matched_code": "5928",
+        "total_code": "5012",
+        "matched_code": "5012",
         "matched_code_percent": 100.0,
-        "total_functions": 17,
-        "matched_functions": 17,
+        "total_functions": 16,
+        "matched_functions": 16,
         "matched_functions_percent": 100.0,
-        "complete_code": "5928",
+        "complete_code": "5012",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -23122,15 +23122,6 @@
           "address": "1280",
           "metadata": {
             "virtual_address": "2458608"
-          }
-        },
-        {
-          "name": "FUN_L00_00258490",
-          "size": "916",
-          "fuzzy_match_percent": 100.0,
-          "address": "1440",
-          "metadata": {
-            "virtual_address": "2458768"
           }
         },
         {
@@ -23221,6 +23212,49 @@
           "address": "5808",
           "metadata": {
             "virtual_address": "2463136"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "overlays",
+          "shared"
+        ]
+      }
+    },
+    {
+      "name": "shared/mobys/update_object_wander_movement",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "1468",
+        "matched_code": "1468",
+        "matched_code_percent": 100.0,
+        "total_functions": 2,
+        "matched_functions": 2,
+        "matched_functions_percent": 100.0,
+        "complete_code": "1468",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "FUN_L00_00258490",
+          "size": "916",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "2458768"
+          }
+        },
+        {
+          "name": "FUN_L00_00261630",
+          "size": "552",
+          "fuzzy_match_percent": 100.0,
+          "address": "37280",
+          "metadata": {
+            "virtual_address": "2496048"
           }
         }
       ],
@@ -24847,40 +24881,6 @@
           "address": "0",
           "metadata": {
             "virtual_address": "2491344"
-          }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "overlays",
-          "shared"
-        ]
-      }
-    },
-    {
-      "name": "shared/mobys/update_object_wander_movement",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "552",
-        "matched_code": "552",
-        "matched_code_percent": 100.0,
-        "total_functions": 1,
-        "matched_functions": 1,
-        "matched_functions_percent": 100.0,
-        "complete_code": "552",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
-        {
-          "name": "FUN_L00_00261630",
-          "size": "552",
-          "fuzzy_match_percent": 100.0,
-          "address": "0",
-          "metadata": {
-            "virtual_address": "2496048"
           }
         }
       ],
