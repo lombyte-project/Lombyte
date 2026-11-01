@@ -36,6 +36,15 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 
+enum {
+    CHOMPER_INITIALIZE = 0,
+    CHOMPER_WAIT_TO_APPROACH_TARGET = 1,
+    CHOMPER_APPROACH_TARGET = 4,
+    CHOMPER_FACE_TARGET = 5,
+    CHOMPER_RETURN_HOME = 6,
+    CHOMPER_KNOCKBACK = 8
+};
+
 extern int   scale_game_frames(int);
 extern float frame_time, D_0015EE70;
 extern void  FUN_L00_00257470(void *, int, int);
@@ -235,15 +244,6 @@ typedef struct {
 } L16PursuitMoby;
 
 #include "rnc/overlay/l16/mobys/chomper_globals.h"
-
-enum {
-    CHOMPER_INITIALIZE = 0,
-    CHOMPER_WAIT_TO_APPROACH_TARGET = 1,
-    CHOMPER_APPROACH_TARGET = 4,
-    CHOMPER_FACE_TARGET = 5,
-    CHOMPER_RETURN_HOME = 6,
-    CHOMPER_KNOCKBACK = 8
-};
 
 extern float chomper_knockback_horizontal_speed_approach_rate_gp __asm__("D_L16_00161E58")
     __attribute__((sda));

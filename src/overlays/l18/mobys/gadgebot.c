@@ -19,6 +19,19 @@
 #include "rnc/math_consts.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 
+enum {
+    GADGEBOT_INITIALIZE = 0,
+    GADGEBOT_LAUNCH_FLIGHT = 1,
+    GADGEBOT_TARGET_HERO = 2,
+    GADGEBOT_WAIT_TO_APPROACH = 2,
+    GADGEBOT_APPROACH_TARGET = 3,
+    GADGEBOT_FACE_TARGET = 4,
+    GADGEBOT_DEATH_FALL = 5,
+    GADGEBOT_EXPLODE = 6,
+    GADGEBOT_SUCK_CANNON_SUCTION = 7,
+    GADGEBOT_IDLE = 8
+};
+
 extern int            D_L18_0015F5C4;
 extern unsigned char *D_L18_0015FFD8;
 extern s32            random_integer_below(s32) __asm__("FUN_00213260");
@@ -286,19 +299,6 @@ extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp __asm_
     __attribute__((sda));
 
 #include "rnc/overlay/l18/mobys/gadgebot_data/update_gadgebot_damage_target_and_glow.h"
-
-enum {
-    GADGEBOT_INITIALIZE = 0,
-    GADGEBOT_LAUNCH_FLIGHT = 1,
-    GADGEBOT_TARGET_HERO = 2,
-    GADGEBOT_WAIT_TO_APPROACH = 2,
-    GADGEBOT_APPROACH_TARGET = 3,
-    GADGEBOT_FACE_TARGET = 4,
-    GADGEBOT_DEATH_FALL = 5,
-    GADGEBOT_EXPLODE = 6,
-    GADGEBOT_SUCK_CANNON_SUCTION = 7,
-    GADGEBOT_IDLE = 8
-};
 
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
 void update_gadgebot_damage_target_and_glow(struct Moby *moby) {

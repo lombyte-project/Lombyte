@@ -16,6 +16,19 @@
 #include "rnc/overlay/l12/mobys/miner.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
 
+enum {
+    BLARG_TROOPER_INITIALIZE = 0,
+    BLARG_TROOPER_FOLLOW_WAYPOINTS = 1,
+    BLARG_TROOPER_WAIT_FOR_ACTIVATION = 2,
+    BLARG_TROOPER_APPROACH_TARGET = 3,
+    BLARG_TROOPER_KNOCKBACK_RECOVERY = 4,
+    BLARG_TROOPER_PREPARE_SHOT = 5,
+    BLARG_TROOPER_FIRE_PROJECTILE = 6,
+    BLARG_TROOPER_WAIT_BETWEEN_SHOTS = 7,
+    BLARG_TROOPER_RETURN_HOME = 8,
+    BLARG_TROOPER_DEATH_FALL = 9
+};
+
 extern char D_L12_00167240[];
 
 #include "rnc/overlay/shared/world/level_path.h"
@@ -47,19 +60,6 @@ extern int  step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 extern int  point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
 #include "rnc/overlay/shared/world/level_globals.h"
-
-enum {
-    BLARG_TROOPER_INITIALIZE = 0,
-    BLARG_TROOPER_FOLLOW_WAYPOINTS = 1,
-    BLARG_TROOPER_WAIT_FOR_ACTIVATION = 2,
-    BLARG_TROOPER_APPROACH_TARGET = 3,
-    BLARG_TROOPER_KNOCKBACK_RECOVERY = 4,
-    BLARG_TROOPER_PREPARE_SHOT = 5,
-    BLARG_TROOPER_FIRE_PROJECTILE = 6,
-    BLARG_TROOPER_WAIT_BETWEEN_SHOTS = 7,
-    BLARG_TROOPER_RETURN_HOME = 8,
-    BLARG_TROOPER_DEATH_FALL = 9
-};
 
 extern s32   count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern void  trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");

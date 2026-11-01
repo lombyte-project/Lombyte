@@ -12,6 +12,16 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 
+enum {
+    BLARG_HELICOPTER_INITIALIZE = 0,
+    BLARG_HELICOPTER_WAIT_FOR_ACTIVATION = 1,
+    BLARG_HELICOPTER_FOLLOW_INITIAL_PATH = 2,
+    BLARG_HELICOPTER_AIM_AND_FIRE = 3,
+    BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS = 4,
+    BLARG_HELICOPTER_KNOCKBACK = 5,
+    BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6
+};
+
 extern char D_L12_00167240[];
 
 #include "rnc/overlay/shared/world/level_path.h"
@@ -87,16 +97,6 @@ extern int                      D_L12_001619A0 __attribute__((sda));
 
 #include "rnc/game/game_globals.h"
 #include "rnc/audio/voice_pool.h"
-
-enum {
-    BLARG_HELICOPTER_INITIALIZE = 0,
-    BLARG_HELICOPTER_WAIT_FOR_ACTIVATION = 1,
-    BLARG_HELICOPTER_FOLLOW_INITIAL_PATH = 2,
-    BLARG_HELICOPTER_AIM_AND_FIRE = 3,
-    BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS = 4,
-    BLARG_HELICOPTER_KNOCKBACK = 5,
-    BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6
-};
 
 extern unsigned char             D_0013E550[];
 extern unsigned char D_0013D4CB  NOT_SDA;

@@ -8,6 +8,14 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 
+enum {
+    SAND_SHARK_NEST_INITIALIZE = 0,
+    SAND_SHARK_NEST_WAIT_FOR_SPAWN = 1,
+    SAND_SHARK_NEST_LAUNCH_SAND_SHARK = 2,
+    SAND_SHARK_NEST_HIT_RECOVERY = 3,
+    SAND_SHARK_NEST_DEATH_KNOCKBACK = 4
+};
+
 extern float D_0015ED6C;
 extern int   step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 
@@ -25,14 +33,6 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 #include "qcopy.h"
-
-enum {
-    SAND_SHARK_NEST_INITIALIZE = 0,
-    SAND_SHARK_NEST_WAIT_FOR_SPAWN = 1,
-    SAND_SHARK_NEST_LAUNCH_SAND_SHARK = 2,
-    SAND_SHARK_NEST_HIT_RECOVERY = 3,
-    SAND_SHARK_NEST_DEATH_KNOCKBACK = 4
-};
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
 

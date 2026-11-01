@@ -21,6 +21,9 @@
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 #include "rnc/sdk/libc/stdlib.h"
 
+/* Ground enemy update: damage reaction, leash and wake checks, then its chase / attack / return state machine. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_002E39E0), where it is exact; names translated to the US level program. */
+
 enum {
     GROUND_ENEMY_STATE_INITIALIZE = 0,
     GROUND_ENEMY_STATE_IDLE = 1,
@@ -35,9 +38,6 @@ enum {
     GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK = 13,
     GROUND_ENEMY_STATE_FATAL_KNOCKBACK = 99
 };
-
-/* Ground enemy update: damage reaction, leash and wake checks, then its chase / attack / return state machine. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_002E39E0), where it is exact; names translated to the US level program. */
 
 typedef struct Moby Moby;
 typedef struct Hero Hero;

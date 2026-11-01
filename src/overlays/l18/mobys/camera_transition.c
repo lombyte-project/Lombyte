@@ -21,6 +21,11 @@
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 
+enum {
+    CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2,
+    CAMERA_TRANSITION_STATE_INTERPOLATE_TRANSITION = 3
+};
+
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 
@@ -221,11 +226,6 @@ void boss_camera_transition_update(struct Moby *moby) {
 }
 
 #include "qcopy.h"
-
-enum {
-    CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2,
-    CAMERA_TRANSITION_STATE_INTERPOLATE_TRANSITION = 3
-};
 
 extern int scale_game_frames(int);
 

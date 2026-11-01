@@ -13,6 +13,12 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
 
+enum {
+    FLOAT_MINE_INITIALIZE = 0,
+    FLOAT_MINE_ACTIVE = 1,
+    FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN = 2
+};
+
 typedef struct {
     struct Moby *link;
     float        rest_z;
@@ -40,12 +46,6 @@ typedef struct {
 extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 
 #include "rnc/overlay/shared/enemies/bolt_thief_mine_data/bolt_thief_mine_update.h"
-
-enum {
-    FLOAT_MINE_INITIALIZE = 0,
-    FLOAT_MINE_ACTIVE = 1,
-    FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN = 2
-};
 
 extern float probe_ground_height(float, void *, int) __asm__("FUN_00213508");
 extern int   resolve_moby_hit_response(

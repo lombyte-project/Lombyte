@@ -18,6 +18,18 @@
 
 #include "qcopy.h"
 
+enum {
+    STATE_INITIALIZE = 0,
+    STATE_BALLISTIC_FLIGHT = 1,
+    STATE_POST_FLIGHT_SETTLING = 2,
+    STATE_APPROACH_NEARBY_TARGET = 3,
+    STATE_WAIT_TO_RESUME_APPROACH = 4
+};
+
+enum {
+    STATE_INACTIVE = 5
+};
+
 extern int scale_game_frames(int);
 
 /* Moby update: hovers, drifts toward the player and plays its animations by state. */
@@ -142,18 +154,6 @@ void moby_568_update(struct Moby *moby) {
 }
 
 #include "sda.h"
-
-enum {
-    STATE_INITIALIZE = 0,
-    STATE_BALLISTIC_FLIGHT = 1,
-    STATE_POST_FLIGHT_SETTLING = 2,
-    STATE_APPROACH_NEARBY_TARGET = 3,
-    STATE_WAIT_TO_RESUME_APPROACH = 4
-};
-
-enum {
-    STATE_INACTIVE = 5
-};
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D70E8), where it is exact; names translated to the US level program. */

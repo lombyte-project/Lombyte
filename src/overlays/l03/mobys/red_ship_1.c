@@ -24,14 +24,14 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/game/item_state.h"
 
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
+
 enum {
     RED_SHIP_INITIALIZE = 0,
     RED_SHIP_FOLLOW_PATH_SPLINE = 1,
     RED_SHIP_WAIT_FOR_PATH = 2,
     RED_SHIP_WAIT_FOR_MOVEMENT_TIMER = 3
 };
-
-/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
 
 extern int D_L03_0015F5CC; /* no foreign declaration */
 

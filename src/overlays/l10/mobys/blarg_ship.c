@@ -21,6 +21,22 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l10/mobys/aligned_vector.h"
 
+enum {
+    BLARG_SHIP_STATE_INITIALIZE = 0,
+    BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME = 1,
+    BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH = 2,
+    BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH = 3,
+    BLARG_SHIP_STATE_FIRE_AT_TARGET = 4,
+    BLARG_SHIP_STATE_FIRE_COOLDOWN = 5,
+    BLARG_SHIP_STATE_FLY_AWAY = 6,
+    BLARG_SHIP_STATE_HIT_REACTION = 7,
+    BLARG_SHIP_STATE_EXPLODE = 8
+};
+
+enum {
+    HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1
+};
+
 typedef struct Moby Moby;
 extern float        D_0015ED6C;
 extern float        D_0015ED6C, D_0015ED70;
@@ -134,22 +150,6 @@ extern s32   D_0015ED84;
 extern int   D_L10_00161EE4 __attribute__((sda));
 
 #include "rnc/overlay/l10/mobys/blarg_ship_globals.h"
-
-enum {
-    BLARG_SHIP_STATE_INITIALIZE = 0,
-    BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME = 1,
-    BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH = 2,
-    BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH = 3,
-    BLARG_SHIP_STATE_FIRE_AT_TARGET = 4,
-    BLARG_SHIP_STATE_FIRE_COOLDOWN = 5,
-    BLARG_SHIP_STATE_FLY_AWAY = 6,
-    BLARG_SHIP_STATE_HIT_REACTION = 7,
-    BLARG_SHIP_STATE_EXPLODE = 8
-};
-
-enum {
-    HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1
-};
 
 float                blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") = 32.0f;
 float                blarg_ship_firing_animation_speed_gp __asm__("D_L10_00161EEC") = 2.0f;

@@ -25,6 +25,19 @@
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
 
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNETIC = 2
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 0xD
+};
+
+enum {
+    CUTSCENE_MODE_INACTIVE = 0
+};
+
 extern int           hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern unsigned char D_0013E533[];
 
@@ -1422,19 +1435,6 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
 
 #include "rnc/sdk/eetypes.h"
 #include "rnc/input/pad_state.h"
-
-enum {
-    GROUND_MATERIAL_WATER = 0,
-    GROUND_MATERIAL_MAGNETIC = 2
-};
-
-enum {
-    GROUND_MATERIAL_SINK_TRIGGER = 0xD
-};
-
-enum {
-    CUTSCENE_MODE_INACTIVE = 0
-};
 
 typedef struct {
     s32 w0;

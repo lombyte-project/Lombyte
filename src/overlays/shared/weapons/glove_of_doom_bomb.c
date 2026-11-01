@@ -15,6 +15,7 @@
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/overlay/shared/weapons.h"
 
+/* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
 enum {
     DOOM_LANDING_MODE_REQUIRE_LINKED_MOBY = 0,
     DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK = 2
@@ -29,7 +30,6 @@ enum {
     THROWN_MOBY_STATE_RESET_TO_INITIALIZE = 5
 };
 
-/* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
 typedef struct {
     Vec4         vel;          /* 0x00: velocity per step */
     Vec4         landing;      /* 0x10: predicted landing point */

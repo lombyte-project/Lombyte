@@ -16,6 +16,16 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
+enum {
+    UPDATE_INITIALIZE = 0x0,
+    TRACK_TARGET_BEFORE_ATTACK = 0x2,
+    UPDATE_ATTACK_SEQUENCE = 0x4,
+    WAIT_TO_MOVE_TO_TABLE_POINT = 0x5,
+    MOVE_TO_TABLE_POINT = 0x6,
+    WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
+    EMIT_EFFECT_AND_REMOVE = 0x8
+};
+
 extern char D_0013F350[];
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -355,16 +365,6 @@ extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern char *D_L13_001B07B0[];
 
 #include "rnc/overlay/shared/world/level_labels.h"
-
-enum {
-    UPDATE_INITIALIZE = 0x0,
-    TRACK_TARGET_BEFORE_ATTACK = 0x2,
-    UPDATE_ATTACK_SEQUENCE = 0x4,
-    WAIT_TO_MOVE_TO_TABLE_POINT = 0x5,
-    MOVE_TO_TABLE_POINT = 0x6,
-    WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
-    EMIT_EFFECT_AND_REMOVE = 0x8
-};
 
 extern float hovering_rocket_attacker_scale_multiplier_gp __asm__("D_L13_00161490")
     __attribute__((sda));

@@ -20,6 +20,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/l08/mobys/rocket.h"
 
+/* Pvars of the heavy gunship. */
 enum {
     HEAVY_GUNSHIP_INITIALIZE = 0,
     HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH = 1,
@@ -28,7 +29,6 @@ enum {
     HEAVY_GUNSHIP_DISPERSE_AND_REMOVE = 99
 };
 
-/* Pvars of the heavy gunship. */
 typedef struct {
     SwarmPathFollower follow[2];    /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
     SwarmPart         root;         /* 0x60 */

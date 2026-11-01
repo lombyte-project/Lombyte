@@ -11,6 +11,13 @@
 #include "qcopy.h"
 #include "rnc/overlay/l05/mobys/extermitank_globals.h"
 
+enum {
+    EXTERMITANK_INITIALIZE = 0,
+    EXTERMITANK_FOLLOW_PATH = 1,
+    EXTERMITANK_FIRE_PARTICLES = 2,
+    EXTERMITANK_REMOVE = 3
+};
+
 extern char  D_0013E533[];
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void *create_moby() __asm__("FUN_0020c4f8");
@@ -71,13 +78,6 @@ extern float extermitank_secondary_particle_vector_b_xy_scale_gp __asm__("D_L05_
     __attribute__((sda));
 
 #include "rnc/overlay/l05/mobys/extermitank_data/extermitank_update.h"
-
-enum {
-    EXTERMITANK_INITIALIZE = 0,
-    EXTERMITANK_FOLLOW_PATH = 1,
-    EXTERMITANK_FIRE_PARTICLES = 2,
-    EXTERMITANK_REMOVE = 3
-};
 
 extern float extermitank_secondary_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B68")
     __attribute__((sda));

@@ -32,6 +32,11 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
+enum {
+    HERO_ITEM_SLOT_STATE_READY = 2,
+    HERO_ITEM_SLOT_STATE_REMOVING = 3
+};
+
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* line query from -> to; fills the collision hit record, nonzero on a hit */
 extern int
@@ -4161,11 +4166,6 @@ void air_accel(f32 step) {
 }
 
 #include "rnc/math/fast_math.h"
-
-enum {
-    HERO_ITEM_SLOT_STATE_READY = 2,
-    HERO_ITEM_SLOT_STATE_REMOVING = 3
-};
 
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 

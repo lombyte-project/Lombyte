@@ -23,6 +23,20 @@
 /* Update function for moby class 1196 (screamer) on level 10: follows its path, turns to its target, wanders. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E0630), where it is exact; names translated to the US level program. */
 
+enum {
+    SCREAMER_STATE_INITIALIZE = 0,
+    SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
+    SCREAMER_STATE_WAIT_TO_RISE = 2,
+    SCREAMER_STATE_RISE_FROM_HOME = 4,
+    SCREAMER_STATE_FOLLOW_PATH = 5,
+    SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
+    SCREAMER_STATE_IDLE_AT_HOME = 7,
+    SCREAMER_STATE_RETURN_HOME = 8,
+    SCREAMER_STATE_WAIT_TO_WANDER = 9,
+    SCREAMER_STATE_WANDER = 10,
+    SCREAMER_STATE_DEATH_KNOCKBACK = 11
+};
+
 typedef struct Moby Moby;
 
 typedef struct D_2E0630 {
@@ -370,20 +384,6 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN
 extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 #include "rnc/data_labels.h"
-
-enum {
-    SCREAMER_STATE_INITIALIZE = 0,
-    SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
-    SCREAMER_STATE_WAIT_TO_RISE = 2,
-    SCREAMER_STATE_RISE_FROM_HOME = 4,
-    SCREAMER_STATE_FOLLOW_PATH = 5,
-    SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
-    SCREAMER_STATE_IDLE_AT_HOME = 7,
-    SCREAMER_STATE_RETURN_HOME = 8,
-    SCREAMER_STATE_WAIT_TO_WANDER = 9,
-    SCREAMER_STATE_WANDER = 10,
-    SCREAMER_STATE_DEATH_KNOCKBACK = 11
-};
 
 void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     enum {

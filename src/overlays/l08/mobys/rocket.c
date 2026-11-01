@@ -16,6 +16,16 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/level_path.h"
 
+enum {
+    ROCKET_STATE_INITIALIZE = 0,
+    ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
+    ROCKET_STATE_HOME_TOWARD_TARGET = 2,
+    ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
+    ROCKET_STATE_FOLLOW_ROUTE = 4,
+    ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
+    ROCKET_STATE_EXPLODE_AND_REMOVE = 6
+};
+
 extern int  FUN_L08_002025d0(void *, int, int, void *, int);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
@@ -147,16 +157,6 @@ extern float approach_value(float *, float, float);
 extern int   D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") MACRO_ADDR;
 
 #include "rnc/overlay/l08/mobys/rocket_data/rocket_update.h"
-
-enum {
-    ROCKET_STATE_INITIALIZE = 0,
-    ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
-    ROCKET_STATE_HOME_TOWARD_TARGET = 2,
-    ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
-    ROCKET_STATE_FOLLOW_ROUTE = 4,
-    ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
-    ROCKET_STATE_EXPLODE_AND_REMOVE = 6
-};
 
 extern unsigned int D_L08_0015FFDC MACRO_ADDR;
 extern void                        FUN_L00_00262cf0(void *, void *, float, float, float);

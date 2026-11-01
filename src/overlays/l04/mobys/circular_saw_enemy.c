@@ -22,6 +22,7 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/world/collision/ground_probe.h"
 
+/* The engine-sound fields of the moby's pvars. */
 enum {
     CIRCULAR_SAW_STATE_INITIALIZE = 0,
     CIRCULAR_SAW_STATE_IDLE = 1,
@@ -35,7 +36,6 @@ enum {
     CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED = 9
 };
 
-/* The engine-sound fields of the moby's pvars. */
 typedef struct {
     /* 0x000 */ u8  pad0[0x230];
     /* 0x230 */ f32 volume;

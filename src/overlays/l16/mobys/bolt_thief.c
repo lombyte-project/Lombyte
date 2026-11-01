@@ -37,6 +37,16 @@
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/rendering/clip_volume.h"
 
+enum {
+    BOLT_THIEF_INITIALIZE = 0,
+    BOLT_THIEF_FACE_HERO = 1,
+    BOLT_THIEF_WAIT_FOR_HERO_TRIGGER = 2,
+    BOLT_THIEF_SETTLE_AT_PATH_END = 3,
+    BOLT_THIEF_FOLLOW_PRIMARY_PATH = 4,
+    BOLT_THIEF_FOLLOW_OTHER_PATH = 5,
+    BOLT_THIEF_KNOCKBACK = 6
+};
+
 extern int scale_game_frames(int);
 
 /* Update of the crate platform: hit reaction, then its seven states. */
@@ -333,16 +343,6 @@ void bolt_thief_update(L16CrateMoby *moby) {
 }
 
 #include "rnc/overlay/l16/mobys/bolt_thief_globals.h"
-
-enum {
-    BOLT_THIEF_INITIALIZE = 0,
-    BOLT_THIEF_FACE_HERO = 1,
-    BOLT_THIEF_WAIT_FOR_HERO_TRIGGER = 2,
-    BOLT_THIEF_SETTLE_AT_PATH_END = 3,
-    BOLT_THIEF_FOLLOW_PRIMARY_PATH = 4,
-    BOLT_THIEF_FOLLOW_OTHER_PATH = 5,
-    BOLT_THIEF_KNOCKBACK = 6
-};
 
 extern float bolt_thief_path_speed_gp __asm__("D_L16_00161D90") __attribute__((sda));
 extern float D_L16_00161D94_gp __asm__("D_L16_00161D94") __attribute__((sda));

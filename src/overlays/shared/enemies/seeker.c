@@ -17,6 +17,17 @@
 #include "rnc/mobys/resolve_moby_hit_response.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
+enum {
+    SEEKER_STATE_INITIALIZE = 0,
+    SEEKER_STATE_IDLE_HOVER = 1,
+    SEEKER_STATE_CHASE = 2,
+    SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
+    SEEKER_STATE_TIMED_CHASE = 4,
+    SEEKER_STATE_HURT_KNOCKBACK = 5,
+    SEEKER_STATE_FATAL_KNOCKBACK = 6,
+    SEEKER_STATE_EXPLODE = 7
+};
+
 typedef struct {
     u8           pad0[0x20];
     f32          unk20;
@@ -387,17 +398,6 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 
 #include "rnc/overlay/shared/enemies/seeker_data/update_seeker_damage_and_target.h"
-
-enum {
-    SEEKER_STATE_INITIALIZE = 0,
-    SEEKER_STATE_IDLE_HOVER = 1,
-    SEEKER_STATE_CHASE = 2,
-    SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
-    SEEKER_STATE_TIMED_CHASE = 4,
-    SEEKER_STATE_HURT_KNOCKBACK = 5,
-    SEEKER_STATE_FATAL_KNOCKBACK = 6,
-    SEEKER_STATE_EXPLODE = 7
-};
 
 extern float D_L09_0016140C __attribute__((sda));
 extern int   scale_time() __asm__("FUN_001f96b0");

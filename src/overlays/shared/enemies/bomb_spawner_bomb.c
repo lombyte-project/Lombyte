@@ -18,12 +18,12 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
+/* Class header fields the spawner copies into a fresh moby. */
 enum {
     MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
     MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
 };
 
-/* Class header fields the spawner copies into a fresh moby. */
 typedef struct {
     u8  pad0[0xF];
     u8  always_draw; /* 0x0F */

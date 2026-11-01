@@ -21,6 +21,18 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/rendering/effect_texture.h"
 
+enum {
+    FIGHTER_JET_STATE_INITIALIZE = 0,
+    FIGHTER_JET_STATE_WAIT_FOR_ENTRY = 1,
+    FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
+    FIGHTER_JET_STATE_FLIGHT = 4,
+    FIGHTER_JET_STATE_EXIT_PLAYER = 5,
+    FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6,
+    FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET = 7,
+    FIGHTER_JET_STATE_FORCED_EXIT = 8,
+    FIGHTER_JET_STATE_DELETE = 9
+};
+
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
@@ -1711,18 +1723,6 @@ typedef struct {
 extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
 
 #include "rnc/overlay/l13/mobys/fighter_jet_data/fighter_jet_update.h"
-
-enum {
-    FIGHTER_JET_STATE_INITIALIZE = 0,
-    FIGHTER_JET_STATE_WAIT_FOR_ENTRY = 1,
-    FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
-    FIGHTER_JET_STATE_FLIGHT = 4,
-    FIGHTER_JET_STATE_EXIT_PLAYER = 5,
-    FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6,
-    FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET = 7,
-    FIGHTER_JET_STATE_FORCED_EXIT = 8,
-    FIGHTER_JET_STATE_DELETE = 9
-};
 
 extern JetTexture l13_texture_descriptors[] __asm__("D_L13_0016D480");
 

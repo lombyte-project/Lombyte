@@ -27,6 +27,12 @@
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
 
+enum {
+    HERO_GROUND_MATERIAL_WATER = 0,
+    HERO_GROUND_MATERIAL_MAGNETIC = 2,
+    HERO_GROUND_MATERIAL_SINK_SURFACE = 0xD
+};
+
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int  hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 float       absolute_float(float input) __asm__("func_001F99C0");
@@ -939,12 +945,6 @@ extern f32  forward_component(void *) __asm__("FUN_L00_00213350");
 extern struct HeroTableRow2C D_L06_0017C3A8[];
 
 #include "rnc/overlay/shared/camera/level_camera.h"
-
-enum {
-    HERO_GROUND_MATERIAL_WATER = 0,
-    HERO_GROUND_MATERIAL_MAGNETIC = 2,
-    HERO_GROUND_MATERIAL_SINK_SURFACE = 0xD
-};
 
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");

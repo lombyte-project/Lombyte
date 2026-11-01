@@ -15,18 +15,18 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/camera/update_cam.h"
 
-extern u8 *D_L14_00167500 NOT_SDA;
-
-void seed_linked_record_for_flying_car(u8 *flying_car_moby) __asm__("FUN_L14_003135b8");
-
-#include "rnc/overlay/l14/mobys/flying_car_globals.h"
-
 enum {
     FLYING_CAR_INITIALIZE = 0,
     FLYING_CAR_WAIT_FOR_TRIGGER = 1,
     FLYING_CAR_FOLLOW_PATH = 2,
     FLYING_CAR_WAIT_FOR_PATH_RESET = 3
 };
+
+extern u8 *D_L14_00167500 NOT_SDA;
+
+void seed_linked_record_for_flying_car(u8 *flying_car_moby) __asm__("FUN_L14_003135b8");
+
+#include "rnc/overlay/l14/mobys/flying_car_globals.h"
 
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 

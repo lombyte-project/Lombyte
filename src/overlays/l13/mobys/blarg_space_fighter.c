@@ -14,6 +14,18 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/sdk/libc/stdlib.h"
 
+enum {
+    FIGHTER_INITIALIZE = 0,
+    FIGHTER_WAIT_TO_JOIN_PATH = 1,
+    FIGHTER_FOLLOW_PATH_AND_ATTACK = 2,
+    FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3,
+    FIGHTER_WAIT_TO_REINITIALIZE = 4
+};
+
+enum {
+    HIT_PROCESSING_DAMAGE_THRESHOLD = 2
+};
+
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
 extern char D_0013F350[];
@@ -48,18 +60,6 @@ extern float D_0015ED60;
 extern char D_00140940[];
 
 #include "rnc/overlay/l13/effect_suppression_levels.h"
-
-enum {
-    FIGHTER_INITIALIZE = 0,
-    FIGHTER_WAIT_TO_JOIN_PATH = 1,
-    FIGHTER_FOLLOW_PATH_AND_ATTACK = 2,
-    FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3,
-    FIGHTER_WAIT_TO_REINITIALIZE = 4
-};
-
-enum {
-    HIT_PROCESSING_DAMAGE_THRESHOLD = 2
-};
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 

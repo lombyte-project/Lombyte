@@ -18,6 +18,16 @@
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 
+enum {
+    TAXI_STATE_INITIALIZE = 0,
+    TAXI_STATE_WAIT_AT_STOP = 1,
+    TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
+    TAXI_STATE_FOLLOW_PATH = 4,
+    TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
+    TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
+    TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
+};
+
 enum TaxiStop {
     TAXI_STOP_RETURN_HUB = 0x0,
     TAXI_STOP_HUB_OUTBOUND_DESTINATION = 0x1,
@@ -28,16 +38,6 @@ enum TaxiStop {
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 
 #include "rnc/overlay/l14/mobys/taxi_globals.h"
-
-enum {
-    TAXI_STATE_INITIALIZE = 0,
-    TAXI_STATE_WAIT_AT_STOP = 1,
-    TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
-    TAXI_STATE_FOLLOW_PATH = 4,
-    TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
-    TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
-    TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
-};
 
 typedef struct {
     u8   pad0[0x20];

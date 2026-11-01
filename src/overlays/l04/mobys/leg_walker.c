@@ -20,6 +20,10 @@
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
+enum {
+    LEG_RIG_FALLBACK_GAIT_MASK = 5
+};
+
 extern float D_L04_00173FE8 NOT_SDA;
 float probe_leg_rig_ground_height(float *probe_origin) __asm__("FUN_L04_002922d0");
 
@@ -174,10 +178,6 @@ typedef struct {
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
 
 #include "rnc/overlay/shared/world/collision.h"
-
-enum {
-    LEG_RIG_FALLBACK_GAIT_MASK = 5
-};
 
 extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 

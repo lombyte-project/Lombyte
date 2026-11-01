@@ -31,6 +31,22 @@
 #include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 
+enum {
+    TOXIC_CRAB_STATE_INITIALIZE = 0,
+    TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION = 1,
+    TOXIC_CRAB_STATE_ACTIVATE = 2,
+    TOXIC_CRAB_STATE_FACE_TRACKED_POSITION = 3,
+    TOXIC_CRAB_STATE_WAIT_TO_PURSUE = 4,
+    TOXIC_CRAB_STATE_PURSUE_TARGET = 5,
+    TOXIC_CRAB_STATE_PAUSE_PURSUIT = 6,
+    TOXIC_CRAB_STATE_MELEE_ATTACK = 7,
+    TOXIC_CRAB_STATE_RETURN_HOME = 8,
+    TOXIC_CRAB_STATE_BACK_AWAY_FROM_TARGET = 9,
+    TOXIC_CRAB_STATE_HIT_KNOCKBACK = 10,
+    TOXIC_CRAB_STATE_DEATH_EFFECTS = 11,
+    TOXIC_CRAB_STATE_FALL_TO_DEATH = 12
+};
+
 typedef struct Moby Moby;
 extern struct Moby *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern float        D_0015ED6C;
@@ -1002,22 +1018,6 @@ typedef struct Hit_2E52B0 {
 } Hit_2E52B0;
 
 #include "rnc/overlay/l10/mobys/toxic_crab_globals.h"
-
-enum {
-    TOXIC_CRAB_STATE_INITIALIZE = 0,
-    TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION = 1,
-    TOXIC_CRAB_STATE_ACTIVATE = 2,
-    TOXIC_CRAB_STATE_FACE_TRACKED_POSITION = 3,
-    TOXIC_CRAB_STATE_WAIT_TO_PURSUE = 4,
-    TOXIC_CRAB_STATE_PURSUE_TARGET = 5,
-    TOXIC_CRAB_STATE_PAUSE_PURSUIT = 6,
-    TOXIC_CRAB_STATE_MELEE_ATTACK = 7,
-    TOXIC_CRAB_STATE_RETURN_HOME = 8,
-    TOXIC_CRAB_STATE_BACK_AWAY_FROM_TARGET = 9,
-    TOXIC_CRAB_STATE_HIT_KNOCKBACK = 10,
-    TOXIC_CRAB_STATE_DEATH_EFFECTS = 11,
-    TOXIC_CRAB_STATE_FALL_TO_DEATH = 12
-};
 
 extern float toxic_crab_hit_knockback_gravity_gp __asm__("D_L10_00161E2C") __attribute__((sda));
 extern void  func_L10_002E14F8_2E52B0(void *) __asm__("FUN_L10_002e0138");

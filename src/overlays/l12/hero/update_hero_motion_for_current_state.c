@@ -24,6 +24,13 @@
 #include "rnc/world/collision/collision_hit_material.h"
 
 /* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNET = 2,
+    GROUND_MATERIAL_ICE = 7,
+    GROUND_MATERIAL_SINK_TRIGGER = 0xD
+};
+
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int  hero_set_state(int, int) __asm__("FUN_L12_002400d0");
 float       absolute_float(float input) __asm__("func_001F99C0");
@@ -404,13 +411,6 @@ d1:
 
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"
-
-enum {
-    GROUND_MATERIAL_WATER = 0,
-    GROUND_MATERIAL_MAGNET = 2,
-    GROUND_MATERIAL_ICE = 7,
-    GROUND_MATERIAL_SINK_TRIGGER = 0xD
-};
 
 struct MobyView {
     u8  pad0[0xC];

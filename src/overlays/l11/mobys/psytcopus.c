@@ -11,6 +11,16 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
+enum {
+    PSYTCOPUS_STATE_INITIALIZE = 0,
+    PSYTCOPUS_STATE_FACE_PLAYER = 3,
+    PSYTCOPUS_STATE_CREATE_PROJECTILE = 4,
+    PSYTCOPUS_STATE_FIRE_PROJECTILE = 5,
+    PSYTCOPUS_STATE_ATTACK_RECOVERY = 6,
+    PSYTCOPUS_STATE_KNOCKBACK = 7,
+    PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
+};
+
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -91,16 +101,6 @@ extern void
 FUN_L00_0025f3e8_p(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 
 #include "rnc/overlay/l11/mobys/psytcopus_data/psytcopus_update.h"
-
-enum {
-    PSYTCOPUS_STATE_INITIALIZE = 0,
-    PSYTCOPUS_STATE_FACE_PLAYER = 3,
-    PSYTCOPUS_STATE_CREATE_PROJECTILE = 4,
-    PSYTCOPUS_STATE_FIRE_PROJECTILE = 5,
-    PSYTCOPUS_STATE_ATTACK_RECOVERY = 6,
-    PSYTCOPUS_STATE_KNOCKBACK = 7,
-    PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
-};
 
 extern float D_L11_00161F9C __attribute__((sda));
 extern void set_moby_position_and_refresh_removal_timer(void *, void *) __asm__("FUN_L11_00318e78");

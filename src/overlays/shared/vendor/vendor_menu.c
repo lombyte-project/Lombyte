@@ -48,6 +48,20 @@
 #include "rnc/overlay/shared/camera/level_camera.h"
 
 /* Clears D_L00_0015F424..0015F434, D_L00_0017E504[0] and D_L00_0015F2F0/2F4. */
+enum {
+    VENDOR_MENU_MODE_EXISTING_VENDOR = 0,
+    VENDOR_MENU_OPENING = 0,
+    VENDOR_PURCHASE_INACTIVE = 0,
+    VENDOR_MENU_MODE_SPAWNED_VENDOR = 1,
+    VENDOR_MENU_OPEN = 1,
+    VENDOR_PURCHASE_INITIALIZE = 1,
+    VENDOR_MENU_CLOSING = 2,
+    VENDOR_PURCHASE_AWAIT_INPUT = 2,
+    VENDOR_MENU_EXIT_CUTSCENE = 3,
+    VENDOR_PURCHASE_WAIT_DECISION_ANIMATION = 3,
+    VENDOR_PURCHASE_FINALIZE = 4
+};
+
 void reset_frame_counters(void) __asm__("FUN_L00_00297e30");
 
 void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
@@ -858,20 +872,6 @@ extern u8               vendor_part_update_label[] __asm__("D_L00_00161148");
 
 #include "rnc/overlay/shared/vendor/vendor_menu_data/update_vendor_purchase_2.h"
 #include "rnc/overlay/shared/vendor/vendor_menu_data/update_vendor_purchase.h"
-
-enum {
-    VENDOR_MENU_MODE_EXISTING_VENDOR = 0,
-    VENDOR_MENU_OPENING = 0,
-    VENDOR_PURCHASE_INACTIVE = 0,
-    VENDOR_MENU_MODE_SPAWNED_VENDOR = 1,
-    VENDOR_MENU_OPEN = 1,
-    VENDOR_PURCHASE_INITIALIZE = 1,
-    VENDOR_MENU_CLOSING = 2,
-    VENDOR_PURCHASE_AWAIT_INPUT = 2,
-    VENDOR_MENU_EXIT_CUTSCENE = 3,
-    VENDOR_PURCHASE_WAIT_DECISION_ANIMATION = 3,
-    VENDOR_PURCHASE_FINALIZE = 4
-};
 
 extern f32  D_L00_00161E24;
 extern s32  D_L00_00161E38;

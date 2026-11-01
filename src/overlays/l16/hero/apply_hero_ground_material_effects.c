@@ -19,6 +19,16 @@
 /* Per-frame update of the pickup/hit state flags from the state code. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_00209D98), where it is exact; names translated to the US level program. */
 
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNET = 2
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 0xD,
+    GROUND_MATERIAL_FIXED_WATER_DEPTH = 0xE
+};
+
 extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int  hero_set_state(int, int) __asm__("FUN_L16_0021e398");
@@ -141,16 +151,6 @@ void apply_hero_ground_material_effects(void) {
 
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
-
-enum {
-    GROUND_MATERIAL_WATER = 0,
-    GROUND_MATERIAL_MAGNET = 2
-};
-
-enum {
-    GROUND_MATERIAL_SINK_TRIGGER = 0xD,
-    GROUND_MATERIAL_FIXED_WATER_DEPTH = 0xE
-};
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
 

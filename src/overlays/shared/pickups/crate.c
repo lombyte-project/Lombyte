@@ -22,6 +22,7 @@
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
+/* Class header view: pclass + 0xE and + 0x10. */
 enum {
     CRATE_STATE_INITIALIZE = 0,
     CRATE_STATE_PROCESS_HITS = 1,
@@ -32,7 +33,6 @@ enum {
     CRATE_STATE_WAIT_RESPAWN = 6
 };
 
-/* Class header view: pclass + 0xE and + 0x10. */
 typedef struct {
     u8  pad00[0xE];
     u8  unkE;

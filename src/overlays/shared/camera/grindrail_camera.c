@@ -11,13 +11,13 @@
 #include "rnc/camera/camera_spring.h"
 #include "sda.h"
 
+/* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in l01_camera_preset_rows) */
 enum {
     CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC = 0,
     CAMERA_PRESET_KIND_MAPPED_PATHS = 2,
     CAMERA_PRESET_KIND_GRINDRAIL_PATH = 3
 };
 
-/* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in l01_camera_preset_rows) */
 typedef struct {
     Vec4 pos; /* 0x00 */
     u8   pad10[0x30];

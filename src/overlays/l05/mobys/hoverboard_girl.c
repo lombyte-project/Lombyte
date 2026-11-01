@@ -19,13 +19,13 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/mobys/moby.h"
 
+/* Hoverboard girl (class record hoverboard_girl), Rilgar / Blackwater City.
+ * The update counts player action 11 at frame 15 when she faces the player.
+ * Its two breast manipulators also carry the effect into cutscene instances. */
 enum {
     GAME_MODE_CUTSCENE = 2
 };
 
-/* Hoverboard girl (class record hoverboard_girl), Rilgar / Blackwater City.
- * The update counts player action 11 at frame 15 when she faces the player.
- * Its two breast manipulators also carry the effect into cutscene instances. */
 typedef union {
     u128 quadword;
     f32  component[4];

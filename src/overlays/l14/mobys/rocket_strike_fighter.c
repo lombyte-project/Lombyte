@@ -29,6 +29,13 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/overlay/shared/vendor.h"
 
+enum {
+    ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE = 0,
+    ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS = 1,
+    ROCKET_STRIKE_FIGHTER_STATE_FOLLOW_PATH = 2,
+    ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN = 3
+};
+
 extern float vector_length_xy(void *);
 
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
@@ -267,13 +274,6 @@ extern f32 rocket_strike_fighter_exhaust_grey_puff_row0_offset_gp __asm__("D_L14
     __attribute__((sda));
 
 #include "rnc/overlay/l14/mobys/rocket_strike_fighter_data/spawn_rocket_strike_fighter_exhaust.h"
-
-enum {
-    ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE = 0,
-    ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS = 1,
-    ROCKET_STRIKE_FIGHTER_STATE_FOLLOW_PATH = 2,
-    ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN = 3
-};
 
 void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     Vec4     step;

@@ -15,6 +15,12 @@
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/enemy_fighter.h"
 
+enum {
+    ENEMY_FIGHTER_STATE_INITIALIZE = 0,
+    ENEMY_FIGHTER_STATE_FOLLOW_PATH = 1,
+    ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
+};
+
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -138,12 +144,6 @@ void enemy_fighter_update(struct Moby *moby) {
 }
 
 #include "rnc/overlay/l14/mobys/enemy_fighter_data/spawn_enemy_fighter_exhaust.h"
-
-enum {
-    ENEMY_FIGHTER_STATE_INITIALIZE = 0,
-    ENEMY_FIGHTER_STATE_FOLLOW_PATH = 1,
-    ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
-};
 
 extern char D_L14_0015F580[] MACRO_ADDR;
 

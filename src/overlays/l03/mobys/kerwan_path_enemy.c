@@ -22,6 +22,24 @@
 #include "rnc/overlay/l03/mobys/homing_rocket.h"
 #include "rnc/overlay/l03/mobys/robot_dog.h"
 
+enum {
+    ENEMY_INITIALIZE = 0,
+    ENEMY_WAIT_FOR_ACTIVATION = 1,
+    ENEMY_WAIT_FOR_LINKED_MOBY = 2,
+    ENEMY_PROJECTILE_ATTACK_WINDUP = 4,
+    ENEMY_PROJECTILE_ATTACK = 5,
+    ENEMY_MELEE_ATTACK = 6,
+    ENEMY_MOVE_TO_PATH_NODE = 7,
+    ENEMY_FOLLOW_PATH_TO_END = 8,
+    ENEMY_FOLLOW_ALTERNATE_PATH = 0x9,
+    ENEMY_KNOCKBACK_RECOVERY = 10,
+    ENEMY_FALL_UNDER_GRAVITY = 11,
+    ENEMY_TURN_TO_HEADING = 0xC,
+    ENEMY_DEATH_KNOCKBACK = 13,
+    ENEMY_HIDDEN_AT_PATH_START = 14,
+    ENEMY_RESPAWN_AT_PATH_START = 15
+};
+
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C81E0), where it is exact; names translated to the US level program. */
 
@@ -1448,24 +1466,6 @@ extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern float D_L03_001618E0 __attribute__((sda));
 
 #include "rnc/overlay/l03/mobys/kerwan_path_enemy_data/update_kerwan_path_enemy_hit_reaction.h"
-
-enum {
-    ENEMY_INITIALIZE = 0,
-    ENEMY_WAIT_FOR_ACTIVATION = 1,
-    ENEMY_WAIT_FOR_LINKED_MOBY = 2,
-    ENEMY_PROJECTILE_ATTACK_WINDUP = 4,
-    ENEMY_PROJECTILE_ATTACK = 5,
-    ENEMY_MELEE_ATTACK = 6,
-    ENEMY_MOVE_TO_PATH_NODE = 7,
-    ENEMY_FOLLOW_PATH_TO_END = 8,
-    ENEMY_FOLLOW_ALTERNATE_PATH = 0x9,
-    ENEMY_KNOCKBACK_RECOVERY = 10,
-    ENEMY_FALL_UNDER_GRAVITY = 11,
-    ENEMY_TURN_TO_HEADING = 0xC,
-    ENEMY_DEATH_KNOCKBACK = 13,
-    ENEMY_HIDDEN_AT_PATH_START = 14,
-    ENEMY_RESPAWN_AT_PATH_START = 15
-};
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");

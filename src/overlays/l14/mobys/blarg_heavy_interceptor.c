@@ -21,6 +21,18 @@
 #include "sda.h"
 #include "rnc/overlay/l14/mobys/blarg_heavy_interceptor_globals.h"
 
+enum {
+    INTERCEPTOR_STATE_INITIALIZE = 0,
+    INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
+    INTERCEPTOR_STATE_ALERT_GROUP = 2,
+    INTERCEPTOR_STATE_TRACK_TARGET = 3,
+    INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY = 4,
+    INTERCEPTOR_STATE_FOLLOW_RETURN_PATH = 5,
+    INTERCEPTOR_STATE_REJOIN_PATROL = 6,
+    INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
+    INTERCEPTOR_STATE_DEATH_FALL = 9
+};
+
 extern u16 *D_L14_001ABF40_u[] __asm__("D_L14_001ABF40");
 
 extern u8 *D_L14_0015FFD8;
@@ -171,18 +183,6 @@ extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern char D_L14_0015F580[] MACRO_ADDR;
 
 #include "rnc/overlay/l14/mobys/blarg_heavy_interceptor_data/blarg_heavy_interceptor_update.h"
-
-enum {
-    INTERCEPTOR_STATE_INITIALIZE = 0,
-    INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
-    INTERCEPTOR_STATE_ALERT_GROUP = 2,
-    INTERCEPTOR_STATE_TRACK_TARGET = 3,
-    INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY = 4,
-    INTERCEPTOR_STATE_FOLLOW_RETURN_PATH = 5,
-    INTERCEPTOR_STATE_REJOIN_PATROL = 6,
-    INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
-    INTERCEPTOR_STATE_DEATH_FALL = 9
-};
 
 extern f32 l14_blarg_heavy_interceptor_path_easing_error_gain __asm__("D_L14_001613A0")
     __attribute__((sda));

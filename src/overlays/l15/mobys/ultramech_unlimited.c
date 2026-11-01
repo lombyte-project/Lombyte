@@ -24,6 +24,21 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l15/mobys/ultramech_unlimited_globals.h"
 
+enum {
+    ULTRAMECH_INITIALIZE = 0,
+    ULTRAMECH_WAIT_FOR_ACTIVATION = 1,
+    ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
+    ULTRAMECH_BALLISTIC_PATH_MOVE = 3,
+    ULTRAMECH_AIM_AND_SELECT_ATTACK = 4,
+    ULTRAMECH_FIRE_BURST = 5,
+    ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
+    ULTRAMECH_APPROACH_TARGET = 7,
+    ULTRAMECH_MELEE_ATTACK = 8,
+    ULTRAMECH_KNOCKBACK_RECOVERY = 9,
+    ULTRAMECH_DEATH_EFFECTS = 10,
+    ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
+};
+
 extern char D_0014C190[];
 
 extern int D_L15_001BAAD0[];
@@ -911,21 +926,6 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
 }
 
 #include "rnc/overlay/l15/mobys/ultramech_unlimited_data/process_ultramech_hits_and_update_target.h"
-
-enum {
-    ULTRAMECH_INITIALIZE = 0,
-    ULTRAMECH_WAIT_FOR_ACTIVATION = 1,
-    ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
-    ULTRAMECH_BALLISTIC_PATH_MOVE = 3,
-    ULTRAMECH_AIM_AND_SELECT_ATTACK = 4,
-    ULTRAMECH_FIRE_BURST = 5,
-    ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
-    ULTRAMECH_APPROACH_TARGET = 7,
-    ULTRAMECH_MELEE_ATTACK = 8,
-    ULTRAMECH_KNOCKBACK_RECOVERY = 9,
-    ULTRAMECH_DEATH_EFFECTS = 10,
-    ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
-};
 
 extern float ultramech_pre_hit_scale_multiplier_gp __asm__("D_L15_00161B2C") __attribute__((sda));
 

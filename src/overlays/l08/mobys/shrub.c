@@ -20,6 +20,14 @@
 
 /* spawns the child mobys this object owns and fills its part table */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9B60), where it is exact; names translated to the US level program. */
+enum {
+    SHRUB_INITIALIZE = 0,
+    SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
+    SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
+    SHRUB_BEGIN_PRIMARY_PATH = 3,
+    SHRUB_BREAK_APART_AND_REMOVE = 0x63
+};
+
 extern int FUN_L08_002e1c98_c() __asm__("FUN_L08_002e1c98");
 void       spawn_shrub_parts(char *moby) __asm__("FUN_L08_002e8788");
 
@@ -31,14 +39,6 @@ void         update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8
 extern u8    D_0014C050[];
 
 #include "rnc/overlay/shared/world/swarm_path.h"
-
-enum {
-    SHRUB_INITIALIZE = 0,
-    SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
-    SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
-    SHRUB_BEGIN_PRIMARY_PATH = 3,
-    SHRUB_BREAK_APART_AND_REMOVE = 0x63
-};
 
 extern struct Moby *D_L08_0015FFD8;
 extern f32          scale_time(f32) __asm__("FUN_001f96b0");

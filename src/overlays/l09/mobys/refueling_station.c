@@ -11,6 +11,7 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/mobys/moby.h"
 
+/* Damage source returned by find_moby_hit. */
 enum {
     REFUELING_STATION_STATE_INITIALIZE = 0,
     REFUELING_STATION_STATE_WAIT_COMMAND = 1,
@@ -18,7 +19,6 @@ enum {
     REFUELING_STATION_STATE_EXPLODE = 3
 };
 
-/* Damage source returned by find_moby_hit. */
 typedef struct {
     u8  pad0[0x2C];
     f32 damage;

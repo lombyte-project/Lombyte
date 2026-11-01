@@ -18,6 +18,7 @@
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/weapons/devastator.h"
 
+/* Ported from rac1-decomp (nonmatching/shared/func_L00_002B8AE8.c: func_L00_002B8AE8). */
 enum {
     PYROCITOR_STATE_INITIALIZE = 0,
     PYROCITOR_STATE_WAIT_FOR_READY = 1,
@@ -26,7 +27,6 @@ enum {
     PYROCITOR_STATE_CLEANUP = 4
 };
 
-/* Ported from rac1-decomp (nonmatching/shared/func_L00_002B8AE8.c: func_L00_002B8AE8). */
 typedef struct PyrocitorVars {
     struct Moby *other;
     char         pad4[0x40];

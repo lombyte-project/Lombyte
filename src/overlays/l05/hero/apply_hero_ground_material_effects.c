@@ -13,6 +13,16 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNET = 2,
+    GROUND_MATERIAL_FIXED_SHALLOW_WATER = 14
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 13
+};
+
 int        FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 f32        absolute_float(f32) __asm__("func_001F99C0");
 void       exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
@@ -361,16 +371,6 @@ d1:
 typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
 
 #include "rnc/math/fast_math.h"
-
-enum {
-    GROUND_MATERIAL_WATER = 0,
-    GROUND_MATERIAL_MAGNET = 2,
-    GROUND_MATERIAL_FIXED_SHALLOW_WATER = 14
-};
-
-enum {
-    GROUND_MATERIAL_SINK_TRIGGER = 13
-};
 
 typedef union {
     u128_2133a8 q;

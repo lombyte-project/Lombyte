@@ -20,6 +20,21 @@
 
 #include "qcopy.h"
 
+enum {
+    TEST_DUMMY_STATE_INITIALIZE = 0,
+    TEST_DUMMY_STATE_IDLE = 1,
+    TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
+    TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
+    TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
+    TEST_DUMMY_STATE_MOVE_ALONG_PATH = 5,
+    TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE = 6,
+    TEST_DUMMY_STATE_APPROACH_SPRAY_NODE = 7,
+    TEST_DUMMY_STATE_SPRAY_FROM_CHILD = 8,
+    TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
+    TEST_DUMMY_STATE_BURST = 10,
+    TEST_DUMMY_STATE_RESPAWN = 11
+};
+
 extern char *create_moby(int);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
@@ -675,20 +690,6 @@ extern void  add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 #include "rnc/overlay/l16/mobys/test_dummy_globals.h"
 
-enum {
-    TEST_DUMMY_STATE_INITIALIZE = 0,
-    TEST_DUMMY_STATE_IDLE = 1,
-    TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
-    TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
-    TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
-    TEST_DUMMY_STATE_MOVE_ALONG_PATH = 5,
-    TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE = 6,
-    TEST_DUMMY_STATE_APPROACH_SPRAY_NODE = 7,
-    TEST_DUMMY_STATE_SPRAY_FROM_CHILD = 8,
-    TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
-    TEST_DUMMY_STATE_BURST = 10,
-    TEST_DUMMY_STATE_RESPAWN = 11
-};
 /* spins the level's rotating parts by the current angle and queues the draw callback */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0238), where it is exact; names translated to the US level program. */
 

@@ -10,16 +10,6 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
-#endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
-#endif
-#include "qcopy.h"
-#include "rnc/math/interpolation/advance_accelerated_scalar.h"
-#include "rnc/overlay/shared/camera/scripted_camera.h"
-
 enum {
     ELEVATOR_STATE_INITIALIZE = 0,
     ELEVATOR_STATE_BLEND_CAMERA = 1,
@@ -30,6 +20,16 @@ enum {
     ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP = 6,
     ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM = 7
 };
+
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+#include "qcopy.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
 
 typedef struct {
     u8  pad0[0x20];

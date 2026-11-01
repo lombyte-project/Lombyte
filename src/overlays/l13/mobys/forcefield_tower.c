@@ -18,6 +18,12 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/sdk/debug.h"
 
+enum {
+    TOWER_STATE_INITIALIZE = 0,
+    TOWER_STATE_ACTIVE = 1,
+    TOWER_STATE_DESTRUCTION = 2
+};
+
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -29,12 +35,6 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 #include "rnc/overlay/l13/effect_suppression_levels.h"
-
-enum {
-    TOWER_STATE_INITIALIZE = 0,
-    TOWER_STATE_ACTIVE = 1,
-    TOWER_STATE_DESTRUCTION = 2
-};
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 

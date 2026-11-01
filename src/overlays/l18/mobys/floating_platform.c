@@ -20,6 +20,15 @@
 #include "rnc/overlay/l18/hero.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
+enum {
+    STATE_INITIALIZE = 0,
+    STATE_WAIT_FOR_TILT_REQUEST = 1,
+    STATE_WAIT_FOR_SINK_REQUEST = 2,
+    STATE_TILT_DELAY = 3,
+    STATE_WAIT_FOR_SINK_TRIGGER = 4,
+    STATE_SINKING = 5
+};
+
 void update_floating_platform_tilt_and_bob(struct Moby *moby) __asm__("FUN_L18_002d8710");
 
 #include "qcopy.h"
@@ -36,15 +45,6 @@ extern float floating_platform_sink_trigger_distance_gp __asm__("D_L18_00161A5C"
     __attribute__((sda));
 
 #include "rnc/overlay/l18/mobys/floating_platform_data/floating_platform_update.h"
-
-enum {
-    STATE_INITIALIZE = 0,
-    STATE_WAIT_FOR_TILT_REQUEST = 1,
-    STATE_WAIT_FOR_SINK_REQUEST = 2,
-    STATE_TILT_DELAY = 3,
-    STATE_WAIT_FOR_SINK_TRIGGER = 4,
-    STATE_SINKING = 5
-};
 
 extern int D_L18_001623A8 __attribute__((sda));
 void       spawn_floating_platform_sparks(struct Moby *moby) __asm__("FUN_L18_002d88b8");

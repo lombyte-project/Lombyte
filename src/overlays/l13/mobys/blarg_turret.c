@@ -16,6 +16,14 @@
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/overlay/l13/mobys/blarg_turret_globals.h"
 
+enum {
+    BLARG_TURRET_STATE_INITIALIZE = 0,
+    BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
+    BLARG_TURRET_STATE_TRACK_TARGET = 3,
+    BLARG_TURRET_STATE_DESTROY = 4,
+    BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
+};
+
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
@@ -24,14 +32,6 @@
 #endif
 #include "qcopy.h"
 #include "rnc/overlay/l13/mobys/gemlik_projectile.h"
-
-enum {
-    BLARG_TURRET_STATE_INITIALIZE = 0,
-    BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
-    BLARG_TURRET_STATE_TRACK_TARGET = 3,
-    BLARG_TURRET_STATE_DESTROY = 4,
-    BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
-};
 
 typedef struct {
     float x, y, z, w;

@@ -31,6 +31,16 @@
 #include "qcopy.h"
 
 /* Level 8 moby update (class 152): state machine that steers the moby toward the hero and fires its event. */
+enum {
+    BOMBER_TANK_STATE_INITIALIZE = 0,
+    BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM = 2,
+    BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
+    BOMBER_TANK_STATE_FOLLOW_PATH = 6,
+    BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11,
+    BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE = 14,
+    BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
+};
+
 typedef struct Moby Moby;
 extern float        D_0015ED70;
 extern int          D_0015ED84;
@@ -841,16 +851,6 @@ extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("
     __attribute__((sda));
 
 #include "rnc/overlay/l08/mobys/bomber_tank_data/spawn_bomber_tank_joint_particles.h"
-
-enum {
-    BOMBER_TANK_STATE_INITIALIZE = 0,
-    BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM = 2,
-    BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
-    BOMBER_TANK_STATE_FOLLOW_PATH = 6,
-    BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11,
-    BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE = 14,
-    BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
-};
 
 extern void  build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void  func_L00_001FF4B0_2D6C58(void *, void *, float) __asm__("FUN_001f9bf8");

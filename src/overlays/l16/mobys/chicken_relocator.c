@@ -43,6 +43,11 @@
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/world/collision/ground_probe.h"
 
+enum {
+    TARGET_REPOSITION_STATE_REQUESTABLE = 1,
+    TARGET_REPOSITION_STATE_REQUESTED = 7
+};
+
 extern float D_0015ED6C;
 
 #include "rnc/overlay/shared/math/quad.h"
@@ -58,11 +63,6 @@ extern void *spawn_feather_moby(void *, void *, void *) __asm__("FUN_L00_002cbf6
 extern void  build_spherical_offset(float, float, float, void *) __asm__("FUN_00214db0");
 
 #include "rnc/overlay/l16/mobys/chicken_relocator_globals.h"
-
-enum {
-    TARGET_REPOSITION_STATE_REQUESTABLE = 1,
-    TARGET_REPOSITION_STATE_REQUESTED = 7
-};
 
 extern float reposition_effect_velocity_elevation_degrees_gp __asm__("D_L16_001618E8")
     __attribute__((sda));

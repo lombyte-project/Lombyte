@@ -42,6 +42,23 @@
 #include "rnc/ui/menus/item_preview/create_menu_preview_moby.h"
 #include "rnc/ui/menus/stream_buffers/initialize_menu_stream_buffers.h"
 
+enum {
+    PAUSE_MENU_PENDING_STATE_CLEARED = 0,
+    PAUSE_MENU_STATE_EXIT_GUARDED = 0x22
+};
+
+enum {
+    SCENE_STATE_DEFAULT = 2
+};
+
+enum {
+    PAUSE_MENU_STATE_PAGE_TRANSITION = 1,
+    PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY = 0xE,
+    PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14,
+    PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY = 0x21,
+    PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY = 0x23
+};
+
 typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
 
 typedef union {
@@ -182,23 +199,6 @@ extern s32  D_L00_0015F3F8;
 extern int  D_L00_00173E00[];
 
 #include "rnc/overlay/shared/camera/level_camera.h"
-
-enum {
-    PAUSE_MENU_PENDING_STATE_CLEARED = 0,
-    PAUSE_MENU_STATE_EXIT_GUARDED = 0x22
-};
-
-enum {
-    SCENE_STATE_DEFAULT = 2
-};
-
-enum {
-    PAUSE_MENU_STATE_PAGE_TRANSITION = 1,
-    PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY = 0xE,
-    PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14,
-    PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY = 0x21,
-    PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY = 0x23
-};
 
 extern s32  frame_size __asm__("D_0013E504") NOT_SDA;
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");

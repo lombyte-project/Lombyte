@@ -16,6 +16,12 @@
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
 
+enum {
+    SCENERY_SHIP_INITIALIZE = 0,
+    SCENERY_SHIP_FOLLOW_PATH = 1,
+    SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE = 2
+};
+
 extern int  get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int  get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
@@ -126,12 +132,6 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 
 #include "rnc/overlay/l05/mobys/scenery_ship_data/scenery_ship_update.h"
-
-enum {
-    SCENERY_SHIP_INITIALIZE = 0,
-    SCENERY_SHIP_FOLLOW_PATH = 1,
-    SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE = 2
-};
 
 int          D_L05_001613D8 = 0x80000080;
 int          D_L05_001613DC = 0x80202020;

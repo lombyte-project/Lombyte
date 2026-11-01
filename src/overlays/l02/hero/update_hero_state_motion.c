@@ -26,6 +26,16 @@
 #include "rnc/world/collision/collision_hit_material.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L18_00213b40, without states 0, 4 and 0xE). */
+enum {
+    GROUND_MATERIAL_MAGNETIC = 2,
+    GROUND_MATERIAL_SINK_TRIGGER = 0xD
+};
+
+enum {
+    GROUND_MATERIAL_WATER_SURFACE_TRIGGER = 0,
+    GROUND_MATERIAL_SINK_SURFACE_TRIGGER = 3
+};
+
 extern int  D_0015ED84_c __asm__("D_0015ED84");
 extern int  D_0015ED84_d __asm__("D_0015ED84");
 extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -147,15 +157,6 @@ void process_hero_ground_material_effects(void) {
 
 #include "qcopy.h"
 
-enum {
-    GROUND_MATERIAL_MAGNETIC = 2,
-    GROUND_MATERIAL_SINK_TRIGGER = 0xD
-};
-
-enum {
-    GROUND_MATERIAL_WATER_SURFACE_TRIGGER = 0,
-    GROUND_MATERIAL_SINK_SURFACE_TRIGGER = 3
-};
 #define G hero
 
 /* Same source as the exact FUN_L08_00222800, with only the 0x16 animation in mode 0 and no 0xF exit. */

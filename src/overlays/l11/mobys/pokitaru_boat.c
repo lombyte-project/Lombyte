@@ -23,6 +23,15 @@
 #include "rnc/camera/follow_cam.h"
 #include "rnc/math/random.h"
 
+enum {
+    POKITARU_BOAT_INITIALIZE = 0,
+    POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1,
+    POKITARU_BOAT_FOLLOW_PATH = 2,
+    POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR = 3,
+    POKITARU_BOAT_RISE_ABOVE_PATH = 4,
+    POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
+};
+
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -85,15 +94,6 @@ extern float pokitaru_boat_turn_acceleration_degrees_gp __asm__("D_L11_00161DD8"
 extern float pokitaru_boat_max_turn_speed_degrees_gp __asm__("D_L11_00161DDC") __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/pokitaru_boat_data/pokitaru_boat_update.h"
-
-enum {
-    POKITARU_BOAT_INITIALIZE = 0,
-    POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1,
-    POKITARU_BOAT_FOLLOW_PATH = 2,
-    POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR = 3,
-    POKITARU_BOAT_RISE_ABOVE_PATH = 4,
-    POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
-};
 
 void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
 

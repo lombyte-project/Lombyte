@@ -20,6 +20,13 @@
 #include "rnc/sdk/storage/fileio.h"
 #include "rnc/sdk/storage/fileio/sceopen.h"
 
+enum {
+    DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS = 0,
+    DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
+    DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2,
+    DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS = 3
+};
+
 typedef struct {
     s32 a, b, c, d;
 } E001f36f8;
@@ -453,13 +460,6 @@ typedef struct {
 extern u8 D_L00_0016CA40[];
 #define level_view_context (*(LevelViewContext *)D_L00_0016CA40)
 #include "rnc/overlay/shared/hero/item_defs.h"
-
-enum {
-    DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS = 0,
-    DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
-    DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2,
-    DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS = 3
-};
 
 /* 13 item ids, declared as 8 bytes: the most gas reaches through $gp, as retail does. */
 extern u8 debug_menu_item_ids[8] __asm__("D_L00_0015EFD0") __attribute__((sda));

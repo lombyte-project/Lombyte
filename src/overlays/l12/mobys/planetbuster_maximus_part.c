@@ -26,6 +26,14 @@
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
 #include "rnc/overlay/shared/world/level_path.h"
 
+enum {
+    PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,
+    PLANETBUSTER_WAIT_FOR_PATH_TRIGGER = 1,
+    PLANETBUSTER_FOLLOW_PATH = 2,
+    PLANETBUSTER_POST_PATH_GUN_UPDATE = 3,
+    PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
+};
+
 typedef struct Moby Moby;
 
 extern float D_0015ED6C;
@@ -635,14 +643,6 @@ extern float planetbuster_maximus_rotation_oscillation_amplitude_gp __asm__("D_L
     __attribute__((sda));
 
 #include "rnc/game/game_globals.h"
-
-enum {
-    PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,
-    PLANETBUSTER_WAIT_FOR_PATH_TRIGGER = 1,
-    PLANETBUSTER_FOLLOW_PATH = 2,
-    PLANETBUSTER_POST_PATH_GUN_UPDATE = 3,
-    PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
-};
 
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");

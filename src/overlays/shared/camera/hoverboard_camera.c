@@ -16,13 +16,13 @@
 #include "rnc/overlay/shared/camera/init_camera_system.h"
 #include "rnc/camera/camera_spring.h"
 
+/* Sets up a moby's vector from the level table and clamps its height for the current state. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
+
 enum {
     CAMERA_ORBIT_MODE_FOLLOW = 0,
     CAMERA_ORBIT_MODE_ORBITING = 1
 };
-
-/* Sets up a moby's vector from the level table and clamps its height for the current state. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
 void update_hero_follow_camera_focus(char *moby) __asm__("FUN_L05_00329358");
 

@@ -35,6 +35,16 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/l18/mobys.h"
 
+enum {
+    MOBY_INITIALIZE = 0,
+    MOBY_APPROACH_TARGET_TRANSFORM = 2,
+    MOBY_FALL_AND_REMOVE = 4
+};
+
+enum {
+    FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1
+};
+
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern short         *D_L18_001AC240[];
@@ -242,16 +252,6 @@ void falling_moby_group_update(struct Moby *moby) {
 extern void mark_block_entries_within_transform_xy_bounds(int, int) __asm__("FUN_L18_002f1d08");
 
 #include "rnc/overlay/l18/mobys/falling_moby_group.h"
-
-enum {
-    MOBY_INITIALIZE = 0,
-    MOBY_APPROACH_TARGET_TRANSFORM = 2,
-    MOBY_FALL_AND_REMOVE = 4
-};
-
-enum {
-    FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1
-};
 
 void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
 

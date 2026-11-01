@@ -15,6 +15,15 @@
 #include "rnc/overlay/l03/mobys/mine_layer_globals.h"
 
 /* Patrol state of the l03 trooper: walks back and forth along a rail path. */
+enum {
+    MINE_LAYER_INITIALIZE = 0,
+    MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
+    MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL = 2,
+    MINE_LAYER_PATROL_AND_FIRE = 3,
+    MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
+    MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
+};
+
 typedef struct {
     s32        idx; /* 0x00: path point it is walking to */
     s8         dir; /* 0x04: +1 or -1 */
@@ -367,15 +376,6 @@ extern f32 mine_layer_nonlethal_knockback_speed_scale_gp __asm__("D_L03_001618FC
     __attribute__((sda));
 
 #include "rnc/overlay/l03/mobys/mine_layer_data/handle_mine_layer_damage.h"
-
-enum {
-    MINE_LAYER_INITIALIZE = 0,
-    MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
-    MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL = 2,
-    MINE_LAYER_PATROL_AND_FIRE = 3,
-    MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
-    MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
-};
 
 extern TrooperHit *trooper_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32         resolve_moby_hit_response(

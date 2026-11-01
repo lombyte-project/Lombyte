@@ -46,6 +46,17 @@
    collision restores the class collision or clears it; -1 leaves that one alone. */
 /* Ported from rac1-decomp (src/overlays/l17/mobyutil_00254B40.c: func_L17_00254B40), where it is exact; names translated to the US level program. */
 
+enum {
+    FIGHTER_JET_STATE_INITIALIZE = 0,
+    FIGHTER_JET_STATE_WAIT_FOR_BOARDING = 1,
+    FIGHTER_JET_STATE_BOARDING_FADE = 2,
+    FIGHTER_JET_STATE_PILOTED_FLIGHT = 4,
+    FIGHTER_JET_STATE_DISMOUNT = 5,
+    FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7,
+    FIGHTER_JET_STATE_VICTORY_EXIT = 8,
+    FIGHTER_JET_STATE_FADE_THEN_REMOVE = 9
+};
+
 typedef struct {
     char pad0[0x10];
     int  value;
@@ -1735,17 +1746,6 @@ extern void  jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 extern void  FUN_L17_0021e530(int, int);
 
 #include "rnc/overlay/l17/mobys/fighter_jet_data/fighter_jet_update.h"
-
-enum {
-    FIGHTER_JET_STATE_INITIALIZE = 0,
-    FIGHTER_JET_STATE_WAIT_FOR_BOARDING = 1,
-    FIGHTER_JET_STATE_BOARDING_FADE = 2,
-    FIGHTER_JET_STATE_PILOTED_FLIGHT = 4,
-    FIGHTER_JET_STATE_DISMOUNT = 5,
-    FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7,
-    FIGHTER_JET_STATE_VICTORY_EXIT = 8,
-    FIGHTER_JET_STATE_FADE_THEN_REMOVE = 9
-};
 
 extern int            D_L17_0015F608;
 extern char          *fighter_jet_hp_bar_clut_lookup_base __asm__("D_L17_0015F420");

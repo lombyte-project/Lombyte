@@ -9,6 +9,12 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 
+enum {
+    BLARG_GUNNER_STATE_INITIALIZE = 0,
+    BLARG_GUNNER_STATE_ACTIVE = 1,
+    BLARG_GUNNER_STATE_DESTROY = 2
+};
+
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
@@ -17,12 +23,6 @@
 #endif
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-
-enum {
-    BLARG_GUNNER_STATE_INITIALIZE = 0,
-    BLARG_GUNNER_STATE_ACTIVE = 1,
-    BLARG_GUNNER_STATE_DESTROY = 2
-};
 
 extern void FUN_L00_00257470(void *, int, int);
 

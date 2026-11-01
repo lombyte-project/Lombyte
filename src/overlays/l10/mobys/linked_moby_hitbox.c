@@ -14,17 +14,17 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/mobys.h"
 
+enum {
+    MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF = 0xFD,
+    MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF = 0xFE
+};
+
 extern int   debug_print() __asm__("FUN_001e93b0");
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
 
 extern struct Moby *D_L10_0015FFD8;
 
 #include "qzero.h"
-
-enum {
-    MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF = 0xFD,
-    MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF = 0xFE
-};
 
 /* Box a moby sweeps through: hits other mobys inside it (FUN_L10_002c9958) */
 typedef struct {

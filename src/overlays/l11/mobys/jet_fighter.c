@@ -26,6 +26,17 @@
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/ui/help/try_set_help_message.h"
 
+enum {
+    JET_FIGHTER_STATE_INITIALIZE = 0,
+    JET_FIGHTER_STATE_WAIT_FOR_BOARDING = 1,
+    JET_FIGHTER_STATE_BOARD = 2,
+    JET_FIGHTER_STATE_FLIGHT = 4,
+    JET_FIGHTER_STATE_DISMOUNT = 5,
+    JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7,
+    JET_FIGHTER_STATE_DELAYED_EXIT = 8,
+    JET_FIGHTER_STATE_INACTIVE = 9
+};
+
 extern float D_L11_0015F580[] MACRO_ADDR;
 extern float D_L11_0015F3FC;
 
@@ -1222,17 +1233,6 @@ unsigned char l11_jet_fighter_initial_ammo __asm__("D_L11_00162054") = 0xa;
 unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") = 0x14;
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/jet_fighter_update.h"
-
-enum {
-    JET_FIGHTER_STATE_INITIALIZE = 0,
-    JET_FIGHTER_STATE_WAIT_FOR_BOARDING = 1,
-    JET_FIGHTER_STATE_BOARD = 2,
-    JET_FIGHTER_STATE_FLIGHT = 4,
-    JET_FIGHTER_STATE_DISMOUNT = 5,
-    JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7,
-    JET_FIGHTER_STATE_DELAYED_EXIT = 8,
-    JET_FIGHTER_STATE_INACTIVE = 9
-};
 
 extern float D_L11_00162078 __attribute__((sda));
 int          D_L11_00162168 = 180;

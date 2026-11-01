@@ -17,6 +17,8 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l03/mobys/robot_dog.h"
 
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
+
 enum {
     ROBOT_DOG_INITIALIZE = 0,
     ROBOT_DOG_WAIT_FOR_ACTIVATION = 1,
@@ -34,8 +36,6 @@ enum {
 enum {
     MOBY_STATE_PENDING_REMOVAL = 0xFE
 };
-
-/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
 
 int is_robot_dog_in_state_5(struct Moby *moby) __asm__("FUN_L03_002c5b78");
 

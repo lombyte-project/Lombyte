@@ -12,12 +12,12 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
+
 enum {
     FIRE_BOLT_STATE_FLYING = 1,
     FIRE_BOLT_STATE_BURST_AND_REMOVE = 2
 };
-
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
 

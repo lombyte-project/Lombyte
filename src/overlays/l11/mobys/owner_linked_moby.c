@@ -9,6 +9,7 @@
 #include "rnc/game/interpolated_record.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
+/* Runs the moby's hit timer: on a hit it either finishes the stun or counts it down and plays the hurt animation. */
 enum {
     LINKED_MOBY_STATE_START_ANIMATION = 0,
     LINKED_MOBY_STATE_WAIT_FOR_ANIMATION_FLAG = 1,
@@ -17,7 +18,6 @@ enum {
     LINKED_MOBY_STATE_REMOVE = 4
 };
 
-/* Runs the moby's hit timer: on a hit it either finishes the stun or counts it down and plays the hurt animation. */
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int   fptodp(float) __asm__("FUN_00120478");
 extern void  print_fe50(char *, int, int) __asm__("FUN_001e93b0");

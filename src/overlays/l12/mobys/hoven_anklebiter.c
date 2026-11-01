@@ -26,6 +26,25 @@
 /* Suck cannon suction method: state 8 while sucked (alerting its group), back to 1 when released; no suction in states 9, 11 and 13. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E29C8), where it is exact; names translated to the US level program. */
 
+enum {
+    ANKLEBITER_INITIALIZE = 0,
+    ANKLEBITER_IDLE = 1,
+    ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT = 3,
+    ANKLEBITER_PURSUE_TARGET = 4,
+    ANKLEBITER_MELEE_ATTACK = 5,
+    ANKLEBITER_RETURN_HOME = 6,
+    ANKLEBITER_KNOCKBACK_FALL = 7,
+    ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
+    ANKLEBITER_DORMANT = 9,
+    ANKLEBITER_RECOVER_AFTER_KNOCKBACK = 10,
+    ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11,
+    ANKLEBITER_LEAP_TO_HOME = 12,
+    ANKLEBITER_ACTIVATE_FROM_DORMANCY = 13,
+    ANKLEBITER_LAND_AFTER_LEAP = 14,
+    ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15,
+    ANKLEBITER_DEATH_FALL = 99
+};
+
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 int process_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L12_002e16b8");
@@ -870,25 +889,6 @@ extern void anim_reset_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void anim_update_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 #include "rnc/overlay/l12/mobys/hoven_anklebiter_data/process_hoven_anklebiter_damage_and_alerts.h"
-
-enum {
-    ANKLEBITER_INITIALIZE = 0,
-    ANKLEBITER_IDLE = 1,
-    ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT = 3,
-    ANKLEBITER_PURSUE_TARGET = 4,
-    ANKLEBITER_MELEE_ATTACK = 5,
-    ANKLEBITER_RETURN_HOME = 6,
-    ANKLEBITER_KNOCKBACK_FALL = 7,
-    ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
-    ANKLEBITER_DORMANT = 9,
-    ANKLEBITER_RECOVER_AFTER_KNOCKBACK = 10,
-    ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11,
-    ANKLEBITER_LEAP_TO_HOME = 12,
-    ANKLEBITER_ACTIVATE_FROM_DORMANCY = 13,
-    ANKLEBITER_LAND_AFTER_LEAP = 14,
-    ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15,
-    ANKLEBITER_DEATH_FALL = 99
-};
 
 /* Damage and alert step of the Hoven anklebiter: refreshes its speed while alerted, now and then calls for help behind
    itself, and takes hits (dying, or staggering back). */
