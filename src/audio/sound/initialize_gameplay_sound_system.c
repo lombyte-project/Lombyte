@@ -6,11 +6,10 @@
 #include "rnc/game/options.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"
 #include "rnc/audio/mixer/snd_set_playback_mode.h"
-#include "rnc/audio/effects/snd_pre_alloc_reverb_work_area.h"
-#include "rnc/audio/mixer/snd_set_group_voice_range.h"
-#include "rnc/audio/mixer/snd_set_mixer_mode.h"
-#include "rnc/audio/music/reset_music.h"
-#include "rnc/audio/snd_start_sound_system.h"
+#include "rnc/audio/effects.h"
+#include "rnc/audio/mixer.h"
+#include "rnc/audio/music.h"
+#include "rnc/audio.h"
 
 /* The 0x70-byte header in front of the voices, then thirty 0x70-byte voices. */
 typedef struct {

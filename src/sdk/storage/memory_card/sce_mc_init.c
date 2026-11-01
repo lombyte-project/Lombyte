@@ -1,11 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/kernel.h"
 #include "rnc/sdk/libmc.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
-#include "rnc/sdk/storage/memory_card/sce_mc_sync.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/rpc/rpc.h"
+#include "rnc/sdk/storage/memory_card.h"
 
 extern char mc_rpc_bind_error_message[] __asm__("D_00153450");
 extern char mcserv_old_release_message[] __asm__("D_00153468");

@@ -10,10 +10,9 @@
 #include "rnc/rendering/packets/emit_rgba_draw_packet.h"
 #include "rnc/rendering/frame/reset_gs_registers.h"
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu.h"
-#include "rnc/overlay/shared/rendering/frame/queue_framebuffer_upload.h"
-#include "rnc/overlay/shared/ui/menus/get_pause_menu_mode.h"
-#include "rnc/overlay/shared/ui/text/draw_timed_text.h"
-#include "rnc/overlay/shared/ui/text/level_draw_dialog_text.h"
+#include "rnc/overlay/shared/rendering/frame.h"
+#include "rnc/overlay/shared/ui/menus.h"
+#include "rnc/overlay/shared/ui/text.h"
 
 extern int D_L00_0015F5D8;
 /* The level overlay's own copy of draw_dialog_text: same code, own data. */

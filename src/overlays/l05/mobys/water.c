@@ -14,7 +14,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/l05/render_level_water_grids.h"
+#include "rnc/overlay/l05.h"
 
 extern float        random_float_between(float, float) __asm__("FUN_002132a8");
 extern float        fast_cos(float);

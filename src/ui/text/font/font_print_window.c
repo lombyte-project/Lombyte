@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
-#include "rnc/ui/text/font/font_print.h"
+#include "rnc/ui/text/font.h"
 
 typedef struct TextRegion FontWindow;
 

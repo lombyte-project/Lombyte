@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/streaming/stash/stash.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 s32 stash_receive_data(u8 *dst, u32 slot, s32 offset_qwords, s32 qword_count, u32 rpc_mode) __asm__("FUN_00232f20");
 

@@ -2,8 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
-#include "rnc/sdk/dma/set_d3_chcr.h"
-#include "rnc/sdk/dma/set_d4_chcr.h"
+#include "rnc/sdk/dma.h"
 
 void suspend_ipu_dma_state(u32 *pSnapshot) __asm__("FUN_0012cc20");
 

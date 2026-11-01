@@ -15,14 +15,12 @@
 #include "rnc/ui/hud/banks/hud_heap_reset.h"
 #include "rnc/ui/hud/init_hud.h"
 #include "rnc/game/transitions/transition_do_transition.h"
-#include "rnc/audio/voices/allocate_voice_for_group_entry.h"
-#include "rnc/audio/voices/is_voice_active.h"
-#include "rnc/game/start_level.h"
-#include "rnc/game/transitions/transition_load_wad.h"
-#include "rnc/sdk/graph/sce_gs_reset_graph.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
-#include "rnc/ui/help/load_help_message_group.h"
+#include "rnc/audio/voices.h"
+#include "rnc/game.h"
+#include "rnc/game/transitions.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/libc/stdlib.h"
+#include "rnc/ui/help.h"
 
 typedef struct {
     s32 off;

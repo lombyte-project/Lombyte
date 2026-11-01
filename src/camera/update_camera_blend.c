@@ -6,7 +6,7 @@
 #include "rnc/camera/camera_globals.h"
 
 #include "rnc/camera/update_cam.h"
-#include "rnc/camera/advance_alternate_camera_transition.h"
+#include "rnc/camera.h"
 
 extern int step_camera_blend(void *, struct CameraBlend *) __asm__("func_001ECAF8");
 

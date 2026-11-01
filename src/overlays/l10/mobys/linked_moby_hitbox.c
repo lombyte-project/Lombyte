@@ -12,7 +12,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
-#include "rnc/overlay/shared/mobys/spawn_nearby_effect_without_direction.h"
+#include "rnc/overlay/shared/mobys.h"
 
 extern int   debug_print() __asm__("FUN_001e93b0");
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");

@@ -14,7 +14,7 @@
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "sda.h"
-#include "rnc/mobys/animation/queue_animation_update.h"
+#include "rnc/mobys/animation.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"

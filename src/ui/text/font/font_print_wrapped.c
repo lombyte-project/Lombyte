@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/rendering/texture/draw_textured_quad.h"
+#include "rnc/rendering/texture.h"
 
 struct Glyph {
     u8 u;

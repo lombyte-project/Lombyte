@@ -1,8 +1,7 @@
 #include "types.h"
 #include "rnc/audio/sound_state.h"
-#include "rnc/sdk/libc/stdio/printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
+#include "rnc/sdk/libc/stdio.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern s32  snd_cd_load_error __asm__("D_0015EC88") __attribute__((sda));
 extern s32  snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda));

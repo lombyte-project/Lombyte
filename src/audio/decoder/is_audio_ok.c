@@ -2,7 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/movies/decoder/decoder_globals.h"
 #include "rnc/movies/player/movie_player.h"
-#include "rnc/audio/decoder/audio_dec_is_preset.h"
+#include "rnc/audio/decoder.h"
 
 s32 is_audio_ok(void) __asm__("FUN_0023a790");
 

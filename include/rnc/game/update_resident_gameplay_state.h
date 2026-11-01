@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_GAME_UPDATE_RESIDENT_GAMEPLAY_STATE_H
-#define LOMBYTE_RNC_GAME_UPDATE_RESIDENT_GAMEPLAY_STATE_H
-
-#include "types.h"
-
-void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
-
-#endif /* LOMBYTE_RNC_GAME_UPDATE_RESIDENT_GAMEPLAY_STATE_H */

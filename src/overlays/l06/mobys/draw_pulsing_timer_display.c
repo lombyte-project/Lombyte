@@ -6,8 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/ui/frames/draw_ui_frame.h"
-#include "rnc/ui/text/font/font_print_center.h"
-#include "rnc/ui/text/font/font_print_center_large.h"
+#include "rnc/ui/text/font.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 

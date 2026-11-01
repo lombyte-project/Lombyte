@@ -12,10 +12,10 @@
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/banks/snd_bank_load_from_ee_cb.h"
 #include "rnc/rendering/frame/reset_draw_globals.h"
-#include "rnc/rendering/texture/parse_particle_textures.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/rendering/texture.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/libc/stdlib.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 

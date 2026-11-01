@@ -7,7 +7,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/overlay/l01/scroll_layer.h"
-#include "rnc/overlay/l01/scroll_layers.h"
+#include "rnc/overlay/l01.h"
 
 s32 bounded_scroll_layers_bounds_computed __asm__("D_L01_00161BA0") = 0;
 

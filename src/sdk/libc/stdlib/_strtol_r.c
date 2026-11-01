@@ -21,9 +21,7 @@
  * ctype table D_00152201 (= _ctype_ + 1). */
 
 #include "types.h"
-#include "rnc/sdk/soft_float/__muldi3.h"
-#include "rnc/sdk/soft_float/udivdi3.h"
-#include "rnc/sdk/soft_float/umoddi3.h"
+#include "rnc/sdk/soft_float.h"
 
 typedef struct _reent {
     s32 _errno;

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_SHADY_SALESMAN_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_SHADY_SALESMAN_H
-
-#include "types.h"
-
-void shady_salesman_update() __asm__("FUN_L05_003180a0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_SHADY_SALESMAN_H */

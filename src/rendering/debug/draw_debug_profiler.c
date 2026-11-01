@@ -6,13 +6,13 @@
 #include "rnc/rendering/texture/patch_tie_texture_fields.h"
 #include "rnc/rendering/tfrags/light_tfrags.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/rendering/effects/append_billboard_batch.h"
+#include "rnc/rendering/effects.h"
 #include "rnc/rendering/effects/render_queued_rotated_sprites.h"
-#include "rnc/rendering/frame/callbacks/noop_graphics_callback.h"
-#include "rnc/rendering/frame/copy_render_buffer_pair.h"
-#include "rnc/rendering/mobys/register_entity_render_resources.h"
-#include "rnc/rendering/occlusion/update_occlusion.h"
-#include "rnc/rendering/packets/append_dma_tag.h"
+#include "rnc/rendering/frame/callbacks.h"
+#include "rnc/rendering/frame.h"
+#include "rnc/rendering/mobys.h"
+#include "rnc/rendering/occlusion.h"
+#include "rnc/rendering/packets.h"
 
 typedef struct {
     u8  pad_0[4];

@@ -22,8 +22,8 @@
 #include "types.h"
 
 #include "rnc/sdk/sce_dma_chan.h"
-#include "rnc/sdk/dma/sce_dma_put_env.h"
-#include "rnc/sdk/graph/memclr.h"
+#include "rnc/sdk/dma.h"
+#include "rnc/sdk/graph.h"
 
 extern s32 DmaChannelsUsed[] __asm__("D_001533F8");
 

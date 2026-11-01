@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_RENDERING_TEXTURE_DRAW_TEXTURED_QUAD_H
-#define LOMBYTE_RNC_RENDERING_TEXTURE_DRAW_TEXTURED_QUAD_H
-
-#include "types.h"
-
-void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("FUN_001f5450");
-
-#endif /* LOMBYTE_RNC_RENDERING_TEXTURE_DRAW_TEXTURED_QUAD_H */

@@ -7,8 +7,7 @@
 #include "rnc/rendering/draw_environment.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/packets/put_draw_buffer_large.h"
-#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
-#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
+#include "rnc/sdk/graph.h"
 
 extern s32  display_buffer_address __asm__("D_0015EE80");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("FUN_001f97e8");

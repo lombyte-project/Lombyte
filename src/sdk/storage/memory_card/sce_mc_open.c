@@ -2,7 +2,7 @@
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libmc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 struct MemoryCardNameParam {
     s32  port;

@@ -14,7 +14,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/rendering/effects/create_type_31_part.h"
+#include "rnc/overlay/shared/rendering/effects.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct {

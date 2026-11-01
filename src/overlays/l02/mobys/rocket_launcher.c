@@ -9,7 +9,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/l02/mobys/rocket_launcher_globals.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/l02/mobys/rocket_launcher_projectile.h"
+#include "rnc/overlay/l02/mobys.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
 extern float D_0015ED6C;

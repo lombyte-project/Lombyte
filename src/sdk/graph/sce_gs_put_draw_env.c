@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/deci2.h"
 
 extern u8 gs_draw_env_dma_timeout_message[] __asm__("D_00153078");
 

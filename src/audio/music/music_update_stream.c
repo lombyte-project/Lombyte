@@ -1,7 +1,6 @@
 #include "rnc/math/asm_helpers.h"
-#include "rnc/audio/streaming/music_callbacks/music_channel_ready_callback.h"
-#include "rnc/audio/streaming/music_callbacks/music_remaining_time_callback.h"
-#include "rnc/audio/streaming/vag/snd_pause_vag_stream.h"
+#include "rnc/audio/streaming/music_callbacks.h"
+#include "rnc/audio/streaming/vag.h"
 
 /* Ported from rac1-decomp (src/game/music.c, func_00216F48). */
 extern void snd_continue_vag_stream(void *) __asm__("func_0012ECA0");

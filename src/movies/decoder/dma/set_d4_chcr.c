@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/interrupts.h"
 
 extern void DIntr(void);
 

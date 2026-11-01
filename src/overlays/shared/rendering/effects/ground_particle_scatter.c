@@ -11,7 +11,7 @@
 #include "rnc/overlay/shared/rendering/effects/ground_particle_scatter_globals.h"
 #include "rnc/overlay/shared/rendering/effects/ground_particle_scatter.h"
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
-#include "rnc/overlay/shared/rendering/effects/create_type_49_particle.h"
+#include "rnc/overlay/shared/rendering/effects.h"
 
 typedef struct Moby Moby;
 

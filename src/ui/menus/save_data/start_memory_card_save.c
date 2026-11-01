@@ -2,8 +2,8 @@
 #include "sda.h"
 
 #include "rnc/save/memory_card_state.h"
-#include "rnc/sdk/scf/sce_scf_get_local_timefrom_rtc.h"
-#include "rnc/sdk/storage/cdvd/scecdreadclock.h"
+#include "rnc/sdk/scf.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern u8  D_0015EE98[] MACRO_ADDR;
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");

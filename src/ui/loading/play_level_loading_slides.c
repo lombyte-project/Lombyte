@@ -8,7 +8,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/globals.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/graph.h"
 
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;

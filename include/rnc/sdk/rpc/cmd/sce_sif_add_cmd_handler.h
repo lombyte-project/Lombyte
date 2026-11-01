@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_RPC_CMD_SCE_SIF_ADD_CMD_HANDLER_H
-#define LOMBYTE_RNC_SDK_RPC_CMD_SCE_SIF_ADD_CMD_HANDLER_H
-
-#include "types.h"
-
-void sceSifAddCmdHandler(s32, u32, u32);
-
-#endif /* LOMBYTE_RNC_SDK_RPC_CMD_SCE_SIF_ADD_CMD_HANDLER_H */

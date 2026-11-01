@@ -1,7 +1,7 @@
 /* deci2Putchar: buffered deci2 character output. */
 
 #include "types.h"
-#include "rnc/sdk/deci2/kputs.h"
+#include "rnc/sdk/deci2.h"
 
 extern s32 deci2_buffered_byte_count[] __asm__("D_0012FBFC");
 extern s8  deci2_output_buffer[] __asm__("D_00154D00");

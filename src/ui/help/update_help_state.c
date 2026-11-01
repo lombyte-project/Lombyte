@@ -7,7 +7,7 @@
 #include "rnc/ui/help/force_help_message.h"
 #include "rnc/ui/help/find_help_message_index.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
-#include "rnc/ui/text/link_localized_display_text.h"
+#include "rnc/ui/text.h"
 
 #include "rnc/ui/help/help_state.h"
 

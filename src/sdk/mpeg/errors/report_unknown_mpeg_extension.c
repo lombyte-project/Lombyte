@@ -1,6 +1,6 @@
 #include "types.h"
 #include "asm.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 typedef struct MpegVideoDecoderState MpegVideoDecoderState;
 

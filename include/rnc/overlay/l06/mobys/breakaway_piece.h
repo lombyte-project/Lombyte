@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKAWAY_PIECE_H
-#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKAWAY_PIECE_H
-
-#include "types.h"
-
-void breakaway_piece_update(char *) __asm__("FUN_L06_00300df0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKAWAY_PIECE_H */

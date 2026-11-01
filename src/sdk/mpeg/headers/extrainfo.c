@@ -1,5 +1,4 @@
-#include "rnc/sdk/mpeg/bitstream/_flushBuf.h"
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
+#include "rnc/sdk/mpeg/bitstream.h"
 
 void ExtraInfo(void *bitstream) __asm__("_extrainfo");
 

@@ -6,7 +6,7 @@
 #include "types.h"
 #include "qcopy.h"
 #include "rnc/sdk/eetypes.h"
-#include "rnc/rendering/packets/set_up_vis_gif_viewer.h"
+#include "rnc/rendering/packets.h"
 
 typedef struct {
     s32 draw_high;

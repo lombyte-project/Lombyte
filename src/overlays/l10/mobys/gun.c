@@ -11,7 +11,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
-#include "rnc/overlay/shared/weapons/turret_shot.h"
+#include "rnc/overlay/shared/weapons.h"
 
 typedef struct Moby Moby;
 extern struct Moby *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;

@@ -1,5 +1,4 @@
-#include "rnc/sdk/soft_float/__pack_d.h"
-#include "rnc/sdk/soft_float/fpadd_parts.h"
+#include "rnc/sdk/soft_float.h"
 #include "rnc/sdk/soft_float/unpack_d.h"
 /* This is a software floating point library which can be used instead of
    the floating point routines in libgcc1.c for targets without hardware

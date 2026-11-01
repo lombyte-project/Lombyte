@@ -9,7 +9,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/world/level_labels.h"
-#include "rnc/overlay/shared/mobys/test_linked_moby_turn_trigger.h"
+#include "rnc/overlay/shared/mobys.h"
 
 extern float fast_add_rotations(float, float);
 

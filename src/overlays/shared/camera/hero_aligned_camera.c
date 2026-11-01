@@ -11,7 +11,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
-#include "rnc/camera/cam_interp_values.h"
+#include "rnc/camera.h"
 #include "rnc/overlay/shared/camera/init_camera_system.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 

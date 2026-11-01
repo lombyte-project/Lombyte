@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
-#include "rnc/sdk/storage/cdvd/sceCdDelayThread.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/rpc/rpc.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern u8 cd_sync_wait_debug_message[] __asm__("D_00152EF0");
 

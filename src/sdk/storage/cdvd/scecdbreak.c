@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern volatile u32 D_00131314[];
 extern s32          SignalSema(s32 semaId);

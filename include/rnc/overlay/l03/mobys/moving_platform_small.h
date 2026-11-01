@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_MOVING_PLATFORM_SMALL_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_MOVING_PLATFORM_SMALL_H
-
-#include "types.h"
-
-void moving_platform_small_update(char *) __asm__("FUN_L03_00294c08");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_MOVING_PLATFORM_SMALL_H */

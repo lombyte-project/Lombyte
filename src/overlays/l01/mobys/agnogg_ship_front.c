@@ -11,10 +11,10 @@
 #include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
+#include "rnc/overlay/shared/game.h"
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/shared/mobys/show_tracked_moby.h"
+#include "rnc/overlay/shared/mobys.h"
 #include "rnc/rendering/clip_volume.h"
 
 typedef struct {

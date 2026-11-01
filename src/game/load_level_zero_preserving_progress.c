@@ -5,8 +5,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/sdk/scf/sce_scf_get_local_timefrom_rtc.h"
-#include "rnc/sdk/storage/cdvd/scecdreadclock.h"
+#include "rnc/sdk/scf.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 /* Preserves selected state across load_and_initialize_level_chunk using scratchpad copies.
    Only listed bytes of item_available are restored; each D_00141EA0 entry is

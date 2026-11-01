@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_START_TRACK_H
-#define LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_START_TRACK_H
-
-#include "types.h"
-
-void music_start_track(s32, s32, s32) __asm__("FUN_00215c40");
-
-#endif /* LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_START_TRACK_H */

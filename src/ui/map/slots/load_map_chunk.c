@@ -1,6 +1,6 @@
 #include "types.h"
 #include "sda.h"
-#include "rnc/runtime/callbacks/noop_memory_callback.h"
+#include "rnc/runtime/callbacks.h"
 
 extern s32 D_001A0118 NOT_SDA;
 extern s32            decode_compressed_occlusion_map() __asm__("func_00207C28");

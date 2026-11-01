@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 struct ShrubLightLink {
     u8  pad_0[0x1B];

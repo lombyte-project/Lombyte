@@ -1,8 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/input/dbc/scedbcreceivedata.h"
-#include "rnc/sdk/input/sce_pad2_check_dma.h"
-#include "rnc/sdk/input/sce_pad2_get_side.h"
-#include "rnc/sdk/input/sce_pad2_link_driver.h"
+#include "rnc/sdk/input/dbc.h"
+#include "rnc/sdk/input.h"
 
 typedef struct {
     u64 size : 14;

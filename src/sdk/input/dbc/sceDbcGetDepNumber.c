@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/library/sdk_globals.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 struct DbCBlob {
     u8 data[0x40];

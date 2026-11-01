@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/sdk/input/dbc/sceDbcInit.h"
+#include "rnc/sdk/input/dbc.h"
 
 typedef struct {
     s32 port;

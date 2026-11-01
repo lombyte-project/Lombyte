@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/rendering/vu1/vif1_dma_interrupt_handler.h"
+#include "rnc/rendering/vu1.h"
 
 extern s32  AddDmacHandler();
 extern s32  enable_dmac() __asm__("func_00119160");

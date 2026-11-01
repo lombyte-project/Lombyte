@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_AUDIO_SOUND_STORE_SOUND_BANK_HANDLE_CALLBACK_H
-#define LOMBYTE_RNC_AUDIO_SOUND_STORE_SOUND_BANK_HANDLE_CALLBACK_H
-
-#include "types.h"
-
-void store_sound_bank_handle_callback(int, long) __asm__("FUN_0022dd78");
-
-#endif /* LOMBYTE_RNC_AUDIO_SOUND_STORE_SOUND_BANK_HANDLE_CALLBACK_H */

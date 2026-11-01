@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
+#include "rnc/sdk/mpeg/api.h"
 
 void DispatchMpegCallbackNoData(void *callback) __asm__("_dispatchMpegCbNodata");
 

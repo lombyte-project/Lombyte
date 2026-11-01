@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/soft_float/__muldi3.h"
+#include "rnc/sdk/soft_float.h"
 
 struct MpegTimestampState {
     u8  pad_0[0x70];

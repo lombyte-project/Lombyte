@@ -19,7 +19,7 @@
 #include "rnc/overlay/l12/mobys/hoven_anklebiter.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
-#include "rnc/overlay/shared/mobys/find_point_ahead.h"
+#include "rnc/overlay/shared/mobys.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/weapons/suckcannon.h"
 

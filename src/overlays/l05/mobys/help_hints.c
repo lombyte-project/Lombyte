@@ -9,7 +9,7 @@
 #include "rnc/overlay/l05/mobys/help_hints_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/shared/enemies/horny_toad.h"
+#include "rnc/overlay/shared/enemies.h"
 
 extern char D_0013F3D0[];
 extern int  camera_secondary_mode_lui __asm__("D_001413D4") NOT_SDA, D_001413DC NOT_SDA,

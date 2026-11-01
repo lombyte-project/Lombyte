@@ -14,7 +14,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/hero/hero_idle_sequence.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
-#include "rnc/overlay/shared/weapons/visibomb_missile.h"
+#include "rnc/overlay/shared/weapons.h"
 
 typedef struct {
     u8  pad0[0x1A4];

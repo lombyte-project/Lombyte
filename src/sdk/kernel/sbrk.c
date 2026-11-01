@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/kernel.h"
 #include "sda.h"
-#include "rnc/sdk/libc/stdlib/__errno.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 extern void *EndOfHeap(void);
 /* Current program break, raised by sbrk. */

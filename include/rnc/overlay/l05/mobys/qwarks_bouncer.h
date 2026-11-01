@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_QWARKS_BOUNCER_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_QWARKS_BOUNCER_H
-
-#include "types.h"
-
-void qwarks_bouncer_update() __asm__("FUN_L05_00317470");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_QWARKS_BOUNCER_H */

@@ -31,8 +31,8 @@
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
 
 #include "rnc/overlay/l02/mobys/watcher_npc.h"
-#include "rnc/overlay/l02/mobys/skid_mcmarx.h"
-#include "rnc/overlay/shared/streaming/start_indexed_disc_stream.h"
+#include "rnc/overlay/l02/mobys.h"
+#include "rnc/overlay/shared/streaming.h"
 
 extern u8 D_0013D506 NOT_SDA;
 extern u8            big_head_cheat_enabled_macro __asm__("D_0015EDB0") MACRO_ADDR;

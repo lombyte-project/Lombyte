@@ -2,7 +2,7 @@
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
-#include "rnc/ui/menus/save_data/prepare_save_game.h"
+#include "rnc/ui/menus/save_data.h"
 
 typedef struct __attribute__((packed)) {
     s64 v;

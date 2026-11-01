@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_AUDIO_VOICES_SND_SOUND_IS_STILL_PLAYING_CB_H
-#define LOMBYTE_RNC_AUDIO_VOICES_SND_SOUND_IS_STILL_PLAYING_CB_H
-
-#include "types.h"
-
-void snd_sound_is_still_playing_cb(s32, s32, s32) __asm__("FUN_0012e448");
-
-#endif /* LOMBYTE_RNC_AUDIO_VOICES_SND_SOUND_IS_STILL_PLAYING_CB_H */

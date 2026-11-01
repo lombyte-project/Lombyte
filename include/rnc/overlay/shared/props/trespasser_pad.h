@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TRESPASSER_PAD_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TRESPASSER_PAD_H
-
-#include "types.h"
-
-void tresspasser_pad_update() __asm__("FUN_L02_002d8ad0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TRESPASSER_PAD_H */

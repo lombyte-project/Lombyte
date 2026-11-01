@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_INPUT_DBC_SCEDBCINIT_H
-#define LOMBYTE_RNC_SDK_INPUT_DBC_SCEDBCINIT_H
-
-#include "types.h"
-
-s32 sceDbcInit(void);
-
-#endif /* LOMBYTE_RNC_SDK_INPUT_DBC_SCEDBCINIT_H */

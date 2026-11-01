@@ -3,7 +3,7 @@
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
-#include "rnc/overlay/l16/mobys/reflection_mesh_pair.h"
+#include "rnc/overlay/l16/mobys.h"
 
 void draw_only_moby_update(struct Moby *moby) __asm__("FUN_L16_002e9df0");
 

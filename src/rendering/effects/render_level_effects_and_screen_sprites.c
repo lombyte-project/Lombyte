@@ -20,10 +20,10 @@
 #include "rnc/rendering/view/reset_active_camera_position_and_basis.h"
 #include "rnc/rendering/view/configure_graphics_render_target_and_projection.h"
 #include "rnc/ui/menus/widgets/draw_menu_flashing_panel.h"
-#include "rnc/rendering/texture/draw_textured_quad.h"
-#include "rnc/rendering/view/project_graphics_bounds.h"
-#include "rnc/ui/hud/append_screen_rect_packet.h"
-#include "rnc/ui/hud/sprites/draw_hud_rect_depth.h"
+#include "rnc/rendering/texture.h"
+#include "rnc/rendering/view.h"
+#include "rnc/ui/hud.h"
+#include "rnc/ui/hud/sprites.h"
 
 /* Retail 0x002196b8..0x00219d77: draws the level-effect moby lists, then
    projects each enabled menu panel slot to the screen, renders panel

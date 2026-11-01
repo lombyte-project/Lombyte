@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_remove_cmd_handler.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/rpc/cmd.h"
 
 extern s32 D_001312D4[];
 extern s32 D_00131314[];

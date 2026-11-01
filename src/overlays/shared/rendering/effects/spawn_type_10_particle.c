@@ -10,7 +10,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */

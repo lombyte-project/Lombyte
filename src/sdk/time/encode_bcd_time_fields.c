@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/time/time_to_bcd.h"
+#include "rnc/sdk/time.h"
 
 struct BcdClockTime {
     u8 pad_0;

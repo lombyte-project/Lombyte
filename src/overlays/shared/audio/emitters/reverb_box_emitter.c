@@ -4,7 +4,7 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/shared/audio/voices/set_requested_state_and_mark_changes.h"
+#include "rnc/overlay/shared/audio/voices.h"
 
 /* reverb box sound update: starts or stops the sound as the listener enters or leaves the box */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */

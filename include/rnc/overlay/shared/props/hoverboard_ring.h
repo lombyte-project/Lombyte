@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_HOVERBOARD_RING_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_HOVERBOARD_RING_H
-
-#include "types.h"
-
-void hoverboard_ring_update(char *) __asm__("FUN_L05_0031abe0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_HOVERBOARD_RING_H */

@@ -7,7 +7,7 @@
 #include "rnc/hero/hero.h"
 #include "sda.h"
 #include "rnc/overlay/shared/ui/menus/ensure_menu_cache_entry.h"
-#include "rnc/ui/map/world_to_map_coords.h"
+#include "rnc/ui/map.h"
 
 typedef struct {
     f32 lower;

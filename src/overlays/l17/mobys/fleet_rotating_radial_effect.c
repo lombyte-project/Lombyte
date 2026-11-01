@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 /* Fleet moby 669 update: spins up, then sprays particles from points on a rotating ring. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D8CC8), where it is exact; names translated to the US level program. */

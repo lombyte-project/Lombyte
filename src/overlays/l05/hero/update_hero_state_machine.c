@@ -5,7 +5,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/hero.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"

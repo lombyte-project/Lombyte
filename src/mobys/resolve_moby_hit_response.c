@@ -4,7 +4,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/hit_response_tables.h"
-#include "rnc/mobys/get_moby_hit_state.h"
+#include "rnc/mobys.h"
 
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
 

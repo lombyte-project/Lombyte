@@ -1,4 +1,4 @@
-#include "rnc/sdk/graph/sce_gs_set_def_draw_env.h"
+#include "rnc/sdk/graph.h"
 /* Ported from rac1-decomp (src/game/framebuf.c,
    func_001FB608). */
 #include "sda.h"

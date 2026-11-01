@@ -1,13 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/ipu/wait_bdec_out.h"
-#include "rnc/sdk/mpeg/bitstream/_peepBit.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
-#include "rnc/sdk/mpeg/macroblock/_decMB0.h"
-#include "rnc/sdk/mpeg/macroblock/domc.h"
-#include "rnc/sdk/mpeg/macroblock/mb_address_increment.h"
-#include "rnc/sdk/mpeg/macroblock/skip_mb0.h"
-#include "rnc/sdk/mpeg/macroblock/slicea0.h"
+#include "rnc/sdk/ipu.h"
+#include "rnc/sdk/mpeg/bitstream.h"
+#include "rnc/sdk/mpeg/errors.h"
+#include "rnc/sdk/mpeg/macroblock.h"
 
 extern u8  too_many_macroblocks_error_message[] __asm__("D_00153848");
 extern s32 _motionComp0();

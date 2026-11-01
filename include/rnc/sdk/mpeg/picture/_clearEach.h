@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_PICTURE__CLEAREACH_H
-#define LOMBYTE_RNC_SDK_MPEG_PICTURE__CLEAREACH_H
-
-#include "types.h"
-
-void _clearEach(u8 *);
-
-#endif /* LOMBYTE_RNC_SDK_MPEG_PICTURE__CLEAREACH_H */

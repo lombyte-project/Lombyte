@@ -17,7 +17,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/l09/mobys/display.h"
+#include "rnc/overlay/l09/mobys.h"
 
 typedef struct Moby Moby;
 

@@ -1,5 +1,5 @@
 #include "rnc/sdk/mpeg_work_area.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 extern u8 work_area_too_small_message[] __asm__("D_00153A38");
 

@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/eetypes.h"
 #include "rnc/sdk/kernel.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/interrupts.h"
 
 typedef void (*SifCmdHandler)(void *packet, void *argument);
 

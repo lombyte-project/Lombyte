@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libmc.h"
-#include "rnc/runtime/memory/unpack_spr_descriptor.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/runtime/memory.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 struct MemoryCardReadRequest {
     s32 file_descriptor;

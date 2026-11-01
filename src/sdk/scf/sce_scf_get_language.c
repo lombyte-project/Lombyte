@@ -1,7 +1,7 @@
 #include "rnc/sdk/library/sdk_state.h"
 #include "sda.h"
 #include "types.h"
-#include "rnc/sdk/scf/is_t10_k.h"
+#include "rnc/sdk/scf.h"
 
 extern void GetOsdConfigParam(int *config);
 

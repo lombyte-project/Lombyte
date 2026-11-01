@@ -191,7 +191,7 @@ void integrate_hero_movement(void) {
     }
 }
 
-#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/hero.h"
 #include "rnc/input/pad_state.h"
 
 typedef union {

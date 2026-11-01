@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_SAVING_H
-#define LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_SAVING_H
-
-#include "types.h"
-
-void save_card_state_saving(void) __asm__("FUN_00208f28");
-
-#endif /* LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_SAVING_H */

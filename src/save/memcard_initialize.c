@@ -1,6 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/debug/debug_print.h"
-#include "rnc/sdk/storage/memory_card/sce_mc_init.h"
+#include "rnc/sdk/debug.h"
+#include "rnc/sdk/storage/memory_card.h"
 
 extern u8 memcard_error_message[] __asm__("D_001E8360");
 void      memcard_initialize(void) __asm__("FUN_0020ac58");

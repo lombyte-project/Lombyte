@@ -20,7 +20,7 @@
 /* cvt: newlib-2000-02-17 vfprintf.c floating-point conversion helper. */
 
 #include "types.h"
-#include "rnc/sdk/libc/mprec/_dtoa_r.h"
+#include "rnc/sdk/libc/mprec.h"
 
 struct _reent;
 

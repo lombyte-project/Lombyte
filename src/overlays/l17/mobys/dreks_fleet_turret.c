@@ -18,7 +18,7 @@
 #include "rnc/world/collision/collision_line.h"
 #include "qcopy.h"
 #include "qzero.h"
-#include "rnc/overlay/l17/mobys/blarg_ship.h"
+#include "rnc/overlay/l17/mobys.h"
 
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");

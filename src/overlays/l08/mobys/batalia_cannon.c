@@ -23,7 +23,7 @@
 #include "rnc/overlay/l08/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/shared/weapons/turret_rocket.h"
+#include "rnc/overlay/shared/weapons.h"
 
 /* finds the first of eight linked entries whose direction lines up with the moby */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E15A0), where it is exact; names translated to the US level program. */

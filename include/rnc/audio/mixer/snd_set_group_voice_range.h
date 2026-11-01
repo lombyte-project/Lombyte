@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_AUDIO_MIXER_SND_SET_GROUP_VOICE_RANGE_H
-#define LOMBYTE_RNC_AUDIO_MIXER_SND_SET_GROUP_VOICE_RANGE_H
-
-#include "types.h"
-
-void snd_set_group_voice_range(s32, s32, s32) __asm__("FUN_0012e2b8");
-
-#endif /* LOMBYTE_RNC_AUDIO_MIXER_SND_SET_GROUP_VOICE_RANGE_H */

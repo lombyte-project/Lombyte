@@ -39,7 +39,7 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/camera/sample_camera_path.h"
+#include "rnc/camera.h"
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 extern float fast_add_rotations(float, float);

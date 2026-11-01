@@ -1,6 +1,6 @@
 #include "types.h"
 #include "sda.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern s32 D_0012FCAC NOT_SDA;
 extern u8             D_00158040[];

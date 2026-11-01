@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_SYSTEM_ENTER_MAIN_MENU_H
-#define LOMBYTE_RNC_UI_MENUS_SYSTEM_ENTER_MAIN_MENU_H
-
-#include "types.h"
-
-void enter_main_menu(void);
-
-#endif /* LOMBYTE_RNC_UI_MENUS_SYSTEM_ENTER_MAIN_MENU_H */

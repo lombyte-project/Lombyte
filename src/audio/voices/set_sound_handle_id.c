@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 struct Handle {
     u32 id;

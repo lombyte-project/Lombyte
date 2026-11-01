@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/vendor/vendor_volume.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/mobys/compute_advanced_moby_path_position.h"
+#include "rnc/overlay/shared/mobys.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern float D_L09_00166F40[];

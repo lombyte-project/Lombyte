@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/ui/hud/draw_weapon_ammo_hud_panel.h"
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 extern unsigned char D_0013E529[];
 void                 hud_update_counter(char *) __asm__("FUN_L00_00235ea0");

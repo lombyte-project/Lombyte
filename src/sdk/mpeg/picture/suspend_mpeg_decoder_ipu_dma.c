@@ -1,7 +1,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/ipu/suspend_ipu_dma_state.h"
+#include "rnc/sdk/ipu.h"
 
 /* The callback loads the decoder at +0x40, then passes its +0x4c DMA state. */
 typedef struct MpegDecoder MpegDecoder;

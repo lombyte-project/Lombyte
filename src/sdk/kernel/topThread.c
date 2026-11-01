@@ -2,7 +2,7 @@
 
 #include "types.h"
 #include "rnc/sdk/top_thread.h"
-#include "rnc/sdk/deci2/kprintf.h"
+#include "rnc/sdk/deci2.h"
 
 extern u8 thread_command_error_message[] __asm__("D_001526E8");
 

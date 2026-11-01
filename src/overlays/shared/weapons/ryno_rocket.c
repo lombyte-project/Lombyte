@@ -10,7 +10,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 typedef struct RynoRocketVars {
     u8    pad0[0x10];

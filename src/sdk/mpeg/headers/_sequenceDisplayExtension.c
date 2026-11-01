@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
+#include "rnc/sdk/mpeg/bitstream.h"
 
 void _sequenceDisplayExtension(struct MpegDecoder *mpeg) {
     _nextBit(mpeg, 3);

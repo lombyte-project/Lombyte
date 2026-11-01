@@ -3,7 +3,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/shared/world/level_labels.h"
-#include "rnc/audio/voices/allocate_voice_slot.h"
+#include "rnc/audio/voices.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028EF68), where it is exact; names translated to the US level program. */
 

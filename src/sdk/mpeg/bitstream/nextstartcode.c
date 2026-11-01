@@ -1,7 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/ipu/wait_ipu_idle.h"
-#include "rnc/sdk/mpeg/bitstream/_flushBuf.h"
-#include "rnc/sdk/mpeg/bitstream/_peepBit.h"
+#include "rnc/sdk/ipu.h"
+#include "rnc/sdk/mpeg/bitstream.h"
 
 void _nextStartCode(s32 *decoder_state) {
     s32 raw;

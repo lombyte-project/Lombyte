@@ -5,7 +5,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/globals.h"
 #include "rnc/ui/hud/get_icon_frame.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 typedef struct {
     u8  pad_0[0x20];

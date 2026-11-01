@@ -1,6 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/picture/_decodeOrSkipField.h"
-#include "rnc/sdk/mpeg/picture/_decodeOrSkipFrame.h"
+#include "rnc/sdk/mpeg/picture.h"
 
 s32 _decodeOrSkip(s32 mp, s32 skip_comparison_value, s32 skip_threshold) {
     if ((*(s32 **)(mp + 0x40))[0x5D] != 3) {

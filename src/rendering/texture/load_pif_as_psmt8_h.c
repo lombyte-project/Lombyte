@@ -1,6 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
-#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
+#include "rnc/sdk/graph.h"
 
 /* EE layouts: PIF header 0x20 bytes, scratch descriptor 0x54 bytes,
    sceGsLoadImage packet 0x60 bytes (16-byte aligned), output 0x18 bytes.

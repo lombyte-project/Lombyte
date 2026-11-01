@@ -2,13 +2,11 @@
 #include "asm.h"
 #include "rnc/movies/decoder/decoder_globals.h"
 #include "rnc/movies/player/movie_player.h"
-#include "rnc/audio/decoder/audio_dec_create.h"
-#include "rnc/movies/decoder/mpeg_cd_stream_open.h"
-#include "rnc/movies/decoder/video_dec_create.h"
-#include "rnc/movies/decoder/video_dec_set_stream.h"
-#include "rnc/movies/display/handler_end_image.h"
-#include "rnc/sdk/debug/debug_print.h"
-#include "rnc/sdk/mpeg/api/sce_mpeg_init.h"
+#include "rnc/audio/decoder.h"
+#include "rnc/movies/decoder.h"
+#include "rnc/movies/display.h"
+#include "rnc/sdk/debug.h"
+#include "rnc/sdk/mpeg/api.h"
 
 extern u8 movie_open_error_text[18] __asm__("D_001E8AF0");
 

@@ -223,7 +223,7 @@ int FUN_L00_0020cd08(Vec4 *from,
     return 0;
 }
 
-#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/hero.h"
 #include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {

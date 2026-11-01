@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 extern u8 thousands_grouped_integer_format[] __asm__("D_00161078");
 extern u8 plain_integer_format[] __asm__("D_00161080");

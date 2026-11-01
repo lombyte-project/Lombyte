@@ -18,7 +18,7 @@
  */
 
 #include "rnc/sdk/library/stdio.h"
-#include "rnc/sdk/libc/stdio/fflush.h"
+#include "rnc/sdk/libc/stdio.h"
 #include "rnc/sdk/libc/stdio/swsetup.h"
 
 typedef u32 size_t;

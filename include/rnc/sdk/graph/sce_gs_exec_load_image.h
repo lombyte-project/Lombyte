@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_GRAPH_SCE_GS_EXEC_LOAD_IMAGE_H
-#define LOMBYTE_RNC_SDK_GRAPH_SCE_GS_EXEC_LOAD_IMAGE_H
-
-#include "types.h"
-
-s32 sceGsExecLoadImage(u8 *, u8 *);
-
-#endif /* LOMBYTE_RNC_SDK_GRAPH_SCE_GS_EXEC_LOAD_IMAGE_H */

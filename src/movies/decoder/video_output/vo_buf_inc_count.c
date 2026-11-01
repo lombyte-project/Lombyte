@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/movies/decoder/vo_buf.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/interrupts.h"
 
 extern s32 DIntr(void);
 void       vo_buf_inc_count(struct VoBuf *buf) __asm__("FUN_0023d210");

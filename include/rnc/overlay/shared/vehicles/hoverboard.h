@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_HOVERBOARD_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_HOVERBOARD_H
-
-#include "types.h"
-
-void hoverboard_update(unsigned char *) __asm__("FUN_L05_002f87a8");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_HOVERBOARD_H */

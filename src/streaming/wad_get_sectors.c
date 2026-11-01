@@ -1,9 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/storage/cdvd/sceCdGetError.h"
-#include "rnc/sdk/storage/cdvd/sceCdRead.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 s32 wad_get_sectors(s32 lsn, s32 sector_count, s32 dst) __asm__("FUN_0012f208");
 

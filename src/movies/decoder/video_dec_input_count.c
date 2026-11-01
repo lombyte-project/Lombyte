@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/movies/decoder/video_dec.h"
-#include "rnc/movies/decoder/video_input/vi_buf_count.h"
+#include "rnc/movies/decoder/video_input.h"
 
 s32 video_dec_input_count(struct VideoDec *video_dec) __asm__("FUN_0023cce0");
 

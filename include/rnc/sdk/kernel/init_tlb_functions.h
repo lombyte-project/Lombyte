@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_KERNEL_INIT_TLB_FUNCTIONS_H
-#define LOMBYTE_RNC_SDK_KERNEL_INIT_TLB_FUNCTIONS_H
-
-#include "types.h"
-
-void InitTLBFunctions(void);
-
-#endif /* LOMBYTE_RNC_SDK_KERNEL_INIT_TLB_FUNCTIONS_H */

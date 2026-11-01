@@ -29,7 +29,7 @@
 #include "rnc/overlay/shared/enemies/plasmabot_death_debris.h"
 #include "rnc/overlay/shared/enemies/path_or_ballistic_debris.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 

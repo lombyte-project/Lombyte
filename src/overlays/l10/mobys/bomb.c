@@ -14,7 +14,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
-#include "rnc/overlay/shared/math/rotations/step_rotation_toward_target.h"
+#include "rnc/overlay/shared/math/rotations.h"
 
 extern float D_0015ED6C;
 extern float D_0015ED70;

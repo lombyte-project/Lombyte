@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_CAMERA_ADVANCE_TIMED_CAMERA_CONTROL_H
-#define LOMBYTE_RNC_CAMERA_ADVANCE_TIMED_CAMERA_CONTROL_H
-
-#include "types.h"
-
-void advance_timed_camera_control(void) __asm__("FUN_001eda60");
-
-#endif /* LOMBYTE_RNC_CAMERA_ADVANCE_TIMED_CAMERA_CONTROL_H */

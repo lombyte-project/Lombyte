@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
-#include "rnc/overlay/shared/mobys/allocate_moby_animation_slot.h"
+#include "rnc/overlay/shared/mobys.h"
 
 extern int D_L13_0015FFD8;
 

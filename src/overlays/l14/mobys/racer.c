@@ -12,7 +12,7 @@
 #include "sda.h"
 #include "rnc/overlay/l14/mobys/racer_globals.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/l14/mobys/racer_path_and_weapon.h"
+#include "rnc/overlay/l14/mobys.h"
 #include "rnc/overlay/shared/enemies/path_or_ballistic_debris.h"
 #include "rnc/overlay/shared/enemies/plasmabot_death_debris.h"
 

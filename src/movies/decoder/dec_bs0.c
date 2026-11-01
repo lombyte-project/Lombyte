@@ -6,10 +6,8 @@
 #include "types.h"
 #include "rnc/movies/decoder/video_dec.h"
 #include "rnc/movies/player/movie_player.h"
-#include "rnc/sdk/debug/debug_print.h"
-#include "rnc/sdk/mpeg/api/sce_mpeg_get_picture.h"
-#include "rnc/sdk/mpeg/api/sce_mpeg_is_end.h"
-#include "rnc/sdk/mpeg/api/sce_mpeg_reset.h"
+#include "rnc/sdk/debug.h"
+#include "rnc/sdk/mpeg/api.h"
 
 extern struct MoviePlayer *movie_player_macro __asm__("D_0016120C") MACRO_ADDR;
 #define voBuf (movie_player_macro->vo_buf)

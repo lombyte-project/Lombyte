@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_SOFT_FLOAT___FIXUNSDFDI_H
-#define LOMBYTE_RNC_SDK_SOFT_FLOAT___FIXUNSDFDI_H
-
-#include "types.h"
-
-u64 __fixunsdfdi(f64);
-
-#endif /* LOMBYTE_RNC_SDK_SOFT_FLOAT___FIXUNSDFDI_H */

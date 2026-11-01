@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_SYSTEM_CLEAR_MENU_SELECTED_INDEX_H
-#define LOMBYTE_RNC_UI_MENUS_SYSTEM_CLEAR_MENU_SELECTED_INDEX_H
-
-#include "types.h"
-
-int clear_menu_selected_index(int *) __asm__("FUN_0021a318");
-
-#endif /* LOMBYTE_RNC_UI_MENUS_SYSTEM_CLEAR_MENU_SELECTED_INDEX_H */

@@ -1,9 +1,8 @@
 /* Derived from newlib (1999 vfprintf.c); see licenses/COPYING.NEWLIB.txt. */
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
-#include "rnc/sdk/libc/stdio/exponent.h"
-#include "rnc/sdk/libc/stdlib/isinf.h"
-#include "rnc/sdk/libc/stdlib/isnan.h"
+#include "rnc/sdk/libc/stdio.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 typedef char *va_list;
 #define _REENT        _impure_ptr

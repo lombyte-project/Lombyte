@@ -16,7 +16,7 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/l16/mobys/wall_button_blocker.h"
+#include "rnc/overlay/l16/mobys.h"
 
 extern float D_0015ED6C;
 

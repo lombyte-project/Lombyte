@@ -4,8 +4,7 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/runtime/callbacks/count_vsync.h"
 #include "rnc/sdk/graph/sce_gs_sync_path.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/graph/sce_gs_sync_v_callback.h"
+#include "rnc/sdk/graph.h"
 
 extern s32  D_001940D4[];
 extern void play_mpeg_movie(s32, s32, s32, s32, s32) __asm__("func_0023A3B8");

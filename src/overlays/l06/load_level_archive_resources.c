@@ -28,10 +28,10 @@
 #include "rnc/world/loaders/unpack_point_records.h"
 #include "rnc/world/loaders/upload_texture_images.h"
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
-#include "rnc/rendering/shrubs/register_shrub_render_class.h"
-#include "rnc/rendering/texture/parse_particle_textures.h"
-#include "rnc/rendering/tfrags/initialize_tfrag_render_data.h"
-#include "rnc/rendering/ties/register_object_render_class.h"
+#include "rnc/rendering/shrubs.h"
+#include "rnc/rendering/texture.h"
+#include "rnc/rendering/tfrags.h"
+#include "rnc/rendering/ties.h"
 
 typedef struct {
     char *f0; /* 0x00 */

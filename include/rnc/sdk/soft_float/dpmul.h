@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_SOFT_FLOAT_DPMUL_H
-#define LOMBYTE_RNC_SDK_SOFT_FLOAT_DPMUL_H
-
-#include "types.h"
-
-f64 dpmul(f64, f64);
-
-#endif /* LOMBYTE_RNC_SDK_SOFT_FLOAT_DPMUL_H */

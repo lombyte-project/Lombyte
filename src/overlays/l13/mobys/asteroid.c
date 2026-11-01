@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 enum AsteroidSpinAxis {
     SPIN_AXIS_X = 0x0,

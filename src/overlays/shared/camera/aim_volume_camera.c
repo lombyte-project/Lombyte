@@ -9,7 +9,7 @@
 #include "rnc/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/swing_volume_camera.h"
-#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 #include "rnc/rendering/clip_volume.h"

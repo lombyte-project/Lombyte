@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/ref_images/_getRef0.h"
+#include "rnc/sdk/mpeg/ref_images.h"
 
 /* libmpeg motion compensation: builds the forward and backward
    predictions of one macroblock (the MPEG-2 reference decoder's

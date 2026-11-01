@@ -1,8 +1,7 @@
 #include "types.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/rpc/iop/sce_sif_reset_iop.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_exit_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/rpc/iop.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 const char  D_00152960[] = "rom0:UDNL ";
 extern char iop_reboot_parameter_too_long_format[] __asm__("D_00152970");

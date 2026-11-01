@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_H
-#define LOMBYTE_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_H
-
-#include "types.h"
-
-void veldin_robot_enemy_update() __asm__("FUN_L00_002e0b88");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_H */

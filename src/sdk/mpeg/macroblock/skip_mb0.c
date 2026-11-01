@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 struct MpegSkipState {
     s32 unk0;

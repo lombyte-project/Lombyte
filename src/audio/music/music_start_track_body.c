@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/music.c, set_sound_handle_id). */
 #include "rnc/streaming/disc_table.h"
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/audio/streaming/music_callbacks/music_primary_replace_callback.h"
+#include "rnc/audio/streaming/music_callbacks.h"
 
 extern void snd_play_vag_stream_by_loc_ex_cb(int,
                                              int,

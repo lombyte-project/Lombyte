@@ -19,7 +19,7 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/libc/stdio/std.h"
+#include "rnc/sdk/libc/stdio.h"
 
 struct Reent {
     u8  pad_0[0x38];

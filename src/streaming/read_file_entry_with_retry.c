@@ -1,10 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/storage/cdvd/sceCdGetError.h"
-#include "rnc/sdk/storage/cdvd/sceCdRead.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 struct FileEntry {
     u32 lsn;

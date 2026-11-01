@@ -10,7 +10,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/l11/hero/hero_set_state.h"
+#include "rnc/overlay/l11/hero.h"
 
 extern float fast_add_rotations(float, float);
 

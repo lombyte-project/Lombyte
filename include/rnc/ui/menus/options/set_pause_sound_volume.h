@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_OPTIONS_SET_PAUSE_SOUND_VOLUME_H
-#define LOMBYTE_RNC_UI_MENUS_OPTIONS_SET_PAUSE_SOUND_VOLUME_H
-
-#include "types.h"
-
-int set_pause_sound_volume(void) __asm__("FUN_0021cb00");
-
-#endif /* LOMBYTE_RNC_UI_MENUS_OPTIONS_SET_PAUSE_SOUND_VOLUME_H */

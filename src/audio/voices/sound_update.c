@@ -16,17 +16,10 @@
 #include "rnc/audio/sound/calculate_voice_volume.h"
 #include "rnc/audio/voices/snd_stop_sound.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/audio/effects/snd_auto_reverb.h"
-#include "rnc/audio/music/music_update.h"
-#include "rnc/audio/sound/calculate_voice_pan.h"
-#include "rnc/audio/sound/clamp_voice_position_to_collision.h"
-#include "rnc/audio/sound/snd_get_doppler_pitch_mod.h"
-#include "rnc/audio/sound/test_voice_occlusion.h"
-#include "rnc/audio/sound/voice_start_callback.h"
-#include "rnc/audio/sound/voice_update_callback.h"
-#include "rnc/audio/voices/snd_play_sound_vol_pan_pmpb.h"
-#include "rnc/audio/voices/snd_set_sound_params_cb.h"
-#include "rnc/audio/voices/snd_sound_is_still_playing_cb.h"
+#include "rnc/audio/effects.h"
+#include "rnc/audio/music.h"
+#include "rnc/audio/sound.h"
+#include "rnc/audio/voices.h"
 
 extern f32 sound_water_height_threshold[] __asm__("D_0013F640");
 extern s32 use_alt_fog[] __asm__("D_001872D4");

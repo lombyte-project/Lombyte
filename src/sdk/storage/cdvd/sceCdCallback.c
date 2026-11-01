@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern s32 DIntr();
 

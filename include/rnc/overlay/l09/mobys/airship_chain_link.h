@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L09_MOBYS_AIRSHIP_CHAIN_LINK_H
-#define LOMBYTE_RNC_OVERLAY_L09_MOBYS_AIRSHIP_CHAIN_LINK_H
-
-#include "types.h"
-
-void airship_chain_link_update() __asm__("FUN_L09_00304360");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L09_MOBYS_AIRSHIP_CHAIN_LINK_H */

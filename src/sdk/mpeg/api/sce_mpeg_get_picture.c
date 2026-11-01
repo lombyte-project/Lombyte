@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/picture/_getpic.h"
+#include "rnc/sdk/mpeg/picture.h"
 
 typedef struct MpegPictureDecoder MpegPictureDecoder;
 

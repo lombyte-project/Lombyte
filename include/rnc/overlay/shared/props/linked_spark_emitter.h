@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_LINKED_SPARK_EMITTER_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_LINKED_SPARK_EMITTER_H
-
-#include "types.h"
-
-void linked_spark_emitter_update(unsigned char *) __asm__("FUN_L15_002a2bf0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_LINKED_SPARK_EMITTER_H */

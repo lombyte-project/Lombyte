@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_LIBC_STRING_FIND_SUBSTRING_H
-#define LOMBYTE_RNC_SDK_LIBC_STRING_FIND_SUBSTRING_H
-
-#include "types.h"
-
-char *FindSubstring(char *, char *);
-
-#endif /* LOMBYTE_RNC_SDK_LIBC_STRING_FIND_SUBSTRING_H */

@@ -7,8 +7,7 @@
 
 #include "types.h"
 #include "rnc/runtime/core_state.h"
-#include "rnc/sdk/deci2/sce_tty_init.h"
-#include "rnc/sdk/deci2/sce_tty_read.h"
+#include "rnc/sdk/deci2.h"
 
 s32 read(s32 file_descriptor, s32 destination_buffer, s32 max_bytes) {
     if (file_descriptor == 0) {

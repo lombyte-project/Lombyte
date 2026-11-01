@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_DECI2_SCE_TTY_HANDLER_H
-#define LOMBYTE_RNC_SDK_DECI2_SCE_TTY_HANDLER_H
-
-#include "types.h"
-
-void sceTtyHandler();
-
-#endif /* LOMBYTE_RNC_SDK_DECI2_SCE_TTY_HANDLER_H */

@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/picture/_clearEach.h"
+#include "rnc/sdk/mpeg/picture.h"
 
 typedef struct MpegDecoder MpegDecoder;
 extern void                set_mpeg1_mode(MpegDecoder *decoder) __asm__("SetImageBufferFlag");

@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/picture/_lastFrame.h"
+#include "rnc/sdk/mpeg/picture.h"
 
 typedef struct MpegDecoder MpegDecoder;
 

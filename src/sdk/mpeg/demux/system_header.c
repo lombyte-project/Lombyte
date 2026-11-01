@@ -1,6 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/bitstream/peek_bits.h"
-#include "rnc/sdk/system/sysbit_get.h"
+#include "rnc/sdk/mpeg/bitstream.h"
+#include "rnc/sdk/system.h"
 
 s32 ParseSystemHeader(void *state) __asm__("_system_header");
 

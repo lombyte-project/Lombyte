@@ -1,9 +1,7 @@
 #include "types.h"
 #include "rnc/streaming/stash/stash.h"
 #include "rnc/sdk/sifrpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 void init_stash(void) __asm__("FUN_00232d00");
 

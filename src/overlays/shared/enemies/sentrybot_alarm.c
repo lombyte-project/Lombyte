@@ -11,8 +11,8 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
-#include "rnc/overlay/shared/enemies/sentrybot.h"
-#include "rnc/overlay/shared/rendering/emit_sine_modulated_rgba_draw_packet.h"
+#include "rnc/overlay/shared/enemies.h"
+#include "rnc/overlay/shared/rendering.h"
 
 typedef struct {
     int w[20];

@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/movies/decoder/buffers/get_fifo_index.h"
-#include "rnc/movies/decoder/dma/sc_tag2.h"
-#include "rnc/movies/player/err_message.h"
+#include "rnc/movies/decoder/dma.h"
+#include "rnc/movies/player.h"
 
 typedef struct {
     u64 lo;

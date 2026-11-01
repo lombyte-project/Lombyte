@@ -7,9 +7,8 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/rpc/snd_hold_command_batches.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
-#include "rnc/rendering/frame/callbacks/noop_callback_h.h"
-#include "rnc/rendering/frame/callbacks/noop_callback_i.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/rendering/frame/callbacks.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 typedef union {
     u128 quadword;

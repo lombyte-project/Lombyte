@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/ui/menus/item_preview/rotate_preview_moby_x.h"
+#include "rnc/ui/menus/item_preview.h"
 
 struct RotatingPreviewMoby;
 

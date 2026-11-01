@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_RPC_RPC_SCE_SIF_CHECK_STAT_RPC_H
-#define LOMBYTE_RNC_SDK_RPC_RPC_SCE_SIF_CHECK_STAT_RPC_H
-
-#include "types.h"
-
-s32 SceSifCheckStatRpc(void *);
-
-#endif /* LOMBYTE_RNC_SDK_RPC_RPC_SCE_SIF_CHECK_STAT_RPC_H */

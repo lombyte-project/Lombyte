@@ -6,7 +6,7 @@
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"
 #include "rnc/overlay/shared/rendering/buffers/transfer_draw_buffer_chunks.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/graph.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F9D40), where it is exact; names translated to the US level program. */
 

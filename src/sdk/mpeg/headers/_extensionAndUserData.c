@@ -1,8 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/bitstream/_flushBuf.h"
-#include "rnc/sdk/mpeg/bitstream/_peepBit.h"
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
-#include "rnc/sdk/mpeg/bitstream/nextstartcode.h"
+#include "rnc/sdk/mpeg/bitstream.h"
 
 typedef void (*ExtFunc)(void *);
 

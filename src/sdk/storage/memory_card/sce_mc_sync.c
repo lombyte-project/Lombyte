@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
-#include "rnc/sdk/storage/memory_card/mc_delay_thread.h"
+#include "rnc/sdk/rpc/rpc.h"
+#include "rnc/sdk/storage/memory_card.h"
 
 extern s32 SignalSema();
 

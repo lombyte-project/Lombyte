@@ -4,8 +4,7 @@
 #include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "rnc/globals.h"
-#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
-#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
+#include "rnc/sdk/graph.h"
 
 typedef struct {
     u8  pad0[8];

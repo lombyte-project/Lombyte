@@ -1,6 +1,6 @@
 #include "rnc/sdk/library/sdk_globals.h"
 #include "sda.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 /* Query the Deci2 module and return the version written to its work buffer. */
 
 extern unsigned char RpcReceiveData[1] __asm__("D_0015B080") NOT_SDA;

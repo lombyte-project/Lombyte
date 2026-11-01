@@ -1,4 +1,4 @@
-#include "rnc/sdk/soft_float/__make_dp.h"
+#include "rnc/sdk/soft_float.h"
 /* This is a software floating point library which can be used instead of
    the floating point routines in libgcc1.c for targets without hardware
    floating point. 

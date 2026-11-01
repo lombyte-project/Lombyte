@@ -1,5 +1,5 @@
-#include "rnc/sdk/libc/stdio/sprintf.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/libc/stdio.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 void ErrorWithMessage(void *error_state, const char *format) __asm__("_Error1");
 

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_H
-
-#include "types.h"
-
-void drain_cover_update() __asm__("FUN_L05_0030e7f8");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_H */

@@ -3,9 +3,8 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/deci2/call_debug_character.h"
-#include "rnc/sdk/deci2/sce_deci2_poll.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/interrupts.h"
 
 struct TtyState {
     volatile s32 unk0; /* deci2 handle from sceDeci2Open */

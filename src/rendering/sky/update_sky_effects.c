@@ -2,7 +2,7 @@
 #include "rnc/rendering/sky_shell.h"
 #include "rnc/math/random.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/sdk/libc/stdlib/srand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 struct LevelSkyEffectData {
     u8                pad_0[4];

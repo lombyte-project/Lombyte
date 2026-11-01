@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_RENDERING_PACKETS_SET_UP_VIS_GIF_VIEWER_H
-#define LOMBYTE_RNC_RENDERING_PACKETS_SET_UP_VIS_GIF_VIEWER_H
-
-#include "types.h"
-
-void set_up_vis_gif_viewer(u64 *, s32, s32, s32, s32, s32) __asm__("FUN_00202fd0");
-
-#endif /* LOMBYTE_RNC_RENDERING_PACKETS_SET_UP_VIS_GIF_VIEWER_H */

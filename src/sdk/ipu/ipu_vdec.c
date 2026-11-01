@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/ipu_command_table.h"
-#include "rnc/sdk/mpeg/api/dispatch_mpeg_cb_nodata.h"
+#include "rnc/sdk/mpeg/api.h"
 
 typedef struct {
     u8    pad0[0x11C];

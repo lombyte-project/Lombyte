@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern u8  native_cd_drive_state_response[] __asm__("D_00131340");
 extern s32 SignalSema();

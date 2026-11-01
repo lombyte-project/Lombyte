@@ -9,10 +9,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/shared/enemies/blarg_ship_shot.h"
-#include "rnc/overlay/shared/pickups/fighter_jet_crate.h"
+#include "rnc/overlay/shared/enemies.h"
+#include "rnc/overlay/shared/pickups.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 

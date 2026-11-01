@@ -1,6 +1,5 @@
 #include "types.h"
 #include "rnc/sdk/kernel.h"
-#include "rnc/sdk/kernel/i_wakeup_thread.h"
 
 /* Alarm handler: wakes the waiting thread, then re-enables interrupts. */
 void wake_thread_alarm(s32 alarm_id, u32 scheduled_time, s32 thread_id) __asm__("FUN_00123bc0");

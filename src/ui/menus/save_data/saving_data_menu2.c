@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/game/load_level_zero_preserving_progress.h"
-#include "rnc/game/transitions/request_space_load.h"
-#include "rnc/ui/menus/save_data/start_memory_card_save.h"
+#include "rnc/game.h"
+#include "rnc/game/transitions.h"
+#include "rnc/ui/menus/save_data.h"
 
 typedef struct __attribute__((packed)) {
     s64 v;

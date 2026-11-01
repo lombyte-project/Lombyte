@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/ui/text/font/font_set_window.h"
+#include "rnc/ui/text/font.h"
 
 #include "rnc/ui/help/help_state.h"
 

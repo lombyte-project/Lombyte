@@ -5,7 +5,7 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/prune_moby_references.h"
-#include "rnc/rendering/packets/append_dma_tag.h"
+#include "rnc/rendering/packets.h"
 
 struct Globals_0016045C {
     u8  pad_0[0x4];

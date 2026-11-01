@@ -3,7 +3,6 @@
 #include "types.h"
 #include "rnc/sdk/kernel.h"
 #include "rnc/sdk/top_thread.h"
-#include "rnc/sdk/kernel/topThread.h"
 
 struct ThreadParam {
     u8 pad0[4];

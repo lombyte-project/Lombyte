@@ -1,8 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/runtime/memory/init_ring_buffer.h"
-#include "rnc/sdk/deci2/sce_deci2_open.h"
-#include "rnc/sdk/deci2/sce_tty_handler.h"
+#include "rnc/runtime/memory.h"
+#include "rnc/sdk/deci2.h"
 
 struct TtyState {
     s32          unk0;

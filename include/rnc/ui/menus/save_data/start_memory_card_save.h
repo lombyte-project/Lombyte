@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_SAVE_DATA_START_MEMORY_CARD_SAVE_H
-#define LOMBYTE_RNC_UI_MENUS_SAVE_DATA_START_MEMORY_CARD_SAVE_H
-
-#include "types.h"
-
-void start_memory_card_save(s32, s32) __asm__("FUN_00226a70");
-
-#endif /* LOMBYTE_RNC_UI_MENUS_SAVE_DATA_START_MEMORY_CARD_SAVE_H */

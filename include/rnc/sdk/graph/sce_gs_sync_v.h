@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_GRAPH_SCE_GS_SYNC_V_H
-#define LOMBYTE_RNC_SDK_GRAPH_SCE_GS_SYNC_V_H
-
-#include "types.h"
-
-s32 sceGsSyncV(s32);
-
-#endif /* LOMBYTE_RNC_SDK_GRAPH_SCE_GS_SYNC_V_H */

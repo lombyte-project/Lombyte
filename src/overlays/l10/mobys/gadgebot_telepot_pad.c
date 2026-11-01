@@ -14,7 +14,7 @@
 #include "rnc/overlay/l10/mobys/gadgebot_telepot_pad_globals.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/camera.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");

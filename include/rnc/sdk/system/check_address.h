@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_SYSTEM_CHECK_ADDRESS_H
-#define LOMBYTE_RNC_SDK_SYSTEM_CHECK_ADDRESS_H
-
-#include "types.h"
-
-u32 CheckAddress(u32);
-
-#endif /* LOMBYTE_RNC_SDK_SYSTEM_CHECK_ADDRESS_H */

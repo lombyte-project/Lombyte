@@ -5,7 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
 #include "rnc/ui/text/font/font_print_right.h"
-#include "rnc/ui/hud/sprites/draw_hud_sprite_rect.h"
+#include "rnc/ui/hud/sprites.h"
 
 typedef struct {
     u8  pad0[0x20];

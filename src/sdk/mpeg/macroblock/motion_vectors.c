@@ -1,6 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
-#include "rnc/sdk/mpeg/macroblock/motion_vector.h"
+#include "rnc/sdk/mpeg/bitstream.h"
+#include "rnc/sdk/mpeg/macroblock.h"
 
 typedef struct MpegDec MpegDec;
 

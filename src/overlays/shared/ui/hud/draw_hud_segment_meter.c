@@ -8,7 +8,7 @@
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
-#include "rnc/ui/hud/append_screen_rect_packet.h"
+#include "rnc/ui/hud.h"
 
 extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
 extern s32 D_L06_0015F8E8 __attribute__((sda));

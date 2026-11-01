@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/math/random.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 f32 random_angle_radians(void) __asm__("FUN_00213308");
 

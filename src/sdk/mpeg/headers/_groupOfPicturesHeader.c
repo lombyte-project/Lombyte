@@ -1,5 +1,5 @@
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
-#include "rnc/sdk/mpeg/headers/_extensionAndUserData.h"
+#include "rnc/sdk/mpeg/bitstream.h"
+#include "rnc/sdk/mpeg/headers.h"
 
 typedef struct GroupOfPicturesContext GroupOfPicturesContext;
 

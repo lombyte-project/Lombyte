@@ -7,11 +7,11 @@
 #include "rnc/game/options.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/audio/decoder/audio_dec_reset.h"
-#include "rnc/movies/decoder/video_dec_is_flushed.h"
-#include "rnc/movies/display/end_display.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/mpeg/api/sce_mpeg_demux_pss_ring.h"
+#include "rnc/audio/decoder.h"
+#include "rnc/movies/decoder.h"
+#include "rnc/movies/display.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/mpeg/api.h"
 
 extern struct PadStateWords pad_words __asm__("D_0013C940");
 extern s32                  D_0015EEA0;

@@ -8,7 +8,7 @@
 #include "rnc/overlay/shared/camera/init_camera_system.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/shared/math/rotations/rotate_vector_by_scaled_angle_between_vectors.h"
+#include "rnc/overlay/shared/math/rotations.h"
 
 typedef struct {
     char  pad0[0x40];

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_SHARKIGATOR_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_SHARKIGATOR_H
-
-#include "types.h"
-
-void sharkigator_update(char *) __asm__("FUN_L05_002d1688");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_SHARKIGATOR_H */

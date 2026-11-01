@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/movies/decoder/video_dec.h"
-#include "rnc/sdk/mpeg/api/sce_mpeg_is_ref_buff_empty.h"
+#include "rnc/sdk/mpeg/api.h"
 
 extern s32 video_dec_input_count(struct VideoDec *video_dec) __asm__("func_0023CCE0");
 s32        video_dec_is_flushed(struct VideoDec *video_dec) __asm__("FUN_0023cde0");

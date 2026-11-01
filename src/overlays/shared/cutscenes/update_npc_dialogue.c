@@ -13,10 +13,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/overlay/shared/ui/hud/draw_hud_item_selector_panel.h"
-#include "rnc/mobys/animation/queue_animation_update.h"
+#include "rnc/mobys/animation.h"
 #include "rnc/overlay/shared/ui/hud/initialize_numeric_hud_element.h"
 #include "rnc/ui/hud/remove_hud_item.h"
-#include "rnc/ui/menus/system/process_menu_entry.h"
+#include "rnc/ui/menus/system.h"
 
 /*
  * Scene trigger attached to a moby: when the hero comes close enough (and,

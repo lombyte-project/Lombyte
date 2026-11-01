@@ -8,7 +8,7 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/save/memcard_save_data.h"
 #include "rnc/overlay/shared/pickups/infobot.h"
-#include "rnc/overlay/shared/enemies/blarg_ship_rocket.h"
+#include "rnc/overlay/shared/enemies.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");

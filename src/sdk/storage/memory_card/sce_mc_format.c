@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libmc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 struct MemoryCardFormatRequest {
     u8  reserved_00[0x4];

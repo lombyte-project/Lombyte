@@ -12,7 +12,7 @@
 #include "qcopy.h"
 #include "rnc/rendering/dma_tag.h"
 #include "sda.h"
-#include "rnc/rendering/vu1/vu1_add_vif_code.h"
+#include "rnc/rendering/vu1.h"
 
 typedef struct QuadDrawArgs {
     char           pad0[0x1C];

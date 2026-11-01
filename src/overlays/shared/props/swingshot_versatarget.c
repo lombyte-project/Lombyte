@@ -9,7 +9,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "qcopy.h"
-#include "rnc/overlay/shared/camera/follow_camera_offset_effect.h"
+#include "rnc/overlay/shared/camera.h"
 
 typedef struct Hero Hero;
 

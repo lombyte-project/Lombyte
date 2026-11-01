@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/eeregs.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/ipu/send_ipu_command.h"
-#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/ipu.h"
+#include "rnc/sdk/mpeg/api.h"
 
 typedef struct {
     u32 qwc;

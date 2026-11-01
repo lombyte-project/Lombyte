@@ -2,7 +2,7 @@
 #include "rnc/game/freeze_mode_state.h"
 #include "rnc/globals.h"
 #include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
-#include "rnc/audio/music/music_pause.h"
+#include "rnc/audio/music.h"
 
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 get_help_message_text() __asm__("func_001FDD10");

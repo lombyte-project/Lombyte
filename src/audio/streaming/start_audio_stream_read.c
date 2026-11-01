@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 extern u8  cd_read_start_failure_message[] __asm__("D_001E8650");
 extern s32 RaiseKernelTrap();

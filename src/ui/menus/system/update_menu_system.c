@@ -11,8 +11,8 @@
 #include "rnc/rendering/effects/update_fog.h"
 #include "rnc/rendering/vu1/select_level_vu_chain.h"
 #include "rnc/mobys/update_visible_mobys.h"
-#include "rnc/ui/menus/initialize_menu_preview_scene.h"
-#include "rnc/ui/menus/system/close_menu_system.h"
+#include "rnc/ui/menus.h"
+#include "rnc/ui/menus/system.h"
 
 struct Ent3 {
     u8 pad0[0x10];

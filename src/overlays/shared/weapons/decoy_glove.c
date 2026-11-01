@@ -15,7 +15,7 @@
 #include "qzero.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
-#include "rnc/overlay/shared/weapons/decoy.h"
+#include "rnc/overlay/shared/weapons.h"
 
 typedef struct DecoyGloveVars {
     u8    pad0[0x40];

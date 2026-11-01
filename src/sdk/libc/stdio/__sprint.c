@@ -18,7 +18,7 @@
 /* Source: newlib (UC Berkeley). */
 
 #include "types.h"
-#include "rnc/sdk/libc/stdio/sfvwrite.h"
+#include "rnc/sdk/libc/stdio.h"
 
 struct PrintIoVector {
     u8  reserved_00[4];

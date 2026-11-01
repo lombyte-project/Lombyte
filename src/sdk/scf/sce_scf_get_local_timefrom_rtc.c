@@ -1,6 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/scf/sce_scf_get_summer_time.h"
-#include "rnc/sdk/scf/sce_scf_get_time_zone.h"
+#include "rnc/sdk/scf.h"
 
 void sceScfGetLocalTimefromRTC(s32 rtc_time) {
     register s32 rtc_time_s0;

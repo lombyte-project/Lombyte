@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_HOVERBOARD_CAMERA_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_HOVERBOARD_CAMERA_H
-
-#include "types.h"
-
-void reset_camera_from_source_transform(char *) __asm__("FUN_L05_0032a6e0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_HOVERBOARD_CAMERA_H */

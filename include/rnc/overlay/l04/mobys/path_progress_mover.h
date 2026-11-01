@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L04_MOBYS_PATH_PROGRESS_MOVER_H
-#define LOMBYTE_RNC_OVERLAY_L04_MOBYS_PATH_PROGRESS_MOVER_H
-
-#include "types.h"
-
-void path_progress_mover_update(char *) __asm__("FUN_L04_002d6f68");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L04_MOBYS_PATH_PROGRESS_MOVER_H */

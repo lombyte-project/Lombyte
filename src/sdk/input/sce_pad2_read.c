@@ -1,8 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/input/sce_pad2_get_side.h"
-#include "rnc/sdk/input/sce_pad2_link_driver.h"
-#include "rnc/sdk/input/sce_pad2_set_button_order.h"
+#include "rnc/sdk/input.h"
 
 struct Pad2Data {
     u8  pad_0[0x2];

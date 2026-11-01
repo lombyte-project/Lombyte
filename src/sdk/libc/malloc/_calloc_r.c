@@ -9,7 +9,7 @@
 /* _calloc_r q5: exact mallocr.c else-form with p/csz locals. */
 
 #include "types.h"
-#include "rnc/sdk/libc/malloc/malloc_r.h"
+#include "rnc/sdk/libc/malloc.h"
 
 struct _reent;
 extern void *memset(void *dst, s32 value, u32 size);

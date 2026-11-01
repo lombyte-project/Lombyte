@@ -6,9 +6,8 @@
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
-#include "rnc/rendering/frame/callbacks/noop_callback_h.h"
-#include "rnc/rendering/frame/callbacks/noop_callback_i.h"
-#include "rnc/ui/menus/system/enter_main_menu.h"
+#include "rnc/rendering/frame/callbacks.h"
+#include "rnc/ui/menus/system.h"
 
 typedef struct {
     f32 x, y, z, w;

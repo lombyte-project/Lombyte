@@ -2,7 +2,7 @@
 #include "rnc/ui/hud/hud_state.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/ui/hud/banks/load_compressed_hud_bank.h"
+#include "rnc/ui/hud/banks.h"
 
 #define ALIGN64(x) (((x) + 0x3F) & ~0x3FU)
 

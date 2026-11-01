@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_KERNEL_INITEXECPS2_H
-#define LOMBYTE_RNC_SDK_KERNEL_INITEXECPS2_H
-
-#include "types.h"
-
-void InitExecPS2(void);
-
-#endif /* LOMBYTE_RNC_SDK_KERNEL_INITEXECPS2_H */

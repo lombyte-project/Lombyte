@@ -10,7 +10,7 @@
 #include "rnc/math/random.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/camera/sample_camera_path.h"
+#include "rnc/camera.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/rendering/effect_texture.h"
 

@@ -1,6 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/deci2/printfloat.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/interrupts.h"
 
 extern s32 DIntr(void);
 extern void (*D_0012FC00[])(s32);

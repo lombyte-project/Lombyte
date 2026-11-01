@@ -11,7 +11,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */
 

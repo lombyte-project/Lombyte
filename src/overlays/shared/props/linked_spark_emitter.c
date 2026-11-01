@@ -11,8 +11,8 @@
 #include "rnc/audio/voice_pool.h"
 #include "qzero.h"
 #include "rnc/overlay/shared/props/linked_spark_emitter_data/draw_spark_emitter_effect_quads.h"
-#include "rnc/overlay/shared/enemies/sentrybot.h"
-#include "rnc/overlay/shared/rendering/effects/spawn_owner_target_particle.h"
+#include "rnc/overlay/shared/enemies.h"
+#include "rnc/overlay/shared/rendering/effects.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 

@@ -8,7 +8,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/overlay/shared/mobys/allocate_moby_animation_slot.h"
+#include "rnc/overlay/shared/mobys.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 typedef struct {

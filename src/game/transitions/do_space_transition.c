@@ -4,11 +4,11 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/streaming/safe_cd/snd_stream_safe_cd_callback.h"
 #include "rnc/game/transitions/tick_space_transition.h"
-#include "rnc/rendering/frame/set_background_color.h"
-#include "rnc/sdk/debug/debug_print.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
-#include "rnc/ui/loading/play_level_loading_slides.h"
+#include "rnc/rendering/frame.h"
+#include "rnc/sdk/debug.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/storage/cdvd.h"
+#include "rnc/ui/loading.h"
 
 struct Globals_0013DD58 {
     u8 unk0;

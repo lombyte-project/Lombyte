@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_SAVE_DATA_PREPARE_SAVE_GAME_H
-#define LOMBYTE_RNC_UI_MENUS_SAVE_DATA_PREPARE_SAVE_GAME_H
-
-#include "types.h"
-
-void prepare_save_game(int, int) __asm__("FUN_002269c0");
-
-#endif /* LOMBYTE_RNC_UI_MENUS_SAVE_DATA_PREPARE_SAVE_GAME_H */

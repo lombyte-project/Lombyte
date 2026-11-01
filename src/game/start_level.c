@@ -4,9 +4,8 @@
 #include "types.h"
 #include "rnc/runtime/callbacks/count_vsync.h"
 #include "rnc/sdk/graph/sce_gs_sync_path.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/graph/sce_gs_sync_v_callback.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern int decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
 

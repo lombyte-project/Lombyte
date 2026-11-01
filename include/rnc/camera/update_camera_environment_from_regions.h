@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_CAMERA_UPDATE_CAMERA_ENVIRONMENT_FROM_REGIONS_H
-#define LOMBYTE_RNC_CAMERA_UPDATE_CAMERA_ENVIRONMENT_FROM_REGIONS_H
-
-#include "types.h"
-
-void update_camera_environment_from_regions(void *) __asm__("FUN_001ee4b0");
-
-#endif /* LOMBYTE_RNC_CAMERA_UPDATE_CAMERA_ENVIRONMENT_FROM_REGIONS_H */

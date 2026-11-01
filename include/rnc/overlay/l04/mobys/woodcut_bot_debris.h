@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L04_MOBYS_WOODCUT_BOT_DEBRIS_H
-#define LOMBYTE_RNC_OVERLAY_L04_MOBYS_WOODCUT_BOT_DEBRIS_H
-
-#include "types.h"
-
-void woodcut_bot_debris_update() __asm__("FUN_L04_002e5178");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L04_MOBYS_WOODCUT_BOT_DEBRIS_H */

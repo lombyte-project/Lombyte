@@ -16,7 +16,7 @@
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 #include "rnc/mobys/animation/apply_pending_animation.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
-#include "rnc/mobys/animation/queue_animation_update.h"
+#include "rnc/mobys/animation.h"
 #include "rnc/overlay/shared/ui/hud/draw_hud_item_selector_panel.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 

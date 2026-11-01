@@ -1,8 +1,8 @@
 #include "types.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/ipu/wait_ipu_idle.h"
-#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/ipu.h"
+#include "rnc/sdk/mpeg/api.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 typedef struct {
     u8    pad0[0x838];

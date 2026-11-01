@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/ui/text/font_metrics.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/ui/text/font/font_print_wrapped.h"
+#include "rnc/ui/text/font.h"
 
 void font_print_wrapped_small(s32 start_x,
                               s32 start_y,

@@ -4,7 +4,7 @@
 #include "rnc/rendering/fs_aa_packets.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/graph.h"
 
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");

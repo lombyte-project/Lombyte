@@ -1,4 +1,4 @@
-#include "rnc/sdk/rpc/iop/sce_sif_load_module_buffer.h"
+#include "rnc/sdk/rpc/iop.h"
 /* sceSifLoadModuleBuffer: load an IRX image already in IOP memory and return
    its module id (_sceSifLoadModuleBuffer also reports the start result). */
 

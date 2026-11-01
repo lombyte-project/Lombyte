@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/movies/decoder/video_input/vi_buf_delete.h"
+#include "rnc/movies/decoder/video_input.h"
 
 extern s32 sceMpegDelete(struct sceMpeg *mpeg) __asm__("FUN_0012b9e0");
 s32        video_dec_delete(s32 video_dec) __asm__("FUN_0023cc38");

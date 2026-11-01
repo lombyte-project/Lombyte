@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/help.c, func_001FF1B0). */
 #include "sda.h"
-#include "rnc/ui/help/help_draw_prompt.h"
-#include "rnc/ui/text/font/font_set_window.h"
+#include "rnc/ui/help.h"
+#include "rnc/ui/text/font.h"
 
 #include "rnc/ui/help/help_state.h"
 

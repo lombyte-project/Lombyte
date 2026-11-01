@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/input/dbc/sceDbcCreateSocket.h"
+#include "rnc/sdk/input/dbc.h"
 
 typedef struct {
     s32 option;

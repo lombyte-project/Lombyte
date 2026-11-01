@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/audio/movie/snd_close_movie_sound.h"
+#include "rnc/audio/movie.h"
 
 s32 audio_dec_delete(s32 unused_arg) __asm__("FUN_0023ac90");
 

@@ -1,7 +1,6 @@
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
-#include "rnc/sdk/mpeg/headers/_extensionAndUserData.h"
-#include "rnc/sdk/mpeg/headers/extrainfo.h"
-#include "rnc/sdk/mpeg/picture/update_temp_track_data.h"
+#include "rnc/sdk/mpeg/bitstream.h"
+#include "rnc/sdk/mpeg/headers.h"
+#include "rnc/sdk/mpeg/picture.h"
 
 typedef struct PictureHeaderContext PictureHeaderContext;
 

@@ -1,8 +1,7 @@
 /* checkModelVersion c2: read the model-version string and validate its range. */
 
 #include "types.h"
-#include "rnc/sdk/storage/fileio/sceClose.h"
-#include "rnc/sdk/storage/fileio/sceRead.h"
+#include "rnc/sdk/storage/fileio.h"
 
 extern s32 sceOpen(const char *path, s32 flags);
 extern s32 atoi(const char *str) __asm__("CheckStateRange");

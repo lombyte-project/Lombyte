@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_RPC_RPC_QUEUE_PEEK_READ_DONE_H
-#define LOMBYTE_RNC_SDK_RPC_RPC_QUEUE_PEEK_READ_DONE_H
-
-#include "types.h"
-
-void QueuePeekReadDone();
-
-#endif /* LOMBYTE_RNC_SDK_RPC_RPC_QUEUE_PEEK_READ_DONE_H */

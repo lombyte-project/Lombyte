@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern u8                      D_0012FCAC[];
 extern struct sceSifClientData D_00158040;

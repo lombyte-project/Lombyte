@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/syscalls/update_rfu_dispatch_state.h"
+#include "rnc/sdk/syscalls.h"
 
 extern void  startlevel(void) __asm__("func_001E9658");
 extern void *parse_bin(void) __asm__("func_0012D8F8");

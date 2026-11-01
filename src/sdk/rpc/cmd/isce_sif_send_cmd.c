@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_send_cmd.h"
+#include "rnc/sdk/rpc/cmd.h"
 
 s32 IsceSifSendCmd(void *packet,
                    void *command,

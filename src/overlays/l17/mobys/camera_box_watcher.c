@@ -17,9 +17,9 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/camera/follow_camera_angle_blend.h"
-#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/camera.h"
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */

@@ -1,8 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/library/sdk_state.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/storage/fileio/sceClose.h"
-#include "rnc/sdk/storage/fileio/sceRead.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/storage/fileio.h"
 #include "rnc/sdk/storage/fileio/sceopen.h"
 
 const u8  D_00153C00[] = "rom0:ROMVER";

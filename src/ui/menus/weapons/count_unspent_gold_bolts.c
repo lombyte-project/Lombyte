@@ -1,6 +1,5 @@
 #include "types.h"
-#include "rnc/ui/menus/weapons/count_gold_bolts.h"
-#include "rnc/ui/menus/weapons/count_gold_weapons.h"
+#include "rnc/ui/menus/weapons.h"
 
 s32 count_unspent_gold_bolts(void) __asm__("FUN_00215248");
 

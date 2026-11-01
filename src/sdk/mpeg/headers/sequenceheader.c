@@ -1,12 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/ipu/send_ipu_command.h"
-#include "rnc/sdk/ipu/wait_ipu_idle.h"
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
-#include "rnc/sdk/mpeg/headers/_extensionAndUserData.h"
-#include "rnc/sdk/mpeg/headers/setdefaultqm.h"
-#include "rnc/sdk/mpeg/headers/update_mpeg_frame_size.h"
+#include "rnc/sdk/ipu.h"
+#include "rnc/sdk/mpeg/bitstream.h"
+#include "rnc/sdk/mpeg/errors.h"
+#include "rnc/sdk/mpeg/headers.h"
 
 extern u8 default_intra_quantiser_matrix[] __asm__("D_00132FC0");
 extern u8 default_non_intra_quantiser_matrix[] __asm__("D_00133000");

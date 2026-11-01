@@ -2,8 +2,8 @@
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libmc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
-#include "rnc/sdk/storage/memory_card/mce_store_pwd.h"
+#include "rnc/sdk/rpc/rpc.h"
+#include "rnc/sdk/storage/memory_card.h"
 
 struct McChdirRequest {
     s32 unk0;

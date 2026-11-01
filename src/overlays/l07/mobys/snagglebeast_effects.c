@@ -9,7 +9,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/rendering/effect_texture.h"
 #include "qcopy.h"
-#include "rnc/overlay/l07/mobys/growing_ballistic_moby.h"
+#include "rnc/overlay/l07/mobys.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"

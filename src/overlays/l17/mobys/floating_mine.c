@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
-#include "rnc/camera/resolve_camera_surface_height.h"
+#include "rnc/camera.h"
 
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");

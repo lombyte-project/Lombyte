@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/math/random.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 f32 random_float_between(f32 range_start, f32 range_end) __asm__("FUN_002132a8");
 

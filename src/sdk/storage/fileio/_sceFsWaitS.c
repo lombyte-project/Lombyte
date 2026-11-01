@@ -1,5 +1,5 @@
 #include "rnc/sdk/library/sif_file_slot.h"
-#include "rnc/sdk/storage/fileio/scefsseminit.h"
+#include "rnc/sdk/storage/fileio.h"
 
 extern s32 WaitSema();
 

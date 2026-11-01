@@ -14,7 +14,7 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "rnc/overlay/l10/mobys/magnetboots_globals.h"
-#include "rnc/overlay/shared/enemies/blarg_ship_rocket.h"
+#include "rnc/overlay/shared/enemies.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */

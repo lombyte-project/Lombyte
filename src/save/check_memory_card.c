@@ -1,8 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
-#include "rnc/sdk/storage/memory_card/sce_mc_get_dir.h"
-#include "rnc/sdk/storage/memory_card/sce_mc_get_info.h"
-#include "rnc/sdk/storage/memory_card/sce_mc_sync.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/storage/memory_card.h"
 
 struct McDirBlk {
     u8  pad_0[0x4];

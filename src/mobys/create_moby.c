@@ -3,7 +3,7 @@
 #include "sda.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 extern s32          num_spawnable_mobys __asm__("D_0015FEFC") MACRO_ADDR;
 extern struct Moby *moby_instance_end __asm__("D_0015FF1C");

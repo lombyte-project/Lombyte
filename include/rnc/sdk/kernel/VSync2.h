@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_KERNEL_VSYNC2_H
-#define LOMBYTE_RNC_SDK_KERNEL_VSYNC2_H
-
-#include "types.h"
-
-s64 VSync2(void);
-
-#endif /* LOMBYTE_RNC_SDK_KERNEL_VSYNC2_H */

@@ -18,7 +18,7 @@
 #include "sda.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 /* spawns a moby of the given class at a source moby's position */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */

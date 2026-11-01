@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/system/sysbit_flush.h"
+#include "rnc/sdk/system.h"
 
 typedef struct SysbitState {
     s64 bits;

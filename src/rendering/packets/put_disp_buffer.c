@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/graph/sce_gs_put_disp_env.h"
+#include "rnc/sdk/graph.h"
 
 struct sceGsDispEnv;
 extern struct sceGsDispEnv *D_0015EEB8;

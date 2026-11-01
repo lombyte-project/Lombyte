@@ -2,6 +2,8 @@
 #define LOMBYTE_RNC_SDK_KERNEL_H
 
 #include "types.h"
+#include "rnc/sdk/top_thread.h"
+#include "types.h"
 
 /* Sony EE-kernel primitives: the privileged instructions C cannot express.
    This header is the only place for them; units use these macros. */
@@ -37,5 +39,22 @@ struct SemaParam {
     u32 attr;
     u32 option;
 };
+
+void  InitExecPS2(void);
+void  InitSystemCallTableAddress(void);
+s32   InitThread(void);
+s32   PatchIsNeeded(void);
+s64   VSync2(void);
+void  clear_tty_initialized(void) __asm__("func_00118BC0");
+s32   iWakeupThread(s32);
+void  InitAlarm(void);
+s32   InitTLB(void);
+void  InitTLBFunctions(void);
+s32   read(s32, s32, s32);
+void *sbrk(s32);
+void  SupplementCrt0(void) __asm__("supplement_crt0");
+void  topThread(TopThreadQueue *);
+void  VSync(void);
+s32   write(s32, s32, s32);
 
 #endif /* LOMBYTE_RNC_SDK_KERNEL_H */

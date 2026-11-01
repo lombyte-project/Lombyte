@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_KERWAN_PATH_ENEMY_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_KERWAN_PATH_ENEMY_H
-
-#include "types.h"
-
-void kerwan_path_enemy_update() __asm__("FUN_L03_002c6fd0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_KERWAN_PATH_ENEMY_H */

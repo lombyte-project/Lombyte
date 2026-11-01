@@ -17,9 +17,8 @@
 
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
-#include "rnc/sdk/libc/malloc/free_r.h"
-#include "rnc/sdk/libc/stdio/sinit.h"
-#include "rnc/sdk/libc/stdio/smakebuf.h"
+#include "rnc/sdk/libc/malloc.h"
+#include "rnc/sdk/libc/stdio.h"
 
 /* FILE with the SDK's signed flags word. */
 struct SwFile {

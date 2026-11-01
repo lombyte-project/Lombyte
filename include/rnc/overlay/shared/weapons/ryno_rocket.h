@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_RYNO_ROCKET_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_RYNO_ROCKET_H
-
-#include "types.h"
-
-void ryno_rocket_update(char *) __asm__("FUN_L00_002cd1f0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_RYNO_ROCKET_H */

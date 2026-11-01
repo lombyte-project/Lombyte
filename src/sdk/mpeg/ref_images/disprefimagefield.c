@@ -1,8 +1,7 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/demux/_getPtsDtsFlags.h"
-#include "rnc/sdk/mpeg/macroblock/cpr8.h"
-#include "rnc/sdk/mpeg/ref_images/csc_store_ref_image.h"
-#include "rnc/sdk/mpeg/ref_images/is_out_size_ok.h"
+#include "rnc/sdk/mpeg/demux.h"
+#include "rnc/sdk/mpeg/macroblock.h"
+#include "rnc/sdk/mpeg/ref_images.h"
 
 struct MpegPictureBuffer {
     u8  pad0[0x10];
