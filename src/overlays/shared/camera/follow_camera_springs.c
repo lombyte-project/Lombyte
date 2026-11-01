@@ -1083,7 +1083,9 @@ void FUN_L00_002e4930(char *camera) {
 
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6498), where it is exact; names translated to the US level program. */
-void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
+void compute_follow_camera_focus_velocity(char *camera, float *out_focus_velocity) __asm__("FUN_L00_002e4fe8");
+
+void compute_follow_camera_focus_velocity(char *camera, float *out_focus_velocity) {
     float        hero_position[4];
     float        target_position_or_up_offset[4];
     char        *camera_state;
