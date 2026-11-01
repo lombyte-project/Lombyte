@@ -63,7 +63,7 @@ void timed_activation_pads_update(unsigned char *moby) {
         return;
 
     flag = 0;
-    if (MOBY(moby)->state < 6) {
+    if (MOBY(moby)->state < PAD_INITIALIZE_FLASHING) {
         if (MOBY(moby)->mission != 0xFF) {
             if (visited52[MOBY(moby)->mission + (current_level_index << 4)] == 0xFF)
                 set_moby_list_state(MOBY(moby)->group, 6);
@@ -137,7 +137,7 @@ void timed_activation_pads_update(unsigned char *moby) {
         }
         break;
     case PAD_ADVANCE_TO_FLASH_ACTIVATION_GATE:
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = PAD_WAIT_TO_ENTER_FLASH_ACTIVATION_WAIT;
         break;
     case PAD_WAIT_TO_ENTER_FLASH_ACTIVATION_WAIT:
         if (flag) {
@@ -148,7 +148,7 @@ void timed_activation_pads_update(unsigned char *moby) {
         }
         break;
     case PAD_ENTER_FLASH_ACTIVATION_WAIT:
-        MOBY(moby)->state = 5;
+        MOBY(moby)->state = PAD_WAIT_FOR_FLASH_ACTIVATION;
         break;
     case PAD_WAIT_FOR_FLASH_ACTIVATION:
         if (flag) {
@@ -162,7 +162,7 @@ void timed_activation_pads_update(unsigned char *moby) {
         pad_data->unkC = func_001F9850_30D370(0x14);
         pad_data->unkE = 0;
         glow_n(moby, 0x80, 0xFF, 0x80);
-        MOBY(moby)->state = 7;
+        MOBY(moby)->state = PAD_UPDATE_FLASHING;
         break;
     case PAD_UPDATE_FLASHING:
         if (MOBY(moby)->mission != 0xFF) {
@@ -189,7 +189,7 @@ void timed_activation_pads_update(unsigned char *moby) {
     case PAD_RESET_TO_ACTIVATION_WAIT:
         glow_n(moby, 0x80, 0x80, 0x80);
         MOBY(moby)->command = 0;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = PAD_WAIT_FOR_ACTIVATION;
         break;
     case 9:
         break;
