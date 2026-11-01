@@ -1911,8 +1911,8 @@ void update_hero_and_equipped_item_glows(void) {
     }
     }
 }
-extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 
 extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 extern void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");

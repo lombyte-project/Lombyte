@@ -88,6 +88,16 @@ extern int                      D_L12_001619A0 __attribute__((sda));
 #include "rnc/game/game_globals.h"
 #include "rnc/audio/voice_pool.h"
 
+enum {
+    BLARG_HELICOPTER_INITIALIZE = 0,
+    BLARG_HELICOPTER_WAIT_FOR_ACTIVATION = 1,
+    BLARG_HELICOPTER_FOLLOW_INITIAL_PATH = 2,
+    BLARG_HELICOPTER_AIM_AND_FIRE = 3,
+    BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS = 4,
+    BLARG_HELICOPTER_KNOCKBACK = 5,
+    BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6
+};
+
 extern unsigned char             D_0013E550[];
 extern unsigned char D_0013D4CB  NOT_SDA;
 extern unsigned short D_00141C50 NOT_SDA;
@@ -161,15 +171,6 @@ typedef struct BlargHelicopterVars {
 
 /* Moby class 326 */
 void blarg_helicopter_update(struct Moby *moby) {
-    enum {
-        BLARG_HELICOPTER_INITIALIZE = 0,
-        BLARG_HELICOPTER_WAIT_FOR_ACTIVATION = 1,
-        BLARG_HELICOPTER_FOLLOW_INITIAL_PATH = 2,
-        BLARG_HELICOPTER_AIM_AND_FIRE = 3,
-        BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS = 4,
-        BLARG_HELICOPTER_KNOCKBACK = 5,
-        BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6
-    };
     BlargHelicopterVars *blarg_helicopter_vars = (BlargHelicopterVars *)moby->pvars;
     struct Moby         *child;
     float                target[20] __attribute__((aligned(16)));
@@ -634,10 +635,6 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_blarg_helicopter_hits(struct Moby *moby) {
-    enum {
-        BLARG_HELICOPTER_KNOCKBACK = 5,
-        BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6
-    };
     enum {
         HIT_PROCESSING_SKIP_HIT = 1
     };

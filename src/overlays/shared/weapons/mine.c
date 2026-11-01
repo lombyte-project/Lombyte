@@ -24,6 +24,13 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
+enum {
+    MINE_STATE_OWNER_ATTACHED = 0,
+    MINE_HOMING_RISE_PHASE = 1,
+    MINE_STATE_FREE_MOTION = 1,
+    MINE_HOMING_FALL_PHASE = 2
+};
+
 typedef struct MineVars {
     u8  pad0[0x30];
     s32 unk30;
@@ -403,9 +410,6 @@ s32              FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 
 unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
-    enum {
-        MINE_STATE_OWNER_ATTACHED = 0
-    };
     unsigned char *mine_moby = create_moby(0x4A);
     if (mine_moby) {
         MineVars *mine_vars = (MineVars *)MOBY(mine_moby)->pvars;
@@ -516,9 +520,6 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) __asm__("FUN_L00_002aa2a8");
 
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
-    enum {
-        MINE_STATE_OWNER_ATTACHED = 0
-    };
     enum {
         MINE_PREDICTION_REQUIRE_LINKED_MOBY_HIT = 0,
         MINE_PREDICTION_HIDE_LINKED_MOBY_HIT_MARKER = 2
@@ -631,12 +632,6 @@ void mine_update(M910 *mine_moby) {
         MINE_DEBRIS_FIXED_LIFETIME = 1,
         MINE_DEBRIS_SHORT_LIVED = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
-    };
-    enum {
-        MINE_STATE_OWNER_ATTACHED = 0,
-        MINE_STATE_FREE_MOTION = 1,
-        MINE_HOMING_RISE_PHASE = 1,
-        MINE_HOMING_FALL_PHASE = 2
     };
     B910  camera_blast_parameters = l00_mine_camera_blast_parameters;
     B910  alternate_camera_blast_parameters = l00_mine_alternate_camera_blast_parameters;

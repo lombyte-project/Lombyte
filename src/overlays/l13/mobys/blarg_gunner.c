@@ -18,6 +18,12 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
+enum {
+    BLARG_GUNNER_STATE_INITIALIZE = 0,
+    BLARG_GUNNER_STATE_ACTIVE = 1,
+    BLARG_GUNNER_STATE_DESTROY = 2
+};
+
 extern void FUN_L00_00257470(void *, int, int);
 
 extern void spawn_explosion(void *,
@@ -64,9 +70,6 @@ extern void copy_hero_moby_field_38(struct Moby *moby) __asm__("FUN_L00_0025d1b8
 struct Moby *spawn_blarg_turret_child(struct Moby *parent) __asm__("FUN_L13_002b4958");
 
 struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
-    enum {
-        BLARG_GUNNER_STATE_INITIALIZE = 0
-    };
     struct Moby *child_moby;
     Vars        *child_vars;
 
@@ -110,9 +113,6 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) __asm__("FUN_
 void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
     enum {
         HIT_REACTION_NONE = 11
-    };
-    enum {
-        BLARG_GUNNER_STATE_DESTROY = 2
     };
     float *tm = (float *)(moby_vars + 0x20);
     char  *hit_record;
@@ -218,11 +218,6 @@ void blarg_gunner_update(struct Moby *moby) __asm__("FUN_L13_002b4c80");
 
 /* Moby class 36 */
 void blarg_gunner_update(struct Moby *moby) {
-    enum {
-        BLARG_GUNNER_STATE_INITIALIZE = 0,
-        BLARG_GUNNER_STATE_ACTIVE = 1,
-        BLARG_GUNNER_STATE_DESTROY = 2
-    };
     unsigned char *moby_vars = moby->pvars;
     float          explosion_offset[4];
     float          explosion_spawn_position[4];

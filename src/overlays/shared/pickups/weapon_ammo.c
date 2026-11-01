@@ -15,6 +15,14 @@
 #include "rnc/globals.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
+enum {
+    AMMO_PICKUP_INITIALIZE = 0,
+    AMMO_PICKUP_WAIT_FOR_COLLECTION = 1,
+    AMMO_PICKUP_COLLECTED = 2,
+    AMMO_PICKUP_PULSE_ALPHA = 3,
+    AMMO_PICKUP_RESTORE_SCALE = 4
+};
+
 typedef struct {
     float x;
     float y;
@@ -91,9 +99,6 @@ int D_L18_001618A8 = 0;
 unsigned char *spawn_on_path(u128 *a, int b, int c, int d) __asm__("FUN_L00_002c52a8");
 
 unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_amount, int d) {
-    enum {
-        AMMO_PICKUP_WAIT_FOR_COLLECTION = 1
-    };
     unsigned char *spawned_moby = 0;
     {
         ItemDef *spawn_config_entry = (ItemDef *)(weapon_index * 0x4C + (u8 *)item_defs_lui);
@@ -129,13 +134,6 @@ void devestator_ammo_update(struct Moby *m) __asm__("FUN_L00_002c53c0");
 
 /* Moby classes 204, 213, 214, 222, 223, 225, 226, 1006, 1438, 1447, 1449 */
 void devestator_ammo_update(struct Moby *pickup_moby) {
-    enum {
-        AMMO_PICKUP_INITIALIZE = 0,
-        AMMO_PICKUP_WAIT_FOR_COLLECTION = 1,
-        AMMO_PICKUP_COLLECTED = 2,
-        AMMO_PICKUP_PULSE_ALPHA = 3,
-        AMMO_PICKUP_RESTORE_SCALE = 4
-    };
     AmmoPickup  *pickup_vars;
     unsigned int state;
     FxVec        position;
@@ -343,9 +341,6 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
 int try_collect_ammo_pickup(struct Moby *pickup_moby) __asm__("FUN_L00_002c5be8");
 
 int try_collect_ammo_pickup(struct Moby *pickup_moby) {
-    enum {
-        AMMO_PICKUP_COLLECTED = 2
-    };
     int  *pickup_vars = ((int *)pickup_moby->pvars);
     int   before;
     float excess_ammo_amount;

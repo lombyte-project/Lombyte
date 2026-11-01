@@ -61,9 +61,6 @@ extern float FUN_L04_001f1978(float);
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_002923b8");
 
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
-    enum {
-        LEG_RIG_FALLBACK_GAIT_MASK = 5
-    };
     int   joints[6];
     float matrix[4][4];
     int   i;
@@ -177,6 +174,10 @@ typedef struct {
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
 
 #include "rnc/overlay/shared/world/collision.h"
+
+enum {
+    LEG_RIG_FALLBACK_GAIT_MASK = 5
+};
 
 extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 
@@ -572,9 +573,6 @@ extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_
 void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_00295de8");
 
 void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
-    enum {
-        LEG_RIG_FALLBACK_GAIT_MASK = 5
-    };
     int          joints[6];
     float        mtx[4][4];
     float        animation_time;

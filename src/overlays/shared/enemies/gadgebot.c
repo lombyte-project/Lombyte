@@ -25,6 +25,22 @@
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_pad.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
+enum {
+    GADGEBOT_ABSORPTION_DISABLED = 2
+};
+
+enum {
+    GADGEBOT_INITIALIZE = 0,
+    GADGEBOT_WAIT_FOR_SPAWN_PAD = 1,
+    GADGEBOT_WANDER_NEAR_HOME = 2,
+    GADGEBOT_FOLLOW_HERO = 3,
+    GADGEBOT_STAND_AND_FACE_HERO = 4,
+    GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
+    GADGEBOT_SEEK_INTERACTION_TARGET = 7,
+    GADGEBOT_ABSORB_INTO_OWNER = 8,
+    GADGEBOT_UPDATE_KNOCKBACK = 9
+};
+
 #define GB_FLAG                (*(unsigned char *)0x15EDB3)
 #define PVARS(p)               (*(char **)((p) + 0x78))
 #define S16(p, current_target) (*(short *)((p) + (current_target)))
@@ -297,17 +313,6 @@ void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 
 /* Moby classes 857, 1906 */
 void gadgebot_update(GbMoby *moby) {
-    enum {
-        GADGEBOT_INITIALIZE = 0,
-        GADGEBOT_WAIT_FOR_SPAWN_PAD = 1,
-        GADGEBOT_WANDER_NEAR_HOME = 2,
-        GADGEBOT_FOLLOW_HERO = 3,
-        GADGEBOT_STAND_AND_FACE_HERO = 4,
-        GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
-        GADGEBOT_SEEK_INTERACTION_TARGET = 7,
-        GADGEBOT_ABSORB_INTO_OWNER = 8,
-        GADGEBOT_UPDATE_KNOCKBACK = 9
-    };
     enum {
         GADGEBOT_ATTACK_SEEK_AND_APPROACH_TARGET = 1,
         GADGEBOT_ATTACK_STRIKE = 2,
@@ -1370,9 +1375,6 @@ void assign_gadgebot_attack_targets(void) {
 }
 
 void select_nearest_gadgebot_interaction_target(void *moby_arg) {
-    enum {
-        GADGEBOT_ABSORPTION_DISABLED = 2
-    };
     GbMoby *moby = moby_arg;
     GbVars *gadgebot_vars = moby->vars;
     GbMoby *candidate;
@@ -1431,9 +1433,6 @@ int process_gadgebot_interaction_candidate(
 int process_gadgebot_interaction_candidate(
 
     char *ctx, char *ow, char *moby, int flag, int *interaction_status_out) {
-    enum {
-        GADGEBOT_ABSORPTION_DISABLED = 2
-    };
     float candidate_position[4];
     float vB[4];
     float vA[4];
@@ -1623,11 +1622,9 @@ int process_gadgebot_interactions(char *moby, int flag) {
 void handle_gadgebot_hit_knockback(unsigned char *moby) __asm__("FUN_L06_002f3640");
 
 void handle_gadgebot_hit_knockback(unsigned char *moby) {
-    enum {
-        GADGEBOT_UPDATE_KNOCKBACK = 9
-    };
     char *state = ((char *)MOBY(moby)->pvars);
-    if (MOBY(moby)->state != GADGEBOT_UPDATE_KNOCKBACK && MOBY(moby)->seq != 2 && MOBY(moby)->prev_seq != 2) {
+    if (MOBY(moby)->state != GADGEBOT_UPDATE_KNOCKBACK && MOBY(moby)->seq != 2 &&
+        MOBY(moby)->prev_seq != 2) {
         char *target = find_moby_hit(moby, 0x330001, 0);
         if (target != 0) {
             Q     hit_vector_copy;
@@ -1691,12 +1688,6 @@ void draw_gadgebot_group_glow_effects(char *group_reference_moby) {
 }
 
 void update_gadgebot_glow_effects(char *moby) {
-    enum {
-        GADGEBOT_FOLLOW_HERO = 3,
-        GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
-        GADGEBOT_SEEK_INTERACTION_TARGET = 7,
-        GADGEBOT_UPDATE_KNOCKBACK = 9
-    };
     char *moby_vars;
     int   tint;
     int   i;

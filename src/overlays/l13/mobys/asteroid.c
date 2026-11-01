@@ -17,6 +17,14 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/sdk/libc/stdlib.h"
 
+enum {
+    ASTEROID_INITIALIZE = 0,
+    ASTEROID_WAIT_TO_LAUNCH = 1,
+    ASTEROID_MOVE_AND_COLLIDE = 2,
+    ASTEROID_RESET_AT_HOME = 3,
+    ASTEROID_WAIT_TO_RESPAWN = 4
+};
+
 enum AsteroidSpinAxis {
     SPIN_AXIS_X = 0x0,
     SPIN_AXIS_Y = 0x1,
@@ -144,9 +152,6 @@ void process_asteroid_hit(struct Moby *moby,
                           float        scale_ratio) __asm__("FUN_L13_002e1348");
 
 void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio) {
-    enum {
-        ASTEROID_WAIT_TO_RESPAWN = 4
-    };
     float split_velocity[4];
     float split_spawn_position[4];
     float nearby_effect_scale = scale_ratio * 7.0f;
@@ -241,13 +246,6 @@ void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
 
 /* Moby classes 212, 1412 */
 void asteroid_update(struct Moby *moby) {
-    enum {
-        ASTEROID_INITIALIZE = 0,
-        ASTEROID_WAIT_TO_LAUNCH = 1,
-        ASTEROID_MOVE_AND_COLLIDE = 2,
-        ASTEROID_RESET_AT_HOME = 3,
-        ASTEROID_WAIT_TO_RESPAWN = 4
-    };
     struct BlobVars *asteroid_vars = (struct BlobVars *)moby->pvars;
     f32              distance = fast_vec_dist(&moby->pos, &hero_pos);
     f32              size;

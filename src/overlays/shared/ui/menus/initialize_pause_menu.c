@@ -183,6 +183,20 @@ extern int  D_L00_00173E00[];
 
 #include "rnc/overlay/shared/camera/level_camera.h"
 
+enum {
+    PAUSE_MENU_PENDING_STATE_CLEARED = 0,
+    SCENE_STATE_DEFAULT = 2,
+    PAUSE_MENU_STATE_EXIT_GUARDED = 0x22
+};
+
+enum {
+    PAUSE_MENU_STATE_PAGE_TRANSITION = 1,
+    PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY = 0xE,
+    PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14,
+    PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY = 0x21,
+    PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY = 0x23
+};
+
 extern s32  frame_size __asm__("D_0013E504") NOT_SDA;
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
 extern s32  sce_gs_sync_v(s32) __asm__("FUN_00122298");
@@ -193,11 +207,6 @@ extern void FUN_L00_002df638(Ent *);
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00277208). */
 void initialize_pause_menu(void) {
-    enum {
-        PAUSE_MENU_PENDING_STATE_CLEARED = 0,
-        SCENE_STATE_DEFAULT = 2,
-        PAUSE_MENU_STATE_EXIT_GUARDED = 0x22
-    };
     enum {
         PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION = 15
     };
@@ -393,9 +402,6 @@ void initialize_pause_menu(void) {
 /* Closes the scene once its progress reaches 10: releases its objects, restores the hero's
    items and HUD bank, deletes the 14 scene mobies, shows the health and bolt HUD, enters state 0x14. */
 void close_pause_menu(void) {
-    enum {
-        PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14
-    };
     s32   i;
     s32   value;
     s32   handle;
@@ -492,16 +498,6 @@ void close_pause_menu(void) {
 void update_pause_menu(void) __asm__("FUN_L00_00276bd0");
 
 void update_pause_menu(void) {
-    enum {
-        SCENE_STATE_DEFAULT = 2
-    };
-    enum {
-        PAUSE_MENU_STATE_PAGE_TRANSITION = 1,
-        PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY = 0xE,
-        PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14,
-        PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY = 0x21,
-        PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY = 0x23
-    };
     Own *owner;
     Own *u8p;
     Mth *active_callback_object;
@@ -730,9 +726,6 @@ extern void draw_menu_flashing_panel(int) __asm__("FUN_00223e28");
 void draw_pause_menu_pages(int transfer_only) __asm__("FUN_L00_002772c0");
 
 void draw_pause_menu_pages(int transfer_only) {
-    enum {
-        PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14
-    };
     u128 corners[4];
     u128 pad[5];
     u128 box[2];

@@ -72,6 +72,13 @@ extern float extermitank_secondary_particle_vector_b_xy_scale_gp __asm__("D_L05_
 
 #include "rnc/overlay/l05/mobys/extermitank_data/extermitank_update.h"
 
+enum {
+    EXTERMITANK_INITIALIZE = 0,
+    EXTERMITANK_FOLLOW_PATH = 1,
+    EXTERMITANK_FIRE_PARTICLES = 2,
+    EXTERMITANK_REMOVE = 3
+};
+
 extern float extermitank_secondary_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B68")
     __attribute__((sda));
 extern float extermitank_secondary_particle_vector_a_spread_degrees_gp __asm__("D_L05_00161B6C")
@@ -152,12 +159,6 @@ typedef struct ExtermitankVars {
 
 /* Moby class 625 */
 void extermitank_update(unsigned char *moby) {
-    enum {
-        EXTERMITANK_INITIALIZE = 0,
-        EXTERMITANK_FOLLOW_PATH = 1,
-        EXTERMITANK_FIRE_PARTICLES = 2,
-        EXTERMITANK_REMOVE = 3
-    };
     ExtermitankVars *extermitank_vars = (ExtermitankVars *)MOBY(moby)->pvars;
     float            origin_position[4];
     float            particle_vector_a[4];
@@ -539,9 +540,6 @@ typedef struct Hero Hero;
 void handle_extermitank_hits_and_sync_children(char *moby) {
     enum {
         MOBY_HIT_RESPONSE_SKIP_DAMAGE = 1
-    };
-    enum {
-        EXTERMITANK_REMOVE = 3
     };
     ExtermitankVars *extermitank_hit_sync_vars = (ExtermitankVars *)MOBY(moby)->pvars;
     char            *first;

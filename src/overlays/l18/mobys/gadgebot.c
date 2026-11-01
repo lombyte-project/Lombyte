@@ -72,19 +72,6 @@ void gadgebot_update(unsigned char *m) __asm__("FUN_L18_002fbb98");
 
 /* Moby class 1906 */
 void gadgebot_update(unsigned char *moby) {
-    enum {
-        GADGEBOT_INITIALIZE = 0,
-        GADGEBOT_LAUNCH_FLIGHT = 1,
-        GADGEBOT_WAIT_TO_APPROACH = 2,
-        GADGEBOT_APPROACH_TARGET = 3,
-        GADGEBOT_FACE_TARGET = 4,
-        GADGEBOT_DEATH_FALL = 5,
-        GADGEBOT_EXPLODE = 6,
-        GADGEBOT_SUCK_CANNON_SUCTION = 7
-    };
-    enum {
-        GADGEBOT_IDLE = 8
-    };
     char           position_scratch[16];
     unsigned char *moby_vars = ((unsigned char *)MOBY(moby)->pvars);
     unsigned char *moby_transform_ptr;
@@ -300,17 +287,21 @@ extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp __asm_
 
 #include "rnc/overlay/l18/mobys/gadgebot_data/update_gadgebot_damage_target_and_glow.h"
 
+enum {
+    GADGEBOT_INITIALIZE = 0,
+    GADGEBOT_LAUNCH_FLIGHT = 1,
+    GADGEBOT_TARGET_HERO = 2,
+    GADGEBOT_WAIT_TO_APPROACH = 2,
+    GADGEBOT_APPROACH_TARGET = 3,
+    GADGEBOT_FACE_TARGET = 4,
+    GADGEBOT_DEATH_FALL = 5,
+    GADGEBOT_EXPLODE = 6,
+    GADGEBOT_SUCK_CANNON_SUCTION = 7,
+    GADGEBOT_IDLE = 8
+};
+
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
 void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
-    enum {
-        GADGEBOT_INITIALIZE = 0,
-        GADGEBOT_TARGET_HERO = 2,
-        GADGEBOT_FACE_TARGET = 4,
-        GADGEBOT_DEATH_FALL = 5,
-        GADGEBOT_EXPLODE = 6,
-        GADGEBOT_SUCK_CANNON_SUCTION = 7,
-        GADGEBOT_IDLE = 8
-    };
     SentryVars_c100 *sentry_vars = (SentryVars_c100 *)moby->pvars;
     union {
         u128  q;
@@ -484,10 +475,6 @@ int launch_first_idle_group_class_0772_moby(int   group,
                                             float speed) __asm__("FUN_L18_002fc668");
 
 int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, float speed) {
-    enum {
-        GADGEBOT_LAUNCH_FLIGHT = 1,
-        GADGEBOT_IDLE = 8
-    };
     unsigned short *group_moby_entry = (unsigned short *)D_L18_001AC240[group];
     struct Moby    *table;
     struct Moby    *moby;
@@ -525,9 +512,6 @@ int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, flo
 short count_group_gadgebots_not_in_state_8(int group_index) __asm__("FUN_L18_002fc7e0");
 
 short count_group_gadgebots_not_in_state_8(int group_index) {
-    enum {
-        GADGEBOT_IDLE = 8
-    };
     unsigned short *group_moby_entry = (unsigned short *)D_L18_001AC240[group_index];
     short           n = 0;
     int             moby_table_address;
@@ -661,10 +645,6 @@ int update_moby_suck_cannon_state(struct Moby *a) __asm__("FUN_L18_002fcbb0");
 
 /* Method: holds the gadgebot in state 7 while the suck cannon pulls it, and puts it back to state 2 when it lets go. */
 int update_moby_suck_cannon_state(struct Moby *moby) {
-    enum {
-        GADGEBOT_WAIT_TO_APPROACH = 0x2,
-        GADGEBOT_SUCK_CANNON_SUCTION = 0x7
-    };
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
         if (moby->state == GADGEBOT_SUCK_CANNON_SUCTION)
@@ -679,9 +659,6 @@ void hide_moby_and_clear_collision(struct Moby *moby) __asm__("FUN_L18_002fcd00"
 
 /* Method: sends the gadgebot back to its idle state 8, hidden and without collision. */
 void hide_moby_and_clear_collision(struct Moby *moby) {
-    enum {
-        GADGEBOT_IDLE = 0x8
-    };
     unsigned short flags;
     moby->state = GADGEBOT_IDLE;
     if (moby->prev_seq != 0) {

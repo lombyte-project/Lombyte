@@ -23,6 +23,12 @@
 #include "rnc/game/options.h"
 #include "rnc/overlay/shared/hero/hero_frame_update.h"
 
+enum {
+    GOLD_BOLT_INITIALIZE = 0,
+    GOLD_BOLT_WAIT_FOR_PICKUP = 1,
+    GOLD_BOLT_PICKUP_CUTSCENE = 2
+};
+
 typedef struct {
     s32   id; /* collected flag index (D_0014BEC0 + level * 4), -1 none */
     u8    pad4[8];
@@ -470,11 +476,6 @@ void gold_bolt_update(struct Moby *moby) __asm__("FUN_L01_00307ca0");
 
 /* Moby class 1134 */
 void gold_bolt_update(struct Moby *moby) {
-    enum {
-        GOLD_BOLT_INITIALIZE = 0,
-        GOLD_BOLT_WAIT_FOR_PICKUP = 1,
-        GOLD_BOLT_PICKUP_CUTSCENE = 2
-    };
     Vars        *gold_bolt_instance_vars = (Vars *)moby->pvars;
     struct Hero *hero_ptr;
     Vec4f        at;
@@ -623,9 +624,6 @@ void gold_bolt_update(struct Moby *moby) {
 void update_gold_bolt_visuals(struct Moby *moby) __asm__("FUN_L01_00308380");
 
 void update_gold_bolt_visuals(struct Moby *moby) {
-    enum {
-        GOLD_BOLT_WAIT_FOR_PICKUP = 1
-    };
     char *gold_bolt_visual_vars = (char *)moby->pvars;
     float updated_rotation_z;
     float bobbing_sine;
@@ -790,9 +788,6 @@ void update_gold_bolt_pickup_camera(struct Moby *moby) {
 void spawn_gold_bolt_particles(struct Moby *moby) __asm__("FUN_L01_003089f0");
 
 void spawn_gold_bolt_particles(struct Moby *moby) {
-    enum {
-        GOLD_BOLT_WAIT_FOR_PICKUP = 1
-    };
     float v[4];
     float particle_velocity[4];
     float u[4];

@@ -129,21 +129,6 @@ void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 
 /* Moby class 1068 */
 void blarg_space_commando_update(struct Moby *moby) {
-    enum {
-        BLARG_COMMANDO_STATE_INITIALIZE = 0,
-        BLARG_COMMANDO_STATE_SELECT_ACTION = 1,
-        BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP = 2,
-        BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY = 3,
-        BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN = 4,
-        BLARG_COMMANDO_STATE_MELEE_ATTACK = 5,
-        BLARG_COMMANDO_STATE_MELEE_RECOVERY = 6,
-        BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
-        BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK = 12,
-        BLARG_COMMANDO_STATE_RETURN_HOME = 13,
-        BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14,
-        BLARG_COMMANDO_STATE_KNOCKBACK = 15,
-        BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 16
-    };
     Moby1068Vars *blarg_commando_state = (Moby1068Vars *)moby->pvars;
     struct Moby  *target;
     s32          *route;
@@ -555,6 +540,22 @@ extern char *FUN_L06_00300c60_c(int unused, char *pa, char *pb) __asm__("FUN_L06
 
 #include "rnc/data_labels.h"
 
+enum {
+    BLARG_COMMANDO_STATE_INITIALIZE = 0,
+    BLARG_COMMANDO_STATE_SELECT_ACTION = 1,
+    BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP = 2,
+    BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY = 3,
+    BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN = 4,
+    BLARG_COMMANDO_STATE_MELEE_ATTACK = 5,
+    BLARG_COMMANDO_STATE_MELEE_RECOVERY = 6,
+    BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
+    BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK = 12,
+    BLARG_COMMANDO_STATE_RETURN_HOME = 13,
+    BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14,
+    BLARG_COMMANDO_STATE_KNOCKBACK = 15,
+    BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 16
+};
+
 extern f32   D_0015ED6C;
 extern float FUN_L04_001f1978(float);
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
@@ -591,10 +592,6 @@ void process_blarg_space_commando_hits(char *moby) {
         FRAME_SCALED_KNOCKBACK_HIT_RESPONSE = 9,
         SIXTY_FRAME_KNOCKBACK_HIT_RESPONSE = 10,
         HIT_RESPONSE_PRESERVING_MOBY_STATE = 11
-    };
-    enum {
-        BLARG_COMMANDO_STATE_KNOCKBACK = 0xF,
-        BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 0x10
     };
     extern unsigned char D_0013D408[];
     char                *commando_state;

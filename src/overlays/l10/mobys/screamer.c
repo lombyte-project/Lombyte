@@ -89,19 +89,6 @@ extern float fast_vec_dist(void *, void *);
 
 /* Moby class 1196 */
 void screamer_update(Moby *moby) {
-    enum {
-        SCREAMER_STATE_INITIALIZE = 0,
-        SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
-        SCREAMER_STATE_WAIT_TO_RISE = 2,
-        SCREAMER_STATE_RISE_FROM_HOME = 4,
-        SCREAMER_STATE_FOLLOW_PATH = 5,
-        SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
-        SCREAMER_STATE_IDLE_AT_HOME = 7,
-        SCREAMER_STATE_RETURN_HOME = 8,
-        SCREAMER_STATE_WAIT_TO_WANDER = 9,
-        SCREAMER_STATE_WANDER = 10,
-        SCREAMER_STATE_DEATH_KNOCKBACK = 11
-    };
     float     waypoint[6];
     D_2E0630 *screamer_data = (D_2E0630 *)moby->pvars;
     Moby     *leader;
@@ -384,11 +371,21 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 #include "rnc/data_labels.h"
 
+enum {
+    SCREAMER_STATE_INITIALIZE = 0,
+    SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
+    SCREAMER_STATE_WAIT_TO_RISE = 2,
+    SCREAMER_STATE_RISE_FROM_HOME = 4,
+    SCREAMER_STATE_FOLLOW_PATH = 5,
+    SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
+    SCREAMER_STATE_IDLE_AT_HOME = 7,
+    SCREAMER_STATE_RETURN_HOME = 8,
+    SCREAMER_STATE_WAIT_TO_WANDER = 9,
+    SCREAMER_STATE_WANDER = 10,
+    SCREAMER_STATE_DEATH_KNOCKBACK = 11
+};
+
 void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
-    enum {
-        SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
-        SCREAMER_STATE_DEATH_KNOCKBACK = 11
-    };
     enum {
         TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED = 2
     };

@@ -26,6 +26,14 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 #include "qcopy.h"
 
+enum {
+    SAND_SHARK_NEST_INITIALIZE = 0,
+    SAND_SHARK_NEST_WAIT_FOR_SPAWN = 1,
+    SAND_SHARK_NEST_LAUNCH_SAND_SHARK = 2,
+    SAND_SHARK_NEST_HIT_RECOVERY = 3,
+    SAND_SHARK_NEST_DEATH_KNOCKBACK = 4
+};
+
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
 
 void launch_sand_shark(struct Moby *moby,
@@ -144,13 +152,6 @@ void sand_shark_nest_update(unsigned char *moby) __asm__("FUN_L02_002dcb38");
 
 /* Moby class 668 */
 void sand_shark_nest_update(unsigned char *moby) {
-    enum {
-        SAND_SHARK_NEST_INITIALIZE = 0,
-        SAND_SHARK_NEST_WAIT_FOR_SPAWN = 1,
-        SAND_SHARK_NEST_LAUNCH_SAND_SHARK = 2,
-        SAND_SHARK_NEST_HIT_RECOVERY = 3,
-        SAND_SHARK_NEST_DEATH_KNOCKBACK = 4
-    };
     Varscb38 *nest_vars = ((Varscb38 *)MOBY(moby)->pvars);
     char     *launched_shark;
     int       spawn_delay_factor;
@@ -310,10 +311,6 @@ extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 
 void handle_sand_shark_nest_damage(struct Moby *moby) {
-    enum {
-        SAND_SHARK_NEST_HIT_RECOVERY = 3,
-        SAND_SHARK_NEST_DEATH_KNOCKBACK = 4
-    };
     char *nest_vars = (char *)moby->pvars;
     float hit_knockback_vector[4];
     int   hit;

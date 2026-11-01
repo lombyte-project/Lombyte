@@ -29,6 +29,16 @@ extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FU
 
 #include "rnc/overlay/l14/mobys/taxi_globals.h"
 
+enum {
+    TAXI_STATE_INITIALIZE = 0,
+    TAXI_STATE_WAIT_AT_STOP = 1,
+    TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
+    TAXI_STATE_FOLLOW_PATH = 4,
+    TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
+    TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
+    TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
+};
+
 typedef struct {
     u8   pad0[0x20];
     u8   spring[0x40]; /* 0x20 */
@@ -84,15 +94,6 @@ void taxi_update(struct Moby *moby) __asm__("FUN_L14_002f0538");
 
 /* Moby class 712 */
 void taxi_update(struct Moby *moby) {
-    enum {
-        TAXI_STATE_INITIALIZE = 0,
-        TAXI_STATE_WAIT_AT_STOP = 1,
-        TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
-        TAXI_STATE_FOLLOW_PATH = 4,
-        TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
-        TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
-        TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
-    };
     enum {
         TAXI_STATE_HIDDEN = 2
     };
@@ -385,9 +386,6 @@ struct L14PickVars {
 };
 
 void initialize_taxi_stop_from_position(struct Moby *moby) {
-    enum {
-        TAXI_STATE_WAIT_AT_STOP = 1
-    };
     struct L14PickVars *taxi_vars = (struct L14PickVars *)moby->pvars;
     int                 i;
     taxi_vars->picked = -1;
@@ -473,9 +471,6 @@ found:
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void request_taxi_stop_prompt(struct Moby *moby) {
-    enum {
-        TAXI_STATE_BLEND_PATH_END_TO_STOP = 5
-    };
     char *taxi_prompt_vars = (char *)moby->pvars;
     int   taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB4);
     if (moby->state == TAXI_STATE_BLEND_PATH_END_TO_STOP) {

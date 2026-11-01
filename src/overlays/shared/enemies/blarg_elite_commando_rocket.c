@@ -12,6 +12,10 @@
 #include "sda.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_rocket_data/spawn_rocket_trail_spark.h"
 
+enum {
+    BLARG_ELITE_COMMANDO_ROCKET_STATE_FLYING = 0
+};
+
 extern int   scale_game_frames(int);
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
@@ -72,9 +76,6 @@ void blarg_elite_commando_rocket_update(unsigned char *m) __asm__("FUN_L15_0029a
 
 /* Moby class 49 */
 void blarg_elite_commando_rocket_update(unsigned char *moby) {
-    enum {
-        BLARG_ELITE_COMMANDO_ROCKET_STATE_FLYING = 0
-    };
     char *rocket_data = ((char *)MOBY(moby)->pvars);
     float rocket_next_position[4];
     float back[4];
@@ -176,9 +177,6 @@ char *spawn_blarg_elite_commando_rocket(char  *firing_commando_moby,
                                         float *initial_movement_vector,
 
                                         char *spawn_position) {
-    enum {
-        BLARG_ELITE_COMMANDO_ROCKET_STATE_FLYING = 0
-    };
     char *moby = create_moby(0x31);
     if (moby != 0) {
         char *spawned_rocket_data;

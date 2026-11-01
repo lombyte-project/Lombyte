@@ -43,9 +43,6 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                                              struct Moby *moby,
 
                                              struct Moby *target) {
-    enum {
-        ENEMY_TURN_TO_HEADING = 0xC
-    };
     KerwanPathEnemyVars *enemy_pvars = (KerwanPathEnemyVars *)moby->pvars;
     int                  linked_moby_index;
     float                heading_delta;
@@ -365,9 +362,6 @@ void axis_angle_rotation_to_euler(AxisAngleQuad *axis, AxisAngleQuad *point, flo
 int is_kerwan_path_enemy_in_state_9(struct Moby *moby) __asm__("FUN_L03_002c6d58");
 
 int is_kerwan_path_enemy_in_state_9(struct Moby *moby) {
-    enum {
-        ENEMY_FOLLOW_ALTERNATE_PATH = 0x9
-    };
     if (moby && moby->state != 0xFE && moby->state != 0xFD && moby->oclass == 0x23e &&
         moby->state == ENEMY_FOLLOW_ALTERNATE_PATH) {
         return 1;
@@ -379,23 +373,6 @@ void kerwan_path_enemy_update(Moby2C8398 *m) __asm__("FUN_L03_002c6fd0");
 
 /* Moby class 574 */
 void kerwan_path_enemy_update(Moby2C8398 *m) {
-    enum {
-        ENEMY_INITIALIZE = 0,
-        ENEMY_WAIT_FOR_ACTIVATION = 1,
-        ENEMY_WAIT_FOR_LINKED_MOBY = 2,
-        ENEMY_PROJECTILE_ATTACK_WINDUP = 4,
-        ENEMY_PROJECTILE_ATTACK = 5,
-        ENEMY_MELEE_ATTACK = 6,
-        ENEMY_MOVE_TO_PATH_NODE = 7,
-        ENEMY_FOLLOW_PATH_TO_END = 8,
-        ENEMY_FOLLOW_ALTERNATE_PATH = 9,
-        ENEMY_KNOCKBACK_RECOVERY = 10,
-        ENEMY_FALL_UNDER_GRAVITY = 11,
-        ENEMY_TURN_TO_HEADING = 12,
-        ENEMY_DEATH_KNOCKBACK = 13,
-        ENEMY_HIDDEN_AT_PATH_START = 14,
-        ENEMY_RESPAWN_AT_PATH_START = 15
-    };
     enum {
         ENEMY_ANIM_LOCOMOTION = 1,
         ENEMY_ANIM_HEADING_TURN = 9
@@ -1472,6 +1449,24 @@ extern float D_L03_001618E0 __attribute__((sda));
 
 #include "rnc/overlay/l03/mobys/kerwan_path_enemy_data/update_kerwan_path_enemy_hit_reaction.h"
 
+enum {
+    ENEMY_INITIALIZE = 0,
+    ENEMY_WAIT_FOR_ACTIVATION = 1,
+    ENEMY_WAIT_FOR_LINKED_MOBY = 2,
+    ENEMY_PROJECTILE_ATTACK_WINDUP = 4,
+    ENEMY_PROJECTILE_ATTACK = 5,
+    ENEMY_MELEE_ATTACK = 6,
+    ENEMY_MOVE_TO_PATH_NODE = 7,
+    ENEMY_FOLLOW_PATH_TO_END = 8,
+    ENEMY_FOLLOW_ALTERNATE_PATH = 0x9,
+    ENEMY_KNOCKBACK_RECOVERY = 10,
+    ENEMY_FALL_UNDER_GRAVITY = 11,
+    ENEMY_TURN_TO_HEADING = 0xC,
+    ENEMY_DEATH_KNOCKBACK = 13,
+    ENEMY_HIDDEN_AT_PATH_START = 14,
+    ENEMY_RESPAWN_AT_PATH_START = 15
+};
+
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
@@ -1494,10 +1489,6 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         ANIMATION_FIVE_KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE = 8,
         NO_KNOCKBACK_HIT_RESPONSE = 12,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
-    };
-    enum {
-        ENEMY_KNOCKBACK_RECOVERY = 10,
-        ENEMY_DEATH_KNOCKBACK = 0xD
     };
     enum {
         HIT_REACTION_SUPPRESSED = 1

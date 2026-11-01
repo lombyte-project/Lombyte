@@ -20,6 +20,14 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/l08/mobys/rocket.h"
 
+enum {
+    HEAVY_GUNSHIP_INITIALIZE = 0,
+    HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH = 1,
+    HEAVY_GUNSHIP_FOLLOW_SECONDARY_PATH = 2,
+    HEAVY_GUNSHIP_START_PRIMARY_PATH = 3,
+    HEAVY_GUNSHIP_DISPERSE_AND_REMOVE = 99
+};
+
 /* Pvars of the heavy gunship. */
 typedef struct {
     SwarmPathFollower follow[2];    /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -119,9 +127,6 @@ void spawn_heavy_gunship_parts(struct Moby *moby) {
 void process_heavy_gunship_part_hits(struct Moby *moby) __asm__("FUN_L08_002e9758");
 
 void process_heavy_gunship_part_hits(struct Moby *moby) {
-    enum {
-        HEAVY_GUNSHIP_DISPERSE_AND_REMOVE = 99
-    };
     int        selected = 0;
     char      *linked_part_hit_vars = (char *)moby->pvars;
     SwarmPart *slots = (SwarmPart *)(linked_part_hit_vars + 0x60);
@@ -255,13 +260,6 @@ void heavy_gunship_update(struct Moby *moby) __asm__("FUN_L08_002e9b70");
 
 /* Moby class 463 */
 void heavy_gunship_update(struct Moby *moby) {
-    enum {
-        HEAVY_GUNSHIP_INITIALIZE = 0,
-        HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH = 1,
-        HEAVY_GUNSHIP_FOLLOW_SECONDARY_PATH = 2,
-        HEAVY_GUNSHIP_START_PRIMARY_PATH = 3,
-        HEAVY_GUNSHIP_DISPERSE_AND_REMOVE = 0x63
-    };
     enum {
         HEAVY_GUNSHIP_PART_DETACHED = 1
     };

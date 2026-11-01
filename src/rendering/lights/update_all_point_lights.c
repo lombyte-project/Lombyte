@@ -49,7 +49,8 @@ void update_all_point_lights(void) {
         struct PointLight     *light = &point_lights[light_index];
         struct PointLightSlot *slot = &((struct PointLightSlot *)point_light_data)[light_index];
 
-        if (slot->link_state != POINT_LIGHT_LINK_INACTIVE && fast_vec_dist(light->sphere, slot->linked_sphere) > 8.0f) {
+        if (slot->link_state != POINT_LIGHT_LINK_INACTIVE &&
+            fast_vec_dist(light->sphere, slot->linked_sphere) > 8.0f) {
             qcopy(slot->linked_sphere, light->sphere);
             if (slot->link_state == POINT_LIGHT_LINK_PENDING_CREATION) {
                 create_point_light(light_index);

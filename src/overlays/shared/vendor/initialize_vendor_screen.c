@@ -18,7 +18,9 @@
 #include "rnc/audio/voices/sound_update.h"
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
+
 void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
+
 #include "rnc/overlay/shared/streaming.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 

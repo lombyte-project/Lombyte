@@ -17,6 +17,15 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/math/random.h"
 
+enum {
+    BLARG_HELICOPTER_INITIALIZE = 0,
+    BLARG_HELICOPTER_ACTIVATION_PATH = 1,
+    BLARG_HELICOPTER_PATROL_AND_ATTACK = 2,
+    BLARG_HELICOPTER_EXIT = 3,
+    BLARG_HELICOPTER_TIMED_REACTION = 4,
+    BLARG_HELICOPTER_DESTROY = 5
+};
+
 typedef float HVec49_2CDDC8[4] __attribute__((aligned(16)));
 
 typedef unsigned int HQuad49_2CDDC8 __attribute__((mode(TI)));
@@ -200,14 +209,6 @@ void blarg_helicopter_update(HMob49 *moby) __asm__("FUN_L03_002cca00");
 
 /* Moby classes 326, 631 */
 void blarg_helicopter_update(HMob49 *moby) {
-    enum {
-        BLARG_HELICOPTER_INITIALIZE = 0,
-        BLARG_HELICOPTER_ACTIVATION_PATH = 1,
-        BLARG_HELICOPTER_PATROL_AND_ATTACK = 2,
-        BLARG_HELICOPTER_EXIT = 3,
-        BLARG_HELICOPTER_TIMED_REACTION = 4,
-        BLARG_HELICOPTER_DESTROY = 5
-    };
     enum {
         MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 253,
         MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 254
@@ -862,10 +863,6 @@ void blarg_helicopter_update(HMob49 *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002CF600), where it is exact; names translated to the US level program. */
 
 void handle_blarg_helicopter_hits(char *helicopter_moby) {
-    enum {
-        BLARG_HELICOPTER_TIMED_REACTION = 4,
-        BLARG_HELICOPTER_DESTROY = 5
-    };
     enum {
         HIT_REACTION_SKIP_DAMAGE = 1
     };

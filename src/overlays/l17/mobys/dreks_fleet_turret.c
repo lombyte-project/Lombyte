@@ -20,6 +20,16 @@
 #include "qzero.h"
 #include "rnc/overlay/l17/mobys.h"
 
+enum {
+    FLEET_TURRET_INITIALIZE = 0,
+    FLEET_TURRET_DEPLETED = 1,
+    FLEET_TURRET_WAIT_FOR_TARGET = 1,
+    FLEET_TURRET_AIM_AND_FIRE_AT_ZONE = 2,
+    FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP = 3,
+    FLEET_TURRET_DESTROY = 4,
+    FLEET_TURRET_NOT_DEPLETED = 0xB
+};
+
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -88,13 +98,6 @@ void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
 
 /* Moby class 347 */
 void dreks_fleet_turret_update(struct Moby *turret_moby) {
-    enum {
-        FLEET_TURRET_INITIALIZE = 0,
-        FLEET_TURRET_WAIT_FOR_TARGET = 1,
-        FLEET_TURRET_AIM_AND_FIRE_AT_ZONE = 2,
-        FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP = 3,
-        FLEET_TURRET_DESTROY = 4
-    };
     float    targeting_vector_scratch[4];
     float    from[4];
     Vars347 *turret_vars = (Vars347 *)turret_moby->pvars;
@@ -295,12 +298,6 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
 void process_dreks_fleet_turret_hits(struct Moby *turret_moby) __asm__("FUN_L17_002cbc10");
 
 void process_dreks_fleet_turret_hits(struct Moby *turret_moby) {
-    enum {
-        FLEET_TURRET_INITIALIZE = 0,
-        FLEET_TURRET_DEPLETED = 1,
-        FLEET_TURRET_DESTROY = 4,
-        FLEET_TURRET_NOT_DEPLETED = 0xB
-    };
     enum {
         HIT_REACTION_NO_DAMAGE = 1
     };

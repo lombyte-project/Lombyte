@@ -15,6 +15,14 @@
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 #include "rnc/rendering/clip_volume.h"
 
+enum {
+    SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END = 1,
+    SWING_CAMERA_TYPE_ONE_FRAME_SWING = 3,
+    SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4,
+    SWING_CAMERA_TYPE_SNAP_ON_ENTRY = 5,
+    SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10
+};
+
 typedef float CameraVec[4] __attribute__((aligned(16)));
 
 /* Parameters of a swing camera. */
@@ -90,9 +98,6 @@ f32 D_L17_001677B4 NOT_SDA = 0;
 s32 volume_camera_swing_active(struct UpdateCam *cam) __asm__("FUN_L00_002ec7e8");
 
 s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
-    enum {
-        SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4
-    };
     SwingCameraParams *params;
     s32                forced = 0;
     u16                type;
@@ -133,13 +138,6 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
 void volume_camera_swing(struct UpdateCam *cam) __asm__("FUN_L00_002ec988");
 
 void volume_camera_swing(struct UpdateCam *swing_camera_record) {
-    enum {
-        SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END = 1,
-        SWING_CAMERA_TYPE_ONE_FRAME_SWING = 3,
-        SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4,
-        SWING_CAMERA_TYPE_SNAP_ON_ENTRY = 5,
-        SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10
-    };
     enum {
         SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE = 6,
         SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE = 8,
@@ -382,10 +380,6 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
 s32 volume_camera_swing_check(struct UpdateCam *cam) __asm__("FUN_L00_002ed230");
 
 s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {
-    enum {
-        SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END = 1,
-        SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10
-    };
     SwingCameraParams *params = camera_descriptors[swing_camera_record->descriptor_index].params;
     if (params->l_buttons_end == 1 && params->done != 0)
         return 0;

@@ -22,6 +22,16 @@
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
+enum {
+    CRATE_STATE_INITIALIZE = 0,
+    CRATE_STATE_PROCESS_HITS = 1,
+    CRATE_STATE_CLASS_CHANGE_COOLDOWN = 2,
+    CRATE_STATE_BROKEN = 3,
+    CRATE_STATE_REACTIVATION_DELAY = 4,
+    CRATE_STATE_DETONATION_COUNTDOWN = 5,
+    CRATE_STATE_WAIT_RESPAWN = 6
+};
+
 /* Class header view: pclass + 0xE and + 0x10. */
 typedef struct {
     u8  pad00[0xE];
@@ -248,15 +258,6 @@ void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
 
 /* Moby classes 500-502, 505, 511 */
 void crate_update(struct Moby *moby) {
-    enum {
-        CRATE_STATE_INITIALIZE = 0,
-        CRATE_STATE_PROCESS_HITS = 1,
-        CRATE_STATE_CLASS_CHANGE_COOLDOWN = 2,
-        CRATE_STATE_BROKEN = 3,
-        CRATE_STATE_REACTIVATION_DELAY = 4,
-        CRATE_STATE_DETONATION_COUNTDOWN = 5,
-        CRATE_STATE_WAIT_RESPAWN = 6
-    };
     Burst        burst;
     Vec4f        at;
     s32          hitKind;
@@ -1023,9 +1024,6 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         CRATE_VARIANT_CONDITIONAL_RESPAWN_START = 11
     };
     enum {
-        CRATE_STATE_BROKEN = 3
-    };
-    enum {
         CRATE_DEBRIS_FALLBACK_BASE = 0x95,
         CRATE_DEBRIS_MISSION_THRESHOLD_GATED_BASE = 0x15C,
         CRATE_DEBRIS_DAMAGE_FLAG_GATED_BASE = 0x162,
@@ -1250,9 +1248,6 @@ void update_crate_stack_motion(M2d1428 *moby) {
     enum {
         CRATE_STATE_BREAKABLE = 1,
         CRATE_STATE_IMPACT_TRIGGERED = 5
-    };
-    enum {
-        CRATE_STATE_INITIALIZE = 0
     };
     O2d1428 *vars;
     M2d1428 *chain_cursor, *parent_moby, *next;

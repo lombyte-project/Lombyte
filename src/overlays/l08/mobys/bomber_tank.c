@@ -130,17 +130,6 @@ void bomber_tank_update(Moby *moby) __asm__("FUN_L08_002d42d8");
 
 /* Moby class 253 */
 void bomber_tank_update(Moby *moby) {
-    enum {
-        BOMBER_TANK_STATE_INITIALIZE = 0,
-        BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
-        BOMBER_TANK_STATE_FOLLOW_PATH = 6,
-        BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11,
-        BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE = 14,
-        BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
-    };
-    enum {
-        BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM = 2
-    };
     float           old_pos[4];
     float           old_rot[4];
     float           velocity[4];
@@ -421,10 +410,6 @@ extern int bomber_tank_part_3_destroyed_by_class_661_gp __asm__("D_L08_0015F5B8"
     __attribute__((sda));
 
 void update_bomber_tank_damage_and_aim(Moby *moby) {
-    enum {
-        BOMBER_TANK_STATE_INITIALIZE = 0,
-        BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM = 2
-    };
     Data       *bomber_tank_damage_and_aim_vars = (Data *)moby->pvars;
     Hit_2D5FA8 *source;
     Hit_2D5FA8 *part_a_source;
@@ -856,6 +841,16 @@ extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("
     __attribute__((sda));
 
 #include "rnc/overlay/l08/mobys/bomber_tank_data/spawn_bomber_tank_joint_particles.h"
+
+enum {
+    BOMBER_TANK_STATE_INITIALIZE = 0,
+    BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM = 2,
+    BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
+    BOMBER_TANK_STATE_FOLLOW_PATH = 6,
+    BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11,
+    BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE = 14,
+    BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
+};
 
 extern void  build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void  func_L00_001FF4B0_2D6C58(void *, void *, float) __asm__("FUN_001f9bf8");

@@ -19,6 +19,11 @@
 
 #include "qcopy.h"
 
+enum {
+    ROCKET_STATE_FLYING = 1,
+    ROCKET_STATE_DETONATE = 2
+};
+
 extern float fast_cos(float);
 extern float fast_sin(float);
 
@@ -42,9 +47,6 @@ char *spawn_rocket(char *initial_velocity,
                    float nominal_speed,
 
                    float f2) {
-    enum {
-        ROCKET_STATE_FLYING = 1
-    };
     struct Moby *moby = (struct Moby *)create_moby(0x199);
     if (moby != 0) {
         char *rocket_vars;
@@ -118,10 +120,6 @@ void rocket_update(struct Moby *moby) __asm__("FUN_L12_002ece00");
 
 /* Moby classes 409, 435 */
 void rocket_update(struct Moby *moby) {
-    enum {
-        ROCKET_STATE_FLYING = 1,
-        ROCKET_STATE_DETONATE = 2
-    };
     ShotVars *rocket_state = (ShotVars *)moby->pvars;
     float     old_pos[4];
     float     side[4];

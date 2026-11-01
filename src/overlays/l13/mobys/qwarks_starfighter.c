@@ -34,6 +34,25 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l13/mobys/qwarks_starfighter_shield.h"
 
+enum {
+    ATTACHMENT_DAMAGE_NONE = 0,
+    STARFIGHTER_STATE_INITIALIZE = 0,
+    ATTACHMENT_DAMAGE_APPLIED = 1,
+    STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,
+    ATTACHMENT_DAMAGE_STAGE_ADVANCED = 2,
+    STARFIGHTER_STATE_FOLLOW_INITIAL_PATH = 2,
+    ATTACHMENT_DAMAGE_LETHAL = 3,
+    STARFIGHTER_STATE_FOLLOW_COMMAND_PATH = 3,
+    STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY = 4,
+    STARFIGHTER_STATE_TRACTOR_BEAM = 5,
+    STARFIGHTER_STATE_OWNER_UNAVAILABLE = 6,
+    STARFIGHTER_STATE_DEATH_FLIGHT = 7,
+    STARFIGHTER_STATE_EXPLODE_AND_REMOVE = 8,
+    STARFIGHTER_STATE_RESET = 9,
+    MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+    MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+};
+
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 extern float D_0015ED6C;
@@ -245,11 +264,6 @@ void update_moby_joint_attachments(struct Moby *parent_moby,
                                    char        *attachment_data) __asm__("FUN_L13_002e8d28");
 
 void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_data) {
-    enum {
-        STARFIGHTER_STATE_TRACTOR_BEAM = 5,
-        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
-        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
-    };
     int   i;
     int   attachment_joint_index;
     char *attached_moby;
@@ -371,9 +385,6 @@ int advance_moby_along_selected_path(struct Moby *moby,
                                      int          path_slot_index,
 
                                      int aim) {
-    enum {
-        STARFIGHTER_STATE_TRACTOR_BEAM = 5
-    };
     char *path = D_L13_001B07B0[*(int *)(&moby_data[path_slot_index << 2] + 0xB0)];
     float distance_from_previous_node, seg, segment_distance_shortfall, steering_blend_factor, yaw,
         pitch;
@@ -548,9 +559,6 @@ void begin_starfighter_death_sequence(struct Moby *moby,
                                       char        *starfighter_moby_data,
 
                                       int *remaining_health) {
-    enum {
-        STARFIGHTER_STATE_DEATH_FLIGHT = 7
-    };
     int          path_ids = (int)starfighter_moby_data + 0xB0;
     struct Moby *mobys;
     float        dx;
@@ -724,16 +732,6 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
     enum {
         CHILD_HIT_HALF_DAMAGE = 0x127,
         CHILD_HIT_FIXED_DAMAGE = 0x3F1
-    };
-    enum {
-        ATTACHMENT_DAMAGE_NONE = 0,
-        ATTACHMENT_DAMAGE_APPLIED = 1,
-        ATTACHMENT_DAMAGE_STAGE_ADVANCED = 2,
-        ATTACHMENT_DAMAGE_LETHAL = 3,
-        STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY = 4,
-        STARFIGHTER_STATE_TRACTOR_BEAM = 5,
-        STARFIGHTER_STATE_OWNER_UNAVAILABLE = 6,
-        STARFIGHTER_STATE_DEATH_FLIGHT = 7
     };
     int         hit;
     int         rf;
@@ -1620,22 +1618,6 @@ void qwarks_starfighter_update(Moby388 *moby) __asm__("FUN_L13_002eb098");
 
 /* Moby class 388 */
 void qwarks_starfighter_update(Moby388 *moby) {
-    enum {
-        STARFIGHTER_STATE_INITIALIZE = 0,
-        STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,
-        STARFIGHTER_STATE_FOLLOW_INITIAL_PATH = 2,
-        STARFIGHTER_STATE_FOLLOW_COMMAND_PATH = 3,
-        STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY = 4,
-        STARFIGHTER_STATE_TRACTOR_BEAM = 5,
-        STARFIGHTER_STATE_OWNER_UNAVAILABLE = 6,
-        STARFIGHTER_STATE_DEATH_FLIGHT = 7,
-        STARFIGHTER_STATE_EXPLODE_AND_REMOVE = 8,
-        STARFIGHTER_STATE_RESET = 9
-    };
-    enum {
-        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
-        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
-    };
     enum {
         STARFIGHTER_SHIELD_STATE_DEACTIVATE_REQUESTED = 3
     };

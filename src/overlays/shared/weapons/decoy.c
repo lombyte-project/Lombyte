@@ -22,6 +22,19 @@
 #include "qzero.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 
+enum {
+    DECOY_INITIALIZE = 0,
+    LANDING_REQUIRE_MOBY_PVARS_LINK = 0,
+    DECOY_HELD = 1,
+    DECOY_THROWN_MOVEMENT = 2,
+    LANDING_SKIP_LINKED_MOBY_DRAW = 2,
+    DECOY_SETTLED_MOVEMENT = 3,
+    DECOY_PRE_REMOVAL_DELAY = 4,
+    DECOY_WAIT_TO_SHRINK = 5,
+    DECOY_SHRINK_FOR_REMOVAL = 6,
+    DECOY_RESET_TO_INITIALIZE = 7
+};
+
 typedef struct DecoyVars {
     u8    pad0[0x10];
     f32   unk10[4];
@@ -202,10 +215,6 @@ void destroy_decoy_with_particles(unsigned char *moby) {
 u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) __asm__("FUN_L00_002c35c0");
 
 u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
-    enum {
-        DECOY_INITIALIZE = 0,
-        DECOY_WAIT_TO_SHRINK = 5
-    };
     u8 *flags = item_text_variant;
     u8 *spawned_moby;
     u8 *decoy_vars;
@@ -282,10 +291,6 @@ void release_moby_with_collision_check(float *release_position,
                                        char  *moby,
 
                                        void *initial_velocity) {
-    enum {
-        DECOY_THROWN_MOVEMENT = 2,
-        DECOY_PRE_REMOVAL_DELAY = 4
-    };
     float        collision_start[4], collision_normal[4], rotated_normal[4];
     char        *state = *(char **)(moby + 0x78);
     struct Hero *camera;
@@ -355,11 +360,6 @@ s32 predict_thrown_moby_landing(ThrowVars   *throw_vars,
                                 s32          mode) __asm__("FUN_L00_002c3af8");
 
 s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode) {
-    enum {
-        LANDING_REQUIRE_MOBY_PVARS_LINK = 0,
-        DECOY_HELD = 1,
-        LANDING_SKIP_LINKED_MOBY_DRAW = 2
-    };
     Vec4 predicted_position, predicted_velocity, position_scratch, q, ground_probe_position;
     s32  prediction_countdown;
     s32  found = 0;
@@ -547,16 +547,6 @@ void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
 
 /* Moby classes 203, 1900 */
 void decoy_update(char *moby) {
-    enum {
-        DECOY_INITIALIZE = 0,
-        DECOY_HELD = 1,
-        DECOY_THROWN_MOVEMENT = 2,
-        DECOY_SETTLED_MOVEMENT = 3,
-        DECOY_PRE_REMOVAL_DELAY = 4,
-        DECOY_WAIT_TO_SHRINK = 5,
-        DECOY_SHRINK_FOR_REMOVAL = 6,
-        DECOY_RESET_TO_INITIALIZE = 7
-    };
     int        active = ((unsigned char *)&D_0013E533)[6];
     DecoyVars *decoy_instance_vars = (DecoyVars *)(*(char **)(moby + 0x78));
     char      *target;

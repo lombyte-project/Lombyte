@@ -19,6 +19,11 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
+enum {
+    DEBRIS_STATE_FOLLOW_PATH = 0,
+    DEBRIS_STATE_BALLISTIC = 1
+};
+
 extern float D_0015ED60;
 extern s32   coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern int   sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
@@ -69,9 +74,6 @@ void path_or_ballistic_debris_update(struct Moby *moby) __asm__("FUN_L14_002dfd1
 
 /* Moby class 403 */
 void path_or_ballistic_debris_update(struct Moby *moby) {
-    enum {
-        DEBRIS_STATE_FOLLOW_PATH = 0
-    };
     Data *debris_private_vars = (Data *)moby->pvars;
     Vec4  probe;
     f32   position_offset[4];
@@ -297,10 +299,6 @@ extern Particle_2E17B8 *func_L00_0026DEA0_2E17B8(
     void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
 void emit_debris_trail_particles(Moby *moby) {
-    enum {
-        DEBRIS_STATE_FOLLOW_PATH = 0,
-        DEBRIS_STATE_BALLISTIC = 1
-    };
     Vec4_2E17B8          pos;
     Vec4_2E17B8          emission_axis_offset;
     Vec4_2E17B8          particle_initial_velocity;

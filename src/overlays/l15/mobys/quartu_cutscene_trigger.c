@@ -11,8 +11,10 @@
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
+
 void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
+
 #include "rnc/rendering/clip_volume.h"
 
 extern int D_L15_0015F5C4;

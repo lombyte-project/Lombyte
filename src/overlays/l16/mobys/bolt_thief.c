@@ -138,15 +138,6 @@ void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L16_002e37a0");
 /* Moby classes 452, 1401 */
 void bolt_thief_update(L16CrateMoby *moby) {
     enum {
-        BOLT_THIEF_INITIALIZE = 0,
-        BOLT_THIEF_FACE_HERO = 1,
-        BOLT_THIEF_WAIT_FOR_HERO_TRIGGER = 2,
-        BOLT_THIEF_SETTLE_AT_PATH_END = 3,
-        BOLT_THIEF_FOLLOW_PRIMARY_PATH = 4,
-        BOLT_THIEF_FOLLOW_OTHER_PATH = 5,
-        BOLT_THIEF_KNOCKBACK = 6
-    };
-    enum {
         BOLT_THIEF_MODE_LINKED_MOBY_PATH_CYCLE = 0,
         BOLT_THIEF_MODE_SINGLE_PATH_THEN_FACE_HERO = 1,
         BOLT_THIEF_MODE_FACE_HERO_IN_PLACE = 2
@@ -343,6 +334,16 @@ void bolt_thief_update(L16CrateMoby *moby) {
 
 #include "rnc/overlay/l16/mobys/bolt_thief_globals.h"
 
+enum {
+    BOLT_THIEF_INITIALIZE = 0,
+    BOLT_THIEF_FACE_HERO = 1,
+    BOLT_THIEF_WAIT_FOR_HERO_TRIGGER = 2,
+    BOLT_THIEF_SETTLE_AT_PATH_END = 3,
+    BOLT_THIEF_FOLLOW_PRIMARY_PATH = 4,
+    BOLT_THIEF_FOLLOW_OTHER_PATH = 5,
+    BOLT_THIEF_KNOCKBACK = 6
+};
+
 extern float bolt_thief_path_speed_gp __asm__("D_L16_00161D90") __attribute__((sda));
 extern float D_L16_00161D94_gp __asm__("D_L16_00161D94") __attribute__((sda));
 extern float D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
@@ -350,9 +351,6 @@ extern int
 FUN_L00_0025d808_path54(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 
 int advance_bolt_thief_path(struct Moby *moby) {
-    enum {
-        BOLT_THIEF_FOLLOW_OTHER_PATH = 5
-    };
     float pos[4];
     float delta[4];
     char *bolt_thief_path_data = (char *)moby->pvars;

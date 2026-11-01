@@ -94,14 +94,6 @@ void falling_moby_group_update(struct Moby *moby) __asm__("FUN_L18_002f16f0");
 
 /* Moby class 1381 */
 void falling_moby_group_update(struct Moby *moby) {
-    enum {
-        MOBY_INITIALIZE = 0,
-        MOBY_APPROACH_TARGET_TRANSFORM = 2,
-        MOBY_FALL_AND_REMOVE = 4
-    };
-    enum {
-        FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1
-    };
     VData *moby_vars = (VData *)moby->pvars;
     if (moby_vars) {
         float initial_acceleration_step = group_transform_initial_acceleration_gp * frame_time_sq;
@@ -251,13 +243,16 @@ extern void mark_block_entries_within_transform_xy_bounds(int, int) __asm__("FUN
 
 #include "rnc/overlay/l18/mobys/falling_moby_group.h"
 
+enum {
+    MOBY_INITIALIZE = 0,
+    FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1,
+    MOBY_APPROACH_TARGET_TRANSFORM = 2,
+    MOBY_FALL_AND_REMOVE = 4
+};
+
 void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
 
 void activate_drek_boss_class_0565_moby(struct Moby *moby) {
-    enum {
-        FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1,
-        MOBY_APPROACH_TARGET_TRANSFORM = 2
-    };
     char *state = (char *)moby->pvars;
     if (moby->oclass == 0x565 && moby->state == FALLING_MOBY_GROUP_AWAIT_ACTIVATION) {
         if (*(int *)(state + 0xC) != -1) {
@@ -294,9 +289,6 @@ typedef struct L18VD_1cc8 {
 void reset_drek_boss_falling_moby_group(L18VM_1cc8 *moby) __asm__("FUN_L18_002f1cc8");
 
 void reset_drek_boss_falling_moby_group(L18VM_1cc8 *moby) {
-    enum {
-        FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1
-    };
     L18VD_1cc8 *data = moby->data;
     if (moby->class_id == 0x565) {
         moby->state = FALLING_MOBY_GROUP_AWAIT_ACTIVATION;

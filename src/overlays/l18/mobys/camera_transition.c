@@ -222,6 +222,11 @@ void boss_camera_transition_update(struct Moby *moby) {
 
 #include "qcopy.h"
 
+enum {
+    CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2,
+    CAMERA_TRANSITION_STATE_INTERPOLATE_TRANSITION = 3
+};
+
 extern int scale_game_frames(int);
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E0E90), where it is exact; names translated to the US level program. */
@@ -246,9 +251,6 @@ void start_camera_transition(struct Moby *moby,
                              int          transition_delay_frames,
 
                              int transition_mode) {
-    enum {
-        CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2
-    };
     BossCameraTransitionVars *position_rotation_transition_vars =
         (BossCameraTransitionVars *)moby->pvars;
     *(int *)&position_rotation_transition_vars->unk60 = 0;
@@ -290,10 +292,6 @@ float get_camera_transition_progress(Level18VendorFloatMoby *moby) {
 s32 classify_moby_state_two_or_three(const u8 *moby) __asm__("FUN_L18_002dfba0");
 
 s32 classify_moby_state_two_or_three(const u8 *moby) {
-    enum {
-        CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP = 2,
-        CAMERA_TRANSITION_STATE_INTERPOLATE_TRANSITION = 3
-    };
     u32 state = MOBY(moby)->state;
     s32 state_classification = 2;
 

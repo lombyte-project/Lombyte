@@ -12,6 +12,11 @@
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
+enum {
+    NANOTECH_CRATE_FRAGMENT_BOUNCING = 0,
+    NANOTECH_CRATE_FRAGMENT_FADING = 1
+};
+
 typedef struct {
     void         *o;
     float         f4, f8;
@@ -144,9 +149,6 @@ unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
                                   float          lo,
 
                                   float hi) {
-    enum {
-        NANOTECH_CRATE_FRAGMENT_BOUNCING = 0
-    };
     unsigned char *debris_moby = create_moby(type);
     if (debris_moby) {
         V_2af8b0 *debris_data = ((V_2af8b0 *)MOBY(debris_moby)->pvars);
@@ -188,10 +190,6 @@ void nanotech_crate_fragment_update(M_2afa48 *m) __asm__("FUN_L00_002afa48");
 
 /* Moby classes 149, 348, 349, 354-359, 363, 364 */
 void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
-    enum {
-        NANOTECH_CRATE_FRAGMENT_BOUNCING = 0,
-        NANOTECH_CRATE_FRAGMENT_FADING = 1
-    };
     PV   *pv = fragment_moby->pv;
     u128  pre_motion_position;
     u128 *hit_normal;

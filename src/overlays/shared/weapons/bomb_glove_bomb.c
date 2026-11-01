@@ -21,6 +21,11 @@
 #include "rnc/overlay/shared/weapons/mine.h"
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 
+enum {
+    BOMB_STATE_HELD = 0,
+    THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER = 2
+};
+
 typedef struct {
     char           p0[0x80];
     float          pos[4];
@@ -805,9 +810,6 @@ void draw_bomb_landing_marker(M_2acbf0_002acbf0 *moby) {
 unsigned char *spawn_bomb(int owner, void *pos) __asm__("FUN_L00_002ace70");
 
 unsigned char *spawn_bomb(int bomb_holder_moby, void *spawn_position) {
-    enum {
-        BOMB_STATE_HELD = 0
-    };
     unsigned char *bomb_moby = create_moby(0x79);
     if (bomb_moby) {
         V_2ace70       u, random_rotation;
@@ -938,10 +940,6 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
 int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) __asm__("FUN_L00_002ad410");
 
 int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
-    enum {
-        BOMB_STATE_HELD = 0,
-        THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER = 2
-    };
     U910 position, velocity, previous, hero_position, offset, start;
     int  timer;
     int  object_hit;

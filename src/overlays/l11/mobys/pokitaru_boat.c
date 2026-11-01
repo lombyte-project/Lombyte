@@ -86,18 +86,19 @@ extern float pokitaru_boat_max_turn_speed_degrees_gp __asm__("D_L11_00161DDC") _
 
 #include "rnc/overlay/l11/mobys/pokitaru_boat_data/pokitaru_boat_update.h"
 
+enum {
+    POKITARU_BOAT_INITIALIZE = 0,
+    POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1,
+    POKITARU_BOAT_FOLLOW_PATH = 2,
+    POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR = 3,
+    POKITARU_BOAT_RISE_ABOVE_PATH = 4,
+    POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
+};
+
 void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
 
 /* Moby class 1075 */
 void pokitaru_boat_update(struct Moby *moby) {
-    enum {
-        POKITARU_BOAT_INITIALIZE = 0,
-        POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1,
-        POKITARU_BOAT_FOLLOW_PATH = 2,
-        POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR = 3,
-        POKITARU_BOAT_RISE_ABOVE_PATH = 4,
-        POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
-    };
     struct PokPv *boat_vars = (struct PokPv *)moby->pvars;
     float         start_pos[4];
     float         start_rot[4];
@@ -330,9 +331,6 @@ struct DataA500 {
 };
 
 void update_pokitaru_boat_joint_effects(struct Moby *moby) {
-    enum {
-        POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1
-    };
     struct DataA500 *moby_vars = (struct DataA500 *)moby->pvars;
     float            joint_world_position[4];
     float            pos[4];

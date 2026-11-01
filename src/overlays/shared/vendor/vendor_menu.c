@@ -362,12 +362,6 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 
 void open_vendor_menu(void *vendor_moby_arg) {
-    enum {
-        VENDOR_PURCHASE_INACTIVE = 0,
-        VENDOR_MENU_MODE_EXISTING_VENDOR = 0,
-        VENDOR_MENU_OPENING = 0,
-        VENDOR_MENU_MODE_SPAWNED_VENDOR = 1
-    };
     VendorMoby_29a6b0 *vendor_moby = vendor_moby_arg;
     s32                i;
     Vec4              *vector_destination_cursor;
@@ -570,9 +564,6 @@ extern void  sce_gs_sync_v(s32) __asm__("FUN_00122298");
 void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 
 void start_vendor_exit_cutscene(void) {
-    enum {
-        VENDOR_MENU_EXIT_CUTSCENE = 3
-    };
     enum {
         SECONDARY_MUSIC_STREAM_READY_TO_CONTINUE = 3
     };
@@ -868,6 +859,20 @@ extern u8               vendor_part_update_label[] __asm__("D_L00_00161148");
 #include "rnc/overlay/shared/vendor/vendor_menu_data/update_vendor_purchase_2.h"
 #include "rnc/overlay/shared/vendor/vendor_menu_data/update_vendor_purchase.h"
 
+enum {
+    VENDOR_MENU_MODE_EXISTING_VENDOR = 0,
+    VENDOR_MENU_OPENING = 0,
+    VENDOR_PURCHASE_INACTIVE = 0,
+    VENDOR_MENU_MODE_SPAWNED_VENDOR = 1,
+    VENDOR_MENU_OPEN = 1,
+    VENDOR_PURCHASE_INITIALIZE = 1,
+    VENDOR_MENU_CLOSING = 2,
+    VENDOR_PURCHASE_AWAIT_INPUT = 2,
+    VENDOR_MENU_EXIT_CUTSCENE = 3,
+    VENDOR_PURCHASE_WAIT_DECISION_ANIMATION = 3,
+    VENDOR_PURCHASE_FINALIZE = 4
+};
+
 extern f32  D_L00_00161E24;
 extern s32  D_L00_00161E38;
 extern Vec4 D_L00_00165F80[3];
@@ -905,14 +910,6 @@ extern void set_scrolling_status_message(int) __asm__("FUN_00237e90");
 
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.item])
 void update_vendor_purchase(void) {
-    enum {
-        VENDOR_PURCHASE_INACTIVE = 0,
-        VENDOR_MENU_MODE_EXISTING_VENDOR = 0,
-        VENDOR_PURCHASE_INITIALIZE = 1,
-        VENDOR_PURCHASE_AWAIT_INPUT = 2,
-        VENDOR_PURCHASE_WAIT_DECISION_ANIMATION = 3,
-        VENDOR_PURCHASE_FINALIZE = 4
-    };
     u128 lv;
     s32  purchase_state;
     s32  purchase_cost, k, last_row_index;
@@ -1142,17 +1139,6 @@ void update_vendor_purchase(void) {
 void update_vendor_menu(void) __asm__("FUN_L00_0029c648");
 
 void update_vendor_menu(void) {
-    enum {
-        VENDOR_MENU_OPENING = 0,
-        VENDOR_MENU_OPEN = 1,
-        VENDOR_MENU_CLOSING = 2,
-        VENDOR_MENU_EXIT_CUTSCENE = 3
-    };
-    enum {
-        VENDOR_MENU_MODE_EXISTING_VENDOR = 0,
-        VENDOR_PURCHASE_INACTIVE = 0,
-        VENDOR_PURCHASE_INITIALIZE = 1
-    };
     enum {
         VENDOR_ROW_PURCHASE_REQUEST_ENABLED = 0
     };

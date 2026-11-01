@@ -62,11 +62,6 @@ void enemy_fighter_update(struct Moby *moby) __asm__("FUN_L14_002fc0f0");
 
 /* Moby class 908 */
 void enemy_fighter_update(struct Moby *moby) {
-    enum {
-        ENEMY_FIGHTER_STATE_INITIALIZE = 0,
-        ENEMY_FIGHTER_STATE_FOLLOW_PATH = 1,
-        ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
-    };
     EnemyFighterVars *enemy_fighter_vars = (EnemyFighterVars *)moby->pvars;
     int               hit = find_moby_hit(moby, 0x800000, 0);
     int               index;
@@ -144,15 +139,17 @@ void enemy_fighter_update(struct Moby *moby) {
 
 #include "rnc/overlay/l14/mobys/enemy_fighter_data/spawn_enemy_fighter_exhaust.h"
 
+enum {
+    ENEMY_FIGHTER_STATE_INITIALIZE = 0,
+    ENEMY_FIGHTER_STATE_FOLLOW_PATH = 1,
+    ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
+};
+
 extern char D_L14_0015F580[] MACRO_ADDR;
 
 extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
 
 void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
-    enum {
-        ENEMY_FIGHTER_STATE_INITIALIZE = 0,
-        ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
-    };
     Vec4     step;
     Vec4     pos;
     Vec4     paired_exhaust_origin;

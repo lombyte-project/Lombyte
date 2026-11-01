@@ -14,6 +14,11 @@
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/world/collision/collision_line.h"
 
+enum {
+    ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,
+    ENERGY_SPHERE_MOVE_AND_DETONATE = 2
+};
+
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319FA0), where it is exact; names translated to the US level program. */
@@ -47,10 +52,6 @@ extern int   scale_game_frames(int);
 
 /* Moby class 1297 */
 void energy_sphere_update(unsigned char *moby) {
-    enum {
-        ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,
-        ENERGY_SPHERE_MOVE_AND_DETONATE = 2
-    };
     char  *energy_sphere_private_vars = ((char *)MOBY(moby)->pvars);
     float  previous_position[4];
     float *vp;
@@ -169,9 +170,6 @@ void set_moby_position_and_refresh_removal_timer(struct Moby *moby, void *new_po
 void set_moby_state_two_data_and_timer(struct Moby *moby, void *src) __asm__("FUN_L11_00318e98");
 
 void set_moby_state_two_data_and_timer(struct Moby *moby, void *movement_step) {
-    enum {
-        ENERGY_SPHERE_MOVE_AND_DETONATE = 2
-    };
     char *moby_vars;
     moby->state = ENERGY_SPHERE_MOVE_AND_DETONATE;
     moby_vars = (char *)moby->pvars;

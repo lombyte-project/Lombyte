@@ -37,6 +37,15 @@ extern float floating_platform_sink_trigger_distance_gp __asm__("D_L18_00161A5C"
 
 #include "rnc/overlay/l18/mobys/floating_platform_data/floating_platform_update.h"
 
+enum {
+    STATE_INITIALIZE = 0,
+    STATE_WAIT_FOR_TILT_REQUEST = 1,
+    STATE_WAIT_FOR_SINK_REQUEST = 2,
+    STATE_TILT_DELAY = 3,
+    STATE_WAIT_FOR_SINK_TRIGGER = 4,
+    STATE_SINKING = 5
+};
+
 extern int D_L18_001623A8 __attribute__((sda));
 void       spawn_floating_platform_sparks(struct Moby *moby) __asm__("FUN_L18_002d88b8");
 
@@ -49,14 +58,6 @@ void floating_platform_update(struct Moby *moby) __asm__("FUN_L18_002d82c0");
 
 /* Moby classes 481, 587, 810 */
 void floating_platform_update(struct Moby *moby) {
-    enum {
-        STATE_INITIALIZE = 0,
-        STATE_WAIT_FOR_TILT_REQUEST = 1,
-        STATE_WAIT_FOR_SINK_REQUEST = 2,
-        STATE_TILT_DELAY = 3,
-        STATE_WAIT_FOR_SINK_TRIGGER = 4,
-        STATE_SINKING = 5
-    };
     char *floating_platform_update_private_vars;
     float delta[4] __attribute__((aligned(16)));
     float old_rot[4] __attribute__((aligned(16)));
@@ -188,10 +189,6 @@ extern float floating_platform_bob_amplitude_gp __asm__("D_L18_00161A48") __attr
 extern float floating_platform_bob_phase_rate_gp __asm__("D_L18_00161A4C") __attribute__((sda));
 
 void update_floating_platform_tilt_and_bob(struct Moby *moby) {
-    enum {
-        STATE_WAIT_FOR_SINK_TRIGGER = 4,
-        STATE_SINKING = 5
-    };
     char *floating_platform_private_vars = (char *)moby->pvars;
     float unclamped_rotation_y =
         fast_add_rotations(moby->rot.y, *(float *)(floating_platform_private_vars + 0x6C));
@@ -233,11 +230,6 @@ typedef struct {
 int request_floating_platform_sink(Level18State *platform_moby) __asm__("FUN_L18_002d8858");
 
 int request_floating_platform_sink(Level18State *platform_moby) {
-    enum {
-        STATE_WAIT_FOR_TILT_REQUEST = 1,
-        STATE_WAIT_FOR_SINK_REQUEST = 2,
-        STATE_SINKING = 5
-    };
     if (platform_moby->state == STATE_WAIT_FOR_TILT_REQUEST) {
         return 1;
     }
@@ -256,10 +248,6 @@ int request_floating_platform_tilt(struct Moby *platform_moby,
                                    int          tilt_delay_frames,
 
                                    int scaled_frame_count) {
-    enum {
-        STATE_WAIT_FOR_TILT_REQUEST = 1,
-        STATE_TILT_DELAY = 3
-    };
     int *platform_vars = (int *)platform_moby->pvars;
     if (platform_moby->state == STATE_WAIT_FOR_TILT_REQUEST) {
         platform_moby->state = STATE_TILT_DELAY;

@@ -93,16 +93,6 @@ void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 /* Moby class 52 */
 void seeker_update(struct Moby *moby) {
     enum {
-        SEEKER_STATE_INITIALIZE = 0,
-        SEEKER_STATE_IDLE_HOVER = 1,
-        SEEKER_STATE_CHASE = 2,
-        SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
-        SEEKER_STATE_TIMED_CHASE = 4,
-        SEEKER_STATE_HURT_KNOCKBACK = 5,
-        SEEKER_STATE_FATAL_KNOCKBACK = 6,
-        SEEKER_STATE_EXPLODE = 7
-    };
-    enum {
         SEEKER_DISPATCH_MODE_SKIP_STATE_UPDATE = 2
     };
     Moby52Vars      *seeker_instance_vars = (Moby52Vars *)moby->pvars;
@@ -398,6 +388,17 @@ extern float D_0015ED70;
 
 #include "rnc/overlay/shared/enemies/seeker_data/update_seeker_damage_and_target.h"
 
+enum {
+    SEEKER_STATE_INITIALIZE = 0,
+    SEEKER_STATE_IDLE_HOVER = 1,
+    SEEKER_STATE_CHASE = 2,
+    SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
+    SEEKER_STATE_TIMED_CHASE = 4,
+    SEEKER_STATE_HURT_KNOCKBACK = 5,
+    SEEKER_STATE_FATAL_KNOCKBACK = 6,
+    SEEKER_STATE_EXPLODE = 7
+};
+
 extern float D_L09_0016140C __attribute__((sda));
 extern int   scale_time() __asm__("FUN_001f96b0");
 extern void  FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
@@ -435,12 +436,6 @@ void update_seeker_damage_and_target(Moby *moby) {
         RESPONSE_HURT_KNOCKBACK = 3,
         RESPONSE_REACTION_ONLY = 9,
         RESPONSE_NO_REACTION = 11
-    };
-    enum {
-        SEEKER_STATE_INITIALIZE = 0,
-        SEEKER_STATE_HURT_KNOCKBACK = 5,
-        SEEKER_STATE_FATAL_KNOCKBACK = 6,
-        SEEKER_STATE_EXPLODE = 7
     };
     enum {
         SEEKER_TARGET_STATUS_LOST = 2

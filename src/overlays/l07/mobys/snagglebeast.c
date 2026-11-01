@@ -766,9 +766,6 @@ int start_snagglebeast_turn_toward_target(unsigned char    *moby,
                                           int               resume_animation,
 
                                           int use_fixed_target_position) {
-    enum {
-        SNAGGLEBEAST_TURN_TOWARD_TARGET = 7
-    };
     float target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                         target_position[1] - MOBY(moby)->pos.y);
     if (moby_vars->turn_start_angle <
@@ -949,25 +946,6 @@ void         snagglebeast_update(unsigned char *moby) __asm__("FUN_L07_00314150"
 
 /* Moby class 1106 */
 void snagglebeast_update(unsigned char *moby) {
-    enum {
-        SNAGGLEBEAST_INITIALIZE = 0,
-        SNAGGLEBEAST_IDLE = 1,
-        SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST = 2,
-        SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK = 3,
-        SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
-        SNAGGLEBEAST_CHASE_TARGET = 5,
-        SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE = 6,
-        SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
-        SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
-        SNAGGLEBEAST_ROPE_ATTACK = 9,
-        SNAGGLEBEAST_DEATH_EXPLOSION = 10,
-        SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT = 11,
-        SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE = 12,
-        SNAGGLEBEAST_WAIT_BEFORE_TIMED_DAMAGE = 13,
-        SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH = 14,
-        SNAGGLEBEAST_RESTORE_TRANSFORM_AND_RESUME_CHASE = 15,
-        SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
-    };
     enum {
         SNAGGLEBEAST_ROPE_START_ATTACK_ANIMATION = 0,
         SNAGGLEBEAST_ROPE_WAIT_FOR_ORIGIN_FRAME = 1,
@@ -2424,6 +2402,26 @@ int D_L07_00161B80 = 0;
 extern int D_L07_00161B84;
 
 #include "rnc/overlay/l07/mobys/snagglebeast_globals.h"
+
+enum {
+    SNAGGLEBEAST_INITIALIZE = 0,
+    SNAGGLEBEAST_IDLE = 1,
+    SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST = 2,
+    SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK = 3,
+    SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
+    SNAGGLEBEAST_CHASE_TARGET = 5,
+    SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE = 6,
+    SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
+    SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
+    SNAGGLEBEAST_ROPE_ATTACK = 9,
+    SNAGGLEBEAST_DEATH_EXPLOSION = 10,
+    SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT = 11,
+    SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE = 12,
+    SNAGGLEBEAST_WAIT_BEFORE_TIMED_DAMAGE = 13,
+    SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH = 14,
+    SNAGGLEBEAST_RESTORE_TRANSFORM_AND_RESUME_CHASE = 15,
+    SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
+};
 
 extern char    D_L07_00161B90[] MACRO_ADDR;
 extern char    D_L07_00161BA0[] MACRO_ADDR;

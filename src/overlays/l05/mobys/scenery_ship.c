@@ -127,6 +127,12 @@ extern float D_0015ED70;
 
 #include "rnc/overlay/l05/mobys/scenery_ship_data/scenery_ship_update.h"
 
+enum {
+    SCENERY_SHIP_INITIALIZE = 0,
+    SCENERY_SHIP_FOLLOW_PATH = 1,
+    SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE = 2
+};
+
 int          D_L05_001613D8 = 0x80000080;
 int          D_L05_001613DC = 0x80202020;
 float        D_L05_001613E0 = 5.0f;
@@ -161,11 +167,6 @@ extern float fast_vec_dist(void *, void *);
 
 /* Moby class 79 */
 void scenery_ship_update(char *moby) {
-    enum {
-        SCENERY_SHIP_INITIALIZE = 0,
-        SCENERY_SHIP_FOLLOW_PATH = 1,
-        SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE = 2
-    };
     Data_2D8388 *scenery_ship_instance_vars = ((Data_2D8388 *)MOBY(moby)->pvars);
     char        *hit;
     char        *path;
@@ -412,9 +413,6 @@ typedef struct Moby Moby;
 
 /* Builds 16 fading glow quads, then draws three ribbons of quads for each linked moby of class 0x4F in view. */
 void draw_group_scenery_ship_trails(struct Moby *moby) {
-    enum {
-        SCENERY_SHIP_FOLLOW_PATH = 1
-    };
     L05GlowPacket  packet[16];
     float          matrix[8];
     float          center[4];

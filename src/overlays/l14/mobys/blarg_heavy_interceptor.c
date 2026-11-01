@@ -172,6 +172,18 @@ extern char D_L14_0015F580[] MACRO_ADDR;
 
 #include "rnc/overlay/l14/mobys/blarg_heavy_interceptor_data/blarg_heavy_interceptor_update.h"
 
+enum {
+    INTERCEPTOR_STATE_INITIALIZE = 0,
+    INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
+    INTERCEPTOR_STATE_ALERT_GROUP = 2,
+    INTERCEPTOR_STATE_TRACK_TARGET = 3,
+    INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY = 4,
+    INTERCEPTOR_STATE_FOLLOW_RETURN_PATH = 5,
+    INTERCEPTOR_STATE_REJOIN_PATROL = 6,
+    INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
+    INTERCEPTOR_STATE_DEATH_FALL = 9
+};
+
 extern f32 l14_blarg_heavy_interceptor_path_easing_error_gain __asm__("D_L14_001613A0")
     __attribute__((sda));
 
@@ -250,17 +262,6 @@ typedef struct BlargHeavyInterceptorVars {
 
 /* Moby class 8 */
 void blarg_heavy_interceptor_update(struct Moby *moby) {
-    enum {
-        INTERCEPTOR_STATE_INITIALIZE = 0,
-        INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
-        INTERCEPTOR_STATE_ALERT_GROUP = 2,
-        INTERCEPTOR_STATE_TRACK_TARGET = 3,
-        INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY = 4,
-        INTERCEPTOR_STATE_FOLLOW_RETURN_PATH = 5,
-        INTERCEPTOR_STATE_REJOIN_PATROL = 6,
-        INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
-        INTERCEPTOR_STATE_DEATH_FALL = 9
-    };
     enum {
         INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER = 8
     };
@@ -796,11 +797,6 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH = 9,
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
-    };
-    enum {
-        INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
-        INTERCEPTOR_STATE_ALERT_GROUP = 2,
-        INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7
     };
     enum {
         HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE = 1
@@ -1718,9 +1714,6 @@ update_moby_rotation_oscillation(u8 *, u8 *, u8 *, f32, f32, f32) __asm__("FUN_L
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) __asm__("FUN_L14_002aea08");
 
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) {
-    enum {
-        INTERCEPTOR_STATE_PATROL_AND_SCAN = 1
-    };
     BlargHeavyInterceptorVars *interceptor_private_vars = (BlargHeavyInterceptorVars *)moby->pvars;
     f32                        heading_offset;
     update_moby_vertical_oscillation(

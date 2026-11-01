@@ -12,6 +12,10 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "sda.h"
 
+enum {
+    GIANT_CLANK_CHARGED_BLAST_CHARGING = 0
+};
+
 extern int   D_L00_0015F320;
 extern int   D_L00_0015F330;
 extern int   allocate_packed_color_point_light_slot(float *pos,
@@ -34,9 +38,6 @@ void *spawn_giant_clank_charged_blast(int    unused,
                                       float *spawn_position) __asm__("FUN_L00_002a9aa0");
 
 void *spawn_giant_clank_charged_blast(int unused, float *spawn_position) {
-    enum {
-        GIANT_CLANK_CHARGED_BLAST_CHARGING = 0
-    };
     char *spawned_moby = create_moby(0x5F3);
     if (spawned_moby != 0 && *(int *)&D_L00_001613C8_gp == 0) {
         char *moby_vars;
@@ -88,9 +89,6 @@ void set_giant_clank_charged_blast_position(void *unused_creation_arg, OvlQuad *
 void remove_giant_clank_charged_blast(void) __asm__("FUN_L00_002a9be0");
 
 void remove_giant_clank_charged_blast(void) {
-    enum {
-        GIANT_CLANK_CHARGED_BLAST_CHARGING = 0
-    };
     struct Moby *tracked_moby = *(char **)&D_L00_001613C8_gp;
     if (tracked_moby != 0) {
         if (tracked_moby->oclass == 0x5F3) {

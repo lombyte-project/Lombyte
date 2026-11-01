@@ -92,6 +92,16 @@ FUN_L00_0025f3e8_p(struct Moby *, void *, int, float, float) __asm__("FUN_L00_00
 
 #include "rnc/overlay/l11/mobys/psytcopus_data/psytcopus_update.h"
 
+enum {
+    PSYTCOPUS_STATE_INITIALIZE = 0,
+    PSYTCOPUS_STATE_FACE_PLAYER = 3,
+    PSYTCOPUS_STATE_CREATE_PROJECTILE = 4,
+    PSYTCOPUS_STATE_FIRE_PROJECTILE = 5,
+    PSYTCOPUS_STATE_ATTACK_RECOVERY = 6,
+    PSYTCOPUS_STATE_KNOCKBACK = 7,
+    PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
+};
+
 extern float D_L11_00161F9C __attribute__((sda));
 extern void set_moby_position_and_refresh_removal_timer(void *, void *) __asm__("FUN_L11_00318e78");
 extern void FUN_L00_0025ab48_p(void *, float *, float *, float *) __asm__("FUN_L00_0025ab48");
@@ -109,15 +119,6 @@ void psytcopus_update(struct Moby *m) __asm__("FUN_L11_00310180");
 
 /* Moby class 1231 */
 void psytcopus_update(struct Moby *psytcopus) {
-    enum {
-        PSYTCOPUS_STATE_INITIALIZE = 0,
-        PSYTCOPUS_STATE_FACE_PLAYER = 3,
-        PSYTCOPUS_STATE_CREATE_PROJECTILE = 4,
-        PSYTCOPUS_STATE_FIRE_PROJECTILE = 5,
-        PSYTCOPUS_STATE_ATTACK_RECOVERY = 6,
-        PSYTCOPUS_STATE_KNOCKBACK = 7,
-        PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
-    };
     struct PokiPathVars *psytcopus_vars = (struct PokiPathVars *)psytcopus->pvars;
     struct Moby         *target;
     Vec4f                projectile_vector_scratch;
@@ -275,10 +276,6 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         HIT_REACTION_HURT_WITHOUT_KNOCKBACK = 9,
         HIT_REACTION_HURT_WITHOUT_STATE_CHANGE = 10,
         HIT_REACTION_NO_RESPONSE = 11
-    };
-    enum {
-        PSYTCOPUS_STATE_KNOCKBACK = 7,
-        PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
     };
     struct PokiPathVars *psytcopus_vars = (struct PokiPathVars *)psytcopus->pvars;
     Vec4f                projectile_and_hit_vector_scratch;

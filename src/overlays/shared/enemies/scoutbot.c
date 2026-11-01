@@ -21,6 +21,17 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/math/quad.h"
 
+enum {
+    SCOUTBOT_STATE_INITIALIZE = 0,
+    SCOUTBOT_STATE_IDLE = 1,
+    SCOUTBOT_STATE_APPROACH_TARGET = 2,
+    SCOUTBOT_STATE_RETURN_HOME = 3,
+    SCOUTBOT_STATE_ATTACK = 4,
+    SCOUTBOT_STATE_WAIT_FOR_VOICE = 6,
+    SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL = 7,
+    SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63
+};
+
 typedef struct ScoutbotVars {
     u8    pad0[0x20];
     f32   unk20[4];
@@ -176,16 +187,6 @@ void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
 
 /* Moby class 252 */
 void scoutbot_update(Moby *moby) {
-    enum {
-        SCOUTBOT_STATE_INITIALIZE = 0,
-        SCOUTBOT_STATE_IDLE = 1,
-        SCOUTBOT_STATE_APPROACH_TARGET = 2,
-        SCOUTBOT_STATE_RETURN_HOME = 3,
-        SCOUTBOT_STATE_ATTACK = 4,
-        SCOUTBOT_STATE_WAIT_FOR_VOICE = 6,
-        SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL = 7,
-        SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63
-    };
     Data_3DF8 *scoutbot_instance_vars = (struct Data_3DF8 *)moby->pvars;
     float      target_pos[4];
     float      offset[4];
@@ -416,9 +417,6 @@ void scoutbot_update(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_health_and_target(struct Moby *moby) {
-    enum {
-        SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63
-    };
     ScoutbotVars *scoutbot_pvars = (ScoutbotVars *)moby->pvars;
     int           hit;
     float         dmg;
@@ -648,9 +646,6 @@ void update_scoutbot_movement(struct Moby *moby) {
 void *enter_scoutbot_return_home_state(struct Moby *moby) __asm__("FUN_L08_002d4050");
 
 void *enter_scoutbot_return_home_state(struct Moby *moby) {
-    enum {
-        SCOUTBOT_STATE_RETURN_HOME = 3
-    };
     void         *suction_cancel_status = cancel_suck_cannon_suction(moby);
     ScoutbotVars *scoutbot_data = (ScoutbotVars *)moby->pvars;
     moby->state = SCOUTBOT_STATE_RETURN_HOME;

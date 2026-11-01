@@ -41,6 +41,12 @@ extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 
 #include "rnc/overlay/shared/enemies/bolt_thief_mine_data/bolt_thief_mine_update.h"
 
+enum {
+    FLOAT_MINE_INITIALIZE = 0,
+    FLOAT_MINE_ACTIVE = 1,
+    FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN = 2
+};
+
 extern float probe_ground_height(float, void *, int) __asm__("FUN_00213508");
 extern int   resolve_moby_hit_response(
       struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
@@ -68,11 +74,6 @@ void bolt_thief_mine_update(struct Moby *moby) __asm__("FUN_L14_002ff640");
 
 /* Moby class 933 */
 void bolt_thief_mine_update(struct Moby *moby) {
-    enum {
-        FLOAT_MINE_INITIALIZE = 0,
-        FLOAT_MINE_ACTIVE = 1,
-        FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN = 2
-    };
     FloatMineVars *floating_mine_private_vars = (FloatMineVars *)moby->pvars;
     union {
         HitInfo info;
@@ -206,9 +207,6 @@ unsigned char *spawn_bolt_thief_mine(unsigned char *owner,
                                      char          *spawn_position) __asm__("FUN_L14_002ffaf8");
 
 unsigned char *spawn_bolt_thief_mine(unsigned char *spawning_moby, char *spawn_position) {
-    enum {
-        FLOAT_MINE_INITIALIZE = 0
-    };
     unsigned char *spawned_moby = create_moby(0x3A5);
     if (spawned_moby != 0) {
         char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);

@@ -15,6 +15,17 @@
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
 #include "rnc/math/random.h"
 
+enum {
+    LIFT_INITIALIZE = 0,
+    LIFT_BLEND_TO_MOUNT_TRANSFORM = 1,
+    LIFT_MOVE_TO_TOP = 2,
+    LIFT_MOVE_TO_BOTTOM = 3,
+    LIFT_IDLE_AT_TOP = 4,
+    LIFT_IDLE_AT_BOTTOM = 5,
+    LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE = 6,
+    LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE = 7
+};
+
 extern float D_0015ED6C;
 
 extern char D_0013E533[];
@@ -49,16 +60,6 @@ void lift_update(struct Moby *moby) __asm__("FUN_L13_0030a6d8");
 
 /* Moby class 1270 */
 void lift_update(struct Moby *moby) {
-    enum {
-        LIFT_INITIALIZE = 0,
-        LIFT_BLEND_TO_MOUNT_TRANSFORM = 1,
-        LIFT_MOVE_TO_TOP = 2,
-        LIFT_MOVE_TO_BOTTOM = 3,
-        LIFT_IDLE_AT_TOP = 4,
-        LIFT_IDLE_AT_BOTTOM = 5,
-        LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE = 6,
-        LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE = 7
-    };
     LiftVarsA6D8 *lift_vars = (LiftVarsA6D8 *)moby->pvars;
     float         delta[4];
     float         rot[4];
@@ -207,9 +208,6 @@ void lift_update(struct Moby *moby) {
 }
 
 void compute_lift_mount_transform(struct Moby *moby, float *mount_position, float *mount_rotation) {
-    enum {
-        LIFT_MOVE_TO_TOP = 2
-    };
     float mount_offset_angle, k;
     char *mount_facing_target_base;
     clear_u64_value(mount_rotation);

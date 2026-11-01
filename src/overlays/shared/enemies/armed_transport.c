@@ -17,6 +17,18 @@
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
+enum {
+    ARMED_TRANSPORT_STATE_INITIALIZE = 0,
+    ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION = 1,
+    ARMED_TRANSPORT_STATE_FOLLOW_FIRST_PATH = 2,
+    ARMED_TRANSPORT_STATE_RELEASE_PASSENGERS = 3,
+    ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH = 4,
+    ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH = 5,
+    ARMED_TRANSPORT_STATE_TRACK_TARGET = 6,
+    ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY = 7,
+    ARMED_TRANSPORT_STATE_DYING = 8
+};
+
 typedef struct ArmedTransportVars {
     u8  pad0[0x20];
     f32 health;
@@ -160,17 +172,6 @@ void armed_transport_update(char *m) __asm__("FUN_L16_002e22d8");
 
 /* Moby class 1356 */
 void armed_transport_update(char *transport_moby) {
-    enum {
-        ARMED_TRANSPORT_STATE_INITIALIZE = 0,
-        ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION = 1,
-        ARMED_TRANSPORT_STATE_FOLLOW_FIRST_PATH = 2,
-        ARMED_TRANSPORT_STATE_RELEASE_PASSENGERS = 3,
-        ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH = 4,
-        ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH = 5,
-        ARMED_TRANSPORT_STATE_TRACK_TARGET = 6,
-        ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY = 7,
-        ARMED_TRANSPORT_STATE_DYING = 8
-    };
     L16TransportVector  vector, rotation;
     ArmedTransportVars *transport_data = (ArmedTransportVars *)MOBY(transport_moby)->pvars;
 
@@ -444,9 +445,6 @@ void armed_transport_update(char *transport_moby) {
 /* Update interaction ownership, damage responses and pursuit tracking. */
 
 void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
-    enum {
-        ARMED_TRANSPORT_STATE_DYING = 8
-    };
     enum {
         HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE = 1
     };

@@ -10,6 +10,10 @@
 #include "qzero.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 
+enum {
+    COLLISION_MATERIAL_WATER = 0
+};
+
 typedef struct {
     float x, y, z, w;
 } Vx __attribute__((aligned(16)));
@@ -225,9 +229,6 @@ float probe_moby_landing_height(Vec4_2bec80 *probe_position,
                                 void        *probing_moby) __asm__("FUN_L00_002bec80");
 
 float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby) {
-    enum {
-        COLLISION_MATERIAL_WATER = 0
-    };
     Vec4_2bec80 lower_probe_point, upper_probe_point;
     float       f, unclamped_lower_z;
     qcopy(&lower_probe_point, probe_position);
@@ -665,9 +666,6 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
 int compute_moby_state_from_vertical_probe(unsigned char *moby) __asm__("FUN_L00_002bfec8");
 
 int compute_moby_state_from_vertical_probe(unsigned char *moby) {
-    enum {
-        COLLISION_MATERIAL_WATER = 0
-    };
     enum {
         DOOM_BOT_DETONATE = 11
     };

@@ -15,6 +15,17 @@
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/overlay/shared/weapons.h"
 
+enum {
+    DOOM_LANDING_MODE_REQUIRE_LINKED_MOBY = 0,
+    THROWN_MOBY_STATE_INITIALIZE = 0,
+    THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1,
+    DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK = 2,
+    THROWN_MOBY_STATE_MOVE_WITH_COLLISION = 2,
+    THROWN_MOBY_STATE_SPAWN_SEQUENCE = 3,
+    THROWN_MOBY_STATE_FADE_OUT = 4,
+    THROWN_MOBY_STATE_RESET_TO_INITIALIZE = 5
+};
+
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
 typedef struct {
     Vec4         vel;          /* 0x00: velocity per step */
@@ -61,11 +72,6 @@ s32 predict_doom_bot_spawner_landing(ThrowVars   *throw_vars,
                                      s32          mode) __asm__("FUN_L00_002c8440");
 
 s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode) {
-    enum {
-        DOOM_LANDING_MODE_REQUIRE_LINKED_MOBY = 0,
-        THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1,
-        DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK = 2
-    };
     Vec4 simulated_position, simulated_velocity, position_scratch, q, landing_probe_position;
     s32  prediction_timer;
     s32  found = 0;
@@ -187,14 +193,6 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) __asm__("FUN_L00_002c89e8
 
 /* Moby class 230 */
 void doom_bot_spawner_update(struct Moby *thrown_moby) {
-    enum {
-        THROWN_MOBY_STATE_INITIALIZE = 0,
-        THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1,
-        THROWN_MOBY_STATE_MOVE_WITH_COLLISION = 2,
-        THROWN_MOBY_STATE_SPAWN_SEQUENCE = 3,
-        THROWN_MOBY_STATE_FADE_OUT = 4,
-        THROWN_MOBY_STATE_RESET_TO_INITIALIZE = 5
-    };
     Vec4         next_pos, start, end, probe;
     ThrowVars   *spawner_throw_vars;
     struct Moby *population_scan_moby;

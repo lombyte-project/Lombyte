@@ -19,6 +19,17 @@
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/game/level_save_state.h"
 
+enum {
+    SANDMOUSE_STATE_INITIALIZE = 0,
+    SANDMOUSE_STATE_WAIT_FOR_ACTIVATION = 1,
+    SANDMOUSE_STATE_WAIT_FOR_LINK = 2,
+    SANDMOUSE_STATE_MOVE_TO_GOAL = 3,
+    SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE = 4,
+    SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE = 5,
+    SANDMOUSE_STATE_FADE_OUT = 6,
+    SANDMOUSE_STATE_RESET = 7
+};
+
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* offset a position by two camera-relative vectors, then raise z by 1 */
@@ -289,9 +300,6 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
         HOVER_COMMAND_FACE_GOAL = 0,
         HOVER_COMMAND_MOVE_TO_GOAL = 2
     };
-    enum {
-        SANDMOUSE_STATE_FADE_OUT = 6
-    };
     Vec4                steering_correction;
     f32                 reference_distance;
     f32                 k;
@@ -533,16 +541,6 @@ void sandmouse_update(Moby *m) __asm__("FUN_L01_0030df40");
 
 /* Moby class 1818 */
 void sandmouse_update(Moby *sandmouse_moby) {
-    enum {
-        SANDMOUSE_STATE_INITIALIZE = 0,
-        SANDMOUSE_STATE_WAIT_FOR_ACTIVATION = 1,
-        SANDMOUSE_STATE_WAIT_FOR_LINK = 2,
-        SANDMOUSE_STATE_MOVE_TO_GOAL = 3,
-        SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE = 4,
-        SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE = 5,
-        SANDMOUSE_STATE_FADE_OUT = 6,
-        SANDMOUSE_STATE_RESET = 7
-    };
     Pv *sandmouse_vars;
     f32 goal_bearing_yaw;
     int dv;

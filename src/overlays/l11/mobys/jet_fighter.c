@@ -355,9 +355,6 @@ void        draw_ship_hud(struct Moby *moby) __asm__("FUN_L11_00311d50");
 extern void draw_ship_hud();
 
 void draw_ship_hud(struct Moby *moby) {
-    enum {
-        JET_FIGHTER_STATE_DELAYED_EXIT = 8
-    };
     ShipVars *ship_hud_vars = (ShipVars *)moby->pvars;
     short    *list;
     void     *found[12];
@@ -873,9 +870,6 @@ void update_player_ship_flight(struct Moby   *ship_moby,
                                ShipVars_2838 *ship_vars) __asm__("FUN_L11_00312838");
 
 void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
-    enum {
-        JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7
-    };
     W4_2838          ship_position_before_movement;
     W4_2838          death_explosion_velocity;
     UQ_2838          up;
@@ -1229,6 +1223,17 @@ unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") = 0x14;
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/jet_fighter_update.h"
 
+enum {
+    JET_FIGHTER_STATE_INITIALIZE = 0,
+    JET_FIGHTER_STATE_WAIT_FOR_BOARDING = 1,
+    JET_FIGHTER_STATE_BOARD = 2,
+    JET_FIGHTER_STATE_FLIGHT = 4,
+    JET_FIGHTER_STATE_DISMOUNT = 5,
+    JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7,
+    JET_FIGHTER_STATE_DELAYED_EXIT = 8,
+    JET_FIGHTER_STATE_INACTIVE = 9
+};
+
 extern float D_L11_00162078 __attribute__((sda));
 int          D_L11_00162168 = 180;
 extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
@@ -1248,16 +1253,6 @@ void jet_fighter_update(struct Moby *moby) __asm__("FUN_L11_00313290");
 
 /* Moby class 1242 */
 void jet_fighter_update(struct Moby *moby) {
-    enum {
-        JET_FIGHTER_STATE_INITIALIZE = 0,
-        JET_FIGHTER_STATE_WAIT_FOR_BOARDING = 1,
-        JET_FIGHTER_STATE_BOARD = 2,
-        JET_FIGHTER_STATE_FLIGHT = 4,
-        JET_FIGHTER_STATE_DISMOUNT = 5,
-        JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7,
-        JET_FIGHTER_STATE_DELAYED_EXIT = 8,
-        JET_FIGHTER_STATE_INACTIVE = 9
-    };
     ShipVars_2838 *ship_vars;
     ShipHit_3290  *hit;
     W4_2838        ship_velocity_scratch;

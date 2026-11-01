@@ -124,14 +124,6 @@ void mine_layer_update(struct Moby *m) __asm__("FUN_L03_002c9eb8");
 
 /* Moby class 578 */
 void mine_layer_update(struct Moby *mine_layer_moby) {
-    enum {
-        MINE_LAYER_INITIALIZE = 0,
-        MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
-        MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL = 2,
-        MINE_LAYER_PATROL_AND_FIRE = 3,
-        MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
-        MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
-    };
     TrooperVars        *mine_layer_vars = (TrooperVars *)mine_layer_moby->pvars;
     TrooperPatrol      *pt;
     LevelPath          *path;
@@ -376,6 +368,15 @@ extern f32 mine_layer_nonlethal_knockback_speed_scale_gp __asm__("D_L03_001618FC
 
 #include "rnc/overlay/l03/mobys/mine_layer_data/handle_mine_layer_damage.h"
 
+enum {
+    MINE_LAYER_INITIALIZE = 0,
+    MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
+    MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL = 2,
+    MINE_LAYER_PATROL_AND_FIRE = 3,
+    MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
+    MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
+};
+
 extern TrooperHit *trooper_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32         resolve_moby_hit_response(
             struct Moby *, TrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
@@ -395,10 +396,6 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
         TROOPER_DAMAGE_LONG_KNOCKBACK = 4,
         TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE = 5,
         TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE = 6
-    };
-    enum {
-        MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
-        MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
     };
     TrooperVars *trooper_vars = (TrooperVars *)damaged_moby->pvars;
     TrooperHit  *hit_record;

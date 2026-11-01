@@ -85,12 +85,6 @@ void rocket_strike_fighter_update(struct Moby *moby) __asm__("FUN_L14_002fcbb0")
 /* Moby class 921 */
 void rocket_strike_fighter_update(struct Moby *moby) {
     enum {
-        ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE = 0,
-        ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS = 1,
-        ROCKET_STRIKE_FIGHTER_STATE_FOLLOW_PATH = 2,
-        ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN = 3
-    };
-    enum {
         ROCKET_STRIKE_FIGHTER_MISSION_COMPLETE = 0xFF
     };
     RocketStrikeFighterVars *moby_vars = (RocketStrikeFighterVars *)moby->pvars;
@@ -274,12 +268,14 @@ extern f32 rocket_strike_fighter_exhaust_grey_puff_row0_offset_gp __asm__("D_L14
 
 #include "rnc/overlay/l14/mobys/rocket_strike_fighter_data/spawn_rocket_strike_fighter_exhaust.h"
 
+enum {
+    ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE = 0,
+    ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS = 1,
+    ROCKET_STRIKE_FIGHTER_STATE_FOLLOW_PATH = 2,
+    ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN = 3
+};
+
 void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
-    enum {
-        ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE = 0,
-        ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS = 1,
-        ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN = 3
-    };
     Vec4     step;
     Vec4     pos;
     Vec4     common_exhaust_origin;

@@ -13,6 +13,12 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/props.h"
 
+enum {
+    GADGEBOT_CONTAINER_ACTIVATE = 0,
+    GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS = 1,
+    GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
+};
+
 typedef struct {
     float corner[4][4];
     int   color[4];
@@ -87,9 +93,6 @@ static inline void transform_point(float *dst, float *src, float (*m)[4]) {
 void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) __asm__("FUN_L06_002d8178");
 
 void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
-    enum {
-        GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
-    };
     int            i;
     int            j;
     char          *moby = moby_ptr;
@@ -177,11 +180,6 @@ void gadgebot_spawn_container_update(unsigned char *moby) __asm__("FUN_L06_002d8
 
 /* Moby class 302 */
 void gadgebot_spawn_container_update(unsigned char *moby) {
-    enum {
-        GADGEBOT_CONTAINER_ACTIVATE = 0,
-        GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS = 1,
-        GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
-    };
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     float raised_position_snapshot[4];
     int   frame_count_snapshot;

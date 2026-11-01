@@ -17,6 +17,22 @@
 #include "rnc/overlay/l14/mobys/flying_bolt.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 
+enum {
+    MOBY_SELECTION_HERO_FALLBACK = 0,
+    MOBY_SELECTION_DISTANCE_CANDIDATE = 1,
+    MOBY_SELECTION_NO_TARGET = 2
+};
+
+enum {
+    TURRET_STATE_INITIALIZE = 0,
+    TURRET_STATE_WAIT_FOR_ACTIVATION = 1,
+    TURRET_STATE_DEPLOY = 2,
+    TURRET_STATE_WAIT_FOR_TARGET = 3,
+    TURRET_STATE_AIM_AND_FIRE = 4,
+    TURRET_STATE_RETRACT = 5,
+    TURRET_STATE_DESTROY = 6
+};
+
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 
@@ -106,11 +122,6 @@ int                select_moby_by_xy_distance(char *selection_reference,
                                               float best) __asm__("FUN_L14_00268038");
 
 int select_moby_by_xy_distance(char *selection_reference, char *selection_output, float best) {
-    enum {
-        MOBY_SELECTION_HERO_FALLBACK = 0,
-        MOBY_SELECTION_DISTANCE_CANDIDATE = 1,
-        MOBY_SELECTION_NO_TARGET = 2
-    };
     struct Hero *hero = &hero_lui;
     char        *selected_moby;
     char        *candidate_moby;
@@ -220,20 +231,8 @@ void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
 /* Moby class 30 */
 void machinegun_turret_update(char *moby) {
     enum {
-        TURRET_STATE_INITIALIZE = 0,
-        TURRET_STATE_WAIT_FOR_ACTIVATION = 1,
-        TURRET_STATE_DEPLOY = 2,
-        TURRET_STATE_WAIT_FOR_TARGET = 3,
-        TURRET_STATE_AIM_AND_FIRE = 4,
-        TURRET_STATE_RETRACT = 5,
-        TURRET_STATE_DESTROY = 6
-    };
-    enum {
         TURRET_SPAWN_CENTER = 0,
         TURRET_SPAWN_UNNEGATED_OFFSET = 1
-    };
-    enum {
-        MOBY_SELECTION_NO_TARGET = 2
     };
     MachinegunTurretVars *machinegun_turret_private_vars;
     float                 target_point_scratch[4];
@@ -518,9 +517,6 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
         HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH = 9,
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
-    };
-    enum {
-        TURRET_STATE_DESTROY = 6
     };
     MachinegunTurretVars *moby_vars = (MachinegunTurretVars *)moby->pvars;
     int                   loc0;

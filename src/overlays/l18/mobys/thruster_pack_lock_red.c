@@ -20,6 +20,12 @@
 #include "rnc/math/random.h"
 #include "rnc/ui/frames/draw_ui_frame.h"
 
+enum {
+    THRUSTER_PACK_LOCK_RED_STATE_APPROACH_CONFIGURED_HEIGHT = 1,
+    THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2,
+    THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT = 3
+};
+
 extern int scale_game_frames(int);
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -162,9 +168,6 @@ s32        allocate_voice_for_group_entry(s32 group_entry_index,
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) __asm__("FUN_L18_002d7f68");
 
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int wait_duration_frames) {
-    enum {
-        THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2
-    };
     char *red_lock_vars = (char *)moby->pvars;
     if (moby->state != THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER) {
         moby->state = THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER;
@@ -179,10 +182,6 @@ void request_thruster_pack_lock_red_wait(struct Moby *moby, int wait_duration_fr
 void end_thruster_pack_lock_red_wait(struct Moby *moby) __asm__("FUN_L18_002d7fd0");
 
 void end_thruster_pack_lock_red_wait(struct Moby *moby) {
-    enum {
-        THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2,
-        THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT = 3
-    };
     int *red_lock_private_vars = (int *)moby->pvars;
     if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER) {
         int voice_slot_index;
@@ -203,11 +202,6 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) {
 int poll_moby_state_and_rearm(struct Moby *moby) __asm__("FUN_L18_002d8050");
 
 int poll_moby_state_and_rearm(struct Moby *moby) {
-    enum {
-        THRUSTER_PACK_LOCK_RED_STATE_APPROACH_CONFIGURED_HEIGHT = 1,
-        THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2,
-        THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT = 3
-    };
     int *moby_private_vars = (int *)moby->pvars;
     if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT) {
         moby->state = THRUSTER_PACK_LOCK_RED_STATE_APPROACH_CONFIGURED_HEIGHT;

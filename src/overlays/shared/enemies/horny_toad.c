@@ -20,6 +20,10 @@
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/overlay/shared/math/quad.h"
 
+enum {
+    MOBY_STATE_SUCK_CANNON_ACTIVE = 0x9
+};
+
 typedef struct HornyToadVars {
     u8  pad0[0x1f4];
     f32 unk1F4[4];
@@ -635,9 +639,6 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int process_suck_cannon_suction_and_update_moby_state(char *a) __asm__("FUN_L00_002d56e0");
 
 int process_suck_cannon_suction_and_update_moby_state(char *moby) {
-    enum {
-        MOBY_STATE_SUCK_CANNON_ACTIVE = 0x9
-    };
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
         if (MOBY(moby)->state == MOBY_STATE_SUCK_CANNON_ACTIVE)
@@ -654,9 +655,6 @@ extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) __asm__("FUN_L00_002d57d0");
 
 int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) {
-    enum {
-        MOBY_STATE_SUCK_CANNON_ACTIVE = 0x9
-    };
     int helper_result = cancel_suck_cannon_suction(moby);
     MOBY(moby)->state = MOBY_STATE_SUCK_CANNON_ACTIVE;
     return helper_result;

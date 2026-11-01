@@ -12,6 +12,16 @@
 #include "rnc/globals.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 
+enum {
+    SHIP_PICKUP_INITIALIZE = 0,
+    SHIP_PICKUP_SELECT_ACTIVATION_GATE = 1,
+    SHIP_PICKUP_WAIT_FOR_TARGET_STATE = 2,
+    SHIP_PICKUP_WAIT_FOR_ACTIVATION_TIMER = 3,
+    SHIP_PICKUP_ACTIVE = 4,
+    SHIP_PICKUP_COLLECTED_SHRINKING = 5,
+    SHIP_PICKUP_REMOVE_OR_RESET = 6
+};
+
 extern int D_L13_00174158_lui __asm__("D_L13_00174158") NOT_SDA;
 
 extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -27,9 +37,6 @@ extern char *create_moby(int);
 unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 
 unsigned char *spawn_ship_pickup(char *position, int moby_class) {
-    enum {
-        SHIP_PICKUP_INITIALIZE = 0
-    };
     unsigned char *moby = create_moby(moby_class);
     if (moby != 0) {
         MOBY(moby)->update_dist = 0xFF;
@@ -48,15 +55,6 @@ void ammocrate_update(char *moby) __asm__("FUN_L13_002e1cc8");
 
 /* Moby classes 224, 228 */
 void ammocrate_update(char *moby) {
-    enum {
-        SHIP_PICKUP_INITIALIZE = 0,
-        SHIP_PICKUP_SELECT_ACTIVATION_GATE = 1,
-        SHIP_PICKUP_WAIT_FOR_TARGET_STATE = 2,
-        SHIP_PICKUP_WAIT_FOR_ACTIVATION_TIMER = 3,
-        SHIP_PICKUP_ACTIVE = 4,
-        SHIP_PICKUP_COLLECTED_SHRINKING = 5,
-        SHIP_PICKUP_REMOVE_OR_RESET = 6
-    };
     enum {
         MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xfd,
         MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xfe

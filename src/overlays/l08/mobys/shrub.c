@@ -32,6 +32,14 @@ extern u8    D_0014C050[];
 
 #include "rnc/overlay/shared/world/swarm_path.h"
 
+enum {
+    SHRUB_INITIALIZE = 0,
+    SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
+    SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
+    SHRUB_BEGIN_PRIMARY_PATH = 3,
+    SHRUB_BREAK_APART_AND_REMOVE = 0x63
+};
+
 extern struct Moby *D_L08_0015FFD8;
 extern f32          scale_time(f32) __asm__("FUN_001f96b0");
 extern void         FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
@@ -104,9 +112,6 @@ void spawn_shrub_parts(char *moby) {
 }
 
 void process_shrub_part_hits(struct Moby *parent_moby) {
-    enum {
-        SHRUB_BREAK_APART_AND_REMOVE = 0x63
-    };
     char  *shrub_hit_vars = ((char *)parent_moby->pvars);
     char  *shrub_part_entry_address = shrub_hit_vars + 0x60;
     char **part_entry_cursor = (char **)shrub_part_entry_address;
@@ -217,13 +222,6 @@ void update_shrub_parts(struct Moby *parent_moby) {
 
 /* Moby class 462 */
 void shrub_update(struct Moby *moby) {
-    enum {
-        SHRUB_INITIALIZE = 0,
-        SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
-        SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
-        SHRUB_BEGIN_PRIMARY_PATH = 3,
-        SHRUB_BREAK_APART_AND_REMOVE = 0x63
-    };
     enum {
         SHRUB_PART_RELEASED = 1
     };

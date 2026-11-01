@@ -26,14 +26,6 @@ extern int  hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 void apply_hero_ground_material_effects(void) __asm__("FUN_L16_002097a0");
 
 void apply_hero_ground_material_effects(void) {
-    enum {
-        GROUND_MATERIAL_WATER = 0,
-        GROUND_MATERIAL_MAGNET = 2
-    };
-    enum {
-        GROUND_MATERIAL_SINK_TRIGGER = 0xD,
-        GROUND_MATERIAL_FIXED_WATER_DEPTH = 0xE
-    };
     struct Hero *hero_data = &hero;
     int          keep = hero_data->ground_sound_class;
     int          saved_ground_type = hero_data->ground_type;
@@ -150,6 +142,16 @@ void apply_hero_ground_material_effects(void) {
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/quad.h"
 
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNET = 2
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 0xD,
+    GROUND_MATERIAL_FIXED_WATER_DEPTH = 0xE
+};
+
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0025f730(void *a, float x);
@@ -196,12 +198,6 @@ extern CollisionHit HH __asm__("D_L16_00174240") NOT_SDA;
 void update_hero_ground_contact(void) __asm__("FUN_L16_0020ffb0");
 
 void update_hero_ground_contact(void) {
-    enum {
-        GROUND_MATERIAL_WATER = 0
-    };
-    enum {
-        GROUND_MATERIAL_SINK_TRIGGER = 0xD
-    };
     V_u collision_ray_endpoint, ground_probe_endpoint, ground_offset_or_angles, side_probe_endpoint,
         unused_side_probe_endpoint, probe_surface_angles, normalized_hit_normal;
     f32 f;

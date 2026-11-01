@@ -21,6 +21,18 @@
 #include "rnc/overlay/l15/mobys/helicopter_globals.h"
 #include "rnc/overlay/shared/math/quad.h"
 
+enum {
+    HELICOPTER_INITIALIZE = 0,
+    HELICOPTER_WAIT_FOR_ACTIVATION = 1,
+    HELICOPTER_FOLLOW_ENTRY_PATH = 2,
+    HELICOPTER_APPROACH_AREA_PATH = 3,
+    HELICOPTER_HOLD_POSITION_WAIT_FOR_TARGET = 4,
+    HELICOPTER_ENGAGE_AND_FIRE = 5,
+    HELICOPTER_RECOIL = 6,
+    HELICOPTER_DEATH_EFFECTS = 7,
+    HELICOPTER_DEAD_WAIT_FOR_RESET = 0x40
+};
+
 extern char D_L15_001673C0[];
 
 extern char D_0014C190[];
@@ -388,17 +400,6 @@ void helicopter_update(struct Moby *moby) __asm__("FUN_L15_002c5630");
 
 /* Moby class 233 */
 void helicopter_update(struct Moby *moby) {
-    enum {
-        HELICOPTER_INITIALIZE = 0,
-        HELICOPTER_WAIT_FOR_ACTIVATION = 1,
-        HELICOPTER_FOLLOW_ENTRY_PATH = 2,
-        HELICOPTER_APPROACH_AREA_PATH = 3,
-        HELICOPTER_HOLD_POSITION_WAIT_FOR_TARGET = 4,
-        HELICOPTER_ENGAGE_AND_FIRE = 5,
-        HELICOPTER_RECOIL = 6,
-        HELICOPTER_DEATH_EFFECTS = 7,
-        HELICOPTER_DEAD_WAIT_FOR_RESET = 0x40
-    };
     enum {
         HELICOPTER_GOAL_UNAVAILABLE = 2
     };
@@ -892,11 +893,6 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_helicopter_hits(struct Moby *moby) {
-    enum {
-        HELICOPTER_RECOIL = 6,
-        HELICOPTER_DEATH_EFFECTS = 7,
-        HELICOPTER_DEAD_WAIT_FOR_RESET = 0x40
-    };
     enum {
         HIT_REACTION_SKIP_DAMAGE = 1
     };

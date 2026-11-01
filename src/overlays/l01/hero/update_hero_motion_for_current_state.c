@@ -607,8 +607,8 @@ void update_hero_motion_for_current_state(void) {
             clip_hero_horizontal_velocity(0);
             if (hero.air_frames.s != 0) {
                 add_hero_gravity_offset(hero.motion.velocity.f,
-                                 hero.motion.resolved_velocity_z.f,
-                                 frame_time_sq * 25.0f);
+                                        hero.motion.resolved_velocity_z.f,
+                                        frame_time_sq * 25.0f);
                 correct_hero_airborne_wall_velocity();
             } else {
                 add_hero_gravity_offset(
@@ -1141,7 +1141,8 @@ void update_hero_motion_for_current_state(void) {
                 hero.motion.velocity.f, hero.motion.displacement.f, frame_time_sq * 25.0f);
             correct_hero_airborne_wall_velocity();
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
         if (anim != -1 && hero.moby->seq != 0x36) {
             set_hero_animation(anim, 0, frames);
@@ -1338,7 +1339,8 @@ void update_hero_motion_for_current_state(void) {
             add_hero_gravity_offset(
                 hero.motion.velocity.f, hero.motion.resolved_velocity_z.f, frame_time_sq * 25.0f);
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
     case HERO_STATE_WRENCH_COMBO: {
@@ -1441,7 +1443,8 @@ void update_hero_motion_for_current_state(void) {
             add_hero_gravity_offset(
                 hero.motion.velocity.f, hero.motion.resolved_velocity_z.f, frame_time_sq * 25.0f);
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
     } break;
@@ -1565,7 +1568,8 @@ void update_hero_motion_for_current_state(void) {
                 hero.motion.velocity.f, hero.motion.resolved_velocity.f, frame_time_sq * 24.0f);
             correct_hero_airborne_wall_velocity();
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
     case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
@@ -1690,7 +1694,8 @@ void update_hero_motion_for_current_state(void) {
                 hero.motion.velocity.f, hero.motion.resolved_velocity_z.f, frame_time_sq * 25.0f);
             correct_hero_airborne_wall_velocity();
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
     case HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT:
@@ -1853,7 +1858,8 @@ void update_hero_motion_for_current_state(void) {
         }
         adjust_hero_pose_targets_from_motion();
         build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
-        add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, hero.fall_state_gravity);
+        add_hero_gravity_offset(
+            hero.motion.velocity.f, hero.motion.velocity.f, hero.fall_state_gravity);
         if (FUN_L00_00233a78(hero.motion.velocity.f) < -(frame_time * 50.0f)) {
             FUN_L00_00233b20(hero.motion.velocity.f, hero.motion.velocity.f, -(frame_time * 50.0f));
         }
@@ -1873,7 +1879,8 @@ void update_hero_motion_for_current_state(void) {
                                 hero.motion.velocity.f,
                                 hero.motion.velocity.f);
         }
-        add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, hero.fall_state_gravity);
+        add_hero_gravity_offset(
+            hero.motion.velocity.f, hero.motion.velocity.f, hero.fall_state_gravity);
         if (FUN_L00_00233a78(hero.motion.velocity.f) < -(frame_time * 50.0f)) {
             FUN_L00_00233b20(hero.motion.velocity.f, hero.motion.velocity.f, -(frame_time * 50.0f));
         }
@@ -2221,7 +2228,8 @@ void update_hero_motion_for_current_state(void) {
                 hero.motion.velocity.f, hero.motion.displacement.f, frame_time_sq * 25.0f);
             correct_hero_airborne_wall_velocity();
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
     case HERO_STATE_BRAKE_AT_TARGET_POSITION: {
@@ -2237,7 +2245,8 @@ void update_hero_motion_for_current_state(void) {
                 hero.motion.velocity.f, hero.motion.displacement.f, frame_time_sq * 25.0f);
             correct_hero_airborne_wall_velocity();
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
     case HERO_STATE_FIDGET:
@@ -2259,7 +2268,8 @@ void update_hero_motion_for_current_state(void) {
                 hero.motion.velocity.f, hero.motion.resolved_velocity_z.f, frame_time_sq * 25.0f);
             correct_hero_airborne_wall_velocity();
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
         break;
     case HERO_STATE_VEHICLE_MODE_3_SLIP:
@@ -2274,7 +2284,8 @@ void update_hero_motion_for_current_state(void) {
         if (hero.move_lock_timer == 0) {
             update_hero_airborne_planar_motion();
         }
-        add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 21.0f);
+        add_hero_gravity_offset(
+            hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 21.0f);
         if (hero.motion.velocity.f[2] < frame_time * -15.0f) {
             hero.motion.velocity.f[2] = frame_time * -15.0f;
         }
@@ -2308,7 +2319,8 @@ void update_hero_motion_for_current_state(void) {
                 hero.motion.velocity.f, hero.motion.resolved_velocity_z.f, frame_time_sq * 25.0f);
             correct_hero_airborne_wall_velocity();
         } else {
-            add_hero_gravity_offset(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
+            add_hero_gravity_offset(
+                hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
     case HERO_STATE_VEHICLE_MODE_3_HURT: {

@@ -20,14 +20,6 @@ extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 void       apply_hero_ground_material_effects(void) __asm__("FUN_L05_00239fc0");
 
 void apply_hero_ground_material_effects(void) {
-    enum {
-        GROUND_MATERIAL_WATER = 0,
-        GROUND_MATERIAL_MAGNET = 2,
-        GROUND_MATERIAL_FIXED_SHALLOW_WATER = 14
-    };
-    enum {
-        GROUND_MATERIAL_SINK_TRIGGER = 13
-    };
     u8  save = hero.ground_sound_class;
     s16 saved_ground_type = hero.ground_type;
     f32 water_depth;
@@ -166,12 +158,6 @@ extern CollisionHit HH __asm__("D_L05_00174240") NOT_SDA;
 void update_hero_ground_contact(void) __asm__("FUN_L05_002402a8");
 
 void update_hero_ground_contact(void) {
-    enum {
-        GROUND_MATERIAL_WATER = 0
-    };
-    enum {
-        GROUND_MATERIAL_SINK_TRIGGER = 0xD
-    };
     enum {
         GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH = 3,
         GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS = 0xB
@@ -375,6 +361,16 @@ d1:
 typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
 
 #include "rnc/math/fast_math.h"
+
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNET = 2,
+    GROUND_MATERIAL_FIXED_SHALLOW_WATER = 14
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 13
+};
 
 typedef union {
     u128_2133a8 q;

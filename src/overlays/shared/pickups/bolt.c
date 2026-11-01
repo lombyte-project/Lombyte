@@ -21,6 +21,14 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/collision.h"
 
+enum {
+    BOLT_INITIALIZE = 0x0,
+    BOLT_FALLING = 0x1,
+    BOLT_SETTLING = 0x2,
+    BOLT_IDLE = 0x3,
+    BOLT_MOVE_TO_HERO = 0x4
+};
+
 typedef struct {
     u8  pad0[0x24];
     f32 scale; /* 0x24 */
@@ -174,13 +182,6 @@ void bolt_update(Bolt *obj) __asm__("FUN_L00_002a5dd8");
 
 /* Moby classes 13-16 */
 void bolt_update(Bolt *bolt_moby) {
-    enum {
-        BOLT_INITIALIZE = 0x0,
-        BOLT_FALLING = 0x1,
-        BOLT_SETTLING = 0x2,
-        BOLT_IDLE = 0x3,
-        BOLT_MOVE_TO_HERO = 0x4
-    };
     BoltVars *v = bolt_moby->vars;
     Vec4      geometry_scratch;
     Vec4      vector_scratch;
@@ -539,12 +540,6 @@ void collect_bolt(struct Moby *bolt) {
 void update_bolt_grounded_pose(char *moby, void *out1, void *out2) __asm__("FUN_L00_002a6de8");
 
 void update_bolt_grounded_pose(char *moby, void *base_position_output, void *base_rotation_output) {
-    enum {
-        BOLT_IDLE = 3
-    };
-    enum {
-        BOLT_FALLING = 1
-    };
     char *grounded_bolt_vars = ((char *)MOBY(moby)->pvars);
     float local_rotation_basis[12];
     float base_rotation_basis[12];
@@ -665,10 +660,6 @@ int begin_bolt_attraction(void *ov,
                           float attraction_yaw_angle,
 
                           float attraction_pitch_angle) {
-    enum {
-        BOLT_IDLE = 3,
-        BOLT_MOVE_TO_HERO = 4
-    };
     char *bolt_moby = ov;
     char *target_moby = tv;
     char *bolt_vars = ((char *)MOBY(bolt_moby)->pvars);
@@ -744,9 +735,6 @@ struct Moby *spawn_bolt_by_value(
         BOLT_VALUE_FIVE = 5,
         BOLT_VALUE_TWENTY = 20,
         BOLT_VALUE_FIFTY = 50
-    };
-    enum {
-        BOLT_FALLING = 1
     };
     f32          spin_axis[4] __attribute__((aligned(16)));
     f32          bolt_to_source_offset[4] __attribute__((aligned(16)));

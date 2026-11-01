@@ -31,13 +31,6 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int process_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L12_002e16b8");
 
 int process_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) {
-    enum {
-        ANKLEBITER_IDLE = 1,
-        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
-        ANKLEBITER_DORMANT = 9,
-        ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11,
-        ANKLEBITER_ACTIVATE_FROM_DORMANCY = 13
-    };
     int active;
     if (moby->state == ANKLEBITER_DORMANT || moby->state == ANKLEBITER_WAIT_FOR_LEAP_TRIGGER ||
         moby->state == ANKLEBITER_ACTIVATE_FROM_DORMANCY)
@@ -59,10 +52,6 @@ extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 int store_hoven_anklebiter_in_suck_cannon(struct Moby *a) __asm__("FUN_L12_002e1758");
 
 int store_hoven_anklebiter_in_suck_cannon(struct Moby *carried_moby) {
-    enum {
-        ANKLEBITER_IDLE = 1,
-        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 0x8
-    };
     int suck_cannon_store_result = store_moby_in_suck_cannon(carried_moby);
     if (suck_cannon_store_result == 0) {
         if (carried_moby->state == ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME)
@@ -79,11 +68,6 @@ int store_hoven_anklebiter_in_suck_cannon(struct Moby *carried_moby) {
 int cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L12_002e17f8");
 
 int cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) {
-    enum {
-        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
-        ANKLEBITER_DORMANT = 9,
-        ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11
-    };
     int was_stored_in_suck_cannon = cancel_suck_cannon_suction(moby);
     if (moby->state == ANKLEBITER_DORMANT || moby->state == ANKLEBITER_WAIT_FOR_LEAP_TRIGGER) {
         return 0;
@@ -289,24 +273,6 @@ extern float fast_subtract_rotations(float, float);
 
 /* Moby class 238 */
 void hoven_anklebiter_update(AnklebiterMoby *moby) {
-    enum {
-        ANKLEBITER_INITIALIZE = 0,
-        ANKLEBITER_IDLE = 1,
-        ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT = 3,
-        ANKLEBITER_PURSUE_TARGET = 4,
-        ANKLEBITER_MELEE_ATTACK = 5,
-        ANKLEBITER_RETURN_HOME = 6,
-        ANKLEBITER_KNOCKBACK_FALL = 7,
-        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
-        ANKLEBITER_DORMANT = 9,
-        ANKLEBITER_RECOVER_AFTER_KNOCKBACK = 10,
-        ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11,
-        ANKLEBITER_LEAP_TO_HOME = 12,
-        ANKLEBITER_ACTIVATE_FROM_DORMANCY = 13,
-        ANKLEBITER_LAND_AFTER_LEAP = 14,
-        ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15,
-        ANKLEBITER_DEATH_FALL = 99
-    };
     enum {
         ANKLEBITER_LEAP_TO_HOME_MOTION_FLAGS = 5
     };
@@ -770,9 +736,6 @@ extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) __asm__("FUN_L12_002e3098");
 
 void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
-    enum {
-        ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15
-    };
     float  pos[4];
     float  spark_launch_velocity[4];
     float  gravity_adjusted_spark_velocity[4];
@@ -908,19 +871,30 @@ extern void anim_update_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d538")
 
 #include "rnc/overlay/l12/mobys/hoven_anklebiter_data/process_hoven_anklebiter_damage_and_alerts.h"
 
+enum {
+    ANKLEBITER_INITIALIZE = 0,
+    ANKLEBITER_IDLE = 1,
+    ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT = 3,
+    ANKLEBITER_PURSUE_TARGET = 4,
+    ANKLEBITER_MELEE_ATTACK = 5,
+    ANKLEBITER_RETURN_HOME = 6,
+    ANKLEBITER_KNOCKBACK_FALL = 7,
+    ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
+    ANKLEBITER_DORMANT = 9,
+    ANKLEBITER_RECOVER_AFTER_KNOCKBACK = 10,
+    ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11,
+    ANKLEBITER_LEAP_TO_HOME = 12,
+    ANKLEBITER_ACTIVATE_FROM_DORMANCY = 13,
+    ANKLEBITER_LAND_AFTER_LEAP = 14,
+    ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15,
+    ANKLEBITER_DEATH_FALL = 99
+};
+
 /* Damage and alert step of the Hoven anklebiter: refreshes its speed while alerted, now and then calls for help behind
    itself, and takes hits (dying, or staggering back). */
 void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) __asm__("FUN_L12_002e3528");
 
 void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
-    enum {
-        ANKLEBITER_INITIALIZE = 0,
-        ANKLEBITER_KNOCKBACK_FALL = 7,
-        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
-        ANKLEBITER_DORMANT = 9,
-        ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 0xB,
-        ANKLEBITER_DEATH_FALL = 0x63
-    };
     AnklebiterVars *anklebiter_vars = (AnklebiterVars *)moby->pvars;
     Vec4            help_direction_or_hit_position;
     s32             hit;

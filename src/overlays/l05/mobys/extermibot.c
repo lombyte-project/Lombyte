@@ -125,26 +125,6 @@ typedef struct ExtermibotVars {
 
 /* Moby class 623 */
 void extermibot_update(unsigned char *moby) {
-    enum {
-        EXTERMIBOT_INITIALIZE = 0,
-        EXTERMIBOT_IDLE_AND_CHECK_TARGET_PATH = 1,
-        EXTERMIBOT_WANDER_NEAR_START = 2,
-        EXTERMIBOT_FOLLOW_TARGET = 4,
-        EXTERMIBOT_WAIT_FOR_TARGET_IN_STRIKE_RANGE = 5,
-        EXTERMIBOT_APPROACH_TARGET_DIRECTLY = 6,
-        EXTERMIBOT_AIM_BEFORE_STRIKE = 7,
-        EXTERMIBOT_STRIKE_TARGET = 8,
-        EXTERMIBOT_RECOVER_AFTER_STRIKE = 9,
-        EXTERMIBOT_RETURN_TO_START = 10,
-        EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
-        EXTERMIBOT_WAIT_FOR_ANIMATION_BEFORE_IDLE = 13,
-        EXTERMIBOT_DEATH_KNOCKBACK = 14,
-        EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER = 15
-    };
-    enum {
-        EXTERMIBOT_TARGET_PATH_UNAVAILABLE = 2,
-        EXTERMIBOT_HIDDEN_BELOW_START = 0xC
-    };
     ExtermibotVars *moby_data = (ExtermibotVars *)MOBY(moby)->pvars;
     char           *target_moby;
     float           path_goal_or_facing_vector[4];
@@ -722,6 +702,29 @@ extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 
 #include "rnc/overlay/l05/mobys/extermibot_data/handle_extermibot_hits_and_update_targeting.h"
 
+enum {
+    EXTERMIBOT_INITIALIZE = 0,
+    EXTERMIBOT_HIT_STATUS_SKIP_RESPONSE = 1,
+    EXTERMIBOT_IDLE_AND_CHECK_TARGET_PATH = 1,
+    EXTERMIBOT_WANDER_NEAR_START = 2,
+    EXTERMIBOT_FOLLOW_TARGET = 4,
+    EXTERMIBOT_WAIT_FOR_TARGET_IN_STRIKE_RANGE = 5,
+    EXTERMIBOT_APPROACH_TARGET_DIRECTLY = 6,
+    EXTERMIBOT_AIM_BEFORE_STRIKE = 7,
+    EXTERMIBOT_STRIKE_TARGET = 8,
+    EXTERMIBOT_RECOVER_AFTER_STRIKE = 9,
+    EXTERMIBOT_RETURN_TO_START = 10,
+    EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
+    EXTERMIBOT_WAIT_FOR_ANIMATION_BEFORE_IDLE = 13,
+    EXTERMIBOT_DEATH_KNOCKBACK = 14,
+    EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER = 15
+};
+
+enum {
+    EXTERMIBOT_TARGET_PATH_UNAVAILABLE = 2,
+    EXTERMIBOT_HIDDEN_BELOW_START = 0xC
+};
+
 extern Hit_3047E8 *func_L00_0025B478_3047E8(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int         collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -757,11 +760,6 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
         EXTERMIBOT_HIT_FLASH = 9,
         EXTERMIBOT_HIT_FLASH_ONLY = 10,
         EXTERMIBOT_HIT_NO_REACTION = 11
-    };
-    enum {
-        EXTERMIBOT_HIT_STATUS_SKIP_RESPONSE = 1,
-        EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
-        EXTERMIBOT_DEATH_KNOCKBACK = 14
     };
     Vec_3047E8  working_vector;
     Vec_3047E8  hit_test_endpoint;
@@ -976,9 +974,6 @@ extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_0030405
 void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) __asm__("FUN_L05_00303b08");
 
 void move_extermibot_along_path(struct Moby *moby, s32 destination_position, f32 side) {
-    enum {
-        EXTERMIBOT_TARGET_PATH_UNAVAILABLE = 2
-    };
     PathWalkerVars *walker_vars = (PathWalkerVars *)moby->pvars;
     Vec4f           facing_direction, movement_displacement, goal;
     f32             offset_heading;

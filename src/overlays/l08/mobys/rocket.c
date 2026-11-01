@@ -148,6 +148,16 @@ extern int   D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") MACRO_ADDR;
 
 #include "rnc/overlay/l08/mobys/rocket_data/rocket_update.h"
 
+enum {
+    ROCKET_STATE_INITIALIZE = 0,
+    ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
+    ROCKET_STATE_HOME_TOWARD_TARGET = 2,
+    ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
+    ROCKET_STATE_FOLLOW_ROUTE = 4,
+    ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
+    ROCKET_STATE_EXPLODE_AND_REMOVE = 6
+};
+
 extern unsigned int D_L08_0015FFDC MACRO_ADDR;
 extern void                        FUN_L00_00262cf0(void *, void *, float, float, float);
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
@@ -167,15 +177,6 @@ void spawn_rocket_explosion_and_debris(char *moby,
 
 /* Moby class 435 */
 void rocket_update(M46 *moby) {
-    enum {
-        ROCKET_STATE_INITIALIZE = 0,
-        ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
-        ROCKET_STATE_HOME_TOWARD_TARGET = 2,
-        ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
-        ROCKET_STATE_FOLLOW_ROUTE = 4,
-        ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
-        ROCKET_STATE_EXPLODE_AND_REMOVE = 6
-    };
     enum {
         LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_POSITIVE_Z_LAUNCH_OFFSET = 0,
         LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_NEGATIVE_Z_LAUNCH_OFFSET = 1,
@@ -556,9 +557,6 @@ typedef struct RocketVars {
 } RocketVars;
 
 struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
-    enum {
-        ROCKET_STATE_APPROACH_TARGET_OFFSET = 1
-    };
     struct Moby *moby = create_moby(0x1B3);
     RocketVars  *projectile_vars;
     float       *reference;

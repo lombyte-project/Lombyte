@@ -23,6 +23,23 @@
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_burst_sparks_2.h"
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_burst_sparks.h"
 
+enum {
+    LARGE_AMOEBOID_INITIALIZE = 0,
+    LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
+    LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
+    LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END = 3,
+    LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
+    LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
+    LARGE_AMOEBOID_LUNGE_AT_TARGET = 6,
+    LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH = 7,
+    LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
+    LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH = 9,
+    LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
+    LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 14,
+    LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
+    LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
+};
+
 typedef struct LargeAmoeboidVars {
     u8    pad0[0x20];
     f32   health;
@@ -222,22 +239,6 @@ void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 
 /* Moby classes 572, 865, 866 */
 void large_amoeboid_update(unsigned char *moby) {
-    enum {
-        LARGE_AMOEBOID_INITIALIZE = 0,
-        LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
-        LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
-        LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END = 3,
-        LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
-        LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
-        LARGE_AMOEBOID_LUNGE_AT_TARGET = 6,
-        LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH = 7,
-        LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
-        LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH = 9,
-        LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
-        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 14,
-        LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
-        LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
-    };
     enum {
         LARGE_AMOEBOID_LARGE_VARIANT = 0x23c,
         LARGE_AMOEBOID_MEDIUM_VARIANT = 0x361,
@@ -657,10 +658,6 @@ void large_amoeboid_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0040), where it is exact; names translated to the US level program. */
 
 void process_amoeboid_hits_and_update_targeting(char *moby) {
-    enum {
-        LARGE_AMOEBOID_INITIALIZE = 0,
-        LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8
-    };
     V_2F0040           scratch_vector;
     V_2F0040           line_test_endpoint;
     int                flag;
@@ -1095,11 +1092,6 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
 int process_amoeboid_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L01_002efa88");
 
 int process_amoeboid_suck_cannon_suction(struct Moby *moby) {
-    enum {
-        LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
-        LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
-        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 0xE
-    };
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result != 0) {
         if (moby->oclass != 0x362) {
@@ -1122,10 +1114,6 @@ extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 int moby_hold_state_if_found(struct Moby *a) __asm__("FUN_L01_002efaf8");
 
 int moby_hold_state_if_found(struct Moby *target_moby) {
-    enum {
-        LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
-        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 0xe
-    };
     int suck_cannon_store_result = store_moby_in_suck_cannon(target_moby);
     if (suck_cannon_store_result == 0) {
         if (target_moby->state == LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION)
@@ -1142,9 +1130,6 @@ extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) __asm__("FUN_L01_002efb98");
 
 int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) {
-    enum {
-        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 0xe
-    };
     int helper_result = cancel_suck_cannon_suction(moby);
     moby->state = LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION;
     return helper_result;

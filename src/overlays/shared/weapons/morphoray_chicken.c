@@ -17,6 +17,15 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/fast_math.h"
 
+enum {
+    CHICKEN_STATE_INITIALIZE = 0,
+    CHICKEN_STATE_IDLE = 1,
+    CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2,
+    CHICKEN_STATE_FLEE_FROM_HERO = 3,
+    CHICKEN_STATE_CLOSE_RANGE_FLEE_FROM_HERO = 4,
+    CHICKEN_STATE_EMIT_FEATHERS = 5
+};
+
 typedef union {
     u128 q;
     f32  f[4];
@@ -235,10 +244,6 @@ struct Moby *spawn_morphoray_chicken(State *source_state) __asm__("FUN_L00_002c9
 
 struct Moby *spawn_morphoray_chicken(State *source_state) {
     enum {
-        CHICKEN_STATE_IDLE = 1,
-        CHICKEN_STATE_EMIT_FEATHERS = 5
-    };
-    enum {
         MOBY_STATE_NON_SPAWN_POOL_REMOVAL = 0xFD,
         MOBY_STATE_SPAWN_POOL_REMOVAL = 0xFE
     };
@@ -359,14 +364,6 @@ void morphoray_chicken_update(Moby *chicken_moby) __asm__("FUN_L00_002c97e0");
 
 /* Moby class 270 */
 void morphoray_chicken_update(Moby *chicken_moby) {
-    enum {
-        CHICKEN_STATE_INITIALIZE = 0,
-        CHICKEN_STATE_IDLE = 1,
-        CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2,
-        CHICKEN_STATE_FLEE_FROM_HERO = 3,
-        CHICKEN_STATE_CLOSE_RANGE_FLEE_FROM_HERO = 4,
-        CHICKEN_STATE_EMIT_FEATHERS = 5
-    };
     enum {
         CHICKEN_STATE_DEAD = 6
     };
@@ -828,10 +825,6 @@ void morphoray_chicken_update(Moby *chicken_moby) {
 int moby_set_state_from_check(struct Moby *a) __asm__("FUN_L00_002cadc0");
 
 int moby_set_state_from_check(struct Moby *checked_moby) {
-    enum {
-        CHICKEN_STATE_IDLE = 1,
-        CHICKEN_STATE_EMIT_FEATHERS = 5
-    };
     int suction_result = process_moby_suck_cannon_suction(checked_moby);
     if (suction_result == 0) {
         if (checked_moby->state == CHICKEN_STATE_EMIT_FEATHERS)
@@ -855,10 +848,6 @@ int launch_suck_cannon_projectile_and_update_moby_state(struct Moby *moby,
                                                         int          target_moby,
 
                                                         float target_height_offset) {
-    enum {
-        CHICKEN_STATE_IDLE = 1,
-        CHICKEN_STATE_EMIT_FEATHERS = 5
-    };
     char *class_callback_data = get_moby_suck_cannon_record(moby);
     int   projectile_launch_result = launch_suck_cannon_projectile(
         moby, launch_vector_address, target_moby, target_height_offset);

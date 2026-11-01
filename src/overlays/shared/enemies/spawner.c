@@ -19,6 +19,12 @@
 #include "rnc/overlay/shared/enemies/spawner_egg.h"
 #include "rnc/overlay/shared/math/random.h"
 
+enum {
+    SPAWNER_STATE_INITIALIZE = 0,
+    SPAWNER_STATE_SPAWN = 1,
+    SPAWNER_STATE_EXPLODE = 2
+};
+
 typedef struct SpawnerVars {
     u8    pad0[0x20];
     f32   unk20;
@@ -87,9 +93,6 @@ extern f32   frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) __asm__("FUN_L09_0030a9e8");
 
 void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) {
-    enum {
-        SPAWNER_STATE_EXPLODE = 2
-    };
     char *moby_record;
     int   record_processing_status;
     float remaining_value;
@@ -144,11 +147,6 @@ void spawner_update(char *moby) __asm__("FUN_L09_0030ab80");
 
 /* Moby class 1885 */
 void spawner_update(char *moby) {
-    enum {
-        SPAWNER_STATE_INITIALIZE = 0,
-        SPAWNER_STATE_SPAWN = 1,
-        SPAWNER_STATE_EXPLODE = 2
-    };
     SpawnerVars *spawner_vars = (SpawnerVars *)MOBY(moby)->pvars;
     float        target[4];
     float        launch_velocity[4];

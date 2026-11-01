@@ -23,6 +23,23 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
+enum {
+    COMMANDO_PURSUIT_MODE_DISABLED = 2
+};
+
+enum {
+    COMMANDO_STATE_INITIALIZE = 0,
+    COMMANDO_STATE_RETURN_TO_INITIAL_POSITION = 1,
+    COMMANDO_STATE_IDLE = 2,
+    COMMANDO_STATE_MOVE_TO_PATROL_NODE = 3,
+    COMMANDO_STATE_PREPARE_ROCKET_FIRE = 4,
+    COMMANDO_STATE_FIRE_ROCKETS = 5,
+    COMMANDO_STATE_MOVE_TO_ATTACK_NODE = 7,
+    COMMANDO_STATE_KNOCKBACK_RECOVERY = 8,
+    COMMANDO_STATE_FATAL_FALL = 9,
+    COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
+};
+
 typedef struct L16DamageData {
     u8            pad0[0x20];
     float         health;
@@ -207,21 +224,6 @@ void blarg_elite_commando_update(char *m) __asm__("FUN_L16_002d2cf0");
 
 /* Moby class 638 */
 void blarg_elite_commando_update(char *commando_moby) {
-    enum {
-        COMMANDO_STATE_INITIALIZE = 0,
-        COMMANDO_STATE_RETURN_TO_INITIAL_POSITION = 1,
-        COMMANDO_STATE_IDLE = 2,
-        COMMANDO_STATE_MOVE_TO_PATROL_NODE = 3,
-        COMMANDO_STATE_PREPARE_ROCKET_FIRE = 4,
-        COMMANDO_STATE_FIRE_ROCKETS = 5,
-        COMMANDO_STATE_MOVE_TO_ATTACK_NODE = 7,
-        COMMANDO_STATE_KNOCKBACK_RECOVERY = 8,
-        COMMANDO_STATE_FATAL_FALL = 9,
-        COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
-    };
-    enum {
-        COMMANDO_PURSUIT_MODE_DISABLED = 2
-    };
     float          target[4], scratch_vector[4], delta[4];
     L16DamageData *commando_data = (L16DamageData *)MOBY(commando_moby)->pvars;
     char          *source, *aim_target_moby;
@@ -684,10 +686,6 @@ void start_blarg_elite_commando_return_to_initial_position(
 void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
 
                                                            int return_countdown_ticks) {
-    enum {
-        COMMANDO_STATE_RETURN_TO_INITIAL_POSITION = 1,
-        COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
-    };
     L16DamageData *commando_data = (L16DamageData *)moby->pvars;
     if (moby->state == COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM) {
         moby->state = COMMANDO_STATE_RETURN_TO_INITIAL_POSITION;
@@ -856,9 +854,6 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
 /* Aim paired joints toward the owner or player, then smooth their rotations. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
 void update_blarg_elite_commando_joint_aim(char *commando_moby) {
-    enum {
-        COMMANDO_PURSUIT_MODE_DISABLED = 2
-    };
     float          position[4], target[4], matrix[16], delta[4], aim[4], aimDelta[4], velocity[4];
     L16DamageData *commando_data = (L16DamageData *)MOBY(commando_moby)->pvars;
     if (commando_data->pursuit_mode != COMMANDO_PURSUIT_MODE_DISABLED) {
@@ -924,9 +919,6 @@ void update_blarg_elite_commando_joint_aim(char *commando_moby) {
 /* Emit randomized joint particles while the moby is active. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5CD0), where it is exact; names translated to the US level program. */
 void emit_blarg_elite_commando_joint_sparks(char *commando_moby) {
-    enum {
-        COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
-    };
     float matrix[16], velocity[4], acceleration[4], scatter[4];
     int   i;
     if (MOBY(commando_moby)->visible == 0 ||

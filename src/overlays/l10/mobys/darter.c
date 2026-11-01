@@ -126,21 +126,6 @@ void darter_update(Moby *moby) __asm__("FUN_L10_002e01a8");
 /* Moby class 1199 */
 void darter_update(Moby *moby) {
     enum {
-        DARTER_STATE_INITIALIZE = 0,
-        DARTER_STATE_RISE_TO_HOME_HEIGHT = 2,
-        DARTER_STATE_WANDER = 3,
-        DARTER_STATE_WAIT_BETWEEN_WANDER_GOALS = 4,
-        DARTER_STATE_RETURN_HOME = 5,
-        DARTER_STATE_ATTACK_WINDUP = 6,
-        DARTER_STATE_DIVE_TOWARD_TARGET = 7,
-        DARTER_STATE_DIVE_ATTACK = 8,
-        DARTER_STATE_CUBOID_PATROL = 9,
-        DARTER_STATE_CUBOID_APPROACH_TARGET = 10,
-        DARTER_STATE_CUBOID_CHARGE_ATTACK = 11,
-        DARTER_STATE_CUBOID_RETURN_HOME = 12,
-        DARTER_STATE_DYING = 13
-    };
-    enum {
         DARTER_SPAWN_HOME_WANDER = 0,
         DARTER_SPAWN_REMOVE = 1,
         DARTER_SPAWN_CUBOID_PATROL = 2
@@ -668,9 +653,6 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
     enum {
-        DARTER_STATE_DYING = 13
-    };
-    enum {
         TARGET_SELECTION_DEFAULT_REJECTED_NO_REPLACEMENT = 2
     };
     MobyData   *class_1199_vars = ((struct MobyData *)moby->pvars);
@@ -783,6 +765,22 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
 }
 
 #include "rnc/overlay/l10/mobys/darter_globals.h"
+
+enum {
+    DARTER_STATE_INITIALIZE = 0,
+    DARTER_STATE_RISE_TO_HOME_HEIGHT = 2,
+    DARTER_STATE_WANDER = 3,
+    DARTER_STATE_WAIT_BETWEEN_WANDER_GOALS = 4,
+    DARTER_STATE_RETURN_HOME = 5,
+    DARTER_STATE_ATTACK_WINDUP = 6,
+    DARTER_STATE_DIVE_TOWARD_TARGET = 7,
+    DARTER_STATE_DIVE_ATTACK = 8,
+    DARTER_STATE_CUBOID_PATROL = 9,
+    DARTER_STATE_CUBOID_APPROACH_TARGET = 10,
+    DARTER_STATE_CUBOID_CHARGE_ATTACK = 11,
+    DARTER_STATE_CUBOID_RETURN_HOME = 12,
+    DARTER_STATE_DYING = 13
+};
 
 int  moby_group_command_frames_gp __asm__("D_L10_00161E00") = 5;
 void set_moby_group_command_frames(struct Moby *moby) __asm__("FUN_L10_002e1cb0");

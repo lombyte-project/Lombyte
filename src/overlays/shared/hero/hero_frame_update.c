@@ -330,13 +330,6 @@ extern int  l01_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 
 void update_hero_ground_material_effects(void) {
-    enum {
-        GROUND_MATERIAL_WATER = 0,
-        GROUND_MATERIAL_MAGNETIC = 2
-    };
-    enum {
-        GROUND_MATERIAL_SINK_TRIGGER = 0xD
-    };
     struct Hero  *hero_ptr = &hero;
     int           saved_ground_type;
     int           x;
@@ -824,9 +817,6 @@ extern OvlMobyEntry40 l01_moby_hit_response_entries[] __asm__("D_L01_00178580");
 s32 process_hero_hit_response(s32 apply_state_and_motion_response) __asm__("FUN_L01_00231580");
 
 s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
-    enum {
-        CUTSCENE_MODE_INACTIVE = 0
-    };
     u8             *hero_moby;
     OvlMobyEntry40 *hero_moby_entry;
     u8             *mob;
@@ -1148,12 +1138,6 @@ extern CollisionHit HH __asm__("D_L01_001742C0") NOT_SDA;
 void update_hero_ground_contact_and_gravity(void) __asm__("FUN_L01_00232dc0");
 
 void update_hero_ground_contact_and_gravity(void) {
-    enum {
-        GROUND_MATERIAL_WATER = 0
-    };
-    enum {
-        GROUND_MATERIAL_SINK_TRIGGER = 0xD
-    };
     V collision_ray_end, ground_ray_start, ground_delta_or_angles, side_ray_start,
         unused_side_probe_point, side_hit_angles, normalized_side_hit_normal;
     f32 f;
@@ -1439,6 +1423,19 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
 #include "rnc/sdk/eetypes.h"
 #include "rnc/input/pad_state.h"
 
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNETIC = 2
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 0xD
+};
+
+enum {
+    CUTSCENE_MODE_INACTIVE = 0
+};
+
 typedef struct {
     s32 w0;
     u8  pad4[0x70 - 4];
@@ -1458,9 +1455,6 @@ extern Entry70 l01_countdown_timer_records[] __asm__("D_L01_00179D70");
 void           update_hero_timers_and_vehicle_transitions(void) __asm__("FUN_L01_0023c710");
 
 void update_hero_timers_and_vehicle_transitions(void) {
-    enum {
-        CUTSCENE_MODE_INACTIVE = 0
-    };
     Vec4         sum;
     Vec4         sample_delta;
     struct Moby *vehicle_moby;

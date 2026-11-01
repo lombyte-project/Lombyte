@@ -91,14 +91,6 @@ typedef struct ChomperVars {
 
 /* Moby class 1445 */
 void chomper_update(struct Moby *chomper_moby) {
-    enum {
-        CHOMPER_INITIALIZE = 0,
-        CHOMPER_WAIT_TO_APPROACH_TARGET = 1,
-        CHOMPER_APPROACH_TARGET = 4,
-        CHOMPER_FACE_TARGET = 5,
-        CHOMPER_RETURN_HOME = 6,
-        CHOMPER_KNOCKBACK = 8
-    };
     ChomperVars *chomper_data = (ChomperVars *)chomper_moby->pvars;
     update_chomper_hit_reaction_and_target(chomper_moby);
     FUN_L00_00263ac8(2.1f, (int)chomper_moby, 1, &chomper_data->unk220);
@@ -244,6 +236,15 @@ typedef struct {
 
 #include "rnc/overlay/l16/mobys/chomper_globals.h"
 
+enum {
+    CHOMPER_INITIALIZE = 0,
+    CHOMPER_WAIT_TO_APPROACH_TARGET = 1,
+    CHOMPER_APPROACH_TARGET = 4,
+    CHOMPER_FACE_TARGET = 5,
+    CHOMPER_RETURN_HOME = 6,
+    CHOMPER_KNOCKBACK = 8
+};
+
 extern float chomper_knockback_horizontal_speed_approach_rate_gp __asm__("D_L16_00161E58")
     __attribute__((sda));
 extern float chomper_knockback_gravity_gp __asm__("D_L16_00161E54") __attribute__((sda));
@@ -254,10 +255,6 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 void update_chomper_hit_reaction_and_target(void *chomper_instance) {
-    enum {
-        CHOMPER_INITIALIZE = 0,
-        CHOMPER_KNOCKBACK = 8
-    };
     L16PursuitMoby *chomper_moby = chomper_instance;
     L16PursuitData *pursuit_data = chomper_moby->data;
     char           *hit;

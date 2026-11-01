@@ -25,6 +25,18 @@
 #include "rnc/overlay/shared/enemies/sand_mouse_data/sand_mouse_update.h"
 #include "rnc/world/collision/collision_line.h"
 
+enum {
+    SAND_MOUSE_INITIALIZE = 0,
+    SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME = 1,
+    SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
+    SAND_MOUSE_MOVE_TOWARD_HERO = 3,
+    SAND_MOUSE_BEGIN_FOLLOW_HERO = 4,
+    SAND_MOUSE_FOLLOW_HERO = 5,
+    SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
+    SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
+    SAND_MOUSE_RETURN_TO_PARENT = 20
+};
+
 typedef struct {
     float a[4];
 } Vs __attribute__((aligned(16)));
@@ -349,9 +361,6 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
         HOVER_FACE_GOAL_AND_WAIT = 0,
         HOVER_MOVE_TOWARD_GOAL = 2
     };
-    enum {
-        SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6
-    };
     Vec4         velocity_adjustment;
     f32          reference_distance, direction_yaw, movement_magnitude, ground, near;
     s32          hit;
@@ -489,17 +498,6 @@ void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 
 /* Moby class 437 */
 void sand_mouse_update(struct Moby *moby) {
-    enum {
-        SAND_MOUSE_INITIALIZE = 0,
-        SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME = 1,
-        SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
-        SAND_MOUSE_MOVE_TOWARD_HERO = 3,
-        SAND_MOUSE_BEGIN_FOLLOW_HERO = 4,
-        SAND_MOUSE_FOLLOW_HERO = 5,
-        SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
-        SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
-        SAND_MOUSE_RETURN_TO_PARENT = 20
-    };
     Data *sand_mouse_vars;
     float va[4];
     float vb[4];

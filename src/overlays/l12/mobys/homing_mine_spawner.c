@@ -17,6 +17,15 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
+enum {
+    HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0,
+    HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY = 1,
+    HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION = 2,
+    HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS = 3,
+    HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION = 4,
+    HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE = 5
+};
+
 typedef struct Moby Moby;
 
 /* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
@@ -92,14 +101,6 @@ void homing_mine_spawner_update(struct Moby *m) __asm__("FUN_L12_00307840");
 
 /* Moby class 1281 */
 void homing_mine_spawner_update(struct Moby *spawner) {
-    enum {
-        HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0,
-        HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY = 1,
-        HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION = 2,
-        HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS = 3,
-        HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION = 4,
-        HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE = 5
-    };
     HomingMineSpawnerVars *spawner_data = (HomingMineSpawnerVars *)spawner->pvars;
     int                   *slots;
     int                    i;
@@ -173,9 +174,6 @@ extern char D_0013E533[];
 extern int  select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_0025fcb8");
 
 void update_homing_mine_spawner_target(struct Moby *spawner) {
-    enum {
-        HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0
-    };
     HomingMineSpawnerVars *spawner_data = (HomingMineSpawnerVars *)spawner->pvars;
     char                  *pad;
     if (spawner->state != HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS) {

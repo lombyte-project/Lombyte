@@ -10,6 +10,12 @@
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
+enum {
+    VELDIN_SHIP_STATE_UNINITIALIZED = 0,
+    VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING = 1,
+    VELDIN_SHIP_STATE_REFLECTION_INITIALIZED = 2
+};
+
 typedef struct {
     u128 points[4];
     u32  colors[4];
@@ -69,10 +75,6 @@ extern s32 veldin_ship_visibility_selector[] __asm__("D_L00_0016C890");
 void veldin_ship_draw(struct Moby *moby) __asm__("FUN_L00_002d19b0");
 
 void veldin_ship_draw(struct Moby *moby) {
-    enum {
-        VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING = 1,
-        VELDIN_SHIP_STATE_REFLECTION_INITIALIZED = 2
-    };
     Quad_2d19b0 quad;
     Vec_2d19b0  normal, reflection, view;
     u8         *ship_render_state = ((u8 *)moby->pvars);
@@ -150,10 +152,6 @@ void veldin_ship_update(M2d1e80 *m) __asm__("FUN_L00_002d1e80");
 
 /* Moby class 530 */
 void veldin_ship_update(M2d1e80 *moby) {
-    enum {
-        VELDIN_SHIP_STATE_UNINITIALIZED = 0,
-        VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING = 1
-    };
     s32 *ship_vars = moby->vars;
     if (moby->state == VELDIN_SHIP_STATE_UNINITIALIZED) {
         moby->state = VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING;

@@ -11,6 +11,13 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/mobys/moby.h"
 
+enum {
+    REFUELING_STATION_STATE_INITIALIZE = 0,
+    REFUELING_STATION_STATE_WAIT_COMMAND = 1,
+    REFUELING_STATION_STATE_EXPLOSION_DELAY = 2,
+    REFUELING_STATION_STATE_EXPLODE = 3
+};
+
 /* Damage source returned by find_moby_hit. */
 typedef struct {
     u8  pad0[0x2C];
@@ -97,9 +104,6 @@ void handle_refueling_station_damage(struct Moby *moby,
         DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
     };
     enum {
-        REFUELING_STATION_STATE_EXPLODE = 3
-    };
-    enum {
         MOBY_STATE_REMOVAL_PENDING_BELOW_ADDRESS_BOUNDARY = 0xFD,
         MOBY_STATE_REMOVAL_PENDING_AT_OR_ABOVE_ADDRESS_BOUNDARY = 0xFE
     };
@@ -171,12 +175,6 @@ typedef struct RefuelingStationVars {
 
 /* Moby class 1172 */
 void refueling_station_update(struct Moby *moby) {
-    enum {
-        REFUELING_STATION_STATE_INITIALIZE = 0,
-        REFUELING_STATION_STATE_WAIT_COMMAND = 1,
-        REFUELING_STATION_STATE_EXPLOSION_DELAY = 2,
-        REFUELING_STATION_STATE_EXPLODE = 3
-    };
     RefuelingStationVars *station_vars = (RefuelingStationVars *)moby->pvars;
     float                 explosion_offset[4];
     unsigned char        *removal_check_base;

@@ -59,6 +59,11 @@ extern void  build_spherical_offset(float, float, float, void *) __asm__("FUN_00
 
 #include "rnc/overlay/l16/mobys/chicken_relocator_globals.h"
 
+enum {
+    TARGET_REPOSITION_STATE_REQUESTABLE = 1,
+    TARGET_REPOSITION_STATE_REQUESTED = 7
+};
+
 extern float reposition_effect_velocity_elevation_degrees_gp __asm__("D_L16_001618E8")
     __attribute__((sda));
 extern float reposition_effect_velocity_scale_range_start_gp __asm__("D_L16_001618EC")
@@ -154,10 +159,6 @@ int is_moby_in_state_6(Level16VendorMoby *moby) {
 void request_target_reposition(struct Moby *moby) __asm__("FUN_L16_002e0de0");
 
 void request_target_reposition(struct Moby *moby) {
-    enum {
-        TARGET_REPOSITION_STATE_REQUESTABLE = 1,
-        TARGET_REPOSITION_STATE_REQUESTED = 7
-    };
     int state = TARGET_REPOSITION_STATE_REQUESTABLE;
     if (moby->state == state) {
         allocate_voice_for_target_entry(0, 0, moby);
@@ -171,9 +172,6 @@ void request_target_reposition(struct Moby *moby) {
 int get_target_reposition_status(char *moby_or_private_data) __asm__("FUN_L16_002e0e28");
 
 int get_target_reposition_status(char *moby_or_private_data) {
-    enum {
-        TARGET_REPOSITION_STATE_REQUESTED = 7
-    };
     unsigned char moby_state = moby_or_private_data[0x20];
     moby_or_private_data = *(char **)(moby_or_private_data + 0x78);
     if (moby_state == TARGET_REPOSITION_STATE_REQUESTED || moby_state == 8) {

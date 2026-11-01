@@ -21,7 +21,8 @@ void help_draw_prompt(void) {
                   help_state.center_x - 0x20,
                   help_state.center_x + 0x20,
                   0x60);
-    if (help_state.state == HELP_STATE_FRAME_EXPAND || help_state.state == HELP_STATE_FRAME_COLLAPSE) {
+    if (help_state.state == HELP_STATE_FRAME_EXPAND ||
+        help_state.state == HELP_STATE_FRAME_COLLAPSE) {
         alpha = help_state.timer * 21;
     } else {
         alpha = 0x7E;

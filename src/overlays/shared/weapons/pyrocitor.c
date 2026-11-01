@@ -18,6 +18,14 @@
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/weapons/devastator.h"
 
+enum {
+    PYROCITOR_STATE_INITIALIZE = 0,
+    PYROCITOR_STATE_WAIT_FOR_READY = 1,
+    PYROCITOR_STATE_READY = 2,
+    PYROCITOR_STATE_FIRING = 3,
+    PYROCITOR_STATE_CLEANUP = 4
+};
+
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002B8AE8.c: func_L00_002B8AE8). */
 typedef struct PyrocitorVars {
     struct Moby *other;
@@ -518,12 +526,6 @@ void pyrocitor_update(struct Moby *moby) __asm__("FUN_L00_002b77f0");
 
 /* Moby class 176 */
 void pyrocitor_update(struct Moby *moby) {
-    enum {
-        PYROCITOR_STATE_INITIALIZE = 0,
-        PYROCITOR_STATE_WAIT_FOR_READY = 1,
-        PYROCITOR_STATE_READY = 2,
-        PYROCITOR_STATE_FIRING = 3
-    };
     PyrocitorVars *pyrocitor_vars = (PyrocitorVars *)moby->pvars;
     Vec_2b2100     pos, light_offset_and_flame_velocity, light_color_and_flame_origin, endpoint,
         particle_pos, random_vec;
@@ -742,10 +744,6 @@ void pyrocitor_update(struct Moby *moby) {
 void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) __asm__("FUN_L00_002b8230");
 
 void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
-    enum {
-        PYROCITOR_STATE_FIRING = 3,
-        PYROCITOR_STATE_CLEANUP = 4
-    };
     unsigned char     *pyrocitor_vars = ((unsigned char *)pyrocitor_moby->pvars);
     struct UsageStats *P;
     unsigned char     *voice;

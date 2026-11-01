@@ -54,10 +54,6 @@ void         drek_boss_electric_ball_update(struct Moby *moby) __asm__("FUN_L18_
 
 /* Moby class 983 */
 void drek_boss_electric_ball_update(struct Moby *moby) {
-    enum {
-        STATE_TIMED_REMOVAL_WAIT = 0,
-        STATE_TRAVEL_TO_TARGET = 1
-    };
     float *moby_vars = (float *)moby->pvars;
     float  updated_rotation_angle = fast_add_rotations(
         moby_vars[0xB], target_effect_first_rotation_rate_degrees_gp * DEG_TO_RAD * frame_time);
@@ -145,10 +141,6 @@ void refresh_moby_position_and_activate(struct Moby *moby,
 void refresh_moby_position_and_activate(
 
     struct Moby *moby, void *moby_position, void *position, int active, float speed) {
-    enum {
-        STATE_TIMED_REMOVAL_WAIT = 0,
-        STATE_TRAVEL_TO_TARGET = 1
-    };
     char *refreshed_moby_private_vars = (char *)moby->pvars;
     qcopy(&moby->pos, moby_position);
     *(int *)(refreshed_moby_private_vars + 0x28) = scale_game_frames(5);
@@ -707,6 +699,11 @@ extern float secondary_bolt_z_phase_step_gp __asm__("D_L18_0016202C") __attribut
 extern s32 D_L18_00162054_gp __asm__("D_L18_00162054") __attribute__((sda));
 
 #include "rnc/overlay/l18/mobys/drek_boss_electric_ball_data/update_electric_bolt_geometry_and_particles.h"
+
+enum {
+    STATE_TIMED_REMOVAL_WAIT = 0,
+    STATE_TRAVEL_TO_TARGET = 1
+};
 
 extern float primary_bolt_random_step_blend_weight_gp __asm__("D_L18_0016208C")
     __attribute__((sda));

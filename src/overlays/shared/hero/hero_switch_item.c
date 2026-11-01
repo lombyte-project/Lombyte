@@ -404,9 +404,6 @@ s32 hero_slot_moby(s32 i) {
 int hero_slot_item_id(int i) __asm__("FUN_L00_0020d498");
 
 int hero_slot_item_id(int i) {
-    enum {
-        HERO_ITEM_SLOT_STATE_READY = 2
-    };
     /* hero shifted by i slots, so items[0] is slot i */
     struct Hero *slot_owner = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
     switch (slot_owner->items[0].state) {
@@ -2253,10 +2250,6 @@ extern s32  D_L00_0015F3F8;
 void hero_update_items(void) __asm__("FUN_L00_00210748");
 
 void hero_update_items(void) {
-    enum {
-        HERO_ITEM_SLOT_STATE_READY = 2,
-        HERO_ITEM_SLOT_STATE_REMOVING = 3
-    };
     int          i;
     int          k;
     struct Moby *moby;
@@ -4169,6 +4162,11 @@ void air_accel(f32 step) {
 
 #include "rnc/math/fast_math.h"
 
+enum {
+    HERO_ITEM_SLOT_STATE_READY = 2,
+    HERO_ITEM_SLOT_STATE_REMOVING = 3
+};
+
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 
 extern char          hero_pos[] __asm__("D_0013F3D0");
@@ -4285,7 +4283,8 @@ tail:
     }
     if (hero.state_timer < hero.takeoff_frame) {
         gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-        add_hero_gravity_offset(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 48.0f);
+        add_hero_gravity_offset(
+            &hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 48.0f);
     } else {
         add_hero_gravity_offset(&hero.motion.velocity, &hero.motion.velocity, hero.jump_gravity);
         z = gravity_z(&hero.motion.velocity);

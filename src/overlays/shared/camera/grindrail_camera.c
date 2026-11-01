@@ -11,6 +11,12 @@
 #include "rnc/camera/camera_spring.h"
 #include "sda.h"
 
+enum {
+    CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC = 0,
+    CAMERA_PRESET_KIND_MAPPED_PATHS = 2,
+    CAMERA_PRESET_KIND_GRINDRAIL_PATH = 3
+};
+
 /* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in l01_camera_preset_rows) */
 typedef struct {
     Vec4 pos; /* 0x00 */
@@ -115,10 +121,6 @@ extern s32              FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s
 void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) __asm__("FUN_L01_00314e98");
 
 void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
-    enum {
-        CAMERA_PRESET_KIND_MAPPED_PATHS = 2,
-        CAMERA_PRESET_KIND_GRINDRAIL_PATH = 3
-    };
     Vec4           at;
     s32            seg;
     f32            path_fraction_or_length;
@@ -311,10 +313,6 @@ extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 void update_camera_position_and_orientation_from_paths(Cam *cam) __asm__("FUN_L01_00315358");
 
 void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
-    enum {
-        CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC = 0,
-        CAMERA_PRESET_KIND_MAPPED_PATHS = 2
-    };
     float         camera_goal[4];
     float         look_offset[4];
     float         look_dir[4];
@@ -550,9 +548,6 @@ extern OvlVec4                D_0013F3D0_315de0 __asm__("D_0013F3D0");
 void initialize_camera_transform_and_paths(Camera *destination_camera) __asm__("FUN_L01_00315de0");
 
 void initialize_camera_transform_and_paths(Camera *destination_camera) {
-    enum {
-        CAMERA_PRESET_KIND_GRINDRAIL_PATH = 3
-    };
     CameraPresetRow *rows = l01_camera_preset_rows;
     Camera          *source_camera = D_L01_00167284;
     CameraPreset    *camera_preset = rows[destination_camera->preset].preset;

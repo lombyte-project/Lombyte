@@ -334,22 +334,6 @@ void plasmabot_update(char *moby) __asm__("FUN_L14_002b17d8");
 
 /* Moby class 28 */
 void plasmabot_update(char *moby) {
-    enum {
-        PLASMABOT_INITIALIZE = 0,
-        PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL = 1,
-        PLASMABOT_START_PATH_TRAVERSAL = 2,
-        PLASMABOT_FOLLOW_PATH_FORWARD = 3,
-        PLASMABOT_AIM_AT_TARGET = 4,
-        PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP = 5,
-        PLASMABOT_SWEEP_AIM_AND_TRACE_LINE = 6,
-        PLASMABOT_WAIT_ANIMATION_BEFORE_AIM = 7,
-        PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
-        PLASMABOT_RETURN_TO_PATH_START = 9,
-        PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 10,
-        PLASMABOT_FALL_THEN_EXPLODE = 11,
-        PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 12,
-        PLASMABOT_FACE_TARGET_AND_WAIT = 13
-    };
     PlasmabotVars *plasmabot_update_private_vars;
     char          *plasmabot_aim_target_moby;
     int            state;
@@ -832,6 +816,24 @@ extern u8                  D_L14_0015F580[] MACRO_ADDR;
 
 #include "rnc/overlay/shared/enemies/plasmabot_data/update_plasmabot_visual_effects.h"
 
+enum {
+    PLASMABOT_INITIALIZE = 0,
+    HIT_KIND_SKIP_DAMAGE_AND_REACTION = 1,
+    PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL = 1,
+    PLASMABOT_START_PATH_TRAVERSAL = 2,
+    PLASMABOT_FOLLOW_PATH_FORWARD = 3,
+    PLASMABOT_AIM_AT_TARGET = 4,
+    PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP = 5,
+    PLASMABOT_SWEEP_AIM_AND_TRACE_LINE = 6,
+    PLASMABOT_WAIT_ANIMATION_BEFORE_AIM = 7,
+    PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
+    PLASMABOT_RETURN_TO_PATH_START = 9,
+    PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 10,
+    PLASMABOT_FALL_THEN_EXPLODE = 11,
+    PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 12,
+    PLASMABOT_FACE_TARGET_AND_WAIT = 13
+};
+
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
 extern void FUN_L14_002b2928_u(struct Moby *) __asm__("FUN_L14_002b2928");
 
@@ -1089,12 +1091,6 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         HIT_REACTION_STAGGER = 3,
         HIT_REACTION_NONE = 11
     };
-    enum {
-        HIT_KIND_SKIP_DAMAGE_AND_REACTION = 1,
-        PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 0xA,
-        PLASMABOT_FALL_THEN_EXPLODE = 0xB,
-        PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 0xC
-    };
     PlasmabotVars *state = (PlasmabotVars *)moby->pvars;
     int            hit_kind;
     float          damage;
@@ -1323,9 +1319,6 @@ extern char *D_L14_0015FFD8;
 int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) __asm__("FUN_L14_002b39a0");
 
 int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) {
-    enum {
-        PLASMABOT_START_PATH_TRAVERSAL = 2
-    };
     unsigned short *moby_list_entry;
     if (*(volatile unsigned char *)(source_moby + 0x21) == 0xFF ||
         (moby_list_entry = (unsigned short *)D_L14_001ABF40[MOBY(source_moby)->group]) == 0)

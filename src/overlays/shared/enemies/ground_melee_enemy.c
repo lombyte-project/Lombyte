@@ -21,6 +21,21 @@
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 #include "rnc/sdk/libc/stdlib.h"
 
+enum {
+    GROUND_ENEMY_STATE_INITIALIZE = 0,
+    GROUND_ENEMY_STATE_IDLE = 1,
+    GROUND_ENEMY_STATE_ALERT_TURN = 2,
+    GROUND_ENEMY_STATE_CHASE = 3,
+    GROUND_ENEMY_STATE_MELEE_ATTACK = 4,
+    GROUND_ENEMY_STATE_RETURN_HOME = 5,
+    GROUND_ENEMY_STATE_HURT_KNOCKBACK = 6,
+    GROUND_ENEMY_STATE_RECOVER_TO_IDLE = 0x7,
+    GROUND_ENEMY_STATE_HURT_RECOVERY = 9,
+    GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME = 12,
+    GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK = 13,
+    GROUND_ENEMY_STATE_FATAL_KNOCKBACK = 99
+};
+
 /* Ground enemy update: damage reaction, leash and wake checks, then its chase / attack / return state machine. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_002E39E0), where it is exact; names translated to the US level program. */
 
@@ -160,10 +175,6 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int moby_hold_state_if_grabbed(struct Moby *a) __asm__("FUN_L01_002f1c78");
 
 int moby_hold_state_if_grabbed(struct Moby *suction_moby) {
-    enum {
-        GROUND_ENEMY_STATE_IDLE = 1,
-        GROUND_ENEMY_STATE_RECOVER_TO_IDLE = 0x7
-    };
     int suction_result = process_moby_suck_cannon_suction(suction_moby);
     if (suction_result == 0) {
         if (suction_moby->state == GROUND_ENEMY_STATE_RECOVER_TO_IDLE)
@@ -202,20 +213,6 @@ void ground_melee_enemy_update(Moby *moby) __asm__("FUN_L09_002e27d8");
 
 /* Moby class 193 */
 void ground_melee_enemy_update(Moby *moby) {
-    enum {
-        GROUND_ENEMY_STATE_INITIALIZE = 0,
-        GROUND_ENEMY_STATE_IDLE = 1,
-        GROUND_ENEMY_STATE_ALERT_TURN = 2,
-        GROUND_ENEMY_STATE_CHASE = 3,
-        GROUND_ENEMY_STATE_MELEE_ATTACK = 4,
-        GROUND_ENEMY_STATE_RETURN_HOME = 5,
-        GROUND_ENEMY_STATE_HURT_KNOCKBACK = 6,
-        GROUND_ENEMY_STATE_RECOVER_TO_IDLE = 7,
-        GROUND_ENEMY_STATE_HURT_RECOVERY = 9,
-        GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME = 12,
-        GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK = 13,
-        GROUND_ENEMY_STATE_FATAL_KNOCKBACK = 99
-    };
     V_2E39E0      previous;
     Target_2E39E0 query;
     V_2E39E0      step;

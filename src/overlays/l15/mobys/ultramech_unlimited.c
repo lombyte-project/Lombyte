@@ -269,20 +269,6 @@ void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 
 /* Moby class 491 */
 void ultramech_unlimited_update(UMoby *ultramech_moby) {
-    enum {
-        ULTRAMECH_INITIALIZE = 0,
-        ULTRAMECH_WAIT_FOR_ACTIVATION = 1,
-        ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
-        ULTRAMECH_BALLISTIC_PATH_MOVE = 3,
-        ULTRAMECH_AIM_AND_SELECT_ATTACK = 4,
-        ULTRAMECH_FIRE_BURST = 5,
-        ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
-        ULTRAMECH_APPROACH_TARGET = 7,
-        ULTRAMECH_MELEE_ATTACK = 8,
-        ULTRAMECH_KNOCKBACK_RECOVERY = 9,
-        ULTRAMECH_DEATH_EFFECTS = 10,
-        ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
-    };
     Vec4   vector_or_hit_descriptor;
     Vec4   position_or_motion_vector;
     Vec4   vector_arithmetic_result;
@@ -926,6 +912,21 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
 
 #include "rnc/overlay/l15/mobys/ultramech_unlimited_data/process_ultramech_hits_and_update_target.h"
 
+enum {
+    ULTRAMECH_INITIALIZE = 0,
+    ULTRAMECH_WAIT_FOR_ACTIVATION = 1,
+    ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
+    ULTRAMECH_BALLISTIC_PATH_MOVE = 3,
+    ULTRAMECH_AIM_AND_SELECT_ATTACK = 4,
+    ULTRAMECH_FIRE_BURST = 5,
+    ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
+    ULTRAMECH_APPROACH_TARGET = 7,
+    ULTRAMECH_MELEE_ATTACK = 8,
+    ULTRAMECH_KNOCKBACK_RECOVERY = 9,
+    ULTRAMECH_DEATH_EFFECTS = 10,
+    ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
+};
+
 extern float ultramech_pre_hit_scale_multiplier_gp __asm__("D_L15_00161B2C") __attribute__((sda));
 
 extern float ultramech_post_hit_scale_multiplier_gp __asm__("D_L15_00161B30") __attribute__((sda));
@@ -986,13 +987,6 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
         HIT_REACTION_DAMAGE_WITHOUT_KNOCKBACK = 9,
         HIT_REACTION_DAMAGE_WITHOUT_KNOCKBACK_ALTERNATE = 10,
         HIT_REACTION_NONE = 11
-    };
-    enum {
-        ULTRAMECH_WAIT_FOR_ACTIVATION = 1,
-        ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
-        ULTRAMECH_KNOCKBACK_RECOVERY = 9,
-        ULTRAMECH_DEATH_EFFECTS = 10,
-        ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
     };
     enum {
         HIT_CLASSIFICATION_NO_DAMAGE = 1

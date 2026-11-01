@@ -1216,10 +1216,6 @@ extern void update_view_context(void) __asm__("FUN_001f2d98");
 void update_fighter_jet_flight(void *moby_arg, void *data_arg) __asm__("FUN_L13_002ba178");
 
 void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
-    enum {
-        FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
-        FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6
-    };
     FlightMoby *moby = moby_arg;
     FlightData *jet_flight_state = data_arg;
     FlightVec   old_pos;
@@ -1716,6 +1712,18 @@ extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
 
 #include "rnc/overlay/l13/mobys/fighter_jet_data/fighter_jet_update.h"
 
+enum {
+    FIGHTER_JET_STATE_INITIALIZE = 0,
+    FIGHTER_JET_STATE_WAIT_FOR_ENTRY = 1,
+    FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
+    FIGHTER_JET_STATE_FLIGHT = 4,
+    FIGHTER_JET_STATE_EXIT_PLAYER = 5,
+    FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6,
+    FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET = 7,
+    FIGHTER_JET_STATE_FORCED_EXIT = 8,
+    FIGHTER_JET_STATE_DELETE = 9
+};
+
 extern JetTexture l13_texture_descriptors[] __asm__("D_L13_0016D480");
 
 extern unsigned int l13_texture_palette_data_base __asm__("D_L13_0015F420");
@@ -1766,17 +1774,6 @@ void fighter_jet_update(Jet *m) __asm__("FUN_L13_002bb068");
 
 /* Moby class 69 */
 void fighter_jet_update(Jet *jet_moby) {
-    enum {
-        FIGHTER_JET_STATE_INITIALIZE = 0,
-        FIGHTER_JET_STATE_WAIT_FOR_ENTRY = 1,
-        FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
-        FIGHTER_JET_STATE_FLIGHT = 4,
-        FIGHTER_JET_STATE_EXIT_PLAYER = 5,
-        FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6,
-        FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET = 7,
-        FIGHTER_JET_STATE_FORCED_EXIT = 8,
-        FIGHTER_JET_STATE_DELETE = 9
-    };
     JetData *jet_data;
     JetVec   impulse;
     int      state, initial_state;

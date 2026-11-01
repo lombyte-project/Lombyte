@@ -48,6 +48,19 @@ extern int  point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
 #include "rnc/overlay/shared/world/level_globals.h"
 
+enum {
+    BLARG_TROOPER_INITIALIZE = 0,
+    BLARG_TROOPER_FOLLOW_WAYPOINTS = 1,
+    BLARG_TROOPER_WAIT_FOR_ACTIVATION = 2,
+    BLARG_TROOPER_APPROACH_TARGET = 3,
+    BLARG_TROOPER_KNOCKBACK_RECOVERY = 4,
+    BLARG_TROOPER_PREPARE_SHOT = 5,
+    BLARG_TROOPER_FIRE_PROJECTILE = 6,
+    BLARG_TROOPER_WAIT_BETWEEN_SHOTS = 7,
+    BLARG_TROOPER_RETURN_HOME = 8,
+    BLARG_TROOPER_DEATH_FALL = 9
+};
+
 extern s32   count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern void  trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern float fast_subtract_rotations(float, float);
@@ -162,18 +175,6 @@ extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
 /* Moby classes 294, 427 */
 void blarg_trooper_update(struct Moby *moby) {
-    enum {
-        BLARG_TROOPER_INITIALIZE = 0,
-        BLARG_TROOPER_FOLLOW_WAYPOINTS = 1,
-        BLARG_TROOPER_WAIT_FOR_ACTIVATION = 2,
-        BLARG_TROOPER_APPROACH_TARGET = 3,
-        BLARG_TROOPER_KNOCKBACK_RECOVERY = 4,
-        BLARG_TROOPER_PREPARE_SHOT = 5,
-        BLARG_TROOPER_FIRE_PROJECTILE = 6,
-        BLARG_TROOPER_WAIT_BETWEEN_SHOTS = 7,
-        BLARG_TROOPER_RETURN_HOME = 8,
-        BLARG_TROOPER_DEATH_FALL = 9
-    };
     TargetReport combat_target_report;
     Vec4         query_position_or_projectile_origin;
     Vec4         delta;
@@ -568,12 +569,6 @@ extern void anim_update_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d538")
    more members, hands off inside its clip volume, and takes hits from other
    classes (dying, or staggering back). */
 void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
-    enum {
-        BLARG_TROOPER_INITIALIZE = 0,
-        BLARG_TROOPER_WAIT_FOR_ACTIVATION = 2,
-        BLARG_TROOPER_KNOCKBACK_RECOVERY = 4,
-        BLARG_TROOPER_DEATH_FALL = 9
-    };
     BlargTrooperVars *trooper_damage_alert_vars = (BlargTrooperVars *)moby->pvars;
     Vec4              help_direction_or_hit_position;
     s32               hit;

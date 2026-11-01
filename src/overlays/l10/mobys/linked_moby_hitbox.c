@@ -21,6 +21,11 @@ extern struct Moby *D_L10_0015FFD8;
 
 #include "qzero.h"
 
+enum {
+    MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF = 0xFD,
+    MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF = 0xFE
+};
+
 /* Box a moby sweeps through: hits other mobys inside it (FUN_L10_002c9958) */
 typedef struct {
     f32 width; /* 0x00: extent along the moby's x */
@@ -40,10 +45,6 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby,
                                          HitBox      *box) __asm__("FUN_L10_002c9958");
 
 void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
-    enum {
-        MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF = 0xFD,
-        MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF = 0xFE
-    };
     OvlVec4 moby_rotation_basis[3];
     OvlVec4 center;
     OvlVec4 delta;
@@ -77,7 +78,8 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
         for (i = 0; i < count; i++) {
             struct Moby *hitbox_candidate_moby = found[i];
 
-            if (hitbox_candidate_moby == 0 || hitbox_candidate_moby->state == MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF ||
+            if (hitbox_candidate_moby == 0 ||
+                hitbox_candidate_moby->state == MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF ||
                 hitbox_candidate_moby->state == MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF) {
                 continue;
             }
@@ -149,10 +151,6 @@ void linked_moby_hitbox_update(struct Moby *moby) {
         LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES = 1,
         LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER = 2,
         LINKED_HITBOX_STATE_REMOVE = 3
-    };
-    enum {
-        MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF = 0xfd,
-        MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF = 0xfe
     };
     LinkedMobyHitboxVars *linked_hitbox_vars = (LinkedMobyHitboxVars *)moby->pvars;
     int                   differences = 0;

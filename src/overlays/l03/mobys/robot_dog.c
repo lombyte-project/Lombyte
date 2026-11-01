@@ -17,17 +17,29 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l03/mobys/robot_dog.h"
 
+enum {
+    ROBOT_DOG_INITIALIZE = 0,
+    ROBOT_DOG_WAIT_FOR_ACTIVATION = 1,
+    ROBOT_DOG_WAIT_FOR_PARTNER_RELEASE = 2,
+    ROBOT_DOG_TURN_TO_TARGET = 3,
+    ROBOT_DOG_CHASE_TARGET = 4,
+    ROBOT_DOG_FOLLOW_PATH = 5,
+    ROBOT_DOG_MELEE_ATTACK = 6,
+    ROBOT_DOG_RETURN_HOME = 7,
+    ROBOT_DOG_FALL_RECOVERY = 8,
+    ROBOT_DOG_WAIT_TO_REINITIALIZE = 9,
+    ROBOT_DOG_DEATH_FALL = 21
+};
+
+enum {
+    MOBY_STATE_PENDING_REMOVAL = 0xFE
+};
+
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
 
 int is_robot_dog_in_state_5(struct Moby *moby) __asm__("FUN_L03_002c5b78");
 
 int is_robot_dog_in_state_5(struct Moby *moby) {
-    enum {
-        ROBOT_DOG_FOLLOW_PATH = 5
-    };
-    enum {
-        MOBY_STATE_PENDING_REMOVAL = 0xFE
-    };
     if (moby && moby->state != MOBY_STATE_PENDING_REMOVAL && moby->state != 0xFD &&
         moby->oclass == 0x23D && moby->state == ROBOT_DOG_FOLLOW_PATH) {
         return 1;
@@ -141,19 +153,6 @@ void robot_dog_update(char *moby) __asm__("FUN_L03_002c5bb8");
 
 /* Moby class 573 */
 void robot_dog_update(char *moby) {
-    enum {
-        ROBOT_DOG_INITIALIZE = 0,
-        ROBOT_DOG_WAIT_FOR_ACTIVATION = 1,
-        ROBOT_DOG_WAIT_FOR_PARTNER_RELEASE = 2,
-        ROBOT_DOG_TURN_TO_TARGET = 3,
-        ROBOT_DOG_CHASE_TARGET = 4,
-        ROBOT_DOG_FOLLOW_PATH = 5,
-        ROBOT_DOG_MELEE_ATTACK = 6,
-        ROBOT_DOG_RETURN_HOME = 7,
-        ROBOT_DOG_FALL_RECOVERY = 8,
-        ROBOT_DOG_WAIT_TO_REINITIALIZE = 9,
-        ROBOT_DOG_DEATH_FALL = 21
-    };
     Tgt2c5bb8   selected_target;
     float       forward_vector_or_path_point[4];
     float       push[4];
@@ -494,9 +493,6 @@ extern void FUN_L01_0026e090(int, int);
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
 
 void update_robot_dog_hit_reaction(struct Moby *moby) {
-    enum {
-        ROBOT_DOG_DEATH_FALL = 21
-    };
     float vector[4];
     int   hit_reaction_code;
     float damage;
@@ -550,9 +546,6 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
 
 int can_release_linked_robot_dog(struct Moby *moby) {
-    enum {
-        MOBY_STATE_PENDING_REMOVAL = 0xFE
-    };
     unsigned char state;
     char         *partner_pvars;
     partner_pvars = (char *)moby->pvars;

@@ -19,6 +19,16 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l14/mobys/bolt_thief_globals.h"
 
+enum {
+    BOLT_THIEF_STATE_INITIALIZE = 0,
+    BOLT_THIEF_STATE_FACE_HERO = 1,
+    BOLT_THIEF_STATE_WAIT_FOR_TRIGGER = 2,
+    BOLT_THIEF_STATE_SETTLE_AT_PATH_END = 3,
+    BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH = 4,
+    BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH = 5,
+    BOLT_THIEF_STATE_KNOCKBACK = 6
+};
+
 typedef struct {
     char          pad00[0x60];
     char          effect[7]; /* 0x60: record func_L00_0025E590 updates */
@@ -116,15 +126,6 @@ void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L14_002fe2a0");
 
 /* Moby class 923 */
 void bolt_thief_update(L16CrateMoby *moby) {
-    enum {
-        BOLT_THIEF_STATE_INITIALIZE = 0,
-        BOLT_THIEF_STATE_FACE_HERO = 1,
-        BOLT_THIEF_STATE_WAIT_FOR_TRIGGER = 2,
-        BOLT_THIEF_STATE_SETTLE_AT_PATH_END = 3,
-        BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH = 4,
-        BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH = 5,
-        BOLT_THIEF_STATE_KNOCKBACK = 6
-    };
     enum {
         BOLT_THIEF_MODE_PATH_LOOP_WITH_LINKED_CHILD = 0,
         BOLT_THIEF_MODE_PRIMARY_PATH_THEN_FACE_HERO = 1,
@@ -339,9 +340,6 @@ typedef struct BoltThiefVars {
 } BoltThiefVars;
 
 int update_bolt_thief_path_movement(struct Moby *moby) {
-    enum {
-        BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH = 5
-    };
     float          pos[4];
     float          delta[4];
     BoltThiefVars *bolt_thief_state = (BoltThiefVars *)moby->pvars;

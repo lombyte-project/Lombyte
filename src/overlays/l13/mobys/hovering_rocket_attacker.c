@@ -103,15 +103,6 @@ typedef struct HoveringRocketAttackerVars {
 /* Moby class 101 */
 void hovering_rocket_attacker_update(unsigned char *moby) {
     enum {
-        UPDATE_INITIALIZE = 0x0,
-        TRACK_TARGET_BEFORE_ATTACK = 0x2,
-        UPDATE_ATTACK_SEQUENCE = 0x4,
-        WAIT_TO_MOVE_TO_TABLE_POINT = 0x5,
-        MOVE_TO_TABLE_POINT = 0x6,
-        WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
-        EMIT_EFFECT_AND_REMOVE = 0x8
-    };
-    enum {
         START_ATTACK_ANIMATION_SEQUENCE = 0,
         WAIT_FOR_ATTACK_START_ANIMATION = 1,
         WAIT_TO_BEGIN_ALTERNATING_FIRE = 2,
@@ -365,6 +356,16 @@ extern char *D_L13_001B07B0[];
 
 #include "rnc/overlay/shared/world/level_labels.h"
 
+enum {
+    UPDATE_INITIALIZE = 0x0,
+    TRACK_TARGET_BEFORE_ATTACK = 0x2,
+    UPDATE_ATTACK_SEQUENCE = 0x4,
+    WAIT_TO_MOVE_TO_TABLE_POINT = 0x5,
+    MOVE_TO_TABLE_POINT = 0x6,
+    WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
+    EMIT_EFFECT_AND_REMOVE = 0x8
+};
+
 extern float hovering_rocket_attacker_scale_multiplier_gp __asm__("D_L13_00161490")
     __attribute__((sda));
 
@@ -385,13 +386,6 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     };
     enum {
         TARGET_SELECTION_NO_TARGET = 2
-    };
-    enum {
-        UPDATE_INITIALIZE = 0,
-        UPDATE_ATTACK_SEQUENCE = 4,
-        WAIT_TO_MOVE_TO_TABLE_POINT = 5,
-        WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
-        EMIT_EFFECT_AND_REMOVE = 8
     };
     HoveringRocketAttackerVars *moby_data;
     char                       *hit_record;

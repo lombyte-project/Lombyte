@@ -22,6 +22,18 @@
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/minibomber_globals.h"
 
+enum {
+    MINIBOMBER_STATE_INITIALIZE = 0,
+    MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH = 1,
+    MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
+    MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH = 3,
+    MINIBOMBER_STATE_HOLD_AT_PATH_END = 4,
+    MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
+    MINIBOMBER_STATE_RELEASE_BOMB = 6,
+    MINIBOMBER_STATE_TRAVERSE_PATH = 7,
+    MINIBOMBER_STATE_DESTROY = 9
+};
+
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 
 extern void FUN_L00_0025a120(void *);
@@ -264,17 +276,6 @@ void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
 
 /* Moby class 31 */
 void minibomber_update(Moby_2B5938 *moby) {
-    enum {
-        MINIBOMBER_STATE_INITIALIZE = 0,
-        MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH = 1,
-        MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
-        MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH = 3,
-        MINIBOMBER_STATE_HOLD_AT_PATH_END = 4,
-        MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
-        MINIBOMBER_STATE_RELEASE_BOMB = 6,
-        MINIBOMBER_STATE_TRAVERSE_PATH = 7,
-        MINIBOMBER_STATE_DESTROY = 9
-    };
     Data  *d = moby->d;
     float  v[12];
     float *path_endpoint_target_position;
@@ -654,10 +655,6 @@ void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
         HIT_REACTION_FLASH_RED = 10,
         HIT_REACTION_NONE = 11
     };
-    enum {
-        MINIBOMBER_STATE_INITIALIZE = 0,
-        MINIBOMBER_STATE_DESTROY = 9
-    };
     unsigned char *moby_vars = hit_owner_moby->pvars;
     int            loc0;
     float          damage_amount;
@@ -736,12 +733,6 @@ extern short minibomber_rotation_oscillation_second_phase_increment_gp __asm__("
 void update_minibomber_oscillation(struct Moby *moby) __asm__("FUN_L14_002b5428");
 
 void update_minibomber_oscillation(struct Moby *moby) {
-    enum {
-        MINIBOMBER_STATE_INITIALIZE = 0,
-        MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH = 1,
-        MINIBOMBER_STATE_TRAVERSE_PATH = 7,
-        MINIBOMBER_STATE_DESTROY = 9
-    };
     int           raw = moby->state;
     unsigned char state = raw;
     char         *minibomber_instance_vars = (char *)moby->pvars;
@@ -784,10 +775,6 @@ extern int FUN_L00_0025ff38(float a, char *m, char *b, int c, int d, int *e, int
 void update_minibomber_target(struct Moby *moby) __asm__("FUN_L14_002b5530");
 
 void update_minibomber_target(struct Moby *moby) {
-    enum {
-        MINIBOMBER_STATE_INITIALIZE = 0,
-        MINIBOMBER_STATE_DESTROY = 9
-    };
     char *minibomber_private_vars = (char *)moby->pvars;
     if (moby->state != MINIBOMBER_STATE_INITIALIZE && moby->state != MINIBOMBER_STATE_DESTROY) {
         int *bound_path = ((int *)l14_paths[*(int *)(minibomber_private_vars + 0xD4)]);
@@ -900,10 +887,6 @@ void ease_minibomber_position_and_heading(char  *moby,
                                           float  heading_velocity_damping,
 
                                           float heading_velocity_limit) {
-    enum {
-        MINIBOMBER_STATE_HOLD_AT_PATH_END = 4,
-        MINIBOMBER_STATE_RELEASE_BOMB = 6
-    };
     int minibomber_private_vars_base;
     int moby_state = MOBY(moby)->state & 0xFF;
     if ((moby_state >= MINIBOMBER_STATE_HOLD_AT_PATH_END &&
@@ -1138,10 +1121,6 @@ void initialize_minibomber_path_following(struct Moby *moby) {
 void emit_minibomber_exhaust_puffs(struct Moby *moby) __asm__("FUN_L14_002b5dd8");
 
 void emit_minibomber_exhaust_puffs(struct Moby *moby) {
-    enum {
-        MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
-        MINIBOMBER_STATE_DESTROY = 9
-    };
     float exhaust_position_offset[4];
     float pos[4];
     int   i;

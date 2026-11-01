@@ -6,6 +6,10 @@
 #include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/audio/streaming/update_audio_stream_until_idle.h"
 
+enum {
+    PAL_MODE_DISABLED = 0
+};
+
 typedef struct {
     u8  pad[0x5C];
     u8 *buf;
@@ -17,9 +21,6 @@ void     start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 void     load_scene_chunks_with_fade(s32 i) __asm__("FUN_L00_002454c8");
 
 void load_scene_chunks_with_fade(s32 i) {
-    enum {
-        PAL_MODE_DISABLED = 0
-    };
     s32  pointer_index;
     s32 *offset_entry;
     if (pal_mode == PAL_MODE_DISABLED) {
@@ -56,9 +57,6 @@ void load_chunks_with_optional_fade(s32 i, s32 fade_frame_count) __asm__("FUN_L0
 void load_chunks_with_optional_fade(s32 i, s32 p) __asm__("FUN_L00_00245610");
 
 void load_chunks_with_optional_fade(s32 i, s32 fade_frame_count) {
-    enum {
-        PAL_MODE_DISABLED = 0
-    };
     s32  pointer_index;
     s32 *offset_entry;
     if (pal_mode == PAL_MODE_DISABLED) {

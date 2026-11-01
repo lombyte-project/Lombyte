@@ -21,6 +21,17 @@
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 
+enum {
+    TELEPORTER_INITIALIZE = 0,
+    TELEPORTER_WAIT_FOR_USE = 1,
+    TELEPORTER_PREPARE_TRANSFER = 2,
+    TELEPORTER_TRANSFER_TO_DESTINATION = 3,
+    TELEPORTER_RETURN_TO_IDLE = 4,
+    TELEPORTER_ENTER_WAIT_FOR_USE = 6,
+    TELEPORTER_EFFECT_CYCLE_PREPARE = 7,
+    TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE = 8
+};
+
 typedef struct TeleporterVars {
     u8  pad0[0x4];
     s32 unk4;
@@ -232,9 +243,6 @@ float D_L18_001621D0 = 1.0f;
 void activate_teleporter_and_record_state(struct Moby *moby) __asm__("FUN_L01_00308b28");
 
 void activate_teleporter_and_record_state(struct Moby *moby) {
-    enum {
-        TELEPORTER_WAIT_FOR_USE = 1
-    };
     int           level_bitset_byte_offset = D_0015ED84 << 8;
     unsigned char moby_group_index;
     *(int *)((u8 *)D_0014C190 + (((short)moby->save_id >> 5) * 4 + level_bitset_byte_offset)) |=
@@ -252,16 +260,6 @@ void teleporter_update(struct Moby *moby) __asm__("FUN_L01_00308bd8");
 
 /* Moby class 1135 */
 void teleporter_update(struct Moby *moby) {
-    enum {
-        TELEPORTER_INITIALIZE = 0,
-        TELEPORTER_WAIT_FOR_USE = 1,
-        TELEPORTER_PREPARE_TRANSFER = 2,
-        TELEPORTER_TRANSFER_TO_DESTINATION = 3,
-        TELEPORTER_RETURN_TO_IDLE = 4,
-        TELEPORTER_ENTER_WAIT_FOR_USE = 6,
-        TELEPORTER_EFFECT_CYCLE_PREPARE = 7,
-        TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE = 8
-    };
     enum {
         TELEPORTER_WAIT_FOR_ACTIVATION = 5
     };

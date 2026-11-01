@@ -109,29 +109,6 @@ void puffoid_update(struct Moby *moby) __asm__("FUN_L11_00314318");
 /* Moby class 1246 */
 void puffoid_update(struct Moby *moby) {
     enum {
-        PUFFOID_STATE_INITIALIZE = 0,
-        PUFFOID_STATE_WAIT_FOR_HOME_JUMP = 1,
-        PUFFOID_STATE_IDLE = 2,
-        PUFFOID_STATE_WANDER_NEAR_HOME = 3,
-        PUFFOID_STATE_CHASE_TARGET = 4,
-        PUFFOID_STATE_SPRAY_ATTACK = 5,
-        PUFFOID_STATE_RETURN_HOME = 6,
-        PUFFOID_STATE_JUMP_HOME = 7,
-        PUFFOID_STATE_JUMP_THEN_WAIT_FOR_HOME_JUMP = 8,
-        PUFFOID_STATE_KNOCKBACK = 9,
-        PUFFOID_STATE_REPOSITION_AND_FACE_TARGET = 10,
-        PUFFOID_STATE_DEATH_KNOCKBACK = 11,
-        PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 12,
-        PUFFOID_STATE_CARRIER_JUMP = 13,
-        PUFFOID_STATE_CARRIER_IDLE = 14,
-        PUFFOID_STATE_CARRIER_CHASE_TARGET = 15,
-        PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 16,
-        PUFFOID_STATE_CARRIER_KNOCKBACK = 17,
-        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18,
-        PUFFOID_STATE_FOLLOW_PATH = 19,
-        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 20
-    };
-    enum {
         PUFFOID_PATH_ANIM_TRAVEL = 4,
         PUFFOID_PATH_ANIM_ENTER_SPRAY_ATTACK = 5,
         PUFFOID_PATH_ANIM_SPRAY_ATTACK = 6,
@@ -680,6 +657,30 @@ extern float puffoid_death_knockback_vertical_scale_gp __asm__("D_L11_001622DC")
 
 #include "rnc/overlay/l11/mobys/puffoid_data/update_puffoid_damage_and_path_goal.h"
 
+enum {
+    PUFFOID_STATE_INITIALIZE = 0,
+    PUFFOID_STATE_WAIT_FOR_HOME_JUMP = 1,
+    PUFFOID_STATE_IDLE = 2,
+    PUFFOID_STATE_WANDER_NEAR_HOME = 3,
+    PUFFOID_STATE_CHASE_TARGET = 4,
+    PUFFOID_STATE_SPRAY_ATTACK = 5,
+    PUFFOID_STATE_RETURN_HOME = 6,
+    PUFFOID_STATE_JUMP_HOME = 7,
+    PUFFOID_STATE_JUMP_THEN_WAIT_FOR_HOME_JUMP = 8,
+    PUFFOID_STATE_KNOCKBACK = 9,
+    PUFFOID_STATE_REPOSITION_AND_FACE_TARGET = 10,
+    PUFFOID_STATE_DEATH_KNOCKBACK = 11,
+    PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 12,
+    PUFFOID_STATE_CARRIER_JUMP = 13,
+    PUFFOID_STATE_CARRIER_IDLE = 14,
+    PUFFOID_STATE_CARRIER_CHASE_TARGET = 15,
+    PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 16,
+    PUFFOID_STATE_CARRIER_KNOCKBACK = 17,
+    PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18,
+    PUFFOID_STATE_FOLLOW_PATH = 19,
+    PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 20
+};
+
 extern float l11_puffoid_horizontal_speed_limit __asm__("D_L11_001622FC") __attribute__((sda));
 
 /* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
@@ -759,19 +760,6 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
         HIT_RESPONSE_NON_KNOCKBACK_REACTION = 9,
         HIT_RESPONSE_NON_KNOCKBACK_REACTION_ALTERNATE = 10,
         HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
-    };
-    enum {
-        PUFFOID_STATE_INITIALIZE = 0,
-        PUFFOID_STATE_WAIT_FOR_HOME_JUMP = 1,
-        PUFFOID_STATE_IDLE = 2,
-        PUFFOID_STATE_WANDER_NEAR_HOME = 3,
-        PUFFOID_STATE_KNOCKBACK = 9,
-        PUFFOID_STATE_REPOSITION_AND_FACE_TARGET = 0xA,
-        PUFFOID_STATE_DEATH_KNOCKBACK = 0xB,
-        PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 0xC,
-        PUFFOID_STATE_CARRIER_JUMP = 0xD,
-        PUFFOID_STATE_CARRIER_KNOCKBACK = 0x11,
-        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 0x12
     };
     enum {
         HIT_PROCESSING_SKIP_DAMAGE_AND_REACTION = 1
@@ -970,10 +958,6 @@ extern short *D_L11_001AC240[];
 short count_group_puffoids_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
 
 short count_group_puffoids_in_states_13_to_17(struct Moby *group_source_moby) {
-    enum {
-        PUFFOID_STATE_CARRIER_JUMP = 13,
-        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18
-    };
     unsigned short *moby_list_entry;
     short           matching_moby_count;
     char           *level_moby_array_base;
@@ -1003,12 +987,6 @@ short count_group_puffoids_in_states_13_to_17(struct Moby *group_source_moby) {
 s32 is_moby_in_bob_target_exclusion_state(const u8 *moby) __asm__("FUN_L11_00316128");
 
 s32 is_moby_in_bob_target_exclusion_state(const u8 *moby) {
-    enum {
-        PUFFOID_STATE_DEATH_KNOCKBACK = 0xB,
-        PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 0xC,
-        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 0x12,
-        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 0x14
-    };
     u32 moby_state = moby[0x20];
     if (moby_state == PUFFOID_STATE_WAIT_TO_RESUME_COMMAND ||
         moby_state == PUFFOID_STATE_DEATH_KNOCKBACK ||
@@ -1025,16 +1003,6 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int process_puffoid_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L11_00316160");
 
 int process_puffoid_suck_cannon_suction(struct Moby *moby) {
-    enum {
-        PUFFOID_STATE_IDLE = 2,
-        PUFFOID_STATE_CHASE_TARGET = 4,
-        PUFFOID_STATE_SPRAY_ATTACK = 5,
-        PUFFOID_STATE_RETURN_HOME = 6,
-        PUFFOID_STATE_CARRIER_IDLE = 0xE,
-        PUFFOID_STATE_CARRIER_CHASE_TARGET = 0xF,
-        PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 0x10,
-        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 0x14
-    };
     int grab_check_result = process_moby_suck_cannon_suction(moby);
     if (grab_check_result != 0) {
         if (moby->state == PUFFOID_STATE_IDLE || moby->state == PUFFOID_STATE_CHASE_TARGET ||
@@ -1063,9 +1031,6 @@ extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 void *moby_park_state_on_find(struct Moby *arg) __asm__("FUN_L11_00316210");
 
 void *moby_park_state_on_find(struct Moby *suction_moby) {
-    enum {
-        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 0x14
-    };
     void *found = store_moby_in_suck_cannon(suction_moby);
     if (found != 0) {
         unsigned char state = suction_moby->state;

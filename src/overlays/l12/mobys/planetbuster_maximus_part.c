@@ -82,9 +82,6 @@ extern int  D_L12_00161F24 __attribute__((sda));
 void update_planetbuster_maximus_guns(char *moby) __asm__("FUN_L12_003054b0");
 
 void update_planetbuster_maximus_guns(char *moby) {
-    enum {
-        PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
-    };
     char  *owner_data = ((char *)MOBY(moby)->pvars);
     int    i;
     float  position_buffer[4];
@@ -639,6 +636,14 @@ extern float planetbuster_maximus_rotation_oscillation_amplitude_gp __asm__("D_L
 
 #include "rnc/game/game_globals.h"
 
+enum {
+    PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,
+    PLANETBUSTER_WAIT_FOR_PATH_TRIGGER = 1,
+    PLANETBUSTER_FOLLOW_PATH = 2,
+    PLANETBUSTER_POST_PATH_GUN_UPDATE = 3,
+    PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
+};
+
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
@@ -684,13 +689,6 @@ typedef struct PlanetbusterMaximusVars {
 
 /* Moby class 1274 */
 void planetbuster_maximus_part_update(char *moby) {
-    enum {
-        PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,
-        PLANETBUSTER_WAIT_FOR_PATH_TRIGGER = 1,
-        PLANETBUSTER_FOLLOW_PATH = 2,
-        PLANETBUSTER_POST_PATH_GUN_UPDATE = 3,
-        PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
-    };
     enum {
         PLANETBUSTER_TRANSITION_SETUP = 0,
         PLANETBUSTER_TRANSITION_INTERPOLATE = 1,
@@ -981,7 +979,8 @@ void planetbuster_maximus_part_update(char *moby) {
         break;
     }
     update_planetbuster_maximus_glow_color(moby);
-    if ((unsigned char)MOBY(moby)->state >= PLANETBUSTER_WAIT_FOR_PATH_TRIGGER && (unsigned char)MOBY(moby)->state <= PLANETBUSTER_POST_PATH_GUN_UPDATE) {
+    if ((unsigned char)MOBY(moby)->state >= PLANETBUSTER_WAIT_FOR_PATH_TRIGGER &&
+        (unsigned char)MOBY(moby)->state <= PLANETBUSTER_POST_PATH_GUN_UPDATE) {
         if (moby_data->unk604 == -1)
             moby_data->unk604 = allocate_voice_for_target_entry(0, 4, moby);
     } else {

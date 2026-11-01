@@ -25,6 +25,14 @@
 #include "qcopy.h"
 #include "rnc/overlay/l13/mobys/gemlik_projectile.h"
 
+enum {
+    BLARG_TURRET_STATE_INITIALIZE = 0,
+    BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
+    BLARG_TURRET_STATE_TRACK_TARGET = 3,
+    BLARG_TURRET_STATE_DESTROY = 4,
+    BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
+};
+
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V4_2B5368;
@@ -108,13 +116,6 @@ void blarg_turret_update(Moby_2B5368 *m) __asm__("FUN_L13_002b41b8");
 
 /* Moby class 29 */
 void blarg_turret_update(Moby_2B5368 *turret_moby) {
-    enum {
-        BLARG_TURRET_STATE_INITIALIZE = 0,
-        BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
-        BLARG_TURRET_STATE_TRACK_TARGET = 3,
-        BLARG_TURRET_STATE_DESTROY = 4,
-        BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
-    };
     Data        *data = turret_moby->data;
     Moby_2B5368 *target_moby;
     Moby_2B5368 *gun;
@@ -300,9 +301,6 @@ extern int select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_002
 void update_blarg_turret_target_and_state(struct Moby *moby) __asm__("FUN_L13_002b48d8");
 
 void update_blarg_turret_target_and_state(struct Moby *moby) {
-    enum {
-        BLARG_TURRET_STATE_TRACK_TARGET = 3
-    };
     char *turret_vars = (char *)moby->pvars;
     float distance;
     if (moby->state == BLARG_TURRET_STATE_TRACK_TARGET)

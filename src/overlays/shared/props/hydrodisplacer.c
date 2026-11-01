@@ -20,6 +20,15 @@
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
+enum {
+    HYDRODISPLACER_INITIALIZE = 0,
+    HYDRODISPLACER_WAIT_FOR_ANIMATION_FLAG = 1,
+    HYDRODISPLACER_WAIT_FOR_ACTIVATION = 2,
+    HYDRODISPLACER_WAIT_FOR_HERO_FLAG = 3,
+    HYDRODISPLACER_CAMERA_TRANSITION = 4,
+    HYDRODISPLACER_WAIT_FOR_TIMER = 5
+};
+
 typedef struct Hero Hero;
 
 typedef struct Moby Moby;
@@ -102,14 +111,6 @@ void hydrodisplacer_update(Moby *moby) __asm__("FUN_L00_002df9a0");
 
 /* Moby class 1251 */
 void hydrodisplacer_update(Moby *moby) {
-    enum {
-        HYDRODISPLACER_INITIALIZE = 0,
-        HYDRODISPLACER_WAIT_FOR_ANIMATION_FLAG = 1,
-        HYDRODISPLACER_WAIT_FOR_ACTIVATION = 2,
-        HYDRODISPLACER_WAIT_FOR_HERO_FLAG = 3,
-        HYDRODISPLACER_CAMERA_TRANSITION = 4,
-        HYDRODISPLACER_WAIT_FOR_TIMER = 5
-    };
     enum {
         HYDRODISPLACER_CAMERA_PREPARE_INTERPOLATION = 0,
         HYDRODISPLACER_CAMERA_INTERPOLATE = 1,
@@ -381,9 +382,6 @@ s32 test_hydrodisplacer_activation_flag(void) {
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
 void end_hydrodisplacer_interaction(char *moby) {
-    enum {
-        HYDRODISPLACER_CAMERA_TRANSITION = 4
-    };
     if (MOBY(moby)->state == HYDRODISPLACER_CAMERA_TRANSITION) {
         hydrodisplacer_camera_active = 0;
         *(int *)&D_L00_0015F3FC = 0;

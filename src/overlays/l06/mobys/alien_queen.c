@@ -183,6 +183,26 @@ void update_alien_queen_hit_response_and_recovery(char *moby) __asm__("FUN_L06_0
 
 #include "sda.h"
 
+enum {
+    ALIEN_QUEEN_STATE_INITIALIZE = 0,
+    ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO = 1,
+    HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1,
+    ALIEN_QUEEN_STATE_INTRO = 2,
+    ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA = 3,
+    ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT = 4,
+    ALIEN_QUEEN_STATE_SECOND_RECOVERY_CAMERA = 5,
+    ALIEN_QUEEN_STATE_GROUP_RECOVERY_ORBIT = 6,
+    ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET = 7,
+    ALIEN_QUEEN_STATE_APPROACH_TARGET = 8,
+    ALIEN_QUEEN_STATE_ATTACK_WINDUP = 9,
+    ALIEN_QUEEN_STATE_ATTACK_HIT_QUERIES = 10,
+    ALIEN_QUEEN_STATE_WAIT_FOR_ORBIT_ANIMATION_END = 11,
+    ALIEN_QUEEN_STATE_TIMED_ORBIT = 12,
+    ALIEN_QUEEN_STATE_RETURN_HOME = 13,
+    ALIEN_QUEEN_STATE_DEATH = 14,
+    ALIEN_QUEEN_STATE_POST_DEATH = 15
+};
+
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
 extern int *D_L06_001B0FB0[] __asm__("D_L06_001B0C30");
 void        start_alien_queen_intro(char *moby) __asm__("FUN_L06_002fb148");
@@ -389,24 +409,6 @@ typedef struct AlienQueenVars {
 
 /* Moby class 1051 */
 void alien_queen_update(unsigned char *moby) {
-    enum {
-        ALIEN_QUEEN_STATE_INITIALIZE = 0,
-        ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO = 1,
-        ALIEN_QUEEN_STATE_INTRO = 2,
-        ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA = 3,
-        ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT = 4,
-        ALIEN_QUEEN_STATE_SECOND_RECOVERY_CAMERA = 5,
-        ALIEN_QUEEN_STATE_GROUP_RECOVERY_ORBIT = 6,
-        ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET = 7,
-        ALIEN_QUEEN_STATE_APPROACH_TARGET = 8,
-        ALIEN_QUEEN_STATE_ATTACK_WINDUP = 9,
-        ALIEN_QUEEN_STATE_ATTACK_HIT_QUERIES = 10,
-        ALIEN_QUEEN_STATE_WAIT_FOR_ORBIT_ANIMATION_END = 11,
-        ALIEN_QUEEN_STATE_TIMED_ORBIT = 12,
-        ALIEN_QUEEN_STATE_RETURN_HOME = 13,
-        ALIEN_QUEEN_STATE_DEATH = 14,
-        ALIEN_QUEEN_STATE_POST_DEATH = 15
-    };
     AlienQueenVars *alien_queen_update_vars = (AlienQueenVars *)MOBY(moby)->pvars;
     char           *target;
     float           step[4];
@@ -805,10 +807,6 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         AMPLIFIED_DAMAGE_SOURCE_CLASS = 0xB0,
         REDUCED_DAMAGE_SOURCE_CLASS = 0x131,
         DAMAGE_BOOSTING_SOURCE_CLASS = 0x33B
-    };
-    enum {
-        ALIEN_QUEEN_STATE_INITIALIZE = 0,
-        HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1
     };
     AlienQueenVars *alien_queen_hit_recovery_vars;
     char           *hit;

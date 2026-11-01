@@ -23,6 +23,14 @@
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 
+enum {
+    NANOTECH_BALL_STATE_INITIALIZE = 0,
+    NANOTECH_BALL_STATE_FOLLOW_OWNER = 1,
+    NANOTECH_BALL_STATE_DETACHED_PICKUP = 2,
+    NANOTECH_BALL_STATE_COLLECTING = 3,
+    NANOTECH_BALL_STATE_BASIS_ONLY = 4
+};
+
 typedef struct {
     char        pad[0x10];
     OvlQuad     q;
@@ -1006,9 +1014,6 @@ float         D_L18_00161E2C = 1.125f;
 int is_moby_in_state_one(unsigned char *moby) __asm__("FUN_L00_002d8128");
 
 int is_moby_in_state_one(unsigned char *moby) {
-    enum {
-        NANOTECH_BALL_STATE_FOLLOW_OWNER = 1
-    };
     return MOBY(moby)->state == NANOTECH_BALL_STATE_FOLLOW_OWNER;
 }
 
@@ -1206,9 +1211,6 @@ void compute_nanotech_ball_slot_position(unsigned char *moby,
                                          int            i) __asm__("FUN_L00_002d8850");
 
 void compute_nanotech_ball_slot_position(unsigned char *moby, float *out_slot_position, int i) {
-    enum {
-        NANOTECH_BALL_STATE_DETACHED_PICKUP = 2
-    };
     u128        slot_offset;
     M_002d8850 *moby_data = ((M_002d8850 *)MOBY(moby)->pvars);
     char       *e;
@@ -1252,13 +1254,6 @@ void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 
 /* Moby class 806 */
 void nanotech_ball_update(Moby *moby) {
-    enum {
-        NANOTECH_BALL_STATE_INITIALIZE = 0,
-        NANOTECH_BALL_STATE_FOLLOW_OWNER = 1,
-        NANOTECH_BALL_STATE_DETACHED_PICKUP = 2,
-        NANOTECH_BALL_STATE_COLLECTING = 3,
-        NANOTECH_BALL_STATE_BASIS_ONLY = 4
-    };
     V_2D9EA0 slot_rotation_basis_or_cull_position_or_start_tangent,
         rotated_slot_offset_or_particle_position, v20, collection_target_or_end_tangent,
         cross_product_or_particle_midpoint, half_displacement_or_spark_position, slot_curve_offset;

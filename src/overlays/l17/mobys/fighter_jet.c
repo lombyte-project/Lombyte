@@ -771,9 +771,6 @@ extern int  font_print_center_small(int, int, long, void *, int) __asm__("FUN_00
 void draw_fighter_jet_hud(struct Moby *moby) __asm__("FUN_L17_002eb9a8");
 
 void draw_fighter_jet_hud(struct Moby *moby) {
-    enum {
-        FIGHTER_JET_STATE_VICTORY_EXIT = 8
-    };
     char         *ship_vars = (char *)moby->pvars;
     char         *screen_dimensions;
     int           locked_target_screen_x;
@@ -1197,36 +1194,33 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby,
                                FighterJetVars *ship_vars) __asm__("FUN_L17_002ec360");
 
 void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_vars) {
-    enum {
-        FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7
-    };
-    sceVu0FVECTOR    pre_movement_ship_position;
-    sceVu0FVECTOR    death_explosion_velocity;
-    UQ_c4            movement_delta;
-    sceVu0FVECTOR    side;
-    UQ_c4            up;
-    sceVu0FVECTOR    camera_rotation;
-    sceVu0FVECTOR    target;
-    sceVu0FVECTOR    target_record_sum_or_camera_local_offset;
-    float            horizontal_steering_input;
-    float            vertical_steering_input;
-    float            ka;
-    float            kb;
-    float            lenA;
-    float            lenB;
-    float            distance_to_default_target;
-    float            target_height_distance, target_height_distance_for_moby_pitch;
-    float            x, y;
-    float            half_fov, tn;
-    float            ratio;
-    float            collision_adjusted_pitch;
-    float            k;
+    sceVu0FVECTOR pre_movement_ship_position;
+    sceVu0FVECTOR death_explosion_velocity;
+    UQ_c4         movement_delta;
+    sceVu0FVECTOR side;
+    UQ_c4         up;
+    sceVu0FVECTOR camera_rotation;
+    sceVu0FVECTOR target;
+    sceVu0FVECTOR target_record_sum_or_camera_local_offset;
+    float         horizontal_steering_input;
+    float         vertical_steering_input;
+    float         ka;
+    float         kb;
+    float         lenA;
+    float         lenB;
+    float         distance_to_default_target;
+    float         target_height_distance, target_height_distance_for_moby_pitch;
+    float         x, y;
+    float         half_fov, tn;
+    float         ratio;
+    float         collision_adjusted_pitch;
+    float         k;
     struct PadState *pad;
-    struct Hero     *steering_input_hero;
-    char            *e;
-    char            *collision_result;
-    int              voice_slot_index;
-    int              hc;
+    struct Hero  *steering_input_hero;
+    char         *e;
+    char         *collision_result;
+    int           voice_slot_index;
+    int           hc;
 
     movement_delta.q = 0;
     up.q = 0;
@@ -1742,6 +1736,17 @@ extern void  FUN_L17_0021e530(int, int);
 
 #include "rnc/overlay/l17/mobys/fighter_jet_data/fighter_jet_update.h"
 
+enum {
+    FIGHTER_JET_STATE_INITIALIZE = 0,
+    FIGHTER_JET_STATE_WAIT_FOR_BOARDING = 1,
+    FIGHTER_JET_STATE_BOARDING_FADE = 2,
+    FIGHTER_JET_STATE_PILOTED_FLIGHT = 4,
+    FIGHTER_JET_STATE_DISMOUNT = 5,
+    FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7,
+    FIGHTER_JET_STATE_VICTORY_EXIT = 8,
+    FIGHTER_JET_STATE_FADE_THEN_REMOVE = 9
+};
+
 extern int            D_L17_0015F608;
 extern char          *fighter_jet_hp_bar_clut_lookup_base __asm__("D_L17_0015F420");
 extern ShipLevelEntry l17_fighter_jet_hp_bar_clut_entries[] __asm__("D_L17_0016DA80");
@@ -1749,16 +1754,6 @@ void                  fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed0
 
 /* Moby class 1379 */
 void fighter_jet_update(ShipMoby *moby) {
-    enum {
-        FIGHTER_JET_STATE_INITIALIZE = 0,
-        FIGHTER_JET_STATE_WAIT_FOR_BOARDING = 1,
-        FIGHTER_JET_STATE_BOARDING_FADE = 2,
-        FIGHTER_JET_STATE_PILOTED_FLIGHT = 4,
-        FIGHTER_JET_STATE_DISMOUNT = 5,
-        FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7,
-        FIGHTER_JET_STATE_VICTORY_EXIT = 8,
-        FIGHTER_JET_STATE_FADE_THEN_REMOVE = 9
-    };
     ShipVars     *ship_vars;
     ShipHit      *hit;
     sceVu0FVECTOR dir;

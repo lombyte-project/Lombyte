@@ -21,6 +21,23 @@
 #include "rnc/overlay/shared/enemies/frog_data/spawn_moby_directional_spark_bursts_2.h"
 #include "rnc/overlay/shared/enemies/frog_data/spawn_moby_directional_spark_bursts.h"
 
+enum {
+    FROG_STATE_INITIALIZE = 0,
+    FROG_STATE_WAIT_WITH_CHILD = 1,
+    FROG_STATE_WAIT_TO_FOLLOW_PATH = 3,
+    FROG_STATE_FOLLOW_PATH = 4,
+    FROG_STATE_JUMP_TO_HOME = 5,
+    FROG_STATE_AIRBORNE_MOTION = 6,
+    FROG_STATE_LANDING_ANIMATION = 7,
+    FROG_STATE_WANDER = 8,
+    FROG_STATE_APPROACH_TARGET = 9,
+    FROG_STATE_BLINKING_APPROACH_TARGET = 10,
+    FROG_STATE_APPROACH_PAUSE = 11,
+    FROG_STATE_ATTACK = 12,
+    FROG_STATE_RETURN_HOME = 13,
+    FROG_STATE_SUCK_CANNON_HELD = 16
+};
+
 typedef struct FrogVars {
     u8             pad0[0x29];
     s8             unk29;
@@ -245,22 +262,6 @@ void frog_update(unsigned char *moby) __asm__("FUN_L06_002e8678");
 
 /* Moby class 827 */
 void frog_update(unsigned char *moby) {
-    enum {
-        FROG_STATE_INITIALIZE = 0,
-        FROG_STATE_WAIT_WITH_CHILD = 1,
-        FROG_STATE_WAIT_TO_FOLLOW_PATH = 3,
-        FROG_STATE_FOLLOW_PATH = 4,
-        FROG_STATE_JUMP_TO_HOME = 5,
-        FROG_STATE_AIRBORNE_MOTION = 6,
-        FROG_STATE_LANDING_ANIMATION = 7,
-        FROG_STATE_WANDER = 8,
-        FROG_STATE_APPROACH_TARGET = 9,
-        FROG_STATE_BLINKING_APPROACH_TARGET = 10,
-        FROG_STATE_APPROACH_PAUSE = 11,
-        FROG_STATE_ATTACK = 12,
-        FROG_STATE_RETURN_HOME = 13,
-        FROG_STATE_SUCK_CANNON_HELD = 16
-    };
     float          A[4] __attribute__((aligned(16)));
     float          B[4] __attribute__((aligned(16)));
     float          C[4] __attribute__((aligned(16)));
@@ -974,13 +975,6 @@ void spawn_moby_death_effect_burst(char *moby) {
 int update_moby_grab_state(struct Moby *moby) __asm__("FUN_L06_002ea5e0");
 
 int update_moby_grab_state(struct Moby *moby) {
-    enum {
-        FROG_STATE_WANDER = 8,
-        FROG_STATE_APPROACH_TARGET = 9,
-        FROG_STATE_ATTACK = 0xC,
-        FROG_STATE_RETURN_HOME = 0xD,
-        FROG_STATE_SUCK_CANNON_HELD = 0x10
-    };
     int grab_check_result = process_moby_suck_cannon_suction(moby);
     if (grab_check_result != 0) {
         if (moby->state == FROG_STATE_WANDER || moby->state == FROG_STATE_APPROACH_TARGET ||
@@ -1006,10 +1000,6 @@ int update_moby_grab_state(struct Moby *moby) {
 int update_moby_suck_cannon_storage_state(unsigned char *moby) __asm__("FUN_L06_002ea6a8");
 
 int update_moby_suck_cannon_storage_state(unsigned char *moby) {
-    enum {
-        FROG_STATE_WANDER = 8,
-        FROG_STATE_SUCK_CANNON_HELD = 0x10
-    };
     int suck_cannon_store_result = store_moby_in_suck_cannon(moby);
     if (suck_cannon_store_result != 0) {
         if (MOBY(moby)->state != FROG_STATE_SUCK_CANNON_HELD) {
@@ -1028,9 +1018,6 @@ int update_moby_suck_cannon_storage_state(unsigned char *moby) {
 s32 cancel_moby_suction_and_save_state(unsigned char *moby) __asm__("FUN_L06_002ea7c8");
 
 s32 cancel_moby_suction_and_save_state(unsigned char *moby) {
-    enum {
-        FROG_STATE_SUCK_CANNON_HELD = 0x10
-    };
     u8  previous_state;
     s32 helper_result;
     helper_result = cancel_suck_cannon_suction(moby);

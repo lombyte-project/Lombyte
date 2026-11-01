@@ -49,6 +49,15 @@ extern char D_00140940[];
 
 #include "rnc/overlay/l13/effect_suppression_levels.h"
 
+enum {
+    FIGHTER_INITIALIZE = 0,
+    FIGHTER_WAIT_TO_JOIN_PATH = 1,
+    FIGHTER_FOLLOW_PATH_AND_ATTACK = 2,
+    HIT_PROCESSING_DAMAGE_THRESHOLD = 2,
+    FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3,
+    FIGHTER_WAIT_TO_REINITIALIZE = 4
+};
+
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
@@ -82,10 +91,6 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
-    };
-    enum {
-        HIT_PROCESSING_DAMAGE_THRESHOLD = 2,
-        FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3
     };
     if (moby->state != FIGHTER_EMIT_DESTRUCTION_EFFECTS) {
         int   hit_processing_status;
@@ -527,13 +532,6 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) __asm__("FUN_L13_002c4428");
 
 /* Moby class 111 */
 void blarg_space_fighter_update(Moby_2C56B0 *moby) {
-    enum {
-        FIGHTER_INITIALIZE = 0,
-        FIGHTER_WAIT_TO_JOIN_PATH = 1,
-        FIGHTER_FOLLOW_PATH_AND_ATTACK = 2,
-        FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3,
-        FIGHTER_WAIT_TO_REINITIALIZE = 4
-    };
     enum {
         FIGHTER_ATTACK_WAIT_TO_FIRE = 0,
         FIGHTER_ATTACK_FIRE = 1,

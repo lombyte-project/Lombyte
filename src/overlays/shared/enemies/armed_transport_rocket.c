@@ -11,6 +11,10 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_rocket.h"
 
+enum {
+    ARMED_TRANSPORT_ROCKET_STATE_FLYING = 0
+};
+
 extern char *create_moby(int);
 extern int   trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern void
@@ -55,9 +59,6 @@ void armed_transport_rocket_update(char *m) __asm__("FUN_L16_002a0a98");
 
 /* Moby class 50 */
 void armed_transport_rocket_update(char *rocket_moby) {
-    enum {
-        ARMED_TRANSPORT_ROCKET_STATE_FLYING = 0
-    };
     float desired[4], next_position[4], delta[4], blend[4];
     char *rocket_data = ((char *)MOBY(rocket_moby)->pvars);
     void *remaining;
@@ -137,9 +138,6 @@ char *spawn_armed_transport_rocket(char *spawning_moby,
                                    int   blend_duration_ticks,
 
                                    float unused) {
-    enum {
-        ARMED_TRANSPORT_ROCKET_STATE_FLYING = 0
-    };
     char *spawned_moby = (char *)create_moby(0x32);
     char *moby_data;
     float initial_movement_length, x, random_angle_radians, y;

@@ -128,20 +128,6 @@ void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 /* Moby class 541 */
 void test_dummy_update(unsigned char *moby) {
     enum {
-        TEST_DUMMY_STATE_INITIALIZE = 0,
-        TEST_DUMMY_STATE_IDLE = 1,
-        TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
-        TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
-        TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
-        TEST_DUMMY_STATE_MOVE_ALONG_PATH = 5,
-        TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE = 6,
-        TEST_DUMMY_STATE_APPROACH_SPRAY_NODE = 7,
-        TEST_DUMMY_STATE_SPRAY_FROM_CHILD = 8,
-        TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
-        TEST_DUMMY_STATE_BURST = 10,
-        TEST_DUMMY_STATE_RESPAWN = 11
-    };
-    enum {
         TEST_DUMMY_KIND_THROWER = 0,
         TEST_DUMMY_KIND_PATH_MOVER = 1,
         TEST_DUMMY_KIND_SPRAYER = 2
@@ -533,12 +519,6 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 /* Per-frame update of a hit-point moby: handles a hit (respawn at the spawn point or removal when out of lives) and its state timers. */
 void update_test_dummy_damage_and_respawn(void *moby) {
     enum {
-        TEST_DUMMY_STATE_IDLE = 1,
-        TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
-        TEST_DUMMY_STATE_BURST = 10,
-        TEST_DUMMY_STATE_RESPAWN = 11
-    };
-    enum {
         HIT_REACTION_STATUS_NO_DAMAGE = 1
     };
     L16HitMoby *hit_moby = moby;
@@ -694,6 +674,21 @@ extern char *D_L16_0015FFD8;
 extern void  add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 #include "rnc/overlay/l16/mobys/test_dummy_globals.h"
+
+enum {
+    TEST_DUMMY_STATE_INITIALIZE = 0,
+    TEST_DUMMY_STATE_IDLE = 1,
+    TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
+    TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
+    TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
+    TEST_DUMMY_STATE_MOVE_ALONG_PATH = 5,
+    TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE = 6,
+    TEST_DUMMY_STATE_APPROACH_SPRAY_NODE = 7,
+    TEST_DUMMY_STATE_SPRAY_FROM_CHILD = 8,
+    TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
+    TEST_DUMMY_STATE_BURST = 10,
+    TEST_DUMMY_STATE_RESPAWN = 11
+};
 /* spins the level's rotating parts by the current angle and queues the draw callback */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0238), where it is exact; names translated to the US level program. */
 

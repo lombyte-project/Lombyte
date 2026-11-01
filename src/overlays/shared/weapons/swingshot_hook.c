@@ -10,6 +10,17 @@
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 
+enum {
+    HOOK_INITIAL_ANIMATION = 0,
+    HOOK_IDLE_ANIMATION = 1,
+    HOOK_REMOVAL_ANIMATION = 2,
+    HOOK_LAUNCH_ANIMATION = 3,
+    HOOK_FLIGHT_ANIMATION = 4,
+    HOOK_ATTACHED_ANIMATION = 5,
+    HOOK_SKIP_ANIMATION_TRANSITIONS = 6,
+    HOOK_RETURN_ANIMATION = 7
+};
+
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 int        FUN_001f96f8_2c7070(int) __asm__("FUN_001f96f8");
 
@@ -19,9 +30,6 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby,
                                     float          initial_hook_speed) __asm__("FUN_L00_002c6f88");
 
 unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hook_speed) {
-    enum {
-        HOOK_INITIAL_ANIMATION = 0
-    };
     unsigned char *spawned_moby = create_moby(0xd1);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
@@ -48,16 +56,6 @@ void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
 
 /* Moby class 209 */
 void swingshot_hook_update(unsigned char *hook_moby) {
-    enum {
-        HOOK_INITIAL_ANIMATION = 0,
-        HOOK_IDLE_ANIMATION = 1,
-        HOOK_REMOVAL_ANIMATION = 2,
-        HOOK_LAUNCH_ANIMATION = 3,
-        HOOK_FLIGHT_ANIMATION = 4,
-        HOOK_ATTACHED_ANIMATION = 5,
-        HOOK_SKIP_ANIMATION_TRANSITIONS = 6,
-        HOOK_RETURN_ANIMATION = 7
-    };
     enum {
         MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
     };

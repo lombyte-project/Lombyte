@@ -22,6 +22,19 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/world/collision/ground_probe.h"
 
+enum {
+    CIRCULAR_SAW_STATE_INITIALIZE = 0,
+    CIRCULAR_SAW_STATE_IDLE = 1,
+    CIRCULAR_SAW_STATE_JUMP = 2,
+    CIRCULAR_SAW_STATE_CHASE_TARGET = 3,
+    CIRCULAR_SAW_STATE_FOLLOW_PATH = 4,
+    CIRCULAR_SAW_STATE_POINT_ATTACK = 5,
+    CIRCULAR_SAW_STATE_HIT_RECOVERY = 6,
+    CIRCULAR_SAW_STATE_MELEE_ATTACK = 7,
+    CIRCULAR_SAW_STATE_DYING = 8,
+    CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED = 9
+};
+
 /* The engine-sound fields of the moby's pvars. */
 typedef struct {
     /* 0x000 */ u8  pad0[0x230];
@@ -48,9 +61,6 @@ void update_circular_saw_engine_sound(struct Moby *moby) {
         CIRCULAR_SAW_ANIM_JUMP = 5,
         CIRCULAR_SAW_ANIM_ALERT = 6,
         CIRCULAR_SAW_ANIM_ATTACK = 7
-    };
-    enum {
-        CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED = 9
     };
     EngineSoundVars *engine_sound_vars = (EngineSoundVars *)moby->pvars;
     f32              volume;
@@ -484,18 +494,6 @@ void circular_saw_enemy_update(M_35F0 *moby) __asm__("FUN_L04_002c2270");
 
 /* Moby class 340 */
 void circular_saw_enemy_update(M_35F0 *moby) {
-    enum {
-        CIRCULAR_SAW_STATE_INITIALIZE = 0,
-        CIRCULAR_SAW_STATE_IDLE = 1,
-        CIRCULAR_SAW_STATE_JUMP = 2,
-        CIRCULAR_SAW_STATE_CHASE_TARGET = 3,
-        CIRCULAR_SAW_STATE_FOLLOW_PATH = 4,
-        CIRCULAR_SAW_STATE_POINT_ATTACK = 5,
-        CIRCULAR_SAW_STATE_HIT_RECOVERY = 6,
-        CIRCULAR_SAW_STATE_MELEE_ATTACK = 7,
-        CIRCULAR_SAW_STATE_DYING = 8,
-        CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED = 9
-    };
     enum {
         CIRCULAR_SAW_HIT_REACTION_NONE = 0,
         CIRCULAR_SAW_HIT_REACTION_FATAL = 1,
@@ -1152,10 +1150,6 @@ int launch_circular_saw_enemy_from_suck_cannon(struct Moby *moby,
                                                int          launch_position_source,
 
                                                float launch_position_offset) {
-    enum {
-        CIRCULAR_SAW_STATE_IDLE = 1,
-        CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED = 0x9
-    };
     char *moby_callback_result = get_moby_suck_cannon_record(moby);
     int   hit_processing_result = launch_suck_cannon_projectile(
         moby, input_quad_address, launch_position_source, launch_position_offset);

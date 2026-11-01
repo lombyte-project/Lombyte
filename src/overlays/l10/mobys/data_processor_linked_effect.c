@@ -54,11 +54,6 @@ typedef struct DataProcessorLinkedEffectVars {
 
 /* Moby class 1067 */
 void data_processor_linked_effect_update(struct Moby *moby) {
-    enum {
-        MOBY_STATE_INITIALIZE = 0,
-        MOBY_STATE_ACTIVE_WITH_SOUND = 1,
-        MOBY_STATE_ACTIVE_WITHOUT_SOUND = 2
-    };
     DataProcessorLinkedEffectVars *linked_effect_vars =
         (DataProcessorLinkedEffectVars *)moby->pvars;
     union {
@@ -170,6 +165,12 @@ extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 
 #include "rnc/overlay/l10/mobys/data_processor_linked_effect_data/render_data_processor_linked_effect.h"
 
+enum {
+    MOBY_STATE_INITIALIZE = 0,
+    MOBY_STATE_ACTIVE_WITH_SOUND = 1,
+    MOBY_STATE_ACTIVE_WITHOUT_SOUND = 2
+};
+
 extern int data_processor_linked_effect_color_at_zero_progress_gp __asm__("D_L10_00161C90")
     __attribute__((sda));
 extern int data_processor_linked_effect_color_at_full_progress_gp __asm__("D_L10_00161C94")
@@ -183,9 +184,6 @@ extern int D_L10_00161D64;
 extern int D_L10_00161D68;
 
 void render_data_processor_linked_effect(u8 *moby) {
-    enum {
-        MOBY_STATE_ACTIVE_WITHOUT_SOUND = 2
-    };
     DataProcessorLinkedEffectVars *linked_effect_render_vars =
         (DataProcessorLinkedEffectVars *)MOBY(moby)->pvars;
     char *linked_processor_vars =

@@ -23,6 +23,32 @@
 #include "rnc/overlay/shared/enemies/sentrybot_data/update_sentrybot_hit_response_and_target_visibility.h"
 #include "rnc/overlay/shared/mobys/animation_start.h"
 
+enum {
+    SENTRYBOT_INITIALIZE = 0,
+    SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
+    SENTRYBOT_PATROL_IDLE = 2,
+    SENTRYBOT_PATROL_PAUSE = 3,
+    SENTRYBOT_PATROL_MOVE = 4,
+    SENTRYBOT_DEACTIVATE_LINKED_MOBYS_AFTER_ANIMATION = 5,
+    SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA = 6,
+    SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
+    SENTRYBOT_TURN_AROUND = 8,
+    SENTRYBOT_RETURN_HOME = 9,
+    SENTRYBOT_WAIT_FOR_ANIMATION_THEN_PATROL_IDLE = 10,
+    SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION = 11,
+    SENTRYBOT_ALERT_IDLE = 12,
+    SENTRYBOT_PATROL_MOVE_FAST = 13,
+    SENTRYBOT_APPROACH_LINKED_MOBY = 14,
+    SENTRYBOT_ACTIVATE_LINKED_MOBY = 15,
+    SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM = 16,
+    SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM = 17,
+    SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_POSITIVE_JOINT_AIM = 18,
+    SENTRYBOT_EMIT_WITH_POSITIVE_JOINT_AIM = 19,
+    SENTRYBOT_RETURN_HOME_FAST = 20,
+    SENTRYBOT_RECOVERABLE_KNOCKBACK = 21,
+    SENTRYBOT_DEATH_KNOCKBACK = 23
+};
+
 typedef struct {
     char  pad0[0x2084];
     int   f2084;
@@ -248,31 +274,6 @@ void sentrybot_update(unsigned char *moby) __asm__("FUN_L15_002979d8");
 /* Moby class 44 */
 void sentrybot_update(unsigned char *moby) {
     enum {
-        SENTRYBOT_INITIALIZE = 0,
-        SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
-        SENTRYBOT_PATROL_IDLE = 2,
-        SENTRYBOT_PATROL_PAUSE = 3,
-        SENTRYBOT_PATROL_MOVE = 4,
-        SENTRYBOT_DEACTIVATE_LINKED_MOBYS_AFTER_ANIMATION = 5,
-        SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA = 6,
-        SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
-        SENTRYBOT_TURN_AROUND = 8,
-        SENTRYBOT_RETURN_HOME = 9,
-        SENTRYBOT_WAIT_FOR_ANIMATION_THEN_PATROL_IDLE = 10,
-        SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION = 11,
-        SENTRYBOT_ALERT_IDLE = 12,
-        SENTRYBOT_PATROL_MOVE_FAST = 13,
-        SENTRYBOT_APPROACH_LINKED_MOBY = 14,
-        SENTRYBOT_ACTIVATE_LINKED_MOBY = 15,
-        SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM = 16,
-        SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM = 17,
-        SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_POSITIVE_JOINT_AIM = 18,
-        SENTRYBOT_EMIT_WITH_POSITIVE_JOINT_AIM = 19,
-        SENTRYBOT_RETURN_HOME_FAST = 20,
-        SENTRYBOT_RECOVERABLE_KNOCKBACK = 21,
-        SENTRYBOT_DEATH_KNOCKBACK = 23
-    };
-    enum {
         SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA = 10,
         SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA = 11,
         SENTRYBOT_ANIM_TURN_AROUND = 12
@@ -320,7 +321,8 @@ void sentrybot_update(unsigned char *moby) {
         }
     }
     update_sentrybot_hit_response_and_target_visibility(moby, flag);
-    if (flag != 0 && MOBY(moby)->state != SENTRYBOT_RECOVERABLE_KNOCKBACK && MOBY(moby)->state != SENTRYBOT_DEATH_KNOCKBACK) {
+    if (flag != 0 && MOBY(moby)->state != SENTRYBOT_RECOVERABLE_KNOCKBACK &&
+        MOBY(moby)->state != SENTRYBOT_DEATH_KNOCKBACK) {
         MOBY(moby)->collision = 0;
         MOBY(moby)->flags = (MOBY(moby)->flags | 0x41) & 0xEFFF;
         return;
@@ -1107,7 +1109,8 @@ void sentrybot_update(unsigned char *moby) {
                 } else {
                     MOBY(moby)->command = 1;
                     if (sentrybot_instance_data->unk15F != 0) {
-                        MOBY(moby)->state = SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM;
+                        MOBY(moby)->state =
+                            SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM;
                         if (MOBY(moby)->prev_seq != 3)
                             blend_moby_animation(moby, 3, 0, scale_game_frames(10));
                     } else {
@@ -1225,11 +1228,6 @@ int begin_sentrybot_turn_toward_heading(
     int            next_animation,
 
     float angle) {
-    enum {
-        SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA = 6,
-        SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
-        SENTRYBOT_TURN_AROUND = 8
-    };
     float heading_delta = -fast_subtract_rotations(MOBY(moby)->rot.z, angle);
     float stored_heading_delta;
     int   turn_required = 1;
@@ -1572,13 +1570,6 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
     enum {
         HIT_STATUS_SKIP_REACTION = 1
     };
-    enum {
-        SENTRYBOT_INITIALIZE = 0,
-        SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM = 0x10,
-        SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM = 0x11,
-        SENTRYBOT_RECOVERABLE_KNOCKBACK = 0x15,
-        SENTRYBOT_DEATH_KNOCKBACK = 0x17
-    };
     unsigned char *moby = sentrybot_moby;
     SentrybotVars *sentrybot_data = (SentrybotVars *)MOBY(moby)->pvars;
     char          *hit;
@@ -1741,7 +1732,8 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
         if ((fast_difference_between_rotations(MOBY(moby)->rot.z, target_angle) < 1.5707964f &&
              (sentrybot_target_visibility_height_check_gate[0] == 0 ||
               absolute_float(MOBY(moby)->pos.z - sentrybot_data->unkD0[2]) < 4.0f)) ||
-            MOBY(moby)->state == SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM || MOBY(moby)->state == SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM) {
+            MOBY(moby)->state == SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM ||
+            MOBY(moby)->state == SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM) {
             seen = sentrybot_data->has_line_of_sight;
         }
         if (sentrybot_data->unk114 == 1)

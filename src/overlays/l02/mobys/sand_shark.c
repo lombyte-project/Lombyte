@@ -263,33 +263,6 @@ void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 /* Moby class 580 */
 void sand_shark_update(struct Moby *moby) {
     enum {
-        SAND_SHARK_INITIALIZE = 0,
-        SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET = 1,
-        SAND_SHARK_WANDER_AROUND_HOME = 2,
-        SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
-        SAND_SHARK_APPROACH_TARGET = 5,
-        SAND_SHARK_CLOSE_RANGE_ATTACK = 6,
-        SAND_SHARK_RETURN_HOME = 7,
-        SAND_SHARK_KNOCKBACK_UNTIL_LANDING = 8,
-        SAND_SHARK_SUCK_CANNON_INTERACTION = 9,
-        SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
-        SAND_SHARK_BALLISTIC_FLIGHT = 13,
-        SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK = 14,
-        SAND_SHARK_FACE_TARGET = 15,
-        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 17,
-        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET = 18,
-        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET = 19,
-        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
-        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK = 21,
-        SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 22,
-        SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET = 23,
-        SAND_SHARK_DEATH_KNOCKBACK = 24,
-        SAND_SHARK_FADE_OUT = 25,
-        SAND_SHARK_INACTIVE_WAIT_FOR_RELAUNCH = 26,
-        SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27,
-        SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE = 29
-    };
-    enum {
         SAND_SHARK_LANDED_AFTER_KNOCKBACK = 0xB
     };
     Varsd3e50 *sand_shark_behavior_vars;
@@ -1234,6 +1207,34 @@ typedef struct {
 
 #include "rnc/overlay/l02/mobys/sand_shark_data/handle_sand_shark_damage_and_targeting.h"
 
+enum {
+    SAND_SHARK_INITIALIZE = 0,
+    SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET = 1,
+    SAND_SHARK_WANDER_AROUND_HOME = 2,
+    SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
+    SAND_SHARK_APPROACH_TARGET = 5,
+    SAND_SHARK_CLOSE_RANGE_ATTACK = 6,
+    SAND_SHARK_RETURN_HOME = 7,
+    SAND_SHARK_KNOCKBACK_UNTIL_LANDING = 8,
+    SAND_SHARK_SUCK_CANNON_INTERACTION = 9,
+    SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
+    SAND_SHARK_BALLISTIC_FLIGHT = 13,
+    SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK = 14,
+    SAND_SHARK_FACE_TARGET = 15,
+    SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 17,
+    SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET = 18,
+    SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET = 19,
+    SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
+    SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK = 21,
+    SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 22,
+    SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET = 23,
+    SAND_SHARK_DEATH_KNOCKBACK = 24,
+    SAND_SHARK_FADE_OUT = 25,
+    SAND_SHARK_INACTIVE_WAIT_FOR_RELAUNCH = 26,
+    SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27,
+    SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE = 29
+};
+
 extern int *D_L02_001B0AB0_5c88[] __asm__("D_L02_001B0AB0");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern int  FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
@@ -1357,10 +1358,6 @@ extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 void *handle_sand_shark_suck_cannon_storage(struct Moby *moby) __asm__("FUN_L02_002d6210");
 
 void *handle_sand_shark_suck_cannon_storage(struct Moby *moby) {
-    enum {
-        SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET = 1,
-        SAND_SHARK_SUCK_CANNON_INTERACTION = 9
-    };
     void *helper_result = store_moby_in_suck_cannon(moby);
     if (helper_result) {
         int spawner_moby_index;
@@ -1382,9 +1379,6 @@ void *handle_sand_shark_suck_cannon_storage(struct Moby *moby) {
 void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) __asm__("FUN_L02_002d6340");
 
 void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) {
-    enum {
-        SAND_SHARK_INACTIVE_WAIT_FOR_RELAUNCH = 0x1A
-    };
     char *sand_shark_private_vars = (char *)moby->pvars;
     int   selected_class_29c_moby = select_group_class_29c_moby(moby);
     *(int *)(sand_shark_private_vars + 0x27C) = selected_class_29c_moby;
@@ -1408,9 +1402,6 @@ extern int   point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 void begin_sand_shark_return_home_if_outside_path(struct Moby *moby) __asm__("FUN_L02_002d63c0");
 
 void begin_sand_shark_return_home_if_outside_path(struct Moby *moby) {
-    enum {
-        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET = 0x12
-    };
     char *sand_shark_instance_vars = (char *)moby->pvars;
     char *configured_path = D_L02_001B0AB0[*(int *)(sand_shark_instance_vars + 0x290)];
     if (point_in_path_xy(&moby->pos, configured_path + 0x10, *(int *)configured_path) == 0) {

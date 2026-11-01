@@ -19,6 +19,10 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/mobys/moby.h"
 
+enum {
+    GAME_MODE_CUTSCENE = 2
+};
+
 /* Hoverboard girl (class record hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
  * Its two breast manipulators also carry the effect into cutscene instances. */
@@ -164,9 +168,6 @@ extern unsigned char D_L05_0017C8A0[];
  * of the girl's class. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
 void update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *girl) {
-    enum {
-        GAME_MODE_CUTSCENE = 2
-    };
     char *reference_moby = (char *)girl;
 
     if (game_mode == GAME_MODE_CUTSCENE && (D_0015EDB0[0] != 0 || breast_growth_count_gp != 0)) {
@@ -201,9 +202,6 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
         HOVERBOARD_GIRL_STATE_INITIALIZE = 0,
         HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE = 1,
         HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE = 3
-    };
-    enum {
-        GAME_MODE_CUTSCENE = 2
     };
     HoverboardGirlState *state = moby->data;
     HoverboardGirlVector target_position;

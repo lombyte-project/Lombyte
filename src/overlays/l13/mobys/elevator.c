@@ -20,6 +20,17 @@
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 
+enum {
+    ELEVATOR_STATE_INITIALIZE = 0,
+    ELEVATOR_STATE_BLEND_CAMERA = 1,
+    ELEVATOR_STATE_MOVE_TO_TOP = 2,
+    ELEVATOR_STATE_MOVE_TO_BOTTOM = 3,
+    ELEVATOR_STATE_WAIT_AT_TOP = 4,
+    ELEVATOR_STATE_WAIT_AT_BOTTOM = 5,
+    ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP = 6,
+    ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM = 7
+};
+
 typedef struct {
     u8  pad0[0x20];
     u8  path[0x40];  /* 0x20: passed to update_entity_matrix with the moved delta */
@@ -56,16 +67,6 @@ void elevator_update(struct Moby *moby) __asm__("FUN_L13_002b39e0");
 
 /* Moby classes 21, 244 */
 void elevator_update(struct Moby *moby) {
-    enum {
-        ELEVATOR_STATE_INITIALIZE = 0,
-        ELEVATOR_STATE_BLEND_CAMERA = 1,
-        ELEVATOR_STATE_MOVE_TO_TOP = 2,
-        ELEVATOR_STATE_MOVE_TO_BOTTOM = 3,
-        ELEVATOR_STATE_WAIT_AT_TOP = 4,
-        ELEVATOR_STATE_WAIT_AT_BOTTOM = 5,
-        ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP = 6,
-        ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM = 7
-    };
     LiftVars *elevator_vars = (LiftVars *)moby->pvars;
     float     delta[4];
     float     rot[4];
@@ -234,9 +235,6 @@ void compute_elevator_camera_pose(struct Moby *moby,
                                   float       *camera_position,
 
                                   float *camera_rotation) {
-    enum {
-        ELEVATOR_STATE_MOVE_TO_TOP = 2
-    };
     float          camera_offset_azimuth = moby->rot.z;
     float          horizontal_offset_radius = 2.5f;
     float          z = 1.5f;

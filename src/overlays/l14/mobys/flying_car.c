@@ -21,6 +21,13 @@ void seed_linked_record_for_flying_car(u8 *flying_car_moby) __asm__("FUN_L14_003
 
 #include "rnc/overlay/l14/mobys/flying_car_globals.h"
 
+enum {
+    FLYING_CAR_INITIALIZE = 0,
+    FLYING_CAR_WAIT_FOR_TRIGGER = 1,
+    FLYING_CAR_FOLLOW_PATH = 2,
+    FLYING_CAR_WAIT_FOR_PATH_RESET = 3
+};
+
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 
 typedef struct {
@@ -115,12 +122,6 @@ void flying_car_update(struct Moby *m) __asm__("FUN_L14_00306ee0");
 
 /* Moby class 1417 */
 void flying_car_update(struct Moby *flying_car_moby) {
-    enum {
-        FLYING_CAR_INITIALIZE = 0,
-        FLYING_CAR_WAIT_FOR_TRIGGER = 1,
-        FLYING_CAR_FOLLOW_PATH = 2,
-        FLYING_CAR_WAIT_FOR_PATH_RESET = 3
-    };
     Data_6ee0 *flying_car_data = (Data_6ee0 *)flying_car_moby->pvars;
     Vec4f      attached_part_offset_component __attribute__((aligned(16)));
     char      *hit;
@@ -335,9 +336,6 @@ extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025
 int update_flying_car_path_motion(struct Moby *moby) __asm__("FUN_L14_00307620");
 
 int update_flying_car_path_motion(struct Moby *moby) {
-    enum {
-        FLYING_CAR_WAIT_FOR_PATH_RESET = 3
-    };
     float pos[4];
     float delta[4];
     char *flying_car_data = (char *)moby->pvars;

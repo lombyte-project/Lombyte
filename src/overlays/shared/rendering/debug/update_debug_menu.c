@@ -187,9 +187,6 @@ static inline void copy_vector3(f32 *dst, f32 *src) {
 void update_debug_camera(void) __asm__("FUN_L00_001f3aa0");
 
 void update_debug_camera(void) {
-    enum {
-        DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2
-    };
     struct PadStateWords *pad;
     DebugMenuState       *menu;
     int                   moved;
@@ -457,6 +454,13 @@ extern u8 D_L00_0016CA40[];
 #define level_view_context (*(LevelViewContext *)D_L00_0016CA40)
 #include "rnc/overlay/shared/hero/item_defs.h"
 
+enum {
+    DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS = 0,
+    DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
+    DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2,
+    DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS = 3
+};
+
 /* 13 item ids, declared as 8 bytes: the most gas reaches through $gp, as retail does. */
 extern u8 debug_menu_item_ids[8] __asm__("D_L00_0015EFD0") __attribute__((sda));
 /* Declared as 1 byte so the add_sample path forms its address through $gp, as retail does. */
@@ -504,12 +508,6 @@ void update_debug_menu(void) {
         DEBUG_OPTION_ROW_SCREEN_MODE = 8,
         DEBUG_OPTION_ROW_SCENE_INDEX = 9,
         DEBUG_OPTION_ROW_SEGMENT_INDEX = 10
-    };
-    enum {
-        DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS = 0,
-        DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
-        DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2,
-        DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS = 3
     };
     enum {
         DEBUG_OCCLUSION_MODE_COUNT = 3,

@@ -69,8 +69,10 @@ void draw_help(void) {
         break;
     case HELP_PROMPT_FRAME_TRANSITION:
         if (D_0015EF1D_b) {
-            int transition_half_width = (help_state.half_width - 0x20) * help_state.timer / 8 + 0x20;
-            int transition_half_height = (help_state.half_height - 0x20) * help_state.timer / 8 + 0x20;
+            int transition_half_width =
+                (help_state.half_width - 0x20) * help_state.timer / 8 + 0x20;
+            int transition_half_height =
+                (help_state.half_height - 0x20) * help_state.timer / 8 + 0x20;
             int alpha;
 
             help_state.frame_half_width = transition_half_width;
@@ -125,9 +127,9 @@ void draw_help(void) {
     case HELP_FRAME_CLOSING:
         if (D_0015EF1D_b) {
             int closing_half_width = help_state.frame_half_width -
-                    (help_state.frame_half_width - 8) * help_state.timer / 8;
+                                     (help_state.frame_half_width - 8) * help_state.timer / 8;
             int closing_half_height = help_state.frame_half_height -
-                    (help_state.frame_half_height - 8) * help_state.timer / 8;
+                                      (help_state.frame_half_height - 8) * help_state.timer / 8;
 
             draw_ui_frame(help_state.center_y - closing_half_height,
                           help_state.center_y + closing_half_height,

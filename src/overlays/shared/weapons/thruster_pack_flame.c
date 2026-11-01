@@ -16,6 +16,14 @@
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 
+enum {
+    STATE_INITIALIZE = 0,
+    STATE_WAIT_FOR_BEAM = 1,
+    STATE_BEAM_GROW = 2,
+    STATE_BEAM_ACTIVE = 3,
+    STATE_BEAM_SHRINK = 4
+};
+
 #define BEAM_QUAD_YZ                                                                       \
     {                                                                                      \
         {0.0f, -2.0f, 2.0f, 1.0f}, {0.0f, -2.0f, -2.0f, 1.0f}, {0.0f, 2.0f, 2.0f, 1.0f}, { \
@@ -847,9 +855,6 @@ void emit_beam_trail_particles(X *x) {
 char *spawn_thruster_pack_flame(int instance_index) __asm__("FUN_L00_002b4138");
 
 char *spawn_thruster_pack_flame(int instance_index) {
-    enum {
-        STATE_INITIALIZE = 0
-    };
     char *spawned_moby = create_moby(0xA7);
     if (spawned_moby != 0) {
         int *moby_vars = ((int *)MOBY(spawned_moby)->pvars);
@@ -869,13 +874,6 @@ void thruster_pack_flame_update(void *moby) __asm__("FUN_L00_002b4198");
 
 /* Moby class 167 */
 void thruster_pack_flame_update(void *moby) {
-    enum {
-        STATE_INITIALIZE = 0,
-        STATE_WAIT_FOR_BEAM = 1,
-        STATE_BEAM_GROW = 2,
-        STATE_BEAM_ACTIVE = 3,
-        STATE_BEAM_SHRINK = 4
-    };
     O_4198 *beam_moby = (O_4198 *)moby;
     V_4198 *v = beam_moby->v;
     s32     flag = 0;

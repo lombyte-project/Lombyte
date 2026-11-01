@@ -10,6 +10,17 @@
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "qcopy.h"
 
+enum {
+    HATCH_WAIT_ACTIVATION = 0,
+    HATCH_WAIT_ACTIVATION_DELAY = 1,
+    HATCH_WAIT_ACTIVATION_ANIMATION = 2,
+    HATCH_WAIT_ACTIVATION_GATE_CLEAR = 3,
+    HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR = 4,
+    HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY = 5,
+    HATCH_WAIT_RESET_DELAY = 6,
+    HATCH_WAIT_RESET_ANIMATION = 7
+};
+
 extern u8 *D_L14_00167500 NOT_SDA;
 extern char              *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 
@@ -17,16 +28,6 @@ void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 
 /* Moby class 250 */
 void plasmabot_hatch_update(struct Moby *moby) {
-    enum {
-        HATCH_WAIT_ACTIVATION = 0,
-        HATCH_WAIT_ACTIVATION_DELAY = 1,
-        HATCH_WAIT_ACTIVATION_ANIMATION = 2,
-        HATCH_WAIT_ACTIVATION_GATE_CLEAR = 3,
-        HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR = 4,
-        HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY = 5,
-        HATCH_WAIT_RESET_DELAY = 6,
-        HATCH_WAIT_RESET_ANIMATION = 7
-    };
     char *hatch_private_vars = (char *)moby->pvars;
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         moby->collision = 0;
@@ -103,11 +104,6 @@ typedef struct {
 int refresh_plasmabot_hatch_reset_delay(int i) __asm__("FUN_L14_002d9870");
 
 int refresh_plasmabot_hatch_reset_delay(int i) {
-    enum {
-        HATCH_WAIT_ACTIVATION = 0,
-        HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY = 5,
-        HATCH_WAIT_RESET_DELAY = 6
-    };
     struct Moby *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int         *hatch_vars = ((int *)moby->pvars);
     int          hatch_reset_delay_active = 0;

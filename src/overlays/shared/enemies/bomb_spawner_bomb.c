@@ -18,6 +18,11 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
+enum {
+    MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+    MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+};
+
 /* Class header fields the spawner copies into a fresh moby. */
 typedef struct {
     u8  pad0[0xF];
@@ -79,10 +84,6 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby,
 struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s32 oclass) {
     enum {
         SPAWNER_CHILD_STATE_INITIAL = 0
-    };
-    enum {
-        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
-        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
     };
     Vec4         pos;
     Vec4        *spawn_position_source;
@@ -202,10 +203,6 @@ void bomb_spawner_bomb_update(struct Moby *moby) {
         SPAWNER_BOMB_STATE_MOVING = 0,
         SPAWNER_BOMB_STATE_SPAWN_CHILD = 1,
         SPAWNER_BOMB_STATE_SHRINKING = 2
-    };
-    enum {
-        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xfd,
-        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xfe
     };
     float       *bomb_runtime;
     Vec4        *pos;

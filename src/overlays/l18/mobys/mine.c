@@ -36,16 +36,6 @@ void moby_568_update(struct Moby *moby) __asm__("FUN_L18_002d5918");
 
 /* Moby class 568 */
 void moby_568_update(struct Moby *moby) {
-    enum {
-        STATE_INITIALIZE = 0,
-        STATE_BALLISTIC_FLIGHT = 1,
-        STATE_POST_FLIGHT_SETTLING = 2,
-        STATE_APPROACH_NEARBY_TARGET = 3,
-        STATE_WAIT_TO_RESUME_APPROACH = 4
-    };
-    enum {
-        STATE_INACTIVE = 5
-    };
     char *class_238_update_private_vars = (char *)moby->pvars;
     float settling_displacement_or_steering_increment[4];
     update_mine_detonation(moby);
@@ -152,6 +142,18 @@ void moby_568_update(struct Moby *moby) {
 }
 
 #include "sda.h"
+
+enum {
+    STATE_INITIALIZE = 0,
+    STATE_BALLISTIC_FLIGHT = 1,
+    STATE_POST_FLIGHT_SETTLING = 2,
+    STATE_APPROACH_NEARBY_TARGET = 3,
+    STATE_WAIT_TO_RESUME_APPROACH = 4
+};
+
+enum {
+    STATE_INACTIVE = 5
+};
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D70E8), where it is exact; names translated to the US level program. */
@@ -373,9 +375,6 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int update_moby_state_pause(struct Moby *moby) __asm__("FUN_L18_002d6108");
 
 int update_moby_state_pause(struct Moby *moby) {
-    enum {
-        STATE_WAIT_TO_RESUME_APPROACH = 4
-    };
     char *moby_vars = (char *)moby->pvars;
     int   state_pause_result = process_moby_suck_cannon_suction(moby);
     if (state_pause_result != 0) {
@@ -407,9 +406,6 @@ extern int store_moby_in_suck_cannon(struct Moby *) __asm__("FUN_L00_002dbb20");
 int moby_hold_state_while_active(struct Moby *moby) __asm__("FUN_L18_002d6190");
 
 int moby_hold_state_while_active(struct Moby *moby) {
-    enum {
-        STATE_WAIT_TO_RESUME_APPROACH = 4
-    };
     int active = store_moby_in_suck_cannon(moby);
     if (active != 0) {
         moby->state = STATE_WAIT_TO_RESUME_APPROACH;
@@ -424,9 +420,6 @@ int moby_hold_state_while_active(struct Moby *moby) {
 void hide_moby_and_disable_collision(struct Moby *moby) __asm__("FUN_L18_002d6280");
 
 void hide_moby_and_disable_collision(struct Moby *moby) {
-    enum {
-        STATE_INACTIVE = 5
-    };
     unsigned short flags;
     moby->state = STATE_INACTIVE;
     if (moby->prev_seq != 0) {

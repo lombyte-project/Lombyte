@@ -16,6 +16,11 @@
 #include "rnc/overlay/shared/camera/init_camera_system.h"
 #include "rnc/camera/camera_spring.h"
 
+enum {
+    CAMERA_ORBIT_MODE_FOLLOW = 0,
+    CAMERA_ORBIT_MODE_ORBITING = 1
+};
+
 /* Sets up a moby's vector from the level table and clamps its height for the current state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
@@ -243,9 +248,6 @@ extern CameraPresetRow *D_L05_0015EF50;
 void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) __asm__("FUN_L05_003296e0");
 
 void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
-    enum {
-        CAMERA_ORBIT_MODE_FOLLOW = 0
-    };
     CameraPreset *preset = D_L05_0015EF50[camera_to_reset->preset].preset;
     CameraOrbit  *orbit_state;
     CameraFocus  *focus;
@@ -314,10 +316,6 @@ extern float FUN_001ebd78(void *, float, float, float, float, float);
 void update_hero_follow_camera_orbit(Camera *cam) __asm__("FUN_L05_003298d8");
 
 void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
-    enum {
-        CAMERA_ORBIT_MODE_FOLLOW = 0,
-        CAMERA_ORBIT_MODE_ORBITING = 1
-    };
     Vec4         up;
     Vec4         side;
     Vec4         fwd;
@@ -482,9 +480,6 @@ extern float D_L05_00174278 NOT_SDA;
 void update_orbit_camera_position(Camera_32B1F8 *camera) __asm__("FUN_L05_00329ce8");
 
 void update_orbit_camera_position(Camera_32B1F8 *camera) {
-    enum {
-        CAMERA_ORBIT_MODE_FOLLOW = 0
-    };
     V_32B1F8      down;
     V_32B1F8      focus;
     V_32B1F8      rel;

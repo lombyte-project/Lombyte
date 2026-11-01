@@ -30,6 +30,12 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 #include "rnc/overlay/l13/effect_suppression_levels.h"
 
+enum {
+    TOWER_STATE_INITIALIZE = 0,
+    TOWER_STATE_ACTIVE = 1,
+    TOWER_STATE_DESTRUCTION = 2
+};
+
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern void FUN_L00_00257470(struct Moby *, int, int);
@@ -262,9 +268,6 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
-    enum {
-        TOWER_STATE_DESTRUCTION = 2
-    };
     char            *hit_record;
     int              hit;
     float            position[4];
@@ -376,11 +379,6 @@ void forcefield_tower_update(struct Moby *moby) __asm__("FUN_L13_002cefc0");
 
 /* Moby class 170 */
 void forcefield_tower_update(struct Moby *moby) {
-    enum {
-        TOWER_STATE_INITIALIZE = 0,
-        TOWER_STATE_ACTIVE = 1,
-        TOWER_STATE_DESTRUCTION = 2
-    };
     enum {
         TOWER_DESTRUCTION_WAIT_FOR_POINT_1_EFFECT = 0,
         TOWER_DESTRUCTION_WAIT_FOR_POINT_2_EFFECT = 1,

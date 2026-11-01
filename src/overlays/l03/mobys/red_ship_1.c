@@ -24,6 +24,13 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/game/item_state.h"
 
+enum {
+    RED_SHIP_INITIALIZE = 0,
+    RED_SHIP_FOLLOW_PATH_SPLINE = 1,
+    RED_SHIP_WAIT_FOR_PATH = 2,
+    RED_SHIP_WAIT_FOR_MOVEMENT_TIMER = 3
+};
+
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
 
 extern int D_L03_0015F5CC; /* no foreign declaration */
@@ -61,9 +68,6 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *position) {
 void maintain_emitter_sound_voice(struct Moby *moby) __asm__("FUN_L03_0029c9d0");
 
 void maintain_emitter_sound_voice(struct Moby *moby) {
-    enum {
-        RED_SHIP_INITIALIZE = 0
-    };
     char *emitter_pvars = (char *)moby->pvars;
     if (moby->state == RED_SHIP_INITIALIZE) {
         *(int *)(emitter_pvars + 0x150) = -1;
@@ -545,12 +549,6 @@ typedef struct RedShip1Vars {
  * steering, banking and spawning its hit/smoke effects; state 2 waits without a path, 3 waits a timer. */
 /* Moby classes 75, 115-120, 132, 795 */
 void red_ship_1_update(char *moby) {
-    enum {
-        RED_SHIP_INITIALIZE = 0,
-        RED_SHIP_FOLLOW_PATH_SPLINE = 1,
-        RED_SHIP_WAIT_FOR_PATH = 2,
-        RED_SHIP_WAIT_FOR_MOVEMENT_TIMER = 3
-    };
     float          zero[4];
     float          old_rot[4];
     float          old_pos[4];
