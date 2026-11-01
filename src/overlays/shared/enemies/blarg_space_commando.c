@@ -105,7 +105,8 @@ extern f32   D_L06_0015F580[] MACRO_ADDR;
 
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
-extern s32  FUN_L00_00258b50(struct Moby *, MoveCtl *, void *, void *, f32);
+extern s32  move_moby_with_ground_and_collision_checks(
+     struct Moby *, MoveCtl *, void *, void *, f32) __asm__("FUN_L00_00258b50");
 extern void
 make_hit_descriptor(ShotInfo *, struct Moby *, s32, void *, f32) __asm__("FUN_L00_00259888");
 extern void sweep_hit_segment(
@@ -265,11 +266,11 @@ void blarg_space_commando_update(struct Moby *moby) {
             movement_input_or_output_or_melee_origin.f[1] =
                 fast_sin(moby->rot.z) * route_destination_distance;
             movement_input_or_output_or_melee_origin.f[2] = 0.0f;
-            FUN_L00_00258b50(moby,
-                             &blarg_commando_state->ctl,
-                             &movement_input_or_output_or_melee_origin,
-                             &movement_output_or_hit_vector_or_path_point,
-                             1.0f);
+            move_moby_with_ground_and_collision_checks(moby,
+                                                       &blarg_commando_state->ctl,
+                                                       &movement_input_or_output_or_melee_origin,
+                                                       &movement_output_or_hit_vector_or_path_point,
+                                                       1.0f);
         }
         break;
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP:
@@ -388,11 +389,11 @@ void blarg_space_commando_update(struct Moby *moby) {
         position_or_movement_vector.f[0] = 2.0f * fast_cos(moby->rot.z);
         position_or_movement_vector.f[1] = 2.0f * fast_sin(moby->rot.z);
         position_or_movement_vector.f[2] = 0.0f;
-        FUN_L00_00258b50(moby,
-                         &blarg_commando_state->ctl,
-                         &position_or_movement_vector,
-                         &movement_input_or_output_or_melee_origin,
-                         1.0f);
+        move_moby_with_ground_and_collision_checks(moby,
+                                                   &blarg_commando_state->ctl,
+                                                   &position_or_movement_vector,
+                                                   &movement_input_or_output_or_melee_origin,
+                                                   1.0f);
         resolve_point_path_segment_xy_clearance(
             blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
         if (path_8808(blarg_commando_state->path,
@@ -462,11 +463,11 @@ void blarg_space_commando_update(struct Moby *moby) {
                 moby->rot.z,
                 fast_arc_tan(blarg_commando_state->home.f[0] - moby->pos.x,
                              blarg_commando_state->home.f[1] - moby->pos.y)) < 0.7853982f) {
-            FUN_L00_00258b50(moby,
-                             &blarg_commando_state->ctl,
-                             &position_or_movement_vector,
-                             &movement_input_or_output_or_melee_origin,
-                             1.0f);
+            move_moby_with_ground_and_collision_checks(moby,
+                                                       &blarg_commando_state->ctl,
+                                                       &position_or_movement_vector,
+                                                       &movement_input_or_output_or_melee_origin,
+                                                       1.0f);
             resolve_point_path_segment_xy_clearance(
                 blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
         }

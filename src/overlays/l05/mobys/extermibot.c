@@ -45,7 +45,8 @@ extern float D_0015ED70;
 float        absolute_float(float input) __asm__("func_001F99C0");
 extern float
            approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
+extern int move_moby_with_ground_and_collision_checks(
+    void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern void FUN_L01_0026d930(char *p);
 /* Extermibot update: wakes from its dormant pose, walks its path, closes in on the target and strikes it, bursts into sparks between strikes, and dies on a hit. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003033A0), where it is exact; names translated to the US level program. */
@@ -284,11 +285,12 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[2] = 0.0f;
-            FUN_L00_00258b50(moby,
-                             &moby_data->move,
-                             path_goal_or_facing_vector,
-                             movement_displacement_or_spark_vector_or_strike_position,
-                             1.0f);
+            move_moby_with_ground_and_collision_checks(
+                moby,
+                &moby_data->move,
+                path_goal_or_facing_vector,
+                movement_displacement_or_spark_vector_or_strike_position,
+                1.0f);
             resolve_point_path_segment_xy_clearance(
                 moby_data->path, moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
@@ -321,11 +323,12 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[2] = 0.0f;
-            FUN_L00_00258b50(moby,
-                             &moby_data->move,
-                             path_goal_or_facing_vector,
-                             movement_displacement_or_spark_vector_or_strike_position,
-                             1.0f);
+            move_moby_with_ground_and_collision_checks(
+                moby,
+                &moby_data->move,
+                path_goal_or_facing_vector,
+                movement_displacement_or_spark_vector_or_strike_position,
+                1.0f);
             resolve_point_path_segment_xy_clearance(
                 moby_data->path, moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
@@ -1020,7 +1023,8 @@ void move_extermibot_along_path(struct Moby *moby, s32 destination_position, f32
     facing_direction.x = fast_cos(moby->rot.z) * 2.0f;
     facing_direction.y = fast_sin(moby->rot.z) * 2.0f;
     facing_direction.z = 0.0f;
-    FUN_L00_00258b50(moby, walker_vars->move, &facing_direction, &movement_displacement, 1.0f);
+    move_moby_with_ground_and_collision_checks(
+        moby, walker_vars->move, &facing_direction, &movement_displacement, 1.0f);
     if (walker_vars->stuck_timer == 0) {
         if (FUN_L05_00304058_u(
                 walker_vars->path, &moby->pos, &moby->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)

@@ -121,9 +121,10 @@ char         D_L03_001618D0 = 3;
 extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
 extern int   rand(void) __asm__("FUN_001160d8");
-extern int   FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern int   step_mover_2e3f20(char *m, char *p, char *pos, char *v) __asm__("FUN_L00_00259028");
-extern int   FUN_L00_002dc9f0(void *, void *);
+extern int   move_moby_with_ground_and_collision_checks(
+      void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
+extern int step_mover_2e3f20(char *m, char *p, char *pos, char *v) __asm__("FUN_L00_00259028");
+extern int FUN_L00_002dc9f0(void *, void *);
 extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
@@ -286,7 +287,8 @@ void robot_dog_update(char *moby) {
         forward_vector_or_path_point[0] = 2.0f * fast_cos(MOBY(moby)->rot.z);
         forward_vector_or_path_point[1] = 2.0f * fast_sin(MOBY(moby)->rot.z);
         forward_vector_or_path_point[2] = 0.0f;
-        FUN_L00_00258b50(moby, &robot_dog_state->i180, forward_vector_or_path_point, push, 1.0f);
+        move_moby_with_ground_and_collision_checks(
+            moby, &robot_dog_state->i180, forward_vector_or_path_point, push, 1.0f);
         if (fast_dec_timer(&robot_dog_state->i23C)) {
             robot_dog_state->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
         }
@@ -359,7 +361,7 @@ void robot_dog_update(char *moby) {
         forward_vector_or_path_point[0] = 2.0f * fast_cos(MOBY(moby)->rot.z);
         forward_vector_or_path_point[1] = 2.0f * fast_sin(MOBY(moby)->rot.z);
         forward_vector_or_path_point[2] = 0.0f;
-        FUN_L00_00258b50(
+        move_moby_with_ground_and_collision_checks(
             moby, &robot_dog_state->i180, forward_vector_or_path_point, robot_dog_state->v40, 1.0f);
         if (((unsigned char *)moby)[0x52] == 5) {
             approach_value(&robot_dog_state->f1A4,
@@ -401,7 +403,8 @@ void robot_dog_update(char *moby) {
         forward_vector_or_path_point[0] = 2.0f * fast_cos(MOBY(moby)->rot.z);
         forward_vector_or_path_point[1] = 2.0f * fast_sin(MOBY(moby)->rot.z);
         forward_vector_or_path_point[2] = 0.0f;
-        FUN_L00_00258b50(moby, &robot_dog_state->i180, forward_vector_or_path_point, push, 1.0f);
+        move_moby_with_ground_and_collision_checks(
+            moby, &robot_dog_state->i180, forward_vector_or_path_point, push, 1.0f);
         if (vector_distance_xy(moby + 0x10, robot_dog_state->home) < 1.0f) {
             MOBY(moby)->state = ROBOT_DOG_WAIT_FOR_ACTIVATION;
             if (((unsigned char *)moby)[0x53] != 1) {

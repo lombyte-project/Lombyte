@@ -920,7 +920,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
 }
 
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
-extern void FUN_L00_00258b50_c(char *, char *, float *, float *, float) __asm__("FUN_L00_00258b50");
+extern void  move_moby_with_ground_and_collision_checks(
+     char *, char *, float *, float *, float) __asm__("FUN_L00_00258b50");
 
 void update_moby_target_heading_and_conditional_movement(
     char *moby, float *target_position) __asm__("FUN_L11_00315f58");
@@ -947,7 +948,7 @@ void update_moby_target_heading_and_conditional_movement(char *moby, float *targ
         planar_heading_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
         planar_heading_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
         *(int *)&planar_heading_vector[2] = 0;
-        FUN_L00_00258b50_c(
+        move_moby_with_ground_and_collision_checks(
             moby, moby_vars + 0x180, planar_heading_vector, helper_scratch_buffer, 1.0f);
     }
 }

@@ -138,14 +138,15 @@ void        spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) __asm__(
 extern void spawn_amoeboid_burst_sparks(unsigned char *, float *) __asm__("FUN_L01_002ef770");
 extern int  follow_path(int *, int, int, float, void *, void *, void *) __asm__("FUN_L01_00276fe8");
 extern void FUN_L01_0026d930(void *);
-extern void FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern int  path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
-extern int  FUN_L00_002dc9f0(void *, void *);
-extern int  FUN_L00_00257470(void *, int, int);
-extern int  is_value_within_interpolated_window(float, void *) __asm__("FUN_00214cc8");
-extern int  FUN_00214720(void *, int);
-extern void FUN_0022da68(int, int, char *);
-extern int  FUN_00213260(int);
+extern void move_moby_with_ground_and_collision_checks(
+    void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
+extern int              path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
+extern int              FUN_L00_002dc9f0(void *, void *);
+extern int              FUN_L00_00257470(void *, int, int);
+extern int              is_value_within_interpolated_window(float, void *) __asm__("FUN_00214cc8");
+extern int              FUN_00214720(void *, int);
+extern void             FUN_0022da68(int, int, char *);
+extern int              FUN_00213260(int);
 extern float            FUN_00213308(void);
 extern float            frame_time_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70 MACRO_ADDR;
@@ -368,7 +369,7 @@ void large_amoeboid_update(unsigned char *moby) {
         move[0] = fast_cos(MOBY(moby)->rot.z);
         move[1] = fast_sin(MOBY(moby)->rot.z);
         move[2] = 0.0f;
-        FUN_L00_00258b50(
+        move_moby_with_ground_and_collision_checks(
             moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
         result = large_amoeboid_vars->unk204;
         if (result != 2 && FUN_00213260(4) == 0) {
@@ -412,7 +413,7 @@ void large_amoeboid_update(unsigned char *moby) {
         move[0] = fast_cos(MOBY(moby)->rot.z);
         move[1] = fast_sin(MOBY(moby)->rot.z);
         move[2] = 0.0f;
-        FUN_L00_00258b50(
+        move_moby_with_ground_and_collision_checks(
             moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
         if (path_8808(large_amoeboid_vars->unk240, &MOBY(moby)->pos, target + 0x10, hit) != 0 &&
             fast_vec_dist(&MOBY(moby)->pos, hit) < 1.5f)
@@ -480,7 +481,7 @@ void large_amoeboid_update(unsigned char *moby) {
                 move[1] = fast_sin(MOBY(moby)->rot.z);
                 move[1] += move[1];
                 move[2] = 0.0f;
-                FUN_L00_00258b50(
+                move_moby_with_ground_and_collision_checks(
                     moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
             } else {
                 large_amoeboid_vars->unk204 = 2;
@@ -509,7 +510,7 @@ void large_amoeboid_update(unsigned char *moby) {
             move[1] = fast_sin(*rotation);
             move[1] += move[1];
             move[2] = 0.0f;
-            FUN_L00_00258b50(
+            move_moby_with_ground_and_collision_checks(
                 moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
         }
         if (is_value_within_interpolated_window(15.5f, moby) != 0 &&
@@ -580,7 +581,7 @@ void large_amoeboid_update(unsigned char *moby) {
             move[1] = fast_sin(MOBY(moby)->rot.z);
             move[1] += move[1];
             move[2] = 0.0f;
-            FUN_L00_00258b50(
+            move_moby_with_ground_and_collision_checks(
                 moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
         }
         if (large_amoeboid_vars->unk204 != 2 && (MOBY(moby)->state = 4, MOBY(moby)->prev_seq != 1))

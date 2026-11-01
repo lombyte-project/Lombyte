@@ -261,7 +261,8 @@ extern void         FUN_L00_00257470_e50(void *, int, int) __asm__("FUN_L00_0025
 extern void         random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void
 FUN_L00_00258278_c(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
-extern void FUN_L00_00258b50(void *, void *, void *, void *, float);
+extern void move_moby_with_ground_and_collision_checks(
+    void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern void play_entity_sound(void *, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_0025a120_e50(void *) __asm__("FUN_L00_0025a120");
 extern void
@@ -483,11 +484,11 @@ void sand_shark_update(struct Moby *moby) {
         position_or_offset_scratch.f[1] = 2.0f * fast_sin(moby->rot.z);
         position_or_offset_scratch.f[2] = 0.0f;
         fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
-        FUN_L00_00258b50(moby,
-                         &sand_shark_behavior_vars->walk_mode,
-                         &position_or_offset_scratch,
-                         &target_home_delta,
-                         1.0f);
+        move_moby_with_ground_and_collision_checks(moby,
+                                                   &sand_shark_behavior_vars->walk_mode,
+                                                   &position_or_offset_scratch,
+                                                   &target_home_delta,
+                                                   1.0f);
         FUN_L02_002d63c0_e50(moby);
         if (path_8808(sand_shark_behavior_vars->path,
                       &moby->pos,
@@ -625,11 +626,11 @@ void sand_shark_update(struct Moby *moby) {
         position_or_offset_scratch.f[1] = 2.0f * fast_sin(moby->rot.z);
         position_or_offset_scratch.f[2] = 0.0f;
         fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
-        FUN_L00_00258b50(moby,
-                         &sand_shark_behavior_vars->walk_mode,
-                         &position_or_offset_scratch,
-                         &target_or_particle_vector,
-                         1.0f);
+        move_moby_with_ground_and_collision_checks(moby,
+                                                   &sand_shark_behavior_vars->walk_mode,
+                                                   &position_or_offset_scratch,
+                                                   &target_or_particle_vector,
+                                                   1.0f);
         FUN_L02_002d63c0_e50(moby);
         if (moby->state == SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET) {
             moby->pos.z -= sand_shark_height_offset_gp;
@@ -718,11 +719,11 @@ void sand_shark_update(struct Moby *moby) {
         position_or_offset_scratch.f[1] = 2.0f * fast_sin(moby->rot.z);
         position_or_offset_scratch.f[2] = 0.0f;
         fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
-        FUN_L00_00258b50(moby,
-                         &sand_shark_behavior_vars->walk_mode,
-                         &position_or_offset_scratch,
-                         &target_or_particle_vector,
-                         1.0f);
+        move_moby_with_ground_and_collision_checks(moby,
+                                                   &sand_shark_behavior_vars->walk_mode,
+                                                   &position_or_offset_scratch,
+                                                   &target_or_particle_vector,
+                                                   1.0f);
         if (moby->state == SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET) {
             moby->pos.z -= sand_shark_height_offset_gp;
         }

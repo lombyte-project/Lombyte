@@ -411,7 +411,8 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
 extern int FUN_L00_00258830(void *, void *, float, float, float, int);
 
-extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
+extern int move_moby_with_ground_and_collision_checks(
+    void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 
 extern int FUN_L00_002dc9f0(void *, void *);
 
@@ -1026,7 +1027,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
+        res = move_moby_with_ground_and_collision_checks(
+            robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
         if (fast_dec_timer(&robosquawker_vars->w210) != 0) {
             robosquawker_vars->w210 = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             robosquawker_vars->f1F4 = -robosquawker_vars->f1F4;
@@ -1131,7 +1133,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
+        res = move_moby_with_ground_and_collision_checks(
+            robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
         if (vector_distance_xy(&robosquawker_moby->pos, &robosquawker_vars->v1D0) < 2.0f) {
             robosquawker_moby->state = ROBOSQUAWKER_STATE_GROUND_IDLE;
             if (robosquawker_moby->b53 != 3) {
@@ -1227,7 +1230,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
+        res = move_moby_with_ground_and_collision_checks(
+            robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
         fast_vec_sub(&vc, &selected_target_record, &robosquawker_vars->v1D0);
         if (vector_distance_xy(&robosquawker_moby->pos, &selected_target_record) < 1.5f &&
             r <= 1.0f) {

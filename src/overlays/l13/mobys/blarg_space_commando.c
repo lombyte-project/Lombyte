@@ -131,7 +131,8 @@ typedef struct {
     u8           unk400[1];
 } Vars_309330;
 
-extern int FUN_L00_00258b50(struct Moby *, void *, void *, void *, float);
+extern int move_moby_with_ground_and_collision_checks(
+    struct Moby *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 
 extern int path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 
@@ -373,7 +374,9 @@ void blarg_space_commando_update(struct Moby *moby) {
         point.f[0] = 2.0f * fast_cos(moby->rot.z);
         point.f[1] = 2.0f * fast_sin(moby->rot.z);
         point.f[2] = 0.0f;
-        if (FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f) & 2) {
+        if (move_moby_with_ground_and_collision_checks(
+                moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f) &
+            2) {
             rand();
             blarg_space_commando_vars->unk1A8 = convert_integer_to_float(-1) * 1.0995574f;
         } else {
@@ -418,7 +421,8 @@ void blarg_space_commando_update(struct Moby *moby) {
         point.f[0] = 2.0f * fast_cos(moby->rot.z);
         point.f[1] = 2.0f * fast_sin(moby->rot.z);
         point.f[2] = 0.0f;
-        FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
+        move_moby_with_ground_and_collision_checks(
+            moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
         resolve_point_path_segment_xy_clearance(
             blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
         if (path_8808(blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
@@ -483,7 +487,8 @@ void blarg_space_commando_update(struct Moby *moby) {
                 moby->rot.z,
                 fast_arc_tan(blarg_space_commando_vars->home.f[0] - moby->pos.x,
                              blarg_space_commando_vars->home.f[1] - moby->pos.y)) < 0.7853982f) {
-            FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
+            move_moby_with_ground_and_collision_checks(
+                moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
             resolve_point_path_segment_xy_clearance(
                 blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
         }

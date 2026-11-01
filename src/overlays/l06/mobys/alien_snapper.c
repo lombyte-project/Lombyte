@@ -178,8 +178,8 @@ extern void
 func_L00_002592B0_91A8(Moby *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float func_L06_002FAB28_91A8(Moby *) __asm__("FUN_L06_002f96f8");
-extern int
-func_L00_00259B88_91A8(Moby *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
+extern int   move_moby_with_ground_and_collision_checks(
+      Moby *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern void  func_L00_00262DF0_91A8(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern void  func_L00_00262DF0_b91A8(int, void *, void *, float) __asm__("FUN_L00_00261d78");
 extern float compute_interpolated_record_value(Moby *) __asm__("FUN_0020c9e0");
@@ -487,7 +487,7 @@ void alien_snapper_update(Moby *moby) {
         scratch.m.dir[0] = fast_cos(moby->rot.z) * 2.0f;
         scratch.m.dir[1] = fast_sin(moby->rot.z) * 2.0f;
         scratch.m.dir[2] = 0.0f;
-        func_L00_00259B88_91A8(
+        move_moby_with_ground_and_collision_checks(
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         moby->rot.z = saved_rot;
         func_L00_00262DF0_91A8(0.5f, snapper_behavior->path, &moby->pos, &moby->pos);
@@ -561,7 +561,7 @@ void alien_snapper_update(Moby *moby) {
         scratch.m.dir[0] = fast_cos(moby->rot.z) * 2.0f;
         scratch.m.dir[1] = fast_sin(moby->rot.z) * 2.0f;
         scratch.m.dir[2] = 0.0f;
-        func_L00_00259B88_91A8(
+        move_moby_with_ground_and_collision_checks(
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         moby->rot.z = saved_rot;
         func_L00_00262DF0_91A8(0.5f, snapper_behavior->path, &moby->pos, &moby->pos);
@@ -630,7 +630,7 @@ void alien_snapper_update(Moby *moby) {
         scratch.m.dir[0] = fast_cos(moby->rot.z) * 2.0f;
         scratch.m.dir[1] = fast_sin(moby->rot.z) * 2.0f;
         scratch.m.dir[2] = 0.0f;
-        func_L00_00259B88_91A8(
+        move_moby_with_ground_and_collision_checks(
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         moby->rot.z = saved_rot;
         func_L00_00262DF0_91A8(0.5f, snapper_behavior->path, &moby->pos, &moby->pos);
@@ -664,7 +664,7 @@ void alien_snapper_update(Moby *moby) {
         scratch.m.dir[0] = fast_cos(moby->rot.z) * 2.0f;
         scratch.m.dir[1] = fast_sin(moby->rot.z) * 2.0f;
         scratch.m.dir[2] = 0.0f;
-        func_L00_00259B88_91A8(
+        move_moby_with_ground_and_collision_checks(
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         func_L00_00262DF0_b91A8(snapper_behavior->path, &moby->pos, &moby->pos, 0.5f);
         if (fast_vec_dist(&moby->pos, &snapper_behavior->home) < 1.0f) {

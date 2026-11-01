@@ -193,7 +193,8 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern int   D_L10_0015F5CC;
 extern int   D_L10_0015FFD8;
-extern int   FUN_L00_00258b50(void *, void *, void *, void *, float);
+extern int   move_moby_with_ground_and_collision_checks(
+      void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern float l10_toxic_crab_size_scale __asm__("D_L10_00161E24") __attribute__((sda));
 
 #include "rnc/overlay/l10/mobys/toxic_crab_data/toxic_crab_update_2.h"
@@ -478,7 +479,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                         }
                     }
                 }
-                r = FUN_L00_00258b50(m, &crab_data->iD0, dir, out, 1.0f);
+                r = move_moby_with_ground_and_collision_checks(m, &crab_data->iD0, dir, out, 1.0f);
                 m->f48 = rot;
                 if (r & 3) {
                     if (vector_distance_xy(m->pos, pre_movement_position) <
@@ -675,7 +676,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             dir[0] = fast_cos(m->f48) * 2.0f;
             dir[1] = fast_sin(m->f48) * 2.0f;
             dir[2] = 0.0f;
-            FUN_L00_00258b50(m, &crab_data->iD0, dir, out, 1.0f);
+            move_moby_with_ground_and_collision_checks(m, &crab_data->iD0, dir, out, 1.0f);
             m->f48 = rot;
             if (see) {
                 if (fast_dec_timer(&crab_data->i1A8) ||
@@ -713,7 +714,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             dir[0] = fast_cos(m->f48) * 2.0f;
             dir[1] = fast_sin(m->f48) * 2.0f;
             dir[2] = 0.0f;
-            FUN_L00_00258b50(m, &crab_data->iD0, dir, out, 1.0f);
+            move_moby_with_ground_and_collision_checks(m, &crab_data->iD0, dir, out, 1.0f);
             if (fast_vec_dist(m->pos, crab_data->v170) < 1.0f) {
                 m->state = TOXIC_CRAB_STATE_FACE_TRACKED_POSITION;
                 if (m->anim != 1) {

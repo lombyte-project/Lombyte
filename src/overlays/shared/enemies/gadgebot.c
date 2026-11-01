@@ -255,9 +255,10 @@ extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
 extern int   coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
-extern int   FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern int   is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-extern int   test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
+extern int   move_moby_with_ground_and_collision_checks(
+      void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
+extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
+extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern int
 compute_clear_path_point_mask(float, int *, int, int, void *) __asm__("FUN_L01_00276a48");
@@ -620,11 +621,11 @@ void gadgebot_update(GbMoby *moby) {
                     gadgebot_vars->ctl.unk24 = frame_time * 3.0f * 1.35f;
                 }
                 if (hero_distance > 0.8f) {
-                    flags = FUN_L00_00258b50(moby,
-                                             &gadgebot_vars->ctl,
-                                             hero.motion.pos.f,
-                                             movement_displacement_output,
-                                             1.0f);
+                    flags = move_moby_with_ground_and_collision_checks(moby,
+                                                                       &gadgebot_vars->ctl,
+                                                                       hero.motion.pos.f,
+                                                                       movement_displacement_output,
+                                                                       1.0f);
                 }
                 {
                     int ph = ((int)moby >> 8) % 8;
@@ -788,11 +789,11 @@ void gadgebot_update(GbMoby *moby) {
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
                 gadgebot_vars->ctl.unk24 = frame_time * 4.5f;
-                if (FUN_L00_00258b50(moby,
-                                     &gadgebot_vars->ctl,
-                                     gadgebot_vars->target->pos,
-                                     movement_displacement_output,
-                                     1.0f) &
+                if (move_moby_with_ground_and_collision_checks(moby,
+                                                               &gadgebot_vars->ctl,
+                                                               gadgebot_vars->target->pos,
+                                                               movement_displacement_output,
+                                                               1.0f) &
                     0x20) {
                     moby->state = GADGEBOT_STAND_AND_FACE_HERO;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
@@ -901,11 +902,11 @@ void gadgebot_update(GbMoby *moby) {
                                  frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
-                if (FUN_L00_00258b50(moby,
-                                     &gadgebot_vars->ctl,
-                                     vector_and_hit_scratch,
-                                     movement_displacement_output,
-                                     1.0f) &
+                if (move_moby_with_ground_and_collision_checks(moby,
+                                                               &gadgebot_vars->ctl,
+                                                               vector_and_hit_scratch,
+                                                               movement_displacement_output,
+                                                               1.0f) &
                     0x20) {
                     moby->state = GADGEBOT_STAND_AND_FACE_HERO;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
@@ -1021,7 +1022,8 @@ void gadgebot_update(GbMoby *moby) {
         saved_control_f24 = gadgebot_vars->ctl.unk24;
         gadgebot_vars->ctl.unk10 = 0.0f;
         gadgebot_vars->ctl.unk24 = 0.0f;
-        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, moby->pos, movement_displacement_output, 1.0f);
+        move_moby_with_ground_and_collision_checks(
+            moby, &gadgebot_vars->ctl, moby->pos, movement_displacement_output, 1.0f);
         gadgebot_vars->ctl.unk10 = saved_control_f10;
         gadgebot_vars->ctl.unk24 = saved_control_f24;
         moby->pos[2] = vector_and_hit_scratch[2];

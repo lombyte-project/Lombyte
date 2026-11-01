@@ -135,7 +135,7 @@ int         select_list_point_toward_target(char *a0,
                                             void *list,
                                             char *pt,
                                             char *out) __asm__("FUN_L01_0028b5e0");
-s32         FUN_L00_00258b50(void *m, void *c, void *v, Vec4 *out, f32 f);
+s32 move_moby_with_ground_and_collision_checks(void *m, void *c, void *v, Vec4 *out, f32 f) __asm__("FUN_L00_00258b50");
 void        FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void        FUN_L00_0025a120_c(char *o) __asm__("FUN_L00_0025a120");
 void        FUN_L00_00263ac8_c(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
