@@ -13,8 +13,8 @@ extern s32 D_L00_00184414 NOT_SDA;
 s32                       pause_menu_entry_input(s32 object_address) __asm__("FUN_L00_0027c410");
 
 s32 pause_menu_entry_input(s32 object_address) {
-    s32               flags_snapshot = (*(volatile s32 *)&controller_state.pressed_unmasked);
-    s32               owner_unk38_address;
+    s32 flags_snapshot = ((s32)((volatile struct PadState *)&controller_state)->pressed_unmasked);
+    s32 owner_unk38_address;
     struct GameState *game_state;
     if (flags_snapshot & 0xD00) {
         if (*(s32 *)(object_address + 0x30) & 0x20) {
@@ -34,7 +34,7 @@ s32 pause_menu_entry_input(s32 object_address) {
             return -1;
         }
     }
-    if ((*(volatile s32 *)&controller_state.pressed_unmasked) & 0x20) {
+    if (((s32)((volatile struct PadState *)&controller_state)->pressed_unmasked) & 0x20) {
         D_0013D384 = 0;
         D_L00_0015F5C0 = -1;
         D_L00_0015F570 = 1;

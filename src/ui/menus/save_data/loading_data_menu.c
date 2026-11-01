@@ -67,12 +67,12 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
             return 0;
         }
     }
-    if ((*(s32 *)&controller_state.pressed_unmasked) & 0xD00) {
+    if (((s32)controller_state.pressed_unmasked) & 0xD00) {
         if (menu_system.close_locked == 0) {
             return 1;
         }
     }
-    if ((*(s32 *)&controller_state.pressed_unmasked) & 0x10) {
+    if (((s32)controller_state.pressed_unmasked) & 0x10) {
         back_page = menu_system.current->back;
         if (back_page != 0) {
             menu_system.next = back_page;
@@ -89,7 +89,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         if (menu->flags & 1) {
             buttons = controller_state.raw_pressed;
         } else {
-            buttons = (*(s32 *)&controller_state.pressed_unmasked);
+            buttons = ((s32)controller_state.pressed_unmasked);
         }
         menu->selected_save_slot = (s32)selected_save_slot;
         if ((buttons & 0x1000) && (selected_save_slot != 0)) {

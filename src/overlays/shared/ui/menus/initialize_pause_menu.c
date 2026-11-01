@@ -920,10 +920,10 @@ int process_active_menu_object_actions(int x) {
     if ((s32)D_L00_001B9CF0.owner->unk40 != x) {
         return 0;
     }
-    if (((*(s32 *)&controller_state_lui.pressed_unmasked) & 0xD00) && D_L00_001B9CF0.unk124 == 0) {
+    if ((((s32)controller_state_lui.pressed_unmasked) & 0xD00) && D_L00_001B9CF0.unk124 == 0) {
         return 1;
     }
-    if ((*(s32 *)&controller_state_lui.pressed_unmasked) & 0x10) {
+    if (((s32)controller_state_lui.pressed_unmasked) & 0x10) {
         transition_owner = (s32)D_L00_001B9CF0.owner->unk38;
         if (transition_owner != 0) {
             D_L00_001B9CF0.unk8 = (struct Own *)transition_owner;

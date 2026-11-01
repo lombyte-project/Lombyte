@@ -34,10 +34,10 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     s32  previous_sound_volume;
     s32  scaled_sound_volume;
 
-    if (((*(s32 *)&controller_state.pressed_unmasked) & 0xD00) && (D_001D5D14 == 0)) {
+    if ((((s32)controller_state.pressed_unmasked) & 0xD00) && (D_001D5D14 == 0)) {
         return 1;
     }
-    if ((*(s32 *)&controller_state.pressed_unmasked) & 0x10) {
+    if (((s32)controller_state.pressed_unmasked) & 0x10) {
         struct MenuPage *back_page = menu_system.current->back;
 
         if (back_page != 0) {
@@ -47,10 +47,10 @@ s32 sound_options_menu(struct SoundMenu *menu) {
         }
     }
     previous_selection = menu->selected_option;
-    if ((*(s32 *)&controller_state.pressed_unmasked) & 0x1000) {
+    if (((s32)controller_state.pressed_unmasked) & 0x1000) {
         menu->selected_option = (previous_selection + 2) % 3;
     }
-    if ((*(s32 *)&controller_state.pressed_unmasked) & 0x4000) {
+    if (((s32)controller_state.pressed_unmasked) & 0x4000) {
         menu->selected_option = (menu->selected_option + 1) % 3;
     }
     if ((menu->selected_option != previous_selection) ||
@@ -63,7 +63,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     previous_music_volume = music_volume;
     previous_sound_volume = sound_volume;
     sound_volume_ptr = &sound_volume;
-    if ((*(s32 *)&controller_state.held_unmasked) & 0x2000) {
+    if (((s32)controller_state.held_unmasked) & 0x2000) {
         if (menu->selected_option == 0) {
             sound_volume = (previous_sound_volume + 3 < 0x401) ? previous_sound_volume + 3 : 0x400;
         }
@@ -71,7 +71,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
             music_volume = (previous_music_volume + 3 < 0x401) ? previous_music_volume + 3 : 0x400;
         }
     }
-    if ((*(s32 *)&controller_state.held_unmasked) & 0x8000) {
+    if (((s32)controller_state.held_unmasked) & 0x8000) {
         if (menu->selected_option == 0) {
             sound_volume = (sound_volume - 3 <= 0) ? 0 : sound_volume - 3;
         }
@@ -87,7 +87,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
         voice_pool.group_4_volume = scaled_sound_volume;
         voice_pool.group_5_volume = *sound_volume_ptr;
     }
-    if ((*(s32 *)&controller_state.pressed_unmasked) & 0x40) {
+    if (((s32)controller_state.pressed_unmasked) & 0x40) {
         if (menu->selected_option == 2) {
             playback_mode = !playback_mode;
         }
