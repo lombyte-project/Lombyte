@@ -481,7 +481,7 @@ float D_L15_001CE370[196][4] = RIBBON_POINTS;
 float D_L16_001CDD70[196][4] = RIBBON_POINTS;
 float D_L17_001CE5F0[196][4] = RIBBON_POINTS;
 float D_L18_001CE2F0[196][4] = RIBBON_POINTS;
-P3    D_L00_001DAA80[196] = {0};
+P3    l00_beam_ribbon_world_positions[196] __asm__("D_L00_001DAA80") = {0};
 
 P3 D_L01_001DAF00[196] = {0};
 
@@ -712,17 +712,17 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     for (i = 0; i < 0xC4; i++) {
         fast_vec_scale(&ribbon_vertex_position, D_L00_001D9470[i], beam_effect_vars->f20);
         transform_vector(&ribbon_vertex_position, &ribbon_vertex_position, mtx);
-        D_L00_001DAA80[i].x = ribbon_vertex_position.x;
-        D_L00_001DAA80[i].y = ribbon_vertex_position.y;
-        D_L00_001DAA80[i].z = ribbon_vertex_position.z;
+        l00_beam_ribbon_world_positions[i].x = ribbon_vertex_position.x;
+        l00_beam_ribbon_world_positions[i].y = ribbon_vertex_position.y;
+        l00_beam_ribbon_world_positions[i].z = ribbon_vertex_position.z;
         D_L00_001DA0B0[i].v -= 0.025f;
         if (D_L00_001DA0B0[i].v < -7.0f) {
             D_L00_001DA0B0[i].v += 7.0f;
         }
     }
-    func_L00_001FDE48_2b3628(0x94, D_L00_001DAA80, D_L00_001DA6D0, D_L00_001DA0B0, 1);
+    func_L00_001FDE48_2b3628(0x94, l00_beam_ribbon_world_positions, D_L00_001DA6D0, D_L00_001DA0B0, 1);
     func_L00_001FDE48_2b3628(
-        0x32, &D_L00_001DAA80[0x92], &D_L00_001DA6D0[0x92], &D_L00_001DA0B0[0x92], 1);
+        0x32, &l00_beam_ribbon_world_positions[0x92], &D_L00_001DA6D0[0x92], &D_L00_001DA0B0[0x92], 1);
 }
 
 void emit_beam_trail_particles(X *x) __asm__("FUN_L00_002b3c50");
