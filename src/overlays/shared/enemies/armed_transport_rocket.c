@@ -137,6 +137,9 @@ char *spawn_armed_transport_rocket(char *spawning_moby,
                                    int   blend_duration_ticks,
 
                                    float unused) {
+    enum {
+        ARMED_TRANSPORT_ROCKET_STATE_FLYING = 0
+    };
     char *spawned_moby = (char *)create_moby(0x32);
     char *moby_data;
     float initial_movement_length, x, random_angle_radians, y;
@@ -144,7 +147,7 @@ char *spawn_armed_transport_rocket(char *spawning_moby,
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         MOBY(spawned_moby)->visible = 1;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = ARMED_TRANSPORT_ROCKET_STATE_FLYING;
         MOBY(spawned_moby)->spawn_frame = *(unsigned long *)(spawning_moby + 0x38);
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 3.0f;
         qcopy(&MOBY(spawned_moby)->pos, spawn_position);
