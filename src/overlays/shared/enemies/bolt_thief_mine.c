@@ -206,6 +206,9 @@ unsigned char *spawn_bolt_thief_mine(unsigned char *owner,
                                      char          *spawn_position) __asm__("FUN_L14_002ffaf8");
 
 unsigned char *spawn_bolt_thief_mine(unsigned char *spawning_moby, char *spawn_position) {
+    enum {
+        FLOAT_MINE_INITIALIZE = 0
+    };
     unsigned char *spawned_moby = create_moby(0x3A5);
     if (spawned_moby != 0) {
         char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
@@ -218,7 +221,7 @@ unsigned char *spawn_bolt_thief_mine(unsigned char *spawning_moby, char *spawn_p
         *(float *)(spawned_vars + 0x18) = random_float_between(0.00349065848f, 0.00698131695f);
         qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         MOBY(spawned_moby)->rot.z = MOBY(spawning_moby)->rot.z;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = FLOAT_MINE_INITIALIZE;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         MOBY(spawned_moby)->visible = 1;
