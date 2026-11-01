@@ -19,6 +19,9 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby,
                                     float          initial_hook_speed) __asm__("FUN_L00_002c6f88");
 
 unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hook_speed) {
+    enum {
+        HOOK_INITIAL_ANIMATION = 0
+    };
     unsigned char *spawned_moby = create_moby(0xd1);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
@@ -35,7 +38,7 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hoo
         if (MOBY(spawned_moby)->prev_seq)
             blend_moby_animation(spawned_moby, 0, 0, scale_game_frames(10));
         update_entity(spawned_moby);
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = HOOK_INITIAL_ANIMATION;
         MOBY(spawned_moby)->flags |= 4;
     }
     return spawned_moby;
