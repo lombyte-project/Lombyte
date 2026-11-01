@@ -72,11 +72,11 @@ typedef struct PlasmabotVars {
     u8  unk200[0x10];
     u8  unk210[0x10];
     u8  unk220[0x14];
-    f32 unk234;
+    f32 target_range;
     u8  pad238[0x4];
     s32 unk23C;
     s32 path_index; /* 0x240: into l14_paths, -1: none */
-    s32 unk244;
+    s32 target_path_index;
     s16 unk248;
     u8  pad24A[0x2];
     s32 unk24C;
@@ -102,15 +102,15 @@ void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
 
 void update_plasmabot_target(char *moby) {
     PlasmabotVars *plasmabot_private_vars = (PlasmabotVars *)MOBY(moby)->pvars;
-    int           *target_filter_record = ((int *)l14_paths[plasmabot_private_vars->unk244]);
+    int *target_filter_record = ((int *)l14_paths[plasmabot_private_vars->target_path_index]);
     if (FUN_L00_0025ff38(moby,
                          &plasmabot_private_vars->unkD0,
-                         plasmabot_private_vars->unk234,
+                         plasmabot_private_vars->target_range,
                          0,
                          0,
                          target_filter_record + 4,
                          *target_filter_record) != 2) {
-        if (plasmabot_private_vars->unk234 <
+        if (plasmabot_private_vars->target_range <
             vector_distance_xy(&MOBY(moby)->pos, &plasmabot_private_vars->unkD0)) {
             plasmabot_private_vars->unk114 = 2;
         }
@@ -416,14 +416,14 @@ void plasmabot_update(char *moby) {
                 }
             }
         }
-        if (plasmabot_update_private_vars->unk244 == -1) {
+        if (plasmabot_update_private_vars->target_path_index == -1) {
             DebugPrint(plasmabot_missing_bound_path_format, ((short)MOBY(moby)->save_id));
             {
                 call_D678(moby);
                 return;
             }
         }
-        if (*((int *)l14_paths[plasmabot_update_private_vars->unk244]) == 0) {
+        if (*((int *)l14_paths[plasmabot_update_private_vars->target_path_index]) == 0) {
             DebugPrint(plasmabot_empty_bound_path_format, ((short)MOBY(moby)->save_id));
             {
                 call_D678(moby);
@@ -642,7 +642,7 @@ void plasmabot_update(char *moby) {
             break;
         if (!(aim < 0.017453292f))
             break;
-        if (test_path_segment_strict_crossing(plasmabot_update_private_vars->unk244,
+        if (test_path_segment_strict_crossing(plasmabot_update_private_vars->target_path_index,
                                               &MOBY(moby)->pos,
                                               &MOBY(plasmabot_aim_target_moby)->pos) != 0)
             break;
@@ -1045,8 +1045,8 @@ typedef struct {
     u8  pad00[0x38];
     s32 restart; /* 0x38: nonzero picks a new random delay */
     u8  pad3C[0x1F8];
-    f32 unk234; /* 0x234 */
-    s32 delay;  /* 0x238: frames, counted down */
+    f32 target_range; /* 0x234 */
+    s32 delay;        /* 0x238: frames, counted down */
 } DelayVars;
 
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
@@ -1064,9 +1064,9 @@ void update_plasmabot_target_range(struct Moby *moby) {
     }
     fast_dec_timer(&delay_state->delay);
     if (delay_state->delay != 0) {
-        delay_state->unk234 = plasmabot_base_target_range_gp + 6.0f;
+        delay_state->target_range = plasmabot_base_target_range_gp + 6.0f;
     } else {
-        delay_state->unk234 = plasmabot_base_target_range_gp;
+        delay_state->target_range = plasmabot_base_target_range_gp;
     }
 }
 
