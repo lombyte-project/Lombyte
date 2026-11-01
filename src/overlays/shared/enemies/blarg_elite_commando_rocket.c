@@ -72,6 +72,9 @@ void blarg_elite_commando_rocket_update(unsigned char *m) __asm__("FUN_L15_0029a
 
 /* Moby class 49 */
 void blarg_elite_commando_rocket_update(unsigned char *moby) {
+    enum {
+        BLARG_ELITE_COMMANDO_ROCKET_STATE_FLYING = 0
+    };
     char *rocket_data = ((char *)MOBY(moby)->pvars);
     float rocket_next_position[4];
     float back[4];
@@ -83,7 +86,7 @@ void blarg_elite_commando_rocket_update(unsigned char *moby) {
             *(int *)(rocket_data + 0x10) = 1;
         }
     }
-    if (MOBY(moby)->state != 0)
+    if (MOBY(moby)->state != BLARG_ELITE_COMMANDO_ROCKET_STATE_FLYING)
         return;
     collision_setup_value = 1.0f;
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, D_0015ED6C * 6.2831855f);
