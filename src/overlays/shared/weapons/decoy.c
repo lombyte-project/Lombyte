@@ -278,6 +278,10 @@ void release_moby_with_collision_check(float *release_position,
                                        char  *moby,
 
                                        void *initial_velocity) {
+    enum {
+        DECOY_THROWN_MOVEMENT = 2,
+        DECOY_PRE_REMOVAL_DELAY = 4
+    };
     float        collision_start[4], collision_normal[4], rotated_normal[4];
     char        *state = *(char **)(moby + 0x78);
     struct Hero *camera;
@@ -301,7 +305,7 @@ void release_moby_with_collision_check(float *release_position,
         float smoothing;
         qcopy(&MOBY(moby)->pos, D_00173F60_alias);
         qzero(state + 0x10);
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = DECOY_PRE_REMOVAL_DELAY;
         *(short *)(state + 0x44) = scale_game_frames_c(30);
         MOBY(moby)->pos.z = ((S173E40 *)D_L00_00173E40)->height;
         qcopy(collision_normal, ((S173E40 *)D_L00_00173E40)->vector);
@@ -332,7 +336,7 @@ void release_moby_with_collision_check(float *release_position,
             fast_subtract_rotations(*(float *)(state + 0x50), MOBY(moby)->rot.y) *
                 (frame_scale * smoothing));
     } else
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = DECOY_THROWN_MOVEMENT;
 }
 
 /*
