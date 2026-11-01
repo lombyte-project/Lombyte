@@ -6,8 +6,11 @@
 void restore_camera_vectors(void) __asm__("FUN_001ec868");
 
 void restore_camera_vectors(void) {
+    enum {
+        CAMERA_TRANSITION_ALTERNATE_DISABLED = 0
+    };
     struct CameraTransition *transition = &cam_trans_state;
-    if (transition->kind != 0) {
+    if (transition->kind != CAMERA_TRANSITION_ALTERNATE_DISABLED) {
         qcopy(transition->blend.position, transition->orbit.saved_position);
         qcopy(transition->blend.rotation, transition->orbit.saved_rotation);
     }
