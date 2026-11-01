@@ -494,14 +494,14 @@ extern char *l14_camera_preset_rows __asm__("D_L14_0015EF50");
 
 int check_path_key_camera_priority(char *moby, char *other) __asm__("FUN_L14_00316748");
 
-int check_path_key_camera_priority(char *moby, char *other) {
+int check_path_key_camera_priority(char *moby, char *comparison_camera) {
     char *slot_record = *(char **)(l14_camera_preset_rows + *(short *)(moby + 0x84) * 32 + 0x1C);
     if (*(int *)(slot_record + 0x20) == 0 && *(short *)(D_L14_00167500 + 0x86) == 0x14) {
         *(int *)(slot_record + 0x20) = 1;
     } else if (*(int *)(slot_record + 0x20) == 1) {
         if (*(short *)(D_L14_00167500 + 0x86) != 0x14)
             return 1;
-        if (other == 0 || *(short *)(other + 0x7E) != 0)
+        if (comparison_camera == 0 || *(short *)(comparison_camera + 0x7E) != 0)
             return 1;
     }
     return 0;
