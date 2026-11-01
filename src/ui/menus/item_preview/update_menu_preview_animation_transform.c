@@ -17,6 +17,9 @@ extern void noop_callback_s(void *, void *, int, int, int) __asm__("func_001E948
 void update_menu_preview_animation_transform(PauseMoby *moby) __asm__("FUN_00224d28");
 
 void update_menu_preview_animation_transform(PauseMoby *moby) {
+    enum {
+        ANIMATION_BINDING_FRAME_AND_CLIP_RESET = 0
+    };
     f32 transform[16];
     s32 source_moby_address = (s32)((struct MenuScreen *)*moby->vars)->data.preview.moby;
 
@@ -40,7 +43,7 @@ void update_menu_preview_animation_transform(PauseMoby *moby) {
                         0,
                         source_moby_address);
     }
-    moby->binding_state = 0;
+    moby->binding_state = ANIMATION_BINDING_FRAME_AND_CLIP_RESET;
     moby->primary_binding = (char *)menu_item_info;
     moby->binding_blend_word = 0;
     moby->secondary_binding = (char *)menu_item_info;
