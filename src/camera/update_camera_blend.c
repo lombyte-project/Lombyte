@@ -18,10 +18,13 @@ void update_camera_blend(char *to_cam) {
     enum {
         CAMERA_TRANSITION_PHASE_IDLE = 0
     };
+    enum {
+        CAMERA_TRANSITION_KIND_PRIMARY = 0
+    };
     struct CameraTransition *transition = &cam_trans_state;
     int                      transition_complete;
 
-    if (transition->kind == 0) {
+    if (transition->kind == CAMERA_TRANSITION_KIND_PRIMARY) {
         transition_complete = step_camera_blend(to_cam, &transition->blend);
     } else {
         transition_complete = advance_alternate_camera_transition(to_cam, &transition->orbit);
@@ -34,7 +37,7 @@ void update_camera_blend(char *to_cam) {
             qcopy(camera_rows - 0x210, to_cam + 0x30);
         }
         transition->mode = CAMERA_TRANSITION_PHASE_IDLE;
-        transition->kind = 0;
+        transition->kind = CAMERA_TRANSITION_KIND_PRIMARY;
     }
 }
 
