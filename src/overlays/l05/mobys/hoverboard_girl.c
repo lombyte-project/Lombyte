@@ -206,6 +206,9 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
     enum {
         HOVERBOARD_GIRL_DIALOGUE_ALTERNATE_ITEM_REWARD = 4
     };
+    enum {
+        HOVERBOARD_GIRL_DIALOGUE_SETUP_RACE_CAMERA = 3
+    };
     HoverboardGirlState *state = moby->data;
     HoverboardGirlVector target_position;
     HoverboardGirlVector head_position;
@@ -241,7 +244,7 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
             begin_dialogue_camera_transition(2.0f, moby);
             moby->state = HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE;
         }
-        if (state->dialogue_state == 3) {
+        if (state->dialogue_state == HOVERBOARD_GIRL_DIALOGUE_SETUP_RACE_CAMERA) {
             state->previous_dialogue_state = state->dialogue_state;
             state->dialogue_state = 2;
             state->dialogue_state_frame = frame_number;
