@@ -144,6 +144,9 @@ unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
                                   float          lo,
 
                                   float hi) {
+    enum {
+        NANOTECH_CRATE_FRAGMENT_BOUNCING = 0
+    };
     unsigned char *debris_moby = create_moby(type);
     if (debris_moby) {
         V_2af8b0 *debris_data = ((V_2af8b0 *)MOBY(debris_moby)->pvars);
@@ -153,7 +156,7 @@ unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
         MOBY(debris_moby)->draw_dist = 0x7E;
         MOBY(debris_moby)->visible = 1;
         MOBY(debris_moby)->spawn_frame = *(long *)(debris_source_moby + 0x38);
-        MOBY(debris_moby)->state = 0;
+        MOBY(debris_moby)->state = NANOTECH_CRATE_FRAGMENT_BOUNCING;
         MOBY(debris_moby)->rot.x = random_angle_radians();
         MOBY(debris_moby)->rot.y = random_angle_radians();
         MOBY(debris_moby)->rot.z = random_angle_radians();
