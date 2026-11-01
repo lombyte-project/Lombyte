@@ -57,7 +57,7 @@ void door_update(u8 *moby) {
         qcopy(door_data, &MOBY(moby)->pos);
         if (door_data->unk38 != -1)
             D_L07_00184528[door_data->unk38] = 0;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = DOOR_WAIT_TO_MOVE_TO_OFFSET_POSITION;
         *(s32 *)&door_data->unkC = 0;
         return;
     case DOOR_WAIT_TO_MOVE_TO_OFFSET_POSITION:
@@ -77,7 +77,7 @@ void door_update(u8 *moby) {
         door_data->unkC = fast_vec_length(vectors);
         if (door_data->sound_entry != -1)
             allocate_voice_for_target_entry(door_data->sound_entry, 0, moby);
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = DOOR_MOVE_TO_OFFSET_POSITION;
         return;
     case DOOR_MOVE_TO_OFFSET_POSITION:
         if (door_data->unk38 != -1)
@@ -88,7 +88,7 @@ void door_update(u8 *moby) {
                 MOBY(linked_moby)->state != 0xfd && MOBY(linked_moby)->state == door_data->unk18) {
                 if (door_data->sound_entry != -1)
                     allocate_voice_for_target_entry(door_data->sound_entry, 0, moby);
-                MOBY(moby)->state = 4;
+                MOBY(moby)->state = DOOR_RETURN_TO_INITIAL_POSITION;
                 return;
             }
         }
@@ -105,7 +105,7 @@ void door_update(u8 *moby) {
             return;
         fast_vec_add(&MOBY(moby)->pos, door_data, vectors);
         door_data->unkC = 0.0f;
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = DOOR_WAIT_TO_RETURN_TO_INITIAL_POSITION;
         if (door_data->unk34 != -1)
             allocate_voice_for_target_entry(door_data->sound_entry, 0, moby);
         return;
@@ -121,7 +121,7 @@ void door_update(u8 *moby) {
         *(s32 *)&door_data->unkC = 0;
         if (door_data->sound_entry != -1)
             allocate_voice_for_target_entry(door_data->sound_entry, 0, moby);
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = DOOR_RETURN_TO_INITIAL_POSITION;
         return;
     case DOOR_RETURN_TO_INITIAL_POSITION:
         if (door_data->unk38 != -1)
@@ -132,7 +132,7 @@ void door_update(u8 *moby) {
             MOBY(linked_moby)->state == door_data->unk14) {
             if (door_data->sound_entry != -1)
                 allocate_voice_for_target_entry(door_data->sound_entry, 0, moby);
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = DOOR_MOVE_TO_OFFSET_POSITION;
         } else {
             *(quadword *)(vectors + 4) = 0;
             vectors[4] = door_data->unk1C;
@@ -151,7 +151,7 @@ void door_update(u8 *moby) {
                 allocate_voice_for_target_entry(door_data->unk34, 0, moby);
             if (door_data->unk38 != -1)
                 D_L07_00184528[door_data->unk38] = 0;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = DOOR_WAIT_TO_MOVE_TO_OFFSET_POSITION;
         }
         break;
     case 5:
