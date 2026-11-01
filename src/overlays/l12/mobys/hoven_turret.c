@@ -182,7 +182,7 @@ extern void  spawn_explosion(void *,
                              int,
                              int,
                              int) __asm__("FUN_L00_0025e450");
-extern void  fast_add_rotations_cf_spherical_offset(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
+extern void  fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern void  start_scene(int) __asm__("FUN_L00_00298840");
 extern void  queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void  spawn_turret_rocket(void *, void *, void *, int) __asm__("FUN_L08_002e7eb0");
@@ -494,11 +494,11 @@ void hoven_turret_update(struct Moby *moby) {
             randomized_view_pitch =
                 fast_add_rotations(l12_camera.pitch, randf_sym(0.0f, 0.5235988f));
             qcopy(explosion_position, &l12_camera.pos);
-            fast_add_rotations_cf_spherical_offset(explosion_position,
-                             explosion_position,
-                             randomized_view_offset_distance,
-                             randomized_view_yaw,
-                             randomized_view_pitch);
+            fast_add_rotations_cf(explosion_position,
+                                  explosion_position,
+                                  randomized_view_offset_distance,
+                                  randomized_view_yaw,
+                                  randomized_view_pitch);
             t = random_float_between(0.5f, 1.3f);
             spawn_explosion(moby,
                             D_L12_0015F580_macro,

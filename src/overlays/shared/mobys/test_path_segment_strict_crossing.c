@@ -111,10 +111,10 @@ typedef struct {
 int path_8808(int idx, void *a, void *b, void *c) __asm__("FUN_L00_00261b48");
 
 int path_8808(int   segment_path_index,
-                     void *segment_start,
-                     void *segment_end,
+              void *segment_start,
+              void *segment_end,
 
-                     void *adjusted_endpoint) {
+              void *adjusted_endpoint) {
     float  v[4], perpendicular_xy_axis[4], z[4], previous_path_point_in_basis[4], u[4];
     float  best;
     float  zero;

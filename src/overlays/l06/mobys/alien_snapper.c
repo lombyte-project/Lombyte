@@ -14,7 +14,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
-int  path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
+
 #include "rnc/rendering/clip_volume.h"
 
 enum {
@@ -491,8 +491,8 @@ void alien_snapper_update(Moby *moby) {
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         moby->rot.z = saved_rot;
         func_L00_00262DF0_91A8(0.5f, snapper_behavior->path, &moby->pos, &moby->pos);
-        if (path_8808(
-                snapper_behavior->path, &moby->pos, &target->pos, scratch.m.path_point) != 0 &&
+        if (path_8808(snapper_behavior->path, &moby->pos, &target->pos, scratch.m.path_point) !=
+                0 &&
             fast_vec_dist(&moby->pos, scratch.m.path_point) < snapper_behavior->reach_distance) {
             near = 1;
         }

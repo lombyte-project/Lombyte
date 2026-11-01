@@ -382,8 +382,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         resolve_point_path_segment_xy_clearance(
             blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
         path_blocked = 0;
-        if (path_8808(
-                blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
+        if (path_8808(blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             path_blocked = 1;
         }
@@ -422,8 +421,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
         resolve_point_path_segment_xy_clearance(
             blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
-        if (path_8808(
-                blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
+        if (path_8808(blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             blocked = 1;
         }

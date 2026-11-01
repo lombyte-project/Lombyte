@@ -396,9 +396,9 @@ void blarg_space_commando_update(struct Moby *moby) {
         resolve_point_path_segment_xy_clearance(
             blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
         if (path_8808(blarg_commando_state->path,
-                             &moby->pos,
-                             &target->pos,
-                             &movement_output_or_hit_vector_or_path_point) != 0 &&
+                      &moby->pos,
+                      &target->pos,
+                      &movement_output_or_hit_vector_or_path_point) != 0 &&
             fast_vec_dist(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
             near = 1;
         }

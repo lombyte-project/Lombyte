@@ -990,9 +990,9 @@ void crate_drop_bolts(u8 *crate_moby) {
                 fast_vec_scale(&trajectory_vector, spawned_vars + 0x10, trajectory_time);
                 fast_vec_add(&trajectory_vector, &trajectory_vector, &MOBY(crate_moby)->pos);
                 path_8808(*(s32 *)(crate_vars + 0xC0),
-                                 &MOBY(crate_moby)->pos,
-                                 &trajectory_vector,
-                                 &adjusted_position);
+                          &MOBY(crate_moby)->pos,
+                          &trajectory_vector,
+                          &adjusted_position);
                 fast_vec_sub(&trajectory_vector, &adjusted_position, &MOBY(spawned_moby)->pos);
                 trajectory_vector.f[2] = 0.0f;
                 fast_vec_normalize(&scratch_vector, &trajectory_vector, 0.25f);

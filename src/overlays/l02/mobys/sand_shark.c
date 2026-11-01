@@ -14,7 +14,7 @@
 #include "rnc/overlay/l02/mobys/sand_shark_globals.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
-int  path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
+
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/world/collision/ground_probe.h"
 
@@ -490,9 +490,9 @@ void sand_shark_update(struct Moby *moby) {
                          1.0f);
         FUN_L02_002d63c0_e50(moby);
         if (path_8808(sand_shark_behavior_vars->path,
-                             &moby->pos,
-                             &target_or_particle_vector,
-                             &navigation_point) &&
+                      &moby->pos,
+                      &target_or_particle_vector,
+                      &navigation_point) &&
             fast_vec_dist(&moby->pos, &navigation_point) < sand_shark_behavior_vars->unk294) {
             hit14 = 1;
         }

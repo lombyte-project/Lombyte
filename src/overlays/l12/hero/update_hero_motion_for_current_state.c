@@ -559,7 +559,7 @@ extern f32  spring_angle(f32 *, f32, f32 *, s32, f32, f32, f32) __asm__("FUN_L00
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern u8  *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void fast_add_rotations_cf_spherical_offset(void *, void *, f32, f32, f32) __asm__("FUN_L00_00262cf0");
+extern void fast_add_rotations_cf(void *, void *, f32, f32, f32) __asm__("FUN_L00_00262cf0");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32  vector_length_xyz_cf(void *, s32) __asm__("FUN_L00_00209018");
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -1092,11 +1092,11 @@ void update_hero_motion_for_current_state(void) {
                         geometry_and_hit_descriptor_scratch.f[2] +=
                             random_float_between(0.0f, 0.03f);
                         qcopy(&v10, &hero.motion.displacement);
-                        fast_add_rotations_cf_spherical_offset(&v10,
-                                         &v10,
-                                         frame_time * -0.75f,
-                                         hero.motion.rot.f[2],
-                                         hero.motion.rot.f[1]);
+                        fast_add_rotations_cf(&v10,
+                                              &v10,
+                                              frame_time * -0.75f,
+                                              hero.motion.rot.f[2],
+                                              hero.motion.rot.f[1]);
                         hero.pack_particle_timer =
                             truncate_float_to_s32((frame_time * 7.0f - hero.ground_speed) /
                                                   (frame_time * 7.0f) * scale_game_frames(5));

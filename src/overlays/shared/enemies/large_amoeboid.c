@@ -414,8 +414,7 @@ void large_amoeboid_update(unsigned char *moby) {
         move[2] = 0.0f;
         FUN_L00_00258b50(
             moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
-        if (path_8808(large_amoeboid_vars->unk240, &MOBY(moby)->pos, target + 0x10, hit) !=
-                0 &&
+        if (path_8808(large_amoeboid_vars->unk240, &MOBY(moby)->pos, target + 0x10, hit) != 0 &&
             fast_vec_dist(&MOBY(moby)->pos, hit) < 1.5f)
             blocked = 1;
         if (large_amoeboid_vars->unk22C == 0) {
