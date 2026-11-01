@@ -48,7 +48,7 @@ Only this release is targeted; other releases and the PlayStation 3 remaster are
 
 <h3>Contributing</h3>
 
-Help with matching C, names, types and docs: [CONTRIBUTING.md](CONTRIBUTING.md).
+Help with names, structs, data in C and docs: [CONTRIBUTING.md](CONTRIBUTING.md).
 <p align="center">
   <a href="https://lombyte-project.github.io/namingdesk">
     <img src="assets/naming-desk-card.svg" alt="Open the Naming Desk" width="100%">
@@ -64,7 +64,7 @@ git clone https://github.com/lombyte-project/lombyte.git && cd lombyte
 
 Windows, macOS and other options: [docs/build/building.md](docs/build/building.md#quick-setup).
 
-Work-in-progress C is also welcome when it preserves the matching baseline. Do not submit game images, extracted game data, or proprietary compiler binaries.
+Keep the build matching retail. Do not submit game images, extracted game data, or proprietary compiler binaries.
 
 <h3>Credits</h3>
 
