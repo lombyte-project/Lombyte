@@ -231,7 +231,7 @@ struct PlayerJointTable {
 };
 
 extern s32 D_L11_0015F688 __attribute__((sda));
-s32        D_L11_0015F68C = 0;
+s32        l11_look_timer_completion_count __asm__("D_L11_0015F68C") = 0;
 extern u8  D_L11_001677D8[];
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
@@ -422,7 +422,7 @@ void update_hero_motion_by_state(void) {
                     D_L11_0015F688 = -1;
                     usage_stats.stat[18].level_mask =
                         usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
-                    D_L11_0015F68C++;
+                    l11_look_timer_completion_count++;
                 }
             }
         }
