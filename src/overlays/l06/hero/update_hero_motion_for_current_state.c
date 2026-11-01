@@ -14,6 +14,7 @@
 #include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
+#include "rnc/input/pad_state.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -814,25 +815,6 @@ struct MobyView {
     s16              hA6;
     u8               padA8[0x18];
     Vec4             vC0;
-};
-
-struct PadState {
-    u8  pad0[0x128];
-    f32 f128;
-    f32 f12C;
-    u8  pad130[0x70];
-    union {
-        u64 d1A0;
-        s32 i1A0;
-        struct {
-            u8  pad[0x4];
-            s32 v;
-        } i1A4;
-    } u1A0;
-    u8  pad1A8[0x2C];
-    s32 i1D4;
-    u8  pad1D8[0x4];
-    s32 i1DC;
 };
 
 struct PlayerJointTable {
@@ -2597,13 +2579,13 @@ void update_hero_motion_for_current_state(void) {
             m = sp;
         }
         FUN_L00_002118c8_c(hero.stick_magnitude * m, 0);
-        if (hero.stick_magnitude > 0.2f && !(PD.u1A0.i1A0 & 3)) {
+        if (hero.stick_magnitude > 0.2f && !(PD.held & 3)) {
             turn_to(0,
                     frame_scale_sq * 0.027f,
                     frame_scale_sq * 0.3f,
                     D_0015ED6C_c * 5.934119f * hero.stick_magnitude);
         }
-        if (PD.u1A0.i1A0 & 3) {
+        if (PD.held & 3) {
             f32 o = hero.motion.move_yaw;
             hero.motion.move_yaw = *(f32 *)D_L06_00167558;
             turn_to(0, frame_scale_sq * 0.017f, frame_scale_sq * 0.3f, D_0015ED6C_c * 4.712389f);
