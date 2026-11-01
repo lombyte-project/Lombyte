@@ -48,7 +48,7 @@ Only this release is targeted; other releases and the PlayStation 3 remaster are
 
 <h3>Contributing</h3>
 
-The code is done. Now make it readable: names, structs, data and docs. Start with [CONTRIBUTING.md](CONTRIBUTING.md).
+Help with names, structs, data in C and docs: [CONTRIBUTING.md](CONTRIBUTING.md).
 <p align="center">
   <a href="https://lombyte-project.github.io/namingdesk">
     <img src="assets/naming-desk-card.svg" alt="Open the Naming Desk" width="100%">
