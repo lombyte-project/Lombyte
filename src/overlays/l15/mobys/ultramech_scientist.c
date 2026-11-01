@@ -118,6 +118,10 @@ void ultramech_scientist_update(struct Moby *moby) {
     enum {
         ULTRAMECH_SCIENTIST_DISABLED = 9
     };
+    enum {
+        MOBY_REMOVAL_BELOW_ADDRESS_BOUNDARY = 0xFD,
+        MOBY_REMOVAL_AT_OR_ABOVE_ADDRESS_BOUNDARY = 0xFE
+    };
     UltramechScientistVars *ultramech_scientist_private_data;
     char                   *hero_pos;
     struct Moby            *moby_list_cursor;
@@ -172,8 +176,8 @@ void ultramech_scientist_update(struct Moby *moby) {
             break;
         }
         {
-            int dead_state = 0xFE;
-            int gone_state = 0xFD;
+            int dead_state = MOBY_REMOVAL_AT_OR_ABOVE_ADDRESS_BOUNDARY;
+            int gone_state = MOBY_REMOVAL_BELOW_ADDRESS_BOUNDARY;
             for (; moby_list_cursor != 0; moby_list_cursor = moby_list_cursor->next) {
                 if (moby_list_cursor->mission != ultramech_scientist_private_data->unk280) {
                     continue;
@@ -215,8 +219,8 @@ void ultramech_scientist_update(struct Moby *moby) {
             break;
         }
         {
-            int dead_state = 0xFE;
-            int gone_state = 0xFD;
+            int dead_state = MOBY_REMOVAL_AT_OR_ABOVE_ADDRESS_BOUNDARY;
+            int gone_state = MOBY_REMOVAL_BELOW_ADDRESS_BOUNDARY;
             for (; moby_list_cursor != 0; moby_list_cursor = moby_list_cursor->next) {
                 if (moby_list_cursor->mission != ultramech_scientist_private_data->unk280) {
                     continue;
@@ -264,8 +268,8 @@ void ultramech_scientist_update(struct Moby *moby) {
                 (char *)l15_moby_array + (ultramech_scientist_private_data->unk158 << 8);
             if (spawned != 0) {
                 int state = *(unsigned char *)(spawned + 0x20);
-                if (state != 0xFE) {
-                    if (state != 0xFD) {
+                if (state != MOBY_REMOVAL_AT_OR_ABOVE_ADDRESS_BOUNDARY) {
+                    if (state != MOBY_REMOVAL_BELOW_ADDRESS_BOUNDARY) {
                         mark_moby_for_removal(spawned);
                         ultramech_scientist_private_data->unk158 = -1;
                     }
