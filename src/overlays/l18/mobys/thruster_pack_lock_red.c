@@ -122,17 +122,18 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             int               one = 1;
             if ((help[0x2B02].level_mask & (one << current_level_index)) == 0) {
                 if (help[0x71].count != 0) {
-                    if (scale_game_frames(D_0015EEA4) - help[0x71].unk2 * 600 >
+                    if (scale_game_frames(D_0015EEA4) - help[0x71].latest_time_bucket * 600 >
                             (int)((float)scale_game_frames(0x12) * 60.0f) ||
-                        help[0x71].unk2 * 600 == 0) {
+                        help[0x71].latest_time_bucket * 600 == 0) {
                         help_request(0x2B02, 0x71);
-                    } else if (scale_game_frames(D_0015EEA4) / 600 > help[0x71].unk2) {
-                        help[0x71].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    } else if (scale_game_frames(D_0015EEA4) / 600 >
+                               help[0x71].latest_time_bucket) {
+                        help[0x71].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                     }
                 } else {
                     help[0x71].count++;
-                    if (scale_game_frames(D_0015EEA4) / 600 > help[0x71].unk2) {
-                        help[0x71].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (scale_game_frames(D_0015EEA4) / 600 > help[0x71].latest_time_bucket) {
+                        help[0x71].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                     }
                     help[0x71].level_mask =
                         help[0x71].level_mask | (one << current_level_index) | 0x80000000;

@@ -583,8 +583,9 @@ void update_hero_motion_by_state(void) {
                         usage_stats.stat[18].count++;
                     }
                     t = scale_game_frames(D_0015EEA4) / 600;
-                    if (usage_stats.stat[18].unk2 < t) {
-                        usage_stats.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (usage_stats.stat[18].latest_time_bucket < t) {
+                        usage_stats.stat[18].latest_time_bucket =
+                            scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L14_0015F688 = -1;
                     usage_stats.stat[18].level_mask =

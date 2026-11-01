@@ -780,8 +780,8 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
         if (P->stat[10].count <= 0xFFFE)
             (P->stat[10].count)++;
         voice_slot_or_time_stat = scale_game_frames(D_0015EEA4) / 600;
-        if (P->stat[10].unk2 < voice_slot_or_time_stat)
-            P->stat[10].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        if (P->stat[10].latest_time_bucket < voice_slot_or_time_stat)
+            P->stat[10].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
         P->stat[10].level_mask = P->stat[10].level_mask | (1 << current_level_index) | 0x80000000;
     } else if (*(short *)(pyrocitor_vars + 0x50) < scale_game_frames(0x1E)) {
         hero.unk20B4++;

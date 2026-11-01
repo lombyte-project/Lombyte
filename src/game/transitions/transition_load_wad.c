@@ -97,10 +97,7 @@ typedef struct {
     s32 pad[3];
 } TextEntry;
 
-typedef struct {
-    u8  pad0[0x2C];
-    s32 count;
-} HelpState;
+#include "rnc/ui/help/window_state.h"
 
 typedef struct {
     u8    pad0[0xD];
@@ -120,12 +117,12 @@ extern s32        registered_shrub_render_class_count __asm__("D_001603CC");
 
 #include "rnc/game/transitions/transition_load_wad_globals.h"
 
-extern s32        registered_object_render_class_count __asm__("D_00160F4C");
-extern u8         D_00186310[];
-extern SoundBanks render_sequence __asm__("D_0018CB20");
-extern LoadState  D_001940C0;
-extern u8         D_00194180[];
-extern HelpState  D_001996D0;
+extern s32             registered_object_render_class_count __asm__("D_00160F4C");
+extern u8              D_00186310[];
+extern SoundBanks      render_sequence __asm__("D_0018CB20");
+extern LoadState       D_001940C0;
+extern u8              D_00194180[];
+extern HelpWindowState help_window_state __asm__("D_001996D0");
 
 #include "rnc/rendering/material_templates.h"
 
@@ -326,14 +323,14 @@ void transition_load_wad(void) {
     for (k = 0; k < 8; k++) {
         load_help_message_group(k);
         j = 0;
-        if (D_001996D0.count > 0) {
+        if (help_window_state.message_count > 0) {
             te = help_msgs;
             adj = ((s32)te) - 8;
             {
                 do {
                     te[j].offset += adj;
                     j++;
-                } while (j < D_001996D0.count);
+                } while (j < help_window_state.message_count);
             }
         }
     }

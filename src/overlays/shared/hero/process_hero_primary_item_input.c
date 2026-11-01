@@ -1096,8 +1096,8 @@ int process_hero_primary_item_input(void) {
         }
         play_time = scale_game_frames(D_0015EEA4_macro);
         unit = 600;
-        if (play_time / unit > stats->stat[27].unk2) {
-            stats->stat[27].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
+        if (play_time / unit > stats->stat[27].latest_time_bucket) {
+            stats->stat[27].latest_time_bucket = scale_game_frames(D_0015EEA4_macro) / 600;
         }
         stats->stat[27].level_mask = stats->stat[27].level_mask | (1 << D_0015ED84_gp) | 0x80000000;
         allocate_voice_for_target_entry(0, 0, (int)item);
@@ -1375,8 +1375,8 @@ void update_hero_hoverboard_trick_score(void) {
         struct UsageStats *stats = &usage_stats;
         if (stats->stat[30].count < 0xFFFF)
             stats->stat[30].count++;
-        if (scale_game_frames(D_0015EEA4) / 600 > stats->stat[30].unk2)
-            stats->stat[30].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / 600 > stats->stat[30].latest_time_bucket)
+            stats->stat[30].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
         stats->stat[30].level_mask = stats->stat[30].level_mask | (1 << D_0015ED84) | 0x80000000;
     }
     for (i = 0; i < 3; i++) {

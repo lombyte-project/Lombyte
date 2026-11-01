@@ -110,21 +110,22 @@ void skids_agent_update(struct Moby *moby) {
         } else if (item_available[0x5] == 0 &&
                    vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f) {
             if (D_00141968[14].count != 0) {
-                usage_time_value = scale_game_frames(D_0015EEA4) - D_00141968[14].unk2 * 600;
+                usage_time_value =
+                    scale_game_frames(D_0015EEA4) - D_00141968[14].latest_time_bucket * 600;
                 if ((int)(scale_game_frames(0x12) * 60.0f) < usage_time_value ||
-                    D_00141968[14].unk2 * 600 == 0) {
+                    D_00141968[14].latest_time_bucket * 600 == 0) {
                     help_request(0x7D4, 0xE);
                 } else {
                     usage_time_value = scale_game_frames(D_0015EEA4) / 600;
-                    if (D_00141968[14].unk2 < usage_time_value) {
-                        D_00141968[14].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (D_00141968[14].latest_time_bucket < usage_time_value) {
+                        D_00141968[14].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                     }
                 }
             } else {
                 D_00141968[14].count++;
                 usage_time_value = scale_game_frames(D_0015EEA4) / 600;
-                if (D_00141968[14].unk2 < usage_time_value) {
-                    D_00141968[14].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                if (D_00141968[14].latest_time_bucket < usage_time_value) {
+                    D_00141968[14].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                 }
                 D_00141968[14].level_mask =
                     D_00141968[14].level_mask | (1 << current_level_index) | 0x80000000;

@@ -45,8 +45,9 @@ s32 update_menu_item_slots(struct MenuScreen *menu) {
                 usage_stats.stat[21].count = (u16)(usage_stats.stat[21].count + 1);
             }
             cursor_or_scaled_frame_quotient = scale_game_frames(D_0015EEA4) / 600;
-            if ((s32)usage_stats.stat[21].unk2 < cursor_or_scaled_frame_quotient) {
-                usage_stats.stat[21].unk2 = (u16)(scale_game_frames(D_0015EEA4) / 600);
+            if ((s32)usage_stats.stat[21].latest_time_bucket < cursor_or_scaled_frame_quotient) {
+                usage_stats.stat[21].latest_time_bucket =
+                    (u16)(scale_game_frames(D_0015EEA4) / 600);
             }
             slots = menu->data.slots.items;
             usage_stats.stat[21].level_mask =

@@ -522,8 +522,10 @@ void update_hero_motion_for_current_state(void) {
                         if (usage_stats.stat[18].count < 0xFFFF) {
                             usage_stats.stat[18].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[18].unk2) {
-                            usage_stats.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 >
+                            usage_stats.stat[18].latest_time_bucket) {
+                            usage_stats.stat[18].latest_time_bucket =
+                                scale_game_frames(D_0015EEA4) / 600;
                         }
                         usage_stats.stat[18].level_mask = usage_stats.stat[18].level_mask |
                                                           (1 << current_level_index) | 0x80000000;
@@ -813,8 +815,8 @@ void update_hero_motion_for_current_state(void) {
                         usage_stats.stat[11].count++;
                     }
                 }
-                if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[11].unk2) {
-                    usage_stats.stat[11].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[11].latest_time_bucket) {
+                    usage_stats.stat[11].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                 }
                 usage_stats.stat[11].level_mask =
                     usage_stats.stat[11].level_mask | (1 << current_level_index) | 0x80000000;

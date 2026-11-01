@@ -91,8 +91,8 @@ void help_hints_update(Moby *moby) {
                 if (usage[0x18].count < 0xFFFF) {
                     usage[0x18].count++;
                 }
-                if (scale_game_frames(D_0015EEA4_macro) / 600 > usage[0x18].unk2) {
-                    usage[0x18].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
+                if (scale_game_frames(D_0015EEA4_macro) / 600 > usage[0x18].latest_time_bucket) {
+                    usage[0x18].latest_time_bucket = scale_game_frames(D_0015EEA4_macro) / 600;
                 }
                 usage[0x18].level_mask =
                     usage[0x18].level_mask | (1 << current_level_index_macro) | 0x80000000;
@@ -210,8 +210,9 @@ void help_hints_update(Moby *moby) {
                     if (count <= 0xFFFE) {
                         usage[0x11].count = count + 1;
                     }
-                    if (scale_game_frames(D_0015EEA4_macro) / 600 > usage[0x11].unk2) {
-                        usage[0x11].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
+                    if (scale_game_frames(D_0015EEA4_macro) / 600 >
+                        usage[0x11].latest_time_bucket) {
+                        usage[0x11].latest_time_bucket = scale_game_frames(D_0015EEA4_macro) / 600;
                     }
                     usage[0x11].level_mask =
                         usage[0x11].level_mask | (1 << current_level_index_macro) | 0x80000000;
@@ -297,8 +298,8 @@ void help_hints_update(Moby *moby) {
                 int now;
                 usage[0x19].count++;
                 now = scale_game_frames(D_0015EEA4_macro) / 600;
-                if (usage[0x19].unk2 < now) {
-                    usage[0x19].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
+                if (usage[0x19].latest_time_bucket < now) {
+                    usage[0x19].latest_time_bucket = scale_game_frames(D_0015EEA4_macro) / 600;
                 }
                 usage[0x19].level_mask =
                     usage[0x19].level_mask | (1 << current_level_index_macro) | 0x80000000;

@@ -6,7 +6,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/math/asm_helpers.h"
 
-extern u8 D_001996D0[];
+extern u8 help_window_state[] __asm__("D_001996D0");
 
 extern s32 help_msgs __asm__("D_0015F6A0");
 
@@ -14,7 +14,7 @@ extern s32
 start_audio_stream_read(s32 read_destination, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 
 static inline int pauseSlotCount(void) {
-    char *b = D_001996D0;
+    char *b = help_window_state;
     return *(int *)(b + 0x2C);
 }
 
@@ -51,7 +51,7 @@ int update_menu_help_text_load(char *menu) {
             int                i;
 
             copy_memory_aligned(archive, language_entries, ((entry_bytes + 3) & ~3) - 8);
-            entry_count_base = D_001996D0;
+            entry_count_base = help_window_state;
             *(int *)(menu + 0x54) = help_msgs;
             *(int *)(menu + 0x38) = *(int *)(entry_count_base + 0x2C);
             *(int *)(entry_count_base + 0x2C) = entry_count;

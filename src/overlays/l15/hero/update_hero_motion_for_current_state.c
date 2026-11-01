@@ -651,8 +651,9 @@ void update_hero_motion_for_current_state(void) {
                         usage_stats.stat[18].count++;
                     }
                     t = scale_game_frames(D_0015EEA4) / 600;
-                    if (usage_stats.stat[18].unk2 < t) {
-                        usage_stats.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (usage_stats.stat[18].latest_time_bucket < t) {
+                        usage_stats.stat[18].latest_time_bucket =
+                            scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L15_0015F688 = -1;
                     usage_stats.stat[18].level_mask =
@@ -873,8 +874,9 @@ void update_hero_motion_for_current_state(void) {
                         usage_stats.stat[11].count++;
                     }
                     t2 = scale_game_frames(D_0015EEA4) / 600;
-                    if (usage_stats.stat[11].unk2 < t2) {
-                        usage_stats.stat[11].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (usage_stats.stat[11].latest_time_bucket < t2) {
+                        usage_stats.stat[11].latest_time_bucket =
+                            scale_game_frames(D_0015EEA4) / 600;
                     }
                     usage_stats.stat[11].level_mask =
                         usage_stats.stat[11].level_mask | (1 << current_level_index) | 0x80000000;

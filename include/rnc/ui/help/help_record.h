@@ -5,8 +5,8 @@
 
 typedef struct {
     u16 count;
-    u16 best;
-    u32 flags;
+    u16 latest_time_bucket; /* max(scale_game_frames(play_time) / 600) */
+    u32 level_flags;        /* level bits plus bit 31, cleared by clear_help_record_high_bits */
 } HelpRecord;
 
 /* One record per help entry: the level code's clear_help_record_high_bits

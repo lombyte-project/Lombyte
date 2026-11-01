@@ -446,7 +446,7 @@ void transport_pod_update(unsigned char *moby) {
                            ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
             {
                 adjusted_help_ticks =
-                    scale_game_frames(D_0015EEA4_gp) - usage_stats.stat[9].unk2 * 600;
+                    scale_game_frames(D_0015EEA4_gp) - usage_stats.stat[9].latest_time_bucket * 600;
             }
             help_request_threshold_ticks = scale_game_frames(3600) * 60.0f;
             if (help_request_threshold_ticks < adjusted_help_ticks) {

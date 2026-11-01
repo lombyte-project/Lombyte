@@ -309,8 +309,8 @@ void ryno_update(struct Moby *ryno_moby) {
             if (s->stat[23].count <= 0xFFFE)
                 s->stat[23].count++;
             per = 600;
-            if (scale_game_frames(D_0015EEA4_macro) / per > s->stat[23].unk2)
-                s->stat[23].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
+            if (scale_game_frames(D_0015EEA4_macro) / per > s->stat[23].latest_time_bucket)
+                s->stat[23].latest_time_bucket = scale_game_frames(D_0015EEA4_macro) / 600;
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].switch_lock = 2;
@@ -344,8 +344,8 @@ void ryno_update(struct Moby *ryno_moby) {
             if (s->stat[23].count <= 0xFFFE)
                 s->stat[23].count++;
             per = 600;
-            if (scale_game_frames(D_0015EEA4_macro) / per > s->stat[23].unk2)
-                s->stat[23].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
+            if (scale_game_frames(D_0015EEA4_macro) / per > s->stat[23].latest_time_bucket)
+                s->stat[23].latest_time_bucket = scale_game_frames(D_0015EEA4_macro) / 600;
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].switch_lock = 2;

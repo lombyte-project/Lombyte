@@ -52,8 +52,10 @@ void follow_camera_read_stick(char *camera_object, float *turn_input_out, float 
                 if (usage_stats_state->stat[8].count <= 0xFFFE) {
                     usage_stats_state->stat[8].count++;
                 }
-                if (scale_game_frames(D_0015EEA4) / 600 > usage_stats_state->stat[8].unk2) {
-                    usage_stats_state->stat[8].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                if (scale_game_frames(D_0015EEA4) / 600 >
+                    usage_stats_state->stat[8].latest_time_bucket) {
+                    usage_stats_state->stat[8].latest_time_bucket =
+                        scale_game_frames(D_0015EEA4) / 600;
                 }
                 D_L00_00161D90 = 1;
                 usage_stats_state->stat[8].level_mask =

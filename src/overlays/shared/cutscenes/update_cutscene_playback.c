@@ -288,8 +288,8 @@ void handle_pause_input(void) {
         struct UsageStats *usage_stats_ptr = &usage_stats;
         if (usage_stats_ptr->stat[9].count < 0xFFFF)
             usage_stats_ptr->stat[9].count++;
-        if (scale_game_frames(D_0015EEA4) / 600 > usage_stats_ptr->stat[9].unk2)
-            usage_stats_ptr->stat[9].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / 600 > usage_stats_ptr->stat[9].latest_time_bucket)
+            usage_stats_ptr->stat[9].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
         usage_stats_ptr->stat[9].level_mask =
             usage_stats_ptr->stat[9].level_mask | (1 << current_level_index) | 0x80000000;
     }
