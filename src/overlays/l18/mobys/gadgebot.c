@@ -525,6 +525,9 @@ int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, flo
 short count_group_gadgebots_not_in_state_8(int group_index) __asm__("FUN_L18_002fc7e0");
 
 short count_group_gadgebots_not_in_state_8(int group_index) {
+    enum {
+        GADGEBOT_IDLE = 8
+    };
     unsigned short *group_moby_entry = (unsigned short *)D_L18_001AC240[group_index];
     short           n = 0;
     int             moby_table_address;
@@ -534,7 +537,7 @@ short count_group_gadgebots_not_in_state_8(int group_index) {
     while (1) {
         unsigned char *moby =
             (unsigned char *)(moby_table_address + ((group_moby_entry[0] & 0x7FFF) << 8));
-        if (MOBY(moby)->oclass == 0x772 && MOBY(moby)->state != 8)
+        if (MOBY(moby)->oclass == 0x772 && MOBY(moby)->state != GADGEBOT_IDLE)
             n++;
         if ((short)*group_moby_entry++ < 0)
             return n;
