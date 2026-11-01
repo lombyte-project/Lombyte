@@ -90,6 +90,9 @@ void rocket_strike_fighter_update(struct Moby *moby) {
         ROCKET_STRIKE_FIGHTER_STATE_FOLLOW_PATH = 2,
         ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN = 3
     };
+    enum {
+        ROCKET_STRIKE_FIGHTER_MISSION_COMPLETE = 0xFF
+    };
     RocketStrikeFighterVars *moby_vars = (RocketStrikeFighterVars *)moby->pvars;
     Vec4                     target_view_point_or_rocket_offset;
     Vec4                     rocket_position;
@@ -165,7 +168,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
     case ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS: {
         int lvl = current_level_index * 16;
         u8  first_mission_state = visited52[moby_vars->mission[0] + lvl];
-        if (first_mission_state == 0xFF) {
+        if (first_mission_state == ROCKET_STRIKE_FIGHTER_MISSION_COMPLETE) {
             u8 second_mission_state = visited52[moby_vars->mission[1] + lvl];
             if (second_mission_state == first_mission_state) {
                 u8 x = visited52[moby_vars->mission[2] + lvl];
