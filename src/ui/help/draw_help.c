@@ -36,7 +36,10 @@ void draw_help(void) {
         HELP_TEXT_FADE_OUT = 6,
         HELP_FRAME_CLOSING = 7
     };
-    if (help_state.state == 0) {
+    enum {
+        HELP_INACTIVE = 0
+    };
+    if (help_state.state == HELP_INACTIVE) {
         return;
     }
     if (help_state.started == 0) {
@@ -66,16 +69,16 @@ void draw_help(void) {
         break;
     case HELP_PROMPT_FRAME_TRANSITION:
         if (D_0015EF1D_b) {
-            int a = (help_state.half_width - 0x20) * help_state.timer / 8 + 0x20;
-            int b = (help_state.half_height - 0x20) * help_state.timer / 8 + 0x20;
+            int transition_half_width = (help_state.half_width - 0x20) * help_state.timer / 8 + 0x20;
+            int transition_half_height = (help_state.half_height - 0x20) * help_state.timer / 8 + 0x20;
             int alpha;
 
-            help_state.frame_half_width = a;
-            help_state.frame_half_height = b;
-            draw_ui_frame(help_state.center_y - b,
-                          help_state.center_y + b,
-                          help_state.center_x - a,
-                          help_state.center_x + a,
+            help_state.frame_half_width = transition_half_width;
+            help_state.frame_half_height = transition_half_height;
+            draw_ui_frame(help_state.center_y - transition_half_height,
+                          help_state.center_y + transition_half_height,
+                          help_state.center_x - transition_half_width,
+                          help_state.center_x + transition_half_width,
                           0x60);
             alpha = (8 - help_state.timer) * 16;
             if (alpha < 0) {
@@ -108,9 +111,9 @@ void draw_help(void) {
                           help_state.center_x - help_state.half_width,
                           help_state.center_x + help_state.half_width,
                           0x60);
-            if (help_state.state == 4) {
+            if (help_state.state == HELP_TEXT_FADE_IN) {
                 col = 0xFFA888 | (help_state.timer << 29);
-            } else if (help_state.state == 6) {
+            } else if (help_state.state == HELP_TEXT_FADE_OUT) {
                 col = ((4 - help_state.timer) << 29) | 0xFFA888;
             }
             text = help_msgs[help_state.msg].text;
@@ -121,15 +124,15 @@ void draw_help(void) {
         break;
     case HELP_FRAME_CLOSING:
         if (D_0015EF1D_b) {
-            int b = help_state.frame_half_width -
+            int closing_half_width = help_state.frame_half_width -
                     (help_state.frame_half_width - 8) * help_state.timer / 8;
-            int a = help_state.frame_half_height -
+            int closing_half_height = help_state.frame_half_height -
                     (help_state.frame_half_height - 8) * help_state.timer / 8;
 
-            draw_ui_frame(help_state.center_y - a,
-                          help_state.center_y + a,
-                          help_state.center_x - b,
-                          help_state.center_x + b,
+            draw_ui_frame(help_state.center_y - closing_half_height,
+                          help_state.center_y + closing_half_height,
+                          help_state.center_x - closing_half_width,
+                          help_state.center_x + closing_half_width,
                           (8 - help_state.timer) * 12);
         }
         break;
