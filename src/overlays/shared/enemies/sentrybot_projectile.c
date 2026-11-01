@@ -68,13 +68,16 @@ char *spawn_sentrybot_projectile(char  *source_moby,
                                  char  *pos) __asm__("FUN_L15_002e4580");
 
 char *spawn_sentrybot_projectile(char *source_moby, float *direction_vector, char *spawn_position) {
+    enum {
+        SENTRYBOT_PROJECTILE_STATE_FLYING = 0
+    };
     char *spawned_moby = create_moby(0x3A6);
     if (spawned_moby != 0) {
         char *moby_vars;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         MOBY(spawned_moby)->visible = 1;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = SENTRYBOT_PROJECTILE_STATE_FLYING;
         MOBY(spawned_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 20.0f;
         qcopy(&MOBY(spawned_moby)->pos, spawn_position);
