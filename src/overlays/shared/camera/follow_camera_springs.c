@@ -830,7 +830,9 @@ void compute_follow_camera_offset_target_up_projection(void *out_target_up_proje
 
 /* camera attach mode transitions: picks the next state from the player's state and arms its timers */
 /* Migrated from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5DE0). */
-void FUN_L00_002e4930(char *camera) {
+void update_follow_camera_attach_mode(char *camera) __asm__("FUN_L00_002e4930");
+
+void update_follow_camera_attach_mode(char *camera) {
     char      *camera_state = *(char **)(camera + 0x70);
     CamAttach *attach_state = (CamAttach *)(camera_state + 0x40);
     char      *timer_camera_state;
