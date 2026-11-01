@@ -1006,14 +1006,18 @@ int update_moby_grab_state(struct Moby *moby) {
 int update_moby_suck_cannon_storage_state(unsigned char *moby) __asm__("FUN_L06_002ea6a8");
 
 int update_moby_suck_cannon_storage_state(unsigned char *moby) {
+    enum {
+        FROG_STATE_WANDER = 8,
+        FROG_STATE_SUCK_CANNON_HELD = 0x10
+    };
     int suck_cannon_store_result = store_moby_in_suck_cannon(moby);
     if (suck_cannon_store_result != 0) {
-        if (MOBY(moby)->state != 0x10) {
+        if (MOBY(moby)->state != FROG_STATE_SUCK_CANNON_HELD) {
             MOBY(moby)->command = MOBY(moby)->state;
-            MOBY(moby)->state = 0x10;
+            MOBY(moby)->state = FROG_STATE_SUCK_CANNON_HELD;
         }
-    } else if (MOBY(moby)->state == 0x10) {
-        MOBY(moby)->state = 8;
+    } else if (MOBY(moby)->state == FROG_STATE_SUCK_CANNON_HELD) {
+        MOBY(moby)->state = FROG_STATE_WANDER;
         if (MOBY(moby)->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         }
