@@ -23,16 +23,22 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
-typedef struct {
-    char          pad00[0x20];
+typedef struct L16DamageData {
+    u8            pad0[0x20];
     float         health;
-    char          pad24[0x14];
+    s16           unk24;
+    u8            pad26[0x2];
+    s8            unk28;
+    s8            unk29;
+    u8            pad2A[0x6];
+    f32           unk30;
+    u8            pad34[0x4];
     int           reset_timer;
-    char          pad3C[0x24];
+    u8            pad3C[0x24];
     short         damage[3];
-    unsigned char pad66;
+    u8            pad66[0x1];
     unsigned char animation;
-    char          pad68[8];
+    u8            pad68[0x8];
     float         knockback[4];
     float         impulse_time;
     float         vertical_impulse;
@@ -41,23 +47,57 @@ typedef struct {
     int           sound_timer;
     int           active;
     float         damping;
-    char          pad9C[0x11];
+    u8            pad9C[0x11];
     unsigned char pending;
-    char          padAE[0x12];
+    u8            padAE[0x12];
     float         blend_start;
     float         blend_end;
-    char          padC8[8];
+    u8            padC8[0x8];
     float         target[4];
-    char          padE0[0x30];
+    u8            padE0[0x30];
     int           owner;
     int           pursuit_mode;
-    char          pad118[0xC];
+    u8            pad118[0x8];
+    s32           unk120;
     float         pursuit_range;
-    char          pad128[4];
+    s32           unk128;
     int           path_index;
-    char          pad130[0x1B0];
+    u8            unk130[0x64];
+    f32           unk194;
+    f32           unk198;
+    u8            pad19C[0x14];
+    u8            unk1B0[0x64];
+    f32           unk214;
+    f32           unk218;
+    u8            pad21C[0x14];
+    u8            unk230[0x64];
+    f32           unk294;
+    f32           unk298;
+    u8            pad29C[0x14];
+    f32           unk2B0;
+    f32           unk2B4;
+    u8            pad2B8[0x4];
+    f32           unk2BC;
+    f32           unk2C0;
+    f32           unk2C4;
+    f32           unk2C8;
+    f32           unk2CC;
+    char         *unk2D0;
+    f32           unk2D4;
+    u8            unk2D8[0x4];
+    s16           unk2DC;
+    u16           unk2DE;
     int           pursuit_timer;
-    char          pad2E4[0x24];
+    f32           unk2E4;
+    f32           unk2E8;
+    f32           unk2EC;
+    f32           unk2F0;
+    f32           unk2F4;
+    f32           unk2F8;
+    f32           unk2FC;
+    s16           unk300;
+    s16           unk302;
+    s32           unk304;
     int           reward_hits;
 } L16DamageData;
 
@@ -179,15 +219,15 @@ void blarg_elite_commando_update(char *commando_moby) {
         COMMANDO_STATE_FATAL_FALL = 9,
         COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
     };
-    float  target[4], scratch_vector[4], delta[4];
-    char  *commando_data = ((char *)MOBY(commando_moby)->pvars);
-    char  *source, *aim_target_moby;
-    float  distance, angle;
-    float *heading, *movement;
-    int    ticks;
-    int    owner_moby_class;
+    float          target[4], scratch_vector[4], delta[4];
+    L16DamageData *commando_data = (L16DamageData *)MOBY(commando_moby)->pvars;
+    char          *source, *aim_target_moby;
+    float          distance, angle;
+    float         *heading, *movement;
+    int            ticks;
+    int            owner_moby_class;
     update_blarg_elite_commando_damage_and_pursuit(commando_moby);
-    aim_target_moby = *(char **)(commando_data + 0x110);
+    aim_target_moby = *(char **)(&commando_data->owner);
     owner_moby_class = MOBY(aim_target_moby)->oclass;
     if (owner_moby_class == 0 || owner_moby_class == 0x1A3) {
         qcopy(target, &hero.motion.near_ground_point);
@@ -195,25 +235,22 @@ void blarg_elite_commando_update(char *commando_moby) {
         qcopy(target, &MOBY(aim_target_moby)->pos);
     }
     if ((&big_head_cheat_enabled)[7])
-        manipulator_set_scale(commando_data + 0x130, 2.5f);
+        manipulator_set_scale(&commando_data->unk130, 2.5f);
     switch (((unsigned char *)commando_moby)[0x20]) {
     case COMMANDO_STATE_INITIALIZE:
-        *(int *)(commando_data + 0x2EC) = 0;
-        commando_data[0x29] = 1;
-        *(short *)(commando_data + 0x24) = 3;
-        commando_data[0x28] = 2;
-        *(float *)(commando_data + 0x30) = 1.5f;
-        *(float *)(commando_data + 0x20) = 3.0f;
-        *(float *)(commando_data + 0x2F4) = random_angle_radians();
-        *(float *)(commando_data + 0x2FC) = random_angle_radians();
-        *(float *)(commando_data + 0x2E8) = random_angle_radians();
-        *(float *)(commando_data + 0x2F0) =
-            random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
-        *(float *)(commando_data + 0x2F8) =
-            random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
-        *(float *)(commando_data + 0x2E4) =
-            random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
-        *(short *)(commando_data + 0x302) =
+        *(int *)&commando_data->unk2EC = 0;
+        commando_data->unk29 = 1;
+        commando_data->unk24 = 3;
+        commando_data->unk28 = 2;
+        commando_data->unk30 = 1.5f;
+        commando_data->health = 3.0f;
+        commando_data->unk2F4 = random_angle_radians();
+        commando_data->unk2FC = random_angle_radians();
+        commando_data->unk2E8 = random_angle_radians();
+        commando_data->unk2F0 = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
+        commando_data->unk2F8 = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
+        commando_data->unk2E4 = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
+        commando_data->unk302 =
             truncate_float_to_s32(scale_time(random_float_between(180.0f, 360.0f)));
         if (random_integer_below(2))
             MOBY(commando_moby)->flags |= 0x8000;
@@ -221,18 +258,17 @@ void blarg_elite_commando_update(char *commando_moby) {
             MOBY(commando_moby)->flags &= 0x7FFF;
         {
             char *position = &MOBY(commando_moby)->pos;
-            if (*(int *)(commando_data + 0x120) >= 0) {
+            if (commando_data->unk120 >= 0) {
                 int node = truncate_float_to_s32(random_float_between(
-                    0.0f, (float)(*(int *)D_L16_001B0930[*(int *)(commando_data + 0x120)] - 1)));
-                *(short *)(commando_data + 0x300) = node;
-                qcopy(position,
-                      D_L16_001B0930[*(int *)(commando_data + 0x120)] + (short)node * 16 + 0x10);
+                    0.0f, (float)(*(int *)D_L16_001B0930[commando_data->unk120] - 1)));
+                commando_data->unk300 = node;
+                qcopy(position, D_L16_001B0930[commando_data->unk120] + (short)node * 16 + 0x10);
             }
-            *(int *)(commando_data + 0x308) = 1;
-            qcopy(commando_data + 0x2C0, position);
-            qcopy(commando_data + 0x2B0, position);
+            commando_data->reward_hits = 1;
+            qcopy(&commando_data->unk2C0, position);
+            qcopy(&commando_data->unk2B0, position);
         }
-        if (*(int *)(commando_data + 0x128)) {
+        if (commando_data->unk128) {
             MOBY(commando_moby)->state = 10;
             MOBY(commando_moby)->visible = 0;
             MOBY(commando_moby)->flags = (MOBY(commando_moby)->flags | 1) & 0xEFFF;
@@ -244,36 +280,33 @@ void blarg_elite_commando_update(char *commando_moby) {
             goto idle;
         break;
     case COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM:
-        if (*(char **)(commando_data + 0x2D0)) {
+        if (commando_data->unk2D0) {
             MOBY(commando_moby)->visible = 1;
             MOBY(commando_moby)->flags &= 0xFFFE;
             movement = scratch_vector;
             transform_vector_by_basis(
-                movement, commando_data + 0x2C0, *(char **)(commando_data + 0x2D0) + 0xC0);
-            fast_vec_add(
-                &MOBY(commando_moby)->pos, movement, *(char **)(commando_data + 0x2D0) + 0x10);
+                movement, &commando_data->unk2C0, commando_data->unk2D0 + 0xC0);
+            fast_vec_add(&MOBY(commando_moby)->pos, movement, commando_data->unk2D0 + 0x10);
             MOBY(commando_moby)->rot.z =
-                fast_add_rotations(*(float *)(*(char **)(commando_data + 0x2D0) + 0x48),
-                                   *(float *)(commando_data + 0x2CC));
+                fast_add_rotations(*(float *)(commando_data->unk2D0 + 0x48), commando_data->unk2CC);
         }
         break;
     case COMMANDO_STATE_RETURN_TO_INITIAL_POSITION:
-        if (!fast_dec_timer_s16(commando_data + 0x2DC)) {
-            fast_vec_normalize(
-                scratch_vector, commando_moby + 0xC0, *(short *)(commando_data + 0x2DC) * 0.1f);
+        if (!fast_dec_timer_s16(&commando_data->unk2DC)) {
+            fast_vec_normalize(scratch_vector, commando_moby + 0xC0, commando_data->unk2DC * 0.1f);
             fast_vec_add(scratch_vector, scratch_vector, &MOBY(commando_moby)->pos);
             func_L16_002D5280_update(commando_moby, scratch_vector, 1);
         } else {
             heading = (float *)&MOBY(commando_moby)->rot.z;
-            angle = fast_arc_tan(*(float *)(commando_data + 0x2B0) - MOBY(commando_moby)->pos.x,
-                                 *(float *)(commando_data + 0x2B4) - MOBY(commando_moby)->pos.y);
+            angle = fast_arc_tan(commando_data->unk2B0 - MOBY(commando_moby)->pos.x,
+                                 commando_data->unk2B4 - MOBY(commando_moby)->pos.y);
             approach_angle(heading,
-                           (float *)(commando_data + 0x2D8),
+                           (float *)(&commando_data->unk2D8),
                            angle,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
                            frame_time * 12.566371f);
-            distance = func_L16_002D5280_update(commando_moby, commando_data + 0x2B0, 1);
+            distance = func_L16_002D5280_update(commando_moby, &commando_data->unk2B0, 1);
             if (((unsigned char *)commando_moby)[0x53] != 0)
                 blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
             if (distance < 1.0f)
@@ -281,14 +314,14 @@ void blarg_elite_commando_update(char *commando_moby) {
         }
         break;
     case COMMANDO_STATE_IDLE:
-        fast_dec_timer_s16(commando_data + 0x2DC);
-        if (*(int *)(commando_data + 0x114) != 2) {
-            if (*(short *)(commando_data + 0x2DC) == 0) {
-                if (*(int *)(commando_data + 0x120) >= 0) {
+        fast_dec_timer_s16(&commando_data->unk2DC);
+        if (commando_data->pursuit_mode != 2) {
+            if (commando_data->unk2DC == 0) {
+                if (commando_data->unk120 >= 0) {
                     MOBY(commando_moby)->state = 7;
-                    *(short *)(commando_data + 0x2DC) =
+                    commando_data->unk2DC =
                         truncate_float_to_s32(scale_time(random_float_between(30.0f, 90.0f)));
-                    *(short *)(commando_data + 0x300) = (*(short *)(commando_data + 0x300) + 1) % 2;
+                    commando_data->unk300 = (commando_data->unk300 + 1) % 2;
                     select_blarg_elite_commando_movement_animation(commando_moby);
                 } else if (!random_integer_below(20)) {
                     MOBY(commando_moby)->state = 4;
@@ -297,35 +330,34 @@ void blarg_elite_commando_update(char *commando_moby) {
                     }
                 }
             }
-        } else if (fast_dec_timer_s16(commando_data + 0x302)) {
-            if (*(int *)(commando_data + 0x120) >= 0) {
-                *(short *)(commando_data + 0x300) = (*(short *)(commando_data + 0x300) + 1) % 2;
+        } else if (fast_dec_timer_s16(&commando_data->unk302)) {
+            if (commando_data->unk120 >= 0) {
+                commando_data->unk300 = (commando_data->unk300 + 1) % 2;
                 MOBY(commando_moby)->state = 3;
-                *(short *)(commando_data + 0x302) = scale_game_frames(180);
+                commando_data->unk302 = scale_game_frames(180);
                 select_blarg_elite_commando_movement_animation(commando_moby);
             }
         }
         break;
     case COMMANDO_STATE_MOVE_TO_PATROL_NODE: {
-        float path_distance =
-            func_L16_002D5280_update(commando_moby,
-                                     D_L16_001B0930[*(int *)(commando_data + 0x120)] +
-                                         (*(short *)(commando_data + 0x300) * 16 + 0x10),
-                                     1);
+        float path_distance = func_L16_002D5280_update(commando_moby,
+                                                       D_L16_001B0930[commando_data->unk120] +
+                                                           (commando_data->unk300 * 16 + 0x10),
+                                                       1);
         if (path_distance < 0.01f) {
             MOBY(commando_moby)->state = 2;
             if (((unsigned char *)commando_moby)[0x53] != 0)
                 blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
-            *(short *)(commando_data + 0x302) =
+            commando_data->unk302 =
                 truncate_float_to_s32(scale_time(random_float_between(180.0f, 360.0f)));
-        } else if (fast_dec_timer_s16(commando_data + 0x302)) {
+        } else if (fast_dec_timer_s16(&commando_data->unk302)) {
             MOBY(commando_moby)->state = 2;
             if (((unsigned char *)commando_moby)[0x53] != 0)
                 blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
-            *(short *)(commando_data + 0x302) =
+            commando_data->unk302 =
                 truncate_float_to_s32(scale_time(random_float_between(180.0f, 360.0f)));
         }
-        if (*(float *)(commando_data + 0x2D4) < 2.0f * frame_time && path_distance < 0.5f) {
+        if (commando_data->unk2D4 < 2.0f * frame_time && path_distance < 0.5f) {
             if (((unsigned char *)commando_moby)[0x53] != 0) {
                 ticks = 30;
                 goto animate_idle;
@@ -338,7 +370,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         angle = fast_arc_tan(target[0] - MOBY(commando_moby)->pos.x,
                              target[1] - MOBY(commando_moby)->pos.y);
         approach_angle(heading,
-                       (float *)(commando_data + 0x2D8),
+                       (float *)(&commando_data->unk2D8),
                        angle,
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
@@ -355,7 +387,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         angle = fast_arc_tan(target[0] - MOBY(commando_moby)->pos.x,
                              target[1] - MOBY(commando_moby)->pos.y);
         approach_angle(heading,
-                       (float *)(commando_data + 0x2D8),
+                       (float *)(&commando_data->unk2D8),
                        angle,
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
@@ -368,29 +400,29 @@ void blarg_elite_commando_update(char *commando_moby) {
             fast_vec_normalize(delta, delta, frame_time * 20.0f);
             spawn_blarg_elite_commando_rocket(commando_moby, delta, (char *)scratch_vector);
         } else if (is_value_within_interpolated_window(commando_moby, 10.0f)) {
-            int count = *(unsigned short *)(commando_data + 0x2DE) + 1;
-            *(unsigned short *)(commando_data + 0x2DE) = count;
+            int count = commando_data->unk2DE + 1;
+            commando_data->unk2DE = count;
             if ((short)count >= 3) {
                 MOBY(commando_moby)->state = 2;
                 if (((unsigned char *)commando_moby)[0x53] != 0)
                     blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
-                *(short *)(commando_data + 0x2DC) = scale_game_frames(60);
-                *(unsigned short *)(commando_data + 0x2DE) = 0;
+                commando_data->unk2DC = scale_game_frames(60);
+                commando_data->unk2DE = 0;
             }
         }
         break;
     case COMMANDO_STATE_MOVE_TO_ATTACK_NODE:
         distance = func_L16_002D5280_update(commando_moby,
-                                            D_L16_001B0930[*(int *)(commando_data + 0x120)] +
-                                                (*(short *)(commando_data + 0x300) * 16 + 0x10),
+                                            D_L16_001B0930[commando_data->unk120] +
+                                                (commando_data->unk300 * 16 + 0x10),
                                             1);
-        fast_dec_timer_s16(commando_data + 0x2DC);
-        if (distance < 0.01f || *(short *)(commando_data + 0x2DC) == 0) {
+        fast_dec_timer_s16(&commando_data->unk2DC);
+        if (distance < 0.01f || commando_data->unk2DC == 0) {
             MOBY(commando_moby)->state = 4;
             if (((unsigned char *)commando_moby)[0x53] != 2)
                 blend_moby_animation(commando_moby, 2, 0, scale_game_frames(30));
         }
-        if (distance < 0.5f && *(float *)(commando_data + 0x2D4) < 2.0f * frame_time) {
+        if (distance < 0.5f && commando_data->unk2D4 < 2.0f * frame_time) {
             if (((unsigned char *)commando_moby)[0x53] != 2) {
                 blend_moby_animation(commando_moby, 2, 0, scale_game_frames(30));
             }
@@ -415,43 +447,40 @@ void blarg_elite_commando_update(char *commando_moby) {
         movement = scratch_vector;
         position = &MOBY(commando_moby)->pos;
         qcopy(movement, position);
-        if (step_moby_motion(commando_moby, commando_data + 0x70) & 0x160) {
+        if (step_moby_motion(commando_moby, &commando_data->knockback) & 0x160) {
             FUN_L16_002d41f8_2(commando_moby, position);
             func_0022ED80_update(0, 0, commando_moby);
             mark_moby_for_removal(commando_moby);
             return;
         }
         fast_vec_sub(movement, position, movement);
-        fast_vec_add(commando_data + 0x2C0, commando_data + 0x2C0, movement);
+        fast_vec_add(&commando_data->unk2C0, &commando_data->unk2C0, movement);
     } break;
     case 6:
     default:
         break;
     }
     if (blarg_elite_commando_bobbing_and_voice_enabled_gp) {
-        *(float *)(commando_data + 0x2BC) = MOBY(commando_moby)->pos.z;
+        commando_data->unk2BC = MOBY(commando_moby)->pos.z;
         if (((unsigned char *)commando_moby)[0x20] != 0 &&
             ((unsigned char *)commando_moby)[0x20] != 10) {
-            approach_value((float *)(commando_data + 0x2EC), 0.25f, frame_time * 0.25f);
-            *(float *)(commando_data + 0x2F4) = fast_add_rotations(
-                *(float *)(commando_data + 0x2F4), *(float *)(commando_data + 0x2F0));
-            *(float *)(commando_data + 0x2FC) = fast_add_rotations(
-                *(float *)(commando_data + 0x2FC), *(float *)(commando_data + 0x2F8));
-            *(float *)(commando_data + 0x2E8) = fast_add_rotations(
-                *(float *)(commando_data + 0x2E8), *(float *)(commando_data + 0x2E4));
+            approach_value((float *)(&commando_data->unk2EC), 0.25f, frame_time * 0.25f);
+            commando_data->unk2F4 =
+                fast_add_rotations(commando_data->unk2F4, commando_data->unk2F0);
+            commando_data->unk2FC =
+                fast_add_rotations(commando_data->unk2FC, commando_data->unk2F8);
+            commando_data->unk2E8 =
+                fast_add_rotations(commando_data->unk2E8, commando_data->unk2E4);
             MOBY(commando_moby)->pos.x =
-                *(float *)(commando_data + 0x2C0) +
-                *(float *)(commando_data + 0x2EC) * fast_sin(*(float *)(commando_data + 0x2F4));
+                commando_data->unk2C0 + commando_data->unk2EC * fast_sin(commando_data->unk2F4);
             MOBY(commando_moby)->pos.y =
-                *(float *)(commando_data + 0x2C4) +
-                *(float *)(commando_data + 0x2EC) * fast_sin(*(float *)(commando_data + 0x2FC));
+                commando_data->unk2C4 + commando_data->unk2EC * fast_sin(commando_data->unk2FC);
             MOBY(commando_moby)->pos.z =
-                *(float *)(commando_data + 0x2C8) +
-                *(float *)(commando_data + 0x2EC) * fast_sin(*(float *)(commando_data + 0x2E8));
+                commando_data->unk2C8 + commando_data->unk2EC * fast_sin(commando_data->unk2E8);
         }
         if (fast_vec_dist(&MOBY(commando_moby)->pos, D_L16_001671C0) < 32.0f &&
-            !voice_is_playing(commando_moby, *(int *)(commando_data + 0x304)))
-            *(int *)(commando_data + 0x304) = func_0022ED80_update(7, 4, commando_moby);
+            !voice_is_playing(commando_moby, commando_data->unk304))
+            commando_data->unk304 = func_0022ED80_update(7, 4, commando_moby);
     }
     if (blarg_elite_commando_joint_aim_enabled_gp)
         update_blarg_elite_commando_joint_aim(commando_moby);
@@ -639,10 +668,10 @@ void set_blarg_elite_commando_parent_transform(char *moby,
                                                void *position,
 
                                                char *vector) {
-    char *commando_data = ((char *)MOBY(moby)->pvars);
-    *(void **)(commando_data + 0x2D0) = parent_moby;
-    qcopy(commando_data + 0x2C0, position);
-    *(float *)(commando_data + 0x2CC) = *(float *)(vector + 8);
+    L16DamageData *commando_data = (L16DamageData *)MOBY(moby)->pvars;
+    commando_data->unk2D0 = parent_moby;
+    qcopy(&commando_data->unk2C0, position);
+    commando_data->unk2CC = *(float *)(vector + 8);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
@@ -652,7 +681,7 @@ void start_blarg_elite_commando_return_to_initial_position(
 void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
 
                                                            int return_countdown_ticks) {
-    char *commando_data = (char *)moby->pvars;
+    L16DamageData *commando_data = (L16DamageData *)moby->pvars;
     if (moby->state == 10) {
         moby->state = 1;
         if (moby->prev_seq != 1) {
@@ -662,10 +691,10 @@ void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
         moby->flags &= 0xFFFE;
         moby->collision = moby->pclass->collision;
         moby->flags |= 0x1000;
-        *(short *)(commando_data + 0x2DC) = return_countdown_ticks;
-        *(float *)(commando_data + 0x2BC) = moby->pos.z;
-        qcopy(commando_data + 0x2C0, &moby->pos);
-        *(float *)(commando_data + 0x2D4) = frame_time * 5.0f;
+        commando_data->unk2DC = return_countdown_ticks;
+        commando_data->unk2BC = moby->pos.z;
+        qcopy(&commando_data->unk2C0, &moby->pos);
+        commando_data->unk2D4 = frame_time * 5.0f;
     }
 }
 
@@ -675,21 +704,21 @@ float advance_blarg_elite_commando_base_position(char  *moby,
                                                  float *target) __asm__("FUN_L16_002d3eb8");
 
 float advance_blarg_elite_commando_base_position(char *moby, float *target) {
-    char *commando_motion_data = ((char *)MOBY(moby)->pvars);
-    char *base_position = commando_motion_data + 0x2C0;
-    float distance = fast_vec_dist(base_position, target);
-    float acceleration_braking_step = frame_time_sq * 4.0f;
-    int   zero[1];
-    float movement_step[4];
+    L16DamageData *commando_motion_data = (L16DamageData *)MOBY(moby)->pvars;
+    char          *base_position = &commando_motion_data->unk2C0;
+    float          distance = fast_vec_dist(base_position, target);
+    float          acceleration_braking_step = frame_time_sq * 4.0f;
+    int            zero[1];
+    float          movement_step[4];
     zero[0] = 0;
     advance_accelerated_scalar((float *)zero,
-                               (float *)(commando_motion_data + 0x2D4),
+                               (float *)(&commando_motion_data->unk2D4),
                                distance,
                                acceleration_braking_step,
                                acceleration_braking_step,
                                frame_time * 5.0f);
     fast_vec_sub(movement_step, target, base_position);
-    fast_vec_normalize(movement_step, movement_step, *(float *)(commando_motion_data + 0x2D4));
+    fast_vec_normalize(movement_step, movement_step, commando_motion_data->unk2D4);
     fast_vec_add(base_position, base_position, movement_step);
     return distance;
 }
@@ -725,9 +754,8 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 void select_blarg_elite_commando_movement_animation(char *moby) {
-    char *commando_path_state = ((char *)MOBY(moby)->pvars);
-    char *target = D_L16_001B0930[*(int *)(commando_path_state + 0x120)] +
-                   (*(short *)(commando_path_state + 0x300) << 4);
+    L16DamageData *commando_path_state = (L16DamageData *)MOBY(moby)->pvars;
+    char *target = D_L16_001B0930[commando_path_state->unk120] + (commando_path_state->unk300 << 4);
     float angle = fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                *(float *)(target + 0x14) - MOBY(moby)->pos.y);
     float delta = fast_subtract_rotations(angle, MOBY(moby)->rot.z);
@@ -821,17 +849,17 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
 /* Aim paired joints toward the owner or player, then smooth their rotations. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
 void update_blarg_elite_commando_joint_aim(char *commando_moby) {
-    float position[4], target[4], matrix[16], delta[4], aim[4], aimDelta[4], velocity[4];
-    char *commando_data = ((char *)MOBY(commando_moby)->pvars);
-    if (*(int *)(commando_data + 0x114) != 2) {
+    float          position[4], target[4], matrix[16], delta[4], aim[4], aimDelta[4], velocity[4];
+    L16DamageData *commando_data = (L16DamageData *)MOBY(commando_moby)->pvars;
+    if (commando_data->pursuit_mode != 2) {
         float *savedTarget, *savedMatrix;
         float  yaw, pitch;
         qcopy(position, &MOBY(commando_moby)->pos);
         position[2] += 2.0f;
-        if (*(short *)(*(char **)(commando_data + 0x110) + 0xA6) == 0)
+        if (*(short *)(*(char **)(&commando_data->owner) + 0xA6) == 0)
             qcopy(target, D_0013F420);
         else
-            qcopy(target, commando_data + 0xD0);
+            qcopy(target, &commando_data->target);
         savedTarget = target;
         transpose_rotation_matrix(matrix, commando_moby + 0xC0);
         fast_vec_sub(delta, savedTarget, position);
@@ -848,10 +876,10 @@ void update_blarg_elite_commando_joint_aim(char *commando_moby) {
             pitch = -0.7853982f;
         {
             float halfYaw = yaw * 0.5f, halfPitch = pitch * 0.5f;
-            *(float *)(commando_data + 0x198) = halfYaw;
-            *(float *)(commando_data + 0x194) = halfPitch;
-            *(float *)(commando_data + 0x218) = halfYaw;
-            *(float *)(commando_data + 0x214) = halfPitch;
+            commando_data->unk198 = halfYaw;
+            commando_data->unk194 = halfPitch;
+            commando_data->unk218 = halfYaw;
+            commando_data->unk214 = halfPitch;
         }
         if ((unsigned int)(MOBY(commando_moby)->state - 4) < 2) {
             float yaw2, pitch2, bound;
@@ -871,16 +899,16 @@ void update_blarg_elite_commando_joint_aim(char *commando_moby) {
                 yaw2 = 0.34906584f;
             else if (yaw2 < -0.34906584f)
                 yaw2 = -0.34906584f;
-            *(float *)(commando_data + 0x294) = pitch2;
-            *(float *)(commando_data + 0x298) = yaw2;
+            commando_data->unk294 = pitch2;
+            commando_data->unk298 = yaw2;
         }
     }
     update_joint_animation(
-        commando_moby, commando_data + 0x130, 1, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+        commando_moby, &commando_data->unk130, 1, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
     update_joint_animation(
-        commando_moby, commando_data + 0x1B0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+        commando_moby, &commando_data->unk1B0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
     update_joint_animation(
-        commando_moby, commando_data + 0x230, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+        commando_moby, &commando_data->unk230, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
 }
 
 /* Emit randomized joint particles while the moby is active. */
