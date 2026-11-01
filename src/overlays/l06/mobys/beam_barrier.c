@@ -443,7 +443,7 @@ f32        beam_barrier_class_scale_multiplier_gp __asm__("D_L06_00161E14") = 1.
 f32        beam_barrier_strand_jitter_max_speed_gp __asm__("D_L06_00161E04") = 0.4f;
 extern int D_L06_00161E40[4] MACRO_ADDR;
 
-Vec4 D_L06_001DB870[4][30] = {0};
+Vec4 l06_beam_barrier_strand_point_drifts[4][30] __asm__("D_L06_001DB870") = {0};
 
 extern void FUN_L06_00217300(void *);
 
@@ -478,14 +478,14 @@ void animate_beam_barrier_strands(struct Moby *moby) {
                 y += step;
             }
             for (k = 1; k < 29; k++) {
-                fast_vec_add(&D_L06_001DB870[i][k], &jitter[k - 1], &jitter[k]);
-                fast_vec_add(&D_L06_001DB870[i][k], &D_L06_001DB870[i][k], &jitter[k + 1]);
-                fast_vec_scale(&D_L06_001DB870[i][k], &D_L06_001DB870[i][k], 0.333f);
+                fast_vec_add(&l06_beam_barrier_strand_point_drifts[i][k], &jitter[k - 1], &jitter[k]);
+                fast_vec_add(&l06_beam_barrier_strand_point_drifts[i][k], &l06_beam_barrier_strand_point_drifts[i][k], &jitter[k + 1]);
+                fast_vec_scale(&l06_beam_barrier_strand_point_drifts[i][k], &l06_beam_barrier_strand_point_drifts[i][k], 0.333f);
             }
             D_L06_00161E40[i] = D_L06_00161E50;
         } else {
             for (j = 1; j < 29; j++) {
-                fast_vec_add(&l06_beam_barrier_strand_local_points[i][j], &l06_beam_barrier_strand_local_points[i][j], &D_L06_001DB870[i][j]);
+                fast_vec_add(&l06_beam_barrier_strand_local_points[i][j], &l06_beam_barrier_strand_local_points[i][j], &l06_beam_barrier_strand_point_drifts[i][j]);
             }
             D_L06_00161E40[i]--;
         }
