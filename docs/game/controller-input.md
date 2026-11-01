@@ -22,8 +22,9 @@ also retains a `_lui` alias; pyrocitor uses the second name to preserve address
 reconstruction between button tests.
 
 Signed and unsigned views are intentional. Some menu/debug/movie paths load
-two button words together; their explicit `u64` or PS2 `long` accesses must
-not become two independent loads. Pause-menu entry reads the unmasked pressed
+two button words together; their `PadStateWords` member views or explicit `u64`/PS2 `long` accesses
+must not become two independent loads. The member views also preserve the
+compiler's base-plus-field addressing where a scalar pointer cast does not. Pause-menu entry reads the unmasked pressed
 word through a volatile signed view. The save-loading menu reads `raw_pressed`,
 not `held`.
 

@@ -75,4 +75,32 @@ struct PadState {
 extern struct PadState controller_state __asm__("D_0013C940");
 extern struct PadState controller_state_lui __asm__("D_0013C940") NOT_SDA;
 
+/*
+ * The same pad state as some functions read it: the stick axes, and the held/pressed button words,
+ * which are also tested together as one doubleword (FUN_L00_00298f90, the debug camera's
+ * two-button chords).
+ */
+struct PadStateWords {
+    char pad0[0x100];
+    f32  analog[4]; /* 0x100: stick axes */
+    char pad110[0x1A0 - 0x110];
+    union {
+        u64 held_pressed; /* 0x1A0: held | pressed << 32 */
+        struct {
+            s32 held;    /* 0x1A0 */
+            s32 pressed; /* 0x1A4 */
+        } w;
+    } buttons;
+    char pad1A8[0x1C0 - 0x1A8];
+    union {
+        long held_pressed; /* PS2 long-width unmasked pair, used by the trespasser */
+        struct {
+            s32 held;
+            s32 pressed;
+        } w;
+    } unmasked;
+    char pad1C8[0x1D8 - 0x1C8];
+    s32  stick_moved; /* 0x1D8: analog[2] or analog[3] nonzero */
+};
+
 #endif

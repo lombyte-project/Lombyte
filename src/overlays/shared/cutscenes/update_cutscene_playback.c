@@ -756,7 +756,8 @@ void update_cutscene_playback(void) {
              current_level_index <= 0) &&
             (controller_state.pressed & 0x800)) {
             done = 1;
-        } else if (((*(u64 *)&controller_state.held) & 0x8000000000FUL) == 0x8000000000FUL) {
+        } else if ((((struct PadStateWords *)&controller_state)->buttons.held_pressed &
+                    0x8000000000FUL) == 0x8000000000FUL) {
             done = 1;
         }
     }

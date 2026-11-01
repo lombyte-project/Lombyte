@@ -380,10 +380,11 @@ void tresspasser_pad_update(Moby *moby) {
                 if (fast_dec_timer_s16(&pad_puzzle_state->h10)) {
                     moby->state = 3;
                 }
-            } else if ((*(long *)&controller_state.held_unmasked) & 0xA00000000000) {
+            } else if (((struct PadStateWords *)&controller_state)->unmasked.held_pressed &
+                       0xA00000000000) {
                 pad_puzzle_state->h11E |= 1;
                 allocate_voice_for_target_entry(0, 0, moby);
-                if (((s32)controller_state.pressed_unmasked) & 0x8000) {
+                if (((struct PadStateWords *)&controller_state)->unmasked.w.pressed & 0x8000) {
                     pad_puzzle_state->fE4 = -(frame_time_macro * 6.2831855f);
                 } else {
                     pad_puzzle_state->fE4 = frame_time_macro * 6.2831855f;

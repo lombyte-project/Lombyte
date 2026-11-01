@@ -40,3 +40,10 @@ OFFSET_CHECK(repeat_rate, struct PadState, repeat_rate, 0x34E);
 OFFSET_CHECK(repeat_timer, struct PadState, repeat_timer, 0x34F);
 
 typedef char pad_state_size_check[sizeof(struct PadState) == 0x350 ? 1 : -1];
+
+OFFSET_CHECK(words_held_pressed, struct PadStateWords, buttons.held_pressed, 0x1A0);
+OFFSET_CHECK(words_unmasked, struct PadStateWords, unmasked.held_pressed, 0x1C0);
+OFFSET_CHECK(words_unmasked_pressed, struct PadStateWords, unmasked.w.pressed, 0x1C4);
+OFFSET_CHECK(words_stick_moved, struct PadStateWords, stick_moved, 0x1D8);
+typedef char pad_unmasked_pair_width_check
+    [sizeof(((struct PadStateWords *)0)->unmasked.held_pressed) == 8 ? 1 : -1];
