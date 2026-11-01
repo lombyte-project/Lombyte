@@ -23,11 +23,14 @@ void alien_snapper_spawner_update(char *moby) {
         WAIT_FOR_ANIMATION_SIGNAL = 1,
         ACTIVATE_LISTED_MOBYS_AT_INTERVAL = 2
     };
+    enum {
+        ACTIVATION_SEQUENCE_FINISHED = 3
+    };
     int *moby_vars = ((int *)MOBY(moby)->pvars);
     switch (((unsigned char *)moby)[0x20]) {
     case WAIT_FOR_HERO_IN_CLIP_VOLUME:
         if (moby_vars[1] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, moby_vars[1])) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = WAIT_FOR_ANIMATION_SIGNAL;
             if (((unsigned char *)moby)[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, 5);
             }
@@ -36,9 +39,9 @@ void alien_snapper_spawner_update(char *moby) {
     case WAIT_FOR_ANIMATION_SIGNAL:
         if (MOBY(moby)->anim_flags & 2) {
             if (moby_vars[0] >= 0) {
-                MOBY(moby)->state = 2;
+                MOBY(moby)->state = ACTIVATE_LISTED_MOBYS_AT_INTERVAL;
             } else {
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = ACTIVATION_SEQUENCE_FINISHED;
             }
             if (((unsigned char *)moby)[0x53] != 2) {
                 blend_moby_animation(moby, 2, 0, 5);
@@ -64,7 +67,7 @@ void alien_snapper_spawner_update(char *moby) {
             if (found != 0.0f) {
                 moby_vars[2] = scale_game_frames(0x14);
             } else {
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = ACTIVATION_SEQUENCE_FINISHED;
             }
         }
         break;
