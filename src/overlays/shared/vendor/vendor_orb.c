@@ -43,7 +43,7 @@ void vendor_orb_update(unsigned char *moby) {
     float rotation_step_radians;
     switch (MOBY(moby)->state) {
     case VENDOR_ORB_INITIALIZE:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = VENDOR_ORB_ROTATE;
         MOBY(moby)->unk73 = 0x20;
         *(float *)(manipulator + 0x40) = random_angle_radians();
         attach_manipulator(moby, 1, manipulator);
