@@ -19,7 +19,7 @@
 
 typedef struct ArmedTransportVars {
     u8  pad0[0x20];
-    f32 unk20;
+    f32 health;
     s16 unk24;
     u8  pad26[0x2];
     s8  unk28;
@@ -35,21 +35,21 @@ typedef struct ArmedTransportVars {
     u8  unkC0[0x10];
     s32 unkD0;
     s32 unkD4;
-    s32 unkD8;
+    s32 path_index;
     s32 unkDC;
     u8  unkE0[0x64];
     f32 unk144;
     u8  pad148[0x18];
     s32 unk160;
     s32 unk164;
-    s32 unk168;
+    s32 path_point;
     s32 unk16C;
     f32 unk170[4];
     u8  unk180[0x4];
     s32 unk184;
     f32 unk188;
     f32 unk18C;
-    s32 unk190;
+    s32 voice;
     f32 unk194;
 } ArmedTransportVars;
 
@@ -182,23 +182,23 @@ void armed_transport_update(char *transport_moby) {
 
         MOBY(transport_moby)->draw_dist = 255;
         MOBY(transport_moby)->update_dist = 255;
-        transport_data->unk20 = 12.0f;
+        transport_data->health = 12.0f;
         transport_data->unk24 = 12;
         transport_data->unk28 = 3;
-        if (transport_data->unkD8 != -1)
-            compute_armed_transport_path_headings(D_L16_001B0930[transport_data->unkD8]);
+        if (transport_data->path_index != -1)
+            compute_armed_transport_path_headings(D_L16_001B0930[transport_data->path_index]);
         if (transport_data->unkDC != -1)
             compute_armed_transport_path_headings(D_L16_001B0930[transport_data->unkDC]);
         speed = *(float *)&D_L16_00161D80 * frame_time;
         transport_data->unk16C = 0;
-        transport_data->unk168 = 0;
+        transport_data->path_point = 0;
         transport_data->unk170[0] = speed;
         transport_data->unk194 = MOBY(transport_moby)->pos.z;
-        if (transport_data->unkD8 == -1) {
+        if (transport_data->path_index == -1) {
             MOBY(transport_moby)->state = 6;
             break;
         }
-        path = D_L16_001B0930[transport_data->unkD8];
+        path = D_L16_001B0930[transport_data->path_index];
         transport_data->unk170[1] = fast_vec_dist(path + 0x10, path + 0x20);
         qcopy(&MOBY(transport_moby)->pos, path + 0x10);
         MOBY(transport_moby)->state = 1;
@@ -243,9 +243,10 @@ void armed_transport_update(char *transport_moby) {
             if (((int *)(&transport_data->unkC0))[i] >= 0)
                 loaded = 1;
         }
-        path = D_L16_001B0930[transport_data->unkD8];
+        path = D_L16_001B0930[transport_data->path_index];
         if (loaded &&
-            (float)(*(int *)path - transport_data->unk168) * transport_data->unk170[1] < 16.0f) {
+            (float)(*(int *)path - transport_data->path_point) * transport_data->unk170[1] <
+                16.0f) {
             advance_accelerated_scalar((float *)(&transport_data->unk170[3]),
                                        (float *)(&transport_data->unk180),
                                        1.5707964f,
@@ -306,7 +307,7 @@ void armed_transport_update(char *transport_moby) {
                                    frame_time * 6.2831855f);
         if (fast_difference_between_rotations(MOBY(transport_moby)->rot.z, heading) < 0.01f) {
             MOBY(transport_moby)->state = 5;
-            transport_data->unk168 = 0;
+            transport_data->path_point = 0;
             transport_data->unk16C = 0;
         }
         break;
@@ -450,24 +451,24 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
 
     transport_moby->scale = transport_moby->pclass->scale * D_L16_00161D78_gp;
     if ((unsigned int)(transport_moby->state - 2) < 4) {
-        if (!voice_is_playing(transport_moby, transport_data->unk190))
-            transport_data->unk190 = FUN_0022da68_i(0, 4, transport_moby);
-    } else if (voice_is_playing(transport_moby, transport_data->unk190)) {
-        int slot = transport_data->unk190;
+        if (!voice_is_playing(transport_moby, transport_data->voice))
+            transport_data->voice = FUN_0022da68_i(0, 4, transport_moby);
+    } else if (voice_is_playing(transport_moby, transport_data->voice)) {
+        int slot = transport_data->voice;
         if (slot != -1) {
             L16Slot_e *voice_slot = (L16Slot_e *)(((u8 *)&voice_pool) + slot * 0x70);
             if (voice_slot->owner == transport_moby && voice_slot->active != 0)
                 release_voice_slot(slot);
         }
-        transport_data->unk190 = -1;
+        transport_data->voice = -1;
     }
     hit.amount = zero = 0.0f;
     hit_record = find_moby_hit(transport_moby, 0x330000, 0);
     response = hit_reaction(
-        transport_moby, hit_record, &transport_data->unk20, 0, &hit.status, &hit.amount, 0, 4);
+        transport_moby, hit_record, &transport_data->health, 0, &hit.status, &hit.amount, 0, 4);
     if (hit.status != 1 && transport_moby->state != 8) {
-        transport_data->unk20 -= hit.amount;
-        if (transport_data->unk20 <= zero || (hero.vehicle_mode == 2 && hit.amount >= 2.0f))
+        transport_data->health -= hit.amount;
+        if (transport_data->health <= zero || (hero.vehicle_mode == 2 && hit.amount >= 2.0f))
             response = 1;
         if (response > 0) {
             if (response >= 3) {
@@ -516,13 +517,13 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
 
 int advance_armed_transport_along_path(char *transport_moby, char *path) {
     ArmedTransportVars *transport_data = (ArmedTransportVars *)MOBY(transport_moby)->pvars;
-    float progress = (float)transport_data->unk168 + *(float *)&transport_data->unk16C +
+    float progress = (float)transport_data->path_point + *(float *)&transport_data->unk16C +
                      transport_data->unk170[0] / transport_data->unk170[1];
     int   index = truncate_float_to_s32(progress);
     float speed;
     float distance, rate;
     char *position;
-    transport_data->unk168 = index;
+    transport_data->path_point = index;
     *(float *)&transport_data->unk16C = progress - (float)index;
     if (index < *(int *)path - 1) {
         position = &MOBY(transport_moby)->pos;
