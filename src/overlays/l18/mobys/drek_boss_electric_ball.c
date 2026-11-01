@@ -211,7 +211,7 @@ extern int l18_homing_spark_blend_subtrahend_selector __asm__("D_L18_00161EE8")
 extern int l18_homing_spark_blend_alpha_factor_selector __asm__("D_L18_00161EEC")
     __attribute__((sda));
 extern int  l18_homing_spark_blend_addend_selector __asm__("D_L18_00161EF0") __attribute__((sda));
-extern int  D_L18_00161EF8 __attribute__((sda));
+extern int  l18_homing_spark_quad_colors __asm__("D_L18_00161EF8") __attribute__((sda));
 extern int  l18_homing_spark_quad_texture_ids __asm__("D_L18_00161F08") __attribute__((sda));
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -278,11 +278,11 @@ void homing_spark_draw(char *moby) {
                 pkt[i].uv[j][1] = homing_spark_quad_uvs[j][1];
                 if (i == 0) {
                     pkt[0].color[j] =
-                        fast_tween_color_c(D_L18_00161EF8 & 0xFFFFFF,
-                                           D_L18_00161EF8,
+                        fast_tween_color_c(l18_homing_spark_quad_colors & 0xFFFFFF,
+                                           l18_homing_spark_quad_colors,
                                            *(float *)(homing_spark_private_vars + 0x24));
                 } else {
-                    pkt[i].color[j] = ((int *)&(*(short *)&D_L18_00161EF8))[i];
+                    pkt[i].color[j] = ((int *)&(*(short *)&l18_homing_spark_quad_colors))[i];
                 }
                 qcopy(pkt[i].vtx[j], homing_spark_quad_vertices[i][j]);
             }
