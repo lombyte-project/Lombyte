@@ -243,7 +243,7 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
     int          flag_clear_target;
     void        *moby_to_remove;
     char        *restored_hero_moby;
-    if (hero_state_for_vehicle_exit->vehicle_mode == 2) {
+    if (hero_state_for_vehicle_exit->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         int animation_parameter_value = hero_state_for_vehicle_exit->unk1634;
         if (animation_parameter_value != -1) {
             set_animation_parameter(animation_parameter_value, 0);
@@ -253,7 +253,7 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
     reset_hero_easing_records();
     hero_state_bytes = (struct Hero *)(((unsigned char *)&D_0013E533) + 0xE1D);
     flag_clear_target = *(int *)&hero_state_bytes->unkA84;
-    hero_state_bytes->vehicle_mode = 0;
+    hero_state_bytes->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
     if (flag_clear_target != 0) {
         *(unsigned short *)(flag_clear_target + 0x34) &= 0xFFF9;
     }
