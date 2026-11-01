@@ -394,7 +394,7 @@ extern int scale_game_frames(int);
 #include "rnc/overlay/shared/world/level_labels.h"
 
 extern s32  D_L01_0015F68C __attribute__((sda));
-extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810");
+extern void add_hero_up_offset(float *, float *, float) __asm__("FUN_L00_00233810");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void emit_hero_periodic_surface_effect(int, int) __asm__("FUN_L00_00209540");
 extern void emit_hero_periodic_surface_particles(int, int) __asm__("FUN_L00_00209848");
@@ -2070,7 +2070,7 @@ void update_hero_motion_for_current_state(void) {
                 }
                 if (hero.state_timer < scale_game_frames(0xA) && hero.stick_magnitude > 0.2f) {
                     qcopy(vector_and_hit_scratch[0], hero.motion.pos.f);
-                    FUN_001efa68_cf(vector_and_hit_scratch[0], vector_and_hit_scratch[0], 0.5f);
+                    add_hero_up_offset(vector_and_hit_scratch[0], vector_and_hit_scratch[0], 0.5f);
                     qcopy(vector_and_hit_scratch[1], vector_and_hit_scratch[0]);
                     vector_and_hit_scratch[1][0] += fast_cos(hero.motion.rot.f[2]) * 0.85f;
                     vector_and_hit_scratch[1][1] += fast_sin(hero.motion.rot.f[2]) * 0.85f;

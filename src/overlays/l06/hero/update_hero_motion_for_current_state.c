@@ -975,7 +975,7 @@ struct PlayerSpeedTuning {
 
 extern struct PlayerSpeedTuning D_L06_0017C538_c __asm__("D_L06_0017C538");
 extern s32                      allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
-extern void                     FUN_L00_00233810(void *, void *, f32);
+extern void                     add_hero_up_offset(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern s32  FUN_001efa68_c(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
 extern void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
@@ -2752,7 +2752,7 @@ void update_hero_motion_for_current_state(void) {
             }
             if (hero.state_timer < scale_game_frames(10) && hero.stick_magnitude > 0.2f) {
                 qcopy(&vector_or_hit_descriptor_scratch, &hero.motion.pos);
-                FUN_L00_00233810(
+                add_hero_up_offset(
                     &vector_or_hit_descriptor_scratch, &vector_or_hit_descriptor_scratch, 0.5f);
                 qcopy(&v10, &vector_or_hit_descriptor_scratch);
                 v10.f[0] += fast_cos(hero.motion.rot.f[2]) * 0.85f;

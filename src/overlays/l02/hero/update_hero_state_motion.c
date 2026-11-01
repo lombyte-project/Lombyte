@@ -571,7 +571,7 @@ typedef union {
 } V_222270;
 
 extern void        resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
-extern void        FUN_L00_00233810(f32 *, f32 *, f32);
+extern void        add_hero_up_offset(f32 *, f32 *, f32) __asm__("FUN_L00_00233810");
 extern void        FUN_L00_002334d0(f32 *, f32 *, f32);
 extern s32         coll1_222270(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32         rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
@@ -599,7 +599,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     if (hero.state.control_mode != 0x11) {
         if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
             if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
-                FUN_L00_00233810(&collision_probe_offset, &collision_probe_offset, 0.6f);
+                add_hero_up_offset(&collision_probe_offset, &collision_probe_offset, 0.6f);
             } else {
                 FUN_L00_002334d0(
                     &collision_probe_offset, &collision_probe_offset, -hero.capsule_bottom);

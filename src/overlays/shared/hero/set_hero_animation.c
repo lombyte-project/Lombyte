@@ -1079,9 +1079,9 @@ typedef struct {
     f32 v[4];
 } V00233810 __attribute__((aligned(16)));
 
-void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
+void add_hero_up_offset(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233810");
 
-void FUN_L00_00233810(f32 *gravity_offset_adjusted_vector, f32 *in, f32 z) {
+void add_hero_up_offset(f32 *gravity_offset_adjusted_vector, f32 *in, f32 z) {
     struct Hero *hero_base = &hero;
     M00233810    moby_rotation_matrix;
     V00233810    offset_vector;

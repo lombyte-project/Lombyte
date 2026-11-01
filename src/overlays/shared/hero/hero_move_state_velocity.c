@@ -1063,7 +1063,7 @@ extern unsigned char coll_hit[] __asm__("D_L00_00173E40") __attribute__((section
 void                 FUN_001f9a68_217118(void *, float, void *) __asm__("FUN_001f9a68");
 void                 add_hero_forward_offset(void *, void *, float) __asm__("FUN_L00_00233708");
 void                 FUN_001f9a10_217118(void *, void *, void *) __asm__("FUN_001f9a10");
-void                 FUN_L00_00233810_217118(void *, void *, float) __asm__("FUN_L00_00233810");
+void                 add_hero_up_offset(void *, void *, float) __asm__("FUN_L00_00233810");
 int   FUN_L00_001efc70_217118(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
 float compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void  scale_hero_motion(float) __asm__("FUN_L00_00213de8");
@@ -1102,14 +1102,14 @@ void stop_hero_motion_without_forward_support(float velocity_scale, float planar
     gravity_set_z(collision_query_position, collision_query_position, 0.0f);
     FUN_001f9a10_217118(collision_query_position, collision_query_position, (&hero.motion.pos));
     qcopy(collision_query_second_position, collision_query_position);
-    FUN_L00_00233810_217118(collision_query_position, collision_query_position, 0.3f);
+    add_hero_up_offset(collision_query_position, collision_query_position, 0.3f);
     P = ((char *)&hero);
     k = -0.2f;
     if (*(int *)(P + 0x2084) == 0x20)
         k = -0.35f;
     if (P[0x20A4] == 2)
         k = -0.7f;
-    FUN_L00_00233810_217118(collision_query_second_position, collision_query_second_position, k);
+    add_hero_up_offset(collision_query_second_position, collision_query_second_position, k);
     final_call_enabled = 1.0f;
     if (FUN_L00_001efc70_217118(collision_query_position,
                                 collision_query_second_position,

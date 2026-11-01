@@ -553,7 +553,7 @@ typedef union {
 
 extern OvlVec4 coll_hit_pos __asm__("D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
 extern void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
-extern void FUN_L00_00233810(void *, void *, f32);
+extern void add_hero_up_offset(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern void FUN_L00_002334d0(void *, void *, f32);
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
@@ -580,7 +580,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     if (hero.state.control_mode != 0x11) {
         if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
             if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
-                FUN_L00_00233810(&collision_query_offset, &collision_query_offset, 0.6f);
+                add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
                 FUN_L00_002334d0(
                     &collision_query_offset, &collision_query_offset, -hero.capsule_bottom);
