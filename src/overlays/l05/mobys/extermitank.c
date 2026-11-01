@@ -540,6 +540,9 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     enum {
         MOBY_HIT_RESPONSE_SKIP_DAMAGE = 1
     };
+    enum {
+        EXTERMITANK_REMOVE = 3
+    };
     ExtermitankVars *extermitank_hit_sync_vars = (ExtermitankVars *)MOBY(moby)->pvars;
     char            *first;
     char            *second;
@@ -574,7 +577,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     resolve_moby_hit_response(
         moby, hit, &extermitank_hit_sync_vars->health, 0, &hit_processing_status, &remaining, 0, 4);
     if (hit_processing_status == MOBY_HIT_RESPONSE_SKIP_DAMAGE ||
-        (unsigned char)MOBY(moby)->state == 3)
+        (unsigned char)MOBY(moby)->state == EXTERMITANK_REMOVE)
         goto mark_children;
     {
         extermitank_hit_sync_vars->health -= remaining;
@@ -650,7 +653,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
                             -1,
                             0);
             extermitank_hit_sync_vars->unk19E = scale_game_frames(D_L05_00161B74);
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = EXTERMITANK_REMOVE;
             clear_u64_value(effect_data);
             *(float *)(effect_data + 8) = extermitank_hit_sync_vars->unk194;
             spawn_particle_305178(moby,
