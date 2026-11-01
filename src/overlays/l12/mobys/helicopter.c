@@ -171,7 +171,7 @@ void helicopter_update(char *moby) {
                 moby_vars->unk30 = 1.4f;
                 moby_vars->unk2B = 1;
                 moby_vars->unk60 = initial_node_index;
-                MOBY(moby)->state = 1;
+                MOBY(moby)->state = HELICOPTER_FOLLOW_PATH;
                 MOBY(moby)->draw_dist = 0xAA;
                 MOBY(moby)->flags |= 0x1000;
             }
