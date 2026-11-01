@@ -40,7 +40,7 @@ void crane_arm_update(unsigned char *moby) {
     case CRANE_ARM_INITIALIZE:
         if (MOBY(moby)->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, 0);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = CRANE_ARM_WAIT_DELAY;
         MOBY(moby)->command = random_integer_below(scale_game_frames(0xB4));
         break;
     case CRANE_ARM_WAIT_DELAY:
@@ -69,7 +69,7 @@ void crane_arm_update(unsigned char *moby) {
                     blend_moby_animation(moby, 6, 0, 0);
                 break;
             }
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = CRANE_ARM_WAIT_ANIMATION_FLAG;
         }
         break;
     case CRANE_ARM_WAIT_ANIMATION_FLAG:
@@ -89,7 +89,7 @@ void crane_arm_update(unsigned char *moby) {
                     blend_moby_animation(moby, 2, 0, 0);
                 break;
             }
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = CRANE_ARM_WAIT_DELAY;
             MOBY(moby)->command = random_integer_below(scale_game_frames(0xB4));
         }
         break;
