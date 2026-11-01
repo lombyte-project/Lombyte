@@ -16,6 +16,10 @@ extern s32 scePad2CreateSocket(scePad2SocketParam *, void *);
 void       init_pads(void) __asm__("FUN_00217048");
 
 void init_pads(void) {
+    enum {
+        CONTROLLER_PROFILE_INITIAL_STATE = 0,
+        CONTROLLER_DEVICE_INITIAL_STATE = 0
+    };
     sceDbcInit();
     scePad2Init(0);
     D_001CD760.port = 2;
@@ -23,8 +27,8 @@ void init_pads(void) {
     controller_state.socket = scePad2CreateSocket(&D_001CD760, &controller_state);
     D_001CD760.port = 2;
     D_001CD760.slot = 1;
-    controller_state.profile_state = 0;
-    controller_state.device_state = 0;
+    controller_state.profile_state = CONTROLLER_PROFILE_INITIAL_STATE;
+    controller_state.device_state = CONTROLLER_DEVICE_INITIAL_STATE;
 }
 
 extern __typeof__(init_pads) func_00217048 __attribute__((alias("FUN_00217048")));
