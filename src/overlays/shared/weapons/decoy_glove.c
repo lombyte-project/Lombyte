@@ -278,7 +278,7 @@ target_valid:
 L3D10:
     allocate_hero_voice_for_entry(0x1A, 0);
     use_ammo(-1, 1);
-    MOBY(moby)->state = 3;
+    MOBY(moby)->state = DECOY_GLOVE_RELEASE_DECOY;
 L3D34:
     *(u128_D3B20 *)&loc = *(u128_D3B20 *)(&glove_vars->unk40);
     decoy_glove_aim_throw((int)moby, (void *)glove_vars, (float *)&loc);
@@ -287,12 +287,12 @@ L3D34:
     case DECOY_GLOVE_INITIALIZE:
         *(int *)&glove_vars->unk50 = 0;
         if (!(MOBY(moby)->anim_flags & 2))
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = DECOY_GLOVE_WAIT_FOR_MOBY_FLAG;
         else
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN;
     case DECOY_GLOVE_WAIT_FOR_MOBY_FLAG:
         if (MOBY(moby)->anim_flags & 2)
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN;
         break;
     case DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN:
         break;
@@ -312,17 +312,17 @@ L3D34:
         } else {
             allocate_voice_for_target_entry(0, 0, (int)moby);
         }
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = DECOY_GLOVE_WAIT_AFTER_RELEASE;
         glove_vars->unk54 = scale_game_frames(0x14);
         break;
     case DECOY_GLOVE_WAIT_AFTER_RELEASE: {
         struct Hero *h = &hero;
         if (h->state.current != 0x23 && h->item_anim_active == 0)
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN;
         break;
     }
     case DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN:
-        MOBY(moby)->state = 6;
+        MOBY(moby)->state = DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN;
         break;
     case DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN:
         return;
