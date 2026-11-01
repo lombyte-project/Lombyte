@@ -21,7 +21,8 @@ s64 _waitIpuIdle64(s32 *ctx) {
                     count++;
                 }
                 status = *((volatile s64 *)0x10002000);
-            } while ((status < IPU_CMD_IDLE_THRESHOLD) && (((*((volatile u32 *)0x10002010)) & 0x4000) == 0));
+            } while ((status < IPU_CMD_IDLE_THRESHOLD) &&
+                     (((*((volatile u32 *)0x10002010)) & 0x4000) == 0));
         }
     }
     return status;
