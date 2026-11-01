@@ -1,6 +1,7 @@
 /* Shared moby class taunter: the taunter held by the hero, which lures nearby enemies, and its effect quads. */
 
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
@@ -105,7 +106,6 @@ void FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
 extern int            D_0015EEA4;
 extern s32            D_0015EEA4;
 extern s32            D_L00_0015F5CC;
-extern u32            D_0013C940[];
 extern Ring           D_00141680;
 extern Moby          *D_001ABA00_b6bc8[] __asm__("D_L00_001ABA00");
 extern s16            D_L00_001B07B0[] __asm__("D_L00_001B07B0");
@@ -497,9 +497,9 @@ void taunter_update(Moby *taunter_moby) {
         taunter_vars->cnt18 = 0;
     }
     if (voice_is_playing(taunter_moby, taunter_vars->anim) == 0) {
-        activation_button_bits = D_0013C940[0x1A4 / 4] & hero.items[0].button_mask;
+        activation_button_bits = ((u32)controller_state.pressed) & hero.items[0].button_mask;
         if ((activation_button_bits != 0 ||
-             ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 &&
+             ((((u32)controller_state.held) & hero.items[0].button_mask) != 0 &&
               taunter_vars->retry >= 0x11)) &&
             hero.item_use_locked == 0) {
             if (activation_button_bits != 0) {
@@ -529,7 +529,7 @@ void taunter_update(Moby *taunter_moby) {
             goto end;
         }
         if (taunter_vars->anim < 0) {
-            if ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 &&
+            if ((((u32)controller_state.held) & hero.items[0].button_mask) != 0 &&
                 hero.item_use_locked == 0)
                 taunter_vars->retry++;
             else
@@ -540,7 +540,7 @@ void taunter_update(Moby *taunter_moby) {
         }
     } else {
         taunter_vars->retry++;
-        if ((pad_held[0] & hero.items[0].button_mask) != 0 ||
+        if ((pad_held_words[0] & hero.items[0].button_mask) != 0 ||
             scale_game_frames(0x1E) >= taunter_vars->cnt18) {
             if (hero.item_use_locked == 0)
                 goto L7340;

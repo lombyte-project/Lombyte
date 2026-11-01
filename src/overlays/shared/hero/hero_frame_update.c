@@ -1,4 +1,5 @@
 /* Hero per-frame update: idle animation, voice requests, ground material effects, ledge probes, vehicle mode entry and exit, hit response and collision dimensions. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/hero/hero.h"
@@ -1582,13 +1583,12 @@ void request_hero_idle_state_for_vehicle_mode(void) {
     }
 }
 
-extern s32 pad_held __asm__("D_0013CAE0") NOT_SDA;
-void       set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
-void       stick_target(s32, f32) __asm__("FUN_L00_002118c8");
-void       hero_queue_sequence(s32, s32) __asm__("FUN_L00_002325e0");
-void       FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
-s32        get_hero_idle_animation_index(s32) __asm__("FUN_L01_00226f10");
-void       select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
+void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
+void stick_target(s32, f32) __asm__("FUN_L00_002118c8");
+void hero_queue_sequence(s32, s32) __asm__("FUN_L00_002325e0");
+void FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
+s32  get_hero_idle_animation_index(s32) __asm__("FUN_L01_00226f10");
+void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 
 void select_hero_locomotion_state(void) {
     struct Hero *hero_ptr, *run_hero, *stop_idle_hero;
@@ -1596,7 +1596,7 @@ void select_hero_locomotion_state(void) {
     hero_ptr = &hero;
     hero_ptr->unk2284 = 0;
     stick_target(0, 1.0f);
-    if (pad_held & 0xA) {
+    if (pad_held_lui & 0xA) {
         l01_hero_set_state(HERO_STATE_CROUCH, 0);
         set_hero_animation(0xD, 2, -2.0f);
         hero_queue_sequence(3, 0x12);

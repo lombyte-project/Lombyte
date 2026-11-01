@@ -1,5 +1,6 @@
 /* Hero: primary item input, item slot selection, water and ground transitions, and the hoverboard tricks, race progress and respawn. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/hero/hero_tables.h"
 #include "qcopy.h"
@@ -114,7 +115,6 @@ typedef struct {
     char pad2[0x28];
 } ItemDef;
 
-extern char    D_0013C940[];
 extern char    D_00141660[];
 extern u8      item_available_lui[35] __asm__("D_0013D4C0") NOT_SDA;
 extern int     D_0015ED8C;
@@ -180,8 +180,8 @@ void apply_hero_item_slot_selection(int i) {
     }
     changed = 0;
     {
-        char *pad = D_0013C940;
-        if ((*(int *)(pad + 0x1A4) & 0x80) || (&hero)->force_slot0_item8 != 0) {
+        struct PadState *pad = &controller_state;
+        if ((pad->pressed & 0x80) || (&hero)->force_slot0_item8 != 0) {
             if (i == 0) {
                 int          v;
                 struct Hero *g = &hero;
@@ -197,8 +197,8 @@ void apply_hero_item_slot_selection(int i) {
         }
     }
     if (i == 0) {
-        char *pad = D_0013C940;
-        if (*(int *)(pad + 0x1A4) & 0x20) {
+        struct PadState *pad = &controller_state;
+        if (pad->pressed & 0x20) {
             struct Hero *g = &hero;
             if (g->item_select_blocked == 0) {
                 if (g->items[0].item_id != *(int *)(D_00141660) && *(int *)(D_00141660) != 0) {
@@ -627,8 +627,6 @@ int try_apply_hero_water_and_ground_transitions(void) {
     return water_state_requested;
 }
 
-#include "rnc/input/pad_state.h"
-
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002523C8), where it is exact; names translated to the US level program. */
 
@@ -659,8 +657,7 @@ extern void           launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void           select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void           FUN_L05_0024cee8(int, int);
 extern void create_class_5c3_moby(void *, void *, void *, float, float) __asm__("FUN_L05_002d4168");
-extern PadState       D_0013CA40_p2523C8 __asm__("D_0013C940");
-extern int            D_00141660_lui __asm__("D_00141660") NOT_SDA;
+extern int  D_00141660_lui __asm__("D_00141660") NOT_SDA;
 extern unsigned char  D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern HeroTableRow2C D_L05_0017C088[];
 int                   hero_item_input_r1_double_press_timer_gp __asm__("D_L05_0015F674") = 0;
@@ -727,7 +724,7 @@ int process_hero_primary_item_input(void) {
             if (item->state != 0) {
                 break;
             }
-            if ((D_0013CA40_p2523C8.held & 0xA) ||
+            if ((controller_state.held & 0xA) ||
                 (((*(Hero *)((char *)&hero)).state.current == 1 ||
                   (*(Hero *)((char *)&hero)).state.current == 0x1E) &&
                  (*(Hero *)((char *)&hero)).state_timer > scale_game_frames(0x14))) {
@@ -797,7 +794,7 @@ int process_hero_primary_item_input(void) {
                         break;
                     }
                     if ((*(Hero *)((char *)&hero)).anim_frame >= (float)rec->f10 &&
-                        (D_0013CA40_p2523C8.held & 0xA) &&
+                        (controller_state.held & 0xA) &&
                         pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
                         hero_set_state(0x15, 1);
                         break;
@@ -823,7 +820,7 @@ int process_hero_primary_item_input(void) {
             if (!pad_pressed_within(mask, window, 0)) {
                 break;
             }
-            if (D_0013CA40_p2523C8.held & 0xA) {
+            if (controller_state.held & 0xA) {
                 hero_set_state(0x15, 1);
                 break;
             }
@@ -850,7 +847,7 @@ int process_hero_primary_item_input(void) {
             (*(Hero *)((char *)&hero)).state.control_mode == 5 ||
             (*(Hero *)((char *)&hero)).state.current == 0x1E) {
             if (pad_pressed_within(mask, window, 0) ||
-                ((D_0013CA40_p2523C8.held & mask) &&
+                ((controller_state.held & mask) &&
                  (*(Hero *)((char *)&hero)).items[0].ready_frames > scale_game_frames(0xF))) {
                 if ((*(Hero *)((char *)&hero)).swing_target_in_sight != 0) {
                     if ((*(Hero *)((char *)&hero)).grapple_target_in_sight != 0) {
@@ -921,9 +918,9 @@ int process_hero_primary_item_input(void) {
                 break;
             }
             pv = (PVar *)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby)->pvars;
-            if (((D_0013CA40_p2523C8.held & mask) &&
+            if (((controller_state.held & mask) &&
                  (*(Hero *)((char *)&hero)).items[0].ready_frames > scale_game_frames(5)) ||
-                (D_0013CA40_p2523C8.pressed & mask)) {
+                (controller_state.pressed & mask)) {
                 if (get_ammo(-1)) {
                     if ((*(Hero *)((char *)&hero)).item_anim_active == 0) {
                         start_equipped_item_animation();
@@ -931,7 +928,7 @@ int process_hero_primary_item_input(void) {
                     break;
                 }
             }
-            if (D_0013CA40_p2523C8.held & mask) {
+            if (controller_state.held & mask) {
                 if (!get_ammo(-1)) {
                     if (!voice_is_playing((Moby *)(*(Hero *)((char *)&hero)).items[0].moby,
                                           pv->fC)) {
@@ -967,7 +964,7 @@ int process_hero_primary_item_input(void) {
             held_frames = (*(Hero *)((char *)&hero)).items[0].ready_frames;
             if (pad_pressed_within(
                     mask, window <= held_frames ? window : held_frames, &press_time1) ||
-                ((D_0013CA40_p2523C8.held & 0x20) && held_frames > scale_game_frames(8) &&
+                ((controller_state.held & 0x20) && held_frames > scale_game_frames(8) &&
                  held_frames < scale_game_frames(0x11))) {
                 if (get_ammo(-1)) {
                     if ((*(Hero *)((char *)&hero)).state.control_mode == 0xC ||
@@ -1011,7 +1008,7 @@ int process_hero_primary_item_input(void) {
         break;
     case ITEM_PRESS_ACTIVATED_DEVICE:
         if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
-            if (D_0013CA40_p2523C8.pressed & mask) {
+            if (controller_state.pressed & mask) {
                 start_equipped_item_animation();
             }
         }
@@ -1121,12 +1118,12 @@ int process_hero_primary_item_input(void) {
                     (((*(Hero *)((char *)&hero)).state.control_mode == 2 ||
                       (*(Hero *)((char *)&hero)).state.control_mode == 4) &&
                      (*(Hero *)((char *)&hero)).grounded_frames != 0)) {
-                    if ((D_0013CA40_p2523C8.held & 8) && (D_0013CA40_p2523C8.pressed & 8)) {
+                    if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);
                     }
                 }
             }
-            if ((D_0013CA40_p2523C8.pressed & 8) &&
+            if ((controller_state.pressed & 8) &&
                 (*(Hero *)((char *)&hero)).state.current != 0x81) {
                 hero_item_input_r1_double_press_timer_gp = scale_game_frames(0x1E);
             }
@@ -1164,7 +1161,7 @@ void update_hero_hoverboard_trick_animations(void) {
     int          pad;
     hero_ptr->board_jump_land_frames = truncate_float_to_s32(
         predict_hero_trajectory_intercept_time(60.0f, hero_ptr->board_gravity, -1.0f));
-    if (hero_ptr->trick_input != 0 && ((pad = pad_held[0]) & 0xF) != 0) {
+    if (hero_ptr->trick_input != 0 && ((pad = pad_held_words[0]) & 0xF) != 0) {
         hero_ptr->air_pose_index = 0;
         if (pad & 8)
             hero_ptr->air_pose_index = 1;
@@ -1188,7 +1185,7 @@ void update_hero_hoverboard_trick_animations(void) {
     }
     {
         struct Hero *k = &hero;
-        if ((k->air_frames.s == 0 || (pad_held[0] & 0xF) == 0) &&
+        if ((k->air_frames.s == 0 || (pad_held_words[0] & 0xF) == 0) &&
             (unsigned int)(((unsigned char *)((char *)k->moby))[0x53] - 0x69) < 4 &&
             k->anim_changing == 0 &&
             k->anim_loop_frame < ((unsigned char *)((char *)k->moby))[0x51] &&

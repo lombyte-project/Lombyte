@@ -1,5 +1,6 @@
 /* Shared moby class mine_glove: the mine glove held by the hero, with its launch velocity. */
 
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/game/item_state.h"
 #include "rnc/game/game_globals.h"
@@ -68,16 +69,15 @@ extern void         FUN_L00_0024f7c8(void *, int, void *);
 /* Float arguments first: the order they are evaluated in gives retail's registers. */
 extern void FUN_L00_002c1928_f(f32, f32, f32, f32 *, f32 *, f32 *) __asm__("FUN_L00_002c1928");
 
-extern CollisionHit   coll_hit __asm__("D_L00_00173E40") NOT_SDA;
-extern f32            frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
-extern u32 D_0013CAE4 NOT_SDA;
-extern CollisionHit   coll_hit __asm__("D_L00_00173E40");
-extern Vec4           D_L00_00166DC0;
-extern short          D_L00_001B07B0[];
-extern f32            frame_scale_inv_macro __asm__("D_0015ED68") MACRO_ADDR;
-extern f32            frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
-extern s32            current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
-extern s32            D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
+extern f32          frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern CollisionHit coll_hit __asm__("D_L00_00173E40");
+extern Vec4         D_L00_00166DC0;
+extern short        D_L00_001B07B0[];
+extern f32          frame_scale_inv_macro __asm__("D_0015ED68") MACRO_ADDR;
+extern f32          frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern s32          current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern s32          D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 /* coll_hit's normal as a whole quadword (CollisionHit names only x/y/z) */
 extern Vec4 D_L00_00166DC0 NOT_SDA;
 extern float               frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
@@ -180,7 +180,7 @@ void mine_glove_update(struct Moby *moby) {
         hero_set_state(0x1E, 1);
     if (fast_dec_timer(&mine_glove_vars->timer58) && !hero.item_use_locked) {
         if ((hero.item_anim_active && hero.item_anim_frames == scale_game_frames(0x11)) ||
-            ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E &&
+            ((((u32)pad_pressed_lui) & hero.items[0].button_mask) && hero.state.current == 0x1E &&
              get_ammo(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
             allocate_hero_voice_for_entry(0x1A, 0);

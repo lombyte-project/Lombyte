@@ -1,4 +1,5 @@
 /* Level 10 moby class nanotech_upgrade_vendor: sells the two health upgrades. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 
 #include "rnc/overlay/shared/world/level_globals.h"
@@ -53,7 +54,7 @@ void nanotech_upgrade_vendor_update(struct Moby *moby) {
             if (alternate_item_available[4] == 0) {
                 if (current_bolt_count >= 4001) {
                     int accepted = try_set_help_message(1, 0x271e) != 0;
-                    if (!(D_0013CAE4 & 0x10))
+                    if (!(((u32)pad_pressed_lui) & 0x10))
                         return;
                     if (accepted == 0)
                         return;
@@ -73,7 +74,7 @@ void nanotech_upgrade_vendor_update(struct Moby *moby) {
                     return;
                 if (current_bolt_count >= 30001) {
                     int accepted = try_set_help_message(1, 0x271f) != 0;
-                    if (!(D_0013CAE4 & 0x10))
+                    if (!(((u32)pad_pressed_lui) & 0x10))
                         return;
                     if (accepted == 0)
                         return;

@@ -1,4 +1,5 @@
 /* Hero: tries the water state transition; split out of hero_set_state.c so it builds with the SN compiler on its own. */
+#include "rnc/input/pad_globals.h"
 #include "sda.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/world/collision/collision_line.h"
@@ -11,7 +12,6 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
 
-extern unsigned int pad_held_lui __asm__("D_0013CAE0") NOT_SDA;
 extern void
 queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void hud_init_particles(void) __asm__("FUN_L00_00236268");
@@ -69,7 +69,7 @@ collision_mode:
     qcopy(&end, &start);
     end.f[2] += 0.3f;
     if (collision_line(&start, &end, 2, hero.moby, 0)) {
-        if (item_available[4] != 0 && (pad_held_lui & 10) != 0) {
+        if (item_available[4] != 0 && (((u32)pad_held_lui) & 10) != 0) {
             state = 0x35;
             goto change_state;
         }

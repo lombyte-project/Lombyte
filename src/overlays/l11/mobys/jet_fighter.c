@@ -1,4 +1,5 @@
 /* Level 11 moby class jet_fighter: the player ship on Pokitaru, its flight, shots, lock-on and HUD. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
@@ -1367,7 +1368,7 @@ void jet_fighter_update(struct Moby *moby) {
                         help_records[0x3C].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                     }
                 }
-                if (item_available[7] != 0 && (D_0013CAE4 & 0x10)) {
+                if (item_available[7] != 0 && (((u32)pad_pressed_lui) & 0x10)) {
                     moby->state = 2;
                     ship_vars->i118 = -1;
                 }

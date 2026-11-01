@@ -1,5 +1,6 @@
 /* Follow camera: setup, per-frame approach and overrides, pose rebuild, and the collision probes that keep it clear of the level. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/camera.h"
 #include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/hero/hero.h"
@@ -213,19 +214,12 @@ typedef struct {
 } A_2e6000;
 
 typedef struct {
-    u8  pad[0x100];
-    f32 f100;
-    f32 f104;
-} C_2e6000;
-
-typedef struct {
     u8  pad[0x2000];
     s32 i2000;
 } L_2e6000;
 
 #include "rnc/overlay/shared/camera/level_camera.h"
 
-extern C_2e6000 D_0013C940_2e6000 __asm__("D_0013C940");
 extern L_2e6000 D_0013F3D0_2e6000 __asm__("D_0013F3D0");
 extern s32      D_L00_00177F00[];
 extern f32      D_L00_00166E10[];
@@ -336,8 +330,8 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         if ((s8)player_camera_state->p25C[0x20] < 0) {
             player_camera_state->p25C = 0;
         } else {
-            if (0.3f <= absolute_float(D_0013C940_2e6000.f100) ||
-                0.3f <= absolute_float(D_0013C940_2e6000.f104)) {
+            if (0.3f <= absolute_float(controller_state.analog[0]) ||
+                0.3f <= absolute_float(controller_state.analog[1])) {
                 player_camera_state->i260 = 0;
             }
             x = (A_2e6000 *)&l00_camera;
@@ -363,7 +357,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             }
         }
     }
-    if (hero.state.current == 0x81 && (pad_held[0] & 3)) {
+    if (hero.state.current == 0x81 && (pad_held_words[0] & 3)) {
         set_follow_camera_orbit_clamp_mode(0);
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);
@@ -1395,14 +1389,6 @@ extern f32       follow_camera_minimum_retracted_orbit_distance_gp __asm__("D_L0
     __attribute__((sda));
 
 typedef struct {
-    u8  pad[0x100];
-    f32 x;
-    f32 y;
-} C940_2e7d20_t;
-
-extern C940_2e7d20_t D_0013C940_lui __asm__("D_0013C940") NOT_SDA;
-
-typedef struct {
     u8  pad[0x18];
     s32 p18;
     s32 p1C;
@@ -1533,10 +1519,10 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     if (retraction_timer_or_below_hold_threshold && BH_2e7d20(0x34) > 0) {
         goto dec;
     }
-    if (!(D_0013C940_lui.x < 0.3f)) {
+    if (!(controller_state_lui.analog[0] < 0.3f)) {
         goto slow;
     }
-    if (!(D_0013C940_lui.y < 0.3f)) {
+    if (!(controller_state_lui.analog[1] < 0.3f)) {
         goto slow;
     }
 dec:

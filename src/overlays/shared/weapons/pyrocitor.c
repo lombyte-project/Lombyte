@@ -100,8 +100,6 @@ extern f32 pyrocitor_flame_zero_length_random_range_gp __asm__("D_L00_00161528")
     __attribute__((sda));
 extern s32 pyrocitor_ammo_use_interval_frames_gp __asm__("D_L00_00161530") __attribute__((sda));
 extern f32 D_L00_001601E8;
-/* Fakematch: a second name for the pad state makes the button tests rebuild its address as retail does. */
-extern struct PadState           controller_state_lui __asm__("D_0013C940");
 extern unsigned short D_00141BD8 NOT_SDA;
 extern short                     pyrocitor_spark_lookup_index_and_flags_gp __asm__("D_L00_0016152C")
     __attribute__((sda));
@@ -579,6 +577,7 @@ void pyrocitor_update(struct Moby *moby) {
                     pyrocitor_vars->light = -1;
             }
         }
+        /* Fakematch: the second pad name rebuilds the address for these button tests. */
         if ((controller_state_lui.held & hero.items[0].button_mask) && !hero.item_use_locked &&
             get_ammo(-1)) {
             moby->state = 3;

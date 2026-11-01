@@ -110,7 +110,7 @@ void volume_camera_aim(struct UpdateCam *aim_camera_record) {
             params->timer = 0;
             return;
         }
-        if (!(pad_held[0] & (PAD_L2 | PAD_L1))) {
+        if (!(pad_held_words[0] & (PAD_L2 | PAD_L1))) {
             goto run;
         }
     }

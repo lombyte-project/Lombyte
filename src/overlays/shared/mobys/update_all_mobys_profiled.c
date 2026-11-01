@@ -44,7 +44,7 @@ void update_all_mobys_profiled(void) {
     s32         *class_profile_counters;
     s16          profile_label;
 
-    if ((*(u64 *)pad_held & 0x800000007LL) != 0x800000007LL) {
+    if ((*(u64 *)&pad_held_words[0] & 0x800000007LL) != 0x800000007LL) {
         update_all_mobys();
         return;
     }

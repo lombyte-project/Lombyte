@@ -1,4 +1,5 @@
 /* Cutscene, movie and slideshow playback, the game frame and idle counters and pause input; also defines the vendor menu data (vendor/vendor_menu.c holds its code). */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/game/scene_trigger.h"
@@ -78,8 +79,6 @@ void reset_frame_counters(void) {
 
 #include "rnc/game/usage_stats.h"
 
-extern struct PadStateWords D_0013C940;
-
 int        controller_idle_frames_gp __asm__("D_L00_00160FF0") = 0;
 extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
@@ -88,9 +87,9 @@ extern int D_0015EE28;
 void       update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 
 void update_game_frame_and_idle_counters(void) {
-    if (D_0013C940.buttons.w.held != 0 || D_0013C940.analog[2] != 0.0f ||
-        D_0013C940.analog[3] != 0.0f || D_0013C940.analog[0] != 0.0f ||
-        D_0013C940.analog[1] != 0.0f) {
+    if (controller_state.held != 0 || controller_state.analog[2] != 0.0f ||
+        controller_state.analog[3] != 0.0f || controller_state.analog[0] != 0.0f ||
+        controller_state.analog[1] != 0.0f) {
         controller_idle_frames_gp = 0;
     } else {
         controller_idle_frames_gp++;
@@ -115,14 +114,6 @@ typedef struct {
     u8  padA4[0xEC - 0xA4];
     s32 wEC;
 } S_297f78;
-
-typedef struct {
-    u8  pad0[0x19C];
-    s32 w19C;
-    s32 w1A0;
-    s32 w1A4;
-    s32 w1A8;
-} C_297f78;
 
 typedef struct {
     u8  pad0[0xA6];
@@ -152,7 +143,6 @@ typedef struct {
 } P_297f78;
 
 extern S_297f78                 D_L00_0016C058;
-extern C_297f78                 D_0013C940_c __asm__("D_0013C940");
 extern s32                      D_L00_0015F5C0_macro[] __asm__("D_L00_0015F5C0") MACRO_ADDR;
 extern s32                      level_timer __asm__("D_L00_0015F5C8");
 extern s32                      game_frame __asm__("D_L00_0015F5CC");
@@ -195,9 +185,10 @@ extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void update_help_state(void) __asm__("FUN_001fde90");
 extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 
-#define DBG(b) \
-    ((D_L00_0016C058.w8 & (b)) || ((D_L00_0016C058.w8 & 0x10) && (D_0013C940_c.w1A4 & 0x200)))
-#define HELD ((D_0013C940_c.w1A4 & 0x800) || noctl)
+#define DBG(b)                    \
+    ((D_L00_0016C058.w8 & (b)) || \
+     ((D_L00_0016C058.w8 & 0x10) && (controller_state.pressed & 0x200)))
+#define HELD ((controller_state.pressed & 0x800) || noctl)
 
 void handle_pause_input(void) __asm__("FUN_L00_00297f78");
 
@@ -207,17 +198,17 @@ void handle_pause_input(void) {
         if (--D_L00_0016C058.wEC == 0)
             D_L00_0016C058.w8 = 0x10;
     }
-    if ((D_L00_0016C058.w8 & 0x10) && (D_0013C940_c.w1A4 & 0x200)) {
-        D_0013C940_c.w1A4 = ~D_L00_0016C058.wA0 & D_0013C940_c.w1A0;
-        D_0013C940_c.w1A8 = ~D_0013C940_c.w1A0 & D_L00_0016C058.wA0;
-        D_L00_0016C058.wA0 = D_0013C940_c.w1A0 & ~0x200;
+    if ((D_L00_0016C058.w8 & 0x10) && (controller_state.pressed & 0x200)) {
+        controller_state.pressed = ~D_L00_0016C058.wA0 & controller_state.held;
+        controller_state.released = ~controller_state.held & D_L00_0016C058.wA0;
+        D_L00_0016C058.wA0 = controller_state.held & ~0x200;
     }
     lvl = D_L00_0015F5C0_macro[1];
     if (lvl == 0 && (mode_freeze_flags & 1) && level_timer >= 8) {
         mode_freeze_init(3, 0);
         return;
     }
-    noctl = D_0013C940_c.w19C == 0;
+    noctl = controller_state.device_state == 0;
     if (D_L00_001B9DE0 && lvl == 0) {
         pause_all_sounds(0);
         return;
@@ -255,7 +246,7 @@ void handle_pause_input(void) {
         pause_all_sounds(0);
         return;
     }
-    if (!(D_L00_0016C058.w8 & 0x10) && level_timer >= 8 && (D_0013C940_c.w1A4 & 0x500) &&
+    if (!(D_L00_0016C058.w8 & 0x10) && level_timer >= 8 && (controller_state.pressed & 0x500) &&
         hero.state.control_mode != 0x16 && hero.state.current != 0x72 &&
         hero.state.current != 0x32 && hero.state.current != 0x1D && !hero.fall_fade_pending &&
         hero.health.hp && lvl == 0 && !special && !D_L00_0016C058.wEC) {
@@ -271,7 +262,8 @@ void handle_pause_input(void) {
     }
     if (hero.state.current != 0x1D && hero.state.current != 0x32)
         update_timed_hud_visibility();
-    if ((D_0013C940_c.w1A4 & 0x200) && hero.state.current != 0x1D && hero.state.current != 0x32) {
+    if ((controller_state.pressed & 0x200) && hero.state.current != 0x1D &&
+        hero.state.current != 0x32) {
         s32 x;
         x = show_health_hud();
         hud_keep_visible(x, scale_game_frames(0xB4));
@@ -725,25 +717,25 @@ void update_cutscene_playback(void) {
     f32             weighted_next_key_position[4] __attribute__((aligned(16)));
 
     if ((g_debug_menu.update_flags & 2) ||
-        ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
         reset_frame_counters();
     }
-    if (!(g_debug_menu.update_flags & 0x10) || (D_0013CAE4 & 0x220)) {
+    if (!(g_debug_menu.update_flags & 0x10) || (((u32)pad_pressed_lui) & 0x220)) {
         apply_level_specific_cutscene_moby_effects();
     }
     if ((g_debug_menu.update_flags & 2) ||
-        ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
         update_visible_mobys();
         enqueue_voice_request();
     }
     noop_main_callback(D_L00_00160FF8, 3);
     if ((g_debug_menu.update_flags & 1) ||
-        ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
         coordinate_hero_frame_update();
     }
     noop_main_callback(D_L00_00161008, 7);
     if ((g_debug_menu.update_flags & 4) ||
-        ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
         update_parts();
     }
     noop_main_callback(D_L00_00161018, 5);
@@ -762,9 +754,10 @@ void update_cutscene_playback(void) {
     if (cs->f34 >= scale_game_frames(0x12) && fade_level == 0.0f) {
         if ((D_0015EEA0 || alternate_animation_sequence || decode_mode ||
              current_level_index <= 0) &&
-            (D_0013C940.buttons.w.pressed & 0x800)) {
+            (controller_state.pressed & 0x800)) {
             done = 1;
-        } else if ((D_0013C940.buttons.held_pressed & 0x8000000000FUL) == 0x8000000000FUL) {
+        } else if ((((struct PadStateWords *)&controller_state)->buttons.held_pressed &
+                    0x8000000000FUL) == 0x8000000000FUL) {
             done = 1;
         }
     }
@@ -817,7 +810,7 @@ void update_cutscene_playback(void) {
     update_all_point_lights();
     update_resident_packed_direction();
     if ((g_debug_menu.update_flags & 2) ||
-        ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+        ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
         update_game_frame_and_idle_counters();
     }
 }
@@ -1221,7 +1214,7 @@ void update_slideshow(void) {
     }
     slideshow.timer++;
     slideshow.frame++;
-    if (D_0013CAE4 & 0x800) {
+    if (((u32)pad_pressed_lui) & 0x800) {
         end_slideshow();
     }
     FUN_0022ca50();

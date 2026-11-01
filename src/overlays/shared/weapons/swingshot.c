@@ -646,7 +646,7 @@ child_ready:;
         hero.unk5B4 = 0;
         if ((*(u8 **)(vars + 0x14)) != 0 &&
             3.5f < FUN_001ff450_2c6158((*(u8 **)(vars + 0x14)) + 0x10, &hero.motion.pos)) {
-            if ((pad_held[0] & hero.items[0].button_mask) == 0) {
+            if ((pad_held_words[0] & hero.items[0].button_mask) == 0) {
                 hero.unk988 = 1;
                 hero_set_state(0, 0);
                 effect = hero_idle_sequence(0);

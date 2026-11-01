@@ -61,7 +61,7 @@ void help_hints_update(struct Moby *moby) {
             struct Hero *q = &hero;
             if (q->state.current == 0x81) {
                 moby_vars[1]++;
-                if ((pad_held[0] & 3) && 0.3f < q->stick_magnitude) {
+                if ((pad_held_words[0] & 3) && 0.3f < q->stick_magnitude) {
                     moby_vars[2]++;
                 } else {
                     moby_vars[2] = 0;

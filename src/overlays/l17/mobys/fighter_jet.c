@@ -656,21 +656,21 @@ extern char D_L17_001676D0_lui[] __asm__("D_L17_001676D0") NOT_SDA;
 void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) __asm__("FUN_L17_002eb768");
 
 void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) {
-    char *excluded_target = 0;
-    char *pad;
-    char *locked_target;
-    char *candidate_target;
-    float radar_rotation[4];
-    int   lock_timer_reload;
+    char            *excluded_target = 0;
+    struct PadState *pad;
+    char            *locked_target;
+    char            *candidate_target;
+    float            radar_rotation[4];
+    int              lock_timer_reload;
     if (!(D_L17_0015F5C4 >= 3 && D_L17_0015F5C4 <= 4)) {
         fast_dec_timer((int *)(ship_vars + 0x8C));
     }
     if (W(ship_vars, 0x8C) != 0 && P(ship_vars, 0x88) != 0 &&
         H(P(ship_vars, 0x88), 0xA6) == W(ship_vars, 0x128) && B(P(ship_vars, 0x88), 0x20) != 0xFE &&
         B(P(ship_vars, 0x88), 0x20) != 0xFD) {
-        pad = (char *)&controller_state;
+        pad = &controller_state;
         if (B(P(ship_vars, 0x88), 0x31) != 0) {
-            if (W(pad, 0x1B4) & 0x2000) {
+            if (pad->raw_pressed & 0x2000) {
                 goto take;
             }
             if (FLAG != 0) {
@@ -678,8 +678,8 @@ void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) {
             }
         }
     }
-    pad = (char *)&controller_state;
-    if (W(pad, 0x1B4) & 0x2000) {
+    pad = &controller_state;
+    if (pad->raw_pressed & 0x2000) {
     take:
         excluded_target = P(ship_vars, 0x88);
     }
@@ -1168,7 +1168,6 @@ void           adjust_fighter_jet_steering_for_flight_bounds(
 void        adjust_fighter_jet_steering_for_flight_bounds(char  *moby,
                                                           float *a,
                                                           float *b) __asm__("FUN_L17_002edf10");
-extern char D_0013C940[];
 extern void func_L00_0025F4A8_alt(void *,
                                   void *,
                                   void *,
@@ -1192,33 +1191,33 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby,
                                FighterJetVars *ship_vars) __asm__("FUN_L17_002ec360");
 
 void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_vars) {
-    sceVu0FVECTOR pre_movement_ship_position;
-    sceVu0FVECTOR death_explosion_velocity;
-    UQ_c4         movement_delta;
-    sceVu0FVECTOR side;
-    UQ_c4         up;
-    sceVu0FVECTOR camera_rotation;
-    sceVu0FVECTOR target;
-    sceVu0FVECTOR target_record_sum_or_camera_local_offset;
-    float         horizontal_steering_input;
-    float         vertical_steering_input;
-    float         ka;
-    float         kb;
-    float         lenA;
-    float         lenB;
-    float         distance_to_default_target;
-    float         target_height_distance, target_height_distance_for_moby_pitch;
-    float         x, y;
-    float         half_fov, tn;
-    float         ratio;
-    float         collision_adjusted_pitch;
-    float         k;
-    char         *pad;
-    struct Hero  *steering_input_hero;
-    char         *e;
-    char         *collision_result;
-    int           voice_slot_index;
-    int           hc;
+    sceVu0FVECTOR    pre_movement_ship_position;
+    sceVu0FVECTOR    death_explosion_velocity;
+    UQ_c4            movement_delta;
+    sceVu0FVECTOR    side;
+    UQ_c4            up;
+    sceVu0FVECTOR    camera_rotation;
+    sceVu0FVECTOR    target;
+    sceVu0FVECTOR    target_record_sum_or_camera_local_offset;
+    float            horizontal_steering_input;
+    float            vertical_steering_input;
+    float            ka;
+    float            kb;
+    float            lenA;
+    float            lenB;
+    float            distance_to_default_target;
+    float            target_height_distance, target_height_distance_for_moby_pitch;
+    float            x, y;
+    float            half_fov, tn;
+    float            ratio;
+    float            collision_adjusted_pitch;
+    float            k;
+    struct PadState *pad;
+    struct Hero     *steering_input_hero;
+    char            *e;
+    char            *collision_result;
+    int              voice_slot_index;
+    int              hc;
 
     movement_delta.q = 0;
     up.q = 0;
@@ -1228,8 +1227,8 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
     *(Q_c4 *)death_explosion_velocity = movement_delta.q;
     if (ship_moby->bc == 0) {
         if (D_L17_00162000 < ship_vars->count) {
-            pad = (char *)((char *)&D_0013C940);
-            if (*(int *)(pad + 0x1B4) & 0x40) {
+            pad = &controller_state;
+            if (pad->raw_pressed & 0x40) {
                 voice_slot_index = ship_vars->i10C;
                 if (voice_slot_index != -1) {
                     e = (char *)&voice_pool + voice_slot_index * 0x70;
@@ -1240,7 +1239,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                 }
                 ship_vars->i10C = -1;
                 ship_vars->i10C = allocate_voice_for_target_entry(1, 4, (int)ship_moby);
-            } else if (*(int *)(pad + 0x1B8) & 0x40) {
+            } else if (pad->raw_released & 0x40) {
                 voice_slot_index = ship_vars->i10C;
                 if (voice_slot_index != -1) {
                     e = (char *)&voice_pool + voice_slot_index * 0x70;
@@ -1251,8 +1250,8 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                 }
                 ship_vars->i10C = -1;
             }
-            pad = (char *)((char *)&D_0013C940);
-            if (*(int *)(pad + 0x1B0) & 0x40) {
+            pad = &controller_state;
+            if (pad->raw_held & 0x40) {
                 float accelerated_speed =
                     ship_vars->speed + fighter_jet_boost_speed_step_gp * D_L17_001620A0_gp;
                 float max = fighter_jet_boost_speed_limit_gp * D_L17_001620A0_gp;
@@ -1290,7 +1289,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         kb = fighter_jet_vertical_steering_settle_threshold_scale_gp;
         horizontal_steering_input = x;
         vertical_steering_input = y;
-        if (*(int *)(((char *)&pad_held)) & 0x200) {
+        if (pad_held_words[0] & 0x200) {
             horizontal_steering_input = x / D_L17_00162028 * D_L17_00162030;
             vertical_steering_input = y / D_L17_00162024 * D_L17_0016202C;
             ka = fighter_jet_rescaled_horizontal_steering_settle_threshold_scale_gp;
@@ -1675,8 +1674,6 @@ typedef struct {
     int   flags;
 } ShipHit;
 
-extern char D_0013CAE4_ed[] __asm__("D_0013CAE4");
-
 typedef struct {
     char           pad0[0xA];
     unsigned short idx;
@@ -1877,7 +1874,7 @@ void fighter_jet_update(ShipMoby *moby) {
             struct Hero *g = &hero;
             board = jet_distance(moby, (ShipCamera *)g->moby) <
                         fighter_jet_boarding_distance_limit_gp &&
-                    FUN_00215130(7, 0x53E4) != 0 && (*(int *)D_0013CAE4_ed & 0x10);
+                    FUN_00215130(7, 0x53E4) != 0 && (pad_pressed_words[0] & 0x10);
             if (board) {
                 remove_help_message_for_selector(7);
                 moby->state = 2;

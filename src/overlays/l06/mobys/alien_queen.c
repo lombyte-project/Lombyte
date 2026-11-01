@@ -1,4 +1,5 @@
 /* Level 06 moby class 0x41b: alien queen. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
@@ -168,7 +169,6 @@ extern void                 FUN_L06_002fb148_recovery_high(char *) __asm__("FUN_
 extern void                 FUN_L06_002fb148_recovery_low(char *) __asm__("FUN_L06_002fb8c8");
 extern short D_L06_0014162A NOT_SDA;
 extern int D_L06_00140408   NOT_SDA;
-extern int D_0013CAE0       NOT_SDA;
 extern int D_L06_001413D0   NOT_SDA;
 
 #include "rnc/overlay/l06/mobys/alien_queen_data/update_alien_queen_hit_response_and_recovery.h"
@@ -884,7 +884,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         moby[0x20] = 14;
         return;
     }
-    if ((unsigned char)moby[0x20] >= 2 && D_L06_00140408 != 8 && (D_0013CAE0 & 0x20))
+    if ((unsigned char)moby[0x20] >= 2 && D_L06_00140408 != 8 && (pad_held_lui & 0x20))
         alien_queen_hit_recovery_vars->unk178 = 1;
     timer = alien_queen_hit_recovery_vars->timer_12C;
     if (timer != 0 && alien_queen_hit_recovery_vars->unk170 != 0) {

@@ -13,8 +13,7 @@
 #include "rnc/sdk/graph.h"
 #include "rnc/sdk/mpeg/api.h"
 
-extern struct PadStateWords pad_words __asm__("D_0013C940");
-extern s32                  D_0015EEA0;
+extern s32 D_0015EEA0;
 /* Movie skip mode (decode_mode): -1 no skipping, 2 any new button. Read
    through a volatile view because retail loads it once for the -1 and 2
    tests and then again inside the skip-allowed test, with no store or call
@@ -34,12 +33,12 @@ extern s32  video_dec_flush(struct VideoDec *) __asm__("func_0023CD08");
 
 /* Each pad test takes the pad by pointer, so retail forms the pad address
    afresh for every test from one shared upper half. */
-static inline s32 pad_pressed(struct PadStateWords *pad, s32 mask) {
-    return pad->buttons.w.pressed & mask;
+static inline s32 pad_pressed(struct PadState *pad, s32 mask) {
+    return pad->pressed & mask;
 }
 
-static inline s32 pad_chord(struct PadStateWords *pad, u64 mask) {
-    if ((pad->buttons.held_pressed & mask) != mask) {
+static inline s32 pad_chord(struct PadState *pad, u64 mask) {
+    if (((*(u64 *)&pad->held) & mask) != mask) {
         return 0;
     }
     return 1;
@@ -83,13 +82,13 @@ s32 read_mpeg(struct VideoDec *video_dec,
         update_primary_pad_state();
         mode = DECODE_MODE;
         if (mode != -1) {
-            if ((mode == 2 && pad_pressed(&pad_words, -1)) ||
+            if ((mode == 2 && pad_pressed(&controller_state, -1)) ||
                 ((D_0015EEA0 != 0 || alternate_animation_sequence != 0 || DECODE_MODE != 0 ||
                   current_level_index <= 0) &&
-                 pad_pressed(&pad_words, 0x800))) {
+                 pad_pressed(&controller_state, 0x800))) {
                 skip = 1;
             } else {
-                skip = pad_chord(&pad_words, 0x8000000000FULL);
+                skip = pad_chord(&controller_state, 0x8000000000FULL);
             }
             if (skip) {
                 skipped = 1;

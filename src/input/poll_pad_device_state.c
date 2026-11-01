@@ -1,42 +1,12 @@
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/sdk/input.h"
 
-struct PAD {
-    u8  pad0[0x180];
-    u8  unk180[4];
-    u8  unk184[4];
-    u8  unk188;
-    u8  unk189;
-    u8  pad18A[0xA];
-    s32 socket;
-    s32 unk198;
-    s32 unk19C;
-    s32 unk1A0;
-    s32 unk1A4;
-    s32 unk1A8;
-    s32 unk1AC;
-    s32 unk1B0;
-    u8  pad1B4[4];
-    s32 unk1B8;
-    s32 unk1BC;
-    s32 unk1C0;
-    s32 unk1C4;
-    s32 unk1C8;
-    s32 unk1CC;
-    s32 unk1D0;
-    s32 unk1D4;
-    s32 unk1D8;
-    s32 unk1DC;
-    u8  pad1E0[0x168];
-    s32 unk348;
-};
+#include "rnc/input.h"
 
-extern void clear_pad_input(struct PAD *p) __asm__("func_002172C0");
-extern void process_pad_input(struct PAD *p, u8 *buf, s32 len) __asm__("func_00217328");
+void poll_pad_device_state(struct PadState *p) __asm__("FUN_002170c8");
 
-void poll_pad_device_state(struct PAD *p) __asm__("FUN_002170c8");
-
-void poll_pad_device_state(struct PAD *pad_state) {
+void poll_pad_device_state(struct PadState *pad_state) {
     enum {
         PAD_PROFILE_INITIALIZATION = 0,
         PAD_INPUT_POLLING = 1,
@@ -48,15 +18,15 @@ void poll_pad_device_state(struct PAD *pad_state) {
     s32 i;
     u8  pad_response_buffer[0x40];
 
-    pad_state->unk1A0 = 0;
-    saved_pad_value = pad_state->unk1B0;
-    pad_state->unk1B0 = 0;
-    pad_state->unk1AC = pad_state->unk348;
-    pad_state->unk1BC = saved_pad_value;
+    pad_state->held = 0;
+    saved_pad_value = pad_state->raw_held;
+    pad_state->raw_held = 0;
+    pad_state->prev_held = pad_state->saved_held;
+    pad_state->prev_raw_held = saved_pad_value;
     pad_device_state = scePad2GetState(pad_state->socket);
-    pad_state->unk19C = pad_device_state;
+    pad_state->device_state = pad_device_state;
     if (pad_device_state == 1) {
-        switch (pad_state->unk198) {
+        switch (pad_state->profile_state) {
         case PAD_PROFILE_INITIALIZATION: {
             byte_count = scePad2GetButtonProfile(pad_state->socket, pad_response_buffer);
             if (*(u32 *)pad_response_buffer == 0xFFFFFFFF) {
@@ -66,26 +36,26 @@ void poll_pad_device_state(struct PAD *pad_state) {
             }
             if (byte_count < 5) {
                 for (i = 0; i < byte_count; i++) {
-                    pad_state->unk180[i] = pad_response_buffer[i];
+                    pad_state->button_profile[i] = pad_response_buffer[i];
                 }
-                pad_state->unk198 = 1;
+                pad_state->profile_state = 1;
             } else {
-                pad_state->unk198 = 2;
+                pad_state->profile_state = 2;
                 byte_count = 0;
             }
             for (i = byte_count; i < 4; i++) {
-                pad_state->unk180[i] = pad_response_buffer[i];
+                pad_state->button_profile[i] = pad_response_buffer[i];
             }
             byte_count = sceVibGetProfile(pad_state->socket, pad_response_buffer);
             if (byte_count < 5) {
                 for (i = 0; i < byte_count; i++) {
-                    pad_state->unk184[i] = pad_response_buffer[i];
+                    pad_state->vibration_profile[i] = pad_response_buffer[i];
                 }
             } else {
                 byte_count = 0;
             }
             for (i = byte_count; i < 4; i++) {
-                pad_state->unk184[i] = pad_response_buffer[i];
+                pad_state->vibration_profile[i] = pad_response_buffer[i];
             }
             clear_pad_input(pad_state);
             break;
@@ -100,7 +70,7 @@ void poll_pad_device_state(struct PAD *pad_state) {
         }
     } else {
         clear_pad_input(pad_state);
-        pad_state->unk198 = 0;
+        pad_state->profile_state = 0;
     }
     pad_state->unk188 = 0;
     pad_state->unk189 = 0;

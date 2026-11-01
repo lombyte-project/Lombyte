@@ -1,5 +1,6 @@
 /* Level 15 moby follow camera type: region and angle checks, update and dispatch. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/math_consts.h"
 #include "rnc/math/fast_math.h"
@@ -119,14 +120,6 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
     return 0;
 }
 
-typedef struct {
-    char  pad[0x100];
-    float x;
-    float y;
-} G_88e8;
-
-extern G_88e8 D_0013C940_lui __asm__("D_0013C940") NOT_SDA;
-
 extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
 
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
@@ -163,9 +156,9 @@ void update_moby_follow_camera(char *moby) {
     cycle_reset_frames = scale_game_frames(560);
     spin_ramp_frames = scale_game_frames(200);
     set_nonzero_follow_camera_parameters(1.0f, 12.0f, 0.11f);
-    if (D_0013C940_lui.x != 0.0f)
+    if (controller_state_lui.analog[0] != 0.0f)
         *(short *)(slot_data + 0x20) = hold_start_frames;
-    else if (D_0013C940_lui.y != 0.0f)
+    else if (controller_state_lui.analog[1] != 0.0f)
         *(short *)(slot_data + 0x20) = hold_start_frames;
     if (*(short *)(slot_data + 0x20) >= hold_start_frames) {
         if (++*(int *)(slot_data + 0x3C) >= cone_check_delay_frames &&

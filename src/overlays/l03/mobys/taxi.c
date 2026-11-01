@@ -1,4 +1,5 @@
 /* Level 03 moby class taxi (0x330): the rail taxi that carries Ratchet along its routes, its rail path flight and its bobbing. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
@@ -217,7 +218,7 @@ void rail_taxi_update(struct Moby *taxi_moby) {
                        frame_time * 12.566371f);
         if (hero.ground_moby == taxi_moby && hero.air_frames.s == 0) {
             request_taxi_return_help_message(taxi_moby, taxi_vars->help[taxi_moby->command]);
-            if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
+            if ((((u32)pad_pressed_lui) & 0x10) && D_L03_0015F594 == 8) {
                 request_hero_target_pose(&taxi_moby->pos, taxi_moby->rot.z, 0);
                 taxi_moby->state = 4;
                 taxi_vars->idx = 1;

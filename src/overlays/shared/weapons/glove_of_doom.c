@@ -107,7 +107,6 @@ extern CollisionHit   coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 extern f32 frame_time MACRO_ADDR;
 extern f32            frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern s32            D_0015EEA4;
-extern u32 D_0013CAE4 NOT_SDA;
 extern CollisionHit   coll_hit __asm__("D_L00_00173E40");
 extern float          frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern DeliveryStats  D_00141680;
@@ -159,7 +158,7 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
     *(s32 *)&launch_velocity[2] = 0;
     launch_velocity[2] =
         fn_2c7320(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
-    if (pad_held[0] & 5) {
+    if (pad_held_words[0] & 5) {
         k = 3.5f / horizontal_speed;
     } else {
         k = 2.5f / horizontal_speed;
@@ -316,7 +315,7 @@ void glove_of_doom_update(struct Moby *moby) {
     }
     if (fast_dec_timer(&glove_carrier_vars->timer) && !hero.item_use_locked) {
         if ((hero.item_anim_active && hero.item_anim_frames == scale_game_frames(0x11)) ||
-            ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E &&
+            ((((u32)pad_pressed_lui) & hero.items[0].button_mask) && hero.state.current == 0x1E &&
              get_ammo(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
             allocate_hero_voice_for_entry(0x1A, 0);

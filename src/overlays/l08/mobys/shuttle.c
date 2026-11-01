@@ -1,4 +1,5 @@
 /* Level 08 moby class 0x1a8: shuttle. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -56,7 +57,6 @@ extern s32 D_L08_0015F594 __attribute__((sda));
 
 extern LiftLock l08_shuttle_departure_lock __asm__("D_L08_00179C10");
 
-extern s32  D_0013CAE4[];
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void
 resolve_point_path_segment_xy_clearance(s32, float, void *, void *) __asm__("FUN_L00_00261d78");
@@ -140,7 +140,8 @@ void shuttle_update(struct Moby *moby) {
                     shuttle_vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
                 if (fast_vec_dist(&hero.motion.pos, &hero_position_probe) < 0.001f) {
                     try_set_shuttle_departure_help_message((char *)moby);
-                    if ((D_0013CAE4[0] & 0x10) && hero.air_frames.s == 0 && D_L08_0015F594 == 10)
+                    if ((pad_pressed_words[0] & 0x10) && hero.air_frames.s == 0 &&
+                        D_L08_0015F594 == 10)
                         moby->state = 3;
                 }
             }

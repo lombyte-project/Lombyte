@@ -162,7 +162,7 @@ void hydrodisplacer_update(Moby *moby) {
         if (pad_pressed_within(hero.items[0].button_mask, func_001F9850_2E0E50(8), 0) == 0) {
             break;
         }
-        if ((pad_held[0] & hero.items[0].button_mask) == 0) {
+        if ((pad_held_words[0] & hero.items[0].button_mask) == 0) {
             break;
         }
         if (hero.ground_moby == 0 || hero.air_frames.s != 0 || hero.ground_moby->oclass != 0x155) {

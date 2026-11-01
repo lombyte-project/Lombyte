@@ -1,5 +1,6 @@
 /* Shared moby class teleporter: activates, shows its children and draws its radius ring. */
 
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -85,7 +86,6 @@ extern s32           D_0014C190[][64];
 extern u8            D_0014C050[];
 extern unsigned char D_0014C050[];
 extern int           alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
-extern int           D_0013CAE4[];
 extern char         *D_L01_0015FFD8;
 extern int           D_L01_0015F594 __attribute__((sda));
 extern float teleporter_child_motion_acceleration_gp __asm__("D_L01_00161F88") __attribute__((sda));
@@ -334,7 +334,7 @@ void teleporter_update(struct Moby *moby) {
         if (g->air_frames.s != 0)
             break;
         try_set_teleporter_help_message(moby);
-        if (!(D_0013CAE4[0] & 0x10))
+        if (!(pad_pressed_words[0] & 0x10))
             break;
         allocate_voice_for_target_entry(0, 0, (void *)moby);
         moby->state = 2;

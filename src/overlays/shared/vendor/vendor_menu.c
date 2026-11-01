@@ -1,4 +1,5 @@
 /* Vendor menu: loads the vendor moby assets, builds the item rows, opens, updates and closes the menu, handles purchases and plays the exit cutscene. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "sda.h"
 #include "rnc/overlay/shared/world/level_globals.h"
@@ -1151,22 +1152,22 @@ void update_vendor_menu(void) {
     case VENDOR_MENU_CLOSING:
         if (vendor_menu.mode == 0 || vendor_menu.state == 2) {
             if ((g_debug_menu.update_flags & 2) ||
-                ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+                ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
                 reset_frame_counters();
             }
             if ((g_debug_menu.update_flags & 2) ||
-                ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+                ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
                 update_visible_mobys();
                 FUN_0022dc50();
             }
             noop_main_callback(vendor_moby_update_label, 3);
             if ((g_debug_menu.update_flags & 1) ||
-                ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+                ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
                 coordinate_hero_frame_update();
             }
             noop_main_callback(vendor_hero_update_label, 7);
             if ((g_debug_menu.update_flags & 4) ||
-                ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+                ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
                 update_parts();
             }
             noop_main_callback(vendor_part_update_label, 5);
@@ -1224,7 +1225,7 @@ void update_vendor_menu(void) {
         }
         FUN_00201a28();
         if ((g_debug_menu.update_flags & 2) ||
-            ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
+            ((g_debug_menu.update_flags & 0x10) && (((u32)pad_pressed_lui) & 0x200))) {
             update_game_frame_and_idle_counters();
         }
         break;

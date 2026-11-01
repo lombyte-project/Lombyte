@@ -1,4 +1,5 @@
 /* Shared moby class vendor: the Gadgetron vendor and its effects. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
@@ -99,7 +100,6 @@ void        draw_offset_textured_effect_quad(void *, int, float, float) __asm__(
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern V_2a57a8 hero_pos __asm__("D_0013F3D0") NOT_SDA;
-extern s32      D_0013CAE4_lui __asm__("D_0013CAE4") NOT_SDA;
 extern s32      D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
 void            FUN_L00_002a5040_2a57a8(void) __asm__("FUN_L00_002a5040");
 
@@ -404,7 +404,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         help_message_succeeded = 0;
         if (help_message_allowed)
             help_message_succeeded = try_set_help_message(1, 0x53E3) != 0;
-        if ((D_0013CAE4_lui & 0x10) && interaction_allowed && help_message_succeeded) {
+        if ((pad_pressed_lui & 0x10) && interaction_allowed && help_message_succeeded) {
             open_vendor_menu(vendor_moby);
             vendor_moby->b20 = 3;
         }

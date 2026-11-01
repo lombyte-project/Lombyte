@@ -1,5 +1,7 @@
 /* Shared moby class tresspasser_pad: the pad the hero uses the trespasser on, and its puzzle display. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
@@ -67,19 +69,6 @@ typedef struct Data {
     unsigned short h11E;
 } Data;
 
-typedef struct Pad {
-    char p0[0x1A4];
-    int  i1A4;
-    char p1A8[0x18];
-    union {
-        long l;
-        struct {
-            int lo;
-            int hi;
-        } w;
-    } b1C0;
-} Pad;
-
 typedef struct {
     int  i0;
     char p4[0x20];
@@ -104,31 +93,29 @@ typedef struct {
 
 extern LevelCamera l02_camera_lui __asm__("D_L02_00167280") NOT_SDA;
 
-extern char D_0013C940[];
-void        draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
+void draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
 
 extern int  allocate_voice_for_target_entry(long, int, Moby *) __asm__("FUN_0022da68");
 extern void func_L02_002DA728_2D9F08(Moby *) __asm__("FUN_L02_002d92f0");
 extern void func_L02_002D9D48_2D9F08(void *, void *, Moby *) __asm__("FUN_L02_002d8910");
 extern float
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void           func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
-extern void           func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
-extern float          D_L02_001D33B0[4][4];
-extern Lvl            D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
-extern int            current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
-extern Vec_2D9F08     D_L02_00167440_2D9F08[] __asm__("D_L02_001673C0");
-extern float          frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
-extern float          frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
-extern int            D_L02_0017EB08_lui __asm__("D_L02_0017EB08") NOT_SDA;
-extern Idle           D_L02_00179A10;
-extern int            D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
-extern int            D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
-extern int            D_L02_00161AA8_gp __asm__("D_L02_00161AA8") __attribute__((sda));
-extern int            D_L02_00161AA4_gp __asm__("D_L02_00161AA4") __attribute__((sda));
-extern int            D_L02_00161AA0_gp __asm__("D_L02_00161AA0") __attribute__((sda));
-extern char           D_0013E633_2D9F08[] __asm__("D_0013E533");
-extern int D_0013CAE4 NOT_SDA;
+extern void       func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
+extern void       func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
+extern float      D_L02_001D33B0[4][4];
+extern Lvl        D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
+extern int        current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern Vec_2D9F08 D_L02_00167440_2D9F08[] __asm__("D_L02_001673C0");
+extern float      frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern float      frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern int        D_L02_0017EB08_lui __asm__("D_L02_0017EB08") NOT_SDA;
+extern Idle       D_L02_00179A10;
+extern int        D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
+extern int        D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
+extern int        D_L02_00161AA8_gp __asm__("D_L02_00161AA8") __attribute__((sda));
+extern int        D_L02_00161AA4_gp __asm__("D_L02_00161AA4") __attribute__((sda));
+extern int        D_L02_00161AA0_gp __asm__("D_L02_00161AA0") __attribute__((sda));
+extern char       D_0013E633_2D9F08[] __asm__("D_0013E533");
 
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 
@@ -393,15 +380,16 @@ void tresspasser_pad_update(Moby *moby) {
                 if (fast_dec_timer_s16(&pad_puzzle_state->h10)) {
                     moby->state = 3;
                 }
-            } else if (((Pad *)D_0013C940)->b1C0.l & 0xA00000000000) {
+            } else if (((struct PadStateWords *)&controller_state)->unmasked.held_pressed &
+                       0xA00000000000) {
                 pad_puzzle_state->h11E |= 1;
                 allocate_voice_for_target_entry(0, 0, moby);
-                if (((Pad *)D_0013C940)->b1C0.w.hi & 0x8000) {
+                if (((struct PadStateWords *)&controller_state)->unmasked.w.pressed & 0x8000) {
                     pad_puzzle_state->fE4 = -(frame_time_macro * 6.2831855f);
                 } else {
                     pad_puzzle_state->fE4 = frame_time_macro * 6.2831855f;
                 }
-            } else if (((Pad *)D_0013C940)->i1A4 & 0x1000) {
+            } else if (controller_state.pressed & 0x1000) {
                 pad_puzzle_state->h11E |= 2;
                 pad_puzzle_state->iE0 = pad_puzzle_state->iE0 - 1;
                 if (pad_puzzle_state->iE0 == 0) {
@@ -409,7 +397,7 @@ void tresspasser_pad_update(Moby *moby) {
                 } else {
                     allocate_voice_for_target_entry(1, 0, moby);
                 }
-            } else if (((Pad *)D_0013C940)->i1A4 & 0x4000) {
+            } else if (controller_state.pressed & 0x4000) {
                 pad_puzzle_state->h11E |= 2;
                 pad_puzzle_state->iE0 = pad_puzzle_state->iE0 + 1;
                 if (pad_puzzle_state->iE0 == 4) {
@@ -422,7 +410,7 @@ void tresspasser_pad_update(Moby *moby) {
             set_hero_animation(0x58, 0, scale_game_frames(6));
         }
         if (i != 12) {
-            if (((D_0013CAE4 & 0x10) && D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1) ||
+            if (((pad_pressed_lui & 0x10) && D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1) ||
                 ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->state.current != 0x72 ||
                 ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id != 0x1A) {
                 moby->state = 1;

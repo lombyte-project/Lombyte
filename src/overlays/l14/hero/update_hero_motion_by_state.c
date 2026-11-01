@@ -13,6 +13,7 @@
 #include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -334,25 +335,6 @@ struct MobyView {
 /* Second name for hero: one call needs it to keep the original address CSE. */
 extern struct Hero hero_b __asm__("D_0013F350");
 
-struct PadState {
-    u8  pad0[0x128];
-    f32 f128;
-    f32 f12C;
-    u8  pad130[0x70];
-    union {
-        u64 d1A0;
-        s32 i1A0;
-        struct {
-            u8  pad[0x4];
-            s32 v;
-        } i1A4;
-    } u1A0;
-    u8  pad1A8[0x2C];
-    s32 i1D4;
-    u8  pad1D8[0x4];
-    s32 i1DC;
-};
-
 struct PlayerJointTable {
     u8  pad0[0x60];
     f32 f60;
@@ -421,8 +403,8 @@ extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 extern s32  allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern s32  FUN_L00_001ff600(f32, void *, void *);
 extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
-extern struct PadState D_0013C940;
-#define PD D_0013C940
+
+#define PD controller_state
 extern struct PlayerJointTable D_L14_0017AD80;
 #define AN D_L14_0017AD80
 struct VoiceSlot {
@@ -1213,7 +1195,7 @@ void update_hero_motion_by_state(void) {
             if (test_hero_animation_frame_window(84.0f) != 0) {
                 f32 a = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
                 f32 s = frame_time * 2.5f;
-                if (pad_held[0] & 0xA) {
+                if (pad_held_words[0] & 0xA) {
                     s = frame_time * 3.0f;
                 }
                 hero.motion.velocity.f[0] += fast_cos(a) * s;
@@ -2199,13 +2181,13 @@ void update_hero_motion_by_state(void) {
             m = sp;
         }
         stick_target(hero.stick_magnitude * m, 0);
-        if (hero.stick_magnitude > 0.2f && !(PD.u1A0.i1A0 & 3)) {
+        if (hero.stick_magnitude > 0.2f && !(PD.held & 3)) {
             turn_to(0,
                     frame_scale_sq * 0.027f,
                     frame_scale_sq * 0.3f,
                     frame_time * 5.934119f * hero.stick_magnitude);
         }
-        if (PD.u1A0.i1A0 & 3) {
+        if (PD.held & 3) {
             f32 o = hero.motion.move_yaw;
             hero.motion.move_yaw = *(f32 *)D_L14_001674D8;
             turn_to(0, frame_scale_sq * 0.017f, frame_scale_sq * 0.3f, frame_time * 4.712389f);

@@ -1,5 +1,6 @@
 /* Menus: unlock code input. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "asm.h"
 #include "rnc/game/item_state.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
@@ -25,18 +26,17 @@ extern char          D_0013D388[];
 extern short         unlock_code_input_count __asm__("D_L00_001603F8") __attribute__((sda));
 extern short         unlock_code_input_sequence[] __asm__("D_L00_001BA4A8");
 extern unsigned char D_0013A4E0[];
-extern unsigned char D_0013C940[];
 extern unsigned char l00_unlock_code_comparison_table[] __asm__("D_L00_001B9BA0");
 
 void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 
 void process_unlock_code_input(void) {
-    char *pad = (char *)((char *)&D_0013C940);
-    int   staged_candidate_index_limit, candidate_index_limit;
-    int   va, vb, vc;
-    int   pressed, direction, count, j, code, index, matched;
-    if ((*(long *)(pad + 0x1C0) & 0xF) == 6) {
-        pressed = *(int *)(pad + 0x1C4);
+    struct PadState *pad = &controller_state;
+    int              staged_candidate_index_limit, candidate_index_limit;
+    int              va, vb, vc;
+    int              pressed, direction, count, j, code, index, matched;
+    if ((*(long *)&pad->held_unmasked & 0xF) == 6) {
+        pressed = *(s32 *)&pad->pressed_unmasked;
         if (!(pressed & 0xF0A0))
             return;
 
