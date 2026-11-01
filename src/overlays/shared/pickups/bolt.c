@@ -542,6 +542,9 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
     enum {
         BOLT_IDLE = 3
     };
+    enum {
+        BOLT_FALLING = 1
+    };
     char *grounded_bolt_vars = ((char *)MOBY(moby)->pvars);
     float local_rotation_basis[12];
     float base_rotation_basis[12];
@@ -632,7 +635,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
                     coll_sphere(ground_collision_radius, &MOBY(moby)->pos, 0x22, moby) == 0;
             }
             if (should_detach_from_ground) {
-                MOBY(moby)->state = 1;
+                MOBY(moby)->state = BOLT_FALLING;
                 clear_u64_value(grounded_bolt_vars + 0x30);
                 *(float *)(grounded_bolt_vars + 0x3C) = 1.0f;
                 x = FUN_L00_002603d0_c(*(char **)(grounded_bolt_vars + 0x5C));
