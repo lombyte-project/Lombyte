@@ -7,7 +7,7 @@
 #include "qcopy.h"
 
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void FUN_L00_00262cf0(void *, void *, float, float, float);
+extern void fast_add_rotations_cf_spherical_offset(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 void        mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* update: follow the parent, blend its color, scale by the wind factor */
@@ -32,7 +32,7 @@ void parent_following_effect_update(char *moby) {
     qcopy(&MOBY(moby)->pos, *(char **)(*(char **)moby_pvars + 0x78) + 0xF0);
     accumulated_offset = *(float *)(moby_pvars + 0x10) + *(float *)(moby_pvars + 0x14);
     *(float *)(moby_pvars + 0x10) = accumulated_offset;
-    FUN_L00_00262cf0(&MOBY(moby)->pos,
+    fast_add_rotations_cf_spherical_offset(&MOBY(moby)->pos,
                      &MOBY(moby)->pos,
                      -accumulated_offset,
                      MOBY(moby)->rot.z,

@@ -442,7 +442,7 @@ extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
 extern void air_accel(float) __asm__("FUN_L01_00234358");
 extern void update_hero_airborne_planar_motion(void) __asm__("FUN_L01_00234b40");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
+extern void fast_add_rotations_cf_spherical_offset(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern void fast_sin_cf(int, int) __asm__("FUN_L00_00209638");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
 extern void release_voice_slot_cf(int, int, int) __asm__("FUN_L00_00216e48");
@@ -904,7 +904,7 @@ void update_hero_motion_for_current_state(void) {
                         vector_and_hit_scratch[0][1] += random_float_between(0.0f, 0.03f);
                         vector_and_hit_scratch[0][2] += random_float_between(0.0f, 0.03f);
                         qcopy(vector_and_hit_scratch[1], hero.motion.displacement.f);
-                        fast_add_rotations_cf(vector_and_hit_scratch[1],
+                        fast_add_rotations_cf_spherical_offset(vector_and_hit_scratch[1],
                                               vector_and_hit_scratch[1],
                                               frame_time * -0.75f,
                                               hero.motion.rot.f[2],

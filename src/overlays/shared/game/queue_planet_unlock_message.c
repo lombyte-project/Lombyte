@@ -5,9 +5,9 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 void build_spherical_offset(void *) __asm__("FUN_00214db0");
-void FUN_L00_00262cf0(void *a, void *b);
+void fast_add_rotations_cf_spherical_offset(void *a, void *b) __asm__("FUN_L00_00262cf0");
 
-void FUN_L00_00262cf0(void *destination, void *base_vector) {
+void fast_add_rotations_cf_spherical_offset(void *destination, void *base_vector) {
     char spherical_offset[16];
     build_spherical_offset(spherical_offset);
     fast_vec_add(destination, spherical_offset, base_vector);

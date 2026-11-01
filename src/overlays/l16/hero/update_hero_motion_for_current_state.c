@@ -181,7 +181,7 @@ extern f32  spring_angle(f32 *, f32, f32 *, s32, f32, f32, f32) __asm__("FUN_L00
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern u8  *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
+extern void fast_add_rotations_cf_spherical_offset(void *, void *, f32, f32, f32) __asm__("FUN_L00_00262cf0");
 extern f32  vector_length_xyz_cf(void *, s32) __asm__("FUN_L00_00209018");
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
@@ -701,7 +701,7 @@ void update_hero_motion_for_current_state(void) {
                         primary_vector_scratch.f[1] += random_float_between(0.0f, 0.03f);
                         primary_vector_scratch.f[2] += random_float_between(0.0f, 0.03f);
                         qcopy(&v10, &hero.motion.displacement);
-                        FUN_L00_00262cf0(&v10,
+                        fast_add_rotations_cf_spherical_offset(&v10,
                                          &v10,
                                          frame_time * -0.75f,
                                          hero.motion.rot.f[2],
