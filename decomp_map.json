@@ -1,6 +1,6 @@
 {
   "schema": "rnc-public-progress-v3",
-  "source": "scripts/generate_treemap.py",
+  "source": "scripts/progress-map.py",
   "units_total": 4500,
   "matching_c": 4191,
   "intentional_asm": 309,
@@ -376,8 +376,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/video/mpeg/ref_images",
-        "logical_group": "sdk/video/mpeg/ref_images",
+        "name": "sdk/mpeg/ref_images",
+        "logical_group": "sdk/mpeg/ref_images",
         "category": "sdk",
         "functions": 13,
         "matching_c": 13,
@@ -496,8 +496,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/video/mpeg/macroblock",
-        "logical_group": "sdk/video/mpeg/macroblock",
+        "name": "sdk/mpeg/macroblock",
+        "logical_group": "sdk/mpeg/macroblock",
         "category": "sdk",
         "functions": 13,
         "matching_c": 13,
@@ -676,8 +676,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/video/mpeg/headers",
-        "logical_group": "sdk/video/mpeg/headers",
+        "name": "sdk/mpeg/headers",
+        "logical_group": "sdk/mpeg/headers",
         "category": "sdk",
         "functions": 14,
         "matching_c": 14,
@@ -751,8 +751,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/video/ipu",
-        "logical_group": "sdk/video/ipu",
+        "name": "sdk/ipu",
+        "logical_group": "sdk/ipu",
         "category": "sdk",
         "functions": 13,
         "matching_c": 13,
@@ -796,8 +796,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/video/mpeg/demux",
-        "logical_group": "sdk/video/mpeg/demux",
+        "name": "sdk/mpeg/demux",
+        "logical_group": "sdk/mpeg/demux",
         "category": "sdk",
         "functions": 5,
         "matching_c": 5,
@@ -871,8 +871,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/video/mpeg/api",
-        "logical_group": "sdk/video/mpeg/api",
+        "name": "sdk/mpeg/api",
+        "logical_group": "sdk/mpeg/api",
         "category": "sdk",
         "functions": 17,
         "matching_c": 17,
@@ -931,8 +931,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/video/mpeg/picture",
-        "logical_group": "sdk/video/mpeg/picture",
+        "name": "sdk/mpeg/picture",
+        "logical_group": "sdk/mpeg/picture",
         "category": "sdk",
         "functions": 12,
         "matching_c": 12,
@@ -1336,8 +1336,8 @@
         "c_fuzzy_percent_of_recoverable": null
       },
       {
-        "name": "sdk/video/mpeg/bitstream",
-        "logical_group": "sdk/video/mpeg/bitstream",
+        "name": "sdk/mpeg/bitstream",
+        "logical_group": "sdk/mpeg/bitstream",
         "category": "sdk",
         "functions": 5,
         "matching_c": 5,
@@ -1786,8 +1786,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/video/mpeg/errors",
-        "logical_group": "sdk/video/mpeg/errors",
+        "name": "sdk/mpeg/errors",
+        "logical_group": "sdk/mpeg/errors",
         "category": "sdk",
         "functions": 7,
         "matching_c": 7,
@@ -2421,10 +2421,10 @@
         },
         {
           "file": "src/overlays/shared/weapons/morphoray.c",
-          "functions": 10,
-          "matching_c": 10,
-          "bytes_total": 10720,
-          "bytes_matching_c": 10720
+          "functions": 9,
+          "matching_c": 9,
+          "bytes_total": 10320,
+          "bytes_matching_c": 10320
         },
         {
           "file": "src/overlays/shared/world/load_two_int_two_float_header.c",
@@ -2596,17 +2596,10 @@
         },
         {
           "file": "src/overlays/shared/math/interpolation/spring_turn.c",
-          "functions": 16,
-          "matching_c": 16,
-          "bytes_total": 5768,
-          "bytes_matching_c": 5768
-        },
-        {
-          "file": "src/overlays/shared/weapons/doom_bot_movement.c",
-          "functions": 13,
-          "matching_c": 13,
-          "bytes_total": 5300,
-          "bytes_matching_c": 5300
+          "functions": 17,
+          "matching_c": 17,
+          "bytes_total": 5928,
+          "bytes_matching_c": 5928
         },
         {
           "file": "src/overlays/shared/mobys/find_moby_hit.c",
@@ -2617,10 +2610,10 @@
         },
         {
           "file": "src/overlays/shared/rendering/effects/particles.c",
-          "functions": 53,
-          "matching_c": 53,
-          "bytes_total": 19276,
-          "bytes_matching_c": 19276
+          "functions": 54,
+          "matching_c": 54,
+          "bytes_total": 19676,
+          "bytes_matching_c": 19676
         },
         {
           "file": "src/overlays/shared/vendor/vendor_spring.c",
@@ -3496,6 +3489,13 @@
           "matching_c": 1,
           "bytes_total": 768,
           "bytes_matching_c": 768
+        },
+        {
+          "file": "src/overlays/shared/weapons/doom_bot_movement.c",
+          "functions": 12,
+          "matching_c": 12,
+          "bytes_total": 5140,
+          "bytes_matching_c": 5140
         },
         {
           "file": "src/overlays/shared/enemies/bomb_spawner.c",
