@@ -645,7 +645,7 @@ void red_ship_1_update(char *moby) {
                 random_float_between(-1.0f, 1.0f) * spline_moby_pvars->unk144 / 1000.0f;
         }
         if (*(int *)(pm + 0x14) == -1) {
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = RED_SHIP_WAIT_FOR_PATH;
             break;
         }
         moby_position = moby + 0x10;
@@ -702,15 +702,15 @@ void red_ship_1_update(char *moby) {
         compute_sampled_spline_path_lengths(
             pm, 0, moby, spline_moby_pvars->unk104, spline_moby_pvars->unk108);
         if (spline_moby_pvars->timer_12C > 0) {
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = RED_SHIP_WAIT_FOR_MOVEMENT_TIMER;
         } else {
             spline_moby_pvars->unk14A = 0;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = RED_SHIP_FOLLOW_PATH_SPLINE;
         }
         break;
     case RED_SHIP_WAIT_FOR_PATH:
         if (*(int *)(pm + 0x14) != -1) {
-            MOBY(moby)->state = 0;
+            MOBY(moby)->state = RED_SHIP_INITIALIZE;
         }
         voice_slot_index = spline_moby_pvars->unk150;
         if (voice_slot_index != -1) {
@@ -723,7 +723,7 @@ void red_ship_1_update(char *moby) {
         break;
     case RED_SHIP_WAIT_FOR_MOVEMENT_TIMER:
         if (fast_dec_timer_s16(&spline_moby_pvars->timer_12C)) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = RED_SHIP_FOLLOW_PATH_SPLINE;
         }
         break;
     case RED_SHIP_FOLLOW_PATH_SPLINE:
