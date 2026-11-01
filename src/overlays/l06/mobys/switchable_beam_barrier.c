@@ -64,6 +64,9 @@ void switchable_beam_barrier_update(char *moby) {
         UPDATE_VECTOR_STREAMS = 2,
         EMIT_PARTICLE_BURST = 3
     };
+    enum {
+        PARTICLE_BURST_COMPLETE = 4
+    };
     Data_305E38 *vector_stream_vars = ((Data_305E38 *)MOBY(moby)->pvars);
     union {
         float tmp[30][4];
@@ -86,10 +89,10 @@ void switchable_beam_barrier_update(char *moby) {
         vector_stream_vars->timer[0] = 0;
         vector_stream_vars->f18 = -1;
         if (vector_stream_vars->f10 != -1) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = WAIT_FOR_LINKED_MOBY;
             MOBY(moby)->collision = 0;
         } else {
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = UPDATE_VECTOR_STREAMS;
         }
         break;
     case WAIT_FOR_LINKED_MOBY: {
@@ -97,7 +100,7 @@ void switchable_beam_barrier_update(char *moby) {
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
         }
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = UPDATE_VECTOR_STREAMS;
         MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         break;
     }
@@ -154,7 +157,7 @@ void switchable_beam_barrier_update(char *moby) {
             *(unsigned char *)(level_mobys_q + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
             int voice_slot_index;
             MOBY(moby)->collision = 0;
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = EMIT_PARTICLE_BURST;
             voice_slot_index = vector_stream_vars->f18;
             if (voice_slot_index != -1) {
                 char *e = ((char *)&voice_pool) + voice_slot_index * 0x70;
@@ -209,7 +212,7 @@ void switchable_beam_barrier_update(char *moby) {
                                     0);
             }
         }
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = PARTICLE_BURST_COMPLETE;
         break;
     }
     }
