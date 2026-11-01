@@ -726,7 +726,7 @@ void set_hero_item_moby_flag_bit0(void) {
     if (hero_flag_target != 0) {
         *(unsigned short *)(hero_flag_target + 0x34) |= 1;
     }
-    if (tail->vehicle_mode == 1) {
+    if (tail->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_flag_target = ((char *)tail->unk1624);
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) |= 1;
