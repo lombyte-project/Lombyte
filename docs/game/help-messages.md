@@ -56,21 +56,11 @@ argument declarations; naming cleanup must not silently change their ABI.
 
 ## Reference evidence
 
-The field meanings above come from the RC1 functions and their callers.
-The local `rac1-decomp` reference at
-`05da3217a4046ac01dec3ac74f051a348f063155` also contains corresponding PAL
-help functions in `src/game/help.c` and
-`src/overlays/shared/help_00203E98.c`. Its window geometry and request
-accesses corroborate the offsets. Its help-update implementation explicitly
-credits Lombyte, so that portion is not independent evidence. No PAL
-addresses or implementation bodies are imported by this cleanup.
+RC1 functions and their callers establish these field meanings.
+`rac1-decomp` at `05da3217a4046ac01dec3ac74f051a348f063155`
+corroborates window geometry and request offsets in `src/game/help.c` and
+`src/overlays/shared/help_00203E98.c`. Its help-update code derives from
+Lombyte and is not independent evidence. No PAL addresses or bodies were imported.
 
-`rac2-decomp` at `118332cb96ec33604526365bc7e8b25123acde82` names save block
-16 `SAVE_BLOCK_HELP_MESSAGES` in `include/save.h`; that supports the general
-subsystem identification, not RC1 layouts. `rac3-uya-decomp` at
-`f8f6098a281d351381ba9547085d425e06cd74f3` supplied no stronger applicable
-help-layout evidence. Sequel moby layouts must not replace RC1 layouts.
-
-`src/check/help_window_layout_check.c` and `help_record_layout_check.c`
-check the EE field offsets and sizes. The boot executable and level overlay
-byte checks remain the acceptance gates for changes to these declarations.
+The help window and record layout checks in `src/check/` verify EE offsets
+and sizes; boot and overlay byte checks remain the acceptance gates.
