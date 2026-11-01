@@ -51,9 +51,9 @@ typedef struct {
 
 typedef struct {
     V4  v;
-    f32 t1;
-    f32 t2;
-    f32 t3;
+    f32 yaw_local_x;
+    f32 yaw_local_y;
+    f32 yaw_local_z;
 } Loc;
 
 typedef struct {
@@ -272,15 +272,16 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
             qcopy(&loc.v, (u8 *)&D_L00_00173E40 + 0x40);
             yaw_cosine_scratch = fast_cos(spawned_moby->rot.z);
             sn = fast_sin(spawned_moby->rot.z);
-            loc.t1 = loc.v.f[0] * yaw_cosine_scratch + loc.v.f[1] * sn;
+            loc.yaw_local_x = loc.v.f[0] * yaw_cosine_scratch + loc.v.f[1] * sn;
             yaw_cosine_scratch = fast_cos(spawned_moby->rot.z);
             sn = fast_sin(spawned_moby->rot.z);
-            loc.t2 = loc.v.f[1] * yaw_cosine_scratch - loc.v.f[0] * sn;
-            loc.t3 = loc.v.f[2];
-            ground_height_pitch_and_variant_scratch =
-                fast_arc_tan(square_root(loc.t1 * loc.t1 + loc.t3 * loc.t3), loc.t2);
+            loc.yaw_local_y = loc.v.f[1] * yaw_cosine_scratch - loc.v.f[0] * sn;
+            loc.yaw_local_z = loc.v.f[2];
+            ground_height_pitch_and_variant_scratch = fast_arc_tan(
+                square_root(loc.yaw_local_x * loc.yaw_local_x + loc.yaw_local_z * loc.yaw_local_z),
+                loc.yaw_local_y);
             spawned_moby->rot.x = -ground_height_pitch_and_variant_scratch;
-            spawned_moby->rot.y = fast_arc_tan(loc.t3, loc.t1);
+            spawned_moby->rot.y = fast_arc_tan(loc.yaw_local_z, loc.yaw_local_x);
         }
         spawned_moby->collision = ((Part *)spawned_moby->pclass)->unk10;
         allocate_voice_for_target_entry(1, 0, spawned_moby);
