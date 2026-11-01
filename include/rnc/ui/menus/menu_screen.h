@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+struct Moby;
+
 /*
  * Front-end menu screens. A MenuScreen (end of this file) is one screen of a
  * MenuPage; 0x0-0x2F are shared, and from 0x30 on each kind of screen keeps
@@ -15,7 +17,7 @@ struct MenuScreenWords {
     u8  pad_30[0x4];
     s32 unk34; /* 0x34: flags 0x40 / 0x80 (draw_map_screen) */
     s32 unk38; /* 0x38: cleared by enter_menu_help_text */
-    s32 unk3C; /* 0x3C: stream buffer (leave_streamed_moby_screen) */
+    s32 unk3C; /* 0x3C */
     u8  pad_40[0x10];
     s32 unk50; /* 0x50: 0, 1 or 3 (enter_menu_help_text) */
     s32 unk54; /* 0x54: cleared by enter_menu_help_text */
@@ -96,7 +98,8 @@ struct MenuIconListData {
     u8               pad_44[0x4];
     struct MenuIcon *list; /* 0x48 */
     u8               pad_4C[0x10];
-    s32              first_y; /* 0x5C: y of the first icon, 0x260 per icon */
+    s32              first_y;     /* 0x5C: y of the first icon, 0x260 per icon */
+    s32              first_shown; /* 0x60: first icon in view, kept around cursor */
 };
 
 /* Save slot screen (saving_data_menu, saving_data_menu2, loading_data_menu,
@@ -118,6 +121,33 @@ struct MenuSaveSlotData {
 struct MenuPromptData {
     u8  pad_30[0x24];
     s32 buffer; /* 0x54: stream buffer */
+};
+
+/* Help text label (help_history_text_label): enter_menu_help_text starts
+   reading the help archive, update_menu_help_text_load swaps it in for the
+   current help text table and count, and restore_menu_help_text puts the
+   saved ones back. */
+struct MenuHelpTextData {
+    u8  pad_30[0x8];
+    s32 saved_text_count; /* 0x38 */
+    u8  pad_3C[0x14];
+    s32 load_state;       /* 0x50: 0 read, 1 reading, 2 loaded, 3 read not started */
+    s32 saved_text_table; /* 0x54 */
+};
+
+/* Timed text screen (the credits: update_timed_menu_sequence, draw_menu_text_box).
+   Each phase shows one text id or a -1 terminated list of them in text;
+   draw_menu_text_box scrolls a list up by scroll / 16 and sets list_done once
+   its end is on screen. */
+struct MenuTimedTextData {
+    u8  pad_30[0x4];
+    s32 text; /* 0x34: text id, or the address of a text id list */
+    u8  pad_38[0x4];
+    s32 scroll; /* 0x3C */
+    s32 timer;  /* 0x40: frames left in the phase */
+    u8  pad_44[0xC];
+    u32 phase;     /* 0x50 */
+    s32 list_done; /* 0x54 */
 };
 
 /* Item slot screen (update_menu_item_slots). Confirm stores the grid's selected item
@@ -217,12 +247,12 @@ struct MenuStreamData {
 /* Item preview screen (draw_item_preview_screen, draw_available_item_preview_mobys,
    update_item_preview_moby). */
 struct MenuItemPreviewData {
-    s32   flags;          /* 0x30: update_item_preview_binding */
-    s32   state;          /* 0x34 */
-    f32   rotation_angle; /* 0x38 */
-    u8    pad_3C[0x8];
-    char *moby;        /* 0x44: preview moby (create_menu_preview_moby) */
-    char *second_moby; /* 0x48: optional, drawn after moby */
+    s32          flags;          /* 0x30: update_item_preview_binding */
+    s32          state;          /* 0x34 */
+    f32          rotation_angle; /* 0x38 */
+    u8           pad_3C[0x8];
+    struct Moby *moby;        /* 0x44: preview moby (create_menu_preview_moby) */
+    struct Moby *second_moby; /* 0x48: optional, drawn after moby */
 };
 
 /* Label screen (render_configured_text_label). flags: 8/0x10 font; value source 0x20
@@ -342,6 +372,8 @@ struct MenuScreen {
         struct MenuItemPreviewData preview; /* draw_item_preview_screen, update_item_preview_moby */
         struct MenuLabelData       label;   /* render_configured_text_label */
         struct MenuPromptData      prompt;  /* draw_prompt_box, enter_menu_prompt */
+        struct MenuTimedTextData   timed;   /* update_timed_menu_sequence, draw_menu_text_box */
+        struct MenuHelpTextData    help;    /* enter_menu_help_text, update_menu_help_text_load */
     } data;                                 /* 0x30 */
 };
 
@@ -458,7 +490,7 @@ struct MenuStreamScreen {
 struct MenuIconListScreen {
     struct MenuScreenHead   head;
     struct MenuIconListData icons;
-    u8                      pad_60[0x8];
+    u8                      pad_64[0x4];
 }; /* size 0x68 */
 
 /* Map screens: draw_map_screen, draw_map_screen_overlay, draw_map_screen_layers. */
@@ -486,6 +518,19 @@ struct MenuItemPreviewScreen {
 struct MenuPlainScreenC0 {
     struct MenuScreenHead head;
     u8                    pad_30[0x90];
+}; /* size 0xC0 */
+
+/* The helpdesk screen's streamed moby (enter_streamed_moby_screen, leave_streamed_moby_screen,
+   update_streamed_moby_animation, draw_moby_entries_from_object). */
+struct MenuStreamedMobyScreen {
+    struct MenuScreenHead head;
+    u8                    pad_30[0x4];
+    s32                   state; /* 0x34: update_streamed_moby_animation's step, 3 stops it */
+    u8                    pad_38[0x4];
+    s32                   buffer;      /* 0x3C: acquire_menu_stream_buffer(1) */
+    s32                   read_offset; /* 0x40 */
+    struct Moby          *mobys[24];   /* 0x44: drawn and deleted as a list */
+    u8                    pad_A4[0x1C];
 }; /* size 0xC0 */
 
 #endif /* LOMBYTE_RNC_UI_MENUS_MENU_SCREEN_H */

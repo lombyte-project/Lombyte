@@ -29,17 +29,17 @@ void updraft_vent_update(unsigned char *moby) {
     float        hero_point_local_offset[4] __attribute__((aligned(16)));
     float        mtx[16] __attribute__((aligned(16)));
     char        *player;
-    unsigned int update_state = moby[0x20];
+    unsigned int update_state = MOBY(moby)->state;
     switch (update_state) {
     case MOBY_UPDATE_INITIALIZE:
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         MOBY(moby)->flags |= 1;
-        moby[0x31] = 0;
+        MOBY(moby)->visible = 0;
         break;
     case MOBY_UPDATE_ACTIVE:
         player = (&hero.motion.pos);
-        if (fast_vec_dist(moby + 0x10, player) < 8.0f) {
-            fast_vec_sub(hero_point_local_offset, player + 0x50, moby + 0x10);
+        if (fast_vec_dist(&MOBY(moby)->pos, player) < 8.0f) {
+            fast_vec_sub(hero_point_local_offset, player + 0x50, &MOBY(moby)->pos);
             transpose_rotation_matrix(mtx, moby + 0xC0);
             transform_vector(hero_point_local_offset, hero_point_local_offset, mtx);
             if (-5.0f < hero_point_local_offset[0] && hero_point_local_offset[0] < 5.0f &&
@@ -106,7 +106,7 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
 
     scale = ((float *)MOBY(moby)->pvars);
     copy_matrix_rotation(transform, moby + 0xC0);
-    qcopy(position, moby + 0x10);
+    qcopy(position, &MOBY(moby)->pos);
     position[3] = 1.0f;
     uniform_color_quad.tex = get_effect_texture(0x2C);
     uniform_color_quad.unk80 = 0xFF9000000260L;

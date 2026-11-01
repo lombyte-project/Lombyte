@@ -1,6 +1,6 @@
 /* Level 17 shuttle. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/mobys/moby_class_id.h"
 
@@ -11,9 +11,9 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
@@ -35,6 +35,10 @@
 #include "rnc/overlay/l17/hero/hero_set_state.h"
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/ui/help/force_help_message.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
+#include "rnc/overlay/shared/camera/set_nonzero_follow_camera_parameters.h"
+#include "rnc/overlay/shared/ui/help/remove_help_message_for_selector.h"
+#include "rnc/ui/help/try_set_help_message.h"
 
 /* Shuttle destination selection shared by its route helpers. */
 enum ShuttleStop {
@@ -48,15 +52,13 @@ extern char *D_L17_001600EC;
 extern float fast_add_rotations(float, float);
 extern void  set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern int   remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void  jet_end_mount(int) __asm__("FUN_L00_002eac18");
 
 extern char D_L17_001B0DB0[];
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(void *m, int a, int b, int c) __asm__("FUN_00212f90");
 
 /* UpdateMoby 1448: a moby that alternates between two camera points and starts a cutscene on a button press. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F3450), where it is exact; names translated to the US level program. */
@@ -94,7 +96,6 @@ extern short      shuttle_second_stop_departure_scale_multiplier __asm__("D_L17_
     __attribute__((sda));
 extern short shuttle_first_stop_departure_scale_multiplier __asm__("D_L17_001623AC")
     __attribute__((sda));
-extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 int  update_shuttle_travel_and_camera(char *moby, int idx) __asm__("FUN_L17_002f2180");
 void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
 
@@ -103,7 +104,7 @@ extern char D_0013CAE4[];
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L17_002f1940");
 
-/* Moby class 1448 */
+/* Moby classes 424, 1109, 1448, 1766 */
 void shuttle_update(struct Moby *shuttle_moby) {
     enum {
         SHUTTLE_STATE_INITIALIZE = 0,
@@ -284,8 +285,6 @@ void shuttle_update(struct Moby *shuttle_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F3C18), where it is exact; names translated to the US level program. */
 
-s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
-
 void update_shuttle_help_message(struct Moby *moby) {
     char *shuttle_private_vars = (char *)moby->pvars;
     int   mode = *(int *)(shuttle_private_vars + 0x94);
@@ -436,7 +435,7 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
         set_camera_rotation(camera_rotation);
     }
     MOBY(moby)->scale =
-        *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
+        MOBY(moby)->pclass->scale *
         (shuttle_vars->f9C - (shuttle_vars->f9C - shuttle_vars->fA0) * shuttle_vars->fA4);
     if (shuttle_vars->fA4 > 0.8f) {
         turn = frame_time_sq * 12.566371f;

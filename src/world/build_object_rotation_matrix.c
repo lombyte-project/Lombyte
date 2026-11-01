@@ -3,6 +3,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/rendering/view/update_view_context.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 extern char          D_00187080[];
 extern char          render_sequence[] __asm__("D_0018CB20");
@@ -21,8 +22,8 @@ unsigned char build_object_rotation_matrix(void) {
     unsigned char flag = key[0xC];
     float        *keyframe_angles = (float *)(key + 0x10);
     char         *camera_position;
-    char         *camera_state;
-    float         rotation_matrix[16];
+    struct PreviewCamera *camera_state;
+    float                 rotation_matrix[16];
 
     view_tan_half_fov = keyframe_angles[3];
     update_view_context();
@@ -32,18 +33,18 @@ unsigned char build_object_rotation_matrix(void) {
     SceVu0RotMatrixX(rotation_matrix, rotation_matrix, *(float *)(key + 0x10));
     SceVu0RotMatrixY(rotation_matrix, rotation_matrix, keyframe_angles[1]);
     sceVu0RotMatrixZ(rotation_matrix, rotation_matrix, keyframe_angles[2]);
-    camera_state = camera_position - 0x140;
-    *(float *)(camera_state + 0x350) = -rotation_matrix[8];
-    *(float *)(camera_state + 0x360) = -rotation_matrix[0];
-    *(float *)(camera_state + 0x370) = rotation_matrix[4];
-    *(float *)(camera_state + 0x354) = -rotation_matrix[9];
-    *(float *)(camera_state + 0x364) = -rotation_matrix[1];
-    *(float *)(camera_state + 0x374) = rotation_matrix[5];
-    *(float *)(camera_state + 0x358) = -rotation_matrix[10];
-    *(float *)(camera_state + 0x368) = -rotation_matrix[2];
-    *(float *)(camera_state + 0x378) = rotation_matrix[6];
+    camera_state = (struct PreviewCamera *)(camera_position - 0x140);
+    camera_state->forward.f[0] = -rotation_matrix[8];
+    camera_state->right.f[0] = -rotation_matrix[0];
+    camera_state->up.f[0] = rotation_matrix[4];
+    camera_state->forward.f[1] = -rotation_matrix[9];
+    camera_state->right.f[1] = -rotation_matrix[1];
+    camera_state->up.f[1] = rotation_matrix[5];
+    camera_state->forward.f[2] = -rotation_matrix[10];
+    camera_state->right.f[2] = -rotation_matrix[2];
+    camera_state->up.f[2] = rotation_matrix[6];
     if (D_0015EDB4_macro[0] != 0) {
-        fast_vec_cross(camera_position + 0x220, camera_position + 0x230, camera_position + 0x210);
+        fast_vec_cross(&camera_state->right, &camera_state->up, &camera_state->forward);
     }
     return flag;
 }

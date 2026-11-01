@@ -18,8 +18,36 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
+
+typedef struct ScoutbotVars {
+    u8    pad0[0x20];
+    f32   unk20[4];
+    u8    pad30[0x10];
+    f32   unk40[4];
+    u8    pad50[0x78];
+    s16   unkC8;
+    u8    padCA[0xa6];
+    f32   unk170[4];
+    u8    pad180[0x30];
+    s32   unk1B0;
+    s32   unk1B4;
+    u8    pad1B8[0x8];
+    f32   unk1C0[4];
+    f32   unk1D0[4];
+    f32   unk1E0[4];
+    u8    pad1F0[0x10];
+    f32   unk200;
+    f32   unk204;
+    f32   unk208;
+    f32   unk20C;
+    u8    pad210[0x6];
+    s16   unk216;
+    char *unk218;
+    s32   unk21C;
+    u8    unk220[0x4];
+} ScoutbotVars;
 
 typedef struct Moby Moby;
 
@@ -388,16 +416,16 @@ void scoutbot_update(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_health_and_target(struct Moby *moby) {
-    char *scoutbot_pvars = ((char *)moby->pvars);
-    int   hit;
-    float dmg;
-    int   hit_reaction_code;
+    ScoutbotVars *scoutbot_pvars = (ScoutbotVars *)moby->pvars;
+    int           hit;
+    float         dmg;
+    int           hit_reaction_code;
     dmg = 0.0f;
     hit_reaction_code = hit_reaction(
-        moby, find_moby_hit(moby, 0x330000, 0), scoutbot_pvars + 0x20, 0, &hit, &dmg, 0, 4);
+        moby, find_moby_hit(moby, 0x330000, 0), &scoutbot_pvars->unk20, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x63) {
-        *(float *)(scoutbot_pvars + 0x20) -= dmg;
-        if (*(float *)(scoutbot_pvars + 0x20) <= 0.0f)
+        scoutbot_pvars->unk20[0] -= dmg;
+        if (scoutbot_pvars->unk20[0] <= 0.0f)
             hit_reaction_code = 1;
         if (hit_reaction_code < 12) {
             if (hit_reaction_code >= 0) {
@@ -408,24 +436,24 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (((unsigned char *)moby)[0x20] != 0 && ((unsigned char *)moby)[0x20] != 4) {
-        char *path = ((char *)l08_paths[*(int *)(scoutbot_pvars + 0x21C)]);
+        char *path = ((char *)l08_paths[scoutbot_pvars->unk21C]);
         if (func_L00_00260FB0_f(
-                moby, scoutbot_pvars + 0x170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
-            if (14.0f < vector_distance_xy(scoutbot_pvars + 0x1C0, scoutbot_pvars + 0x170)) {
-                *(int *)(scoutbot_pvars + 0x1B4) = 2;
-            } else if (3.0f < absolute_float(*(float *)(scoutbot_pvars + 0x1C8) -
-                                             *(float *)(scoutbot_pvars + 0x178))) {
-                *(int *)(scoutbot_pvars + 0x1B4) = 2;
+                moby, &scoutbot_pvars->unk170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
+            if (14.0f < vector_distance_xy(&scoutbot_pvars->unk1C0, &scoutbot_pvars->unk170)) {
+                scoutbot_pvars->unk1B4 = 2;
+            } else if (3.0f <
+                       absolute_float(scoutbot_pvars->unk1C0[2] - scoutbot_pvars->unk170[2])) {
+                scoutbot_pvars->unk1B4 = 2;
             }
         }
     }
-    if (*(int *)(scoutbot_pvars + 0x1B0) == 0) {
-        *(int *)(scoutbot_pvars + 0x1B0) = ((int)hero.moby);
+    if (scoutbot_pvars->unk1B0 == 0) {
+        scoutbot_pvars->unk1B0 = ((int)hero.moby);
     }
 }
 
 void draw_target_beam(struct Moby *moby) {
-    char           *data = ((char *)moby->pvars);
+    ScoutbotVars   *data = (ScoutbotVars *)moby->pvars;
     Packet_002d3878 pk;
     Vec_002d3878    matrix[3], direction, pos, delta, angles;
     float           length;
@@ -453,9 +481,9 @@ void draw_target_beam(struct Moby *moby) {
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
     moby_point_position(moby, 2, &pos);
-    fast_vec_sub(&delta, *(char **)(data + 0x218) + 0x10, &pos);
+    fast_vec_sub(&delta, data->unk218 + 0x10, &pos);
     scale_vector_002d3878(3.0f, &delta);
-    delta.v[2] = (*(float *)(*(char **)(data + 0x218) + 0x18) + 0.25f) - pos.v[2];
+    delta.v[2] = (*(float *)(data->unk218 + 0x18) + 0.25f) - pos.v[2];
     delta.v[3] = 1.0f;
     length = fast_vec_length(&delta);
     clear_u64_value(&angles);
@@ -468,15 +496,15 @@ void draw_target_beam(struct Moby *moby) {
     clear_u64_value(&pk.vertices[0]);
     pk.vertices[0].v[2] = D_L08_00161894_lui;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], data + 0x1d0);
-    pk.vertices[1].v[0] = length * *(float *)(data + 0x1dc);
+    qcopy(&pk.vertices[1], &data->unk1D0);
+    pk.vertices[1].v[0] = length * data->unk1D0[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[2]);
     pk.vertices[2].v[2] = 0.0f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], data + 0x1d0);
-    pk.vertices[3].v[0] = length * *(float *)(data + 0x1dc);
+    qcopy(&pk.vertices[3], &data->unk1D0);
+    pk.vertices[3].v[0] = length * data->unk1D0[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -493,20 +521,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], data + 0x1d0);
-    pk.vertices[0].v[0] = length * *(float *)(data + 0x1dc);
+    qcopy(&pk.vertices[0], &data->unk1D0);
+    pk.vertices[0].v[0] = length * data->unk1D0[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], data + 0x1e0);
-    pk.vertices[1].v[0] = length * *(float *)(data + 0x1ec);
+    qcopy(&pk.vertices[1], &data->unk1E0);
+    pk.vertices[1].v[0] = length * data->unk1E0[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], data + 0x1d0);
-    pk.vertices[2].v[0] = length * *(float *)(data + 0x1dc);
+    qcopy(&pk.vertices[2], &data->unk1D0);
+    pk.vertices[2].v[0] = length * data->unk1D0[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], data + 0x1e0);
-    pk.vertices[3].v[0] = length * *(float *)(data + 0x1ec);
+    qcopy(&pk.vertices[3], &data->unk1E0);
+    pk.vertices[3].v[0] = length * data->unk1E0[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -524,20 +552,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], data + 0x1e0);
-    pk.vertices[0].v[0] = length * *(float *)(data + 0x1ec);
+    qcopy(&pk.vertices[0], &data->unk1E0);
+    pk.vertices[0].v[0] = length * data->unk1E0[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[1]);
-    pk.vertices[1].v[0] = length * *(float *)(data + 0x1dc) * 3.0f;
+    pk.vertices[1].v[0] = length * data->unk1D0[3] * 3.0f;
     pk.vertices[1].v[2] += D_L08_00161894_lui;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], data + 0x1e0);
-    pk.vertices[2].v[0] = length * *(float *)(data + 0x1ec);
+    qcopy(&pk.vertices[2], &data->unk1E0);
+    pk.vertices[2].v[0] = length * data->unk1E0[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[3]);
-    pk.vertices[3].v[0] = length * *(float *)(data + 0x1dc) * 3.0f;
+    pk.vertices[3].v[0] = length * data->unk1D0[3] * 3.0f;
     pk.vertices[3].v[2] = 0.0f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -560,9 +588,9 @@ void draw_target_beam(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_movement(struct Moby *moby) {
-    char *scoutbot_instance_state = ((char *)moby->pvars);
-    float movement_length =
-        fast_vec_length((float *)(scoutbot_instance_state + 0x40)) - frame_time_sq * 6.0f;
+    ScoutbotVars *scoutbot_instance_state = (ScoutbotVars *)moby->pvars;
+    float         movement_length =
+        fast_vec_length((float *)(&scoutbot_instance_state->unk40)) - frame_time_sq * 6.0f;
     float  movement_length_limit = frame_time * 3.0f;
     float  target_height;
     float  vertical_step;
@@ -573,16 +601,15 @@ void update_scoutbot_movement(struct Moby *moby) {
     } else if (movement_length < 0.0f) {
         movement_length = 0.0f;
     }
-    velocity_ptr = (float *)(scoutbot_instance_state + 0x40);
+    velocity_ptr = (float *)(&scoutbot_instance_state->unk40);
     fast_vec_normalize(velocity_ptr, velocity_ptr, movement_length);
     fast_vec_add((float *)&moby->pos, (float *)&moby->pos, velocity_ptr);
-    *(float *)(scoutbot_instance_state + 0x204) = fast_add_rotations(
-        *(float *)(scoutbot_instance_state + 0x204), *(float *)(scoutbot_instance_state + 0x20C));
-    target_height = *(float *)(scoutbot_instance_state + 0x1C8) +
-                    *(float *)(scoutbot_instance_state + 0x208) *
-                        fast_sin(*(float *)(scoutbot_instance_state + 0x204));
-    if (*(short *)(scoutbot_instance_state + 0x216))
-        target_height += *(float *)(scoutbot_instance_state + 0x200);
+    scoutbot_instance_state->unk204 =
+        fast_add_rotations(scoutbot_instance_state->unk204, scoutbot_instance_state->unk20C);
+    target_height = scoutbot_instance_state->unk1C0[2] +
+                    scoutbot_instance_state->unk208 * fast_sin(scoutbot_instance_state->unk204);
+    if (scoutbot_instance_state->unk216)
+        target_height += scoutbot_instance_state->unk200;
     vertical_step = target_height - moby->pos.z;
     {
         float vertical_step_limit = frame_time * 3.0f;
@@ -594,7 +621,7 @@ void update_scoutbot_movement(struct Moby *moby) {
                 vertical_step = vertical_step_limit;
         }
     }
-    *(float *)(scoutbot_instance_state + 0x48) = vertical_step;
+    scoutbot_instance_state->unk40[2] = vertical_step;
     qcopy(probe_position_or_correction, (float *)&moby->pos);
     probe_position_or_correction[2] += 0.5f;
     if (FUN_L08_002025d0(probe_position_or_correction, 0x190, 0, moby, 0)) {
@@ -617,27 +644,27 @@ void update_scoutbot_movement(struct Moby *moby) {
 void *enter_scoutbot_return_home_state(struct Moby *moby) __asm__("FUN_L08_002d4050");
 
 void *enter_scoutbot_return_home_state(struct Moby *moby) {
-    void *suction_cancel_status = cancel_suck_cannon_suction(moby);
-    char *scoutbot_data = ((char *)moby->pvars);
+    void         *suction_cancel_status = cancel_suck_cannon_suction(moby);
+    ScoutbotVars *scoutbot_data = (ScoutbotVars *)moby->pvars;
     moby->state = 3;
-    *(float *)(scoutbot_data + 0x200) = 4.0f;
-    *(float *)(scoutbot_data + 0x208) = 0.5f;
+    scoutbot_data->unk200 = 4.0f;
+    scoutbot_data->unk208 = 0.5f;
     if ((unsigned char)((char)moby->prev_seq) != 2) {
         blend_moby_animation(moby, 2, 0, 3);
     }
-    *(short *)(scoutbot_data + 0xC8) = 0;
+    scoutbot_data->unkC8 = 0;
     return suction_cancel_status;
 }
 
 void draw_scoutbot_glow_quad(struct Moby *moby) {
-    char   *scoutbot_private_state = ((char *)moby->pvars);
-    Pk      pk;
-    float   up[4];
-    float   M[4][4];
-    float   position_offset[4];
-    s32     i;
-    OvlQuad z = 0;
-    u32     col;
+    ScoutbotVars *scoutbot_private_state = (ScoutbotVars *)moby->pvars;
+    Pk            pk;
+    float         up[4];
+    float         M[4][4];
+    float         position_offset[4];
+    s32           i;
+    OvlQuad       z = 0;
+    u32           col;
 
     *(OvlQuad *)up = z;
     up[2] = 1.0f;
@@ -654,7 +681,7 @@ void draw_scoutbot_glow_quad(struct Moby *moby) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    qcopy(M[3], (float *)(scoutbot_private_state + 0x220));
+    qcopy(M[3], (float *)(&scoutbot_private_state->unk220));
     fast_vec_sub(M[0], D_L08_001675C0_lui, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);
     fast_vec_cross(M[1], M[0], up);

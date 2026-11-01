@@ -29,7 +29,7 @@ int find_nearest_point_index_xy(char *moby, char *points, int count) {
 #include "rnc/mobys/moby.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F3010), where it is exact; names translated to the US level program. */
 
@@ -74,7 +74,7 @@ int        find_closest_polygon_edge_point(float *out,
                                            float *poly,
                                            int    n) __asm__("FUN_L04_0024c7d8");
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 

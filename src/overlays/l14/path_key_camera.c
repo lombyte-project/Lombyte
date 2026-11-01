@@ -3,10 +3,13 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "types.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/camera/update_cam.h"
+#include "rnc/overlay/shared/math/random/random_vector.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 extern int D_001413DC NOT_SDA;
 
@@ -15,10 +18,6 @@ extern u8 *D_L14_00167500 NOT_SDA;
 void exit_path_key_camera(u8 *target_object) __asm__("FUN_L14_003167e0");
 
 #include "rnc/overlay/l14/path_key_camera_globals.h"
-
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-
-extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 
 extern char *l14_camera_preset_rows __asm__("D_L14_0015EF50");
 
@@ -233,9 +232,6 @@ extern float
 rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
-
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 
 void update_path_key_camera(char *cam) __asm__("FUN_L14_00315d48");
 

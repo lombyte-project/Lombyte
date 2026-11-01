@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_SELECTION_UPDATE_MENU_GRID_SELECTION_H
+#define LOMBYTE_RNC_UI_MENUS_SELECTION_UPDATE_MENU_GRID_SELECTION_H
+
+#include "types.h"
+
+struct MenuScreen;
+
+s32 update_menu_grid_selection(struct MenuScreen *) __asm__("FUN_0021b858");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_SELECTION_UPDATE_MENU_GRID_SELECTION_H */

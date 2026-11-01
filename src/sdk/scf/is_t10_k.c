@@ -1,6 +1,5 @@
 #include "rnc/sdk/library/sdk_state.h"
-
-extern void GetRomName(void) __asm__("GetRomName");
+#include "rnc/sdk/scf/GetRomName.h"
 
 int IsT10K(void) __asm__("IsT10K");
 

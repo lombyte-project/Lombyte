@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L09_MOBYS_BARRIER_H
+#define LOMBYTE_RNC_OVERLAY_L09_MOBYS_BARRIER_H
+
+#include "types.h"
+
+void barrier_update() __asm__("FUN_L09_003082d8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L09_MOBYS_BARRIER_H */

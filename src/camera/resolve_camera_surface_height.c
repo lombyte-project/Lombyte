@@ -2,6 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/math/fast_math.h"
 
 struct CameraProbePosition {
     f32 x;
@@ -11,7 +12,6 @@ struct CameraProbePosition {
 
 #include "rnc/camera/resolve_camera_surface_height_globals.h"
 
-extern f32  absolute_float(f32) __asm__("func_001F99C0");
 extern void set_vector_unit_z(s32) __asm__("FUN_001f9a00");
 extern f32  vector_distance_xy(struct CameraProbePosition *, s32 *) __asm__("FUN_001f9b80");
 extern s32  sample_surface_height_map(f32 *, f32, f32, f32) __asm__("func_00239F58");

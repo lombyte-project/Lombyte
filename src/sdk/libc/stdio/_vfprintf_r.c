@@ -1,6 +1,9 @@
 /* Derived from newlib (1999 vfprintf.c); see licenses/COPYING.NEWLIB.txt. */
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
+#include "rnc/sdk/libc/stdio/exponent.h"
+#include "rnc/sdk/libc/stdlib/isinf.h"
+#include "rnc/sdk/libc/stdlib/isnan.h"
 
 typedef char *va_list;
 #define _REENT        _impure_ptr
@@ -36,10 +39,7 @@ extern s32    convert_multibyte_character(RncReent *, s32 *, const char *, s32, 
 extern s32   __swsetup(RncFile *);
 extern s32   __sbprintf(RncFile *, const char *, va_list);
 extern s32   __sprint(RncFile *, RncStdioUio *);
-extern s32   isinf(f64) __asm__("FUN_00116168");
-extern s32   isnan(f64) __asm__("ClassifyDoubleNaN");
 extern char *cvt(RncReent *, f64, s32, s32, char *, s32 *, s32, s32 *) __asm__("func_00118338");
-extern s32   exponent(char *, s32, s32);
 extern void *memchr(const void *, s32, u32);
 extern u32   strlen(const char *);
 /* slot load */

@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -10,9 +10,10 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "rnc/overlay/l17/mobys/fleet_backdrop_globals.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Draws the Drek's Fleet reflection/backdrop quads around a moby. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
@@ -27,7 +28,6 @@ typedef struct {
 extern char  D_L17_001676C0[];
 extern float frame_delta_time __asm__("D_0015ED7C");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 float        D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f, 1.0f};
 
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
@@ -61,24 +61,37 @@ extern int backdrop_scrolling_quad_texture_indices[] __asm__("D_L17_001DE088");
 int  backdrop_scrolling_quad_color __asm__("D_L17_001623B8") = 0x807e4931; /* RGBA, 0xAABBGGRR */
 void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
 
+typedef struct FleetBackdropAnimationVars {
+    u8  pad_0[0x10];
+    f32 unk10;
+    f32 unk14;
+    f32 unk18;
+    u8  pad_1C[0xC];
+    f32 unk28;
+    u8  pad_2C[0x18];
+    f32 unk44;
+    u8  pad_48[0x4];
+    s32 clip_volume_4C;
+} FleetBackdropAnimationVars;
+
 void draw_fleet_backdrop_quads(struct Moby *moby) {
-    Pkt      pkt;
-    OvlQuad  vv[4];
-    char    *backdrop_pvars = (char *)moby->pvars;
-    char    *backdrop_endpoint_position;
-    int      i;
-    int      k;
-    int      j;
-    OvlQuad *vb;
-    float   *pu;
-    float   *quad_vertex_v_coordinates;
+    Pkt                         pkt;
+    OvlQuad                     vv[4];
+    FleetBackdropAnimationVars *backdrop_pvars = (FleetBackdropAnimationVars *)moby->pvars;
+    char                       *backdrop_endpoint_position;
+    int                         i;
+    int                         k;
+    int                         j;
+    OvlQuad                    *vb;
+    float                      *pu;
+    float                      *quad_vertex_v_coordinates;
     vu1_add_g_sregister(0x47, 0x513F1);
     vb = &vv[2];
-    backdrop_endpoint_position = backdrop_pvars + 0x10;
+    backdrop_endpoint_position = &backdrop_pvars->unk10;
     pu = &pkt.uv[0];
     quad_vertex_v_coordinates = &pkt.uv[1];
     D_L17_0016D3E4 = 8192000.0f;
-    *(float *)(backdrop_pvars + 0x14) = -8000.0f;
+    backdrop_pvars->unk14 = -8000.0f;
     for (i = 0; i < 2; i++) {
         fast_vec_sub(vb, backdrop_pvars, backdrop_endpoint_position);
         fast_vec_sub(&vv[0], backdrop_pvars, D_L17_001676C0);
@@ -86,7 +99,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         fast_vec_cross(&vv[0], &vv[0], vb);
         fast_vec_normalize(&vv[0], &vv[0], backdrop_scrolling_quad_start_half_widths[i]);
         fast_vec_cross(&vv[1], &vv[1], vb);
-        fast_vec_normalize(&vv[1], &vv[1], *(float *)(backdrop_pvars + 0x28));
+        fast_vec_normalize(&vv[1], &vv[1], backdrop_pvars->unk28);
         *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
         *(long *)&pkt.q[6] = 0x0000008000000048LL;
         *(long *)&pkt.q[0] = 0;
@@ -124,11 +137,11 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     for (k = 0; k < 5; k++) {
         float quad_side_length = backdrop_quad_side_lengths[k];
         float uv_rotation_angle = backdrop_quad_uv_rotation_angles[k];
-        float x = *(float *)(backdrop_pvars + 0x10) - quad_side_length * 0.5f;
+        float x = backdrop_pvars->unk10 - quad_side_length * 0.5f;
         float z;
         ((float *)&pkt)[0] = x;
-        ((float *)&pkt)[1] = *(float *)(backdrop_pvars + 0x14) + 1000.0f;
-        z = *(float *)(backdrop_pvars + 0x18) + quad_side_length * 0.5f;
+        ((float *)&pkt)[1] = backdrop_pvars->unk14 + 1000.0f;
+        z = backdrop_pvars->unk18 + quad_side_length * 0.5f;
         ((float *)&pkt)[3] = 1.0f;
         ((float *)&pkt)[2] = z;
         pkt.m[3] = pkt.m[0];
@@ -185,16 +198,16 @@ void fleet_backdrop_animation_update(struct Moby *moby) __asm__("FUN_L17_002f384
 
 /* Moby class 1772 */
 void fleet_backdrop_animation_update(struct Moby *moby) {
-    char *moby_pvars = (char *)moby->pvars;
-    float offset_accumulator[4];
-    float pvar_angle_offset[4];
-    float vector_sum[4];
-    int   i;
-    if (*(int *)(moby_pvars + 0x4C) != -1) {
+    FleetBackdropAnimationVars *moby_pvars = (FleetBackdropAnimationVars *)moby->pvars;
+    float                       offset_accumulator[4];
+    float                       pvar_angle_offset[4];
+    float                       vector_sum[4];
+    int                         i;
+    if (moby_pvars->clip_volume_4C != -1) {
         struct Hero *hero_data = &hero;
         if (hero_data->state.current != 0x32 || ((char *)hero_data->ship_moby) == 0 ||
-            *(short *)(((char *)hero_data->ship_moby) + 0xA6) != 0x563) {
-            if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(moby_pvars + 0x4C))) {
+            hero_data->ship_moby->oclass != 0x563) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, moby_pvars->clip_volume_4C)) {
                 D_L17_0015F638 = 150.0f;
                 goto done;
             }
@@ -217,14 +230,14 @@ done:
         build_spherical_offset(pvar_angle_offset,
                                backdrop_shared_radius_numerator_gp /
                                    backdrop_offset_radius_divisor_gp,
-                               *(float *)(moby_pvars + 0x44),
+                               moby_pvars->unk44,
                                0.0f);
         fast_vec_add(vector_sum, offset_accumulator, pvar_angle_offset);
         *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
         fast_vec_add(vector_sum, moby_pvars, offset_accumulator);
-        *(OvlQuad *)(moby_pvars + 0x10) = *(OvlQuad *)vector_sum;
+        *(OvlQuad *)&moby_pvars->unk10 = *(OvlQuad *)vector_sum;
         moby->update_dist = 0xFF;
-        *(float *)(moby_pvars + 0x10) -= 300.0f;
+        moby_pvars->unk10 -= 300.0f;
     } else {
         for (i = 0; i < 5; i++) {
             backdrop_quad_color_blend_factors[i] +=

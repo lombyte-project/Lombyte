@@ -16,9 +16,26 @@
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/ui/help/try_set_help_message.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+
+typedef struct TeleporterVars {
+    u8  pad0[0x4];
+    s32 unk4;
+    s32 unk8;
+    u8  padC[0x8];
+    f32 unk14[4];
+    f32 unk24;
+    f32 unk28;
+    f32 unk2C;
+    s32 unk30;
+    f32 unk34;
+    s32 unk38;
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
+} TeleporterVars;
 
 typedef struct L01Moby L01Moby;
 
@@ -242,8 +259,8 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_EFFECT_CYCLE_PREPARE = 7,
         TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE = 8
     };
-    char *teleporter_vars = (char *)moby->pvars;
-    int   active = 0;
+    TeleporterVars *teleporter_vars = (TeleporterVars *)moby->pvars;
+    int             active = 0;
 
     if (l01_save_state.cleared[(short)moby->save_id] != 0 ||
         (D_0014C190_257218[current_level_index][((short)moby->save_id) >> 5] >>
@@ -252,15 +269,15 @@ void teleporter_update(struct Moby *moby) {
         active = 1;
     }
     active = active != 0;
-    if (moby->state != 0 && *(int *)(teleporter_vars + 4) != -1 && !active &&
-        FUN_00214720(&hero.motion.pos, *(int *)(teleporter_vars + 4)) != 0) {
+    if (moby->state != 0 && teleporter_vars->unk4 != -1 && !active &&
+        FUN_00214720(&hero.motion.pos, teleporter_vars->unk4) != 0) {
         active = 1;
         activate_teleporter_and_record_state(moby);
         show_teleporter_and_children(moby);
         if (moby->state == 5)
             moby->state = active;
     }
-    if (*(int *)(teleporter_vars + 0x3C) != 0) {
+    if (teleporter_vars->unk3C != 0) {
         if (alternate_animation_sequence_gp == 0) {
             moby->collision = 0;
             moby->flags |= 0x41;
@@ -271,7 +288,7 @@ void teleporter_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case TELEPORTER_INITIALIZE: {
-        char **slots = (char **)(teleporter_vars + 0x14);
+        char **slots = (char **)(&teleporter_vars->unk14);
         int    i;
         moby->update_dist = 0xFF;
         for (i = 0; i < 3; i++) {
@@ -283,12 +300,12 @@ void teleporter_update(struct Moby *moby) {
             *(long *)(slots[i] + 0x38) = *(long *)(((char *)g->moby) + 0x38);
             *(unsigned short *)(slots[i] + 0x34) = moby->flags;
             child_moby = slots[i];
-            qcopy(child_moby + 0x10, &moby->pos);
+            qcopy(&MOBY(child_moby)->pos, &moby->pos);
             qcopy(child_moby + 0x40, &moby->rot);
             *(float *)(slots[i] + 0x48) =
                 fast_add_rotations(MOBY(child_moby)->rot.z, (float)i * 2.0943952f);
         }
-        if (*(int *)(teleporter_vars + 0x38) != 0 || active) {
+        if (teleporter_vars->unk38 != 0 || active) {
             moby->state = 6;
         } else {
             moby->state = 5;
@@ -304,8 +321,8 @@ void teleporter_update(struct Moby *moby) {
         moby->state = 1;
     case TELEPORTER_WAIT_FOR_USE: {
         struct Hero *g;
-        if (*(int *)(teleporter_vars + 8) >= 0 &&
-            D_0014C050[*(int *)(teleporter_vars + 8) + current_level_index * 16] != 0xFF)
+        if (teleporter_vars->unk8 >= 0 &&
+            D_0014C050[teleporter_vars->unk8 + current_level_index * 16] != 0xFF)
             break;
         if (*(int *)teleporter_vars == -1)
             break;
@@ -321,24 +338,24 @@ void teleporter_update(struct Moby *moby) {
             break;
         allocate_voice_for_target_entry(0, 0, (void *)moby);
         moby->state = 2;
-        *(int *)(teleporter_vars + 0x30) = -1;
-        *(int *)(teleporter_vars + 0x2C) = 0;
-        *(int *)(teleporter_vars + 0x28) = 0;
+        teleporter_vars->unk30 = -1;
+        *(int *)&teleporter_vars->unk2C = 0;
+        *(int *)&teleporter_vars->unk28 = 0;
         request_hero_target_pose(&moby->pos.x, 0, moby->rot.z);
         play_entity_sound((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
     }
     case TELEPORTER_EFFECT_CYCLE_PREPARE:
-        if (*(float *)(teleporter_vars + 0x20) < 1.0f) {
-            advance_accelerated_scalar((float *)(teleporter_vars + 0x20),
-                                       (float *)(teleporter_vars + 0x28),
+        if (teleporter_vars->unk14[3] < 1.0f) {
+            advance_accelerated_scalar((float *)(&teleporter_vars->unk14[3]),
+                                       (float *)(&teleporter_vars->unk28),
                                        1.0f,
                                        teleporter_child_motion_acceleration_gp * frame_time_sq,
                                        teleporter_child_motion_deceleration_gp * frame_time_sq,
                                        teleporter_child_motion_max_speed_gp * frame_time);
-        } else if (*(float *)(teleporter_vars + 0x24) < 1.0f) {
-            advance_accelerated_scalar((float *)(teleporter_vars + 0x24),
-                                       (float *)(teleporter_vars + 0x2C),
+        } else if (teleporter_vars->unk24 < 1.0f) {
+            advance_accelerated_scalar((float *)(&teleporter_vars->unk24),
+                                       (float *)(&teleporter_vars->unk2C),
                                        1.0f,
                                        teleporter_child_motion_acceleration_gp * frame_time_sq,
                                        teleporter_child_motion_deceleration_gp * frame_time_sq,
@@ -346,29 +363,29 @@ void teleporter_update(struct Moby *moby) {
         } else {
             allocate_voice_for_target_entry(1, 0, (void *)moby);
             moby->state = 8;
-            *(float *)(teleporter_vars + 0x34) = 0.0f;
+            teleporter_vars->unk34 = 0.0f;
         }
         update_teleporter_child_transforms(moby);
         break;
     case TELEPORTER_PREPARE_TRANSFER: {
         int transfer_preparation_status = get_hero_target_pose_status();
-        if (*(float *)(teleporter_vars + 0x20) < 1.0f) {
-            advance_accelerated_scalar((float *)(teleporter_vars + 0x20),
-                                       (float *)(teleporter_vars + 0x28),
+        if (teleporter_vars->unk14[3] < 1.0f) {
+            advance_accelerated_scalar((float *)(&teleporter_vars->unk14[3]),
+                                       (float *)(&teleporter_vars->unk28),
                                        1.0f,
                                        teleporter_child_motion_acceleration_gp * frame_time_sq,
                                        teleporter_child_motion_deceleration_gp * frame_time_sq,
                                        teleporter_child_motion_max_speed_gp * frame_time);
-        } else if (*(float *)(teleporter_vars + 0x24) < 1.0f) {
-            advance_accelerated_scalar((float *)(teleporter_vars + 0x24),
-                                       (float *)(teleporter_vars + 0x2C),
+        } else if (teleporter_vars->unk24 < 1.0f) {
+            advance_accelerated_scalar((float *)(&teleporter_vars->unk24),
+                                       (float *)(&teleporter_vars->unk2C),
                                        1.0f,
                                        teleporter_child_motion_acceleration_gp * frame_time_sq,
                                        teleporter_child_motion_deceleration_gp * frame_time_sq,
                                        teleporter_child_motion_max_speed_gp * frame_time);
-        } else if (D_L01_0015F594 != 4 || !(*(float *)(teleporter_vars + 0x20) > 0.25f)) {
+        } else if (D_L01_0015F594 != 4 || !(teleporter_vars->unk14[3] > 0.25f)) {
             if (transfer_preparation_status == 2) {
-                *(float *)(teleporter_vars + 0x34) = 1.95f;
+                teleporter_vars->unk34 = 1.95f;
                 moby->state = 3;
             } else if (transfer_preparation_status == 0) {
                 moby->state = 4;
@@ -378,52 +395,51 @@ void teleporter_update(struct Moby *moby) {
         break;
     }
     case TELEPORTER_TRANSFER_TO_DESTINATION:
-        if (*(float *)(teleporter_vars + 0x34) != 0.0f) {
+        if (teleporter_vars->unk34 != 0.0f) {
             add_draw_callback(draw_moby_radius_ring, moby);
-            approach_value((float *)(teleporter_vars + 0x34), 0.0f, frame_time * 4.0f);
+            approach_value((float *)(&teleporter_vars->unk34), 0.0f, frame_time * 4.0f);
         } else {
-            char *destination_moby = D_L01_0015FFD8 + (*(int *)teleporter_vars << 8);
-            char *td = ((char *)MOBY(destination_moby)->pvars);
-            float destination_position[4];
-            qcopy(destination_position, destination_moby + 0x10);
+            char           *destination_moby = D_L01_0015FFD8 + (*(int *)teleporter_vars << 8);
+            TeleporterVars *td = (TeleporterVars *)MOBY(destination_moby)->pvars;
+            float           destination_position[4];
+            qcopy(destination_position, &MOBY(destination_moby)->pos);
             destination_position[2] += 0.2f;
             set_race_camera(destination_position, destination_moby + 0x40, 0, 1);
             hero.unk20A5 = 1;
-            if (*(int *)(teleporter_vars + 0x40) != -1 && *(int *)(teleporter_vars + 0x44) != -1) {
-                request_music_track(*(int *)(teleporter_vars + 0x40),
-                                    *(int *)(teleporter_vars + 0x44));
+            if (teleporter_vars->unk40 != -1 && teleporter_vars->unk44 != -1) {
+                request_music_track(teleporter_vars->unk40, teleporter_vars->unk44);
             }
             MOBY(destination_moby)->state = 4;
-            *(float *)(td + 0x34) = 0.0f;
-            *(float *)(td + 0x28) = 0.0f;
-            *(float *)(td + 0x2C) = 0.0f;
-            *(float *)(td + 0x20) = 1.0f;
-            *(float *)(td + 0x24) = 1.0f;
+            td->unk34 = 0.0f;
+            td->unk28 = 0.0f;
+            td->unk2C = 0.0f;
+            td->unk14[3] = 1.0f;
+            td->unk24 = 1.0f;
             allocate_voice_for_target_entry(1, 0, (void *)destination_moby);
             moby->state = 1;
-            *(float *)(teleporter_vars + 0x20) = 0.0f;
-            *(float *)(teleporter_vars + 0x24) = 0.0f;
-            *(float *)(teleporter_vars + 0x28) = 0.0f;
-            *(float *)(teleporter_vars + 0x2C) = 0.0f;
-            *(float *)(teleporter_vars + 0x34) = 1.95f;
+            teleporter_vars->unk14[3] = 0.0f;
+            teleporter_vars->unk24 = 0.0f;
+            teleporter_vars->unk28 = 0.0f;
+            teleporter_vars->unk2C = 0.0f;
+            teleporter_vars->unk34 = 1.95f;
             update_teleporter_child_transforms(moby);
         }
         break;
     case TELEPORTER_RETURN_TO_IDLE:
     case TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE:
-        if (*(float *)(teleporter_vars + 0x34) < 1.95f) {
+        if (teleporter_vars->unk34 < 1.95f) {
             add_draw_callback(draw_moby_radius_ring, moby);
-            approach_value((float *)(teleporter_vars + 0x34), 1.95f, frame_time * 4.0f);
-        } else if (0.0f < *(float *)(teleporter_vars + 0x24)) {
-            advance_accelerated_scalar((float *)(teleporter_vars + 0x24),
-                                       (float *)(teleporter_vars + 0x28),
+            approach_value((float *)(&teleporter_vars->unk34), 1.95f, frame_time * 4.0f);
+        } else if (0.0f < teleporter_vars->unk24) {
+            advance_accelerated_scalar((float *)(&teleporter_vars->unk24),
+                                       (float *)(&teleporter_vars->unk28),
                                        0.0f,
                                        teleporter_child_motion_acceleration_gp * frame_time_sq,
                                        teleporter_child_motion_deceleration_gp * frame_time_sq,
                                        teleporter_child_motion_max_speed_gp * frame_time);
-        } else if (0.0f < *(float *)(teleporter_vars + 0x20)) {
-            advance_accelerated_scalar((float *)(teleporter_vars + 0x20),
-                                       (float *)(teleporter_vars + 0x2C),
+        } else if (0.0f < teleporter_vars->unk14[3]) {
+            advance_accelerated_scalar((float *)(&teleporter_vars->unk14[3]),
+                                       (float *)(&teleporter_vars->unk2C),
                                        0.0f,
                                        teleporter_child_motion_acceleration_gp * frame_time_sq,
                                        teleporter_child_motion_deceleration_gp * frame_time_sq,
@@ -447,7 +463,7 @@ void update_teleporter_child_transforms(char *parent_moby) {
         float child_offset_length;
         float u;
         char *child_moby = *child_slot;
-        qcopy(child_moby + 0x10, parent_moby + 0x10);
+        qcopy(&MOBY(child_moby)->pos, &MOBY(parent_moby)->pos);
         u = teleporter_child_displacement_angle_degrees_gp * DEG_TO_RAD;
         MOBY(child_moby)->pos.z += teleporter_child_position_z_offset_gp;
         *(float *)(*child_slot + 0x44) = u;
@@ -496,15 +512,15 @@ void try_set_teleporter_help_message(struct Moby *moby) {
 
 /* Ported from rac1-decomp src/overlays/shared/vendor_002F7700.c (func_L01_0030A8C8) */
 void draw_moby_radius_ring(char *moby) {
-    Quad  quad;
-    float rotation_matrix[12];
-    float moby_position_snapshot[4];
-    char *moby_data;
-    float ring_half_height;
-    int   i, j, nj;
-    moby_data = ((char *)MOBY(moby)->pvars);
+    Quad            quad;
+    float           rotation_matrix[12];
+    float           moby_position_snapshot[4];
+    TeleporterVars *moby_data;
+    float           ring_half_height;
+    int             i, j, nj;
+    moby_data = (TeleporterVars *)MOBY(moby)->pvars;
     copy_matrix_rotation(rotation_matrix, moby + 0xC0);
-    qcopy(moby_position_snapshot, moby + 0x10);
+    qcopy(moby_position_snapshot, &MOBY(moby)->pos);
     quad.g[1] = get_effect_texture(moby_radius_ring_texture_index_gp);
     quad.g[3] = (long)moby_radius_ring_blend_minuend_selector_gp |
                 ((long)moby_radius_ring_blend_subtrahend_selector_gp << 2) |
@@ -518,8 +534,8 @@ void draw_moby_radius_ring(char *moby) {
         quad.c[i] = moby_radius_ring_vertex_color_gp;
     }
     ring_half_height = 0.1f;
-    if (*(float *)(moby_data + 0x34) < 1.15f) {
-        float ring_half_height_increase = (1.15f - *(float *)(moby_data + 0x34)) * 2.0f;
+    if (moby_data->unk34 < 1.15f) {
+        float ring_half_height_increase = (1.15f - moby_data->unk34) * 2.0f;
         if (1.0f < ring_half_height_increase) {
             ring_half_height_increase = 1.0f;
         } else if (ring_half_height_increase < 0.0f) {
@@ -527,7 +543,7 @@ void draw_moby_radius_ring(char *moby) {
         }
         ring_half_height = ring_half_height_increase + 0.1f;
         if (((unsigned char *)moby)[0x20] != 7 && ((unsigned char *)moby)[0x20] != 8) {
-            if (*(float *)(moby_data + 0x34) < 0.65f) {
+            if (moby_data->unk34 < 0.65f) {
                 D_001413F5_lui = 1;
             } else {
                 D_001413F5_lui = 0;
@@ -542,8 +558,8 @@ void draw_moby_radius_ring(char *moby) {
         vertex = quad.v;
         for (; k < 4;) {
             float vertex_angle = (float)(j + k / 2) * 6.28318f * 0.03125f - 3.14159f;
-            vertex[0] = fast_cos(vertex_angle) * *(float *)(moby_data + 0x34);
-            vertex[1] = fast_sin(vertex_angle) * *(float *)(moby_data + 0x34);
+            vertex[0] = fast_cos(vertex_angle) * moby_data->unk34;
+            vertex[1] = fast_sin(vertex_angle) * moby_data->unk34;
             vertex[2] = 0.0f;
             if (k++ & 1) {
                 vertex[2] = moby_radius_ring_center_z_gp + ring_half_height + vertex[2];

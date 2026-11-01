@@ -1,5 +1,8 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/game/load_level_zero_preserving_progress.h"
+#include "rnc/game/transitions/request_space_load.h"
+#include "rnc/ui/menus/save_data/start_memory_card_save.h"
 
 typedef struct __attribute__((packed)) {
     s64 v;
@@ -16,11 +19,8 @@ extern volatile u16 D_0013E05A[];
 extern s32          D_0015EE24;
 extern Unaligned64  D_0015EE98[1];
 extern s32          D_001D2640[];
-extern void         request_space_load(s32 value);
 extern void         mode_freeze_init() __asm__("func_001FBAB8");
 extern s32          load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void         start_memory_card_save(s32 save_data, s32 slot) __asm__("FUN_00226a70");
-extern s32          load_level_zero_preserving_progress() __asm__("FUN_00226b08");
 extern s32          allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 saving_data_menu2(struct MenuScreen *w) __asm__("FUN_002235b8");
@@ -66,15 +66,15 @@ s32 saving_data_menu2(struct MenuScreen *w) {
             mode_freeze_init(3, menu_system.current);
             return 0;
         }
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x24) =
+        memory_card_state.card[0].entries[memory_card_state.card[0].save_index].bolts =
             current_bolt_count;
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x20) =
+        memory_card_state.card[0].entries[memory_card_state.card[0].save_index].id =
             current_level_index;
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x2C) =
-            D_0015EE24;
-        *(Unaligned64 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C +
-                         0x30) = D_0015EE98[0];
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) =
+        memory_card_state.card[0].entries[memory_card_state.card[0].save_index].time = D_0015EE24;
+        *(Unaligned64 *)&memory_card_state.card[0]
+             .entries[memory_card_state.card[0].save_index]
+             .saved_at = D_0015EE98[0];
+        memory_card_state.card[0].entries[memory_card_state.card[0].save_index].count =
             alternate_animation_sequence;
         request_space_load(0);
         D_0013E05A[0] = 1;

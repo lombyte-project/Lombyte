@@ -5,7 +5,7 @@
 extern u8 *D_L00_0015FFDC;
 extern u8 *D_L00_0015FFE0;
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern s32 D_L00_0015FFBC;
 void       count_expired_mobys(void) __asm__("FUN_L00_0024e7a8");

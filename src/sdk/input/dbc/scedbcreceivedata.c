@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_globals.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct DbCState {
     s32 unk0;
@@ -12,7 +13,6 @@ struct DbCState {
 
 extern u8              dbc_receive_rpc_error_message[] __asm__("D_001536A0");
 extern s32             debug_print_stub() __asm__("func_00124A20");
-extern s32             sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
 s32                    sceDbcReceiveData(s32  rpc_request_word_0,
                                          s32  rpc_request_word_1,

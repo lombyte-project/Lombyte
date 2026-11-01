@@ -9,4 +9,6 @@ typedef struct {
     u8   bB;
 } E;
 
+void bomb_update() __asm__("FUN_L00_002adb30");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_BOMB_GLOVE_BOMB_H */

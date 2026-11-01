@@ -1,16 +1,15 @@
 /* Random: an int between two bounds, and a symmetric random float. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258BC8), where it is exact; names translated to the US level program. */
 
-extern s32 rand();
-
-/* Random integer in lo..hi inclusive from rand(). */
+/* Random integer in lo..hi inclusive from RandomNext(). */
 int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 
 int random_int_between(int lo, int hi) {
-    return ((rand() >> 16) & 0x7FFF) % (hi - lo + 1) + lo;
+    return ((RandomNext() >> 16) & 0x7FFF) % (hi - lo + 1) + lo;
 }
 
 /* Random float in [lo, hi], randomly negated: uses a 12-bit fraction
@@ -18,11 +17,11 @@ int random_int_between(int lo, int hi) {
    sign. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258C80), where it is exact; names translated to the US level program. */
 
-/* Random float of magnitude lo..hi from rand(), negated on odd values. */
+/* Random float of magnitude lo..hi from RandomNext(), negated on odd values. */
 float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 
 float randf_sym(float lo, float hi) {
-    int   shifted_random_bits = rand() >> 16;
+    int   shifted_random_bits = RandomNext() >> 16;
     float range = hi - lo;
     float sampled_value = lo + (float)(shifted_random_bits & 0xFFF) * range * 0.000244140625f;
 

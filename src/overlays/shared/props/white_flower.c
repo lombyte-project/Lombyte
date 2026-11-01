@@ -4,12 +4,12 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void
 spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
-extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */

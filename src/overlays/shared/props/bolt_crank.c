@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -15,10 +15,11 @@
 #include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "rnc/overlay/shared/mobys/record_moby_context_bytes.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/options.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
 
 /* Bolt-crank Moby.state, including the callback-only state. */
 enum BoltCrankState {
@@ -46,7 +47,6 @@ typedef struct {
 } BoltCrankVars;
 
 extern char D_L01_00167240[];
-float       absolute_float(float input) __asm__("func_001F99C0");
 
 extern int           D_0015ED84;
 extern unsigned char menu_item_enabled_1_lui __asm__("D_0013D395") NOT_SDA;
@@ -64,8 +64,6 @@ extern void  jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void  set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void  jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void  set_camera_5_track_acceleration_yz(f32, f32) __asm__("FUN_L01_00316e88");
 
 /* On level 1, when a state-5 moby of type 0x118 has sub-id 0x34 or 0x35, sets the matching flag byte (D_0013D394 / D_0013D395). */
 
@@ -76,12 +74,12 @@ void set_novalis_bolt_crank_completion_flags(char *moby) {
     if (level != 1)
         return;
     if (((short)MOBY(moby)->save_id) == 0x34 && MOBY(moby)->oclass == 0x118 &&
-        (unsigned char)moby[0x20] == 5) {
+        (unsigned char)MOBY(moby)->state == 5) {
         menu_item_enabled_0 = level;
         level = D_0015ED84;
     }
     if (level == 1 && ((short)MOBY(moby)->save_id) == 0x35 && MOBY(moby)->oclass == 0x118 &&
-        (unsigned char)moby[0x20] == 5) {
+        (unsigned char)MOBY(moby)->state == 5) {
         menu_item_enabled_1_lui = level;
     }
 }

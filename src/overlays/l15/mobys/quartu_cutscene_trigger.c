@@ -9,6 +9,9 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/save/memcard_save_data.h"
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern int D_L15_0015F5C4;
 
@@ -20,23 +23,21 @@ extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
 extern char *D_L15_001600EC;
 
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-
-extern void FUN_L00_00232fe8_v(void) __asm__("FUN_L00_00232fe8");
-
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 
-extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
-
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 
 void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
 void quartu_cutscene_trigger_update(struct Moby *moby) __asm__("FUN_L15_002eb4c0");
+
+typedef struct QuartuCutsceneTriggerVars {
+    u8  pad_0[0x4];
+    s32 unk4;
+    s32 unk8;
+} QuartuCutsceneTriggerVars;
 
 /* Moby class 1419 */
 void quartu_cutscene_trigger_update(struct Moby *moby) {
@@ -47,7 +48,7 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
         CUTSCENE_TRIGGER_FINALIZE_AND_SAVE = 3,
         CUTSCENE_TRIGGER_COMPLETED = 4
     };
-    char *trigger_data = (char *)moby->pvars;
+    QuartuCutsceneTriggerVars *trigger_data = (QuartuCutsceneTriggerVars *)moby->pvars;
     moby->update_dist = 0x80;
     switch (moby->state) {
     case CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS:
@@ -57,12 +58,12 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
             break;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)trigger_data) == 0)
             break;
-        if (((unsigned char *)l15_moby_array)[(*(int *)(trigger_data + 8) << 8) + 0x20] != 3)
+        if (((unsigned char *)l15_moby_array)[(trigger_data->unk8 << 8) + 0x20] != 3)
             break;
         start_scene(3);
         moby->state = 2;
         jet_clear_persistent(moby->mission);
-        FUN_L00_00232fe8_v();
+        FUN_L00_00232fe8();
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 != 2) {
@@ -74,9 +75,9 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
         if (D_L15_0015F5C4 != 2) {
             start_scene(4);
             moby->state = 3;
-            FUN_L00_002330d0_v();
-            if (*(int *)(trigger_data + 4) != -1) {
-                char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
+            FUN_L00_002330d0();
+            if (trigger_data->unk4 != -1) {
+                char *o = D_L15_001600EC + (trigger_data->unk4 << 7);
                 set_race_camera(o + 0x30, o + 0x70, 0, 1);
             }
         }
@@ -84,8 +85,8 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
     case CUTSCENE_TRIGGER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             unlock_planet(0x11);
-            if (*(int *)(trigger_data + 4) != -1) {
-                char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
+            if (trigger_data->unk4 != -1) {
+                char *o = D_L15_001600EC + (trigger_data->unk4 << 7);
                 jet_reset_camera(o + 0x30, o + 0x70);
             }
             queue_planet_unlock_message(0x11);
@@ -110,7 +111,8 @@ extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 
 extern int strlen_alt(char *) __asm__("FUN_001166cc");
 
-extern void print_text_with_texture_3(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_L00_001fb470");
+extern void
+print_text_with_texture_3(s32 x, s32 y, s32 color, s32 text, s32 len) __asm__("FUN_L00_001fb470");
 
 int D_L15_00162180 = 150;
 

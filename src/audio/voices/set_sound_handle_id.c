@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 struct Handle {
     u32 id;
@@ -7,7 +8,6 @@ struct Handle {
 };
 
 extern char sound_handle_id_conflict_diagnostic[] __asm__("D_00160068");
-extern void DebugPrint(char *, ...);
 void        set_sound_handle_id(u32 id, s64 arg) __asm__("FUN_00216b68");
 
 void set_sound_handle_id(u32 id, s64 playback_record_address) {

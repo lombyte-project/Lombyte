@@ -7,6 +7,55 @@
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
+#include "rnc/audio/music/music_pause.h"
+#include "rnc/audio/rpc/snd_flush_sound_commands.h"
+#include "rnc/audio/streaming/advance_audio_stream_state.h"
+#include "rnc/game/missions/update_mission_list.h"
+#include "rnc/rendering/effects/draw_transition_overlay.h"
+#include "rnc/ui/map/draw_map_screen.h"
+#include "rnc/ui/map/draw_map_screen_layers.h"
+#include "rnc/ui/map/draw_map_screen_overlay.h"
+#include "rnc/ui/map/leave_map_screen.h"
+#include "rnc/ui/menus/item_preview/clear_menu_preview_pair.h"
+#include "rnc/ui/menus/item_preview/draw_item_preview_screen.h"
+#include "rnc/ui/menus/item_preview/draw_menu_preview_objects.h"
+#include "rnc/ui/menus/item_preview/enter_item_preview.h"
+#include "rnc/ui/menus/item_preview/initialize_menu_preview_objects.h"
+#include "rnc/ui/menus/item_preview/release_menu_preview_objects.h"
+#include "rnc/ui/menus/item_preview/update_item_preview_moby.h"
+#include "rnc/ui/menus/missions/draw_missions_menu.h"
+#include "rnc/ui/menus/missions/draw_missions_menu2.h"
+#include "rnc/ui/menus/missions/enter_menu_mission_list.h"
+#include "rnc/ui/menus/missions/update_menu_mission_list.h"
+#include "rnc/ui/menus/pause/draw_pause_ring.h"
+#include "rnc/ui/menus/pause/find_next_pause_page.h"
+#include "rnc/ui/menus/pause/pause_stage_sprite_lists.h"
+#include "rnc/ui/menus/pause/set_menu_pause_flag_state.h"
+#include "rnc/ui/menus/save_data/draw_checking_memory_card_data_menu.h"
+#include "rnc/ui/menus/save_data/reset_pause_memory_card_state.h"
+#include "rnc/ui/menus/selection/load_selection_list.h"
+#include "rnc/ui/menus/selection/update_menu_grid_selection.h"
+#include "rnc/ui/menus/selection/update_menu_item_slots.h"
+#include "rnc/ui/menus/stream_image/draw_menu_stream_image.h"
+#include "rnc/ui/menus/stream_image/enter_menu_stream_image.h"
+#include "rnc/ui/menus/stream_image/leave_menu_stream_image.h"
+#include "rnc/ui/menus/stream_image/update_menu_stream_image.h"
+#include "rnc/ui/menus/system/clear_menu_selected_index.h"
+#include "rnc/ui/menus/system/menu_draw_noop.h"
+#include "rnc/ui/menus/system/menu_leave_noop.h"
+#include "rnc/ui/menus/system/menu_update_noop.h"
+#include "rnc/ui/menus/system/reset_menu_graphics_buffers.h"
+#include "rnc/ui/menus/system/update_menu_entry_actions.h"
+#include "rnc/ui/menus/system/update_menu_resource_stream.h"
+#include "rnc/ui/menus/weapons/draw_selected_item_ammo.h"
+#include "rnc/ui/menus/widgets/draw_menu_item_grid.h"
+#include "rnc/ui/menus/widgets/draw_menu_text_list.h"
+#include "rnc/ui/menus/widgets/enter_menu_help_text.h"
+#include "rnc/ui/menus/widgets/render_configured_text_label.h"
+#include "rnc/ui/menus/widgets/restore_menu_help_text.h"
+#include "rnc/ui/menus/widgets/update_menu_help_text_load.h"
+#include "rnc/ui/text/render_localized_ui_entry_list.h"
+#include "rnc/weapons/load_hand_gadget.h"
 
 extern s32 D_0015F674 MACRO_ADDR;
 extern s32            D_00141660[];
@@ -15,9 +64,6 @@ extern s32            D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
 extern s32            alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
 extern s32            D_001D0398[]; /* help_history_list list.selected */
 
-extern void music_pause(s32);
-extern s32  snd_flush_sound_commands() __asm__("FUN_0012dc80");
-extern s32  update_mission_list() __asm__("FUN_0020b950");
 extern void update_skill_point_and_gold_weapon_menu_entries() __asm__("func_00226E58");
 
 void pause_all_sounds(s32 mode) __asm__("FUN_00218d78");
@@ -50,17 +96,17 @@ void pause_all_sounds(s32 mode) {
             D_0015EEA0_macro != 0 || alternate_animation_sequence_macro != 0 || g->unkF8 != 0;
     }
     {
-        struct MenuSystem *g = &menu_system;
-        char              *menu_entry_base = (char *)&pause_menu_chain_head;
+        struct MenuSystem         *g = &menu_system;
+        struct MenuTextListScreen *head = &pause_menu_chain_head;
         g->unkDC = mode == 0x23;
-        *(char **)(menu_entry_base + 0x38) =
-            g->unkD8 ? (char *)&pause_goodies_tab : (char *)&pause_menu_chain_tail;
+        head->list.up = g->unkD8 ? (struct MenuScreen *)&pause_goodies_tab
+                                 : (struct MenuScreen *)&pause_menu_chain_tail;
     }
     {
-        struct MenuSystem *g = &menu_system;
-        char              *menu_record_base = (char *)&pause_menu_chain_tail;
-        *(char **)(menu_record_base + 0x3C) =
-            g->unkD8 ? (char *)&pause_goodies_tab : (char *)&pause_menu_chain_head;
+        struct MenuSystem         *g = &menu_system;
+        struct MenuTextListScreen *tail = &pause_menu_chain_tail;
+        tail->list.down = g->unkD8 ? (struct MenuScreen *)&pause_goodies_tab
+                                   : (struct MenuScreen *)&pause_menu_chain_head;
     }
     {
         struct MenuSystem *g = &menu_system;
@@ -103,54 +149,54 @@ s32 D_0015F674 MACRO_ADDR = 0;
  */
 #define SCREEN(screen) ((struct MenuScreen *)&(screen))
 
-extern s32  FUN_00219d80(struct MenuScreen *);
-extern void FUN_0021a318(struct MenuScreen *, s32); /* clear_menu_selected_index */
-extern s32  FUN_0021a328(struct MenuScreen *);      /* render_configured_text_label */
-extern s32  FUN_0021abf8(struct MenuScreen *);      /* update_menu_entry_actions */
-extern s32  FUN_0021b1c8(struct MenuScreen *);      /* render_localized_ui_entry_list */
-extern void FUN_0021b7a8(struct MenuScreen *, s32); /* find_next_pause_page */
-extern s32  FUN_0021b858(struct MenuScreen *);      /* update_menu_grid_selection */
-extern s32  FUN_0021bd98(struct MenuScreen *);      /* menu_update_noop */
-extern void FUN_0021bda0(struct MenuScreen *, s32); /* leave_map_screen */
-extern s32  FUN_0021be60(struct MenuScreen *);      /* draw_map_screen */
-extern void FUN_0021c420(struct MenuScreen *, s32); /* enter_menu_mission_list */
-extern s32  FUN_0021c4c0(struct MenuScreen *);      /* update_menu_mission_list */
-extern s32  FUN_0021c7a0(struct MenuScreen *);      /* update_menu_item_slots */
-extern void FUN_0021c9c8(struct MenuScreen *, s32); /* load_selection_list */
-extern void FUN_0021ca60(struct MenuScreen *, s32); /* pause_stage_sprite_lists */
-extern void FUN_0021cac8(struct MenuScreen *, s32); /* reset_pause_memory_card_state */
-extern void FUN_0021cae0(struct MenuScreen *, s32); /* reset_menu_graphics_buffers */
+extern s32 FUN_00219d80(struct MenuScreen *);
+/* clear_menu_selected_index */
+/* render_configured_text_label */
+/* update_menu_entry_actions */
+/* render_localized_ui_entry_list */
+/* find_next_pause_page */
+/* update_menu_grid_selection */
+/* menu_update_noop */
+/* leave_map_screen */
+/* draw_map_screen */
+/* enter_menu_mission_list */
+/* update_menu_mission_list */
+/* update_menu_item_slots */
+/* load_selection_list */
+/* pause_stage_sprite_lists */
+/* reset_pause_memory_card_state */
+/* reset_menu_graphics_buffers */
 extern void FUN_0021d168(struct MenuScreen *, s32);
-extern void FUN_0021d1f0(struct MenuScreen *, s32); /* menu_leave_noop */
-extern void FUN_0021d1f8(struct MenuScreen *, s32); /* enter_menu_help_text */
-extern void FUN_0021d2c8(struct MenuScreen *, s32); /* restore_menu_help_text */
-extern s32  FUN_0021d338(struct MenuScreen *);      /* update_menu_help_text_load */
-extern s32  FUN_0021d4a8(struct MenuScreen *);      /* draw_menu_text_list */
-extern s32  FUN_0021d948(struct MenuScreen *);      /* draw_menu_item_grid */
-extern void FUN_0021ddd0(struct MenuScreen *, s32); /* set_menu_pause_flag_state */
-extern s32  FUN_0021ddf8(struct MenuScreen *);      /* draw_menu_preview_objects */
-extern s32  FUN_0021df28(struct MenuScreen *);      /* menu_draw_noop */
-extern void FUN_0021df30(struct MenuScreen *, s32); /* enter_item_preview */
-extern void FUN_0021df58(struct MenuScreen *, s32); /* clear_menu_preview_pair */
-extern s32  FUN_0021df98(struct MenuScreen *);      /* update_item_preview_moby */
-extern s32  FUN_0021e110(struct MenuScreen *);      /* draw_item_preview_screen */
-extern s32  FUN_0021f158(struct MenuScreen *);      /* draw_selected_item_ammo */
-extern s32  FUN_0021f330(struct MenuScreen *);      /* draw_map_screen_overlay */
-extern s32  FUN_0021f368(struct MenuScreen *);      /* draw_missions_menu */
-extern s32  FUN_0021f688(struct MenuScreen *);      /* draw_missions_menu2 */
-extern s32  FUN_0021f990(struct MenuScreen *);      /* update_menu_stream_image */
-extern s32  FUN_0021fc68(struct MenuScreen *);      /* draw_transition_overlay */
-extern void FUN_0021fce0(struct MenuScreen *, s32); /* enter_menu_stream_image */
-extern void FUN_0021fd78(struct MenuScreen *, s32); /* leave_menu_stream_image */
-extern s32  FUN_0021fdc8(struct MenuScreen *);      /* update_menu_resource_stream */
-extern s32  FUN_00220348(struct MenuScreen *);      /* draw_checking_memory_card_data_menu */
-extern s32  FUN_00220648(struct MenuScreen *);      /* advance_audio_stream_state */
-extern s32  FUN_00220790(struct MenuScreen *);      /* draw_menu_stream_image */
-extern s32  FUN_00220850(struct MenuScreen *);      /* draw_map_screen_layers */
-extern s32  FUN_00220b20(struct MenuScreen *);      /* draw_pause_ring */
-extern void FUN_002240c8(struct MenuScreen *, s32); /* initialize_menu_preview_objects */
-extern void FUN_002242b8(struct MenuScreen *, s32); /* release_menu_preview_objects */
-extern s32  FUN_00224368(struct MenuScreen *);      /* load_hand_gadget */
+/* menu_leave_noop */
+/* enter_menu_help_text */
+/* restore_menu_help_text */
+/* update_menu_help_text_load */
+/* draw_menu_text_list */
+/* draw_menu_item_grid */
+/* set_menu_pause_flag_state */
+/* draw_menu_preview_objects */
+/* menu_draw_noop */
+/* enter_item_preview */
+/* clear_menu_preview_pair */
+/* update_item_preview_moby */
+/* draw_item_preview_screen */
+/* draw_selected_item_ammo */
+/* draw_map_screen_overlay */
+/* draw_missions_menu */
+/* draw_missions_menu2 */
+/* update_menu_stream_image */
+/* draw_transition_overlay */
+/* enter_menu_stream_image */
+/* leave_menu_stream_image */
+/* update_menu_resource_stream */
+/* draw_checking_memory_card_data_menu */
+/* advance_audio_stream_state */
+/* draw_menu_stream_image */
+/* draw_map_screen_layers */
+/* draw_pause_ring */
+/* initialize_menu_preview_objects */
+/* release_menu_preview_objects */
+/* load_hand_gadget */
 
 extern struct MenuStreamEntry D_00138008[];
 extern struct MenuStreamEntry D_00138080[];
@@ -178,8 +224,8 @@ struct MenuTextItem toggle_exit_hint_items[3] = {
 };
 
 struct MenuTextListScreen toggle_exit_hint_list = {
-    {                                              0,           FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, toggle_exit_hint_items}
+    {                                              0, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,         toggle_exit_hint_items}
 };
 
 struct MenuTextItem exit_hint_items[2] = {
@@ -195,8 +241,8 @@ struct MenuTextItem level_map_hint_items[4] = {
 };
 
 struct MenuTextListScreen exit_hint_list = {
-    {                                              0,    FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, exit_hint_items}
+    {                                              0, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,                exit_hint_items}
 };
 
 struct MenuPage pause_root_page = {
@@ -249,45 +295,45 @@ struct MenuTextItem pause_goodies_tab_items[2] = {
 };
 
 struct MenuTextListScreen pause_menu_chain_head = {
-    {FUN_0021abf8, FUN_0021b1c8, FUN_0021ddd0},
+    {update_menu_entry_actions, render_localized_ui_entry_list, set_menu_pause_flag_state},
     {MENU_LIST_LARGE_FONT, pause_weapons_tab_items, 0, SCREEN(pause_gadgets_tab)}
 };
 
 struct MenuTextListScreen pause_gadgets_tab = {
-    {FUN_0021abf8, FUN_0021b1c8, FUN_0021ddd0},
+    {update_menu_entry_actions, render_localized_ui_entry_list, set_menu_pause_flag_state},
     {MENU_LIST_LARGE_FONT,
      pause_gadgets_tab_items, SCREEN(pause_menu_chain_head),
      SCREEN(pause_quick_select_tab)}
 };
 
 struct MenuTextListScreen pause_quick_select_tab = {
-    {FUN_0021abf8, FUN_0021b1c8, FUN_0021ddd0},
+    {update_menu_entry_actions, render_localized_ui_entry_list, set_menu_pause_flag_state},
     {MENU_LIST_LARGE_FONT,
      pause_quick_select_tab_items, SCREEN(pause_gadgets_tab),
      SCREEN(pause_items_tab)}
 };
 
 struct MenuTextListScreen pause_items_tab = {
-    {FUN_0021abf8, FUN_0021b1c8},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
     {MENU_LIST_LARGE_FONT,
      pause_items_tab_items, SCREEN(pause_quick_select_tab),
      SCREEN(pause_help_tab)}
 };
 
 struct MenuTextListScreen pause_help_tab = {
-    {FUN_0021abf8, FUN_0021b1c8},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
     {MENU_LIST_LARGE_FONT,
      pause_help_tab_items, SCREEN(pause_items_tab),
      SCREEN(pause_menu_chain_tail)}
 };
 
 struct MenuTextListScreen pause_menu_chain_tail = {
-    {FUN_0021abf8, FUN_0021b1c8},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
     {MENU_LIST_LARGE_FONT, pause_options_tab_items, SCREEN(pause_help_tab)}
 };
 
 struct MenuTextListScreen pause_goodies_tab = {
-    {FUN_0021abf8, FUN_0021b1c8},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
     {MENU_LIST_LARGE_FONT,
      pause_goodies_tab_items, SCREEN(pause_menu_chain_tail),
      SCREEN(pause_menu_chain_head)}
@@ -315,42 +361,42 @@ struct MenuPage pause_gadgets_page = {
 };
 
 struct MenuLabelScreen pause_gadgets_title = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4EE3}
 };
 
 struct MenuLabelScreen pause_item_info_label = {
-    {                             FUN_00219d80,        FUN_0021a328,         FUN_0021a318},
-    {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y, (s32)menu_item_info, sizeof(MenuItemInfo)}
+    {                             FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
+    {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y,          (s32)menu_item_info,      sizeof(MenuItemInfo)}
 };
 
 struct MenuLabelScreen pause_hand_gadgets_heading = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_FULL_HEIGHT | MENU_LABEL_NO_SCROLL | MENU_LABEL_SMALL_FONT | MENU_LABEL_FIXED_TEXT |
          MENU_LABEL_CENTER_X, 0x4EE8}  /* "Hand" */
 };
 
 struct MenuLabelScreen pause_pack_gadgets_heading = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_FULL_HEIGHT | MENU_LABEL_NO_SCROLL | MENU_LABEL_SMALL_FONT | MENU_LABEL_FIXED_TEXT |
          MENU_LABEL_CENTER_X, 0x4EE9}  /* "Back Packs" */
 };
 
 struct MenuLabelScreen pause_head_gadgets_heading = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_FULL_HEIGHT | MENU_LABEL_NO_SCROLL | MENU_LABEL_SMALL_FONT | MENU_LABEL_FIXED_TEXT |
          MENU_LABEL_CENTER_X, 0x4EEA}  /* "Head" */
 };
 
 struct MenuLabelScreen pause_foot_gadgets_heading = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_FULL_HEIGHT | MENU_LABEL_NO_SCROLL | MENU_LABEL_SMALL_FONT | MENU_LABEL_FIXED_TEXT |
          MENU_LABEL_CENTER_X, 0x4EEB}  /* "Foot" */
 };
 
 struct MenuGridScreen pause_hand_gadget_grid = {
-    {FUN_0021b858, FUN_0021d948},
+    {update_menu_grid_selection, draw_menu_item_grid},
     {MENU_GRID_NO_EQUIPPED_FRAME,
      0.1f, 0.1f,
      0, 2,
@@ -360,7 +406,7 @@ struct MenuGridScreen pause_hand_gadget_grid = {
 };
 
 struct MenuGridScreen pause_pack_gadget_grid = {
-    {FUN_0021b858, FUN_0021d948, FUN_0021b7a8},
+    {update_menu_grid_selection, draw_menu_item_grid, find_next_pause_page},
     {MENU_GRID_HIDDEN_WITH_UNK138,
      0.1f, 0.1f,
      0, 1,
@@ -370,7 +416,7 @@ struct MenuGridScreen pause_pack_gadget_grid = {
 };
 
 struct MenuGridScreen pause_head_gadget_grid = {
-    {FUN_0021b858, FUN_0021d948, FUN_0021b7a8},
+    {update_menu_grid_selection, draw_menu_item_grid, find_next_pause_page},
     {MENU_GRID_HIDDEN_WITH_UNK134,
      0.1f, 0.1f,
      0, 1,
@@ -380,7 +426,7 @@ struct MenuGridScreen pause_head_gadget_grid = {
 };
 
 struct MenuGridScreen pause_foot_gadget_grid = {
-    {FUN_0021b858, FUN_0021d948, FUN_0021b7a8},
+    {update_menu_grid_selection, draw_menu_item_grid, find_next_pause_page},
     {0x10 /* not read by the grid code */,
      0.1f, 0.1f,
      0, 1,
@@ -432,30 +478,34 @@ struct MenuPage pause_weapons_page = {
 };
 
 struct MenuLabelScreen pause_weapons_title = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4EE2}
 };
 
 struct MenuItemPreviewScreen pause_hand_model_screen = {
-    {FUN_00224368, FUN_0021ddf8, FUN_002240c8, FUN_002242b8, 2}
+    {load_hand_gadget,
+     draw_menu_preview_objects, initialize_menu_preview_objects,
+     release_menu_preview_objects, 2}
 };
 
 struct MenuGridScreen pause_weapon_grid = {
-    {FUN_0021b858, FUN_0021d948},
+    {update_menu_grid_selection, draw_menu_item_grid},
     {MENU_GRID_NO_EQUIPPED_FRAME, 0.08f, 0.08f, 0, 3, 5, pause_item_candidate_entries}
 };
 
 struct MenuPlainScreenC0 menu_noop_screen = {
-    {FUN_0021bd98, FUN_0021df28}
+    {menu_update_noop, menu_draw_noop}
 };
 
 struct MenuItemPreviewScreen pause_item_preview_screen = {
-    {FUN_0021df98, FUN_0021e110, FUN_0021df30, FUN_0021df58, 2}
+    {update_item_preview_moby,
+     draw_item_preview_screen, enter_item_preview,
+     clear_menu_preview_pair, 2}
 };
 
 struct MenuPlainScreen68 pause_weapon_ammo_screen = {
-    {FUN_0021bd98, FUN_0021f158}
+    {menu_update_noop, draw_selected_item_ammo}
 };
 
 struct MenuTextItem equip_exit_hint_items[3] = {
@@ -465,8 +515,8 @@ struct MenuTextItem equip_exit_hint_items[3] = {
 };
 
 struct MenuTextListScreen equip_exit_hint_list = {
-    {                                              0,          FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, equip_exit_hint_items}
+    {                                              0, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,          equip_exit_hint_items}
 };
 
 struct MenuGridCell pause_item_candidate_entries[15] = {
@@ -504,13 +554,13 @@ struct MenuPage pause_quick_select_page = {
 };
 
 struct MenuLabelScreen pause_quick_select_title = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4EE4}
 };
 
 struct MenuGridScreen pause_quick_select_weapon_grid = {
-    {FUN_0021b858, FUN_0021d948},
+    {update_menu_grid_selection, draw_menu_item_grid},
     {0x20,
      0.08f, 0.08f,
      0, 3,
@@ -520,7 +570,7 @@ struct MenuGridScreen pause_quick_select_weapon_grid = {
 };
 
 struct MenuGridScreen pause_quick_select_gadget_grid = {
-    {FUN_0021b858, FUN_0021d948},
+    {update_menu_grid_selection, draw_menu_item_grid},
     {0,
      0.1f, 0.1f,
      0, 2,
@@ -530,11 +580,11 @@ struct MenuGridScreen pause_quick_select_gadget_grid = {
 };
 
 struct MenuItemSlotsScreen pause_quick_select_ring = {
-    {FUN_0021c7a0, FUN_00220b20, FUN_0021c9c8, FUN_0021ca60}
+    {update_menu_item_slots, draw_pause_ring, load_selection_list, pause_stage_sprite_lists}
 };
 
 struct MenuLabelScreen D_001CF3C0 = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_SMALL_FONT | MENU_LABEL_FIXED_TEXT | MENU_LABEL_CENTER_Y | MENU_LABEL_CENTER_X,
      0x4EED}
 };
@@ -552,30 +602,30 @@ struct MenuPage map_circle_destination_page = {
 };
 
 struct MenuLabelScreen map_location_label = {
-    {                FUN_00219d80,    FUN_0021a328,FUN_0021a318},
+    {                FUN_00219d80, render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT | MENU_LABEL_CENTER_Y |
-MENU_LABEL_CENTER_X, (s32)D_001DDD4C,
-     0xC     }
+MENU_LABEL_CENTER_X,              (s32)D_001DDD4C,
+     0xC                  }
 };
 
 struct MenuLabelScreen map_planet_label = {
-    {                                      FUN_00219d80,FUN_0021a328,FUN_0021a318},
+    {                                      FUN_00219d80,render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_PLANET_PREFIX | MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT |
 MENU_LABEL_CENTER_Y | MENU_LABEL_CENTER_X,
      (s32)D_001DDD50,
-     0xC     }
+     0xC                  }
 };
 
 struct MenuMapScreen map_screen = {
-    {FUN_0021be60, FUN_0021f330, 0, FUN_0021bda0}
+    {draw_map_screen, draw_map_screen_overlay, 0, leave_map_screen}
 };
 
 struct MenuMapScreen map_globe_screen = {
-    {0, FUN_00220850, FUN_0021cac8}
+    {0, draw_map_screen_layers, reset_pause_memory_card_state}
 };
 
 struct MenuPlainScreen58 map_legend_screen = {
-    {FUN_00219d80, FUN_0021f368}
+    {FUN_00219d80, draw_missions_menu}
 };
 
 struct MenuPage map_cross_destination_page = {
@@ -594,21 +644,24 @@ struct MenuPage map_cross_destination_page = {
 };
 
 struct MenuStreamScreen missions_picture_screen = {
-    {FUN_0021f990,                                 FUN_0021fc68, FUN_0021fce0, FUN_0021fd78},
-    {  D_00138080, MENU_STREAM_UNPACK | MENU_STREAM_FIXED_ENTRY,          219,          175}
+    {update_menu_stream_image,
+     draw_transition_overlay, enter_menu_stream_image,
+     leave_menu_stream_image                                                                             },
+    {              D_00138080, MENU_STREAM_UNPACK | MENU_STREAM_FIXED_ENTRY,                     219, 175}
 };
 
 struct MenuLabelScreen missions_location_label = {
-    {                FUN_00219d80,    FUN_0021a328,FUN_0021a318},
+    {                FUN_00219d80, render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT | MENU_LABEL_CENTER_Y |
-MENU_LABEL_CENTER_X, (s32)D_001DDD4C,
-     0xC     }
+MENU_LABEL_CENTER_X,              (s32)D_001DDD4C,
+     0xC                  }
 };
 
-struct MenuScreen missions_list_screen = {FUN_0021c4c0, FUN_0021f688, FUN_0021c420};
+struct MenuScreen missions_list_screen = {
+    update_menu_mission_list, draw_missions_menu2, enter_menu_mission_list};
 
 struct MenuLabelScreen missions_description_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_TEXT_523E | MENU_LABEL_SMALL_FONT | MENU_LABEL_FIXED_TEXT}
 };
 
@@ -625,12 +678,14 @@ struct MenuPage pause_help_page = {
 };
 
 struct MenuStreamScreen pause_help_image = {
-    {FUN_0021fdc8,       FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {  D_00138008, MENU_STREAM_UNPACK,          147,          133}
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                      },
+    {                 D_00138008, MENU_STREAM_UNPACK,                     147, 133}
 };
 
 struct MenuLabelScreen pause_help_title = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021cae0},
+    {FUN_00219d80, render_configured_text_label, reset_menu_graphics_buffers},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F5E}
 };
@@ -647,13 +702,13 @@ struct MenuTextItem pause_help_items[6] = {
 s32 pause_help_descriptions[5] = {0x4FD6, 0x4EFD, 0x4EFE, 0x4EFF, 0x4F00};
 
 struct MenuLabelScreen pause_help_description_label = {
-    {                                        FUN_00219d80,                 FUN_0021a328, FUN_0021a318},
-    {MENU_LABEL_BY_LIST_SELECTION | MENU_LABEL_SMALL_FONT, (s32)pause_help_descriptions,            4}
+    {                                        FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
+    {MENU_LABEL_BY_LIST_SELECTION | MENU_LABEL_SMALL_FONT, (s32)pause_help_descriptions,                         4}
 };
 
 struct MenuTextListScreen pause_help_list = {
-    {  FUN_0021abf8,     FUN_0021b1c8},
-    {MENU_LIST_WRAP, pause_help_items}
+    {update_menu_entry_actions, render_localized_ui_entry_list},
+    {           MENU_LIST_WRAP,               pause_help_items}
 };
 
 struct MenuTextItem select_exit_hint_items[3] = {
@@ -663,8 +718,8 @@ struct MenuTextItem select_exit_hint_items[3] = {
 };
 
 struct MenuTextListScreen select_exit_hint_list = {
-    {                                              0,           FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, select_exit_hint_items}
+    {                                              0, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,         select_exit_hint_items}
 };
 
 struct MenuPage help_history_page = {
@@ -679,9 +734,9 @@ struct MenuPage help_history_page = {
 };
 
 struct MenuLabelScreen help_history_title = {
-    {                                                                             FUN_00219d80,FUN_0021a328},
+    {                                                                             FUN_00219d80,render_configured_text_label},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
-     0x4FD5  }
+     0x4FD5                  }
 };
 
 struct MenuTextItem help_history_menu_items[151] = {
@@ -693,12 +748,14 @@ struct MenuTextItem help_history_menu_items[151] = {
 };
 
 struct MenuTextListScreen help_history_list = {
-    {FUN_0021abf8, FUN_0021d4a8, FUN_0021d168, FUN_0021d1f0},
+    {update_menu_entry_actions, draw_menu_text_list, FUN_0021d168, menu_leave_noop},
     {MENU_LIST_CENTERED | MENU_LIST_FIXED_STEP, help_history_menu_items}
 };
 
 struct MenuLabelScreen help_history_text_label = {
-    {FUN_0021d338, FUN_0021a328, FUN_0021d1f8, FUN_0021d2c8},
+    {update_menu_help_text_load,
+     render_configured_text_label, enter_menu_help_text,
+     restore_menu_help_text},
     {MENU_LABEL_BY_HELP_ENTRY | MENU_LABEL_SMALL_FONT}
 };
 
@@ -715,13 +772,15 @@ struct MenuPage controls_help_page = {
 };
 
 struct MenuLabelScreen controls_help_title = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021cae0},
+    {FUN_00219d80, render_configured_text_label, reset_menu_graphics_buffers},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4EF1}
 };
 
 struct MenuStreamScreen controls_help_pictures = {
-    {FUN_00220648, FUN_00220790, FUN_0021fce0, FUN_0021fd78}
+    {advance_audio_stream_state,
+     draw_menu_stream_image, enter_menu_stream_image,
+     leave_menu_stream_image}
 };
 
 struct MenuPage moves_help_page = {
@@ -737,7 +796,7 @@ struct MenuPage moves_help_page = {
 };
 
 struct MenuLabelScreen moves_help_title = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4EF2}
 };

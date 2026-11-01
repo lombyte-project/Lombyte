@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/rpc/rpc/queue_peek_read_done.h"
 
 typedef struct {
     u8           pad_0[4];
@@ -17,7 +18,6 @@ typedef struct {
 
 extern TtyQueue *tty_read_input_queues[] __asm__("D_00154A68");
 extern TtyState  D_00154A50;
-extern void      QueuePeekReadDone();
 
 s32 sceTtyRead(s8 *destination, s32 size) {
     s32 i;

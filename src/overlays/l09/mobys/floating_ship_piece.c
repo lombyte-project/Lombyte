@@ -1,5 +1,6 @@
 /* Level 09 moby classes 0x50d, 0x528: floating ship piece. */
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -70,7 +71,7 @@ void floating_ship_piece_update(char *moby) {
 
     fast_vec_scale(movement, moby + 0x10, -1.0f);
     qcopy(original_rotation, moby + 0x40);
-    old_z = *(float *)(moby + 0x18);
+    old_z = MOBY(moby)->pos.z;
     sink_level = *(float *)(floating_ship_piece_vars + 0x84) - 0.300000012f;
     state = ((unsigned char *)moby)[0x20];
     switch (state) {
@@ -78,17 +79,17 @@ void floating_ship_piece_update(char *moby) {
         *(int *)(floating_ship_piece_vars + 0x80) = 1;
         qcopy(floating_ship_piece_vars + 0x60, moby + 0x40);
         qzero(floating_ship_piece_vars + 0x70);
-        start_z = *(float *)(moby + 0x18);
+        start_z = MOBY(moby)->pos.z;
         *(float *)(floating_ship_piece_vars + 0x84) = start_z;
         if (*(int *)(floating_ship_piece_vars + 0x8C) != -1) {
-            *(float *)(moby + 0x18) = start_z - 5.0f;
-            *(float *)(moby + 0x40) = random_float_between(-1.57079637f, 1.57079637f);
-            *(float *)(moby + 0x44) = random_float_between(-1.57079637f, 1.57079637f);
-            moby[0x20] = 1;
+            MOBY(moby)->pos.z = start_z - 5.0f;
+            MOBY(moby)->rot.x = random_float_between(-1.57079637f, 1.57079637f);
+            MOBY(moby)->rot.y = random_float_between(-1.57079637f, 1.57079637f);
+            MOBY(moby)->state = 1;
         } else {
             func_001E9730_30A560(
-                D_L09_00209518_30A560, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
-            moby[0x20] = 2;
+                D_L09_00209518_30A560, *(short *)(moby + 0xB2), MOBY(moby)->oclass);
+            MOBY(moby)->state = 2;
         }
         break;
     case PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL:
@@ -104,7 +105,7 @@ void floating_ship_piece_update(char *moby) {
             break;
         }
     set2:
-        moby[0x20] = 2;
+        MOBY(moby)->state = 2;
         break;
     case PLATFORM_STATE_ACTIVE:
         if (hero.air_frames.s == 0 && ((char *)hero.ground_moby) == moby) {
@@ -144,8 +145,8 @@ void floating_ship_piece_update(char *moby) {
                 floating_ship_piece_loaded_tilt_time_squared_gain_gp * deg_to_rad * frame_time_sq,
                 floating_ship_piece_loaded_tilt_frame_scale_squared_gain_gp * frame_scale_sq,
                 floating_ship_piece_loaded_tilt_snap_tolerance_scale_gp * deg_to_rad * frame_time);
-            new_z = *(float *)(moby + 0x18) - floating_ship_piece_sink_speed_gp * frame_time;
-            *(float *)(moby + 0x18) = new_z;
+            new_z = MOBY(moby)->pos.z - floating_ship_piece_sink_speed_gp * frame_time;
+            MOBY(moby)->pos.z = new_z;
             if (sink_level < old_z && new_z <= sink_level) {
                 allocate_voice_for_target_entry(1, 0, moby);
             }
@@ -157,7 +158,7 @@ void floating_ship_piece_update(char *moby) {
             fast_vec_sub(
                 (unsigned char *)&hero + 0xF0, carried_pos, ((unsigned char *)&hero + 0x80));
             hero.motion.platform_delta.f[2] =
-                hero.motion.platform_delta.f[2] + (*(float *)(moby + 0x18) - old_pos[2]);
+                hero.motion.platform_delta.f[2] + (MOBY(moby)->pos.z - old_pos[2]);
         } else {
             float rise;
             ((Mpos_30A560 *)moby)->z =
@@ -230,10 +231,10 @@ void floating_ship_piece_update(char *moby) {
                                          0.0872664601f,
                                          frame_time * 0.436332315f,
                                          frame_time * 0.541052043f);
-        *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(floating_ship_piece_vars + 0x60),
-                                                     *(float *)(moby + 0x40));
-        *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(floating_ship_piece_vars + 0x64),
-                                                     *(float *)(moby + 0x44));
+        MOBY(moby)->rot.x =
+            fast_add_rotations(*(float *)(floating_ship_piece_vars + 0x60), MOBY(moby)->rot.x);
+        MOBY(moby)->rot.y =
+            fast_add_rotations(*(float *)(floating_ship_piece_vars + 0x64), MOBY(moby)->rot.y);
         fast_vec_add(movement, movement, moby + 0x10);
         update_entity_matrix(
             floating_ship_piece_vars + 0x20, movement, original_rotation, moby + 0x40);

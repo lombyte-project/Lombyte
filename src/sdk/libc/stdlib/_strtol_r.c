@@ -21,15 +21,15 @@
  * ctype table D_00152201 (= _ctype_ + 1). */
 
 #include "types.h"
+#include "rnc/sdk/soft_float/__muldi3.h"
+#include "rnc/sdk/soft_float/udivdi3.h"
+#include "rnc/sdk/soft_float/umoddi3.h"
 
 typedef struct _reent {
     s32 _errno;
 } _reent;
 
-extern u8  D_00152201[];
-extern u64 __umoddi3(u64, u64);
-extern u64 __udivdi3(u64, u64);
-extern u64 __muldi3(u64, u64);
+extern u8 D_00152201[];
 
 #define _U 01
 #define _L 02

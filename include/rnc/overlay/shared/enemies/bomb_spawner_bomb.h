@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BOMB_SPAWNER_BOMB_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BOMB_SPAWNER_BOMB_H
+
+#include "types.h"
+
+struct Moby;
+
+void bomb_spawner_bomb_update(struct Moby *) __asm__("FUN_L03_002c4718");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BOMB_SPAWNER_BOMB_H */

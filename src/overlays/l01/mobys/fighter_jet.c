@@ -1,12 +1,15 @@
 /* Level 01 moby class fighter_jet. */
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/vehicles/gunship.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
@@ -29,7 +32,7 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002BA898.c: func_L01_002F5800), where it is exact; names translated to the US level program. */
 
@@ -57,9 +60,7 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_00263d40(int, int);
 extern void FUN_L01_0030be70(char *, void *, float);
-extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
 /* Per-frame update of a breakable moby: scales its speed by distance, and on a hit spawns the break effect, frees its child mobys and removes itself; otherwise fades its alpha by height. */
 void fighter_jet_update(char *moby) __asm__("FUN_L01_002f4428");
@@ -73,7 +74,7 @@ void fighter_jet_update(char *moby) {
     float speed_scale;
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (((unsigned char *)moby)[0x20] == 0) {
-        *(float *)(fighter_jet_vars + 0x170) = *(float *)(moby + 0x2C);
+        *(float *)(fighter_jet_vars + 0x170) = MOBY(moby)->scale;
         *(float *)(fighter_jet_vars + 0x174) = *(float *)(fighter_jet_vars + 0xFC);
     }
     {
@@ -88,7 +89,7 @@ void fighter_jet_update(char *moby) {
         if (speed_scale < min_scale)
             speed_scale = min_scale;
     }
-    *(float *)(moby + 0x2C) = *(float *)(fighter_jet_vars + 0x170) * speed_scale;
+    MOBY(moby)->scale = *(float *)(fighter_jet_vars + 0x170) * speed_scale;
     *(float *)(fighter_jet_vars + 0xFC) = *(float *)(fighter_jet_vars + 0x174) * speed_scale;
     if (hit != 0) {
         int  i;
@@ -98,10 +99,10 @@ void fighter_jet_update(char *moby) {
         if (item_unlocked[0] == 0) {
             item_unlocked[0] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
         fast_vec_sub(hit_vec, fighter_jet_vars + 0xD0, fighter_jet_vars + 0xE0);
-        moby[0x20] = 0x65;
+        MOBY(moby)->state = 0x65;
         *(u128 *)hit_dir = *(u128 *)hit_vec;
         spawn_explosion(moby,
                         hit_dir,
@@ -134,14 +135,14 @@ void fighter_jet_update(char *moby) {
     if (((unsigned char *)moby)[0x20] == 0x65)
         return;
     gunship_update(moby);
-    *(unsigned short *)(moby + 0x34) |= 0x1000;
+    MOBY(moby)->flags |= 0x1000;
     fighter_jet_vars[0x2B] = 1;
     fighter_jet_vars[0x2C] = 0x64;
-    if (175.0f <= *(float *)(moby + 0x18)) {
-        moby[0x23] = 0;
-    } else if (125.0f < *(float *)(moby + 0x18) && *(float *)(moby + 0x18) < 175.0f) {
-        moby[0x23] = truncate_float_to_s32((175.0f - *(float *)(moby + 0x18)) * 128.0f / 50.0f);
-    } else if (*(float *)(moby + 0x18) <= 125.0f) {
+    if (175.0f <= MOBY(moby)->pos.z) {
+        MOBY(moby)->alpha = 0;
+    } else if (125.0f < MOBY(moby)->pos.z && MOBY(moby)->pos.z < 175.0f) {
+        MOBY(moby)->alpha = truncate_float_to_s32((175.0f - MOBY(moby)->pos.z) * 128.0f / 50.0f);
+    } else if (MOBY(moby)->pos.z <= 125.0f) {
         ((unsigned char *)moby)[0x23] = 0x80;
     }
 }

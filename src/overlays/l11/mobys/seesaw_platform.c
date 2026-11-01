@@ -10,6 +10,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/l11/hero/hero_set_state.h"
 
 extern float fast_add_rotations(float, float);
 
@@ -25,7 +26,6 @@ extern float seesaw_rider_spin_change_gain_degrees_gp __asm__("D_L11_00161F78")
 extern float seesaw_tilt_feedback_gain_degrees_gp __asm__("D_L11_00161F7C") __attribute__((sda));
 extern float seesaw_spin_feedback_gain_degrees_gp __asm__("D_L11_00161F80") __attribute__((sda));
 extern float seesaw_fall_tilt_threshold_degrees_gp __asm__("D_L11_00161F84") __attribute__((sda));
-extern int   hero_set_state(int, int) __asm__("FUN_L11_0024db50");
 
 /* Private variables of the tilting platform (seesaw_platform_update). */
 struct L11TiltVars {

@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "sda.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 
 /* libmc (SDK) client side. Each call takes mc_sema, sends one RPC to the
    mcserv module and leaves its function number in mc_current_func until

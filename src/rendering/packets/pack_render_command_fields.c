@@ -1,4 +1,4 @@
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 void pack_render_command_fields(u64 *command_words,
                                 u64  upper_field,

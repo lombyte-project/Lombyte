@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 

@@ -7,7 +7,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 /* pvars of the moby run by FUN_L01_002f2eb8 */
 typedef struct {

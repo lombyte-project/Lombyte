@@ -1,10 +1,10 @@
 /* checkModelVersion c2: read the model-version string and validate its range. */
 
 #include "types.h"
+#include "rnc/sdk/storage/fileio/sceClose.h"
+#include "rnc/sdk/storage/fileio/sceRead.h"
 
 extern s32 sceOpen(const char *path, s32 flags);
-extern s32 sceRead(s32 fd, void *buf, s32 size);
-extern s32 sceClose(s32 fd);
 extern s32 atoi(const char *str) __asm__("CheckStateRange");
 const u8   D_00153030[] = "rom0:ROMVER";
 

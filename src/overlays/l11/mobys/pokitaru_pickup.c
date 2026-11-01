@@ -15,7 +15,6 @@
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC828), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013D4E3[];
-void                 mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c828");
 
 void pokitaru_pickup_update(struct Moby *moby) __asm__("FUN_L11_002cb668");
 

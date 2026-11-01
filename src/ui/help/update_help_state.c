@@ -6,21 +6,10 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/help/force_help_message.h"
 #include "rnc/ui/help/find_help_message_index.h"
+#include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
+#include "rnc/ui/text/link_localized_display_text.h"
 
-typedef struct {
-    s32 state;    /* 0x00 */
-    s32 timer;    /* 0x04 */
-    s32 pad08[6]; /* 0x08 */
-    s32 msg;      /* 0x20 */
-    s32 pending;  /* 0x24 */
-    s32 entry;    /* 0x28 */
-    s32 count;    /* 0x2C */
-    s32 started;  /* 0x30 */
-    s32 delay;    /* 0x34 */
-    s16 queued;   /* 0x38 */
-    s16 shown;    /* 0x3A */
-    s32 wait[1];  /* 0x3C */
-} HelpState;
+#include "rnc/ui/help/help_state.h"
 
 typedef struct {
     void *text;
@@ -33,29 +22,26 @@ typedef struct {
 #include "rnc/math/fast_math.h"
 
 extern TextEntry *help_msgs __asm__("D_0015F6A0");
-extern HelpState  D_001996D0;
 
-extern s32  fast_dec_timer(void *) __asm__("func_001F9740");
-extern void link_localized_display_text(void) __asm__("FUN_001fdd58");
-extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
+extern s32 fast_dec_timer(void *) __asm__("func_001F9740");
 
 void update_help_state(void) __asm__("FUN_001fde90");
 
 #define PLAY_TIME (scale_game_frames(D_0015EEA4) / 600)
 
 #define RECORD_COUNT()                                 \
-    if (D_00141968[D_001996D0.entry].count < 0xFFFF) { \
-        D_00141968[D_001996D0.entry].count++;          \
+    if (D_00141968[help_state.entry].count < 0xFFFF) { \
+        D_00141968[help_state.entry].count++;          \
     }
 
 #define RECORD_BEST()                                    \
-    if (PLAY_TIME > D_00141968[D_001996D0.entry].best) { \
-        D_00141968[D_001996D0.entry].best = PLAY_TIME;   \
+    if (PLAY_TIME > D_00141968[help_state.entry].best) { \
+        D_00141968[help_state.entry].best = PLAY_TIME;   \
     }
 
 #define RECORD_FLAGS()                   \
-    D_00141968[D_001996D0.entry].flags = \
-        D_00141968[D_001996D0.entry].flags | (1 << current_level_index) | 0x80000000
+    D_00141968[help_state.entry].flags = \
+        D_00141968[help_state.entry].flags | (1 << current_level_index) | 0x80000000
 
 void update_help_state(void) {
     enum {
@@ -70,36 +56,36 @@ void update_help_state(void) {
         HELP_STATE_QUEUED_MESSAGE_WAIT = 8
     };
 
-    if (D_001996D0.started == 0) {
-        if (D_001996D0.delay == 0 &&
+    if (help_state.started == 0) {
+        if (help_state.delay == 0 &&
             (controller_state.held & (PAD_UP | PAD_RIGHT | PAD_DOWN | PAD_LEFT))) {
-            D_001996D0.delay = 1;
+            help_state.delay = 1;
         }
-        if (D_001996D0.delay != 0) {
-            if (++D_001996D0.delay >= scale_game_frames(0x78)) {
-                D_001996D0.started = 1;
+        if (help_state.delay != 0) {
+            if (++help_state.delay >= scale_game_frames(0x78)) {
+                help_state.started = 1;
             }
         }
     }
 
-    if (game_mode != 0 || D_001996D0.started == 0) {
-        D_001996D0.pending = -1;
-        D_001996D0.state = 0;
-        D_001996D0.timer = 0;
+    if (game_mode != 0 || help_state.started == 0) {
+        help_state.pending = -1;
+        help_state.state = 0;
+        help_state.timer = 0;
         return;
     }
 
-    D_001996D0.timer++;
-    switch (D_001996D0.state) {
+    help_state.timer++;
+    switch (help_state.state) {
     case HELP_STATE_QUEUED_MESSAGE_WAIT:
-        if (D_001996D0.queued != 0) {
+        if (help_state.queued != 0) {
             break;
         }
-        if (D_001996D0.msg >= 0) {
-            if (D_001996D0.shown == 0) {
-                if (fast_dec_timer(D_001996D0.wait) != 0) {
+        if (help_state.msg >= 0) {
+            if (help_state.shown == 0) {
+                if (fast_dec_timer(help_state.wait) != 0) {
                     link_localized_display_text();
-                    D_001996D0.shown++;
+                    help_state.shown++;
                 }
                 break;
             }
@@ -107,16 +93,16 @@ void update_help_state(void) {
         }
         RECORD_BEST();
         RECORD_FLAGS();
-        D_001996D0.msg = -1;
-        D_001996D0.state = 0;
-        D_001996D0.shown = 0;
+        help_state.msg = -1;
+        help_state.state = 0;
+        help_state.shown = 0;
         break;
 
     case HELP_STATE_IDLE:
-        if (D_001996D0.pending >= 0) {
-            D_001996D0.msg = find_help_message_index(D_001996D0.pending);
-            D_001996D0.pending = -1;
-            if (D_001996D0.msg >= 0) {
+        if (help_state.pending >= 0) {
+            help_state.msg = find_help_message_index(help_state.pending);
+            help_state.pending = -1;
+            if (help_state.msg >= 0) {
                 link_localized_display_text();
             }
         }
@@ -126,7 +112,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        id = help_msgs[D_001996D0.msg].id;
+        id = help_msgs[help_state.msg].id;
         if (id >= 0 && music_stream_state.secondary.handle == 0 &&
             music_stream_state.queued_secondary_track == -1) {
             music_stream_state.queued_secondary_track = id + 0x7530;
@@ -135,11 +121,11 @@ void update_help_state(void) {
             RECORD_COUNT();
             RECORD_BEST();
             RECORD_FLAGS();
-            D_001996D0.timer = 8 - D_001996D0.timer;
-            D_001996D0.state = 7;
-        } else if (D_001996D0.timer >= 6) {
-            D_001996D0.timer = 0;
-            D_001996D0.state = 2;
+            help_state.timer = 8 - help_state.timer;
+            help_state.state = 7;
+        } else if (help_state.timer >= 6) {
+            help_state.timer = 0;
+            help_state.state = 2;
         }
         break;
     }
@@ -151,15 +137,15 @@ void update_help_state(void) {
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_BEST();
-            D_001996D0.state = 7;
-            D_001996D0.timer = 0;
+            help_state.state = 7;
+            help_state.timer = 0;
             RECORD_FLAGS();
-        } else if (D_001996D0.timer >= scale_game_frames(0x18)) {
+        } else if (help_state.timer >= scale_game_frames(0x18)) {
             if (music_stream_state.secondary.state == 3 ||
-                (id = help_msgs[D_001996D0.msg].id) == -1 ||
+                (id = help_msgs[help_state.msg].id) == -1 ||
                 id != music_stream_state.secondary.track - 0x7530) {
-                D_001996D0.state = 3;
-                D_001996D0.timer = 0;
+                help_state.state = 3;
+                help_state.timer = 0;
             }
         }
         break;
@@ -170,12 +156,12 @@ void update_help_state(void) {
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_BEST();
-            D_001996D0.state = 7;
-            D_001996D0.timer = 0;
+            help_state.state = 7;
+            help_state.timer = 0;
             RECORD_FLAGS();
-        } else if (D_001996D0.timer >= 8) {
-            D_001996D0.timer = 0;
-            D_001996D0.state = 4;
+        } else if (help_state.timer >= 8) {
+            help_state.timer = 0;
+            help_state.state = 4;
         }
         break;
 
@@ -186,17 +172,17 @@ void update_help_state(void) {
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_BEST();
-            D_001996D0.state = 6;
+            help_state.state = 6;
             RECORD_FLAGS();
-            D_001996D0.timer = 4 - D_001996D0.timer;
-        } else if (D_001996D0.timer >= 4) {
-            id = help_msgs[D_001996D0.msg].id;
+            help_state.timer = 4 - help_state.timer;
+        } else if (help_state.timer >= 4) {
+            id = help_msgs[help_state.msg].id;
             if (id != -1 && id == music_stream_state.secondary.track - 0x7530 &&
                 music_stream_state.secondary.state == 3) {
                 continue_audio_stream_if_ready();
             }
-            D_001996D0.state = 5;
-            D_001996D0.timer = 0;
+            help_state.state = 5;
+            help_state.timer = 0;
         }
         break;
     }
@@ -205,25 +191,25 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        if ((D_001996D0.timer >= scale_game_frames(0x1A4) &&
-             ((id = help_msgs[D_001996D0.msg].id) == -1 ||
+        if ((help_state.timer >= scale_game_frames(0x1A4) &&
+             ((id = help_msgs[help_state.msg].id) == -1 ||
               id != music_stream_state.secondary.track - 0x7530 ||
               (music_stream_state.secondary.handle == 0 &&
                music_stream_state.queued_secondary_track == -1))) ||
             (controller_state.pressed & PAD_TRIANGLE)) {
             RECORD_COUNT();
             RECORD_BEST();
-            D_001996D0.state = 6;
-            D_001996D0.timer = 0;
+            help_state.state = 6;
+            help_state.timer = 0;
             RECORD_FLAGS();
         }
         break;
     }
 
     case HELP_STATE_DISMISS_DELAY:
-        if (D_0015EE1D == 0 || D_001996D0.timer >= 4 || (controller_state.pressed & PAD_TRIANGLE)) {
-            D_001996D0.state = 7;
-            D_001996D0.timer = 0;
+        if (D_0015EE1D == 0 || help_state.timer >= 4 || (controller_state.pressed & PAD_TRIANGLE)) {
+            help_state.state = 7;
+            help_state.timer = 0;
         }
         break;
 
@@ -231,19 +217,19 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        id = help_msgs[D_001996D0.msg].id;
+        id = help_msgs[help_state.msg].id;
         if (id != -1 && id == music_stream_state.secondary.track - 0x7530 &&
             (u16)music_stream_state.secondary.state - 6U >= 2) {
             music_stream_state.secondary.state = 5;
         }
-        if (D_001996D0.timer >= 8) {
-            if (D_001996D0.queued != 0) {
-                D_001996D0.state = 8;
+        if (help_state.timer >= 8) {
+            if (help_state.queued != 0) {
+                help_state.state = 8;
             } else {
-                D_001996D0.state = 0;
-                D_001996D0.msg = -1;
+                help_state.state = 0;
+                help_state.msg = -1;
             }
-            D_001996D0.timer = 0;
+            help_state.timer = 0;
         }
         break;
     }

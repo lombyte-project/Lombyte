@@ -1,8 +1,9 @@
 /* Hero: primary item input, item slot selection, water and ground transitions, and the hoverboard tricks, race progress and respawn. */
 #include "types.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/game/usage_stats.h"
@@ -45,10 +46,11 @@ void smooth_and_clamp_value_pair(float *out,
                                  float  step) __asm__("FUN_L05_00237488");
 
 void smooth_and_clamp_value_pair(float *clamped_values, float *smoothed_values, float step) {
-    char *target_values_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
+    struct Hero *target_values_base =
+        (struct Hero *)((char *)((unsigned char *)&D_0013E533) + 0xE1D);
     float target_values[2];
-    target_values[0] = -*(float *)(target_values_base + 0x1D20);
-    target_values[1] = *(float *)(target_values_base + 0x1D24);
+    target_values[0] = -target_values_base->stick_x;
+    target_values[1] = target_values_base->stick_y;
     approach_value(smoothed_values + 2, target_values[0], step);
     if (smoothed_values[2] > 1.0f)
         smoothed_values[2] = 1.0f;
@@ -64,14 +66,14 @@ void smooth_and_clamp_value_pair(float *clamped_values, float *smoothed_values, 
 }
 
 #include "sda.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 int hero_anim_tilt_lookup(int id, float *out) __asm__("FUN_L05_0023b378");
 
 int hero_anim_tilt_lookup(int id, float *out_tilt_radians) {
     *out_tilt_radians = 0.0f;
     if (hero.state.control_mode == 0x16 && hero.race_ammo &&
-        (unsigned)(*(unsigned char *)(((char *)hero.moby) + 0x53) - 0x69) < 4)
+        (unsigned)(hero.moby->prev_seq - 0x69) < 4)
         return 1;
     switch (id) {
     case 0x37:
@@ -626,7 +628,6 @@ int try_apply_hero_water_and_ground_transitions(void) {
 }
 
 #include "rnc/input/pad_state.h"
-#include "rnc/mobys/moby.h"
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002523C8), where it is exact; names translated to the US level program. */
@@ -1429,28 +1430,28 @@ void compute_hero_hoverboard_respawn_transform(float *out,
                                                float *out_rotation) __asm__("FUN_L05_00254358");
 
 void compute_hero_hoverboard_respawn_transform(float *out_position, float *out_rotation) {
-    char        *hero_base = (char *)((char *)((char *)&hero));
-    struct Moby *path_owner_moby = *(char **)(hero_base + 0x86C);
+    struct Hero *hero_base = &hero;
+    struct Moby *path_owner_moby = ((char *)hero_base->hoverboard_moby);
     char        *path;
     float        distance;
     int          i, best;
     float        ground_probe_position[4] __attribute__((aligned(16)));
 
     if (path_owner_moby == 0) {
-        qcopy(out_position, hero_base + 0x80);
-        qcopy(out_rotation, hero_base + 0x90);
+        qcopy(out_position, &hero_base->motion.pos);
+        qcopy(out_rotation, &hero_base->motion.rot);
         return;
     }
     path = ((char *)l05_paths[*(int *)(((char *)path_owner_moby->pvars) + 0x24)]);
     distance = 9999999.0f;
     best = 0;
     for (i = 0; i < *(int *)path; i += 2) {
-        char *hero_bytes = (char *)((char *)((char *)&hero));
-        char *candidate_path_record = path + i * 16;
-        float limit = 4.0f;
-        float angle =
-            fast_arc_tan(*(float *)(candidate_path_record + 0x10) - *(float *)(hero_bytes + 0x80),
-                         *(float *)(candidate_path_record + 0x14) - *(float *)(hero_bytes + 0x84));
+        struct Hero *hero_bytes = &hero;
+        char        *candidate_path_record = path + i * 16;
+        float        limit = 4.0f;
+        float        angle =
+            fast_arc_tan(*(float *)(candidate_path_record + 0x10) - hero_bytes->motion.pos.f[0],
+                         *(float *)(candidate_path_record + 0x14) - hero_bytes->motion.pos.f[1]);
         int   path_count_plus_two = *(int *)path + 2;
         int   lookahead_path_index = (i + path_count_plus_two) % *(int *)path;
         char *lookahead_path_record = path + lookahead_path_index * 16;
@@ -1461,10 +1462,10 @@ void compute_hero_hoverboard_respawn_transform(float *out_position, float *out_r
                              *(float *)(lookahead_path_record + 0x14) -
                                  *(float *)(candidate_path_record + 0x14))) > 1.5707964f) {
             float candidate_distance_xy;
-            if (D_0015ED84_gp == 0x10 && *(char **)(hero_bytes + 0x8B4) != 0) {
-                char *verts = *(char **)(hero_bytes + 0x8B4);
-                char *first_height_sample_point = verts + *(short *)(hero_bytes + 0x8C8) * 16;
-                char *second_height_sample_point = verts + *(short *)(hero_bytes + 0x898) * 16;
+            if (D_0015ED84_gp == 0x10 && ((char *)hero_bytes->race_path) != 0) {
+                char *verts = ((char *)hero_bytes->race_path);
+                char *first_height_sample_point = verts + hero_bytes->wrong_way_path_point * 16;
+                char *second_height_sample_point = verts + hero_bytes->race_path_node * 16;
                 float z1 = *(float *)(first_height_sample_point + 0x18);
                 float z2 = *(float *)(second_height_sample_point + 0x18);
                 if (z1 < z2) {
@@ -1982,15 +1983,15 @@ extern char hero_hoverboard_animation_link_table[] __asm__("D_L05_0017C068");
 void hero_update_linked_target(void) __asm__("FUN_L05_0025b538");
 
 void hero_update_linked_target(void) {
-    char *hero_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    int   path_owner_moby = *(int *)(hero_base + 0x86C);
+    struct Hero *hero_base = (struct Hero *)((char *)((unsigned char *)&D_0013E533) + 0xE1D);
+    int          path_owner_moby = *(int *)&hero_base->hoverboard_moby;
 
-    *(int *)(hero_base + 0x2278) = 0;
-    *(int *)(hero_base + 0x227C) = 0;
+    *(int *)&hero_base->unk2278 = 0;
+    hero_base->unk227C = 0;
     if (path_owner_moby != 0) {
-        if ((unsigned)(*(int *)(hero_base + 0x208C) - 0x15) < 2) {
-            *(int *)(hero_base + 0x2278) = path_owner_moby;
-            *(int *)(hero_base + 0x227C) = (int)hero_hoverboard_animation_link_table;
+        if ((unsigned)(hero_base->state.control_mode - 0x15) < 2) {
+            *(int *)&hero_base->unk2278 = path_owner_moby;
+            hero_base->unk227C = (int)hero_hoverboard_animation_link_table;
         }
     }
 }

@@ -7,7 +7,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/rendering/texture/do_gif_paging.h"
 #include "rnc/rendering/texture/setup_gif_paging.h"

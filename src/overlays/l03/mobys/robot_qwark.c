@@ -6,20 +6,20 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_save_state.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern char  D_L03_00166EC0[];
 extern void  FUN_L00_0025a120(struct Moby *);
 extern void  add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern int   FUN_L00_00257b90(int, int);
 extern int   D_L03_0015F5C4;
 extern u8    npc_dialogue_suppression_flags[] __asm__("D_0013D4CC");
 extern char *D_001413D0[];
 extern void  begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void  jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void  queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 /* Pvars of the dialogue moby robot_qwark_update drives (initialize_npc_dialogue / update_npc_dialogue state). */
 struct TalkerVars {
@@ -188,7 +188,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
                 &particle_velocity,
                 0x20202020,
                 0x7F7F7F,
-                scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
+                scale_game_frames(random_int_between(0x3C, 0x78)),
                 157500.0f);
         }
         break;

@@ -14,13 +14,15 @@
 #include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "rnc/overlay/shared/vehicles/gunship.h"
 
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int   cutscene_active __asm__("D_L01_0015F404");
@@ -44,10 +46,8 @@ extern void  spawn_explosion(void *,
                              int,
                              int) __asm__("FUN_L00_0025e450");
 extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void  jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void  fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 #include "qcopy.h"
@@ -227,7 +227,6 @@ extern s32          ents_macro __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern LevelCuboid *l01_cuboids_macro __asm__("D_L01_001600EC") MACRO_ADDR;
 extern s32          cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 
-extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -249,7 +248,6 @@ extern void spawn_explosion(void *,
 extern void spawn_debris(char *, void *, f32) __asm__("FUN_L01_0030be70");
 extern int  debug_print() __asm__("FUN_001e93b0");
 extern void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
-extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern s32  collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern GunshipMoby *
 spawn_beam(void *, void *, void *, void *, s32, s32) __asm__("FUN_L01_002f68a0");

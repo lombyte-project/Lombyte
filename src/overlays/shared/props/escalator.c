@@ -7,6 +7,18 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "qcopy.h"
 
+typedef struct EscalatorVars {
+    u8  pad0[0x40];
+    f32 unk40;
+    f32 unk44;
+    s32 unk48;
+    u8  pad4C[0x14];
+    u8  unk60[0x3c];
+    u32 unk9C;
+    s32 unkA0;
+    s32 unkA4;
+} EscalatorVars;
+
 extern int escalator_direction_timer_frames_gp __asm__("D_L02_00161C18") __attribute__((sda));
 float      escalator_target_speed_gp __asm__("D_L02_00161C14") = -2.5f;
 float      escalator_acceleration_gp __asm__("D_L02_00161C1C") = 2.5f;
@@ -15,10 +27,10 @@ void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
 
 /* Moby classes 296, 652, 653 */
 void escalator_update(char *moby) {
-    char *escalator_motion_state = ((char *)MOBY(moby)->pvars);
-    float limit;
-    float y;
-    int   state;
+    EscalatorVars *escalator_motion_state = (EscalatorVars *)MOBY(moby)->pvars;
+    float          limit;
+    float          y;
+    int            state;
 
     if (escalator_motion_state == 0)
         return;
@@ -36,11 +48,10 @@ void escalator_update(char *moby) {
         goto state3;
     goto move;
 state0:
-    clear_u64_value(escalator_motion_state + 0x40);
-    *(int *)(escalator_motion_state + 0xa0) =
-        scale_game_frames(escalator_direction_timer_frames_gp);
-    *(u32 *)(escalator_motion_state + 0x9c) |= 4;
-    if (*(int *)(escalator_motion_state + 0xa4) != 0)
+    clear_u64_value(&escalator_motion_state->unk40);
+    escalator_motion_state->unkA0 = scale_game_frames(escalator_direction_timer_frames_gp);
+    escalator_motion_state->unk9C |= 4;
+    if (escalator_motion_state->unkA4 != 0)
         MOBY(moby)->state = 3;
     else
         MOBY(moby)->state = 1;
@@ -49,28 +60,27 @@ state1: {
     float speed;
 
     MOBY(moby)->anim_speed = 1.0f;
-    if (fast_dec_timer((int *)(escalator_motion_state + 0xa0))) {
-        speed = fast_vec_length(escalator_motion_state + 0x40) -
+    if (fast_dec_timer((int *)(&escalator_motion_state->unkA0))) {
+        speed = fast_vec_length(&escalator_motion_state->unk40) -
                 escalator_acceleration_gp * frame_time_sq;
         if (speed <= 0.0f) {
-            *(int *)(escalator_motion_state + 0xa0) =
-                scale_game_frames(escalator_direction_timer_frames_gp);
+            escalator_motion_state->unkA0 = scale_game_frames(escalator_direction_timer_frames_gp);
             MOBY(moby)->state = 2;
         } else {
-            *(float *)(escalator_motion_state + 0x40) = fast_cos(MOBY(moby)->rot.z) * -speed;
+            escalator_motion_state->unk40 = fast_cos(MOBY(moby)->rot.z) * -speed;
             y = fast_sin(MOBY(moby)->rot.z) * -speed;
-            *(float *)(escalator_motion_state + 0x48) = 0.0f;
-            *(float *)(escalator_motion_state + 0x44) = y;
+            *(float *)&escalator_motion_state->unk48 = 0.0f;
+            escalator_motion_state->unk44 = y;
         }
     } else {
-        speed = fast_vec_length(escalator_motion_state + 0x40);
+        speed = fast_vec_length(&escalator_motion_state->unk40);
         limit = absolute_float(escalator_target_speed_gp * frame_time);
         /* Retail loads frame_time_sq through its absolute EE address here. */
         if (speed < limit)
             speed += escalator_acceleration_gp * (*(float *)0x0015ED70);
-        *(float *)(escalator_motion_state + 0x40) = fast_cos(MOBY(moby)->rot.z) * -speed;
-        *(float *)(escalator_motion_state + 0x44) = fast_sin(MOBY(moby)->rot.z) * -speed;
-        *(int *)(escalator_motion_state + 0x48) = 0;
+        escalator_motion_state->unk40 = fast_cos(MOBY(moby)->rot.z) * -speed;
+        escalator_motion_state->unk44 = fast_sin(MOBY(moby)->rot.z) * -speed;
+        escalator_motion_state->unk48 = 0;
     }
     MOBY(moby)->anim_speed = speed / (escalator_target_speed_gp * frame_time);
     goto move;
@@ -79,39 +89,38 @@ state2: {
     float speed;
 
     MOBY(moby)->anim_speed = -1.0f;
-    if (fast_dec_timer((int *)(escalator_motion_state + 0xa0))) {
-        speed = fast_vec_length(escalator_motion_state + 0x40) -
+    if (fast_dec_timer((int *)(&escalator_motion_state->unkA0))) {
+        speed = fast_vec_length(&escalator_motion_state->unk40) -
                 escalator_acceleration_gp * frame_time_sq;
         if (speed <= 0.0f) {
-            *(int *)(escalator_motion_state + 0xa0) =
-                scale_game_frames(escalator_direction_timer_frames_gp);
+            escalator_motion_state->unkA0 = scale_game_frames(escalator_direction_timer_frames_gp);
             MOBY(moby)->state = 1;
         } else {
-            *(float *)(escalator_motion_state + 0x40) = fast_cos(MOBY(moby)->rot.z) * speed;
-            *(float *)(escalator_motion_state + 0x44) = fast_sin(MOBY(moby)->rot.z) * speed;
-            *(float *)(escalator_motion_state + 0x48) = 0.0f;
+            escalator_motion_state->unk40 = fast_cos(MOBY(moby)->rot.z) * speed;
+            escalator_motion_state->unk44 = fast_sin(MOBY(moby)->rot.z) * speed;
+            *(float *)&escalator_motion_state->unk48 = 0.0f;
         }
     } else {
-        speed = fast_vec_length(escalator_motion_state + 0x40);
+        speed = fast_vec_length(&escalator_motion_state->unk40);
         limit = absolute_float(escalator_target_speed_gp * frame_time);
         if (speed < limit)
             speed += escalator_acceleration_gp * (*(float *)0x0015ED70);
-        *(float *)(escalator_motion_state + 0x40) = fast_cos(MOBY(moby)->rot.z) * speed;
-        *(float *)(escalator_motion_state + 0x44) = fast_sin(MOBY(moby)->rot.z) * speed;
-        *(int *)(escalator_motion_state + 0x48) = 0;
+        escalator_motion_state->unk40 = fast_cos(MOBY(moby)->rot.z) * speed;
+        escalator_motion_state->unk44 = fast_sin(MOBY(moby)->rot.z) * speed;
+        escalator_motion_state->unk48 = 0;
     }
     MOBY(moby)->anim_speed = speed / -(escalator_target_speed_gp * frame_time);
     goto move;
 }
 state3:
-    *(float *)(escalator_motion_state + 0x40) =
+    escalator_motion_state->unk40 =
         fast_cos(MOBY(moby)->rot.z) * -(escalator_target_speed_gp * frame_time);
-    *(float *)(escalator_motion_state + 0x44) =
+    escalator_motion_state->unk44 =
         fast_sin(MOBY(moby)->rot.z) * -(escalator_target_speed_gp * frame_time);
-    *(int *)(escalator_motion_state + 0x48) = 0;
+    escalator_motion_state->unk48 = 0;
 move:
     update_entity_matrix(
-        escalator_motion_state + 0x60, escalator_motion_state + 0x40, moby + 0x40, moby + 0x40);
+        &escalator_motion_state->unk60, &escalator_motion_state->unk40, moby + 0x40, moby + 0x40);
 }
 
 int   D_L12_00161964 = 0xb4;

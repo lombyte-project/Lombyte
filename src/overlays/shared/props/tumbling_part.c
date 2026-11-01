@@ -8,7 +8,18 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
+
+typedef struct TumblingPartVars {
+    u8  pad0[0x8];
+    f32 unk8;
+    u8  padC[0x4];
+    u8  unk10[0x10];
+    f32 unk20[4];
+    s32 unk30;
+    s32 unk34;
+    f32 unk38;
+} TumblingPartVars;
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void  normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -50,48 +61,46 @@ void tumbling_part_update(char *moby) {
         TUMBLING_PART_SPAWN_EFFECT_AND_REMOVE = 2,
         TUMBLING_PART_FADE_AND_REMOVE = 3
     };
-    char  *moby_data = ((char *)MOBY(moby)->pvars);
-    float  effect_offset_or_world_position[4];
-    float  rotation_step_basis[12];
-    float  offset_after_rotation[4];
-    float  rotation_offset_delta[4];
-    float  collision_probe_position[4];
-    float  bounce_rotation_matrix[16];
-    float  aD0[4];
-    float  aE0[4];
-    char  *rotation_step_euler;
-    float  collision_radius;
-    float *collision_normal;
+    TumblingPartVars *moby_data = (TumblingPartVars *)MOBY(moby)->pvars;
+    float             effect_offset_or_world_position[4];
+    float             rotation_step_basis[12];
+    float             offset_after_rotation[4];
+    float             rotation_offset_delta[4];
+    float             collision_probe_position[4];
+    float             bounce_rotation_matrix[16];
+    float             aD0[4];
+    float             aE0[4];
+    char             *rotation_step_euler;
+    float             collision_radius;
+    float            *collision_normal;
 
     switch (MOBY(moby)->state) {
     case TUMBLING_PART_REMOVE:
         mark_moby_for_removal(moby);
         return;
     case TUMBLING_PART_WAIT_FOR_TIMER:
-        if (func_001F9908_r((int *)(moby_data + 0x30))) {
-            moby[0x20] = (*(int *)(moby_data + 0x34) & 1) ? 3 : 2;
-            *(int *)(moby_data + 0x30) = truncate_float_to_s32(scale_time(10.0f));
+        if (func_001F9908_r((int *)(&moby_data->unk30))) {
+            MOBY(moby)->state = (moby_data->unk34 & 1) ? 3 : 2;
+            moby_data->unk30 = truncate_float_to_s32(scale_time(10.0f));
             return;
         }
         break;
     case TUMBLING_PART_SPAWN_EFFECT_AND_REMOVE:
-        transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
-        fast_vec_add(effect_offset_or_world_position, effect_offset_or_world_position, moby + 0x10);
-        if (*(int *)(moby_data + 0x34) & 2) {
-            spawn_color_swapped_explosion_burst(moby,
-                                                effect_offset_or_world_position,
-                                                -1,
-                                                *(float *)(moby_data + 0x2C) * 0.5f,
-                                                0.0f);
+        transform_vector_by_basis(effect_offset_or_world_position, &moby_data->unk20, moby + 0xC0);
+        fast_vec_add(
+            effect_offset_or_world_position, effect_offset_or_world_position, &MOBY(moby)->pos);
+        if (moby_data->unk34 & 2) {
+            spawn_color_swapped_explosion_burst(
+                moby, effect_offset_or_world_position, -1, moby_data->unk20[3] * 0.5f, 0.0f);
         } else {
-            float half_collision_radius = *(float *)(moby_data + 0x2C) * 0.5f;
+            float half_collision_radius = moby_data->unk20[3] * 0.5f;
             spawn_explosion(moby,
                             &zero_vector,
                             effect_offset_or_world_position,
                             0.0f,
                             0.0f,
                             5,
-                            *(float *)(moby_data + 0x2C),
+                            moby_data->unk20[3],
                             3,
                             half_collision_radius,
                             9.0f,
@@ -107,26 +116,26 @@ void tumbling_part_update(char *moby) {
         mark_moby_for_removal(moby);
         return;
     case TUMBLING_PART_FADE_AND_REMOVE:
-        if (func_001F9908_r((int *)(moby_data + 0x30))) {
+        if (func_001F9908_r((int *)(&moby_data->unk30))) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby[0x23] =
-            truncate_float_to_s32((float)*(int *)(moby_data + 0x30) / scale_time(10.0f) * 128.0f);
+        MOBY(moby)->alpha =
+            truncate_float_to_s32((float)moby_data->unk30 / scale_time(10.0f) * 128.0f);
         break;
     }
-    rotation_step_euler = moby_data + 0x10;
+    rotation_step_euler = &moby_data->unk10;
     euler_rotation_basis(rotation_step_basis, rotation_step_euler);
-    transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
+    transform_vector_by_basis(effect_offset_or_world_position, &moby_data->unk20, moby + 0xC0);
     multiply_matrix3x3(moby + 0xC0, rotation_step_basis, moby + 0xC0);
-    transform_vector_by_basis(offset_after_rotation, moby_data + 0x20, moby + 0xC0);
+    transform_vector_by_basis(offset_after_rotation, &moby_data->unk20, moby + 0xC0);
     fast_vec_sub(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
     fast_vec_sub((float *)&MOBY(moby)->pos, (float *)&MOBY(moby)->pos, rotation_offset_delta);
-    fast_vec_add(moby + 0x10, moby + 0x10, moby_data);
-    collision_radius = *(float *)(moby_data + 0x2C);
-    *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - *(float *)(moby_data + 0x38);
-    transform_vector_by_basis(collision_probe_position, moby_data + 0x20, moby + 0xC0);
-    fast_vec_add(collision_probe_position, collision_probe_position, moby + 0x10);
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, moby_data);
+    collision_radius = moby_data->unk20[3];
+    moby_data->unk8 = moby_data->unk8 - moby_data->unk38;
+    transform_vector_by_basis(collision_probe_position, &moby_data->unk20, moby + 0xC0);
+    fast_vec_add(collision_probe_position, collision_probe_position, &MOBY(moby)->pos);
     if (func_L00_001F10E0_s(collision_probe_position, collision_radius, 0, moby)) {
         float speed, approach;
         collision_normal = coll_hit_normal.f;

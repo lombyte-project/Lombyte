@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/draw.c, func_001F4F90). */
 #include "sda.h"
 #include "types.h"
+#include "rnc/ui/text/font/font_set_window.h"
 
 typedef struct {
     short start;   /* 0x0 */
@@ -20,8 +21,6 @@ extern SubState render_sequence __asm__("D_0018CB20");
 #include "rnc/rendering/screen.h"
 #include "rnc/globals.h"
 
-extern void
-font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8);
 extern void font_print_window_regular(void *, long, char *, int) __asm__("func_001F7580");
 extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
 /* Draws the subtitle showing at the current time (D_0018CB20+0x34): the

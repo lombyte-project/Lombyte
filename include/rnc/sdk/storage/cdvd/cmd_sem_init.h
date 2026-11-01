@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_STORAGE_CDVD_CMD_SEM_INIT_H
+#define LOMBYTE_RNC_SDK_STORAGE_CDVD_CMD_SEM_INIT_H
+
+#include "types.h"
+
+void cmd_sem_init(void);
+
+#endif /* LOMBYTE_RNC_SDK_STORAGE_CDVD_CMD_SEM_INIT_H */

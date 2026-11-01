@@ -1,7 +1,7 @@
 /* Level 10 moby class nanotech_upgrade_vendor: sells the two health upgrades. */
 #include "types.h"
 
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"

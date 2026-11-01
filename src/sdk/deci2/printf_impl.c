@@ -1,8 +1,8 @@
 #include "types.h"
+#include "rnc/sdk/deci2/printfloat.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
-extern s32  DIntr(void);
-extern s32  EnableInterrupts(void);
-extern void printfloat(double);
+extern s32 DIntr(void);
 extern void (*D_0012FC00[])(s32);
 
 #define ARG(T) (ap += 8, *(T *)(ap - 8))

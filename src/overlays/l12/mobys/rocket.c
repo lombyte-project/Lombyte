@@ -4,9 +4,9 @@
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/collision.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -31,7 +31,7 @@ char *spawn_rocket(char *initial_velocity,
                    int   owner,
                    int   seed,
                    float yaw,
-                   float f1,
+                   float nominal_speed,
                    float f2) __asm__("FUN_L12_002ecce8");
 
 char *spawn_rocket(char *initial_velocity,
@@ -113,7 +113,7 @@ extern void spawn_explosion(struct Moby *,
 /* Level 12 shot: flies with a smoke trail, damages the first moby it hits other than its owner, then pops. */
 void rocket_update(struct Moby *moby) __asm__("FUN_L12_002ece00");
 
-/* Moby class 409 */
+/* Moby classes 409, 435 */
 void rocket_update(struct Moby *moby) {
     enum {
         ROCKET_STATE_FLYING = 1,

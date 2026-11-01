@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_AUDIO_STREAMING_ADVANCE_AUDIO_STREAM_STATE_H
+#define LOMBYTE_RNC_AUDIO_STREAMING_ADVANCE_AUDIO_STREAM_STATE_H
+
+#include "types.h"
+
+struct AudioStream;
+
+s32 advance_audio_stream_state(struct AudioStream *) __asm__("FUN_00220648");
+
+#endif /* LOMBYTE_RNC_AUDIO_STREAMING_ADVANCE_AUDIO_STREAM_STATE_H */

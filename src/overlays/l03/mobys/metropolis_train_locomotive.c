@@ -1,6 +1,6 @@
 /* Level 03 moby class metropolis_train_locomotive: the train engine that pulls the carriages along its path. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
@@ -16,9 +16,11 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/effects/fade_to_black.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/overlay/shared/mobys/is_moby_class_23e_in_state_14.h"
 
 /* Places a train: puts the engine at `at` facing ang (offset back by its length), then lays each linked
  * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */
@@ -361,11 +363,8 @@ char train_end_path_missing_stop_node_warning[124] __asm__("D_L03_001E2478") =
     "train end path has no STOP NODE!!!\n  Bailing out of the end cutscene before the train goes out of control and kills us all!";
 
 extern int  FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
-extern int  is_hero_on_moby(char *) __asm__("FUN_L01_00277fb8");
-extern int  is_moby_class_23e_in_state_14(char *) __asm__("FUN_L03_002c6c60");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
-extern void set_moby_state_14(char *) __asm__("FUN_L03_002c6c90");
 extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
 
 /* Heading of a path's first segment. */
@@ -490,7 +489,7 @@ void metropolis_train_locomotive_update(char *moby) {
                 }
             }
         }
-        moby[0xBC] = 1;
+        MOBY(moby)->command = 1;
         train_engine_pvars->i9C = 3;
         *(unsigned short *)(coupling + 0x34) |= 6;
         break;
@@ -500,13 +499,13 @@ void metropolis_train_locomotive_update(char *moby) {
         cdata->i74 = train_engine_pvars->iA4;
         cdata->fFC = train_engine_pvars->fC0;
         gunship_update(coupling);
-        moby[0xBC] = 2;
+        MOBY(moby)->command = 2;
         break;
     case TRAIN_POSITION_FOR_BOARDING:
         *(OvlQuad *)start = *(OvlQuad *)(((char *)l03_paths[train_engine_pvars->iA8]) + 0x10);
         place_metropolis_train(
             moby, start, PATH_HEADING(((char *)l03_paths[train_engine_pvars->iA8])));
-        moby[0xBC] = 3;
+        MOBY(moby)->command = 3;
         cdata->i74 = train_engine_pvars->iA4;
         cdata->path = ((char *)l03_paths[cdata->i74]);
         cdata->i60 = 1;
@@ -522,7 +521,7 @@ void metropolis_train_locomotive_update(char *moby) {
         }
         mode = hero.state.control_mode;
         if (mode < 2 || mode == 9 || mode == 12) {
-            moby[0xBC] = 4;
+            MOBY(moby)->command = 4;
             D_L03_0015FDFC = 1;
             request_music_track(4, 7);
             set_moby_dialogue_record_value(moby, 1);
@@ -561,8 +560,8 @@ void metropolis_train_locomotive_update(char *moby) {
             td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[train_engine_pvars->i100] + 0x78);
             AIM_AT_HERO(td);
         }
-        if (hero.ground_moby != 0 && (*(short *)((char *)hero.ground_moby + 0xA6) == 0x336 ||
-                                      *(short *)((char *)hero.ground_moby + 0xA6) == 0x4BA)) {
+        if (hero.ground_moby != 0 &&
+            (hero.ground_moby->oclass == 0x336 || hero.ground_moby->oclass == 0x4BA)) {
             set_moby_dialogue_record_value(hero.ground_moby, 3);
         }
         if (!is_hero_on_moby(moby)) {
@@ -622,7 +621,7 @@ void metropolis_train_locomotive_update(char *moby) {
         train_engine_pvars->fC0 = 2.0f * train_engine_pvars->fC0;
         cdata->fFC = train_engine_pvars->fC0;
         gunship_update(coupling);
-        moby[0xBC] = 5;
+        MOBY(moby)->command = 5;
         request_music_track(0, 8);
         break;
     case TRAIN_FOLLOW_SECOND_PATH_AND_BRAKE:
@@ -639,7 +638,7 @@ void metropolis_train_locomotive_update(char *moby) {
             }
             if (train_engine_pvars->fC8 == braking_speed_floor) {
                 ((char *)&D_L03_0015FFD8_m292[train_engine_pvars->iD8])[0xBC] = 0;
-                moby[0xBC] = 6;
+                MOBY(moby)->command = 6;
                 train_engine_pvars->fC0 *= 0.5f;
                 RELEASE_VOICE(train_engine_pvars->i108);
                 train_engine_pvars->i108 = -1;
@@ -660,7 +659,7 @@ void metropolis_train_locomotive_update(char *moby) {
             }
             train_engine_pvars->fC8 = train_engine_pvars->fC0;
             train_engine_pvars->fDC = 20.0f;
-            moby[0xBC] = 1;
+            MOBY(moby)->command = 1;
         } else {
             update_metropolis_train_idle_motion(moby);
         }

@@ -139,8 +139,8 @@ void FUN_L00_00258278(struct Moby *moby,
     moby->rot.z = fast_add_rotations(moby->rot.z, *turn_step);
 }
 
-#include "eetypes.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/sdk/eetypes.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef union {
     u128 q;
@@ -186,7 +186,7 @@ extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
     __attribute__((section(".data")));
 extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern int   FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -319,7 +319,7 @@ int move_moby_with_step_collision(char *moby,
     Vs    scaled_displacement;
     int   result = 0;
     int   coll_flags = (flags * 2) & 0x20;
-    char *movement_position = moby + 0x10;
+    char *movement_position = &MOBY(moby)->pos;
     int   i;
     char *collision_position;
 
@@ -334,21 +334,21 @@ int move_moby_with_step_collision(char *moby,
         if (collision_line(&raised_position, &probe_end, coll_flags, (int)moby, 0)) {
             fast_vec_sub(movement_position, (char *)&D_94C8_60, &scaled_displacement);
             result = 1;
-            *(float *)(moby + 0x18) -= step_height;
+            MOBY(moby)->pos.z -= step_height;
         }
     }
-    for (i = 0, collision_position = moby + 0x10; i < 6; i++) {
+    for (i = 0, collision_position = &MOBY(moby)->pos; i < 6; i++) {
         qcopy(&raised_position, collision_position);
         raised_position.a[2] += step_height;
         if (func_L00_001F10E0_l(&raised_position, radius, coll_flags | 4, moby)) {
             qcopy(collision_position, &coll_hit_position);
             result |= 1;
-            *(float *)(moby + 0x18) -= step_height;
+            MOBY(moby)->pos.z -= step_height;
         } else {
             break;
         }
     }
-    radius = *(float *)(moby + 0x18) - height;
+    radius = MOBY(moby)->pos.z - height;
     qcopy(&raised_position, collision_position);
     qcopy(&probe_end, collision_position);
     raised_position.a[2] += step_height;
@@ -364,7 +364,7 @@ int move_moby_with_step_collision(char *moby,
             }
             g = *(float *)((char *)D_L00_00173E40 + 0x28);
             if (radius < g) {
-                *(float *)(moby + 0x18) += (g - radius) * 0.3f;
+                MOBY(moby)->pos.z += (g - radius) * 0.3f;
             }
         }
     }
@@ -586,7 +586,7 @@ int  FUN_L00_00259028(unsigned char *moby,
     int   navigation_result_flags = 0;
     float target_heading, heading_error;
     clear_u64_value(movement_displacement_output);
-    if (fast_vec_dist(moby + 0x10, target_position) < *(float *)(movement_control + 0x2C))
+    if (fast_vec_dist(&MOBY(moby)->pos, target_position) < *(float *)(movement_control + 0x2C))
         navigation_result_flags = 4;
     target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                   target_position[1] - MOBY(moby)->pos.y);
@@ -623,7 +623,7 @@ extern char           *D_L00_00160114;
 extern unsigned short *moby_group_entry_cursor __asm__("D_L00_0016010C");
 extern short           D_L00_00160110;
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
 /* Looks up table entry idx and makes it current; the flag test reads the

@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -14,10 +14,11 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/game/usage_stats.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
 
 typedef struct Moby Moby;
 
@@ -90,12 +91,9 @@ extern int            D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern int D_0015ED84 MACRO_ADDR;
 extern struct Moby   *FUN_L00_002cc360_c(
       float *, float *, struct Moby **, float, float, float) __asm__("FUN_L00_002cc360");
-extern int  get_ammo(int) __asm__("FUN_L00_00233e98");
-extern int  use_ammo(int, int) __asm__("FUN_L00_00233db8");
 extern void suck_draw_reticle(
     struct Moby *, int, float, float, float *, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern void           hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void           start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void           add_2cc608(float *, void *, void *) __asm__("FUN_001f9a10");
 extern void           scale_2cc608(float *, float *, float) __asm__("FUN_001f9a68");
 extern unsigned char *FUN_L00_002ccee0_c(
@@ -472,28 +470,28 @@ unsigned char *spawn_ryno_rocket(int            owner_moby,
     spawned_moby = create_moby(0x1C9);
     if (spawned_moby != 0) {
         rocket_vars = *(unsigned char **)(spawned_moby + 0x78);
-        spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
-        spawned_moby[0x31] = 1;
-        *(float *)(spawned_moby + 0x48) = yaw;
-        *(float *)(spawned_moby + 0x44) = pitch;
-        spawned_moby[0x20] = 0;
+        MOBY(spawned_moby)->update_dist = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->rot.z = yaw;
+        MOBY(spawned_moby)->rot.y = pitch;
+        MOBY(spawned_moby)->state = 0;
         *(int *)(rocket_vars + 0x20) = owner_moby;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         qcopy(rocket_vars + 0x10, spawn_position);
         *(int *)(rocket_vars + 0x34) = 0;
         *(int *)(rocket_vars + 0x38) = 0;
         *(int *)(rocket_vars + 0x30) = 0;
         *(unsigned char **)(rocket_vars + 0x28) = target_moby;
-        *(float *)(spawned_moby + 0x2C) =
+        MOBY(spawned_moby)->scale =
             *(float *)(*(unsigned char **)(spawned_moby + 0x24) + 0x24) * 0.25f;
         if (target_moby != 0) {
-            *(int *)(rocket_vars + 0x58) = *(short *)(target_moby + 0xA6);
+            *(int *)(rocket_vars + 0x58) = MOBY(target_moby)->oclass;
             target_aim_data = get_moby_target_info(target_moby);
             if (target_aim_data != 0) {
                 *(unsigned short *)(target_aim_data + 0x1E) |= 0x80;
             }
-            qcopy(rocket_vars, target_moby + 0x10);
+            qcopy(rocket_vars, &MOBY(target_moby)->pos);
             *(float *)(rocket_vars + 0x2C) = target_height_offset;
             *(float *)(rocket_vars + 8) += target_height_offset;
         }
@@ -519,12 +517,12 @@ unsigned char *spawn_ryno_rocket(int            owner_moby,
         collision_start.q = ((V_2ccee0 *)&collision_ignore_moby->pos)->q;
         collision_start.f[2] = spawn_position->f[2];
         if (FUN_001efa68_2ccee0(&collision_start, spawn_position, 0, collision_ignore_moby, 0)) {
-            spawned_moby[0xBC] = 2;
-            qcopy(spawned_moby + 0x10, D_L00_00173E60_2ccee0);
+            MOBY(spawned_moby)->command = 2;
+            qcopy(&MOBY(spawned_moby)->pos, D_L00_00173E60_2ccee0);
             build_spherical_offset(&forward_step,
                                    *(float *)(rocket_vars + 0x30),
-                                   *(float *)(spawned_moby + 0x48),
-                                   -*(float *)(spawned_moby + 0x44));
+                                   MOBY(spawned_moby)->rot.z,
+                                   -MOBY(spawned_moby)->rot.y);
             reflect_vector(&explosion_direction, &forward_step, D_L00_00173E60_2ccee0 + 0x20);
             FUN_001f9bf8_2ccee0(
                 &explosion_direction, &explosion_direction, D_0015ED6C_lui + D_0015ED6C_lui);

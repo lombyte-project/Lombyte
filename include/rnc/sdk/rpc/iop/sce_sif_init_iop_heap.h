@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_RPC_IOP_SCE_SIF_INIT_IOP_HEAP_H
+#define LOMBYTE_RNC_SDK_RPC_IOP_SCE_SIF_INIT_IOP_HEAP_H
+
+#include "types.h"
+
+s32 sceSifInitIopHeap(void);
+
+#endif /* LOMBYTE_RNC_SDK_RPC_IOP_SCE_SIF_INIT_IOP_HEAP_H */

@@ -41,7 +41,7 @@ void floating_platform_update(char *moby) {
     case FLOATING_PLATFORM_INITIALIZE: {
         int i;
         MOBY(moby)->anim_speed = random_float_between(0.5f, 0.8f);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         *(float *)(platform_vars + 0x220) = MOBY(moby)->pos.z + 15.0f;
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(platform_vars + 0x3E) = 0xD;

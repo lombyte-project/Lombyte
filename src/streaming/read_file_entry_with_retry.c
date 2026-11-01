@@ -1,6 +1,10 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/storage/cdvd/sceCdGetError.h"
+#include "rnc/sdk/storage/cdvd/sceCdRead.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
 struct FileEntry {
     u32 lsn;
@@ -8,10 +12,6 @@ struct FileEntry {
 };
 
 extern struct FileEntry level_archive_disc_extents[] __asm__("D_0013A448");
-extern s32              sceCdRead(u32, u32, void *, sceCdRMode *);
-extern s32              sceCdSync(s32);
-extern s32              sceCdGetError(void);
-extern s32              sceGsSyncV(s32);
 s32                     read_file_entry_with_retry(s32 file) __asm__("FUN_0012f368");
 
 s32 read_file_entry_with_retry(s32 file) {

@@ -1,9 +1,9 @@
-void SupplementCrt0(void) __asm__("supplement_crt0");
-void InitSystemCallTableAddress(void) __asm__("InitSystemCallTableAddress");
-void InitAlarm(void) __asm__("InitAlarm");
-void InitThread(void) __asm__("InitThread");
-void InitExecPS2(void) __asm__("InitExecPS2");
-void InitTLBFunctions(void) __asm__("InitTLBFunctions");
+#include "rnc/sdk/kernel/InitExecPS2.h"
+#include "rnc/sdk/kernel/InitSystemCallTableAddress.h"
+#include "rnc/sdk/kernel/InitThread.h"
+#include "rnc/sdk/kernel/init_alarm.h"
+#include "rnc/sdk/kernel/init_tlb_functions.h"
+#include "rnc/sdk/kernel/supplement_crt0.h"
 
 void _InitSys(void) __asm__("_InitSys");
 

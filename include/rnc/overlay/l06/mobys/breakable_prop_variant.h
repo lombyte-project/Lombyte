@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_PROP_VARIANT_H
+#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_PROP_VARIANT_H
+
+#include "types.h"
+
+void breakable_prop_variant_update(char *) __asm__("FUN_L06_00309fa8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_PROP_VARIANT_H */

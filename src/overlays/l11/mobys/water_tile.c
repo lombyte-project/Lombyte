@@ -12,7 +12,8 @@
 #include "rnc/overlay/shared/props/pool_set_scale.h"
 #include "rnc/overlay/shared/props/pool_init_tiles.h"
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/water_grid.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 extern void
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -65,7 +66,6 @@ extern void  synchronize_linked_moby_heights(struct Moby *) __asm__("FUN_L11_003
 extern void  pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
 extern int   check_scaled_vector_bsphere(float, void *) __asm__("FUN_L01_00275690");
 void         render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
-extern void  add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 /* Tile moby: claims a water grid row on spawn (row 0 also sets up the shared light block), then moves
    up or down once its switch fires and throws random sparks; row 0 flushes the visible rows each frame. */

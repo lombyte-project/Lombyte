@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_GAME_PROCESS_GLOBAL_STATE_FLAGS_H
+#define LOMBYTE_RNC_GAME_PROCESS_GLOBAL_STATE_FLAGS_H
+
+#include "types.h"
+
+s32 process_global_state_flags(void) __asm__("FUN_00222290");
+
+#endif /* LOMBYTE_RNC_GAME_PROCESS_GLOBAL_STATE_FLAGS_H */

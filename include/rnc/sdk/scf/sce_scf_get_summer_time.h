@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_SCF_SCE_SCF_GET_SUMMER_TIME_H
+#define LOMBYTE_RNC_SDK_SCF_SCE_SCF_GET_SUMMER_TIME_H
+
+#include "types.h"
+
+u8 sceScfGetSummerTime(void);
+
+#endif /* LOMBYTE_RNC_SDK_SCF_SCE_SCF_GET_SUMMER_TIME_H */

@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 #include "rnc/camera/update_cam.h"

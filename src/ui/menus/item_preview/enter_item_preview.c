@@ -1,12 +1,13 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_0021EF38). */
-int enter_item_preview(void *destination) __asm__("FUN_0021df30");
+#include "rnc/ui/menus/menu_screen.h"
 
-int enter_item_preview(void *destination) {
-    char *destination_bytes = (char *)destination;
-    *(float *)(destination_bytes + 0x38) = 3.14159274f;
-    *(int *)(destination_bytes + 0x34) = 0;
-    *(int *)(destination_bytes + 0x44) = 0;
-    *(int *)(destination_bytes + 0x48) = 0;
+int enter_item_preview(struct MenuScreen *menu) __asm__("FUN_0021df30");
+
+int enter_item_preview(struct MenuScreen *menu) {
+    menu->data.preview.rotation_angle = 3.14159274f;
+    menu->data.preview.state = 0;
+    menu->data.preview.moby = 0;
+    menu->data.preview.second_moby = 0;
     return 0;
 }
 

@@ -8,8 +8,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/l07/mobys/get_target_sight.h"
 
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
@@ -39,8 +41,6 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_0025a120(struct Moby *);
-extern int  get_target_sight(void *, void *, float) __asm__("FUN_L07_002886d8");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void jet_animate(struct Moby *, float) __asm__("FUN_L00_00259fe8");
 extern Vec4 l07_sphere_collision_resolved_center __asm__("D_L07_00173EF0");
 extern f32  D_0015ED6C;

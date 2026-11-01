@@ -6,4 +6,6 @@
 s32  get_hero_help_value(s32) __asm__("FUN_L06_0021d0a0");
 void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 
+void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_HERO_UPDATE_HERO_VEHICLE_ATTACHMENTS_AND_EFFECTS_H */

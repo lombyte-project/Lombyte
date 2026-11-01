@@ -11,7 +11,6 @@
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void lightpost_update(struct Moby *m) __asm__("FUN_L03_002e2948");
 

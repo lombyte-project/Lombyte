@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_AUDIO_VOICES_IS_VOICE_ACTIVE_H
+#define LOMBYTE_RNC_AUDIO_VOICES_IS_VOICE_ACTIVE_H
+
+#include "types.h"
+
+s32 is_voice_active(s32, s32) __asm__("FUN_001eb740");
+
+#endif /* LOMBYTE_RNC_AUDIO_VOICES_IS_VOICE_ACTIVE_H */

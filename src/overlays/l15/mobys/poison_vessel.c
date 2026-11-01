@@ -6,9 +6,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/game/level_state.h"
 #include "rnc/overlay/l15/mobys/poison_vessel_globals.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/mobys/get_moby_pvars_link.h"
 
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
@@ -101,12 +103,7 @@ extern s32 D_L15_00178500[] __asm__("D_L15_00178500");
 
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
-extern char *FUN_L00_002603d0(int);
-
 extern void func_L00_001FF610_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff660");
-
-extern int
-probe_ground_height_cf(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 
 extern void func_L00_0025F4A8_2E9358(void *,
                                      void *,
@@ -154,7 +151,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     previous_position.q = moby->pos;
     clear_u64_value(&collision_scratch_vector);
     if (coll_sphere(0.5f, &moby->pos, 1, moby)) {
-        if (D_L15_00174458_lui[0] == 0 || FUN_L00_002603d0(D_L15_00174458_lui[0]) == 0) {
+        if (D_L15_00174458_lui[0] == 0 || get_moby_pvars_link(D_L15_00174458_lui[0]) == 0) {
             moby->bBC = 1;
         }
     }
@@ -171,7 +168,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         add_vectors(&temporary_vector, &moby->pos, data);
         if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
             if (((Tb *)D_L15_001744C0_2E9358)->f18 != 0 &&
-                FUN_L00_002603d0(((Tb *)D_L15_001744C0_2E9358)->f18) != 0) {
+                get_moby_pvars_link(((Tb *)D_L15_001744C0_2E9358)->f18) != 0) {
                 data->target = (Moby_2E9358 *)((Tb *)D_L15_001744C0_2E9358)->f18;
                 moby->state = 1;
                 data->f8 = 0.0f;
@@ -196,9 +193,9 @@ void poison_vessel_update(Moby_2E9358 *moby) {
                 moby->bBC = state;
                 data->target = 0;
             } else if (D_L15_00174458_lui[0] != 0) {
-                follow_context = FUN_L00_002603d0(D_L15_00174458_lui[0]);
+                follow_context = get_moby_pvars_link(D_L15_00174458_lui[0]);
                 if (follow_context != 0) {
-                    probe_ground_height_cf(
+                    FUN_L00_00260400(
                         moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
                     fast_vec_sub(&temporary_vector, &moby->pos, &previous_position);
                     *(OvlQuad *)data = temporary_vector.q;

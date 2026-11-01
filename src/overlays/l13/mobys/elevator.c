@@ -17,6 +17,8 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 #include "qcopy.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
 
 typedef struct {
     u8  pad0[0x20];
@@ -35,8 +37,6 @@ extern char D_L13_001670C0_2b39e0[] __asm__("D_L13_001670C0");
 
 extern float D_0015ED70_2b39e0 __asm__("D_0015ED70");
 
-extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
@@ -44,8 +44,6 @@ extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 
 void compute_elevator_camera_pose(struct Moby *moby,
                                   float       *camera_position,

@@ -2,12 +2,12 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 
 extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 extern char *D_L05_0015FFD8_c __asm__("D_L05_0015FFD8");
-extern void convert_pose_to_reference_local(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_00260668");
-extern void transform_attachment_pose(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_002604f0");
+extern void  transform_attachment_pose(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_002604f0");
 extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L00_00260738");
 
 void box_update(char *moby) __asm__("FUN_L05_0030bf98");

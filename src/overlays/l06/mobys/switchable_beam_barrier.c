@@ -7,6 +7,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 
 extern float D_L06_00167540[];
 
@@ -33,10 +37,8 @@ extern float D_0015ED6C;
 #include "rnc/overlay/l06/mobys/switchable_beam_barrier_data/update_switchable_beam_barrier_3.h"
 
 extern float D_L06_001FE890[];
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int   D_L06_00162234;
 extern int   D_L06_00162238;
-extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern float D_L06_001621F8 __attribute__((sda));
 
 #include "rnc/overlay/l06/mobys/switchable_beam_barrier_data/update_switchable_beam_barrier_2.h"
@@ -48,7 +50,6 @@ extern float D_L06_00162208 __attribute__((sda));
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);
 extern void add_draw_callback(int, char *) __asm__("FUN_001f4600");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void        test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00305000");
 void        draw_moby_vector_streams(char *m) __asm__("FUN_L06_00305170");
 extern void
@@ -74,10 +75,9 @@ void switchable_beam_barrier_update(char *moby) {
         } m;
     } u;
 
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_VECTOR_STREAMS:
-        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
-                            vector_stream_moby_scale_multiplier_gp;
+        MOBY(moby)->scale = MOBY(moby)->pclass->scale * vector_stream_moby_scale_multiplier_gp;
         D_L06_00162238 = 0x16;
         D_L06_00162234 = 0x2D;
         vector_stream_vars->timer[1] = 0xB;
@@ -86,10 +86,10 @@ void switchable_beam_barrier_update(char *moby) {
         vector_stream_vars->timer[0] = 0;
         vector_stream_vars->f18 = -1;
         if (vector_stream_vars->f10 != -1) {
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             MOBY(moby)->collision = 0;
         } else {
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     case WAIT_FOR_LINKED_MOBY: {
@@ -97,8 +97,8 @@ void switchable_beam_barrier_update(char *moby) {
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
         }
-        moby[0x20] = 2;
-        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        MOBY(moby)->state = 2;
+        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         break;
     }
     case UPDATE_VECTOR_STREAMS: {
@@ -154,7 +154,7 @@ void switchable_beam_barrier_update(char *moby) {
             *(unsigned char *)(D_L06_0015FFD8 + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
             int voice_slot_index;
             MOBY(moby)->collision = 0;
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
             voice_slot_index = vector_stream_vars->f18;
             if (voice_slot_index != -1) {
                 char *e = ((char *)&voice_pool) + voice_slot_index * 0x70;
@@ -209,7 +209,7 @@ void switchable_beam_barrier_update(char *moby) {
                                     0);
             }
         }
-        moby[0x20] = 4;
+        MOBY(moby)->state = 4;
         break;
     }
     }
@@ -267,7 +267,6 @@ extern float vector_stream_texture_u_step_gp __asm__("D_L06_001621F4") __attribu
 extern f32   D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
 extern f32   D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
 extern void  FUN_L06_00216b88(int *, float *);
-extern void  font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void  vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void draw_moby_vector_streams(char *moby) {

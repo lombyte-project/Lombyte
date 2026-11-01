@@ -5,6 +5,9 @@
 #include "sda.h"
 #include "rnc/audio/sound_read_work.h"
 #include "rnc/audio/snd_start_sound_system_globals.h"
+#include "rnc/sdk/libc/stdio/printf.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
 
 struct SifClientDataStartSound {
     u8 pad_0[0x24];
@@ -25,10 +28,7 @@ extern s32  snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda));
 extern s64  snd_cd_callback_data __asm__("D_0015ECD8") MACRO_ADDR;
 extern u32  snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;
 
-extern void sceSifInitRpc(u32);
-extern s32  sceSifBindRpc(struct SifClientDataStartSound *, u32, s32);
-extern s32  printf(const char *, ...);
-extern s32  snd_send_iop_command_and_wait(s32, s32, void *) __asm__("func_0012E548");
+extern s32 snd_send_iop_command_and_wait(s32, s32, void *) __asm__("func_0012E548");
 
 s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
 
@@ -49,7 +49,7 @@ s32 snd_start_sound_system(void) {
     for (;;) {
         bind_result = sceSifBindRpc(&sound_command_client, 0x123456, 0);
         if (bind_result < 0) {
-            printf((const char *)snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x73);
+            Printf((const char *)snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x73);
             for (;;) {
             }
         }
@@ -69,7 +69,7 @@ s32 snd_start_sound_system(void) {
     do {
         bind_result = sceSifBindRpc(&sound_stream_client, 0x123457, 0);
         if (bind_result < 0) {
-            printf((const char *)snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x88);
+            Printf((const char *)snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x88);
             for (;;) {
             }
         }

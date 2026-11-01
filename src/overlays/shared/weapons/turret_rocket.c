@@ -115,7 +115,7 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
         MOBY(moby)->visible = 1;
         MOBY(moby)->rot.y = -fast_arc_tan(vector_length_xy(rotation_copy), rotation[2]);
         MOBY(moby)->rot.z = fast_arc_tan(rotation[0], rotation[1]);
-        qcopy(moby + 0x10, position_copy);
+        qcopy(&MOBY(moby)->pos, position_copy);
         qcopy(created_moby_private_state, rotation_copy);
         if (D_L08_0015F5CC & 1)
             *(volatile int *)(created_moby_private_state + 0x1c) = 1;
@@ -143,7 +143,7 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
                 velocity[3] = moby_creation_particle_primary_motion_w_gp;
                 offset[3] = moby_creation_particle_secondary_motion_w_gp;
                 i++;
-                spawn_burst(moby + 0x10,
+                spawn_burst(&MOBY(moby)->pos,
                             velocity_ptr,
                             moby_creation_initial_particle_word_gp,
                             moby_creation_second_particle_word_gp,
@@ -158,7 +158,7 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
                 particle_third_frame_count =
                     truncate_float_to_s32(FUN_L08_00211a20(random_float_between(
                         (float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
-                spawn_spark(moby + 0x10,
+                spawn_spark(&MOBY(moby)->pos,
                             velocity_ptr,
                             offset_ptr,
                             moby_creation_initial_spark_word_gp,
@@ -183,7 +183,7 @@ void turret_rocket_update(char *moby) __asm__("FUN_L08_002e8210");
 
 /* Moby class 458 */
 void turret_rocket_update(char *moby) {
-    char *position_ptr = moby + 0x10;
+    char *position_ptr = &MOBY(moby)->pos;
     char *homing_projectile_private_state = ((char *)MOBY(moby)->pvars);
     float position_copy[4] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
@@ -251,12 +251,12 @@ void turret_rocket_update(char *moby) {
         {
             char *target_data = *(char **)(target + 0x78);
             length = fast_vec_length(homing_projectile_private_state);
-            spread = fast_vec_dist(moby + 0x10,
+            spread = fast_vec_dist(&MOBY(moby)->pos,
                                    *(char **)(homing_projectile_private_state + 0x10) + 0x10);
             fast_vec_scale(position, target_data + 0x20, spread / length);
             fast_vec_add(
                 position, position, *(char **)(homing_projectile_private_state + 0x10) + 0x10);
-            fast_vec_sub(direction, position, moby + 0x10);
+            fast_vec_sub(direction, position, &MOBY(moby)->pos);
             fast_vec_normalize(direction, direction, length);
             fast_vec_sub(velocity, direction, homing_projectile_private_state);
             scale_vector_in_place_002e8210(frame_time * 3.7f, velocity);
@@ -281,9 +281,9 @@ remove:
     mark_moby_for_removal(moby);
     return;
 collision:
-    if (collision_line(position_copy, moby + 0x10, 0, moby, position) == 0)
+    if (collision_line(position_copy, &MOBY(moby)->pos, 0, moby, position) == 0)
         return;
-    qcopy(moby + 0x10, D_L08_00174660);
+    qcopy(&MOBY(moby)->pos, D_L08_00174660);
     if (15.0f < MOBY(moby)->pos.x && 15.0f < MOBY(moby)->pos.y && 15.0f < MOBY(moby)->pos.z) {
         radius = 24.0f;
         if (MOBY(moby)->pos.x - 2.0f < radius)
@@ -294,7 +294,7 @@ collision:
             radius = MOBY(moby)->pos.z - 2.0f;
         FUN_L00_0025e450_002e8210(moby,
                                   homing_projectile_private_state,
-                                  moby + 0x10,
+                                  &MOBY(moby)->pos,
                                   3.0f,
                                   3.0f,
                                   0,

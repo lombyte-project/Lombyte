@@ -1,0 +1,9 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_INITIALIZE_NUMERIC_HUD_ELEMENT_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_INITIALIZE_NUMERIC_HUD_ELEMENT_H
+
+#include "types.h"
+#include "rnc/overlay/shared/ui/hud.h"
+
+void initialize_numeric_hud_element(HudElem *) __asm__("FUN_L00_00237190");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_INITIALIZE_NUMERIC_HUD_ELEMENT_H */

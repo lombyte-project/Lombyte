@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_HUD_SPRITES_DRAW_HUD_SPRITE_SUBPIXEL_H
+#define LOMBYTE_RNC_UI_HUD_SPRITES_DRAW_HUD_SPRITE_SUBPIXEL_H
+
+#include "types.h"
+
+void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("FUN_00200080");
+
+#endif /* LOMBYTE_RNC_UI_HUD_SPRITES_DRAW_HUD_SPRITE_SUBPIXEL_H */

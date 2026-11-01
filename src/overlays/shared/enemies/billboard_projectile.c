@@ -1,7 +1,7 @@
 /* Billboard projectile (class 0x9C): flies along its velocity, bursts into particles on collision and times out. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -9,20 +9,19 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "qcopy.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern char D_L01_00167240[];
 
-extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern char  D_L01_001742E0[];
 extern float D_L01_001742C0[];
-extern void  spawn_two_point_effect_particle(char *, char *) __asm__("FUN_L00_0026c6e8");
 
 extern int noop_callback_l(void *) __asm__("FUN_001e9448");
 extern int collect_mobies_in_sphere(float, void *, int, int, void *) __asm__("FUN_L00_001f2868");
 extern void
 FUN_L00_00259bc8_2c7530(float, void *, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
-extern void spawn_type_14_particle(int, void *) __asm__("FUN_L01_00280970");
-extern void FUN_0020c828(void *);
 
 s32 moby_motion_particle_random_sign_base_gp __asm__("D_L01_00161494") = 8;
 f32 moby_motion_collision_radius_gp __asm__("D_L01_0016149C") = 0.25f;
@@ -57,13 +56,13 @@ void spawn_collision_particle_bursts(void) {
         x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
         y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
         build_spherical_offset(offset_vector, 0.05f, y, x);
-        spawn_burst(spawn_position,
-                    offset_vector,
-                    0x4F007FFF,
-                    0x1FFFFFFF,
-                    random_int_between(scale_game_frames(10), scale_game_frames(20)),
-                    1,
-                    20000.0f);
+        FUN_L00_0026cbb0(spawn_position,
+                         offset_vector,
+                         0x4F007FFF,
+                         0x1FFFFFFF,
+                         random_int_between(scale_game_frames(10), scale_game_frames(20)),
+                         1,
+                         20000.0f);
     }
 }
 
@@ -82,20 +81,23 @@ void billboard_projectile_update(char *moby) {
     float normal[4];
     float distance;
 
-    distance = vector_distance_xy(camera, moby + 0x10);
+    distance = vector_distance_xy(camera, &MOBY(moby)->pos);
     camera -= 0x140;
     MOBY(moby)->rot.y = -fast_arc_tan(distance, *(float *)(camera + 0x148) - MOBY(moby)->pos.z);
     MOBY(moby)->rot.z = fast_arc_tan(*(float *)(camera + 0x140) - MOBY(moby)->pos.x,
                                      *(float *)(camera + 0x144) - MOBY(moby)->pos.y);
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(motion_lifetime_vars + 3));
-    fast_vec_add(moby + 0x10, moby + 0x10, motion_lifetime_vars + 8);
-    switch ((u8)moby[0x20]) {
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, motion_lifetime_vars + 8);
+    switch ((u8)MOBY(moby)->state) {
     case COLLISION_CHECK_AND_COUNTDOWN:
         spawn_type_14_particle(moby_motion_particle_random_sign_base_gp, moby);
         fast_vec_normalize(normal, motion_lifetime_vars + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
-        if (collect_mobies_in_sphere(
-                moby_motion_collision_radius_gp, moby + 0x10, 0x10, motion_lifetime_vars[6], hit) &&
+        if (collect_mobies_in_sphere(moby_motion_collision_radius_gp,
+                                     &MOBY(moby)->pos,
+                                     0x10,
+                                     motion_lifetime_vars[6],
+                                     hit) &&
             !noop_callback_l(moby)) {
             CollisionHit *contact = (CollisionHit *)D_L01_001742C0;
             if (contact->moby != 0)
@@ -106,7 +108,7 @@ void billboard_projectile_update(char *moby) {
         }
         if (fast_dec_timer(motion_lifetime_vars)) {
             motion_lifetime_vars[0] = scale_game_frames(0x1e);
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             if (motion_lifetime_vars[4] != 0)
                 motion_lifetime_vars[4] = 0;
         }
@@ -116,10 +118,10 @@ void billboard_projectile_update(char *moby) {
     case TIMED_REMOVAL:
         if (fast_dec_timer(motion_lifetime_vars)) {
         remove:
-            FUN_0020c828(moby);
+            mark_moby_for_removal(moby);
         } else {
             int duration = scale_game_frames(0x1e);
-            moby[0x23] =
+            MOBY(moby)->alpha =
                 truncate_float_to_s32((float)motion_lifetime_vars[0] * (127.0f / (float)duration));
         }
         break;

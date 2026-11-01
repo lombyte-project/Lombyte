@@ -3,8 +3,8 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/overlay/l08/mesh_batches.h"
 

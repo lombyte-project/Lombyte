@@ -7,13 +7,13 @@
 #include "rnc/math/fast_math.h"
 
 #include "rnc/rendering/effects/draw_light_quads.h"
+#include "rnc/rendering/effect_texture.h"
 
 typedef struct {
     FRow pos;
     FRow dir;
 } LightRec;
 
-extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
 /* Builds a 4-row matrix per light in D_0018E340 (count D_0015F474):

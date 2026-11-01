@@ -6,6 +6,7 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/rendering/build_interpolated_dma_packet.h"
 #include "rnc/overlay/shared/rendering/draw_textured_grid.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 extern char D_L05_001671C0[];
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
@@ -30,7 +31,6 @@ void draw_ocean_grid_outside_clip_volumes(struct Moby *moby) {
         draw_textured_grid(D_L05_00211B20);
 }
 
-void         add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern int   frame_number __asm__("D_L05_0015F5CC");
 extern float D_L05_00211B20[];
 

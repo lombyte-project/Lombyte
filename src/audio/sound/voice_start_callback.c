@@ -1,18 +1,20 @@
 /* Ported from rac1-decomp (src/game/sound.c, func_0022F0A8). */
+#include "rnc/audio/voice_pool.h"
+
 void voice_start_callback(int handle, long context) __asm__("FUN_0022dd90");
 
 void voice_start_callback(int handle, long voice_record_address) {
-    unsigned char *voice = (unsigned char *)(int)voice_record_address;
+    VoiceSlot *voice = (VoiceSlot *)(int)voice_record_address;
     if (voice != 0) {
-        *(int *)voice = handle;
+        voice->handle = handle;
         if (handle != 0) {
-            if (voice[4] == 1) {
-                voice[4] = 2;
+            if (voice->state == 1) {
+                voice->state = 2;
             }
         } else {
-            *(int *)(voice + 0x18) = 0;
-            *(int *)(voice + 0x1C) = 0;
-            voice[4] = 0;
+            voice->owner = 0;
+            voice->owner_context = 0;
+            voice->state = 0;
         }
     }
 }

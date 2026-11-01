@@ -5,7 +5,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -37,6 +37,26 @@ extern void           update_moby_path_transform(void *) __asm__("FUN_L11_0031a4
 float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") = 32.0f;
 void  blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 
+typedef struct BlargShipVars {
+    u8  pad_0[0x60];
+    s32 unk60;
+    s32 unk64;
+    f32 unk68;
+    f32 unk6C;
+    f32 unk70;
+    f32 unk74;
+    f32 unk78;
+    u8  pad_7C[0x8];
+    s32 unk84;
+    s32 unk88;
+    f32 unk8C;
+    f32 unk90;
+    f32 unk94;
+    s32 unk98;
+    u8  pad_9C[0x14];
+    f32 unkB0[4];
+} BlargShipVars;
+
 /* Moby class 1843 */
 void blarg_ship_update(struct Moby *moby) {
     enum {
@@ -48,35 +68,35 @@ void blarg_ship_update(struct Moby *moby) {
         BLARG_SHIP_TRACK_HERO_AND_FIRE = 5,
         BLARG_SHIP_BURST_AND_DEACTIVATE = 6
     };
-    float scratch_vector[4];
-    float movement_target_position[4];
-    float hero_position_delta[4];
-    float clamped_euler_angles[4];
-    float rotation_basis_row0[4];
-    float rotation_basis_row1[4];
-    float rotation_basis_row2[4];
-    float hero_relative_position[4];
-    float firing_target_delta[4];
-    float firing_direction[4];
-    float sA0[4];
-    float sB0[4];
-    float movement_distance_accumulator;
-    char *moby_pvars = (char *)moby->pvars;
-    float offset_angle;
-    float movement_target_distance;
-    char *firing_moby;
+    float          scratch_vector[4];
+    float          movement_target_position[4];
+    float          hero_position_delta[4];
+    float          clamped_euler_angles[4];
+    float          rotation_basis_row0[4];
+    float          rotation_basis_row1[4];
+    float          rotation_basis_row2[4];
+    float          hero_relative_position[4];
+    float          firing_target_delta[4];
+    float          firing_direction[4];
+    float          sA0[4];
+    float          sB0[4];
+    float          movement_distance_accumulator;
+    BlargShipVars *moby_pvars = (BlargShipVars *)moby->pvars;
+    float          offset_angle;
+    float          movement_target_distance;
+    char          *firing_moby;
 
     update_moby_hit_stats_and_state(moby);
     switch (moby->state) {
     case BLARG_SHIP_INITIALIZE:
         moby->draw_dist = 0xFF;
         moby->update_dist = 0xFF;
-        if (*(int *)(moby_pvars + 0x88) == 0) {
+        if (moby_pvars->unk88 == 0) {
             moby->state = 1;
-            *(float *)(moby_pvars + 0x6C) = randf_sym(0.3f, 0.5f);
-            *(float *)(moby_pvars + 0x70) = random_angle_radians();
-            *(float *)(moby_pvars + 0x74) = randf_sym(60.0f, 120.0f) * DEG_TO_RAD * frame_time;
-            *(float *)(moby_pvars + 0x78) = random_float_between(8.0f, 12.0f);
+            moby_pvars->unk6C = randf_sym(0.3f, 0.5f);
+            moby_pvars->unk70 = random_angle_radians();
+            moby_pvars->unk74 = randf_sym(60.0f, 120.0f) * DEG_TO_RAD * frame_time;
+            moby_pvars->unk78 = random_float_between(8.0f, 12.0f);
         } else {
             moby->state = 4;
             moby->collision = 0;
@@ -86,20 +106,18 @@ void blarg_ship_update(struct Moby *moby) {
     case BLARG_SHIP_FOLLOW_PATH:
     case BLARG_SHIP_BURST_AND_HIDE:
         update_moby_trail_points(moby);
-        *(float *)(moby_pvars + 0x68) += *(float *)(moby_pvars + 0x6C);
-        if (*(float *)(moby_pvars + 0x68) > 1.0f) {
-            *(float *)(moby_pvars + 0x68) -= 1.0f;
-            *(int *)(moby_pvars + 0x64) =
-                (*(int *)(moby_pvars + 0x64) + 1) %
-                **(int **)(D_L17_001B0DB0 + *(int *)(moby_pvars + 0x60) * 4);
-        } else if (*(float *)(moby_pvars + 0x68) < 0.0f) {
-            *(float *)(moby_pvars + 0x68) += 1.0f;
-            *(int *)(moby_pvars + 0x64) =
-                (*(int *)(moby_pvars + 0x64) +
-                 **(int **)(D_L17_001B0DB0 + *(int *)(moby_pvars + 0x60) * 4) - 1) %
-                **(int **)(D_L17_001B0DB0 + *(int *)(moby_pvars + 0x60) * 4);
+        moby_pvars->unk68 += moby_pvars->unk6C;
+        if (moby_pvars->unk68 > 1.0f) {
+            moby_pvars->unk68 -= 1.0f;
+            moby_pvars->unk64 =
+                (moby_pvars->unk64 + 1) % **(int **)(D_L17_001B0DB0 + moby_pvars->unk60 * 4);
+        } else if (moby_pvars->unk68 < 0.0f) {
+            moby_pvars->unk68 += 1.0f;
+            moby_pvars->unk64 =
+                (moby_pvars->unk64 + **(int **)(D_L17_001B0DB0 + moby_pvars->unk60 * 4) - 1) %
+                **(int **)(D_L17_001B0DB0 + moby_pvars->unk60 * 4);
         }
-        fast_add_rotations(*(float *)(moby_pvars + 0x70), *(float *)(moby_pvars + 0x74));
+        fast_add_rotations(moby_pvars->unk70, moby_pvars->unk74);
         update_moby_path_transform(moby);
         if (moby->state == 2) {
             cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
@@ -125,8 +143,8 @@ void blarg_ship_update(struct Moby *moby) {
         scratch_vector[3] = 3.0f;
         if (fast_bsphere_check((char *)&moby->pos, 512.0f) == -1) {
             if (fast_vec_dist(&moby->pos, &hero.motion.pos) > 32.0f) {
-                *(int *)(moby_pvars + 0x84) += 1;
-                if (scale_game_frames(60) < *(int *)(moby_pvars + 0x84)) {
+                moby_pvars->unk84 += 1;
+                if (scale_game_frames(60) < moby_pvars->unk84) {
                     moby->state = 1;
                     if (moby->prev_seq) {
                         blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -135,10 +153,10 @@ void blarg_ship_update(struct Moby *moby) {
                     moby->collision = moby->pclass->collision;
                 }
             } else {
-                *(int *)(moby_pvars + 0x84) = 0;
+                moby_pvars->unk84 = 0;
             }
         } else {
-            *(int *)(moby_pvars + 0x84) = 0;
+            moby_pvars->unk84 = 0;
         }
         break;
     case BLARG_SHIP_INACTIVE:
@@ -153,11 +171,10 @@ void blarg_ship_update(struct Moby *moby) {
             clamped_euler_angles[1] = -0.2617994f;
         }
         euler_rotation_basis(rotation_basis_row0, clamped_euler_angles);
-        fast_vec_sub(hero_position_delta, &hero.motion.pos, moby_pvars + 0xB0);
-        qcopy(moby_pvars + 0xB0, &hero.motion.pos);
+        fast_vec_sub(hero_position_delta, &hero.motion.pos, moby_pvars->unkB0);
+        qcopy(moby_pvars->unkB0, &hero.motion.pos);
         fast_vec_add(&moby->pos, &moby->pos, hero_position_delta);
-        offset_angle =
-            fast_add_rotations(0.7853982f, (float)*(int *)(moby_pvars + 0x88) * 1.5707964f);
+        offset_angle = fast_add_rotations(0.7853982f, (float)moby_pvars->unk88 * 1.5707964f);
         fast_vec_normalize(scratch_vector, rotation_basis_row1, fast_sin(offset_angle) * 8.0f);
         fast_vec_add(movement_target_position, D_L17_001676C0, scratch_vector);
         fast_vec_normalize(scratch_vector, rotation_basis_row2, fast_cos(offset_angle) * 8.0f);
@@ -168,35 +185,35 @@ void blarg_ship_update(struct Moby *moby) {
         movement_target_distance = fast_vec_length(scratch_vector);
         if (*(char *)&hero.ship_flags & 2) {
             advance_accelerated_scalar(&movement_distance_accumulator,
-                                       (float *)(moby_pvars + 0x6C),
+                                       &moby_pvars->unk6C,
                                        movement_target_distance,
                                        frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f,
                                        frame_time);
         } else if (moby->command) {
             advance_accelerated_scalar(&movement_distance_accumulator,
-                                       (float *)(moby_pvars + 0x6C),
+                                       &moby_pvars->unk6C,
                                        movement_target_distance,
                                        frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f,
                                        frame_time * 15.0f);
         } else {
             advance_accelerated_scalar(&movement_distance_accumulator,
-                                       (float *)(moby_pvars + 0x6C),
+                                       &moby_pvars->unk6C,
                                        movement_target_distance,
                                        frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f,
                                        frame_time * 5.0f);
         }
-        FUN_L00_0025f730(scratch_vector, *(float *)(moby_pvars + 0x6C));
+        FUN_L00_0025f730(scratch_vector, moby_pvars->unk6C);
         fast_vec_add(&moby->pos.x, &moby->pos.x, scratch_vector);
         if (moby->command) {
             if (moby->visible) {
-                *(int *)(moby_pvars + 0x98) += 1;
+                moby_pvars->unk98 += 1;
             }
             if (fast_vec_dist(movement_target_position, &moby->pos.x) < 2.0f) {
                 moby->command = 0;
-            } else if (scale_game_frames(120) < *(int *)(moby_pvars + 0x98)) {
+            } else if (scale_game_frames(120) < moby_pvars->unk98) {
                 moby->command = 0;
             }
         } else {
@@ -208,7 +225,7 @@ void blarg_ship_update(struct Moby *moby) {
             target_rotation_angle =
                 fast_arc_tan(hero_relative_position[0], hero_relative_position[1]);
             approach_angle(yaw,
-                           (float *)(moby_pvars + 0x8C),
+                           &moby_pvars->unk8C,
                            target_rotation_angle,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
@@ -216,15 +233,15 @@ void blarg_ship_update(struct Moby *moby) {
             target_rotation_angle =
                 -fast_arc_tan(vector_length_xy(hero_relative_position), hero_relative_position[2]);
             approach_angle(pitch,
-                           (float *)(moby_pvars + 0x90),
+                           &moby_pvars->unk90,
                            target_rotation_angle,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
                            frame_time * 12.566371f);
             if (D_L17_0015F5CC % 10 == 0) {
                 FUN_0022da68(2, 0, (int)moby);
-                approach_value((float *)(moby_pvars + 0x94), 0.0f, 0.25f);
-                fast_vec_normalize(sB0, hero_position_delta, *(float *)(moby_pvars + 0x94));
+                approach_value(&moby_pvars->unk94, 0.0f, 0.25f);
+                fast_vec_normalize(sB0, hero_position_delta, moby_pvars->unk94);
                 fast_vec_add(sB0, sB0, hero_position);
                 if (D_L17_0015F5CC % 20 == 0) {
                     transform_vector_by_basis(
@@ -256,8 +273,8 @@ void blarg_ship_update(struct Moby *moby) {
         }
         break;
     case BLARG_SHIP_BURST_AND_DEACTIVATE:
-        fast_vec_sub(scratch_vector, &hero.motion.pos, moby_pvars + 0xB0);
-        qcopy(moby_pvars + 0xB0, &hero.motion.pos);
+        fast_vec_sub(scratch_vector, &hero.motion.pos, moby_pvars->unkB0);
+        qcopy(moby_pvars->unkB0, &hero.motion.pos);
         fast_vec_add(&moby->pos, &moby->pos, scratch_vector);
         cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
         if (random_integer_below(2)) {
@@ -322,7 +339,7 @@ char *try_activate_blarg_ship_from_list(int list) {
         if (MOBY(selected_moby)->prev_seq)
             blend_moby_animation(selected_moby, 0, 0, scale_game_frames(10));
         MOBY(selected_moby)->flags &= 0xFFFE;
-        MOBY(selected_moby)->collision = *(int *)(((char *)MOBY(selected_moby)->pclass) + 0x10);
+        MOBY(selected_moby)->collision = MOBY(selected_moby)->pclass->collision;
         return selected_moby;
     } while (*moby_index_ptr++ >= 0);
     return 0;

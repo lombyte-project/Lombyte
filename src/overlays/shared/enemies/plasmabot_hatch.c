@@ -3,7 +3,7 @@
 #include "rnc/overlay/shared/enemies/plasmabot_hatch.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"

@@ -1,5 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/input/dbc/scedbcreceivedata.h"
+#include "rnc/sdk/input/sce_pad2_link_driver.h"
+#include "rnc/sdk/input/sce_pad2_set_button_order.h"
 
 typedef struct {
     u64 size : 14;
@@ -22,9 +25,6 @@ typedef struct {
 } Pad2Info;
 
 extern Pad2Info D_0015B540[];
-extern s32      sceDbcReceiveData(s32 port, s32 cmd, void *buf, void *data);
-extern s32      scePad2LinkDriver(s32 socket);
-extern void     scePad2SetButtonOrder(u8 *profile, u8 *order);
 
 s32 scePad2GetButtonProfile(s32 socket, u8 *profile) {
     DbcCommandWord cmd;

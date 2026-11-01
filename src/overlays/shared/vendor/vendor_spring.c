@@ -2,11 +2,9 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C918), where it is exact; names translated to the US level program. */
-
-extern void advance_damped_scalar_velocity(
-    float *ptr, float rate, float b, float c, float limit) __asm__("FUN_L00_0025b798");
 
 float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 float vendor_spring(float *current_value,

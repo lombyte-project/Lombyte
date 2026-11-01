@@ -1,3 +1,6 @@
+#include "rnc/sdk/soft_float/__pack_d.h"
+#include "rnc/sdk/soft_float/fpadd_parts.h"
+#include "rnc/sdk/soft_float/unpack_d.h"
 /* This is a software floating point library which can be used instead of
    the floating point routines in libgcc1.c for targets without hardware
    floating point. 
@@ -36,10 +39,6 @@ Boston, MA 02111-1307, USA.  */
 /* Source: GCC 2.95.2 fp-bit.c. */
 
 #include "types.h"
-
-extern s32 __pack_d();
-extern s32 __unpack_d();
-extern s32 _fpadd_parts();
 
 struct DpsubWork {
     u8  pad_0[0x20];

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L09_MOBYS_FLOATING_SHIP_PIECE_H
+#define LOMBYTE_RNC_OVERLAY_L09_MOBYS_FLOATING_SHIP_PIECE_H
+
+#include "types.h"
+
+void floating_ship_piece_update(char *) __asm__("FUN_L09_003091b0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L09_MOBYS_FLOATING_SHIP_PIECE_H */

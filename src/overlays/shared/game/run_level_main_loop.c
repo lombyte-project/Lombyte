@@ -11,8 +11,8 @@
 #include "rnc/save/memory_card_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/level_state.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
@@ -37,6 +37,28 @@
 #include "rnc/game/transitions/tick_space_transition.h"
 #include "rnc/streaming/stash/init_stash.h"
 #include "rnc/ui/hud/init_hud.h"
+#include "rnc/audio/music/music_start_track.h"
+#include "rnc/audio/streaming/read_disc_sectors_and_wait.h"
+#include "rnc/game/dispatch_game_state_update.h"
+#include "rnc/game/update_mode_freeze.h"
+#include "rnc/game/update_resident_gameplay_state.h"
+#include "rnc/overlay/shared/cutscenes/update_cutscene_playback.h"
+#include "rnc/overlay/shared/game/init_level_runtime_state.h"
+#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
+#include "rnc/overlay/shared/rendering/debug/draw_debug_profiler_if_enabled.h"
+#include "rnc/overlay/shared/rendering/debug/update_debug_menu.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/overlay/shared/rendering/frame/frame_roll_counter.h"
+#include "rnc/overlay/shared/ui/menus/initialize_pause_menu.h"
+#include "rnc/overlay/shared/ui/text/draw_dialog_background_and_text.h"
+#include "rnc/overlay/shared/vendor/draw_vendor_inset_quads.h"
+#include "rnc/overlay/shared/vendor/vendor_menu.h"
+#include "rnc/overlay/shared/world/load_level_gameplay.h"
+#include "rnc/rendering/debug/prepare_debug_profiler_render.h"
+#include "rnc/rendering/frame/reset_gs_registers_pr.h"
+#include "rnc/rendering/packets/put_disp_buffer.h"
+#include "rnc/streaming/stash/stash_send_data.h"
+#include "rnc/ui/map/update_map_icons.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
@@ -54,43 +76,16 @@ extern long                     frm_clock_time __asm__("D_0015ED40");
 extern float D_L00_0015F5A8_macro[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
 
 extern int  debug_print(void *) __asm__("FUN_001e93b0");
-extern void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
-extern int  load_level_assets_and_gameplay(int, int) __asm__("FUN_L00_00244110");
 extern void reset_draw_config(void) __asm__("FUN_001f0b88");
 extern void initialize_level_map_archive(void) __asm__("FUN_L00_002464a8");
-extern void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
-extern void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
 extern int  sce_gs_sync_v(int) __asm__("FUN_00122298");
-extern void put_disp_buffer(void) __asm__("FUN_001fb2a8");
-extern void music_start_track(int, int, int) __asm__("FUN_00215c40");
 extern void noop_main_callback() __asm__("FUN_001e93e8");
-extern void update_debug_menu(void) __asm__("FUN_L00_001f4598");
-extern void draw_debug_menu(void) __asm__("FUN_L00_001f58e0");
-extern void FUN_L00_00297f78(void);
-extern void draw_debug_profiler_if_enabled(void) __asm__("FUN_L00_001f8e30");
-extern void play_queued_movie(void) __asm__("FUN_L00_002999a8");
-extern void update_cutscene_playback(void) __asm__("FUN_L00_00298f90");
-extern void prepare_debug_profiler_render(void) __asm__("FUN_001f4248");
-extern void update_pause_menu(void) __asm__("FUN_L00_00276bd0");
-extern void draw_page_contents(void) __asm__("FUN_L00_001f8f50");
-extern void update_mode_freeze(void) __asm__("FUN_001fce28");
-extern void draw_dialog_background_and_text(void) __asm__("FUN_L00_001f8ec8");
-extern void update_vendor_menu(void) __asm__("FUN_L00_0029c648");
-extern void draw_vendor_screen(void) __asm__("FUN_L00_002a02b0");
-extern void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
-extern void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
-extern void update_slideshow(void) __asm__("FUN_L00_00299c48");
-extern void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
-extern void frame_roll_counter(void) __asm__("FUN_L00_001f6d70");
 extern void snd_hold_command_batches(void) __asm__("FUN_0012eaf0");
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void
 draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
-extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
-extern void reset_gs_registers_pr(void) __asm__("FUN_001f3958");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern void music_pause(int) __asm__("FUN_00216050");
-extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 
 extern char level_startup_clear_end[] __asm__("D_L00_00165FB0");
 extern char level_startup_clear_start[] __asm__("D_L00_00161E00");
@@ -187,7 +182,7 @@ void run_level_main_loop(void) {
             break;
         case LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE:
             register_audio_stream_callback();
-            FUN_L00_00297f78();
+            handle_pause_input();
             draw_debug_profiler_if_enabled();
             break;
         case LEVEL_MODE_MEMORY_CARD_DRAIN:
@@ -283,7 +278,7 @@ void run_level_main_loop(void) {
                 if (frame_timer_threshold < *(volatile int *)0x10000800) {
                     if (mode == 0) {
                         register_audio_stream_callback();
-                        FUN_L00_00297f78();
+                        handle_pause_input();
                     } else if (mode == 2 && D_L00_0016C8B0 == 0) {
                         register_audio_stream_callback();
                         update_cutscene_playback();
@@ -390,8 +385,6 @@ extern unsigned char      D_0014161B[];
 extern unsigned char      l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
-s32 read_disc_sectors_and_wait(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
-s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
 extern struct DiscFile D_00138438[];
 extern char            D_001383A0[];
 extern char            D_00141EC0[];
@@ -502,7 +495,6 @@ void initialize_level_map_archive(void) {
 extern u8 D_0013D4E1 NOT_SDA;
 
 void noop_main_callback(void) __asm__("FUN_001e93e8");
-void update_map_icons(s32, s32) __asm__("FUN_0020bf90");
 void start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 void send_dma_to_stash_slot(s32, s32, s32, s32) __asm__("FUN_L00_00293d38");

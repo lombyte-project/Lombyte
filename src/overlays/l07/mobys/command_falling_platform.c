@@ -10,9 +10,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
-
-extern float random_angle_radians(void) __asm__("FUN_00213308");
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/rotations/reorient_position_about_pivot.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
@@ -20,16 +22,39 @@ extern int   FUN_0022da68(int, int, int);
 extern void  update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
-void         FUN_L01_0026e090(int i, int v);
 void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int   rand(void) __asm__("FUN_001160d8");
 extern s32   rand(void);
 extern float step_angle_toward_target(float *, float, int, float) __asm__("FUN_L00_0025bc00");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void
-reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
-void command_falling_platform_update(char *moby) __asm__("FUN_L07_003112c8");
+void         command_falling_platform_update(char *moby) __asm__("FUN_L07_003112c8");
+
+typedef struct CommandFallingPlatformVars {
+    u8  pad_0[0x20];
+    s32 unk20;
+    s16 unk24;
+    u8  pad_26[0x2];
+    u8  unk28;
+    u8  pad_29[0x15];
+    s16 unk3E;
+    u8  pad_40[0x20];
+    f32 transform[16];
+    s32 parent_index;
+    f32 saved_rot_x;
+    f32 saved_rot_y;
+    s32 unkAC;
+    f32 fall_speed;
+    f32 unkB4;
+    f32 unkB8;
+    u8  unkBC;
+    u8  unkBD;
+    u8  unkBE;
+    u8  unkBF;
+    f32 unkC0;
+    f32 unkC4;
+    s32 unkC8;
+    f32 unkCC;
+} CommandFallingPlatformVars;
 
 /* Moby class 1069 */
 void command_falling_platform_update(char *moby) {
@@ -41,7 +66,8 @@ void command_falling_platform_update(char *moby) {
         PLATFORM_PARENT_GATED_RECOVERY_SETUP = 4,
         PLATFORM_HEIGHT_RECOVERY_AND_SWAY = 5
     };
-    char *falling_platform_vars = ((char *)MOBY(moby)->pvars);
+    CommandFallingPlatformVars *falling_platform_vars =
+        (CommandFallingPlatformVars *)MOBY(moby)->pvars;
     char *parent = 0;
     char *parent_data = 0;
     float previous[4];
@@ -61,76 +87,76 @@ void command_falling_platform_update(char *moby) {
     qcopy(previous, moby + 0x10);
     fast_vec_scale(delta, moby + 0x10, -1.0f);
     qcopy(rotation, moby + 0x40);
-    if (*(int *)(falling_platform_vars + 0xA0) != -1) {
-        parent = level_mobys + *(int *)(falling_platform_vars + 0xA0) * 0x100;
+    if (falling_platform_vars->parent_index != -1) {
+        parent = level_mobys + falling_platform_vars->parent_index * 0x100;
         parent_data = *(char **)(parent + 0x78);
     }
     if (((unsigned char *)moby)[0xBC] == 2) {
-        moby[0x20] = 2;
-        moby[0xBC] = 3;
-        *(int *)(falling_platform_vars + 0xAC) = ((unsigned char *)falling_platform_vars)[0xBD];
+        MOBY(moby)->state = 2;
+        MOBY(moby)->command = 3;
+        falling_platform_vars->unkAC = falling_platform_vars->unkBD;
     }
     switch (((unsigned char *)moby)[0x20]) {
     case PLATFORM_INITIALIZE:
-        *(int *)(falling_platform_vars + 0x20) = 0;
-        *(short *)(falling_platform_vars + 0x24) = 0;
-        falling_platform_vars[0x28] = 4;
-        *(short *)(falling_platform_vars + 0x3E) = 13;
+        falling_platform_vars->unk20 = 0;
+        falling_platform_vars->unk24 = 0;
+        falling_platform_vars->unk28 = 4;
+        falling_platform_vars->unk3E = 13;
         timer = rand();
         if (timer & 1)
             MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, 3.1415927f);
-        *(float *)(falling_platform_vars + 0xA4) = MOBY(moby)->rot.x;
-        *(float *)(falling_platform_vars + 0xA8) = MOBY(moby)->rot.y;
-        *(int *)(falling_platform_vars + 0xC8) = -1;
-        moby[0x20] = 1;
-        moby[0xBC] = 0;
+        falling_platform_vars->saved_rot_x = MOBY(moby)->rot.x;
+        falling_platform_vars->saved_rot_y = MOBY(moby)->rot.y;
+        falling_platform_vars->unkC8 = -1;
+        MOBY(moby)->state = 1;
+        MOBY(moby)->command = 0;
         if (((unsigned char *)moby)[0xB0] != 0xFF) {
             if (visited52[((unsigned char *)moby)[0xB0] + current_level_index * 16] != 0xFF)
                 break;
             MOBY(moby)->pos.z -= 5.0f;
-            if (((unsigned char *)falling_platform_vars)[0xBC] == 0) {
+            if (falling_platform_vars->unkBC == 0) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     case PLATFORM_COMMAND_GATED_SWAY:
         if (((unsigned char *)moby)[0xBC] != 1)
             break;
-        if (*(int *)(falling_platform_vars + 0xAC) == 0)
-            *(int *)(falling_platform_vars + 0xAC) = rand() % 10;
-        if (((unsigned char *)falling_platform_vars)[0xBE] != 0)
+        if (falling_platform_vars->unkAC == 0)
+            falling_platform_vars->unkAC = rand() % 10;
+        if (falling_platform_vars->unkBE != 0)
             FUN_L01_0026e090(((unsigned char *)moby)[0x21], 2);
         MOBY(moby)->rot.x = fast_add_rotations(
-            *(float *)(falling_platform_vars + 0xA4),
-            fast_sin(normalize_angle(
-                convert_integer_to_float(*(int *)(falling_platform_vars + 0xAC)) * 0.75f)) *
+            falling_platform_vars->saved_rot_x,
+            fast_sin(
+                normalize_angle(convert_integer_to_float(falling_platform_vars->unkAC) * 0.75f)) *
                 0.017453292f);
         MOBY(moby)->rot.y = fast_add_rotations(
-            *(float *)(falling_platform_vars + 0xA8),
-            fast_cos(normalize_angle(
-                convert_integer_to_float(*(int *)(falling_platform_vars + 0xAC)) * 0.89f)) *
+            falling_platform_vars->saved_rot_y,
+            fast_cos(
+                normalize_angle(convert_integer_to_float(falling_platform_vars->unkAC) * 0.89f)) *
                 0.017453292f);
         break;
     case PLATFORM_TIMED_SWAY_BEFORE_FALL:
         MOBY(moby)->rot.x = fast_add_rotations(
-            *(float *)(falling_platform_vars + 0xA4),
-            fast_sin(normalize_angle(
-                convert_integer_to_float(*(int *)(falling_platform_vars + 0xAC)) * 0.75f)) *
+            falling_platform_vars->saved_rot_x,
+            fast_sin(
+                normalize_angle(convert_integer_to_float(falling_platform_vars->unkAC) * 0.75f)) *
                 0.017453292f);
         MOBY(moby)->rot.y = fast_add_rotations(
-            *(float *)(falling_platform_vars + 0xA8),
-            fast_cos(normalize_angle(
-                convert_integer_to_float(*(int *)(falling_platform_vars + 0xAC)) * 0.89f)) *
+            falling_platform_vars->saved_rot_y,
+            fast_cos(
+                normalize_angle(convert_integer_to_float(falling_platform_vars->unkAC) * 0.89f)) *
                 0.017453292f);
-        if (!fast_dec_timer((int *)(falling_platform_vars + 0xAC)))
+        if (!fast_dec_timer(&falling_platform_vars->unkAC))
             break;
-        if (((unsigned char *)falling_platform_vars)[0xBE] != 0) {
-            parent_data[0x19D] = falling_platform_vars[0xBF];
+        if (falling_platform_vars->unkBE != 0) {
+            parent_data[0x19D] = falling_platform_vars->unkBF;
             parent[0x20] = 12;
         }
-        moby[0x20] = 3;
+        MOBY(moby)->state = 3;
         break;
     case PLATFORM_TILT_AND_FALL:
         speed = 1.3962634f;
@@ -143,14 +169,13 @@ void command_falling_platform_update(char *moby) {
             float gravity = frame_time_sq;
             float drop = 15.0f;
             MOBY(moby)->pos.z -= descent;
-            *(float *)(falling_platform_vars + 0xB0) -=
-                *(float *)(falling_platform_vars + 0xB4) * gravity;
-            MOBY(moby)->pos.z += *(float *)(falling_platform_vars + 0xB0);
-            if (!(MOBY(moby)->pos.z < *(float *)(falling_platform_vars + 0xB8) - drop))
+            falling_platform_vars->fall_speed -= falling_platform_vars->unkB4 * gravity;
+            MOBY(moby)->pos.z += falling_platform_vars->fall_speed;
+            if (!(MOBY(moby)->pos.z < falling_platform_vars->unkB8 - drop))
                 break;
-            if (((unsigned char *)falling_platform_vars)[0xBC] != 0) {
-                *(float *)(falling_platform_vars + 0xB0) = 0.0f;
-                moby[0x20] = 4;
+            if (falling_platform_vars->unkBC != 0) {
+                falling_platform_vars->fall_speed = 0.0f;
+                MOBY(moby)->state = 4;
             } else {
                 mark_moby_for_removal(moby);
                 return;
@@ -160,30 +185,29 @@ void command_falling_platform_update(char *moby) {
     case PLATFORM_PARENT_GATED_RECOVERY_SETUP:
         if (((unsigned char *)parent_data)[0xEF] < 2 && ((unsigned char *)parent)[0x20] > 11)
             break;
-        *(float *)(falling_platform_vars + 0xB0) =
-            random_float_between(frame_time, frame_time * 4.0f);
-        *(float *)(falling_platform_vars + 0xC0) = random_angle_radians();
-        *(float *)(falling_platform_vars + 0xC4) = random_angle_radians();
-        moby[0x20] = 5;
+        falling_platform_vars->fall_speed = random_float_between(frame_time, frame_time * 4.0f);
+        falling_platform_vars->unkC0 = random_angle_radians();
+        falling_platform_vars->unkC4 = random_angle_radians();
+        MOBY(moby)->state = 5;
         MOBY(moby)->rot.x = 0.0f;
         MOBY(moby)->rot.y = 0.0f;
-        *(int *)(falling_platform_vars + 0xAC) = 0;
+        falling_platform_vars->unkAC = 0;
         break;
     case PLATFORM_HEIGHT_RECOVERY_AND_SWAY:
-        target = MOBY(moby)->pos.z + *(float *)(falling_platform_vars + 0xB0);
-        height = *(float *)(falling_platform_vars + 0xB8);
+        target = MOBY(moby)->pos.z + falling_platform_vars->fall_speed;
+        height = falling_platform_vars->unkB8;
         if (hero.air_frames.s == 0 && (char *)hero.ground_moby == moby) {
-            if (*(int *)(falling_platform_vars + 0xAC) == 0)
+            if (falling_platform_vars->unkAC == 0)
                 FUN_0022da68(0, 0, (int)moby);
             timer = scale_game_frames(90);
-            if (*(int *)(falling_platform_vars + 0xAC) < timer)
-                *(int *)(falling_platform_vars + 0xAC) = scale_game_frames(90);
+            if (falling_platform_vars->unkAC < timer)
+                falling_platform_vars->unkAC = scale_game_frames(90);
         }
-        if (*(int *)(falling_platform_vars + 0xAC) != 0) {
-            if (MOBY(moby)->pos.z > *(float *)(falling_platform_vars + 0xB8) - 2.6f) {
-                *(float *)(falling_platform_vars + 0xB0) = -(frame_time * 0.25f);
+        if (falling_platform_vars->unkAC != 0) {
+            if (MOBY(moby)->pos.z > falling_platform_vars->unkB8 - 2.6f) {
+                falling_platform_vars->fall_speed = -(frame_time * 0.25f);
             } else {
-                *(float *)(falling_platform_vars + 0xB0) = 0.0f;
+                falling_platform_vars->fall_speed = 0.0f;
             }
         } else {
             if (target < height) {
@@ -192,26 +216,24 @@ void command_falling_platform_update(char *moby) {
                     correction = 0.9f;
                 else if (correction < -0.9f)
                     correction = -0.9f;
-                *(float *)(falling_platform_vars + 0xB0) += correction;
+                falling_platform_vars->fall_speed += correction;
             }
             {
-                float velocity = *(float *)(falling_platform_vars + 0xB0) - frame_time_sq * 9.8f;
+                float velocity = falling_platform_vars->fall_speed - frame_time_sq * 9.8f;
                 float cap = frame_time * 5.0f;
-                *(float *)(falling_platform_vars + 0xB0) = velocity;
+                falling_platform_vars->fall_speed = velocity;
                 if (cap < velocity)
-                    *(float *)(falling_platform_vars + 0xB0) = cap;
+                    falling_platform_vars->fall_speed = cap;
             }
         }
-        MOBY(moby)->pos.z += *(float *)(falling_platform_vars + 0xB0);
-        *(float *)(falling_platform_vars + 0xC0) =
-            fast_add_rotations(*(float *)(falling_platform_vars + 0xC0), 0.01f);
-        *(float *)(falling_platform_vars + 0xC4) =
-            fast_add_rotations(*(float *)(falling_platform_vars + 0xC0), 0.017f);
-        sway = fast_sin(*(float *)(falling_platform_vars + 0xC0)) * 0.02f;
-        roll = fast_sin(*(float *)(falling_platform_vars + 0xC4)) * 0.02f;
-        if (*(int *)(falling_platform_vars + 0xAC) != 0) {
+        MOBY(moby)->pos.z += falling_platform_vars->fall_speed;
+        falling_platform_vars->unkC0 = fast_add_rotations(falling_platform_vars->unkC0, 0.01f);
+        falling_platform_vars->unkC4 = fast_add_rotations(falling_platform_vars->unkC0, 0.017f);
+        sway = fast_sin(falling_platform_vars->unkC0) * 0.02f;
+        roll = fast_sin(falling_platform_vars->unkC4) * 0.02f;
+        if (falling_platform_vars->unkAC != 0) {
             float forward, side;
-            fast_dec_timer((int *)(falling_platform_vars + 0xAC));
+            fast_dec_timer(&falling_platform_vars->unkAC);
             fast_vec_sub(platform_to_hero_offset, &hero.motion.pos, moby + 0x10);
             forward = fast_vec_dot(platform_to_hero_offset, moby + 0xC0);
             side = fast_vec_dot(platform_to_hero_offset, moby + 0xD0) * -0.03f;
@@ -237,18 +259,16 @@ void command_falling_platform_update(char *moby) {
             MOBY(moby)->rot.y = -0.5235988f;
         break;
     }
-    if (((unsigned char *)moby)[0x20] == 5 &&
-        fast_dec_timer((int *)(falling_platform_vars + 0xC8))) {
-        float last = *(float *)(falling_platform_vars + 0xCC);
-        float height = *(float *)(falling_platform_vars + 0xB8);
+    if (((unsigned char *)moby)[0x20] == 5 && fast_dec_timer(&falling_platform_vars->unkC8)) {
+        float last = falling_platform_vars->unkCC;
+        float height = falling_platform_vars->unkB8;
         if ((height <= last && MOBY(moby)->pos.z < height) ||
             (last <= height && height < MOBY(moby)->pos.z)) {
             FUN_0022da68(0, 0, (int)moby);
-            *(int *)(falling_platform_vars + 0xC8) =
-                rand() % scale_game_frames(20) + scale_game_frames(20);
+            falling_platform_vars->unkC8 = rand() % scale_game_frames(20) + scale_game_frames(20);
         }
     }
-    *(float *)(falling_platform_vars + 0xCC) = MOBY(moby)->pos.z;
+    falling_platform_vars->unkCC = MOBY(moby)->pos.z;
     fast_vec_add(delta, delta, moby + 0x10);
-    update_entity_matrix(falling_platform_vars + 0x60, delta, rotation, moby + 0x40);
+    update_entity_matrix(falling_platform_vars->transform, delta, rotation, moby + 0x40);
 }

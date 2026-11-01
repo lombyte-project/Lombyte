@@ -17,6 +17,8 @@
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 #include "qcopy.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D6C58), where it is exact; names translated to the US level program. */
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -27,11 +29,8 @@ int          water_entry_plane_initialized_gp __asm__("D_L08_00161970") = 0;
 extern float water_entry_plane_data[4] __asm__("D_L08_001D7060");
 extern f32   D_L08_0015F580[] MACRO_ADDR;
 extern void  FUN_L08_002da0d0(void *);
-extern int   FUN_L00_00257b90(int, int);
 extern void  spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
-extern unsigned char      *
-spawn_splash(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
-void water_surface_update(struct Moby *moby) __asm__("FUN_L08_002da0f0");
+void         water_surface_update(struct Moby *moby) __asm__("FUN_L08_002da0f0");
 
 float water_entry_plane_data[4] __asm__("D_L08_001D7060") = {-2.6e+02f, -2.2e+02f, 15.0f, 1.6e+05f};
 
@@ -71,7 +70,7 @@ void water_surface_update(struct Moby *moby) {
         spray_velocity_or_splash_position.f[1] = fast_sin(spray_heading_radians) * k;
         spray_velocity_or_splash_position.f[2] =
             random_float_between(frame_time * 3.0f, frame_time * 6.5f);
-        spray_random_value = FUN_L00_00257b90(0x5A, 0x78);
+        spray_random_value = random_int_between(0x5A, 0x78);
         spawn_debris_chunk(
             &pos, &spray_velocity_or_splash_position, random_integer_below(2), spray_random_value);
     }

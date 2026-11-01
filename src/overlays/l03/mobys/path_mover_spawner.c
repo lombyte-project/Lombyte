@@ -1,11 +1,12 @@
 /* Level 03 moby class path_mover_spawner: spawns path_mover mobys along its path. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
@@ -68,7 +69,6 @@ char path_mover_spawner_bad_path_format[51] __asm__("D_L03_001E35F0") =
     "Bad path data on moby class 899, maya instance %d\n";
 
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
-extern int  voice_is_playing(struct RailSpawnerMoby *, int) __asm__("FUN_L00_0028d8c0");
 extern int  FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
 
 void path_mover_spawner_update(struct RailSpawnerMoby *moby) __asm__("FUN_L03_002db280");

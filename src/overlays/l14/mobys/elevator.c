@@ -1,7 +1,7 @@
 /* Level 14 elevator moby class: path state, travel, endpoints and idle glow. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_WEAPONS_COUNT_GOLD_BOLTS_H
+#define LOMBYTE_RNC_UI_MENUS_WEAPONS_COUNT_GOLD_BOLTS_H
+
+#include "types.h"
+
+s32 count_gold_bolts(void) __asm__("FUN_00215290");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_WEAPONS_COUNT_GOLD_BOLTS_H */

@@ -18,4 +18,8 @@ int play_entity_sound(void *moby,
                       int   h,
                       int   i) __asm__("FUN_L00_002598b0");
 
+f32   interpolate_scalar_linear(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
+float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
+void  advance_damped_scalar_velocity(float *, float, float, float, float) __asm__("FUN_L00_0025b798");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_FIND_MOBY_HIT_H */

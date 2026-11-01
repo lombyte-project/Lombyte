@@ -4,6 +4,11 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/streaming/safe_cd/snd_stream_safe_cd_callback.h"
 #include "rnc/game/transitions/tick_space_transition.h"
+#include "rnc/rendering/frame/set_background_color.h"
+#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/ui/loading/play_level_loading_slides.h"
 
 struct Globals_0013DD58 {
     u8 unk0;
@@ -37,9 +42,7 @@ extern struct Globals_0015F634 *level_sound_defs __asm__("D_0015F634");
 extern struct Globals_00194100  coll_output __asm__("D_00194100");
 extern u8                       unloaded_sound_bank_format[] __asm__("D_001E8988");
 
-extern void DebugPrint();
 extern void FlushCache(s32);
-extern void set_background_color(u64, u64, u64);
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void snd_resolve_bank_xrefs(void) __asm__("func_0012E1A8");
 extern void snd_unload_bank(s32) __asm__("FUN_0012e1d8");
@@ -62,13 +65,10 @@ extern void update_resident_gameplay_state(void) __asm__("func_0022F778");
 extern void dispatch_game_state_update(void) __asm__("func_00230EE8");
 extern void initialize_level_runtime(void) __asm__("func_00230F60");
 extern void play_level_transition_movie(s32) __asm__("func_00231608");
-extern void play_level_loading_slides(s32, s32, s32, s32, s32) __asm__("FUN_00231bd8");
 extern void swap_render_buffer_chain(void) __asm__("func_00233630");
 extern void vu1_send_chain(void) __asm__("func_002336A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void dmac_vif1_disable(void) __asm__("func_00233D90");
-extern s32  sceCdSync(s32);
-extern s32  sceGsSyncV(s32);
 
 void do_space_transition(void) __asm__("FUN_00231ff0");
 

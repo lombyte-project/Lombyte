@@ -17,12 +17,13 @@
 #include "rnc/overlay/shared/mobys/build_symmetric_adjacency_masks.h"
 #include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
 #include "rnc/overlay/shared/mobys/update_object_wander_movement.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/enemies/gadgebot_data/gadgebot_update.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_container.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_pad.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 #define GB_FLAG                (*(unsigned char *)0x15EDB3)
 #define PVARS(p)               (*(char **)((p) + 0x78))
@@ -219,7 +220,6 @@ typedef struct {
 
 typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
 
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void  add_draw_callback(int, int) __asm__("FUN_001f4600");
@@ -233,7 +233,6 @@ extern void
 resolve_point_path_segment_xy_clearance(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern char *spawn_source_attached_fading_effect_particle(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -266,7 +265,6 @@ extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern unsigned char *get_moby_target_info(int);
 extern int            get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int            get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern int            FUN_L00_00257b90(int, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_0022da68(int, int, void *);
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
@@ -297,7 +295,7 @@ GbStats D_L10_0017E958 = {0};
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F1470), where it is exact; names translated to the US level program. */
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 
-/* Moby class 857 */
+/* Moby classes 857, 1906 */
 void gadgebot_update(GbMoby *moby) {
     enum {
         GADGEBOT_INITIALIZE = 0,
@@ -1153,7 +1151,7 @@ float score_gadgebot_target_candidate(char *moby,
                                       int   target_kind) __asm__("FUN_L06_002f2148");
 
 float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) {
-    float r = vector_distance_xy(moby + 0x10, b + 0x10);
+    float r = vector_distance_xy(&MOBY(moby)->pos, b + 0x10);
     float t =
         fast_difference_between_rotations(l06_camera.yaw,
                                           fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
@@ -1229,11 +1227,11 @@ void assign_gadgebot_attack_targets(void) {
                 range = 12.0f;
                 if (S16(vars, 0x198) != 0)
                     range = 5.0f;
-                if (range < vector_distance_xy(moby + 0x10, candidate + 0x10))
+                if (range < vector_distance_xy(&MOBY(moby)->pos, candidate + 0x10))
                     continue;
                 if (1.0f < absolute_float(F32(moby, 0x18) - F32(candidate, 0x18)))
                     continue;
-                *(u128_c *)start = *(u128_c *)(moby + 0x10);
+                *(u128_c *)start = *(u128_c *)&MOBY(moby)->pos;
                 *(u128_c *)end = *(u128_c *)(candidate + 0x10);
                 *(float *)(start + 8) += 0.25f;
                 *(float *)(end + 8) += 0.25f;
@@ -1435,9 +1433,9 @@ int process_gadgebot_interaction_candidate(
     float f20;
 
     if (MOBY(moby)->oclass != 0x515 && MOBY(moby)->oclass != 0x15F) {
-        fast_vec_add(candidate_position, moby + 0x10, moby + 0xC0);
+        fast_vec_add(candidate_position, &MOBY(moby)->pos, moby + 0xC0);
     } else {
-        *(u128_F4058 *)candidate_position = *(u128_F4058 *)(moby + 0x10);
+        *(u128_F4058 *)candidate_position = *(u128_F4058 *)&MOBY(moby)->pos;
     }
 
     switch (MOBY(moby)->oclass) {
@@ -1465,9 +1463,9 @@ int process_gadgebot_interaction_candidate(
             int   r16, r17, r18, r2, gc;
             float f0, lift, f20, f21;
             f21 = random_float_between(0.1f, 1.0f);
-            r18 = FUN_L00_00257b90(0x40, 0xFF);
-            r17 = FUN_L00_00257b90(0x40, 0xFF);
-            r16 = FUN_L00_00257b90(0x40, 0xFF);
+            r18 = random_int_between(0x40, 0xFF);
+            r17 = random_int_between(0x40, 0xFF);
+            r16 = random_int_between(0x40, 0xFF);
             f20 = fast_cos(random_angle_radians()) * random_float_between(0.0f, 0.25f);
             vA[0] = f20;
             f20 = fast_sin(random_angle_radians());
@@ -1481,7 +1479,7 @@ int process_gadgebot_interaction_candidate(
             fast_vec_normalize(vB, vB, f0);
             f0 = random_float_between(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             vB[2] = f0;
-            r2 = scale_game_frames(FUN_L00_00257b90(0xF, 0x1E));
+            r2 = scale_game_frames(random_int_between(0xF, 0x1E));
             gc = (r17 << 8) | 0x7F000000;
             FUN_L00_00272060(vA,
                              r2,
@@ -1500,16 +1498,16 @@ int process_gadgebot_interaction_candidate(
         vB[0] = fast_cos(fast_add_rotations(MOBY(destination_moby)->rot.z, f20));
         vB[1] = fast_sin(fast_add_rotations(MOBY(destination_moby)->rot.z, f20));
         vB[2] = 0.0f;
-        fast_vec_add(ctx + 0x10, vB, destination_moby + 0x10);
+        fast_vec_add(ctx + 0x10, vB, &MOBY(destination_moby)->pos);
         *(u128_F4058 *)(ow + 0x2F0) = *(u128_F4058 *)(ow + 0x2E0) = *(u128_F4058 *)(ctx + 0x10);
 
         for (k = 0; k < 10; k++) {
             int   r16, r17, r18, r2, gc;
             float f0, lift, f20, f21;
             f21 = random_float_between(0.1f, 1.0f);
-            r18 = FUN_L00_00257b90(0x40, 0xFF);
-            r17 = FUN_L00_00257b90(0x40, 0xFF);
-            r16 = FUN_L00_00257b90(0x40, 0xFF);
+            r18 = random_int_between(0x40, 0xFF);
+            r17 = random_int_between(0x40, 0xFF);
+            r16 = random_int_between(0x40, 0xFF);
             f20 = fast_cos(random_angle_radians()) * random_float_between(0.0f, 0.25f);
             vC[0] = f20;
             f20 = fast_sin(random_angle_radians());
@@ -1523,7 +1521,7 @@ int process_gadgebot_interaction_candidate(
             fast_vec_normalize(vA, vA, f0);
             f0 = random_float_between(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             vA[2] = f0;
-            r2 = scale_game_frames(FUN_L00_00257b90(0xF, 0x1E));
+            r2 = scale_game_frames(random_int_between(0xF, 0x1E));
             gc = (r17 << 8) | 0x7F000000;
             FUN_L00_00272060(vC,
                              r2,
@@ -1613,7 +1611,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) __asm__("FUN_L06_002f364
 
 void handle_gadgebot_hit_knockback(unsigned char *moby) {
     char *state = ((char *)MOBY(moby)->pvars);
-    if (moby[0x20] != 9 && moby[0x52] != 2 && moby[0x53] != 2) {
+    if (MOBY(moby)->state != 9 && MOBY(moby)->seq != 2 && MOBY(moby)->prev_seq != 2) {
         char *target = find_moby_hit(moby, 0x330001, 0);
         if (target != 0) {
             Q     hit_vector_copy;
@@ -1622,7 +1620,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
             float knockback_angle;
             knockback_angle = base_angle;
             if (hit_source_moby != D_001413D0 &&
-                *(short *)(hit_source_moby + 0xA6) != MOBY(moby)->oclass) {
+                MOBY(hit_source_moby)->oclass != MOBY(moby)->oclass) {
                 int frames_sq = scale_game_frames(0x50);
                 frames_sq *= scale_game_frames(0x50);
                 state[0xBD] = 0;
@@ -1640,11 +1638,11 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
                     *(float *)(state + 0xCC) = doubled_frame_time;
                 }
                 FUN_0022da68(2, 0, moby);
-                moby[0x20] = 9;
+                MOBY(moby)->state = 9;
             }
         }
     }
-    moby[0xA4] = 0xFF;
+    MOBY(moby)->hit_slot = 0xFF;
 }
 
 /* for each moby in a search list with the owner's id, start three effects on its data */
@@ -1663,7 +1661,7 @@ void draw_gadgebot_group_glow_effects(char *group_reference_moby) {
     while (list != 0) {
         if (*(unsigned char *)(list + 0x31) != 0) {
             moby_vars = *(char **)(list + 0x78);
-            if (*(short *)(list + 0xA6) == *(short *)(group_reference_moby + 0xA6)) {
+            if (*(short *)(list + 0xA6) == MOBY(group_reference_moby)->oclass) {
                 effect_position = moby_vars + 0x140;
                 for (i = 2; i >= 0; i--) {
                     draw_offset_textured_effect_quad(

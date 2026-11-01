@@ -1,7 +1,7 @@
 /* Level 03 moby class homing_rocket: its spawn helper and update. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"

@@ -1,7 +1,7 @@
 /* Level 10 moby class help_hints (0x540): tracks nearby targets and plays the Orxon help messages. */
 #include "types.h"
 
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"

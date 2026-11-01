@@ -1,4 +1,6 @@
 #include "types.h"
+#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
+#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
 
 /* EE layouts: PIF header 0x20 bytes, scratch descriptor 0x54 bytes,
    sceGsLoadImage packet 0x60 bytes (16-byte aligned), output 0x18 bytes.
@@ -40,9 +42,7 @@ typedef struct {
 
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern s32  log2dim(s32) __asm__("func_001F97A0");
-extern s32  sceGsSetDefLoadImage(GsLoadImage *, short, short, short, short, short, short, short);
 extern void FlushCache(int);
-extern s32  sceGsExecLoadImage(GsLoadImage *, void *);
 extern s32  sceGsSyncPath(int, unsigned short) __asm__("func_00120558");
 
 /* Retail 0x001e9168..0x001e9337, also called by load_debug_font:

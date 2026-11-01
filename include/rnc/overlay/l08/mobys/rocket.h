@@ -10,4 +10,6 @@ struct Moby *spawn_rocket(void        *pos,
                           float        pitch,
                           float        yaw) __asm__("FUN_L08_002de3e0");
 
+void rocket_update() __asm__("FUN_L08_002dd3c0");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_ROCKET_H */

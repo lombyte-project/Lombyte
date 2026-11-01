@@ -1,6 +1,6 @@
 /* Level 03 moby class mine_layer: patrols a path and lobs mines. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"

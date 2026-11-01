@@ -7,9 +7,9 @@ void snd_set_group_voice_range(s32 payload_word_0,
                                s32 payload_word_2) __asm__("FUN_0012e2b8");
 
 void snd_set_group_voice_range(s32 payload_word_0, s32 payload_word_1, s32 payload_word_2) {
-    u8 sp_slot[0x10];
-    *(s32 *)(sp_slot + 0) = payload_word_0;
-    *(s32 *)(sp_slot + 4) = payload_word_1;
-    *(s32 *)(sp_slot + 8) = payload_word_2;
-    snd_send_iop_command_no_wait(78, 12, sp_slot, 0, 0);
+    s32 command[4];
+    command[0] = payload_word_0;
+    command[1] = payload_word_1;
+    command[2] = payload_word_2;
+    snd_send_iop_command_no_wait(78, 12, command, 0, 0);
 }

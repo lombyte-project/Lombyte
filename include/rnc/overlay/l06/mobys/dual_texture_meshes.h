@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_DUAL_TEXTURE_MESHES_H
+#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_DUAL_TEXTURE_MESHES_H
+
+#include "types.h"
+
+void dual_texture_mesh_update(char *) __asm__("FUN_L06_002fd088");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_DUAL_TEXTURE_MESHES_H */

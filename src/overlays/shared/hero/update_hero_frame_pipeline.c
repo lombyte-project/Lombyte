@@ -1,5 +1,6 @@
 /* Hero: the per-frame update pipeline. */
 #include "types.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
@@ -7,55 +8,33 @@
 #include "rnc/overlay/shared/hero/advance_hero_animation.h"
 #include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
 #include "rnc/rendering/frame/begin_draw_frame.h"
+#include "rnc/overlay/shared/hero/hero_frame_update.h"
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/hero/hero_move_state_velocity.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
 
 /* Per-frame driver: validates the cursor, then runs each update pass in order. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00200890.c: func_L03_00200890), where it is exact; names translated to the US level program. */
 
-extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
-extern void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
-extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
-extern void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
-extern void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
-extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
-extern void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
-extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
-extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
-extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
-extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
-extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
-extern void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
-extern void update_hero_pitch_and_yaw_easing_targets(void) __asm__("FUN_L00_0020a540");
-extern void update_hero_idle_random_rotation_targets(void) __asm__("FUN_L00_0020a9e8");
-extern void update_hero_target_tracking(void) __asm__("FUN_L00_0020ac98");
-extern void update_hero_easing_targets_and_point_effects(void) __asm__("FUN_L00_0020b1d8");
-extern void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
-extern void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
-extern void hero_update(void) __asm__("FUN_L00_00211670");
-extern void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
-extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void FUN_L00_00257024(void *);
-extern void hero_frame_update(void) __asm__("FUN_L01_00228000");
-extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
-extern void update_hero_ground_material_effects(void) __asm__("FUN_L01_0022cd48");
-extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void update_hero_state_machine(void) __asm__("FUN_L03_0021c668");
 extern void noop_main_callback(void *) __asm__("FUN_001e93e8");
 
 void update_hero_frame_pipeline(void) __asm__("FUN_L03_002002f8");
 
 void update_hero_frame_pipeline(void) {
-    char *hero_state = (char *)D_0013E533 + 0xE1D;
-    if (*(float *)(hero_state + 0x80) < 2.0f || *(float *)(hero_state + 0x84) < 2.0f ||
-        *(float *)(hero_state + 0x80) > 1022.0f || *(float *)(hero_state + 0x84) > 1022.0f) {
+    struct Hero *hero_state = (struct Hero *)((char *)D_0013E533 + 0xE1D);
+    if (hero_state->motion.pos.f[0] < 2.0f || hero_state->motion.pos.f[1] < 2.0f ||
+        hero_state->motion.pos.f[0] > 1022.0f || hero_state->motion.pos.f[1] > 1022.0f) {
         char *q;
         fade_to_black(scale_game_frames(0x10));
         q = (char *)D_0013E533 + 0xE1D;
         q[0x20B1] = 1;
         return;
     }
-    *(short *)(hero_state + 0x1EB2) = 0;
-    *(short *)(hero_state + 0x1EB0) = 0;
-    if (*(unsigned char *)(hero_state + 0x20A4) != 0) {
+    hero_state->unk1EB2 = 0;
+    hero_state->unk1EB0 = 0;
+    if (hero_state->vehicle_mode != 0) {
         hero_frame_update();
         return;
     }
@@ -65,7 +44,7 @@ void update_hero_frame_pipeline(void) {
     update_hero_ledge_probe();
     update_hero_offset_rail_candidate();
     update_hero_state_machine();
-    if (*(unsigned char *)(hero_state + 0x20A4) != 0) {
+    if (hero_state->vehicle_mode != 0) {
         return;
     }
     update_hero_delayed_voice_requests();
@@ -88,13 +67,13 @@ void update_hero_frame_pipeline(void) {
     update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();
     scan_hero_input_sequences();
-    noop_main_callback(*(void **)(hero_state + 0x2080));
-    if (*(int *)(hero_state + 0x208C) != 0x16 && *(int *)(hero_state + 0x2084) != 0x32) {
-        reveal_map_around_position(hero_state + 0x80);
+    noop_main_callback(((void *)hero_state->moby));
+    if (hero_state->state.control_mode != 0x16 && hero_state->state.current != 0x32) {
+        reveal_map_around_position(&hero_state->motion.pos);
     }
     {
-        char *q = (char *)D_0013E533 + 0xE1D;
-        FUN_L00_00257024(*(void **)(q + 0x2080));
+        struct Hero *q = (struct Hero *)((char *)D_0013E533 + 0xE1D);
+        FUN_L00_00257024(((void *)q->moby));
     }
     update_hero_blink_and_gold_weapon_tint();
     update_hero_moby_probed_height_bounds();

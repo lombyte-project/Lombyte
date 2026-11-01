@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_PATH_FOLLOWING_MOBY_H
+#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_PATH_FOLLOWING_MOBY_H
+
+#include "types.h"
+
+void path_following_moby_update(char *) __asm__("FUN_L08_002de848");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_PATH_FOLLOWING_MOBY_H */

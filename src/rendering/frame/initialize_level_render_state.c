@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 
@@ -20,6 +20,9 @@
 #include "rnc/rendering/ties/light_ties.h"
 #include "rnc/rendering/tfrags/light_tfrags.h"
 #include "rnc/ui/text/font/enable_font_color_codes.h"
+#include "rnc/input/reset_pad_history.h"
+#include "rnc/rendering/frame/set_background_color.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 typedef struct FRow {
     f32 v[3];
@@ -83,11 +86,6 @@ typedef struct Buf194100 {
     s32 x14;
 } Buf194100;
 
-typedef struct OcclCamState {
-    u8  pad00[0x1C];
-    s32 x1C;
-} OcclCamState;
-
 typedef struct S160AB0 {
     s32 x0;
     u8 *x4;
@@ -127,14 +125,11 @@ extern u8                 D_001CD780[];
 extern u8                 object_render_class_slot_by_id[] __asm__("D_001E1A00");
 extern char               too_many_directional_lights_message[] __asm__("D_001E76D8");
 
-extern void DebugPrint(char *fmt, ...);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void set_background_color(s32 red, u64 green, u64 blue);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 extern void set_video_timing(s32) __asm__("func_00214970");
-extern void reset_pad_history(void) __asm__("func_00217020");
 extern void FUN_0022a5e0(void *);
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 
@@ -465,7 +460,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     for (tfrag_index = 0; tfrag_index < tfrag_render_record_count; tfrag_index++) {
         tfrag_render_records[tfrag_index].x3A = 0x7F80;
     }
-    ((OcclCamState *)occl_cam_state)->x1C = 0;
+    occl_cam_state.unk1C = 0;
     reset_draw_globals();
     reset_pad_history();
     enable_font_color_codes();

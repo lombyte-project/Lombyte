@@ -13,4 +13,8 @@ void compute_level16_reflection_map_coordinates(int    point_count,
 
 void env_map_a_draw(void) __asm__("FUN_L16_002e8d40");
 
+struct Moby;
+
+void reflection_mesh_trio_update(struct Moby *) __asm__("FUN_L16_002e8e80");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_REFLECTION_MESH_TRIO_H */

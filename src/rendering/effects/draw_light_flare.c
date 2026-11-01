@@ -7,8 +7,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/ground_probe.h"
-
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+#include "rnc/rendering/effect_texture.h"
 
 typedef struct {
     float positions[4][4];           /* 0x00 */

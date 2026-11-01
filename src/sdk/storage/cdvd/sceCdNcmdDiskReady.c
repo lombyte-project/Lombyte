@@ -1,10 +1,10 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 extern u8  native_cd_drive_state_response[] __asm__("D_00131340");
 extern s32 SignalSema();
 extern s32 cd_check_ncmd() __asm__("func_00120A28");
-extern s32 sceSifCallRpc();
 
 s32 sceCdNcmdDiskReady(void) {
     s32 status;

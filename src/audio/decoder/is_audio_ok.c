@@ -2,8 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/movies/decoder/decoder_globals.h"
 #include "rnc/movies/player/movie_player.h"
-
-extern s32 audio_dec_is_preset(struct AudioDec *dec) __asm__("func_0023AEE0");
+#include "rnc/audio/decoder/audio_dec_is_preset.h"
 
 s32 is_audio_ok(void) __asm__("FUN_0023a790");
 

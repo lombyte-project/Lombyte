@@ -1,3 +1,4 @@
+#include "rnc/sdk/libc/mprec/balloc.h"
 /****************************************************************
  *
  * The author of this software is David M. Gay.
@@ -93,8 +94,7 @@ typedef s32 __Long;
 typedef u32 __ULong;
 #define Storeinc(a, b, c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
 #define Sign_Extend(a, b)
-extern _Bigint *_Balloc(struct _reent *, s32);
-extern s32      Dcmp(_Bigint *, _Bigint *);
+extern s32 Dcmp(_Bigint *, _Bigint *);
 
 _Bigint *__mdiff(struct _reent *reent_context, _Bigint *left_operand, _Bigint *right_operand) {
     _Bigint *difference;

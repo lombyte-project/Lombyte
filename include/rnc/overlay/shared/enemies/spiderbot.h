@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SPIDERBOT_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SPIDERBOT_H
+
+#include "types.h"
+
+void spiderbot_update(unsigned char *) __asm__("FUN_L15_002a6e68");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SPIDERBOT_H */

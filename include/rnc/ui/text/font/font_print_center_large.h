@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_TEXT_FONT_FONT_PRINT_CENTER_LARGE_H
+#define LOMBYTE_RNC_UI_TEXT_FONT_FONT_PRINT_CENTER_LARGE_H
+
+#include "types.h"
+
+s32 font_print_center_large(s32, s32, s32, s32, s32) __asm__("FUN_001f6c20");
+
+#endif /* LOMBYTE_RNC_UI_TEXT_FONT_FONT_PRINT_CENTER_LARGE_H */

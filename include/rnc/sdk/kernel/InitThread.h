@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_KERNEL_INITTHREAD_H
+#define LOMBYTE_RNC_SDK_KERNEL_INITTHREAD_H
+
+#include "types.h"
+
+s32 InitThread(void);
+
+#endif /* LOMBYTE_RNC_SDK_KERNEL_INITTHREAD_H */

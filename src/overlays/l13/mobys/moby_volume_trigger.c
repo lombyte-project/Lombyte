@@ -11,7 +11,7 @@
 #ifndef MACRO_ADDR
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int debug_print() __asm__("FUN_001e93b0");
 
@@ -21,173 +21,198 @@ extern char moby_volume_trigger_missing_volume_format[] __asm__("D_L13_001F41F8"
 
 void moby_volume_trigger_update(char *moby) __asm__("FUN_L13_002b0e80");
 
+typedef struct MobyVolumeTriggerVars {
+    u8  pad_0[0x4];
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s8  unk24;
+    s8  unk25;
+    s8  unk26;
+    s8  unk27;
+    s8  unk28;
+    s8  unk29;
+    s8  unk2A;
+    s8  unk2B;
+    s8  unk2C;
+    s8  unk2D;
+    s8  unk2E;
+    s8  unk2F;
+    s8  unk30;
+    s8  unk31;
+    s8  unk32;
+    s8  unk33;
+    s8  unk34;
+    s8  unk35;
+    s8  unk36;
+    s8  unk37;
+    s8  unk38;
+} MobyVolumeTriggerVars;
+
 /* Moby class 6 */
 void moby_volume_trigger_update(char *moby) {
-    char *volume_trigger_vars = ((char *)MOBY(moby)->pvars);
+    MobyVolumeTriggerVars *volume_trigger_vars = (MobyVolumeTriggerVars *)MOBY(moby)->pvars;
     if (*(int *)volume_trigger_vars == -1) {
         debug_print(moby_volume_trigger_missing_volume_format, ((short)MOBY(moby)->save_id));
         mark_moby_for_removal(moby);
         return;
     }
     if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)volume_trigger_vars) != 0) {
-        if (volume_trigger_vars[0x38] == 0) {
+        if (volume_trigger_vars->unk38 == 0) {
             {
-                int uid = *(int *)(volume_trigger_vars + 0x4);
+                int uid = volume_trigger_vars->unk4;
                 if (uid != -1) {
                     char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
                             if (st != 0xFD) {
-                                if (volume_trigger_vars[0x24] != -1)
-                                    m[0x20] = volume_trigger_vars[0x24];
+                                if (volume_trigger_vars->unk24 != -1)
+                                    m[0x20] = volume_trigger_vars->unk24;
                             }
                         }
                     }
                 }
             }
-            if (*(int *)(volume_trigger_vars + 0x14) != -1 && volume_trigger_vars[0x2C] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x14),
-                                    volume_trigger_vars[0x2C]);
+            if (volume_trigger_vars->unk14 != -1 && volume_trigger_vars->unk2C != -1)
+                set_moby_list_state(volume_trigger_vars->unk14, volume_trigger_vars->unk2C);
             {
-                int uid = *(int *)(volume_trigger_vars + 0x8);
+                int uid = volume_trigger_vars->unk8;
                 if (uid != -1) {
                     char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
                             if (st != 0xFD) {
-                                if (volume_trigger_vars[0x25] != -1)
-                                    m[0x20] = volume_trigger_vars[0x25];
+                                if (volume_trigger_vars->unk25 != -1)
+                                    m[0x20] = volume_trigger_vars->unk25;
                             }
                         }
                     }
                 }
             }
-            if (*(int *)(volume_trigger_vars + 0x18) != -1 && volume_trigger_vars[0x2D] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x18),
-                                    volume_trigger_vars[0x2D]);
+            if (volume_trigger_vars->unk18 != -1 && volume_trigger_vars->unk2D != -1)
+                set_moby_list_state(volume_trigger_vars->unk18, volume_trigger_vars->unk2D);
             {
-                int uid = *(int *)(volume_trigger_vars + 0xC);
+                int uid = volume_trigger_vars->unkC;
                 if (uid != -1) {
                     char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
                             if (st != 0xFD) {
-                                if (volume_trigger_vars[0x26] != -1)
-                                    m[0x20] = volume_trigger_vars[0x26];
+                                if (volume_trigger_vars->unk26 != -1)
+                                    m[0x20] = volume_trigger_vars->unk26;
                             }
                         }
                     }
                 }
             }
-            if (*(int *)(volume_trigger_vars + 0x1C) != -1 && volume_trigger_vars[0x2E] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x1C),
-                                    volume_trigger_vars[0x2E]);
+            if (volume_trigger_vars->unk1C != -1 && volume_trigger_vars->unk2E != -1)
+                set_moby_list_state(volume_trigger_vars->unk1C, volume_trigger_vars->unk2E);
             {
-                int uid = *(int *)(volume_trigger_vars + 0x10);
+                int uid = volume_trigger_vars->unk10;
                 if (uid != -1) {
                     char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
                             if (st != 0xFD) {
-                                if (volume_trigger_vars[0x27] != -1)
-                                    m[0x20] = volume_trigger_vars[0x27];
+                                if (volume_trigger_vars->unk27 != -1)
+                                    m[0x20] = volume_trigger_vars->unk27;
                             }
                         }
                     }
                 }
             }
-            if (*(int *)(volume_trigger_vars + 0x20) != -1 && volume_trigger_vars[0x2F] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x20),
-                                    volume_trigger_vars[0x2F]);
-            if (volume_trigger_vars[0x34] != -1)
-                moby[0x20] = volume_trigger_vars[0x34];
-            if (volume_trigger_vars[0x36] != -1)
-                moby[0xBC] = volume_trigger_vars[0x36];
-            volume_trigger_vars[0x38] = 1;
+            if (volume_trigger_vars->unk20 != -1 && volume_trigger_vars->unk2F != -1)
+                set_moby_list_state(volume_trigger_vars->unk20, volume_trigger_vars->unk2F);
+            if (volume_trigger_vars->unk34 != -1)
+                MOBY(moby)->state = volume_trigger_vars->unk34;
+            if (volume_trigger_vars->unk36 != -1)
+                MOBY(moby)->command = volume_trigger_vars->unk36;
+            volume_trigger_vars->unk38 = 1;
         }
     } else {
-        if (volume_trigger_vars[0x38] == 1) {
+        if (volume_trigger_vars->unk38 == 1) {
             {
-                int uid = *(int *)(volume_trigger_vars + 0x4);
+                int uid = volume_trigger_vars->unk4;
                 if (uid != -1) {
                     char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
                             if (st != 0xFD) {
-                                if (volume_trigger_vars[0x28] != -1)
-                                    m[0x20] = volume_trigger_vars[0x28];
+                                if (volume_trigger_vars->unk28 != -1)
+                                    m[0x20] = volume_trigger_vars->unk28;
                             }
                         }
                     }
                 }
             }
-            if (*(int *)(volume_trigger_vars + 0x14) != -1 && volume_trigger_vars[0x30] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x14),
-                                    volume_trigger_vars[0x30]);
+            if (volume_trigger_vars->unk14 != -1 && volume_trigger_vars->unk30 != -1)
+                set_moby_list_state(volume_trigger_vars->unk14, volume_trigger_vars->unk30);
             {
-                int uid = *(int *)(volume_trigger_vars + 0x8);
+                int uid = volume_trigger_vars->unk8;
                 if (uid != -1) {
                     char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
                             if (st != 0xFD) {
-                                if (volume_trigger_vars[0x29] != -1)
-                                    m[0x20] = volume_trigger_vars[0x29];
+                                if (volume_trigger_vars->unk29 != -1)
+                                    m[0x20] = volume_trigger_vars->unk29;
                             }
                         }
                     }
                 }
             }
-            if (*(int *)(volume_trigger_vars + 0x18) != -1 && volume_trigger_vars[0x31] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x18),
-                                    volume_trigger_vars[0x31]);
+            if (volume_trigger_vars->unk18 != -1 && volume_trigger_vars->unk31 != -1)
+                set_moby_list_state(volume_trigger_vars->unk18, volume_trigger_vars->unk31);
             {
-                int uid = *(int *)(volume_trigger_vars + 0xC);
+                int uid = volume_trigger_vars->unkC;
                 if (uid != -1) {
                     char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
                             if (st != 0xFD) {
-                                if (volume_trigger_vars[0x2A] != -1)
-                                    m[0x20] = volume_trigger_vars[0x2A];
+                                if (volume_trigger_vars->unk2A != -1)
+                                    m[0x20] = volume_trigger_vars->unk2A;
                             }
                         }
                     }
                 }
             }
-            if (*(int *)(volume_trigger_vars + 0x1C) != -1 && volume_trigger_vars[0x32] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x1C),
-                                    volume_trigger_vars[0x32]);
+            if (volume_trigger_vars->unk1C != -1 && volume_trigger_vars->unk32 != -1)
+                set_moby_list_state(volume_trigger_vars->unk1C, volume_trigger_vars->unk32);
             {
-                int uid = *(int *)(volume_trigger_vars + 0x10);
+                int uid = volume_trigger_vars->unk10;
                 if (uid != -1) {
                     char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
                             if (st != 0xFD) {
-                                if (volume_trigger_vars[0x2B] != -1)
-                                    m[0x20] = volume_trigger_vars[0x2B];
+                                if (volume_trigger_vars->unk2B != -1)
+                                    m[0x20] = volume_trigger_vars->unk2B;
                             }
                         }
                     }
                 }
             }
-            if (*(int *)(volume_trigger_vars + 0x20) != -1 && volume_trigger_vars[0x33] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x20),
-                                    volume_trigger_vars[0x33]);
-            if (volume_trigger_vars[0x35] != -1)
-                moby[0x20] = volume_trigger_vars[0x35];
-            if (volume_trigger_vars[0x37] != -1)
-                moby[0xBC] = volume_trigger_vars[0x37];
-            volume_trigger_vars[0x38] = 0;
+            if (volume_trigger_vars->unk20 != -1 && volume_trigger_vars->unk33 != -1)
+                set_moby_list_state(volume_trigger_vars->unk20, volume_trigger_vars->unk33);
+            if (volume_trigger_vars->unk35 != -1)
+                MOBY(moby)->state = volume_trigger_vars->unk35;
+            if (volume_trigger_vars->unk37 != -1)
+                MOBY(moby)->command = volume_trigger_vars->unk37;
+            volume_trigger_vars->unk38 = 0;
         }
     }
 }

@@ -10,12 +10,14 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "sda.h"
+#include "rnc/overlay/shared/math/random/random_vector.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* Updates a gem-lock sentry: picks up a sound slot and fires when the player is near. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002E0228), where it is exact; names translated to the US level program. */
@@ -117,8 +119,6 @@ void initialize_ribbon_effect_state(struct Moby *moby) {
     moby_vars[0x1E8 / 4] = 0.0f;
     moby_vars[0x1EC / 4] = 0.0f;
 }
-
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
 void draw_ribbon_effect(struct Moby *ribbon_moby) __asm__("FUN_L14_002df458");
 
@@ -231,8 +231,6 @@ typedef struct {
 extern char D_L14_001674C0[];
 
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 

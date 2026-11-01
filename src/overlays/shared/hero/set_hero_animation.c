@@ -5,7 +5,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
 #include "rnc/camera/camera_globals.h"
@@ -24,6 +24,7 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/hero/set_second_hero_easing_parameters.h"
 
 extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 
@@ -232,14 +233,13 @@ void sync_hero_slot3_animation_speed(void) {
     if (hero_slot3_animation_speed_state->items[3].state != 2) {
         return;
     }
-    if (select_hero_slot3_animation_pair(
-            *(unsigned char *)(((char *)hero_slot3_animation_speed_state->moby) + 0x53),
-            &mapped_animation_ids[0],
-            &mapped_animation_ids[1]) == 0) {
+    if (select_hero_slot3_animation_pair(hero_slot3_animation_speed_state->moby->prev_seq,
+                                         &mapped_animation_ids[0],
+                                         &mapped_animation_ids[1]) == 0) {
         return;
     }
     if (((char *)hero_slot3_animation_speed_state->items[3].moby) != 0) {
-        *(float *)(((char *)hero_slot3_animation_speed_state->items[3].moby) + 0x58) =
+        hero_slot3_animation_speed_state->items[3].moby->anim_speed =
             hero_slot3_animation_speed_state->anim_speed;
     }
     if (((char *)hero_slot3_animation_speed_state->items[3].moby2) != 0) {
@@ -315,8 +315,8 @@ void sync_hero_mapped_moby_animation_speed(void) {
 
     if (((void *)hero_animation_speed_state->unk2278) != 0 &&
         hero_animation_speed_state->unk227C != 0 &&
-        lookup_s16_pair_value(*(unsigned char *)(((char *)hero_animation_speed_state->moby) + 0x53),
-                              mapped_animation_id) != 0) {
+        lookup_s16_pair_value(hero_animation_speed_state->moby->prev_seq, mapped_animation_id) !=
+            0) {
         *(float *)(((char *)hero_animation_speed_state->unk2278) + 0x58) =
             hero_animation_speed_state->anim_speed;
     }
@@ -364,11 +364,9 @@ void sync_hero_mapped_moby_animation_frames(void) {
         return;
     }
     animation_sync_target->f5C = hero_animation_sync_state->anim_frame_rate;
-    animation_sync_target->f54 = *(float *)(((char *)hero_animation_sync_state->moby) + 0x54);
-    animation_sync_target->seq[0] =
-        *(unsigned char *)(((char *)hero_animation_sync_state->moby) + 0x51);
-    animation_sync_target->seq[1] =
-        *(unsigned char *)(((char *)hero_animation_sync_state->moby) + 0x51);
+    animation_sync_target->f54 = hero_animation_sync_state->moby->anim_time;
+    animation_sync_target->seq[0] = hero_animation_sync_state->moby->prev_frame;
+    animation_sync_target->seq[1] = hero_animation_sync_state->moby->prev_frame;
     animation_sync_target->id[0] =
         animation_sync_target->model->banks[animation_sync_target->bank[0]]
             ->ids[animation_sync_target->seq[0]];
@@ -422,8 +420,6 @@ extern char          D_L00_00196D00[] NOT_SDA;
 extern unsigned char D_0015EDB4_macro[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern int           FUN_L00_0024f698(void *);
 extern short         hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") __attribute__((sda));
-extern void          clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
-extern void          clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");
 extern void blend_hero_mapped_moby_animation(int, int, float) __asm__("FUN_L00_00232220");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
@@ -513,10 +509,10 @@ void set_hero_animation_sequence_and_frame(int animation_id,
 
 void set_hero_animation_sequence_and_frame(int animation_id, int frame_index) {
     char *animation_moby = D_001413D0_2325a0[0];
-    animation_moby[0x50] = frame_index;
-    animation_moby[0x51] = frame_index + 1;
-    animation_moby[0x52] = animation_id;
-    animation_moby[0x53] = animation_id;
+    MOBY(animation_moby)->frame = frame_index;
+    MOBY(animation_moby)->prev_frame = frame_index + 1;
+    MOBY(animation_moby)->seq = animation_id;
+    MOBY(animation_moby)->prev_seq = animation_id;
     *(int *)(animation_moby + 0x54) = 0;
     update_moby_animation_state(animation_moby);
 }
@@ -561,7 +557,7 @@ void hero_set_attack_ticks(int id) {
     hero.queued_frame_request = id;
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
 
@@ -570,7 +566,7 @@ typedef union {
     f32       f[4];
 } V4;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern f32  collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
 extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
@@ -820,7 +816,7 @@ void set_hero_moby_flag_bit0(void) {
     struct Hero *hero_flag_state = &hero;
     char        *optional_hero_flag_target;
 
-    *(unsigned short *)(((char *)hero_flag_state->moby) + 0x34) |= 1;
+    hero_flag_state->moby->flags |= 1;
     optional_hero_flag_target = ((char *)hero_flag_state->unk1620);
     if (optional_hero_flag_target != 0) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) |= 1;
@@ -837,7 +833,7 @@ void clear_hero_moby_flag_bit0(void) {
     struct Hero *hero_flag_clear_state = &hero;
     char        *optional_hero_flag_target;
 
-    *(unsigned short *)(((char *)hero_flag_clear_state->moby) + 0x34) &= ~1;
+    hero_flag_clear_state->moby->flags &= ~1;
     optional_hero_flag_target = ((char *)hero_flag_clear_state->unk1620);
     if (optional_hero_flag_target != 0) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) &= ~1;
@@ -1057,10 +1053,8 @@ void add_hero_forward_offset(Vec4_00233708 *forward_offset_adjusted_vector,
     switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         *(u128_00233708 *)forward_offset_adjusted_vector = *(u128_00233708 *)in;
-        forward_offset_adjusted_vector->x +=
-            fast_cos(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
-        forward_offset_adjusted_vector->y +=
-            fast_sin(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
+        forward_offset_adjusted_vector->x += fast_cos(hero_base->moby->rot.z) * offset_scale;
+        forward_offset_adjusted_vector->y += fast_sin(hero_base->moby->rot.z) * offset_scale;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
@@ -1761,8 +1755,6 @@ void animate_hero_slot4_and_slot5_visuals(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002352D0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0016C860[];
-extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
-extern void update_hero_item_mobys(void) __asm__("FUN_L00_0020f580");
 extern void animate_hero_slot4_and_slot5_visuals(void) __asm__("FUN_L00_00234808");
 
 void update_hero_slot4_and_slot5_mobys(int moby_override) __asm__("FUN_L00_00234a50");
@@ -1866,7 +1858,7 @@ void      configure_moby_from_source_bone4(void *source_moby,
 void configure_moby_from_source_bone4(void *source_moby, char *destination_moby) {
     u128 mt[4];
     build_moby_bone_transform(source_moby, 4, mt);
-    qcopy(destination_moby + 0x10, &mt[3]);
+    qcopy(&MOBY(destination_moby)->pos, &mt[3]);
     copy_matrix3x4(destination_moby + 0xc0, mt);
     refresh_moby_spatial_bounds_from_basis(destination_moby);
     if (MOBY(destination_moby)->oclass == 0x1b1)

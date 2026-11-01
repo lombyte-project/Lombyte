@@ -2,6 +2,13 @@
 #include "asm.h"
 #include "rnc/movies/decoder/decoder_globals.h"
 #include "rnc/movies/player/movie_player.h"
+#include "rnc/audio/decoder/audio_dec_create.h"
+#include "rnc/movies/decoder/mpeg_cd_stream_open.h"
+#include "rnc/movies/decoder/video_dec_create.h"
+#include "rnc/movies/decoder/video_dec_set_stream.h"
+#include "rnc/movies/display/handler_end_image.h"
+#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/mpeg/api/sce_mpeg_init.h"
 
 extern u8 movie_open_error_text[18] __asm__("D_001E8AF0");
 
@@ -22,25 +29,15 @@ extern void video_callback() __asm__("func_0023B5F0");
 extern void pcm_callback() __asm__("func_0023B728");
 extern void vblank_handler() __asm__("func_0023B3D8");
 
-extern void handler_end_image() __asm__("FUN_0023b540");
 extern void video_dec_main() __asm__("func_0023CE28");
-extern void sceMpegInit(void);
-extern s32
-video_dec_create(void *, u32, u32, void *, u32, u32, void *, u32) __asm__("FUN_0023cac8");
-extern s32 audio_dec_create(void *, void *, u32, u32) __asm__("FUN_0023abd0");
-extern s32 video_dec_set_stream(void *, u32, u32, void *, struct ReadBuf *) __asm__("FUN_0023cbd0");
-extern s32 CreateThread(struct AudioDecoderThreadArgs *);
-extern s32 _StartThread(s32, void *);
-extern s32 mpeg_cd_stream_open(struct MpegCdStream *stream,
-                               s32                  first_sector,
-                               s32                  byte_count) __asm__("func_0023BA48");
-extern s32 DebugPrint(void *);
-extern s32 AddIntcHandler(s32, void *, s32);
-extern s32 enable_intc(s32) __asm__("func_00119090");
-extern s32 AddDmacHandler(s32, void *, s32);
-extern s32 enable_dmac(s32) __asm__("func_00119160");
-s32        init_all(s32 movie_sector, s32 movie_size, s32 callback_context) __asm__("FUN_0023a7c0");
-s32        init_all(s32 movie_sector, s32 movie_size, s32 callback_context) __asm__("FUN_0023a7c0");
+extern s32  CreateThread(struct AudioDecoderThreadArgs *);
+extern s32  _StartThread(s32, void *);
+extern s32  AddIntcHandler(s32, void *, s32);
+extern s32  enable_intc(s32) __asm__("func_00119090");
+extern s32  AddDmacHandler(s32, void *, s32);
+extern s32  enable_dmac(s32) __asm__("func_00119160");
+s32 init_all(s32 movie_sector, s32 movie_size, s32 callback_context) __asm__("FUN_0023a7c0");
+s32 init_all(s32 movie_sector, s32 movie_size, s32 callback_context) __asm__("FUN_0023a7c0");
 
 s32 init_all(s32 movie_sector, s32 movie_size, s32 callback_context) {
     struct AudioDecoderThreadArgs thread_params;

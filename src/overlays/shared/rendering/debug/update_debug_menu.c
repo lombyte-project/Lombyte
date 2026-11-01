@@ -1,10 +1,10 @@
 /* Debug: debug text queue, debug camera and debug menu. */
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
@@ -13,6 +13,15 @@
 #include "rnc/rendering/effects/update_fog.h"
 #include "rnc/rendering/debug/print_debug_text.h"
 #include "rnc/rendering/debug/print_debug_text_centered.h"
+#include "rnc/camera/update_all_cameras.h"
+#include "rnc/overlay/shared/camera/follow_camera_setup.h"
+#include "rnc/rendering/vu1_registers.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/storage/fileio/sceClose.h"
+#include "rnc/sdk/storage/fileio/sceRead.h"
+#include "rnc/sdk/storage/fileio/sce_lseek.h"
+#include "rnc/sdk/storage/fileio/sceopen.h"
+#include "rnc/sdk/storage/fileio/scewrite.h"
 
 typedef struct {
     s32 a, b, c, d;
@@ -102,7 +111,6 @@ extern s32           debug_font_glyph_advances[] __asm__("D_L00_00169B00");
 /* Struct views of the two globals: retail reads them after the packet stores. */
 #define debug_packet       (*(PacketBuffer *)&D_L00_001611C0)
 #define debug_font_texture (*(DebugFontTexture *)&debug_font_pif_header)
-extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
 void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
     const u8 *text = (const u8 *)text_address;
@@ -168,10 +176,7 @@ void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
 
 extern struct PadStateWords D_0013C940;
 
-#include "rnc/overlay/level_camera.h"
-
-extern void update_all_cameras(void) __asm__("FUN_001ec420");
-extern void reset_follow_camera_state_from_position(void *) __asm__("FUN_L00_002e6bf8");
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 static inline void copy_vector3(f32 *dst, f32 *src) {
     dst[0] = src[0];
@@ -448,7 +453,7 @@ typedef struct {
 
 extern u8 D_L00_0016CA40[];
 #define level_view_context (*(LevelViewContext *)D_L00_0016CA40)
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 /* 13 item ids, declared as 8 bytes: the most gas reaches through $gp, as retail does. */
 extern u8 debug_menu_item_ids[8] __asm__("D_L00_0015EFD0") __attribute__((sda));
@@ -469,13 +474,7 @@ extern u8    D_L00_0015F444;
 extern f32   D_L00_0015F448;
 extern char *D_L00_0015F600;
 extern void  set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
-extern s32   sprintf(char *, const char *, ...);
 extern f64   fptodp(f32) __asm__("FUN_00120478");
-extern s32   sceOpen(const char *, s32, ...);
-extern s32   sceLseek(s32, s32, s32);
-extern s32   sceWrite(s32, void *, s32);
-extern s32   sceRead(s32, void *, s32);
-extern s32   sceClose(s32);
 extern u32   strlen(const char *);
 
 /* Debug menu input: moves between the columns and rows and changes the selected toggle, mode, item

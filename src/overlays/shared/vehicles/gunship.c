@@ -9,9 +9,9 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/vehicles/gunship_data/gunship_update.h"
 
 struct DriftEmitter {
@@ -192,7 +192,7 @@ void apply_gunship_path_position_offsets(char *moby, float *path_position) {
 
 void gunship_update(struct Moby *m) __asm__("FUN_L01_002f5168");
 
-/* Moby class 845 */
+/* Moby classes 444, 845 */
 void gunship_update(struct Moby *moby) {
     enum {
         GUNSHIP_PATH_STATE_INITIALIZE = 0,

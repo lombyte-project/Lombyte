@@ -9,7 +9,7 @@ Writes only gitignored files under config/us/overlays/ (docs/build/overlays.md):
     level_NN/{lit,bss,data,vtbl,camvtbl,sndvtbl,text}.bin, manifest.json
     asm/FUN_LNN_xxxxxxxx.s   (one per shared/level function, INCLUDE_ASM target)
 
-Every level is checked against config/overlays/us/level-NN.json and a pinned
+Every level is checked against config/us/levels/level-NN.json and a pinned
 SHA-256 before anything is written. Nothing from the disc goes into Git.
 Methods from rac1-decomp tools/overlay_dump.py and overlay_asm.py (MIT).
 """
@@ -26,7 +26,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 import rnc_overlays as ov  # noqa: E402
 
 WORK = ov.ROOT / "build/overlay-asm"

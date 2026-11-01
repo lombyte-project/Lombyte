@@ -1,6 +1,6 @@
 /* Level 14 moby class enemy_fighter (908, "Enemy Fighter (moby908)"): flies its path in a loop, puffs exhaust, and respawns after it is shot down. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
@@ -272,8 +272,6 @@ extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, floa
 
 extern void
 FUN_L00_0025d808_c(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
-
-float absolute_float(float input) __asm__("func_001F99C0");
 
 extern short enemy_fighter_path_step_rate_gp __asm__("D_L14_00161F48") __attribute__((sda));
 

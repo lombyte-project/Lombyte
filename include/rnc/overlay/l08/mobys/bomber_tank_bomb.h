@@ -6,4 +6,8 @@ char *spawn_bomber_tank_bomb(char *source_moby,
                              char *spawn_position,
                              char *initial_velocity) __asm__("FUN_L08_002dc8a0");
 
+struct Moby;
+
+void bomber_tank_bomb_update(struct Moby *) __asm__("FUN_L08_002dc9a8");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_BOMB_H */

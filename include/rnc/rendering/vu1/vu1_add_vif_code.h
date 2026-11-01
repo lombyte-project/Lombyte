@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_VU1_VU1_ADD_VIF_CODE_H
+#define LOMBYTE_RNC_RENDERING_VU1_VU1_ADD_VIF_CODE_H
+
+#include "types.h"
+
+void vu1_add_vif_code(s32) __asm__("FUN_00233938");
+
+#endif /* LOMBYTE_RNC_RENDERING_VU1_VU1_ADD_VIF_CODE_H */

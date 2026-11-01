@@ -25,6 +25,6 @@ void translation_delta_matrix_update(char *moby) {
         moby_vars[0x28] = 4;
         *(short *)(moby_vars + 0x3E) = 0xD;
         copy_hero_moby_field_38(moby);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
     }
 }

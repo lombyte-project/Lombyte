@@ -1,6 +1,6 @@
 /* Level 16 moby class spinning_sprite_effect (0x1d6, named rocket in the class record): a spinning moby with four glowing sprites. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -14,6 +14,9 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/world/collision/ground_probe.h"
 /* updates the moby: initialises in state 0, then runs its motion in state 1 */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CA848), where it is exact; names translated to the US level program. */
 
@@ -22,7 +25,6 @@ void         initialize_spinning_sprite_effect(struct Moby *moby) __asm__("FUN_L
 
 extern void initialize_spinning_sprite_effect(struct Moby *) __asm__("FUN_L16_002c9568");
 extern void FUN_L16_002c9650_u(char *) __asm__("FUN_L16_002c9650");
-f32         probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
 void spinning_sprite_effect_update(struct Moby *moby) __asm__("FUN_L16_002c9480");
 
@@ -53,8 +55,6 @@ void spinning_sprite_effect_update(struct Moby *moby) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CA930), where it is exact; names translated to the US level program. */
-
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void initialize_spinning_sprite_effect(struct Moby *moby) {
     char  *sprite_effect_data = (char *)moby->pvars;
@@ -89,9 +89,8 @@ typedef struct {
     float d[4];
 } L16SpriteData;
 
-extern char           D_L16_001671C0[];
-extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
-extern int            fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern char D_L16_001671C0[];
+extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 void draw_spinning_sprite_effect_sprites(struct Moby *moby) __asm__("FUN_L16_002c9650");
 

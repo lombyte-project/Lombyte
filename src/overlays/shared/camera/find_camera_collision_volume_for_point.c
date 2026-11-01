@@ -1,8 +1,8 @@
 /* Camera collision volumes: finds the volume holding a point over a 64x64 grid and tests a point against one; the asm functions after them use the collision hit record D_L00_00173E40. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 

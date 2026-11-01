@@ -18,7 +18,7 @@ void draw_matching_moby_slot_quads(char *reference_moby) {
     while (current_moby != 0) {
         if (current_moby->visible != 0) {
             char *slot_quad_data = ((char *)current_moby->pvars);
-            if (current_moby->oclass == *(short *)(reference_moby + 0xA6)) {
+            if (current_moby->oclass == MOBY(reference_moby)->oclass) {
                 if ((*(int *)(slot_quad_data + 0xe0) & 0xFF) > 0x80) {
                     char *slot_position = slot_quad_data + 0x80;
                     int   i;

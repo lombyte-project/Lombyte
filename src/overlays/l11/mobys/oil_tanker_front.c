@@ -1,6 +1,6 @@
 /* Level 11 moby class oil_tanker_front: the chain head, its path poses, damage and links. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -23,7 +23,7 @@ extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern short *D_L11_001AC240[];
 extern s32    FUN_0022da68(s32, s32, void *);

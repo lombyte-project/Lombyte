@@ -37,12 +37,12 @@ def load_module(name: str, path: Path):
 
 
 class TreemapClassificationTests(unittest.TestCase):
-    """generate_treemap.py must classify owners exactly as documented."""
+    """progress-map.py must classify owners exactly as documented."""
 
     @classmethod
     def setUpClass(cls):
         cls.treemap = load_module(
-            "rnc_generate_treemap", ROOT / "scripts" / "generate_treemap.py"
+            "rnc_generate_treemap", ROOT / "scripts" / "progress-map.py"
         )
 
     def _workspace(self, tmp: Path):
@@ -175,12 +175,12 @@ class TreemapClassificationTests(unittest.TestCase):
 
 
 class ProgressReportTests(unittest.TestCase):
-    """gen_progress_report.py must count only C_EXACT units as matched."""
+    """progress-report.py must count only C_EXACT units as matched."""
 
     @classmethod
     def setUpClass(cls):
         cls.report = load_module(
-            "rnc_gen_progress_report", ROOT / "scripts" / "gen_progress_report.py"
+            "rnc_gen_progress_report", ROOT / "scripts" / "progress-report.py"
         )
 
     def _repo(self, tmp: Path) -> Path:
@@ -270,14 +270,14 @@ class ProgressReportTests(unittest.TestCase):
         an INCLUDE_ASM stub is pending; exe rows belong to the executable."""
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
-            (repo / "config" / "overlays" / "us").mkdir(parents=True)
-            (repo / "config" / "overlays" / "us" / "functions.tsv").write_text(
+            (repo / "config" / "us" / "levels").mkdir(parents=True)
+            (repo / "config" / "us" / "levels" / "functions.tsv").write_text(
                 "# name\tkind\tsize\tfingerprint\tlevels\tplaces\texe unit\n"
                 "FUN_00112400\texe\t256\tf0\t19\t00:001EAA08\ttextbin/promoted\n"
                 "FUN_L00_00200000\tshared\t64\tf1\t19\t00:00200000,01:00210000\t\n"
                 "FUN_L03_00300000\tlevel\t32\tf2\t1\t03:00300000\t\n"
             )
-            (repo / "config" / "overlays" / "us" / "levels.json").write_text(json.dumps({
+            (repo / "config" / "us" / "levels" / "levels.json").write_text(json.dumps({
                 "schema": "rnc-overlay-levels-v1",
                 "levels": [{"index": 3, "id": "level-03", "planet": "Kerwan", "description": "Metropolis"}],
             }))
@@ -311,12 +311,12 @@ class ProgressReportTests(unittest.TestCase):
         to require the parameter list to close the line."""
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
-            (repo / "config" / "overlays" / "us").mkdir(parents=True)
-            (repo / "config" / "overlays" / "us" / "functions.tsv").write_text(
+            (repo / "config" / "us" / "levels").mkdir(parents=True)
+            (repo / "config" / "us" / "levels" / "functions.tsv").write_text(
                 "# name\tkind\tsize\tfingerprint\tlevels\tplaces\texe unit\n"
                 "FUN_L00_00200000\tshared\t40\tf1\t19\t00:00200000\t\n"
             )
-            (repo / "config" / "overlays" / "us" / "levels.json").write_text(json.dumps({
+            (repo / "config" / "us" / "levels" / "levels.json").write_text(json.dumps({
                 "schema": "rnc-overlay-levels-v1",
                 "levels": [],
             }))
@@ -334,7 +334,7 @@ class ProgressReportTests(unittest.TestCase):
     def test_promotion_shows_in_the_regenerated_report_and_comment(self):
         """CI regenerates the report from the tree; the PR comment lists a
         promoted function and C_FUZZY survives through fuzzy_scores.json."""
-        comment = load_module("rnc_progress_comment", ROOT / "scripts" / "progress_comment.py")
+        comment = load_module("rnc_progress_comment", ROOT / "scripts" / "progress-comment.py")
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
             base, head = repo / "base.json", repo / "head.json"
@@ -365,7 +365,7 @@ class ProgressReportTests(unittest.TestCase):
 
     def test_data_counts_blobs_c_entries_and_levels(self):
         """Data totals come from the preserved blobs and the level records;
-        matched data from the *_OVERLAYS sizes and config/overlays/us/data.tsv."""
+        matched data from the *_OVERLAYS sizes and config/us/levels/data.tsv."""
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
             config = repo / "config" / "us" / "rnc1.us.yaml"
@@ -377,7 +377,7 @@ class ProgressReportTests(unittest.TestCase):
             (repo / "configure.py").write_text(
                 'DATA_OVERLAYS = {\n    "textbin/promoted": (0x112680, 0x13680, 16),\n'
                 '    "gone/unit": (0x112690, 0x13690, 8),\n}\n')
-            overlays = repo / "config" / "overlays" / "us"
+            overlays = repo / "config" / "us" / "levels"
             overlays.mkdir(parents=True)
             (overlays / "level-02.json").write_text(json.dumps({"sections": [
                 {"name": ".lit", "size": 64}, {"name": ".bss", "size": 999},
@@ -397,7 +397,7 @@ class ProgressReportTests(unittest.TestCase):
         D_XXXXXXXX row counts once per level."""
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
-            overlays = repo / "config" / "overlays" / "us"
+            overlays = repo / "config" / "us" / "levels"
             overlays.mkdir(parents=True)
             for level in (1, 2):
                 (overlays / f"level-{level:02d}.json").write_text("{}")
@@ -432,7 +432,7 @@ class OverlayHelperTimestampTests(unittest.TestCase):
             sources.mkdir(parents=True)
             (sources / "sample.c").write_text("void sample(void) {}\n")
             (root / "config/us/overlays/asm").mkdir(parents=True)
-            catalogue = root / "config/overlays/us/functions.tsv"
+            catalogue = root / "config/us/levels/functions.tsv"
             catalogue.parent.mkdir(parents=True)
             catalogue.write_text("")
             build = root / "build/overlays"
@@ -560,7 +560,7 @@ class DataDeclarationTests(unittest.TestCase):
 class OverlayDataSymbolCacheTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.proof = load_module("rnc_overlay_proof_cache", ROOT / "scripts/overlay_proof.py")
+        cls.proof = load_module("rnc_overlay_proof_cache", ROOT / "scripts/lib/overlay_proof.py")
 
     @staticmethod
     def _elf_bytes(symbols, data=b"\x01\x02\x03\x04"):
@@ -673,7 +673,7 @@ class OverlaySourceStateTests(unittest.TestCase):
     """overlay_units.source_state must count a C-named function bound to its label."""
 
     def test_named_definition_counts_as_its_label(self):
-        units = load_module("rnc_overlay_units", ROOT / "scripts" / "overlay_units.py")
+        units = load_module("rnc_overlay_units", ROOT / "scripts" / "lib" / "overlay_units.py")
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "src" / "overlays" / "l14").mkdir(parents=True)
@@ -698,8 +698,9 @@ class BaselineGuardTests(unittest.TestCase):
     """verify-baseline.sh must never delete a build/baseline it did not create."""
 
     def _run(self, checkout: Path) -> subprocess.CompletedProcess:
-        script = checkout / "verify-baseline.sh"
-        script.write_text((ROOT / "verify-baseline.sh").read_text())
+        (checkout / "scripts").mkdir(exist_ok=True)
+        script = checkout / "scripts" / "verify-baseline.sh"
+        script.write_text((ROOT / "scripts" / "verify-baseline.sh").read_text())
         return subprocess.run(
             ["bash", str(script)], capture_output=True, text=True, cwd=checkout
         )
@@ -861,9 +862,9 @@ class UnitListHelpersTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.units = load_module("rnc_units", ROOT / "scripts" / "rnc_units.py")
+        cls.units = load_module("rnc_units", ROOT / "scripts" / "lib" / "rnc_units.py")
         cls.treemap = load_module(
-            "rnc_generate_treemap", ROOT / "scripts" / "generate_treemap.py"
+            "rnc_generate_treemap", ROOT / "scripts" / "progress-map.py"
         )
 
     def test_parse_config_rows(self):
@@ -1811,8 +1812,8 @@ class NoGameDataTests(unittest.TestCase):
 
 class OverlayStageTests(unittest.TestCase):
     def setUp(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
-        self.unit = load_module("overlay_unit", ROOT / "scripts/overlay_unit.py")
+        sys.path.insert(0, str(ROOT / "scripts" / "lib"))
+        self.unit = load_module("overlay_unit", ROOT / "scripts/lib/overlay_unit.py")
 
     def test_guarded_body_is_staged_and_other_stubs_dropped(self):
         text = textwrap.dedent("""\

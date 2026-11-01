@@ -2,15 +2,15 @@
 #include "rnc/globals.h"
 #include "rnc/streaming/disc_table.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/runtime/callbacks/count_vsync.h"
+#include "rnc/sdk/graph/sce_gs_sync_path.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/graph/sce_gs_sync_v_callback.h"
 
-extern s32   D_001940D4[];
-extern void  count_vsync() __asm__("FUN_0012f1c8");
-extern void  play_mpeg_movie(s32, s32, s32, s32, s32) __asm__("func_0023A3B8");
-extern s32   sceGsSyncV(s32);
-extern void  sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
-extern void *sceGsSyncVCallback(void *);
-extern void  fade_to_black(s32) __asm__("func_001F4A58");
-void         play_level_transition_movie(s32 movie_index) __asm__("FUN_00231608");
+extern s32  D_001940D4[];
+extern void play_mpeg_movie(s32, s32, s32, s32, s32) __asm__("func_0023A3B8");
+extern void fade_to_black(s32) __asm__("func_001F4A58");
+void        play_level_transition_movie(s32 movie_index) __asm__("FUN_00231608");
 
 void play_level_transition_movie(s32 movie_index) {
     s32 stream_size;

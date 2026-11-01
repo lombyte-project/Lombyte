@@ -1,16 +1,9 @@
 /* Ported from rac1-decomp (src/game/help.c, func_001FF1B0). */
 #include "sda.h"
+#include "rnc/ui/help/help_draw_prompt.h"
+#include "rnc/ui/text/font/font_set_window.h"
 
-typedef struct {
-    int state;  /* 0x00 */
-    int x04;    /* 0x04 */
-    int pad[7]; /* 0x08 */
-    int x24;    /* 0x24 */
-    int x28;    /* 0x28 */
-    int count;  /* 0x2C: entries in the D_0015F6A0 table */
-} HelpState;
-
-extern char D_001996D0[];
+#include "rnc/ui/help/help_state.h"
 
 typedef struct {
     char *text; /* 0x0 */
@@ -22,18 +15,15 @@ typedef struct {
 extern HelpEntry     *help_msgs __asm__("D_0015F6A0") MACRO_ADDR;
 extern int D_0015EE1D MACRO_ADDR;
 extern int D_0015EE1C MACRO_ADDR;
-extern void           help_draw_prompt(void) __asm__("FUN_001fe898");
 #define D_0015EF1D_b (*(unsigned char *)&D_0015EE1D)
 #define D_0015EF1C_b (*(unsigned char *)&D_0015EE1C)
-extern void
-font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8);
 extern void font_print_window_small(void *a, long b, void *c, int d) __asm__("func_001F75F0");
 extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
 extern void
 draw_textured_quad(int, int, int, int, int, int, int, int, long, long) __asm__("func_001F5450");
 extern long get_effect_texture(int) __asm__("func_001F44B8");
 /* Help_Draw: nothing unless a state is active, the help window is shown
-   (+0x30) and one of the fade flags is set. Then, by state, and only while
+   (help_state.started) and one of the fade flags is set. Then, by state, and only while
    D_0015EE1D is set: the growing frame (1), the prompt (2), the frame
    shrinking into the prompt icon with its fading quad (3), the full
    frame and the entry text, fading in (4) or out (6) through the text
@@ -51,26 +41,26 @@ void draw_help(void) {
         HELP_TEXT_FADE_OUT = 6,
         HELP_FRAME_CLOSING = 7
     };
-    if (((HelpState *)D_001996D0)->state == 0) {
+    if (help_state.state == 0) {
         return;
     }
-    if (*(int *)(D_001996D0 + 0x30) == 0) {
+    if (help_state.started == 0) {
         return;
     }
     if (D_0015EF1D_b == 0 && D_0015EF1C_b == 0) {
         return;
     }
-    switch (((HelpState *)D_001996D0)->state) {
+    switch (help_state.state) {
     case HELP_FRAME_OPENING:
         if (D_0015EF1D_b) {
-            int frame_half_extent = ((HelpState *)D_001996D0)->x04 * 4 + 8;
+            int frame_half_extent = help_state.timer * 4 + 8;
 
-            ((HelpState *)D_001996D0)->pad[4] = frame_half_extent;
-            ((HelpState *)D_001996D0)->pad[5] = frame_half_extent;
-            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - frame_half_extent,
-                          ((HelpState *)D_001996D0)->pad[3] + frame_half_extent,
-                          ((HelpState *)D_001996D0)->pad[2] - frame_half_extent,
-                          ((HelpState *)D_001996D0)->pad[2] + frame_half_extent,
+            help_state.frame_half_width = frame_half_extent;
+            help_state.frame_half_height = frame_half_extent;
+            draw_ui_frame(help_state.center_y - frame_half_extent,
+                          help_state.center_y + frame_half_extent,
+                          help_state.center_x - frame_half_extent,
+                          help_state.center_x + frame_half_extent,
                           0x60);
         }
         break;
@@ -81,27 +71,23 @@ void draw_help(void) {
         break;
     case HELP_PROMPT_FRAME_TRANSITION:
         if (D_0015EF1D_b) {
-            int a =
-                (((HelpState *)D_001996D0)->pad[0] - 0x20) * ((HelpState *)D_001996D0)->x04 / 8 +
-                0x20;
-            int b =
-                (((HelpState *)D_001996D0)->pad[1] - 0x20) * ((HelpState *)D_001996D0)->x04 / 8 +
-                0x20;
+            int a = (help_state.half_width - 0x20) * help_state.timer / 8 + 0x20;
+            int b = (help_state.half_height - 0x20) * help_state.timer / 8 + 0x20;
             int alpha;
 
-            ((HelpState *)D_001996D0)->pad[4] = a;
-            ((HelpState *)D_001996D0)->pad[5] = b;
-            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - b,
-                          ((HelpState *)D_001996D0)->pad[3] + b,
-                          ((HelpState *)D_001996D0)->pad[2] - a,
-                          ((HelpState *)D_001996D0)->pad[2] + a,
+            help_state.frame_half_width = a;
+            help_state.frame_half_height = b;
+            draw_ui_frame(help_state.center_y - b,
+                          help_state.center_y + b,
+                          help_state.center_x - a,
+                          help_state.center_x + a,
                           0x60);
-            alpha = (8 - ((HelpState *)D_001996D0)->x04) * 16;
+            alpha = (8 - help_state.timer) * 16;
             if (alpha < 0) {
                 alpha = 0;
             }
-            draw_textured_quad(((HelpState *)D_001996D0)->pad[2] - 0x20,
-                               ((HelpState *)D_001996D0)->pad[3] - 0x20,
+            draw_textured_quad(help_state.center_x - 0x20,
+                               help_state.center_y - 0x20,
                                0x40,
                                0x40,
                                0,
@@ -120,43 +106,36 @@ void draw_help(void) {
             int   col = 0x80FFA888;
             char *text;
 
-            ((HelpState *)D_001996D0)->pad[4] = ((HelpState *)D_001996D0)->pad[0];
-            ((HelpState *)D_001996D0)->pad[5] = ((HelpState *)D_001996D0)->pad[1];
-            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - ((HelpState *)D_001996D0)->pad[1],
-                          ((HelpState *)D_001996D0)->pad[3] + ((HelpState *)D_001996D0)->pad[1],
-                          ((HelpState *)D_001996D0)->pad[2] - ((HelpState *)D_001996D0)->pad[0],
-                          ((HelpState *)D_001996D0)->pad[2] + ((HelpState *)D_001996D0)->pad[0],
+            help_state.frame_half_width = help_state.half_width;
+            help_state.frame_half_height = help_state.half_height;
+            draw_ui_frame(help_state.center_y - help_state.half_height,
+                          help_state.center_y + help_state.half_height,
+                          help_state.center_x - help_state.half_width,
+                          help_state.center_x + help_state.half_width,
                           0x60);
-            if (((HelpState *)D_001996D0)->state == 4) {
-                col = 0xFFA888 | (((HelpState *)D_001996D0)->x04 << 29);
-            } else if (((HelpState *)D_001996D0)->state == 6) {
-                col = ((4 - ((HelpState *)D_001996D0)->x04) << 29) | 0xFFA888;
+            if (help_state.state == 4) {
+                col = 0xFFA888 | (help_state.timer << 29);
+            } else if (help_state.state == 6) {
+                col = ((4 - help_state.timer) << 29) | 0xFFA888;
             }
-            text = help_msgs[((HelpState *)D_001996D0)->pad[6]].text;
-            font_set_window((void *)win,
-                            0xF0,
-                            0x1E0,
-                            0x2C,
-                            0x1D4,
-                            0x100,
-                            ((HelpState *)D_001996D0)->pad[3],
-                            0x10,
-                            3);
+            text = help_msgs[help_state.msg].text;
+            font_set_window(
+                (void *)win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100, help_state.center_y, 0x10, 3);
             font_print_window_small((void *)win, col, text, -1);
         }
         break;
     case HELP_FRAME_CLOSING:
         if (D_0015EF1D_b) {
-            int b = ((HelpState *)D_001996D0)->pad[4] -
-                    (((HelpState *)D_001996D0)->pad[4] - 8) * ((HelpState *)D_001996D0)->x04 / 8;
-            int a = ((HelpState *)D_001996D0)->pad[5] -
-                    (((HelpState *)D_001996D0)->pad[5] - 8) * ((HelpState *)D_001996D0)->x04 / 8;
+            int b = help_state.frame_half_width -
+                    (help_state.frame_half_width - 8) * help_state.timer / 8;
+            int a = help_state.frame_half_height -
+                    (help_state.frame_half_height - 8) * help_state.timer / 8;
 
-            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - a,
-                          ((HelpState *)D_001996D0)->pad[3] + a,
-                          ((HelpState *)D_001996D0)->pad[2] - b,
-                          ((HelpState *)D_001996D0)->pad[2] + b,
-                          (8 - ((HelpState *)D_001996D0)->x04) * 12);
+            draw_ui_frame(help_state.center_y - a,
+                          help_state.center_y + a,
+                          help_state.center_x - b,
+                          help_state.center_x + b,
+                          (8 - help_state.timer) * 12);
         }
         break;
     }

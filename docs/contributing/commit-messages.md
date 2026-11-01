@@ -24,7 +24,7 @@ wrong; write `decomp: promote …`.
 A commit that promotes sources and also refreshes the map is still `decomp:`;
 the map is a derived artifact. Prefer `decomp:` whenever the commit changes
 `src/` behavior. Work on the level overlays is `overlay:` whatever it touches
-(`config/overlays/`, `src/overlays/`, the overlay parts of the scripts and
+(`config/us/levels/`, `src/overlays/`, the overlay parts of the scripts and
 the map); `decomp:` stays the executable's.
 
 ## Rules

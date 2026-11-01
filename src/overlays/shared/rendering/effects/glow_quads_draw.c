@@ -1,9 +1,9 @@
 /* Effects: glow quads, moby particle pairs, and point light and colored effect slots. */
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "asm.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 
 #include "qcopy.h"
@@ -170,7 +170,7 @@ void glow_quads_draw(char *moby) {
     draw_geometry_quad(corners, frame, 1);
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int, void *);
 
@@ -225,7 +225,7 @@ void emit_moby_particle_pairs(void *moby) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef struct {
     char  pad[0xc];

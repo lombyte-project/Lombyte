@@ -15,14 +15,14 @@ void falling_moby_update(char *moby) {
     float unused_vector_add_argument[4];
     char *moby_data = ((char *)MOBY(moby)->pvars);
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - frame_time_sq * 9.8f;
-    add_vectors(unused_vector_add_argument, moby + 0x10, moby_data);
+    add_vectors(unused_vector_add_argument, &MOBY(moby)->pos, moby_data);
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(moby_data + 0x10));
     MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(moby_data + 0x14));
     MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(moby_data + 0x18));
     {
         float remaining_timer_value = convert_integer_to_float(*(int *)(moby_data + 0x24));
         float timer_scale_denominator = convert_integer_to_float(*(int *)(moby_data + 0x20));
-        moby[0x23] =
+        MOBY(moby)->alpha =
             truncate_float_to_s32(remaining_timer_value * 255.0f / timer_scale_denominator);
     }
     if (fast_dec_timer((int *)(moby_data + 0x24)) != 0) {

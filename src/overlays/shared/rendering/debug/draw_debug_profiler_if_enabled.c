@@ -2,8 +2,8 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/rendering/debug/draw_debug_profiler.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F91B0), where it is exact; names translated to the US level program. */

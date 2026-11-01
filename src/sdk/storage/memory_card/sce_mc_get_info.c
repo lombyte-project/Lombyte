@@ -1,6 +1,7 @@
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct McGetInfoRequest {
     u8  pad_0[0x4];
@@ -21,7 +22,6 @@ extern struct McGetInfoRequest D_00159A80;
 extern u8                      D_00159F00[];
 extern s32                     PollSema();
 extern s32                     SignalSema();
-extern s32                     sceSifCallRpc();
 extern s32                     sceSifWriteBackDCache();
 
 s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {

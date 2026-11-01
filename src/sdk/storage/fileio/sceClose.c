@@ -1,5 +1,5 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 #include "rnc/sdk/library/sdk_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sif_file_slot.h"

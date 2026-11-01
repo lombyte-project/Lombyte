@@ -4,8 +4,8 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/hero.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "sda.h"
 #include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
@@ -14,6 +14,7 @@
 #include "rnc/overlay/shared/camera/find_camera_collision_volume_for_point.h"
 #include "rnc/sdk/library/sceVu0Normalize.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/camera/resolve_camera_surface_height.h"
 
 typedef struct {
     char pad[0x24];
@@ -57,7 +58,7 @@ int FUN_L15_001fe778(int allow_item_lookup) {
 }
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #define GI(o) (*(s32 *)(hero_lui + (o)))
@@ -75,8 +76,6 @@ typedef union {
 extern u8 D_L15_00174440[] NOT_SDA;
 extern u8 D_L15_00174460[] NOT_SDA;
 
-void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
-f32  resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 f32  compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");

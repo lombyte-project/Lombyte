@@ -1,7 +1,7 @@
 /* Camera type 4: a camera aligned with the hero, steered by the pad, and its transition step. */
 
 #include "types.h"
-#include "rnc/overlay/camera.h"
+#include "rnc/overlay/shared/camera/camera.h"
 #include "rnc/hero/hero.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -9,8 +9,11 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/camera/cam_interp_values.h"
+#include "rnc/overlay/shared/camera/init_camera_system.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 #define P D_0013F350_lui
 #define Q l00_camera_lui
@@ -99,8 +102,6 @@ typedef struct {
     short         s7E;
 } A_2ea810;
 
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 extern void  FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void  FUN_001f9a68_002e9cc0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void  FUN_001f9bf8_2e9dd0(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -109,7 +110,6 @@ extern void  FUN_001f9a10_2e9dd0(void *, void *, void *) __asm__("FUN_001f9a10")
 extern void  FUN_001f9ad8_2e9dd0(void *, void *, void *) __asm__("FUN_001f9ad8");
 void         FUN_001f9bf8_c(void *, void *, float) __asm__("FUN_001f9bf8");
 void         FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
-float        FUN_001ebd78(float, float, float, float, float, float *);
 int          coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 extern char *find_camera_collision_volume_for_point(void *, f32) __asm__("FUN_L00_001ee1b0");
 extern int   FUN_001f96f8_2ea488(int) __asm__("FUN_001f96f8");
@@ -119,7 +119,6 @@ extern f32   FUN_001f9ab0_2ea488(void *, void *) __asm__("FUN_001f9ab0");
 extern void  FUN_001f9a68_2ea488(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void  FUN_001f9a28_2ea488(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32   FUN_001f9af0_2ea488(void *) __asm__("FUN_001f9af0");
-extern void  init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void  FUN_L00_002e9ef0_v(void) __asm__("FUN_L00_002e9ef0");
 extern float FUN_001f9ab0_2ea810(void *, void *) __asm__("FUN_001f9ab0");
 extern void  FUN_001f9a68_2ea810(void *, void *, float) __asm__("FUN_001f9a68");
@@ -335,12 +334,12 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
          hero_aligned_camera_rotation_gain_at_zero_input_gp) *
             rotation_input_scratch;
     camera_rotation_state->a = rotation_input_scratch =
-        FUN_001ebd78(camera_rotation_state->a,
-                     rotation_input_target,
-                     hero_aligned_camera_input_stiffness_gp,
-                     hero_aligned_camera_input_damping_gp,
-                     hero_aligned_camera_input_step_limit_gp,
-                     &camera_rotation_state->va);
+        cam_interp_values(camera_rotation_state->a,
+                          rotation_input_target,
+                          hero_aligned_camera_input_stiffness_gp,
+                          hero_aligned_camera_input_damping_gp,
+                          hero_aligned_camera_input_step_limit_gp,
+                          &camera_rotation_state->va);
     if (rotation_input_scratch != 0.0f)
         build_look_at_matrix(camera_object, camera_object, &up, k * rotation_input_scratch);
     if (hero.motion.platform_carry.f[3] != 0.0f && hero.unk308 == 0)
@@ -361,12 +360,12 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
         (hero_aligned_camera_rotation_gain_at_unit_input_gp -
          hero_aligned_camera_rotation_gain_at_zero_input_gp) *
             rotation_input_scratch;
-    camera_rotation_state->b = FUN_001ebd78(camera_rotation_state->b,
-                                            rotation_input_target,
-                                            hero_aligned_camera_input_stiffness_gp,
-                                            hero_aligned_camera_input_damping_gp,
-                                            hero_aligned_camera_input_step_limit_gp,
-                                            &camera_rotation_state->vb);
+    camera_rotation_state->b = cam_interp_values(camera_rotation_state->b,
+                                                 rotation_input_target,
+                                                 hero_aligned_camera_input_stiffness_gp,
+                                                 hero_aligned_camera_input_damping_gp,
+                                                 hero_aligned_camera_input_step_limit_gp,
+                                                 &camera_rotation_state->vb);
     if (camera_rotation_state->b != 0.0f) {
         float a, prospective_pitch_angle, z;
         fast_vec_cross(&side, camera_object, &up);
@@ -377,10 +376,10 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
             a += (0.0f - a) *
                  (fast_subtract_rotations(prospective_pitch_angle, 1.1170107f) / 0.3490659f);
         if (prospective_pitch_angle >= 1.1152654f && camera_rotation_state->ang > 0.0f)
-            camera_rotation_state->z = FUN_001ebd78(
+            camera_rotation_state->z = cam_interp_values(
                 camera_rotation_state->z, 0.5f, 0.005f, 0.2f, 0.0f, &camera_rotation_state->vz);
         else
-            camera_rotation_state->z = FUN_001ebd78(
+            camera_rotation_state->z = cam_interp_values(
                 camera_rotation_state->z, 0.0f, 0.005f, 0.2f, 0.0f, &camera_rotation_state->vz);
         z = 0.0f;
         horizontal_view_offset.f[0] = *(float *)(camera_object + 0);
@@ -390,7 +389,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
         FUN_001f9bf8_c(&horizontal_view_offset, &horizontal_view_offset, camera_rotation_state->z);
         FUN_001f9a10_c(camera_object + 0x30, camera_object + 0x30, &horizontal_view_offset);
         if (coll_sphere(camera_object + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
-            camera_rotation_state->z = FUN_001ebd78(
+            camera_rotation_state->z = cam_interp_values(
                 camera_rotation_state->z, z, 0.005f, 0.2f, z, &camera_rotation_state->vz);
         prospective_pitch_angle = fast_add_rotations(camera_rotation_state->ang, a);
         if (absolute_float(prospective_pitch_angle) > 1.4660766f) {

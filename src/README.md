@@ -17,9 +17,9 @@
 
 - A file is named after the function it holds (`ui/map/coverage/save_map_coverage.c`);
   `fun_<address>.c` means the function is not understood yet.
-- `assembly/` holds units that build from the retail assembly (the oracle),
-  under the same subsystem names. `assembly/textbin/` units come from raw-word
-  segments; the oracle tooling finds them by that prefix.
+- `assembly/` holds the hand-written assembly units, under the same subsystem
+  names. `assembly/textbin/` units come from raw-word segments; the build finds
+  them by that prefix.
 - `overlays/` holds the level code, built by `make overlays` and not linked
   into the boot executable ([docs/build/overlays.md](../docs/build/overlays.md)):
   - `shared/`: code every level carries, grouped like the boot tree plus
@@ -33,7 +33,9 @@ Rules:
 - Place a file by what its functions do, not by the file next to it.
 - Level code holds one moby class (or camera or sound emitter type) per file,
   named after the class; its helpers and methods live with it.
-- No folder with only one file, and at most three folders deep.
+- No folder with only one file, unless it mirrors a folder of the same name
+  in `assembly/` or in the boot tree; at most three folders deep
+  (`overlays/shared/` and `overlays/lNN/` count as the top).
 - Headers mirror the source path under `include/rnc/` (`include/rnc/overlay/` for level code).
 
 Each file's owner path in `config/us/rnc1.us.yaml` must match its location.

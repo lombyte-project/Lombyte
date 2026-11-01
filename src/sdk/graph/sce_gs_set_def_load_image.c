@@ -1,10 +1,9 @@
 #include "types.h"
 #include "rnc/rendering/pixel_format.h"
 #include "rnc/sdk/libgraph.h"
-#include "eetypes.h"
-#include "kernel.h"
-
-extern void scePrintf(const char *message, ...);
+#include "rnc/sdk/eetypes.h"
+#include "rnc/sdk/kernel.h"
+#include "rnc/sdk/deci2/sce_printf.h"
 
 s32 sceGsSetDefLoadImage(sceGsLoadImage *image,
                          s16             destination_base,

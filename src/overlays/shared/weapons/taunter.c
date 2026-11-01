@@ -1,7 +1,7 @@
 /* Shared moby class taunter: the taunter held by the hero, which lures nearby enemies, and its effect quads. */
 
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/data_labels.h"
@@ -13,7 +13,11 @@
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/weapons/taunter_globals.h"
 #include "rnc/input/pad_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct {
     f32 x;
@@ -90,17 +94,13 @@ typedef struct {
 
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-extern int  random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern s32  FUN_L00_0028d8c0_u(Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern s32  FUN_L00_00257b50_b6bc8(s32) __asm__("FUN_L00_00257b50");
 extern u8  *FUN_L00_0025c338_b6bc8(Moby *) __asm__("FUN_L00_0025c338");
 extern void
      spawn_nearby_effect(Moby *, Moby *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
 void update_taunter_effect_slots(void *source_moby) __asm__("FUN_L00_002b7398");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-void        FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
+void FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
 
 extern int            D_0015EEA4;
 extern s32            D_0015EEA4;
@@ -496,7 +496,7 @@ void taunter_update(Moby *taunter_moby) {
     } else {
         taunter_vars->cnt18 = 0;
     }
-    if (FUN_L00_0028d8c0_u(taunter_moby, taunter_vars->anim) == 0) {
+    if (voice_is_playing(taunter_moby, taunter_vars->anim) == 0) {
         activation_button_bits = D_0013C940[0x1A4 / 4] & hero.items[0].button_mask;
         if ((activation_button_bits != 0 ||
              ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 &&

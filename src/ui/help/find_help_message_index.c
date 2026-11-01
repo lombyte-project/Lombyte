@@ -7,27 +7,23 @@ typedef struct HelpMsg {
     s32 unkC;
 } HelpMsg;
 
-struct HelpMessageState {
-    u8  pad_0[0x2C];
-    s32 unk2C;
-};
+#include "rnc/ui/help/help_state.h"
 
-extern struct HelpMessageState D_001996D0;
-extern HelpMsg                *help_msgs __asm__("D_0015F6A0");
-s32                            find_help_message_index(s32 message_id) __asm__("FUN_001fdca0");
+extern HelpMsg *help_msgs __asm__("D_0015F6A0");
+s32             find_help_message_index(s32 message_id) __asm__("FUN_001fdca0");
 
 s32 find_help_message_index(s32 message_id) {
     s32 i;
     s32 found = -1;
 
     i = 0;
-    if (D_001996D0.unk2C > 0) {
+    if (help_state.count > 0) {
         if (help_msgs[0].id == message_id) {
             found = 0;
         } else {
         next:
             i++;
-            if (i < D_001996D0.unk2C) {
+            if (i < help_state.count) {
                 if (help_msgs[i].id == message_id) {
                     found = i;
                 } else {

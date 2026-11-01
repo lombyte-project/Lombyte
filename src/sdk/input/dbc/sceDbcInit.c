@@ -1,19 +1,19 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_globals.h"
+#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/input/dbc/sceDbcSetWorkAddr.h"
+#include "rnc/sdk/input/dbc/sce_dbc_get_mod_version.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
 
 extern struct sceSifClientData dbc_transfer_rpc_client __asm__("D_0015B030");
 extern char                    dbc_rpc_bind_failure_message[] __asm__("D_001534D8");
 extern char                    dbc_module_version_mismatch_message[] __asm__("D_001534F0");
 const char                     D_00153518[] = "[libdbc.a = %d.%d, dbcman.irx = %d.%d]\n";
 const char                     D_00153540[] = "SifDmaAddr %08x\n";
-extern void                    sceSifInitRpc(u32);
-extern s32                     sceSifBindRpc(struct sceSifClientData *, u32, u32);
 extern void                    debug_print_stub(const char *fmt, ...) __asm__("func_00124A20");
 extern void                    exit(s32);
-extern s32                     sceDbcGetModVersion(void);
-extern void                    sceDbcSetWorkAddr(void *addr);
-extern s32                     scePrintf(const char *, ...);
 
 s32 sceDbcInit(void) {
     s32 ver;
@@ -45,7 +45,7 @@ s32 sceDbcInit(void) {
         do {
         } while (--i != -1);
     }
-    ver = sceDbcGetModVersion();
+    ver = SceDbcGetModVersion();
     major = ver >> 8;
     if (major != 2) {
         scePrintf(dbc_module_version_mismatch_message);

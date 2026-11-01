@@ -1,3 +1,5 @@
+#include "rnc/sdk/libc/mprec/hi0bits.h"
+#include "rnc/sdk/libc/mprec/lshift.h"
 /****************************************************************
  *
  * The author of this software is David M. Gay.
@@ -71,7 +73,7 @@ union double_union {
 #define Balloc      _Balloc
 #define _Bfree      _Bfree
 #define d2b         _d2b
-#define hi0bits     _hi0bits
+#define hi0bits     CountLeadingZeroBits
 #define i2b         __i2b
 #define mult        _multiply
 #define pow5mult    _pow5mult
@@ -87,11 +89,9 @@ extern const f64 dtoa_quick_overflow_divisor[] __asm__("D_001524B0");
 extern char      D_00152310[], D_00152320[], D_00152328[];
 extern _Bigint  *Balloc(struct _reent *, s32);
 extern _Bigint  *d2b(struct _reent *, f64, s32 *, s32 *);
-extern s32       hi0bits(u32);
 extern _Bigint  *i2b(struct _reent *, s32) __asm__("func_00115808");
 extern _Bigint  *mult(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint  *pow5mult(struct _reent *, _Bigint *, s32);
-extern _Bigint  *lshift(struct _reent *, _Bigint *, s32);
 extern s32       cmp(_Bigint *, _Bigint *);
 extern _Bigint  *diff(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint  *multadd(struct _reent *, _Bigint *, s32, s32);

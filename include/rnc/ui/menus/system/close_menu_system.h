@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_SYSTEM_CLOSE_MENU_SYSTEM_H
+#define LOMBYTE_RNC_UI_MENUS_SYSTEM_CLOSE_MENU_SYSTEM_H
+
+#include "types.h"
+
+void close_menu_system(void) __asm__("FUN_002191b8");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_SYSTEM_CLOSE_MENU_SYSTEM_H */

@@ -13,7 +13,9 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 extern float D_0015ED60;
 extern u8    D_L14_0015F580[] MACRO_ADDR;
@@ -22,7 +24,6 @@ extern u8    D_L14_0015F580[] MACRO_ADDR;
 #define DE670_GRAVITY   D_L14_00161B18
 extern void *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern void  FUN_L14_002dec40(struct Moby *);
-extern s32   FUN_L00_00257b90(s32, s32);
 extern s32   coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void  spawn_explosion(void *,
                              void *,
@@ -117,7 +118,7 @@ void plasmabot_death_debris_update(struct Moby *moby) {
                            D_L14_0015F580,
                            0x4F007FFF,
                            0x1FFFFFFF,
-                           FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)),
+                           random_int_between(scale_game_frames(10), scale_game_frames(20)),
                            1,
                            60000.0f);
     for (i = 0; i < 2; i++) {
@@ -125,7 +126,7 @@ void plasmabot_death_debris_update(struct Moby *moby) {
         if (random_integer_below(2) != 0)
             signed_particle_variation = -signed_particle_variation;
         size = random_float_between(40000.0f, 100000.0f);
-        color = FUN_L00_00257b90(0x30, 0xFF);
+        color = random_int_between(0x30, 0xFF);
         alpha = 0x60000000;
         particle = FUN_L00_0026d000_de670(&moby->pos,
                                           0.025f,
@@ -148,10 +149,6 @@ void plasmabot_death_debris_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_00257c48(float lo, float hi);
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
-
 extern float plasmabot_debris_launch_magnitude_range_start_gp __asm__("D_L14_00161B08")
     __attribute__((sda));
 extern float plasmabot_debris_launch_magnitude_range_end_gp __asm__("D_L14_00161B0C")
@@ -171,14 +168,14 @@ unsigned char *spawn_plasmabot_death_debris(char *debris_source_moby, char *pos)
     if (spawned_moby != 0) {
         spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(char **)(spawned_vars + 0x24) = debris_source_moby;
-        qcopy(spawned_moby + 0x10, pos);
-        MOBY(spawned_moby)->rot.z = *(float *)(debris_source_moby + 0x48);
-        spawned_moby[0x20] = 0;
-        spawned_moby[0x30] = 0xFF;
+        qcopy(&MOBY(spawned_moby)->pos, pos);
+        MOBY(spawned_moby)->rot.z = MOBY(debris_source_moby)->rot.z;
+        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         hero_launch_reference = (char *)&hero.motion.pos;
-        fast_vec_sub(launch_vector_scratch, spawned_moby + 0x10, hero_launch_reference);
+        fast_vec_sub(launch_vector_scratch, &MOBY(spawned_moby)->pos, hero_launch_reference);
         hero_launch_reference = hero_launch_reference + 0x210;
         launch_vector_scratch[2] = 0.0f;
         fast_vec_normalize(
@@ -190,13 +187,13 @@ unsigned char *spawn_plasmabot_death_debris(char *debris_source_moby, char *pos)
         build_look_at_matrix(spawned_vars,
                              launch_vector_scratch,
                              hero_launch_reference,
-                             FUN_L00_00257c48(0.34906584f, 1.0471976f));
+                             randf_sym(0.34906584f, 1.0471976f));
         *(float *)(spawned_vars + 8) =
             random_float_between(plasmabot_debris_z_velocity_range_start_gp * frame_scale,
                                  plasmabot_debris_z_velocity_range_end_gp * frame_scale);
-        *(float *)(spawned_vars + 0x10) = FUN_L00_00257c48(0.0f, 0.008726646f);
-        *(float *)(spawned_vars + 0x14) = FUN_L00_00257c48(0.05235988f, 0.13962634f);
-        *(float *)(spawned_vars + 0x18) = FUN_L00_00257c48(0.0f, DEG_TO_RAD);
+        *(float *)(spawned_vars + 0x10) = randf_sym(0.0f, 0.008726646f);
+        *(float *)(spawned_vars + 0x14) = randf_sym(0.05235988f, 0.13962634f);
+        *(float *)(spawned_vars + 0x18) = randf_sym(0.0f, DEG_TO_RAD);
         *(int *)(spawned_vars + 0x20) = scale_game_frames(200);
         update_entity(spawned_moby);
     }
@@ -275,7 +272,7 @@ void draw_moby_offset_textured_quad(char *moby) {
     fast_vec_scale(&local.basis.partial, moby + 0xe0, moby_quad_e0_offset_scale_gp);
     fast_vec_add(&local.basis.offset, &local.basis.offset, &local.basis.partial);
     basis_axis_or_source_corner = &local.basis.mat0;
-    fast_vec_add(&local.basis.point, &local.basis.offset, moby + 0x10);
+    fast_vec_add(&local.basis.point, &local.basis.offset, &MOBY(moby)->pos);
     fast_vec_sub(basis_axis_or_source_corner, D_L01_00167240, &local.basis.point);
     fast_vec_normalize(basis_axis_or_source_corner, basis_axis_or_source_corner, one);
     basis_axis_or_quad_corner = &local.basis.mat1;

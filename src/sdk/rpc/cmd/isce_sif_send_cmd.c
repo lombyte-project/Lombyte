@@ -1,12 +1,5 @@
 #include "types.h"
-
-extern s32 SendSifCommand(void *packet,
-                          s32   mode,
-                          void *command,
-                          void *source,
-                          s32   source_size,
-                          void *destination,
-                          s32   destination_size) __asm__("_sceSifSendCmd");
+#include "rnc/sdk/rpc/cmd/sce_sif_send_cmd.h"
 
 s32 IsceSifSendCmd(void *packet,
                    void *command,
@@ -22,5 +15,5 @@ s32 IsceSifSendCmd(void *packet,
                    void *destination,
 
                    s32 destination_size) {
-    return SendSifCommand(packet, 1, command, source, source_size, destination, destination_size);
+    return _sceSifSendCmd(packet, 1, command, source, source_size, destination, destination_size);
 }

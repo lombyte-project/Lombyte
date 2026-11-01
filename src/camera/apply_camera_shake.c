@@ -21,7 +21,7 @@ extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 void apply_camera_shake(struct CameraShake *shake, s32 axis_index) __asm__("FUN_001ed360");
 
 void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
-    f32 sp_slot[4];
+    f32 shake_offset[4];
     f32 remaining_frames_float;
     f32 total_frames_float;
     f32 remaining_frame_ratio;
@@ -47,11 +47,11 @@ void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
             val = shake->unk0 * oscillation_cosine * remaining_frame_ratio * remaining_frame_ratio;
             shake->unk4 = val;
             if (axis_index == 0) {
-                fast_vec_normalize(sp_slot, D_001872B0, val);
+                fast_vec_normalize(shake_offset, D_001872B0, val);
             } else {
-                fast_vec_normalize(sp_slot, camera_rows, val);
+                fast_vec_normalize(shake_offset, camera_rows, val);
             }
-            fast_vec_add(camera_position, camera_position, sp_slot);
+            fast_vec_add(camera_position, camera_position, shake_offset);
         } else {
             shake->unkC = 0;
         }

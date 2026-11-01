@@ -11,12 +11,12 @@
 #include "types.h"
 #include "rnc/sdk/library/malloc_chunk.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/libc/malloc/malloc_trim_r.h"
 
 struct _reent;
 
 extern void __malloc_lock(struct _reent *) __asm__("func_001154C0");
 extern void __malloc_unlock(struct _reent *) __asm__("func_001154C8");
-extern s32  _malloc_trim_r(struct _reent *ptr, u32 pad);
 
 extern u64 D_0012FB90[]; /* trim_threshold */
 

@@ -1,11 +1,11 @@
 /* Level 10 moby class configurable_particle_emitter (class 1544): emits burst, timed or height-adjusted sparks at the moby or along its path. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -42,11 +42,11 @@ void configurable_particle_emitter_update(char *moby) {
         EFFECT_MODE_TIMED_PARTICLES = 2
     };
     char *effect_pvars = ((char *)MOBY(moby)->pvars);
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case EFFECT_STATE_INITIALIZE:
         switch (*(int *)effect_pvars) {
         case EFFECT_MODE_BURST_PARTICLES:
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             break;
         case EFFECT_MODE_CACHE_GROUND_HEIGHT:
             if (*(int *)(effect_pvars + 4) != -1) {
@@ -66,10 +66,10 @@ void configurable_particle_emitter_update(char *moby) {
                 }
             } else
                 *(float *)(effect_pvars + 0x88) = probe_ground_height(moby + 0x10, 0, 0.5f);
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             break;
         case EFFECT_MODE_TIMED_PARTICLES:
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
             break;
         }
         break;

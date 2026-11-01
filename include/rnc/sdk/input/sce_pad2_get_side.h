@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_GET_SIDE_H
+#define LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_GET_SIDE_H
+
+#include "types.h"
+
+void *scePad2GetSide(s32);
+
+#endif /* LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_GET_SIDE_H */

@@ -3,10 +3,9 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002A6C20), where it is exact; names translated to the US level program. */
-
-extern s32 rand();
 
 void        random_interval_animation_update(struct Moby *moby) __asm__("FUN_L04_002a5a08");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
@@ -21,7 +20,7 @@ void random_interval_animation_update(struct Moby *moby) {
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, (void *)1, 0, (void *)scale_game_frames(3));
             }
-            *animation_countdown = scale_game_frames((rand() + 0x1E) & 0xFF);
+            *animation_countdown = scale_game_frames((RandomNext() + 0x1E) & 0xFF);
         }
         if ((moby->anim_flags & 2) && moby->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(3));

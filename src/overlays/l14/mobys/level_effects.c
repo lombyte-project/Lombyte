@@ -25,7 +25,7 @@ void draw_level14_textured_effect_list(void) {
         level14_textured_effect_list, 0x13, get_effect_texture(0x2e), get_effect_texture(0x2f));
 }
 
-void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
+void add_draw_callback(int callback, int callback_argument) __asm__("FUN_001f4600");
 
 void level_effects_update(struct Moby *moby) __asm__("FUN_L14_00307a80");
 

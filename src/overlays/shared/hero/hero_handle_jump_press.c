@@ -4,7 +4,7 @@
 #include "asm.h"
 #include "qcopy.h"
 
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 #include "rnc/globals.h"
 #include "sda.h"
 #include "rnc/math/random.h"
@@ -243,7 +243,7 @@ typedef union {
     float                f[4];
 } V_229910_00229910;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
@@ -277,7 +277,7 @@ int check_hero_forward_collision_height(void) {
     return 0;
 }
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 s32  hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");

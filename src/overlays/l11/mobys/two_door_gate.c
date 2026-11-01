@@ -1,6 +1,6 @@
 /* Level 11 moby class two_door_gate: spawns both doors and swings them open. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -13,11 +13,11 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 
 #include "rnc/overlay/l11/mobys/two_door_gate_globals.h"
+#include "rnc/rendering/clip_volume.h"
 
 float      gate_door_z_offset_gp __asm__("D_L11_00162308") = -4.0f;
 float      gate_door_x_rotation_degrees_gp __asm__("D_L11_0016230C") = 0;
 float      gate_door_y_rotation_degrees_gp __asm__("D_L11_00162310") = -9e+01f;
-extern s32 FUN_00214720(void *, s32);
 extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 
@@ -88,7 +88,7 @@ void two_door_gate_update(struct Moby *moby) {
     }
     case GATE_WAIT_FOR_HERO_TRIGGER:
         if (vector_distance_xy(&moby->pos.x, &hero.motion.pos.f[0]) < 12.0f &&
-            FUN_00214720(&hero.motion.pos, gate_vars->unk10) != 0) {
+            is_point_inside_clip_volume(&hero.motion.pos, gate_vars->unk10) != 0) {
             gate_vars->t = 0.0f;
             moby->state = 2;
             FUN_0022da68(0, 4, gate_vars->left);

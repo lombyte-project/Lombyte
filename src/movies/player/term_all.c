@@ -2,6 +2,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/movies/decoder/decoder_globals.h"
 #include "rnc/movies/player/movie_player.h"
+#include "rnc/movies/decoder/mpeg_cd_stream_close.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
 extern s32 DeleteThread();
 extern s32 RemoveDmacHandler();
@@ -10,9 +12,7 @@ extern s32 TerminateThread();
 extern s32 disable_intc() __asm__("func_00119028");
 extern s32 disable_dmac() __asm__("func_001190F8");
 extern s32 audio_dec_delete() __asm__("func_0023AC90");
-extern s32 mpeg_cd_stream_close(struct MpegCdStream *stream) __asm__("func_0023BA58");
 extern s32 video_dec_delete() __asm__("func_0023CC38");
-extern s32 sceCdSync();
 void       term_all(void) __asm__("FUN_0023aa68");
 
 void term_all(void) {

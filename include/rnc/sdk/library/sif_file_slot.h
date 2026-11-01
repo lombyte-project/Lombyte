@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "sda.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 
 /* One open-file slot of the SIF file I/O wrappers. */
 struct SifFileSlot {

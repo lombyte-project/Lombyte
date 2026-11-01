@@ -1,0 +1,32 @@
+#include "rnc/sdk/mpeg/bitstream/nextbit.h"
+#include "rnc/sdk/mpeg/headers/_extensionAndUserData.h"
+#include "rnc/sdk/mpeg/headers/extrainfo.h"
+#include "rnc/sdk/mpeg/picture/update_temp_track_data.h"
+
+typedef struct PictureHeaderContext PictureHeaderContext;
+
+struct PictureHeaderContext {
+    unsigned char opaque;
+};
+
+#define FIELD(type, object, offset) (*(type *)((unsigned char *)(object) + (offset)))
+
+void PictureHeader(PictureHeaderContext *context) __asm__("_pictureHeader");
+
+void PictureHeader(PictureHeaderContext *decoder_state) {
+    int temporal_reference = _nextBit(decoder_state, 10);
+
+    FIELD(int, decoder_state, 0x150) = _nextBit(decoder_state, 3);
+    _nextBit(decoder_state, 16);
+    if ((FIELD(unsigned int, decoder_state, 0x150) - 2) < 2) {
+        FIELD(int, decoder_state, 0x154) = _nextBit(decoder_state, 1);
+        FIELD(int, decoder_state, 0x158) = _nextBit(decoder_state, 3);
+    }
+    if (FIELD(unsigned int, decoder_state, 0x150) == 3) {
+        FIELD(int, decoder_state, 0x15C) = _nextBit(decoder_state, 1);
+        FIELD(int, decoder_state, 0x160) = _nextBit(decoder_state, 3);
+    }
+    ExtraInfo(decoder_state);
+    _extensionAndUserData(decoder_state);
+    UpdateTempTrackData(decoder_state, temporal_reference);
+}

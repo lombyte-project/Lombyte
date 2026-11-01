@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
-extern s32 sceCdSync();
 extern s32 DIntr();
-extern s32 EnableInterrupts();
 
 s32 sceCdCallback(s32 callback) {
     s32 intr;

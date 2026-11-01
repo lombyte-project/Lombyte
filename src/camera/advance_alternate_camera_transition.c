@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/interpolation/cosine_interpolate.h"
 
@@ -33,10 +34,10 @@ extern void rotate_vector_by_quaternion(void *, void *, void *) __asm__("func_00
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
 extern void fast_dec_timer(void *) __asm__("func_001F9740");
 
-int advance_alternate_camera_transition(char *target_camera,
-                                        f32  *transition_state) __asm__("FUN_001eccd8");
+int advance_alternate_camera_transition(char               *target_camera,
+                                        struct CameraOrbit *orbit) __asm__("FUN_001eccd8");
 
-int advance_alternate_camera_transition(char *target_camera, f32 *transition_state) {
+int advance_alternate_camera_transition(char *target_camera, struct CameraOrbit *orbit) {
     CameraVector orbit_angles;
     CameraVector forward_axis;
     CameraVector horizontal_axis;
@@ -60,16 +61,15 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     f32          projection;
     struct Hero *hero_state;
 
-    if (*(s32 *)(transition_state + 3) <= 0) {
+    if (orbit->frames <= 0) {
         return 1;
     }
-    step = 1.0f / cosine_interpolate(1.0f,
-                                     (f32) * (s32 *)(transition_state + 5),
-                                     (f32) * (s32 *)(transition_state + 3) * transition_state[4]);
-    if (((u8 *)cam_trans_state)[2] == 2) {
+    step = 1.0f / cosine_interpolate(
+                      1.0f, (f32)orbit->start_count, (f32)orbit->frames * orbit->frame_step);
+    if (cam_trans_state.kind == 2) {
         qcopy(&focus_position, D_0013F3D0);
-        qcopy(&forward_axis, transition_state + 8);
-        qcopy(&vertical_axis, transition_state + 12);
+        qcopy(&forward_axis, orbit->forward);
+        qcopy(&vertical_axis, orbit->up);
         fast_vec_cross(&horizontal_axis, &forward_axis, &vertical_axis);
         compute_camera_angles(orbit_angles.v,
                               target_camera + 0x30,
@@ -80,27 +80,27 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     } else {
         qcopy(&focus_position, target_camera + 0x30);
         hero_state = &hero;
-        fast_vec_normalize(&forward_axis, (char *)hero_state->moby + 0xC0, 1.0f);
-        fast_vec_normalize(&vertical_axis, (char *)hero_state->moby + 0xE0, 1.0f);
+        fast_vec_normalize(&forward_axis, &hero_state->moby->rot_row0, 1.0f);
+        fast_vec_normalize(&vertical_axis, &hero_state->moby->rot_row2, 1.0f);
         orbit_angles.v[2] = 0.0f;
         orbit_angles.v[1] = 0.0f;
         orbit_angles.v[0] = 3.1415927f;
     }
-    orbit_yaw_delta = fast_subtract_rotations(orbit_angles.v[0], transition_state[0]);
-    transition_state[0] = fast_add_rotations(transition_state[0], orbit_yaw_delta * step);
-    orbit_pitch_delta = fast_subtract_rotations(orbit_angles.v[1], transition_state[1]);
-    transition_state[1] = fast_add_rotations(transition_state[1], orbit_pitch_delta * step);
-    transition_state[2] = transition_state[2] + (orbit_angles.v[2] - transition_state[2]) * step;
-    fast_vec_normalize(&camera_offset, &forward_axis, transition_state[2]);
-    build_look_at_matrix(&camera_offset, &camera_offset, &vertical_axis, transition_state[0]);
+    orbit_yaw_delta = fast_subtract_rotations(orbit_angles.v[0], orbit->angles[0]);
+    orbit->angles[0] = fast_add_rotations(orbit->angles[0], orbit_yaw_delta * step);
+    orbit_pitch_delta = fast_subtract_rotations(orbit_angles.v[1], orbit->angles[1]);
+    orbit->angles[1] = fast_add_rotations(orbit->angles[1], orbit_pitch_delta * step);
+    orbit->angles[2] = orbit->angles[2] + (orbit_angles.v[2] - orbit->angles[2]) * step;
+    fast_vec_normalize(&camera_offset, &forward_axis, orbit->angles[2]);
+    build_look_at_matrix(&camera_offset, &camera_offset, &vertical_axis, orbit->angles[0]);
     fast_vec_cross(&horizontal_axis, &camera_offset, &vertical_axis);
     fast_vec_normalize(&horizontal_axis, &horizontal_axis, 1.0f);
-    build_look_at_matrix(&camera_offset, &camera_offset, &horizontal_axis, transition_state[1]);
-    fast_vec_add(transition_state + 20, &focus_position, &camera_offset);
+    build_look_at_matrix(&camera_offset, &camera_offset, &horizontal_axis, orbit->angles[1]);
+    fast_vec_add(orbit->saved_position, &focus_position, &camera_offset);
     if (camera_position_publication_suppressed[0] == 0) {
-        qcopy(camera_position, transition_state + 20);
+        qcopy(camera_position, orbit->saved_position);
     }
-    quaternion_rotation_basis(transition_state + 16, rotation_matrix);
+    quaternion_rotation_basis(orbit->rotation, rotation_matrix);
     projection = fast_vec_dot(&rotation_matrix[2], target_camera);
     fast_vec_scale(&axis_projection, &rotation_matrix[2], projection);
     fast_vec_sub(&projected_difference, target_camera, &axis_projection);
@@ -150,9 +150,9 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     fast_vec_cross(camera_rows + 0x10, camera_rows, D_0013F5E0);
     fast_vec_normalize(camera_rows + 0x10, camera_rows + 0x10, -1.0f);
     fast_vec_cross(camera_rows + 0x20, camera_rows + 0x10, camera_rows);
-    extract_matrix_rotation_quaternion(transition_state + 24, camera_rows);
-    extract_matrix_rotation_quaternion(transition_state + 16, camera_rows);
-    fast_dec_timer(transition_state + 3);
+    extract_matrix_rotation_quaternion(orbit->saved_rotation, camera_rows);
+    extract_matrix_rotation_quaternion(orbit->rotation, camera_rows);
+    fast_dec_timer(&orbit->frames);
     return 0;
 }
 

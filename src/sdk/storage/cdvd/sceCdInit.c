@@ -2,6 +2,14 @@
 
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
+#include "rnc/sdk/storage/cdvd/PowerOffCB.h"
+#include "rnc/sdk/storage/cdvd/cdvd_exit.h"
+#include "rnc/sdk/storage/cdvd/cmd_sem_init.h"
+#include "rnc/sdk/storage/cdvd/sceCdSyncS.h"
 
 /* libcdvd: bind the CD/DVD init RPC server, send the init mode and read
    back the drive state. */
@@ -28,22 +36,6 @@ extern sceSifClientData cd_init_rpc_client __asm__("D_00159968");
 extern s32              cd_init_mode_request[] __asm__("D_001599C0");
 
 extern s32  GetThreadId(void);
-extern s32  PowerOffCB(void);
-extern void cdvd_exit(void);
-extern void cmd_sem_init(void);
-extern s32  sceCdSyncS(s32 mode);
-extern int  scePrintf(const char *format, ...);
-extern s32  sceSifBindRpc(sceSifClientData *cd, u32 request, u32 mode);
-extern s32  sceSifCallRpc(sceSifClientData *cd,
-                          u32               fno,
-                          u32               mode,
-                          void             *send,
-                          s32               ssize,
-                          void             *receive,
-                          s32               rsize,
-                          void             *end_func,
-                          void             *end_para);
-extern void sceSifInitRpc(u32 mode);
 extern void sceSifWriteBackDCache(void *addr, s32 size);
 
 int sceCdInit(int init_mode) {

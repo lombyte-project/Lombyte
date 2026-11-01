@@ -15,9 +15,10 @@
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/input/pad_globals.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 typedef struct Hero Hero;
 
@@ -49,7 +50,6 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V_2e01b0;
 
-extern int   hero_set_state() __asm__("FUN_L00_002223f8");
 void         emit_hydrodisplacer_effect(char *m) __asm__("FUN_L00_002e01b0");
 void         end_hydrodisplacer_interaction(char *a) __asm__("FUN_L00_002e0340");
 extern int   func_001F9850_2E0E50(int) __asm__("FUN_001f96f8");
@@ -58,8 +58,6 @@ extern int   func_L00_002E1790_2E0E50(Moby *) __asm__("FUN_L00_002e02e0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int   func_001FA898_2E0E50(float) __asm__("FUN_001fa6d0");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void  func_001F9C08_2E0E50(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float func_001FA790_2E0E50(float, float) __asm__("FUN_001fa5c8");
 extern float func_001FA748_2E0E50(float, float) __asm__("FUN_001fa580");
@@ -370,10 +368,10 @@ s32 test_hydrodisplacer_activation_flag(void) {
     flags = (u8)activation_hero->hydro_tank_full;
     linked_moby += *(s32 *)*(s32 *)((u8 *)ground_moby_address + 0x78) << 8;
     if (!flags) {
-        if (linked_moby[0xBC] & 2)
+        if (MOBY(linked_moby)->command & 2)
             return 1;
     } else {
-        if (linked_moby[0xBC] & 1)
+        if (MOBY(linked_moby)->command & 1)
             return 1;
     }
     return 0;

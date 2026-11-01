@@ -1,7 +1,7 @@
 /* VU1: sends the render buffer chain and waits for it. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "sda.h"
 #include "rnc/rendering/frame/reset_graphics.h"
 

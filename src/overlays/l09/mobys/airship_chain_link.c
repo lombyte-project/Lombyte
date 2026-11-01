@@ -5,7 +5,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
@@ -369,7 +369,7 @@ void airship_chain_link_update(unsigned char *moby) __asm__("FUN_L09_00304360");
 
 /* Moby class 1181 */
 void airship_chain_link_update(unsigned char *moby) {
-    unsigned char *data = *(unsigned char **)(moby + 0x78);
+    unsigned char *data = MOBY(moby)->pvars;
     unsigned char *link;
     unsigned char *link2;
     float          work[4], work2[4], work3[4];
@@ -378,7 +378,7 @@ void airship_chain_link_update(unsigned char *moby) {
     int            tick;
     short          oclass;
 
-    switch ((int)moby[0x20]) {
+    switch ((int)MOBY(moby)->state) {
     case 0: {
         unsigned char *link;
         if ((signed char)data[0x69] != -1 &&
@@ -404,13 +404,13 @@ void airship_chain_link_update(unsigned char *moby) {
                 print_missing_link(D_L09_00209080, *(short *)(moby + 0xb2));
             }
         }
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         return;
     }
     case 1: {
         float rotation_scale;
         float height;
-        if (moby[0x31] == 0 || fast_vec_dist(moby + 0x10, D_L09_00166F40) > 32.0f) {
+        if (MOBY(moby)->visible == 0 || fast_vec_dist(moby + 0x10, D_L09_00166F40) > 32.0f) {
             int a = *(short *)(moby + 0xb2);
             int b = D_L09_0015F5CC;
             if (b % 8 != (short)(a % 8))
@@ -471,7 +471,7 @@ void airship_chain_link_update(unsigned char *moby) {
         } else {
             data[0x68] = 1;
         }
-        if (moby[0xbc] != 1)
+        if (MOBY(moby)->command != 1)
             return;
         index = *(int *)(data + 0x6c);
         if (index != -1) {
@@ -480,14 +480,14 @@ void airship_chain_link_update(unsigned char *moby) {
                 link2[0xbc] = 1;
         }
         *(short *)(data + 0x6a) = scale_game_frames(10);
-        moby[0x30] = 0xff;
-        moby[0x20] = 2;
+        MOBY(moby)->update_dist = 0xff;
+        MOBY(moby)->state = 2;
         return;
     }
     case 2: {
         unsigned char *link;
         link = 0;
-        moby[0x30] = 0xff;
+        MOBY(moby)->update_dist = 0xff;
         index = *(int *)(data + 0x60);
         if (index != -1) {
             link = (unsigned char *)((char *)moby_list + (index << 8));
@@ -536,7 +536,7 @@ void airship_chain_link_update(unsigned char *moby) {
                 }
             }
         }
-        moby[0x20] = 3;
+        MOBY(moby)->state = 3;
         return;
     }
     case 3: {

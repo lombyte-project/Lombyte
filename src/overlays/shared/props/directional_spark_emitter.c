@@ -9,6 +9,25 @@
 #include "rnc/overlay/shared/props/directional_spark_emitter_data/update_directional_spark_emitter_2.h"
 #include "rnc/overlay/shared/props/directional_spark_emitter_data/directional_spark_emitter_update.h"
 
+typedef struct DirectionalSparkEmitterVars {
+    s32 unk0;
+    s32 unk4;
+    u8  unk8[0x4];
+    u8  unkC[0x4];
+    u8  unk10[0x4];
+    s32 unk14;
+    f32 unk18;
+    f32 unk1C;
+    f32 unk20;
+    f32 unk24;
+    f32 unk28;
+    f32 unk2C;
+    f32 unk30;
+    f32 unk34;
+    s32 unk38;
+    s32 unk3C;
+} DirectionalSparkEmitterVars;
+
 extern void
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
@@ -40,16 +59,16 @@ void directional_spark_emitter_update(char *moby) __asm__("FUN_L08_002f5830");
 void directional_spark_emitter_update(char *moby) {
     f32 spark_motion_primary[4], spark_motion_secondary[4], spark_position[4],
         spark_motion_offset[4], spark_rotation_matrix[16];
-    char *spark_data;
-    s32   spark_frame_count, spark_second_frame_count, spark_third_frame_count;
+    DirectionalSparkEmitterVars *spark_data;
+    s32 spark_frame_count, spark_second_frame_count, spark_third_frame_count;
 
-    spark_data = ((char *)MOBY(moby)->pvars);
-    if (fast_dec_timer((int *)(spark_data + 0x3C)) == 0)
+    spark_data = (DirectionalSparkEmitterVars *)MOBY(moby)->pvars;
+    if (fast_dec_timer((int *)(&spark_data->unk3C)) == 0)
         return;
-    if (*(s32 *)(spark_data + 0x38) != 0) {
-        *(s32 *)(spark_data + 0x3C) = spark_emitter_default_timer_reset_gp;
+    if (spark_data->unk38 != 0) {
+        spark_data->unk3C = spark_emitter_default_timer_reset_gp;
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
-        qcopy(spark_position, moby + 0x10);
+        qcopy(spark_position, &MOBY(moby)->pos);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
         spark_position[1] += random_float_between(-0.05f, 0.05f);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
@@ -108,55 +127,49 @@ void directional_spark_emitter_update(char *moby) {
                     spark_third_frame_count,
                     -1);
     } else {
-        *(s32 *)(spark_data + 0x3C) = *(s32 *)(spark_data + 0x14);
+        spark_data->unk3C = spark_data->unk14;
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
-        qcopy(spark_position, moby + 0x10);
+        qcopy(spark_position, &MOBY(moby)->pos);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
         spark_position[1] += random_float_between(-0.05f, 0.05f);
         spark_position[2] += random_float_between(-0.05f, 0.05f);
         random_float_between(-0.17453292f, 0.17453292f);
-        fast_vec_normalize(
-            spark_motion_primary,
-            spark_rotation_matrix,
-            random_float_between(*(f32 *)(spark_data + 0x18), *(f32 *)(spark_data + 0x18) * 1.2f) *
-                frame_time);
-        fast_vec_normalize(
-            spark_motion_offset,
-            spark_rotation_matrix + 4,
-            random_float_between(-*(f32 *)(spark_data + 0x30), *(f32 *)(spark_data + 0x30)) *
-                frame_time);
+        fast_vec_normalize(spark_motion_primary,
+                           spark_rotation_matrix,
+                           random_float_between(spark_data->unk18, spark_data->unk18 * 1.2f) *
+                               frame_time);
+        fast_vec_normalize(spark_motion_offset,
+                           spark_rotation_matrix + 4,
+                           random_float_between(-spark_data->unk30, spark_data->unk30) *
+                               frame_time);
         fast_vec_add(spark_motion_primary, spark_motion_primary, spark_motion_offset);
         spark_motion_primary[2] +=
-            random_float_between(*(f32 *)(spark_data + 0x1C), *(f32 *)(spark_data + 0x1C) * 1.2f) *
-            frame_time;
+            random_float_between(spark_data->unk1C, spark_data->unk1C * 1.2f) * frame_time;
         qcopy(spark_motion_secondary, spark_motion_primary);
-        fast_vec_normalize(
-            spark_motion_secondary,
-            spark_rotation_matrix,
-            random_float_between(*(f32 *)(spark_data + 0x20), *(f32 *)(spark_data + 0x20) * 1.5f) *
-                frame_time);
-        fast_vec_normalize(
-            spark_motion_offset,
-            spark_rotation_matrix + 4,
-            random_float_between(-*(f32 *)(spark_data + 0x34), *(f32 *)(spark_data + 0x34)) *
-                frame_time);
+        fast_vec_normalize(spark_motion_secondary,
+                           spark_rotation_matrix,
+                           random_float_between(spark_data->unk20, spark_data->unk20 * 1.5f) *
+                               frame_time);
+        fast_vec_normalize(spark_motion_offset,
+                           spark_rotation_matrix + 4,
+                           random_float_between(-spark_data->unk34, spark_data->unk34) *
+                               frame_time);
         fast_vec_add(spark_motion_secondary, spark_motion_secondary, spark_motion_offset);
         spark_motion_secondary[2] +=
-            random_float_between(*(f32 *)(spark_data + 0x24), *(f32 *)(spark_data + 0x24) * 1.5f) *
-            frame_time;
-        spark_motion_primary[3] = *(f32 *)(spark_data + 0x28);
-        spark_motion_secondary[3] = *(f32 *)(spark_data + 0x2C);
+            random_float_between(spark_data->unk24, spark_data->unk24 * 1.5f) * frame_time;
+        spark_motion_primary[3] = spark_data->unk28;
+        spark_motion_secondary[3] = spark_data->unk2C;
         spark_frame_count = truncate_float_to_s32(scale_time(random_float_between(
-            (f32) * (s32 *)(spark_data + 0x08), (f32) * (s32 *)(spark_data + 0x08) * 1.2f)));
+            (f32) * (s32 *)(&spark_data->unk8), (f32) * (s32 *)(&spark_data->unk8) * 1.2f)));
         spark_second_frame_count = truncate_float_to_s32(scale_time(random_float_between(
-            (f32) * (s32 *)(spark_data + 0x0C), (f32) * (s32 *)(spark_data + 0x0C) * 1.2f)));
+            (f32) * (s32 *)(&spark_data->unkC), (f32) * (s32 *)(&spark_data->unkC) * 1.2f)));
         spark_third_frame_count = truncate_float_to_s32(scale_time(random_float_between(
-            (f32) * (s32 *)(spark_data + 0x10), (f32) * (s32 *)(spark_data + 0x10) * 1.2f)));
+            (f32) * (s32 *)(&spark_data->unk10), (f32) * (s32 *)(&spark_data->unk10) * 1.2f)));
         spawn_spark(spark_position,
                     spark_motion_primary,
                     spark_motion_secondary,
-                    *(s32 *)(spark_data + 0x00),
-                    *(s32 *)(spark_data + 0x04),
+                    spark_data->unk0,
+                    spark_data->unk4,
                     spark_frame_count,
                     spark_second_frame_count,
                     spark_third_frame_count,

@@ -10,4 +10,6 @@ void *set_class_0287_group_activation_and_find_nearest(int index,
 void *activate_class_0287_group_and_find_nearest(int index,
                                                  int secondary) __asm__("FUN_L16_002d5bc8");
 
+void door_update(unsigned char *) __asm__("FUN_L16_002d59e0");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_DOOR_H */

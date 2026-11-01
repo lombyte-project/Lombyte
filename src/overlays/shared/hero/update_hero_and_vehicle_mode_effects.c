@@ -181,12 +181,12 @@ extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 void update_enabled_item_tint_from_hero(void) __asm__("FUN_L15_00200788");
 
 void update_enabled_item_tint_from_hero(void) {
-    unsigned char *hero_state_base = ((unsigned char *)&D_0013E533) + 0xE1D;
-    int            index = *(int *)(hero_state_base + 0x10B8);
+    struct Hero *hero_state_base = (struct Hero *)(((unsigned char *)&D_0013E533) + 0xE1D);
+    int          index = hero_state_base->items[0].item_id;
     if (index >= 0 && *(D_0013E05A + 0x4C6 + index) != 0) {
-        int item_moby = *(int *)(hero_state_base + 0x1090);
+        int item_moby = *(int *)&hero_state_base->items;
         if (item_moby != 0) {
-            update_item_tint_from_hero(item_moby, *(int *)(hero_state_base + 0x2080));
+            update_item_tint_from_hero(item_moby, *(int *)&hero_state_base->moby);
         }
     }
 }
@@ -213,7 +213,7 @@ void update_hero_bobbing_and_target_position(void) {
         if (position_target != 0) {
             char *hero_moby;
             hero_moby = ((char *)hero_instance->moby);
-            qcopy(position_target + 0x10, hero_moby + 0x10);
+            qcopy(position_target + 0x10, &MOBY(hero_moby)->pos);
             *(u128 *)position_offset = 0;
             position_offset[2] = 0.21f;
             transform_vector_by_basis(position_offset, position_offset, hero_moby + 0xC0);
@@ -237,40 +237,40 @@ extern int  hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 
 void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
-    unsigned char *hero_state_for_vehicle_exit = ((unsigned char *)&D_0013E533) + 0xE1D;
-    unsigned char *hero_state_bytes;
-    int            flag_clear_target;
-    void          *moby_to_remove;
-    char          *restored_hero_moby;
-    if (hero_state_for_vehicle_exit[0x20A4] == 2) {
-        int animation_parameter_value = *(short *)(hero_state_for_vehicle_exit + 0x1634);
+    struct Hero *hero_state_for_vehicle_exit =
+        (struct Hero *)(((unsigned char *)&D_0013E533) + 0xE1D);
+    struct Hero *hero_state_bytes;
+    int          flag_clear_target;
+    void        *moby_to_remove;
+    char        *restored_hero_moby;
+    if (hero_state_for_vehicle_exit->vehicle_mode == 2) {
+        int animation_parameter_value = hero_state_for_vehicle_exit->unk1634;
         if (animation_parameter_value != -1) {
             set_animation_parameter(animation_parameter_value, 0);
-            *(short *)(hero_state_for_vehicle_exit + 0x1634) = -1;
+            hero_state_for_vehicle_exit->unk1634 = -1;
         }
     }
     reset_hero_easing_records();
-    hero_state_bytes = ((unsigned char *)&D_0013E533) + 0xE1D;
-    flag_clear_target = *(int *)(hero_state_bytes + 0xA84);
-    hero_state_bytes[0x20A4] = 0;
+    hero_state_bytes = (struct Hero *)(((unsigned char *)&D_0013E533) + 0xE1D);
+    flag_clear_target = *(int *)&hero_state_bytes->unkA84;
+    hero_state_bytes->vehicle_mode = 0;
     if (flag_clear_target != 0) {
         *(unsigned short *)(flag_clear_target + 0x34) &= 0xFFF9;
     }
-    moby_to_remove = *(void **)(hero_state_bytes + 0xA8C);
-    *(int *)(hero_state_bytes + 0xA84) = 0;
+    moby_to_remove = hero_state_bytes->vehicle_mode3_moby;
+    *(int *)&hero_state_bytes->unkA84 = 0;
     if (moby_to_remove != 0) {
         mark_moby_for_removal(moby_to_remove);
-        *(int *)(hero_state_bytes + 0xA8C) = 0;
+        *(int *)&hero_state_bytes->vehicle_mode3_moby = 0;
     }
     release_and_clear_hero_voice_slots();
-    restored_hero_moby = *(char **)(hero_state_bytes + 0xA88);
-    *(char **)(hero_state_bytes + 0x2080) = restored_hero_moby;
-    qcopy(restored_hero_moby + 0x10, hero_state_bytes + 0x80);
+    restored_hero_moby = ((char *)hero_state_bytes->unkA88);
+    hero_state_bytes->moby = restored_hero_moby;
+    qcopy(&MOBY(restored_hero_moby)->pos, &hero_state_bytes->motion.pos);
     MOBY(restored_hero_moby)->collision_disable = 0;
-    *(float *)(hero_state_bytes + 0xA94) = 1.0f;
+    hero_state_bytes->anim_frame_rate = 1.0f;
     clear_hero_queued_animation();
-    if (*(int *)(hero_state_bytes + 0x2084) != 100 ||
-        (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
+    if (hero_state_bytes->state.current != 100 || (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
         hero_set_state(HERO_STATE_IDLE, 1);
     }
 }
@@ -432,7 +432,7 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/input/pad_state.h"
 
 typedef struct {

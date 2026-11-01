@@ -3,7 +3,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -14,6 +14,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_line.h"
 #include "qzero.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
@@ -86,17 +87,25 @@ struct L13Ent00178480 {
 
 extern float fast_vec_dist(void *, void *);
 
-extern int FUN_L00_00257b90(int, int);
-
 extern struct L13Ent00178480 l13_moby_hit_entries[] __asm__("D_L13_00178400");
 
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 
 void gemlik_projectile_update(struct Moby *moby) __asm__("FUN_L13_00306300");
 
+typedef struct GemlikProjectileVars {
+    u8    pad_0[0xC];
+    f32   unkC;
+    f32   unk10[4];
+    void *unk20;
+    s32   unk24;
+    f32   unk28;
+    s32   timer_2C;
+} GemlikProjectileVars;
+
 /* Moby class 1238 */
 void gemlik_projectile_update(struct Moby *moby) {
-    char *projectile_vars = (char *)moby->pvars;
+    GemlikProjectileVars *projectile_vars = (GemlikProjectileVars *)moby->pvars;
     struct {
         L13Vec_p old_pos;
         char     hit[48];
@@ -119,13 +128,13 @@ void gemlik_projectile_update(struct Moby *moby) {
     work.velocity.z = 1.0f;
     flags = 0x10001;
     hero_bytes = (unsigned char *)((char *)((char *)&hero));
-    if (hero_bytes[0x1FF6] != 0 && *(float *)(projectile_vars + 0xC) != 31337.6015625f &&
+    if (hero_bytes[0x1FF6] != 0 && projectile_vars->unkC != 31337.6015625f &&
         fast_vec_dist(&moby->pos, hero_bytes + 0x80) < 2.0f) {
         fast_vec_normalize(projectile_vars, projectile_vars, 0.5f);
         fast_vec_sub(&moby->pos, &moby->pos, projectile_vars);
         qzero(projectile_vars);
-        *(int *)(projectile_vars + 0x2C) = 5;
-        *(float *)(projectile_vars + 0xC) = 31337.6015625f;
+        projectile_vars->timer_2C = 5;
+        projectile_vars->unkC = 31337.6015625f;
         for (i = 0; i < 6; i++) {
             unsigned char *hero_base = (unsigned char *)((char *)((char *)&hero));
             ent = ((char **)(hero_base + 0x2020))[i];
@@ -160,10 +169,9 @@ void gemlik_projectile_update(struct Moby *moby) {
     *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
     work.hit[0x18] = 1;
     work.hit[0x19] = 1;
-    stationary = *(int *)(projectile_vars + 0x24) == 0;
-    if (*(float *)(projectile_vars + 0x28) <
-            vector_distance_xy(&moby->pos, projectile_vars + 0x10) ||
-        fast_dec_timer(projectile_vars + 0x2C) != 0) {
+    stationary = projectile_vars->unk24 == 0;
+    if (projectile_vars->unk28 < vector_distance_xy(&moby->pos, projectile_vars->unk10) ||
+        fast_dec_timer(&projectile_vars->timer_2C) != 0) {
         if (moby->visible != 0) {
             int i;
             for (i = 0; i < 3; i++) {
@@ -185,8 +193,7 @@ void gemlik_projectile_update(struct Moby *moby) {
         }
         goto remove;
     }
-    if (collision_line(
-            &work.old_pos, &moby->pos, stationary, *(void **)(projectile_vars + 0x20), work.hit) ==
+    if (collision_line(&work.old_pos, &moby->pos, stationary, projectile_vars->unk20, work.hit) ==
         0)
         goto bounds;
     qcopy(&moby->pos, &coll_hit_1638.point);
@@ -208,7 +215,7 @@ void gemlik_projectile_update(struct Moby *moby) {
             FUN_L00_0026dd20(&moby->pos,
                              &work.direction,
                              0x7F2F4F6F,
-                             FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)),
+                             random_int_between(scale_game_frames(10), scale_game_frames(15)),
                              30000.0f);
         }
     }

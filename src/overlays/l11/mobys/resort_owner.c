@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
 #include "rnc/overlay/shared/mobys/build_symmetric_adjacency_masks.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/overlay/l11/mobys/watcher.h"
 #include "rnc/overlay/l11/mobys/resort_owner.h"
 
@@ -64,13 +64,40 @@ approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("
 
 void trigger_pokitaru_paired_rotation(struct Moby *moby) __asm__("FUN_L11_002cb990");
 
+typedef struct ResortOwnerVars {
+    u8    pad_0[0x8];
+    char *unk8;
+    u8    pad_C[0x20];
+    f32   unk2C;
+    u8    pad_30[0x26];
+    s16   unk56;
+    u8    pad_58[0x28];
+    void *unk80;
+    void *unk84;
+    void *unk88;
+    u8    pad_8C[0x64];
+    s32   unkF0;
+    u8    pad_F4[0x4];
+    s32   unkF8;
+    u8    pad_FC[0x8];
+    s32   unk104;
+    u8    pad_108[0x18];
+    f32   unk120[4];
+    f32   unk130[4];
+    f32   unk140[4];
+    f32   unk150;
+    f32   unk154;
+    u32   unk158;
+    s32   unk15C;
+} ResortOwnerVars;
+
 void trigger_pokitaru_paired_rotation(struct Moby *moby) {
-    char *state = (char *)moby->pvars;
+    ResortOwnerVars *state = (ResortOwnerVars *)moby->pvars;
     if (moby->oclass == 0x41 && moby->state == 1) {
         char *child;
         D_0013D3E2[0] = moby->state;
         moby->state = 2;
-        child = *(char **)(state + 8);
+        child = state->unk8;
         if (child)
             child[0x20] = 2;
     }
@@ -124,13 +151,13 @@ extern int   D_L11_0015FFD8;
 int try_activate_pokitaru_gate(struct Moby *moby) __asm__("FUN_L11_0030a480");
 
 void update_resort_owner_state_actions(void *mp) {
-    struct Moby *moby = mp;
-    char        *pvars = (char *)moby->pvars;
-    float        target_yaw;
-    float        motion_scalar;
-    float        vertical_motion;
-    float        vertical_motion_decrement;
-    float        horizontal_speed;
+    struct Moby     *moby = mp;
+    ResortOwnerVars *pvars = (ResortOwnerVars *)moby->pvars;
+    float            target_yaw;
+    float            motion_scalar;
+    float            vertical_motion;
+    float            vertical_motion_decrement;
+    float            horizontal_speed;
 
     switch (moby->state) {
     case RESORT_OWNER_INITIALIZE:
@@ -146,53 +173,53 @@ void update_resort_owner_state_actions(void *mp) {
     case RESORT_OWNER_MOVE_TO_GATE_TARGET:
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET: {
         char *yaw_ptr = (char *)moby + 0x48;
-        target_yaw = fast_arc_tan(*(float *)(pvars + 0x120) - *(float *)((char *)moby + 0x10),
-                                  *(float *)(pvars + 0x124) - *(float *)((char *)moby + 0x14));
+        target_yaw = fast_arc_tan(pvars->unk120[0] - MOBY(moby)->pos.x,
+                                  pvars->unk120[1] - MOBY(moby)->pos.y);
         approach_angle((float *)(yaw_ptr),
                        target_yaw,
-                       (float *)(pvars + 0x150),
+                       &pvars->unk150,
                        D_0015ED70 * 12.566371f,
                        D_0015ED70 * 25.132742f,
                        D_0015ED6C * 12.566371f);
-        *(float *)(pvars + 0x130) = fast_cos(*(float *)(yaw_ptr)) * *(float *)(pvars + 0x154);
+        pvars->unk130[0] = fast_cos(*(float *)(yaw_ptr)) * pvars->unk154;
         motion_scalar = fast_sin(*(float *)(yaw_ptr));
-        vertical_motion = *(float *)(pvars + 0x148);
+        vertical_motion = pvars->unk140[2];
         vertical_motion_decrement = D_0015ED70 * 20.0f;
-        horizontal_speed = *(float *)(pvars + 0x154);
-        *(float *)(pvars + 0x134) = motion_scalar * horizontal_speed;
+        horizontal_speed = pvars->unk154;
+        pvars->unk130[1] = motion_scalar * horizontal_speed;
         vertical_motion = vertical_motion - vertical_motion_decrement;
-        *(float *)(pvars + 0x138) = vertical_motion;
+        pvars->unk130[2] = vertical_motion;
         if (0.0f < vertical_motion) {
-            *(float *)(pvars + 0x138) = 0.0f;
+            pvars->unk130[2] = 0.0f;
             /* Fakematch: storing the speed back is a no-op that reload
              * deletes, but it keeps f3 live into this branch, so the
              * first scheduling pass hoists the 0x154 load and the
              * allocator gives it $f4 as in retail. */
-            *(float *)(pvars + 0x154) = horizontal_speed;
+            pvars->unk154 = horizontal_speed;
         }
         break;
     }
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (is_value_within_interpolated_window(moby, 9.0f)) {
-            fast_vec_sub(pvars + 0x130, pvars + 0x120, (char *)moby + 0x10);
+            fast_vec_sub(pvars->unk130, pvars->unk120, (char *)moby + 0x10);
             motion_scalar = (float)scale_game_frames(0x3C);
-            fast_vec_scale(pvars + 0x130, pvars + 0x130, 1.0f / motion_scalar);
-            motion_scalar = vector_length_xy(pvars + 0x130);
-            *(float *)(pvars + 0x138) = FUN_L00_0025abf0(
-                (char *)moby + 0x10, pvars + 0x120, motion_scalar, 0, -(D_0015ED70 * 10.8f));
-            *(float *)((char *)moby + 0x58) = 0.6666667f;
+            fast_vec_scale(pvars->unk130, pvars->unk130, 1.0f / motion_scalar);
+            motion_scalar = vector_length_xy(pvars->unk130);
+            pvars->unk130[2] = FUN_L00_0025abf0(
+                (char *)moby + 0x10, pvars->unk120, motion_scalar, 0, -(D_0015ED70 * 10.8f));
+            MOBY(moby)->anim_speed = 0.6666667f;
         }
-        motion_scalar = fast_vec_length(pvars + 0x130);
+        motion_scalar = fast_vec_length(pvars->unk130);
         if (0.0f < motion_scalar)
-            *(float *)(pvars + 0x138) = *(float *)(pvars + 0x138) - D_0015ED70 * 10.8f;
+            pvars->unk130[2] = pvars->unk130[2] - D_0015ED70 * 10.8f;
         if (is_value_within_interpolated_window(moby, 29.0f)) {
-            clear_u64_value(pvars + 0x130);
-            *(float *)((char *)moby + 0x58) = 1.0f;
+            clear_u64_value(pvars->unk130);
+            MOBY(moby)->anim_speed = 1.0f;
         }
         break;
     case RESORT_OWNER_WAIT_AT_GATE: {
-        int         *gate_moby_index_ptr = (int *)(pvars + 0xF0);
-        unsigned int gate_slot_index = 0U < *(unsigned int *)(pvars + 0x158);
+        int         *gate_moby_index_ptr = &pvars->unkF0;
+        unsigned int gate_slot_index = 0U < pvars->unk158;
         char        *gate_moby;
         gate_moby_index_ptr += gate_slot_index;
         gate_moby = (char *)D_L11_0015FFD8;
@@ -214,8 +241,7 @@ void update_resort_owner_state_actions(void *mp) {
             break;
         if (resort_owner_completion_rotation_trigger_state[13] != scale_game_frames(0x7D0))
             break;
-        trigger_pokitaru_paired_rotation(
-            (struct Moby *)(D_L11_0015FFD8 + (*(int *)(pvars + 0x104) << 8)));
+        trigger_pokitaru_paired_rotation((struct Moby *)(D_L11_0015FFD8 + (pvars->unk104 << 8)));
         break;
     default:
         break;
@@ -230,38 +256,38 @@ extern void
 resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 
 void apply_resort_owner_movement(void *mp) {
-    unsigned char *moby = mp;
-    char          *moby_vars = ((char *)MOBY(moby)->pvars);
-    float          A[4];
-    float          B[4];
+    unsigned char   *moby = mp;
+    ResortOwnerVars *moby_vars = (ResortOwnerVars *)MOBY(moby)->pvars;
+    float            A[4];
+    float            B[4];
     qcopy(A, moby + 0x10);
-    qcopy(B, moby_vars + 0x130);
+    qcopy(B, moby_vars->unk130);
     FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
-    if ((moby[0x20] >= 4 && moby[0x20] <= 6) ||
-        (moby[0x20] == 7 && *(int *)(moby_vars + 0x15C) == 3)) {
+    if ((MOBY(moby)->state >= 4 && MOBY(moby)->state <= 6) ||
+        (MOBY(moby)->state == 7 && moby_vars->unk15C == 3)) {
         resolve_point_path_segment_xy_clearance(
             0.3f,
-            *(void **)(moby_vars + 0x60 - -(*(int *)(moby_vars + 0x158) * 4)),
+            *(void **)((u8 *)moby_vars + 0x60 - -(*(int *)&moby_vars->unk158 * 4)),
             moby + 0x10,
             moby + 0x10);
-        switch (*(int *)(moby_vars + 0x158)) {
+        switch (*(int *)&moby_vars->unk158) {
         case RESORT_OWNER_PENULTIMATE_PATH_LEG:
             resolve_point_path_segment_xy_clearance(
-                0.3f, *(void **)(moby_vars + 0x80), moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->unk80, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
-                0.3f, *(void **)(moby_vars + 0x84), moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->unk84, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
-                0.3f, *(void **)(moby_vars + 0x88), moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->unk88, moby + 0x10, moby + 0x10);
             break;
         case RESORT_OWNER_FINAL_PATH_LEG:
             resolve_point_path_segment_xy_clearance(
-                0.3f, *(void **)(moby_vars + 0x80), moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->unk80, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
-                0.3f, *(void **)(moby_vars + 0x84), moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->unk84, moby + 0x10, moby + 0x10);
             break;
         }
     }
-    fast_vec_sub(moby_vars + 0x140, moby + 0x10, A);
+    fast_vec_sub(moby_vars->unk140, moby + 0x10, A);
 }
 
 int classify_resort_owner_target_proximity(struct Moby *moby) __asm__("FUN_L11_002d2460");
@@ -283,7 +309,7 @@ extern unsigned char D_0013D3DC NOT_SDA;
 extern int                      D_0015ED84;
 extern unsigned char            D_0014C050[];
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 #include "rnc/camera/camera_globals.h"
 
@@ -568,8 +594,8 @@ float D_L11_00161400 = -3.0f;
 void set_resort_owner_state(struct Moby *moby, unsigned char state) __asm__("FUN_L11_002d2088");
 
 void set_resort_owner_state(struct Moby *moby, unsigned char state) {
-    char *moby_vars = (char *)moby->pvars;
-    float gate_target_offset[4];
+    ResortOwnerVars *moby_vars = (ResortOwnerVars *)moby->pvars;
+    float            gate_target_offset[4];
 
     moby->state = state;
     switch (moby->state) {
@@ -581,65 +607,65 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
         if (moby->prev_seq != 0)
             FUN_00212f90(moby, 0, 0, scale_game_frames(0x14));
         if (moby->state == 14)
-            *(float *)(moby_vars + 0x2C) = 10.0f;
-        clear_u64_value(moby_vars + 0x130);
+            moby_vars->unk2C = 10.0f;
+        clear_u64_value(moby_vars->unk130);
         if (moby->state == 14)
-            *(short *)(moby_vars + 0x56) = 2;
+            moby_vars->unk56 = 2;
         break;
     case RESORT_OWNER_FOLLOW_HERO:
         if (moby->prev_seq != 2)
             FUN_00212f90(moby, 2, 0, scale_game_frames(0x14));
-        *(float *)(moby_vars + 0x154) = resort_owner_follow_hero_speed_gp * frame_time;
+        moby_vars->unk154 = resort_owner_follow_hero_speed_gp * frame_time;
         break;
     case RESORT_OWNER_FOLLOW_DISTANT_HERO:
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
-        *(float *)(moby_vars + 0x154) = resort_owner_distant_follow_and_path_speed_gp * frame_time;
+        moby_vars->unk154 = resort_owner_distant_follow_and_path_speed_gp * frame_time;
         break;
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->prev_seq != 4)
             FUN_00212f90(moby, 4, 0, scale_game_frames(0x14));
-        clear_u64_value(moby_vars + 0x130);
+        clear_u64_value(moby_vars->unk130);
         break;
     case RESORT_OWNER_MOVE_TO_GATE_TARGET:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
-            int         *tbl = (int *)(moby_vars + 0xF0);
-            unsigned int idx = 0U < *(unsigned int *)(moby_vars + 0x158);
+            int         *tbl = &moby_vars->unkF0;
+            unsigned int idx = 0U < moby_vars->unk158;
             int          p;
             char        *o;
             tbl += idx;
             p = *tbl;
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
-            qcopy(moby_vars + 0x120, o + 0x10);
+            qcopy(moby_vars->unk120, o + 0x10);
             transform_vector_by_basis(gate_target_offset, &D_L11_001613E0, o + 0xC0);
-            fast_vec_add(moby_vars + 0x120, moby_vars + 0x120, gate_target_offset);
+            fast_vec_add(moby_vars->unk120, moby_vars->unk120, gate_target_offset);
         }
         break;
     case RESORT_OWNER_WAIT_AT_GATE:
     case 16:
         if (moby->prev_seq != 0)
             FUN_00212f90(moby, 0, 0, scale_game_frames(0x14));
-        clear_u64_value(moby_vars + 0x130);
+        clear_u64_value(moby_vars->unk130);
         break;
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
-            int         *tbl = (int *)(moby_vars + 0xF0);
-            unsigned int idx = 0U < *(unsigned int *)(moby_vars + 0x158);
+            int         *tbl = &moby_vars->unkF0;
+            unsigned int idx = 0U < moby_vars->unk158;
             int          p;
             char        *o;
             tbl += idx;
             p = *tbl;
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
-            qcopy(moby_vars + 0x120, o + 0x10);
+            qcopy(moby_vars->unk120, o + 0x10);
             transform_vector_by_basis(gate_target_offset, &D_L11_00161400, o + 0xC0);
-            fast_vec_add(moby_vars + 0x120, moby_vars + 0x120, gate_target_offset);
+            fast_vec_add(moby_vars->unk120, moby_vars->unk120, gate_target_offset);
         }
         break;
     default:
@@ -658,7 +684,7 @@ struct TgtData {
     int  idx;
 };
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
@@ -750,13 +776,13 @@ extern int   collision_line(void *, void *, int, void *, int) __asm__("FUN_001ef
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 
 int try_find_resort_owner_jump_target(struct Moby *moby, float *jump_target_position) {
-    char *pvars = (char *)moby->pvars;
-    int  *clip_volume_index_ptr = (int *)(pvars + 0xF8);
-    int   i;
-    int   found = 0;
-    float candidate_position[4];
-    float collision_start_position[4];
-    float landing_ground_height;
+    ResortOwnerVars *pvars = (ResortOwnerVars *)moby->pvars;
+    int             *clip_volume_index_ptr = &pvars->unkF8;
+    int              i;
+    int              found = 0;
+    float            candidate_position[4];
+    float            collision_start_position[4];
+    float            landing_ground_height;
     for (i = 0; i < 2; i++) {
         if (is_point_inside_clip_volume(&moby->pos, *clip_volume_index_ptr)) {
             found = 1;
@@ -772,7 +798,7 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *jump_target_posi
         fast_vec_add(candidate_position, candidate_position, pos);
         {
             int *path_entry =
-                (int *)l11_paths[*(int *)(pvars - (-(*(int *)(pvars + 0x158) * 4)) + 0x60)];
+                (int *)l11_paths[*(int *)((u8 *)pvars - (-(*(int *)&pvars->unk158 * 4)) + 0x60)];
             if (point_in_path_xy(candidate_position, path_entry + 4, *path_entry)) {
                 candidate_position[2] += 5.0f;
                 landing_ground_height = func_L00_0025A748_f(candidate_position);

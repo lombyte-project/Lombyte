@@ -4,7 +4,7 @@
 #include "asm.h"
 #include "qcopy.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -13,6 +13,7 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 
 typedef union {
     u128 q;
@@ -274,7 +275,7 @@ void FUN_L00_0025da70(u128_0025da70 *first_point,
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 float project_level_path_point_onto_segment(float   *out,
                                             float   *query_point,
@@ -601,12 +602,11 @@ typedef struct {
 
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
-extern S6       burst_first_color_palette __asm__("D_L00_001E9030");
-extern S6       burst_second_color_palette __asm__("D_L00_001E9048");
-extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
-extern void     initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
+extern S6   burst_first_color_palette __asm__("D_L00_001E9030");
+extern S6   burst_second_color_palette __asm__("D_L00_001E9048");
+extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
     void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
@@ -680,7 +680,7 @@ void spawn_explosion(char *owner_moby,
     if (explosion_position == 0) {
         if (owner_moby == 0)
             return;
-        explosion_position = owner_moby + 0x10;
+        explosion_position = &MOBY(owner_moby)->pos;
     }
     {
         if (fA > 0.0f) {
@@ -930,8 +930,6 @@ typedef struct {
 } Vy10 __attribute__((aligned(16)));
 
 extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
-extern int   FUN_L00_00257b90(int, int);
-extern void  swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 
 typedef struct {
     u8  pad0[0x160];
@@ -961,8 +959,8 @@ void cart_burst(u8 *burst_owner_moby, u128 *burst_position, int sound, float sca
                        first_particle_color_palette.v[random_integer_below(6)],
                        second_particle_color_palette.v[random_integer_below(6)],
                        big,
-                       FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
-                       FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)),
+                       random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
+                       random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)),
                        0,
                        0,
                        sp * scale);
@@ -996,8 +994,8 @@ void cart_burst(u8 *burst_owner_moby, u128 *burst_position, int sound, float sca
             l00_camera.shake_frames = scale_game_frames(0x14);
         }
     }
-    if (burst_owner_moby != 0 && burst_owner_moby[0x20] != 0xFE && burst_owner_moby[0x20] != 0xFD &&
-        sound != -1) {
+    if (burst_owner_moby != 0 && MOBY(burst_owner_moby)->state != 0xFE &&
+        MOBY(burst_owner_moby)->state != 0xFD && sound != -1) {
         allocate_voice_for_target_entry(sound, 0, burst_owner_moby);
     }
     if (flash != 0.0f) {
@@ -1045,8 +1043,8 @@ void spawn_color_swapped_explosion_burst(char *glow_owner_moby,
             swap_packed_color_channels(first_particle_color_palette.v[random_integer_below(6)], 1),
             swap_packed_color_channels(second_particle_color_palette.v[random_integer_below(6)], 1),
             big,
-            FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
-            FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)),
+            random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
+            random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)),
             0,
             0,
             sp * scale);
@@ -1108,7 +1106,7 @@ void FUN_L00_0025f730(void *vector, float x) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 /* Adds the moby index of a to the short list unless present or the list holds max. */
 void append_unique_moby_index(int moby_address, short *list, short max) __asm__("FUN_L00_0025f780");

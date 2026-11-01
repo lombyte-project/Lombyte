@@ -1,10 +1,10 @@
 #include "types.h"
 #include "rnc/audio/decoder/audio_dec.h"
+#include "rnc/audio/movie/snd_update_movie_adpcm.h"
 
 extern void FlushCache(s32);
 extern s32  sceSifSetDma(void *, s32);
 extern s32  sceSifDmaStat(s32);
-extern void snd_update_movie_adpcm(s32, s32) __asm__("FUN_0012f148");
 
 void send_to_spu(struct AudioDec *dec,
                  s32              adpcm_source_address,

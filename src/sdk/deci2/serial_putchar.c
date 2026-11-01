@@ -1,4 +1,4 @@
-extern int kputchar(int character);
+#include "rnc/sdk/deci2/kputchar.h"
 
 void serialPutchar(int character) {
     if (character == 10) {

@@ -9,6 +9,14 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/game/transitions/do_space_transition.h"
 #include "rnc/game/startlevel.h"
+#include "rnc/game/transitions/transition_do_transition.h"
+#include "rnc/rendering/frame/reset_draw_config.h"
+#include "rnc/rendering/frame/set_background_color.h"
+#include "rnc/rendering/texture/reset_gs_texture_allocation.h"
+#include "rnc/save/check_memory_card.h"
+#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/graph/sce_gs_reset_graph.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
 
 typedef struct {
     s32 off;
@@ -38,13 +46,9 @@ extern volatile SoundDef *volatile level_sound_defs __asm__("D_0015F634");
 extern volatile s32 level_sound_def_count __asm__("D_0015F630");
 
 extern void init_once(void) __asm__("func_00201650");
-extern void reset_gs_texture_allocation(void);
 extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern void dmac_vif1_enable(void) __asm__("func_00233D00");
-extern void reset_draw_config(void);
-extern s32  sceGsSyncV(s32);
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
-extern void set_background_color(s32, u64, u64);
 extern void FlushCache(s32);
 extern void decompress_wad(s32, s32) __asm__("func_0020B618");
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
@@ -55,16 +59,12 @@ extern void append_palette_transfer_packet(void) __asm__("func_001FB6E0");
 extern void vu1_send_chain(void) __asm__("func_002336A0");
 extern void swap_render_buffer_chain(void) __asm__("func_00233630");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
-extern s32  check_memory_card(void) __asm__("FUN_00209168");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void play_mpeg_movie(s32, s32, s32, s32, s32) __asm__("func_0023A3B8");
-extern void DebugPrint(char *, ...);
 extern s32  load_audio_bank_by_location(s32) __asm__("func_0022D708");
 extern void snd_resolve_bank_xrefs(void) __asm__("func_0012E1A8");
-extern s32  transition_do_transition(void) __asm__("FUN_001eb798");
 extern s32  reset_vif1_gif(void) __asm__("func_001204B8");
-extern void sceGsResetGraph(s16, s16, s16, s16);
 extern void set_pal_mode(void) __asm__("func_001F34E8");
 
 static inline void clear_bytes(u8 *p, s32 n) {

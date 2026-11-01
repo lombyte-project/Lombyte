@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/input/dbc/sceDbcCreateSocket.h"
 
 typedef struct {
     s32 option;
@@ -37,7 +38,6 @@ typedef struct {
 } Pad2Side;
 
 extern Pad2Info D_0015B540[];
-extern s32      sceDbcCreateSocket(DbcSocketParam *param, void *addr0, void *addr1);
 extern void    *memset(void *, s32, u32);
 extern void    *memcpy(void *, const void *, u32);
 

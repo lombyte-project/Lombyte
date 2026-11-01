@@ -10,7 +10,6 @@
 /* Lamp: waits for a hit, then drops bolts, breaks into class 0x745 fragments and leaves its broken placement moby (class 0x744). */
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void lamp_update(struct Moby *m) __asm__("FUN_L11_0031d7d8");
 

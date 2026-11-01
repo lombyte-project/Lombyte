@@ -129,17 +129,34 @@ enum MemoryCardWriteStep {
 extern u8 memcard_game_data_buffer[MEMCARD_GAME_DATA_SIZE] __asm__("D_0014EED0");
 extern u8 memcard_level_data_buffer[MEMCARD_LEVEL_DATA_SIZE] __asm__("D_001506D0");
 
+/* The sceCdReadClock time a save was made at, in BCD. */
+struct MemoryCardSaveClock {
+    u8 stat;
+    u8 second;
+    u8 minute;
+    u8 hour;
+    u8 pad_4;
+    u8 day;
+    u8 month;
+    u8 year;
+};
+
+/* The start of a whole save file: the sizes of its main block and of one
+   record (memcard_make_whole_save writes them, memcard_restore_game and
+   the card reads check them). */
+struct MemoryCardSaveSizes {
+    s32 main_size;
+    s32 record_size;
+};
+
 /* One save entry in the card directory listing (0x1C bytes, five per card). */
 struct MemoryCardSaveEntry {
-    s32 id;    /* 0x00: -1 = empty; the load menu reads it */
-    s32 bolts; /* 0x04 */
-    s32 count; /* 0x08 */
-    s32 time;  /* 0x0C: play ticks */
-    u8  pad_10[5];
-    u8  b15; /* 0x15 */
-    u8  b16; /* 0x16 */
-    u8  b17; /* 0x17 */
-    u8  pad_18[4];
+    s32                        id;       /* 0x00: -1 = empty; the load menu reads it */
+    s32                        bolts;    /* 0x04 */
+    s32                        count;    /* 0x08 */
+    s32                        time;     /* 0x0C: play ticks */
+    struct MemoryCardSaveClock saved_at; /* 0x10 */
+    u8                         pad_18[4];
 };
 
 struct MemoryCard {

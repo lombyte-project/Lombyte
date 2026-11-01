@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_MATH_VECTOR_H
 
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 /* Plain float vectors with 4-byte alignment (no u128 member). */
 typedef struct {

@@ -9,9 +9,9 @@
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/hero/update_hero_and_vehicle_mode_effects.h"
 #include "sda.h"
+#include "rnc/ui/help/try_set_help_message.h"
 
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");

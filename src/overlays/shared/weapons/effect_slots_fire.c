@@ -7,6 +7,7 @@
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E58), where it is exact; names translated to the US level program. */
 
@@ -47,8 +48,6 @@ extern int                D_L02_001600D4 __attribute__((sda));
 extern int                D_L02_001600D8 __attribute__((sda));
 extern float              D_L02_001600DC __attribute__((sda));
 extern float              D_L02_001600E0 __attribute__((sda));
-extern void
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
 void effect_slots_fire(char  *slots,
                        float *position,

@@ -12,6 +12,7 @@
 #include "qcopy.h"
 #include "rnc/rendering/dma_tag.h"
 #include "sda.h"
+#include "rnc/rendering/vu1/vu1_add_vif_code.h"
 
 typedef struct QuadDrawArgs {
     char           pad0[0x1C];
@@ -77,7 +78,6 @@ extern int frame_counter_ref[] __asm__("D_L02_0015F5CC") MACRO_ADDR;
 extern struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") MACRO_ADDR;
 
 extern int *D_L02_001611C0;
-extern void vu1_add_vif_code(int) __asm__("FUN_00233938");
 
 void prepare_scaled_float_table_with_target_byte(char *value_target,
                                                  int   val,

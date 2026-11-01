@@ -10,18 +10,22 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/l06/mobys/alien_queen.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/save/memcard_save_data.h"
+#include "rnc/world/collision/ground_probe.h"
 
 extern float D_L06_00167540[];
-extern int   is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern void  blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void  set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void  jet_end_mount(int) __asm__("FUN_L00_002eac18");
 
 extern char  *D_L06_0015FFD8_301070 __asm__("D_L06_0015FFD8");
-extern int    is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 typedef float Vec_301070[4] __attribute__((aligned(16)));
 typedef int   u128q_301070 __attribute__((mode(TI)));
 
@@ -72,16 +76,10 @@ typedef struct Busy {
 
 extern void  attach_shared_manipulator_to_matching_class_moby(char *) __asm__("FUN_L03_002db480");
 extern void  FUN_L00_0025a120_301070(void *) __asm__("FUN_L00_0025a120");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int   initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int   update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void  begin_dialogue_camera_transition(float, void *) __asm__("FUN_L01_002783a8");
-extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void  grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-extern int   memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int   help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern float advance_accelerated_scalar_301070(
-    float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void  build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -103,7 +101,6 @@ extern f32                        frame_scale_sq_macro __asm__("D_0015ED64") MAC
 /* Update of moby class 1105 (fred): steps the conversation and camera states, then turns the head toward the hero. */
 void       fred_update(struct Moby *m) __asm__("FUN_L06_00301070");
 extern int D_L06_00179B90[] __asm__("D_L06_00179B90");
-extern int is_point_inside_clip_volume(void *, int);
 
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 
@@ -240,12 +237,12 @@ void fred_update(struct Moby *moby) {
             camera_end_rotation.f[0] = 0.07f;
             camera_end_rotation.f[1] = 0.13f;
             camera_end_rotation.f[2] = -1.21f;
-            advance_accelerated_scalar_301070(&fred_vars->f178,
-                                              &fred_vars->f17C,
-                                              1.0f,
-                                              frame_time_sq_macro * 0.1f,
-                                              frame_time_sq_macro * 0.1f,
-                                              frame_time_macro * 0.1f);
+            advance_accelerated_scalar(&fred_vars->f178,
+                                       &fred_vars->f17C,
+                                       1.0f,
+                                       frame_time_sq_macro * 0.1f,
+                                       frame_time_sq_macro * 0.1f,
+                                       frame_time_macro * 0.1f);
             if (fred_vars->f178 > 0.1f) {
                 set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 +
                                                      (fred_vars->f160 << 8));

@@ -9,6 +9,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/enemies/blarg_ship_shot.h"
+#include "rnc/overlay/shared/pickups/fighter_jet_crate.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
@@ -127,11 +131,7 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-
-float absolute_float(float input) __asm__("func_001F99C0");
 
 void steer_blarg_space_fighter(struct Moby *moby,
                                char        *moby_data,
@@ -503,22 +503,13 @@ typedef struct Snd {
     void         *f88;
 } Snd;
 
-extern char *spawn_blarg_ship_shot(
-    int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
-
 extern char blarg_space_fighter_missing_path_debug_format[] __asm__("D_L13_001F4700");
 
 extern float D_L13_001670C0[];
 
 extern int update_blarg_space_fighter_path_following();
 
-extern s32 rand(void);
-
-extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
-
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
-
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void FUN_L13_002c37e0_c(struct Moby *moby, unsigned char *d, float *fp) __asm__("FUN_L13_002c37e0");
 
@@ -792,7 +783,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         fast_vec_normalize(scratch_vector, scratch_vector, 4.0f);
         fast_vec_sub(spawn_position, &moby->pos, scratch_vector);
         fast_vec_scale(scratch_vector, &fighter_data->vel, 0.5f);
-        switch (rand() % 10) {
+        switch (RandomNext() % 10) {
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E0:
             spawn_ship_pickup((char *)spawn_position, 0xE0);
             break;
@@ -858,7 +849,3 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         moby->pos.z = 1003.0f;
     }
 }
-
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
-
-extern s32 rand();

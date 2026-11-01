@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/streaming/disc_table.h"
+#include "rnc/audio/streaming/update_audio_stream_until_idle.h"
 
 struct Chunk {
     u8  pad0[0x10];
@@ -8,7 +9,6 @@ struct Chunk {
 };
 
 extern void calculate_ring_buffer_bounds(s32, struct Chunk **, s32 *) __asm__("func_001FD6E0");
-extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 extern s32  read_disc_sectors_and_wait(struct Chunk *, s32, s32) __asm__("func_00216828");
 extern void memcard_restore_game(void *) __asm__("func_00209298");
 void        load_and_initialize_level_chunk(void) __asm__("FUN_00209370");

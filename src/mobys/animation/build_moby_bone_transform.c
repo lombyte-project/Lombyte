@@ -10,19 +10,19 @@ void        build_moby_bone_transform(struct Moby *moby,
                                       s32          output_transform) __asm__("FUN_0020cca8");
 
 void build_moby_bone_transform(struct Moby *moby, s32 bone_index, s32 output_transform) {
-    u8  sp_slot[0x40];
+    u8  rotation[0x40];
     s32 bone_index_input;
     f32 scale;
     s32 translation;
 
     bone_index_input = bone_index;
-    scale = (*(f32 *)((u8 *)moby + 0x2C)) * 0.0009765625f;
+    scale = moby->scale * 0.0009765625f;
     get_moby_joint_matrices(moby, 1, &bone_index_input, output_transform);
     translation = output_transform + 0x30;
     fast_vec_scale(translation, translation, scale);
-    copy_matrix_rotation(sp_slot, ((u8 *)moby + (0xC0)));
-    multiply_matrix(output_transform, sp_slot, output_transform);
-    fast_vec_add(translation, translation, ((u8 *)moby + (0x10)));
+    copy_matrix_rotation(rotation, &moby->rot_row0);
+    multiply_matrix(output_transform, rotation, output_transform);
+    fast_vec_add(translation, translation, &moby->pos);
 }
 
 extern __typeof__(build_moby_bone_transform) func_0020CCA8 __attribute__((alias("FUN_0020cca8")));

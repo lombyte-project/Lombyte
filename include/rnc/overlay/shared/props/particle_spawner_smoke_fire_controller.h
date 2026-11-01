@@ -6,4 +6,6 @@
 
 int fetch_and_add_global_accumulator(int) __asm__("FUN_L00_002a4dc8");
 
+void smoke_fire_controller_update(unsigned char *) __asm__("FUN_L00_002a4cd8");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_PARTICLE_SPAWNER_SMOKE_FIRE_CONTROLLER_H */

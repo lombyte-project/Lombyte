@@ -1,6 +1,6 @@
 /* Shared moby class mine (0x4D): a group moby that seeks the hero. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
@@ -71,7 +71,7 @@ void hero_seeking_mine_update(char *moby) {
     float         pb[4];
     char         *group_moby_data;
     char         *callback_frame_stamp;
-    char         *hero_base;
+    struct Hero  *hero_base;
     float         fa;
     float         fb;
     float         yaw_cosine;
@@ -94,7 +94,7 @@ void hero_seeking_mine_update(char *moby) {
     }
     if (((unsigned char *)moby)[0x20] != 1) {
         random_vector(va, 0.0f, D_0015ED6C + D_0015ED6C);
-        qcopy(pb, moby + 0x10);
+        qcopy(pb, &MOBY(moby)->pos);
         pb[2] = pb[2] + *(float *)&group_moby_effect_z_offset_gp;
         if (D_L15_00161AB8_lui == 0) {
             ((unsigned char *)moby)[0x20] = 1;
@@ -146,11 +146,11 @@ s2:
     return;
 
 s3:
-    hero_base = (char *)&hero;
-    fa = *(float *)(hero_base + 0x80) - MOBY(moby)->pos.x;
-    fb = *(float *)(hero_base + 0x84) - MOBY(moby)->pos.y;
+    hero_base = &hero;
+    fa = hero_base->motion.pos.f[0] - MOBY(moby)->pos.x;
+    fb = hero_base->motion.pos.f[1] - MOBY(moby)->pos.y;
     yaw = fast_add_rotations(*(float *)(group_moby_data + 0x64), fast_arc_tan(fa, fb));
-    target_z = *(float *)(hero_base + 0xC8);
+    target_z = hero_base->motion.near_ground_point.f[2];
     yaw_cosine = fast_cos(yaw);
     va[0] = yaw_cosine * (*(float *)&group_moby_seeking_speed_gp * D_0015ED6C);
     yaw_sine = fast_sin(yaw);
@@ -178,8 +178,8 @@ s3:
     return;
 
 s4:
-    cart_burst(moby, moby + 0x10, -1, 0.25f, 13.0f);
-    func_L00_0025A8E8_m(moby, moby + 0x10, 0x10001, 1.0f, 1.0f, 1.0f, 0, 1, 0);
+    cart_burst(moby, &MOBY(moby)->pos, -1, 0.25f, 13.0f);
+    func_L00_0025A8E8_m(moby, &MOBY(moby)->pos, 0x10001, 1.0f, 1.0f, 1.0f, 0, 1, 0);
 
 s0:
     ((unsigned char *)moby)[0x20] = 1;

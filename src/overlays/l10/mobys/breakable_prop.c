@@ -9,8 +9,6 @@
 /* UpdateMoby 1856: waits for a hit, then plays its sound, sheds bolts, spawns its broken placement moby (class 0x741) and deletes itself. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECBA0), where it is exact; names translated to the US level program. */
 
-extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
-
 void breakable_prop_update(struct Moby *moby) __asm__("FUN_L10_002eb7e0");
 
 /* Moby class 1856 */

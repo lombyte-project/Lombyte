@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/math/vector.h"
 #include "sda.h"
 

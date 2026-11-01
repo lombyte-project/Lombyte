@@ -14,8 +14,8 @@
 #include "rnc/overlay/shared/props/grow_and_fade_out.h"
 #include "rnc/overlay/shared/rendering/effects/explosion_light.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/level_camera.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/overlay/shared/weapons/mine.h"
 #include "rnc/mobys/moby.h"
@@ -23,6 +23,24 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/world/collision/collision_hit_material.h"
+
+typedef struct MineVars {
+    u8  pad0[0x30];
+    s32 unk30;
+    u8  pad34[0x2];
+    s16 unk36;
+    f32 unk38;
+    f32 unk3C;
+    u8  pad40[0x1c];
+    s32 unk5C;
+    f32 unk60;
+    f32 unk64;
+    s32 unk68;
+    f32 unk6C;
+    f32 unk70;
+    s32 unk74;
+    s32 unk78;
+} MineVars;
 
 typedef float V910[4] __attribute__((aligned(16)));
 
@@ -386,16 +404,16 @@ unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
     unsigned char *mine_moby = create_moby(0x4A);
     if (mine_moby) {
-        unsigned char *mine_vars = ((unsigned char *)MOBY(mine_moby)->pvars);
-        mine_moby[0x30] = 0xFF;
+        MineVars *mine_vars = (MineVars *)MOBY(mine_moby)->pvars;
+        MOBY(mine_moby)->update_dist = 0xFF;
         MOBY(mine_moby)->draw_dist = 0x7F;
-        mine_moby[0x31] = 1;
+        MOBY(mine_moby)->visible = 1;
         MOBY(mine_moby)->scale = MOBY(mine_moby)->scale * 0.5f;
-        mine_moby[0x20] = 0;
-        *(int *)(mine_vars + 0x30) = mine_owner_moby;
-        *(short *)(mine_vars + 0x36) = 0;
-        *(int *)(mine_vars + 0x78) = 0;
-        qcopy(mine_moby + 0x10, spawn_position);
+        MOBY(mine_moby)->state = 0;
+        mine_vars->unk30 = mine_owner_moby;
+        mine_vars->unk36 = 0;
+        mine_vars->unk78 = 0;
+        qcopy(&MOBY(mine_moby)->pos, spawn_position);
         clear_u64_value(mine_vars);
         {
             float a = random_float_between(D_0015ED6C_2a9ed0 * 1.0471976f,
@@ -404,19 +422,19 @@ unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
             float frame_scaled_random_sample;
             int   x;
             float z;
-            *(float *)(mine_vars + 0x38) = a;
+            mine_vars->unk38 = a;
             frame_scaled_random_sample =
                 random_float_between(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
             x = D_L00_0015F5CC_2a9ed0;
             z = 0.0f;
-            *(float *)(mine_vars + 0x3C) = frame_scaled_random_sample;
-            *(float *)(mine_vars + 0x64) = z;
-            *(float *)(mine_vars + 0x60) = z;
-            *(float *)(mine_vars + 0x70) = z;
-            *(float *)(mine_vars + 0x6C) = z;
-            *(int *)(mine_vars + 0x5C) = x;
-            *(int *)(mine_vars + 0x74) = 0;
-            *(int *)(mine_vars + 0x68) = -1;
+            mine_vars->unk3C = frame_scaled_random_sample;
+            mine_vars->unk64 = z;
+            mine_vars->unk60 = z;
+            mine_vars->unk70 = z;
+            mine_vars->unk6C = z;
+            mine_vars->unk5C = x;
+            mine_vars->unk74 = 0;
+            mine_vars->unk68 = -1;
             MOBY(mine_moby)->collision = 0;
         }
         update_entity(mine_moby);
@@ -506,7 +524,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         return 0;
     if (D_L00_0015F5C4_c != 0)
         return 0;
-    qcopy(C, moby + 0x10);
+    qcopy(C, &MOBY(moby)->pos);
     if (MOBY(moby)->state == 0) {
         trajectory_position[0] =
             fast_cos(fast_add_rotations(
@@ -529,7 +547,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         x = scale_game_frames(0x78);
     } else {
         owner_moby_vars = *(char **)(*(char **)(trajectory_state + 0x30) + 0x78);
-        qcopy(trajectory_position, moby + 0x10);
+        qcopy(trajectory_position, &MOBY(moby)->pos);
         qcopy(B, trajectory_state);
         {
             short xs = *(short *)(trajectory_state + 0x34);
@@ -542,7 +560,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     {
         char *collision_hero_state = D_0013F350;
         char *hero_moby = *(char **)(collision_hero_state + 0x2080);
-        *(u128 *)box = *(u128 *)(hero_moby + 0x10);
+        *(u128 *)box = *(u128 *)&MOBY(hero_moby)->pos;
         box[2] = trajectory_position[2];
         if (FUN_001efa68(box, trajectory_position, 0x10, (int)hero_moby, 0) != 0) {
             if (collision_hit_material() != 0 && D_L00_00173E40_u[7] > 0) {

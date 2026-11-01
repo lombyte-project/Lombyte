@@ -1,5 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/library/sdk_globals.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct DbCBlob {
     u8 data[0x40];
@@ -21,10 +23,8 @@ extern u8              dbc_get_dep_number_rpc_error_message[] __asm__("D_001535B
 extern u8              D_0015B480[];
 extern u8              D_0015B500[];
 extern s32             DIntr();
-extern s32             EnableInterrupts();
 extern s32             SyncDCache() __asm__("func_00118F88");
 extern s32             debug_print_stub() __asm__("func_00124A20");
-extern s32             sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
 
 s32 sceDbcGetDepNumber(s32 dependency_index) {

@@ -19,7 +19,7 @@
 #include "sda.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/pickups/crate_data/crate_drop_bolts.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
 /* Class header view: pclass + 0xE and + 0x10. */
@@ -891,11 +891,11 @@ void crate_drop_bolts(u8 *crate_moby) {
                 MOBY(crate_moby)->occlusion = 0x7F80;
             probe_ground_height_cf(crate_moby,
                                    *(s32 *)(crate_vars + 0xF0),
-                                   crate_moby + 0x10,
+                                   &MOBY(crate_moby)->pos,
                                    crate_moby + 0x40,
                                    &adjusted_position,
                                    &scratch_vector);
-            fast_vec_sub(&trajectory_vector, &adjusted_position, crate_moby + 0x10);
+            fast_vec_sub(&trajectory_vector, &adjusted_position, &MOBY(crate_moby)->pos);
         }
         if (D_0015ED84 == 0xF && absolute_float(MOBY(crate_moby)->pos.x - 166.0f) < 6.0f &&
             absolute_float(MOBY(crate_moby)->pos.y - 193.0f) < 6.0f) {
@@ -950,7 +950,7 @@ void crate_drop_bolts(u8 *crate_moby) {
         }
         requested_drop_count = FUN_L00_00257218_2d0538(crate_moby, &drop_type_or_skip_spawn);
         for (i = 0; i < requested_drop_count; i++) {
-            spawned_moby = spawn_on_path(crate_moby + 0x10, drop_type_or_skip_spawn, -1, 0);
+            spawned_moby = spawn_on_path(&MOBY(crate_moby)->pos, drop_type_or_skip_spawn, -1, 0);
             if (!spawned_moby)
                 break;
             spawned_vars = ((u8 *)MOBY(spawned_moby)->pvars);
@@ -982,12 +982,12 @@ void crate_drop_bolts(u8 *crate_moby) {
                     larger_trajectory_time_root < 120.0f)
                     trajectory_time = larger_trajectory_time_root;
                 fast_vec_scale(&trajectory_vector, spawned_vars + 0x10, trajectory_time);
-                fast_vec_add(&trajectory_vector, &trajectory_vector, crate_moby + 0x10);
+                fast_vec_add(&trajectory_vector, &trajectory_vector, &MOBY(crate_moby)->pos);
                 FUN_L00_00261b48(*(s32 *)(crate_vars + 0xC0),
-                                 crate_moby + 0x10,
+                                 &MOBY(crate_moby)->pos,
                                  &trajectory_vector,
                                  &adjusted_position);
-                fast_vec_sub(&trajectory_vector, &adjusted_position, spawned_moby + 0x10);
+                fast_vec_sub(&trajectory_vector, &adjusted_position, &MOBY(spawned_moby)->pos);
                 trajectory_vector.f[2] = 0.0f;
                 fast_vec_normalize(&scratch_vector, &trajectory_vector, 0.25f);
                 fast_vec_sub(&trajectory_vector, &trajectory_vector, &scratch_vector);

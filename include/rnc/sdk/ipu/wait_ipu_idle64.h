@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_IPU_WAIT_IPU_IDLE64_H
+#define LOMBYTE_RNC_SDK_IPU_WAIT_IPU_IDLE64_H
+
+#include "types.h"
+
+s64 _waitIpuIdle64(s32 *);
+
+#endif /* LOMBYTE_RNC_SDK_IPU_WAIT_IPU_IDLE64_H */

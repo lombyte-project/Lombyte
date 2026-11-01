@@ -1,4 +1,6 @@
 #include "sda.h"
+#include "rnc/sdk/libc/stdio/fwalk.h"
+#include "rnc/sdk/libc/stdio/sinit.h"
 /*
  * Copyright (c) 1990 The Regents of the University of California.
  * All rights reserved.
@@ -62,8 +64,6 @@ No supporting OS subroutines are required.
 #define __SNBF                     2
 #define __SERR                     0x40
 #define EOF                        (-1)
-extern s32  _fwalk(RncReent *, s32 (*)(RncFile *));
-extern void __sinit(RncReent *);
 #define CHECK_INIT(fp)                \
     do {                              \
         if ((fp)->_data == 0)         \

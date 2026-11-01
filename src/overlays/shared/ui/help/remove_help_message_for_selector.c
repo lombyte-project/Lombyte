@@ -1,7 +1,7 @@
 /* Help: removes the help message of a selector. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/ui/hud/remove_hud_item.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00265558.c: func_L00_00265558), where it is exact; names translated to the US level program. */

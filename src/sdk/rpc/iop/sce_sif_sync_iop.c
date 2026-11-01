@@ -1,5 +1,6 @@
-int  sceSifGetReg(int register_number) __asm__("sceSifGetReg");
-void clear_tty_initialized(void) __asm__("func_00118BC0");
+#include "rnc/sdk/kernel/clear_tty_initialized.h"
+
+int sceSifGetReg(int register_number) __asm__("sceSifGetReg");
 
 int sceSifSyncIop(void) __asm__("sceSifSyncIop");
 

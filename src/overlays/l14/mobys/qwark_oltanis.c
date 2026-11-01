@@ -1,6 +1,6 @@
 /* Level 14 Qwark (Oltanis) moby class and the elevator state it sets. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -18,7 +18,8 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern char D_L14_001674C0[];
 
@@ -141,8 +142,6 @@ extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002
 
 void mark_elevator_collected(Level14VendorMoby *m) __asm__("FUN_L14_002ef5a8");
 
-extern void FUN_L00_00263d40(int, int);
-
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void qwark_oltanis_update(L14WatchMoby *m) __asm__("FUN_L14_002fba20");
@@ -208,9 +207,9 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
             moby->state = 1;
             if ((unsigned)(moby_vars->sub - 3) < 2) {
                 if ((short)moby_vars->sub == 4)
-                    FUN_L00_00263d40(0x53DD, -1);
+                    queue_dialogue_message(0x53DD, -1);
                 else
-                    FUN_L00_00263d40(0x36B3, -1);
+                    queue_dialogue_message(0x36B3, -1);
                 grant_inventory_item(0x20, 1);
                 mark_elevator_collected(D_L14_0015FFD8 + moby_vars->i44 * 256);
                 D_0014C190_257218[current_level_index][(short)moby->hB2 >> 5] |=

@@ -1,7 +1,7 @@
 /* Level 08 moby class 0x258: layered mesh effect. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"

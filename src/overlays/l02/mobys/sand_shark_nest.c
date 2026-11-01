@@ -15,7 +15,7 @@ extern int D_L02_001ABE40[];
 extern int D_L02_0015FFD8; /* no foreign declaration */
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -155,20 +155,20 @@ void sand_shark_nest_update(unsigned char *moby) {
     OvlVec4   launch_position;
 
     handle_sand_shark_nest_damage((struct Moby *)moby);
-    if ((signed char)moby[0x20] < 0) {
+    if ((signed char)MOBY(moby)->state < 0) {
         return;
     }
-    if (moby[0x31] != 0 && fast_vec_dist(moby + 0x10, D_L02_001673C0) < 28.0f) {
+    if (MOBY(moby)->visible != 0 && fast_vec_dist(moby + 0x10, D_L02_001673C0) < 28.0f) {
         FUN_L00_0025a120(moby);
-        moby[0x7F] = 0x16;
+        MOBY(moby)->shadow_range = 0x16;
     }
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case SAND_SHARK_NEST_INITIALIZE:
         MOBY(moby)->unkB4 -= bolt_source_stats_lui[2][moby[0xB1]].bolts;
         if (MOBY(moby)->unkB4 <= 0) {
             MOBY(moby)->unkB4 = 1;
         }
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         nest_vars->f20 = 3.0f;
         nest_vars->s24 = 3;
         nest_vars->b2E = 1;
@@ -180,8 +180,8 @@ void sand_shark_nest_update(unsigned char *moby) {
     case SAND_SHARK_NEST_WAIT_FOR_SPAWN:
         if (fast_dec_timer(&nest_vars->timer)) {
             if (FUN_L02_002dd2a8_c(moby)) {
-                moby[0x20] = 2;
-                if (moby[0x53] != 1) {
+                MOBY(moby)->state = 2;
+                if (MOBY(moby)->prev_seq != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                 }
             } else {
@@ -190,13 +190,13 @@ void sand_shark_nest_update(unsigned char *moby) {
         }
         break;
     case SAND_SHARK_NEST_LAUNCH_SAND_SHARK:
-        if (moby[0x70] & 2) {
-            moby[0x20] = 1;
-            if (moby[0x53] != 0) {
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 1;
+            if (MOBY(moby)->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
         } else if (compute_interpolated_record_value(moby) == 12.0f) {
-            spawn_delay_factor = D_0014EE90[moby[0xB0]];
+            spawn_delay_factor = D_0014EE90[MOBY(moby)->mission];
             if (spawn_delay_factor > 20) {
                 spawn_delay_factor = 20;
             }
@@ -224,9 +224,9 @@ void sand_shark_nest_update(unsigned char *moby) {
         break;
     case SAND_SHARK_NEST_HIT_RECOVERY:
         step_moby_motion(moby, nest_vars->anim);
-        if (moby[0x70] & 2) {
-            moby[0x20] = 1;
-            if (moby[0x53] != 0) {
+        if (MOBY(moby)->anim_flags & 2) {
+            MOBY(moby)->state = 1;
+            if (MOBY(moby)->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }
         }

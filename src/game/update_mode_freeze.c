@@ -7,6 +7,8 @@
 #include "rnc/game/options.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/audio/voices/snd_continue_all_sounds_in_group.h"
+#include "rnc/game/transitions/request_space_load.h"
+#include "rnc/runtime/decrement_resource_counter.h"
 
 extern u16  D_0013E05A[];
 extern u8   saved_camera_vectors[] __asm__("D_00141050");
@@ -21,9 +23,7 @@ extern void noop_main_callback() __asm__("func_001E93E8");
 extern void noop_callback_k(u8 *, u8 *, s32, s32) __asm__("func_001E9440");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void set_animation_parameter(s32, s32) __asm__("func_001FF570");
-extern void decrement_resource_counter(void) __asm__("UpdateResourceCounter");
 extern void load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void request_space_load(s32 value);
 extern void music_unpause();
 extern void snd_flush_sound_commands() __asm__("func_0012DC80");
 void        update_mode_freeze(void) __asm__("FUN_001fce28");

@@ -5,4 +5,6 @@
 
 void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 
+void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_BUFFERS_VU1_SEND_CHAIN_RENDER_BUFFER_H */

@@ -3,7 +3,7 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/data_labels.h"

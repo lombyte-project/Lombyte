@@ -42,7 +42,7 @@ void pterodactyl_update(unsigned char *moby) {
     D_2e3a88 *moby_data = ((D_2e3a88 *)MOBY(moby)->pvars);
     int      *path = toad_paths[moby_data->path];
     float     y;
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case PTERODACTYL_INITIALIZE:
         if (moby_data->path == -1) {
             mark_moby_for_removal(moby);
@@ -55,23 +55,23 @@ void pterodactyl_update(unsigned char *moby) {
             moby_data->i70 = absolute_float(first_segment_length - first_to_last_distance) < 0.1f;
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         MOBY(moby)->scale *= pterodactyl_scale_multiplier_gp;
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:
         y = MOBY(moby)->pos.z;
-        sample_camera_path(path, moby_data->f6C, moby_data->i70, moby + 0x10, moby + 0x40, 0);
+        sample_camera_path(path, moby_data->f6C, moby_data->i70, &MOBY(moby)->pos, moby + 0x40, 0);
         MOBY(moby)->rot.y *= 0.5f;
         MOBY(moby)->pos.z += moby_data->f64;
         moby_data->f6C += moby_data->f74;
         if ((float)*path < moby_data->f6C)
             moby_data->f6C -= (float)*path;
-        if (moby[0x70] & 2) {
+        if (MOBY(moby)->anim_flags & 2) {
             if (y < MOBY(moby)->pos.z || random_integer_below(3) != 0) {
-                if (moby[0x53])
+                if (MOBY(moby)->prev_seq)
                     blend_moby_animation(moby, 0, 0, 10);
             } else {
-                if (moby[0x53] != 1)
+                if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, 10);
             }
         }

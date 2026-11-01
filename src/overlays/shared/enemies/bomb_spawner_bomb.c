@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/ground_probe.h"
@@ -15,6 +15,8 @@
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
 #include "qcopy.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* Class header fields the spawner copies into a fresh moby. */
 typedef struct {
@@ -60,14 +62,12 @@ extern struct Moby *D_L03_0015FFE4;
 extern s32          D_L03_0015F5CC;
 extern char         spawner_spawn_failure_format[] __asm__("D_L03_001E2FA0");
 
-extern void  debug_print() __asm__("FUN_001e93b0");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
+extern void debug_print() __asm__("FUN_001e93b0");
 
 extern int   coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int   FUN_0022da68(int, int, void *);
 extern float FUN_002132a8(float, float);
 extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void  FUN_0020c828(void *);
 extern CollisionHit D_L03_00173F40 NOT_SDA;
 
 /* Spawner: revives the first free pooled child (of class oclass, -1 = any) at a copy of at, counts the live children, returns the revived one or NULL. */
@@ -330,7 +330,7 @@ void bomb_spawner_bomb_update(struct Moby *moby) {
     jet_animate(moby, moby->scale * 0.3f / moby->pclass->scale);
     if (moby->pos.z < 5.0f || moby->pos.z > 500.0f) {
     remove_moby:
-        FUN_0020c828(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     if (moby->pos.x < 5.0f)

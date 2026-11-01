@@ -1,10 +1,10 @@
 /* Level 03 moby class taxi (0x330): the rail taxi that carries Ratchet along its routes, its rail path flight and its bobbing. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -14,9 +14,13 @@
 #include "rnc/hero/hero.h"
 #include "qcopy.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/overlay/l03/mobys/taxi.h"
 #include "rnc/overlay/l03/mobys/taxi_globals.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Test the observed halfword and byte range without inferring object identity. */
 s32 is_taxi_in_round_trip_phase(u8 *object) __asm__("FUN_L03_002d30d8");
@@ -71,10 +75,8 @@ extern f32 rail_flyer_roll_acceleration_degrees_gp __asm__("D_L03_00161B18") __a
 extern s32 D_L03_0015F594 __attribute__((sda));
 extern void
 draw_number(void *, struct Moby *, s32, u32, s32, s32, s32, f32) __asm__("FUN_L01_00285768");
-extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int  is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
-extern s32  get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern f32  approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025be00");
 
@@ -283,13 +285,11 @@ typedef struct {
     f32 roll_vel;  /* 0x70 */
 } RailFlyerVars;
 
-extern f32  rail_flyer_speed_acceleration_gp __asm__("D_L03_00161B0C") __attribute__((sda));
-extern f32  rail_flyer_yaw_acceleration_degrees_gp __asm__("D_L03_00161B14") __attribute__((sda));
-extern f32  D_L03_00161B1C __attribute__((sda));
-extern f32  advance_accelerated_scalar(f32 *, f32, f32, f32, f32, f32 *) __asm__("FUN_00213f38");
-extern s32  sound_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
-extern s32  play_moby_sound(s32, s32, void *, s32) __asm__("FUN_L00_0028dc90");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern f32 rail_flyer_speed_acceleration_gp __asm__("D_L03_00161B0C") __attribute__((sda));
+extern f32 rail_flyer_yaw_acceleration_degrees_gp __asm__("D_L03_00161B14") __attribute__((sda));
+extern f32 D_L03_00161B1C __attribute__((sda));
+extern f32 advance_accelerated_scalar(f32 *, f32, f32, f32, f32, f32 *) __asm__("FUN_00213f38");
+extern s32 play_moby_sound(s32, s32, void *, s32) __asm__("FUN_L00_0028dc90");
 
 /* Moves m along rail path `path`, easing speed toward the end and banking into turns;
    keeps the travel sound playing and releases it on arrival. Returns 1 at the last point. */
@@ -350,7 +350,7 @@ s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) {
                    frame_time * 12.566371f);
     sound_voice = *snd;
     if (!done) {
-        if (sound_is_playing(rail_moby, sound_voice) == 0)
+        if (voice_is_playing(rail_moby, sound_voice) == 0)
             *snd = play_moby_sound(0, 4, rail_moby, 0x330);
     } else {
         if (sound_voice != -1) {

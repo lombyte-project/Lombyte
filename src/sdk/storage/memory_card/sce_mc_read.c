@@ -1,6 +1,8 @@
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/runtime/memory/unpack_spr_descriptor.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct MemoryCardReadRequest {
     s32 file_descriptor;
@@ -11,12 +13,10 @@ struct MemoryCardReadRequest {
     s32 transfer_buffer;
 };
 
-extern void                         unpack_spr_descriptor(void *) __asm__("FUN_001238a0");
 extern struct MemoryCardReadRequest D_00159A80;
 extern u8                           D_00159F00[];
 extern s32                          PollSema();
 extern s32                          SignalSema();
-extern s32                          sceSifCallRpc();
 extern s32                          sceSifWriteBackDCache();
 
 s32 sceMcRead(s32 file_descriptor, s32 *destination_buffer, s32 byte_count) {

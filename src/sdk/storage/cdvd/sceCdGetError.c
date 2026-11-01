@@ -1,10 +1,10 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 extern s32 SignalSema();
 extern s32 cd_check_scmd() __asm__("func_00120D40");
-extern s32 sceSifCallRpc();
 
 s32 sceCdGetError(void) {
     s32 error;

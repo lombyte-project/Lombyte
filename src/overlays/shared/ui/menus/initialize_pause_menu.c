@@ -7,8 +7,8 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/movies/decoder/decoder_globals.h"
-#include "rnc/overlay/level_globals.h"
-#include "eetypes.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/hero/hero.h"
@@ -180,7 +180,7 @@ extern u8   D_L00_0016CA40[];
 extern s32  D_L00_0015F3F8;
 extern int  D_L00_00173E00[];
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern s32  frame_size __asm__("D_0013E504") NOT_SDA;
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_GET_STATE_H
+#define LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_GET_STATE_H
+
+#include "types.h"
+
+s32 scePad2GetState(s32);
+
+#endif /* LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_GET_STATE_H */

@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"

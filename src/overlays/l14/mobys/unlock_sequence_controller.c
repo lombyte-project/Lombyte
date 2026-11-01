@@ -6,15 +6,15 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
+#include "rnc/overlay/shared/math/random/random_vector.h"
+#include "rnc/overlay/shared/mobys/spawn_type_52_particle_near_moby.h"
 
 extern char *D_L14_0015FFD8;
 
 extern LevelSaveState D_L14_001BB930;
 
 extern int D_L14_001BABD0[];
-
-extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305600");
 
@@ -92,12 +92,10 @@ void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
             float *target_moby = (float *)(moby_array_base + ((*moby_id_cursor & 0x7FFF) << 8));
             *saved_moby_height_write_cursor++ = target_moby[6];
             target_moby[6] -= 20.0f;
-            *(unsigned short *)((char *)target_moby + 0x34) |= 0x41;
+            MOBY(target_moby)->flags |= 0x41;
         } while (*(short *)moby_id_cursor++ >= 0);
     }
 }
-
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 
 void raise_unlock_sequence_mobys(struct Moby *moby) {
     int   *unlock_sequence_data = (int *)moby->pvars;

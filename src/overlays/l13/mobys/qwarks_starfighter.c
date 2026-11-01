@@ -10,12 +10,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/animation/set_animation_parameter.h"
 #include "rnc/overlay/shared/camera/path_flythrough_camera.h"
-#include "rnc/overlay/cuboid.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/l13/mobys/mine.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/rendering/geometry_quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/item_state.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/effect_texture.h"
@@ -31,7 +31,7 @@
 #include "qzero.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l13/mobys/qwarks_starfighter_shield.h"
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -638,8 +638,8 @@ struct Moby_2EAE80 {
 };
 
 typedef struct {
-    float f0;
-    short h4;
+    float health;
+    short max_health;
     short h6;
 } Sub;
 
@@ -730,7 +730,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
         mode = 0;
         rf = 0;
         k6 = 6.0f;
-        step = (float)dd->h4 / k6;
+        step = (float)dd->max_health / k6;
         hi = (k6 - convert_integer_to_float(moby->bBC)) * step;
         if (moby->bBC >= 5) {
             hi = (k6 - convert_integer_to_float(moby->bBC - 1)) * step;
@@ -750,12 +750,12 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 if (r != 0 && moby->bBC == 7) {
                     r->f2C = r->f2C * 1.5f;
                 }
-                if (dd->f0 <= r->f2C) {
+                if (dd->health <= r->f2C) {
                     func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
                     mode = 3;
                     moby_data->first->bA4 = 0xFF;
                 } else {
-                    dd->f0 = dd->f0 - r->f2C;
+                    dd->health = dd->health - r->f2C;
                     moby_data->b67 = 0xFA;
                     mode = 1;
                     moby_data->sub.h6 = scale_game_frames(0);
@@ -773,7 +773,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                         v->f8C = 0;
                         v->f118 = 0;
                     }
-                } else if (dd->f0 < hi) {
+                } else if (dd->health < hi) {
                     int tv = D_L13_001D3478[moby->bBC - 1];
 
                     if (tv != -1) {
@@ -809,7 +809,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                         }
                         allocate_voice_for_target_entry(7, 0, moby);
                     }
-                } else if (dd->f0 < lo) {
+                } else if (dd->health < lo) {
                     moby_data->b148 = 1;
                 }
             }
@@ -842,12 +842,12 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
             if (r != 0 && moby->bBC == 7) {
                 r->f2C = r->f2C * 1.5f;
             }
-            if (dd->f0 <= r->f2C) {
+            if (dd->health <= r->f2C) {
                 func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
                 mode = 3;
                 moby_data->list[i]->bA4 = 0xFF;
             } else {
-                dd->f0 = dd->f0 - r->f2C;
+                dd->health = dd->health - r->f2C;
                 moby_data->b67 = 0xFA;
                 mode = 1;
                 moby_data->sub.h6 = scale_game_frames(0);
@@ -865,7 +865,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     v->f8C = 0;
                     v->f118 = 0;
                 }
-            } else if (dd->f0 < hi) {
+            } else if (dd->health < hi) {
                 int tv = D_L13_001D3478[moby->bBC - 1];
 
                 if (tv != -1) {
@@ -901,7 +901,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     }
                     allocate_voice_for_target_entry(7, 0, moby);
                 }
-            } else if (dd->f0 < lo) {
+            } else if (dd->health < lo) {
                 moby_data->b148 = 1;
             }
         }
@@ -1073,16 +1073,16 @@ unsigned char *fire_level_13_mine(char *firing_moby, char *velocity_source_data)
     unsigned char *spawned_projectile_moby;
     moby_point_position(firing_moby, 0xE, spawn_position);
     x = &hero;
-    if (((char *)x->ship_moby) != 0 && *(short *)(((char *)x->ship_moby) + 0xA6) == 0x45) {
+    if (((char *)x->ship_moby) != 0 && x->ship_moby->oclass == 0x45) {
         predict_hero_ship_projectile_lead_position(
             (char *)predicted_target_position, (char *)spawn_position, frame_time * 20.0f);
         fast_vec_sub(scratch_vector, predicted_target_position, spawn_position);
         fast_vec_normalize(projectile_velocity, scratch_vector, frame_time * 20.0f);
         fast_vec_normalize(random_velocity_offset,
-                           ((char *)x->ship_moby) + 0xD0,
+                           &x->ship_moby->rot_row1,
                            random_float_between(-(frame_time * 30.0f), frame_time * 30.0f));
         fast_vec_normalize(scratch_vector,
-                           ((char *)x->ship_moby) + 0xE0,
+                           &x->ship_moby->rot_row2,
                            random_float_between(-(frame_time * 30.0f), frame_time * 30.0f));
         fast_vec_add(random_velocity_offset, random_velocity_offset, scratch_vector);
         fast_vec_normalize(random_velocity_offset,
@@ -2332,8 +2332,8 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
     char *moby = create_moby(id);
     if (moby != 0) {
         char *attachment_vars;
-        float f = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * MOBY(parent_moby)->scale /
-                  *(float *)(((char *)MOBY(parent_moby)->pclass) + 0x24);
+        float f =
+            MOBY(moby)->pclass->scale * MOBY(parent_moby)->scale / MOBY(parent_moby)->pclass->scale;
         attachment_vars = ((char *)MOBY(moby)->pvars);
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;

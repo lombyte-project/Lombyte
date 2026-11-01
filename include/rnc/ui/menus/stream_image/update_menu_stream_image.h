@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_STREAM_IMAGE_UPDATE_MENU_STREAM_IMAGE_H
+#define LOMBYTE_RNC_UI_MENUS_STREAM_IMAGE_UPDATE_MENU_STREAM_IMAGE_H
+
+#include "types.h"
+
+struct MenuScreen;
+
+s32 update_menu_stream_image(struct MenuScreen *) __asm__("FUN_0021f990");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_STREAM_IMAGE_UPDATE_MENU_STREAM_IMAGE_H */

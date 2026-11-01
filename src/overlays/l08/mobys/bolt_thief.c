@@ -28,7 +28,7 @@ extern char *D_L08_0015FFD8;
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E35C8), where it is exact; names translated to the US level program. */
 extern void *FUN_L00_0025a420(void *, int, int);
 
-#include "rnc/overlay/swarm_path.h"
+#include "rnc/overlay/shared/world/swarm_path.h"
 
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 

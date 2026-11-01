@@ -4,7 +4,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/interpolation.h"
@@ -16,13 +16,13 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 int hero_get_gadget_anim_id(int allow_item_lookup) __asm__("FUN_L12_00227f10");
 
 int hero_get_gadget_anim_id(int allow_item_lookup) {
-    char *animation_selection_state = D_0013E533 + 0xE1D;
-    int   i;
-    char *item_table_entry;
+    struct Hero *animation_selection_state = (struct Hero *)(D_0013E533 + 0xE1D);
+    int          i;
+    char        *item_table_entry;
     if (((unsigned char *)animation_selection_state)[0x20A4] == 3) {
         return 0;
     }
-    if (*(int *)(animation_selection_state + 0x22A8) == 1) {
+    if (animation_selection_state->health.hp == 1) {
         return 0x54;
     }
     if (((unsigned char *)animation_selection_state)[0x12E2] != 0) {
@@ -37,7 +37,7 @@ int hero_get_gadget_anim_id(int allow_item_lookup) {
     if (((unsigned char *)animation_selection_state)[0x20AA] == 0) {
         return 0;
     }
-    if (*(short *)(animation_selection_state + 0x22C8) != 0) {
+    if (animation_selection_state->unk22C8 != 0) {
         return 0;
     }
     i = hero_slot_item_id(0) * 0x4C;
@@ -45,7 +45,7 @@ int hero_get_gadget_anim_id(int allow_item_lookup) {
     return *(int *)(item_table_entry + 0x24);
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 typedef union {

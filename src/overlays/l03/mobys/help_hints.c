@@ -5,7 +5,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -13,6 +13,7 @@
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
@@ -41,8 +42,6 @@ extern struct L03HelpState l03_help_message_playback_state __asm__("D_L03_001795
 extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry  D_L03_00179BC0[];
 extern struct Moby         *D_L03_0015FFE4;
-
-extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 
 /* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
 void help_hints_update(struct Moby *moby) __asm__("FUN_L03_002df520");
@@ -133,7 +132,7 @@ void help_hints_update(struct Moby *moby) {
         count = 0;
         for (candidate_moby = D_L03_0015FFE4; candidate_moby != 0;
              candidate_moby = candidate_moby->next) {
-            if (candidate_moby->pclass != 0 && *(s16 *)((u8 *)candidate_moby->pclass + 0x46) == 5 &&
+            if (candidate_moby->pclass != 0 && candidate_moby->pclass->type == 5 &&
                 vector_distance_xy(&candidate_moby->pos, &hero.motion.pos) < 8.0f) {
                 count++;
             }

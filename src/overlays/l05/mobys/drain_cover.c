@@ -15,6 +15,8 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern char D_0013E550[];
 extern int  allocate_voice_for_target_entry() __asm__("FUN_0022da68");
@@ -105,8 +107,6 @@ create_particle_with_velocity_and_randomized_parameters(void *initial_position_s
 void emit_drain_cover_particles(char *, float, float) __asm__("FUN_L05_0030f218");
 
 void         update_drain_cover_tilt(char *, float, float) __asm__("FUN_L05_0030f408");
-extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -403,7 +403,6 @@ void drain_cover_update(DrainCoverMoby *moby) {
 /* Scatters points along a range, placing each one with a heading and radius. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_00257c48(float lo, float hi);
 extern short D_L05_00161DB8_gp __asm__("D_L05_00161DB8") __attribute__((sda));
 
 extern short drain_cover_particle_height_span_per_particle_gp __asm__("D_L05_00161DB4")
@@ -452,7 +451,7 @@ void emit_drain_cover_particles(char *particle_source_moby,
                                  *(float *)&drain_cover_particle_scalar_upper_bound_gp);
         k = scale_game_frames(*(int *)&D_L05_00161DB8_gp);
         particle_size = truncate_float_to_s32(
-            FUN_L00_00257c48(fi, (float)*(int *)&drain_cover_particle_size_sampling_bound_gp));
+            randf_sym(fi, (float)*(int *)&drain_cover_particle_size_sampling_bound_gp));
         particle_color = *(int *)&drain_cover_particle_color_gp;
         create_particle_with_velocity_and_lifetime(
             u, particle_position, v, k, particle_size, particle_color);
@@ -468,21 +467,31 @@ extern float
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float fast_add_rotations(float, float);
 
+typedef struct DrainCoverVars {
+    u8  pad_0[0x90];
+    f32 unk90;
+    f32 unk94;
+    f32 unk98;
+    f32 unk9C;
+    f32 unkA0;
+    f32 unkA4;
+} DrainCoverVars;
+
 void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
-    char        *drain_cover_vars = (char *)MOBY(moby)->pvars;
-    struct Hero *game = &hero;
-    float        offset[4];
-    float        horizontal;
-    float        vertical;
-    float        angle0;
-    float        angle1;
-    float        target0;
-    float        target1;
-    float        rate0;
-    float        rate1;
-    float        limit;
-    float        dot0;
-    float        dot1;
+    DrainCoverVars *drain_cover_vars = (DrainCoverVars *)MOBY(moby)->pvars;
+    struct Hero    *game = &hero;
+    float           offset[4];
+    float           horizontal;
+    float           vertical;
+    float           angle0;
+    float           angle1;
+    float           target0;
+    float           target1;
+    float           rate0;
+    float           rate1;
+    float           limit;
+    float           dot0;
+    float           dot1;
 
     if ((char *)game->ground_moby == moby && game->air_frames.s == 0) {
         fast_vec_sub(offset, &game->motion.pos, &MOBY(moby)->pos);
@@ -495,23 +504,20 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
         vertical = 0.0f;
     }
 
-    *(float *)(drain_cover_vars + 0x98) = fast_add_rotations(*(float *)(drain_cover_vars + 0x98),
-                                                             *(float *)(drain_cover_vars + 0xa0));
-    *(float *)(drain_cover_vars + 0x9c) = fast_add_rotations(*(float *)(drain_cover_vars + 0x9c),
-                                                             *(float *)(drain_cover_vars + 0xa4));
-    angle0 = fast_sin(*(float *)(drain_cover_vars + 0x98));
+    drain_cover_vars->unk98 = fast_add_rotations(drain_cover_vars->unk98, drain_cover_vars->unkA0);
+    drain_cover_vars->unk9C = fast_add_rotations(drain_cover_vars->unk9C, drain_cover_vars->unkA4);
+    angle0 = fast_sin(drain_cover_vars->unk98);
     target0 = fast_add_rotations(vertical, angle0 * turn_scale * D_L05_00161DD8);
-    angle1 = fast_sin(*(float *)(drain_cover_vars + 0x9c));
+    angle1 = fast_sin(drain_cover_vars->unk9C);
     target1 = fast_add_rotations(horizontal, angle1 * turn_scale * D_L05_00161DD8);
 
     rate0 = drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
     rate1 = drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
     limit = drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time;
-    approach_angle(
-        &MOBY(moby)->rot.x, target0, (float *)(drain_cover_vars + 0x90), rate0, rate1, limit);
+    approach_angle(&MOBY(moby)->rot.x, target0, &drain_cover_vars->unk90, rate0, rate1, limit);
     approach_angle(&MOBY(moby)->rot.y,
                    target1,
-                   (float *)(drain_cover_vars + 0x94),
+                   &drain_cover_vars->unk94,
                    drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq,
                    drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq,
                    drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time);

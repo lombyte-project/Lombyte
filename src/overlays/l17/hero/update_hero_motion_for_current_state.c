@@ -1,21 +1,21 @@
 /* Level 17 hero motion: update_hero_motion_for_current_state. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/game/usage_stats.h"
-#include "rnc/overlay/hero_tables.h"
+#include "rnc/overlay/shared/hero/hero_tables.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -593,13 +593,13 @@ void update_hero_motion_for_current_state(void) {
             if (PD.u1A0.i1A0 & 0x40) {
                 hero.jump_button_frames++;
                 if (PD.f128 > 0.75f) {
-                    s32 t2;
+                    s32 use_seconds;
                     if (++hero.swim_hard_press_frames > scale_game_frames(90) &&
                         usage_stats.stat[11].count < 0xFFFF) {
                         usage_stats.stat[11].count++;
                     }
-                    t2 = scale_game_frames(D_0015EEA4) / 600;
-                    if (usage_stats.stat[11].unk2 < t2) {
+                    use_seconds = scale_game_frames(D_0015EEA4) / 600;
+                    if (usage_stats.stat[11].unk2 < use_seconds) {
                         usage_stats.stat[11].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     usage_stats.stat[11].level_mask =
@@ -1204,23 +1204,23 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
-        s32 t1;
-        s32 t2;
+        s32 window_start;
+        s32 window_end;
         f32 r;
         f32 mx;
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 30.0f, frame_time_sq * 30.0f);
         set_gravity_relative_vector_length_xy(
             &hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
-        t1 = scale_game_frames(12);
+        window_start = scale_game_frames(12);
         r = frame_time * 5.7f;
         mx = frame_time_sq * 70.0f;
-        t2 = scale_game_frames(33);
-        if (hero.state_timer < t1) {
+        window_end = scale_game_frames(33);
+        if (hero.state_timer < window_start) {
             f32 h = gravity_z(&hero.motion.velocity);
             approach_value(&h, r, mx);
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, h);
-        } else if (t2 < hero.state_timer) {
+        } else if (window_end < hero.state_timer) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, hero.rise_fall_gravity);
             if (gravity_z(&hero.motion.velocity) < 0.0f) {
                 hero.past_apex = 1.0f;
@@ -1247,8 +1247,8 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_WRENCH_SLAM: {
-        s32 t1;
-        s32 t2;
+        s32 window_start;
+        s32 window_end;
         f32 r;
         f32 mx;
         if (hero.anim_changing != 0 || hero.anim_frame < D_L17_0017C528[hero.attack_record].f18) {
@@ -1292,7 +1292,7 @@ void update_hero_motion_for_current_state(void) {
         } else if (hero.anim_frame < 25.0f) {
             update_hero_target_heading(8.0f, 1.0471976f, 1.0471976f);
         }
-        t1 = scale_game_frames(9);
+        window_start = scale_game_frames(9);
         r = frame_time * 7.7f;
         if (hero.ground_distance > 2.25f) {
             r *= 0.5f;
@@ -1300,7 +1300,7 @@ void update_hero_motion_for_current_state(void) {
             r *= 0.7f;
         }
         mx = frame_time_sq * 150.0f;
-        t2 = scale_game_frames(14);
+        window_end = scale_game_frames(14);
         if (hero.anim_changing == 0 && hero.anim_frame > 23.5f &&
             hero.motion.displacement.f[2] < 0.0f && hero.air_frames.s != 0) {
             qcopy(&scratch_vector, &hero.motion.pos);
@@ -1318,11 +1318,11 @@ void update_hero_motion_for_current_state(void) {
                 0.4f, &scratch_vector, 0x10, (struct MobyView *)hero.moby, &v10);
         }
         test_hero_animation_frame_window(27.0f);
-        if (hero.state_timer < t1) {
+        if (hero.state_timer < window_start) {
             f32 h = gravity_z(&hero.motion.velocity);
             approach_value(&h, r, mx);
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, h);
-        } else if (t2 < hero.state_timer) {
+        } else if (window_end < hero.state_timer) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 130.0f);
             if (gravity_z(&hero.motion.velocity) < 0.0f) {
                 hero.slam_descending = 1.0f;
@@ -1525,18 +1525,18 @@ void update_hero_motion_for_current_state(void) {
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         break;
     case HERO_STATE_HELD_ITEM_ATTACK: {
-        s32 t1;
-        s32 t2;
+        s32 window_start;
+        s32 window_end;
         if (hero.heading_locked != 0 || (struct MobyView *)hero.melee_target != NULL) {
             hero.motion.move_yaw = hero.attack_target_yaw;
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else if (hero.state_timer < scale_game_frames(4)) {
             update_hero_target_heading(11.0f, 0.87266463f, -1.0f);
         }
-        t1 = scale_game_frames(10);
+        window_start = scale_game_frames(10);
         hero.target_speed = 0.0f;
-        t2 = t1 + scale_game_frames(8);
-        if (t1 < hero.state_timer && hero.state_timer < t2) {
+        window_end = window_start + scale_game_frames(8);
+        if (window_start < hero.state_timer && hero.state_timer < window_end) {
             hero.target_speed = frame_time * 18.0f;
         }
         if (hero.state_timer == scale_game_frames(8)) {
@@ -1545,9 +1545,10 @@ void update_hero_motion_for_current_state(void) {
             create_moby_transform_history_entry(&hero.trail.pos[0], 0x17, 4);
             create_moby_transform_history_entry(&hero.trail.pos[0], 0xC, 6);
         }
-        update_moby_transform_history(&hero.trail.pos[0], t2 < hero.state_timer ? 5 : 0);
+        update_moby_transform_history(&hero.trail.pos[0], window_end < hero.state_timer ? 5 : 0);
         if (hero.on_ice_ground != 0) {
-            if (t1 < hero.state_timer && hero.state_timer < t1 + scale_game_frames(7) &&
+            if (window_start < hero.state_timer &&
+                hero.state_timer < window_start + scale_game_frames(7) &&
                 hero.motion.forward_speed < frame_time * 8.5f) {
                 hero.motion.velocity.f[0] += fast_cos(hero.motion.rot.f[2]) * (frame_time * 1.2f);
                 hero.motion.velocity.f[1] += fast_sin(hero.motion.rot.f[2]) * (frame_time * 1.2f);
@@ -1555,7 +1556,7 @@ void update_hero_motion_for_current_state(void) {
             }
             update_hero_planar_movement_velocity();
         } else {
-            if (t1 < hero.state_timer) {
+            if (window_start < hero.state_timer) {
                 speed_step(frame_time_sq * 190.0f, frame_time_sq * 90.0f);
             }
             if (hero.heading_locked != 0) {
@@ -1564,8 +1565,8 @@ void update_hero_motion_for_current_state(void) {
                 set_planar_vel(99999.0f);
             }
         }
-        if (hero.state.current == 0x20 && t1 < hero.state_timer &&
-            hero.state_timer < t2 + scale_game_frames(4)) {
+        if (hero.state.current == 0x20 && window_start < hero.state_timer &&
+            hero.state_timer < window_end + scale_game_frames(4)) {
             struct MobyView *o = (struct MobyView *)hero.items[0].moby;
             if (o != NULL) {
                 f32 a;

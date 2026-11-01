@@ -1,9 +1,9 @@
 #include "types.h"
+#include "rnc/sdk/scf/is_t10_k.h"
 
 extern u8   t10k_summer_time_setting[] __asm__("D_001330D6");
 extern void GetOsdConfigParam();
 extern s32  GetOsdConfigParam2();
-extern s32  IsT10K();
 
 struct OsdSummerConfig {
     u32 config;

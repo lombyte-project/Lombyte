@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
+#include "rnc/sdk/storage/memory_card/mc_delay_thread.h"
 
-extern s32 SceSifCheckStatRpc();
 extern s32 SignalSema();
-extern s32 mcDelayThread();
 
 s32 sceMcSync(s32 poll_mode, s32 *active_code_out, s32 *completion_status_out) {
     s32           busy;

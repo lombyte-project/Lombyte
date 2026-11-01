@@ -8,6 +8,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/globals.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
 
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;
@@ -30,7 +31,6 @@ extern void swap_render_buffer_chain(void) __asm__("func_00233630");
 extern void vu1_send_chain(void) __asm__("func_002336A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-extern void sceGsSyncV(s32);
 
 void play_level_loading_slides(s32 language_index,
                                s32 first_slide,

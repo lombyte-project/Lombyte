@@ -1,7 +1,7 @@
 /* Level 17 moby class cutscene_camera_target (0x61a): points the cutscene camera at the moby of the current cutscene step. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
 extern void cutscene_set_camera_target() __asm__("FUN_L00_002637f8");
@@ -15,7 +15,7 @@ extern struct {
 
 void cutscene_camera_target_update(struct Moby *moby) __asm__("FUN_L17_002f2e78");
 
-/* Moby class 1562 */
+/* Moby classes 1549-1551, 1553, 1557, 1562 */
 void cutscene_camera_target_update(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,

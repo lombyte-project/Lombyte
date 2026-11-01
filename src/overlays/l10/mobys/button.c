@@ -10,7 +10,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern struct Moby *D_L10_0015FFD8;
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");

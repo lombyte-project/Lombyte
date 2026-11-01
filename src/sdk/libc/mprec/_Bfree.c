@@ -1,6 +1,5 @@
 #include "types.h"
-#include "eetypes.h"
-#include "structs.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef struct LinkObject LinkObject;
 typedef struct LinkOwner  LinkOwner;

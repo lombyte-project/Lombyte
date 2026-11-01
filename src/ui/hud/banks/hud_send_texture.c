@@ -1,11 +1,11 @@
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
+#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
 
-extern s32  sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern void FlushCache(s32);
-extern s32  sceGsExecLoadImage(sceGsLoadImage *, u128 *);
 void        hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immediate) __asm__("FUN_00200b10");
 
 void hud_send_texture(

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_DRAWBRIDGE_H
+#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_DRAWBRIDGE_H
+
+#include "types.h"
+
+void drawbridge_update() __asm__("FUN_L06_002f55a0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_DRAWBRIDGE_H */

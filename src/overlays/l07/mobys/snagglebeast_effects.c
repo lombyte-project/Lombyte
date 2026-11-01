@@ -9,6 +9,10 @@
 #include "rnc/game/item_state.h"
 #include "rnc/rendering/effect_texture.h"
 #include "qcopy.h"
+#include "rnc/overlay/l07/mobys/growing_ballistic_moby.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
 extern char D_L07_00166E40[];
@@ -20,23 +24,20 @@ void rumble_by_distance(char *moby) __asm__("FUN_L07_003120d8");
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313530), where it is exact; names translated to the US level program. */
 extern char point_light_slot_table[] __asm__("D_L07_00180340");
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 void        update_timed_point_light_color(char *light_effect_state) __asm__("FUN_L07_00312150");
 
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
 extern int  FUN_0022da68(int, int, int);
-extern int  FUN_L07_0030e370_c() __asm__("FUN_L07_0030e370");
 extern void FUN_L00_001ff600(float, void *, void *);
 extern void configure_timed_point_light(
     float, void *, void *, short, void *, short, unsigned int, int) __asm__("FUN_L07_00311eb8");
-int          update_alternating_joint_emission_burst(void  *mp,
-                                                     char  *emitter_state,
-                                                     float *target_position) __asm__("FUN_L07_003122b0");
-extern void  draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern int   rand(void) __asm__("FUN_001160d8");
-extern s32   rand(void);
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
+int         update_alternating_joint_emission_burst(void  *mp,
+                                                    char  *emitter_state,
+                                                    float *target_position) __asm__("FUN_L07_003122b0");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern int  rand(void) __asm__("FUN_001160d8");
+extern s32  rand(void);
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313298), where it is exact; names translated to the US level program. */
 extern int
@@ -62,19 +63,10 @@ typedef struct Packet {
     long         x138;
 } Packet;
 
-extern int   D_L07_0015F5CC_lui __asm__("D_L07_0015F5CC");
-extern int   FUN_001efa68_2cd2b0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void *FUN_L00_002729c8_2cd2b0(float        *pos,
-                                     unsigned char a1,
-                                     unsigned char a2,
-                                     unsigned char a3,
-                                     unsigned char a4,
-                                     unsigned char a5,
-                                     void         *a6,
-                                     float         f0,
-                                     float         f1) __asm__("FUN_L00_002729c8");
-extern char  D_L07_00167050_2cd2b0[] __asm__("D_L07_00167050");
-extern char  D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
+extern int  D_L07_0015F5CC_lui __asm__("D_L07_0015F5CC");
+extern int  FUN_001efa68_2cd2b0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern char D_L07_00167050_2cd2b0[] __asm__("D_L07_00167050");
+extern char D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
 void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby) __asm__("FUN_L07_00312420");
 
 void configure_timed_point_light(float        radius,
@@ -218,7 +210,7 @@ int update_alternating_joint_emission_burst(void *mp, char *emitter_state, float
         if (B[2] > 0.0f)
             B[2] = 0.0f;
         fast_vec_normalize(B, B, frame_time * 9.0f);
-        FUN_L07_0030e370_c(A, B, moby);
+        spawn_growing_ballistic_moby(A, B, moby);
         FUN_0022da68(0, 0, (int)moby);
         configure_timed_point_light(
             10.0f, moby, emitter_state, 0, A, scale_game_frames(0x1E), 0x800060FF, 0);
@@ -264,15 +256,15 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby) {
     fast_vec_normalize(quad_side_offset, quad_side_offset, 0.25f);
     fast_vec_add(endpoint_work_vector, quad_side_offset, line_endpoint);
     if (flag) {
-        FUN_L00_002729c8_2cd2b0(line_endpoint,
-                                0,
-                                scale_game_frames((rand() & 1) + 0x2D),
-                                scale_game_frames((rand() & 7) + 0x37),
-                                1,
-                                scale_game_frames((rand() & 3) + 0xD),
-                                effect_owner_moby,
-                                1.0f,
-                                1.0f);
+        spawn_color_tween_emitter_particle(line_endpoint,
+                                           0,
+                                           scale_game_frames((rand() & 1) + 0x2D),
+                                           scale_game_frames((rand() & 7) + 0x37),
+                                           1,
+                                           scale_game_frames((rand() & 3) + 0xD),
+                                           effect_owner_moby,
+                                           1.0f,
+                                           1.0f);
         if (moby_effect_data->f15C != 0.0f) {
             fast_vec_sub(effect_sample_step, line_endpoint, moby_effect_data->f150);
             fast_vec_normalize(effect_sample_step, effect_sample_step, 0.2f);
@@ -287,25 +279,25 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby) {
                     qcopy(effect_sample_position, D_L07_00173EE0_2cd2b0);
                 }
                 if (k == 2) {
-                    FUN_L00_002729c8_2cd2b0(effect_sample_position,
-                                            0,
-                                            scale_game_frames((rand() & 1) + 0x2D),
-                                            scale_game_frames((rand() & 7) + 0x37),
-                                            1,
-                                            scale_game_frames((rand() & 3) + 0xD),
-                                            effect_owner_moby,
-                                            1.0f,
-                                            1.0f);
+                    spawn_color_tween_emitter_particle(effect_sample_position,
+                                                       0,
+                                                       scale_game_frames((rand() & 1) + 0x2D),
+                                                       scale_game_frames((rand() & 7) + 0x37),
+                                                       1,
+                                                       scale_game_frames((rand() & 3) + 0xD),
+                                                       effect_owner_moby,
+                                                       1.0f,
+                                                       1.0f);
                 } else {
-                    FUN_L00_002729c8_2cd2b0(effect_sample_position,
-                                            1,
-                                            scale_game_frames(0x2D),
-                                            scale_game_frames(0x37),
-                                            1,
-                                            scale_game_frames(0xD),
-                                            effect_owner_moby,
-                                            1.0f,
-                                            1.0f);
+                    spawn_color_tween_emitter_particle(effect_sample_position,
+                                                       1,
+                                                       scale_game_frames(0x2D),
+                                                       scale_game_frames(0x37),
+                                                       1,
+                                                       scale_game_frames(0xD),
+                                                       effect_owner_moby,
+                                                       1.0f,
+                                                       1.0f);
                 }
             }
         }

@@ -13,11 +13,12 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
 extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 
 #include "rnc/overlay/l05/mobys/elevator_with_button_globals.h"
 
@@ -55,7 +56,6 @@ typedef struct {
 extern u16 D_0014162A NOT_SDA;
 
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern void lift_camera_view(void *, void *, void *) __asm__("FUN_L05_00315ee0");
 extern void place_marker_ring(void *) __asm__("FUN_L05_00315f70");

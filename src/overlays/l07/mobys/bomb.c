@@ -9,10 +9,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
+#include "rnc/mobys/moby_spawn.h"
 
 extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -84,7 +84,6 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern void spawn_explosion(void *,
                             void *,
                             void *,

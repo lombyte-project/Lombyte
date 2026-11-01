@@ -1,13 +1,13 @@
 /* Follow camera: setup, per-frame approach and overrides, pose rebuild, and the collision probes that keep it clear of the level. */
 #include "types.h"
-#include "rnc/overlay/camera.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/camera/camera.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/globals.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/random.h"
@@ -223,7 +223,7 @@ typedef struct {
     s32 i2000;
 } L_2e6000;
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern C_2e6000 D_0013C940_2e6000 __asm__("D_0013C940");
 extern L_2e6000 D_0013F3D0_2e6000 __asm__("D_0013F3D0");
@@ -436,7 +436,7 @@ typedef float V[4] __attribute__((aligned(16)));
 
 extern V D_L00_00173E60;
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float D_L00_00166E40[];
 extern int   FUN_001efa68(void *, void *, int, int, int);
@@ -448,12 +448,12 @@ extern char  collision_hit_point[] __asm__("D_L00_00173E60");
 void rebuild_follow_camera_pose(int snap) __asm__("FUN_L00_002e66b8");
 
 void rebuild_follow_camera_pose(int snap) {
-    char *cams = (char *)&l00_camera;
-    char *camera_moby = *(char **)(cams + 0x180);
-    char *track = cams + 0x190; /* the followed player: position at 0, up vector at 0x30 */
-    char *follow_camera_state = *(char **)(camera_moby + 0x70);
-    char *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
-    char *target =
+    LevelCamera *cams = &l00_camera;
+    char        *camera_moby = ((char *)cams->unk180);
+    char        *track = &cams->unk190; /* the followed player: position at 0, up vector at 0x30 */
+    char        *follow_camera_state = *(char **)(camera_moby + 0x70);
+    char        *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
+    char        *target =
         follow_camera_state + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
     float  up[4], rise[4], look[4], eye[4];
     int    mask;
@@ -551,9 +551,9 @@ void rebuild_follow_camera_pose(int snap) {
     fast_vec_sub(look, eye, (float *)&MOBY(camera_moby)->update_dist);
     fast_vec_normalize(camera_moby, look, 1.0f);
     qcopy(camera_moby + 0x20, up);
-    fast_vec_cross(camera_moby + 0x10, camera_moby, camera_moby + 0x20);
-    fast_vec_normalize(camera_moby + 0x10, camera_moby + 0x10, 1.0f);
-    fast_vec_cross(camera_moby + 0x20, camera_moby + 0x10, camera_moby);
+    fast_vec_cross(&MOBY(camera_moby)->pos, camera_moby, camera_moby + 0x20);
+    fast_vec_normalize(&MOBY(camera_moby)->pos, &MOBY(camera_moby)->pos, 1.0f);
+    fast_vec_cross(camera_moby + 0x20, &MOBY(camera_moby)->pos, camera_moby);
     qcopy(camera_moby + 0x40, camera_moby);
 }
 
@@ -1486,7 +1486,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
                 MOBY(nearby_moby)->collision = 0;
                 goto next;
             }
-            fast_vec_sub(&moby_offset_or_camera_endpoint, nearby_moby + 0x10, (x + 0x90));
+            fast_vec_sub(&moby_offset_or_camera_endpoint, &MOBY(nearby_moby)->pos, (x + 0x90));
             fast_vec_scale(
                 &v20,
                 camera_tracking_state + 0x30,

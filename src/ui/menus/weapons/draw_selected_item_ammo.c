@@ -3,6 +3,9 @@
 #include "rnc/ui/menus/menu_screen.h"
 
 #include "rnc/game/item_state.h"
+#include "rnc/rendering/texture/pack_image_descriptor.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/ui/text/text_region.h"
 
 extern char D_001602A0[];
 extern u8   ammo_count_decimal_format[] __asm__("D_001602B8");
@@ -18,17 +21,15 @@ struct ImageEntry {
 };
 
 extern struct ImageEntry D_001DFFB0[];
-extern void              pack_image_descriptor(s32 *, s32);
 extern void              setup_gif_paging(s32) __asm__("func_001F4280");
 extern void              do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
 extern u8  *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
-extern s32  sprintf();
 s32         draw_selected_item_ammo(s32 image_descriptor_input) __asm__("FUN_0021f158");
 
 s32 draw_selected_item_ammo(s32 image_descriptor_input) {
-    u8                 sp_slot[0x50];
+    u8                 ammo_text[0x50];
     u8                 descriptor[0x20];
     s16                cell_id;
     s32                selected_item_id;
@@ -50,13 +51,14 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0xB);
     if (selected_item_record->unk8 == 0) {
-        sprintf(sp_slot, get_help_message_text(0x4F52));
+        sprintf(ammo_text, get_help_message_text(0x4F52));
     } else {
         if (ammo < 0x3E8) {
-            end_ptr = sp_slot + sprintf(sp_slot, ammo_count_decimal_format, ammo);
+            end_ptr = ammo_text + sprintf(ammo_text, ammo_count_decimal_format, ammo);
         } else {
-            end_ptr = sp_slot +
-                      sprintf(sp_slot, ammo_count_grouped_decimal_format, ammo / 1000, ammo % 1000);
+            end_ptr =
+                ammo_text +
+                sprintf(ammo_text, ammo_count_grouped_decimal_format, ammo / 1000, ammo % 1000);
         }
         if ((s32)entry_field < 0x3E8) {
             sprintf(end_ptr, D_001602A0, (s32)entry_field);
@@ -66,9 +68,10 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     }
     setup_gif_paging(0);
     pack_image_descriptor((s32 *)descriptor, image_descriptor_input);
-    *(s16 *)(descriptor + 0x10) = 0x10;
-    *(s16 *)(descriptor + 0x12) = 3;
-    font_print_window_regular((s32 *)descriptor, (((u64)0x80FF << 0x10) | 0xA888), sp_slot, -1);
+    ((struct TextRegion *)descriptor)->line_advance = 0x10;
+    ((struct TextRegion *)descriptor)->flags =
+        TEXT_REGION_CENTER_HORIZONTALLY | TEXT_REGION_CENTER_VERTICALLY;
+    font_print_window_regular((s32 *)descriptor, (((u64)0x80FF << 0x10) | 0xA888), ammo_text, -1);
     do_gif_paging();
     return 2;
 }

@@ -1,19 +1,25 @@
 /* Level 18 class 0x3d7: the electric ball Drek's boss robot fires, travelling to a target with bolts and exploding. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/props/electric_water.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/world/collision/ground_probe.h"
 
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
@@ -22,14 +28,11 @@ extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void FUN_L00_00257d78(float *, float, float);
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-f32        probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
 extern float fast_add_rotations(float, float);
-extern float probe_ground_height(void *, int, float);
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB260), where it is exact; names translated to the US level program. */
 
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern void  draw_electric_water_bolt_effect(char *) __asm__("FUN_L15_002d8710");
 extern void  FUN_L18_002ea1f8_u(struct Moby *) __asm__("FUN_L18_002ea1f8");
 void         spawn_explosion_burst(void *arg) __asm__("FUN_L18_002ea800");
 void initialize_electric_bolt_effect_if_requested(struct Moby *moby) __asm__("FUN_L18_002eacd8");
@@ -380,13 +383,9 @@ void spawn_sparks_along_target_direction(struct Moby *moby) {
 
 extern int scale_game_frames(int);
 
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern float fast_sin(float);
 extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 
-extern s32  random_integer_below(s32) __asm__("FUN_00213260");
 extern void spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__("FUN_L00_0026a9f0");
 extern int D_L18_0015F580;
 
@@ -637,8 +636,7 @@ void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
     }
 }
 
-extern char  D_0013E533[];
-extern float FUN_L00_00257c48(float, float);
+extern char D_0013E533[];
 /* Veldin 2 arc emitter: rebuilds the 20-point bolt and its mirror, regrows or jitters four side arcs, then spawns three particles. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EC290), where it is exact; names translated to the US level program. */
 
@@ -667,8 +665,6 @@ extern char    D_0013F5E0[];
 extern float   D_L18_001677C0_c[] __asm__("D_L18_001677C0");
 extern float   D_L18_001D9F80[20];
 extern float   D_L18_001DA110[20];
-extern float   FUN_L00_00257c48(float lo, float hi);
-extern float   normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int     D_L18_0015F580; /* no foreign declaration */
 extern float   primary_bolt_z_phase_step_gp __asm__("D_L18_00161FFC") __attribute__((sda));
 extern float   primary_bolt_z_amplitude_start_gp __asm__("D_L18_00162000") __attribute__((sda));
@@ -697,7 +693,6 @@ extern short D_L18_001620C0[] MACRO_ADDR;
 extern short electric_bolt_side_arc_reset_frames_macro[] __asm__("D_L18_001620C8") MACRO_ADDR;
 extern short
     electric_bolt_side_arc_timer_distance_references_macro[] __asm__("D_L18_001620D0") MACRO_ADDR;
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 extern void
 spawn_ec290(void *, int, float, float, int, int, int, void *, float) __asm__("FUN_L00_00272060");
@@ -749,9 +744,9 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
             primary_bolt_z_offset *
             fast_sin(normalize_angle(*(float *)&D_L18_00162008 +
                                      (float)i * *(float *)&primary_bolt_z_phase_step_gp));
-        primary_bolt_z_offset = primary_bolt_z_offset +
-                                FUN_L00_00257c48(*(float *)&primary_bolt_z_jitter_range_start_gp,
-                                                 *(float *)&primary_bolt_z_jitter_range_end_gp);
+        primary_bolt_z_offset =
+            primary_bolt_z_offset + randf_sym(*(float *)&primary_bolt_z_jitter_range_start_gp,
+                                              *(float *)&primary_bolt_z_jitter_range_end_gp);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
         D_L18_001D9F80[i] = primary_bolt_z_offset;
         azimuth_angle = random_angle_radians();
@@ -805,8 +800,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
                 fast_sin(normalize_angle(*(float *)&D_L18_00162024 +
                                          (float)i * *(float *)&secondary_bolt_z_phase_step_gp));
             qcopy(&D_L18_001D9D00[1][i], &D_L18_001D9D00[0][i]);
-            secondary_bolt_z_offset =
-                secondary_bolt_z_offset * fast_sin(g) + FUN_L00_00257c48(0.0f, 0.1f);
+            secondary_bolt_z_offset = secondary_bolt_z_offset * fast_sin(g) + randf_sym(0.0f, 0.1f);
             D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + secondary_bolt_z_offset;
             D_L18_001DA110[i] = secondary_bolt_z_offset;
             secondary_bolt_lateral_angle = fast_add_rotations(
@@ -844,7 +838,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
             int j;
             D_L18_001620B8[k] = scale_game_frames(electric_bolt_side_arc_reset_frames_macro[k]);
             D_L18_001620C0[k] = 0;
-            scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
+            scale = randf_sym(0.52359879f, 1.04719758f);
             rotation_angle_or_particle_scale = random_float_between(-1.04719758f, 0.17453292f);
             scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[0], side_arc_scale);
             build_look_at_matrix(&scratch_vectors[5],
@@ -879,9 +873,9 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
                 fast_vec_sub(&side_arc_segment_offsets[j],
                              (l18_electric_bolt_side_arc_points[k].p + j),
                              &l18_electric_bolt_side_arc_predecessor_view[k].p[j - 1]);
-                side_arc_segment_offsets[j].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
-                side_arc_segment_offsets[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
-                side_arc_segment_offsets[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
+                side_arc_segment_offsets[j].f[0] += randf_sym(0.0f, 0.1f);
+                side_arc_segment_offsets[j].f[1] += randf_sym(0.0f, 0.1f);
+                side_arc_segment_offsets[j].f[2] += randf_sym(0.0f, 0.1f);
             }
             qcopy(&l18_electric_bolt_side_arc_points[k].p[0], &scratch_vectors[8]);
             for (j = 1; j < 5; j++) {
@@ -904,7 +898,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
             }
         }
     }
-    scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
+    scale = randf_sym(0.52359879f, 1.04719758f);
     rotation_angle_or_particle_scale = random_float_between(-0.52359879f, 1.04719758f);
     scale_vector_xyz_c(&scratch_vectors[5],
                        &scratch_vectors[0],

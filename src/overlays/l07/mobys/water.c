@@ -15,7 +15,7 @@ extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0")
 extern f32  random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 /* Ported from rac1-decomp src/overlays/l07_umbris/vendor_002CE470.c (func_L07_0030D8E8) */
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/water_grid.h"
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
 
 typedef struct {

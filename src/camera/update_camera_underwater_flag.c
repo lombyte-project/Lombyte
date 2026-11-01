@@ -6,29 +6,25 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/camera/update_cam.h"
 
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
-/* Camera-inside-water test: cast a ray through the camera focus from
-   0.75 above to 0.75 below (up to six hits); on the first hit that is
-   not a water surface, flag D_00186F40+0x394 when the focus is below the
-   surface height + 0.04. Off for camera mode 6 or while D_0015F604 is
-   set. */
-void update_camera_underwater_flag(void) __asm__("FUN_001ed7f0");
+void         update_camera_underwater_flag(void) __asm__("FUN_001ed7f0");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
 void update_camera_underwater_flag(void) {
-    char *preview_camera_base = (char *)&preview_camera;
-    float probe_start[4];
-    float probe_end[4];
-    int   i;
+    struct PreviewCamera *camera = &preview_camera;
+    float                 probe_start[4];
+    float                 probe_end[4];
+    int                   i;
 
-    if (*(short *)(*(char **)(preview_camera_base + 0x180) + 0x86) == 6 || game_mode_macro != 0) {
-        *(int *)(preview_camera_base + 0x394) = 0;
+    if (camera->current_camera->unk86 == 6 || game_mode_macro != 0) {
+        camera->underwater = 0;
         return;
     }
-    qcopy(probe_start, preview_camera_base + 0x140);
-    qcopy(probe_end, preview_camera_base + 0x140);
+    qcopy(probe_start, &camera->position);
+    qcopy(probe_end, &camera->position);
     probe_start[2] += 0.75f;
     probe_end[2] -= 0.75f;
     i = 0;
@@ -36,12 +32,12 @@ void update_camera_underwater_flag(void) {
         if (collision_hit_material() == 0) {
             float submersion_height_threshold =
                 resolve_camera_surface_height(D_00194120, 0) + 0.04f;
-            char *preview_camera_state = (char *)&preview_camera;
+            struct PreviewCamera *focus_camera = &preview_camera;
 
-            if (*(float *)(preview_camera_state + 0x148) < submersion_height_threshold) {
-                *(int *)(preview_camera_state + 0x394) = 1;
+            if (focus_camera->position.f[2] < submersion_height_threshold) {
+                focus_camera->underwater = 1;
             } else {
-                *(int *)(preview_camera_state + 0x394) = 0;
+                focus_camera->underwater = 0;
             }
             return;
         }

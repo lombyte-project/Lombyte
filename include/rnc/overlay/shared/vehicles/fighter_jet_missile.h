@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_FIGHTER_JET_MISSILE_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_FIGHTER_JET_MISSILE_H
+
+#include "types.h"
+
+struct Moby;
+
+void fighter_jet_missile_update(struct Moby *) __asm__("FUN_L11_003089d0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_FIGHTER_JET_MISSILE_H */

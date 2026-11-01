@@ -17,7 +17,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/math/interpolation/cosine_interpolate.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "sda.h"
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/minibomber_globals.h"
@@ -220,23 +220,26 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void set_moby_animation_c(void *, s32, s32) __asm__("func_00212ED8");
 
 int advance_minibomber_along_path(struct Moby *moby,
-                                  char        *a1,
-                                  int          a2,
-                                  int          a3,
+                                  char        *path,
+                                  int          segment_index_address,
+                                  int          segment_distance_address,
                                   float       *v,
                                   float       *vel,
-                                  float        f12,
-                                  float        f13,
-                                  float        f14,
-                                  float        f15,
-                                  float        f16,
-                                  float        f17,
-                                  float        f18) __asm__("FUN_L14_002b5730");
+                                  float        path_step_distance,
+                                  float        position_error_gain,
+                                  float        position_velocity_damping,
+                                  float        position_snap_threshold_scale,
+                                  float        heading_error_gain,
+                                  float        heading_velocity_damping,
+                                  float        heading_velocity_limit) __asm__("FUN_L14_002b5730");
 
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 
-extern char *
-func_L14_00302968_2B5938(int a0, float *a1, float *a2, float f, int a3) __asm__("FUN_L14_003014e0");
+extern char *func_L14_00302968_2B5938(int    owner,
+                                      float *pos,
+                                      float *initial_velocity,
+                                      float  f,
+                                      int    gravity) __asm__("FUN_L14_003014e0");
 
 extern void func_L00_0025F4A8_2B5938(void *,
                                      void *,
@@ -814,13 +817,13 @@ int advance_minibomber_along_path(struct Moby *moby,
                                   int          segment_distance_address,
                                   float       *position_easing_velocity,
                                   float       *heading_easing_velocity,
-                                  float        f12,
-                                  float        f13,
-                                  float        f14,
-                                  float        f15,
-                                  float        f16,
-                                  float        f17,
-                                  float        f18) __asm__("FUN_L14_002b5730");
+                                  float        path_step_distance,
+                                  float        position_error_gain,
+                                  float        position_velocity_damping,
+                                  float        position_snap_threshold_scale,
+                                  float        heading_error_gain,
+                                  float        heading_velocity_damping,
+                                  float        heading_velocity_limit) __asm__("FUN_L14_002b5730");
 
 int advance_minibomber_along_path(struct Moby *moby,
                                   char        *path,
@@ -879,7 +882,7 @@ void ease_minibomber_position_and_heading(char  *moby,
 
                                           float heading_velocity_limit) {
     int minibomber_private_vars_base;
-    int moby_state = moby[0x20] & 0xFF;
+    int moby_state = MOBY(moby)->state & 0xFF;
     if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
         minibomber_private_vars_base = *(int *)(moby + 0x78);
         vendor_spring((float *)&MOBY(moby)->pos,

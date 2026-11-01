@@ -19,7 +19,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 typedef struct {
     u8  pad0[0x24];
@@ -608,10 +608,10 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
     euler_rotation_basis(local_rotation_basis, local_rotation_angles);
     euler_rotation_basis(base_rotation_basis, B);
     multiply_matrix3x3(moby + 0xC0, base_rotation_basis, local_rotation_basis);
-    fast_vec_scale(moby + 0x10, &base_rotation_basis[8], base_axis_offset_distance);
+    fast_vec_scale(&MOBY(moby)->pos, &base_rotation_basis[8], base_axis_offset_distance);
     fast_vec_scale(rotated_position_offset, moby + 0xC0, rotated_axis_offset_distance);
-    fast_vec_add(moby + 0x10, moby + 0x10, rotated_position_offset);
-    fast_vec_add(moby + 0x10, moby + 0x10, A);
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, rotated_position_offset);
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, A);
     if (base_position_output != 0)
         qcopy(base_position_output, A);
     if (base_rotation_output != 0)
@@ -621,15 +621,15 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
         if (ground_moby != 0 && *(unsigned char *)(grounded_bolt_vars + 0x57) == 0) {
             int   should_detach_from_ground;
             char *x;
-            if ((unsigned char)ground_moby[0x20] == 0xFE ||
+            if ((unsigned char)MOBY(ground_moby)->state == 0xFE ||
                 (*(unsigned char **)(grounded_bolt_vars + 0x5C))[0x20] == 0xFD) {
                 should_detach_from_ground = 1;
             } else {
                 should_detach_from_ground =
-                    coll_sphere(ground_collision_radius, moby + 0x10, 0x22, moby) == 0;
+                    coll_sphere(ground_collision_radius, &MOBY(moby)->pos, 0x22, moby) == 0;
             }
             if (should_detach_from_ground) {
-                moby[0x20] = 1;
+                MOBY(moby)->state = 1;
                 clear_u64_value(grounded_bolt_vars + 0x30);
                 *(float *)(grounded_bolt_vars + 0x3C) = 1.0f;
                 x = FUN_L00_002603d0_c(*(char **)(grounded_bolt_vars + 0x5C));
@@ -642,7 +642,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
                 fast_vec_normalize(D, (float *)&MOBY(moby)->rot_row0, D_0015ED6C);
                 fast_vec_add(C, C, D);
                 fast_vec_add(grounded_bolt_vars + 0x20, grounded_bolt_vars + 0x20, C);
-                fast_vec_add(moby + 0x10, moby + 0x10, grounded_bolt_vars + 0x20);
+                fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, grounded_bolt_vars + 0x20);
                 *(char **)(grounded_bolt_vars + 0x5C) = 0;
             }
         }
@@ -692,7 +692,8 @@ int begin_bolt_attraction(void *ov,
         *(float *)(bolt_vars + 0x48) = attraction_pitch_angle;
         *(int *)(bolt_vars + 0x64) = 0;
         *(char **)(bolt_vars + 0x60) = target_moby;
-        fast_vec_sub(attraction_geometry_scratch[1], target_moby + 0x10, bolt_moby + 0x10);
+        fast_vec_sub(
+            attraction_geometry_scratch[1], &MOBY(target_moby)->pos, &MOBY(bolt_moby)->pos);
         fast_vec_cross(
             attraction_geometry_scratch[0], bolt_vars + 0x20, attraction_geometry_scratch[1]);
         fast_vec_normalize(bolt_vars + 0x30, attraction_geometry_scratch[0], 1.0f);

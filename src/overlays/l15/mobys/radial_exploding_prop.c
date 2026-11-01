@@ -8,6 +8,8 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern char D_0014C190[];
 
@@ -40,8 +42,6 @@ extern void normalize_vector_xyz_7880(float, void *, void *) __asm__("FUN_001f9b
 
 extern void scale_vector_xyz_7880(float, void *, void *) __asm__("FUN_001f9a68");
 
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-
 extern int FUN_L00_002371e0_7880(float, int, int) __asm__("FUN_L15_00249ce8");
 
 extern void FUN_L00_00257470_7880(void *, int, long long) __asm__("FUN_L00_00257470");
@@ -66,8 +66,6 @@ extern void FUN_L00_0025e450_7880(void *,
                                   int) __asm__("FUN_L00_0025e450");
 
 extern void *spawn_debris_chunk(void *, void *, int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
-
-extern void *mine_debris(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 
 void radial_exploding_prop_update(struct Moby *moby) __asm__("FUN_L15_002a7880");
 
@@ -244,9 +242,6 @@ extern void *spawn_debris_chunk(void *pos,
                                 float b,
                                 float c,
                                 int   d) __asm__("FUN_L01_002f8530");
-
-extern void *
-mine_debris(void *pos, void *vel, int color, int color2, float size, int life, int tint) __asm__("FUN_L00_0026bed0");
 
 Colors l15_destructible_secondary_debris_color_palette __asm__("D_L15_00161578") = {
     {0, 1, 2}

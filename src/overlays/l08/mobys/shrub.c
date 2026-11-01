@@ -30,7 +30,7 @@ float        shrub_part_spin_speed_degrees_gp __asm__("D_L08_00161D28") = 3e+01f
 void         update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8ba0");
 extern u8    D_0014C050[];
 
-#include "rnc/overlay/swarm_path.h"
+#include "rnc/overlay/shared/world/swarm_path.h"
 
 extern struct Moby *D_L08_0015FFD8;
 extern f32          scale_time(f32) __asm__("FUN_001f96b0");
@@ -80,7 +80,7 @@ void spawn_shrub_parts(char *moby) {
     *(int *)(shrub_instance_vars + 0x7C) = 2;
     *(char **)(shrub_instance_vars + 0x74) = moby;
     *(int *)(shrub_instance_vars + 0x78) = 0;
-    child_moby->scale = *(float *)(((char *)child_moby->pclass) + 0x24) * 0.75f;
+    child_moby->scale = child_moby->pclass->scale * 0.75f;
     muzzle_anchor_moby = FUN_L08_002e1c98_c(moby, 0x1BA, 1, 1);
     *(char **)(shrub_instance_vars + 0x80) = muzzle_anchor_moby;
     *(char **)(shrub_instance_vars + 0x84) = moby;

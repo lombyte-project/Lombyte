@@ -9,11 +9,20 @@
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/hero/hero_move_state_velocity.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "qzero.h"
 #include "rnc/game/game_globals.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/weapons/decoy.h"
+
+typedef struct DecoyGloveVars {
+    u8    pad0[0x40];
+    u8    unk40[0x10];
+    char *unk50;
+    s32   unk54;
+} DecoyGloveVars;
 
 typedef struct Hero Hero;
 
@@ -70,14 +79,11 @@ extern void  func_L00_002C8680_2D3608(float *pos,
                                       float  unused,
                                       float  range) __asm__("FUN_L00_002c7320");
 extern int   D_0015EEA4;
-extern int   use_ammo(int, int) __asm__("FUN_L00_00233db8");
-extern int   get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int   spawn_decoy(void *, void *, void *) __asm__("FUN_L00_002c35c0");
 extern short D_L00_001B0830[];
 extern void  hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void  FUN_L00_0024f7c8(void *, int, void *);
 extern void  mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void  release_moby_with_collision_check(float *, char *, void *) __asm__("FUN_L00_002c3888");
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void  mark_moby_for_removal() __asm__("FUN_0020c828");
 extern u8    D_0013E539_lui __asm__("D_0013E539") NOT_SDA;
@@ -188,7 +194,7 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
                              (controller_state.held & 5) ? 3.5f : 2.5f);
 }
 
-/* Decoy glove update: state machine on moby[0x20], per-object data block at moby[0x78]. */
+/* Decoy glove update: state machine on MOBY(moby)->state, per-object data block at moby[0x78]. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D3B20), where it is exact; names translated to the US level program. */
 
 void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
@@ -204,24 +210,24 @@ void decoy_glove_update(unsigned char *moby) {
         DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN = 5,
         DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN = 6
     };
-    extern void mark_moby_for_removal();
-    extern void transform_vector() __asm__("FUN_001f9d20");
-    extern int  allocate_voice_for_target_entry(int, int, void *);
-    char       *glove_vars;
-    char       *tracked_target_moby;
-    char       *hero_data;
-    float       vb[4];
-    float       va[4];
-    float       vc[4];
-    float       vd[4];
-    float       pad0[4];
-    float       pad1[4];
-    float       pad2[4];
-    u128_D3B20  loc;
+    extern void     mark_moby_for_removal();
+    extern void     transform_vector() __asm__("FUN_001f9d20");
+    extern int      allocate_voice_for_target_entry(int, int, void *);
+    DecoyGloveVars *glove_vars;
+    char           *tracked_target_moby;
+    struct Hero    *hero_data;
+    float           vb[4];
+    float           va[4];
+    float           vc[4];
+    float           vd[4];
+    float           pad0[4];
+    float           pad1[4];
+    float           pad2[4];
+    u128_D3B20      loc;
 
     if (moby == 0)
         return;
-    glove_vars = ((char *)MOBY(moby)->pvars);
+    glove_vars = (DecoyGloveVars *)MOBY(moby)->pvars;
     if (glove_vars == 0)
         return;
     *(u128_D3B20 *)va = 0;
@@ -230,39 +236,38 @@ void decoy_glove_update(unsigned char *moby) {
     FUN_L00_0024f7c8(moby, 0, vb);
     build_moby_bone_transform(moby, 0, vd);
     transform_vector(vc, va, vd);
-    fast_vec_add(glove_vars + 0x40, vb, vc);
+    fast_vec_add(&glove_vars->unk40, vb, vc);
 
-    tracked_target_moby = *(char **)(glove_vars + 0x50);
+    tracked_target_moby = glove_vars->unk50;
     if (tracked_target_moby) {
         MOBY(tracked_target_moby)->collision_disable = 1;
-        if (D_0013E539_lui && *(short *)(*(char **)(glove_vars + 0x50) + 0xA6) != 0x76C) {
+        if (D_0013E539_lui && *(short *)(glove_vars->unk50 + 0xA6) != 0x76C) {
             qzero(&loc);
-            mine_spawn_drops(*(char **)(glove_vars + 0x50), D_L00_001B0830);
-            ((void (*)(void *))mark_moby_for_removal)(*(char **)(glove_vars + 0x50));
-            *(int *)(glove_vars + 0x50) = spawn_decoy(moby, glove_vars + 0x40, &loc);
+            mine_spawn_drops(glove_vars->unk50, D_L00_001B0830);
+            ((void (*)(void *))mark_moby_for_removal)(glove_vars->unk50);
+            *(int *)&glove_vars->unk50 = spawn_decoy(moby, &glove_vars->unk40, &loc);
         }
-        if (*(char **)(glove_vars + 0x50) != 0 &&
-            *(unsigned char *)(*(char **)(glove_vars + 0x50) + 0x20) != 0xFE &&
-            *(unsigned char *)(*(char **)(glove_vars + 0x50) + 0x20) != 0xFD)
+        if (glove_vars->unk50 != 0 && *(unsigned char *)(glove_vars->unk50 + 0x20) != 0xFE &&
+            *(unsigned char *)(glove_vars->unk50 + 0x20) != 0xFD)
             goto target_valid;
     }
-    *(int *)(glove_vars + 0x50) = 0;
+    *(int *)&glove_vars->unk50 = 0;
 target_valid:
-    hero_data = ((char *)&hero);
-    if (*(int *)(hero_data + 0x2084) == 1)
+    hero_data = &hero;
+    if (hero_data->state.current == 1)
         hero_set_state(0x1E, 1);
-    if (fast_dec_timer((int *)(glove_vars + 0x54))) {
-        if (*(unsigned char *)(hero_data + 0x20AC) == 0) {
-            if (*(unsigned char *)(hero_data + 0x20A8) &&
-                *(int *)(hero_data + 0x1BC) == scale_game_frames(0x11))
+    if (fast_dec_timer((int *)(&glove_vars->unk54))) {
+        if (hero_data->item_use_locked == 0) {
+            if (hero_data->item_anim_active &&
+                hero_data->item_anim_frames == scale_game_frames(0x11))
                 goto L3D10;
-            if (*(int *)(((char *)&D_0013CAE4)) & *(int *)(hero_data + 0x10A0)) {
-                if (*(int *)(hero_data + 0x2084) == 0x1E && get_ammo(-1))
+            if (*(int *)(((char *)&D_0013CAE4)) & hero_data->items[0].button_mask) {
+                if (hero_data->state.current == 0x1E && get_ammo(-1))
                     goto L3D10;
             }
-            hero_data = ((char *)&hero);
-            if (*(int *)(hero_data + 0x2084) == 0x23 &&
-                *(int *)(hero_data + 0x198) == scale_game_frames(0x10))
+            hero_data = &hero;
+            if (hero_data->state.current == 0x23 &&
+                hero_data->state_timer == scale_game_frames(0x10))
                 goto L3D10;
         }
     }
@@ -270,26 +275,26 @@ target_valid:
 L3D10:
     allocate_hero_voice_for_entry(0x1A, 0);
     use_ammo(-1, 1);
-    moby[0x20] = 3;
+    MOBY(moby)->state = 3;
 L3D34:
-    *(u128_D3B20 *)&loc = *(u128_D3B20 *)(glove_vars + 0x40);
+    *(u128_D3B20 *)&loc = *(u128_D3B20 *)(&glove_vars->unk40);
     decoy_glove_aim_throw((int)moby, (void *)glove_vars, (float *)&loc);
 
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case DECOY_GLOVE_INITIALIZE:
-        *(int *)(glove_vars + 0x50) = 0;
-        if (!(moby[0x70] & 2))
-            moby[0x20] = 1;
+        *(int *)&glove_vars->unk50 = 0;
+        if (!(MOBY(moby)->anim_flags & 2))
+            MOBY(moby)->state = 1;
         else
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
     case DECOY_GLOVE_WAIT_FOR_MOBY_FLAG:
-        if (moby[0x70] & 2)
-            moby[0x20] = 2;
+        if (MOBY(moby)->anim_flags & 2)
+            MOBY(moby)->state = 2;
         break;
     case DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN:
         break;
     case DECOY_GLOVE_RELEASE_DECOY:
-        if (*(char **)(glove_vars + 0x50)) {
+        if (glove_vars->unk50) {
             char *stats = ((char *)&item_usage);
             if (*(unsigned short *)(stats + 0xC8) <= 0xFFFE)
                 *(unsigned short *)(stats + 0xC8) = *(unsigned short *)(stats + 0xC8) + 1;
@@ -297,25 +302,24 @@ L3D34:
                 *(unsigned short *)(stats + 0xCA) = scale_game_frames(D_0015EEA4) / 600;
             *(unsigned int *)(stats + 0xCC) =
                 (*(unsigned int *)(stats + 0xCC) | (1 << D_0015ED84)) | 0x80000000;
-            release_moby_with_collision_check((float *)(glove_vars + 0x40),
-                                              *(char **)(glove_vars + 0x50),
-                                              *(char **)(*(char **)(glove_vars + 0x50) + 0x78) +
-                                                  0x10);
-            *(int *)(glove_vars + 0x50) = 0;
+            release_moby_with_collision_check((float *)(&glove_vars->unk40),
+                                              glove_vars->unk50,
+                                              *(char **)(glove_vars->unk50 + 0x78) + 0x10);
+            *(int *)&glove_vars->unk50 = 0;
         } else {
             allocate_voice_for_target_entry(0, 0, (int)moby);
         }
-        moby[0x20] = 4;
-        *(int *)(glove_vars + 0x54) = scale_game_frames(0x14);
+        MOBY(moby)->state = 4;
+        glove_vars->unk54 = scale_game_frames(0x14);
         break;
     case DECOY_GLOVE_WAIT_AFTER_RELEASE: {
-        char *h = ((char *)&hero);
-        if (*(int *)(h + 0x2084) != 0x23 && *(unsigned char *)(h + 0x20A8) == 0)
-            moby[0x20] = 2;
+        struct Hero *h = &hero;
+        if (h->state.current != 0x23 && h->item_anim_active == 0)
+            MOBY(moby)->state = 2;
         break;
     }
     case DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN:
-        moby[0x20] = 6;
+        MOBY(moby)->state = 6;
         break;
     case DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN:
         return;
@@ -323,18 +327,18 @@ L3D34:
         break;
     }
 
-    if (*(char **)(glove_vars + 0x50)) {
-        qcopy(*(char **)(glove_vars + 0x50) + 0x10, glove_vars + 0x40);
+    if (glove_vars->unk50) {
+        qcopy(glove_vars->unk50 + 0x10, &glove_vars->unk40);
         return;
     }
     if (get_ammo(-1)) {
         qzero(&loc);
-        *(int *)(glove_vars + 0x50) = spawn_decoy(moby, glove_vars + 0x40, &loc);
+        *(int *)&glove_vars->unk50 = spawn_decoy(moby, &glove_vars->unk40, &loc);
     } else {
-        char *h = ((char *)&hero);
-        if (*(unsigned char *)(h + 0x20A8)) {
+        struct Hero *h = &hero;
+        if (h->item_anim_active) {
             qzero(&loc);
-            *(int *)(glove_vars + 0x50) = spawn_decoy(moby, glove_vars + 0x40, &loc);
+            *(int *)&glove_vars->unk50 = spawn_decoy(moby, &glove_vars->unk40, &loc);
         }
     }
 }

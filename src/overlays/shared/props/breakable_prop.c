@@ -1,12 +1,12 @@
 /* Breakable prop (class 0x677): breaks into three pieces and drops a tumbling part (0x678) when hit; same source as the l07 mushroom and robot_head. */
 #include "types.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "qcopy.h"
 
 typedef struct {
@@ -45,14 +45,14 @@ void prop_breakup_update(char *breakup_moby) {
     struct Moby *hit_moby = find_moby_hit(breakup_moby, 0x10000, 0);
     switch (((unsigned char *)breakup_moby)[0x20]) {
     case MOBY_STATE_INITIALIZE:
-        breakup_moby[0x20] = 1;
+        MOBY(breakup_moby)->state = 1;
         break;
     case MOBY_STATE_WAIT_FOR_HIT:
         if (hit_moby != 0 && hit_moby->scale > 0.0f) {
             flag = 1;
         }
         if (flag) {
-            breakup_moby[0x20] = 2;
+            MOBY(breakup_moby)->state = 2;
         }
         break;
     case MOBY_STATE_SPAWN_AND_REMOVE: {
@@ -61,7 +61,7 @@ void prop_breakup_update(char *breakup_moby) {
         spawn_proximity_gated_bolts(breakup_moby);
         FUN_L00_00263fd8(breakup_moby,
                          0x679,
-                         breakup_moby + 0x10,
+                         &MOBY(breakup_moby)->pos,
                          breakup_moby + 0x40,
                          0,
                          0,
@@ -71,7 +71,7 @@ void prop_breakup_update(char *breakup_moby) {
                          D_L06_0015F580);
         FUN_L00_00263fd8(breakup_moby,
                          0x67a,
-                         breakup_moby + 0x10,
+                         &MOBY(breakup_moby)->pos,
                          breakup_moby + 0x40,
                          0,
                          0,
@@ -81,7 +81,7 @@ void prop_breakup_update(char *breakup_moby) {
                          D_L06_0015F580);
         FUN_L00_00263fd8(breakup_moby,
                          0x67b,
-                         breakup_moby + 0x10,
+                         &MOBY(breakup_moby)->pos,
                          breakup_moby + 0x40,
                          0,
                          0,
@@ -91,9 +91,9 @@ void prop_breakup_update(char *breakup_moby) {
                          D_L06_0015F580);
         spawned_moby = create_moby(0x678);
         if (spawned_moby != 0) {
-            spawned_moby[0x31] = 1;
+            MOBY(spawned_moby)->visible = 1;
             MOBY(spawned_moby)->draw_dist = 0xFF;
-            qcopy(spawned_moby + 0x10, breakup_moby + 0x10);
+            qcopy(&MOBY(spawned_moby)->pos, &MOBY(breakup_moby)->pos);
             qcopy(spawned_moby + 0x40, breakup_moby + 0x40);
             MOBY(spawned_moby)->spawn_frame = *(long *)(breakup_moby + 0x38);
             update_entity(spawned_moby);

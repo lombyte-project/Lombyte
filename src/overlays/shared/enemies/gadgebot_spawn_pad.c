@@ -20,14 +20,14 @@ char *spawn_gadgebot_pad(char *gadgebot) {
     char *moby = create_moby(0x12F);
     if (moby != 0) {
         MOBY(moby)->draw_dist = 0x60;
-        moby[0x31] = 1;
+        MOBY(moby)->visible = 1;
         ((unsigned char *)moby)[0x30] = 0;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         MOBY(moby)->rot.z = *(float *)(gadgebot + 0x48);
         MOBY(moby)->spawn_frame = *(long *)(gadgebot + 0x38);
         MOBY(moby)->parent = gadgebot;
-        qcopy(moby + 0x10, gadgebot + 0x10);
+        qcopy(&MOBY(moby)->pos, gadgebot + 0x10);
         update_entity(moby);
     }
     return moby;
@@ -39,7 +39,7 @@ void gadgebot_spawn_pad_update(char *moby) __asm__("FUN_L06_002d8c20");
 /* Moby class 303 */
 void gadgebot_spawn_pad_update(char *moby) {
     char *owner_moby = ((char *)MOBY(moby)->parent);
-    if (owner_moby != 0 && (unsigned char)owner_moby[0x20] < 2) {
+    if (owner_moby != 0 && (unsigned char)MOBY(owner_moby)->state < 2) {
         int   frame_count_snapshot = *(int *)&level_frame_count;
         float color_pulse_value = (float)(frame_count_snapshot % 150) / 150.0f * 2.0f * 3.14159274f;
         if (color_pulse_value > 3.14159274f)

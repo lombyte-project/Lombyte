@@ -15,7 +15,7 @@ void show_tracked_moby(void) {
     char *tracked_moby = *(char **)((char *)&level_render_state);
     if (tracked_moby != 0) {
         char *moby;
-        *(unsigned short *)(tracked_moby + 0x34) &= 0xfffc;
+        MOBY(tracked_moby)->flags &= 0xfffc;
         moby = *(char **)((char *)&level_render_state);
         MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
     }

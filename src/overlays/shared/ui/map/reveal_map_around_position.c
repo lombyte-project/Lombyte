@@ -1,11 +1,13 @@
 /* Map: reveals the map around a position. */
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "asm.h"
 
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "sda.h"
 #include "rnc/overlay/shared/ui/menus/ensure_menu_cache_entry.h"
+#include "rnc/ui/map/world_to_map_coords.h"
 
 typedef struct {
     f32 lower;
@@ -31,7 +33,6 @@ extern MapBitGrid D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
 extern MapFilter  D_L00_00182BA0[19][16] NOT_SDA;
 extern MapFilterCallback D_L00_00183F90[19][8] NOT_SDA;
 extern s32               D_L00_001844A8[] NOT_SDA;
-extern void              world_to_map_coords(f32, f32, f32 *, f32 *, s32) __asm__("FUN_00208408");
 
 void reveal_map_around_position(f32 *position) __asm__("FUN_L00_002484e0");
 
@@ -111,7 +112,7 @@ void reveal_map_around_position(f32 *position) {
             continue;
         }
         if (D_L00_00182BA0[level][i].lower != D_L00_00182BA0[level][i].upper) {
-            f32 height = *(f32 *)((u8 *)hero.moby + 0x18);
+            f32 height = hero.moby->pos.z;
             if (D_L00_00182BA0[level][i].lower > height ||
                 height > D_L00_00182BA0[level][i].upper) {
                 *filter = 0;

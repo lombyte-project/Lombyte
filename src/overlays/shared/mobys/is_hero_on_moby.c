@@ -9,6 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 
 /* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
    or state 0x1C, otherwise unk2FC while unk30E is clear. */
@@ -47,7 +48,7 @@ void begin_dialogue_camera_transition(float scale, char *moby) __asm__("FUN_L01_
 
 void begin_dialogue_camera_transition(float scale, char *moby) {
     D_L01_0016CCE0_lui.f = 1;
-    qcopy(D_L01_0016CCE0_lui.p, moby + 0x10);
+    qcopy(D_L01_0016CCE0_lui.p, &MOBY(moby)->pos);
     D_L01_0016CCE0_lui.p[0] += fast_cos(MOBY(moby)->rot.z) * scale;
     D_L01_0016CCE0_lui.p[1] += fast_sin(MOBY(moby)->rot.z) * scale;
     clear_u64_value(D_L01_0016CCE0_lui.q);
@@ -56,13 +57,11 @@ void begin_dialogue_camera_transition(float scale, char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
 
-extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
-
 void spawn_proximity_gated_bolts(char *moby) __asm__("FUN_L01_002787a0");
 
 void spawn_proximity_gated_bolts(char *moby) {
     int bolt_spawn_flags = 0;
-    if (vector_distance_xy(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
+    if (vector_distance_xy(&MOBY(moby)->pos, D_0013E533 + 0xE9D) < 7.0f) {
         bolt_spawn_flags = 2;
     }
     spawn_randomized_bolt_drop(moby, 4, 7, bolt_spawn_flags, -1);
@@ -80,14 +79,14 @@ void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) {
     char *destination_moby = create_moby(oClass);
     if (destination_moby != 0) {
         MOBY(destination_moby)->draw_dist = 0xFF;
-        destination_moby[0x31] = 1;
+        MOBY(destination_moby)->visible = 1;
         MOBY(destination_moby)->scale =
             MOBY(destination_moby)->scale *
             (placement_source_moby->scale / placement_source_moby->pclass->scale);
-        qcopy(destination_moby + 0x10, &placement_source_moby->pos);
+        qcopy(&MOBY(destination_moby)->pos, &placement_source_moby->pos);
         qcopy(destination_moby + 0x40, &placement_source_moby->rot);
         MOBY(destination_moby)->spawn_frame = placement_source_moby->spawn_frame;
-        destination_moby[0x30] = 0;
+        MOBY(destination_moby)->update_dist = 0;
         MOBY(destination_moby)->flags = 0;
         update_entity(destination_moby);
     }

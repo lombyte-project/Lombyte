@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/deci2/sce_printf.h"
 
-extern u8  gs_draw_env_dma_timeout_message[] __asm__("D_00153078");
-extern s32 scePrintf();
+extern u8 gs_draw_env_dma_timeout_message[] __asm__("D_00153078");
 
 s32 sceGsPutDrawEnv(u64 *env) {
     u32 count;

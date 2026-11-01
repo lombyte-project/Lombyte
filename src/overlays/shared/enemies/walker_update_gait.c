@@ -8,6 +8,7 @@
 #include "rnc/game/interpolated_record.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/mobys/find_nearest_animation_sequence_entry.h"
 
 int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
 
@@ -162,7 +163,6 @@ typedef struct WalkData {
 extern char  walker_jump_distance_debug_format[] __asm__("D_L00_001611E0");
 extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 extern int   walker_gait_animation_index_by_state[] __asm__("D_L00_001CA760");
-extern int   find_nearest_animation_sequence_entry(char *a, float time) __asm__("FUN_L00_0024ed18");
 extern void  debug_print() __asm__("FUN_001e93b0");
 float        compute_walker_time_to_landing(char *a, char *b) __asm__("FUN_L00_002a15c8");
 void         reset_walker_gait_helpers(u8 *a0) __asm__("FUN_L00_002a1538");

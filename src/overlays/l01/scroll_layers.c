@@ -6,7 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
-#include "rnc/overlay/scroll_layer.h"
+#include "rnc/overlay/l01/scroll_layer.h"
 
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") MACRO_ADDR;
 extern u8                 D_L01_001CAC80[];

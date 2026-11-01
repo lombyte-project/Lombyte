@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_DECOY_GLOVE_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_DECOY_GLOVE_H
+
+#include "types.h"
+
+void decoy_glove_update(unsigned char *) __asm__("FUN_L00_002d2670");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_DECOY_GLOVE_H */

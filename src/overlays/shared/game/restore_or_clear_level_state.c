@@ -7,10 +7,10 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/camera/init_camera_system.h"
 #include "rnc/audio/voice_pool.h"

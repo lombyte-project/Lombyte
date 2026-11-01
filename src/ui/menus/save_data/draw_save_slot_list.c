@@ -5,6 +5,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/globals.h"
 #include "rnc/ui/hud/get_icon_frame.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
 
 typedef struct {
     u8  pad_0[0x20];
@@ -24,7 +25,6 @@ extern void  font_print_center_small(s32, s32, u64, char *, s32) __asm__("func_0
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void  draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void  append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
-extern s32   sprintf(char *, const char *, ...);
 
 s32 draw_save_slot_list(SaveMenu *menu) __asm__("FUN_002239e0");
 
@@ -106,7 +106,11 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                 draw_hud_sprite(get_icon_frame(0x754F, 0xF), 4, y, 0x10, 0x10, 0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;
-                sprintf(text, save_slot_hex_triplet_format, slot->b16, slot->b15, slot->b17);
+                sprintf(text,
+                        save_slot_hex_triplet_format,
+                        slot->saved_at.month,
+                        slot->saved_at.day,
+                        slot->saved_at.year);
                 draw_hud_sprite(get_icon_frame(0xE99E, 2), 4, y, 0x10, 0x10, 0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;

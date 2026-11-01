@@ -9,7 +9,7 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "qcopy.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 typedef struct {
     f32 x;
@@ -561,7 +561,7 @@ char *spawn_class_221_moby(
     if (spawned_moby != 0) {
         moby_pvars = ((char *)MOBY(spawned_moby)->pvars);
         *(char **)(moby_pvars + 0x10) = spawning_moby;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(&MOBY(spawned_moby)->pos, pos);
         qcopy(moby_pvars, launch_velocity);
         MOBY(spawned_moby)->rot.x = random_float_between(-3.1415927f, 3.1415927f);
         MOBY(spawned_moby)->rot.y = random_float_between(-3.1415927f, 3.1415927f);
@@ -570,8 +570,8 @@ char *spawn_class_221_moby(
         *(short *)(moby_pvars + 0x16) = ang;
         MOBY(spawned_moby)->update_dist = (*(unsigned char **)(moby_pvars + 0x10))[0x30];
         MOBY(spawned_moby)->draw_dist = *(unsigned short *)(*(char **)(moby_pvars + 0x10) + 0x32);
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 0;
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 0;
         MOBY(spawned_moby)->scale =
             *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) * 0.001f;
         *(int *)(moby_pvars + 0x1C) = spawn_options;

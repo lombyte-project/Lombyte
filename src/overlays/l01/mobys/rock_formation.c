@@ -9,6 +9,7 @@
 
 #include "rnc/math/vector.h"
 #include "rnc/overlay/l01/mobys/debris_class_choices.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 typedef struct {
     u8  pad0[0x2C];
@@ -20,7 +21,6 @@ DebrisClassChoices l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161
 };
 
 extern s32  FUN_0022da68(s32, s32, void *);
-extern int  FUN_L00_00257b90(int lo, int hi);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern struct Moby *
 spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
@@ -70,7 +70,7 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
                     0x5F787878,
                     0x181818,
                     offset_component_or_particle_size,
-                    scale_game_frames(FUN_L00_00257b90(30, 90)));
+                    scale_game_frames(random_int_between(30, 90)));
             }
         }
         for (j = 0; j < 40; j++) {
@@ -100,7 +100,7 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
                                &vel,
                                oclass_choices.oclass[random_integer_below(3)],
                                random_float_between(0.04f, 0.09f),
-                               FUN_L00_00257b90(60, 180),
+                               random_int_between(60, 180),
                                1.0f,
                                1.0f,
                                0.75f,

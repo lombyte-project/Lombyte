@@ -1,6 +1,6 @@
 /* Level 10 moby class gate_2: the second of the paired gates. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
@@ -10,17 +10,17 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/l10/mobys/gate_state.h"
 #include "rnc/game/item_state.h"
+#include "rnc/overlay/shared/mobys/spawn_type_52_particle_near_moby.h"
 
 typedef struct Moby Moby;
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern float         FUN_L04_001f1978(float);
 extern float         fast_cos(float);
 extern float         fast_sin(float);
 extern unsigned char D_001413F4[];
 extern int           D_L10_001BA950[] __asm__("D_L10_001BA950");
-extern void          activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EAD50), where it is exact; names translated to the US level program. */
 
 typedef OvlQuad Vec;
@@ -51,7 +51,6 @@ typedef struct {
 } GateMoby; /* no foreign declaration */
 
 extern struct Moby  *D_L10_0015FFD8_gp __asm__("D_L10_0015FFD8") __attribute__((sda));
-void                 activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 extern unsigned char D_0013DE4B_2EAD50[] __asm__("D_0013DD4C");
 
 void gate_2_update(GateMoby *m) __asm__("FUN_L10_002e9990");

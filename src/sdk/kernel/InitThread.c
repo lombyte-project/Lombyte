@@ -1,8 +1,9 @@
 /* InitThread i4: create the kernel patch sema and top-level thread. */
 
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 #include "rnc/sdk/top_thread.h"
+#include "rnc/sdk/kernel/topThread.h"
 
 struct ThreadParam {
     u8 pad0[4];
@@ -14,13 +15,12 @@ struct ThreadParam {
     u8    pad18[0x18];
 };
 
-extern s32  CreateSema();
-extern s32  CreateThread();
-extern s32  DeleteSema(s32 sema);
-extern s32  _StartThread(s32 id, void *arg);
-extern s32  GetThreadId();
-extern s32  ChangeThreadPriority(s32 id, s32 priority);
-extern void topThread(TopThreadQueue *queue);
+extern s32 CreateSema();
+extern s32 CreateThread();
+extern s32 DeleteSema(s32 sema);
+extern s32 _StartThread(s32 id, void *arg);
+extern s32 GetThreadId();
+extern s32 ChangeThreadPriority(s32 id, s32 priority);
 
 extern s32 top_thread_stack[] __asm__("D_00154100");
 extern s32 D_00166C00[];

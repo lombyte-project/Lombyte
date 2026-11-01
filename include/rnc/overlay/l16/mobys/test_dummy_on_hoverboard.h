@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_ON_HOVERBOARD_H
+#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_ON_HOVERBOARD_H
+
+#include "types.h"
+
+void test_dummy_on_hoverboard_update(unsigned char *) __asm__("FUN_L16_002d04a0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_ON_HOVERBOARD_H */

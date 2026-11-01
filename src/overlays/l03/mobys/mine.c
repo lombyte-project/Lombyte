@@ -1,6 +1,6 @@
 /* Level 03 moby class mine: the mine a mine_layer drops. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
@@ -8,7 +8,8 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/hero/hero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 void        handle_mine_hit(unsigned char *mine_moby) __asm__("FUN_L03_002cc828");
 extern char D_L03_00166EC0[];
@@ -39,7 +40,6 @@ extern int
 collect_mobies_in_sphere(void *, int, struct Moby *, void *, f32) __asm__("FUN_L00_001f2868");
 extern void
 send_blast_hits(struct Moby *, void *, void *, int, int, int, int, int, f32, f32, f32) __asm__("FUN_L00_0025a9f8");
-extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern int  hud_counter_update(int, int, f32) __asm__("FUN_L00_002371e0");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void mine_debris(void *, void *, int, int, f32, int, int) __asm__("FUN_L00_0026bed0");

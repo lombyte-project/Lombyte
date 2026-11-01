@@ -1,11 +1,11 @@
 /* Level 15 codebot slot moby class and its helpers. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/game/item_state.h"
 
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
@@ -63,12 +63,12 @@ void set_moby_list_visibility(int moby_list_index, int show) {
         unsigned char *moby =
             (unsigned char *)((int)l15_moby_array + ((*moby_index_entry & 0x7FFF) << 8));
         if (show) {
-            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
-            moby[0x31] = 1;
+            MOBY(moby)->collision = MOBY(moby)->pclass->collision;
+            MOBY(moby)->visible = 1;
             MOBY(moby)->flags &= 0xFFFC;
         } else {
             MOBY(moby)->collision = 0;
-            moby[0x31] = 0;
+            MOBY(moby)->visible = 0;
             MOBY(moby)->flags |= 3;
         }
         if (*moby_index_entry++ < 0)
@@ -88,7 +88,7 @@ int count_missing_or_dying_mobys_in_list(int moby_list_index) {
     do {
         unsigned char *moby =
             (unsigned char *)(moby_array_base + ((moby_index_entry[0] & 0x7FFF) << 8));
-        if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
+        if (moby == 0 || MOBY(moby)->state == 0xFE || MOBY(moby)->state == 0xFD)
             missing_or_dying_count++;
     } while ((short)*moby_index_entry++ >= 0);
     return missing_or_dying_count;

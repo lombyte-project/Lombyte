@@ -24,7 +24,7 @@ char *spawn_hit_proxy(char *owner_moby, void *position, float scale) {
         moby[0x31] = 1;
         moby[0x20] = 0;
         *(char **)(spawned_moby_vars + 0x60) = owner_moby;
-        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * scale;
+        MOBY(moby)->scale = MOBY(moby)->pclass->scale * scale;
         qcopy(moby + 0x10, position);
         if (owner_moby != 0) {
             *(int *)(spawned_moby_vars + 0x64) = *(short *)(owner_moby + 0xA6);

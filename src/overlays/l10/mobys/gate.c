@@ -1,11 +1,11 @@
 /* Level 10 moby class gate. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/globals.h"
 #include "rnc/game/item_state.h"
 

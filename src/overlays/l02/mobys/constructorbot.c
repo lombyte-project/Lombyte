@@ -10,7 +10,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "sda.h"
 #include "qcopy.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/l02/mobys/constructorbot_globals.h"
 
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");

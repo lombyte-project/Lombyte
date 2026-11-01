@@ -4,6 +4,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 
 extern s32 FUN_0022da68(s32, s32, void *);
 
@@ -34,7 +35,6 @@ typedef struct {
 extern s32   D_L01_0015F580;
 extern void  spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
-extern void  spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 
 void green_mushroom_update(SparkMoby *m) __asm__("FUN_L01_002fd9a0");
 

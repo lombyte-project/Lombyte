@@ -1,9 +1,9 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 #include "sda.h"
+#include "rnc/sdk/libc/stdlib/__errno.h"
 
 extern void *EndOfHeap(void);
-extern int  *__errno(void) __asm__("func_001138A8");
 /* Current program break, raised by sbrk. */
 extern char *heap_break __asm__("D_0012FBF4") NOT_SDA;
 

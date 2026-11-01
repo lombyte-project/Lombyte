@@ -9,6 +9,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -18,11 +20,9 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 /* raise each listed moby's position z by a fixed amount and notify it */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC4C0), where it is exact; names translated to the US level program. */
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float FUN_00213f38(float *, float *, float, float, float, float);
 
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 /* Sparks thrown off the swinging hazard while the camera is near it. */
 extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -61,6 +61,25 @@ extern int moby_pair_phase_two_duration_max_frames_gp __asm__("D_L06_00161F58")
 extern float moby_pair_reset_enabled_gp __asm__("D_L06_00161F5C") __attribute__((sda));
 void         split_door_update(char *moby) __asm__("FUN_L06_002fbfb0");
 
+typedef struct SplitDoorVars {
+    u8    pad_0[0x4];
+    s32   unk4;
+    u8    unk8;
+    u8    pad_9[0x3];
+    u8    unkC;
+    u8    pad_D[0x3];
+    u8    unk10;
+    u8    pad_11[0xF];
+    f32   unk20[4];
+    f32   unk30[4];
+    char *unk40;
+    u8    unk44;
+    u8    pad_45[0x3];
+    u8    unk48;
+    u8    pad_49[0x3];
+    s32   timer_4C;
+} SplitDoorVars;
+
 /* Moby class 1054 */
 void split_door_update(char *moby) {
     enum {
@@ -70,97 +89,95 @@ void split_door_update(char *moby) {
         ANIMATE_PAIR_WITH_TIMED_PHASES = 4,
         WAIT_FOR_RESET = 5
     };
-    char *pair_transform_vars = ((char *)MOBY(moby)->pvars);
-    char *child;
-    float position_offset[4];
-    float parent_distance, child_distance;
-    float phase_a, phase_b;
-    float target_delta;
-    float target_a, target_b, target_rot_a, target_rot_b;
+    SplitDoorVars *pair_transform_vars = (SplitDoorVars *)MOBY(moby)->pvars;
+    char          *child;
+    float          position_offset[4];
+    float          parent_distance, child_distance;
+    float          phase_a, phase_b;
+    float          target_delta;
+    float          target_a, target_b, target_rot_a, target_rot_b;
     float acceleration, max_speed, damping, rotation_acceleration, rotation_speed, rotation_damping;
     int   next_timer;
     unsigned char next_phase;
     int           phase;
 
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_CHILD_AND_TRANSFORMS:
-        qcopy(pair_transform_vars + 0x10, moby + 0x10);
-        qcopy(pair_transform_vars + 0x20, moby + 0x40);
-        qcopy(pair_transform_vars + 0x30, moby + 0xe0);
-        *(char **)(pair_transform_vars + 0x40) = (char *)create_moby(0x41f);
-        *(unsigned short *)(*(char **)(pair_transform_vars + 0x40) + 0x32) = 0x40;
-        (*(char **)(pair_transform_vars + 0x40))[0x31] = 1;
-        *(long *)(*(char **)(pair_transform_vars + 0x40) + 0x38) = ((long)MOBY(moby)->spawn_frame);
-        *(unsigned short *)(*(char **)(pair_transform_vars + 0x40) + 0x34) = MOBY(moby)->flags;
-        child = *(char **)(pair_transform_vars + 0x40) + 0x10;
+        qcopy(&pair_transform_vars->unk10, moby + 0x10);
+        qcopy(pair_transform_vars->unk20, moby + 0x40);
+        qcopy(pair_transform_vars->unk30, moby + 0xe0);
+        pair_transform_vars->unk40 = (char *)create_moby(0x41f);
+        *(unsigned short *)(pair_transform_vars->unk40 + 0x32) = 0x40;
+        (pair_transform_vars->unk40)[0x31] = 1;
+        *(long *)(pair_transform_vars->unk40 + 0x38) = ((long)MOBY(moby)->spawn_frame);
+        *(unsigned short *)(pair_transform_vars->unk40 + 0x34) = MOBY(moby)->flags;
+        child = pair_transform_vars->unk40 + 0x10;
         qcopy(child, moby + 0x10);
         qcopy(child + 0x30, moby + 0x40);
         if (*(int *)pair_transform_vars >= 0) {
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
             return;
         }
-        if (*(int *)(pair_transform_vars + 4) == 2) {
-            moby[0x20] = 2;
+        if (pair_transform_vars->unk4 == 2) {
+            MOBY(moby)->state = 2;
             return;
         }
         fast_vec_normalize(
-            position_offset, pair_transform_vars + 0x30, moby_pair_parent_fixed_distance_gp);
-        fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
+            position_offset, pair_transform_vars->unk30, moby_pair_parent_fixed_distance_gp);
+        fast_vec_add(moby + 0x10, &pair_transform_vars->unk10, position_offset);
         fast_vec_normalize(
-            position_offset, pair_transform_vars + 0x30, -moby_pair_child_fixed_distance_gp);
-        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
-                     pair_transform_vars + 0x10,
-                     position_offset);
-        update_entity(*(char **)(pair_transform_vars + 0x40));
-        moby[0x20] = 5;
+            position_offset, pair_transform_vars->unk30, -moby_pair_child_fixed_distance_gp);
+        fast_vec_add(
+            pair_transform_vars->unk40 + 0x10, &pair_transform_vars->unk10, position_offset);
+        update_entity(pair_transform_vars->unk40);
+        MOBY(moby)->state = 5;
         return;
     case WAIT_FOR_HERO_IN_CLIP_VOLUME:
         if (!is_point_inside_clip_volume(&hero.motion.pos, *(int *)pair_transform_vars))
             return;
-        if (*(int *)(pair_transform_vars + 4) == 1) {
-            moby[0x20] = 4;
-            *(int *)(pair_transform_vars + 0x4c) = scale_game_frames(0x14);
-        } else if ((unsigned char)moby[0x21] != 0xff) {
-            set_moby_list_state((unsigned char)moby[0x21], 3);
+        if (pair_transform_vars->unk4 == 1) {
+            MOBY(moby)->state = 4;
+            pair_transform_vars->timer_4C = scale_game_frames(0x14);
+        } else if ((unsigned char)MOBY(moby)->group != 0xff) {
+            set_moby_list_state((unsigned char)MOBY(moby)->group, 3);
         } else {
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
         }
-        allocate_voice_for_target_entry(0, 0, (int)*(char **)(pair_transform_vars + 0x40));
+        allocate_voice_for_target_entry(0, 0, (int)pair_transform_vars->unk40);
         return;
     case MOVE_PAIR_TO_FIXED_OFFSETS:
-        target_delta = fast_vec_dist(moby + 0x10, pair_transform_vars + 0x10);
-        child = *(char **)(pair_transform_vars + 0x40);
+        target_delta = fast_vec_dist(moby + 0x10, &pair_transform_vars->unk10);
+        child = pair_transform_vars->unk40;
         parent_distance = target_delta;
-        child_distance = fast_vec_dist(child + 0x10, pair_transform_vars + 0x10);
-        FUN_00213f38(&parent_distance,
-                     &((float *)pair_transform_vars)[2],
-                     moby_pair_parent_fixed_distance_gp,
-                     frame_time_sq * 10.0f,
-                     frame_time_sq * 20.0f,
-                     frame_time * 5.0f);
-        FUN_00213f38(&child_distance,
-                     &((float *)pair_transform_vars)[0x11],
-                     moby_pair_child_fixed_distance_gp,
-                     frame_time_sq * 10.0f,
-                     frame_time_sq * 20.0f,
-                     frame_time * 5.0f);
-        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, parent_distance);
-        fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
-        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -child_distance);
-        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
-                     pair_transform_vars + 0x10,
-                     position_offset);
-        update_entity(*(char **)(pair_transform_vars + 0x40));
+        child_distance = fast_vec_dist(child + 0x10, &pair_transform_vars->unk10);
+        advance_accelerated_scalar(&parent_distance,
+                                   &((float *)pair_transform_vars)[2],
+                                   moby_pair_parent_fixed_distance_gp,
+                                   frame_time_sq * 10.0f,
+                                   frame_time_sq * 20.0f,
+                                   frame_time * 5.0f);
+        advance_accelerated_scalar(&child_distance,
+                                   &((float *)pair_transform_vars)[0x11],
+                                   moby_pair_child_fixed_distance_gp,
+                                   frame_time_sq * 10.0f,
+                                   frame_time_sq * 20.0f,
+                                   frame_time * 5.0f);
+        fast_vec_normalize(position_offset, pair_transform_vars->unk30, parent_distance);
+        fast_vec_add(moby + 0x10, &pair_transform_vars->unk10, position_offset);
+        fast_vec_normalize(position_offset, pair_transform_vars->unk30, -child_distance);
+        fast_vec_add(
+            pair_transform_vars->unk40 + 0x10, &pair_transform_vars->unk10, position_offset);
+        update_entity(pair_transform_vars->unk40);
         if (absolute_float(parent_distance - moby_pair_parent_fixed_distance_gp) < 0.01f &&
             absolute_float(child_distance - moby_pair_child_fixed_distance_gp) < 0.01f)
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         return;
     case ANIMATE_PAIR_WITH_TIMED_PHASES:
-        target_delta = fast_vec_dist(moby + 0x10, pair_transform_vars + 0x10);
-        child = *(char **)(pair_transform_vars + 0x40);
+        target_delta = fast_vec_dist(moby + 0x10, &pair_transform_vars->unk10);
+        child = pair_transform_vars->unk40;
         phase_a = target_delta;
-        phase_b = fast_vec_dist(child + 0x10, pair_transform_vars + 0x10);
-        phase = (unsigned char)moby[0xbc];
+        phase_b = fast_vec_dist(child + 0x10, &pair_transform_vars->unk10);
+        phase = (unsigned char)MOBY(moby)->command;
         if (phase == 1)
             goto phase_one;
         if (phase < 2)
@@ -184,7 +201,7 @@ void split_door_update(char *moby) {
         goto phase_join;
     phase_one:
         target_rot_a = MOBY(moby)->rot.y;
-        target_rot_b = *(float *)(*(char **)(pair_transform_vars + 0x40) + 0x44);
+        target_rot_b = *(float *)(pair_transform_vars->unk40 + 0x44);
         target_a = phase_a;
         target_b = phase_b;
         acceleration = moby_pair_phase_distance_acceleration_gp;
@@ -214,61 +231,60 @@ void split_door_update(char *moby) {
             random_float_between((float)moby_pair_phase_one_duration_min_frames_gp,
                                  (float)moby_pair_phase_one_duration_max_frames_gp));
     phase_join:
-        FUN_00213f38(&phase_a,
-                     &((float *)pair_transform_vars)[2],
-                     target_a,
-                     acceleration * frame_time_sq,
-                     max_speed * frame_time_sq,
-                     damping * frame_time);
-        FUN_00213f38(&phase_b,
-                     &((float *)pair_transform_vars)[0x11],
-                     target_b,
-                     acceleration * frame_time_sq,
-                     max_speed * frame_time_sq,
-                     damping * frame_time);
-        FUN_00213f38((float *)&MOBY(moby)->rot.y,
-                     &((float *)pair_transform_vars)[3],
-                     target_rot_a,
-                     rotation_acceleration * DEG_TO_RAD * frame_time_sq,
-                     rotation_speed * DEG_TO_RAD * frame_time_sq,
-                     rotation_damping * DEG_TO_RAD * frame_time);
-        FUN_00213f38((float *)(*(char **)(pair_transform_vars + 0x40) + 0x44),
-                     &((float *)pair_transform_vars)[0x12],
-                     target_rot_b,
-                     rotation_acceleration * DEG_TO_RAD * frame_time_sq,
-                     rotation_speed * DEG_TO_RAD * frame_time_sq,
-                     rotation_damping * DEG_TO_RAD * frame_time);
-        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, phase_a);
-        fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
-        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -phase_b);
-        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
-                     pair_transform_vars + 0x10,
-                     position_offset);
-        update_entity(*(char **)(pair_transform_vars + 0x40));
-        if (!fast_dec_timer(pair_transform_vars + 0x4c))
+        advance_accelerated_scalar(&phase_a,
+                                   &((float *)pair_transform_vars)[2],
+                                   target_a,
+                                   acceleration * frame_time_sq,
+                                   max_speed * frame_time_sq,
+                                   damping * frame_time);
+        advance_accelerated_scalar(&phase_b,
+                                   &((float *)pair_transform_vars)[0x11],
+                                   target_b,
+                                   acceleration * frame_time_sq,
+                                   max_speed * frame_time_sq,
+                                   damping * frame_time);
+        advance_accelerated_scalar((float *)&MOBY(moby)->rot.y,
+                                   &((float *)pair_transform_vars)[3],
+                                   target_rot_a,
+                                   rotation_acceleration * DEG_TO_RAD * frame_time_sq,
+                                   rotation_speed * DEG_TO_RAD * frame_time_sq,
+                                   rotation_damping * DEG_TO_RAD * frame_time);
+        advance_accelerated_scalar((float *)(pair_transform_vars->unk40 + 0x44),
+                                   &((float *)pair_transform_vars)[0x12],
+                                   target_rot_b,
+                                   rotation_acceleration * DEG_TO_RAD * frame_time_sq,
+                                   rotation_speed * DEG_TO_RAD * frame_time_sq,
+                                   rotation_damping * DEG_TO_RAD * frame_time);
+        fast_vec_normalize(position_offset, pair_transform_vars->unk30, phase_a);
+        fast_vec_add(moby + 0x10, &pair_transform_vars->unk10, position_offset);
+        fast_vec_normalize(position_offset, pair_transform_vars->unk30, -phase_b);
+        fast_vec_add(
+            pair_transform_vars->unk40 + 0x10, &pair_transform_vars->unk10, position_offset);
+        update_entity(pair_transform_vars->unk40);
+        if (!fast_dec_timer(&pair_transform_vars->timer_4C))
             return;
-        moby[0xbc] = next_phase;
-        *(int *)(pair_transform_vars + 0x4c) = scale_game_frames(next_timer);
+        MOBY(moby)->command = next_phase;
+        pair_transform_vars->timer_4C = scale_game_frames(next_timer);
         target_delta = moby_pair_parent_phase_target_distance_gp;
         if (absolute_float(phase_a - target_delta) < 0.01f) {
             if (absolute_float(phase_b - moby_pair_child_phase_target_distance_gp) < 0.01f)
-                moby[0x20] = 5;
+                MOBY(moby)->state = 5;
         }
         return;
     case WAIT_FOR_RESET:
         if (moby_pair_reset_enabled_gp == 0.0f)
             return;
-        moby[0xbc] = 0;
-        moby[0x20] = 1;
-        qcopy(moby + 0x10, pair_transform_vars + 0x10);
-        qcopy(moby + 0x40, pair_transform_vars + 0x20);
-        child = *(char **)(pair_transform_vars + 0x40) + 0x10;
+        MOBY(moby)->command = 0;
+        MOBY(moby)->state = 1;
+        qcopy(moby + 0x10, &pair_transform_vars->unk10);
+        qcopy(moby + 0x40, pair_transform_vars->unk20);
+        child = pair_transform_vars->unk40 + 0x10;
         qcopy(child, moby + 0x10);
         qcopy(child + 0x30, moby + 0x40);
-        *(volatile float *)(pair_transform_vars + 0x48) = 0.0f;
-        *(volatile float *)(pair_transform_vars + 8) = 0.0f;
-        *(volatile float *)(pair_transform_vars + 0xc) = 0.0f;
-        *(volatile float *)(pair_transform_vars + 0x44) = 0.0f;
+        *(volatile float *)(&pair_transform_vars->unk48) = 0.0f;
+        *(volatile float *)(&pair_transform_vars->unk8) = 0.0f;
+        *(volatile float *)(&pair_transform_vars->unkC) = 0.0f;
+        *(volatile float *)(&pair_transform_vars->unk44) = 0.0f;
         return;
     }
 }

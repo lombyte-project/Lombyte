@@ -11,11 +11,10 @@
 
 extern int  FUN_0022da68(int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
-extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void shattering_prop_update(struct Moby *moby) __asm__("FUN_L17_002f5260");
 
-/* Moby class 1873 */
+/* Moby classes 1844, 1873 */
 void shattering_prop_update(struct Moby *moby) {
     enum {
         HIT_EFFECT_INITIALIZE = 0,

@@ -10,4 +10,6 @@ void initialize_eight_slot_hud_selector(void) __asm__("FUN_L00_00237ae8");
 void update_hud_item_selector_selection_and_visibility(void) __asm__("FUN_L00_00237ba0");
 void draw_hud_item_selector_panel(void) __asm__("FUN_L00_002382a0");
 
+int draw_hud_cropped_gauge_panel(char *) __asm__("FUN_L00_0023a640");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_DRAW_HUD_ITEM_SELECTOR_PANEL_H */

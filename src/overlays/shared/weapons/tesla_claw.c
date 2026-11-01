@@ -1,11 +1,11 @@
 /* Shared moby class tesla_claw: the lightning gun held by the hero, and the beam and arcs it draws. */
 
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/input/pad_state.h"
@@ -17,7 +17,13 @@
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/weapons/tesla_claw_globals.h"
 #include "qzero.h"
-#include "rnc/overlay/beam_vector.h"
+#include "rnc/overlay/shared/weapons/beam_vector.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/weapons/tesla_claw_beam.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct {
     u8  p0[0x2084];
@@ -72,19 +78,10 @@ typedef struct Aim {
     short kind;
 } Aim;
 
-extern int  get_ammo(int) __asm__("FUN_L00_00233e98");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-void        cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 void        help_request(int, int) __asm__("FUN_L00_00203908");
-extern void draw_beam_and_arc_effects(char *) __asm__("FUN_L00_002ba970");
-extern int  FUN_L00_00233db8_2b2100a(int, int) __asm__("FUN_L00_00233db8");
 extern int  FUN_L00_0023e5e0_2b2100(void *, float, float, int) __asm__("FUN_L00_0023e5e0");
 extern void FUN_L00_002b9310_2b2100(void *) __asm__("FUN_L00_002b9310");
-extern void FUN_L00_002b94d0_2b2100(void *) __asm__("FUN_L00_002b94d0");
-extern int  FUN_L00_0028d8c0_2b2100(void *, int) __asm__("FUN_L00_0028d8c0");
 
 extern int            D_0015EEA4;
 extern s32            D_0015EEA4;
@@ -525,7 +522,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                 if (fast_dec_timer_s16(&tesla_claw_vars->tick)) {
                     fast_dec_timer_s16(&tesla_claw_vars->f44);
                     fast_dec_timer_s16(&tesla_claw_vars->f46);
-                    FUN_L00_00233db8_2b2100a(-1, 1);
+                    use_ammo(-1, 1);
                     tesla_claw_vars->tick = scale_game_frames(10);
                 }
                 if (tesla_claw_vars->light == -1) {
@@ -629,7 +626,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                         &tesla_claw_vars->tip, &tesla_claw_vars->pos, &tesla_claw_vars->tip);
                 }
                 FUN_L00_002b9310_2b2100(tesla_claw_moby);
-                FUN_L00_002b94d0_2b2100(tesla_claw_moby);
+                build_beam_and_arc_points(tesla_claw_moby);
                 add_draw_callback(draw_beam_and_arc_effects, tesla_claw_moby);
             } else {
                 tesla_claw_vars->target = 0;
@@ -657,7 +654,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                 release_voice_slot(tesla_claw_vars->sound);
         }
         tesla_claw_vars->sound = -1;
-    } else if (!FUN_L00_0028d8c0_2b2100(tesla_claw_moby, tesla_claw_vars->sound)) {
+    } else if (!voice_is_playing(tesla_claw_moby, tesla_claw_vars->sound)) {
         tesla_claw_vars->sound = allocate_voice_for_target_entry(4, 4, tesla_claw_moby);
     }
     if (!tesla_claw_vars->target || tesla_claw_vars->target->state == 0xFE ||

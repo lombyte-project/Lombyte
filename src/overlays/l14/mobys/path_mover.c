@@ -1,6 +1,6 @@
 /* Level 14 path mover moby class. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/vendor/vendor_spring.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 typedef struct {
     u8  pad0[0x20];

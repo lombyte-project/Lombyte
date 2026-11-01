@@ -8,18 +8,19 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/camera/update_camera_tracking_state.h"
+#include "rnc/camera/advance_timed_camera_control.h"
+#include "rnc/camera/update_camera_blend.h"
+#include "rnc/camera/update_camera_environment_from_regions.h"
+#include "rnc/camera/update_cam.h"
 
 extern int           text_screen_active[] __asm__("D_001E6400");
 extern char          camera_shake_vectors[] __asm__("D_001870A0");
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
-extern void          advance_timed_camera_control(void) __asm__("FUN_001eda60");
 extern void          refresh_camera_control_flags(void) __asm__("func_001ED940");
-extern void          update_camera_blend(char *) __asm__("FUN_001ed2b0");
-extern void          start_camera_blend(void *) __asm__("func_001EC8A0");
+extern void          start_camera_blend(struct UpdateCam *) __asm__("func_001EC8A0");
 extern int           update_all_cameras(void) __asm__("func_001EC420");
 extern void          apply_camera_shake(void *, int) __asm__("func_001ED360");
 extern void          update_camera_underwater_flag(void) __asm__("func_001ED7F0");
-extern void          update_camera_environment_from_regions(void *) __asm__("FUN_001ee4b0");
 extern void          fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 /* Camera update, once per frame: count the frame, run the camera
    steps, then (unless the D_0018C318 freeze flag is set) take the view
@@ -32,43 +33,43 @@ void update_camera(void) __asm__("FUN_001edaa8");
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
 void update_camera(void) {
-    char *preview_camera_state;
-    char *target;
-    char *camera_shake_base;
-    float rotation_matrix[16];
+    struct PreviewCamera *camera;
+    struct UpdateCam     *target;
+    char                 *camera_shake_base;
+    float                 rotation_matrix[16];
 
     if (game_mode_macro == 5) {
         if (text_screen_active[0] != 0) {
             return;
         }
-        *(short *)cam_trans_state = 0;
-        cam_trans_state[2] = 0;
+        cam_trans_state.mode = 0;
+        cam_trans_state.kind = 0;
     }
-    preview_camera_state = (char *)&preview_camera;
-    (*(int *)(preview_camera_state + 0x398))++;
+    camera = &preview_camera;
+    camera->frame_count++;
     advance_timed_camera_control();
     refresh_camera_control_flags();
     update_camera_tracking_state();
     update_all_cameras();
-    target = *(char **)(preview_camera_state + 0x180);
-    if ((unsigned short)(*(unsigned short *)(preview_camera_state + 0x270) - 1) < 2) {
-        start_camera_blend(*(void **)(preview_camera_state + 0x184));
+    target = camera->current_camera;
+    if ((unsigned short)(*(unsigned short *)&camera->transition_mode - 1) < 2) {
+        start_camera_blend(camera->previous_camera);
     }
-    if (*(short *)(preview_camera_state + 0x270) == 3) {
-        update_camera_blend(target);
+    if (camera->transition_mode == 3) {
+        update_camera_blend((char *)target);
     } else {
-        char *st = occl_cam_state;
-        if (*(int *)(st + 0x14) != 0) {
+        struct OcclCamState *occlusion = &occl_cam_state;
+        if (occlusion->position_frozen != 0) {
             goto frozen;
         }
-        qcopy(preview_camera_state + 0x140, target + 0x30);
-        qcopy(preview_camera_state + 0x350, target);
-        qcopy(preview_camera_state + 0x360, target + 0x10);
-        qcopy(preview_camera_state + 0x370, target + 0x20);
+        qcopy(&camera->position, &target->pos);
+        qcopy(&camera->forward, &target->m0);
+        qcopy(&camera->right, &target->m1);
+        qcopy(&camera->up, &target->m2);
     }
     {
-        char *st = occl_cam_state;
-        if (*(int *)(st + 0x14) == 0) {
+        struct OcclCamState *occlusion = &occl_cam_state;
+        if (occlusion->position_frozen == 0) {
             copy_matrix_rotation(rotation_matrix, camera_rows);
             matrix_to_euler(rotation_matrix, camera_rows - 0x200);
         }

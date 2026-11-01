@@ -12,7 +12,6 @@
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6ED0), where it is exact; names translated to the US level program. */
 
 extern void  FUN_L00_00257470(void *, int, int);
-extern void  spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 extern void *FUN_L00_00263fd8(char  *src,
                               int    cls,
                               float *pos,

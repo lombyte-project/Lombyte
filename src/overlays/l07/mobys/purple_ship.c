@@ -4,8 +4,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/item_state.h"
-
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_002FD198), where it is exact; names translated to the US level program. */
 extern void func_00233AB8(void) __asm__("FUN_L07_002ba260");

@@ -1,7 +1,7 @@
 /* Path or ballistic debris (class 0x193): a piece that follows a race path until its timer ends, then flies and falls; its spawner and trail particles. */
 #include "types.h"
 #include "rnc/overlay/shared/enemies/path_or_ballistic_debris.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -17,6 +17,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern float D_0015ED60;
 extern s32   coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
@@ -190,15 +191,15 @@ unsigned char *spawn_path_or_ballistic_debris(char *debris_origin_moby, float *s
     if (spawned_moby != 0) {
         char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         float launch_vector_scratch[8];
-        pos = spawned_moby + 0x10;
-        qcopy(pos, debris_origin_moby + 0x10);
-        MOBY(spawned_moby)->rot.z = *(float *)(debris_origin_moby + 0x48);
-        spawned_moby[0x20] = mode;
-        spawned_moby[0x30] = 0xFF;
+        pos = &MOBY(spawned_moby)->pos;
+        qcopy(pos, &MOBY(debris_origin_moby)->pos);
+        MOBY(spawned_moby)->rot.z = MOBY(debris_origin_moby)->rot.z;
+        MOBY(spawned_moby)->state = mode;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         *(char **)spawned_vars = debris_origin_moby;
-        if (spawned_moby[0x20] == 0) {
+        if (MOBY(spawned_moby)->state == 0) {
             int          index;
             LevelSpline *splines;
             int         *fields = (int *)spawned_vars;
@@ -284,10 +285,7 @@ typedef struct Particle_2E17B8 {
     ParticleFade_2E17B8 fade; /* 0x20 */
 } Particle_2E17B8;
 
-char *
-spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern int   D_L14_0015F580_c __asm__("D_L14_0015F580");
-int          FUN_L00_00257b90(int lo, int hi);
 extern float func_002140F8_2E17B8(float, float) __asm__("random_float_between");
 extern int   func_002140B0_2E17B8(int) __asm__("random_integer_below");
 extern void

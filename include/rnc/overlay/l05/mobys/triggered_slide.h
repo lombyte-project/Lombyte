@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_SLIDE_H
+#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_SLIDE_H
+
+#include "types.h"
+
+void triggered_slide_update(char *) __asm__("FUN_L05_0030e508");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_SLIDE_H */

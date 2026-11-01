@@ -1,6 +1,6 @@
 /* Vendor screen drawing: inset quads, purchase panel and hologram cone. */
 #include "types.h"
-#include "rnc/overlay/vendor_menu.h"
+#include "rnc/overlay/shared/vendor/vendor_menu.h"
 #include "asm.h"
 #include "rnc/streaming/disc_table.h"
 #include "rnc/math/fast_math.h"
@@ -9,12 +9,31 @@
 #include "rnc/rendering/render_globals.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "sda.h"
 #include "rnc/rendering/texture/do_gif_paging.h"
 #include "rnc/rendering/texture/setup_gif_paging.h"
 #include "rnc/audio/streaming/start_audio_stream_read.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/mobys/init_moby_class_dists.h"
+#include "rnc/mobys/init_moby_instance.h"
+#include "rnc/mobys/restore_moby_class_dists.h"
+#include "rnc/mobys/stash_moby_class_dists.h"
+#include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
+#include "rnc/overlay/shared/vendor/draw_vendor_purchase_text.h"
+#include "rnc/rendering/debug/draw_debug_profiler.h"
+#include "rnc/rendering/frame/begin_draw_frame.h"
+#include "rnc/rendering/frame/reset_gs_registers.h"
+#include "rnc/rendering/frame/swap_render_buffer_chain.h"
+#include "rnc/rendering/mobys/draw_mobys_clean_up.h"
+#include "rnc/rendering/mobys/draw_mobys_setup.h"
+#include "rnc/rendering/mobys/patch_moby_gifs.h"
+#include "rnc/rendering/packets/append_gif_transfer_packet.h"
+#include "rnc/rendering/view/update_camera_view_matrices.h"
+#include "rnc/ui/hud/update_hud.h"
+#include "rnc/ui/vendor/configure_capture_target.h"
+#include "rnc/ui/vendor/draw_centered_capture_background.h"
+#include "rnc/ui/vendor/render_vendor_capture_texture_overlays_pass.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A0C20), where it is exact; names translated to the US level program. */
 
@@ -102,7 +121,7 @@ void draw_vendor_inset_quads(char *vertex_batch) {
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     int a, b, c;
@@ -111,12 +130,7 @@ typedef struct {
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 void        FUN_0020cd48_29fcd0(void *, int, void *, void *) __asm__("FUN_0020cd48");
 void project_graphics_bounds(void *, void *, int *, int *, int *, int *) __asm__("FUN_00237a78");
-void configure_capture_target(int, int, float) __asm__("FUN_00239690");
-void draw_centered_capture_background(int, int) __asm__("FUN_001fb740");
 void FUN_00233980_29fcd0(int, long) __asm__("FUN_00233980");
-void draw_vendor_purchase_text(void *, int, int) __asm__("FUN_L00_0029ead8");
-void render_vendor_capture_texture_overlays_pass(int, float, float) __asm__("FUN_00239328");
-void begin_draw_frame(void) __asm__("FUN_001f7978");
 void draw_moby_list(void *, int) __asm__("FUN_0020d330");
 void draw_textured_quad(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
 
@@ -269,7 +283,7 @@ void draw_vendor_hologram_cone(void) {
     }
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qzero.h"
 
 typedef struct {
@@ -297,35 +311,19 @@ extern u128         camera_lateral_axis[] __asm__("D_L00_00166FE0");
 extern u128         D_L00_00166FF0[];
 extern u128         D_L00_00166FD0[];
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern A02b0_tab D_L00_001C8FF0[];
 
-extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
-extern void draw_debug_profiler(void) __asm__("FUN_001f39d0");
-extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern s32  sce_gs_sync_v(s32) __asm__("FUN_00122298");
-extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
-extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void capture_draw_buffer(s32) __asm__("FUN_L00_001f99c0");
-extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
-extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
-extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern void append_draw_buffer_upload_packets(s32, u32, u32) __asm__("FUN_L00_002a0fc8");
-extern void reset_gs_registers(void) __asm__("FUN_001f3868");
-extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
-extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
-extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
 extern void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
 extern void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
 extern void render_vendor_capture_pass_sequence(s32) __asm__("FUN_00239780");
 extern void draw_vendor_purchase_panel(void *) __asm__("FUN_L00_0029fcd0");
 extern void FUN_00233980(s32, s64);
-extern void update_hud(void) __asm__("FUN_001ff780");
-extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
-extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
-extern void patch_moby_gifs(void) __asm__("FUN_0020cef8");
 
 void draw_vendor_screen(void) __asm__("FUN_L00_002a02b0");
 

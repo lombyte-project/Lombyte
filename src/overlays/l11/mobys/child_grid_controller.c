@@ -15,7 +15,7 @@
 
 extern float D_L11_0015F3FC;
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void

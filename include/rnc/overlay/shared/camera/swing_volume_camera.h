@@ -10,4 +10,8 @@ typedef struct {
     void *params; /* 0x1C: SwingCameraParams or AimCameraParams */
 } CameraDescriptor;
 
+struct UpdateCam;
+
+s32 volume_camera_swing_check(struct UpdateCam *) __asm__("FUN_L00_002ed230");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_SWING_VOLUME_CAMERA_H */

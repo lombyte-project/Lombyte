@@ -1,12 +1,15 @@
 #include "types.h"
 #include "rnc/rendering/effects/space_effect_tables.h"
 #include "rnc/globals.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/rpc/snd_hold_command_batches.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
+#include "rnc/rendering/frame/callbacks/noop_callback_h.h"
+#include "rnc/rendering/frame/callbacks/noop_callback_i.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 typedef union {
     u128 quadword;
@@ -140,8 +143,6 @@ extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void
 snd_play_sound_vol_pan_pmpb(s32, s32, s32, s32, s32, s32, s32, void *) __asm__("func_0012E308");
 extern void snd_reset_state_and_flush_commands(void) __asm__("func_0012EB00");
-extern void noop_callback_h(void) __asm__("func_001E9428");
-extern void noop_callback_i(void) __asm__("func_001E9430");
 extern void update_view_context(void) __asm__("func_001F2D98");
 extern s32  scale_game_frames(s32) __asm__("func_001F96F8");
 extern u32  fast_mem_copy(void *, void *, s32) __asm__("func_001F98D0");
@@ -152,7 +153,6 @@ extern void update_moby_animation_state(LevelRenderObject *) __asm__("func_0020C
 extern void build_moby_bone_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
 extern void refresh_moby_spatial_bounds(LevelRenderObject *) __asm__("func_0020DEF8");
 extern void build_object_rotation_matrix(void) __asm__("func_0022DE10");
-extern s32  rand(void);
 
 void update_level_gameplay_frame(void) __asm__("FUN_0022eaa8");
 
@@ -226,7 +226,7 @@ void update_level_gameplay_frame(void) {
         }
         if (level_render_state.state < 2) {
             if (level_render_state.state == 0) {
-                mode_advance = (rand() >> 16) % 3 + 1;
+                mode_advance = (RandomNext() >> 16) % 3 + 1;
                 level_render_state.mode = (level_render_state.mode + mode_advance) & 3;
             } else {
                 level_render_state.mode = 4;

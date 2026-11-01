@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_H
+#define LOMBYTE_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_H
+
+#include "types.h"
+
+void fighter_jet_update() __asm__("FUN_L17_002ed018");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_H */

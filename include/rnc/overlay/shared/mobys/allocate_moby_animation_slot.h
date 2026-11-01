@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ALLOCATE_MOBY_ANIMATION_SLOT_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ALLOCATE_MOBY_ANIMATION_SLOT_H
+
+#include "types.h"
+
+void offset_moby_class_point_pairs(unsigned char *, int, int) __asm__("FUN_L00_0024efb0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ALLOCATE_MOBY_ANIMATION_SLOT_H */

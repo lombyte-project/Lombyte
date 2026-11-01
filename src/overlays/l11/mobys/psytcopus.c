@@ -70,7 +70,7 @@ struct PokiPathVars {
 extern struct Moby *D_001413D0 NOT_SDA;
 extern char                    D_L11_001677C0[];
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 #include "rnc/overlay/l11/mobys/psytcopus_globals.h"
 

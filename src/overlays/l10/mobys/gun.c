@@ -1,6 +1,6 @@
 /* Level 10 moby class gun. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -11,6 +11,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
+#include "rnc/overlay/shared/weapons/turret_shot.h"
 
 typedef struct Moby Moby;
 extern struct Moby *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
@@ -30,7 +31,6 @@ typedef struct {
 extern struct Moby *D_L10_0015FFD8_8ab0 __asm__("D_L10_0015FFD8") __attribute__((sda));
 extern int          D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern float        FUN_L00_00258110(float *, float, float, float, float, float);
-extern struct Moby *spawn_turret_shot(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
 
 void gun_update(struct Moby *moby) __asm__("FUN_L10_002e8ab0");
 

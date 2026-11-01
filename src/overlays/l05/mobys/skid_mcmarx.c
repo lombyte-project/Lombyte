@@ -1,6 +1,6 @@
 /* Level 05 moby class skid_mcmarx: the hoverboard racer, its path and jump animations. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -8,6 +8,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/add_moby_frames_for_group_proximity.h"
 
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
@@ -54,7 +59,6 @@ void copy_racer_path_node(char *moby, int path_node_index, float *output_path_no
 }
 
 extern int   offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
@@ -139,25 +143,40 @@ void advance_racer_path_node(char *patrol_moby) {
 
 void start_racer_branch_jump(char *moby) __asm__("FUN_L05_00307358");
 
+typedef struct SkidMcmarxVars {
+    u8    pad_0[0x210];
+    f32   unk210[4];
+    s32   path_220;
+    u8    pad_224[0x20];
+    char *unk244;
+    u8    pad_248[0x4];
+    f32   unk24C;
+    u8    pad_250[0x8];
+    s16   unk258;
+    u8    pad_25A[0x12];
+    s32   unk26C;
+    u8    pad_270[0xC];
+    s32   unk27C;
+} SkidMcmarxVars;
+
 void start_racer_branch_jump(char *moby) {
-    char *moby_data = ((char *)MOBY(moby)->pvars);
-    char *active_path = *(char **)(moby_data + 0x244);
-    int   path_node_index;
-    int   path_node_byte_offset;
-    if (active_path != ((char *)l05_paths[*(int *)(moby_data + 0x220)])) {
-        if (*(float *)(moby_data + 0x24C) <= 0.0f) {
-            path_node_index = *(short *)(moby_data + 0x258);
+    SkidMcmarxVars *moby_data = (SkidMcmarxVars *)MOBY(moby)->pvars;
+    char           *active_path = moby_data->unk244;
+    int             path_node_index;
+    int             path_node_byte_offset;
+    if (active_path != ((char *)l05_paths[moby_data->path_220])) {
+        if (moby_data->unk24C <= 0.0f) {
+            path_node_index = moby_data->unk258;
             path_node_byte_offset = path_node_index * 16;
             if (*(float *)(active_path + path_node_byte_offset + 0x1C) == 1.0f) {
                 while (*(float *)(active_path + path_node_byte_offset + 0x1C) != 2.0f) {
                     path_node_index = offset_path_index(active_path, path_node_index, 1, 1);
-                    active_path = *(char **)(moby_data + 0x244);
+                    active_path = moby_data->unk244;
                     path_node_byte_offset = path_node_index * 16;
                 }
-                *(int *)(moby_data + 0x27C) = path_node_index;
-                qcopy(moby_data + 0x210,
-                      *(char **)(moby_data + 0x244) + path_node_index * 16 + 0x10);
-                *(int *)(moby_data + 0x26C) = 1;
+                moby_data->unk27C = path_node_index;
+                qcopy(moby_data->unk210, moby_data->unk244 + path_node_index * 16 + 0x10);
+                moby_data->unk26C = 1;
             }
         }
     }
@@ -214,7 +233,6 @@ void blend_racer_and_child_animations(char *moby,
 }
 
 extern int          scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int          random_int_between(int, int) __asm__("FUN_L00_00257b90");
 typedef struct Moby Moby;
 
 /* Same routine as FUN_L16_002d0058 without the pitch step: times the leap animation to the
@@ -233,8 +251,6 @@ struct LeapVars {
     s16          sequence; /* 0x272 */
 };
 
-extern int
-solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern float FUN_0020c9e0(struct Moby *);
 
 void update_racer_jump_animations(struct Moby *moby) __asm__("FUN_L05_00307570");
@@ -312,8 +328,6 @@ extern void  fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void  fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-float        absolute_float(float input) __asm__("func_001F99C0");
 extern char  D_L05_001671C0[];
 extern float fast_vec_dist(void *, void *);
 extern void
@@ -391,7 +405,6 @@ extern int   D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
 extern int   D_L05_00178300[];
 extern int   is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern void  copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
-extern void  add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 void         advance_racer_path_node(char *obj) __asm__("FUN_L05_00306e10");
 void         FUN_L05_00307570_c(struct Moby *m) __asm__("FUN_L05_00307570");
 extern char  D_001413DC[];

@@ -5,9 +5,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/level_labels.h"
-
-extern int FUN_L00_00257b90(int lo, int hi);
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/vendor/draw_vendor_purchase_text.h"
 
 extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 
@@ -29,7 +29,6 @@ extern int  collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int  allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int  tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern void FUN_L00_0026f548(void *, void *, int, int);
-extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
 
 /* Per-frame update of a falling debris moby: moves it, bursts into particles when it hits the ground, and removes it when its timer runs out. */
 void falling_splash_moby_update(struct Moby *moby) __asm__("FUN_L01_002ffdc0");
@@ -50,8 +49,7 @@ void falling_splash_moby_update(struct Moby *moby) {
             if (*(int *)(falling_splash_vars + 0x18) == 0) {
                 allocate_voice_for_target_entry(0, 0, (int)moby);
             }
-            FUN_L00_002a3ec8(
-                D_L01_001612D0, pool_draw_count, 1, moby->pos.x, moby->pos.y, 0.5f, -0.35f);
+            pool_splash(D_L01_001612D0, pool_draw_count, 1, moby->pos.x, moby->pos.y, 0.5f, -0.35f);
             {
                 float pos_unit = frame_time;
                 float pos_unit2 = frame_time_sq;
@@ -76,7 +74,7 @@ void falling_splash_moby_update(struct Moby *moby) {
                 particle_vel[1] = fast_sin(particle_angle) * horizontal_velocity_magnitude;
                 particle_vel[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
                 {
-                    int lifetime = FUN_L00_00257b90(0x5A, 0x78);
+                    int lifetime = random_int_between(0x5A, 0x78);
                     FUN_L00_0026f548(effect_pos, particle_vel, random_integer_below(2), lifetime);
                 }
             }

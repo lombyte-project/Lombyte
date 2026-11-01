@@ -4,6 +4,8 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/mobys/prune_moby_references.h"
+#include "rnc/rendering/packets/append_dma_tag.h"
 
 struct Globals_0016045C {
     u8  pad_0[0x4];
@@ -16,7 +18,6 @@ struct Globals_0016045C {
 
 extern struct Globals_0016045C *level_sky_effect_data __asm__("D_0016045C");
 extern s32                      D_0018A2E8[];
-extern s32                      append_dma_tag();
 extern s32                      fill_transfer_words() __asm__("func_001F97E8");
 extern s32                      FlushCache();
 extern s32                      transition_draw_sky() __asm__("func_001E9AB8");
@@ -33,7 +34,6 @@ extern s32                      draw_textured_quad() __asm__("func_001F5450");
 extern s32                      append_gif_transfer_packet() __asm__("func_001FB368");
 extern s32                      aa_blur_pass() __asm__("func_001FB680");
 extern s32                      draw_dialog_text() __asm__("func_001FBC50");
-extern s32                      prune_moby_references() __asm__("FUN_0020cc60");
 extern s32                      patch_moby_gifs() __asm__("func_0020CEF8");
 extern s32                      draw_mobys() __asm__("func_0020D460");
 extern void                     part_proc() __asm__("func_00217C18");

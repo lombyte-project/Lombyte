@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_GRAPH_SCE_GSZBUFADDR_H
+#define LOMBYTE_RNC_SDK_GRAPH_SCE_GSZBUFADDR_H
+
+#include "types.h"
+
+s16 sceGszbufaddr(s16, s16, s16);
+
+#endif /* LOMBYTE_RNC_SDK_GRAPH_SCE_GSZBUFADDR_H */

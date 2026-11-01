@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_THRUSTER_PACK_LOCK_GREEN_H
+#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_THRUSTER_PACK_LOCK_GREEN_H
+
+#include "types.h"
+
+void thruster_pack_lock_green_update(char *) __asm__("FUN_L18_002d6600");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_THRUSTER_PACK_LOCK_GREEN_H */

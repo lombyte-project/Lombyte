@@ -1,6 +1,6 @@
 /* Level 11 moby class energy_sphere (class 0x511): spawning, moving and timing the sphere, its particles and sparks. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -55,7 +55,7 @@ void energy_sphere_update(unsigned char *moby) {
     float  previous_position[4];
     float *vp;
     FUN_L11_00319028_c((char *)moby);
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE:
         if (fast_dec_timer(energy_sphere_private_vars + 0x20)) {
             float *scale_approach_pointer = ((float *)MOBY(moby)->pclass);

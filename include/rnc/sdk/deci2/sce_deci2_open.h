@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_OPEN_H
+#define LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_OPEN_H
+
+#include "types.h"
+
+s32 sceDeci2Open();
+
+#endif /* LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_OPEN_H */
