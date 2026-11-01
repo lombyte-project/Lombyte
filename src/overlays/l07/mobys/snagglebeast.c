@@ -766,6 +766,9 @@ int start_snagglebeast_turn_toward_target(unsigned char    *moby,
                                           int               resume_animation,
 
                                           int use_fixed_target_position) {
+    enum {
+        SNAGGLEBEAST_TURN_TOWARD_TARGET = 7
+    };
     float target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                         target_position[1] - MOBY(moby)->pos.y);
     if (moby_vars->turn_start_angle <
@@ -788,7 +791,7 @@ int start_snagglebeast_turn_toward_target(unsigned char    *moby,
                 blend_moby_animation(moby, 0xE, r, random_int_between(0xF, 0x14));
             }
         }
-        MOBY(moby)->state = 7;
+        MOBY(moby)->state = SNAGGLEBEAST_TURN_TOWARD_TARGET;
         return 1;
     }
     return 0;
