@@ -33,7 +33,7 @@ void hoverboard_ring_update(char *moby) {
     case HOVERBOARD_RING_STATE_INIT:
         ((unsigned char *)moby)[0x30] = 0x80;
         MOBY(moby)->flags |= 0x41;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = HOVERBOARD_RING_STATE_ACTIVE;
         break;
     case HOVERBOARD_RING_STATE_ACTIVE: {
         float bounding_sphere[4];
