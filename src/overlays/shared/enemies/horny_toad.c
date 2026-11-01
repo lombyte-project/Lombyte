@@ -643,7 +643,7 @@ int process_suck_cannon_suction_and_update_moby_state(char *moby) {
         if (MOBY(moby)->state == MOBY_STATE_SUCK_CANNON_ACTIVE)
             MOBY(moby)->state = 0x5;
     } else {
-        MOBY(moby)->state = 0x9;
+        MOBY(moby)->state = MOBY_STATE_SUCK_CANNON_ACTIVE;
     }
     return suction_result;
 }
