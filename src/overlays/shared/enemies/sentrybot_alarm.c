@@ -58,6 +58,9 @@ int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
     enum {
         GROUP_MOBY_STATE_INACTIVE = 1
     };
+    enum {
+        GROUP_MOBY_STATE_ACTIVATING = 2
+    };
     short       *group_moby_entry = (short *)D_L15_001ABE40[moby_group_index];
     struct Hero *hero_data = &hero;
     do {
@@ -66,7 +69,7 @@ int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
         unsigned char state = MOBY(listed_moby)->state;
         if (state == GROUP_MOBY_STATE_INACTIVE) {
             char *activated_moby_data;
-            MOBY(listed_moby)->state = 2;
+            MOBY(listed_moby)->state = GROUP_MOBY_STATE_ACTIVATING;
             if (MOBY(listed_moby)->prev_seq != 0)
                 blend_moby_animation(listed_moby, 0, 0, 0);
             MOBY(listed_moby)->flags |= 1;
