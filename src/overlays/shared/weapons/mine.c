@@ -403,6 +403,9 @@ s32              FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 
 unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
+    enum {
+        MINE_STATE_OWNER_ATTACHED = 0
+    };
     unsigned char *mine_moby = create_moby(0x4A);
     if (mine_moby) {
         MineVars *mine_vars = (MineVars *)MOBY(mine_moby)->pvars;
@@ -410,7 +413,7 @@ unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
         MOBY(mine_moby)->draw_dist = 0x7F;
         MOBY(mine_moby)->visible = 1;
         MOBY(mine_moby)->scale = MOBY(mine_moby)->scale * 0.5f;
-        MOBY(mine_moby)->state = 0;
+        MOBY(mine_moby)->state = MINE_STATE_OWNER_ATTACHED;
         mine_vars->unk30 = mine_owner_moby;
         mine_vars->unk36 = 0;
         mine_vars->unk78 = 0;
