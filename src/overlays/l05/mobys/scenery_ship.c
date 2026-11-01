@@ -387,8 +387,8 @@ typedef struct {
     u64   flags;
 } L05GlowPacket;
 
-int                  D_L05_001613F0 = 0;
-int                  D_L05_001613F4 = 0;
+int                  l05_scenery_ship_trail_callback_disabled __asm__("D_L05_001613F0") = 0;
+int                  l05_scenery_ship_trail_ribbon_draw_disabled __asm__("D_L05_001613F4") = 0;
 int                  D_L05_001613F8 = 0;
 int                  D_L05_001613FC = 2;
 int                  D_L05_00161400 = 0;
@@ -426,7 +426,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
     u64            texture;
     L05GlowPacket *glow_packet;
 
-    if (D_L05_001613F0 != 0)
+    if (l05_scenery_ship_trail_callback_disabled != 0)
         return;
     if (l05_scenery_ship_extended_trail_selector != 0)
         D_L05_001613E0 = 16.0f;
@@ -474,7 +474,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
                     trail_segment_start_index =
                         (*(short *)(scenery_ship_vars + 0x322) - frame + 15) & 15;
                     for (ribbon = 0; ribbon < 3; ribbon++) {
-                        if (D_L05_001613F4 == 0) {
+                        if (l05_scenery_ship_trail_ribbon_draw_disabled == 0) {
                             points = scenery_ship_vars + (ribbon * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
                                 index = (trail_segment_start_index + (k >> 1)) & 15;
