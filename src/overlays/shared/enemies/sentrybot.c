@@ -1225,6 +1225,11 @@ int begin_sentrybot_turn_toward_heading(
     int            next_animation,
 
     float angle) {
+    enum {
+        SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA = 6,
+        SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
+        SENTRYBOT_TURN_AROUND = 8
+    };
     float heading_delta = -fast_subtract_rotations(MOBY(moby)->rot.z, angle);
     float stored_heading_delta;
     int   turn_required = 1;
@@ -1235,7 +1240,7 @@ int begin_sentrybot_turn_toward_heading(
     moby_data->unk15C = next_state;
     moby_data->unk15D = next_animation;
     if (heading_delta > 2.0943952f || heading_delta < -2.0943952f) {
-        MOBY(moby)->state = 8;
+        MOBY(moby)->state = SENTRYBOT_TURN_AROUND;
         stored_heading_delta = moby_data->turn_delta;
         if (stored_heading_delta > 0.0f) {
             moby_data->turn_delta = stored_heading_delta + -6.2831855f;
@@ -1245,13 +1250,13 @@ int begin_sentrybot_turn_toward_heading(
         }
 
     } else if (heading_delta < -0.7853982f) {
-        MOBY(moby)->state = 6;
+        MOBY(moby)->state = SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA;
         if (MOBY(moby)->prev_seq != 0xA) {
             blend_moby_animation(moby, 0xA, 0, scale_game_frames(10));
         }
 
     } else if (heading_delta > 0.7853982f) {
-        MOBY(moby)->state = 7;
+        MOBY(moby)->state = SENTRYBOT_TURN_POSITIVE_HEADING_DELTA;
         if (MOBY(moby)->prev_seq != 0xB) {
             blend_moby_animation(moby, 0xB, 0, scale_game_frames(10));
         }
