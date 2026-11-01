@@ -6,8 +6,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/menus/menu_screen.h"
-
-extern u8 D_001996D0[];
+#include "rnc/ui/help/help_state.h"
 
 extern s32 help_msgs __asm__("D_0015F6A0");
 
@@ -15,8 +14,8 @@ extern s32
 start_audio_stream_read(s32 read_destination, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 
 static inline int help_text_count(void) {
-    char *help_state = D_001996D0;
-    return *(int *)(help_state + 0x2C);
+    HelpState *state = &help_state;
+    return state->count;
 }
 
 int update_menu_help_text_load(struct MenuScreen *menu) __asm__("FUN_0021d338");
@@ -47,15 +46,15 @@ int update_menu_help_text_load(struct MenuScreen *menu) {
             int               *language_entries = (int *)((char *)archive + archive[game_language]);
             int                entry_count = *language_entries++;
             int                entry_bytes = *language_entries++;
-            char              *help_state;
+            HelpState         *state;
             int               *text_entries;
             int                i;
 
             copy_memory_aligned(archive, language_entries, ((entry_bytes + 3) & ~3) - 8);
-            help_state = D_001996D0;
+            state = &help_state;
             menu->data.help.saved_text_table = help_msgs;
-            menu->data.help.saved_text_count = *(int *)(help_state + 0x2C);
-            *(int *)(help_state + 0x2C) = entry_count;
+            menu->data.help.saved_text_count = state->count;
+            state->count = entry_count;
             text_entries = (int *)menu_system_state->help_text_buffer;
             help_msgs = (int)text_entries;
             for (i = 0; i < help_text_count(); i++) {
