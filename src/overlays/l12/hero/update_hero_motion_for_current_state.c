@@ -544,8 +544,8 @@ extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 extern s32  allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern s32  FUN_L00_001ff600(f32, void *, void *);
 extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
-extern struct PadState D_0013C940;
-#define PD D_0013C940
+
+#define PD controller_state
 extern struct PlayerJointTable D_L12_0017AB00;
 #define AN D_L12_0017AB00
 struct VoiceSlot {
@@ -1793,7 +1793,7 @@ void update_hero_motion_for_current_state(void) {
             if (test_hero_animation_frame_window(84.0f) != 0) {
                 f32 a = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
                 f32 s = frame_time * 2.5f;
-                if (pad_held[0] & 0xA) {
+                if (pad_held & 0xA) {
                     s = frame_time * 3.0f;
                 }
                 hero.motion.velocity.f[0] += fast_cos(a) * s;

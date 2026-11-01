@@ -1,4 +1,5 @@
 /* Level 03 moby class rail_lift (0x3f4): carries the hero between the ends of two rail paths, with its help message and hud. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/mobys/moby.h"
@@ -156,7 +157,7 @@ void rail_lift_update(struct Moby *lift_moby) {
         } else if (lift_vars->ready && is_hero_on_moby(lift_moby)) {
             update_rail_lift_help_and_hud((char *)lift_moby,
                                           lift_vars->help[lift_moby->command ^ 1]);
-            if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
+            if ((((u32)pad_pressed_lui) & 0x10) && D_L03_0015F594 == 8) {
                 request_hero_target_pose(&lift_moby->pos, lift_moby->rot.z, 0);
                 lift_moby->command ^= 1;
                 lift_vars->unk64 = 1;

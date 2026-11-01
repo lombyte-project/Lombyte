@@ -1,4 +1,5 @@
 /* Level 06 moby class 0x425: elevator; carries the hero between two heights and switches the states of its linked mobys. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -142,7 +143,6 @@ void                 set_moby_and_links_to_states_2_and_3(char *a) __asm__("FUN_
 extern unsigned char D_0013D5DD_2FDA70[] __asm__("D_0013D4C6");
 extern unsigned char D_0013D4AF_2FDA70[] __asm__("D_0013D3A8");
 extern unsigned char D_0013D5CA_2FDA70[] __asm__("D_0013D4C6");
-extern char          D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 void                 elevator_update(Moby_2FDA70 *moby) __asm__("FUN_L06_002fc640");
 
 void set_moby_and_links_to_states_2_and_3(char *moby) {
@@ -253,8 +253,7 @@ void elevator_update(Moby_2FDA70 *moby) {
             } else {
                 ok = try_set_help_message(9, 0x1789) != 0;
             }
-            if ((*(int *)D_0013A5E0_2FDA70 & 0x10) && ((Hero_2FDA70 *)(D_0013F350))->f2084 != 100 &&
-                ok) {
+            if ((pad_pressed & 0x10) && ((Hero_2FDA70 *)(D_0013F350))->f2084 != 100 && ok) {
                 ((Hero_2FDA70 *)(D_0013F350))->f1F2 = scale_game_frames(0x3C);
                 moby_data->f90 = scale_game_frames(0x78);
                 if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {

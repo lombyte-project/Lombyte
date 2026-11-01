@@ -1,4 +1,5 @@
 /* Shared moby class decoy_glove. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
@@ -87,7 +88,6 @@ extern void  mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void  mark_moby_for_removal() __asm__("FUN_0020c828");
 extern u8    D_0013E539_lui __asm__("D_0013E539") NOT_SDA;
-extern char  D_0013CAE4[];
 
 /* Same camera step as func_L00_002C88A8, writing the following vector in the target data. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D3608), where it is exact; names translated to the US level program. */
@@ -261,7 +261,7 @@ target_valid:
             if (hero_data->item_anim_active &&
                 hero_data->item_anim_frames == scale_game_frames(0x11))
                 goto L3D10;
-            if (*(int *)(((char *)&D_0013CAE4)) & hero_data->items[0].button_mask) {
+            if (pad_pressed & hero_data->items[0].button_mask) {
                 if (hero_data->state.current == 0x1E && get_ammo(-1))
                     goto L3D10;
             }

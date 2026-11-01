@@ -1,5 +1,6 @@
 /* Pause menu: entry input. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/game/overlay_game_state.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
@@ -8,18 +9,11 @@
 #include "rnc/globals.h"
 #include "sda.h"
 
-typedef struct {
-    char         pad[0x1C4];
-    volatile s32 f1C4;
-} G_7c410;
-
-extern G_7c410 D_0013C940_7c410 __asm__("D_0013C940");
-
 extern s32 D_L00_00184414 NOT_SDA;
 s32                       pause_menu_entry_input(s32 object_address) __asm__("FUN_L00_0027c410");
 
 s32 pause_menu_entry_input(s32 object_address) {
-    s32               flags_snapshot = D_0013C940_7c410.f1C4;
+    s32               flags_snapshot = (*(volatile s32 *)&controller_state.pressed_unmasked);
     s32               owner_unk38_address;
     struct GameState *game_state;
     if (flags_snapshot & 0xD00) {
@@ -40,7 +34,7 @@ s32 pause_menu_entry_input(s32 object_address) {
             return -1;
         }
     }
-    if (D_0013C940_7c410.f1C4 & 0x20) {
+    if ((*(volatile s32 *)&controller_state.pressed_unmasked) & 0x20) {
         D_0013D384 = 0;
         D_L00_0015F5C0 = -1;
         D_L00_0015F570 = 1;

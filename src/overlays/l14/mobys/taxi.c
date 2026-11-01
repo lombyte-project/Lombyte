@@ -1,4 +1,5 @@
 /* Level 14 taxi moby class: stops, routes and prompts. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/audio/voice_pool.h"
@@ -53,8 +54,6 @@ typedef struct {
 extern s32 D_L14_0015F5CC;
 
 extern s32 D_L14_0015F594;
-
-extern char D_0013CAE4[];
 
 extern f32 advance_accelerated_scalar(f32 *value,
                                       f32 *velocity,
@@ -124,7 +123,7 @@ void taxi_update(struct Moby *moby) {
             if (absolute_float(hero_relative_position[1]) < 1.2f) {
                 prepare_taxi_route(moby);
                 request_taxi_stop_prompt(moby);
-                if ((*(int *)D_0013CAE4 & button) && D_L14_0015F594 == 4) {
+                if ((pad_pressed & button) && D_L14_0015F594 == 4) {
                     struct Moby *m;
                     moby->state = 3;
                     m = find_group_moby_by_tag(moby, taxi_vars->target);
@@ -309,7 +308,7 @@ void taxi_update(struct Moby *moby) {
                 hero_relative_position, hero_relative_position, taxi_inverse_rotation_matrix);
             if (absolute_float(hero_relative_position[1]) < 1.2f) {
                 request_taxi_stop_prompt(moby);
-                if (*(int *)D_0013CAE4 & button) {
+                if (pad_pressed & button) {
                     qcopy(taxi_vars->save_pos, taxi_vars->pos);
                     qcopy(taxi_vars->save_rot, taxi_vars->rot);
                     initialize_taxi_stop_from_position(moby);

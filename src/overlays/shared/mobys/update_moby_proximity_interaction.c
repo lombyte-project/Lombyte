@@ -1,4 +1,5 @@
 /* Mobys: proximity interaction update. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/game/item_state.h"
@@ -19,7 +20,6 @@
 extern int           D_L00_0015F5C4;
 extern char          ship_proximity_local_offsets[] __asm__("D_L00_001BD880");
 extern int           D_L00_0015F630 __asm__("D_L00_0015F630");
-extern unsigned char D_0013CAE4[];
 extern unsigned char l00_moby_followup_scene_gate[] __asm__("D_0013DD4B");
 extern void          start_scene(int) __asm__("FUN_L00_00298840");
 extern void          queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
@@ -82,7 +82,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         }
         if (*(short *)(proximity_state_data + 0xC) != 0) {
             int help_message_accepted = try_set_help_message(2, 0x53E4) != 0;
-            if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && help_message_accepted) {
+            if ((pad_pressed & 0x10) && help_message_accepted) {
                 if (current_level_index == 10 && hero.vehicle_mode == 1) {
                     MOBY(moby)->state = 0x2A;
                     MOBY(moby)->flags |= 0x41;

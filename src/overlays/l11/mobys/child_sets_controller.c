@@ -1,4 +1,5 @@
 /* Level 11 moby class child_sets_controller: spawns and poses its child moby sets. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -244,7 +245,7 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
                                        frame_time + frame_time);
         }
         update_child_set_poses(child_sets_controller);
-        if (alternate_item_available[0x56] != 0 && D_0013CAE4 != 0) {
+        if (alternate_item_available[0x56] != 0 && ((u32)pad_pressed_lui) != 0) {
             child_sets_controller->command = 1;
         }
         if (D_L11_00161ED8 < 1.0f && child_sets_controller->command == 0) {

@@ -1,4 +1,5 @@
 /* Level 09 moby class 0x4b1: turret. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/game/options.h"
 #include "rnc/hero/hero.h"
@@ -124,7 +125,7 @@ void turret_update(struct Moby *moby) {
             offset.f[2] = 0.0f;
             fast_vec_add(&hero.motion.pos, &hero.motion.pos, &offset);
             fast_mem_zero16(&hero.motion.velocity, 0x90);
-            if (D_0013CAE4 & 0x10) {
+            if (((u32)pad_pressed_lui) & 0x10) {
                 jet_end_mount(0);
                 hero_set_state(0, 1);
                 moby->command = 2;

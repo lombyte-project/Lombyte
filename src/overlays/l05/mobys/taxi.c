@@ -1,4 +1,5 @@
 /* Level 05 moby class taxi: picks a route and moves between its stops. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -23,7 +24,6 @@ extern float         fast_add_rotations(float, float);
 extern float         fast_subtract_rotations(float, float);
 /* Same source as the exact taxi_update, with its moby data 8 bytes further on, an x range on the pickup test and a table test for state 6. */
 
-extern char D_0013CAE4[];
 void        initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
 extern void select_taxi_route(struct Moby *) __asm__("FUN_L05_003193a8");
 extern void sample_camera_path(int  *path,
@@ -105,7 +105,7 @@ void taxi_update(struct Moby *moby) {
                 hero_offset[0] > -0.75f) {
                 select_taxi_route(moby);
                 request_moby_variant_help_message(moby);
-                if (*(int *)(D_0013CAE4) & 0x10) {
+                if (pad_pressed & 0x10) {
                     moby->state = 3;
                     destination_stop_moby = find_moby_in_owner_list_by_id(moby, taxi_data->unkB6);
                     if (destination_stop_moby != 0) {

@@ -112,8 +112,6 @@ extern void spawn_bolt_by_value(void *, void *, void *, s32, s32, s32) __asm__("
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002d2a90_u(void) __asm__("FUN_L00_002d2a90");
 
-extern struct PadState controller_state_lui __asm__("D_0013C940") NOT_SDA;
-
 /* Ported from rac1-decomp src/overlays/shared/vendor_002D1168.c (func_L00_002D3F40) */
 
 /* Draws the trail of fading ring sprites for a moby. */

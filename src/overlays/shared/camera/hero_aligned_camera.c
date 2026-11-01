@@ -1,6 +1,7 @@
 /* Camera type 4: a camera aligned with the hero, steered by the pad, and its transition step. */
 
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/camera.h"
 #include "rnc/hero/hero.h"
 #include "sda.h"
@@ -25,13 +26,6 @@ typedef struct {
 typedef struct {
     float a, va, b, vb, ang, z, vz;
 } S_9f38;
-
-typedef struct {
-    u8    pad0[0x100];
-    float f100, f104, f108, f10C;
-    u8    pad1[0x1A0 - 0x110];
-    int   i1A0;
-} C940;
 
 typedef struct {
     u8    pad0[0x180];
@@ -128,7 +122,6 @@ extern float FUN_001f9af0_2ea810(void *) __asm__("FUN_001f9af0");
 extern unsigned char     D_0015EDB3_002e9cc0 __asm__("D_0015EDB3");
 extern u128              D_0013F3D0_2e9dd0 __asm__("D_0013F3D0");
 extern FollowCamSideRef *D_L00_00166E04 __asm__("D_L00_00166E04") NOT_SDA;
-extern C940              D_0013C940;
 extern float hero_aligned_camera_rotation_gain_at_zero_input_gp __asm__("D_L00_00161DC0")
     __attribute__((sda));
 extern float hero_aligned_camera_rotation_gain_at_unit_input_gp __asm__("D_L00_00161DC4")
@@ -321,13 +314,13 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
     FUN_001f9bf8_c(&up, ((u8 *)hero.moby) + 0xE0, 1.0f);
     if (l00_camera.unk270 == 0 && hero.unk20A5 == 0)
         hero.unk20A5 = 1;
-    rotation_input_target = -D_0013C940.f108;
+    rotation_input_target = -controller_state.analog[2];
     if (rotation_input_target == 0.0f)
-        rotation_input_target = -D_0013C940.f100;
+        rotation_input_target = -controller_state.analog[0];
     if (rotation_input_target == 0.0f)
-        rotation_input_target = convert_integer_to_float((D_0013C940.i1A0 >> 15) & 1);
+        rotation_input_target = convert_integer_to_float((controller_state.held >> 15) & 1);
     if (rotation_input_target == 0.0f)
-        rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 13) & 1);
+        rotation_input_target = -convert_integer_to_float((controller_state.held >> 13) & 1);
     rotation_input_scratch = absolute_float(camera_rotation_state->a);
     k = hero_aligned_camera_rotation_gain_at_zero_input_gp +
         (hero_aligned_camera_rotation_gain_at_unit_input_gp -
@@ -344,13 +337,13 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
         build_look_at_matrix(camera_object, camera_object, &up, k * rotation_input_scratch);
     if (hero.motion.platform_carry.f[3] != 0.0f && hero.unk308 == 0)
         build_look_at_matrix(camera_object, camera_object, &up, hero.motion.platform_carry.f[3]);
-    rotation_input_target = -D_0013C940.f10C;
+    rotation_input_target = -controller_state.analog[3];
     if (rotation_input_target == 0.0f)
-        rotation_input_target = -D_0013C940.f104;
+        rotation_input_target = -controller_state.analog[1];
     if (rotation_input_target == 0.0f)
-        rotation_input_target = convert_integer_to_float((D_0013C940.i1A0 >> 12) & 1);
+        rotation_input_target = convert_integer_to_float((controller_state.held >> 12) & 1);
     if (rotation_input_target == 0.0f)
-        rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 14) & 1);
+        rotation_input_target = -convert_integer_to_float((controller_state.held >> 14) & 1);
     if (l00_camera.unk270 != 0 && hero.state.prev == 2)
         rotation_input_target = 0.0f;
     if (invert52 == 0)

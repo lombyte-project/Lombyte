@@ -178,8 +178,8 @@ extern void compute_hero_reference_tilt_rotation(void *, void *, f32, f32, f32, 
 extern void rotate_hero_about_local_pivot(void *, f32, f32, f32) __asm__("FUN_L00_002090d0");
 extern void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
 extern Vec4 l16_hoverboard_trick_pivots_by_air_pose[] __asm__("D_L16_00179BE0");
-extern struct PadState D_0013C940;
-#define PD D_0013C940
+
+#define PD controller_state
 extern struct PlayerJointTable D_L16_0017AAE0;
 #define AN D_L16_0017AAE0
 struct VoiceSlot {

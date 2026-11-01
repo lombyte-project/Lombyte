@@ -1,5 +1,6 @@
 /* Shared moby class bomb_glove: the bomb glove held by the hero, which aims the throw arc and throws bombs. */
 
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -66,10 +67,8 @@ extern CollisionHit   coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 extern f32 frame_time MACRO_ADDR;
 extern f32            frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern s32            D_0015EEA4;
-extern u32 D_0013CAE4 NOT_SDA;
 extern LevelCamera    l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern CollisionHit   coll_hit __asm__("D_L00_00173E40");
-extern s32            pad_held_lui[] __asm__("D_0013CAE0") NOT_SDA;
 extern u8             bomb_glove_aimed_range_modifier[] __asm__("D_0013E52A");
 extern struct Moby   *D_L00_001ABA00_lui[] __asm__("D_L00_001ABA00") NOT_SDA;
 extern float          frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
@@ -144,7 +143,7 @@ void aim_throw_arc(V2c2488 *origin_position,
     *(s32 *)&throw_velocity[2] = 0;
     throw_velocity[2] =
         FUN_L00_0025abf0(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
-    if (pad_held_lui[0] & 5) {
+    if (pad_held_lui & 5) {
         k = scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f;
         k = k / horizontal_speed;
     } else {
@@ -208,7 +207,7 @@ void bomb_glove_update(struct Moby *moby) {
         hero_set_state(0x1E, 1);
     if (fast_dec_timer(&bomb_glove_vars->timer) && !hero.item_use_locked) {
         if ((hero.item_anim_active && hero.item_anim_frames == scale_game_frames(0x11)) ||
-            ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E &&
+            ((((u32)pad_pressed_lui) & hero.items[0].button_mask) && hero.state.current == 0x1E &&
              get_ammo(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
             allocate_hero_voice_for_entry(0x1A, 0);

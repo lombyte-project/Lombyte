@@ -1,5 +1,6 @@
 /* Shared moby class giant_clank_pad: the pad where the hero becomes Giant Clank. */
 
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -16,11 +17,10 @@ extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
 
-extern int            D_L15_0015F5C4;
-extern struct Moby   *l15_moby_array __asm__("D_L15_0015FFD8");
-extern int            D_L15_0015F594 __attribute__((sda));
-extern u8             D_0014C050[];
-extern u32 D_0013CAE4 NOT_SDA;
+extern int          D_L15_0015F5C4;
+extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
+extern int          D_L15_0015F594 __attribute__((sda));
+extern u8           D_0014C050[];
 
 void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
 
@@ -68,7 +68,7 @@ void giant_clank_pad_update(struct Moby *moby) {
             } else if (hero.vehicle_mode == 2 && current_level_index != 0x12) {
                 try_set_help_message(4, 0x3aa5);
             }
-            if (!(D_0013CAE4 & 0x10))
+            if (!(((u32)pad_pressed_lui) & 0x10))
                 return;
             if (D_L15_0015F594 != 4)
                 return;

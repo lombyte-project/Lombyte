@@ -1,5 +1,6 @@
 /* Level 13 fighter jet moby class: moby group switches, flight, targeting, HUD, radar, guns and rockets. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
@@ -757,8 +758,6 @@ int select_fighter_jet_target_and_draw_indicators(int   source_moby,
 
 extern char fighter_jet_radar_rotation[] __asm__("D_L13_001670D0");
 
-extern char D_0013C940[];
-
 int select_fighter_jet_target_and_draw_indicators(int   a,
                                                   char *p,
                                                   char *radar_origin_position,
@@ -783,20 +782,20 @@ void update_fighter_jet_target_tracking(int   source_moby,
                                         char *moby_vars) __asm__("FUN_L13_002b95b8");
 
 void update_fighter_jet_target_tracking(int source_moby, char *moby_vars) {
-    char *excluded_target_moby = 0;
-    char *pad;
-    char *current_target_moby;
-    char *selected_target_moby;
-    float radar_rotation_copy[4];
+    char            *excluded_target_moby = 0;
+    struct PadState *pad;
+    char            *current_target_moby;
+    char            *selected_target_moby;
+    float            radar_rotation_copy[4];
     if (!(D_L13_0015F5C4 >= 3 && D_L13_0015F5C4 <= 4)) {
         fast_dec_timer((int *)(moby_vars + 0x8C));
     }
     if (W(moby_vars, 0x8C) != 0 && P(moby_vars, 0x88) != 0 &&
         H(P(moby_vars, 0x88), 0xA6) == W(moby_vars, 0x124) && B(P(moby_vars, 0x88), 0x20) != 0xFE &&
         B(P(moby_vars, 0x88), 0x20) != 0xFD) {
-        pad = D_0013C940;
+        pad = &controller_state;
         if (B(P(moby_vars, 0x88), 0x31) != 0) {
-            if (W(pad, 0x1B4) & 0x2000) {
+            if (pad->raw_pressed & 0x2000) {
                 goto take;
             }
             if (FLAG != 0) {
@@ -804,8 +803,8 @@ void update_fighter_jet_target_tracking(int source_moby, char *moby_vars) {
             }
         }
     }
-    pad = D_0013C940;
-    if (W(pad, 0x1B4) & 0x2000) {
+    pad = &controller_state;
+    if (pad->raw_pressed & 0x2000) {
     take:
         excluded_target_moby = P(moby_vars, 0x88);
     }

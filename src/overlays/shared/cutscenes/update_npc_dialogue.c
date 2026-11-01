@@ -1,4 +1,5 @@
 /* NPC dialogue: initializes and updates a dialogue and reads and writes its dialogue records. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/game/level_object_states.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
@@ -58,7 +59,6 @@ struct SceneTrigger {
 
 extern s32 D_L00_0015F5C4; /* nonzero blocks all triggers */
 extern s32 game_frame __asm__("D_L00_0015F5CC");
-extern s32 D_0013CAE4[]; /* bit 0x10 lifts the facing check */
 extern s32 bolt_hud_item __asm__("D_L00_00160130") __attribute__((sda));
 
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
@@ -112,7 +112,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) {
     if (game_frame < active_scene_trigger.next_frame)
         return 0;
 
-    if (trigger->any_direction != 0 || (D_0013CAE4[0] & 0x10)) {
+    if (trigger->any_direction != 0 || (pad_pressed & 0x10)) {
         index = FUN_L00_002667d0_c2(moby);
         if (level_object_states[index].state == 0)
             level_object_states[index].state = 1;

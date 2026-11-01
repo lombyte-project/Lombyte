@@ -1,5 +1,6 @@
 /* HUD panels: item and radial selectors, health, bolt counter and gauges. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -201,20 +202,6 @@ typedef struct {
     int w7C;
 } Obj;
 
-typedef struct {
-    u8    p0[0x148];
-    float unk148;
-    float unk14C;
-    u8    p150[0x70];
-    int   w1C0;
-    int   w1C4;
-    u8    p1C8[4];
-    int   w1CC;
-    u8    p1D0[8];
-    int   w1D8;
-} G_t;
-
-extern G_t                D_0013C940;
 extern int D_L00_0017E504 NOT_SDA;
 extern int                D_L00_0015FA90;
 extern int                D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
@@ -260,9 +247,9 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
     hud_element->w7C = scale_game_frames(0xB4);
     hud_element->w6C = 0x18;
     if (fast_dec_timer_s16(D_00141622))
-        D_0013C940.w1CC = 2;
-    x = D_0013C940.unk148;
-    y = D_0013C940.unk14C;
+        controller_state.mode = 2;
+    x = controller_state.analog_prev[2];
+    y = controller_state.analog_prev[3];
     mag = square_root(x * x + y * y);
     if (mag != 0.0f) {
         x /= mag;
@@ -270,14 +257,15 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
     }
     stick_angle = fast_arc_tan(x, y);
     if ((hud_element->w78 >> 24) == 0) {
-        if ((D_0013C940.w1C4 & 0xF000) || mag < 0.5f || --hud_element->w78 == -1) {
+        if (((*(s32 *)&controller_state.pressed_unmasked) & 0xF000) || mag < 0.5f ||
+            --hud_element->w78 == -1) {
             hud_element->w74 = -1;
             hud_element->w78 = 0x10000FF;
         }
     }
     slot_step = 0;
     previous_selected_slot_index = hud_element->w74;
-    if ((hud_element->w78 >> 24) == 1 && (D_0013C940.w1C0 & 0x10)) {
+    if ((hud_element->w78 >> 24) == 1 && ((*(s32 *)&controller_state.held_unmasked) & 0x10)) {
         if (mag > 0.9f) {
             a = stick_angle + 3.1415927f + 3.1415927f + 1.5707964f +
                 3.1415927f / (float)D_L00_0015FA90;
@@ -305,10 +293,11 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 if (hud_item_selector_slot_angle_offset_gp > 0.0f)
                     slot_step = 1;
             }
-        } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
+        } else if (controller_state.stick_moved == 0 &&
+                   ((*(s32 *)&controller_state.pressed_unmasked) & 0xF000)) {
             int pad_slot_index;
             pad_slot_index = previous_selected_slot_index;
-            if (D_0013C940.w1C4 & 0x1000) {
+            if ((*(s32 *)&controller_state.pressed_unmasked) & 0x1000) {
                 int slot_lookup;
                 if (pad_slot_index == -1)
                     slot_lookup = D_L00_0017DC20;
@@ -316,7 +305,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                     slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk10;
                 pad_slot_index = slot_lookup;
             }
-            if (D_0013C940.w1C4 & 0x4000) {
+            if ((*(s32 *)&controller_state.pressed_unmasked) & 0x4000) {
                 int slot_lookup;
                 if (pad_slot_index == -1)
                     slot_lookup = D_L00_0017DC24;
@@ -324,7 +313,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                     slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk14;
                 pad_slot_index = slot_lookup;
             }
-            if (D_0013C940.w1C4 & 0x8000) {
+            if ((*(s32 *)&controller_state.pressed_unmasked) & 0x8000) {
                 int slot_lookup;
                 if (pad_slot_index == -1)
                     slot_lookup = D_L00_0017DC18;
@@ -332,7 +321,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                     slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk8;
                 pad_slot_index = slot_lookup;
             }
-            if (D_0013C940.w1C4 & 0x2000) {
+            if ((*(s32 *)&controller_state.pressed_unmasked) & 0x2000) {
                 int slot_lookup;
                 if (pad_slot_index == -1)
                     slot_lookup = D_L00_0017DC1C;
@@ -356,7 +345,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
         counters[1] = 0;
     else if (counters[1] < D_L00_0015F780_gp)
         counters[1]++;
-    if (!(D_0013C940.w1C0 & 0x10)) {
+    if (!((*(s32 *)&controller_state.held_unmasked) & 0x10)) {
         int sel = hud_element->w74;
         if (sel >= 0 && (id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].unk18) != 0) {
             VendorItemInfo *rr;
@@ -635,9 +624,9 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
 
     hud_element->w7C = scale_game_frames(0xB4);
     hud_element->w6C = 0x18;
-    D_0013C940.w1CC = 2;
-    x = D_0013C940.unk148;
-    y = D_0013C940.unk14C;
+    controller_state.mode = 2;
+    x = controller_state.analog_prev[2];
+    y = controller_state.analog_prev[3];
     input_magnitude = square_root(x * x + y * y);
     if (input_magnitude != 0.0f) {
         x /= input_magnitude;
@@ -645,7 +634,8 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
     }
     selection_angle = fast_arc_tan(x, y);
     if ((hud_element->w78 >> 24) == 0 && D_L00_0017E504 != 0) {
-        if ((D_0013C940.w1C4 & 0xF000) || input_magnitude < 0.5f || --hud_element->w78 == -1) {
+        if (((*(s32 *)&controller_state.pressed_unmasked) & 0xF000) || input_magnitude < 0.5f ||
+            --hud_element->w78 == -1) {
             hud_element->w74 = -1;
             hud_element->w78 = 0x10000FF;
         }
@@ -659,30 +649,30 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
                                      ((float)slot_count / 6.2831855f)) %
                                slot_count;
         }
-        if (D_0013C940.w1C4 & 0xF000) {
+        if ((*(s32 *)&controller_state.pressed_unmasked) & 0xF000) {
             pad_slot_index = hud_element->w74;
-            if (D_0013C940.w1C4 & 0x1000) {
+            if ((*(s32 *)&controller_state.pressed_unmasked) & 0x1000) {
                 if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC40;
                 else
                     next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk10;
                 pad_slot_index = next_slot_index;
             }
-            if (D_0013C940.w1C4 & 0x4000) {
+            if ((*(s32 *)&controller_state.pressed_unmasked) & 0x4000) {
                 if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC44;
                 else
                     next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk14;
                 pad_slot_index = next_slot_index;
             }
-            if (D_0013C940.w1C4 & 0x8000) {
+            if ((*(s32 *)&controller_state.pressed_unmasked) & 0x8000) {
                 if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC38;
                 else
                     next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk8;
                 pad_slot_index = next_slot_index;
             }
-            if (D_0013C940.w1C4 & 0x2000) {
+            if ((*(s32 *)&controller_state.pressed_unmasked) & 0x2000) {
                 if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC3C;
                 else
@@ -697,7 +687,7 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
     } else if (counters[1] < D_L00_0015F780_gp) {
         counters[1]++;
     }
-    if (!(D_0013C940.w1C0 & 0x10)) {
+    if (!((*(s32 *)&controller_state.held_unmasked) & 0x10)) {
         if (hud_element->w74 == -1)
             D_00141610[0] = 0;
         else

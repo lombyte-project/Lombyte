@@ -1,4 +1,5 @@
 /* Level 16 moby class taxi: its update, stop setup, departure path and the helpers it calls. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
@@ -60,7 +61,6 @@ typedef struct {
 
 extern L16PickupPose *D_L16_001600EC;
 extern char          *find_group_moby_by_data_id(struct Moby *, int) __asm__("FUN_L16_002e4be0");
-extern char           D_0013CAE4[];
 extern float          D_0015EE6C_u;
 extern int            advance_taxi_path(struct Moby *) __asm__("FUN_L16_002e4c40");
 extern s32            D_L16_0015F594;
@@ -116,7 +116,7 @@ void taxi_update(struct Moby *moby) {
             if (absolute_float(hero_local_offset[1]) < 1.2f) {
                 FUN_L16_002e4a58_c(moby);
                 request_taxi_destination_help_message(moby);
-                if ((*(int *)(D_0013CAE4) & 0x10) && *(int *)&D_L16_0015F594 == 8) {
+                if ((pad_pressed & 0x10) && *(int *)&D_L16_0015F594 == 8) {
                     moby->state = 3;
                     matched_moby = find_group_moby_by_data_id(moby, *(short *)(taxi_data + 0xAE));
                     if (matched_moby != 0) {

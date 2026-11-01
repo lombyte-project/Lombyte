@@ -1,4 +1,5 @@
 /* Level 11 moby class teleporter: the three-part switch, its help message and ring. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 
 #include "rnc/hero/hero.h"
@@ -17,7 +18,6 @@
 #include "rnc/game/game_globals.h"
 
 extern float         D_0013F3D8_lui __asm__("D_0013F3D8") NOT_SDA; /* hero z */
-extern int           D_0013CAE4_lui __asm__("D_0013CAE4") NOT_SDA;
 extern int           D_L11_0015F594 __asm__("D_L11_0015F594");
 extern char         *D_L11_0015FFD8_2518 __asm__("D_L11_0015FFD8");
 extern unsigned char D_001413F5_lui __asm__("D_001413F5") NOT_SDA;
@@ -121,7 +121,7 @@ void teleporter_update(struct Moby *moby) {
         if (g->air_frames.s != 0)
             break;
         FUN_L11_002f2cd0_2518(moby);
-        if (!(D_0013CAE4_lui & 0x10))
+        if (!(pad_pressed_lui & 0x10))
             break;
         if (D_L11_0015F594 != 0xB)
             break;

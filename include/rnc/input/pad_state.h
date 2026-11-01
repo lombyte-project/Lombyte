@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_INPUT_PAD_STATE_H
 
 #include "types.h"
+#include "sda.h"
 
 /*
  * Controller state D_0013C940, polled each frame by poll_pad_device_state
@@ -33,9 +34,11 @@
 
 struct PadState {
     u8  pad_0[0x100] __attribute__((aligned(16)));
-    f32 analog[16];      /* 0x100: [0..3] stick axes (-1..1), [4..15] pressure (0..1) */
-    f32 analog_prev[16]; /* 0x140: copy of analog */
-    u8  pad_180[0x9];
+    f32 analog[16];           /* 0x100: [0..3] stick axes (-1..1), [4..15] pressure (0..1) */
+    f32 analog_prev[16];      /* 0x140: copy of analog */
+    u8  button_profile[4];    /* 0x180: scePad2GetButtonProfile */
+    u8  vibration_profile[4]; /* 0x184: sceVibGetProfile */
+    u8  unk188;
     u8  unk189; /* 0x189: copied by metal_detector_update on spawn */
     u8  pad_18A[0x4];
     s16 hist_idx;          /* 0x18E: cleared with unk190 by reset_pad_history */
@@ -60,30 +63,16 @@ struct PadState {
     s32 stick_moved;  /* 0x1D8: analog[2] or analog[3] nonzero */
     s32 unk1DC; /* 0x1DC: 0x79 if the button profile is all ones, else 0; l01 picks pressure input on 0x79 */
     u32 pressed_history[30]; /* 0x1E0: ring indexed by hist_idx, searched by pad_pressed_within */
-    u8  pad_258[0x78];
-    f32 float_history[30]; /* 0x2D0: ring indexed by hist_idx, read by read_pad_float_history */
+    f32 angle_history[30];   /* 0x258: left-stick direction history */
+    f32 float_history[30];   /* 0x2D0: ring indexed by hist_idx, read by read_pad_float_history */
+    s32 saved_held; /* 0x348: held before mode masking, copied to prev_held on the next poll */
+    u8  pad_34C;
+    u8  repeat_delay; /* 0x34D */
+    u8  repeat_rate;  /* 0x34E: zero disables button repeat */
+    u8  repeat_timer; /* 0x34F */
 };
 
 extern struct PadState controller_state __asm__("D_0013C940");
-
-/*
- * The same pad state as some functions read it: the stick axes, and the held/pressed button words,
- * which are also tested together as one doubleword (FUN_L00_00298f90, the debug camera's
- * two-button chords).
- */
-struct PadStateWords {
-    char pad0[0x100];
-    f32  analog[4]; /* 0x100: stick axes */
-    char pad110[0x1A0 - 0x110];
-    union {
-        u64 held_pressed; /* 0x1A0: held | pressed << 32 */
-        struct {
-            s32 held;    /* 0x1A0 */
-            s32 pressed; /* 0x1A4 */
-        } w;
-    } buttons;
-    char pad1A8[0x1D8 - 0x1A8];
-    s32  stick_moved; /* 0x1D8: analog[2] or analog[3] nonzero */
-};
+extern struct PadState controller_state_lui __asm__("D_0013C940") NOT_SDA;
 
 #endif

@@ -1,4 +1,5 @@
 /* Hero: jump press handling, locomotion state, idle fidgets, item idle animations and the forward collision height check. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
@@ -107,7 +108,6 @@ s32 pick_idle_fidget(s32 *index) {
 }
 
 extern u8  D_0013F350_002293a8[] __asm__("D_0013F350");
-extern s32 pad_held __asm__("D_0013CAE0") NOT_SDA;
 extern s32 D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void       set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
@@ -127,7 +127,7 @@ void update_hero_locomotion_state(void) {
         return;
     }
     stick_target(0, 1.0f);
-    if (pad_held & 0xA) {
+    if (pad_held_lui & 0xA) {
         hero_set_state(HERO_STATE_CROUCH, 0);
         set_hero_animation(0xD, 2, -2.0f);
         hero_queue_sequence(3, 0x12);
@@ -172,7 +172,6 @@ void update_hero_locomotion_state(void) {
     }
 }
 
-extern s32 pad_held_lui __asm__("D_0013CAE0") NOT_SDA;
 extern u8  D_0013D4C2_lui __asm__("D_0013D4C2") NOT_SDA;
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");

@@ -264,7 +264,6 @@ float        batalia_cannon_yaw_deceleration_gp __asm__("D_L08_00161AF8") = 3.6e
 float        batalia_cannon_pitch_deceleration_gp __asm__("D_L08_00161AFC") = 7.2e+02f;
 float        batalia_cannon_rocket_speed_gp __asm__("D_L08_00161B00") = 1.8e+02f;
 extern s32   D_0015ED84;
-extern char  D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
 extern int   D_0015ED84;
 extern short batalia_cannon_dismount_offset_gp __asm__("D_L08_00161A90") __attribute__((sda));
 extern short batalia_cannon_left_gun_offset_gp __asm__("D_L08_00161B10") __attribute__((sda));
@@ -767,8 +766,7 @@ void batalia_cannon_update(Moby *moby) {
         }
         if (visited52[moby->mission + D_0015ED84 * 16] != 0xFF && (hero.ship_flags & 1))
             hero_respawn();
-        if (((*(int *)D_0013A5E0_2E16A0 & 0x10) ||
-             (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) &&
+        if (((pad_pressed & 0x10) || (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) &&
             visited52[moby->mission + D_0015ED84 * 16] == 0xFF) {
             hero.ship_flags = 0;
             hero_set_state(0, 1);
@@ -894,7 +892,7 @@ void batalia_cannon_update(Moby *moby) {
         } else if (cannon_control_vars->lock_timer)
             cannon_control_vars->lock_timer--;
         fast_dec_timer_s16(&cannon_control_vars->fire_timer);
-        if ((pad_held[0] & 0x20) && cannon_control_vars->fire_timer == 0) {
+        if ((pad_held & 0x20) && cannon_control_vars->fire_timer == 0) {
             if (cannon_control_vars->barrel == 1) {
                 int count;
                 build_spherical_offset(direction,

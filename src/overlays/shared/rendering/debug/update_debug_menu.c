@@ -171,8 +171,6 @@ void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
 #include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
-extern struct PadStateWords D_0013C940;
-
 #include "rnc/overlay/shared/camera/level_camera.h"
 
 static inline void copy_vector3(f32 *dst, f32 *src) {
@@ -187,14 +185,14 @@ static inline void copy_vector3(f32 *dst, f32 *src) {
 void update_debug_camera(void) __asm__("FUN_L00_001f3aa0");
 
 void update_debug_camera(void) {
-    struct PadStateWords *pad;
-    DebugMenuState       *menu;
-    int                   moved;
-    int                   free_look;
-    DebugCameraTarget    *target;
-    pad = &D_0013C940;
+    struct PadState   *pad;
+    DebugMenuState    *menu;
+    int                moved;
+    int                free_look;
+    DebugCameraTarget *target;
+    pad = &controller_state;
     moved = 0;
-    if (pad->buttons.w.held & 0x800)
+    if (pad->held & 0x800)
         return;
     menu = &g_debug_menu;
     if (menu->update_flags & 8)
@@ -204,8 +202,8 @@ void update_debug_camera(void) {
     free_look = hero.unk308 == 2;
     {
         Vec4 step;
-        if ((pad->buttons.held_pressed & 3) != 3) {
-            if (D_0013C940.buttons.w.held & 0x1000) {
+        if (((*(u64 *)&pad->held) & 3) != 3) {
+            if (controller_state.held & 0x1000) {
                 if (free_look) {
                     fast_vec_normalize(&step, l00_camera.unk350, g_debug_menu.movement_speed);
                     fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &step);
@@ -215,7 +213,7 @@ void update_debug_camera(void) {
                 }
                 moved = 1;
             }
-            if (D_0013C940.buttons.w.held & 0x4000) {
+            if (controller_state.held & 0x4000) {
                 if (free_look) {
                     fast_vec_normalize(&step, l00_camera.unk350, g_debug_menu.movement_speed);
                     fast_vec_sub(l00_camera.pos.f, l00_camera.pos.f, &step);
@@ -225,7 +223,7 @@ void update_debug_camera(void) {
                 }
                 moved = 1;
             }
-            if (D_0013C940.buttons.w.held & 1) {
+            if (controller_state.held & 1) {
                 if (free_look) {
                     fast_vec_normalize(&step, l00_camera.unk350 + 4, g_debug_menu.movement_speed);
                     fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &step);
@@ -235,7 +233,7 @@ void update_debug_camera(void) {
                 }
                 moved = 1;
             }
-            if (D_0013C940.buttons.w.held & 2) {
+            if (controller_state.held & 2) {
                 if (free_look) {
                     fast_vec_normalize(&step, l00_camera.unk350 + 4, g_debug_menu.movement_speed);
                     fast_vec_sub(l00_camera.pos.f, l00_camera.pos.f, &step);
@@ -256,9 +254,9 @@ void update_debug_camera(void) {
                 g_debug_menu.movement_speed = 0;
         }
 
-        if (!(free_look && (D_0013C940.buttons.held_pressed & 3) == 3) &&
-            (D_0013C940.buttons.w.held & 0xA000)) {
-            if (D_0013C940.buttons.w.held & 0x8000)
+        if (!(free_look && ((*(u64 *)&controller_state.held) & 3) == 3) &&
+            (controller_state.held & 0xA000)) {
+            if (controller_state.held & 0x8000)
                 g_debug_menu.yaw_speed -= 0.002f;
             else
                 g_debug_menu.yaw_speed += 0.002f;
@@ -288,8 +286,9 @@ void update_debug_camera(void) {
                 g_debug_menu.yaw_speed = 0;
         }
     }
-    if ((D_0013C940.buttons.held_pressed & 3) == 3 && (D_0013C940.buttons.held_pressed & 0x5000)) {
-        if (D_0013C940.buttons.w.held & 0x1000)
+    if (((*(u64 *)&controller_state.held) & 3) == 3 &&
+        ((*(u64 *)&controller_state.held) & 0x5000)) {
+        if (controller_state.held & 0x1000)
             g_debug_menu.pitch_speed -= 0.002f;
         else
             g_debug_menu.pitch_speed += 0.002f;
@@ -319,9 +318,9 @@ void update_debug_camera(void) {
             g_debug_menu.pitch_speed = 0;
     }
 
-    if (free_look && (D_0013C940.buttons.held_pressed & 3) == 3 &&
-        (D_0013C940.buttons.held_pressed & 0xA000)) {
-        if (D_0013C940.buttons.w.held & 0x8000)
+    if (free_look && ((*(u64 *)&controller_state.held) & 3) == 3 &&
+        ((*(u64 *)&controller_state.held) & 0xA000)) {
+        if (controller_state.held & 0x8000)
             g_debug_menu.roll_speed -= 0.002f;
         else
             g_debug_menu.roll_speed += 0.002f;
@@ -350,8 +349,8 @@ void update_debug_camera(void) {
             g_debug_menu.roll_speed = 0;
     }
 
-    if (D_0013C940.buttons.held_pressed & 0xC) {
-        if (D_0013C940.buttons.w.held & 8) {
+    if ((*(u64 *)&controller_state.held) & 0xC) {
+        if (controller_state.held & 8) {
             g_debug_menu.vertical_speed += 0.004f;
             if (g_debug_menu.vertical_speed > 0.3f)
                 g_debug_menu.vertical_speed = 0.3f;
@@ -518,7 +517,7 @@ void update_debug_menu(void) {
     } scratch;
     s32 pressed;
     sound_update();
-    pressed = D_0013C940.buttons.w.pressed;
+    pressed = controller_state.pressed;
     if (pressed & 0x500) {
         D_L00_0015F5C4 = g_debug_menu.unknown_a4;
         set_background_color(level_view_context.background_color[0],
@@ -543,11 +542,11 @@ void update_debug_menu(void) {
         else if (g_debug_menu.selected_column == 2)
             g_debug_menu.selected_column = 5;
     }
-    if ((D_0013C940.buttons.w.pressed & 0x1000) && --g_debug_menu.selected_row < 0) {
+    if ((controller_state.pressed & 0x1000) && --g_debug_menu.selected_row < 0) {
         if (g_debug_menu.selected_column >= 3)
             g_debug_menu.selected_column = (g_debug_menu.selected_column + 3) % 6;
         g_debug_menu.selected_row = row_counts.rows[g_debug_menu.selected_column] - 1;
-    } else if (D_0013C940.buttons.w.pressed & 0x4000) {
+    } else if (controller_state.pressed & 0x4000) {
         if (++g_debug_menu.selected_row >= row_counts.rows[g_debug_menu.selected_column]) {
             if (g_debug_menu.selected_column < 3)
                 g_debug_menu.selected_column = (g_debug_menu.selected_column + 9) % 6;
@@ -558,7 +557,7 @@ void update_debug_menu(void) {
         g_debug_menu.selected_row = row_counts.rows[g_debug_menu.selected_column] - 1;
     switch (g_debug_menu.selected_column) {
     case DEBUG_COLUMN_UPDATE_FLAGS:
-        if (D_0013C940.buttons.w.pressed & 0x40) {
+        if (controller_state.pressed & 0x40) {
             s32 flag = 1 << g_debug_menu.selected_row;
             g_debug_menu.update_flags ^= flag;
             if (flag == 16) {
@@ -572,12 +571,12 @@ void update_debug_menu(void) {
     case DEBUG_COLUMN_OPTIONS:
         switch (g_debug_menu.selected_row) {
         case DEBUG_OPTION_ROW_CONTROL_MODE:
-            if (D_0013C940.buttons.w.pressed & 0x50) {
-                if (D_0013C940.buttons.w.pressed & 0x40) {
+            if (controller_state.pressed & 0x50) {
+                if (controller_state.pressed & 0x40) {
                     if (++g_debug_menu.control_mode >= 4)
                         g_debug_menu.control_mode = 0;
                 }
-                if (D_0013C940.buttons.w.pressed & 0x10) {
+                if (controller_state.pressed & 0x10) {
                     if (--g_debug_menu.control_mode < 0)
                         g_debug_menu.control_mode = 3;
                 }
@@ -606,11 +605,11 @@ void update_debug_menu(void) {
             }
             break;
         case DEBUG_OPTION_ROW_PROFILER_MODE:
-            if (D_0013C940.buttons.w.pressed & 0x40) {
+            if (controller_state.pressed & 0x40) {
                 if (++g_debug_menu.profiler_mode >= 8)
                     g_debug_menu.profiler_mode = 0;
             }
-            if (D_0013C940.buttons.w.pressed & 0x10) {
+            if (controller_state.pressed & 0x10) {
                 if (--g_debug_menu.profiler_mode < 0)
                     g_debug_menu.profiler_mode = 7;
             }
@@ -620,25 +619,25 @@ void update_debug_menu(void) {
                 g_debug_menu.occlusion_mode = 0;
                 break;
             }
-            if (D_0013C940.buttons.w.pressed & 0x40) {
+            if (controller_state.pressed & 0x40) {
                 if (++g_debug_menu.occlusion_mode >= 3)
                     g_debug_menu.occlusion_mode = 0;
             }
-            if (D_0013C940.buttons.w.pressed & 0x10) {
+            if (controller_state.pressed & 0x10) {
                 if (--g_debug_menu.occlusion_mode < 0)
                     g_debug_menu.occlusion_mode = 2;
             }
             break;
         case DEBUG_OPTION_ROW_BOOKMARK:
-            if (D_0013C940.buttons.w.pressed & 0x50)
+            if (controller_state.pressed & 0x50)
                 g_debug_menu.bookmark_enabled = !g_debug_menu.bookmark_enabled;
             break;
         case DEBUG_OPTION_ROW_INVINCIBILITY:
-            if (D_0013C940.buttons.w.pressed & 0x50)
+            if (controller_state.pressed & 0x50)
                 g_debug_menu.invincibility_enabled = !g_debug_menu.invincibility_enabled;
             break;
         case DEBUG_OPTION_ROW_DRAW_DISTANCE_OVERRIDE:
-            if (D_0013C940.buttons.w.pressed & 0x50) {
+            if (controller_state.pressed & 0x50) {
                 g_debug_menu.draw_distance_override = !g_debug_menu.draw_distance_override;
                 if (g_debug_menu.draw_distance_override) {
                     D_L00_00160F80 = 65536.0f;
@@ -656,21 +655,21 @@ void update_debug_menu(void) {
             }
             break;
         case DEBUG_OPTION_ROW_COLLISION_MODE:
-            if (D_0013C940.buttons.w.pressed & 0x40) {
+            if (controller_state.pressed & 0x40) {
                 if (++g_debug_menu.collision_mode >= 3)
                     g_debug_menu.collision_mode = 0;
             }
-            if (D_0013C940.buttons.w.pressed & 0x10) {
+            if (controller_state.pressed & 0x10) {
                 if (--g_debug_menu.collision_mode < 0)
                     g_debug_menu.collision_mode = 2;
             }
             break;
         case DEBUG_OPTION_ROW_TELEVISION_MODE:
-            if (D_0013C940.buttons.w.pressed & 0x50)
+            if (controller_state.pressed & 0x50)
                 g_debug_menu.television_mode = !g_debug_menu.television_mode;
             break;
         case DEBUG_OPTION_ROW_SCREEN_MODE:
-            if (D_0013C940.buttons.w.pressed & 0x50) {
+            if (controller_state.pressed & 0x50) {
                 g_debug_menu.screen_mode = !g_debug_menu.screen_mode;
                 if (g_debug_menu.screen_mode) {
                     level_view_context.half_width =
@@ -693,8 +692,8 @@ void update_debug_menu(void) {
             }
             break;
         case DEBUG_OPTION_ROW_SCENE_INDEX:
-            if (D_0013C940.buttons.w.pressed & 0x50) {
-                if (D_0013C940.buttons.w.pressed & 0x40) {
+            if (controller_state.pressed & 0x50) {
+                if (controller_state.pressed & 0x40) {
                     g_debug_menu.scene_index++;
                     while (g_debug_menu.scene_index == 36)
                         g_debug_menu.scene_index = -1;
@@ -710,8 +709,8 @@ void update_debug_menu(void) {
                 g_debug_menu.unknown_a4 = 0;
             break;
         case DEBUG_OPTION_ROW_SEGMENT_INDEX:
-            if (D_0013C940.buttons.w.pressed & 0x50) {
-                if (D_0013C940.buttons.w.pressed & 0x40) {
+            if (controller_state.pressed & 0x50) {
+                if (controller_state.pressed & 0x40) {
                     g_debug_menu.segment_index++;
                     while (g_debug_menu.segment_index == 16)
                         g_debug_menu.segment_index = 0;
@@ -720,7 +719,7 @@ void update_debug_menu(void) {
                     while (g_debug_menu.segment_index < 0)
                         g_debug_menu.segment_index = 15;
                 }
-            } else if (D_0013C940.buttons.w.pressed & 0x20) {
+            } else if (controller_state.pressed & 0x20) {
                 s32 mission = g_debug_menu.segment_index;
                 s32 index = mission + (current_level_index << 4);
                 u8 *visited = visited52 + index;
@@ -731,7 +730,7 @@ void update_debug_menu(void) {
         }
         break;
     case DEBUG_COLUMN_DRAW_FLAGS:
-        if (D_0013C940.buttons.w.pressed & 0x40)
+        if (controller_state.pressed & 0x40)
             g_debug_menu.draw_flags ^= 1 << g_debug_menu.selected_row;
         break;
     case DEBUG_COLUMN_ITEM_COUNTS: {
@@ -744,37 +743,37 @@ void update_debug_menu(void) {
         } else {
             count = &current_bolt_count;
         }
-        if (D_0013C940.buttons.w.held & 8) {
-            if (D_0013C940.buttons.w.pressed & 0x40)
+        if (controller_state.held & 8) {
+            if (controller_state.pressed & 0x40)
                 *count += 60;
-            if (D_0013C940.buttons.w.pressed & 0x20) {
+            if (controller_state.pressed & 0x20) {
                 if (*count > 60)
                     *count -= 60;
                 else
                     *count = 0;
             }
-        } else if (D_0013C940.buttons.w.held & 2) {
-            if (D_0013C940.buttons.w.pressed & 0x40)
+        } else if (controller_state.held & 2) {
+            if (controller_state.pressed & 0x40)
                 *count += 600;
-            if (D_0013C940.buttons.w.pressed & 0x20) {
+            if (controller_state.pressed & 0x20) {
                 if (*count > 600)
                     *count -= 600;
                 else
                     *count = 0;
             }
         } else {
-            if (D_0013C940.buttons.w.pressed & 0x40)
+            if (controller_state.pressed & 0x40)
                 *count += 1;
-            if (D_0013C940.buttons.w.pressed & 0x20) {
+            if (controller_state.pressed & 0x20) {
                 if (*count > 0)
                     *count -= 1;
             }
         }
         if (*count > limit)
             *count = limit;
-        if (D_0013C940.buttons.w.pressed & 0x10)
+        if (controller_state.pressed & 0x10)
             item_text_variant[debug_menu_item_ids[g_debug_menu.selected_row]]++;
-        if (D_0013C940.buttons.w.pressed & 0x80)
+        if (controller_state.pressed & 0x80)
             item_text_variant[debug_menu_item_ids[g_debug_menu.selected_row]]--;
         {
             s32      item = debug_menu_item_ids[g_debug_menu.selected_row];
@@ -787,7 +786,7 @@ void update_debug_menu(void) {
     }
     case DEBUG_COLUMN_FOG:
         if (g_debug_menu.selected_row == 0) {
-            u64 buttons = D_0013C940.buttons.held_pressed;
+            u64 buttons = (*(u64 *)&controller_state.held);
             if (buttons & 0x800000040ULL)
                 D_L00_0015F448 += 1024.0f;
             if (buttons & 0x400000010ULL)
@@ -798,7 +797,7 @@ void update_debug_menu(void) {
                 D_L00_0015F448 = 0.0f;
         }
         if (g_debug_menu.selected_row == 2) {
-            u64 buttons = D_0013C940.buttons.held_pressed;
+            u64 buttons = (*(u64 *)&controller_state.held);
             if (buttons & 0x800000040ULL)
                 D_L00_0015F44C += 1024.0f;
             if (buttons & 0x400000010ULL)
@@ -809,7 +808,7 @@ void update_debug_menu(void) {
                 D_L00_0015F44C = D_L00_0015F448;
         }
         if (g_debug_menu.selected_row == 1) {
-            u64 buttons = D_0013C940.buttons.held_pressed;
+            u64 buttons = (*(u64 *)&controller_state.held);
             if (buttons & 0x800000040ULL)
                 D_L00_0015F450 -= 2.55f;
             if (buttons & 0x400000010ULL)
@@ -820,7 +819,7 @@ void update_debug_menu(void) {
                 D_L00_0015F450 = 0.0f;
         }
         if (g_debug_menu.selected_row == 3) {
-            u64 buttons = D_0013C940.buttons.held_pressed;
+            u64 buttons = (*(u64 *)&controller_state.held);
             if (buttons & 0x800000040ULL)
                 D_L00_0015F454 -= 2.55f;
             if (buttons & 0x400000010ULL)
@@ -831,31 +830,31 @@ void update_debug_menu(void) {
                 D_L00_0015F454 = 0.0f;
         }
         if (g_debug_menu.selected_row == 4) {
-            if (D_L00_0015F444 < 255 && (D_0013C940.buttons.held_pressed & 0x800000040ULL))
+            if (D_L00_0015F444 < 255 && ((*(u64 *)&controller_state.held) & 0x800000040ULL))
                 ++D_L00_0015F444;
-            if (D_L00_0015F444 > 0 && (D_0013C940.buttons.held_pressed & 0x400000010ULL))
+            if (D_L00_0015F444 > 0 && ((*(u64 *)&controller_state.held) & 0x400000010ULL))
                 --D_L00_0015F444;
         }
         if (g_debug_menu.selected_row == 5) {
-            if (D_L00_0015F445 < 255 && (D_0013C940.buttons.held_pressed & 0x800000040ULL))
+            if (D_L00_0015F445 < 255 && ((*(u64 *)&controller_state.held) & 0x800000040ULL))
                 ++D_L00_0015F445;
-            if (D_L00_0015F445 > 0 && (D_0013C940.buttons.held_pressed & 0x400000010ULL))
+            if (D_L00_0015F445 > 0 && ((*(u64 *)&controller_state.held) & 0x400000010ULL))
                 --D_L00_0015F445;
         }
         if (g_debug_menu.selected_row == 6) {
-            if (D_L00_0015F446 < 255 && (D_0013C940.buttons.held_pressed & 0x800000040ULL))
+            if (D_L00_0015F446 < 255 && ((*(u64 *)&controller_state.held) & 0x800000040ULL))
                 ++D_L00_0015F446;
-            if (D_L00_0015F446 > 0 && (D_0013C940.buttons.held_pressed & 0x400000010ULL))
+            if (D_L00_0015F446 > 0 && ((*(u64 *)&controller_state.held) & 0x400000010ULL))
                 --D_L00_0015F446;
         }
         update_fog();
         break;
     case DEBUG_COLUMN_CAMERA_ACTUATOR_AND_CAPTURE:
-        if (g_debug_menu.selected_row == 0 && (D_0013C940.buttons.w.pressed & 0x50))
+        if (g_debug_menu.selected_row == 0 && (controller_state.pressed & 0x50))
             g_debug_menu.battle_camera_enabled = !g_debug_menu.battle_camera_enabled;
-        if (g_debug_menu.selected_row == 1 && (D_0013C940.buttons.w.pressed & 0x50))
+        if (g_debug_menu.selected_row == 1 && (controller_state.pressed & 0x50))
             g_debug_menu.actuator_enabled = !g_debug_menu.actuator_enabled;
-        if (g_debug_menu.selected_row == 2 && (D_0013C940.buttons.w.pressed & 0xF0)) {
+        if (g_debug_menu.selected_row == 2 && (controller_state.pressed & 0xF0)) {
             char *directory = level_directory_macro;
             char *path_format = level_file_path_format_gp;
             s32   i = 0, found, fd, size;
@@ -926,7 +925,7 @@ void update_debug_menu(void) {
                 }
             }
         }
-        if (g_debug_menu.selected_row == 3 && (D_0013C940.buttons.w.pressed & 0xF0)) {
+        if (g_debug_menu.selected_row == 3 && (controller_state.pressed & 0xF0)) {
             s32 fd;
             sprintf(scratch.start_point.path,
                     level_file_path_format,

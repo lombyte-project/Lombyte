@@ -100,7 +100,6 @@ int  update_shuttle_travel_and_camera(char *moby, int idx) __asm__("FUN_L17_002f
 void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
 
 extern char D_0014C190[];
-extern char D_0013CAE4[];
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L17_002f1940");
 
@@ -167,7 +166,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         pl = &hero;
         if (((unsigned char *)pl->ground_moby) == shuttle_moby && pl->air_frames.s == 0) {
             update_shuttle_help_message(shuttle_moby);
-            if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && D_L17_0015F594 == 10) {
+            if ((pad_pressed & 0x10) && D_L17_0015F594 == 10) {
                 int s = shuttle_vars->dir;
                 if (s >= 0) {
                     shuttle_vars->go = 1;

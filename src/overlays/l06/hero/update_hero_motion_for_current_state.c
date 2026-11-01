@@ -905,8 +905,8 @@ extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 extern s32  allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern s32  FUN_L00_001ff600(f32, void *, void *);
 extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
-extern struct PadState D_0013C940;
-#define PD D_0013C940
+
+#define PD controller_state
 extern struct PlayerJointTable D_L06_0017AE00;
 #define AN D_L06_0017AE00
 struct VoiceSlot {

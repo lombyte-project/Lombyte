@@ -1,5 +1,7 @@
 /* Hero items and targeting: item slots and switching, ledge and grind rail probes, aim pitch, target scoring and selection. */
+#include "rnc/input/pad_globals.h"
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/mobys/moby_hit.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/asm_helpers.h"
@@ -344,8 +346,7 @@ typedef union {
     float       f[4];
 } Vec4_20d330;
 
-extern int D_0013CAE4_0020d330[] __asm__("D_0013CAE4");
-void       update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
+void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
 
 void update_hero_offset_rail_candidate(void) {
     struct Hero *P = &hero;
@@ -365,7 +366,7 @@ void update_hero_offset_rail_candidate(void) {
             float bz, az;
             int   fl;
             az = rail_query_position.f[2];
-            fl = D_0013CAE4_0020d330[0];
+            fl = pad_pressed;
             bz = rail_point.f[2];
             minimum_query_height_above_rail = -0.7f;
             query_height_above_rail = az - bz;
@@ -1908,7 +1909,6 @@ s32 can_select_hero_item_31(void) {
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 
-extern char          D_0013C940[];
 extern char          D_00141660[];
 extern unsigned char D_0013D4C0[];
 extern int           D_0015ED8C;
@@ -1963,8 +1963,8 @@ void hero_switch_item(int i) {
     }
     changed = 0;
     {
-        char *pad = D_0013C940;
-        if ((*(int *)(pad + 0x1A4) & 0x80) || hero.force_slot0_item8 != 0) {
+        struct PadState *pad = &controller_state;
+        if ((pad->pressed & 0x80) || hero.force_slot0_item8 != 0) {
             if (i == 0) {
                 int          v;
                 struct Hero *g = &hero;
@@ -1980,8 +1980,8 @@ void hero_switch_item(int i) {
         }
     }
     if (i == 0) {
-        char *pad = D_0013C940;
-        if (*(int *)(pad + 0x1A4) & 0x20) {
+        struct PadState *pad = &controller_state;
+        if (pad->pressed & 0x20) {
             struct Hero *g = &hero;
             if (g->item_select_blocked == 0) {
                 if (g->items[0].item_id != *(int *)(D_00141660) && *(int *)(D_00141660) != 0) {
@@ -2725,7 +2725,6 @@ extern void FUN_L00_001ff9e8(void *);
 extern void matrix_from_basis_rows(void *, void *) __asm__("FUN_L00_001ffcf8");
 extern void update_hero_motion_and_collision_probes(void) __asm__("FUN_L00_00221310");
 extern void update_hero_timers_and_reach_state(void) __asm__("FUN_L00_002215c8");
-extern u8   controller_state[] __asm__("D_0013C940");
 
 /* Per-frame hero input: stick (or d-pad) into unk1D20/24, the yaw and position
    history rings, then the hero basis matrix and the movement updates. */
@@ -2745,7 +2744,7 @@ void hero_update(void) {
     hero_state->gravity_mode = mode;
     hero_state->stick_magnitude = get_capped_hero_stick_magnitude();
     hero_state->unk240 = 0;
-    source = controller_state;
+    source = (u8 *)&controller_state;
     hero_state->stick_x = *(f32 *)(source + 0x108);
     hero_state->stick_y = *(f32 *)(source + 0x10C);
     if (FUN_L00_001ff408(&hero_state->stick_x) < 0.25f) {
@@ -4152,7 +4151,6 @@ extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern char          hero_pos[] __asm__("D_0013F3D0");
 extern f32           D_0015ED6C;
 extern u8 D_0013D4C2 NOT_SDA;
-extern s32           pad_held_lui __asm__("D_0013CAE0") NOT_SDA;
 
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 

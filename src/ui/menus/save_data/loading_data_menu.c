@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "asm.h"
 
@@ -6,13 +7,6 @@
 #include "rnc/globals.h"
 #include "rnc/game/options.h"
 #include "rnc/game/transitions.h"
-
-struct LoadMenuControllerState {
-    u8  pad_0[0x1B4];
-    s32 held_buttons;
-    u8  pad_1B8[0xC];
-    s32 pressed_buttons;
-};
 
 struct LoadMenuMixerState {
     u8  pad_0[0x48];
@@ -32,8 +26,6 @@ struct LoadMenuDescriptor {
     u8  pad_34[0xC];
     s32 selected_save_slot;
 };
-
-extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
 
 #include "rnc/save/memory_card_state.h"
 
@@ -75,12 +67,12 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
             return 0;
         }
     }
-    if (controller_state.pressed_buttons & 0xD00) {
+    if ((*(s32 *)&controller_state.pressed_unmasked) & 0xD00) {
         if (menu_system.close_locked == 0) {
             return 1;
         }
     }
-    if (controller_state.pressed_buttons & 0x10) {
+    if ((*(s32 *)&controller_state.pressed_unmasked) & 0x10) {
         back_page = menu_system.current->back;
         if (back_page != 0) {
             menu_system.next = back_page;
@@ -95,9 +87,9 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
     if (((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) &&
         (memory_card_state.card[0].type == 2)) {
         if (menu->flags & 1) {
-            buttons = controller_state.held_buttons;
+            buttons = controller_state.raw_pressed;
         } else {
-            buttons = controller_state.pressed_buttons;
+            buttons = (*(s32 *)&controller_state.pressed_unmasked);
         }
         menu->selected_save_slot = (s32)selected_save_slot;
         if ((buttons & 0x1000) && (selected_save_slot != 0)) {

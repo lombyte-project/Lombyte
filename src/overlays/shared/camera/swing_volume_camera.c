@@ -166,7 +166,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
                                       D_L00_00166DD8) >= 1.3962634f) {
         goto stop;
     }
-    if (params->l_buttons_end != 0 && params->type == 5 && (pad_held[0] & (PAD_L2 | PAD_L1))) {
+    if (params->l_buttons_end != 0 && params->type == 5 && (pad_held & (PAD_L2 | PAD_L1))) {
     stop:
         if (params->timer != 0) {
             params->done = 1;

@@ -1532,8 +1532,7 @@ void morphoray_update(Moby *moby) {
           ((Hero *)((char *)&hero))->state.control_mode == 12 ||
           ((Hero *)((char *)&hero))->state.control_mode == 4 ||
           ((Hero *)((char *)&hero))->state.control_mode == 5)) &&
-        (*(int *)pad_held & ((Hero *)((char *)&hero))->items[0].button_mask) != 0 && !busy &&
-        in_range) {
+        (pad_held & ((Hero *)((char *)&hero))->items[0].button_mask) != 0 && !busy && in_range) {
         if (((Hero *)((char *)&hero))->item_anim_active == 0) {
             start_equipped_item_animation();
         }
