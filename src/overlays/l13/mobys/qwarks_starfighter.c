@@ -1561,7 +1561,7 @@ extern int D_0015ED84;
 
 extern int D_0015EEA4;
 
-int D_L13_00161950 = 0;
+int l13_starfighter_owner_unavailable_voice_line_index __asm__("D_L13_00161950") = 0;
 
 int D_L13_00161954 = -1;
 
@@ -2001,8 +2001,8 @@ void qwarks_starfighter_update(Moby388 *moby) {
             int line = *(int *)(dialog + 0x1C);
             if (line == -1 && (short)starfighter_vars->h138 <= 0) {
                 if (queue_starfighter_voice_line(
-                        moby, starfighter_vars, D_L13_00161950 + 0x1D, 1) != 0) {
-                    D_L13_00161950 = (D_L13_00161950 + 1) % 4;
+                        moby, starfighter_vars, l13_starfighter_owner_unavailable_voice_line_index + 0x1D, 1) != 0) {
+                    l13_starfighter_owner_unavailable_voice_line_index = (l13_starfighter_owner_unavailable_voice_line_index + 1) % 4;
                     starfighter_vars->h138 += 1;
                 }
             }
@@ -2310,8 +2310,8 @@ void qwarks_starfighter_update(Moby388 *moby) {
                 owner->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END || owner->state == 7) {
                 moby->state = STARFIGHTER_STATE_OWNER_UNAVAILABLE;
                 if (queue_starfighter_voice_line(
-                        moby, starfighter_vars, D_L13_00161950 + 0x1D, 1) != 0) {
-                    D_L13_00161950 = (D_L13_00161950 + 1) % 4;
+                        moby, starfighter_vars, l13_starfighter_owner_unavailable_voice_line_index + 0x1D, 1) != 0) {
+                    l13_starfighter_owner_unavailable_voice_line_index = (l13_starfighter_owner_unavailable_voice_line_index + 1) % 4;
                     starfighter_vars->h138 = 1;
                 } else {
                     starfighter_vars->h138 = 0;
