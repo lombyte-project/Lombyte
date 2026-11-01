@@ -202,6 +202,10 @@ void destroy_decoy_with_particles(unsigned char *moby) {
 u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) __asm__("FUN_L00_002c35c0");
 
 u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
+    enum {
+        DECOY_INITIALIZE = 0,
+        DECOY_WAIT_TO_SHRINK = 5
+    };
     u8 *flags = item_text_variant;
     u8 *spawned_moby;
     u8 *decoy_vars;
@@ -217,7 +221,7 @@ u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
         *(u16 *)(spawned_moby + 0x32) = 0xff;
         MOBY(spawned_moby)->visible = 1;
         decoy_vars = *(u8 **)(spawned_moby + 0x78);
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = DECOY_INITIALIZE;
         qcopy(&MOBY(spawned_moby)->pos, position);
         qcopy(decoy_vars + 0x10, other_position);
         speed = frame_scale * -0.5f;
@@ -240,7 +244,7 @@ u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
                 u8 *listed_moby = (u8 *)(moby_table + (D_L00_001B0830_lui[i] << 8));
                 if (listed_moby != 0 &&
                     (MOBY(listed_moby)->oclass == 0xcb || MOBY(listed_moby)->oclass == 0x76c) &&
-                    MOBY(listed_moby)->state < 5) {
+                    MOBY(listed_moby)->state < DECOY_WAIT_TO_SHRINK) {
                     current_value = *(s32 *)(*(u8 **)(listed_moby + 0x78) + 0x54);
                     if (best_value <= current_value) {
                         candidate = listed_moby;
