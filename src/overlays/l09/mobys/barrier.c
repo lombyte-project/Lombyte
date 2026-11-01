@@ -71,11 +71,14 @@ extern void  func_L00_0025F4A8_309688(void *,
 void         barrier_update(Moby *moby) __asm__("FUN_L09_003082d8");
 
 char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class) {
+    enum {
+        BARRIER_REPLACEMENT_DRAW_DISTANCE = 0xFF
+    };
     char *moby = create_moby(spawned_moby_class);
     if (moby != 0) {
         unsigned char state;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        state = 0xFF;
+        state = BARRIER_REPLACEMENT_DRAW_DISTANCE;
         MOBY(moby)->draw_dist = state;
         moby[0x31] = 1;
         moby[0x20] = 0;
