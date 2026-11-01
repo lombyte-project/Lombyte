@@ -43,6 +43,9 @@ void draw_sky_shells(void) {
         SKY_SHELL_ONE_AND_THREE_QUARTERS_SCALE = 4,
         SKY_SHELL_DOUBLE_SCALE = 5
     };
+    enum {
+        SKY_SHELL_RELOCATION_RESET = 0
+    };
     f32 rotation_angles[4];
     f32 shell_scale;
     u8 *transform_row;
@@ -50,7 +53,7 @@ void draw_sky_shells(void) {
 
     shell_index = 0;
     setup_sky_gif_paging();
-    level_sky_effect_data->relocation_state = 0;
+    level_sky_effect_data->relocation_state = SKY_SHELL_RELOCATION_RESET;
     set_identity_matrix(&sky_matrix);
     clear_u64_value(rotation_angles);
     if (level_sky_effect_data->shell_count > 0) {
