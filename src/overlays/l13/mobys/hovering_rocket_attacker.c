@@ -386,6 +386,13 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     enum {
         TARGET_SELECTION_NO_TARGET = 2
     };
+    enum {
+        UPDATE_INITIALIZE = 0,
+        UPDATE_ATTACK_SEQUENCE = 4,
+        WAIT_TO_MOVE_TO_TABLE_POINT = 5,
+        WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
+        EMIT_EFFECT_AND_REMOVE = 8
+    };
     HoveringRocketAttackerVars *moby_data;
     char                       *hit_record;
     int                         hit_reaction_code;
@@ -400,7 +407,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     float                       z[4];
 
     moby_data = ((unsigned char *)MOBY(moby)->pvars);
-    if (MOBY(moby)->state == 0)
+    if (MOBY(moby)->state == UPDATE_INITIALIZE)
         return;
     if (moby_data->unk110 == -1 || voice_is_playing(moby, moby_data->unk110) == 0) {
         moby_data->unk110 = -1;
@@ -499,7 +506,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         if (moby_data->health <= 0.0f) {
             hit_reaction_code = 1;
         } else {
-            MOBY(moby)->state = 7;
+            MOBY(moby)->state = WAIT_TO_RESUME_ATTACK_SEQUENCE;
         }
         switch (hit_reaction_code) {
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
@@ -517,7 +524,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             FUN_L00_00257470(moby, 0, -1);
-            MOBY(moby)->state = 8;
+            MOBY(moby)->state = EMIT_EFFECT_AND_REMOVE;
             moby_data->unk67 = 0xF0;
             break;
         case HIT_REACTION_NONE:
@@ -529,7 +536,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     }
     MOBY(moby)->hit_slot = 0xFF;
     trooper_anim_finish(moby, &moby_data->anim_state);
-    if (MOBY(moby)->state == 4) {
+    if (MOBY(moby)->state == UPDATE_ATTACK_SEQUENCE) {
         moby_data->unkD8 = 50.0f;
     } else {
         moby_data->unkD8 = 40.0f;
@@ -548,7 +555,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         if (moby_data->unkD8 < vector_distance_xy(moby + 0x10, moby_data->unk70) ||
             8.0f < absolute_float(MOBY(moby)->pos.z - moby_data->unk70[2])) {
             moby_data->unkB4 = 2;
-        } else if (MOBY(moby)->state != 5 &&
+        } else if (MOBY(moby)->state != WAIT_TO_MOVE_TO_TABLE_POINT &&
                    collision_line(moby + 0x10, D_0013F350 + 0xD0, 2, moby, 0) != 0) {
             moby_data->unkB4 = 2;
         }
