@@ -954,9 +954,9 @@ typedef struct {
     u64 tag[4];
 } QuadPacket;
 
-s32 D_L13_00161E88 = 0;
+s32 l13_point_table_quad_blend_color_a_selector __asm__("D_L13_00161E88") = 0;
 s32 D_L13_00161E8C = 2;
-s32 D_L13_00161E90 = 0;
+s32 l13_point_table_quad_blend_alpha_selector __asm__("D_L13_00161E90") = 0;
 s32 D_L13_00161E94 = 1;
 s32 D_L13_00161E98 = 0x80;
 s32 D_L13_00161E9C = 0xb;
@@ -996,9 +996,9 @@ void draw_point_table_quads(struct Moby *moby) {
     i = 0;
     pk[0].tag[1] = get_effect_texture(D_L13_00161E9C);
     pk[1].tag[1] = get_effect_texture(D_L13_00161E9C);
-    regs = D_L13_00161E88;
+    regs = l13_point_table_quad_blend_color_a_selector;
     regs |= (u64)D_L13_00161E8C << 2;
-    regs |= (u64)D_L13_00161E90 << 4;
+    regs |= (u64)l13_point_table_quad_blend_alpha_selector << 4;
     regs |= (u64)D_L13_00161E94 << 6;
     regs |= (u64)D_L13_00161E98 << 32;
     /* Store order is load-bearing: it sets which register keeps regs. */
