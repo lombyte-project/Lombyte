@@ -187,7 +187,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
     MOBY(moby)->hit_slot = 0xFF;
     switch (MOBY(moby)->state) {
     case GADGEBOT_CONTAINER_ACTIVATE:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS;
         break;
     case GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS:
         frame_count_snapshot = level_frame_count;
