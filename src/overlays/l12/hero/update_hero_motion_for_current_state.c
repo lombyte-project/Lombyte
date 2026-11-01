@@ -1776,7 +1776,7 @@ void update_hero_motion_for_current_state(void) {
             if (test_hero_animation_frame_window(84.0f) != 0) {
                 f32 a = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
                 f32 s = frame_time * 2.5f;
-                if (pad_held & 0xA) {
+                if (pad_held_words[0] & 0xA) {
                     s = frame_time * 3.0f;
                 }
                 hero.motion.velocity.f[0] += fast_cos(a) * s;

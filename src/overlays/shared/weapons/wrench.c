@@ -646,7 +646,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         wrench_moby->parent = player->moby;
         player_state = player->state;
         if (player_state == 1) {
-            if (pad_held & 0xA)
+            if (pad_held_words[0] & 0xA)
                 draw_target_reticle(
                     (int)wrench_moby, 0xFF917267, 1.0f, 0.0f, 0, 0x25, -1, 90.0f, 4);
             wrench_vars->aim_hit = 0;

@@ -140,7 +140,8 @@ void shuttle_update(struct Moby *moby) {
                     shuttle_vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
                 if (fast_vec_dist(&hero.motion.pos, &hero_position_probe) < 0.001f) {
                     try_set_shuttle_departure_help_message((char *)moby);
-                    if ((pad_pressed & 0x10) && hero.air_frames.s == 0 && D_L08_0015F594 == 10)
+                    if ((pad_pressed_words[0] & 0x10) && hero.air_frames.s == 0 &&
+                        D_L08_0015F594 == 10)
                         moby->state = 3;
                 }
             }

@@ -1289,7 +1289,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         kb = fighter_jet_vertical_steering_settle_threshold_scale_gp;
         horizontal_steering_input = x;
         vertical_steering_input = y;
-        if (pad_held & 0x200) {
+        if (pad_held_words[0] & 0x200) {
             horizontal_steering_input = x / D_L17_00162028 * D_L17_00162030;
             vertical_steering_input = y / D_L17_00162024 * D_L17_0016202C;
             ka = fighter_jet_rescaled_horizontal_steering_settle_threshold_scale_gp;
@@ -1874,7 +1874,7 @@ void fighter_jet_update(ShipMoby *moby) {
             struct Hero *g = &hero;
             board = jet_distance(moby, (ShipCamera *)g->moby) <
                         fighter_jet_boarding_distance_limit_gp &&
-                    FUN_00215130(7, 0x53E4) != 0 && (pad_pressed & 0x10);
+                    FUN_00215130(7, 0x53E4) != 0 && (pad_pressed_words[0] & 0x10);
             if (board) {
                 remove_help_message_for_selector(7);
                 moby->state = 2;

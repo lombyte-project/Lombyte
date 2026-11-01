@@ -15,9 +15,11 @@
 | `0x348` | `saved_held` | Held mask before mode filtering, used by the next poll |
 | `0x34D`–`0x34F` | `repeat_delay`, `repeat_rate`, `repeat_timer` | Button-repeat timing |
 
-`pad_held` (`D_0013CAE0`) and `pad_pressed` (`D_0013CAE4`) name the two
+`pad_held_words` (`D_0013CAE0`) and `pad_pressed_words` (`D_0013CAE4`) name the two
 interior words separately because retail code addresses them directly.
-Their `_lui` aliases preserve non-small-data access. The controller record
+The array declarations preserve the original address formation; the scalar
+`pad_held_lui` and `pad_pressed_lui` aliases preserve explicit non-small-data access.
+These two deliberate array/scalar declaration variants remain in the declaration audit. The controller record
 also retains a `_lui` alias; pyrocitor uses the second name to preserve address
 reconstruction between button tests.
 

@@ -904,7 +904,7 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
             }
             total = frame_time_sq * 11.0f;
             rp = throw_arc_velocity;
-            if (pad_held & 5) {
+            if (pad_held_words[0] & 5) {
                 height = convert_integer_to_float(D_0013E520.bA) * 2.5f + 8.5f;
             } else {
                 height = 8.5f;

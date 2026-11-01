@@ -357,7 +357,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             }
         }
     }
-    if (hero.state.current == 0x81 && (pad_held & 3)) {
+    if (hero.state.current == 0x81 && (pad_held_words[0] & 3)) {
         set_follow_camera_orbit_clamp_mode(0);
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);

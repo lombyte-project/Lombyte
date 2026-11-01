@@ -261,7 +261,7 @@ target_valid:
             if (hero_data->item_anim_active &&
                 hero_data->item_anim_frames == scale_game_frames(0x11))
                 goto L3D10;
-            if (pad_pressed & hero_data->items[0].button_mask) {
+            if (pad_pressed_words[0] & hero_data->items[0].button_mask) {
                 if (hero_data->state.current == 0x1E && get_ammo(-1))
                     goto L3D10;
             }

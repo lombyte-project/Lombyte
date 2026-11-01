@@ -334,7 +334,7 @@ void teleporter_update(struct Moby *moby) {
         if (g->air_frames.s != 0)
             break;
         try_set_teleporter_help_message(moby);
-        if (!(pad_pressed & 0x10))
+        if (!(pad_pressed_words[0] & 0x10))
             break;
         allocate_voice_for_target_entry(0, 0, (void *)moby);
         moby->state = 2;

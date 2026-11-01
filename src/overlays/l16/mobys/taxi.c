@@ -116,7 +116,7 @@ void taxi_update(struct Moby *moby) {
             if (absolute_float(hero_local_offset[1]) < 1.2f) {
                 FUN_L16_002e4a58_c(moby);
                 request_taxi_destination_help_message(moby);
-                if ((pad_pressed & 0x10) && *(int *)&D_L16_0015F594 == 8) {
+                if ((pad_pressed_words[0] & 0x10) && *(int *)&D_L16_0015F594 == 8) {
                     moby->state = 3;
                     matched_moby = find_group_moby_by_data_id(moby, *(short *)(taxi_data + 0xAE));
                     if (matched_moby != 0) {

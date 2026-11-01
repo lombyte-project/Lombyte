@@ -112,7 +112,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) {
     if (game_frame < active_scene_trigger.next_frame)
         return 0;
 
-    if (trigger->any_direction != 0 || (pad_pressed & 0x10)) {
+    if (trigger->any_direction != 0 || (pad_pressed_words[0] & 0x10)) {
         index = FUN_L00_002667d0_c2(moby);
         if (level_object_states[index].state == 0)
             level_object_states[index].state = 1;

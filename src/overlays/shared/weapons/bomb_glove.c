@@ -143,7 +143,7 @@ void aim_throw_arc(V2c2488 *origin_position,
     *(s32 *)&throw_velocity[2] = 0;
     throw_velocity[2] =
         FUN_L00_0025abf0(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
-    if (pad_held_lui & 5) {
+    if (pad_held_words_lui[0] & 5) {
         k = scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f;
         k = k / horizontal_speed;
     } else {

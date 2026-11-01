@@ -105,7 +105,7 @@ void taxi_update(struct Moby *moby) {
                 hero_offset[0] > -0.75f) {
                 select_taxi_route(moby);
                 request_moby_variant_help_message(moby);
-                if (pad_pressed & 0x10) {
+                if (pad_pressed_words[0] & 0x10) {
                     moby->state = 3;
                     destination_stop_moby = find_moby_in_owner_list_by_id(moby, taxi_data->unkB6);
                     if (destination_stop_moby != 0) {

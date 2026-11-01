@@ -497,9 +497,9 @@ void taunter_update(Moby *taunter_moby) {
         taunter_vars->cnt18 = 0;
     }
     if (voice_is_playing(taunter_moby, taunter_vars->anim) == 0) {
-        activation_button_bits = (*(u32 *)&controller_state.pressed) & hero.items[0].button_mask;
+        activation_button_bits = ((u32)controller_state.pressed) & hero.items[0].button_mask;
         if ((activation_button_bits != 0 ||
-             (((*(u32 *)&controller_state.held) & hero.items[0].button_mask) != 0 &&
+             ((((u32)controller_state.held) & hero.items[0].button_mask) != 0 &&
               taunter_vars->retry >= 0x11)) &&
             hero.item_use_locked == 0) {
             if (activation_button_bits != 0) {
@@ -529,7 +529,7 @@ void taunter_update(Moby *taunter_moby) {
             goto end;
         }
         if (taunter_vars->anim < 0) {
-            if (((*(u32 *)&controller_state.held) & hero.items[0].button_mask) != 0 &&
+            if ((((u32)controller_state.held) & hero.items[0].button_mask) != 0 &&
                 hero.item_use_locked == 0)
                 taunter_vars->retry++;
             else
@@ -540,7 +540,7 @@ void taunter_update(Moby *taunter_moby) {
         }
     } else {
         taunter_vars->retry++;
-        if ((pad_held & hero.items[0].button_mask) != 0 ||
+        if ((pad_held_words[0] & hero.items[0].button_mask) != 0 ||
             scale_game_frames(0x1E) >= taunter_vars->cnt18) {
             if (hero.item_use_locked == 0)
                 goto L7340;

@@ -411,7 +411,7 @@ void hoven_turret_update(struct Moby *moby) {
                 blend_moby_animation(moby, 5, 0, 1);
             }
             fast_dec_timer_s16(&hoven_turret_state->f70);
-            if ((pad_held & 0xA0) && hoven_turret_state->f70 == 0) {
+            if ((pad_held_words[0] & 0xA0) && hoven_turret_state->f70 == 0) {
                 Vec_304920 firing_offset;
                 Vec_304920 muz;
                 float      yaw;

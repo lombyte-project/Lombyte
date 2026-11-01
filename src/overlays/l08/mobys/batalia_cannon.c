@@ -766,7 +766,8 @@ void batalia_cannon_update(Moby *moby) {
         }
         if (visited52[moby->mission + D_0015ED84 * 16] != 0xFF && (hero.ship_flags & 1))
             hero_respawn();
-        if (((pad_pressed & 0x10) || (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) &&
+        if (((pad_pressed_words[0] & 0x10) ||
+             (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) &&
             visited52[moby->mission + D_0015ED84 * 16] == 0xFF) {
             hero.ship_flags = 0;
             hero_set_state(0, 1);
@@ -892,7 +893,7 @@ void batalia_cannon_update(Moby *moby) {
         } else if (cannon_control_vars->lock_timer)
             cannon_control_vars->lock_timer--;
         fast_dec_timer_s16(&cannon_control_vars->fire_timer);
-        if ((pad_held & 0x20) && cannon_control_vars->fire_timer == 0) {
+        if ((pad_held_words[0] & 0x20) && cannon_control_vars->fire_timer == 0) {
             if (cannon_control_vars->barrel == 1) {
                 int count;
                 build_spherical_offset(direction,

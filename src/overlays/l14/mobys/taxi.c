@@ -123,7 +123,7 @@ void taxi_update(struct Moby *moby) {
             if (absolute_float(hero_relative_position[1]) < 1.2f) {
                 prepare_taxi_route(moby);
                 request_taxi_stop_prompt(moby);
-                if ((pad_pressed & button) && D_L14_0015F594 == 4) {
+                if ((pad_pressed_words[0] & button) && D_L14_0015F594 == 4) {
                     struct Moby *m;
                     moby->state = 3;
                     m = find_group_moby_by_tag(moby, taxi_vars->target);
@@ -308,7 +308,7 @@ void taxi_update(struct Moby *moby) {
                 hero_relative_position, hero_relative_position, taxi_inverse_rotation_matrix);
             if (absolute_float(hero_relative_position[1]) < 1.2f) {
                 request_taxi_stop_prompt(moby);
-                if (pad_pressed & button) {
+                if (pad_pressed_words[0] & button) {
                     qcopy(taxi_vars->save_pos, taxi_vars->pos);
                     qcopy(taxi_vars->save_rot, taxi_vars->rot);
                     initialize_taxi_stop_from_position(moby);

@@ -1161,7 +1161,7 @@ void update_hero_hoverboard_trick_animations(void) {
     int          pad;
     hero_ptr->board_jump_land_frames = truncate_float_to_s32(
         predict_hero_trajectory_intercept_time(60.0f, hero_ptr->board_gravity, -1.0f));
-    if (hero_ptr->trick_input != 0 && ((pad = pad_held) & 0xF) != 0) {
+    if (hero_ptr->trick_input != 0 && ((pad = pad_held_words[0]) & 0xF) != 0) {
         hero_ptr->air_pose_index = 0;
         if (pad & 8)
             hero_ptr->air_pose_index = 1;
@@ -1185,7 +1185,7 @@ void update_hero_hoverboard_trick_animations(void) {
     }
     {
         struct Hero *k = &hero;
-        if ((k->air_frames.s == 0 || (pad_held & 0xF) == 0) &&
+        if ((k->air_frames.s == 0 || (pad_held_words[0] & 0xF) == 0) &&
             (unsigned int)(((unsigned char *)((char *)k->moby))[0x53] - 0x69) < 4 &&
             k->anim_changing == 0 &&
             k->anim_loop_frame < ((unsigned char *)((char *)k->moby))[0x51] &&

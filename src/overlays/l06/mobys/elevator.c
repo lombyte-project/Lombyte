@@ -253,7 +253,8 @@ void elevator_update(Moby_2FDA70 *moby) {
             } else {
                 ok = try_set_help_message(9, 0x1789) != 0;
             }
-            if ((pad_pressed & 0x10) && ((Hero_2FDA70 *)(D_0013F350))->f2084 != 100 && ok) {
+            if ((pad_pressed_words[0] & 0x10) && ((Hero_2FDA70 *)(D_0013F350))->f2084 != 100 &&
+                ok) {
                 ((Hero_2FDA70 *)(D_0013F350))->f1F2 = scale_game_frames(0x3C);
                 moby_data->f90 = scale_game_frames(0x78);
                 if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {

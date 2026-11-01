@@ -366,7 +366,7 @@ void update_hero_offset_rail_candidate(void) {
             float bz, az;
             int   fl;
             az = rail_query_position.f[2];
-            fl = pad_pressed;
+            fl = pad_pressed_words[0];
             bz = rail_point.f[2];
             minimum_query_height_above_rail = -0.7f;
             query_height_above_rail = az - bz;

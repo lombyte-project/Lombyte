@@ -158,7 +158,7 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
     *(s32 *)&launch_velocity[2] = 0;
     launch_velocity[2] =
         fn_2c7320(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
-    if (pad_held & 5) {
+    if (pad_held_words[0] & 5) {
         k = 3.5f / horizontal_speed;
     } else {
         k = 2.5f / horizontal_speed;
