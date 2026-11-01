@@ -133,7 +133,7 @@ V D_L00_001CB7E0[1200] = {0};
 
 u8 D_L00_001D2860[1200] = {0};
 
-s16 D_L00_001D5740[1200] = {0};
+s16 l00_smoke_fire_particle_fade_in_timers[1200] __asm__("D_L00_001D5740") = {0};
 
 /* Particle pool of 1200 entries, one array per field (more fields below FUN_L00_002d73e8). */
 
@@ -177,7 +177,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
             D_L00_001CB7E0[i].w = 1.0f;
             D_L00_001D2860[i] = r;
             reset_smoke_fire_spawner_particle(spawner, i);
-            D_L00_001D5740[i] = 0;
+            l00_smoke_fire_particle_fade_in_timers[i] = 0;
         }
         j = particle_end_or_emission_index;
         particle_end_or_emission_index = particle_end_or_emission_index + q->extra;
@@ -322,10 +322,10 @@ void draw_smoke_fire_spawner(P *spawner) {
                 draw_geometry_quad(&quad, 0, 0);
             }
         } else {
-            if (D_L00_001D5740[i]) {
-                fast_dec_timer_s16(&D_L00_001D5740[i]);
+            if (l00_smoke_fire_particle_fade_in_timers[i]) {
+                fast_dec_timer_s16(&l00_smoke_fire_particle_fade_in_timers[i]);
                 alpha = truncate_float_to_s32(
-                    (1.0f - convert_integer_to_float(D_L00_001D5740[i]) * D_L00_00161384) *
+                    (1.0f - convert_integer_to_float(l00_smoke_fire_particle_fade_in_timers[i]) * D_L00_00161384) *
                     D_L00_0016199C);
             } else if (D_L00_001D60A0[i]) {
                 if (fast_dec_timer_s16(&D_L00_001D60A0[i])) {
@@ -413,7 +413,7 @@ void reset_smoke_fire_spawner_particle(P *spawner, int i) {
     D_L00_001D31C0[i] = 0.0f;
     D_L00_001D4480[i] =
         random_float_between(*(float *)(spawner_vars + 0x8), *(float *)(spawner_vars + 0xC));
-    D_L00_001D5740[i] = D_L00_00161380_2d7bf0;
+    l00_smoke_fire_particle_fade_in_timers[i] = D_L00_00161380_2d7bf0;
     D_L00_001D60A0[i] = 0;
     emitter_particle_index = i - *(s16 *)spawner_vars;
     D_L00_001D6A00[i] = (emitter_particle_index + 1) * D_L00_0016137C;
