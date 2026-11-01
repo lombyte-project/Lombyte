@@ -507,6 +507,9 @@ void update_pause_menu(void) {
     enum {
         PAUSE_MENU_STATE_CLOSE_ON_ACTION_ENTRY = 0xA
     };
+    enum {
+        PAUSE_MENU_STATE_DEFAULT_PAGE_ENTRY = 0
+    };
     Own *owner;
     Own *u8p;
     Mth *active_callback_object;
@@ -603,7 +606,7 @@ void update_pause_menu(void) {
         return;
     }
     scene_state = D_L00_001B9CF0.state;
-    if (scene_state == 0 || scene_state == PAUSE_MENU_STATE_CLOSE_ON_ACTION_ENTRY ||
+    if (scene_state == PAUSE_MENU_STATE_DEFAULT_PAGE_ENTRY || scene_state == PAUSE_MENU_STATE_CLOSE_ON_ACTION_ENTRY ||
         scene_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY || scene_state == 0x11 ||
         scene_state == PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY || scene_state == 0x2D ||
         scene_state == PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY) {
