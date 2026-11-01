@@ -46,7 +46,7 @@ void configurable_particle_emitter_update(char *moby) {
     case EFFECT_STATE_INITIALIZE:
         switch (*(int *)effect_pvars) {
         case EFFECT_MODE_BURST_PARTICLES:
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = EFFECT_STATE_EMIT_BURST_PARTICLES;
             break;
         case EFFECT_MODE_CACHE_GROUND_HEIGHT:
             if (*(int *)(effect_pvars + 4) != -1) {
@@ -66,10 +66,10 @@ void configurable_particle_emitter_update(char *moby) {
                 }
             } else
                 *(float *)(effect_pvars + 0x88) = probe_ground_height(moby + 0x10, 0, 0.5f);
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT;
             break;
         case EFFECT_MODE_TIMED_PARTICLES:
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = EFFECT_STATE_EMIT_TIMED_PARTICLES;
             break;
         }
         break;
