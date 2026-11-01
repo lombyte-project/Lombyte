@@ -74,12 +74,12 @@ void set_novalis_bolt_crank_completion_flags(char *moby) {
     if (level != 1)
         return;
     if (((short)MOBY(moby)->save_id) == 0x34 && MOBY(moby)->oclass == 0x118 &&
-        (unsigned char)MOBY(moby)->state == 5) {
+        (unsigned char)MOBY(moby)->state == BOLT_CRANK_DONE) {
         menu_item_enabled_0 = level;
         level = D_0015ED84;
     }
     if (level == 1 && ((short)MOBY(moby)->save_id) == 0x35 && MOBY(moby)->oclass == 0x118 &&
-        (unsigned char)MOBY(moby)->state == 5) {
+        (unsigned char)MOBY(moby)->state == BOLT_CRANK_DONE) {
         menu_item_enabled_1_lui = level;
     }
 }
