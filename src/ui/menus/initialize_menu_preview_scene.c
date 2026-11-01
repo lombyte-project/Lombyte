@@ -87,28 +87,8 @@
 #include "rnc/ui/text/rebuild_configured_text_label_list.h"
 #include "rnc/ui/text/render_localized_ui_entry_list.h"
 
-struct P {
-    u8 pad_0[0x10];
-    u8 f10;
-};
-
-struct T {
-    u8        pad_0[0x48];
-    struct P *tbl[1];
-};
-
-struct O2 {
-    u8        pad_0[0x10];
-    float     f10, f14, f18;
-    u8        pad_1C[8];
-    struct T *f24;
-    u8        pad_28[0xC];
-    u16       f34;
-    u8        pad_36[0xA];
-    s32       f40, f44, f48;
-    u8        pad_4C[0x28];
-    s32      *f74;
-};
+#include "rnc/mobys/moby.h"
+#include "rnc/mobys/animation/moby_anim.h"
 
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_pages.h"
@@ -121,12 +101,12 @@ extern u8 D_0019C160[];
 #include "rnc/math/fast_math.h"
 #include "rnc/game/options.h"
 
-extern u8         menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
-extern u8         menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));
-extern void       vu1_sync_chain(s32) __asm__("func_002337B0");
-extern void       vu1_init_chain(void) __asm__("func_002335D0");
-extern struct O2 *create_menu_preview_moby() __asm__("func_00225490");
-extern s32        set_moby_animation() __asm__("func_00212ED8");
+extern u8   menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
+extern u8   menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));
+extern void vu1_sync_chain(s32) __asm__("func_002337B0");
+extern void vu1_init_chain(void) __asm__("func_002335D0");
+extern struct Moby *create_menu_preview_moby() __asm__("func_00225490");
+extern s32          set_moby_animation() __asm__("func_00212ED8");
 
 void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 
@@ -161,21 +141,23 @@ void initialize_menu_preview_scene(void) {
     menu_system.saved_texture_start = gs_texture_allocation_start;
     if (menu_system.current != 0) {
         for (i = 0; i < 14; i++) {
-            struct O2 *preview_moby = (struct O2 *)create_menu_preview_moby(0x472);
+            struct Moby *preview_moby = (struct Moby *)create_menu_preview_moby(0x472);
             panel_slots[i] = preview_moby;
             if (preview_moby != 0) {
-                s32 k;
-                preview_moby->f34 &= 0xFFFD;
-                ((struct O2 *)panel_slots[i])->f74 = quad_moby_update;
-                ((struct O2 *)panel_slots[i])->f10 = preview_camera.position.f[0];
-                ((struct O2 *)panel_slots[i])->f14 = preview_camera.position.f[1];
-                ((struct O2 *)panel_slots[i])->f18 = preview_camera.position.f[2];
-                ((struct O2 *)panel_slots[i])->f40 = 0;
-                ((struct O2 *)panel_slots[i])->f44 = 0;
-                ((struct O2 *)panel_slots[i])->f48 = 0;
-                k = menu_system.current->moby_anims[i];
+                s32 seq;
+                preview_moby->flags &= 0xFFFD;
+                ((struct Moby *)panel_slots[i])->update = (void (*)(struct Moby *))quad_moby_update;
+                ((struct Moby *)panel_slots[i])->pos.x = preview_camera.position.f[0];
+                ((struct Moby *)panel_slots[i])->pos.y = preview_camera.position.f[1];
+                ((struct Moby *)panel_slots[i])->pos.z = preview_camera.position.f[2];
+                ((struct Moby *)panel_slots[i])->rot.x = 0;
+                ((struct Moby *)panel_slots[i])->rot.y = 0;
+                ((struct Moby *)panel_slots[i])->rot.z = 0;
+                seq = menu_system.current->moby_anims[i];
                 set_moby_animation(
-                    panel_slots[i], k, ((struct O2 *)panel_slots[i])->f24->tbl[k]->f10 - 1);
+                    panel_slots[i],
+                    seq,
+                    ((AnimClass *)((struct Moby *)panel_slots[i])->pclass)->seqs[seq]->nframes - 1);
             }
         }
     }
