@@ -10,7 +10,7 @@ void voice_update_callback(int handle, long voice_state_address) {
         if (handle == 0) {
             voice->owner = 0;
             voice->owner_context = 0;
-            voice->state = 0;
+            voice->state = VOICE_SLOT_FREE;
         }
     }
 }
