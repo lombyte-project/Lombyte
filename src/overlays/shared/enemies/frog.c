@@ -143,7 +143,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern int   step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
-extern int   FUN_L00_00261b48(int, void *, void *, void *);
+extern int   path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 extern int   FUN_L00_002dc9f0(void *, void *);
 extern void  FUN_L00_00257470(void *, int, int);
 extern void  collect_mobies_in_sphere_at_moby_point(
@@ -536,7 +536,7 @@ void frog_update(unsigned char *moby) {
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
         fast_vec_normalize(A, moby + 0xC0, frog_instance_vars->unk1E4 * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
-        if (FUN_L00_00261b48(frog_instance_vars->unk1EC, &MOBY(moby)->pos, target + 0x10, D) != 0 &&
+        if (path_8808(frog_instance_vars->unk1EC, &MOBY(moby)->pos, target + 0x10, D) != 0 &&
             fast_vec_dist(&MOBY(moby)->pos, D) < frog_instance_vars->unk244) {
             near = 1;
         }

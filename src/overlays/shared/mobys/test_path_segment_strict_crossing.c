@@ -108,9 +108,9 @@ typedef struct {
     OvlVec4_261b48 points[1];
 } SegmentPath_261d78_261b48;
 
-int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
+int path_8808(int idx, void *a, void *b, void *c) __asm__("FUN_L00_00261b48");
 
-int FUN_L00_00261b48(int   segment_path_index,
+int path_8808(int   segment_path_index,
                      void *segment_start,
                      void *segment_end,
 

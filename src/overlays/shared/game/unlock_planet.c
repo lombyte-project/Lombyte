@@ -484,7 +484,7 @@ extern s32           D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
 extern int           D_L00_0015F598;
 extern unsigned char D_L00_0015FC88_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern void          debug_print() __asm__("FUN_001e93b0");
-extern int           FUN_L00_00261b48(int, void *, void *, void *);
+extern int           path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 
 void spawn_randomized_bolt_drop(struct Moby *moby,
@@ -690,7 +690,7 @@ void spawn_randomized_bolt_drop(
             }
             fast_vec_scale(landing, velocity, time);
             fast_vec_add(landing, landing, &moby->pos);
-            roots = FUN_L00_00261b48(path_index, &moby->pos, landing, path_point);
+            roots = path_8808(path_index, &moby->pos, landing, path_point);
             fast_vec_sub(landing, path_point, position);
             landing[2] = 0.0f;
             fast_vec_normalize(quarter, landing, 0.25f);

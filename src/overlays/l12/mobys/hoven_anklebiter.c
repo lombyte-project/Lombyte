@@ -21,6 +21,7 @@
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/mobys.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
+int  path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 #include "rnc/overlay/shared/weapons/suckcannon.h"
 
 /* Suck cannon suction method: state 8 while sucked (alerting its group), back to 1 when released; no suction in states 9, 11 and 13. */
@@ -702,7 +703,7 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
         fast_vec_sub(path_test_offset, pre_move_position, &moby->pos);
         fast_vec_normalize(path_test_offset, path_test_offset, 0.05f);
         fast_vec_add(path_test_position, pre_move_position, path_test_offset);
-        if (FUN_L00_00261b48(*(int *)(moby_vars + 0x2D0),
+        if (path_8808(*(int *)(moby_vars + 0x2D0),
                              &moby->pos,
                              path_test_position,
                              path_corrected_position) != 0) {

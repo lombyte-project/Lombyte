@@ -61,7 +61,7 @@ extern float fast_vec_dist(void *, void *);
 extern int   D_L05_0015FFD8;
 extern int   D_L05_0015F5C4;
 extern int   step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
-extern int   FUN_L00_00261b48(int, void *, void *, void *);
+extern int   path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 extern int   is_point_inside_clip_volume(void *point, int volume_index) __asm__("func_00214720");
 extern s32   follow_path(void *, s32, s32, void *, s32, void *, f32) __asm__("FUN_L01_00276fe8");
 extern s32
@@ -330,7 +330,7 @@ void extermibot_update(unsigned char *moby) {
                 moby_data->path, moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
         near = 0;
-        if (FUN_L00_00261b48(moby_data->path, moby_position, target_moby + 0x10, hit) != 0 &&
+        if (path_8808(moby_data->path, moby_position, target_moby + 0x10, hit) != 0 &&
             fast_vec_dist((float *)moby_position, hit) < 1.5f) {
             near = 1;
         }

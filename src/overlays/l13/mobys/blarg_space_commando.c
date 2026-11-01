@@ -133,7 +133,7 @@ typedef struct {
 
 extern int FUN_L00_00258b50(struct Moby *, void *, void *, void *, float);
 
-extern int FUN_L00_00261b48(int, void *, void *, void *);
+extern int path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 
 extern s32 rand(void);
 
@@ -382,7 +382,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         resolve_point_path_segment_xy_clearance(
             blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
         path_blocked = 0;
-        if (FUN_L00_00261b48(
+        if (path_8808(
                 blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             path_blocked = 1;
@@ -422,7 +422,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
         resolve_point_path_segment_xy_clearance(
             blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
-        if (FUN_L00_00261b48(
+        if (path_8808(
                 blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             blocked = 1;

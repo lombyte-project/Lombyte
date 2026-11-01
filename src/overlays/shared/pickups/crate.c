@@ -604,7 +604,7 @@ void mark_moby_for_removal_cf(u8 *, s32, s32) __asm__("FUN_L00_00257470");
 s32  FUN_L00_00257218_2d0538(u8 *, s32 *) __asm__("FUN_L00_00257218");
 f32  random_angle_radians(void) __asm__("FUN_00213308");
 s32  solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
-void FUN_L00_00261b48(s32, void *, void *, void *);
+void path_8808(s32, void *, void *, void *) __asm__("FUN_L00_00261b48");
 u8  *spawn_on_path(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
 void            crate_drop_bolts(u8 *a) __asm__("FUN_L00_002d0538");
@@ -989,7 +989,7 @@ void crate_drop_bolts(u8 *crate_moby) {
                     trajectory_time = larger_trajectory_time_root;
                 fast_vec_scale(&trajectory_vector, spawned_vars + 0x10, trajectory_time);
                 fast_vec_add(&trajectory_vector, &trajectory_vector, &MOBY(crate_moby)->pos);
-                FUN_L00_00261b48(*(s32 *)(crate_vars + 0xC0),
+                path_8808(*(s32 *)(crate_vars + 0xC0),
                                  &MOBY(crate_moby)->pos,
                                  &trajectory_vector,
                                  &adjusted_position);

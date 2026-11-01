@@ -131,7 +131,7 @@ extern void spawn_explosion(struct Moby *,
                             s32,
                             s32,
                             s32) __asm__("FUN_L00_0025e450");
-extern s32  FUN_L00_00261b48(s32, void *, void *, void *);
+extern s32  path_8808(s32, void *, void *, void *) __asm__("FUN_L00_00261b48");
 extern void
 resolve_point_path_segment_xy_clearance(s32, void *, void *, f32) __asm__("FUN_L00_00261d78");
 extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
@@ -395,7 +395,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                          1.0f);
         resolve_point_path_segment_xy_clearance(
             blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
-        if (FUN_L00_00261b48(blarg_commando_state->path,
+        if (path_8808(blarg_commando_state->path,
                              &moby->pos,
                              &target->pos,
                              &movement_output_or_hit_vector_or_path_point) != 0 &&

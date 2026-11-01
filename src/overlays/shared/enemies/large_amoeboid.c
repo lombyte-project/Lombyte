@@ -139,7 +139,7 @@ extern void spawn_amoeboid_burst_sparks(unsigned char *, float *) __asm__("FUN_L
 extern int  follow_path(int *, int, int, float, void *, void *, void *) __asm__("FUN_L01_00276fe8");
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern int  FUN_L00_00261b48(int, void *, void *, void *);
+extern int  path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 extern int  FUN_L00_002dc9f0(void *, void *);
 extern int  FUN_L00_00257470(void *, int, int);
 extern int  is_value_within_interpolated_window(float, void *) __asm__("FUN_00214cc8");
@@ -414,7 +414,7 @@ void large_amoeboid_update(unsigned char *moby) {
         move[2] = 0.0f;
         FUN_L00_00258b50(
             moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
-        if (FUN_L00_00261b48(large_amoeboid_vars->unk240, &MOBY(moby)->pos, target + 0x10, hit) !=
+        if (path_8808(large_amoeboid_vars->unk240, &MOBY(moby)->pos, target + 0x10, hit) !=
                 0 &&
             fast_vec_dist(&MOBY(moby)->pos, hit) < 1.5f)
             blocked = 1;
