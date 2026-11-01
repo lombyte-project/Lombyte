@@ -34,10 +34,13 @@ void *spawn_giant_clank_charged_blast(int    unused,
                                       float *spawn_position) __asm__("FUN_L00_002a9aa0");
 
 void *spawn_giant_clank_charged_blast(int unused, float *spawn_position) {
+    enum {
+        GIANT_CLANK_CHARGED_BLAST_CHARGING = 0
+    };
     char *spawned_moby = create_moby(0x5F3);
     if (spawned_moby != 0 && *(int *)&D_L00_001613C8_gp == 0) {
         char *moby_vars;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = GIANT_CLANK_CHARGED_BLAST_CHARGING;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         MOBY(spawned_moby)->visible = 1;
