@@ -344,7 +344,7 @@ eb20:
         attach_manipulator(moby, 0, &moby_data->manipulator_70);
         *(int *)&moby_data->unkC0 = 0;
         allocate_voice_for_target_entry(0, 4, (int)moby);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = BOMBOMATIC_WAIT_TO_LAUNCH;
         moby_data->unkC4 = 0;
         break;
     }
@@ -355,7 +355,7 @@ eb20:
             moby_data->timer_B8 = 0;
             moby_data->unkBC = random_angle_radians();
             moby_data->unkBA = 0;
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = BOMBOMATIC_LAUNCH_BURST;
         }
         break;
     }
@@ -414,7 +414,7 @@ eb20:
         if (moby_data->unkB4 <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0x78);
             moby_data->unkB4 = D_L07_0015F5CC + r9;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = BOMBOMATIC_WAIT_TO_LAUNCH;
         }
         break;
     }
