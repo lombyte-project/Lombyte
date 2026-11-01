@@ -40,6 +40,10 @@ s32          allocate_voice_for_target_entry(s32   entry_index,
 
 /* Moby class 38 */
 void taxi_platform_update(unsigned char *moby) {
+    enum {
+        TAXI_PLATFORM_STATE_UNINITIALIZED = 0,
+        TAXI_PLATFORM_STATE_INITIALIZED = 1
+    };
     char *taxi_platform_vars = ((char *)MOBY(moby)->pvars);
     char *path;
     float orig[4], delta[4], path_segment_offset[4];
@@ -49,7 +53,7 @@ void taxi_platform_update(unsigned char *moby) {
     path = D_L07_001B0530[*(int *)(taxi_platform_vars + 0xB4)];
     qcopy(orig, moby + 0x10);
     fast_dec_timer_s16(taxi_platform_vars + 0xBA);
-    if (MOBY(moby)->state == 0) {
+    if (MOBY(moby)->state == TAXI_PLATFORM_STATE_UNINITIALIZED) {
         float f;
         char *pts;
         taxi_platform_vars[0x28] = 4;
@@ -66,7 +70,7 @@ void taxi_platform_update(unsigned char *moby) {
         *(short *)(taxi_platform_vars + 0xBA) = 0;
         *(int *)(taxi_platform_vars + 0xA8) = 0;
         *(int *)(taxi_platform_vars + 0xBC) = 0;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = TAXI_PLATFORM_STATE_INITIALIZED;
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         *(int *)(taxi_platform_vars + 0xC4) = -1;
