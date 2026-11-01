@@ -1623,8 +1623,11 @@ int process_gadgebot_interactions(char *moby, int flag) {
 void handle_gadgebot_hit_knockback(unsigned char *moby) __asm__("FUN_L06_002f3640");
 
 void handle_gadgebot_hit_knockback(unsigned char *moby) {
+    enum {
+        GADGEBOT_UPDATE_KNOCKBACK = 9
+    };
     char *state = ((char *)MOBY(moby)->pvars);
-    if (MOBY(moby)->state != 9 && MOBY(moby)->seq != 2 && MOBY(moby)->prev_seq != 2) {
+    if (MOBY(moby)->state != GADGEBOT_UPDATE_KNOCKBACK && MOBY(moby)->seq != 2 && MOBY(moby)->prev_seq != 2) {
         char *target = find_moby_hit(moby, 0x330001, 0);
         if (target != 0) {
             Q     hit_vector_copy;
@@ -1651,7 +1654,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
                     *(float *)(state + 0xCC) = doubled_frame_time;
                 }
                 FUN_0022da68(2, 0, moby);
-                MOBY(moby)->state = 9;
+                MOBY(moby)->state = GADGEBOT_UPDATE_KNOCKBACK;
             }
         }
     }
