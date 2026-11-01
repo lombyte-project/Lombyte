@@ -119,7 +119,10 @@ float D_L08_00161FB0 = 2.1f;
 void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) __asm__("FUN_L01_002ff028");
 
 void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) {
-    if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
+    enum {
+        CUTSCENE_MODE_ACTIVE = 2
+    };
+    if (cutscene_mode == CUTSCENE_MODE_ACTIVE && big_head_cheat_enabled != 0) {
         int i;
         for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
             char *moby = D_L01_0016CCE0_q.m[i];
