@@ -51,6 +51,16 @@ extern s32                     camera_secondary_mode[] __asm__("D_001413D4");
 extern u8                      camera_position[] __asm__("D_00187080");
 extern struct CameraTransition cam_trans_state __asm__("D_001871B0");
 extern char                    camera_rows[] __asm__("D_00187290");
-extern char                    occl_cam_state[] __asm__("D_0018C318");
+
+/* The camera's occlusion state (D_0018C318). */
+struct OcclCamState {
+    u8  pad_00[0x14];
+    s32 position_frozen; /* 0x14: nonzero keeps update_camera and step_camera_blend from
+                            writing the camera position and rows */
+    u8  pad_18[0x4];
+    s32 unk1C; /* 0x1C: cleared by initialize_level_render_state */
+};
+
+extern struct OcclCamState occl_cam_state __asm__("D_0018C318");
 
 #endif /* LOMBYTE_RNC_CAMERA_CAMERA_GLOBALS_H */

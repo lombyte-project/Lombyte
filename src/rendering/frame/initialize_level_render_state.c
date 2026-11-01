@@ -86,11 +86,6 @@ typedef struct Buf194100 {
     s32 x14;
 } Buf194100;
 
-typedef struct OcclCamState {
-    u8  pad00[0x1C];
-    s32 x1C;
-} OcclCamState;
-
 typedef struct S160AB0 {
     s32 x0;
     u8 *x4;
@@ -465,7 +460,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     for (tfrag_index = 0; tfrag_index < tfrag_render_record_count; tfrag_index++) {
         tfrag_render_records[tfrag_index].x3A = 0x7F80;
     }
-    ((OcclCamState *)occl_cam_state)->x1C = 0;
+    occl_cam_state.unk1C = 0;
     reset_draw_globals();
     reset_pad_history();
     enable_font_color_codes();

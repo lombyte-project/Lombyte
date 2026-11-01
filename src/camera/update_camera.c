@@ -58,8 +58,8 @@ void update_camera(void) {
     if (camera->transition_mode == 3) {
         update_camera_blend((char *)target);
     } else {
-        char *st = occl_cam_state;
-        if (*(int *)(st + 0x14) != 0) {
+        struct OcclCamState *occlusion = &occl_cam_state;
+        if (occlusion->position_frozen != 0) {
             goto frozen;
         }
         qcopy(&camera->position, &target->pos);
@@ -68,8 +68,8 @@ void update_camera(void) {
         qcopy(&camera->up, &target->m2);
     }
     {
-        char *st = occl_cam_state;
-        if (*(int *)(st + 0x14) == 0) {
+        struct OcclCamState *occlusion = &occl_cam_state;
+        if (occlusion->position_frozen == 0) {
             copy_matrix_rotation(rotation_matrix, camera_rows);
             matrix_to_euler(rotation_matrix, camera_rows - 0x200);
         }
