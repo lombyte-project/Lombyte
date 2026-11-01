@@ -19,8 +19,25 @@
 #include "rnc/overlay/shared/enemies/spawner_egg.h"
 #include "rnc/overlay/shared/math/random/generate_random_scaled_vector2.h"
 
-typedef struct {
-    char  pad0[0xB0];
+typedef struct SpawnerVars {
+    u8    pad0[0x20];
+    f32   unk20;
+    u8    pad24[0x3c];
+    u8    unk60[0x7];
+    s8    unk67;
+    u8    pad68[0x8];
+    u8    unk70[0x10];
+    f32   unk80;
+    s32   unk84;
+    s32   unk88;
+    s16   unk8C;
+    s16   unk8E;
+    s8    unk90;
+    s8    unk91;
+    u8    unk92;
+    s8    unk93;
+    s32   unk94;
+    u8    pad98[0x18];
     char *slots[4];
 } SpawnerVars;
 
@@ -129,17 +146,17 @@ void spawner_update(char *moby) {
         SPAWNER_STATE_SPAWN = 1,
         SPAWNER_STATE_EXPLODE = 2
     };
-    char *spawner_vars = ((char *)MOBY(moby)->pvars);
-    float target[4];
-    float launch_velocity[4];
-    float spawn_position[4];
-    float offset[4];
+    SpawnerVars *spawner_vars = (SpawnerVars *)MOBY(moby)->pvars;
+    float        target[4];
+    float        launch_velocity[4];
+    float        spawn_position[4];
+    float        offset[4];
 
     process_spawner_hit_record(moby, spawner_vars);
     switch ((unsigned char)MOBY(moby)->state) {
     case SPAWNER_STATE_INITIALIZE: {
         int moby_to_remove = 0;
-        while (get_first_moby_in_group(&moby_to_remove, *(int *)(spawner_vars + 0x94), 0, 0) == 0) {
+        while (get_first_moby_in_group(&moby_to_remove, spawner_vars->unk94, 0, 0) == 0) {
             mark_moby_for_removal((void *)moby_to_remove);
         }
         MOBY(moby)->state = 1;
@@ -147,54 +164,54 @@ void spawner_update(char *moby) {
     }
     case SPAWNER_STATE_SPAWN: {
         process_spawner_hit_record(moby, spawner_vars);
-        if (!fast_dec_timer_s16(spawner_vars + 0x8E))
+        if (!fast_dec_timer_s16(&spawner_vars->unk8E))
             return;
         if (random_integer_below(7) == 0) {
             char *excluded = 0;
             int   excluded_count = 0;
             char *region = 0;
             int   region_count = 0;
-            if (*(int *)(spawner_vars + 0x84) != -1) {
-                excluded = spawner_vars + 0x84;
+            if (spawner_vars->unk84 != -1) {
+                excluded = &spawner_vars->unk84;
                 excluded_count = 1;
             }
-            if (*(int *)(spawner_vars + 0x88) != -1) {
-                char *q = ((char *)l09_paths[*(int *)(spawner_vars + 0x88)]);
+            if (spawner_vars->unk88 != -1) {
+                char *q = ((char *)l09_paths[spawner_vars->unk88]);
                 region_count = *(int *)q;
                 region = q + 0x10;
             }
             activate_effect_l08(moby,
-                                spawner_vars + 0x100,
-                                *(float *)(spawner_vars + 0x80),
+                                (char *)spawner_vars + 0x100,
+                                spawner_vars->unk80,
                                 excluded,
                                 excluded_count,
                                 region,
                                 region_count);
         } else {
-            char *target_moby = *(char **)(spawner_vars + 0x140);
+            char *target_moby = *(char **)((char *)spawner_vars + 0x140);
             if (target_moby != 0 && (unsigned char)MOBY(target_moby)->state != 0xFE &&
                 (unsigned char)MOBY(target_moby)->state != 0xFD) {
-                qcopy(spawner_vars + 0x100, &MOBY(target_moby)->pos);
+                qcopy((char *)spawner_vars + 0x100, &MOBY(target_moby)->pos);
             } else {
-                *(int *)(spawner_vars + 0x140) = 0;
-                *(int *)(spawner_vars + 0x144) = 2;
+                *(int *)((char *)spawner_vars + 0x140) = 0;
+                *(int *)((char *)spawner_vars + 0x144) = 2;
             }
         }
-        if (*(int *)(spawner_vars + 0x144) == 2)
+        if (*(int *)((char *)spawner_vars + 0x144) == 2)
             return;
         {
             int   last = refresh_spawner_population_and_find_free_slot((int)moby, spawner_vars);
             char *sel;
-            if ((unsigned char)spawner_vars[0x91] >= (unsigned char)spawner_vars[0x90])
+            if ((unsigned char)spawner_vars->unk91 >= (unsigned char)spawner_vars->unk90)
                 return;
             if (last == -1)
                 return;
             sel = 0;
-            if (*(unsigned char *)(spawner_vars + 0x92) != 0) {
+            if (spawner_vars->unk92 != 0) {
                 int   i;
                 float best = 100000.0f;
                 for (i = 0; i < 4; i++) {
-                    int idx = *(int *)(spawner_vars + 0xA0 + i * 4);
+                    int idx = *(int *)((char *)spawner_vars + 0xA0 + i * 4);
                     if (idx != -1) {
                         char *q = spawner_target_region_records + (idx << 7);
                         float candidate_distance = fast_vec_dist(D_0013E533 + 0xE9D, q + 0x30);
@@ -205,9 +222,9 @@ void spawner_update(char *moby) {
                     }
                 }
                 if (sel == 0) {
-                    fast_vec_sub(target, spawner_vars + 0x100, &MOBY(moby)->pos);
+                    fast_vec_sub(target, (char *)spawner_vars + 0x100, &MOBY(moby)->pos);
                     fast_vec_scale(target, target, 0.5f);
-                    if (3.0f < *(float *)(spawner_vars + 0x80))
+                    if (3.0f < spawner_vars->unk80)
                         clamp_vector_length(target, target, 3.0f);
                     if (fast_vec_length(target) < 3.0f)
                         fast_vec_normalize(target, target, 3.0f);
@@ -220,14 +237,14 @@ void spawner_update(char *moby) {
                 int i;
                 for (i = 0; i < 4; i++) {
                     int k = (i + start) % 4;
-                    int idx = *(int *)(spawner_vars + (k << 2) + 0xA0);
+                    int idx = *(int *)((char *)spawner_vars + (k << 2) + 0xA0);
                     if (idx != -1) {
                         sel = spawner_target_region_records + (idx << 7);
                         break;
                     }
                 }
                 if (sel == 0) {
-                    float target_offset_scale = *(float *)(spawner_vars + 0x80);
+                    float target_offset_scale = spawner_vars->unk80;
                     if (target_offset_scale < 3.0f)
                         target_offset_scale = 3.0f;
                     generate_random_scaled_vector2(target, target_offset_scale);
@@ -259,20 +276,19 @@ void spawner_update(char *moby) {
                 launch_velocity[2] = FUN_L00_0025abf0_30ab80(
                     spawn_position, target, 0, speed, -(frame_time_sq_macro * 9.8f));
             }
-            ((SpawnerVars *)spawner_vars)->slots[last] =
-                spawn_spawner_egg((int)moby,
-                                  spawn_position,
-                                  launch_velocity,
-                                  (unsigned char)spawner_vars[0x93],
-                                  (unsigned char)last);
-            *(short *)(spawner_vars + 0x8E) = scale_game_frames(*(short *)(spawner_vars + 0x8C));
-            spawner_vars[0x91] = (char)(spawner_vars[0x91] + 1);
+            spawner_vars->slots[last] = spawn_spawner_egg((int)moby,
+                                                          spawn_position,
+                                                          launch_velocity,
+                                                          (unsigned char)spawner_vars->unk93,
+                                                          (unsigned char)last);
+            spawner_vars->unk8E = scale_game_frames(spawner_vars->unk8C);
+            spawner_vars->unk91 = (char)(spawner_vars->unk91 + 1);
         }
         return;
     }
     case SPAWNER_STATE_EXPLODE:
         FUN_L00_0025e450_30ab80(moby,
-                                spawner_vars + 0x70,
+                                &spawner_vars->unk70,
                                 0,
                                 0.0f,
                                 0.0f,
