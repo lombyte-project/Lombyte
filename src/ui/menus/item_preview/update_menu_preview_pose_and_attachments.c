@@ -3,6 +3,7 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_002260A8). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/weapons/hand_gadget.h"
 #include "rnc/ui/menus/menu_globals.h"
 
@@ -25,7 +26,7 @@ void update_menu_preview_pose_and_attachments(void *preview) {
     PauseMoby *moby = preview;
     char     **preview_vars = moby->vars;
     f32        transform[16];
-    s32        source_moby_address = *(int *)(*preview_vars + 0x44);
+    s32        source_moby_address = (s32)((struct MenuScreen *)*preview_vars)->data.preview.moby;
     s32        is_second_preview_moby;
     s32        first_attachment_active;
     s32        second_attachment_active;

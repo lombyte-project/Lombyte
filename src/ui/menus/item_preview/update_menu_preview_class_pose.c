@@ -1,6 +1,8 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00225E00). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/weapons/hand_gadget.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
@@ -31,16 +33,16 @@ extern void             attach_manipulator(int, int, void *) __asm__("FUN_0020cb
 void update_menu_preview_class_pose(void *preview) __asm__("FUN_00224b70");
 
 void update_menu_preview_class_pose(void *preview) {
-    PauseMoby             *moby = preview;
-    unsigned char         *moby_bytes = preview;
-    f32                    transform[16];
-    s32                    source_moby_address = *(int *)(*moby->vars + 0x44);
-    s32                    i;
-    s32                    reset_bindings;
-    s32                    attachment_active;
+    PauseMoby   *moby = preview;
+    struct Moby *anim = preview;
+    f32          transform[16];
+    s32          source_moby_address = (s32)((struct MenuScreen *)*moby->vars)->data.preview.moby;
+    s32          i;
+    s32          reset_bindings;
+    s32          attachment_active;
     HandGadgetManipulator *attachment;
 
-    if ((moby_bytes[0x70] & 2) && moby_bytes[0x53] != 1) {
+    if ((anim->anim_flags & 2) && anim->prev_seq != 1) {
         blend_moby_animation(moby, 1, 0, 0);
     }
     for (i = 0; i < 0x25; i++) {
@@ -72,7 +74,7 @@ void update_menu_preview_class_pose(void *preview) {
         moby->primary_binding = (char *)menu_item_info;
         moby->binding_blend_word = 0;
         moby->secondary_binding = (char *)menu_item_info;
-        *(int *)(moby_bytes + 0x58) = 0;
+        anim->anim_speed = 0;
         moby->binding_state = 0;
     }
     if (attachment_active) {
