@@ -609,7 +609,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         }
         hoverboard_dummy_data->unk2E8 = random_angle_radians();
         hoverboard_dummy_data->unk29 = 0;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE;
         break;
     }
     case HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE:
@@ -628,12 +628,12 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                 MOBY(moby)->flags |= 0x8000;
             }
             MOBY(moby)->hit_slot = 255;
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_RACING;
         }
         break;
     case HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION:
         if (hero.state.control_mode != 22) {
-            MOBY(moby)->state = 0;
+            MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_INITIALIZE;
         } else {
             int   count = *(unsigned short *)&hoverboard_dummy_data->unk2F2 + 1;
             short timer = count;
@@ -649,7 +649,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                     MOBY(moby)->collision = MOBY(moby)->pclass->collision;
                     MOBY(moby)->flags &= ~0x41;
                     MOBY(moby)->hit_slot = 255;
-                    MOBY(moby)->state = 2;
+                    MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_RACING;
                 }
             }
         }
@@ -657,7 +657,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
     case HOVERBOARD_DUMMY_STATE_RACING:
         hero_base = ((char *)&hero);
         if (*(int *)(hero_base + 0x208C) != 22) {
-            MOBY(moby)->state = 0;
+            MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_INITIALIZE;
             break;
         }
         if (find_moby_hit(moby, mask, 0)) {
@@ -685,7 +685,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             spawn_moby_break_fragments(moby, 0x6FA, 1, 0x6FB, 1, 1, 0);
             hoverboard_dummy_data->unk2F2 = 0;
             *(int *)(hero_base + 0x8A8) += 250;
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags |= 0x41;
             break;
