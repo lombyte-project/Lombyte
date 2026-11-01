@@ -43,11 +43,11 @@ extern float              D_L02_00174460[];
 extern float              FUN_L04_001f1978(float);
 extern float              fast_vec_dist(void *, void *);
 extern int D_L02_0015F5CC MACRO_ADDR;
-extern float              D_L02_001600D0 __attribute__((sda));
-extern int                D_L02_001600D4 __attribute__((sda));
-extern int                D_L02_001600D8 __attribute__((sda));
-extern float              D_L02_001600DC __attribute__((sda));
-extern float              D_L02_001600E0 __attribute__((sda));
+extern float l02_effect_particle_travel_step_limit __asm__("D_L02_001600D0") __attribute__((sda));
+extern int   l02_effect_alternate_particle_count __asm__("D_L02_001600D4") __attribute__((sda));
+extern int   l02_effect_default_particle_count __asm__("D_L02_001600D8") __attribute__((sda));
+extern float l02_effect_particle_full_travel_spread __asm__("D_L02_001600DC") __attribute__((sda));
+extern float l02_effect_particle_zero_travel_spread __asm__("D_L02_001600E0") __attribute__((sda));
 
 void effect_slots_fire(char  *slots,
                        float *position,
@@ -55,6 +55,9 @@ void effect_slots_fire(char  *slots,
                        float  distance) __asm__("FUN_L02_00264e70");
 
 void effect_slots_fire(char *slots, float *position, float *direction, float distance) {
+    enum {
+        EFFECT_SHOT_TRACKING_PHASE = 0
+    };
     float         origin[4] __attribute__((aligned(16)));
     float         end[4] __attribute__((aligned(16)));
     float         adjusted[4] __attribute__((aligned(16)));
@@ -64,7 +67,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
     float         speed = 0.0f;
     float         travel;
     float         acceleration;
-    int           n;
+    int           default_particle_count;
     int           first_count;
     int           i;
     int           save_shot;
@@ -73,7 +76,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
 
     {
         int phase = D_L02_0015F5CC & 3;
-        save_shot = phase == 0;
+        save_shot = phase == EFFECT_SHOT_TRACKING_PHASE;
     }
     qcopy(origin, position);
     fast_vec_normalize(adjusted, direction, distance + 0.75f);
@@ -91,17 +94,19 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
                                travel,
                                1.0f,
                                acceleration * 48.0f,
-                               (D_L02_001600D0)*frame_time_macro);
+                               (l02_effect_particle_travel_step_limit)*frame_time_macro);
     ((float (*)(void *, void *, float))fast_vec_normalize)(adjusted, adjusted, travel_step);
-    n = (D_L02_001600D8);
-    first_count = (D_L02_001600D4);
+    default_particle_count = (l02_effect_default_particle_count);
+    first_count = (l02_effect_alternate_particle_count);
     if (travel < 4.0f)
         first_count = 1;
-    for (i = 0; i < n + first_count; i++) {
+    for (i = 0; i < default_particle_count + first_count; i++) {
         random_vector(
             offset,
             0.0f,
-            (((D_L02_001600DC) - (D_L02_001600E0)) * (travel / distance) + (D_L02_001600E0)) *
+            (((l02_effect_particle_full_travel_spread) - (l02_effect_particle_zero_travel_spread)) *
+                 (travel / distance) +
+             (l02_effect_particle_zero_travel_spread)) *
                 frame_time_macro);
         fast_vec_add(offset, offset, adjusted);
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
@@ -122,9 +127,9 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
         }
     }
     if (fast_dec_timer_s16(slots + 0x1c)) {
-        float sp2 = random_float_between(10.0f, 30.0f);
-        sp2 = FUN_L04_001f1978(sp2);
-        ((Slots *)slots)->timer = truncate_float_to_s32(sp2);
+        float color_particle_spawn_delay = random_float_between(10.0f, 30.0f);
+        color_particle_spawn_delay = FUN_L04_001f1978(color_particle_spawn_delay);
+        ((Slots *)slots)->timer = truncate_float_to_s32(color_particle_spawn_delay);
         random_vector(offset, 0.0f, frame_time_macro + frame_time_macro);
         fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));
         fast_vec_add(velocity, velocity, offset);

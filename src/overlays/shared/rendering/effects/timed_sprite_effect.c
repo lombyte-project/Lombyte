@@ -10,6 +10,11 @@
 #include "rnc/overlay/shared/mobys/entities.h"
 #include "qcopy.h"
 
+enum {
+    SPRITE_EFFECT_STATE_REMOVE = 0,
+    SPRITE_EFFECT_STATE_ANIMATE = 1
+};
+
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern u32   fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
@@ -31,10 +36,6 @@ void timed_sprite_effect_update(struct Moby *moby) __asm__("FUN_L06_0030be60");
 
 /* Moby class 1898 */
 void timed_sprite_effect_update(struct Moby *moby) {
-    enum {
-        SPRITE_EFFECT_STATE_REMOVE = 0,
-        SPRITE_EFFECT_STATE_ANIMATE = 1
-    };
     float *effect_data = ((float *)moby->pvars);
     switch ((unsigned char)((char)moby->state)) {
     case SPRITE_EFFECT_STATE_REMOVE:
@@ -74,7 +75,7 @@ void spawn_timed_projected_sprite_effect(char *world_position,
         *(int *)(effect_data + 0x8) = start_color;
         *(float *)(effect_data + 0x4) = 2.0f / duration_as_float;
         MOBY(effect_moby)->update_dist = 0xFF;
-        MOBY(effect_moby)->state = 1;
+        MOBY(effect_moby)->state = SPRITE_EFFECT_STATE_ANIMATE;
     }
 }
 

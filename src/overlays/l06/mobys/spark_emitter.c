@@ -68,6 +68,9 @@ void spark_emitter_update(struct Moby *emitter) {
         SPARK_EMITTER_RANDOMIZED_SPRAY = 3,
         SPARK_EMITTER_TIMED_BURSTS = 4
     };
+    enum {
+        SPARK_EMITTER_AWAITING_ACTIVATION = 1
+    };
     SparkData  *emitter_data = *(void **)&emitter->pvars;
     SparkVector position_test_vector;
     SparkVector rotation_based_spark_vector;
@@ -83,20 +86,20 @@ void spark_emitter_update(struct Moby *emitter) {
     case SPARK_EMITTER_INITIALIZE:
         euler_rotation_basis(&*(SparkVector *)&emitter->rot_row0, &*(SparkVector *)&emitter->rot);
         if (emitter_data->f4 != 0) {
-            emitter->state = 1;
+            emitter->state = SPARK_EMITTER_AWAITING_ACTIVATION;
         } else if (emitter_data->f0 != 0) {
-            emitter->state = 4;
+            emitter->state = SPARK_EMITTER_TIMED_BURSTS;
         } else {
-            emitter->state = 3;
+            emitter->state = SPARK_EMITTER_RANDOMIZED_SPRAY;
         }
         break;
     case SPARK_EMITTER_DELAYED_ACTION:
         if (fast_dec_timer(&emitter_data->f28)) {
             cart_burst(emitter, &*(SparkVector *)&emitter->pos, -1, 0.333f, 13.0f);
             if (emitter_data->f0 != 0) {
-                emitter->state = 4;
+                emitter->state = SPARK_EMITTER_TIMED_BURSTS;
             } else {
-                emitter->state = 3;
+                emitter->state = SPARK_EMITTER_RANDOMIZED_SPRAY;
             }
         }
         break;
@@ -247,7 +250,7 @@ void spark_emitter_update(struct Moby *emitter) {
 /* finds the mobys of type 0x5E8 in state 1 in a level list and starts those within range */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
 
-extern char  *D_L06_0015FFD8;
+extern char  *level_mobys_q __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0[];
 
 void activate_listed_spark_emitters(int moby_list_index) __asm__("FUN_L06_00309240");
@@ -260,7 +263,7 @@ void activate_listed_spark_emitters(int moby_list_index) {
     if (D_L06_001ABFC0[moby_list_index] != 0) {
         moby_index_entry = D_L06_001ABFC0[moby_list_index];
         do {
-            moby = D_L06_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
+            moby = level_mobys_q + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
             if (MOBY(moby)->oclass == 0x5E8 && (unsigned char)moby[0x20] == 1) {
                 qcopy(position_test_vector, moby + 0x10);
                 position_test_vector[3] = 0.25f;

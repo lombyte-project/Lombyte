@@ -35,6 +35,16 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/l18/mobys.h"
 
+enum {
+    MOBY_INITIALIZE = 0,
+    MOBY_APPROACH_TARGET_TRANSFORM = 2,
+    MOBY_FALL_AND_REMOVE = 4
+};
+
+enum {
+    FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1
+};
+
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern short         *D_L18_001AC240[];
@@ -94,11 +104,6 @@ void falling_moby_group_update(struct Moby *moby) __asm__("FUN_L18_002f16f0");
 
 /* Moby class 1381 */
 void falling_moby_group_update(struct Moby *moby) {
-    enum {
-        MOBY_INITIALIZE = 0,
-        MOBY_APPROACH_TARGET_TRANSFORM = 2,
-        MOBY_FALL_AND_REMOVE = 4
-    };
     VData *moby_vars = (VData *)moby->pvars;
     if (moby_vars) {
         float initial_acceleration_step = group_transform_initial_acceleration_gp * frame_time_sq;
@@ -132,7 +137,7 @@ void falling_moby_group_update(struct Moby *moby) {
             moby_vars->f34C = scale_game_frames(30);
             moby_vars->cnt = j;
             capture_linked_moby_relative_transforms(moby, (char *)moby_vars + 0x30, j);
-            moby->state = 1;
+            moby->state = FALLING_MOBY_GROUP_AWAIT_ACTIVATION;
             break;
         }
         case MOBY_APPROACH_TARGET_TRANSFORM: {
@@ -162,7 +167,7 @@ void falling_moby_group_update(struct Moby *moby) {
             }
             if (moby_vars->f330 > group_transform_fall_progress_threshold_gp &&
                 moby_vars->i8 != 0) {
-                moby->state = 4;
+                moby->state = MOBY_FALL_AND_REMOVE;
             }
             hero_on_group_or_class_764_moby = 0;
             for (i = 0; i < moby_vars->cnt; i++) {
@@ -182,7 +187,7 @@ void falling_moby_group_update(struct Moby *moby) {
             if (moby_vars->f348 != 0 && hero_on_group_or_class_764_moby == 0 &&
                 hero.air_frames.s == 0) {
                 if (fast_dec_timer(&moby_vars->f34C))
-                    moby->state = 4;
+                    moby->state = MOBY_FALL_AND_REMOVE;
             }
             break;
         }
@@ -213,7 +218,7 @@ void falling_moby_group_update(struct Moby *moby) {
         }
         apply_linked_moby_relative_transforms(moby, (char *)moby_vars + 0x30, moby_vars->cnt);
         if (moby_vars->f344 != 0.0f) {
-            if (moby->state != 4) {
+            if (moby->state != MOBY_FALL_AND_REMOVE) {
                 float debris_spawn_position[4];
                 float s, z, debris_spawn_angle;
                 int   debris_spawn_frames;
@@ -252,13 +257,13 @@ void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f
 
 void activate_drek_boss_class_0565_moby(struct Moby *moby) {
     char *state = (char *)moby->pvars;
-    if (moby->oclass == 0x565 && moby->state == 1) {
+    if (moby->oclass == 0x565 && moby->state == FALLING_MOBY_GROUP_AWAIT_ACTIVATION) {
         if (*(int *)(state + 0xC) != -1) {
             mark_block_entries_within_transform_xy_bounds(0x802, *(int *)(state + 0xC));
             mark_block_entries_within_transform_xy_bounds(0x908, *(int *)(state + 0xC));
             mark_block_entries_within_transform_xy_bounds(0x954, *(int *)(state + 0xC));
         }
-        moby->state = 2;
+        moby->state = MOBY_APPROACH_TARGET_TRANSFORM;
         set_group_child_carrier_byte_bc(moby->group, 1);
     }
 }
@@ -289,7 +294,7 @@ void reset_drek_boss_falling_moby_group(L18VM_1cc8 *moby) __asm__("FUN_L18_002f1
 void reset_drek_boss_falling_moby_group(L18VM_1cc8 *moby) {
     L18VD_1cc8 *data = moby->data;
     if (moby->class_id == 0x565) {
-        moby->state = 1;
+        moby->state = FALLING_MOBY_GROUP_AWAIT_ACTIVATION;
         data->field330 = 0;
         data->field344 = 0;
     }

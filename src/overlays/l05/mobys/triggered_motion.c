@@ -12,9 +12,10 @@ extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern short D_L05_0015FFD8 __asm__("D_L05_0015FFD8");
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
-extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float
+approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 
-extern void  FUN_L00_001fff28(void *, int, float);
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
 void triggered_motion_update(char *moby) __asm__("FUN_L05_00316258");
@@ -44,6 +45,9 @@ void triggered_motion_update(char *moby) {
         MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE = 5,
         MOBY_SETTLE_AT_ZERO_MANIPULATOR_ANGLE = 6
     };
+    enum {
+        MOBY_MOTION_SEQUENCE_COMPLETE = 7
+    };
     TriggeredMotionVars *motion_and_manipulator_vars = (TriggeredMotionVars *)MOBY(moby)->pvars;
     float                target[4];
     float                delta[4];
@@ -59,16 +63,16 @@ void triggered_motion_update(char *moby) {
         attach_manipulator(moby, 0, &motion_and_manipulator_vars->manipulator_10);
         if (motion_and_manipulator_vars->unk54 != 0) {
             motion_and_manipulator_vars->unk60 = 0.0f;
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = MOBY_WAIT_TO_RETURN_TO_SAVED_POSITION;
             if (motion_and_manipulator_vars->unk50 != 0)
                 fast_vec_scale(target, moby + 0xD0, 2.0f);
             else
                 fast_vec_scale(target, moby + 0xD0, -2.0f);
             fast_vec_add(moby + 0x10, moby + 0x10, target);
         } else {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = MOBY_WAIT_FOR_TRIGGER;
             motion_and_manipulator_vars->unk60 = 0.5934119f;
-            FUN_L00_001fff28(&motion_and_manipulator_vars->unk20, 0, 0.5934119f);
+            build_axis_rotation_quaternion(&motion_and_manipulator_vars->unk20, 0, 0.5934119f);
         }
         *(long long *)(moby + 0x38) = *(long long *)(D_001413D0_lui + 0x38);
         break;
@@ -78,33 +82,33 @@ void triggered_motion_update(char *moby) {
             ((u8 *)*(int *)&D_L05_0015FFD8)[motion_and_manipulator_vars->unk58 * 256 + 0xBC];
         if (trigger == 0)
             return;
-        if (MOBY(moby)->state == 2 && trigger != 2) {
-            MOBY(moby)->state = 4;
+        if (MOBY(moby)->state == MOBY_WAIT_TO_RETURN_TO_SAVED_POSITION && trigger != 2) {
+            MOBY(moby)->state = MOBY_RETURN_TO_SAVED_POSITION;
             break;
         }
-        if (MOBY(moby)->state != 1)
+        if (MOBY(moby)->state != MOBY_WAIT_FOR_TRIGGER)
             return;
         allocate_voice_for_target_entry(0, 0, moby);
-        MOBY(moby)->state = 6;
+        MOBY(moby)->state = MOBY_SETTLE_AT_ZERO_MANIPULATOR_ANGLE;
         return;
     }
     case MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE:
     case MOBY_SETTLE_AT_ZERO_MANIPULATOR_ANGLE: {
         float end;
         float approach;
-        if (MOBY(moby)->state == 5) {
+        if (MOBY(moby)->state == MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE) {
             end = 0.5934119f;
             approach = 1.1868238f;
         } else {
             end = 0.0f;
             approach = -0.5934119f;
         }
-        FUN_L00_0025be00(&motion_and_manipulator_vars->unk60,
-                         &motion_and_manipulator_vars->unk64,
-                         approach,
-                         frame_time_sq * 4.1887903f,
-                         frame_time_sq * 4.1887903f,
-                         frame_time * 12.566371f);
+        approach_angle(&motion_and_manipulator_vars->unk60,
+                       &motion_and_manipulator_vars->unk64,
+                       approach,
+                       frame_time_sq * 4.1887903f,
+                       frame_time_sq * 4.1887903f,
+                       frame_time * 12.566371f);
         if (motion_and_manipulator_vars->unk60 > 0.5934119f ||
             motion_and_manipulator_vars->unk60 < 0.0f) {
             if (motion_and_manipulator_vars->unk60 > 0.5934119f)
@@ -115,18 +119,18 @@ void triggered_motion_update(char *moby) {
                 MOBY(moby)->command = 1;
                 motion_and_manipulator_vars->unk64 *= -0.33f;
             } else if (motion_and_manipulator_vars->unk60 == end) {
-                if (MOBY(moby)->state == 5)
-                    MOBY(moby)->state = 7;
+                if (MOBY(moby)->state == MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE)
+                    MOBY(moby)->state = MOBY_MOTION_SEQUENCE_COMPLETE;
                 else
-                    MOBY(moby)->state = 3;
+                    MOBY(moby)->state = MOBY_MOVE_TO_OFFSET_POSITION;
             }
         }
-        FUN_L00_001fff28(
+        build_axis_rotation_quaternion(
             &motion_and_manipulator_vars->unk20, 0, motion_and_manipulator_vars->unk60);
     } break;
     case MOBY_MOVE_TO_OFFSET_POSITION:
     case MOBY_RETURN_TO_SAVED_POSITION:
-        if (MOBY(moby)->state == 3) {
+        if (MOBY(moby)->state == MOBY_MOVE_TO_OFFSET_POSITION) {
             fast_vec_scale(target, moby + 0xD0, -1.9f);
             fast_vec_add(target, motion_and_manipulator_vars, target);
         } else {
@@ -145,12 +149,12 @@ void triggered_motion_update(char *moby) {
         fast_vec_add(moby + 0x10, moby + 0x10, delta);
         if (!(fast_vec_dist(moby + 0x10, target) < 0.0001f))
             return;
-        if (MOBY(moby)->state == 3) {
+        if (MOBY(moby)->state == MOBY_MOVE_TO_OFFSET_POSITION) {
             allocate_voice_for_target_entry(1, 0, moby);
-            MOBY(moby)->state = 7;
+            MOBY(moby)->state = MOBY_MOTION_SEQUENCE_COMPLETE;
             return;
         }
-        MOBY(moby)->state = 5;
+        MOBY(moby)->state = MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE;
         break;
     }
 }

@@ -25,6 +25,18 @@
 #include "rnc/overlay/shared/enemies/sand_mouse_data/sand_mouse_update.h"
 #include "rnc/world/collision/collision_line.h"
 
+enum {
+    SAND_MOUSE_INITIALIZE = 0,
+    SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME = 1,
+    SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
+    SAND_MOUSE_MOVE_TOWARD_HERO = 3,
+    SAND_MOUSE_BEGIN_FOLLOW_HERO = 4,
+    SAND_MOUSE_FOLLOW_HERO = 5,
+    SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
+    SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
+    SAND_MOUSE_RETURN_TO_PARENT = 20
+};
+
 typedef struct {
     float a[4];
 } Vs __attribute__((aligned(16)));
@@ -356,7 +368,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
     struct Moby *target;
 
     fast_vec_sub(&velocity_adjustment, movement_state, &moby->pos);
-    if (moby->state == 6)
+    if (moby->state == SAND_MOUSE_FADE_OUT_AND_RESET_HOME)
         reference_distance = vector_distance_xy(&moby->pos, movement_state + 0x30);
     else
         reference_distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
@@ -421,7 +433,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
     velocity_adjustment.f[2] *= frame_scale * -0.100000024f + 1.0f;
     fast_vec_add(
         ((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), &velocity_adjustment);
-    if (moby->state == 6)
+    if (moby->state == SAND_MOUSE_FADE_OUT_AND_RESET_HOME)
         clamp_vector_length(
             ((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), frame_time * 2.7f);
     hit = move_moby_with_collision_integer_radius(moby,
@@ -466,7 +478,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
         }
     }
 collision_done:
-    if (moby->state == 6 || !(reference_distance < 1.1f))
+    if (moby->state == SAND_MOUSE_FADE_OUT_AND_RESET_HOME || !(reference_distance < 1.1f))
         return;
     near = 1.1f - reference_distance;
     direction_yaw =
@@ -486,17 +498,6 @@ void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 
 /* Moby class 437 */
 void sand_mouse_update(struct Moby *moby) {
-    enum {
-        SAND_MOUSE_INITIALIZE = 0,
-        SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME = 1,
-        SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
-        SAND_MOUSE_MOVE_TOWARD_HERO = 3,
-        SAND_MOUSE_BEGIN_FOLLOW_HERO = 4,
-        SAND_MOUSE_FOLLOW_HERO = 5,
-        SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
-        SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
-        SAND_MOUSE_RETURN_TO_PARENT = 20
-    };
     Data *sand_mouse_vars;
     float va[4];
     float vb[4];
@@ -510,7 +511,7 @@ void sand_mouse_update(struct Moby *moby) {
         return;
     }
     if (sand_mouse_vars->parent != -1) {
-        if (moby->state >= 5) {
+        if (moby->state >= SAND_MOUSE_FOLLOW_HERO) {
             ((Data *)((struct Moby *)ents)[sand_mouse_vars->parent].pvars)->target[0] =
                 fast_arc_tan(moby->pos.x - ((struct Moby *)ents)[sand_mouse_vars->parent].pos.x,
                              moby->pos.y - ((struct Moby *)ents)[sand_mouse_vars->parent].pos.y);
@@ -577,7 +578,7 @@ void sand_mouse_update(struct Moby *moby) {
             mover_2e3f20.unk48 = scale_game_frames(4);
             mover_2e3f20.unk28 = 3.1415927f;
         }
-        moby->state = 1;
+        moby->state = SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME;
         moby->draw_dist = 0;
         break;
     case SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME:
@@ -623,10 +624,10 @@ void sand_mouse_update(struct Moby *moby) {
                         set_hero_animation(0, 0, (float)scale_game_frames(6));
                         if (sand_mouse_vars->parent != -1) {
                             ((struct Moby *)ents)[sand_mouse_vars->parent].command = 5;
-                            moby->state = 2;
+                            moby->state = SAND_MOUSE_WAIT_FOR_PARENT_READY;
                         } else {
                             moby->draw_dist = 0xFF;
-                            moby->state = 3;
+                            moby->state = SAND_MOUSE_MOVE_TOWARD_HERO;
                         }
                     }
                 }
@@ -636,14 +637,14 @@ void sand_mouse_update(struct Moby *moby) {
     case SAND_MOUSE_WAIT_FOR_PARENT_READY:
         if (sand_mouse_vars->parent != -1) {
             if (((struct Moby *)ents)[sand_mouse_vars->parent].state == 5) {
-                moby->state = 3;
+                moby->state = SAND_MOUSE_MOVE_TOWARD_HERO;
                 sand_mouse_vars->timer = 0;
                 moby->draw_dist = 0xFF;
             }
         } else {
             sand_mouse_vars->timer = 0;
             moby->draw_dist = 0xFF;
-            moby->state = 3;
+            moby->state = SAND_MOUSE_MOVE_TOWARD_HERO;
         }
         break;
     case SAND_MOUSE_MOVE_TOWARD_HERO:
@@ -660,7 +661,7 @@ void sand_mouse_update(struct Moby *moby) {
              6) ||
             vector_distance_xy(((float *)&moby->pos), hero_2e3f20->pos) < 1.0f) {
             qzero(sand_mouse_vars->vel);
-            moby->state = 4;
+            moby->state = SAND_MOUSE_BEGIN_FOLLOW_HERO;
             sand_mouse_vars->timer = scale_game_frames(0x78);
         }
         if (vector_distance_xy(((float *)&moby->pos), sand_mouse_vars->home) > 0.4f &&
@@ -677,7 +678,7 @@ void sand_mouse_update(struct Moby *moby) {
         if (sand_mouse_vars->parent != -1) {
             ((struct Moby *)ents)[sand_mouse_vars->parent].flags &= 0xFFBE;
         }
-        moby->state = 5;
+        moby->state = SAND_MOUSE_FOLLOW_HERO;
         if (hero_2e3f20->helper != 0 && hero_2e3f20->helper->oclass == 0x1B1 &&
             hero_2e3f20->helper->state != 0xFE && hero_2e3f20->helper->state != 0xFD) {
             sand_mouse_vars->b48 = 0xFF;
@@ -697,7 +698,7 @@ void sand_mouse_update(struct Moby *moby) {
             }
             qzero(sand_mouse_vars->vel);
             sand_mouse_vars->timer = sand_mouse_fade_duration_frames_gp;
-            moby->state = 6;
+            moby->state = SAND_MOUSE_FADE_OUT_AND_RESET_HOME;
             if (sand_mouse_vars->parent != -1) {
                 ((struct Moby *)ents)[sand_mouse_vars->parent].command = 5;
             }
@@ -710,7 +711,7 @@ void sand_mouse_update(struct Moby *moby) {
             qcopy(((float *)&moby->pos), sand_mouse_vars->home);
             qcopy(sand_mouse_vars->target, sand_mouse_vars->home);
             qzero(sand_mouse_vars->vel);
-            moby->state = 0x13;
+            moby->state = SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN;
             moby->flags &= 0xFDFF;
         } else {
             int   cr;
@@ -761,7 +762,7 @@ void sand_mouse_update(struct Moby *moby) {
             qzero(sand_mouse_vars->vel);
             qcopy(sand_mouse_vars->target,
                   ((float *)&((struct Moby *)ents)[sand_mouse_vars->parent].pos));
-            moby->state = 0x14;
+            moby->state = SAND_MOUSE_RETURN_TO_PARENT;
         }
         break;
     case SAND_MOUSE_RETURN_TO_PARENT: {
@@ -785,7 +786,7 @@ void sand_mouse_update(struct Moby *moby) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(6));
             }
             ((struct Moby *)ents)[sand_mouse_vars->parent].command = 1;
-            moby->state = 1;
+            moby->state = SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME;
             moby->draw_dist = 0;
         }
     } break;

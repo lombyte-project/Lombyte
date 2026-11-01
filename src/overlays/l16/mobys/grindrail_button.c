@@ -60,7 +60,7 @@ void grindrail_button_update(struct Moby *button_moby) {
     float glow_blend_factor;
     switch (button_moby->state) {
     case GRINDRAIL_BUTTON_INITIALIZE_GLOW_PHASE:
-        button_moby->state = 1;
+        button_moby->state = GRINDRAIL_BUTTON_CHECK_ACTIVATION;
         *(float *)button_data = random_angle_radians();
         break;
     case GRINDRAIL_BUTTON_CHECK_ACTIVATION:
@@ -125,7 +125,10 @@ typedef struct {
 void activate_grindrail_button(Level16VendorTurnMoby *moby) __asm__("FUN_L16_002e56e0");
 
 void activate_grindrail_button(Level16VendorTurnMoby *moby) {
+    enum {
+        GRINDRAIL_BUTTON_ACTIVATED = 2
+    };
     moby->data->value = -3.1415925f;
     moby->active = 1;
-    moby->state = 2;
+    moby->state = GRINDRAIL_BUTTON_ACTIVATED;
 }

@@ -21,6 +21,14 @@
 #include "rnc/overlay/l08/mobys/rocket.h"
 
 /* Pvars of the heavy gunship. */
+enum {
+    HEAVY_GUNSHIP_INITIALIZE = 0,
+    HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH = 1,
+    HEAVY_GUNSHIP_FOLLOW_SECONDARY_PATH = 2,
+    HEAVY_GUNSHIP_START_PRIMARY_PATH = 3,
+    HEAVY_GUNSHIP_DISPERSE_AND_REMOVE = 99
+};
+
 typedef struct {
     SwarmPathFollower follow[2];    /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
     SwarmPart         root;         /* 0x60 */
@@ -197,7 +205,7 @@ void process_heavy_gunship_part_hits(struct Moby *moby) {
                 }
                 i++;
             } while (i < 8);
-            moby->state = 99;
+            moby->state = HEAVY_GUNSHIP_DISPERSE_AND_REMOVE;
         }
     }
     if (sound >= 0)
@@ -253,11 +261,7 @@ void heavy_gunship_update(struct Moby *moby) __asm__("FUN_L08_002e9b70");
 /* Moby class 463 */
 void heavy_gunship_update(struct Moby *moby) {
     enum {
-        HEAVY_GUNSHIP_INITIALIZE = 0,
-        HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH = 1,
-        HEAVY_GUNSHIP_FOLLOW_SECONDARY_PATH = 2,
-        HEAVY_GUNSHIP_START_PRIMARY_PATH = 3,
-        HEAVY_GUNSHIP_DISPERSE_AND_REMOVE = 0x63
+        HEAVY_GUNSHIP_PART_DETACHED = 1
     };
     HeavyGunshipVars  *swarm_vars = (HeavyGunshipVars *)moby->pvars;
     SwarmPathFollower *follower;
@@ -300,7 +304,7 @@ void heavy_gunship_update(struct Moby *moby) {
         moby->flags |= 0x4000;
         qcopy(&moby->pos, &swarm_vars->follow[1].path->points[0]);
         spawn_heavy_gunship_parts(moby);
-        moby->state = 2;
+        moby->state = HEAVY_GUNSHIP_FOLLOW_SECONDARY_PATH;
         moby->rot.z = fast_arc_tan(swarm_vars->follow[1].path->points[1].f[0] - moby->pos.x,
                                    swarm_vars->follow[1].path->points[1].f[1] - moby->pos.y);
         break;
@@ -404,7 +408,7 @@ void heavy_gunship_update(struct Moby *moby) {
     case HEAVY_GUNSHIP_START_PRIMARY_PATH: {
         LevelPath *path;
 
-        moby->state = 1;
+        moby->state = HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH;
         path = swarm_vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z =
@@ -420,7 +424,7 @@ void heavy_gunship_update(struct Moby *moby) {
                 cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 fast_vec_sub(drift, &part->pos, &moby->pos);
                 fast_vec_normalize(drift, drift, frame_time * 5.0f);
-                part->state = 1;
+                part->state = HEAVY_GUNSHIP_PART_DETACHED;
                 swarm_vars->parts[i].moby = NULL;
             }
         }

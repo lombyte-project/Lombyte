@@ -20,6 +20,9 @@ extern struct CameraTrackingControl cam_coll_state __asm__("D_001870D0");
 void refresh_camera_control_flags(void) __asm__("FUN_001ed940");
 
 void refresh_camera_control_flags(void) {
+    enum {
+        CAMERA_TRACKING_BASE_CONTROL_MASK = 0xB4
+    };
     struct CameraTrackingControl *tracking;
 
     tracking = &cam_coll_state;
@@ -32,7 +35,7 @@ void refresh_camera_control_flags(void) {
     }
     cam_coll_flag_prev = cam_coll_flag;
     cam_coll_flag |= 0x80;
-    cam_coll_mode = 0xB4;
+    cam_coll_mode = CAMERA_TRACKING_BASE_CONTROL_MASK;
     if (hero.selector_1 != 0) {
         tracking->control_selector = 0x100;
         cam_coll_mode = 0x1B4;
@@ -47,7 +50,7 @@ void refresh_camera_control_flags(void) {
         cam_coll_mode = 0xDB4;
     } else if (hero.base_condition != 0) {
         tracking->control_selector = 0;
-        cam_coll_mode = 0xB4;
+        cam_coll_mode = CAMERA_TRACKING_BASE_CONTROL_MASK;
     } else {
         cam_coll_mode = tracking->control_selector | 0xB4;
     }

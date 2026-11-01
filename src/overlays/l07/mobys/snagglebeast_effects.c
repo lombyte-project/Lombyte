@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
-extern char D_L07_00166E40[];
+extern char debris_far_point[] __asm__("D_L07_00166E40");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003134B8), where it is exact; names translated to the US level program. */
@@ -150,11 +150,11 @@ void configure_timed_point_light(float        radius,
 }
 
 void rumble_by_distance(char *moby) {
-    float distance = fast_vec_dist(moby + 0x10, D_L07_00166E40);
+    float distance = fast_vec_dist(moby + 0x10, debris_far_point);
     char *state;
     if (distance > 80.0f)
         distance = 80.0f;
-    state = D_L07_00166E40 - 0x140;
+    state = debris_far_point - 0x140;
     *(int *)(state + 0x168) = 0x14;
     *(float *)(state + 0x160) = ((80.0f - distance) / 80.0f) * 0.1f;
 }

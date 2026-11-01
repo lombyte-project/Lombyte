@@ -72,6 +72,9 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_CONTRACT_RING = 3,
         TELEPORTER_RESET = 4
     };
+    enum {
+        HERO_TARGET_POSE_INACTIVE = 0
+    };
     TeleporterVars *teleporter_instance_vars = (TeleporterVars *)moby->pvars;
 
     switch (moby->state) {
@@ -79,7 +82,7 @@ void teleporter_update(struct Moby *moby) {
         char **slots = &teleporter_instance_vars->unk14;
         int    i;
         int    j;
-        moby->state = 1;
+        moby->state = TELEPORTER_WAIT_FOR_ACTIVATION;
         for (i = 0; i < 3; i++) {
             struct Hero *g = &hero;
             char        *child_moby;
@@ -126,7 +129,7 @@ void teleporter_update(struct Moby *moby) {
         if (D_L11_0015F594 != 0xB)
             break;
         allocate_voice_for_target_entry(0, 0, (void *)moby);
-        moby->state = 2;
+        moby->state = TELEPORTER_OPEN_PARTS;
         teleporter_instance_vars->unk28 = 0;
         teleporter_instance_vars->unk2C = 0;
         request_hero_target_pose(&moby->pos.x, 0, moby->rot.z);
@@ -152,9 +155,9 @@ void teleporter_update(struct Moby *moby) {
         } else if (D_L11_0015F594 != 0xB || !(teleporter_instance_vars->unk20 > 0.25f)) {
             if (teleport_transition_status == 2) {
                 teleporter_instance_vars->unk3C = 1.95f;
-                moby->state = 3;
-            } else if (teleport_transition_status == 0) {
-                moby->state = 4;
+                moby->state = TELEPORTER_CONTRACT_RING;
+            } else if (teleport_transition_status == HERO_TARGET_POSE_INACTIVE) {
+                moby->state = TELEPORTER_RESET;
             }
         }
         update_teleporter_child_transforms(moby);
@@ -181,14 +184,14 @@ void teleporter_update(struct Moby *moby) {
                                       teleporter_instance_vars->unk34);
             }
             FUN_L11_002f3040_2518(destination_moby);
-            MOBY(destination_moby)->state = 4;
+            MOBY(destination_moby)->state = TELEPORTER_RESET;
             *(float *)(td + 0x3C) = 0.0f;
             *(float *)(td + 0x28) = 0.0f;
             *(float *)(td + 0x2C) = 0.0f;
             *(float *)(td + 0x20) = 1.0f;
             *(float *)(td + 0x24) = 1.0f;
             allocate_voice_for_target_entry(1, 0, (void *)destination_moby);
-            moby->state = 1;
+            moby->state = TELEPORTER_WAIT_FOR_ACTIVATION;
             teleporter_instance_vars->unk20 = 0.0f;
             teleporter_instance_vars->unk24 = 0.0f;
             *(float *)&teleporter_instance_vars->unk28 = 0.0f;
@@ -218,7 +221,7 @@ void teleporter_update(struct Moby *moby) {
                                        teleporter_parts_deceleration_gp * frame_time_sq,
                                        teleporter_parts_max_speed_gp * frame_time);
         } else {
-            moby->state = 1;
+            moby->state = TELEPORTER_WAIT_FOR_ACTIVATION;
         }
         update_teleporter_child_transforms(moby);
         break;

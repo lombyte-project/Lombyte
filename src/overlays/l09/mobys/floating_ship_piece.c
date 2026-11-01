@@ -85,11 +85,11 @@ void floating_ship_piece_update(char *moby) {
             MOBY(moby)->pos.z = start_z - 5.0f;
             MOBY(moby)->rot.x = random_float_between(-1.57079637f, 1.57079637f);
             MOBY(moby)->rot.y = random_float_between(-1.57079637f, 1.57079637f);
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL;
         } else {
             func_001E9730_30A560(
                 D_L09_00209518_30A560, *(short *)(moby + 0xB2), MOBY(moby)->oclass);
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = PLATFORM_STATE_ACTIVE;
         }
         break;
     case PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL:
@@ -105,7 +105,7 @@ void floating_ship_piece_update(char *moby) {
             break;
         }
     set2:
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = PLATFORM_STATE_ACTIVE;
         break;
     case PLATFORM_STATE_ACTIVE:
         if (hero.air_frames.s == 0 && ((char *)hero.ground_moby) == moby) {

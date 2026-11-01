@@ -36,7 +36,7 @@ void child_carrier_update(char *moby) {
     char             *child;
     switch (MOBY(moby)->state) {
     case INITIALIZE_TRANSFORM_HISTORY:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = UPDATE_TRANSFORM_FROM_HISTORY;
         break;
     case UPDATE_TRANSFORM_FROM_HISTORY:
         fast_vec_sub(position_delta, moby + 0x10, transform_and_child_vars->unk60);

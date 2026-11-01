@@ -6,9 +6,9 @@
 #include "rnc/camera/update_cam.h"
 #include "rnc/mobys/moby_class_tables.h"
 
-void FUN_L00_002caf40();
+void get_morphoray_chicken_slot_record() __asm__("FUN_L00_002caf40");
 void FUN_L00_002ea7a0();
-void FUN_L10_002f5f18();
+void update_path_flythrough_camera() __asm__("FUN_L10_002f5f18");
 void ammocrate_update() __asm__("FUN_L13_002e1cc8");
 void asteroid_update() __asm__("FUN_L13_002e1638");
 void attached_rocket_update() __asm__("FUN_L13_00305a58");
@@ -172,7 +172,7 @@ void *D_L13_001F618C[6]
                                             moby_set_state_from_check,
                                             launch_suck_cannon_projectile_and_update_moby_state,
                                             cancel_suck_cannon_suction_and_set_moby_state_5,
-                                            FUN_L00_002caf40,
+                                            get_morphoray_chicken_slot_record,
                                             hud_counter_update};
 
 struct MobyClassUpdate moby_classes[189] __asm__("D_L13_001F5880")
@@ -383,7 +383,7 @@ struct CameraType level_camera_types[8] __asm__("D_L13_001F6200") __attribute__(
      update_target_tracking_camera,        conditionally_set_camera_state_three                                                           },
     {19,
      evaluate_descriptor_eligibility,            initialize_path_camera,
-     FUN_L10_002f5f18,                          noop_main_callback                                                                        },
+     update_path_flythrough_camera,                          noop_main_callback                                                           },
     {23,         volume_camera_check,                noop_main_callback,   noop_main_callback,                          noop_main_callback},
     {-1,                           0,                                 0,                    0,                                           0},
 };

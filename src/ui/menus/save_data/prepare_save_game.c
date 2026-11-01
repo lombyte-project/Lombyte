@@ -29,9 +29,9 @@ void prepare_save_game(int save_data, int slot) {
     card_state->buf = (void *)save_data;
     card_state->card[0].save_index = slot;
     card_state->active_card = 0;
-    if (card_state->pending_state < 0) {
+    if (card_state->pending_state < MEMCARD_QUERY_INFO) {
         card_state->pending_card = 0;
-        card_state->pending_state = 0x13;
+        card_state->pending_state = MEMCARD_BEGIN_WRITE_FULL_SAVE;
     }
 }
 

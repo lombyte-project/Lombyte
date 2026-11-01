@@ -20,6 +20,16 @@
 #include "qzero.h"
 #include "rnc/overlay/l17/mobys.h"
 
+enum {
+    FLEET_TURRET_INITIALIZE = 0,
+    FLEET_TURRET_DEPLETED = 1,
+    FLEET_TURRET_WAIT_FOR_TARGET = 1,
+    FLEET_TURRET_AIM_AND_FIRE_AT_ZONE = 2,
+    FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP = 3,
+    FLEET_TURRET_DESTROY = 4,
+    FLEET_TURRET_NOT_DEPLETED = 0xB
+};
+
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -88,13 +98,6 @@ void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
 
 /* Moby class 347 */
 void dreks_fleet_turret_update(struct Moby *turret_moby) {
-    enum {
-        FLEET_TURRET_INITIALIZE = 0,
-        FLEET_TURRET_WAIT_FOR_TARGET = 1,
-        FLEET_TURRET_AIM_AND_FIRE_AT_ZONE = 2,
-        FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP = 3,
-        FLEET_TURRET_DESTROY = 4
-    };
     float    targeting_vector_scratch[4];
     float    from[4];
     Vars347 *turret_vars = (Vars347 *)turret_moby->pvars;
@@ -102,7 +105,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
     process_dreks_fleet_turret_hits(turret_moby);
     switch (turret_moby->state) {
     case FLEET_TURRET_INITIALIZE:
-        turret_moby->state = 1;
+        turret_moby->state = FLEET_TURRET_WAIT_FOR_TARGET;
         turret_vars->f20 = 15.0f;
         turret_vars->s24 = 0xF;
         distribute_group_blarg_ships_along_path(turret_moby);
@@ -121,13 +124,13 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             fast_vec_add(from, from, targeting_vector_scratch);
             from[2] += 0.5f;
             if (collision_line(targeting_vector_scratch, from, 2, turret_moby, 0) == 0) {
-                turret_moby->state = 2;
+                turret_moby->state = FLEET_TURRET_AIM_AND_FIRE_AT_ZONE;
             }
         } else if (g->state.current == 0x32) {
             char *hero_ship_moby = ((char *)g->ship_moby);
             if (hero_ship_moby != 0 && MOBY(hero_ship_moby)->oclass == 0x563) {
                 if (vector_distance_xy(&turret_moby->pos, &g->motion.pos) < 254.0f) {
-                    turret_moby->state = 3;
+                    turret_moby->state = FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP;
                 }
             }
         }
@@ -135,7 +138,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
     }
     case FLEET_TURRET_AIM_AND_FIRE_AT_ZONE: {
         if (hero.unk308 == 0) {
-            turret_moby->state = 1;
+            turret_moby->state = FLEET_TURRET_WAIT_FOR_TARGET;
         }
         {
             float  j[8];
@@ -205,7 +208,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         struct Hero *g = &hero;
         if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
             g->ship_moby->oclass != 0x563) {
-            turret_moby->state = 1;
+            turret_moby->state = FLEET_TURRET_WAIT_FOR_TARGET;
         } else {
             Aim347 aim;
             float  j[8];
@@ -295,6 +298,9 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
 void process_dreks_fleet_turret_hits(struct Moby *turret_moby) __asm__("FUN_L17_002cbc10");
 
 void process_dreks_fleet_turret_hits(struct Moby *turret_moby) {
+    enum {
+        HIT_REACTION_NO_DAMAGE = 1
+    };
     char *turret_vars;
     char *hit_animation_state;
     char *hit_record;
@@ -302,7 +308,7 @@ void process_dreks_fleet_turret_hits(struct Moby *turret_moby) {
     float fv;
     int   depletion_status;
     turret_vars = ((char *)turret_moby->pvars);
-    if (turret_moby->state != 0) {
+    if (turret_moby->state != FLEET_TURRET_INITIALIZE) {
         fv = 0.0f;
         hit_record = find_moby_hit(turret_moby, 0x330000, 0);
         if (hit_record != 0) {
@@ -317,14 +323,15 @@ void process_dreks_fleet_turret_hits(struct Moby *turret_moby) {
         hit_animation_state = turret_vars + 0x60;
         hit_reaction(
             turret_moby, hit_record, turret_vars + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-        if (hit_reaction_status != 1 && turret_moby->state != 4) {
+        if (hit_reaction_status != HIT_REACTION_NO_DAMAGE &&
+            turret_moby->state != FLEET_TURRET_DESTROY) {
             float remaining_value = *(float *)(turret_vars + 0x20) - fv;
             *(float *)(turret_vars + 0x20) = remaining_value;
-            depletion_status = 0xB;
+            depletion_status = FLEET_TURRET_NOT_DEPLETED;
             if (remaining_value <= 0.0f)
-                depletion_status = 1;
-            if (depletion_status == 1) {
-                turret_moby->state = 4;
+                depletion_status = FLEET_TURRET_DEPLETED;
+            if (depletion_status == FLEET_TURRET_DEPLETED) {
+                turret_moby->state = FLEET_TURRET_DESTROY;
                 turret_moby->flags &= 0xEFFF;
             }
             *(unsigned char *)(turret_vars + 0x67) = 0xF0;

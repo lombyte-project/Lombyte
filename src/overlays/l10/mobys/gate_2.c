@@ -75,13 +75,13 @@ void gate_2_update(GateMoby *moby) {
             opening_offset[1] = fast_sin(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
             opening_offset[2] = 0.0f;
             fast_vec_add(&opening_position, &vars->home, opening_offset);
-            moby->state = 3;
+            moby->state = GATE_STATE_OPEN;
             moby->pos = opening_position;
         } else {
             if (vars->door > 0) {
                 (*(GateMoby **)&D_L10_0015FFD8_gp)[vars->door].flags |= 2;
             }
-            moby->state = 1;
+            moby->state = GATE_STATE_CLOSED;
         }
         break;
     case GATE_STATE_CLOSED: {
@@ -92,7 +92,7 @@ void gate_2_update(GateMoby *moby) {
               (moby->uid & 0x1F)) &
              1) != 0) {
             moby->pos = vars->home;
-            moby->state = 3;
+            moby->state = GATE_STATE_OPEN;
             if (vars->door > 0) {
                 (*(GateMoby **)&D_L10_0015FFD8_gp)[vars->door].flags &= 0xFFFD;
             }
@@ -107,7 +107,7 @@ void gate_2_update(GateMoby *moby) {
                 activate_descriptor(vars->sound);
             }
             vars->timer = truncate_float_to_s32(FUN_L04_001f1978(90.0f));
-            moby->state = 2;
+            moby->state = GATE_STATE_OPENING;
         }
         break;
     }
@@ -124,7 +124,7 @@ void gate_2_update(GateMoby *moby) {
         fast_vec_add(&opening_position, &vars->home, opening_offset);
         moby->pos = opening_position;
         if (fast_dec_timer(&vars->timer)) {
-            moby->state = 3;
+            moby->state = GATE_STATE_OPEN;
         }
         break;
     case GATE_STATE_OPEN:
@@ -135,7 +135,7 @@ void gate_2_update(GateMoby *moby) {
               1) &
              1)) {
             moby->pos = vars->home;
-            moby->state = 0;
+            moby->state = GATE_STATE_INITIALIZE;
         }
         break;
     }

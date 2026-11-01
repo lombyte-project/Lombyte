@@ -83,20 +83,23 @@ extern int  fptodp(float) __asm__("FUN_00120478");
 
 void print_moby_class_sizes(int *record, int n) __asm__("FUN_L00_00241788");
 
-void print_moby_class_sizes(int *record, int n) {
+void print_moby_class_sizes(int *moby_class_record_cursor, int moby_class_record_count) {
     MobyClassSize entries[512];
     int           i, j, k, done;
 
-    for (i = 0; i < n; i++, record += 8) {
-        entries[i].class_id = (float)record[1];
-        if (record[0] == 0) {
+    for (i = 0; i < moby_class_record_count; i++, moby_class_record_cursor += 8) {
+        entries[i].class_id = (float)moby_class_record_cursor[1];
+        if (moby_class_record_cursor[0] == 0) {
             entries[i].size = 0;
         } else {
-            if (record[8] != 0) {
-                entries[i].size = convert_integer_to_float(record[8] - record[0]) * 0.0009765625f;
+            if (moby_class_record_cursor[8] != 0) {
+                entries[i].size = convert_integer_to_float(moby_class_record_cursor[8] -
+                                                           moby_class_record_cursor[0]) *
+                                  0.0009765625f;
             } else {
-                entries[i].size =
-                    convert_integer_to_float(record[0x10] - record[0]) * 0.0009765625f;
+                entries[i].size = convert_integer_to_float(moby_class_record_cursor[0x10] -
+                                                           moby_class_record_cursor[0]) *
+                                  0.0009765625f;
             }
             entries[i + 1].class_id = -1.0f;
             entries[i + 1].size = 0;
@@ -104,7 +107,7 @@ void print_moby_class_sizes(int *record, int n) {
     }
     do {
         done = 1;
-        for (j = 0; j < n; j++) {
+        for (j = 0; j < moby_class_record_count; j++) {
             if (entries[j].size < entries[j + 1].size) {
                 float class_id = entries[j].class_id;
                 float size = entries[j].size;
@@ -116,7 +119,7 @@ void print_moby_class_sizes(int *record, int n) {
             }
         }
     } while (!done);
-    for (k = 0; k < n; k++) {
+    for (k = 0; k < moby_class_record_count; k++) {
         int class_id = truncate_float_to_s32(entries[k].class_id);
         debug_print(moby_class_size_format, class_id, fptodp(entries[k].size));
     }
@@ -501,6 +504,9 @@ extern s32           pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern s32           game_language __asm__("D_0015ED88") MACRO_ADDR;
 
 char *load_level_gameplay(int skip_gameplay_read) {
+    enum {
+        OCCLUSION_MODE_DISABLED = 0
+    };
     LevelHeader *hdr;
     char        *mem;
     float       *ship;
@@ -511,7 +517,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     hdr = D_L00_00173E00.f4;
     mem = D_L00_00173E00.f18;
     if (skip_gameplay_read == 0) {
-        if (pal_mode != 0) {
+        if (pal_mode != FALSE) {
             read_disc_sectors_and_wait(
                 mem, disc_table.sound_archive_alt.sector, disc_table.sound_archive_alt.size);
         } else {
@@ -527,7 +533,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     FillTransferWords(&l00_camera, 0, 0x3A0);
     FillTransferWords(D_L00_0018EB40, 0, 0x180);
     srand(0x4D2);
-    if (pal_mode != 0) {
+    if (pal_mode != FALSE) {
         if (frame_scale == 1.0f) {
             set_video_timing(1);
         }
@@ -1632,7 +1638,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         for (i = 0; i < D_L00_00160F50; i++) {
             D_L00_00160F4C[i].f3A = 0x7F80;
         }
-        g_debug_menu.occlusion_mode = 0;
+        g_debug_menu.occlusion_mode = OCCLUSION_MODE_DISABLED;
     }
     reset_draw_globals();
     initialize_hero();
@@ -2152,7 +2158,7 @@ s32 start_cutscene_chunk_read(s32 i) {
     s32 start;
     s32 size;
 
-    if (pal_mode != 0) {
+    if (pal_mode != FALSE) {
         size = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] -
                disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];

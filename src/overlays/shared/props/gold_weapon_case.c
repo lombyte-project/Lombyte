@@ -45,6 +45,9 @@ void gold_weapon_case_update(struct Moby *moby) {
         GOLD_WEAPON_CASE_IDLE = 3,
         GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END = 4
     };
+    enum {
+        CUTSCENE_MODE_INACTIVE = 0
+    };
     SaleVars  *sale_vars = (SaleVars *)moby->pvars;
     s32        purchased_item_id;
     ItemPrice *price;
@@ -57,12 +60,12 @@ void gold_weapon_case_update(struct Moby *moby) {
     switch (moby->state) {
     case GOLD_WEAPON_CASE_INITIALIZE:
         if (moby->oclass != 0x130) {
-            moby->state = 2;
+            moby->state = GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED;
         } else if (item_text_variant[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] != 0 ||
                    initialize_npc_dialogue(moby, sale_vars) == -1) {
-            moby->state = 3;
+            moby->state = GOLD_WEAPON_CASE_IDLE;
         } else {
-            moby->state = 1;
+            moby->state = GOLD_WEAPON_CASE_PROCESS_SALE;
         }
         break;
     case GOLD_WEAPON_CASE_PROCESS_SALE:
@@ -70,7 +73,7 @@ void gold_weapon_case_update(struct Moby *moby) {
         FUN_L00_00266448_2e1ac0(moby, sale_vars);
         if (sale_vars->result == 2) {
             item_text_variant[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] = 1;
-            moby->state = 4;
+            moby->state = GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END;
             purchased_item_id = gold_weapon_case_item_ids_by_slot[sale_vars->slot];
             price = &l01_gold_weapon_case_item_prices[purchased_item_id];
             current_bolt_count -= price->bolts;
@@ -80,9 +83,9 @@ void gold_weapon_case_update(struct Moby *moby) {
     case GOLD_WEAPON_CASE_IDLE: /* sold out or done: idle */
         break;
     case GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END:
-        if (cutscene_mode == 0) {
+        if (cutscene_mode == CUTSCENE_MODE_INACTIVE) {
             memcard_save_data(0, -1);
-            moby->state = 3;
+            moby->state = GOLD_WEAPON_CASE_IDLE;
         }
         break;
     case GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED:

@@ -4,6 +4,6 @@
 
 void srand(int value) __asm__("func_001160C8");
 
-void srand(int value) {
-    _impure_ptr->_rand_next = value;
+void srand(int seed) {
+    _impure_ptr->_rand_next = seed;
 }

@@ -33,9 +33,12 @@ extern void
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int D_L08_0015F5CC __asm__("D_L08_0015F5CC");
 
-extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));
-extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
-extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
+extern int l08_turret_rocket_spark_first_frame_count_base __asm__("D_L08_00161D08")
+    __attribute__((sda));
+extern int l08_turret_rocket_spark_second_frame_count_base __asm__("D_L08_00161D0C")
+    __attribute__((sda));
+extern int l08_turret_rocket_spark_third_frame_count_base __asm__("D_L08_00161D10")
+    __attribute__((sda));
 
 extern float moby_creation_default_timer_frames_gp __asm__("D_L08_00161CD8") __attribute__((sda));
 extern float moby_creation_particle_count_limit_gp __asm__("D_L08_00161CE0") __attribute__((sda));
@@ -151,13 +154,16 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
                             1,
                             20000.0f);
                 particle_frame_count = truncate_float_to_s32(FUN_L08_00211a20(random_float_between(
-                    (float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
+                    (float)l08_turret_rocket_spark_first_frame_count_base,
+                    (float)l08_turret_rocket_spark_first_frame_count_base * 1.2f)));
                 particle_second_frame_count =
                     truncate_float_to_s32(FUN_L08_00211a20(random_float_between(
-                        (float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
+                        (float)l08_turret_rocket_spark_second_frame_count_base,
+                        (float)l08_turret_rocket_spark_second_frame_count_base * 1.2f)));
                 particle_third_frame_count =
                     truncate_float_to_s32(FUN_L08_00211a20(random_float_between(
-                        (float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
+                        (float)l08_turret_rocket_spark_third_frame_count_base,
+                        (float)l08_turret_rocket_spark_third_frame_count_base * 1.5f)));
                 spawn_spark(&MOBY(moby)->pos,
                             velocity_ptr,
                             offset_ptr,
@@ -221,11 +227,14 @@ void turret_rocket_update(char *moby) {
         offset[3] = homing_projectile_trail_secondary_motion_w_gp;
         i++;
         particle_frame_count = truncate_float_to_s32(scale_game_frames_002e8210(
-            random_float_between((float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
+            random_float_between((float)l08_turret_rocket_spark_first_frame_count_base,
+                                 (float)l08_turret_rocket_spark_first_frame_count_base * 1.2f)));
         particle_second_frame_count = truncate_float_to_s32(scale_game_frames_002e8210(
-            random_float_between((float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
+            random_float_between((float)l08_turret_rocket_spark_second_frame_count_base,
+                                 (float)l08_turret_rocket_spark_second_frame_count_base * 1.2f)));
         particle_third_frame_count = truncate_float_to_s32(scale_game_frames_002e8210(
-            random_float_between((float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
+            random_float_between((float)l08_turret_rocket_spark_third_frame_count_base,
+                                 (float)l08_turret_rocket_spark_third_frame_count_base * 1.5f)));
         spawn_spark(position,
                     velocity,
                     offset,

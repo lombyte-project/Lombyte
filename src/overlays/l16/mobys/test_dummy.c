@@ -20,6 +20,21 @@
 
 #include "qcopy.h"
 
+enum {
+    TEST_DUMMY_STATE_INITIALIZE = 0,
+    TEST_DUMMY_STATE_IDLE = 1,
+    TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
+    TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
+    TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
+    TEST_DUMMY_STATE_MOVE_ALONG_PATH = 5,
+    TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE = 6,
+    TEST_DUMMY_STATE_APPROACH_SPRAY_NODE = 7,
+    TEST_DUMMY_STATE_SPRAY_FROM_CHILD = 8,
+    TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
+    TEST_DUMMY_STATE_BURST = 10,
+    TEST_DUMMY_STATE_RESPAWN = 11
+};
+
 extern char *create_moby(int);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
@@ -128,23 +143,12 @@ void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 /* Moby class 541 */
 void test_dummy_update(unsigned char *moby) {
     enum {
-        TEST_DUMMY_STATE_INITIALIZE = 0,
-        TEST_DUMMY_STATE_IDLE = 1,
-        TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
-        TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
-        TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
-        TEST_DUMMY_STATE_MOVE_ALONG_PATH = 5,
-        TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE = 6,
-        TEST_DUMMY_STATE_APPROACH_SPRAY_NODE = 7,
-        TEST_DUMMY_STATE_SPRAY_FROM_CHILD = 8,
-        TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
-        TEST_DUMMY_STATE_BURST = 10,
-        TEST_DUMMY_STATE_RESPAWN = 11
-    };
-    enum {
         TEST_DUMMY_KIND_THROWER = 0,
         TEST_DUMMY_KIND_PATH_MOVER = 1,
         TEST_DUMMY_KIND_SPRAYER = 2
+    };
+    enum {
+        TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET = 2
     };
     L16QuadVector    position_or_delta, position_or_direction, launch_velocity;
     L16HitDescriptor fx;
@@ -204,9 +208,9 @@ void test_dummy_update(unsigned char *moby) {
             dummy_data->timer = scale_game_frames(30);
             dummy_data->node = 1;
             dummy_data->step = 1;
-            if (dummy_data->kind == 0) {
+            if (dummy_data->kind == TEST_DUMMY_KIND_THROWER) {
                 moby[0x20] = 3;
-            } else if (dummy_data->kind == 1) {
+            } else if (dummy_data->kind == TEST_DUMMY_KIND_PATH_MOVER) {
                 moby[0x20] = 5;
             } else {
                 moby[0x20] = 7;
@@ -232,13 +236,13 @@ void test_dummy_update(unsigned char *moby) {
                     FUN_L00_0025ff38(
                         12.0f, (char *)moby, dummy_data->target, 0, 0, p + 16, *(int *)p);
                 } else {
-                    dummy_data->mode = 2;
+                    dummy_data->mode = TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET;
                 }
             }
         }
         break;
     case TEST_DUMMY_STATE_THROW_AT_TARGET: /* thrower: launch the held object at the target, then face it or the next node */
-        if (dummy_data->mode == 2) {
+        if (dummy_data->mode == TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET) {
             qcopy(position_or_delta.f,
                   D_L16_001600EC_c + dummy_data->aim[dummy_data->node] * 0x80 + 0x30);
         } else {
@@ -351,13 +355,13 @@ void test_dummy_update(unsigned char *moby) {
                     FUN_L00_0025ff38(
                         12.0f, (char *)moby, dummy_data->target, 0, 0, p + 16, *(int *)p);
                 } else {
-                    dummy_data->mode = 2;
+                    dummy_data->mode = TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET;
                 }
             }
         }
         break;
     case TEST_DUMMY_STATE_SPRAY_FROM_CHILD: /* sprayer: face the target and emit from the child toward it */
-        if (dummy_data->mode != 2) {
+        if (dummy_data->mode != TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET) {
             position_or_delta.quad = *(u128 *)(moby + 16);
             move_test_dummy_toward_position_and_heading(
                 moby,
@@ -529,6 +533,9 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 
 /* Per-frame update of a hit-point moby: handles a hit (respawn at the spawn point or removal when out of lives) and its state timers. */
 void update_test_dummy_damage_and_respawn(void *moby) {
+    enum {
+        HIT_REACTION_STATUS_NO_DAMAGE = 1
+    };
     L16HitMoby *hit_moby = moby;
     float       matrix[16];
     int         status;
@@ -536,7 +543,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     L16HitData *hit_data;
     char       *dummy_hit_record;
 
-    if (hit_moby->state == 1) {
+    if (hit_moby->state == TEST_DUMMY_STATE_IDLE) {
         return;
     }
     hit_data = hit_moby->data;
@@ -548,7 +555,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
         hit_moby->flags &= 0xEFFF;
         hit_data->lives--;
         if (hit_data->lives != -1) {
-            hit_moby->state = 11;
+            hit_moby->state = TEST_DUMMY_STATE_RESPAWN;
             qcopy(hit_moby->position, hit_data->spawn);
             hit_data->timer = scale_game_frames(60);
         } else {
@@ -565,12 +572,13 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     amount = 0.0f;
     dummy_hit_record = find_moby_hit(hit_moby, 0x330000, 0);
     hit_reaction(hit_moby, dummy_hit_record, &hit_data->health, 0, &status, &amount, 0, 4);
-    if (status != 1 && hit_moby->state != 10 && hit_moby->state != 11) {
+    if (status != HIT_REACTION_STATUS_NO_DAMAGE && hit_moby->state != TEST_DUMMY_STATE_BURST &&
+        hit_moby->state != TEST_DUMMY_STATE_RESPAWN) {
         hit_data->health -= amount;
         if (hit_data->health <= 0.0f) {
-            hit_moby->state = 10;
+            hit_moby->state = TEST_DUMMY_STATE_BURST;
         } else {
-            if (hit_moby->state != 9) {
+            if (hit_moby->state != TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE) {
                 hit_data->next_state = hit_moby->state;
                 hit_data->next_anim = hit_moby->animation;
             }
@@ -580,7 +588,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
                 hit_data->heading =
                     fast_arc_tan(player->motion.pos.f[0] - x, player->motion.pos.f[1] - y);
             }
-            hit_moby->state = 9;
+            hit_moby->state = TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE;
             /* No pointer local for the reaction record anywhere: d->reaction is written at each call and the
                compiler caches it itself (formed before the hit query, and formed again here with a copy after
                the call). It only forms it again here when this place cannot be reached along one straight path
@@ -681,6 +689,7 @@ extern char *D_L16_0015FFD8;
 extern void  add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 #include "rnc/overlay/l16/mobys/test_dummy_globals.h"
+
 /* spins the level's rotating parts by the current angle and queues the draw callback */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0238), where it is exact; names translated to the US level program. */
 

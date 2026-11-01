@@ -54,30 +54,29 @@ extern int              collision_line(void *, void *, int, void *, int) __asm__
 extern int              coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 float      bomb_downward_acceleration_gp __asm__("D_L08_00161860") = 15.0f;
-extern void FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void spawn_explosion(void *,
-                            void *,
-                            void *,
-                            float,
-                            float,
-                            int,
-                            int,
-                            int,
-                            float,
-                            float,
-                            float,
-                            float,
-                            int,
-                            float,
-                            int,
-                            int,
-                            int,
-                            int) __asm__("FUN_L00_0025e450");
-extern void
-FUN_L00_00269958_c(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+extern void  FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
+extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  spawn_explosion(void *,
+                             void *,
+                             void *,
+                             float,
+                             float,
+                             int,
+                             int,
+                             int,
+                             float,
+                             float,
+                             float,
+                             float,
+                             int,
+                             float,
+                             int,
+                             int,
+                             int,
+                             int) __asm__("FUN_L00_0025e450");
+extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") MACRO_ADDR;
 void         moby_248_update(char *moby) __asm__("FUN_L08_002d23f0");
 extern float D_0015ED6C;
@@ -125,9 +124,9 @@ void moby_248_update(char *moby) {
             if (sphere_hit_moby != 0 &&
                 (sphere_hit_moby != bomb_vars->unk30 || bomb_vars->unk24 != 0)) {
                 if (!(MOBY(moby)->command & 2))
-                    MOBY(moby)->state = 0x62;
+                    MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                 else
-                    MOBY(moby)->state = 0x63;
+                    MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
                 qcopy((moby + 0x10), ((char *)D_L08_00174660));
                 FUN_L00_001ff660_c(
                     &bomb_vars->unk10, &bomb_vars->unk10, ((char *)D_L08_00174660) + 0x20);
@@ -155,14 +154,14 @@ void moby_248_update(char *moby) {
             *(v128_36F8 *)normalized_direction = *(v128_36F8 *)random_direction;
             fast_vec_normalize(normalized_direction, normalized_direction, D_0015ED6C);
             selected_table_entry = (int *)table_or_bounce_scratch.b + random_integer_below(4);
-            FUN_L00_00269958_c((moby + 0x10),
-                               normalized_direction,
-                               *selected_table_entry,
-                               0x4FFF,
-                               scale_game_frames(0x2D),
-                               0x32,
-                               0x78,
-                               1);
+            spawn_effect((moby + 0x10),
+                         normalized_direction,
+                         *selected_table_entry,
+                         0x4FFF,
+                         scale_game_frames(0x2D),
+                         0x32,
+                         0x78,
+                         1);
         }
         qcopy(c.r.start, moby + 0x10);
         collision_z_offset = 0.16f;
@@ -182,9 +181,9 @@ void moby_248_update(char *moby) {
             if (v != 0) {
                 if (v != bomb_vars->unk30 || bomb_vars->unk24 != 0) {
                     if (!(MOBY(moby)->command & 2))
-                        MOBY(moby)->state = 0x62;
+                        MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                     else
-                        MOBY(moby)->state = 0x63;
+                        MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
                     qcopy((moby + 0x10), ((char *)D_L08_00174660));
                     {
                         char *v = &bomb_vars->unk10;
@@ -220,7 +219,7 @@ void moby_248_update(char *moby) {
                         clear_u64_value((&bomb_vars->unk10));
                     }
                 } else {
-                    MOBY(moby)->state = 0x62;
+                    MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                     qcopy((moby + 0x10), collision_result + 0x20);
                     FUN_L00_001ff660_c(
                         (&bomb_vars->unk10), (&bomb_vars->unk10), collision_result + 0x40);
@@ -230,16 +229,16 @@ void moby_248_update(char *moby) {
             }
         } else if (fast_dec_timer(&bomb_vars->timer_20)) {
             if (MOBY(moby)->command & 2) {
-                MOBY(moby)->state = 0x63;
+                MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
             } else {
-                MOBY(moby)->state = 0x62;
+                MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
             }
         }
         break;
     }
     case BOMB_STATE_STATIONARY_FUSE:
         if (fast_dec_timer(&bomb_vars->timer_20)) {
-            MOBY(moby)->state = 0x63;
+            MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
         } else if (bomb_vars->timer_20 == scale_game_frames(0x3C) ||
                    bomb_vars->timer_20 == scale_game_frames(0x28) ||
                    bomb_vars->timer_20 == scale_game_frames(0x14)) {

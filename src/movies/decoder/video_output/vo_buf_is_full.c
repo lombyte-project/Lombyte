@@ -3,6 +3,6 @@
 
 s32 vo_buf_is_full(struct VoBuf *buf) __asm__("func_0023D1F8");
 
-s32 vo_buf_is_full(struct VoBuf *buf) {
-    return buf->count == buf->size;
+s32 vo_buf_is_full(struct VoBuf *video_output_buffer) {
+    return video_output_buffer->count == video_output_buffer->size;
 }

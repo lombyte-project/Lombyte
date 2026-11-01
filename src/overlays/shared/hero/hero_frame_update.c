@@ -25,6 +25,19 @@
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
 
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNETIC = 2
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 0xD
+};
+
+enum {
+    CUTSCENE_MODE_INACTIVE = 0
+};
+
 extern int           hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern unsigned char D_0013E533[];
 
@@ -113,11 +126,11 @@ void hero_frame_update(void) {
     hero_update();
     update_hero_ground_material_effects();
     update_hero_state_machine();
-    if (hero.vehicle_mode == 0)
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT)
         return;
     update_hero_delayed_voice_requests();
     update_hero_easing_records();
-    if (hero.vehicle_mode == 0)
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT)
         return;
     update_hero_vehicle_moby();
     update_hero_scalar_pulse();
@@ -242,7 +255,7 @@ void update_hero_frame(void) {
     }
     hero_state_base->unk1EB2 = 0;
     hero_state_base->unk1EB0 = 0;
-    if (hero_state_base->vehicle_mode != 0) {
+    if (hero_state_base->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         hero_frame_update();
         return;
     }
@@ -251,7 +264,7 @@ void update_hero_frame(void) {
     update_hero_ground_material_effects();
     update_hero_ledge_probe();
     update_hero_state_machine();
-    if (hero_state_base->vehicle_mode != 0) {
+    if (hero_state_base->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         return;
     }
     update_hero_delayed_voice_requests();
@@ -342,10 +355,10 @@ void update_hero_ground_material_effects(void) {
     hero_ptr->unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == GROUND_MATERIAL_MAGNETIC) {
         if (hero_ptr->frames_off_ground.s == 0 || hero_ptr->ground_distance < 0.3f) {
             hero_ptr->on_magnet_ground = 1;
-            if (hero_ptr->vehicle_mode == 0) {
+            if (hero_ptr->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_slot_1_moby = (char *)hero_ptr->items[1].moby;
                 if (item_slot_1_moby != 0 && MOBY(item_slot_1_moby)->oclass == 0xAD)
                     hero_ptr->unk308 = 1;
@@ -358,7 +371,7 @@ void update_hero_ground_material_effects(void) {
         q->water_depth = 0.2f;
         q->water_surface_z = q->ground_z.f + 0.2f;
     }
-    if (saved_ground_type == 0) {
+    if (saved_ground_type == GROUND_MATERIAL_WATER) {
         struct Hero *q = &hero;
         q->water_depth = q->water_surface_z - q->ground_z.f;
         if (q->water_depth < 0.85f) {
@@ -387,7 +400,7 @@ void update_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->selector_4 = 1;
     }
-    if (saved_ground_type == 0xD) {
+    if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
@@ -454,7 +467,7 @@ void update_hero_ledge_probe(void) {
     if (hero.ledge_probe_cooldown != 0)
         return;
     allowed = 0;
-    if (hero.vehicle_mode == 0) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         if ((hero.state.control_mode == 4 &&
              (hero.past_jump_apex != 0 || hero.motion.velocity.f[2] < frame_time * 3.5f)) ||
             hero.state.control_mode == 2 || hero.state.current == 8 || hero.state.current == 0x1A ||
@@ -722,7 +735,7 @@ extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08")
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_update_items() __asm__("FUN_L00_00210748");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
-extern void FUN_L00_00232fe8(void);
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void update_hero_collision_dimensions(void) __asm__("FUN_L01_00231ae0");
 
@@ -739,7 +752,7 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     *(int *)&hero_state_base->moby = *(int *)&hero_state_base->unkA88;
     clear_moby_transform_history(&hero_state_base->trail.pos);
     hero_state_base->moby->collision_disable = -1;
-    FUN_L00_00232fe8();
+    set_hero_item_moby_flag_bit0();
     release_and_clear_hero_voice_slots();
     reset_hero_easing_records();
     *(char *)&hero_state_base->vehicle_mode = vehicle_mode;
@@ -755,7 +768,7 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     FUN_L00_00257024(((void *)hero_state_base->moby));
     apply_hero_and_item_scale_sequence();
     hero_state_base->unk22CC = initial_state;
-    if (vehicle_mode == 1) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         *(unsigned short *)&hero_state_base->health.unk22B0 =
             *(unsigned short *)&hero_state_base->health;
         hero_state_base->health.hp = hero_state_base->health.vehicle_mode_hp;
@@ -837,7 +850,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     if (G.invulnerable_frames != 0) {
         return 0;
     }
-    if (cutscene_mode != 0) {
+    if (cutscene_mode != CUTSCENE_MODE_INACTIVE) {
         return 0;
     }
     G.damage_source_moby = 0;
@@ -1181,7 +1194,7 @@ void update_hero_ground_contact_and_gravity(void) {
     }
     hero.ground_sound_class = collision_sound_class;
     hero.ground_type = collision_hit_material();
-    if (hero.ground_type == 0) {
+    if (hero.ground_type == GROUND_MATERIAL_WATER) {
         hero.water_surface_z =
             resolve_camera_surface_height(D_L01_001742E0, (u8 *)&hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
@@ -1196,7 +1209,7 @@ void update_hero_ground_contact_and_gravity(void) {
         }
         hero.ground_sound_class = collision_sound_class;
     }
-    if (hero.ground_type == 0xD) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         hero.water_surface_z = HH.point.f[2];
         ground_ray_start.f[2] = HH.point.f[2] - 0.01f;
         if (FUN_001efa68_c(&ground_ray_start, &collision_ray_end, 4, (s32)hero.moby, 0) == 0) {
@@ -1230,7 +1243,8 @@ void update_hero_ground_contact_and_gravity(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 ||
+            if (hero.ground_slope.f <= 0.87266463f ||
+                hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;
@@ -1323,9 +1337,9 @@ typedef union {
     f32         f[4];
 } V_233940;
 
-extern void        FUN_L00_002347c0(void);
-extern void        FUN_L00_00233810(void *, void *, f32);
-extern void        FUN_L00_002334d0(void *, void *, f32);
+extern void        resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
+extern void        add_hero_up_offset(void *, void *, f32) __asm__("FUN_L00_00233810");
+extern void        add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern s32         coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32         coll3_233940(void *, f32) __asm__("FUN_L00_001f3170");
 extern u128_233940 D_L01_001742F0[] NOT_SDA;
@@ -1345,15 +1359,15 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
     qcopy(&pre_collision_position, &hero.motion.pos.q);
     clear_u64_value(&collision_query_offset);
     if (hero.path_constrain_pending != 0) {
-        FUN_L00_002347c0();
+        resolve_hero_pending_path_clearance();
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != 0x11) {
-        if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == 1 || hero.unk1F8 != 0) {
-                FUN_L00_00233810(&collision_query_offset, &collision_query_offset, 0.6f);
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
+                add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
-                FUN_L00_002334d0(
+                add_hero_gravity_offset(
                     &collision_query_offset, &collision_query_offset, -hero.capsule_bottom);
             }
         } else {
@@ -1366,7 +1380,7 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
-        if (hero.gravity_mode != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll_sphere(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.4f))
                 break;
         } else if (hero.state.control_mode == 0x11) {
@@ -1497,7 +1511,7 @@ void update_hero_timers_and_vehicle_transitions(void) {
         hero.stick_held_frames++;
     }
     if (hero.vehicle_toggle_timer != 0 && fast_dec_timer_s16(&hero.vehicle_toggle_timer) != 0 &&
-        hero.health.hp != 0 && cutscene_mode == 0) {
+        hero.health.hp != 0 && cutscene_mode == CUTSCENE_MODE_INACTIVE) {
         if (hero.vehicle_mode == 3) {
             exit_hero_vehicle_mode_and_restore_moby();
             if (pad_pressed_within(0x80, scale_game_frames(0x12), 0)) {

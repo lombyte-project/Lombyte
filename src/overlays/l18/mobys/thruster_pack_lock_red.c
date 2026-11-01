@@ -20,6 +20,12 @@
 #include "rnc/math/random.h"
 #include "rnc/ui/frames/draw_ui_frame.h"
 
+enum {
+    THRUSTER_PACK_LOCK_RED_STATE_APPROACH_CONFIGURED_HEIGHT = 1,
+    THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2,
+    THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT = 3
+};
+
 extern int scale_game_frames(int);
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -57,6 +63,9 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         STATE_WAIT_FOR_DEPRESSION_TRIGGER = 4,
         STATE_SETTLE_DEPRESSED_HEIGHT = 5
     };
+    enum {
+        STATE_DEPRESSED_HEIGHT_SETTLED = 6
+    };
     char *thruster_pack_lock_red_private_vars = (char *)moby->pvars;
     int   index;
 
@@ -65,11 +74,11 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         *(float *)(thruster_pack_lock_red_private_vars + 0x64) = moby->pos.z;
         *(unsigned short *)(thruster_pack_lock_red_private_vars + 0x3E) |= 8;
         if (*(int *)(thruster_pack_lock_red_private_vars + 0x60) != 0) {
-            moby->state = 1;
+            moby->state = STATE_APPROACH_CONFIGURED_HEIGHT;
             moby->scale = moby->pclass->scale * l18_thruster_pack_lock_red_scale_multiplier;
             return;
         }
-        moby->state = 4;
+        moby->state = STATE_WAIT_FOR_DEPRESSION_TRIGGER;
         return;
     case STATE_APPROACH_CONFIGURED_HEIGHT:
     case STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT:
@@ -91,7 +100,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             frame_time_sq * 10.0f,
             frame_time * 20.0f);
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
-            moby->state = 3;
+            moby->state = STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT;
             allocate_voice_for_target_entry(0, 0, (int)moby);
             index = *(int *)(thruster_pack_lock_red_private_vars + 0x70);
             if (index != -1) {
@@ -110,7 +119,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         break;
     case STATE_WAIT_FOR_DEPRESSION_TRIGGER:
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
-            moby->state = 5;
+            moby->state = STATE_SETTLE_DEPRESSED_HEIGHT;
             moby->command = 1;
             moby->pos.z -= 1.5f;
             if (current_level_index == 0x12)
@@ -145,7 +154,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
                            *(float *)(thruster_pack_lock_red_private_vars + 0x64) - 1.5f,
                            0.15f) != 0.0f)
             return;
-        moby->state = 6;
+        moby->state = STATE_DEPRESSED_HEIGHT_SETTLED;
         break;
     }
 }
@@ -160,8 +169,8 @@ void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) __asm__("
 
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int wait_duration_frames) {
     char *red_lock_vars = (char *)moby->pvars;
-    if (moby->state != 2) {
-        moby->state = 2;
+    if (moby->state != THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER) {
+        moby->state = THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER;
         *(int *)(red_lock_vars + 0x6C) = wait_duration_frames;
     }
     if (!voice_is_playing(moby, *(int *)(red_lock_vars + 0x70))) {
@@ -174,9 +183,9 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) __asm__("FUN_L18_002d7fd
 
 void end_thruster_pack_lock_red_wait(struct Moby *moby) {
     int *red_lock_private_vars = (int *)moby->pvars;
-    if (moby->state == 2) {
+    if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER) {
         int voice_slot_index;
-        moby->state = 3;
+        moby->state = THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT;
         voice_slot_index = red_lock_private_vars[0x70 / 4];
         if (voice_slot_index != -1) {
             unsigned char *voice_slot_entry =
@@ -194,11 +203,12 @@ int poll_moby_state_and_rearm(struct Moby *moby) __asm__("FUN_L18_002d8050");
 
 int poll_moby_state_and_rearm(struct Moby *moby) {
     int *moby_private_vars = (int *)moby->pvars;
-    if (moby->state == 3) {
-        moby->state = 1;
+    if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT) {
+        moby->state = THRUSTER_PACK_LOCK_RED_STATE_APPROACH_CONFIGURED_HEIGHT;
         return 1;
     }
-    if (moby->state == 2 && moby_private_vars[0x6C / 4] == 0) {
+    if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER &&
+        moby_private_vars[0x6C / 4] == 0) {
         return -1;
     }
     return 0;

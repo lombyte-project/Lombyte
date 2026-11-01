@@ -21,6 +21,14 @@
 #include "rnc/overlay/shared/weapons/mine.h"
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 
+enum {
+    BOMB_STATE_HELD = 0
+};
+
+enum {
+    THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER = 2
+};
+
 typedef struct {
     char           p0[0x80];
     float          pos[4];
@@ -819,7 +827,7 @@ unsigned char *spawn_bomb(int bomb_holder_moby, void *spawn_position) {
         MOBY(bomb_moby)->update_dist = 0xFF;
         MOBY(bomb_moby)->draw_dist = 0xFF;
         MOBY(bomb_moby)->visible = 1;
-        MOBY(bomb_moby)->state = 0;
+        MOBY(bomb_moby)->state = BOMB_STATE_HELD;
         *(int *)(v + 0x50) = bomb_holder_moby;
         *(short *)(v + 0x56) = 0;
         *(short *)(v + 0x6A) = 0;
@@ -946,7 +954,7 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
     if (D_L00_0015F5C4_002acbf0 != 0)
         return 0;
     qcopy(&previous, &thrown_moby->pos);
-    if (thrown_moby->state == 0) {
+    if (thrown_moby->state == BOMB_STATE_HELD) {
         position.f[0] =
             fast_cos(fast_add_rotations(-0.361968f, fast_arc_tan(hero.facing_x, hero.facing_y))) *
             0.859039f;
@@ -1065,7 +1073,8 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
         if (!FUN_L00_002603d0_2ad410(coll_hit.moby))
             goto return_zero;
     }
-    if (mode != 2 || !coll_hit.moby || !FUN_L00_002603d0_2ad410(coll_hit.moby))
+    if (mode != THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER || !coll_hit.moby ||
+        !FUN_L00_002603d0_2ad410(coll_hit.moby))
         add_draw_callback(draw_bomb_landing_marker, thrown_moby);
     if (!object_hit && v->last_hit) {
         if (v->last_hit->state == 0xfe) {
@@ -1153,7 +1162,7 @@ void bomb_update(BombMoby *bomb_moby) {
                     Vec_2adb30 spark_velocity;
                     Vec_2adb30 v2;
                     Vec_2adb30 random_velocity_offset;
-                    int        p0;
+                    int        spark_primary_color;
                     int        spark_secondary_color;
                     int        spark_random_frame_count;
                     int        spark_vertical_offset_scale;
@@ -1168,9 +1177,9 @@ void bomb_update(BombMoby *bomb_moby) {
                         random_float_between(*(float *)&D_L00_0016140C, *(float *)&D_L00_00161410);
                     v2.f[3] =
                         random_float_between(*(float *)&D_L00_00161414, *(float *)&D_L00_00161418);
-                    p0 = fast_tween_color(*(int *)&bomb_spark_primary_color_start,
-                                          *(int *)&bomb_spark_primary_color_end,
-                                          random_float_between(0.0f, 1.0f));
+                    spark_primary_color = fast_tween_color(*(int *)&bomb_spark_primary_color_start,
+                                                           *(int *)&bomb_spark_primary_color_end,
+                                                           random_float_between(0.0f, 1.0f));
                     spark_secondary_color =
                         fast_tween_color(*(int *)&bomb_spark_secondary_color_start,
                                          *(int *)&bomb_spark_secondary_color_end,
@@ -1194,7 +1203,7 @@ void bomb_update(BombMoby *bomb_moby) {
                     spawn_spark(&bomb_moby->pos,
                                 &spark_velocity,
                                 &v2,
-                                p0,
+                                spark_primary_color,
                                 spark_secondary_color,
                                 spark_random_frame_count,
                                 spark_vertical_offset_scale,
@@ -1412,14 +1421,16 @@ void bomb_update(BombMoby *bomb_moby) {
                     for (i = 0; i < blast_effect_count; i++) {
                         float spd = s * random_float_between(8.0f, 10.0f) * frame_time_macro -
                                     g * frame_time_macro;
-                        Colors6 c1 = l00_bomb_blast_effect_primary_palette;
+                        Colors6 blast_effect_primary_palette =
+                            l00_bomb_blast_effect_primary_palette;
                         Colors6 blast_effect_secondary_palette =
                             l00_bomb_blast_effect_secondary_palette;
                         FUN_L00_0026a9f0_2adb30(
                             &bomb_moby->pos,
                             &blast_velocity,
-                            swap_packed_color_channels(c1.c[random_integer_below(6)],
-                                                       (unsigned char)item_text_variant[0xA]),
+                            swap_packed_color_channels(
+                                blast_effect_primary_palette.c[random_integer_below(6)],
+                                (unsigned char)item_text_variant[0xA]),
                             swap_packed_color_channels(
                                 blast_effect_secondary_palette.c[random_integer_below(6)],
                                 (unsigned char)item_text_variant[0xA]),
@@ -1586,7 +1597,7 @@ void bomb_update(BombMoby *bomb_moby) {
                                 hud_counter_update(0x7F << 24,
                                                    (0x7F << 24) | (cb << 16) | (cg << 8) | cr,
                                                    random_float_between(0.25f, 1.0f));
-                            int c1 =
+                            int shrinking_particle_secondary_color =
                                 hud_counter_update(0,
                                                    ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
                                                    random_float_between(0.5f, 1.0f));
@@ -1611,7 +1622,7 @@ void bomb_update(BombMoby *bomb_moby) {
                                 &v2,
                                 &particle_work_vector,
                                 shrinking_particle_primary_color,
-                                c1,
+                                shrinking_particle_secondary_color,
                                 sz,
                                 life,
                                 1,

@@ -25,8 +25,11 @@ extern P00203908 D_00141968_00203908[] __asm__("D_00141968");
 s32 help_request(s32 a, s32 b) __asm__("FUN_L00_00203908");
 
 s32 help_request(s32 message_id, s32 help_record_index) {
+    enum {
+        HELP_STATE_INACTIVE = 0
+    };
     S00203908 *help_state_ptr = &D_L00_00179410_00203908;
-    if (help_state_ptr->state == 0 && help_state_ptr->cur == -1 &&
+    if (help_state_ptr->state == HELP_STATE_INACTIVE && help_state_ptr->cur == -1 &&
         music_stream_state.secondary.handle == 0 &&
         music_stream_state.queued_secondary_track == help_state_ptr->cur &&
         D_00141968_00203908[help_record_index].id != 0xFFFF) {

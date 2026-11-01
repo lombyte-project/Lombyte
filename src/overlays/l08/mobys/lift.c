@@ -26,7 +26,7 @@ void lift_update(char *moby) {
     switch (MOBY(moby)->state) {
     case POSITION_BASELINE_INITIALIZE:
         *(float *)(position_vars + 4) = MOBY(moby)->pos.z;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = POSITION_FOLLOW_DRIVER;
         break;
     case POSITION_FOLLOW_DRIVER:
         i = *(int *)(position_vars + 8);
@@ -38,7 +38,7 @@ void lift_update(char *moby) {
                 break;
             menu_item_enabled_41 = 1;
             allocate_voice_for_target_entry(0, 0, moby);
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = POSITION_APPROACH_TARGET;
         } else {
             approach_value(moby + 0x18,
                            (*(float *)position_vars - *(float *)(position_vars + 4)) *

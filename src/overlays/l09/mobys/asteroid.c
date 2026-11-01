@@ -333,6 +333,10 @@ void update_fading_asteroid_debris(unsigned char *moby) {
 }
 
 void update_falling_asteroid(Moby *falling_rock) {
+    enum {
+        FALLING_ASTEROID_STATE_FALLING = 0,
+        FALLING_ASTEROID_IMPACT_REMOVAL_STATE = 3
+    };
     float movement_step[4];
     float collision_probe_offset[4];
     float position_or_movement_step[4];
@@ -358,7 +362,7 @@ void update_falling_asteroid(Moby *falling_rock) {
     updated_rotation_x = fast_add_rotations(falling_rock->rot.x, moby_vars->f40);
     falling_rock->rot.x = updated_rotation_x;
     falling_rock->rot.y = fast_add_rotations(updated_rotation_x, moby_vars->f44);
-    if (falling_rock->state == 0) {
+    if (falling_rock->state == FALLING_ASTEROID_STATE_FALLING) {
         if (moby_vars->pos[2] < 100.0f && moby_vars->pos[0] < 500.0f &&
             moby_vars->pos[1] < 500.0f) {
             position_or_movement_step[0] = random_float_between(-5.0f, 5.0f);
@@ -568,7 +572,7 @@ void update_falling_asteroid(Moby *falling_rock) {
                                  1200000.0f,
                                  sc);
             }
-            if (falling_rock->state >= 3) {
+            if (falling_rock->state >= FALLING_ASTEROID_IMPACT_REMOVAL_STATE) {
                 mark_moby_for_removal(falling_rock);
             }
         }
@@ -577,6 +581,10 @@ void update_falling_asteroid(Moby *falling_rock) {
 
 /* Moby classes 263-267 */
 void asteroid_update(struct Moby *asteroid_moby) {
+    enum {
+        ASTEROID_MODE_FALLING = 1,
+        ASTEROID_MODE_FADING_DEBRIS = 2
+    };
     Data_2ECC50 *moby_vars = (*(Data_2ECC50 **)&asteroid_moby->pvars);
     Path        *path;
     float        displacement_vector[4];
@@ -585,11 +593,11 @@ void asteroid_update(struct Moby *asteroid_moby) {
     float        dot;
     int          i;
 
-    if (moby_vars->mode == 2) {
+    if (moby_vars->mode == ASTEROID_MODE_FADING_DEBRIS) {
         update_fading_asteroid_debris((unsigned char *)asteroid_moby);
         return;
     }
-    if (moby_vars->mode == 1) {
+    if (moby_vars->mode == ASTEROID_MODE_FALLING) {
         update_falling_asteroid((void *)asteroid_moby);
         return;
     }

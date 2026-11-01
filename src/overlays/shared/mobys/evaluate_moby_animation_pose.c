@@ -38,13 +38,15 @@ extern Item257218 D_L00_001C40B0[] NOT_SDA;
 int               FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");
 
 /* Picks the weapon whose ammo a pickup gives (*out), preferring owned weapons that are not full, and returns how many pickups to drop (1 or 2). */
-int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
-    int i, idx, x;
+int FUN_L00_00257218_u3(Moby257218 *drop_source_moby, int *pickup_item_type) {
+    int i, pickup_candidate_index, x;
     int not_full = 0, owned = 0, with_max = 0;
     int drops = 1;
 
-    if (*out <= 0 ||
-        (m != 0 && (D_0014C190[D_0015ED84][(s16)m->uid >> 5] >> (m->uid & 0x1F)) & 1)) {
+    if (*pickup_item_type <= 0 ||
+        (drop_source_moby != 0 && (D_0014C190[D_0015ED84][(s16)drop_source_moby->uid >> 5] >>
+                                   (drop_source_moby->uid & 0x1F)) &
+                                      1)) {
         for (i = 0; i < 12 && D_0015EDD0_macro[i] != 0xFF; i++) {
             x = D_0015EDD0_macro[i] & 0x3F;
             if (item_available[x]) {
@@ -55,29 +57,29 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
                             ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo;
             }
         }
-        idx = -1;
+        pickup_candidate_index = -1;
         if (not_full) {
             i = random_integer_below(not_full);
             while (i >= 0) {
-                idx++;
-                x = D_0015EDD0_macro[idx] & 0x3F;
+                pickup_candidate_index++;
+                x = D_0015EDD0_macro[pickup_candidate_index] & 0x3F;
                 if (item_available[x])
                     i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo >
                          weapon_ammo_counts[x];
             }
-            *out = D_0015EDD0_macro[idx] & 0x3F;
+            *pickup_item_type = D_0015EDD0_macro[pickup_candidate_index] & 0x3F;
         } else if (owned) {
             i = random_integer_below(with_max);
             while (i >= 0) {
-                idx++;
-                x = D_0015EDD0_macro[idx] & 0x3F;
+                pickup_candidate_index++;
+                x = D_0015EDD0_macro[pickup_candidate_index] & 0x3F;
                 if (item_available[x] &&
                     ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo)
                     i--;
             }
-            *out = D_0015EDD0_macro[idx] & 0x3F;
+            *pickup_item_type = D_0015EDD0_macro[pickup_candidate_index] & 0x3F;
         } else {
-            *out = 10;
+            *pickup_item_type = 10;
         }
     }
     if (random_integer_below(5) == 0)

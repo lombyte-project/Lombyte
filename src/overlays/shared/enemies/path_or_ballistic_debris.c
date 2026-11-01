@@ -19,6 +19,11 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
+enum {
+    DEBRIS_STATE_FOLLOW_PATH = 0,
+    DEBRIS_STATE_BALLISTIC = 1
+};
+
 extern float D_0015ED60;
 extern s32   coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern int   sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
@@ -76,7 +81,7 @@ void path_or_ballistic_debris_update(struct Moby *moby) {
     void *points;
     f32   speed;
 
-    if (moby->state == 0) {
+    if (moby->state == DEBRIS_STATE_FOLLOW_PATH) {
         points = l14_splines[debris_private_vars->path].path;
         qcopy(&probe, &moby->pos);
         sample_path(points,
@@ -342,7 +347,7 @@ void emit_debris_trail_particles(Moby *moby) {
     particle_initial_velocity.f[1] = debris_motion_state->f1C;
     particle_initial_velocity.f[2] = 0.0f;
     particle_initial_velocity.f[3] = 1.0f;
-    if (moby->state == 0) {
+    if (moby->state == DEBRIS_STATE_FOLLOW_PATH) {
         fast_vec_normalize(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.95f);
     } else {
         fast_vec_normalize(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 1.15f);
@@ -353,7 +358,7 @@ void emit_debris_trail_particles(Moby *moby) {
     emission_position_offset.f[1] = fast_sin(moby->rot.z) * 0.3f;
     emission_position_offset.f[2] = 0.0f;
     fast_vec_add(&pos, &pos, &emission_position_offset);
-    if (moby->state == 1) {
+    if (moby->state == DEBRIS_STATE_BALLISTIC) {
         pos.f[0] += randf_sym(0.0f, 0.1f);
         pos.f[1] += randf_sym(0.0f, 0.1f);
     }

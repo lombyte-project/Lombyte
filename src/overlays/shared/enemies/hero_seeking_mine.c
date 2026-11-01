@@ -67,6 +67,12 @@ void hero_seeking_mine_update(char *moby) __asm__("FUN_L15_002a2488");
 
 /* Moby class 77 */
 void hero_seeking_mine_update(char *moby) {
+    enum {
+        GROUP_MOBY_STATE_RESET = 0,
+        GROUP_MOBY_STATE_RISING = 2,
+        GROUP_MOBY_STATE_HERO_SEEKING = 3,
+        GROUP_MOBY_STATE_BURST = 4
+    };
     float         va[4];
     float         pb[4];
     char         *group_moby_data;
@@ -120,16 +126,16 @@ void hero_seeking_mine_update(char *moby) {
         }
     }
     state = ((unsigned char *)moby)[0x20];
-    if (state == 2)
+    if (state == GROUP_MOBY_STATE_RISING)
         goto s2;
-    if (state < 3) {
-        if (state == 0)
+    if (state < GROUP_MOBY_STATE_HERO_SEEKING) {
+        if (state == GROUP_MOBY_STATE_RESET)
             goto s0;
         return;
     }
-    if (state == 3)
+    if (state == GROUP_MOBY_STATE_HERO_SEEKING)
         goto s3;
-    if (state == 4)
+    if (state == GROUP_MOBY_STATE_BURST)
         goto s4;
     return;
 
@@ -190,6 +196,9 @@ tailA:
 }
 
 void draw_group_moby_effect_quads(unsigned char *moby) {
+    enum {
+        GROUP_MOBY_STATE_INACTIVE = 1
+    };
     EffectQuad      effect_quad;
     float           angles[4] __attribute__((aligned(16)));
     float           rotation[12] __attribute__((aligned(16)));
@@ -219,7 +228,7 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
     do {
         unsigned char *group_member_moby =
             (unsigned char *)((int)l15_moby_array + ((*group_moby_entry & 0x7fff) << 8));
-        if (MOBY(group_member_moby)->state != 1) {
+        if (MOBY(group_member_moby)->state != GROUP_MOBY_STATE_INACTIVE) {
             clear_u64_value(angles);
             angles[2] = fast_arc_tan(l15_camera.pos.f[0] - MOBY(group_member_moby)->pos.x,
                                      l15_camera.pos.f[1] - MOBY(group_member_moby)->pos.y);

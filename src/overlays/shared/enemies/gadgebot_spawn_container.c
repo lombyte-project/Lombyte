@@ -13,6 +13,12 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/props.h"
 
+enum {
+    GADGEBOT_CONTAINER_ACTIVATE = 0,
+    GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS = 1,
+    GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
+};
+
 typedef struct {
     float corner[4][4];
     int   color[4];
@@ -144,7 +150,7 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
         }
     }
     MOBY(moby)->collision = 0;
-    MOBY(moby)->state = 2;
+    MOBY(moby)->state = GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL;
     MOBY(moby)->flags |= 1;
     MOBY(moby)->command = (unsigned char)scale_game_frames(15);
 }
@@ -174,11 +180,6 @@ void gadgebot_spawn_container_update(unsigned char *moby) __asm__("FUN_L06_002d8
 
 /* Moby class 302 */
 void gadgebot_spawn_container_update(unsigned char *moby) {
-    enum {
-        GADGEBOT_CONTAINER_ACTIVATE = 0,
-        GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS = 1,
-        GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
-    };
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     float raised_position_snapshot[4];
     int   frame_count_snapshot;
@@ -187,7 +188,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
     MOBY(moby)->hit_slot = 0xFF;
     switch (MOBY(moby)->state) {
     case GADGEBOT_CONTAINER_ACTIVATE:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS;
         break;
     case GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS:
         frame_count_snapshot = level_frame_count;

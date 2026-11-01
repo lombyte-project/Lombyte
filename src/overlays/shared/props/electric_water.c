@@ -133,7 +133,7 @@ void electric_water_update(struct Moby *moby) {
     unsigned short     save_id;
     float              distance, theta, phi, radius;
 
-    if (moby->state != 0 &&
+    if (moby->state != ELECTRIC_WATER_INITIALIZE &&
         is_point_inside_clip_volume(D_0013F3D0, electric_water_controller_vars->active_area) == 0) {
         if (electric_water_controller_vars->owner != 0) {
             if (electric_water_controller_vars->voice0 != -1) {
@@ -196,7 +196,7 @@ void electric_water_update(struct Moby *moby) {
         electric_water_controller_vars->off_timer = scale_game_frames(200);
         electric_water_controller_vars->shock_count = 0;
         electric_water_controller_vars->light = -1;
-        moby->state = 1;
+        moby->state = ELECTRIC_WATER_ON;
         electric_water_controller_vars->voice0 = -1;
         electric_water_controller_vars->voice1 = -1;
         break;
@@ -207,7 +207,7 @@ void electric_water_update(struct Moby *moby) {
         if (fast_dec_timer_s16(&electric_water_controller_vars->on_timer) != 0) {
             electric_water_controller_vars->off_timer =
                 truncate_float_to_s32(scale_time(electric_water_off_duration_seconds_gp * 60.0f));
-            moby->state = 2;
+            moby->state = ELECTRIC_WATER_OFF;
             if (electric_water_controller_vars->owner != 0) {
                 if (electric_water_controller_vars->voice1 != -1) {
                     VoicePoolWindow *voice =
@@ -229,7 +229,7 @@ void electric_water_update(struct Moby *moby) {
                 break;
             }
         }
-        if (moby->state == 2) {
+        if (moby->state == ELECTRIC_WATER_OFF) {
             for (dim_lamp = 0; dim_lamp < 3; dim_lamp++) {
                 if (electric_water_controller_vars->lamps[dim_lamp] != -1) {
                     set_moby_color(&l15_moby_array[electric_water_controller_vars->lamps[dim_lamp]],
@@ -378,7 +378,7 @@ void electric_water_update(struct Moby *moby) {
             hit.v[3] = 5627.9248f;
             hit.unk18 = 0;
             record_moby_hit(hero.moby, &hit);
-            if (moby->state == 2) {
+            if (moby->state == ELECTRIC_WATER_OFF) {
                 D_L15_0015F448 = electric_water_controller_vars->saved_fog[0];
                 D_L15_0015F44C = electric_water_controller_vars->saved_fog[1];
                 D_L15_0015F450 = electric_water_controller_vars->saved_fog[2];
@@ -440,18 +440,19 @@ void electric_water_update(struct Moby *moby) {
             electric_water_controller_vars->voice0 =
                 trooper_play_sound(0, 5, electric_water_controller_vars->owner, 0x28F);
         }
-        if (moby->state == 1 && voice_is_playing(electric_water_controller_vars->owner,
-                                                 electric_water_controller_vars->voice1) == 0) {
+        if (moby->state == ELECTRIC_WATER_ON &&
+            voice_is_playing(electric_water_controller_vars->owner,
+                             electric_water_controller_vars->voice1) == 0) {
             electric_water_controller_vars->voice1 =
                 trooper_play_sound(1, 5, electric_water_controller_vars->owner, 0x28F);
         }
         if (fast_dec_timer_s16(&electric_water_controller_vars->off_timer) != 0 &&
-            moby->state == 2) {
+            moby->state == ELECTRIC_WATER_OFF) {
             electric_water_controller_vars->on_timer =
                 truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
             electric_water_controller_vars->off_timer = scale_game_frames(200);
             electric_water_controller_vars->shock_count = 0;
-            moby->state = 1;
+            moby->state = ELECTRIC_WATER_ON;
         }
         for (sw = 0; sw < 4; sw++) {
             /* Fakematch: the press action is written in both arms so CSE keeps the second sw load. */
@@ -460,7 +461,7 @@ void electric_water_update(struct Moby *moby) {
                 l15_moby_array[electric_water_controller_vars->switches[sw]].state == 2) {
                 electric_water_controller_vars->off_timer = truncate_float_to_s32(
                     scale_time(electric_water_controller_vars->off_seconds * 60.0f));
-                moby->state = 3;
+                moby->state = ELECTRIC_WATER_SWITCH_DISABLED;
                 trooper_play_sound(
                     2, 0, &l15_moby_array[electric_water_controller_vars->switches[sw]], 0x28F);
                 electric_water_controller_vars->armed = 0;
@@ -469,7 +470,7 @@ void electric_water_update(struct Moby *moby) {
                            &l15_moby_array[electric_water_controller_vars->switches[sw]]) != 0) {
                 electric_water_controller_vars->off_timer = truncate_float_to_s32(
                     scale_time(electric_water_controller_vars->off_seconds * 60.0f));
-                moby->state = 3;
+                moby->state = ELECTRIC_WATER_SWITCH_DISABLED;
                 trooper_play_sound(
                     2, 0, &l15_moby_array[electric_water_controller_vars->switches[sw]], 0x28F);
                 electric_water_controller_vars->armed = 0;
@@ -561,7 +562,7 @@ void electric_water_update(struct Moby *moby) {
             truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
         electric_water_controller_vars->off_timer = scale_game_frames(200);
         electric_water_controller_vars->shock_count = 0;
-        moby->state = 1;
+        moby->state = ELECTRIC_WATER_ON;
         break;
     }
 
@@ -1031,15 +1032,21 @@ extern float frame_scale __asm__("D_0015ED60");
 extern char  D_L15_001D3750_8710[] __asm__("D_L15_001D3750");
 extern char  D_L15_001D3BB0_8710[] __asm__("D_L15_001D3BB0");
 extern int   D_L15_00161CC8_8710 __asm__("D_L15_00161CC8");
-extern short D_L15_00161C58_gp __asm__("D_L15_00161C58") __attribute__((sda));
-extern short D_L15_00161C54_gp __asm__("D_L15_00161C54") __attribute__((sda));
-extern short D_L15_00161C3C_gp __asm__("D_L15_00161C3C") __attribute__((sda));
-extern short D_L15_00161C44_gp __asm__("D_L15_00161C44") __attribute__((sda));
+extern short l15_electric_water_bolt_draw_accumulator_decrement_rate __asm__("D_L15_00161C58")
+    __attribute__((sda));
+extern short l15_electric_water_bolt_draw_wrapped_accumulator __asm__("D_L15_00161C54")
+    __attribute__((sda));
+extern short l15_electric_water_first_bolt_path_first_pass_alpha __asm__("D_L15_00161C3C")
+    __attribute__((sda));
+extern short l15_electric_water_first_bolt_path_second_pass_alpha __asm__("D_L15_00161C44")
+    __attribute__((sda));
 extern short D_L15_00161C64_gp __asm__("D_L15_00161C64") __attribute__((sda));
 extern short D_L15_00161C68_gp __asm__("D_L15_00161C68") __attribute__((sda));
 extern short D_L15_00161C9C_gp __asm__("D_L15_00161C9C") __attribute__((sda));
-extern short D_L15_00161C6C_gp __asm__("D_L15_00161C6C") __attribute__((sda));
-extern short D_L15_00161C70_gp __asm__("D_L15_00161C70") __attribute__((sda));
+extern short l15_electric_water_second_bolt_path_first_pass_alpha __asm__("D_L15_00161C6C")
+    __attribute__((sda));
+extern short l15_electric_water_second_bolt_path_second_pass_alpha __asm__("D_L15_00161C70")
+    __attribute__((sda));
 extern short D_L15_00161C74_gp __asm__("D_L15_00161C74") __attribute__((sda));
 extern short D_L15_00161C78_gp __asm__("D_L15_00161C78") __attribute__((sda));
 extern short D_L15_00161CA0_gp __asm__("D_L15_00161CA0") __attribute__((sda));
@@ -1047,21 +1054,23 @@ extern void  draw_beam_and_arc_two_pass_quads(char *, int, int, int, float, floa
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
 void draw_electric_water_bolt_effect(char *moby) {
-    float decremented_accumulator = F(D_L15_00161C54_gp) - F(D_L15_00161C58_gp) * frame_scale;
-    F(D_L15_00161C54_gp) = decremented_accumulator;
+    float decremented_accumulator =
+        F(l15_electric_water_bolt_draw_wrapped_accumulator) -
+        F(l15_electric_water_bolt_draw_accumulator_decrement_rate) * frame_scale;
+    F(l15_electric_water_bolt_draw_wrapped_accumulator) = decremented_accumulator;
     if (decremented_accumulator <= -8.0f) {
-        F(D_L15_00161C54_gp) = decremented_accumulator + 8.0f;
+        F(l15_electric_water_bolt_draw_wrapped_accumulator) = decremented_accumulator + 8.0f;
     }
     draw_beam_and_arc_two_pass_quads(D_L15_001D3750_8710,
-                                     W(D_L15_00161C3C_gp),
-                                     W(D_L15_00161C44_gp),
+                                     W(l15_electric_water_first_bolt_path_first_pass_alpha),
+                                     W(l15_electric_water_first_bolt_path_second_pass_alpha),
                                      0x14,
                                      F(D_L15_00161C64_gp),
                                      F(D_L15_00161C68_gp),
                                      F(D_L15_00161C9C_gp));
     draw_beam_and_arc_two_pass_quads(D_L15_001D3750_8710 + 0x140,
-                                     W(D_L15_00161C6C_gp),
-                                     W(D_L15_00161C70_gp),
+                                     W(l15_electric_water_second_bolt_path_first_pass_alpha),
+                                     W(l15_electric_water_second_bolt_path_second_pass_alpha),
                                      0x14,
                                      F(D_L15_00161C74_gp),
                                      F(D_L15_00161C78_gp),
@@ -1184,8 +1193,11 @@ extern int is_moby_class_23e_in_state_14(void *) __asm__("FUN_L03_002c6c60");
 void reset_electric_water_switch(char *moby) __asm__("FUN_L15_002d95a0");
 
 void reset_electric_water_switch(char *moby) {
+    enum {
+        ELECTRIC_WATER_SWITCH_RESET = 1
+    };
     if (is_moby_class_23e_in_state_14(moby)) {
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = ELECTRIC_WATER_SWITCH_RESET;
         MOBY(moby)->pos.z += 1.5f;
     }
 }

@@ -70,7 +70,7 @@ void phase_effect_controller_update(FlockMoby *moby) {
     switch (moby->state) {
     case FLOCK_EFFECT_STATE_INITIALIZE:
         moby->unk30 = 0xFF;
-        moby->state = 1;
+        moby->state = FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS;
         break;
     case FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS:
         if ((D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 2 &&

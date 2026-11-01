@@ -16,6 +16,11 @@ int                find_point_ahead(char *a, char *o, float best) __asm__("FUN_L
 int find_point_ahead(char *source_entity, char *target_out, float best) __asm__("FUN_L01_00274b78");
 
 int find_point_ahead(char *source_entity, char *target_out, float best) {
+    enum {
+        POINT_AHEAD_HERO_FALLBACK = 0,
+        POINT_AHEAD_CANDIDATE_SELECTED = 1,
+        POINT_AHEAD_NO_TARGET = 2
+    };
     struct Hero *hero = &hero_lui;
     char        *selected_entity;
     char        *candidate_entity;
@@ -25,10 +30,10 @@ int find_point_ahead(char *source_entity, char *target_out, float best) {
     float        candidate_metric;
 
     selected_entity = ((char *)hero->moby);
-    selection_status = 0;
+    selection_status = POINT_AHEAD_HERO_FALLBACK;
     if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_entity = 0;
-        selection_status = 2;
+        selection_status = POINT_AHEAD_NO_TARGET;
     }
     for (i = 1; i <= D_L01_001B0CB0[0]; i++) {
         candidate_entity = ents + (D_L01_001B0CB0[i] << 8);
@@ -47,7 +52,7 @@ int find_point_ahead(char *source_entity, char *target_out, float best) {
         if (candidate_metric < best) {
             selected_entity = candidate_entity;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = POINT_AHEAD_CANDIDATE_SELECTED;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -66,7 +71,7 @@ int find_point_ahead(char *source_entity, char *target_out, float best) {
         if (candidate_metric < best) {
             selected_entity = candidate_entity;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = POINT_AHEAD_CANDIDATE_SELECTED;
         }
     }
     if (selected_entity != 0) {

@@ -43,8 +43,8 @@ extern void draw_electric_beam(char *) __asm__("FUN_L14_00301fa8");
 void        apply_electric_beam_damage(char *self) __asm__("FUN_L14_00302538");
 
 extern void apply_electric_beam_damage(char *) __asm__("FUN_L14_00302538");
-extern int  D_L14_001620CC_gp __asm__("D_L14_001620CC") __attribute__((sda));
-extern int  D_L14_001620B8_gp __asm__("D_L14_001620B8") __attribute__((sda));
+extern int  l14_electric_beam_update_disabled __asm__("D_L14_001620CC") __attribute__((sda));
+extern int  l14_electric_beam_pending_pulse_count __asm__("D_L14_001620B8") __attribute__((sda));
 extern int  D_L14_001620D0_gp __asm__("D_L14_001620D0") __attribute__((sda));
 extern s32  D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
 extern int  D_L14_001620D4_gp __asm__("D_L14_001620D4") __attribute__((sda));
@@ -64,14 +64,14 @@ void electric_beam_update(unsigned char *moby) {
     float  beam_culling_sphere[4] __attribute__((aligned(16)));
     int    beam_state;
     int    phase_duration_frames;
-    if (MOBY(moby)->state != 0) {
+    if (MOBY(moby)->state != BEAM_STATE_INITIALIZE) {
         qcopy(beam_culling_sphere, &MOBY(moby)->pos);
         beam_culling_sphere[3] = beam_vars->f624;
         if (fast_bsphere_check(beam_culling_sphere, 52.0f) < 0) {
             return;
         }
     }
-    if (D_L14_001620CC_gp != 0) {
+    if (l14_electric_beam_update_disabled != 0) {
         return;
     }
     beam_state = MOBY(moby)->state;
@@ -79,22 +79,22 @@ void electric_beam_update(unsigned char *moby) {
     case BEAM_STATE_INITIALIZE:
         start_electric_beam_pulse((char *)moby);
         beam_vars->s10 = scale_game_frames(beam_vars->wC);
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = BEAM_STATE_WAIT_FOR_TIMED_PULSE;
         beam_vars->f624 = fast_vec_length(&l14_cuboids[beam_vars->w0].axes[1]);
         beam_vars->s8 = 1;
         beam_vars->sA = 1;
         break;
     case BEAM_STATE_COUNTER_TRIGGERED_PULSES:
-        if (D_L14_001620B8_gp != 0) {
+        if (l14_electric_beam_pending_pulse_count != 0) {
             if (beam_vars->s12 == 0) {
-                D_L14_001620B8_gp = D_L14_001620B8_gp - 1;
+                l14_electric_beam_pending_pulse_count = l14_electric_beam_pending_pulse_count - 1;
                 start_electric_beam_pulse((char *)moby);
             }
         }
         break;
     case BEAM_STATE_WAIT_FOR_TIMED_PULSE:
         if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = BEAM_STATE_REPEAT_PULSES;
             beam_vars->s10 = scale_game_frames(beam_vars->s4);
             start_electric_beam_pulse((char *)moby);
         }
@@ -102,7 +102,7 @@ void electric_beam_update(unsigned char *moby) {
     case BEAM_STATE_REPEAT_PULSES:
         if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
             if (beam_vars->s6 != 0) {
-                MOBY(moby)->state = 2;
+                MOBY(moby)->state = BEAM_STATE_WAIT_FOR_TIMED_PULSE;
                 phase_duration_frames = beam_vars->s6;
             } else {
                 phase_duration_frames = beam_vars->s4;

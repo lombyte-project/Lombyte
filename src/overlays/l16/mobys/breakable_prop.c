@@ -36,13 +36,13 @@ void breakable_prop_update(struct Moby *moby) {
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
-        moby->state = 1;
+        moby->state = MOBY_STATE_CHECK_HIT_FOR_REMOVAL;
         break;
     case MOBY_STATE_CHECK_HIT_FOR_REMOVAL:
         if (hit_record != 0 && 0.0f < *(float *)(hit_record + 0x2C))
             flag = 1;
         if (flag)
-            moby->state = 2;
+            moby->state = MOBY_STATE_REMOVE_WITH_EFFECTS;
         break;
     case MOBY_STATE_REMOVE_WITH_EFFECTS:
         allocate_voice_for_target_entry(0, 0, moby);

@@ -14,6 +14,11 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
+enum {
+    FIRE_BOLT_STATE_FLYING = 1,
+    FIRE_BOLT_STATE_BURST_AND_REMOVE = 2
+};
+
 extern char *create_moby(int);
 
 char *spawn_paratrooper_projectile(char *initial_velocity,
@@ -36,7 +41,7 @@ char *spawn_paratrooper_projectile(char *initial_velocity,
         MOBY(spawned_moby)->draw_dist = 0x7E;
         moby_data = ((char *)MOBY(spawned_moby)->pvars);
         MOBY(spawned_moby)->visible = 1;
-        MOBY(spawned_moby)->state = 1;
+        MOBY(spawned_moby)->state = FIRE_BOLT_STATE_FLYING;
         qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         qcopy(moby_data, initial_velocity);
         *(int *)(moby_data + 0x18) = scale_game_frames(lifetime_frames);
@@ -64,10 +69,6 @@ void fire_bolt_update(char *fire_bolt) __asm__("FUN_L08_00307298");
 
 /* Moby class 1292 */
 void fire_bolt_update(char *fire_bolt) {
-    enum {
-        FIRE_BOLT_STATE_FLYING = 1,
-        FIRE_BOLT_STATE_BURST_AND_REMOVE = 2
-    };
     char *bolt_data = *(char **)(fire_bolt + 0x78);
     float previous_position[4];
     float sc[4];

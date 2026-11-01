@@ -18,6 +18,10 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
+
+unsigned char *spawn_timed_hero_relative_particle(
+    u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+
 #include "rnc/save/memcard_save_data.h"
 
 typedef struct Moby Moby;
@@ -149,7 +153,7 @@ extern float FUN_001f9bf8_2d5988(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern float FUN_001f9dc8_2d5988(f32) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2d5988(f32) __asm__("FUN_001f9de0");
 
-extern Path        *D_L00_001B04B0[];
+extern Path        *toad_paths[] __asm__("D_L00_001B04B0");
 extern Player       D_0013F3D0;
 extern Camera       D_0013F350;
 extern f32          D_0015ED6C;
@@ -350,18 +354,18 @@ void infobot_update(struct Moby *moby) {
         infobot->yaw = moby->rot.z;
         infobot->home = MPOS(moby)->q;
         if (infobot->arrived != 0) {
-            moby->state = 2;
+            moby->state = INFOBOT_WAIT_FOR_PLAYER;
             FUN_L00_002d6bf0_2d5de8(moby);
         } else {
             if (infobot->waiting != 0) {
-                moby->state = 2;
+                moby->state = INFOBOT_WAIT_FOR_PLAYER;
             } else {
-                moby->state = 1;
+                moby->state = INFOBOT_IDLE;
             }
             moby->flags |= 0x41;
         }
         if (infobot->attach != -1) {
-            moby->state = 5;
+            moby->state = INFOBOT_ORBIT_CARRIER;
             FUN_L00_002d6bf0_2d5de8(moby);
             break;
         }
@@ -372,11 +376,11 @@ void infobot_update(struct Moby *moby) {
             if (infobot->slots[i] == -1) {
                 continue;
             }
-            measure_path(D_L00_001B04B0[infobot->slots[i]]);
+            measure_path(toad_paths[infobot->slots[i]]);
         }
-        MPOS(moby)->q = D_L00_001B04B0[infobot->slots[0]]->pts[0].q;
+        MPOS(moby)->q = toad_paths[infobot->slots[0]]->pts[0].q;
         infobot->seg = 0;
-        moby->state = 3;
+        moby->state = INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH;
         break;
     case INFOBOT_IDLE:
         break;
@@ -407,7 +411,7 @@ void infobot_update(struct Moby *moby) {
             return;
         }
         if (fast_vec_dist(&D_0013F3D0, &moby->pos) < range && D_0013F3D0.active != 0) {
-            moby->state = 8;
+            moby->state = INFOBOT_START_SCENE_SEQUENCE;
         }
         break;
     case INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH:
@@ -417,7 +421,7 @@ void infobot_update(struct Moby *moby) {
             return;
         }
         if (infobot->slots[infobot->seg] == -1) {
-            moby->state = 2;
+            moby->state = INFOBOT_WAIT_FOR_PLAYER;
             break;
         }
         heading =
@@ -436,14 +440,14 @@ void infobot_update(struct Moby *moby) {
                                   D_0015ED6C * 1.5707964f,
                                   &infobot->spin[0]);
         if (fast_vec_dist(&D_0013F350.target, &moby->pos) < 8.0f) {
-            moby->state = 4;
+            moby->state = INFOBOT_FOLLOW_SLOT_PATH;
             set_moby_dialogue_record_value(moby, 1);
         }
         break;
     case INFOBOT_FOLLOW_SLOT_PATH:
-        FUN_L00_002d5988_2d5de8(moby, D_L00_001B04B0[infobot->slots[infobot->seg]], 3);
+        FUN_L00_002d5988_2d5de8(moby, toad_paths[infobot->slots[infobot->seg]], 3);
         FUN_L00_002d6cd0_2d5de8(moby);
-        if (moby->state != 4) {
+        if (moby->state != INFOBOT_FOLLOW_SLOT_PATH) {
             infobot->seg++;
         }
         break;
@@ -470,16 +474,16 @@ void infobot_update(struct Moby *moby) {
         if (infobot->path == -1) {
             break;
         }
-        moby->state = 6;
+        moby->state = INFOBOT_FOLLOW_PATH;
         infobot->attach = -1;
-        MPOS(moby)->q = D_L00_001B04B0[infobot->path]->pts[0].q;
+        MPOS(moby)->q = toad_paths[infobot->path]->pts[0].q;
         moby->rot.z = fast_arc_tan(
-            D_L00_001B04B0[infobot->path]->pts[1].v.x - D_L00_001B04B0[infobot->path]->pts[0].v.x,
-            D_L00_001B04B0[infobot->path]->pts[1].v.y - D_L00_001B04B0[infobot->path]->pts[0].v.y);
-        measure_path(D_L00_001B04B0[infobot->path]);
+            toad_paths[infobot->path]->pts[1].v.x - toad_paths[infobot->path]->pts[0].v.x,
+            toad_paths[infobot->path]->pts[1].v.y - toad_paths[infobot->path]->pts[0].v.y);
+        measure_path(toad_paths[infobot->path]);
         break;
     case INFOBOT_FOLLOW_PATH:
-        path = D_L00_001B04B0[infobot->path];
+        path = toad_paths[infobot->path];
         pos = (Vec *)&moby->pos;
         FUN_L00_002d6cd0_2d5de8(moby);
         FUN_L00_0025df68(path, pos, &point, &segment, &fraction, 0, 999.0f, 5.0f, 0.0f);
@@ -504,7 +508,7 @@ void infobot_update(struct Moby *moby) {
         if (segment >= path->count - 1) {
             if (infobot->speed <= D_0015ED70 * 16.0f) {
                 MPOS(moby)->q = ((Vec *)path)[path->count].q;
-                moby->state = 7;
+                moby->state = INFOBOT_ORBIT_PATH_ENDPOINT;
                 break;
             }
             segment = path->count - 2;
@@ -541,7 +545,7 @@ void infobot_update(struct Moby *moby) {
                                   &infobot->spin[0]);
         break;
     case INFOBOT_ORBIT_PATH_ENDPOINT: {
-        Path *orbit_path = D_L00_001B04B0[infobot->path];
+        Path *orbit_path = toad_paths[infobot->path];
         FUN_L00_002d6cd0_2d5de8(moby);
         infobot->sway = infobot->sway + D_0015ED6C;
         if (1.0f < infobot->sway) {
@@ -562,7 +566,7 @@ void infobot_update(struct Moby *moby) {
         MPOS(moby)->q = step.q;
         if (fast_vec_dist(&D_0013F3D0, &orbit_path->pts[orbit_path->count - 1]) < 2.0f &&
             D_0013F3D0.active != 0) {
-            moby->state = 8;
+            moby->state = INFOBOT_START_SCENE_SEQUENCE;
         }
         moby->rot.y = spring_turn(moby->rot.y,
                                   0.0f,
@@ -586,7 +590,7 @@ void infobot_update(struct Moby *moby) {
             jet_reset_camera(&D_L00_001600EC_2d5de8[infobot->cutscene].pos,
                              &D_L00_001600EC_2d5de8[infobot->cutscene].dir);
         }
-        moby->state = 9;
+        moby->state = INFOBOT_WAIT_TO_DISPATCH_MSG1;
         if (infobot->msg0 != -1) {
             start_scene(infobot->msg0);
         }
@@ -595,7 +599,7 @@ void infobot_update(struct Moby *moby) {
         if (D_L00_0015F5C4 == 2) {
             break;
         }
-        moby->state = 10;
+        moby->state = INFOBOT_WAIT_TO_START_FINAL_SCENE;
         if (infobot->msg1 != -1) {
             queue_scene_movie_with_game_language(infobot->msg1);
         }
@@ -607,7 +611,7 @@ void infobot_update(struct Moby *moby) {
         if (infobot->msg2 != -1) {
             start_scene(infobot->msg2);
         }
-        moby->state = 11;
+        moby->state = INFOBOT_SAVE_AND_REMOVE;
         break;
     case INFOBOT_SAVE_AND_REMOVE:
         if (D_L00_0015F5C4 == 2) {
@@ -694,14 +698,15 @@ void update_infobot_particle_effect(char *moby) {
         f = f / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - f));
         if (D_15F5C4_2d6cd0 != 2) {
-            FUN_L00_00272f68(d,
-                             col,
-                             truncate_float_to_s32(infobot_particle_state->a[i]) & 0xFF,
-                             0x35,
-                             1,
-                             2,
-                             0,
-                             infobot_particle_state->d[i]);
+            spawn_timed_hero_relative_particle(d,
+                                               col,
+                                               truncate_float_to_s32(infobot_particle_state->a[i]) &
+                                                   0xFF,
+                                               0x35,
+                                               1,
+                                               2,
+                                               0,
+                                               infobot_particle_state->d[i]);
         }
         fast_vec_add(d, d, particle_position_step);
     }

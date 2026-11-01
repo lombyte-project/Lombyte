@@ -24,10 +24,11 @@ extern float          D_L00_0015EF44_macro __asm__("D_L00_0015EF44") MACRO_ADDR;
 extern unsigned char *D_L00_00168FC0_lui __asm__("D_L00_00168FC0") NOT_SDA;
 extern int            D_L00_0015EF60_macro __asm__("D_L00_0015EF60") MACRO_ADDR;
 extern float          D_L00_00161CA0_gp __asm__("D_L00_00161CA0") __attribute__((sda));
-extern float          D_L00_00161CDC_gp __asm__("D_L00_00161CDC") __attribute__((sda));
-extern float          D_L00_00161CE0_gp __asm__("D_L00_00161CE0") __attribute__((sda));
-extern float          D_L00_00161CE4_gp __asm__("D_L00_00161CE4") __attribute__((sda));
-extern float          D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
+extern float          l00_follow_camera_collision_probe_step_growth_factor __asm__("D_L00_00161CDC")
+    __attribute__((sda));
+extern float l00_follow_camera_collision_probe_count __asm__("D_L00_00161CE0") __attribute__((sda));
+extern float l00_follow_camera_collision_probe_scale __asm__("D_L00_00161CE4") __attribute__((sda));
+extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
 
 typedef struct {
     char  pad0[0x2C];
@@ -163,9 +164,9 @@ void follow_camera_approach(unsigned char *moby) {
     ((CamTarget *)target)->unkE8 = 0.2f;
     ((CamTarget *)target)->unkD6 = 0;
     spring_reset = (CamSpring *)(*(unsigned char **)(moby + 0x70) + 0x1D0);
-    spring_reset->unk44 = D_L00_00161CDC_gp;
-    spring_reset->unk3C = D_L00_00161CE4_gp;
-    spring_reset->unk40 = D_L00_00161CE0_gp;
+    spring_reset->unk44 = l00_follow_camera_collision_probe_step_growth_factor;
+    spring_reset->unk3C = l00_follow_camera_collision_probe_scale;
+    spring_reset->unk40 = l00_follow_camera_collision_probe_count;
     spring_reset->unk48 = D_L00_0015EF60_macro;
     reset = *(unsigned char **)(moby + 0x70) + 0x220;
     ((CamEnd *)reset)->unkC = D_L00_00161D1C_gp;
@@ -284,7 +285,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         flag = 1;
         {
             S40 *camera_target = (S40 *)((u8 *)camera_moby->m + 0x40);
-            if (hero.vehicle_mode == 1) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
                 camera_target->fB0 = 0.25f;
                 follow_camera_set_height(1.5f, 0.003f);
             } else {
@@ -295,7 +296,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     }
     if (hero.state.control_mode == 0x10)
         camera_moby->m->fF0 = 0.25f;
-    if (hero.vehicle_mode == 1) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         if (camera_override_state->i0 == 0) {
             q = (S40 *)((u8 *)camera_moby->m + 0x40);
             follow_camera_set_distance(1, 3.0f, 0.003f);
@@ -306,7 +307,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         }
         *(f32 *)((u8 *)camera_moby->m + 0x20C) = 0.6f;
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         if (camera_override_state->i10 < 2) {
             follow_camera_set_offset_scale(0, follow_camera_vehicle_offset_scale_gp, 0.005f);
             follow_camera_set_distance(1, follow_camera_vehicle_orbit_distance_gp, 0.003f);
@@ -866,9 +867,9 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     g->h38 = 0;
     g->i4C = 0;
     g->h34 = r;
-    g->f44 = D_L00_00161CDC_gp;
-    g->f3C = D_L00_00161CE4_gp;
-    g->f40 = D_L00_00161CE0_gp;
+    g->f44 = l00_follow_camera_collision_probe_step_growth_factor;
+    g->f3C = l00_follow_camera_collision_probe_scale;
+    g->f40 = l00_follow_camera_collision_probe_count;
     g->i48 = D_L00_0015EF60;
     clear_u64_value(camera_state_base->g.v10);
 
@@ -943,8 +944,8 @@ int update_follow_camera_orbit_after_collision(unsigned char *camera_moby,
         return sphere_collision_found;
     }
     adjusted_orbit_length = fast_vec_length(A);
-    if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_lui[0]) > 0.05f &&
-        sphere_collision_found) {
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK &&
+        absolute_float(D_0013CA40_lui[0]) > 0.05f && sphere_collision_found) {
         adjusted_orbit_length -= follow_camera_collision_retraction_rate_gp * frame_scale;
         *(short *)(B + 0x34) = scale_game_frames(0x884);
     }
@@ -1311,7 +1312,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
                         accumulated_radial_adjustment_distance,
                         spd)) {
                     found = 1;
-                    if (hero_state->vehicle_mode != 2 &&
+                    if (hero_state->vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK &&
                         absolute_float(D_0013CA40_lui[0]) > 0.05f) {
                         fast_vec_sub(position_delta, step, save);
                         fast_vec_normalize(position_delta, position_delta, 1.0f);

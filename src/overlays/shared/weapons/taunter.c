@@ -378,7 +378,7 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
             do {
                 state = FUN_L00_0025c338_b6bc8(taunter_candidate_moby);
             } while (0);
-            if (state != 0) {
+            if (state != NULL) {
                 /* Fakematch: &hero through the motion label keeps retail's &hero + 0x98 load below. */
                 player = (struct Hero *)(D_0013F3D0 - 0x80);
                 distance = vector_distance_xy(&pos, (u8 *)taunter_candidate_moby + 0x10);
@@ -455,6 +455,16 @@ void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
 
 /* Moby class 175 */
 void taunter_update(Moby *taunter_moby) {
+    enum {
+        TAUNTER_STATE_INITIALIZE = 0,
+        TAUNTER_STATE_ACTIVE = 2
+    };
+    enum {
+        TAUNTER_STATE_WAIT_FOR_ENABLE_FLAG = 1
+    };
+    enum {
+        TAUNTER_STATE_ACTIVATION_DISABLED = 3
+    };
     Vars *taunter_vars;
     s32   taunter_state;
     s32   voice_slot_index;
@@ -473,22 +483,22 @@ void taunter_update(Moby *taunter_moby) {
     if (taunter_vars->radius == 0.0f)
         taunter_vars->radius = 30.0f;
     if (taunter_moby->type == 2)
-        taunter_moby->state = 3;
+        taunter_moby->state = TAUNTER_STATE_ACTIVATION_DISABLED;
     taunter_effect_emission_disabled = 1;
-    if (taunter_moby->state == 0) {
+    if (taunter_moby->state == TAUNTER_STATE_INITIALIZE) {
         taunter_vars->anim = -1;
         taunter_moby->state++;
         taunter_effect_reset_pending = 1;
     }
     taunter_state = taunter_moby->state;
-    if ((u8)taunter_state == 1) {
+    if ((u8)taunter_state == TAUNTER_STATE_WAIT_FOR_ENABLE_FLAG) {
         if (taunter_moby->flags & 2) {
             taunter_moby->state = taunter_state + 1;
             taunter_vars->retry = 0;
         }
         goto end;
     }
-    if ((u8)taunter_state != 2)
+    if ((u8)taunter_state != TAUNTER_STATE_ACTIVE)
         goto end;
     if (taunter_moby->type == 3 && hero.item_use_locked == 0) {
         taunter_effect_emission_disabled = 0;

@@ -23,7 +23,7 @@ char *spawn_bombomatic_projectile(char *spawn_position,
                                   short burst_index) __asm__("FUN_L07_0030ba90");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
-extern char D_L07_00166E40[];
+extern char debris_far_point[] __asm__("D_L07_00166E40");
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int  resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int);
@@ -80,7 +80,7 @@ extern float              FUN_L00_0025abf0(void *, void *, void *, float, float)
 extern int D_L07_0015F5CC MACRO_ADDR;
 extern void *
 FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
-extern void  FUN_L00_001fff28(void *, int, float);
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void  FUN_L00_0024f7c8(void *, int, void *);
 extern void  FUN_L00_00257470(void *, int, int);
 extern void  FUN_L00_0025a120(void *);
@@ -222,7 +222,7 @@ void bombomatic_update(char *moby) {
     }
     moby_data = (BombomaticVars *)MOBY(moby)->pvars;
     if (((unsigned char *)moby)[0x31] != 0) {
-        if (fast_vec_dist(moby + 0x10, D_L07_00166E40) < 27.0f) {
+        if (fast_vec_dist(moby + 0x10, debris_far_point) < 27.0f) {
             FUN_L00_0025a120(moby);
             MOBY(moby)->shadow_range = 0x15;
         }
@@ -344,7 +344,7 @@ eb20:
         attach_manipulator(moby, 0, &moby_data->manipulator_70);
         *(int *)&moby_data->unkC0 = 0;
         allocate_voice_for_target_entry(0, 4, (int)moby);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = BOMBOMATIC_WAIT_TO_LAUNCH;
         moby_data->unkC4 = 0;
         break;
     }
@@ -355,7 +355,7 @@ eb20:
             moby_data->timer_B8 = 0;
             moby_data->unkBC = random_angle_radians();
             moby_data->unkBA = 0;
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = BOMBOMATIC_LAUNCH_BURST;
         }
         break;
     }
@@ -364,9 +364,9 @@ eb20:
         if (fast_dec_timer_s16(&moby_data->timer_B8) != 0) {
             moby_data->timer_B8 = scale_game_frames(7);
             if (((unsigned char *)moby)[0x31] == 0) {
-                if (!(vector_distance_xy(moby + 0x10, D_L07_00166E40) < 90.0f &&
+                if (!(vector_distance_xy(moby + 0x10, debris_far_point) < 90.0f &&
                       (moby_data->unkC4 & 1) != 0)) {
-                    if (!(vector_distance_xy(moby + 0x10, D_L07_00166E40) < 40.0f)) {
+                    if (!(vector_distance_xy(moby + 0x10, debris_far_point) < 40.0f)) {
                         goto eeE4;
                     }
                 }
@@ -414,7 +414,7 @@ eb20:
         if (moby_data->unkB4 <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0x78);
             moby_data->unkB4 = D_L07_0015F5CC + r9;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = BOMBOMATIC_WAIT_TO_LAUNCH;
         }
         break;
     }
@@ -424,6 +424,6 @@ eb20:
         float f = D_0015ED6C_gp * 17.80235863f;
         float g = fast_add_rotations(moby_data->unkC0, f);
         moby_data->unkC0 = g;
-        FUN_L00_001fff28(&moby_data->unk80, 2, g);
+        build_axis_rotation_quaternion(&moby_data->unk80, 2, g);
     }
 }

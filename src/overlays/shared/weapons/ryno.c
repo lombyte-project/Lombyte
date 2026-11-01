@@ -285,12 +285,12 @@ void ryno_update(struct Moby *ryno_moby) {
     case RYNO_STATE_INITIALIZE:
         ryno_vars->target = 0;
         hero.items[0].switch_lock = 0;
-        ryno_moby->state = 1;
+        ryno_moby->state = RYNO_STATE_WAIT_ANIMATION;
         ryno_vars->track_timer = 0;
         break;
     case RYNO_STATE_WAIT_ANIMATION:
         if (ryno_moby->anim_flags & 2)
-            ryno_moby->state = 2;
+            ryno_moby->state = RYNO_STATE_READY_TO_FIRE;
         break;
     case RYNO_STATE_READY_TO_FIRE:
         if (hero.state.current == 1)
@@ -312,7 +312,7 @@ void ryno_update(struct Moby *ryno_moby) {
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].switch_lock = 2;
-        ryno_moby->state = 4;
+        ryno_moby->state = RYNO_STATE_FIRE_SALVO;
         ryno_vars->shot_timer = 0;
         ryno_vars->slot = 0;
         ryno_vars->shots = 0;
@@ -327,7 +327,7 @@ void ryno_update(struct Moby *ryno_moby) {
     case RYNO_STATE_READY_TO_FIRE_WITH_RETICLE:
         suck_draw_reticle(ryno_moby, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x23, -1, 90.0f, 4);
         if ((controller_state.held & 5) == 0) {
-            ryno_moby->state = 2;
+            ryno_moby->state = RYNO_STATE_READY_TO_FIRE;
             return;
         }
         if ((controller_state.pressed & hero.items[0].button_mask) == 0)
@@ -347,7 +347,7 @@ void ryno_update(struct Moby *ryno_moby) {
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].switch_lock = 2;
-        ryno_moby->state = 4;
+        ryno_moby->state = RYNO_STATE_FIRE_SALVO;
         ryno_vars->shot_timer = 0;
         ryno_vars->slot = 0;
         ryno_vars->shots = 0;
@@ -396,7 +396,7 @@ void ryno_update(struct Moby *ryno_moby) {
         if (ryno_vars->shots >= 7) {
             hero.items[0].switch_lock = 0;
             cancel_hero_item_animation();
-            ryno_moby->state = 5;
+            ryno_moby->state = RYNO_STATE_COOLDOWN;
             ryno_vars->shot_timer = scale_game_frames(60);
             ryno_vars->track_timer = scale_game_frames(60);
         }
@@ -433,7 +433,7 @@ void ryno_update(struct Moby *ryno_moby) {
             return;
         ryno_vars->shots = 0;
         ryno_vars->target = 0;
-        ryno_moby->state = 2;
+        ryno_moby->state = RYNO_STATE_READY_TO_FIRE;
         break;
     case 6:
     case 7:

@@ -39,6 +39,10 @@ void button_update(struct Moby *m) __asm__("FUN_L10_002d92b8");
 
 /* Moby class 1031 */
 void button_update(struct Moby *moby) {
+    enum {
+        DOOR_STATE_CLOSING = 1,
+        DOOR_STATE_OPENING = 3
+    };
     FloorPlateVars *plate_vars = (FloorPlateVars *)moby->pvars;
     s32             pressed = 0;
     struct Moby    *door;
@@ -75,8 +79,8 @@ void button_update(struct Moby *moby) {
         } else {
             plate_vars->held = 0;
         }
-        if (door->state == 1 || door->state == 2) {
-            door->state = 3;
+        if (door->state == DOOR_STATE_CLOSING || door->state == 2) {
+            door->state = DOOR_STATE_OPENING;
             if (plate_vars->sound_timer == 0) {
                 allocate_voice_for_target_entry(0, 0, door);
                 allocate_voice_for_target_entry(0, 0, moby);
@@ -86,7 +90,7 @@ void button_update(struct Moby *moby) {
         FUN_L00_002502f0_u(moby, 0x7F, 0x7F, 0x7F);
     } else {
         if (door->state == 4) {
-            door->state = 1;
+            door->state = DOOR_STATE_CLOSING;
             if (plate_vars->sound_timer == 0) {
                 allocate_voice_for_target_entry(1, 0, door);
                 allocate_voice_for_target_entry(0, 0, moby);

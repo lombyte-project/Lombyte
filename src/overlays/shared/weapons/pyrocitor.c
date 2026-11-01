@@ -19,6 +19,14 @@
 #include "rnc/overlay/shared/weapons/devastator.h"
 
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002B8AE8.c: func_L00_002B8AE8). */
+enum {
+    PYROCITOR_STATE_INITIALIZE = 0,
+    PYROCITOR_STATE_WAIT_FOR_READY = 1,
+    PYROCITOR_STATE_READY = 2,
+    PYROCITOR_STATE_FIRING = 3,
+    PYROCITOR_STATE_CLEANUP = 4
+};
+
 typedef struct PyrocitorVars {
     struct Moby *other;
     char         pad4[0x40];
@@ -518,12 +526,6 @@ void pyrocitor_update(struct Moby *moby) __asm__("FUN_L00_002b77f0");
 
 /* Moby class 176 */
 void pyrocitor_update(struct Moby *moby) {
-    enum {
-        PYROCITOR_STATE_INITIALIZE = 0,
-        PYROCITOR_STATE_WAIT_FOR_READY = 1,
-        PYROCITOR_STATE_READY = 2,
-        PYROCITOR_STATE_FIRING = 3
-    };
     PyrocitorVars *pyrocitor_vars = (PyrocitorVars *)moby->pvars;
     Vec_2b2100     pos, light_offset_and_flame_velocity, light_color_and_flame_origin, endpoint,
         particle_pos, random_vec;
@@ -544,11 +546,11 @@ void pyrocitor_update(struct Moby *moby) {
     case PYROCITOR_STATE_INITIALIZE:
         pyrocitor_vars->light = -1;
         pyrocitor_vars->voice = -1;
-        moby->state = 1;
+        moby->state = PYROCITOR_STATE_WAIT_FOR_READY;
         break;
     case PYROCITOR_STATE_WAIT_FOR_READY:
         if (moby->seq == 1)
-            moby->state = 2;
+            moby->state = PYROCITOR_STATE_READY;
         if (moby->seq != 0)
             break;
         if (compute_interpolated_record_value(moby) > 10.0f &&
@@ -580,7 +582,7 @@ void pyrocitor_update(struct Moby *moby) {
         /* Fakematch: the second pad name rebuilds the address for these button tests. */
         if ((controller_state_lui.held & hero.items[0].button_mask) && !hero.item_use_locked &&
             get_ammo(-1)) {
-            moby->state = 3;
+            moby->state = PYROCITOR_STATE_FIRING;
             start_equipped_item_animation();
             pyrocitor_vars->timer = scale_game_frames(10);
             if (pyrocitor_vars->light == -1)
@@ -592,7 +594,7 @@ void pyrocitor_update(struct Moby *moby) {
     case PYROCITOR_STATE_FIRING:
         if (!voice_is_playing(moby, pyrocitor_vars->voice))
             pyrocitor_vars->voice = FUN_0022da68(1, 4, moby);
-        if (pyrocitor_vars->light != -1 && moby->state == 3) {
+        if (pyrocitor_vars->light != -1 && moby->state == PYROCITOR_STATE_FIRING) {
             light_offset_and_flame_velocity.q = 0;
             light_offset_and_flame_velocity.f.x = 2.0f;
             light_offset_and_flame_velocity.f.z = 2.0f;
@@ -714,7 +716,7 @@ void pyrocitor_update(struct Moby *moby) {
             if ((controller_state.held & hero.items[0].button_mask) && !hero.item_use_locked &&
                 ready)
                 break;
-            moby->state = 2;
+            moby->state = PYROCITOR_STATE_READY;
             cancel_hero_item_animation();
             firing_voice_slot_index = pyrocitor_vars->voice;
             if (firing_voice_slot_index != -1) {
@@ -747,7 +749,7 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
     unsigned char     *voice;
     int                voice_slot_or_time_stat, firing_frame_count;
     if (pyrocitor_moby->prev_seq == 2) {
-        pyrocitor_moby->state = 4;
+        pyrocitor_moby->state = PYROCITOR_STATE_CLEANUP;
         if (*(void **)pyrocitor_vars)
             mark_moby_for_removal(*(void **)pyrocitor_vars);
         if (*(short *)(pyrocitor_vars + 0x44) != -1) {
@@ -768,7 +770,7 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
     P = &usage_stats;
     if (P->stat[10].count)
         return;
-    if (pyrocitor_moby->state == 3) {
+    if (pyrocitor_moby->state == PYROCITOR_STATE_FIRING) {
         (*(unsigned short *)(pyrocitor_vars + 0x50))++;
         return;
     }
@@ -796,6 +798,12 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
 void update_pyrocitor_flame_effect_slots(char *moby) __asm__("FUN_L00_002b8438");
 
 void update_pyrocitor_flame_effect_slots(char *moby) {
+    enum {
+        PYROCITOR_FLAME_SUBTYPE_SPARK_BURST = 10
+    };
+    enum {
+        PYROCITOR_FLAME_MIN_TRACKED_FRAME_COUNT = 2
+    };
     float          hit_direction_vector[4];
     char           hit_descriptor[0x30];
     char           qv[16];
@@ -828,7 +836,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
             collect_mobies_in_sphere(
                 (flame_effect + 0x10), hit_sphere_radius, 0, moby, hit_descriptor);
             sub_type = *(short *)(flame_effect + 0xA);
-            if (sub_type == 10) {
+            if (sub_type == PYROCITOR_FLAME_SUBTYPE_SPARK_BURST) {
                 int j;
                 for (j = 0; j < *(int *)&pyrocitor_spark_burst_count_gp; j++) {
                     int spark_initial_color;
@@ -872,7 +880,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
                                 spark_third_frame_count,
                                 *(int *)&pyrocitor_spark_lookup_index_and_flags_gp);
                 }
-            } else if (sub_type < 2) {
+            } else if (sub_type < PYROCITOR_FLAME_MIN_TRACKED_FRAME_COUNT) {
                 *(int *)(slots_base - (-(i * 4))) = 0;
             }
         } else {

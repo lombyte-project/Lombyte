@@ -70,7 +70,7 @@ void morphoray_pickup_update(struct Moby *moby) {
         moby->rot.y = -1.5707964f;
         moby->pos.z = D_L14_00174568[0] + morphoray_ground_height_offset_gp;
         qcopy(morphoray_pvars, moby_bytes + 0x10);
-        moby->state = 1;
+        moby->state = MORPHORAY_PICKUP_WAIT_FOR_HERO;
         break;
     case MORPHORAY_PICKUP_WAIT_FOR_HERO:
         *(f32 *)(moby_bytes + 0x48) =
@@ -91,7 +91,7 @@ void morphoray_pickup_update(struct Moby *moby) {
             *(s32 *)(morphoray_pvars + 0x18) = 0;
         grant_inventory_item(0x15, 1);
         start_scene(6);
-        moby->state = 2;
+        moby->state = MORPHORAY_PICKUP_WAIT_TO_REMOVE;
         break;
     case MORPHORAY_PICKUP_WAIT_TO_REMOVE:
         if (D_L14_0015F5C4 != state) {
@@ -127,20 +127,20 @@ typedef struct {
 } MorphorayPrivateState;
 
 void initialize_morphoray_private_state(struct Moby *moby) {
-    MorphorayPrivateState *m = (MorphorayPrivateState *)moby->pvars;
+    MorphorayPrivateState *morphoray_private_state = (MorphorayPrivateState *)moby->pvars;
     s32                    i;
     for (i = 0; i < 4; i++)
-        m->r[i] = random_integer_below(0xFF);
-    m->a[0] = -1.0f;
-    m->a[1] = -2.25f;
-    m->a[2] = 1.25f;
-    m->a[3] = 2.5f;
+        morphoray_private_state->r[i] = random_integer_below(0xFF);
+    morphoray_private_state->a[0] = -1.0f;
+    morphoray_private_state->a[1] = -2.25f;
+    morphoray_private_state->a[2] = 1.25f;
+    morphoray_private_state->a[3] = 2.5f;
     for (i = 0; i < 4; i++)
-        m->c[i] = scale_game_frames(i * 0x40 + 0x3F);
-    m->x40 = 2.0f;
-    m->x44 = 2.5f;
-    m->x4c = 2.0f;
-    m->x48 = 2.5f;
+        morphoray_private_state->c[i] = scale_game_frames(i * 0x40 + 0x3F);
+    morphoray_private_state->x40 = 2.0f;
+    morphoray_private_state->x44 = 2.5f;
+    morphoray_private_state->x4c = 2.0f;
+    morphoray_private_state->x48 = 2.5f;
 }
 
 typedef struct {
@@ -155,8 +155,14 @@ typedef struct {
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
-extern unsigned char *
-FUN_L00_00272f68(float f, void *pos, int b, unsigned char a2, int idx, int flag, int s, int mode);
+extern unsigned char *spawn_timed_hero_relative_particle(float         f,
+                                                         void         *pos,
+                                                         int           b,
+                                                         unsigned char a2,
+                                                         int           idx,
+                                                         int           flag,
+                                                         int           s,
+                                                         int mode) __asm__("FUN_L00_00272f68");
 
 void update_morphoray_particles(struct Moby *morphoray_moby) {
     float     particle_position_and_step[8];
@@ -191,7 +197,8 @@ void update_morphoray_particles(struct Moby *morphoray_moby) {
         elapsed_timer_fraction = elapsed_timer_fraction / (float)scale_game_frames(255);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_timer_fraction));
         k = truncate_float_to_s32(*a++);
-        FUN_L00_00272f68(effect_data->c[j], particle_position_and_step, c, k, 0x35, 1, 2, 0);
+        spawn_timed_hero_relative_particle(
+            effect_data->c[j], particle_position_and_step, c, k, 0x35, 1, 2, 0);
         j++;
         fast_vec_add(
             particle_position_and_step, particle_position_and_step, &particle_position_and_step[4]);

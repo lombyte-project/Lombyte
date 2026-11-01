@@ -19,7 +19,7 @@ extern s32          dmac_vif1_disable() __asm__("func_00233D90");
 void reset_graphics(void) __asm__("FUN_001f21c0");
 
 void reset_graphics(void) {
-    s32 value;
+    s32 saved_gs_texture_allocation_start;
 
     /* The volatile flag store stays out of the call's delay slot, and the
        do-while keeps the D_0015EE78 load after vu1_init_chain, as retail. */
@@ -33,11 +33,11 @@ void reset_graphics(void) {
     /* Fakematch: see the note at the top of the function. */
     do {
         vu1_init_chain();
-        value = D_0015EE78[0];
+        saved_gs_texture_allocation_start = D_0015EE78[0];
     } while (0);
     render_packet_cursor.addr = 0;
     set_pal_mode();
-    D_0015EE78_gp = value;
+    D_0015EE78_gp = saved_gs_texture_allocation_start;
     vu1_init_chain();
     dmac_vif1_enable();
 }

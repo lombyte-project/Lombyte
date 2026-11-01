@@ -39,6 +39,10 @@ void elevator_update(unsigned char *moby) {
         ELEVATOR_STATE_AT_PATH_START = 1,
         ELEVATOR_STATE_MOVING = 2
     };
+    enum {
+        ELEVATOR_MOBY_STATE_UNINITIALIZED = 0,
+        ELEVATOR_MOBY_STATE_INITIALIZED = 1
+    };
     char *elevator_vars = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], segment_offset[4];
@@ -66,7 +70,7 @@ void elevator_update(unsigned char *moby) {
     }
     qcopy(orig, moby + 0x10);
     fast_dec_timer_s16(elevator_vars + 0xBA);
-    if (MOBY(moby)->state == 0) {
+    if (MOBY(moby)->state == ELEVATOR_MOBY_STATE_UNINITIALIZED) {
         float f;
         char *pts;
         elevator_vars[0x28] = 4;
@@ -83,7 +87,7 @@ void elevator_update(unsigned char *moby) {
         *(short *)(elevator_vars + 0xBA) = 0;
         *(int *)(elevator_vars + 0xA8) = 0;
         *(int *)(elevator_vars + 0xBC) = 0;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = ELEVATOR_MOBY_STATE_INITIALIZED;
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         *(int *)(elevator_vars + 0xC4) = -1;

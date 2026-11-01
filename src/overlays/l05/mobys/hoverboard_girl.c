@@ -22,6 +22,10 @@
 /* Hoverboard girl (class record hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
  * Its two breast manipulators also carry the effect into cutscene instances. */
+enum {
+    GAME_MODE_CUTSCENE = 2
+};
+
 typedef union {
     u128 quadword;
     f32  component[4];
@@ -166,7 +170,7 @@ extern unsigned char D_L05_0017C8A0[];
 void update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *girl) {
     char *reference_moby = (char *)girl;
 
-    if (game_mode == 2 && (D_0015EDB0[0] != 0 || breast_growth_count_gp != 0)) {
+    if (game_mode == GAME_MODE_CUTSCENE && (D_0015EDB0[0] != 0 || breast_growth_count_gp != 0)) {
         int i;
         for (i = 0; i < D_L05_0016CC60.count; i++) {
             char *moby = D_L05_0016CC60.mobys[i];
@@ -225,14 +229,14 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
             entries[dialogue_entry_index]->state = 13;
         }
         state->dialogue_name = race_girl_name;
-        moby->state = 1;
+        moby->state = HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE;
         initialize_npc_dialogue(moby, state);
         initialize_moby_grounding(moby);
         break;
     case HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE:
         if (update_npc_dialogue(moby, state) != 0) {
             begin_dialogue_camera_transition(2.0f, moby);
-            moby->state = 3;
+            moby->state = HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE;
         }
         if (state->dialogue_state == 3) {
             state->previous_dialogue_state = state->dialogue_state;
@@ -281,8 +285,8 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
         }
         break;
     case HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE:
-        if (game_mode != 2) {
-            moby->state = 1;
+        if (game_mode != GAME_MODE_CUTSCENE) {
+            moby->state = HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE;
             if (state->previous_dialogue_state == 4) {
                 alternate_item_available = 1;
                 queue_dialogue_message(0x1395, scale_game_frames(300));
@@ -378,7 +382,7 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
             breast_growth_count_gp = state->breast_growth_count_gp;
         }
     }
-    if (game_mode != 2) {
+    if (game_mode != GAME_MODE_CUTSCENE) {
         update_hoverboard_girl_boobs_animation(moby, state);
         if (big_head_cheat_enabled != 0)
             state->joints[0].target_scale = 2.75f;

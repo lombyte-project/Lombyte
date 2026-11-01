@@ -915,22 +915,35 @@ void update_color_tween_emitter_particle(struct EffectParticle *particle) {
 }
 
 extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") NOT_SDA;
-unsigned char *
-FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
-unsigned char *FUN_L00_00272f68(u128         *position,
-                                int           packed_color,
-                                unsigned char initial_rotation,
-                                int           particle_texture_index,
-                                int           flag,
-                                int           lifetime_frames,
-                                int           mode,
+unsigned char        *spawn_timed_hero_relative_particle(u128         *position,
+                                                         int           packed_color,
+                                                         unsigned char initial_rotation,
+                                                         int           particle_texture_index,
+                                                         int           flag,
+                                                         int           lifetime_frames,
+                                                         int           mode,
 
-                                float size_scale) {
+                                                         float size_scale) __asm__("FUN_L00_00272f68");
+
+unsigned char *spawn_timed_hero_relative_particle(
+    u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
+unsigned char *spawn_timed_hero_relative_particle(u128         *position,
+                                                  int           packed_color,
+                                                  unsigned char initial_rotation,
+                                                  int           particle_texture_index,
+                                                  int           flag,
+                                                  int           lifetime_frames,
+                                                  int           mode,
+
+                                                  float size_scale) {
+    enum {
+        PARTICLE_MODE_HERO_RELATIVE = 1
+    };
     unsigned char *particle = create_part(0x3B);
     if (particle) {
         int *particle_data = (int *)(particle + 0x20);
         particle_data[4] = mode;
-        if (mode == 1)
+        if (mode == PARTICLE_MODE_HERO_RELATIVE)
             fast_vec_sub(particle_data, position, D_0013F3D0);
         qcopy(particle + 0x10, position);
         *(int *)(particle + 4) = packed_color;
@@ -1166,6 +1179,10 @@ unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position,
                                                          int   alpha_fade_divisor,
 
                                                          int particle_mode) {
+    enum {
+        PARTICLE_MODE_STATIONARY_ALPHA_FADE = 0,
+        PARTICLE_MODE_PARENT_RELATIVE_ALPHA_FADE = 2
+    };
     unsigned char *particle = create_part(0x3E);
     if (particle != 0) {
         unsigned char *particle_data = particle + 0x20;
@@ -1177,8 +1194,8 @@ unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position,
         *(float *)(particle + 0xC) = 30000.0f;
         particle[8] = random_integer_below(0xFF);
         *(short *)(particle_data + 2) = particle_mode;
-        if (particle_mode >= 2)
-            particle_mode = 0;
+        if (particle_mode >= PARTICLE_MODE_PARENT_RELATIVE_ALPHA_FADE)
+            particle_mode = PARTICLE_MODE_STATIONARY_ALPHA_FADE;
         particle[2] = D_L00_001B2178[particle_mode];
         *(short *)(particle + 0x20) =
             truncate_float_to_s32(127.0f / convert_integer_to_float(alpha_fade_divisor));

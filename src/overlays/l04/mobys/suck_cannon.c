@@ -13,6 +13,10 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
+
+unsigned char *spawn_timed_hero_relative_particle(
+    u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+
 #include "rnc/save/memcard_save_data.h"
 
 /* Warp portal: spins, opens once the hero is near, then warps to the exit moby. */
@@ -63,7 +67,7 @@ void suck_cannon_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             break;
         }
-        moby->state = 1;
+        moby->state = SUCK_CANNON_WAIT_FOR_HERO;
         moby->pos.z += 1.0f;
         break;
     case SUCK_CANNON_WAIT_FOR_HERO:
@@ -71,7 +75,7 @@ void suck_cannon_update(struct Moby *moby) {
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             start_scene(2);
-            moby->state = 2;
+            moby->state = SUCK_CANNON_WAIT_TO_RESET_CAMERA;
         }
         break;
     case SUCK_CANNON_WAIT_TO_RESET_CAMERA:
@@ -90,7 +94,7 @@ void suck_cannon_update(struct Moby *moby) {
             debug_print(suck_cannon_missing_segment_switch_warning_format,
                         ((struct PortalMobyView *)moby)->uid);
         }
-        moby->state = 3;
+        moby->state = SUCK_CANNON_REMOVE;
         memcard_save_data(0, -1);
         break;
     case SUCK_CANNON_REMOVE:
@@ -141,14 +145,14 @@ void update_suck_cannon_particles(char *moby) {
         timer_progress = timer_progress / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_progress));
         if (D_L04_0015F5C4 != 2)
-            FUN_L00_00272f68(d,
-                             col,
-                             truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
-                             0x35,
-                             1,
-                             2,
-                             0,
-                             sprite_data->d[i]);
+            spawn_timed_hero_relative_particle(d,
+                                               col,
+                                               truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
+                                               0x35,
+                                               1,
+                                               2,
+                                               0,
+                                               sprite_data->d[i]);
         fast_vec_add(d, d, particle_position_step);
     }
 }

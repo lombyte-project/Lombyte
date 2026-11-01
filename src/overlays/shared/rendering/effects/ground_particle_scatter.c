@@ -167,7 +167,7 @@ void ground_particle_scatter_update(Moby *moby) {
 
     switch (moby->state) {
     case GROUND_PARTICLES_STATE_INITIALIZE:
-        moby->state = 2;
+        moby->state = GROUND_PARTICLES_STATE_SCATTER;
         moby->update_dist = 0xFF;
         randomize_ground_particle_scatter_parameters(flag);
         break;

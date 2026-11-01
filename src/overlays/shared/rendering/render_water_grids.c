@@ -66,6 +66,14 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position,
                                      s32  mode) __asm__("FUN_L01_002b8cb0");
 
 void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 mode) {
+    enum {
+        WATER_TILE_MODE_SKIP_CLIP_TESTS = 0,
+        WATER_TILE_MODE_TEST_FAR_CLIP = 1
+    };
+    enum {
+        WATER_TILE_VU_ENTRY_NO_FAR_CLIP = 0xc,
+        WATER_TILE_VU_ENTRY_FAR_CLIP_PENDING = 0xe
+    };
     f32 corners[4][4];
     f32 near_clip[4];
     f32 far_clip[4];
@@ -76,7 +84,7 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
     u32 near_bits, far_bits;
     s32 i, tile_vertex_offset, row, column;
 
-    if (mode != 0) {
+    if (mode != WATER_TILE_MODE_SKIP_CLIP_TESTS) {
         row = index >> 2;
         column = index & 3;
         half_x = 0.5f * -pool_light[2];
@@ -122,7 +130,7 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
             far_bits = (far_bits << 8) | is_vector_outside_clip(far_clip);
             near_bits = (near_bits << 8) | is_vector_outside_clip(near_clip);
         }
-        if (mode == 1) {
+        if (mode == WATER_TILE_MODE_TEST_FAR_CLIP) {
             if ((near_bits & 0x01010101) == 0x01010101)
                 return;
             if ((near_bits & 0x02020202) == 0x02020202)
@@ -132,7 +140,7 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
             if ((near_bits & 0x08080808) == 0x08080808)
                 return;
             if (far_bits == 0)
-                mode = 0;
+                mode = WATER_TILE_MODE_SKIP_CLIP_TESTS;
             if ((near_bits & 0x20202020) == 0x20202020)
                 return;
         } else {
@@ -146,14 +154,14 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
                 return;
             if ((near_bits & 0x20202020) == 0x20202020)
                 return;
-            mode = 0;
+            mode = WATER_TILE_MODE_SKIP_CLIP_TESTS;
         }
     }
     tile_vertex_offset = (index & 3) * 4 + (index >> 2) * 0x44;
-    if (mode != 0) {
-        mode = 0xe;
+    if (mode != WATER_TILE_MODE_SKIP_CLIP_TESTS) {
+        mode = WATER_TILE_VU_ENTRY_FAR_CLIP_PENDING;
     } else {
-        mode = 0xc;
+        mode = WATER_TILE_VU_ENTRY_NO_FAR_CLIP;
     }
     FUN_L01_00262388(mode, tile_vertex_offset);
 }
@@ -220,6 +228,10 @@ void build_water_render_setup_packet(void) {
 void render_water_grids(f32 *water_record, s32 count) __asm__("FUN_L01_002b91c8");
 
 void render_water_grids(f32 *water_record, s32 count) {
+    enum {
+        WATER_GRID_MODE_SKIP_CLIP_TESTS = 0,
+        WATER_GRID_MODE_TEST_NEAR_CLIP = 2
+    };
     f32  corners[4][4];
     f32  near_clip[4];
     f32  far_clip[4];
@@ -310,9 +322,9 @@ void render_water_grids(f32 *water_record, s32 count) {
             }
             mode = (far_bits & 0x2f2f2f2f) != 0;
             if (!mode) {
-                mode = 2;
+                mode = WATER_GRID_MODE_TEST_NEAR_CLIP;
                 if (!(near_bits & 0x2f2f2f2f))
-                    mode = 0;
+                    mode = WATER_GRID_MODE_SKIP_CLIP_TESTS;
             }
             mask = *(u16 *)((u8 *)water_record + 0x1e);
             if (*(u32 *)(water_record + 5) != cached_water_texture_id_gp ||

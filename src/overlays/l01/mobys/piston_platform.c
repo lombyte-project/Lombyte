@@ -56,6 +56,10 @@ void piston_platform_update(LiftMoby *piston_platform) {
         PISTON_PLATFORM_MODE_WAIT_BEFORE_ADD_TRAVEL = 1,
         PISTON_PLATFORM_MODE_MOVING = 2
     };
+    enum {
+        PISTON_PLATFORM_STATE_UNINITIALIZED = 0,
+        PISTON_PLATFORM_STATE_INITIALIZED = 1
+    };
     LiftVars *piston_platform_vars;
     u128      previous_position;
     u128      delta;
@@ -64,7 +68,7 @@ void piston_platform_update(LiftMoby *piston_platform) {
     piston_platform_vars = piston_platform->pvars;
     qcopy(&previous_position, &piston_platform->pos);
     fast_dec_timer_s16(&piston_platform_vars->timer);
-    if (piston_platform->state == 0) {
+    if (piston_platform->state == PISTON_PLATFORM_STATE_UNINITIALIZED) {
         piston_platform_vars->x28 = 4;
         piston_platform_vars->x3e = 0xD;
         piston_platform_vars->x20 = 0;
@@ -72,7 +76,7 @@ void piston_platform_update(LiftMoby *piston_platform) {
         piston_platform_vars->home_z = ((f32 *)&piston_platform->pos)[2];
         piston_platform->mode = piston_platform_vars->home_mode;
         piston_platform_vars->timer = scale_game_frames(0x78);
-        piston_platform->state = 1;
+        piston_platform->state = PISTON_PLATFORM_STATE_INITIALIZED;
         piston_platform->b30 = 0xFF;
         piston_platform->h32 = 0xFF;
         piston_platform_vars->xb4 = -1;
@@ -80,7 +84,7 @@ void piston_platform_update(LiftMoby *piston_platform) {
     switch (piston_platform->mode) {
     case PISTON_PLATFORM_MODE_WAIT_BEFORE_SUBTRACT_TRAVEL:
         if (piston_platform_vars->timer == 0) {
-            piston_platform->mode = 2;
+            piston_platform->mode = PISTON_PLATFORM_MODE_MOVING;
             piston_platform_vars->speed =
                 piston_platform_vars->travel /
                 convert_integer_to_float(
@@ -92,7 +96,7 @@ void piston_platform_update(LiftMoby *piston_platform) {
         break;
     case PISTON_PLATFORM_MODE_WAIT_BEFORE_ADD_TRAVEL:
         if (piston_platform_vars->timer == 0) {
-            piston_platform->mode = 2;
+            piston_platform->mode = PISTON_PLATFORM_MODE_MOVING;
             piston_platform_vars->speed =
                 -(piston_platform_vars->travel /
                   convert_integer_to_float(scale_game_frames(
@@ -106,9 +110,9 @@ void piston_platform_update(LiftMoby *piston_platform) {
         ((f32 *)&piston_platform->pos)[2] -= piston_platform_vars->speed;
         if (piston_platform_vars->timer == 0) {
             if (piston_platform_vars->speed < 0.0f) {
-                piston_platform->mode = 0;
+                piston_platform->mode = PISTON_PLATFORM_MODE_WAIT_BEFORE_SUBTRACT_TRAVEL;
             } else {
-                piston_platform->mode = 1;
+                piston_platform->mode = PISTON_PLATFORM_MODE_WAIT_BEFORE_ADD_TRAVEL;
             }
             if (piston_platform->mode == piston_platform_vars->home_mode) {
                 ((f32 *)&piston_platform->pos)[2] = piston_platform_vars->home_z;

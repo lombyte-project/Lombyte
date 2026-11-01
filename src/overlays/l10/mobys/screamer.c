@@ -23,6 +23,20 @@
 /* Update function for moby class 1196 (screamer) on level 10: follows its path, turns to its target, wanders. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E0630), where it is exact; names translated to the US level program. */
 
+enum {
+    SCREAMER_STATE_INITIALIZE = 0,
+    SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
+    SCREAMER_STATE_WAIT_TO_RISE = 2,
+    SCREAMER_STATE_RISE_FROM_HOME = 4,
+    SCREAMER_STATE_FOLLOW_PATH = 5,
+    SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
+    SCREAMER_STATE_IDLE_AT_HOME = 7,
+    SCREAMER_STATE_RETURN_HOME = 8,
+    SCREAMER_STATE_WAIT_TO_WANDER = 9,
+    SCREAMER_STATE_WANDER = 10,
+    SCREAMER_STATE_DEATH_KNOCKBACK = 11
+};
+
 typedef struct Moby Moby;
 
 typedef struct D_2E0630 {
@@ -89,19 +103,6 @@ extern float fast_vec_dist(void *, void *);
 
 /* Moby class 1196 */
 void screamer_update(Moby *moby) {
-    enum {
-        SCREAMER_STATE_INITIALIZE = 0,
-        SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
-        SCREAMER_STATE_WAIT_TO_RISE = 2,
-        SCREAMER_STATE_RISE_FROM_HOME = 4,
-        SCREAMER_STATE_FOLLOW_PATH = 5,
-        SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
-        SCREAMER_STATE_IDLE_AT_HOME = 7,
-        SCREAMER_STATE_RETURN_HOME = 8,
-        SCREAMER_STATE_WAIT_TO_WANDER = 9,
-        SCREAMER_STATE_WANDER = 10,
-        SCREAMER_STATE_DEATH_KNOCKBACK = 11
-    };
     float     waypoint[6];
     D_2E0630 *screamer_data = (D_2E0630 *)moby->pvars;
     Moby     *leader;
@@ -127,20 +128,20 @@ void screamer_update(Moby *moby) {
         if (screamer_data->f174 != 1) {
             mark_moby_for_removal(moby);
         } else {
-            moby->state = 1;
+            moby->state = SCREAMER_STATE_WAIT_FOR_ACTIVATION;
         }
         break;
     case SCREAMER_STATE_WAIT_FOR_ACTIVATION:
         if (screamer_data->f104 == 2 && screamer_data->f174 != 0)
             break;
-        moby->state = 2;
+        moby->state = SCREAMER_STATE_WAIT_TO_RISE;
         if (moby->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         break;
     case SCREAMER_STATE_WAIT_TO_RISE:
         if ((moby->anim_flags & 2) == 0)
             break;
-        moby->state = 4;
+        moby->state = SCREAMER_STATE_RISE_FROM_HOME;
         clear_u64_value(&screamer_data->vel);
         if (moby->prev_seq != 4)
             blend_moby_animation(moby, 4, 0, scale_game_frames(10));
@@ -155,7 +156,7 @@ void screamer_update(Moby *moby) {
                                        D_0015ED70 * 18.0f,
                                        D_0015ED70 * 18.0f,
                                        D_0015ED6C * 6.0f) == 0.0f) {
-            moby->state = 5;
+            moby->state = SCREAMER_STATE_FOLLOW_PATH;
         }
         break;
     case SCREAMER_STATE_FOLLOW_PATH: {
@@ -191,13 +192,13 @@ void screamer_update(Moby *moby) {
         {
             int node_index = screamer_data->node_index++;
             if (0.0f < l10_paths[screamer_data->path]->points[node_index].f[3]) {
-                moby->state = 6;
+                moby->state = SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT;
                 if (moby->prev_seq != 3)
                     blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             } else {
                 if (node_index + 1 != l10_paths[screamer_data->path]->count)
                     break;
-                moby->state = 10;
+                moby->state = SCREAMER_STATE_WANDER;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                 probe_ground_height(&moby->pos, 0, 0.5f);
@@ -230,14 +231,14 @@ void screamer_update(Moby *moby) {
                 activate_waiting_moby_group_members(linked);
         }
         if (screamer_data->node_index == l10_paths[screamer_data->path]->count) {
-            moby->state = 10;
+            moby->state = SCREAMER_STATE_WANDER;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             probe_ground_height(&moby->pos, 0, 0.5f);
             qcopy(&screamer_data->home, &D_L10_00174360_2E0630);
             qcopy(&screamer_data->wander_goal, &moby->pos);
         } else {
-            moby->state = 5;
+            moby->state = SCREAMER_STATE_FOLLOW_PATH;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
@@ -267,7 +268,7 @@ void screamer_update(Moby *moby) {
         screamer_data->vel.z = climb;
         func_L00_00259B08_2E0630(moby, &screamer_data->vel, 0.5f, 0x200, 0.0f, 0);
         if (vector_distance_xy(&moby->pos, &screamer_data->home) < 2.0f)
-            moby->state = 7;
+            moby->state = SCREAMER_STATE_IDLE_AT_HOME;
         break;
     }
     case SCREAMER_STATE_WAIT_TO_WANDER: {
@@ -285,7 +286,7 @@ void screamer_update(Moby *moby) {
         waypoint[2] = zero;
         waypoint[2] = random_float_between(5.0f, 7.0f);
         fast_vec_add(&screamer_data->wander_goal, waypoint, &screamer_data->home);
-        moby->state = 10;
+        moby->state = SCREAMER_STATE_WANDER;
         break;
     }
     case SCREAMER_STATE_WANDER:
@@ -301,12 +302,12 @@ void screamer_update(Moby *moby) {
         fast_vec_add(waypoint, &screamer_data->step, &moby->pos);
         if (func_L00_001F10E0_2E0630(0.4f, waypoint, 0, moby)) {
             clear_u64_value(&screamer_data->step);
-            moby->state = 9;
+            moby->state = SCREAMER_STATE_WAIT_TO_WANDER;
         } else {
             qcopy(&moby->pos, waypoint);
         }
         if (fast_vec_length(&screamer_data->step) == 0.0f)
-            moby->state = 9;
+            moby->state = SCREAMER_STATE_WAIT_TO_WANDER;
         break;
     case SCREAMER_STATE_DEATH_KNOCKBACK:
         if ((step_moby_motion(moby, screamer_data->react) & 1) == 0)
@@ -385,6 +386,9 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 #include "rnc/data_labels.h"
 
 void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
+    enum {
+        TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED = 2
+    };
     MobyData_2DFC38 *screamer_vars = (MobyData_2DFC38 *)moby->pvars;
     Hit_2DFC38      *hit_record;
     float            relative_offset[4];
@@ -399,7 +403,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         screamer_vars->f38 = 0;
     }
     fast_dec_timer(&screamer_vars->f184);
-    if (moby->state != 11) {
+    if (moby->state != SCREAMER_STATE_DEATH_KNOCKBACK) {
         hit_record = (Hit_2DFC38 *)find_moby_hit(moby, 0x330000, 0);
         hit_update_2DFC38(
             moby, hit_record, &screamer_vars->f20, 5, &hit_processing_status, 0, 0, 4);
@@ -414,7 +418,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 5)
                     blend_moby_animation(moby, 5, 0, scale_game_frames(10));
-                moby->state = 11;
+                moby->state = SCREAMER_STATE_DEATH_KNOCKBACK;
                 screamer_vars->f70 = D_0015ED70 * 26.0f;
                 screamer_vars->f9D = 3;
                 screamer_vars->f74 = 0.0005f;
@@ -444,14 +448,14 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         screamer_vars->f180 = 42.0f;
     else if (screamer_vars->f184 != 0)
         screamer_vars->f180 = screamer_vars->f178 + 6.0f;
-    else if (moby->state == 1)
+    else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION)
         screamer_vars->f180 = screamer_vars->f188;
     else
         screamer_vars->f180 = screamer_vars->f178;
 
     if (screamer_vars->f174 == 2) {
         target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
-        if (target_selection_status != 2) {
+        if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
             LevelCuboid *bp = &l10_cuboids[screamer_vars->f194];
             fast_vec_sub(relative_offset, D_0013F3D0, &bp->pos);
             relative_offset[3] = 0.0f;
@@ -461,18 +465,18 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                 transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2])
                 screamer_vars->f104 = 2;
         }
-    } else if (moby->state == 1 && screamer_vars->f18C >= 0) {
+    } else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION && screamer_vars->f18C >= 0) {
         LevelPath *path = l10_paths[screamer_vars->f18C];
         target_selection_status = activate_effect_l08(
             screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
-    } else if (moby->state != 1 && screamer_vars->f17C >= 0) {
+    } else if (moby->state != SCREAMER_STATE_WAIT_FOR_ACTIVATION && screamer_vars->f17C >= 0) {
         LevelPath *path = l10_paths[screamer_vars->f17C];
         target_selection_status = activate_effect_l08(
             screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
     } else {
         target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
     }
-    if (target_selection_status != 2) {
+    if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
         if (screamer_vars->f180 < vector_distance_xy(screamer_vars->f130, screamer_vars->fC0))
             screamer_vars->f104 = 2;
         else if (moby->visible == 0)
@@ -488,6 +492,12 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
 extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 
 void activate_waiting_moby_group_members(struct Moby *moby) {
+    enum {
+        MOBY_GROUP_MEMBER_WAITING_FOR_ACTIVATION = 1
+    };
+    enum {
+        MOBY_GROUP_MEMBER_ACTIVATE = 2
+    };
     short *group_entry;
     if (moby->group != 0xFF) {
         group_entry = moby_group_member_lists[moby->group];
@@ -497,8 +507,8 @@ void activate_waiting_moby_group_members(struct Moby *moby) {
                 struct Moby *listed_entity =
                     (struct Moby *)((*(unsigned short *)group_entry & 0x7FFF) * 256 +
                                     (int)moby_array_base);
-                if (listed_entity->state == 1)
-                    listed_entity->state = 2;
+                if (listed_entity->state == MOBY_GROUP_MEMBER_WAITING_FOR_ACTIVATION)
+                    listed_entity->state = MOBY_GROUP_MEMBER_ACTIVATE;
             } while (*group_entry++ >= 0);
         }
     }

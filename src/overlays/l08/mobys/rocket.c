@@ -16,6 +16,16 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/level_path.h"
 
+enum {
+    ROCKET_STATE_INITIALIZE = 0,
+    ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
+    ROCKET_STATE_HOME_TOWARD_TARGET = 2,
+    ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
+    ROCKET_STATE_FOLLOW_ROUTE = 4,
+    ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
+    ROCKET_STATE_EXPLODE_AND_REMOVE = 6
+};
+
 extern int  FUN_L08_002025d0(void *, int, int, void *, int);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
@@ -168,15 +178,6 @@ void spawn_rocket_explosion_and_debris(char *moby,
 /* Moby class 435 */
 void rocket_update(M46 *moby) {
     enum {
-        ROCKET_STATE_INITIALIZE = 0,
-        ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
-        ROCKET_STATE_HOME_TOWARD_TARGET = 2,
-        ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
-        ROCKET_STATE_FOLLOW_ROUTE = 4,
-        ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
-        ROCKET_STATE_EXPLODE_AND_REMOVE = 6
-    };
-    enum {
         LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_POSITIVE_Z_LAUNCH_OFFSET = 0,
         LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_NEGATIVE_Z_LAUNCH_OFFSET = 1,
         LINKED_CLASS_NEGATIVE_X_NEGATIVE_Y_NEGATIVE_Z_LAUNCH_OFFSET = 2,
@@ -186,7 +187,7 @@ void rocket_update(M46 *moby) {
     };
     V46  target, delta, velocity_correction_or_effect_velocity, effect, aux;
     D46 *data = moby->data;
-    if (FUN_L00_0025a420(moby, 0x210000, 0) && moby->state != 4) {
+    if (FUN_L00_0025a420(moby, 0x210000, 0) && moby->state != ROCKET_STATE_FOLLOW_ROUTE) {
         allocate_voice_for_target_entry(0, 0, moby);
         cart_burst(moby, moby->position, -1, 0.5f, 13.0f);
         mark_moby_for_removal(moby);
@@ -209,7 +210,7 @@ void rocket_update(M46 *moby) {
         data->path = ((Route_2dd4f8_2dd3c0 *)l08_paths[data->path_index]);
         qcopy(moby->position, data->path->e[0]);
         data->waypoint = 1;
-        moby->state = 3;
+        moby->state = ROCKET_STATE_WAIT_FOR_ACTIVATION;
         moby->animation = 0;
         moby->flags = 0;
         return;
@@ -236,7 +237,7 @@ void rocket_update(M46 *moby) {
         moby->rotation[2] = fast_arc_tan(data->velocity[0], data->velocity[1]);
         if (fast_difference_between_rotations(yaw, data->yaw) < 0.08726646f &&
             fast_difference_between_rotations(pitch, data->pitch) < 0.08726646f)
-            moby->state = 2;
+            moby->state = ROCKET_STATE_HOME_TOWARD_TARGET;
         radius = random_float_between(0.0f, rocket_effect_radial_speed_range_end_gp) * D_0015ED6C;
         angle = random_angle_radians();
         fast_vec_normalize(effect, moby->matrix[2], radius * fast_cos(angle));
@@ -280,7 +281,7 @@ void rocket_update(M46 *moby) {
             target_data->health -= 60;
             clear_u64_value(data->velocity);
             allocate_voice_for_target_entry(0, 0, moby);
-            moby->state = 6;
+            moby->state = ROCKET_STATE_EXPLODE_AND_REMOVE;
         }
         radius = random_float_between(0.0f, rocket_effect_radial_speed_range_end_gp) * D_0015ED6C;
         angle = random_angle_radians();
@@ -310,7 +311,7 @@ void rocket_update(M46 *moby) {
                 data->activation_range &&
             fast_dec_timer(&data->timer)) {
             moby->flags = 0x40;
-            moby->state = 4;
+            moby->state = ROCKET_STATE_FOLLOW_ROUTE;
             moby->animation = moby->model->animation;
             moby->rotation[2] = fast_arc_tan(data->path->e[1][0] - moby->position[0],
                                              data->path->e[1][1] - moby->position[1]);
@@ -491,7 +492,7 @@ void rocket_update(M46 *moby) {
             else
                 FUN_L08_002de528_u(moby, data->effect_path, 30, 0);
             allocate_voice_for_target_entry(2, 0, moby);
-            moby->state = 6;
+            moby->state = ROCKET_STATE_EXPLODE_AND_REMOVE;
         }
         return;
     }
@@ -510,7 +511,7 @@ void rocket_update(M46 *moby) {
             moby->position[0] > 500.0f || moby->position[1] < 5.0f || moby->position[1] > 500.0f ||
             moby->position[2] < 5.0f || moby->position[2] > 500.0f ||
             fast_vec_dist(D_0013F3D0, moby->position) < 16.0f)
-            moby->state = 6;
+            moby->state = ROCKET_STATE_EXPLODE_AND_REMOVE;
         return;
     case ROCKET_STATE_EXPLODE_AND_REMOVE:
         if (D_L08_0015FFDC < (unsigned int)moby)
@@ -576,7 +577,7 @@ struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float 
         scale *= rocket_scale_multiplier_gp;
         moby->update_dist = 0xFF;
         moby->visible = 1;
-        *(volatile u8 *)&moby->state = 1;
+        *(volatile u8 *)&moby->state = ROCKET_STATE_APPROACH_TARGET_OFFSET;
         moby->draw_dist = 0xFF;
         moby->scale = scale;
         set_moby_color(moby, rocket_color_red_gp, rocket_color_green_gp, rocket_color_blue_gp);

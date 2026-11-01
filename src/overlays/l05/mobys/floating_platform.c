@@ -62,7 +62,7 @@ void floating_platform_update(unsigned char *moby) {
                                             (float)floating_platform_voice_interval_max_gp)));
         floating_platform_vars->unk60 = random_angle_radians();
         floating_platform_vars->unk6C = random_angle_radians();
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = FLOATING_PLATFORM_UPDATE_ROCKING;
         break;
     case FLOATING_PLATFORM_UPDATE_ROCKING:
         if (fast_dec_timer(&floating_platform_vars->timer_78)) {

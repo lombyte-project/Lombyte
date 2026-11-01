@@ -127,6 +127,9 @@ void drawbridge_update(Moby *moby) {
         FADE_AFTER_DRAWBRIDGE_ANIMATION = 5,
         DRAWBRIDGE_COMPLETE = 6
     };
+    enum {
+        DRAWBRIDGE_MISSION_ALREADY_COMPLETE = 0xFF
+    };
     Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
     Data      *drawbridge_control_vars = (struct Data *)moby->pvars;
     float      previous_fade, blend;
@@ -135,13 +138,13 @@ void drawbridge_update(Moby *moby) {
     switch (moby->state) {
     case INITIALIZE_DRAWBRIDGE_SEGMENTS: {
         int status = visited52[moby->mission + (current_level_index << 4)];
-        if (status == 0xFF) {
-            moby->state = 6;
+        if (status == DRAWBRIDGE_MISSION_ALREADY_COMPLETE) {
+            moby->state = DRAWBRIDGE_COMPLETE;
             drawbridge_extension_gp = 20.0f;
             drawbridge_pitch_degrees_gp = 1000.0f;
             drawbridge_yaw_degrees_gp = 1000.0f;
         } else {
-            moby->state = 1;
+            moby->state = WAIT_FOR_DRAWBRIDGE_ACTIVATION;
         }
         for (i = 0; i < 20; i++) {
             drawbridge_control_vars->a[i] = create_moby(0x405);
@@ -181,7 +184,7 @@ void drawbridge_update(Moby *moby) {
     case WAIT_FOR_DRAWBRIDGE_ACTIVATION:
         if (D_001413F4_r[0] == 1 && D_0013D4D6[0] != 0 && D_L06_0015F5C4 == 0) {
             D_L06_0015F3FC = 1.0f;
-            moby->state = 3;
+            moby->state = FADE_BEFORE_DRAWBRIDGE_ANIMATION;
             drawbridge_control_vars->fade = -0.01f;
         }
         break;
@@ -199,7 +202,7 @@ void drawbridge_update(Moby *moby) {
                       0,
                       0);
         } else if (1.0f <= drawbridge_control_vars->fade) {
-            moby->state = 4;
+            moby->state = ANIMATE_DRAWBRIDGE_AND_CAMERA;
             moby->command = allocate_voice_for_target_entry(0, 4, drawbridge_control_vars->c[9]);
         }
         break;
@@ -232,7 +235,7 @@ void drawbridge_update(Moby *moby) {
                                        drawbridge_yaw_max_speed_gp * frame_time);
         }
         if (1000.0f <= drawbridge_yaw_degrees_gp) {
-            moby->state = 5;
+            moby->state = FADE_AFTER_DRAWBRIDGE_ANIMATION;
             drawbridge_control_vars->fade = -1.0f;
         }
         slot = moby->command;
@@ -280,7 +283,7 @@ void drawbridge_update(Moby *moby) {
             enter_hero_idle_state_for_current_vehicle_mode();
             jet_end_mount(3);
         } else if (1.0f <= drawbridge_control_vars->fade) {
-            moby->state = 6;
+            moby->state = DRAWBRIDGE_COMPLETE;
             help_request(0x1776, 0x2D);
             queue_dialogue_message(0x177C, -1);
             memcard_save_data(0, -1);

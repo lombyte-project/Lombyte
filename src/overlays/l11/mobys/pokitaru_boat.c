@@ -23,6 +23,15 @@
 #include "rnc/camera/follow_cam.h"
 #include "rnc/math/random.h"
 
+enum {
+    POKITARU_BOAT_INITIALIZE = 0,
+    POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1,
+    POKITARU_BOAT_FOLLOW_PATH = 2,
+    POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR = 3,
+    POKITARU_BOAT_RISE_ABOVE_PATH = 4,
+    POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
+};
+
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -90,14 +99,6 @@ void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
 
 /* Moby class 1075 */
 void pokitaru_boat_update(struct Moby *moby) {
-    enum {
-        POKITARU_BOAT_INITIALIZE = 0,
-        POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1,
-        POKITARU_BOAT_FOLLOW_PATH = 2,
-        POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR = 3,
-        POKITARU_BOAT_RISE_ABOVE_PATH = 4,
-        POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
-    };
     struct PokPv *boat_vars = (struct PokPv *)moby->pvars;
     float         start_pos[4];
     float         start_rot[4];
@@ -110,7 +111,7 @@ void pokitaru_boat_update(struct Moby *moby) {
 
     qcopy(start_pos, &moby->pos);
     qcopy(start_rot, &moby->rot);
-    if (moby->state != 0) {
+    if (moby->state != POKITARU_BOAT_INITIALIZE) {
         moby->pos.z = boat_vars->height_e4;
     }
     update_pokitaru_boat_joint_effects(moby);
@@ -138,7 +139,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         boat_vars->path_c4 = path;
         qcopy(&moby->pos, (char *)path + 0x10);
         boat_vars->seg_d4 = 1;
-        moby->state = 1;
+        moby->state = POKITARU_BOAT_WAIT_FOR_ACTIVATION;
         for (part_angle_index = 0; part_angle_index < 4; part_angle_index++) {
             boat_vars->wobble_f0[part_angle_index] = random_angle_radians();
         }
@@ -158,7 +159,7 @@ void pokitaru_boat_update(struct Moby *moby) {
             qcopy(&moby->pos, (char *)path + n * 16 - 16);
             last = (float *)((char *)path + (n - 1) * 16);
             moby->rot.z = fast_arc_tan(last[4] - moby->pos.x, last[5] - moby->pos.y);
-            moby->state = 5;
+            moby->state = POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO;
         }
         break;
     case POKITARU_BOAT_FOLLOW_PATH: {
@@ -229,7 +230,7 @@ void pokitaru_boat_update(struct Moby *moby) {
                 }
                 boat_vars->slot_c8 = -1;
             }
-            moby->state = 3;
+            moby->state = POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR;
         }
         approach_angle(&moby->rot.z,
                        fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y),
@@ -255,9 +256,9 @@ void pokitaru_boat_update(struct Moby *moby) {
         if (is_pokitaru_boat_target_group_clear(moby) != 0) {
             if (boat_vars->flag_b0 != 0) {
                 boat_vars->approach_d0 = 0.0f;
-                moby->state = 4;
+                moby->state = POKITARU_BOAT_RISE_ABOVE_PATH;
             } else {
-                moby->state = 5;
+                moby->state = POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO;
             }
         }
         break;
@@ -270,7 +271,7 @@ void pokitaru_boat_update(struct Moby *moby) {
                                    frame_time_sq,
                                    frame_time);
         if (target[2] + 5.9f <= moby->pos.z) {
-            moby->state = 5;
+            moby->state = POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO;
         }
         break;
     case POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO:
@@ -313,7 +314,7 @@ void pokitaru_boat_update(struct Moby *moby) {
     update_entity_matrix(boat_vars->ctl60, delta, start_rot, &moby->rot);
 }
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void FUN_L00_0026f080(float *, float *, float, float);
 
 struct PartA500 {
@@ -347,29 +348,29 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
         if (!((u8 *)moby_vars)[i * 0x40 + 0x101])
             attach_manipulator(moby, i, &moby_vars->parts[i]);
         step = frame_time * 12.217304f;
-        if (moby->state == 1)
+        if (moby->state == POKITARU_BOAT_WAIT_FOR_ACTIVATION)
             step = frame_time * 2.6179938f;
         if (((u8 *)moby_vars)[i * 0x40 + 0x101]) {
             moby_vars->angle[i] = fast_add_rotations(moby_vars->angle[i], step);
-            FUN_L00_001fff28(moby_vars->parts[i].joint, 0, moby_vars->angle[i]);
+            build_axis_rotation_quaternion(moby_vars->parts[i].joint, 0, moby_vars->angle[i]);
         }
     }
     if (vector_distance_xy(&moby->pos, camera_pos_b358) > 38.0f)
         return;
-    if (moby->state == 1 && (level_frame & 1))
+    if (moby->state == POKITARU_BOAT_WAIT_FOR_ACTIVATION && (level_frame & 1))
         return;
     if (!(moby->pos.z < 224.5f))
         return;
     for (j = 0; j < 4; j++) {
         moby_point_position(moby, j, joint_world_position);
-        iterations_per_joint = moby->state == 1 ? 1 : 2;
+        iterations_per_joint = moby->state == POKITARU_BOAT_WAIT_FOR_ACTIVATION ? 1 : 2;
         for (k = 0; k < iterations_per_joint; k++) {
             pos[0] = joint_world_position[0] + randf_sym(0.0f, 0.3f);
             pos[1] = joint_world_position[1] + randf_sym(0.0f, 0.3f);
             pos[2] = joint_world_position[2] + randf_sym(0.0f, 0.3f);
             heading = fast_add_rotations(moby->rot.z, randf_sym(0.0f, 0.122173049f) + 3.1415927f);
             speed = random_float_between(2.0f, 5.0f) * frame_time;
-            if (moby->state == 1)
+            if (moby->state == POKITARU_BOAT_WAIT_FOR_ACTIVATION)
                 speed *= 0.4f;
             initial_velocity[0] = fast_cos(heading) * speed;
             initial_velocity[1] = fast_sin(heading) * speed;

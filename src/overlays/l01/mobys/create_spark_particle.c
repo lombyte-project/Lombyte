@@ -71,6 +71,9 @@ void create_spark_particle(s32   id,
                            f32   b,
 
                            f32 size) {
+    enum {
+        SPARK_MODE_FROM_KIND = 0xFF
+    };
     Spark     *spark;
     SparkBody *spark_body;
     u128       position_snapshot = *pos;
@@ -85,7 +88,7 @@ void create_spark_particle(s32   id,
     }
     spark_body = &spark->body;
     qcopy(&spark->pos, position_copy_source);
-    if (mode == 0xFF) {
+    if (mode == SPARK_MODE_FROM_KIND) {
         spark->b9 = (kind >> 5) * 16 + truncate_float_to_s32(4.0f);
         if (kind & 1) {
             spark->b3 = 0x48;

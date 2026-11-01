@@ -10,20 +10,23 @@ extern s32 _dispRefImageField(struct MpegDecoder  *mpeg,
                               s32                  arg3);
 
 void _outputFrame(struct MpegDecoder *mpeg, s32 frame_counter, s32 output_enabled) {
+    enum {
+        MPEG_PICTURE_CODING_TYPE_B = 3
+    };
     struct MpegRefImage *frame_image;
     struct MpegRefImage *top_field;
     struct MpegRefImage *bottom_field;
 
     if (output_enabled != 0) {
         if (mpeg->picture_structure == 3) {
-            if (mpeg->picture_coding_type == 3) {
+            if (mpeg->picture_coding_type == MPEG_PICTURE_CODING_TYPE_B) {
                 frame_image = mpeg->ref_images[3];
             } else {
                 frame_image = mpeg->ref_images[0];
             }
             _dispRefImage(mpeg, frame_image, frame_counter - 1);
         } else {
-            if (mpeg->picture_coding_type == 3) {
+            if (mpeg->picture_coding_type == MPEG_PICTURE_CODING_TYPE_B) {
                 top_field = mpeg->ref_images[7];
                 bottom_field = mpeg->ref_images[11];
             } else {

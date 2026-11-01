@@ -20,6 +20,15 @@
 #include "rnc/overlay/l18/hero.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
+enum {
+    STATE_INITIALIZE = 0,
+    STATE_WAIT_FOR_TILT_REQUEST = 1,
+    STATE_WAIT_FOR_SINK_REQUEST = 2,
+    STATE_TILT_DELAY = 3,
+    STATE_WAIT_FOR_SINK_TRIGGER = 4,
+    STATE_SINKING = 5
+};
+
 void update_floating_platform_tilt_and_bob(struct Moby *moby) __asm__("FUN_L18_002d8710");
 
 #include "qcopy.h"
@@ -49,14 +58,6 @@ void floating_platform_update(struct Moby *moby) __asm__("FUN_L18_002d82c0");
 
 /* Moby classes 481, 587, 810 */
 void floating_platform_update(struct Moby *moby) {
-    enum {
-        STATE_INITIALIZE = 0,
-        STATE_WAIT_FOR_TILT_REQUEST = 1,
-        STATE_WAIT_FOR_SINK_REQUEST = 2,
-        STATE_TILT_DELAY = 3,
-        STATE_WAIT_FOR_SINK_TRIGGER = 4,
-        STATE_SINKING = 5
-    };
     char *floating_platform_update_private_vars;
     float delta[4] __attribute__((aligned(16)));
     float old_rot[4] __attribute__((aligned(16)));
@@ -79,9 +80,9 @@ void floating_platform_update(struct Moby *moby) {
         *(int *)(floating_platform_update_private_vars + 0x5C) |= 1;
         *(float *)(floating_platform_update_private_vars + 0x74) = angle;
         if (*(int *)(floating_platform_update_private_vars + 0x88) != 0) {
-            moby->state = 2;
+            moby->state = STATE_WAIT_FOR_SINK_REQUEST;
         } else {
-            moby->state = 1;
+            moby->state = STATE_WAIT_FOR_TILT_REQUEST;
         }
         break;
     case STATE_TILT_DELAY:
@@ -104,7 +105,7 @@ void floating_platform_update(struct Moby *moby) {
             rate = floating_platform_tilt_rate_degrees_config_84_zero_gp * tilt_rate_scale;
         }
         *(float *)(floating_platform_update_private_vars + 0x6C) = rate * DEG_TO_RAD * frame_time;
-        moby->state = 4;
+        moby->state = STATE_WAIT_FOR_SINK_TRIGGER;
         break;
     case STATE_WAIT_FOR_SINK_TRIGGER:
         if (moby->visible != 0 &&
@@ -115,7 +116,7 @@ void floating_platform_update(struct Moby *moby) {
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             *(int *)(floating_platform_update_private_vars + 0x8C) = 0;
-            moby->state = 5;
+            moby->state = STATE_SINKING;
             *(short *)(floating_platform_update_private_vars + 0x92) =
                 allocate_voice_for_target_entry(1, 0, moby);
         }
@@ -124,7 +125,7 @@ void floating_platform_update(struct Moby *moby) {
         }
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) <
             floating_platform_sink_trigger_distance_gp) {
-            moby->state = 5;
+            moby->state = STATE_SINKING;
             *(short *)(floating_platform_update_private_vars + 0x92) =
                 allocate_voice_for_target_entry(1, 0, moby);
         }
@@ -192,13 +193,13 @@ void update_floating_platform_tilt_and_bob(struct Moby *moby) {
     float unclamped_rotation_y =
         fast_add_rotations(moby->rot.y, *(float *)(floating_platform_private_vars + 0x6C));
     moby->rot.y = unclamped_rotation_y;
-    if (moby->state == 5) {
+    if (moby->state == STATE_SINKING) {
         if (unclamped_rotation_y > 0.5235988f) {
             moby->rot.y = 0.5235988f;
         } else if (unclamped_rotation_y < -0.5235988f) {
             moby->rot.y = -0.5235988f;
         }
-    } else if (moby->state == 4) {
+    } else if (moby->state == STATE_WAIT_FOR_SINK_TRIGGER) {
         if (unclamped_rotation_y > 0.08726646f) {
             moby->rot.y = 0.08726646f;
         } else if (unclamped_rotation_y < -0.08726646f) {
@@ -229,11 +230,11 @@ typedef struct {
 int request_floating_platform_sink(Level18State *platform_moby) __asm__("FUN_L18_002d8858");
 
 int request_floating_platform_sink(Level18State *platform_moby) {
-    if (platform_moby->state == 1) {
+    if (platform_moby->state == STATE_WAIT_FOR_TILT_REQUEST) {
         return 1;
     }
-    if (platform_moby->state == 2) {
-        platform_moby->state = 5;
+    if (platform_moby->state == STATE_WAIT_FOR_SINK_REQUEST) {
+        platform_moby->state = STATE_SINKING;
     }
     return 0;
 }
@@ -248,8 +249,8 @@ int request_floating_platform_tilt(struct Moby *platform_moby,
 
                                    int scaled_frame_count) {
     int *platform_vars = (int *)platform_moby->pvars;
-    if (platform_moby->state == 1) {
-        platform_moby->state = 3;
+    if (platform_moby->state == STATE_WAIT_FOR_TILT_REQUEST) {
+        platform_moby->state = STATE_TILT_DELAY;
         platform_vars[0x7C / 4] = tilt_delay_frames;
         platform_vars[0x78 / 4] = scaled_frame_count;
         return 1;
@@ -268,7 +269,8 @@ spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_0
 extern int   FUN_001fa6e0(int, int, float);
 extern short floating_platform_spark_first_vector_length_base_rate_gp __asm__("D_L18_00161A68")
     __attribute__((sda));
-extern short D_L18_00161A6C_gp __asm__("D_L18_00161A6C") __attribute__((sda));
+extern short l18_floating_platform_spark_second_vector_length_base_rate_gp __asm__("D_L18_00161A6C")
+    __attribute__((sda));
 extern short floating_platform_spark_second_vector_downward_z_rate_gp __asm__("D_L18_00161A70")
     __attribute__((sda));
 extern short
@@ -348,7 +350,7 @@ void spawn_floating_platform_sparks(struct Moby *moby) {
         fast_vec_normalize(
             second_spark_vector,
             first_spark_vector,
-            (*(float *)&(D_L18_00161A6C_gp)) *
+            (*(float *)&(l18_floating_platform_spark_second_vector_length_base_rate_gp)) *
                 (random_float_between(
                      -(*(float *)&(
                          floating_platform_spark_vector_length_relative_variation_limit_gp)),

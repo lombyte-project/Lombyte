@@ -42,7 +42,7 @@ void bolt_grabber_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby->state = 1;
+        moby->state = BOLT_GRABBER_WAIT_FOR_PROXIMITY;
         moby->pos.z = moby->pos.z + 1.0f;
         break;
     case BOLT_GRABBER_WAIT_FOR_PROXIMITY:
@@ -50,7 +50,7 @@ void bolt_grabber_update(struct Moby *moby) {
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             start_scene(5);
-            moby->state = 2;
+            moby->state = BOLT_GRABBER_FINALIZE_AND_SAVE;
         }
         break;
     case BOLT_GRABBER_FINALIZE_AND_SAVE:
@@ -59,7 +59,7 @@ void bolt_grabber_update(struct Moby *moby) {
             D_L15_0015F640 = scale_game_frames(0xB4);
             grant_inventory_item(0x22, 1);
             memcard_save_data(0, -1);
-            moby->state = 3;
+            moby->state = BOLT_GRABBER_REMOVE;
         }
         break;
     case BOLT_GRABBER_REMOVE:

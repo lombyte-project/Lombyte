@@ -110,52 +110,63 @@ typedef struct {
 
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
 
-int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
-    float  v[4], w[4], z[4], t[4], u[4];
+int FUN_L00_00261b48(int   segment_path_index,
+                     void *segment_start,
+                     void *segment_end,
+
+                     void *adjusted_endpoint) {
+    float  v[4], perpendicular_xy_axis[4], z[4], previous_path_point_in_basis[4], u[4];
     float  best;
     float  zero;
     int    found = 0;
     int    i = 1;
     int    offset;
-    float *prev;
-    float *cur;
-    fast_vec_sub(v, b, a);
+    float *previous_path_point_slot;
+    float *current_path_point_slot;
+    fast_vec_sub(v, segment_end, segment_start);
     v[2] = 0;
     fast_vec_normalize(v, v, 1.0f / fast_vec_length(v));
-    clear_u64_value(w);
-    w[0] = v[1];
-    w[1] = -v[0];
+    clear_u64_value(perpendicular_xy_axis);
+    perpendicular_xy_axis[0] = v[1];
+    perpendicular_xy_axis[1] = -v[0];
     clear_u64_value(z);
     z[2] = 1.0f;
     best = 1.0f;
-    fast_vec_sub(t, (char *)((SegmentPath **)D_L00_001B04B0_261968)[idx] + 0x10, a);
-    transform_vector_by_basis(t, t, v);
-    prev = t;
-    cur = u;
-    if (i < ((SegmentPath **)D_L00_001B04B0_261968)[idx]->count) {
+    fast_vec_sub(previous_path_point_in_basis,
+                 (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] + 0x10,
+                 segment_start);
+    transform_vector_by_basis(previous_path_point_in_basis, previous_path_point_in_basis, v);
+    previous_path_point_slot = previous_path_point_in_basis;
+    current_path_point_slot = u;
+    if (i < ((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index]->count) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(cur, (char *)((SegmentPath **)D_L00_001B04B0_261968)[idx] + offset, a);
-            transform_vector_by_basis(cur, cur, v);
-            if (t[3] != zero || u[3] != zero) {
-                if (u[1] * t[1] < 0.0f) {
-                    float x = (t[0] - u[0]) / (t[1] - u[1]) * -u[1] + u[0];
+            fast_vec_sub(current_path_point_slot,
+                         (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] +
+                             offset,
+                         segment_start);
+            transform_vector_by_basis(current_path_point_slot, current_path_point_slot, v);
+            if (previous_path_point_in_basis[3] != zero || u[3] != zero) {
+                if (u[1] * previous_path_point_in_basis[1] < 0.0f) {
+                    float x = (previous_path_point_in_basis[0] - u[0]) /
+                                  (previous_path_point_in_basis[1] - u[1]) * -u[1] +
+                              u[0];
                     if (x > 0.0f && x < best) {
                         best = x;
                         found = 1;
-                        qcopy(prev, cur);
+                        qcopy(previous_path_point_slot, current_path_point_slot);
                         goto next;
                     }
                 }
             }
-            qcopy(prev, cur);
+            qcopy(previous_path_point_slot, current_path_point_slot);
         next:
             i++;
             offset += 0x10;
-        } while (i < ((SegmentPath **)D_L00_001B04B0_261968)[idx]->count);
+        } while (i < ((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index]->count);
     }
-    lerp_vector(c, a, b, best);
+    lerp_vector(adjusted_endpoint, segment_start, segment_end, best);
     return found;
 }
 
@@ -345,30 +356,36 @@ void path_sample_at_distance(PointPath *path,
                              f32        spacing) __asm__("FUN_L00_00262360");
 void path_sample_at_distance(
 
-    PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) {
-    Vec4 tmp;
+    PointPath *path,
+    s32       *seg_out,
+    f32       *along,
+    Vec4      *sampled_position,
+    f32        path_distance,
+
+    f32 spacing) {
+    Vec4 sampling_intermediate;
     s32  seg;
 
-    seg = truncate_float_to_s32(dist / spacing);
+    seg = truncate_float_to_s32(path_distance / spacing);
     *seg_out = seg;
     if (seg >= path->count - 1) {
         *seg_out = path->count - 1;
         *along = 0.0f;
-        out->q = (path->points + *seg_out)->q;
+        sampled_position->q = (path->points + *seg_out)->q;
         return;
     }
     if (seg < 0) {
         *seg_out = 0;
         *along = 0.0f;
-        out->q = (path->points + *seg_out)->q;
+        sampled_position->q = (path->points + *seg_out)->q;
         return;
     }
-    *along = dist - convert_integer_to_float(seg) * spacing;
-    fast_vec_sub(&tmp, &path->points[*seg_out + 1], &path->points[*seg_out]);
-    out->q = tmp.q;
-    fast_vec_normalize(out, out, *along);
-    fast_vec_add(&tmp, out, &path->points[*seg_out]);
-    out->q = tmp.q;
+    *along = path_distance - convert_integer_to_float(seg) * spacing;
+    fast_vec_sub(&sampling_intermediate, &path->points[*seg_out + 1], &path->points[*seg_out]);
+    sampled_position->q = sampling_intermediate.q;
+    fast_vec_normalize(sampled_position, sampled_position, *along);
+    fast_vec_add(&sampling_intermediate, sampled_position, &path->points[*seg_out]);
+    sampled_position->q = sampling_intermediate.q;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */

@@ -11,6 +11,16 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
+enum {
+    PSYTCOPUS_STATE_INITIALIZE = 0,
+    PSYTCOPUS_STATE_FACE_PLAYER = 3,
+    PSYTCOPUS_STATE_CREATE_PROJECTILE = 4,
+    PSYTCOPUS_STATE_FIRE_PROJECTILE = 5,
+    PSYTCOPUS_STATE_ATTACK_RECOVERY = 6,
+    PSYTCOPUS_STATE_KNOCKBACK = 7,
+    PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
+};
+
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -109,15 +119,6 @@ void psytcopus_update(struct Moby *m) __asm__("FUN_L11_00310180");
 
 /* Moby class 1231 */
 void psytcopus_update(struct Moby *psytcopus) {
-    enum {
-        PSYTCOPUS_STATE_INITIALIZE = 0,
-        PSYTCOPUS_STATE_FACE_PLAYER = 3,
-        PSYTCOPUS_STATE_CREATE_PROJECTILE = 4,
-        PSYTCOPUS_STATE_FIRE_PROJECTILE = 5,
-        PSYTCOPUS_STATE_ATTACK_RECOVERY = 6,
-        PSYTCOPUS_STATE_KNOCKBACK = 7,
-        PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
-    };
     struct PokiPathVars *psytcopus_vars = (struct PokiPathVars *)psytcopus->pvars;
     struct Moby         *target;
     Vec4f                projectile_vector_scratch;
@@ -140,7 +141,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         psytcopus_vars->unk2A = 6;
         psytcopus_vars->unk58 = truncate_float_to_s32(8.0f);
         psytcopus_vars->unk5A = truncate_float_to_s32(8.0f);
-        psytcopus->state = 3;
+        psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
         if (psytcopus->prev_seq != 0) {
             blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
         }
@@ -149,7 +150,7 @@ void psytcopus_update(struct Moby *psytcopus) {
             qcopy(&psytcopus->pos, (char *)(s32 *)l11_paths[psytcopus_vars->unk134] + 0x10);
             break;
         }
-        psytcopus->state = 3;
+        psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
         if (psytcopus->prev_seq != 0) {
             blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
         }
@@ -166,7 +167,7 @@ void psytcopus_update(struct Moby *psytcopus) {
                        frame_time * 6.2831855f);
     }
         if (psytcopus_vars->unk114 != 2) {
-            psytcopus->state = 4;
+            psytcopus->state = PSYTCOPUS_STATE_CREATE_PROJECTILE;
             if (psytcopus->prev_seq != 2) {
                 blend_moby_animation(psytcopus, 2, 0, scale_game_frames(10));
             }
@@ -193,7 +194,7 @@ void psytcopus_update(struct Moby *psytcopus) {
             break;
         }
         if (psytcopus->anim_flags & 2) {
-            psytcopus->state = 5;
+            psytcopus->state = PSYTCOPUS_STATE_FIRE_PROJECTILE;
             if (psytcopus->prev_seq != 3) {
                 blend_moby_animation(psytcopus, 3, 0, scale_game_frames(10));
             }
@@ -217,7 +218,7 @@ void psytcopus_update(struct Moby *psytcopus) {
             psytcopus_vars->unk160 = 0;
         }
         if (psytcopus->anim_flags & 2) {
-            psytcopus->state = 6;
+            psytcopus->state = PSYTCOPUS_STATE_ATTACK_RECOVERY;
             if (psytcopus->prev_seq != 4) {
                 blend_moby_animation(psytcopus, 4, 0, scale_game_frames(10));
             }
@@ -225,7 +226,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         break;
     case PSYTCOPUS_STATE_ATTACK_RECOVERY:
         if (psytcopus->anim_flags & 2) {
-            psytcopus->state = 3;
+            psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
             if (psytcopus->prev_seq != 0) {
                 blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
             }
@@ -236,7 +237,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         if (knockback_result_flags & 0x41) {
             path = (s32 *)l11_paths[psytcopus_vars->unk13C];
             if (FUN_L00_00259740_p(&psytcopus->pos, path + 4, *path) != 0) {
-                psytcopus->state = 3;
+                psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
                 if (psytcopus->prev_seq != 0) {
                     blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
                 }
@@ -304,7 +305,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
     psytcopus_hit_record = find_moby_hit(psytcopus, 0x330000, 0);
     hit_reaction = resolve_moby_hit_response(
         psytcopus, psytcopus_hit_record, &psytcopus_vars->health, 0, &hits, &damage, 0, 4);
-    if (hits != 1 && psytcopus->state != 8) {
+    if (hits != 1 && psytcopus->state != PSYTCOPUS_STATE_DEATH_KNOCKBACK) {
         psytcopus_vars->health -= damage;
         if (psytcopus_vars->health <= 0.0f) {
             hit_reaction = 1;
@@ -343,7 +344,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
                                &psytcopus_vars->unk88,
                                &psytcopus_vars->unk8C);
             FUN_L00_0025c558_p(psytcopus, psytcopus_vars->unk70, 5, 1, 0, angle1);
-            psytcopus->state = 7;
+            psytcopus->state = PSYTCOPUS_STATE_KNOCKBACK;
             psytcopus_vars->unk67 = 0x78;
             if (psytcopus_vars->unk160 != 0) {
                 FUN_L00_002371e0_p(psytcopus_vars->unk160);
@@ -369,7 +370,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
                                &psytcopus_vars->unk88,
                                &psytcopus_vars->unk8C);
             FUN_L00_0025c558_p(psytcopus, psytcopus_vars->unk70, 6, 1, 0, angle2);
-            psytcopus->state = 8;
+            psytcopus->state = PSYTCOPUS_STATE_DEATH_KNOCKBACK;
             psytcopus_vars->unk67 = 0xF0;
             if (psytcopus_vars->unk160 != 0) {
                 FUN_L00_002371e0_p(psytcopus_vars->unk160);

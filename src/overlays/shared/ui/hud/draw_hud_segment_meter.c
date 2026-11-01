@@ -11,20 +11,22 @@
 #include "rnc/ui/hud.h"
 
 extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
-extern s32 D_L06_0015F8E8 __attribute__((sda));
-extern f32 D_L06_0015F8F0 __attribute__((sda));
-extern f32 D_L06_0015F8F4 __attribute__((sda));
+extern s32 l06_hud_segment_meter_center_x __asm__("D_L06_0015F8E8") __attribute__((sda));
+extern f32 l06_hud_segment_meter_last_segment_fill_scale __asm__("D_L06_0015F8F0")
+    __attribute__((sda));
+extern f32 l06_hud_segment_meter_first_segment_fill_scale __asm__("D_L06_0015F8F4")
+    __attribute__((sda));
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 
 s32 draw_hud_segment_meter(u8 *p) __asm__("FUN_L06_00249738");
 
-s32 draw_hud_segment_meter(u8 *p) {
+s32 draw_hud_segment_meter(u8 *meter_state) {
     s32 y;
     s32 ntsc_y;
     s32 level;
     s32 segments = 3;
     s32 x, start_x, inner, i, color, remaining, tile_count, k;
-    s32 center_x = D_L06_0015F8E8;
+    s32 center_x = l06_hud_segment_meter_center_x;
     f32 alpha, scaled_alpha, fill, step, limit;
 
     /* Fakematch: computing this row before the default one gives retail's order. */
@@ -37,15 +39,15 @@ s32 draw_hud_segment_meter(u8 *p) {
         segments = 6;
     if (level == 18)
         segments = 7;
-    if (p[0x70] == 0)
-        return *(s32 *)(p + 0x58);
+    if (meter_state[0x70] == 0)
+        return *(s32 *)(meter_state + 0x58);
     {
         if (level == 13) {
             y = 18;
-            if (pal_mode != 0)
+            if (pal_mode != FALSE)
                 y = 10;
         }
-        alpha = convert_integer_to_float(p[0x70]) * 0.125f;
+        alpha = convert_integer_to_float(meter_state[0x70]) * 0.125f;
         if (alpha > 1.0f)
             alpha = 1.0f;
         else if (alpha < 0.0f)
@@ -62,17 +64,18 @@ s32 draw_hud_segment_meter(u8 *p) {
         }
         x = 0;
         color = 0x800000ff;
-        if (*(s32 *)(p + 0x74) != 0) {
-            fill = (f32) * (s32 *)(p + 0x74) / convert_integer_to_float(*(s32 *)(p + 8));
+        if (*(s32 *)(meter_state + 0x74) != 0) {
+            fill = (f32) * (s32 *)(meter_state + 0x74) /
+                   convert_integer_to_float(*(s32 *)(meter_state + 8));
             step = 1.0f / convert_integer_to_float(segments);
             limit = remaining * step;
             if (limit < fill) {
                 fill -= limit;
-                fill *= D_L06_0015F8F0;
+                fill *= l06_hud_segment_meter_last_segment_fill_scale;
                 fill += limit;
             } else if (fill < step) {
                 fill -= step;
-                fill *= D_L06_0015F8F4;
+                fill *= l06_hud_segment_meter_first_segment_fill_scale;
                 fill += step;
             }
             x = truncate_float_to_s32((f32)(segments << 5) * fill);
@@ -97,7 +100,7 @@ s32 draw_hud_segment_meter(u8 *p) {
         draw_hud_sprite(get_icon_frame(0x7562, 4), segments, y - 8, 48, 48, i);
         draw_hud_sprite(get_icon_frame(0x7562, 0), segments, y - 8, 48, 48, i);
     }
-    return *(s32 *)(p + 0x58);
+    return *(s32 *)(meter_state + 0x58);
 }
 
 s32 D_L07_0015F8E8 = 0x114;

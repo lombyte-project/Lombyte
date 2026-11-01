@@ -42,6 +42,9 @@ extern void    *memset(void *, s32, u32);
 extern void    *memcpy(void *, const void *, u32);
 
 s32 scePad2CreateSocket(Pad2SocketParam *param, void *addr) {
+    enum {
+        DBC_SOCKET_TYPE_PAD2 = 1
+    };
     DbcSocketParam dbc;
     Pad2Side      *side;
     s32            socket;
@@ -63,7 +66,7 @@ s32 scePad2CreateSocket(Pad2SocketParam *param, void *addr) {
         dbc.number = 0;
         dbc.name[0] = 0;
     }
-    dbc.type = 1;
+    dbc.type = DBC_SOCKET_TYPE_PAD2;
     dbc.option |= 1;
     socket = sceDbcCreateSocket(&dbc, addr, (u8 *)addr + 128);
     if (socket < 0) {

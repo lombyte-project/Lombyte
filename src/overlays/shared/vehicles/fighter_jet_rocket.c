@@ -34,13 +34,16 @@ unsigned char *spawn_fighter_jet_rocket(struct Moby *firing_moby,
                                         int          lifetime_frames,
 
                                         float scale) {
+    enum {
+        FIGHTER_JET_ROCKET_STATE_INITIAL = 0
+    };
     unsigned char *moby = create_moby(0x127);
     if (moby != 0) {
         char *rocket_private_state = ((char *)MOBY(moby)->pvars);
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;
-        MOBY(moby)->state = 0;
+        MOBY(moby)->state = FIGHTER_JET_ROCKET_STATE_INITIAL;
         *(char **)(rocket_private_state + 0x20) = firing_moby;
         *(char **)(rocket_private_state + 0x24) = target;
         qcopy(&MOBY(moby)->pos, spawn_position);
@@ -111,10 +114,9 @@ typedef struct Tex {
     unsigned char *p5C;
 } Tex;
 
-extern float D_0015ED6C;
-extern int   collision_line() __asm__("FUN_001efa68");
-extern int   FUN_L00_0024f7c8();
-float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv);
+extern float          D_0015ED6C;
+extern int            collision_line() __asm__("FUN_001efa68");
+extern int            FUN_L00_0024f7c8();
 unsigned char        *spawn_particle(void  *pos,
                                      float *vec,
                                      int    s,

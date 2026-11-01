@@ -96,9 +96,9 @@ void elevator_update(L16PlatformMoby *moby) {
                 level02_elevator_stop_height_offset_gp;
             moby->reverse = 1;
             if (elevator_vars->stop) {
-                moby->state = 2;
+                moby->state = ELEVATOR_WAIT_AT_STOP;
             } else {
-                moby->state = 1;
+                moby->state = ELEVATOR_WAIT_FOR_RIDER_OR_TRIGGER;
             }
             break;
         case ELEVATOR_WAIT_AT_STOP:
@@ -124,7 +124,7 @@ void elevator_update(L16PlatformMoby *moby) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     elevator_vars->goal = motion.v[2];
                     elevator_vars->speed = 0.0f;
-                    moby->state = 3;
+                    moby->state = ELEVATOR_MOVE_TO_GOAL;
                     break;
                 }
             }
@@ -144,7 +144,7 @@ void elevator_update(L16PlatformMoby *moby) {
                                                  elevator_vars->joint * 0x80 + 0x38) +
                                       level02_elevator_stop_height_offset_gp;
                 elevator_vars->speed = 0.0f;
-                moby->state = 3;
+                moby->state = ELEVATOR_MOVE_TO_GOAL;
             }
             break;
         case ELEVATOR_WAIT_FOR_RIDER_OR_TRIGGER:
@@ -164,7 +164,7 @@ void elevator_update(L16PlatformMoby *moby) {
                                                  elevator_vars->joint * 0x80 + 0x38) +
                                       level02_elevator_stop_height_offset_gp;
                 elevator_vars->speed = 0.0f;
-                moby->state = 3;
+                moby->state = ELEVATOR_MOVE_TO_GOAL;
             }
             break;
         case ELEVATOR_MOVE_TO_GOAL: {
@@ -205,7 +205,7 @@ void elevator_update(L16PlatformMoby *moby) {
             if (moby->position[2] == elevator_vars->goal &&
                 (hero.ground_moby != (struct Moby *)moby || hero.air_frames.s != 0)) {
                 clear_u64_value(elevator_vars->basis[1]);
-                moby->state = 2;
+                moby->state = ELEVATOR_WAIT_AT_STOP;
                 break;
             }
             if (elevator_vars->speed != 0.0f) {

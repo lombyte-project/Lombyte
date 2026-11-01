@@ -57,7 +57,7 @@ extern float                    D_0015ED6C;
 extern float                    D_L02_0015F3FC;
 
 extern int            func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *func_L00_00273E08_ea8b0(
+extern unsigned char *spawn_timed_hero_relative_particle(
     void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
 
@@ -65,17 +65,24 @@ void tresspasser_update(struct Moby *moby) __asm__("FUN_L02_002ea210");
 
 /* Moby classes 1005, 1016 */
 void tresspasser_update(struct Moby *moby) {
-    char *data;
+    enum {
+        GADGET_PICKUP_STATE_INITIALIZE = 0,
+        GADGET_PICKUP_STATE_WAIT_FOR_PLAYER = 1,
+        GADGET_PICKUP_STATE_GRANT_ITEM = 3,
+        GADGET_PICKUP_STATE_CAMERA_SEQUENCE = 4,
+        GADGET_PICKUP_STATE_SAVE_AND_REMOVE = 5
+    };
+    char *gadget_pickup_state;
     int   which;
     int   frames;
     float angle;
     float ground_offset;
-    data = (char *)moby->pvars;
+    gadget_pickup_state = (char *)moby->pvars;
     frames = scale_game_frames(60);
     angle = 3.14159274f / (float)frames;
     which = moby->oclass == 0x3ED ? 0x1A : 0x16;
     switch (moby->state) {
-    case 0:
+    case GADGET_PICKUP_STATE_INITIALIZE:
         FUN_L02_002ea7d0_c(moby);
         ground_offset = 0.2f;
         if (items_acquired[which] == 0) {
@@ -83,12 +90,12 @@ void tresspasser_update(struct Moby *moby) {
             *(float *)((char *)moby + 0x40) = 1.57079637f;
             *(float *)((char *)moby + 0x44) = 3.14159274f;
             moby->pos.z = D_L02_00174468 + ground_offset;
-            moby->state = 1;
+            moby->state = GADGET_PICKUP_STATE_WAIT_FOR_PLAYER;
             return;
         }
         mark_moby_for_removal(moby);
         return;
-    case 1:
+    case GADGET_PICKUP_STATE_WAIT_FOR_PLAYER:
         moby->rot.z = fast_add_rotations(moby->rot.z, angle);
         FUN_L02_002ea8b0_c(moby);
         if (D_L02_0015F5CC % 10 != 0)
@@ -96,7 +103,7 @@ void tresspasser_update(struct Moby *moby) {
         if (!(vector_distance_xy(&moby->pos, D_0013F3D0) < 1.0f))
             return;
         if (absolute_float(moby->pos.z - *(float *)(D_0013F3D0 + 8)) < 2.0f) {
-            moby->state = 3;
+            moby->state = GADGET_PICKUP_STATE_GRANT_ITEM;
             moby->flags |= 1;
             moby->visible = 0;
             moby->collision = 0;
@@ -107,7 +114,7 @@ void tresspasser_update(struct Moby *moby) {
             }
         }
         return;
-    case 3:
+    case GADGET_PICKUP_STATE_GRANT_ITEM:
         if (level_game_mode == 2)
             return;
         if (D_001413F4 != 0) {
@@ -125,14 +132,14 @@ void tresspasser_update(struct Moby *moby) {
             clear_active_help_record();
             help_request(0x7D9, 0x13);
             D_L02_0015F3FC = 1.0f;
-            moby->state = 4;
+            moby->state = GADGET_PICKUP_STATE_CAMERA_SEQUENCE;
             set_race_camera(D_0013F3D0, D_0013F3D0 + 16, 0x72, 1);
             return;
         }
         memcard_save_data(0, -1);
         mark_moby_for_removal(moby);
         return;
-    case 4: {
+    case GADGET_PICKUP_STATE_CAMERA_SEQUENCE: {
         float a[4] __attribute__((aligned(16))), b[4] __attribute__((aligned(16))),
             c[4] __attribute__((aligned(16))), d[4] __attribute__((aligned(16)));
         float position[4] __attribute__((aligned(16)));
@@ -158,20 +165,21 @@ void tresspasser_update(struct Moby *moby) {
                                    D_0015ED70 * 0.15f,
                                    D_0015ED70 * 0.15f,
                                    D_0015ED6C * 0.15f,
-                                   data + 0x40,
-                                   data + 0x44);
-        lerp_vector(position, (void *)a, (void *)b, *(float *)(data + 0x40));
-        output[2] =
-            fast_add_rotations(fast_subtract_rotations(d[2], c[2]) * *(float *)(data + 0x40), c[2]);
-        output[1] =
-            fast_add_rotations(fast_subtract_rotations(d[1], c[1]) * *(float *)(data + 0x40), c[1]);
-        output[0] =
-            fast_add_rotations(fast_subtract_rotations(d[0], c[0]) * *(float *)(data + 0x40), c[0]);
+                                   gadget_pickup_state + 0x40,
+                                   gadget_pickup_state + 0x44);
+        lerp_vector(position, (void *)a, (void *)b, *(float *)(gadget_pickup_state + 0x40));
+        output[2] = fast_add_rotations(
+            fast_subtract_rotations(d[2], c[2]) * *(float *)(gadget_pickup_state + 0x40), c[2]);
+        output[1] = fast_add_rotations(
+            fast_subtract_rotations(d[1], c[1]) * *(float *)(gadget_pickup_state + 0x40), c[1]);
+        output[0] = fast_add_rotations(
+            fast_subtract_rotations(d[0], c[0]) * *(float *)(gadget_pickup_state + 0x40), c[0]);
         if (D_L02_00167400 && *(short *)(D_L02_00167400 + 0x86) != 5)
             jet_mount(position, output, 1, 0, 0);
         set_camera_position(position);
         set_camera_rotation(output);
-        if (D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1 && 0.2f < *(float *)(data + 0x40)) {
+        if (D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1 &&
+            0.2f < *(float *)(gadget_pickup_state + 0x40)) {
             approach_value(1.0f, frame_time * 4.0f, &D_L02_0015F3FC);
         } else {
             approach_value(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
@@ -180,10 +188,10 @@ void tresspasser_update(struct Moby *moby) {
             return;
         set_race_camera(D_0013F3D0, D_0013F3D0 + 16, 0, 0);
         jet_end_mount(0);
-        moby->state = 5;
+        moby->state = GADGET_PICKUP_STATE_SAVE_AND_REMOVE;
         return;
     }
-    case 5:
+    case GADGET_PICKUP_STATE_SAVE_AND_REMOVE:
         approach_value(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
         if (D_L02_0015F3FC == 0.0f) {
             memcard_save_data(0, -1);
@@ -251,14 +259,14 @@ void update_collectible_sprite_effect(char *moby) {
         timer_elapsed_fraction = timer_elapsed_fraction / (float)scale_game_frames(0xFF);
         col = func_001FA8A8_2ebce8_ea8b0(
             0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_elapsed_fraction));
-        func_L00_00273E08_ea8b0(d,
-                                col,
-                                truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
-                                0x35,
-                                1,
-                                2,
-                                0,
-                                sprite_data->d[i]);
+        spawn_timed_hero_relative_particle(d,
+                                           col,
+                                           truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
+                                           0x35,
+                                           1,
+                                           2,
+                                           0,
+                                           sprite_data->d[i]);
         fast_vec_add(d, d, sprite_position_step);
     }
 }

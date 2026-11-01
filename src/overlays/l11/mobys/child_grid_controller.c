@@ -83,19 +83,19 @@ void child_grid_controller_update(struct Moby *grid_controller) {
             }
         }
         grid_controller_vars->t = 0.0f;
-        grid_controller->state = 1;
+        grid_controller->state = CHILD_GRID_STATE_WAIT_LINK_COMMAND;
         break;
     case CHILD_GRID_STATE_WAIT_LINK_COMMAND: {
         struct Moby *link =
             (struct Moby *)((grid_controller_vars->link << 8) + D_L11_0015FFD8_d800);
         if (link->command == 1) {
-            grid_controller->state = 2;
+            grid_controller->state = CHILD_GRID_STATE_FADE_TO_POINT_POSE;
             grid_controller_vars->fade = -1.0f;
             D_L11_00161F54 = 0;
             allocate_voice_for_target_entry(0, 0, grid_controller);
         } else if (link->command == 2) {
             grid_controller_vars->t = 1.0f;
-            grid_controller->state = 5;
+            grid_controller->state = CHILD_GRID_STATE_IDLE;
         }
         break;
     }
@@ -111,7 +111,7 @@ void child_grid_controller_update(struct Moby *grid_controller) {
             source_pose_point = (char *)((int)l11_cuboids + (grid_controller_vars->from << 7));
             jet_mount(source_pose_point + 0x30, source_pose_point + 0x70, 1, 0, 0);
         } else if (1.0f <= grid_controller_vars->fade) {
-            grid_controller->state = 3;
+            grid_controller->state = CHILD_GRID_STATE_BLEND_POINT_POSES;
         }
         break;
     case CHILD_GRID_STATE_BLEND_POINT_POSES:
@@ -148,7 +148,7 @@ void child_grid_controller_update(struct Moby *grid_controller) {
         set_camera_position(&pos);
         set_camera_rotation(&rot);
         if (1.0f <= grid_controller_vars->t) {
-            grid_controller->state = 4;
+            grid_controller->state = CHILD_GRID_STATE_FADE_TO_HERO_POSE;
             grid_controller_vars->fade = -1.0f;
         }
         break;
@@ -160,7 +160,7 @@ void child_grid_controller_update(struct Moby *grid_controller) {
             set_race_camera(&hero.motion.pos, &hero.motion.rot, 0, 1);
             jet_end_mount(3);
         } else if (1.0f <= grid_controller_vars->fade) {
-            grid_controller->state = 5;
+            grid_controller->state = CHILD_GRID_STATE_IDLE;
         }
         break;
     case CHILD_GRID_STATE_IDLE:

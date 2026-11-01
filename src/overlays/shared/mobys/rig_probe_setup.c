@@ -28,6 +28,11 @@ int rig_probe_setup(
     float        *radius,
 
     float *distance) {
+    enum {
+        RIG_PROBE_SINGLE_JOINT = 2,
+        RIG_PROBE_LOCAL_POSITION_WITH_DISTANCE = 3,
+        RIG_PROBE_JOINT_PAIR = 4
+    };
     char         *probe_entry;
     float         scale;
     u128          matrix[4];
@@ -44,19 +49,19 @@ int rig_probe_setup(
     scale = MOBY(moby)->scale * 0.0009765625f;
     euler_rotation_matrix(matrix, moby + 0x40);
 
-    if (*type < 2 || *type == 3) {
+    if (*type < RIG_PROBE_SINGLE_JOINT || *type == RIG_PROBE_LOCAL_POSITION_WITH_DISTANCE) {
         qcopy(probe_position, probe_entry + 0x10);
         fast_vec_scale(probe_position, probe_position, scale);
         transform_vector(probe_position, probe_position, matrix);
         fast_vec_add(probe_position, probe_position, &MOBY(moby)->pos);
         *radius = probe_position[3] * scale;
-        if (*type < 2) {
+        if (*type < RIG_PROBE_SINGLE_JOINT) {
             *distance = 0.0f;
         } else {
             *distance = *(float *)(probe_entry + 4) * scale;
         }
         return 1;
-    } else if (*type == 2) {
+    } else if (*type == RIG_PROBE_SINGLE_JOINT) {
         short joint = *(short *)(*(char **)(moby + 0x94) + 2);
         if (joint != 0) {
             compute_moby_joint_matrices(moby, joint, 0);
@@ -68,7 +73,7 @@ int rig_probe_setup(
         *radius = *(float *)(probe_entry + 0xc) * scale;
         *distance = 0.0f;
         return 1;
-    } else if (*type == 4) {
+    } else if (*type == RIG_PROBE_JOINT_PAIR) {
         short joint = *(short *)(*(char **)(moby + 0x94) + 2);
         if (joint != 0) {
             compute_moby_joint_matrices(moby, joint, 0);

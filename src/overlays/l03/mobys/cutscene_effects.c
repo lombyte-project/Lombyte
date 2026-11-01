@@ -37,7 +37,7 @@ void kerwan_cutscene_effects_update(struct Moby *owner_moby) {
     switch (owner_moby->state) {
     case CUTSCENE_EFFECTS_INITIALIZE:
         owner_moby->update_dist = 0xFF;
-        owner_moby->state = 1;
+        owner_moby->state = CUTSCENE_EFFECTS_UPDATE;
         break;
     case CUTSCENE_EFFECTS_UPDATE:
         if (D_L03_0015F5C4 != 2)

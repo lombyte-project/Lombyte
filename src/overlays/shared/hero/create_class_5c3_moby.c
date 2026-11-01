@@ -18,6 +18,9 @@ char *create_class_5c3_moby(int   source_item_moby,
                             float initial_rotation_z,
 
                             float initial_rotation_y) {
+    enum {
+        CLASS_5C3_STATE_INITIAL = 0
+    };
     char *moby = (char *)create_moby(0x5C3);
     if (moby != 0) {
         char *moby_vars = ((char *)MOBY(moby)->pvars);
@@ -26,7 +29,7 @@ char *create_class_5c3_moby(int   source_item_moby,
         MOBY(moby)->visible = 1;
         MOBY(moby)->rot.z = initial_rotation_z;
         MOBY(moby)->rot.y = initial_rotation_y;
-        MOBY(moby)->state = 0;
+        MOBY(moby)->state = CLASS_5C3_STATE_INITIAL;
         *(int *)moby_vars = source_item_moby;
         qcopy(&MOBY(moby)->pos, initial_position);
         *(float *)(moby_vars + 0x10) = frame_time * 30.0f * 0.7f;

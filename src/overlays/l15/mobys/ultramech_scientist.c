@@ -115,6 +115,9 @@ void ultramech_scientist_update(struct Moby *moby) {
         ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE = 7,
         ULTRAMECH_SCIENTIST_SAVE_AND_DISABLE = 8
     };
+    enum {
+        ULTRAMECH_SCIENTIST_DISABLED = 9
+    };
     UltramechScientistVars *ultramech_scientist_private_data;
     char                   *hero_pos;
     struct Moby            *moby_list_cursor;
@@ -134,7 +137,7 @@ void ultramech_scientist_update(struct Moby *moby) {
                 0x41;
         }
     }
-    if (moby->state == 9) {
+    if (moby->state == ULTRAMECH_SCIENTIST_DISABLED) {
         moby->update_dist = 0;
         moby->collision = 0;
         moby->flags |= 0x41;
@@ -151,7 +154,7 @@ void ultramech_scientist_update(struct Moby *moby) {
 
     switch (moby->state) {
     case ULTRAMECH_SCIENTIST_INITIALIZE:
-        moby->state = 1;
+        moby->state = ULTRAMECH_SCIENTIST_WAIT_FOR_DIALOGUE;
         moby->update_dist = 0xFF;
         ultramech_scientist_private_data->unkC = 20.0f;
         initialize_npc_dialogue(moby, ultramech_scientist_private_data);
@@ -160,10 +163,10 @@ void ultramech_scientist_update(struct Moby *moby) {
             break;
         }
         if (level_available[16] != 0) {
-            moby->state = 9;
+            moby->state = ULTRAMECH_SCIENTIST_DISABLED;
             break;
         }
-        moby->state = 3;
+        moby->state = ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_CONDITIONS;
         moby_list_cursor = (struct Moby *)D_L15_0015FFE4;
         if (moby_list_cursor == 0) {
             break;
@@ -206,7 +209,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         }
         jet_clear_persistent(ultramech_scientist_private_data->unk280);
         moby->anim_speed = 0.0f;
-        moby->state = 2;
+        moby->state = ULTRAMECH_SCIENTIST_RESUME_AFTER_DIALOGUE;
         moby_list_cursor = (struct Moby *)D_L15_0015FFE4;
         if (moby_list_cursor == 0) {
             break;
@@ -245,9 +248,9 @@ void ultramech_scientist_update(struct Moby *moby) {
                 FUN_L00_00284e50(paths + (ultramech_scientist_private_data->unk150 << 7) + 0x30,
                                  paths + (ultramech_scientist_private_data->unk150 << 7) + 0x70);
             }
-            moby->state = 3;
+            moby->state = ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_CONDITIONS;
         } else {
-            moby->state = 9;
+            moby->state = ULTRAMECH_SCIENTIST_DISABLED;
         }
         break;
     case ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_CONDITIONS: {
@@ -275,7 +278,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         if (count_active_moby_group_members(ultramech_scientist_private_data->unk148, 0x40) != 0) {
             break;
         }
-        moby->state = 4;
+        moby->state = ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_DELAY;
         ultramech_scientist_private_data->timer_15C = scale_game_frames(120);
         break;
     case ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_DELAY:
@@ -302,31 +305,31 @@ void ultramech_scientist_update(struct Moby *moby) {
             FUN_L00_00284e50(paths_again + (ultramech_scientist_private_data->unk154 << 7) + 0x30,
                              paths_again + (ultramech_scientist_private_data->unk154 << 7) + 0x70);
         }
-        moby->state = 5;
+        moby->state = ULTRAMECH_SCIENTIST_START_FIRST_SCENE;
         break;
     case ULTRAMECH_SCIENTIST_START_FIRST_SCENE:
         start_scene(1);
-        moby->state = 6;
+        moby->state = ULTRAMECH_SCIENTIST_WAIT_FOR_FIRST_SCENE;
         break;
     case ULTRAMECH_SCIENTIST_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 == 2) {
             break;
         }
         queue_scene_movie_with_game_language(0x10);
-        moby->state = 7;
+        moby->state = ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE;
         break;
     case ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             queue_planet_unlock_message(0x10);
             start_scene(2);
-            moby->state = 8;
+            moby->state = ULTRAMECH_SCIENTIST_SAVE_AND_DISABLE;
         }
         memcard_save_data(0, -1);
-        moby->state = 9;
+        moby->state = ULTRAMECH_SCIENTIST_DISABLED;
         break;
     case ULTRAMECH_SCIENTIST_SAVE_AND_DISABLE:
         memcard_save_data(0, -1);
-        moby->state = 9;
+        moby->state = ULTRAMECH_SCIENTIST_DISABLED;
         break;
     default:
         break;

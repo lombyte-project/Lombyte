@@ -103,10 +103,10 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
     Vec_2D3608   direction, aim, launch, origin_copy, endpoint;
     Moby_2D3608 *target;
     float       *output;
-    float        value, distance, heading, vertical, pitch, length, fall_time;
-    int          hit;
-    float        range;
-    float       *anchor_ptr = anchor;
+    float  aim_slope_or_extension_scale, distance, heading, vertical, pitch, length, fall_time;
+    int    hit;
+    float  range;
+    float *anchor_ptr = anchor;
 
     *(u128_2D3608 *)anchor_ptr = *(u128_2D3608 *)position;
     copy_matrix3x4(rotation, l00_camera.unk0);
@@ -153,15 +153,16 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
             {
                 float rise = launch[2];
                 if (length != 0.0f) {
-                    value = rise / length;
+                    aim_slope_or_extension_scale = rise / length;
                 } else {
-                    value = rise / 0.00999999978f;
+                    aim_slope_or_extension_scale = rise / 0.00999999978f;
                 }
             }
             fall_time =
                 square_root(D_0015ED70 * 9.0f * ((controller_state.held & 5) ? 3.5f : 2.5f) * 0.5f);
-            distance = (fall_time + fall_time) * fall_time * (1.0f - value) / (D_0015ED70 * 9.0f);
-            vertical = value * distance;
+            distance = (fall_time + fall_time) * fall_time * (1.0f - aim_slope_or_extension_scale) /
+                       (D_0015ED70 * 9.0f);
+            vertical = aim_slope_or_extension_scale * distance;
             if (0.0f < distance) {
                 launch[0] = func_001F9F90_2D3608(heading) * distance;
                 launch[1] = func_001F9FA8_2D3608(heading) * distance;
@@ -175,10 +176,12 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
                     heading = fast_arc_tan(aim[0] - anchor_ptr[0], aim[1] - anchor_ptr[1]);
                 }
                 if (hit == 0) {
-                    value = 5.0f;
-                    aim[0] = func_001F9F90_2D3608(heading) * distance * value;
-                    aim[1] = func_001F9FA8_2D3608(heading) * distance * value;
-                    aim[2] = vertical * value;
+                    aim_slope_or_extension_scale = 5.0f;
+                    aim[0] =
+                        func_001F9F90_2D3608(heading) * distance * aim_slope_or_extension_scale;
+                    aim[1] =
+                        func_001F9FA8_2D3608(heading) * distance * aim_slope_or_extension_scale;
+                    aim[2] = vertical * aim_slope_or_extension_scale;
                     fast_vec_add(aim, aim, g_debug_camera.position);
                 }
             }
@@ -275,7 +278,7 @@ target_valid:
 L3D10:
     allocate_hero_voice_for_entry(0x1A, 0);
     use_ammo(-1, 1);
-    MOBY(moby)->state = 3;
+    MOBY(moby)->state = DECOY_GLOVE_RELEASE_DECOY;
 L3D34:
     *(u128_D3B20 *)&loc = *(u128_D3B20 *)(&glove_vars->unk40);
     decoy_glove_aim_throw((int)moby, (void *)glove_vars, (float *)&loc);
@@ -284,12 +287,12 @@ L3D34:
     case DECOY_GLOVE_INITIALIZE:
         *(int *)&glove_vars->unk50 = 0;
         if (!(MOBY(moby)->anim_flags & 2))
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = DECOY_GLOVE_WAIT_FOR_MOBY_FLAG;
         else
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN;
     case DECOY_GLOVE_WAIT_FOR_MOBY_FLAG:
         if (MOBY(moby)->anim_flags & 2)
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN;
         break;
     case DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN:
         break;
@@ -309,17 +312,17 @@ L3D34:
         } else {
             allocate_voice_for_target_entry(0, 0, (int)moby);
         }
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = DECOY_GLOVE_WAIT_AFTER_RELEASE;
         glove_vars->unk54 = scale_game_frames(0x14);
         break;
     case DECOY_GLOVE_WAIT_AFTER_RELEASE: {
         struct Hero *h = &hero;
         if (h->state.current != 0x23 && h->item_anim_active == 0)
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN;
         break;
     }
     case DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN:
-        MOBY(moby)->state = 6;
+        MOBY(moby)->state = DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN;
         break;
     case DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN:
         return;

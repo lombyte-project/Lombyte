@@ -98,12 +98,15 @@ char *draw_number(float         scale,
                   short         particle_lifetime,
 
                   unsigned char kind) {
+    enum {
+        DRAW_NUMBER_KIND_FROM_FLAGS = 0xFF
+    };
     char *particle = create_part(0x29);
     if (particle != 0) {
         int *tail = (int *)(particle + 0x20);
         qcopy(particle + 0x10, particle_spawn_position);
         *(int *)(particle + 4) = particle_color;
-        if (kind == 0xFF) {
+        if (kind == DRAW_NUMBER_KIND_FROM_FLAGS) {
             particle[9] = (flags >> 5) * 16 + truncate_float_to_s32(4.0f);
             if (flags & 1) {
                 particle[3] = 0x48;

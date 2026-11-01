@@ -94,7 +94,7 @@ void help_hints_update(Moby *moby) {
     switch (moby->state) {
     case HELP_MESSAGE_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = HELP_MESSAGE_STATE_CHECK_CONDITIONS;
         break;
     case HELP_MESSAGE_STATE_CHECK_CONDITIONS:
         if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f0) != 0 &&

@@ -23,6 +23,16 @@
 #include "rnc/rendering/debug/debug_menu.h"
 
 /* Class header view: pclass + 0xE and + 0x10. */
+enum {
+    CRATE_STATE_INITIALIZE = 0,
+    CRATE_STATE_PROCESS_HITS = 1,
+    CRATE_STATE_CLASS_CHANGE_COOLDOWN = 2,
+    CRATE_STATE_BROKEN = 3,
+    CRATE_STATE_REACTIVATION_DELAY = 4,
+    CRATE_STATE_DETONATION_COUNTDOWN = 5,
+    CRATE_STATE_WAIT_RESPAWN = 6
+};
+
 typedef struct {
     u8  pad00[0xE];
     u8  unkE;
@@ -248,15 +258,6 @@ void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
 
 /* Moby classes 500-502, 505, 511 */
 void crate_update(struct Moby *moby) {
-    enum {
-        CRATE_STATE_INITIALIZE = 0,
-        CRATE_STATE_PROCESS_HITS = 1,
-        CRATE_STATE_CLASS_CHANGE_COOLDOWN = 2,
-        CRATE_STATE_BROKEN = 3,
-        CRATE_STATE_REACTIVATION_DELAY = 4,
-        CRATE_STATE_DETONATION_COUNTDOWN = 5,
-        CRATE_STATE_WAIT_RESPAWN = 6
-    };
     Burst        burst;
     Vec4f        at;
     s32          hitKind;
@@ -287,7 +288,7 @@ void crate_update(struct Moby *moby) {
     } else {
         coll->flags &= ~1;
     }
-    if (crate_vars->frameB4 != D_L00_0015F5CC_macro && moby->state != 0 &&
+    if (crate_vars->frameB4 != D_L00_0015F5CC_macro && moby->state != CRATE_STATE_INITIALIZE &&
         (crate_vars->flags & 0xC)) {
         update_crate_stack_motion(moby);
     }
@@ -305,12 +306,12 @@ void crate_update(struct Moby *moby) {
     case CRATE_STATE_INITIALIZE:
         clear_u64_value(&crate_vars->unk40);
         if (D_0015ED84 == 0x12 && moby->oclass == 0x1FF && crate_vars->unkC8 != 0) {
-            moby->state = 6;
+            moby->state = CRATE_STATE_WAIT_RESPAWN;
             moby->flags |= 0x41;
             moby->collision = 0;
             moby->flags &= ~0x1000;
         } else {
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
         }
         crate_vars->unkA8 = 0;
         if ((crate_vars->flags ^ 1) & 1) {
@@ -330,7 +331,7 @@ void crate_update(struct Moby *moby) {
              (hero.ground_moby == moby && hero.air_frames.s == 0) || hero.ledge_moby == (s32)moby ||
              touched)) {
             moby->command = 0;
-            moby->state = 5;
+            moby->state = CRATE_STATE_DETONATION_COUNTDOWN;
             break;
         }
         if (hit_contact == NULL || !(hit_contact->damage > 0.0f)) {
@@ -341,7 +342,7 @@ void crate_update(struct Moby *moby) {
             doHit = 0;
         }
         if (moby->oclass == 0x1F9) {
-            moby->state = 5;
+            moby->state = CRATE_STATE_DETONATION_COUNTDOWN;
             if (hit_contact->hit.s.flags & 0x20000) {
                 moby->command = 1;
             } else {
@@ -372,7 +373,7 @@ void crate_update(struct Moby *moby) {
                 moby->pclass = D_L00_00197300[moby->class_slot];
                 update_moby_animation_state(moby);
                 moby->unk72 = ((Part *)moby->pclass)->unkE;
-                moby->state = 2;
+                moby->state = CRATE_STATE_CLASS_CHANGE_COOLDOWN;
                 moby->command = scale_game_frames(15);
                 doHit = 0;
             }
@@ -399,7 +400,7 @@ void crate_update(struct Moby *moby) {
     case CRATE_STATE_CLASS_CHANGE_COOLDOWN:
         if (--moby->command == 0xFF) {
             moby->hit_slot = 0xFF;
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
         }
         break;
 
@@ -430,7 +431,7 @@ void crate_update(struct Moby *moby) {
             if (moby->unkB4 >= 2) {
                 moby->unkB4 = 1;
             }
-            moby->state = 6;
+            moby->state = CRATE_STATE_WAIT_RESPAWN;
             if (D_0015ED84 == 0x12) {
                 crate_vars->unkC9 = FUN_L00_00257b90(300, 720);
             } else {
@@ -452,7 +453,7 @@ void crate_update(struct Moby *moby) {
             break;
         }
         if (moby->group == 0xFF) {
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
             moby->visible = 1;
             moby->flags &= ~1;
             moby->collision = ((Part *)moby->pclass)->unk10;
@@ -489,7 +490,7 @@ void crate_update(struct Moby *moby) {
         get_first_moby_in_group(&it, moby->group, 0, 0);
         while (it != NULL) {
             if (moby != it && !(vector_distance_xy(&moby->pos, &it->pos) > 0.1f) &&
-                it->state == 1) {
+                it->state == CRATE_STATE_PROCESS_HITS) {
                 CrateVars *ipv = (CrateVars *)it->pvars;
 
                 if (ipv->rider == NULL) {
@@ -498,7 +499,7 @@ void crate_update(struct Moby *moby) {
                     ipv->rider = moby;
                     crate_vars->below = it;
                     crate_vars->rider = NULL;
-                    moby->state = 1;
+                    moby->state = CRATE_STATE_PROCESS_HITS;
                     moby->visible = 1;
                     moby->flags &= ~1;
                     moby->collision = ((Part *)moby->pclass)->unk10;
@@ -509,9 +510,9 @@ void crate_update(struct Moby *moby) {
             }
             get_next_moby_in_group(&it, it, 0, 0);
         }
-        if (moby->state != 1) {
+        if (moby->state != CRATE_STATE_PROCESS_HITS) {
             moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f);
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
             crate_vars->rider = NULL;
             crate_vars->below = NULL;
             moby->visible = 1;
@@ -549,7 +550,7 @@ void crate_update(struct Moby *moby) {
 
     case CRATE_STATE_REACTIVATION_DELAY:
         if (FUN_L00_001fefc8(&moby->command)) {
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
             moby->flags &= ~1;
         }
         break;
@@ -653,15 +654,19 @@ struct Vars;
 void ground_attached_update(M_2cfcb8 *moby) __asm__("FUN_L00_002cfcb8");
 
 void ground_attached_update(M_2cfcb8 *moby) {
+    enum {
+        ROUTE_ENTRY_ADVANCE_LIMIT = 0x111
+    };
     V_2cfcb8  probe_top;
     V_2cfcb8  probe_bottom;
     V_2cfcb8  probe_up;
     V_2cfcb8  probe_down;
     M_2cfcb8 *member;
-    M_2cfcb8 *other;
+    M_2cfcb8 *later_group_member;
     Vars     *vars;
     Vars     *below_vars;
-    V_2cfcb8 *src1, *src2, *src3, *src4;
+    V_2cfcb8 *ungrouped_crate_position, *group_crate_probe_position, *stacked_crate_position,
+        *stack_base_probe_position;
     R_2cfcb8 *route;
     s32       group, flags_before, i, member_flags;
     M_2cfcb8 *below;
@@ -683,9 +688,9 @@ void ground_attached_update(M_2cfcb8 *moby) {
         vars->hC4 = moby->hA8;
         vars->height = 1.0f;
         vars->flags = flags_before | 1;
-        src1 = &moby->pos;
-        qcopy(&probe_top, src1);
-        qcopy(&probe_bottom, src1);
+        ungrouped_crate_position = &moby->pos;
+        qcopy(&probe_top, ungrouped_crate_position);
+        qcopy(&probe_bottom, ungrouped_crate_position);
         probe_top.z += 0.5f;
         probe_bottom.z = 0.1f;
         if (FUN_001efa68_2cfcb8(&probe_top, &probe_bottom, 2, 0, 0) == 0) {
@@ -732,9 +737,9 @@ void ground_attached_update(M_2cfcb8 *moby) {
                 vars->hC4 = moby->hA8;
                 vars->height = 1.0f;
                 vars->flags = member_flags | 1;
-                src2 = &moby->pos;
-                qcopy(&probe_top, src2);
-                qcopy(&probe_bottom, src2);
+                group_crate_probe_position = &moby->pos;
+                qcopy(&probe_top, group_crate_probe_position);
+                qcopy(&probe_bottom, group_crate_probe_position);
                 probe_top.z += 0.5f;
                 probe_bottom.z = 0.1f;
                 if (FUN_001efa68_2cfcb8(&probe_top, &probe_bottom, 2, 0, 0) == 0) {
@@ -756,10 +761,11 @@ void ground_attached_update(M_2cfcb8 *moby) {
                     } else if (is_moby_in_class_range_500_to_540(
                                    (*(H_2cfcb8 *)&D_L00_00173E40).moby) != 0) {
                         vars->pA4 = (*(H_2cfcb8 *)&D_L00_00173E40).moby;
-                        src3 = &moby->pos;
+                        stacked_crate_position = &moby->pos;
                         below = (*(H_2cfcb8 *)&D_L00_00173E40).moby;
-                        qcopy(src3, &below->pos);
-                        FUN_001f9a10_2cfcb8(src3, src3, (u8 *)below + 0xE0);
+                        qcopy(stacked_crate_position, &below->pos);
+                        FUN_001f9a10_2cfcb8(
+                            stacked_crate_position, stacked_crate_position, (u8 *)below + 0xE0);
                         vars = (*(H_2cfcb8 *)&D_L00_00173E40).moby->vars;
                         if (is_moby_in_class_range_500_to_540(moby) != 0) {
                             vars->next_member = moby;
@@ -782,9 +788,9 @@ void ground_attached_update(M_2cfcb8 *moby) {
     while (member != 0) {
         vars = member->vars;
         if (is_moby_in_class_range_500_to_540(member) != 0 && vars->pA4 == 0) {
-            src4 = &member->pos;
-            qcopy(&probe_up, src4);
-            qcopy(&probe_down, src4);
+            stack_base_probe_position = &member->pos;
+            qcopy(&probe_up, stack_base_probe_position);
+            qcopy(&probe_down, stack_base_probe_position);
             probe_up.z += vars->height * 0.5f;
             probe_down.z = 0.1f;
             if (FUN_001efa68_2cfcb8(&probe_up, &probe_down, 2, moby, 0) != 0) {
@@ -828,7 +834,7 @@ void ground_attached_update(M_2cfcb8 *moby) {
                         s32 entry_state = route->entries[0].state;
                         if (entry_state == 1 || entry_state == 3) {
                             vars->route_index = -1;
-                        } else if (entry_state == 0x111) {
+                        } else if (entry_state == ROUTE_ENTRY_ADVANCE_LIMIT) {
                             vars->route_index = -1;
                         } else if ((u32)(entry_state - 0x11) < 0x100) {
                             if (entry_state - 0x10 >= route->count) {
@@ -852,12 +858,12 @@ void ground_attached_update(M_2cfcb8 *moby) {
     get_first_moby_in_group(&moby, group, 0, 0);
     while (moby != 0) {
         if (is_moby_in_class_range_500_to_540(moby) != 0) {
-            get_next_moby_in_group(&other, moby, 0, 0);
-            while (other != 0) {
-                if (is_moby_in_class_range_500_to_540(other) != 0) {
-                    fast_vec_dist(&moby->pos, &other->pos);
+            get_next_moby_in_group(&later_group_member, moby, 0, 0);
+            while (later_group_member != 0) {
+                if (is_moby_in_class_range_500_to_540(later_group_member) != 0) {
+                    fast_vec_dist(&moby->pos, &later_group_member->pos);
                 }
-                get_next_moby_in_group(&other, other, 0, 0);
+                get_next_moby_in_group(&later_group_member, later_group_member, 0, 0);
             }
         }
         get_next_moby_in_group(&moby, moby, 0, 0);
@@ -1017,6 +1023,15 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         CRATE_VARIANT_FINAL_DAMAGE_STAGE = 10,
         CRATE_VARIANT_CONDITIONAL_RESPAWN_START = 11
     };
+    enum {
+        CRATE_DEBRIS_FALLBACK_BASE = 0x95,
+        CRATE_DEBRIS_MISSION_THRESHOLD_GATED_BASE = 0x15C,
+        CRATE_DEBRIS_DAMAGE_FLAG_GATED_BASE = 0x162,
+        CRATE_DEBRIS_OPTIONAL_TURN_OR_RESPAWN_BASE = 0x165,
+        CRATE_DEBRIS_IMPACT_TRIGGERED_BASE = 0x16B,
+        CRATE_DEBRIS_CLASS_OVERRIDE_BREAK_SOUND_BASE = 0x16E,
+        CRATE_DEBRIS_DAMAGE_STAGE_BASE = 0x171
+    };
     u8      *vars = (u8 *)moby->vars;
     V2d09b8  position, away, rotation, basis[3], launch, spawn_pos, spin;
     s32      kind;
@@ -1068,7 +1083,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             fast_vec_sub(&away, &moby->pos, (*(u8 **)D_001413D0) + 0x10);
         switch ((s16)((u16)moby->oclass - 500)) {
         case CRATE_VARIANT_MISSION_THRESHOLD_GATED:
-            kind = 0x15C;
+            kind = CRATE_DEBRIS_MISSION_THRESHOLD_GATED_BASE;
             break;
         case 3:
             kind = 0x15F;
@@ -1076,29 +1091,29 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         case CRATE_VARIANT_DAMAGE_FLAG_GATED:
             if (!angle) {
             }
-            kind = 0x162;
+            kind = CRATE_DEBRIS_DAMAGE_FLAG_GATED_BASE;
             break;
         case CRATE_VARIANT_OPTIONAL_QUARTER_TURN:
         case CRATE_VARIANT_CONDITIONAL_RESPAWN_START:
-            kind = 0x165;
+            kind = CRATE_DEBRIS_OPTIONAL_TURN_OR_RESPAWN_BASE;
             break;
         case 4:
             kind = 0x168;
             break;
         case CRATE_VARIANT_IMPACT_TRIGGERED:
-            kind = 0x16B;
+            kind = CRATE_DEBRIS_IMPACT_TRIGGERED_BASE;
             break;
         case CRATE_VARIANT_CLASS_OVERRIDE_BREAK_SOUND:
-            kind = 0x16E;
+            kind = CRATE_DEBRIS_CLASS_OVERRIDE_BREAK_SOUND_BASE;
             break;
         case CRATE_VARIANT_INITIAL_DAMAGE_STAGE:
         case CRATE_VARIANT_SECOND_DAMAGE_STAGE:
         case CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE:
         case CRATE_VARIANT_FINAL_DAMAGE_STAGE:
-            kind = 0x171;
+            kind = CRATE_DEBRIS_DAMAGE_STAGE_BASE;
             break;
         default:
-            kind = 0x95;
+            kind = CRATE_DEBRIS_FALLBACK_BASE;
             break;
         }
         if (D_L00_0015FFBC >= 201) {
@@ -1169,7 +1184,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         }
     }
     *(u32 *)((u8 *)broken_crate_moby + 0x94) = 0;
-    moby->state = 3;
+    moby->state = CRATE_STATE_BROKEN;
     *(u16 *)((u8 *)moby + 0x34) |= 1;
     moby->bBC = FUN_001fef20_2d09b8(15);
     if (hit) {
@@ -1262,7 +1277,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (vars->flags & 2)
             return;
         vars->iB4 = D_L00_0015F5CC;
-        if (moby->state == 0)
+        if (moby->state == CRATE_STATE_INITIALIZE)
             continue;
         fast_vec_sub(&hero_local_offset, &hero.motion.pos, &moby->pos);
         transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->vC0);
@@ -1328,12 +1343,12 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (hit != 0) {
             acceleration_scale_or_speed = fast_vec_length(&vars->vel);
             if (frame_time * 0.5f < acceleration_scale_or_speed) {
-                if (moby->oclass == 0x1F9 && moby->state == 1) {
+                if (moby->oclass == 0x1F9 && moby->state == CRATE_STATE_BREAKABLE) {
                     moby->bBC = 0;
-                    moby->state = 5;
+                    moby->state = CRATE_STATE_IMPACT_TRIGGERED;
                 } else if ((parent_moby = vars->parent) != 0 && parent_moby->oclass == 0x1F9 &&
-                           parent_moby->state == 1) {
-                    parent_moby->state = 5;
+                           parent_moby->state == CRATE_STATE_BREAKABLE) {
+                    parent_moby->state = CRATE_STATE_IMPACT_TRIGGERED;
                     vars->parent->bBC = 0;
                 }
             }

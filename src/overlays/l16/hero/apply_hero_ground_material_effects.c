@@ -19,6 +19,16 @@
 /* Per-frame update of the pickup/hit state flags from the state code. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_00209D98), where it is exact; names translated to the US level program. */
 
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNET = 2
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 0xD,
+    GROUND_MATERIAL_FIXED_WATER_DEPTH = 0xE
+};
+
 extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int  hero_set_state(int, int) __asm__("FUN_L16_0021e398");
@@ -37,23 +47,23 @@ void apply_hero_ground_material_effects(void) {
     hero_data->unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == GROUND_MATERIAL_MAGNET) {
         if (hero_data->frames_off_ground.s == 0 || hero_data->ground_distance < 0.3f) {
             hero_data->on_magnet_ground = 1;
-            if (hero_data->vehicle_mode == 0) {
+            if (hero_data->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_moby = (char *)hero_data->items[1].moby;
                 if (item_moby != 0 && MOBY(item_moby)->oclass == 0xAD)
                     hero_data->unk308 = 1;
             }
         }
     }
-    if (saved_ground_type == 0xE) {
+    if (saved_ground_type == GROUND_MATERIAL_FIXED_WATER_DEPTH) {
         struct Hero *q = &hero;
         q->base_condition = 1;
         q->water_depth = 0.2f;
         q->water_surface_z = q->ground_z.f + 0.2f;
     }
-    if (saved_ground_type == 0) {
+    if (saved_ground_type == GROUND_MATERIAL_WATER) {
         struct Hero *q = &hero;
         float        water_depth = q->water_surface_z - q->ground_z.f;
         q->water_depth = water_depth;
@@ -90,7 +100,7 @@ void apply_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->unk12E9 = 1;
     }
-    if (saved_ground_type == 0x2) {
+    if (saved_ground_type == GROUND_MATERIAL_MAGNET) {
         struct Hero *q = &hero;
         q->on_magnet_ground = 1;
     }
@@ -98,7 +108,7 @@ void apply_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->selector_4 = 1;
     }
-    if (saved_ground_type == 0xD) {
+    if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
@@ -179,7 +189,7 @@ void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32  compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
-void FUN_L00_002334d0(void *, void *, f32);
+void add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 
 extern CollisionHit HH __asm__("D_L16_00174240") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L16_00174240 + (o)))
@@ -232,7 +242,7 @@ void update_hero_ground_contact(void) {
     }
     hero.ground_sound_class = collision_sound_class;
     hero.ground_type = collision_hit_material();
-    if (hero.ground_type == 0) {
+    if (hero.ground_type == GROUND_MATERIAL_WATER) {
         hero.water_surface_z =
             resolve_camera_surface_height(D_L16_00174260, (u8 *)&hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
@@ -248,7 +258,7 @@ void update_hero_ground_contact(void) {
         }
         hero.ground_sound_class = collision_sound_class;
     }
-    if (hero.ground_type == 0xD) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         hero.water_surface_z = HH.point.f[2];
         ground_probe_endpoint.f[2] = HH.point.f[2] - 0.01f;
         if (collision_line(&ground_probe_endpoint, &collision_ray_endpoint, 4, (s32)hero.moby, 0) ==
@@ -264,7 +274,7 @@ void update_hero_ground_contact(void) {
         if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.on_flagged_ground_moby = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
-                FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
+                add_hero_gravity_offset((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
             }
         }
         hit_moby_record = get_moby_target_info(HH.moby);
@@ -286,7 +296,8 @@ void update_hero_ground_contact(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 ||
+            if (hero.ground_slope.f <= 0.87266463f ||
+                hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;
@@ -383,10 +394,10 @@ typedef union {
     f32         f[4];
 } V_2133a8;
 
-extern void FUN_L00_002347c0(void);
+extern void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
-extern void FUN_L00_00233810(void *, void *, f32);
-extern void FUN_L00_002334d0(void *, void *, f32);
+extern void add_hero_up_offset(void *, void *, f32) __asm__("FUN_L00_00233810");
+extern void add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern s32  coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32  FUN_L00_001f3170(void *, f32);
@@ -407,7 +418,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     qcopy(&pre_collision_position, &hero.motion.pos.q);
     clear_u64_value(&collision_position_offset);
     if (hero.path_constrain_pending != 0) {
-        FUN_L00_002347c0();
+        resolve_hero_pending_path_clearance();
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != 0x11) {
@@ -415,12 +426,12 @@ s32 resolve_hero_position_collisions(s32 mode) {
             transform_hero_local_offset_to_world(&collision_position_offset, 0.0f, 0.0f, 0.7f);
             fast_vec_sub(
                 &collision_position_offset, &collision_position_offset, &hero.motion.pos.q);
-        } else if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == 1 || hero.unk1F8 != 0 ||
+        } else if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0 ||
                 (unsigned)(hero.state.control_mode - 0x15) < 2) {
-                FUN_L00_00233810(&collision_position_offset, &collision_position_offset, 0.6f);
+                add_hero_up_offset(&collision_position_offset, &collision_position_offset, 0.6f);
             } else {
-                FUN_L00_002334d0(
+                add_hero_gravity_offset(
                     &collision_position_offset, &collision_position_offset, -hero.capsule_bottom);
             }
         } else {
@@ -433,7 +444,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
-        if (hero.gravity_mode != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll1_2133a8(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.4f))
                 break;
         } else if (hero.state.control_mode == 0x11) {
@@ -573,7 +584,8 @@ void integrate_hero_motion(void) {
     player = (L16MovementPlayer *)((char *)position - 0x80);
     update_hero_attachment(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
     /* Limit the velocity by state and mode. Inside an arm `position` moves on to the velocity; it is formed again below. */
-    if (player->state == 34 || player->state == 20) {
+    if (player->state == HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY ||
+        player->state == HERO_STATE_WRENCH_SLAM) {
         float  limit;
         float *limited_velocity;
 

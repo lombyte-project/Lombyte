@@ -8,13 +8,18 @@ void tracked_group_watcher_update(struct Moby *moby) __asm__("FUN_L13_0030be60")
 
 /* Moby class 1577 */
 void tracked_group_watcher_update(struct Moby *moby) {
+    enum {
+        TRACKED_GROUP_WATCHER_STATE_INITIALIZE_TRACKING = 0,
+        TRACKED_GROUP_WATCHER_STATE_MONITOR_TRACKED_MOBYS = 1,
+        TRACKED_GROUP_WATCHER_STATE_ZERO_THRESHOLD_IDLE = 2
+    };
     int *moby_vars = (int *)moby->pvars;
-    if (moby->state == 0) {
+    if (moby->state == TRACKED_GROUP_WATCHER_STATE_INITIALIZE_TRACKING) {
         int  *ids = moby_vars + 4;
         int  *cls = moby_vars + 12;
         char *base;
         int   i;
-        moby->state = 1;
+        moby->state = TRACKED_GROUP_WATCHER_STATE_MONITOR_TRACKED_MOBYS;
         base = (char *)moby_base;
         for (i = 0; i < 8; i++) {
             unsigned char *o = (unsigned char *)(base + (ids[i] << 8));
@@ -24,8 +29,8 @@ void tracked_group_watcher_update(struct Moby *moby) {
                 cls[i] = -1;
         }
         if (moby_vars[0] == 0)
-            moby->state = 2;
-    } else if (moby->state == 1) {
+            moby->state = TRACKED_GROUP_WATCHER_STATE_ZERO_THRESHOLD_IDLE;
+    } else if (moby->state == TRACKED_GROUP_WATCHER_STATE_MONITOR_TRACKED_MOBYS) {
         int  *ids = moby_vars + 4;
         int  *cls = moby_vars + 12;
         char *base = (char *)moby_base;

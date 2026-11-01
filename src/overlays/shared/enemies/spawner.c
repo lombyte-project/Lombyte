@@ -19,6 +19,12 @@
 #include "rnc/overlay/shared/enemies/spawner_egg.h"
 #include "rnc/overlay/shared/math/random.h"
 
+enum {
+    SPAWNER_STATE_INITIALIZE = 0,
+    SPAWNER_STATE_SPAWN = 1,
+    SPAWNER_STATE_EXPLODE = 2
+};
+
 typedef struct SpawnerVars {
     u8    pad0[0x20];
     f32   unk20;
@@ -102,7 +108,7 @@ void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) {
             FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
         } else {
             FUN_L00_00257470_c(moby, 0, -1);
-            moby->state = 2;
+            moby->state = SPAWNER_STATE_EXPLODE;
             spawner_vars[0x67] = 0x78;
             FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
         }
@@ -141,11 +147,6 @@ void spawner_update(char *moby) __asm__("FUN_L09_0030ab80");
 
 /* Moby class 1885 */
 void spawner_update(char *moby) {
-    enum {
-        SPAWNER_STATE_INITIALIZE = 0,
-        SPAWNER_STATE_SPAWN = 1,
-        SPAWNER_STATE_EXPLODE = 2
-    };
     SpawnerVars *spawner_vars = (SpawnerVars *)MOBY(moby)->pvars;
     float        target[4];
     float        launch_velocity[4];
@@ -159,7 +160,7 @@ void spawner_update(char *moby) {
         while (get_first_moby_in_group(&moby_to_remove, spawner_vars->unk94, 0, 0) == 0) {
             mark_moby_for_removal((void *)moby_to_remove);
         }
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = SPAWNER_STATE_SPAWN;
         return;
     }
     case SPAWNER_STATE_SPAWN: {

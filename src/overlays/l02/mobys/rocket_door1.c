@@ -23,7 +23,7 @@ typedef struct {
 
 extern s32  D_0015ED84;
 extern u8   D_0014C050[][16];
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern float
 approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 
@@ -36,6 +36,9 @@ void rocket_door1_update(struct Moby *moby) {
         ROCKET_DOOR1_INITIALIZE_ROTATION = 0,
         ROCKET_DOOR1_WAIT_FOR_COMMAND = 1,
         ROCKET_DOOR1_TURN_TO_GOAL_ROTATION = 2
+    };
+    enum {
+        ROCKET_DOOR1_GOAL_ROTATION_APPLIED = 3
     };
     Vec4        qx;
     Vec4        qy;
@@ -59,25 +62,25 @@ void rocket_door1_update(struct Moby *moby) {
             moby->rot.x = door_vars->goal.f[0] * 0.017453292f;
             moby->rot.y = door_vars->goal.f[1] * 0.017453292f;
             moby->rot.z = door_vars->goal.f[2] * 0.017453292f;
-            moby->state = 3;
+            moby->state = ROCKET_DOOR1_GOAL_ROTATION_APPLIED;
         } else {
-            moby->state = 1;
+            moby->state = ROCKET_DOOR1_WAIT_FOR_COMMAND;
             moby->flags |= 0x100;
-            FUN_L00_001fff28(&qx, 0, door_vars->goal.f[0] * 0.017453292f);
-            FUN_L00_001fff28(&qy, 1, door_vars->goal.f[1] * 0.017453292f);
-            FUN_L00_001fff28(&qz, 2, door_vars->goal.f[2] * 0.017453292f);
+            build_axis_rotation_quaternion(&qx, 0, door_vars->goal.f[0] * 0.017453292f);
+            build_axis_rotation_quaternion(&qy, 1, door_vars->goal.f[1] * 0.017453292f);
+            build_axis_rotation_quaternion(&qz, 2, door_vars->goal.f[2] * 0.017453292f);
             multiply_quaternions(&qxy, &qx, &qy);
             multiply_quaternions(&door_vars->goal, &qxy, &qz);
-            FUN_L00_001fff28(&qx, 0, moby->rot.x);
-            FUN_L00_001fff28(&qy, 1, moby->rot.y);
-            FUN_L00_001fff28(&qz, 2, moby->rot.z);
+            build_axis_rotation_quaternion(&qx, 0, moby->rot.x);
+            build_axis_rotation_quaternion(&qy, 1, moby->rot.y);
+            build_axis_rotation_quaternion(&qz, 2, moby->rot.z);
             multiply_quaternions(&rxy, &qx, &qy);
             multiply_quaternions(&door_vars->start, &rxy, &qz);
         }
         break;
     case ROCKET_DOOR1_WAIT_FOR_COMMAND:
         if (moby->command != 0) {
-            moby->state = 2;
+            moby->state = ROCKET_DOOR1_TURN_TO_GOAL_ROTATION;
             door_vars->speed = 0.0f;
             door_vars->t = 0.0f;
         }

@@ -98,6 +98,10 @@ void run_level_main_loop(void) {
         LEVEL_MODE_GAME_STATE_UPDATE = 6,
         LEVEL_MODE_TIMED_BUFFER_SEQUENCE = 7
     };
+    enum {
+        PAL_MODE_DISABLED = 0,
+        PROFILER_MODE_DISABLED = 0
+    };
     int i;
     int saved_level_mode;
     int quit;
@@ -227,7 +231,8 @@ void run_level_main_loop(void) {
         }
         memcard_update_state();
         run_state_handler();
-        if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
+        if (memory_card_state.state >= MEMCARD_REQUEST_FORMAT ||
+            memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
             if (D_L00_001B9CF0.unk13C == 0) {
                 int   rotation_period_frames = 55;
                 float size;
@@ -258,24 +263,25 @@ void run_level_main_loop(void) {
         noop_main_callback(level_frame_callback_args, 0x10);
         vu1_sync_chain(1);
         D_L00_0015F5D0 = convert_integer_to_float(*(volatile int *)0x10000800) /
-                         (pal_mode != 0 ? 11520.0f : 9600.0f);
-        if (D_L00_0015F5C4 == 0 && g_debug_menu.profiler_mode != 0) {
+                         (pal_mode != PAL_MODE_DISABLED ? 11520.0f : 9600.0f);
+        if (D_L00_0015F5C4 == 0 && g_debug_menu.profiler_mode != PROFILER_MODE_DISABLED) {
             noop_main_callback();
         }
         if (hero.fall_fade_pending == 0) {
             int mode = D_L00_0015F5C4;
 
-            if (mode == 0 || mode == 2) {
+            if (mode == LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE ||
+                mode == LEVEL_MODE_DEBUG_PROFILER_RENDER) {
                 int frame_timer_threshold = 9600;
 
-                if (pal_mode != 0) {
+                if (pal_mode != PAL_MODE_DISABLED) {
                     frame_timer_threshold = 11520;
                 }
                 if (frame_timer_threshold < *(volatile int *)0x10000800) {
-                    if (mode == 0) {
+                    if (mode == LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE) {
                         register_audio_stream_callback();
                         handle_pause_input();
-                    } else if (mode == 2 && D_L00_0016C8B0 == 0) {
+                    } else if (mode == LEVEL_MODE_DEBUG_PROFILER_RENDER && D_L00_0016C8B0 == 0) {
                         register_audio_stream_callback();
                         update_cutscene_playback();
                     }

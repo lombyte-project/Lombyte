@@ -164,6 +164,9 @@ void fighter_jet_missile_update(struct Moby *moby) __asm__("FUN_L11_003089d0");
 
 /* Moby class 1009 */
 void fighter_jet_missile_update(struct Moby *moby) {
+    enum {
+        MOBY_STATE_PENDING_REMOVAL = 0xFE
+    };
     MissileVars *missile_vars = (MissileVars *)moby->pvars;
     float        previous_missile_position[4];
     float        look[4];
@@ -182,7 +185,7 @@ void fighter_jet_missile_update(struct Moby *moby) {
     copy_xyz_089d0(look, missile_vars->target_pos);
     ((int *)look)[3] = 0;
     target = missile_vars->target;
-    if (target == 0 || target->state == 0xFE || target->state == 0xFD ||
+    if (target == 0 || target->state == MOBY_STATE_PENDING_REMOVAL || target->state == 0xFD ||
         fast_vec_dist(&target->pos, look) > 3.0f)
         missile_vars->target = (struct Moby *)select_homing_missile_target(
             (float *)&moby->pos, (float *)&moby->rot, 0.2617994f, 0.2617994f, 60.0f);

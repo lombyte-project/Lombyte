@@ -17,13 +17,17 @@ extern void  extract_matrix_rotation_quaternion(void *, void *) __asm__("func_00
 void         start_camera_blend(struct UpdateCam *source) __asm__("FUN_001ec8a0");
 
 void start_camera_blend(struct UpdateCam *source) {
+    enum {
+        CAMERA_TRANSITION_KIND_BLEND = 0,
+        CAMERA_TRANSITION_PHASE_SEED_FROM_SOURCE = 1
+    };
     struct CameraTransition *transition = &cam_trans_state;
     char                     orbit_reference_direction[16];
     char                     orbit_yaw_side_direction[16];
     char                     orbit_axis[16];
     unsigned char            sub;
 
-    if (transition->mode == 1) {
+    if (transition->mode == CAMERA_TRANSITION_PHASE_SEED_FROM_SOURCE) {
         sub = transition->requested_kind;
         if (sub == 0) {
             qcopy(transition->blend.position, &source->pos);
@@ -33,11 +37,13 @@ void start_camera_blend(struct UpdateCam *source) {
             extract_matrix_rotation_quaternion(transition->orbit.saved_rotation, source);
             capture_camera_orientation();
         } else {
-            struct Hero *g = &hero;
+            struct Hero *orbit_reference_hero = &hero;
 
-            fast_vec_normalize(orbit_reference_direction, &g->moby->rot_row0, 1.0f);
-            fast_vec_normalize(orbit_yaw_side_direction, &g->moby->rot_row1, 1.0f);
-            fast_vec_normalize(orbit_axis, &g->moby->rot_row2, 1.0f);
+            fast_vec_normalize(
+                orbit_reference_direction, &orbit_reference_hero->moby->rot_row0, 1.0f);
+            fast_vec_normalize(
+                orbit_yaw_side_direction, &orbit_reference_hero->moby->rot_row1, 1.0f);
+            fast_vec_normalize(orbit_axis, &orbit_reference_hero->moby->rot_row2, 1.0f);
             /* PreviewCamera.current_camera, reached from this base. */
             compute_camera_angles(transition->orbit.angles,
                                   &source->pos,
@@ -62,7 +68,7 @@ void start_camera_blend(struct UpdateCam *source) {
     }
     cam_trans_state_lui = 3;
     transition->kind = transition->requested_kind;
-    if (transition->kind == 0) {
+    if (transition->kind == CAMERA_TRANSITION_KIND_BLEND) {
         struct CameraBlend *blend = &transition->blend;
 
         blend->position_rate = blend->configured_position_rate;

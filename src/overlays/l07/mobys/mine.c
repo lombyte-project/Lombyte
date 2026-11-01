@@ -221,7 +221,7 @@ void diving_mine_update(struct Moby *moby) {
         moby->rot.z = fast_arc_tan(swooper_instance_vars->goal.f[0] - moby->pos.x,
                                    swooper_instance_vars->goal.f[1] - moby->pos.y);
         swooper_instance_vars->unk29 = 0;
-        moby->state = 1;
+        moby->state = MINE_WAIT_AT_GOAL;
         moby->command = 0;
         break;
     case MINE_WAIT_AT_GOAL:
@@ -250,7 +250,7 @@ void diving_mine_update(struct Moby *moby) {
             swooper_instance_vars->life_timer = scale_game_frames(600);
             moby->command = 1;
             swooper_instance_vars->bob_timer = scale_game_frames(7);
-            moby->state = 2;
+            moby->state = MINE_CHASE_TARGET;
         }
         break;
     case MINE_CHASE_TARGET:

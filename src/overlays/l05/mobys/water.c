@@ -192,10 +192,10 @@ void water_update(struct Moby *moby) {
                 }
             }
             if (visited52[moby->mission + (current_level_index << 4)] == 0xFF) {
-                moby->state = 7;
+                moby->state = WATER_RISE_COMPLETE;
                 moby->pos.z = 44.0f;
             } else {
-                moby->state = 3;
+                moby->state = WATER_WAIT_FOR_RISE_TRIGGER;
                 water_vars->timer = scale_game_frames(0x3C);
                 if (moby->pos.z < water_vars->lowered_z) {
                     l05_water_grids[water_vars->record_index].visible_subtiles = 0;
@@ -207,14 +207,14 @@ void water_update(struct Moby *moby) {
                 water_vars->lowered_z = z;
                 water_vars->raised_z = z + 4.5f;
                 if (water_vars->starts_raised != 0) {
-                    moby->state = 1;
+                    moby->state = WATER_MOVE_TO_RAISED_HEIGHT;
                     moby->pos.z = water_vars->raised_z;
                 } else {
-                    moby->state = 2;
+                    moby->state = WATER_MOVE_TO_LOWERED_HEIGHT;
                     moby->pos.z = water_vars->lowered_z;
                 }
             } else {
-                moby->state = 2;
+                moby->state = WATER_MOVE_TO_LOWERED_HEIGHT;
                 moby->pos.z = water_vars->lowered_z;
             }
         }
@@ -228,7 +228,7 @@ void water_update(struct Moby *moby) {
             set_moby_list_state(moby->group, 1);
         } else if (water_vars->f10 >= 0) {
             if (visited52[moby->mission + (current_level_index << 4)] == 0xFF) {
-                moby->state = 1;
+                moby->state = WATER_MOVE_TO_RAISED_HEIGHT;
                 moby->pos.z = water_vars->raised_z;
             }
         }
@@ -291,7 +291,7 @@ void water_update(struct Moby *moby) {
                 if (h->ground_moby != 0 && h->air_frames.s == 0 &&
                     h->ground_moby->oclass == 0x33E) {
                     water_vars->f1C = 0;
-                    moby->state = 8;
+                    moby->state = WATER_TIMED_RISE;
                     rise_step = 0;
                     water_vars->timer = scale_game_frames(rise_frames[0]);
                 }
@@ -361,7 +361,7 @@ void water_update(struct Moby *moby) {
         e->z = moby->pos.z;
         grid_in_view = 0.0f;
         if (check_scaled_vector_bsphere((char *)moby, 48.0f) != -1 &&
-            (!(moby->state >= 3 && moby->state <= 7) ||
+            (!(moby->state >= WATER_WAIT_FOR_RISE_TRIGGER && moby->state <= WATER_RISE_COMPLETE) ||
              (moby->pos.z > water_vars->lowered_z && moby->pos.z < water_vars->raised_z))) {
             grid_in_view = 1.0f;
         }

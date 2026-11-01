@@ -53,7 +53,7 @@ void gadgetron_sign_update(struct Moby *moby) {
         float size = moby->scale * 4.0f;
         int   ff = 0xFF;
         int   twohundred = 0x200;
-        moby->state = 1;
+        moby->state = GADGETRON_SIGN_ROTATE;
         moby->update_dist = ff;
         moby->draw_dist = twohundred;
         moby->pos.z = 160.0f;

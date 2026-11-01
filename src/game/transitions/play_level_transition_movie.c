@@ -12,11 +12,14 @@ extern void fade_to_black(s32) __asm__("func_001F4A58");
 void        play_level_transition_movie(s32 movie_index) __asm__("FUN_00231608");
 
 void play_level_transition_movie(s32 movie_index) {
+    enum {
+        PAL_MODE_NTSC = 0
+    };
     s32 stream_size;
     s32 stream_start;
     s32 archive_base;
 
-    if (pal_mode != 0) {
+    if (pal_mode != PAL_MODE_NTSC) {
         stream_start = disc_table.movies_alt[movie_index].sector;
         stream_size = disc_table.movies_alt[movie_index].size;
     } else {

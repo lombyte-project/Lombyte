@@ -20,6 +20,14 @@
 
 /* spawns the child mobys this object owns and fills its part table */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9B60), where it is exact; names translated to the US level program. */
+enum {
+    SHRUB_INITIALIZE = 0,
+    SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
+    SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
+    SHRUB_BEGIN_PRIMARY_PATH = 3,
+    SHRUB_BREAK_APART_AND_REMOVE = 0x63
+};
+
 extern int FUN_L08_002e1c98_c() __asm__("FUN_L08_002e1c98");
 void       spawn_shrub_parts(char *moby) __asm__("FUN_L08_002e8788");
 
@@ -175,7 +183,7 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
                     return;
                 }
             }
-            parent_moby->state = 0x63;
+            parent_moby->state = SHRUB_BREAK_APART_AND_REMOVE;
         }
     }
     if (hit_sound_id >= 0)
@@ -215,11 +223,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
 /* Moby class 462 */
 void shrub_update(struct Moby *moby) {
     enum {
-        SHRUB_INITIALIZE = 0,
-        SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
-        SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
-        SHRUB_BEGIN_PRIMARY_PATH = 3,
-        SHRUB_BREAK_APART_AND_REMOVE = 0x63
+        SHRUB_PART_RELEASED = 1
     };
     SwarmVars         *shrub_control_vars = (SwarmVars *)moby->pvars;
     SwarmPathFollower *follower;
@@ -262,7 +266,7 @@ void shrub_update(struct Moby *moby) {
         moby->flags |= 0x4000;
         qcopy(&moby->pos, &shrub_control_vars->follow[1].path->points[0]);
         spawn_shrub_parts((char *)moby);
-        moby->state = 2;
+        moby->state = SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY;
         moby->rot.z =
             fast_arc_tan(shrub_control_vars->follow[1].path->points[1].f[0] - moby->pos.x,
                          shrub_control_vars->follow[1].path->points[1].f[1] - moby->pos.y);
@@ -372,7 +376,7 @@ void shrub_update(struct Moby *moby) {
     case SHRUB_BEGIN_PRIMARY_PATH: {
         LevelPath *path;
 
-        moby->state = 1;
+        moby->state = SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET;
         path = shrub_control_vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z =
@@ -388,7 +392,7 @@ void shrub_update(struct Moby *moby) {
                 cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 fast_vec_sub(drift, &part->pos, &moby->pos);
                 fast_vec_normalize(drift, drift, frame_time * 5.0f);
-                part->state = 1;
+                part->state = SHRUB_PART_RELEASED;
                 shrub_control_vars->parts[i].moby = NULL;
             }
         }

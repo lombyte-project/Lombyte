@@ -16,6 +16,14 @@
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/overlay/l13/mobys/blarg_turret_globals.h"
 
+enum {
+    BLARG_TURRET_STATE_INITIALIZE = 0,
+    BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
+    BLARG_TURRET_STATE_TRACK_TARGET = 3,
+    BLARG_TURRET_STATE_DESTROY = 4,
+    BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
+};
+
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
@@ -108,13 +116,6 @@ void blarg_turret_update(Moby_2B5368 *m) __asm__("FUN_L13_002b41b8");
 
 /* Moby class 29 */
 void blarg_turret_update(Moby_2B5368 *turret_moby) {
-    enum {
-        BLARG_TURRET_STATE_INITIALIZE = 0,
-        BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
-        BLARG_TURRET_STATE_TRACK_TARGET = 3,
-        BLARG_TURRET_STATE_DESTROY = 4,
-        BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
-    };
     Data        *data = turret_moby->data;
     Moby_2B5368 *target_moby;
     Moby_2B5368 *gun;
@@ -133,7 +134,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         if (turret_moby->b53 != 0) {
             blend_moby_animation(turret_moby, 0, 0, 10);
         }
-        turret_moby->state = 1;
+        turret_moby->state = BLARG_TURRET_STATE_WAIT_FOR_TARGET;
         break;
     case BLARG_TURRET_STATE_WAIT_FOR_TARGET:
         target_yaw_scratch =
@@ -150,7 +151,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
                 blend_moby_animation(
                     turret_moby, 1, animation_start_frame, random_int_between(7, 13));
             }
-            turret_moby->state = 3;
+            turret_moby->state = BLARG_TURRET_STATE_TRACK_TARGET;
         }
         approach_angle(&turret_moby->rot.z,
                        data->f54,
@@ -165,7 +166,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
                 blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
             }
             data->f64 = 1.0f;
-            turret_moby->state = 5;
+            turret_moby->state = BLARG_TURRET_STATE_DESTRUCTION_DELAY;
         }
         break;
     case BLARG_TURRET_STATE_TRACK_TARGET:
@@ -180,7 +181,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             if (turret_moby->b53 != 0) {
                 blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
             }
-            turret_moby->state = 1;
+            turret_moby->state = BLARG_TURRET_STATE_WAIT_FOR_TARGET;
         } else {
             float yaw_offset_limit_radians;
             approach_value(&data->f68, 20.0f, frame_time * 6.0f);
@@ -209,7 +210,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
                     blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
                 }
                 data->f64 = 1.0f;
-                turret_moby->state = 5;
+                turret_moby->state = BLARG_TURRET_STATE_DESTRUCTION_DELAY;
             }
         }
         break;
@@ -247,7 +248,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
                        frame_time * 25.132742f);
         data->f64 -= 1.0f;
         if (data->f64 <= 0.0f) {
-            turret_moby->state = 4;
+            turret_moby->state = BLARG_TURRET_STATE_DESTROY;
         }
         break;
     }
@@ -302,7 +303,7 @@ void update_blarg_turret_target_and_state(struct Moby *moby) __asm__("FUN_L13_00
 void update_blarg_turret_target_and_state(struct Moby *moby) {
     char *turret_vars = (char *)moby->pvars;
     float distance;
-    if (moby->state == 3)
+    if (moby->state == BLARG_TURRET_STATE_TRACK_TARGET)
         distance = 22.0f;
     else
         distance = 20.0f;

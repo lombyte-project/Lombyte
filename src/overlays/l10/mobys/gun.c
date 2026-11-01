@@ -36,6 +36,12 @@ void gun_update(struct Moby *moby) __asm__("FUN_L10_002e8ab0");
 
 /* Moby class 1346 */
 void gun_update(struct Moby *moby) {
+    enum {
+        GUN_STATE_INITIALIZE = 0,
+        GUN_STATE_INACTIVE = 1,
+        GUN_STATE_AIM_AND_FIRE = 2,
+        GUN_STATE_CLEANUP = 3
+    };
     Vars *gun_control = (Vars *)moby->pvars;
     int  *bits;
     float rotation[4];
@@ -45,16 +51,16 @@ void gun_update(struct Moby *moby) {
     int   state;
 
     state = moby->state;
-    if (state == 1)
+    if (state == GUN_STATE_INACTIVE)
         return;
-    if (state < 2) {
-        if (state == 0)
+    if (state < GUN_STATE_AIM_AND_FIRE) {
+        if (state == GUN_STATE_INITIALIZE)
             goto state_zero;
         return;
     }
-    if (state == 2)
+    if (state == GUN_STATE_AIM_AND_FIRE)
         goto state_two;
-    if (state == 3)
+    if (state == GUN_STATE_CLEANUP)
         goto state_three;
     return;
 state_zero: {
@@ -67,7 +73,7 @@ state_zero: {
                    ((signed_save_id >> 5) * 4 + (current_level_index << 8))) >>
           (save_id & 31)) &
          1) != 0) {
-        moby->state = 3;
+        moby->state = GUN_STATE_CLEANUP;
         return;
     }
     {
@@ -76,7 +82,7 @@ state_zero: {
             return;
         }
         gun_control->turn_velocity = 0.0f;
-        moby->state = 1;
+        moby->state = GUN_STATE_INACTIVE;
         return;
     }
 }
@@ -92,7 +98,7 @@ state_two: {
                    ((signed_save_id >> 5) * 4 + (current_level_index << 8))) >>
           (save_id & 31)) &
          1) != 0) {
-        moby->state = 3;
+        moby->state = GUN_STATE_CLEANUP;
         return;
     }
     {
@@ -162,7 +168,7 @@ state_two: {
         }
         moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
     } else {
-        moby->state = 3;
+        moby->state = GUN_STATE_CLEANUP;
         if (gun_control->wake != -1) {
             ((struct Moby *)((gun_control->wake << 8) + (int)D_L10_0015FFD8_8ab0))->state = 1;
             gun_control->wake = -1;

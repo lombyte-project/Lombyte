@@ -40,6 +40,10 @@ void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState         *state,
                                       s64                               *decoding_timestamp,
 
                                       s64 *flags) {
+    enum {
+        MPEG_PTS_OVERRIDE_INACTIVE = 0,
+        MPEG_PTS_OVERRIDE_PENDING = 2
+    };
     s32 previous_timestamp;
     s32 timestamp_carry;
     s64 timestamp_step;
@@ -71,11 +75,11 @@ void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState         *state,
     } else {
         *presentation_timestamp = picture->presentation_timestamp;
     }
-    if (state->override_state == 2) {
+    if (state->override_state == MPEG_PTS_OVERRIDE_PENDING) {
         override_timestamp = state->override_timestamp;
         if (override_timestamp >= 0) {
             *presentation_timestamp = override_timestamp;
-            state->override_state = 0;
+            state->override_state = MPEG_PTS_OVERRIDE_INACTIVE;
             state->override_timestamp = -1;
         }
     }

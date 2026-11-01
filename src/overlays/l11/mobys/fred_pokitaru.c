@@ -86,7 +86,7 @@ void fred_pokitaru_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case FRED_POKITARU_INITIALIZE:
-        moby->state = 1;
+        moby->state = FRED_POKITARU_CHECK_DIALOGUE;
         if (moby->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, scale_game_frames(20));
         if (D_0013D50B) {
@@ -99,7 +99,7 @@ void fred_pokitaru_update(struct Moby *moby) {
     case FRED_POKITARU_CHECK_DIALOGUE:
         if (update_npc_dialogue(moby, moby_vars)) {
             begin_dialogue_camera_transition(moby, 3.0f);
-            moby->state = 2;
+            moby->state = FRED_POKITARU_WAIT_FOR_DIALOGUE_END;
         }
         if (alternate_item_available[1] == 0 && discount_purchase_pricing[0] == 0) {
             if (fast_vec_dist(&moby->pos, hero.motion.pos.f) < 4.0f) {
@@ -125,7 +125,7 @@ void fred_pokitaru_update(struct Moby *moby) {
         break;
     case FRED_POKITARU_WAIT_FOR_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
-            moby->state = 1;
+            moby->state = FRED_POKITARU_CHECK_DIALOGUE;
             if (moby_vars->h04 == 2) {
                 alternate_item_available[1] = 0;
                 discount_purchase_pricing[0] = 1;

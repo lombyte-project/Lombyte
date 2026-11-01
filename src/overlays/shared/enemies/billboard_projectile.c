@@ -13,7 +13,7 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
-extern char D_L01_00167240[];
+extern char camera_pos[] __asm__("D_L01_00167240");
 
 extern char  D_L01_001742E0[];
 extern float D_L01_001742C0[];
@@ -36,7 +36,7 @@ void spawn_collision_particle_bursts(void) {
     float spawn_position[4];
     float base_angle, b;
     int   i;
-    fast_vec_sub(offset_vector, D_L01_00167240, D_L01_001742E0);
+    fast_vec_sub(offset_vector, camera_pos, D_L01_001742E0);
     base_angle = -fast_arc_tan(vector_length_xy(offset_vector), offset_vector[2]);
     fast_arc_tan(offset_vector[0], offset_vector[1]);
     for (i = 19; i >= 0; i--) {
@@ -76,7 +76,7 @@ void billboard_projectile_update(char *moby) {
         TIMED_REMOVAL = 2
     };
     int  *motion_lifetime_vars = ((int *)MOBY(moby)->pvars);
-    char *camera = D_L01_00167240;
+    char *camera = camera_pos;
     char  hit[0x30];
     float normal[4];
     float distance;
@@ -108,7 +108,7 @@ void billboard_projectile_update(char *moby) {
         }
         if (fast_dec_timer(motion_lifetime_vars)) {
             motion_lifetime_vars[0] = scale_game_frames(0x1e);
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = TIMED_REMOVAL;
             if (motion_lifetime_vars[4] != 0)
                 motion_lifetime_vars[4] = 0;
         }

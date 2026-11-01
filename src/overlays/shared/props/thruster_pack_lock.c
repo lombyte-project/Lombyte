@@ -88,8 +88,8 @@ extern s32           allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
 s32                  FUN_L00_00203908(s32 a, s32 b);
 extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
-extern LvState       D_L11_001BBC30;
-extern LvState       D_L11_001BAFD0;
+extern LvState       l11_thruster_pack_lock_restore_state __asm__("D_L11_001BBC30");
+extern LvState       l11_thruster_pack_lock_activation_state __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
@@ -100,6 +100,9 @@ void thruster_pack_lock_update(Lock *moby) {
         THRUSTER_PACK_LOCK_STATE_INIT = 0,
         THRUSTER_PACK_LOCK_STATE_ACTIVE = 1
     };
+    enum {
+        THRUSTER_PACK_LOCK_STATE_LOWERED = 2
+    };
     char *vars = moby->vars;
 
     switch (moby->state) {
@@ -109,17 +112,17 @@ void thruster_pack_lock_update(Lock *moby) {
         ((Stats *)(D_00141968_r))->best = 0;
         *(unsigned short *)(vars + 0x3E) |= 8;
         if (level == 0xB && moby->bB0 != 0xFF) {
-            if (D_L11_001BBC30.collected[(short)moby->uid] != 0 ||
+            if (l11_thruster_pack_lock_restore_state.collected[(short)moby->uid] != 0 ||
                 ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >>
                   (moby->uid & 0x1F)) &
                  1)) {
-                moby->state = 2;
+                moby->state = THRUSTER_PACK_LOCK_STATE_LOWERED;
                 moby->z = moby->z - 1.5f;
                 allocate_voice_for_target_entry(0, 0, moby);
                 return;
             }
         }
-        moby->state = 1;
+        moby->state = THRUSTER_PACK_LOCK_STATE_ACTIVE;
         break;
     }
     case THRUSTER_PACK_LOCK_STATE_ACTIVE:
@@ -129,16 +132,16 @@ void thruster_pack_lock_update(Lock *moby) {
             if (current_level_index == 0xB && moby->bB0 != 0xFF) {
                 int group;
                 int group_index;
-                D_L11_001BAFD0.collected[(short)moby->uid] = moby->bB0 + 2;
+                l11_thruster_pack_lock_activation_state.collected[(short)moby->uid] = moby->bB0 + 2;
                 group = moby->bB0;
                 group_index = group & 0xFF;
                 if (group == 0xFF ||
                     (D_L11_0015FD08_3102C8[group_index] != 0xFF &&
                      (visited52)[group_index + (current_level_index << 4)] == 0xFF)) {
-                    D_L11_001BBC30.collected[(short)moby->uid] = group + 2;
+                    l11_thruster_pack_lock_restore_state.collected[(short)moby->uid] = group + 2;
                 }
             }
-            moby->state = 2;
+            moby->state = THRUSTER_PACK_LOCK_STATE_LOWERED;
             moby->z = moby->z - 1.5f;
             allocate_voice_for_target_entry(0, 0, moby);
         }
@@ -738,6 +741,13 @@ extern unsigned char D_00141968[];
 void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
 
 void update_moby_hit_stats_and_state(char *moby) {
+    enum {
+        BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE = 2,
+        BLARG_SHIP_BURST_AND_DEACTIVATE = 6
+    };
+    enum {
+        BLARG_SHIP_INACTIVE = 4
+    };
     char        *moby_vars = ((char *)MOBY(moby)->pvars);
     char        *hit_record = find_moby_hit(moby, 0x330000, 0);
     struct Hero *player_hero;
@@ -771,11 +781,11 @@ void update_moby_hit_stats_and_state(char *moby) {
             }
         }
         if (*(int *)(moby_vars + 0x88) != 0) {
-            next_moby_state = 6;
+            next_moby_state = BLARG_SHIP_BURST_AND_DEACTIVATE;
             current_moby_state = ((unsigned char *)moby)[0x20];
         } else {
             current_moby_state = ((unsigned char *)moby)[0x20];
-            next_moby_state = 2;
+            next_moby_state = BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE;
         }
         if (current_moby_state != next_moby_state) {
             MOBY(moby)->state = next_moby_state;
@@ -786,12 +796,12 @@ void update_moby_hit_stats_and_state(char *moby) {
     } else if (((unsigned char *)moby)[0x20] == 5) {
         struct Hero *hero_for_state_check = &hero;
         if (hero_for_state_check->state.current != 0x32) {
-            MOBY(moby)->state = 4;
+            MOBY(moby)->state = BLARG_SHIP_INACTIVE;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags |= 1;
         }
         if (coll_sphere(1.0f, &MOBY(moby)->pos, 0, moby)) {
-            MOBY(moby)->state = 6;
+            MOBY(moby)->state = BLARG_SHIP_BURST_AND_DEACTIVATE;
             if (((unsigned char *)moby)[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }

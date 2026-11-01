@@ -43,6 +43,11 @@
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/world/collision/ground_probe.h"
 
+enum {
+    TARGET_REPOSITION_STATE_REQUESTABLE = 1,
+    TARGET_REPOSITION_STATE_REQUESTED = 7
+};
+
 extern float D_0015ED6C;
 
 #include "rnc/overlay/shared/math/quad.h"
@@ -154,10 +159,10 @@ int is_moby_in_state_6(Level16VendorMoby *moby) {
 void request_target_reposition(struct Moby *moby) __asm__("FUN_L16_002e0de0");
 
 void request_target_reposition(struct Moby *moby) {
-    int state = 1;
+    int state = TARGET_REPOSITION_STATE_REQUESTABLE;
     if (moby->state == state) {
         allocate_voice_for_target_entry(0, 0, moby);
-        state = 7;
+        state = TARGET_REPOSITION_STATE_REQUESTED;
         moby->state = state;
     }
 }
@@ -169,7 +174,7 @@ int get_target_reposition_status(char *moby_or_private_data) __asm__("FUN_L16_00
 int get_target_reposition_status(char *moby_or_private_data) {
     unsigned char moby_state = moby_or_private_data[0x20];
     moby_or_private_data = *(char **)(moby_or_private_data + 0x78);
-    if (moby_state == 7 || moby_state == 8) {
+    if (moby_state == TARGET_REPOSITION_STATE_REQUESTED || moby_state == 8) {
         if (moby_state == 8 && *(float *)(moby_or_private_data + 0x34) > 0.2f) {
             return 2;
         }
@@ -212,14 +217,14 @@ void chicken_relocator_update(struct Moby *moby) {
     target = D_L16_0015FFD8 + (target_cycle_data->unk4 << 8);
     switch (moby->state) {
     case TARGET_CYCLE_INITIALIZE_DELAY:
-        moby->state = 1;
+        moby->state = TARGET_CYCLE_WAIT_TO_TRIGGER;
         target_cycle_data->timer_C = scale_game_frames(random_int_between(0xB4, 0x168));
         break;
     case TARGET_CYCLE_WAIT_TO_TRIGGER:
         if (vector_distance_xy(hero_position, target + 0x10) > 3.0f) {
             if (find_group_chicken_in_state_6(*(int *)target_cycle_data) != 0) {
                 if (fast_dec_timer(&target_cycle_data->timer_C)) {
-                    moby->state = 2;
+                    moby->state = TARGET_CYCLE_POLL_STATUS;
                     request_target_reposition(target);
                     target_cycle_data->timer_C = scale_game_frames(random_int_between(0xB4, 0x168));
                 }
@@ -230,10 +235,10 @@ void chicken_relocator_update(struct Moby *moby) {
         target_status = get_target_reposition_status(target);
         switch (target_status) {
         case TARGET_STATUS_INACTIVE:
-            moby->state = 1;
+            moby->state = TARGET_CYCLE_WAIT_TO_TRIGGER;
             break;
         case TARGET_STATUS_REPOSITION_READY:
-            moby->state = 1;
+            moby->state = TARGET_CYCLE_WAIT_TO_TRIGGER;
             {
                 char *moby_to_reposition = find_group_chicken_in_state_6(*(int *)target_cycle_data);
                 if (moby_to_reposition != 0) {

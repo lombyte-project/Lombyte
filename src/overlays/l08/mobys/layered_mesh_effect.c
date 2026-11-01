@@ -123,7 +123,7 @@ void layered_mesh_effect_update(struct Moby *moby) {
                               1);
             *(int *)&layered_mesh_rgba_tables_initialized = 1;
         }
-        moby->state = 1;
+        moby->state = DRAW_ELEMENTS_UPDATE;
         for (i = 0; i < 3; i++) {
             D_L08_001E8348[i].a = 0;
             D_L08_001E8348[i].b = 0;

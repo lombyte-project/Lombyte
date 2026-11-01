@@ -56,6 +56,12 @@ void umbris_scene_progression_update(struct Moby *moby) {
         CONTROLLER_CLEANUP_LINKED_MOBY = 12,
         CONTROLLER_DELETE_SELF = 13
     };
+    enum {
+        SCENE_STATE_IDLE = 0,
+        SCENE_STATE_ACTIVE = 2,
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     Class436Vars *scene_controller_vars = (Class436Vars *)moby->pvars;
     float         linked_moby_to_hero_offset[4];
 
@@ -65,24 +71,24 @@ void umbris_scene_progression_update(struct Moby *moby) {
             mark_moby_for_removal(
                 &((struct Moby *)level_mobys)[scene_controller_vars->removed_moby]);
         }
-        if (scene_state == 0)
-            moby->state = 1;
+        if (scene_state == SCENE_STATE_IDLE)
+            moby->state = CONTROLLER_START_INITIAL_SCENE;
         break;
     case CONTROLLER_START_INITIAL_SCENE:
         if (alternate_item_available[0x28] == 0) {
             alternate_item_available[0x28] = 1;
-            moby->state = 2;
+            moby->state = CONTROLLER_WAIT_FOR_INITIAL_SCENE;
             start_scene(0);
         } else {
-            moby->state = 3;
+            moby->state = CONTROLLER_ADVANCE_TO_OPEN_VOLUME_WAIT;
         }
         break;
     case CONTROLLER_WAIT_FOR_INITIAL_SCENE:
-        if (scene_state != 2)
-            moby->state = 3;
+        if (scene_state != SCENE_STATE_ACTIVE)
+            moby->state = CONTROLLER_ADVANCE_TO_OPEN_VOLUME_WAIT;
         break;
     case CONTROLLER_ADVANCE_TO_OPEN_VOLUME_WAIT:
-        moby->state = 4;
+        moby->state = CONTROLLER_WAIT_FOR_OPEN_VOLUME;
         break;
     case CONTROLLER_WAIT_FOR_OPEN_VOLUME:
         if (alternate_item_available[0x29] == 0) {
@@ -100,32 +106,33 @@ void umbris_scene_progression_update(struct Moby *moby) {
                             &((struct Moby *)level_mobys)[scene_controller_vars->moby_14];
                         e->flags |= 0x41;
                     }
-                    moby->state = 5;
+                    moby->state = CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE;
                     start_scene(1);
                 }
             } else {
-                moby->state = 8;
+                moby->state = CONTROLLER_WAIT_FOR_FINISH_VOLUME;
             }
         } else {
-            moby->state = 7;
+            moby->state = CONTROLLER_CLEAR_LINKED_MOBY_FLAGS;
         }
-        if (moby->state != 4 && scene_controller_vars->removed_moby != -1) {
+        if (moby->state != CONTROLLER_WAIT_FOR_OPEN_VOLUME &&
+            scene_controller_vars->removed_moby != -1) {
             mark_moby_for_removal(
                 &((struct Moby *)level_mobys)[scene_controller_vars->removed_moby]);
         }
         break;
     case CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE:
-        if (scene_state == 2)
+        if (scene_state == SCENE_STATE_ACTIVE)
             break;
         if (scene_controller_vars->moby_0c != -1) {
             struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_0c];
             e->flags |= 0x41;
         }
-        moby->state = 6;
+        moby->state = CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE;
         start_scene(2);
         break;
     case CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE:
-        if (scene_state == 2)
+        if (scene_state == SCENE_STATE_ACTIVE)
             break;
         if (scene_controller_vars->points_18 != -1) {
             set_race_camera(&l07_cuboids[scene_controller_vars->points_18].pos,
@@ -133,7 +140,7 @@ void umbris_scene_progression_update(struct Moby *moby) {
                             0,
                             1);
         }
-        moby->state = 7;
+        moby->state = CONTROLLER_CLEAR_LINKED_MOBY_FLAGS;
         break;
     case CONTROLLER_CLEAR_LINKED_MOBY_FLAGS:
         if (scene_controller_vars->moby_0c != -1) {
@@ -145,14 +152,15 @@ void umbris_scene_progression_update(struct Moby *moby) {
             e->flags &= 0xFFBE;
         }
         request_music_track(2, 4);
-        moby->state = 8;
+        moby->state = CONTROLLER_WAIT_FOR_FINISH_VOLUME;
         break;
     case CONTROLLER_WAIT_FOR_FINISH_VOLUME:
         if (alternate_item_available[0x2A] == 0) {
             struct Moby *e;
             if (scene_controller_vars->moby_0c == -1 ||
                 (e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_0c]) == 0 ||
-                e->state == 0xFE || e->state == 0xFD) {
+                e->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+                e->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 if (scene_controller_vars->finish_volume != -1) {
                     if (is_point_inside_clip_volume(&hero.motion.pos,
                                                     scene_controller_vars->finish_volume) != 0) {
@@ -161,34 +169,35 @@ void umbris_scene_progression_update(struct Moby *moby) {
                                         0x72,
                                         1);
                         alternate_item_available[0x2A] = 1;
-                        moby->state = 9;
+                        moby->state = CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE;
                         start_scene(3);
                     }
                 } else {
-                    moby->state = 13;
+                    moby->state = CONTROLLER_DELETE_SELF;
                 }
             }
         } else {
-            moby->state = 12;
+            moby->state = CONTROLLER_CLEANUP_LINKED_MOBY;
         }
-        if (moby->state != 8 && scene_controller_vars->moby_10 != -1) {
+        if (moby->state != CONTROLLER_WAIT_FOR_FINISH_VOLUME &&
+            scene_controller_vars->moby_10 != -1) {
             struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_10];
             e->flags |= 0x41;
         }
         break;
     case CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE:
-        if (scene_state == 2)
+        if (scene_state == SCENE_STATE_ACTIVE)
             break;
-        moby->state = 10;
+        moby->state = CONTROLLER_WAIT_TO_START_FINAL_SCENE;
         queue_scene_movie_with_game_language(8);
         break;
     case CONTROLLER_WAIT_TO_START_FINAL_SCENE:
-        if (scene_state == 2)
+        if (scene_state == SCENE_STATE_ACTIVE)
             break;
-        moby->state = 11;
+        moby->state = CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET;
         start_scene(4);
     case CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET:
-        if (scene_state == 2)
+        if (scene_state == SCENE_STATE_ACTIVE)
             break;
         if (scene_controller_vars->points_1c != -1) {
             set_race_camera(&l07_cuboids[scene_controller_vars->points_1c].pos,
@@ -207,16 +216,17 @@ void umbris_scene_progression_update(struct Moby *moby) {
         unlock_planet(8);
         memcard_save_data(0, 8);
         request_space_load(8);
-        moby->state = 12;
+        moby->state = CONTROLLER_CLEANUP_LINKED_MOBY;
         break;
     case CONTROLLER_CLEANUP_LINKED_MOBY:
         if (scene_controller_vars->moby_10 != -1) {
             struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_10];
-            if (e != 0 && e->state != 0xFE && e->state != 0xFD) {
+            if (e != 0 && e->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+                e->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 mark_moby_for_removal(e);
             }
         }
-        moby->state = 13;
+        moby->state = CONTROLLER_DELETE_SELF;
         break;
     case CONTROLLER_DELETE_SELF:
         mark_moby_for_removal(moby);

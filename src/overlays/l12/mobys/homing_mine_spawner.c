@@ -17,6 +17,15 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
+enum {
+    HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0,
+    HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY = 1,
+    HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION = 2,
+    HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS = 3,
+    HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION = 4,
+    HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE = 5
+};
+
 typedef struct Moby Moby;
 
 /* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
@@ -92,14 +101,6 @@ void homing_mine_spawner_update(struct Moby *m) __asm__("FUN_L12_00307840");
 
 /* Moby class 1281 */
 void homing_mine_spawner_update(struct Moby *spawner) {
-    enum {
-        HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0,
-        HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY = 1,
-        HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION = 2,
-        HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS = 3,
-        HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION = 4,
-        HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE = 5
-    };
     HomingMineSpawnerVars *spawner_data = (HomingMineSpawnerVars *)spawner->pvars;
     int                   *slots;
     int                    i;
@@ -116,12 +117,12 @@ void homing_mine_spawner_update(struct Moby *spawner) {
                 }
             }
         }
-        spawner->state = 1;
+        spawner->state = HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY;
         break;
     case HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY:
         if (spawner_data->unkB4 != 2) {
             if (vector_distance_xy(&spawner->pos, &spawner_data->unk70) < spawner_data->unkF8) {
-                spawner->state = 2;
+                spawner->state = HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION;
             }
         }
         break;
@@ -133,7 +134,7 @@ void homing_mine_spawner_update(struct Moby *spawner) {
             if (spawner->prev_seq != 2) {
                 blend_moby_animation(spawner, 2, 0, scale_game_frames(2));
             }
-            spawner->state = 3;
+            spawner->state = HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS;
         }
         break;
     case HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS:
@@ -146,7 +147,7 @@ void homing_mine_spawner_update(struct Moby *spawner) {
             spawner_data->unkF0 += 1;
         }
         if (spawner_data->unkF0 == 12 || slots[spawner_data->unkF0] == -1) {
-            spawner->state = 4;
+            spawner->state = HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION;
         }
         break;
     case HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION:
@@ -158,7 +159,7 @@ void homing_mine_spawner_update(struct Moby *spawner) {
             if (spawner->prev_seq != 0) {
                 blend_moby_animation(spawner, 0, 0, scale_game_frames(2));
             }
-            spawner->state = 5;
+            spawner->state = HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE;
         }
         break;
     case HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE:
@@ -175,7 +176,7 @@ extern int  select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_00
 void update_homing_mine_spawner_target(struct Moby *spawner) {
     HomingMineSpawnerVars *spawner_data = (HomingMineSpawnerVars *)spawner->pvars;
     char                  *pad;
-    if (spawner->state != 0) {
+    if (spawner->state != HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS) {
         if (spawner_data->unk38 != 0) {
             spawner_data->timer_FE = scale_game_frames(0xB4);
         }

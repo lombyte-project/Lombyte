@@ -248,7 +248,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             convert_pose_to_reference_local(
                 moby, linked, vars->anchor, vars->v10, vars->v20, vars->v30);
         }
-        moby->state = 1;
+        moby->state = BOLT_PICKUP_WAIT_FOR_HERO;
         vars->s6C = 0;
         vars->u70.i =
             truncate_float_to_s32(random_float_between(0.0f, (float)scale_game_frames(600)));
@@ -268,14 +268,14 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                                        &moby->rot_row1,
                                        l08_bolt_pickup_detached_fall_spin_speed_degrees *
                                            0.017453292f * frame_time);
-                moby->state = 4;
+                moby->state = BOLT_PICKUP_FALL_AND_BOUNCE;
                 break;
             }
         }
         if (absolute_float(moby->pos.z - hero.motion.pos.f[2]) < hero.reach_distance &&
             vector_distance_xy(&moby->pos, hero.motion.pos.f) < hero.reach_height) {
             vars->timer = scale_game_frames(1);
-            moby->state = 2;
+            moby->state = BOLT_PICKUP_TURN_TOWARD_HERO;
         }
         if (moby->visible == 0) {
             if (moby > D_L08_0015FFDC &&
@@ -363,7 +363,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             } else {
                 vars->f64 = random_float_between(-30.0f, 30.0f) * deg_to_rad;
             }
-            moby->state = 3;
+            moby->state = BOLT_PICKUP_FLY_TO_HERO_AND_CREDIT_BOLTS;
         } else {
             if (scale_game_frames(10) < vars->timer) {
                 float goal_yaw = fast_add_rotations(
@@ -578,7 +578,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
 
             *(u128_4BE8_p *)vars->v10 = *(u128_4BE8_p *)((char *)&hero + 0x90);
             vars->timer = scale_game_frames(1);
-            moby->state = 2;
+            moby->state = BOLT_PICKUP_TURN_TOWARD_HERO;
             break;
         }
         if (coll_sphere(0.25f, &moby->pos, 0x22, moby) != 0) {
@@ -620,7 +620,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                 vars->spin_x = fast_subtract_rotations(vars->v30[0], moby->rot.x) * per_frame;
                 vars->spin_y = fast_subtract_rotations(vars->v30[1], moby->rot.y) * per_frame;
                 vars->spin_z = fast_subtract_rotations(vars->v30[2], moby->rot.z) * per_frame;
-                moby->state = 5;
+                moby->state = BOLT_PICKUP_RETURN_TO_SURFACE;
                 vars->timer = frames;
                 vars->u7C.i = D_L08_00174658_lui;
                 if (absolute_float(moby->pos.z - hero.motion.pos.f[2]) < hero.reach_distance &&
@@ -628,7 +628,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                     Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
                     vars->timer = scale_game_frames(1);
-                    moby->state = 2;
+                    moby->state = BOLT_PICKUP_TURN_TOWARD_HERO;
                 }
             }
         }
@@ -649,11 +649,11 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             if (absolute_float(moby->pos.z - hero.motion.pos.f[2]) < hero.reach_distance &&
                 vector_distance_xy(&moby->pos, hero.motion.pos.f) < hero.reach_height) {
                 vars->timer = scale_game_frames(1);
-                moby->state = 2;
+                moby->state = BOLT_PICKUP_TURN_TOWARD_HERO;
                 break;
             }
             if (moby->command != 0) {
-                moby->state = 1;
+                moby->state = BOLT_PICKUP_WAIT_FOR_HERO;
                 if (vars->u7C.i != 0) {
                     Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 

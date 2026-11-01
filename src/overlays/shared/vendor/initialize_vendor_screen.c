@@ -18,6 +18,9 @@
 #include "rnc/audio/voices/sound_update.h"
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
+
+void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
+
 #include "rnc/overlay/shared/streaming.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 
@@ -53,6 +56,9 @@ extern short D_L01_0015F400 __attribute__((sda));
 void         initialize_vendor_screen(char *vendor_moby, int lvl) __asm__("FUN_L01_002aea70");
 
 void initialize_vendor_screen(char *vendor_moby, int lvl) {
+    enum {
+        CUTSCENE_MODE_VENDOR_SCREEN = 5
+    };
     struct Hero             *hero_state = &hero;
     char                    *vendor_screen_state = vendor_screen_state_storage;
     char                    *relocated_address_block = fx_cutscene;
@@ -69,7 +75,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     D_L01_0015F5D8 = 1;
     fill_transfer_words(vendor_screen_state, 0, 0x220);
     *(int *)vendor_screen_state_storage = 3;
-    cutscene_mode = 5;
+    cutscene_mode = CUTSCENE_MODE_VENDOR_SCREEN;
     *(int *)(vendor_screen_state + 4) = 0;
     *(char **)(vendor_screen_state + 0x28) = vendor_moby;
     sc = vendor_screen_state + 0xC0;
@@ -78,7 +84,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     l01_hero_set_state(100, 1);
     *(char *)&hero_state->item_use_locked = 1;
     *(char *)&hero_state->unk20A5 = 1;
-    FUN_L00_00232fe8();
+    set_hero_item_moby_flag_bit0();
     transform_vector_by_basis(sc, &vendor_camera_local_position_offset, vendor_moby + 0xC0);
     fast_vec_add(sc, sc, &MOBY(vendor_moby)->pos);
     *(float *)(vendor_screen_state + 0xC8) = probe_ground_height(sc, 0, 0.5f);

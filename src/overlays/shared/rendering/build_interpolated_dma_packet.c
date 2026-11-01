@@ -124,6 +124,13 @@ void prepare_scaled_table_with_byte_128(char *value_target) {
 void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) __asm__("FUN_L02_002a40f0");
 
 void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
+    enum {
+        TEXTURED_GRID_FOG_SOURCE_CAMERA = 1
+    };
+    enum {
+        TEXTURED_GRID_BLEND_MODE_ABOVE_ALPHA_LIMIT = 0x5360A,
+        TEXTURED_GRID_BLEND_MODE_AT_OR_BELOW_ALPHA_LIMIT = 0x5370B
+    };
     float        view_matrix[16];
     int         *view_setup_dma_packet;
     int         *cursor;
@@ -136,7 +143,7 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     textured_grid_saved_fog_far_distance = ((QuadCamera *)level02_camera_view_state)->f21C;
     textured_grid_saved_fog_near_intensity = ((QuadCamera *)level02_camera_view_state)->f228;
     textured_grid_saved_fog_far_intensity = ((QuadCamera *)level02_camera_view_state)->f22C;
-    if (textured_grid_fog_source_mode != 1) {
+    if (textured_grid_fog_source_mode != TEXTURED_GRID_FOG_SOURCE_CAMERA) {
         ((QuadCamera *)level02_camera_view_state)->f218 = draw_parameters->f20;
         ((QuadCamera *)level02_camera_view_state)->f21C = draw_parameters->f24;
         ((QuadCamera *)level02_camera_view_state)->f228 = draw_parameters->f28;
@@ -216,16 +223,16 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     }
     TEXTURE_REGISTER = (TEXTURE_CURSOR >> 8) | 0x18100000 | 0x580000000;
     color = draw_parameters->c30 | draw_parameters->c31 << 8 | draw_parameters->c32 << 16;
-    if (textured_grid_fog_source_mode == 1) {
+    if (textured_grid_fog_source_mode == TEXTURED_GRID_FOG_SOURCE_CAMERA) {
         color = ((QuadCamera *)level02_camera_view_state)->c230 |
                 ((QuadCamera *)level02_camera_view_state)->c234 << 8 |
                 ((QuadCamera *)level02_camera_view_state)->c238 << 16;
     }
     words = (long *)PACKET_CURSOR;
     alpha_limit = 0x60;
-    blend_mode = 0x5360A;
+    blend_mode = TEXTURED_GRID_BLEND_MODE_ABOVE_ALPHA_LIMIT;
     if (!(alpha_limit < draw_parameters->alpha)) {
-        blend_mode = 0x5370B;
+        blend_mode = TEXTURED_GRID_BLEND_MODE_AT_OR_BELOW_ALPHA_LIMIT;
     }
     words[0] = 0x8000000000008001;
     words[1] = 0xEEEEEEEE;

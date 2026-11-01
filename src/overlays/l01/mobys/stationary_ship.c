@@ -134,7 +134,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
     switch (v->state) {
     case CARRIER_STATE_INITIALIZE:
         v->unk194 = -1;
-        v->state = 1;
+        v->state = CARRIER_STATE_WAIT_FOR_TRIGGER;
         v->arrived = 0;
         v->keep = 0;
         carrier_moby->unk30 = 0xFF;
@@ -142,7 +142,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
         return;
     case CARRIER_STATE_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(&hero.motion.pos, volume_or_path_node_index) != 0) {
-            v->state = 2;
+            v->state = CARRIER_STATE_FOLLOW_PATH;
             carrier_moby->flags &= ~0x41;
             if (v->camera != -1) {
                 cv = (CarrierCamVars *)((CarrierMoby *)ents)[v->camera].pvars;
@@ -205,7 +205,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
         for (i = 0; i < 8; i++) {
             offs = l01_carrier_rider_local_offsets;
             if (v->riders[i] != -1) {
-                if (v->state != 1) {
+                if (v->state != CARRIER_STATE_WAIT_FOR_TRIGGER) {
                     ((CarrierMoby *)ents)[v->riders[i]].flags &= ~0x41;
                 }
                 transform_vector_by_basis(&offs.v[i], &offs.v[i], &carrier_moby->unkC0);

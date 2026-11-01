@@ -115,13 +115,13 @@ void qwark_rilgar_update(L03WatchMoby *moby) {
                 return;
             }
         }
-        moby->state = 1;
+        moby->state = QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION;
         break;
     case QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION:
         if (watch_data->region_a != -1 &&
             is_point_inside_clip_volume(&hero.motion.pos, watch_data->region_a)) {
             set_moby_dialogue_record_value(moby, 1);
-            moby->state = 2;
+            moby->state = QWARK_RILGAR_POST_REGION_TRIGGER;
         }
         break;
     case QWARK_RILGAR_POST_REGION_TRIGGER:

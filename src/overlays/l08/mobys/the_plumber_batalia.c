@@ -183,7 +183,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
             return;
         }
         watch_data->p20 = (void *)batalia_plumber_name_text;
-        moby->state = 1;
+        moby->state = PLUMBER_UPDATE_DIALOGUE;
         initialize_npc_dialogue(moby, watch_data);
         break;
     case PLUMBER_UPDATE_DIALOGUE:
@@ -192,12 +192,12 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
         if (watch_data->h36 == 2) {
             char *camera_record = D_L08_001600EC + watch_data->i48 * 128;
             jet_reset_camera(camera_record + 0x30, camera_record + 0x70);
-            moby->state = 2;
+            moby->state = PLUMBER_SCRIPTED_HANDOFF;
             request_batalia_cannon_mount(D_L08_0015FFD8 + watch_data->i50 * 256);
         }
         if (watch_data->sub == 3) {
             FUN_L08_002a1880(1);
-            moby->state = 5;
+            moby->state = PLUMBER_SAVE_AND_REMOVE;
         }
         if (watch_data->sub == 4) {
             hero_respawn();

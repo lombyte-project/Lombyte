@@ -10,6 +10,14 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
 /* Runs the moby's hit timer: on a hit it either finishes the stun or counts it down and plays the hurt animation. */
+enum {
+    LINKED_MOBY_STATE_START_ANIMATION = 0,
+    LINKED_MOBY_STATE_WAIT_FOR_ANIMATION_FLAG = 1,
+    LINKED_MOBY_STATE_HANDLE_HITS = 2,
+    LINKED_MOBY_STATE_FADE_OUT = 3,
+    LINKED_MOBY_STATE_REMOVE = 4
+};
+
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int   fptodp(float) __asm__("FUN_00120478");
 extern void  print_fe50(char *, int, int) __asm__("FUN_001e93b0");
@@ -36,9 +44,12 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
         HIT_REACTION_KNOCKBACK_AND_CANCEL_PROJECTILE = 4,
         HIT_REACTION_NO_RESPONSE = 11
     };
+    enum {
+        HIT_STATUS_DAMAGE_PROCESSING_THRESHOLD = 2
+    };
     int   hit_status;
     char *hit_record;
-    if (moby->state != 4) {
+    if (moby->state != LINKED_MOBY_STATE_REMOVE) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
         if (hit_record != 0) {
             print_fe50(D_L11_0021B530, moby->oclass, fptodp(*(float *)(hit_record + 0x2C)));
@@ -54,7 +65,7 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
         case HIT_REACTION_NO_RESPONSE:
             break;
         }
-        if (hit_status >= 2) {
+        if (hit_status >= HIT_STATUS_DAMAGE_PROCESSING_THRESHOLD) {
             if (*health <= *(float *)(hit_record + 0x2C)) {
                 unsigned char *owner_moby;
                 *health = 0.0f;
@@ -68,7 +79,7 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
                 if (owner_moby != 0 && owner_moby[0x20] != 0xFE && owner_moby[0x20] != 0xFD) {
                     owner_moby[0x20] = 3;
                 }
-                moby->state = 3;
+                moby->state = LINKED_MOBY_STATE_FADE_OUT;
             } else {
                 *health -= *(float *)(hit_record + 0x2C);
                 private_data[0x67] = 0xFA;
@@ -96,18 +107,15 @@ typedef struct OwnerLinkedMobyVars {
 /* Moby class 1219 */
 void owner_linked_moby_update(struct Moby *moby) {
     enum {
-        LINKED_MOBY_STATE_START_ANIMATION = 0,
-        LINKED_MOBY_STATE_WAIT_FOR_ANIMATION_FLAG = 1,
-        LINKED_MOBY_STATE_HANDLE_HITS = 2,
-        LINKED_MOBY_STATE_FADE_OUT = 3,
-        LINKED_MOBY_STATE_REMOVE = 4
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
     };
     OwnerLinkedMobyVars *owner_linked_moby_vars = (OwnerLinkedMobyVars *)moby->pvars;
     char                *health_ptr = &owner_linked_moby_vars->unk20;
     struct Moby         *owner_moby = owner_linked_moby_vars->unk70;
-    if (owner_moby == 0 || owner_moby->state == 0xFE || owner_moby->state == 0xFD) {
-        if (moby->state < 3) {
-            moby->state = 4;
+    if (owner_moby == 0 || owner_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
+        owner_moby->state == 0xFD) {
+        if (moby->state < LINKED_MOBY_STATE_FADE_OUT) {
+            moby->state = LINKED_MOBY_STATE_REMOVE;
         }
     }
     switch (moby->state) {
@@ -115,12 +123,12 @@ void owner_linked_moby_update(struct Moby *moby) {
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 0xF);
         }
-        moby->state = 1;
+        moby->state = LINKED_MOBY_STATE_WAIT_FOR_ANIMATION_FLAG;
         break;
     case LINKED_MOBY_STATE_WAIT_FOR_ANIMATION_FLAG:
         if (moby->anim_flags & 2) {
             moby->hit_slot = 0xFF;
-            moby->state = 2;
+            moby->state = LINKED_MOBY_STATE_HANDLE_HITS;
         }
         break;
     case LINKED_MOBY_STATE_HANDLE_HITS:
@@ -134,7 +142,7 @@ void owner_linked_moby_update(struct Moby *moby) {
             moby->alpha--;
         }
         if (compute_interpolated_record_value(moby) > 13.5f) {
-            moby->state = 4;
+            moby->state = LINKED_MOBY_STATE_REMOVE;
         }
         break;
     case LINKED_MOBY_STATE_REMOVE:

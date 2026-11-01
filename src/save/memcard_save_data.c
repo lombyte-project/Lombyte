@@ -26,6 +26,9 @@ int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 extern s32 current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 
 int memcard_save_data(int slot, int flags) {
+    enum {
+        LEVEL_VISIT_UNVISITED = 0
+    };
     unsigned char saved_visit_state;
 
     sceCdReadClock(D_0015EE98);
@@ -48,18 +51,18 @@ int memcard_save_data(int slot, int flags) {
         if (slot == 0) {
             mode_freeze_flags |= 0x200;
         }
-        if (card_state->state >= 3) {
+        if (card_state->state >= MEMCARD_REQUEST_FORMAT) {
             goto done;
         }
-        if (card_state->pending_state >= 0) {
+        if (card_state->pending_state >= MEMCARD_QUERY_INFO) {
             goto done;
         }
         card_state->record_index = current_level_index;
-        saved_visit_state = 0;
+        saved_visit_state = LEVEL_VISIT_UNVISITED;
         if (flags >= 0) {
             current_level_index = flags;
             saved_visit_state = level_visit_state[flags];
-            if (saved_visit_state == 0) {
+            if (saved_visit_state == LEVEL_VISIT_UNVISITED) {
                 level_visit_state[flags] = 1;
             }
         }
@@ -84,13 +87,13 @@ int memcard_save_data(int slot, int flags) {
             level_visit_state[current_level_index] = saved_visit_state;
             current_level_index = card_state->record_index;
         }
-        if (card_state->pending_state < 0) {
-            card_state->pending_state = 0xF;
+        if (card_state->pending_state < MEMCARD_QUERY_INFO) {
+            card_state->pending_state = MEMCARD_BEGIN_UPDATE_SAVE;
             card_state->pending_card = card_state->active_card;
         }
     }
 done:
-    return memory_card_state.pending_state == 0xF;
+    return memory_card_state.pending_state == MEMCARD_BEGIN_UPDATE_SAVE;
 }
 
 extern __typeof__(memcard_save_data) func_0020B178 __attribute__((alias("FUN_0020b178")));

@@ -111,11 +111,15 @@ extern float      frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern int        D_L02_0017EB08_lui __asm__("D_L02_0017EB08") NOT_SDA;
 extern Idle       D_L02_00179A10;
 extern int        D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
-extern int        D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
-extern int        D_L02_00161AA8_gp __asm__("D_L02_00161AA8") __attribute__((sda));
-extern int        D_L02_00161AA4_gp __asm__("D_L02_00161AA4") __attribute__((sda));
-extern int        D_L02_00161AA0_gp __asm__("D_L02_00161AA0") __attribute__((sda));
-extern char       D_0013E633_2D9F08[] __asm__("D_0013E533");
+extern int        l02_tresspasser_puzzle_texture_index_offset __asm__("D_L02_00161B1C")
+    __attribute__((sda));
+extern int l02_tresspasser_pad_no_ground_contact_glow_color __asm__("D_L02_00161AA8")
+    __attribute__((sda));
+extern int l02_tresspasser_pad_without_tool_glow_color __asm__("D_L02_00161AA4")
+    __attribute__((sda));
+extern int l02_tresspasser_pad_tool_equipped_glow_color __asm__("D_L02_00161AA0")
+    __attribute__((sda));
+extern char D_0013E633_2D9F08[] __asm__("D_0013E533");
 
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 
@@ -244,17 +248,20 @@ void tresspasser_pad_update(Moby *moby) {
         TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE = 2,
         TRESSPASSER_PAD_STATE_COMMIT_COMPLETION = 3
     };
+    enum {
+        TRESSPASSER_PAD_STATE_COMPLETED = 4
+    };
     Vec_2D9F08 camera_pos, camera_rot;
     Data      *pad_puzzle_state = (struct Data *)moby->pvars;
     int        i;
 
-    if (pad_puzzle_state == 0) {
+    if (pad_puzzle_state == NULL) {
         return;
     }
     switch (moby->state) {
     case TRESSPASSER_PAD_STATE_INITIALIZE:
         pad_puzzle_state->h12 = 0;
-        moby->state = 1;
+        moby->state = TRESSPASSER_PAD_STATE_WAIT_FOR_TOOL_ACTIVATION;
         D_L02_001D33B0[2][1] = 17.0f;
         D_L02_001D33B0[0][1] = 17.0f;
         D_L02_001D33B0[1][0] = 17.0f;
@@ -263,14 +270,14 @@ void tresspasser_pad_update(Moby *moby) {
         D_L02_001D33B0[3][0] = -17.0f;
         D_L02_001D33B0[3][1] = -17.0f;
         D_L02_001D33B0[0][0] = 17.0f;
-        D_L02_00161B1C_gp = pad_puzzle_state->iEC;
+        l02_tresspasser_puzzle_texture_index_offset = pad_puzzle_state->iEC;
         if (moby->mission != 0xFF) {
             if (D_L02_001BBB40_2D9F08.collected[(short)moby->save_id] != 0 ||
                 (((int *)((char *)D_0014C190_257218 +
                           (current_level_index_macro << 8)))[(short)moby->save_id >> 5] >>
                  (moby->save_id & 0x1F)) &
                     1) {
-                moby->state = 4;
+                moby->state = TRESSPASSER_PAD_STATE_COMPLETED;
             }
         }
         break;
@@ -285,10 +292,10 @@ void tresspasser_pad_update(Moby *moby) {
             }
             if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby != 0 &&
                 ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id == 0x1A) {
-                moby->glow_color = D_L02_00161AA0_gp;
+                moby->glow_color = l02_tresspasser_pad_tool_equipped_glow_color;
                 holding_tool = 1;
             } else {
-                moby->glow_color = D_L02_00161AA4_gp;
+                moby->glow_color = l02_tresspasser_pad_without_tool_glow_color;
                 holding_tool = 0;
             }
             if (holding_tool &&
@@ -299,7 +306,7 @@ void tresspasser_pad_update(Moby *moby) {
                 hero_set_state(0x72, 0);
                 set_hero_animation(0x57, 0, scale_game_frames(6));
                 jet_mount(&D_L02_00167440_2D9F08[0], &D_L02_00167440_2D9F08[1], 1, 0, 0);
-                moby->state = 2;
+                moby->state = TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE;
                 pad_puzzle_state->h10 = scale_game_frames(0x3C);
                 pad_puzzle_state->f110 = 0.0f;
                 qcopy(&pad_puzzle_state->vF0, &D_L02_00167440_2D9F08[0]);
@@ -307,7 +314,7 @@ void tresspasser_pad_update(Moby *moby) {
             }
         } else {
             pad_puzzle_state->h12 = 0;
-            moby->glow_color = D_L02_00161AA8_gp;
+            moby->glow_color = l02_tresspasser_pad_no_ground_contact_glow_color;
         }
         break;
     case TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE:
@@ -378,7 +385,7 @@ void tresspasser_pad_update(Moby *moby) {
                 }
             } else if (i == 12) {
                 if (fast_dec_timer_s16(&pad_puzzle_state->h10)) {
-                    moby->state = 3;
+                    moby->state = TRESSPASSER_PAD_STATE_COMMIT_COMPLETION;
                 }
             } else if (((struct PadStateWords *)&controller_state)->unmasked.held_pressed &
                        0xA00000000000) {
@@ -413,7 +420,7 @@ void tresspasser_pad_update(Moby *moby) {
             if (((pad_pressed_lui & 0x10) && D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1) ||
                 ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->state.current != 0x72 ||
                 ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id != 0x1A) {
-                moby->state = 1;
+                moby->state = TRESSPASSER_PAD_STATE_WAIT_FOR_TOOL_ACTIVATION;
                 jet_end_mount(1);
                 request_hero_idle_state_for_vehicle_mode();
                 pad_puzzle_state->h10 = scale_game_frames(0x3C);
@@ -431,7 +438,7 @@ void tresspasser_pad_update(Moby *moby) {
             jet_end_mount(1);
             hero_set_state(0, 1);
             moby->command = 1;
-            moby->state = 4;
+            moby->state = TRESSPASSER_PAD_STATE_COMPLETED;
         }
         break;
     }
@@ -487,6 +494,12 @@ void align_hero_to_tresspasser_pad(struct Moby *moby) {
 
 void draw_tresspasser_puzzle(char *moby) {
     /* Fakematch: the texture sits at retail's stack offset inside this frame. */
+    enum {
+        TRESSPASSER_MARKER_ABSENT = 0,
+        TRESSPASSER_SELECTED_RING_FIRST = 1,
+        TRESSPASSER_SELECTED_RING_SECOND = 2,
+        TRESSPASSER_MARKER_REACHED = 2
+    };
     struct {
         char pad0[0x78];
         u64  texture;
@@ -517,17 +530,17 @@ void draw_tresspasser_puzzle(char *moby) {
     third_step = 0;
     if (puzzle_state->unkE4 > 0.31415927f) {
         state = puzzle_state->unkE0;
-        if (state == 1)
+        if (state == TRESSPASSER_SELECTED_RING_FIRST)
             first_step = 1;
-        else if (state == 2)
+        else if (state == TRESSPASSER_SELECTED_RING_SECOND)
             second_step = 1;
         else
             third_step = 1;
     } else if (puzzle_state->unkE4 < -0.31415927f) {
         state = puzzle_state->unkE0;
-        if (state == 1)
+        if (state == TRESSPASSER_SELECTED_RING_FIRST)
             first_step = -1;
-        else if (state == 2)
+        else if (state == TRESSPASSER_SELECTED_RING_SECOND)
             second_step = -1;
         else
             third_step = -1;
@@ -845,8 +858,8 @@ void draw_tresspasser_puzzle(char *moby) {
             angle = fast_add_rotations(-0.08726646f, (float)(i * 30) * 0.017453292f);
             phase = fast_add_rotations(angle, 0.17453292f);
             marker_state = markers->slot[i];
-            if (marker_state != 0) {
-                if (marker_state == 2)
+            if (marker_state != TRESSPASSER_MARKER_ABSENT) {
+                if (marker_state == TRESSPASSER_MARKER_REACHED)
                     color = tresspasser_reached_marker_arc_color_gp;
                 else if (D_L02_0015F5CC & 0x20)
                     color = tresspasser_unreached_marker_arc_flag_set_color_gp;
@@ -990,7 +1003,7 @@ void draw_tresspasser_puzzle_arrow(
     xy[2] += truncate_float_to_s32(M[2][1] * 16.0f);
     xy[3] += truncate_float_to_s32(M[3][0] * 16.0f) << 16;
     xy[3] += truncate_float_to_s32(M[3][1] * 16.0f);
-    texture_tex0 = get_effect_texture(D_L02_00161B1C_gp + 0x29);
+    texture_tex0 = get_effect_texture(l02_tresspasser_puzzle_texture_index_offset + 0x29);
     FUN_L02_0020bc88(xy, uv, col, texture_tex0, 1);
     FUN_L02_0020bc88(xy, uv, col, texture_tex0, 1);
 }
@@ -1134,7 +1147,7 @@ void draw_tresspasser_puzzle_textured_quads(void) {
             vertex_uvs,
             vertex_colors,
             /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
-            ((int (*)(int))get_effect_texture)(D_L02_00161B1C_gp + 0x28),
+            ((int (*)(int))get_effect_texture)(l02_tresspasser_puzzle_texture_index_offset + 0x28),
             1);
     }
 }

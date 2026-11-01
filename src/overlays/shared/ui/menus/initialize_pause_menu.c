@@ -42,6 +42,23 @@
 #include "rnc/ui/menus/item_preview/create_menu_preview_moby.h"
 #include "rnc/ui/menus/stream_buffers/initialize_menu_stream_buffers.h"
 
+enum {
+    PAUSE_MENU_PENDING_STATE_CLEARED = 0,
+    PAUSE_MENU_STATE_EXIT_GUARDED = 0x22
+};
+
+enum {
+    SCENE_STATE_DEFAULT = 2
+};
+
+enum {
+    PAUSE_MENU_STATE_PAGE_TRANSITION = 1,
+    PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY = 0xE,
+    PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14,
+    PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY = 0x21,
+    PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY = 0x23
+};
+
 typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
 
 typedef union {
@@ -165,7 +182,7 @@ extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
 extern Own  l00_pause_menu_default_page_owner __asm__("D_L00_001B2588");
 extern Own  D_L00_001B3518;
-extern Own  D_L00_001B6088;
+extern Own  l00_pause_menu_level_transition_on_action_page_owner __asm__("D_L00_001B6088");
 extern Own  l00_pause_menu_state_preserving_entry_page_owner __asm__("D_L00_001B6B38");
 extern Own  D_L00_001B86C8;
 
@@ -193,6 +210,9 @@ extern void FUN_L00_002df638(Ent *);
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00277208). */
 void initialize_pause_menu(void) {
+    enum {
+        PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION = 15
+    };
     struct GameState *state = &D_L00_001B9CF0;
     Own              *page;
     s32               small_buffers = 0;
@@ -210,13 +230,13 @@ void initialize_pause_menu(void) {
         state->unk8 = page;
         small_buffers = 1;
     } else if (state_id == 14) {
-        D_L00_001B9CF0.state = 15;
-        page = &D_L00_001B6088;
+        D_L00_001B9CF0.state = PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION;
+        page = &l00_pause_menu_level_transition_on_action_page_owner;
         state->owner = page;
         state->unk8 = page;
         small_buffers = 1;
     } else if (state_id == 0x21) {
-        D_L00_001B9CF0.state = 0x22;
+        D_L00_001B9CF0.state = PAUSE_MENU_STATE_EXIT_GUARDED;
         page = &l00_pause_menu_exit_guarded_page_owner;
         state->owner = page;
         state->unk8 = page;
@@ -227,12 +247,12 @@ void initialize_pause_menu(void) {
         state->unk8 = page;
     } else if (state_id == 0x2D) {
         page = &D_L00_001B86C8;
-        D_L00_001B9CF0.state = 2;
+        D_L00_001B9CF0.state = SCENE_STATE_DEFAULT;
         state->owner = page;
         state->unk8 = page;
     } else {
         page = &l00_pause_menu_default_page_owner;
-        D_L00_001B9CF0.state = 2;
+        D_L00_001B9CF0.state = SCENE_STATE_DEFAULT;
         state->owner = page;
         state->unk8 = page;
     }
@@ -244,12 +264,12 @@ void initialize_pause_menu(void) {
         D_L00_001B9CF0.unk8 = D_L00_001B9CF0.pending_owner;
         pending_state = D_L00_001B9CF0.pending_state;
         D_L00_001B9CF0.state = pending_state;
-        if (pending_state == 11 || pending_state == 15) {
+        if (pending_state == 11 || pending_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
             small_buffers = 1;
             D_L00_001841F0.w224 = (s32)D_L00_001B9CF0.unkE4;
         }
         D_L00_001B9CF0.pending_owner = 0;
-        D_L00_001B9CF0.pending_state = 0;
+        D_L00_001B9CF0.pending_state = PAUSE_MENU_PENDING_STATE_CLEARED;
     }
 
     {
@@ -314,11 +334,14 @@ void initialize_pause_menu(void) {
     D_L00_0015F578 = 0x2000;
     vu1_init_chain();
 
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
+    if (D_L00_001B9CF0.state == 11 ||
+        D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
         initialize_render_archive_transfer();
     }
     apply_group_entry_adjustment(0);
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15 || D_L00_001B9CF0.state == 0x12) {
+    if (D_L00_001B9CF0.state == 11 ||
+        D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION ||
+        D_L00_001B9CF0.state == 0x12) {
         decompress_and_relocate_selected_groups(1);
     } else {
         decompress_and_relocate_selected_groups(0);
@@ -326,7 +349,8 @@ void initialize_pause_menu(void) {
     transfer_draw_buffer_chunks(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
     texture_start = gs_texture_allocation_start;
     D_L00_001B9CF0.saved_texture_start = texture_start;
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
+    if (D_L00_001B9CF0.state == 11 ||
+        D_L00_001B9CF0.state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
         D_L00_001841F0.unk240 = texture_start;
         texture_region_end = texture_start + 0x40000;
         D_L00_001841F0.unk244 = texture_region_end;
@@ -448,7 +472,7 @@ void close_pause_menu(void) {
                                         &current_bolt_count,
                                         9999999);
         hud_keep_visible(handle, scale_game_frames(0xb4));
-        D_L00_001B9CF0.state = 0x14;
+        D_L00_001B9CF0.state = PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION;
         D_L00_001B9CF0.unk14 = 2;
         {
             s32 value = D_L00_001B9CF0.saved_seq_count;
@@ -477,9 +501,6 @@ void close_pause_menu(void) {
 void update_pause_menu(void) __asm__("FUN_L00_00276bd0");
 
 void update_pause_menu(void) {
-    enum {
-        SCENE_STATE_DEFAULT = 2
-    };
     Own *owner;
     Own *u8p;
     Mth *active_callback_object;
@@ -501,7 +522,7 @@ void update_pause_menu(void) {
         D_L00_0015F5AC = 1;
         break;
     }
-    if (D_L00_001B9CF0.state == 0x14) {
+    if (D_L00_001B9CF0.state == PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION) {
         if (D_L00_001B9CF0.unk14 != 0) {
             D_L00_001B9CF0.unk14 = D_L00_001B9CF0.unk14 - 1;
             if (D_L00_001B9CF0.unk14 != 0) {
@@ -576,8 +597,10 @@ void update_pause_menu(void) {
         return;
     }
     scene_state = D_L00_001B9CF0.state;
-    if (scene_state == 0 || scene_state == 0xA || scene_state == 0xE || scene_state == 0x11 ||
-        scene_state == 0x21 || scene_state == 0x2D || scene_state == 0x23) {
+    if (scene_state == 0 || scene_state == 0xA ||
+        scene_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY || scene_state == 0x11 ||
+        scene_state == PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY || scene_state == 0x2D ||
+        scene_state == PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY) {
         initialize_pause_menu();
     }
     if ((mode_freeze_flags & 1) && !(level_timer < 8)) {
@@ -585,7 +608,7 @@ void update_pause_menu(void) {
         return;
     }
     process_unlock_code_input();
-    if (D_L00_001B9CF0.state == 1) {
+    if (D_L00_001B9CF0.state == PAUSE_MENU_STATE_PAGE_TRANSITION) {
         D_L00_001B9CF0.unk14 = (D_L00_001B9CF0.unk14 < 1) ? 0 : D_L00_001B9CF0.unk14 - 1;
         if (D_L00_001B9CF0.unk14 == 0) {
             u8p = D_L00_001B9CF0.unk8;
@@ -618,7 +641,7 @@ void update_pause_menu(void) {
             D_L00_001B9CF0.owner != &D_L00_001B7DD0 && D_L00_001B9CF0.owner != &D_L00_001B80E0 &&
             D_L00_001B9CF0.owner != &l00_pause_menu_self_transition_animation_guard_page_owner &&
             D_L00_001B9CF0.owner != &D_L00_001B78F0 && D_L00_001B9CF0.owner != &D_L00_001B6820) {
-            if (D_L00_001B9CF0.state != 0x23) {
+            if (D_L00_001B9CF0.state != PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY) {
                 flag = flag ^ 1;
             }
         }
@@ -637,7 +660,7 @@ void update_pause_menu(void) {
                 l00_pause_menu_page_mobys[j]->anim_speed = 1.0f;
             }
         }
-        D_L00_001B9CF0.state = 1;
+        D_L00_001B9CF0.state = PAUSE_MENU_STATE_PAGE_TRANSITION;
         D_L00_001B9CF0.unk14 = 12;
         D_L00_001B9CF0.unkD0 = D_L00_001B9CF0.owner;
         D_L00_001B9CF0.owner = 0;
@@ -733,7 +756,7 @@ void draw_pause_menu_pages(int transfer_only) {
     }
     reset_gs_registers();
     emit_rgba_draw_packet(0, 0, 0, 0x30);
-    if (D_L00_001B9CF0.state == 0x14) {
+    if (D_L00_001B9CF0.state == PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION) {
         return;
     }
     vu1_add_g_sregister(0x47, 0x5360B);

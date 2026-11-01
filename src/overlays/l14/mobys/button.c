@@ -25,6 +25,9 @@ void button_update(struct Moby *moby) {
         BUTTON_INITIALIZE = 0,
         BUTTON_WAIT_FOR_HERO_TO_STAND = 1
     };
+    enum {
+        BUTTON_ACTIVATED = 2
+    };
     s32  *button_pvars = (s32 *)moby->pvars;
     s16   id;
     s32   i;
@@ -46,7 +49,7 @@ void button_update(struct Moby *moby) {
              D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
             moby->command = 2;
             moby->glow_color = 0x80208020;
-            moby->state = 2;
+            moby->state = BUTTON_ACTIVATED;
             list = button_pvars[0];
             if (list != -1) {
                 i = 0;
@@ -61,7 +64,7 @@ void button_update(struct Moby *moby) {
                 }
             }
         } else {
-            moby->state = 1;
+            moby->state = BUTTON_WAIT_FOR_HERO_TO_STAND;
         }
         break;
     case BUTTON_WAIT_FOR_HERO_TO_STAND:
@@ -79,7 +82,7 @@ void button_update(struct Moby *moby) {
             id = (s16)moby->save_id;
             D_0014C190_257218[current_level_index][id >> 5] |= 1 << (moby->save_id & 31);
             D_L14_001BABD0[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
-            moby->state = 2;
+            moby->state = BUTTON_ACTIVATED;
             moby->command = 1;
             moby->glow_color = 0x80208020;
             allocate_voice_for_target_entry(0, 0, moby);

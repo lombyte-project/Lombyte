@@ -146,7 +146,7 @@ void hero_relocation_trigger_update(struct Moby *moby) {
         request_music_track(2, 4);
         return;
     }
-    if (hero.vehicle_mode == 1) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         exit_hero_vehicle_mode();
         set_race_camera(&l10_cuboids[relocation_trigger_vars->vehicle_spot].pos,
                         &l10_cuboids[relocation_trigger_vars->vehicle_spot].rot,

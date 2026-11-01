@@ -351,6 +351,15 @@ void drone_update(struct Moby *updated_moby) __asm__("FUN_L00_002ce358");
 
 /* Moby class 479 */
 void drone_update(struct Moby *updated_moby) {
+    enum {
+        DRONE_STATE_ORBIT = 2,
+        DRONE_STATE_PURSUE_TARGET = 3,
+        DRONE_STATE_FADE = 4,
+        DRONE_STATE_REMOVE = 5
+    };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     DroneVars   *drone_vars = (DroneVars *)updated_moby->pvars;
     Vec4         collision_data[1], old_pos;
     Vec4         direction, rotated;
@@ -370,7 +379,7 @@ void drone_update(struct Moby *updated_moby) {
         return;
     }
     updated_moby->flags &= 0xFFBE;
-    if (updated_moby->state < 5) {
+    if (updated_moby->state < DRONE_STATE_REMOVE) {
         ((DroneSlots *)&hero)->counter++;
         if (((DroneSlots *)&hero)->ammo_used < ((DroneSlots *)&hero)->counter) {
             closest = 0;
@@ -384,7 +393,7 @@ void drone_update(struct Moby *updated_moby) {
                 drone = ((DroneSlots *)&hero)->slots[k];
                 if (drone != 0) {
                     if (drone->oclass == 0x1DF) {
-                        if (drone->state == 0xFE) {
+                        if (drone->state == MOBY_STATE_MARKED_FOR_REMOVAL) {
                             ((DroneSlots *)&hero)->slots[k] = 0;
                         } else if (drone->state == 0xFD) {
                             ((DroneSlots *)&hero)->slots[k] = 0;
@@ -392,7 +401,7 @@ void drone_update(struct Moby *updated_moby) {
                             ((DroneSlots *)&hero)->exclusions[count] =
                                 *(struct Moby **)(drone->pvars + 0x30);
                             count++;
-                            if (drone->state < 4)
+                            if (drone->state < DRONE_STATE_FADE)
                                 ((DroneSlots *)&hero)->ammo_capacity++;
                             if (count > 8)
                                 break;
@@ -416,7 +425,8 @@ void drone_update(struct Moby *updated_moby) {
                     drone = ((DroneSlots *)&hero)->slots[i];
                     if (drone != 0) {
                         struct Moby *drone_target = *(struct Moby **)(drone->pvars + 0x30);
-                        if (drone_target == 0 || drone_target->state == 0xFE ||
+                        if (drone_target == 0 ||
+                            drone_target->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
                             drone_target->state == 0xFD) {
                             f32 candidate_distance = vector_distance_xy(&drone->pos, &old_pos);
                             if (candidate_distance < distance) {
@@ -436,7 +446,7 @@ void drone_update(struct Moby *updated_moby) {
                     if (target_height_data != 0)
                         old_pos.f[2] += *(f32 *)(target_height_data + 0x10);
                     qcopy(&assigned->offset, &old_pos);
-                    closest->state = 3;
+                    closest->state = DRONE_STATE_PURSUE_TARGET;
                     random = rand_2cc608() % 3;
                     allocate_voice_for_target_entry(random + (random > 0), 0, updated_moby);
                     ((DroneSlots *)&hero)->exclusions[count] = assigned->target;
@@ -468,22 +478,22 @@ void drone_update(struct Moby *updated_moby) {
                 if (cat >= 5) {
                     if (hit == 0 || h == 0 || *(s16 *)(h + 0xA6) != 0x4D6 ||
                         fast_dec_timer_s16(&drone_vars->health))
-                        updated_moby->state = 4;
+                        updated_moby->state = DRONE_STATE_FADE;
                 }
             }
         }
     }
 dispatch_state:
     state = updated_moby->state;
-    if (state == 3)
+    if (state == DRONE_STATE_PURSUE_TARGET)
         goto state3;
-    if (state < 4) {
-        if (state == 2)
+    if (state < DRONE_STATE_FADE) {
+        if (state == DRONE_STATE_ORBIT)
             goto state2;
     } else {
-        if (state == 4)
+        if (state == DRONE_STATE_FADE)
             goto state4;
-        if (state == 5)
+        if (state == DRONE_STATE_REMOVE)
             goto state5;
     }
     goto update_effects;
@@ -574,7 +584,7 @@ state2: {
                                              1,
                                              -1,
                                              0);
-                    updated_moby->state = 4;
+                    updated_moby->state = DRONE_STATE_FADE;
                 }
             }
         }
@@ -609,8 +619,8 @@ state3: {
     updated_moby->collision = pclass->collision;
     func_L00_002CF328_2CF808(updated_moby);
     target = drone_vars->target;
-    if (target != 0 && target->oclass == drone_vars->target_oclass && target->state != 0xFE &&
-        target->state != 0xFD) {
+    if (target != 0 && target->oclass == drone_vars->target_oclass &&
+        target->state != MOBY_STATE_MARKED_FOR_REMOVAL && target->state != 0xFD) {
         char *h = get_moby_target_info(target);
         qcopy(&target_pos, &drone_vars->target->pos);
         if (h != 0)
@@ -625,8 +635,8 @@ state3: {
         qcopy(&collision_data[0], &updated_moby->pos);
         if (coll_sphere(0.25f, &collision_data[0], 0, updated_moby)) {
             struct Moby *hm = (struct Moby *)coll_hit.moby;
-            if (!hm || hm->state == 0xFE || hm->state == 0xFD || hm != drone_vars->target ||
-                hm->oclass == 0) {
+            if (!hm || hm->state == MOBY_STATE_MARKED_FOR_REMOVAL || hm->state == 0xFD ||
+                hm != drone_vars->target || hm->oclass == 0) {
                 qcopy(&updated_moby->pos, &coll_hit_position);
             } else {
                 s32 cat2 = hm->pclass ? *(u8 *)((u8 *)hm->pclass + 0x46) : 0;
@@ -667,13 +677,13 @@ state3: {
                                                  1,
                                                  -1,
                                                  0);
-                        updated_moby->state = 4;
+                        updated_moby->state = DRONE_STATE_FADE;
                     }
                 }
             }
         }
     } else {
-        updated_moby->state = 2;
+        updated_moby->state = DRONE_STATE_ORBIT;
         drone_vars->target_oclass = -1;
         drone_vars->target = 0;
     }
@@ -689,7 +699,7 @@ state4: {
         goto fade_clear;
     if (target->oclass != drone_vars->target_oclass)
         goto fade_clear;
-    if (target->state == 0xFE)
+    if (target->state == MOBY_STATE_MARKED_FOR_REMOVAL)
         goto fade_clear;
     if (target->state == 0xFD)
         goto fade_clear;
@@ -709,7 +719,7 @@ fade_clear:
 fade_alpha:
     updated_moby->alpha -= 4;
     if (updated_moby->alpha < 6)
-        updated_moby->state = 5;
+        updated_moby->state = DRONE_STATE_REMOVE;
     goto update_effects;
 }
 state5: {

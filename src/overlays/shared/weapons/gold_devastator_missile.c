@@ -174,7 +174,8 @@ extern void FUN_L00_001ff290_c(void *, void *, void *) __asm__("FUN_L00_001ff290
 extern int  collision1688(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_001ffd48_c(void *, void *, float) __asm__("FUN_L00_001ffd48");
 extern void FUN_L00_001ffe20_c(void *, void *, void *) __asm__("FUN_L00_001ffe20");
-extern void FUN_L00_0026a4c8_c(void *, void *, int, int, float, int) __asm__("FUN_L00_0026a4c8");
+extern void
+spawn_particle_alt_9768(void *, void *, int, int, float, int) __asm__("FUN_L00_0026a4c8");
 
 extern E             D_0013E520;
 extern char         *active_mobies[] __asm__("D_L00_001ABA00");
@@ -413,6 +414,9 @@ unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
                                         float          initial_yaw,
 
                                         float initial_pitch) {
+    enum {
+        DEVASTATOR_MISSILE_STATE_FLYING = 0
+    };
     V_2afc70                   collision_start;
     unsigned char             *missile_moby;
     GoldDevastatorMissileVars *missile_data;
@@ -429,7 +433,7 @@ unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
         MOBY(missile_moby)->visible = 1;
         MOBY(missile_moby)->rot.z = initial_yaw;
         MOBY(missile_moby)->rot.y = initial_pitch;
-        MOBY(missile_moby)->state = 0;
+        MOBY(missile_moby)->state = DEVASTATOR_MISSILE_STATE_FLYING;
         missile_data->unk10 = missile_source_moby;
         qcopy(&MOBY(missile_moby)->pos, spawn_position);
         default_desired_speed = frame_time * 20.0f;
@@ -1028,7 +1032,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             debris_scale = size * 200000.0f;
             life = random_int_between(scale_game_frames(20), scale_game_frames(35)) -
                    particle_reduction * 10;
-            FUN_L00_0026a4c8_c((&missile_moby->pos), &v, c, f, debris_scale, life);
+            spawn_particle_alt_9768((&missile_moby->pos), &v, c, f, debris_scale, life);
         }
         if (D_L00_0015F5D0 < 0.95f && distance > 9.0f) {
             int c = 127, f = 127;

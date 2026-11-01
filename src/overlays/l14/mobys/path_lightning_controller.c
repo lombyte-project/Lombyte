@@ -56,20 +56,26 @@ void path_lightning_controller_update(struct Moby *moby) __asm__("FUN_L14_002ed2
 
 /* Moby class 684 */
 void path_lightning_controller_update(struct Moby *moby) {
+    enum {
+        PATH_LIGHTNING_STATE_INITIALIZE = 0,
+        PATH_LIGHTNING_STATE_WAIT_SCENE_START = 1,
+        PATH_LIGHTNING_STATE_WAIT_TRACKED_MOBY_RESTORE = 2,
+        PATH_LIGHTNING_STATE_ACTIVE = 3
+    };
     char *moby_vars = (char *)moby->pvars;
     int   visible_path_point_indices[5];
     float visibility_test_point[4];
     int   moby_state;
-    if (MOBY(moby)->state == 0) {
+    if (MOBY(moby)->state == PATH_LIGHTNING_STATE_INITIALIZE) {
         if (current_level_index == 0xE)
             hero.pack_disabled = 1;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = PATH_LIGHTNING_STATE_WAIT_SCENE_START;
         moby->update_dist = 0xFF;
         *(int *)&lightning_arc_initialized_gp = 0;
         *(int *)&lightning_arc_interval_remaining_frames_gp = 0;
     }
     moby_state = MOBY(moby)->state;
-    if (moby_state == 1) {
+    if (moby_state == PATH_LIGHTNING_STATE_WAIT_SCENE_START) {
         unsigned char *scene_start_guard_base;
         if (D_L14_0015F5C4 != 0)
             return;
@@ -78,14 +84,14 @@ void path_lightning_controller_update(struct Moby *moby) {
             return;
         start_scene(0);
         scene_start_guard_base[0x68] = moby_state;
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = PATH_LIGHTNING_STATE_WAIT_TRACKED_MOBY_RESTORE;
         deactivate_recorded_moby();
         return;
     }
-    if (moby_state == 2) {
+    if (moby_state == PATH_LIGHTNING_STATE_WAIT_TRACKED_MOBY_RESTORE) {
         if (D_L14_0015F5C4 == moby_state)
             return;
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = PATH_LIGHTNING_STATE_ACTIVE;
         show_tracked_moby();
         return;
     }

@@ -16,6 +16,12 @@
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
 
+enum {
+    SCENERY_SHIP_INITIALIZE = 0,
+    SCENERY_SHIP_FOLLOW_PATH = 1,
+    SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE = 2
+};
+
 extern int  get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int  get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
@@ -161,11 +167,6 @@ extern float fast_vec_dist(void *, void *);
 
 /* Moby class 79 */
 void scenery_ship_update(char *moby) {
-    enum {
-        SCENERY_SHIP_INITIALIZE = 0,
-        SCENERY_SHIP_FOLLOW_PATH = 1,
-        SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE = 2
-    };
     Data_2D8388 *scenery_ship_instance_vars = ((Data_2D8388 *)MOBY(moby)->pvars);
     char        *hit;
     char        *path;
@@ -242,7 +243,7 @@ void scenery_ship_update(char *moby) {
         }
         scenery_ship_instance_vars->fC =
             fast_vec_dist((float *)(path + 0x10), (float *)(path + 0x20));
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = SCENERY_SHIP_FOLLOW_PATH;
         scenery_ship_instance_vars->f8 = (float)*(int *)path * scenery_ship_instance_vars->f4;
         break;
     }
@@ -307,7 +308,7 @@ void scenery_ship_update(char *moby) {
         if (hit != 0 && 0.0f < *(float *)(hit + 0x2C))
             damaged = 1;
         if (damaged)
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE;
         break;
     }
     case SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE: {
@@ -458,7 +459,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
     list = D_L05_001ABCC0_7920[(unsigned char)((char)moby->group)];
     do {
         member = (struct Moby *)(((*list & 0x7fff) << 8) + (int)D_L05_0015FFD8);
-        if (member->oclass == 0x4f && member->state == 1) {
+        if (member->oclass == 0x4f && member->state == SCENERY_SHIP_FOLLOW_PATH) {
             scenery_ship_vars = (char *)member->pvars;
             qcopy_nc(center, &member->pos);
             center[3] = 20.0f;

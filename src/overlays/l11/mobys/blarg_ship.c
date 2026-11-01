@@ -141,13 +141,13 @@ void blarg_ship_update(struct Moby *moby) {
         moby->draw_dist = 0xFF;
         moby->update_dist = 0xFF;
         if (moby_vars->unk88 == 0) {
-            moby->state = 1;
+            moby->state = BLARG_SHIP_FOLLOW_PATH;
             moby_vars->unk6C = randf_sym(0.3f, 0.5f);
             moby_vars->unk70 = random_angle_radians();
             moby_vars->unk74 = randf_sym(60.0f, 120.0f) * DEG_TO_RAD * frame_scale_inv_macro[1];
             moby_vars->unk78 = random_float_between(8.0f, 12.0f);
         } else {
-            moby->state = 4;
+            moby->state = BLARG_SHIP_INACTIVE;
             moby->collision = 0;
             moby->flags |= 1;
         }
@@ -166,7 +166,7 @@ void blarg_ship_update(struct Moby *moby) {
         }
         fast_add_rotations(moby_vars->unk70, moby_vars->unk74);
         update_moby_path_transform(moby);
-        if (moby->state == 2) {
+        if (moby->state == BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE) {
             cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
             if (random_integer_below(2)) {
                 spawn_moby_with_random_yaw(&moby->pos, D_L11_0015F580, 0x4C4);
@@ -175,12 +175,12 @@ void blarg_ship_update(struct Moby *moby) {
             }
             allocate_voice_for_target_entry(1, 0, (int)moby);
             *(unsigned short *)(D_00141C18) = 0xFFFF;
-            moby->state = 3;
+            moby->state = BLARG_SHIP_WAIT_TO_REACTIVATE;
             moby->collision = 0;
             moby->flags |= 1;
         } else if (moby->visible == 0) {
             if (fast_vec_dist(&moby->pos, &hero.motion.pos) < 32.0f) {
-                moby->state = 3;
+                moby->state = BLARG_SHIP_WAIT_TO_REACTIVATE;
                 moby->collision = 0;
                 moby->flags |= 1;
             }
@@ -193,7 +193,7 @@ void blarg_ship_update(struct Moby *moby) {
             if (fast_vec_dist(&moby->pos, &hero.motion.pos) > 32.0f) {
                 moby_vars->unk84 += 1;
                 if (scale_game_frames(60) < moby_vars->unk84) {
-                    moby->state = 1;
+                    moby->state = BLARG_SHIP_FOLLOW_PATH;
                     if (moby->prev_seq) {
                         blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                     }
@@ -314,7 +314,7 @@ void blarg_ship_update(struct Moby *moby) {
                 }
             }
             if (moby->visible == 0) {
-                moby->state = 4;
+                moby->state = BLARG_SHIP_INACTIVE;
                 moby->collision = 0;
                 moby->flags |= 1;
             }
@@ -332,7 +332,7 @@ void blarg_ship_update(struct Moby *moby) {
             spawn_moby_with_random_yaw(&moby->pos, D_L11_0015F580, 0x4C2);
         }
         allocate_voice_for_target_entry(1, 0, (int)moby);
-        moby->state = 4;
+        moby->state = BLARG_SHIP_INACTIVE;
         moby->collision = 0;
         moby->flags |= 1;
         break;

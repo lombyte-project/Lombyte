@@ -37,7 +37,7 @@ void breakaway_piece_update(char *moby) {
         MOBY(moby)->draw_dist = 0x200;
         ((unsigned char *)moby)[0x30] = 0xFF;
         bobbing_and_motion_vars->unkC = MOBY(moby)->pos.z;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = UPDATE_BOBBING_HEIGHT;
         break;
     case UPDATE_BOBBING_HEIGHT:
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {

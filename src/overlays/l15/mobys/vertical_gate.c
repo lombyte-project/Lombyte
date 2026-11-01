@@ -75,14 +75,14 @@ void vertical_gate_update(GateMoby *gate_moby) {
     switch (gate_moby->state) {
     case GATE_INITIALIZE:
         *(u128 *)&gate_vars->home = *(u128 *)&gate_moby->pos;
-        gate_moby->state = 1;
+        gate_moby->state = GATE_WAIT_TO_OPEN;
         gate_vars->locked = 0;
         if (gate_vars->key != -1) {
             gate_moby->f30 = 0xFF;
         }
         if (D_0013DD50 != 0 && gate_vars->key != -1) {
             gate_moby->pos.z = gate_moby->pos.z - vertical_gate_travel_distance_gp;
-            gate_moby->state = 5;
+            gate_moby->state = GATE_POSITION_OVERRIDE;
         }
         break;
     case GATE_WAIT_TO_OPEN:
@@ -95,20 +95,20 @@ void vertical_gate_update(GateMoby *gate_moby) {
                 (struct Moby *)((char *)l15_moby_array + (gate_vars->trigger << 8));
             if (trigger_moby == 0 || trigger_moby->state == 0xFE || trigger_moby->state == 0xFD) {
                 if (D_L15_00161AC0 == 0) {
-                    gate_moby->state = 2;
+                    gate_moby->state = GATE_OPENING;
                     gate_vars->locked = 1;
                 }
             }
         } else {
             if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, gate_vars->vol_near)) {
                 if (gate_vars->key == -1 || D_0013F3D0_2A48B0[0x2024] == 2) {
-                    gate_moby->state = 2;
+                    gate_moby->state = GATE_OPENING;
                 }
             }
         }
         if (D_0013DD50 != 0 && gate_vars->key != -1) {
             gate_moby->pos.z = gate_vars->home.z - vertical_gate_travel_distance_gp;
-            gate_moby->state = 5;
+            gate_moby->state = GATE_POSITION_OVERRIDE;
         }
         break;
     case GATE_OPENING:
@@ -129,7 +129,7 @@ void vertical_gate_update(GateMoby *gate_moby) {
             }
             gate_vars->sound = -1;
             gate_vars->travel = vertical_gate_travel_distance_gp;
-            gate_moby->state = 3;
+            gate_moby->state = GATE_OPEN;
         }
         {
             float t = gate_vars->travel;
@@ -155,7 +155,7 @@ void vertical_gate_update(GateMoby *gate_moby) {
             }
         }
         if (gate_vars->locked == 0) {
-            gate_moby->state = 4;
+            gate_moby->state = GATE_CLOSING;
         }
         break;
     case GATE_CLOSING:
@@ -176,9 +176,9 @@ void vertical_gate_update(GateMoby *gate_moby) {
             }
             gate_vars->travel = 0;
             gate_vars->sound = -1;
-            gate_moby->state = 1;
+            gate_moby->state = GATE_WAIT_TO_OPEN;
             if (gate_vars->key != -1) {
-                gate_moby->state = 5;
+                gate_moby->state = GATE_POSITION_OVERRIDE;
                 l15_key_gate_open_lui = 0;
             }
         }
@@ -196,7 +196,7 @@ void vertical_gate_update(GateMoby *gate_moby) {
         }
         if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, gate_vars->vol_near) != 0 ||
             is_point_inside_clip_volume(D_L15_00167440_2A48B0, gate_vars->vol_near) != 0) {
-            gate_moby->state = 2;
+            gate_moby->state = GATE_OPENING;
         }
         break;
     case GATE_POSITION_OVERRIDE:
@@ -208,7 +208,7 @@ void vertical_gate_update(GateMoby *gate_moby) {
                 break;
             }
             gate_moby->pos.z = gate_vars->home.z;
-            gate_moby->state = 1;
+            gate_moby->state = GATE_WAIT_TO_OPEN;
             l15_key_gate_open_lui = 0;
         }
         break;

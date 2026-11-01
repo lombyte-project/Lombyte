@@ -124,7 +124,7 @@ void energy_sphere_update(struct Moby *sphere_moby) {
         set_moby_color(sphere_moby, 0x80, 0x80, 0x80);
         sphere_moby->scale = sphere_moby->pclass->scale * D_L06_00161E80;
         *(char **)sphere_vars = sphere_vars + 0x20;
-        sphere_moby->state = 1;
+        sphere_moby->state = ENERGY_SPHERE_UPDATE_ROTATION;
         sphere_moby->flags |= 0x20;
         *(int *)(sphere_vars + 0x60) = -1;
     case ENERGY_SPHERE_UPDATE_ROTATION: {

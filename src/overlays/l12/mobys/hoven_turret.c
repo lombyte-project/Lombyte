@@ -159,32 +159,32 @@ extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_00161F24 MACRO_ADDR;
 extern int                random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int                hero_set_state(int, int) __asm__("FUN_L12_002400d0");
-extern void               FUN_L00_001fff28(void *, int, float);
-extern void               hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void               set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void               moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void               jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void               spawn_explosion(void *,
-                                          void *,
-                                          void *,
-                                          float,
-                                          float,
-                                          int,
-                                          int,
-                                          int,
-                                          float,
-                                          float,
-                                          float,
-                                          int,
-                                          float,
-                                          float,
-                                          int,
-                                          int,
-                                          int,
-                                          int) __asm__("FUN_L00_0025e450");
-extern void               FUN_L00_00262cf0(void *, void *, float, float, float);
-extern void               start_scene(int) __asm__("FUN_L00_00298840");
-extern void               queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
+extern void  hero_respawn(void) __asm__("FUN_L00_00211250");
+extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void  moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
+extern void  spawn_explosion(void *,
+                             void *,
+                             void *,
+                             float,
+                             float,
+                             int,
+                             int,
+                             int,
+                             float,
+                             float,
+                             float,
+                             int,
+                             float,
+                             float,
+                             int,
+                             int,
+                             int,
+                             int) __asm__("FUN_L00_0025e450");
+extern void  FUN_L00_00262cf0(void *, void *, float, float, float);
+extern void  start_scene(int) __asm__("FUN_L00_00298840");
+extern void  queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void  spawn_turret_rocket(void *, void *, void *, int) __asm__("FUN_L08_002e7eb0");
 extern void  update_hoven_turret_target_alignment_timer(void *) __asm__("FUN_L12_00303370");
 extern void  draw_hoven_turret_hud() __asm__("FUN_L12_00304218");
@@ -222,10 +222,10 @@ void hoven_turret_update(struct Moby *moby) {
         D_L12_00161F00 = 0;
         D_L12_00161F04 = 0;
         if (visited52[moby->mission + (current_level_index << 4)] == 0xFF) {
-            moby->state = 6;
+            moby->state = HOVEN_TURRET_STATE_INACTIVE;
         } else {
             attach_manipulator(moby, 0, hoven_turret_state);
-            moby->state = 3;
+            moby->state = HOVEN_TURRET_STATE_WAIT_FOR_BOARDING;
             hoven_turret_state->f84 = 0xC8;
             moby->rot.y = 0.0f;
             hoven_turret_state->f70 = scale_game_frames(0x1E);
@@ -284,7 +284,7 @@ void hoven_turret_update(struct Moby *moby) {
                 hoven_turret_state->f8C = 200.0f;
                 moby->hit_slot = 0xFF;
                 D_L12_00161F20++;
-                moby->state = 4;
+                moby->state = HOVEN_TURRET_STATE_MANNED;
             }
         }
         break;
@@ -317,7 +317,7 @@ void hoven_turret_update(struct Moby *moby) {
             if (hoven_turret_state->f8C <= 0.0f) {
                 D_L12_00161F04 = 1;
                 hoven_turret_state->fAC = scale_game_frames(0x78);
-                moby->state = 7;
+                moby->state = HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS;
                 break;
             }
         }
@@ -352,7 +352,7 @@ void hoven_turret_update(struct Moby *moby) {
                     D_L12_00161F00 = 0;
                     set_race_camera(cpos, crot, 0, 1);
                 }
-                moby->state = 5;
+                moby->state = HOVEN_TURRET_STATE_START_SCENE;
                 break;
             }
         }
@@ -406,7 +406,7 @@ void hoven_turret_update(struct Moby *moby) {
             if (hoven_turret_state->f74 < hoven_turret_pitch_min) {
                 hoven_turret_state->f74 = hoven_turret_pitch_min;
             }
-            FUN_L00_001fff28(hoven_turret_state->f10, 1, -hoven_turret_state->f74);
+            build_axis_rotation_quaternion(hoven_turret_state->f10, 1, -hoven_turret_state->f74);
             if (moby->anim_flags & 2) {
                 blend_moby_animation(moby, 5, 0, 1);
             }
@@ -527,13 +527,13 @@ void hoven_turret_update(struct Moby *moby) {
     case HOVEN_TURRET_STATE_START_SCENE:
         if (D_L12_0015F5C4_macro != 2) {
             start_scene(1);
-            moby->state = 8;
+            moby->state = HOVEN_TURRET_STATE_SAVE_DATA;
         }
         break;
     case HOVEN_TURRET_STATE_SAVE_DATA:
         if (D_L12_0015F5C4_macro != 2) {
             func_0020BFC8_304920(0, -1);
-            moby->state = 6;
+            moby->state = HOVEN_TURRET_STATE_INACTIVE;
         }
         break;
     case HOVEN_TURRET_STATE_INACTIVE:

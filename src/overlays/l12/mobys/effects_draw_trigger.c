@@ -27,7 +27,7 @@ void effects_draw_trigger_update(struct Moby *moby) {
     char *draw_callback_vars = (char *)moby->pvars;
     switch (moby->state) {
     case DRAW_CALLBACK_INITIALIZE:
-        moby->state = 1;
+        moby->state = DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER;
         moby->update_dist = 0xFF;
         break;
     case DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER: {

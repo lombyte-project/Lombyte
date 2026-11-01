@@ -127,7 +127,7 @@ void rail_lift_update(struct Moby *lift_moby) {
         qcopy(&lift_moby->pos, &(l03_paths[lift_vars->path[lift_moby->command]])->points[0]);
         lift_vars->hud = -1;
         lift_vars->timer = 0;
-        lift_moby->state = 1;
+        lift_moby->state = LIFT_WAIT_FOR_DEPARTURE;
         lift_moby->update_dist = 0xFF;
         lift_moby->draw_dist = 0xFF;
         break;
@@ -144,7 +144,7 @@ void rail_lift_update(struct Moby *lift_moby) {
                 lift_moby->flags &= 0xFFBE;
                 *(u128 *)&lift_moby->pos =
                     *(u128 *)&(l03_paths[lift_vars->path[hero_end]])->points[0];
-                lift_moby->state = 3;
+                lift_moby->state = LIFT_FOLLOW_PATH;
                 lift_vars->unk64 = 1;
                 lift_vars->started = 1;
                 lift_vars->ready = 0;
@@ -162,10 +162,10 @@ void rail_lift_update(struct Moby *lift_moby) {
                 lift_moby->command ^= 1;
                 lift_vars->unk64 = 1;
                 lift_vars->ready = 0;
-                lift_moby->state = 2;
+                lift_moby->state = LIFT_WAIT_FOR_HERO_ANIMATION;
             }
         } else if (hero_end != lift_end) {
-            lift_moby->state = 3;
+            lift_moby->state = LIFT_FOLLOW_PATH;
             lift_moby->command ^= 1;
             lift_vars->unk64 = 1;
             lift_vars->ready = 0;
@@ -173,7 +173,7 @@ void rail_lift_update(struct Moby *lift_moby) {
         break;
     case LIFT_WAIT_FOR_HERO_ANIMATION:
         if (!get_hero_target_pose_status())
-            lift_moby->state = 3;
+            lift_moby->state = LIFT_FOLLOW_PATH;
         break;
     case LIFT_FOLLOW_PATH:
         if (is_hero_on_moby(lift_moby)) {
@@ -182,7 +182,7 @@ void rail_lift_update(struct Moby *lift_moby) {
         }
         if (advance_moby_along_rail_path(
                 lift_moby, lift_vars->path[lift_moby->command], &lift_vars->snd)) {
-            lift_moby->state = 1;
+            lift_moby->state = LIFT_WAIT_FOR_DEPARTURE;
             lift_vars->timer = scale_game_frames(0xF);
         }
         break;

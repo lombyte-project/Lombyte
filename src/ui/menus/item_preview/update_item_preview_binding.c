@@ -70,6 +70,9 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
         ITEM_PREVIEW_CREATE_MOBYS = 2,
         ITEM_PREVIEW_MONITOR_CLASS_CHANGE = 3
     };
+    enum {
+        ITEM_PREVIEW_TYPE_WITH_SECONDARY_MOBY = 3
+    };
     struct MenuScreen            *grid;
     struct Moby                  *moby;
     struct Moby                  *secondary_moby;
@@ -107,7 +110,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     preview->rotation_angle = fast_add_rotations(preview->rotation_angle, 0.01f);
     item_type = menu_item_info[item_index].item_type;
     is_type2 = item_type == 2;
-    has_secondary_moby = item_type == 3;
+    has_secondary_moby = item_type == ITEM_PREVIEW_TYPE_WITH_SECONDARY_MOBY;
     is_type1 = item_type == 1;
     if (!is_type2 && !has_secondary_moby && !is_type1) {
         load_class = 1;
@@ -118,16 +121,16 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     use_alternate_x = preview->flags & 1;
     switch (preview->state) {
     case ITEM_PREVIEW_INITIALIZE:
-        preview->state = 1;
+        preview->state = ITEM_PREVIEW_WAIT_FOR_CLASS;
         break;
     case ITEM_PREVIEW_WAIT_FOR_CLASS:
         if (oclass != -1) {
-            preview->state = 2;
+            preview->state = ITEM_PREVIEW_CREATE_MOBYS;
         }
         break;
     case ITEM_PREVIEW_CREATE_MOBYS:
         if (oclass == -1) {
-            preview->state = 1;
+            preview->state = ITEM_PREVIEW_WAIT_FOR_CLASS;
             break;
         }
         if (load_class) {
@@ -198,13 +201,13 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                                    0);
             }
         }
-        preview->state = 3;
+        preview->state = ITEM_PREVIEW_MONITOR_CLASS_CHANGE;
         break;
     case ITEM_PREVIEW_MONITOR_CLASS_CHANGE:
         if (previous_class != oclass) {
             preview->primary_moby = delete_moby(preview->primary_moby);
             preview->secondary_moby = delete_moby(preview->secondary_moby);
-            preview->state = 2;
+            preview->state = ITEM_PREVIEW_CREATE_MOBYS;
         }
         break;
     }

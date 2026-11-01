@@ -62,7 +62,7 @@ void landmine_update(struct Moby *moby) {
     switch (moby->state) {
     case PATH_FOLLOWER_INITIALIZE_HEIGHT_OFFSET: {
         fade = moby->pos.z;
-        moby->state = 1;
+        moby->state = PATH_FOLLOWER_CHECK_HIT_AND_PROXIMITY;
         moby->pos.z = fade + 0.4f;
         return;
     }
@@ -189,7 +189,7 @@ void landmine_update(struct Moby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            moby->state = 3;
+            moby->state = PATH_FOLLOWER_FADE_OUT;
         }
         if (fast_vec_dist(&moby->pos, &point) < 0.1f) {
             follower->point = waypoint;

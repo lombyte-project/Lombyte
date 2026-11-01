@@ -231,18 +231,18 @@ void spawn_nearby_effect(unsigned char *owner_moby,
                          u128          *hit_vector_source,
                          u128          *direction_vector,
 
-                         float f) {
+                         float hit_damage) {
     int      i = D_L00_00173E40.idx;
     MobyHit *hit_record;
     if (MOBY(owner_moby)->hit_slot != 0xFF) {
         MobyHit *existing_hit = &moby_hits[MOBY(owner_moby)->hit_slot];
-        if (existing_hit->owner == owner_moby && f < existing_hit->damage)
+        if (existing_hit->owner == owner_moby && hit_damage < existing_hit->damage)
             return;
     }
     hit_record = &moby_hits[i];
     hit_record->source_moby = (u8 *)x;
     hit_record->flags = y;
-    hit_record->damage = f;
+    hit_record->damage = hit_damage;
     hit_record->owner = owner_moby;
     hit_record->unk38 = 0;
     if (fast_vec_length(direction_vector) > 0.0001f) {
@@ -293,16 +293,16 @@ typedef struct {
     int a[4];
 } Vk __attribute__((aligned(16)));
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 void build_quaternion_from_axis_rotations(void  *output_quaternion,
                                           float *axis_rotation_angles) __asm__("FUN_L00_00259f50");
 
 void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_rotation_angles) {
     Vk z_axis_quaternion, y_axis_quaternion, x_axis_quaternion;
-    FUN_L00_001fff28(&x_axis_quaternion, 0, axis_rotation_angles[0]);
-    FUN_L00_001fff28(&y_axis_quaternion, 1, axis_rotation_angles[1]);
-    FUN_L00_001fff28(&z_axis_quaternion, 2, axis_rotation_angles[2]);
+    build_axis_rotation_quaternion(&x_axis_quaternion, 0, axis_rotation_angles[0]);
+    build_axis_rotation_quaternion(&y_axis_quaternion, 1, axis_rotation_angles[1]);
+    build_axis_rotation_quaternion(&z_axis_quaternion, 2, axis_rotation_angles[2]);
     multiply_quaternions(output_quaternion, &x_axis_quaternion, &y_axis_quaternion);
     multiply_quaternions(output_quaternion, output_quaternion, &z_axis_quaternion);
 }
@@ -381,9 +381,9 @@ MobyHit *find_moby_hit(u8 *p, s32 mask, s32 flag) __asm__("FUN_L00_0025a420");
 
 MobyHit *find_moby_hit(u8 *owner_moby, s32 mask, s32 flag) {
     MobyHit *hit_record;
-    u8      *a = owner_moby + 0xA4;
-    u8       i = load_u8_0025a420(a);
-    if (load_u8_0025a420(a) == 0xFF)
+    u8      *hit_slot_address = owner_moby + 0xA4;
+    u8       i = load_u8_0025a420(hit_slot_address);
+    if (load_u8_0025a420(hit_slot_address) == 0xFF)
         return 0;
     hit_record = &moby_hits[i];
     if (hit_record->owner != owner_moby)
@@ -639,7 +639,7 @@ int generate_random_points_from_shape_entries(
                     case SHAPE_INLINE_CENTER_SPHERE:
                     case 1:
                     case SHAPE_INDEXED_CENTER_SPHERE: {
-                        if (type < 2) {
+                        if (type < SHAPE_INDEXED_CENTER_SPHERE) {
                             qcopy(&shape_anchor, (void *)((entry + 0x10)));
                             scale_vector(*(float *)(entity + 0x2c) * 0.0009765625f,
                                          &shape_anchor,
@@ -709,7 +709,7 @@ int generate_random_points_from_shape_entries(
         case 1:
         case SHAPE_INDEXED_CENTER_SPHERE: {
             float radius, extent;
-            if (type < 2) {
+            if (type < SHAPE_INDEXED_CENTER_SPHERE) {
                 qcopy(&shape_anchor, (void *)((entry + 0x10)));
                 FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &shape_anchor, &shape_anchor);
                 extent = shape_anchor.f[3] * *(float *)(entity + 0x2c);
@@ -834,6 +834,9 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         DESCEND_TO_GROUND = 2,
         WAIT_AFTER_GROUND_CLAMP = 3
     };
+    enum {
+        ARC_MOTION_FINISHED = 4
+    };
     float motion_displacement[4];
     float prediction_time;
     float ground_height;
@@ -848,7 +851,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         }
         if (moving_object->b70 & 2) {
             blend_moby_animation(moving_object, arc_motion_state->b2D, 0, 10);
-            arc_motion_state->state = 1;
+            arc_motion_state->state = INTEGRATE_ARC_MOTION;
         }
     case INTEGRATE_ARC_MOTION:
         approach_w(moving_object,
@@ -869,7 +872,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
                     (arc_motion_state->f10 * prediction_time -
                      arc_motion_state->f1C * 0.5f * prediction_time * prediction_time)) {
                 blend_moby_animation(moving_object, arc_motion_state->b2E, 0, 10);
-                arc_motion_state->state = 2;
+                arc_motion_state->state = DESCEND_TO_GROUND;
             }
         }
         break;
@@ -879,7 +882,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         ground_height = probe_ground_height(moving_object->pos, 0, 0.5f);
         if (moving_object->z <= ground_height) {
             moving_object->z = ground_height;
-            arc_motion_state->state = 3;
+            arc_motion_state->state = WAIT_AFTER_GROUND_CLAMP;
         } else {
             motion_displacement[0] =
                 FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
@@ -890,7 +893,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         }
     case WAIT_AFTER_GROUND_CLAMP:
         if (moving_object->b70 & 2) {
-            arc_motion_state->state = 4;
+            arc_motion_state->state = ARC_MOTION_FINISHED;
         }
         break;
     }

@@ -29,7 +29,7 @@ void respawn_volume_update(char *moby) {
     int          j;
     switch (((unsigned char *)moby)[0x20]) {
     case INITIALIZE_TRIGGER_MONITOR:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = CHECK_HERO_TRIGGER_VOLUMES;
         ((unsigned char *)moby)[0x30] = 0xFF;
         return;
     case CHECK_HERO_TRIGGER_VOLUMES:
@@ -49,7 +49,7 @@ void respawn_volume_update(char *moby) {
     for (i = 0; i < 32; i++) {
         if (list[i] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, list[i])) {
             struct Hero *hero_ptr = &hero;
-            if (hero_ptr->vehicle_mode != 0) {
+            if (hero_ptr->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
                 fade_to_black(scale_game_frames(10));
                 hero_respawn();
             } else if (hero_ptr->state.current != 0x77) {

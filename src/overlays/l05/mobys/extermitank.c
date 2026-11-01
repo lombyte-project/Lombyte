@@ -11,6 +11,13 @@
 #include "qcopy.h"
 #include "rnc/overlay/l05/mobys/extermitank_globals.h"
 
+enum {
+    EXTERMITANK_INITIALIZE = 0,
+    EXTERMITANK_FOLLOW_PATH = 1,
+    EXTERMITANK_FIRE_PARTICLES = 2,
+    EXTERMITANK_REMOVE = 3
+};
+
 extern char  D_0013E533[];
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void *create_moby() __asm__("FUN_0020c4f8");
@@ -33,7 +40,7 @@ extern int   collision_line(void *, void *, int, void *, void *) __asm__("FUN_00
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern int   frame_number_gp __asm__("D_L05_0015F5CC") MACRO_ADDR;
-extern int   FUN_L00_00259028(char *m, char *p, float *pos, char *v);
+extern int   step_mover_2e3f20(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern int   FUN_L00_00259740(void *, void *, int);
 extern s32
 spawn_spark_c2(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
@@ -78,7 +85,7 @@ extern float extermitank_secondary_particle_vector_a_spread_degrees_gp __asm__("
     __attribute__((sda));
 extern short D_L05_00161B78 __attribute__((sda));
 extern float D_L05_00161B7C __attribute__((sda));
-extern void  FUN_L00_001fff28(void *, int, float);
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void  mark_moby_for_removal_c3(void *) __asm__("func_0020C828");
 void         handle_extermitank_hits_and_sync_children(char *moby) __asm__("FUN_L05_00305178");
 void         process_extermitank_particle_hits(char *m) __asm__("FUN_L05_00305898");
@@ -152,12 +159,6 @@ typedef struct ExtermitankVars {
 
 /* Moby class 625 */
 void extermitank_update(unsigned char *moby) {
-    enum {
-        EXTERMITANK_INITIALIZE = 0,
-        EXTERMITANK_FOLLOW_PATH = 1,
-        EXTERMITANK_FIRE_PARTICLES = 2,
-        EXTERMITANK_REMOVE = 3
-    };
     ExtermitankVars *extermitank_vars = (ExtermitankVars *)MOBY(moby)->pvars;
     float            origin_position[4];
     float            particle_vector_a[4];
@@ -231,7 +232,7 @@ void extermitank_update(unsigned char *moby) {
         extermitank_vars->unkD0 = ((char *)l05_paths[extermitank_vars->unkD4]);
         extermitank_vars->unkC0 = 1;
         qcopy(moby + 0x10, extermitank_vars->unkD0 + 0x10);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = EXTERMITANK_FOLLOW_PATH;
         if (MOBY(moby)->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, 0);
         extermitank_vars->unk94 = D_L05_00161AF8 * D_0015ED6C_gp;
@@ -263,10 +264,10 @@ void extermitank_update(unsigned char *moby) {
         if (dir >= 0)
             last = n - 1;
         idx = (extermitank_vars->unkC0 + n + dir) % n;
-        FUN_L00_00259028((char *)moby,
-                         &extermitank_vars->unk70,
-                         (float *)(path + (idx * 16 + 0x10)),
-                         extermitank_vars->unk40);
+        step_mover_2e3f20((char *)moby,
+                          &extermitank_vars->unk70,
+                          (float *)(path + (idx * 16 + 0x10)),
+                          extermitank_vars->unk40);
         if (vector_distance_xy(moby + 0x10, *(char **)(pp + 0x10) + (idx * 16 + 0x10)) < 1.0f) {
             if (idx == last) {
                 char *q = *(char **)(pp + 0x10);
@@ -289,7 +290,7 @@ void extermitank_update(unsigned char *moby) {
                     if (collision_line(origin_position, h + 0x50, 2, moby, 0) == 0) {
                         if (MOBY(moby)->prev_seq != 0)
                             blend_moby_animation(moby, 0, 0, 3);
-                        MOBY(moby)->state = 2;
+                        MOBY(moby)->state = EXTERMITANK_FIRE_PARTICLES;
                     }
                 }
             }
@@ -307,10 +308,11 @@ void extermitank_update(unsigned char *moby) {
             step_angle_toward_target(
                 &extermitank_vars->unk198, 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
         }
-        FUN_L00_001fff28(extermitank_vars->unk140, 1, extermitank_vars->unk198);
-        FUN_L00_001fff28(extermitank_vars->unk100,
-                         2,
-                         fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
+        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
+        build_axis_rotation_quaternion(
+            extermitank_vars->unk100,
+            2,
+            fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
         break;
     }
     case EXTERMITANK_FIRE_PARTICLES: {
@@ -326,10 +328,10 @@ void extermitank_update(unsigned char *moby) {
         if (dir >= 0)
             last = n - 1;
         idx = (extermitank_vars->unkC0 + n + dir) % n;
-        FUN_L00_00259028((char *)moby,
-                         &extermitank_vars->unk70,
-                         (float *)(path + (idx * 16 + 0x10)),
-                         extermitank_vars->unk40);
+        step_mover_2e3f20((char *)moby,
+                          &extermitank_vars->unk70,
+                          (float *)(path + (idx * 16 + 0x10)),
+                          extermitank_vars->unk40);
         if (vector_distance_xy(moby + 0x10, *(char **)(pp + 0x10) + (idx * 16 + 0x10)) < 1.0f) {
             if (idx == last) {
                 char *q = *(char **)(pp + 0x10);
@@ -470,7 +472,7 @@ void extermitank_update(unsigned char *moby) {
             collision_line(working_position, D_0013E533 + 0xEED, 2, moby, 0) != 0) {
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 3);
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = EXTERMITANK_FOLLOW_PATH;
         }
         {
             char *g = ((char *)&D_0013F350);
@@ -480,10 +482,11 @@ void extermitank_update(unsigned char *moby) {
             step_angle_toward_target(
                 &extermitank_vars->unk198, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         }
-        FUN_L00_001fff28(extermitank_vars->unk140, 1, extermitank_vars->unk198);
-        FUN_L00_001fff28(extermitank_vars->unk100,
-                         2,
-                         fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
+        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
+        build_axis_rotation_quaternion(
+            extermitank_vars->unk100,
+            2,
+            fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
         break;
     }
     case EXTERMITANK_REMOVE:
@@ -535,6 +538,9 @@ extern float extermitank_child_animation_speed_offset_scale_gp __asm__("D_L05_00
 typedef struct Hero Hero;
 
 void handle_extermitank_hits_and_sync_children(char *moby) {
+    enum {
+        MOBY_HIT_RESPONSE_SKIP_DAMAGE = 1
+    };
     ExtermitankVars *extermitank_hit_sync_vars = (ExtermitankVars *)MOBY(moby)->pvars;
     char            *first;
     char            *second;
@@ -568,7 +574,8 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     hit = part0;
     resolve_moby_hit_response(
         moby, hit, &extermitank_hit_sync_vars->health, 0, &hit_processing_status, &remaining, 0, 4);
-    if (hit_processing_status == 1 || (unsigned char)MOBY(moby)->state == 3)
+    if (hit_processing_status == MOBY_HIT_RESPONSE_SKIP_DAMAGE ||
+        (unsigned char)MOBY(moby)->state == EXTERMITANK_REMOVE)
         goto mark_children;
     {
         extermitank_hit_sync_vars->health -= remaining;
@@ -644,7 +651,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
                             -1,
                             0);
             extermitank_hit_sync_vars->unk19E = scale_game_frames(D_L05_00161B74);
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = EXTERMITANK_REMOVE;
             clear_u64_value(effect_data);
             *(float *)(effect_data + 8) = extermitank_hit_sync_vars->unk194;
             spawn_particle_305178(moby,

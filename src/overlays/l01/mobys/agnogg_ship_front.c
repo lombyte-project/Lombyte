@@ -45,9 +45,12 @@ extern MobyList fx_cutscene __asm__("D_L01_0016CCE0");
 void            apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
 
 void apply_cutscene_big_head_cheat(void) {
+    enum {
+        CUTSCENE_MODE_PLAYING = 2
+    };
     s32 i;
 
-    if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
+    if (cutscene_mode == CUTSCENE_MODE_PLAYING && big_head_cheat_enabled != 0) {
         for (i = 0; i < fx_cutscene.count; i++) {
             if (fx_cutscene.list[i]->type == 0x32B && D_L01_0017C8C0.active == 0) {
                 attach_manipulator(fx_cutscene.list[i], 0, &D_L01_0017C8C0);
@@ -179,7 +182,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     case AGNOGG_SHIP_INITIALIZE:
         fz = moby->pos.z - 0.75f;
         moby->f30 = 0xFF;
-        moby->state = 1;
+        moby->state = AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER;
         data->timer = 0;
         fd = data->f0;
         data->fC = fz;
@@ -194,7 +197,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             if (moby->f53 != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
             }
-            moby->state = 10;
+            moby->state = AGNOGG_SHIP_HOLD_TARGET_HEIGHT;
             moby->flags = moby->flags & 0xFFBE;
             moby->f32 = level_table_byte;
             moby->f94 = moby->pclass->f10;
@@ -224,7 +227,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                         fast_arc_tan(moby->pos.x - l01_cuboids_macro[linked_moby_data->rec].pos.x,
                                      moby->pos.y - l01_cuboids_macro[linked_moby_data->rec].pos.y);
                 }
-                moby->state = 2;
+                moby->state = AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT;
             }
         }
         break;
@@ -246,7 +249,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         }
         if (moby->pos.z <= data->fC) {
             moby->pos.z = data->fC;
-            moby->state = 3;
+            moby->state = AGNOGG_SHIP_WAIT_FOR_ANIMATION_1_GATE;
         }
         break;
     case AGNOGG_SHIP_WAIT_FOR_ANIMATION_1_GATE:
@@ -260,9 +263,9 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
         }
         if (moby->oclass == 0x2DA) {
-            moby->state = 10;
+            moby->state = AGNOGG_SHIP_HOLD_TARGET_HEIGHT;
         } else {
-            moby->state = 4;
+            moby->state = AGNOGG_SHIP_WAIT_FOR_LINKED_MOBIES_INACTIVE;
         }
         break;
     case AGNOGG_SHIP_WAIT_FOR_LINKED_MOBIES_INACTIVE:
@@ -290,7 +293,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             break;
         }
         data->timer = scale_game_frames(0x2D);
-        moby->state = 5;
+        moby->state = AGNOGG_SHIP_WAIT_BEFORE_SCENE;
         break;
     case AGNOGG_SHIP_WAIT_BEFORE_SCENE:
         if (data->timer != 0) {
@@ -299,21 +302,21 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         data->fA = moby->f32;
         moby->flags = moby->flags | 0x41;
         start_scene(3);
-        moby->state = 6;
+        moby->state = AGNOGG_SHIP_WAIT_FOR_SCENE_3_END;
         break;
     case AGNOGG_SHIP_WAIT_FOR_SCENE_3_END:
         if (cutscene_mode_macro == 2) {
             break;
         }
         queue_scene_movie_with_game_language(3);
-        moby->state = 7;
+        moby->state = AGNOGG_SHIP_WAIT_TO_START_SCENE_4;
         break;
     case AGNOGG_SHIP_WAIT_TO_START_SCENE_4:
         if (cutscene_mode_macro == 2) {
             break;
         }
         start_scene(4);
-        moby->state = 8;
+        moby->state = AGNOGG_SHIP_WAIT_FOR_SCENE_4_END;
         break;
     case AGNOGG_SHIP_WAIT_FOR_SCENE_4_END:
         if (cutscene_mode_macro == 2) {
@@ -351,7 +354,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         }
         memcard_save_data(0, -1);
         show_tracked_moby();
-        moby->state = 10;
+        moby->state = AGNOGG_SHIP_HOLD_TARGET_HEIGHT;
         break;
     case AGNOGG_SHIP_HOLD_TARGET_HEIGHT:
         moby->pos.z = data->fC;

@@ -136,8 +136,8 @@ int          shuttle_forced_return_requested_gp __asm__("D_L06_00162100") = 0;
 
 #include "rnc/overlay/l06/mobys/shuttle_data/shuttle_update.h"
 
-extern int           D_L06_0016210C __attribute__((sda));
-extern int           D_L06_00162110 __attribute__((sda));
+extern int l06_shuttle_projected_sprite_start_color __asm__("D_L06_0016210C") __attribute__((sda));
+extern int l06_shuttle_projected_sprite_end_color __asm__("D_L06_00162110") __attribute__((sda));
 extern unsigned char D_0013D4D5[] NOT_SDA;
 
 /* Update of moby class 1109 (shuttle): waits at one of three camera points, takes the hero's choice of destination, flies there through a cutscene and hands over to the level's travel sequence. */
@@ -192,26 +192,42 @@ Colors D_L06_00201948 = {
     {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
 };
 
-extern float D_L06_00162114 __attribute__((sda));
-extern float D_L06_00162118 __attribute__((sda));
-extern float D_L06_0016211C __attribute__((sda));
-extern float D_L06_00162120 __attribute__((sda));
-extern float D_L06_00162124 __attribute__((sda));
-extern float D_L06_00162128 __attribute__((sda));
-extern float D_L06_0016212C __attribute__((sda));
-extern float D_L06_00162130 __attribute__((sda));
-extern int   D_L06_00162134 __attribute__((sda));
-extern int   D_L06_00162138 __attribute__((sda));
-extern int   D_L06_0016213C __attribute__((sda));
-extern int   D_L06_00162140 __attribute__((sda));
-extern int   D_L06_00162144 __attribute__((sda));
-extern int   D_L06_00162148 __attribute__((sda));
-extern int   D_L06_0016214C __attribute__((sda));
-extern int   D_L06_00162150 __attribute__((sda));
-extern int   D_L06_00162154 __attribute__((sda));
-extern int   D_L06_00162158 __attribute__((sda));
-extern void  random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
-extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern float l06_shuttle_explosion_spark_velocity_scale_random_bound_a __asm__("D_L06_00162114")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_velocity_scale_random_bound_b __asm__("D_L06_00162118")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_velocity_w_random_bound_a __asm__("D_L06_0016211C")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_velocity_w_random_bound_b __asm__("D_L06_00162120")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_acceleration_scale_random_bound_a __asm__("D_L06_00162124")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_acceleration_scale_random_bound_b __asm__("D_L06_00162128")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_acceleration_w_random_bound_a __asm__("D_L06_0016212C")
+    __attribute__((sda));
+extern float l06_shuttle_explosion_spark_acceleration_w_random_bound_b __asm__("D_L06_00162130")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_first_color_blend_a __asm__("D_L06_00162134")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_first_color_blend_b __asm__("D_L06_00162138")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_second_color_blend_a __asm__("D_L06_0016213C")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_second_color_blend_b __asm__("D_L06_00162140")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_timing_random_min_frames __asm__("D_L06_00162144")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_timing_base_a_frames __asm__("D_L06_00162148")
+    __attribute__((sda));
+extern int l06_shuttle_explosion_spark_timing_base_b_frames __asm__("D_L06_0016214C")
+    __attribute__((sda));
+extern int D_L06_00162150 __attribute__((sda));
+extern int l06_shuttle_explosion_spark_table_index __asm__("D_L06_00162154") __attribute__((sda));
+extern int l06_shuttle_explosion_spark_alternate_mode_flag __asm__("D_L06_00162158")
+    __attribute__((sda));
+extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
+extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u8 *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -273,8 +289,8 @@ void shuttle_update(struct Moby *moby) {
         *(u128_302578 *)b = *(u128_302578 *)((char *)&hero.motion.pos + 0x50);
         spawn_timed_projected_sprite_effect((char *)b,
                                             scale_game_frames(class_076a_moby_rate_input_frames_gp),
-                                            D_L06_0016210C,
-                                            D_L06_00162110);
+                                            l06_shuttle_projected_sprite_start_color,
+                                            l06_shuttle_projected_sprite_end_color);
     }
     switch (moby->state) {
     case INITIALIZE_SHUTTLE:
@@ -288,7 +304,7 @@ void shuttle_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x80;
         moby->spawn_frame = hero.moby->spawn_frame;
-        moby->state = 1;
+        moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
         if (moby->prev_seq != 2) {
             blend_moby_animation(moby, 2, 0, 0);
         }
@@ -385,7 +401,7 @@ void shuttle_update(struct Moby *moby) {
         }
         if (shuttle_vars->go != 0) {
             shuttle_vars->go = 0;
-            moby->state = 3;
+            moby->state = UPDATE_SHUTTLE_PATH_RIDE;
             remove_help_message_for_selector(10);
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
@@ -411,7 +427,7 @@ void shuttle_update(struct Moby *moby) {
         if (update_shuttle_path_ride((char *)moby, shuttle_vars->side) != 0) {
             int ofs;
             int base;
-            moby->state = 4;
+            moby->state = RESTORE_SHUTTLE_IDLE_ANIMATION;
             shuttle_vars->fF4 = 0;
             ofs = shuttle_vars->cam[shuttle_vars->sel] << 7;
             base = (int)l06_cuboids;
@@ -439,7 +455,7 @@ void shuttle_update(struct Moby *moby) {
                 initialize_moby_particle_effect_state(D_L06_0015FFD8_302578 +
                                                       (shuttle_vars->f10C << 8));
                 shuttle_vars->f114 = 0;
-                moby->state = 6;
+                moby->state = WAIT_FOR_HERO_NEAR_LINKED_MOBY;
                 if (moby->prev_seq != 2) {
                     blend_moby_animation(moby, 2, 0, scale_game_frames(30));
                 }
@@ -459,7 +475,7 @@ void shuttle_update(struct Moby *moby) {
             start_scene(12);
             mark_moby_for_removal(linked_moby);
             unlock_planet(5);
-            moby->state = 8;
+            moby->state = WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW;
             jet_clear_persistent(shuttle_vars->fF8);
             jet_reset_camera(b, rot);
         }
@@ -472,11 +488,11 @@ void shuttle_update(struct Moby *moby) {
             shuttle_vars->sel = 0;
             shuttle_vars->go = 1;
             shuttle_vars->f114 = 1;
-            moby->state = 1;
+            moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
         }
         break;
     case RESTORE_SHUTTLE_IDLE_ANIMATION:
-        moby->state = 1;
+        moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
         if (moby->prev_seq != 2) {
             blend_moby_animation(moby, 2, 0, scale_game_frames(30));
         }
@@ -485,10 +501,10 @@ void shuttle_update(struct Moby *moby) {
         if (D_L06_0015F5C4 != 2) {
             if (D_0013D4D5[9] != 0) {
                 start_scene(5);
-                moby->state = 9;
+                moby->state = WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS;
             } else {
                 queue_planet_unlock_message(5);
-                moby->state = 1;
+                moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
                 enter_hero_idle_state_for_current_vehicle_mode();
                 memcard_save_data(0, -1);
             }
@@ -498,13 +514,13 @@ void shuttle_update(struct Moby *moby) {
         if (D_L06_0015F5C4 != 2) {
             queue_planet_unlock_message(5);
             memcard_save_data(0, -1);
-            moby->state = 1;
+            moby->state = WAIT_FOR_SHUTTLE_ROUTE_REQUEST;
         }
         break;
     case WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW:
         if (D_L06_0015F5C4 != 2) {
             queue_scene_movie_with_game_language(5);
-            moby->state = 7;
+            moby->state = WAIT_TO_SELECT_SHUTTLE_SAVE_FLOW;
         }
         break;
     }
@@ -671,12 +687,17 @@ int update_shuttle_path_ride(char *moby, int path) {
     return ride->progress == 1.0f;
 }
 
-void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count) {
+void spawn_shuttle_explosion_effect(
+    float scale, char *moby, char *pos, char *push, int count) __asm__("FUN_L06_00303748");
+
+void spawn_shuttle_explosion_effect(
+
+    float scale, char *moby, char *explosion_origin, char *push, int count) {
     float  position[4], direction[4], velocity[4], acceleration[4];
     Colors first_colors, second_colors;
     int    i;
     float  strength;
-    cart_burst(moby, pos, -1, 2.0f, 13.0f);
+    cart_burst(moby, explosion_origin, -1, 2.0f, 13.0f);
     first_colors = D_L06_00201948;
     second_colors = D_L06_00201960;
     {
@@ -699,7 +720,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
                 high = scale_game_frames(30);
                 second_time = random_int_between(low, high);
             }
-            spawn_particle(pos,
+            spawn_particle(explosion_origin,
                            push,
                            *first_color,
                            *second_color,
@@ -715,26 +736,45 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
         int color1, color2, life, size, fade;
         i++;
         random_vector(position, 0.0f, 1.0f);
-        fast_vec_add(position, position, pos);
+        fast_vec_add(position, position, explosion_origin);
         random_vector(direction, 0.0f, 0.9f);
         fast_vec_add(direction, direction, push);
         fast_vec_scale(
-            velocity, direction, random_float_between(D_L06_00162114, D_L06_00162118) * frame_time);
+            velocity,
+            direction,
+            random_float_between(l06_shuttle_explosion_spark_velocity_scale_random_bound_a,
+                                 l06_shuttle_explosion_spark_velocity_scale_random_bound_b) *
+                frame_time);
         random_vector(direction, 0.0f, 0.9f);
         fast_vec_add(direction, direction, push);
-        fast_vec_scale(acceleration,
-                       direction,
-                       random_float_between(D_L06_00162124, D_L06_00162128) * frame_time);
-        velocity[3] = random_float_between(D_L06_0016211C, D_L06_00162120) * scale;
-        acceleration[3] = random_float_between(D_L06_0016212C, D_L06_00162130) * scale;
-        color1 = fast_tween_color(D_L06_00162134, D_L06_00162138, random_float_between(0.0f, 1.0f));
-        color2 = fast_tween_color(D_L06_0016213C, D_L06_00162140, random_float_between(0.0f, 1.0f));
-        life = truncate_float_to_s32(
-            scale_time(random_float_between((float)D_L06_00162144, (float)(D_L06_00162144 << 1))));
-        size = truncate_float_to_s32(
-            scale_time(random_float_between((float)D_L06_00162148, (float)D_L06_00162148 * 1.2f)));
-        fade = truncate_float_to_s32(
-            scale_time(random_float_between((float)D_L06_0016214C * 0.8f, (float)D_L06_0016214C)));
+        fast_vec_scale(
+            acceleration,
+            direction,
+            random_float_between(l06_shuttle_explosion_spark_acceleration_scale_random_bound_a,
+                                 l06_shuttle_explosion_spark_acceleration_scale_random_bound_b) *
+                frame_time);
+        velocity[3] = random_float_between(l06_shuttle_explosion_spark_velocity_w_random_bound_a,
+                                           l06_shuttle_explosion_spark_velocity_w_random_bound_b) *
+                      scale;
+        acceleration[3] =
+            random_float_between(l06_shuttle_explosion_spark_acceleration_w_random_bound_a,
+                                 l06_shuttle_explosion_spark_acceleration_w_random_bound_b) *
+            scale;
+        color1 = fast_tween_color(l06_shuttle_explosion_spark_first_color_blend_a,
+                                  l06_shuttle_explosion_spark_first_color_blend_b,
+                                  random_float_between(0.0f, 1.0f));
+        color2 = fast_tween_color(l06_shuttle_explosion_spark_second_color_blend_a,
+                                  l06_shuttle_explosion_spark_second_color_blend_b,
+                                  random_float_between(0.0f, 1.0f));
+        life = truncate_float_to_s32(scale_time(random_float_between(
+            (float)l06_shuttle_explosion_spark_timing_random_min_frames,
+            (float)(l06_shuttle_explosion_spark_timing_random_min_frames << 1))));
+        size = truncate_float_to_s32(scale_time(
+            random_float_between((float)l06_shuttle_explosion_spark_timing_base_a_frames,
+                                 (float)l06_shuttle_explosion_spark_timing_base_a_frames * 1.2f)));
+        fade = truncate_float_to_s32(scale_time(
+            random_float_between((float)l06_shuttle_explosion_spark_timing_base_b_frames * 0.8f,
+                                 (float)l06_shuttle_explosion_spark_timing_base_b_frames)));
         spawn_spark(position,
                     velocity,
                     acceleration,
@@ -743,7 +783,8 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
                     life,
                     size,
                     fade,
-                    D_L06_00162154 + (D_L06_00162158 << 16));
+                    l06_shuttle_explosion_spark_table_index +
+                        (l06_shuttle_explosion_spark_alternate_mode_flag << 16));
     }
 }
 
@@ -770,8 +811,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     center[2] = 173.07f;
     spawn_timed_projected_sprite_effect(center,
                                         scale_game_frames(class_076a_moby_rate_input_frames_gp),
-                                        D_L06_0016210C,
-                                        D_L06_00162110);
+                                        l06_shuttle_projected_sprite_start_color,
+                                        l06_shuttle_projected_sprite_end_color);
     largest = 0.0f;
     clear_u64_value(middle);
     list = D_L06_001ABFC0_03b68[*(int *)(shuttle_linkage_vars + 0xCC)];
@@ -779,7 +820,7 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     do {
         id = *list & 0x7FFF;
         random_vector(push, 1.0f, 2.0f);
-        FUN_L06_00303748(
+        spawn_shuttle_explosion_effect(
             30.0f, moby, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos, push, 1);
         fast_vec_add(middle, middle, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
         count++;

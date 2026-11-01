@@ -244,9 +244,9 @@ void update_hero_aligned_camera_position(char *camera_object) {
     int          vehicle_mode;
     FUN_001f9bf8_002e9cc0(normalized_hero_up_axis, ((char *)hero_data->moby) + 0xE0, 1.0f);
     vehicle_mode = hero_data->vehicle_mode;
-    if (vehicle_mode == 2) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         FUN_001f9a68_002e9cc0(camera_height_offset, normalized_hero_up_axis, 9.5f);
-    } else if (vehicle_mode == 1) {
+    } else if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         if (D_0015EDB3_002e9cc0) {
             FUN_001f9a68_002e9cc0(camera_height_offset, normalized_hero_up_axis, 1.2f);
         } else {
@@ -267,9 +267,9 @@ void initialize_hero_aligned_camera_pose(char *camera_object) {
     u128         scaled_hero_up_axis;
     struct Hero *hero_state = &hero;
     FUN_001f9bf8_2e9dd0(&hero_up_axis, ((char *)hero_state->moby) + 0xE0, 1.0f);
-    if (hero_state->vehicle_mode == 2) {
+    if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 9.5f);
-    } else if (hero_state->vehicle_mode == 1) {
+    } else if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 0.9f);
     } else {
         FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 1.6f);
@@ -418,6 +418,9 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
 int camera_transition_update(u8 *, char *) __asm__("FUN_L00_002ea488");
 
 int camera_transition_update(u8 *transition_camera_record, char *mode_check_object) {
+    enum {
+        CAMERA_REQUEST_BYPASS_MODE_MATCH = 0x51
+    };
     Q_2ea488 *q;
     char     *active_transition_camera_record;
     char     *r;
@@ -434,7 +437,7 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
     g = &P;
     requested_camera_mode = g->i2284;
     if (requested_camera_mode == *(s16 *)(transition_camera_record + 0x86) ||
-        requested_camera_mode == 0x51) {
+        requested_camera_mode == CAMERA_REQUEST_BYPASS_MODE_MATCH) {
         active_transition_camera_record = D_L00_00166E00_lui;
         checked_object_mode = *(s16 *)(mode_check_object + 0x86);
         if (checked_object_mode != 0 && checked_object_mode != 10 && checked_object_mode != 14 &&

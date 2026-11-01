@@ -50,7 +50,7 @@ void leaf_update(struct Moby *moby) {
         qcopy(leaf_vars + 0x30, &moby->pos);
         *(int *)(leaf_vars + 0x40) = *(int *)(leaf_vars + 0x44) = random_int_between(120, 2400);
         *(float *)(leaf_vars + 0x4c) = moby->scale * random_float_between(0.8f, 1.2f);
-        moby->state = 1;
+        moby->state = LEAF_WAIT_FOR_ACTIVATION;
         break;
     case LEAF_WAIT_FOR_ACTIVATION:
         if (!(vector_distance_xy(&moby->pos, D_L04_00166F40) < 32.0f))
@@ -74,7 +74,7 @@ void leaf_update(struct Moby *moby) {
         fast_vec_normalize(motion + 8, &initialDirection, 0.098174773f);
         fast_vec_normalize(motion + 4, &initialDirection, leaf_motion_parameters[5] * 0.5f);
         *(int *)(motion + 16) = *(int *)(motion + 17) = random_int_between(720, 1200);
-        moby->state = 2;
+        moby->state = LEAF_UPDATE_MOTION;
         return;
     case LEAF_UPDATE_MOTION:
         fast_dec_timer((int *)(leaf_vars + 0x44));
@@ -138,7 +138,7 @@ void leaf_update(struct Moby *moby) {
         /* Preserve the retail ordering of the timer reload stores. */
         *(volatile int *)(leaf_vars + 0x40) = timer;
         *(volatile int *)(leaf_vars + 0x44) = timer;
-        moby->state = 1;
+        moby->state = LEAF_WAIT_FOR_ACTIVATION;
         break;
     default:
         return;

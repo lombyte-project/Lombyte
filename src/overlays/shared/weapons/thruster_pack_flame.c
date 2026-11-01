@@ -16,6 +16,14 @@
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 
+enum {
+    STATE_INITIALIZE = 0,
+    STATE_WAIT_FOR_BEAM = 1,
+    STATE_BEAM_GROW = 2,
+    STATE_BEAM_ACTIVE = 3,
+    STATE_BEAM_SHRINK = 4
+};
+
 #define BEAM_QUAD_YZ                                                                       \
     {                                                                                      \
         {0.0f, -2.0f, 2.0f, 1.0f}, {0.0f, -2.0f, -2.0f, 1.0f}, {0.0f, 2.0f, 2.0f, 1.0f}, { \
@@ -818,9 +826,9 @@ void emit_beam_trail_particles(X *x) {
         fast_vec_sub(&previous_position_delta, &trail_state->v10, &emission_position);
         hero_state = hero.state.current;
         trail_sample_limit = 4;
-        if (hero_state == 8)
+        if (hero_state == HERO_STATE_LAND)
             trail_sample_limit = 2;
-        if (hero_state == 0x81)
+        if (hero_state == HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT)
             trail_sample_limit = 1;
         for (i = 1; i < trail_sample_limit; i++) {
             fast_vec_normalize(
@@ -857,7 +865,7 @@ char *spawn_thruster_pack_flame(int instance_index) {
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0x7E;
         MOBY(spawned_moby)->visible = 0;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = STATE_INITIALIZE;
     }
     return spawned_moby;
 }
@@ -866,13 +874,6 @@ void thruster_pack_flame_update(void *moby) __asm__("FUN_L00_002b4198");
 
 /* Moby class 167 */
 void thruster_pack_flame_update(void *moby) {
-    enum {
-        STATE_INITIALIZE = 0,
-        STATE_WAIT_FOR_BEAM = 1,
-        STATE_BEAM_GROW = 2,
-        STATE_BEAM_ACTIVE = 3,
-        STATE_BEAM_SHRINK = 4
-    };
     O_4198 *beam_moby = (O_4198 *)moby;
     V_4198 *v = beam_moby->v;
     s32     flag = 0;
@@ -880,10 +881,10 @@ void thruster_pack_flame_update(void *moby) {
     s32     lim;
 
     if (hero.items[3].item_id == 3) {
-        if (beam_moby->state == 1 || beam_moby->state == 3) {
+        if (beam_moby->state == STATE_WAIT_FOR_BEAM || beam_moby->state == STATE_BEAM_ACTIVE) {
             hero_state = hero.state.current;
             if ((u32)(hero_state - 0xB) < 4 ||
-                (hero_state == 0x1C &&
+                (hero_state == HERO_STATE_LEDGE_JUMP &&
                  ((u8 *)((void *)hero.moby))[0x52] == ((u8 *)((void *)hero.moby))[0x53] &&
                  hero.anim_frame >= 6.0f && hero.anim_frame <= 16.0f)) {
                 if (!hero.past_jump_apex)
@@ -908,7 +909,7 @@ void thruster_pack_flame_update(void *moby) {
     switch (beam_moby->state) {
     case STATE_INITIALIZE:
         beam_moby->f18 += 0.5f;
-        beam_moby->state = 1;
+        beam_moby->state = STATE_WAIT_FOR_BEAM;
         beam_moby->u30 = 0xFF;
         beam_moby->u34 |= 1;
         break;
@@ -916,7 +917,7 @@ void thruster_pack_flame_update(void *moby) {
         if (hero_slot_item_id(3) != 3) {
             mark_moby_for_removal(beam_moby);
         } else if (flag != 0) {
-            beam_moby->state = 2;
+            beam_moby->state = STATE_BEAM_GROW;
             v->i0 = scale_game_frames(2);
             v->f30 = 0.0125f / scale_game_frames(2);
             v->f34 = 0.2f / scale_game_frames(2);
@@ -936,7 +937,7 @@ void thruster_pack_flame_update(void *moby) {
         v->i8 = ((s32)hero.items[3].moby);
         add_draw_callback(FUN_L00_002b3628_4198, beam_moby);
         if (fast_dec_timer(v) != 0) {
-            beam_moby->state = 3;
+            beam_moby->state = STATE_BEAM_ACTIVE;
             v->f20 = 0.0125f;
             v->f24 = 0.2f;
             v->f28 = 0.05f;
@@ -948,7 +949,7 @@ void thruster_pack_flame_update(void *moby) {
         v->i8 = ((s32)hero.items[3].moby);
         add_draw_callback(FUN_L00_002b3628_4198, beam_moby);
         if (flag == 0) {
-            beam_moby->state = 4;
+            beam_moby->state = STATE_BEAM_SHRINK;
             v->i0 = scale_game_frames(8);
             v->f30 = 0.0125f / scale_game_frames(8);
             v->f34 = 0.2f / scale_game_frames(8);
@@ -961,7 +962,7 @@ void thruster_pack_flame_update(void *moby) {
         break;
     case STATE_BEAM_SHRINK:
         if (fast_dec_timer(v) != 0) {
-            beam_moby->state = 1;
+            beam_moby->state = STATE_WAIT_FOR_BEAM;
         } else {
             v->f20 -= v->f30;
             v->f24 -= v->f34;

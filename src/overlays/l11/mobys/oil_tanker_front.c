@@ -95,7 +95,7 @@ void oil_tanker_front_update(struct Moby *moby) {
         chain_vars->sound = -1;
         chain_vars->point = 0;
         chain_vars->t = 0.0f;
-        moby->state = 1;
+        moby->state = OIL_TANKER_WAIT_FOR_CAMERA_MODE;
         for (i = 0; i < 8; i++) {
             struct Moby *link;
             chain_vars->links[i] = create_moby(0x4F1);
@@ -117,7 +117,7 @@ void oil_tanker_front_update(struct Moby *moby) {
         if (camera_secondary_mode[0] == 0x32) {
             int i;
 
-            moby->state = 2;
+            moby->state = OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE;
             chain_vars->path = (char *)l11_paths[chain_vars->path_index];
             chain_vars->point = 0;
             for (i = 0; i < 8; i++) {
@@ -143,7 +143,7 @@ void oil_tanker_front_update(struct Moby *moby) {
         }
         update_oil_tanker_front_path_pose(moby);
         update_oil_tanker_link_path_poses(moby);
-        if (moby->state == 2) {
+        if (moby->state == OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE) {
             process_oil_tanker_damage_and_destruction(moby);
         }
         if (voice_is_playing(moby, chain_vars->sound) == 0) {
@@ -472,8 +472,11 @@ void distribute_group_blarg_ships_along_path(struct Moby *moby, int table_index)
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003198F8), where it is exact; names translated to the US level program. */
 
 void start_oil_tanker_link_destruction(struct Moby *link_moby) {
+    enum {
+        OIL_TANKER_LINK_DESTRUCTION = 1
+    };
     char *link_vars = (char *)link_moby->pvars;
-    link_moby->state = 1;
+    link_moby->state = OIL_TANKER_LINK_DESTRUCTION;
     link_moby->collision = 0;
     fast_vec_sub(link_vars + 0x10, &link_moby->pos, link_vars);
     *(float *)(link_vars + 0x20) =

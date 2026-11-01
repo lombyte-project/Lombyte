@@ -17,6 +17,16 @@ typedef struct {
 extern char skip_to_next_picture_error_message[] __asm__("D_001537E0");
 
 s32 _pictureData0(MpegDec *decoder) {
+    enum {
+        DECODE_STATUS_SUCCESS = 0,
+        DECODE_STATUS_ABORT_PICTURE = 2
+    };
+    enum {
+        DECODE_STATUS_SLICE_DECODE_ERROR = 1
+    };
+    enum {
+        DECODE_STATUS_SLICE_LOOKAHEAD_STOP = 3
+    };
     s32 decode_status;
     s32 mbs;
 
@@ -28,18 +38,20 @@ s32 _pictureData0(MpegDec *decoder) {
     }
     do {
         decode_status = _slice0(decoder, mbs);
-    } while (decode_status == 1 || decode_status == 3);
+    } while (decode_status == DECODE_STATUS_SLICE_DECODE_ERROR ||
+             decode_status == DECODE_STATUS_SLICE_LOOKAHEAD_STOP);
     _waitIpuIdle(decoder);
     if (_waitBdecOut(decoder) == 0) {
-        decode_status = 2;
+        decode_status = DECODE_STATUS_ABORT_PICTURE;
     }
     while ((*(volatile u32 *)0x1000D400 >> 8) & 1) {
     }
-    if (decode_status == 0) {
+    if (decode_status == DECODE_STATUS_SUCCESS) {
         _doMC(decoder, decoder->unk810 == 0);
     }
-    if (decode_status == 1 || decode_status == 2) {
+    if (decode_status == DECODE_STATUS_SLICE_DECODE_ERROR ||
+        decode_status == DECODE_STATUS_ABORT_PICTURE) {
         _Error(decoder, skip_to_next_picture_error_message);
     }
-    return decode_status == 0;
+    return decode_status == DECODE_STATUS_SUCCESS;
 }

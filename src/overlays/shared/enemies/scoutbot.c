@@ -21,6 +21,17 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/math/quad.h"
 
+enum {
+    SCOUTBOT_STATE_INITIALIZE = 0,
+    SCOUTBOT_STATE_IDLE = 1,
+    SCOUTBOT_STATE_APPROACH_TARGET = 2,
+    SCOUTBOT_STATE_RETURN_HOME = 3,
+    SCOUTBOT_STATE_ATTACK = 4,
+    SCOUTBOT_STATE_WAIT_FOR_VOICE = 6,
+    SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL = 7,
+    SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63
+};
+
 typedef struct ScoutbotVars {
     u8    pad0[0x20];
     f32   unk20[4];
@@ -150,10 +161,10 @@ func_L00_00260FB0_f(char *, void *, float, int, int, void *, int) __asm__("FUN_L
 extern void  scale_vector_002d3878(float, void *) __asm__("FUN_L00_0025f730");
 extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L08_00161894_lui __asm__("D_L08_00161894") NOT_SDA;
-extern u32   D_00151878_gp __asm__("D_00151878") __attribute__((sda));
-extern u32   D_0015187C_gp __asm__("D_0015187C") __attribute__((sda));
-extern u32   D_00151880_gp __asm__("D_00151880") __attribute__((sda));
-extern u32   D_00151884_gp __asm__("D_00151884") __attribute__((sda));
+extern u32   scoutbot_target_beam_vertex_0_color __asm__("D_00151878") __attribute__((sda));
+extern u32   scoutbot_target_beam_vertex_1_color __asm__("D_0015187C") __attribute__((sda));
+extern u32   scoutbot_target_beam_vertex_2_color __asm__("D_00151880") __attribute__((sda));
+extern u32   scoutbot_target_beam_vertex_3_color __asm__("D_00151884") __attribute__((sda));
 void         draw_target_beam(struct Moby *moby) __asm__("FUN_L08_002d3878");
 
 extern float scoutbot_probe_correction_target_position[] __asm__("D_L08_00174670");
@@ -176,16 +187,6 @@ void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
 
 /* Moby class 252 */
 void scoutbot_update(Moby *moby) {
-    enum {
-        SCOUTBOT_STATE_INITIALIZE = 0,
-        SCOUTBOT_STATE_IDLE = 1,
-        SCOUTBOT_STATE_APPROACH_TARGET = 2,
-        SCOUTBOT_STATE_RETURN_HOME = 3,
-        SCOUTBOT_STATE_ATTACK = 4,
-        SCOUTBOT_STATE_WAIT_FOR_VOICE = 6,
-        SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL = 7,
-        SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63
-    };
     Data_3DF8 *scoutbot_instance_vars = (struct Data_3DF8 *)moby->pvars;
     float      target_pos[4];
     float      offset[4];
@@ -218,7 +219,7 @@ void scoutbot_update(Moby *moby) {
         if (moby->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, 0);
         }
-        moby->state = 1;
+        moby->state = SCOUTBOT_STATE_IDLE;
         qcopy(scoutbot_instance_vars->home, &moby->pos);
         if (probe_ground_height(&moby->pos, 0, 0.5f) > moby->pos.z - 10.0f) {
             scoutbot_instance_vars->home[2] = probe_ground_height(&moby->pos, 0, 0.5f);
@@ -237,7 +238,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
-            moby->state = 2;
+            moby->state = SCOUTBOT_STATE_APPROACH_TARGET;
         } else if (moby->anim_flags & 2) {
             float heading = random_angle_radians();
             float radius = random_float_between(0.0f, 3.0f);
@@ -249,7 +250,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
-            moby->state = 7;
+            moby->state = SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL;
         }
         break;
     case SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL: {
@@ -265,7 +266,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 3);
             }
-            moby->state = 1;
+            moby->state = SCOUTBOT_STATE_IDLE;
         }
         break;
     }
@@ -280,7 +281,7 @@ void scoutbot_update(Moby *moby) {
         if (vector_distance_xy(&moby->pos, &scoutbot_instance_vars->current_target->pos) < 3.0f &&
             absolute_float(scoutbot_instance_vars->current_target->pos.z - moby->pos.z) < 2.0f) {
             scoutbot_instance_vars->voice = allocate_voice_for_target_entry(0, 0, moby);
-            moby->state = 6;
+            moby->state = SCOUTBOT_STATE_WAIT_FOR_VOICE;
         } else if (vector_distance_xy(target_pos, scoutbot_instance_vars->home) > 15.0f ||
                    absolute_float(scoutbot_instance_vars->home[2] - target_pos[2]) > 4.0f) {
             scoutbot_instance_vars->f200 = 4.0f;
@@ -288,7 +289,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
-            moby->state = 3;
+            moby->state = SCOUTBOT_STATE_RETURN_HOME;
         }
         break;
     }
@@ -308,7 +309,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 3);
             }
-            moby->state = 1;
+            moby->state = SCOUTBOT_STATE_IDLE;
         }
         break;
     }
@@ -348,7 +349,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 3);
             }
-            moby->state = 3;
+            moby->state = SCOUTBOT_STATE_RETURN_HOME;
         }
         break;
     }
@@ -360,7 +361,7 @@ void scoutbot_update(Moby *moby) {
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, 3);
             }
-            moby->state = 4;
+            moby->state = SCOUTBOT_STATE_ATTACK;
         }
         break;
     }
@@ -403,7 +404,7 @@ void scoutbot_update(Moby *moby) {
     if (moby->state != 5 && (signed char)moby->state >= 0) {
         int col = 0x7F20FF20;
 
-        if (moby->state == 4 || moby->state == 6) {
+        if (moby->state == SCOUTBOT_STATE_ATTACK || moby->state == SCOUTBOT_STATE_WAIT_FOR_VOICE) {
             col = 0x7F2828A0;
         }
         moby->glow_color = colorlerp_3DF8(moby->glow_color, col, 0.1f);
@@ -430,7 +431,7 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
         if (hit_reaction_code < 12) {
             if (hit_reaction_code >= 0) {
                 FUN_L00_00257470(moby, 0, -1);
-                moby->state = 0x63;
+                moby->state = SCOUTBOT_STATE_EXPLODE_AND_REMOVE;
             }
         }
     }
@@ -453,9 +454,9 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
 }
 
 void draw_target_beam(struct Moby *moby) {
-    ScoutbotVars   *data = (ScoutbotVars *)moby->pvars;
+    ScoutbotVars   *scoutbot_private_vars = (ScoutbotVars *)moby->pvars;
     Packet_002d3878 pk;
-    Vec_002d3878    matrix[3], direction, pos, delta, angles;
+    Vec_002d3878    matrix[3], direction, beam_origin_position, delta, angles;
     float           length;
     u64             tag;
     Vec_002d3878   *points;
@@ -464,10 +465,10 @@ void draw_target_beam(struct Moby *moby) {
     float          *vertex;
     int             i;
     tag = get_effect_texture(14);
-    pk.color[0] = D_00151878_gp;
-    pk.color[1] = D_0015187C_gp;
-    pk.color[2] = D_00151880_gp;
-    pk.color[3] = D_00151884_gp;
+    pk.color[0] = scoutbot_target_beam_vertex_0_color;
+    pk.color[1] = scoutbot_target_beam_vertex_1_color;
+    pk.color[2] = scoutbot_target_beam_vertex_2_color;
+    pk.color[3] = scoutbot_target_beam_vertex_3_color;
     pk.tag[1] = tag;
     pk.tag[2] = 0xff9000000260ULL;
     pk.tag[0] = 5;
@@ -480,31 +481,32 @@ void draw_target_beam(struct Moby *moby) {
     pk.uv[5] = 1.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    moby_point_position(moby, 2, &pos);
-    fast_vec_sub(&delta, data->unk218 + 0x10, &pos);
+    moby_point_position(moby, 2, &beam_origin_position);
+    fast_vec_sub(&delta, scoutbot_private_vars->unk218 + 0x10, &beam_origin_position);
     scale_vector_002d3878(3.0f, &delta);
-    delta.v[2] = (*(float *)(data->unk218 + 0x18) + 0.25f) - pos.v[2];
+    delta.v[2] =
+        (*(float *)(scoutbot_private_vars->unk218 + 0x18) + 0.25f) - beam_origin_position.v[2];
     delta.v[3] = 1.0f;
     length = fast_vec_length(&delta);
     clear_u64_value(&angles);
     angles.v[1] = -fast_arc_tan(vector_length_xy(&delta), delta.v[2]);
     angles.v[2] = fast_arc_tan(delta.v[0], delta.v[1]);
     euler_rotation_matrix(matrix, &angles);
-    qcopy(&direction, &pos);
+    qcopy(&direction, &beam_origin_position);
     direction.v[3] = 1.0f;
 
     clear_u64_value(&pk.vertices[0]);
     pk.vertices[0].v[2] = D_L08_00161894_lui;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], &data->unk1D0);
-    pk.vertices[1].v[0] = length * data->unk1D0[3];
+    qcopy(&pk.vertices[1], &scoutbot_private_vars->unk1D0);
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1D0[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[2]);
     pk.vertices[2].v[2] = 0.0f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], &data->unk1D0);
-    pk.vertices[3].v[0] = length * data->unk1D0[3];
+    qcopy(&pk.vertices[3], &scoutbot_private_vars->unk1D0);
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1D0[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -521,20 +523,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], &data->unk1D0);
-    pk.vertices[0].v[0] = length * data->unk1D0[3];
+    qcopy(&pk.vertices[0], &scoutbot_private_vars->unk1D0);
+    pk.vertices[0].v[0] = length * scoutbot_private_vars->unk1D0[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], &data->unk1E0);
-    pk.vertices[1].v[0] = length * data->unk1E0[3];
+    qcopy(&pk.vertices[1], &scoutbot_private_vars->unk1E0);
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1E0[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], &data->unk1D0);
-    pk.vertices[2].v[0] = length * data->unk1D0[3];
+    qcopy(&pk.vertices[2], &scoutbot_private_vars->unk1D0);
+    pk.vertices[2].v[0] = length * scoutbot_private_vars->unk1D0[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], &data->unk1E0);
-    pk.vertices[3].v[0] = length * data->unk1E0[3];
+    qcopy(&pk.vertices[3], &scoutbot_private_vars->unk1E0);
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1E0[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -552,20 +554,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], &data->unk1E0);
-    pk.vertices[0].v[0] = length * data->unk1E0[3];
+    qcopy(&pk.vertices[0], &scoutbot_private_vars->unk1E0);
+    pk.vertices[0].v[0] = length * scoutbot_private_vars->unk1E0[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[1]);
-    pk.vertices[1].v[0] = length * data->unk1D0[3] * 3.0f;
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1D0[3] * 3.0f;
     pk.vertices[1].v[2] += D_L08_00161894_lui;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], &data->unk1E0);
-    pk.vertices[2].v[0] = length * data->unk1E0[3];
+    qcopy(&pk.vertices[2], &scoutbot_private_vars->unk1E0);
+    pk.vertices[2].v[0] = length * scoutbot_private_vars->unk1E0[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[3]);
-    pk.vertices[3].v[0] = length * data->unk1D0[3] * 3.0f;
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1D0[3] * 3.0f;
     pk.vertices[3].v[2] = 0.0f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -646,7 +648,7 @@ void *enter_scoutbot_return_home_state(struct Moby *moby) __asm__("FUN_L08_002d4
 void *enter_scoutbot_return_home_state(struct Moby *moby) {
     void         *suction_cancel_status = cancel_suck_cannon_suction(moby);
     ScoutbotVars *scoutbot_data = (ScoutbotVars *)moby->pvars;
-    moby->state = 3;
+    moby->state = SCOUTBOT_STATE_RETURN_HOME;
     scoutbot_data->unk200 = 4.0f;
     scoutbot_data->unk208 = 0.5f;
     if ((unsigned char)((char)moby->prev_seq) != 2) {

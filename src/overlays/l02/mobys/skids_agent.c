@@ -121,7 +121,7 @@ void skids_agent_update(struct Moby *moby) {
             goto kill;
         }
         skids_agent_vars->unk20 = skids_agent_dialogue_data;
-        moby->state = 1;
+        moby->state = SKIDS_AGENT_IDLE_AND_TALK;
         initialize_npc_dialogue(moby, skids_agent_vars);
         initialize_moby_grounding(moby);
         prop = create_moby(0x38);
@@ -140,7 +140,7 @@ void skids_agent_update(struct Moby *moby) {
         }
         if (update_npc_dialogue(moby, skids_agent_vars) != 0) {
             begin_dialogue_camera_transition(moby, 2.2f);
-            moby->state = 2;
+            moby->state = SKIDS_AGENT_CONVERSATION_ACTIVE;
         } else if (item_available[0x5] == 0 &&
                    vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f) {
             if (D_00141968[14].count != 0) {
@@ -177,7 +177,7 @@ void skids_agent_update(struct Moby *moby) {
         break;
     case SKIDS_AGENT_CONVERSATION_ACTIVE:
         if (level_game_mode != 2) {
-            moby->state = 1;
+            moby->state = SKIDS_AGENT_IDLE_AND_TALK;
             if (skids_agent_vars->unk4 == 0) {
                 jet_clear_persistent(moby->mission);
                 if (skids_agent_vars->unk150 != -1) {
@@ -194,7 +194,7 @@ void skids_agent_update(struct Moby *moby) {
                     skids_agent_vars->unk178->visible = 0;
                 }
                 start_indexed_disc_stream(2);
-                moby->state = 5;
+                moby->state = SKIDS_AGENT_END_CONVERSATION;
             }
         } else if (talk_camera.placed == 0) {
             fast_vec_normalize(&talk_camera.pos, &moby->rot_row0, 2.5f);
@@ -239,7 +239,7 @@ void skids_agent_update(struct Moby *moby) {
         } else {
             approach_value(&skids_agent_vars->unk17C, 1.0f, 0.1f);
             if (skids_agent_vars->unk17C == 1.0f) {
-                moby->state = 4;
+                moby->state = SKIDS_AGENT_FADE_TO_ZERO_AND_DELETE;
                 jet_end_mount(0);
             }
         }

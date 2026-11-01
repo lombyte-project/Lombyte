@@ -181,7 +181,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
         moby_vars->p20 = (void *)captain_qwark_name;
         initialize_npc_dialogue(moby, moby_vars);
         moby_vars->b8 = 1;
-        moby->state = 1;
+        moby->state = QWARK_OLTANIS_STATE_UPDATE_DIALOGUE;
         break;
     }
     case QWARK_OLTANIS_STATE_UPDATE_DIALOGUE:
@@ -199,12 +199,12 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
         }
         if (update_npc_dialogue(moby, moby_vars)) {
             begin_dialogue_camera_transition(moby, 3.0f);
-            moby->state = 2;
+            moby->state = QWARK_OLTANIS_STATE_POST_DIALOGUE;
         }
         break;
     case QWARK_OLTANIS_STATE_POST_DIALOGUE:
         if (D_L14_0015F5C4 != 2) {
-            moby->state = 1;
+            moby->state = QWARK_OLTANIS_STATE_UPDATE_DIALOGUE;
             if ((unsigned)(moby_vars->sub - 3) < 2) {
                 if ((short)moby_vars->sub == 4)
                     queue_dialogue_message(0x53DD, -1);

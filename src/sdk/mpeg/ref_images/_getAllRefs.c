@@ -23,6 +23,13 @@ void _getAllRefs(struct MpegDecoder *decoder,
                  int                 mvfs[2][2],
 
                  int *dmvector) {
+    enum {
+        MPEG_MOTION_FIELD = 1,
+        MPEG_PICTURE_CODING_PREDICTIVE = 2,
+        MPEG_MOTION_FRAME = 2,
+        MPEG_MOTION_16X8 = 2,
+        MPEG_MOTION_DUAL_PRIME = 3
+    };
     int                  dmv[2][2];
     struct MpegRefImage *refs[2][2];
     int                  one = 1;
@@ -34,9 +41,9 @@ void _getAllRefs(struct MpegDecoder *decoder,
 
     decoder->mb_buf[decoder->mb_buf_index].fetch_count = 0;
 
-    if ((mb_type & 8) || decoder->picture_coding_type == 2) {
+    if ((mb_type & 8) || decoder->picture_coding_type == MPEG_PICTURE_CODING_PREDICTIVE) {
         if (decoder->picture_structure == 3) {
-            if (motion_type == 2 || !(mb_type & 8)) {
+            if (motion_type == MPEG_MOTION_FRAME || !(mb_type & 8)) {
                 _getRef0(decoder,
                          decoder->ref_images[0],
                          0,
@@ -74,7 +81,7 @@ void _getAllRefs(struct MpegDecoder *decoder,
                          pmv[1][0][1] >> 1,
                          same,
                          0);
-            } else if (motion_type == 3) {
+            } else if (motion_type == MPEG_MOTION_DUAL_PRIME) {
                 _dualPrimeVector(decoder, dmv, dmvector, pmv[0][0][0], pmv[0][0][1] >> 1);
                 _getRef0(decoder,
                          decoder->ref_images[0],
@@ -139,7 +146,7 @@ void _getAllRefs(struct MpegDecoder *decoder,
             if (decoder->picture_coding_type == one && decoder->second_field) {
                 same = currentfield != mvfs[0][0];
             }
-            if (motion_type == 1 || !(mb_type & 8)) {
+            if (motion_type == MPEG_MOTION_FIELD || !(mb_type & 8)) {
                 _getRef0(decoder,
                          refs[same][mvfs[0][0]],
                          0,
@@ -152,7 +159,7 @@ void _getAllRefs(struct MpegDecoder *decoder,
                          pmv[0][0][1],
                          0,
                          0);
-            } else if (motion_type == 2) {
+            } else if (motion_type == MPEG_MOTION_16X8) {
                 _getRef0(decoder,
                          refs[same][mvfs[0][0]],
                          0,
@@ -179,7 +186,7 @@ void _getAllRefs(struct MpegDecoder *decoder,
                          pmv[1][0][1],
                          0,
                          0);
-            } else if (motion_type == 3) {
+            } else if (motion_type == MPEG_MOTION_DUAL_PRIME) {
                 same = decoder->second_field ? motion_type - 2 : 0;
                 _dualPrimeVector(decoder, dmv, dmvector, pmv[0][0][0], pmv[0][0][1]);
                 _getRef0(decoder,
@@ -216,7 +223,7 @@ void _getAllRefs(struct MpegDecoder *decoder,
     if (mb_type & 4) {
         if (decoder->picture_structure == 3) {
             same = 1;
-            if (motion_type == 2) {
+            if (motion_type == MPEG_MOTION_FRAME) {
                 _getRef0(decoder,
                          decoder->ref_images[1],
                          0,
@@ -255,7 +262,7 @@ void _getAllRefs(struct MpegDecoder *decoder,
                          same,
                          avg);
             }
-        } else if (motion_type == 1) {
+        } else if (motion_type == MPEG_MOTION_FIELD) {
             _getRef0(decoder,
                      mvfs[0][1] ? decoder->ref_images[9] : decoder->ref_images[5],
                      0,
@@ -268,7 +275,7 @@ void _getAllRefs(struct MpegDecoder *decoder,
                      pmv[0][1][1],
                      0,
                      avg);
-        } else if (motion_type == 2) {
+        } else if (motion_type == MPEG_MOTION_16X8) {
             _getRef0(decoder,
                      mvfs[0][1] ? decoder->ref_images[9] : decoder->ref_images[5],
                      0,

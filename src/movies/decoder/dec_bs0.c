@@ -20,8 +20,11 @@ extern char mpeg_get_picture_decode_error_message[] __asm__("D_001E8B50");
 int dec_bs0(struct VideoDec *vd) __asm__("FUN_0023cec8");
 
 int dec_bs0(struct VideoDec *vd) {
+    enum {
+        DEC_BS0_COMPLETED = 1
+    };
     struct VoData *voData;
-    int            status = 1;
+    int            status = DEC_BS0_COMPLETED;
     int            i;
 
     while (!sceMpegIsEnd(&vd->mpeg)) {

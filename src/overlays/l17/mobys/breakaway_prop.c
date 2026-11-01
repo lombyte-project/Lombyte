@@ -37,7 +37,7 @@ void breakaway_prop_update(struct Moby *moby) {
     char *hit_result = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case HIT_EFFECT_INITIALIZE:
-        moby->state = 1;
+        moby->state = HIT_EFFECT_WAIT_FOR_HIT;
         break;
     case HIT_EFFECT_WAIT_FOR_HIT:
         if (hit_result) {
@@ -45,7 +45,7 @@ void breakaway_prop_update(struct Moby *moby) {
                 flag = 1;
         }
         if (flag)
-            moby->state = 2;
+            moby->state = HIT_EFFECT_EMIT_AND_REMOVE;
         break;
     case HIT_EFFECT_EMIT_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);

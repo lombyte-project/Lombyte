@@ -92,7 +92,7 @@ void command_falling_platform_update(char *moby) {
         parent_data = *(char **)(parent + 0x78);
     }
     if (((unsigned char *)moby)[0xBC] == 2) {
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = PLATFORM_TIMED_SWAY_BEFORE_FALL;
         MOBY(moby)->command = 3;
         falling_platform_vars->unkAC = falling_platform_vars->unkBD;
     }
@@ -108,7 +108,7 @@ void command_falling_platform_update(char *moby) {
         falling_platform_vars->saved_rot_x = MOBY(moby)->rot.x;
         falling_platform_vars->saved_rot_y = MOBY(moby)->rot.y;
         falling_platform_vars->unkC8 = -1;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = PLATFORM_COMMAND_GATED_SWAY;
         MOBY(moby)->command = 0;
         if (((unsigned char *)moby)[0xB0] != 0xFF) {
             if (visited52[((unsigned char *)moby)[0xB0] + current_level_index * 16] != 0xFF)
@@ -118,7 +118,7 @@ void command_falling_platform_update(char *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            MOBY(moby)->state = 5;
+            MOBY(moby)->state = PLATFORM_HEIGHT_RECOVERY_AND_SWAY;
         }
         break;
     case PLATFORM_COMMAND_GATED_SWAY:
@@ -156,7 +156,7 @@ void command_falling_platform_update(char *moby) {
             parent_data[0x19D] = falling_platform_vars->unkBF;
             parent[0x20] = 12;
         }
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = PLATFORM_TILT_AND_FALL;
         break;
     case PLATFORM_TILT_AND_FALL:
         speed = 1.3962634f;
@@ -175,7 +175,7 @@ void command_falling_platform_update(char *moby) {
                 break;
             if (falling_platform_vars->unkBC != 0) {
                 falling_platform_vars->fall_speed = 0.0f;
-                MOBY(moby)->state = 4;
+                MOBY(moby)->state = PLATFORM_PARENT_GATED_RECOVERY_SETUP;
             } else {
                 mark_moby_for_removal(moby);
                 return;
@@ -188,7 +188,7 @@ void command_falling_platform_update(char *moby) {
         falling_platform_vars->fall_speed = random_float_between(frame_time, frame_time * 4.0f);
         falling_platform_vars->unkC0 = random_angle_radians();
         falling_platform_vars->unkC4 = random_angle_radians();
-        MOBY(moby)->state = 5;
+        MOBY(moby)->state = PLATFORM_HEIGHT_RECOVERY_AND_SWAY;
         MOBY(moby)->rot.x = 0.0f;
         MOBY(moby)->rot.y = 0.0f;
         falling_platform_vars->unkAC = 0;

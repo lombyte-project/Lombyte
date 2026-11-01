@@ -15,6 +15,15 @@
 #include "rnc/overlay/l03/mobys/mine_layer_globals.h"
 
 /* Patrol state of the l03 trooper: walks back and forth along a rail path. */
+enum {
+    MINE_LAYER_INITIALIZE = 0,
+    MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
+    MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL = 2,
+    MINE_LAYER_PATROL_AND_FIRE = 3,
+    MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
+    MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
+};
+
 typedef struct {
     s32        idx; /* 0x00: path point it is walking to */
     s8         dir; /* 0x04: +1 or -1 */
@@ -92,7 +101,7 @@ char       *spawn_mine_layer_projectile(char *p, void *pos, float *dir) __asm__(
 extern void FUN_L01_0026d930(void *);
 extern void blend_moby_animation(struct Moby *, int, int, int) __asm__("FUN_00212f90");
 extern void FUN_L00_00258278(f32, f32, f32, f32, struct Moby *, void *);
-extern void FUN_L00_00259028(struct Moby *, void *, void *, void *);
+extern void step_mover_2e3f20(struct Moby *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern void trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int  step_moby_motion(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern void spawn_explosion(struct Moby *,
@@ -124,14 +133,6 @@ void mine_layer_update(struct Moby *m) __asm__("FUN_L03_002c9eb8");
 
 /* Moby class 578 */
 void mine_layer_update(struct Moby *mine_layer_moby) {
-    enum {
-        MINE_LAYER_INITIALIZE = 0,
-        MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
-        MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL = 2,
-        MINE_LAYER_PATROL_AND_FIRE = 3,
-        MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
-        MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
-    };
     TrooperVars        *mine_layer_vars = (TrooperVars *)mine_layer_moby->pvars;
     TrooperPatrol      *pt;
     LevelPath          *path;
@@ -176,7 +177,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         qcopy(&mine_layer_moby->pos, &path->points[0]);
         mine_layer_vars->patrol.idx = 1;
         mine_layer_moby->scale *= mine_layer_initial_scale_multiplier_gp;
-        mine_layer_moby->state = 1;
+        mine_layer_moby->state = MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE;
         if (mine_layer_moby->prev_seq != 0) {
             blend_moby_animation(mine_layer_moby, 0, 0, 0);
         }
@@ -191,7 +192,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
                          mine_layer_vars->turn);
         if (vector_distance_xy(&mine_layer_moby->pos, &target.aim) < sight &&
             absolute_float(target.aim.f[2] - mine_layer_moby->pos.z) < 4.0f) {
-            mine_layer_moby->state = 2;
+            mine_layer_moby->state = MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL;
             if (mine_layer_moby->prev_seq != 1) {
                 blend_moby_animation(mine_layer_moby, 1, 0, scale_game_frames(10));
             }
@@ -199,7 +200,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         break;
     case MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL:
         if (mine_layer_moby->anim_flags & 2) {
-            mine_layer_moby->state = 3;
+            mine_layer_moby->state = MINE_LAYER_PATROL_AND_FIRE;
             mine_layer_vars->patrol_timer = scale_game_frames(120);
             if (mine_layer_moby->prev_seq != 2) {
                 blend_moby_animation(mine_layer_moby, 2, 0, scale_game_frames(10));
@@ -211,16 +212,16 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     case MINE_LAYER_PATROL_AND_FIRE:
         pt = &mine_layer_vars->patrol;
         patrol_point_index = pt->idx;
-        FUN_L00_00259028(mine_layer_moby,
-                         mine_layer_vars->walk,
-                         &pt->path->points[patrol_point_index],
-                         mine_layer_vars->effect);
+        step_mover_2e3f20(mine_layer_moby,
+                          mine_layer_vars->walk,
+                          &pt->path->points[patrol_point_index],
+                          mine_layer_vars->effect);
         mine_layer_moby->anim_speed = mine_layer_patrol_animation_speed_gp;
         fast_dec_timer_s16(&mine_layer_vars->patrol_timer);
         if (fast_vec_dist(&mine_layer_moby->pos, &pt->path->points[patrol_point_index]) < 1.0f) {
             if (mine_layer_vars->patrol_timer == 0 &&
                 vector_distance_xy(&mine_layer_moby->pos, &target.aim) > 25.0f) {
-                mine_layer_moby->state = 1;
+                mine_layer_moby->state = MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE;
                 if (mine_layer_moby->prev_seq != 0) {
                     blend_moby_animation(mine_layer_moby, 0, 0, scale_game_frames(10));
                 }
@@ -267,7 +268,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
             if (mine_layer_moby->prev_seq != 0) {
                 blend_moby_animation(mine_layer_moby, 0, 0, scale_game_frames(10));
             }
-            mine_layer_moby->state = 1;
+            mine_layer_moby->state = MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE;
         } else if (mine_layer_moby->pos.z < 5.0f) {
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 0.5f;
@@ -323,7 +324,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         }
         break;
     }
-    if (mine_layer_moby->state < 4) {
+    if (mine_layer_moby->state < MINE_LAYER_KNOCKBACK_AND_RECOVER) {
         mine_layer_vars->fall_speed += frame_time_sq * 9.8f;
         mine_layer_moby->pos.z -= mine_layer_vars->fall_speed - 2.0f;
         ground = probe_ground_height(&mine_layer_moby->pos, 0, 0.5f);
@@ -408,7 +409,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
     hit_record = trooper_find_hit(damaged_moby, 0x330000, 0);
     damage_response = resolve_moby_hit_response(
         damaged_moby, hit_record, &trooper_vars->health, 0, &hit, &dmg, 0, 4);
-    if (hit != 1 && damaged_moby->state != 5) {
+    if (hit != 1 && damaged_moby->state != MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION) {
         if (hit_record->source != NULL) {
             if (hit_record->source != hero.items[0].moby)
                 knockback_arc_angle = fast_arc_tan(damaged_moby->pos.x - hit_record->source->pos.x,
@@ -445,7 +446,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
                                     0);
             trooper_vars->kb_min = 5.0f;
             trooper_vars->kb_max = 10.0f;
-            damaged_moby->state = 4;
+            damaged_moby->state = MINE_LAYER_KNOCKBACK_AND_RECOVER;
             break;
         case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
@@ -468,7 +469,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
                                     0);
             trooper_vars->kb_min = 7.5f;
             trooper_vars->kb_max = 15.0f;
-            damaged_moby->state = 4;
+            damaged_moby->state = MINE_LAYER_KNOCKBACK_AND_RECOVER;
             break;
         case TROOPER_DAMAGE_LETHAL:
             trooper_vars->kb_speed =
@@ -492,7 +493,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
             trooper_vars->kb_max = 15.0f;
             damaged_moby->flags &= 0xEFFF;
             *((u8 *)trooper_vars + 0x67) = 0xFA;
-            damaged_moby->state = 5;
+            damaged_moby->state = MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION;
             break;
         }
         trooper_anim_update(damaged_moby, trooper_vars->anim);

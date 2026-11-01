@@ -90,6 +90,10 @@ void level_13_mine_update(ProjectileMoby *moby) __asm__("FUN_L13_002c2048");
 
 /* Moby class 83 */
 void level_13_mine_update(ProjectileMoby *moby) {
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     char           *moby_data = (char *)moby->data;
     ProjectileVec4  steering_and_collision_vector;
     float           hitpos[12];
@@ -139,7 +143,8 @@ void level_13_mine_update(ProjectileMoby *moby) {
         return;
     }
     target = *(ProjectileMoby **)(moby_data + 0x74);
-    if (target != 0 && target->state != 0xFE && target->state != 0xFD &&
+    if (target != 0 && target->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+        target->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END &&
         fast_vec_dist(pos, &target->pos) > 8.0f) {
         make_hit_descriptor(16.0f, &hitpos, moby, 0x30000, velocity);
         qcopy(&steering_and_collision_vector, pos);

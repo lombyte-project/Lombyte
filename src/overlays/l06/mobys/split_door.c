@@ -89,6 +89,10 @@ void split_door_update(char *moby) {
         ANIMATE_PAIR_WITH_TIMED_PHASES = 4,
         WAIT_FOR_RESET = 5
     };
+    enum {
+        SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS = 1,
+        SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS = 2
+    };
     SplitDoorVars *pair_transform_vars = (SplitDoorVars *)MOBY(moby)->pvars;
     char          *child;
     float          position_offset[4];
@@ -115,7 +119,7 @@ void split_door_update(char *moby) {
         qcopy(child, moby + 0x10);
         qcopy(child + 0x30, moby + 0x40);
         if (*(int *)pair_transform_vars >= 0) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = WAIT_FOR_HERO_IN_CLIP_VOLUME;
             return;
         }
         if (pair_transform_vars->unk4 == 2) {
@@ -130,18 +134,18 @@ void split_door_update(char *moby) {
         fast_vec_add(
             pair_transform_vars->unk40 + 0x10, &pair_transform_vars->unk10, position_offset);
         update_entity(pair_transform_vars->unk40);
-        MOBY(moby)->state = 5;
+        MOBY(moby)->state = WAIT_FOR_RESET;
         return;
     case WAIT_FOR_HERO_IN_CLIP_VOLUME:
         if (!is_point_inside_clip_volume(&hero.motion.pos, *(int *)pair_transform_vars))
             return;
         if (pair_transform_vars->unk4 == 1) {
-            MOBY(moby)->state = 4;
+            MOBY(moby)->state = ANIMATE_PAIR_WITH_TIMED_PHASES;
             pair_transform_vars->timer_4C = scale_game_frames(0x14);
         } else if ((unsigned char)MOBY(moby)->group != 0xff) {
             set_moby_list_state((unsigned char)MOBY(moby)->group, 3);
         } else {
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = MOVE_PAIR_TO_FIXED_OFFSETS;
         }
         allocate_voice_for_target_entry(0, 0, (int)pair_transform_vars->unk40);
         return;
@@ -170,7 +174,7 @@ void split_door_update(char *moby) {
         update_entity(pair_transform_vars->unk40);
         if (absolute_float(parent_distance - moby_pair_parent_fixed_distance_gp) < 0.01f &&
             absolute_float(child_distance - moby_pair_child_fixed_distance_gp) < 0.01f)
-            MOBY(moby)->state = 5;
+            MOBY(moby)->state = WAIT_FOR_RESET;
         return;
     case ANIMATE_PAIR_WITH_TIMED_PHASES:
         target_delta = fast_vec_dist(moby + 0x10, &pair_transform_vars->unk10);
@@ -178,11 +182,11 @@ void split_door_update(char *moby) {
         phase_a = target_delta;
         phase_b = fast_vec_dist(child + 0x10, &pair_transform_vars->unk10);
         phase = (unsigned char)MOBY(moby)->command;
-        if (phase == 1)
+        if (phase == SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS)
             goto phase_one;
-        if (phase < 2)
+        if (phase < SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS)
             goto phase_default;
-        if (phase == 2)
+        if (phase == SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS)
             goto phase_two;
 
     phase_default:
@@ -196,7 +200,7 @@ void split_door_update(char *moby) {
         rotation_acceleration = 10.0f;
         rotation_speed = 10.0f;
         rotation_damping = 5.0f;
-        next_phase = 1;
+        next_phase = SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS;
         next_timer = 30;
         goto phase_join;
     phase_one:
@@ -210,7 +214,7 @@ void split_door_update(char *moby) {
         rotation_acceleration = moby_pair_phase_rotation_y_acceleration_degrees_gp;
         rotation_speed = moby_pair_phase_rotation_y_deceleration_degrees_gp;
         rotation_damping = moby_pair_phase_rotation_y_max_speed_degrees_gp;
-        next_phase = 2;
+        next_phase = SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS;
         next_timer = truncate_float_to_s32(
             random_float_between((float)moby_pair_phase_two_duration_min_frames_gp,
                                  (float)moby_pair_phase_two_duration_max_frames_gp));
@@ -226,7 +230,7 @@ void split_door_update(char *moby) {
         rotation_acceleration = moby_pair_phase_rotation_y_acceleration_degrees_gp;
         rotation_speed = moby_pair_phase_rotation_y_deceleration_degrees_gp;
         rotation_damping = moby_pair_phase_rotation_y_max_speed_degrees_gp;
-        next_phase = 1;
+        next_phase = SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS;
         next_timer = truncate_float_to_s32(
             random_float_between((float)moby_pair_phase_one_duration_min_frames_gp,
                                  (float)moby_pair_phase_one_duration_max_frames_gp));
@@ -268,14 +272,14 @@ void split_door_update(char *moby) {
         target_delta = moby_pair_parent_phase_target_distance_gp;
         if (absolute_float(phase_a - target_delta) < 0.01f) {
             if (absolute_float(phase_b - moby_pair_child_phase_target_distance_gp) < 0.01f)
-                MOBY(moby)->state = 5;
+                MOBY(moby)->state = WAIT_FOR_RESET;
         }
         return;
     case WAIT_FOR_RESET:
         if (moby_pair_reset_enabled_gp == 0.0f)
             return;
         MOBY(moby)->command = 0;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = WAIT_FOR_HERO_IN_CLIP_VOLUME;
         qcopy(moby + 0x10, &pair_transform_vars->unk10);
         qcopy(moby + 0x40, pair_transform_vars->unk20);
         child = pair_transform_vars->unk40 + 0x10;

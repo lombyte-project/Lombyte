@@ -13,6 +13,16 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
+enum {
+    GROUND_MATERIAL_WATER = 0,
+    GROUND_MATERIAL_MAGNET = 2,
+    GROUND_MATERIAL_FIXED_SHALLOW_WATER = 14
+};
+
+enum {
+    GROUND_MATERIAL_SINK_TRIGGER = 13
+};
+
 int        FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 f32        absolute_float(f32) __asm__("func_001F99C0");
 void       exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
@@ -31,20 +41,20 @@ void apply_hero_ground_material_effects(void) {
     hero.unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == GROUND_MATERIAL_MAGNET) {
         if (hero.frames_off_ground.s == 0 || hero.ground_distance < 0.3f) {
             hero.on_magnet_ground = 1;
-            if (hero.vehicle_mode == 0 && ((u8 *)hero.items[1].moby) != 0 &&
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT && ((u8 *)hero.items[1].moby) != 0 &&
                 *(s16 *)(((u8 *)hero.items[1].moby) + 0xA6) == 0xAD)
                 hero.unk308 = 1;
         }
     }
-    if (saved_ground_type == 14) {
+    if (saved_ground_type == GROUND_MATERIAL_FIXED_SHALLOW_WATER) {
         hero.base_condition = 1;
         hero.water_depth = 0.2f;
         hero.water_surface_z = hero.ground_z.f + 0.2f;
     }
-    if (saved_ground_type == 0) {
+    if (saved_ground_type == GROUND_MATERIAL_WATER) {
         water_depth = hero.water_surface_z - hero.ground_z.f;
         hero.water_depth = water_depth;
         if (water_depth < 0.85f && 0.25f < water_depth)
@@ -67,7 +77,7 @@ void apply_hero_ground_material_effects(void) {
         hero.unk12E9 = 1;
     if (saved_ground_type == 4)
         hero.selector_4 = 1;
-    if (saved_ground_type == 13)
+    if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER)
         hero.selector_13 = 1;
     if (saved_ground_type == 1)
         hero.selector_1 = 1;
@@ -149,7 +159,7 @@ void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
-void FUN_L00_002334d0(void *, void *, f32);
+void add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 
 extern CollisionHit HH __asm__("D_L05_00174240") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L05_00174240 + (o)))
@@ -158,6 +168,10 @@ extern CollisionHit HH __asm__("D_L05_00174240") NOT_SDA;
 void update_hero_ground_contact(void) __asm__("FUN_L05_002402a8");
 
 void update_hero_ground_contact(void) {
+    enum {
+        GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH = 3,
+        GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS = 0xB
+    };
     V shared_probe_endpoint, ground_probe_endpoint, ground_vector_scratch, side_probe_endpoint,
         unused_probe_vector, hit_normal_angles, normalized_hit_normal;
     f32 f;
@@ -201,7 +215,7 @@ void update_hero_ground_contact(void) {
     }
     hero.ground_sound_class = ground_sound_class;
     hero.ground_type = collision_hit_material();
-    if (hero.ground_type == 0) {
+    if (hero.ground_type == GROUND_MATERIAL_WATER) {
         hero.water_surface_z =
             resolve_camera_surface_height(D_L05_00174260, (u8 *)&hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
@@ -217,7 +231,7 @@ void update_hero_ground_contact(void) {
         }
         hero.ground_sound_class = ground_sound_class;
     }
-    if (hero.ground_type == 0xD) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         hero.water_surface_z = D_L05_00174268;
         ground_probe_endpoint.f[2] = D_L05_00174268 - 0.01f;
         if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 4, (s32)hero.moby, 0) ==
@@ -225,7 +239,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
     }
-    if (hero.ground_type == 3) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH) {
         hero.sink_surface_z = D_L05_00174268;
         ground_probe_endpoint.f[2] = D_L05_00174268 - 0.01f;
         if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 4, (s32)hero.moby, 0) ==
@@ -233,7 +247,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
     }
-    if (hero.ground_type == 0xB) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS) {
         hero.sink_surface_z = D_L05_00174268;
         goto d1;
     }
@@ -244,7 +258,7 @@ void update_hero_ground_contact(void) {
         if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.on_flagged_ground_moby = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
-                FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
+                add_hero_gravity_offset((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
             }
         }
         hit_moby_record = get_moby_target_info(HH.moby);
@@ -266,7 +280,8 @@ void update_hero_ground_contact(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 ||
+            if (hero.ground_slope.f <= 0.87266463f ||
+                hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;
@@ -362,10 +377,10 @@ typedef union {
     f32         f[4];
 } V_2133a8;
 
-extern void FUN_L00_002347c0(void);
+extern void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
-extern void FUN_L00_00233810(void *, void *, f32);
-extern void FUN_L00_002334d0(void *, void *, f32);
+extern void add_hero_up_offset(void *, void *, f32) __asm__("FUN_L00_00233810");
+extern void add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32  FUN_L00_001f3170(void *, f32);
@@ -386,19 +401,19 @@ s32 resolve_hero_position_collisions(s32 mode) {
     qcopy(&initial_position, &hero.motion.pos.q);
     clear_u64_value(&collision_query_offset);
     if (hero.path_constrain_pending != 0) {
-        FUN_L00_002347c0();
+        resolve_hero_pending_path_clearance();
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != 0x11) {
         if (hero.state.control_mode == 0x16) {
             transform_hero_local_offset_to_world(&collision_query_offset, 0.0f, 0.0f, 0.7f);
             fast_vec_sub(&collision_query_offset, &collision_query_offset, &hero.motion.pos.q);
-        } else if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == 1 || hero.unk1F8 != 0 ||
+        } else if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0 ||
                 (unsigned)(hero.state.control_mode - 0x15) < 2) {
-                FUN_L00_00233810(&collision_query_offset, &collision_query_offset, 0.6f);
+                add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
-                FUN_L00_002334d0(
+                add_hero_gravity_offset(
                     &collision_query_offset, &collision_query_offset, -hero.capsule_bottom);
             }
         } else {
@@ -411,7 +426,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
-        if (hero.gravity_mode != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll_sphere(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.4f))
                 break;
         } else if (hero.state.control_mode == 0x11) {
@@ -545,7 +560,8 @@ void integrate_hero_motion_with_collisions(void) {
     player = (L16MovementPlayer *)((char *)position - 0x80);
     update_hero_attachment(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
     /* Limit the velocity by state and mode. Inside an arm `position` moves on to the velocity; it is formed again below. */
-    if (player->state == 34 || player->state == 20) {
+    if (player->state == HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY ||
+        player->state == HERO_STATE_WRENCH_SLAM) {
         float  limit;
         float *limited_velocity;
 

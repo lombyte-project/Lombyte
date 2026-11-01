@@ -20,6 +20,10 @@
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
+enum {
+    LEG_RIG_FALLBACK_GAIT_MASK = 5
+};
+
 extern float D_L04_00173FE8 NOT_SDA;
 float probe_leg_rig_ground_height(float *probe_origin) __asm__("FUN_L04_002922d0");
 
@@ -119,7 +123,7 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
     rig->unkD8 = 0;
     rig->unkE4 = 0;
     rig->unkEC = 0;
-    rig->mode = 5;
+    rig->mode = LEG_RIG_FALLBACK_GAIT_MASK;
     debug_print(rig_size_message, 0x250);
 }
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
@@ -347,11 +351,11 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
         rig->legs[i].yaw = fast_add_rotations(rig->legs[i].upper_turn, base_yaw);
         rig->legs[i].yaw = fast_add_rotations(rig->legs[i].lower_turn, rig->legs[i].yaw);
         if (rig->legs[i].manip_b.attached)
-            rotation_2D5FA8(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
+            build_axis_rotation_quaternion(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
         if (rig->legs[i].manip_a.attached) {
-            rotation_2D5FA8(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
+            build_axis_rotation_quaternion(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
             if (flags & mask) {
-                rotation_2D5FA8(tilt, 0, -moby->rot.x);
+                build_axis_rotation_quaternion(tilt, 0, -moby->rot.x);
                 multiply_quaternions(rig->legs[i].manip_a.rot, rig->legs[i].manip_a.rot, tilt);
             }
         }
@@ -468,10 +472,10 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     fast_vec_add(pos, pos, &shift);
     {
         f32 max_step = rig->unkC4;
-        s32 old = rig->mode;
+        s32 previous_mode = rig->mode;
 
         rig->mode = mode;
-        changed = (mode ^ old) & mode;
+        changed = (mode ^ previous_mode) & mode;
         if (max_step < step)
             step = max_step;
     }
@@ -521,19 +525,19 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     moby->anim_speed = 1.0f;
     if (rig->unkB7 != 0) {
         LegRigAnim **fallback = rig->anims;
-        LegRigAnim **entry;
+        LegRigAnim **animation_record_cursor;
         s32          seq = moby->seq;
         f32          min_turn = 0.09239978f;
 
-        for (i = 0, entry = fallback; i < 13; i++) {
-            if ((*entry)->id == seq) {
+        for (i = 0, animation_record_cursor = fallback; i < 13; i++) {
+            if ((*animation_record_cursor)->id == seq) {
                 LegRigAnim *anim;
                 f32         rate;
 
                 if (!(rig->speed < frame_time * 0.19f) ||
                     !(min_turn < fast_difference_between_rotations(moby->rot.z, heading)) ||
                     !(speed < (rate = frame_time * 0.19f))) {
-                    anim = *entry;
+                    anim = *animation_record_cursor;
                     rate = rig->speed;
                 } else {
                     anim = *fallback;
@@ -541,7 +545,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
                 moby->anim_speed = frame_scale_inv * absolute_float(rate / anim->rate);
                 break;
             }
-            entry++;
+            animation_record_cursor++;
             fallback++;
         }
     }
@@ -599,7 +603,7 @@ void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
         animation_time = convert_integer_to_float(moby->prev_frame);
         animation_time += animation_start(moby->class_slot, moby->prev_seq);
     }
-    rig->mode = 5;
+    rig->mode = LEG_RIG_FALLBACK_GAIT_MASK;
     rig->speed = 0.0f;
     rig->unkB7 = 0;
     animation_cursor = rig->anims;

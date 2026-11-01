@@ -21,6 +21,18 @@
 #include "sda.h"
 #include "rnc/overlay/l14/mobys/blarg_heavy_interceptor_globals.h"
 
+enum {
+    INTERCEPTOR_STATE_INITIALIZE = 0,
+    INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
+    INTERCEPTOR_STATE_ALERT_GROUP = 2,
+    INTERCEPTOR_STATE_TRACK_TARGET = 3,
+    INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY = 4,
+    INTERCEPTOR_STATE_FOLLOW_RETURN_PATH = 5,
+    INTERCEPTOR_STATE_REJOIN_PATROL = 6,
+    INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
+    INTERCEPTOR_STATE_DEATH_FALL = 9
+};
+
 extern u16 *D_L14_001ABF40_u[] __asm__("D_L14_001ABF40");
 
 extern u8 *D_L14_0015FFD8;
@@ -105,7 +117,7 @@ extern int FUN_L00_001f2868_c618(float, void *, int, void *, void *) __asm__("FU
 
 extern int FUN_001efa68_c618(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 extern f32 ease_c618(f32 *pos, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 
@@ -172,9 +184,11 @@ extern char D_L14_0015F580[] MACRO_ADDR;
 
 #include "rnc/overlay/l14/mobys/blarg_heavy_interceptor_data/blarg_heavy_interceptor_update.h"
 
-extern f32 D_L14_001613A0_gp __asm__("D_L14_001613A0") __attribute__((sda));
+extern f32 l14_blarg_heavy_interceptor_path_easing_error_gain __asm__("D_L14_001613A0")
+    __attribute__((sda));
 
-extern f32 D_L14_001613A4_gp __asm__("D_L14_001613A4") __attribute__((sda));
+extern f32 l14_blarg_heavy_interceptor_path_easing_damping_coefficient __asm__("D_L14_001613A4")
+    __attribute__((sda));
 
 extern Vec4 D_L14_00174560;
 
@@ -249,15 +263,7 @@ typedef struct BlargHeavyInterceptorVars {
 /* Moby class 8 */
 void blarg_heavy_interceptor_update(struct Moby *moby) {
     enum {
-        INTERCEPTOR_STATE_INITIALIZE = 0,
-        INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
-        INTERCEPTOR_STATE_ALERT_GROUP = 2,
-        INTERCEPTOR_STATE_TRACK_TARGET = 3,
-        INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY = 4,
-        INTERCEPTOR_STATE_FOLLOW_RETURN_PATH = 5,
-        INTERCEPTOR_STATE_REJOIN_PATROL = 6,
-        INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
-        INTERCEPTOR_STATE_DEATH_FALL = 9
+        INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER = 8
     };
     BlargHeavyInterceptorVars *moby_vars = (BlargHeavyInterceptorVars *)moby->pvars;
     float                      vector_scratch[4];
@@ -272,7 +278,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         FUN_0020c828(moby);
         return;
     }
-    if (moby->state == 8) {
+    if (moby->state == INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER) {
         FUN_L14_002aed50_c618(moby);
         add_draw_callback(draw_blarg_heavy_interceptor_group_effects, moby);
         return;
@@ -289,7 +295,8 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         }
     }
     process_blarg_heavy_interceptor_hit_reactions(moby);
-    if (moby->state > 0 && moby->state < 7) {
+    if (moby->state > INTERCEPTOR_STATE_INITIALIZE &&
+        moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
         if (fast_vec_dist(&moby->pos, D_L14_001674C0) < 40.0f) {
             FUN_L00_0025a120(moby);
         }
@@ -302,7 +309,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
             moby->collision = 0;
             moby->update_dist = 0xFF;
-            moby->state = 8;
+            moby->state = INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER;
             moby_vars->unk58 = truncate_float_to_s32(17.0f);
             moby_vars->unk5A = truncate_float_to_s32(6.0f);
             moby_vars->group_member_count = count_moby_group_members(moby);
@@ -342,7 +349,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         attach_manipulator_c618(moby, 1, moby_vars->unk120);
         moby_vars->unk1C0[2] = moby_vars->unk1C0[1] = 0.0f;
         *(int *)&moby_vars->unk180[3] = 0;
-        moby->state = 1;
+        moby->state = INTERCEPTOR_STATE_PATROL_AND_SCAN;
         moby->command = 0;
         break;
     case INTERCEPTOR_STATE_PATROL_AND_SCAN: {
@@ -353,7 +360,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                            (blarg_heavy_interceptor_patrol_glow_green_gp << 8) |
                            blarg_heavy_interceptor_patrol_glow_red_gp;
         if (is_turret_group_activated_or_empty(moby_vars->turret_group)) {
-            moby->state = 3;
+            moby->state = INTERCEPTOR_STATE_TRACK_TARGET;
             moby_vars->timer_1F2 =
                 scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         }
@@ -397,7 +404,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         }
         *(s32 *)&moby_vars->unk1D0[0] = -1;
         activate_waiting_turrets_in_group(moby_vars->turret_group);
-        moby->state = 3;
+        moby->state = INTERCEPTOR_STATE_TRACK_TARGET;
         moby_vars->timer_1F2 =
             scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         break;
@@ -439,13 +446,13 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 moby_vars->unk8C = 0.0f;
                 moby_vars->path_point = 0;
                 moby_vars->unk208 = 0;
-                moby->state = 4;
+                moby->state = INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY;
             }
         } else {
             moby_vars->path_point = 0;
             moby_vars->unk8C = 0.0f;
             moby_vars->unk208 = 0;
-            moby->state = 4;
+            moby->state = INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY;
         }
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
         moby->glow_color = 0xFF000000 |
@@ -466,7 +473,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             moby_vars->flags |= 8;
             FUN_L14_002aea08_c618(moby);
         }
-        if (moby->state == 4) {
+        if (moby->state == INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY) {
             if (moby->prev_seq == 0) {
                 blend_moby_animation_c618(moby, 2, 0, 5);
             }
@@ -484,13 +491,13 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 if (absolute_float(moby_vars->unk1B0[3]) < 0.0001f) {
                     moby_vars->unk1B0[3] = 0.0f;
                 }
-                FUN_L00_001fff28(moby_vars->unkF0, 2, moby_vars->unk1B0[3]);
-                FUN_L00_001fff28(moby_vars->unk130, 1, moby_vars->unk1C0[0]);
+                build_axis_rotation_quaternion(moby_vars->unkF0, 2, moby_vars->unk1B0[3]);
+                build_axis_rotation_quaternion(moby_vars->unk130, 1, moby_vars->unk1C0[0]);
             }
             if (try_retract_turret_group(moby_vars->turret_group)) {
                 LevelPath *p = l14_paths[moby_vars->patrol_path];
 
-                moby->state = 5;
+                moby->state = INTERCEPTOR_STATE_FOLLOW_RETURN_PATH;
                 moby_vars->path_point = p->count - 2;
                 moby_vars->unk8C = p->points[moby_vars->path_point].f[3];
                 moby_vars->unk208 = 0;
@@ -512,7 +519,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             moby_vars->path_segment = near_seg;
             moby_vars->unk1C0[3] = near_t;
             moby_vars->unk200 = 0;
-            moby->state = 6;
+            moby->state = INTERCEPTOR_STATE_REJOIN_PATROL;
         }
         break;
     case INTERCEPTOR_STATE_REJOIN_PATROL: {
@@ -542,23 +549,23 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                   vector_scratch[0],
                   &moby_vars->unk190[1],
                   0.005f,
-                  D_L14_001613A4_gp,
+                  l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         ease_c618(&moby->pos.y,
                   vector_scratch[1],
                   &moby_vars->unk190[2],
                   0.005f,
-                  D_L14_001613A4_gp,
+                  l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         ease_c618(&moby->pos.z,
                   vector_scratch[2],
                   &moby_vars->unk190[3],
                   0.005f,
-                  D_L14_001613A4_gp,
+                  l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         update_blarg_heavy_interceptor_aim_transforms(moby, 0);
         if (fast_vec_dist(&moby->pos, vector_scratch) < 0.5f) {
-            moby->state = 1;
+            moby->state = INTERCEPTOR_STATE_PATROL_AND_SCAN;
         }
         FUN_L00_0025d808_c618(((int *)l14_paths[moby_vars->unk78]),
                               vector_scratch,
@@ -569,20 +576,20 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         ease_c618(moby_vars->unk170,
                   vector_scratch[0],
                   moby_vars->unk180,
-                  D_L14_001613A0_gp,
-                  D_L14_001613A4_gp,
+                  l14_blarg_heavy_interceptor_path_easing_error_gain,
+                  l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         ease_c618(&moby_vars->unk170[1],
                   vector_scratch[1],
                   &moby_vars->unk180[1],
-                  D_L14_001613A0_gp,
-                  D_L14_001613A4_gp,
+                  l14_blarg_heavy_interceptor_path_easing_error_gain,
+                  l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         ease_c618(&moby_vars->unk170[2],
                   vector_scratch[2],
                   &moby_vars->unk180[2],
-                  D_L14_001613A0_gp,
-                  D_L14_001613A4_gp,
+                  l14_blarg_heavy_interceptor_path_easing_error_gain,
+                  l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         break;
     }
@@ -644,7 +651,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         moby_vars->yaw_drift = randf_sym(0.0f, 0.08726646f);
         moby->rot.x = fast_add_rotations(moby->rot.x, randf_sym(0.0f, 0.7853982f));
         moby->rot.y = fast_add_rotations(moby->rot.y, randf_sym(0.0f, 0.7853982f));
-        moby->state = 9;
+        moby->state = INTERCEPTOR_STATE_DEATH_FALL;
         FUN_L14_002aead8_c618(moby);
         return;
     }
@@ -747,17 +754,19 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         return;
     }
     }
-    if ((s8)moby->state >= 0 && moby->prev_seq == 1) {
+    if ((s8)moby->state >= INTERCEPTOR_STATE_INITIALIZE && moby->prev_seq == 1) {
         if (moby->command == 1) {
             spawn_particles_at_shape_points(moby, D_L14_0015F580, 0xFFFF);
         }
     } else {
         moby->command = 0;
     }
-    if (moby->state == 1 && !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
+    if (moby->state == INTERCEPTOR_STATE_PATROL_AND_SCAN &&
+        !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
         *(s32 *)&moby_vars->unk1D0[0] = allocate_voice_c618(0, 4, moby);
     }
-    if ((moby->state == 3 || moby->state == 4) &&
+    if ((moby->state == INTERCEPTOR_STATE_TRACK_TARGET ||
+         moby->state == INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY) &&
         !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
         *(s32 *)&moby_vars->unk1D0[0] = allocate_voice_c618(2, 4, moby);
     }
@@ -789,6 +798,12 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
     };
+    enum {
+        HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE = 1
+    };
+    enum {
+        HIT_REACTION_STATUS_ENABLE_HIT_PARTICLES = 3
+    };
     BlargHeavyInterceptorVars *blarg_heavy_interceptor_vars =
         (BlargHeavyInterceptorVars *)moby->pvars;
     int   hit_reaction_status;
@@ -803,14 +818,15 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
                                        &damage_amount,
                                        0,
                                        4);
-    if (hit_reaction_status != 1 && moby->state < 7) {
+    if (hit_reaction_status != HIT_REACTION_STATUS_SKIP_DAMAGE_RESPONSE &&
+        moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
         float remaining_health = blarg_heavy_interceptor_vars->health - damage_amount;
         blarg_heavy_interceptor_vars->health = remaining_health;
         if (remaining_health <= 0.0f)
             hit_reaction_result = 1;
-        if (moby->state == 1)
-            moby->state = 2;
-        if (hit_reaction_status == 3)
+        if (moby->state == INTERCEPTOR_STATE_PATROL_AND_SCAN)
+            moby->state = INTERCEPTOR_STATE_ALERT_GROUP;
+        if (hit_reaction_status == HIT_REACTION_STATUS_ENABLE_HIT_PARTICLES)
             moby->command = 1;
         switch (hit_reaction_result) {
         case HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH:
@@ -829,7 +845,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_DEATH_FALL:
-            moby->state = 7;
+            moby->state = INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL;
             moby->flags &= 0xEFFF;
             FUN_L00_00257470(moby, 0, -1);
             break;
@@ -1532,20 +1548,20 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
     FUN_L00_0025b8c0_c(interceptor_instance_vars->unk170,
                        interceptor_instance_vars->unk180,
                        path_target_position[0],
-                       *(float *)&D_L14_001613A0_gp,
-                       *(float *)&D_L14_001613A4_gp,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     FUN_L00_0025b8c0_c(&interceptor_instance_vars->unk170[1],
                        &interceptor_instance_vars->unk180[1],
                        path_target_position[1],
-                       *(float *)&D_L14_001613A0_gp,
-                       *(float *)&D_L14_001613A4_gp,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     FUN_L00_0025b8c0_c(&interceptor_instance_vars->unk170[2],
                        &interceptor_instance_vars->unk180[2],
                        path_target_position[2],
-                       *(float *)&D_L14_001613A0_gp,
-                       *(float *)&D_L14_001613A4_gp,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     if (interceptor_instance_vars->rejoin_path_loop == 0) {
         if (r != 0) {
@@ -1588,20 +1604,20 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     FUN_L00_0025b8c0_c(&moby->pos.x,
                        &heavy_interceptor_vars->unk190[1],
                        destination_path_target_position[0],
-                       *(float *)&D_L14_001613A0_gp,
-                       *(float *)&D_L14_001613A4_gp,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y,
                        &heavy_interceptor_vars->unk190[2],
                        destination_path_target_position[1],
-                       *(float *)&D_L14_001613A0_gp,
-                       *(float *)&D_L14_001613A4_gp,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.z,
                        &heavy_interceptor_vars->unk190[3],
                        destination_path_target_position[2],
-                       *(float *)&D_L14_001613A0_gp,
-                       *(float *)&D_L14_001613A4_gp,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
+                       *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
 }
 
@@ -1713,7 +1729,7 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *
         blarg_heavy_interceptor_rotation_oscillation_amplitude_gp,
         blarg_heavy_interceptor_rotation_oscillation_first_phase_increment_gp,
         blarg_heavy_interceptor_rotation_oscillation_second_phase_increment_gp);
-    if (moby->state == 1) {
+    if (moby->state == INTERCEPTOR_STATE_PATROL_AND_SCAN) {
         if (fast_dec_timer_s16((s16 *)&interceptor_private_vars->unk1B0[1])) {
             *(s16 *)&interceptor_private_vars->unk1B0[1] =
                 scale_game_frames(blarg_heavy_interceptor_patrol_heading_change_interval_frames_gp);
@@ -1782,10 +1798,12 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
                            1.0f);
         rotation_angle = fast_subtract_rotations(
             fast_arc_tan(half_span_vector[0], half_span_vector[1]), moby->rot.z);
-        FUN_L00_001fff28(blarg_heavy_interceptor_private_vars->unkF0, 2, rotation_angle);
+        build_axis_rotation_quaternion(
+            blarg_heavy_interceptor_private_vars->unkF0, 2, rotation_angle);
         blarg_heavy_interceptor_private_vars->unk1B0[3] = rotation_angle;
         rotation_angle = -fast_arc_tan(vector_length_xy(half_span_vector), half_span_vector[2]);
-        FUN_L00_001fff28(blarg_heavy_interceptor_private_vars->unk130, 1, rotation_angle);
+        build_axis_rotation_quaternion(
+            blarg_heavy_interceptor_private_vars->unk130, 1, rotation_angle);
         blarg_heavy_interceptor_private_vars->unk1C0[0] = rotation_angle;
         qcopy(blarg_heavy_interceptor_private_vars->unk90,
               blarg_heavy_interceptor_private_vars->unk170);
@@ -1948,6 +1966,10 @@ extern int FUN_001f96f8_b45(int) __asm__("FUN_001f96f8");
 extern float FUN_001fa6c0_b45(short) __asm__("FUN_001fa6c0");
 
 int try_retract_turret_group(int index) {
+    enum {
+        TURRET_STATE_WAITING = 1,
+        TURRET_STATE_RETRACTING = 5
+    };
     short         *list_entry = D_L14_001ABF40_b45[index];
     unsigned char *moby_array_start;
     unsigned char *checked_moby;
@@ -1966,7 +1988,8 @@ int try_retract_turret_group(int index) {
         checked_moby = moby_array_start + (moby_index_or_state << 8);
         if ((((unsigned char *)MOBY(checked_moby)->pvars))[0x8B] == 0) {
             moby_index_or_state = checked_moby[0x20];
-            if (moby_index_or_state != 5 && moby_index_or_state != 1) {
+            if (moby_index_or_state != TURRET_STATE_RETRACTING &&
+                moby_index_or_state != TURRET_STATE_WAITING) {
                 return 0;
             }
         }

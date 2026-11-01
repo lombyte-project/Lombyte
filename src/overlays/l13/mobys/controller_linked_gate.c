@@ -70,12 +70,12 @@ void controller_linked_gate_update(struct Moby *moby) {
         moby->flags |= 0xA08;
         if (gate_data->unk18 == 0) {
             gate_data->unk10 = 1.0f;
-            moby->state = 1;
+            moby->state = GATE_STATE_OPEN;
             moby->collision = moby->pclass->collision;
             moby->alpha = 0x14;
         } else {
             gate_data->unk10 = 0.0f;
-            moby->state = 3;
+            moby->state = GATE_STATE_CLOSED;
             moby->collision = 0;
             moby->alpha = 0;
         }
@@ -83,18 +83,18 @@ void controller_linked_gate_update(struct Moby *moby) {
     case GATE_STATE_OPEN:
         if (close) {
             moby->collision = 0;
-            moby->state = 2;
+            moby->state = GATE_STATE_CLOSING;
         }
         break;
     case GATE_STATE_CLOSING:
         if (open) {
-            moby->state = 4;
+            moby->state = GATE_STATE_OPENING;
             moby->collision = moby->pclass->collision;
         }
         gate_data->unk10 -= frame_scale * 0.05f;
         if (gate_data->unk10 < 0.0f) {
             gate_data->unk10 = 0.0f;
-            moby->state = 3;
+            moby->state = GATE_STATE_CLOSED;
             moby->collision = 0;
             moby->visible = 0;
             moby->flags |= 1;
@@ -102,7 +102,7 @@ void controller_linked_gate_update(struct Moby *moby) {
         break;
     case GATE_STATE_CLOSED:
         if (open) {
-            moby->state = 4;
+            moby->state = GATE_STATE_OPENING;
             moby->collision = moby->pclass->collision;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
@@ -111,12 +111,12 @@ void controller_linked_gate_update(struct Moby *moby) {
     case GATE_STATE_OPENING:
         if (close) {
             moby->collision = 0;
-            moby->state = 2;
+            moby->state = GATE_STATE_CLOSING;
         }
         gate_data->unk10 += frame_scale * 0.05f;
         if (1.0f < gate_data->unk10) {
             gate_data->unk10 = 1.0f;
-            moby->state = 1;
+            moby->state = GATE_STATE_OPEN;
             moby->collision = moby->pclass->collision;
         }
         break;

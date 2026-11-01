@@ -10,6 +10,17 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 
+enum {
+    ELEVATOR_STATE_INITIALIZE = 0,
+    ELEVATOR_STATE_BLEND_CAMERA = 1,
+    ELEVATOR_STATE_MOVE_TO_TOP = 2,
+    ELEVATOR_STATE_MOVE_TO_BOTTOM = 3,
+    ELEVATOR_STATE_WAIT_AT_TOP = 4,
+    ELEVATOR_STATE_WAIT_AT_BOTTOM = 5,
+    ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP = 6,
+    ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM = 7
+};
+
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
@@ -56,16 +67,6 @@ void elevator_update(struct Moby *moby) __asm__("FUN_L13_002b39e0");
 
 /* Moby classes 21, 244 */
 void elevator_update(struct Moby *moby) {
-    enum {
-        ELEVATOR_STATE_INITIALIZE = 0,
-        ELEVATOR_STATE_BLEND_CAMERA = 1,
-        ELEVATOR_STATE_MOVE_TO_TOP = 2,
-        ELEVATOR_STATE_MOVE_TO_BOTTOM = 3,
-        ELEVATOR_STATE_WAIT_AT_TOP = 4,
-        ELEVATOR_STATE_WAIT_AT_BOTTOM = 5,
-        ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP = 6,
-        ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM = 7
-    };
     LiftVars *elevator_vars = (LiftVars *)moby->pvars;
     float     delta[4];
     float     rot[4];
@@ -79,7 +80,7 @@ void elevator_update(struct Moby *moby) {
     case ELEVATOR_STATE_INITIALIZE:
         elevator_vars->pulse = random_angle_radians();
         elevator_vars->voice = -1;
-        moby->state = 3;
+        moby->state = ELEVATOR_STATE_MOVE_TO_BOTTOM;
         break;
     case ELEVATOR_STATE_BLEND_CAMERA: {
         float previous_camera_blend = elevator_vars->blend;
@@ -127,7 +128,7 @@ void elevator_update(struct Moby *moby) {
             set_camera_position(camera_position_scratch);
             set_camera_rotation(camera_pose_scratch);
         }
-        if (moby->state == 2) {
+        if (moby->state == ELEVATOR_STATE_MOVE_TO_TOP) {
             target = elevator_vars->top;
         } else {
             target = elevator_vars->bottom;
@@ -139,10 +140,10 @@ void elevator_update(struct Moby *moby) {
                                    D_0015ED70_2b39e0 * 8.0f,
                                    frame_time * 40.0f);
         if (absolute_float(moby->pos.z - target) == 0.0f) {
-            if (moby->state == 2) {
-                moby->state = 6;
+            if (moby->state == ELEVATOR_STATE_MOVE_TO_TOP) {
+                moby->state = ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP;
             } else {
-                moby->state = 7;
+                moby->state = ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM;
             }
             if (moby->command != 0) {
                 hero_set_state(HERO_STATE_IDLE, 0);
@@ -162,9 +163,9 @@ void elevator_update(struct Moby *moby) {
             u8 s = moby->state;
             elevator_vars->armed = 0;
             if (s == 7) {
-                moby->state = 5;
+                moby->state = ELEVATOR_STATE_WAIT_AT_BOTTOM;
             } else {
-                moby->state = 4;
+                moby->state = ELEVATOR_STATE_WAIT_AT_TOP;
             }
         }
         break;
@@ -189,31 +190,31 @@ void elevator_update(struct Moby *moby) {
         if (elevator_vars->armed != 0 && hero.ground_moby == moby && hero.air_frames.s == 0 &&
             vector_distance_xy(&hero.motion.pos, &moby->pos) < 0.5f) {
             moby->glow_color = 0x80208020;
-            if (moby->state == 5) {
+            if (moby->state == ELEVATOR_STATE_WAIT_AT_BOTTOM) {
                 moby->command = 2;
             } else {
                 moby->command = 3;
             }
-            moby->state = 1;
+            moby->state = ELEVATOR_STATE_BLEND_CAMERA;
             hero_set_state(0x72, 1);
             jet_mount(D_L13_001670C0_2b39e0, D_L13_001670C0_2b39e0 + 0x10, 1, 0, 0);
             elevator_vars->blend = 0.0f;
-        } else if (moby->state == 4) {
+        } else if (moby->state == ELEVATOR_STATE_WAIT_AT_TOP) {
             char *p = (char *)&hero.motion.pos;
             float d = vector_distance_xy(&moby->pos, p);
             if (absolute_float(*(float *)(p + 0x258) - elevator_vars->bottom) < 2.0f && d < 32.0f &&
                 d > 5.0f) {
                 moby->command = 0;
-                moby->state = 3;
+                moby->state = ELEVATOR_STATE_MOVE_TO_BOTTOM;
                 elevator_vars->speed = -(frame_time * 5.0f);
             }
-        } else if (moby->state == 5) {
+        } else if (moby->state == ELEVATOR_STATE_WAIT_AT_BOTTOM) {
             char *p = (char *)&hero.motion.pos;
             float d = vector_distance_xy(&moby->pos, p);
             if (absolute_float(*(float *)(p + 0x258) - elevator_vars->top) < 2.0f && d < 32.0f &&
                 d > 5.0f) {
                 moby->command = 0;
-                moby->state = 2;
+                moby->state = ELEVATOR_STATE_MOVE_TO_TOP;
                 elevator_vars->speed = frame_time * 5.0f;
             }
         }
@@ -238,7 +239,8 @@ void compute_elevator_camera_pose(struct Moby *moby,
     float          horizontal_offset_radius = 2.5f;
     float          z = 1.5f;
     unsigned char *x;
-    if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= 2 && (moby->state & 1))) {
+    if ((moby->command >= 2 && (moby->command & 1)) ||
+        (moby->state >= ELEVATOR_STATE_MOVE_TO_TOP && (moby->state & 1))) {
         camera_offset_azimuth = fast_subtract_rotations(camera_offset_azimuth, 1.5707964f);
     } else {
         camera_offset_azimuth = fast_add_rotations(camera_offset_azimuth, 1.5707964f);

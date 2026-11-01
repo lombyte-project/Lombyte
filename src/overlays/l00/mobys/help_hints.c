@@ -27,6 +27,10 @@ void help_hints_update(HelpMoby *moby) __asm__("FUN_L00_002e0988");
 
 /* Moby class 1413 */
 void help_hints_update(HelpMoby *moby) {
+    enum {
+        HELP_HINTS_STATE_UNINITIALIZED = 0,
+        HELP_HINTS_STATE_INITIALIZED = 1
+    };
     s32         *vars;
     s32         *target_index_ptr;
     s32          i;
@@ -34,8 +38,8 @@ void help_hints_update(HelpMoby *moby) {
     struct Hero *hero_ptr;
 
     vars = moby->vars;
-    if (moby->state == 0) {
-        moby->state = 1;
+    if (moby->state == HELP_HINTS_STATE_UNINITIALIZED) {
+        moby->state = HELP_HINTS_STATE_INITIALIZED;
         moby->alpha = 0xFF;
     }
     if (D_00141968[0x18 / 2] == 0) {

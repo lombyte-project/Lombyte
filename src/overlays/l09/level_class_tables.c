@@ -17,6 +17,9 @@
 #include "rnc/overlay/shared/vehicles.h"
 #include "rnc/overlay/shared/vendor.h"
 #include "rnc/overlay/shared/weapons.h"
+
+s32 get_morphoray_chicken_slot_record(s32) __asm__("FUN_L00_002caf40");
+
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 #include "rnc/overlay/shared/weapons/devastator.h"
 #include "rnc/overlay/shared/weapons/mine.h"
@@ -57,7 +60,7 @@ void *D_L09_00209B18[6]
                                             moby_set_state_from_check,
                                             launch_suck_cannon_projectile_and_update_moby_state,
                                             cancel_suck_cannon_suction_and_set_moby_state_5,
-                                            FUN_L00_002caf40,
+                                            get_morphoray_chicken_slot_record,
                                             hud_counter_update};
 
 struct MobyClassUpdate moby_classes[158] __asm__("D_L09_00209380")

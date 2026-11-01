@@ -55,6 +55,9 @@ void upper_door_update(struct Moby *moby) {
         UPPER_DOOR_WAIT_FOR_ACTIVATION = 1,
         UPPER_DOOR_MOVE_VERTICAL = 2
     };
+    enum {
+        UPPER_DOOR_MOVEMENT_COMPLETE = 3
+    };
     struct RiserVars *riser_vars = (struct RiserVars *)moby->pvars;
     struct Moby      *trigger_moby;
     s16               save_id_index;
@@ -63,7 +66,7 @@ void upper_door_update(struct Moby *moby) {
     switch (moby->state) {
     case UPPER_DOOR_INITIALIZE:
         riser_vars->baseZ = moby->pos.z;
-        moby->state = 1;
+        moby->state = UPPER_DOOR_WAIT_FOR_ACTIVATION;
         break;
     case UPPER_DOOR_WAIT_FOR_ACTIVATION:
         id = moby->save_id;
@@ -79,7 +82,7 @@ void upper_door_update(struct Moby *moby) {
         }
         if (moby->oclass == 0x44D || moby->oclass == 0x5FC)
             trooper_play_sound(0, 0, moby, 0x44D);
-        moby->state = 2;
+        moby->state = UPPER_DOOR_MOVE_VERTICAL;
         riser_vars->timer = scale_game_frames(60);
         break;
     case UPPER_DOOR_MOVE_VERTICAL:
@@ -90,7 +93,7 @@ void upper_door_update(struct Moby *moby) {
             level_completed_save_id_bits[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
             if (moby->oclass == 0x44D)
                 allocate_voice_for_target_entry(1, 0, moby);
-            moby->state = 3;
+            moby->state = UPPER_DOOR_MOVEMENT_COMPLETE;
         }
         break;
     }

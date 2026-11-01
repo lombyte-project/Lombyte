@@ -57,7 +57,7 @@ void trespasser_barrier_update(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     switch (moby->state) {
     case GLOW_INITIALIZE:
-        moby->state = 1;
+        moby->state = GLOW_ACTIVE;
         ((float *)moby_vars)[3] = 1.0f;
         break;
     case GLOW_ACTIVE:
@@ -69,7 +69,7 @@ void trespasser_barrier_update(struct Moby *moby) {
             unsigned char *linked_moby = D_L18_0015FFD8 + (moby_vars[0] << 8);
             if (MOBY(linked_moby)->oclass == 0x267 && linked_moby[0x20] >= 3) {
                 moby->collision = 0;
-                moby->state = 2;
+                moby->state = GLOW_FADE_OUT;
                 if (voice_is_playing(moby, moby_vars[1]) != 0) {
                     int i = moby_vars[1];
                     if (i != -1) {

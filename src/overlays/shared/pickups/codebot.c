@@ -61,7 +61,7 @@ void codebot_update(struct Moby *moby) {
             if (alternate_item_available[2] != 0) {
                 mark_moby_for_removal(moby);
             } else {
-                moby->state = 1;
+                moby->state = CODEBOT_CHECK_HERO_PROXIMITY;
                 moby->pos.z += 1.0f;
             }
             break;
@@ -71,7 +71,7 @@ void codebot_update(struct Moby *moby) {
                 if (hero.state.current != 0x32) {
                     moby->flags |= 0x41;
                     start_scene(1);
-                    moby->state = 2;
+                    moby->state = CODEBOT_RECORD_COLLECTION;
                 }
             }
             break;
@@ -82,7 +82,7 @@ void codebot_update(struct Moby *moby) {
                 collection_flags = alternate_item_available;
                 collection_flags[2] = 1;
                 collection_flags[0x78] = 1;
-                moby->state = 3;
+                moby->state = CODEBOT_REMOVE;
                 memcard_save_data(0, -1);
             }
             break;

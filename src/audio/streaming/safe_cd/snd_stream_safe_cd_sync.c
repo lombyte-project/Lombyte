@@ -10,6 +10,9 @@ extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 s32 snd_stream_safe_cd_sync(s32 mode) __asm__("FUN_0012ee08");
 
 s32 snd_stream_safe_cd_sync(s32 mode) {
+    enum {
+        SND_CD_SYNC_NONBLOCKING = 1
+    };
     s32 ready;
     s32 next_ready;
     if (snd_cd_stream_active == 0) {
@@ -19,7 +22,7 @@ s32 snd_stream_safe_cd_sync(s32 mode) {
     ready = sound_read_work.read_active == 0;
     snd_cd_stream_end_pending = ready;
     if (ready != 1) {
-        if (mode == 1) {
+        if (mode == SND_CD_SYNC_NONBLOCKING) {
             return 1;
         }
         if (ready == 0) {

@@ -77,6 +77,9 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         ROBOT_QWARK_RESOLVE_DIALOGUE = 2,
         ROBOT_QWARK_BROKEN_SPARKING = 3
     };
+    enum {
+        TALKER_MODE_WARP = 2
+    };
     struct TalkerVars *dialogue_state = (struct TalkerVars *)robot_qwark_moby->pvars;
     TalkerHit         *hit;
     u8                 type;
@@ -94,8 +97,8 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         (D_0014C190_257218[current_level_index][(s16)robot_qwark_moby->save_id >> 5] >>
          (robot_qwark_moby->save_id & 0x1F)) &
             1) {
-        if (robot_qwark_moby->state != 3) {
-            robot_qwark_moby->state = 3;
+        if (robot_qwark_moby->state != ROBOT_QWARK_BROKEN_SPARKING) {
+            robot_qwark_moby->state = ROBOT_QWARK_BROKEN_SPARKING;
             set_moby_animation(robot_qwark_moby, 1, 0);
         }
     }
@@ -140,13 +143,14 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
             1 << (robot_qwark_moby->save_id & 0x1F);
     }
     robot_qwark_moby->hit_slot = 0xFF;
-    if (npc_dialogue_suppression_flags[0] != 0 && robot_qwark_moby->state != 3) {
+    if (npc_dialogue_suppression_flags[0] != 0 &&
+        robot_qwark_moby->state != ROBOT_QWARK_BROKEN_SPARKING) {
         return;
     }
     switch (robot_qwark_moby->state) {
     case ROBOT_QWARK_INITIALIZE:
         robot_qwark_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
-        robot_qwark_moby->state = 1;
+        robot_qwark_moby->state = ROBOT_QWARK_UPDATE_DIALOGUE;
         talker_init(robot_qwark_moby, dialogue_state);
         if (alternate_item_available[0x19] != 0) {
             dialogue_state->mode = 1;
@@ -157,15 +161,15 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         if (talker_update(robot_qwark_moby, dialogue_state)) {
             alternate_item_available[0x19] = 1;
             begin_dialogue_camera_transition(robot_qwark_moby, 2.7f);
-            robot_qwark_moby->state = 2;
+            robot_qwark_moby->state = ROBOT_QWARK_RESOLVE_DIALOGUE;
         }
         break;
     case ROBOT_QWARK_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 == 2) {
             break;
         }
-        robot_qwark_moby->state = 1;
-        if (dialogue_state->mode == 2 && dialogue_state->warp != -1) {
+        robot_qwark_moby->state = ROBOT_QWARK_UPDATE_DIALOGUE;
+        if (dialogue_state->mode == TALKER_MODE_WARP && dialogue_state->warp != -1) {
             warp_record = (char *)l03_cuboids + dialogue_state->warp * 128;
             jet_reset_camera(warp_record + 0x30, warp_record + 0x70);
         }

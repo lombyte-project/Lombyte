@@ -23,6 +23,14 @@
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 
+enum {
+    NANOTECH_BALL_STATE_INITIALIZE = 0,
+    NANOTECH_BALL_STATE_FOLLOW_OWNER = 1,
+    NANOTECH_BALL_STATE_DETACHED_PICKUP = 2,
+    NANOTECH_BALL_STATE_COLLECTING = 3,
+    NANOTECH_BALL_STATE_BASIS_ONLY = 4
+};
+
 typedef struct {
     char        pad[0x10];
     OvlQuad     q;
@@ -188,11 +196,11 @@ void FUN_00214890_002d8418(Vec4_002d8418 *,
                            float) __asm__("FUN_00214890");
 void spawn_moving_hero_relative_alpha_fade_particle(
     void *, Vec4_002d8418 *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
-s32  FUN_001f96f8_2d8510(s32) __asm__("FUN_001f96f8");
-s32  FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
-u8  *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
-void FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
-void draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
+s32 FUN_001f96f8_2d8510(s32) __asm__("FUN_001f96f8");
+s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
+u8 *spawn_timed_hero_relative_particle(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
+void         FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
+void         draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
 extern int   func_001F9850_2D9EA0(int) __asm__("FUN_001f96f8");
 extern void  func_L00_001FF4B0_2D9EA0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void  func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1006,7 +1014,7 @@ float         D_L18_00161E2C = 1.125f;
 int is_moby_in_state_one(unsigned char *moby) __asm__("FUN_L00_002d8128");
 
 int is_moby_in_state_one(unsigned char *moby) {
-    return MOBY(moby)->state == 1;
+    return MOBY(moby)->state == NANOTECH_BALL_STATE_FOLLOW_OWNER;
 }
 
 /* Creates a class 0x326 moby linked to p at p's position; 0 when p's state is negative. */
@@ -1170,27 +1178,27 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
              << 24;
         c = al | (c & 0xFFFFFF);
         effect_position.z = z + nanotech_ball_collection_particle_z_offsets[i];
-        effect_record = FUN_L00_00272f68_2d8510(&effect_position,
-                                                c,
-                                                truncate_float_to_s32(effect_data->f60[i]),
-                                                nanotech_ball_collection_particle_byte_source_index,
-                                                0,
-                                                2,
-                                                1,
-                                                nanotech_ball_collection_particle_scale_factors[i] *
-                                                    color_progress_or_size_factor);
+        effect_record = spawn_timed_hero_relative_particle(
+            &effect_position,
+            c,
+            truncate_float_to_s32(effect_data->f60[i]),
+            nanotech_ball_collection_particle_byte_source_index,
+            0,
+            2,
+            1,
+            nanotech_ball_collection_particle_scale_factors[i] * color_progress_or_size_factor);
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_lui.pF8;
-        effect_record =
-            FUN_L00_00272f68_2d8510(&effect_position,
-                                    al | 0xFFFFFF,
-                                    truncate_float_to_s32(effect_data->f60[i]),
-                                    nanotech_ball_collection_particle_byte_source_index,
-                                    nanotech_ball_collection_second_particle_mode_selector,
-                                    2,
-                                    1,
-                                    nanotech_ball_collection_particle_scale_factors[i] *
-                                        (color_progress_or_size_factor * 0.7f));
+        effect_record = spawn_timed_hero_relative_particle(
+            &effect_position,
+            al | 0xFFFFFF,
+            truncate_float_to_s32(effect_data->f60[i]),
+            nanotech_ball_collection_particle_byte_source_index,
+            nanotech_ball_collection_second_particle_mode_selector,
+            2,
+            1,
+            nanotech_ball_collection_particle_scale_factors[i] *
+                (color_progress_or_size_factor * 0.7f));
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_lui.pF8;
         fast_vec_add(&effect_position, &effect_position, &effect_position_step);
@@ -1209,7 +1217,7 @@ void compute_nanotech_ball_slot_position(unsigned char *moby, float *out_slot_po
     build_look_at_matrix(
         &slot_offset, &D_L00_001E3CA0_002d8850[i], &moby_data->p20, moby_data->p20.f[3]);
     e = moby_data->e[i];
-    if (e && MOBY(moby)->state == 2)
+    if (e && MOBY(moby)->state == NANOTECH_BALL_STATE_DETACHED_PICKUP)
         FUN_001f9bf8_002d8850(&slot_offset, &slot_offset, *(float *)(e + 0x28));
     fast_vec_add(out_slot_position, &moby_data->p10, &slot_offset);
     out_slot_position[2] += moby_data->f0_002d8850;
@@ -1246,13 +1254,6 @@ void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 
 /* Moby class 806 */
 void nanotech_ball_update(Moby *moby) {
-    enum {
-        NANOTECH_BALL_STATE_INITIALIZE = 0,
-        NANOTECH_BALL_STATE_FOLLOW_OWNER = 1,
-        NANOTECH_BALL_STATE_DETACHED_PICKUP = 2,
-        NANOTECH_BALL_STATE_COLLECTING = 3,
-        NANOTECH_BALL_STATE_BASIS_ONLY = 4
-    };
     V_2D9EA0 slot_rotation_basis_or_cull_position_or_start_tangent,
         rotated_slot_offset_or_particle_position, v20, collection_target_or_end_tangent,
         cross_product_or_particle_midpoint, half_displacement_or_spark_position, slot_curve_offset;
@@ -1262,7 +1263,7 @@ void nanotech_ball_update(Moby *moby) {
     case NANOTECH_BALL_STATE_INITIALIZE: {
         Moby *owner;
         int   i;
-        moby->state = 1;
+        moby->state = NANOTECH_BALL_STATE_FOLLOW_OWNER;
         moby->flags |= 0x41;
         moby->collision = 0;
         moby->command = 0;
@@ -1325,12 +1326,12 @@ void nanotech_ball_update(Moby *moby) {
         qcopy(&nanotech_ball_state->pos, &owner->pos);
         nanotech_ball_state->pos.z += 0.5f;
         if ((signed char)owner->state < 0 || owner == moby) {
-            moby->state = 2;
+            moby->state = NANOTECH_BALL_STATE_DETACHED_PICKUP;
             nanotech_ball_state->f50 = 0;
         }
     }
     case NANOTECH_BALL_STATE_DETACHED_PICKUP:
-        if (moby->state == 2) {
+        if (moby->state == NANOTECH_BALL_STATE_DETACHED_PICKUP) {
             int i;
             qcopy(&nanotech_ball_state->pos, &moby->pos);
             nanotech_ball_state->pos.z += 0.5f;
@@ -1348,9 +1349,9 @@ void nanotech_ball_update(Moby *moby) {
         {
             Hero *player = &hero;
             int   max_hp = hero_max_health;
-            if (player->vehicle_mode == 1)
+            if (player->vehicle_mode == HERO_VEHICLE_MODE_CLANK)
                 max_hp = 4;
-            if (moby->state != 1 && D_L00_0015F63C != 0 &&
+            if (moby->state != NANOTECH_BALL_STATE_FOLLOW_OWNER && D_L00_0015F63C != 0 &&
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && player->health.hp != 0 &&
                 (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < max_hp ||
                  (nanotech_ball_invulnerability_pickup_enabled != 0 &&
@@ -1358,7 +1359,7 @@ void nanotech_ball_update(Moby *moby) {
                 fast_vec_dist(&moby->pos, &player->motion.pos) < 10.0f &&
                 func_L00_002D9E30_2D9EA0(moby)) {
                 int i;
-                moby->state = 3;
+                moby->state = NANOTECH_BALL_STATE_COLLECTING;
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (nanotech_ball_invulnerability_pickup_enabled != 0)
                     player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
@@ -1448,7 +1449,7 @@ void nanotech_ball_update(Moby *moby) {
                     ext->b.x = part->pos.x - moby->pos.x;
                     ext->b.y = part->pos.y - moby->pos.y;
                     ext->b.z = part->pos.z - moby->pos.z;
-                    if (moby->state == 2)
+                    if (moby->state == NANOTECH_BALL_STATE_DETACHED_PICKUP)
                         ext->u.s.owner = moby;
                     else
                         ext->u.s.owner = nanotech_ball_state->owner;
@@ -1487,7 +1488,7 @@ void nanotech_ball_update(Moby *moby) {
         {
             Hero *player = &hero;
             int   max_hp = hero_max_health;
-            if (player->vehicle_mode == 1)
+            if (player->vehicle_mode == HERO_VEHICLE_MODE_CLANK)
                 max_hp = 4;
             if (player->health.hp == max_hp && player->invulnerable_frames != 0 &&
                 nanotech_ball_invulnerability_pickup_enabled != 0) {
@@ -1510,7 +1511,7 @@ void nanotech_ball_update(Moby *moby) {
                 }
             }
             if (D_L00_0015F63C == moby)
-                moby->state = 4;
+                moby->state = NANOTECH_BALL_STATE_BASIS_ONLY;
             else
                 mark_moby_for_removal(moby);
         } else {
@@ -1528,7 +1529,7 @@ void nanotech_ball_update(Moby *moby) {
                     if (nanotech_ball_state->h56 == 0) {
                         Hero *player = &hero;
                         int   max_hp = hero_max_health;
-                        if (player->vehicle_mode == 1)
+                        if (player->vehicle_mode == HERO_VEHICLE_MODE_CLANK)
                             max_hp = 4;
                         if (player->health.hp != 0) {
                             int new_hp = player->health.hp + 1;

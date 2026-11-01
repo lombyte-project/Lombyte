@@ -9,6 +9,10 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 
+enum {
+    POOL_BUBBLE_PARTICLE_KIND = 0x48
+};
+
 typedef struct {
     u128 pos;
     f32  size;
@@ -45,7 +49,7 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
         col = (gray_channel << 8) | 0x40000000;
         particle->color = (gray_channel << 16) | col | gray_channel;
         particle->alpha = truncate_float_to_s32(4.0f) + 0x20;
-        particle->kind = 0x48;
+        particle->kind = POOL_BUBBLE_PARTICLE_KIND;
         particle->active = 0;
         particle->tex = *pool_bubble_texture_table[0];
         particle->scale = scale;
@@ -70,7 +74,7 @@ Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 s
         m = &particle->m;
         particle->color = (random_integer_below(0x10) << 25) | 0x808080;
         particle->alpha = truncate_float_to_s32(12.0f) + 0x20;
-        particle->kind = 0x48;
+        particle->kind = POOL_BUBBLE_PARTICLE_KIND;
         particle->active = 1;
         particle->tex = *pool_bubbles_texture_table[0];
         particle->life = 0x80;

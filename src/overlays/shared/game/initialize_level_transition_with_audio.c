@@ -14,6 +14,9 @@
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/voices/sound_update.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
+
+void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
+
 #include "rnc/overlay/shared/mobys.h"
 #include "rnc/overlay/shared/streaming.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
@@ -116,6 +119,9 @@ int                  sce_gs_sync_v(int) __asm__("FUN_00122298");
 void initialize_level_transition_with_audio(int audio_selection_mode) __asm__("FUN_L00_0028e9c8");
 
 void initialize_level_transition_with_audio(int audio_selection_mode) {
+    enum {
+        AUDIO_SELECTION_MODE_ALWAYS_FADE = 0
+    };
     O_28e9c8 *moby;
     int       secondary_track_index, base_audio_selection_index, audio_stream_table_index,
         alternate_audio_stream_table_index, shared_table_offset;
@@ -136,13 +142,13 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     D_001413F5_lui = 1;
-    FUN_L00_00232fe8();
+    set_hero_item_moby_flag_bit0();
     D_0013E030_28e9c8.x0->flags |= 1;
     for (moby = D_L00_0015FFDC_28e9c8; moby->st != 0xFF; moby++) {
         if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
             moby->flags |= 0x80;
     }
-    if (audio_selection_mode == 0) {
+    if (audio_selection_mode == AUDIO_SELECTION_MODE_ALWAYS_FADE) {
         base_audio_selection_index = D_0013E030_28e9c8.x26;
         audio_stream_table_index = base_audio_selection_index + 1;
         secondary_track_index = base_audio_selection_index + 6;

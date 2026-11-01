@@ -73,14 +73,18 @@ void wind_control_update(struct Moby *wind_control_moby) __asm__("FUN_L14_002eaf
 
 /* Moby class 610 */
 void wind_control_update(struct Moby *wind_control_moby) {
+    enum {
+        WIND_CONTROL_STATE_UNINITIALIZED = 0,
+        WIND_CONTROL_STATE_INITIALIZED = 1
+    };
     L14WindVars *wind_vars = (L14WindVars *)wind_control_moby->pvars;
     float        wind_direction_or_push_delta[4];
     char        *pos;
     struct Hero *hero_base;
     int          i;
 
-    if (wind_control_moby->state == 0) {
-        wind_control_moby->state = 1;
+    if (wind_control_moby->state == WIND_CONTROL_STATE_UNINITIALIZED) {
+        wind_control_moby->state = WIND_CONTROL_STATE_INITIALIZED;
         if (wind_vars->clip_push < 0) {
             debug_print(D_L14_001FC980, wind_control_moby->save_id);
             mark_moby_for_removal(wind_control_moby);

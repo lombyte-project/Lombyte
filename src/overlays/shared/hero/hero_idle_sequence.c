@@ -93,7 +93,8 @@ int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 int hero_idle_sequence(int allow_item_idle_sequence) {
     struct Hero *vehicle_mode_owner = &hero;
     int          vehicle_mode = vehicle_mode_owner->vehicle_mode;
-    if (vehicle_mode == 2 || (vehicle_mode < 3 ? vehicle_mode == 1 : vehicle_mode == 3)) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK ||
+        (vehicle_mode < 3 ? vehicle_mode == HERO_VEHICLE_MODE_CLANK : vehicle_mode == 3)) {
         return 0;
     }
     {
@@ -155,13 +156,17 @@ extern s32 D_001403E0[];
 int get_hero_easing_moby_by_kind(int ease_kind) __asm__("FUN_L00_00205110");
 
 int get_hero_easing_moby_by_kind(int ease_kind) {
+    enum {
+        HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY = 1,
+        HERO_EASE_KIND_SLOT_ZERO_PRIMARY_MOBY = 5
+    };
     if (ease_kind == 0 || ease_kind == 2 || ease_kind == 3 || ease_kind == 4) {
         return D_001413D0[0];
     }
-    if (ease_kind == 1) {
+    if (ease_kind == HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY) {
         return hero_slot_three_secondary_moby[0];
     }
-    if (ease_kind == 5) {
+    if (ease_kind == HERO_EASE_KIND_SLOT_ZERO_PRIMARY_MOBY) {
         return D_001403E0[0];
     }
     return 0;
@@ -501,7 +506,7 @@ void update_hero_glow_and_extra_manipulators(void) {
     }
     moby->glow_color = (alpha << 24) | (blue << 16) | (green << 8) | red;
     manip_owner = &hero;
-    if (manip_owner->vehicle_mode != 0)
+    if (manip_owner->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT)
         return;
     if (fast_dec_timer_s16(&HERO_EXTRA->delay) && moby->prev_seq == 1) {
         min_delay = scale_game_frames(50);
@@ -916,7 +921,7 @@ void update_hero_in_vehicle_mode(void) {
         }
     }
     reveal_map_around_position(&hero.motion.pos);
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         struct Hero *g = &hero;
         if (D_0015EDB3_macro)
             *(f32 *)((char *)&D_L00_0017B85C_lui + 0x210) = 1.4f * D_0015EE18_gp;
@@ -1544,7 +1549,7 @@ void apply_hero_and_item_scale_sequence(void) {
             ((unsigned char *)G->moby) + 0xC0, ((unsigned char *)G->moby) + 0xC0, sequence_scale);
         fast_vec_scale(
             ((unsigned char *)G->moby) + 0xD0, ((unsigned char *)G->moby) + 0xD0, sequence_scale);
-        if (G->vehicle_mode == 0) {
+        if (G->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             for (i = 0; i < 7; i++) {
                 for (j = 0; j < 3; j++) {
                     struct Hero *hero_state = &hero;
@@ -1552,7 +1557,8 @@ void apply_hero_and_item_scale_sequence(void) {
                     if (j == 1)
                         item_moby = *(unsigned char **)&hero_state->items[i].moby2;
                     item_scale = sequence_scale;
-                    if (i == 0 && hero_state->vehicle_mode == 0 && 1.0f < sequence_scale)
+                    if (i == 0 && hero_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT &&
+                        1.0f < sequence_scale)
                         item_scale = 1.0f;
                     if (item_moby) {
                         fast_vec_scale(item_moby + 0xC0, item_moby + 0xC0, item_scale);
@@ -1661,7 +1667,7 @@ void draw_hero_glow_quads(void) {
         }
         return;
     }
-    if (vehicle_mode == 0) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         if ((hero_slot_item_id(3) == 3 || hero_slot_item_id(3) == 2) && P.h22D8 == 0) {
             P.v1D80.f[2] += 0.015f;
             draw_offset_textured_effect_quad(&P.v1D80, 0x280000C0, 0.057f, 0.08f);
@@ -1671,13 +1677,13 @@ void draw_hero_glow_quads(void) {
             draw_offset_textured_effect_quad(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
         return;
     }
-    if (vehicle_mode == 2) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         P.v1D80.f[2] -= 0.07f;
         draw_offset_textured_effect_quad(&P.v1D80, 0x300000C0, 0.25f, 0.08f);
         P.v1D80.f[2] += 0.07f;
         return;
     }
-    if (vehicle_mode == 1) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         k = 0.07f;
         if (P.h22FC)
             k = 0.101500004529953f;
@@ -1707,7 +1713,12 @@ extern G_00208038 D_0013F350_00208038 __asm__("D_0013F350");
 void              enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 
 /* Appends v, b, x and y to the list in ((char *)&hero) and calls FUN_L00_00207d00. */
-void FUN_L00_00208038(u128 *glow_position, int b, float x, float y) {
+void enqueue_hero_glow_quad(u128 *glow_position,
+                            int   b,
+                            float x,
+                            float y) __asm__("FUN_L00_00208038");
+
+void enqueue_hero_glow_quad(u128 *glow_position, int b, float x, float y) {
     G_00208038 *hero_glow_queue_owner = &D_0013F350_00208038;
     short       n = hero_glow_queue_owner->n;
     u128       *pos = hero_glow_queue_owner->pos;
@@ -1901,8 +1912,10 @@ void update_hero_and_equipped_item_glows(void) {
     }
 }
 
-extern void FUN_L00_00232fe8(void);
-extern void FUN_L00_002330d0(void);
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
+
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
+extern void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 extern void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 extern void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 extern void offset_hero_position_against_gravity(void *, void *, float) __asm__("FUN_L00_002336e8");
@@ -1917,9 +1930,9 @@ void update_hero_moby(void) {
 
     hero.moby->hit_slot = 0xFF;
     if (hero.unk20A5) {
-        FUN_L00_00232fe8();
+        set_hero_item_moby_flag_bit0();
     } else {
-        FUN_L00_002330d0();
+        update_hero_item_moby_flags();
     }
     qcopy(&hero.moby->pos, &hero.motion.pos);
     apply_hero_vertical_oscillation();
@@ -1963,7 +1976,7 @@ void update_hero_moby(void) {
 
 extern void set_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233210");
 extern void clear_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233248");
-extern void FUN_L00_00232fe8_00208a10(void) __asm__("FUN_L00_00232fe8");
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 extern void
 set_moby_local_table_entry(void *, int, void *, float, float) __asm__("FUN_L00_0024eed8");
 
@@ -1976,7 +1989,7 @@ void update_hero_vehicle_moby(void) {
     } else {
         clear_hero_moby_flag_bit0();
     }
-    FUN_L00_00232fe8_00208a10();
+    set_hero_item_moby_flag_bit0();
     hero.moby->hit_slot = 0xFF;
     hero_moby = ((unsigned char *)hero.moby);
     qcopy(&MOBY(hero_moby)->pos, &hero.motion.pos);
@@ -2199,9 +2212,9 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame,
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00209690), where it is exact; names translated to the US level program. */
 
-float FUN_L00_00209018(float *a, int n);
+float vector_length_xyz_cf(float *a, int n) __asm__("FUN_L00_00209018");
 
-float FUN_L00_00209018(float *sample_values, int sample_count) {
+float vector_length_xyz_cf(float *sample_values, int sample_count) {
     char         sample_integral_part_scratch[16] __attribute__((aligned(16)));
     struct Hero *hero_base = (struct Hero *)((char *)((unsigned char *)&D_0013E533) + 0xE1D);
     int          i = truncate_float_to_s32(hero_base->anim_frame);
@@ -2545,6 +2558,9 @@ extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L0
 void emit_hero_randomized_motion_effects(int iteration_count, int mode) __asm__("FUN_L00_00209a40");
 
 void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
+    enum {
+        HERO_MOTION_EFFECT_RANDOMIZED_HERO_POSITION = 0
+    };
     float        pos[4];
     V_209a40     randomized_displacement;
     int          i;
@@ -2554,7 +2570,7 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
     for (i = 0; i < iteration_count; i++) {
         hero_state = &hero;
         hero_displacement_source = (V_209a40 *)&hero_state->motion.displacement;
-        if (mode == 0) {
+        if (mode == HERO_MOTION_EFFECT_RANDOMIZED_HERO_POSITION) {
             pos[0] = hero_state->motion.pos.f[0] + random_float_between(-0.1f, 0.1f);
             pos[1] = hero_state->motion.pos.f[1] + random_float_between(-0.1f, 0.1f);
             pos[2] = hero_state->motion.pos.f[2] + random_float_between(-0.5f, 0.1f);
@@ -2637,7 +2653,7 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
 }
 
 void        spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
-void        FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+void        spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern char D_0013F7EE[] NOT_SDA;
 void        emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
 
@@ -2688,7 +2704,7 @@ void emit_hero_timed_effects(void) {
         theta = random_angle_radians();
         phi = random_angle_radians();
         build_spherical_offset(pt, spherical_offset_scale, theta, phi);
-        FUN_L00_00269958(
+        spawn_effect(
             hero_position_copy, pt, col, 0x70F0, life, small_effect_sample, large_effect_sample, 1);
     }
     frame_count = random_int_between(scale_game_frames(3), scale_game_frames(7));
@@ -2708,10 +2724,10 @@ extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 /* Sets the accel and max_speed of the first hero ease. */
 void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
 
-void set_first_hero_easing_parameters(float a, float b) {
+void set_first_hero_easing_parameters(float easing_acceleration, float easing_max_speed) {
     struct HeroEase *destination_record = hero_eases;
-    destination_record->accel = a;
-    destination_record->max_speed = b;
+    destination_record->accel = easing_acceleration;
+    destination_record->max_speed = easing_max_speed;
 }
 
 typedef struct V0020a240 {
@@ -3467,24 +3483,24 @@ void apply_hero_selected_flags_and_state_transitions(void) {
     if (saved_flag_selector == 12)
         P.b12EA = 1;
     if (P.b12E3 && P.i300 && P.i208C != 0x10 && P.i208C != 0x14 && P.i208C != 7) {
-        target_state = 0x31;
+        target_state = HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT;
         goto call;
     }
     if (P.b12E5 && P.i300 && P.b20A4 == 1 && P.i2084 != 0x7D) {
-        target_state = 0x7D;
+        target_state = HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT;
         goto call;
     }
     if (P.b12E5 && P.i300 && (P.i2084 != 0x3C || P.h41E != 0)) {
         exit_hero_vehicle_mode_if_mode_three();
         if (P.i22A8)
             goto call3c;
-        target_state = 0x7C;
+        target_state = HERO_STATE_DEATH_DESCENT;
         goto call;
     }
     if (P.b12EC && P.i2084 != 0x7F && absolute_float(P.f2F0 - (P.f88 + 0.25f)) < 1.0f &&
         0.0f < P.f2F0 - P.f88 && P.f108 < 0.0f) {
         exit_hero_vehicle_mode_if_mode_three();
-        target_state = 0x7F;
+        target_state = HERO_STATE_SINK;
         goto call;
     }
     if (P.b12E6 && P.i2084 != 0x68 && P.i2084 != 0x7B &&
@@ -3492,16 +3508,16 @@ void apply_hero_selected_flags_and_state_transitions(void) {
         (P.i2084 != 0x69 || P.h41E != 0) && P.f108 < 0.0f) {
         exit_hero_vehicle_mode_if_mode_three();
         if (P.i22A8) {
-            target_state = 0x68;
+            target_state = HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN;
             goto call;
         }
     s7B:
-        target_state = 0x7B;
+        target_state = HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT;
     call:
         hero_set_state(target_state, 1);
         return;
     call3c:
-        target_state = 0x3C;
+        target_state = HERO_STATE_JUMP_WITH_HEALTH_DAMAGE;
         goto call;
     }
     if (P.b12EB && P.i2084 != 0x7B && absolute_float(P.f2F4 - (P.f88 + 0.25f)) < 1.0f &&

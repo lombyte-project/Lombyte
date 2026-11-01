@@ -48,6 +48,10 @@ build_moby_bone_transform(EnvironmentMappedObject *, int, void *) __asm__("func_
 void render_environment_mapped_object(EnvironmentMappedObject *object) __asm__("FUN_002327a0");
 
 void render_environment_mapped_object(EnvironmentMappedObject *mesh_object) {
+    enum {
+        ENVIRONMENT_MAPPING_UV_REFRESH_PENDING = 1,
+        ENVIRONMENT_MAPPING_UV_REFRESH_CONSUMED = 2
+    };
     Vec4         quad_positions[4];
     int          colors[4];
     float        texture_coordinates[4][2];
@@ -99,7 +103,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *mesh_object) {
     if (game_mode == 6 && ship_substate[0] == 4) {
         mapping_enabled = 0;
     }
-    if (mapping_enabled != 0 || environment_mapping_uv_refresh_state == 1) {
+    if (mapping_enabled != 0 ||
+        environment_mapping_uv_refresh_state == ENVIRONMENT_MAPPING_UV_REFRESH_PENDING) {
         environment_mapping_was_active_gp = 1;
         fast_dec_timer(&D_001604AC);
         transition_fraction = convert_integer_to_float(D_001604AC) /
@@ -119,7 +124,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *mesh_object) {
             fast_vec_normalize(reflection, reflection, 1.0f);
             reflection[2] += 1.0f;
             sphere_denominator = square_root(reflection[2] * 2.0f) * 2.0f;
-            if (environment_mapping_uv_refresh_state == 1 || D_001604AC == 0) {
+            if (environment_mapping_uv_refresh_state == ENVIRONMENT_MAPPING_UV_REFRESH_PENDING ||
+                D_001604AC == 0) {
                 environment_mapping_vertex_uvs[element_index][0] =
                     reflection[0] / sphere_denominator + 0.5f;
                 environment_mapping_vertex_uvs[element_index][1] =
@@ -137,8 +143,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *mesh_object) {
                         transition_fraction;
             }
         }
-        if (environment_mapping_uv_refresh_state == 1) {
-            environment_mapping_uv_refresh_state = 2;
+        if (environment_mapping_uv_refresh_state == ENVIRONMENT_MAPPING_UV_REFRESH_PENDING) {
+            environment_mapping_uv_refresh_state = ENVIRONMENT_MAPPING_UV_REFRESH_CONSUMED;
         }
     } else {
         if (environment_mapping_was_active_gp == 1) {

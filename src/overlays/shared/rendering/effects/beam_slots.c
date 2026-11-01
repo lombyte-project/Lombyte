@@ -35,6 +35,11 @@ void beam_slots_update(unsigned char *moby) {
         SLOT_UPDATE_STATE_INITIALIZE = 0,
         SLOT_UPDATE_STATE_PROCESS_SLOTS = 1
     };
+    enum {
+        BEAM_SLOT_STATE_UNUSED = 0,
+        BEAM_SLOT_STATE_REGISTERED = 1,
+        BEAM_SLOT_STATE_PENDING_RELEASE = 4
+    };
     int i;
     int j;
     int started_slot_count;
@@ -46,21 +51,21 @@ void beam_slots_update(unsigned char *moby) {
             D_L14_00162148[j] = 0;
             D_L14_001621D8[j] = 0;
         }
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = SLOT_UPDATE_STATE_PROCESS_SLOTS;
         MOBY(moby)->update_dist = 0xFF;
         break;
     case SLOT_UPDATE_STATE_PROCESS_SLOTS:
         started_slot_count = 0;
         for (i = 0; i < 3; i++) {
             slot_state = D_L14_00162148[i];
-            if (slot_state == 1) {
+            if (slot_state == BEAM_SLOT_STATE_REGISTERED) {
                 if (((signed char *)D_L14_001621D8[i])[0x20] < 0) {
                     D_L14_00162148[i] = 0;
                     D_L14_001621D8[i] = 0;
                 }
-            } else if (slot_state == 4) {
+            } else if (slot_state == BEAM_SLOT_STATE_PENDING_RELEASE) {
                 release_beam_slot(i);
-            } else if (slot_state != 0) {
+            } else if (slot_state != BEAM_SLOT_STATE_UNUSED) {
                 started_slot_count++;
                 update_slot_panes_and_effects(D_L14_001621D8[i], i);
                 D_L14_00162148[i] = 4;

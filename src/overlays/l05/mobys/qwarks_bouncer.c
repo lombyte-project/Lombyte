@@ -134,7 +134,7 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
             return;
         }
         bouncer_data->ptr20 = (void *)qwarks_bouncer_dialogue_name;
-        bouncer_moby->state = 1;
+        bouncer_moby->state = QWARKS_BOUNCER_UPDATE_DIALOGUE;
         initialize_npc_dialogue(bouncer_moby, bouncer_data);
         bouncer_data->fC = 3.7f;
         initialize_moby_grounding(bouncer_moby);

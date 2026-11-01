@@ -16,6 +16,20 @@
 #include "rnc/overlay/shared/weapons.h"
 
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
+enum {
+    DOOM_LANDING_MODE_REQUIRE_LINKED_MOBY = 0,
+    DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK = 2
+};
+
+enum {
+    THROWN_MOBY_STATE_INITIALIZE = 0,
+    THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1,
+    THROWN_MOBY_STATE_MOVE_WITH_COLLISION = 2,
+    THROWN_MOBY_STATE_SPAWN_SEQUENCE = 3,
+    THROWN_MOBY_STATE_FADE_OUT = 4,
+    THROWN_MOBY_STATE_RESET_TO_INITIALIZE = 5
+};
+
 typedef struct {
     Vec4         vel;          /* 0x00: velocity per step */
     Vec4         landing;      /* 0x10: predicted landing point */
@@ -71,7 +85,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
     if (D_L00_0015F5C4 != 0)
         return 0;
     qcopy(&position_scratch, &thrown_moby->pos);
-    if (thrown_moby->state == 1) {
+    if (thrown_moby->state == THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE) {
         simulated_position.f[0] =
             fast_cos(fast_add_rotations(-0.36196801066398620605f,
                                         fast_arc_tan(hero.facing_x, hero.facing_y))) *
@@ -156,13 +170,14 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
     }
     if (prediction_timer == 0)
         return 0;
-    if (mode == 0) {
+    if (mode == DOOM_LANDING_MODE_REQUIRE_LINKED_MOBY) {
         if (coll_hit.moby == 0)
             return 0;
         if (get_moby_pvars_link(coll_hit.moby) == 0)
             goto ret0;
     }
-    if (mode != 2 || coll_hit.moby == 0 || !get_moby_pvars_link(coll_hit.moby))
+    if (mode != DOOM_LANDING_MODE_SKIP_LINKED_MOBY_DRAW_CALLBACK || coll_hit.moby == 0 ||
+        !get_moby_pvars_link(coll_hit.moby))
         add_draw_callback(FUN_L00_002c7df8_2c8440, thrown_moby);
     throw_vars->normal.q = coll_hit_normal.q;
     fast_vec_sub(&position_scratch, &throw_vars->landing, &g_debug_camera_lui);
@@ -181,14 +196,6 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) __asm__("FUN_L00_002c89e8
 
 /* Moby class 230 */
 void doom_bot_spawner_update(struct Moby *thrown_moby) {
-    enum {
-        THROWN_MOBY_STATE_INITIALIZE = 0,
-        THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1,
-        THROWN_MOBY_STATE_MOVE_WITH_COLLISION = 2,
-        THROWN_MOBY_STATE_SPAWN_SEQUENCE = 3,
-        THROWN_MOBY_STATE_FADE_OUT = 4,
-        THROWN_MOBY_STATE_RESET_TO_INITIALIZE = 5
-    };
     Vec4         next_pos, start, end, probe;
     ThrowVars   *spawner_throw_vars;
     struct Moby *population_scan_moby;
@@ -209,7 +216,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
     if (thrown_moby->pos.x < 2.0f || 1021.0f < thrown_moby->pos.x || thrown_moby->pos.y < 2.0f ||
         1021.0f < thrown_moby->pos.y || thrown_moby->pos.z < 2.0f || 1021.0f < thrown_moby->pos.z)
         goto remove;
-    if (hero.unk20A5 && thrown_moby->state < 2)
+    if (hero.unk20A5 && thrown_moby->state < THROWN_MOBY_STATE_MOVE_WITH_COLLISION)
         thrown_moby->flags |= 0x41;
     else
         thrown_moby->flags &= 0xffbe;
@@ -222,7 +229,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
     }
     switch (thrown_moby->state) {
     case THROWN_MOBY_STATE_INITIALIZE:
-        thrown_moby->state = 1;
+        thrown_moby->state = THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE;
         spawner_throw_vars->effect_timer = scale_game_frames(4);
         spawner_throw_vars->timer = 0;
         spawner_throw_vars->spawn_count = 0;
@@ -310,7 +317,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
                     spawner_throw_vars->timer = settled;
                     if (!coll_hit.moby || coll_hit.unk1C > 0 ||
                         (settled_frames = (s16)settled, scale_game_frames(240) < settled_frames)) {
-                        thrown_moby->state = 3;
+                        thrown_moby->state = THROWN_MOBY_STATE_SPAWN_SEQUENCE;
                         spawner_throw_vars->timer = 0;
                     }
                 }
@@ -368,7 +375,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
                     s32 spawned = spawner_throw_vars->spawn_count + 1;
                     spawner_throw_vars->spawn_count = spawned;
                     if (spawned > 3)
-                        thrown_moby->state = 4;
+                        thrown_moby->state = THROWN_MOBY_STATE_FADE_OUT;
                 }
             }
         }
@@ -399,6 +406,6 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
     }
     case THROWN_MOBY_STATE_RESET_TO_INITIALIZE:
     default:
-        thrown_moby->state = 0;
+        thrown_moby->state = THROWN_MOBY_STATE_INITIALIZE;
     }
 }

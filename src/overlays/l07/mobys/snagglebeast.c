@@ -42,6 +42,26 @@
 #include "rnc/overlay/shared/math/split_float_fraction.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/effect_00313D28.c: func_L07_00313D28). */
+enum {
+    SNAGGLEBEAST_INITIALIZE = 0,
+    SNAGGLEBEAST_IDLE = 1,
+    SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST = 2,
+    SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK = 3,
+    SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
+    SNAGGLEBEAST_CHASE_TARGET = 5,
+    SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE = 6,
+    SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
+    SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
+    SNAGGLEBEAST_ROPE_ATTACK = 9,
+    SNAGGLEBEAST_DEATH_EXPLOSION = 10,
+    SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT = 11,
+    SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE = 12,
+    SNAGGLEBEAST_WAIT_BEFORE_TIMED_DAMAGE = 13,
+    SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH = 14,
+    SNAGGLEBEAST_RESTORE_TRANSFORM_AND_RESUME_CHASE = 15,
+    SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
+};
+
 extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 
 /* [4] is depth_buffer_address. */
@@ -652,7 +672,7 @@ struct ChaserTarget {
 extern s32                 level_frame_count_lui __asm__("D_L07_0015F5CC");
 extern float               D_0015ED6C;
 extern struct ChaserTarget D_L07_00173EC0;
-extern int                 FUN_L00_00259028(struct Moby *, void *, int, void *);
+extern int step_mover_2e3f20(struct Moby *, void *, int, void *) __asm__("FUN_L00_00259028");
 extern int probe_vertical_ground_collision(void *, struct Moby *, int, float, float) __asm__("FUN_L00_002583f0");
 int update_snagglebeast_chase_movement(struct Moby       *chaser_moby,
                                        struct ChaserVars *chaser_vars,
@@ -674,7 +694,7 @@ int update_snagglebeast_chase_movement(
     path = D_L07_001B0530[chaser_vars->path];
     if (range < goal_distance) {
         navigation_result =
-            FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
+            step_mover_2e3f20(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
         if (navigation_result == 2) {
             fast_vec_sub(
                 position_delta,
@@ -788,7 +808,7 @@ int start_snagglebeast_turn_toward_target(unsigned char    *moby,
                 blend_moby_animation(moby, 0xE, r, random_int_between(0xF, 0x14));
             }
         }
-        MOBY(moby)->state = 7;
+        MOBY(moby)->state = SNAGGLEBEAST_TURN_TOWARD_TARGET;
         return 1;
     }
     return 0;
@@ -946,25 +966,6 @@ void         snagglebeast_update(unsigned char *moby) __asm__("FUN_L07_00314150"
 
 /* Moby class 1106 */
 void snagglebeast_update(unsigned char *moby) {
-    enum {
-        SNAGGLEBEAST_INITIALIZE = 0,
-        SNAGGLEBEAST_IDLE = 1,
-        SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST = 2,
-        SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK = 3,
-        SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
-        SNAGGLEBEAST_CHASE_TARGET = 5,
-        SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE = 6,
-        SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
-        SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
-        SNAGGLEBEAST_ROPE_ATTACK = 9,
-        SNAGGLEBEAST_DEATH_EXPLOSION = 10,
-        SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT = 11,
-        SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE = 12,
-        SNAGGLEBEAST_WAIT_BEFORE_TIMED_DAMAGE = 13,
-        SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH = 14,
-        SNAGGLEBEAST_RESTORE_TRANSFORM_AND_RESUME_CHASE = 15,
-        SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
-    };
     enum {
         SNAGGLEBEAST_ROPE_START_ATTACK_ANIMATION = 0,
         SNAGGLEBEAST_ROPE_WAIT_FOR_ORIGIN_FRAME = 1,
@@ -1761,14 +1762,14 @@ void snagglebeast_update(unsigned char *moby) {
                                0x78);
                 if (*(int *)(linked_moby_vars + 0x28) != -1 &&
                     *(int *)(paired_linked_moby_vars + 0x28) != -1) {
-                    float d1 = vector_distance_xy(
+                    float hero_to_linked_cuboid_distance = vector_distance_xy(
                         ((char *)&hero) + 0x80,
                         (char *)l07_cuboids + (*(int *)(linked_moby_vars + 0x28) << 7) + 0x30);
                     int sel;
                     if (vector_distance_xy(((char *)&hero) + 0x80,
                                            (char *)l07_cuboids +
                                                (*(int *)(paired_linked_moby_vars + 0x28) << 7) +
-                                               0x30) < d1) {
+                                               0x30) < hero_to_linked_cuboid_distance) {
                         sel = *(int *)(paired_linked_moby_vars + 0x28);
                         k = k2;
                     } else {
@@ -1880,12 +1881,12 @@ void snagglebeast_update(unsigned char *moby) {
                     snagglebeast_instance_state->navigation_mask &= 0xFD;
                     break;
                 case SNAGGLEBEAST_PATH_SELECT_FARTHER_PAIRED_POINT: {
-                    float d1 = vector_distance_xy(
+                    float hero_to_first_paired_path_point_distance = vector_distance_xy(
                         ((char *)&hero) + 0x80,
                         D_L07_001B0530[snagglebeast_instance_state->path_1A0] + 0x30);
                     if (vector_distance_xy(((char *)&hero) + 0x80,
                                            D_L07_001B0530[snagglebeast_instance_state->path_1A0] +
-                                               0x40) < d1) {
+                                               0x40) < hero_to_first_paired_path_point_distance) {
                         qcopy(snagglebeast_instance_state->unk120,
                               D_L07_001B0530[snagglebeast_instance_state->path_1A0] + 0x30);
                     } else {
@@ -2057,7 +2058,7 @@ void snagglebeast_update(unsigned char *moby) {
                             char *path = D_L07_001B0530[snagglebeast_instance_state->measured_path];
                             int   pidx = 0;
                             float pfrac = 0.0f;
-                            float d1;
+                            float hero_to_sample_distance;
                             float moby_to_sample_distance;
                             pidx =
                                 select_point_index_by_distance(((char *)&hero) + 0x80, path, 0.0f);
@@ -2069,9 +2070,11 @@ void snagglebeast_update(unsigned char *moby) {
                                             &pfrac,
                                             snagglebeast_instance_state->unk1AC,
                                             1);
-                                d1 = vector_distance_xy(((char *)&hero) + 0x80, &start);
+                                hero_to_sample_distance =
+                                    vector_distance_xy(((char *)&hero) + 0x80, &start);
                                 moby_to_sample_distance = vector_distance_xy(moby + 0x10, &start);
-                            } while (d1 < 8.0f || moby_to_sample_distance < 12.0f);
+                            } while (hero_to_sample_distance < 8.0f ||
+                                     moby_to_sample_distance < 12.0f);
                             add_random_xy_offset((float *)&start, 0.5f);
                             fast_vec_sub(&direction, &start, ((char *)&hero) + 0x80);
                             zv = start.f[2];

@@ -38,14 +38,14 @@ void tall_shroom_update(TriggerMoby *shroom_moby) {
     hit = find_moby_hit(shroom_moby, 0x10000, 0);
     switch (shroom_moby->state) {
     case TALL_SHROOM_STATE_INITIALIZE:
-        shroom_moby->state = 1;
+        shroom_moby->state = TALL_SHROOM_STATE_WAIT_FOR_HIT;
         break;
     case TALL_SHROOM_STATE_WAIT_FOR_HIT:
         if (hit != 0 && hit->f2c > 0.0f) {
             flag = 1;
         }
         if (flag) {
-            shroom_moby->state = 2;
+            shroom_moby->state = TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS;
         }
         break;
     case TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS:

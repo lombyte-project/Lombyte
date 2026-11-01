@@ -16,6 +16,10 @@ extern float       fast_difference_between_rotations(float, float) __asm__("func
 void process_pad_input(struct PadState *p, u8 *buf, s32 len) __asm__("FUN_00217328");
 
 void process_pad_input(struct PadState *pad_state, u8 *pad_read_data, s32 pad_read_byte_count) {
+    enum {
+        PAD_INPUT_FILTER_NONE = 0,
+        PAD_INPUT_FILTER_SUPPRESS_DIRECTIONS = 2
+    };
     float axis_vector[2];
     s32   i, j, k;
     s32   held_buttons, old, ncur, nold;
@@ -99,9 +103,9 @@ void process_pad_input(struct PadState *pad_state, u8 *pad_read_data, s32 pad_re
         pad_state->released &= ~0x5030;
         pad_state->analog[0] = 0.0f;
         pad_state->analog[1] = 0.0f;
-        pad_state->mode = 0;
+        pad_state->mode = PAD_INPUT_FILTER_NONE;
     }
-    if (pad_state->mode == 2) {
+    if (pad_state->mode == PAD_INPUT_FILTER_SUPPRESS_DIRECTIONS) {
         pad_state->held = *(volatile s32 *)&pad_state->held & 0x900;
         pad_state->pressed &= 0x900;
         pad_state->released &= 0x900;
@@ -109,7 +113,7 @@ void process_pad_input(struct PadState *pad_state, u8 *pad_read_data, s32 pad_re
         pad_state->no_direction = 1;
         pad_state->analog[2] = 0.0f;
         pad_state->analog[3] = 0.0f;
-        pad_state->mode = 0;
+        pad_state->mode = PAD_INPUT_FILTER_NONE;
     }
     axis_vector[0] = pad_state->analog[2];
     axis_vector[1] = pad_state->analog[3];

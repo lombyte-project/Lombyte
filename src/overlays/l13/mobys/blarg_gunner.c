@@ -9,6 +9,12 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 
+enum {
+    BLARG_GUNNER_STATE_INITIALIZE = 0,
+    BLARG_GUNNER_STATE_ACTIVE = 1,
+    BLARG_GUNNER_STATE_DESTROY = 2
+};
+
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
@@ -77,7 +83,7 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
         child_moby->draw_dist = child_vars->parent->draw_dist;
         child_moby->visible = 1;
         child_moby->flags |= 0x20;
-        child_moby->state = 0;
+        child_moby->state = BLARG_GUNNER_STATE_INITIALIZE;
         child_moby->command = 0;
         qcopy(&child_moby->pos, &child_vars->parent->pos);
         child_moby->scale = child_moby->pclass->scale * parent->scale / parent->pclass->scale;
@@ -112,7 +118,7 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
     char  *hit_record;
     int    k;
     int    hit_reaction_result;
-    if (moby->state != 2) {
+    if (moby->state != BLARG_GUNNER_STATE_DESTROY) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
         hit_reaction_result = hit_reaction(moby, hit_record, tm, 0, &k, 0, 0, 4);
         if (hit_record != 0) {
@@ -172,7 +178,7 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
                 trooper_anim_update(moby, (short *)(moby_vars + 0x60));
                 if (moby->prev_seq != 3)
                     blend_moby_animation(moby, 3, 1, 0);
-                moby->state = 2;
+                moby->state = BLARG_GUNNER_STATE_DESTROY;
             } else {
                 *tm = current_health - hit_damage;
                 *(unsigned char *)(moby_vars + 0x67) = 0xFA;
@@ -212,18 +218,13 @@ void blarg_gunner_update(struct Moby *moby) __asm__("FUN_L13_002b4c80");
 
 /* Moby class 36 */
 void blarg_gunner_update(struct Moby *moby) {
-    enum {
-        BLARG_GUNNER_STATE_INITIALIZE = 0,
-        BLARG_GUNNER_STATE_ACTIVE = 1,
-        BLARG_GUNNER_STATE_DESTROY = 2
-    };
     unsigned char *moby_vars = moby->pvars;
     float          explosion_offset[4];
     float          explosion_spawn_position[4];
     switch (moby->state) {
     case BLARG_GUNNER_STATE_INITIALIZE:
         moby_vars[0x29] = 1;
-        moby->state = 1;
+        moby->state = BLARG_GUNNER_STATE_ACTIVE;
         moby_vars[0x5A] = 6;
         moby_vars[0x58] = 8;
         break;

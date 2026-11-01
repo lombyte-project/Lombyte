@@ -173,6 +173,11 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS = 3,
         GADGETRON_CEO_WAIT_TO_SAVE = 4
     };
+    enum {
+        GADGETRON_CEO_DIALOGUE_AFTER_CHALLENGE_START = 2,
+        GADGETRON_CEO_DIALOGUE_START_CHALLENGE = 3,
+        GADGETRON_CEO_DIALOGUE_AFTER_CHALLENGE_RETURN = 4
+    };
     L16ChallengeScratch     ceo_gaze_vectors;
     L16ChallengeData       *ceo_data = ceo_moby->data;
     L16ChallengeActivation *activation = (L16ChallengeActivation *)ceo_data->activation;
@@ -186,7 +191,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
     switch (ceo_moby->state) {
     case GADGETRON_CEO_INITIALIZE_DIALOGUE:
         ceo_moby->opacity = 255;
-        ceo_moby->state = 1;
+        ceo_moby->state = GADGETRON_CEO_POLL_DIALOGUE;
         initialize_npc_dialogue(ceo_moby, activation);
         *(float *)((char *)ceo_data + 0x2C) = 3.7f;
         ceo_data->initial_yaw = ceo_moby->yaw;
@@ -202,7 +207,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         if (update_npc_dialogue(ceo_moby, (char *)ceo_data + 0x20)) {
             ceo_moby->yaw = ceo_data->initial_yaw;
             begin_dialogue_camera_transition(3.5f, ceo_moby);
-            ceo_moby->state = 2;
+            ceo_moby->state = GADGETRON_CEO_WAIT_AFTER_DIALOGUE;
         }
         if (!D_0013D4DE && vector_distance_xy(&hero.motion.pos, ceo_moby->position) < 3.5f) {
             int   elapsed, period;
@@ -219,13 +224,13 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
                 *(unsigned short *)(statistics + 0x43A) = scale_game_frames(D_0015EEA4) / 600;
             }
         }
-        if (activation->mode == 3) {
+        if (activation->mode == GADGETRON_CEO_DIALOGUE_START_CHALLENGE) {
             char *camera;
             char *pose;
             int   pending;
             pending = D_L16_0015F5CC;
             activation->previous = (unsigned short)activation->mode;
-            activation->mode = 2;
+            activation->mode = GADGETRON_CEO_DIALOGUE_AFTER_CHALLENGE_START;
             activation->pending = pending;
             ceo_moby->event = 0;
             pose = gadgetron_ceo_challenge_start_pose;
@@ -233,11 +238,11 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             camera = (char *)hero.saved_pos_rot;
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);
-            ceo_moby->state = 3;
+            ceo_moby->state = GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS;
             activate_gadgetron_ceo_challenge_environment((char *)ceo_moby);
         }
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode == 22) {
-            ceo_moby->state = 3;
+            ceo_moby->state = GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS;
             activate_gadgetron_ceo_challenge_environment((char *)ceo_moby);
         }
         break;
@@ -245,7 +250,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
     case GADGETRON_CEO_WAIT_AFTER_DIALOGUE:
         if (*(int *)&D_L16_0015F5C4 != 2) {
             int previous;
-            ceo_moby->state = 1;
+            ceo_moby->state = GADGETRON_CEO_POLL_DIALOGUE;
             previous = activation->previous;
             if (previous == 4) {
                 FUN_L16_002923d0(0);
@@ -255,7 +260,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         break;
     case GADGETRON_CEO_WAIT_TO_SAVE:
         if (*(int *)&D_L16_0015F5C4 == 0) {
-            ceo_moby->state = 1;
+            ceo_moby->state = GADGETRON_CEO_POLL_DIALOGUE;
             grant_inventory_item(31, 1);
             memcard_save_data(0, -1);
         }
@@ -275,7 +280,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
                 D_0015EE6C_p = player->points;
         }
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode == 0) {
-            ceo_moby->state = 1;
+            ceo_moby->state = GADGETRON_CEO_POLL_DIALOGUE;
             restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         }
         event = ceo_moby->event;
@@ -292,14 +297,14 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
                 previous = activation->mode;
                 pending = D_L16_0015F5CC;
                 activation->previous = previous;
-                activation->mode = 4;
+                activation->mode = GADGETRON_CEO_DIALOGUE_AFTER_CHALLENGE_RETURN;
                 activation->pending = pending;
                 activation->flag = event;
             }
             restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         }
         if (ceo_moby->event == 2) {
-            ceo_moby->state = 1;
+            ceo_moby->state = GADGETRON_CEO_POLL_DIALOGUE;
             set_race_camera(gadgetron_ceo_challenge_return_pose,
                             gadgetron_ceo_challenge_return_pose + 0x10,
                             0,

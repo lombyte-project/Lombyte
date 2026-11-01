@@ -23,6 +23,23 @@
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_burst_sparks_2.h"
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_burst_sparks.h"
 
+enum {
+    LARGE_AMOEBOID_INITIALIZE = 0,
+    LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
+    LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
+    LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END = 3,
+    LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
+    LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
+    LARGE_AMOEBOID_LUNGE_AT_TARGET = 6,
+    LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH = 7,
+    LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
+    LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH = 9,
+    LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
+    LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 14,
+    LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
+    LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
+};
+
 typedef struct LargeAmoeboidVars {
     u8    pad0[0x20];
     f32   health;
@@ -103,7 +120,7 @@ typedef struct {
     char           pA8[0x58];
 } Ent;
 
-extern char D_L01_00167240[];
+extern char camera_pos[] __asm__("D_L01_00167240");
 float       absolute_float(float input) __asm__("func_001F99C0");
 extern void FUN_0020c828(void *);
 extern int  func_L00_001EFFF0_t(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -153,8 +170,10 @@ extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern float       D_0013F420[];
 extern int         D_001413D0[];
-extern const float D_L01_001619A0_gp __asm__("D_L01_001619A0") __attribute__((sda));
-extern const float D_L01_001619A4_gp __asm__("D_L01_001619A4") __attribute__((sda));
+extern const float l01_smaller_amoeboid_knockback_xy_scale __asm__("D_L01_001619A0")
+    __attribute__((sda));
+extern const float l01_smaller_amoeboid_knockback_z_scale __asm__("D_L01_001619A4")
+    __attribute__((sda));
 extern const float frame_time_macro __asm__("D_0015ED6C");
 
 extern short *l01_moby_index_lists_by_group[] __asm__("D_L01_001ABCC0");
@@ -221,22 +240,6 @@ void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 /* Moby classes 572, 865, 866 */
 void large_amoeboid_update(unsigned char *moby) {
     enum {
-        LARGE_AMOEBOID_INITIALIZE = 0,
-        LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
-        LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
-        LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END = 3,
-        LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
-        LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
-        LARGE_AMOEBOID_LUNGE_AT_TARGET = 6,
-        LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH = 7,
-        LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
-        LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH = 9,
-        LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
-        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 14,
-        LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
-        LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
-    };
-    enum {
         LARGE_AMOEBOID_LARGE_VARIANT = 0x23c,
         LARGE_AMOEBOID_MEDIUM_VARIANT = 0x361,
         LARGE_AMOEBOID_SMALL_VARIANT = 0x362
@@ -257,7 +260,7 @@ void large_amoeboid_update(unsigned char *moby) {
         return;
     }
     FUN_L00_00263ac8(2.9f, moby, 0, &large_amoeboid_vars->unk270);
-    if (MOBY(moby)->visible != 0 && fast_vec_dist(&MOBY(moby)->pos, D_L01_00167240) < 28.0f) {
+    if (MOBY(moby)->visible != 0 && fast_vec_dist(&MOBY(moby)->pos, camera_pos) < 28.0f) {
         FUN_L00_0025a120(moby);
         MOBY(moby)->shadow_range = 0x16;
     }
@@ -719,7 +722,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     }
     resolve_moby_hit_response(moby, hit_record, &moby_vars->health, 0, &flag, &amount, 0, 4);
     if (flag != 1 && amount != 0.0f && MOBY(moby)->state != 0xB && MOBY(moby)->state != 0xA &&
-        MOBY(moby)->state != 8) {
+        MOBY(moby)->state != LARGE_AMOEBOID_PROCESS_KNOCKBACK) {
         size_multiplier = 0.8f;
         allocate_voice_for_target_entry(0, 0, moby);
         hit_decrement = 1.0f;
@@ -745,8 +748,8 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
                 k = frame_time_macro;
                 seven = 7.0f;
                 *(float *)(q + 0x88) = moby_vars->size_scale * size_multiplier;
-                *(float *)(q + 0x78) = D_L01_001619A0_gp * k;
-                *(float *)(q + 0x7C) = D_L01_001619A4_gp * k;
+                *(float *)(q + 0x78) = l01_smaller_amoeboid_knockback_xy_scale * k;
+                *(float *)(q + 0x7C) = l01_smaller_amoeboid_knockback_z_scale * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
                 *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
@@ -768,8 +771,8 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
                 k = frame_time_macro;
                 seven = 7.0f;
                 *(float *)(q + 0x88) = moby_vars->size_scale * size_multiplier;
-                *(float *)(q + 0x78) = D_L01_001619A0_gp * k;
-                *(float *)(q + 0x7C) = D_L01_001619A4_gp * k;
+                *(float *)(q + 0x78) = l01_smaller_amoeboid_knockback_xy_scale * k;
+                *(float *)(q + 0x7C) = l01_smaller_amoeboid_knockback_z_scale * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
                 *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
@@ -797,7 +800,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     }
     MOBY(moby)->hit_slot = 0xFF;
     removal_height_entry_index = moby_vars->unk258;
-    if (removal_height_entry_index != 0 && MOBY(moby)->state != 0 &&
+    if (removal_height_entry_index != 0 && MOBY(moby)->state != LARGE_AMOEBOID_INITIALIZE &&
         MOBY(moby)->pos.z < *(float *)(removal_height_entry_index * 0x1190 + pool_draw_tiles + 8)) {
         clear_u64_value(&scratch_vector);
         spawn_amoeboid_burst_sparks((unsigned char *)moby, (float *)&scratch_vector);
@@ -859,6 +862,9 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
 }
 
 char *activate_smaller_amoeboid(void *source_moby) {
+    enum {
+        LARGE_AMOEBOID_DORMANT = 12
+    };
     struct Moby *source_amoeboid = source_moby;
     short       *list;
     char        *entities;
@@ -891,7 +897,8 @@ char *activate_smaller_amoeboid(void *source_moby) {
         group_index_or_list_entry = index;
         index &= 0x7FFF;
         smaller_amoeboid = (struct Moby *)(entities + (index << 8));
-        if (smaller_amoeboid->state != 12 || smaller_amoeboid->oclass != next_class)
+        if (smaller_amoeboid->state != LARGE_AMOEBOID_DORMANT ||
+            smaller_amoeboid->oclass != next_class)
             goto advance;
         {
             /* Retail reads both pvars pointers and update_dist before writing the entity. */
@@ -1089,13 +1096,13 @@ int process_amoeboid_suck_cannon_suction(struct Moby *moby) {
     if (suction_result != 0) {
         if (moby->oclass != 0x362) {
             return 0;
-        } else if (moby->state == 8) {
+        } else if (moby->state == LARGE_AMOEBOID_PROCESS_KNOCKBACK) {
             return 0;
         } else {
-            moby->state = 0xE;
+            moby->state = LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION;
         }
-    } else if (moby->state == 0xE) {
-        moby->state = 1;
+    } else if (moby->state == LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION) {
+        moby->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
     }
     return suction_result;
 }
@@ -1109,10 +1116,10 @@ int moby_hold_state_if_found(struct Moby *a) __asm__("FUN_L01_002efaf8");
 int moby_hold_state_if_found(struct Moby *target_moby) {
     int suck_cannon_store_result = store_moby_in_suck_cannon(target_moby);
     if (suck_cannon_store_result == 0) {
-        if (target_moby->state == 0xe)
-            target_moby->state = 1;
+        if (target_moby->state == LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION)
+            target_moby->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
     } else {
-        target_moby->state = 0xe;
+        target_moby->state = LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION;
     }
     return suck_cannon_store_result;
 }
@@ -1124,7 +1131,7 @@ int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) __asm__("FUN_
 
 int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby->state = 0xe;
+    moby->state = LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION;
     return helper_result;
 }
 

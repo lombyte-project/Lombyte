@@ -63,7 +63,7 @@ void qwarks_starfighter_part_update(struct Moby *moby) {
     moby->flags = moby->flags | (starfighter_part_vars->parent->flags & 3);
     switch (moby->state) {
     case PART_STATE_INITIALIZE:
-        moby->state = 1;
+        moby->state = PART_STATE_SYNC_PARENT_SCALE;
         qzero(&starfighter_part_vars->unk20);
         break;
     case PART_STATE_SYNC_PARENT_SCALE:
@@ -86,7 +86,7 @@ void qwarks_starfighter_part_update(struct Moby *moby) {
                  hit->oclass != 0x18C && hit->oclass != 0x18F && hit->oclass != 0x190)) {
                 reflect_vector(
                     &starfighter_part_vars->vel, &starfighter_part_vars->vel, coll + 0x40);
-                moby->state = 4;
+                moby->state = PART_STATE_BURST_AND_REMOVE;
             }
         }
         moby->rot.x = fast_add_rotations(moby->rot.x, starfighter_part_vars->spin[0]);

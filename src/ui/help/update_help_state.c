@@ -65,7 +65,7 @@ void update_help_state(void) {
 
     if (game_mode != 0 || help_state.started == 0) {
         help_state.pending = -1;
-        help_state.state = 0;
+        help_state.state = HELP_STATE_IDLE;
         help_state.timer = 0;
         return;
     }
@@ -89,7 +89,7 @@ void update_help_state(void) {
         RECORD_LATEST_TIME();
         RECORD_FLAGS();
         help_state.msg = -1;
-        help_state.state = 0;
+        help_state.state = HELP_STATE_IDLE;
         help_state.shown = 0;
         break;
 
@@ -117,10 +117,10 @@ void update_help_state(void) {
             RECORD_LATEST_TIME();
             RECORD_FLAGS();
             help_state.timer = 8 - help_state.timer;
-            help_state.state = 7;
+            help_state.state = HELP_STATE_DISMISSING;
         } else if (help_state.timer >= 6) {
             help_state.timer = 0;
-            help_state.state = 2;
+            help_state.state = HELP_STATE_DISMISSAL_WAIT_AUDIO_GATE;
         }
         break;
     }
@@ -132,14 +132,14 @@ void update_help_state(void) {
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_LATEST_TIME();
-            help_state.state = 7;
+            help_state.state = HELP_STATE_DISMISSING;
             help_state.timer = 0;
             RECORD_FLAGS();
         } else if (help_state.timer >= scale_game_frames(0x18)) {
             if (music_stream_state.secondary.state == 3 ||
                 (id = help_msgs[help_state.msg].audio_track_offset) == -1 ||
                 id != music_stream_state.secondary.track - 0x7530) {
-                help_state.state = 3;
+                help_state.state = HELP_STATE_DISMISSAL_WAIT_TRANSITION_DELAY;
                 help_state.timer = 0;
             }
         }
@@ -151,12 +151,12 @@ void update_help_state(void) {
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_LATEST_TIME();
-            help_state.state = 7;
+            help_state.state = HELP_STATE_DISMISSING;
             help_state.timer = 0;
             RECORD_FLAGS();
         } else if (help_state.timer >= 8) {
             help_state.timer = 0;
-            help_state.state = 4;
+            help_state.state = HELP_STATE_DISMISSAL_WAIT_START_DELAY;
         }
         break;
 
@@ -167,7 +167,7 @@ void update_help_state(void) {
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();
             RECORD_LATEST_TIME();
-            help_state.state = 6;
+            help_state.state = HELP_STATE_DISMISS_DELAY;
             RECORD_FLAGS();
             help_state.timer = 4 - help_state.timer;
         } else if (help_state.timer >= 4) {
@@ -176,7 +176,7 @@ void update_help_state(void) {
                 music_stream_state.secondary.state == 3) {
                 continue_audio_stream_if_ready();
             }
-            help_state.state = 5;
+            help_state.state = HELP_STATE_WAIT_FOR_DISMISSAL;
             help_state.timer = 0;
         }
         break;
@@ -194,7 +194,7 @@ void update_help_state(void) {
             (controller_state.pressed & PAD_TRIANGLE)) {
             RECORD_COUNT();
             RECORD_LATEST_TIME();
-            help_state.state = 6;
+            help_state.state = HELP_STATE_DISMISS_DELAY;
             help_state.timer = 0;
             RECORD_FLAGS();
         }
@@ -203,7 +203,7 @@ void update_help_state(void) {
 
     case HELP_STATE_DISMISS_DELAY:
         if (D_0015EE1D == 0 || help_state.timer >= 4 || (controller_state.pressed & PAD_TRIANGLE)) {
-            help_state.state = 7;
+            help_state.state = HELP_STATE_DISMISSING;
             help_state.timer = 0;
         }
         break;
@@ -219,9 +219,9 @@ void update_help_state(void) {
         }
         if (help_state.timer >= 8) {
             if (help_state.queued != 0) {
-                help_state.state = 8;
+                help_state.state = HELP_STATE_QUEUED_MESSAGE_WAIT;
             } else {
-                help_state.state = 0;
+                help_state.state = HELP_STATE_IDLE;
                 help_state.msg = -1;
             }
             help_state.timer = 0;

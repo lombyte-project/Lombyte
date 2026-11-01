@@ -8,9 +8,9 @@ extern s32 audio_dec_send() __asm__("func_0023AEF0");
 s32 proceed_audio(void) __asm__("FUN_0023aba0");
 
 s32 proceed_audio(void) {
-    s32 result;
-    result = audio_dec_send(&movie_player->audio_dec);
-    return result;
+    s32 audio_send_result;
+    audio_send_result = audio_dec_send(&movie_player->audio_dec);
+    return audio_send_result;
 }
 
 extern s32 func_0023ABA0(void) __attribute__((alias("FUN_0023aba0")));

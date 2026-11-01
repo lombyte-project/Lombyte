@@ -55,7 +55,7 @@ void pterodactyl_update(unsigned char *moby) {
             moby_data->i70 = absolute_float(first_segment_length - first_to_last_distance) < 0.1f;
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = PTERODACTYL_FOLLOW_PATH;
         MOBY(moby)->scale *= pterodactyl_scale_multiplier_gp;
         MOBY(moby)->update_dist = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:

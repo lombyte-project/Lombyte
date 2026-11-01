@@ -31,6 +31,16 @@
 #include "qcopy.h"
 
 /* Level 8 moby update (class 152): state machine that steers the moby toward the hero and fires its event. */
+enum {
+    BOMBER_TANK_STATE_INITIALIZE = 0,
+    BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM = 2,
+    BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
+    BOMBER_TANK_STATE_FOLLOW_PATH = 6,
+    BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11,
+    BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE = 14,
+    BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
+};
+
 typedef struct Moby Moby;
 extern float        D_0015ED70;
 extern int          D_0015ED84;
@@ -130,14 +140,6 @@ void bomber_tank_update(Moby *moby) __asm__("FUN_L08_002d42d8");
 
 /* Moby class 253 */
 void bomber_tank_update(Moby *moby) {
-    enum {
-        BOMBER_TANK_STATE_INITIALIZE = 0,
-        BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
-        BOMBER_TANK_STATE_FOLLOW_PATH = 6,
-        BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11,
-        BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE = 14,
-        BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
-    };
     float           old_pos[4];
     float           old_rot[4];
     float           velocity[4];
@@ -193,7 +195,7 @@ void bomber_tank_update(Moby *moby) {
         moby->flags |= 0x1000;
         bomber_tank_update_vars->unk16C = frame_time + frame_time;
         if (bomber_tank_update_vars->trigger_moby > 0) {
-            moby->state = 11;
+            moby->state = BOMBER_TANK_STATE_WAIT_FOR_TRIGGER;
             moby->flags = (moby->flags & 0xEFFF) | 0x41;
             bomber_tank_update_vars->part_a->flags |= 0x41;
             bomber_tank_update_vars->part_b->flags |= 0x41;
@@ -204,7 +206,7 @@ void bomber_tank_update(Moby *moby) {
                 blend_moby_animation(moby, 0, 0, 0);
         } else if (bomber_tank_update_vars->unk144 > 0) {
             if (D_0013D3B6 == 0) {
-                moby->state = 14;
+                moby->state = BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE;
                 moby->flags |= 0x41;
                 bomber_tank_update_vars->part_a->flags |= 0x41;
                 bomber_tank_update_vars->part_b->flags |= 0x41;
@@ -216,13 +218,13 @@ void bomber_tank_update(Moby *moby) {
             } else {
                 remove_bomber_tank_linked_debris(moby);
                 qcopy(&moby->pos, (char *)l08_paths[bomber_tank_update_vars->path] + 0x10);
-                moby->state = 6;
+                moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, 0);
             }
         } else {
             qcopy(&moby->pos, (char *)l08_paths[bomber_tank_update_vars->path] + 0x10);
-            moby->state = 6;
+            moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, 0);
         }
@@ -242,21 +244,21 @@ void bomber_tank_update(Moby *moby) {
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH:
         advance_bomber_tank_along_path(moby, bomber_tank_update_vars->path);
-        if (bomber_tank_update_vars->mode != 2 &&
+        if (bomber_tank_update_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM &&
             vector_distance_xy(&moby->pos, &target->pos) < 20.0f) {
             if (D_00141C38 == 0 && D_0013D4CB == 0) {
                 help_request(0x1F44, 0x5A);
             }
-            moby->state = 3;
+            moby->state = BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE;
             if (moby->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
         }
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE:
         advance_bomber_tank_along_path(moby, bomber_tank_update_vars->path);
-        if (bomber_tank_update_vars->mode == 2 ||
+        if (bomber_tank_update_vars->mode == BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM ||
             vector_distance_xy(&moby->pos, &target->pos) > 22.0f) {
-            moby->state = 6;
+            moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
@@ -296,15 +298,16 @@ void bomber_tank_update(Moby *moby) {
             bomber_tank_update_vars->part_b->collision =
                 bomber_tank_update_vars->part_b->pclass->collision;
             moby->flags |= 0x1000;
-            if (bomber_tank_update_vars->mode != 2) {
-                moby->state = 6;
+            if (bomber_tank_update_vars->mode !=
+                BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
+                moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         }
         break;
     case BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE:
-        if (bomber_tank_update_vars->mode != 2) {
+        if (bomber_tank_update_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
             unsigned char *event_flags;
             scatter_bomber_tank_linked_debris((char *)moby);
             event_flags = (unsigned char *)D_0013D388;
@@ -322,8 +325,9 @@ void bomber_tank_update(Moby *moby) {
             bomber_tank_update_vars->part_b->collision =
                 bomber_tank_update_vars->part_b->pclass->collision;
             moby->flags |= 0x1000;
-            if (bomber_tank_update_vars->mode != 2) {
-                moby->state = 6;
+            if (bomber_tank_update_vars->mode !=
+                BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
+                moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -445,7 +449,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     resolve_moby_hit_response(
         moby, source, &bomber_tank_damage_and_aim_vars->health, 0, &hit, &damage, 0, 4);
     one = 1;
-    if (hit != one && moby->state != 0) {
+    if (hit != one && moby->state != BOMBER_TANK_STATE_INITIALIZE) {
         bomber_tank_damage_and_aim_vars->health -= damage;
         if (damage != 0.0f)
             allocate_voice_for_target_entry(4, 0, moby);
@@ -668,7 +672,8 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                         ((Path *)l08_paths[bomber_tank_damage_and_aim_vars->path])->count);
     if (bomber_tank_damage_and_aim_vars->fF0 == 0)
         bomber_tank_damage_and_aim_vars->fF0 = *(int *)D_001413D0;
-    if (bomber_tank_damage_and_aim_vars->mode != 2) {
+    if (bomber_tank_damage_and_aim_vars->mode !=
+        BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
         float yaw, distance, pitch;
         fast_vec_sub(burst_position_or_aim_scratch,
                      bomber_tank_damage_and_aim_vars->target,
@@ -709,8 +714,10 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                         D_0015ED70 * 12.566371f,
                         D_0015ED6C_lui * 9.424778f);
     }
-    rotation_2D5FA8(burst_position_or_aim_scratch, 1, bomber_tank_damage_and_aim_vars->pitch);
-    rotation_2D5FA8(bomber_tank_damage_and_aim_vars->f110, 2, bomber_tank_damage_and_aim_vars->yaw);
+    build_axis_rotation_quaternion(
+        burst_position_or_aim_scratch, 1, bomber_tank_damage_and_aim_vars->pitch);
+    build_axis_rotation_quaternion(
+        bomber_tank_damage_and_aim_vars->f110, 2, bomber_tank_damage_and_aim_vars->yaw);
     multiply_quaternions(bomber_tank_damage_and_aim_vars->f110,
                          burst_position_or_aim_scratch,
                          bomber_tank_damage_and_aim_vars->f110);
@@ -1164,6 +1171,9 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
 
 /* Remove active mobys of the selected classes from this moby's linked group. */
 void remove_bomber_tank_linked_debris(struct Moby *moby) {
+    enum {
+        LINKED_MOBY_ACTIVE_STATE_LIMIT = 0x7f
+    };
     short *list =
         D_L08_001AC040[(((struct Moby *)D_L08_0015FFD8) + *(s32 *)(moby->pvars + 0x144))->group];
     struct Moby *linked_group_moby;
@@ -1173,7 +1183,8 @@ void remove_bomber_tank_linked_debris(struct Moby *moby) {
         index = *list & 0x7fff;
         linked_group_moby = (struct Moby *)D_L08_0015FFD8 + index;
         while (1) {
-            if (linked_group_moby->state < 0x7f && linked_group_moby != moby) {
+            if (linked_group_moby->state < LINKED_MOBY_ACTIVE_STATE_LIMIT &&
+                linked_group_moby != moby) {
                 u16 class_id = linked_group_moby->oclass;
                 if ((u32)(class_id - 0x24c) < 0xb) {
                     mark_moby_for_removal(linked_group_moby);

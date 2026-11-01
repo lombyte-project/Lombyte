@@ -25,13 +25,13 @@ void lightpost_update(struct Moby *lightpost_moby) {
     char *hit_result = find_moby_hit(lightpost_moby, 0x10000, 0);
     switch (lightpost_moby->state) {
     case LIGHTPOST_INITIALIZE:
-        lightpost_moby->state = 1;
+        lightpost_moby->state = LIGHTPOST_WAIT_FOR_HIT;
         break;
     case LIGHTPOST_WAIT_FOR_HIT:
         if (hit_result != 0 && *(float *)(hit_result + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
-            lightpost_moby->state = 2;
+            lightpost_moby->state = LIGHTPOST_REMOVE;
         break;
     case LIGHTPOST_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)lightpost_moby);

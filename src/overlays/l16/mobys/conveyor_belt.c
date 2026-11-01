@@ -68,7 +68,7 @@ void conveyor_belt_update(struct Moby *moby) {
         if (conveyor_data->unk60 == -1) {
             moby->flags |= 2;
         } else {
-            moby->state = 2;
+            moby->state = CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED;
         }
         conveyor_data->unk74 = -1;
         break;
@@ -91,7 +91,7 @@ void conveyor_belt_update(struct Moby *moby) {
             update_conveyor_group_motion_transforms(moby->group, conveyor_motion_vector);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, conveyor_data->clip_volume_64))
-            moby->state = 2;
+            moby->state = CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED;
         add_draw_callback(draw_conveyor_belt_strips, moby);
         break;
     }

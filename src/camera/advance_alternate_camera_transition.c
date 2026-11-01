@@ -38,6 +38,9 @@ int advance_alternate_camera_transition(char               *target_camera,
                                         struct CameraOrbit *orbit) __asm__("FUN_001eccd8");
 
 int advance_alternate_camera_transition(char *target_camera, struct CameraOrbit *orbit) {
+    enum {
+        CAMERA_TRANSITION_KIND_STORED_FOCUS_ORBIT = 2
+    };
     CameraVector orbit_angles;
     CameraVector forward_axis;
     CameraVector horizontal_axis;
@@ -66,7 +69,7 @@ int advance_alternate_camera_transition(char *target_camera, struct CameraOrbit 
     }
     step = 1.0f / cosine_interpolate(
                       1.0f, (f32)orbit->start_count, (f32)orbit->frames * orbit->frame_step);
-    if (cam_trans_state.kind == 2) {
+    if (cam_trans_state.kind == CAMERA_TRANSITION_KIND_STORED_FOCUS_ORBIT) {
         qcopy(&focus_position, D_0013F3D0);
         qcopy(&forward_axis, orbit->forward);
         qcopy(&vertical_axis, orbit->up);

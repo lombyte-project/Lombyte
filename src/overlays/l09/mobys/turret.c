@@ -85,7 +85,7 @@ extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void suck_draw_reticle(void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_001edf60");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern void  FUN_L00_001fff28(void *, int, float);
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 void         turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
 
 /* Moby class 1201 */
@@ -113,7 +113,7 @@ void turret_update(struct Moby *moby) {
     moby->flags &= ~4;
     moby_point_position(moby, 3, &seat);
     seat.f[2] += 0.4f;
-    if (moby->state >= 4) {
+    if (moby->state >= TURRET_STATE_IDLE) {
         if (fast_dec_timer_s16(&turret_vars->mount_delay) != 0 && moby->command == 1 &&
             hero.state.control_mode != 0x14 && hero.state.control_mode != 7 &&
             hero.state.current != 0x3D) {
@@ -129,17 +129,17 @@ void turret_update(struct Moby *moby) {
                 jet_end_mount(0);
                 hero_set_state(0, 1);
                 moby->command = 2;
-                moby->state = 4;
+                moby->state = TURRET_STATE_IDLE;
                 blend_moby_animation(moby, 0, 0, 1);
             } else {
-                if (moby->state != 5) {
+                if (moby->state != TURRET_STATE_MOUNTED) {
                     turret_vars->dismount_delay = 2;
                     jet_mount(&moby->pos, &moby->rot, 0, 0, 0);
                     if (moby->prev_seq != 5) {
                         blend_moby_animation(moby, 5, 0, scale_game_frames(5));
                     }
                 }
-                moby->state = 5;
+                moby->state = TURRET_STATE_MOUNTED;
             }
         } else if (moby->command == 2) {
             if (fast_vec_dist(&seat, &hero.moby->pos) > 1.2f || hero.ground_moby != moby) {
@@ -158,7 +158,7 @@ void turret_update(struct Moby *moby) {
         attach_manipulator(moby, 0, turret_vars);
         work_vector.q = *(u128 *)&moby->pos;
         spawn_turret_base(moby, &work_vector);
-        moby->state = 4;
+        moby->state = TURRET_STATE_IDLE;
         turret_vars->rest_z = moby->pos.z;
         turret_vars->pitch = 0.0f;
         moby->rot.z = 0.0f;
@@ -249,7 +249,7 @@ void turret_update(struct Moby *moby) {
         }
         turret_vars->yaw_speed *= 0.97f;
         turret_vars->pitch_speed *= 0.97f;
-        FUN_L00_001fff28(&turret_vars->aim, 1, -turret_vars->pitch);
+        build_axis_rotation_quaternion(&turret_vars->aim, 1, -turret_vars->pitch);
         if (controller_state.held & 0x20) {
             if (controller_state.pressed & 0x20) {
                 blend_moby_animation(moby, turret_vars->barrel == 0 ? 4 : 3, 0, 1);

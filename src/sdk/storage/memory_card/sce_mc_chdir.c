@@ -21,13 +21,16 @@ extern s32                   sceSifWriteBackDCache();
 extern s32                   strncpy(s8 *, s8 *, s32);
 
 s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
+    enum {
+        RPC_DISPATCH_SUCCESS = 0
+    };
     s32 rpc_dispatch_status;
-    s32 ret;
+    s32 chdir_request_status;
 
     if (mc_rpc_client.serve == 0) {
         return -0x64;
     }
-    ret = -0xC8;
+    chdir_request_status = -0xC8;
     if (PollSema(mc_sema) >= 0) {
         if ((path == NULL) || (*path == 0)) {
             SignalSema(mc_sema);
@@ -48,14 +51,14 @@ s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
                                             4,
                                             &mceStorePwd,
                                             pwd);
-        if (rpc_dispatch_status == 0) {
+        if (rpc_dispatch_status == RPC_DISPATCH_SUCCESS) {
             mc_current_func = MC_FUNC_CHDIR;
         } else {
             SignalSema(mc_sema);
         }
-        ret = rpc_dispatch_status;
+        chdir_request_status = rpc_dispatch_status;
         /* Duplicate return node #10. Try simplifying control flow for better match */
-        return ret;
+        return chdir_request_status;
     }
-    return ret;
+    return chdir_request_status;
 }

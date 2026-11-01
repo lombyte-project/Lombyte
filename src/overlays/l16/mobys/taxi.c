@@ -117,7 +117,7 @@ void taxi_update(struct Moby *moby) {
                 FUN_L16_002e4a58_c(moby);
                 request_taxi_destination_help_message(moby);
                 if ((pad_pressed_words[0] & 0x10) && *(int *)&D_L16_0015F594 == 8) {
-                    moby->state = 3;
+                    moby->state = TAXI_BLEND_TO_PATH_START;
                     matched_moby = find_group_moby_by_data_id(moby, *(short *)(taxi_data + 0xAE));
                     if (matched_moby != 0) {
                         matched_moby[0x20] = 2;
@@ -162,14 +162,14 @@ void taxi_update(struct Moby *moby) {
         if (1.0f <= *(float *)(taxi_data + 0xB0)) {
             *(float *)(taxi_data + 0xB0) = z;
             *(float *)(taxi_data + 0xB4) = z;
-            moby->state = 4;
+            moby->state = TAXI_FOLLOW_PATH;
         }
         break;
     case TAXI_FOLLOW_PATH:
         if (advance_taxi_path(moby)) {
             *(int *)(taxi_data + 0xB0) = 0;
             *(int *)(taxi_data + 0xB4) = 0;
-            moby->state = 5;
+            moby->state = TAXI_BLEND_TO_DESTINATION_POSE;
         }
         break;
     case TAXI_BLEND_TO_DESTINATION_POSE:
@@ -207,7 +207,7 @@ void taxi_update(struct Moby *moby) {
         if (1.0f <= *(float *)(taxi_data + 0xB0)) {
             *(int *)(taxi_data + 0xB0) = 0;
             *(int *)(taxi_data + 0xB4) = 0;
-            moby->state = 1;
+            moby->state = TAXI_WAIT_FOR_DEPARTURE;
             transfer_moby_placement_to_linked_moby(moby);
         }
         break;
@@ -219,12 +219,12 @@ void taxi_update(struct Moby *moby) {
             moby->visible = 1;
             moby->collision = taxi_model_collision;
             moby->flags = flags & 0xFFFE;
-            moby->state = 1;
+            moby->state = TAXI_WAIT_FOR_DEPARTURE;
         }
         break;
     }
     apply_taxi_wobble(moby);
-    if (moby->state >= 3 && moby->state <= 5) {
+    if (moby->state >= TAXI_BLEND_TO_PATH_START && moby->state <= TAXI_BLEND_TO_DESTINATION_POSE) {
         travel_player = &hero;
         travel_player->jump_lock_timer = 2;
         travel_player->unk1F4 = 2;
@@ -411,14 +411,19 @@ int advance_taxi_path(struct Moby *moby) {
 void request_taxi_destination_help_message(struct Moby *moby) __asm__("FUN_L16_002e4cd8");
 
 void request_taxi_destination_help_message(struct Moby *moby) {
+    enum {
+        TAXI_DESTINATION_FIRST_STOP = 0,
+        TAXI_DESTINATION_SECOND_STOP = 1,
+        TAXI_DESTINATION_THIRD_STOP = 2
+    };
     switch (*(short *)((char *)moby->pvars + 0xae)) {
-    case 0:
+    case TAXI_DESTINATION_FIRST_STOP:
         try_set_help_message(8, 0x3e89);
         break;
-    case 1:
+    case TAXI_DESTINATION_SECOND_STOP:
         try_set_help_message(8, 0x3e8a);
         break;
-    case 2:
+    case TAXI_DESTINATION_THIRD_STOP:
         try_set_help_message(8, 0x139A);
         break;
     case 3:

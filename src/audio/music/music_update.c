@@ -28,6 +28,11 @@ void music_update(void) {
         CROSSFADE_WAIT_TO_CONTINUE_PRIMARY = 4,
         CROSSFADE_WAIT_TO_RESET = 5
     };
+    enum {
+        CROSSFADE_IDLE = 0,
+        CD_READ_STATE_IDLE = 0,
+        CD_READ_STATE_PENDING_RETRY = 2
+    };
     s8  requested_track;
     s32 fade_volume;
     s32 handle;
@@ -55,7 +60,7 @@ void music_update(void) {
     }
     if (fast_dec_timer(&music_stream_state.retry_timer) != 0) {
         requested_track = music_stream_state.requested_track;
-        if (requested_track != -1 && music_stream_state.crossfade_state == 0) {
+        if (requested_track != -1 && music_stream_state.crossfade_state == CROSSFADE_IDLE) {
             if (music_stream_state.primary.track != requested_track) {
                 if (music_stream_state.requested_transition_track == -1 ||
                     music_transition(requested_track,
@@ -97,7 +102,7 @@ void music_update(void) {
                   music_stream_state.transition.crossfade_enabled == 0) &&
                  music_stream_state.transition.handle == 0) ||
                 (handle = music_stream_state.primary.handle) == 0) {
-                music_stream_state.crossfade_state = 3;
+                music_stream_state.crossfade_state = CROSSFADE_WAIT_TO_PRESEEK_PRIMARY;
                 music_stream_state.primary.state = 5;
             } else if (music_stream_state.primary.state != 9) {
                 /* The callback receives the old handle; mark its slot pending before submission. */
@@ -120,7 +125,7 @@ void music_update(void) {
                                     music_stream_state.primary.flags,
                                     music_stream_state.primary.volume);
                 music_stream_state.requested_track = -1;
-                music_stream_state.crossfade_state = 4;
+                music_stream_state.crossfade_state = CROSSFADE_WAIT_TO_CONTINUE_PRIMARY;
             }
             break;
         case CROSSFADE_WAIT_TO_CONTINUE_PRIMARY:
@@ -132,14 +137,14 @@ void music_update(void) {
                      music_stream_state.transition.handle == 0)) {
                     snd_continue_vag_stream(music_stream_state.primary.handle);
                     music_stream_state.primary.state = 8;
-                    music_stream_state.crossfade_state = 5;
+                    music_stream_state.crossfade_state = CROSSFADE_WAIT_TO_RESET;
                 }
             }
             break;
         case CROSSFADE_WAIT_TO_RESET:
             if (music_stream_state.transition.state != 4 ||
                 music_stream_state.transition.crossfade_enabled == 0) {
-                music_stream_state.crossfade_state = 0;
+                music_stream_state.crossfade_state = CROSSFADE_IDLE;
             }
             break;
         }
@@ -149,17 +154,17 @@ void music_update(void) {
     music_update_stream(&music_stream_state.secondary.handle);
     if (music_stream_state.break_requested != 0) {
         if (snd_stream_safe_cd_sync(1) == 0) {
-            music_stream_state.read_state = 0;
+            music_stream_state.read_state = CD_READ_STATE_IDLE;
             music_stream_state.break_requested = 0;
         }
     } else {
         pending_state = music_stream_state.read_state;
-        if (pending_state == 2) {
-            music_stream_state.read_state = 0;
+        if (pending_state == CD_READ_STATE_PENDING_RETRY) {
+            music_stream_state.read_state = CD_READ_STATE_IDLE;
             start_audio_stream_read(music_stream_state.read_dst,
                                     music_stream_state.read_sector,
                                     music_stream_state.read_sector_count);
-            if (music_stream_state.read_state == 0) {
+            if (music_stream_state.read_state == CD_READ_STATE_IDLE) {
                 music_stream_state.read_state = pending_state;
             }
         }

@@ -8,6 +8,10 @@ void music_remaining_time_callback(int remaining_time, long context) __asm__("FU
    enabled on the channel and crossfade_state 1, moves crossfade_state to 2
    and copies the time (and a quarter of it) into the crossfade fields. */
 void music_remaining_time_callback(int remaining_time, long channel_context) {
+    enum {
+        MUSIC_CROSSFADE_AWAITING_REMAINING_TIME = 1,
+        MUSIC_CROSSFADE_TIMING_INITIALIZED = 2
+    };
     struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(int)channel_context;
     struct MusicStreamState   *music_state;
     if (channel == 0) {
@@ -18,13 +22,13 @@ void music_remaining_time_callback(int remaining_time, long channel_context) {
         return;
     }
     music_state = &music_stream_state;
-    if (music_state->crossfade_state != 1) {
+    if (music_state->crossfade_state != MUSIC_CROSSFADE_AWAITING_REMAINING_TIME) {
         return;
     }
     if (remaining_time == 0) {
         return;
     }
-    music_state->crossfade_state = 2;
+    music_state->crossfade_state = MUSIC_CROSSFADE_TIMING_INITIALIZED;
     music_state->crossfade_remaining_time = channel->remaining_time;
     music_state->crossfade_interval = channel->remaining_time / 4;
 }

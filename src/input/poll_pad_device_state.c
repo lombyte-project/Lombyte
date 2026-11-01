@@ -12,6 +12,9 @@ void poll_pad_device_state(struct PadState *pad_state) {
         PAD_INPUT_POLLING = 1,
         PAD_BUTTON_PROFILE_TOO_LARGE = 2
     };
+    enum {
+        PAD_DEVICE_READY = 1
+    };
     s32 saved_pad_value;
     s32 pad_device_state;
     s32 byte_count;
@@ -25,7 +28,7 @@ void poll_pad_device_state(struct PadState *pad_state) {
     pad_state->prev_raw_held = saved_pad_value;
     pad_device_state = scePad2GetState(pad_state->socket);
     pad_state->device_state = pad_device_state;
-    if (pad_device_state == 1) {
+    if (pad_device_state == PAD_DEVICE_READY) {
         switch (pad_state->profile_state) {
         case PAD_PROFILE_INITIALIZATION: {
             byte_count = scePad2GetButtonProfile(pad_state->socket, pad_response_buffer);

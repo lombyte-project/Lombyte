@@ -19,6 +19,11 @@ int                select_moby_target_goal(char *comparison_source,
                                            float best) __asm__("FUN_L02_00261c80");
 
 int select_moby_target_goal(char *comparison_source, char *output_data, float best) {
+    enum {
+        TARGET_SELECTION_DEFAULT_HERO = 0,
+        TARGET_SELECTION_CANDIDATE = 1,
+        TARGET_SELECTION_HERO_EXCLUDED = 2
+    };
     struct Hero *hero = &hero_lui;
     char        *selected_moby;
     char        *candidate_moby;
@@ -28,10 +33,10 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
     float        candidate_metric;
 
     selected_moby = ((char *)hero->moby);
-    selection_status = 0;
+    selection_status = TARGET_SELECTION_DEFAULT_HERO;
     if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_moby = 0;
-        selection_status = 2;
+        selection_status = TARGET_SELECTION_HERO_EXCLUDED;
     }
     for (i = 1; i <= D_L02_001B0E30[0]; i++) {
         candidate_moby = D_L00_0015FFD8_25fcb8 + (D_L02_001B0E30[i] << 8);
@@ -49,7 +54,7 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = TARGET_SELECTION_CANDIDATE;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -68,7 +73,7 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = TARGET_SELECTION_CANDIDATE;
         }
     }
     if (selected_moby != 0) {

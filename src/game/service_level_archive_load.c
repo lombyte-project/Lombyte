@@ -87,7 +87,7 @@ s32 service_level_archive_load(void) {
     stage = (s16)D_0015EE48;
     switch (stage) {
     case LOAD_SHARED_ARCHIVE:
-        if (pal_mode != 0) {
+        if (pal_mode != FALSE) {
             sound_aligned_bytes = ((disc_table.sound_archive_alt.size << 11) + 0xFFF) & 0xFFFFF000;
         } else {
             sound_aligned_bytes = ((disc_table.sound_archive.size << 11) + 0xFFF) & 0xFFFFF000;
@@ -115,7 +115,7 @@ s32 service_level_archive_load(void) {
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case LOAD_SOUND_ARCHIVE:
-        if (pal_mode != 0) {
+        if (pal_mode != FALSE) {
             submit_audio_stream_io_request(sound_archive_base,
                                            disc_table.sound_archive_alt.sector,
                                            disc_table.sound_archive_alt.size);

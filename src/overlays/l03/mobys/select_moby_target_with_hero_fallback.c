@@ -16,6 +16,11 @@ extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 int select_moby_target_with_hero_fallback(char *a, char *o, float best) __asm__("FUN_L03_0024e830");
 
 int select_moby_target_with_hero_fallback(char *source_moby, char *target_output, float best) {
+    enum {
+        TARGET_SELECTION_HERO_FALLBACK = 0,
+        TARGET_SELECTION_CANDIDATE_SELECTED = 1,
+        TARGET_SELECTION_HERO_FALLBACK_SUPPRESSED = 2
+    };
     struct Hero *hero = &hero_lui;
     char        *selected_moby;
     char        *candidate_moby;
@@ -25,10 +30,10 @@ int select_moby_target_with_hero_fallback(char *source_moby, char *target_output
     float        candidate_comparison_value;
 
     selected_moby = ((char *)hero->moby);
-    target_selection_status = 0;
+    target_selection_status = TARGET_SELECTION_HERO_FALLBACK;
     if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_moby = 0;
-        target_selection_status = 2;
+        target_selection_status = TARGET_SELECTION_HERO_FALLBACK_SUPPRESSED;
     }
     for (i = 1; i <= D_L03_001B0930[0]; i++) {
         candidate_moby = D_L03_0015FFD8 + (D_L03_001B0930[i] << 8);
@@ -46,7 +51,7 @@ int select_moby_target_with_hero_fallback(char *source_moby, char *target_output
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
-            target_selection_status = 1;
+            target_selection_status = TARGET_SELECTION_CANDIDATE_SELECTED;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -65,7 +70,7 @@ int select_moby_target_with_hero_fallback(char *source_moby, char *target_output
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
-            target_selection_status = 1;
+            target_selection_status = TARGET_SELECTION_CANDIDATE_SELECTED;
         }
     }
     if (selected_moby != 0) {

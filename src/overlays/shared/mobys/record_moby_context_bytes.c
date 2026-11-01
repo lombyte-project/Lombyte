@@ -29,13 +29,16 @@ void record_moby_context_bytes(char  *source,
 void record_moby_context_bytes(
 
     char *source, int byte_count, char *context_moby, int mode, Table *entry_table) {
+    enum {
+        MOBY_CONTEXT_MODE_MOBY_RELATIVE = 1
+    };
     short  v20 = ((short)MOBY(context_moby)->save_id);
     short  v19 = MOBY(context_moby)->oclass;
     short  key;
     int    i;
     Entry *e;
     Entry *ne;
-    if (mode == 1) {
+    if (mode == MOBY_CONTEXT_MODE_MOBY_RELATIVE) {
         key = source - context_moby;
     } else {
         key = (int)source - *(unsigned short *)(context_moby + 0x78);

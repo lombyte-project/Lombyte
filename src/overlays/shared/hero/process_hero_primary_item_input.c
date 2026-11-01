@@ -131,6 +131,10 @@ void           set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020
 void apply_hero_item_slot_selection(int i) __asm__("FUN_L05_0023dc88");
 
 void apply_hero_item_slot_selection(int i) {
+    enum {
+        ITEM_SWITCH_GATE_RELOAD_ZERO_TIMER = 1,
+        ITEM_SWITCH_GATE_BLOCK_SWITCH = 2
+    };
     int           changed;
     int           flag6;
     int           flag4;
@@ -388,10 +392,11 @@ void apply_hero_item_slot_selection(int i) {
     {
         struct Hero *s = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
         item_switch_gate_state = s->items[0].switch_lock;
-        if (item_switch_gate_state == 2) {
+        if (item_switch_gate_state == ITEM_SWITCH_GATE_BLOCK_SWITCH) {
             changed = 0;
         }
-        if (item_switch_gate_state == 1 && s->items[0].timer == 0) {
+        if (item_switch_gate_state == ITEM_SWITCH_GATE_RELOAD_ZERO_TIMER &&
+            s->items[0].timer == 0) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
@@ -679,6 +684,9 @@ int process_hero_primary_item_input(void) {
         ITEM_AMMO_MENU_DEVICE = 32,
         ITEM_RACE_PROJECTILE = 36
     };
+    enum {
+        WRENCH_MOBY_STATE_READY = 0
+    };
     float joint_pos[4];
     int   press_time0, press_time1, press_time2;
     int   start_timer;
@@ -721,7 +729,7 @@ int process_hero_primary_item_input(void) {
             if (!is_wrench_moby(item)) {
                 break;
             }
-            if (item->state != 0) {
+            if (item->state != WRENCH_MOBY_STATE_READY) {
                 break;
             }
             if ((controller_state.held & 0xA) ||
@@ -1543,6 +1551,10 @@ extern s32   current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
 
 void update_hero_hoverboard_race_progress(void) {
+    enum {
+        RACE_RESPAWN_GATE_WAITING = 0,
+        RACE_RESPAWN_GATE_READY = 1
+    };
     float world_position_scratch[4] __attribute__((aligned(16)));
     float course_point_or_respawn_rotation[4] __attribute__((aligned(16)));
     Data *race_pvars;
@@ -1634,11 +1646,11 @@ void update_hero_hoverboard_race_progress(void) {
         if (hero.off_course_frames > FUN_001f96f8_254608(0xB4)) {
             if (race_respawn_request_active == 0) {
                 race_respawn_request_active = 1;
-                race_respawn_gate_state = 0;
+                race_respawn_gate_state = RACE_RESPAWN_GATE_WAITING;
                 D_L05_0015F67C = frame_scale * 0.08f;
             }
             hero.off_course_reset_pending = 1;
-            if (race_respawn_gate_state == 1) {
+            if (race_respawn_gate_state == RACE_RESPAWN_GATE_READY) {
                 hero.off_course_reset_pending = 0;
                 compute_hero_hoverboard_respawn_transform(world_position_scratch,
                                                           course_point_or_respawn_rotation);
@@ -1717,7 +1729,7 @@ void update_hero_hoverboard_race_progress(void) {
     if (D_0015ED84_lui == 5) {
         int fast_finish_threshold_frames;
 
-        if (pal_mode != 0) {
+        if (pal_mode != FALSE) {
             fast_finish_threshold_frames = FUN_001f96f8_254608(0x1680);
         } else {
             fast_finish_threshold_frames = FUN_001f96f8_254608(0x1644);
@@ -1813,7 +1825,8 @@ extern s32   current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 extern void  fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int   offset_path_index(void *, int, int, int) __asm__("FUN_L00_0025d7a0");
-extern int   D_L05_0015F698 __attribute__((sda));
+extern int   l05_hoverboard_trick_landing_frame_thresholds __asm__("D_L05_0015F698")
+    __attribute__((sda));
 
 int hero_pick_help_mode(void) __asm__("FUN_L05_00255208");
 
@@ -1842,9 +1855,9 @@ int hero_pick_help_mode(void) {
                 if (fast_difference_between_rotations(
                         fast_arc_tan(player->motion.velocity.f[0], player->motion.velocity.f[1]),
                         player->unk8A4) < 0.7853982f) {
-                    state = 0x6F;
+                    state = HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT;
                     if (!(player->ground_distance < 1.0f))
-                        state = 0x6D;
+                        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
                     goto change_state;
                 }
             }
@@ -1854,7 +1867,7 @@ int hero_pick_help_mode(void) {
     if ((&hero)->wall_hit) {
         float distance = vector_length_xy(&(&hero)->motion.displacement);
         if (distance < vector_length_xy(&(&hero)->motion.velocity) * 0.25f) {
-            state = 0x6D;
+            state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
             goto change_state;
         }
         level = *(int *)0x0015ED84;
@@ -1862,18 +1875,18 @@ int hero_pick_help_mode(void) {
     if (level == 5) {
         if ((&hero)->motion.pos.f[2] < 61.4f) {
             (&hero)->board_floor_z = 61.4f;
-            state = 0x6E;
+            state = HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT;
             goto change_state;
         }
     }
     if (level == 0x10) {
         if ((&hero)->motion.pos.f[2] < 76.0f) {
             (&hero)->board_floor_z = 76.0f;
-            state = 0x6E;
+            state = HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT;
             goto change_state;
         }
         if ((&hero)->on_slip_ground && (&hero)->ground_distance < 0.1f) {
-            state = 0x6D;
+            state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
             goto change_state;
         }
     }
@@ -1881,21 +1894,21 @@ int hero_pick_help_mode(void) {
         if ((&hero)->race_path != 0) {
             int index =
                 select_point_index_by_distance(&(&hero)->motion.pos, (&hero)->race_path, 0.0f);
-            int next = offset_path_index((&hero)->race_path, index, -1, 1);
+            int previous_path_point_index = offset_path_index((&hero)->race_path, index, -1, 1);
             (&hero)->wrong_way_path_point = index;
             if (*(int *)0x0015ED84 == 5) {
                 Path *path = (Path *)(&hero)->race_path;
                 float height = path->p[index].z;
-                float other = path->p[next].z;
+                float previous_path_point_height = path->p[previous_path_point_index].z;
                 float distance;
                 float minimum;
-                if (height < other)
+                if (height < previous_path_point_height)
                     minimum = height;
                 else
-                    minimum = other;
+                    minimum = previous_path_point_height;
                 distance = vector_distance_xy(&(&hero)->motion.pos, &path->p[index]);
                 if (0.5f < minimum - (&hero)->motion.pos.f[2] && 4.0f < distance) {
-                    state = 0x6D;
+                    state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
                     goto change_state;
                 }
             }
@@ -1921,21 +1934,22 @@ int hero_pick_help_mode(void) {
     if (!((&hero)->motion.velocity.f[2] < 0.0f))
         return 0;
     if (1.0471976f < absolute_float((&hero)->motion.rot.f[1])) {
-        state = 0x6D;
+        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }
     if (1.0471976f < absolute_float((&hero)->motion.rot.f[0])) {
-        state = 0x6D;
+        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }
     if (1.3962634f <
         fast_difference_between_rotations((&hero)->motion.rot.f[2], (&hero)->board_air_yaw)) {
-        state = 0x6D;
+        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }
     if ((unsigned)(*((unsigned char *)(&hero)->moby + 0x53) - 0x69) < 4 &&
-        (&hero)->anim_frame < (float)(&D_L05_0015F698)[(&hero)->air_pose_index]) {
-        state = 0x6D;
+        (&hero)->anim_frame <
+            (float)(&l05_hoverboard_trick_landing_frame_thresholds)[(&hero)->air_pose_index]) {
+        state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
         goto change_state;
     }
     goto continue_fall;

@@ -151,6 +151,9 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         PLUMBER_LEVEL_EIGHT_POST_DIALOGUE = 5,
         PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED = 6
     };
+    enum {
+        PLUMBER_FALLBACK_DIALOGUE_INITIALIZED = 7
+    };
     L01WatchScratch look_tracking_vectors;
     L01WatchData   *plumber_vars = (L01WatchData *)plumber_moby->data;
     float           rate;
@@ -175,20 +178,20 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
                 return;
             }
             plumber_vars->p20 = (void *)plumber_level_one_dialogue_data;
-            plumber_moby->state = 1;
+            plumber_moby->state = PLUMBER_LEVEL_ONE_DIALOGUE;
         } else if (current_level_index == 8) {
             plumber_vars->p20 = (void *)plumber_level_eight_dialogue_data;
-            plumber_moby->state = 4;
+            plumber_moby->state = PLUMBER_LEVEL_EIGHT_DIALOGUE;
         } else {
             plumber_vars->p20 = (void *)plumber_fallback_dialogue_data;
-            plumber_moby->state = 7;
+            plumber_moby->state = PLUMBER_FALLBACK_DIALOGUE_INITIALIZED;
         }
         initialize_npc_dialogue(plumber_moby, plumber_vars);
         break;
     case PLUMBER_LEVEL_ONE_DIALOGUE:
         if (update_npc_dialogue(plumber_moby, plumber_vars)) {
             begin_dialogue_camera_transition(plumber_moby, 2.2f);
-            plumber_moby->state = 2;
+            plumber_moby->state = PLUMBER_LEVEL_ONE_POST_DIALOGUE;
         }
         break;
     case PLUMBER_LEVEL_ONE_POST_DIALOGUE:
@@ -201,11 +204,11 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
                 jet_reset_camera(&camera_record->pos, &camera_record->rot);
             }
         }
-        plumber_moby->state = 1;
+        plumber_moby->state = PLUMBER_LEVEL_ONE_DIALOGUE;
         if (plumber_vars->sub == 4) {
             unlock_planet(2);
             queue_planet_unlock_message(2);
-            plumber_moby->state = 3;
+            plumber_moby->state = PLUMBER_REMOVE;
             record_moby_context_bytes(
                 (char *)plumber_moby + 0x20, 1, plumber_moby, 1, D_L01_001BAAA0);
             memcard_save_data(0, -1);
@@ -216,7 +219,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         return;
     case PLUMBER_LEVEL_EIGHT_DIALOGUE:
         if (update_npc_dialogue(plumber_moby, plumber_vars)) {
-            plumber_moby->state = 5;
+            plumber_moby->state = PLUMBER_LEVEL_EIGHT_POST_DIALOGUE;
             plumber_vars->b8 = 0;
         }
         break;
@@ -227,9 +230,9 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
             D_0013F350_w.f80 = 130.5f;
             D_0013F350_w.f84 = 299.5f;
             D_0013F350_w.f88 = 46.0f;
-            plumber_moby->state = 6;
+            plumber_moby->state = PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED;
         } else {
-            plumber_moby->state = 4;
+            plumber_moby->state = PLUMBER_LEVEL_EIGHT_DIALOGUE;
         }
         break;
     case PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED:

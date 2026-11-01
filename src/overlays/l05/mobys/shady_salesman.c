@@ -105,7 +105,7 @@ void shady_salesman_update(WM *moby) {
         moby->position[2] += 0.5f;
         moby->position[2] = probe_ground_height(moby->position, 0, 0.5f);
         npc_data->ptr20 = (void *)shady_salesman_dialogue_name;
-        moby->state = 1;
+        moby->state = SHADY_SALESMAN_UPDATE_DIALOGUE;
         initialize_npc_dialogue(moby, npc_data);
         break;
     case SHADY_SALESMAN_UPDATE_DIALOGUE:

@@ -306,6 +306,9 @@ f32               D_L18_00162768[2] = {0.017453292f, 0.02268928f};
 void follow_camera_build_view(u8 *p) __asm__("FUN_L00_002e9010");
 
 void follow_camera_build_view(u8 *camera) {
+    enum {
+        VIEW_BLEND_NO_REMAINING_FRAMES = 0
+    };
     u8 *follow_state_block;
     u8 *camera_state;
     u8 *reloaded_camera_state;
@@ -425,7 +428,7 @@ void follow_camera_build_view(u8 *camera) {
             FUN_001f9bf8_2e9010(camera, camera, 1.0f);
         }
     }
-    if (*(s16 *)view_blend_and_smoothing_state != 0) {
+    if (*(s16 *)view_blend_and_smoothing_state != VIEW_BLEND_NO_REMAINING_FRAMES) {
         fast_dec_timer_s16(view_blend_and_smoothing_state);
         remaining_view_blend_frames =
             convert_integer_to_float(*(s16 *)view_blend_and_smoothing_state);

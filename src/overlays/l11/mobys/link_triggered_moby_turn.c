@@ -28,6 +28,9 @@ void link_triggered_moby_turn_update(struct Moby *turning_moby) {
         LINKED_TURN_STATE_WAIT_FOR_LINK = 1,
         LINKED_TURN_STATE_ROTATE_TO_TARGET = 2
     };
+    enum {
+        LINKED_TURN_STATE_COMPLETE = 3
+    };
     int    entry_state = turning_moby->state;
     float *private_data = (float *)turning_moby->pvars;
     float  target_angle;
@@ -35,17 +38,17 @@ void link_triggered_moby_turn_update(struct Moby *turning_moby) {
     switch (entry_state) {
     case LINKED_TURN_STATE_INITIALIZE:
         turning_moby->update_dist = 0xFF;
-        turning_moby->state = 1;
+        turning_moby->state = LINKED_TURN_STATE_WAIT_FOR_LINK;
         private_data[2] = turning_moby->rot.z;
         break;
     case LINKED_TURN_STATE_WAIT_FOR_LINK:
         if (test_linked_moby_turn_trigger(D_L11_0015FFD8_t + (*(int *)private_data << 8))) {
             if (level_frame >= 11) {
                 D_0013D3E3_t[0] = entry_state;
-                turning_moby->state = 2;
+                turning_moby->state = LINKED_TURN_STATE_ROTATE_TO_TARGET;
                 allocate_voice_for_target_entry(0, 0, turning_moby);
             } else {
-                turning_moby->state = 3;
+                turning_moby->state = LINKED_TURN_STATE_COMPLETE;
                 turning_moby->rot.z = fast_add_rotations(private_data[2], 1.0471976f);
             }
         }
@@ -59,7 +62,7 @@ void link_triggered_moby_turn_update(struct Moby *turning_moby) {
                            turn_acceleration_step,
                            turn_acceleration_step,
                            frame_time * 0.7853982f) == 0.0f) {
-            turning_moby->state = 3;
+            turning_moby->state = LINKED_TURN_STATE_COMPLETE;
         }
         break;
     }

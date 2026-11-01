@@ -14,6 +14,11 @@
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/world/collision/collision_line.h"
 
+enum {
+    ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,
+    ENERGY_SPHERE_MOVE_AND_DETONATE = 2
+};
+
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319FA0), where it is exact; names translated to the US level program. */
@@ -47,10 +52,6 @@ extern int   scale_game_frames(int);
 
 /* Moby class 1297 */
 void energy_sphere_update(unsigned char *moby) {
-    enum {
-        ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,
-        ENERGY_SPHERE_MOVE_AND_DETONATE = 2
-    };
     char  *energy_sphere_private_vars = ((char *)MOBY(moby)->pvars);
     float  previous_position[4];
     float *vp;
@@ -170,7 +171,7 @@ void set_moby_state_two_data_and_timer(struct Moby *moby, void *src) __asm__("FU
 
 void set_moby_state_two_data_and_timer(struct Moby *moby, void *movement_step) {
     char *moby_vars;
-    moby->state = 2;
+    moby->state = ENERGY_SPHERE_MOVE_AND_DETONATE;
     moby_vars = (char *)moby->pvars;
     qcopy(moby_vars, movement_step);
     *(int *)(moby_vars + 0x20) = scale_game_frames(0x3C);
@@ -225,14 +226,14 @@ void spawn_moby_radial_spark(struct Moby *source_moby) {
 
 extern float          D_L11_001677C0_lui[] __asm__("D_L11_001677C0") NOT_SDA;
 extern int            FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *FUN_L00_00272f68_q(float         f,
-                                         void         *pos,
-                                         int           a1,
-                                         unsigned char a2,
-                                         int           idx,
-                                         int           flag,
-                                         int           s,
-                                         int           mode) __asm__("FUN_L00_00272f68");
+extern unsigned char *spawn_timed_hero_relative_particle(float         f,
+                                                         void         *pos,
+                                                         int           a1,
+                                                         unsigned char a2,
+                                                         int           idx,
+                                                         int           flag,
+                                                         int           s,
+                                                         int mode) __asm__("FUN_L00_00272f68");
 
 extern short energy_sphere_particle_color_end_gp __asm__("D_L11_00162384") __attribute__((sda));
 extern short energy_sphere_particle_color_start_gp __asm__("D_L11_00162380") __attribute__((sda));
@@ -257,15 +258,16 @@ void spawn_energy_sphere_particles(struct Moby *moby) {
         unsigned char updated_effect_byte;
         effect_byte_cursor[0] += effect_byte_cursor[4];
         updated_effect_byte = truncate_float_to_s32((float)effect_byte_cursor[0]);
-        FUN_L00_00272f68_q(*(float *)(energy_sphere_vars + 0x1C) *
-                               convert_integer_to_float(effect_byte_cursor[8]) * 0.025f,
-                           effect_position,
-                           a,
-                           updated_effect_byte,
-                           0x35,
-                           1,
-                           2,
-                           0);
+        spawn_timed_hero_relative_particle(*(float *)(energy_sphere_vars + 0x1C) *
+                                               convert_integer_to_float(effect_byte_cursor[8]) *
+                                               0.025f,
+                                           effect_position,
+                                           a,
+                                           updated_effect_byte,
+                                           0x35,
+                                           1,
+                                           2,
+                                           0);
         effect_byte_cursor++;
         fast_vec_add(effect_position, effect_position, position_step);
     }

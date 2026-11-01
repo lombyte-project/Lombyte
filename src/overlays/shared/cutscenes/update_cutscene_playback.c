@@ -214,8 +214,8 @@ void handle_pause_input(void) {
         return;
     }
     area = current_level_index;
-    if (area == 15 && level_timer >= 8 && hero.vehicle_mode == 2 && HELD &&
-        hero.state.current != 0x72) {
+    if (area == 15 && level_timer >= 8 && hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
+        HELD && hero.state.current != 0x72) {
         if (D_L00_00166E00->h86 == 0x13)
             return;
         mode_freeze_init(4, 0);
@@ -391,7 +391,7 @@ void             music_pause(int) __asm__("FUN_00216050");
 extern int       update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
 void             fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void             clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-void             FUN_L00_00232fe8(void);
+void             set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 int              start_cutscene_chunk_read(int) __asm__("FUN_L00_002451b8");
 void             update_world_object_animation(void) __asm__("FUN_00204790");
 void             sound_update(void) __asm__("FUN_0022ca50");
@@ -433,7 +433,7 @@ void start_scene(int scene_id) {
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     hero.unk20A5 = 1;
-    FUN_L00_00232fe8();
+    set_hero_item_moby_flag_bit0();
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags |= 1;
     if (D_L00_001B9CF0.unkEC)
@@ -498,7 +498,7 @@ extern float     D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18  D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void             select_level_vu_chain(void) __asm__("FUN_002335a0");
-void             FUN_L00_002330d0(void);
+void             update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 void             set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void             process_menu_entry(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void             music_set_active_track_value(int) __asm__("FUN_L00_00265880");
@@ -534,7 +534,7 @@ void finish_cutscene(void) {
     if (2.0f < hero_candidate_z && absolute_float(hero.motion.pos.f[2] - hero_candidate_z) < 4.5f)
         hero.motion.pos.f[2] = hero_candidate_z;
     hero.unk20A5 = 0;
-    FUN_L00_002330d0();
+    update_hero_item_moby_flags();
     if (D_L00_0016C860_298b18.x46) {
         f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
         if (2.0f < f && absolute_float(D_L00_0016C860_298b18.x18 - f) < 2.0f)
@@ -823,22 +823,22 @@ void hero_respawn() __asm__("FUN_L00_00211250");
 void queue_scene_movie_with_game_language(s32 i) __asm__("FUN_L00_00299460");
 
 void queue_scene_movie_with_game_language(s32 i) {
-    s32          a, b;
+    s32          scene_movie_sector, scene_movie_size;
     struct Hero *hero_ptr;
     if (i < 0)
         return;
     if (D_0015ED80) {
-        a = disc_table.unk18A0[i].sector;
-        b = disc_table.unk18A0[i].size;
+        scene_movie_sector = disc_table.unk18A0[i].sector;
+        scene_movie_size = disc_table.unk18A0[i].size;
     } else {
-        a = disc_table.unk1808[i].sector;
-        b = disc_table.unk1808[i].size;
+        scene_movie_sector = disc_table.unk1808[i].sector;
+        scene_movie_size = disc_table.unk1808[i].size;
     }
     hero_ptr = &hero;
     if (hero_ptr->health.hp == 0) {
         hero_respawn();
     } else if (hero_ptr->fall_fade_pending == 0) {
-        prepare_movie_playback(a, b, game_language);
+        prepare_movie_playback(scene_movie_sector, scene_movie_size, game_language);
     }
 }
 
@@ -846,17 +846,17 @@ void queue_scene_movie_with_game_language(s32 i) {
 void queue_language_zero_movie(s32 i) __asm__("FUN_L00_002994f8");
 
 void queue_language_zero_movie(s32 i) {
-    s32 a, b;
+    s32 queued_movie_sector, queued_movie_size;
     if (i < 0)
         return;
     if (D_0015ED80) {
-        a = disc_table.unk1A50[i].sector;
-        b = disc_table.unk1A50[i].size;
+        queued_movie_sector = disc_table.unk1A50[i].sector;
+        queued_movie_size = disc_table.unk1A50[i].size;
     } else {
-        a = disc_table.unk1A28[i].sector;
-        b = disc_table.unk1A28[i].size;
+        queued_movie_sector = disc_table.unk1A28[i].sector;
+        queued_movie_size = disc_table.unk1A28[i].size;
     }
-    prepare_movie_playback(a, b, 0);
+    prepare_movie_playback(queued_movie_sector, queued_movie_size, 0);
 }
 
 /* Passes movie i (the alt table while D_0015ED80 is set) and the language to FUN_L00_002995d0. */
@@ -963,7 +963,7 @@ void count_vsync(void) __asm__("FUN_0012f1c8");
 void movie_exit_to_gameplay(void) __asm__("FUN_L00_002997c8");
 
 void movie_exit_to_gameplay(void) {
-    char                       buf[0x70] __attribute__((aligned(16)));
+    char                       gs_image_transfer_descriptor[0x70] __attribute__((aligned(16)));
     s32                        large_count, small_count, gs_address, source, i, j;
     struct ActiveSceneTrigger *active;
     D_L00_0015F5D8 = 1;
@@ -976,22 +976,22 @@ void movie_exit_to_gameplay(void) {
     small_count = D_0015ED80 != 0 ? 0xE : 0x11;
     i = 0;
     while (i < large_count) {
-        FUN_00122518_2997c8(buf, gs_address >> 8, 2, 1, 0, 0, 0x80, 0x80);
+        FUN_00122518_2997c8(gs_image_transfer_descriptor, gs_address >> 8, 2, 1, 0, 0, 0x80, 0x80);
         i++;
         gs_address += 0x10000;
         flush_cache(0);
-        FUN_001227d8_2997c8(buf, source);
+        FUN_001227d8_2997c8(gs_image_transfer_descriptor, source);
         source += 0xC000;
         sceGsSyncPath(0, 0);
     }
     gs_address = D_0015EE78_macro[0];
     j = 0;
     while (j < small_count) {
-        FUN_00122518_2997c8(buf, gs_address >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        FUN_00122518_2997c8(gs_image_transfer_descriptor, gs_address >> 8, 1, 0, 0, 0, 0x40, 0x40);
         j++;
         gs_address += 0x4000;
         flush_cache(0);
-        FUN_001227d8_2997c8(buf, source);
+        FUN_001227d8_2997c8(gs_image_transfer_descriptor, source);
         source += 0x4000;
         sceGsSyncPath(0, 0);
     }
@@ -1138,6 +1138,10 @@ extern void FUN_0022ca50(void);
 void update_slideshow(void) __asm__("FUN_L00_00299c48");
 
 void update_slideshow(void) {
+    enum {
+        SLIDESHOW_STATE_WAIT_FOR_TRANSITION = 0,
+        SLIDESHOW_STATE_TRANSITION = 1
+    };
     s32  skip_check;
     s32  i;
     s32 *src;
@@ -1153,7 +1157,7 @@ void update_slideshow(void) {
     if ((u8)D_0013D1D0[2] != 'A') {
         skip_check = 0;
     }
-    if (slideshow.state == 0) {
+    if (slideshow.state == SLIDESHOW_STATE_WAIT_FOR_TRANSITION) {
         if (slideshow.frame >= slideshow_frame_thresholds[slideshow.slide] - 0x24) {
             if (cd_read_active[0] != 0) {
                 update_audio_stream_until_idle(1);
@@ -1167,9 +1171,9 @@ void update_slideshow(void) {
                 goto end_show;
             }
             slideshow.timer = -1;
-            slideshow.state = 1;
+            slideshow.state = SLIDESHOW_STATE_TRANSITION;
         }
-    } else if (slideshow.state == 1) {
+    } else if (slideshow.state == SLIDESHOW_STATE_TRANSITION) {
         vu1_sync_chain(1);
         if (slideshow.timer < 0x20) {
             src = slideshow.src;
@@ -1197,7 +1201,7 @@ void update_slideshow(void) {
                     slideshow.frame = 0x32B4;
                 }
             }
-            slideshow.state = 0;
+            slideshow.state = SLIDESHOW_STATE_WAIT_FOR_TRANSITION;
             slideshow.timer = -1;
             slideshow.slide++;
             slide = slideshow.slide % 20;

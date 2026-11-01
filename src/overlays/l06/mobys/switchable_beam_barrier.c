@@ -14,7 +14,7 @@
 
 extern float D_L06_00167540[];
 
-extern char *D_L06_0015FFD8 __asm__("D_L06_0015FFD8");
+extern char *level_mobys_q __asm__("D_L06_0015FFD8");
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
@@ -36,7 +36,7 @@ extern float D_0015ED6C;
 
 #include "rnc/overlay/l06/mobys/switchable_beam_barrier_data/update_switchable_beam_barrier_3.h"
 
-extern float D_L06_001FE890[];
+extern float l06_vector_stream_copy_rotations[] __asm__("D_L06_001FE890");
 extern int   D_L06_00162234;
 extern int   D_L06_00162238;
 extern float D_L06_001621F8 __attribute__((sda));
@@ -64,6 +64,9 @@ void switchable_beam_barrier_update(char *moby) {
         UPDATE_VECTOR_STREAMS = 2,
         EMIT_PARTICLE_BURST = 3
     };
+    enum {
+        PARTICLE_BURST_COMPLETE = 4
+    };
     Data_305E38 *vector_stream_vars = ((Data_305E38 *)MOBY(moby)->pvars);
     union {
         float tmp[30][4];
@@ -86,18 +89,18 @@ void switchable_beam_barrier_update(char *moby) {
         vector_stream_vars->timer[0] = 0;
         vector_stream_vars->f18 = -1;
         if (vector_stream_vars->f10 != -1) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = WAIT_FOR_LINKED_MOBY;
             MOBY(moby)->collision = 0;
         } else {
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = UPDATE_VECTOR_STREAMS;
         }
         break;
     case WAIT_FOR_LINKED_MOBY: {
-        char *e = D_L06_0015FFD8 + (vector_stream_vars->f10 << 8);
+        char *e = level_mobys_q + (vector_stream_vars->f10 << 8);
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
         }
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = UPDATE_VECTOR_STREAMS;
         MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         break;
     }
@@ -151,10 +154,10 @@ void switchable_beam_barrier_update(char *moby) {
             add_draw_callback((int)draw_moby_vector_streams, moby);
         }
         if (vector_stream_vars->f14 >= 0 &&
-            *(unsigned char *)(D_L06_0015FFD8 + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
+            *(unsigned char *)(level_mobys_q + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
             int voice_slot_index;
             MOBY(moby)->collision = 0;
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = EMIT_PARTICLE_BURST;
             voice_slot_index = vector_stream_vars->f18;
             if (voice_slot_index != -1) {
                 char *e = ((char *)&voice_pool) + voice_slot_index * 0x70;
@@ -175,7 +178,7 @@ void switchable_beam_barrier_update(char *moby) {
         set_scale_matrix(u.m.b, D_L06_00162208);
         multiply_matrix(u.m.a, u.m.a, u.m.b);
         for (i = 0; i < 4; i++) {
-            euler_rotation_matrix(u.m.b, &D_L06_001FE890[i * 4]);
+            euler_rotation_matrix(u.m.b, &l06_vector_stream_copy_rotations[i * 4]);
             multiply_matrix(u.m.b, u.m.a, u.m.b);
             fast_vec_add(u.m.b + 12, u.m.b + 12, moby + 0x10);
             u.m.b[14] += (float)i * 1.7f + 0.6f;
@@ -209,7 +212,7 @@ void switchable_beam_barrier_update(char *moby) {
                                     0);
             }
         }
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = PARTICLE_BURST_COMPLETE;
         break;
     }
     }
@@ -298,7 +301,7 @@ void draw_moby_vector_streams(char *moby) {
     transform_matrix_base = copy_transform_matrices[0];
     sp = shared_helper_arguments;
     pp = copy_transform_matrices[0] + 12;
-    tp = D_L06_001FE890;
+    tp = l06_vector_stream_copy_rotations;
     mp = transform_matrix_base;
     for (i = 0; i < 4; i++) {
         euler_rotation_matrix(mp, tp);

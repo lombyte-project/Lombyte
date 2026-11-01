@@ -74,6 +74,9 @@ void linked_spark_emitter_update(unsigned char *moby) {
         EMIT_SPARKS = 1,
         WAIT_FOR_EFFECT_TIMEOUT = 2
     };
+    enum {
+        EFFECT_DISABLED = 3
+    };
     unsigned char *moby_data = ((unsigned char *)MOBY(moby)->pvars);
     float          V[4];
     float          W[16];
@@ -91,11 +94,11 @@ void linked_spark_emitter_update(unsigned char *moby) {
             (((*(int *)(D_0014C190 + (((short)id >> 5) * 4) + (D_0015ED84 << 8)) >> (id & 0x1F)) ^
               1) &
              1)) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = EMIT_SPARKS;
         } else {
             MOBY(moby)->command = 0xFF;
             MOBY(moby)->collision = 0;
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = EFFECT_DISABLED;
         }
         break;
     }
@@ -105,10 +108,11 @@ void linked_spark_emitter_update(unsigned char *moby) {
             visited52[(unsigned char)MOBY(moby)->mission + (D_0015ED84 << 4)] == 0xFF) {
             mark_moby_killed_and_release_owned_voice(moby);
         } else {
-            Voice *e = (Voice *)((unsigned char *)&voice_pool + MOBY(moby)->command * 0x70);
-            float  lo, hi, z, one;
-            int    i;
-            if (e->owner != (char *)moby || e->active == 0) {
+            Voice *emitter_voice_slot =
+                (Voice *)((unsigned char *)&voice_pool + MOBY(moby)->command * 0x70);
+            float lo, hi, z, one;
+            int   i;
+            if (emitter_voice_slot->owner != (char *)moby || emitter_voice_slot->active == 0) {
                 MOBY(moby)->command = allocate_voice_for_target_entry(0, 4, moby);
             }
             fast_vec_sub(V, D_0013F420, &MOBY(moby)->pos);
@@ -164,7 +168,7 @@ void linked_spark_emitter_update(unsigned char *moby) {
     }
     case WAIT_FOR_EFFECT_TIMEOUT:
         if ((*(int *)(moby_data + 0x14))++ >= 0x3D) {
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = EFFECT_DISABLED;
         } else {
             qzero(moby_data);
             add_draw_callback(func_L15_002A4318_2A3DD0, moby);

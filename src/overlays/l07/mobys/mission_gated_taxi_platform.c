@@ -66,6 +66,10 @@ typedef struct MissionGatedTaxiPlatformVars {
 
 /* Moby class 1474 */
 void mission_gated_taxi_platform_update(struct Moby *moby) {
+    enum {
+        TAXI_PLATFORM_STATE_UNINITIALIZED = 0,
+        TAXI_PLATFORM_STATE_INITIALIZED = 1
+    };
     MissionGatedTaxiPlatformVars *mission_gated_taxi_vars =
         (MissionGatedTaxiPlatformVars *)moby->pvars;
     char *path;
@@ -81,7 +85,7 @@ void mission_gated_taxi_platform_update(struct Moby *moby) {
     path = D_L07_001B0530[mission_gated_taxi_vars->path];
     qcopy(orig, &moby->pos);
     fast_dec_timer_s16(&mission_gated_taxi_vars->timer);
-    if (moby->state == 0) {
+    if (moby->state == TAXI_PLATFORM_STATE_UNINITIALIZED) {
         float f;
         char *pts;
         mission_gated_taxi_vars->unk28 = 4;
@@ -98,7 +102,7 @@ void mission_gated_taxi_platform_update(struct Moby *moby) {
         mission_gated_taxi_vars->timer = 0;
         *(int *)&mission_gated_taxi_vars->unkA8 = 0;
         *(int *)&mission_gated_taxi_vars->unkBC = 0;
-        moby->state = 1;
+        moby->state = TAXI_PLATFORM_STATE_INITIALIZED;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0xFF;
         mission_gated_taxi_vars->unkC4 = -1;

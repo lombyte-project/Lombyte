@@ -15,6 +15,9 @@ s32 audio_dec_create(struct AudioDec *dec,
                      s32              buffer_size,
 
                      s32 globals_address) {
+    enum {
+        AUDIO_DEC_STATE_INITIAL = 0
+    };
     s32 movie_handle;
     s32 three;
     s32 four;
@@ -24,7 +27,7 @@ s32 audio_dec_create(struct AudioDec *dec,
     dec->size = buffer_size;
     three = 3;
     dec->strType = three;
-    dec->state = 0;
+    dec->state = AUDIO_DEC_STATE_INITIAL;
     dec->hdrCount = 0;
     dec->put = 0;
     dec->count = 0;

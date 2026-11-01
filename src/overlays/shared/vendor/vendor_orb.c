@@ -8,7 +8,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/attach_manipulator.h"
 
-void FUN_L00_001fff28(char *, int, float);
+void build_axis_rotation_quaternion(char *, int, float) __asm__("FUN_L00_001fff28");
 
 float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") = 45.0f;
 
@@ -43,7 +43,7 @@ void vendor_orb_update(unsigned char *moby) {
     float rotation_step_radians;
     switch (MOBY(moby)->state) {
     case VENDOR_ORB_INITIALIZE:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = VENDOR_ORB_ROTATE;
         MOBY(moby)->unk73 = 0x20;
         *(float *)(manipulator + 0x40) = random_angle_radians();
         attach_manipulator(moby, 1, manipulator);
@@ -53,7 +53,7 @@ void vendor_orb_update(unsigned char *moby) {
         MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, rotation_step_radians);
         *(float *)(manipulator + 0x40) =
             fast_add_rotations(*(float *)(manipulator + 0x40), rotation_step_radians * -2.0f);
-        FUN_L00_001fff28(manipulator + 0x10, 2, *(float *)(manipulator + 0x40));
+        build_axis_rotation_quaternion(manipulator + 0x10, 2, *(float *)(manipulator + 0x40));
         break;
     }
 }

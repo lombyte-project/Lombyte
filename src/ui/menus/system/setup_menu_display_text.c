@@ -11,7 +11,7 @@ extern void        setup_gif_paging(int) __asm__("func_001F4280");
 extern void        do_gif_paging(void) __asm__("func_001F4398");
 extern void        draw_moby_list(void *, int) __asm__("func_0020D330");
 extern void       *get_help_message_text(int) __asm__("func_001FDD10");
-extern const float D_001602A4_gp __asm__("D_001602A4") __attribute__((sda));
+extern const float setup_menu_moby_camera_y_offset __asm__("D_001602A4") __attribute__((sda));
 extern char        setup_menu_text_format[] __asm__("D_001602A8");
 extern int         menu_display_value_by_level[] __asm__("D_001E0888");
 
@@ -27,7 +27,7 @@ int setup_menu_display_text(struct MenuScreen *menu) {
     int                   count;
 
     preview_moby->pos.x = camera->position.f[0] + 8.0f;
-    preview_moby->pos.y = camera->position.f[1] + D_001602A4_gp;
+    preview_moby->pos.y = camera->position.f[1] + setup_menu_moby_camera_y_offset;
     preview_moby->pos.z = camera->position.f[2] - 0.1f;
     if (menu->data.preview.moby != 0) {
         draw_moby_list(menu->data.preview.moby, 1);

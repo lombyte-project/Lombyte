@@ -8,10 +8,14 @@
 extern s32 DIntr(void);
 
 void _setDefaultQM(struct MpegDecoder *decoder, s32 command, u32 matrix) {
+    enum {
+        MPEG_CALLBACK_BEFORE_DEFAULT_MATRIX_LOAD = 2,
+        MPEG_CALLBACK_AFTER_DEFAULT_MATRIX_LOAD = 3
+    };
     s32                  interrupts_enabled;
     struct sceMpegCbData callback;
 
-    callback.type = 2;
+    callback.type = MPEG_CALLBACK_BEFORE_DEFAULT_MATRIX_LOAD;
     _dispatchMpegCallback(decoder->mpeg, &callback);
     _waitIpuIdle(decoder);
     *IPU_CMD = 0;
@@ -25,6 +29,6 @@ void _setDefaultQM(struct MpegDecoder *decoder, s32 command, u32 matrix) {
     }
     SendIpuCommand(decoder, command);
     _waitIpuIdle(decoder);
-    callback.type = 3;
+    callback.type = MPEG_CALLBACK_AFTER_DEFAULT_MATRIX_LOAD;
     _dispatchMpegCallback(decoder->mpeg, &callback);
 }

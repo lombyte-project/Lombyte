@@ -6,10 +6,10 @@
 #include "rnc/camera/update_cam.h"
 #include "rnc/mobys/moby_class_tables.h"
 
-void FUN_L00_002caf40();
+void get_morphoray_chicken_slot_record() __asm__("FUN_L00_002caf40");
 void FUN_L00_002ea7a0();
 void FUN_L00_002ed230();
-void FUN_L10_002f5f18();
+void update_path_flythrough_camera() __asm__("FUN_L10_002f5f18");
 void audio_stream_callback_keeper_update() __asm__("FUN_L14_00303370");
 void beam_slots_update() __asm__("FUN_L14_003039e0");
 void blarg_heavy_interceptor_update() __asm__("FUN_L14_002ac618");
@@ -175,7 +175,7 @@ void *D_L14_001FD9E8[6]
                                             moby_set_state_from_check,
                                             launch_suck_cannon_projectile_and_update_moby_state,
                                             cancel_suck_cannon_suction_and_set_moby_state_5,
-                                            FUN_L00_002caf40,
+                                            get_morphoray_chicken_slot_record,
                                             hud_counter_update};
 
 struct MobyClassUpdate moby_classes[154] __asm__("D_L14_001FD280")
@@ -352,7 +352,7 @@ struct CameraType level_camera_types[10] __asm__("D_L14_001FDA00") __attribute__
     {17,            FUN_L00_002ed230,                noop_main_callback,   noop_main_callback,                          noop_main_callback},
     {19,
      evaluate_descriptor_eligibility,            initialize_path_camera,
-     FUN_L10_002f5f18,                          noop_main_callback                                                                        },
+     update_path_flythrough_camera,                          noop_main_callback                                                           },
     {20,  check_path_camera_priority,                 setup_path_camera,   update_path_camera,                          noop_main_callback},
     {21,
      check_path_key_camera_priority,        initialize_path_key_camera,

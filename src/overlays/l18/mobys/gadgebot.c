@@ -19,6 +19,19 @@
 #include "rnc/math_consts.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 
+enum {
+    GADGEBOT_INITIALIZE = 0,
+    GADGEBOT_LAUNCH_FLIGHT = 1,
+    GADGEBOT_TARGET_HERO = 2,
+    GADGEBOT_WAIT_TO_APPROACH = 2,
+    GADGEBOT_APPROACH_TARGET = 3,
+    GADGEBOT_FACE_TARGET = 4,
+    GADGEBOT_DEATH_FALL = 5,
+    GADGEBOT_EXPLODE = 6,
+    GADGEBOT_SUCK_CANNON_SUCTION = 7,
+    GADGEBOT_IDLE = 8
+};
+
 extern int            D_L18_0015F5C4;
 extern unsigned char *D_L18_0015FFD8;
 extern s32            random_integer_below(s32) __asm__("FUN_00213260");
@@ -72,15 +85,6 @@ void gadgebot_update(unsigned char *m) __asm__("FUN_L18_002fbb98");
 
 /* Moby class 1906 */
 void gadgebot_update(unsigned char *moby) {
-    enum {
-        GADGEBOT_INITIALIZE = 0,
-        GADGEBOT_LAUNCH_FLIGHT = 1,
-        GADGEBOT_WAIT_TO_APPROACH = 2,
-        GADGEBOT_APPROACH_TARGET = 3,
-        GADGEBOT_FACE_TARGET = 4,
-        GADGEBOT_DEATH_FALL = 5,
-        GADGEBOT_EXPLODE = 6
-    };
     char           position_scratch[16];
     unsigned char *moby_vars = ((unsigned char *)MOBY(moby)->pvars);
     unsigned char *moby_transform_ptr;
@@ -88,7 +92,7 @@ void gadgebot_update(unsigned char *moby) {
     switch (MOBY(moby)->state) {
     case GADGEBOT_INITIALIZE: {
         unsigned short moby_flags;
-        MOBY(moby)->state = 8;
+        MOBY(moby)->state = GADGEBOT_IDLE;
         if (random_integer_below(2))
             MOBY(moby)->flags |= 0x8000;
         else
@@ -124,17 +128,17 @@ void gadgebot_update(unsigned char *moby) {
         r = probe_ground_height(position_scratch, 0, 0.5f);
         if (MOBY(moby)->pos.z < r) {
             MOBY(moby)->pos.z = r;
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = GADGEBOT_WAIT_TO_APPROACH;
             if (MOBY(moby)->prev_seq)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         } else if (MOBY(moby)->pos.z < launch_gravity_and_minimum_z) {
-            MOBY(moby)->state = 6;
+            MOBY(moby)->state = GADGEBOT_EXPLODE;
         }
         break;
     }
-    case 7:
+    case GADGEBOT_SUCK_CANNON_SUCTION:
         if (FUN_L00_002dc9f0(moby, moby_vars + 0x70)) {
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = GADGEBOT_WAIT_TO_APPROACH;
             *(short *)(moby_vars + 0x138) = 0;
         }
         break;
@@ -143,7 +147,7 @@ void gadgebot_update(unsigned char *moby) {
             if (!(10.0f < vector_distance_xy(moby + 0x10, moby_vars + 0x180)))
                 break;
         }
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = GADGEBOT_APPROACH_TARGET;
         if (MOBY(moby)->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         break;
@@ -152,13 +156,13 @@ void gadgebot_update(unsigned char *moby) {
         *(QVd058 *)position_scratch = *(QVd058 *)(moby_vars + 0x180);
         target_distance = move_gadgebot_toward_target(moby, position_scratch);
         if (*(int *)(moby_vars + 0x1C4) == 2 && target_distance < 5.0f) {
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = GADGEBOT_WAIT_TO_APPROACH;
             if (MOBY(moby)->prev_seq)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             break;
         }
         if (target_distance < 1.5f) {
-            MOBY(moby)->state = 4;
+            MOBY(moby)->state = GADGEBOT_FACE_TARGET;
             if (MOBY(moby)->prev_seq != 2) {
                 int animation_frame_index = (int)gadgebot_sequence_2_start_frame_gp;
                 blend_moby_animation(moby, 2, animation_frame_index, scale_game_frames(5));
@@ -180,14 +184,14 @@ void gadgebot_update(unsigned char *moby) {
             collect_mobies_in_sphere_at_moby_point(moby, 0.5f, 1.0f, 1.0f, 1, 1, 0, 1, 0);
         if (MOBY(moby)->anim_flags & 2) {
             if (*(int *)(moby_vars + 0x1C4) == 2) {
-                MOBY(moby)->state = 2;
+                MOBY(moby)->state = GADGEBOT_WAIT_TO_APPROACH;
                 if (MOBY(moby)->prev_seq)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                 break;
             }
             if (!(2.5f < vector_distance_xy(moby + 0x10, moby_vars + 0x180)))
                 break;
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = GADGEBOT_APPROACH_TARGET;
             if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             break;
@@ -218,7 +222,7 @@ void gadgebot_update(unsigned char *moby) {
                               1,
                               -1,
                               0);
-        MOBY(moby)->state = 8;
+        MOBY(moby)->state = GADGEBOT_IDLE;
         if (MOBY(moby)->prev_seq)
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         MOBY(moby)->collision = 0;
@@ -311,28 +315,29 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     int   reaction_value_or_path_address; /* the reaction kind, later the path */
     int fall_setup_value_or_path_slot_address; /* the reaction flags, later the path's slot in the table */
 
-    if (moby->state == 0 || moby->state == 8) {
+    if (moby->state == GADGEBOT_INITIALIZE || moby->state == GADGEBOT_IDLE) {
         return;
     }
-    if (moby->state != 7 && game_frame != gadgebot_joint_glows_last_queued_frame_gp) {
+    if (moby->state != GADGEBOT_SUCK_CANNON_SUCTION &&
+        game_frame != gadgebot_joint_glows_last_queued_frame_gp) {
         gadgebot_joint_glows_last_queued_frame_gp = game_frame;
         add_draw_callback(draw_group_gadgebot_joint_glows, moby);
     }
     speed = gadgebot_glow_default_phase_speed_degrees_per_second_gp;
-    if (moby->state == 4 || moby->state == 5) {
+    if (moby->state == GADGEBOT_FACE_TARGET || moby->state == GADGEBOT_DEATH_FALL) {
         speed = gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp;
     }
     sentry_vars->spin = fast_add_rotations(sentry_vars->spin, speed * DEG_TO_RAD * frame_time);
     moby->glow_color = fast_tween_color(gadgebot_glow_tint_start_gp,
                                         gadgebot_glow_tint_end_gp,
                                         fast_sin(sentry_vars->spin) * 0.5f + 0.5f);
-    if (moby->pos.z < 100.0f && moby->state != 7) {
-        moby->state = 6;
+    if (moby->pos.z < 100.0f && moby->state != GADGEBOT_SUCK_CANNON_SUCTION) {
+        moby->state = GADGEBOT_EXPLODE;
     }
     moby->scale = moby->pclass->scale * D_L18_001625FC;
     if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
-        if (moby->state != 7) {
-            moby->state = 8;
+        if (moby->state != GADGEBOT_SUCK_CANNON_SUCTION) {
+            moby->state = GADGEBOT_IDLE;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
@@ -344,11 +349,11 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     dmg = 0.0f;
     coll = find_moby_hit(moby, 0x330000, 0);
     resolve_moby_hit_response(moby, coll, &sentry_vars->health, 0, &hit, &dmg, 0, 4);
-    if (hit != 1 && moby->state != 6 && dmg != 0.0f) {
+    if (hit != 1 && moby->state != GADGEBOT_EXPLODE && dmg != 0.0f) {
         sentry_vars->health -= dmg;
         if (sentry_vars->health <= 0.0f) {
             if (random_integer_below(2) != 0) {
-                moby->state = 6;
+                moby->state = GADGEBOT_EXPLODE;
             } else {
                 fall_setup_value_or_path_slot_address = 0x200;
                 sentry_vars->unk90 = fall_setup_value_or_path_slot_address;
@@ -368,7 +373,7 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 trooper_start_knockback(moby, sentry_vars->fall, 3, 1, 0, angle);
                 sentry_vars->unkC0 = 7.5f;
                 sentry_vars->unkC4 = 15.0f;
-                moby->state = 5;
+                moby->state = GADGEBOT_DEATH_FALL;
                 moby->collision = 0;
                 sentry_vars->anim_flags = 0x78;
                 trooper_anim_update(moby, sentry_vars->anim);
@@ -386,7 +391,7 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                           0,
                           (int *)(reaction_value_or_path_address + 0x10),
                           *(int *)reaction_value_or_path_address);
-    if (sentry_vars->target_mode == 2) {
+    if (sentry_vars->target_mode == GADGEBOT_TARGET_HERO) {
         if (hero.state.control_mode == 0xF) {
             int *list = (int *)hero.rail_spline;
             qcopy(&sentry_vars->target, (char *)list + *list * 16);
@@ -480,13 +485,13 @@ int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, flo
     for (;;) {
         moby = &table[*group_moby_entry & 0x7FFF];
         if (moby->oclass == 0x772) {
-            if (moby->state == 8) {
+            if (moby->state == GADGEBOT_IDLE) {
                 LaunchedMobyVars *launched_moby_vars = (LaunchedMobyVars *)moby->pvars;
                 moby->flags &= ~0x41;
                 moby->collision = moby->pclass->collision;
                 moby->flags |= 0x1000;
                 qcopy(&moby->pos, from);
-                moby->state = 1;
+                moby->state = GADGEBOT_LAUNCH_FLIGHT;
                 launched_moby_vars->unk1F4 = 1.0f;
                 fast_vec_sub(launched_moby_vars->velocity, to, from);
                 launched_moby_vars->velocity[2] = 0.0f;
@@ -516,7 +521,7 @@ short count_group_gadgebots_not_in_state_8(int group_index) {
     while (1) {
         unsigned char *moby =
             (unsigned char *)(moby_table_address + ((group_moby_entry[0] & 0x7FFF) << 8));
-        if (MOBY(moby)->oclass == 0x772 && MOBY(moby)->state != 8)
+        if (MOBY(moby)->oclass == 0x772 && MOBY(moby)->state != GADGEBOT_IDLE)
             n++;
         if ((short)*group_moby_entry++ < 0)
             return n;
@@ -642,10 +647,10 @@ int update_moby_suck_cannon_state(struct Moby *a) __asm__("FUN_L18_002fcbb0");
 int update_moby_suck_cannon_state(struct Moby *moby) {
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
-        if (moby->state == 0x7)
-            moby->state = 0x2;
+        if (moby->state == GADGEBOT_SUCK_CANNON_SUCTION)
+            moby->state = GADGEBOT_WAIT_TO_APPROACH;
     } else {
-        moby->state = 0x7;
+        moby->state = GADGEBOT_SUCK_CANNON_SUCTION;
     }
     return suction_result;
 }
@@ -655,7 +660,7 @@ void hide_moby_and_clear_collision(struct Moby *moby) __asm__("FUN_L18_002fcd00"
 /* Method: sends the gadgebot back to its idle state 8, hidden and without collision. */
 void hide_moby_and_clear_collision(struct Moby *moby) {
     unsigned short flags;
-    moby->state = 0x8;
+    moby->state = GADGEBOT_IDLE;
     if (moby->prev_seq != 0) {
         blend_moby_animation(moby, 0, 0, scale_game_frames(10));
     }

@@ -60,7 +60,7 @@ extern int  debug_print(void *, int, int) __asm__("FUN_001e93b0");
 
 extern s32      D_0015ED84;
 extern u8       D_0015EDB0;
-extern MobyList D_L01_0016CCE0;
+extern MobyList fx_cutscene __asm__("D_L01_0016CCE0");
 extern Effect   D_L01_0017C8C0;
 extern char     cutscene_camera_init_position_error_format[] __asm__("D_L01_0020B550");
 extern int      D_0015ED84; /* no foreign declaration */
@@ -74,11 +74,11 @@ void attach_cutscene_fixed_scale_manipulator(void) {
     s32 i;
 
     if (cutscene_mode == 2 && D_0015EDB0 != 0) {
-        for (i = 0; i < D_L01_0016CCE0.count; i++) {
-            int moby_type = D_L01_0016CCE0.list[i]->type;
+        for (i = 0; i < fx_cutscene.count; i++) {
+            int moby_type = fx_cutscene.list[i]->type;
 
             if ((moby_type == 0x398 || moby_type == 0x1BF) && D_L01_0017C8C0.active == 0) {
-                attach_manipulator(D_L01_0016CCE0.list[i], 0, &D_L01_0017C8C0);
+                attach_manipulator(fx_cutscene.list[i], 0, &D_L01_0017C8C0);
                 D_L01_0017C8C0.z = D_L01_0017C8C0.y = D_L01_0017C8C0.x = 2.1f;
             }
         }
@@ -112,7 +112,7 @@ void cutscene_trigger_update(char *moby) {
             return;
         }
         trigger_vars->unk2C = scale_game_frames(trigger_vars->unk2C);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER;
         {
             int ff = 0xFF;
             MOBY(moby)->draw_dist = ff;
@@ -122,14 +122,14 @@ void cutscene_trigger_update(char *moby) {
     case CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER: {
         char *hero_position;
         if (l01_save_state.cleared[(short)MOBY(moby)->save_id] != 0) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER;
             break;
         }
         if ((*(int *)((((short)MOBY(moby)->save_id >> 5) << 2) + (D_0015ED84 << 8) +
                       (char *)D_0014C190_257218) >>
              (MOBY(moby)->save_id & 0x1F)) &
             1) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER;
             break;
         }
         hero_position = (char *)&hero.motion.pos;
@@ -151,7 +151,7 @@ void cutscene_trigger_update(char *moby) {
             jet_mount(&o->pos, &o->rot, 0, 0, 0);
         }
         cutscene_active = 1;
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = CUTSCENE_TRIGGER_ACTIVE;
         MOBY(moby)->command = 1;
         {
             int   o = trigger_vars->unk24 << 7;
@@ -170,7 +170,7 @@ void cutscene_trigger_update(char *moby) {
             }
             request_hero_idle_state_for_vehicle_mode();
             cutscene_active = 0;
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = CUTSCENE_TRIGGER_WAIT_FOR_REARM;
             MOBY(moby)->command = 0;
         } else {
             set_camera_position(trigger_vars);

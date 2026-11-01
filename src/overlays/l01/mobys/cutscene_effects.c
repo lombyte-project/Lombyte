@@ -102,7 +102,7 @@ void level01_cutscene_effects_update(struct Moby *moby) {
     switch (moby->state) {
     case CUTSCENE_FX_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = CUTSCENE_FX_STATE_UPDATE;
         break;
     case CUTSCENE_FX_STATE_UPDATE:
         if (cutscene_mode_macro == 2) {

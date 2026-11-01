@@ -60,7 +60,7 @@ void path_following_rocket_update(struct Moby *moby) {
         }
         rocket_path_data->unkC =
             rocket_path_data->unk8 * D_0015ED6C / fast_vec_dist(path + 0x10, path + 0x20);
-        moby->state = 1;
+        moby->state = ROCKET_STATE_WAIT_FOR_TRIGGER;
         moby->update_dist = 100;
         moby->command = 0;
         break;
@@ -69,7 +69,7 @@ void path_following_rocket_update(struct Moby *moby) {
         if (player->state.control_mode != 15)
             break;
         if (is_point_inside_clip_volume(&player->motion.body_center, *(int *)rocket_path_data)) {
-            moby->state = 2;
+            moby->state = ROCKET_STATE_FOLLOW_PATH;
             rocket_path_data->unk16 = 0;
         }
         break;
@@ -78,7 +78,7 @@ void path_following_rocket_update(struct Moby *moby) {
         rocket_path_data->unk10 += rocket_path_data->unkC;
         if ((float)(*(int *)path - 1) <= rocket_path_data->unk10) {
             moby->update_dist = 0xFF;
-            moby->state = 3;
+            moby->state = ROCKET_STATE_WAIT_FOR_RESET;
         } else {
             sample_camera_path(
                 (int *)path, 0, &moby->pos, &moby->rot.x, 0, rocket_path_data->unk10);
@@ -113,7 +113,7 @@ void path_following_rocket_update(struct Moby *moby) {
                 moby->flags &= ~1;
                 moby->collision = moby->pclass->collision;
                 rocket_path_data->unk16 = 0;
-                moby->state = 1;
+                moby->state = ROCKET_STATE_WAIT_FOR_TRIGGER;
             }
         }
         break;

@@ -19,6 +19,11 @@
 /* Sets up a moby's vector from the level table and clamps its height for the current state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
+enum {
+    CAMERA_ORBIT_MODE_FOLLOW = 0,
+    CAMERA_ORBIT_MODE_ORBITING = 1
+};
+
 void update_hero_follow_camera_focus(char *moby) __asm__("FUN_L05_00329358");
 
 void update_hero_follow_camera_focus(char *moby) {
@@ -276,7 +281,7 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     orbit->unk10 = 0.01f;
     orbit->unk14 = 0.2f;
     orbit->unk18 = 0;
-    orbit->mode = 0;
+    orbit->mode = CAMERA_ORBIT_MODE_FOLLOW;
     clear_u64_value(orbit);
     track = &camera_to_reset->orbit->track;
     clear_u64_value(track);
@@ -329,8 +334,8 @@ void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
     f32          tilt;
 
     fast_vec_normalize(&up, &hero.gravity_dir, -1.0f);
-    if (orbit->mode == 0 && hero.vert_ramp_launch != 0) {
-        orbit->mode = 1;
+    if (orbit->mode == CAMERA_ORBIT_MODE_FOLLOW && hero.vert_ramp_launch != 0) {
+        orbit->mode = CAMERA_ORBIT_MODE_ORBITING;
         fast_vec_cross(&side, &hero.moby->rot_row2, &up);
         fast_vec_normalize(&side, &side, 1.0f);
         fast_vec_cross(&fwd, &up, &side);
@@ -378,7 +383,7 @@ void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
         spring[8] = 0.005f;
         spring[11] = 0.2f;
     }
-    if (orbit->mode == 1) {
+    if (orbit->mode == CAMERA_ORBIT_MODE_ORBITING) {
         fast_vec_normalize(&side, &focus->side, hero_follow_camera->dist);
         build_look_at_matrix(&side, &side, &up, hero_follow_camera->yaw);
         fast_vec_cross(&fwd, &side, &up);
@@ -392,7 +397,7 @@ void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
         hero_follow_camera->dist = FUN_001ebd78(
             &spring[5], hero_follow_camera->dist, spring[2], spring[8], spring[11], 0.0f);
         if (hero.vert_ramp_launch == 0) {
-            orbit->mode = 0;
+            orbit->mode = CAMERA_ORBIT_MODE_FOLLOW;
             fast_vec_scale(orbit, orbit, -1.0f);
         }
     }
@@ -505,7 +510,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     spring = &orbit->spring;
     fast_vec_normalize(&down, up_axis, -1.0f);
     qcopy(&focus, &focus_state->pos);
-    if (orbit->mode == 0) {
+    if (orbit->mode == CAMERA_ORBIT_MODE_FOLLOW) {
         fast_vec_sub(&rel, pos = &camera->pos, &focus);
         probe_step = 0;
         along = fast_vec_dot(&rel, &focus_state->axis);

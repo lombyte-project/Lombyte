@@ -18,6 +18,16 @@
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 
+enum {
+    TAXI_STATE_INITIALIZE = 0,
+    TAXI_STATE_WAIT_AT_STOP = 1,
+    TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
+    TAXI_STATE_FOLLOW_PATH = 4,
+    TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
+    TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
+    TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
+};
+
 enum TaxiStop {
     TAXI_STOP_RETURN_HUB = 0x0,
     TAXI_STOP_HUB_OUTBOUND_DESTINATION = 0x1,
@@ -85,13 +95,7 @@ void taxi_update(struct Moby *moby) __asm__("FUN_L14_002f0538");
 /* Moby class 712 */
 void taxi_update(struct Moby *moby) {
     enum {
-        TAXI_STATE_INITIALIZE = 0,
-        TAXI_STATE_WAIT_AT_STOP = 1,
-        TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
-        TAXI_STATE_FOLLOW_PATH = 4,
-        TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
-        TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
-        TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
+        TAXI_STATE_HIDDEN = 2
     };
     L14TaxiVars *taxi_vars = (L14TaxiVars *)moby->pvars;
     float        previous_position[4], previous_rotation[4], position_delta[4],
@@ -125,10 +129,10 @@ void taxi_update(struct Moby *moby) {
                 request_taxi_stop_prompt(moby);
                 if ((pad_pressed_words[0] & button) && D_L14_0015F594 == 4) {
                     struct Moby *m;
-                    moby->state = 3;
+                    moby->state = TAXI_STATE_BLEND_STOP_TO_PATH_START;
                     m = find_group_moby_by_tag(moby, taxi_vars->target);
                     if (m != 0) {
-                        m->state = 2;
+                        m->state = TAXI_STATE_HIDDEN;
                         m->flags |= 1;
                         m->visible = 0;
                         m->collision = 0;
@@ -144,7 +148,7 @@ void taxi_update(struct Moby *moby) {
                     taxi_vars->picked = 0;
                     qcopy_nc(&moby->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
                     qcopy_nc(&moby->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
-                    moby->state = 1;
+                    moby->state = TAXI_STATE_WAIT_AT_STOP;
                     qcopy_nc(taxi_vars->pos,
                              &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
                     qcopy_nc(taxi_vars->rot,
@@ -156,7 +160,7 @@ void taxi_update(struct Moby *moby) {
                         taxi_vars->picked = 1;
                     }
                     prepare_taxi_route(moby);
-                    moby->state = 3;
+                    moby->state = TAXI_STATE_BLEND_STOP_TO_PATH_START;
                 }
             }
             if (taxi_vars->clip[1] >= 0 && taxi_vars->picked != 1 &&
@@ -166,7 +170,7 @@ void taxi_update(struct Moby *moby) {
                     taxi_vars->picked = 1;
                     qcopy_nc(&moby->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
                     qcopy_nc(&moby->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
-                    moby->state = 1;
+                    moby->state = TAXI_STATE_WAIT_AT_STOP;
                     qcopy_nc(taxi_vars->pos,
                              &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
                     qcopy_nc(taxi_vars->rot,
@@ -174,7 +178,7 @@ void taxi_update(struct Moby *moby) {
                 } else {
                     taxi_vars->picked = 0;
                     prepare_taxi_route(moby);
-                    moby->state = 3;
+                    moby->state = TAXI_STATE_BLEND_STOP_TO_PATH_START;
                 }
             }
             if (taxi_vars->clip[2] >= 0 && taxi_vars->picked < 2 &&
@@ -184,7 +188,7 @@ void taxi_update(struct Moby *moby) {
                     taxi_vars->picked = 2;
                     qcopy_nc(&moby->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
                     qcopy_nc(&moby->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
-                    moby->state = 1;
+                    moby->state = TAXI_STATE_WAIT_AT_STOP;
                     qcopy_nc(taxi_vars->pos,
                              &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
                     qcopy_nc(taxi_vars->rot,
@@ -192,7 +196,7 @@ void taxi_update(struct Moby *moby) {
                 } else {
                     taxi_vars->picked = 2;
                     prepare_taxi_route(moby);
-                    moby->state = 3;
+                    moby->state = TAXI_STATE_BLEND_STOP_TO_PATH_START;
                 }
             }
         }
@@ -225,7 +229,7 @@ void taxi_update(struct Moby *moby) {
         if (1.0f <= taxi_vars->t) {
             taxi_vars->t = 0.0f;
             taxi_vars->tv = 0.0f;
-            moby->state = 4;
+            moby->state = TAXI_STATE_FOLLOW_PATH;
         }
         break;
     }
@@ -254,7 +258,7 @@ void taxi_update(struct Moby *moby) {
         if (1.0f <= taxi_vars->t) {
             taxi_vars->t = 0.0f;
             taxi_vars->tv = 0.0f;
-            moby->state = 4;
+            moby->state = TAXI_STATE_FOLLOW_PATH;
         }
         break;
     }
@@ -266,7 +270,7 @@ void taxi_update(struct Moby *moby) {
         if (advance_moby_path((char *)moby)) {
             taxi_vars->t = 0.0f;
             taxi_vars->tv = 0.0f;
-            moby->state = 5;
+            moby->state = TAXI_STATE_BLEND_PATH_END_TO_STOP;
         }
         break;
     }
@@ -296,7 +300,7 @@ void taxi_update(struct Moby *moby) {
         if (1.0f <= taxi_vars->t) {
             taxi_vars->t = 0.0f;
             taxi_vars->tv = 0.0f;
-            moby->state = 1;
+            moby->state = TAXI_STATE_WAIT_AT_STOP;
             reset_selected_moby_to_current_placement(moby);
         }
         g = &hero;
@@ -314,13 +318,13 @@ void taxi_update(struct Moby *moby) {
                     initialize_taxi_stop_from_position(moby);
                     taxi_vars->picked = taxi_vars->target;
                     prepare_taxi_route(moby);
-                    moby->state = 7;
+                    moby->state = TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START;
                     qcopy(taxi_vars->pos, taxi_vars->save_pos);
                     qcopy(taxi_vars->rot, taxi_vars->save_rot);
                     {
                         struct Moby *m = find_group_moby_by_tag(moby, taxi_vars->target);
                         if (m != 0) {
-                            m->state = 2;
+                            m->state = TAXI_STATE_HIDDEN;
                             m->flags |= 1;
                             m->visible = 0;
                             m->collision = 0;
@@ -340,13 +344,14 @@ void taxi_update(struct Moby *moby) {
             moby->visible = 1;
             moby->collision = class_collision;
             moby->flags = bits & 0xFFFE;
-            moby->state = 1;
+            moby->state = TAXI_STATE_WAIT_AT_STOP;
         }
         break;
     }
     }
     apply_moby_position_and_rotation_wobble((char *)moby);
-    if (moby->state >= 3 && moby->state <= 4) {
+    if (moby->state >= TAXI_STATE_BLEND_STOP_TO_PATH_START &&
+        moby->state <= TAXI_STATE_FOLLOW_PATH) {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             g->jump_lock_timer = 2;
@@ -390,7 +395,7 @@ void initialize_taxi_stop_from_position(struct Moby *moby) {
             break;
         }
     }
-    moby->state = 1;
+    moby->state = TAXI_STATE_WAIT_AT_STOP;
     {
         int          k = taxi_vars->points[taxi_vars->picked];
         LevelCuboid *taxi_stops = l14_cuboids;
@@ -468,7 +473,7 @@ extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 void request_taxi_stop_prompt(struct Moby *moby) {
     char *taxi_prompt_vars = (char *)moby->pvars;
     int   taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB4);
-    if (moby->state == 5) {
+    if (moby->state == TAXI_STATE_BLEND_PATH_END_TO_STOP) {
         taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB6);
     }
     switch (taxi_stop_index) {

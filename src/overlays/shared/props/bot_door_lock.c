@@ -26,6 +26,9 @@ extern int     D_L06_001fe9d0[][4];
 void           draw_bot_door_lock_glow(struct Moby *moby) __asm__("FUN_L06_00307578");
 
 void draw_bot_door_lock_glow(struct Moby *moby) {
+    enum {
+        GEOMETRY_QUAD_TEX1_FIXED_LOD = 1
+    };
     struct GeometryQuad quad;
     OvlVec4             rotated_quad_corners[4];
     float               rotation[4];
@@ -45,7 +48,7 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     bot_door_lock_private_data[7] += 0.01f;
     if (1.0f < bot_door_lock_private_data[7])
         bot_door_lock_private_data[7] -= 1.0f;
-    quad.texture_state = 1;
+    quad.texture_state = GEOMETRY_QUAD_TEX1_FIXED_LOD;
     quad.primitive = 0x4000000044ULL;
     quad.reserved.value = 0;
     quad.texture = get_effect_texture(0x18);
@@ -246,7 +249,7 @@ void bot_door_lock_update(char *moby) {
         idata[5] = idata[4];
         bot_door_lock_data[6] = random_angle_radians();
         bot_door_lock_data[10] = random_angle_radians();
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = BOT_DOOR_LOCK_STATE_ACTIVE;
         bot_door_lock_data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
@@ -319,7 +322,7 @@ void bot_door_lock_update(char *moby) {
                     activate_bot_door_lock_target(
                         (unsigned char *)moby, (unsigned char *)(level_mobys_q + idata[i] * 0x100));
             }
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = BOT_DOOR_LOCK_STATE_SHRINK_EFFECT;
         }
         break;
     case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:

@@ -12,6 +12,10 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "sda.h"
 
+enum {
+    GIANT_CLANK_CHARGED_BLAST_CHARGING = 0
+};
+
 extern int   D_L00_0015F320;
 extern int   D_L00_0015F330;
 extern int   allocate_packed_color_point_light_slot(float *pos,
@@ -37,7 +41,7 @@ void *spawn_giant_clank_charged_blast(int unused, float *spawn_position) {
     char *spawned_moby = create_moby(0x5F3);
     if (spawned_moby != 0 && *(int *)&D_L00_001613C8_gp == 0) {
         char *moby_vars;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = GIANT_CLANK_CHARGED_BLAST_CHARGING;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         MOBY(spawned_moby)->visible = 1;
@@ -90,7 +94,7 @@ void remove_giant_clank_charged_blast(void) {
         if (tracked_moby->oclass == 0x5F3) {
             char *tracked_moby_vars;
             int   point_light_slot_index;
-            if (tracked_moby->state != 0)
+            if (tracked_moby->state != GIANT_CLANK_CHARGED_BLAST_CHARGING)
                 return;
             tracked_moby_vars = ((char *)tracked_moby->pvars);
             D_L00_0015F320 = 0;
@@ -360,7 +364,7 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
             moby_data->vel[0] = fast_cos(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
             moby_data->vel[1] = fast_sin(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
             moby_data->vel[2] = 0.0f;
-            moby->state = 1;
+            moby->state = EXPANDING_BLAST;
             moby_data->f14 = 0;
         }
         break;
@@ -419,16 +423,16 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
             int i;
 
             for (i = 0; i < 8; i++) {
-                Part29FF90 *p;
+                Part29FF90 *offset_particle;
 
                 random_spherical_offset(
                     random_effect_vector, r * D_0015ED6C, r * 2.0f * D_0015ED6C);
                 random_spherical_offset(effect_vector_scratch, 0.0f, r * 0.5f);
                 add_vectors(temporary_position, effect_vector_scratch, moby->pos);
-                p = (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(
+                offset_particle = (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(
                     effect_vector_scratch, random_effect_vector, 0x7F, moby);
-                if (p != 0) {
-                    p->fC = random_float_between(6000.0f, 32000.0f) * r * 0.4f;
+                if (offset_particle != 0) {
+                    offset_particle->fC = random_float_between(6000.0f, 32000.0f) * r * 0.4f;
                 }
             }
         }
@@ -436,20 +440,22 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
             int i;
 
             for (i = 0; i < 12; i++) {
-                Part29FF90 *p = (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(
-                    moby->pos, D_L15_0015F580, 0x7F, moby);
+                Part29FF90 *blast_center_particle =
+                    (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(
+                        moby->pos, D_L15_0015F580, 0x7F, moby);
 
-                if (p != 0) {
-                    PartSub29FF90 *particle_subrecord = &p->sub;
+                if (blast_center_particle != 0) {
+                    PartSub29FF90 *particle_subrecord = &blast_center_particle->sub;
 
                     if (i == 2 && random_integer_below(8) == 0) {
-                        p->fC = 180000.0f;
+                        blast_center_particle->fC = 180000.0f;
                     } else {
-                        p->fC = random_float_between(80000.0f, 120000.0f);
+                        blast_center_particle->fC = random_float_between(80000.0f, 120000.0f);
                     }
-                    p->fC = p->fC * r;
-                    p->fA = scale_game_frames(2);
-                    particle_subrecord->f10 = 1.0f / convert_integer_to_float(p->fA);
+                    blast_center_particle->fC = blast_center_particle->fC * r;
+                    blast_center_particle->fA = scale_game_frames(2);
+                    particle_subrecord->f10 =
+                        1.0f / convert_integer_to_float(blast_center_particle->fA);
                     particle_subrecord->f18 = 0x7F7F7F;
                     particle_subrecord->f16 = 3;
                 }

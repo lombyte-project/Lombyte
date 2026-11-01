@@ -69,7 +69,7 @@ void burning_debris_update(struct Moby *moby) {
     s32       grey_intensity;
     s32       alpha;
     s32       grey;
-    f32       s;
+    f32       initial_particle_scalar;
     u8       *puff;
     u8       *puff_data;
 
@@ -128,12 +128,12 @@ void burning_debris_update(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    s = random_float_between(0.5f, 1.5f) * 210000.0f;
+    initial_particle_scalar = random_float_between(0.5f, 1.5f) * 210000.0f;
     spawn_burst(&moby->pos,
                 &D_L01_0015F580,
                 0x4F007FFF,
                 0x1FFFFFFF,
-                s,
+                initial_particle_scalar,
                 random_int_between(scale_game_frames(10), scale_game_frames(20)),
                 1);
     alpha = 0x60000000;
@@ -142,7 +142,7 @@ void burning_debris_update(struct Moby *moby) {
         if (random_integer_below(2)) {
             signed_puff_variation = -signed_puff_variation;
         }
-        s = random_float_between(40000.0f, 100000.0f);
+        initial_particle_scalar = random_float_between(40000.0f, 100000.0f);
         grey_intensity = random_int_between(0x30, 0xFF);
         grey = (grey_intensity << 8) | alpha;
         puff = spawn_puff(&moby->pos,
@@ -151,7 +151,7 @@ void burning_debris_update(struct Moby *moby) {
                           1.0f,
                           signed_puff_variation,
                           &D_L01_0015F580,
-                          s,
+                          initial_particle_scalar,
                           grey_intensity | ((grey_intensity << 16) | grey));
         if (puff != NULL) {
             puff[3] = 0x44;
@@ -194,6 +194,9 @@ DebrisMoby *spawn_debris(DebrisMoby *parent_moby,
                          f32         scale) __asm__("FUN_L01_0030be70");
 
 DebrisMoby *spawn_debris(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) {
+    enum {
+        BURNING_DEBRIS_STATE_INITIAL = 0
+    };
     DebrisMoby *spawned_moby;
     DebrisVars *debris_vars;
 
@@ -203,7 +206,7 @@ DebrisMoby *spawn_debris(DebrisMoby *parent_moby, void *debris_vector_source, f3
         debris_vars->parent = parent_moby;
         qcopy(&spawned_moby->pos, &parent_moby->pos);
         spawned_moby->rot = parent_moby->rot;
-        spawned_moby->state = 0;
+        spawned_moby->state = BURNING_DEBRIS_STATE_INITIAL;
         spawned_moby->b30 = 0xFF;
         spawned_moby->h32 = 0xFF;
         spawned_moby->b31 = 1;

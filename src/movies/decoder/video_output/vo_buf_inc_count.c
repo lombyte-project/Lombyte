@@ -5,11 +5,11 @@
 extern s32 DIntr(void);
 void       vo_buf_inc_count(struct VoBuf *buf) __asm__("FUN_0023d210");
 
-void vo_buf_inc_count(struct VoBuf *buf) {
+void vo_buf_inc_count(struct VoBuf *video_output_buffer) {
     DIntr();
-    buf->tag[buf->write].status = VO_TAG_FILLED;
-    buf->count++;
-    buf->write = (buf->write + 1) % buf->size;
+    video_output_buffer->tag[video_output_buffer->write].status = VO_TAG_FILLED;
+    video_output_buffer->count++;
+    video_output_buffer->write = (video_output_buffer->write + 1) % video_output_buffer->size;
     EnableInterrupts();
 }
 

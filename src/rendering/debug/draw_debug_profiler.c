@@ -111,6 +111,10 @@ extern float sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
 extern s32   game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
 void draw_debug_profiler(void) {
+    enum {
+        FONT_STATE_EFFECTS_DATA = 6,
+        FONT_STATE_PART_DRAW = 8
+    };
     f32 rcnt1_count_float;
     f32 div;
 
@@ -137,7 +141,7 @@ void draw_debug_profiler(void) {
     }
     append_dma_tag(0x02010000);
     if (draw_enable_mask & 4) {
-        if (pal_mode != 0) {
+        if (pal_mode != FALSE) {
             draw_ties_2();
         } else {
             draw_ties_1();
@@ -177,9 +181,10 @@ void draw_debug_profiler(void) {
     }
     append_dma_tag(0x02080000);
     setup_gif_paging(0);
-    if ((draw_enable_mask & 0x20) && draw_config.unk30 != 0 && font_state != 6) {
+    if ((draw_enable_mask & 0x20) && draw_config.unk30 != 0 &&
+        font_state != FONT_STATE_EFFECTS_DATA) {
         vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
-        font_state = 6;
+        font_state = FONT_STATE_EFFECTS_DATA;
     }
     noop_core_callback_secondary(vu_effects_label, 4);
     noop_core_callback(vu_effects_label, 4);
@@ -201,7 +206,7 @@ void draw_debug_profiler(void) {
             vu1_gs_regs_alt();
             FlushCache(0);
             part_proc();
-            font_state = 8;
+            font_state = FONT_STATE_PART_DRAW;
         }
         noop_core_callback(part_draw_label, 8);
         noop_core_callback_secondary(part_draw_label, 8);
@@ -265,7 +270,7 @@ void draw_debug_profiler(void) {
     vu0_load_micro_program(D_00100AE0);
     FlushCache(0);
     rcnt1_count_float = convert_integer_to_float(*(volatile s32 *)0x10000800);
-    D_0015F614 = rcnt1_count_float / (pal_mode != 0 ? 11520.0f : 9600.0f);
+    D_0015F614 = rcnt1_count_float / (pal_mode != FALSE ? 11520.0f : 9600.0f);
     vu1_sync_chain(2);
     noop_core_callback(dma_sync_empty_label, 0x11);
     if (draw_enable_mask & 2) {
@@ -279,7 +284,7 @@ void draw_debug_profiler(void) {
     noop_core_callback(dma_sync_empty_label, 0x11);
     if (draw_enable_mask & 4) {
         if (draw_config.tie.enabled != 0) {
-            if (pal_mode != 0) {
+            if (pal_mode != FALSE) {
                 register_entity_render_resources();
                 copy_render_buffer_pair();
             } else {

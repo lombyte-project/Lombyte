@@ -118,7 +118,7 @@ void elevator_update(L16PlatformMoby *moby) {
                                            elevator_data->joint * 0x80 + 0x38) +
                                 elevator_height_offset;
             moby->reverse = 1;
-            moby->state = 2;
+            moby->state = ELEVATOR_WAIT_FOR_HERO;
             break;
         case ELEVATOR_WAIT_FOR_HERO:
             if (voice_is_playing(moby, elevator_data->particle)) {
@@ -143,7 +143,7 @@ void elevator_update(L16PlatformMoby *moby) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     elevator_data->goal = motion.v[2];
                     elevator_data->speed = 0.0f;
-                    moby->state = 3;
+                    moby->state = ELEVATOR_UPDATE_HEIGHT;
                     break;
                 }
             }
@@ -163,7 +163,7 @@ void elevator_update(L16PlatformMoby *moby) {
                                                  elevator_data->joint * 0x80 + 0x38) +
                                       elevator_height_offset;
                 elevator_data->speed = 0.0f;
-                moby->state = 3;
+                moby->state = ELEVATOR_UPDATE_HEIGHT;
             }
             break;
         case ELEVATOR_UPDATE_HEIGHT: {
@@ -205,7 +205,7 @@ void elevator_update(L16PlatformMoby *moby) {
             if (moby->position[2] == elevator_data->goal &&
                 (hero.ground_moby != moby || hero.air_frames.s != 0)) {
                 clear_u64_value(elevator_data->basis[1]);
-                moby->state = 2;
+                moby->state = ELEVATOR_WAIT_FOR_HERO;
                 break;
             }
             if (elevator_data->speed != 0.0f) {

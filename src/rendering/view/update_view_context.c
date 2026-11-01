@@ -80,7 +80,7 @@ void update_view_context(void) {
 
     depth_scale = -8388080.0f;
     depth_bias = 8388112.0f;
-    if (pal_mode != 0) {
+    if (pal_mode != FALSE) {
         view_context.fov.f[1] = view_context.fov.f[0] * 0.756f;
     } else {
         view_context.fov.f[1] = view_context.fov.f[0] * 0.775f;

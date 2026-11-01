@@ -96,19 +96,23 @@ void set_moby_color(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void trooper_anim_finish(s32 id, S_25d538 *s) __asm__("FUN_L00_0025d538");
 
 void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
+    enum {
+        MOBY_COLOR_PHASE_TO_SECONDARY_COLOR = 0,
+        MOBY_COLOR_PHASE_TO_ORIGINAL_COLOR = 1
+    };
     f32 phase_duration_frames, phase_progress;
     s32 r, g, b;
     if (animation_state->t == 0)
         return;
     if (fast_dec_timer_s16(animation_state)) {
-        if (animation_state->phase != 0) {
+        if (animation_state->phase != MOBY_COLOR_PHASE_TO_SECONDARY_COLOR) {
             set_moby_color(id, animation_state->r0, animation_state->g0, animation_state->b0);
             return;
         }
-        animation_state->phase = 1;
+        animation_state->phase = MOBY_COLOR_PHASE_TO_ORIGINAL_COLOR;
         animation_state->t = scale_game_frames(animation_state->d1);
     }
-    if (animation_state->phase == 0) {
+    if (animation_state->phase == MOBY_COLOR_PHASE_TO_SECONDARY_COLOR) {
         phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d0));
         phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
         if (animation_state->r1 != 0)
@@ -613,7 +617,7 @@ extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
 extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
 extern void  spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void
-func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
+spawn_particle_alt_9768(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
@@ -830,7 +834,7 @@ void spawn_explosion(char *owner_moby,
                                fF * (random_float_between(0.0f, 3.0f) * frame_time_macro));
             first_packed_color = swap_packed_color_channels(c0.v[random_integer_below(6)], flag);
             second_packed_color = swap_packed_color_channels(c1.v[random_integer_below(6)], flag);
-            func_L00_0026B368_25e450(
+            spawn_particle_alt_9768(
                 explosion_position,
                 &randomized_particle_vector,
                 first_packed_color,

@@ -137,10 +137,10 @@ void ammocrate_update(struct Moby *pickup) {
                                   1,
                                   -1,
                                   0);
-            pickup->state = 5;
+            pickup->state = AMMOCRATE_STATE_REMOVE;
         }
     }
-    if (pickup->state < 4) {
+    if (pickup->state < AMMOCRATE_STATE_COLLECTED) {
         if (hero.state.current == 0x32 && ship != 0 && ship->state != 0xFE && ship->state != 0xFD &&
             (ship->oclass == 0x4DA || ship->oclass == 0x45 || ship->oclass == 0x563)) {
             ship_pickup_distance_metric = fast_vec_dist(&ship->pos, &pickup->pos);
@@ -164,7 +164,7 @@ void ammocrate_update(struct Moby *pickup) {
                 if (hero.ship_ammo_max < hero.ship_ammo) {
                     hero.ship_ammo = hero.ship_ammo_max;
                 }
-                pickup->state = 4;
+                pickup->state = AMMOCRATE_STATE_COLLECTED;
                 break;
             case OCLASS_SHIP_HEALTH_PICKUP:
                 hero.ship_hp += hero.ship_hp_max * 0.25f;
@@ -175,10 +175,10 @@ void ammocrate_update(struct Moby *pickup) {
                 if (hero.ship_hp_max < hero.ship_hp) {
                     hero.ship_hp = hero.ship_hp_max;
                 }
-                pickup->state = 4;
+                pickup->state = AMMOCRATE_STATE_COLLECTED;
                 break;
             default:
-                pickup->state = 4;
+                pickup->state = AMMOCRATE_STATE_COLLECTED;
                 break;
             }
         }
@@ -188,7 +188,7 @@ void ammocrate_update(struct Moby *pickup) {
         pickup_vars->unk34 = 0;
         sync_ship_pickup_child_pose(pickup, pickup_vars);
         pickup_vars->unk30 = 0.0f;
-        pickup->state = 1;
+        pickup->state = AMMOCRATE_STATE_DAMPED_FALL;
         break;
     case AMMOCRATE_STATE_DAMPED_FALL:
         fast_vec_scale(&pickup_vars->unk10, &pickup_vars->unk10, 0.9f);
@@ -198,7 +198,7 @@ void ammocrate_update(struct Moby *pickup) {
         if (sync_ship_pickup_child_pose(pickup, pickup_vars)) {
             if (pickup_vars->unk34->seq == 1) {
                 fast_vec_scale(&pickup_vars->unk10, &pickup_vars->unk10, 0.8f);
-                pickup->state = 2;
+                pickup->state = AMMOCRATE_STATE_ATTRACT_TO_SHIP;
             }
         }
         break;
@@ -229,7 +229,7 @@ void ammocrate_update(struct Moby *pickup) {
         fast_vec_add(&pickup->pos, &pickup->pos, &pickup_vars->unk10);
         break;
     case AMMOCRATE_STATE_COLLECTED:
-        pickup->state = 5;
+        pickup->state = AMMOCRATE_STATE_REMOVE;
         break;
     case AMMOCRATE_STATE_REMOVE:
         mark_moby_for_removal(pickup);

@@ -53,7 +53,7 @@ void draw_menu_flashing_panel(struct MenuPanelOwner *panel_moby) {
     if (x >= 0x200 || x + width < 0) {
         return;
     }
-    if (!(pal_mode != 0 ? y < 0x1C1 : y < 0x1A1) || y + height < 0) {
+    if (!(pal_mode != FALSE ? y < 0x1C1 : y < 0x1A1) || y + height < 0) {
         return;
     }
     vu1_add_g_sregister(8, 0);

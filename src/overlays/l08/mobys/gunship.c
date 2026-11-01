@@ -242,6 +242,11 @@ void update_linked_moby_parts(struct Moby *moby) {
 }
 
 void process_gunship_part_hits(struct Moby *moby) {
+    enum {
+        GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY = 0,
+        GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY = 1,
+        GUNSHIP_TARGET_HIT_VOICE_ENTRY = 2
+    };
     char *gunship_instance_vars = *(char **)((char *)moby + 0x78);
     char *entries = gunship_instance_vars + 0x60;
     char *part_entry_cursor = entries;
@@ -256,18 +261,18 @@ void process_gunship_part_hits(struct Moby *moby) {
             if (i < 7) {
                 if (score <= 0) {
                     score = 1;
-                    state = 1;
+                    state = GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY;
                 }
             } else if (i < 10) {
                 if (score < 2) {
                     score = 2;
-                    state = 1;
+                    state = GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY;
                 }
             } else {
                 if (score < 4) {
                     score += 4;
                     chosen = i;
-                    state = 2;
+                    state = GUNSHIP_TARGET_HIT_VOICE_ENTRY;
                 }
             }
             (*(unsigned char **)part_entry_cursor)[0xA4] = 0xFF;
@@ -275,7 +280,7 @@ void process_gunship_part_hits(struct Moby *moby) {
     }
     *(short *)(gunship_instance_vars + 0x28C) += score;
     if (*(short *)(gunship_instance_vars + 0x28C) >= 8) {
-        state = 0;
+        state = GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY;
         *(short *)(gunship_instance_vars + 0x28C) = *(short *)(gunship_instance_vars + 0x28C) % 8;
         if (chosen != 0) {
             int   off = chosen * 16;
@@ -314,7 +319,7 @@ void process_gunship_part_hits(struct Moby *moby) {
             ((char *)moby)[0x20] = 99;
         }
     }
-    if (state >= 0)
+    if (state >= GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY)
         allocate_voice_for_target_entry(state, 0, moby);
 }
 
@@ -326,6 +331,9 @@ void gunship_update(struct Moby *moby) {
         GUNSHIP_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
         GUNSHIP_BEGIN_PRIMARY_PATH = 3,
         GUNSHIP_BREAK_APART_AND_REMOVE = 0x63
+    };
+    enum {
+        GUNSHIP_PART_RELEASED = 1
     };
     GunshipVars       *gunship_control_vars = (GunshipVars *)moby->pvars;
     SwarmPathFollower *follower;
@@ -367,7 +375,7 @@ void gunship_update(struct Moby *moby) {
             truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
         qcopy(&moby->pos, &gunship_control_vars->follow[1].path->points[0]);
         spawn_gunship_parts(moby);
-        moby->state = 2;
+        moby->state = GUNSHIP_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY;
         moby->rot.z =
             fast_arc_tan(gunship_control_vars->follow[1].path->points[1].f[0] - moby->pos.x,
                          gunship_control_vars->follow[1].path->points[1].f[1] - moby->pos.y);
@@ -486,7 +494,7 @@ void gunship_update(struct Moby *moby) {
     case GUNSHIP_BEGIN_PRIMARY_PATH: {
         LevelPath *path;
 
-        moby->state = 1;
+        moby->state = GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET;
         path = gunship_control_vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z =
@@ -503,7 +511,7 @@ void gunship_update(struct Moby *moby) {
                 cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 fast_vec_sub(drift, &part->pos, &moby->pos);
                 fast_vec_normalize(drift, drift, frame_time * 5.0f);
-                part->state = 1;
+                part->state = GUNSHIP_PART_RELEASED;
                 gunship_control_vars->links[i].part = NULL;
             }
         }

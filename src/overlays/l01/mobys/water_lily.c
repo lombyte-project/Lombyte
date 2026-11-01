@@ -13,6 +13,9 @@
 #include "rnc/camera.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 
+void move_moby_xy_with_collision_constraints(
+    void *, void *, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_00258490");
+
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
 f32 FUN_L01_002f81c8(f32 *spring_axis_position,
@@ -101,7 +104,7 @@ void water_lily_update(HoverMoby *water_lily) {
     switch (water_lily->state) {
     case WATER_LILY_STATE_INITIALIZE:
         *(u128 *)v = previous_water_lily_position.q;
-        water_lily->state = 1;
+        water_lily->state = WATER_LILY_STATE_UPDATE_POSITION;
         break;
     case WATER_LILY_STATE_UPDATE_POSITION:
         spring_axis_to(&water_lily->pos.v.x,
@@ -129,14 +132,14 @@ void water_lily_update(HoverMoby *water_lily) {
                 water_lily->pos.v.y += hero.motion.pos.f[1];
             }
         }
-        FUN_L00_00258490(water_lily,
-                         &collision_adjusted_position,
-                         &water_lily->pos,
-                         3,
-                         0.1f,
-                         water_lily_collision_radius_gp,
-                         600.0f,
-                         1.5707964f);
+        move_moby_xy_with_collision_constraints(water_lily,
+                                                &collision_adjusted_position,
+                                                &water_lily->pos,
+                                                3,
+                                                0.1f,
+                                                water_lily_collision_radius_gp,
+                                                600.0f,
+                                                1.5707964f);
         water_lily->pos.v.x = collision_adjusted_position.v.x;
         water_lily->pos.v.y = collision_adjusted_position.v.y;
         water_lily->pos.v.z = previous_water_lily_position.v.z;

@@ -6,7 +6,7 @@
 extern s32 FUN_0022da68(s32, s32, void *);
 
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern u8  D_L01_00167240[];
+extern u8  camera_pos[] __asm__("D_L01_00167240");
 
 #include "qcopy.h"
 
@@ -51,13 +51,13 @@ void door_left_update(HoverMoby *door_moby) {
     case DOOR_INITIALIZE:
         qcopy(&door_vars->home, &door_moby->pos);
         door_vars->t = 0.0f;
-        door_moby->state = 1;
+        door_moby->state = DOOR_CLOSED;
         break;
     case DOOR_CLOSED:
         player = &hero.motion.pos;
         if (vector_distance_xy(door_vars, player) < door_vars->radius &&
             absolute_float(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
-            door_moby->state = 2;
+            door_moby->state = DOOR_OPENING;
             if (door_moby->oclass == 0x300) {
                 FUN_0022da68(0, 0, door_moby);
             }
@@ -67,14 +67,14 @@ void door_left_update(HoverMoby *door_moby) {
         door_vars->t += 1.0f / scale_time(20.0f);
         if (door_vars->t >= 1.0f) {
             door_vars->t = 1.0f;
-            door_moby->state = 3;
+            door_moby->state = DOOR_OPEN;
         }
         break;
     case DOOR_OPEN:
         k = 1.1f;
         if (vector_distance_xy(door_vars, &hero.motion.pos) > door_vars->radius * k &&
-            vector_distance_xy(door_vars, D_L01_00167240) > door_vars->radius * k) {
-            door_moby->state = 4;
+            vector_distance_xy(door_vars, camera_pos) > door_vars->radius * k) {
+            door_moby->state = DOOR_CLOSING;
             if (door_moby->oclass == 0x300) {
                 FUN_0022da68(0, 0, door_moby);
             }
@@ -84,12 +84,12 @@ void door_left_update(HoverMoby *door_moby) {
         player = &hero.motion.pos;
         if (vector_distance_xy(door_vars, player) < door_vars->radius &&
             absolute_float(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
-            door_moby->state = 2;
+            door_moby->state = DOOR_OPENING;
         } else {
             door_vars->t -= 1.0f / scale_time(20.0f);
             if (door_vars->t <= 0.0f) {
                 door_vars->t = 0.0f;
-                door_moby->state = 1;
+                door_moby->state = DOOR_CLOSED;
             }
         }
         break;

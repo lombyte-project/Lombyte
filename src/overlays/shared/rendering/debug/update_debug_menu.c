@@ -20,6 +20,13 @@
 #include "rnc/sdk/storage/fileio.h"
 #include "rnc/sdk/storage/fileio/sceopen.h"
 
+enum {
+    DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS = 0,
+    DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
+    DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2,
+    DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS = 3
+};
+
 typedef struct {
     s32 a, b, c, d;
 } E001f36f8;
@@ -382,7 +389,8 @@ void update_debug_camera(void) {
             copy_matrix3x4(l00_camera.unk350, r);
         }
     }
-    if (g_debug_menu.control_mode == 2 && l00_camera.unk180 != 0) {
+    if (g_debug_menu.control_mode == DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET &&
+        l00_camera.unk180 != 0) {
         target = (DebugCameraTarget *)l00_camera.unk180;
         qcopy(target->position, l00_camera.pos.f);
         qcopy(target->basis, l00_camera.unk350);
@@ -502,10 +510,15 @@ void update_debug_menu(void) {
         DEBUG_OPTION_ROW_SEGMENT_INDEX = 10
     };
     enum {
-        DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS = 0,
-        DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
-        DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2,
-        DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS = 3
+        DEBUG_OCCLUSION_MODE_COUNT = 3,
+        DEBUG_COLLISION_MODE_COUNT = 3,
+        DEBUG_CONTROL_MODE_COUNT = 4,
+        DEBUG_PROFILER_MODE_COUNT = 8,
+        DEBUG_CAPTURE_STATUS_NO = 110,
+        DEBUG_CAPTURE_STATUS_YES = 121
+    };
+    enum {
+        DEBUG_OCCLUSION_MODE_NO_DATA_FALLBACK = 0
     };
     DebugRowCounts row_counts;
     union {
@@ -525,8 +538,8 @@ void update_debug_menu(void) {
         set_background_color(level_view_context.background_color[0],
                              level_view_context.background_color[1],
                              level_view_context.background_color[2]);
-        g_debug_menu.start_capture_status = 110;
-        g_debug_menu.sample_capture_status = 110;
+        g_debug_menu.start_capture_status = DEBUG_CAPTURE_STATUS_NO;
+        g_debug_menu.sample_capture_status = DEBUG_CAPTURE_STATUS_NO;
         g_debug_menu.unknown_94 = (s32)l00_camera.pos.f[0] >> 2;
         g_debug_menu.unknown_98 = (s32)l00_camera.pos.f[1] >> 2;
         g_debug_menu.unknown_9c = (s32)l00_camera.pos.f[2] >> 2;
@@ -575,12 +588,14 @@ void update_debug_menu(void) {
         case DEBUG_OPTION_ROW_CONTROL_MODE:
             if (controller_words.buttons.w.pressed & 0x50) {
                 if (controller_words.buttons.w.pressed & 0x40) {
-                    if (++g_debug_menu.control_mode >= 4)
-                        g_debug_menu.control_mode = 0;
+                    if (++g_debug_menu.control_mode >= DEBUG_CONTROL_MODE_COUNT)
+                        g_debug_menu.control_mode = DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS;
                 }
                 if (controller_words.buttons.w.pressed & 0x10) {
-                    if (--g_debug_menu.control_mode < 0)
-                        g_debug_menu.control_mode = 3;
+                    if (--g_debug_menu.control_mode <
+                        DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS)
+                        g_debug_menu.control_mode =
+                            DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS;
                 }
                 switch (g_debug_menu.control_mode) {
                 case DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS:
@@ -608,7 +623,7 @@ void update_debug_menu(void) {
             break;
         case DEBUG_OPTION_ROW_PROFILER_MODE:
             if (controller_words.buttons.w.pressed & 0x40) {
-                if (++g_debug_menu.profiler_mode >= 8)
+                if (++g_debug_menu.profiler_mode >= DEBUG_PROFILER_MODE_COUNT)
                     g_debug_menu.profiler_mode = 0;
             }
             if (controller_words.buttons.w.pressed & 0x10) {
@@ -618,15 +633,15 @@ void update_debug_menu(void) {
             break;
         case DEBUG_OPTION_ROW_OCCLUSION_MODE:
             if (!D_L00_0015F600) {
-                g_debug_menu.occlusion_mode = 0;
+                g_debug_menu.occlusion_mode = DEBUG_OCCLUSION_MODE_NO_DATA_FALLBACK;
                 break;
             }
             if (controller_words.buttons.w.pressed & 0x40) {
-                if (++g_debug_menu.occlusion_mode >= 3)
-                    g_debug_menu.occlusion_mode = 0;
+                if (++g_debug_menu.occlusion_mode >= DEBUG_OCCLUSION_MODE_COUNT)
+                    g_debug_menu.occlusion_mode = DEBUG_OCCLUSION_MODE_NO_DATA_FALLBACK;
             }
             if (controller_words.buttons.w.pressed & 0x10) {
-                if (--g_debug_menu.occlusion_mode < 0)
+                if (--g_debug_menu.occlusion_mode < DEBUG_OCCLUSION_MODE_NO_DATA_FALLBACK)
                     g_debug_menu.occlusion_mode = 2;
             }
             break;
@@ -658,7 +673,7 @@ void update_debug_menu(void) {
             break;
         case DEBUG_OPTION_ROW_COLLISION_MODE:
             if (controller_words.buttons.w.pressed & 0x40) {
-                if (++g_debug_menu.collision_mode >= 3)
+                if (++g_debug_menu.collision_mode >= DEBUG_COLLISION_MODE_COUNT)
                     g_debug_menu.collision_mode = 0;
             }
             if (controller_words.buttons.w.pressed & 0x10) {
@@ -898,7 +913,7 @@ void update_debug_menu(void) {
                 sceLseek(fd, 0, 2);
                 sceWrite(fd, scratch.sample.line, strlen(scratch.sample.line));
                 sceClose(fd);
-                g_debug_menu.sample_capture_status = 121;
+                g_debug_menu.sample_capture_status = DEBUG_CAPTURE_STATUS_YES;
             }
             {
                 f32 *samples = occlusion_samples;
@@ -945,7 +960,7 @@ void update_debug_menu(void) {
                 sceLseek(fd, 0, 2);
                 sceWrite(fd, scratch.start_point.line, strlen(scratch.start_point.line));
                 sceClose(fd);
-                g_debug_menu.start_capture_status = 121;
+                g_debug_menu.start_capture_status = DEBUG_CAPTURE_STATUS_YES;
             }
         }
         break;

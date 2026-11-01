@@ -12,6 +12,13 @@
 #include "rnc/mobys/moby.h"
 
 /* Damage source returned by find_moby_hit. */
+enum {
+    REFUELING_STATION_STATE_INITIALIZE = 0,
+    REFUELING_STATION_STATE_WAIT_COMMAND = 1,
+    REFUELING_STATION_STATE_EXPLOSION_DELAY = 2,
+    REFUELING_STATION_STATE_EXPLODE = 3
+};
+
 typedef struct {
     u8  pad0[0x2C];
     f32 damage;
@@ -96,11 +103,15 @@ void handle_refueling_station_damage(struct Moby *moby,
         DAMAGE_RESULT_UNAVAILABLE = 0,
         DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
     };
+    enum {
+        MOBY_STATE_REMOVAL_PENDING_BELOW_ADDRESS_BOUNDARY = 0xFD,
+        MOBY_STATE_REMOVAL_PENDING_AT_OR_ABOVE_ADDRESS_BOUNDARY = 0xFE
+    };
     VendorHitSource *damage_hit_record;
     struct Moby     *link;
     s32              hit;
 
-    if (moby->state != 3) {
+    if (moby->state != REFUELING_STATION_STATE_EXPLODE) {
         damage_hit_record = find_moby_hit(moby, 0x330000, 0);
         if (damage_hit_record != 0) {
             debug_print(D_L09_00208F90, moby->oclass, fptodp(damage_hit_record->damage));
@@ -128,7 +139,9 @@ void handle_refueling_station_damage(struct Moby *moby,
                 moby->flags &= ~0x1000;
                 if (refueling_station_vars->link != -1) {
                     link = &moby_list[refueling_station_vars->link];
-                    if (link != 0 && link->state != 0xFE && link->state != 0xFD &&
+                    if (link != 0 &&
+                        link->state != MOBY_STATE_REMOVAL_PENDING_AT_OR_ABOVE_ADDRESS_BOUNDARY &&
+                        link->state != MOBY_STATE_REMOVAL_PENDING_BELOW_ADDRESS_BOUNDARY &&
                         (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
                         link->command = 1;
                     }
@@ -136,7 +149,7 @@ void handle_refueling_station_damage(struct Moby *moby,
                 FUN_L00_00257470(moby, 0, -1);
                 refueling_station_vars->anim[7] = 0x78;
                 trooper_anim_update(moby, refueling_station_vars->anim);
-                moby->state = 3;
+                moby->state = REFUELING_STATION_STATE_EXPLODE;
             } else {
                 *health -= damage_hit_record->damage;
                 refueling_station_vars->anim[7] = 0xFA;
@@ -162,12 +175,6 @@ typedef struct RefuelingStationVars {
 
 /* Moby class 1172 */
 void refueling_station_update(struct Moby *moby) {
-    enum {
-        REFUELING_STATION_STATE_INITIALIZE = 0,
-        REFUELING_STATION_STATE_WAIT_COMMAND = 1,
-        REFUELING_STATION_STATE_EXPLOSION_DELAY = 2,
-        REFUELING_STATION_STATE_EXPLODE = 3
-    };
     RefuelingStationVars *station_vars = (RefuelingStationVars *)moby->pvars;
     float                 explosion_offset[4];
     unsigned char        *removal_check_base;
@@ -180,7 +187,7 @@ void refueling_station_update(struct Moby *moby) {
             return;
         }
         station_vars->voice = -1;
-        moby->state = 1;
+        moby->state = REFUELING_STATION_STATE_WAIT_COMMAND;
         break;
     case REFUELING_STATION_STATE_WAIT_COMMAND:
         if ((D_L09_0015F5CC & 7) == (((int)moby >> 8) & 7)) {
@@ -206,7 +213,7 @@ void refueling_station_update(struct Moby *moby) {
             }
             station_vars->voice = -1;
             moby->update_dist = 0xFF;
-            moby->state = 2;
+            moby->state = REFUELING_STATION_STATE_EXPLOSION_DELAY;
         }
         break;
     case REFUELING_STATION_STATE_EXPLOSION_DELAY:
@@ -221,7 +228,7 @@ void refueling_station_update(struct Moby *moby) {
                     o[0xBC] = 1;
                 }
             }
-            moby->state = 3;
+            moby->state = REFUELING_STATION_STATE_EXPLODE;
         }
         break;
     case REFUELING_STATION_STATE_EXPLODE:

@@ -20,7 +20,7 @@ extern char D_0013E550[];
 #include "rnc/mobys/moby.h"
 
 extern int  D_L09_0015F5CC;
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
@@ -119,7 +119,7 @@ void shuttle_update(struct Moby *moby) {
             Vec4               *endpoint;
             attach_manipulator(moby, 0, (u8 *)shuttle_vars + 0x60);
             path = (PathNodes_00309c08 *)l09_paths[shuttle_vars->path];
-            moby->state = 1;
+            moby->state = SHUTTLE_STATE_WAIT_FOR_DEPARTURE;
             if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
                 shuttle_vars->dir = -1;
                 shuttle_vars->node = path->count - 2;
@@ -149,7 +149,7 @@ void shuttle_update(struct Moby *moby) {
                                          frame_time * 0.31415927f,
                                          frame_time * 0.4886922f);
         if (hero.ground_moby != moby)
-            moby->state = 1;
+            moby->state = SHUTTLE_STATE_WAIT_FOR_DEPARTURE;
         break;
     case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         shuttle_vars->lag += (1.0f - shuttle_vars->lag) * 0.01f;
@@ -169,12 +169,12 @@ void shuttle_update(struct Moby *moby) {
                  is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)shuttle_vars + 0xB4))) ||
                 (shuttle_vars->dir < 0 && *(s32 *)((u8 *)shuttle_vars + 0xB0) != -1 &&
                  is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)shuttle_vars + 0xB0)))) {
-                moby->state = 3;
+                moby->state = SHUTTLE_STATE_FOLLOW_PATH;
             }
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             *(s32 *)((u8 *)shuttle_vars + 0xC8) = 1;
-            moby->state = 3;
+            moby->state = SHUTTLE_STATE_FOLLOW_PATH;
         }
         break;
     case SHUTTLE_STATE_FOLLOW_PATH:
@@ -218,7 +218,7 @@ void shuttle_update(struct Moby *moby) {
             *(s32 *)((u8 *)shuttle_vars + 0xC4) = -1;
             shuttle_vars->lag = 0.0f;
             *(s32 *)((u8 *)shuttle_vars + 0xDC) = 0;
-            moby->state = 2;
+            moby->state = SHUTTLE_STATE_WAIT_FOR_DISMOUNT;
             shuttle_vars->yaw_offset = 3.1415927f;
             dir = shuttle_vars->dir;
             shuttle_vars->dir = -dir;
@@ -308,7 +308,7 @@ int advance_shuttle_along_path(struct Moby *moby) {
         shuttle_path_state->yaw_offset = 0.0f;
     shuttle_path_state->spin =
         fast_add_rotations(shuttle_path_state->spin, shuttle_path_state->speed);
-    FUN_L00_001fff28(shuttle_path_state->unk70, 0, shuttle_path_state->spin);
+    build_axis_rotation_quaternion(shuttle_path_state->unk70, 0, shuttle_path_state->spin);
     if (vector_distance_xy(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
         vector_distance_xy(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
         qcopy(&puff, &moby->pos);

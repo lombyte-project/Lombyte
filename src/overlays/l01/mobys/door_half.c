@@ -66,7 +66,7 @@ void door_half_update(struct Moby *door_half_moby) {
         door_half_vars->start_y = door_half_moby->pos.y;
         door_half_vars->sound = -1;
         door_half_vars->last_progress = 0.0f;
-        door_half_moby->state = 1;
+        door_half_moby->state = DOOR_HALF_STATE_FOLLOW_DRIVER;
         break;
     case DOOR_HALF_STATE_FOLLOW_DRIVER:
         if (door_half_vars->target == -1 || door_half_vars->end_x == 0.0f ||

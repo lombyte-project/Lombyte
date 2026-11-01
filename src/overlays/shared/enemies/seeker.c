@@ -17,6 +17,17 @@
 #include "rnc/mobys/resolve_moby_hit_response.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
+enum {
+    SEEKER_STATE_INITIALIZE = 0,
+    SEEKER_STATE_IDLE_HOVER = 1,
+    SEEKER_STATE_CHASE = 2,
+    SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
+    SEEKER_STATE_TIMED_CHASE = 4,
+    SEEKER_STATE_HURT_KNOCKBACK = 5,
+    SEEKER_STATE_FATAL_KNOCKBACK = 6,
+    SEEKER_STATE_EXPLODE = 7
+};
+
 typedef struct {
     u8           pad0[0x20];
     f32          unk20;
@@ -93,14 +104,7 @@ void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 /* Moby class 52 */
 void seeker_update(struct Moby *moby) {
     enum {
-        SEEKER_STATE_INITIALIZE = 0,
-        SEEKER_STATE_IDLE_HOVER = 1,
-        SEEKER_STATE_CHASE = 2,
-        SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
-        SEEKER_STATE_TIMED_CHASE = 4,
-        SEEKER_STATE_HURT_KNOCKBACK = 5,
-        SEEKER_STATE_FATAL_KNOCKBACK = 6,
-        SEEKER_STATE_EXPLODE = 7
+        SEEKER_DISPATCH_MODE_SKIP_STATE_UPDATE = 2
     };
     Moby52Vars      *seeker_instance_vars = (Moby52Vars *)moby->pvars;
     struct Moby     *target;
@@ -122,7 +126,7 @@ void seeker_update(struct Moby *moby) {
         moby->shadow_range = 0x17;
     }
     mode = seeker_state_dispatch_mode;
-    if (mode == 2) {
+    if (mode == SEEKER_DISPATCH_MODE_SKIP_STATE_UPDATE) {
         return;
     }
     switch (moby->state) {
@@ -142,7 +146,7 @@ void seeker_update(struct Moby *moby) {
         seeker_instance_vars->unkD8 = 0.5f;
         seeker_instance_vars->unkD0 = truncate_float_to_s32(512.0f);
         seeker_instance_vars->speed = frame_time * 7.75f;
-        moby->state = 1;
+        moby->state = SEEKER_STATE_IDLE_HOVER;
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
@@ -174,7 +178,7 @@ void seeker_update(struct Moby *moby) {
                 seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
             seeker_instance_vars->moving = 1;
-            moby->state = 2;
+            moby->state = SEEKER_STATE_CHASE;
         }
         break;
     case SEEKER_STATE_CHASE_ANIMATION_WAIT:
@@ -183,7 +187,7 @@ void seeker_update(struct Moby *moby) {
                 FUN_L01_0026e090(moby->group, 1);
             }
             seeker_instance_vars->moving = 1;
-            moby->state = 4;
+            moby->state = SEEKER_STATE_TIMED_CHASE;
             if (seeker_instance_vars->voice == -1) {
                 seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
@@ -252,8 +256,8 @@ void seeker_update(struct Moby *moby) {
             }
             FUN_L00_00258830(moby, &vel, 0, 0.0f, 0.5f, 0.0f);
         }
-        if (target_distance_xy < 6.0f && moby->state == 2) {
-            moby->state = 3;
+        if (target_distance_xy < 6.0f && moby->state == SEEKER_STATE_CHASE) {
+            moby->state = SEEKER_STATE_CHASE_ANIMATION_WAIT;
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             }
@@ -269,7 +273,7 @@ void seeker_update(struct Moby *moby) {
                 seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
             seeker_instance_vars->moving = 1;
-            moby->state = 4;
+            moby->state = SEEKER_STATE_TIMED_CHASE;
             if (seeker_instance_vars->timer == 0) {
                 seeker_instance_vars->timer = scale_game_frames(180);
             }
@@ -433,6 +437,9 @@ void update_seeker_damage_and_target(Moby *moby) {
         RESPONSE_REACTION_ONLY = 9,
         RESPONSE_NO_REACTION = 11
     };
+    enum {
+        SEEKER_TARGET_STATUS_LOST = 2
+    };
     char        hit_pos[16];
     int         hit;
     float       damage;
@@ -445,13 +452,13 @@ void update_seeker_damage_and_target(Moby *moby) {
     int         lost_state;
 
     seeker_vars = (struct Data *)moby->pvars;
-    if (moby->state == 0) {
+    if (moby->state == SEEKER_STATE_INITIALIZE) {
         return;
     }
     moby->scale =
         moby->scale + ((((Cls *)moby->pclass)->scale * D_L09_0016140C) - moby->scale) * 0.1f;
     if (fast_dec_timer(&seeker_vars->timer) == 2) {
-        moby->state = 7;
+        moby->state = SEEKER_STATE_EXPLODE;
         return;
     }
     if (seeker_vars->timer == scale_game_frames(0xA) ||
@@ -467,7 +474,7 @@ void update_seeker_damage_and_target(Moby *moby) {
     source = find_moby_hit(moby, 0x330000, 0);
     response =
         resolve_moby_hit_response(moby, source, &seeker_vars->health, 0, &hit, &damage, 0, 4);
-    if (hit != 1 && moby->state != 6) {
+    if (hit != 1 && moby->state != SEEKER_STATE_FATAL_KNOCKBACK) {
         seeker_vars->health = seeker_vars->health - damage;
         if (seeker_vars->health <= 0.0f) {
             response = 1;
@@ -500,7 +507,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             *(Q_2C73D0 *)hit_pos = source->pos;
             func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle, &seeker_vars->f88, &seeker_vars->f8C);
             func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle, 4, 1, 0);
-            moby->state = 5;
+            moby->state = SEEKER_STATE_HURT_KNOCKBACK;
             if (moby->group != 0xFF) {
                 func_L01_0026F040_2C73D0(moby->group, 1);
             }
@@ -521,7 +528,7 @@ void update_seeker_damage_and_target(Moby *moby) {
                 hit_pos, &knock_angle_fatal, &seeker_vars->f88, &seeker_vars->f8C);
             func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle_fatal, 4, 1, 0);
             mark_moby_for_removal_cf(moby, 0, -1);
-            moby->state = 6;
+            moby->state = SEEKER_STATE_FATAL_KNOCKBACK;
             seeker_vars->reactTime = 0xF0;
             break;
         case RESPONSE_NONE:
@@ -546,7 +553,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             seeker_vars->reach = 24.0f;
             goal = seeker_vars->target;
             target_selection_status = func_L00_00260D30_2C73D0(moby, goal, 24.0f);
-            lost_state = 2;
+            lost_state = SEEKER_TARGET_STATUS_LOST;
         } else {
             Path *path;
             seeker_vars->reach = 12.0f;
@@ -554,7 +561,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             goal = seeker_vars->target;
             target_selection_status =
                 activate_effect_l08(moby, goal, 12.0f, 0, 0, path->pts, path->count);
-            lost_state = 2;
+            lost_state = SEEKER_TARGET_STATUS_LOST;
         }
         if (target_selection_status != lost_state && seeker_vars->retreat == 0) {
             if (seeker_vars->reach < vector_distance_xy(&moby->pos, goal)) {

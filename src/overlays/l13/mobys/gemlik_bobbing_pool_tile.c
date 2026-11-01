@@ -295,7 +295,7 @@ void gemlik_bobbing_pool_tile_update(struct Moby *moby) {
                 initialize_gemlik_pool_tile_neighbors(tile_index);
         }
         moby->draw_dist = 0;
-        moby->state = 1;
+        moby->state = BOBBING_PLATFORM_UPDATE;
         break;
     }
     case BOBBING_PLATFORM_UPDATE: {

@@ -12,7 +12,8 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
 void step_angle_toward_target(void *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
-s32  FUN_L00_00258490_261630(void *, void *, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_00258490");
+s32  move_moby_xy_with_collision_constraints(
+     void *, void *, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_00258490");
 void update_object_wander_movement(u8 *moving_object,
                                    u8 *movement_state,
                                    f32 a,
@@ -47,14 +48,15 @@ void update_object_wander_movement(u8 *moving_object,
         fast_cos(*(f32 *)(moving_object + 0x48)) * *(f32 *)(movement_state + 0x14);
     ((f32 *)proposed_position)[1] +=
         fast_sin(*(f32 *)(moving_object + 0x48)) * *(f32 *)(movement_state + 0x14);
-    movement_unconstrained = FUN_L00_00258490_261630(moving_object,
-                                                     pos,
-                                                     proposed_position,
-                                                     0,
-                                                     collision_height_offset,
-                                                     *(f32 *)(movement_state + 0x10),
-                                                     ground_height_difference_limit,
-                                                     0.52359879f);
+    movement_unconstrained =
+        move_moby_xy_with_collision_constraints(moving_object,
+                                                pos,
+                                                proposed_position,
+                                                0,
+                                                collision_height_offset,
+                                                *(f32 *)(movement_state + 0x10),
+                                                ground_height_difference_limit,
+                                                0.52359879f);
     *(f32 *)(moving_object + 0x18) = probe_ground_height(pos, 0, 0.5f);
     planar_distance = vector_distance_xy(pos, movement_state);
     if (movement_unconstrained == 0 || *(f32 *)(movement_state + 0x1C) < planar_distance) {

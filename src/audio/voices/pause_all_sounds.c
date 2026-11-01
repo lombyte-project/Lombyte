@@ -30,7 +30,8 @@ extern s32            D_00141660[];
 extern u8 D_0014161B  NOT_SDA;
 extern s32            D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
 extern s32            alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
-extern s32            D_001D0398[]; /* help_history_list list.selected */
+extern s32
+    help_history_selected_index[] __asm__("D_001D0398"); /* help_history_list list.selected */
 
 extern void update_skill_point_and_gold_weapon_menu_entries() __asm__("func_00226E58");
 
@@ -93,7 +94,7 @@ void pause_all_sounds(s32 mode) {
         }
     }
     update_mission_list();
-    D_001D0398[0] = 0;
+    help_history_selected_index[0] = 0;
     update_skill_point_and_gold_weapon_menu_entries();
     {
         struct MenuSystem *g = &menu_system;

@@ -19,6 +19,11 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* Class header fields the spawner copies into a fresh moby. */
+enum {
+    MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+    MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+};
+
 typedef struct {
     u8  pad0[0xF];
     u8  always_draw; /* 0x0F */
@@ -77,6 +82,9 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby,
                                          s32          oclass) __asm__("FUN_L03_002bec60");
 
 struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s32 oclass) {
+    enum {
+        SPAWNER_CHILD_STATE_INITIAL = 0
+    };
     Vec4         pos;
     Vec4        *spawn_position_source;
     Spawner     *spawner_data;
@@ -104,7 +112,9 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
             continue;
         }
         current_moby = &D_L03_0015FFD8_gp[pooled_child_moby_index];
-        if (current_moby != NULL && current_moby->state != 0xFE && current_moby->state != 0xFD) {
+        if (current_moby != NULL &&
+            current_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+            current_moby->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             spawner_data->live++;
             continue;
         }
@@ -118,7 +128,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         found = 1;
         qcopy(&current_moby->pos, spawn_position_source);
         current_moby->pos.w = 0.0f;
-        current_moby->state = 0;
+        current_moby->state = SPAWNER_CHILD_STATE_INITIAL;
         current_moby->command = 0;
         spawned_moby_class = (SpawnClass *)current_moby->pclass;
         flags = spawned_moby_class->flags;
@@ -169,8 +179,9 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         }
     }
     for (current_moby = D_L03_0015FFE4; current_moby != NULL; current_moby = current_moby->next) {
-        if (current_moby->oclass == 0x221 && current_moby->state != 0xFE &&
-            current_moby->state != 0xFD) {
+        if (current_moby->oclass == 0x221 &&
+            current_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
+            current_moby->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             spawner_data->live++;
         }
     }
@@ -188,7 +199,12 @@ void bomb_spawner_bomb_update(struct Moby *moby) __asm__("FUN_L03_002c4718");
 /* Drifts and bounces off walls (state 0), lands and spawns its child moby (1), then shrinks while the child grows (2). */
 /* Moby class 545 */
 void bomb_spawner_bomb_update(struct Moby *moby) {
-    float       *vars;
+    enum {
+        SPAWNER_BOMB_STATE_MOVING = 0,
+        SPAWNER_BOMB_STATE_SPAWN_CHILD = 1,
+        SPAWNER_BOMB_STATE_SHRINKING = 2
+    };
+    float       *bomb_runtime;
     Vec4        *pos;
     struct Moby *other;
     Vec4         old_pos;
@@ -200,54 +216,54 @@ void bomb_spawner_bomb_update(struct Moby *moby) {
 
     if (moby == NULL)
         return;
-    vars = (float *)moby->pvars;
-    if (vars == NULL)
+    bomb_runtime = (float *)moby->pvars;
+    if (bomb_runtime == NULL)
         return;
     pos = (Vec4 *)&moby->pos;
-    fast_dec_timer(vars + 8);
+    fast_dec_timer(bomb_runtime + 8);
     qcopy(&old_pos, pos);
     switch (moby->state) {
-    case 0: {
+    case SPAWNER_BOMB_STATE_MOVING: {
         moby->scale += (moby->pclass->scale - moby->scale) * (frame_scale * 0.05f);
-        fast_vec_add(pos, pos, vars);
-        fast_vec_normalize(&next_pos, vars, 0.2f);
+        fast_vec_add(pos, pos, bomb_runtime);
+        fast_vec_normalize(&next_pos, bomb_runtime, 0.2f);
         fast_vec_add(&next_pos, &next_pos, pos);
         old_disable = moby->collision_disable;
         old_collision = moby->collision;
-        old_owner_disable = (*(struct Moby **)(vars + 4))->collision_disable;
-        old_owner_collision = (*(struct Moby **)(vars + 4))->collision;
+        old_owner_disable = (*(struct Moby **)(bomb_runtime + 4))->collision_disable;
+        old_owner_collision = (*(struct Moby **)(bomb_runtime + 4))->collision;
         moby->collision_disable = -1;
-        (*(struct Moby **)(vars + 4))->collision_disable = -1;
+        (*(struct Moby **)(bomb_runtime + 4))->collision_disable = -1;
         moby->collision = 0;
-        (*(struct Moby **)(vars + 4))->collision = 0;
+        (*(struct Moby **)(bomb_runtime + 4))->collision = 0;
         if (collision_line(&old_pos, &next_pos, 4, moby, 0)) {
             fast_vec_sub(&next_pos, &D_L03_00173F40.point, &next_pos);
             fast_vec_normalize(&next_pos, &next_pos, 0.215f);
             fast_vec_add(pos, pos, &next_pos);
             if (D_L03_00173F40.moby == 0) {
-                reflect_vector(vars, vars, &D_L03_00173F40.normal_x);
+                reflect_vector(bomb_runtime, bomb_runtime, &D_L03_00173F40.normal_x);
                 angle = vector_length_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f &&
                     collision_hit_material() == -1) {
-                    fast_vec_scale(vars, vars, 0.5f);
-                    if (fast_vec_length(vars) < 0.025f) {
-                        moby->state = 1;
+                    fast_vec_scale(bomb_runtime, bomb_runtime, 0.5f);
+                    if (fast_vec_length(bomb_runtime) < 0.025f) {
+                        moby->state = SPAWNER_BOMB_STATE_SPAWN_CHILD;
                         goto first_collision_timer;
                     }
                 }
             } else if (((struct Moby *)D_L03_00173F40.moby)->oclass != 0x221) {
-                reflect_vector(vars, vars, &D_L03_00173F40.normal_x);
+                reflect_vector(bomb_runtime, bomb_runtime, &D_L03_00173F40.normal_x);
                 angle = vector_length_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f &&
                     collision_hit_material() == -1)
-                    fast_vec_scale(vars, vars, 1.2f);
+                    fast_vec_scale(bomb_runtime, bomb_runtime, 1.2f);
             } else {
-                vars[2] *= FUN_002132a8(0.9f, 1.1f);
+                bomb_runtime[2] *= FUN_002132a8(0.9f, 1.1f);
             }
         first_collision_timer:
-            if (*(int *)(vars + 8) == 0) {
+            if (*(int *)(bomb_runtime + 8) == 0) {
                 FUN_0022da68(0, 0, moby);
-                *(int *)(vars + 8) = 12;
+                *(int *)(bomb_runtime + 8) = 12;
             }
         }
         if (coll_sphere(0.2f, (Vec4 *)&moby->pos, 4, moby)) {
@@ -255,30 +271,32 @@ void bomb_spawner_bomb_update(struct Moby *moby) {
             fast_vec_normalize(&next_pos, &next_pos, 0.015f);
             fast_vec_add((Vec4 *)&moby->pos, &D_L03_00173F40.pad30, &next_pos);
             if (D_L03_00173F40.moby == 0) {
-                reflect_vector(vars, vars, &D_L03_00173F40.normal_x);
+                reflect_vector(bomb_runtime, bomb_runtime, &D_L03_00173F40.normal_x);
                 angle = vector_length_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f &&
                     collision_hit_material() == -1) {
-                    fast_vec_scale(vars, vars, 0.5f);
-                    if (fast_vec_length(vars) < 0.025f)
-                        moby->state = 1;
+                    fast_vec_scale(bomb_runtime, bomb_runtime, 0.5f);
+                    if (fast_vec_length(bomb_runtime) < 0.025f)
+                        moby->state = SPAWNER_BOMB_STATE_SPAWN_CHILD;
                 }
             } else if (((struct Moby *)D_L03_00173F40.moby)->oclass != 0x221) {
-                reflect_vector(vars, vars, &D_L03_00173F40.normal_x);
+                reflect_vector(bomb_runtime, bomb_runtime, &D_L03_00173F40.normal_x);
                 angle = vector_length_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f &&
                     collision_hit_material() == -1)
-                    fast_vec_scale(vars, vars, 1.2f);
+                    fast_vec_scale(bomb_runtime, bomb_runtime, 1.2f);
             } else {
-                vars[2] *= FUN_002132a8(0.9f, 1.1f);
+                bomb_runtime[2] *= FUN_002132a8(0.9f, 1.1f);
             }
-            if (*(int *)(vars + 8) == 0) {
+            if (*(int *)(bomb_runtime + 8) == 0) {
                 FUN_0022da68(0, 0, moby);
-                *(int *)(vars + 8) = 12;
+                *(int *)(bomb_runtime + 8) = 12;
             }
         }
         for (other = D_L03_0015FFE4; other != NULL; other = other->next) {
-            if (other == moby || (int)other == 0 || other->state == 0xfe || other->state == 0xfd)
+            if (other == moby || (int)other == 0 ||
+                other->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+                other->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
                 continue;
             fast_vec_sub(&delta, (Vec4 *)&moby->pos, &other->pos);
             delta.f[2] = 0.0f;
@@ -288,41 +306,42 @@ void bomb_spawner_bomb_update(struct Moby *moby) {
                 fast_vec_add((Vec4 *)&moby->pos, (Vec4 *)&moby->pos, &delta);
             }
         }
-        if (fast_dec_timer_s16(vars + 5))
-            moby->state = 2;
-        moby->rot.x = normalize_angle(vars[0]);
-        moby->rot.y = normalize_angle(vars[1]);
+        if (fast_dec_timer_s16(bomb_runtime + 5))
+            moby->state = SPAWNER_BOMB_STATE_SHRINKING;
+        moby->rot.x = normalize_angle(bomb_runtime[0]);
+        moby->rot.y = normalize_angle(bomb_runtime[1]);
         moby->collision_disable = old_disable;
-        (*(struct Moby **)(vars + 4))->collision_disable = old_owner_disable;
+        (*(struct Moby **)(bomb_runtime + 4))->collision_disable = old_owner_disable;
         moby->collision = old_collision;
-        (*(struct Moby **)(vars + 4))->collision = old_owner_collision;
-        vars[2] -= frame_time_sq * 9.8f;
+        (*(struct Moby **)(bomb_runtime + 4))->collision = old_owner_collision;
+        bomb_runtime[2] -= frame_time_sq * 9.8f;
         moby->rot.x += frame_scale * 0.01f;
         moby->rot.y += frame_scale * 0.02f;
         break;
     }
-    case 1: {
+    case SPAWNER_BOMB_STATE_SPAWN_CHILD: {
         float height = probe_ground_height(pos, 0, 0.5f);
         moby->pos.w = 0.0f;
         moby->pos.z = height + 0.2f;
         next_pos.q = *(u128 *)pos;
-        *(struct Moby **)(vars + 6) =
-            revive_spawner_pooled_child(*(struct Moby **)(vars + 4), &next_pos, -1);
-        moby->state = 2;
+        *(struct Moby **)(bomb_runtime + 6) =
+            revive_spawner_pooled_child(*(struct Moby **)(bomb_runtime + 4), &next_pos, -1);
+        moby->state = SPAWNER_BOMB_STATE_SHRINKING;
         break;
     }
-    case 2: {
+    case SPAWNER_BOMB_STATE_SHRINKING: {
         struct Moby *other;
         float        rate = frame_scale * 0.05f;
         moby->scale -= moby->scale * rate;
-        other = *(struct Moby **)(vars + 6);
-        if (other != NULL && (*(int *)(vars + 7) & 4))
+        other = *(struct Moby **)(bomb_runtime + 6);
+        if (other != NULL && (*(int *)(bomb_runtime + 7) & 4))
             other->scale += (other->pclass->scale - other->scale) * rate;
         if (moby->scale < moby->pclass->scale * (frame_scale * 0.05f)) {
             moby->scale = 0.0001f;
-            other = *(struct Moby **)(vars + 6);
-            if (other == NULL || other->state == 0xfe || other->state == 0xfd ||
-                !(*(int *)(vars + 7) & 4) || other->pclass->scale - 0.01f <= other->scale)
+            other = *(struct Moby **)(bomb_runtime + 6);
+            if (other == NULL || other->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+                other->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END ||
+                !(*(int *)(bomb_runtime + 7) & 4) || other->pclass->scale - 0.01f <= other->scale)
                 goto remove_moby;
         }
     }

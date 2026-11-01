@@ -33,6 +33,27 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
+enum {
+    PLASMABOT_INITIALIZE = 0,
+    PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL = 1,
+    PLASMABOT_START_PATH_TRAVERSAL = 2,
+    PLASMABOT_FOLLOW_PATH_FORWARD = 3,
+    PLASMABOT_AIM_AT_TARGET = 4,
+    PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP = 5,
+    PLASMABOT_SWEEP_AIM_AND_TRACE_LINE = 6,
+    PLASMABOT_WAIT_ANIMATION_BEFORE_AIM = 7,
+    PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
+    PLASMABOT_RETURN_TO_PATH_START = 9,
+    PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 10,
+    PLASMABOT_FALL_THEN_EXPLODE = 11,
+    PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 12,
+    PLASMABOT_FACE_TARGET_AND_WAIT = 13
+};
+
+enum {
+    HIT_KIND_SKIP_DAMAGE_AND_REACTION = 1
+};
+
 typedef struct PlasmabotVars {
     u8  pad0[0x20];
     f32 health;
@@ -188,7 +209,7 @@ void scale_and_apply_plasmabot_planar_velocity(char *moby) {
 /* steers the pitch angle of a moby toward a target and updates the joint */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4A00), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 void update_plasmabot_aim_joint_rotation(char *moby, float x) __asm__("FUN_L14_002b37b0");
 
@@ -210,7 +231,7 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
                        k,
                        frame_time * 6.2831854820251465f);
     }
-    FUN_L00_001fff28(&moby_vars->unk130, 2, *(float *)&moby_vars->unk270);
+    build_axis_rotation_quaternion(&moby_vars->unk130, 2, *(float *)&moby_vars->unk270);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
 
@@ -334,22 +355,6 @@ void plasmabot_update(char *moby) __asm__("FUN_L14_002b17d8");
 
 /* Moby class 28 */
 void plasmabot_update(char *moby) {
-    enum {
-        PLASMABOT_INITIALIZE = 0,
-        PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL = 1,
-        PLASMABOT_START_PATH_TRAVERSAL = 2,
-        PLASMABOT_FOLLOW_PATH_FORWARD = 3,
-        PLASMABOT_AIM_AT_TARGET = 4,
-        PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP = 5,
-        PLASMABOT_SWEEP_AIM_AND_TRACE_LINE = 6,
-        PLASMABOT_WAIT_ANIMATION_BEFORE_AIM = 7,
-        PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
-        PLASMABOT_RETURN_TO_PATH_START = 9,
-        PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 10,
-        PLASMABOT_FALL_THEN_EXPLODE = 11,
-        PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 12,
-        PLASMABOT_FACE_TARGET_AND_WAIT = 13
-    };
     PlasmabotVars *plasmabot_update_private_vars;
     char          *plasmabot_aim_target_moby;
     int            state;
@@ -794,7 +799,8 @@ void plasmabot_update(char *moby) {
     }
     }
     state = ((unsigned char *)moby)[0x20];
-    if (!(state >= 4 && state <= 7) && state != 1) {
+    if (!(state >= PLASMABOT_AIM_AT_TARGET && state <= PLASMABOT_WAIT_ANIMATION_BEFORE_AIM) &&
+        state != PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL) {
         update_plasmabot_aim_quaternion(moby, 0, MOBY(moby)->rot.z);
         update_plasmabot_aim_joint_rotation(moby, MOBY(moby)->rot.z);
     }
@@ -1108,7 +1114,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         hit_info = 0;
     }
     reaction_outcome = hit_reaction(moby, hit_info, &state->health, 0, &hit_kind, &damage, 0, 4);
-    if (hit_kind != 1 && ((unsigned char *)moby)[0x20] != 0xB) {
+    if (hit_kind != HIT_KIND_SKIP_DAMAGE_AND_REACTION && ((unsigned char *)moby)[0x20] != 0xB) {
         state->health -= damage;
         if (state->health <= 0.0f)
             reaction_outcome = 1;
@@ -1125,7 +1131,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
             int   stagger_duration_frames;
             float frame_duration, stagger_motion_z, k;
             release_beam_slot_by_id(moby);
-            moby->state = 0xA;
+            moby->state = PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM;
             stagger_duration_frames = scale_game_frames(0x3C);
             frame_duration = frame_time;
             stagger_motion_z = plasmabot_stagger_motion_z_scale_gp * frame_duration;
@@ -1149,9 +1155,9 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         case HIT_REACTION_DEATH: {
             float y;
             if (*(int *)(hit_info + 0x24) & 0x800000) {
-                moby->state = 0xC;
+                moby->state = PLASMABOT_SPAWN_DEBRIS_AND_REMOVE;
             } else {
-                moby->state = 0xB;
+                moby->state = PLASMABOT_FALL_THEN_EXPLODE;
             }
             moby->flags &= 0xEFFF;
             {
@@ -1257,7 +1263,7 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
                                  yaw_easing_coefficient,
                                  frame_time * 6.2831854820251465f);
     }
-    FUN_L00_001fff28(&state->unk170, 2, state->unk268);
+    build_axis_rotation_quaternion(&state->unk170, 2, state->unk268);
     if (flag) {
         float        owner_aim_position[4];
         float        owner_aim_offset[4];
@@ -1281,7 +1287,7 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
                                  frame_time_sq * 12.566370964050293f,
                                  frame_time * 6.2831854820251465f);
         cp = pitch_quaternion;
-        FUN_L00_001fff28(cp, 1, *(float *)&state->unk280);
+        build_axis_rotation_quaternion(cp, 1, *(float *)&state->unk280);
         multiply_quaternions(&state->unk170, &state->unk170, cp);
     }
     return fast_difference_between_rotations(turn, state->unk268);
@@ -1322,7 +1328,7 @@ int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_mo
         return 1;
     do {
         char *moby = D_L14_0015FFD8 + ((*moby_list_entry & 0x7FFF) << 8);
-        if (MOBY(moby)->oclass == 0x1C && MOBY(moby)->state == 2)
+        if (MOBY(moby)->oclass == 0x1C && MOBY(moby)->state == PLASMABOT_START_PATH_TRAVERSAL)
             return 0;
     } while ((short)*moby_list_entry++ >= 0);
     return 1;

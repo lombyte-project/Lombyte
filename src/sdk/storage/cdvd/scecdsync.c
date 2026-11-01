@@ -7,7 +7,10 @@
 extern u8 cd_sync_wait_debug_message[] __asm__("D_00152EF0");
 
 s32 sceCdSync(s32 mode) {
-    if (mode == 0) {
+    enum {
+        CD_SYNC_BLOCKING = 0
+    };
+    if (mode == CD_SYNC_BLOCKING) {
         if (cd_debug > 0) {
             scePrintf(cd_sync_wait_debug_message);
         }

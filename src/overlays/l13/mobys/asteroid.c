@@ -17,6 +17,14 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/sdk/libc/stdlib.h"
 
+enum {
+    ASTEROID_INITIALIZE = 0,
+    ASTEROID_WAIT_TO_LAUNCH = 1,
+    ASTEROID_MOVE_AND_COLLIDE = 2,
+    ASTEROID_RESET_AT_HOME = 3,
+    ASTEROID_WAIT_TO_RESPAWN = 4
+};
+
 enum AsteroidSpinAxis {
     SPIN_AXIS_X = 0x0,
     SPIN_AXIS_Y = 0x1,
@@ -198,7 +206,7 @@ void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio)
         moby->collision = 0;
         *(short *)(blob_data + 0x4C) = scale_game_frames(0x1E);
     } else if (*(int *)(blob_data + 0x40) == 0) {
-        moby->state = 4;
+        moby->state = ASTEROID_WAIT_TO_RESPAWN;
         moby->flags |= 1;
         moby->collision = 0;
         moby->visible = 0;
@@ -238,13 +246,6 @@ void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
 
 /* Moby classes 212, 1412 */
 void asteroid_update(struct Moby *moby) {
-    enum {
-        ASTEROID_INITIALIZE = 0,
-        ASTEROID_WAIT_TO_LAUNCH = 1,
-        ASTEROID_MOVE_AND_COLLIDE = 2,
-        ASTEROID_RESET_AT_HOME = 3,
-        ASTEROID_WAIT_TO_RESPAWN = 4
-    };
     struct BlobVars *asteroid_vars = (struct BlobVars *)moby->pvars;
     f32              distance = fast_vec_dist(&moby->pos, &hero_pos);
     f32              size;
@@ -261,14 +262,14 @@ void asteroid_update(struct Moby *moby) {
         if (moby->scale < moby->pclass->scale) {
             moby->unk72 = 0;
         }
-        moby->state = 3;
+        moby->state = ASTEROID_RESET_AT_HOME;
         break;
     case ASTEROID_WAIT_TO_LAUNCH:
         if (hero.state.current == 0x32 && hero.ship_moby != 0 && hero.ship_moby->oclass == 0x45 &&
             (moby->visible != 0 || distance < 40.0f)) {
             fast_vec_normalize(
                 asteroid_vars, asteroid_vars->dir, random_float_between(1.0f, 10.0f) * frame_time);
-            moby->state = 2;
+            moby->state = ASTEROID_MOVE_AND_COLLIDE;
         }
         break;
     case ASTEROID_MOVE_AND_COLLIDE:
@@ -311,7 +312,7 @@ void asteroid_update(struct Moby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            moby->state = 4;
+            moby->state = ASTEROID_WAIT_TO_RESPAWN;
             moby->collision = 0;
             moby->flags |= 1;
             moby->visible = 0;
@@ -353,7 +354,7 @@ void asteroid_update(struct Moby *moby) {
         if (moby->pclass->scale < moby->scale) {
             moby->unk72 = 100;
         }
-        moby->state = 1;
+        moby->state = ASTEROID_WAIT_TO_LAUNCH;
         break;
     case ASTEROID_WAIT_TO_RESPAWN:
         if (fast_bsphere_check(&asteroid_vars->home, moby->draw_dist) < 0) {
@@ -361,7 +362,7 @@ void asteroid_update(struct Moby *moby) {
             moby->collision = moby->pclass->collision;
             moby->visible = 1;
             moby->flags &= ~1;
-            moby->state = 3;
+            moby->state = ASTEROID_RESET_AT_HOME;
         }
         break;
     }

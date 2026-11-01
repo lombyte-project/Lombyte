@@ -78,7 +78,7 @@ void door_update(struct Moby *door_moby) {
             door_moby->command = 1;
         }
         *(OvlQuad *)door_vars = *(OvlQuad *)&door_moby->pos;
-        door_moby->state = 1;
+        door_moby->state = DOOR_STATE_WAIT_AT_ORIGIN;
         break;
     case DOOR_STATE_MOVE_AWAY_FROM_ORIGIN:
         if (door_moby->pclass->sound_defs != 0 &&
@@ -114,7 +114,7 @@ void door_update(struct Moby *door_moby) {
                 }
             }
             (*(int *)(door_vars + ((0x20)))) = -1;
-            door_moby->state = 4;
+            door_moby->state = DOOR_STATE_WAIT_DISPLACED;
         }
         break;
     case DOOR_STATE_WAIT_AT_ORIGIN:
@@ -143,7 +143,7 @@ void door_update(struct Moby *door_moby) {
                 (*(int *)(door_vars + ((0x20)))) =
                     allocate_voice_for_target_entry(0, 4, (int)door_moby);
             }
-            door_moby->state = 2;
+            door_moby->state = DOOR_STATE_MOVE_AWAY_FROM_ORIGIN;
         }
         break;
     case 3:
@@ -172,7 +172,7 @@ void door_update(struct Moby *door_moby) {
             (*(int *)(door_vars + ((0x20)))) =
                 allocate_voice_for_target_entry(0, 4, (int)door_moby);
         }
-        door_moby->state = 5;
+        door_moby->state = DOOR_STATE_RETURN_TO_ORIGIN;
         break;
     case DOOR_STATE_RETURN_TO_ORIGIN:
         if (door_moby->pclass->sound_defs != 0 &&
@@ -186,7 +186,7 @@ void door_update(struct Moby *door_moby) {
              is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(door_vars + ((0x10)))) * 0x100 +
                                              0x10,
                                          (*(int *)(door_vars + ((0x18))))))) {
-            door_moby->state = 2;
+            door_moby->state = DOOR_STATE_MOVE_AWAY_FROM_ORIGIN;
             break;
         }
         displacement_sample = absolute_float((*(float *)(door_vars + ((0x14)))));
@@ -227,7 +227,7 @@ void door_update(struct Moby *door_moby) {
                 }
             }
             (*(int *)(door_vars + ((0x20)))) = -1;
-            door_moby->state = 1;
+            door_moby->state = DOOR_STATE_WAIT_AT_ORIGIN;
         }
         break;
     }

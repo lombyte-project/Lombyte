@@ -81,7 +81,9 @@ typedef struct {
 extern void update_entity() __asm__("FUN_L00_00250df8");
 extern void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
 
-BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
+BeamMoby *spawn_bomber_jet_beam(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) __asm__("FUN_L01_002f68a0");
+
+BeamMoby *spawn_bomber_jet_beam(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
     Vec4      position_copy;
     Vec4      direction_copy;
     Vec4      target_position_copy;
@@ -259,6 +261,9 @@ void bomber_jet_update(GunshipMoby *m) __asm__("FUN_L01_002f7728");
 
 /* Moby class 688 */
 void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
+    enum {
+        BOMBER_JET_STATE_INITIALIZE = 0
+    };
     GunshipVars   *gunship_vars = bomber_jet_moby->vars;
     GunshipFollow *sub = &gunship_vars->sub;
     float          distance_scale;
@@ -318,7 +323,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
         return;
     }
     do {
-        if (bomber_jet_moby->state == 0) {
+        if (bomber_jet_moby->state == BOMBER_JET_STATE_INITIALIZE) {
             if (sub->path != -1) {
                 GunshipPath *path = (GunshipPath *)l01_paths[sub->path];
                 j = 0;
@@ -363,7 +368,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
             bomber_jet_moby->alpha = 0x80;
         }
         if (gunship_vars->trigger_volume != -1) {
-            if (bomber_jet_moby->state == 0) {
+            if (bomber_jet_moby->state == BOMBER_JET_STATE_INITIALIZE) {
                 gunship_update((char *)bomber_jet_moby);
             }
             if (gunship_vars->cutscene_timer == -1 &&

@@ -19,6 +19,17 @@
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/game/level_save_state.h"
 
+enum {
+    SANDMOUSE_STATE_INITIALIZE = 0,
+    SANDMOUSE_STATE_WAIT_FOR_ACTIVATION = 1,
+    SANDMOUSE_STATE_WAIT_FOR_LINK = 2,
+    SANDMOUSE_STATE_MOVE_TO_GOAL = 3,
+    SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE = 4,
+    SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE = 5,
+    SANDMOUSE_STATE_FADE_OUT = 6,
+    SANDMOUSE_STATE_RESET = 7
+};
+
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* offset a position by two camera-relative vectors, then raise z by 1 */
@@ -72,6 +83,9 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby,
                                                 f32          nearYaw,
 
                                                 f32 nearPitch) {
+    enum {
+        TARGET_KIND_LOCK_ON = 5
+    };
     f32          tp[4];
     struct Moby *best = 0;
     f32          bestScore = 1.0e9f;
@@ -90,7 +104,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby,
         if (candidate_moby == 0 || candidate_moby->pclass == 0)
             continue;
         candidate_target_kind = ((TargetClass *)candidate_moby->pclass)->kind;
-        if (candidate_target_kind != 5 || hp == 0 || !(0.0f < *hp))
+        if (candidate_target_kind != TARGET_KIND_LOCK_ON || hp == 0 || !(0.0f < *hp))
             continue;
         candidate_distance = fast_vec_dist(from, &candidate_moby->pos);
         if (!(candidate_distance < range))
@@ -296,7 +310,7 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
     struct HoverTuning *hover_tuning;
 
     fast_vec_sub(&steering_correction, hover_vars, &moby->pos);
-    if (moby->state == 6) {
+    if (moby->state == SANDMOUSE_STATE_FADE_OUT) {
         reference_distance = vector_distance_xy(&moby->pos, &hover_vars->unk30);
     } else {
         reference_distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
@@ -346,7 +360,7 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
         }
         steering_correction.f[2] *= frame_scale * -0.100000024f + 1.0f;
         fast_vec_add(&hover_vars->vel, &hover_vars->vel, &steering_correction);
-        if (moby->state == 6) {
+        if (moby->state == SANDMOUSE_STATE_FADE_OUT) {
             clamp_vector_length(&hover_vars->vel, &hover_vars->vel, frame_time * 2.7f);
         }
         hover_tuning = &D_L01_001DEB38;
@@ -491,9 +505,9 @@ extern char                        D_L01_0020BA30[] NOT_SDA;
 extern float                       fast_vec_dist(void *, void *);
 extern int                         debug_print() __asm__("FUN_001e93b0");
 extern int                         FUN_L00_00257b90(int, int);
-extern int                         FUN_L00_00259028(void *, void *, void *, void *);
-extern s32                         collision_line(void *, void *, s32, void *, s32);
-extern s32                         rand(void);
+extern int   step_mover_2e3f20(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
+extern s32   collision_line(void *, void *, s32, void *, s32);
+extern s32   rand(void);
 extern short sandmouse_follow_duration_frames_gp __asm__("D_L01_00162098") __attribute__((sda));
 extern short sandmouse_projectile_count_limit_gp __asm__("D_L01_0016209C") __attribute__((sda));
 extern short sandmouse_fade_duration_frames_gp __asm__("D_L01_001620A4") __attribute__((sda));
@@ -527,16 +541,6 @@ void sandmouse_update(Moby *m) __asm__("FUN_L01_0030df40");
 
 /* Moby class 1818 */
 void sandmouse_update(Moby *sandmouse_moby) {
-    enum {
-        SANDMOUSE_STATE_INITIALIZE = 0,
-        SANDMOUSE_STATE_WAIT_FOR_ACTIVATION = 1,
-        SANDMOUSE_STATE_WAIT_FOR_LINK = 2,
-        SANDMOUSE_STATE_MOVE_TO_GOAL = 3,
-        SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE = 4,
-        SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE = 5,
-        SANDMOUSE_STATE_FADE_OUT = 6,
-        SANDMOUSE_STATE_RESET = 7
-    };
     Pv *sandmouse_vars;
     f32 goal_bearing_yaw;
     int dv;
@@ -547,7 +551,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
     if (sandmouse_vars == 0)
         return;
     if (sandmouse_vars->link != -1) {
-        if (sandmouse_moby->state >= 5) {
+        if (sandmouse_moby->state >= SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE) {
             *(f32 *)LNK(sandmouse_vars->link)->pvars =
                 fast_arc_tan(sandmouse_moby->pos.x - LNK(sandmouse_vars->link)->pos.x,
                              sandmouse_moby->pos.y - LNK(sandmouse_vars->link)->pos.y);
@@ -561,7 +565,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             LNK(sandmouse_vars->link)->collision = 0;
         }
     }
-    if (sandmouse_moby->state >= 3) {
+    if (sandmouse_moby->state >= SANDMOUSE_STATE_MOVE_TO_GOAL) {
         if (big_head_cheat_enabled != 0) {
             if (*((u8 *)sandmouse_vars + 0x91) == 0) {
                 attach_manipulator(sandmouse_moby, 5, (u8 *)sandmouse_vars + 0x90);
@@ -620,7 +624,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         D_L01_001DEB38_lui.unk44 = frame_time * 11.519173f;
         D_L01_001DEB38_lui.unk48 = scale_game_frames(4);
         D_L01_001DEB38_lui.unk28 = 3.1415927f;
-        sandmouse_moby->state = 1;
+        sandmouse_moby->state = SANDMOUSE_STATE_WAIT_FOR_ACTIVATION;
         sandmouse_moby->draw_dist = 0;
         break;
     case SANDMOUSE_STATE_WAIT_FOR_ACTIVATION:
@@ -682,13 +686,13 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 set_hero_animation((float)scale_game_frames(6), 0, 0);
                 if (sandmouse_vars->link != -1) {
                     LNK(sandmouse_vars->link)->command = 5;
-                    sandmouse_moby->state = 2;
+                    sandmouse_moby->state = SANDMOUSE_STATE_WAIT_FOR_LINK;
                 } else {
                     sandmouse_moby->draw_dist = 0xFF;
                     if (sandmouse_moby->prev_seq != 0) {
                         blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(10));
                     }
-                    sandmouse_moby->state = 3;
+                    sandmouse_moby->state = SANDMOUSE_STATE_MOVE_TO_GOAL;
                 }
             }
         }
@@ -699,7 +703,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 if (sandmouse_moby->prev_seq != 0) {
                     blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(10));
                 }
-                sandmouse_moby->state = 3;
+                sandmouse_moby->state = SANDMOUSE_STATE_MOVE_TO_GOAL;
                 sandmouse_vars->timer = 0;
                 sandmouse_moby->draw_dist = 0xFF;
             }
@@ -713,7 +717,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 sandmouse_vars->slot =
                     allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
             }
-            sandmouse_moby->state = 3;
+            sandmouse_moby->state = SANDMOUSE_STATE_MOVE_TO_GOAL;
         }
         break;
     case SANDMOUSE_STATE_MOVE_TO_GOAL: {
@@ -744,7 +748,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                                   frame_time_sq * 3.1415927f,
                                   frame_time * 11.519173f);
             sandmouse_vars->vel.f[2] = 0;
-            movement_result_flags = FUN_L00_00259028(
+            movement_result_flags = step_mover_2e3f20(
                 sandmouse_moby, &D_L01_001DEB38_lui, sandmouse_vars, &sandmouse_vars->vel);
         }
         if ((movement_result_flags & 6) != 0 ||
@@ -753,7 +757,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 blend_moby_animation(sandmouse_moby, 2, 0, scale_game_frames(10));
             }
             qzero(&sandmouse_vars->vel);
-            sandmouse_moby->state = 4;
+            sandmouse_moby->state = SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE;
             sandmouse_vars->timer = scale_game_frames(0x78);
         }
         if (sandmouse_moby->anim_flags & 2) {
@@ -778,7 +782,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         if (sandmouse_vars->link != -1) {
             LNK(sandmouse_vars->link)->flags &= 0xFFBE;
         }
-        sandmouse_moby->state = 5;
+        sandmouse_moby->state = SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE;
         break;
     case SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE: {
         char *v = VOICE(sandmouse_vars->slot);
@@ -821,7 +825,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 }
                 sandmouse_vars->slot = -1;
                 allocate_voice_for_target_entry(2, 0, (struct VoiceTarget *)sandmouse_moby);
-                sandmouse_moby->state = 6;
+                sandmouse_moby->state = SANDMOUSE_STATE_FADE_OUT;
                 if (sandmouse_vars->link != -1) {
                     LNK(sandmouse_vars->link)->command = 5;
                 }
@@ -842,7 +846,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             qcopy(&sandmouse_moby->pos, &sandmouse_vars->a30);
             qcopy(sandmouse_vars, &sandmouse_vars->a30);
             qzero(&sandmouse_vars->vel);
-            sandmouse_moby->state = 7;
+            sandmouse_moby->state = SANDMOUSE_STATE_RESET;
             sandmouse_moby->flags &= 0xFDFF;
         } else {
             Vec4 pos;
@@ -905,13 +909,13 @@ void sandmouse_update(Moby *sandmouse_moby) {
             blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(6));
         }
         LNK(sandmouse_vars->link)->command = 1;
-        sandmouse_moby->state = 1;
+        sandmouse_moby->state = SANDMOUSE_STATE_WAIT_FOR_ACTIVATION;
         sandmouse_moby->draw_dist = 0;
         break;
     case 8:
         break;
     }
-    if (sandmouse_moby->state >= 2) {
+    if (sandmouse_moby->state >= SANDMOUSE_STATE_WAIT_FOR_LINK) {
         jet_animate(sandmouse_moby, 0.3f);
         ((void (*)(void *, void *))emit_sandmouse_particles)(sandmouse_moby, sandmouse_vars);
     }

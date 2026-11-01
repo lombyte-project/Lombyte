@@ -28,6 +28,10 @@ extern void          draw_light_flare() __asm__("func_0022DF40");
 void update_moby_proximity_interaction(unsigned char *moby) __asm__("FUN_L00_0028e180");
 
 void update_moby_proximity_interaction(unsigned char *moby) {
+    enum {
+        PROXIMITY_MOBY_STATE_INTERACTIVE = 0,
+        PROXIMITY_MOBY_STATE_FOLLOWUP_SCENES = 0x2A
+    };
     char          *proximity_state_data = ((char *)MOBY(moby)->pvars);
     float         *moby_position;
     float          proximity_test_position[4];
@@ -35,7 +39,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
     int            one;
     unsigned char *hero_position_or_scene_flags;
 
-    if (MOBY(moby)->state != 0x2A) {
+    if (MOBY(moby)->state != PROXIMITY_MOBY_STATE_FOLLOWUP_SCENES) {
         if (MOBY(moby)->visible != 0) {
             MOBY(moby)->command += 2;
             color_pulse_intensity =
@@ -83,8 +87,8 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         if (*(short *)(proximity_state_data + 0xC) != 0) {
             int help_message_accepted = try_set_help_message(2, 0x53E4) != 0;
             if ((pad_pressed_words[0] & 0x10) && help_message_accepted) {
-                if (current_level_index == 10 && hero.vehicle_mode == 1) {
-                    MOBY(moby)->state = 0x2A;
+                if (current_level_index == 10 && hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
+                    MOBY(moby)->state = PROXIMITY_MOBY_STATE_FOLLOWUP_SCENES;
                     MOBY(moby)->flags |= 0x41;
                     start_scene(9);
                 } else {
@@ -116,7 +120,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
                 start_scene(6);
                 hero_position_or_scene_flags[0x4B] = 1;
             } else {
-                MOBY(moby)->state = 0;
+                MOBY(moby)->state = PROXIMITY_MOBY_STATE_INTERACTIVE;
                 MOBY(moby)->flags &= 0xFFBE;
                 one = 1;
                 ship_index[1] = one;

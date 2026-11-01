@@ -21,6 +21,14 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/collision.h"
 
+enum {
+    BOLT_INITIALIZE = 0x0,
+    BOLT_FALLING = 0x1,
+    BOLT_SETTLING = 0x2,
+    BOLT_IDLE = 0x3,
+    BOLT_MOVE_TO_HERO = 0x4
+};
+
 typedef struct {
     u8  pad0[0x24];
     f32 scale; /* 0x24 */
@@ -174,13 +182,6 @@ void bolt_update(Bolt *obj) __asm__("FUN_L00_002a5dd8");
 
 /* Moby classes 13-16 */
 void bolt_update(Bolt *bolt_moby) {
-    enum {
-        BOLT_INITIALIZE = 0x0,
-        BOLT_FALLING = 0x1,
-        BOLT_SETTLING = 0x2,
-        BOLT_IDLE = 0x3,
-        BOLT_MOVE_TO_HERO = 0x4
-    };
     BoltVars *v = bolt_moby->vars;
     Vec4      geometry_scratch;
     Vec4      vector_scratch;
@@ -211,7 +212,7 @@ void bolt_update(Bolt *bolt_moby) {
     }
     switch (bolt_moby->state) {
     case BOLT_INITIALIZE:
-        bolt_moby->state = 3;
+        bolt_moby->state = BOLT_IDLE;
         bolt_moby->unk73 = 0x14;
         bolt_moby->flags |= 0x100;
         bolt_moby->unk30 = 0x20;
@@ -312,7 +313,7 @@ void bolt_update(Bolt *bolt_moby) {
               settling_inclination_limit)) {
             return;
         }
-        bolt_moby->state = 2;
+        bolt_moby->state = BOLT_SETTLING;
         v->hop_frames = v->hop_left =
             truncate_float_to_s32(scale_time(random_float_between(30.0f, 40.0f)));
         if (D_L00_00173E40.moby != 0 && FUN_L00_002603d0((void *)D_L00_00173E40.moby) != 0) {
@@ -341,7 +342,7 @@ void bolt_update(Bolt *bolt_moby) {
         if (--v->hop_left != 0) {
             return;
         }
-        bolt_moby->state = 3;
+        bolt_moby->state = BOLT_IDLE;
         v->hop_frames = v->hop_left =
             truncate_float_to_s32(scale_time(random_float_between(10.0f, 20.0f)));
         return;
@@ -616,7 +617,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
         qcopy(base_position_output, A);
     if (base_rotation_output != 0)
         qcopy(base_rotation_output, B);
-    if (MOBY(moby)->state == 3) {
+    if (MOBY(moby)->state == BOLT_IDLE) {
         char *ground_moby = *(char **)(grounded_bolt_vars + 0x5C);
         if (ground_moby != 0 && *(unsigned char *)(grounded_bolt_vars + 0x57) == 0) {
             int   should_detach_from_ground;
@@ -629,7 +630,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
                     coll_sphere(ground_collision_radius, &MOBY(moby)->pos, 0x22, moby) == 0;
             }
             if (should_detach_from_ground) {
-                MOBY(moby)->state = 1;
+                MOBY(moby)->state = BOLT_FALLING;
                 clear_u64_value(grounded_bolt_vars + 0x30);
                 *(float *)(grounded_bolt_vars + 0x3C) = 1.0f;
                 x = FUN_L00_002603d0_c(*(char **)(grounded_bolt_vars + 0x5C));
@@ -666,7 +667,7 @@ int begin_bolt_attraction(void *ov,
     float k;
     float attraction_geometry_scratch[3][4] __attribute__((aligned(16)));
 
-    if (MOBY(bolt_moby)->state == 4) {
+    if (MOBY(bolt_moby)->state == BOLT_MOVE_TO_HERO) {
         return 0;
     }
     sound_cooldown_frames = scale_game_frames(3);
@@ -681,7 +682,7 @@ int begin_bolt_attraction(void *ov,
         if (attraction_pitch_angle == 0.0f)
             attraction_pitch_angle = random_float_between(0.0f, 30.0f) * DEG_TO_RAD;
     }
-    if (MOBY(bolt_moby)->state == 3) {
+    if (MOBY(bolt_moby)->state == BOLT_IDLE) {
         euler_rotation_basis(attraction_geometry_scratch, bolt_vars + 0x10);
         fast_vec_normalize(bolt_vars + 0x20,
                            attraction_geometry_scratch[2],
@@ -702,7 +703,7 @@ int begin_bolt_attraction(void *ov,
             DEG_TO_RAD;
         build_quaternion_from_axis_angle(bolt_vars + 0x30, bolt_vars + 0x30, k * frame_time);
     }
-    MOBY(bolt_moby)->state = 4;
+    MOBY(bolt_moby)->state = BOLT_MOVE_TO_HERO;
     return 1;
 }
 
@@ -779,7 +780,7 @@ struct Moby *spawn_bolt_by_value(
         spawned_bolt->update_dist = 0x40;
         spawned_bolt->draw_dist = 0x40;
         spawned_bolt->visible = 1;
-        spawned_bolt->state = 1;
+        spawned_bolt->state = BOLT_FALLING;
         spawned_bolt->scale = spawned_bolt->pclass->scale * scale;
         euler_rotation_basis(&spawned_bolt->rot_row0, &spawned_bolt->rot);
         if ((bolt_source->flags & 0x20) && (color = *(u8 **)(bolt_source->pvars + 0xC)) != 0)

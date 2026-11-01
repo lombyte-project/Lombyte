@@ -57,14 +57,14 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
     hit = find_moby_hit(mushroom_moby, 0x10000, 0);
     switch (mushroom_moby->state) {
     case GREEN_MUSHROOM_INITIALIZE:
-        mushroom_moby->state = 1;
+        mushroom_moby->state = GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT;
         break;
     case GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT:
         if (hit != 0 && hit->f2c > 0.0f) {
             flag = 1;
         }
         if (flag) {
-            mushroom_moby->state = 2;
+            mushroom_moby->state = GREEN_MUSHROOM_SPAWN_PIECES_AND_REMOVE;
         }
         break;
     case GREEN_MUSHROOM_SPAWN_PIECES_AND_REMOVE:

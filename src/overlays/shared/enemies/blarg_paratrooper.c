@@ -137,7 +137,7 @@ extern void  FUN_L00_00263ac8_c(float, void *, int, void *) __asm__("FUN_L00_002
 extern void  FUN_L00_0025a120_c(void *) __asm__("FUN_L00_0025a120");
 extern void  debug_print(char *, int) __asm__("FUN_001e93b0");
 extern void  FUN_L01_0026d930_c(void *) __asm__("FUN_L01_0026d930");
-extern void  FUN_L00_00259028_c(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
+extern void  step_mover_2e3f20(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern void  FUN_L00_0025f730(void *, float);
 extern void
            FUN_L00_00258830_c(void *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
@@ -155,11 +155,13 @@ extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int
 activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
-extern float D_L08_00162180 __attribute__((sda));
+extern float l08_paratrooper_model_scale_multiplier __asm__("D_L08_00162180") __attribute__((sda));
 extern float D_L08_00162184 __attribute__((sda));
-extern float D_L08_0016218C __attribute__((sda));
-extern float D_L08_00162190 __attribute__((sda));
-extern float D_L08_00162194 __attribute__((sda));
+extern float l08_paratrooper_recovery_knockback_xy_speed __asm__("D_L08_0016218C")
+    __attribute__((sda));
+extern float l08_paratrooper_death_knockback_z_speed __asm__("D_L08_00162190") __attribute__((sda));
+extern float l08_paratrooper_death_knockback_xy_speed __asm__("D_L08_00162194")
+    __attribute__((sda));
 extern float D_L08_001621B0 __attribute__((sda));
 
 /* Paratrooper: initializes its path and steering, patrols, attacks its target,
@@ -288,10 +290,10 @@ void blarg_paratrooper_update(char *moby) {
                 paratrooper_private_state->f1F4 = index + 2 * paratrooper_private_state->f20C;
             }
         }
-        FUN_L00_00259028_c(moby,
-                           (char *)paratrooper_private_state + 0xD0,
-                           path + 0x10 + paratrooper_private_state->f1F4 * 16,
-                           pos);
+        step_mover_2e3f20(moby,
+                          (char *)paratrooper_private_state + 0xD0,
+                          path + 0x10 + paratrooper_private_state->f1F4 * 16,
+                          pos);
         if (target && paratrooper_private_state->f164 != 2 &&
             fast_dec_timer((char *)paratrooper_private_state + 0x1F0)) {
             paratrooper_private_state->f1F4 = select_point_index_by_distance(
@@ -310,11 +312,11 @@ void blarg_paratrooper_update(char *moby) {
             paratrooper_private_state->fE0 = 0.0f;
             (*(unsigned char *)((char *)(moby) + 0x20)) = 3;
         } else {
-            FUN_L00_00259028_c(moby,
-                               (char *)paratrooper_private_state + 0xD0,
-                               ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
-                                   paratrooper_private_state->f1F4 * 16,
-                               pos);
+            step_mover_2e3f20(moby,
+                              (char *)paratrooper_private_state + 0xD0,
+                              ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
+                                  paratrooper_private_state->f1F4 * 16,
+                              pos);
             if ((*(unsigned char *)((char *)(moby) + 0x53)) != 2)
                 blend_moby_animation(moby, 2, 0, random302618() % 4 + 7);
         }
@@ -601,7 +603,13 @@ void blarg_paratrooper_update(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00303998), where it is exact; names translated to the US level program. */
 
 void update_blarg_paratrooper_damage_and_state(char *moby) {
-    Paratrooper302618 *data;
+    enum {
+        PARATROOPER_HIT_REACTION_LETHAL = 1,
+        PARATROOPER_HIT_REACTION_DEATH_KNOCKBACK = 2,
+        PARATROOPER_HIT_REACTION_RECOVERY_KNOCKBACK = 3,
+        PARATROOPER_HIT_REACTION_NONE = 11
+    };
+    Paratrooper302618 *paratrooper_instance_state;
     char              *target, *child, *attached, *chased;
     float              pos[4] __attribute__((aligned(16)));
     float              matrix[16] __attribute__((aligned(16)));
@@ -609,43 +617,45 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     int                hit_state, reaction, turn, state;
     float              angle, distance, height, dx, dy;
 
-    data = (Paratrooper302618 *)MOBY(moby)->pvars;
+    paratrooper_instance_state = (Paratrooper302618 *)MOBY(moby)->pvars;
     if (MOBY(moby)->state == 0)
         return;
     {
         float timer_scale = D_L08_001621B0 * frame_time;
-        ((Moby *)moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * D_L08_00162180;
-        data->unkF4 = timer_scale;
+        ((Moby *)moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
+                                l08_paratrooper_model_scale_multiplier;
+        paratrooper_instance_state->unkF4 = timer_scale;
     }
 
-    if (data->f1F8 == 0) {
+    if (paratrooper_instance_state->f1F8 == 0) {
         child = create_moby(0x401);
-        data->f1F8 = child;
+        paratrooper_instance_state->f1F8 = child;
         if (child != 0) {
             *(short *)(child + 0x32) = 0x40;
-            *(unsigned char *)(data->f1F8 + 0x30) = 0x40;
-            *(unsigned char *)(data->f1F8 + 0x31) = 1;
-            *(unsigned short *)(data->f1F8 + 0x34) |= 0x100;
+            *(unsigned char *)(paratrooper_instance_state->f1F8 + 0x30) = 0x40;
+            *(unsigned char *)(paratrooper_instance_state->f1F8 + 0x31) = 1;
+            *(unsigned short *)(paratrooper_instance_state->f1F8 + 0x34) |= 0x100;
             moby_point_position(moby, 4, pos);
-            qcopy(data->f1F8 + 0x10, pos);
+            qcopy(paratrooper_instance_state->f1F8 + 0x10, pos);
         }
         MOBY(moby)->flags |= 0x1000;
     } else {
         moby_point_position(moby, 4, pos);
         build_moby_bone_transform(moby, 4, matrix);
-        copy_matrix3x4(data->f1F8 + 0xc0, matrix);
-        attached = data->f1F8;
+        copy_matrix3x4(paratrooper_instance_state->f1F8 + 0xc0, matrix);
+        attached = paratrooper_instance_state->f1F8;
         qcopy(attached + 0x10, pos);
         update_entity(attached);
     }
 
     damage = 0.0f;
     target = find_moby_hit(moby, 0x330000, 0);
-    reaction = resolve_moby_hit_response(moby, target, &data->health, 0, &hit_state, &damage, 0, 4);
+    reaction = resolve_moby_hit_response(
+        moby, target, &paratrooper_instance_state->health, 0, &hit_state, &damage, 0, 4);
     if (hit_state != 1 && MOBY(moby)->state != 11) {
         {
-            float health = data->health - damage;
-            data->health = health;
+            float health = paratrooper_instance_state->health - damage;
+            paratrooper_instance_state->health = health;
             if (*(short *)(*(char **)(target + 0x20) + 0xa6) == 0x47)
                 reaction = 3;
             if (health <= 0.0f)
@@ -655,34 +665,34 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         turn = truncate_float_to_s32(512.0f);
         {
             float pose_scale = D_L08_00162184 * frame_time_sq;
-            data->unk90 = turn;
-            data->unk98 = 0.5f;
-            data->unk94 = 9;
-            data->unk80 = pose_scale;
+            paratrooper_instance_state->unk90 = turn;
+            paratrooper_instance_state->unk98 = 0.5f;
+            paratrooper_instance_state->unk94 = 9;
+            paratrooper_instance_state->unk80 = pose_scale;
         }
-        data->unkAD = 0;
+        paratrooper_instance_state->unkAD = 0;
 
         if ((unsigned)reaction < 12) {
             switch (reaction) {
             case 0:
-            case 11:
+            case PARATROOPER_HIT_REACTION_NONE:
                 break;
             case 9:
             case 10:
-                data->unk67 = 0xfa;
+                paratrooper_instance_state->unk67 = 0xfa;
                 break;
-            case 3:
+            case PARATROOPER_HIT_REACTION_RECOVERY_KNOCKBACK:
             case 4:
             case 5:
             case 6:
             case 7:
             case 8: {
-                float pose_scale = D_L08_0016218C * frame_time;
+                float pose_scale = l08_paratrooper_recovery_knockback_xy_speed * frame_time;
                 float timer_scale = frame_time * 3.0f;
-                data->unk88 = pose_scale;
-                data->unk8C = timer_scale;
-                data->unkC0 = 5.0f;
-                data->unkC4 = 10.0f;
+                paratrooper_instance_state->unk88 = pose_scale;
+                paratrooper_instance_state->unk8C = timer_scale;
+                paratrooper_instance_state->unkC0 = 5.0f;
+                paratrooper_instance_state->unkC4 = 10.0f;
             }
                 {
                     char *hit_moby = *(char **)(target + 0x20);
@@ -692,31 +702,34 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 angle = fast_arc_tan(dx, dy);
                 *(u128 *)pos = *(u128 *)(target + 0x10);
                 knock_angle = angle;
-                trooper_knockback_arc(
-                    pos, &knock_angle, (float *)(&data->unk88), (float *)(&data->unk8C));
-                trooper_start_knockback(moby, &data->unk70, knock_angle, 8, 1, 0);
+                trooper_knockback_arc(pos,
+                                      &knock_angle,
+                                      (float *)(&paratrooper_instance_state->unk88),
+                                      (float *)(&paratrooper_instance_state->unk8C));
+                trooper_start_knockback(
+                    moby, &paratrooper_instance_state->unk70, knock_angle, 8, 1, 0);
                 MOBY(moby)->state = 10;
-                data->unk67 = 0x78;
+                paratrooper_instance_state->unk67 = 0x78;
                 break;
-            case 1:
-            case 2: {
+            case PARATROOPER_HIT_REACTION_LETHAL:
+            case PARATROOPER_HIT_REACTION_DEATH_KNOCKBACK: {
                 float push_limit = 16.0f;
                 float pose_rate = D_L08_00162184;
-                float timer_rate = D_L08_00162194;
-                float angle_rate = D_L08_00162190;
+                float timer_rate = l08_paratrooper_death_knockback_xy_speed;
+                float angle_rate = l08_paratrooper_death_knockback_z_speed;
                 float step, pose_scale, timer_scale, angle_scale;
                 ((Moby *)moby)->flags &= 0xefff;
                 step = frame_time;
                 pose_scale = pose_rate * frame_time_sq;
                 timer_scale = timer_rate * step;
                 angle_scale = angle_rate * step;
-                data->unk98 = 0.25f;
-                data->unk8C = angle_scale;
-                data->unk80 = pose_scale;
-                data->unk88 = timer_scale;
-                data->unkC0 = 11.0f;
-                data->unkC4 = push_limit;
-                data->unk90 = 0x200;
+                paratrooper_instance_state->unk98 = 0.25f;
+                paratrooper_instance_state->unk8C = angle_scale;
+                paratrooper_instance_state->unk80 = pose_scale;
+                paratrooper_instance_state->unk88 = timer_scale;
+                paratrooper_instance_state->unkC0 = 11.0f;
+                paratrooper_instance_state->unkC4 = push_limit;
+                paratrooper_instance_state->unk90 = 0x200;
             }
                 {
                     char *hit_moby = *(char **)(target + 0x20);
@@ -726,57 +739,66 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 angle = fast_arc_tan(dx, dy);
                 *(u128 *)pos = *(u128 *)(target + 0x10);
                 second_knock_angle = angle;
-                trooper_knockback_arc(
-                    pos, &second_knock_angle, (float *)(&data->unk88), (float *)(&data->unk8C));
-                trooper_start_knockback(moby, &data->unk70, second_knock_angle, 12, 1, 0);
+                trooper_knockback_arc(pos,
+                                      &second_knock_angle,
+                                      (float *)(&paratrooper_instance_state->unk88),
+                                      (float *)(&paratrooper_instance_state->unk8C));
+                trooper_start_knockback(
+                    moby, &paratrooper_instance_state->unk70, second_knock_angle, 12, 1, 0);
                 MOBY(moby)->state = 11;
-                data->unk67 = 0xf0;
+                paratrooper_instance_state->unk67 = 0xf0;
                 spawn_randomized_bolt_drop(moby, 2, 3, 0, -1);
                 break;
             default:
                 break;
             }
         }
-        trooper_anim_update(moby, &data->unk60);
+        trooper_anim_update(moby, &paratrooper_instance_state->unk60);
     }
     MOBY(moby)->hit_slot = 0xff;
-    trooper_anim_finish(moby, &data->unk60);
+    trooper_anim_finish(moby, &paratrooper_instance_state->unk60);
 
-    if (data->unk38 != 0) {
+    if (paratrooper_instance_state->unk38 != 0) {
         angle = random_float_between(180.0f, 240.0f);
         angle = scale_time(angle);
-        data->unk1D8 = (short)truncate_float_to_s32(angle);
-        data->unk38 = 0;
+        paratrooper_instance_state->unk1D8 = (short)truncate_float_to_s32(angle);
+        paratrooper_instance_state->unk38 = 0;
     }
-    fast_dec_timer_s16((short *)(&data->unk1D8));
-    if (data->unk1D8 != 0)
-        data->unk1DC = data->unk1E4 + 6.0f;
+    fast_dec_timer_s16((short *)(&paratrooper_instance_state->unk1D8));
+    if (paratrooper_instance_state->unk1D8 != 0)
+        paratrooper_instance_state->unk1DC = paratrooper_instance_state->unk1E4 + 6.0f;
     else
-        data->unk1DC = data->unk1E4;
+        paratrooper_instance_state->unk1DC = paratrooper_instance_state->unk1E4;
 
     if (random_integer_below(4) == 0) {
         {
-            char *path = ((char *)l08_paths[data->f1D0]);
-            reaction = activate_effect_l08(
-                moby, &data->unk120, data->unk1DC, 0, 0, path + 0x10, *(int *)path);
+            char *path = ((char *)l08_paths[paratrooper_instance_state->f1D0]);
+            reaction = activate_effect_l08(moby,
+                                           &paratrooper_instance_state->unk120,
+                                           paratrooper_instance_state->unk1DC,
+                                           0,
+                                           0,
+                                           path + 0x10,
+                                           *(int *)path);
         }
         if (reaction != 2) {
-            distance = vector_distance_xy(&MOBY(moby)->pos, &data->unk120);
-            if (data->unk1DC < distance || 3.0f < absolute_float(MOBY(moby)->pos.z - data->unk128))
-                data->f164 = 2;
+            distance = vector_distance_xy(&MOBY(moby)->pos, &paratrooper_instance_state->unk120);
+            if (paratrooper_instance_state->unk1DC < distance ||
+                3.0f < absolute_float(MOBY(moby)->pos.z - paratrooper_instance_state->unk128))
+                paratrooper_instance_state->f164 = 2;
         }
     } else {
-        chased = data->f160;
+        chased = paratrooper_instance_state->f160;
         if (chased != 0 && *(unsigned char *)(chased + 0x20) != 0xfe &&
             *(unsigned char *)(chased + 0x20) != 0xfd) {
-            qcopy(&data->unk120, chased + 0x10);
+            qcopy(&paratrooper_instance_state->unk120, chased + 0x10);
         } else {
-            data->f160 = 0;
-            data->f164 = 2;
+            paratrooper_instance_state->f160 = 0;
+            paratrooper_instance_state->f164 = 2;
         }
     }
-    if (*(int *)&data->f160 == 0)
-        data->f160 = (char *)hero.moby;
+    if (*(int *)&paratrooper_instance_state->f160 == 0)
+        paratrooper_instance_state->f160 = (char *)hero.moby;
 
     state = MOBY(moby)->state;
     if (state == 0 || state == 5 || state == 7 || state == 4) {

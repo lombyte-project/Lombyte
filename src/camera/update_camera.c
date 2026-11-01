@@ -30,6 +30,13 @@ void update_camera(void) __asm__("FUN_001edaa8");
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
 void update_camera(void) {
+    enum {
+        CAMERA_TRANSITION_PHASE_IDLE = 0
+    };
+    enum {
+        CAMERA_TRANSITION_KIND_PRIMARY = 0,
+        CAMERA_TRANSITION_PHASE_BLENDING = 3
+    };
     struct PreviewCamera *camera;
     struct UpdateCam     *target;
     char                 *camera_shake_base;
@@ -39,8 +46,8 @@ void update_camera(void) {
         if (text_screen_active[0] != 0) {
             return;
         }
-        cam_trans_state.mode = 0;
-        cam_trans_state.kind = 0;
+        cam_trans_state.mode = CAMERA_TRANSITION_PHASE_IDLE;
+        cam_trans_state.kind = CAMERA_TRANSITION_KIND_PRIMARY;
     }
     camera = &preview_camera;
     camera->frame_count++;
@@ -52,7 +59,7 @@ void update_camera(void) {
     if ((unsigned short)(*(unsigned short *)&camera->transition_mode - 1) < 2) {
         start_camera_blend(camera->previous_camera);
     }
-    if (camera->transition_mode == 3) {
+    if (camera->transition_mode == CAMERA_TRANSITION_PHASE_BLENDING) {
         update_camera_blend((char *)target);
     } else {
         struct OcclCamState *occlusion = &occl_cam_state;

@@ -16,6 +16,10 @@
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
+
+unsigned char *spawn_timed_hero_relative_particle(
+    u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+
 #include "rnc/world/collision/ground_probe.h"
 /* updates the moby: initialises in state 0, then runs its motion in state 1 */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CA848), where it is exact; names translated to the US level program. */
@@ -45,7 +49,7 @@ void spinning_sprite_effect_update(struct Moby *moby) {
         if (vertical_distance_to_ground < 1.0f) {
             moby->pos.z = ground_height + 0.9f;
         }
-        moby->state = 1;
+        moby->state = MOBY_STATE_SPIN_AND_DRAW_SPRITES;
         break;
     }
     case MOBY_STATE_SPIN_AND_DRAW_SPRITES:
@@ -123,14 +127,14 @@ void draw_spinning_sprite_effect_sprites(struct Moby *moby) {
         elapsed_cycle_fraction = elapsed_cycle_fraction / (float)scale_game_frames(0xFF);
         col =
             fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_cycle_fraction));
-        FUN_L00_00272f68(d,
-                         col,
-                         truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
-                         0x35,
-                         1,
-                         2,
-                         0,
-                         sprite_data->d[i]);
+        spawn_timed_hero_relative_particle(d,
+                                           col,
+                                           truncate_float_to_s32(sprite_data->a[i]) & 0xFF,
+                                           0x35,
+                                           1,
+                                           2,
+                                           0,
+                                           sprite_data->d[i]);
         fast_vec_add(d, d, particle_position_step);
     }
 }

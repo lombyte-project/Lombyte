@@ -370,7 +370,7 @@ void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
 void restore_hero_from_vehicle_mode(void) {
     struct Hero   *hero_context = &hero;
     unsigned char *flag_clear_target;
-    if (hero_context->vehicle_mode == 1) {
+    if (hero_context->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_context->health.vehicle_mode_hp = hero_context->health.hp;
         hero_context->health.hp = hero_context->health.unk22B0;
         if (hero_context->unk1620) {
@@ -385,7 +385,7 @@ void restore_hero_from_vehicle_mode(void) {
     {
         struct Hero *hero_restore_context = &hero;
         reset_hero_easing_records();
-        hero_restore_context->vehicle_mode = 0;
+        hero_restore_context->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
         flag_clear_target = hero_restore_context->unkA84;
         if (flag_clear_target) {
             *(u16 *)(flag_clear_target + 0x34) &= ~6;
@@ -552,9 +552,9 @@ typedef union {
 } V_22a1d0;
 
 extern OvlVec4 coll_hit_pos __asm__("D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
-extern void FUN_L00_002347c0(void);
-extern void FUN_L00_00233810(void *, void *, f32);
-extern void FUN_L00_002334d0(void *, void *, f32);
+extern void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
+extern void add_hero_up_offset(void *, void *, f32) __asm__("FUN_L00_00233810");
+extern void add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32  coll3_22a1d0(void *, f32) __asm__("FUN_L00_001f3170");
@@ -574,15 +574,15 @@ s32 resolve_hero_position_collisions(s32 mode) {
     qcopy(&pre_collision_position, &hero.motion.pos.q);
     clear_u64_value(&collision_query_offset);
     if (hero.path_constrain_pending != 0) {
-        FUN_L00_002347c0();
+        resolve_hero_pending_path_clearance();
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != 0x11) {
-        if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == 1 || hero.unk1F8 != 0) {
-                FUN_L00_00233810(&collision_query_offset, &collision_query_offset, 0.6f);
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
+                add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
-                FUN_L00_002334d0(
+                add_hero_gravity_offset(
                     &collision_query_offset, &collision_query_offset, -hero.capsule_bottom);
             }
         } else {
@@ -594,7 +594,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     if (hero.state.current == HERO_STATE_SINK)
         mask = 0xD24;
     for (i = 0; i < 8; i++) {
-        if (hero.gravity_mode != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll_sphere(&hero.motion.pos.q, mask, hero.moby, frame_scale * 0.4f))
                 break;
         } else if (hero.state.control_mode == 0xF) {
@@ -773,7 +773,7 @@ void update_hero_timers_and_spatial_state(void) {
     hero.still_frames = 0;
 skip:
     update_hero_planar_distance_spring_motion();
-    if (hero.vehicle_mode == 1) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         transform_hero_local_offset_to_world(&hero.motion.body_center, 0.0f, 0.0f, 0.4f);
         hero.reach_distance = 2.125f;
         hero.reach_height = 1.25f;

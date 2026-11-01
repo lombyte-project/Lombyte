@@ -54,7 +54,8 @@ typedef struct {
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
+extern void
+spawn_particle_alt_9768(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
     void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
@@ -64,7 +65,7 @@ extern Cols l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020
 extern struct Moby *D_L01_001742D8 NOT_SDA;
 extern char                       *ents_macro __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern char                        D_0013E533[];
-extern char                        D_L01_00167240[];
+extern char                        camera_pos[] __asm__("D_L01_00167240");
 extern float D_0015ED6C            MACRO_ADDR;
 extern float D_L01_0015F5D0        MACRO_ADDR;
 extern int                         cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
@@ -96,6 +97,10 @@ void explosive_projectile_update(struct Moby *moby) __asm__("FUN_L01_002f6a30");
 
 /* Moby class 686 */
 void explosive_projectile_update(struct Moby *moby) {
+    enum {
+        EXPLOSIVE_PROJECTILE_STATE_FLYING = 0,
+        EXPLOSIVE_PROJECTILE_STATE_BURST = 1
+    };
     Vec_2F7E08 old_pos;
     Vec_2F7E08 smoke_pos;
     Data      *projectile_vars;
@@ -169,11 +174,11 @@ void explosive_projectile_update(struct Moby *moby) {
     if (fast_vec_dist(&projectile_vars->target, &(*(Vec_2F7E08 *)&moby->pos)) <
         projectile_vars->f38) {
         qcopy(&(*(Vec_2F7E08 *)&moby->pos), &projectile_vars->target);
-        moby->state = 1;
+        moby->state = EXPLOSIVE_PROJECTILE_STATE_BURST;
     }
-    if (moby->state != 0) {
+    if (moby->state != EXPLOSIVE_PROJECTILE_STATE_FLYING) {
         size_scale = 8.0f;
-        camera_distance = fast_vec_dist(D_L01_00167240, &(*(Vec_2F7E08 *)&moby->pos));
+        camera_distance = fast_vec_dist(camera_pos, &(*(Vec_2F7E08 *)&moby->pos));
         if (cutscene_active_macro != 0) {
             size_scale = 4.0f;
         }
@@ -199,7 +204,7 @@ void explosive_projectile_update(struct Moby *moby) {
                 }
             }
         }
-        view_distance = fast_vec_dist(&(*(Vec_2F7E08 *)&moby->pos), D_L01_00167240);
+        view_distance = fast_vec_dist(&(*(Vec_2F7E08 *)&moby->pos), camera_pos);
         max_rings = 5;
         if (cutscene_active_macro != 0) {
             max_rings = 2;
@@ -257,7 +262,7 @@ void explosive_projectile_update(struct Moby *moby) {
                 fast_vec_normalize(&flash_emission_vector,
                                    &flash_emission_vector,
                                    size_scale * (random_float_between(0.0f, 3.0f) * D_0015ED6C));
-                FUN_L00_0026a4c8(
+                spawn_particle_alt_9768(
                     &(*(Vec_2F7E08 *)&moby->pos),
                     &flash_emission_vector,
                     start_colors.c[random_integer_below(6)],
@@ -393,7 +398,7 @@ void explosive_projectile_update(struct Moby *moby) {
                         (*(void **)&((struct Moby *)ents_macro)[projectile_vars->ids[link]].pvars);
                     if (target->h4 == 0 && target->timer == 0 &&
                         is_point_inside_clip_volume(((char *)&D_0013F3D0), target->vol) != 0 &&
-                        is_point_inside_clip_volume(D_L01_00167240, target->vol) != 0) {
+                        is_point_inside_clip_volume(camera_pos, target->vol) != 0) {
                         target->timer = scale_game_frames(random_int_between(0x3C, 0xB4));
                     }
                 }

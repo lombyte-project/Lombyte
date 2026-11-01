@@ -5,8 +5,11 @@ extern s32 snd_reset_movie_sound() __asm__("func_0012F0A8");
 void       audio_dec_reset(struct AudioDec *dec) __asm__("FUN_0023ad10");
 
 void audio_dec_reset(struct AudioDec *dec) {
+    enum {
+        AUDIO_DEC_STATE_RESET = 0
+    };
     snd_reset_movie_sound();
-    dec->state = 0;
+    dec->state = AUDIO_DEC_STATE_RESET;
     dec->hdrCount = 0;
     dec->put = 0;
     dec->count = 0;

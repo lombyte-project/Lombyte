@@ -74,7 +74,7 @@ void bob_update(WatcherMoby *moby) {
         if (D_0013D4C3) {
             moby->state = 3;
         } else {
-            moby->state = 1;
+            moby->state = BOB_CHECK_DIALOGUE;
         }
         initialize_npc_dialogue(moby, moby_vars);
         moby_vars->f0C = 3.7f;
@@ -83,13 +83,13 @@ void bob_update(WatcherMoby *moby) {
         if (is_point_inside_clip_volume(hero.motion.pos.f, moby_vars->region)) {
             if (update_npc_dialogue(moby, moby_vars)) {
                 begin_dialogue_camera_transition(moby, 2.7f);
-                moby->state = 2;
+                moby->state = BOB_WAIT_FOR_DIALOGUE_END;
             }
         }
         break;
     case BOB_WAIT_FOR_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
-            moby->state = 1;
+            moby->state = BOB_CHECK_DIALOGUE;
             if (moby_vars->h04 == 2) {
                 grant_inventory_item(3, 1);
                 jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);

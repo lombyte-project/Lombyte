@@ -30,6 +30,11 @@ int                select_moby_combat_target(char *query_moby,
                                              float best) __asm__("FUN_L00_0025fcb8");
 
 int select_moby_combat_target(char *query_moby, char *target_output, float best) {
+    enum {
+        COMBAT_TARGET_STATUS_DEFAULT_HERO = 0,
+        COMBAT_TARGET_STATUS_ALTERNATE_MOBY = 1,
+        COMBAT_TARGET_STATUS_HERO_EXCLUDED = 2
+    };
     struct Hero *hero_data = &hero_lui;
     char        *selected_moby;
     char        *candidate_moby;
@@ -39,10 +44,10 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
     float        candidate_distance_score;
 
     selected_moby = ((char *)hero_data->moby);
-    target_selection_status = 0;
+    target_selection_status = COMBAT_TARGET_STATUS_DEFAULT_HERO;
     if (hero_data->state.control_mode == 0x18 || hero_data->state.current == 0x72) {
         selected_moby = 0;
-        target_selection_status = 2;
+        target_selection_status = COMBAT_TARGET_STATUS_HERO_EXCLUDED;
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
         candidate_moby = moby_table + (D_L00_001B0830_lui[i] << 8);
@@ -61,7 +66,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
-            target_selection_status = 1;
+            target_selection_status = COMBAT_TARGET_STATUS_ALTERNATE_MOBY;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -81,7 +86,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
-            target_selection_status = 1;
+            target_selection_status = COMBAT_TARGET_STATUS_ALTERNATE_MOBY;
         }
     }
     if (selected_moby != 0) {
@@ -118,6 +123,11 @@ int        FUN_L00_0025ff38(char  *query_moby,
                             float *target_region_vertices,
 
                             int nv) {
+    enum {
+        FOLLOW_TARGET_STATUS_DEFAULT_HERO = 0,
+        FOLLOW_TARGET_STATUS_ALTERNATE_MOBY = 1,
+        FOLLOW_TARGET_STATUS_HERO_EXCLUDED = 2
+    };
     struct Hero *hero_data = &hero_lui;
     char        *selected_moby;
     char        *indexed_candidate;
@@ -130,22 +140,22 @@ int        FUN_L00_0025ff38(char  *query_moby,
     float        candidate_distance_score;
 
     selected_moby = (char *)hero_data->moby;
-    target_selection_status = 0;
+    target_selection_status = FOLLOW_TARGET_STATUS_DEFAULT_HERO;
     if (hero_data->state.control_mode == 0x18 || hero_data->state.current == 0x72) {
         selected_moby = 0;
-        target_selection_status = 2;
+        target_selection_status = FOLLOW_TARGET_STATUS_HERO_EXCLUDED;
     } else if (exclusion_list_bound > 0) {
         for (k = 0; k < exclusion_list_bound - 1; k++) {
             if (is_point_inside_clip_volume(&hero_lui.motion.pos, list[k]) != 0) {
                 selected_moby = 0;
-                target_selection_status = 2;
+                target_selection_status = FOLLOW_TARGET_STATUS_HERO_EXCLUDED;
                 break;
             }
         }
     } else if (target_region_vertices != 0 && nv > 0) {
         if (point_in_path_xy(&hero_lui.motion.pos, target_region_vertices, nv) == 0) {
             selected_moby = 0;
-            target_selection_status = 2;
+            target_selection_status = FOLLOW_TARGET_STATUS_HERO_EXCLUDED;
         }
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
@@ -179,7 +189,7 @@ int        FUN_L00_0025ff38(char  *query_moby,
         }
         if (ok) {
             selected_moby = indexed_candidate;
-            target_selection_status = 1;
+            target_selection_status = FOLLOW_TARGET_STATUS_ALTERNATE_MOBY;
             best = candidate_distance_score;
         }
     }
@@ -213,7 +223,7 @@ int        FUN_L00_0025ff38(char  *query_moby,
         }
         if (ok) {
             selected_moby = listed_candidate;
-            target_selection_status = 1;
+            target_selection_status = FOLLOW_TARGET_STATUS_ALTERNATE_MOBY;
             best = candidate_distance_score;
         }
     }
@@ -440,12 +450,12 @@ void grant_inventory_item(int id, int flag) {
             }
         }
         if (flag != 0) {
-            int t = item_defs_lui[id].slot;
-            if (t == 0) {
+            int item_slot = item_defs_lui[id].slot;
+            if (item_slot == 0) {
                 D_00141408 = id;
-            } else if (t == 3) {
+            } else if (item_slot == 3) {
                 D_00141414 = id;
-            } else if (t == 2) {
+            } else if (item_slot == 2) {
                 D_00141410 = id;
             }
         }

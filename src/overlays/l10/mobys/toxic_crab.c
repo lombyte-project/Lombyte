@@ -31,6 +31,22 @@
 #include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 
+enum {
+    TOXIC_CRAB_STATE_INITIALIZE = 0,
+    TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION = 1,
+    TOXIC_CRAB_STATE_ACTIVATE = 2,
+    TOXIC_CRAB_STATE_FACE_TRACKED_POSITION = 3,
+    TOXIC_CRAB_STATE_WAIT_TO_PURSUE = 4,
+    TOXIC_CRAB_STATE_PURSUE_TARGET = 5,
+    TOXIC_CRAB_STATE_PAUSE_PURSUIT = 6,
+    TOXIC_CRAB_STATE_MELEE_ATTACK = 7,
+    TOXIC_CRAB_STATE_RETURN_HOME = 8,
+    TOXIC_CRAB_STATE_BACK_AWAY_FROM_TARGET = 9,
+    TOXIC_CRAB_STATE_HIT_KNOCKBACK = 10,
+    TOXIC_CRAB_STATE_DEATH_EFFECTS = 11,
+    TOXIC_CRAB_STATE_FALL_TO_DEATH = 12
+};
+
 typedef struct Moby Moby;
 extern struct Moby *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern float        D_0015ED6C;
@@ -219,19 +235,10 @@ extern float fast_vec_dist(void *, void *);
 /* Moby class 1202 */
 void toxic_crab_update(Moby2E30F8 *m) {
     enum {
-        TOXIC_CRAB_STATE_INITIALIZE = 0,
-        TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION = 1,
-        TOXIC_CRAB_STATE_ACTIVATE = 2,
-        TOXIC_CRAB_STATE_FACE_TRACKED_POSITION = 3,
-        TOXIC_CRAB_STATE_WAIT_TO_PURSUE = 4,
-        TOXIC_CRAB_STATE_PURSUE_TARGET = 5,
-        TOXIC_CRAB_STATE_PAUSE_PURSUIT = 6,
-        TOXIC_CRAB_STATE_MELEE_ATTACK = 7,
-        TOXIC_CRAB_STATE_RETURN_HOME = 8,
-        TOXIC_CRAB_STATE_BACK_AWAY_FROM_TARGET = 9,
-        TOXIC_CRAB_STATE_HIT_KNOCKBACK = 10,
-        TOXIC_CRAB_STATE_DEATH_EFFECTS = 11,
-        TOXIC_CRAB_STATE_FALL_TO_DEATH = 12
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
+    enum {
+        MOBY_STATE_ALTERNATE_REMOVAL_MARKER = 0xFD
     };
     int         see = 0;
     Crab2E30F8 *crab_data = m->data;
@@ -293,7 +300,8 @@ void toxic_crab_update(Moby2E30F8 *m) {
             int k = crab_data->i1BC;
             if (k != -1) {
                 Moby2E30F8 *p = (Moby2E30F8 *)((char *)D_L10_0015FFD0_macro[2] + (k << 8));
-                if (p == 0 || p->state == 0xFE || p->state == 0xFD ||
+                if (p == 0 || p->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
+                    p->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER ||
                     (((*(int *)(((char *)&D_0014C190) +
                                 (((short)p->id >> 5) * 4 + (current_level_index << 8))) >>
                        (p->id & 0x1F)) &
@@ -303,7 +311,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 }
             }
         }
-        m->state = 1;
+        m->state = TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION;
         if (m->anim != 0) {
             blend_moby_animation(m, 0, 0, 0);
         }
@@ -315,12 +323,13 @@ void toxic_crab_update(Moby2E30F8 *m) {
         if (crab_data->i1BC != -1) {
             char       *moby_instance_array_base = D_L10_0015FFD8;
             Moby2E30F8 *p = (Moby2E30F8 *)(moby_instance_array_base + (crab_data->i1BC << 8));
-            if (p == 0 || p->state == 0xFE || p->state == 0xFD ||
+            if (p == 0 || p->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
+                p->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER ||
                 ((*(int *)(((char *)&D_0014C190) +
                            (((short)p->id >> 5) * 4 + (current_level_index << 8))) >>
                   (p->id & 0x1F)) &
                  1)) {
-                m->state = 2;
+                m->state = TOXIC_CRAB_STATE_ACTIVATE;
                 crab_data->i1A8 = scale_game_frames(1);
                 if (m->b21 != 0xFF) {
                     activate_waiting_moby_group_members((struct Moby *)m);
@@ -328,7 +337,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             }
         }
         if (crab_data->i164 != 2 || crab_data->i1B4 != 0) {
-            m->state = 2;
+            m->state = TOXIC_CRAB_STATE_ACTIVATE;
             crab_data->i1A8 = scale_game_frames(1);
             if (m->b21 != 0xFF) {
                 activate_waiting_moby_group_members((struct Moby *)m);
@@ -354,7 +363,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         } else if (m->b70 & 2) {
             if (vector_distance_xy(m->pos, &hero.motion.pos) < *(float *)&D_L10_00161E40_gp) {
                 float x;
-                m->state = 5;
+                m->state = TOXIC_CRAB_STATE_PURSUE_TARGET;
                 crab_data->i1D8 = 0;
                 qcopy(crab_data->v1C0, m->pos);
                 crab_data->fF4 = 0.0f;
@@ -364,7 +373,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     blend_moby_animation(m, 3, 0, scale_game_frames(5));
                 }
             } else {
-                m->state = 3;
+                m->state = TOXIC_CRAB_STATE_FACE_TRACKED_POSITION;
                 if (m->anim != 1) {
                     blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
@@ -375,7 +384,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         float ang = fast_arc_tan(crab_data->f120 - m->pos[0], crab_data->f124 - m->pos[1]);
         FUN_L00_00258278((char *)m, &crab_data->f190, ang, 0.02f, 0.3f, frame_time * 6.2831855f);
         if (crab_data->i164 != 2) {
-            m->state = 4;
+            m->state = TOXIC_CRAB_STATE_WAIT_TO_PURSUE;
             crab_data->i1A8 =
                 truncate_float_to_s32(random_float_between(0.0f, (float)crab_data->i1B8));
         }
@@ -384,7 +393,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
     case TOXIC_CRAB_STATE_WAIT_TO_PURSUE:
         if (fast_dec_timer(&crab_data->i1A8)) {
             float x;
-            m->state = 5;
+            m->state = TOXIC_CRAB_STATE_PURSUE_TARGET;
             crab_data->i1D8 = 0;
             qcopy(crab_data->v1C0, m->pos);
             crab_data->fF4 = 0.0f;
@@ -440,7 +449,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             v[1] = fast_sin(aim) * (MOBY(target_moby)->oclass == 0x359 ? 2.0f : 3.57f);
             v[2] = 0.0f;
             fast_vec_add(v, v, target_moby + 0x10);
-            if (hero.vehicle_mode != 1) {
+            if (hero.vehicle_mode != HERO_VEHICLE_MODE_CLANK) {
                 float rot = m->f48;
                 int   r;
                 m->f48 = fast_arc_tan(v[0] - m->pos[0], v[1] - m->pos[1]);
@@ -461,7 +470,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                              *(short *)(*(char **)(h + 0x18) + 0xA6) != 0x31A) &&
                             fast_vec_dist(from2, h + 0x20) <
                                 toxic_crab_obstacle_pause_distance_gp) {
-                            m->state = 6;
+                            m->state = TOXIC_CRAB_STATE_PAUSE_PURSUIT;
                             crab_data->i1A8 = scale_game_frames(0x3C);
                             if (m->anim != 1) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(7));
@@ -481,7 +490,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     if (D_L10_0015F5CC % 7 == 0 && crab_data->i1A8 == 0) {
                         if (vector_distance_xy(crab_data->v1C0, m->pos) < crab_data->fF4 &&
                             diff <= toxic_crab_pursuit_heading_threshold_degrees_gp * DEG_TO_RAD) {
-                            m->state = 6;
+                            m->state = TOXIC_CRAB_STATE_PAUSE_PURSUIT;
                             crab_data->i1A8 = scale_game_frames(0x3C);
                             if (m->anim != 1) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(7));
@@ -494,7 +503,8 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 } else {
                     crab_data->i1D8 = 0;
                 }
-                if (m->state == 5 && fast_dec_timer(&crab_data->i1A8) && 0.0f < crab_data->fF4 &&
+                if (m->state == TOXIC_CRAB_STATE_PURSUE_TARGET &&
+                    fast_dec_timer(&crab_data->i1A8) && 0.0f < crab_data->fF4 &&
                     crab_data->i1D8 == 0 && m->anim == 1) {
                     blend_moby_animation(m, 3, 0, scale_game_frames(7));
                 }
@@ -512,8 +522,9 @@ void toxic_crab_update(Moby2E30F8 *m) {
             m->f58 = 1.2f;
             {
                 float home = fast_vec_dist(m->pos, crab_data->v170);
-                if ((hero.vehicle_mode == 1 ? 1.0f : 30.0f) < home || crab_data->i164 == 2) {
-                    m->state = 8;
+                if ((hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK ? 1.0f : 30.0f) < home ||
+                    crab_data->i164 == 2) {
+                    m->state = TOXIC_CRAB_STATE_RETURN_HOME;
                     blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
                 } else if (vector_distance_xy(m->pos, target_moby + 0x10) <
                            (MOBY(target_moby)->oclass == 0x359 ? 2.45f : 4.02f)) {
@@ -523,7 +534,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                         if (random_integer_below(100) & 1) {
                             anim = 6;
                         }
-                        m->state = 7;
+                        m->state = TOXIC_CRAB_STATE_MELEE_ATTACK;
                         blend_moby_animation(m, anim, 0, scale_game_frames(7));
                     }
                 }
@@ -561,7 +572,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 }
             }
             if (ok) {
-                m->state = 5;
+                m->state = TOXIC_CRAB_STATE_PURSUE_TARGET;
                 crab_data->i1D8 = 0;
                 qcopy(crab_data->v1C0, m->pos);
                 crab_data->fF4 = 0.0f;
@@ -570,8 +581,9 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
         {
             float home = fast_vec_dist(m->pos, crab_data->v170);
-            if ((hero.vehicle_mode == 1 ? 1.0f : 30.0f) < home || crab_data->i164 == 2) {
-                m->state = 8;
+            if ((hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK ? 1.0f : 30.0f) < home ||
+                crab_data->i164 == 2) {
+                m->state = TOXIC_CRAB_STATE_RETURN_HOME;
                 blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
             } else if (vector_distance_xy(m->pos, target_moby + 0x10) <
                        (MOBY(target_moby)->oclass == 0x359 ? 2.45f : 4.02f)) {
@@ -581,7 +593,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     if (random_integer_below(100) & 1) {
                         anim = 6;
                     }
-                    m->state = 7;
+                    m->state = TOXIC_CRAB_STATE_MELEE_ATTACK;
                     blend_moby_animation(m, anim, 0, scale_game_frames(7));
                 }
             }
@@ -629,10 +641,10 @@ void toxic_crab_update(Moby2E30F8 *m) {
             float home = fast_vec_dist(m->pos, crab_data->v170);
             if ((((unsigned char *)&D_0013E533)[0x2EC1] == 1 ? 1.0f : 30.0f) < home ||
                 crab_data->i164 == 2) {
-                m->state = 8;
+                m->state = TOXIC_CRAB_STATE_RETURN_HOME;
                 blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
             } else {
-                m->state = 5;
+                m->state = TOXIC_CRAB_STATE_PURSUE_TARGET;
                 crab_data->i1D8 = 0;
                 qcopy(crab_data->v1C0, m->pos);
                 crab_data->fF4 = 0.0f;
@@ -670,7 +682,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     toxic_crab_back_away_distance_limit_gp <
                         fast_vec_dist(m->pos, target_moby + 0x10)) {
                     int anim;
-                    m->state = 7;
+                    m->state = TOXIC_CRAB_STATE_MELEE_ATTACK;
                     crab_data->fF4 = frame_time * 5.0f;
                     anim = 7;
                     if (random_integer_below(100) & 1) {
@@ -703,12 +715,12 @@ void toxic_crab_update(Moby2E30F8 *m) {
             dir[2] = 0.0f;
             FUN_L00_00258b50(m, &crab_data->iD0, dir, out, 1.0f);
             if (fast_vec_dist(m->pos, crab_data->v170) < 1.0f) {
-                m->state = 3;
+                m->state = TOXIC_CRAB_STATE_FACE_TRACKED_POSITION;
                 if (m->anim != 1) {
                     blend_moby_animation(m, 1, 0, scale_game_frames(0x14));
                 }
             } else if (crab_data->i164 != 2) {
-                m->state = 5;
+                m->state = TOXIC_CRAB_STATE_PURSUE_TARGET;
                 crab_data->i1D8 = 0;
                 qcopy(crab_data->v1C0, m->pos);
                 crab_data->fF4 = 0.0f;
@@ -722,7 +734,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
     case TOXIC_CRAB_STATE_HIT_KNOCKBACK:
         if (step_moby_motion(m, crab_data->v70) & 0x41) {
             int anim;
-            m->state = 7;
+            m->state = TOXIC_CRAB_STATE_MELEE_ATTACK;
             crab_data->fF4 = frame_time * 5.0f;
             anim = 7;
             if (random_integer_below(100) & 1) {
@@ -733,7 +745,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             if (m->anim != 0xE) {
                 blend_moby_animation(m, 0xE, 0, scale_game_frames(6));
             }
-            m->state = 0xC;
+            m->state = TOXIC_CRAB_STATE_FALL_TO_DEATH;
             crab_data->f78 = crab_data->f78 / 3.0f;
         }
         break;
@@ -754,7 +766,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     return;
                 }
                 m->s34 &= 0xEFFF;
-                m->state = 0xB;
+                m->state = TOXIC_CRAB_STATE_DEATH_EFFECTS;
                 knockback_collision_radius_fixed = truncate_float_to_s32(768.0f);
                 x = toxic_crab_death_knockback_gravity_gp * frame_time_sq;
                 crab_data->bAD = 0;
@@ -806,7 +818,9 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
     }
     }
-    if (m->state == 3 || m->state == 5 || m->state == 7 || m->state == 8) {
+    if (m->state == TOXIC_CRAB_STATE_FACE_TRACKED_POSITION ||
+        m->state == TOXIC_CRAB_STATE_PURSUE_TARGET || m->state == TOXIC_CRAB_STATE_MELEE_ATTACK ||
+        m->state == TOXIC_CRAB_STATE_RETURN_HOME) {
         float ground_height = probe_ground_height(m->pos, 0, 0.5f);
         if (ground_height < m->pos[2]) {
             crab_data->f78 = crab_data->f78 - crab_data->f80;
@@ -821,7 +835,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 if (m->anim != 0xE) {
                     blend_moby_animation(m, 0xE, 0, scale_game_frames(6));
                 }
-                m->state = 0xC;
+                m->state = TOXIC_CRAB_STATE_FALL_TO_DEATH;
             }
         }
     }
@@ -833,39 +847,47 @@ void toxic_crab_update(Moby2E30F8 *m) {
     }
 }
 
-extern int   D_L10_00161E74 __attribute__((sda));
-extern int   D_L10_00161E78 __attribute__((sda));
-extern float D_L10_00161E7C __attribute__((sda));
-extern float D_L10_00161E80 __attribute__((sda));
-extern float D_L10_00161E84 __attribute__((sda));
-extern float D_L10_00161E88 __attribute__((sda));
-extern float D_L10_00161E8C __attribute__((sda));
-extern float D_L10_00161E90 __attribute__((sda));
-extern float D_L10_00161E94 __attribute__((sda));
-extern float D_L10_00161E98 __attribute__((sda));
+extern int   l10_toxic_crab_particle_group_count __asm__("D_L10_00161E74") __attribute__((sda));
+extern int   l10_toxic_crab_particles_per_group __asm__("D_L10_00161E78") __attribute__((sda));
+extern float l10_toxic_crab_particle_group_position_jitter __asm__("D_L10_00161E7C")
+    __attribute__((sda));
+extern float l10_toxic_crab_particle_position_jitter __asm__("D_L10_00161E80") __attribute__((sda));
+extern float l10_toxic_crab_particle_adjusted_velocity_jitter __asm__("D_L10_00161E84")
+    __attribute__((sda));
+extern float l10_toxic_crab_particle_speed_lower_bound __asm__("D_L10_00161E88")
+    __attribute__((sda));
+extern float l10_toxic_crab_particle_speed_upper_bound __asm__("D_L10_00161E8C")
+    __attribute__((sda));
+extern float l10_toxic_crab_particle_rise_lower_bound __asm__("D_L10_00161E90")
+    __attribute__((sda));
+extern float l10_toxic_crab_particle_rise_upper_bound __asm__("D_L10_00161E94")
+    __attribute__((sda));
+extern float l10_toxic_crab_particle_vertical_velocity_drop_scale __asm__("D_L10_00161E98")
+    __attribute__((sda));
 extern float D_L10_00161E9C __attribute__((sda));
 extern float D_L10_00161EA0 __attribute__((sda));
-extern int   D_L10_00161EA4 __attribute__((sda));
-extern int   D_L10_00161EA8 __attribute__((sda));
-extern int   D_L10_00161EAC __attribute__((sda));
-extern int   D_L10_00161EB0 __attribute__((sda));
-extern int   D_L10_00161EB4 __attribute__((sda));
-extern int   D_L10_00161EB8 __attribute__((sda));
-extern int   D_L10_00161EBC __attribute__((sda));
-extern void  add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
-extern int   fast_tween_color_3a90(int, int, float) __asm__("FUN_001fa6e0");
+extern int   l10_toxic_crab_particle_start_color_a __asm__("D_L10_00161EA4") __attribute__((sda));
+extern int   l10_toxic_crab_particle_end_color_a __asm__("D_L10_00161EA8") __attribute__((sda));
+extern int   l10_toxic_crab_particle_start_color_b __asm__("D_L10_00161EAC") __attribute__((sda));
+extern int   l10_toxic_crab_particle_end_color_b __asm__("D_L10_00161EB0") __attribute__((sda));
+extern int   l10_toxic_crab_particle_life_frames __asm__("D_L10_00161EB4") __attribute__((sda));
+extern int   l10_toxic_crab_particle_fade_frames __asm__("D_L10_00161EB8") __attribute__((sda));
+extern int   l10_toxic_crab_particle_random_duration_base __asm__("D_L10_00161EBC")
+    __attribute__((sda));
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
+extern int  fast_tween_color_3a90(int, int, float) __asm__("FUN_001fa6e0");
 
 void emit_moby_particles(struct Moby *moby) __asm__("FUN_L10_002e3a90");
 
 void emit_moby_particles(struct Moby *moby) {
     float  pos[4];
-    float  vel[4];
-    float  accel[4];
+    float  particle_velocity[4];
+    float  adjusted_particle_velocity[4];
     float  push[4];
-    char  *vars;
+    char  *particle_moby_data;
     int    count;
     float *pos_ptr;
-    void  *src;
+    void  *moby_position_source;
     int    i;
     int    j;
     float  angle;
@@ -878,46 +900,54 @@ void emit_moby_particles(struct Moby *moby) {
     int    life;
     int    fade;
 
-    count = D_L10_00161E74;
-    vars = (char *)moby->pvars;
+    count = l10_toxic_crab_particle_group_count;
+    particle_moby_data = (char *)moby->pvars;
     for (i = 0; i < count; i++) {
         pos_ptr = pos;
-        src = &moby->pos;
-        qcopy_nc(pos, src);
-        add_random_offset_to_vector_xyz(pos_ptr, D_L10_00161E7C);
+        moby_position_source = &moby->pos;
+        qcopy_nc(pos, moby_position_source);
+        add_random_offset_to_vector_xyz(pos_ptr, l10_toxic_crab_particle_group_position_jitter);
         pos[2] += 0.55f;
         angle = random_angle_radians();
-        speed = random_float_between(D_L10_00161E88, D_L10_00161E8C);
-        rise = random_float_between(D_L10_00161E90, D_L10_00161E94);
+        speed = random_float_between(l10_toxic_crab_particle_speed_lower_bound,
+                                     l10_toxic_crab_particle_speed_upper_bound);
+        rise = random_float_between(l10_toxic_crab_particle_rise_lower_bound,
+                                    l10_toxic_crab_particle_rise_upper_bound);
         if (*((u8 *)moby + 0x20) == 11) {
             speed *= 0.55f;
             rise *= 0.55f;
             pos[2] -= 0.2f;
         }
-        vel[0] = fast_cos(angle) * (speed * D_0015ED6C);
-        vel[1] = fast_sin(angle) * (speed * D_0015ED6C);
-        vel[2] = 0.0f + rise * D_0015ED6C;
-        fast_vec_scale(push, vars + 0x70, 0.5f);
+        particle_velocity[0] = fast_cos(angle) * (speed * D_0015ED6C);
+        particle_velocity[1] = fast_sin(angle) * (speed * D_0015ED6C);
+        particle_velocity[2] = 0.0f + rise * D_0015ED6C;
+        fast_vec_scale(push, particle_moby_data + 0x70, 0.5f);
         push[2] = 0.0f;
-        fast_vec_add(vel, vel, push);
-        qcopy(accel, vel);
-        accel[2] -= D_L10_00161E98 * D_0015ED70 * (float)scale_game_frames(D_L10_00161EB8);
-        for (j = 0; j < D_L10_00161E78; j++) {
+        fast_vec_add(particle_velocity, particle_velocity, push);
+        qcopy(adjusted_particle_velocity, particle_velocity);
+        adjusted_particle_velocity[2] -=
+            l10_toxic_crab_particle_vertical_velocity_drop_scale * D_0015ED70 *
+            (float)scale_game_frames(l10_toxic_crab_particle_fade_frames);
+        for (j = 0; j < l10_toxic_crab_particles_per_group; j++) {
             size = random_float_between(0.5f, 1.5f);
-            vel[3] = size * D_L10_00161E9C;
-            accel[3] = size * D_L10_00161EA0;
-            add_random_offset_to_vector_xyz(pos, D_L10_00161E80);
-            add_random_offset_to_vector_xyz(accel, D_L10_00161E84 * D_0015ED6C);
-            start_color = fast_tween_color_3a90(
-                D_L10_00161EA4, D_L10_00161EAC, random_float_between(0.0f, 1.0f));
-            end_color = fast_tween_color_3a90(
-                D_L10_00161EA8, D_L10_00161EB0, random_float_between(0.0f, 1.0f));
-            life = scale_game_frames(D_L10_00161EB4);
-            fade = scale_game_frames(D_L10_00161EB8);
-            time_base = (float)D_L10_00161EBC;
+            particle_velocity[3] = size * D_L10_00161E9C;
+            adjusted_particle_velocity[3] = size * D_L10_00161EA0;
+            add_random_offset_to_vector_xyz(pos, l10_toxic_crab_particle_position_jitter);
+            add_random_offset_to_vector_xyz(adjusted_particle_velocity,
+                                            l10_toxic_crab_particle_adjusted_velocity_jitter *
+                                                D_0015ED6C);
+            start_color = fast_tween_color_3a90(l10_toxic_crab_particle_start_color_a,
+                                                l10_toxic_crab_particle_start_color_b,
+                                                random_float_between(0.0f, 1.0f));
+            end_color = fast_tween_color_3a90(l10_toxic_crab_particle_end_color_a,
+                                              l10_toxic_crab_particle_end_color_b,
+                                              random_float_between(0.0f, 1.0f));
+            life = scale_game_frames(l10_toxic_crab_particle_life_frames);
+            fade = scale_game_frames(l10_toxic_crab_particle_fade_frames);
+            time_base = (float)l10_toxic_crab_particle_random_duration_base;
             spawn_spark(pos,
-                        vel,
-                        accel,
+                        particle_velocity,
+                        adjusted_particle_velocity,
                         start_color,
                         end_color,
                         life,
@@ -1029,8 +1059,8 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     if (((Hero *)(((char *)&hero)))->items[0].item_id == 0x15) {
         if (((D_2E52B0 *)((Hero *)(((char *)&hero)))->items[0].moby->pvars)->f10 == moby) {
             func_L10_002E14F8_2E52B0(moby);
-            if (moby->state == 1)
-                moby->state = 2;
+            if (moby->state == TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION)
+                moby->state = TOXIC_CRAB_STATE_ACTIVATE;
         }
     }
     if (moby_data->f38 != 0) {
@@ -1046,7 +1076,8 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     hit_response_code =
         resolve_moby_hit_response(moby, hit_record, &moby_data->f20, 0, &A, &B, 0, 4);
     fast_dec_timer_s16(&moby_data->h26);
-    if ((unsigned int)A >= 2 && moby->state != 0xB && moby->state != 0xC) {
+    if ((unsigned int)A >= 2 && moby->state != TOXIC_CRAB_STATE_DEATH_EFFECTS &&
+        moby->state != TOXIC_CRAB_STATE_FALL_TO_DEATH) {
         if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 &&
             hit_record->f20->oclass == 0x31A) {
             if (moby_data->f1AC != 0 && item_unlocked[0x11] == 0) {
@@ -1119,7 +1150,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         case ANIMATED_KNOCKBACK_HIT_RESPONSE:
         case HIT_DIRECTED_KNOCKBACK_HIT_RESPONSE:
         case ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE:
-            moby->state = 10;
+            moby->state = TOXIC_CRAB_STATE_HIT_KNOCKBACK;
             moby_data->h26 = scale_game_frames(60);
             moby_data->f80 = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
             trooper_set_knockback(moby_data->a70, 0.5f, 0.5f);
@@ -1134,7 +1165,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         case VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE:
         case VEHICLE_DEPENDENT_KNOCKBACK_HIT_RESPONSE: {
             float knockback_strength;
-            moby->state = 10;
+            moby->state = TOXIC_CRAB_STATE_HIT_KNOCKBACK;
             moby_data->h26 = scale_game_frames(60);
             moby_data->f80 = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
             knockback_strength = ((Hero *)(((char *)&hero)))->vehicle_mode == 1 ? 1.0f : 3.0f;
@@ -1151,7 +1182,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         }
         case LETHAL_HIT_RESPONSE:
         case DEATH_HIT_RESPONSE:
-            moby->state = 11;
+            moby->state = TOXIC_CRAB_STATE_DEATH_EFFECTS;
             moby->flags &= 0xEFFF;
             break;
         case NO_STATE_TRANSITION_HIT_RESPONSE:
@@ -1167,7 +1198,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     }
     if (moby_data->f1AC != 0) {
         moby_data->f1A0 = D_L10_00161E40_gp + 6.0f;
-    } else if (moby->state == 1) {
+    } else if (moby->state == TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION) {
         if (moby == ((Moby *)((Hero *)(((char *)&hero)))->unk240) ||
             moby == ((Moby *)((Hero *)(((char *)&hero)))->coll_hit_moby)) {
             moby_data->f1A0 = 6.0f;
@@ -1198,15 +1229,15 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
                             l10_paths[moby_data->f1B0]->points,
                             l10_paths[moby_data->f1B0]->count);
     }
-    if (moby->state != 1 && moby_data->f164 == 2) {
+    if (moby->state != TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION && moby_data->f164 == 2) {
         moby_data->f1D4++;
         if (scale_game_frames(300) < moby_data->f1D4) {
             if (1.0f < fast_vec_dist(&moby->pos, &moby_data->a170)) {
-                moby->state = 8;
+                moby->state = TOXIC_CRAB_STATE_RETURN_HOME;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(12));
             } else if (((Hero *)(((char *)&hero)))->vehicle_mode != 1) {
-                moby->state = 1;
+                moby->state = TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION;
                 if (moby->prev_seq != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }

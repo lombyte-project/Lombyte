@@ -10,6 +10,17 @@
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "qcopy.h"
 
+enum {
+    HATCH_WAIT_ACTIVATION = 0,
+    HATCH_WAIT_ACTIVATION_DELAY = 1,
+    HATCH_WAIT_ACTIVATION_ANIMATION = 2,
+    HATCH_WAIT_ACTIVATION_GATE_CLEAR = 3,
+    HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR = 4,
+    HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY = 5,
+    HATCH_WAIT_RESET_DELAY = 6,
+    HATCH_WAIT_RESET_ANIMATION = 7
+};
+
 extern u8 *D_L14_00167500 NOT_SDA;
 extern char              *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 
@@ -17,18 +28,8 @@ void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 
 /* Moby class 250 */
 void plasmabot_hatch_update(struct Moby *moby) {
-    enum {
-        HATCH_WAIT_ACTIVATION = 0,
-        HATCH_WAIT_ACTIVATION_DELAY = 1,
-        HATCH_WAIT_ACTIVATION_ANIMATION = 2,
-        HATCH_WAIT_ACTIVATION_GATE_CLEAR = 3,
-        HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR = 4,
-        HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY = 5,
-        HATCH_WAIT_RESET_DELAY = 6,
-        HATCH_WAIT_RESET_ANIMATION = 7
-    };
     char *hatch_private_vars = (char *)moby->pvars;
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         moby->collision = 0;
     } else {
         moby->collision = moby->pclass->collision;
@@ -36,45 +37,45 @@ void plasmabot_hatch_update(struct Moby *moby) {
     switch (moby->state) {
     case HATCH_WAIT_ACTIVATION:
         if (*(s32 *)hatch_private_vars != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
-            moby->state = 1;
+            moby->state = HATCH_WAIT_ACTIVATION_DELAY;
             *(s32 *)(hatch_private_vars + 8) = scale_game_frames(*(s32 *)(hatch_private_vars + 4));
         }
         break;
     case HATCH_WAIT_ACTIVATION_DELAY:
         if (fast_dec_timer(hatch_private_vars + 8) != 0) {
-            moby->state = 2;
+            moby->state = HATCH_WAIT_ACTIVATION_ANIMATION;
             set_moby_animation(moby, 1, 0);
         }
         break;
     case HATCH_WAIT_ACTIVATION_ANIMATION:
         if ((moby->anim_flags & 2) != 0) {
-            moby->state = 3;
+            moby->state = HATCH_WAIT_ACTIVATION_GATE_CLEAR;
             set_moby_animation(moby, 2, 0);
         }
         break;
     case HATCH_WAIT_ACTIVATION_GATE_CLEAR:
         if (*(s16 *)(D_L14_00167500 + 0x86) != 0x14) {
             set_moby_animation(moby, 0, 0);
-            moby->state = 4;
+            moby->state = HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR;
         }
         break;
     case HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR:
         break;
     case HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY:
         if ((moby->anim_flags & 2) != 0) {
-            moby->state = 6;
+            moby->state = HATCH_WAIT_RESET_DELAY;
             set_moby_animation(moby, 2, 0);
         }
         break;
     case HATCH_WAIT_RESET_DELAY:
         if (fast_dec_timer(hatch_private_vars + 8) != 0) {
             set_moby_animation(moby, 3, 0);
-            moby->state = 7;
+            moby->state = HATCH_WAIT_RESET_ANIMATION;
         }
         break;
     case HATCH_WAIT_RESET_ANIMATION:
         if ((moby->anim_flags & 2) != 0) {
-            moby->state = 0;
+            moby->state = HATCH_WAIT_ACTIVATION;
             set_moby_animation(moby, 0, 0);
         }
         break;
@@ -106,11 +107,11 @@ int refresh_plasmabot_hatch_reset_delay(int i) {
     struct Moby *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int         *hatch_vars = ((int *)moby->pvars);
     int          hatch_reset_delay_active = 0;
-    if (moby->state == 0) {
-        moby->state = 5;
+    if (moby->state == HATCH_WAIT_ACTIVATION) {
+        moby->state = HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY;
         set_moby_animation(moby, 1, 0);
     } else {
-        hatch_reset_delay_active = moby->state == 6;
+        hatch_reset_delay_active = moby->state == HATCH_WAIT_RESET_DELAY;
     }
     hatch_vars[2] = scale_game_frames(0x3C);
     return hatch_reset_delay_active;

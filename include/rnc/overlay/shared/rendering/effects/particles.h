@@ -14,7 +14,8 @@ void *spawn_mode_controlled_rotating_alpha_fade_particle(void *,
 struct EmberParticle;
 struct EffectParticle;
 
-unsigned char *FUN_L00_00272f68(u128 *, int, unsigned char, int, int, int, int, float);
+unsigned char *spawn_timed_hero_relative_particle(
+    u128 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 unsigned char *spawn_color_tween_emitter_particle(void *,
                                                   unsigned char,
                                                   unsigned char,

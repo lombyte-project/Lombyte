@@ -21,14 +21,15 @@ void update_instance_attachment_points_and_lengths(struct Moby *instance) __asm_
 
 void update_instance_attachment_points_and_lengths(struct Moby *instance) {
     u8                     offsets[0x30];
-    struct AttachmentVars *vars;
-    vars = (struct AttachmentVars *)instance->pvars;
+    struct AttachmentVars *attachment_points_and_lengths;
+    attachment_points_and_lengths = (struct AttachmentVars *)instance->pvars;
     *(struct Pair64 *)(offsets + 0x20) = *(struct Pair64 *)attachment_point_indices;
-    transform_scaled_vertex_batch(instance, 4, offsets + 0x20, vars);
-    fast_vec_sub(offsets, vars->points[1], vars);
-    fast_vec_sub(offsets + 0x10, vars->points[2], vars);
-    vars->first_length = fast_vec_length(offsets);
-    vars->second_length = fast_vec_length(offsets + 0x10);
+    transform_scaled_vertex_batch(instance, 4, offsets + 0x20, attachment_points_and_lengths);
+    fast_vec_sub(offsets, attachment_points_and_lengths->points[1], attachment_points_and_lengths);
+    fast_vec_sub(
+        offsets + 0x10, attachment_points_and_lengths->points[2], attachment_points_and_lengths);
+    attachment_points_and_lengths->first_length = fast_vec_length(offsets);
+    attachment_points_and_lengths->second_length = fast_vec_length(offsets + 0x10);
 }
 
 extern __typeof__(update_instance_attachment_points_and_lengths) func_0023A318

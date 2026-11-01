@@ -37,6 +37,10 @@ int sceCdInit(int init_mode) {
     enum {
         CD_INIT_SHUTDOWN = 5
     };
+    enum {
+        CD_INIT_REPLY_ENABLE_DEBUG = 0xFE,
+        CD_INIT_REPLY_BYPASS_VERSION_CHECK = 0xFF
+    };
     int compatibility_result;
     int bind_result;
     int delay;
@@ -108,8 +112,8 @@ int sceCdInit(int init_mode) {
     second_version = *(s32 *)((u32)(receive_buffer + 8) | 0x20000000);
     reply_status = *(s32 *)((u32)(receive_buffer + 0xC) | 0x20000000);
     compatibility_result = 1;
-    if (reply_status == 0xFF) {
-    } else if (reply_status == 0xFE) {
+    if (reply_status == CD_INIT_REPLY_BYPASS_VERSION_CHECK) {
+    } else if (reply_status == CD_INIT_REPLY_ENABLE_DEBUG) {
         cd_debug = compatibility_result;
     } else {
         if (first_version / 256 < 2 || second_version / 256 < 2) {

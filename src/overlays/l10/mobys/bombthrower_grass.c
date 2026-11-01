@@ -77,13 +77,17 @@ int spawn_bombthrower_grass_projectile(int   firing_moby,
 
 /* Moby class 939 */
 void bombthrower_grass_update(struct Moby *moby) {
+    enum {
+        BOMBTHROWER_GRASS_STATE_LAUNCH_TIMER_UNINITIALIZED = 0,
+        BOMBTHROWER_GRASS_STATE_LAUNCH_TIMER_INITIALIZED = 1
+    };
     char *launch_timer = (char *)moby->pvars;
     float launch_offset[4];
     float launch_position[4];
-    if (moby->state == 0) {
+    if (moby->state == BOMBTHROWER_GRASS_STATE_LAUNCH_TIMER_UNINITIALIZED) {
         *(int *)launch_timer =
             scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
-        moby->state = 1;
+        moby->state = BOMBTHROWER_GRASS_STATE_LAUNCH_TIMER_INITIALIZED;
     }
     if (fast_dec_timer((int *)launch_timer)) {
         float x = bombthrower_grass_yaw_offset_limit_degrees_gp;

@@ -19,6 +19,11 @@
 
 #include "qcopy.h"
 
+enum {
+    ROCKET_STATE_FLYING = 1,
+    ROCKET_STATE_DETONATE = 2
+};
+
 extern float fast_cos(float);
 extern float fast_sin(float);
 
@@ -50,7 +55,7 @@ char *spawn_rocket(char *initial_velocity,
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x7E;
         moby->visible = 1;
-        moby->state = 1;
+        moby->state = ROCKET_STATE_FLYING;
         qcopy(&moby->pos, pos);
         qcopy(rocket_vars, initial_velocity);
         moby->rot.z = fast_arc_tan(*(float *)rocket_vars, *(float *)(rocket_vars + 4));
@@ -115,10 +120,6 @@ void rocket_update(struct Moby *moby) __asm__("FUN_L12_002ece00");
 
 /* Moby classes 409, 435 */
 void rocket_update(struct Moby *moby) {
-    enum {
-        ROCKET_STATE_FLYING = 1,
-        ROCKET_STATE_DETONATE = 2
-    };
     ShotVars *rocket_state = (ShotVars *)moby->pvars;
     float     old_pos[4];
     float     side[4];
@@ -130,7 +131,7 @@ void rocket_update(struct Moby *moby) {
         char *touch = find_moby_hit(moby, 0x230000, 0);
         int   damage;
         if (touch != 0 && *(struct Moby **)(touch + 0x20) != rocket_state->owner) {
-            moby->state = 2;
+            moby->state = ROCKET_STATE_DETONATE;
             break;
         }
         if (current_level_index == 12 && camera_secondary_mode[0] == 50 &&
@@ -140,7 +141,7 @@ void rocket_update(struct Moby *moby) {
                 return;
             }
             if (rocket_state->owner->state < 2) {
-                moby->state = 2;
+                moby->state = ROCKET_STATE_DETONATE;
                 break;
             }
         }
@@ -185,10 +186,10 @@ void rocket_update(struct Moby *moby) {
                 hit.oclass = moby->oclass;
                 record_moby_hit(D_L12_001742C0_lui.moby, &hit);
             }
-            moby->state = 2;
+            moby->state = ROCKET_STATE_DETONATE;
         }
         if (fast_dec_timer(&rocket_state->timer)) {
-            moby->state = 2;
+            moby->state = ROCKET_STATE_DETONATE;
         }
         break;
     }

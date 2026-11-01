@@ -578,7 +578,7 @@ void breakable_window_update(char *moby) {
     switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_DRAW_SELECTION:
         camera_sequence_and_draw_vars[1] = 1;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = WAIT_FOR_LINKED_MOBY_TRIGGER;
         break;
     case WAIT_FOR_LINKED_MOBY_TRIGGER:
         if ((camera_sequence_and_draw_vars[2] < 0 ||
@@ -588,11 +588,11 @@ void breakable_window_update(char *moby) {
             break;
         }
         if (vector_distance_xy(moby + 0x10, D_0013F3D0) < 32.0f) {
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = WAIT_CAMERA_START_DELAY;
             camera_sequence_and_draw_vars[9] = scale_game_frames(30);
         } else {
             spawn_moby_breakup_effect(moby);
-            MOBY(moby)->state = 4;
+            MOBY(moby)->state = WAIT_FOR_NEARBY_HERO;
         }
         break;
     case WAIT_CAMERA_START_DELAY:
@@ -600,7 +600,7 @@ void breakable_window_update(char *moby) {
             {
                 int state;
                 int base;
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = BLEND_CAMERA_TO_HERO;
                 scripted_camera_sequence_active = 1;
                 D_L06_0015F408 = 0x12;
                 state = camera_sequence_and_draw_vars[5];

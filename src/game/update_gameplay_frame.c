@@ -64,6 +64,12 @@ extern void sound_update(void) __asm__("func_0022CA50");
 void update_gameplay_frame(void) __asm__("FUN_001eb0a8");
 
 void update_gameplay_frame(void) {
+    enum {
+        GAME_MODE_MAIN_MENU = 3
+    };
+    enum {
+        GAME_MODE_FREEZE = 4
+    };
     Vec4                 first_position;
     Vec4                 next_position;
     RenderSequenceActor *actor;
@@ -133,7 +139,7 @@ void update_gameplay_frame(void) {
             enter_main_menu();
         }
         sound_update();
-    } else if (game_mode == 3) {
+    } else if (game_mode == GAME_MODE_MAIN_MENU) {
         intro_overlay_timer = scale_game_frames(0x3C);
         if ((intro_overlay_alpha -= 0x10) < 0) {
             intro_overlay_alpha = 0;
@@ -143,7 +149,7 @@ void update_gameplay_frame(void) {
         }
         update_menu_system();
         sound_update();
-    } else if (game_mode == 4) {
+    } else if (game_mode == GAME_MODE_FREEZE) {
         update_mode_freeze();
         sound_update();
     }

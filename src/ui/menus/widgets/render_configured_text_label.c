@@ -98,7 +98,7 @@ int render_configured_text_label(struct MenuScreen *label) {
         struct MenuScreen *page = menu_system.current->focus;
         value_index = page->data.list.selected;
         if (selector_flags & 0x8000) {
-            value_variant = pal_mode != 0;
+            value_variant = pal_mode != FALSE;
         }
     } else if (selector_flags & 0x100) {
         struct MenuScreen *page = menu_system.current->focus;

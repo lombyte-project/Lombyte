@@ -66,6 +66,9 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         STREAMED_MOBY_WAIT_THIRD_ANIMATION_COMPLETION = 5,
         STREAMED_MOBY_WAIT_SEQUENCE_RESTART = 6
     };
+    enum {
+        ANIMATION_STREAM_READ_FAILED = 3
+    };
     StreamedAnimationMoby  *moby;
     AnimationTableHeader   *header;
     StreamedClassResource **class_resource;
@@ -87,12 +90,12 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
                                     disc_table.animation_table.sector,
                                     disc_table.animation_table.size) != 0) {
             stream->read_offset = table_index;
-            stream->state = 1;
+            stream->state = ANIMATION_STREAM_FINISH_READ;
             animation_asset_read_active[0] = 1;
             mark_menu_stream_buffer_read_active(stream->buffer);
             return 0;
         }
-        stream->state = 3;
+        stream->state = ANIMATION_STREAM_READ_FAILED;
         break;
     case ANIMATION_STREAM_FINISH_READ:
         /* Decompress the completed read and relocate three animation tables. */
@@ -111,7 +114,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
             (*class_resource)->animation_tables[k + 1] = animation_table;
             relocate_asset_entry_pointers(*class_resource, k + 1);
         }
-        stream->state = 2;
+        stream->state = ANIMATION_STREAM_UPDATE_MOBY;
         if (alternate_animation_sequence == 0) {
             stream->moby->moby_state = 0;
         } else {
@@ -157,10 +160,10 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
                 moby->animation_frame_counter = 1;
             }
             if (moby->transition_flags & 2) {
-                if (moby->moby_state == 1) {
+                if (moby->moby_state == STREAMED_MOBY_WAIT_FIRST_ANIMATION_COMPLETION) {
                     moby->moby_state = moby->moby_state + 1;
                 } else {
-                    moby->moby_state = 6;
+                    moby->moby_state = STREAMED_MOBY_WAIT_SEQUENCE_RESTART;
                 }
                 moby->animation_frame_counter = 0;
                 blend_moby_animation(moby, 0, 0, scale_game_frames(0x18));
@@ -176,9 +179,9 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
                 return 0;
             }
             if (alternate_animation_sequence == 0) {
-                moby->moby_state = 0;
+                moby->moby_state = STREAMED_MOBY_WAIT_DIALOGUE_FOR_FIRST_ANIMATION;
             } else {
-                moby->moby_state = 4;
+                moby->moby_state = STREAMED_MOBY_WAIT_DIALOGUE_FOR_THIRD_ANIMATION;
             }
             moby->animation_frame_counter = 0;
             break;

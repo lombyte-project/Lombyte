@@ -68,6 +68,10 @@ void path_mover_update(struct Moby *moby) {
         PATH_MOVER_COMMAND_WAIT_AT_FIRST_POINT = 1,
         PATH_MOVER_COMMAND_TRAVERSE_PATH = 2
     };
+    enum {
+        PATH_MOVER_STATE_UNINITIALIZED = 0,
+        PATH_MOVER_STATE_INITIALIZED = 1
+    };
     PathMoverVars *path_mover_vars = (PathMoverVars *)moby->pvars;
     LevelPath     *path;
     Vec4           orig;
@@ -112,7 +116,7 @@ void path_mover_update(struct Moby *moby) {
     }
     qcopy(&orig, &moby->pos);
     fast_dec_timer_s16(&path_mover_vars->wait);
-    if (moby->state == 0) {
+    if (moby->state == PATH_MOVER_STATE_UNINITIALIZED) {
         f32   t;
         Vec4 *points;
 
@@ -131,7 +135,7 @@ void path_mover_update(struct Moby *moby) {
         path_mover_vars->wait = 0;
         path_mover_vars->speed = 0.0f;
         path_mover_vars->rise = 0.0f;
-        moby->state = 1;
+        moby->state = PATH_MOVER_STATE_INITIALIZED;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0xFF;
         path_mover_vars->voice = -1;

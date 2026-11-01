@@ -70,7 +70,7 @@ void linked_moby_states_update(unsigned char *source_moby) {
     int       matching_owned_record, i;
     switch (MOBY(source_moby)->state) {
     case STATE_INITIALIZE:
-        MOBY(source_moby)->state = 1;
+        MOBY(source_moby)->state = STATE_ACTIVE;
         moby_vars->w4 = linked_moby_selection_delay_gp;
         moby_vars->w8 = 3;
         moby_vars->p[0] = moby_table + (moby_vars->idx[0] << 8);

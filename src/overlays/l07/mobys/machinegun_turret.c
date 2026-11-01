@@ -90,7 +90,7 @@ void machinegun_turret_update(unsigned char *moby) {
     animation = &turret_instance_vars->anim_state;
     hit = find_moby_hit(moby, 0x230000, 0);
     resolve_moby_hit_response((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
-    if ((u8)MOBY(moby)->state < 2 && contact[0] > 1) {
+    if ((u8)MOBY(moby)->state < TURRET_HIT_SPIN && contact[0] > 1) {
         FUN_0022da68(1, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
         MOBY(moby)->flags &= 0xefff;
@@ -100,7 +100,7 @@ void machinegun_turret_update(unsigned char *moby) {
         turret_instance_vars->unk7C = scale_game_frames(60);
         if ((u8)MOBY(moby)->prev_seq != 2)
             FUN_00212f90(moby, 2, 0, 5);
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = TURRET_HIT_SPIN;
     }
     MOBY(moby)->hit_slot = 0xff;
     trooper_anim_finish(moby, animation);
@@ -136,7 +136,7 @@ void machinegun_turret_update(unsigned char *moby) {
         turret_instance_vars->unk9C = turret_instance_vars->unk94;
         if ((u8)MOBY(moby)->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, 0);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = TURRET_SWEEP_AND_FIRE;
         break;
     case TURRET_SWEEP_AND_FIRE:
         if ((u8)MOBY(moby)->seq != 1 && ((u8)MOBY(moby)->anim_flags & 2) != 0 &&
@@ -210,7 +210,7 @@ void machinegun_turret_update(unsigned char *moby) {
         if (fast_dec_timer_s16(&turret_instance_vars->unk7C) == 0)
             return;
         turret_instance_vars->unk7C = scale_game_frames(180);
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = TURRET_LOWER_AND_REALIGN;
         break;
     case TURRET_LOWER_AND_REALIGN:
         if ((u8)MOBY(moby)->seq != 4 && ((u8)MOBY(moby)->anim_flags & 2) &&
@@ -232,7 +232,7 @@ void machinegun_turret_update(unsigned char *moby) {
             FUN_0022da68(2, 0, moby);
             if ((u8)MOBY(moby)->prev_seq != 3)
                 FUN_00212f90(moby, 3, 0, 5);
-            MOBY(moby)->state = 4;
+            MOBY(moby)->state = TURRET_RESTORE_HEIGHT;
         }
         break;
     case TURRET_RESTORE_HEIGHT:
@@ -244,7 +244,7 @@ void machinegun_turret_update(unsigned char *moby) {
         MOBY(moby)->flags |= 0x1000;
         if ((u8)MOBY(moby)->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, 5);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = TURRET_SWEEP_AND_FIRE;
         break;
     case 5:
         break;

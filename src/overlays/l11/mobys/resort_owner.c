@@ -92,11 +92,15 @@ typedef struct ResortOwnerVars {
 } ResortOwnerVars;
 
 void trigger_pokitaru_paired_rotation(struct Moby *moby) {
+    enum {
+        POKITARU_PAIRED_ROTATION_WAITING = 1,
+        POKITARU_PAIRED_ROTATION_ROTATING = 2
+    };
     ResortOwnerVars *state = (ResortOwnerVars *)moby->pvars;
-    if (moby->oclass == 0x41 && moby->state == 1) {
+    if (moby->oclass == 0x41 && moby->state == POKITARU_PAIRED_ROTATION_WAITING) {
         char *child;
         D_0013D3E2[0] = moby->state;
-        moby->state = 2;
+        moby->state = POKITARU_PAIRED_ROTATION_ROTATING;
         child = state->unk8;
         if (child)
             child[0x20] = 2;
@@ -263,8 +267,9 @@ void apply_resort_owner_movement(void *mp) {
     qcopy(A, moby + 0x10);
     qcopy(B, moby_vars->unk130);
     FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
-    if ((MOBY(moby)->state >= 4 && MOBY(moby)->state <= 6) ||
-        (MOBY(moby)->state == 7 && moby_vars->unk15C == 3)) {
+    if ((MOBY(moby)->state >= RESORT_OWNER_FOLLOW_HERO &&
+         MOBY(moby)->state <= RESORT_OWNER_MOVE_TO_PATH_POINT) ||
+        (MOBY(moby)->state == RESORT_OWNER_JUMP_TO_TARGET && moby_vars->unk15C == 3)) {
         resolve_point_path_segment_xy_clearance(
             0.3f,
             *(void **)((u8 *)moby_vars + 0x60 - -(*(int *)&moby_vars->unk158 * 4)),
@@ -365,17 +370,18 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
     float                 position_scratch[4];
     float                 dialogue_rotation[4];
 
-    if (moby->state >= 3 && moby->state <= 5 && proximity == 0) {
+    if (moby->state >= RESORT_OWNER_WAIT_TO_FOLLOW_HERO &&
+        moby->state <= RESORT_OWNER_FOLLOW_DISTANT_HERO && proximity == 0) {
         FUN_L11_002d2088_c(moby, 6);
         return;
     }
-    if (moby->state >= 4 && moby->state <= 6) {
+    if (moby->state >= RESORT_OWNER_FOLLOW_HERO && moby->state <= RESORT_OWNER_MOVE_TO_PATH_POINT) {
         fast_vec_normalize(position_scratch, &moby->rot_row0, 3.0f);
         fast_vec_add(position_scratch, position_scratch, &moby->pos);
         if (try_find_resort_owner_jump_target(moby, position_scratch)) {
             qcopy(&moby_vars->target, position_scratch);
             moby_vars->target.z = ground_height_14b0(&moby_vars->target);
-            moby_vars->next_state = 3;
+            moby_vars->next_state = RESORT_OWNER_WAIT_TO_FOLLOW_HERO;
             FUN_L11_002d2088_c(moby, 7);
         }
     }
@@ -480,7 +486,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                                    &o->rot_row2,
                                    resort_owner_gate_jump_target_local_z_offset_gp);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                moby_vars->next_state = 8;
+                moby_vars->next_state = RESORT_OWNER_MOVE_TO_GATE_TARGET;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
             }
@@ -500,7 +506,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                                    resort_owner_gate_jump_target_local_z_offset_gp);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
                 l11_cuboids[moby_vars->unk110].pos.z += 500.0f;
-                moby_vars->next_state = 8;
+                moby_vars->next_state = RESORT_OWNER_MOVE_TO_GATE_TARGET;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
             }
@@ -558,7 +564,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         if (vector_distance_xy(&moby->pos, &moby_vars->target) < 0.5f) {
             int next_leg_index = ++moby_vars->leg;
             qcopy(&moby_vars->target, &l11_cuboids[moby_vars->unkD0[next_leg_index]].pos);
-            moby_vars->next_state = 4;
+            moby_vars->next_state = RESORT_OWNER_FOLLOW_HERO;
             FUN_L11_002d2088_c(moby, 7);
         }
         break;
@@ -606,10 +612,10 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
         if (moby->prev_seq != 0)
             FUN_00212f90(moby, 0, 0, scale_game_frames(0x14));
-        if (moby->state == 14)
+        if (moby->state == RESORT_OWNER_CHECK_POST_PATH_DIALOGUE)
             moby_vars->unk2C = 10.0f;
         clear_u64_value(moby_vars->unk130);
-        if (moby->state == 14)
+        if (moby->state == RESORT_OWNER_CHECK_POST_PATH_DIALOGUE)
             moby_vars->unk56 = 2;
         break;
     case RESORT_OWNER_FOLLOW_HERO:
@@ -740,6 +746,9 @@ extern s32 D_L11_0015FFF4;
 
 /* 2 when a live moby of the current target groups is within 10 units, 1 when one is alive, else 0. */
 int classify_resort_owner_target_proximity(struct Moby *moby) {
+    enum {
+        RESORT_OWNER_TARGET_MIN_LIVE_STATE = 0
+    };
     struct TargetSets *target_sets = (struct TargetSets *)moby->pvars;
     int                found = 0;
     int                i;
@@ -756,7 +765,7 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
         do {
             int          offset = (*group_moby_entry & 0x7fff) << 8;
             struct Moby *target_group_moby = (struct Moby *)(offset + D_L11_0015FFD8);
-            if ((signed char)target_group_moby->state >= 0) {
+            if ((signed char)target_group_moby->state >= RESORT_OWNER_TARGET_MIN_LIVE_STATE) {
                 if (target_group_moby->oclass != 0x4de ||
                     is_moby_in_bob_target_exclusion_state((const u8 *)target_group_moby) == 0) {
                     found = 1;
@@ -893,8 +902,11 @@ void update_resort_owner_look_tracking(WatcherMoby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
 
 int try_activate_pokitaru_gate(struct Moby *moby) {
+    enum {
+        POKITARU_GATE_READY_FOR_ACTIVATION = 1
+    };
     char *current;
-    if (moby->state != 1)
+    if (moby->state != POKITARU_GATE_READY_FOR_ACTIVATION)
         return 0;
     current = (char *)hero.ground_moby;
     if (current != (char *)moby || hero.air_frames.s)

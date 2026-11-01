@@ -282,7 +282,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
     hit_reaction(peckbot_moby, hit, &peckbot_vars->health, 0, &hitA0, &hitA4, 0, 4);
     fast_dec_timer_s16(&peckbot_vars->flee_timer);
     if (peckbot_vars->flee_timer < scale_game_frames(0x2D) && hit != NULL &&
-        peckbot_moby->state != 0x63) {
+        peckbot_moby->state != PECKBOT_STATE_FATAL_KNOCKBACK) {
         if ((hit->cls->oclass == 0xB0 || hit->cls->oclass == 0xB1) &&
             peckbot_vars->flee_timer != 0) {
             hit->dmg = 0.0f;
@@ -310,7 +310,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 trooper_start_knockback(peckbot_moby, peckbot_vars->knock, 7, 1, 0, angle);
                 peckbot_vars->x170 = 11.0f;
                 peckbot_vars->x174 = 18.0f;
-                peckbot_moby->state = 0x63;
+                peckbot_moby->state = PECKBOT_STATE_FATAL_KNOCKBACK;
                 peckbot_vars->x117 = 0x78;
                 trooper_anim_update(peckbot_moby, peckbot_vars->fx110);
                 FUN_L00_00257470(peckbot_moby, 0, -1);
@@ -321,7 +321,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 trooper_start_knockback(peckbot_moby, peckbot_vars->knock, 6, 1, 0, angle);
                 peckbot_vars->x170 = 5.0f;
                 peckbot_vars->x174 = 10.0f;
-                peckbot_moby->state = 6;
+                peckbot_moby->state = PECKBOT_STATE_NONFATAL_KNOCKBACK;
                 peckbot_vars->x117 = 0xFA;
                 peckbot_vars->flee_timer = scale_game_frames(0x3C);
                 trooper_anim_update(peckbot_moby, peckbot_vars->fx110);
@@ -334,10 +334,10 @@ void peckbot_update(Mob577 *peckbot_moby) {
         qcopy(&peckbot_vars->home, &peckbot_moby->pos);
         peckbot_vars->x29 = 0;
         if (peckbot_vars->x20A != 0) {
-            peckbot_moby->state = 1;
+            peckbot_moby->state = PECKBOT_STATE_GROUNDED_IDLE;
             SET_ANIM(peckbot_moby, 4, 0, 0);
         } else {
-            peckbot_moby->state = 14;
+            peckbot_moby->state = PECKBOT_STATE_AIRBORNE_IDLE;
             peckbot_moby->pos.f[2] = peckbot_moby->pos.f[2] + 6.0f;
             SET_ANIM(peckbot_moby, 0, 0, 0);
         }
@@ -363,7 +363,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
             fast_vec_length(&vector_scratch) < peckbot_vars->range + 4.0f &&
             absolute_float(peckbot_moby->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
-            peckbot_moby->state = 17;
+            peckbot_moby->state = PECKBOT_STATE_DESCEND;
         } else if (peckbot_vars->x228 == 0 && peckbot_moby->hit == 1 &&
                    random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
@@ -371,7 +371,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
             }
             peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
             peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
-            peckbot_moby->state = 17;
+            peckbot_moby->state = PECKBOT_STATE_DESCEND;
             clear_u64_value(&peckbot_vars->vel);
             peckbot_moby->hit = 0;
         } else if (fast_dec_timer(&peckbot_vars->idle_timer) != 0) {
@@ -383,7 +383,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
             position_scratch.f[2] = 0.0f;
             position_scratch.f[2] = random_float_between(5.0f, 7.0f);
             fast_vec_add(&peckbot_vars->dest, &position_scratch, &peckbot_vars->home);
-            peckbot_moby->state = 15;
+            peckbot_moby->state = PECKBOT_STATE_MOVE_TO_DESTINATION;
         }
         break;
     case PECKBOT_STATE_MOVE_TO_DESTINATION:
@@ -395,12 +395,12 @@ void peckbot_update(Mob577 *peckbot_moby) {
         fast_vec_add(&vector_scratch, &peckbot_vars->vel, &peckbot_moby->pos);
         if (coll_sphere(&vector_scratch, 0, peckbot_moby, 0.4f) != 0) {
             clear_u64_value(&peckbot_vars->vel);
-            peckbot_moby->state = 14;
+            peckbot_moby->state = PECKBOT_STATE_AIRBORNE_IDLE;
         } else {
             qcopy(&peckbot_moby->pos, &vector_scratch);
         }
         if (fast_vec_length(&peckbot_vars->vel) == 0.0f) {
-            peckbot_moby->state = 14;
+            peckbot_moby->state = PECKBOT_STATE_AIRBORNE_IDLE;
         }
         break;
     case PECKBOT_STATE_DESCEND:
@@ -418,7 +418,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
             }
             peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
             peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             clear_u64_value(&peckbot_vars->vel);
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
         }
@@ -429,7 +429,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         peckbot_moby->pos.f[2] += peckbot_vars->vel.f[2];
         if (ascent_ground_height + 6.0f <= peckbot_moby->pos.f[2]) {
             peckbot_moby->pos.f[2] = ascent_ground_height + 6.0f;
-            peckbot_moby->state = 14;
+            peckbot_moby->state = PECKBOT_STATE_AIRBORNE_IDLE;
             peckbot_vars->x228 = scale_game_frames(0xB4);
             clear_u64_value(&peckbot_vars->vel);
         }
@@ -439,7 +439,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         if (fast_vec_length(&vector_scratch) < peckbot_vars->range + 4.0f &&
             absolute_float(peckbot_moby->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
-            peckbot_moby->state = 2;
+            peckbot_moby->state = PECKBOT_STATE_FACE_AWAY_FROM_TARGET;
             SET_ANIM(peckbot_moby, 5, 0, scale_game_frames(3));
         } else if (peckbot_moby->hit == 1 && random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
@@ -447,12 +447,12 @@ void peckbot_update(Mob577 *peckbot_moby) {
             }
             peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
             peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
             peckbot_moby->hit = 0;
         } else if (fast_vec_length(&vector_scratch) > peckbot_vars->range + 6.0f &&
                    peckbot_vars->x20A == 0) {
-            peckbot_moby->state = 16;
+            peckbot_moby->state = PECKBOT_STATE_ASCEND;
             SET_ANIM(peckbot_moby, 0, 0, scale_game_frames(3));
         }
         break;
@@ -461,7 +461,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         if (fast_vec_length(&vector_scratch) < peckbot_vars->range - 4.0f &&
             absolute_float(peckbot_moby->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
-            peckbot_moby->state = 2;
+            peckbot_moby->state = PECKBOT_STATE_FACE_AWAY_FROM_TARGET;
             peckbot_moby->pos.f[2] = peckbot_moby->pos.f[2] + 1.0f;
             SET_ANIM(peckbot_moby, 5, 0, scale_game_frames(3));
         }
@@ -492,12 +492,12 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 peckbot_moby, peckbot_vars->knock, 6, 1, 0, peckbot_moby->rot.f[2]);
             peckbot_vars->x170 = 5.0f;
             peckbot_vars->x174 = 10.0f;
-            peckbot_moby->state = 11;
+            peckbot_moby->state = PECKBOT_STATE_HOME_TRIGGERED_KNOCKBACK;
         }
         break;
     case PECKBOT_STATE_HOME_TRIGGERED_KNOCKBACK:
         if (step_moby_motion(peckbot_moby, peckbot_vars->knock) & 1) {
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             if (random_integer_below(0x100) & 1) {
                 peckbot_vars->turn_deg = -peckbot_vars->turn_deg;
             }
@@ -527,7 +527,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
             }
             peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
             peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
             peckbot_moby->hit = 0;
         } else if (peckbot_moby->hit == 1 && random_integer_below(0x13) == 0) {
@@ -536,12 +536,12 @@ void peckbot_update(Mob577 *peckbot_moby) {
             }
             peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
             peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
             peckbot_moby->hit = 0;
         } else if (fast_vec_length(&vector_scratch) > peckbot_vars->range + 6.0f &&
                    peckbot_vars->x20A == 0) {
-            peckbot_moby->state = 16;
+            peckbot_moby->state = PECKBOT_STATE_ASCEND;
             SET_ANIM(peckbot_moby, 0, 0, scale_game_frames(3));
         }
         if (peckbot_moby->anim == 5 && (peckbot_moby->anim_flags & 2)) {
@@ -575,12 +575,12 @@ void peckbot_update(Mob577 *peckbot_moby) {
         fast_vec_sub(&home_to_target, &target.pos, &peckbot_vars->home);
         if (vector_distance_xy(&peckbot_moby->pos, &target.pos) < 1.5f &&
             !(movement_result_flags & 2)) {
-            peckbot_moby->state = 4;
+            peckbot_moby->state = PECKBOT_STATE_ATTACK_TARGET;
             SET_ANIM(peckbot_moby, 3, 0, scale_game_frames(3));
         } else if (chase_target_height_distance_ratio > 1.0f || (movement_result_flags & 2)) {
             peckbot_moby->pos.f[0] = oldpos.f[0];
             peckbot_moby->pos.f[1] = oldpos.f[1];
-            peckbot_moby->state = 12;
+            peckbot_moby->state = PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT;
             SET_ANIM(peckbot_moby, 5, 0, scale_game_frames(3));
         } else if (fast_vec_length(&home_to_target) < peckbot_vars->range + 4.0f &&
                    absolute_float(peckbot_moby->pos.f[2] - target.pos.f[2]) < 8.0f) {
@@ -588,11 +588,11 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 FUN_L01_0026e090(peckbot_moby->group, 1);
             }
         } else if (peckbot_moby->hit != 1) {
-            peckbot_moby->state = 5;
+            peckbot_moby->state = PECKBOT_STATE_RETURN_HOME;
         }
         FUN_00213508(&peckbot_moby->pos, 0, 0.5f);
         if (FUN_L00_001f35d8_cf() == 0 || FUN_L00_001f35d8_cf() == 8) {
-            peckbot_moby->state = 16;
+            peckbot_moby->state = PECKBOT_STATE_ASCEND;
             SET_ANIM(peckbot_moby, 0, 0, scale_game_frames(3));
         }
         peckbot_moby->hit = 0;
@@ -620,7 +620,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         }
         if ((peckbot_moby->anim_flags & 2) &&
             vector_distance_xy(&peckbot_moby->pos, &target.pos) > 1.5f) {
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
         }
         attack_ground_height = FUN_00213508(&peckbot_moby->pos, 0, 0.5f);
@@ -649,7 +649,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         movement_result_flags = FUN_L00_00258b50(
             peckbot_moby, &peckbot_vars->x180, &vector_scratch, &position_scratch, 1.0f);
         if (vector_distance_xy(&peckbot_moby->pos, &peckbot_vars->home) < 2.0f) {
-            peckbot_moby->state = 1;
+            peckbot_moby->state = PECKBOT_STATE_GROUNDED_IDLE;
             SET_ANIM(peckbot_moby, 4, 0, scale_game_frames(3));
         }
         fast_vec_sub(&home_to_target, &target.pos, &peckbot_vars->home);
@@ -657,27 +657,27 @@ void peckbot_update(Mob577 *peckbot_moby) {
             if (peckbot_moby->group != 0xFF) {
                 FUN_L01_0026e090(peckbot_moby->group, 1);
             }
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
         } else if (peckbot_moby->hit == 1) {
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
         } else if (movement_result_flags & 2) {
             peckbot_moby->pos.f[0] = oldpos.f[0];
             peckbot_moby->pos.f[1] = oldpos.f[1];
-            peckbot_moby->state = 12;
+            peckbot_moby->state = PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT;
             SET_ANIM(peckbot_moby, 5, 0, scale_game_frames(3));
         }
         FUN_00213508(&peckbot_moby->pos, 0, 0.5f);
         if (FUN_L00_001f35d8_cf() == 0 || FUN_L00_001f35d8_cf() == 8) {
-            peckbot_moby->state = 16;
+            peckbot_moby->state = PECKBOT_STATE_ASCEND;
             SET_ANIM(peckbot_moby, 0, 0, scale_game_frames(3));
         }
         peckbot_moby->hit = 0;
         break;
     case PECKBOT_STATE_NONFATAL_KNOCKBACK:
         if (step_moby_motion(peckbot_moby, peckbot_vars->knock) & 1) {
-            peckbot_moby->state = 3;
+            peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
             return;
         } else if (peckbot_moby->pos.f[2] < 5.0f) {
@@ -688,7 +688,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         break;
     case 7:
         if (FUN_L00_002dc9f0(peckbot_moby, peckbot_vars->knock) != 0) {
-            peckbot_moby->state = 14;
+            peckbot_moby->state = PECKBOT_STATE_AIRBORNE_IDLE;
             peckbot_vars->x228 = scale_game_frames(0xB4);
             SET_ANIM(peckbot_moby, 0, 0, 0);
             peckbot_vars->xC8 = 0;
@@ -793,15 +793,15 @@ void peckbot_update(Mob577 *peckbot_moby) {
         fast_vec_sub(&home_to_target, &target.pos, &peckbot_vars->home);
         if (vector_distance_xy(&peckbot_moby->pos, &target.pos) < 1.5f &&
             recovery_target_height_distance_ratio <= 1.0f) {
-            peckbot_moby->state = 4;
+            peckbot_moby->state = PECKBOT_STATE_ATTACK_TARGET;
             SET_ANIM(peckbot_moby, 3, 0, scale_game_frames(3));
         } else if (recovery_target_height_distance_ratio <= 1.0f &&
                    !(recovery_movement_result_flags & 2)) {
-            peckbot_moby->state = 5;
+            peckbot_moby->state = PECKBOT_STATE_RETURN_HOME;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
         } else if (vector_distance_xy(&peckbot_moby->pos, &target.pos) >
                    peckbot_vars->range + 6.0f) {
-            peckbot_moby->state = 16;
+            peckbot_moby->state = PECKBOT_STATE_ASCEND;
             SET_ANIM(peckbot_moby, 0, 0, scale_game_frames(3));
         } else if (peckbot_moby->anim_flags & 2) {
             random_integer_below(4);
@@ -811,7 +811,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         }
         FUN_00213508(&peckbot_moby->pos, 0, 0.5f);
         if (FUN_L00_001f35d8_cf() == 0 || FUN_L00_001f35d8_cf() == 8) {
-            peckbot_moby->state = 16;
+            peckbot_moby->state = PECKBOT_STATE_ASCEND;
             SET_ANIM(peckbot_moby, 0, 0, scale_game_frames(3));
         }
         peckbot_moby->hit = 0;
@@ -859,7 +859,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         if (peckbot_vars->leader == NULL ||
             vector_distance_xy(&peckbot_moby->pos, &peckbot_vars->leader->pos) >
                 convert_integer_to_float(peckbot_vars->x216)) {
-            peckbot_moby->state = 5;
+            peckbot_moby->state = PECKBOT_STATE_RETURN_HOME;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
         }
         peckbot_moby->hit = 0;

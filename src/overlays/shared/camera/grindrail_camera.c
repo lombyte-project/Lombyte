@@ -12,6 +12,12 @@
 #include "sda.h"
 
 /* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in l01_camera_preset_rows) */
+enum {
+    CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC = 0,
+    CAMERA_PRESET_KIND_MAPPED_PATHS = 2,
+    CAMERA_PRESET_KIND_GRINDRAIL_PATH = 3
+};
+
 typedef struct {
     Vec4 pos; /* 0x00 */
     u8   pad10[0x30];
@@ -132,7 +138,7 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     focus = &destination_camera->orbit->focus;
     focus->dist = 1.5f;
     focus->state = 0;
-    if (preset->kind == 3) {
+    if (preset->kind == CAMERA_PRESET_KIND_GRINDRAIL_PATH) {
         focus->dist = 0.5f;
     }
     control = &destination_camera->control;
@@ -169,7 +175,7 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     blend->unk8 = 0;
     blend->unkC = 0;
     blend->unk10 = 1;
-    if (preset->kind == 2 && preset->ready == 0) {
+    if (preset->kind == CAMERA_PRESET_KIND_MAPPED_PATHS && preset->ready == 0) {
         track_path = ((CameraPath *)l01_paths[preset->track_path]);
         target_path = (CameraPath *)l01_splines[preset->target].path;
         preset_path = ((CameraPath *)l01_paths[preset->path]);
@@ -329,7 +335,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     float         look_length;
     float         pitch_step;
 
-    if (mode == 0) {
+    if (mode == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
         Path *path;
         float dist;
 
@@ -353,7 +359,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
             camera_to_update->pos[1], rail_point[1], &data->vel[1], rate, 0.175f, 0.0f);
         camera_to_update->pos[2] = cam_interp_values(
             camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
-    } else if (mode == 2) {
+    } else if (mode == CAMERA_PRESET_KIND_MAPPED_PATHS) {
         Path *pathA = ((Path *)l01_paths[path_index]);
         Path *pathD = (Path *)l01_splines_macro[camera_path_preset->target].path;
         Path *pathC = ((Path *)l01_paths[camera_path_preset->path]);
@@ -487,7 +493,8 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                          20.0f,
                          1.0f,
                          0.0f);
-        if (current_level_index_macro == 0xE && camera_path_preset->kind == 0) {
+        if (current_level_index_macro == 0xE &&
+            camera_path_preset->kind == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
             sample_path(path, delta, &segment, &fraction, lead, 0);
         } else {
             sample_path(path, delta, &segment, &fraction, lead, 1);
@@ -566,7 +573,7 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
     }
 
     camera_preset->unk36 = 0;
-    if (camera_preset->kind == 3) {
+    if (camera_preset->kind == CAMERA_PRESET_KIND_GRINDRAIL_PATH) {
         CameraPath *path;
         s32         next;
         path = ((CameraPath *)l01_paths[camera_preset->track_path]);

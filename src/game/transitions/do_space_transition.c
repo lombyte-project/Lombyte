@@ -117,7 +117,8 @@ void do_space_transition(void) {
     view_context.fog_far_int = 128.0f;
     set_background_color(0, 0, 0);
     if (space_load_macro < 0) {
-        while (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
+        while (memory_card_state.state >= MEMCARD_REQUEST_FORMAT ||
+               memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
             memcard_update_state();
             run_state_handler();
         }
@@ -223,7 +224,8 @@ void do_space_transition(void) {
                 tick_space_transition();
             } while (service_level_archive_load() == 0);
         }
-        while (memory_card_state.state != 2 || memory_card_state.pending_state >= 0) {
+        while (memory_card_state.state != MEMCARD_DISPATCH_PENDING_OPERATION ||
+               memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
             FlushCache(0);
             sceGsSyncV(0);
             memcard_update_state();

@@ -40,6 +40,9 @@ extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("fun
 s32 draw_menu_item_grid(struct MenuScreen *grid) __asm__("FUN_0021d948");
 
 s32 draw_menu_item_grid(struct MenuScreen *grid) {
+    enum {
+        MENU_GRID_CELL_EQUIPPABLE_ITEM = 0
+    };
     Font                *font;
     struct MenuGridCell *cell;
     s32                  focused;
@@ -107,9 +110,10 @@ s32 draw_menu_item_grid(struct MenuScreen *grid) {
                 append_screen_rect_packet(
                     left - 0x10, top - 0x10, right + 0x10, bottom + 0x10, panel_clear_color, 1);
             }
-            if (cell->kind == 0 ? item_available[cell->id] : alternate_item_available[cell->id]) {
+            if (cell->kind == MENU_GRID_CELL_EQUIPPABLE_ITEM ? item_available[cell->id]
+                                                             : alternate_item_available[cell->id]) {
                 frame_offset = 0;
-                if ((u16)cell->kind == 0) {
+                if ((u16)cell->kind == MENU_GRID_CELL_EQUIPPABLE_ITEM) {
                     id = cell->id;
                     if (menu_system.equipped[menu_grid_item_slot_records[id].slot] == id &&
                         !(grid->data.grid.flags & 0x20)) {

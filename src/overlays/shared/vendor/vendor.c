@@ -344,8 +344,9 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             q->mC->h34 &= 0xFFFE;
         }
         add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
-        rotation_2D5FA8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
-        rotation_2D5FA8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
+        build_axis_rotation_quaternion((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
+        build_axis_rotation_quaternion(
+            (u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
         vendor_manipulator_rotation_phase =
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
@@ -367,8 +368,9 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
         interaction_allowed = 1;
         help_message_allowed = 1;
-        rotation_2D5FA8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
-        rotation_2D5FA8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
+        build_axis_rotation_quaternion((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
+        build_axis_rotation_quaternion(
+            (u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
         vendor_manipulator_rotation_phase =
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =

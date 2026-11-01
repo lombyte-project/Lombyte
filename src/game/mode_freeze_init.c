@@ -19,6 +19,9 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
         FREEZE_PUSH_HELP_HISTORY = 5,
         FREEZE_VIDEO_MODE_CHANGE = 6
     };
+    enum {
+        GAME_MODE_FREEZE = 4
+    };
     FreezeModeState *freeze_state;
 
     if (game_mode != 3) {
@@ -27,7 +30,7 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
     }
     freeze.return_game_mode = game_mode;
     freeze.context = freeze_context;
-    game_mode = 4;
+    game_mode = GAME_MODE_FREEZE;
     freeze.state = mode;
     switch (mode) {
     case FREEZE_CONTROL_MODE_16_PAUSE:

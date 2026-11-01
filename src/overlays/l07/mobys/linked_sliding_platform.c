@@ -73,7 +73,7 @@ void linked_sliding_platform_update(struct Moby *moby) {
         sliding_platform_vars->sound_slot = -1;
         if (sliding_platform_vars->flag_index != -1)
             D_L07_00184528[sliding_platform_vars->flag_index] = 0;
-        moby->state = 1;
+        moby->state = PLATFORM_WAIT_TO_MOVE_OUTWARD;
         break;
     }
     case PLATFORM_WAIT_TO_MOVE_OUTWARD:
@@ -85,7 +85,7 @@ void linked_sliding_platform_update(struct Moby *moby) {
         }
         if (sliding_platform_vars->trigger_sound != -1)
             allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
-        moby->state = 2;
+        moby->state = PLATFORM_MOVE_OUTWARD;
         break;
     case PLATFORM_MOVE_OUTWARD:
         if (sliding_platform_vars->target_index != -1 &&
@@ -94,7 +94,7 @@ void linked_sliding_platform_update(struct Moby *moby) {
             target->state != 0xfe && target->state != 0xfd &&
             target->state == sliding_platform_vars->target_state_word) {
             allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
-            moby->state = 4;
+            moby->state = PLATFORM_RETURN_TO_ORIGIN;
             break;
         }
         distance = vector_distance_xy(&moby->pos, origin);
@@ -103,7 +103,7 @@ void linked_sliding_platform_update(struct Moby *moby) {
                 allocate_voice_for_target_entry(sliding_platform_vars->arrival_sound, 0, moby);
             if (sliding_platform_vars->flag_index != -1)
                 D_L07_00184528[sliding_platform_vars->flag_index] = 1;
-            moby->state = 3;
+            moby->state = PLATFORM_WAIT_TO_RETURN;
         } else {
             step.q = 0;
             step.f[1] = -(frame_scale * 0.01f);
@@ -123,7 +123,7 @@ void linked_sliding_platform_update(struct Moby *moby) {
                     return;
                 if (sliding_platform_vars->trigger_sound != -1)
                     allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
-                moby->state = 4;
+                moby->state = PLATFORM_RETURN_TO_ORIGIN;
             }
         }
         break;
@@ -134,7 +134,7 @@ void linked_sliding_platform_update(struct Moby *moby) {
             target->state == 0xfe || target->state == 0xfd ||
             target->state == sliding_platform_vars->target_state) {
             allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
-            moby->state = 2;
+            moby->state = PLATFORM_MOVE_OUTWARD;
             return;
         }
         distance = vector_distance_xy(&moby->pos, origin);
@@ -156,7 +156,7 @@ void linked_sliding_platform_update(struct Moby *moby) {
                 allocate_voice_for_target_entry(sliding_platform_vars->arrival_sound, 0, moby);
             if (sliding_platform_vars->flag_index != -1)
                 D_L07_00184528[sliding_platform_vars->flag_index] = 0;
-            moby->state = 1;
+            moby->state = PLATFORM_WAIT_TO_MOVE_OUTWARD;
             break;
         }
         step.q = 0;

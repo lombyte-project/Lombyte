@@ -147,6 +147,10 @@ void         robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 
 /* Moby classes 573, 1382 */
 void robot_dog_update(unsigned char *robot_dog_moby) {
+    enum {
+        ROBOT_DOG_DETECTION_LINE_BLOCKED = 0,
+        ROBOT_DOG_DETECTION_CLEAR_LINE_IN_FACING_CONE = 2
+    };
     Vars1382    *robot_dog_vars;
     struct Moby *facing_target_moby;
     int          clip_volume_suppressed;
@@ -222,7 +226,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         }
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER:
-        if (robot_dog_vars->mode != 0 && random_integer_below(0x1F) == 0) {
+        if (robot_dog_vars->mode != ROBOT_DOG_DETECTION_LINE_BLOCKED &&
+            random_integer_below(0x1F) == 0) {
             robot_dog_moby[0x20] = 2;
             if (robot_dog_moby[0x53] != 1) {
                 blend_moby_animation(robot_dog_moby, 1, 0, scale_game_frames(10));
@@ -285,7 +290,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             }
             MOBY(robot_dog_moby)->anim_speed = 1.7f;
             mode = robot_dog_vars->mode;
-            if (mode == 2 &&
+            if (mode == ROBOT_DOG_DETECTION_CLEAR_LINE_IN_FACING_CONE &&
                 (fast_dec_timer_s16(&robot_dog_vars->t1E2) || D_0013E533[0x2EC1] != 3)) {
                 if (random_integer_below(3) == 0) {
                     if (robot_dog_moby[0x53] != mode) {
@@ -302,7 +307,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                         blend_moby_animation(robot_dog_moby, 7, 0, scale_game_frames(10));
                     }
                 }
-            } else if (robot_dog_vars->t1E0 == 0 && robot_dog_vars->mode == 0) {
+            } else if (robot_dog_vars->t1E0 == 0 &&
+                       robot_dog_vars->mode == ROBOT_DOG_DETECTION_LINE_BLOCKED) {
                 robot_dog_moby[0x20] = 3;
                 if (robot_dog_moby[0x53] != 0) {
                     clip_volume_id_or_animation_value = random_integer_below(
@@ -615,7 +621,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
     float        target_heading;
 
     moby_vars = moby->data;
-    if (moby->state == 0) {
+    if (moby->state == ROBOT_DOG_STATE_INITIALIZE) {
         return;
     }
     if (moby_vars->i38 != 0) {
@@ -626,7 +632,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
     y = 0;
     hit_record = (Hit_2F1558 *)find_moby_hit(moby, 0x330000, 0);
     hit_reaction(moby, hit_record, &moby_vars->f20, 0, &x, &y, 0, 4);
-    if (x != 1 && moby->state != 15) {
+    if (x != 1 && moby->state != ROBOT_DOG_STATE_FALL_THEN_REMOVE) {
         moby_vars->f20 -= y;
         moby_vars->f130 = frame_time_sq * 42.0f;
         moby_vars->f134 = frame_time_sq * 24.0f;
@@ -644,7 +650,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
                 fast_arc_tan(moby_vars->f1F0 - moby->pos[0], moby_vars->f1F4 - moby->pos[1]);
         }
         trooper_start_knockback(knockback_heading, moby, moby_vars->v120, 0xB, 1, 0);
-        moby->state = 15;
+        moby->state = ROBOT_DOG_STATE_FALL_THEN_REMOVE;
         moby_vars->b117 = 0xF0;
         trooper_anim_update(moby, moby_vars->h110);
     }
@@ -710,9 +716,9 @@ int enemy_stun_update(struct Moby *moby) __asm__("FUN_L17_002efea8");
 int enemy_stun_update(struct Moby *moby) {
     int suction_status = process_moby_suck_cannon_suction(moby);
     if (suction_status) {
-        moby->state = 12;
-    } else if (moby->state == 12) {
-        moby->state = 6;
+        moby->state = ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE;
+    } else if (moby->state == ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE) {
+        moby->state = ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER;
         if (moby->prev_seq != 7) {
             int animation_blend_frames = scale_game_frames(10);
             blend_moby_animation(moby, 7, 0, animation_blend_frames);
@@ -727,7 +733,7 @@ int cancel_suck_cannon_suction_and_set_state_12(struct Moby *moby) __asm__("FUN_
 
 int cancel_suck_cannon_suction_and_set_state_12(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby->state = 0xc;
+    moby->state = ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE;
     return helper_result;
 }
 
@@ -783,6 +789,11 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 void       draw_three_moby_effect_quads(struct Moby *effect_owner) __asm__("FUN_L17_002f0448");
 
 void update_robot_dog_glow_effects(struct Moby *moby) {
+    enum {
+        ROBOT_DOG_GLOW_MODE_SLOW_PULSE = 0,
+        ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE = 1,
+        ROBOT_DOG_GLOW_MODE_FAST_PULSE = 2
+    };
     char *robot_dog_glow_vars;
     int   glow_pulse_period_frames;
     int   alpha;
@@ -808,12 +819,12 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
     robot_dog_glow_vars = (char *)moby->pvars;
     glow_pulse_period_frames = scale_game_frames(glow_pulse_period_frames);
     alpha = 0x80;
-    mode = 0;
+    mode = ROBOT_DOG_GLOW_MODE_SLOW_PULSE;
     switch (moby->state) {
     case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
     case ROBOT_DOG_STATE_TRACK_TARGET_FACING:
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
-        mode = 1;
+        mode = ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE;
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE:
     case ROBOT_DOG_STATE_TURN_TOWARD_TARGET:
@@ -823,16 +834,16 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
     case 13:
     case 14:
     case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
-        mode = 2;
+        mode = ROBOT_DOG_GLOW_MODE_FAST_PULSE;
         break;
     case ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE:
         mode = -1;
         break;
     }
-    if (mode >= 0) {
-        if (mode == 2) {
+    if (mode >= ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
+        if (mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
             glow_pulse_period_frames = scale_game_frames(0x32);
-        } else if (mode == 1) {
+        } else if (mode == ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE) {
             glow_pulse_period_frames = scale_game_frames(0x5A);
         }
         glow_pulse_sine = fast_sin(((float)(D_L17_0015F5CC % glow_pulse_period_frames) /
@@ -851,9 +862,9 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
         if (g > 255) {
             g = 255;
         }
-        if (mode == 2) {
+        if (mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
             color = (alpha << 24) | (b << 16) | ((r / 2) << 8) | g;
-        } else if (mode != 0) {
+        } else if (mode != ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
             color = (alpha << 24) | (b << 16) | ((r / 2) << 8) | g;
         } else {
             color = (alpha << 24) | (b << 16) | (g << 8) | r;

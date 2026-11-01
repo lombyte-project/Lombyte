@@ -227,7 +227,7 @@ void sync_hero_slot3_animation_speed(void) {
     struct Hero *hero_slot3_animation_speed_state = &hero;
     int          mapped_animation_ids[2];
 
-    if (hero_slot3_animation_speed_state->vehicle_mode != 0) {
+    if (hero_slot3_animation_speed_state->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         return;
     }
     if (hero_slot3_animation_speed_state->items[3].state != 2) {
@@ -491,7 +491,7 @@ void set_hero_animation(int requested_animation_id,
         blend_frames_or_selector = *(int *)((char *)&hero_blend_curve_frame_counts +
                                             hero_animation_dispatch_state->anim_blend_curve * 4);
     }
-    if (hero_animation_dispatch_state->vehicle_mode == 0) {
+    if (hero_animation_dispatch_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         blend_hero_slot3_mapped_animation_pair(
             requested_animation_id, starting_frame_index, blend_frames_or_selector);
     }
@@ -703,9 +703,9 @@ typedef struct {
 
 extern int D_L00_0015F5C4;
 
-void FUN_L00_00232fe8(void);
+void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 
-void FUN_L00_00232fe8(void) {
+void set_hero_item_moby_flag_bit0(void) {
     struct Hero *hero_item_flag_state = &hero;
     struct Hero *tail;
     struct Hero *last;
@@ -726,7 +726,7 @@ void FUN_L00_00232fe8(void) {
     if (hero_flag_target != 0) {
         *(unsigned short *)(hero_flag_target + 0x34) |= 1;
     }
-    if (tail->vehicle_mode == 1) {
+    if (tail->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_flag_target = ((char *)tail->unk1624);
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) |= 1;
@@ -750,9 +750,9 @@ void FUN_L00_00232fe8(void) {
    block, as retail re-forms it from the saved %hi before each one. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233950), where it is exact; names translated to the US level program. */
 
-void FUN_L00_002330d0(void);
+void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 
-void FUN_L00_002330d0(void) {
+void update_hero_item_moby_flags(void) {
     struct Hero *hero_item_flag_clear_state = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
@@ -774,7 +774,7 @@ void FUN_L00_002330d0(void) {
     if (hero_flag_target != 0) {
         *(unsigned short *)(hero_flag_target + 0x34) &= ~1;
     }
-    if (blk2->vehicle_mode == 1) {
+    if (blk2->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_flag_target = *(char **)&blk2->unk1624;
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) &= ~1;
@@ -920,8 +920,11 @@ int resolve_hero_gravity_mode(void) {
     int          state = hero_gravity_mode_state->state.current;
     int          return_value = hero_gravity_mode_state->unk308;
 
-    if (state == 0x3F || state == 0x71 || state == 0x70 ||
-        (hero_gravity_mode_state->on_magnet_ground != 0 && D_0013D4DC[0] != 0 && state == 0 &&
+    if (state == HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE ||
+        state == HERO_STATE_ANIMATION_FRAME_EXIT_WAIT ||
+        state == HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT ||
+        (hero_gravity_mode_state->on_magnet_ground != 0 && D_0013D4DC[0] != 0 &&
+         state == HERO_STATE_IDLE &&
          hero_gravity_mode_state->air_frames.s < scale_game_frames(4))) {
         return_value = 1;
     }
@@ -932,9 +935,9 @@ typedef struct {
     f32 v[4];
 } V002334d0 __attribute__((aligned(16)));
 
-void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
+void add_hero_gravity_offset(f32 *out, f32 *in, f32 k) __asm__("FUN_L00_002334d0");
 
-void FUN_L00_002334d0(f32 *gravity_adjusted_vector, f32 *in, f32 k) {
+void add_hero_gravity_offset(f32 *gravity_adjusted_vector, f32 *in, f32 k) {
     struct Hero *hero_base = &hero;
     V002334d0    offset_vector;
     switch (hero_base->gravity_mode) {
@@ -1076,9 +1079,9 @@ typedef struct {
     f32 v[4];
 } V00233810 __attribute__((aligned(16)));
 
-void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
+void add_hero_up_offset(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233810");
 
-void FUN_L00_00233810(f32 *gravity_offset_adjusted_vector, f32 *in, f32 z) {
+void add_hero_up_offset(f32 *gravity_offset_adjusted_vector, f32 *in, f32 z) {
     struct Hero *hero_base = &hero;
     M00233810    moby_rotation_matrix;
     V00233810    offset_vector;
@@ -1447,6 +1450,11 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 void update_hero_attachment(void) __asm__("FUN_L00_00233f80");
 
 void update_hero_attachment(void) {
+    enum {
+        HERO_ATTACHMENT_MODE_INACTIVE = 0,
+        HERO_ATTACHMENT_MODE_PROBE = 1,
+        HERO_ATTACHMENT_MODE_ANCHORED = 2
+    };
     Vec_234800 probed_position, unanchored_probe_rotation, attachment_motion_scratch,
         attachment_position_motion_scratch, probe_transform_scratch, anchored_probe_rotation,
         primary_attachment_position, primary_attachment_rotation, secondary_attachment_position,
@@ -1456,12 +1464,12 @@ void update_hero_attachment(void) {
     int   mode;
     Plat *plat;
 
-    mode = 0;
+    mode = HERO_ATTACHMENT_MODE_INACTIVE;
     amt = 0.0f;
     saved_hero_yaw = ((Hero_234800 *)hero_233f80)->v90.z;
     if (((Hero_234800 *)hero_233f80)->h30E == 0) {
         if (((Hero_234800 *)hero_233f80)->p2FC != 0) {
-            mode = 1;
+            mode = HERO_ATTACHMENT_MODE_PROBE;
             if (((Hero_234800 *)hero_233f80)->p360 != ((Hero_234800 *)hero_233f80)->p2FC) {
                 ((Hero_234800 *)hero_233f80)->i364 &= ~1;
             }
@@ -1474,13 +1482,13 @@ void update_hero_attachment(void) {
     } else if (((Hero_234800 *)hero_233f80)->i2084 == 0x1C &&
                ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
         ((Hero_234800 *)hero_233f80)->p360 = ((Hero_234800 *)hero_233f80)->p4F8;
-        mode = 1;
+        mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->i208C == 3 &&
                ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
         ((Hero_234800 *)hero_233f80)->p360 = ((Hero_234800 *)hero_233f80)->p4F8;
-        mode = 1;
+        mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->p360 != 0) {
-        mode = 1;
+        mode = HERO_ATTACHMENT_MODE_PROBE;
         convert_integer_to_float(scale_game_frames(120) - ((Hero_234800 *)hero_233f80)->h30E);
         scale_game_frames_v_233f80(120);
         amt = ((Hero_234800 *)hero_233f80)->h30E;
@@ -1575,7 +1583,7 @@ void update_hero_attachment(void) {
         ((Hero_234800 *)hero_233f80)->i364 &= ~2;
     }
     if (((Hero_234800 *)hero_233f80)->i364 & 3) {
-        mode = 2;
+        mode = HERO_ATTACHMENT_MODE_ANCHORED;
     }
     clear_u64_value(&attachment_motion_scratch);
     clear_u64_value(&attachment_position_motion_scratch);
@@ -1592,7 +1600,7 @@ void update_hero_attachment(void) {
             qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350);
         }
         qcopy(&attachment_position_motion_scratch, &attachment_motion_scratch);
-    } else if (mode == 1) {
+    } else if (mode == HERO_ATTACHMENT_MODE_PROBE) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080,
                                ((Hero_234800 *)hero_233f80)->p360,
                                &((Hero_234800 *)hero_233f80)->pos,
@@ -1603,7 +1611,7 @@ void update_hero_attachment(void) {
         fast_vec_sub(
             &attachment_motion_scratch, &probed_position, &((Hero_234800 *)hero_233f80)->pos);
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
-    } else if (mode == 2) {
+    } else if (mode == HERO_ATTACHMENT_MODE_ANCHORED) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080,
                                ((Hero_234800 *)hero_233f80)->p360,
                                &((Hero_234800 *)hero_233f80)->pos,
@@ -1685,9 +1693,9 @@ extern int
 resolve_point_path_segment_clearance(int, void *, void *, float) __asm__("FUN_L00_00262030");
 
 /* Sets the short at &hero.unk1F6 to 4 when FUN_L00_00262030 succeeds. */
-void FUN_L00_002347c0(void);
+void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
 
-void FUN_L00_002347c0(void) {
+void resolve_hero_pending_path_clearance(void) {
     struct Hero *hero_path_clearance_state = &hero;
 
     if (resolve_point_path_segment_clearance(hero_path_clearance_state->path_constrain_pending,
@@ -1747,7 +1755,7 @@ void animate_hero_slot4_and_slot5_visuals(void) {
             if (!hero.unk1D90.attached)
                 attach_manipulator(slot5_moby, 0, &hero.unk1D90);
             else
-                rotation_2D5FA8(&hero.unk1D90.quat, 0, hero.unk22F0);
+                build_axis_rotation_quaternion(&hero.unk1D90.quat, 0, hero.unk22F0);
         }
     }
 }

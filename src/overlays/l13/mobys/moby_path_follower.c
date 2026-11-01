@@ -17,6 +17,12 @@ void moby_path_follower_update(struct Moby *moby) __asm__("FUN_L13_0030bb70");
 
 /* Moby class 1403 */
 void moby_path_follower_update(struct Moby *moby) {
+    enum {
+        PATH_FOLLOWER_STATE_INITIALIZE = 0,
+        PATH_FOLLOWER_STATE_PROJECT_TARGET_ONTO_PATH = 1,
+        PATH_FOLLOWER_STATE_ADVANCE_ALONG_PATH = 2,
+        PATH_FOLLOWER_STATE_PATH_END_REACHED = 3
+    };
     int  *moby_vars = (int *)moby->pvars;
     char *path;
     char *pth;
@@ -25,7 +31,7 @@ void moby_path_follower_update(struct Moby *moby) {
     int   nearest_segment_index;
     float nearest_segment_progress;
     int   i;
-    if (moby->state == 0) {
+    if (moby->state == PATH_FOLLOWER_STATE_INITIALIZE) {
         moby->update_dist = 0xFF;
         if (moby_vars[1] != -1) {
             path = D_L13_001B07B0[moby_vars[1]];
@@ -36,7 +42,7 @@ void moby_path_follower_update(struct Moby *moby) {
         }
         moby_vars[2] = 0;
         moby_vars[3] = 0;
-        moby->state = 1;
+        moby->state = PATH_FOLLOWER_STATE_PROJECT_TARGET_ONTO_PATH;
         moby_vars[4] = 0;
     }
     if (moby_vars[0] == -1)
@@ -52,7 +58,7 @@ void moby_path_follower_update(struct Moby *moby) {
         if (moby_vars[1] == -1)
             return;
         pth = D_L13_001B07B0[moby_vars[1]];
-        if (moby->state == 1) {
+        if (moby->state == PATH_FOLLOWER_STATE_PROJECT_TARGET_ONTO_PATH) {
             FUN_L00_0025df68(pth,
                              target_moby + 0x10,
                              nearest_path_position,
@@ -68,17 +74,17 @@ void moby_path_follower_update(struct Moby *moby) {
                 ((float *)moby_vars)[3] = nearest_segment_progress;
                 qcopy(&moby->pos, nearest_path_position);
             } else {
-                moby->state = 2;
+                moby->state = PATH_FOLLOWER_STATE_ADVANCE_ALONG_PATH;
             }
         }
-        if (moby->state == 2) {
+        if (moby->state == PATH_FOLLOWER_STATE_ADVANCE_ALONG_PATH) {
             if (moby_vars[2] < *(int *)pth - 1) {
                 int k = compute_advanced_moby_path_position(
                     moby, pth, &moby->pos, moby_vars[2], 1, frame_scale * 0.25f);
                 moby_vars[2] = k;
                 ((float *)moby_vars)[3] = fast_vec_dist(&moby->pos, pth + (k * 16 + 0x10));
             } else {
-                moby->state = 3;
+                moby->state = PATH_FOLLOWER_STATE_PATH_END_REACHED;
             }
         }
     } else {

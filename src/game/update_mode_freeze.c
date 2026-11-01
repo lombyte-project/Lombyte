@@ -60,6 +60,11 @@ void update_mode_freeze(void) {
         MODE_FREEZE_RESUME_WITH_ACTION_LIST = 16,
         MODE_FREEZE_BOOT_GATED_CROSS_RELOAD = 19
     };
+    enum {
+        GAME_MODE_CONTINUE = 0,
+        VIDEO_MODE_REQUEST_PAL_DISABLED = 0,
+        VIDEO_MODE_REQUEST_PAL_ENABLED = 1
+    };
     s32 video_mode;
     s32 step;
     sound_update();
@@ -78,7 +83,7 @@ void update_mode_freeze(void) {
         state = &freeze;
         if (scale_game_frames(0x78) < state->unk20) {
             if (controller_state.pressed & PAD_CROSS) {
-                game_mode = 0;
+                game_mode = GAME_MODE_CONTINUE;
                 if (current_level_index == 1) {
                     memcard_save_data(0, -1);
                 }
@@ -95,9 +100,9 @@ void update_mode_freeze(void) {
             moby->flags = (u16)(moby->flags | 1);
             noop_main_callback();
             noop_callback_k(hero.saved_pos_rot, hero.saved_pos_rot + 0x10, 0, 1);
-            game_mode = 0;
+            game_mode = GAME_MODE_CONTINUE;
         } else if (controller_state.pressed & PAD_CROSS) {
-            game_mode = 0;
+            game_mode = GAME_MODE_CONTINUE;
         }
         break;
 
@@ -118,7 +123,7 @@ void update_mode_freeze(void) {
                 game_mode = freeze.return_game_mode;
             } else if (controller_state.pressed & PAD_CROSS) {
                 fade_to_black(4);
-                requested_video_mode = 0;
+                requested_video_mode = VIDEO_MODE_REQUEST_PAL_DISABLED;
                 freeze.choice = 2;
                 freeze.unk20 = scale_game_frames(0x258);
             }
@@ -126,14 +131,14 @@ void update_mode_freeze(void) {
 
         case VIDEO_MODE_TEST_PREVIEW_ACTIVE:
             if ((freeze.unk20 == 0) || ((--freeze.unk20) == 0)) {
-                requested_video_mode = 1;
+                requested_video_mode = VIDEO_MODE_REQUEST_PAL_ENABLED;
                 freeze.choice = 3;
             } else if (controller_state.pressed & PAD_TRIANGLE) {
                 fade_to_black(4);
-                requested_video_mode = 1;
+                requested_video_mode = VIDEO_MODE_REQUEST_PAL_ENABLED;
                 game_mode = freeze.return_game_mode;
             } else if (controller_state.pressed & PAD_CROSS) {
-                requested_video_mode = 0;
+                requested_video_mode = VIDEO_MODE_REQUEST_PAL_DISABLED;
                 game_mode = freeze.return_game_mode;
             }
             break;
@@ -154,17 +159,17 @@ void update_mode_freeze(void) {
     case FREEZE_MODE_TRIANGLE_SET_SHIP_FLAG_CONTINUE:
         D_0015F648 = 2;
         if (controller_state.pressed & PAD_TRIANGLE) {
-            game_mode = 0;
+            game_mode = GAME_MODE_CONTINUE;
             hero.ship_flags = (u8)(hero.ship_flags | 1);
         } else if (controller_state.pressed & PAD_CROSS) {
-            game_mode = 0;
+            game_mode = GAME_MODE_CONTINUE;
         }
         break;
 
     case FREEZE_MODE_AWAIT_CROSS_CONTINUE:
         D_0015F648 = 2;
         if (controller_state.pressed & PAD_CROSS) {
-            game_mode = 0;
+            game_mode = GAME_MODE_CONTINUE;
         }
         break;
 
@@ -217,10 +222,10 @@ void update_mode_freeze(void) {
                             D_0015EE3C++;
                         }
                     }
-                    game_mode = 0;
+                    game_mode = GAME_MODE_CONTINUE;
                     noop_callback_k(saved_camera_vectors, saved_camera_vectors + 0x10, 0, 1);
                 } else {
-                    game_mode = 0;
+                    game_mode = GAME_MODE_CONTINUE;
                     if (hero.race_lap >= 3) {
                         hero.race_lap = (s16)(((u16)hero.race_lap) - 1);
                         hero.unk890[0xBC] = 3;

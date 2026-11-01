@@ -46,7 +46,8 @@ extern short bubble_horizontal_deceleration_gp __asm__("D_L11_00162408") __attri
 extern short bubble_surface_crossing_velocity_scale_gp __asm__("D_L11_0016240C")
     __attribute__((sda));
 extern short bubble_spark_spawn_random_limit_gp __asm__("D_L11_00162410") __attribute__((sda));
-extern short D_L11_00162414 __attribute__((sda));
+extern short l11_bubble_shrink_effect_randomization_scale __asm__("D_L11_00162414")
+    __attribute__((sda));
 extern short bubble_shrink_effect_color_range_start_gp __asm__("D_L11_00162418")
     __attribute__((sda));
 extern short bubble_shrink_effect_color_range_end_gp __asm__("D_L11_0016241C") __attribute__((sda));
@@ -90,7 +91,7 @@ void bubble_update(struct Moby *bubble_moby) {
         if (bubble_moby->pos.z < *bubble_vars->unk24) {
             fast_vec_scale(
                 bubble_vars, bubble_vars, *(float *)&bubble_surface_crossing_velocity_scale_gp);
-            bubble_moby->state = 2;
+            bubble_moby->state = BUBBLE_SHRINK_TO_REMOVAL;
             spawn_bubble_surface_effects((struct Moby *)bubble_moby, bubble_vars->unk24, 8, 4);
         }
         break;
@@ -101,10 +102,11 @@ void bubble_update(struct Moby *bubble_moby) {
             spawn_bubble_surface_effects((struct Moby *)bubble_moby, bubble_vars->unk24, 0, 1);
             random_vector(randomized_effect_vector, 0.0f, frame_scale_inv_macro[1]);
             randomized_effect_vector[2] = absolute_float(randomized_effect_vector[2]);
-            spawned_effect = func_L00_0026FF20_p(&bubble_moby->pos,
-                                                 randomized_effect_vector,
-                                                 *(float *)&D_L11_00162414,
-                                                 *bubble_vars->unk24);
+            spawned_effect =
+                func_L00_0026FF20_p(&bubble_moby->pos,
+                                    randomized_effect_vector,
+                                    *(float *)&l11_bubble_shrink_effect_randomization_scale,
+                                    *bubble_vars->unk24);
             if (spawned_effect != 0) {
                 *(int *)(spawned_effect + 4) =
                     fast_tween_color(*(int *)&bubble_shrink_effect_color_range_start_gp,

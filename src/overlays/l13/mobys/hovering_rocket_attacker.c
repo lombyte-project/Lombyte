@@ -16,6 +16,16 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
+enum {
+    UPDATE_INITIALIZE = 0x0,
+    TRACK_TARGET_BEFORE_ATTACK = 0x2,
+    UPDATE_ATTACK_SEQUENCE = 0x4,
+    WAIT_TO_MOVE_TO_TABLE_POINT = 0x5,
+    MOVE_TO_TABLE_POINT = 0x6,
+    WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
+    EMIT_EFFECT_AND_REMOVE = 0x8
+};
+
 extern char D_0013F350[];
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -103,15 +113,6 @@ typedef struct HoveringRocketAttackerVars {
 /* Moby class 101 */
 void hovering_rocket_attacker_update(unsigned char *moby) {
     enum {
-        UPDATE_INITIALIZE = 0x0,
-        TRACK_TARGET_BEFORE_ATTACK = 0x2,
-        UPDATE_ATTACK_SEQUENCE = 0x4,
-        WAIT_TO_MOVE_TO_TABLE_POINT = 0x5,
-        MOVE_TO_TABLE_POINT = 0x6,
-        WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
-        EMIT_EFFECT_AND_REMOVE = 0x8
-    };
-    enum {
         START_ATTACK_ANIMATION_SEQUENCE = 0,
         WAIT_FOR_ATTACK_START_ANIMATION = 1,
         WAIT_TO_BEGIN_ALTERNATING_FIRE = 2,
@@ -147,9 +148,9 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         moby_data->rocket0 = create_attached_rocket(moby, 0);
         moby_data->rocket1 = create_attached_rocket(moby, 1);
         if (moby_data->unkD4 != -1)
-            MOBY(moby)->state = 5;
+            MOBY(moby)->state = WAIT_TO_MOVE_TO_TABLE_POINT;
         else
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = TRACK_TARGET_BEFORE_ATTACK;
         moby_data->unk100[0] = random_angle_radians();
         moby_data->unk100[2] = random_angle_radians();
         moby_data->unk100[3] = random_angle_radians();
@@ -159,7 +160,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         if (moby_data->unkB4 == 2)
             return;
         MOBY(moby)->command = 0;
-        MOBY(moby)->state = 6;
+        MOBY(moby)->state = MOVE_TO_TABLE_POINT;
         break;
     case MOVE_TO_TABLE_POINT:
         index = moby_data->unkD4 * 128;
@@ -180,7 +181,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 10);
             MOBY(moby)->command = 0;
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = TRACK_TARGET_BEFORE_ATTACK;
         }
         break;
     case TRACK_TARGET_BEFORE_ATTACK:
@@ -199,7 +200,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         MOBY(moby)->command = 1;
         if (MOBY(moby)->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, 0);
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = UPDATE_ATTACK_SEQUENCE;
         break;
     case UPDATE_ATTACK_SEQUENCE:
         moby_yaw = (float *)&MOBY(moby)->rot.z;
@@ -294,7 +295,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
             if (moby_data->unkB4 == 2) {
                 if (MOBY(moby)->prev_seq != 0)
                     blend_moby_animation(moby, 0, 0, 2);
-                MOBY(moby)->state = 2;
+                MOBY(moby)->state = TRACK_TARGET_BEFORE_ATTACK;
                 MOBY(moby)->command = 0;
                 break;
             }
@@ -336,7 +337,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
             return;
         if (MOBY(moby)->prev_seq != MOBY(moby)->command)
             blend_moby_animation(moby, MOBY(moby)->command, 0, 10);
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = UPDATE_ATTACK_SEQUENCE;
         break;
     }
 }
@@ -383,6 +384,9 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
+    enum {
+        TARGET_SELECTION_NO_TARGET = 2
+    };
     HoveringRocketAttackerVars *moby_data;
     char                       *hit_record;
     int                         hit_reaction_code;
@@ -397,7 +401,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     float                       z[4];
 
     moby_data = ((unsigned char *)MOBY(moby)->pvars);
-    if (MOBY(moby)->state == 0)
+    if (MOBY(moby)->state == UPDATE_INITIALIZE)
         return;
     if (moby_data->unk110 == -1 || voice_is_playing(moby, moby_data->unk110) == 0) {
         moby_data->unk110 = -1;
@@ -496,7 +500,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         if (moby_data->health <= 0.0f) {
             hit_reaction_code = 1;
         } else {
-            MOBY(moby)->state = 7;
+            MOBY(moby)->state = WAIT_TO_RESUME_ATTACK_SEQUENCE;
         }
         switch (hit_reaction_code) {
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
@@ -514,7 +518,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             FUN_L00_00257470(moby, 0, -1);
-            MOBY(moby)->state = 8;
+            MOBY(moby)->state = EMIT_EFFECT_AND_REMOVE;
             moby_data->unk67 = 0xF0;
             break;
         case HIT_REACTION_NONE:
@@ -526,7 +530,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     }
     MOBY(moby)->hit_slot = 0xFF;
     trooper_anim_finish(moby, &moby_data->anim_state);
-    if (MOBY(moby)->state == 4) {
+    if (MOBY(moby)->state == UPDATE_ATTACK_SEQUENCE) {
         moby_data->unkD8 = 50.0f;
     } else {
         moby_data->unkD8 = 40.0f;
@@ -541,11 +545,11 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                                                    target_selection_point_table + 0x10,
                                                    *(int *)target_selection_point_table);
     }
-    if (target_selection_status != 2) {
+    if (target_selection_status != TARGET_SELECTION_NO_TARGET) {
         if (moby_data->unkD8 < vector_distance_xy(moby + 0x10, moby_data->unk70) ||
             8.0f < absolute_float(MOBY(moby)->pos.z - moby_data->unk70[2])) {
             moby_data->unkB4 = 2;
-        } else if (MOBY(moby)->state != 5 &&
+        } else if (MOBY(moby)->state != WAIT_TO_MOVE_TO_TABLE_POINT &&
                    collision_line(moby + 0x10, D_0013F350 + 0xD0, 2, moby, 0) != 0) {
             moby_data->unkB4 = 2;
         }

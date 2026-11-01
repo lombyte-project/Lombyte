@@ -18,6 +18,12 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/sdk/debug.h"
 
+enum {
+    TOWER_STATE_INITIALIZE = 0,
+    TOWER_STATE_ACTIVE = 1,
+    TOWER_STATE_DESTRUCTION = 2
+};
+
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -269,7 +275,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
     int              link;
     VoicePoolWindow *voice_slot_record;
 
-    if (moby->state != 2) {
+    if (moby->state != TOWER_STATE_DESTRUCTION) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
         if (hit_record != 0) {
             DebugPrint(D_L13_001f4980, moby->oclass, fptodp(*(float *)(hit_record + 0x2c)));
@@ -342,7 +348,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
                         }
                     }
                     *(int *)(moby_data + 0x70) = -1;
-                    moby->state = 2;
+                    moby->state = TOWER_STATE_DESTRUCTION;
                 } else {
                     *health -= *(float *)(hit_record + 0x2c);
                     moby_data[0x67] = 0xfa;
@@ -373,11 +379,6 @@ void forcefield_tower_update(struct Moby *moby) __asm__("FUN_L13_002cefc0");
 
 /* Moby class 170 */
 void forcefield_tower_update(struct Moby *moby) {
-    enum {
-        TOWER_STATE_INITIALIZE = 0,
-        TOWER_STATE_ACTIVE = 1,
-        TOWER_STATE_DESTRUCTION = 2
-    };
     enum {
         TOWER_DESTRUCTION_WAIT_FOR_POINT_1_EFFECT = 0,
         TOWER_DESTRUCTION_WAIT_FOR_POINT_2_EFFECT = 1,

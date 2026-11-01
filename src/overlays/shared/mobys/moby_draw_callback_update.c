@@ -22,7 +22,7 @@ void moby_draw_callback_update(struct Moby *moby) {
     case DRAW_CALLBACK_INITIALIZE:
         prepare_scaled_float_table_with_target_byte(
             l03_draw_callback_setup_byte_target, 0x20, 0.6666667f);
-        moby->state = 1;
+        moby->state = DRAW_CALLBACK_REGISTER;
         moby->update_dist = 0xFF;
         break;
     case DRAW_CALLBACK_REGISTER:

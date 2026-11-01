@@ -199,16 +199,16 @@ after:
 unsigned char                       *FUN_L00_002678b8_00269958(int) __asm__("FUN_L00_002678b8");
 int                                  FUN_001160d8_00269958(void) __asm__("FUN_001160d8");
 extern unsigned char *D_L00_001B2090 NOT_SDA;
-void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag);
-void FUN_L00_00269958(u128 *spawn_position,
-                      u128 *initial_velocity,
-                      int   initial_color,
-                      int   color_endpoint,
-                      int   lifetime,
-                      int   scalar_base,
-                      int   scalar_delta,
+void spawn_effect(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag) __asm__("FUN_L00_00269958");
+void spawn_effect(u128 *spawn_position,
+                  u128 *initial_velocity,
+                  int   initial_color,
+                  int   color_endpoint,
+                  int   lifetime,
+                  int   scalar_base,
+                  int   scalar_delta,
 
-                      int flag) {
+                  int flag) {
     unsigned char *particle = FUN_L00_002678b8_00269958(4);
     if (particle) {
         int           *particle_data;
@@ -501,14 +501,14 @@ void update_colliding_effect_particle(struct EffectParticle *particle) {
 extern unsigned char *D_L00_001B20A0_0026a4c8 __asm__("D_L00_001B20A0")
     __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8_0026a4c8(int) __asm__("FUN_L00_002678b8");
-void           FUN_L00_0026a4c8(u128 *a, u128 *b, int c, int d, int n, float f);
-void           FUN_L00_0026a4c8(u128 *spawn_position,
-                                u128 *initial_velocity,
-                                int   initial_color,
-                                int   final_color,
-                                int   lifetime,
+void           spawn_particle_alt_9768(u128 *a, u128 *b, int c, int d, int n, float f) __asm__("FUN_L00_0026a4c8");
+void spawn_particle_alt_9768(u128 *spawn_position,
+                             u128 *initial_velocity,
+                             int   initial_color,
+                             int   final_color,
+                             int   lifetime,
 
-                                float particle_scalar_change) {
+                             float particle_scalar_change) {
     if (lifetime) {
         unsigned char *particle = FUN_L00_002678b8_0026a4c8(8);
         if (particle) {
@@ -1351,6 +1351,9 @@ extern int hud_counter_update(int, int, float) __asm__("FUN_L00_002371e0");
 void update_fading_debris_particle_with_landing_spawn(Part *particle) __asm__("FUN_L00_0026c088");
 
 void update_fading_debris_particle_with_landing_spawn(Part *particle) {
+    enum {
+        DEBRIS_KIND_UPWARD_ACCELERATING = 3
+    };
     float saved[4];
     float grav[4] = {
         D_0015ED70 * 4.8f, D_0015ED70 * 24.5f, D_0015ED70 * 9.8f, -(D_0015ED70 * 0.24f)};
@@ -1358,7 +1361,7 @@ void update_fading_debris_particle_with_landing_spawn(Part *particle) {
     int   alpha, spawn_lifetime, k;
     float reference_distance_or_spawn_size;
 
-    if (particle_data->kind == 3 && D_L00_0015F5D0 > 0.95f)
+    if (particle_data->kind == DEBRIS_KIND_UPWARD_ACCELERATING && D_L00_0015F5D0 > 0.95f)
         fast_dec_timer_s16(&particle->timer);
     if (fast_dec_timer_s16(&particle->timer)) {
         free_effect_particle(particle);
@@ -2962,14 +2965,19 @@ spawn_random_planar_drift_particle(void *, int, float, float) __asm__("FUN_L00_0
 void update_ballistic_effect_particle_with_contact_spawns(struct EffectParticle *) __asm__("FUN_L00_0026f660");
 
 void update_ballistic_effect_particle_with_contact_spawns(struct EffectParticle *particle) {
+    enum {
+        BALLISTIC_PARTICLE_MODE_NO_CONTACT_TEST = 0,
+        BALLISTIC_PARTICLE_MODE_LINE_CONTACT_HEIGHT_SNAPPED_SPAWN = 1,
+        BALLISTIC_PARTICLE_MODE_WATER_SURFACE_CONTACT_SPAWN = 3
+    };
     char *particle_data = particle->data;
     int   mode = *(int *)(particle_data + 0x10);
     V     next_position;
     char *particle_position;
 
-    if (mode == 0) {
+    if (mode == BALLISTIC_PARTICLE_MODE_NO_CONTACT_TEST) {
         fast_vec_add(particle->pos.f, particle->pos.f, particle_data);
-    } else if (mode == 1) {
+    } else if (mode == BALLISTIC_PARTICLE_MODE_LINE_CONTACT_HEIGHT_SNAPPED_SPAWN) {
         particle_position = particle->pos.f;
         fast_vec_add(&next_position, particle_position, particle_data);
         if (collision_line(particle_position, &next_position, 2, 0, 0)) {
@@ -2981,7 +2989,7 @@ void update_ballistic_effect_particle_with_contact_spawns(struct EffectParticle 
             return;
         }
         qcopy(particle_position, &next_position);
-    } else if (mode == 3) {
+    } else if (mode == BALLISTIC_PARTICLE_MODE_WATER_SURFACE_CONTACT_SPAWN) {
         float water_surface_z;
         particle_position = particle->pos.f;
         fast_vec_add(particle_position, particle_position, particle_data);

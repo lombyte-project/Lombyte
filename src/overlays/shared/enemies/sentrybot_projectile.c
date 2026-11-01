@@ -9,6 +9,10 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 
+enum {
+    SENTRYBOT_PROJECTILE_STATE_FLYING = 0
+};
+
 extern char *spawn_source_attached_fading_effect_particle(
     char *src, int col, int w, int v, float x) __asm__("FUN_L00_0026daa0");
 extern char *create_moby(int);
@@ -37,7 +41,7 @@ void sentrybot_projectile_update(unsigned char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (MOBY(moby)->state != 0)
+    if (MOBY(moby)->state != SENTRYBOT_PROJECTILE_STATE_FLYING)
         return;
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, frame_time * 6.2831855f);
     fast_vec_add(next_position, &MOBY(moby)->pos, moby_vars);
@@ -74,7 +78,7 @@ char *spawn_sentrybot_projectile(char *source_moby, float *direction_vector, cha
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         MOBY(spawned_moby)->visible = 1;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = SENTRYBOT_PROJECTILE_STATE_FLYING;
         MOBY(spawned_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 20.0f;
         qcopy(&MOBY(spawned_moby)->pos, spawn_position);

@@ -222,15 +222,15 @@ void water_update(Moby_30D8E8 *water_moby) {
             }
         }
         if (water_data->fC != 0) {
-            water_moby->state = 3;
+            water_moby->state = WATER_WAIT_FOR_HERO_IN_VOLUME;
             water_data->timer = scale_game_frames(0x3C);
             if (water_moby->pos[2] < water_data->lo) {
                 l07_water_grids[water_data->idx].visible_subtiles = 0;
             }
         } else if (water_data->f8 != 0) {
-            water_moby->state = 1;
+            water_moby->state = WATER_APPROACH_HIGH_HEIGHT;
         } else {
-            water_moby->state = 2;
+            water_moby->state = WATER_APPROACH_LOW_HEIGHT;
         }
         break;
     case WATER_APPROACH_LOW_HEIGHT:
@@ -277,19 +277,19 @@ void water_update(Moby_30D8E8 *water_moby) {
     case WATER_WAIT_BEFORE_RISING:
         if (fast_dec_timer(&water_data->timer)) {
             water_data->timer = scale_game_frames(0x708);
-            water_moby->state = 5;
+            water_moby->state = WATER_TIMED_RISE;
         }
         break;
     case WATER_TIMED_RISE:
         water_moby->pos[2] += D_0015ED6C * 0.32f;
         if (fast_dec_timer(&water_data->timer)) {
-            water_moby->state = 6;
+            water_moby->state = WATER_RISE_TO_HEIGHT_54;
         }
         break;
     case WATER_RISE_TO_HEIGHT_54:
         water_moby->pos[2] += D_0015ED6C * 0.42f;
         if (water_moby->pos[2] >= 54.0f) {
-            water_moby->state = 7;
+            water_moby->state = WATER_REMOVE_ABOVE_HIGH_HEIGHT;
         }
         break;
     case WATER_REMOVE_ABOVE_HIGH_HEIGHT:
@@ -311,7 +311,8 @@ void water_update(Moby_30D8E8 *water_moby) {
     l07_water_grids[water_data->idx].z = water_moby->pos[2];
     on = 0.0f;
     if (water_moby->f94 != 0 && FUN_L01_00275690_2cd2b0(water_moby, 48.0f) != -1) {
-        if (!(water_moby->state >= 3 && water_moby->state <= 7) ||
+        if (!(water_moby->state >= WATER_WAIT_FOR_HERO_IN_VOLUME &&
+              water_moby->state <= WATER_REMOVE_ABOVE_HIGH_HEIGHT) ||
             (water_moby->pos[2] > water_data->lo && water_moby->pos[2] < water_data->hi)) {
             on = 1.0f;
         }

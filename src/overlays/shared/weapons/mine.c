@@ -24,6 +24,13 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
+enum {
+    MINE_STATE_OWNER_ATTACHED = 0,
+    MINE_HOMING_RISE_PHASE = 1,
+    MINE_STATE_FREE_MOTION = 1,
+    MINE_HOMING_FALL_PHASE = 2
+};
+
 typedef struct MineVars {
     u8  pad0[0x30];
     s32 unk30;
@@ -62,12 +69,13 @@ extern int   FUN_L00_001f0d60(float, void *, int, void *);
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern int hud_counter_update(int, int, float) __asm__("FUN_L00_002371e0");
 extern int FUN_L00_00257b90(int, int);
-extern int FUN_L00_00258490(void *, void *, void *, float, float, float, float, int);
-extern int FUN_L00_00260400(void *, void *, void *, void *, void *, void *);
-extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
-extern unsigned       swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
+extern int move_moby_xy_with_collision_constraints(
+    void *, void *, void *, float, float, float, float, int) __asm__("FUN_L00_00258490");
+extern int      FUN_L00_00260400(void *, void *, void *, void *, void *, void *);
+extern int      random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
+extern int      voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
+extern s32      is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
+extern unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
 extern unsigned char *FUN_002141f8_cf(unsigned char *) __asm__("FUN_L00_002603d0");
 extern void          *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void          *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
@@ -409,7 +417,7 @@ unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
         MOBY(mine_moby)->draw_dist = 0x7F;
         MOBY(mine_moby)->visible = 1;
         MOBY(mine_moby)->scale = MOBY(mine_moby)->scale * 0.5f;
-        MOBY(mine_moby)->state = 0;
+        MOBY(mine_moby)->state = MINE_STATE_OWNER_ATTACHED;
         mine_vars->unk30 = mine_owner_moby;
         mine_vars->unk36 = 0;
         mine_vars->unk78 = 0;
@@ -512,6 +520,10 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) __asm__("FUN_L00_002aa2a8");
 
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
+    enum {
+        MINE_PREDICTION_REQUIRE_LINKED_MOBY_HIT = 0,
+        MINE_PREDICTION_HIDE_LINKED_MOBY_HIT_MARKER = 2
+    };
     float trajectory_position[4];
     float B[4];
     float C[4];
@@ -525,7 +537,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     if (D_L00_0015F5C4_c != 0)
         return 0;
     qcopy(C, &MOBY(moby)->pos);
-    if (MOBY(moby)->state == 0) {
+    if (MOBY(moby)->state == MINE_STATE_OWNER_ATTACHED) {
         trajectory_position[0] =
             fast_cos(fast_add_rotations(
                 -0.36196801f,
@@ -541,7 +553,8 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         trajectory_position[2] = trajectory_position[2] + 0.49082f;
         qcopy(B, trajectory_state);
         if (*(int *)(hero_state + 0x2FC) != 0 &&
-            FUN_L00_002603d0_u((void *)*(int *)(hero_state + 0x2FC)) != 0 && mode != 0) {
+            FUN_L00_002603d0_u((void *)*(int *)(hero_state + 0x2FC)) != 0 &&
+            mode != MINE_PREDICTION_REQUIRE_LINKED_MOBY_HIT) {
             fast_vec_add(B, B, hero_state + 0x100);
         }
         x = scale_game_frames(0x78);
@@ -585,13 +598,14 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         }
     }
     if (x != 0) {
-        if (mode == 0) {
+        if (mode == MINE_PREDICTION_REQUIRE_LINKED_MOBY_HIT) {
             if (coll_hit_moby == 0)
                 return 0;
             if (FUN_L00_002603d0_u(coll_hit_moby) == 0)
                 return 0;
         }
-        if (mode != 2 || coll_hit_moby == 0 || FUN_L00_002603d0_u(coll_hit_moby) == 0) {
+        if (mode != MINE_PREDICTION_HIDE_LINKED_MOBY_HIT_MARKER || coll_hit_moby == 0 ||
+            FUN_L00_002603d0_u(coll_hit_moby) == 0) {
             add_draw_callback(FUN_L00_002a9c50_c, moby);
         }
         {
@@ -635,17 +649,18 @@ void mine_update(M910 *mine_moby) {
     up.f[2] = 1.0f;
     collision_response_velocity.q = mine_pre_motion_position.q;
     v = mine_moby->v;
-    if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && mine_moby->state == 0) {
+    if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && mine_moby->state == MINE_STATE_OWNER_ATTACHED) {
         mine_moby->flags |= 0x41;
     } else {
         mine_moby->flags &= 0xFFBE;
     }
     if ((hero.items[0].moby == 0 || ((M910 *)hero.items[0].moby)->cls != 0xBE) &&
-        mine_moby->state == 0) {
+        mine_moby->state == MINE_STATE_OWNER_ATTACHED) {
         mark_moby_for_removal(mine_moby);
         return;
     }
-    if (hero.vehicle_mode != 0 && mine_moby->state == 0) {
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT &&
+        mine_moby->state == MINE_STATE_OWNER_ATTACHED) {
         mark_moby_for_removal(mine_moby);
         return;
     }
@@ -775,7 +790,7 @@ void mine_update(M910 *mine_moby) {
                             coll_hit.moby->cls != mine_moby->cls && coll_hit.moby != hero.moby &&
                             coll_hit.moby != v->owner) {
                             mine_moby->bBC = 1;
-                            if (mine_moby->state != 1) {
+                            if (mine_moby->state != MINE_STATE_FREE_MOTION) {
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
                                 mine_moby->pos.f[2] = probe_ground_height(&mine_moby->pos, 0, 0.5f);
                             }
@@ -890,7 +905,7 @@ void mine_update(M910 *mine_moby) {
                     if (hd == 0) {
                         int s;
 
-                        mine_moby->state = 1;
+                        mine_moby->state = MINE_STATE_FREE_MOTION;
                         s = v->i68;
                         if (s != -1) {
                             char *tab = ((char *)&voice_pool);
@@ -917,7 +932,7 @@ void mine_update(M910 *mine_moby) {
                     } else {
                         int s;
 
-                        mine_moby->state = 1;
+                        mine_moby->state = MINE_STATE_FREE_MOTION;
                         s = v->i68;
                         if (s != -1) {
                             char *tab = ((char *)&voice_pool);
@@ -938,7 +953,7 @@ void mine_update(M910 *mine_moby) {
                     (mine_moby->state & 0x10)) {
                     int s;
 
-                    mine_moby->state = 1;
+                    mine_moby->state = MINE_STATE_FREE_MOTION;
                     s = v->i68;
                     if (s != -1) {
                         char *tab = ((char *)&voice_pool);
@@ -982,13 +997,13 @@ void mine_update(M910 *mine_moby) {
                             v->f40 = max_homing_step;
                         }
                         mode = v->h52;
-                        if (mode == 1) {
+                        if (mode == MINE_HOMING_RISE_PHASE) {
                             mine_moby->pos.f[2] += frame_scale * 0.05f;
                             if (fast_dec_timer(&v->i48) != 0) {
                                 v->i48 = scale_game_frames(7);
                                 v->h52 = 2;
                             }
-                        } else if (mode == 2) {
+                        } else if (mode == MINE_HOMING_FALL_PHASE) {
                             mine_moby->pos.f[2] -= frame_scale * 0.05f;
                             if (fast_dec_timer(&v->i48) != 0) {
                                 v->h52 = 0;
@@ -1063,7 +1078,7 @@ void mine_update(M910 *mine_moby) {
                         fast_vec_normalize(t, t, 0.75f);
                         fast_vec_add(r, &((M910 *)hero.moby)->pos, t);
                         *(OvlQuad *)n = *(OvlQuad *)r;
-                        FUN_L00_00258490(
+                        move_moby_xy_with_collision_constraints(
                             mine_moby, &mine_moby->pos, n, 0.4f, 0.25f, 0.25f, 0.5235988f, 0);
                     }
                 } else {
@@ -1316,7 +1331,9 @@ void mine_update(M910 *mine_moby) {
                             r[1] = random_float_between(frame_time * -0.5f, frame_time * 0.5f) * sc;
                             r[2] = random_float_between(frame_time * 4.0f, tbl[kind]) * sc;
                             *(OvlQuad *)n = *(OvlQuad *)r;
-                            rr = random_float_between(0.0f, kind == 1 ? 0.5f : 0.25f) * sc;
+                            rr = random_float_between(
+                                     0.0f, kind == MINE_DEBRIS_FIXED_LIFETIME ? 0.5f : 0.25f) *
+                                 sc;
                             ang = random_angle_radians();
                             r[0] = fast_cos(ang) * rr;
                             r[1] = fast_sin(ang) * rr;

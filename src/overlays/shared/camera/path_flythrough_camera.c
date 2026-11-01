@@ -18,13 +18,13 @@
 #include "rnc/overlay/shared/camera/path_flythrough_camera.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
-extern char *D_L10_0015EF50;
+extern char *l10_descriptor_table __asm__("D_L10_0015EF50");
 
 void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 
 void activate_descriptor(int i) {
     unsigned char *descriptor_record;
-    descriptor_record = *(unsigned char **)(D_L10_0015EF50 + i * 0x20 + 0x1C);
+    descriptor_record = *(unsigned char **)(l10_descriptor_table + i * 0x20 + 0x1C);
     descriptor_record[0x38] = 1;
     descriptor_record[0x39] = 0;
 }
@@ -34,24 +34,28 @@ extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");
 int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
 
 int check_descriptor_hero_trigger(char *moby) {
-    unsigned char *e = *(unsigned char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    unsigned char *trigger_descriptor_record =
+        *(unsigned char **)(l10_descriptor_table + *(short *)(moby + 0x84) * 32 + 0x1C);
 
-    if (*(int *)(e + 0x0C) >= 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(e + 0x0C)))
+    if (*(int *)(trigger_descriptor_record + 0x0C) >= 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos,
+                                        *(int *)(trigger_descriptor_record + 0x0C)))
             return 1;
-    } else if (*(int *)(e + 0x10) >= 0) {
-        if (test_point_in_transformed_unit_cylinder(&hero.motion.pos, *(int *)(e + 0x10)))
+    } else if (*(int *)(trigger_descriptor_record + 0x10) >= 0) {
+        if (test_point_in_transformed_unit_cylinder(&hero.motion.pos,
+                                                    *(int *)(trigger_descriptor_record + 0x10)))
             return 1;
-    } else if (*(int *)(e + 0x08) >= 0) {
-        if (test_point_in_transformed_unit_sphere((float *)(&hero.motion.pos), *(int *)(e + 0x08)))
+    } else if (*(int *)(trigger_descriptor_record + 0x08) >= 0) {
+        if (test_point_in_transformed_unit_sphere((float *)(&hero.motion.pos),
+                                                  *(int *)(trigger_descriptor_record + 0x08)))
             return 1;
-    } else if (*(int *)(e + 0x14) >= 0) {
-        int i = *(int *)(e + 0x14);
+    } else if (*(int *)(trigger_descriptor_record + 0x14) >= 0) {
+        int i = *(int *)(trigger_descriptor_record + 0x14);
         if (point_in_path_xy((float *)(&hero.motion.pos),
                              (float *)(((char *)l10_paths[i]) + 0x10),
                              *(int *)l10_paths[i]))
             return 1;
-    } else if (e[0x38] != 0 && e[0x39] == 0) {
+    } else if (trigger_descriptor_record[0x38] != 0 && trigger_descriptor_record[0x39] == 0) {
         return 1;
     }
     return 0;
@@ -84,13 +88,13 @@ extern struct {
     char *source;
 } D_L10_00167100;
 
-extern VendorView_5f18 D_L10_0016CEC0;
+extern VendorView_5f18 l10_camera_view __asm__("D_L10_0016CEC0");
 
 void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f5b58");
 
 void initialize_path_camera(struct UpdateCam *path_camera) {
-    char              *rec = *(char **)(D_L10_0015EF50 + path_camera->descriptor_index * 32 + 0x1C);
-    VendorCamRun_5f18 *run;
+    char *rec = *(char **)(l10_descriptor_table + path_camera->descriptor_index * 32 + 0x1C);
+    VendorCamRun_5f18   *run;
     VendorCamStops_5f18 *stops;
     f32                 *fov;
     Vec4f               *m1, *m2, *pos;
@@ -117,7 +121,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     pos = &path_camera->pos;
     m1 = (Vec4f *)&path_camera->m1;
     m2 = (Vec4f *)&path_camera->m2;
-    stops->fov_end = fast_arc_tan(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
+    stops->fov_end = fast_arc_tan(1.0f, l10_camera_view.tan_half_fov) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         char *path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
         int   i = 0;
@@ -189,15 +193,17 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
 }
 
 extern char                *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
-extern f32                  D_L10_0015F3FC;
-extern s32                  D_L10_0015F404;
-extern char                 D_L10_00167450[];
+extern f32                  l10_path_camera_transition_amount __asm__("D_L10_0015F3FC");
+extern s32                  l10_path_flythrough_active __asm__("D_L10_0015F404");
+extern char                 l10_path_camera_anchor_offset_basis[] __asm__("D_L10_00167450");
 extern float D_L10_00167358 NOT_SDA;
 extern float                D_0013F5E0_5f18[] __asm__("D_0013F5E0");
 extern void                 debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 
-void FUN_L10_002f5f18(struct UpdateCam *cam) {
-    float                dir[4];
+void update_path_flythrough_camera(struct UpdateCam *cam) __asm__("FUN_L10_002f5f18");
+
+void update_path_flythrough_camera(struct UpdateCam *cam) {
+    float                initial_aim_or_previous_position[4];
     float                offset[4];
     float                point[4];
     float                look_point[4];
@@ -212,17 +218,17 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     int                  i;
 
     saved = (char *)cam->saved_state;
-    rec = *(char **)(D_L10_0015EF50 + cam->descriptor_index * 32 + 0x1C);
+    rec = *(char **)(l10_descriptor_table + cam->descriptor_index * 32 + 0x1C);
     run = (VendorCamRun_5f18 *)(saved + 0x40);
     stops = (VendorCamStops_5f18 *)(saved + 0x58);
 
     if (run->started == 0) {
-        D_L10_0015F3FC += 0.05f;
-        if (D_L10_0015F3FC >= 1.0f) {
+        l10_path_camera_transition_amount += 0.05f;
+        if (l10_path_camera_transition_amount >= 1.0f) {
             char *start_path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
             char *look_path = ((char *)l10_paths[*(int *)(rec + 0x24)]);
-            D_L10_0015F3FC = 1.0f;
-            D_L10_0015F404 = 1;
+            l10_path_camera_transition_amount = 1.0f;
+            l10_path_flythrough_active = 1;
             run->started = 1;
             qcopy(&cam->pos, start_path + 0x10);
             if (*(int *)(rec + 0x28) >= 0) {
@@ -233,14 +239,14 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
                 offset[1] = ofs[1];
                 offset[2] = ofs[2];
                 offset[3] = 0.0f;
-                transform_vector_by_basis(offset, offset, D_L10_00167450);
+                transform_vector_by_basis(offset, offset, l10_path_camera_anchor_offset_basis);
                 fast_vec_add(point, &anchor->pos, offset);
-                fast_vec_sub(dir, point, &cam->pos);
+                fast_vec_sub(initial_aim_or_previous_position, point, &cam->pos);
             } else {
-                fast_vec_sub(dir, look_path + 0x10, &cam->pos);
+                fast_vec_sub(initial_aim_or_previous_position, look_path + 0x10, &cam->pos);
             }
             fast_vec_scale(offset, D_0013F5E0_5f18, -1.0f);
-            fast_vec_normalize(&cam->m0, dir, 1.0f);
+            fast_vec_normalize(&cam->m0, initial_aim_or_previous_position, 1.0f);
             fast_vec_cross(&cam->m1, &cam->m0, offset);
             fast_vec_normalize(&cam->m1, &cam->m1, 1.0f);
             fast_vec_cross(&cam->m2, &cam->m1, &cam->m0);
@@ -248,18 +254,18 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         return;
     }
     if (run->started == 2) {
-        D_L10_0015F3FC += 0.05f;
-        if (D_L10_0015F3FC >= 1.0f) {
+        l10_path_camera_transition_amount += 0.05f;
+        if (l10_path_camera_transition_amount >= 1.0f) {
             float ang;
             run->started = 3;
-            D_L10_0015F3FC = 1.0f;
+            l10_path_camera_transition_amount = 1.0f;
             ang = stops->fov_end * 0.5f;
-            D_L10_0016CEC0.tan_half_fov = fast_sin(ang) / fast_cos(ang);
+            l10_camera_view.tan_half_fov = fast_sin(ang) / fast_cos(ang);
             update_view_context();
             *(u8 *)(rec + 0x39) = 1;
             D_L10_00167358 = 0.05f;
             cam->transition_state = 4;
-            D_L10_0015F404 = 0;
+            l10_path_flythrough_active = 0;
             if (*(int *)(rec + 0x4C) == 0)
                 hero_set_state(0, 1);
         }
@@ -268,12 +274,12 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     } else if (run->started == 3) {
         return;
     } else {
-        D_L10_0015F3FC -= 0.05f;
-        if (D_L10_0015F3FC < 0.0f)
-            D_L10_0015F3FC = 0.0f;
+        l10_path_camera_transition_amount -= 0.05f;
+        if (l10_path_camera_transition_amount < 0.0f)
+            l10_path_camera_transition_amount = 0.0f;
     }
     path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
-    qcopy(dir, &cam->pos);
+    qcopy(initial_aim_or_previous_position, &cam->pos);
     done = FUN_L00_0025d808(
         path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (run->timer != 0) {
@@ -306,11 +312,11 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
                 total += *(float *)(path + (after * 16 + 0x1C));
             ang = cosine_interpolate(stops->fov[i], stops->fov[i + 1], sum / total) * 0.017453292f *
                   0.5f;
-            D_L10_0016CEC0.tan_half_fov = fast_sin(ang) / fast_cos(ang);
+            l10_camera_view.tan_half_fov = fast_sin(ang) / fast_cos(ang);
             update_view_context();
         }
     }
-    run->dist += fast_vec_dist(dir, &cam->pos);
+    run->dist += fast_vec_dist(initial_aim_or_previous_position, &cam->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
         float       *ofs = (float *)(rec + 0x2C);
@@ -318,7 +324,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         point[1] = ofs[1];
         point[2] = ofs[2];
         point[3] = 0.0f;
-        transform_vector_by_basis(point, point, D_L10_00167450);
+        transform_vector_by_basis(point, point, l10_path_camera_anchor_offset_basis);
         fast_vec_add(look_point, &anchor->pos, point);
         fast_vec_sub(offset, look_point, &cam->pos);
     } else {
@@ -351,7 +357,7 @@ int evaluate_descriptor_eligibility(char *descriptor_owner,
 
 int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_object) {
     unsigned char *descriptor_record =
-        *(unsigned char **)(D_L10_0015EF50 + *(short *)(descriptor_owner + 0x84) * 32 + 0x1C);
+        *(unsigned char **)(l10_descriptor_table + *(short *)(descriptor_owner + 0x84) * 32 + 0x1C);
     int x;
     int y;
     if (descriptor_record[0x39] != 0) {

@@ -17,12 +17,15 @@ void                update_visible_mobys(void) __asm__("FUN_00212e28");
  * bounds refresh can change flags or the list link, so each field is read at
  * its point of use. */
 void update_visible_mobys(void) {
+    enum {
+        MOBY_MIN_UPDATABLE_STATE = 0
+    };
     struct Moby *moby;
 
     visible_moby_list = build_resident_visibility_list();
     moby = visible_moby_list;
     while (moby != 0) {
-        if ((s8)moby->state >= 0) {
+        if ((s8)moby->state >= MOBY_MIN_UPDATABLE_STATE) {
             if (!(moby->flags & MOBY_SKIP_ANIMATION)) {
                 advance_moby_animation(moby);
             }

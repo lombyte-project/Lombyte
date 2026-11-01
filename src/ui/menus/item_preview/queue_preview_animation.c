@@ -30,6 +30,9 @@ s32 queue_preview_animation(s32 animation_id,
                             s32 resource_first,
 
                             s32 resource_count) {
+    enum {
+        PREVIEW_REQUEST_INITIAL = 0
+    };
     PreviewAnimationRequest *request;
     s32                      request_index;
 
@@ -39,7 +42,7 @@ s32 queue_preview_animation(s32 animation_id,
     }
     preview_request_count = request_index + 1;
     request = &preview_animation_requests[request_index];
-    request->status = 0;
+    request->status = PREVIEW_REQUEST_INITIAL;
     request->animation_id = animation_id;
     request->trigger_mode = trigger_mode;
     request->delay_frames = delay_frames;

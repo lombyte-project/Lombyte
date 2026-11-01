@@ -27,6 +27,11 @@ extern void              refresh_point_light(int) __asm__("FUN_00201f58");
 void                     update_all_point_lights(void) __asm__("FUN_00201a28");
 
 void update_all_point_lights(void) {
+    enum {
+        POINT_LIGHT_LINK_INACTIVE = 0,
+        POINT_LIGHT_LINK_PENDING_CREATION = 1,
+        POINT_LIGHT_LINK_CREATED = 2
+    };
     struct DirectionalLight *lights = (struct DirectionalLight *)dir_lights;
     float                    lighting_direction_angle;
     int                      light_index;
@@ -44,12 +49,13 @@ void update_all_point_lights(void) {
         struct PointLight     *light = &point_lights[light_index];
         struct PointLightSlot *slot = &((struct PointLightSlot *)point_light_data)[light_index];
 
-        if (slot->link_state != 0 && fast_vec_dist(light->sphere, slot->linked_sphere) > 8.0f) {
+        if (slot->link_state != POINT_LIGHT_LINK_INACTIVE &&
+            fast_vec_dist(light->sphere, slot->linked_sphere) > 8.0f) {
             qcopy(slot->linked_sphere, light->sphere);
-            if (slot->link_state == 1) {
+            if (slot->link_state == POINT_LIGHT_LINK_PENDING_CREATION) {
                 create_point_light(light_index);
-                slot->link_state = 2;
-            } else if (slot->link_state == 2) {
+                slot->link_state = POINT_LIGHT_LINK_CREATED;
+            } else if (slot->link_state == POINT_LIGHT_LINK_CREATED) {
                 refresh_point_light(light_index);
             }
         }

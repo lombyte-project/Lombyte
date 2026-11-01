@@ -32,6 +32,9 @@ void start_level(int level) __asm__("FUN_001e9488");
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
 void start_level(int level) {
+    enum {
+        VIDEO_MODE_NTSC = 0
+    };
     int movie_size_bytes;
     int movie_start_sector;
     int movie_work_area_base;
@@ -39,7 +42,7 @@ void start_level(int level) {
     if (level < 0) {
         return;
     }
-    if (pal_mode != 0) {
+    if (pal_mode != VIDEO_MODE_NTSC) {
         movie_start_sector = disc_table.start_movies_alt[level].sector;
         movie_size_bytes = disc_table.start_movies_alt[level].size;
     } else {
@@ -59,7 +62,7 @@ void start_level(int level) {
     snd_stream_safe_cd_sync(0);
     for (;;) {
         struct MemoryCardState *ld = &memory_card_state;
-        if (ld->state < 3 && ld->pending_state < 0) {
+        if (ld->state < MEMCARD_REQUEST_FORMAT && ld->pending_state < MEMCARD_QUERY_INFO) {
             break;
         }
         memcard_update_state();

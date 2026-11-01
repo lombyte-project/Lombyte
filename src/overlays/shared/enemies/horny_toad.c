@@ -20,6 +20,10 @@
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/overlay/shared/math/quad.h"
 
+enum {
+    MOBY_STATE_SUCK_CANNON_ACTIVE = 0x9
+};
+
 typedef struct HornyToadVars {
     u8  pad0[0x1f4];
     f32 unk1F4[4];
@@ -136,13 +140,16 @@ extern float horny_toad_target_animation_start_index_gp __asm__("D_L00_00161984"
     __attribute__((sda));
 extern short D_L00_00161960 __attribute__((sda));
 
-extern s32            D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
-extern f32            D_L00_00161970_gp __asm__("D_L00_00161970") __attribute__((sda));
-extern f32            D_L00_00161974_gp __asm__("D_L00_00161974") __attribute__((sda));
-extern f32            D_L00_00161978_gp __asm__("D_L00_00161978") __attribute__((sda));
-extern f32            D_L00_0016197C_gp __asm__("D_L00_0016197C") __attribute__((sda));
-extern f32            D_L00_00161988_gp __asm__("D_L00_00161988") __attribute__((sda));
-extern f32            D_L00_0016198C_gp __asm__("D_L00_0016198C") __attribute__((sda));
+extern s32 D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
+extern f32 l00_horny_toad_knockback_gravity __asm__("D_L00_00161970") __attribute__((sda));
+extern f32 l00_horny_toad_knockback_horizontal_deceleration __asm__("D_L00_00161974")
+    __attribute__((sda));
+extern f32 l00_horny_toad_knockback_horizontal_speed __asm__("D_L00_00161978") __attribute__((sda));
+extern f32 l00_horny_toad_knockback_vertical_speed __asm__("D_L00_0016197C") __attribute__((sda));
+extern f32 l00_horny_toad_knockback_landing_animation_frame __asm__("D_L00_00161988")
+    __attribute__((sda));
+extern f32 l00_horny_toad_knockback_apex_animation_frame __asm__("D_L00_0016198C")
+    __attribute__((sda));
 extern unsigned char *D_L00_001B04B0_2d5160[] __asm__("D_L00_001B04B0");
 extern void
 hit_reaction(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
@@ -190,6 +197,9 @@ void horny_toad_update(Moby *moby) {
         HORNY_TOAD_RECOVER_FROM_REACTION = 11,
         HORNY_TOAD_DYING = 12
     };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     ToadVars *horny_toad_vars;
     Moby     *target;
     ToadVec   reference_point_or_movement_endpoint;
@@ -233,10 +243,10 @@ void horny_toad_update(Moby *moby) {
                 ToadPath *path = toad_paths[horny_toad_vars->path];
                 qcopy(horny_toad_vars->home, path->pts[path->count - 1]);
                 qcopy((*(ToadVec *)&moby->pos), path->pts[0]);
-                moby->state = 3;
+                moby->state = HORNY_TOAD_WAIT_TO_FOLLOW_PATH;
             } else if (horny_toad_vars->follow_moby >= 0) {
                 qcopy(horny_toad_vars->home, (*(ToadVec *)&moby->pos));
-                moby->state = 1;
+                moby->state = HORNY_TOAD_FACE_FOLLOW_MOBY;
                 if (moby->prev_seq != 2)
                     blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             } else {
@@ -244,19 +254,20 @@ void horny_toad_update(Moby *moby) {
                 return;
             }
         } else {
-            moby->state = 5;
+            moby->state = HORNY_TOAD_ROAM;
         }
         break;
     }
     case HORNY_TOAD_RUN_MOVEMENT_SEQUENCE:
         if (FUN_L00_002dc9f0_2d4610(moby, horny_toad_vars->unk70) != 0) {
-            moby->state = 5;
+            moby->state = HORNY_TOAD_ROAM;
             horny_toad_vars->unk138 = 0;
         }
         break;
     case HORNY_TOAD_FACE_FOLLOW_MOBY: {
         Moby *followed_moby = (Moby *)(moby_table + (horny_toad_vars->follow_moby << 8));
-        if (followed_moby != 0 && followed_moby->state != 0xFE && followed_moby->state != 0xFD) {
+        if (followed_moby != 0 && followed_moby->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
+            followed_moby->state != 0xFD) {
             approach_angle(
                 &moby->rot.z,
                 fast_arc_tan((*(ToadVec *)&followed_moby->pos)[0] - (*(ToadVec *)&moby->pos)[0],
@@ -266,7 +277,7 @@ void horny_toad_update(Moby *moby) {
                 frame_time_sq * 12.566371f,
                 frame_time * 12.566371f);
         } else {
-            moby->state = 8;
+            moby->state = HORNY_TOAD_RETURN_HOME;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
@@ -277,14 +288,14 @@ void horny_toad_update(Moby *moby) {
                 (unsigned char *)moby,
                 toad_paths[horny_toad_vars->path]->pts[horny_toad_vars->path_point],
                 0.5f) < 1.0f) {
-            moby->state = 1;
+            moby->state = HORNY_TOAD_FACE_FOLLOW_MOBY;
             if (moby->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
         }
         break;
     case HORNY_TOAD_WAIT_TO_FOLLOW_PATH:
         if (horny_toad_vars->unk1C4 != 2) {
-            moby->state = 4;
+            moby->state = HORNY_TOAD_FOLLOW_PATH;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
@@ -296,12 +307,12 @@ void horny_toad_update(Moby *moby) {
             if (horny_toad_vars->path_point < path->count - 1) {
                 horny_toad_vars->path_point++;
             } else {
-                moby->state = 5;
+                moby->state = HORNY_TOAD_ROAM;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         } else if (horny_toad_vars->unk1C4 != 2) {
-            moby->state = 6;
+            moby->state = HORNY_TOAD_APPROACH_AND_FACE_TARGET;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
@@ -317,7 +328,7 @@ void horny_toad_update(Moby *moby) {
         update_object_wander_movement((char *)moby, (char *)horny_toad_vars->unk240, 0.5f, 0.5f);
         if (horny_toad_vars->unk1C4 != 2) {
             horny_toad_vars->unk1FC = random_float_between(-20.0f, 20.0f) * 0.017453292f;
-            moby->state = 6;
+            moby->state = HORNY_TOAD_APPROACH_AND_FACE_TARGET;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
@@ -330,14 +341,14 @@ void horny_toad_update(Moby *moby) {
                 fast_arc_tan((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0],
                              (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) <
                 0.17453292f) {
-            moby->state = 7;
+            moby->state = HORNY_TOAD_PLAY_TARGET_ANIMATION;
             if (moby->prev_seq != 5)
                 blend_moby_animation(moby,
                                      5,
                                      (int)horny_toad_target_animation_start_index_gp,
                                      scale_game_frames(10));
         } else if (horny_toad_vars->unk1C4 == 2) {
-            moby->state = 8;
+            moby->state = HORNY_TOAD_RETURN_HOME;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
@@ -347,7 +358,7 @@ void horny_toad_update(Moby *moby) {
             collect_mobies_in_sphere_at_moby_point(moby, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
         } else if (moby->anim_flags & 2) {
             if (horny_toad_vars->unk1C4 == 2) {
-                moby->state = 8;
+                moby->state = HORNY_TOAD_RETURN_HOME;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             } else if (vector_distance_xy((*(ToadVec *)&moby->pos), (*(ToadVec *)&target->pos)) >
@@ -357,7 +368,7 @@ void horny_toad_update(Moby *moby) {
                            fast_arc_tan((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0],
                                         (*(ToadVec *)&target->pos)[1] -
                                             (*(ToadVec *)&moby->pos)[1])) > 0.17453292f) {
-                moby->state = 6;
+                moby->state = HORNY_TOAD_APPROACH_AND_FACE_TARGET;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             }
@@ -366,11 +377,11 @@ void horny_toad_update(Moby *moby) {
     case HORNY_TOAD_RETURN_HOME:
         if (move_horny_toad_toward_position((unsigned char *)moby, horny_toad_vars->home, 0.5f) <
             1.5f) {
-            moby->state = 5;
+            moby->state = HORNY_TOAD_ROAM;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         } else if (horny_toad_vars->unk1C4 != 2) {
-            moby->state = 6;
+            moby->state = HORNY_TOAD_APPROACH_AND_FACE_TARGET;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
@@ -409,11 +420,11 @@ void horny_toad_update(Moby *moby) {
         }
         if (moby->anim_flags & 2) {
             if (horny_toad_vars->unk1C4 != 2) {
-                moby->state = 6;
+                moby->state = HORNY_TOAD_APPROACH_AND_FACE_TARGET;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             } else if (horny_toad_vars->unk276 == 0) {
-                moby->state = 8;
+                moby->state = HORNY_TOAD_RETURN_HOME;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
             }
@@ -422,7 +433,7 @@ void horny_toad_update(Moby *moby) {
     }
     case HORNY_TOAD_RECOVER_FROM_REACTION:
         if (step_moby_motion(moby, horny_toad_vars->unk70) & 0x140) {
-            moby->state = 5;
+            moby->state = HORNY_TOAD_ROAM;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
@@ -436,11 +447,12 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     }
-    if (moby->state != 11 && moby->state != 12 && moby->state != 9) {
+    if (moby->state != HORNY_TOAD_RECOVER_FROM_REACTION && moby->state != HORNY_TOAD_DYING &&
+        moby->state != HORNY_TOAD_RUN_MOVEMENT_SEQUENCE) {
         approach_value(probe_ground_height((*(ToadVec *)&moby->pos), 0, 0.5f),
                        frame_time * 7.0f,
                        &(*(ToadVec *)&moby->pos)[2]);
-        if (moby->state != 4) {
+        if (moby->state != HORNY_TOAD_FOLLOW_PATH) {
             resolve_point_path_segment_xy_clearance(
                 horny_toad_vars->unk1E0, 0.25f, (*(ToadVec *)&moby->pos), (*(ToadVec *)&moby->pos));
         }
@@ -460,6 +472,9 @@ void horny_toad_update(Moby *moby) {
 void process_horny_toad_hit_reaction(unsigned char *m) __asm__("FUN_L00_002d5160");
 
 void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
+    enum {
+        HIT_RESPONSE_NO_HIT = 1
+    };
     unsigned char *toad_vars = *(unsigned char **)(toad_moby + 0x78);
     unsigned char *hit;
     s32            hit_response_status;
@@ -484,17 +499,18 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
     damage = 0.0f;
     hit = find_moby_hit(toad_moby, 0x330000, 0);
     hit_reaction(toad_moby, hit, toad_vars + 0x20, 0, &hit_response_status, &damage, 0, 4);
-    if (hit_response_status != 1 && MOBY(toad_moby)->state != 12 && damage != 0.0f) {
+    if (hit_response_status != HIT_RESPONSE_NO_HIT && MOBY(toad_moby)->state != 12 &&
+        damage != 0.0f) {
         /* Fakematch: register pins give retail's choices: 41 in $t0, the frame time and
            later 0.75 in $f4, the squared frame time first in $f0. */
         register s32 hit_state __asm__("$8") = 0x29;
         register f32 frame_time_reg __asm__("$f4") = frame_time;
         register f32 knockback_scale __asm__("$f4");
         register f32 frame_time_sq_reg __asm__("$f0") = D_0015ED70;
-        forceX = D_L00_00161970_gp * frame_time_sq_reg;
-        forceY = D_L00_00161974_gp * frame_time_sq_reg;
-        forceZ = D_L00_00161978_gp * frame_time_reg;
-        forceW = D_L00_0016197C_gp * frame_time_reg;
+        forceX = l00_horny_toad_knockback_gravity * frame_time_sq_reg;
+        forceY = l00_horny_toad_knockback_horizontal_deceleration * frame_time_sq_reg;
+        forceZ = l00_horny_toad_knockback_horizontal_speed * frame_time_reg;
+        forceW = l00_horny_toad_knockback_vertical_speed * frame_time_reg;
         health = *(f32 *)(toad_vars + 0x20) - damage;
         toad_vars[0xAD] = 0;
         duration = frame_time + frame_time;
@@ -513,8 +529,8 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
         trooper_knockback_arc(hit_knockback_vector, &angle, toad_vars + 0x88, toad_vars + 0x8C);
         trooper_start_knockback(
             toad_moby, toad_vars + 0x70, angle, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
-        reactionC0 = D_L00_0016198C_gp;
-        reactionC4 = D_L00_00161988_gp;
+        reactionC0 = l00_horny_toad_knockback_apex_animation_frame;
+        reactionC4 = l00_horny_toad_knockback_landing_animation_frame;
         *(f32 *)(toad_vars + 0xC0) = reactionC0;
         *(f32 *)(toad_vars + 0xC4) = reactionC4;
         MOBY(toad_moby)->state = 12;
@@ -625,10 +641,10 @@ int process_suck_cannon_suction_and_update_moby_state(char *a) __asm__("FUN_L00_
 int process_suck_cannon_suction_and_update_moby_state(char *moby) {
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
-        if (MOBY(moby)->state == 0x9)
+        if (MOBY(moby)->state == MOBY_STATE_SUCK_CANNON_ACTIVE)
             MOBY(moby)->state = 0x5;
     } else {
-        MOBY(moby)->state = 0x9;
+        MOBY(moby)->state = MOBY_STATE_SUCK_CANNON_ACTIVE;
     }
     return suction_result;
 }
@@ -640,7 +656,7 @@ int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) __asm__("FUN_L00
 
 int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    MOBY(moby)->state = 0x9;
+    MOBY(moby)->state = MOBY_STATE_SUCK_CANNON_ACTIVE;
     return helper_result;
 }
 
@@ -664,9 +680,13 @@ s32 get_moby_private_data_d0_address(T6 *moby) {
 void collect_moby_and_clear_path_keys(struct Moby *moby) __asm__("FUN_L00_002d5830");
 
 void collect_moby_and_clear_path_keys(struct Moby *moby) {
+    enum {
+        PICKUP_MOBY_AVAILABLE = 1,
+        PICKUP_MOBY_COLLECTED = 2
+    };
     KeyVars *key_vars = (KeyVars *)moby->pvars;
     s32      i;
-    if (moby->state != 1) {
+    if (moby->state != PICKUP_MOBY_AVAILABLE) {
         return;
     }
     D_L00_001BA5D0.killed[(s16)moby->save_id] = moby->mission + 2;
@@ -674,7 +694,7 @@ void collect_moby_and_clear_path_keys(struct Moby *moby) {
                                   D_0014C050[current_level_index][moby->mission] == 0xFF)) {
         D_L00_001BB230.killed[(s16)moby->save_id] = moby->mission + 2;
     }
-    moby->state = 2;
+    moby->state = PICKUP_MOBY_COLLECTED;
     moby->command = 1;
     moby->glow_color = 0x80208020;
     allocate_voice_for_target_entry(0, 0, moby);

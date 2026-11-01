@@ -14,6 +14,9 @@ extern void         FUN_L00_00250480(struct Moby *moby);
 void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
 
 void link_and_update_all_mobys(void) {
+    enum {
+        MOBY_TABLE_END_STATE = 0xFF
+    };
     struct Moby *moby;
     struct Moby *last;
     struct Moby *current;
@@ -22,7 +25,7 @@ void link_and_update_all_mobys(void) {
     suck_moby_list = 0;
     moby = (struct Moby *)moby_table;
     last = 0;
-    while (moby->state != 0xFF) {
+    while (moby->state != MOBY_TABLE_END_STATE) {
         if (!(moby->state & 0x80) && !(moby->flags & 2)) {
             if (last != 0) {
                 last->next = moby;

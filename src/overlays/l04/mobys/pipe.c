@@ -25,13 +25,13 @@ void pipe_update(struct Moby *pipe_moby) {
     struct Moby *hit_moby = find_moby_hit(pipe_moby, 0x10000, 0);
     switch (pipe_moby->state) {
     case PIPE_INITIALIZE:
-        pipe_moby->state = 1;
+        pipe_moby->state = PIPE_WAIT_FOR_HIT;
         break;
     case PIPE_WAIT_FOR_HIT:
         if (hit_moby != 0 && hit_moby->scale > 0.0f)
             hit = 1;
         if (hit)
-            pipe_moby->state = 2;
+            pipe_moby->state = PIPE_REMOVE;
         break;
     case PIPE_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)pipe_moby);

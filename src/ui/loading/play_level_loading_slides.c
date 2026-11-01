@@ -64,8 +64,8 @@ void play_level_loading_slides(
     }
     sceGsSyncV(0);
     vu1_init_chain();
-    for (frame = 0; frame < duration_ticks && memory_card_state.state < 3 &&
-                    memory_card_state.pending_state < 0;
+    for (frame = 0; frame < duration_ticks && memory_card_state.state < MEMCARD_REQUEST_FORMAT &&
+                    memory_card_state.pending_state < MEMCARD_QUERY_INFO;
          frame++) {
         alpha = 0x80;
         reset_gs_registers();

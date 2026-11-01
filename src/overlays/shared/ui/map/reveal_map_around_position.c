@@ -97,10 +97,10 @@ void reveal_map_around_position(f32 *position) {
     if (level >= 19) {
         level = 0;
     }
-    state = 0;
+    state = FALSE;
     if (hero.state.control_mode == 17 || hero.state.control_mode == 18 ||
         hero.base_condition == 1) {
-        state = 1;
+        state = TRUE;
     }
     mode16 = hero.state.control_mode == 16;
     mode15 = hero.state.control_mode == 15;

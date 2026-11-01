@@ -42,7 +42,7 @@ void swing_gate_update(struct Moby *moby) {
     switch (moby->state) {
     case SWING_GATE_INITIALIZE:
         moby->rot.y = 0;
-        moby->state = 1;
+        moby->state = SWING_GATE_WAIT_FOR_OPEN_CONDITION;
         gate_motion->vel = 0;
         break;
     case SWING_GATE_WAIT_FOR_OPEN_CONDITION:
@@ -53,7 +53,7 @@ void swing_gate_update(struct Moby *moby) {
         gate_motion->vel = gate_motion->speed * frame_time;
         moby->rot.y = gate_motion->vel;
         allocate_voice_for_target_entry(0, 0, moby);
-        moby->state = 3;
+        moby->state = SWING_GATE_SWINGING;
         break;
     case SWING_GATE_HOLD_ROTATION:
         break;
@@ -67,14 +67,14 @@ void swing_gate_update(struct Moby *moby) {
             break;
         if (target->state != gate_motion->shutState)
             return;
-        moby->state = 4;
+        moby->state = SWING_GATE_RETURN_TO_ZERO;
         break;
     case SWING_GATE_RETURN_TO_ZERO:
         if (gate_motion->target == -1 || (target = &D_L07_0015FFD8[gate_motion->target]) == 0 ||
             target->state == 0xFE || target->state == 0xFD ||
             target->state == gate_motion->openState) {
             allocate_voice_for_target_entry(0, 0, moby);
-            moby->state = 2;
+            moby->state = SWING_GATE_HOLD_ROTATION;
             break;
         }
         updated_y_rotation = fast_subtract_rotations(moby->rot.y, gate_motion->rate);
@@ -82,7 +82,7 @@ void swing_gate_update(struct Moby *moby) {
         if (0.0f < updated_y_rotation) {
             moby->rot.y = 0;
             gate_motion->vel = 0;
-            moby->state = 1;
+            moby->state = SWING_GATE_WAIT_FOR_OPEN_CONDITION;
         }
         break;
     case 5:

@@ -16,7 +16,7 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 
 /* angle from a moby to its owner, clamped to the gaps between obstacles in its list */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAB28), where it is exact; names translated to the US level program. */
-extern char *D_L06_0015FFD8;
+extern char *level_mobys_q __asm__("D_L06_0015FFD8");
 
 #include "qcopy.h"
 
@@ -46,15 +46,15 @@ extern int  help_request(int, int) __asm__("FUN_L00_00203908");
 
 typedef struct GbMoby         GbMoby;
 extern GbMoby *D_L06_001745D8 NOT_SDA;
-extern float                  D_L06_001DAFD0[];
-extern float                  D_L06_001DB060[];
+extern float                  l06_beam_barrier_segment_local_offsets[] __asm__("D_L06_001DAFD0");
+extern float                  l06_beam_barrier_segment_euler_rotations[] __asm__("D_L06_001DB060");
 extern int                    D_L06_00161E40[] MACRO_ADDR;
 extern int                    D_L06_00161E50;
 extern int                    D_L06_00161E54;
-extern f32                    D_L06_00161E08 __attribute__((sda));
-extern float                  D_L06_00161E0C __attribute__((sda));
-float                         beam_barrier_collision_z_offset_gp __asm__("D_L06_00161E18") = 2.25f;
-extern int beam_barrier_burst_color_from_gp __asm__("D_L06_00161E1C") __attribute__((sda));
+extern f32   l06_beam_barrier_strand_length __asm__("D_L06_00161E08") __attribute__((sda));
+extern float l06_beam_barrier_transform_scale __asm__("D_L06_00161E0C") __attribute__((sda));
+float        beam_barrier_collision_z_offset_gp __asm__("D_L06_00161E18") = 2.25f;
+extern int   beam_barrier_burst_color_from_gp __asm__("D_L06_00161E1C") __attribute__((sda));
 int   beam_barrier_burst_color_to_gp __asm__("D_L06_00161E20") = 0x80802080; /* RGBA, 0xAABBGGRR */
 float beam_barrier_burst_scale_min_gp __asm__("D_L06_00161E24") = 0.125f;
 float beam_barrier_burst_scale_max_gp __asm__("D_L06_00161E28") = 0.333f;
@@ -135,7 +135,7 @@ void beam_barrier_update(struct Moby *moby) {
         D_L06_00161E40[3] = 0x22;
         D_L06_00161E40[0] = 0;
         beam_barrier_control_vars->voice = -1;
-        moby->state = 1;
+        moby->state = BEAM_BARRIER_ACTIVE;
         moby->flags = moby->flags | 0x4000;
         return;
     }
@@ -238,7 +238,7 @@ void beam_barrier_update(struct Moby *moby) {
         {
             int   all_done = 1;
             int   count_usage = 1;
-            char *moby_table = D_L06_0015FFD8;
+            char *moby_table = level_mobys_q;
             int   link;
             for (link = 0; link < 4; link++) {
                 int index = beam_barrier_control_vars->links[link];
@@ -257,7 +257,7 @@ void beam_barrier_update(struct Moby *moby) {
             if (!all_done)
                 return;
             moby->collision = 0;
-            moby->state = 2;
+            moby->state = BEAM_BARRIER_EMIT_SPARK_BURST;
             {
                 int voice = beam_barrier_control_vars->voice;
                 if (voice != -1) {
@@ -289,7 +289,7 @@ void beam_barrier_update(struct Moby *moby) {
         int spark;
         int segment_offset;
         euler_rotation_matrix(work.matrix, &moby->rot);
-        set_scale_matrix(work.shared.local, D_L06_00161E0C);
+        set_scale_matrix(work.shared.local, l06_beam_barrier_transform_scale);
         segment = 0;
         pos = (float *)&moby->pos;
         multiply_matrix(work.matrix, work.matrix, work.shared.local);
@@ -297,14 +297,18 @@ void beam_barrier_update(struct Moby *moby) {
         do {
             segment_offset = segment * 16;
             spark = 19;
-            euler_rotation_matrix(work.shared.local, (char *)D_L06_001DB060 + segment_offset);
+            euler_rotation_matrix(work.shared.local,
+                                  (char *)l06_beam_barrier_segment_euler_rotations +
+                                      segment_offset);
             next_segment = segment + 1;
             multiply_matrix(work.shared.local, work.matrix, work.shared.local);
-            transform_vector(work.point, (char *)D_L06_001DAFD0 + segment_offset, work.matrix);
+            transform_vector(work.point,
+                             (char *)l06_beam_barrier_segment_local_offsets + segment_offset,
+                             work.matrix);
             fast_vec_add(work.shared.collision.delta, work.point, pos);
             work.shared.collision.delta[3] = 1.0f;
             do {
-                radius = randf_sym(0.0f, D_L06_00161E08 * 0.5f);
+                radius = randf_sym(0.0f, l06_beam_barrier_strand_length * 0.5f);
                 fast_vec_normalize(work.offset, column, radius);
                 fast_vec_add(work.offset, work.offset, work.shared.collision.delta);
                 blend = random_float_between(0.0f, 1.0f);
@@ -329,7 +333,7 @@ void beam_barrier_update(struct Moby *moby) {
             } while (spark >= 0);
             segment = next_segment;
         } while (segment < 9);
-        moby->state = 3;
+        moby->state = BEAM_BARRIER_REMOVE;
         return;
     }
     case BEAM_BARRIER_REMOVE:
@@ -381,7 +385,7 @@ void draw_beam_barrier_segments(char *moby) {
     int          j;
 
     euler_rotation_matrix(base_matrix, moby + 0x40);
-    set_scale_matrix(yaw_matrix, D_L06_00161E0C);
+    set_scale_matrix(yaw_matrix, l06_beam_barrier_transform_scale);
     multiply_matrix(base_matrix, base_matrix, yaw_matrix);
     vu1_add_g_sregister(6, get_effect_texture(14));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
@@ -393,8 +397,8 @@ void draw_beam_barrier_segments(char *moby) {
     font_queue_vu_state();
     first_matrix = segment_matrix[0];
     segment_params = beam_segment_draw_params;
-    rotation = D_L06_001DB060;
-    offset_src = D_L06_001DAFD0;
+    rotation = l06_beam_barrier_segment_euler_rotations;
+    offset_src = l06_beam_barrier_segment_local_offsets;
     translation = segment_matrix[0] + 12;
     matrix = first_matrix;
     for (i = 8; i >= 0; i--) {
@@ -462,8 +466,8 @@ void animate_beam_barrier_strands(struct Moby *moby) {
     if (phase > 1.0f) {
         D_L06_00161DFC = phase - 1.0f;
     }
-    step = D_L06_00161E08 / 30.0f;
-    y = -(D_L06_00161E08 * 0.5f);
+    step = l06_beam_barrier_strand_length / 30.0f;
+    y = -(l06_beam_barrier_strand_length * 0.5f);
     for (i = 0; i < 4; i++) {
         if (D_L06_00161E40[i] == 0) {
             for (k = 0; k < 30; k++) {

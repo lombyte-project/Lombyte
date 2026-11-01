@@ -18,6 +18,12 @@
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/audio/voice_pool.h"
 
+enum {
+    MOBY_STATE_INITIALIZE = 0,
+    MOBY_STATE_ACTIVE_WITH_SOUND = 1,
+    MOBY_STATE_ACTIVE_WITHOUT_SOUND = 2
+};
+
 extern int   debug_print() __asm__("FUN_001e93b0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
@@ -54,11 +60,6 @@ typedef struct DataProcessorLinkedEffectVars {
 
 /* Moby class 1067 */
 void data_processor_linked_effect_update(struct Moby *moby) {
-    enum {
-        MOBY_STATE_INITIALIZE = 0,
-        MOBY_STATE_ACTIVE_WITH_SOUND = 1,
-        MOBY_STATE_ACTIVE_WITHOUT_SOUND = 2
-    };
     DataProcessorLinkedEffectVars *linked_effect_vars =
         (DataProcessorLinkedEffectVars *)moby->pvars;
     union {
@@ -100,7 +101,7 @@ void data_processor_linked_effect_update(struct Moby *moby) {
             float timer;
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
             moby->update_dist = 0x60;
-            moby->state = 1;
+            moby->state = MOBY_STATE_ACTIVE_WITH_SOUND;
             timer = data_processor_linked_effect_fade_duration_seconds_gp * 60.0f;
             moby->rot.z = new_rotation;
             linked_effect_vars->voice = -1;
@@ -300,7 +301,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                     (color & 0xffffff) +
                     (truncate_float_to_s32(fade * fade * convert_integer_to_float((int)color >> 24))
                      << 24);
-                if (MOBY(moby)->state == 2) {
+                if (MOBY(moby)->state == MOBY_STATE_ACTIVE_WITHOUT_SOUND) {
                     float alpha = convert_integer_to_float(linked_effect_render_vars->timer_34);
                     float duration =
                         scale_time(data_processor_linked_effect_fade_duration_seconds_gp * 60.0f);

@@ -72,6 +72,9 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
         CHILD_SETS_STATE_UNFOLD_AND_BLEND_POSES = 3,
         CHILD_SETS_STATE_FADE_AFTER_HERO_HANDOFF = 4
     };
+    enum {
+        CHILD_SETS_STATE_COMPLETE = 5
+    };
     CamVars_c788 *child_sets_controller_vars = (CamVars_c788 *)child_sets_controller->pvars;
     Vec4f         pos;
     Vec4f         rot;
@@ -140,13 +143,13 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
             D_L11_00161F10[i]->collision = 0;
         }
         update_child_set_poses(child_sets_controller);
-        child_sets_controller->state = 1;
+        child_sets_controller->state = CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER;
         break;
     case CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER:
         if (child_sets_controller_vars->link != -1 &&
             test_linked_moby_turn_trigger(
                 (void *)(D_L11_0015FFD8_c788 + (child_sets_controller_vars->link << 8)))) {
-            child_sets_controller->state = 2;
+            child_sets_controller->state = CHILD_SETS_STATE_FADE_BEFORE_ACTIVATION;
         }
         break;
     case CHILD_SETS_STATE_FADE_BEFORE_ACTIVATION:
@@ -154,7 +157,7 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
         D_L11_0015F3FC = child_sets_controller_vars->fade;
         if (1.0f <= child_sets_controller_vars->fade) {
             int j;
-            child_sets_controller->state = 3;
+            child_sets_controller->state = CHILD_SETS_STATE_UNFOLD_AND_BLEND_POSES;
             qcopy(&pos,
                   &((struct Moby *)(D_L11_0015FFD8_c788 + (child_sets_controller_vars->link << 8)))
                        ->pos);
@@ -278,7 +281,7 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
             D_L11_00161ED4 = 1.0f;
             D_L11_00161ED8 = 1.0f;
             update_child_set_poses(child_sets_controller);
-            child_sets_controller->state = 4;
+            child_sets_controller->state = CHILD_SETS_STATE_FADE_AFTER_HERO_HANDOFF;
             jet_end_mount(3);
             set_race_camera(&hero.motion.pos, &hero.motion.rot, 0, 1);
             alternate_item_available[0x56] = 1;
@@ -288,7 +291,7 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
         approach_value(&child_sets_controller_vars->fade, 0.0f, frame_time * 4.0f);
         D_L11_0015F3FC = child_sets_controller_vars->fade;
         if (child_sets_controller_vars->fade == 0.0f) {
-            child_sets_controller->state = 5;
+            child_sets_controller->state = CHILD_SETS_STATE_COMPLETE;
         }
         break;
     }

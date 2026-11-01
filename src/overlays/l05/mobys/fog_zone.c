@@ -88,14 +88,14 @@ void fog_zone_update(struct Moby *moby) {
         fog_zone_vars->preset_fog_448 = 0;
         fog_zone_vars->preset_fog_454 = 0;
         {
-            int c = l05_volume_blended_color_low_byte +
-                    (l05_volume_blended_color_lower_middle_byte << 8) +
-                    (l05_volume_blended_color_upper_middle_byte << 16) +
-                    (l05_volume_blended_color_high_byte << 24);
+            int saved_volume_blend_color = l05_volume_blended_color_low_byte +
+                                           (l05_volume_blended_color_lower_middle_byte << 8) +
+                                           (l05_volume_blended_color_upper_middle_byte << 16) +
+                                           (l05_volume_blended_color_high_byte << 24);
             fog_zone_vars->unk34 = 0x40408070;
-            fog_zone_vars->unk30 = c;
+            fog_zone_vars->unk30 = saved_volume_blend_color;
         }
-        moby->state = 1;
+        moby->state = FOG_ZONE_WAIT_TO_APPLY_PRESET;
         break;
     case FOG_ZONE_WAIT_TO_APPLY_PRESET:
         if (is_point_inside_clip_volume(&hero.motion.pos, fog_zone_vars->clip_volume_2C)) {
@@ -112,7 +112,7 @@ void fog_zone_update(struct Moby *moby) {
                 D_L05_0015F450 = fog_450;
                 D_L05_0015F454 = fog_454;
             }
-            moby->state = 2;
+            moby->state = FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS;
         }
         break;
     case FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS:
@@ -130,7 +130,7 @@ void fog_zone_update(struct Moby *moby) {
                 D_L05_0015F450 = fog_450;
                 D_L05_0015F454 = fog_454;
             }
-            moby->state = 1;
+            moby->state = FOG_ZONE_WAIT_TO_APPLY_PRESET;
         }
         break;
     }

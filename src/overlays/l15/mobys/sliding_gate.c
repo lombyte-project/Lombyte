@@ -47,6 +47,9 @@ void sliding_gate_update(struct Moby *gate_moby) {
         GATE_OPEN = 3,
         GATE_CLOSING = 4
     };
+    enum {
+        GATE_OPEN_LATCHED = 5
+    };
     MovingVars       *gate_vars = (MovingVars *)gate_moby->pvars;
     Vec4              offset;
     Vec4              pos;
@@ -59,7 +62,7 @@ void sliding_gate_update(struct Moby *gate_moby) {
     switch (gate_moby->state) {
     case GATE_INITIALIZE:
         gate_vars->home.q = *(u128 *)&gate_moby->pos;
-        gate_moby->state = 1;
+        gate_moby->state = GATE_WAIT_TO_OPEN;
         return;
     case GATE_WAIT_TO_OPEN:
         trigger_active = 0;
@@ -87,9 +90,9 @@ void sliding_gate_update(struct Moby *gate_moby) {
                 trigger_active = 1;
         }
         if (is_point_inside_clip_volume(D_0013F3D0, gate_vars->open_volume)) {
-            gate_moby->state = 2;
+            gate_moby->state = GATE_OPENING;
         } else if (trigger_active) {
-            gate_moby->state = 2;
+            gate_moby->state = GATE_OPENING;
         }
         return;
     case GATE_OPENING:
@@ -114,9 +117,9 @@ void sliding_gate_update(struct Moby *gate_moby) {
                                (((s16)gate_moby->save_id >> 5) * 4 + current_level_index * 0x100));
                 *bits |= mask;
                 D_L15_001BAAD0[((s16)gate_moby->save_id >> 5)] |= 1U << (gate_moby->save_id & 31);
-                gate_moby->state = 5;
+                gate_moby->state = GATE_OPEN_LATCHED;
             } else {
-                gate_moby->state = 3;
+                gate_moby->state = GATE_OPEN;
             }
         }
         offset.f[0] = fast_cos(gate_moby->rot.z) * -gate_vars->travel;
@@ -129,7 +132,7 @@ void sliding_gate_update(struct Moby *gate_moby) {
         if (is_point_inside_clip_volume(D_0013F3D0, gate_vars->close_volume) ||
             is_point_inside_clip_volume(D_L15_001673C0, gate_vars->close_volume))
             return;
-        gate_moby->state = 4;
+        gate_moby->state = GATE_CLOSING;
         return;
     case GATE_CLOSING:
         if (((VoiceSlot_29aff0 *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->owner !=
@@ -145,7 +148,7 @@ void sliding_gate_update(struct Moby *gate_moby) {
                 release_voice_slot(slot);
             gate_vars->travel = 0;
             gate_vars->sound = -1;
-            gate_moby->state = 1;
+            gate_moby->state = GATE_WAIT_TO_OPEN;
         }
         offset.f[0] = fast_cos(gate_moby->rot.z) * -gate_vars->travel;
         offset.f[1] = fast_sin(gate_moby->rot.z) * -gate_vars->travel;
@@ -154,7 +157,7 @@ void sliding_gate_update(struct Moby *gate_moby) {
         *(u128 *)&gate_moby->pos = pos.q;
         if (is_point_inside_clip_volume(D_0013F3D0, gate_vars->open_volume) ||
             is_point_inside_clip_volume(D_L15_001673C0, gate_vars->open_volume))
-            gate_moby->state = 2;
+            gate_moby->state = GATE_OPENING;
         return;
     default:
         return;

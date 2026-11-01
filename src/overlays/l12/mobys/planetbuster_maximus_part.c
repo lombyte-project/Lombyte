@@ -26,6 +26,14 @@
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
 #include "rnc/overlay/shared/world/level_path.h"
 
+enum {
+    PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,
+    PLANETBUSTER_WAIT_FOR_PATH_TRIGGER = 1,
+    PLANETBUSTER_FOLLOW_PATH = 2,
+    PLANETBUSTER_POST_PATH_GUN_UPDATE = 3,
+    PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
+};
+
 typedef struct Moby Moby;
 
 extern float D_0015ED6C;
@@ -63,10 +71,11 @@ extern float
 spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_00161F24 MACRO_ADDR;
-extern int                D_L12_00161F34 __attribute__((sda));
-extern int                planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
-extern int                D_L12_001FB688[];
-extern int                FUN_L00_001fefc8(void *);
+extern int                l12_planetbuster_maximus_proximity_fire_counter __asm__("D_L12_00161F34")
+    __attribute__((sda));
+extern int planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
+extern int D_L12_001FB688[];
+extern int FUN_L00_001fefc8(void *);
 extern void             *
 spawn_blarg_trooper_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
@@ -157,13 +166,13 @@ void update_planetbuster_maximus_guns(char *moby) {
             hp = (float *)(((char *)&hero) + 0x80);
             owner_to_hero_distance_xy = vector_distance_xy(moby + 0x10, hp);
             dz = absolute_float(hp[2] - MOBY(moby)->pos.z);
-            if (scale_game_frames(0x4B0) < D_L12_00161F34) {
+            if (scale_game_frames(0x4B0) < l12_planetbuster_maximus_proximity_fire_counter) {
                 if (owner_to_hero_distance_xy < 80.0f && dz < 4.0f) {
                     flag = 1;
                 }
             }
             if (owner_to_hero_distance_xy > 90.0f || dz > 7.0f) {
-                D_L12_00161F34 = 0;
+                l12_planetbuster_maximus_proximity_fire_counter = 0;
             }
             if ((D_L12_00161F00_gp != 0 || flag) && md->f80 > 0.0f) {
                 fast_dec_timer_s16(&md->h98);
@@ -280,7 +289,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                         }
                     }
                     if (D_L12_00161F00_gp == 0) {
-                        D_L12_00161F34 = scale_game_frames(0xFA0);
+                        l12_planetbuster_maximus_proximity_fire_counter = scale_game_frames(0xFA0);
                         goto done;
                     }
                     md->w84 = scale_game_frames(0x14);
@@ -396,7 +405,7 @@ void update_planetbuster_maximus_guns(char *moby) {
     update_planetbuster_maximus_detached_parts(moby);
     if (*(short *)(owner_data + 0x5FC) <= 0 && D_L12_00161F04_gp == 0) {
         D_L12_00161F24 = 1;
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = PLANETBUSTER_DROP_PARTS_AND_TRANSITION;
         MOBY(moby)->command = 0;
     }
 }
@@ -681,13 +690,6 @@ typedef struct PlanetbusterMaximusVars {
 /* Moby class 1274 */
 void planetbuster_maximus_part_update(char *moby) {
     enum {
-        PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,
-        PLANETBUSTER_WAIT_FOR_PATH_TRIGGER = 1,
-        PLANETBUSTER_FOLLOW_PATH = 2,
-        PLANETBUSTER_POST_PATH_GUN_UPDATE = 3,
-        PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
-    };
-    enum {
         PLANETBUSTER_TRANSITION_SETUP = 0,
         PLANETBUSTER_TRANSITION_INTERPOLATE = 1,
         PLANETBUSTER_TRANSITION_CLEANUP = 2
@@ -736,7 +738,7 @@ void planetbuster_maximus_part_update(char *moby) {
                 D_L12_001FB688[j] = 0;
             moby_data->unk604 = -1;
             moby_data->unk5FC = 100;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = PLANETBUSTER_WAIT_FOR_PATH_TRIGGER;
         }
         break;
     case PLANETBUSTER_WAIT_FOR_PATH_TRIGGER: {
@@ -802,7 +804,7 @@ void planetbuster_maximus_part_update(char *moby) {
                 ((unsigned char *)D_L12_0015FFD8_gp +
                  (*(int *)((u8 *)moby_data + k * 0x30 + 0x20) << 8))[0xA4] = 0xFF;
             }
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = PLANETBUSTER_FOLLOW_PATH;
         }
         break;
     }
@@ -827,7 +829,7 @@ void planetbuster_maximus_part_update(char *moby) {
         } else {
             approach_value(&moby_data->unk5F0, 0.0f, frame_time_sq_macro * 8.0f);
             if (moby_data->unk5F0 == 0.0f) {
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = PLANETBUSTER_POST_PATH_GUN_UPDATE;
                 break;
             }
         }
@@ -862,7 +864,7 @@ void planetbuster_maximus_part_update(char *moby) {
         break;
     }
     case PLANETBUSTER_POST_PATH_GUN_UPDATE:
-        D_L12_00161F34++;
+        l12_planetbuster_maximus_proximity_fire_counter++;
         spring_angle(moby + 0x48,
                      3.0543261f,
                      &moby_data->unk5F4,
@@ -977,7 +979,8 @@ void planetbuster_maximus_part_update(char *moby) {
         break;
     }
     update_planetbuster_maximus_glow_color(moby);
-    if ((unsigned char)MOBY(moby)->state >= 1 && (unsigned char)MOBY(moby)->state <= 3) {
+    if ((unsigned char)MOBY(moby)->state >= PLANETBUSTER_WAIT_FOR_PATH_TRIGGER &&
+        (unsigned char)MOBY(moby)->state <= PLANETBUSTER_POST_PATH_GUN_UPDATE) {
         if (moby_data->unk604 == -1)
             moby_data->unk604 = allocate_voice_for_target_entry(0, 4, moby);
     } else {

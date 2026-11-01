@@ -127,14 +127,14 @@ void fleet_beam_update(struct Moby *beam_moby) {
             qcopy(beam_vars, &beam_moby->pos);
             beam_vars->unk54 = beam_vars->unk48 * frame_time /
                                fast_vec_dist(beam_vars, D_L17_001600EC + (k << 7) + 0x30);
-            beam_moby->state = 2;
+            beam_moby->state = BEAM_UPDATE_OSCILLATING;
         } else if ((j = beam_vars->unk68) != -1) {
             qcopy(beam_vars, &beam_moby->pos);
             beam_vars->unk54 = beam_vars->unk48 * frame_time /
                                fast_vec_dist(beam_vars, D_L17_0015FFD0[2] + (j << 8) + 0x10);
-            beam_moby->state = 2;
+            beam_moby->state = BEAM_UPDATE_OSCILLATING;
         } else {
-            beam_moby->state = 1;
+            beam_moby->state = BEAM_UPDATE_STATIONARY;
         }
         beam_vars->unk60 = 0;
         beam_vars->unk4C = 0.1f;

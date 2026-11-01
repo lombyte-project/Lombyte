@@ -54,6 +54,9 @@ extern s32                      light_ties() __asm__("func_00237370");
 void transition_default_draw(s32 *unused_parameter) __asm__("FUN_001eb410");
 
 void transition_default_draw(s32 *unused_parameter) {
+    enum {
+        GAME_MODE_DIALOG = 4
+    };
     s32 language_overlay_index;
 
     if (level_sky_effect_data == 0 || level_sky_effect_data->unk4 != 0) {
@@ -132,7 +135,7 @@ void transition_default_draw(s32 *unused_parameter) {
     }
     vu0_load_micro_program(D_00100AE0);
     FlushCache(0);
-    if (game_mode == 4) {
+    if (game_mode == GAME_MODE_DIALOG) {
         draw_dialog_text();
     }
     vu1_sync_chain(2);

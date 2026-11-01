@@ -37,6 +37,9 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
     enum {
         CAMERA_COMPARE_ACCEPT = 1
     };
+    enum {
+        CAMERA_TRANSITION_PRIORITY_GATED = 0
+    };
     struct CameraActivation *activation = (struct CameraActivation *)&candidate->state;
 
     if (candidate->active == 0) {
@@ -64,7 +67,7 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
         if (current == 0) {
             return 1;
         }
-        if (current->transition_state != 0) {
+        if (current->transition_state != CAMERA_TRANSITION_PRIORITY_GATED) {
             return 1;
         }
         if (activation->priority > current->active) {
@@ -74,7 +77,7 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
     case CAMERA_ACTIVATION_IN_CLIP_VOLUME: {
         char *camera_descriptor_bytes = (char *)D_0015EF90[candidate->descriptor_index].unk1C;
 
-        if (current != 0 && current->transition_state == 0 &&
+        if (current != 0 && current->transition_state == CAMERA_TRANSITION_PRIORITY_GATED &&
             !(activation->priority > current->active)) {
             return 0;
         }
@@ -90,7 +93,8 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
         if (listener_group != hero_state->unk2284) {
             return 0;
         }
-        if (current->transition_state == 0 && !(activation->priority > current->active)) {
+        if (current->transition_state == CAMERA_TRANSITION_PRIORITY_GATED &&
+            !(activation->priority > current->active)) {
             return 0;
         }
         if (listener_group != 3) {

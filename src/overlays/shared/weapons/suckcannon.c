@@ -604,13 +604,13 @@ extern E04                  D_L00_001E4C80[];
 extern char                 D_L00_00161B60[] MACRO_ADDR;
 extern char                 D_L00_00161B70[] MACRO_ADDR;
 extern char                 D_L00_00166FD0[];
-extern char                 D_L00_001E5F30[];
+extern char                 l00_suck_beam_previous_segment_positions[] __asm__("D_L00_001E5F30");
 extern char                 D_L00_001E5F40[];
 extern float D_L00_00161B80 MACRO_ADDR;
 extern float D_L00_00161B84 MACRO_ADDR;
 extern int                  suck_beam_reset_pending __asm__("D_L00_00161B40") __attribute__((sda));
 extern int   suck_beam_particles_reset_pending __asm__("D_L00_00161B44") __attribute__((sda));
-extern int   D_L00_00161B54 __attribute__((sda));
+extern int   l00_suck_beam_step_blend_elapsed_frames __asm__("D_L00_00161B54") __attribute__((sda));
 extern int   suck_beam_wave_phase __asm__("D_L00_00161B58") __attribute__((sda));
 extern short D_L00_001E6008[];
 extern V41   l00_suck_beam_ring_source_offsets[] __asm__("D_L00_001E4B40");
@@ -1418,6 +1418,9 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
         SUCKCANNON_STATE_LOADED_AIM = 4,
         SUCKCANNON_STATE_FIRE_STORED_MOBY = 5
     };
+    enum {
+        SUCKCANNON_ANIMATION_SUCTION_LOOP = 3
+    };
     SuckWork    aim_and_fire_scratch;
     SuckCannon *cannon;
     SuckStats  *stats;
@@ -1433,7 +1436,8 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
                            5);
     cannon = suck_cannon_moby->data;
     slot_released = ((SuckHero *)&hero)->slot_state == 3;
-    if ((u8)suck_cannon_moby->state != 3 && (u8)suck_cannon_moby->state != 0)
+    if ((u8)suck_cannon_moby->state != SUCKCANNON_STATE_SUCTION_ACTIVE &&
+        (u8)suck_cannon_moby->state != SUCKCANNON_STATE_INITIALIZE)
         suck_beam_queue_draw((int)suck_cannon_moby);
     refresh_suck_cannon_slots();
     switch ((u8)suck_cannon_moby->state) {
@@ -1448,10 +1452,10 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
         if (((SuckHero *)&hero)->count > 0) {
             cannon->blocked = 1;
             blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
-            suck_cannon_moby->state = 4;
+            suck_cannon_moby->state = SUCKCANNON_STATE_LOADED_AIM;
         } else {
             cannon->cooldown = 0;
-            suck_cannon_moby->state = 1;
+            suck_cannon_moby->state = SUCKCANNON_STATE_EMPTY_IDLE;
         }
         suck_reset(suck_cannon_moby);
         break;
@@ -1463,7 +1467,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             cancel_hero_item_animation();
         if (((SuckHero *)&hero)->count > 0) {
             blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
-            suck_cannon_moby->state = 4;
+            suck_cannon_moby->state = SUCKCANNON_STATE_LOADED_AIM;
             break;
         }
         if ((controller_state.held & ((SuckHero *)&hero)->fire_buttons) && cannon->cooldown == 0 &&
@@ -1479,7 +1483,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
             stats->level_mask = (stats->level_mask | (1 << current_level_index)) | 0x80000000;
-            suck_cannon_moby->state = 2;
+            suck_cannon_moby->state = SUCKCANNON_STATE_SUCTION_STARTUP;
         }
         break;
     case SUCKCANNON_STATE_SUCTION_STARTUP:
@@ -1498,22 +1502,22 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             ((SuckHero *)&hero)->firing = 0;
             if (((SuckHero *)&hero)->count > 0) {
                 blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
-                next_state = 4;
+                next_state = SUCKCANNON_STATE_LOADED_AIM;
                 goto changed;
             } else {
                 cannon->cooldown = 0;
                 blend_moby_animation(suck_cannon_moby, 1, 0, scale_game_frames(4));
-                next_state = 1;
+                next_state = SUCKCANNON_STATE_EMPTY_IDLE;
                 goto changed;
             }
         } else if (fast_dec_timer(&cannon->cooldown)) {
             cannon->cooldown = scale_game_frames(20);
-            next_state = 3;
+            next_state = SUCKCANNON_STATE_SUCTION_ACTIVE;
             goto changed;
         }
         break;
     case SUCKCANNON_STATE_SUCTION_ACTIVE:
-        if (suck_cannon_moby->anim_state != 3 &&
+        if (suck_cannon_moby->anim_state != SUCKCANNON_ANIMATION_SUCTION_LOOP &&
             (suck_cannon_moby->anim_state != 0 || (suck_cannon_moby->anim_flags & 2)))
             blend_moby_animation(suck_cannon_moby, 3, 0, scale_game_frames(5));
         fast_dec_timer(&cannon->cooldown);
@@ -1536,12 +1540,12 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
                 blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
                 cannon->cooldown = 0;
                 cannon->blocked = 1;
-                suck_cannon_moby->state = 4;
+                suck_cannon_moby->state = SUCKCANNON_STATE_LOADED_AIM;
                 goto done;
             } else {
                 cannon->cooldown = 0;
                 blend_moby_animation(suck_cannon_moby, 1, 0, scale_game_frames(4));
-                suck_cannon_moby->state = 1;
+                suck_cannon_moby->state = SUCKCANNON_STATE_EMPTY_IDLE;
                 goto done;
             }
         } else {
@@ -1620,7 +1624,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
             stats->level_mask = (stats->level_mask | (1 << current_level_index)) | 0x80000000;
-            suck_cannon_moby->state = 5;
+            suck_cannon_moby->state = SUCKCANNON_STATE_FIRE_STORED_MOBY;
         }
         break;
     case 6:
@@ -1774,11 +1778,11 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             ((SuckHero *)&hero)->count--;
             if (((SuckHero *)&hero)->count > 0) {
                 ((SuckHero *)&hero)->firing = 0;
-                suck_cannon_moby->state = 4;
+                suck_cannon_moby->state = SUCKCANNON_STATE_LOADED_AIM;
                 goto done;
             } else {
                 cannon->cooldown = scale_game_frames(20);
-                next_state = 1;
+                next_state = SUCKCANNON_STATE_EMPTY_IDLE;
                 ((SuckHero *)&hero)->firing = 0;
                 suck_cannon_moby->state = next_state;
                 goto done;
@@ -2842,7 +2846,8 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
     D_L00_00161B84 = 1.7f;
     suck_beam_reset_pending = 0;
     hero_state = hero.state.current;
-    if ((hero_state == 0x1E || hero_state == 1) && (hero.moby->flags & 1)) {
+    if ((hero_state == HERO_STATE_LOOK_RELEASE_WAIT || hero_state == HERO_STATE_LOOK) &&
+        (hero.moby->flags & 1)) {
         qcopy((char *)beam_initialization_vectors, D_L00_00166FD0);
         qcopy((char *)beam_initialization_vectors + 0x10, D_L00_00166FD0 + 0x10);
         qcopy((char *)beam_initialization_vectors + 0x20, D_L00_00166FD0 + 0x20);
@@ -2867,7 +2872,7 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
     D_L00_001E6008[0] = 0;
     for (i = 1; i < 10; i++) {
         fast_vec_add(D_L00_001E5F40 + i * 0x10,
-                     D_L00_001E5F30 + i * 0x10,
+                     l00_suck_beam_previous_segment_positions + i * 0x10,
                      (char *)beam_initialization_vectors + 0x30);
         D_L00_001E6008[i] = 0;
     }
@@ -2887,7 +2892,7 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
         D_L00_00161B80 = initial_random_angle;
     }
     suck_beam_texture_v_step = 0.006f;
-    D_L00_00161B54 = 0;
+    l00_suck_beam_step_blend_elapsed_frames = 0;
     suck_beam_wave_phase = 0;
     if (suck_beam_particles_reset_pending != 0) {
         suck_beam_particles_reset_pending = 0;
@@ -2954,13 +2959,13 @@ void suck_beam_update(void *moby, void *position) {
     fast_vec_add(&start, &start, &step);
     transform_vector_by_basis(&end, &(*(V41 *)D_L00_00161B70), orientation);
     fast_vec_add(&end, &end, &step);
-    beam_step_blend_fraction =
-        (float)D_L00_00161B54 / convert_integer_to_float(scale_game_frames(60));
-    D_L00_00161B54++;
+    beam_step_blend_fraction = (float)l00_suck_beam_step_blend_elapsed_frames /
+                               convert_integer_to_float(scale_game_frames(60));
+    l00_suck_beam_step_blend_elapsed_frames++;
     step.f.x = start.f.x + (end.f.x - start.f.x) * beam_step_blend_fraction;
     step.f.y = start.f.y + (end.f.y - start.f.y) * beam_step_blend_fraction;
     step.f.z = start.f.z + (end.f.z - start.f.z) * beam_step_blend_fraction;
-    if (D_L00_00161B54 >= scale_game_frames(60)) {
+    if (l00_suck_beam_step_blend_elapsed_frames >= scale_game_frames(60)) {
         qcopy(&(*(V41 *)D_L00_00161B60), &(*(V41 *)D_L00_00161B70));
         fast_vec_normalize(&axis, orientation, D_L00_00161B84);
         tmp_a.q = 0;
@@ -2973,7 +2978,7 @@ void suck_beam_update(void *moby, void *position) {
             fast_add_rotations(D_L00_00161B80, random_float_between(45.0f, 315.0f) * 0.0174532924f);
         build_look_at_matrix(&(*(V41 *)D_L00_00161B70), &tmp_a, angle, &tmp_b);
         D_L00_00161B80 = angle;
-        D_L00_00161B54 = 0;
+        l00_suck_beam_step_blend_elapsed_frames = 0;
     }
     (*(float *)&suck_beam_wave_phase_gp) =
         fast_add_rotations((*(float *)&suck_beam_wave_phase_gp), 0.1f);
@@ -2994,7 +2999,7 @@ void suck_beam_update(void *moby, void *position) {
         int i;
         for (i = 1; i < 10; i++) {
             anchor = (V41 *)(D_L00_001E5F40 + i * 16);
-            previous = (V41 *)(D_L00_001E5F30 + i * 16);
+            previous = (V41 *)(l00_suck_beam_previous_segment_positions + i * 16);
             fast_vec_sub(&tmp_a, anchor, previous);
             qcopy(&tmp_b, &step);
             fast_vec_cross(&tmp_c, &tmp_b, &tmp_a);
@@ -3105,7 +3110,8 @@ void suck_beam_update(void *moby, void *position) {
             }
             if (D_L00_001E4C80_lui[i].p) {
                 fast_vec_sub(&tmp_a,
-                             D_L00_001E5F30 + D_L00_001E4C80_lui[i].idx * 16,
+                             l00_suck_beam_previous_segment_positions +
+                                 D_L00_001E4C80_lui[i].idx * 16,
                              D_L00_001E5F40 + D_L00_001E4C80_lui[i].idx * 16);
                 length = fast_vec_length(&tmp_a);
                 D_L00_001E4C80_lui[i].f += D_L00_001E4C80_lui[i].speed;
@@ -3118,7 +3124,8 @@ void suck_beam_update(void *moby, void *position) {
                     } else {
                         D_L00_001E4C80_lui[i].f -= length;
                         fast_vec_sub(&tmp_a,
-                                     D_L00_001E5F30 + D_L00_001E4C80_lui[i].idx * 16,
+                                     l00_suck_beam_previous_segment_positions +
+                                         D_L00_001E4C80_lui[i].idx * 16,
                                      D_L00_001E5F40 + D_L00_001E4C80_lui[i].idx * 16);
                         length = fast_vec_length(&tmp_a);
                     }
@@ -3156,7 +3163,8 @@ void suck_beam_update(void *moby, void *position) {
                         fast_vec_sub(&tmp_c,
                                      (char *)((V41 *)D_L00_001E5EE0) +
                                          D_L00_001E4C80_lui[i].idx * 320 + j * 16,
-                                     D_L00_001E5F30 + D_L00_001E4C80_lui[i].idx * 16);
+                                     l00_suck_beam_previous_segment_positions +
+                                         D_L00_001E4C80_lui[i].idx * 16);
                         interpolate_vector(&motion, &tmp_b, &tmp_c, amount);
                         j = (j + 19) % 20;
                         fast_vec_sub(&tmp_d,
@@ -3166,7 +3174,8 @@ void suck_beam_update(void *moby, void *position) {
                         fast_vec_sub(&tmp_e,
                                      (char *)((V41 *)D_L00_001E5EE0) +
                                          D_L00_001E4C80_lui[i].idx * 320 + j * 16,
-                                     D_L00_001E5F30 + D_L00_001E4C80_lui[i].idx * 16);
+                                     l00_suck_beam_previous_segment_positions +
+                                         D_L00_001E4C80_lui[i].idx * 16);
                         interpolate_vector(&interp, &tmp_d, &tmp_e, amount);
                         interpolate_vector(&motion, &motion, &interp, D_L00_001E4C80_lui[i].phase);
                         D_L00_001E4C80_lui[i].phase += D_L00_001E4C80_lui[i].phase_step;
@@ -3215,7 +3224,7 @@ void stop_suck_cannon_suction_effect(int callback_context) {
         if (p != 0) {
             D_L00_001E4C80[i].p = 0;
             fast_vec_sub(segment_offset,
-                         D_L00_001E5F30 + D_L00_001E4C80[i].idx * 16,
+                         l00_suck_beam_previous_segment_positions + D_L00_001E4C80[i].idx * 16,
                          D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16);
             segment_length = vector_length_xyz(segment_offset);
             scale_vector_xyz(segment_offset, segment_offset, D_L00_001E4C80[i].f / segment_length);

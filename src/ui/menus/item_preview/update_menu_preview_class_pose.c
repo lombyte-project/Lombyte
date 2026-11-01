@@ -33,6 +33,9 @@ extern void             attach_manipulator(int, int, void *) __asm__("FUN_0020cb
 void update_menu_preview_class_pose(void *preview) __asm__("FUN_00224b70");
 
 void update_menu_preview_class_pose(void *preview) {
+    enum {
+        PREVIEW_BINDING_STATE_RESET = 0
+    };
     PauseMoby   *moby = preview;
     struct Moby *anim = preview;
     f32          transform[16];
@@ -75,7 +78,7 @@ void update_menu_preview_class_pose(void *preview) {
         moby->binding_blend_word = 0;
         moby->secondary_binding = (char *)menu_item_info;
         anim->anim_speed = 0;
-        moby->binding_state = 0;
+        moby->binding_state = PREVIEW_BINDING_STATE_RESET;
     }
     if (attachment_active) {
         attach_manipulator(source_moby_address, 0, attachment);

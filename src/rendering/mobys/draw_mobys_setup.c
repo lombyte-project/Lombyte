@@ -16,10 +16,13 @@ extern void vu1_add_data_ref() __asm__("func_00233830");
 void draw_mobys_setup(void) __asm__("FUN_0020d278");
 
 void draw_mobys_setup(void) {
+    enum {
+        FONT_STATE_MOBY_DRAW = 6
+    };
     register s32 current;
     register s32 callbackArg;
     vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
-    font_state = 6;
+    font_state = FONT_STATE_MOBY_DRAW;
     vu0_load_micro_program(moby_draw_vu0_micro_program);
     vu1_add_g_sregister(0x47, 0x5360B);
     current = render_packet_cursor.addr;

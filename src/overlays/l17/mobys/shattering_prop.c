@@ -25,13 +25,13 @@ void shattering_prop_update(struct Moby *moby) {
     char *hit_result = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case HIT_EFFECT_INITIALIZE:
-        moby->state = 1;
+        moby->state = HIT_EFFECT_WAIT_FOR_HIT;
         break;
     case HIT_EFFECT_WAIT_FOR_HIT:
         if (hit_result && *(float *)(hit_result + 0x2C) > 0.0f)
             flag = 1;
         if (flag)
-            moby->state = 2;
+            moby->state = HIT_EFFECT_EMIT_AND_REMOVE;
         break;
     case HIT_EFFECT_EMIT_AND_REMOVE:
         FUN_0022da68(0, 0, (int)moby);

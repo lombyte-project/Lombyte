@@ -66,7 +66,7 @@ void bridge_update(u8 *moby) {
         qcopy(&bridge_data->unkA0, &MOBY(moby)->pos);
         if (bridge_data->unkD8 != -1)
             D_L07_00184528[bridge_data->unkD8] = 0;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = BRIDGE_WAIT_TO_MOVE_TO_OFFSET_POSITION;
         *(s32 *)&bridge_data->unkA0[3] = 0;
         break;
     case BRIDGE_WAIT_TO_MOVE_TO_OFFSET_POSITION:
@@ -85,7 +85,7 @@ void bridge_update(u8 *moby) {
         bridge_data->unkA0[3] = fast_vec_length(vectors);
         if (bridge_data->unkD0 != -1)
             allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = BRIDGE_MOVE_TO_OFFSET_POSITION;
         break;
     case BRIDGE_MOVE_TO_OFFSET_POSITION:
         if (bridge_data->unkB0 != -1) {
@@ -95,7 +95,7 @@ void bridge_update(u8 *moby) {
                 MOBY(linked_state_moby)->state == bridge_data->unkB8) {
                 if (bridge_data->unkD0 != -1)
                     allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
-                MOBY(moby)->state = 4;
+                MOBY(moby)->state = BRIDGE_RETURN_TO_INITIAL_POSITION;
                 break;
             }
         }
@@ -113,7 +113,7 @@ void bridge_update(u8 *moby) {
             bridge_data->unkA0[3] = 0.0f;
             if (bridge_data->unkD8 != -1)
                 D_L07_00184528[bridge_data->unkD8] = 1;
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION;
             if (bridge_data->unkD4 != -1)
                 allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
         }
@@ -127,7 +127,7 @@ void bridge_update(u8 *moby) {
                 *(s32 *)&bridge_data->unkA0[3] = 0;
                 if (bridge_data->unkD0 != -1)
                     allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
-                MOBY(moby)->state = 4;
+                MOBY(moby)->state = BRIDGE_RETURN_TO_INITIAL_POSITION;
             }
         }
         break;
@@ -138,7 +138,7 @@ void bridge_update(u8 *moby) {
             MOBY(linked_state_moby)->state == bridge_data->unkB4) {
             if (bridge_data->unkD0 != -1)
                 allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = BRIDGE_MOVE_TO_OFFSET_POSITION;
         } else {
             *(quadword *)(vectors + 4) = 0;
             vectors[4] = bridge_data->unkBC;
@@ -156,7 +156,7 @@ void bridge_update(u8 *moby) {
                     allocate_voice_for_target_entry(bridge_data->unkD4, 0, moby);
                 if (bridge_data->unkD8 != -1)
                     D_L07_00184528[bridge_data->unkD8] = 0;
-                MOBY(moby)->state = 1;
+                MOBY(moby)->state = BRIDGE_WAIT_TO_MOVE_TO_OFFSET_POSITION;
             }
         }
         break;

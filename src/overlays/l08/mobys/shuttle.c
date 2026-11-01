@@ -97,6 +97,9 @@ void shuttle_update(struct Moby *moby) {
         SHUTTLE_STATE_WAIT_FOR_DEPARTURE = 2,
         SHUTTLE_STATE_TRAVEL = 3
     };
+    enum {
+        SHUTTLE_STATE_NO_PATH = 4
+    };
     LiftVars *shuttle_vars = (LiftVars *)moby->pvars;
     Vec4      old_pos;
     Vec4      old_rot;
@@ -122,13 +125,13 @@ void shuttle_update(struct Moby *moby) {
         if (shuttle_vars->path == -1) {
             qcopy(&shuttle_vars->home_pos, &moby->pos);
             qcopy(&shuttle_vars->home_rot, &moby->rot);
-            moby->state = 4;
+            moby->state = SHUTTLE_STATE_NO_PATH;
             shuttle_vars->ridable = 1;
         } else {
             shuttle_vars->unk100 = -1;
             shuttle_vars->unkE0 = -1;
             select_shuttle_route_for_hero((char *)moby);
-            moby->state = 2;
+            moby->state = SHUTTLE_STATE_WAIT_FOR_DEPARTURE;
             moby->update_dist = 0xFF;
         }
         break;
@@ -142,7 +145,7 @@ void shuttle_update(struct Moby *moby) {
                     try_set_shuttle_departure_help_message((char *)moby);
                     if ((pad_pressed_words[0] & 0x10) && hero.air_frames.s == 0 &&
                         D_L08_0015F594 == 10)
-                        moby->state = 3;
+                        moby->state = SHUTTLE_STATE_TRAVEL;
                 }
             }
         } else {
@@ -155,7 +158,7 @@ void shuttle_update(struct Moby *moby) {
         hero.path_constrain_pending = shuttle_vars->stop;
         if (advance_shuttle_path_travel((char *)moby)) {
             select_shuttle_route_for_hero((char *)moby);
-            moby->state = 2;
+            moby->state = SHUTTLE_STATE_WAIT_FOR_DEPARTURE;
         }
         break;
     }

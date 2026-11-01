@@ -15,6 +15,13 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/camera/update_cam.h"
 
+enum {
+    FLYING_CAR_INITIALIZE = 0,
+    FLYING_CAR_WAIT_FOR_TRIGGER = 1,
+    FLYING_CAR_FOLLOW_PATH = 2,
+    FLYING_CAR_WAIT_FOR_PATH_RESET = 3
+};
+
 extern u8 *D_L14_00167500 NOT_SDA;
 
 void seed_linked_record_for_flying_car(u8 *flying_car_moby) __asm__("FUN_L14_003135b8");
@@ -115,20 +122,14 @@ void flying_car_update(struct Moby *m) __asm__("FUN_L14_00306ee0");
 
 /* Moby class 1417 */
 void flying_car_update(struct Moby *flying_car_moby) {
-    enum {
-        FLYING_CAR_INITIALIZE = 0,
-        FLYING_CAR_WAIT_FOR_TRIGGER = 1,
-        FLYING_CAR_FOLLOW_PATH = 2,
-        FLYING_CAR_WAIT_FOR_PATH_RESET = 3
-    };
     Data_6ee0 *flying_car_data = (Data_6ee0 *)flying_car_moby->pvars;
     Vec4f      attached_part_offset_component __attribute__((aligned(16)));
     char      *hit;
 
     hit = find_moby_hit(flying_car_moby, 0x800000, 0);
     flying_car_moby->hit_slot = 0xFF;
-    if (hit && flying_car_moby->state != 3) {
-        flying_car_moby->state = 3;
+    if (hit && flying_car_moby->state != FLYING_CAR_WAIT_FOR_PATH_RESET) {
+        flying_car_moby->state = FLYING_CAR_WAIT_FOR_PATH_RESET;
         cart_burst(flying_car_moby, &flying_car_moby->pos, 5.0f, 13.0f, -1);
         flying_car_moby->flags |= 0x41;
         flying_car_moby->collision = 0;
@@ -158,7 +159,7 @@ void flying_car_update(struct Moby *flying_car_moby) {
             return;
         }
         FUN_L14_00307510_6ee0(flying_car_moby);
-        flying_car_moby->state = 2;
+        flying_car_moby->state = FLYING_CAR_FOLLOW_PATH;
         flying_car_moby->update_dist = 0xFF;
         flying_car_moby->draw_dist = 0xFF;
         flying_car_data->sound = -1;
@@ -184,7 +185,7 @@ void flying_car_update(struct Moby *flying_car_moby) {
                     (struct Moby *)(D_L14_0015FFD8_macro + (flying_car_data->part << 8));
                 o->flags |= 0x41;
             }
-            flying_car_moby->state = 1;
+            flying_car_moby->state = FLYING_CAR_WAIT_FOR_TRIGGER;
         }
         break;
     case FLYING_CAR_WAIT_FOR_TRIGGER:
@@ -196,7 +197,7 @@ void flying_car_update(struct Moby *flying_car_moby) {
                     (struct Moby *)(D_L14_0015FFD8_macro + (flying_car_data->part << 8));
                 o->flags &= 0xFFBE;
             }
-            flying_car_moby->state = 2;
+            flying_car_moby->state = FLYING_CAR_FOLLOW_PATH;
         }
         break;
     case FLYING_CAR_FOLLOW_PATH:
@@ -256,7 +257,7 @@ void flying_car_update(struct Moby *flying_car_moby) {
             flying_car_moby->flags &= 0xFFBE;
             flying_car_moby->collision = flying_car_moby->pclass->collision;
             flying_car_data->timer = scale_game_frames(flying_car_path_reset_delay_frames_gp);
-            flying_car_moby->state = 2;
+            flying_car_moby->state = FLYING_CAR_FOLLOW_PATH;
             flying_car_data->f70 = 0;
             flying_car_data->f74 = 0;
             qcopy(&flying_car_moby->pos, &path->a);
@@ -282,13 +283,15 @@ void flying_car_update(struct Moby *flying_car_moby) {
             }
             if (flying_car_data->trigger >= 0) {
                 flying_car_moby->flags |= 0x41;
-                flying_car_moby->state = 1;
+                flying_car_moby->state = FLYING_CAR_WAIT_FOR_TRIGGER;
                 flying_car_moby->collision = 0;
             }
         }
         break;
     }
-    if (flying_car_moby->state == 0 || flying_car_moby->state == 3 || flying_car_moby->state == 1) {
+    if (flying_car_moby->state == FLYING_CAR_INITIALIZE ||
+        flying_car_moby->state == FLYING_CAR_WAIT_FOR_PATH_RESET ||
+        flying_car_moby->state == FLYING_CAR_WAIT_FOR_TRIGGER) {
         return;
     }
     if (voice_is_playing(flying_car_moby, flying_car_data->sound) == 0) {
@@ -351,7 +354,7 @@ int update_flying_car_path_motion(struct Moby *moby) {
     if ((*(short *)(flying_car_data + 0x8E) == 0 && end != 0) ||
         moby->pos.z <= flying_car_burst_height_threshold_gp) {
         cart_burst(moby, &moby->pos, 5.0f, 13.0f, -1);
-        moby->state = 3;
+        moby->state = FLYING_CAR_WAIT_FOR_PATH_RESET;
         moby->flags |= 0x41;
         moby->collision = 0;
         if (*(int *)(flying_car_data + 0xA0) >= 0) {

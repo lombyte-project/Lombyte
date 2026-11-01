@@ -14,7 +14,7 @@ void voice_start_callback(int handle, long voice_record_address) {
         } else {
             voice->owner = 0;
             voice->owner_context = 0;
-            voice->state = 0;
+            voice->state = VOICE_SLOT_FREE;
         }
     }
 }

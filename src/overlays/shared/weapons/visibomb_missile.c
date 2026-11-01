@@ -933,16 +933,18 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     func_L00_002B6E90_2b6140(missile_moby, missile_vars);
     {
         struct Moby *skip = missile_moby;
-        rotation_2D5FA8(&missile_vars->f24->pos,
-                        1,
-                        -(missile_vars->f1C * 0.5f + absolute_float(missile_vars->f18 / 3.0f) +
-                          (missile_vars->f18 - missile_moby->rot.x) * 1.1f) *
-                            0.7f);
-        rotation_2D5FA8(&missile_vars->f28->pos,
-                        1,
-                        -(missile_vars->f1C * 0.5f + absolute_float(missile_vars->f18 / 3.0f) -
-                          (missile_vars->f18 - missile_moby->rot.x) * 1.1f) *
-                            0.7f);
+        build_axis_rotation_quaternion(&missile_vars->f24->pos,
+                                       1,
+                                       -(missile_vars->f1C * 0.5f +
+                                         absolute_float(missile_vars->f18 / 3.0f) +
+                                         (missile_vars->f18 - missile_moby->rot.x) * 1.1f) *
+                                           0.7f);
+        build_axis_rotation_quaternion(&missile_vars->f28->pos,
+                                       1,
+                                       -(missile_vars->f1C * 0.5f +
+                                         absolute_float(missile_vars->f18 / 3.0f) -
+                                         (missile_vars->f18 - missile_moby->rot.x) * 1.1f) *
+                                           0.7f);
         ev.moby = missile_moby;
         ev.flags = 0x830000;
         ev.f1C = 6.0f;

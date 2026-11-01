@@ -46,6 +46,17 @@
    collision restores the class collision or clears it; -1 leaves that one alone. */
 /* Ported from rac1-decomp (src/overlays/l17/mobyutil_00254B40.c: func_L17_00254B40), where it is exact; names translated to the US level program. */
 
+enum {
+    FIGHTER_JET_STATE_INITIALIZE = 0,
+    FIGHTER_JET_STATE_WAIT_FOR_BOARDING = 1,
+    FIGHTER_JET_STATE_BOARDING_FADE = 2,
+    FIGHTER_JET_STATE_PILOTED_FLIGHT = 4,
+    FIGHTER_JET_STATE_DISMOUNT = 5,
+    FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7,
+    FIGHTER_JET_STATE_VICTORY_EXIT = 8,
+    FIGHTER_JET_STATE_FADE_THEN_REMOVE = 9
+};
+
 typedef struct {
     char pad0[0x10];
     int  value;
@@ -75,9 +86,12 @@ void set_class_mobys_flags_and_collision(int class_id,
                                          int collision) __asm__("FUN_L17_00253a90");
 
 void set_class_mobys_flags_and_collision(int class_id, int flag2, int flag1, int collision) {
+    enum {
+        MOBY_STATE_MIN_LIVE = 0
+    };
     Level17Moby *moby;
     for (moby = (Level17Moby *)D_L17_0015FFD8; moby <= l17_moby_array_last; moby++) {
-        if (moby->class_id == class_id && moby->state >= 0) {
+        if (moby->class_id == class_id && moby->state >= MOBY_STATE_MIN_LIVE) {
             if (flag2 != -1) {
                 if (flag2 != 0)
                     moby->flags &= ~2;
@@ -119,7 +133,7 @@ typedef struct {
 
 extern IconEC5D0     l17_fighter_jet_radar_contact_icon_definitions[] __asm__("D_L17_001D9B38");
 extern unsigned char frame_size[] __asm__("D_0013E504");
-extern unsigned char D_0015EDB4[4];
+extern unsigned char draw_map51[4] __asm__("D_0015EDB4");
 extern void
     draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
 
@@ -152,7 +166,7 @@ void draw_fighter_jet_radar_contact_icon(
     fast_vec_scale(radar_offset, radar_offset, 0.0714285746f);
     radar_distance = fast_vec_length(radar_offset);
     side = 1.0f;
-    if (D_0015EDB4[0] != 0) {
+    if (draw_map51[0] != 0) {
         side = -1.0f;
     }
     x = truncate_float_to_s32(side * radar_offset[0]);
@@ -922,7 +936,7 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     if (hero.ship_hp < hero.ship_hp_max / 10.0f && (D_L17_0015F5CC / 90) & 1) {
         font_print_center_small(0x100, 0x186, 0x80000080L, get_help_message_text(0x5269), 0x64);
     }
-    if (moby->state == 8) {
+    if (moby->state == FIGHTER_JET_STATE_VICTORY_EXIT) {
         font_print_center_small(0x100, 0xC8, 0x80005080L, get_help_message_text(0x523E), 0x64);
     }
     hp_display_step = hero.ship_hp - *(float *)(ship_vars + 0xF0);
@@ -1538,7 +1552,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                               1,
                                               -1,
                                               0);
-                        ship_moby->state = 7;
+                        ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                     }
                     ship_vars->iDC = D_L17_0016215C;
                 }
@@ -1563,7 +1577,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                       -1,
                                       0);
                 ship_vars->s62 = l17_fighter_jet_collision_death_respawn_delay;
-                ship_moby->state = 7;
+                ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                 ship_moby->flags |= 0x41;
             }
         }
@@ -1740,16 +1754,6 @@ void                  fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed0
 
 /* Moby class 1379 */
 void fighter_jet_update(ShipMoby *moby) {
-    enum {
-        FIGHTER_JET_STATE_INITIALIZE = 0,
-        FIGHTER_JET_STATE_WAIT_FOR_BOARDING = 1,
-        FIGHTER_JET_STATE_BOARDING_FADE = 2,
-        FIGHTER_JET_STATE_PILOTED_FLIGHT = 4,
-        FIGHTER_JET_STATE_DISMOUNT = 5,
-        FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7,
-        FIGHTER_JET_STATE_VICTORY_EXIT = 8,
-        FIGHTER_JET_STATE_FADE_THEN_REMOVE = 9
-    };
     ShipVars     *ship_vars;
     ShipHit      *hit;
     sceVu0FVECTOR dir;
@@ -1762,9 +1766,11 @@ void fighter_jet_update(ShipMoby *moby) {
     if (moby != 0) {
         ship_vars = (ShipVars *)moby->vars;
         fast_dec_timer(&ship_vars->timerDC);
-        if (moby->state != 7 && moby->state != 1 && moby->state != 2) {
+        if (moby->state != FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY &&
+            moby->state != FIGHTER_JET_STATE_WAIT_FOR_BOARDING &&
+            moby->state != FIGHTER_JET_STATE_BOARDING_FADE) {
             hit = (ShipHit *)find_moby_hit(moby, 0x30001, 0);
-            if (hit != 0 && moby->state == 4) {
+            if (hit != 0 && moby->state == FIGHTER_JET_STATE_PILOTED_FLIGHT) {
                 struct Hero *g = &hero;
                 if (hit->damage < g->ship_hp) {
                     g->ship_hp -= hit->damage;
@@ -1799,7 +1805,7 @@ void fighter_jet_update(ShipMoby *moby) {
                         s->shake_frames = scale_game_frames(5);
                     }
                     g->ship_hp = 0.0f;
-                    moby->state = 7;
+                    moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                     ship_vars->hit_timer = scale_game_frames(30);
                     g->motion.pos.f[2] += 0.2f;
                     ((ShipCamera *)g->moby)->unk98 = 0;
@@ -1837,7 +1843,7 @@ void fighter_jet_update(ShipMoby *moby) {
         }
         switch (moby->state) {
         case FIGHTER_JET_STATE_INITIALIZE:
-            moby->state = 1;
+            moby->state = FIGHTER_JET_STATE_WAIT_FOR_BOARDING;
             ship_vars->b60 = 0;
             moby->scale = *(float *)(moby->pclass + 0x24);
             ship_vars->f20 = ship_vars->rot[0];
@@ -1862,7 +1868,7 @@ void fighter_jet_update(ShipMoby *moby) {
             ship_vars->timerF8 = 1;
             ship_vars->iE8 = 1;
             if (moby->bB0 != 0xFF && visited52[moby->bB0 + current_level_index * 16] == 0xFF) {
-                moby->state = 9;
+                moby->state = FIGHTER_JET_STATE_FADE_THEN_REMOVE;
             }
             if (ship_vars->i11C > 0) {
                 jet_group_state(ship_vars->i11C, 0, 0, 0);
@@ -1877,7 +1883,7 @@ void fighter_jet_update(ShipMoby *moby) {
                     FUN_00215130(7, 0x53E4) != 0 && (pad_pressed_words[0] & 0x10);
             if (board) {
                 remove_help_message_for_selector(7);
-                moby->state = 2;
+                moby->state = FIGHTER_JET_STATE_BOARDING_FADE;
                 ship_vars->i124 = -1;
             } else if (ship_vars->fade != 0.0f) {
                 FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
@@ -1948,7 +1954,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 jet_camera_mode();
                 D_L17_0015F608 = 2;
                 update_fighter_jet_flight((FighterJetMoby *)moby, (FighterJetVars *)ship_vars);
-                moby->state = 4;
+                moby->state = FIGHTER_JET_STATE_PILOTED_FLIGHT;
             }
             break;
         case FIGHTER_JET_STATE_PILOTED_FLIGHT:
@@ -1962,7 +1968,7 @@ void fighter_jet_update(ShipMoby *moby) {
             update_fighter_jet_flight((FighterJetMoby *)moby, (FighterJetVars *)ship_vars);
             if (ship_vars->iE8 <= 0) {
                 ship_vars->timerF8 = D_L17_00162178;
-                moby->state = 8;
+                moby->state = FIGHTER_JET_STATE_VICTORY_EXIT;
             }
             if (ship_vars->fade != 0.0f) {
                 FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
@@ -1971,7 +1977,7 @@ void fighter_jet_update(ShipMoby *moby) {
             {
                 struct Hero *g = &hero;
                 if (g->ship_flags & 1) {
-                    moby->state = 5;
+                    moby->state = FIGHTER_JET_STATE_DISMOUNT;
                 }
             }
             break;
@@ -2006,7 +2012,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 }
             }
             ship_vars->voice2 = -1;
-            moby->state = 1;
+            moby->state = FIGHTER_JET_STATE_WAIT_FOR_BOARDING;
             ship_vars->fade = 0.99f;
             fighter_jet_transition_fade_value = 0.99f;
             break;
@@ -2040,7 +2046,7 @@ void fighter_jet_update(ShipMoby *moby) {
                     }
                 }
                 ship_vars->voice2 = -1;
-                moby->state = 0;
+                moby->state = FIGHTER_JET_STATE_INITIALIZE;
             }
             break;
         case FIGHTER_JET_STATE_VICTORY_EXIT:
@@ -2102,7 +2108,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 }
                 ship_vars->voice2 = -1;
                 jet_reset_camera((&hero.motion.pos), &hero.motion.rot);
-                moby->state = 9;
+                moby->state = FIGHTER_JET_STATE_FADE_THEN_REMOVE;
             }
             break;
         case 10:
@@ -2134,11 +2140,11 @@ void fighter_jet_update(ShipMoby *moby) {
         if (moby->pos[2] > 1008.0f) {
             moby->pos[2] = 1008.0f;
         }
-        if (moby->state == 4) {
+        if (moby->state == FIGHTER_JET_STATE_PILOTED_FLIGHT) {
             qcopy_nc((&hero.motion.pos), moby->pos);
             qcopy_nc(&hero.motion.rot, ship_vars->rot);
         }
-        if (moby->state == 3 || moby->state == 4) {
+        if (moby->state == 3 || moby->state == FIGHTER_JET_STATE_PILOTED_FLIGHT) {
             emit_type_74_particles_from_moby_joints(moby, ship_vars);
         }
     }

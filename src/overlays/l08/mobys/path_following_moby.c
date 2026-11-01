@@ -135,7 +135,7 @@ void path_following_moby_update(char *moby) {
             moby_vars->unk4 = moby_vars->unk4 * (float)*path;
             moby_vars->unkC = randf_sym(0.0f, 5.0f);
         }
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = MOBY_STATE_FOLLOW_PATH;
         MOBY(moby)->update_dist = 0xFF;
     case MOBY_STATE_FOLLOW_PATH: {
         float path_point_count;
@@ -197,7 +197,7 @@ void path_following_moby_update(char *moby) {
     } else {
         MOBY(moby)->collision = MOBY(moby)->pclass->collision;
     }
-    if (find_moby_hit(moby, 0x10000, 0) != 0 && MOBY(moby)->state != 2) {
+    if (find_moby_hit(moby, 0x10000, 0) != 0 && MOBY(moby)->state != MOBY_STATE_FALLING) {
         if (camera_secondary_mode_lui == 0x32 && D_0013D408[0xC] == 0) {
             D_0013D408[0xC] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
@@ -224,7 +224,7 @@ void path_following_moby_update(char *moby) {
                         1,
                         -1,
                         0);
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = MOBY_STATE_FALLING;
     }
     MOBY(moby)->hit_slot = 0xFF;
     if (MOBY(moby)->visible != 0) {

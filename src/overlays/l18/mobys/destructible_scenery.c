@@ -70,7 +70,7 @@ void destructible_scenery_update(struct Moby *moby) {
             if (((unsigned char *)((int *)visited52))[mission_table_index] == 0xff)
                 goto remove;
         }
-        moby->state = 1;
+        moby->state = STATE_WAIT_FOR_HIT;
         if (*(int *)hit_response_and_flight_private_vars != 0)
             *(int *)(*(int *)hit_response_and_flight_private_vars) = 3;
         return;
@@ -176,7 +176,7 @@ void destructible_scenery_update(struct Moby *moby) {
             float vector[4];
             float speed = random_float_between(10.0f, 15.0f) * frame_time;
             moby->collision = 0;
-            moby->state = 3;
+            moby->state = STATE_BALLISTIC_FLIGHT;
             hit_response_and_flight_private_vars[2] =
                 randf_sym(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
             hit_response_and_flight_private_vars[3] =

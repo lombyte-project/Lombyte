@@ -14,7 +14,7 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
-extern char D_L07_00166E40[];
+extern char debris_far_point[] __asm__("D_L07_00166E40");
 
 /* Slows and steers a moby toward another when it is below and close in height. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F4C0), where it is exact; names translated to the US level program. */
@@ -59,10 +59,10 @@ extern void  draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
 unsigned char *spawn_fading_ring_effect(int   spawning_moby,
                                         void *spawn_position,
-                                        int   b,
-                                        float f0,
-                                        float f1,
-                                        float f2,
+                                        int   texture_index,
+                                        float initial_radius,
+                                        float terminal_radius,
+                                        float ring_height,
                                         float spawn_speed,
 
                                         float f4) {
@@ -77,15 +77,15 @@ unsigned char *spawn_fading_ring_effect(int   spawning_moby,
         MOBY(moby)->visible = 1;
         qcopy(moby + 0x10, spawn_position);
         *(int *)(spawned_moby_vars + 0x14) = spawning_moby;
-        *(float *)(spawned_moby_vars + 4) = f1;
-        *(float *)(spawned_moby_vars + 0x10) = f2;
+        *(float *)(spawned_moby_vars + 4) = terminal_radius;
+        *(float *)(spawned_moby_vars + 0x10) = ring_height;
         *(float *)(spawned_moby_vars + 0xC) = spawn_speed;
-        *(float *)spawned_moby_vars = f0;
-        *(float *)(spawned_moby_vars + 8) = f0;
-        *(int *)(spawned_moby_vars + 0x18) = b;
+        *(float *)spawned_moby_vars = initial_radius;
+        *(float *)(spawned_moby_vars + 8) = initial_radius;
+        *(int *)(spawned_moby_vars + 0x18) = texture_index;
         *(float *)(spawned_moby_vars + 0x1C) = f4;
         MOBY(moby)->flags |= 0x200;
-        distance_reference_position = D_L07_00166E40;
+        distance_reference_position = debris_far_point;
         distance_response_state = distance_reference_position - 0x140;
         *(float *)(distance_response_state + 0x160) =
             0.3f - vector_distance_xy(moby + 0x10, distance_reference_position) / 100.0f;

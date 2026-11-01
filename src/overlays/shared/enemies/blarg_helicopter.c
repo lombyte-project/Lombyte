@@ -17,6 +17,15 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/math/random.h"
 
+enum {
+    BLARG_HELICOPTER_INITIALIZE = 0,
+    BLARG_HELICOPTER_ACTIVATION_PATH = 1,
+    BLARG_HELICOPTER_PATROL_AND_ATTACK = 2,
+    BLARG_HELICOPTER_EXIT = 3,
+    BLARG_HELICOPTER_TIMED_REACTION = 4,
+    BLARG_HELICOPTER_DESTROY = 5
+};
+
 typedef float HVec49_2CDDC8[4] __attribute__((aligned(16)));
 
 typedef unsigned int HQuad49_2CDDC8 __attribute__((mode(TI)));
@@ -201,12 +210,8 @@ void blarg_helicopter_update(HMob49 *moby) __asm__("FUN_L03_002cca00");
 /* Moby classes 326, 631 */
 void blarg_helicopter_update(HMob49 *moby) {
     enum {
-        BLARG_HELICOPTER_INITIALIZE = 0,
-        BLARG_HELICOPTER_ACTIVATION_PATH = 1,
-        BLARG_HELICOPTER_PATROL_AND_ATTACK = 2,
-        BLARG_HELICOPTER_EXIT = 3,
-        BLARG_HELICOPTER_TIMED_REACTION = 4,
-        BLARG_HELICOPTER_DESTROY = 5
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 253,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 254
     };
     HData49 *data = moby->data;
     HWork49  helicopter_update_scratch;
@@ -223,7 +228,8 @@ void blarg_helicopter_update(HMob49 *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (data->route_a.path_id == -1 || (moby->state != 0 && data->enabled != 1)) {
+    if (data->route_a.path_id == -1 ||
+        (moby->state != BLARG_HELICOPTER_INITIALIZE && data->enabled != 1)) {
         if (data->child_index != -1)
             mark_moby_for_removal((HMob49 *)(D_L03_0015FFD8_c + (data->child_index << 8)));
         mark_moby_for_removal(moby);
@@ -290,10 +296,10 @@ void blarg_helicopter_update(HMob49 *moby) {
             for (i = 0; i < path->count - 2; i++)
                 path->points[i].length = fast_vec_dist(&path->points[i], &path->points[i + 1]);
             *(HQuad49_2CDDC8 *)moby->position = *(HQuad49_2CDDC8 *)path->points;
-            moby->state = 1;
+            moby->state = BLARG_HELICOPTER_ACTIVATION_PATH;
             break;
         }
-        moby->state = 2;
+        moby->state = BLARG_HELICOPTER_PATROL_AND_ATTACK;
         break;
     }
     case BLARG_HELICOPTER_ACTIVATION_PATH: {
@@ -342,8 +348,8 @@ void blarg_helicopter_update(HMob49 *moby) {
                 data->alternate = 0;
                 qcopy(moby->position, data->route_a.path->points);
                 data->route_a.index = 1;
-                moby->previous_state = 2;
-                moby->state = 4;
+                moby->previous_state = BLARG_HELICOPTER_PATROL_AND_ATTACK;
+                moby->state = BLARG_HELICOPTER_TIMED_REACTION;
                 data->reaction_timer = scale_game_frames(15);
                 break;
             }
@@ -422,8 +428,9 @@ void blarg_helicopter_update(HMob49 *moby) {
         moby->rotation[2] =
             spring_turn(&data->yaw_velocity, moby->rotation[2], angle, 0.01f, 0.3f, 0.1f);
         projectile = data->projectile;
-        if (!projectile || projectile->class_id != 0x350 || projectile->state == 254 ||
-            projectile->state == 253) {
+        if (!projectile || projectile->class_id != 0x350 ||
+            projectile->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
+            projectile->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             moby_point_position(moby, 0, helicopter_update_scratch.movement);
             fast_vec_sub(helicopter_update_scratch.direction,
                          helicopter_update_scratch.target.position,
@@ -450,8 +457,8 @@ void blarg_helicopter_update(HMob49 *moby) {
                                           D_0015ED70 * 3.1415927f,
                                           D_0015ED70 * 6.2831855f,
                                           D_0015ED6C * 1.5707964f);
-            rotation_2D5FA8(data->gun_yaw_matrix + 4, 2, data->gun_yaw);
-            rotation_2D5FA8(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
+            build_axis_rotation_quaternion(data->gun_yaw_matrix + 4, 2, data->gun_yaw);
+            build_axis_rotation_quaternion(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
             data->projectile = 0;
         } else {
             moby_point_position(moby, 0, helicopter_update_scratch.movement);
@@ -480,8 +487,8 @@ void blarg_helicopter_update(HMob49 *moby) {
                                           D_0015ED70 * 3.1415927f,
                                           D_0015ED70 * 6.2831855f,
                                           D_0015ED6C * 1.5707964f);
-            rotation_2D5FA8(data->gun_yaw_matrix + 4, 2, data->gun_yaw);
-            rotation_2D5FA8(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
+            build_axis_rotation_quaternion(data->gun_yaw_matrix + 4, 2, data->gun_yaw);
+            build_axis_rotation_quaternion(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
         }
         if (point > 0 && point < route->path->count - 1) {
             float node_distance = vector_distance_xy(&route->path->points[point],
@@ -554,8 +561,8 @@ void blarg_helicopter_update(HMob49 *moby) {
                 for (i = 0; i < path->count - 2; i++)
                     path->points[i].length = fast_vec_dist(&path->points[i], &path->points[i + 1]);
             }
-            moby->previous_state = 3;
-            moby->state = 4;
+            moby->previous_state = BLARG_HELICOPTER_EXIT;
+            moby->state = BLARG_HELICOPTER_TIMED_REACTION;
             data->reaction_timer = scale_game_frames(15);
             break;
         } else if (is_point_inside_clip_volume(helicopter_update_scratch.target.position,
@@ -640,8 +647,8 @@ void blarg_helicopter_update(HMob49 *moby) {
                 route = data->alternate ? &data->route_b : &data->route_a;
                 qcopy(moby->position, route->path->points);
                 route->index = 1;
-                moby->previous_state = 2;
-                moby->state = 4;
+                moby->previous_state = BLARG_HELICOPTER_PATROL_AND_ATTACK;
+                moby->state = BLARG_HELICOPTER_TIMED_REACTION;
                 data->reaction_timer = scale_game_frames(15);
                 break;
             }
@@ -856,6 +863,9 @@ void blarg_helicopter_update(HMob49 *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002CF600), where it is exact; names translated to the US level program. */
 
 void handle_blarg_helicopter_hits(char *helicopter_moby) {
+    enum {
+        HIT_REACTION_SKIP_DAMAGE = 1
+    };
     int   hit_reaction_status;
     float fv;
     int   hit_reaction_result;
@@ -868,15 +878,17 @@ void handle_blarg_helicopter_hits(char *helicopter_moby) {
     hit_record = find_moby_hit(helicopter_moby, 0x330000, 0);
     hit_reaction_result = hit_reaction(
         helicopter_moby, hit_record, helicopter_data + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-    if (hit_reaction_status != 1 && MOBY(helicopter_moby)->state != 5) {
+    if (hit_reaction_status != HIT_REACTION_SKIP_DAMAGE &&
+        MOBY(helicopter_moby)->state != BLARG_HELICOPTER_DESTROY) {
         float remaining_health = *(float *)(helicopter_data + 0x20) - fv;
         *(float *)(helicopter_data + 0x20) = remaining_health;
         if (hit_reaction_result == 1 || remaining_health <= 0.0f) {
-            MOBY(helicopter_moby)->state = 5;
+            MOBY(helicopter_moby)->state = BLARG_HELICOPTER_DESTROY;
         } else if (hit_reaction_result != 0xB) {
             *(unsigned char *)(helicopter_data + 0x67) = 0xB4;
             trooper_anim_update(helicopter_moby, (short *)(helicopter_data + 0x60));
-            if (*(float *)(hit_record + 0x1C) == 5627.925f && MOBY(helicopter_moby)->state != 4) {
+            if (*(float *)(hit_record + 0x1C) == 5627.925f &&
+                MOBY(helicopter_moby)->state != BLARG_HELICOPTER_TIMED_REACTION) {
                 reaction_heading_angle =
                     fast_arc_tan(MOBY(helicopter_moby)->pos.x - *(float *)(hit_record + 0),
                                  MOBY(helicopter_moby)->pos.y - *(float *)(hit_record + 4));
@@ -897,7 +909,7 @@ void handle_blarg_helicopter_hits(char *helicopter_moby) {
                 *(float *)(helicopter_data + 0x214) = frame_time * 4.0f;
                 *(short *)(helicopter_data + 0x206) = scale_game_frames(0x3C);
                 MOBY(helicopter_moby)->command = MOBY(helicopter_moby)->state;
-                MOBY(helicopter_moby)->state = 4;
+                MOBY(helicopter_moby)->state = BLARG_HELICOPTER_TIMED_REACTION;
                 allocate_voice_for_target_entry(1, 0, (int)helicopter_moby);
             }
         }

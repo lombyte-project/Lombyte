@@ -44,7 +44,7 @@ void sandshark_egg_update(struct Moby *moby) {
     case SANDSHARK_EGG_FALL_UNTIL_LANDING:
         clear_u64_value(u);
         if (step_moby_motion(moby, egg_vars) & 1) {
-            moby->state = 2;
+            moby->state = SANDSHARK_EGG_HANDOFF_TO_LINKED_MOBY;
         }
         vp = v;
         i = 2;

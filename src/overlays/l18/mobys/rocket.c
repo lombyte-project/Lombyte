@@ -48,6 +48,9 @@ void rocket_moby_update(struct Moby *moby) __asm__("FUN_L18_002d5050");
 
 /* Moby class 564 */
 void rocket_moby_update(struct Moby *moby) {
+    enum {
+        ROCKET_STATE_FLYING = 0
+    };
     L18D *moby_vars = (L18D *)moby->pvars;
     float target_movement_step[4];
     float movement_step[4];
@@ -60,7 +63,7 @@ void rocket_moby_update(struct Moby *moby) {
     int   movement_collision_result;
     if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
         mark_moby_for_removal(moby);
-    } else if (moby->state == 0) {
+    } else if (moby->state == ROCKET_STATE_FLYING) {
         qcopy(previous_position, &moby->pos);
         movement_blend_weight = convert_integer_to_float(moby_vars->c);
         movement_blend_weight = movement_blend_weight / convert_integer_to_float(moby_vars->lim);
@@ -291,7 +294,7 @@ void spawn_rocket_explosion(void *moby_object, void *movement_step) {
                           -1,
                           0);
     if (hit_radius != 0.0f) {
-        if (hero.vehicle_mode == 2) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             play_entity_sound(
                 (int)moby, 2.0f, moby + 0x10, 2, rocket_explosion_hit_priority_gp, 1.0f, 0, 1, 0);
         }

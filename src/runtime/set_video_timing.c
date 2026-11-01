@@ -16,7 +16,7 @@ extern f32 frame_time_cube_macro __asm__("D_0015ED74") MACRO_ADDR;
 
 void set_video_timing(s32 pal_mode_enabled) {
     if (pal_mode_enabled == 0) {
-        pal_mode = 0;
+        pal_mode = FALSE;
         frame_scale_macro = 1.0f;
         frame_scale_sq_macro = 1.0f;
         frame_scale_inv_macro = 1.0f;
@@ -27,7 +27,7 @@ void set_video_timing(s32 pal_mode_enabled) {
         frame_delta_time = 0.016666668f;
         return;
     }
-    pal_mode = 1;
+    pal_mode = TRUE;
     frame_scale_macro = 1.2f;
     frame_scale_sq_macro = 1.44f;
     frame_scale_inv_macro = 0.8333333f;

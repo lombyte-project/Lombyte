@@ -59,6 +59,9 @@ s32 read_mpeg(struct VideoDec *video_dec,
               struct ReadBuf  *read_buf,
 
               struct MpegCdStream *cd_stream) {
+    enum {
+        MOVIE_SKIP_MODE_ANY_BUTTON = 2
+    };
     u8 *write_ptr;
     u8 *read_ptr;
     s32 skipped;
@@ -82,7 +85,7 @@ s32 read_mpeg(struct VideoDec *video_dec,
         update_primary_pad_state();
         mode = DECODE_MODE;
         if (mode != -1) {
-            if ((mode == 2 && pad_pressed(&controller_state, -1)) ||
+            if ((mode == MOVIE_SKIP_MODE_ANY_BUTTON && pad_pressed(&controller_state, -1)) ||
                 ((D_0015EEA0 != 0 || alternate_animation_sequence != 0 || DECODE_MODE != 0 ||
                   current_level_index <= 0) &&
                  pad_pressed(&controller_state, 0x800))) {

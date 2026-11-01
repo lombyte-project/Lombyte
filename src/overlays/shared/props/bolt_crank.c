@@ -46,7 +46,7 @@ typedef struct {
     f32 rest_height;       /* 0x3C */
 } BoltCrankVars;
 
-extern char D_L01_00167240[];
+extern char camera_pos[] __asm__("D_L01_00167240");
 
 extern int           D_0015ED84;
 extern unsigned char menu_item_enabled_1_lui __asm__("D_0013D395") NOT_SDA;
@@ -74,12 +74,12 @@ void set_novalis_bolt_crank_completion_flags(char *moby) {
     if (level != 1)
         return;
     if (((short)MOBY(moby)->save_id) == 0x34 && MOBY(moby)->oclass == 0x118 &&
-        (unsigned char)MOBY(moby)->state == 5) {
+        (unsigned char)MOBY(moby)->state == BOLT_CRANK_DONE) {
         menu_item_enabled_0 = level;
         level = D_0015ED84;
     }
     if (level == 1 && ((short)MOBY(moby)->save_id) == 0x35 && MOBY(moby)->oclass == 0x118 &&
-        (unsigned char)MOBY(moby)->state == 5) {
+        (unsigned char)MOBY(moby)->state == BOLT_CRANK_DONE) {
         menu_item_enabled_1_lui = level;
     }
 }
@@ -133,7 +133,7 @@ void bolt_crank_update(struct Moby *moby) {
         }
         distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
         if (distance < 1.75f) {
-            if (hero.vehicle_mode == 0) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 angle = fast_arc_tan(moby->pos.x - hero.motion.pos.f[0],
                                      moby->pos.y - hero.motion.pos.f[1]);
                 yaw_diff = fast_difference_between_rotations(hero.motion.rot.f[2], angle);
@@ -166,11 +166,8 @@ void bolt_crank_update(struct Moby *moby) {
                                     goto done;
                                 }
                                 l01_hero_set_state(HERO_STATE_CRANK, 1);
-                                jet_mount(D_L01_00167240,
-                                          D_L01_00167240 + 0x10,
-                                          3,
-                                          scale_game_frames(0xB4),
-                                          0);
+                                jet_mount(
+                                    camera_pos, camera_pos + 0x10, 3, scale_game_frames(0xB4), 0);
                                 set_camera_rotation(&l01_cuboids[crank->camera_point].rot);
                                 set_camera_position(&l01_cuboids[crank->camera_point].pos);
                                 set_camera_5_track_acceleration_yz(crank->camera_params[0],

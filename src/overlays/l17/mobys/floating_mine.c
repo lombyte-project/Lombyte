@@ -41,7 +41,7 @@ extern void  spawn_explosion(void *,
                              int,
                              int,
                              int) __asm__("FUN_L00_0025e450");
-extern short D_L17_00161D2C __attribute__((sda));
+extern short l17_bobbing_vertical_amplitude __asm__("D_L17_00161D2C") __attribute__((sda));
 extern short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") __attribute__((sda));
 extern void  update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -97,10 +97,10 @@ void floating_mine_update(struct Moby *moby) {
     case BOBBING_INITIALIZE:
         *(float *)(bobbing_moby_vars + 0x60) = random_angle_radians();
         *(int *)(bobbing_moby_vars + 0x64) = 0;
-        moby->state = 1;
+        moby->state = BOBBING_UPDATE_AND_CHECK_CONTACT;
         break;
     case BOBBING_UPDATE_AND_CHECK_CONTACT:
-        update_moby_vertical_oscillation(*(float *)&D_L17_00161D2C,
+        update_moby_vertical_oscillation(*(float *)&l17_bobbing_vertical_amplitude,
                                          *(float *)&fleet_bobbing_phase_rate_degrees * DEG_TO_RAD *
                                              frame_time,
                                          moby,

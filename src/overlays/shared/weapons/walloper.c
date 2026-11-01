@@ -748,7 +748,7 @@ void walloper_update(char *walloper_moby) {
     }
     switch (MOBY(walloper_moby)->state) {
     case WALLOPER_STATE_INITIALIZE:
-        MOBY(walloper_moby)->state = 2;
+        MOBY(walloper_moby)->state = WALLOPER_STATE_ANIMATION_DRIVEN_EFFECTS;
         for (arc_init_index = 0; arc_init_index < 10; arc_init_index++) {
             D_L00_001DBEC0[arc_init_index] = 0;
             D_L00_001DBEF0[arc_init_index] = 2;

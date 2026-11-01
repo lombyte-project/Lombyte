@@ -17,6 +17,22 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
+enum {
+    BLARG_COMMANDO_STATE_INITIALIZE = 0,
+    BLARG_COMMANDO_STATE_SELECT_ACTION = 1,
+    BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP = 2,
+    BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY = 3,
+    BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN = 4,
+    BLARG_COMMANDO_STATE_MELEE_ATTACK = 5,
+    BLARG_COMMANDO_STATE_MELEE_RECOVERY = 6,
+    BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
+    BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK = 12,
+    BLARG_COMMANDO_STATE_RETURN_HOME = 13,
+    BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14,
+    BLARG_COMMANDO_STATE_KNOCKBACK = 15,
+    BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 16
+};
+
 typedef struct {
     s32 unk0;
     f32 unk4;
@@ -129,21 +145,6 @@ void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 
 /* Moby class 1068 */
 void blarg_space_commando_update(struct Moby *moby) {
-    enum {
-        BLARG_COMMANDO_STATE_INITIALIZE = 0,
-        BLARG_COMMANDO_STATE_SELECT_ACTION = 1,
-        BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP = 2,
-        BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY = 3,
-        BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN = 4,
-        BLARG_COMMANDO_STATE_MELEE_ATTACK = 5,
-        BLARG_COMMANDO_STATE_MELEE_RECOVERY = 6,
-        BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
-        BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK = 12,
-        BLARG_COMMANDO_STATE_RETURN_HOME = 13,
-        BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14,
-        BLARG_COMMANDO_STATE_KNOCKBACK = 15,
-        BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 16
-    };
     Moby1068Vars *blarg_commando_state = (Moby1068Vars *)moby->pvars;
     struct Moby  *target;
     s32          *route;
@@ -183,12 +184,12 @@ void blarg_space_commando_update(struct Moby *moby) {
         blarg_commando_state->ctl.unk24 = movement_max_horizontal_speed_gp * frame_time;
         blarg_commando_state->ctl.flags |= 8;
         qcopy(&blarg_commando_state->home, &moby->pos);
-        moby->state = 1;
+        moby->state = BLARG_COMMANDO_STATE_SELECT_ACTION;
         break;
     case BLARG_COMMANDO_STATE_SELECT_ACTION:
         if (blarg_commando_state->volume != -1 && blarg_commando_state->route != -1) {
             if (is_point_inside_clip_volume(&hero.motion.pos, blarg_commando_state->volume) != 0) {
-                moby->state = 14;
+                moby->state = BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION;
                 break;
             }
             if (vector_distance_xy(&moby->pos, &target->pos) > 7.0f) {
@@ -207,19 +208,19 @@ void blarg_space_commando_update(struct Moby *moby) {
                         moby->rot.z,
                         fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y)) <
                     0.17453292f) {
-                    moby->state = 2;
+                    moby->state = BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP;
                     if (moby->prev_seq != 3) {
                         blend_moby_animation(moby, 3, 0, scale_game_frames(10));
                     }
                 }
             } else {
-                moby->state = 5;
+                moby->state = BLARG_COMMANDO_STATE_MELEE_ATTACK;
                 if (moby->prev_seq != 6) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(10));
                 }
             }
         } else if (blarg_commando_state->unk188 != 0) {
-            moby->state = 11;
+            moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
@@ -246,7 +247,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(18));
                 }
-                moby->state = 1;
+                moby->state = BLARG_COMMANDO_STATE_SELECT_ACTION;
             }
         } else {
             FUN_L00_00258278(moby,
@@ -280,7 +281,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                        frame_time * 3.1415927f);
         if (moby->anim_flags & 2) {
             FUN_L06_002ff100_u(moby);
-            moby->state = 3;
+            moby->state = BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY;
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(10));
             }
@@ -289,13 +290,13 @@ void blarg_space_commando_update(struct Moby *moby) {
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY:
         if (moby->anim_flags & 2) {
             if (blarg_commando_state->unk164 != 2) {
-                moby->state = 4;
+                moby->state = BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN;
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
                 }
                 blarg_commando_state->timer = scale_game_frames(ranged_attack_cooldown_frames_gp);
             } else {
-                moby->state = 1;
+                moby->state = BLARG_COMMANDO_STATE_SELECT_ACTION;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(20));
                 }
@@ -311,18 +312,18 @@ void blarg_space_commando_update(struct Moby *moby) {
                        frame_time * 3.1415927f);
         if (fast_dec_timer(&blarg_commando_state->timer) != 0) {
             FUN_L06_002ff100_u(moby);
-            moby->state = 3;
+            moby->state = BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY;
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(5));
             }
         } else if (vector_distance_xy(&moby->pos, &target->pos) <
                    melee_attack_distance_threshold_gp) {
-            moby->state = 5;
+            moby->state = BLARG_COMMANDO_STATE_MELEE_ATTACK;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
         } else if (blarg_commando_state->unk188 != 0) {
-            moby->state = 11;
+            moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
@@ -339,7 +340,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         qcopy(&movement_input_or_output_or_melee_origin, &moby->pos);
         movement_input_or_output_or_melee_origin.f[2] += 0.3f;
         cur_frame = compute_interpolated_record_value(moby);
-        if (hero.vehicle_mode == 1 && cur_frame < 9.0f) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK && cur_frame < 9.0f) {
             moby->anim_speed = vehicle_melee_windup_animation_speed_gp;
         }
         if (cur_frame >= 9.0f && cur_frame <= 15.0f) {
@@ -361,7 +362,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         qcopy(&blarg_commando_state->unk200, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
-            moby->state = 6;
+            moby->state = BLARG_COMMANDO_STATE_MELEE_RECOVERY;
             moby->command = 1;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
@@ -402,15 +403,15 @@ void blarg_space_commando_update(struct Moby *moby) {
             near = 1;
         }
         if (blarg_commando_state->unk188 == 0) {
-            moby->state = 13;
+            moby->state = BLARG_COMMANDO_STATE_RETURN_HOME;
         } else if (near != 0) {
-            moby->state = 12;
+            moby->state = BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
         } else if (vector_distance_xy(&moby->pos, &target->pos) <
                    melee_attack_distance_threshold_gp) {
-            moby->state = 12;
+            moby->state = BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
@@ -440,7 +441,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         qcopy(&blarg_commando_state->unk200, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
-            moby->state = 11;
+            moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
@@ -470,7 +471,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                 blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
         }
         if (fast_vec_dist(&blarg_commando_state->home, &moby->pos) < 1.0f) {
-            moby->state = 1;
+            moby->state = BLARG_COMMANDO_STATE_SELECT_ACTION;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }
@@ -479,7 +480,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     case BLARG_COMMANDO_STATE_KNOCKBACK:
         hit = step_moby_motion(moby, &blarg_commando_state->vel);
         if (hit & 0x40) {
-            moby->state = 1;
+            moby->state = BLARG_COMMANDO_STATE_SELECT_ACTION;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
@@ -620,7 +621,7 @@ void process_blarg_space_commando_hits(char *moby) {
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_response_index =
         resolve_moby_hit_response(moby, hit_record, commando_state + 0x20, 0, &hit, &dt, 0, 4);
-    if (hit != 1 && (unsigned char)MOBY(moby)->state != 0x10) {
+    if (hit != 1 && (unsigned char)MOBY(moby)->state != BLARG_COMMANDO_STATE_DEATH_KNOCKBACK) {
         if (current_level_index_gp == 0xA && hit_record != 0 &&
             *(char **)(hit_record + 0x20) != 0 &&
             *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
@@ -646,7 +647,7 @@ void process_blarg_space_commando_hits(char *moby) {
             char *q;
             int   knockback_frames;
             float b, a;
-            MOBY(moby)->state = 0xF;
+            MOBY(moby)->state = BLARG_COMMANDO_STATE_KNOCKBACK;
             q = commando_state + 0x60;
             knockback_frames = scale_game_frames(0x3C);
             a = nonfatal_knockback_horizontal_speed_gp * D_0015ED6C;
@@ -670,7 +671,7 @@ void process_blarg_space_commando_hits(char *moby) {
         case FRAGMENTING_FATAL_HIT_RESPONSE: {
             char *q;
             float a, b;
-            MOBY(moby)->state = 0x10;
+            MOBY(moby)->state = BLARG_COMMANDO_STATE_DEATH_KNOCKBACK;
             q = commando_state + 0x60;
             a = fatal_knockback_horizontal_speed_gp * D_0015ED6C;
             b = fatal_knockback_vertical_speed_gp * D_0015ED6C;
@@ -819,6 +820,10 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff97
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 void update_blarg_space_commando_beam(void *owner_moby) {
+    enum {
+        BEAM_SEGMENT_HIT_WITH_FADING_ENDPOINT = 0x10000,
+        BEAM_SEGMENT_HIT_WITH_FULL_WEIGHT_ENDPOINTS = 0x10001
+    };
     char    *moby = owner_moby;
     FanData *beam_state = ((FanData *)MOBY(moby)->pvars);
     int      frames;
@@ -848,7 +853,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
 
     for (i = 0; i < 16; i++) {
         char *entry;
-        if (hero.vehicle_mode == 1) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
             step = (beam_point_horizontal_speed_gp * frame_time) * 0.5f;
         } else {
             step = beam_point_horizontal_speed_gp * frame_time;
@@ -886,9 +891,9 @@ void update_blarg_space_commando_beam(void *owner_moby) {
                 point[1] = fast_sin(MOBY(moby)->rot.z);
                 point[2] = 1.0f;
                 point[3] = 5627.925f;
-                hit_type = 0x10000;
+                hit_type = BEAM_SEGMENT_HIT_WITH_FADING_ENDPOINT;
                 if (1.0f <= *(float *)(entry + 0x23C) && 1.0f <= *(float *)(next_entry + 0x23C)) {
-                    hit_type = 0x10001;
+                    hit_type = BEAM_SEGMENT_HIT_WITH_FULL_WEIGHT_ENDPOINTS;
                 }
                 make_hit_descriptor(&shot, (struct Moby *)moby, hit_type, point, 1.0f);
                 shot.oclass = MOBY(moby)->oclass;

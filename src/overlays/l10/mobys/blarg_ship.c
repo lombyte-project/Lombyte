@@ -21,6 +21,22 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l10/mobys/aligned_vector.h"
 
+enum {
+    BLARG_SHIP_STATE_INITIALIZE = 0,
+    BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME = 1,
+    BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH = 2,
+    BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH = 3,
+    BLARG_SHIP_STATE_FIRE_AT_TARGET = 4,
+    BLARG_SHIP_STATE_FIRE_COOLDOWN = 5,
+    BLARG_SHIP_STATE_FLY_AWAY = 6,
+    BLARG_SHIP_STATE_HIT_REACTION = 7,
+    BLARG_SHIP_STATE_EXPLODE = 8
+};
+
+enum {
+    HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1
+};
+
 typedef struct Moby Moby;
 extern float        D_0015ED6C;
 extern float        D_0015ED6C, D_0015ED70;
@@ -178,17 +194,6 @@ void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
 
 /* Moby class 1229 */
 void blarg_ship_update(Ship_5E48 *ship) {
-    enum {
-        BLARG_SHIP_STATE_INITIALIZE = 0,
-        BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME = 1,
-        BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH = 2,
-        BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH = 3,
-        BLARG_SHIP_STATE_FIRE_AT_TARGET = 4,
-        BLARG_SHIP_STATE_FIRE_COOLDOWN = 5,
-        BLARG_SHIP_STATE_FLY_AWAY = 6,
-        BLARG_SHIP_STATE_HIT_REACTION = 7,
-        BLARG_SHIP_STATE_EXPLODE = 8
-    };
     ShipD_5E48  *d = ship->d;
     Ship_5E48   *tgt;
     AlignedVec4f A;
@@ -221,14 +226,14 @@ void blarg_ship_update(Ship_5E48 *ship) {
         ship->s34 |= 0x41;
         if (ship->b53 != 0)
             blend_moby_animation(ship, 0, 0, 0);
-        ship->state = 1;
+        ship->state = BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME;
         if (visited52[ship->bB0 + (D_0015ED84 << 4)] != 0xFF)
             break;
         goto del;
     case BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME:
         if (!is_point_inside_clip_volume(&tgt->pos, d->i148))
             break;
-        ship->state = 2;
+        ship->state = BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH;
         if (ship->b53 != 1)
             blend_moby_animation(ship, 1, 0, scale_game_frames(20));
         ship->s34 &= 0xFFBE;
@@ -250,7 +255,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
             blend_moby_animation(ship, 2, 0, scale_game_frames(20));
         ship->pos.z += D_0015ED6C * 4.0f;
         if (fast_vec_dist(&ship->pos, &l10_paths[d->i140]->points[0]) < 0.5f) {
-            ship->state = 3;
+            ship->state = BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH;
             if (ship->b53 != 2)
                 blend_moby_animation(ship, 2, 0, scale_game_frames(10));
         }
@@ -273,14 +278,14 @@ void blarg_ship_update(Ship_5E48 *ship) {
                 d->i158 = n;
             } else {
                 d->i158 = 0;
-                ship->state = 4;
+                ship->state = BLARG_SHIP_STATE_FIRE_AT_TARGET;
                 d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f160 * 60.0f));
             }
         }
         break;
     case BLARG_SHIP_STATE_FIRE_AT_TARGET:
         if (is_point_inside_clip_volume(&(&hero)->motion.pos, d->i1B0)) {
-            ship->state = 6;
+            ship->state = BLARG_SHIP_STATE_FLY_AWAY;
             break;
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
@@ -330,7 +335,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         if (fast_dec_timer(&d->i168)) {
             if (ship->b53 != 2)
                 blend_moby_animation(ship, 2, 0, scale_game_frames(10));
-            ship->state = 5;
+            ship->state = BLARG_SHIP_STATE_FIRE_COOLDOWN;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f164 * 60.0f));
         }
         qcopy(&B, &l10_paths[d->i144]->points[d->i158]);
@@ -345,7 +350,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         break;
     case BLARG_SHIP_STATE_FIRE_COOLDOWN:
         if (is_point_inside_clip_volume(&(&hero)->motion.pos, d->i1B0)) {
-            ship->state = 6;
+            ship->state = BLARG_SHIP_STATE_FLY_AWAY;
             break;
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
@@ -371,7 +376,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         if (fast_dec_timer(&d->i168)) {
             blend_moby_animation(ship, 3, 0, scale_game_frames(10));
             ship->f58 = blarg_ship_firing_animation_speed_gp;
-            ship->state = 4;
+            ship->state = BLARG_SHIP_STATE_FIRE_AT_TARGET;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f160 * 60.0f));
         }
         qcopy(&B, &l10_paths[d->i144]->points[d->i158]);
@@ -399,17 +404,17 @@ void blarg_ship_update(Ship_5E48 *ship) {
         if (!(ship->b70 & 2))
             break;
         pre_hit_state = ship->bBC;
-        if (pre_hit_state == 4) {
+        if (pre_hit_state == BLARG_SHIP_STATE_FIRE_AT_TARGET) {
             blend_moby_animation(ship, 3, 0, scale_game_frames(10));
             ship->f58 = blarg_ship_firing_animation_speed_gp;
             ship->state = pre_hit_state;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f160 * 60.0f));
-        } else if (pre_hit_state == 6) {
+        } else if (pre_hit_state == BLARG_SHIP_STATE_FLY_AWAY) {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
             ship->state = pre_hit_state;
         } else {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
-            ship->state = 5;
+            ship->state = BLARG_SHIP_STATE_FIRE_COOLDOWN;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f164 * 60.0f));
         }
         break;
@@ -495,7 +500,8 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     dmg = 0.0f;
     hit_response_code = resolve_moby_hit_response(
         moby, ship_hit_record, &pvars->unk20, 5, &ship_hit_processing_status, &dmg, 0, 4);
-    if (ship_hit_record != 0 && ship_hit_processing_status != 1 && moby->state != 8) {
+    if (ship_hit_record != 0 && ship_hit_processing_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION &&
+        moby->state != BLARG_SHIP_STATE_EXPLODE) {
         if ((pvars->unk20 -= dmg) <= 0.0f) {
             hit_response_code = 1;
         }
@@ -512,7 +518,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         case LETHAL_HIT_RESPONSE:
             pvars->unkC7 = 0xFA;
             trooper_anim_update(moby, &pvars->anim_state);
-            moby->state = 8;
+            moby->state = BLARG_SHIP_STATE_EXPLODE;
             break;
         case NO_REACTION_HIT_RESPONSE:
             break;
@@ -522,13 +528,13 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
             trooper_anim_update(moby, &pvars->anim_state);
             blend_moby_animation(moby, 4, 0, scale_game_frames(6));
             moby->command = moby->state;
-            moby->state = 7;
+            moby->state = BLARG_SHIP_STATE_HIT_REACTION;
             break;
         }
     }
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, &pvars->anim_state);
-    if (hero.vehicle_mode == 1) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         select_hero_or_gadgebot_target(101.0f, moby, &pvars->unk110);
         if (*(char **)&pvars->unk110 == 0) {
             pvars->unk114 = 2;
