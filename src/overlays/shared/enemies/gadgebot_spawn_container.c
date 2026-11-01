@@ -87,6 +87,9 @@ static inline void transform_point(float *dst, float *src, float (*m)[4]) {
 void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) __asm__("FUN_L06_002d8178");
 
 void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
+    enum {
+        GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
+    };
     int            i;
     int            j;
     char          *moby = moby_ptr;
@@ -144,7 +147,7 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
         }
     }
     MOBY(moby)->collision = 0;
-    MOBY(moby)->state = 2;
+    MOBY(moby)->state = GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL;
     MOBY(moby)->flags |= 1;
     MOBY(moby)->command = (unsigned char)scale_game_frames(15);
 }
