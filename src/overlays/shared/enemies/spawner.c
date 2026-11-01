@@ -123,6 +123,9 @@ int refresh_spawner_population_and_find_free_slot(int   unused,
                                                   char *spawner_vars) __asm__("FUN_L09_0030aae0");
 
 int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars) {
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     int    last = -1;
     int    i;
     char **slot;
@@ -130,7 +133,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
     for (i = 0, slot = (char **)(spawner_vars + 0xB0); i < 20; i++, slot++) {
         char *slot_moby = *slot;
         if (slot_moby != 0 && MOBY(slot_moby)->oclass == 0x75E &&
-            (unsigned char)MOBY(slot_moby)->state != 0xFE &&
+            (unsigned char)MOBY(slot_moby)->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
             (unsigned char)MOBY(slot_moby)->state != 0xFD) {
             spawner_vars[0x91]++;
         } else {
