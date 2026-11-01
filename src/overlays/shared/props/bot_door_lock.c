@@ -249,7 +249,7 @@ void bot_door_lock_update(char *moby) {
         idata[5] = idata[4];
         bot_door_lock_data[6] = random_angle_radians();
         bot_door_lock_data[10] = random_angle_radians();
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = BOT_DOOR_LOCK_STATE_ACTIVE;
         bot_door_lock_data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
@@ -322,7 +322,7 @@ void bot_door_lock_update(char *moby) {
                     activate_bot_door_lock_target(
                         (unsigned char *)moby, (unsigned char *)(level_mobys_q + idata[i] * 0x100));
             }
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = BOT_DOOR_LOCK_STATE_SHRINK_EFFECT;
         }
         break;
     case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:
