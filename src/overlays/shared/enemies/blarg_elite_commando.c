@@ -853,9 +853,12 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
 /* Aim paired joints toward the owner or player, then smooth their rotations. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
 void update_blarg_elite_commando_joint_aim(char *commando_moby) {
+    enum {
+        COMMANDO_PURSUIT_MODE_DISABLED = 2
+    };
     float          position[4], target[4], matrix[16], delta[4], aim[4], aimDelta[4], velocity[4];
     L16DamageData *commando_data = (L16DamageData *)MOBY(commando_moby)->pvars;
-    if (commando_data->pursuit_mode != 2) {
+    if (commando_data->pursuit_mode != COMMANDO_PURSUIT_MODE_DISABLED) {
         float *savedTarget, *savedMatrix;
         float  yaw, pitch;
         qcopy(position, &MOBY(commando_moby)->pos);
