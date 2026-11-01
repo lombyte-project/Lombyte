@@ -31,6 +31,10 @@ void novalis_elevator_update(unsigned char *moby) {
         NOVALIS_ELEVATOR_WAIT_AT_PATH_START = 1,
         NOVALIS_ELEVATOR_TRAVERSE_PATH = 2
     };
+    enum {
+        NOVALIS_ELEVATOR_UNINITIALIZED = 0,
+        NOVALIS_ELEVATOR_INITIALIZED = 1
+    };
     char *elevator_vars = ((char *)MOBY(moby)->pvars);
     char *path;
     float orig[4], delta[4], segment_offset[4];
@@ -71,7 +75,7 @@ void novalis_elevator_update(unsigned char *moby) {
     }
     qcopy(orig, &MOBY(moby)->pos);
     fast_dec_timer_s16(elevator_vars + 0xBA);
-    if (MOBY(moby)->state == 0) {
+    if (MOBY(moby)->state == NOVALIS_ELEVATOR_UNINITIALIZED) {
         float f;
         char *pts;
         elevator_vars[0x28] = 4;
@@ -88,7 +92,7 @@ void novalis_elevator_update(unsigned char *moby) {
         *(short *)(elevator_vars + 0xBA) = 0;
         *(int *)(elevator_vars + 0xA8) = 0;
         *(int *)(elevator_vars + 0xBC) = 0;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = NOVALIS_ELEVATOR_INITIALIZED;
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         *(int *)(elevator_vars + 0xC4) = -1;
