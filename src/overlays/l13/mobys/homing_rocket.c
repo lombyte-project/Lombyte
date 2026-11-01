@@ -43,13 +43,16 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
                                             float scale,
 
                                             float max_speed) {
+    enum {
+        HOMING_ROCKET_STATE_INITIAL = 0
+    };
     unsigned char *moby = (unsigned char *)create_moby(0x52);
     if (moby != 0) {
         Level13HomingRocketVars *homing_rocket_vars = (Level13HomingRocketVars *)MOBY(moby)->pvars;
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;
-        MOBY(moby)->state = 0;
+        MOBY(moby)->state = HOMING_ROCKET_STATE_INITIAL;
         homing_rocket_vars->unk24 = target;
         homing_rocket_vars->unk20 = owner_moby;
         qcopy(moby + 0x10, rocket_spawn_position);
