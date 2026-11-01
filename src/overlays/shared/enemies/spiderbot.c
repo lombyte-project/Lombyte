@@ -96,13 +96,13 @@ void spiderbot_update(unsigned char *moby) {
             MOBY(moby)->anim_speed = moby_data->unk30 / 1.5f;
             moby_data->unk28 = moby_data->unk28 * 0.017453292f;
             if (moby_data->unk20 == 0) {
-                MOBY(moby)->state = 1;
+                MOBY(moby)->state = SPIDERBOT_CIRCULAR_MOTION;
                 moby_data->unk2C = MOBY(moby)->rot.z;
             } else if (moby_data->unk20 >= 3) {
-                MOBY(moby)->state = 2;
+                MOBY(moby)->state = SPIDERBOT_ARC_OSCILLATION;
                 moby_data->unk2C = MOBY(moby)->rot.z;
             } else {
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = SPIDERBOT_LINEAR_OSCILLATION;
             }
             break;
         case SPIDERBOT_CIRCULAR_MOTION: {
