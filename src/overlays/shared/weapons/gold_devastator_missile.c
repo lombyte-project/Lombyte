@@ -414,6 +414,9 @@ unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
                                         float          initial_yaw,
 
                                         float initial_pitch) {
+    enum {
+        DEVASTATOR_MISSILE_STATE_FLYING = 0
+    };
     V_2afc70                   collision_start;
     unsigned char             *missile_moby;
     GoldDevastatorMissileVars *missile_data;
@@ -430,7 +433,7 @@ unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
         MOBY(missile_moby)->visible = 1;
         MOBY(missile_moby)->rot.z = initial_yaw;
         MOBY(missile_moby)->rot.y = initial_pitch;
-        MOBY(missile_moby)->state = 0;
+        MOBY(missile_moby)->state = DEVASTATOR_MISSILE_STATE_FLYING;
         missile_data->unk10 = missile_source_moby;
         qcopy(&MOBY(missile_moby)->pos, spawn_position);
         default_desired_speed = frame_time * 20.0f;
