@@ -139,6 +139,9 @@ void blarg_commander_update(char *m) __asm__("FUN_L12_00308918");
 
 /* Moby class 1371 */
 void blarg_commander_update(char *moby) {
+    enum {
+        BLARG_COMMANDER_STATE_TUMBLING = 1
+    };
     int   moby_state;
     char *moby_pvars;
     char *motion_state;
@@ -147,7 +150,7 @@ void blarg_commander_update(char *moby) {
     char  raised_position[16];
     moby_state = MOBY(moby)->prev_seq;
     moby_pvars = ((char *)MOBY(moby)->pvars);
-    if (moby_state == 1) {
+    if (moby_state == BLARG_COMMANDER_STATE_TUMBLING) {
         motion_state = moby_pvars + 0x20;
         motion_result_flags = step_moby_motion(moby, motion_state);
         mo->vx = fast_add_rotations(mo->vx, frame_time * 4.3633232f);
