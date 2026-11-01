@@ -190,7 +190,7 @@ int run_moby_helper_and_set_state_7(struct Moby *moby) __asm__("FUN_L01_002f1dc8
 
 int run_moby_helper_and_set_state_7(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby->state = 0x7;
+    moby->state = GROUND_ENEMY_STATE_RECOVER_TO_IDLE;
     return helper_result;
 }
 
