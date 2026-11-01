@@ -38,6 +38,9 @@ float       absolute_float(float input) __asm__("func_001F99C0");
 void update_hero_ground_material_flags(void) __asm__("FUN_L12_0022de30");
 
 void update_hero_ground_material_flags(void) {
+    enum {
+        GROUND_MATERIAL_FIXED_WATER_DEPTH = 0xE
+    };
     struct Hero  *hero_for_ground_flags_update = &hero;
     unsigned char saved;
     int           state;
@@ -61,7 +64,7 @@ void update_hero_ground_material_flags(void) {
             }
         }
     }
-    if (state == 0xE) {
+    if (state == GROUND_MATERIAL_FIXED_WATER_DEPTH) {
         struct Hero *hero_for_surface_update = &hero;
         hero_for_surface_update->base_condition = 1;
         hero_for_surface_update->water_depth = 0.2f;
