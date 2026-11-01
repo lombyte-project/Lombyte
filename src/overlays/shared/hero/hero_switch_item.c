@@ -1901,6 +1901,9 @@ s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 
 s32 can_select_hero_item_31(void) {
+    enum {
+        HERO_CONTROL_MODE_JUMP = 4
+    };
     struct Hero *hero_state;
     u32          control_mode;
     if (get_hero_target_pose_status())
@@ -1911,7 +1914,7 @@ s32 can_select_hero_item_31(void) {
     if (hero_state->vehicle_mode)
         return 0;
     control_mode = hero_state->state.control_mode;
-    if (control_mode < 3 || control_mode == 4)
+    if (control_mode < 3 || control_mode == HERO_CONTROL_MODE_JUMP)
         return hero_state->base_condition == 0;
     return 0;
 }
