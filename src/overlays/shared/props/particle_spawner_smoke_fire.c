@@ -131,7 +131,7 @@ extern u8       D_L00_001D2D10_lui[] __asm__("D_L00_001D2D10") NOT_SDA;
 
 V D_L00_001CB7E0[1200] = {0};
 
-u8 D_L00_001D2860[1200] = {0};
+u8 l00_smoke_fire_particle_facing_flip_flags[1200] __asm__("D_L00_001D2860") = {0};
 
 s16 l00_smoke_fire_particle_fade_in_timers[1200] __asm__("D_L00_001D5740") = {0};
 
@@ -175,7 +175,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         for (i = particle_start; i < particle_end_or_emission_index; i++) {
             r = random_integer_below(2);
             D_L00_001CB7E0[i].w = 1.0f;
-            D_L00_001D2860[i] = r;
+            l00_smoke_fire_particle_facing_flip_flags[i] = r;
             reset_smoke_fire_spawner_particle(spawner, i);
             l00_smoke_fire_particle_fade_in_timers[i] = 0;
         }
@@ -184,7 +184,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         for (i = j; i < particle_end_or_emission_index; i++) {
             r = random_integer_below(2);
             D_L00_001CB7E0[i].w = 1.0f;
-            D_L00_001D2860[i] = r;
+            l00_smoke_fire_particle_facing_flip_flags[i] = r;
             FUN_L00_002d7d58_c(spawner, i);
         }
         D_L00_001600EC[q->idx].w = 1.0f;
@@ -291,7 +291,7 @@ void draw_smoke_fire_spawner(P *spawner) {
     for (i = q->start; i < end; i++) {
         phase = D_L00_001D31C0[i] - D_L00_001D4480[i] * frame_scale;
         D_L00_001D31C0[i] = phase;
-        transform = D_L00_001D2860[i] ? flipped : front;
+        transform = l00_smoke_fire_particle_facing_flip_flags[i] ? flipped : front;
         if (phase <= -8.0f) {
             D_L00_001D31C0[i] = phase + 8.0f;
         }
@@ -331,7 +331,7 @@ void draw_smoke_fire_spawner(P *spawner) {
                 if (fast_dec_timer_s16(&D_L00_001D60A0[i])) {
                     reset_smoke_fire_spawner_particle(spawner, i);
                     alpha = 0;
-                    D_L00_001D2860[i] = random_integer_below(2);
+                    l00_smoke_fire_particle_facing_flip_flags[i] = random_integer_below(2);
                 } else {
                     alpha = truncate_float_to_s32(convert_integer_to_float(D_L00_001D60A0[i]) *
                                                   D_L00_0016138C * D_L00_0016199C);
