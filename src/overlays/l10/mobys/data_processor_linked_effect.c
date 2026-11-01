@@ -183,6 +183,9 @@ extern int D_L10_00161D64;
 extern int D_L10_00161D68;
 
 void render_data_processor_linked_effect(u8 *moby) {
+    enum {
+        MOBY_STATE_ACTIVE_WITHOUT_SOUND = 2
+    };
     DataProcessorLinkedEffectVars *linked_effect_render_vars =
         (DataProcessorLinkedEffectVars *)MOBY(moby)->pvars;
     char *linked_processor_vars =
@@ -300,7 +303,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                     (color & 0xffffff) +
                     (truncate_float_to_s32(fade * fade * convert_integer_to_float((int)color >> 24))
                      << 24);
-                if (MOBY(moby)->state == 2) {
+                if (MOBY(moby)->state == MOBY_STATE_ACTIVE_WITHOUT_SOUND) {
                     float alpha = convert_integer_to_float(linked_effect_render_vars->timer_34);
                     float duration =
                         scale_time(data_processor_linked_effect_fade_duration_seconds_gp * 60.0f);
