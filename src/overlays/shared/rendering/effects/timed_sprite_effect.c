@@ -60,6 +60,9 @@ void spawn_timed_projected_sprite_effect(char *world_position,
                                          int   start_color,
 
                                          int end_color) {
+    enum {
+        SPRITE_EFFECT_STATE_ANIMATE = 1
+    };
     OvlQuad        position_copy;
     char          *vp = (char *)&position_copy;
     unsigned char *effect_moby;
@@ -74,7 +77,7 @@ void spawn_timed_projected_sprite_effect(char *world_position,
         *(int *)(effect_data + 0x8) = start_color;
         *(float *)(effect_data + 0x4) = 2.0f / duration_as_float;
         MOBY(effect_moby)->update_dist = 0xFF;
-        MOBY(effect_moby)->state = 1;
+        MOBY(effect_moby)->state = SPRITE_EFFECT_STATE_ANIMATE;
     }
 }
 
