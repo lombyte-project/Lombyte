@@ -1006,7 +1006,10 @@ float         D_L18_00161E2C = 1.125f;
 int is_moby_in_state_one(unsigned char *moby) __asm__("FUN_L00_002d8128");
 
 int is_moby_in_state_one(unsigned char *moby) {
-    return MOBY(moby)->state == 1;
+    enum {
+        NANOTECH_BALL_STATE_FOLLOW_OWNER = 1
+    };
+    return MOBY(moby)->state == NANOTECH_BALL_STATE_FOLLOW_OWNER;
 }
 
 /* Creates a class 0x326 moby linked to p at p's position; 0 when p's state is negative. */
