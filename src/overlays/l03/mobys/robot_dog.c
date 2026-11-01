@@ -549,6 +549,9 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
 
 int can_release_linked_robot_dog(struct Moby *moby) {
+    enum {
+        MOBY_STATE_ALTERNATE_PENDING_REMOVAL = 0xFD
+    };
     unsigned char state;
     char         *partner_pvars;
     partner_pvars = (char *)moby->pvars;
@@ -557,7 +560,7 @@ int can_release_linked_robot_dog(struct Moby *moby) {
     state = moby->state;
     if (state == MOBY_STATE_PENDING_REMOVAL)
         return 0;
-    if (state == 0xFD)
+    if (state == MOBY_STATE_ALTERNATE_PENDING_REMOVAL)
         return 0;
     if (moby->oclass != 0x23E)
         return 0;
