@@ -173,6 +173,9 @@ char *spawn_blarg_elite_commando_rocket(char  *firing_commando_moby,
                                         float *initial_movement_vector,
 
                                         char *spawn_position) {
+    enum {
+        BLARG_ELITE_COMMANDO_ROCKET_STATE_FLYING = 0
+    };
     char *moby = create_moby(0x31);
     if (moby != 0) {
         char *spawned_rocket_data;
@@ -181,7 +184,7 @@ char *spawn_blarg_elite_commando_rocket(char  *firing_commando_moby,
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;
-        MOBY(moby)->state = 0;
+        MOBY(moby)->state = BLARG_ELITE_COMMANDO_ROCKET_STATE_FLYING;
         MOBY(moby)->spawn_frame = *(unsigned long *)(firing_commando_moby + 0x38);
         MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
         qcopy(&MOBY(moby)->pos, spawn_position);
