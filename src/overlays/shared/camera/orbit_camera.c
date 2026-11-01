@@ -237,7 +237,7 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
     char        *target_private_data;
     u128        *pw;
     struct Hero *hero_state;
-    char        *camera_globals;
+    LevelCamera *camera_globals;
     char        *pp;
     char        *cp;
     float        hero_to_camera_bearing_difference, hero_to_camera_distance, x;
@@ -268,14 +268,14 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
         fast_add_rotations(*(float *)(camera_state + 0xAC), *(float *)(target_private_data + 0x18));
     *(float *)(target_private_data + 0x18) *= 0.97f;
     hero_state = &hero;
-    camera_globals = (char *)&l00_camera_lui;
+    camera_globals = &l00_camera_lui;
     pp = &hero_state->motion.pos;
-    cp = camera_globals + 0x140;
+    cp = &camera_globals->pos;
     hero_to_camera_bearing_difference =
-        fast_arc_tan(*(float *)(camera_globals + 0x140) - hero_state->motion.pos.f[0],
-                     *(float *)(camera_globals + 0x144) - hero_state->motion.pos.f[1]);
-    hero_to_camera_bearing_difference = fast_difference_between_rotations(
-        hero_to_camera_bearing_difference, *(float *)(camera_globals + 0x158));
+        fast_arc_tan(camera_globals->pos.f[0] - hero_state->motion.pos.f[0],
+                     camera_globals->pos.f[1] - hero_state->motion.pos.f[1]);
+    hero_to_camera_bearing_difference =
+        fast_difference_between_rotations(hero_to_camera_bearing_difference, camera_globals->yaw);
     hero_to_camera_distance = vector_distance_xy(pp, cp);
     if (hero_to_camera_distance < vector_distance_xy(&hero_state->items[0].moby->pos, cp)) {
         x = vector_distance_xy(pp, cp);
@@ -331,17 +331,16 @@ void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) __as
 
 void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) {
     struct Hero *hero_data = &hero;
-    char        *camera_globals = (char *)&l00_camera;
+    LevelCamera *camera_globals = &l00_camera;
     char        *hero_moby = ((char *)hero_data->moby);
-    float        a = fast_arc_tan(MOBY(hero_moby)->pos.x - *(float *)(camera_globals + 0x140),
-                           MOBY(hero_moby)->pos.y - *(float *)(camera_globals + 0x144));
-    if (fast_difference_between_rotations(*(float *)(camera_globals + 0x158), a) <
-            0.5585053563117981f &&
-        fast_vec_dist(&hero_data->motion.pos, camera_globals + 0x140) < 8.0f) {
-        *(char *)(camera_globals + 0x273) = 0;
+    float        a = fast_arc_tan(MOBY(hero_moby)->pos.x - camera_globals->pos.f[0],
+                           MOBY(hero_moby)->pos.y - camera_globals->pos.f[1]);
+    if (fast_difference_between_rotations(camera_globals->yaw, a) < 0.5585053563117981f &&
+        fast_vec_dist(&hero_data->motion.pos, &camera_globals->pos) < 8.0f) {
+        *(char *)&camera_globals->unk273 = 0;
         *(short *)(camera_object + 0x7E) = 2;
-        *(float *)(camera_globals + 0x294) = 0.018f;
-        *(float *)(camera_globals + 0x288) = 0.018f;
+        camera_globals->unk294 = 0.018f;
+        camera_globals->unk288 = 0.018f;
     } else {
         *(short *)(camera_object + 0x7E) = 4;
     }

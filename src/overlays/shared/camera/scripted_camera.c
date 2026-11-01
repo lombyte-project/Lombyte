@@ -126,8 +126,8 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
 void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
 
 void jet_end_mount(int mode) {
-    char *camera_globals = (char *)&l00_camera_lui;
-    char *current_follow_camera = *(char **)(camera_globals + 0x180);
+    LevelCamera *camera_globals = &l00_camera_lui;
+    char        *current_follow_camera = ((char *)camera_globals->unk180);
     initialize_camera_record_handoff_defaults();
     if (mode == 0) {
         float camera_up_offset[4] __attribute__((aligned(16)));
@@ -141,19 +141,19 @@ void jet_end_mount(int mode) {
         FUN_001f9bf8_2eac18(camera_up_offset, &hero_rotation_matrix[8], 1.2f);
         FUN_001f9a10_2eac18(camera_position, hero_rotation - 0x10, camera_up_offset);
         FUN_001f9a10_2eac18(camera_position, camera_position, camera_backward_offset);
-        *(short *)(*(char **)(camera_globals + 0x180) + 0x8A) = 1;
+        *(short *)(((char *)camera_globals->unk180) + 0x8A) = 1;
     } else if (mode == 2) {
-        *(char *)(camera_globals + 0x273) = 0;
+        *(char *)&camera_globals->unk273 = 0;
         *(short *)(current_follow_camera + 0x7E) = 2;
-        *(float *)(camera_globals + 0x294) = 0.018f;
-        *(float *)(camera_globals + 0x288) = 0.018f;
+        camera_globals->unk294 = 0.018f;
+        camera_globals->unk288 = 0.018f;
     } else if (mode == 1) {
         *(short *)(current_follow_camera + 0x7E) = 3;
     } else if (mode == 4) {
-        *(char *)(camera_globals + 0x273) = 0;
+        *(char *)&camera_globals->unk273 = 0;
         *(short *)(current_follow_camera + 0x7E) = 5;
-        *(float *)(camera_globals + 0x294) = 0.018f;
-        *(float *)(camera_globals + 0x288) = 0.018f;
+        camera_globals->unk294 = 0.018f;
+        camera_globals->unk288 = 0.018f;
     }
 }
 

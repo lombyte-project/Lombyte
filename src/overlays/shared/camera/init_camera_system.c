@@ -119,31 +119,31 @@ extern char active_camera_saved_state_storage[] __asm__("D_L00_00169110");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
 void init_camera_system(void) {
-    char  *camera_system_state = (char *)&l00_camera;
-    float *camera_vector_snapshot, *camera_record_vector_destination, *vector_copy_source,
+    LevelCamera *camera_system_state = &l00_camera;
+    float       *camera_vector_snapshot, *camera_record_vector_destination, *vector_copy_source,
         *vector_copy_destination;
     char *current_camera_record;
-    if (*(char **)(camera_system_state + 0x180) != 0) {
-        *(short *)(*(char **)(camera_system_state + 0x180) + 0x8E) = 0;
-        *(*(char **)(camera_system_state + 0x180) + 0x7D) = 0;
-        *(short *)(*(char **)(camera_system_state + 0x180) + 0x7E) = 0;
+    if (((char *)camera_system_state->unk180) != 0) {
+        *(short *)(((char *)camera_system_state->unk180) + 0x8E) = 0;
+        *(((char *)camera_system_state->unk180) + 0x7D) = 0;
+        *(short *)(((char *)camera_system_state->unk180) + 0x7E) = 0;
     }
-    *(char **)(camera_system_state + 0x180) = find_camera_record_by_id(0);
-    *(short *)(*(char **)(camera_system_state + 0x180) + 0x8E) = 1;
-    *(char **)(*(char **)(camera_system_state + 0x180) + 0x70) = active_camera_saved_state_storage;
-    *(short *)(camera_system_state + 0x270) = 0;
+    camera_system_state->unk180 = find_camera_record_by_id(0);
+    *(short *)(((char *)camera_system_state->unk180) + 0x8E) = 1;
+    *(char **)(((char *)camera_system_state->unk180) + 0x70) = active_camera_saved_state_storage;
+    camera_system_state->unk270 = 0;
     update_camera_tracking_state();
-    camera_run_setup_to_new_cam(*(char **)(camera_system_state + 0x180));
+    camera_run_setup_to_new_cam(((char *)camera_system_state->unk180));
     backup_current_cam();
-    current_camera_record = *(char **)(camera_system_state + 0x180);
-    camera_vector_snapshot = (float *)(camera_system_state + 0x140);
+    current_camera_record = ((char *)camera_system_state->unk180);
+    camera_vector_snapshot = (float *)(&camera_system_state->pos);
     qcopy(camera_vector_snapshot, current_camera_record + 0x30);
     camera_record_vector_destination = (float *)(current_camera_record + 0x64);
     camera_record_vector_destination[0] = camera_vector_snapshot[0];
     camera_record_vector_destination[1] = camera_vector_snapshot[1];
     camera_record_vector_destination[2] = camera_vector_snapshot[2];
     vector_copy_source = (float *)(D_0013E533 + 0xE9D);
-    vector_copy_destination = (float *)(camera_system_state + 0x190);
+    vector_copy_destination = (float *)(&camera_system_state->unk190);
     vector_copy_destination[0] = vector_copy_source[0];
     vector_copy_destination[1] = vector_copy_source[1];
     vector_copy_destination[2] = vector_copy_source[2];
@@ -185,33 +185,33 @@ void       setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern f32 D_L00_0015EF40_gp __asm__("D_L00_0015EF40") __attribute__((sda));
 
 void setup_level_cameras(void) {
-    char        *camera_system_state = (char *)&l00_camera;
-    char        *camera_system_state_alias;
+    LevelCamera *camera_system_state = &l00_camera;
+    LevelCamera *camera_system_state_alias;
     char        *q;
     char        *normalized_hero_vector;
     struct Hero *hero_state;
     int          i;
     int          k;
 
-    *(int *)(camera_system_state + 0x394) = 0;
-    *(int *)(camera_system_state + 0x398) = 0;
+    camera_system_state->unk394 = 0;
+    camera_system_state->unk398 = 0;
     D_L00_0015EF40_gp = 0.75f;
     D_L00_0015EF4C = 0;
     for (k = 0; k < 48; k++) {
         D_L00_00167150[k].s8E = 0;
         level_camera_present_flags[k] = 0;
     }
-    camera_system_state_alias = (char *)&l00_camera;
+    camera_system_state_alias = &l00_camera;
     hero_state = &hero;
-    q = camera_system_state_alias + 0x190;
-    normalized_hero_vector = camera_system_state_alias + 0x1B0;
-    *(int *)(camera_system_state_alias + 0x184) = 0;
-    *(short *)(camera_system_state_alias + 0x270) = 0;
+    q = &camera_system_state_alias->unk190;
+    normalized_hero_vector = &camera_system_state_alias->unk190[32];
+    *(int *)&camera_system_state_alias->unk184 = 0;
+    camera_system_state_alias->unk270 = 0;
     fast_vec_normalize(normalized_hero_vector, (char *)(((int)hero_state->moby) + 0xE0), 1.0f);
-    qcopy(camera_system_state_alias + 0x1C0, normalized_hero_vector);
-    qcopy(camera_system_state_alias + 0x1D0, normalized_hero_vector);
-    clear_u64_value(camera_system_state_alias + 0x1E0);
-    qcopy(camera_system_state_alias + 0x1F0, &hero_state->motion.pos);
+    qcopy(&camera_system_state_alias->unk1C0, normalized_hero_vector);
+    qcopy(&camera_system_state_alias->unk1D0, normalized_hero_vector);
+    clear_u64_value(&camera_system_state_alias->unk1D0[16]);
+    qcopy(&camera_system_state_alias->unk1D0[32], &hero_state->motion.pos);
     {
         float hero_rotation_z = hero_state->motion.rot.f[2];
         float hero_position_z = hero_state->motion.pos.f[2];

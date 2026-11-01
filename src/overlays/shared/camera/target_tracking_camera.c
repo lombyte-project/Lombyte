@@ -335,14 +335,14 @@ void update_target_tracking_camera(char *camera_object) {
         y = ((int)b->grapple_target);
     }
     if (x != y) {
-        char *g = (char *)&l00_camera;
-        char *r = *(char **)(g + 0x184);
+        LevelCamera *g = &l00_camera;
+        char        *r = g->unk184;
         qcopy(r + 0x30, camera_position);
         qcopy(r, camera_object);
         qcopy(r + 0x10, camera_object + 0x10);
         qcopy(r + 0x20, camera_object + 0x20);
         initialize_target_tracking_camera(camera_object);
-        *(int *)(g + 0x2F4) = scale_game_frames(0x2D);
+        g->unk2F4 = scale_game_frames(0x2D);
     }
 done:
     refresh_point_light((int)camera_object);

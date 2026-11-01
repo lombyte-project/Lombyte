@@ -176,13 +176,12 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         return;
     }
     if (params->timer == 0) {
-        u8 *camera_globals = (u8 *)&l00_camera;
+        LevelCamera *camera_globals = &l00_camera;
         params->start_lateral_stiffness =
-            FOLLOW_CAM_STATE(*(struct UpdateCam **)(camera_globals + 0x180))
+            FOLLOW_CAM_STATE(((struct UpdateCam *)camera_globals->unk180))
                 ->follow.lateral_stiffness;
         params->start_lateral_damping =
-            FOLLOW_CAM_STATE(*(struct UpdateCam **)(camera_globals + 0x180))
-                ->follow.lateral_damping;
+            FOLLOW_CAM_STATE(((struct UpdateCam *)camera_globals->unk180))->follow.lateral_damping;
     }
     /* One word over type and timer: type 5 on its first frame snaps the camera. */
     if (*(s32 *)&params->type == 5) {
