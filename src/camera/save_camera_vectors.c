@@ -7,8 +7,11 @@
 void save_camera_vectors(void) __asm__("FUN_001ec7f0");
 
 void save_camera_vectors(void) {
+    enum {
+        CAMERA_TRANSITION_PRIMARY_SOLVER = 0
+    };
     struct CameraTransition *transition = &cam_trans_state;
-    if (transition->kind == 0) {
+    if (transition->kind == CAMERA_TRANSITION_PRIMARY_SOLVER) {
         qcopy(transition->orbit.saved_position, transition->blend.position);
         if (transition->requested_kind == 2) {
             fast_vec_add(
