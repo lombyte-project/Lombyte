@@ -23,7 +23,7 @@ void ocean_umbris_update(unsigned char *moby) {
     switch (MOBY(moby)->state) {
     case OCEAN_UMBRIS_INITIALIZE:
         prepare_scaled_table_with_byte_128(ocean_umbris_scaled_table, 0.66666669f);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = OCEAN_UMBRIS_QUEUE_DRAW_OUTSIDE_CLIP_VOLUME;
         MOBY(moby)->update_dist = 0xFF;
         break;
     case OCEAN_UMBRIS_QUEUE_DRAW_OUTSIDE_CLIP_VOLUME:
