@@ -1572,6 +1572,13 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
     enum {
         HIT_STATUS_SKIP_REACTION = 1
     };
+    enum {
+        SENTRYBOT_INITIALIZE = 0,
+        SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM = 0x10,
+        SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM = 0x11,
+        SENTRYBOT_RECOVERABLE_KNOCKBACK = 0x15,
+        SENTRYBOT_DEATH_KNOCKBACK = 0x17
+    };
     unsigned char *moby = sentrybot_moby;
     SentrybotVars *sentrybot_data = (SentrybotVars *)MOBY(moby)->pvars;
     char          *hit;
@@ -1587,14 +1594,14 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
     int            group;
     unsigned char  seen;
 
-    if (MOBY(moby)->state == 0)
+    if (MOBY(moby)->state == SENTRYBOT_INITIALIZE)
         return;
     MOBY(moby)->scale =
         *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * sentrybot_class_scale_multiplier_gp;
     impact = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
     code = resolve_moby_hit_response(moby, hit, &sentrybot_data->health, 0, &kind, &impact, 0, 4);
-    if (kind != HIT_STATUS_SKIP_REACTION && MOBY(moby)->state != 0x17) {
+    if (kind != HIT_STATUS_SKIP_REACTION && MOBY(moby)->state != SENTRYBOT_DEATH_KNOCKBACK) {
         if ((unsigned char)D_001413F4[0] == 0)
             alert_visible_group_sentrybots(moby);
         sentrybot_data->health -= impact;
@@ -1655,7 +1662,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
                                   &sentrybot_data->knockback.horizontal_speed,
                                   &sentrybot_data->knockback.vertical_speed);
             trooper_start_knockback(moby, &sentrybot_data->knockback, 7, 1, 0, angle);
-            MOBY(moby)->state = 0x15;
+            MOBY(moby)->state = SENTRYBOT_RECOVERABLE_KNOCKBACK;
             MOBY(moby)->command = 2;
             sentrybot_data->unk67 = 0x78;
             break;
@@ -1694,7 +1701,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
                                   &sentrybot_data->knockback.horizontal_speed,
                                   &sentrybot_data->knockback.vertical_speed);
             trooper_start_knockback(moby, &sentrybot_data->knockback, 8, 1, 0, fall_angle);
-            MOBY(moby)->state = 0x17;
+            MOBY(moby)->state = SENTRYBOT_DEATH_KNOCKBACK;
             MOBY(moby)->command = 2;
             sentrybot_data->unk67 = 0xF0;
             break;
@@ -1734,7 +1741,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
         if ((fast_difference_between_rotations(MOBY(moby)->rot.z, target_angle) < 1.5707964f &&
              (sentrybot_target_visibility_height_check_gate[0] == 0 ||
               absolute_float(MOBY(moby)->pos.z - sentrybot_data->unkD0[2]) < 4.0f)) ||
-            MOBY(moby)->state == 0x10 || MOBY(moby)->state == 0x11) {
+            MOBY(moby)->state == SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM || MOBY(moby)->state == SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM) {
             seen = sentrybot_data->has_line_of_sight;
         }
         if (sentrybot_data->unk114 == 1)
