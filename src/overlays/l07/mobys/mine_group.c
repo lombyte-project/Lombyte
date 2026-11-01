@@ -158,10 +158,13 @@ char D_L07_00211580[] =
     "Moby 871 short on mines at %d in group %d compared to mine count in pVar %d\n";
 
 void reset_moby_from_class_defaults(struct Moby *moby) {
+    enum {
+        MOBY_RESET_STATE = 0
+    };
     struct SpawnClassView *class_defaults;
     struct AnimTimer      *animation_timer;
 
-    moby->state = 0;
+    moby->state = MOBY_RESET_STATE;
     class_defaults = (struct SpawnClassView *)moby->pclass;
     moby->command = 0;
     moby->flags = class_defaults->flags;
