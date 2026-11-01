@@ -185,8 +185,11 @@ extern int  D_L00_00173E00[];
 
 enum {
     PAUSE_MENU_PENDING_STATE_CLEARED = 0,
-    SCENE_STATE_DEFAULT = 2,
     PAUSE_MENU_STATE_EXIT_GUARDED = 0x22
+};
+
+enum {
+    SCENE_STATE_DEFAULT = 2
 };
 
 enum {

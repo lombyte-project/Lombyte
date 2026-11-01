@@ -186,7 +186,6 @@ void update_alien_queen_hit_response_and_recovery(char *moby) __asm__("FUN_L06_0
 enum {
     ALIEN_QUEEN_STATE_INITIALIZE = 0,
     ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO = 1,
-    HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1,
     ALIEN_QUEEN_STATE_INTRO = 2,
     ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA = 3,
     ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT = 4,
@@ -201,6 +200,10 @@ enum {
     ALIEN_QUEEN_STATE_RETURN_HOME = 13,
     ALIEN_QUEEN_STATE_DEATH = 14,
     ALIEN_QUEEN_STATE_POST_DEATH = 15
+};
+
+enum {
+    HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1
 };
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */

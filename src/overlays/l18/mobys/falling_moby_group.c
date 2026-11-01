@@ -245,9 +245,12 @@ extern void mark_block_entries_within_transform_xy_bounds(int, int) __asm__("FUN
 
 enum {
     MOBY_INITIALIZE = 0,
-    FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1,
     MOBY_APPROACH_TARGET_TRANSFORM = 2,
     MOBY_FALL_AND_REMOVE = 4
+};
+
+enum {
+    FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1
 };
 
 void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");

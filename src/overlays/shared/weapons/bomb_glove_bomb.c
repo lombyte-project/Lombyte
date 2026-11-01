@@ -22,7 +22,10 @@
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 
 enum {
-    BOMB_STATE_HELD = 0,
+    BOMB_STATE_HELD = 0
+};
+
+enum {
     THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER = 2
 };
 
