@@ -81,7 +81,7 @@ void moby_wobble_update(unsigned char *moby) {
         wobble_vars->unk4C = randf_sym(lo, hi);
         set_moby_color(moby, 0x80, 0x80, 0x80);
         attach_manipulator((char *)moby, 0, wobble_vars);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = MOBY_WOBBLE_STATE_ANIMATE;
         break;
     case MOBY_WOBBLE_STATE_ANIMATE: {
         float k = 0.5235988f;
