@@ -59,7 +59,7 @@ void flickering_point_light_update(u8 *moby) {
         *(s32 *)(effect_vars + 0x68) = -1;
         if (MOBY(moby)->update_dist < truncate_float_to_s32(*(f32 *)(effect_vars + 0x5c)) + 4)
             MOBY(moby)->update_dist = truncate_float_to_s32(*(f32 *)(effect_vars + 0x5c)) + 4;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = EFFECT_STATE_UPDATE;
         return;
     case EFFECT_STATE_UPDATE:
         break;
