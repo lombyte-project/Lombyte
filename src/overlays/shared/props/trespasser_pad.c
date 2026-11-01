@@ -119,7 +119,7 @@ extern int l02_tresspasser_pad_without_tool_glow_color __asm__("D_L02_00161AA4")
     __attribute__((sda));
 extern int l02_tresspasser_pad_tool_equipped_glow_color __asm__("D_L02_00161AA0")
     __attribute__((sda));
-extern char           D_0013E633_2D9F08[] __asm__("D_0013E533");
+extern char D_0013E633_2D9F08[] __asm__("D_0013E533");
 
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 

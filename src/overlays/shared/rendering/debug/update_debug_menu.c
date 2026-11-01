@@ -592,8 +592,10 @@ void update_debug_menu(void) {
                         g_debug_menu.control_mode = DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS;
                 }
                 if (controller_words.buttons.w.pressed & 0x10) {
-                    if (--g_debug_menu.control_mode < DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS)
-                        g_debug_menu.control_mode = DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS;
+                    if (--g_debug_menu.control_mode <
+                        DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS)
+                        g_debug_menu.control_mode =
+                            DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS;
                 }
                 switch (g_debug_menu.control_mode) {
                 case DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS:
