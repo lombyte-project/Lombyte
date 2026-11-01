@@ -774,7 +774,7 @@ void update_hero_item_moby_flags(void) {
     if (hero_flag_target != 0) {
         *(unsigned short *)(hero_flag_target + 0x34) &= ~1;
     }
-    if (blk2->vehicle_mode == 1) {
+    if (blk2->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_flag_target = *(char **)&blk2->unk1624;
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) &= ~1;
