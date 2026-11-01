@@ -740,7 +740,7 @@ void planetbuster_maximus_part_update(char *moby) {
                 D_L12_001FB688[j] = 0;
             moby_data->unk604 = -1;
             moby_data->unk5FC = 100;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = PLANETBUSTER_WAIT_FOR_PATH_TRIGGER;
         }
         break;
     case PLANETBUSTER_WAIT_FOR_PATH_TRIGGER: {
@@ -806,7 +806,7 @@ void planetbuster_maximus_part_update(char *moby) {
                 ((unsigned char *)D_L12_0015FFD8_gp +
                  (*(int *)((u8 *)moby_data + k * 0x30 + 0x20) << 8))[0xA4] = 0xFF;
             }
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = PLANETBUSTER_FOLLOW_PATH;
         }
         break;
     }
@@ -831,7 +831,7 @@ void planetbuster_maximus_part_update(char *moby) {
         } else {
             approach_value(&moby_data->unk5F0, 0.0f, frame_time_sq_macro * 8.0f);
             if (moby_data->unk5F0 == 0.0f) {
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = PLANETBUSTER_POST_PATH_GUN_UPDATE;
                 break;
             }
         }
@@ -981,7 +981,7 @@ void planetbuster_maximus_part_update(char *moby) {
         break;
     }
     update_planetbuster_maximus_glow_color(moby);
-    if ((unsigned char)MOBY(moby)->state >= 1 && (unsigned char)MOBY(moby)->state <= 3) {
+    if ((unsigned char)MOBY(moby)->state >= PLANETBUSTER_WAIT_FOR_PATH_TRIGGER && (unsigned char)MOBY(moby)->state <= PLANETBUSTER_POST_PATH_GUN_UPDATE) {
         if (moby_data->unk604 == -1)
             moby_data->unk604 = allocate_voice_for_target_entry(0, 4, moby);
     } else {
