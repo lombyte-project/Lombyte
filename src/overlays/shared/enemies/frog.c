@@ -33,7 +33,7 @@ typedef struct FrogVars {
     u8             padCA[0x6];
     short         *unkD0;
     u8             padD4[0x4c];
-    u8             unk120[0x10];
+    u8             motion[0x10];
     f32            unk130;
     s32            unk134;
     f32            unk138;
@@ -47,22 +47,22 @@ typedef struct FrogVars {
     unsigned char *unk1C0;
     s32            unk1C4;
     u8             pad1C8[0xc];
-    f32            unk1D4;
-    f32            unk1D8;
+    f32            turn_angle;
+    f32            turn_range_degrees;
     u8             pad1DC[0x8];
     f32            unk1E4;
     s16            unk1E8;
     s16            unk1EA;
     s32            unk1EC;
     u8             pad1F0[0x8];
-    s32            unk1F8;
+    s32            path_index;
     s32            unk1FC;
     s16            unk200;
     s16            unk202;
     u8             pad204[0x4];
-    s16            unk208;
+    s16            path_point;
     s16            unk20A;
-    char          *unk20C;
+    char          *child;
     f32            unk210[4];
     u8             unk220[0x10];
     u8             unk230[0x10];
@@ -297,7 +297,7 @@ void frog_update(unsigned char *moby) {
         qcopy(&data->unk210, &MOBY(moby)->pos);
         qcopy(&data->unk230, &MOBY(moby)->pos);
         qcopy(&data->unk220, moby + 0x40);
-        data->unk208 = 0;
+        data->path_point = 0;
         wait = random_float_between(0.5f, 3.0f);
         data->unk130 = D_0015ED70 * 20.0f;
         data->unk148 = 0;
@@ -311,27 +311,27 @@ void frog_update(unsigned char *moby) {
             char *child;
             MOBY(moby)->state = 1;
             child = create_moby(0x1F4);
-            data->unk20C = child;
+            data->child = child;
             if (child == 0) {
                 mark_moby_for_removal(moby);
                 return;
             }
             *(long *)(child + 0x38) = ((long)MOBY(moby)->spawn_frame);
-            *(unsigned short *)(data->unk20C + 0x34) |= 0x4002;
+            *(unsigned short *)(data->child + 0x34) |= 0x4002;
             {
-                char *child = data->unk20C;
+                char *child = data->child;
                 qcopy(child + 0x10, &MOBY(moby)->pos);
                 qcopy(child + 0x40, moby + 0x40);
                 *(short *)(child + 0x32) = 0x40;
             }
-            (data->unk20C)[0x31] = 1;
-            update_entity(data->unk20C);
+            (data->child)[0x31] = 1;
+            update_entity(data->child);
             MOBY(moby)->flags |= 0x41;
         } else if (data->unk202 != 0) {
             MOBY(moby)->state = 0xF;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags = (MOBY(moby)->flags | 0x41) & 0xEFFF;
-        } else if (data->unk1F8 >= 0) {
+        } else if (data->path_index >= 0) {
             MOBY(moby)->state = 3;
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 0);
@@ -369,7 +369,7 @@ void frog_update(unsigned char *moby) {
     case 4: {
         int *path;
         int  point_count;
-        qcopy(B, (char *)D_L06_001B0C30[data->unk1F8] + data->unk208 * 16 + 0x10);
+        qcopy(B, (char *)D_L06_001B0C30[data->path_index] + data->path_point * 16 + 0x10);
         fast_vec_sub(A, B, &MOBY(moby)->pos);
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, A);
@@ -379,10 +379,10 @@ void frog_update(unsigned char *moby) {
         if (vector_length_xy(A) < 0.5f) {
             float return_speed;
             float dist;
-            path = D_L06_001B0C30[data->unk1F8];
+            path = D_L06_001B0C30[data->path_index];
             point_count = *path;
-            if (data->unk208 < point_count - 2) {
-                data->unk208 = data->unk208 + 1;
+            if (data->path_point < point_count - 2) {
+                data->path_point = data->path_point + 1;
                 return;
             }
             qcopy(&data->unk210, (char *)path + point_count * 16);
@@ -395,7 +395,7 @@ void frog_update(unsigned char *moby) {
             data->unk15D = 3;
             data->unk144 = 5;
             trooper_start_knockback(moby,
-                                    &data->unk120,
+                                    &data->motion,
                                     2,
                                     1,
                                     0,
@@ -407,8 +407,8 @@ void frog_update(unsigned char *moby) {
     }
     case 5:
         set_vector_unit_z(A);
-        blend_frog_rotation_to_facing_frame((char *)moby, A, (float *)(&data->unk120));
-        if (step_moby_motion(moby, &data->unk120) & 1) {
+        blend_frog_rotation_to_facing_frame((char *)moby, A, (float *)(&data->motion));
+        if (step_moby_motion(moby, &data->motion) & 1) {
             MOBY(moby)->state = 7;
             if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, 1);
@@ -417,7 +417,7 @@ void frog_update(unsigned char *moby) {
         }
         break;
     case 6: {
-        int hit = step_moby_motion(moby, &data->unk120);
+        int hit = step_moby_motion(moby, &data->motion);
         if (hit & 1) {
             MOBY(moby)->state = 7;
             if (MOBY(moby)->prev_seq != 3)
@@ -458,12 +458,16 @@ void frog_update(unsigned char *moby) {
             FUN_L06_002e9b60_c(moby, B, 1, 0.3f, 0.3f);
         }
         if (data->unk1C4 != 2 && random_integer_below(9) == 0) {
-            data->unk1D4 = random_float_between(-data->unk1D8, data->unk1D8) * 0.017453292f;
+            data->turn_angle =
+                random_float_between(-data->turn_range_degrees, data->turn_range_degrees) *
+                0.017453292f;
             MOBY(moby)->state = 9;
             if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, 0);
         } else if (data->unk1E8 != 0) {
-            data->unk1D4 = random_float_between(-data->unk1D8, data->unk1D8) * 0.017453292f;
+            data->turn_angle =
+                random_float_between(-data->turn_range_degrees, data->turn_range_degrees) *
+                0.017453292f;
             MOBY(moby)->state = 10;
             if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, 0);
@@ -473,7 +477,7 @@ void frog_update(unsigned char *moby) {
         float angle =
             fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                             *(float *)(target + 0x14) - MOBY(moby)->pos.y),
-                               data->unk1D4);
+                               data->turn_angle);
         B[0] = fast_cos(angle);
         B[1] = fast_sin(angle);
         B[2] = 0.0f;
@@ -495,7 +499,7 @@ void frog_update(unsigned char *moby) {
         float angle =
             fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                             *(float *)(target + 0x14) - MOBY(moby)->pos.y),
-                               data->unk1D4);
+                               data->turn_angle);
         qcopy(C, &MOBY(moby)->pos);
         B[0] = fast_cos(angle);
         B[1] = fast_sin(angle);
@@ -570,7 +574,7 @@ void frog_update(unsigned char *moby) {
         }
         break;
     case 16:
-        if (FUN_L00_002dc9f0(moby, &data->unk120) != 0) {
+        if (FUN_L00_002dc9f0(moby, &data->motion) != 0) {
             MOBY(moby)->state = 8;
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -802,14 +806,8 @@ void destroy_frog_child_moby(struct Moby *moby) {
         *(u128 *)pos = *(u128 *)offset;
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
-        spawn_crate_debris(((void *)frog_vars->unk20C),
-                           debris_velocity,
-                           pos,
-                           D_L06_0015F580,
-                           0x165,
-                           0,
-                           0.3f,
-                           0.6f);
+        spawn_crate_debris(
+            ((void *)frog_vars->child), debris_velocity, pos, D_L06_0015F580, 0x165, 0, 0.3f, 0.6f);
     }
     for (j = 7; j >= 0; j--) {
         float speed = random_float_between(1.0f, 4.0f) * frame_time;
@@ -820,7 +818,7 @@ void destroy_frog_child_moby(struct Moby *moby) {
         *(u128 *)pos = *(u128 *)offset;
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
-        spawn_crate_debris(((void *)frog_vars->unk20C),
+        spawn_crate_debris(((void *)frog_vars->child),
                            debris_velocity,
                            pos,
                            D_L06_0015F580,
@@ -829,8 +827,8 @@ void destroy_frog_child_moby(struct Moby *moby) {
                            0.5f,
                            0.7f);
     }
-    mark_moby_for_removal(((void *)frog_vars->unk20C));
-    *(int *)&frog_vars->unk20C = 0;
+    mark_moby_for_removal(((void *)frog_vars->child));
+    *(int *)&frog_vars->child = 0;
 }
 
 /* Throws D_L06_00161C18 bursts of sparks from around the moby: each burst gets a random heading, speed and rise on top
