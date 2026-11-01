@@ -1,5 +1,5 @@
 #include "sda.h"
-#include "rnc/sdk/kernel/sbrk.h"
+#include "rnc/sdk/kernel.h"
 /*
  * Derived from newlib, which is distributed under permissive BSD-style
  * terms. See THIRD_PARTY_NOTICES.md and licenses/COPYING.NEWLIB.txt.

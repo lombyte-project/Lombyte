@@ -1,4 +1,4 @@
-#include "rnc/sdk/soft_float/__pack_d.h"
+#include "rnc/sdk/soft_float.h"
 #define US_SOFTWARE_GOFAST     1
 #define FINE_GRAINED_LIBRARIES 1
 #define L_mul_df               1

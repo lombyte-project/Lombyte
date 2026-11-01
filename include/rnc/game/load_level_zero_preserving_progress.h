@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_GAME_LOAD_LEVEL_ZERO_PRESERVING_PROGRESS_H
-#define LOMBYTE_RNC_GAME_LOAD_LEVEL_ZERO_PRESERVING_PROGRESS_H
-
-#include "types.h"
-
-void load_level_zero_preserving_progress(s32) __asm__("FUN_00226b08");
-
-#endif /* LOMBYTE_RNC_GAME_LOAD_LEVEL_ZERO_PRESERVING_PROGRESS_H */

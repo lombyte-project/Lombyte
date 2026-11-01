@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
-#include "rnc/sdk/storage/cdvd/sceCdCallback.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 s32 snd_stream_safe_cd_callback(s32 callback) __asm__("FUN_0012ef28");
 

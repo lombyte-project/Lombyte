@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_FIND_POINT_AHEAD_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_FIND_POINT_AHEAD_H
-
-#include "types.h"
-
-int find_point_ahead(char *, char *, float) __asm__("FUN_L01_00274b78");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_FIND_POINT_AHEAD_H */

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SENTRYBOT_ALARM_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SENTRYBOT_ALARM_H
-
-#include "types.h"
-
-void sentrybot_alarm_update(unsigned char *) __asm__("FUN_L15_002cb4c8");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SENTRYBOT_ALARM_H */

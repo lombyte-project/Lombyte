@@ -2,8 +2,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/movies/decoder/decoder_globals.h"
 #include "rnc/movies/player/movie_player.h"
-#include "rnc/movies/decoder/mpeg_cd_stream_close.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/movies/decoder.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern s32 DeleteThread();
 extern s32 RemoveDmacHandler();

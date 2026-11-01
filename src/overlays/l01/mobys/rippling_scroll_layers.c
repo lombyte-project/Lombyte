@@ -6,7 +6,7 @@
 #include "sda.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/overlay/l01/scroll_layer.h"
-#include "rnc/overlay/l01/scroll_layers.h"
+#include "rnc/overlay/l01.h"
 
 extern s32 level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
 

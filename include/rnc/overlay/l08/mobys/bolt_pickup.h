@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOLT_PICKUP_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOLT_PICKUP_H
-
-#include "types.h"
-
-void bolt_pickup_update() __asm__("FUN_L08_002b82a0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOLT_PICKUP_H */

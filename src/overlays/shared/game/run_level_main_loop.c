@@ -37,28 +37,24 @@
 #include "rnc/game/transitions/tick_space_transition.h"
 #include "rnc/streaming/stash/init_stash.h"
 #include "rnc/ui/hud/init_hud.h"
-#include "rnc/audio/music/music_start_track.h"
+#include "rnc/audio/music.h"
 #include "rnc/audio/streaming/read_disc_sectors_and_wait.h"
-#include "rnc/game/dispatch_game_state_update.h"
-#include "rnc/game/update_mode_freeze.h"
-#include "rnc/game/update_resident_gameplay_state.h"
+#include "rnc/game.h"
 #include "rnc/overlay/shared/cutscenes/update_cutscene_playback.h"
-#include "rnc/overlay/shared/game/init_level_runtime_state.h"
-#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
-#include "rnc/overlay/shared/rendering/debug/draw_debug_profiler_if_enabled.h"
-#include "rnc/overlay/shared/rendering/debug/update_debug_menu.h"
+#include "rnc/overlay/shared/game.h"
+#include "rnc/overlay/shared/rendering/debug.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
-#include "rnc/overlay/shared/rendering/frame/frame_roll_counter.h"
+#include "rnc/overlay/shared/rendering/frame.h"
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu.h"
-#include "rnc/overlay/shared/ui/text/draw_dialog_background_and_text.h"
-#include "rnc/overlay/shared/vendor/draw_vendor_inset_quads.h"
+#include "rnc/overlay/shared/ui/text.h"
+#include "rnc/overlay/shared/vendor.h"
 #include "rnc/overlay/shared/vendor/vendor_menu.h"
 #include "rnc/overlay/shared/world/load_level_gameplay.h"
-#include "rnc/rendering/debug/prepare_debug_profiler_render.h"
-#include "rnc/rendering/frame/reset_gs_registers_pr.h"
-#include "rnc/rendering/packets/put_disp_buffer.h"
-#include "rnc/streaming/stash/stash_send_data.h"
-#include "rnc/ui/map/update_map_icons.h"
+#include "rnc/rendering/debug.h"
+#include "rnc/rendering/frame.h"
+#include "rnc/rendering/packets.h"
+#include "rnc/streaming/stash.h"
+#include "rnc/ui/map.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
@@ -153,8 +149,8 @@ void run_level_main_loop(void) {
         item_usage[current_level_index].count++;
     }
     per = 600;
-    if (scale_game_frames(D_0015EEA4) / per > item_usage[current_level_index].unk2) {
-        item_usage[current_level_index].unk2 = scale_game_frames(D_0015EEA4) / 600;
+    if (scale_game_frames(D_0015EEA4) / per > item_usage[current_level_index].latest_time_bucket) {
+        item_usage[current_level_index].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
     }
     item_usage[current_level_index].level_mask =
         item_usage[current_level_index].level_mask | (1 << current_level_index) | 0x80000000;
@@ -312,8 +308,10 @@ void run_level_main_loop(void) {
             init_hud();
         }
         per = 600;
-        if (scale_game_frames(D_0015EEA4) / per > item_usage[current_level_index].unk2) {
-            item_usage[current_level_index].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / per >
+            item_usage[current_level_index].latest_time_bucket) {
+            item_usage[current_level_index].latest_time_bucket =
+                scale_game_frames(D_0015EEA4) / 600;
         }
     }
     do_space_transition();

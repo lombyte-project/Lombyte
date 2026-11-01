@@ -12,7 +12,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/mobys/add_moby_frames_for_group_proximity.h"
+#include "rnc/overlay/shared/mobys.h"
 
 extern void *create_moby() __asm__("FUN_0020c4f8");
 

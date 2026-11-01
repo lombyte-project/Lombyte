@@ -3,7 +3,7 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/ui/text/font/disable_font_color_codes.h"
 #include "rnc/ui/text/font/enable_font_color_codes.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 struct ThreeOptionMenu {
     u8  pad0[0x20];

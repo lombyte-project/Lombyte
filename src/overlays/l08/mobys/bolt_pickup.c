@@ -9,8 +9,8 @@
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/random.h"
-#include "rnc/mobys/animation/queue_animation_update.h"
-#include "rnc/overlay/l08/mobys/spawn_moby_offset_effect.h"
+#include "rnc/mobys/animation.h"
+#include "rnc/overlay/l08/mobys.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002B9438), where it is exact; names translated to the US level program. */
 extern void  copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");

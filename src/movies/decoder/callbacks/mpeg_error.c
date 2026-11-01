@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 struct MpegErrorData {
     u8  pad_0[0x4];

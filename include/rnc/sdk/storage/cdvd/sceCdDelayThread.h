@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_STORAGE_CDVD_SCECDDELAYTHREAD_H
-#define LOMBYTE_RNC_SDK_STORAGE_CDVD_SCECDDELAYTHREAD_H
-
-#include "types.h"
-
-void SceCdDelayThread(int) __asm__("sceCdDelayThread");
-
-#endif /* LOMBYTE_RNC_SDK_STORAGE_CDVD_SCECDDELAYTHREAD_H */

@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/hero.h"
 #include "rnc/overlay/shared/world/collision.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"

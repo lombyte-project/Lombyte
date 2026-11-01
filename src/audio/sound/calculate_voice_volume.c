@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/camera/camera_globals.h"
-#include "rnc/audio/sound/calculate_voice_distance_volume.h"
+#include "rnc/audio/sound.h"
 
 extern f32 fast_vec_dist(s32, u32) __asm__("func_001F9B48");
 

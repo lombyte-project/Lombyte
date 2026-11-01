@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/input/poll_pad_device_state.h"
+#include "rnc/input.h"
 
 void update_primary_pad_state(void) __asm__("FUN_00217a10");
 

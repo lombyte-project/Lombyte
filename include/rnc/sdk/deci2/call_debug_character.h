@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_DECI2_CALL_DEBUG_CHARACTER_H
-#define LOMBYTE_RNC_SDK_DECI2_CALL_DEBUG_CHARACTER_H
-
-#include "types.h"
-
-int CallDebugCharacter(int, int);
-
-#endif /* LOMBYTE_RNC_SDK_DECI2_CALL_DEBUG_CHARACTER_H */

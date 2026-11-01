@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
-#include "rnc/rendering/occlusion/build_occlusion_visibility.h"
+#include "rnc/rendering/occlusion.h"
 
 extern u32 occl_update[] __asm__("D_0018C334");
 extern s32 fill_transfer_words() __asm__("FUN_001f97e8");

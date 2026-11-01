@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/overlay/l01/scroll_layer.h"
-#include "rnc/overlay/l01/scroll_layers.h"
+#include "rnc/overlay/l01.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 

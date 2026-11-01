@@ -5,7 +5,7 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/shared/mobys/compute_advanced_moby_path_position.h"
+#include "rnc/overlay/shared/mobys.h"
 
 extern float fast_vec_dist(void *, void *);
 

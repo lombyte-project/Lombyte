@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/libc/stdio/printf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 extern s32   snd_batch_index __asm__("D_0015ECC0");
 extern s32  *snd_batch_command_buffers[2] __asm__("D_0015ECA0");

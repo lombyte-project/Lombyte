@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/libc/stdio.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 const u8 D_00153980[] = "Too small buffer size for %dx%d picture\n";
 

@@ -1,6 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/dma/wait_dma.h"
-#include "rnc/sdk/system/check_address.h"
+#include "rnc/sdk/dma.h"
+#include "rnc/sdk/system.h"
 
 struct DmaChannelRegs {
     s32 unk0;

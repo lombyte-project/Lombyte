@@ -10,7 +10,7 @@
 #include "sda.h"
 
 #include "qcopy.h"
-#include "rnc/camera/resolve_camera_surface_height.h"
+#include "rnc/camera.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;

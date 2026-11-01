@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-#include "rnc/rendering/texture/pack_image_descriptor.h"
+#include "rnc/rendering/texture.h"
 
 struct Descriptor {
     u8  pad0[0x10];

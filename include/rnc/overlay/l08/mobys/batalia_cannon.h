@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_CANNON_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_CANNON_H
-
-#include "types.h"
-
-void batalia_cannon_update() __asm__("FUN_L08_002e0328");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_CANNON_H */

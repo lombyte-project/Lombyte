@@ -1,5 +1,5 @@
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/rendering/texture/pack_image_descriptor.h"
+#include "rnc/rendering/texture.h"
 #include "rnc/ui/menus/menu_screen.h"
 
 /* Ported from rac1-decomp (src/game/pause.c, func_00223810). */

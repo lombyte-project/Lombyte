@@ -7,7 +7,7 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 #include "rnc/mobys/detach_manipulator.h"
-#include "rnc/mobys/animation/is_value_within_interpolated_window.h"
+#include "rnc/mobys/animation.h"
 
 typedef struct {
     u8 pad0[0x20];

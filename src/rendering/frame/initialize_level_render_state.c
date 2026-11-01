@@ -20,9 +20,9 @@
 #include "rnc/rendering/ties/light_ties.h"
 #include "rnc/rendering/tfrags/light_tfrags.h"
 #include "rnc/ui/text/font/enable_font_color_codes.h"
-#include "rnc/input/reset_pad_history.h"
-#include "rnc/rendering/frame/set_background_color.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/input.h"
+#include "rnc/rendering/frame.h"
+#include "rnc/sdk/debug.h"
 
 typedef struct FRow {
     f32 v[3];

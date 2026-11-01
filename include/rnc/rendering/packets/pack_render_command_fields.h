@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_RENDERING_PACKETS_PACK_RENDER_COMMAND_FIELDS_H
-#define LOMBYTE_RNC_RENDERING_PACKETS_PACK_RENDER_COMMAND_FIELDS_H
-
-#include "types.h"
-
-void pack_render_command_fields(u64 *, u64, u64, u64, u64) __asm__("PackRenderCommandFields");
-
-#endif /* LOMBYTE_RNC_RENDERING_PACKETS_PACK_RENDER_COMMAND_FIELDS_H */

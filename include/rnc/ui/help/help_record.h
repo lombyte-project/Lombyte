@@ -5,8 +5,8 @@
 
 typedef struct {
     u16 count;
-    u16 best;
-    u32 flags;
+    u16 latest_time_bucket;
+    u32 level_flags;
 } HelpRecord;
 
 /* One record per help entry: the level code's clear_help_record_high_bits

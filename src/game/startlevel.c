@@ -10,13 +10,11 @@
 #include "rnc/game/transitions/do_space_transition.h"
 #include "rnc/game/startlevel.h"
 #include "rnc/game/transitions/transition_do_transition.h"
-#include "rnc/rendering/frame/reset_draw_config.h"
-#include "rnc/rendering/frame/set_background_color.h"
-#include "rnc/rendering/texture/reset_gs_texture_allocation.h"
-#include "rnc/save/check_memory_card.h"
-#include "rnc/sdk/debug/debug_print.h"
-#include "rnc/sdk/graph/sce_gs_reset_graph.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/rendering/frame.h"
+#include "rnc/rendering/texture.h"
+#include "rnc/save.h"
+#include "rnc/sdk/debug.h"
+#include "rnc/sdk/graph.h"
 
 typedef struct {
     s32 off;

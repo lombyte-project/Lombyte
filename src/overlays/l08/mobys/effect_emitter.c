@@ -9,7 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/l08/mobys/spawn_moby_offset_effect.h"
+#include "rnc/overlay/l08/mobys.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 void effect_emitter_update(struct Moby *moby) __asm__("FUN_L08_00308c90");

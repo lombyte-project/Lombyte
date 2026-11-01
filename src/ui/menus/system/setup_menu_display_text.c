@@ -3,7 +3,7 @@
 #include "rnc/ui/map/map_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/ui/menus/menu_screen.h"
 

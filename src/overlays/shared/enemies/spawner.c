@@ -17,7 +17,7 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/enemies/spawner_egg.h"
-#include "rnc/overlay/shared/math/random/generate_random_scaled_vector2.h"
+#include "rnc/overlay/shared/math/random.h"
 
 typedef struct SpawnerVars {
     u8    pad0[0x20];

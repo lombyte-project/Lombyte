@@ -25,9 +25,9 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
-#include "rnc/overlay/shared/props/initialize_energy_sphere_holder_vars.h"
+#include "rnc/overlay/shared/props.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
-#include "rnc/overlay/shared/vendor/flag_vendor_item.h"
+#include "rnc/overlay/shared/vendor.h"
 
 extern float vector_length_xy(void *);
 

@@ -9,7 +9,7 @@
 #include "sda.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
-#include "rnc/overlay/l07/mobys/machinegun_turret_projectile.h"
+#include "rnc/overlay/l07/mobys.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");

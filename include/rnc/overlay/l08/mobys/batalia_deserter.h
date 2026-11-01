@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_DESERTER_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_DESERTER_H
-
-#include "types.h"
-
-void batalia_deserter_update() __asm__("FUN_L08_00305270");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_DESERTER_H */

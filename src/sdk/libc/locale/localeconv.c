@@ -1,5 +1,5 @@
 #include "rnc/sdk/library/stdio.h"
-#include "rnc/sdk/libc/locale/_localeconv_r.h"
+#include "rnc/sdk/libc/locale.h"
 
 int *localeconv(void) __asm__("GetStateResourceWrapper");
 

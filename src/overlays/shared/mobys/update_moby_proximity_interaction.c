@@ -13,7 +13,7 @@
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/overlay/shared/ui/help/remove_help_message_for_selector.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/rendering/mobys/render_environment_mapped_object.h"
+#include "rnc/rendering/mobys.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern int           D_L00_0015F5C4;

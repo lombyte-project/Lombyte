@@ -10,16 +10,12 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 
-typedef struct {
-    u16 count;
-    u16 best;
-    u32 flags;
-} VendorEventRecord;
+#include "rnc/ui/help/help_record.h"
 
 #include "rnc/game/item_state.h"
 
-extern VendorEventRecord help_records[] __asm__("D_00141968");
-extern void              help_request(s32, s32) __asm__("FUN_L00_00203908");
+extern HelpRecord help_records[] __asm__("D_00141968");
+extern void       help_request(s32, s32) __asm__("FUN_L00_00203908");
 
 typedef struct {
     s32 first;
@@ -61,14 +57,14 @@ void help_hints_update(struct Moby *moby) {
     }
     if (item_available[29] == 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->first)) {
-            elapsed = scale_game_frames(D_0015EEA4) - help_records[48].best * 600;
+            elapsed = scale_game_frames(D_0015EEA4) - help_records[48].latest_time_bucket * 600;
             if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed ||
-                help_records[48].best * 600 == 0) {
+                help_records[48].latest_time_bucket * 600 == 0) {
                 help_request(8000, 0x30);
             } else {
                 time = scale_game_frames(D_0015EEA4) / 600;
-                if (help_records[48].best < time)
-                    help_records[48].best = scale_game_frames(D_0015EEA4) / 600;
+                if (help_records[48].latest_time_bucket < time)
+                    help_records[48].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
         }
     }
@@ -76,36 +72,36 @@ void help_hints_update(struct Moby *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->first) &&
             alternate_item_available[47] == 0) {
             if (help_records[49].count != 0) {
-                elapsed = scale_game_frames(D_0015EEA4) - help_records[49].best * 600;
+                elapsed = scale_game_frames(D_0015EEA4) - help_records[49].latest_time_bucket * 600;
                 if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed ||
-                    help_records[49].best * 600 == 0) {
+                    help_records[49].latest_time_bucket * 600 == 0) {
                     help_request(8001, 0x31);
                 } else {
                     time = scale_game_frames(D_0015EEA4) / 600;
-                    if (help_records[49].best < time)
-                        help_records[49].best = scale_game_frames(D_0015EEA4) / 600;
+                    if (help_records[49].latest_time_bucket < time)
+                        help_records[49].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                 }
             } else {
                 help_records[49].count++;
                 time = scale_game_frames(D_0015EEA4) / 600;
-                if (help_records[49].best < time)
-                    help_records[49].best = scale_game_frames(D_0015EEA4) / 600;
-                help_records[49].flags =
-                    help_records[49].flags | (1 << current_level_index) | 0x80000000;
+                if (help_records[49].latest_time_bucket < time)
+                    help_records[49].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
+                help_records[49].level_flags =
+                    help_records[49].level_flags | (1 << current_level_index) | 0x80000000;
             }
         }
     }
     if (item_available[28] == 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->second) &&
             D_0013DD4A != 0) {
-            elapsed = scale_game_frames(D_0015EEA4) - help_records[50].best * 600;
+            elapsed = scale_game_frames(D_0015EEA4) - help_records[50].latest_time_bucket * 600;
             if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed ||
-                help_records[50].best * 600 == 0) {
+                help_records[50].latest_time_bucket * 600 == 0) {
                 help_request(8002, 0x32);
             } else {
                 time = scale_game_frames(D_0015EEA4) / 600;
-                if (help_records[50].best < time)
-                    help_records[50].best = scale_game_frames(D_0015EEA4) / 600;
+                if (help_records[50].latest_time_bucket < time)
+                    help_records[50].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             goto sample_volume;
         }
@@ -114,22 +110,23 @@ void help_hints_update(struct Moby *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->second) &&
             D_0013DD4A != 0) {
             if (help_records[112].count != 0) {
-                elapsed = scale_game_frames(D_0015EEA4) - help_records[112].best * 600;
+                elapsed =
+                    scale_game_frames(D_0015EEA4) - help_records[112].latest_time_bucket * 600;
                 if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed ||
-                    help_records[112].best * 600 == 0) {
+                    help_records[112].latest_time_bucket * 600 == 0) {
                     help_request(8005, 0x70);
                 } else {
                     time = scale_game_frames(D_0015EEA4) / 600;
-                    if (help_records[112].best < time)
-                        help_records[112].best = scale_game_frames(D_0015EEA4) / 600;
+                    if (help_records[112].latest_time_bucket < time)
+                        help_records[112].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                 }
             } else {
                 help_records[112].count++;
                 time = scale_game_frames(D_0015EEA4) / 600;
-                if (help_records[112].best < time)
-                    help_records[112].best = scale_game_frames(D_0015EEA4) / 600;
-                help_records[112].flags =
-                    help_records[112].flags | (1 << current_level_index) | 0x80000000;
+                if (help_records[112].latest_time_bucket < time)
+                    help_records[112].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
+                help_records[112].level_flags =
+                    help_records[112].level_flags | (1 << current_level_index) | 0x80000000;
             }
         }
     }

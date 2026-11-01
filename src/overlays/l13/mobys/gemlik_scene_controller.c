@@ -9,7 +9,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
+#include "rnc/overlay/shared/game.h"
 
 extern int D_L13_0015F5C4;
 

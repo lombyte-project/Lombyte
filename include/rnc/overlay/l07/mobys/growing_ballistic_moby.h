@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L07_MOBYS_GROWING_BALLISTIC_MOBY_H
-#define LOMBYTE_RNC_OVERLAY_L07_MOBYS_GROWING_BALLISTIC_MOBY_H
-
-#include "types.h"
-
-char *spawn_growing_ballistic_moby(char *, char *, int) __asm__("FUN_L07_0030e370");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L07_MOBYS_GROWING_BALLISTIC_MOBY_H */

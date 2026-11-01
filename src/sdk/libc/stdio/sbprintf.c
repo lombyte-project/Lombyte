@@ -9,7 +9,7 @@
 
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
-#include "rnc/sdk/libc/stdio/fflush.h"
+#include "rnc/sdk/libc/stdio.h"
 
 typedef char *va_list;
 

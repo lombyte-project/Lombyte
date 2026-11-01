@@ -10,7 +10,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/rendering/mesh_batch.h"
-#include "rnc/overlay/shared/rendering/effects/draw_scrolled_mesh_batch.h"
+#include "rnc/overlay/shared/rendering/effects.h"
 #include "rnc/rendering/effect_texture.h"
 
 typedef struct Moby Moby;

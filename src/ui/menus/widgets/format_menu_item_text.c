@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/ui/map/map_state.h"
 #include "rnc/ui/map/map_icon.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 struct Weapon {
     s32 name;

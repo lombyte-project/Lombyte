@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 extern u8 dmac_bus_error_message[] __asm__("D_001E8A08");
 extern u8 dma1_register_values_format[] __asm__("D_001E8A20");

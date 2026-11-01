@@ -9,7 +9,7 @@
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/world/cuboid.h"
-#include "rnc/overlay/l05/mobys/taxi.h"
+#include "rnc/overlay/l05/mobys.h"
 
 typedef struct TaxiVars {
     u8   pad0[0x60];

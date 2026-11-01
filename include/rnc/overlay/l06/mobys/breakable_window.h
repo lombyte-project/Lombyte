@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_H
-#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_H
-
-#include "types.h"
-
-void breakable_window_update(char *) __asm__("FUN_L06_002ffcb0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_H */

@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/hero.h"
 #include "rnc/overlay/shared/world/collision.h"
 #include "sda.h"
 #include "rnc/mobys/get_moby_target_info.h"
@@ -14,7 +14,7 @@
 #include "rnc/overlay/shared/camera/find_camera_collision_volume_for_point.h"
 #include "rnc/sdk/library/sceVu0Normalize.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/camera/resolve_camera_surface_height.h"
+#include "rnc/camera.h"
 
 typedef struct {
     char pad[0x24];

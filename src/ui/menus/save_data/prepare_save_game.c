@@ -7,8 +7,8 @@
 #include "rnc/save/memory_card_state.h"
 #include "rnc/globals.h"
 #include "rnc/ui/map/copy_level_object_positions.h"
-#include "rnc/sdk/scf/sce_scf_get_local_timefrom_rtc.h"
-#include "rnc/sdk/storage/cdvd/scecdreadclock.h"
+#include "rnc/sdk/scf.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern void memcard_make_whole_save(char *out) __asm__("func_0020ABB0");
 extern void prepare_save_game(int, int) __asm__("FUN_002269c0");

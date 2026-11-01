@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TRACKDRIVE_LEFT_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TRACKDRIVE_LEFT_H
-
-#include "types.h"
-
-void trackdrive_left_update(char *) __asm__("FUN_L02_002cb978");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TRACKDRIVE_LEFT_H */

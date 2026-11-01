@@ -3,7 +3,7 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/rendering/packets/emit_textured_rectangle.h"
+#include "rnc/rendering/packets.h"
 
 struct Glyph {
     u8 u;

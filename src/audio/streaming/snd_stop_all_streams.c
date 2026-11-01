@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/audio/rpc/snd_send_iop_command_no_wait.h"
+#include "rnc/audio/rpc.h"
 
 void snd_stop_all_streams(void) __asm__("FUN_0012ebd0");
 

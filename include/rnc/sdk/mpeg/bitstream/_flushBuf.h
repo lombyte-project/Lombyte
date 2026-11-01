@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_BITSTREAM__FLUSHBUF_H
-#define LOMBYTE_RNC_SDK_MPEG_BITSTREAM__FLUSHBUF_H
-
-#include "types.h"
-
-void _flushBuf(s32 *, s32);
-
-#endif /* LOMBYTE_RNC_SDK_MPEG_BITSTREAM__FLUSHBUF_H */

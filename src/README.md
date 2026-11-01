@@ -37,6 +37,8 @@ Rules:
   in `assembly/` or in the boot tree; at most three folders deep
   (`overlays/shared/` and `overlays/lNN/` count as the top).
 - Headers mirror the source path under `include/rnc/` (`include/rnc/overlay/` for level code).
+  The prototypes of one source folder share one header named after it
+  (`src/audio/decoder/*.c` → `include/rnc/audio/decoder.h`); types keep their own headers.
 
 Each file's owner path in `config/us/rnc1.us.yaml` must match its location.
 Moving or renaming a file follows [docs/contributing/code-cleanup.md](../docs/contributing/code-cleanup.md).

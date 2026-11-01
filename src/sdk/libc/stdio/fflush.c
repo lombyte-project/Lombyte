@@ -1,6 +1,5 @@
 #include "sda.h"
-#include "rnc/sdk/libc/stdio/fwalk.h"
-#include "rnc/sdk/libc/stdio/sinit.h"
+#include "rnc/sdk/libc/stdio.h"
 /*
  * Copyright (c) 1990 The Regents of the University of California.
  * All rights reserved.

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_SYSTEM_SYSBIT_GET_H
-#define LOMBYTE_RNC_SDK_SYSTEM_SYSBIT_GET_H
-
-#include "types.h"
-
-s32 _sysbitGet(s32, s32);
-
-#endif /* LOMBYTE_RNC_SDK_SYSTEM_SYSBIT_GET_H */

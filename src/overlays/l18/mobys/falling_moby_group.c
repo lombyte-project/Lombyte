@@ -33,7 +33,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/l18/mobys/child_carrier.h"
+#include "rnc/overlay/l18/mobys.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 

@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
-#include "rnc/sdk/kernel/i_wakeup_thread.h"
+#include "rnc/sdk/kernel.h"
 
 /* Packet, server, and queue are handled as words to preserve the retail
  * copy order. The indices below are byte offsets divided by four. */

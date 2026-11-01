@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_HELIPACK_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_HELIPACK_H
-
-#include "types.h"
-
-void helipack_update(char *) __asm__("FUN_L00_002d37d0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_HELIPACK_H */

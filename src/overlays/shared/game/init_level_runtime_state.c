@@ -12,7 +12,7 @@
 #include "rnc/rendering/vu1/vu1_init_chain.h"
 #include "rnc/runtime/memory/init_mem_slots.h"
 #include "rnc/rendering/vu1/dmac_vif1_enable.h"
-#include "rnc/overlay/shared/rendering/effects/register_part_types.h"
+#include "rnc/overlay/shared/rendering/effects.h"
 
 extern u8   D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
 extern char D_L00_001C5B00_lui[] __asm__("D_L00_001C5B00") NOT_SDA;

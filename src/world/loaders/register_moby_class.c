@@ -1,7 +1,7 @@
 #include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/mobys/assign_moby_class_data.h"
+#include "rnc/mobys.h"
 
 /* Class data block of a moby class in the level file (not a Moby instance). */
 typedef struct MobyClassData {

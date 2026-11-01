@@ -1,8 +1,8 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/rendering/dma_tag.h"
-#include "rnc/sdk/dma/sce_dma_reset.h"
-#include "rnc/sdk/graph/sce_gs_reset_graph.h"
+#include "rnc/sdk/dma.h"
+#include "rnc/sdk/graph.h"
 
 extern s32          pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern s32          D_0015EE78[] MACRO_ADDR;

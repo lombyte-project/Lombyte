@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_BUILD_PAUSE_ITEM_LIST_H
-#define LOMBYTE_RNC_UI_MENUS_PAUSE_BUILD_PAUSE_ITEM_LIST_H
-
-#include "types.h"
-
-int build_pause_item_list(void) __asm__("FUN_002215f8");
-
-#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_BUILD_PAUSE_ITEM_LIST_H */

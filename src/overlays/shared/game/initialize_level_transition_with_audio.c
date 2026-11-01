@@ -14,8 +14,8 @@
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/voices/sound_update.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
-#include "rnc/overlay/shared/mobys/update_moby_proximity_interaction.h"
-#include "rnc/overlay/shared/streaming/load_scene_chunks_with_fade.h"
+#include "rnc/overlay/shared/mobys.h"
+#include "rnc/overlay/shared/streaming.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effect_texture.h"
 

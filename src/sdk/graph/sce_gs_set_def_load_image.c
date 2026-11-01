@@ -3,7 +3,7 @@
 #include "rnc/sdk/libgraph.h"
 #include "rnc/sdk/eetypes.h"
 #include "rnc/sdk/kernel.h"
-#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/deci2.h"
 
 s32 sceGsSetDefLoadImage(sceGsLoadImage *image,
                          s16             destination_base,

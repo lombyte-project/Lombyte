@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_screen.h"
-#include "rnc/ui/map/level_selection/draw_level_selection_map.h"
+#include "rnc/ui/map/level_selection.h"
 
 s32 draw_level_selection_map_screen(struct MenuScreen *menu) __asm__("FUN_00221930");
 

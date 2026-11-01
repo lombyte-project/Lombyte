@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/ipu_command_table.h"
-#include "rnc/sdk/ipu/wait_ipu_idle64.h"
-#include "rnc/sdk/mpeg/api/dispatch_mpeg_cb_nodata.h"
+#include "rnc/sdk/ipu.h"
+#include "rnc/sdk/mpeg/api.h"
 
 typedef struct NextBitContext {
     u8  pad_0[0x818];

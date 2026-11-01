@@ -3,7 +3,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/mobys/init_moby_class_dists.h"
 #include "rnc/rendering/mobys/draw_mobys_clean_up.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 extern u8   vu_chain_overflow_message[] __asm__("D_001E8400");
 extern s32  D_0018A2D8[];

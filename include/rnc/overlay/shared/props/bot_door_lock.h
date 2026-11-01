@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_BOT_DOOR_LOCK_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_BOT_DOOR_LOCK_H
-
-#include "types.h"
-
-void bot_door_lock_update(char *) __asm__("FUN_L06_00307d30");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_BOT_DOOR_LOCK_H */

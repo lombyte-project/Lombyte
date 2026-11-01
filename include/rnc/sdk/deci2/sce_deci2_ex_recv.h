@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_EX_RECV_H
-#define LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_EX_RECV_H
-
-#include "types.h"
-
-s32 SceDeci2ExRecv(s32, void *, u16);
-
-#endif /* LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_EX_RECV_H */

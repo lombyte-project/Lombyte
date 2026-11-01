@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_DEMUX_TYPE2ID_H
-#define LOMBYTE_RNC_SDK_MPEG_DEMUX_TYPE2ID_H
-
-#include "types.h"
-
-u64 _type2id(s32, s32);
-
-#endif /* LOMBYTE_RNC_SDK_MPEG_DEMUX_TYPE2ID_H */

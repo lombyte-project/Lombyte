@@ -2,8 +2,8 @@
 #include "sda.h"
 #include "types.h"
 #include "rnc/ui/map/copy_level_object_positions.h"
-#include "rnc/sdk/scf/sce_scf_get_local_timefrom_rtc.h"
-#include "rnc/sdk/storage/cdvd/scecdreadclock.h"
+#include "rnc/sdk/scf.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern int  memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
 extern void save_map_coverage(void *) __asm__("func_00207B08");

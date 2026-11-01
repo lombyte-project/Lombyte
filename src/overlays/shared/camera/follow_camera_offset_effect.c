@@ -6,7 +6,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/camera/follow_cam.h"
-#include "rnc/overlay/shared/camera/register_camera_update_callback.h"
+#include "rnc/overlay/shared/camera.h"
 
 typedef struct {
     int   a;

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/interrupts.h"
 
 typedef struct {
     s32   pid;

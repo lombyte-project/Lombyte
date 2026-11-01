@@ -1,9 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_SPAWN_OWNER_TARGET_PARTICLE_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_SPAWN_OWNER_TARGET_PARTICLE_H
-
-#include "types.h"
-
-unsigned char *create_type_47_particle(
-    void *, float *, float *, int, int, int, int, int, char *) __asm__("FUN_L15_002647f0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_SPAWN_OWNER_TARGET_PARTICLE_H */

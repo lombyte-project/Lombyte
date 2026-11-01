@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libmc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 struct McGetInfoRequest {
     u8  pad_0[0x4];

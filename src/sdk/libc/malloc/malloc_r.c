@@ -1,4 +1,4 @@
-#include "rnc/sdk/libc/malloc/malloc_extend_top.h"
+#include "rnc/sdk/libc/malloc.h"
 /* _malloc_r exact recovery: the smallbin branch expresses bck/bin_at(0) from the unsorted-bin
    head (u8*)&D_0012F790 - 8 so the compiler keeps &D_0012F790 in a1 and derives the bins base
    with `addiu a1,a1,-8`, matching retail's register reuse and store order. */

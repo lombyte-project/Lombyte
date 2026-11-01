@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_DEPLANETIZER_GUN_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_DEPLANETIZER_GUN_H
-
-#include "types.h"
-
-void deplanetizer_gun_update() __asm__("FUN_L18_002f7ad8");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_DEPLANETIZER_GUN_H */

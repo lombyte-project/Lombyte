@@ -1,6 +1,6 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
-#include "rnc/sdk/mpeg/picture/_pictureData0.h"
+#include "rnc/sdk/mpeg/errors.h"
+#include "rnc/sdk/mpeg/picture.h"
 
 struct MpegReferenceImage;
 

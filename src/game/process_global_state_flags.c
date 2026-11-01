@@ -7,7 +7,7 @@
 
 #include "rnc/input/pad_state.h"
 #include "rnc/data_labels.h"
-#include "rnc/game/transitions/request_space_load.h"
+#include "rnc/game/transitions.h"
 
 extern u8   preserved_gold_bolt_flags[] __asm__("D_0014BF08");
 extern u8   circle_target_menu_page[] __asm__("D_001D4EC0");

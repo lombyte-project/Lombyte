@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_DMA_SET_D4_CHCR_VARIANT_H
-#define LOMBYTE_RNC_SDK_DMA_SET_D4_CHCR_VARIANT_H
-
-#include "types.h"
-
-void SetD4ChcrVariant(s32);
-
-#endif /* LOMBYTE_RNC_SDK_DMA_SET_D4_CHCR_VARIANT_H */

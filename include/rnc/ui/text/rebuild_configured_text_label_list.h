@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_TEXT_REBUILD_CONFIGURED_TEXT_LABEL_LIST_H
-#define LOMBYTE_RNC_UI_TEXT_REBUILD_CONFIGURED_TEXT_LABEL_LIST_H
-
-#include "types.h"
-
-s32 rebuild_configured_text_label_list(void) __asm__("FUN_0021a1e0");
-
-#endif /* LOMBYTE_RNC_UI_TEXT_REBUILD_CONFIGURED_TEXT_LABEL_LIST_H */

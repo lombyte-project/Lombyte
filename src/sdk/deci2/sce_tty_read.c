@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/rpc/rpc/queue_peek_read_done.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 typedef struct {
     u8           pad_0[4];

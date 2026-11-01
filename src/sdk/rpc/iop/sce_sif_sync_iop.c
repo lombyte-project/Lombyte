@@ -1,4 +1,4 @@
-#include "rnc/sdk/kernel/clear_tty_initialized.h"
+#include "rnc/sdk/kernel.h"
 
 int sceSifGetReg(int register_number) __asm__("sceSifGetReg");
 

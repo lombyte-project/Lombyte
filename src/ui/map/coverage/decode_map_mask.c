@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/ui/map/coverage/decode_map_rle_row.h"
+#include "rnc/ui/map/coverage.h"
 
 void decode_map_mask(u8  *mask_dst,
                      s32  compressed_data_base,

@@ -1,11 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/api/dispatch_mpeg_cb_nodata.h"
-#include "rnc/sdk/mpeg/api/sce_mpeg_flush.h"
-#include "rnc/sdk/mpeg/headers/next_header.h"
-#include "rnc/sdk/mpeg/picture/decpicture.h"
-#include "rnc/sdk/mpeg/ref_images/_updateRefImage.h"
-#include "rnc/sdk/mpeg/ref_images/outputframe.h"
+#include "rnc/sdk/mpeg/api.h"
+#include "rnc/sdk/mpeg/headers.h"
+#include "rnc/sdk/mpeg/picture.h"
+#include "rnc/sdk/mpeg/ref_images.h"
 
 s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 skip_threshold) {
     struct MpegDecoder *mpeg_decoder;

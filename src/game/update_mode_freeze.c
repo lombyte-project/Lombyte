@@ -7,8 +7,8 @@
 #include "rnc/game/options.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/audio/voices/snd_continue_all_sounds_in_group.h"
-#include "rnc/game/transitions/request_space_load.h"
-#include "rnc/runtime/decrement_resource_counter.h"
+#include "rnc/game/transitions.h"
+#include "rnc/runtime.h"
 
 extern u16  D_0013E05A[];
 extern u8   saved_camera_vectors[] __asm__("D_00141050");

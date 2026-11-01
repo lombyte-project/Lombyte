@@ -14,8 +14,7 @@
 #include "rnc/overlay/l06/scripted_camera_sequence.h"
 #include "rnc/overlay/l06/mobys/countdown_sequence_globals.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/l06/mobys/draw_pulsing_timer_display.h"
-#include "rnc/overlay/l06/mobys/spark_emitter.h"
+#include "rnc/overlay/l06/mobys.h"
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 
 extern int D_L06_001ABFC0_u[] __asm__("D_L06_001ABFC0");

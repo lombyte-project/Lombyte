@@ -1,7 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/deci2/kprintf.h"
-#include "rnc/sdk/deci2/sce_deci2_ex_recv.h"
-#include "rnc/sdk/deci2/sce_deci2_ex_send.h"
+#include "rnc/sdk/deci2.h"
 
 typedef struct {
     u8  pad0[0xC];

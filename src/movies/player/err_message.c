@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 extern u8 movie_error_message[] __asm__("D_001611F8");
 void      err_message(s32 error_code) __asm__("FUN_0023ab78");

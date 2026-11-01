@@ -6,7 +6,7 @@
 #include "rnc/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/rendering/packets/write_vif_unpack_packet.h"
+#include "rnc/rendering/packets.h"
 
 struct Locals {
     u8  pad0[0x30];

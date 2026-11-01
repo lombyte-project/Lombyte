@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_AUDIO_VOICES_SND_PLAY_SOUND_VOL_PAN_PMPB_H
-#define LOMBYTE_RNC_AUDIO_VOICES_SND_PLAY_SOUND_VOL_PAN_PMPB_H
-
-#include "types.h"
-
-void snd_play_sound_vol_pan_pmpb(s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_0012e308");
-
-#endif /* LOMBYTE_RNC_AUDIO_VOICES_SND_PLAY_SOUND_VOL_PAN_PMPB_H */

@@ -14,7 +14,7 @@
 #include "rnc/overlay/l06/hero/hero_set_state.h"
 #include "rnc/overlay/l06/scripted_camera_sequence.h"
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
-#include "rnc/overlay/shared/props/spinning_fragment.h"
+#include "rnc/overlay/shared/props.h"
 
 extern float          D_L06_00167540[];
 extern void           draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");

@@ -5,7 +5,7 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/shared/camera/follow_camera_turn_and_pitch.h"
+#include "rnc/overlay/shared/camera.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 
 typedef struct {

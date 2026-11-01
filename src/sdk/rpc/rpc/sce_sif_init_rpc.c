@@ -1,13 +1,8 @@
 #include "types.h"
 #include "rnc/runtime/core_state.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_add_cmd_handler.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_get_sreg.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_init_cmd.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_send_cmd_public.h"
-#include "rnc/sdk/rpc/rpc/request_bind.h"
-#include "rnc/sdk/rpc/rpc/request_end.h"
-#include "rnc/sdk/rpc/rpc/request_rdata.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/rpc/cmd.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 typedef struct {
     s32   pid;

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_AUDIO_EFFECTS_SND_PRE_ALLOC_REVERB_WORK_AREA_H
-#define LOMBYTE_RNC_AUDIO_EFFECTS_SND_PRE_ALLOC_REVERB_WORK_AREA_H
-
-#include "types.h"
-
-void snd_pre_alloc_reverb_work_area(s32, s32) __asm__("FUN_0012efa8");
-
-#endif /* LOMBYTE_RNC_AUDIO_EFFECTS_SND_PRE_ALLOC_REVERB_WORK_AREA_H */

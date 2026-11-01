@@ -14,7 +14,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/text/font/disable_font_color_codes.h"
 #include "rnc/ui/text/font/enable_font_color_codes.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 extern int  panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
 extern int  text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));

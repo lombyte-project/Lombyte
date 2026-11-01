@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_STORAGE_FILEIO_SCEREAD_H
-#define LOMBYTE_RNC_SDK_STORAGE_FILEIO_SCEREAD_H
-
-#include "types.h"
-
-s32 sceRead(s32, void *, s32);
-
-#endif /* LOMBYTE_RNC_SDK_STORAGE_FILEIO_SCEREAD_H */

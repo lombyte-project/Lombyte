@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L00_MOBYS_CUTSCENE_EFFECTS_H
-#define LOMBYTE_RNC_OVERLAY_L00_MOBYS_CUTSCENE_EFFECTS_H
-
-#include "types.h"
-
-void phase_effect_controller_update() __asm__("FUN_L00_002e3800");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L00_MOBYS_CUTSCENE_EFFECTS_H */

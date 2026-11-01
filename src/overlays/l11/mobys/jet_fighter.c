@@ -544,8 +544,8 @@ void draw_ship_hud(struct Moby *moby) {
         if (help_records[0x58].count < 0xFFFF) {
             help_records[0x58].count++;
         }
-        if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x58].unk2) {
-            help_records[0x58].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x58].latest_time_bucket) {
+            help_records[0x58].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
         }
         help_records[0x58].level_mask =
             help_records[0x58].level_mask | (1 << current_level_index) | 0x80000000;
@@ -900,8 +900,8 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
             if (usage_stats.stat[28].count < 0xFFFF) {
                 usage_stats.stat[28].count++;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[28].unk2) {
-                usage_stats.stat[28].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[28].latest_time_bucket) {
+                usage_stats.stat[28].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             usage_stats.stat[28].level_mask =
                 usage_stats.stat[28].level_mask | (1 << current_level_index) | 0x80000000;
@@ -1357,13 +1357,14 @@ void jet_fighter_update(struct Moby *moby) {
                     try_set_help_message(7, 0x2B09);
                 } else {
                     frames_since_help_timestamp =
-                        scale_game_frames(D_0015EEA4) - help_records[0x3C].unk2 * 600;
+                        scale_game_frames(D_0015EEA4) - help_records[0x3C].latest_time_bucket * 600;
                     if (frames_since_help_timestamp >
                             (int)((float)scale_game_frames(0x12) * 60.0f) ||
-                        help_records[0x3C].unk2 * 600 == 0) {
+                        help_records[0x3C].latest_time_bucket * 600 == 0) {
                         help_request(0x2AFA, 0x3C);
-                    } else if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x3C].unk2) {
-                        help_records[0x3C].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    } else if (scale_game_frames(D_0015EEA4) / 600 >
+                               help_records[0x3C].latest_time_bucket) {
+                        help_records[0x3C].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                     }
                 }
                 if (item_available[7] != 0 && (D_0013CAE4 & 0x10)) {

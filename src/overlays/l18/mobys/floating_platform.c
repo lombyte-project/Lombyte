@@ -17,7 +17,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/l18/hero/hero_set_state.h"
+#include "rnc/overlay/l18/hero.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
 void update_floating_platform_tilt_and_bob(struct Moby *moby) __asm__("FUN_L18_002d8710");

@@ -11,7 +11,7 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/camera/update_cam.h"
-#include "rnc/overlay/l14/mobys/racer_path_and_weapon.h"
+#include "rnc/overlay/l14/mobys.h"
 #include "rnc/overlay/shared/camera/path_flythrough_camera.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 

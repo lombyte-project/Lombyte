@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_H
-
-#include "types.h"
-
-void taunter_update() __asm__("FUN_L00_002b6f10");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_H */

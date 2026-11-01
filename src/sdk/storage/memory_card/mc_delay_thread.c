@@ -1,4 +1,4 @@
-#include "rnc/sdk/callbacks/wake_thread_alarm.h"
+#include "rnc/sdk/callbacks.h"
 
 extern int  GetThreadId(void);
 extern int  SetAlarm(int delay, void *callback, int thread_id);

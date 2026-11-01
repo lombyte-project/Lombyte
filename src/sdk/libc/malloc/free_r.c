@@ -11,7 +11,7 @@
 #include "types.h"
 #include "rnc/sdk/library/malloc_chunk.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/libc/malloc/malloc_trim_r.h"
+#include "rnc/sdk/libc/malloc.h"
 
 struct _reent;
 

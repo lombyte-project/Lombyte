@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 extern u8   intra_skip_mb_error_message[] __asm__("D_00153770");
 extern void func_001271D8();

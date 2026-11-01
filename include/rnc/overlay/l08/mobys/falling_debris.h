@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_FALLING_DEBRIS_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_FALLING_DEBRIS_H
-
-#include "types.h"
-
-void falling_debris_update() __asm__("FUN_L08_002e16c0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_FALLING_DEBRIS_H */

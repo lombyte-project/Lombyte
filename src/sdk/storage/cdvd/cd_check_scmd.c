@@ -1,11 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
-#include "rnc/sdk/storage/cdvd/cmd_sem_init.h"
-#include "rnc/sdk/storage/cdvd/sceCdSyncS.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/rpc/rpc.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern s32  D_00131308[];
 const u8    D_00152F10[] = "Scmd fail sema cur_cmd:%d keep_cmd:%d\n";

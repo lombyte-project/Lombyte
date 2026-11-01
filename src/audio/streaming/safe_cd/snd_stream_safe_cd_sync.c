@@ -2,7 +2,7 @@
 #include "rnc/audio/sound_read_work.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern void FlushCache(s32);
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");

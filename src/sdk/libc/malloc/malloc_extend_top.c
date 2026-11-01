@@ -13,8 +13,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libc/malloc/__malloc_lock.h"
 #include "rnc/sdk/libc/malloc/__malloc_unlock.h"
-#include "rnc/sdk/libc/malloc/_sbrk_r.h"
-#include "rnc/sdk/libc/malloc/free_r.h"
+#include "rnc/sdk/libc/malloc.h"
 
 struct _reent;
 

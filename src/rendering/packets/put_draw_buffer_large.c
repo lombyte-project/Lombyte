@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/graph/sce_gs_put_draw_env.h"
+#include "rnc/sdk/graph.h"
 
 void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
 

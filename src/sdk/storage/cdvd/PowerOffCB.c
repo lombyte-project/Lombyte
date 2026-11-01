@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_add_cmd_handler.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/rpc/cmd.h"
 
 extern u8  D_00120960[];
 extern s32 D_001312FC[];

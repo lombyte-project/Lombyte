@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
-#include "rnc/sdk/ipu/sce_ipu_restart_dma.h"
+#include "rnc/sdk/ipu.h"
 
 typedef struct MpegVideoLibraryContext {
     u8    reserved[0x40];

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_MOTION_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_MOTION_H
-
-#include "types.h"
-
-void triggered_motion_update(char *) __asm__("FUN_L05_00316258");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_MOTION_H */

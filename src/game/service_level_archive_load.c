@@ -6,10 +6,8 @@
 #include "rnc/audio/streaming/submit_audio_stream_io_request.h"
 #include "rnc/audio/banks/snd_unload_bank.h"
 #include "rnc/audio/banks/snd_resolve_bank_xrefs.h"
-#include "rnc/audio/sound/store_sound_bank_handle_callback.h"
-#include "rnc/sdk/storage/cdvd/sceCdGetError.h"
-#include "rnc/sdk/storage/cdvd/scecdbreak.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/audio/sound.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 struct LevelArchiveHeader {
     u8  pad_0[8];

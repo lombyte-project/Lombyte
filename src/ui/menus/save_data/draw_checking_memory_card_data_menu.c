@@ -2,7 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/text/text_region.h"
-#include "rnc/rendering/texture/draw_textured_quad.h"
+#include "rnc/rendering/texture.h"
 
 typedef struct TextRegion FontWindow;
 

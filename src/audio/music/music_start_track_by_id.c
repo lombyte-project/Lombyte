@@ -2,12 +2,7 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
-#include "rnc/audio/music/music_start_track_10000.h"
-#include "rnc/audio/music/music_start_track_20000.h"
-#include "rnc/audio/music/music_start_track_30000.h"
-#include "rnc/audio/music/music_start_track_40000.h"
-#include "rnc/audio/music/music_start_track_50000.h"
-#include "rnc/audio/music/music_start_track_60000.h"
+#include "rnc/audio/music.h"
 
 extern u8 scene_sounds[] __asm__("D_0013A664");
 // D_002169C0 is a code address retail passes as a pointer, not a data symbol;

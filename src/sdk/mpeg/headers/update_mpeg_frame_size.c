@@ -1,8 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/api/reset_work_area.h"
-#include "rnc/sdk/mpeg/ref_images/init_ref_images.h"
-#include "rnc/sdk/mpeg/ref_images/initialize_reference_image.h"
+#include "rnc/sdk/mpeg/api.h"
+#include "rnc/sdk/mpeg/ref_images.h"
 
 extern s32 alloc_work_area() __asm__("func_0012BC20");
 

@@ -1,6 +1,6 @@
 #include "types.h"
 #include "asm.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 const char D_00153B90[] = "_pictureSpatialScalableExtension is not supported";
 

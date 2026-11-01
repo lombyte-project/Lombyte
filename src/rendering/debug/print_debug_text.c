@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 struct DebugText {
     s32   x;

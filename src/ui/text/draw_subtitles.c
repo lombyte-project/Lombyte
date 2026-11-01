@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/draw.c, func_001F4F90). */
 #include "sda.h"
 #include "types.h"
-#include "rnc/ui/text/font/font_set_window.h"
+#include "rnc/ui/text/font.h"
 
 typedef struct {
     short start;   /* 0x0 */

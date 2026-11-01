@@ -1,6 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/storage/cdvd/sceCdRead.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 struct CdStream {
     u8  pad_0[0x4];

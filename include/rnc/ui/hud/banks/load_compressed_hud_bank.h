@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_HUD_BANKS_LOAD_COMPRESSED_HUD_BANK_H
-#define LOMBYTE_RNC_UI_HUD_BANKS_LOAD_COMPRESSED_HUD_BANK_H
-
-#include "types.h"
-
-void load_compressed_hud_bank(s32, s32) __asm__("FUN_00202d10");
-
-#endif /* LOMBYTE_RNC_UI_HUD_BANKS_LOAD_COMPRESSED_HUD_BANK_H */

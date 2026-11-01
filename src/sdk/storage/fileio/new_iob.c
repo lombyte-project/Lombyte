@@ -22,7 +22,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sif_file_slot.h"
-#include "rnc/sdk/storage/fileio/sce_fs_iob_sema_mk.h"
+#include "rnc/sdk/storage/fileio.h"
 
 extern s32 WaitSema();
 extern s32 SignalSema();

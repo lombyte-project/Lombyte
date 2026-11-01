@@ -21,7 +21,7 @@
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/l06/hero/hero_set_state.h"
-#include "rnc/overlay/shared/camera/moby_controlled_camera.h"
+#include "rnc/overlay/shared/camera.h"
 
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");

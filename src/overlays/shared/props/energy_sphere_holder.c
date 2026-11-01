@@ -10,7 +10,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/game/item_state.h"
 #include "rnc/overlay/shared/props/energy_sphere_holder_data/update_energy_sphere_holder_beam_effects.h"
-#include "rnc/overlay/shared/props/initialize_energy_sphere_holder_vars.h"
+#include "rnc/overlay/shared/props.h"
 #include "rnc/overlay/shared/rendering/effects/particles.h"
 
 typedef struct {

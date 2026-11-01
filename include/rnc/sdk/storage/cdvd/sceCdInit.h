@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_STORAGE_CDVD_SCECDINIT_H
-#define LOMBYTE_RNC_SDK_STORAGE_CDVD_SCECDINIT_H
-
-#include "types.h"
-
-int sceCdInit(int);
-
-#endif /* LOMBYTE_RNC_SDK_STORAGE_CDVD_SCECDINIT_H */

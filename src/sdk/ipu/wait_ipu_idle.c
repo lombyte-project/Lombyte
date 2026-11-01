@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/api/dispatch_mpeg_cb_nodata.h"
+#include "rnc/sdk/mpeg/api.h"
 
 void _waitIpuIdle(s32 *ctx) {
     long new_var;

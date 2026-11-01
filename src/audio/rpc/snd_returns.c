@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
-#include "rnc/sdk/libc/stdio/printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
+#include "rnc/sdk/libc/stdio.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 /* The IOP return buffer this file owns: both functions below reach these
    gp-relative, which needs their definitions ahead of them. */

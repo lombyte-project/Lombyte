@@ -15,11 +15,10 @@
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/streaming/update_audio_stream_until_idle.h"
 #include "rnc/rendering/frame/initialize_level_render_state.h"
-#include "rnc/rendering/texture/parse_particle_textures.h"
-#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
-#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
+#include "rnc/rendering/texture.h"
+#include "rnc/sdk/graph.h"
 #include "rnc/sdk/graph/sce_gs_sync_path.h"
-#include "rnc/ui/help/load_help_message_group.h"
+#include "rnc/ui/help.h"
 
 typedef struct {
     s32 x0;

@@ -1,12 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
-#include "rnc/sdk/storage/cdvd/cmd_sem_init.h"
-#include "rnc/sdk/storage/cdvd/sceCdSyncS.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/rpc/rpc.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern s32                     D_00131304[];
 extern struct sceSifClientData cd_disk_ready_rpc_client __asm__("D_00159990");

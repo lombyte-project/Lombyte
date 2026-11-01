@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_RENDERING_MOBYS_PATCH_MOBY_GIFS_H
-#define LOMBYTE_RNC_RENDERING_MOBYS_PATCH_MOBY_GIFS_H
-
-#include "types.h"
-
-void patch_moby_gifs(void) __asm__("FUN_0020cef8");
-
-#endif /* LOMBYTE_RNC_RENDERING_MOBYS_PATCH_MOBY_GIFS_H */

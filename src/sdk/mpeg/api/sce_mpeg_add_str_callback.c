@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/mpeg/demux/type2id.h"
+#include "rnc/sdk/mpeg/demux.h"
 
 typedef struct {
     u64 id;

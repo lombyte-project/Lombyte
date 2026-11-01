@@ -1,8 +1,7 @@
 /* adjust_time: deci clock adjust; v0-pinned hour with void AddClockHour(). */
 
 #include "types.h"
-#include "rnc/sdk/time/addhour.h"
-#include "rnc/sdk/time/subhour.h"
+#include "rnc/sdk/time.h"
 
 struct AdjustTimeArg {
     u8 pad_0[2];

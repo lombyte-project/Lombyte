@@ -7,7 +7,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/vendor/draw_vendor_purchase_text.h"
+#include "rnc/overlay/shared/vendor.h"
 
 extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 

@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/ui/hud/remove_hud_item.h"
 #include "rnc/ui/menus/weapons/count_unspent_gold_bolts.h"
-#include "rnc/sdk/libc/string/find_substring.h"
+#include "rnc/sdk/libc/string.h"
 
 typedef struct {
     s32 unk0;

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_RENDERING_FRAME_RESET_DRAW_CONFIG_H
-#define LOMBYTE_RNC_RENDERING_FRAME_RESET_DRAW_CONFIG_H
-
-#include "types.h"
-
-void reset_draw_config(void);
-
-#endif /* LOMBYTE_RNC_RENDERING_FRAME_RESET_DRAW_CONFIG_H */

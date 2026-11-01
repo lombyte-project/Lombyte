@@ -1,8 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/input/sce_pad2_get_button_profile.h"
-#include "rnc/sdk/input/sce_pad2_get_state.h"
-#include "rnc/sdk/input/sce_pad2_read.h"
-#include "rnc/sdk/input/sce_vib_get_profile.h"
+#include "rnc/sdk/input.h"
 
 struct PAD {
     u8  pad0[0x180];

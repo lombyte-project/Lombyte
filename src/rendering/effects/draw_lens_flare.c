@@ -5,7 +5,7 @@
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/rendering/texture/draw_textured_quad.h"
+#include "rnc/rendering/texture.h"
 
 /* Lens flare: 16 sprites along the line from the flare source's screen
    position through the screen centre, faded by distance and by how far

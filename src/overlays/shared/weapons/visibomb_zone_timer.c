@@ -11,8 +11,8 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/rendering/screen.h"
-#include "rnc/overlay/shared/weapons/visibomb_missile.h"
-#include "rnc/rendering/texture/draw_textured_quad.h"
+#include "rnc/overlay/shared/weapons.h"
+#include "rnc/rendering/texture.h"
 
 /* pvars of the moby run by FUN_L01_00302648: 20 trigger zones and a hold counter */
 typedef struct {

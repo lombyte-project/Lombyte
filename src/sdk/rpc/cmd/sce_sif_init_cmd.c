@@ -1,9 +1,8 @@
 /* Ported from rac1-decomp (src/core/00119D88.c: func_0011A780). */
 #include "types.h"
 #include "rnc/sdk/eeregs.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_cmd_intr_hdlr.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_send_cmd_public.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/rpc/cmd.h"
 
 typedef void (*SifCmdHandler)(void *packet, void *argument);
 

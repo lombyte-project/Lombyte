@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/ipu/ipu_vdec.h"
+#include "rnc/sdk/ipu.h"
 
 s32 decode_dmvector(s32 command, s32 requested_mode) __asm__("InitializeMemoryCardDirectory");
 

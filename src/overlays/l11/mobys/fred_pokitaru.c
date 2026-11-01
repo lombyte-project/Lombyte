@@ -104,12 +104,13 @@ void fred_pokitaru_update(struct Moby *moby) {
         if (alternate_item_available[1] == 0 && discount_purchase_pricing[0] == 0) {
             if (fast_vec_dist(&moby->pos, hero.motion.pos.f) < 4.0f) {
                 int help_frame_delta =
-                    scale_game_frames(D_0015EEA4) - help_records[0x86].unk2 * 600;
+                    scale_game_frames(D_0015EEA4) - help_records[0x86].latest_time_bucket * 600;
                 if ((int)(scale_game_frames(18) * 60.0f) < help_frame_delta ||
-                    help_records[0x86].unk2 * 600 == 0) {
+                    help_records[0x86].latest_time_bucket * 600 == 0) {
                     help_request(0x2B03, 0x86);
-                } else if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x86].unk2) {
-                    help_records[0x86].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                } else if (scale_game_frames(D_0015EEA4) / 600 >
+                           help_records[0x86].latest_time_bucket) {
+                    help_records[0x86].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
                 }
             }
         }

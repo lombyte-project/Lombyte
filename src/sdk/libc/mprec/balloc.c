@@ -1,4 +1,4 @@
-#include "rnc/sdk/libc/malloc/_calloc_r.h"
+#include "rnc/sdk/libc/malloc.h"
 /****************************************************************
  *
  * The author of this software is David M. Gay.

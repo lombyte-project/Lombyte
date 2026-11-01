@@ -3,7 +3,7 @@
 #include "rnc/save/mc_data.h"
 #include "rnc/save/memcard_get_data_size.h"
 #include "rnc/save/memory_card_state.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 extern char out_of_date_save_message[] __asm__("D_001E81D0");
 extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");

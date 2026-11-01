@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_STORAGE_CDVD_CDVD_EXIT_H
-#define LOMBYTE_RNC_SDK_STORAGE_CDVD_CDVD_EXIT_H
-
-#include "types.h"
-
-void cdvd_exit(void);
-
-#endif /* LOMBYTE_RNC_SDK_STORAGE_CDVD_CDVD_EXIT_H */

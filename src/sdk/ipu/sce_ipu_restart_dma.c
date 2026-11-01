@@ -1,6 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/dma/set_d3_chcr.h"
-#include "rnc/sdk/dma/set_d4_chcr.h"
+#include "rnc/sdk/dma.h"
 
 struct IpuContext {
     s32 unk0;

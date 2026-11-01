@@ -7,9 +7,8 @@
 #include "rnc/sdk/libgraph.h"
 #include "rnc/streaming/disc_table.h"
 #include "rnc/rendering/render_globals.h"
-#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
-#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
-#include "rnc/sdk/storage/cdvd/scecdsync.h"
+#include "rnc/sdk/graph.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 struct CommonArchiveMemory {
     u8  pad_0[0x14];

@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_screen.h"
-#include "rnc/ui/menus/stream_buffers/release_menu_stream_buffer.h"
+#include "rnc/ui/menus/stream_buffers.h"
 
 s32 leave_save_slot_screen(struct MenuScreen *screen) __asm__("FUN_00222f58");
 

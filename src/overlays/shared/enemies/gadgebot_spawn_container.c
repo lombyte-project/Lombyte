@@ -11,7 +11,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/props/spinning_fragment.h"
+#include "rnc/overlay/shared/props.h"
 
 typedef struct {
     float corner[4][4];

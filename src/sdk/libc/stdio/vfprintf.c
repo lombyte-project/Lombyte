@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
 #include "rnc/sdk/libc/stdio/_vfprintf_r.h"
-#include "rnc/sdk/libc/stdio/sinit.h"
+#include "rnc/sdk/libc/stdio.h"
 #define FILE RncFile
 /* newlib local.h */
 #define CHECK_INIT(fp)                  \

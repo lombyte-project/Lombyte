@@ -14,7 +14,7 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 typedef struct SpiderbotVars {
     u8  pad0[0x10];

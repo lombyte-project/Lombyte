@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
-#include "rnc/overlay/l15/mobys/radial_ripple_mesh.h"
+#include "rnc/overlay/l15/mobys.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
 void ripple_strips_moby_update(struct Moby *moby) __asm__("FUN_L15_002eb0a0");

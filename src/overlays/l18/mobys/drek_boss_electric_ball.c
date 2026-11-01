@@ -16,7 +16,7 @@
 #include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/props/electric_water.h"
+#include "rnc/overlay/shared/props.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/world/collision/ground_probe.h"

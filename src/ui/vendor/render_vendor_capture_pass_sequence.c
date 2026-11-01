@@ -7,7 +7,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/vendor/configure_capture_target.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/rendering/view/setup_view_context.h"
+#include "rnc/rendering/view.h"
 
 typedef u128 CaptureVector;
 extern int   capture_primary_transition __asm__("D_00161298") MACRO_ADDR;

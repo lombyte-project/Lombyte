@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/storage/cdvd/handle_cd_read_callback.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 void process_native_cd_read_completion(void *descriptor) __asm__("FUN_00120788");
 

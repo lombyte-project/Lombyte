@@ -3,6 +3,8 @@
 
 #include "types.h"
 #include "rnc/math/vector.h"
+#include "rnc/sdk/eetypes.h"
+#include "types.h"
 
 /* View and projection state at D_0018CD00. init_view_context and
    configure_graphics_projection set the clip distances,
@@ -49,5 +51,9 @@ struct View {
 };
 
 extern struct View view_context __asm__("D_0018CD00");
+
+void configure_graphics_projection(s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_001f33b8");
+void project_graphics_bounds(u128 *, u128 *, s32 *, s32 *, s32 *, s32 *) __asm__("FUN_00237a78");
+void setup_view_context(void) __asm__("FUN_00239750");
 
 #endif /* LOMBYTE_RNC_RENDERING_VIEW_H */

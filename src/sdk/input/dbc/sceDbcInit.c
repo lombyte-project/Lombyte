@@ -1,11 +1,9 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_globals.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/input/dbc/sceDbcSetWorkAddr.h"
-#include "rnc/sdk/input/dbc/sce_dbc_get_mod_version.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/input/dbc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern struct sceSifClientData dbc_transfer_rpc_client __asm__("D_0015B030");
 extern char                    dbc_rpc_bind_failure_message[] __asm__("D_001534D8");

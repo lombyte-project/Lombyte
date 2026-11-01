@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/ui/map/draw_map_overlay.h"
+#include "rnc/ui/map.h"
 
 s32 draw_map_screen_overlay(void) __asm__("FUN_0021f330");
 

@@ -9,8 +9,8 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/mobys/prune_moby_references.h"
-#include "rnc/rendering/effects/draw_resident_textured_banner.h"
-#include "rnc/rendering/packets/append_dma_tag.h"
+#include "rnc/rendering/effects.h"
+#include "rnc/rendering/packets.h"
 
 struct LevelProjectionState {
     u8  pad_0[0xB0];

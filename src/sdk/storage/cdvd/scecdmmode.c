@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern u8   cd_media_mode_request[] __asm__("D_00132900");
 extern s32  SignalSema();

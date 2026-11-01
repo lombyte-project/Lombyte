@@ -8,7 +8,7 @@
 #include "rnc/game/interpolated_record.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/shared/mobys/find_nearest_animation_sequence_entry.h"
+#include "rnc/overlay/shared/mobys.h"
 
 int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
 

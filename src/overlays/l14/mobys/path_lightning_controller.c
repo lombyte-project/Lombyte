@@ -12,9 +12,9 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/random.h"
 #include "sda.h"
-#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
+#include "rnc/overlay/shared/game.h"
 #include "rnc/overlay/shared/math/random/random_vector.h"
-#include "rnc/overlay/shared/mobys/show_tracked_moby.h"
+#include "rnc/overlay/shared/mobys.h"
 
 extern char D_L14_001674C0[];
 

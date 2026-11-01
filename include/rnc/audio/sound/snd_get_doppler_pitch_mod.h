@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_AUDIO_SOUND_SND_GET_DOPPLER_PITCH_MOD_H
-#define LOMBYTE_RNC_AUDIO_SOUND_SND_GET_DOPPLER_PITCH_MOD_H
-
-#include "types.h"
-
-int snd_get_doppler_pitch_mod(int);
-
-#endif /* LOMBYTE_RNC_AUDIO_SOUND_SND_GET_DOPPLER_PITCH_MOD_H */

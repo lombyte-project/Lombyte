@@ -28,7 +28,7 @@
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/world/collision/collision_line.h"
 #include "qzero.h"
-#include "rnc/audio/voices/allocate_voice_slot.h"
+#include "rnc/audio/voices.h"
 
 extern float D_L14_0015F580[] MACRO_ADDR;
 

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_NOVALIS_ELEVATOR_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_NOVALIS_ELEVATOR_H
-
-#include "types.h"
-
-void novalis_elevator_update(unsigned char *) __asm__("FUN_L01_002b9eb0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_NOVALIS_ELEVATOR_H */

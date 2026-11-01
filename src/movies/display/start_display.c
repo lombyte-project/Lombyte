@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/movies/decoder/decoder_globals.h"
-#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/graph.h"
 
 extern volatile s32 D_001611E4;
 

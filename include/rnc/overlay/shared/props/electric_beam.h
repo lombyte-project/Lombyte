@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_BEAM_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_BEAM_H
-
-#include "types.h"
-
-void electric_beam_update(unsigned char *) __asm__("FUN_L14_003015d0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_BEAM_H */

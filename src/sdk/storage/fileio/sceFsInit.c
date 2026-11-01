@@ -5,13 +5,10 @@
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_state.h"
 #include "rnc/sdk/library/sif_file_slot.h"
-#include "rnc/sdk/interrupts/enable_interrupts.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_add_cmd_handler.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
-#include "rnc/sdk/storage/fileio/_sceFs_Rcv_Intr.h"
-#include "rnc/sdk/storage/fileio/sce_fs_iob_sema_mk.h"
+#include "rnc/sdk/interrupts.h"
+#include "rnc/sdk/rpc/cmd.h"
+#include "rnc/sdk/rpc/rpc.h"
+#include "rnc/sdk/storage/fileio.h"
 
 typedef struct SifFileCommandCallbackRecord {
     void (*callback)(void *);

@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
-#include "rnc/sdk/storage/cdvd/sceCdDelayThread.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/rpc/rpc.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern u8 cd_s_command_wait_message[] __asm__("D_00152F00");
 

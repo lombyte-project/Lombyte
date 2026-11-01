@@ -1,8 +1,7 @@
 #include "types.h"
-#include "rnc/audio/rpc/snd_returns.h"
-#include "rnc/sdk/libc/stdio/printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
+#include "rnc/audio/rpc.h"
+#include "rnc/sdk/libc/stdio.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern s32 *snd_current_buffer __asm__("D_0015EC80") __attribute__((sda));
 extern s32  snd_batch_index __asm__("D_0015ECC0") __attribute__((sda));

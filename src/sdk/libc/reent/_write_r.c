@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_globals.h"
-#include "rnc/sdk/kernel/write.h"
+#include "rnc/sdk/kernel.h"
 
 struct _reent {
     s32 _errno;

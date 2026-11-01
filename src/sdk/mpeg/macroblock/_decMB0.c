@@ -1,14 +1,9 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/ipu/ipu_vdec.h"
-#include "rnc/sdk/ipu/receive_data_from_ipu.h"
-#include "rnc/sdk/ipu/send_ipu_command.h"
-#include "rnc/sdk/ipu/wait_ipu_idle.h"
-#include "rnc/sdk/mpeg/bitstream/_flushBuf.h"
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
-#include "rnc/sdk/mpeg/macroblock/motion_vector.h"
-#include "rnc/sdk/mpeg/macroblock/motion_vectors.h"
+#include "rnc/sdk/ipu.h"
+#include "rnc/sdk/mpeg/bitstream.h"
+#include "rnc/sdk/mpeg/errors.h"
+#include "rnc/sdk/mpeg/macroblock.h"
 
 struct MpegMbState {
     int unk0;

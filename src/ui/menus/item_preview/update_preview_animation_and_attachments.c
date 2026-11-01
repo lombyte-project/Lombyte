@@ -22,8 +22,7 @@
 #include "rnc/ui/menus/stream_buffers/get_menu_stream_buffer_size.h"
 #include "rnc/ui/menus/item_preview/clear_preview_resource_bindings.h"
 #include "rnc/ui/menus/stream_buffers/clear_menu_stream_buffer_read_active.h"
-#include "rnc/ui/menus/item_preview/advance_preview_animation_queue.h"
-#include "rnc/ui/menus/item_preview/load_preview_resource_bindings.h"
+#include "rnc/ui/menus/item_preview.h"
 
 typedef struct {
     u8    pad0[0x10];

@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/ui/hud/draw_weapon_ammo_hud_panel.h"
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/sdk/libc/stdio.h"
 
 extern unsigned char D_0013E529[];
 void                 hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -365,8 +365,8 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 if (usage_stats.stat[20].count < 0xFFFF)
                     usage_stats.stat[20].count++;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[20].unk2)
-                usage_stats.stat[20].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[20].latest_time_bucket)
+                usage_stats.stat[20].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             usage_stats.stat[20].level_mask =
                 usage_stats.stat[20].level_mask | (1 << current_level_index) | 0x80000000;
             if (id == 0x18)

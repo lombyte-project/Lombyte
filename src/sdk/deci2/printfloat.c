@@ -1,8 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/soft_float/__fixunsdfdi.h"
-#include "rnc/sdk/soft_float/dpcmp.h"
-#include "rnc/sdk/soft_float/dpmul.h"
+#include "rnc/sdk/soft_float.h"
 
 extern char significand_format[] __asm__("D_00152780");
 extern char nonnegative_exponent_format[] __asm__("D_00152788");

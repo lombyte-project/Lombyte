@@ -1,8 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-#include "rnc/sdk/mpeg/bitstream/_flushBuf.h"
-#include "rnc/sdk/mpeg/bitstream/nextbit.h"
-#include "rnc/sdk/mpeg/headers/extrainfo.h"
+#include "rnc/sdk/mpeg/bitstream.h"
+#include "rnc/sdk/mpeg/headers.h"
 
 s32 _sliceB(struct MpegDecoder *mpeg) {
     mpeg->quantiser_scale_code = _nextBit(mpeg, 5);

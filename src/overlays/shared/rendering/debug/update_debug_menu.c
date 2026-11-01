@@ -13,15 +13,12 @@
 #include "rnc/rendering/effects/update_fog.h"
 #include "rnc/rendering/debug/print_debug_text.h"
 #include "rnc/rendering/debug/print_debug_text_centered.h"
-#include "rnc/camera/update_all_cameras.h"
-#include "rnc/overlay/shared/camera/follow_camera_setup.h"
+#include "rnc/camera.h"
+#include "rnc/overlay/shared/camera.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
-#include "rnc/sdk/storage/fileio/sceClose.h"
-#include "rnc/sdk/storage/fileio/sceRead.h"
-#include "rnc/sdk/storage/fileio/sce_lseek.h"
+#include "rnc/sdk/libc/stdio.h"
+#include "rnc/sdk/storage/fileio.h"
 #include "rnc/sdk/storage/fileio/sceopen.h"
-#include "rnc/sdk/storage/fileio/scewrite.h"
 
 typedef struct {
     s32 a, b, c, d;

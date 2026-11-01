@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_SET_PAUSE_ACTION_LIST_H
-#define LOMBYTE_RNC_UI_MENUS_PAUSE_SET_PAUSE_ACTION_LIST_H
-
-#include "types.h"
-
-int set_pause_action_list(int *) __asm__("FUN_0021a1b0");
-
-#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_SET_PAUSE_ACTION_LIST_H */

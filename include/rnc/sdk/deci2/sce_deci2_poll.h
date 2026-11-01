@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_POLL_H
-#define LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_POLL_H
-
-#include "types.h"
-
-void SceDeci2Poll(s32);
-
-#endif /* LOMBYTE_RNC_SDK_DECI2_SCE_DECI2_POLL_H */

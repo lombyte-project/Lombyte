@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/core/001236F0.c, func_00124858). */
 #include "types.h"
 #include "rnc/sdk/library/sdk_globals.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 extern s32  D_0015B080[];
 extern u8   socket_create_rpc_error_message[] __asm__("D_00153578");

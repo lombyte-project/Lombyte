@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_ALIEN_SNAPPER_SPAWNER_H
-#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_ALIEN_SNAPPER_SPAWNER_H
-
-#include "types.h"
-
-void alien_snapper_spawner_update(char *) __asm__("FUN_L06_002fda30");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_ALIEN_SNAPPER_SPAWNER_H */

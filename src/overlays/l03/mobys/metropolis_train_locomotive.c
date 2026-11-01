@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
-#include "rnc/overlay/shared/mobys/is_moby_class_23e_in_state_14.h"
+#include "rnc/overlay/shared/mobys.h"
 
 /* Places a train: puts the engine at `at` facing ang (offset back by its length), then lays each linked
  * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */

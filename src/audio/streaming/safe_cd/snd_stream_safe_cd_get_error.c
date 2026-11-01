@@ -2,7 +2,7 @@
 #include "rnc/audio/sound_read_work.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
-#include "rnc/sdk/storage/cdvd/sceCdGetError.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 s32 snd_stream_safe_cd_get_error(s32 unused_arg) __asm__("FUN_0012eef0");
 

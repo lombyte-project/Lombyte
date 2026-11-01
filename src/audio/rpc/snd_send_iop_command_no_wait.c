@@ -1,9 +1,8 @@
 #include "types.h"
 #include "rnc/audio/rpc/snd_send_iop_command_no_wait_globals.h"
-#include "rnc/audio/rpc/snd_returns.h"
-#include "rnc/sdk/libc/stdio/printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
+#include "rnc/audio/rpc.h"
+#include "rnc/sdk/libc/stdio.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 struct SndCb {
     s32 func;

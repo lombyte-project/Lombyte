@@ -1,5 +1,4 @@
-#include "rnc/sdk/libc/mprec/hi0bits.h"
-#include "rnc/sdk/libc/mprec/lshift.h"
+#include "rnc/sdk/libc/mprec.h"
 /****************************************************************
  *
  * The author of this software is David M. Gay.

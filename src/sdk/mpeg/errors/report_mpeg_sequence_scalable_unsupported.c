@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
+#include "rnc/sdk/mpeg/errors.h"
 
 const u8 D_00153B48[] = "_sequenceScalableExtension() is not implemented";
 

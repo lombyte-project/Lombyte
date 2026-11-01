@@ -6,7 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/camera/follow_cam.h"
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
-#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/camera.h"
 #include "rnc/overlay/shared/camera/set_nonzero_follow_camera_parameters.h"
 #include "rnc/rendering/clip_volume.h"
 

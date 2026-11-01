@@ -11,7 +11,7 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/l07/mobys/get_target_sight.h"
+#include "rnc/overlay/l07/mobys.h"
 
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");

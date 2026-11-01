@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_INITIALIZE_MENU_PREVIEW_SCENE_H
-#define LOMBYTE_RNC_UI_MENUS_INITIALIZE_MENU_PREVIEW_SCENE_H
-
-#include "types.h"
-
-void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
-
-#endif /* LOMBYTE_RNC_UI_MENUS_INITIALIZE_MENU_PREVIEW_SCENE_H */

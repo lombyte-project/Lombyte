@@ -3,9 +3,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/frame/reset_graphics.h"
-#include "rnc/sdk/debug/debug_print.h"
-#include "rnc/sdk/dma/sce_dma_get_chan.h"
-#include "rnc/sdk/dma/sce_dma_send.h"
+#include "rnc/sdk/debug.h"
+#include "rnc/sdk/dma.h"
 
 /* The SDK DMA channel registers; only CHCR (offset 0) is touched here. */
 struct DmaChannel {

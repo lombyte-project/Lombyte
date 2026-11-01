@@ -13,12 +13,12 @@
 #include "rnc/world/select_world_object_resource_tables.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/overlay/shared/ui/hud/draw_weapon_ammo_hud_panel.h"
-#include "rnc/audio/music/music_pause.h"
+#include "rnc/audio/music.h"
 #include "rnc/audio/rpc/snd_flush_sound_commands.h"
 #include "rnc/audio/voices/sound_update.h"
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
-#include "rnc/overlay/shared/streaming/load_scene_chunks_with_fade.h"
+#include "rnc/overlay/shared/streaming.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 
 /* Opens the vendor screen for moby m in level lvl: sets up its camera, resets the screen state and runs it until it closes. */

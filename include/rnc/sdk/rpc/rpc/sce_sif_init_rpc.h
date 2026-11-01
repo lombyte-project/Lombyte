@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_RPC_RPC_SCE_SIF_INIT_RPC_H
-#define LOMBYTE_RNC_SDK_RPC_RPC_SCE_SIF_INIT_RPC_H
-
-#include "types.h"
-
-void sceSifInitRpc(u32);
-
-#endif /* LOMBYTE_RNC_SDK_RPC_RPC_SCE_SIF_INIT_RPC_H */

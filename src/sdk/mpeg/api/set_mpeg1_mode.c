@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/ipu/ipu_set_mpeg1.h"
+#include "rnc/sdk/ipu.h"
 
 typedef struct ImageBufferState {
     u8  reserved[0x848];

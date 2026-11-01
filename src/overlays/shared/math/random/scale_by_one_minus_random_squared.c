@@ -1,7 +1,7 @@
 /* Random: scales a value by one minus a squared random value. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/libc/stdlib.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_002785C0.c: func_L09_002785C0), where it is exact; names translated to the US level program. */
 

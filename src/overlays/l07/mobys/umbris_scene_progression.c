@@ -9,7 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/l07/clear_bit_grid_rectangle.h"
+#include "rnc/overlay/l07.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/save/memcard_save_data.h"

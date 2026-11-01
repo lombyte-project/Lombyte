@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BLARG_GUN_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BLARG_GUN_H
-
-#include "types.h"
-
-void blarg_gun_update(char *) __asm__("FUN_L05_003186f8");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BLARG_GUN_H */

@@ -5,7 +5,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/hero.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"
@@ -218,8 +218,10 @@ void update_hero_state_machine(void) {
                         if (usage_stats.stat[31].count < 0xFFFF) {
                             usage_stats.stat[31].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[31].unk2) {
-                            usage_stats.stat[31].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 >
+                            usage_stats.stat[31].latest_time_bucket) {
+                            usage_stats.stat[31].latest_time_bucket =
+                                scale_game_frames(D_0015EEA4) / 600;
                         }
                         usage_stats.stat[31].level_mask = usage_stats.stat[31].level_mask |
                                                           (1 << current_level_index) | 0x80000000;

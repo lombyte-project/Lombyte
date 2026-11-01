@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
 #include "rnc/sdk/graph/sce_gs_get_gparam.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/storage/cdvd/checkModelVersion.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 typedef struct {
     s16 nSInterlace;

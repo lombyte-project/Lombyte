@@ -5,7 +5,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/game/options.h"
-#include "rnc/game/transitions/request_space_load.h"
+#include "rnc/game/transitions.h"
 
 struct LoadMenuControllerState {
     u8  pad_0[0x1B4];

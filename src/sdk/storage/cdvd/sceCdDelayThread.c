@@ -1,4 +1,4 @@
-#include "rnc/sdk/storage/cdvd/signal_native_cd_delay_alarm.h"
+#include "rnc/sdk/storage/cdvd.h"
 
 extern int  CreateSema(int *parameters) __asm__("CreateSema");
 extern void SetAlarm(int delay, void *callback, int semaphore) __asm__("SetAlarm");

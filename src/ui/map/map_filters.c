@@ -1,4 +1,4 @@
-#include "rnc/math/point_is_clockwise.h"
+#include "rnc/math.h"
 /* Map reveal filters: the callbacks in the level-indexed table
    D_L00_00183F90[19][8] (map_filter_lNN_S is level NN, slot S). The map
    update calls the ones its filter flags select and reveals a pixel only

@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_WALLOPER_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_WALLOPER_H
-
-#include "types.h"
-
-void walloper_update(char *) __asm__("FUN_L00_002bb558");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_WALLOPER_H */

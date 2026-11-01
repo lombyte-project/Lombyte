@@ -16,7 +16,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/debug.h"
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 

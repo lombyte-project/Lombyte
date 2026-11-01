@@ -6,7 +6,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/shared/hero/hero.h"
+#include "rnc/overlay/shared/hero.h"
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/data_labels.h"

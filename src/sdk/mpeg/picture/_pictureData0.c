@@ -1,9 +1,7 @@
 #include "types.h"
-#include "rnc/sdk/ipu/wait_bdec_out.h"
-#include "rnc/sdk/ipu/wait_ipu_idle.h"
-#include "rnc/sdk/mpeg/errors/_Error.h"
-#include "rnc/sdk/mpeg/macroblock/_slice0.h"
-#include "rnc/sdk/mpeg/macroblock/domc.h"
+#include "rnc/sdk/ipu.h"
+#include "rnc/sdk/mpeg/errors.h"
+#include "rnc/sdk/mpeg/macroblock.h"
 
 typedef struct {
     u8  pad0[0x12C];

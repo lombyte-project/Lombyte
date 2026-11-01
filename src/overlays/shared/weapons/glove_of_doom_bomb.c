@@ -11,10 +11,9 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/shared/mobys/get_moby_pvars_link.h"
+#include "rnc/overlay/shared/mobys.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
-#include "rnc/overlay/shared/weapons/doom_bot.h"
-#include "rnc/overlay/shared/weapons/glove_of_doom.h"
+#include "rnc/overlay/shared/weapons.h"
 
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
 typedef struct {

@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/save/memcard_save_data.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/shared/pickups/gadget_pickup.h"
+#include "rnc/overlay/shared/pickups.h"
 
 typedef struct {
     char           pad0[0x10];

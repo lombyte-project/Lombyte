@@ -1,5 +1,5 @@
 #include "sda.h"
-#include "rnc/sdk/deci2/deci2_putchar.h"
+#include "rnc/sdk/deci2.h"
 
 typedef char *va_list;
 

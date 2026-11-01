@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_COUNTDOWN_SEQUENCE_H
-#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_COUNTDOWN_SEQUENCE_H
-
-#include "types.h"
-
-void countdown_sequence_update(unsigned char *) __asm__("FUN_L06_00301b90");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_COUNTDOWN_SEQUENCE_H */

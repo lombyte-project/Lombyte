@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_BITSTREAM__PEEPBIT_H
-#define LOMBYTE_RNC_SDK_MPEG_BITSTREAM__PEEPBIT_H
-
-#include "types.h"
-
-s32 _peepBit(s32 *, s32);
-
-#endif /* LOMBYTE_RNC_SDK_MPEG_BITSTREAM__PEEPBIT_H */

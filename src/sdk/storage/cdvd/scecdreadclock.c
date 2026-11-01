@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libcdvd.h"
-#include "rnc/sdk/deci2/sce_printf.h"
-#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/deci2.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 struct unaligned64 {
     u64 v;

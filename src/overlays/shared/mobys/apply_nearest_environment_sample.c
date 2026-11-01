@@ -6,7 +6,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/rendering/packets/pack_render_command_fields.h"
+#include "rnc/rendering/packets.h"
 
 /* Finds the table entry nearest the object's position (within 8 units) and applies its fields to the object and globals. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */

@@ -2,7 +2,7 @@
 #include "rnc/input/pad_state.h"
 
 #include "rnc/ui/map/map_state.h"
-#include "rnc/runtime/callbacks/noop_memory_callback.h"
+#include "rnc/runtime/callbacks.h"
 
 int update_map_zoom_and_pan(void) __asm__("FUN_00205440");
 

@@ -3,8 +3,8 @@
 #include "rnc/ui/menus/menu_screen.h"
 
 #include "rnc/game/item_state.h"
-#include "rnc/rendering/texture/pack_image_descriptor.h"
-#include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/rendering/texture.h"
+#include "rnc/sdk/libc/stdio.h"
 #include "rnc/ui/text/text_region.h"
 
 extern char D_001602A0[];

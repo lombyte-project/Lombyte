@@ -11,7 +11,7 @@
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 #include "qcopy.h"
-#include "rnc/camera/sample_camera_path.h"
+#include "rnc/camera.h"
 #include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 extern float D_0015ED70;

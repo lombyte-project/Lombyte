@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L04_MOBYS_FLOATING_PLATFORM_H
-#define LOMBYTE_RNC_OVERLAY_L04_MOBYS_FLOATING_PLATFORM_H
-
-#include "types.h"
-
-void floating_platform_update(char *) __asm__("FUN_L04_002cdda0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_L04_MOBYS_FLOATING_PLATFORM_H */

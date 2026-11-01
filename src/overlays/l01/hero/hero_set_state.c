@@ -402,8 +402,8 @@ int l01_hero_set_state(int a, int b) {
         }
         {
             struct UsageStat *h = usage_stats.stat;
-            if (scale_game_frames(D_0015EEA4) / 600 > h[12].unk2) {
-                h[12].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[12].latest_time_bucket) {
+                h[12].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             {
                 struct Hero *q = &hero;
@@ -417,8 +417,8 @@ int l01_hero_set_state(int a, int b) {
         }
         {
             struct UsageStat *h = usage_stats.stat;
-            if (scale_game_frames(D_0015EEA4) / 600 > h[29].unk2) {
-                h[29].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[29].latest_time_bucket) {
+                h[29].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             h[29].level_mask = h[29].level_mask | (1 << current_level_index) | 0x80000000;
         }
@@ -1167,8 +1167,8 @@ int l01_hero_set_state(int a, int b) {
             if (h[0].count <= 0xFFFE) {
                 h[0].count = h[0].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > h[0].unk2) {
-                h[0].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[0].latest_time_bucket) {
+                h[0].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             h[0].level_mask = h[0].level_mask | (1 << current_level_index) | 0x80000000;
             q = &hero;
@@ -1197,16 +1197,17 @@ int l01_hero_set_state(int a, int b) {
             if (h[1].count <= 0xFFFE) {
                 h[1].count = h[1].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > h[1].unk2) {
-                h[1].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[1].latest_time_bucket) {
+                h[1].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             h[1].level_mask = h[1].level_mask | (1 << current_level_index) | 0x80000000;
             item_usage_stats_base = (struct UsageStat *)item_usage;
             if (item_usage_stats_base[37].count <= 0xFFFE) {
                 item_usage_stats_base[37].count = item_usage_stats_base[37].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > item_usage_stats_base[37].unk2) {
-                item_usage_stats_base[37].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 >
+                item_usage_stats_base[37].latest_time_bucket) {
+                item_usage_stats_base[37].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             item_usage_stats_base[37].level_mask =
                 item_usage_stats_base[37].level_mask | (1 << current_level_index) | 0x80000000;
@@ -1245,8 +1246,8 @@ int l01_hero_set_state(int a, int b) {
             if (h[8].count <= 0xFFFE) {
                 h[8].count = h[8].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > h[8].unk2) {
-                h[8].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[8].latest_time_bucket) {
+                h[8].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             q = &hero;
             h[8].level_mask = h[8].level_mask | (1 << current_level_index) | 0x80000000;

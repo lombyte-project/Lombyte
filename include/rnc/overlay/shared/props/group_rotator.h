@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_GROUP_ROTATOR_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_GROUP_ROTATOR_H
-
-#include "types.h"
-
-void moby_rotation_group_update() __asm__("FUN_L06_002f4f00");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_GROUP_ROTATOR_H */

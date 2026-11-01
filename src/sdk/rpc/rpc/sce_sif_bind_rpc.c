@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
 #include "rnc/data_labels.h"
-#include "rnc/sdk/rpc/cmd/sce_sif_send_cmd_public.h"
-#include "rnc/sdk/rpc/rpc/free_rpc_packet.h"
+#include "rnc/sdk/rpc/cmd.h"
+#include "rnc/sdk/rpc/rpc.h"
 
 struct SifRpcPacket {
     u8  pad_0[0x14];

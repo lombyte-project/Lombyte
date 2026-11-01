@@ -10,7 +10,7 @@
 #include "rnc/game/level_state.h"
 #include "rnc/overlay/l15/mobys/poison_vessel_globals.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/shared/mobys/get_moby_pvars_link.h"
+#include "rnc/overlay/shared/mobys.h"
 
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
