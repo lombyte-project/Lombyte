@@ -617,6 +617,9 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         PARATROOPER_STATE_KNOCKBACK_RECOVERY = 10,
         PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE = 11
     };
+    enum {
+        PARATROOPER_HIT_STATUS_NO_HIT_OR_SUPPRESSED = 1
+    };
     Paratrooper302618 *paratrooper_instance_state;
     char              *target, *child, *attached, *chased;
     float              pos[4] __attribute__((aligned(16)));
@@ -660,7 +663,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     target = find_moby_hit(moby, 0x330000, 0);
     reaction = resolve_moby_hit_response(
         moby, target, &paratrooper_instance_state->health, 0, &hit_state, &damage, 0, 4);
-    if (hit_state != 1 && MOBY(moby)->state != PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE) {
+    if (hit_state != PARATROOPER_HIT_STATUS_NO_HIT_OR_SUPPRESSED && MOBY(moby)->state != PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE) {
         {
             float health = paratrooper_instance_state->health - damage;
             paratrooper_instance_state->health = health;
