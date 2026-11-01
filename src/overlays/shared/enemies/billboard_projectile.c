@@ -108,7 +108,7 @@ void billboard_projectile_update(char *moby) {
         }
         if (fast_dec_timer(motion_lifetime_vars)) {
             motion_lifetime_vars[0] = scale_game_frames(0x1e);
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = TIMED_REMOVAL;
             if (motion_lifetime_vars[4] != 0)
                 motion_lifetime_vars[4] = 0;
         }
