@@ -27,12 +27,15 @@ extern char *create_moby(int);
 unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 
 unsigned char *spawn_ship_pickup(char *position, int moby_class) {
+    enum {
+        SHIP_PICKUP_INITIALIZE = 0
+    };
     unsigned char *moby = create_moby(moby_class);
     if (moby != 0) {
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;
-        MOBY(moby)->state = 0;
+        MOBY(moby)->state = SHIP_PICKUP_INITIALIZE;
         MOBY(moby)->command = 0;
         qcopy(&MOBY(moby)->pos, position);
         update_entity(moby);
