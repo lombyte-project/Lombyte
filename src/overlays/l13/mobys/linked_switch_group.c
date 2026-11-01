@@ -166,7 +166,7 @@ void linked_switch_group_update(char *moby) {
         switch_vars->unk76 = 0;
 
         set_moby_color(moby, 0x80, 0x80, 0x80);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = MONITOR_LINKED_GROUP_HITS;
         break;
     case MONITOR_LINKED_GROUP_HITS:
     case WAIT_FOR_LINKED_GROUP_COMPLETION:
@@ -187,14 +187,14 @@ void linked_switch_group_update(char *moby) {
             set_moby_color(moby, 0, 0xFF, 0);
             switch_vars->unk74 = 1;
         }
-        if ((unsigned char)MOBY(moby)->state == 2) {
+        if ((unsigned char)MOBY(moby)->state == WAIT_FOR_LINKED_GROUP_COMPLETION) {
             if (switch_vars->unk7A >= switch_vars->unk7B) {
                 set_moby_list_state((unsigned char)MOBY(moby)->group, 4);
                 allocate_voice_for_target_entry(1, 0, moby);
                 switch_vars->unk70 = switch_vars->unk84;
                 debug_print(
                     D_L13_001F4D90, ((short)MOBY(moby)->save_id), MOBY(moby)->oclass, frame_count);
-                MOBY(moby)->state = 4;
+                MOBY(moby)->state = UPDATE_OPENED_STATE;
             } else {
                 if (switch_vars->unk7C >= 0) {
                     if (fast_dec_timer_s16(&switch_vars->unk70) != 0) {
@@ -207,7 +207,7 @@ void linked_switch_group_update(char *moby) {
                                     ((short)MOBY(moby)->save_id),
                                     MOBY(moby)->oclass,
                                     frame_count);
-                        MOBY(moby)->state = 3;
+                        MOBY(moby)->state = RESET_HIT_STATE;
                     } else if (fast_dec_timer_s16(&switch_vars->unk72) != 0) {
                         allocate_voice_for_target_entry(0, 0, moby);
                         switch_vars->unk72 = MIN(scale_game_frames(0x2D),
@@ -224,7 +224,7 @@ void linked_switch_group_update(char *moby) {
         switch_vars->unk7A = 0;
         switch_vars->unk74 = 0;
         switch_vars->unk20 = (float)switch_vars->unk24;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = MONITOR_LINKED_GROUP_HITS;
 
         break;
     case UPDATE_OPENED_STATE:
@@ -239,7 +239,7 @@ void linked_switch_group_update(char *moby) {
                             ((short)MOBY(moby)->save_id),
                             MOBY(moby)->oclass,
                             frame_count);
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = RESET_HIT_STATE;
             } else if (fast_dec_timer_s16(&switch_vars->unk72) != 0) {
                 allocate_voice_for_target_entry(0, 0, moby);
                 switch_vars->unk72 =
