@@ -152,8 +152,8 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 int          D_L12_00161A10 = 1;
-int          D_L12_00161A14 = 0;
-int          D_L12_00161A0C = 0;
+int          l12_water_reservoir_alpha_c_selector __asm__("D_L12_00161A14") = 0;
+int          l12_water_reservoir_alpha_a_selector __asm__("D_L12_00161A0C") = 0;
 int          D_L12_00161A18 = 1;
 int          D_L12_00161A1C = 0x40602020;
 int          D_L12_00161A20 = 0x40681818;
@@ -174,7 +174,7 @@ void draw_water_reservoir(struct Moby *moby) {
     quad.g[1] = get_effect_texture(0x10);
     quad.g[0] = 0;
     quad.g[2] = 0xFF9000000260UL;
-    quad.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) | ((long)D_L12_00161A14 << 4) |
+    quad.g[3] = (long)l12_water_reservoir_alpha_a_selector | ((long)D_L12_00161A10 << 2) | ((long)l12_water_reservoir_alpha_c_selector << 4) |
                 ((long)D_L12_00161A18 << 6) | (0x8000L << 24);
     col = fast_tween_color(
         D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
