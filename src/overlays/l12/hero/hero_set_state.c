@@ -703,8 +703,8 @@ int hero_set_state(int a, int b) {
             if (h[12].count <= 0xFFFE) {
                 h[12].count = h[12].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > h[12].unk2) {
-                h[12].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[12].latest_time_bucket) {
+                h[12].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             h[12].level_mask = h[12].level_mask | (1 << current_level_index) | 0x80000000;
         }
@@ -749,8 +749,8 @@ int hero_set_state(int a, int b) {
             if (h[12].count <= 0xFFFE) {
                 h[12].count = h[12].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > h[12].unk2) {
-                h[12].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[12].latest_time_bucket) {
+                h[12].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             h[12].level_mask = h[12].level_mask | (1 << current_level_index) | 0x80000000;
         }
@@ -1366,8 +1366,8 @@ int hero_set_state(int a, int b) {
             if (item_usage_base[37].count <= 0xFFFE) {
                 item_usage_base[37].count = item_usage_base[37].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > item_usage_base[37].unk2) {
-                item_usage_base[37].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > item_usage_base[37].latest_time_bucket) {
+                item_usage_base[37].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             item_usage_base[37].level_mask =
                 item_usage_base[37].level_mask | (1 << current_level_index) | 0x80000000;
@@ -1406,8 +1406,8 @@ int hero_set_state(int a, int b) {
             if (h[8].count <= 0xFFFE) {
                 h[8].count = h[8].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > h[8].unk2) {
-                h[8].unk2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[8].latest_time_bucket) {
+                h[8].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             q = &hero;
             h[8].level_mask = h[8].level_mask | (1 << current_level_index) | 0x80000000;
