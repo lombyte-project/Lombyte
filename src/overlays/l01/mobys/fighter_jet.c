@@ -67,6 +67,9 @@ void fighter_jet_update(char *moby) __asm__("FUN_L01_002f4428");
 
 /* Moby class 660 */
 void fighter_jet_update(char *moby) {
+    enum {
+        FIGHTER_JET_STATE_DESTROYED = 0x65
+    };
     float hit_dir[4];
     float hit_vec[4];
     char *fighter_jet_vars = *(char **)(moby + 0x78);
@@ -102,7 +105,7 @@ void fighter_jet_update(char *moby) {
             queue_dialogue_message(0x53D6, -1);
         }
         fast_vec_sub(hit_vec, fighter_jet_vars + 0xD0, fighter_jet_vars + 0xE0);
-        MOBY(moby)->state = 0x65;
+        MOBY(moby)->state = FIGHTER_JET_STATE_DESTROYED;
         *(u128 *)hit_dir = *(u128 *)hit_vec;
         spawn_explosion(moby,
                         hit_dir,
