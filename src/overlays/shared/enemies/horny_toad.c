@@ -20,6 +20,15 @@
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/overlay/shared/math/quad.h"
 
+typedef struct HornyToadVars {
+    u8  pad0[0x1f4];
+    f32 unk1F4[4];
+    u8  pad204[0x6c];
+    f32 unk270;
+    u8  pad274[0x4];
+    f32 unk278;
+} HornyToadVars;
+
 typedef struct Moby Moby;
 typedef float       ToadVec[4] __attribute__((aligned(16)));
 
@@ -563,21 +572,21 @@ float move_horny_toad_toward_position(unsigned char *moby,
 
                                       float initial_travel_distance) {
     float          requested_movement_displacement[4] __attribute__((aligned(16)));
-    unsigned char *moby_vars;
+    HornyToadVars *moby_vars;
     float          desired_yaw, target_distance, z, movement_yaw, maximum_vertical_displacement,
         vertical_displacement;
-    moby_vars = ((unsigned char *)MOBY(moby)->pvars);
+    moby_vars = (HornyToadVars *)MOBY(moby)->pvars;
     desired_yaw = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                target_position[1] - MOBY(moby)->pos.y);
     z = MOBY(moby)->pos.z;
     target_distance = fast_vec_dist(&MOBY(moby)->pos, target_position);
     if (2.0f < target_distance)
-        desired_yaw = fast_add_rotations(desired_yaw, *(float *)(moby_vars + 0x1FC));
+        desired_yaw = fast_add_rotations(desired_yaw, moby_vars->unk1F4[2]);
     if (MOBY(moby)->seq != MOBY(moby)->prev_seq)
         return target_distance;
     approach_angle(moby + 0x48,
                    desired_yaw,
-                   moby_vars + 0x1F4,
+                   &moby_vars->unk1F4,
                    D_0015ED70_2d54c8 * 12.566371f,
                    D_0015ED70_2d54c8 * 12.566371f,
                    frame_time * 12.566371f);
@@ -586,23 +595,22 @@ float move_horny_toad_toward_position(unsigned char *moby,
                                D_0015ED70_2d54c8 * 8.0f,
                                D_0015ED70_2d54c8 * 12.0f,
                                frame_time * 4.0f,
-                               (float *)(moby_vars + 0x1F8));
-    if (*(float *)(moby_vars + 0x1F8) < 0.0f)
-        *(float *)(moby_vars + 0x1F8) = 0.0f;
+                               (float *)(&moby_vars->unk1F4[1]));
+    if (moby_vars->unk1F4[1] < 0.0f)
+        moby_vars->unk1F4[1] = 0.0f;
     movement_yaw = MOBY(moby)->rot.z;
-    *(float *)(moby_vars + 0x278) = movement_yaw;
-    requested_movement_displacement[0] =
-        FUN_001f9dc8_2d54c8(movement_yaw) * *(float *)(moby_vars + 0x1F8);
+    moby_vars->unk278 = movement_yaw;
+    requested_movement_displacement[0] = FUN_001f9dc8_2d54c8(movement_yaw) * moby_vars->unk1F4[1];
     requested_movement_displacement[1] =
-        FUN_001f9de0_2d54c8(*(float *)(moby_vars + 0x278)) * *(float *)(moby_vars + 0x1F8);
+        FUN_001f9de0_2d54c8(moby_vars->unk278) * moby_vars->unk1F4[1];
     requested_movement_displacement[2] = 0.0f;
-    requested_movement_displacement[2] = *(float *)(moby_vars + 0x270) - D_0015ED70_2d54c8 * 10.0f;
+    requested_movement_displacement[2] = moby_vars->unk270 - D_0015ED70_2d54c8 * 10.0f;
     FUN_L00_00258830_2d54c8(moby, requested_movement_displacement, 0x10, 0.5f, 0.5f, 0.0f);
     vertical_displacement = MOBY(moby)->pos.z - z;
     maximum_vertical_displacement = frame_time * 4.0f;
-    *(float *)(moby_vars + 0x270) = vertical_displacement;
+    moby_vars->unk270 = vertical_displacement;
     if (maximum_vertical_displacement < vertical_displacement)
-        *(float *)(moby_vars + 0x270) = maximum_vertical_displacement;
+        moby_vars->unk270 = maximum_vertical_displacement;
     if (MOBY(moby)->anim_flags & 2)
         return target_distance;
     return 37.0f;

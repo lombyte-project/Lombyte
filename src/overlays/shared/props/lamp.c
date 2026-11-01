@@ -13,6 +13,16 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 
+typedef struct LampVars {
+    u8  pad0[0x10];
+    u8  unk10[0x30];
+    f32 unk40;
+    f32 unk44;
+    f32 unk48;
+    f32 unk4C;
+    f32 unk50;
+} LampVars;
+
 typedef struct {
     float vertex[4][4];
     int   color[4];
@@ -54,21 +64,21 @@ void moby_wobble_update(unsigned char *moby) {
         MOBY_WOBBLE_STATE_INITIALIZE = 0,
         MOBY_WOBBLE_STATE_ANIMATE = 1
     };
-    char *wobble_vars = ((char *)MOBY(moby)->pvars);
-    float random_angular_sample, lo, hi;
+    LampVars *wobble_vars = (LampVars *)MOBY(moby)->pvars;
+    float     random_angular_sample, lo, hi;
     switch (MOBY(moby)->state) {
     case MOBY_WOBBLE_STATE_INITIALIZE:
-        *(float *)(wobble_vars + 0x40) = MOBY(moby)->rot.z;
-        *(float *)(wobble_vars + 0x48) = random_angle_radians();
+        wobble_vars->unk40 = MOBY(moby)->rot.z;
+        wobble_vars->unk48 = random_angle_radians();
         random_angular_sample = random_angle_radians();
         lo = frame_time * 0.47123888f;
         hi = frame_time * 0.5235988f;
-        *(float *)(wobble_vars + 0x44) = random_angular_sample;
+        wobble_vars->unk44 = random_angular_sample;
         random_angular_sample = randf_sym(lo, hi);
         lo = frame_time * 0.20943951f;
         hi = frame_time * 0.2617994f;
-        *(float *)(wobble_vars + 0x50) = random_angular_sample;
-        *(float *)(wobble_vars + 0x4C) = randf_sym(lo, hi);
+        wobble_vars->unk50 = random_angular_sample;
+        wobble_vars->unk4C = randf_sym(lo, hi);
         set_moby_color(moby, 0x80, 0x80, 0x80);
         attach_manipulator((char *)moby, 0, wobble_vars);
         MOBY(moby)->state = 1;
@@ -77,15 +87,12 @@ void moby_wobble_update(unsigned char *moby) {
         float k = 0.5235988f;
         float wobble_phase;
         add_draw_callback((void *)draw_moby_wobble_quads, moby);
-        wobble_phase =
-            fast_add_rotations(*(float *)(wobble_vars + 0x44), *(float *)(wobble_vars + 0x4C));
-        *(float *)(wobble_vars + 0x44) = wobble_phase;
-        MOBY(moby)->rot.z =
-            fast_add_rotations(*(float *)(wobble_vars + 0x40), fast_sin(wobble_phase) * k);
-        wobble_phase =
-            fast_add_rotations(*(float *)(wobble_vars + 0x48), *(float *)(wobble_vars + 0x50));
-        *(float *)(wobble_vars + 0x48) = wobble_phase;
-        FUN_L00_001fff28(wobble_vars + 0x10, 1, fast_sin(wobble_phase) * k + k);
+        wobble_phase = fast_add_rotations(wobble_vars->unk44, wobble_vars->unk4C);
+        wobble_vars->unk44 = wobble_phase;
+        MOBY(moby)->rot.z = fast_add_rotations(wobble_vars->unk40, fast_sin(wobble_phase) * k);
+        wobble_phase = fast_add_rotations(wobble_vars->unk48, wobble_vars->unk50);
+        wobble_vars->unk48 = wobble_phase;
+        FUN_L00_001fff28(&wobble_vars->unk10, 1, fast_sin(wobble_phase) * k + k);
         break;
     }
     }
@@ -96,24 +103,24 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     float rotation[4];
     float position[4];
     /* Draw helper reads four consecutive vectors: side, direction, up, position. */
-    float  matrix[16] __attribute__((aligned(16)));
-    float *side;
-    float *direction;
-    float *up;
-    u64    texture;
-    u64    flags;
-    float  phase;
-    float  sign;
-    float  pass;
-    float  offset_a_x, offset_a_z, offset_b_x, offset_b_z;
-    int    i, j, k;
-    float *vertex_a, *vertex_b;
-    char  *moby_wobble_vars = (char *)moby->pvars;
+    float     matrix[16] __attribute__((aligned(16)));
+    float    *side;
+    float    *direction;
+    float    *up;
+    u64       texture;
+    u64       flags;
+    float     phase;
+    float     sign;
+    float     pass;
+    float     offset_a_x, offset_a_z, offset_b_x, offset_b_z;
+    int       i, j, k;
+    float    *vertex_a, *vertex_b;
+    LampVars *moby_wobble_vars = (LampVars *)moby->pvars;
 
     moby_point_position(moby, 0, position);
     clear_u64_value(rotation);
     rotation[2] = moby->rot.z;
-    rotation[1] = fast_sin(*(float *)(moby_wobble_vars + 0x48)) * 0.5235988f + 0.5235988f;
+    rotation[1] = fast_sin(moby_wobble_vars->unk48) * 0.5235988f + 0.5235988f;
     side = matrix;
     euler_rotation_matrix(side, rotation);
     direction = matrix + 4;

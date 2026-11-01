@@ -24,6 +24,24 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
+typedef struct MineVars {
+    u8  pad0[0x30];
+    s32 unk30;
+    u8  pad34[0x2];
+    s16 unk36;
+    f32 unk38;
+    f32 unk3C;
+    u8  pad40[0x1c];
+    s32 unk5C;
+    f32 unk60;
+    f32 unk64;
+    s32 unk68;
+    f32 unk6C;
+    f32 unk70;
+    s32 unk74;
+    s32 unk78;
+} MineVars;
+
 typedef float V910[4] __attribute__((aligned(16)));
 
 typedef struct {
@@ -386,15 +404,15 @@ unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
     unsigned char *mine_moby = create_moby(0x4A);
     if (mine_moby) {
-        unsigned char *mine_vars = ((unsigned char *)MOBY(mine_moby)->pvars);
+        MineVars *mine_vars = (MineVars *)MOBY(mine_moby)->pvars;
         MOBY(mine_moby)->update_dist = 0xFF;
         MOBY(mine_moby)->draw_dist = 0x7F;
         MOBY(mine_moby)->visible = 1;
         MOBY(mine_moby)->scale = MOBY(mine_moby)->scale * 0.5f;
         MOBY(mine_moby)->state = 0;
-        *(int *)(mine_vars + 0x30) = mine_owner_moby;
-        *(short *)(mine_vars + 0x36) = 0;
-        *(int *)(mine_vars + 0x78) = 0;
+        mine_vars->unk30 = mine_owner_moby;
+        mine_vars->unk36 = 0;
+        mine_vars->unk78 = 0;
         qcopy(&MOBY(mine_moby)->pos, spawn_position);
         clear_u64_value(mine_vars);
         {
@@ -404,19 +422,19 @@ unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
             float frame_scaled_random_sample;
             int   x;
             float z;
-            *(float *)(mine_vars + 0x38) = a;
+            mine_vars->unk38 = a;
             frame_scaled_random_sample =
                 random_float_between(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
             x = D_L00_0015F5CC_2a9ed0;
             z = 0.0f;
-            *(float *)(mine_vars + 0x3C) = frame_scaled_random_sample;
-            *(float *)(mine_vars + 0x64) = z;
-            *(float *)(mine_vars + 0x60) = z;
-            *(float *)(mine_vars + 0x70) = z;
-            *(float *)(mine_vars + 0x6C) = z;
-            *(int *)(mine_vars + 0x5C) = x;
-            *(int *)(mine_vars + 0x74) = 0;
-            *(int *)(mine_vars + 0x68) = -1;
+            mine_vars->unk3C = frame_scaled_random_sample;
+            mine_vars->unk64 = z;
+            mine_vars->unk60 = z;
+            mine_vars->unk70 = z;
+            mine_vars->unk6C = z;
+            mine_vars->unk5C = x;
+            mine_vars->unk74 = 0;
+            mine_vars->unk68 = -1;
             MOBY(mine_moby)->collision = 0;
         }
         update_entity(mine_moby);

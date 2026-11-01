@@ -22,6 +22,27 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 
+typedef struct GoldDevastatorMissileVars {
+    u8             pad0[0x8];
+    f32            unk8;
+    u8             padC[0x4];
+    unsigned char *unk10;
+    s32            unk14;
+    unsigned char *unk18;
+    f32            unk1C;
+    f32            unk20;
+    s32            unk24;
+    s32            unk28;
+    f32            unk2C;
+    f32            unk30;
+    f32            unk34;
+    s32            unk38;
+    s16            unk3C;
+    s16            unk3E;
+    u8             pad40[0x8];
+    f32            unk48;
+} GoldDevastatorMissileVars;
+
 typedef struct {
     char  p0[0x80];
     f32   x80;
@@ -392,60 +413,60 @@ unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
                                         float          initial_yaw,
 
                                         float initial_pitch) {
-    V_2afc70       collision_start;
-    unsigned char *missile_moby;
-    unsigned char *missile_data;
-    unsigned char *target_aim_record;
-    float          default_desired_speed;
-    int            turn_period;
-    float          x;
+    V_2afc70                   collision_start;
+    unsigned char             *missile_moby;
+    GoldDevastatorMissileVars *missile_data;
+    unsigned char             *target_aim_record;
+    float                      default_desired_speed;
+    int                        turn_period;
+    float                      x;
 
     missile_moby = create_moby(0x99);
     if (missile_moby != 0) {
-        missile_data = ((unsigned char *)MOBY(missile_moby)->pvars);
+        missile_data = (GoldDevastatorMissileVars *)MOBY(missile_moby)->pvars;
         MOBY(missile_moby)->update_dist = 0xFF;
         MOBY(missile_moby)->draw_dist = 0xFF;
         MOBY(missile_moby)->visible = 1;
         MOBY(missile_moby)->rot.z = initial_yaw;
         MOBY(missile_moby)->rot.y = initial_pitch;
         MOBY(missile_moby)->state = 0;
-        *(unsigned char **)(missile_data + 0x10) = missile_source_moby;
+        missile_data->unk10 = missile_source_moby;
         qcopy(&MOBY(missile_moby)->pos, spawn_position);
         default_desired_speed = frame_time * 20.0f;
-        *(int *)(missile_data + 0x38) = 1;
-        *(float *)(missile_data + 0x48) = 70.0f;
-        *(float *)(missile_data + 0x34) = default_desired_speed;
-        *(int *)(missile_data + 0x24) = 0;
-        *(int *)(missile_data + 0x28) = 0;
-        *(unsigned char **)(missile_data + 0x18) = target_moby;
-        *(float *)(missile_data + 0x20) = default_desired_speed / 3.0f;
+        missile_data->unk38 = 1;
+        missile_data->unk48 = 70.0f;
+        missile_data->unk34 = default_desired_speed;
+        missile_data->unk24 = 0;
+        missile_data->unk28 = 0;
+        missile_data->unk18 = target_moby;
+        missile_data->unk20 = default_desired_speed / 3.0f;
         if (target_moby != 0) {
             target_aim_record = get_moby_target_info(target_moby);
             if (target_aim_record != 0) {
                 *(unsigned short *)(target_aim_record + 0x1E) |= 0x80;
                 if (target_aim_record[0xB]) {
-                    *(int *)(missile_data + 0x38) = 0;
+                    missile_data->unk38 = 0;
                 }
                 if (target_aim_record[0xC]) {
-                    *(float *)(missile_data + 0x34) = (float)target_aim_record[0xC] * frame_time;
+                    missile_data->unk34 = (float)target_aim_record[0xC] * frame_time;
                 }
-                if (frame_time * 20.0f < *(float *)(missile_data + 0x34)) {
-                    *(float *)(missile_data + 0x48) = 140.0f;
+                if (frame_time * 20.0f < missile_data->unk34) {
+                    missile_data->unk48 = 140.0f;
                 }
             }
         }
-        *(float *)(missile_data + 0x2C) = guidance_yaw;
-        *(float *)(missile_data + 0x30) = guidance_pitch;
-        *(int *)(missile_data + 0x14) = FUN_001f96f8_2afc70(300);
+        missile_data->unk2C = guidance_yaw;
+        missile_data->unk30 = guidance_pitch;
+        missile_data->unk14 = FUN_001f96f8_2afc70(300);
         if (target_moby != 0) {
             qcopy(missile_data, &MOBY(target_moby)->pos);
-            *(float *)(missile_data + 0x1C) = target_height_offset;
-            *(float *)(missile_data + 8) += target_height_offset;
+            missile_data->unk1C = target_height_offset;
+            missile_data->unk8 += target_height_offset;
         }
         x = FUN_001f9af0_2afc70(D_0013F490_lui);
         turn_period = FUN_001f96f8_2afc70(frame_time * 0.1f < x ? 0x3C : 0xF);
-        *(short *)(missile_data + 0x3E) = turn_period;
-        *(short *)(missile_data + 0x3C) = turn_period;
+        missile_data->unk3E = turn_period;
+        missile_data->unk3C = turn_period;
         if (missile_source_moby != 0 && MOBY(missile_source_moby)->state != 0xFE &&
             MOBY(missile_source_moby)->state != 0xFD) {
             collision_start.q = ((V_2afc70 *)&MOBY(missile_source_moby)->pos)->q;

@@ -8,6 +8,23 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/mobys/moby.h"
 
+typedef struct BridgeVars {
+    u8  pad0[0x60];
+    u8  unk60[0x40];
+    f32 unkA0[4];
+    s32 unkB0;
+    u32 unkB4;
+    u32 unkB8;
+    f32 unkBC;
+    f32 unkC0;
+    f32 unkC4;
+    f32 unkC8;
+    f32 unkCC;
+    s32 unkD0;
+    s32 unkD4;
+    s32 unkD8;
+} BridgeVars;
+
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -27,7 +44,7 @@ void bridge_update(u8 *moby) {
         BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION = 3,
         BRIDGE_RETURN_TO_INITIAL_POSITION = 4
     };
-    u8         *bridge_data = ((u8 *)MOBY(moby)->pvars);
+    BridgeVars *bridge_data = (BridgeVars *)MOBY(moby)->pvars;
     u8         *linked_state_moby;
     f32         delta[4];
     f32         old_rotation[4];
@@ -41,106 +58,104 @@ void bridge_update(u8 *moby) {
 
     if (MOBY(moby)->mission != 0xff &&
         visited52[MOBY(moby)->mission + current_level_index * 16] == 0xff)
-        *(s32 *)(bridge_data + 0xb0) = -1;
+        bridge_data->unkB0 = -1;
 
     state = MOBY(moby)->state;
     switch (state) {
     case BRIDGE_INITIALIZE:
-        qcopy(bridge_data + 0xa0, &MOBY(moby)->pos);
-        if (*(s32 *)(bridge_data + 0xd8) != -1)
-            D_L07_00184528[*(s32 *)(bridge_data + 0xd8)] = 0;
+        qcopy(&bridge_data->unkA0, &MOBY(moby)->pos);
+        if (bridge_data->unkD8 != -1)
+            D_L07_00184528[bridge_data->unkD8] = 0;
         MOBY(moby)->state = 1;
-        *(s32 *)(bridge_data + 0xac) = 0;
+        *(s32 *)&bridge_data->unkA0[3] = 0;
         break;
     case BRIDGE_WAIT_TO_MOVE_TO_OFFSET_POSITION:
-        if (*(s32 *)(bridge_data + 0xb0) != -1) {
-            linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
+        if (bridge_data->unkB0 != -1) {
+            linked_state_moby = level_mobys + bridge_data->unkB0 * 0x100;
             if (linked_state_moby != 0 && MOBY(linked_state_moby)->state != 0xfe &&
                 MOBY(linked_state_moby)->state != 0xfd &&
-                MOBY(linked_state_moby)->state != *(u32 *)(bridge_data + 0xb4))
+                MOBY(linked_state_moby)->state != bridge_data->unkB4)
                 break;
         }
         *(quadword *)(vectors + 4) = 0;
-        vectors[4] = *(f32 *)(bridge_data + 0xbc);
-        vectors[5] = *(f32 *)(bridge_data + 0xc0);
-        vectors[6] = *(f32 *)(bridge_data + 0xc4);
+        vectors[4] = bridge_data->unkBC;
+        vectors[5] = bridge_data->unkC0;
+        vectors[6] = bridge_data->unkC4;
         *(quadword *)vectors = *(quadword *)(vectors + 4);
-        *(f32 *)(bridge_data + 0xac) = fast_vec_length(vectors);
-        if (*(s32 *)(bridge_data + 0xd0) != -1)
-            allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
+        bridge_data->unkA0[3] = fast_vec_length(vectors);
+        if (bridge_data->unkD0 != -1)
+            allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
         MOBY(moby)->state = 2;
         break;
     case BRIDGE_MOVE_TO_OFFSET_POSITION:
-        if (*(s32 *)(bridge_data + 0xb0) != -1) {
-            linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
+        if (bridge_data->unkB0 != -1) {
+            linked_state_moby = level_mobys + bridge_data->unkB0 * 0x100;
             if (linked_state_moby != 0 && MOBY(linked_state_moby)->state != 0xfe &&
                 MOBY(linked_state_moby)->state != 0xfd &&
-                MOBY(linked_state_moby)->state == *(u32 *)(bridge_data + 0xb8)) {
-                if (*(s32 *)(bridge_data + 0xd0) != -1)
-                    allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
+                MOBY(linked_state_moby)->state == bridge_data->unkB8) {
+                if (bridge_data->unkD0 != -1)
+                    allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
                 MOBY(moby)->state = 4;
                 break;
             }
         }
         *(quadword *)(vectors + 4) = 0;
-        vectors[4] = *(f32 *)(bridge_data + 0xbc);
-        vectors[5] = *(f32 *)(bridge_data + 0xc0);
-        vectors[6] = *(f32 *)(bridge_data + 0xc4);
+        vectors[4] = bridge_data->unkBC;
+        vectors[5] = bridge_data->unkC0;
+        vectors[6] = bridge_data->unkC4;
         *(quadword *)vectors = *(quadword *)(vectors + 4);
         transform_vector_by_basis(vectors, vectors, moby + 0xc0);
-        scale_vector_xyz_alt_31aee0(
-            *(f32 *)(bridge_data + 0xc8) * frame_time, vectors + 4, vectors);
+        scale_vector_xyz_alt_31aee0(bridge_data->unkC8 * frame_time, vectors + 4, vectors);
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, vectors + 4);
-        *(f32 *)(bridge_data + 0xac) -= *(f32 *)(bridge_data + 0xc8) * frame_time;
-        if (*(f32 *)(bridge_data + 0xac) < 0.0f) {
-            fast_vec_add(&MOBY(moby)->pos, bridge_data + 0xa0, vectors);
-            *(f32 *)(bridge_data + 0xac) = 0.0f;
-            if (*(s32 *)(bridge_data + 0xd8) != -1)
-                D_L07_00184528[*(s32 *)(bridge_data + 0xd8)] = 1;
+        bridge_data->unkA0[3] -= bridge_data->unkC8 * frame_time;
+        if (bridge_data->unkA0[3] < 0.0f) {
+            fast_vec_add(&MOBY(moby)->pos, &bridge_data->unkA0, vectors);
+            bridge_data->unkA0[3] = 0.0f;
+            if (bridge_data->unkD8 != -1)
+                D_L07_00184528[bridge_data->unkD8] = 1;
             MOBY(moby)->state = 3;
-            if (*(s32 *)(bridge_data + 0xd4) != -1)
-                allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
+            if (bridge_data->unkD4 != -1)
+                allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
         }
         break;
     case BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION:
-        if (*(s32 *)(bridge_data + 0xb0) != -1) {
-            linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
+        if (bridge_data->unkB0 != -1) {
+            linked_state_moby = level_mobys + bridge_data->unkB0 * 0x100;
             if (linked_state_moby != 0 && MOBY(linked_state_moby)->state != 0xfe &&
                 MOBY(linked_state_moby)->state != 0xfd &&
-                MOBY(linked_state_moby)->state == *(u32 *)(bridge_data + 0xb8)) {
-                *(s32 *)(bridge_data + 0xac) = 0;
-                if (*(s32 *)(bridge_data + 0xd0) != -1)
-                    allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
+                MOBY(linked_state_moby)->state == bridge_data->unkB8) {
+                *(s32 *)&bridge_data->unkA0[3] = 0;
+                if (bridge_data->unkD0 != -1)
+                    allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
                 MOBY(moby)->state = 4;
             }
         }
         break;
     case BRIDGE_RETURN_TO_INITIAL_POSITION:
-        if (*(s32 *)(bridge_data + 0xb0) == -1 ||
-            (linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100) == 0 ||
+        if (bridge_data->unkB0 == -1 ||
+            (linked_state_moby = level_mobys + bridge_data->unkB0 * 0x100) == 0 ||
             MOBY(linked_state_moby)->state == 0xfe || MOBY(linked_state_moby)->state == 0xfd ||
-            MOBY(linked_state_moby)->state == *(u32 *)(bridge_data + 0xb4)) {
-            if (*(s32 *)(bridge_data + 0xd0) != -1)
-                allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
+            MOBY(linked_state_moby)->state == bridge_data->unkB4) {
+            if (bridge_data->unkD0 != -1)
+                allocate_voice_for_target_entry(bridge_data->unkD0, 0, moby);
             MOBY(moby)->state = 2;
         } else {
             *(quadword *)(vectors + 4) = 0;
-            vectors[4] = *(f32 *)(bridge_data + 0xbc);
-            vectors[5] = *(f32 *)(bridge_data + 0xc0);
-            vectors[6] = *(f32 *)(bridge_data + 0xc4);
+            vectors[4] = bridge_data->unkBC;
+            vectors[5] = bridge_data->unkC0;
+            vectors[6] = bridge_data->unkC4;
             *(quadword *)vectors = *(quadword *)(vectors + 4);
             distance = fast_vec_length(vectors);
-            scale_vector_xyz_alt_31aee0(
-                -(*(f32 *)(bridge_data + 0xcc) * frame_time), vectors, vectors);
+            scale_vector_xyz_alt_31aee0(-(bridge_data->unkCC * frame_time), vectors, vectors);
             transform_vector_by_basis(vectors + 4, vectors, moby + 0xc0);
             fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, vectors + 4);
-            *(f32 *)(bridge_data + 0xac) += *(f32 *)(bridge_data + 0xcc) * frame_time;
-            if (distance < *(f32 *)(bridge_data + 0xac)) {
-                qcopy(&MOBY(moby)->pos, bridge_data + 0xa0);
-                if (*(s32 *)(bridge_data + 0xd0) != -1)
-                    allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd4), 0, moby);
-                if (*(s32 *)(bridge_data + 0xd8) != -1)
-                    D_L07_00184528[*(s32 *)(bridge_data + 0xd8)] = 0;
+            bridge_data->unkA0[3] += bridge_data->unkCC * frame_time;
+            if (distance < bridge_data->unkA0[3]) {
+                qcopy(&MOBY(moby)->pos, &bridge_data->unkA0);
+                if (bridge_data->unkD0 != -1)
+                    allocate_voice_for_target_entry(bridge_data->unkD4, 0, moby);
+                if (bridge_data->unkD8 != -1)
+                    D_L07_00184528[bridge_data->unkD8] = 0;
                 MOBY(moby)->state = 1;
             }
         }
@@ -149,5 +164,5 @@ void bridge_update(u8 *moby) {
         break;
     }
     fast_vec_add(delta, delta, &MOBY(moby)->pos);
-    update_entity_matrix(bridge_data + 0x60, delta, old_rotation, moby + 0x40);
+    update_entity_matrix(&bridge_data->unk60, delta, old_rotation, moby + 0x40);
 }

@@ -8,6 +8,15 @@
 #include "sda.h"
 #include "rnc/mobys/moby.h"
 
+typedef struct TimedActivationPadVars {
+    u8  pad0[0x4];
+    s32 unk4;
+    s32 unk8;
+    s16 unkC;
+    s16 unkE;
+    s32 unk10;
+} TimedActivationPadVars;
+
 extern s32  allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 float       absolute_float(float input) __asm__("func_001F99C0");
@@ -39,17 +48,17 @@ void timed_activation_pads_update(unsigned char *moby) {
         PAD_FLASH_APPLY_GREEN = 0x0,
         PAD_FLASH_APPLY_WHITE = 0x1
     };
-    char *pad_data;
-    char *activation_reference_data;
-    float activation_offset[4];
-    float transposed_pad_rotation[16];
-    int   flag;
-    int   on;
-    int   pad_state;
+    TimedActivationPadVars *pad_data;
+    char                   *activation_reference_data;
+    float                   activation_offset[4];
+    float                   transposed_pad_rotation[16];
+    int                     flag;
+    int                     on;
+    int                     pad_state;
 
     if (moby == 0)
         return;
-    pad_data = ((char *)MOBY(moby)->pvars);
+    pad_data = (TimedActivationPadVars *)MOBY(moby)->pvars;
     if (pad_data == 0)
         return;
 
@@ -61,7 +70,7 @@ void timed_activation_pads_update(unsigned char *moby) {
         }
     }
 
-    if (*(int *)(pad_data + 0x8) == 0) {
+    if (pad_data->unk8 == 0) {
         activation_reference_data = (char *)D_0013F350_lui;
         if (*(short *)(activation_reference_data + 0x30E) == 0)
             flag = *(unsigned char **)(activation_reference_data + 0x2FC) == moby;
@@ -93,9 +102,9 @@ void timed_activation_pads_update(unsigned char *moby) {
             if (fast_dec_timer((int *)pad_data)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 set_moby_list_state(MOBY(moby)->group, 8);
-            } else if (fast_dec_timer((int *)(pad_data + 4))) {
+            } else if (fast_dec_timer((int *)(&pad_data->unk4))) {
                 allocate_voice_for_target_entry(0, 0, (int)moby);
-                *(int *)(pad_data + 4) =
+                pad_data->unk4 =
                     func_001F9850_30D370(0x2D) <
                             func_001F9850_30D370(5) + *(int *)pad_data / func_001F9850_30D370(0x28)
                         ? func_001F9850_30D370(0x2D)
@@ -111,16 +120,16 @@ void timed_activation_pads_update(unsigned char *moby) {
         set_moby_list_state(MOBY(moby)->group, 1);
         break;
     case PAD_WAIT_FOR_ACTIVATION:
-        *(int *)(pad_data + 0x8) = 0;
+        pad_data->unk8 = 0;
         glow_n(moby, 0x80, 0x80, 0x80);
         if (flag) {
-            if (*(int *)(pad_data + 0x10) > 0)
-                *(int *)pad_data = func_001F9850_30D370(*(int *)(pad_data + 0x10) * 60);
+            if (pad_data->unk10 > 0)
+                *(int *)pad_data = func_001F9850_30D370(pad_data->unk10 * 60);
             else
                 *(int *)pad_data = func_001F9850_30D370(900);
             on = 1;
             glow_n(moby, 0, 0xFF, 0);
-            *(int *)(pad_data + 0x8) = on;
+            pad_data->unk8 = on;
             func_L01_0026F040_30D370(MOBY(moby)->group, 0);
             MOBY(moby)->command = on;
             allocate_voice_for_target_entry(3, 0, (int)moby);
@@ -132,7 +141,7 @@ void timed_activation_pads_update(unsigned char *moby) {
         break;
     case PAD_WAIT_TO_ENTER_FLASH_ACTIVATION_WAIT:
         if (flag) {
-            *(int *)(pad_data + 0x8) = 1;
+            pad_data->unk8 = 1;
             glow_n(moby, 0, 0xFF, 0);
             allocate_voice_for_target_entry(3, 0, (int)moby);
             set_moby_list_state(MOBY(moby)->group, 4);
@@ -143,15 +152,15 @@ void timed_activation_pads_update(unsigned char *moby) {
         break;
     case PAD_WAIT_FOR_FLASH_ACTIVATION:
         if (flag) {
-            *(int *)(pad_data + 0x8) = 1;
+            pad_data->unk8 = 1;
             glow_n(moby, 0, 0xFF, 0);
             set_moby_list_state(MOBY(moby)->group, 6);
             allocate_voice_for_target_entry(1, 0, (int)moby);
         }
         break;
     case PAD_INITIALIZE_FLASHING:
-        *(short *)(pad_data + 0xC) = func_001F9850_30D370(0x14);
-        *(short *)(pad_data + 0xE) = 0;
+        pad_data->unkC = func_001F9850_30D370(0x14);
+        pad_data->unkE = 0;
         glow_n(moby, 0x80, 0xFF, 0x80);
         MOBY(moby)->state = 7;
         break;
@@ -160,19 +169,19 @@ void timed_activation_pads_update(unsigned char *moby) {
             if (visited52[MOBY(moby)->mission + (current_level_index << 4)] != 0xFF)
                 jet_clear_persistent(MOBY(moby)->mission);
         }
-        if (fast_dec_timer_s16(pad_data + 0xC)) {
-            *(short *)(pad_data + 0xC) = func_001F9850_30D370(0x14);
-            switch (*(short *)(pad_data + 0xE)) {
+        if (fast_dec_timer_s16(&pad_data->unkC)) {
+            pad_data->unkC = func_001F9850_30D370(0x14);
+            switch (pad_data->unkE) {
             case PAD_FLASH_APPLY_GREEN:
                 glow_n(moby, 0, 0xFF, 0);
-                *(short *)(pad_data + 0xE) = 1;
+                pad_data->unkE = 1;
                 break;
             case PAD_FLASH_APPLY_WHITE:
                 glow_n(moby, 0xFF, 0xFF, 0xFF);
-                *(short *)(pad_data + 0xE) = 0;
+                pad_data->unkE = 0;
                 break;
             case 2 ... 5:
-                *(short *)(pad_data + 0xE) = 0;
+                pad_data->unkE = 0;
                 break;
             }
         }

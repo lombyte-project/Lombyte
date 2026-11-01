@@ -16,6 +16,16 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/sdk/libc/stdlib/rand.h"
 
+typedef struct SpiderbotVars {
+    u8  pad0[0x10];
+    u8  unk10[0x10];
+    s32 unk20;
+    f32 unk24;
+    f32 unk28;
+    f32 unk2C;
+    f32 unk30;
+} SpiderbotVars;
+
 typedef int u128_2A8090 __attribute__((mode(TI)));
 
 typedef struct {
@@ -74,7 +84,7 @@ void spiderbot_update(unsigned char *moby) {
     float          A[4];
     float          B[4];
     float          C[4];
-    unsigned char *moby_data = ((unsigned char *)MOBY(moby)->pvars);
+    SpiderbotVars *moby_data = (SpiderbotVars *)MOBY(moby)->pvars;
     *(u128_2A8090 *)previous_moby_position = *(u128_2A8090 *)&MOBY(moby)->pos;
     {
         float D[4];
@@ -83,37 +93,36 @@ void spiderbot_update(unsigned char *moby) {
         switch (MOBY(moby)->state) {
         case SPIDERBOT_INITIALIZE:
             *(u128_2A8090 *)moby_data = *(u128_2A8090 *)previous_moby_position;
-            MOBY(moby)->anim_speed = *(float *)(moby_data + 0x30) / 1.5f;
-            *(float *)(moby_data + 0x28) = *(float *)(moby_data + 0x28) * 0.017453292f;
-            if (*(int *)(moby_data + 0x20) == 0) {
+            MOBY(moby)->anim_speed = moby_data->unk30 / 1.5f;
+            moby_data->unk28 = moby_data->unk28 * 0.017453292f;
+            if (moby_data->unk20 == 0) {
                 MOBY(moby)->state = 1;
-                *(float *)(moby_data + 0x2C) = MOBY(moby)->rot.z;
-            } else if (*(int *)(moby_data + 0x20) >= 3) {
+                moby_data->unk2C = MOBY(moby)->rot.z;
+            } else if (moby_data->unk20 >= 3) {
                 MOBY(moby)->state = 2;
-                *(float *)(moby_data + 0x2C) = MOBY(moby)->rot.z;
+                moby_data->unk2C = MOBY(moby)->rot.z;
             } else {
                 MOBY(moby)->state = 3;
             }
             break;
         case SPIDERBOT_CIRCULAR_MOTION: {
             *(u128_2A8090 *)C = 0;
-            C[2] = *(float *)(moby_data + 0x24);
+            C[2] = moby_data->unk24;
             *(u128_2A8090 *)D = 0;
             *(u128_2A8090 *)B = *(u128_2A8090 *)C;
-            *(float *)(moby_data + 0x28) = fast_add_rotations(
-                *(float *)(moby_data + 0x28),
-                360.0f /
-                    (*(float *)(moby_data + 0x24) * 6.2831855f / *(float *)(moby_data + 0x30)) *
-                    0.017453292f * D_0015ED6C);
-            MOBY(moby)->anim_speed = *(float *)(moby_data + 0x30) / 1.5f;
-            C[0] = fast_cos(*(float *)(moby_data + 0x2C));
-            C[1] = fast_sin(*(float *)(moby_data + 0x2C));
+            moby_data->unk28 =
+                fast_add_rotations(moby_data->unk28,
+                                   360.0f / (moby_data->unk24 * 6.2831855f / moby_data->unk30) *
+                                       0.017453292f * D_0015ED6C);
+            MOBY(moby)->anim_speed = moby_data->unk30 / 1.5f;
+            C[0] = fast_cos(moby_data->unk2C);
+            C[1] = fast_sin(moby_data->unk2C);
             C[2] = 0.0f;
-            build_look_at_matrix(A, B, C, *(float *)(moby_data + 0x28));
+            build_look_at_matrix(A, B, C, moby_data->unk28);
             fast_vec_add(T, moby_data, A);
             *(u128_2A8090 *)&MOBY(moby)->pos = *(u128_2A8090 *)T;
-            D[2] = fast_add_rotations(*(float *)(moby_data + 0x2C), 1.5707964f);
-            D[1] = fast_add_rotations(-*(float *)(moby_data + 0x28), 3.1415927f);
+            D[2] = fast_add_rotations(moby_data->unk2C, 1.5707964f);
+            D[1] = fast_add_rotations(-moby_data->unk28, 3.1415927f);
             euler_rotation_matrix(M, D);
             copy_matrix3x4(moby + 0xC0, M);
             normalize_vector_triplet(moby + 0xC0);
@@ -124,31 +133,29 @@ void spiderbot_update(unsigned char *moby) {
             float previous_arc_angle;
             float current_arc_angle;
             *(u128_2A8090 *)C = 0;
-            C[2] = -*(float *)(moby_data + 0x24);
+            C[2] = -moby_data->unk24;
             *(u128_2A8090 *)D = 0;
             *(u128_2A8090 *)B = *(u128_2A8090 *)C;
-            previous_arc_angle = fast_add_rotations(
-                fast_normalize_angle(fast_cos(*(float *)(moby_data + 0x28)) * 1.5707964f),
-                *(int *)(moby_data + 0x20) == 4 ? 1.5707964f : 0.0f);
-            *(float *)(moby_data + 0x28) = fast_add_rotations(
-                *(float *)(moby_data + 0x28),
-                360.0f /
-                    (*(float *)(moby_data + 0x24) * 6.2831855f / *(float *)(moby_data + 0x30)) *
-                    0.017453292f * D_0015ED6C);
-            current_arc_angle = fast_add_rotations(
-                fast_normalize_angle(fast_cos(*(float *)(moby_data + 0x28)) * 1.5707964f),
-                *(int *)(moby_data + 0x20) == 4 ? 1.5707964f : 0.0f);
+            previous_arc_angle =
+                fast_add_rotations(fast_normalize_angle(fast_cos(moby_data->unk28) * 1.5707964f),
+                                   moby_data->unk20 == 4 ? 1.5707964f : 0.0f);
+            moby_data->unk28 =
+                fast_add_rotations(moby_data->unk28,
+                                   360.0f / (moby_data->unk24 * 6.2831855f / moby_data->unk30) *
+                                       0.017453292f * D_0015ED6C);
+            current_arc_angle =
+                fast_add_rotations(fast_normalize_angle(fast_cos(moby_data->unk28) * 1.5707964f),
+                                   moby_data->unk20 == 4 ? 1.5707964f : 0.0f);
             MOBY(moby)->anim_speed =
-                *(float *)(moby_data + 0x24) *
-                fast_subtract_rotations(current_arc_angle, previous_arc_angle) /
+                moby_data->unk24 * fast_subtract_rotations(current_arc_angle, previous_arc_angle) /
                 (D_0015ED6C * 1.5f);
-            C[0] = fast_cos(*(float *)(moby_data + 0x2C));
-            C[1] = fast_sin(*(float *)(moby_data + 0x2C));
+            C[0] = fast_cos(moby_data->unk2C);
+            C[1] = fast_sin(moby_data->unk2C);
             C[2] = 0.0f;
             build_look_at_matrix(A, B, C, current_arc_angle);
             fast_vec_add(T, moby_data, A);
             *(u128_2A8090 *)&MOBY(moby)->pos = *(u128_2A8090 *)T;
-            D[2] = fast_add_rotations(*(float *)(moby_data + 0x2C), 1.5707964f);
+            D[2] = fast_add_rotations(moby_data->unk2C, 1.5707964f);
             D[1] = fast_add_rotations(-current_arc_angle, 0.0f);
             euler_rotation_matrix(M, D);
             copy_matrix3x4(moby + 0xC0, M);
@@ -159,19 +166,17 @@ void spiderbot_update(unsigned char *moby) {
         case SPIDERBOT_LINEAR_OSCILLATION: {
             float previous_linear_displacement;
             float x;
-            previous_linear_displacement =
-                fast_cos(*(float *)(moby_data + 0x28)) * *(float *)(moby_data + 0x24);
-            *(float *)(moby_data + 0x28) = fast_add_rotations(
-                *(float *)(moby_data + 0x28),
-                360.0f /
-                    (*(float *)(moby_data + 0x24) * 6.2831855f / *(float *)(moby_data + 0x30)) *
-                    0.017453292f * D_0015ED6C);
-            x = fast_cos(*(float *)(moby_data + 0x28)) * *(float *)(moby_data + 0x24);
+            previous_linear_displacement = fast_cos(moby_data->unk28) * moby_data->unk24;
+            moby_data->unk28 =
+                fast_add_rotations(moby_data->unk28,
+                                   360.0f / (moby_data->unk24 * 6.2831855f / moby_data->unk30) *
+                                       0.017453292f * D_0015ED6C);
+            x = fast_cos(moby_data->unk28) * moby_data->unk24;
             MOBY(moby)->anim_speed = (x - previous_linear_displacement) / (D_0015ED6C * 1.5f);
             build_spherical_offset(A,
                                    x,
-                                   *(int *)(moby_data + 0x20) != 2 ? MOBY(moby)->rot.z : 0.0f,
-                                   *(int *)(moby_data + 0x20) == 2 ? 1.5707964f : 0.0f);
+                                   moby_data->unk20 != 2 ? MOBY(moby)->rot.z : 0.0f,
+                                   moby_data->unk20 == 2 ? 1.5707964f : 0.0f);
             fast_vec_add(B, moby_data, A);
             *(u128_2A8090 *)&MOBY(moby)->pos = *(u128_2A8090 *)B;
             break;
@@ -201,9 +206,9 @@ void spiderbot_update(unsigned char *moby) {
         *(u128_2A8090 *)C = *(u128_2A8090 *)T2;
         collision_line(&MOBY(moby)->pos, A, 9, moby, &R);
         if (collision_line(&MOBY(moby)->pos, A, 2, 0, 0)) {
-            *(u128_2A8090 *)(moby_data + 0x10) = *(u128_2A8090 *)D_L15_00174460;
+            *(u128_2A8090 *)(&moby_data->unk10) = *(u128_2A8090 *)D_L15_00174460;
         } else {
-            *(u128_2A8090 *)(moby_data + 0x10) = *(u128_2A8090 *)A;
+            *(u128_2A8090 *)(&moby_data->unk10) = *(u128_2A8090 *)A;
         }
         for (i = 0; i < spiderbot_effect_spawn_count_gp; i++) {
             float         effect_direction_sign;
@@ -216,11 +221,11 @@ void spiderbot_update(unsigned char *moby) {
             k = truncate_float_to_s32(
                 FUN_L04_001f1978(random_float_between(spiderbot_effect_lifetime_range_end_gp * 0.5f,
                                                       spiderbot_effect_lifetime_range_end_gp)));
-            fast_vec_sub(T2, moby_data + 0x10, &MOBY(moby)->pos);
+            fast_vec_sub(T2, &moby_data->unk10, &MOBY(moby)->pos);
             *(u128_2A8090 *)B = *(u128_2A8090 *)T2;
             fast_vec_scale(B, B, effect_direction_sign);
             effect_segment_length = fast_vec_length(B);
-            *(u128_2A8090 *)A = effect_direction_sign < 0.0f ? *(u128_2A8090 *)(moby_data + 0x10)
+            *(u128_2A8090 *)A = effect_direction_sign < 0.0f ? *(u128_2A8090 *)(&moby_data->unk10)
                                                              : *(u128_2A8090 *)&MOBY(moby)->pos;
             life = k;
             fast_vec_scale(B, B, random_float_between(0.0f, 0.9f));
@@ -246,23 +251,23 @@ void spiderbot_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A8850), where it is exact; names translated to the US level program. */
 
 void draw_spiderbot_effect_quad(char *moby) {
-    float B[4];
-    float A[4];
-    Quad  effect_quad;
-    float F[4];
-    float E[4];
-    float C[4];
-    float D[4];
-    char *d = ((char *)MOBY(moby)->pvars);
-    int   i;
-    fast_vec_sub(A, d + 0x10, &MOBY(moby)->pos);
+    float          B[4];
+    float          A[4];
+    Quad           effect_quad;
+    float          F[4];
+    float          E[4];
+    float          C[4];
+    float          D[4];
+    SpiderbotVars *d = (SpiderbotVars *)MOBY(moby)->pvars;
+    int            i;
+    fast_vec_sub(A, &d->unk10, &MOBY(moby)->pos);
     *(OvlQuad *)B = *(OvlQuad *)A;
     fast_vec_normalize(B, B, 0.5f);
     *(OvlQuad *)C = *(OvlQuad *)&MOBY(moby)->pos;
     add_vectors(D, C, B);
-    fast_vec_sub(E, C, d + 0x10);
+    fast_vec_sub(E, C, &d->unk10);
     fast_vec_sub(A, C, D_L15_001673C0);
-    fast_vec_sub(F, d + 0x10, D_L15_001673C0);
+    fast_vec_sub(F, &d->unk10, D_L15_001673C0);
     fast_vec_cross(A, A, E);
     fast_vec_normalize(A, A, 0.1f);
     fast_vec_cross(F, F, E);
@@ -283,9 +288,9 @@ void draw_spiderbot_effect_quad(char *moby) {
     *(OvlQuad *)effect_quad.v[0] = *(OvlQuad *)D;
     fast_vec_add(D, C, A);
     *(OvlQuad *)effect_quad.v[1] = *(OvlQuad *)D;
-    fast_vec_sub(D, d + 0x10, F);
+    fast_vec_sub(D, &d->unk10, F);
     *(OvlQuad *)effect_quad.v[2] = *(OvlQuad *)D;
-    fast_vec_add(D, d + 0x10, F);
+    fast_vec_add(D, &d->unk10, F);
     *(OvlQuad *)effect_quad.v[3] = *(OvlQuad *)D;
     draw_geometry_quad(&effect_quad, 0, 0);
 }

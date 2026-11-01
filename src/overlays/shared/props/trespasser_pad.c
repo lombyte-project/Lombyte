@@ -22,6 +22,19 @@
 #include "rnc/overlay/shared/props/trespasser_pad_data/draw_tresspasser_puzzle_radial_strip.h"
 #include "rnc/overlay/shared/props/trespasser_pad_data/draw_tresspasser_puzzle.h"
 
+typedef struct TrespasserPadVars {
+    u8  pad0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8  unk20[0x30];
+    u8  unk50[0x30];
+    u8  unk80[0x30];
+    u8  unkB0[0x30];
+    s32 unkE0;
+    f32 unkE4;
+} TrespasserPadVars;
+
 typedef float V2d8910[4] __attribute__((aligned(16)));
 
 typedef struct Hero Hero;
@@ -491,10 +504,10 @@ void draw_tresspasser_puzzle(char *moby) {
         u64  texture;
         char pad80[0x10];
     } ctx;
-    int     first_step, second_step;
-    char   *puzzle_state = ((char *)MOBY(moby)->pvars);
-    Ring12 *markers = (Ring12 *)(puzzle_state + 0xb0);
-    Ring12 *first_ring, *second_ring, *third;
+    int                first_step, second_step;
+    TrespasserPadVars *puzzle_state = (TrespasserPadVars *)MOBY(moby)->pvars;
+    Ring12            *markers = (Ring12 *)(&puzzle_state->unkB0);
+    Ring12            *first_ring, *second_ring, *third;
 
     int   i, state, third_step;
     float phase;
@@ -514,16 +527,16 @@ void draw_tresspasser_puzzle(char *moby) {
     first_step = 0;
     second_step = 0;
     third_step = 0;
-    if (*(float *)(puzzle_state + 0xe4) > 0.31415927f) {
-        state = *(int *)(puzzle_state + 0xe0);
+    if (puzzle_state->unkE4 > 0.31415927f) {
+        state = puzzle_state->unkE0;
         if (state == 1)
             first_step = 1;
         else if (state == 2)
             second_step = 1;
         else
             third_step = 1;
-    } else if (*(float *)(puzzle_state + 0xe4) < -0.31415927f) {
-        state = *(int *)(puzzle_state + 0xe0);
+    } else if (puzzle_state->unkE4 < -0.31415927f) {
+        state = puzzle_state->unkE0;
         if (state == 1)
             first_step = -1;
         else if (state == 2)
@@ -533,27 +546,27 @@ void draw_tresspasser_puzzle(char *moby) {
     }
 
     i = 0;
-    first_ring = (Ring12 *)(puzzle_state + 0x20);
-    second_ring = (Ring12 *)(puzzle_state + 0x50);
-    third = (Ring12 *)(puzzle_state + 0x80);
+    first_ring = (Ring12 *)(&puzzle_state->unk20);
+    second_ring = (Ring12 *)(&puzzle_state->unk50);
+    third = (Ring12 *)(&puzzle_state->unk80);
     {
         int   index, other, slot, draw_second, color;
         float angle, distance, phase;
         for (; i < 12; ++i) {
             draw_second = 1;
             phase = -0.31415927f;
-            if (*(int *)(puzzle_state + 0xe0) == 1)
-                phase = fast_add_rotations(phase, *(float *)(puzzle_state + 0xe4));
+            if (puzzle_state->unkE0 == 1)
+                phase = fast_add_rotations(phase, puzzle_state->unkE4);
             angle = fast_add_rotations(phase, (float)(i * 30) * 0.017453292f);
-            index = i + *(int *)(puzzle_state + 0x14);
+            index = i + puzzle_state->unk14;
             slot = index % 12;
             if (first_ring->slot[slot] == 2) {
-                other = i + *(int *)(puzzle_state + 0x18) + first_step - second_step;
+                other = i + puzzle_state->unk18 + first_step - second_step;
                 color = tresspasser_default_radial_strip_color_gp;
                 if (second_ring->slot[other % 12] != 0)
                     distance = (float)tresspasser_second_ring_arrow_distance_gp;
                 else {
-                    int third_index = i + *(int *)(puzzle_state + 0x1c) + first_step - third_step;
+                    int third_index = i + puzzle_state->unk1C + first_step - third_step;
                     if (third->slot[third_index % 12] != 0)
                         distance = (float)tresspasser_third_ring_arrow_distance_gp;
                     else if (third->slot[(third_index + 6) % 12] != 0)
@@ -599,21 +612,20 @@ void draw_tresspasser_puzzle(char *moby) {
             draw_second = 1;
             phase = -0.31415927f;
             color = tresspasser_default_radial_strip_color_gp;
-            if (*(int *)(puzzle_state + 0xe0) == 2)
-                phase = fast_add_rotations(phase, *(float *)(puzzle_state + 0xe4));
+            if (puzzle_state->unkE0 == 2)
+                phase = fast_add_rotations(phase, puzzle_state->unkE4);
             angle = fast_add_rotations(phase, (float)(i * 30) * 0.017453292f);
-            index = i + *(int *)(puzzle_state + 0x18);
+            index = i + puzzle_state->unk18;
             slot = index % 12;
             if (second_ring->slot[slot] == 2) {
-                other = i + *(int *)(puzzle_state + 0x1c) + second_step - third_step;
+                other = i + puzzle_state->unk1C + second_step - third_step;
                 if (third->slot[other % 12] != 0)
                     distance = (float)tresspasser_third_ring_arrow_distance_gp;
                 else if (third->slot[(other + 6) % 12] != 0)
                     distance = (float)-tresspasser_third_ring_arrow_distance_gp;
                 else if (second_ring->slot[(index + 6) % 12] != 0)
                     distance = (float)-tresspasser_second_ring_arrow_distance_gp;
-                else if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14) + second_step -
-                                           first_step + 6) %
+                else if (first_ring->slot[(i + puzzle_state->unk14 + second_step - first_step + 6) %
                                           12] != 0)
                     distance = (float)-tresspasser_first_ring_arrow_distance_gp;
                 else {
@@ -652,21 +664,21 @@ void draw_tresspasser_puzzle(char *moby) {
             draw_second = 1;
             phase = -0.31415927f;
             color = tresspasser_default_radial_strip_color_gp;
-            if (*(int *)(puzzle_state + 0xe0) == 3)
-                phase = fast_add_rotations(phase, *(float *)(puzzle_state + 0xe4));
+            if (puzzle_state->unkE0 == 3)
+                phase = fast_add_rotations(phase, puzzle_state->unkE4);
             angle = fast_add_rotations(phase, (float)(i * 30) * 0.017453292f);
-            index = i + *(int *)(puzzle_state + 0x1c);
+            index = i + puzzle_state->unk1C;
             slot = index % 12;
             if (third->slot[slot] == 2) {
                 if (third->slot[(index + 6) % 12] != 0)
                     distance = (float)-tresspasser_third_ring_arrow_distance_gp;
-                else if (second_ring->slot[(i + *(int *)(puzzle_state + 0x18) + third_step -
-                                            second_step + 6) %
-                                           12] != 0)
+                else if (second_ring
+                             ->slot[(i + puzzle_state->unk18 + third_step - second_step + 6) %
+                                    12] != 0)
                     distance = (float)-tresspasser_second_ring_arrow_distance_gp;
-                else if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14) + third_step -
-                                           first_step + 6) %
-                                          12] != 0)
+                else if (first_ring
+                             ->slot[(i + puzzle_state->unk14 + third_step - first_step + 6) % 12] !=
+                         0)
                     distance = (float)-tresspasser_first_ring_arrow_distance_gp;
                 else {
                     int opposite;
@@ -702,13 +714,13 @@ void draw_tresspasser_puzzle(char *moby) {
         float angle;
         for (i = 0; i < 12; ++i) {
             angle = -0.2617994f;
-            if (*(int *)(puzzle_state + 0xe0) == 1) {
+            if (puzzle_state->unkE0 == 1) {
                 color = fast_tween_color(
                     tresspasser_selected_ring_base_color_gp,
                     tresspasser_selected_ring_base_color_gp & 0xffffff,
                     fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
-                if (*(float *)(puzzle_state + 0xe4) != 0.0f)
-                    angle = fast_add_rotations(angle, *(float *)(puzzle_state + 0xe4));
+                if (puzzle_state->unkE4 != 0.0f)
+                    angle = fast_add_rotations(angle, puzzle_state->unkE4);
             } else
                 color = tresspasser_unselected_ring_color_gp;
             angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
@@ -720,15 +732,15 @@ void draw_tresspasser_puzzle(char *moby) {
                 (float)tresspasser_first_ring_arc_first_boundary_radius_gp,
                 (float)tresspasser_first_ring_arc_second_boundary_radius_gp,
                 color);
-            if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14)) % 12] != 0) {
-                if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14)) % 12] >= 3) {
+            if (first_ring->slot[(i + puzzle_state->unk14) % 12] != 0) {
+                if (first_ring->slot[(i + puzzle_state->unk14) % 12] >= 3) {
                     draw_tresspasser_puzzle_arrow(ctx.texture,
                                                   tresspasser_arrow_unused_argument_gp,
                                                   0,
                                                   fast_add_rotations(angle, 0.2617994f),
                                                   (float)tresspasser_first_ring_arrow_distance_gp);
-                    first_ring->slot[(i + *(int *)(puzzle_state + 0x14)) % 12] = 2;
-                } else if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14)) % 12] == 2) {
+                    first_ring->slot[(i + puzzle_state->unk14) % 12] = 2;
+                } else if (first_ring->slot[(i + puzzle_state->unk14) % 12] == 2) {
                     draw_tresspasser_puzzle_arrow(ctx.texture,
                                                   tresspasser_arrow_unused_argument_gp,
                                                   1,
@@ -749,13 +761,13 @@ void draw_tresspasser_puzzle(char *moby) {
         float angle;
         for (i = 0; i < 12; ++i) {
             angle = -0.2617994f;
-            if (*(int *)(puzzle_state + 0xe0) == 2) {
+            if (puzzle_state->unkE0 == 2) {
                 color = fast_tween_color(
                     tresspasser_selected_ring_base_color_gp,
                     tresspasser_selected_ring_base_color_gp & 0xffffff,
                     fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
-                if (*(float *)(puzzle_state + 0xe4) != 0.0f)
-                    angle = fast_add_rotations(angle, *(float *)(puzzle_state + 0xe4));
+                if (puzzle_state->unkE4 != 0.0f)
+                    angle = fast_add_rotations(angle, puzzle_state->unkE4);
             } else
                 color = tresspasser_unselected_ring_color_gp;
             angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
@@ -767,15 +779,15 @@ void draw_tresspasser_puzzle(char *moby) {
                 (float)tresspasser_second_ring_arc_first_boundary_radius_gp,
                 (float)tresspasser_second_ring_arc_second_boundary_radius_gp,
                 color);
-            if (second_ring->slot[(i + *(int *)(puzzle_state + 0x18)) % 12] != 0) {
-                if (second_ring->slot[(i + *(int *)(puzzle_state + 0x18)) % 12] >= 3) {
+            if (second_ring->slot[(i + puzzle_state->unk18) % 12] != 0) {
+                if (second_ring->slot[(i + puzzle_state->unk18) % 12] >= 3) {
                     draw_tresspasser_puzzle_arrow(ctx.texture,
                                                   tresspasser_arrow_unused_argument_gp,
                                                   0,
                                                   fast_add_rotations(angle, 0.2617994f),
                                                   (float)tresspasser_second_ring_arrow_distance_gp);
-                    second_ring->slot[(i + *(int *)(puzzle_state + 0x18)) % 12] = 2;
-                } else if (second_ring->slot[(i + *(int *)(puzzle_state + 0x18)) % 12] == 2) {
+                    second_ring->slot[(i + puzzle_state->unk18) % 12] = 2;
+                } else if (second_ring->slot[(i + puzzle_state->unk18) % 12] == 2) {
                     draw_tresspasser_puzzle_arrow(ctx.texture,
                                                   tresspasser_arrow_unused_argument_gp,
                                                   1,
@@ -796,13 +808,13 @@ void draw_tresspasser_puzzle(char *moby) {
         float angle;
         for (i = 0; i < 12; ++i) {
             angle = -0.2617994f;
-            if (*(int *)(puzzle_state + 0xe0) == 3) {
+            if (puzzle_state->unkE0 == 3) {
                 color = fast_tween_color(
                     tresspasser_selected_ring_base_color_gp,
                     tresspasser_selected_ring_base_color_gp & 0xffffff,
                     fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
-                if (*(float *)(puzzle_state + 0xe4) != 0.0f)
-                    angle = fast_add_rotations(angle, *(float *)(puzzle_state + 0xe4));
+                if (puzzle_state->unkE4 != 0.0f)
+                    angle = fast_add_rotations(angle, puzzle_state->unkE4);
             } else
                 color = tresspasser_unselected_ring_color_gp;
             angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
@@ -814,15 +826,15 @@ void draw_tresspasser_puzzle(char *moby) {
                 (float)tresspasser_third_ring_arc_first_boundary_radius_gp,
                 (float)tresspasser_third_ring_arc_second_boundary_radius_gp,
                 color);
-            if (third->slot[(i + *(int *)(puzzle_state + 0x1c)) % 12] != 0) {
-                if (third->slot[(i + *(int *)(puzzle_state + 0x1c)) % 12] >= 3) {
+            if (third->slot[(i + puzzle_state->unk1C) % 12] != 0) {
+                if (third->slot[(i + puzzle_state->unk1C) % 12] >= 3) {
                     draw_tresspasser_puzzle_arrow(ctx.texture,
                                                   tresspasser_arrow_unused_argument_gp,
                                                   0,
                                                   fast_add_rotations(angle, 0.2617994f),
                                                   (float)tresspasser_third_ring_arrow_distance_gp);
-                    third->slot[(i + *(int *)(puzzle_state + 0x1c)) % 12] = 2;
-                } else if (third->slot[(i + *(int *)(puzzle_state + 0x1c)) % 12] == 2) {
+                    third->slot[(i + puzzle_state->unk1C) % 12] = 2;
+                } else if (third->slot[(i + puzzle_state->unk1C) % 12] == 2) {
                     draw_tresspasser_puzzle_arrow(ctx.texture,
                                                   tresspasser_arrow_unused_argument_gp,
                                                   1,

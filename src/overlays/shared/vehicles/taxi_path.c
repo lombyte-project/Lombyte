@@ -11,6 +11,22 @@
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/l05/mobys/taxi.h"
 
+typedef struct TaxiVars {
+    u8   pad0[0x60];
+    u8   unk60[0x10];
+    u8   unk70[0x3c];
+    int *unkAC;
+    u8   padB0[0x4];
+    s16  unkB4;
+    s16  unkB6;
+    u8   padB8[0x8];
+    f32  unkC0[4];
+    f32  unkD0;
+    f32  unkD4;
+    f32  unkD8;
+    s32  unkDC;
+} TaxiVars;
+
 typedef struct {
     char  pad[0x78];
     char *data;
@@ -32,22 +48,22 @@ void reset_selected_moby_to_current_placement(void *moby_v) __asm__("FUN_L05_003
 
 void reset_selected_moby_to_current_placement(void *moby_v) {
     struct Moby *moby = moby_v;
-    char        *taxi_vars = ((char *)moby->pvars);
-    char        *spawn = func_L05_0031AAA8_19510(moby, *(short *)(taxi_vars + 0xB6));
+    TaxiVars    *taxi_vars = (TaxiVars *)moby->pvars;
+    char        *spawn = func_L05_0031AAA8_19510(moby, taxi_vars->unkB6);
     char        *position;
     if (spawn != 0) {
         int   index;
         char *slot = taxi_vars;
         char *placement_table_base;
         position = spawn + 0x10;
-        slot += *(short *)(taxi_vars + 0xB4) << 2;
+        slot += taxi_vars->unkB4 << 2;
         index = *(int *)(slot + 0x80) << 7;
         placement_table_base = (char *)l05_cuboids;
         qcopy(position, (void *)(index + (int)placement_table_base + 0x30));
         qcopy(spawn + 0x40, (void *)(index + (int)placement_table_base + 0x70));
         initialize_taxi_stop_state(spawn);
     }
-    *(short *)(taxi_vars + 0xB4) = *(unsigned short *)(taxi_vars + 0xB6);
+    taxi_vars->unkB4 = *(unsigned short *)&taxi_vars->unkB6;
 }
 
 /* Finds the pool moby in this moby's class list whose data id at 0xB4 matches. */
@@ -78,22 +94,22 @@ found:
 int advance_moby_path(char *moby) __asm__("FUN_L05_003195f8");
 
 int advance_moby_path(char *moby) {
-    char *moby_vars = ((char *)MOBY(moby)->pvars);
-    int  *path;
+    TaxiVars *moby_vars = (TaxiVars *)MOBY(moby)->pvars;
+    int      *path;
     advance_accelerated_scalar(1.0f,
-                               *(float *)(moby_vars + 0xD8),
-                               *(float *)(moby_vars + 0xD8),
-                               *(float *)(moby_vars + 0xD4),
-                               (float *)(moby_vars + 0xC0),
-                               (float *)(moby_vars + 0xC4));
-    path = *(int **)(moby_vars + 0xAC);
+                               moby_vars->unkD8,
+                               moby_vars->unkD8,
+                               moby_vars->unkD4,
+                               (float *)(&moby_vars->unkC0),
+                               (float *)(&moby_vars->unkC0[1]));
+    path = moby_vars->unkAC;
     sample_camera_path(path,
                        0,
-                       moby_vars + 0x60,
-                       (float *)(moby_vars + 0x70),
+                       &moby_vars->unk60,
+                       (float *)(&moby_vars->unk70),
                        0,
-                       *(float *)(moby_vars + 0xC0) * (float)(*path - 1));
-    return *(float *)(moby_vars + 0xC0) >= 1.0f;
+                       moby_vars->unkC0[0] * (float)(*path - 1));
+    return moby_vars->unkC0[0] >= 1.0f;
 }
 
 /* Plays the sound that goes with the moby's current variant. */
@@ -130,22 +146,22 @@ void request_moby_variant_help_message(char *moby) {
 void apply_moby_position_and_rotation_wobble(char *moby) __asm__("FUN_L05_00319740");
 
 void apply_moby_position_and_rotation_wobble(char *moby) {
-    char *moby_vars = ((char *)MOBY(moby)->pvars);
-    float wobble_phase, wobble_result, wobble_phase_step;
-    qcopy(&MOBY(moby)->pos, moby_vars + 0x60);
-    qcopy(moby + 0x40, moby_vars + 0x70);
-    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xC8), frame_time * 2.0943951f);
-    *(float *)(moby_vars + 0xC8) = wobble_phase;
+    TaxiVars *moby_vars = (TaxiVars *)MOBY(moby)->pvars;
+    float     wobble_phase, wobble_result, wobble_phase_step;
+    qcopy(&MOBY(moby)->pos, &moby_vars->unk60);
+    qcopy(moby + 0x40, &moby_vars->unk70);
+    wobble_phase = fast_add_rotations(moby_vars->unkC0[2], frame_time * 2.0943951f);
+    moby_vars->unkC0[2] = wobble_phase;
     wobble_result = fast_sin(wobble_phase);
     wobble_phase_step = frame_time * 1.6929693f;
     MOBY(moby)->pos.z += wobble_result * 0.25f;
-    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xCC), wobble_phase_step);
-    *(float *)(moby_vars + 0xCC) = wobble_phase;
+    wobble_phase = fast_add_rotations(moby_vars->unkC0[3], wobble_phase_step);
+    moby_vars->unkC0[3] = wobble_phase;
     wobble_result = fast_add_rotations(MOBY(moby)->rot.y, fast_sin(wobble_phase) * 0.08726646f);
     wobble_phase_step = frame_time * 0.9250245f;
     MOBY(moby)->rot.y = wobble_result;
-    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xD0), wobble_phase_step);
-    *(float *)(moby_vars + 0xD0) = wobble_phase;
+    wobble_phase = fast_add_rotations(moby_vars->unkD0, wobble_phase_step);
+    moby_vars->unkD0 = wobble_phase;
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, fast_sin(wobble_phase) * 0.08726646f);
     if (MOBY(moby)->rot.x > 0.17453292f)
         MOBY(moby)->rot.x = 0.17453292f;
@@ -163,8 +179,8 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
 void transform_moby_vector_table_to_world_space(char *moby) __asm__("FUN_L05_003198e8");
 
 void transform_moby_vector_table_to_world_space(char *moby) {
-    char *moby_private_vars = ((char *)MOBY(moby)->pvars);
-    int   vector_table_index = *(int *)(moby_private_vars + 0xDC);
+    TaxiVars *moby_private_vars = (TaxiVars *)MOBY(moby)->pvars;
+    int       vector_table_index = moby_private_vars->unkDC;
     if (vector_table_index != -1) {
         char *vector_table_entry = ((char *)l05_paths[vector_table_index]);
         if (*(int *)vector_table_entry == 7) {
@@ -180,7 +196,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
             }
             player_hero = &hero;
             *(unsigned short *)&player_hero->path_constrain_pending =
-                *(unsigned short *)(moby_private_vars + 0xDC);
+                *(unsigned short *)&moby_private_vars->unkDC;
         }
     }
 }
