@@ -162,7 +162,7 @@ void spawner_update(char *moby) {
         while (get_first_moby_in_group(&moby_to_remove, spawner_vars->unk94, 0, 0) == 0) {
             mark_moby_for_removal((void *)moby_to_remove);
         }
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = SPAWNER_STATE_SPAWN;
         return;
     }
     case SPAWNER_STATE_SPAWN: {
