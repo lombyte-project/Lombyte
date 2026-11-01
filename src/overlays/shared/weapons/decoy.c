@@ -580,18 +580,18 @@ void decoy_update(char *moby) {
         return;
     }
     if ((hero.items[0].moby == 0 || hero.items[0].moby->oclass != 0x232) &&
-        (u8)MOBY(moby)->state == 1) {
+        (u8)MOBY(moby)->state == DECOY_HELD) {
         mine_spawn_drops(moby, D_L00_001B0830_lui);
         mark_moby_for_removal(moby);
         return;
     }
-    if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT && (u8)MOBY(moby)->state == 1) {
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT && (u8)MOBY(moby)->state == DECOY_HELD) {
         mine_spawn_drops(moby, D_L00_001B0830_lui);
         mark_moby_for_removal(moby);
         return;
     }
     ++decoy_instance_vars->unk54;
-    if (hero.unk20A5 != 0 && (u8)MOBY(moby)->state < 2)
+    if (hero.unk20A5 != 0 && (u8)MOBY(moby)->state < DECOY_THROWN_MOVEMENT)
         MOBY(moby)->flags |= 0x41;
     else
         MOBY(moby)->flags &= 0xffbe;
@@ -605,7 +605,7 @@ void decoy_update(char *moby) {
     }
     switch ((u8)MOBY(moby)->state) {
     case DECOY_INITIALIZE:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = DECOY_HELD;
         decoy_instance_vars->unk44 = 0;
         MOBY(moby)->collision_disable = -1;
         decoy_instance_vars->unk6C = 0;
@@ -687,7 +687,7 @@ void decoy_update(char *moby) {
                             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                             MOBY(moby)->collision_disable = 0;
                             qzero(&decoy_instance_vars->unk10);
-                            MOBY(moby)->state = 3;
+                            MOBY(moby)->state = DECOY_SETTLED_MOVEMENT;
                             decoy_instance_vars->unk44 = FUN_001fef20_2c4380(600);
                             MOBY(moby)->pos.z = coll_hit.point.f[2];
                             qcopy(scratch.x, &coll_hit.normal_x);
@@ -815,7 +815,7 @@ void decoy_update(char *moby) {
                 blend_moby_animation(moby, 2, 0, FUN_001fef20_2c4380(10));
             MOBY(moby)->anim_speed = random_float_between(0.7f, 1.05f);
         }
-        if ((u8)MOBY(moby)->state != 4) {
+        if ((u8)MOBY(moby)->state != DECOY_PRE_REMOVAL_DELAY) {
             len = probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
             if (len != 0.0f) {
                 destroy_decoy_on_selected_materials(moby);
@@ -861,7 +861,7 @@ void decoy_update(char *moby) {
                 if (((u8 *)moby)[0x53])
                     blend_moby_animation(moby, 0, 0, FUN_001fef20_2c4380(60));
                 mine_spawn_drops(moby, D_L00_001B0830_lui);
-                MOBY(moby)->state = 5;
+                MOBY(moby)->state = DECOY_WAIT_TO_SHRINK;
             }
         }
         break;
@@ -873,7 +873,7 @@ void decoy_update(char *moby) {
         if (MOBY(moby)->anim_flags & 2)
             *(int *)(moby + 0x58) = 0;
         if (fast_dec_timer_s16(&decoy_instance_vars->unk44) || (MOBY(moby)->anim_flags & 2))
-            MOBY(moby)->state = 6;
+            MOBY(moby)->state = DECOY_SHRINK_FOR_REMOVAL;
         break;
     case DECOY_SHRINK_FOR_REMOVAL: {
         float len;
@@ -891,6 +891,6 @@ void decoy_update(char *moby) {
     }
     case DECOY_RESET_TO_INITIALIZE:
     default:
-        MOBY(moby)->state = 0;
+        MOBY(moby)->state = DECOY_INITIALIZE;
     }
 }
