@@ -549,13 +549,13 @@ void hero_update_movement(void) {
             if (PD.held & 0x40) {
                 hero.jump_button_frames++;
                 if (PD.analog[10] > 0.75f) {
-                    s32 t2;
+                    s32 swim_usage_time_bucket;
                     if (++hero.swim_hard_press_frames > scale_game_frames(90) &&
                         usage_stats.stat[11].count < 0xFFFF) {
                         usage_stats.stat[11].count++;
                     }
-                    t2 = scale_game_frames(D_0015EEA4) / 600;
-                    if (usage_stats.stat[11].latest_time_bucket < t2) {
+                    swim_usage_time_bucket = scale_game_frames(D_0015EEA4) / 600;
+                    if (usage_stats.stat[11].latest_time_bucket < swim_usage_time_bucket) {
                         usage_stats.stat[11].latest_time_bucket =
                             scale_game_frames(D_0015EEA4) / 600;
                     }
