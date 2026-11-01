@@ -32,7 +32,7 @@ void updraft_vent_update(unsigned char *moby) {
     unsigned int update_state = MOBY(moby)->state;
     switch (update_state) {
     case MOBY_UPDATE_INITIALIZE:
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = MOBY_UPDATE_ACTIVE;
         MOBY(moby)->flags |= 1;
         MOBY(moby)->visible = 0;
         break;
