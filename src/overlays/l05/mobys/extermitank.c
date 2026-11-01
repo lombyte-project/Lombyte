@@ -231,7 +231,7 @@ void extermitank_update(unsigned char *moby) {
         extermitank_vars->unkD0 = ((char *)l05_paths[extermitank_vars->unkD4]);
         extermitank_vars->unkC0 = 1;
         qcopy(moby + 0x10, extermitank_vars->unkD0 + 0x10);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = EXTERMITANK_FOLLOW_PATH;
         if (MOBY(moby)->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, 0);
         extermitank_vars->unk94 = D_L05_00161AF8 * D_0015ED6C_gp;
@@ -289,7 +289,7 @@ void extermitank_update(unsigned char *moby) {
                     if (collision_line(origin_position, h + 0x50, 2, moby, 0) == 0) {
                         if (MOBY(moby)->prev_seq != 0)
                             blend_moby_animation(moby, 0, 0, 3);
-                        MOBY(moby)->state = 2;
+                        MOBY(moby)->state = EXTERMITANK_FIRE_PARTICLES;
                     }
                 }
             }
@@ -471,7 +471,7 @@ void extermitank_update(unsigned char *moby) {
             collision_line(working_position, D_0013E533 + 0xEED, 2, moby, 0) != 0) {
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 3);
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = EXTERMITANK_FOLLOW_PATH;
         }
         {
             char *g = ((char *)&D_0013F350);
