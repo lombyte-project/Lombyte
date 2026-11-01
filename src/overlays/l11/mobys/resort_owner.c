@@ -267,8 +267,8 @@ void apply_resort_owner_movement(void *mp) {
     qcopy(A, moby + 0x10);
     qcopy(B, moby_vars->unk130);
     FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
-    if ((MOBY(moby)->state >= 4 && MOBY(moby)->state <= 6) ||
-        (MOBY(moby)->state == 7 && moby_vars->unk15C == 3)) {
+    if ((MOBY(moby)->state >= RESORT_OWNER_FOLLOW_HERO && MOBY(moby)->state <= RESORT_OWNER_MOVE_TO_PATH_POINT) ||
+        (MOBY(moby)->state == RESORT_OWNER_JUMP_TO_TARGET && moby_vars->unk15C == 3)) {
         resolve_point_path_segment_xy_clearance(
             0.3f,
             *(void **)((u8 *)moby_vars + 0x60 - -(*(int *)&moby_vars->unk158 * 4)),
