@@ -40,6 +40,10 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby,
                                          HitBox      *box) __asm__("FUN_L10_002c9958");
 
 void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
+    enum {
+        MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF = 0xFD,
+        MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF = 0xFE
+    };
     OvlVec4 moby_rotation_basis[3];
     OvlVec4 center;
     OvlVec4 delta;
@@ -73,8 +77,8 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
         for (i = 0; i < count; i++) {
             struct Moby *hitbox_candidate_moby = found[i];
 
-            if (hitbox_candidate_moby == 0 || hitbox_candidate_moby->state == 0xFE ||
-                hitbox_candidate_moby->state == 0xFD) {
+            if (hitbox_candidate_moby == 0 || hitbox_candidate_moby->state == MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF ||
+                hitbox_candidate_moby->state == MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF) {
                 continue;
             }
             fast_vec_sub(&delta, &hitbox_candidate_moby->pos, &moby->pos);
