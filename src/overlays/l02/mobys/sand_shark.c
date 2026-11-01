@@ -279,7 +279,7 @@ extern void FUN_L02_002d5a68_e50(void *) __asm__("FUN_L02_002d5a68");
 extern void FUN_L02_002d5c88_e50(void *) __asm__("FUN_L02_002d5c88");
 extern void FUN_L02_002d63c0_e50(void *) __asm__("FUN_L02_002d63c0");
 
-int           D_L02_001619A8 = 0;
+int           l02_sand_shark_update_disabled __asm__("D_L02_001619A8") = 0;
 unsigned char D_L02_00161900 = 0xa;
 
 #include "rnc/overlay/l02/mobys/sand_shark_data/sand_shark_update.h"
@@ -303,7 +303,7 @@ void sand_shark_update(struct Moby *moby) {
     OvlVec4    particle_position_or_forward_step;
     float      f;
 
-    if (D_L02_001619A8 != 0) {
+    if (l02_sand_shark_update_disabled != 0) {
         return;
     }
     *(volatile unsigned int *)0x10000010 = 0x81;
