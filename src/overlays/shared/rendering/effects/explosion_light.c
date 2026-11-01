@@ -147,6 +147,10 @@ void explosion_light_update(unsigned char *moby) __asm__("FUN_L00_002d3a10");
 
 /* Moby class 639 */
 void explosion_light_update(unsigned char *moby) {
+    enum {
+        EXPLOSION_LIGHT_STATE_UNINITIALIZED = 0,
+        EXPLOSION_LIGHT_STATE_INITIALIZED = 1
+    };
     ExplosionLightVars *animated_point_light_vars;
     Vx                  tp;
     Vx                  base_position;
@@ -166,7 +170,7 @@ void explosion_light_update(unsigned char *moby) {
     radius_reset_this_update = 0;
     if (animated_point_light_vars == 0)
         return;
-    if (MOBY(moby)->state == 0) {
+    if (MOBY(moby)->state == EXPLOSION_LIGHT_STATE_UNINITIALIZED) {
         unsigned char b1c;
         MOBY(moby)->update_dist = 0xFF;
         b1c = animated_point_light_vars->start_delay;
@@ -199,7 +203,7 @@ void explosion_light_update(unsigned char *moby) {
         if (animated_point_light_vars->radius_fall_rate < 0.0f)
             animated_point_light_vars->radius_fall_rate =
                 -animated_point_light_vars->radius_fall_rate;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = EXPLOSION_LIGHT_STATE_INITIALIZED;
     }
     if (MOBY(moby)->command != 0) {
         MOBY(moby)->command = MOBY(moby)->command - 1;
