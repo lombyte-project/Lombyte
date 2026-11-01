@@ -1693,9 +1693,9 @@ extern int
 resolve_point_path_segment_clearance(int, void *, void *, float) __asm__("FUN_L00_00262030");
 
 /* Sets the short at &hero.unk1F6 to 4 when FUN_L00_00262030 succeeds. */
-void FUN_L00_002347c0(void);
+void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
 
-void FUN_L00_002347c0(void) {
+void resolve_hero_pending_path_clearance(void) {
     struct Hero *hero_path_clearance_state = &hero;
 
     if (resolve_point_path_segment_clearance(hero_path_clearance_state->path_constrain_pending,
