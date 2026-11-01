@@ -1911,8 +1911,10 @@ void update_hero_and_equipped_item_glows(void) {
     }
     }
 }
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 
-extern void FUN_L00_00232fe8(void);
+
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 extern void FUN_L00_002330d0(void);
 extern void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 extern void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
@@ -1928,7 +1930,7 @@ void update_hero_moby(void) {
 
     hero.moby->hit_slot = 0xFF;
     if (hero.unk20A5) {
-        FUN_L00_00232fe8();
+        set_hero_item_moby_flag_bit0();
     } else {
         FUN_L00_002330d0();
     }
@@ -1974,7 +1976,7 @@ void update_hero_moby(void) {
 
 extern void set_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233210");
 extern void clear_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233248");
-extern void FUN_L00_00232fe8_00208a10(void) __asm__("FUN_L00_00232fe8");
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 extern void
 set_moby_local_table_entry(void *, int, void *, float, float) __asm__("FUN_L00_0024eed8");
 
@@ -1987,7 +1989,7 @@ void update_hero_vehicle_moby(void) {
     } else {
         clear_hero_moby_flag_bit0();
     }
-    FUN_L00_00232fe8_00208a10();
+    set_hero_item_moby_flag_bit0();
     hero.moby->hit_slot = 0xFF;
     hero_moby = ((unsigned char *)hero.moby);
     qcopy(&MOBY(hero_moby)->pos, &hero.motion.pos);

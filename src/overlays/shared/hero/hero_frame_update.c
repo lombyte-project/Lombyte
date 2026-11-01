@@ -729,7 +729,7 @@ extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08")
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_update_items() __asm__("FUN_L00_00210748");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
-extern void FUN_L00_00232fe8(void);
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void update_hero_collision_dimensions(void) __asm__("FUN_L01_00231ae0");
 
@@ -746,7 +746,7 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     *(int *)&hero_state_base->moby = *(int *)&hero_state_base->unkA88;
     clear_moby_transform_history(&hero_state_base->trail.pos);
     hero_state_base->moby->collision_disable = -1;
-    FUN_L00_00232fe8();
+    set_hero_item_moby_flag_bit0();
     release_and_clear_hero_voice_slots();
     reset_hero_easing_records();
     *(char *)&hero_state_base->vehicle_mode = vehicle_mode;

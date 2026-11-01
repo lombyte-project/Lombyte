@@ -18,6 +18,7 @@
 #include "rnc/audio/voices/sound_update.h"
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
+void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 #include "rnc/overlay/shared/streaming.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 
@@ -81,7 +82,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     l01_hero_set_state(100, 1);
     *(char *)&hero_state->item_use_locked = 1;
     *(char *)&hero_state->unk20A5 = 1;
-    FUN_L00_00232fe8();
+    set_hero_item_moby_flag_bit0();
     transform_vector_by_basis(sc, &vendor_camera_local_position_offset, vendor_moby + 0xC0);
     fast_vec_add(sc, sc, &MOBY(vendor_moby)->pos);
     *(float *)(vendor_screen_state + 0xC8) = probe_ground_height(sc, 0, 0.5f);

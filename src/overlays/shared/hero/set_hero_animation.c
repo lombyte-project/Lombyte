@@ -703,9 +703,9 @@ typedef struct {
 
 extern int D_L00_0015F5C4;
 
-void FUN_L00_00232fe8(void);
+void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 
-void FUN_L00_00232fe8(void) {
+void set_hero_item_moby_flag_bit0(void) {
     struct Hero *hero_item_flag_state = &hero;
     struct Hero *tail;
     struct Hero *last;

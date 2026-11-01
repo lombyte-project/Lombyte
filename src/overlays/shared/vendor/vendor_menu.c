@@ -345,7 +345,7 @@ extern void          snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void          reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
-extern void FUN_L00_00232fe8_29a6b0(void) __asm__("FUN_L00_00232fe8");
+extern void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 
 typedef unsigned int Q_29a6b0 __attribute__((mode(TI), aligned(16)));
 extern u8            vendor_extra[] __asm__("D_L00_001CA6E0");
@@ -452,7 +452,7 @@ void open_vendor_menu(void *vendor_moby_arg) {
     hero_set_state(100, 1);
     D_0013F350[0x20AC] = 1;
     D_0013F350[0x20A5] = 1;
-    FUN_L00_00232fe8_29a6b0();
+    set_hero_item_moby_flag_bit0();
     if (vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR) {
         set_moby_animation(vendor_moby, 3, 0);
     } else {

@@ -11,6 +11,7 @@
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
+void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 #include "rnc/rendering/clip_volume.h"
 
 extern int D_L15_0015F5C4;
@@ -63,7 +64,7 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
         start_scene(3);
         moby->state = CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE;
         jet_clear_persistent(moby->mission);
-        FUN_L00_00232fe8();
+        set_hero_item_moby_flag_bit0();
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 != 2) {

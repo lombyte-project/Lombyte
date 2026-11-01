@@ -14,6 +14,7 @@
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/voices/sound_update.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
+void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 #include "rnc/overlay/shared/mobys.h"
 #include "rnc/overlay/shared/streaming.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
@@ -139,7 +140,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     D_001413F5_lui = 1;
-    FUN_L00_00232fe8();
+    set_hero_item_moby_flag_bit0();
     D_0013E030_28e9c8.x0->flags |= 1;
     for (moby = D_L00_0015FFDC_28e9c8; moby->st != 0xFF; moby++) {
         if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))

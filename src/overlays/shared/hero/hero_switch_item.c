@@ -2326,7 +2326,7 @@ void update_hero_equipped_items(void) {
 }
 
 void clear_moby_transform_history(void *) __asm__("FUN_L00_00262840");
-void FUN_L00_00232fe8_210a08(void) __asm__("FUN_L00_00232fe8");
+void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 void update_hero_collision_capsule_dimensions(void) __asm__("FUN_L00_00211380");
 void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
@@ -2345,7 +2345,7 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
     hero_state->moby = (struct Moby *)hero_state->unkA88;
     clear_moby_transform_history(&hero_state->trail);
     hero_state->moby->collision_disable = -1;
-    FUN_L00_00232fe8_210a08();
+    set_hero_item_moby_flag_bit0();
     release_and_clear_hero_voice_slots();
     reset_hero_easing_records();
     hero_state->vehicle_mode = mode;

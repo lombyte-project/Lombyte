@@ -391,7 +391,7 @@ void             music_pause(int) __asm__("FUN_00216050");
 extern int       update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
 void             fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void             clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-void             FUN_L00_00232fe8(void);
+void             set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 int              start_cutscene_chunk_read(int) __asm__("FUN_L00_002451b8");
 void             update_world_object_animation(void) __asm__("FUN_00204790");
 void             sound_update(void) __asm__("FUN_0022ca50");
@@ -433,7 +433,7 @@ void start_scene(int scene_id) {
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     hero.unk20A5 = 1;
-    FUN_L00_00232fe8();
+    set_hero_item_moby_flag_bit0();
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags |= 1;
     if (D_L00_001B9CF0.unkEC)
