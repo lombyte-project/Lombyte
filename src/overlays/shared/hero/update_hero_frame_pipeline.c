@@ -34,7 +34,7 @@ void update_hero_frame_pipeline(void) {
     }
     hero_state->unk1EB2 = 0;
     hero_state->unk1EB0 = 0;
-    if (hero_state->vehicle_mode != 0) {
+    if (hero_state->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         hero_frame_update();
         return;
     }
@@ -44,7 +44,7 @@ void update_hero_frame_pipeline(void) {
     update_hero_ledge_probe();
     update_hero_offset_rail_candidate();
     update_hero_state_machine();
-    if (hero_state->vehicle_mode != 0) {
+    if (hero_state->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         return;
     }
     update_hero_delayed_voice_requests();
