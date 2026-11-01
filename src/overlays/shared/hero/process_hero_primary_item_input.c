@@ -1,5 +1,6 @@
 /* Hero: primary item input, item slot selection, water and ground transitions, and the hoverboard tricks, race progress and respawn. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/hero/hero_tables.h"
 #include "qcopy.h"
@@ -625,8 +626,6 @@ int try_apply_hero_water_and_ground_transitions(void) {
     }
     return water_state_requested;
 }
-
-#include "rnc/input/pad_state.h"
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002523C8), where it is exact; names translated to the US level program. */
