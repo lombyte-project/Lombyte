@@ -5,7 +5,7 @@
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -18,9 +18,9 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "qzero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/enemies/sand_mouse_data/update_hover_moby_steering.h"
 #include "rnc/overlay/shared/enemies/sand_mouse_data/sand_mouse_update.h"
 #include "rnc/world/collision/collision_line.h"
@@ -138,10 +138,10 @@ extern unsigned char D_0013D4C5 NOT_SDA;
 void compute_sand_mouse_approach_target(int unused, void *out) __asm__("FUN_L01_002e30b8");
 
 void compute_sand_mouse_approach_target(int unused, void *approach_target) {
-    char  unit_approach_offset[16];
-    char *hero_state_bytes = D_0013E533 + 0xE1D;
-    fast_vec_normalize(unit_approach_offset, *(char **)(hero_state_bytes + 0x2080) + 0xD0, 1.0f);
-    fast_vec_add(approach_target, unit_approach_offset, hero_state_bytes + 0x80);
+    char         unit_approach_offset[16];
+    struct Hero *hero_state_bytes = (struct Hero *)(D_0013E533 + 0xE1D);
+    fast_vec_normalize(unit_approach_offset, ((char *)hero_state_bytes->moby) + 0xD0, 1.0f);
+    fast_vec_add(approach_target, unit_approach_offset, &hero_state_bytes->motion.pos);
 }
 
 /* Builds a camera-relative transform for a moby and steps its height. */
@@ -232,10 +232,10 @@ void *select_sand_mouse_spawn_target(void *moby,
         candidate_class = *(short *)(((char *)MOBY(candidate_moby)->pclass) + 0x46);
         if (candidate_class != 5 || hp == 0 || !(0.0f < *hp))
             continue;
-        candidate_distance = fast_vec_dist(from, candidate_moby + 0x10);
+        candidate_distance = fast_vec_dist(from, &MOBY(candidate_moby)->pos);
         if (!(candidate_distance < range))
             continue;
-        qcopy(tp, candidate_moby + 0x10);
+        qcopy(tp, &MOBY(candidate_moby)->pos);
         tp[2] += 0.4f;
         score = fast_difference_between_rotations(
             ((float *)reference_rotation)[2],
@@ -282,7 +282,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
     if (fast_dec_timer_s16(state + 0x4E) == 0)
         return;
     qzero(&spawn_position);
-    fast_vec_add(&spawn_position, &spawn_position, moby + 0x10);
+    fast_vec_add(&spawn_position, &spawn_position, &MOBY(moby)->pos);
     spawn_position.f[2] = spawn_position.f[2] + sand_mouse_spawn_and_fallback_aim_height_offset_gp;
     target_moby =
         select_sand_mouse_spawn_target(moby,
@@ -302,7 +302,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
             if (fast_difference_between_rotations(MOBY(moby)->rot.z, target_yaw) < 0.5235988f) {
                 if (cutscene_mode != 2) {
                     char *target_aim_data;
-                    qcopy(&target_aim_position, target_moby + 0x10);
+                    qcopy(&target_aim_position, &MOBY(target_moby)->pos);
                     target_aim_data = get_moby_target_info(target_moby);
                     if (target_aim_data != 0)
                         target_aim_position.f[2] =

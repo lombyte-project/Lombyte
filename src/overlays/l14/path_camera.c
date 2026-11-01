@@ -3,14 +3,17 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/view/update_view_context.h"
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/camera/update_cam.h"
+#include "rnc/overlay/l14/mobys/racer_path_and_weapon.h"
+#include "rnc/overlay/shared/camera/path_flythrough_camera.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 typedef struct {
     char  pad0[0xB0];
@@ -20,8 +23,6 @@ typedef struct {
 extern VendorView_5290 l14_camera_projection_state __asm__("D_L14_0016D140");
 
 #include "rnc/overlay/l14/path_camera_globals.h"
-
-extern int sample_path(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 
 extern char *l14_camera_preset_rows __asm__("D_L14_0015EF50");
 
@@ -149,11 +150,7 @@ extern float D_L14_001675D8 NOT_SDA;
 
 extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");
 
-extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
-
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
-
-extern void reset_racer_group_to_hero_path_position(struct Moby *m) __asm__("FUN_L14_002d6570");
 
 void update_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L14_00315290");
 
@@ -202,12 +199,12 @@ void update_path_camera(struct UpdateCam *path_camera) {
     }
     path = ((char *)l14_paths[*(int *)(rec + 0x20)]);
     qcopy(initial_look_direction_or_previous_position, &path_camera->pos);
-    done = sample_path(path,
-                       &path_camera->pos.x,
-                       &camera_run->seg,
-                       &camera_run->t,
-                       0,
-                       *(float *)(rec + 0x3C) * frame_time);
+    done = FUN_L00_0025d808(path,
+                            &path_camera->pos.x,
+                            &camera_run->seg,
+                            &camera_run->t,
+                            0,
+                            *(float *)(rec + 0x3C) * frame_time);
     if (camera_run->timer != 0 && fast_dec_timer_s16(&camera_run->timer) != 0)
         done = 1;
     if (*(u8 *)(rec + 0x39) != 0)
@@ -226,11 +223,11 @@ void update_path_camera(struct UpdateCam *path_camera) {
         hp = (char *)hero.rail_spline;
         seg = hero.rail_segment;
         tt = hero.rail_seg_frac;
-        sample_path(hp, &path_camera->pos.x, &seg, &tt, 0, 10.0f);
+        FUN_L00_0025d808(hp, &path_camera->pos.x, &seg, &tt, 0, 10.0f);
         path_camera->pos.z += 2.0f;
         seg = hero.rail_segment;
         tt = hero.rail_seg_frac;
-        sample_path(hp, u, &seg, &tt, 0, 0.0f);
+        FUN_L00_0025d808(hp, u, &seg, &tt, 0, 0.0f);
         u[2] += 1.5f;
         fast_vec_sub(t, u, &path_camera->pos);
         fast_vec_normalize(&path_camera->m0, t, 1.0f);
@@ -278,7 +275,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         char *look = ((char *)l14_paths[*(int *)(rec + 0x24)]);
         seg2 = 0;
         tt2 = 0.0f;
-        sample_path(
+        FUN_L00_0025d808(
             look, u, &seg2, &tt2, 0, camera_run->dist / camera_run->len_a * camera_run->len_b);
         fast_vec_sub(t, u, &path_camera->pos);
     }
@@ -288,8 +285,6 @@ void update_path_camera(struct UpdateCam *path_camera) {
     fast_vec_normalize(&path_camera->m1, &path_camera->m1, 1.0f);
     fast_vec_cross(&path_camera->m2, &path_camera->m1, &path_camera->m0);
 }
-
-extern int check_descriptor_hero_trigger(void *) __asm__("FUN_L10_002f5a78");
 
 int check_path_camera_priority(char *camera,
                                char *control_mode_gate_object) __asm__("FUN_L14_00315920");

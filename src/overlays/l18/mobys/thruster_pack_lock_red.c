@@ -1,19 +1,19 @@
 /* Level 18 thruster_pack_lock_red and its wait requests. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 
 #include "sda.h"
 #include "rnc/game/game_globals.h"
@@ -66,8 +66,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         *(unsigned short *)(thruster_pack_lock_red_private_vars + 0x3E) |= 8;
         if (*(int *)(thruster_pack_lock_red_private_vars + 0x60) != 0) {
             moby->state = 1;
-            moby->scale = *(float *)((char *)moby->pclass + 0x24) *
-                          l18_thruster_pack_lock_red_scale_multiplier;
+            moby->scale = moby->pclass->scale * l18_thruster_pack_lock_red_scale_multiplier;
             return;
         }
         moby->state = 4;
@@ -153,7 +152,9 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9358), where it is exact; names translated to the US level program. */
 
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-s32        allocate_voice_for_group_entry(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0022dba0");
+s32        allocate_voice_for_group_entry(s32 group_entry_index,
+                                          s32 flags,
+                                          s32 owner) __asm__("FUN_0022dba0");
 
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) __asm__("FUN_L18_002d7f68");
 

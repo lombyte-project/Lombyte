@@ -9,7 +9,7 @@
 #include "rnc/math/random.h"
 #include "rnc/math/spherical_offset.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"

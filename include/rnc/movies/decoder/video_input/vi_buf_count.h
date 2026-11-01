@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_MOVIES_DECODER_VIDEO_INPUT_VI_BUF_COUNT_H
+#define LOMBYTE_RNC_MOVIES_DECODER_VIDEO_INPUT_VI_BUF_COUNT_H
+
+#include "types.h"
+
+struct ViBuf;
+
+s32 vi_buf_count(struct ViBuf *) __asm__("FUN_0023c610");
+
+#endif /* LOMBYTE_RNC_MOVIES_DECODER_VIDEO_INPUT_VI_BUF_COUNT_H */

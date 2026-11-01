@@ -6,13 +6,16 @@
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/camera/update_cam.h"
 #include "rnc/overlay/l14/mobys/morphoray_globals.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
+#include "rnc/save/memcard_save_data.h"
 
 void initialize_morphoray_private_state(struct Moby *moby) __asm__("FUN_L14_00305a38");
 
@@ -35,12 +38,6 @@ f32 morphoray_yaw_step_gp __asm__("D_L14_001621EC") = 0.02617994f;
 f32 morphoray_position_offset_scale_gp __asm__("D_L14_001621F0") = 0.4f;
 
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
-
-extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
-
-extern int memcard_save_data(s32, s32) __asm__("FUN_0020b178");
-
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 
@@ -159,7 +156,7 @@ typedef struct {
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 extern unsigned char *
-FUN_L00_00272f68(float f, void *pos, int a1, unsigned char a2, int idx, int flag, int s, int mode);
+FUN_L00_00272f68(float f, void *pos, int b, unsigned char a2, int idx, int flag, int s, int mode);
 
 void update_morphoray_particles(struct Moby *morphoray_moby) {
     float     particle_position_and_step[8];
@@ -202,6 +199,3 @@ void update_morphoray_particles(struct Moby *morphoray_moby) {
 }
 
 extern int D_L14_0015F5C4;
-
-extern void queue_dialogue_message(int message_id,
-                                   int message_duration_frames) __asm__("FUN_L00_00263d40");

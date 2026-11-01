@@ -1,8 +1,8 @@
 /* Vendor menu: loads the vendor moby assets, builds the item rows, opens, updates and closes the menu, handles purchases and plays the exit cutscene. */
 #include "types.h"
 #include "sda.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/overlay/vendor_menu.h"
+#include "rnc/overlay/shared/world/level_globals.h"
+#include "rnc/overlay/shared/vendor/vendor_menu.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -42,9 +42,9 @@
 #include "rnc/overlay/shared/vendor/vendor_menu_globals.h"
 #include "rnc/game/item_state.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 /* Clears D_L00_0015F424..0015F434, D_L00_0017E504[0] and D_L00_0015F2F0/2F4. */
 void reset_frame_counters(void) __asm__("FUN_L00_00297e30");
@@ -374,7 +374,7 @@ void open_vendor_menu(void *vendor_moby_arg) {
     if (vendor_moby == 0) {
         vendor_moby = create_moby(0xB);
         *(s16 *)((char *)vendor_moby + 0x32) = 0x40;
-        *(f32 *)((char *)vendor_moby + 0x10) =
+        *(f32 *)((char *)&MOBY(vendor_moby)->pos) =
             l00_camera.pos.f[0] + vendor_camera_eye_local_offset_x_gp;
         *(f32 *)((char *)vendor_moby + 0x14) = l00_camera.pos.f[1];
         *(f32 *)((char *)vendor_moby + 0x18) =
@@ -497,7 +497,7 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4_29ab70;
 
-extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
+extern void FUN_L00_002330d0(void);
 extern void decrement_resource_counter(void) __asm__("FUN_001ff768");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern int  vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
@@ -518,7 +518,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
-    f2330d0_29ab70();
+    FUN_L00_002330d0();
     if (*(int *)(vendor_state_base + 0x40) == 0) {
         transform_vector_by_basis(&world_position,
                                   &vendor_close_hero_local_offset_gp,
@@ -552,7 +552,7 @@ extern s32 vendor_exit_cutscene_ids_by_item[] __asm__("D_L00_001CA020");
 extern s32 vendor_exit_hero_local_offset_gp __asm__("D_L00_00161100") __attribute__((sda));
 extern s32 vendor_exit_cutscene_local_offset_gp __asm__("D_L00_001610F0") __attribute__((sda));
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 extern float probe_ground_height(float, void *, s32) __asm__("FUN_00213508");
 extern void  clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
@@ -584,7 +584,7 @@ void start_vendor_exit_cutscene(void) {
                               &vendor_exit_cutscene_local_offset_gp,
                               (char *)vendor_state->vendor_moby + 0xC0);
     moby = (VendorMoby_29a6b0 *)vendor_state->vendor_moby;
-    fast_vec_add(cutscene_world_origin, cutscene_world_origin, (char *)moby + 0x10);
+    fast_vec_add(cutscene_world_origin, cutscene_world_origin, (char *)&MOBY(moby)->pos);
     *(f32 *)((char *)vendor_state + 0xC8) += 2.0f;
     *(f32 *)((char *)vendor_state + 0xC8) = probe_ground_height(0.5f, cutscene_world_origin, 0);
     clear_u64_value((char *)vendor_state + 0xB0);

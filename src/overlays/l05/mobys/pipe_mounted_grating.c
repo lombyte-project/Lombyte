@@ -17,7 +17,7 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void  random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern u8   *FUN_L00_00272060(
-      void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin, void *vel, f32 f2);
+      void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin, void *vel, f32 z);
 extern char pipe_mounted_grating_command_records[] __asm__("D_L05_001BAAA0");
 
 void         pipe_mounted_grating_update(struct Moby *moby) __asm__("FUN_L05_0030f5c8");

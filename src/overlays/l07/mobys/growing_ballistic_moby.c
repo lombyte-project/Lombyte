@@ -7,10 +7,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
+#include "rnc/math/random.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 /* Spawn the class 0x419 effect moby at a position with a data block, and start its particle. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F750), where it is exact; names translated to the US level program. */

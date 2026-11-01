@@ -14,4 +14,6 @@ spawn_debris_chunk(void *, void *, u32, f32, s32, f32, f32, f32, s32) __asm__("F
 void cutscene_trigger_update(s8 *) __asm__("FUN_L01_002fb5b0");
 void rail_hero_motion_update(struct Moby *) __asm__("FUN_L01_002f6328");
 
+void rock_update(struct Moby *) __asm__("FUN_L01_002f8718");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ROCK_H */

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef struct {
     s64 pts;

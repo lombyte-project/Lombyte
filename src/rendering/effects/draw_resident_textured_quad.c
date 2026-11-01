@@ -5,10 +5,10 @@
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/vu1_registers.h"
 
 extern u64  D_00160580;
 extern s32  D_001604F0 __attribute__((sda));
-extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad(struct GeometryQuad *, s32, s32) __asm__("func_001F7D30");
 
 void draw_resident_textured_quad(void) __asm__("FUN_0022e8c8");

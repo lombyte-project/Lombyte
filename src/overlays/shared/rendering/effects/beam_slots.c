@@ -3,7 +3,7 @@
 #include "qcopy.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "sda.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -15,6 +15,9 @@
 #include "rnc/math/random/random_spherical_offset.h"
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/rendering/debug/debug_menu.h"
+#include "rnc/overlay/shared/math/random/random_vector.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
+#include "rnc/rendering/effect_texture.h"
 
 extern int  D_L14_00162148[] MACRO_ADDR;
 extern int  D_L14_001621D8[] MACRO_ADDR;
@@ -37,14 +40,14 @@ void beam_slots_update(unsigned char *moby) {
     int started_slot_count;
     int slot_state;
 
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case SLOT_UPDATE_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
             D_L14_00162148[j] = 0;
             D_L14_001621D8[j] = 0;
         }
-        moby[0x20] = 1;
-        moby[0x30] = 0xFF;
+        MOBY(moby)->state = 1;
+        MOBY(moby)->update_dist = 0xFF;
         break;
     case SLOT_UPDATE_STATE_PROCESS_SLOTS:
         started_slot_count = 0;
@@ -141,7 +144,6 @@ typedef struct {
 } Q_e3388;
 
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-f32         normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 int         allocate_colored_effect_slot(
             void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
 unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(
@@ -158,14 +160,12 @@ extern int   func_001F9850_2E3700(int) __asm__("FUN_001f96f8");
 extern void draw_beam_strand_with_glow(int, int, void *, int, int, int) __asm__("FUN_L00_002e2c88");
 extern void draw_beam_endpoint_quads_with_glow(int, int) __asm__("FUN_L00_002e3388");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern s64   get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void  draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-void         FUN_001f9a28_e3388(void *, void *, void *) __asm__("FUN_001f9a28");
-void         FUN_001f9bf8_e3388(void *, void *, f32) __asm__("FUN_001f9bf8");
-void         FUN_001f9ad8_e3388(void *, void *, void *) __asm__("FUN_001f9ad8");
-void         FUN_001f9a68_e3388(void *, void *, f32) __asm__("FUN_001f9a68");
-void         FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+void        FUN_001f9a28_e3388(void *, void *, void *) __asm__("FUN_001f9a28");
+void        FUN_001f9bf8_e3388(void *, void *, f32) __asm__("FUN_001f9bf8");
+void        FUN_001f9ad8_e3388(void *, void *, void *) __asm__("FUN_001f9ad8");
+void        FUN_001f9a68_e3388(void *, void *, f32) __asm__("FUN_001f9a68");
+void        FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern char          D_L00_00166DC0[] NOT_SDA;
 extern int           beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;

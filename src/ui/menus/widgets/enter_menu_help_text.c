@@ -21,8 +21,8 @@ s32 enter_menu_help_text(struct MenuScreen *menu) {
     struct MenuSystem *menu_system_state;
 
     initialize_menu_stream_buffers(1);
-    menu->data.raw.unk54 = 0;
-    menu->data.raw.unk38 = 0;
+    menu->data.help.saved_text_table = 0;
+    menu->data.help.saved_text_count = 0;
     menu_system_state = &menu_system;
     for (i = 0; i < 5; i++) {
         if (menu_stream_buffers[i].address != 0 &&
@@ -30,17 +30,17 @@ s32 enter_menu_help_text(struct MenuScreen *menu) {
             menu_stream_buffers[i].flags |= MENU_STREAM_BUFFER_ALLOCATED;
         }
     }
-    menu->data.raw.unk50 = 0;
+    menu->data.help.load_state = 0;
     if (music_stream_state.read_state == 0) {
         if (start_audio_stream_read(help_text_read_destination[0],
                                     disc_table.help_text.sector,
                                     disc_table.help_text.size) != 0) {
-            menu->data.raw.unk50 = 1;
+            menu->data.help.load_state = 1;
         } else {
-            menu->data.raw.unk50 = 3;
+            menu->data.help.load_state = 3;
         }
     }
-    menu->unk10 |= 4;
+    menu->unk10 |= MENU_SCREEN_HIDDEN;
     return 0;
 }
 

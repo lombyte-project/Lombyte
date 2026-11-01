@@ -1,7 +1,7 @@
 /* Level 05 moby class cutscene_camera_target (0x60e): points the cutscene camera at the moby of the current cutscene step. */
 #include "types.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 /* UpdateMoby_1550 (0x60e). State 0 arms it: state 1 and byte 0x30 = 0xFF. In state 1,

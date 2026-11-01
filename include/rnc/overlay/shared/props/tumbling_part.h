@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TUMBLING_PART_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TUMBLING_PART_H
+
+#include "types.h"
+
+void tumbling_part_update(char *) __asm__("FUN_L00_002e3d88");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TUMBLING_PART_H */

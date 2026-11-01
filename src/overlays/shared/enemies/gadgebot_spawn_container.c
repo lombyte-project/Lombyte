@@ -9,7 +9,9 @@
 #include "rnc/math/random.h"
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/props/spinning_fragment.h"
 
 typedef struct {
     float corner[4][4];
@@ -23,10 +25,7 @@ typedef struct {
 
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(
     void *, int, int, float, float, float, float, float) __asm__("FUN_L00_0026b790");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern unsigned char              *
-spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -102,7 +101,7 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
     unsigned char *fragment;
 
     allocate_voice_for_target_entry(0, 0, (int)moby);
-    qcopy(origin, moby + 0x10);
+    qcopy(origin, &MOBY(moby)->pos);
     origin[2] += 0.3f;
     spawn_spinning_fade_in_out_effect_particle(
         origin, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
@@ -113,10 +112,10 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
     if (target != 0) {
         qcopy(displacement, target + 0x10);
     } else {
-        fast_vec_sub(displacement, moby + 0x10, D_001413D0 + 0x10);
+        fast_vec_sub(displacement, &MOBY(moby)->pos, D_001413D0 + 0x10);
     }
     for (j = 9; j >= 0; j--) {
-        qcopy(pos, moby + 0x10);
+        qcopy(pos, &MOBY(moby)->pos);
         pos[0] += randf_sym(0.0f, 0.2f);
         pos[1] += randf_sym(0.0f, 0.2f);
         pos[2] += random_float_between(0.15f, 0.55f);
@@ -145,9 +144,9 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
         }
     }
     MOBY(moby)->collision = 0;
-    moby[0x20] = 2;
+    MOBY(moby)->state = 2;
     MOBY(moby)->flags |= 1;
-    moby[0xbc] = (unsigned char)scale_game_frames(15);
+    MOBY(moby)->command = (unsigned char)scale_game_frames(15);
 }
 
 /* Spawns moby class 0x12E at the owner's position, copying its fields. */
@@ -159,13 +158,13 @@ char *spawn_gadgebot_spawn_container(char *spawning_gadgebot) {
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0x60;
         MOBY(moby)->draw_dist = 0x60;
-        moby[0x31] = 1;
+        MOBY(moby)->visible = 1;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         MOBY(moby)->rot.z = *(float *)(spawning_gadgebot + 0x48);
         MOBY(moby)->spawn_frame = *(long *)(spawning_gadgebot + 0x38);
         MOBY(moby)->flags |= 0x1000;
-        qcopy(moby + 0x10, spawning_gadgebot + 0x10);
+        qcopy(&MOBY(moby)->pos, spawning_gadgebot + 0x10);
         update_entity(moby);
     }
     return moby;
@@ -185,10 +184,10 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
     int   frame_count_snapshot;
     float color_pulse_value;
 
-    moby[0xA4] = 0xFF;
-    switch (moby[0x20]) {
+    MOBY(moby)->hit_slot = 0xFF;
+    switch (MOBY(moby)->state) {
     case GADGEBOT_CONTAINER_ACTIVATE:
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS:
         frame_count_snapshot = level_frame_count;
@@ -201,12 +200,12 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
         if (hit_record != 0) {
             destroy_gadgebot_spawn_container(moby, hit_record);
         }
-        if (moby[0x31] != 0) {
+        if (MOBY(moby)->visible != 0) {
             add_draw_callback((int)draw_gadgebot_spawn_container, (int)moby);
         }
         break;
     case GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL:
-        qcopy(raised_position_snapshot, moby + 0x10);
+        qcopy(raised_position_snapshot, &MOBY(moby)->pos);
         raised_position_snapshot[2] += 0.3f;
         if (FUN_L00_001fefc8(moby + 0xBC) != 0) {
             mark_moby_for_removal(moby);

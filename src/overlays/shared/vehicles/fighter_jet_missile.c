@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/spherical_offset.h"
@@ -15,7 +15,8 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct {
     float x, y, z;
@@ -44,8 +45,7 @@ extern char *target_search_moby_list_head __asm__("D_L11_0015FFE4");
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char  D_L11_00174880[];
 extern void
-initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
-extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
+      initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
 char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__("FUN_L11_00308670");
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
@@ -68,7 +68,7 @@ char *select_homing_missile_target(
             ((char *)MOBY(candidate_moby)->pclass) != 0 &&
             *(short *)(((char *)MOBY(candidate_moby)->pclass) + 0x46) == 5) {
             float distance_xy;
-            candidate_position = candidate_moby + 0x10;
+            candidate_position = &MOBY(candidate_moby)->pos;
             distance_xy = vector_distance_xy(targeting_origin, candidate_position);
             if (distance_xy < maxd) {
                 float adjusted_target_position[4];
@@ -123,10 +123,10 @@ unsigned char *spawn_fighter_jet_missile(char  *launching_moby,
         char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         float direction_length_xy;
         *(char **)(moby_vars + 0x1C) = launching_moby;
-        spawned_moby[0x30] = 0xFF;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(travel_distance);
         *(int *)(spawned_moby + 0x40) = 0;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         direction_length_xy = vector_length_xy(launch_direction);
         MOBY(spawned_moby)->rot.y = -fast_arc_tan(direction_length_xy, launch_direction[2]);
         MOBY(spawned_moby)->rot.z = fast_arc_tan(launch_direction[0], launch_direction[1]);
@@ -137,14 +137,14 @@ unsigned char *spawn_fighter_jet_missile(char  *launching_moby,
             qcopy(moby_vars, launch_direction);
             step_length = fast_vec_length(launch_direction);
         }
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) =
             truncate_float_to_s32(travel_distance / step_length);
         MOBY(spawned_moby)->flags = 0x200;
-        MOBY(spawned_moby)->scale = *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) *
-                                    (*(float *)(launching_moby + 0x2C) /
-                                     *(float *)(*(char **)(launching_moby + 0x24) + 0x24));
-        spawned_moby[0x23] = truncate_float_to_s32(*(float *)(moby_vars + 0x10) * 24.0f);
+        MOBY(spawned_moby)->scale =
+            *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) *
+            (MOBY(launching_moby)->scale / *(float *)(*(char **)(launching_moby + 0x24) + 0x24));
+        MOBY(spawned_moby)->alpha = truncate_float_to_s32(*(float *)(moby_vars + 0x10) * 24.0f);
         set_moby_color(spawned_moby, 0xFF, 0xFF, 0xFF);
         update_entity(spawned_moby);
     }
@@ -239,11 +239,11 @@ void fighter_jet_missile_update(struct Moby *moby) {
             fast_vec_normalize(spark_velocity,
                                spark_velocity,
                                random_float_between(frame_time * 5.0f, frame_time * 9.0f));
-            FUN_L00_0026dd20_c(&moby->pos,
-                               spark_velocity,
-                               0x7F2F4F6F,
-                               random_int_between(scale_game_frames(10), scale_game_frames(15)),
-                               90000.0f);
+            FUN_L00_0026dd20(&moby->pos,
+                             spark_velocity,
+                             0x7F2F4F6F,
+                             random_int_between(scale_game_frames(10), scale_game_frames(15)),
+                             90000.0f);
         }
         mark_moby_for_removal(moby);
         return;

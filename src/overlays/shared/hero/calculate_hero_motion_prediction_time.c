@@ -3,9 +3,9 @@
 #include "rnc/hero/hero.h"
 #include "asm.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"

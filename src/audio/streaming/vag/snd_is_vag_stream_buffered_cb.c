@@ -7,9 +7,9 @@ void snd_is_vag_stream_buffered_cb(s32 sound_handle,
                                    s32 callback_context) __asm__("FUN_0012ed00");
 
 void snd_is_vag_stream_buffered_cb(s32 sound_handle, s32 callback_address, s32 callback_context) {
-    u8 sp_slot[0x10];
-    *(s32 *)sp_slot = sound_handle;
-    snd_send_iop_command_no_wait(79, 4, sp_slot, callback_address, callback_context);
+    s32 command[4];
+    command[0] = sound_handle;
+    snd_send_iop_command_no_wait(79, 4, command, callback_address, callback_context);
 }
 
 /* Recovered original symbol name. */

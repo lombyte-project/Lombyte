@@ -14,9 +14,9 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int D_L10_0015F5CC;
 /* Electric spark: runs along its wire path with a light and a buzzing sound, then rests for a random time. */

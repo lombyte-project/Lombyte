@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_KERNEL_I_WAKEUP_THREAD_H
+#define LOMBYTE_RNC_SDK_KERNEL_I_WAKEUP_THREAD_H
+
+#include "types.h"
+
+s32 iWakeupThread(s32);
+
+#endif /* LOMBYTE_RNC_SDK_KERNEL_I_WAKEUP_THREAD_H */

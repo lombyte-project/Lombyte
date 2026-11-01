@@ -12,6 +12,8 @@
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/save/memcard_save_data.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -46,8 +48,6 @@ struct ShopCamera l04_lieutenant_shop_camera __asm__("D_L04_0016C9F0") = {0};
 
 extern s32  D_L04_0015F5C4;
 extern void FUN_L00_0025a120(struct Moby *);
-extern int  FUN_00214720(char *, s32);
-extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void lieutenant_update(struct Moby *moby) __asm__("FUN_L04_002e3078");
 
@@ -81,7 +81,7 @@ void lieutenant_update(struct Moby *moby) {
         initialize_npc_dialogue(moby, lieutenant_dialogue_vars);
         break;
     case LIEUTENANT_STATE_UPDATE_DIALOGUE:
-        if (FUN_00214720(&hero.motion.pos, lieutenant_dialogue_vars->item))
+        if (is_point_inside_clip_volume(&hero.motion.pos, lieutenant_dialogue_vars->item))
             lieutenant_dialogue_vars->alpha = 255.0f;
         else
             lieutenant_dialogue_vars->alpha = 1.0f;

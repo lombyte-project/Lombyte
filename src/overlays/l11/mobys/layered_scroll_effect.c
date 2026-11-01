@@ -1,10 +1,10 @@
 /* Level 11 moby class layered_scroll_effect (class 1903): builds and draws its scrolling layer batches, fading texture 0x29 by distance. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -13,7 +13,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/l11/mobys/layered_scroll_effect_globals.h"
-#include "rnc/overlay/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
 
 /* The 4-batch set (counts and stream tables in .lit at D_L11_00162530/40/50/70). */
 f32 layered_effect_batch_positions_0[148][3] __asm__("D_L11_001F1530") = {

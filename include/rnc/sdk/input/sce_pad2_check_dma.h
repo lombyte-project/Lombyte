@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_CHECK_DMA_H
+#define LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_CHECK_DMA_H
+
+#include "types.h"
+
+s32 scePad2CheckDma(s32);
+
+#endif /* LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_CHECK_DMA_H */

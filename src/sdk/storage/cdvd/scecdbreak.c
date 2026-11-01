@@ -1,18 +1,10 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 extern volatile u32 D_00131314[];
 extern s32          SignalSema(s32 semaId);
 extern s32          cd_check_scmd(s32 cmd) __asm__("func_00120D40");
-extern s32          sceSifCallRpc(void *pkt,
-                                  u32   cmd,
-                                  s32   mode,
-                                  void *send,
-                                  s32   sendsize,
-                                  void *recv,
-                                  s32   recvsize,
-                                  void *endfunc,
-                                  void *endparam);
 
 s32 sceCdBreak(void) {
     s32 status;

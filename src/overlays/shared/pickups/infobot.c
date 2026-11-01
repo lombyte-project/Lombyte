@@ -9,11 +9,16 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/pickups/infobot_data/update_infobot_slot_path_motion.h"
 #include "rnc/globals.h"
 #include "rnc/game/level_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
+#include "rnc/math/random.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/save/memcard_save_data.h"
 
 typedef struct Moby Moby;
 
@@ -129,15 +134,11 @@ typedef struct {
     float d[4];
 } P_2d6cd0;
 
-extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern float D_0015ED70;
-
-float absolute_float(float input) __asm__("func_001F99C0");
 
 extern s32 D_L00_0015F5C4;
 
 extern float D_0015ED6C;
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 
 extern void FUN_L00_0025df68_2d5988(
     void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32) __asm__("FUN_L00_0025df68");
@@ -166,19 +167,12 @@ extern f32  spring_turn(f32  angle,
                         f32  limit,
                         f32 *speed) __asm__("FUN_L00_00258110");
 extern void FUN_L00_0025df68(Path *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
-extern s32  FUN_L00_00260400(struct Moby *, struct Moby *, void *, void *, void *, void *);
-extern void unlock_planet(s32) __asm__("FUN_L00_002607d0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
-extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
-extern void FUN_0020c828(struct Moby *);
 
-s32 random_integer_below(s32) __asm__("FUN_00213260");
-
-extern int  D_15F5C4_2d6cd0 __asm__("D_L00_0015F5C4");
-extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void FUN_L00_00272f68(void *, int, int, int, int, int, int, float);
+extern int D_15F5C4_2d6cd0 __asm__("D_L00_0015F5C4");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 void update_infobot_slot_path_motion(Obj         *moby,
                                      Path_2d5988 *path,
@@ -409,7 +403,7 @@ void infobot_update(struct Moby *moby) {
                                   &infobot->spin[0]);
         FUN_L00_002d6cd0_2d5de8(moby);
         if (level_available[infobot->planet] != 0) {
-            FUN_0020c828(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         if (fast_vec_dist(&D_0013F3D0, &moby->pos) < range && D_0013F3D0.active != 0) {
@@ -419,7 +413,7 @@ void infobot_update(struct Moby *moby) {
     case INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH:
         FUN_L00_002d6cd0_2d5de8(moby);
         if (level_available[infobot->planet] != 0) {
-            FUN_0020c828(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         if (infobot->slots[infobot->seg] == -1) {
@@ -456,7 +450,7 @@ void infobot_update(struct Moby *moby) {
     case INFOBOT_ORBIT_CARRIER:
         FUN_L00_002d6cd0_2d5de8(moby);
         if (level_available[infobot->planet] != 0) {
-            FUN_0020c828(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         infobot->bob = fast_add_rotations(infobot->bob, D_0015ED6C * 3.1415927f);
@@ -621,7 +615,7 @@ void infobot_update(struct Moby *moby) {
         }
         memcard_save_data(0, -1);
         queue_planet_unlock_message(infobot->planet);
-        FUN_0020c828(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     if (infobot->attach != -1 && infobot->carrier != -1) {
@@ -677,10 +671,10 @@ void update_infobot_particle_effect(char *moby) {
     }
     v.q = *(OvlQuad *)&MOBY(moby)->pos;
     v.f[2] += 0.333000004f;
-    fast_vec_sub(d, g_debug_camera.position, moby + 0x10);
+    fast_vec_sub(d, g_debug_camera.position, &MOBY(moby)->pos);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(particle_position_step, d, 0.1f);
-    fast_vec_add(d, d, moby + 0x10);
+    fast_vec_add(d, d, &MOBY(moby)->pos);
     v.f[2] -= 0.333000004f;
     for (i = 0; i < 4; i++) {
         {

@@ -1,3 +1,4 @@
+#include "rnc/sdk/libc/malloc/_calloc_r.h"
 /****************************************************************
  *
  * The author of this software is David M. Gay.
@@ -92,8 +93,6 @@ typedef struct _reent {
     u8        pad_0[0x4C];
     _Bigint **_freelist;
 } _reent;
-
-extern void *_calloc_r(struct _reent *, u32, u32);
 
 _Bigint *_Balloc(struct _reent *reent_context, s32 k) {
     s32      x;

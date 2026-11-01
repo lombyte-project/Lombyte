@@ -3,13 +3,18 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/mobys/get_moby_pvars_link.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
+#include "rnc/overlay/shared/weapons/doom_bot.h"
+#include "rnc/overlay/shared/weapons/glove_of_doom.h"
 
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
 typedef struct {
@@ -33,8 +38,7 @@ extern void add_vector_xyz_2c8440(void *, void *, void *) __asm__("FUN_001f9a10"
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern s32  collision_line_2c8440(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern void FUN_L00_002c7df8_2c8440(void) __asm__("FUN_L00_002c7df8");
-extern unsigned char *FUN_L00_002603d0_2c8440(int) __asm__("FUN_L00_002603d0");
-extern s32            FUN_001f0b58_2c8440(void) __asm__("FUN_001f0b58");
+extern s32  FUN_001f0b58_2c8440(void) __asm__("FUN_001f0b58");
 
 extern u8 D_0013E534 NOT_SDA;
 extern int           D_L00_0015FFE4;
@@ -42,11 +46,6 @@ extern s32           coll_line_fix(void *, void *, s32, void *, s32) __asm__("FU
 extern s32           coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void          reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void          add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern char         *FUN_L00_002603d0(char *);
-extern void          spawn_moby_bound_effect_particle(struct Moby *) __asm__("FUN_L00_0026ed28");
-extern void          spawn_moby_collision_particles(struct Moby *) __asm__("FUN_L00_002c8078");
-extern void          spawn_doom_bot(struct Moby *, void *, void *) __asm__("FUN_L00_002bfe08");
-extern void          FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *);
 
 /* coll_hit_2c8440's normal as a whole quadword (CollisionHit names only x/y/z) */
 
@@ -89,7 +88,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
         if (hero.state.control_mode == 15)
             add_vector_xyz_2c8440(
                 &simulated_velocity, &simulated_velocity, &hero.motion.displacement);
-        if (hero.ground_moby && FUN_L00_002603d0_2c8440((int)hero.ground_moby) && mode)
+        if (hero.ground_moby && get_moby_pvars_link((int)hero.ground_moby) && mode)
             add_vector_xyz_2c8440(
                 &simulated_velocity, &simulated_velocity, &hero.motion.displacement);
         prediction_timer = scale_game_frames(300);
@@ -161,10 +160,10 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
     if (mode == 0) {
         if (coll_hit.moby == 0)
             return 0;
-        if (FUN_L00_002603d0_2c8440(coll_hit.moby) == 0)
+        if (get_moby_pvars_link(coll_hit.moby) == 0)
             goto ret0;
     }
-    if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0_2c8440(coll_hit.moby))
+    if (mode != 2 || coll_hit.moby == 0 || !get_moby_pvars_link(coll_hit.moby))
         add_draw_callback(FUN_L00_002c7df8_2c8440, thrown_moby);
     throw_vars->normal.q = coll_hit_normal.q;
     fast_vec_sub(&position_scratch, &throw_vars->landing, &g_debug_camera_lui);
@@ -217,7 +216,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
         thrown_moby->flags &= 0xffbe;
     if (spawner_throw_vars->holder->oclass == 0xe5 && spawner_throw_vars->unk46 == 0 &&
         fast_vec_length(spawner_throw_vars) > 0.0f) {
-        if (!hero.ground_moby || !FUN_L00_002603d0((char *)hero.ground_moby))
+        if (!hero.ground_moby || !get_moby_pvars_link((char *)hero.ground_moby))
             predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 1);
         else if (!predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 0))
             predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 2);
@@ -304,7 +303,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
                 goto settle;
         }
         if (player->ground_moby) {
-            if (FUN_L00_002603d0((char *)player->ground_moby)) {
+            if (get_moby_pvars_link((char *)player->ground_moby)) {
                 speed = fast_vec_length(spawner_throw_vars);
                 if (speed < frame_scale * rest_speed + fast_vec_length(carry - 0x40)) {
                 settle:
@@ -317,7 +316,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
                     }
                 }
             }
-            if (hero.ground_moby && FUN_L00_002603d0((char *)hero.ground_moby))
+            if (hero.ground_moby && get_moby_pvars_link((char *)hero.ground_moby))
                 fast_vec_add(spawner_throw_vars, spawner_throw_vars, &hero.motion.displacement);
         }
         fast_vec_add(&thrown_moby->pos, &thrown_moby->pos, spawner_throw_vars);
@@ -361,7 +360,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
                 start.f[1] = fast_sin((f32)spawner_throw_vars->spawn_count * 6.2831855f * 0.25f);
                 start.f[2] = frame_scale * 0.02f;
                 start.f[1] = frame_scale * 0.05f * start.f[1];
-                if (hero.ground_moby && FUN_L00_002603d0((char *)hero.ground_moby))
+                if (hero.ground_moby && get_moby_pvars_link((char *)hero.ground_moby))
                     fast_vec_add(&start, &start, &hero.motion.displacement);
                 fast_vec_add(&next_pos, &start, &thrown_moby->pos);
                 spawn_doom_bot(spawner_throw_vars->holder, &next_pos, &start);

@@ -11,13 +11,12 @@
 #include "types.h"
 #include "rnc/sdk/library/malloc_chunk.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/libc/malloc/__malloc_lock.h"
+#include "rnc/sdk/libc/malloc/__malloc_unlock.h"
+#include "rnc/sdk/libc/malloc/_sbrk_r.h"
+#include "rnc/sdk/libc/malloc/free_r.h"
 
 struct _reent;
-
-extern void  __malloc_lock(struct _reent *) __asm__("func_001154C0");
-extern void  __malloc_unlock(struct _reent *) __asm__("func_001154C8");
-extern void *_sbrk_r(struct _reent *ptr, s32 delta);
-extern void  _free_r(struct _reent *ptr, void *mem);
 
 extern u64 D_0012FBA8[]; /* max_sbrked_mem */
 extern u64 D_0012FBB0[]; /* max_total_mem */
@@ -30,7 +29,7 @@ typedef unsigned long POINTER_UINT;
 #define MALLOC_ALIGNMENT      16
 #define MALLOC_ALIGN_MASK     (MALLOC_ALIGNMENT - 1)
 #define malloc_getpagesize    4096
-#define MORECORE(x)           _sbrk_r(reent_context, (x))
+#define MORECORE(x)           SbrkReentrant(reent_context, (x))
 #define MORECORE_FAILURE      ((void *)-1)
 #define chunksize(p)          ((p)->size & ~(SIZE_SZ - 1))
 #define set_head(p, s)        ((p)->size = (s))

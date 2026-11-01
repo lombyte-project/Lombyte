@@ -12,8 +12,8 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern float D_L01_0015F580[] MACRO_ADDR;
 extern float FUN_L04_001f1978(float);

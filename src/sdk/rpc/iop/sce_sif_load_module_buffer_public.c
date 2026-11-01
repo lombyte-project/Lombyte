@@ -1,12 +1,8 @@
+#include "rnc/sdk/rpc/iop/sce_sif_load_module_buffer.h"
 /* sceSifLoadModuleBuffer: load an IRX image already in IOP memory and return
    its module id (_sceSifLoadModuleBuffer also reports the start result). */
 
 #include "types.h"
-
-extern s32 _sceSifLoadModuleBuffer(s32         module_id,
-                                   s32         argument_count,
-                                   const char *arguments,
-                                   void       *result) __asm__("_sceSifLoadModuleBuffer");
 
 s32 sceSifLoadModuleBuffer(s32         iop_address,
                            s32         arguments_length,

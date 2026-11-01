@@ -2,12 +2,13 @@
 #include "rnc/hero/hero.h"
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/camera/init_camera_system.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/shared/math/rotations/rotate_vector_by_scaled_angle_between_vectors.h"
 
 typedef struct {
     char  pad0[0x40];
@@ -29,8 +30,6 @@ typedef struct {
 extern int   D_L03_0015EF50;
 extern void  RaiseKernelTrap();
 extern float transform_basis_reference_vector[] __asm__("D_L03_00166F30");
-extern void  rotate_vector_by_scaled_angle_between_vectors(
-     float, float *, float *, float *, int) __asm__("FUN_L03_0024e6f8");
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E99F0), where it is exact; names translated to the US level program. */
 

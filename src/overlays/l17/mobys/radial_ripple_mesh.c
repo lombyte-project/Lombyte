@@ -1,6 +1,6 @@
 /* Level 17 radial ripple mesh draws (no caller found in C): the mesh pair, the ripple ring and the plain mesh. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/mobys/moby_class_id.h"
 
@@ -11,10 +11,10 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/mesh_batch.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
@@ -37,6 +37,7 @@
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/ui/help/force_help_message.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 
 extern s64  get_effect_texture(s32) __asm__("func_001F44B8");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
@@ -78,7 +79,6 @@ extern float ripple_pair_phase_period_gp __asm__("D_L17_00162258") __attribute__
 extern float ripple_pair_z_amplitude_gp __asm__("D_L17_0016225C") __attribute__((sda));
 extern float ripple_pair_uv_scroll_rate_gp __asm__("D_L17_00162260") __attribute__((sda));
 extern void  FUN_L00_001fde98(int, int, int, void *, int);
-void         font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 /* The two strips: ripple_pair_vertex_counts holds their vertex counts (148 and 11) and
    each table below one stream per strip. draw_moby_radial_ripple_mesh_pair

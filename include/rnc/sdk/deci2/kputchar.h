@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_DECI2_KPUTCHAR_H
+#define LOMBYTE_RNC_SDK_DECI2_KPUTCHAR_H
+
+#include "types.h"
+
+s32 kputchar(s32);
+
+#endif /* LOMBYTE_RNC_SDK_DECI2_KPUTCHAR_H */

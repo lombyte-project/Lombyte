@@ -34,9 +34,9 @@
     }
   ],
   "help": [
-    "Matching hard functions",
-    "Naming structs and fields",
-    "Level overlays"
+    "Naming functions and data",
+    "Structs and fields",
+    "Data in C"
   ],
   "tags": [
     "matching",

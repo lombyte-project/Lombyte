@@ -1,3 +1,4 @@
+#include "rnc/sdk/graph/sce_gs_set_def_draw_env.h"
 /* Ported from rac1-decomp (src/game/framebuf.c,
    func_001FB608). */
 #include "sda.h"
@@ -23,8 +24,6 @@ typedef struct {
     unsigned long pad30 : 2;
     unsigned long FBMSK : 32;
 } GsFrame; /* sceGsFrame */
-
-extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
 
 extern long capture_texture_tex0 __asm__("D_0015EED0") MACRO_ADDR;
 void        setup_render_target(int a, int b, int c) __asm__("FUN_001fb440");

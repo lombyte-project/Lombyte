@@ -188,7 +188,7 @@ void trooper_start_knockback(u8       *moby,
 /* Steps moby MOBY's motion from state ST and returns the flag bits it set. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float approach_value(float *p, float target, float maxstep);
 extern int  *D_L00_00177F00[];
@@ -249,7 +249,7 @@ int step_moby_motion(char *moby, char *motion_state) {
         *(float *)(motion_state + 0x8) = *(float *)(motion_state + 0x1C);
     }
 
-    qcopy(height_probe_position, moby + 0x10);
+    qcopy(height_probe_position, &MOBY(moby)->pos);
     height_probe_position[2] = height_probe_position[2] + *(float *)(motion_state + 0x28);
     ground_reference_height = probe_ground_height(height_probe_position, 0, 0.5f);
     if (collision_hit_material() == 0) {
@@ -260,10 +260,10 @@ int step_moby_motion(char *moby, char *motion_state) {
             height_probe_position[2] = ground_reference_height;
             spawn_burst_moby(height_probe_position, 3.0f);
         }
-        ground_reference_height = func_L00_0025A748_f((moby + 0x10));
+        ground_reference_height = func_L00_0025A748_f(&MOBY(moby)->pos);
     } else {
         if ((*(int *)(motion_state + 0x24) & 0x10) || *(short *)(motion_state + 0x3E) == 2) {
-            fast_vec_add(collision_probe_position, (moby + 0x10), motion_state);
+            fast_vec_add(collision_probe_position, &MOBY(moby)->pos, motion_state);
             if (func_L00_0025A748_f(collision_probe_position) < ground_reference_height - 0.25f) {
                 set_vector_length_xy((float *)motion_state, (float *)motion_state, 0.0f);
             }
@@ -349,10 +349,10 @@ int step_moby_motion(char *moby, char *motion_state) {
     }
 
     i = 0;
-    qcopy(eye, (moby + 0x10));
+    qcopy(eye, &MOBY(moby)->pos);
     eye[2] = eye[2] + *(float *)(motion_state + 0x28);
-    fast_vec_add((moby + 0x10), (moby + 0x10), motion_state);
-    qcopy(collision_probe_position, (moby + 0x10));
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, motion_state);
+    qcopy(collision_probe_position, &MOBY(moby)->pos);
     collision_probe_position[2] = collision_probe_position[2] + *(float *)(motion_state + 0x28);
     fast_vec_add(predicted_query_position, collision_probe_position, motion_state);
     result_count = func_L00_001F2BE8_d6f0(convert_integer_to_float(*(int *)(motion_state + 0x20)) *
@@ -373,7 +373,7 @@ int step_moby_motion(char *moby, char *motion_state) {
                 }
             } else {
                 spawn_nearby_effect(
-                    (char *)*pp, 1.0f, (int)moby, 0x10000, (moby + 0x10), motion_state);
+                    (char *)*pp, 1.0f, (int)moby, 0x10000, &MOBY(moby)->pos, motion_state);
             }
             pp++;
         } while (--k != 0);
@@ -391,7 +391,7 @@ int step_moby_motion(char *moby, char *motion_state) {
                             moby) != 0) {
         flags |= 2;
         collision_result_position = (Vec4 *)&coll_hit_position;
-        qcopy((moby + 0x10), collision_result_position);
+        qcopy(&MOBY(moby)->pos, collision_result_position);
         one = 1.0f;
         MOBY(moby)->pos.z = MOBY(moby)->pos.z - *(float *)(motion_state + 0x28);
         fast_vec_normalize(surface_normal, (char *)collision_result_position + 0x10, one);

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_SPAWN_NEARBY_EFFECT_WITHOUT_DIRECTION_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_SPAWN_NEARBY_EFFECT_WITHOUT_DIRECTION_H
+
+#include "types.h"
+
+void spawn_nearby_effect_without_direction(unsigned char *, int, int, void *, float) __asm__("FUN_L10_0024c7f0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_SPAWN_NEARBY_EFFECT_WITHOUT_DIRECTION_H */

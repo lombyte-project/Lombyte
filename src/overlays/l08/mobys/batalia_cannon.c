@@ -4,7 +4,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/mobys/moby.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
@@ -23,6 +23,7 @@
 #include "rnc/overlay/l08/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/weapons/turret_rocket.h"
 
 /* finds the first of eight linked entries whose direction lines up with the moby */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E15A0), where it is exact; names translated to the US level program. */
@@ -253,10 +254,6 @@ struct CannonData52 {
     float         visual_angle;
 };
 
-char        *spawn_turret_rocket(int    owner,
-                                 float *position,
-                                 float *rotation,
-                                 int    value) __asm__("FUN_L08_002e7eb0");
 extern float D_0015ED70;
 /* Aim rates and accelerations in degrees (the code converts with * 0.017453292f); the offsets are moved into the cannon's basis by transform_vector_by_basis. */
 float        batalia_cannon_max_yaw_rate_gp __asm__("D_L08_00161AE8") = 1.8e+02f;

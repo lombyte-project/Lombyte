@@ -2,6 +2,7 @@
 #include "rnc/rendering/draw_config.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 extern struct TagPtr D_00160F68;
 
@@ -10,7 +11,6 @@ extern struct TagPtr D_00160F68;
 extern char tie_texture_overflow_message[] __asm__("D_001E8A50");
 extern s32  build_tie_texture_dma(s32) __asm__("FUN_002370c0");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
-extern void DebugPrint(char *, ...);
 void        dma_tie_textures(void) __asm__("FUN_00235640");
 
 void dma_tie_textures(void) {

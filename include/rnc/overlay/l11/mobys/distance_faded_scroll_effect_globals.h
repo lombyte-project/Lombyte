@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_OVERLAY_L11_MOBYS_DISTANCE_FADED_SCROLL_EFFECT_GLOBALS_H
 
 #include "types.h"
-#include "rnc/overlay/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
 
 /* Scalar data read by src/overlays/l11/mobys/distance_faded_scroll_effect.c. */
 /* Explicit _gp views stay in the source at their assembler declaration sites. */

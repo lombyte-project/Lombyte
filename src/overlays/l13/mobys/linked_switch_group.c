@@ -4,7 +4,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -132,10 +132,10 @@ void linked_switch_group_update(char *moby) {
     SwitchVars *switch_vars = ((SwitchVars *)MOBY(moby)->pvars);
     int         hit = 0;
 
-    if (switch_vars->unk74 == 0 && (unsigned char)(moby[0x20] - 1) < 2) {
+    if (switch_vars->unk74 == 0 && (unsigned char)(MOBY(moby)->state - 1) < 2) {
         hit = process_linked_switch_damage((struct Moby *)moby, switch_vars, &switch_vars->unk20);
     }
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_LINKED_GROUP:
         if (switch_vars->unk79 == 0) {
             char *iter[4];
@@ -143,7 +143,7 @@ void linked_switch_group_update(char *moby) {
 
             switch_vars->unk7B = 0;
             switch_vars->unk80 = moby;
-            get_first_moby_in_group(iter, (unsigned char)moby[0x21], 0, 0);
+            get_first_moby_in_group(iter, (unsigned char)MOBY(moby)->group, 0, 0);
             while ((linked = *iter) != 0) {
                 linked = iter[0];
                 if (linked != moby && *(short *)(linked + 0xA6) == 0xE7) {
@@ -163,7 +163,7 @@ void linked_switch_group_update(char *moby) {
         switch_vars->unk76 = 0;
 
         set_moby_color(moby, 0x80, 0x80, 0x80);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case MONITOR_LINKED_GROUP_HITS:
     case WAIT_FOR_LINKED_GROUP_COMPLETION:
@@ -184,14 +184,14 @@ void linked_switch_group_update(char *moby) {
             set_moby_color(moby, 0, 0xFF, 0);
             switch_vars->unk74 = 1;
         }
-        if ((unsigned char)moby[0x20] == 2) {
+        if ((unsigned char)MOBY(moby)->state == 2) {
             if (switch_vars->unk7A >= switch_vars->unk7B) {
-                set_moby_list_state((unsigned char)moby[0x21], 4);
+                set_moby_list_state((unsigned char)MOBY(moby)->group, 4);
                 allocate_voice_for_target_entry(1, 0, moby);
                 switch_vars->unk70 = switch_vars->unk84;
                 debug_print(
                     D_L13_001F4D90, ((short)MOBY(moby)->save_id), MOBY(moby)->oclass, frame_count);
-                moby[0x20] = 4;
+                MOBY(moby)->state = 4;
             } else {
                 if (switch_vars->unk7C >= 0) {
                     if (fast_dec_timer_s16(&switch_vars->unk70) != 0) {
@@ -199,12 +199,12 @@ void linked_switch_group_update(char *moby) {
                         switch_vars->unk74 = 0;
 
                         allocate_voice_for_target_entry(2, 0, moby);
-                        set_moby_list_state((unsigned char)moby[0x21], 3);
+                        set_moby_list_state((unsigned char)MOBY(moby)->group, 3);
                         debug_print(D_L13_001F4DB0,
                                     ((short)MOBY(moby)->save_id),
                                     MOBY(moby)->oclass,
                                     frame_count);
-                        moby[0x20] = 3;
+                        MOBY(moby)->state = 3;
                     } else if (fast_dec_timer_s16(&switch_vars->unk72) != 0) {
                         allocate_voice_for_target_entry(0, 0, moby);
                         switch_vars->unk72 = MIN(scale_game_frames(0x2D),
@@ -221,7 +221,7 @@ void linked_switch_group_update(char *moby) {
         switch_vars->unk7A = 0;
         switch_vars->unk74 = 0;
         switch_vars->unk20 = (float)switch_vars->unk24;
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
 
         break;
     case UPDATE_OPENED_STATE:
@@ -231,12 +231,12 @@ void linked_switch_group_update(char *moby) {
                 switch_vars->unk74 = 0;
 
                 allocate_voice_for_target_entry(2, 0, moby);
-                set_moby_list_state((unsigned char)moby[0x21], 3);
+                set_moby_list_state((unsigned char)MOBY(moby)->group, 3);
                 debug_print(linked_switch_closed_debug_format,
                             ((short)MOBY(moby)->save_id),
                             MOBY(moby)->oclass,
                             frame_count);
-                moby[0x20] = 3;
+                MOBY(moby)->state = 3;
             } else if (fast_dec_timer_s16(&switch_vars->unk72) != 0) {
                 allocate_voice_for_target_entry(0, 0, moby);
                 switch_vars->unk72 =

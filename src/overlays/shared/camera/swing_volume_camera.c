@@ -5,11 +5,15 @@
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/overlay/shared/camera/swing_volume_camera.h"
+#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
+#include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
+#include "rnc/rendering/clip_volume.h"
 
 typedef float CameraVec[4] __attribute__((aligned(16)));
 
@@ -45,17 +49,10 @@ typedef struct {
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
 extern void
 set_follow_camera_angle_blend_from_direction(void *, f32, f32) __asm__("FUN_L00_002e8918");
-extern s32  is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern s32  test_point_in_transformed_unit_cylinder(void *, s32) __asm__("FUN_L00_0025fa38");
 extern s32  test_point_in_transformed_unit_sphere(void *, s32) __asm__("FUN_L00_0025faf0");
 extern s32  point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32  try_select_follow_camera_volume(struct UpdateCam *) __asm__("FUN_L00_002e83c0");
 extern void clear_follow_camera_volume_if_current(struct UpdateCam *) __asm__("FUN_L00_002e8388");
-extern void fun_l00_002e8490(f32) __asm__("FUN_L00_002e8490");
-extern void fun_l00_002e8540(f32) __asm__("FUN_L00_002e8540");
-extern void set_follow_camera_orbit_clamp_mode(s32) __asm__("FUN_L00_002e8568");
-extern void fun_l00_002e8620(void) __asm__("FUN_L00_002e8620");
-extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 
 extern float D_L00_00166DD8 NOT_SDA;
 extern CameraDescriptor    *camera_descriptors __asm__("D_L00_0015EF50");
@@ -179,13 +176,12 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         return;
     }
     if (params->timer == 0) {
-        u8 *camera_globals = (u8 *)&l00_camera;
+        LevelCamera *camera_globals = &l00_camera;
         params->start_lateral_stiffness =
-            FOLLOW_CAM_STATE(*(struct UpdateCam **)(camera_globals + 0x180))
+            FOLLOW_CAM_STATE(((struct UpdateCam *)camera_globals->unk180))
                 ->follow.lateral_stiffness;
         params->start_lateral_damping =
-            FOLLOW_CAM_STATE(*(struct UpdateCam **)(camera_globals + 0x180))
-                ->follow.lateral_damping;
+            FOLLOW_CAM_STATE(((struct UpdateCam *)camera_globals->unk180))->follow.lateral_damping;
     }
     /* One word over type and timer: type 5 on its first frame snaps the camera. */
     if (*(s32 *)&params->type == 5) {
@@ -246,7 +242,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             at_end = 1;
             params->timer = scale_game_frames(200);
         }
-        fun_l00_002e8620();
+        FUN_L00_002e8620();
     } else if (params->type == 1 || params->type == 7 || params->type == 10 || params->type == 9) {
         /* Moving the left stick skips to the end of the swing. */
         struct PadState *pad = &controller_state;
@@ -288,10 +284,10 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     if (params->distance != 0.0f) {
         if (params->type == 6 || params->type == 8) {
             follow_camera_set_distance(0, params->distance, 0.002f);
-            fun_l00_002e8490(params->distance + 1.36f);
+            FUN_L00_002e8490(params->distance + 1.36f);
         } else {
             follow_camera_set_distance(0, params->distance, 0.003f);
-            fun_l00_002e8620();
+            FUN_L00_002e8620();
         }
     }
     if (params->height != 0.0f) {
@@ -309,7 +305,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         }
     }
     if (params->unk50 != 0.0f) {
-        fun_l00_002e8540(params->unk50 * 0.017453292f);
+        FUN_L00_002e8540(params->unk50 * 0.017453292f);
     }
     if (params->set_flag1 != 0) {
         {
@@ -342,7 +338,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         }
     }
     if (params->type == 1 || params->type == 7 || params->type == 10) {
-        fun_l00_002e8620();
+        FUN_L00_002e8620();
         follow_camera_start_slide();
         follow_camera_set_up_spring(0.01f, 0.2f);
     }

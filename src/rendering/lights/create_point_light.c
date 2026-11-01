@@ -3,26 +3,11 @@
 #include "qcopy.h"
 #include "rnc/rendering/shrub_instance.h"
 #include "rnc/rendering/tie_instance.h"
+#include "rnc/rendering/lights/point_light.h"
 
 typedef struct {
     f32 v[4];
 } __attribute__((aligned(16))) Vec;
-
-typedef struct {
-    s16  tie_start;
-    s16  tie_count;
-    s16  shrub_start;
-    s16  shrub_count;
-    s16  tfrag_start;
-    s16  tfrag_count;
-    s16 *instance_indices;
-    u8   pad[0x20];
-} LightSlot;
-
-typedef struct {
-    u8  pad0[0x10];
-    Vec sphere;
-} LightDef;
 
 typedef struct {
     u8  pad[0x36];
@@ -30,10 +15,10 @@ typedef struct {
     u8  pad38[8];
 } Obj40;
 
-extern LightDef  point_lights[] __asm__("D_0019C1C0");
-extern LightSlot point_light_data[] __asm__("D_0019C3C0");
-extern Obj40    *D_00160E8C __attribute__((sda));
-extern s32       tfrag_render_record_count __asm__("D_00160E90");
+extern struct PointLight     point_lights[] __asm__("D_0019C1C0");
+extern struct PointLightSlot point_light_data[] __asm__("D_0019C3C0");
+extern Obj40                *D_00160E8C __attribute__((sda));
+extern s32                   tfrag_render_record_count __asm__("D_00160E90");
 
 extern s32  FUN_001f9bb0(void *, void *);
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
@@ -41,18 +26,18 @@ extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 void create_point_light(s32 i) __asm__("FUN_00201ba8");
 
 void create_point_light(s32 i) {
-    LightSlot     *slot;
-    LightDef      *def;
-    s16           *instance_index_cursor;
-    s16           *end;
-    Vec            sphere;
-    TieInstance   *tie;
-    ShrubInstance *shrub;
-    Obj40         *object_record_cursor;
-    s32            tie_index;
-    s32            tfrag_index;
-    s32            shrub_index;
-    u32            v;
+    struct PointLightSlot *slot;
+    struct PointLight     *def;
+    s16                   *instance_index_cursor;
+    s16                   *end;
+    Vec                    sphere;
+    TieInstance           *tie;
+    ShrubInstance         *shrub;
+    Obj40                 *object_record_cursor;
+    s32                    tie_index;
+    s32                    tfrag_index;
+    s32                    shrub_index;
+    u32                    v;
 
     slot = &point_light_data[i];
     instance_index_cursor = slot->instance_indices;

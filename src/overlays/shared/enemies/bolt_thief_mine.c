@@ -216,12 +216,12 @@ unsigned char *spawn_bolt_thief_mine(unsigned char *spawning_moby, char *spawn_p
         *(float *)(spawned_vars + 0x10) = random_float_between(0.0104719754f, 0.0209439509f);
         *(float *)(spawned_vars + 0x14) = random_float_between(0.00698131695f, 0.0139626339f);
         *(float *)(spawned_vars + 0x18) = random_float_between(0.00349065848f, 0.00698131695f);
-        qcopy(spawned_moby + 0x10, spawn_position);
-        MOBY(spawned_moby)->rot.z = *(float *)(spawning_moby + 0x48);
-        spawned_moby[0x20] = 0;
-        spawned_moby[0x30] = 0xFF;
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
+        MOBY(spawned_moby)->rot.z = MOBY(spawning_moby)->rot.z;
+        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         update_entity(spawned_moby);
     }
     return spawned_moby;

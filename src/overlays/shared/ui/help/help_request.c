@@ -3,26 +3,35 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/ui/help/push_help_history.h"
 
-#include "rnc/ui/help/window_state.h"
+typedef struct {
+    s32 state;
+    u8  pad[0x20];
+    s32 cur;
+    s32 idx;
+} S00203908;
 
-#include "rnc/game/usage_stats.h"
+typedef struct {
+    u16 id;
+    u16 pad;
+    s32 v;
+} P00203908;
 
-extern HelpWindowState  level_help_window __asm__("D_L00_00179410");
-extern struct UsageStat help_record_usage[] __asm__("D_00141968");
-/* Requests a message for a help record when the window and voice stream are idle. */
-s32 help_request(s32 message_id, s32 help_record_index) __asm__("FUN_L00_00203908");
+extern S00203908 D_L00_00179410_00203908 __asm__("D_L00_00179410");
+extern P00203908 D_00141968_00203908[] __asm__("D_00141968");
+/* Starts help entry b with message a when no help is showing; pushes a to the help history. */
+s32 help_request(s32 a, s32 b) __asm__("FUN_L00_00203908");
 
 s32 help_request(s32 message_id, s32 help_record_index) {
-    HelpWindowState *help_state_ptr = &level_help_window;
-    if (help_state_ptr->state == 0 && help_state_ptr->pending_message_id == -1 &&
+    S00203908 *help_state_ptr = &D_L00_00179410_00203908;
+    if (help_state_ptr->state == 0 && help_state_ptr->cur == -1 &&
         music_stream_state.secondary.handle == 0 &&
-        music_stream_state.queued_secondary_track == help_state_ptr->pending_message_id &&
-        help_record_usage[help_record_index].count != 0xFFFF) {
-        help_state_ptr->help_record_index = help_record_index;
-        help_state_ptr->pending_message_id = message_id;
+        music_stream_state.queued_secondary_track == help_state_ptr->cur &&
+        D_00141968_00203908[help_record_index].id != 0xFFFF) {
+        help_state_ptr->idx = help_record_index;
+        help_state_ptr->cur = message_id;
         push_help_history(message_id);
         return 1;
     }

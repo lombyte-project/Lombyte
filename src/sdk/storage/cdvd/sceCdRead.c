@@ -1,5 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/storage/cdvd/sceCdNcmdDiskReady.h"
 
 struct CdReadCommand {
     u32               sector;
@@ -20,9 +23,6 @@ extern u8                   native_cd_read_queued_debug_message[] __asm__("D_001
 extern void                 process_native_cd_read_completion(void *) __asm__("func_00120788");
 extern s32                  SignalSema(u32 semaphore);
 extern s32                  cd_check_ncmd() __asm__("func_00120A28");
-extern s32                  sceCdNcmdDiskReady();
-extern s32                  scePrintf();
-extern s32                  sceSifCallRpc();
 extern void                 sceSifWriteBackDCache(void *ptr, s32 size);
 
 s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {

@@ -1,7 +1,7 @@
 /* Level 13 moby state relay class. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/item_state.h"
 
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");

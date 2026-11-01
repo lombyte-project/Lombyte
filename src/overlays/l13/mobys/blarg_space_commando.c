@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -572,7 +572,7 @@ extern f32 D_L13_00161E58 __attribute__((sda));
 
 #include "rnc/overlay/l13/mobys/blarg_space_commando_data/update_blarg_space_commando_damage_targeting_and_ground_motion.h"
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern char D_L13_00160680[] MACRO_ADDR;
 

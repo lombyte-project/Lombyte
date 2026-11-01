@@ -1,7 +1,7 @@
 /* Pool: initializes the height tiles and binds a tile. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 
 /* Converts a float vector to fixed-point ints, relative to the grid origin, plus two scale shorts. */

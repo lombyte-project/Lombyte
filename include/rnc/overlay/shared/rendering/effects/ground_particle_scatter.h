@@ -14,4 +14,6 @@ typedef struct {
 /* Spawn vector bias the scatter randomizes; the radial particle emitter reuses it. */
 extern float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360");
 
+void ground_particle_scatter_update() __asm__("FUN_L08_00307cf0");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_GROUND_PARTICLE_SCATTER_H */

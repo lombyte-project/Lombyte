@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 #include "rnc/game/usage_stats.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
@@ -19,6 +19,8 @@
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
 #include "rnc/overlay/shared/ui/hud/draw_weapon_ammo_hud_panel.h"
 #include "rnc/ui/help/get_help_message_text.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
+#include "rnc/sdk/libc/stdio/sprintf.h"
 
 extern unsigned char D_0013E529[];
 void                 hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -62,12 +64,9 @@ typedef struct {
     void         *unk80;
 } HudElem_237840;
 
-extern int D_L00_0015F760 __attribute__((sda));
-extern int D_L00_0015F764 __attribute__((sda));
-extern void
-apply_hud_slide_offset(HudElem_237840 *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
+extern int  D_L00_0015F760 __attribute__((sda));
+extern int  D_L00_0015F764 __attribute__((sda));
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
-int         hud_screen_position(HudElem_237840 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
 int hud_draw_gauge_frame(HudElem_237840 *e) __asm__("FUN_L00_00237840");
 
@@ -155,7 +154,7 @@ extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
 extern D00237ae8 l00_eight_slot_hud_selector_entries[] __asm__("D_L00_0017DAC0");
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) __asm__("FUN_L00_00237ae8");
 
@@ -404,13 +403,12 @@ typedef struct {
 
 extern unsigned char D_00141EA0[];
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern char  D_L00_0015F7C8[];
 extern void *D_L00_0015FAC0;
 extern s32   fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern s32   font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
-extern s32   sprintf(char *, const char *, ...);
 extern int   D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern int   D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int   D_L00_0015F720_gp __asm__("D_L00_0015F720") __attribute__((sda));
@@ -905,7 +903,6 @@ typedef struct {
 } Q2395b0;
 
 extern Q2395b0 l00_hud_element_counter_state __asm__("D_L00_0015FAB0");
-void           initialize_numeric_hud_values_and_dimensions() __asm__("FUN_L00_00235c80");
 /* Sets 0x7C, 0x58/0x5C = 64, 0x48 = 32, calls 00235c80 and links D_L00_0015FAB0. */
 void initialize_hud_element_with_counters(char *hud_element) __asm__("FUN_L00_002395b0");
 
@@ -1467,8 +1464,6 @@ int draw_hud_cropped_gauge_panel(char *rec) {
 /* func_L00_00236750 without the offsets: a 32 x 32 element with a timer
    of 30 + func_001F9850(120). */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
-
-extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
 void initialize_numeric_hud_timer_and_base_dimensions(HudElem *hud_element) {

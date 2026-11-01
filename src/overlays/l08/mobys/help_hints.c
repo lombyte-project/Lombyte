@@ -8,6 +8,7 @@
 #include "sda.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 
 #include "rnc/ui/help/help_record.h"
 
@@ -15,7 +16,6 @@
 
 extern HelpRecord help_records[] __asm__("D_00141968");
 extern void       help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern void       allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
 
 typedef struct {
     s32 first;

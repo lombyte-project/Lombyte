@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00226380). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/mobys/animation/advance_moby_animation.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds.h"
@@ -14,7 +15,7 @@ void update_menu_preview_class_transform(PauseMoby *moby) __asm__("FUN_002250f0"
 
 void update_menu_preview_class_transform(PauseMoby *moby) {
     f32 transform[16];
-    s32 source_moby_address = *(int *)(*moby->vars + 0x44);
+    s32 source_moby_address = (s32)((struct MenuScreen *)*moby->vars)->data.preview.moby;
 
     advance_moby_animation(moby);
     refresh_moby_spatial_bounds(moby);

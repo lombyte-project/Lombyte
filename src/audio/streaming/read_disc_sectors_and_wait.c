@@ -2,12 +2,12 @@
 
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/audio/rpc/snd_hold_command_batches.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
 
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
 extern s32 music_update() __asm__("func_00216290");
 extern s32 start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216788");
-extern s32 sceGsSyncV();
 
 s32 read_disc_sectors_and_wait(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
 

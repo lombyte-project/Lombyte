@@ -20,13 +20,15 @@
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/hero/update_hero_vehicle_attachments_and_effects.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern int D_L06_0015F5C4;
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
-extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Level 6 drawbridge (class 1028): spawns its two rows of deck pieces, waits for the hero's switch, then
    lowers through three hinge stages (D_L06_00161E08/0C/10) while the camera follows the path nodes. */
@@ -64,15 +66,13 @@ extern float         drawbridge_extension_gp __asm__("D_L06_00161D78") __attribu
 extern float         drawbridge_pitch_degrees_gp __asm__("D_L06_00161D7C") __attribute__((sda));
 extern float         drawbridge_yaw_degrees_gp __asm__("D_L06_00161D80") __attribute__((sda));
 extern void          set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-void                 jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
-void         enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
-extern float D_L06_0015F3FC;
-float        drawbridge_extension_max_speed_gp __asm__("D_L06_00161D84") = 1e+01f;
-float        drawbridge_pitch_max_speed_gp __asm__("D_L06_00161D88") = 3e+02f;
-float        drawbridge_yaw_max_speed_gp __asm__("D_L06_00161D8C") = 3e+02f;
-float        drawbridge_extension_acceleration_gp __asm__("D_L06_00161D90") = 15.0f;
-float        drawbridge_pitch_acceleration_gp __asm__("D_L06_00161D94") = 2e+02f;
-float        drawbridge_yaw_acceleration_gp __asm__("D_L06_00161D98") = 2e+02f;
+extern float         D_L06_0015F3FC;
+float                drawbridge_extension_max_speed_gp __asm__("D_L06_00161D84") = 1e+01f;
+float                drawbridge_pitch_max_speed_gp __asm__("D_L06_00161D88") = 3e+02f;
+float                drawbridge_yaw_max_speed_gp __asm__("D_L06_00161D8C") = 3e+02f;
+float                drawbridge_extension_acceleration_gp __asm__("D_L06_00161D90") = 15.0f;
+float                drawbridge_pitch_acceleration_gp __asm__("D_L06_00161D94") = 2e+02f;
+float                drawbridge_yaw_acceleration_gp __asm__("D_L06_00161D98") = 2e+02f;
 
 float drawbridge_extension_speed __asm__("D_L06_00161D9C") = 0;
 
@@ -82,12 +82,8 @@ float        drawbridge_pitch_start_extension_gp __asm__("D_L06_00161DAC") = 5.0
 float        drawbridge_yaw_start_pitch_gp __asm__("D_L06_00161DB0") = 3e+02f;
 extern void  update_drawbridge_segment_transforms(Moby *) __asm__("FUN_L06_002f5d78");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern int   func_L00_0028EB98_2F69D0(Moby *, int) __asm__("FUN_L00_0028d8c0");
-extern void  release_voice_slot(int) __asm__("FUN_0022d798");
-extern void  enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int   help_request(int, int) __asm__("FUN_L00_00203908");
-extern void  queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 void         drawbridge_update(Moby *moby) __asm__("FUN_L06_002f55a0");
 
 /* Blarg drawbridge pieces: places and rotates the 20 + 10 chained segment mobys. */

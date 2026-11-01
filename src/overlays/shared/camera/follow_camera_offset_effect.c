@@ -1,11 +1,12 @@
 /* Camera offset effect: picks a moby ahead of the hero and pulls the follow camera's offset towards it. */
 
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/camera/follow_cam.h"
+#include "rnc/overlay/shared/camera/register_camera_update_callback.h"
 
 typedef struct {
     int   a;
@@ -15,10 +16,8 @@ typedef struct {
     void (*apply)(void);
 } CameraOffsetEffect;
 
-extern void  apply_camera_offset_effect(void) __asm__("FUN_L02_002fa710");
-extern void  register_camera_update_callback(void (*)(void)) __asm__("FUN_L02_001fc008");
-void         update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
-extern float absolute_float(float);
+extern void apply_camera_offset_effect(void) __asm__("FUN_L02_002fa710");
+void        update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 
 extern CameraOffsetEffect   camera_offset_effect __asm__("D_L02_00167600");
 extern float D_L02_0016760C NOT_SDA;

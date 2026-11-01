@@ -1,20 +1,20 @@
 /* Shared moby class 0x5E0: a point light that blends between random colours of its keyframe list and fades out with the camera distance. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 
 extern void interpolate_vector(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
 extern s32
 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
-extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char camera_pos[] __asm__("D_L01_00167240");
 
 extern char point_light_slot_parameters[] __asm__("D_L01_00180740");
@@ -26,7 +26,7 @@ void flickering_point_light_update(u8 *moby) {
         EFFECT_STATE_INITIALIZE = 0,
         EFFECT_STATE_UPDATE = 1
     };
-    s32     state = moby[0x20];
+    s32     state = MOBY(moby)->state;
     char   *effect_vars = ((char *)MOBY(moby)->pvars);
     s32     i;
     s32     current;
@@ -57,9 +57,9 @@ void flickering_point_light_update(u8 *moby) {
             }
         }
         *(s32 *)(effect_vars + 0x68) = -1;
-        if (moby[0x30] < truncate_float_to_s32(*(f32 *)(effect_vars + 0x5c)) + 4)
-            moby[0x30] = truncate_float_to_s32(*(f32 *)(effect_vars + 0x5c)) + 4;
-        moby[0x20] = 1;
+        if (MOBY(moby)->update_dist < truncate_float_to_s32(*(f32 *)(effect_vars + 0x5c)) + 4)
+            MOBY(moby)->update_dist = truncate_float_to_s32(*(f32 *)(effect_vars + 0x5c)) + 4;
+        MOBY(moby)->state = 1;
         return;
     case EFFECT_STATE_UPDATE:
         break;
@@ -67,7 +67,7 @@ void flickering_point_light_update(u8 *moby) {
         return;
     }
 
-    elapsed = vector_distance_xy(moby + 0x10, camera_pos);
+    elapsed = vector_distance_xy(&MOBY(moby)->pos, camera_pos);
     active = elapsed < *(f32 *)(effect_vars + 0x5c) ? 1.0f : 0.0f;
     if (active != 0.0f && *(s32 *)(effect_vars + 0x80) != -1) {
         if (!is_point_inside_clip_volume(camera_pos, *(s32 *)(effect_vars + 0x80)))
@@ -126,7 +126,7 @@ void flickering_point_light_update(u8 *moby) {
         }
         slot = *(s32 *)(effect_vars + 0x68);
         if (slot == -1) {
-            slot = allocate_colored_effect_slot(moby + 0x10,
+            slot = allocate_colored_effect_slot(&MOBY(moby)->pos,
                                                 *(f32 *)(effect_vars + 0x60),
                                                 *(f32 *)(effect_vars + 0x4c),
                                                 *(f32 *)(effect_vars + 0x40),
@@ -137,7 +137,7 @@ void flickering_point_light_update(u8 *moby) {
         }
         {
             char *effect_entry = point_light_slot_parameters + slot * 0x20;
-            qcopy(effect_entry + 0x10, moby + 0x10);
+            qcopy(effect_entry + 0x10, &MOBY(moby)->pos);
             *(f32 *)(effect_entry + 0x1c) = *(f32 *)(effect_vars + 0x60);
             qcopy(effect_entry, effect_vars + 0x40);
         }

@@ -3,7 +3,7 @@
 #include "rnc/math/fast_math.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/overlay/shared/vendor/vendor_volume.h"

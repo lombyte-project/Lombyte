@@ -6,64 +6,12 @@
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/rendering/level_render_state.h"
+#include "rnc/rendering/resident_render_object.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/rendering/vu1/select_level_vu_chain.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/voices/pause_all_sounds.h"
-
-typedef union {
-    u128 quadword;
-    f32  components[4];
-    u8   bytes[16];
-} Vector4;
-
-typedef struct {
-    u8  pad0[6];
-    u8  unk6;
-    u8  pad7[5];
-    u8  count; /* 0x0C */
-    u8  padD[0x48 - 0xD];
-    s32 frames[1]; /* 0x48 */
-} RenderModel;
-
-typedef struct ResidentRenderObject {
-    u8           pad0[0x10];
-    Vector4      position; /* 0x10 */
-    u8           state;    /* 0x20 */
-    u8           pad21[3];
-    RenderModel *model; /* 0x24 */
-    u8           pad28[0xA];
-    s16          selected_index; /* 0x32 */
-    u16          flags;          /* 0x34 */
-    u8           pad36[2];
-    s64          lifetime_stamp; /* 0x38 */
-    Vector4      rotation;       /* 0x40 */
-    u8           current_frame;
-    u8           next_frame;
-    u8           selected_a;
-    u8           selected_b;
-    f32          blend; /* 0x54 */
-    u8           pad58[0x71 - 0x58];
-    u8           cached_selector;
-    u8           opacity;
-    u8           unk73;
-    u8           pad74[4];
-    u8          *animation_positions; /* 0x78 */
-    u8           pad7C[3];
-    u8           unk7F;
-    u8           pad80[0x10];
-    s32          color; /* 0x90 */
-    s32          unk94; /* 0x94 */
-    u8           pad98[0xE];
-    s16          class_id; /* 0xA6 */
-    u8           padA8[0xA];
-    s16          unkB2; /* 0xB2 */
-    u8           padB4[8];
-    u8           unkBC; /* 0xBC */
-    u8           padBD[3];
-    Vector4      transform[4]; /* 0xC0 */
-} ResidentRenderObject;
 
 typedef struct {
     Vector4 position;
@@ -467,10 +415,10 @@ void update_resident_gameplay_state(void) {
                                 color_intensity | (color_intensity << 8) | (color_intensity << 16);
                         }
                         if (scale_game_frames(0x1A4) < render_sequence.time) {
-                            level_render_state.player->unkBC =
+                            level_render_state.player->quad_alpha =
                                 (s32)(((f32)render_sequence.time - multiply_global_scale(420.0f)) *
                                       (frame_scale * 1.2f));
-                            level_render_state.player->unkB2 = 0;
+                            level_render_state.player->quad_alpha_jitter = 0;
                             add_draw_callback(build_variant_effect_quads,
                                               level_render_state.player);
                         }
@@ -505,16 +453,16 @@ void update_resident_gameplay_state(void) {
                         playback_object->color =
                             color_intensity | (color_intensity << 8) | (color_intensity << 16);
                     }
-                    playback_object->unkBC = 0x32;
-                    playback_object->unkB2 = 10;
+                    playback_object->quad_alpha = 0x32;
+                    playback_object->quad_alpha_jitter = 10;
                     add_draw_callback(build_variant_effect_quads, playback_object);
                 } else if (render_sequence.time <= scale_game_frames(360)) {
                     s32 color_intensity;
                     if (render_sequence.time < scale_game_frames(300)) {
-                        level_render_state.player->unkBC =
+                        level_render_state.player->quad_alpha =
                             (s32)((multiply_global_scale(300.0f) - (f32)render_sequence.time) *
                                   (frame_scale * 1.5f));
-                        level_render_state.player->unkB2 = 0;
+                        level_render_state.player->quad_alpha_jitter = 0;
                         add_draw_callback(build_variant_effect_quads, level_render_state.player);
                     }
                     color_intensity =
@@ -722,8 +670,8 @@ void update_resident_gameplay_state(void) {
                     sequence = 0.0625f;
                 }
                 if (level_render_state.content_variant < 2) {
-                    level_render_state.player->unkBC = 0x32;
-                    level_render_state.player->unkB2 = 10;
+                    level_render_state.player->quad_alpha = 0x32;
+                    level_render_state.player->quad_alpha_jitter = 10;
                     add_draw_callback(build_variant_effect_quads, level_render_state.player);
                 }
                 level_render_state.path_progress +=

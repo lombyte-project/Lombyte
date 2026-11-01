@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/item_preview/rotate_preview_moby_x.h"
 
 struct RotatingPreviewMoby;
 
@@ -25,7 +26,6 @@ struct RotatingPreviewMoby {
 #include "rnc/ui/menus/menu_globals.h"
 
 extern struct RotatingPreviewMoby *create_menu_preview_moby(s32) __asm__("func_00225490");
-extern void rotate_preview_moby_x(struct RotatingPreviewMoby *) __asm__("FUN_0021f120");
 s32 create_rotating_preview_moby(struct RotatingPreviewOwner *owner) __asm__("FUN_0021ea48");
 
 s32 create_rotating_preview_moby(struct RotatingPreviewOwner *preview_owner) {

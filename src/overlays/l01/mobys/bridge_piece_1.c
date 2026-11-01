@@ -7,11 +7,10 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
-#include "rnc/overlay/level_labels.h"
-
-extern int FUN_L00_00257b90(int lo, int hi);
+#include "rnc/overlay/shared/world/level_labels.h"
 
 #include "rnc/math/vector.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 typedef struct {
     u32 c[3];
@@ -38,7 +37,7 @@ typedef struct {
 
 extern s32 pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 BurstColors l01_bridge_piece_debris_oclass_choices __asm__("D_L01_00161C60") = {
     {0x2b8, 0x2b9, 0x2ba}
@@ -85,7 +84,7 @@ void bridge_piece_1_update(BurstMoby *bridge_piece_moby) {
             FUN_L01_002f8530(&pos,
                              &debris_velocity,
                              colors.c[random_integer_below(3)],
-                             FUN_L00_00257b90(0xB4, 0x12C),
+                             random_int_between(0xB4, 0x12C),
                              0.05f,
                              1.0f,
                              1.0f,

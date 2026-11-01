@@ -7,7 +7,7 @@ void snd_sound_is_still_playing_cb(s32 sound_handle,
                                    s32 context_address) __asm__("FUN_0012e448");
 
 void snd_sound_is_still_playing_cb(s32 sound_handle, s32 callback_address, s32 context_address) {
-    u8 sp_slot[0x10];
-    *(s32 *)sp_slot = sound_handle;
-    snd_send_iop_command_no_wait(25, 4, sp_slot, callback_address, context_address);
+    s32 command[4];
+    command[0] = sound_handle;
+    snd_send_iop_command_no_wait(25, 4, command, callback_address, context_address);
 }

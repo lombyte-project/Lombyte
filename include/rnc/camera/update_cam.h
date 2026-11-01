@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "sda.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/math/vector.h"
 
 /* One camera record. The name comes from the recovered symbols

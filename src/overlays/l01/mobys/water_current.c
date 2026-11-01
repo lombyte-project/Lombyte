@@ -6,11 +6,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 #include "qcopy.h"
 
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /*
  * Path that carries the hero along (a path of l01_paths). While the hero's control mode is 0x11 or
@@ -32,7 +33,6 @@ typedef struct {
 /* nearest point of the path to pos, with its segment and position on it */
 extern void FUN_L00_0025df68(LevelPath *, void *, void *, f32 *, s32 *, s32, f32, f32, f32);
 /* the point a step further along the path; nonzero at the path's end */
-extern s32 sample_path(LevelPath *, void *, f32 *, s32 *, s32, f32) __asm__("FUN_L00_0025d808");
 
 void water_current_update(struct Moby *self) __asm__("FUN_L01_002f3120");
 
@@ -75,7 +75,7 @@ void water_current_update(struct Moby *water_current_moby) {
     }
     FUN_L00_0025df68(
         path, &hero.motion.pos, &nearest, &path_segment_index, &seg, 0, 999.0f, 5.0f, 0.0f);
-    at_end = sample_path(path, &ahead, &path_segment_index, &seg, 0, 2.0f);
+    at_end = FUN_L00_0025d808(path, &ahead, &path_segment_index, &seg, 0, 2.0f);
     hero_path_distance = vector_distance_xy(&hero.motion.pos, &nearest);
     if (water_current_vars->radius < hero_path_distance) {
         return;

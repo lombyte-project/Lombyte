@@ -45,7 +45,7 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
             continue;
         if (MOBY(candidate_moby)->state != 3)
             continue;
-        candidate_metric = vector_distance_xy(comparison_source + 0x10, candidate_moby + 0x10);
+        candidate_metric = vector_distance_xy(comparison_source + 0x10, &MOBY(candidate_moby)->pos);
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
@@ -64,7 +64,7 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
             continue;
         if (MOBY(candidate_moby)->command == 0)
             continue;
-        candidate_metric = vector_distance_xy(comparison_source + 0x10, candidate_moby + 0x10);
+        candidate_metric = vector_distance_xy(comparison_source + 0x10, &MOBY(candidate_moby)->pos);
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
@@ -73,7 +73,7 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
     }
     if (selected_moby != 0) {
         *(char **)(output_data + 0x40) = selected_moby;
-        qcopy(output_data, selected_moby + 0x10);
+        qcopy(output_data, &MOBY(selected_moby)->pos);
         qcopy(output_data + 0x10, selected_moby + 0x40);
         hero = &hero_lui;
         if (selected_moby == ((char *)hero->moby)) {

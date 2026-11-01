@@ -1,5 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/rpc/rpc/lf_bind.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct SifLoadModuleArgs {
     s32 unk0;
@@ -7,10 +9,8 @@ struct SifLoadModuleArgs {
 };
 
 extern u8  D_00158400[];
-extern s32 _lf_bind();
 extern s32 sif_load_module_server_changed() __asm__("func_0011CAE0");
 extern s32 memcpy();
-extern s32 sceSifCallRpc();
 #define SIFCMD ((struct SifLoadModuleArgs *)D_00158200)
 s32 _sceSifLoadModuleBuffer(s32 iop_address, s32 size, s32 module_arguments, s32 *result_out) {
     s32 mask;

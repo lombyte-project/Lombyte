@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_STREAMING_WAD_GET_SECTORS_H
+#define LOMBYTE_RNC_STREAMING_WAD_GET_SECTORS_H
+
+#include "types.h"
+
+s32 wad_get_sectors(s32, s32, s32) __asm__("FUN_0012f208");
+
+#endif /* LOMBYTE_RNC_STREAMING_WAD_GET_SECTORS_H */

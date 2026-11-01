@@ -15,14 +15,16 @@
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 #include "qcopy.h"
+#include "rnc/camera/sample_camera_path.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 extern float D_0015ED70;
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 extern float D_0015ED6C MACRO_ADDR;
 extern int              coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -45,12 +47,9 @@ extern void             spawn_explosion(void *,
                                         int,
                                         int) __asm__("FUN_L00_0025e450");
 extern float            D_0015ED6C;
-extern void             FUN_L00_00263d40(int, int);
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D6C58), where it is exact; names translated to the US level program. */
 extern float scale_time(float) __asm__("FUN_001f96b0");
-
-extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002DFBC0) */
 /* Update function: switch on the state byte at +0x20. State 0 reads the table D_L08_001B0FB0[*data] (deleting
@@ -98,6 +97,16 @@ int moby_motion_spark_initial_color_end_gp __asm__("D_L08_00161A78") = 0x6020a0c
 
 int moby_motion_spark_second_color_end_gp __asm__("D_L08_00161A80") = 0x20601020;
 
+typedef struct PathFollowingMobyVars {
+    u8  pad_0[0x4];
+    f32 unk4;
+    f32 unk8;
+    f32 unkC;
+    u8  unk10;
+    u8  pad_11[0x7];
+    f32 unk18;
+} PathFollowingMobyVars;
+
 /* Moby class 438 */
 void path_following_moby_update(char *moby) {
     enum {
@@ -105,11 +114,11 @@ void path_following_moby_update(char *moby) {
         MOBY_STATE_FOLLOW_PATH = 1,
         MOBY_STATE_FALLING = 2
     };
-    float previous_position[4];
-    float frame_displacement[4];
-    char *moby_vars = ((char *)MOBY(moby)->pvars);
-    char *moby_position = moby + 0x10;
-    int  *path;
+    float                  previous_position[4];
+    float                  frame_displacement[4];
+    PathFollowingMobyVars *moby_vars = (PathFollowingMobyVars *)MOBY(moby)->pvars;
+    char                  *moby_position = moby + 0x10;
+    int                   *path;
     qcopy(previous_position, moby_position);
     path = (int *)l08_paths[*(int *)moby_vars];
     switch (MOBY(moby)->state) {
@@ -122,23 +131,21 @@ void path_following_moby_update(char *moby) {
             float first_path_segment_length =
                 fast_vec_dist((char *)path + 0x10, (char *)path + 0x20);
             fast_vec_dist((char *)path + 0x10, (char *)path + (*path << 4));
-            *(float *)(moby_vars + 8) =
-                path_following_moby_speed_gp * D_0015ED6C / first_path_segment_length;
-            *(float *)(moby_vars + 4) = *(float *)(moby_vars + 4) * (float)*path;
-            *(float *)(moby_vars + 0xC) = randf_sym(0.0f, 5.0f);
+            moby_vars->unk8 = path_following_moby_speed_gp * D_0015ED6C / first_path_segment_length;
+            moby_vars->unk4 = moby_vars->unk4 * (float)*path;
+            moby_vars->unkC = randf_sym(0.0f, 5.0f);
         }
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         MOBY(moby)->update_dist = 0xFF;
     case MOBY_STATE_FOLLOW_PATH: {
         float path_point_count;
-        sample_camera_path(
-            path, 1, moby + 0x10, (float *)&MOBY(moby)->rot, 0, *(float *)(moby_vars + 4));
+        sample_camera_path(path, 1, moby + 0x10, (float *)&MOBY(moby)->rot, 0, moby_vars->unk4);
         MOBY(moby)->rot.y = MOBY(moby)->rot.y * 0.5f;
-        MOBY(moby)->pos.z = MOBY(moby)->pos.z + *(float *)(moby_vars + 0xC);
-        *(float *)(moby_vars + 4) = *(float *)(moby_vars + 4) + *(float *)(moby_vars + 8);
+        MOBY(moby)->pos.z = MOBY(moby)->pos.z + moby_vars->unkC;
+        moby_vars->unk4 = moby_vars->unk4 + moby_vars->unk8;
         path_point_count = (float)*path;
-        if (path_point_count < *(float *)(moby_vars + 4)) {
-            *(float *)(moby_vars + 4) = *(float *)(moby_vars + 4) - path_point_count;
+        if (path_point_count < moby_vars->unk4) {
+            moby_vars->unk4 = moby_vars->unk4 - path_point_count;
         }
         break;
     }
@@ -147,13 +154,12 @@ void path_following_moby_update(char *moby) {
         float falling_removal_height = 10.0f;
         float dd;
         float falling_rotation_step;
-        char *falling_velocity = moby_vars + 0x10;
+        char *falling_velocity = &moby_vars->unk10;
         falling_rotation_step = D_0015ED6C * 7.3303828f;
-        *(float *)(moby_vars + 0x18) = *(float *)(moby_vars + 0x18) - D_0015ED70 * falling_gravity;
+        moby_vars->unk18 = moby_vars->unk18 - D_0015ED70 * falling_gravity;
         dd = fast_add_rotations(MOBY(moby)->rot.x, falling_rotation_step);
         MOBY(moby)->rot.x = MOBY(moby)->rot.x + dd;
-        MOBY(moby)->rot.y =
-            -fast_arc_tan(vector_length_xy(falling_velocity), *(float *)(moby_vars + 0x18));
+        MOBY(moby)->rot.y = -fast_arc_tan(vector_length_xy(falling_velocity), moby_vars->unk18);
         fast_vec_add(moby_position, moby_position, falling_velocity);
         if (MOBY(moby)->pos.z < falling_removal_height) {
             mark_moby_for_removal(moby);
@@ -189,17 +195,17 @@ void path_following_moby_update(char *moby) {
     if (MOBY(moby)->pos.x < 4.0f || MOBY(moby)->pos.y < 4.0f || MOBY(moby)->pos.z < 4.0f) {
         MOBY(moby)->collision = 0;
     } else {
-        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
     }
     if (find_moby_hit(moby, 0x10000, 0) != 0 && MOBY(moby)->state != 2) {
         if (camera_secondary_mode_lui == 0x32 && D_0013D408[0xC] == 0) {
             D_0013D408[0xC] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
         fast_vec_sub(frame_displacement, moby + 0x10, previous_position);
-        qcopy(moby_vars + 0x10, frame_displacement);
-        *(float *)(moby_vars + 0x18) = *(float *)(moby_vars + 0x18) + (D_0015ED6C + D_0015ED6C);
+        qcopy(&moby_vars->unk10, frame_displacement);
+        moby_vars->unk18 = moby_vars->unk18 + (D_0015ED6C + D_0015ED6C);
         spawn_explosion(moby,
                         frame_displacement,
                         moby + 0x10,
@@ -218,7 +224,7 @@ void path_following_moby_update(char *moby) {
                         1,
                         -1,
                         0);
-        moby[0x20] = 2;
+        MOBY(moby)->state = 2;
     }
     MOBY(moby)->hit_slot = 0xFF;
     if (MOBY(moby)->visible != 0) {

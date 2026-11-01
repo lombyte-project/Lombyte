@@ -12,6 +12,12 @@ float       moby_bobbing_amplitude_gp __asm__("D_L06_00162090") = 3.0f;
 extern int  GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void        breakaway_piece_update(char *moby) __asm__("FUN_L06_00300df0");
 
+typedef struct BreakawayPieceVars {
+    u8  pad_0[0xC];
+    f32 unkC;
+    f32 unk10[4];
+} BreakawayPieceVars;
+
 /* Moby classes 1091-1098, 1103 */
 void breakaway_piece_update(char *moby) {
     enum {
@@ -19,35 +25,35 @@ void breakaway_piece_update(char *moby) {
         UPDATE_BOBBING_HEIGHT = 1,
         UPDATE_LINEAR_AND_ANGULAR_MOTION = 2
     };
-    char *bobbing_and_motion_vars = ((char *)MOBY(moby)->pvars);
-    int   state;
+    BreakawayPieceVars *bobbing_and_motion_vars = (BreakawayPieceVars *)MOBY(moby)->pvars;
+    int                 state;
     if (bobbing_and_motion_vars == 0) {
         mark_moby_for_removal(moby);
         return;
     }
-    state = (unsigned char)moby[0x20];
+    state = (unsigned char)MOBY(moby)->state;
     switch (state) {
     case INITIALIZE_BOBBING_HEIGHT:
         MOBY(moby)->draw_dist = 0x200;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(float *)(bobbing_and_motion_vars + 0xC) = MOBY(moby)->pos.z;
-        moby[0x20] = 1;
+        bobbing_and_motion_vars->unkC = MOBY(moby)->pos.z;
+        MOBY(moby)->state = 1;
         break;
     case UPDATE_BOBBING_HEIGHT:
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
-            MOBY(moby)->pos.z = *(float *)(bobbing_and_motion_vars + 0xC);
+            MOBY(moby)->pos.z = bobbing_and_motion_vars->unkC;
         } else {
             float bobbing_cycle_fraction = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
             float bobbing_sine_factor = fast_sin(bobbing_cycle_fraction * 6.28318f);
-            MOBY(moby)->pos.z = *(float *)(bobbing_and_motion_vars + 0xC) +
-                                moby_bobbing_amplitude_gp * bobbing_sine_factor;
+            MOBY(moby)->pos.z =
+                bobbing_and_motion_vars->unkC + moby_bobbing_amplitude_gp * bobbing_sine_factor;
         }
         break;
     case UPDATE_LINEAR_AND_ANGULAR_MOTION:
-        if (*(float *)(bobbing_and_motion_vars + 0xC) > 1.0f)
+        if (bobbing_and_motion_vars->unkC > 1.0f)
             fast_vec_scale(bobbing_and_motion_vars, bobbing_and_motion_vars, 0.985f);
         fast_vec_add(moby + 0x10, moby + 0x10, bobbing_and_motion_vars);
-        fast_vec_add(moby + 0x40, moby + 0x40, bobbing_and_motion_vars + 0x10);
+        fast_vec_add(moby + 0x40, moby + 0x40, bobbing_and_motion_vars->unk10);
         if (*(int *)(D_0013E533 + 0x2EA1) != 0x72)
             mark_moby_for_removal(moby);
         break;

@@ -10,9 +10,9 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -36,6 +36,7 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/rendering/effect_texture.h"
 
 extern char D_L16_001671C0[];
 /* For each of n point pairs, reflects a direction and writes its 2D map coordinates. */
@@ -97,7 +98,6 @@ void compute_level16_reflection_map_coordinates(
 
 #include "sda.h"
 
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 /* Sets up the draw state, then draws the three entries of the level's table. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA1B8), where it is exact; names translated to the US level program. */
 

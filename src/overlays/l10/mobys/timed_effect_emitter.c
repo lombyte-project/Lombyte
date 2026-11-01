@@ -13,16 +13,23 @@
 
 #include "qcopy.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
 
-extern int   FUN_L00_0028dc90(int i, int a1, int v, int k);
-extern void *spawn_splitting_effect_particle_with_collision_response_and_fade(
-    char *a, char *b, unsigned char c, int d) __asm__("FUN_L00_0026fd28");
+extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 
 void timed_effect_emitter_update(struct Moby *moby) __asm__("FUN_L10_002c7a20");
 
 extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+
+typedef struct TimedEffectEmitterVars {
+    u8  pad_0[0x4];
+    s32 unk4;
+    s32 unk8;
+    s32 timer_C;
+    s32 voice;
+} TimedEffectEmitterVars;
 
 /* Moby class 702 */
 void timed_effect_emitter_update(struct Moby *moby) {
@@ -30,16 +37,16 @@ void timed_effect_emitter_update(struct Moby *moby) {
         MOBY_STATE_WAIT_FOR_ACTIVATION = 0,
         MOBY_STATE_ACTIVE_WITH_SOUND = 1
     };
-    char *emitter_vars = (char *)moby->pvars;
-    float rotation_matrix[16];
-    float position[4];
-    float rotated_vector[4];
-    float position_step[4];
+    TimedEffectEmitterVars *emitter_vars = (TimedEffectEmitterVars *)moby->pvars;
+    float                   rotation_matrix[16];
+    float                   position[4];
+    float                   rotated_vector[4];
+    float                   position_step[4];
     switch (moby->state) {
     case MOBY_STATE_WAIT_FOR_ACTIVATION:
-        *(int *)(emitter_vars + 0x10) = -1;
-        if (fast_dec_timer((int *)(emitter_vars + 0xC))) {
-            *(int *)(emitter_vars + 0xC) = *(int *)(emitter_vars + 4);
+        emitter_vars->voice = -1;
+        if (fast_dec_timer(&emitter_vars->timer_C)) {
+            emitter_vars->timer_C = emitter_vars->unk4;
             moby->state = 1;
         }
         break;
@@ -58,21 +65,21 @@ void timed_effect_emitter_update(struct Moby *moby) {
         fast_vec_add(position, position, position_step);
         spawn_splitting_effect_particle_with_collision_response_and_fade(
             (char *)position, (char *)rotated_vector, 0x40, (int)moby);
-        if (voice_is_playing(moby, *(int *)(emitter_vars + 0x10)) == 0) {
-            *(int *)(emitter_vars + 0x10) = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
+        if (voice_is_playing(moby, emitter_vars->voice) == 0) {
+            emitter_vars->voice = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
         }
-        if (fast_dec_timer((int *)(emitter_vars + 0xC))) {
+        if (fast_dec_timer(&emitter_vars->timer_C)) {
             int k;
-            *(int *)(emitter_vars + 0xC) = *(int *)(emitter_vars + 8);
+            emitter_vars->timer_C = emitter_vars->unk8;
             moby->state = 0;
-            k = *(int *)(emitter_vars + 0x10);
+            k = emitter_vars->voice;
             if (k != -1) {
                 unsigned char *voice_entry = (unsigned char *)&voice_pool + k * 0x70;
                 if (*(unsigned char **)(voice_entry + 0x88) == moby && voice_entry[0x74] != 0) {
                     release_voice_slot(k);
                 }
             }
-            *(int *)(emitter_vars + 0x10) = -1;
+            emitter_vars->voice = -1;
         }
         break;
     }

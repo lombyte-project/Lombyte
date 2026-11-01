@@ -1,5 +1,6 @@
 /* Level 09 moby classes 0x47e, 0x47f: elevator. */
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -11,7 +12,9 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/rendering/clip_volume.h"
 
 #define F(p, o) (*(float *)((p) + (o)))
 
@@ -24,9 +27,7 @@ typedef struct {
 extern L09LevelState l09_moby_collection_state __asm__("D_L09_001BB3B0");
 
 extern int   elevator_activation_save_id_bits[] __asm__("D_L09_001BA650");
-extern int   is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int   is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern char  D_0013E550[];
 extern s32   level_moby_killed[][64] __asm__("D_0014C190");
 void         elevator_update(unsigned char *moby) __asm__("FUN_L09_003033a0");
@@ -49,15 +50,13 @@ void elevator_update(unsigned char *moby) {
     if (*(int *)(elevator_vars + 0xC0) != -1) {
         unsigned short id;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(elevator_vars + 0xC0)) ||
-            l09_moby_collection_state.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] !=
-                0 ||
+            l09_moby_collection_state.collected[(short)(id = MOBY(moby)->save_id)] != 0 ||
             (level_moby_killed[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
             if (*(int *)(elevator_vars + 0xC0) != -1) {
-                level_moby_killed[current_level_index]
-                                 [(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
-                    1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-                elevator_activation_save_id_bits[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
-                    1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
+                level_moby_killed[current_level_index][(short)MOBY(moby)->save_id >> 5] |=
+                    1 << (MOBY(moby)->save_id & 0x1F);
+                elevator_activation_save_id_bits[(short)MOBY(moby)->save_id >> 5] |=
+                    1 << (MOBY(moby)->save_id & 0x1F);
                 *(int *)(elevator_vars + 0xC0) = -1;
             }
             on = 1;
@@ -67,7 +66,7 @@ void elevator_update(unsigned char *moby) {
     }
     qcopy(orig, moby + 0x10);
     fast_dec_timer_s16(elevator_vars + 0xBA);
-    if (moby[0x20] == 0) {
+    if (MOBY(moby)->state == 0) {
         float f;
         char *pts;
         elevator_vars[0x28] = 4;
@@ -75,7 +74,7 @@ void elevator_update(unsigned char *moby) {
         *(int *)(elevator_vars + 0x20) = 0;
         *(short *)(elevator_vars + 0x24) = 0;
         f = 0.0f;
-        if ((moby[0xBC] = elevator_vars[0xA0]) == 0) {
+        if ((MOBY(moby)->command = elevator_vars[0xA0]) == 0) {
             f = 1.0f;
         }
         F(elevator_vars, 0xA4) = f;
@@ -84,12 +83,12 @@ void elevator_update(unsigned char *moby) {
         *(short *)(elevator_vars + 0xBA) = 0;
         *(int *)(elevator_vars + 0xA8) = 0;
         *(int *)(elevator_vars + 0xBC) = 0;
-        moby[0x20] = 1;
-        moby[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->state = 1;
+        MOBY(moby)->update_dist = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         *(int *)(elevator_vars + 0xC4) = -1;
     }
-    switch (moby[0xBC]) {
+    switch (MOBY(moby)->command) {
     case ELEVATOR_STATE_AT_PATH_END:
         if (on) {
             float far;
@@ -99,7 +98,7 @@ void elevator_update(unsigned char *moby) {
                 if (*(int *)(elevator_vars + 0xC8) == 0 && is_hero_on_moby(moby)) {
                     hero_set_state(0x72, 1);
                 }
-                moby[0xBC] = 2;
+                MOBY(moby)->command = 2;
                 F(elevator_vars, 0xAC) = -1.0f / scale_time(F(elevator_vars, 0xB0) * 60.0f);
                 *(short *)(elevator_vars + 0xB8) = 0;
             }
@@ -115,7 +114,7 @@ void elevator_update(unsigned char *moby) {
                     hero_set_state(0x72, 1);
                 }
                 allocate_voice_for_target_entry(1, 0, moby);
-                moby[0xBC] = 2;
+                MOBY(moby)->command = 2;
                 F(elevator_vars, 0xAC) = 1.0f / scale_time(F(elevator_vars, 0xB0) * 60.0f);
                 *(short *)(elevator_vars + 0xB8) = 0;
             }
@@ -158,10 +157,10 @@ void elevator_update(unsigned char *moby) {
                     hero_set_state(HERO_STATE_IDLE, 1);
                 }
                 if (0.0f < F(elevator_vars, 0xAC)) {
-                    moby[0xBC] = 0;
+                    MOBY(moby)->command = 0;
                     F(elevator_vars, 0xA4) = 1.0f;
                 } else {
-                    moby[0xBC] = 1;
+                    MOBY(moby)->command = 1;
                     F(elevator_vars, 0xA4) = 0.0f;
                 }
                 allocate_voice_for_target_entry(2, 0, moby);

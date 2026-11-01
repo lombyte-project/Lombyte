@@ -3,7 +3,7 @@
 #include "rnc/camera/camera_globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/options.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "qzero.h"
@@ -16,24 +16,24 @@
 #include "rnc/audio/sound/calculate_voice_volume.h"
 #include "rnc/audio/voices/snd_stop_sound.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/audio/effects/snd_auto_reverb.h"
+#include "rnc/audio/music/music_update.h"
+#include "rnc/audio/sound/calculate_voice_pan.h"
+#include "rnc/audio/sound/clamp_voice_position_to_collision.h"
+#include "rnc/audio/sound/snd_get_doppler_pitch_mod.h"
+#include "rnc/audio/sound/test_voice_occlusion.h"
+#include "rnc/audio/sound/voice_start_callback.h"
+#include "rnc/audio/sound/voice_update_callback.h"
+#include "rnc/audio/voices/snd_play_sound_vol_pan_pmpb.h"
+#include "rnc/audio/voices/snd_set_sound_params_cb.h"
+#include "rnc/audio/voices/snd_sound_is_still_playing_cb.h"
 
 extern f32 sound_water_height_threshold[] __asm__("D_0013F640");
 extern s32 use_alt_fog[] __asm__("D_001872D4");
 
 extern s32  ComputeByteStringHash(u8 *, s32);
-extern int  snd_get_doppler_pitch_mod(int arg0);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void snd_play_sound_vol_pan_pmpb() __asm__("FUN_0012e308");
-extern void snd_sound_is_still_playing_cb() __asm__("FUN_0012e448");
-extern void snd_set_sound_params_cb() __asm__("FUN_0012e4c0");
 extern void snd_reset_state_and_flush_commands() __asm__("FUN_0012eb00");
-extern void snd_auto_reverb(s32, s32, s32, s32) __asm__("FUN_0012efe0");
-extern void music_update() __asm__("FUN_00216290");
-extern void clamp_voice_position_to_collision(void *) __asm__("FUN_0022c5a8");
-extern u8   test_voice_occlusion(VoiceSlot *, void *) __asm__("FUN_0022c658");
-extern s32  calculate_voice_pan(VoiceSlot *, VoiceVector *, void *) __asm__("FUN_0022c830");
-extern void voice_start_callback() __asm__("FUN_0022dd90");
-extern void voice_update_callback() __asm__("FUN_0022ddd8");
 
 s32 sound_update(void) __asm__("FUN_0022ca50");
 

@@ -1,9 +1,9 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 extern s32 _EnableDmac();
 extern s32 DIntr();
-extern s32 EnableInterrupts();
 
 s32 enable_dmac(s32 channel_index) __asm__("FUN_00119160");
 

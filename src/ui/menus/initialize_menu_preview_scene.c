@@ -7,52 +7,107 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/game/process_global_state_flags.h"
+#include "rnc/mobys/quad_moby_update.h"
+#include "rnc/rendering/effects/draw_transition_overlay.h"
+#include "rnc/rendering/mobys/draw_moby_entries_from_object.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/ui/map/draw_map_screen.h"
+#include "rnc/ui/map/draw_map_screen_layers.h"
+#include "rnc/ui/map/leave_map_screen.h"
+#include "rnc/ui/map/level_selection/draw_level_selection_map_screen.h"
+#include "rnc/ui/map/level_selection/update_level_selection_map_screen.h"
+#include "rnc/ui/menus/item_preview/clear_menu_preview_pair.h"
+#include "rnc/ui/menus/item_preview/create_rotating_preview_moby.h"
+#include "rnc/ui/menus/item_preview/draw_available_item_preview_mobys.h"
+#include "rnc/ui/menus/item_preview/enter_item_preview.h"
+#include "rnc/ui/menus/item_preview/release_item_preview_moby.h"
+#include "rnc/ui/menus/item_preview/update_item_preview_binding.h"
+#include "rnc/ui/menus/missions/draw_mission_menu_labels.h"
+#include "rnc/ui/menus/missions/draw_missions_menu2.h"
+#include "rnc/ui/menus/missions/enter_menu_mission_list.h"
+#include "rnc/ui/menus/missions/update_menu_mission_list.h"
+#include "rnc/ui/menus/options/draw_cheats_menu.h"
+#include "rnc/ui/menus/options/draw_sound_menu.h"
+#include "rnc/ui/menus/options/set_pause_sound_volume.h"
+#include "rnc/ui/menus/options/sound_options_menu.h"
+#include "rnc/ui/menus/pause/assign_heli_pack_label_text_table.h"
+#include "rnc/ui/menus/pause/assign_pause_level_sprite_list.h"
+#include "rnc/ui/menus/pause/build_pause_item_list.h"
+#include "rnc/ui/menus/pause/draw_quit_game_menu.h"
+#include "rnc/ui/menus/pause/pause_page_enter_noop.h"
+#include "rnc/ui/menus/pause/set_pause_action_list.h"
+#include "rnc/ui/menus/save_data/draw_checking_memory_card_data_menu.h"
+#include "rnc/ui/menus/save_data/draw_save_slot_list.h"
+#include "rnc/ui/menus/save_data/enter_save_slot_screen.h"
+#include "rnc/ui/menus/save_data/leave_save_slot_screen.h"
+#include "rnc/ui/menus/save_data/loading_data_menu.h"
+#include "rnc/ui/menus/save_data/reset_pause_memory_card_state.h"
+#include "rnc/ui/menus/save_data/saving_data_menu.h"
+#include "rnc/ui/menus/save_data/saving_data_menu2.h"
+#include "rnc/ui/menus/selection/build_filtered_menu_item_list.h"
+#include "rnc/ui/menus/selection/handle_cyclic_menu_selection_input.h"
+#include "rnc/ui/menus/selection/update_menu_cycle_selection.h"
+#include "rnc/ui/menus/selection/update_menu_grid_selection.h"
+#include "rnc/ui/menus/selection/update_menu_icon_list.h"
+#include "rnc/ui/menus/selection/update_menu_option_list.h"
+#include "rnc/ui/menus/stream_buffers/initialize_menu_stream_buffers.h"
+#include "rnc/ui/menus/stream_image/enter_menu_stream_image.h"
+#include "rnc/ui/menus/stream_image/leave_menu_stream_image.h"
+#include "rnc/ui/menus/stream_image/update_menu_stream_image.h"
+#include "rnc/ui/menus/streamed_moby/enter_streamed_moby_screen.h"
+#include "rnc/ui/menus/streamed_moby/leave_streamed_moby_screen.h"
+#include "rnc/ui/menus/streamed_moby/update_streamed_moby_animation.h"
+#include "rnc/ui/menus/system/clear_menu_selected_index.h"
+#include "rnc/ui/menus/system/enter_timed_menu_sequence.h"
+#include "rnc/ui/menus/system/handle_menu_action_buttons.h"
+#include "rnc/ui/menus/system/reset_menu_graphics_buffers.h"
+#include "rnc/ui/menus/system/setup_menu_display_text.h"
+#include "rnc/ui/menus/system/update_menu_entry_actions.h"
+#include "rnc/ui/menus/system/update_menu_resource_stream.h"
+#include "rnc/ui/menus/system/update_timed_menu_sequence.h"
+#include "rnc/ui/menus/weapons/draw_items_menu.h"
+#include "rnc/ui/menus/weapons/obtain_all_gold_weapons_menu.h"
+#include "rnc/ui/menus/widgets/draw_localized_three_option_menu.h"
+#include "rnc/ui/menus/widgets/draw_menu_choice_list.h"
+#include "rnc/ui/menus/widgets/draw_menu_icon_list.h"
+#include "rnc/ui/menus/widgets/draw_menu_item_grid.h"
+#include "rnc/ui/menus/widgets/draw_menu_selection_text.h"
+#include "rnc/ui/menus/widgets/draw_menu_side_indicator.h"
+#include "rnc/ui/menus/widgets/draw_menu_text_box.h"
+#include "rnc/ui/menus/widgets/draw_menu_text_list.h"
+#include "rnc/ui/menus/widgets/draw_prompt_box.h"
+#include "rnc/ui/menus/widgets/draw_selected_menu_item_text.h"
+#include "rnc/ui/menus/widgets/enter_menu_choice_list.h"
+#include "rnc/ui/menus/widgets/enter_menu_prompt.h"
+#include "rnc/ui/menus/widgets/leave_menu_choice_list.h"
+#include "rnc/ui/menus/widgets/leave_menu_prompt.h"
+#include "rnc/ui/menus/widgets/render_configured_text_label.h"
+#include "rnc/ui/menus/widgets/update_menu_choice_list.h"
+#include "rnc/ui/text/rebuild_configured_text_label_list.h"
+#include "rnc/ui/text/render_localized_ui_entry_list.h"
 
-struct P {
-    u8 pad_0[0x10];
-    u8 f10;
-};
-
-struct T {
-    u8        pad_0[0x48];
-    struct P *tbl[1];
-};
-
-struct O2 {
-    u8        pad_0[0x10];
-    float     f10, f14, f18;
-    u8        pad_1C[8];
-    struct T *f24;
-    u8        pad_28[0xC];
-    u16       f34;
-    u8        pad_36[0xA];
-    s32       f40, f44, f48;
-    u8        pad_4C[0x28];
-    s32      *f74;
-};
+#include "rnc/mobys/moby.h"
+#include "rnc/mobys/animation/moby_anim.h"
 
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_pages.h"
 
-extern u8   D_0019C150[];
-extern u8   D_0019C160[];
-extern void quad_moby_update() __asm__("FUN_0023a2c0");
+extern u8 D_0019C150[];
+extern u8 D_0019C160[];
 
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/menus/initialize_menu_preview_scene_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/game/options.h"
 
-extern u8         menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
-extern u8         menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));
-extern void       vu1_sync_chain(s32) __asm__("func_002337B0");
-extern s32        sceGsSyncV(s32);
-extern s32        initialize_menu_stream_buffers() __asm__("FUN_00225ac0");
-extern void       vu1_init_chain(void) __asm__("func_002335D0");
-extern struct O2 *create_menu_preview_moby() __asm__("func_00225490");
-extern s32        set_moby_animation() __asm__("func_00212ED8");
+extern u8   menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
+extern u8   menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));
+extern void vu1_sync_chain(s32) __asm__("func_002337B0");
+extern void vu1_init_chain(void) __asm__("func_002335D0");
+extern struct Moby *create_menu_preview_moby() __asm__("func_00225490");
+extern s32          set_moby_animation() __asm__("func_00212ED8");
 
-void func_00225AC0__void() __asm__("FUN_00225ac0");
 void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 
 void initialize_menu_preview_scene(void) {
@@ -81,26 +136,28 @@ void initialize_menu_preview_scene(void) {
     menu_system.unk10 = graphics_workspace_base;
     menu_system.help_text_buffer = help_text_buffer_start;
     menu_system.unk10C = graphics_buffer_start;
-    func_00225AC0__void(1);
+    initialize_menu_stream_buffers(1);
     vu1_init_chain();
     menu_system.saved_texture_start = gs_texture_allocation_start;
     if (menu_system.current != 0) {
         for (i = 0; i < 14; i++) {
-            struct O2 *preview_moby = (struct O2 *)create_menu_preview_moby(0x472);
+            struct Moby *preview_moby = (struct Moby *)create_menu_preview_moby(0x472);
             panel_slots[i] = preview_moby;
             if (preview_moby != 0) {
-                s32 k;
-                preview_moby->f34 &= 0xFFFD;
-                ((struct O2 *)panel_slots[i])->f74 = quad_moby_update;
-                ((struct O2 *)panel_slots[i])->f10 = preview_camera.position.f[0];
-                ((struct O2 *)panel_slots[i])->f14 = preview_camera.position.f[1];
-                ((struct O2 *)panel_slots[i])->f18 = preview_camera.position.f[2];
-                ((struct O2 *)panel_slots[i])->f40 = 0;
-                ((struct O2 *)panel_slots[i])->f44 = 0;
-                ((struct O2 *)panel_slots[i])->f48 = 0;
-                k = menu_system.current->moby_anims[i];
+                s32 seq;
+                preview_moby->flags &= 0xFFFD;
+                ((struct Moby *)panel_slots[i])->update = (void (*)(struct Moby *))quad_moby_update;
+                ((struct Moby *)panel_slots[i])->pos.x = preview_camera.position.f[0];
+                ((struct Moby *)panel_slots[i])->pos.y = preview_camera.position.f[1];
+                ((struct Moby *)panel_slots[i])->pos.z = preview_camera.position.f[2];
+                ((struct Moby *)panel_slots[i])->rot.x = 0;
+                ((struct Moby *)panel_slots[i])->rot.y = 0;
+                ((struct Moby *)panel_slots[i])->rot.z = 0;
+                seq = menu_system.current->moby_anims[i];
                 set_moby_animation(
-                    panel_slots[i], k, ((struct O2 *)panel_slots[i])->f24->tbl[k]->f10 - 1);
+                    panel_slots[i],
+                    seq,
+                    ((AnimClass *)((struct Moby *)panel_slots[i])->pclass)->seqs[seq]->nframes - 1);
             }
         }
     }
@@ -118,86 +175,86 @@ extern __typeof__(initialize_menu_preview_scene) func_00218F98
  */
 #define SCREEN(screen) ((struct MenuScreen *)&(screen))
 
-extern s32  FUN_00219d80(struct MenuScreen *);
-extern s32  FUN_00219e10(struct MenuScreen *);      /* update_menu_icon_list */
-extern s32  FUN_00219fa0(struct MenuScreen *);      /* draw_menu_icon_list */
-extern void FUN_0021a1b0(struct MenuScreen *, s32); /* set_pause_action_list */
-extern void FUN_0021a1e0(struct MenuScreen *, s32); /* rebuild_configured_text_label_list */
-extern void FUN_0021a308(struct MenuScreen *, s32); /* enter_menu_choice_list */
-extern void FUN_0021a310(struct MenuScreen *, s32); /* leave_menu_choice_list */
-extern void FUN_0021a318(struct MenuScreen *, s32); /* clear_menu_selected_index */
-extern s32  FUN_0021a328(struct MenuScreen *);      /* render_configured_text_label */
-extern s32  FUN_0021abf8(struct MenuScreen *);      /* update_menu_entry_actions */
-extern s32  FUN_0021b1c8(struct MenuScreen *);      /* render_localized_ui_entry_list */
-extern s32  FUN_0021b858(struct MenuScreen *);      /* update_menu_grid_selection */
-extern void FUN_0021bda0(struct MenuScreen *, s32); /* leave_map_screen */
-extern s32  FUN_0021be60(struct MenuScreen *);      /* draw_map_screen */
-extern void FUN_0021c420(struct MenuScreen *, s32); /* enter_menu_mission_list */
-extern s32  FUN_0021c4c0(struct MenuScreen *);      /* update_menu_mission_list */
-extern void FUN_0021ca98(struct MenuScreen *, s32); /* assign_heli_pack_label_text_table */
-extern void FUN_0021cac8(struct MenuScreen *, s32); /* reset_pause_memory_card_state */
-extern void FUN_0021cae0(struct MenuScreen *, s32); /* reset_menu_graphics_buffers */
-extern void FUN_0021cb00(struct MenuScreen *, s32); /* set_pause_sound_volume */
-extern s32  FUN_0021cb30(struct MenuScreen *);      /* sound_options_menu */
-extern s32  FUN_0021ce00(struct MenuScreen *);      /* draw_sound_menu */
-extern s32  FUN_0021d4a8(struct MenuScreen *);      /* draw_menu_text_list */
-extern s32  FUN_0021d948(struct MenuScreen *);      /* draw_menu_item_grid */
-extern void FUN_0021df30(struct MenuScreen *, s32); /* enter_item_preview */
-extern void FUN_0021df58(struct MenuScreen *, s32); /* clear_menu_preview_pair */
-extern s32  FUN_0021e230(struct MenuScreen *);      /* update_item_preview_binding */
-extern s32  FUN_0021e608(struct MenuScreen *);      /* draw_available_item_preview_mobys */
-extern s32  FUN_0021e7c8(struct MenuScreen *);
-extern s32  FUN_0021e890(struct MenuScreen *);      /* draw_quit_game_menu */
-extern void FUN_0021ea48(struct MenuScreen *, s32); /* create_rotating_preview_moby */
-extern void FUN_0021eaf0(struct MenuScreen *, s32); /* release_item_preview_moby */
-extern s32  FUN_0021eb20(struct MenuScreen *);      /* draw_items_menu */
-extern s32  FUN_0021ef78(struct MenuScreen *);      /* setup_menu_display_text */
-extern s32  FUN_0021f5f8(struct MenuScreen *);      /* draw_mission_menu_labels */
-extern s32  FUN_0021f688(struct MenuScreen *);      /* draw_missions_menu2 */
-extern s32  FUN_0021f990(struct MenuScreen *);      /* update_menu_stream_image */
-extern s32  FUN_0021fc68(struct MenuScreen *);      /* draw_transition_overlay */
-extern void FUN_0021fce0(struct MenuScreen *, s32); /* enter_menu_stream_image */
-extern void FUN_0021fd78(struct MenuScreen *, s32); /* leave_menu_stream_image */
-extern s32  FUN_0021fdc8(struct MenuScreen *);      /* update_menu_resource_stream */
-extern s32  FUN_00220348(struct MenuScreen *);      /* draw_checking_memory_card_data_menu */
-extern s32  FUN_00220850(struct MenuScreen *);      /* draw_map_screen_layers */
-extern s32  FUN_00220e28(struct MenuScreen *);      /* update_menu_option_list */
-extern s32  FUN_00221030(struct MenuScreen *);      /* draw_cheats_menu */
-extern s32  FUN_002212b8(struct MenuScreen *);      /* update_menu_choice_list */
-extern s32  FUN_00221460(struct MenuScreen *);      /* draw_menu_choice_list */
-extern void FUN_002215f8(struct MenuScreen *, s32); /* build_pause_item_list */
-extern void FUN_002216c0(struct MenuScreen *, s32); /* build_filtered_menu_item_list */
-extern void FUN_002217f8(struct MenuScreen *, s32); /* pause_page_enter_noop */
+extern s32 FUN_00219d80(struct MenuScreen *);
+/* update_menu_icon_list */
+/* draw_menu_icon_list */
+/* set_pause_action_list */
+/* rebuild_configured_text_label_list */
+/* enter_menu_choice_list */
+/* leave_menu_choice_list */
+/* clear_menu_selected_index */
+/* render_configured_text_label */
+/* update_menu_entry_actions */
+/* render_localized_ui_entry_list */
+/* update_menu_grid_selection */
+/* leave_map_screen */
+/* draw_map_screen */
+/* enter_menu_mission_list */
+/* update_menu_mission_list */
+/* assign_heli_pack_label_text_table */
+/* reset_pause_memory_card_state */
+/* reset_menu_graphics_buffers */
+/* set_pause_sound_volume */
+/* sound_options_menu */
+/* draw_sound_menu */
+/* draw_menu_text_list */
+/* draw_menu_item_grid */
+/* enter_item_preview */
+/* clear_menu_preview_pair */
+/* update_item_preview_binding */
+/* draw_available_item_preview_mobys */
+extern s32 FUN_0021e7c8(struct MenuScreen *);
+/* draw_quit_game_menu */
+/* create_rotating_preview_moby */
+/* release_item_preview_moby */
+/* draw_items_menu */
+/* setup_menu_display_text */
+/* draw_mission_menu_labels */
+/* draw_missions_menu2 */
+/* update_menu_stream_image */
+/* draw_transition_overlay */
+/* enter_menu_stream_image */
+/* leave_menu_stream_image */
+/* update_menu_resource_stream */
+/* draw_checking_memory_card_data_menu */
+/* draw_map_screen_layers */
+/* update_menu_option_list */
+/* draw_cheats_menu */
+/* update_menu_choice_list */
+/* draw_menu_choice_list */
+/* build_pause_item_list */
+/* build_filtered_menu_item_list */
+/* pause_page_enter_noop */
 extern void FUN_00221800(struct MenuScreen *, s32);
-extern s32  FUN_00221908(struct MenuScreen *);      /* update_level_selection_map_screen */
-extern s32  FUN_00221930(struct MenuScreen *);      /* draw_level_selection_map_screen */
-extern s32  FUN_00221968(struct MenuScreen *);      /* handle_menu_action_buttons */
-extern void FUN_00221a48(struct MenuScreen *, s32); /* enter_menu_prompt */
-extern void FUN_00221a88(struct MenuScreen *, s32); /* leave_menu_prompt */
-extern s32  FUN_00221ab8(struct MenuScreen *);
-extern s32  FUN_00221b50(struct MenuScreen *);      /* draw_prompt_box */
-extern void FUN_00221d28(struct MenuScreen *, s32); /* assign_pause_level_sprite_list */
-extern s32  FUN_00221d68(struct MenuScreen *);      /* handle_cyclic_menu_selection_input */
-extern s32  FUN_00221e50(struct MenuScreen *);      /* update_menu_cycle_selection */
-extern s32  FUN_00221f58(struct MenuScreen *);      /* draw_menu_side_indicator */
-extern s32  FUN_002220f0(struct MenuScreen *);      /* draw_selected_menu_item_text */
-extern s32  FUN_00222290(struct MenuScreen *);      /* process_global_state_flags */
-extern void FUN_002223d8(struct MenuScreen *, s32); /* enter_timed_menu_sequence */
-extern s32  FUN_002223f0(struct MenuScreen *);      /* update_timed_menu_sequence */
-extern s32  FUN_00222768(struct MenuScreen *);      /* draw_menu_text_box */
-extern s32  FUN_00222948(struct MenuScreen *);      /* obtain_all_gold_weapons_menu */
-extern s32  FUN_00222a98(struct MenuScreen *);      /* draw_localized_three_option_menu */
-extern s32  FUN_00222d98(struct MenuScreen *);      /* draw_menu_selection_text */
-extern void FUN_00222f18(struct MenuScreen *, s32); /* enter_save_slot_screen */
-extern void FUN_00222f58(struct MenuScreen *, s32); /* leave_save_slot_screen */
-extern s32  FUN_00222f88(struct MenuScreen *);      /* saving_data_menu */
-extern s32  FUN_002232d8(struct MenuScreen *);      /* loading_data_menu */
-extern s32  FUN_002235b8(struct MenuScreen *);      /* saving_data_menu2 */
-extern s32  FUN_002239e0(struct MenuScreen *);      /* draw_save_slot_list */
-extern void FUN_00225588(struct MenuScreen *, s32); /* enter_streamed_moby_screen */
-extern void FUN_00225660(struct MenuScreen *, s32); /* leave_streamed_moby_screen */
-extern s32  FUN_002256e8(struct MenuScreen *);      /* update_streamed_moby_animation */
-extern s32  FUN_00225a68(struct MenuScreen *);      /* draw_moby_entries_from_object */
+/* update_level_selection_map_screen */
+/* draw_level_selection_map_screen */
+/* handle_menu_action_buttons */
+/* enter_menu_prompt */
+/* leave_menu_prompt */
+extern s32 FUN_00221ab8(struct MenuScreen *);
+/* draw_prompt_box */
+/* assign_pause_level_sprite_list */
+/* handle_cyclic_menu_selection_input */
+/* update_menu_cycle_selection */
+/* draw_menu_side_indicator */
+/* draw_selected_menu_item_text */
+/* process_global_state_flags */
+/* enter_timed_menu_sequence */
+/* update_timed_menu_sequence */
+/* draw_menu_text_box */
+/* obtain_all_gold_weapons_menu */
+/* draw_localized_three_option_menu */
+/* draw_menu_selection_text */
+/* enter_save_slot_screen */
+/* leave_save_slot_screen */
+/* saving_data_menu */
+/* loading_data_menu */
+/* saving_data_menu2 */
+/* draw_save_slot_list */
+/* enter_streamed_moby_screen */
+/* leave_streamed_moby_screen */
+/* update_streamed_moby_animation */
+/* draw_moby_entries_from_object */
 
 extern struct MenuStreamEntry disc_help_moves[] __asm__("D_00137EA8");
 extern struct MenuStreamEntry disc_help_weapons[] __asm__("D_00137F20");
@@ -222,18 +279,20 @@ extern u8                     subtitles_enabled __asm__("D_0015EE40");
 extern struct MenuTextItem    planet_select_items[] __asm__("D_001D62B8");
 
 struct MenuTextListScreen moves_help_list = {
-    {  FUN_0021abf8,     FUN_0021b1c8},
-    {MENU_LIST_WRAP, moves_help_items},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
+    {           MENU_LIST_WRAP,               moves_help_items},
 };
 
 struct MenuStreamScreen moves_help_image = {
-    {   FUN_0021fdc8,       FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_help_moves, MENU_STREAM_UNPACK,        0x100,         0xD0},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                       },
+    {            disc_help_moves, MENU_STREAM_UNPACK,                   0x100, 0xD0},
 };
 
 struct MenuLabelScreen moves_help_label = {
-    {                                        FUN_00219d80, FUN_0021a328, FUN_0021ca98},
-    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_LIST_SELECTION,            0,            4},
+    {                                        FUN_00219d80, render_configured_text_label, assign_heli_pack_label_text_table},
+    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_LIST_SELECTION,                            0,                                 4},
 };
 
 struct MenuPage pause_options_page = {
@@ -249,14 +308,16 @@ struct MenuPage pause_options_page = {
 };
 
 struct MenuLabelScreen options_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021cae0},
+    {FUN_00219d80, render_configured_text_label, reset_menu_graphics_buffers},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT |
          MENU_LABEL_NO_SCROLL, 0x4F1D},
 };
 
 struct MenuStreamScreen options_image = {
-    {       FUN_0021fdc8,       FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_options_images, MENU_STREAM_UNPACK,         0x93,         0x85},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                       },
+    {        disc_options_images, MENU_STREAM_UNPACK,                    0x93, 0x85},
 };
 
 struct MenuTextItem options_items[8] = {
@@ -271,15 +332,15 @@ struct MenuTextItem options_items[8] = {
 };
 
 struct MenuTextListScreen options_list = {
-    {  FUN_0021abf8,  FUN_0021b1c8},
-    {MENU_LIST_WRAP, options_items},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
+    {           MENU_LIST_WRAP,                  options_items},
 };
 
 s32 options_description_text_ids[7] = {0x4F31, 0x4F32, 0x4F33, 0x4F35, 0x4F36, 0x4F37, 0x4F39};
 
 struct MenuLabelScreen options_description_label = {
-    {                                        FUN_00219d80,                      FUN_0021a328, FUN_0021a318},
-    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_LIST_SELECTION, (s32)options_description_text_ids,            4},
+    {                                        FUN_00219d80,      render_configured_text_label, clear_menu_selected_index},
+    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_LIST_SELECTION, (s32)options_description_text_ids,                         4},
 };
 
 struct MenuPage helpdesk_page = {
@@ -295,7 +356,7 @@ struct MenuPage helpdesk_page = {
 };
 
 struct MenuLabelScreen helpdesk_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F40},
 };
@@ -307,8 +368,8 @@ struct MenuOption helpdesk_options[3] = {
 };
 
 struct MenuOptionListScreen helpdesk_option_list = {
-    {FUN_00220e28,     FUN_00221030},
-    {           0, helpdesk_options},
+    {update_menu_option_list, draw_cheats_menu},
+    {                      0, helpdesk_options},
 };
 
 struct MenuPage weapon_help_page = {
@@ -328,32 +389,38 @@ struct MenuPage weapon_help_page = {
 };
 
 struct MenuLabelScreen weapon_help_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_002215f8},
+    {FUN_00219d80, render_configured_text_label, build_pause_item_list},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F99},
 };
 
 struct MenuIconListScreen weapon_help_icon_list = {
-    {FUN_00219e10, FUN_00219fa0},
+    {update_menu_icon_list, draw_menu_icon_list},
     {{0}, 0, 0, {0}, pause_item_list_entries},
 };
 
 struct MenuStreamScreen weapon_help_image = {
-    {     FUN_0021fdc8,                                   FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_help_weapons, MENU_STREAM_BY_CELL_ENTRY | MENU_STREAM_UNPACK,         0xEE,         0xD5},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                   },
+    {          disc_help_weapons, MENU_STREAM_BY_CELL_ENTRY | MENU_STREAM_UNPACK,                    0xEE, 0xD5},
 };
 
 struct MenuLabelScreen weapon_help_text_label = {
-    {                                   FUN_00219d80,                   FUN_0021a328, FUN_0021a318},
-    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_GRID_CELL, (s32)pause_item_variant_values,            4},
+    {                                   FUN_00219d80,   render_configured_text_label, clear_menu_selected_index},
+    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_GRID_CELL, (s32)pause_item_variant_values,                         4},
 };
 
 struct MenuItemPreviewScreen item_preview_screen = {
-    {FUN_0021e230, FUN_0021e608, FUN_0021df30, FUN_0021df58, MENU_SCREEN_DRAW_3D},
+    {update_item_preview_binding,
+     draw_available_item_preview_mobys, enter_item_preview,
+     clear_menu_preview_pair, MENU_SCREEN_DRAW_3D},
 };
 
 struct MenuItemPreviewScreen gadget_help_preview_screen = {
-    {FUN_0021e230, FUN_0021e608, FUN_0021df30, FUN_0021df58, MENU_SCREEN_DRAW_3D},
+    {update_item_preview_binding,
+     draw_available_item_preview_mobys, enter_item_preview,
+     clear_menu_preview_pair, MENU_SCREEN_DRAW_3D},
     {1},
 };
 
@@ -374,31 +441,33 @@ struct MenuPage gadget_help_page = {
 };
 
 struct MenuLabelScreen gadget_help_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_002216c0},
+    {FUN_00219d80, render_configured_text_label, build_filtered_menu_item_list},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F9A},
 };
 
 struct MenuIconListScreen gadget_help_icon_list = {
-    {FUN_00219e10, FUN_00219fa0},
+    {update_menu_icon_list, draw_menu_icon_list},
     {{0}, 0, 0, {0}, filtered_menu_item_records},
 };
 
 struct MenuStreamScreen gadget_help_image = {
-    {     FUN_0021fdc8,                                   FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_help_gadgets, MENU_STREAM_BY_CELL_ENTRY | MENU_STREAM_UNPACK,         0xEE,         0x9F},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                   },
+    {          disc_help_gadgets, MENU_STREAM_BY_CELL_ENTRY | MENU_STREAM_UNPACK,                    0xEE, 0x9F},
 };
 
 struct MenuLabelScreen gadget_help_name_label = {
-    {                                   FUN_00219d80,                   FUN_0021a328, FUN_0021a318},
-    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_GRID_CELL, (s32)gadget_help_name_text_ids,            4},
+    {                                   FUN_00219d80,   render_configured_text_label, clear_menu_selected_index},
+    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_GRID_CELL, (s32)gadget_help_name_text_ids,                         4},
 };
 
 struct MenuLabelScreen gadget_help_text_label = {
-    {                                                       FUN_00219d80,FUN_0021a328,FUN_0021a318},
+    {                                                       FUN_00219d80,render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_BY_GRID_CELL,
      (s32)gadget_help_text_ids,
-     4       },
+     4                    },
 };
 
 struct MenuPage subtitles_page = {
@@ -414,7 +483,7 @@ struct MenuPage subtitles_page = {
 };
 
 struct MenuLabelScreen subtitles_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F6F},
 };
@@ -425,8 +494,8 @@ struct MenuOption subtitles_options[2] = {
 };
 
 struct MenuOptionListScreen subtitles_option_list = {
-    {FUN_00220e28,      FUN_00221030},
-    {           0, subtitles_options},
+    {update_menu_option_list,  draw_cheats_menu},
+    {                      0, subtitles_options},
 };
 
 struct MenuPage vibration_page = {
@@ -442,7 +511,7 @@ struct MenuPage vibration_page = {
 };
 
 struct MenuLabelScreen vibration_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F6F},
 };
@@ -453,8 +522,8 @@ struct MenuOption vibration_options[2] = {
 };
 
 struct MenuOptionListScreen vibration_option_list = {
-    {FUN_00220e28,      FUN_00221030},
-    {           0, vibration_options},
+    {update_menu_option_list,  draw_cheats_menu},
+    {                      0, vibration_options},
 };
 
 struct MenuPage sound_page = {
@@ -470,13 +539,13 @@ struct MenuPage sound_page = {
 };
 
 struct MenuLabelScreen sound_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F43},
 };
 
 struct MenuPlainScreen50 sound_volume_screen = {
-    {FUN_0021cb30, FUN_0021ce00, 0, FUN_0021cb00}
+    {sound_options_menu, draw_sound_menu, 0, set_pause_sound_volume}
 };
 
 struct MenuPage save_game_page = {
@@ -504,27 +573,27 @@ struct MenuPage load_game_page = {
 };
 
 struct MenuLabelScreen save_game_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F29},
 };
 
 struct MenuLabelScreen load_game_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F28},
 };
 
 struct MenuPlainScreen58 save_slot_selection_text = {
-    {0, FUN_00222d98}
+    {0, draw_menu_selection_text}
 };
 
 struct MenuSaveSlotScreen save_game_slot_list = {
-    {FUN_00222f88, FUN_002239e0, FUN_00222f18, FUN_00222f58},
+    {saving_data_menu, draw_save_slot_list, enter_save_slot_screen, leave_save_slot_screen},
 };
 
 struct MenuSaveSlotScreen load_game_slot_list = {
-    {FUN_002232d8, FUN_002239e0, FUN_00222f18, FUN_00222f58},
+    {loading_data_menu, draw_save_slot_list, enter_save_slot_screen, leave_save_slot_screen},
 };
 
 struct MenuTextItem save_page_hint_items[3] = {
@@ -534,13 +603,15 @@ struct MenuTextItem save_page_hint_items[3] = {
 };
 
 struct MenuTextListScreen save_page_hint_list = {
-    {                                              0,         FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, save_page_hint_items},
+    {                                              0, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,           save_page_hint_items},
 };
 
 struct MenuStreamScreen save_slot_image = {
-    {      FUN_0021fdc8,                                  FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_planet_images, MENU_STREAM_UNPACK | MENU_STREAM_BY_SAVE_SLOT,        0x132,         0x6C},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                  },
+    {         disc_planet_images, MENU_STREAM_UNPACK | MENU_STREAM_BY_SAVE_SLOT,                   0x132, 0x6C},
 };
 
 struct MenuPage camera_page = {
@@ -556,7 +627,7 @@ struct MenuPage camera_page = {
 };
 
 struct MenuLabelScreen camera_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F42},
 };
@@ -569,7 +640,9 @@ struct MenuChoice camera_choices[4] = {
 };
 
 struct MenuChoiceListScreen camera_choice_list = {
-    {FUN_002212b8, FUN_00221460, FUN_0021a308, FUN_0021a310},
+    {update_menu_choice_list,
+     draw_menu_choice_list, enter_menu_choice_list,
+     leave_menu_choice_list},
     {{0}, camera_choices},
 };
 
@@ -585,7 +658,7 @@ struct MenuPage quit_game_page = {
 };
 
 struct MenuPlainScreen50 quit_game_screen = {
-    {FUN_0021e7c8, FUN_0021e890}
+    {FUN_0021e7c8, draw_quit_game_menu}
 };
 
 struct MenuPage pause_items_page = {
@@ -604,14 +677,16 @@ struct MenuPage pause_items_page = {
 };
 
 struct MenuLabelScreen items_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4EE5},
 };
 
 struct MenuStreamScreen items_image = {
-    {    FUN_0021fdc8,                                  FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_item_images, MENU_STREAM_BY_GRID_CELL | MENU_STREAM_UNPACK,         0xBB,         0x5E},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                  },
+    {           disc_item_images, MENU_STREAM_BY_GRID_CELL | MENU_STREAM_UNPACK,                    0xBB, 0x5E},
 };
 
 struct MenuGridCell items_grid_cells[9] = {
@@ -627,30 +702,32 @@ struct MenuGridCell items_grid_cells[9] = {
 };
 
 struct MenuGridScreen items_grid = {
-    {FUN_0021b858, FUN_0021d948},
+    {update_menu_grid_selection, draw_menu_item_grid},
     {MENU_GRID_NO_CONFIRM, 0.5f, 0.1f, 0, 3, 3, items_grid_cells},
 };
 
 struct MenuItemPreviewScreen gold_bolt_screen = {
-    {0, FUN_0021eb20, FUN_0021ea48, FUN_0021eaf0, MENU_SCREEN_DRAW_3D},
+    {0,
+     draw_items_menu, create_rotating_preview_moby,
+     release_item_preview_moby, MENU_SCREEN_DRAW_3D},
 };
 
 s32 items_description_text_ids[9] = {
     0x4F44, 0x4F45, 0x4F46, 0x4F47, 0x4F48, 0x4F49, 0x4F4A, 0x4F4B, 0x4F4C};
 
 struct MenuLabelScreen items_description_label = {
-    {                                   FUN_00219d80,                    FUN_0021a328, FUN_0021a318},
-    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_GRID_CELL, (s32)items_description_text_ids,            4},
+    {                                   FUN_00219d80,    render_configured_text_label, clear_menu_selected_index},
+    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_GRID_CELL, (s32)items_description_text_ids,                         4},
 };
 
 s32 items_name_text_ids[9] = {
     0x4E69, 0x4E73, 0x4E78, 0x4E71, 0x4E72, 0x4E70, 0x4E74, 0x4E75, 0x4E77};
 
 struct MenuLabelScreen items_name_label = {
-    {                                                       FUN_00219d80,FUN_0021a328,FUN_0021a318},
+    {                                                       FUN_00219d80,render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_BY_GRID_CELL,
      (s32)items_name_text_ids,
-     4       },
+     4                    },
 };
 
 struct MenuPage planet_select_page = {
@@ -667,12 +744,14 @@ struct MenuPage planet_select_page = {
 };
 
 struct MenuStreamScreen planet_select_image = {
-    {      FUN_0021f990,                                       FUN_0021fc68, FUN_0021fce0, FUN_0021fd78},
-    {disc_planet_images, MENU_STREAM_BY_SELECTED_LEVEL | MENU_STREAM_UNPACK,        0x132,         0x6C},
+    {update_menu_stream_image,
+     draw_transition_overlay, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                    },
+    {      disc_planet_images, MENU_STREAM_BY_SELECTED_LEVEL | MENU_STREAM_UNPACK,                   0x132, 0x6C},
 };
 
 struct MenuLabelScreen planet_select_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_002217f8},
+    {FUN_00219d80, render_configured_text_label, pause_page_enter_noop},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4EF0},
 };
@@ -701,21 +780,21 @@ struct MenuTextItem planet_select_level_items[19] = {
 };
 
 struct MenuTextListScreen planet_select_list = {
-    {FUN_0021abf8, FUN_0021d4a8, FUN_00221800},
+    {update_menu_entry_actions, draw_menu_text_list, FUN_00221800},
     {MENU_LIST_BUTTONS_ONLY | MENU_LIST_SMALL_FONT | MENU_LIST_FIXED_STEP | MENU_LIST_SETS_LEVEL |
          MENU_LIST_SHOULDER_KEYS, planet_select_items},
 };
 
 struct MenuPlainScreen58 mission_labels_screen = {
-    {FUN_00219d80, FUN_0021f5f8}
+    {FUN_00219d80, draw_mission_menu_labels}
 };
 
 struct MenuLevelMapScreen planet_select_galaxy_map = {
-    {FUN_00221908, FUN_00221930},
+    {update_level_selection_map_screen, draw_level_selection_map_screen},
 };
 
 struct MenuMapScreen planet_select_map_screen = {
-    {FUN_0021be60, 0, 0, FUN_0021bda0},
+    {draw_map_screen, 0, 0, leave_map_screen},
     {{0}, 0xC0},
 };
 
@@ -733,20 +812,23 @@ struct MenuPage planet_confirm_page = {
 };
 
 struct MenuTextListScreen planet_confirm_hint_list = {
-    {                                                              FUN_00221968,FUN_0021b1c8            },
+    {                                                handle_menu_action_buttons,render_localized_ui_entry_list},
     {MENU_LIST_FIXED_COLOR | MENU_LIST_NO_COLOR_CODES | MENU_LIST_CENTER_WIDEST,
-     level_map_hint_items},
+     level_map_hint_items      },
 };
 
-struct MenuScreen planet_confirm_missions_screen = {FUN_0021c4c0, FUN_0021f688, FUN_0021c420};
+struct MenuScreen planet_confirm_missions_screen = {
+    update_menu_mission_list, draw_missions_menu2, enter_menu_mission_list};
 
 struct MenuMapScreen planet_confirm_map_screen = {
-    {FUN_0021be60, FUN_00220850, FUN_0021cac8, FUN_0021bda0},
+    {draw_map_screen, draw_map_screen_layers, reset_pause_memory_card_state, leave_map_screen},
     {{0}, 0x40}
 };
 
 struct MenuItemPreviewScreen planet_confirm_gold_bolt_screen = {
-    {0, FUN_0021ef78, FUN_0021ea48, FUN_0021eaf0, MENU_SCREEN_DRAW_3D},
+    {0,
+     setup_menu_display_text, create_rotating_preview_moby,
+     release_item_preview_moby, MENU_SCREEN_DRAW_3D},
 };
 
 struct MenuPage save_confirm_page = {
@@ -762,11 +844,11 @@ struct MenuPage save_confirm_page = {
 };
 
 struct MenuSaveSlotScreen save_confirm_slot_list = {
-    {0, FUN_002239e0},
+    {0, draw_save_slot_list},
 };
 
 struct MenuPromptScreen save_confirm_prompt = {
-    {FUN_00221ab8, FUN_00221b50, FUN_00221a48, FUN_00221a88},
+    {FUN_00221ab8, draw_prompt_box, enter_menu_prompt, leave_menu_prompt},
 };
 
 struct MenuTextItem confirm_hint_items[3] = {
@@ -776,8 +858,8 @@ struct MenuTextItem confirm_hint_items[3] = {
 };
 
 struct MenuTextListScreen confirm_hint_list = {
-    {                                              0,       FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, confirm_hint_items},
+    {                                              0, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,             confirm_hint_items},
 };
 
 struct MenuPage goodies_page = {
@@ -793,7 +875,7 @@ struct MenuPage goodies_page = {
 };
 
 struct MenuLabelScreen goodies_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021cae0},
+    {FUN_00219d80, render_configured_text_label, reset_menu_graphics_buffers},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4FC3},
 };
@@ -815,22 +897,24 @@ s32 skill_point_and_gold_weapon_menu_labels[9] = {
     0x4FCE, 0x4FCF, 0x4FD0, 0x4FD1, 0x4FD2, -1, -1, -1, -1};
 
 struct MenuLabelScreen goodies_description_label = {
-    {                                        FUN_00219d80,FUN_0021a328,FUN_0021a318},
+    {                                        FUN_00219d80,render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_LIST_SELECTION,
      (s32)skill_point_and_gold_weapon_menu_labels,
-     4       },
+     4                    },
 };
 
 struct MenuTextListScreen goodies_list = {
-    {                             FUN_0021abf8,                     FUN_0021b1c8},
+    {                update_menu_entry_actions,   render_localized_ui_entry_list},
     {MENU_LIST_NO_COLOR_CODES | MENU_LIST_WRAP, skill_point_and_gold_weapon_menu},
 };
 
 struct MenuStreamScreen goodies_image = {
-    {       FUN_0021fdc8,             FUN_00220348,FUN_0021fce0, FUN_0021fd78},
-    {disc_goodies_images,
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu,enter_menu_stream_image,
+     leave_menu_stream_image},
+    {        disc_goodies_images,
      MENU_STREAM_UNPACK | MENU_STREAM_BUFFER_ARG | MENU_STREAM_DENIED_ENTRY,
-     0xF9,        0x10B    },
+     0xF9, 0x10B            },
 };
 
 struct MenuPage goodies_credits_page = {
@@ -856,23 +940,27 @@ struct MenuPage credits_page = {
 };
 
 struct MenuLabelScreen credits_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021cae0},
+    {FUN_00219d80, render_configured_text_label, reset_menu_graphics_buffers},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x50A9},
 };
 
 struct MenuPlainScreen58 credits_text_screen = {
-    {FUN_002223f0, FUN_00222768, FUN_002223d8, 0, 1}
+    {update_timed_menu_sequence, draw_menu_text_box, enter_timed_menu_sequence, 0, 1}
 };
 
 struct MenuStreamScreen credits_sketch_image = {
-    {           FUN_0021fdc8,                                   FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_character_sketches, MENU_STREAM_UNPACK | MENU_STREAM_CYCLE | 0x800,         0xB6,         0xA9},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                   },
+    {    disc_character_sketches, MENU_STREAM_UNPACK | MENU_STREAM_CYCLE | 0x800,                    0xB6, 0xA9},
 };
 
 struct MenuStreamScreen credits_render_image = {
-    {          FUN_0021fdc8,                                   FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_character_renders, MENU_STREAM_UNPACK | MENU_STREAM_CYCLE | 0x800,         0xB6,         0xA9},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                   },
+    {     disc_character_renders, MENU_STREAM_UNPACK | MENU_STREAM_CYCLE | 0x800,                    0xB6, 0xA9},
 };
 
 struct MenuPage skill_points_page = {
@@ -889,18 +977,20 @@ struct MenuPage skill_points_page = {
 };
 
 struct MenuLabelScreen skill_points_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021cae0},
+    {FUN_00219d80, render_configured_text_label, reset_menu_graphics_buffers},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4FC4},
 };
 
 struct MenuPlainScreen58 skill_point_level_screen = {
-    {0, FUN_002220f0}
+    {0, draw_selected_menu_item_text}
 };
 
 struct MenuStreamScreen skill_points_image = {
-    {     FUN_0021fdc8,                                      FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_skill_images, MENU_STREAM_UNPACK | MENU_STREAM_SKILL_POINT_LOCK,         0xF9,         0xB0},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                      },
+    {          disc_skill_images, MENU_STREAM_UNPACK | MENU_STREAM_SKILL_POINT_LOCK,                    0xF9, 0xB0},
 };
 
 /* param: the level the skill point is earned on. */
@@ -973,15 +1063,15 @@ s32 skill_point_description_text_ids[30][2] = {
 };
 
 struct MenuLabelScreen skill_point_description_label = {
-    {                          FUN_00219d80,                          FUN_0021a328,FUN_0021a318},
+    {                          FUN_00219d80,          render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_LIST_SELECTION | MENU_LABEL_LOCKED_TEXT |
 MENU_LABEL_VIDEO_MODE_VARIANT, (s32)skill_point_description_text_ids,
-     8       },
+     8                    },
 };
 
 struct MenuTextListScreen skill_point_list = {
-    {               FUN_0021abf8,      FUN_0021d4a8},
-    {MENU_LIST_SKILL_POINT_MARKS, skill_point_items},
+    {  update_menu_entry_actions, draw_menu_text_list},
+    {MENU_LIST_SKILL_POINT_MARKS,   skill_point_items},
 };
 
 struct MenuPage game_end_page = {
@@ -996,7 +1086,9 @@ struct MenuPage game_end_page = {
 };
 
 struct MenuPlainScreenC0 helpdesk_girl_screen = {
-    {FUN_002256e8, FUN_00225a68, FUN_00225588, FUN_00225660, 2}
+    {update_streamed_moby_animation,
+     draw_moby_entries_from_object, enter_streamed_moby_screen,
+     leave_streamed_moby_screen, 2}
 };
 
 struct MenuTextItem game_end_hint_items[3] = {
@@ -1006,22 +1098,22 @@ struct MenuTextItem game_end_hint_items[3] = {
 };
 
 struct MenuTextListScreen game_end_hint_list = {
-    {                                                                        0,FUN_0021b1c8           },
+    {                                                                        0,render_localized_ui_entry_list},
     {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST | MENU_LIST_SHRINK_TO_FIT,
-     game_end_hint_items},
+     game_end_hint_items       },
 };
 
 struct MenuPlainScreen58 gold_weapons_screen = {
-    {FUN_00219d80, FUN_00222948}
+    {FUN_00219d80, obtain_all_gold_weapons_menu}
 };
 
 struct MenuLabelScreen game_end_fixed_label = {
-    {                    0, FUN_0021a328},
-    {MENU_LABEL_FIXED_TEXT,       0x4F9E},
+    {                    0, render_configured_text_label},
+    {MENU_LABEL_FIXED_TEXT,                       0x4F9E},
 };
 
 struct MenuPlainScreen58 game_end_stats_screen = {
-    {FUN_00222290, FUN_00222a98}
+    {process_global_state_flags, draw_localized_three_option_menu}
 };
 
 struct MenuPage epilogue_page = {
@@ -1036,16 +1128,18 @@ struct MenuPage epilogue_page = {
 };
 
 struct MenuCycleScreen epilogue_side_indicator = {
-    {0, FUN_00221f58},
+    {0, draw_menu_side_indicator},
 };
 
 struct MenuCycleScreen epilogue_pager = {
-    {FUN_00221e50, FUN_00221f58},
-    {         {0},            1},
+    {update_menu_cycle_selection, draw_menu_side_indicator},
+    {                        {0},                        1},
 };
 
 struct MenuStreamScreen epilogue_image = {
-    {FUN_0021fdc8, FUN_00220348, FUN_0021fce0, FUN_0021fd78},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image},
     {disc_epilogue_images,
      MENU_STREAM_UNPACK | MENU_STREAM_BUFFER_ARG | MENU_STREAM_BY_LANGUAGE,
      0x11E, 0x169,
@@ -1064,14 +1158,16 @@ struct MenuPage sketchbook_page = {
 };
 
 struct MenuStreamScreen sketchbook_image = {
-    {FUN_0021fdc8, FUN_00220348, FUN_0021fce0, FUN_0021fd78},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image},
     {disc_sketchbook, MENU_STREAM_UNPACK | MENU_STREAM_BUFFER_ARG, 0x113, 0x166, D_001601E8},
 };
 
 struct MenuLabelScreen sketchbook_title_label = {
-    {                                                                             FUN_00219d80,FUN_0021a328},
+    {                                                                             FUN_00219d80,render_configured_text_label},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
-     0x4FC9  },
+     0x4FC9                  },
 };
 
 struct MenuTextItem sketchbook_hint_items[4] = {
@@ -1082,8 +1178,8 @@ struct MenuTextItem sketchbook_hint_items[4] = {
 };
 
 struct MenuTextListScreen sketchbook_hint_list = {
-    {                                   FUN_00221d68,          FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, sketchbook_hint_items},
+    {             handle_cyclic_menu_selection_input, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,          sketchbook_hint_items},
 };
 
 s32 sketchbook_caption_text_ids[30] = {
@@ -1092,8 +1188,8 @@ s32 sketchbook_caption_text_ids[30] = {
     0x519B, 0x519C, 0x519D, 0x519E, 0x519F, 0x51A0, 0x51A1, 0x51A2, 0x51A3, 0x51A4};
 
 struct MenuLabelScreen sketchbook_caption_label = {
-    {                                        FUN_00219d80,                     FUN_0021a328, FUN_0021a318},
-    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_LIST_SELECTION, (s32)sketchbook_caption_text_ids,            4},
+    {                                        FUN_00219d80,     render_configured_text_label, clear_menu_selected_index},
+    {MENU_LABEL_SMALL_FONT | MENU_LABEL_BY_LIST_SELECTION, (s32)sketchbook_caption_text_ids,                         4},
 };
 
 struct MenuPage commercials_page = {
@@ -1108,9 +1204,9 @@ struct MenuPage commercials_page = {
 };
 
 struct MenuLabelScreen commercials_title_label = {
-    {                                                                             FUN_00219d80,FUN_0021a328},
+    {                                                                             FUN_00219d80,render_configured_text_label},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
-     0x4FCC  },
+     0x4FCC                  },
 };
 
 struct MenuTextItem commercials_items[4] = {
@@ -1121,13 +1217,15 @@ struct MenuTextItem commercials_items[4] = {
 };
 
 struct MenuTextListScreen commercials_list = {
-    {                                                        FUN_0021abf8,      FUN_0021d4a8},
-    {MENU_LIST_FIXED_STEP | MENU_LIST_NO_COLOR_CODES | MENU_LIST_CENTERED, commercials_items},
+    {                                           update_menu_entry_actions, draw_menu_text_list},
+    {MENU_LIST_FIXED_STEP | MENU_LIST_NO_COLOR_CODES | MENU_LIST_CENTERED,   commercials_items},
 };
 
 struct MenuStreamScreen commercials_image = {
-    {    FUN_0021fdc8,                                FUN_00220348, FUN_0021fce0, FUN_0021fd78},
-    {disc_commercials, MENU_STREAM_UNPACK | MENU_STREAM_BUFFER_ARG,        0x107,         0xC4},
+    {update_menu_resource_stream,
+     draw_checking_memory_card_data_menu, enter_menu_stream_image,
+     leave_menu_stream_image                                                                                },
+    {           disc_commercials, MENU_STREAM_UNPACK | MENU_STREAM_BUFFER_ARG,                   0x107, 0xC4},
 };
 
 struct MenuTextItem commercials_hint_items[3] = {
@@ -1137,8 +1235,8 @@ struct MenuTextItem commercials_hint_items[3] = {
 };
 
 struct MenuTextListScreen commercials_hint_list = {
-    {                                   FUN_00219d80,           FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, commercials_hint_items},
+    {                                   FUN_00219d80, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,         commercials_hint_items},
 };
 
 struct MenuPage cheats_page = {
@@ -1150,9 +1248,9 @@ struct MenuPage cheats_page = {
 };
 
 struct MenuLabelScreen cheats_title_label = {
-    {                                                                             FUN_00219d80,FUN_0021a328},
+    {                                                                             FUN_00219d80,render_configured_text_label},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
-     0x4FC6  },
+     0x4FC6                  },
 };
 
 struct MenuOption configured_label_entries[13] = {
@@ -1172,7 +1270,7 @@ struct MenuOption configured_label_entries[13] = {
 };
 
 struct MenuOptionListScreen cheats_option_list = {
-    {FUN_00220e28, FUN_00221030, FUN_0021a1e0},
+    {update_menu_option_list, draw_cheats_menu, rebuild_configured_text_label_list},
     {1, configured_label_entries},
 };
 
@@ -1183,8 +1281,8 @@ struct MenuTextItem cheats_hint_items[3] = {
 };
 
 struct MenuTextListScreen cheats_hint_list = {
-    {                                   FUN_00219d80,      FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, cheats_hint_items},
+    {                                   FUN_00219d80, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,              cheats_hint_items},
 };
 
 struct MenuPage cinematics_page = {
@@ -1196,9 +1294,9 @@ struct MenuPage cinematics_page = {
 };
 
 struct MenuLabelScreen cinematics_title_label = {
-    {                                                                             FUN_00219d80,FUN_0021a328},
+    {                                                                             FUN_00219d80,render_configured_text_label},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
-     0x4FC7  },
+     0x4FC7                  },
 };
 
 struct MenuTextItem movie_page_hint_items[3] = {
@@ -1208,8 +1306,8 @@ struct MenuTextItem movie_page_hint_items[3] = {
 };
 
 struct MenuTextListScreen movie_page_hint_list = {
-    {                                   FUN_00219d80,          FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, movie_page_hint_items},
+    {                                   FUN_00219d80, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,          movie_page_hint_items},
 };
 
 struct MenuTextItem cinematics_items[30] = {
@@ -1246,8 +1344,8 @@ struct MenuTextItem cinematics_items[30] = {
 };
 
 struct MenuTextListScreen cinematics_list = {
-    {      FUN_0021abf8,     FUN_0021d4a8},
-    {MENU_LIST_CENTERED, cinematics_items},
+    {update_menu_entry_actions, draw_menu_text_list},
+    {       MENU_LIST_CENTERED,    cinematics_items},
 };
 
 struct MenuPage in_level_movies_page = {
@@ -1261,9 +1359,9 @@ struct MenuPage in_level_movies_page = {
 };
 
 struct MenuLabelScreen in_level_movies_title_label = {
-    {                                                                             FUN_00219d80,FUN_0021a328},
+    {                                                                             FUN_00219d80,render_configured_text_label},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
-     0x4FC8  },
+     0x4FC8                  },
 };
 
 /* The In-Level Movies lists, one per level (in_level_movie_lists). param.half:
@@ -1422,7 +1520,7 @@ struct MenuTextItem *in_level_movie_lists[19] = {
 };
 
 struct MenuTextListScreen in_level_movies_list = {
-    {FUN_0021abf8, FUN_0021d4a8, FUN_00221d28},
+    {update_menu_entry_actions, draw_menu_text_list, assign_pause_level_sprite_list},
     {MENU_LIST_FIXED_STEP | MENU_LIST_CENTERED | MENU_LIST_NO_SCROLL},
 };
 
@@ -1454,21 +1552,21 @@ struct MenuTextItem title_options_entry_items[2] = {
 };
 
 struct MenuTextListScreen title_new_game_entry = {
-    {FUN_0021abf8, FUN_0021b1c8},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
     {MENU_LIST_LARGE_FONT,
      title_new_game_entry_items, SCREEN(title_options_entry),
      SCREEN(title_load_game_entry)},
 };
 
 struct MenuTextListScreen title_load_game_entry = {
-    {FUN_0021abf8, FUN_0021b1c8},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
     {MENU_LIST_LARGE_FONT,
      title_load_game_entry_items, SCREEN(title_new_game_entry),
      SCREEN(title_options_entry)},
 };
 
 struct MenuTextListScreen title_options_entry = {
-    {FUN_0021abf8, FUN_0021b1c8},
+    {update_menu_entry_actions, render_localized_ui_entry_list},
     {MENU_LIST_LARGE_FONT,
      title_options_entry_items, SCREEN(title_load_game_entry),
      SCREEN(title_new_game_entry)},
@@ -1500,7 +1598,7 @@ struct MenuTextItem title_options_items_no_video[3] = {
 };
 
 struct MenuTextListScreen title_options_list = {
-    {FUN_0021abf8, FUN_0021b1c8, FUN_0021a1b0},
+    {update_menu_entry_actions, render_localized_ui_entry_list, set_pause_action_list},
 };
 
 struct MenuPage title_sound_page = {
@@ -1528,7 +1626,7 @@ struct MenuPage language_page = {
 };
 
 struct MenuLabelScreen language_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021cae0},
+    {FUN_00219d80, render_configured_text_label, reset_menu_graphics_buffers},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F2B},
 };
@@ -1543,8 +1641,8 @@ struct MenuTextItem language_items[6] = {
 };
 
 struct MenuTextListScreen language_list = {
-    {                                                         FUN_0021abf8,   FUN_0021d4a8},
-    {MENU_LIST_FIXED_STEP | MENU_LIST_LANGUAGE_MARKS | MENU_LIST_NO_SCROLL, language_items},
+    {                                            update_menu_entry_actions, draw_menu_text_list},
+    {MENU_LIST_FIXED_STEP | MENU_LIST_LANGUAGE_MARKS | MENU_LIST_NO_SCROLL,      language_items},
 };
 
 struct MenuPage video_page = {
@@ -1560,7 +1658,7 @@ struct MenuPage video_page = {
 };
 
 struct MenuLabelScreen video_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021cae0},
+    {FUN_00219d80, render_configured_text_label, reset_menu_graphics_buffers},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F3A},
 };
@@ -1571,8 +1669,8 @@ struct MenuOption video_options[2] = {
 };
 
 struct MenuOptionListScreen video_option_list = {
-    {FUN_00220e28,  FUN_00221030},
-    {           0, video_options},
+    {update_menu_option_list, draw_cheats_menu},
+    {                      0,    video_options},
 };
 
 struct MenuPage title_load_game_page = {
@@ -1600,13 +1698,13 @@ struct MenuPage new_game_page = {
 };
 
 struct MenuLabelScreen new_game_title_label = {
-    {FUN_00219d80, FUN_0021a328, FUN_0021a318},
+    {FUN_00219d80, render_configured_text_label, clear_menu_selected_index},
     {MENU_LABEL_CENTER_X | MENU_LABEL_CENTER_Y | MENU_LABEL_FIXED_TEXT | MENU_LABEL_LARGE_FONT,
      0x4F2A},
 };
 
 struct MenuSaveSlotScreen new_game_slot_list = {
-    {FUN_002235b8, FUN_002239e0, FUN_00222f18, FUN_00222f58},
+    {saving_data_menu2, draw_save_slot_list, enter_save_slot_screen, leave_save_slot_screen},
 };
 
 struct MenuTextItem new_game_hint_items[4] = {
@@ -1617,8 +1715,8 @@ struct MenuTextItem new_game_hint_items[4] = {
 };
 
 struct MenuTextListScreen new_game_hint_list = {
-    {                                              0,        FUN_0021b1c8},
-    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST, new_game_hint_items},
+    {                                              0, render_localized_ui_entry_list},
+    {MENU_LIST_FIXED_COLOR | MENU_LIST_CENTER_WIDEST,            new_game_hint_items},
 };
 
 struct MenuPage new_game_confirm_page = {
@@ -1646,7 +1744,7 @@ struct MenuPage circle_target_menu_page = {
 };
 
 struct MenuSaveSlotScreen challenge_save_slot_list = {
-    {FUN_002235b8, FUN_002239e0, FUN_00222f18, FUN_00222f58},
+    {saving_data_menu2, draw_save_slot_list, enter_save_slot_screen, leave_save_slot_screen},
     {0x2000},
 };
 

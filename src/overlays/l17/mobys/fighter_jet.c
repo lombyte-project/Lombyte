@@ -1,6 +1,6 @@
 /* Level 17 moby class fighter_jet: flight, HUD and lock marker, targeting and weapons, and the class flags helper it uses. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/mobys/moby_class_id.h"
@@ -12,9 +12,9 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/effect_texture.h"
@@ -248,7 +248,7 @@ int select_fighter_jet_target_and_draw_contacts(int   ship_moby,
         scr = (int *)(D_0013E500);
         if ((MOBY(scanned_moby)->flags & 0x1000) && MOBY(scanned_moby)->visible != 0 &&
             scanned_moby != 0 && ((char *)MOBY(scanned_moby)->pclass) != 0 &&
-            *(short *)(((char *)MOBY(scanned_moby)->pclass) + 0x46) == 5) {
+            MOBY(scanned_moby)->pclass->type == 5) {
             project_world_point_to_screen_pixels(scanned_moby + 0x10, &sx, &sy, 0);
             dx = sx - *(int *)(ship_vars + 0xE0);
             dy = sy - *(int *)(ship_vars + 0xE4);
@@ -484,7 +484,7 @@ int select_fighter_jet_target_and_draw_contacts(int   ship_moby,
             break;
         default:
             if (scanned_moby != 0 && ((char *)MOBY(scanned_moby)->pclass) != 0 &&
-                *(short *)(((char *)MOBY(scanned_moby)->pclass) + 0x46) == 5) {
+                MOBY(scanned_moby)->pclass->type == 5) {
                 draw_fighter_jet_radar_contact_icon(radar_rotation,
                                                     radar_origin,
                                                     scanned_moby,

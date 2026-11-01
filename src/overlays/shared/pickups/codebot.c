@@ -4,14 +4,15 @@
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/save/memcard_save_data.h"
 #include "rnc/game/item_state.h"
+#include "rnc/overlay/shared/pickups/gadget_pickup.h"
 
 typedef struct {
     char           pad0[0x10];
@@ -32,8 +33,6 @@ typedef struct {
 } Obj;
 
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
-extern void update_collectible_sprite_effect(char *) __asm__("FUN_L02_002ea8b0");
 
 extern int   D_L15_0015F5C4;
 extern float D_L15_001621A0 __attribute__((sda));

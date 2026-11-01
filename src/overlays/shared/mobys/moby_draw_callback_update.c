@@ -4,10 +4,10 @@
 #include "rnc/audio/streaming/register_audio_stream_callback.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/rendering/build_interpolated_dma_packet.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct Moby Moby;
 
-extern void          add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char l03_draw_callback_setup_byte_target[] __asm__("D_L03_001DC1A0");
 
 void moby_draw_callback_update(struct Moby *moby) __asm__("FUN_L03_002dc9b0");

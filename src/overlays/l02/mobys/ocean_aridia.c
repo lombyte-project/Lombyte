@@ -7,9 +7,10 @@
 #include "rnc/rendering/lights/refresh_point_light.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/interpolated_frame_packet.h"
+#include "rnc/overlay/shared/rendering/interpolated_frame_packet.h"
 
 #include "rnc/overlay/l02/mobys/ocean_aridia_globals.h"
+#include "rnc/overlay/shared/rendering/build_interpolated_dma_packet.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59D8), where it is exact; names translated to the US level program. */
 
@@ -29,7 +30,6 @@ extern void FUN_L02_002101b8(void *, int, int);
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59F8), where it is exact; names translated to the US level program. */
 
 extern char animated_frame_scratchpad_dma_source[] __asm__("D_L02_001CB400");
-extern void build_interpolated_dma_packet(void *) __asm__("FUN_L02_002a40f0");
 
 /* Sets up an animated frame draw: four header floats, the fog colour, ticks per frame, the frame
    range and its packet. The floats are declared first, in the order the caller passes them (they

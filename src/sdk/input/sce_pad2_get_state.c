@@ -1,4 +1,8 @@
 #include "types.h"
+#include "rnc/sdk/input/dbc/scedbcreceivedata.h"
+#include "rnc/sdk/input/sce_pad2_check_dma.h"
+#include "rnc/sdk/input/sce_pad2_get_side.h"
+#include "rnc/sdk/input/sce_pad2_link_driver.h"
 
 typedef struct {
     u64 size : 14;
@@ -25,11 +29,7 @@ typedef struct {
     s32 linked;
 } Pad2Side;
 
-extern Pad2Info  D_0015B540[];
-extern s32       sceDbcReceiveData(s32 port, s32 cmd, void *buf, void *data);
-extern s32       scePad2LinkDriver(s32 socket);
-extern s32       scePad2CheckDma(s32 socket);
-extern Pad2Side *scePad2GetSide(s32 socket);
+extern Pad2Info D_0015B540[];
 
 s32 scePad2GetState(s32 socket) {
     DbcCommandWord cmd;

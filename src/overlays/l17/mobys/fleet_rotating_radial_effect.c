@@ -5,7 +5,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -15,8 +15,12 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/math/normalize_vector_triplet.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l17/mobys/fleet_rotating_radial_effect_globals.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* Fleet moby 669 update: spins up, then sprays particles from points on a rotating ring. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D8CC8), where it is exact; names translated to the US level program. */
@@ -37,10 +41,6 @@ struct Blk {
 };
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
-extern int   hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
-extern int   rand(void);
-extern int   random_integer_below(int);
 extern short fleet_radial_rotation_rate_degrees_factor __asm__("D_L17_00161B78")
     __attribute__((sda));
 extern short fleet_radial_base_elevation_degrees __asm__("D_L17_00161B7C") __attribute__((sda));
@@ -51,15 +51,7 @@ extern short fleet_radial_particle_scale __asm__("D_L17_00161B8C") __attribute__
 extern short fleet_radial_particle_lifetime_range_end __asm__("D_L17_00161B90")
     __attribute__((sda));
 extern short fleet_radial_particle_color __asm__("D_L17_00161B94") __attribute__((sda));
-extern unsigned char      *
-spawn_moving_hero_relative_alpha_fade_particle(float        *pos,
-                                                    char         *vel,
-                                                    int           color,
-                                                    unsigned char life,
-                                                    unsigned char b,
-                                                    int           mode,
-                                                    float         scale) __asm__("FUN_L00_002730e0");
-void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
+void         draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 
 void fleet_rotating_radial_effect_update(char *moby) __asm__("FUN_L17_002d77f0");
 
@@ -156,7 +148,7 @@ void fleet_rotating_radial_effect_update(char *moby) {
                         {
                             for (k = 0; k < *(int *)&fleet_radial_particles_per_emission; k++) {
                                 particle_direction_sign_or_minimum_speed = -1.0f;
-                                if (rand() & 1)
+                                if (RandomNext() & 1)
                                     particle_direction_sign_or_minimum_speed = 1.0f;
                                 particle_lifetime =
                                     truncate_float_to_s32(scale_time(random_float_between(

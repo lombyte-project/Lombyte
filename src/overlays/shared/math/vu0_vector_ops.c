@@ -4,16 +4,16 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd108.s", FUN_L00_001fd108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd1c8.s", FUN_L00_001fd1c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fde98.s", FUN_L00_001fde98);
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 extern char D_L00_0016EA40_001fe990[] __asm__("D_L00_0016EA40");
-float       random_angle_radians() __asm__("FUN_00213308");
 /* Fills the first free 0x20-byte glints slot with v, b and x; returns its index or -1. */
 int allocate_glint_slot(u128 *input_payload, int b, float x) __asm__("FUN_L00_001fe990");
 

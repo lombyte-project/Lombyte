@@ -1,7 +1,7 @@
 /* Level 03 moby class kerwan_path_enemy: an enemy that walks a path ring and turns toward its target. */
 #include "types.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -18,7 +18,7 @@
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l03/mobys/homing_rocket.h"
 #include "rnc/overlay/l03/mobys/robot_dog.h"
 
@@ -31,16 +31,24 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                                              struct Moby *moby,
                                              struct Moby *target) __asm__("FUN_L03_002c6e18");
 
+typedef struct KerwanPathEnemyVars {
+    u8  pad_0[0x263];
+    u8  unk263;
+    s32 unk264;
+    u8  pad_268[0x24];
+    f32 unk28C;
+} KerwanPathEnemyVars;
+
 int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                                              struct Moby *moby,
 
                                              struct Moby *target) {
-    char         *enemy_pvars = (char *)moby->pvars;
-    int           linked_moby_index;
-    float         heading_delta;
-    unsigned char previous_state;
+    KerwanPathEnemyVars *enemy_pvars = (KerwanPathEnemyVars *)moby->pvars;
+    int                  linked_moby_index;
+    float                heading_delta;
+    unsigned char        previous_state;
     if (*(int *)&target->rot != 0) {
-        linked_moby_index = *(int *)(enemy_pvars + 0x264);
+        linked_moby_index = enemy_pvars->unk264;
         if (linked_moby_index != -1) {
             char *linked_moby = (char *)(linked_moby_index << 8) + (int)*(char **)&D_L03_0015FFD8_u;
             if (MOBY(linked_moby)->oclass == 0x336) {
@@ -49,8 +57,8 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
             }
         }
         heading_delta = fast_subtract_rotations(desired_heading, moby->rot.z);
-        if (absolute_float(heading_delta) >= 0.7853982f &&
-            *(unsigned char *)(enemy_pvars + 0x263) == 0 && moby->prev_seq != 1) {
+        if (absolute_float(heading_delta) >= 0.7853982f && enemy_pvars->unk263 == 0 &&
+            moby->prev_seq != 1) {
             goto go;
         }
         if (absolute_float(heading_delta) > 1.5707964f) {
@@ -62,7 +70,7 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                 } else {
                     blend_moby_animation(moby, 9, 0, scale_game_frames(10));
                 }
-                *(float *)(enemy_pvars + 0x28C) = desired_heading;
+                enemy_pvars->unk28C = desired_heading;
                 previous_state = moby->state;
                 moby->state = 0xC;
                 moby->command = previous_state;

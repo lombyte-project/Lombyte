@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_AUDIO_SOUND_CALCULATE_VOICE_PAN_H
+#define LOMBYTE_RNC_AUDIO_SOUND_CALCULATE_VOICE_PAN_H
+
+#include "types.h"
+
+s32 calculate_voice_pan(s32, f32 *, void *) __asm__("FUN_0022c830");
+
+#endif /* LOMBYTE_RNC_AUDIO_SOUND_CALCULATE_VOICE_PAN_H */

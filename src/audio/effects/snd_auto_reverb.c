@@ -12,10 +12,10 @@ void snd_auto_reverb(s32 reverb_payload_word_0,
                      s32 reverb_payload_word_2,
 
                      s32 reverb_payload_word_3) {
-    u8 sp_slot[0x10];
-    *(s32 *)(sp_slot + 0) = reverb_payload_word_0;
-    *(s32 *)(sp_slot + 4) = reverb_payload_word_1;
-    *(s32 *)(sp_slot + 8) = reverb_payload_word_2;
-    *(s32 *)(sp_slot + 12) = reverb_payload_word_3;
-    snd_send_iop_command_no_wait(16, 16, sp_slot, 0, 0);
+    s32 command[4];
+    command[0] = reverb_payload_word_0;
+    command[1] = reverb_payload_word_1;
+    command[2] = reverb_payload_word_2;
+    command[3] = reverb_payload_word_3;
+    snd_send_iop_command_no_wait(16, 16, command, 0, 0);
 }

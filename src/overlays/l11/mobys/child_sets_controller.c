@@ -7,7 +7,7 @@
 #include "qcopy.h"
 #include "rnc/game/item_state.h"
 #include "sda.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -47,7 +47,7 @@ float               D_L11_00161EF8 = 0;
 extern float        D_L11_0015F3FC;
 extern int          D_L11_0015FFD8_c788 __asm__("D_L11_0015FFD8");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern int   test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");

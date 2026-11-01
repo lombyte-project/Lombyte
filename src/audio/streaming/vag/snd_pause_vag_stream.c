@@ -5,9 +5,9 @@ snd_send_iop_command_no_wait(s32 cmd, s32 size, void *buf, s32 a, s32 b) __asm__
 void snd_pause_vag_stream(s32 sound_handle) __asm__("FUN_0012ec70");
 
 void snd_pause_vag_stream(s32 sound_handle) {
-    u8 sp_slot[0x10];
-    *(s32 *)(sp_slot + 0) = sound_handle;
-    snd_send_iop_command_no_wait(45, 4, sp_slot, 0, 0);
+    s32 command[4];
+    command[0] = sound_handle;
+    snd_send_iop_command_no_wait(45, 4, command, 0, 0);
 }
 
 /* Recovered original symbol name. */

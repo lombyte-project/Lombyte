@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
@@ -13,12 +13,12 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
-extern char  D_L09_00166F40_2ef9b0[] __asm__("D_L09_00166F40");
-extern void *spawn_spark_2ef9b0(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
+extern char D_L09_00166F40_2ef9b0[] __asm__("D_L09_00166F40");
 
 /* The heavier tumbling debris: as FUN_L09_002ef430, inside a 2..1021 box, with eight sparks; on a hit it either
    slows down or bounces off, shrinking, with a new random spin. */
@@ -57,11 +57,11 @@ void shrinking_tumbling_debris_update(struct Moby *moby) {
             fast_vec_normalize(spark_velocity,
                                spark_velocity,
                                random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-            spawn_spark_2ef9b0(&moby->pos,
-                               spark_velocity,
-                               0x7F2F4F6F,
-                               random_int_between(scale_game_frames(10), scale_game_frames(15)),
-                               100000.0f);
+            FUN_L00_0026dd20(&moby->pos,
+                             spark_velocity,
+                             0x7F2F4F6F,
+                             random_int_between(scale_game_frames(10), scale_game_frames(15)),
+                             100000.0f);
         }
         mark_moby_for_removal(moby);
         return;

@@ -4,7 +4,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"

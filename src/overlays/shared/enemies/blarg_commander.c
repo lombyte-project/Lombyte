@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -154,7 +154,7 @@ void blarg_commander_update(char *moby) {
         mo->vy = fast_add_rotations(mo->vy, frame_time * 4.3633232f);
         MOBY(moby)->flags &= 0xEFFF;
         if (motion_result_flags & 0x61) {
-            qcopy(raised_position, moby + 0x10);
+            qcopy(raised_position, &MOBY(moby)->pos);
             ((float *)raised_position)[2] += 1.0f;
             spawn_explosion(moby,
                             motion_state,

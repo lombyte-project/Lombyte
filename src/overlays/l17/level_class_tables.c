@@ -1,3 +1,112 @@
+#include "rnc/mobys/quad_moby_update.h"
+#include "rnc/overlay/l17/mobys/blarg_ship.h"
+#include "rnc/overlay/l17/mobys/breakaway_prop.h"
+#include "rnc/overlay/l17/mobys/camera_box_watcher.h"
+#include "rnc/overlay/l17/mobys/cutscene_camera_target.h"
+#include "rnc/overlay/l17/mobys/door.h"
+#include "rnc/overlay/l17/mobys/dreks_fleet_turret.h"
+#include "rnc/overlay/l17/mobys/dreks_fleet_turret_shot.h"
+#include "rnc/overlay/l17/mobys/fighter_jet.h"
+#include "rnc/overlay/l17/mobys/fleet_backdrop.h"
+#include "rnc/overlay/l17/mobys/fleet_beam.h"
+#include "rnc/overlay/l17/mobys/fleet_rotating_radial_effect.h"
+#include "rnc/overlay/l17/mobys/floating_mine.h"
+#include "rnc/overlay/l17/mobys/magnet_elevator.h"
+#include "rnc/overlay/l17/mobys/robot_dog.h"
+#include "rnc/overlay/l17/mobys/shattering_prop.h"
+#include "rnc/overlay/l17/mobys/shuttle.h"
+#include "rnc/overlay/shared/audio/emitters/listener_emitter.h"
+#include "rnc/overlay/shared/camera/follow_camera_setup.h"
+#include "rnc/overlay/shared/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/camera/grindrail_camera.h"
+#include "rnc/overlay/shared/camera/hero_aligned_camera.h"
+#include "rnc/overlay/shared/camera/orbit_camera.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
+#include "rnc/overlay/shared/camera/swing_volume_camera.h"
+#include "rnc/overlay/shared/camera/target_tracking_camera.h"
+#include "rnc/overlay/shared/enemies/billboard_projectile.h"
+#include "rnc/overlay/shared/enemies/blarg_elite_commando_rocket.h"
+#include "rnc/overlay/shared/enemies/blarg_ship_rocket.h"
+#include "rnc/overlay/shared/enemies/blarg_ship_shot.h"
+#include "rnc/overlay/shared/enemies/ground_melee_enemy.h"
+#include "rnc/overlay/shared/enemies/hero_seeking_mine.h"
+#include "rnc/overlay/shared/enemies/sentrybot.h"
+#include "rnc/overlay/shared/enemies/sentrybot_alarm.h"
+#include "rnc/overlay/shared/enemies/sentrybot_projectile.h"
+#include "rnc/overlay/shared/enemies/smoke_trail_projectile.h"
+#include "rnc/overlay/shared/enemies/spiderbot.h"
+#include "rnc/overlay/shared/mobys/camera_object.h"
+#include "rnc/overlay/shared/mobys/draw_only_moby_update.h"
+#include "rnc/overlay/shared/pickups/buried_bolts.h"
+#include "rnc/overlay/shared/pickups/codebot.h"
+#include "rnc/overlay/shared/pickups/crate.h"
+#include "rnc/overlay/shared/pickups/crate_fragment.h"
+#include "rnc/overlay/shared/pickups/fighter_jet_crate.h"
+#include "rnc/overlay/shared/pickups/infobot.h"
+#include "rnc/overlay/shared/pickups/nanotech_ball.h"
+#include "rnc/overlay/shared/pickups/pilots_helmet.h"
+#include "rnc/overlay/shared/pickups/weapon_ammo.h"
+#include "rnc/overlay/shared/props/electric_beam.h"
+#include "rnc/overlay/shared/props/electric_water.h"
+#include "rnc/overlay/shared/props/energy_sphere.h"
+#include "rnc/overlay/shared/props/energy_sphere_holder.h"
+#include "rnc/overlay/shared/props/floor_button.h"
+#include "rnc/overlay/shared/props/group_rotator.h"
+#include "rnc/overlay/shared/props/grow_and_fade_out.h"
+#include "rnc/overlay/shared/props/hydrodisplacer.h"
+#include "rnc/overlay/shared/props/linked_spark_emitter.h"
+#include "rnc/overlay/shared/props/moby_state_trigger.h"
+#include "rnc/overlay/shared/props/ripple_strips.h"
+#include "rnc/overlay/shared/props/rock.h"
+#include "rnc/overlay/shared/props/swingshot_versatarget.h"
+#include "rnc/overlay/shared/props/tumbling_part.h"
+#include "rnc/overlay/shared/props/underwater_door.h"
+#include "rnc/overlay/shared/props/underwater_ring.h"
+#include "rnc/overlay/shared/props/updraft_vent.h"
+#include "rnc/overlay/shared/rendering/effects/debris.h"
+#include "rnc/overlay/shared/rendering/effects/explosion_light.h"
+#include "rnc/overlay/shared/rendering/effects/glow_particle.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
+#include "rnc/overlay/shared/vehicles/fighter_jet_missile.h"
+#include "rnc/overlay/shared/vehicles/fighter_jet_rocket.h"
+#include "rnc/overlay/shared/vehicles/ship_rocket.h"
+#include "rnc/overlay/shared/vendor/vendor.h"
+#include "rnc/overlay/shared/vendor/vendor_orb.h"
+#include "rnc/overlay/shared/weapons/blaster.h"
+#include "rnc/overlay/shared/weapons/blaster_shot.h"
+#include "rnc/overlay/shared/weapons/bomb_glove.h"
+#include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
+#include "rnc/overlay/shared/weapons/decoy.h"
+#include "rnc/overlay/shared/weapons/decoy_glove.h"
+#include "rnc/overlay/shared/weapons/devastator.h"
+#include "rnc/overlay/shared/weapons/doom_bot.h"
+#include "rnc/overlay/shared/weapons/drone.h"
+#include "rnc/overlay/shared/weapons/glove_of_doom.h"
+#include "rnc/overlay/shared/weapons/glove_of_doom_bomb.h"
+#include "rnc/overlay/shared/weapons/gold_devastator_missile.h"
+#include "rnc/overlay/shared/weapons/helipack.h"
+#include "rnc/overlay/shared/weapons/linked_moby_states_update.h"
+#include "rnc/overlay/shared/weapons/metal_detector.h"
+#include "rnc/overlay/shared/weapons/mine.h"
+#include "rnc/overlay/shared/weapons/mine_glove.h"
+#include "rnc/overlay/shared/weapons/morphoray.h"
+#include "rnc/overlay/shared/weapons/morphoray_chicken.h"
+#include "rnc/overlay/shared/weapons/morphoray_chicken_feather.h"
+#include "rnc/overlay/shared/weapons/morphoray_target_effect.h"
+#include "rnc/overlay/shared/weapons/pyrocitor.h"
+#include "rnc/overlay/shared/weapons/ryno.h"
+#include "rnc/overlay/shared/weapons/ryno_rocket.h"
+#include "rnc/overlay/shared/weapons/suckcannon.h"
+#include "rnc/overlay/shared/weapons/swingshot.h"
+#include "rnc/overlay/shared/weapons/swingshot_hook.h"
+#include "rnc/overlay/shared/weapons/taunter.h"
+#include "rnc/overlay/shared/weapons/tesla_claw.h"
+#include "rnc/overlay/shared/weapons/thruster_pack_flame.h"
+#include "rnc/overlay/shared/weapons/trailing_flame.h"
+#include "rnc/overlay/shared/weapons/trespasser.h"
+#include "rnc/overlay/shared/weapons/visibomb.h"
+#include "rnc/overlay/shared/weapons/visibomb_missile.h"
+#include "rnc/overlay/shared/weapons/walloper.h"
 /* The level's moby classes, camera types and sound emitter types: the tables
    the executable's code looks ids up in (sections lvl.vtbl, lvl.camvtbl and
    lvl.sndvtbl). */
@@ -6,134 +115,9 @@
 #include "rnc/camera/update_cam.h"
 #include "rnc/mobys/moby_class_tables.h"
 
-void FUN_L00_002caf40();
-void FUN_L00_002ea7a0();
-void FUN_L00_002ed230();
-void ammocrate_update() __asm__("FUN_L13_002e1cc8");
-void billboard_projectile_update() __asm__("FUN_L01_002c7530");
-void blarg_elite_commando_rocket_update() __asm__("FUN_L15_0029ac30");
-void blarg_ship_rocket_update() __asm__("FUN_L10_002cc2e8");
-void blarg_ship_shot_update() __asm__("FUN_L11_00309098");
-void blarg_ship_update() __asm__("FUN_L17_002f40d8");
-void blaster_update() __asm__("FUN_L00_002b49a8");
 void bolt_update() __asm__("FUN_L00_002a5dd8");
-void bomb_glove_update() __asm__("FUN_L00_002c26c8");
-void bomb_update() __asm__("FUN_L00_002adb30");
-void breakaway_prop_update() __asm__("FUN_L17_002f5390");
-void buried_bolts_update() __asm__("FUN_L01_002f2eb8");
-void camera_object_update() __asm__("FUN_L00_002a4e48");
-void camera_transition_update() __asm__("FUN_L00_002ea488");
-void cancel_suck_cannon_suction_and_set_moby_state_5() __asm__("FUN_L00_002caf10");
-void cancel_suck_cannon_suction_and_set_state_12() __asm__("FUN_L17_002f0040");
-void codebot_update() __asm__("FUN_L15_002ebd78");
-void conditionally_set_camera_state_three() __asm__("FUN_L00_002ec7b0");
-void crate_update() __asm__("FUN_L00_002cf218");
-void cutscene_camera_target_update() __asm__("FUN_L17_002f2e78");
-void damped_falling_moby_update() __asm__("FUN_L00_002cc210");
-void debris_update() __asm__("FUN_L00_002af5b8");
-void decoy_glove_update() __asm__("FUN_L00_002d2670");
-void decoy_update() __asm__("FUN_L00_002c4380");
-void devastator_update() __asm__("FUN_L00_002b2100");
-void devestator_ammo_update() __asm__("FUN_L00_002c53c0");
-void doom_bot_spawner_update() __asm__("FUN_L00_002c89e8");
-void doom_bot_update() __asm__("FUN_L00_002bffa8");
-void door_update() __asm__("FUN_L17_002e87d8");
-void draw_only_moby_update() __asm__("FUN_L16_002e9df0");
-void dreks_fleet_turret_update() __asm__("FUN_L17_002cb310");
-void drone_update() __asm__("FUN_L00_002ce358");
-void electric_beam_update() __asm__("FUN_L14_003015d0");
-void electric_water_update() __asm__("FUN_L15_002d6810");
-void enemy_stun_update() __asm__("FUN_L17_002efea8");
-void energy_sphere_holder_update() __asm__("FUN_L06_002f7288");
-void energy_sphere_update() __asm__("FUN_L06_002f7ab8");
-void explosion_light_update() __asm__("FUN_L00_002d3a10");
-void fighter_jet_missile_update() __asm__("FUN_L11_003089d0");
-void fighter_jet_rocket_update() __asm__("FUN_L13_002e6c08");
-void fighter_jet_update() __asm__("FUN_L17_002ed018");
-void fleet_backdrop_animation_update() __asm__("FUN_L17_002f3848");
-void fleet_beam_update() __asm__("FUN_L17_002a8da0");
-void fleet_camera_box_watcher_update() __asm__("FUN_L17_002f26d0");
-void fleet_rotating_radial_effect_update() __asm__("FUN_L17_002d77f0");
-void fleet_turret_shot_update() __asm__("FUN_L17_002e8e08");
-void floating_mine_update() __asm__("FUN_L17_002dc3f8");
-void floor_button_update() __asm__("FUN_L05_0030c5b0");
-void follow_camera_setup() __asm__("FUN_L00_002e6d60");
-void follow_camera_update() __asm__("FUN_L00_002e9c28");
-void get_moby_data_plus_0x60() __asm__("FUN_L01_002f1df8");
-void glove_of_doom_update() __asm__("FUN_L00_002c7a58");
-void glow_particle_update() __asm__("FUN_L00_002acad8");
-void gold_bolt_update() __asm__("FUN_L01_00307ca0");
-void gold_devastator_missile_update() __asm__("FUN_L00_002b03a0");
-void grow_and_fade_out_update() __asm__("FUN_L00_002d7f38");
-void helipack_update() __asm__("FUN_L00_002d37d0");
-void hero_seeking_mine_update() __asm__("FUN_L15_002a2488");
-void homing_shot_update() __asm__("FUN_L00_002cb418");
-void hud_counter_update() __asm__("FUN_L00_002371e0");
-void hydrodisplacer_update() __asm__("FUN_L00_002df9a0");
-void infobot_update() __asm__("FUN_L00_002d5de8");
-void initialize_camera_pose_springs() __asm__("FUN_L00_002ead60");
-void initialize_camera_transform_and_paths() __asm__("FUN_L01_00315de0");
-void initialize_orbit_camera_from_hero() __asm__("FUN_L00_002ebb00");
-void initialize_target_tracking_camera() __asm__("FUN_L00_002ebbd8");
-void launch_suck_cannon_projectile_and_update_moby_state() __asm__("FUN_L00_002cae60");
-void linked_moby_states_update() __asm__("FUN_L00_002b3458");
-void linked_spark_emitter_update() __asm__("FUN_L15_002a2bf0");
-void magnet_elevator_update() __asm__("FUN_L17_002ee2b0");
-void metal_detector_update() __asm__("FUN_L00_002d2ee8");
-void mine_glove_update() __asm__("FUN_L00_002c1ad0");
-void mine_update() __asm__("FUN_L00_002aa670");
-void moby_rotation_group_update() __asm__("FUN_L06_002f4f00");
-void moby_set_state_from_check() __asm__("FUN_L00_002cadc0");
-void moby_spatial_trigger_update() __asm__("FUN_L05_002f5200");
-void morphoray_chicken_update() __asm__("FUN_L00_002c97e0");
-void morphoray_target_effect_update() __asm__("FUN_L00_002d7f88");
-void morphoray_update() __asm__("FUN_L00_002bc7e8");
-void nanotech_ball_update() __asm__("FUN_L00_002d89f0");
-void nanotech_crate_fragment_update() __asm__("FUN_L00_002afa48");
 void noop_callback_l() __asm__("FUN_001e9448");
 void noop_main_callback() __asm__("FUN_001e93e8");
-void pilots_helmet_update() __asm__("FUN_L00_002e03a0");
-void pyrocitor_update() __asm__("FUN_L00_002b77f0");
-void quad_moby_update() __asm__("FUN_0023a2c0");
-void ripple_strips_moby_update() __asm__("FUN_L15_002eb0a0");
-void robot_dog_update() __asm__("FUN_L17_002eeb68");
-void ryno_rocket_update() __asm__("FUN_L00_002cd1f0");
-void ryno_update() __asm__("FUN_L00_002cc608");
-void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
-void sentrybot_alarm_update() __asm__("FUN_L15_002cb4c8");
-void sentrybot_projectile_update() __asm__("FUN_L15_002e4380");
-void sentrybot_update() __asm__("FUN_L15_002979d8");
-void shattering_prop_update() __asm__("FUN_L17_002f5260");
-void ship_rocket_update() __asm__("FUN_L11_003094f8");
-void shuttle_update() __asm__("FUN_L17_002f1940");
-void smoke_trail_projectile_update() __asm__("FUN_L01_002eda00");
-void spawn_point_update() __asm__("FUN_L01_00300220");
-void spiderbot_update() __asm__("FUN_L15_002a6e68");
-void suckcannon_update() __asm__("FUN_L00_002da790");
-void swingshot_hook_update() __asm__("FUN_L00_002c7070");
-void swingshot_update() __asm__("FUN_L00_002c6158");
-void swingshot_versatarget_update() __asm__("FUN_L02_002e0450");
-void taunter_update() __asm__("FUN_L00_002b6f10");
-void teleporter_update() __asm__("FUN_L01_00308bd8");
-void tesla_claw_update() __asm__("FUN_L00_002b87e0");
-void thruster_pack_flame_update() __asm__("FUN_L00_002b4198");
-void trailing_flame_update() __asm__("FUN_L00_002bb400");
-void trespasser_update() __asm__("FUN_L00_002c1718");
-void tumbling_part_update() __asm__("FUN_L00_002e3d88");
-void underwater_door_update() __asm__("FUN_L15_002bddb0");
-void underwater_ring_update() __asm__("FUN_L15_002e5958");
-void update_camera_mode_from_preset() __asm__("FUN_L01_00316030");
-void update_camera_pose_with_optional_collision() __asm__("FUN_L00_002eb218");
-void update_camera_position_and_orientation_from_paths() __asm__("FUN_L01_00315358");
-void update_hero_aligned_camera_from_input() __asm__("FUN_L00_002e9f38");
-void update_listener_emitter() __asm__("FUN_L01_0031a078");
-void update_target_tracking_camera() __asm__("FUN_L00_002ec6c0");
-void updraft_vent_update() __asm__("FUN_L10_002e9028");
-void vendor_orb_update() __asm__("FUN_L00_002df730");
-void vendor_update() __asm__("FUN_L00_002a57a8");
-void visibomb_missile_update() __asm__("FUN_L00_002b6140");
-void visibomb_update() __asm__("FUN_L00_002b3058");
-void walloper_update() __asm__("FUN_L00_002bb558");
 void wrench_update() __asm__("FUN_L00_002a84c8");
 
 void *default_moby_methods[6] __asm__("D_L17_001E7824")
@@ -332,22 +316,22 @@ struct MobyClassUpdate moby_classes[163] __asm__("D_L17_001E7080")
 };
 
 struct CameraType level_camera_types[8] __asm__("D_L17_001E7880") __attribute__((section("lvl.camvtbl"))) = {
-    { 0,noop_callback_l,                   follow_camera_setup,follow_camera_update,                          noop_main_callback                                                                     },
+    { 0,   noop_callback_l,                   follow_camera_setup,follow_camera_update,                          noop_main_callback                                                                          },
     { 3,
      noop_callback_l, initialize_camera_transform_and_paths,
-     update_camera_position_and_orientation_from_paths,              update_camera_mode_from_preset                                    },
+     update_camera_position_and_orientation_from_paths,              update_camera_mode_from_preset                                         },
     { 4,
-     camera_transition_update,                      FUN_L00_002ea7a0,
-     update_hero_aligned_camera_from_input, select_camera_mode_by_hero_vector_alignment                                                },
+     camera_transition_update,   initialize_hero_aligned_camera_mode,
+     update_hero_aligned_camera_from_input, select_camera_mode_by_hero_vector_alignment                                                     },
     { 5,
      noop_callback_l,        initialize_camera_pose_springs,
-     update_camera_pose_with_optional_collision,                          noop_main_callback                                           },
-    { 6,      noop_callback_l,     initialize_orbit_camera_from_hero,   hud_counter_update,                          noop_main_callback},
+     update_camera_pose_with_optional_collision,                          noop_main_callback                                                },
+    { 6,           noop_callback_l,     initialize_orbit_camera_from_hero,   hud_counter_update,                          noop_main_callback},
     { 7,
      noop_callback_l,     initialize_target_tracking_camera,
-     update_target_tracking_camera,        conditionally_set_camera_state_three                                                        },
-    {17,     FUN_L00_002ed230,                    noop_main_callback,   noop_main_callback,                          noop_main_callback},
-    {-1,                    0,                                     0,                    0,                                           0},
+     update_target_tracking_camera,        conditionally_set_camera_state_three                                                             },
+    {17, volume_camera_swing_check,                    noop_main_callback,   noop_main_callback,                          noop_main_callback},
+    {-1,                         0,                                     0,                    0,                                           0},
 };
 
 struct SoundHandler sound_handlers[2] __asm__("D_L17_001E7980")

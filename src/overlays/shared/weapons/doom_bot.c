@@ -12,7 +12,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -135,13 +135,13 @@ unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initi
     unsigned char *spawned_moby = create_moby(0xba);
     if (spawned_moby) {
         char *moby_vars;
-        spawned_moby[0x30] = 0xff;
+        MOBY(spawned_moby)->update_dist = 0xff;
         MOBY(spawned_moby)->draw_dist = 0xff;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         moby_vars = ((char *)MOBY(spawned_moby)->pvars);
-        spawned_moby[0x20] = 0;
-        spawned_moby[0xbc] = 0;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->command = 0;
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         qcopy(moby_vars + 0x10, initial_vector);
         *(int *)(moby_vars + 0x60) = linked_moby;
         update_entity(spawned_moby);

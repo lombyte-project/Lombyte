@@ -1,6 +1,6 @@
 /* Level 16 moby class chicken_relocator (0x783): triggers its target moby, then moves a morphoray chicken of its group there. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -18,9 +18,9 @@
 #include "rnc/audio/voice_alloc.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -41,10 +41,11 @@
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
+#include "rnc/world/collision/ground_probe.h"
 
 extern float D_0015ED6C;
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern float D_0015ED6C, frame_time;
 
@@ -70,14 +71,25 @@ extern float reposition_effect_radius_range_end_gp __asm__("D_L16_001618FC") __a
 void         reposition_moby_with_collision_check(struct Moby *moby,
                                                   void        *new_position) __asm__("FUN_L16_002c44f0");
 
+typedef struct ChickenRelocatorVars {
+    u8  pad_0[0x4];
+    s32 unk4;
+    s32 unk8;
+    s32 timer_C;
+    u8  pad_10[0x56];
+    s16 unk66;
+    u8  pad_68[0x10];
+    f32 unk78;
+} ChickenRelocatorVars;
+
 void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) {
-    float origin[4];
-    float pos[4];
-    float effect_velocity[4];
-    float effect_spawn_position[4];
-    float effect_position_angle, random_effect_angle, radius, speed;
-    int   i;
-    char *moby_data;
+    float                 origin[4];
+    float                 pos[4];
+    float                 effect_velocity[4];
+    float                 effect_spawn_position[4];
+    float                 effect_position_angle, random_effect_angle, radius, speed;
+    int                   i;
+    ChickenRelocatorVars *moby_data;
     *(OvlQuad *)origin = *(OvlQuad *)new_position;
     {
         float *start = origin;
@@ -112,14 +124,14 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
         } while (--i >= 0);
         allocate_voice_for_target_entry(1, 0, moby);
     } else {
-        moby_data = (char *)moby->pvars;
-        *(float *)(moby_data + 0x78) = 1.0f;
+        moby_data = (ChickenRelocatorVars *)moby->pvars;
+        moby_data->unk78 = 1.0f;
         if (moby->prev_seq != 2)
             blend_moby_animation(moby, 2, 0, 1);
         moby->flags = (moby->flags | 0x1000) & 0xFFBE;
         moby->collision = moby->pclass->collision;
         moby->state = 4;
-        *(short *)(moby_data + 0x66) = scale_game_frames(0xB4);
+        moby_data->unk66 = scale_game_frames(0xB4);
     }
 }
 
@@ -175,8 +187,7 @@ extern char *D_L16_0015FFD8;
 char *find_group_chicken_in_state_6(int moby_group_index) __asm__("FUN_L16_002e8b08");
 
 char *find_group_chicken_in_state_6(int idx) __asm__("FUN_L16_002e8b08");
-f32   probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
-s32   is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+s32   is_point_inside_clip_volume(s32 point, s32 volume_index) __asm__("FUN_00214720");
 
 void chicken_relocator_update(struct Moby *moby) __asm__("FUN_L16_002e8970");
 
@@ -191,27 +202,26 @@ void chicken_relocator_update(struct Moby *moby) {
         TARGET_STATUS_INACTIVE = 0,
         TARGET_STATUS_REPOSITION_READY = 2
     };
-    char *hero_position = (char *)&hero.motion.pos;
-    char *target_cycle_data = (char *)moby->pvars;
-    char *target;
-    int   target_status;
-    float pos[4];
-    if (!is_point_inside_clip_volume(hero_position, *(int *)(target_cycle_data + 8)))
+    char                 *hero_position = (char *)&hero.motion.pos;
+    ChickenRelocatorVars *target_cycle_data = (ChickenRelocatorVars *)moby->pvars;
+    char                 *target;
+    int                   target_status;
+    float                 pos[4];
+    if (!is_point_inside_clip_volume(hero_position, target_cycle_data->unk8))
         return;
-    target = D_L16_0015FFD8 + (*(int *)(target_cycle_data + 4) << 8);
+    target = D_L16_0015FFD8 + (target_cycle_data->unk4 << 8);
     switch (moby->state) {
     case TARGET_CYCLE_INITIALIZE_DELAY:
         moby->state = 1;
-        *(int *)(target_cycle_data + 0xC) = scale_game_frames(random_int_between(0xB4, 0x168));
+        target_cycle_data->timer_C = scale_game_frames(random_int_between(0xB4, 0x168));
         break;
     case TARGET_CYCLE_WAIT_TO_TRIGGER:
         if (vector_distance_xy(hero_position, target + 0x10) > 3.0f) {
             if (find_group_chicken_in_state_6(*(int *)target_cycle_data) != 0) {
-                if (fast_dec_timer(target_cycle_data + 0xC)) {
+                if (fast_dec_timer(&target_cycle_data->timer_C)) {
                     moby->state = 2;
                     request_target_reposition(target);
-                    *(int *)(target_cycle_data + 0xC) =
-                        scale_game_frames(random_int_between(0xB4, 0x168));
+                    target_cycle_data->timer_C = scale_game_frames(random_int_between(0xB4, 0x168));
                 }
             }
         }

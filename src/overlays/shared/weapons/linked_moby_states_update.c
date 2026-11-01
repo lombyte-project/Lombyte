@@ -4,7 +4,8 @@
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/mobys/moby_spawn.h"
 
 typedef struct {
     int            w0;
@@ -15,8 +16,7 @@ typedef struct {
     unsigned char *p[4];
 } V_2b3458;
 
-int  find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+int find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
 int linked_moby_selection_delay_gp __asm__("D_L00_00161478") = 0;
 int owned_record_cooldown_gp __asm__("D_L00_00161480") = 0;
@@ -68,9 +68,9 @@ void linked_moby_states_update(unsigned char *source_moby) {
     };
     V_2b3458 *moby_vars = ((V_2b3458 *)MOBY(source_moby)->pvars);
     int       matching_owned_record, i;
-    switch (source_moby[0x20]) {
+    switch (MOBY(source_moby)->state) {
     case STATE_INITIALIZE:
-        source_moby[0x20] = 1;
+        MOBY(source_moby)->state = 1;
         moby_vars->w4 = linked_moby_selection_delay_gp;
         moby_vars->w8 = 3;
         moby_vars->p[0] = moby_table + (moby_vars->idx[0] << 8);
@@ -82,7 +82,7 @@ void linked_moby_states_update(unsigned char *source_moby) {
         matching_owned_record = find_moby_hit(source_moby, 0x10000, 0);
         fast_dec_timer(&moby_vars->wC);
         if (matching_owned_record && moby_vars->wC == 0) {
-            source_moby[0xA4] = 0xFF;
+            MOBY(source_moby)->hit_slot = 0xFF;
             moby_vars->wC = owned_record_cooldown_gp;
             if (--moby_vars->w8 <= 0) {
                 mark_moby_for_removal(source_moby);
@@ -94,7 +94,7 @@ void linked_moby_states_update(unsigned char *source_moby) {
         unsigned char *selected_object;
         moby_vars->p[i][0x20] = 0x51;
         selected_object = moby_vars->p[i];
-        qcopy(selected_object + 0x10, source_moby + 0x10);
+        qcopy(selected_object + 0x10, &MOBY(source_moby)->pos);
         selected_object[0xA4] = 0xFF;
         return;
     }

@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -20,7 +20,8 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 /* pvars of the class 0x75E bubble FUN_L09_0030b218 spawns */
 typedef struct {
@@ -42,7 +43,6 @@ extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
 extern s32  coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
-extern f32  normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
 extern char         spawner_child_respawn_failure_format[] __asm__("D_L09_00209280");
 extern CollisionHit D_L09_00173FC0;
@@ -166,7 +166,7 @@ char *spawn_spawner_egg(int           spawner_moby,
     if (spawned_moby) {
         char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(int *)(moby_vars + 0x10) = spawner_moby;
-        qcopy(spawned_moby + 0x10, initial_position);
+        qcopy(&MOBY(spawned_moby)->pos, initial_position);
         qcopy(moby_vars, initial_velocity);
         MOBY(spawned_moby)->rot.x = random_float_between(-3.1415927f, 3.1415927f);
         MOBY(spawned_moby)->rot.y = random_float_between(-3.1415927f, 3.1415927f);
@@ -174,8 +174,8 @@ char *spawn_spawner_egg(int           spawner_moby,
         *(short *)(moby_vars + 0x18) = scale_game_frames(500);
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0x40;
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 0;
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 0;
         MOBY(spawned_moby)->scale = *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) * 0.3f;
         moby_vars[0x1C] = owner_slot_index;
         moby_vars[0x1A] = grow_held_moby;

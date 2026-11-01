@@ -1,23 +1,26 @@
 /* Level 18 floating_platform: tilt, bob, sink and sparks. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/math/random.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/l18/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 void update_floating_platform_tilt_and_bob(struct Moby *moby) __asm__("FUN_L18_002d8710");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 #include "qcopy.h"
 
@@ -37,17 +40,14 @@ extern float floating_platform_sink_trigger_distance_gp __asm__("D_L18_00161A5C"
 extern int D_L18_001623A8 __attribute__((sda));
 void       spawn_floating_platform_sparks(struct Moby *moby) __asm__("FUN_L18_002d88b8");
 
-extern void  spawn_floating_platform_sparks(struct Moby *) __asm__("FUN_L18_002d88b8");
-extern void  hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
-extern void  update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern void spawn_floating_platform_sparks(struct Moby *) __asm__("FUN_L18_002d88b8");
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 /* Ported from rac1-decomp nonmatching/l18_veldin2/func_L18_002D96B0.c (func_L18_002D96B0) */
 /* Sinking platform update: arms its tilt, then sinks it under the hero until it is removed. */
 void floating_platform_update(struct Moby *moby) __asm__("FUN_L18_002d82c0");
 
-/* Moby class 587 */
+/* Moby classes 481, 587, 810 */
 void floating_platform_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
@@ -266,7 +266,6 @@ extern void  transform_vector_by_basis(void *, void *, void *);
 extern char *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int   FUN_001fa6e0(int, int, float);
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern short floating_platform_spark_first_vector_length_base_rate_gp __asm__("D_L18_00161A68")
     __attribute__((sda));
 extern short D_L18_00161A6C_gp __asm__("D_L18_00161A6C") __attribute__((sda));

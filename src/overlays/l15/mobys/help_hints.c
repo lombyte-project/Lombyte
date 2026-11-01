@@ -7,8 +7,8 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/game/level_state.h"
 #include "rnc/game/item_state.h"
-
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
+#include "rnc/rendering/clip_volume.h"
 
 typedef struct Talk {
     int  zone[4];
@@ -45,8 +45,6 @@ typedef struct Items {
     unsigned char f6E;
     unsigned char f6F;
 } Items;
-
-extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 
 extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
 

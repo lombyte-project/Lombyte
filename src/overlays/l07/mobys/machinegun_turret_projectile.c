@@ -9,8 +9,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* spawns a moby of class 0x370 at a position moving along a direction */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030C918), where it is exact; names translated to the US level program. */
@@ -35,7 +36,6 @@ typedef struct {
 } BoltVars;
 
 extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int   collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void  spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
 extern void  reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");

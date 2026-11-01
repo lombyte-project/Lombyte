@@ -5,7 +5,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/hero/hero_idle_sequence.h"
 #include "rnc/world/collision/collision_hit_material.h"
@@ -147,7 +147,7 @@ void apply_hero_ground_type_effects(void) {
 }
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/math/fast_math.h"
 
 typedef struct {

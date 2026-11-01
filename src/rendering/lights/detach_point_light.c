@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 struct ShrubLightLink {
     u8  pad_0[0x1B];
@@ -32,11 +33,10 @@ struct PointLightIndexRanges {
     s32 instance_indices_address;
 };
 
-extern u8  tie_point_light_missing_message[] __asm__("D_001E7B50");
-extern u8  tfrag_point_light_missing_message[] __asm__("D_001E7B70");
-extern u8  shrub_point_light_missing_message[] __asm__("D_001E7B98");
-extern s32 DebugPrint();
-void       detach_point_light(s32 light_index) __asm__("FUN_00201f88");
+extern u8 tie_point_light_missing_message[] __asm__("D_001E7B50");
+extern u8 tfrag_point_light_missing_message[] __asm__("D_001E7B70");
+extern u8 shrub_point_light_missing_message[] __asm__("D_001E7B98");
+void      detach_point_light(s32 light_index) __asm__("FUN_00201f88");
 
 void detach_point_light(s32 light_index) {
     s16                          *tie_index_cursor;

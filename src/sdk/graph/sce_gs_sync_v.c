@@ -1,9 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/sce_gs_gparam.h"
 #include "rnc/sdk/graph/sce_gs_get_gparam.h"
-
-extern s32 VSync(void);
-extern s64 VSync2(void);
+#include "rnc/sdk/kernel/VSync2.h"
+#include "rnc/sdk/kernel/v_sync.h"
 
 s32 sceGsSyncV(s32 mode) {
     sceGsGParam *gp;

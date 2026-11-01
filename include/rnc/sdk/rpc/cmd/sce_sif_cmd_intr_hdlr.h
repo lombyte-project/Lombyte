@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_RPC_CMD_SCE_SIF_CMD_INTR_HDLR_H
+#define LOMBYTE_RNC_SDK_RPC_CMD_SCE_SIF_CMD_INTR_HDLR_H
+
+#include "types.h"
+
+s32 _sceSifCmdIntrHdlr(void);
+
+#endif /* LOMBYTE_RNC_SDK_RPC_CMD_SCE_SIF_CMD_INTR_HDLR_H */

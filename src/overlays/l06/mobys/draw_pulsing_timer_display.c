@@ -6,6 +6,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/ui/frames/draw_ui_frame.h"
+#include "rnc/ui/text/font/font_print_center.h"
+#include "rnc/ui/text/font/font_print_center_large.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 
@@ -20,8 +22,6 @@ extern short timer_frame_left_x_addend_gp __asm__("D_L06_001620E0") __attribute_
 extern short timer_frame_right_x_addend_gp __asm__("D_L06_001620E4") __attribute__((sda));
 extern short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") __attribute__((sda));
 extern int   fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
-extern void  font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
-extern void  font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
 #define W(x) (*(int *)&(x))
 

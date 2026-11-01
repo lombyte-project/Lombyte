@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_OVERLAY_L08_MESH_BATCHES_H
 
 #include "types.h"
-#include "rnc/overlay/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
 
 /* Level 08 mesh batches. Each batch i draws counts[i] vertices with
    FUN_L08_00258090(scratch, uvs[i], counts[i], pair) and

@@ -7,7 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/camera/follow_cam.h"
 
 typedef struct {
@@ -783,9 +783,9 @@ void apply_follow_camera_translation(char *camera) {
         if (ground_moby == 0 || MOBY(ground_moby)->oclass != 0x22D ||
             ((camera_system_state = camera_view - 0x190), FUN_001f96f8_c(0x1E)) <
                 *(int *)(camera_system_state + 0x398)) {
-            char *translation_source_hero = D_0013E533 + 0xE1D;
+            struct Hero *translation_source_hero = (struct Hero *)(D_0013E533 + 0xE1D);
             *(float *)(*(char **)(camera + 0x70) + 0x1C8) =
-                *(float *)(translation_source_hero + 0x14C);
+                translation_source_hero->motion.platform_carry.f[3];
         }
     }
     state_check_hero = D_0013E533 + 0xE1D;

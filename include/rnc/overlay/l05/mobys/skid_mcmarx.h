@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_SKID_MCMARX_H
+#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_SKID_MCMARX_H
+
+#include "types.h"
+
+void skid_mcmarx_update() __asm__("FUN_L05_00307910");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_SKID_MCMARX_H */

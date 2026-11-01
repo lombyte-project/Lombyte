@@ -1,22 +1,23 @@
 /* Level 18 billboard quad pair draw for mobys (no caller found in C). */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 #include "rnc/rendering/effect_texture.h"
 
 #include "sda.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 typedef struct {
     float f[4];
@@ -57,10 +58,9 @@ UVec130 billboard_quad_pair_uvs[4] __asm__("D_L18_001D9CE0") = {
     {1.0f, 1.0f},
 };
 
-extern void  vscl_ec130(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void  vmul_ec130(float, void *, void *) __asm__("FUN_001f9a68");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern void  draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
+extern void vscl_ec130(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void vmul_ec130(float, void *, void *) __asm__("FUN_001f9a68");
+extern void draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_moby_billboard_quad_pair(void *mv) __asm__("FUN_L18_002ec130");
 

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RUNTIME_MEMORY_INIT_RING_BUFFER_H
+#define LOMBYTE_RNC_RUNTIME_MEMORY_INIT_RING_BUFFER_H
+
+#include "types.h"
+
+int init_ring_buffer(int) __asm__("func_00119568");
+
+#endif /* LOMBYTE_RNC_RUNTIME_MEMORY_INIT_RING_BUFFER_H */

@@ -8,8 +8,8 @@ extern s32 draw_moby_list() __asm__("func_0020D330");
 s32        draw_available_item_preview_mobys(struct MenuScreen *preview) __asm__("FUN_0021e608");
 
 s32 draw_available_item_preview_mobys(struct MenuScreen *preview) {
-    char              *primary_moby;
-    char              *secondary_moby;
+    struct Moby       *primary_moby;
+    struct Moby       *secondary_moby;
     struct MenuScreen *grid;
 
     grid = menu_system.current->focus;

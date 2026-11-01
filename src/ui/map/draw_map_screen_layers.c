@@ -3,10 +3,9 @@
 #include "rnc/rendering/fs_aa_buffer.h"
 
 #include "rnc/game/game_globals.h"
+#include "rnc/rendering/packets/append_power_of_two_textured_screen_sprite.h"
 
 extern s32  map_layer_screen_insets[] __asm__("D_001DDF68");
-extern void append_power_of_two_textured_screen_sprite(
-    u64, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_00200468");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 s32 draw_map_screen_layers(void) __asm__("FUN_00220850");

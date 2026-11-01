@@ -1,10 +1,10 @@
 /* Suck cannon: draws the reticle. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 
 typedef struct {
     OvlQuad pos;

@@ -8,19 +8,21 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 extern float D_0015ED6C;
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l02/mobys/elevator_globals.h"
 
 #include "qcopy.h"
 
-extern int  voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 
 typedef union {
     OvlQuad q;
@@ -59,7 +61,6 @@ extern float level02_elevator_vertical_acceleration_gp __asm__("D_L02_00161BE0")
 void draw_elevator_rotating_rings(struct Moby *moby) __asm__("FUN_L02_002dc2c8");
 
 extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L02_002dc2c8");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 /* Same platform routine as elevator_update, with a waiting state (1) and this level's tables. */
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L02_002dbd38");
@@ -255,16 +256,24 @@ int         D_L02_00161C00 = 1;
 int         D_L02_00161C04 = 0x206068;
 int         D_L02_00161C08 = 0x40107020;
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int);
+
+typedef struct ElevatorVars {
+    u8  pad_0[0xA0];
+    s32 unkA0;
+    u8  pad_A4[0xC];
+    f32 unkB0;
+    u8  pad_B4[0x4];
+    f32 unkB8;
+} ElevatorVars;
 
 void draw_elevator_rotating_rings(struct Moby *moby) {
     L16RingPacket packet;
     L16RingMatrix matrix;
-    char         *moby_vars = (char *)moby->pvars;
-    int           bound_index = (*(int *)((char *)moby_vars + 0xA0)) << 7;
+    ElevatorVars *moby_vars = (ElevatorVars *)moby->pvars;
+    int           bound_index = (moby_vars->unkA0) << 7;
     char *elevator_transform_entry = (char *)(bound_index + (int)level02_elevator_transform_table);
-    float translation = (*(float *)((char *)moby_vars + 0xB8));
+    float translation = (moby_vars->unkB8);
     float lower = (*(float *)((char *)elevator_transform_entry + 0x38));
     float half = (*(float *)((char *)elevator_transform_entry + 0x28));
     float upper = lower + half + translation;
@@ -279,7 +288,7 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     lower += translation;
     color = fast_tween_color(D_L02_00161C04,
                              D_L02_00161C08,
-                             absolute_float((*(float *)((char *)moby_vars + 0xB0))) /
+                             absolute_float((moby_vars->unkB0)) /
                                  (level02_elevator_max_vertical_speed_gp * D_0015ED6C));
     copy_matrix_rotation(&matrix, &moby->rot_row0);
     qcopy(matrix.position, &moby->pos);

@@ -7,7 +7,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "qcopy.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
@@ -68,13 +68,13 @@ void spawn_timed_projected_sprite_effect(char *world_position,
     if (effect_moby) {
         char *effect_data = ((char *)MOBY(effect_moby)->pvars);
         float duration_as_float;
-        qcopy(effect_moby + 0x10, vp);
+        qcopy(&MOBY(effect_moby)->pos, vp);
         duration_as_float = convert_integer_to_float(duration_updates);
         *(int *)(effect_data + 0xC) = end_color;
         *(int *)(effect_data + 0x8) = start_color;
         *(float *)(effect_data + 0x4) = 2.0f / duration_as_float;
-        effect_moby[0x30] = 0xFF;
-        effect_moby[0x20] = 1;
+        MOBY(effect_moby)->update_dist = 0xFF;
+        MOBY(effect_moby)->state = 1;
     }
 }
 
@@ -95,7 +95,7 @@ void draw_projected_fading_quad(char *moby) {
     s32    *screen_center;
     float   screen_offset;
 
-    qcopy(&world_position, moby + 0x10);
+    qcopy(&world_position, &MOBY(moby)->pos);
     size = effect_data[0];
     if (1.0f < size)
         size = 1.0f;

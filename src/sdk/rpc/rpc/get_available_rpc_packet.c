@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 typedef struct {
     s32   pid;
@@ -15,7 +16,6 @@ typedef struct {
 } RpcPacket;
 
 extern s32 DIntr(void);
-extern s32 EnableInterrupts(void);
 
 void *get_available_rpc_packet(RpcData *rpc_data) __asm__("FUN_0011ace8");
 

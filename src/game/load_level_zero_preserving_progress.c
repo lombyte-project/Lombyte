@@ -5,6 +5,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
 #include "rnc/game/game_globals.h"
+#include "rnc/sdk/scf/sce_scf_get_local_timefrom_rtc.h"
+#include "rnc/sdk/storage/cdvd/scecdreadclock.h"
 
 /* Preserves selected state across load_and_initialize_level_chunk using scratchpad copies.
    Only listed bytes of item_available are restored; each D_00141EA0 entry is
@@ -41,8 +43,6 @@ extern s32 item_availability_restore_indices[20] __asm__("D_001D5BA0");
 extern void copy_memory_aligned(void *dst, void *src, s32 size) __asm__("func_001F9838");
 extern void load_and_initialize_level_chunk(void) __asm__("func_00209370");
 extern void memcard_make_whole_save(s32) __asm__("func_0020ABB0");
-extern s32  sceCdReadClock(u8 *clock);
-extern void sceScfGetLocalTimefromRTC(u8 *clock);
 
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 void      load_level_zero_preserving_progress(s32 slot) __asm__("FUN_00226b08");

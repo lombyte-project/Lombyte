@@ -1,7 +1,7 @@
 /* Draws a level's water grids: culls each tile, builds its height grid and submits it. */
 #include "types.h"
 #include "rnc/ui/text/font_state.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/effect_texture.h"
@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/rendering/dma_tag.h"
 #include "sda.h"
+#include "rnc/overlay/shared/props/pool_set_scale.h"
 
 typedef struct {
     u8  pad0[0x190];
@@ -37,7 +38,6 @@ extern L01Camera l01_water_render_camera_state __asm__("D_L01_0016CEC0");
 
 extern void FUN_L01_00261c10(void *, void *) __asm__("FUN_L01_00261c10");
 extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
-extern void update_animated_offset_pairs(f32 *) __asm__("FUN_L01_002b80d0");
 
 void build_height_grid_positions(f32 *grid_base_position) __asm__("FUN_L01_002b8c08");
 

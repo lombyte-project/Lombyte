@@ -1,20 +1,20 @@
 /* Level 18 mine (class 0x238): update, launch, detonation and its method table entries. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 
 #include "qcopy.h"
 
@@ -234,7 +234,7 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
         moby[0x20] = 1;
         MOBY(moby)->flags = (MOBY(moby)->flags & 0xFFBE) | 0x1000;
         moby[0xBC] = 0;
-        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+        MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         if (((unsigned char *)moby)[0x53] != 0) {
             blend_moby_animation(moby, 0, 0, 1);
         }

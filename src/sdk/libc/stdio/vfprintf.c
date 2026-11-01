@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
+#include "rnc/sdk/libc/stdio/_vfprintf_r.h"
+#include "rnc/sdk/libc/stdio/sinit.h"
 #define FILE RncFile
-extern void __sinit(RncReent *);
-extern s32  _vfprintf_r(RncReent *, FILE *, const char *, void *);
 /* newlib local.h */
 #define CHECK_INIT(fp)                  \
     do {                                \

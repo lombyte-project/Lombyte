@@ -1,5 +1,5 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 #include "rnc/sdk/top_thread.h"
 
 extern s32 _iWakeupThread(s32 thread_id);

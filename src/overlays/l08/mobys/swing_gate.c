@@ -11,6 +11,7 @@
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/vendor/vendor_volume.h"
 
 /* Pvars of a gate that swings with the progress of its driver moby. */
 typedef struct {
@@ -31,7 +32,6 @@ typedef struct {
 } VoiceView;
 
 extern u8           D_0013D388[];
-extern void         vendor_volume(s32, s32) __asm__("FUN_L01_002a1968");
 extern struct Moby *D_L08_0015FFD8;
 
 /* Swings the gate to its driver's progress, fading a creak in while it

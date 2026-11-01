@@ -1,8 +1,10 @@
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/rendering/level_render_state.h"
+#include "rnc/rendering/resident_render_object.h"
 #include "sda.h"
 #include "types.h"
 #include "rnc/math/random.h"
+#include "rnc/rendering/effect_texture.h"
 
 typedef struct {
     float f[4];
@@ -17,13 +19,12 @@ extern QuadOffset quad_corners[10] __asm__("D_001D9970") NOT_SDA;
 void       fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 void       fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void       transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-long       get_effect_texture(int) __asm__("FUN_001f44b8");
 float      convert_integer_to_float(int) __asm__("func_001FA6C0");
 void       draw_geometry_quad(void *, void *, int) __asm__("func_001F7D30");
 extern int variant_effect_quad_counts[1] __asm__("D_001604C0") __attribute__((sda));
-void       build_variant_effect_quads(unsigned char *quad_source) __asm__("FUN_0022e1b0");
+void build_variant_effect_quads(struct ResidentRenderObject *quad_source) __asm__("FUN_0022e1b0");
 
-void build_variant_effect_quads(unsigned char *quad_source) {
+void build_variant_effect_quads(struct ResidentRenderObject *quad_source) {
     struct GeometryQuad quad;
     QuadOffset          quad_source_translation;
     QuadOffset         *selected_quad_offsets;
@@ -43,21 +44,21 @@ void build_variant_effect_quads(unsigned char *quad_source) {
     }
     fast_vec_scale(0.0009765625f, &quad_source_translation, quad_source);
     for (i = 0; i < variant_effect_quad_counts[level_render_state.content_variant]; i++) {
-        int          quad_alpha = quad_source[0xBC];
+        int          quad_alpha = quad_source->quad_alpha;
         unsigned int col;
         float        quad_scale;
-        if (*(short *)(quad_source + 0xB2))
-            quad_alpha += random_integer_below(*(short *)(quad_source + 0xB2));
+        if (quad_source->quad_alpha_jitter)
+            quad_alpha += random_integer_below(quad_source->quad_alpha_jitter);
         quad_scale = convert_integer_to_float(quad_alpha) * (selected_quad_offsets[i].f[3] / 40.0f);
         col = (quad_alpha << 24) | 0x2058B0;
-        if (*(short *)(quad_source + 0xA6) == 0x215)
+        if (quad_source->class_id == 0x215)
             col = (quad_alpha << 24) | 0x308000;
         for (k = 0; k < 4; k++) {
             quad.colors[k] = col;
             fast_vec_scale(quad_scale, &quad.positions[k], &quad_corners[k]);
             fast_vec_add(&quad.positions[k], &quad.positions[k], &selected_quad_offsets[i]);
             transform_vector_by_basis(
-                &quad.positions[k], &quad.positions[k], (char *)level_render_state.player + 0xC0);
+                &quad.positions[k], &quad.positions[k], level_render_state.player->transform);
             fast_vec_add(&quad.positions[k], &quad.positions[k], &quad_source_translation);
         }
         draw_geometry_quad(&quad, 0, 0);

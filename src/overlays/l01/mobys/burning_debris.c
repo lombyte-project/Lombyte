@@ -11,6 +11,8 @@
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/overlay/l01/mobys/burning_debris_globals.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 /* pvars of the debris FUN_L01_0030ba18 moves (spawn_debris fills them) */
 typedef struct {
@@ -33,7 +35,6 @@ extern f32 burning_debris_horizontal_damping_threshold_gp __asm__("D_L01_0016206
     __attribute__((sda));
 extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");
 extern s32         D_L01_0015F580;
-extern void        add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void        draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
 extern int         coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void        FUN_L00_0025e450(void *,
@@ -55,7 +56,6 @@ extern void        FUN_L00_0025e450(void *,
                                     s32,
                                     s32);
 extern void        spawn_burst(void *, void *, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026cbb0");
-extern int         FUN_L00_00257b90(int lo, int hi);
 extern u8 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 
 void burning_debris_update(struct Moby *moby) __asm__("FUN_L01_0030ba18");
@@ -134,7 +134,7 @@ void burning_debris_update(struct Moby *moby) {
                 0x4F007FFF,
                 0x1FFFFFFF,
                 s,
-                FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)),
+                random_int_between(scale_game_frames(10), scale_game_frames(20)),
                 1);
     alpha = 0x60000000;
     for (i = 0; i < 2; i++) {
@@ -143,7 +143,7 @@ void burning_debris_update(struct Moby *moby) {
             signed_puff_variation = -signed_puff_variation;
         }
         s = random_float_between(40000.0f, 100000.0f);
-        grey_intensity = FUN_L00_00257b90(0x30, 0xFF);
+        grey_intensity = random_int_between(0x30, 0xFF);
         grey = (grey_intensity << 8) | alpha;
         puff = spawn_puff(&moby->pos,
                           0.025f,
@@ -188,8 +188,6 @@ typedef struct {
     u8          pad50[0x28];
     DebrisVars *vars;
 } DebrisMoby;
-
-extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 
 DebrisMoby *spawn_debris(DebrisMoby *parent_moby,
                          void       *debris_vector_source,

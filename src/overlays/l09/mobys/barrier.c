@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/l09/mobys/display.h"
 
 typedef struct Moby Moby;
 
@@ -44,8 +45,6 @@ typedef struct Flags_309688 {
 
 #include "rnc/overlay/l09/mobys/barrier_data/barrier_update.h"
 
-struct Moby *spawn_tumbling_debris(
-    struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) __asm__("FUN_L09_002ef868");
 extern int   func_001F9850_309688(int) __asm__("FUN_001f96f8");
 extern float func_001F9F90_309688(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_309688(float) __asm__("FUN_001f9de0");
@@ -77,7 +76,7 @@ char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class
         unsigned char state;
         ((unsigned char *)moby)[0x30] = 0xFF;
         state = 0xFF;
-        *(short *)(moby + 0x32) = state;
+        MOBY(moby)->draw_dist = state;
         moby[0x31] = 1;
         moby[0x20] = 0;
         qcopy(moby + 0x10, &source_moby->pos);
@@ -85,8 +84,8 @@ char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class
         moby[0xBC] = scale_game_frames(10);
         update_entity(moby);
         copy_hero_moby_field_38(moby);
-        *(float *)(moby + 0x2C) = source_moby->scale;
-        *(unsigned short *)(moby + 0x34) = source_moby->flags;
+        MOBY(moby)->scale = source_moby->scale;
+        MOBY(moby)->flags = source_moby->flags;
         **(int **)(moby + 0x78) = *(int *)source_moby->pvars;
     }
     return moby;

@@ -1,7 +1,7 @@
 /* Level 17 magnet_elevator. */
 #include "types.h"
 #include "rnc/math/vector.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/mobys/moby_class_id.h"
 
@@ -12,9 +12,9 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
@@ -36,16 +36,16 @@
 #include "rnc/overlay/l17/hero/hero_set_state.h"
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/ui/help/force_help_message.h"
+#include "rnc/math/random.h"
+#include "rnc/mobys/moby_spawn.h"
 
 /* Moves a level-17 platform moby between its stops along its heading, with a looping sound. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001676C0[];
-void        mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 #include "qcopy.h"
 
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 #define W(p, o) (*(int *)((char *)(p) + (o)))
 #define P(p, o) (*(char **)((char *)(p) + (o)))
 #define H(p, o) (*(short *)((char *)(p) + (o)))
@@ -57,13 +57,12 @@ extern void  set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 
 /* Updates the class-1380 lift: rises/lowers between two heights, blends the camera and pulses its colour by state. */
-extern char  D_L17_001B0DB0[];
-extern f32   advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void  update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void  FUN_L17_002ee9c0_c(char *, char *, char *) __asm__("FUN_L17_002ee9c0");
-extern void  FUN_L17_002eea70_c(char *) __asm__("FUN_L17_002eea70");
+extern char D_L17_001B0DB0[];
+extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void FUN_L17_002ee9c0_c(char *, char *, char *) __asm__("FUN_L17_002ee9c0");
+extern void FUN_L17_002eea70_c(char *) __asm__("FUN_L17_002eea70");
 
 void magnet_elevator_update(struct Moby *moby) __asm__("FUN_L17_002ee2b0");
 

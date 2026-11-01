@@ -12,4 +12,8 @@ typedef union {
     Quad_2b2100 q;
 } Vec_2b2100 __attribute__((aligned(16)));
 
+struct Moby;
+
+void devastator_update(struct Moby *) __asm__("FUN_L00_002b2100");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_DEVASTATOR_H */

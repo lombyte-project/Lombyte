@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/props/particle_spawner_smoke_fire_data/particle_spawner_smoke_fire_update.h"
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/overlay/shared/props/particle_spawner_smoke_fire_controller.h"
+#include "rnc/rendering/vu1_registers.h"
 
 typedef struct {
     float x, y, z, w;
@@ -74,12 +75,8 @@ typedef struct {
     float x, y, z, w;
 } V_2d7d58;
 
-extern s32  random_integer_below(s32) __asm__("FUN_00213260");
 extern s64  get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern int  random_integer_below(int) __asm__("FUN_00213260");
-
-s32 random_integer_below(s32) __asm__("FUN_00213260");
 
 extern T *D_L00_001600EC;
 
@@ -89,16 +86,13 @@ extern int smoke_fire_emission_attempts_per_update_gp __asm__("D_L00_001619BC")
 extern V D_L00_00166DC0;
 void     mark_moby_for_removal(P *) __asm__("FUN_0020c828");
 float    fast_vec_length(void *) __asm__("FUN_001f9af0");
-int      random_integer_below(int) __asm__("FUN_00213260");
 void     reset_smoke_fire_spawner_particle(P *spawner, int i) __asm__("FUN_L00_002d7bf0");
 
-void  reset_smoke_fire_spawner_particle(P *, int) __asm__("FUN_L00_002d7bf0");
-void  FUN_L00_002d7d58_c(P *, int) __asm__("FUN_L00_002d7d58");
-float FUN_L00_00257c48(float, float);
-int   FUN_L00_00257b90(int, int);
-E    *FUN_L00_0026d000(V *, int, float, float, V *, float, int, float);
-s16   FUN_001f96f8_c(int) __asm__("FUN_001f96f8");
-void  draw_smoke_fire_spawner(P *) __asm__("FUN_L00_002d73e8");
+void reset_smoke_fire_spawner_particle(P *, int) __asm__("FUN_L00_002d7bf0");
+void FUN_L00_002d7d58_c(P *, int) __asm__("FUN_L00_002d7d58");
+E   *FUN_L00_0026d000(V *, int, float, float, V *, float, int, float);
+s16  FUN_001f96f8_c(int) __asm__("FUN_001f96f8");
+void draw_smoke_fire_spawner(P *) __asm__("FUN_L00_002d73e8");
 
 extern float          D_L00_001D02E0[];
 extern float          D_L00_001D15A0[];
@@ -124,7 +118,6 @@ extern float smoke_fire_particle_quad_texture_coordinates[] __asm__("D_L00_001E1
 extern float smoke_fire_base_mesh_local_positions[][4] __asm__("D_L00_001E1200");
 extern float smoke_fire_base_mesh_v_coordinates[] __asm__("D_L00_001E13E0");
 extern float smoke_fire_base_mesh_u_coordinates[] __asm__("D_L00_001E13E4");
-extern void  vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 extern u16 D_L00_00161380_2d7bf0 __asm__("D_L00_00161380");
 extern int D_L00_0016137C __asm__("D_L00_0016137C");
@@ -208,20 +201,20 @@ void particle_spawner_smoke_fire_update(P *spawner) {
             for (particle_end_or_emission_index = 0;
                  particle_end_or_emission_index < smoke_fire_emission_attempts_per_update_gp;
                  particle_end_or_emission_index++) {
-                particle_vector.x = FUN_L00_00257c48(0.0f, 1.0f);
-                particle_vector.y = FUN_L00_00257c48(0.0f, 1.0f);
+                particle_vector.x = randf_sym(0.0f, 1.0f);
+                particle_vector.y = randf_sym(0.0f, 1.0f);
                 particle_vector.z = 1.0f;
                 particle_vector.w = 1.0f;
                 transform_vector(&b, &particle_vector, emitter_transform);
                 b.z += 0.5f;
-                particle_vector.x = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
-                particle_vector.y = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
+                particle_vector.x = randf_sym(0.0f, frame_time * 0.25f);
+                particle_vector.y = randf_sym(0.0f, frame_time * 0.25f);
                 particle_vector.z = q->unk20 * frame_time;
                 sampled_particle_scalar = random_float_between(q->unk24, q->unk28);
-                col = FUN_L00_00257b90(q->h2C, q->h2E) << 24 |
+                col = random_int_between(q->h2C, q->h2E) << 24 |
                       smoke_fire_emitted_particle_base_color_gp;
-                r = FUN_L00_00257b90(smoke_fire_emitted_particle_sign_randomized_sample_min_gp,
-                                     smoke_fire_emitted_particle_sign_randomized_sample_max_gp);
+                r = random_int_between(smoke_fire_emitted_particle_sign_randomized_sample_min_gp,
+                                       smoke_fire_emitted_particle_sign_randomized_sample_max_gp);
                 ent = FUN_L00_0026d000(&b,
                                        r,
                                        smoke_fire_emitted_particle_position_spread_gp,
@@ -232,7 +225,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
                                        sampled_particle_scalar);
                 if (ent) {
                     sub = &ent->sub;
-                    ent->h0A = FUN_001f96f8_c(FUN_L00_00257b90(q->x30, q->x34));
+                    ent->h0A = FUN_001f96f8_c(random_int_between(q->x30, q->x34));
                     sub->x04 = 3;
                     sub->b0A = col >> 24;
                     sub->b0B = ent->h0A;
@@ -408,11 +401,11 @@ void reset_smoke_fire_spawner_particle(P *spawner, int i) {
     char *spawner_vars = (char *)spawner->q;
     V    *particle_position;
     int   emitter_particle_index;
-    float sampled_x = FUN_L00_00257c48(0.0f, 1.0f);
+    float sampled_x = randf_sym(0.0f, 1.0f);
     particle_position = &D_L00_001CB7E0[i];
     particle_position->x = sampled_x;
-    particle_position->y = FUN_L00_00257c48(0.0f, 1.0f);
-    particle_position->z = FUN_L00_00257c48(0.0f, 1.0f);
+    particle_position->y = randf_sym(0.0f, 1.0f);
+    particle_position->z = randf_sym(0.0f, 1.0f);
     D_L00_001D02E0[i] =
         random_float_between(*(float *)(spawner_vars + 0x10), *(float *)(spawner_vars + 0x14));
     D_L00_001D15A0[i] =

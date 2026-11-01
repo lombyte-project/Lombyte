@@ -1,6 +1,7 @@
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libmc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
 
 struct MemoryCardFormatRequest {
     u8  reserved_00[0x4];
@@ -11,7 +12,6 @@ struct MemoryCardFormatRequest {
 extern struct MemoryCardFormatRequest D_00159A80;
 extern s32                            PollSema();
 extern s32                            SignalSema();
-extern s32                            sceSifCallRpc();
 
 s32 SceMcFormat(s32 port, s32 slot) {
     s32 rpc_result;

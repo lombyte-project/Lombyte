@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ESCALATOR_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ESCALATOR_H
+
+#include "types.h"
+
+void escalator_update(char *) __asm__("FUN_L02_002dc6b0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ESCALATOR_H */

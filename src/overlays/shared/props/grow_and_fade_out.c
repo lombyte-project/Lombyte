@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
+#include "rnc/math/random.h"
 
 typedef struct Moby Moby;
 
@@ -20,14 +21,11 @@ typedef struct {
     float x, y, z, w;
 } V;
 
-f32         random_angle_radians(void) __asm__("FUN_00213308");
-extern f32  random_angle_radians(void) __asm__("FUN_00213308");
 extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void           copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 void           set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
-float          random_angle_radians(void) __asm__("FUN_00213308");
 void           update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 
 void mark_moby_for_removal() __asm__("FUN_0020c828");
@@ -39,10 +37,10 @@ unsigned char *spawn_burst_moby(u128 *spawn_position, float scale_multiplier) {
     if (spawned_moby) {
         copy_hero_moby_field_38(spawned_moby);
         set_moby_color(spawned_moby, 0x28, 0x28, 0x46);
-        spawned_moby[0x30] = 0xff;
+        MOBY(spawned_moby)->update_dist = 0xff;
         MOBY(spawned_moby)->draw_dist = 0x40;
         MOBY(spawned_moby)->scale *= scale_multiplier;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         MOBY(spawned_moby)->rot.z = random_angle_radians();
         update_entity(spawned_moby);
     }
@@ -56,6 +54,6 @@ void grow_and_fade_out_update(u8 *moby) __asm__("FUN_L00_002d7f38");
 /* Moby class 775 */
 void grow_and_fade_out_update(u8 *moby) {
     MOBY(moby)->scale *= 1.025f;
-    if ((u8)(moby[0x23] -= 3) < 4)
+    if ((u8)(MOBY(moby)->alpha -= 3) < 4)
         mark_moby_for_removal();
 }

@@ -4,11 +4,12 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/mobys/delete_moby.h"
+#include "rnc/ui/menus/item_preview/rotate_item_preview_moby.h"
 
-extern void *create_menu_preview_moby(int) __asm__("func_00225490");
-extern void  rotate_item_preview_moby(struct MenuScreen *) __asm__("FUN_0021e1f8");
+extern struct Moby *create_menu_preview_moby(int) __asm__("func_00225490");
 /* Keeps the item preview moby in step with the highlighted entry: drop it
    when the entry's class (menu_item_info preview_class) is -1, spawn it in
    front of the camera focus when there is none yet, or respawn it with
@@ -22,39 +23,38 @@ int update_item_preview_moby(struct MenuScreen *menu) {
     MenuItemInfo      *rec;
     short              want;
 
-    current_preview_class =
-        menu->data.preview.moby != 0 ? *(short *)(menu->data.preview.moby + 0xA6) : -1;
+    current_preview_class = menu->data.preview.moby != 0 ? menu->data.preview.moby->oclass : -1;
     rec = &menu_item_info[selected_item_id];
     want = rec->preview_class;
     if (want != -1 && current_preview_class == -1) {
-        char *spawned_moby = create_menu_preview_moby(want);
+        struct Moby *spawned_moby = create_menu_preview_moby(want);
 
         if (spawned_moby != 0) {
-            char *preview_camera_base = (char *)&preview_camera;
+            struct PreviewCamera *camera = &preview_camera;
 
             menu->data.preview.moby = spawned_moby;
-            *(short *)(spawned_moby + 0x34) = 0;
-            *(float *)(spawned_moby + 0x10) = *(float *)(preview_camera_base + 0x140) + 6.0f;
-            *(float *)(spawned_moby + 0x14) = *(float *)(preview_camera_base + 0x144);
-            *(float *)(spawned_moby + 0x18) = *(float *)(preview_camera_base + 0x148) - 0.3f;
-            *(float *)(spawned_moby + 0x48) = 3.1415927f;
-            *(void **)(spawned_moby + 0x74) = (void *)rotate_item_preview_moby;
-            **(void ***)(spawned_moby + 0x78) = menu;
+            spawned_moby->flags = 0;
+            spawned_moby->pos.x = camera->position.f[0] + 6.0f;
+            spawned_moby->pos.y = camera->position.f[1];
+            spawned_moby->pos.z = camera->position.f[2] - 0.3f;
+            spawned_moby->rot.z = 3.1415927f;
+            spawned_moby->update = (void (*)(struct Moby *))rotate_item_preview_moby;
+            *(struct MenuScreen **)spawned_moby->pvars = menu;
         }
     } else if (want == -1) {
         menu->data.preview.moby = delete_moby(menu->data.preview.moby);
     } else if (current_preview_class != want) {
-        char *replacement_moby = create_menu_preview_moby(want);
+        struct Moby *replacement_moby = create_menu_preview_moby(want);
 
         if (replacement_moby != 0) {
-            char *old_preview_moby;
+            struct Moby *old_preview_moby;
 
-            *(short *)(replacement_moby + 0x34) = 0;
+            replacement_moby->flags = 0;
             old_preview_moby = menu->data.preview.moby;
-            qcopy(replacement_moby + 0x10, old_preview_moby + 0x10);
-            qcopy(replacement_moby + 0x40, old_preview_moby + 0x40);
-            *(int *)(replacement_moby + 0x74) = *(int *)(old_preview_moby + 0x74);
-            **(void ***)(replacement_moby + 0x78) = menu;
+            qcopy(&replacement_moby->pos, &old_preview_moby->pos);
+            qcopy(&replacement_moby->rot, &old_preview_moby->rot);
+            replacement_moby->update = old_preview_moby->update;
+            *(struct MenuScreen **)replacement_moby->pvars = menu;
         }
         delete_moby(menu->data.preview.moby);
         menu->data.preview.moby = replacement_moby;

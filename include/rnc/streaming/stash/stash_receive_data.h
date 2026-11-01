@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_STREAMING_STASH_STASH_RECEIVE_DATA_H
+#define LOMBYTE_RNC_STREAMING_STASH_STASH_RECEIVE_DATA_H
+
+#include "types.h"
+
+s32 stash_receive_data(u8 *, u32, s32, s32, u32) __asm__("FUN_00232f20");
+
+#endif /* LOMBYTE_RNC_STREAMING_STASH_STASH_RECEIVE_DATA_H */

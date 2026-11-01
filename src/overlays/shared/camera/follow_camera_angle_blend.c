@@ -5,10 +5,10 @@
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 #include "rnc/camera/follow_cam.h"
+#include "rnc/overlay/shared/math/random/random_vector.h"
 
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern void  FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
-void         FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
+void        FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 
 extern char D_L00_00166E10[];
 

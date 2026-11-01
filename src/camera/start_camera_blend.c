@@ -3,6 +3,8 @@
 #include "rnc/hero/hero.h"
 #include "qcopy.h"
 #include "rnc/camera/camera_globals.h"
+#include "rnc/camera/update_cam.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 
 extern void compute_camera_angles(
@@ -12,76 +14,69 @@ extern void  save_camera_vectors(void) __asm__("func_001EC7F0");
 extern void  restore_camera_vectors(void) __asm__("func_001EC868");
 extern short cam_trans_state_lui __asm__("D_001871B0") NOT_SDA;
 extern void  extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
-/* Camera mode update from arg (its +0x30 vector is copied). In mode 1
-   the sub-mode at +3 picks what is captured from it: 0 the +0x50/+0x60
-   pair, 2 the +0xC0/+0xD0 pair and capture_camera_orientation's angles, otherwise
-   D_0013F350's axes and compute_camera_angles's yaw/pitch/dist into +0x70. Other
-   modes restore through func_001EC7F0/func_001EC868. Then the mode
-   becomes 3, +2 takes the sub-mode, and either the +0x10 blend resets or
-   the +0x70 timer advances. */
-void start_camera_blend(void *arg) __asm__("FUN_001ec8a0");
+void         start_camera_blend(struct UpdateCam *source) __asm__("FUN_001ec8a0");
 
-void start_camera_blend(void *source_camera_transform) {
-    char         *blend_source_transform = source_camera_transform;
-    char         *r = cam_trans_state;
-    char          orbit_reference_direction[16];
-    char          orbit_yaw_side_direction[16];
-    char          orbit_axis[16];
-    unsigned char sub;
+void start_camera_blend(struct UpdateCam *source) {
+    struct CameraTransition *transition = &cam_trans_state;
+    char                     orbit_reference_direction[16];
+    char                     orbit_yaw_side_direction[16];
+    char                     orbit_axis[16];
+    unsigned char            sub;
 
-    if (*(short *)r == 1) {
-        sub = r[3];
+    if (transition->mode == 1) {
+        sub = transition->requested_kind;
         if (sub == 0) {
-            qcopy(r + 0x50, blend_source_transform + 0x30);
-            extract_matrix_rotation_quaternion(r + 0x60, blend_source_transform);
+            qcopy(transition->blend.position, &source->pos);
+            extract_matrix_rotation_quaternion(transition->blend.rotation, source);
         } else if (sub == 2) {
-            qcopy(r + 0xC0, blend_source_transform + 0x30);
-            extract_matrix_rotation_quaternion(r + 0xD0, blend_source_transform);
+            qcopy(transition->orbit.saved_position, &source->pos);
+            extract_matrix_rotation_quaternion(transition->orbit.saved_rotation, source);
             capture_camera_orientation();
         } else {
             struct Hero *g = &hero;
 
-            fast_vec_normalize(orbit_reference_direction, (char *)g->moby + 0xC0, 1.0f);
-            fast_vec_normalize(orbit_yaw_side_direction, (char *)g->moby + 0xD0, 1.0f);
-            fast_vec_normalize(orbit_axis, (char *)g->moby + 0xE0, 1.0f);
-            compute_camera_angles((float *)(r + 0x70),
-                                  blend_source_transform + 0x30,
-                                  *(char **)(r - 0xF0) + 0x30,
+            fast_vec_normalize(orbit_reference_direction, &g->moby->rot_row0, 1.0f);
+            fast_vec_normalize(orbit_yaw_side_direction, &g->moby->rot_row1, 1.0f);
+            fast_vec_normalize(orbit_axis, &g->moby->rot_row2, 1.0f);
+            /* PreviewCamera.current_camera, reached from this base. */
+            compute_camera_angles(transition->orbit.angles,
+                                  &source->pos,
+                                  *(char **)((char *)transition - 0xF0) + 0x30,
                                   orbit_reference_direction,
                                   orbit_yaw_side_direction,
                                   orbit_axis);
-            extract_matrix_rotation_quaternion(r + 0xB0, blend_source_transform);
-            qcopy(r + 0xD0, r + 0xB0);
+            extract_matrix_rotation_quaternion(transition->orbit.rotation, source);
+            qcopy(transition->orbit.saved_rotation, transition->orbit.rotation);
         }
     } else {
-        sub = r[3];
+        sub = transition->requested_kind;
         if (sub == 2) {
             save_camera_vectors();
             capture_camera_orientation();
         } else if (sub == 1) {
             save_camera_vectors();
-            qcopy(r + 0xB0, r + 0xD0);
+            qcopy(transition->orbit.rotation, transition->orbit.saved_rotation);
         } else if (sub == 0) {
             restore_camera_vectors();
         }
     }
     cam_trans_state_lui = 3;
-    *(unsigned char *)(r + 2) = r[3];
-    if (*(unsigned char *)(r + 2) == 0) {
-        char *primary_transition_state = r + 0x10;
+    transition->kind = transition->requested_kind;
+    if (transition->kind == 0) {
+        struct CameraBlend *blend = &transition->blend;
 
-        *(float *)(primary_transition_state + 0x10) = *(float *)(primary_transition_state + 0x14);
-        *(int *)(primary_transition_state + 0xC) = 0;
-        qcopy(r + 0x40, r + 0x50);
-        *(float *)(primary_transition_state + 0x0) = 0;
-        *(float *)(primary_transition_state + 0x4) = *(float *)(primary_transition_state + 0x8);
-        qcopy(r + 0x30, r + 0x60);
+        blend->position_rate = blend->configured_position_rate;
+        *(int *)&blend->position_progress = 0;
+        qcopy(blend->from_position, blend->position);
+        blend->rotation_progress = 0;
+        blend->rotation_rate = blend->configured_rotation_rate;
+        qcopy(blend->from_rotation, blend->rotation);
     } else {
-        char *b = r + 0x70;
-        int   configured_frame_count = ++*(int *)(b + 0x14);
+        struct CameraOrbit *orbit = &transition->orbit;
+        int                 configured_frame_count = ++orbit->start_count;
 
-        *(int *)(b + 0xC) = scale_game_frames(configured_frame_count);
-        *(float *)(b + 0x10) = 1.0f / convert_integer_to_float(*(int *)(b + 0xC));
+        orbit->frames = scale_game_frames(configured_frame_count);
+        orbit->frame_step = 1.0f / convert_integer_to_float(orbit->frames);
     }
 }
 

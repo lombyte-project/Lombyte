@@ -1,5 +1,6 @@
 /* Level 12 moby class crane_arm. */
 #include "types.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
@@ -7,7 +8,6 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
-extern int random_integer_below(int);
 extern int scale_game_frames(int);
 
 /* Idle critter: waits a random time, then plays one of its fidget animations (or reacts when the hero comes close). */
@@ -36,60 +36,61 @@ void crane_arm_update(unsigned char *moby) {
         CRANE_ARM_ANIM_RETURN_TO_BASE_B = 6
     };
     float hero_distance = vector_distance_xy(moby + 0x10, &hero.motion.pos);
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case CRANE_ARM_INITIALIZE:
-        if (moby[0x53] != 0)
+        if (MOBY(moby)->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, 0);
-        moby[0x20] = 1;
-        moby[0xBC] = random_integer_below(scale_game_frames(0xB4));
+        MOBY(moby)->state = 1;
+        MOBY(moby)->command = random_integer_below(scale_game_frames(0xB4));
         break;
     case CRANE_ARM_WAIT_DELAY:
-        if (moby[0x52] == 0 && hero_distance < 9.0f && moby[0xBC] < 2)
-            moby[0xBC] = 2;
-        if (hero_distance < 12.0f && moby[0x52] == moby[0x53] && moby[0x52] != 0)
-            moby[0xBC] = 0;
+        if (MOBY(moby)->seq == 0 && hero_distance < 9.0f && MOBY(moby)->command < 2)
+            MOBY(moby)->command = 2;
+        if (hero_distance < 12.0f && MOBY(moby)->seq == MOBY(moby)->prev_seq &&
+            MOBY(moby)->seq != 0)
+            MOBY(moby)->command = 0;
         if (FUN_L00_001fefc8(moby + 0xBC)) {
-            switch (moby[0x52]) {
+            switch (MOBY(moby)->seq) {
             case CRANE_ARM_ANIM_BASE:
                 if (random_integer_below(0x100) & 1) {
-                    if (moby[0x53] != 3)
+                    if (MOBY(moby)->prev_seq != 3)
                         blend_moby_animation(moby, 3, 0, 0);
                 } else {
-                    if (moby[0x53] != 5)
+                    if (MOBY(moby)->prev_seq != 5)
                         blend_moby_animation(moby, 5, 0, 0);
                 }
                 break;
             case CRANE_ARM_ANIM_DELAY_A:
-                if (moby[0x53] != 4)
+                if (MOBY(moby)->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, 0);
                 break;
             case CRANE_ARM_ANIM_DELAY_B:
-                if (moby[0x53] != 6)
+                if (MOBY(moby)->prev_seq != 6)
                     blend_moby_animation(moby, 6, 0, 0);
                 break;
             }
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     case CRANE_ARM_WAIT_ANIMATION_FLAG:
-        if (moby[0x70] & 2) {
-            switch (moby[0x52]) {
+        if (MOBY(moby)->anim_flags & 2) {
+            switch (MOBY(moby)->seq) {
             case CRANE_ARM_ANIM_BASE_TO_DELAY_A:
-                if (moby[0x53] != 1)
+                if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, 0);
                 break;
             case CRANE_ARM_ANIM_RETURN_TO_BASE_A:
             case CRANE_ARM_ANIM_RETURN_TO_BASE_B:
-                if (moby[0x53] != 0)
+                if (MOBY(moby)->prev_seq != 0)
                     blend_moby_animation(moby, 0, 0, 0);
                 break;
             case CRANE_ARM_ANIM_BASE_TO_DELAY_B:
-                if (moby[0x53] != 2)
+                if (MOBY(moby)->prev_seq != 2)
                     blend_moby_animation(moby, 2, 0, 0);
                 break;
             }
-            moby[0x20] = 1;
-            moby[0xBC] = random_integer_below(scale_game_frames(0xB4));
+            MOBY(moby)->state = 1;
+            MOBY(moby)->command = random_integer_below(scale_game_frames(0xB4));
         }
         break;
     }

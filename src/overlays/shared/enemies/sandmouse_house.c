@@ -32,7 +32,7 @@ void sandmouse_house_update(unsigned char *moby) {
         return;
     house_vars = ((char *)MOBY(moby)->pvars);
     if (house_vars != 0) {
-        if (moby[0x20] != 0) {
+        if (MOBY(moby)->state != 0) {
             if (D_0013D4C5 != 0) {
                 if (hero.items[2].item_id == 5) {
                     float yaw_response_scale = D_0015ED70_lui;
@@ -46,80 +46,81 @@ void sandmouse_house_update(unsigned char *moby) {
             }
         }
     }
-    switch (moby[0x20]) {
+    switch (MOBY(moby)->state) {
     case SANDMOUSE_HOUSE_INITIALIZE:
-        if (moby[0x53] != 0) {
+        if (MOBY(moby)->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(0));
         }
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         *(float *)house_vars = MOBY(moby)->rot.z;
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND:
-        if ((unsigned char)(moby[0xBC] - 3) < 3) {
-            if (moby[0x53] != 1) {
+        if ((unsigned char)(MOBY(moby)->command - 3) < 3) {
+            if (MOBY(moby)->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END:
-        if (moby[0x70] & 2) {
-            if (moby[0x53] != 2) {
+        if (MOBY(moby)->anim_flags & 2) {
+            if (MOBY(moby)->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(3));
             }
-            moby[0x20] = 3;
+            MOBY(moby)->state = 3;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND:
-        if ((unsigned char)(moby[0xBC] - 4) < 2) {
-            if (moby[0x53] != 3) {
+        if ((unsigned char)(MOBY(moby)->command - 4) < 2) {
+            if (MOBY(moby)->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(3));
             }
-            moby[0x20] = 4;
-        } else if (moby[0xBC] == 7 || moby[0xBC] == 1) {
-            if (moby[0x53] != 6) {
+            MOBY(moby)->state = 4;
+        } else if (MOBY(moby)->command == 7 || MOBY(moby)->command == 1) {
+            if (MOBY(moby)->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(3));
             }
-            moby[0x20] = 7;
+            MOBY(moby)->state = 7;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END:
-        if (moby[0x70] & 2) {
-            if (moby[0x53] != 4) {
+        if (MOBY(moby)->anim_flags & 2) {
+            if (MOBY(moby)->prev_seq != 4) {
                 blend_moby_animation(moby, 4, 0, scale_game_frames(3));
             }
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND:
-        if (moby[0xBC] == 3 || moby[0xBC] == 6 || moby[0xBC] == 7 || moby[0xBC] == 1) {
-            if (moby[0x53] != 5) {
+        if (MOBY(moby)->command == 3 || MOBY(moby)->command == 6 || MOBY(moby)->command == 7 ||
+            MOBY(moby)->command == 1) {
+            if (MOBY(moby)->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(3));
             }
-            moby[0x20] = 6;
+            MOBY(moby)->state = 6;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND_ANIMATION_END:
-        if (moby[0x70] & 2) {
-            if (moby[0xBC] == 7 || moby[0xBC] == 1) {
-                if (moby[0x53] != 6) {
+        if (MOBY(moby)->anim_flags & 2) {
+            if (MOBY(moby)->command == 7 || MOBY(moby)->command == 1) {
+                if (MOBY(moby)->prev_seq != 6) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(3));
                 }
-                moby[0x20] = 7;
+                MOBY(moby)->state = 7;
             } else {
-                if (moby[0x53] != 2) {
+                if (MOBY(moby)->prev_seq != 2) {
                     blend_moby_animation(moby, 2, 0, scale_game_frames(3));
                 }
-                moby[0x20] = 3;
+                MOBY(moby)->state = 3;
             }
         }
         break;
     case SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION:
-        if (moby[0x70] & 2) {
-            if (moby[0x53] != 0) {
+        if (MOBY(moby)->anim_flags & 2) {
+            if (MOBY(moby)->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(3));
             }
-            moby[0x20] = 1;
+            MOBY(moby)->state = 1;
         }
         break;
     case 8:

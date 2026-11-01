@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
+#include "rnc/rendering/texture/draw_textured_quad.h"
 
 struct Glyph {
     u8 u;
@@ -10,17 +11,6 @@ struct Glyph {
 };
 
 #include "rnc/ui/text/font_palette.h"
-
-extern void draw_textured_quad(s32 x,
-                               s32 y,
-                               s32 w,
-                               s32 h,
-                               s32 u,
-                               s32 v,
-                               s32 uw,
-                               s32 vh,
-                               u64 color,
-                               u64 extra) __asm__("FUN_001f5450");
 
 s32 font_print_wrapped(s32           x,
                        s32           y,

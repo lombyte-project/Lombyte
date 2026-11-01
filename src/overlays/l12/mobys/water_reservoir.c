@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -12,8 +12,9 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/math/random.h"
+#include "rnc/rendering/effect_texture.h"
 
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 void         draw_water_reservoir(struct Moby *moby) __asm__("FUN_L12_002ecac0");
 
@@ -146,7 +147,6 @@ extern char  water_reservoir_quad_vertex_template[] __asm__("D_L12_001F5B20");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 int          D_L12_00161A10 = 1;
 int          D_L12_00161A14 = 0;
 int          D_L12_00161A0C = 0;

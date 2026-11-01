@@ -6,7 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern int   debug_print() __asm__("FUN_001e93b0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -17,6 +17,19 @@ char cycling_platform_missing_pvars_message[79] __asm__("D_L10_001DC510") =
 void       cycling_platform_update(char *platform_moby) __asm__("FUN_L10_00295a38");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 
+typedef struct CyclingPlatformVars {
+    u8  pad_0[0x20];
+    s32 unk20;
+    s16 unk24;
+    u8  pad_26[0x2];
+    s8  unk28;
+    u8  pad_29[0x15];
+    s16 unk3E;
+    u8  pad_40[0x60];
+    f32 unkA0[4];
+    s32 timer_B0;
+} CyclingPlatformVars;
+
 /* Moby class 1033 */
 void cycling_platform_update(char *platform_moby) {
     enum {
@@ -26,7 +39,7 @@ void cycling_platform_update(char *platform_moby) {
         PLATFORM_STATE_DESCENDING = 3,
         PLATFORM_STATE_WAIT_AT_ORIGINAL_HEIGHT = 4
     };
-    char *platform_vars = ((char *)MOBY(platform_moby)->pvars);
+    CyclingPlatformVars *platform_vars = (CyclingPlatformVars *)MOBY(platform_moby)->pvars;
     if (platform_vars == 0) {
         debug_print(cycling_platform_missing_pvars_message,
                     MOBY(platform_moby)->oclass,
@@ -36,26 +49,26 @@ void cycling_platform_update(char *platform_moby) {
     }
     switch (MOBY(platform_moby)->state) {
     case PLATFORM_STATE_INITIALIZE:
-        platform_vars[0x28] = 4;
-        *(short *)(platform_vars + 0x3E) = 5;
-        *(int *)(platform_vars + 0x20) = 0;
-        *(short *)(platform_vars + 0x24) = 0;
-        *(OvlQuad *)(platform_vars + 0xA0) = *(OvlQuad *)&MOBY(platform_moby)->pos;
+        platform_vars->unk28 = 4;
+        platform_vars->unk3E = 5;
+        platform_vars->unk20 = 0;
+        platform_vars->unk24 = 0;
+        *(OvlQuad *)&platform_vars->unkA0[0] = *(OvlQuad *)&MOBY(platform_moby)->pos;
         platform_moby[0x20] = 1;
         break;
     case PLATFORM_STATE_RISING: {
         float lim;
         MOBY(platform_moby)->pos.z = MOBY(platform_moby)->pos.z + 1.5f / scale_time(45.0f);
-        lim = *(float *)(platform_vars + 0xA8) + 1.5f;
+        lim = platform_vars->unkA0[2] + 1.5f;
         if (lim <= MOBY(platform_moby)->pos.z) {
             MOBY(platform_moby)->pos.z = lim;
             platform_moby[0x20] = 2;
-            *(int *)(platform_vars + 0xB0) = scale_game_frames(0x78);
+            platform_vars->timer_B0 = scale_game_frames(0x78);
         }
         break;
     }
     case PLATFORM_STATE_WAIT_AT_UPPER_HEIGHT:
-        if (fast_dec_timer((int *)(platform_vars + 0xB0))) {
+        if (fast_dec_timer(&platform_vars->timer_B0)) {
             allocate_voice_for_target_entry(0, 0, (int)platform_moby);
             platform_moby[0x20] = 3;
         }
@@ -63,16 +76,16 @@ void cycling_platform_update(char *platform_moby) {
     case PLATFORM_STATE_DESCENDING: {
         float lim;
         MOBY(platform_moby)->pos.z = MOBY(platform_moby)->pos.z - 1.5f / scale_time(45.0f);
-        lim = *(float *)(platform_vars + 0xA8);
+        lim = platform_vars->unkA0[2];
         if (MOBY(platform_moby)->pos.z <= lim) {
             MOBY(platform_moby)->pos.z = lim;
             platform_moby[0x20] = 4;
-            *(int *)(platform_vars + 0xB0) = scale_game_frames(0x78);
+            platform_vars->timer_B0 = scale_game_frames(0x78);
         }
         break;
     }
     case PLATFORM_STATE_WAIT_AT_ORIGINAL_HEIGHT:
-        if (fast_dec_timer((int *)(platform_vars + 0xB0))) {
+        if (fast_dec_timer(&platform_vars->timer_B0)) {
             allocate_voice_for_target_entry(0, 0, (int)platform_moby);
             platform_moby[0x20] = 1;
         }

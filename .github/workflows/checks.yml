@@ -23,4 +23,4 @@ jobs:
       - name: Script regression tests
         run: python3 scripts/test_public_tools.py -v
       - name: Byte-compile the public scripts
-        run: python3 -m py_compile scripts/*.py
+        run: python3 -m py_compile scripts/*.py scripts/lib/*.py

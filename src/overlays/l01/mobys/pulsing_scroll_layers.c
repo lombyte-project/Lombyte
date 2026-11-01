@@ -1,7 +1,10 @@
 /* Level 01 moby class pulsing_scroll_layers (0x4c9): queues the draw of three scrolling layers whose glow pulses with a sine. */
 #include "types.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/scroll_layer.h"
+#include "rnc/overlay/l01/scroll_layer.h"
+#include "rnc/overlay/l01/scroll_layers.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct {
     u8  pad0[0x30];
@@ -11,9 +14,6 @@ typedef struct {
 } FlagMoby;
 
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
-void       hud_counter_update(void) __asm__("FUN_L00_002371e0");
-void       update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
-void       add_draw_callback(void *fn, void *arg) __asm__("FUN_001f4600");
 
 void draw_pulsing_scroll_layers(void) __asm__("FUN_L01_00309bf8");
 

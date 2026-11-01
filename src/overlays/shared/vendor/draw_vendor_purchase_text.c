@@ -1,6 +1,6 @@
 /* Vendor: draws the purchase text; also the pool splash. */
 #include "types.h"
-#include "rnc/overlay/vendor_menu.h"
+#include "rnc/overlay/shared/vendor/vendor_menu.h"
 #include "asm.h"
 #include "sda.h"
 

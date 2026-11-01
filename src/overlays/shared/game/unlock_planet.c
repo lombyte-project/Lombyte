@@ -56,7 +56,8 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
             continue;
         if (MOBY(candidate_moby)->state != 3)
             continue;
-        candidate_distance_score = vector_distance_xy(query_moby + 0x10, candidate_moby + 0x10);
+        candidate_distance_score =
+            vector_distance_xy(&MOBY(query_moby)->pos, &MOBY(candidate_moby)->pos);
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
@@ -75,7 +76,8 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
             continue;
         if (MOBY(candidate_moby)->command == 0)
             continue;
-        candidate_distance_score = vector_distance_xy(query_moby + 0x10, candidate_moby + 0x10);
+        candidate_distance_score =
+            vector_distance_xy(&MOBY(query_moby)->pos, &MOBY(candidate_moby)->pos);
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
@@ -84,7 +86,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
     }
     if (selected_moby != 0) {
         *(char **)(target_output + 0x40) = selected_moby;
-        qcopy(target_output, selected_moby + 0x10);
+        qcopy(target_output, &MOBY(selected_moby)->pos);
         qcopy(target_output + 0x10, selected_moby + 0x40);
         hero_data = &hero_lui;
         if (selected_moby == ((char *)hero_data->moby)) {
@@ -160,7 +162,8 @@ int        FUN_L00_0025ff38(char  *query_moby,
         if (*(unsigned char *)(indexed_candidate + 0x20) != 3)
             continue;
         ok = 1;
-        candidate_distance_score = vector_distance_xy(query_moby + 0x10, indexed_candidate + 0x10);
+        candidate_distance_score =
+            vector_distance_xy(&MOBY(query_moby)->pos, indexed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
         } else if (exclusion_list_bound > 0) {
@@ -193,7 +196,8 @@ int        FUN_L00_0025ff38(char  *query_moby,
         if (*(unsigned char *)(listed_candidate + 0xBC) == 0)
             continue;
         ok = 1;
-        candidate_distance_score = vector_distance_xy(query_moby + 0x10, listed_candidate + 0x10);
+        candidate_distance_score =
+            vector_distance_xy(&MOBY(query_moby)->pos, listed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
         } else if (exclusion_list_bound > 0) {
@@ -215,7 +219,7 @@ int        FUN_L00_0025ff38(char  *query_moby,
     }
     if (selected_moby != 0) {
         *(char **)(target_output + 0x40) = selected_moby;
-        qcopy(target_output, selected_moby + 0x10);
+        qcopy(target_output, &MOBY(selected_moby)->pos);
         qcopy(target_output + 0x10, selected_moby + 0x40);
         hero_data = &hero_lui;
         if (selected_moby == (char *)hero_data->moby) {
@@ -262,7 +266,7 @@ int           FUN_L00_00260400(int    unused_subject_object,
     return 1;
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
 u8           *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
@@ -382,7 +386,7 @@ void unlock_planet(s32 id) {
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
 
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 
 extern ItemDef        item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern int            D_L00_001B0340[] NOT_SDA;

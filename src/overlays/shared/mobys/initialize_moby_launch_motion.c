@@ -27,7 +27,7 @@ void initialize_moby_launch_motion(char *moby,
 
                                    int lifetime_frames) {
     Dat *moby_vars = ((Dat *)MOBY(moby)->pvars);
-    moby[0x20] = 1;
+    MOBY(moby)->state = 1;
     qcopy((char *)moby_vars + 0x30, initial_motion_step);
     qcopy((char *)moby_vars + 0x10, local_rotation_offset);
     moby_vars->id = scale_game_frames(lifetime_frames);

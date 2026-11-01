@@ -6,21 +6,16 @@ typedef float f32;
 
 extern int  collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char D_00194120[];
-/* Builds two 16-byte copies of *pos: one with byte offset 8 (a float)
-   forced to 0.01f, the other with its offset-8 float bumped by height_offset.
-   Passes both to coll_line_fix (a collision/line test elsewhere in the
-   file's neighbours); returns D_00194120's float at +8 on success, else
-   0.0f. */
-f32 probe_ground_height(void *pos, s32 flags, f32 height_offset) __asm__("FUN_00213508");
+f32         probe_ground_height(void *pos, s32 flags, f32 height_offset) __asm__("FUN_00213508");
 
 f32 probe_ground_height(void *probe_position, s32 flags, f32 height_offset) {
-    char low_point[16];
-    char raised_point[16];
+    f32 low_point[4];
+    f32 raised_point[4];
 
     qcopy(low_point, probe_position);
-    *(f32 *)(low_point + 8) = 0.01f;
+    low_point[2] = 0.01f;
     qcopy(raised_point, probe_position);
-    *(f32 *)(raised_point + 8) = *(f32 *)(raised_point + 8) + height_offset;
+    raised_point[2] = raised_point[2] + height_offset;
     if (collision_line(raised_point, low_point, flags | 2, 0, 0) != 0) {
         return *(f32 *)(D_00194120 + 8);
     }

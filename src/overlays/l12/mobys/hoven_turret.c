@@ -1,7 +1,7 @@
 /* Level 12 moby class hoven_turret (class 1267): the manned turret, its camera, target timer, HUD and destruction fade. */
 #include "rnc/hero/hero.h"
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 

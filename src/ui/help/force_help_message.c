@@ -15,9 +15,9 @@ s32 force_help_message(s32 help_message_selector, s32 message_id) {
         if (message_id != 0) {
             copy_text_to_shared_buffer(get_help_message_text(message_id));
         }
-        help_message_owner = help_message_selector;
-        help_message_request_state = 2;
-        current_help_message_id = message_id;
+        D_0015F5D4 = help_message_selector;
+        D_0015F5D0 = 2;
+        D_00161288 = message_id;
         help_message_status = 3;
     }
     return help_message_status;

@@ -3,7 +3,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -13,7 +13,10 @@
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/vendor/vendor_volume.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/compute_advanced_moby_path_position.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern float D_L09_00166F40[];
 
@@ -111,13 +114,11 @@ extern char *FUN_L09_002efe48_c(void *, void *, void *, float, float) __asm__("F
 extern float D_L09_00173FE8 NOT_SDA;
 extern float D_0015ED6C     MACRO_ADDR;
 extern int                  FUN_001efa68(void *, void *, int, int, int);
-extern int                  FUN_L00_00257b90(int, int);
 extern int                  trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern unsigned char        D_0013F350[];
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
-extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
-extern f32  frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
-void        update_falling_asteroid(Moby *falling_rock) __asm__("FUN_L09_002eaea8");
+extern void                 scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+extern f32                  frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
+void                        update_falling_asteroid(Moby *falling_rock) __asm__("FUN_L09_002eaea8");
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002ECC50), where it is exact; names translated to the US level program. */
 typedef struct {
@@ -145,14 +146,12 @@ typedef struct {
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern void  update_fading_asteroid_debris(unsigned char *m) __asm__("FUN_L09_002ead30");
 extern void  scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
-s32          compute_advanced_moby_path_position(
-             struct Moby *m, void *path, void *out, s32 i, s32 dir, f32 dist) __asm__("FUN_L09_00294ae0");
-void  asteroid_update(struct Moby *m) __asm__("FUN_L09_002eb970");
-char *spawn_radially_scattered_moby(void  *unused,
-                                    float  lower_radius,
-                                    float  upper_radius,
-                                    void  *origin,
-                                    float *direction) __asm__("FUN_L09_002efe48");
+void         asteroid_update(struct Moby *m) __asm__("FUN_L09_002eb970");
+char        *spawn_radially_scattered_moby(void  *unused,
+                                           float  lower_radius,
+                                           float  upper_radius,
+                                           void  *origin,
+                                           float *direction) __asm__("FUN_L09_002efe48");
 
 char *spawn_fading_asteroid_debris(struct Moby *debris_source_asteroid, float *inherited_velocity) {
     char *moby = create_moby(random_integer_below(4) + 0x107);
@@ -395,13 +394,13 @@ void update_falling_asteroid(Moby *falling_rock) {
                     pb = &B.v[random_integer_below(6)];
                     {
                         int lo = scale_game_frames(15), hi = scale_game_frames(20);
-                        a = FUN_L00_00257b90(lo, hi);
+                        a = random_int_between(lo, hi);
                     }
                     {
                         int lo = scale_game_frames(25), hi = scale_game_frames(30);
-                        b = FUN_L00_00257b90(lo, hi);
+                        b = random_int_between(lo, hi);
                     }
-                    spawn_particle(
+                    FUN_L00_0026a9f0(
                         moby_vars->pos, scaled_movement_step, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
@@ -471,22 +470,22 @@ void update_falling_asteroid(Moby *falling_rock) {
                     pb = &B.v[random_integer_below(6)];
                     {
                         int lo = scale_game_frames(15), hi = scale_game_frames(20);
-                        a = FUN_L00_00257b90(lo, hi);
+                        a = random_int_between(lo, hi);
                     }
                     {
                         int lo = scale_game_frames(25), hi = scale_game_frames(30);
-                        b = FUN_L00_00257b90(lo, hi);
+                        b = random_int_between(lo, hi);
                     }
-                    spawn_particle(offset_position,
-                                   position_or_movement_step,
-                                   *pa,
-                                   *pb,
-                                   a,
-                                   b,
-                                   0,
-                                   0,
-                                   1200000.0f,
-                                   sc);
+                    FUN_L00_0026a9f0(offset_position,
+                                     position_or_movement_step,
+                                     *pa,
+                                     *pb,
+                                     a,
+                                     b,
+                                     0,
+                                     0,
+                                     1200000.0f,
+                                     sc);
                 }
                 for (i = 9; i >= 0; i--) {
                     FUN_L09_002ea528_c((char *)falling_rock, movement_step);
@@ -552,22 +551,22 @@ void update_falling_asteroid(Moby *falling_rock) {
                 pb = &B.v[random_integer_below(6)];
                 {
                     int lo = scale_game_frames(15), hi = scale_game_frames(20);
-                    a = FUN_L00_00257b90(lo, hi);
+                    a = random_int_between(lo, hi);
                 }
                 {
                     int lo = scale_game_frames(25), hi = scale_game_frames(30);
-                    b = FUN_L00_00257b90(lo, hi);
+                    b = random_int_between(lo, hi);
                 }
-                spawn_particle(offset_position,
-                               position_or_movement_step,
-                               *pa,
-                               *pb,
-                               a,
-                               b,
-                               0,
-                               0,
-                               1200000.0f,
-                               sc);
+                FUN_L00_0026a9f0(offset_position,
+                                 position_or_movement_step,
+                                 *pa,
+                                 *pb,
+                                 a,
+                                 b,
+                                 0,
+                                 0,
+                                 1200000.0f,
+                                 sc);
             }
             if (falling_rock->state >= 3) {
                 mark_moby_for_removal(falling_rock);

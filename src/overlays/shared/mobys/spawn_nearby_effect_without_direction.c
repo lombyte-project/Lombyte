@@ -1,7 +1,7 @@
 /* Mobys: spawns a nearby effect without a direction. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
 void spawn_nearby_effect_without_direction(unsigned char *effect_owner,

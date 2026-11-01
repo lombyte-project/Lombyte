@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_GRINDRAIL_BARRIER_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_GRINDRAIL_BARRIER_H
+
+#include "types.h"
+
+struct Moby;
+
+void grindrail_barrier_update(struct Moby *) __asm__("FUN_L16_002e5708");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_GRINDRAIL_BARRIER_H */

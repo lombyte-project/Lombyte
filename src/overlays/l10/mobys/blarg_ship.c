@@ -18,7 +18,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l10/mobys/aligned_vector.h"
 
 typedef struct Moby Moby;
@@ -36,7 +36,7 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 extern char D_L10_00167240[];
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/game_globals.h"
 
 extern void FUN_L00_00257470(void *, int, int);
@@ -461,6 +461,24 @@ extern int  follow_5968(float, void *, void *, int, int, void *, int) __asm__("F
 
 void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN_L10_002e5968");
 
+typedef struct BlargShipVars {
+    u8  pad_0[0x20];
+    f32 unk20;
+    u8  pad_24[0x2];
+    s16 unk26;
+    u8  pad_28[0x98];
+    u8  anim_state;
+    u8  pad_C1[0x6];
+    u8  unkC7;
+    u8  pad_C8[0x8];
+    u8  unkD0;
+    u8  pad_D1[0x3F];
+    s32 unk110;
+    s32 unk114;
+    u8  pad_118[0x78];
+    s32 path_190;
+} BlargShipVars;
+
 void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
@@ -469,16 +487,16 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         COLOR_EFFECT_ONLY_HIT_RESPONSE = 12,
         NO_REACTION_HIT_RESPONSE = 13
     };
-    unsigned char *pvars = moby->pvars;
+    BlargShipVars *pvars = (BlargShipVars *)moby->pvars;
     char          *ship_hit_record = find_moby_hit(moby, 0x370000, 0);
     int            ship_hit_processing_status;
     float          dmg;
     int            hit_response_code;
     dmg = 0.0f;
     hit_response_code = resolve_moby_hit_response(
-        moby, ship_hit_record, pvars + 0x20, 5, &ship_hit_processing_status, &dmg, 0, 4);
+        moby, ship_hit_record, &pvars->unk20, 5, &ship_hit_processing_status, &dmg, 0, 4);
     if (ship_hit_record != 0 && ship_hit_processing_status != 1 && moby->state != 8) {
-        if ((*(float *)(pvars + 0x20) -= dmg) <= 0.0f) {
+        if ((pvars->unk20 -= dmg) <= 0.0f) {
             hit_response_code = 1;
         }
         if (*(int *)(ship_hit_record + 0x24) & 0x40000) {
@@ -488,20 +506,20 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         case COLOR_UPDATE_ONLY_HIT_RESPONSE:
         case COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
-            pvars[0xC7] = 0xFA;
-            trooper_anim_update(moby, pvars + 0xC0);
+            pvars->unkC7 = 0xFA;
+            trooper_anim_update(moby, &pvars->anim_state);
             break;
         case LETHAL_HIT_RESPONSE:
-            pvars[0xC7] = 0xFA;
-            trooper_anim_update(moby, pvars + 0xC0);
+            pvars->unkC7 = 0xFA;
+            trooper_anim_update(moby, &pvars->anim_state);
             moby->state = 8;
             break;
         case NO_REACTION_HIT_RESPONSE:
             break;
         default:
-            pvars[0xC7] = 0xFA;
-            *(short *)(pvars + 0x26) = scale_game_frames(0x3C);
-            trooper_anim_update(moby, pvars + 0xC0);
+            pvars->unkC7 = 0xFA;
+            pvars->unk26 = scale_game_frames(0x3C);
+            trooper_anim_update(moby, &pvars->anim_state);
             blend_moby_animation(moby, 4, 0, scale_game_frames(6));
             moby->command = moby->state;
             moby->state = 7;
@@ -509,30 +527,29 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, pvars + 0xC0);
+    trooper_anim_finish(moby, &pvars->anim_state);
     if (hero.vehicle_mode == 1) {
-        select_hero_or_gadgebot_target(101.0f, moby, pvars + 0x110);
-        if (*(char **)(pvars + 0x110) == 0) {
-            *(int *)(pvars + 0x114) = 2;
+        select_hero_or_gadgebot_target(101.0f, moby, &pvars->unk110);
+        if (*(char **)&pvars->unk110 == 0) {
+            pvars->unk114 = 2;
         } else {
-            char *path = ((char *)l10_paths[*(int *)(pvars + 0x190)]);
-            if (point_in_path_xy(*(char **)(pvars + 0x110) + 0x10, path + 0x10, *(int *)path) ==
-                0) {
-                *(int *)(pvars + 0x110) = 0;
-                *(int *)(pvars + 0x114) = 2;
+            char *path = ((char *)l10_paths[pvars->path_190]);
+            if (point_in_path_xy(*(char **)&pvars->unk110 + 0x10, path + 0x10, *(int *)path) == 0) {
+                pvars->unk110 = 0;
+                pvars->unk114 = 2;
             } else {
-                *(int *)(pvars + 0x114) = 0;
+                pvars->unk114 = 0;
             }
         }
     } else {
-        char *path = ((char *)l10_paths[*(int *)(pvars + 0x190)]);
-        if (follow_5968(101.0f, moby, pvars + 0xD0, 0, 0, path + 0x10, *(int *)path) != 2 &&
+        char *path = ((char *)l10_paths[pvars->path_190]);
+        if (follow_5968(101.0f, moby, &pvars->unkD0, 0, 0, path + 0x10, *(int *)path) != 2 &&
             moby->visible == 0) {
-            *(int *)(pvars + 0x114) = 2;
+            pvars->unk114 = 2;
         }
     }
-    if (*(int *)(pvars + 0x110) == 0) {
-        *(int *)(pvars + 0x110) = (int)hero.moby;
+    if (pvars->unk110 == 0) {
+        pvars->unk110 = (int)hero.moby;
     }
 }
 

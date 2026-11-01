@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_HOVERBOARD_GIRL_H
+#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_HOVERBOARD_GIRL_H
+
+#include "types.h"
+
+void hoverboard_girl_update() __asm__("FUN_L05_00316ab8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_HOVERBOARD_GIRL_H */

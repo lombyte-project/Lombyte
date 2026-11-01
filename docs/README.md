@@ -1,7 +1,7 @@
 # Docs
 
 Three folders: `build/` (setup, building, progress), `contributing/` (how to
-write and clean up C) and `game/` (notes on how parts of the game work).
+clean up C) and `game/` (notes on how parts of the game work).
 
 Start with [build/building.md](build/building.md), then
 [CONTRIBUTING.md](../CONTRIBUTING.md).
@@ -16,7 +16,9 @@ Start with [build/building.md](build/building.md), then
 | [contributing/decompilation-tips.md](contributing/decompilation-tips.md) | getting a function to match                    |
 | [game/audio-voices.md](game/audio-voices.md)                             | sound voice allocation                         |
 | [game/engine-source-layout.md](game/engine-source-layout.md)             | the original engine's source files and modules |
-| [game/enum-layout.md](game/enum-layout.md)                               | where shared enums live                        |
 | [game/menu-stream-buffers.md](game/menu-stream-buffers.md)               | the menu stream buffer pool                    |
 | [game/moby-selector-scratch-path.md](game/moby-selector-scratch-path.md) | the moby selector to scratch transform         |
+| [game/occlusion.md](game/occlusion.md)                                   | the visibility mask                            |
+| [game/point-lights.md](game/point-lights.md)                             | point-light links to ties, tfrags and shrubs   |
 | [game/stash.md](game/stash.md)                                           | IOP stash transfers                            |
+| [game/vu1-chain.md](game/vu1-chain.md)                                   | VU1 packets and the VIF1 DMA path              |

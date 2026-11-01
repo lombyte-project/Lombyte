@@ -1,6 +1,6 @@
 {
   "schema": "rnc-unit-categories-v1",
-  "description": "Derived unit categories needed by scripts/generate_treemap.py. Canonical audits live in the tooling repository.",
+  "description": "Derived unit categories needed by scripts/progress-map.py. Canonical audits live in the tooling repository.",
   "generated": "2026-09-24",
   "exact_under_assembly": [],
   "intentional_asm": [

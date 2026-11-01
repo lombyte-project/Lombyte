@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L05_RENDER_LEVEL_WATER_GRIDS_H
+#define LOMBYTE_RNC_OVERLAY_L05_RENDER_LEVEL_WATER_GRIDS_H
+
+#include "types.h"
+
+void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L05_RENDER_LEVEL_WATER_GRIDS_H */

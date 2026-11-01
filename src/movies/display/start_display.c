@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/movies/decoder/decoder_globals.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
 
 extern volatile s32 D_001611E4;
-extern s32          sceGsSyncV();
 
 void start_display(s32 vblank_field_to_skip) __asm__("FUN_0023b590");
 

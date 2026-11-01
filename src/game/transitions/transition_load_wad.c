@@ -13,6 +13,13 @@
 #include "rnc/world/loaders/unpack_point_records.h"
 #include "rnc/world/loaders/upload_texture_images.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
+#include "rnc/audio/streaming/update_audio_stream_until_idle.h"
+#include "rnc/rendering/frame/initialize_level_render_state.h"
+#include "rnc/rendering/texture/parse_particle_textures.h"
+#include "rnc/sdk/graph/sce_gs_exec_load_image.h"
+#include "rnc/sdk/graph/sce_gs_set_def_load_image.h"
+#include "rnc/sdk/graph/sce_gs_sync_path.h"
+#include "rnc/ui/help/load_help_message_group.h"
 
 typedef struct {
     s32 x0;
@@ -97,7 +104,7 @@ typedef struct {
     s32 pad[3];
 } TextEntry;
 
-#include "rnc/ui/help/window_state.h"
+#include "rnc/ui/help/help_state.h"
 
 typedef struct {
     u8    pad0[0xD];
@@ -117,12 +124,11 @@ extern s32        registered_shrub_render_class_count __asm__("D_001603CC");
 
 #include "rnc/game/transitions/transition_load_wad_globals.h"
 
-extern s32             registered_object_render_class_count __asm__("D_00160F4C");
-extern u8              D_00186310[];
-extern SoundBanks      render_sequence __asm__("D_0018CB20");
-extern LoadState       D_001940C0;
-extern u8              D_00194180[];
-extern HelpWindowState help_window_state __asm__("D_001996D0");
+extern s32        registered_object_render_class_count __asm__("D_00160F4C");
+extern u8         D_00186310[];
+extern SoundBanks render_sequence __asm__("D_0018CB20");
+extern LoadState  D_001940C0;
+extern u8         D_00194180[];
 
 #include "rnc/rendering/material_templates.h"
 
@@ -137,19 +143,12 @@ extern s32           tfrag_texture_size_table[] __asm__("D_001E0900");
 extern s32           object_render_texture_lookup_table[] __asm__("D_001E2600");
 extern void          fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void          FlushCache(s32);
-extern void          load_help_message_group(s32);
-extern void          sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
-extern s32           initialize_level_render_state(u8 *) __asm__("FUN_001e9b10");
 extern volatile char log2dim(s32) __asm__("func_001F97A0");
-extern void          parse_particle_textures(u8 *, u8 *, u8 *, s32) __asm__("FUN_002026c8");
 extern void          register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__("func_00203730");
 extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
 extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
 extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
 extern volatile unsigned int read_disc_sectors_and_wait(s32, s32, s32) __asm__("func_00216828");
-extern void                  update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
-extern s32                   sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
-extern s32                   sceGsExecLoadImage(void *, u8 *);
 
 void transition_load_wad(void) __asm__("FUN_001ea830");
 
@@ -323,14 +322,14 @@ void transition_load_wad(void) {
     for (k = 0; k < 8; k++) {
         load_help_message_group(k);
         j = 0;
-        if (help_window_state.message_count > 0) {
+        if (help_state.count > 0) {
             te = help_msgs;
             adj = ((s32)te) - 8;
             {
                 do {
                     te[j].offset += adj;
                     j++;
-                } while (j < help_window_state.message_count);
+                } while (j < help_state.count);
             }
         }
     }

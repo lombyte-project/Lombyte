@@ -1,4 +1,7 @@
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/streaming/music_callbacks/music_channel_ready_callback.h"
+#include "rnc/audio/streaming/music_callbacks/music_remaining_time_callback.h"
+#include "rnc/audio/streaming/vag/snd_pause_vag_stream.h"
 
 /* Ported from rac1-decomp (src/game/music.c, func_00216F48). */
 extern void snd_continue_vag_stream(void *) __asm__("func_0012ECA0");
@@ -14,14 +17,11 @@ typedef struct {
 } MusicPlaying;
 
 extern void snd_stop_sound(int) __asm__("func_0012E368");
-extern void snd_pause_vag_stream(int) __asm__("FUN_0012ec70");
 extern void
 snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long), long) __asm__("FUN_0012ecd0");
 extern void snd_sound_is_still_playing_cb(int, void (*)(int, long), long) __asm__("FUN_0012e448");
 extern void snd_is_vag_stream_buffered_cb(int, void (*)(int, long), long) __asm__("FUN_0012ed00");
-extern void music_remaining_time_callback(int, long) __asm__("FUN_00216bc0");
 extern void set_sound_handle_id(int, long) __asm__("func_00216B68");
-extern void music_channel_ready_callback(int, long) __asm__("FUN_00216990");
 /* music_UpdateStream(music_Playing &): with a live handle and state other
    than 9, state 5 stops the stream (state 6) and state 6 without a
    handle resets; a fading record (+0xC bit 15) pauses the handle once

@@ -6,8 +6,9 @@
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "qzero.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 
 typedef struct {
     float x, y, z, w;
@@ -117,10 +118,6 @@ extern f32   FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern s32   FUN_001efa68_c(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern void  FUN_001f9a68(void *, void *, float);
 extern float FUN_L00_0025abf0(void *, void *, int, float, float);
-float        calculate_triangular_corrected_scalar(float *a,
-                                                   float *b,
-                                                   int   *out,
-                                                   float  f) __asm__("FUN_L00_00259468");
 extern void  func_001F9BF0_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int   func_L00_001FF5B0_2C0CF8(float, void *, void *) __asm__("FUN_L00_001ff600");
 extern void  func_001F9BD8_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -155,7 +152,7 @@ int probe_moby_raised_sphere_collision(char *moby, int b, Vx *position_override)
     if (position_override != 0) {
         qcopy(&probe_position, position_override);
     } else {
-        qcopy(&probe_position, moby + 0x10);
+        qcopy(&probe_position, &MOBY(moby)->pos);
     }
     vertical_offset = probe_scale * 0.2f;
     probe_position.z = probe_position.z + vertical_offset;
@@ -300,8 +297,7 @@ select_class5_target_or_hero(
             angles[1], fast_arc_tan(distance, target[2] - position[2]));
         heightError *= heightError;
         if (checkCollision) {
-            if (8.0f <
-                FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18)))
+            if (8.0f < FUN_001f99c0(*(float *)(candidate + 0x18) - MOBY(reference_moby)->pos.z))
                 valid = 1;
             else
                 valid = FUN_001efa68_2bed90(position, target, 6, candidate, 0) != 0;
@@ -311,7 +307,7 @@ select_class5_target_or_hero(
         if (mode != 0 || !valid) {
             bonus = 0.0f;
             score = fast_vec_dist(position, target);
-            if (*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18) > 3.25f)
+            if (*(float *)(candidate + 0x18) - MOBY(reference_moby)->pos.z > 3.25f)
                 score += 15.0f;
             if (valid)
                 bonus = 5.0f;
@@ -326,7 +322,7 @@ select_class5_target_or_hero(
     }
     if (best == 0) {
         char *playerPosition = D_0013F3D0;
-        if (vector_distance(reference_moby + 0x10, playerPosition) > 3.2f)
+        if (vector_distance(&MOBY(reference_moby)->pos, playerPosition) > 3.2f)
             best = *(char **)(playerPosition + 0x2000);
     }
     return best;
@@ -540,7 +536,7 @@ void initialize_moby_hop_trajectory(unsigned char *hopping_moby,
 #define F2BF(p, x) (*(float *)((p) + (x)))
     *(int *)(hop_trajectory + 0x30) = 0;
     qcopy(hop_trajectory, landing_position);
-    squared_horizontal_distance = vector_distance(hopping_moby + 0x10, hop_trajectory);
+    squared_horizontal_distance = vector_distance(&MOBY(hopping_moby)->pos, hop_trajectory);
     squared_horizontal_distance = squared_horizontal_distance * squared_horizontal_distance;
     uncapped_horizontal_speed =
         F2BF(hop_trajectory, 0x1C) * 35.0f * F2BF(hop_trajectory, 0x20) /
@@ -551,7 +547,7 @@ void initialize_moby_hop_trajectory(unsigned char *hopping_moby,
         F2BF(hop_trajectory, 0x14) = F2BF(hop_trajectory, 0x20);
     F2BF(hop_trajectory, 0x18) = fast_arc_tan(F2BF(hop_trajectory, 0) - F2BF(hopping_moby, 0x10),
                                               F2BF(hop_trajectory, 4) - F2BF(hopping_moby, 0x14));
-    uncapped_vertical_launch_speed = FUN_L00_0025abf0(hopping_moby + 0x10,
+    uncapped_vertical_launch_speed = FUN_L00_0025abf0(&MOBY(hopping_moby)->pos,
                                                       hop_trajectory,
                                                       0,
                                                       F2BF(hop_trajectory, 0x14),
@@ -673,9 +669,9 @@ int compute_moby_state_from_vertical_probe(unsigned char *moby) {
         COLLISION_MATERIAL_WATER = 0
     };
     Vec4 lower_probe_point, upper_probe_point;
-    int  resulting_moby_state = moby[0x20];
-    qcopy(&lower_probe_point, moby + 0x10);
-    qcopy(&upper_probe_point, moby + 0x10);
+    int  resulting_moby_state = MOBY(moby)->state;
+    qcopy(&lower_probe_point, &MOBY(moby)->pos);
+    qcopy(&upper_probe_point, &MOBY(moby)->pos);
     lower_probe_point.f[2] -= 0.3f;
     upper_probe_point.f[2] += 1.0f;
     if (FUN_001efa68(&upper_probe_point, &lower_probe_point, 6, moby, 0)) {

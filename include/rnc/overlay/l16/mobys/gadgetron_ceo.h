@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_GADGETRON_CEO_H
+#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_GADGETRON_CEO_H
+
+#include "types.h"
+
+void gadgetron_ceo_update() __asm__("FUN_L16_002e6808");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_GADGETRON_CEO_H */

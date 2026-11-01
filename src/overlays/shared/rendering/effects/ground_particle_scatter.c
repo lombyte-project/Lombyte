@@ -10,6 +10,8 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/rendering/effects/ground_particle_scatter_globals.h"
 #include "rnc/overlay/shared/rendering/effects/ground_particle_scatter.h"
+#include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/rendering/effects/create_type_49_particle.h"
 
 typedef struct Moby Moby;
 
@@ -92,10 +94,8 @@ extern float ground_particle_scatter_ground_height_floor_offset_gp __asm__("D_L0
     __attribute__((sda));
 extern int                        update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 MACRO_ADDR;
-extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
-void        FUN_L00_00262cf0(void *a, void *b);
-void create_type_49_particle(void *pos, int kind, void *vel, float f) __asm__("FUN_L08_0027f5f0");
-void randomize_ground_particle_scatter_parameters(int arg) __asm__("FUN_L08_00307b90");
+extern void  spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
+void         randomize_ground_particle_scatter_parameters(int arg) __asm__("FUN_L08_00307b90");
 extern char  D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
 extern void  randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_00307b90");
 extern void  fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");

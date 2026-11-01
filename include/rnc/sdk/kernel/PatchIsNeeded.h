@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_KERNEL_PATCHISNEEDED_H
+#define LOMBYTE_RNC_SDK_KERNEL_PATCHISNEEDED_H
+
+#include "types.h"
+
+s32 PatchIsNeeded(void);
+
+#endif /* LOMBYTE_RNC_SDK_KERNEL_PATCHISNEEDED_H */

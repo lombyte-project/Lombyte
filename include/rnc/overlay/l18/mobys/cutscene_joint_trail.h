@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_CUTSCENE_JOINT_TRAIL_H
+#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_CUTSCENE_JOINT_TRAIL_H
+
+#include "types.h"
+
+void cutscene_joint_trail_update() __asm__("FUN_L18_002fad28");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_CUTSCENE_JOINT_TRAIL_H */

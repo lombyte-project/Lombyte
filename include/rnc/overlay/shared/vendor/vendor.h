@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_H
+
+#include "types.h"
+
+void vendor_update() __asm__("FUN_L00_002a57a8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_H */

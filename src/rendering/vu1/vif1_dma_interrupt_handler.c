@@ -1,5 +1,5 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 
 /* The DMA-busy bits of the VU1 chain (rendering/vu1/vu1_chain.c). */
 extern volatile s32 vif_chain_flags __asm__("D_00160EE0") __attribute__((sda));

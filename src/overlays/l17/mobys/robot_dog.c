@@ -1,6 +1,6 @@
 /* Level 17 robot_dog: chase and aim, its stun and suction methods, and its glow quads. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/mobys/moby_class_id.h"
 
@@ -11,9 +11,9 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
@@ -140,12 +140,12 @@ void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
 
 void update_robot_dog_glow_effects(struct Moby *moby) __asm__("FUN_L17_002f0210");
 
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(void *m, int a, int b, int c) __asm__("FUN_00212f90");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
 void         robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 
-/* Moby class 1382 */
+/* Moby classes 573, 1382 */
 void robot_dog_update(unsigned char *robot_dog_moby) {
     Vars1382    *robot_dog_vars;
     struct Moby *facing_target_moby;
@@ -208,8 +208,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         blend_moby_animation(
             robot_dog_moby,
             0,
-            random_integer_below(*(
-                unsigned char *)(*(char **)(((char *)MOBY(robot_dog_moby)->pclass) + 0x48) + 0x10)),
+            random_integer_below(
+                *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10)),
             0);
         if (robot_dog_vars->i1E8 == -1) {
             robot_dog_vars->i1E8 = robot_dog_vars->path;
@@ -305,9 +305,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             } else if (robot_dog_vars->t1E0 == 0 && robot_dog_vars->mode == 0) {
                 robot_dog_moby[0x20] = 3;
                 if (robot_dog_moby[0x53] != 0) {
-                    clip_volume_id_or_animation_value = random_integer_below(*(
-                        unsigned char *)(*(char **)(((char *)MOBY(robot_dog_moby)->pclass) + 0x48) +
-                                         0x10));
+                    clip_volume_id_or_animation_value = random_integer_below(
+                        *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10));
                     blend_moby_animation(robot_dog_moby,
                                          0,
                                          clip_volume_id_or_animation_value,
@@ -318,8 +317,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             robot_dog_moby[0x20] = 3;
             if (robot_dog_moby[0x53] != 0) {
                 clip_volume_id_or_animation_value = random_integer_below(
-                    *(unsigned char *)(*(char **)(((char *)MOBY(robot_dog_moby)->pclass) + 0x48) +
-                                       0x10));
+                    *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10));
                 blend_moby_animation(
                     robot_dog_moby, 0, clip_volume_id_or_animation_value, scale_game_frames(10));
             }
@@ -330,9 +328,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             robot_dog_moby[0x20] = 1;
             if (robot_dog_moby[0x53] != 0) {
                 clip_volume_id_or_animation_value = random_integer_below(
-                    *(unsigned char *)(*(char **)(((char *)MOBY(robot_dog_moby)->pclass) + 0x48) +
-                                       0x10) -
-                    1);
+                    *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10) - 1);
                 blend_moby_animation(
                     robot_dog_moby, 0, clip_volume_id_or_animation_value, scale_game_frames(10));
             }

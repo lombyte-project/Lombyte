@@ -5,11 +5,11 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/save/memcard_save_data.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_labels.h"
-
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/game/initialize_level_transition_with_audio.h"
 
 extern int D_L13_0015F5C4;
 
@@ -37,8 +37,6 @@ extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-
-extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
 
 void gemlik_scene_controller_update(struct Moby *moby) __asm__("FUN_L13_0030b628");
 

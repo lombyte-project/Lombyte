@@ -1,6 +1,6 @@
 /* Level 16 test_dummy: the training dummies. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -24,13 +24,13 @@ extern char *create_moby(int);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 extern float D_0015ED6C;
-f32          probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
+f32          probe_ground_height(void *pos, s32 flags, f32 height_offset) __asm__("FUN_00213508");
 
-s32         random_integer_below(s32 arg0) __asm__("FUN_00213260");
+s32         random_integer_below(s32 limit) __asm__("FUN_00213260");
 extern void FUN_L00_00257470(void *, int, int);
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 #include "rnc/overlay/l16/mobys/hit_descriptor.h"
 

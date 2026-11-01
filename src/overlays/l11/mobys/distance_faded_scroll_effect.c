@@ -1,6 +1,6 @@
 /* Level 11 moby class distance_faded_scroll_effect (class 1919): queues and draws its distance-faded scrolling layer batches, with the two pair-offset batch emitters it calls. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -13,7 +13,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/l11/mobys/distance_faded_scroll_effect_globals.h"
-#include "rnc/overlay/mesh_batch.h"
+#include "rnc/overlay/shared/rendering/mesh_batch.h"
 
 extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void queue_oil_tanker_front_texture_2b_batches(int) __asm__("FUN_L11_0031e858");

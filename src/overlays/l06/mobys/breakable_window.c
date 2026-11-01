@@ -13,17 +13,17 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/overlay/l06/hero/hero_set_state.h"
 #include "rnc/overlay/l06/scripted_camera_sequence.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/overlay/shared/props/spinning_fragment.h"
 
 extern float          D_L06_00167540[];
 extern void           draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern char           D_0013F3D0[];
 extern unsigned char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
-extern void
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void  jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void  set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
@@ -48,8 +48,6 @@ extern float camera_sequence_moby_scale_multiplier_gp __asm__("D_L06_00162048")
 extern float camera_sequence_rotation_x_degrees_gp __asm__("D_L06_00162050") __attribute__((sda));
 void         breakable_window_update(char *moby) __asm__("FUN_L06_002ffcb0");
 extern void  update_entity(char *) __asm__("FUN_L00_00250df8");
-extern unsigned char              *
-spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 extern float moby_breakup_z_offset_gp __asm__("D_L06_0016204C") __attribute__((sda));
 
 typedef struct {
@@ -576,12 +574,11 @@ void breakable_window_update(char *moby) {
         offset[4];
     int base;
     int state;
-    MOBY(moby)->scale =
-        *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * camera_sequence_moby_scale_multiplier_gp;
-    switch ((unsigned char)moby[0x20]) {
+    MOBY(moby)->scale = MOBY(moby)->pclass->scale * camera_sequence_moby_scale_multiplier_gp;
+    switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_DRAW_SELECTION:
         camera_sequence_and_draw_vars[1] = 1;
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case WAIT_FOR_LINKED_MOBY_TRIGGER:
         if ((camera_sequence_and_draw_vars[2] < 0 ||
@@ -591,11 +588,11 @@ void breakable_window_update(char *moby) {
             break;
         }
         if (vector_distance_xy(moby + 0x10, D_0013F3D0) < 32.0f) {
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             camera_sequence_and_draw_vars[9] = scale_game_frames(30);
         } else {
             spawn_moby_breakup_effect(moby);
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
         }
         break;
     case WAIT_CAMERA_START_DELAY:
@@ -603,7 +600,7 @@ void breakable_window_update(char *moby) {
             {
                 int state;
                 int base;
-                moby[0x20] = 3;
+                MOBY(moby)->state = 3;
                 scripted_camera_sequence_active = 1;
                 D_L06_0015F408 = 0x12;
                 state = camera_sequence_and_draw_vars[5];
@@ -658,7 +655,7 @@ void breakable_window_update(char *moby) {
         }
         /* This field holds float bits; retail completes only on an ordered >= comparison. */
         if (*(float *)(camera_sequence_and_draw_vars + 6) >= 0.99999f) {
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
             hero_set_state(0, 0);
             FUN_L06_00312ce8(2);
             scripted_camera_sequence_active = 0;
@@ -725,7 +722,7 @@ void breakable_window_update(char *moby) {
             qcopy((void *)(state + base + 0x30), D_0013F3D0);
             *(float *)(state + base + 0x38) -= 0.5f;
             camera_sequence_and_draw_vars[3] = -1;
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
         }
         break;
     }

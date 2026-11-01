@@ -7,7 +7,7 @@ counted; the DVP blobs inside the executable are rebuilt as raw data.
 | Metric      | Meaning                                                          |
 | :---------- | :--------------------------------------------------------------- |
 | **C_EXACT** | the function compiles from C to the same bytes as retail          |
-| **C_FUZZY** | a pending function's C is close to retail but does not match yet |
+| **C_FUZZY** | a function's C is close to retail but does not match           |
 
 A file with several functions counts each one, split at the retail labels its
 source binds them to (`__asm__("FUN_…")`).
@@ -28,7 +28,7 @@ allowed only:
 - in the approved header macros: the quadword copy in `include/qcopy.h` and
   `include/qzero.h`, and the privileged instructions C cannot write
   (`CpuEnableInt`, `CpuSync`, `CpuReadStatus`, `CpuSyscall`, ...) in
-  `include/kernel.h`;
+  `include/rnc/sdk/kernel.h`;
 - as a fakematch: a register pin or a small helper that forces the retail
   schedule, with a `Fakematch:` comment in the 15 lines above it.
 
@@ -36,8 +36,8 @@ Any other asm (instructions, an empty memory barrier, `__asm__("" : "+r"(x))`,
 `.extern`, a register pin like `register int x asm("v1")`) without that
 comment keeps the function
 **pending** (C_FUZZY 99.99) even when the bytes match. The rule is
-`non_label_asm()` in `scripts/rnc_units.py` (copied in
-`scripts/generate_treemap.py`).
+`non_label_asm()` in `scripts/lib/rnc_units.py` (copied in
+`scripts/progress-map.py`).
 
 ## 100 % in objdiff is not exact
 
@@ -57,11 +57,12 @@ Units marked `intentional_asm` in `config/us/unit_categories.json` are left
 out of the numbers: SIMD, VU0/MMI and COP2 helpers whose C would not be
 faithful, and code written in assembly by hand (syscall stubs, code using
 `$at` or trapping `add`). Code that only needs `ei`, `di`, `sync`, `mfc0` or
-`syscall` is not on the list; it is C with the `include/kernel.h` macros.
+`syscall` is not on the list; it is C with the `include/rnc/sdk/kernel.h` macros.
 
-`check-unit.py` refuses these units, and they have **no `#else` C body**: such
-a body could never be checked, so it would be a perfect place for a wrong one
-to hide.
+`check-unit.py` refuses these units, and they have **no C body**: such a body
+could never be checked, so it would be a perfect place for a wrong one to hide.
+They build from listings made at build time from your own
+`config/us/SCUS_971.99` into `config/us/expected/asm/` (not in Git).
 
 ## Data
 
@@ -82,13 +83,6 @@ Data counts as matched when C defines it and a check covers it:
 
 `decomp_map.json` also has `bytes_matching_c_zero`: the part of the matched
 data that is zeros.
-
-## Oracles
-
-Units not in C yet are built from assembly or raw machine code (_oracles_)
-so the executable still matches. They are made at build time from your own
-`config/us/SCUS_971.99` into `config/us/expected/asm/` (not in Git). Matching
-C replaces them over time.
 
 ## Compiler flags
 
@@ -127,5 +121,5 @@ maintainers' builds (`fuzzy_scores.json` next to the report). Locally:
 
 ```sh
 make progress                         # after make elf, measures C_FUZZY too
-python3 scripts/generate_treemap.py   # map only, in build/progress/decomp_map.svg
+python3 scripts/progress-map.py   # map only, in build/progress/decomp_map.svg
 ```

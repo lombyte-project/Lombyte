@@ -13,6 +13,13 @@
 #include "rnc/world/select_world_object_resource_tables.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/overlay/shared/ui/hud/draw_weapon_ammo_hud_panel.h"
+#include "rnc/audio/music/music_pause.h"
+#include "rnc/audio/rpc/snd_flush_sound_commands.h"
+#include "rnc/audio/voices/sound_update.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/streaming/load_scene_chunks_with_fade.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 /* Opens the vendor screen for moby m in level lvl: sets up its camera, resets the screen state and runs it until it closes. */
 /* Ported from rac1-decomp (src/overlays/shared/update_002AFD00.c: func_L01_002AFD00), where it is exact; names translated to the US level program. */
@@ -36,15 +43,8 @@ extern int      cutscene_mode __asm__("D_L01_0015F5C4");
 extern int  vendor_relocation_offsets[] __asm__("D_L01_00174280");
 extern int  level_table_pair_indices[] __asm__("D_L01_001CA4A0");
 extern int  sceGsSyncV_alt(int) __asm__("FUN_00122298");
-extern void sound_update(void) __asm__("FUN_0022ca50");
-extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
-extern void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
-extern void FUN_L00_00232fe8(void);
-extern void load_scene_chunks_with_fade(int) __asm__("FUN_L00_002454c8");
 extern void fill_transfer_words() __asm__("FUN_001f97e8");
-extern void music_pause(s32);
-extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void transform_vector_by_basis(void *, void *, void *);
 
 extern char  vendor_camera_local_position_offset __asm__("D_L01_00161100") __attribute__((sda));
@@ -80,7 +80,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     *(char *)&hero_state->unk20A5 = 1;
     FUN_L00_00232fe8();
     transform_vector_by_basis(sc, &vendor_camera_local_position_offset, vendor_moby + 0xC0);
-    fast_vec_add(sc, sc, vendor_moby + 0x10);
+    fast_vec_add(sc, sc, &MOBY(vendor_moby)->pos);
     *(float *)(vendor_screen_state + 0xC8) = probe_ground_height(sc, 0, 0.5f);
     clear_u64_value(vendor_screen_state + 0xB0);
     *(float *)(vendor_screen_state + 0xB8) =

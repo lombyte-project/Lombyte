@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/camera/camera_globals.h"
+#include "rnc/audio/sound/calculate_voice_distance_volume.h"
 
 extern f32 fast_vec_dist(s32, u32) __asm__("func_001F9B48");
-extern s32 calculate_voice_distance_volume(f32 *, f32, f32, f32) __asm__("FUN_0022c6f8");
 
 s32 calculate_voice_volume(s32 *voice, s32 position) __asm__("FUN_0022c7e8");
 

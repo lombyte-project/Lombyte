@@ -9,7 +9,7 @@ are listed, so you can refine rather than write from scratch.
 
 With ``--score`` every listed unit's C body is measured against retail and the
 highest scores are listed first.  This needs the baseline workspace built once
-with ``./verify-baseline.sh`` (``build/baseline``); only that workspace is
+with ``scripts/verify-baseline.sh`` (``build/baseline``); only that workspace is
 written to.
 
 Usage:
@@ -33,7 +33,7 @@ import sys
 import time
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 import rnc_units  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TIMED_ACTIVATION_PADS_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TIMED_ACTIVATION_PADS_H
+
+#include "types.h"
+
+void timed_activation_pads_update(unsigned char *) __asm__("FUN_L07_0030bf90");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_TIMED_ACTIVATION_PADS_H */

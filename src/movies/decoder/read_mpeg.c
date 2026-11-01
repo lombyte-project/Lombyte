@@ -7,6 +7,11 @@
 #include "rnc/game/options.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/audio/decoder/audio_dec_reset.h"
+#include "rnc/movies/decoder/video_dec_is_flushed.h"
+#include "rnc/movies/display/end_display.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/mpeg/api/sce_mpeg_demux_pss_ring.h"
 
 extern struct PadStateWords pad_words __asm__("D_0013C940");
 extern s32                  D_0015EEA0;
@@ -17,20 +22,15 @@ extern s32                  D_0015EEA0;
    object. */
 #define DECODE_MODE (*(volatile s32 *)&decode_mode)
 extern void FlushCache(s32);
-extern s32  sceGsSyncV(s32);
-extern s32  sceMpegDemuxPssRing(struct VideoDec *, u8 *, s32, struct ReadBuf *, s32);
 extern s32  snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void switch_thread(void) __asm__("func_0023A770");
 extern s32  is_audio_ok(void) __asm__("func_0023A790");
 extern s32  proceed_audio(void) __asm__("func_0023ABA0");
 extern void audio_dec_start(struct AudioDec *) __asm__("func_0023ACB8");
-extern void audio_dec_reset(struct AudioDec *) __asm__("FUN_0023ad10");
 extern void start_display(s32) __asm__("func_0023B590");
-extern void end_display(void) __asm__("ClearStageStateFlag");
 extern s32  read_cd_stream_sectors(struct MpegCdStream *, u8 *, s32, s32) __asm__("func_0023BA60");
 extern s32  video_dec_flush(struct VideoDec *) __asm__("func_0023CD08");
-extern s32  video_dec_is_flushed(struct VideoDec *) __asm__("FUN_0023cde0");
 
 /* Each pad test takes the pad by pointer, so retail forms the pad address
    afresh for every test from one shared upper half. */

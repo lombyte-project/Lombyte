@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_PAUSE_H
+#define LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_PAUSE_H
+
+#include "types.h"
+
+void music_pause(s32);
+
+#endif /* LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_PAUSE_H */

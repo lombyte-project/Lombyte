@@ -6,6 +6,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 typedef struct {
     char  pad[8];
@@ -23,7 +24,6 @@ int         get_first_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_0025
 int         get_next_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_002592b8");
 void        draw_offset_textured_effect_quad(void *, void *, f32, f32) __asm__("FUN_L00_00263618");
 void        FUN_L00_002df3d8_u(M09 *) __asm__("FUN_L00_002df3d8");
-void        FUN_001f4600(CB09, M09 *);
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
@@ -54,11 +54,11 @@ void draw_red_orb_group_effect_quads(struct Moby *reference_moby) {
     get_first_moby_in_group(it, reference_moby->group, 0, 0);
     while (it[0] != 0) {
         u8 *candidate_moby = it[0];
-        if (candidate_moby[0x31] != 0) {
+        if (MOBY(candidate_moby)->visible != 0) {
             void **moby_data = ((void **)MOBY(candidate_moby)->pvars);
             if (MOBY(candidate_moby)->oclass == reference_moby->oclass) {
                 draw_offset_textured_effect_quad(
-                    candidate_moby + 0x10, moby_data[1], quad_scale, 0.5f);
+                    &MOBY(candidate_moby)->pos, moby_data[1], quad_scale, 0.5f);
             }
         }
         get_next_moby_in_group(it, it[0], 0, 0);
@@ -80,7 +80,7 @@ void enqueue_red_orb_group_draw_if_cache_changed(M09 *moby) {
         return;
     if (current_cache_value != *s->p) {
         *s->p = current_cache_value;
-        FUN_001f4600(FUN_L00_002df3d8_u, moby);
+        add_draw_callback(FUN_L00_002df3d8_u, moby);
     }
 }
 

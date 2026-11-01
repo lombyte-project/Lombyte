@@ -1,6 +1,8 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/sdk/dma/sce_dma_reset.h"
+#include "rnc/sdk/graph/sce_gs_reset_graph.h"
 
 extern s32          pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern s32          D_0015EE78[] MACRO_ADDR;
@@ -13,8 +15,6 @@ extern s32          init_dma() __asm__("func_0020B418");
 extern s32          vu1_init_chain() __asm__("func_002335D0");
 extern s32          dmac_vif1_enable() __asm__("func_00233D00");
 extern s32          dmac_vif1_disable() __asm__("func_00233D90");
-extern s32          sceDmaReset();
-extern s32          sceGsResetGraph();
 
 void reset_graphics(void) __asm__("FUN_001f21c0");
 

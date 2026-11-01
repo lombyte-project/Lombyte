@@ -6,4 +6,8 @@
 char *
 spawn_spawner_egg(int, void *, void *, unsigned char, unsigned char) __asm__("FUN_L09_0030b218");
 
+struct Moby;
+
+void spawner_egg_update(struct Moby *) __asm__("FUN_L09_0030b3b0");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SPAWNER_EGG_H */

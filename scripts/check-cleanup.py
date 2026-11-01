@@ -38,7 +38,7 @@ SCRIPTS = Path(__file__).resolve().parent
 
 # Files read from the base revision.
 TREE = ["src", "include", "configure.py", "config/us/rnc1.us.yaml",
-        "config/us/symbol_addrs.txt", "config/overlays/us/functions.tsv"]
+        "config/us/symbol_addrs.txt", "config/us/levels/functions.tsv"]
 YAML = "config/us/rnc1.us.yaml"
 TEXT_SUFFIXES = {".c", ".h", ".py", ".md", ".json", ".yaml", ".yml", ".sh", ".txt",
                  ".tsv", ".s", ".inc", ".ld", ".toml", ".cfg"}
@@ -53,7 +53,7 @@ ASM_LABEL = re.compile(r'__asm__\s*\(\s*"([^"]*)"\s*\)')
 LABEL_STRING = re.compile(r"[A-Za-z_.$][\w.$]*(?:\+\d+)?")
 # The only files that may hold instructions: the approved quadword idiom and the
 # EE-kernel primitives (privileged instructions C cannot express).
-ASM_HEADERS = {"include/qcopy.h", "include/qzero.h", "include/kernel.h", "include/moby_update.h",
+ASM_HEADERS = {"include/qcopy.h", "include/qzero.h", "include/rnc/sdk/kernel.h", "include/moby_update.h",
                "include/macros.h"}
 ASM_ANY = re.compile(r"\b(?:__asm__|__asm|asm)\b(\s*(?:volatile|__volatile__)\b)?\s*\(")
 FUNC_DECL = re.compile(r"\b(\w+)\s*\(((?:[^;{}()]|\([^()]*\))*)\)\s*__asm__\s*\(\s*\"(" + FUN_LABEL + r")\"\s*\)")
@@ -268,7 +268,7 @@ def check_c_file(rel: str, raw: str) -> list[Problem]:
         label = ASM_LABEL.match(text, m.start())
         if m.group(1) or not label or not LABEL_STRING.fullmatch(label.group(1)):
             # A fakematch (pin, barrier or small helper) marked in the 15 lines above,
-            # as scripts/rnc_units.py counts it.
+            # as scripts/lib/rnc_units.py counts it.
             if any("Fakematch:" in l for l in raw[:m.start()].split("\n")[-16:]):
                 continue
             snippet = text[m.start():m.start() + 60].split("\n")[0].strip()
@@ -503,13 +503,13 @@ def check_config_paths(tree: Tree) -> list[Problem]:
     for rel in sorted(sources - configured):
         if Path(rel).name not in {Path(i).name for i in included}:
             out.append(Problem("config-paths", rel, f"file is not a unit in {YAML}"))
-    tsv = read(tree.root, "config/overlays/us/functions.tsv")
+    tsv = read(tree.root, "config/us/levels/functions.tsv")
     for row in tsv.splitlines():
         cols = row.split("\t")
         if row.startswith("#") or len(cols) < 7 or not cols[6].strip():
             continue
         if cols[6].strip() not in tree.units:
-            out.append(Problem("config-paths", "config/overlays/us/functions.tsv",
+            out.append(Problem("config-paths", "config/us/levels/functions.tsv",
                                f"{cols[0]}: exe unit {cols[6].strip()} is not in {YAML}"))
     return out
 
@@ -558,10 +558,13 @@ def moby_update_defs(tree: Tree) -> list[tuple[str, str, int, str]]:
     """(file, name, line, expected comment) of every function a level class table names as an
     update, except empty ones (the shared no-op callbacks)."""
     classes = collections.defaultdict(set)
+    # Header prototypes bind a C name to its label for every file that includes them.
+    header_names = {m.group(1): norm_label(m.group(3)) for rel, text in tree.code.items()
+                    if rel.endswith(".h") for m in PROTO.finditer(text) if m.group(3)}
     for rel, text in tree.code.items():
         if not rel.endswith("/level_class_tables.c"):
             continue
-        names = {m.group(1): norm_label(m.group(3) or m.group(1)) for m in PROTO.finditer(text)}
+        names = {**header_names, **{m.group(1): norm_label(m.group(3) or m.group(1)) for m in PROTO.finditer(text)}}
         for table in CLASS_TABLE.finditer(text):
             for row in CLASS_ROW.finditer(table.group(1)):
                 oclass, name = int(row.group(1), 0), row.group(2)

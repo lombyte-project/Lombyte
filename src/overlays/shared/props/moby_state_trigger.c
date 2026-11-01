@@ -5,7 +5,7 @@
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/game/item_state.h"
 
 /* pvars of the trigger moby run by FUN_L05_002f5200 */

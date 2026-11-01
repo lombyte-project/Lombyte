@@ -8,6 +8,8 @@
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/save/memcard_save_data.h"
 #include "rnc/overlay/shared/pickups/infobot.h"
+#include "rnc/overlay/shared/enemies/blarg_ship_rocket.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
@@ -17,11 +19,7 @@ extern int D_L15_0015F640;
 
 extern unsigned char D_0013D4FD[];
 
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-
-extern void emit_moby_sprite_particles(char *) __asm__("FUN_L10_00298940");
 
 extern short bolt_grabber_scale_multiplier_gp __asm__("D_L15_00162078") __attribute__((sda));
 

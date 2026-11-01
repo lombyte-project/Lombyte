@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/input/pad_state.h"
@@ -17,9 +17,14 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/shared/weapons/visibomb_missile_data/moby_save_globals_state.h"
 #include "rnc/overlay/shared/weapons/visibomb_missile_data/visibomb_missile_update.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 typedef struct {
     u8  p0[0x2084];
@@ -103,12 +108,8 @@ typedef struct Hit_2b6140 {
     V_2b6140     v60;
 } Hit_2b6140;
 
-void         jet_camera_mode(void) __asm__("FUN_L00_00203b18");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern char *create_moby(int);
-extern int   FUN_L00_00257b90(int, int);
-extern int   hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void  set_background_color(s32 red, unsigned long green, unsigned long blue);
 int          FUN_L00_002603d0_2b58d8(void *) __asm__("FUN_L00_002603d0");
 void         FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
@@ -133,7 +134,6 @@ spawn_spinning_fade_in_out_effect_particle(void *pos,
                                                        float f2,
                                                        float f3,
                                                        float scale) __asm__("FUN_L00_0026b790");
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_glow_particle(void *, void *, void *, int, int, int, int, int, float) __asm__("FUN_L00_002ac910");
 extern int   update_orbit_camera_from_target_moby(void *, void *) __asm__("FUN_L00_002eb648");
 extern void  func_L00_002B6AE0_2b6140(void *, int) __asm__("FUN_L00_002b57f0");
@@ -606,16 +606,16 @@ spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, fl
         V_2b58d8       collision_start;
         G->unk1FE0 = spawned_moby;
         D_L00_0017E508 = 1;
-        spawned_moby[0x30] = 0xFF;
+        MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 1;
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 1;
         MOBY(spawned_moby)->rot.z = fa;
         MOBY(spawned_moby)->rot.y = fb;
         *(unsigned char **)(spawned_moby_vars + 0x24) = G->unk1F60;
         *(unsigned char **)(spawned_moby_vars + 0x28) = G->unk1FA0;
         *(unsigned char **)(spawned_moby_vars + 0x0) = source_moby;
-        qcopy(spawned_moby + 0x10, launch_position);
+        qcopy(&MOBY(spawned_moby)->pos, launch_position);
         *(int *)(spawned_moby_vars + 0x8) = 0;
         *(int *)(spawned_moby_vars + 0xC) = 0;
         if ((void *)G->ground_moby && FUN_L00_002603d0_2b58d8((void *)G->ground_moby))
@@ -653,8 +653,8 @@ spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, fl
                                     (void *)collision_ignored_hero->moby;
                                 }),
                                 0)) {
-            spawned_moby[0xBC] = 1;
-            qcopy(spawned_moby + 0x10, &D_L00_00173E60_lui);
+            MOBY(spawned_moby)->command = 1;
+            qcopy(&MOBY(spawned_moby)->pos, &D_L00_00173E60_lui);
         }
         D_L00_0015F608 = 1;
         force_help_message(6, 0);
@@ -709,7 +709,7 @@ void update_attached_moby_transform(unsigned char *source_moby, unsigned char *a
     transform_vector(&rotated_attachment_offset, &k, &combined_rotation);
     fast_vec_add(*(unsigned char **)(attachment_state + 0x20) + 0x10,
                  &rotated_attachment_offset,
-                 source_moby + 0x10);
+                 &MOBY(source_moby)->pos);
     refresh_moby_spatial_bounds_from_basis(*(unsigned char **)(attachment_state + 0x20));
 }
 
@@ -726,7 +726,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
     float view_origin_distance, extra, sc;
     int   count, i, j;
 
-    qcopy(elevated_spawn_position, source_moby + 0x10);
+    qcopy(elevated_spawn_position, &MOBY(source_moby)->pos);
     elevated_spawn_position[2] += 0.3f;
     spawn_spinning_fade_in_out_effect_particle(
         elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
@@ -735,7 +735,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
             elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
     }
     if (flag != 0) {
-        fast_vec_sub(view_origin_delta, D_L00_00166DC0, source_moby + 0x10);
+        fast_vec_sub(view_origin_delta, D_L00_00166DC0, &MOBY(source_moby)->pos);
         clear_u64_value(particle_velocity);
         view_origin_distance = fast_vec_length(view_origin_delta);
         if (view_origin_distance < 8.0f) {
@@ -757,24 +757,24 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
                 pa = A.v + random_integer_below(6);
                 pb = B.v + random_integer_below(6);
                 particle_frame_count =
-                    FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20));
+                    random_int_between(scale_game_frames(15), scale_game_frames(20));
                 particle_random_frame_value =
-                    FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30));
-                spawn_particle(source_moby + 0x10,
-                               particle_velocity,
-                               *pa,
-                               *pb,
-                               particle_frame_count,
-                               particle_random_frame_value,
-                               0,
-                               0,
-                               400000.0f,
-                               sc);
+                    random_int_between(scale_game_frames(25), scale_game_frames(30));
+                FUN_L00_0026a9f0(&MOBY(source_moby)->pos,
+                                 particle_velocity,
+                                 *pa,
+                                 *pb,
+                                 particle_frame_count,
+                                 particle_random_frame_value,
+                                 0,
+                                 0,
+                                 400000.0f,
+                                 sc);
             } while (--i);
         }
         if (D_L00_0015F5D0 < 0.95f) {
             spawn_glow_particle(source_moby,
-                                source_moby + 0x10,
+                                &MOBY(source_moby)->pos,
                                 particle_velocity,
                                 scale_game_frames(15),
                                 0x7F,
@@ -783,7 +783,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
                                 0x20,
                                 3.0f);
             spawn_glow_particle(source_moby,
-                                source_moby + 0x10,
+                                &MOBY(source_moby)->pos,
                                 particle_velocity,
                                 scale_game_frames(24),
                                 0x7F,
@@ -793,7 +793,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
                                 2.0f);
         }
         spawn_glow_particle(source_moby,
-                            source_moby + 0x10,
+                            &MOBY(source_moby)->pos,
                             particle_velocity,
                             scale_game_frames(20),
                             0x7F,
@@ -802,7 +802,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
                             0x30,
                             3.0f);
         spawn_glow_particle(source_moby,
-                            source_moby + 0x10,
+                            &MOBY(source_moby)->pos,
                             particle_velocity,
                             scale_game_frames(27),
                             0x60,
@@ -811,7 +811,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
                             0x40,
                             2.0f);
         spawn_glow_particle(source_moby,
-                            source_moby + 0x10,
+                            &MOBY(source_moby)->pos,
                             particle_velocity,
                             scale_game_frames(29),
                             0x20,

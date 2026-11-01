@@ -1,0 +1,31 @@
+#include "types.h"
+#include "rnc/sdk/eeregs.h"
+#include "rnc/sdk/libmpeg.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/ipu/send_ipu_command.h"
+#include "rnc/sdk/ipu/wait_ipu_idle.h"
+#include "rnc/sdk/mpeg/api/dispatch_mpeg_callback.h"
+
+extern s32 DIntr(void);
+
+void _setDefaultQM(struct MpegDecoder *decoder, s32 command, u32 matrix) {
+    s32                  interrupts_enabled;
+    struct sceMpegCbData callback;
+
+    callback.type = 2;
+    _dispatchMpegCallback(decoder->mpeg, &callback);
+    _waitIpuIdle(decoder);
+    *IPU_CMD = 0;
+    _waitIpuIdle(decoder);
+    interrupts_enabled = DIntr();
+    *D4_MADR = matrix & 0x0FFFFFFF;
+    *D4_QWC = 4;
+    *D4_CHCR = 0x101;
+    if (interrupts_enabled != 0) {
+        EnableInterrupts();
+    }
+    SendIpuCommand(decoder, command);
+    _waitIpuIdle(decoder);
+    callback.type = 3;
+    _dispatchMpegCallback(decoder->mpeg, &callback);
+}

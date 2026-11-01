@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 
 extern void update_entity() __asm__("FUN_L00_00250df8");
 
@@ -84,7 +85,6 @@ typedef struct {
     f32 y;
 } PlayerPosView;
 
-extern s32         count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *) __asm__("FUN_L01_00302328");
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 s32         D_L01_00161E90 = 5;

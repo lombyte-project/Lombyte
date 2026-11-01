@@ -12,6 +12,14 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/hero/update_hero_vehicle_attachments_and_effects.h"
+#include "rnc/overlay/shared/camera/scripted_camera.h"
+#include "rnc/overlay/shared/camera/set_nonzero_follow_camera_parameters.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/ui/help/remove_help_message_for_selector.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 
 /* Shuttle route selection; independent of Moby.state. */
 enum ShuttleRoute {
@@ -22,23 +30,19 @@ enum ShuttleRoute {
     SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 0x4
 };
 
-extern int  is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
 void         begin_moby_linear_and_angular_motion(char *moby,
                                                   void *linear_velocity,
                                                   void *angular_velocity) __asm__("FUN_L06_00300f70");
-extern int   is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern int   help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -47,7 +51,6 @@ extern s32   D_L06_00179B90[] __asm__("D_L06_00179B90");
 #include "rnc/game/game_globals.h"
 
 extern int  D_L06_0015F5C4 __asm__("D_L06_0015F5C4");
-extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 typedef int u128_302578 __attribute__((mode(TI)));
 
 typedef struct {
@@ -112,13 +115,9 @@ void        mark_shuttle_linked_mobys_for_removal(char *moby) __asm__("FUN_L06_0
 extern void mark_shuttle_linked_mobys_for_removal(char *) __asm__("FUN_L06_00304028");
 extern int  update_shuttle_path_ride(char *, int) __asm__("FUN_L06_00303160");
 extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("FUN_L06_0030bef8");
-extern int  is_point_inside_clip_volume(void *, int);
 extern void play_sound_302578(int, int) __asm__("FUN_L01_0027a248");
-extern int  remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
-extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void initialize_moby_particle_effect_state(void *) __asm__("FUN_L06_002e6148");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 
@@ -211,7 +210,6 @@ extern int   D_L06_0016214C __attribute__((sda));
 extern int   D_L06_00162150 __attribute__((sda));
 extern int   D_L06_00162154 __attribute__((sda));
 extern int   D_L06_00162158 __attribute__((sda));
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void  random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u8 *
@@ -646,7 +644,7 @@ int update_shuttle_path_ride(char *moby, int path) {
         set_camera_rotation(rotation);
     }
     MOBY(moby)->scale =
-        *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
+        MOBY(moby)->pclass->scale *
         (ride->scale_start - (ride->scale_start - ride->scale_end) * ride->progress);
     if (ride->progress > 0.8f) {
         rate = frame_time_sq * 12.566371f;

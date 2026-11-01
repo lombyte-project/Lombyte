@@ -20,6 +20,7 @@
 /* Source: dtoa (David M. Gay / AT&T). */
 
 #include "types.h"
+#include "rnc/sdk/libc/mprec/balloc.h"
 
 struct Bigint {
     s32 _next;
@@ -30,8 +31,7 @@ struct Bigint {
     u32 _x[1];
 };
 
-extern struct Bigint *_Balloc(s32, s32);
-extern s32            _Bfree() __asm__("InsertLinkObject");
+extern s32 _Bfree() __asm__("InsertLinkObject");
 
 struct Bigint *_lshift(s32 bigint_context, struct Bigint *input_bigint, s32 shift_bits) {
     s32            i;

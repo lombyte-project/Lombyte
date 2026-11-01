@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -39,10 +39,10 @@ char *spawn_poison_vessel_fragment(void *position,
         char *effect_moby_vars;
         float rotation_x_increment, dd;
         effect_moby_vars = ((char *)MOBY(moby)->pvars);
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
-        moby[0x23] = random_int_between(0x40, 0x80);
+        MOBY(moby)->visible = 1;
+        MOBY(moby)->alpha = random_int_between(0x40, 0x80);
         set_moby_color(moby, 0x20, 0x60, 0x10);
         qcopy(moby + 0x10, position);
         qcopy(effect_moby_vars, initial_velocity);
@@ -59,7 +59,7 @@ char *spawn_poison_vessel_fragment(void *position,
         }
         *(float *)(effect_moby_vars + 0x1C) = MOBY(moby)->scale;
         MOBY(moby)->scale = MOBY(moby)->scale * random_float_between(2.0f, 5.0f);
-        moby[0xBC] = effect_mode;
+        MOBY(moby)->command = effect_mode;
         update_entity(moby);
     }
     return (char *)moby;
@@ -224,7 +224,7 @@ void poison_vessel_fragment_update(struct Moby *moby) {
         short life = *(short *)(motion_and_lifetime_vars + 0x18);
         short duration = *(short *)(motion_and_lifetime_vars + 0x1a);
         if (life < duration / 4) {
-            *(float *)((char *)moby + 0x2c) =
+            MOBY(moby)->scale =
                 *(float *)(motion_and_lifetime_vars + 0x1c) * convert_integer_to_float(life) /
                 convert_integer_to_float(*(short *)(motion_and_lifetime_vars + 0x1a) / 4);
         }

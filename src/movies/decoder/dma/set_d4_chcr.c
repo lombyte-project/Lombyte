@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 extern void DIntr(void);
-extern void EnableInterrupts(void);
 
 void set_d4_chcr(s32 control_value) __asm__("FUN_0023bbb0");
 

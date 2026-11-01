@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -522,12 +522,12 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
             unsigned char *history_moby =
                 (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
             if (history_moby) {
-                int decrement_amount = history_moby[0x23];
+                int decrement_amount = MOBY(history_moby)->alpha;
                 int a = decrement_amount;
                 if (dec < decrement_amount)
                     decrement_amount = dec;
                 a -= decrement_amount;
-                history_moby[0x23] = a;
+                MOBY(history_moby)->alpha = a;
                 if ((unsigned char)a)
                     done = 0;
             }
@@ -568,7 +568,7 @@ void update_joint_animation(
     if (!previous_moby) {
         *(void **)(joint_animation_state + 0x78) = moby;
     } else if (previous_moby != moby) {
-        if (joint_animation_state[1] && previous_moby[0x20] < 0x7F)
+        if (joint_animation_state[1] && MOBY(previous_moby)->state < 0x7F)
             detach_manipulator(previous_moby, joint_animation_state);
         joint_animation_state[1] = 0;
         *(void **)(joint_animation_state + 0x78) = moby;

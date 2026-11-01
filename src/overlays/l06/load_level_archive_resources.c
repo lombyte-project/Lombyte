@@ -10,7 +10,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -27,6 +27,11 @@
 #include "rnc/world/loaders/relocate_sky_definition.h"
 #include "rnc/world/loaders/unpack_point_records.h"
 #include "rnc/world/loaders/upload_texture_images.h"
+#include "rnc/overlay/shared/game/restore_or_clear_level_state.h"
+#include "rnc/rendering/shrubs/register_shrub_render_class.h"
+#include "rnc/rendering/texture/parse_particle_textures.h"
+#include "rnc/rendering/tfrags/initialize_tfrag_render_data.h"
+#include "rnc/rendering/ties/register_object_render_class.h"
 
 typedef struct {
     char *f0; /* 0x00 */
@@ -153,17 +158,9 @@ typedef struct {
 extern u8 D_L06_00179880[];
 
 extern void flush_cache(s32) __asm__("FUN_00118a80");
-extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
-extern void resolve_level_asset_block_pointers(char *) __asm__("FUN_L00_00241728");
-extern void print_moby_class_sizes(void *, s32) __asm__("FUN_L00_00241788");
-extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
-extern void
-register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
-extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 
 #define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld)             \
     ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) |        \

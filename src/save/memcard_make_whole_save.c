@@ -2,6 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/save/mc_data.h"
 #include "rnc/save/memcard_get_data_size.h"
+#include "rnc/save/memory_card_state.h"
 
 extern s32 memcard_prepare_data(u8 *, s32, u8 *) __asm__("func_0020AD78");
 
@@ -11,9 +12,9 @@ void memcard_make_whole_save(u8 *cursor) {
     s32 index;
     s32 size;
 
-    *(s32 *)(cursor + 0x0) = memcard_get_data_size(mc_gamedata);
-    *(s32 *)(cursor + 0x4) = memcard_get_data_size(mc_leveldata);
-    cursor += 8;
+    ((struct MemoryCardSaveSizes *)cursor)->main_size = memcard_get_data_size(mc_gamedata);
+    ((struct MemoryCardSaveSizes *)cursor)->record_size = memcard_get_data_size(mc_leveldata);
+    cursor += sizeof(struct MemoryCardSaveSizes);
     cursor += memcard_prepare_data(cursor, 0, mc_gamedata);
     index = 0;
     do {

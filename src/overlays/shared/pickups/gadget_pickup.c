@@ -8,7 +8,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/interpolation.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/camera/scripted_camera.h"
@@ -230,10 +230,10 @@ void update_collectible_sprite_effect(char *moby) {
     float          timer_elapsed_fraction;
 
     MOBY(moby)->pos.z += 0.5f;
-    fast_vec_sub(d, D_L02_00167440_ea8b0, moby + 0x10);
+    fast_vec_sub(d, D_L02_00167440_ea8b0, &MOBY(moby)->pos);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(sprite_position_step, d, 0.1f);
-    fast_vec_add(d, d, moby + 0x10);
+    fast_vec_add(d, d, &MOBY(moby)->pos);
     MOBY(moby)->pos.z -= 0.5f;
     for (i = 0; i < 4; i++) {
         float unwrapped_sprite_value = sprite_data->a[i] + sprite_data->b[i];

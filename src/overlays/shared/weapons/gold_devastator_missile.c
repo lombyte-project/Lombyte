@@ -14,10 +14,34 @@
 #include "rnc/overlay/shared/rendering/effects/explosion_light.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/weapons/mine.h"
 #include "rnc/overlay/shared/weapons/bomb_glove_bomb.h"
 #include "rnc/game/item_state.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
+
+typedef struct GoldDevastatorMissileVars {
+    u8             pad0[0x8];
+    f32            unk8;
+    u8             padC[0x4];
+    unsigned char *unk10;
+    s32            unk14;
+    unsigned char *unk18;
+    f32            unk1C;
+    f32            unk20;
+    s32            unk24;
+    s32            unk28;
+    f32            unk2C;
+    f32            unk30;
+    f32            unk34;
+    s32            unk38;
+    s16            unk3C;
+    s16            unk3E;
+    u8             pad40[0x8];
+    f32            unk48;
+} GoldDevastatorMissileVars;
 
 typedef struct {
     char  p0[0x80];
@@ -110,10 +134,8 @@ typedef struct {
 
 extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_00257b90(int, int);
-extern unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
-extern void    *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
-       void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
+extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
+    void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -140,10 +162,9 @@ unsigned char *spawn_glow_particle_u8(void         *owner,
                                       unsigned char green,
                                       unsigned char blue,
                                       unsigned char alpha) __asm__("FUN_L00_002ac910");
-extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
-void        spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+extern void  FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
+extern void  FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+void         spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern float FUN_L00_001ff430_c(void *) __asm__("FUN_L00_001ff430");
 extern void  FUN_L00_001ff2c0_c(void *, void *, void *) __asm__("FUN_L00_001ff2c0");
 extern float spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_00258110");
@@ -392,71 +413,71 @@ unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
                                         float          initial_yaw,
 
                                         float initial_pitch) {
-    V_2afc70       collision_start;
-    unsigned char *missile_moby;
-    unsigned char *missile_data;
-    unsigned char *target_aim_record;
-    float          default_desired_speed;
-    int            turn_period;
-    float          x;
+    V_2afc70                   collision_start;
+    unsigned char             *missile_moby;
+    GoldDevastatorMissileVars *missile_data;
+    unsigned char             *target_aim_record;
+    float                      default_desired_speed;
+    int                        turn_period;
+    float                      x;
 
     missile_moby = create_moby(0x99);
     if (missile_moby != 0) {
-        missile_data = ((unsigned char *)MOBY(missile_moby)->pvars);
-        missile_moby[0x30] = 0xFF;
+        missile_data = (GoldDevastatorMissileVars *)MOBY(missile_moby)->pvars;
+        MOBY(missile_moby)->update_dist = 0xFF;
         MOBY(missile_moby)->draw_dist = 0xFF;
-        missile_moby[0x31] = 1;
+        MOBY(missile_moby)->visible = 1;
         MOBY(missile_moby)->rot.z = initial_yaw;
         MOBY(missile_moby)->rot.y = initial_pitch;
-        missile_moby[0x20] = 0;
-        *(unsigned char **)(missile_data + 0x10) = missile_source_moby;
-        qcopy(missile_moby + 0x10, spawn_position);
+        MOBY(missile_moby)->state = 0;
+        missile_data->unk10 = missile_source_moby;
+        qcopy(&MOBY(missile_moby)->pos, spawn_position);
         default_desired_speed = frame_time * 20.0f;
-        *(int *)(missile_data + 0x38) = 1;
-        *(float *)(missile_data + 0x48) = 70.0f;
-        *(float *)(missile_data + 0x34) = default_desired_speed;
-        *(int *)(missile_data + 0x24) = 0;
-        *(int *)(missile_data + 0x28) = 0;
-        *(unsigned char **)(missile_data + 0x18) = target_moby;
-        *(float *)(missile_data + 0x20) = default_desired_speed / 3.0f;
+        missile_data->unk38 = 1;
+        missile_data->unk48 = 70.0f;
+        missile_data->unk34 = default_desired_speed;
+        missile_data->unk24 = 0;
+        missile_data->unk28 = 0;
+        missile_data->unk18 = target_moby;
+        missile_data->unk20 = default_desired_speed / 3.0f;
         if (target_moby != 0) {
             target_aim_record = get_moby_target_info(target_moby);
             if (target_aim_record != 0) {
                 *(unsigned short *)(target_aim_record + 0x1E) |= 0x80;
                 if (target_aim_record[0xB]) {
-                    *(int *)(missile_data + 0x38) = 0;
+                    missile_data->unk38 = 0;
                 }
                 if (target_aim_record[0xC]) {
-                    *(float *)(missile_data + 0x34) = (float)target_aim_record[0xC] * frame_time;
+                    missile_data->unk34 = (float)target_aim_record[0xC] * frame_time;
                 }
-                if (frame_time * 20.0f < *(float *)(missile_data + 0x34)) {
-                    *(float *)(missile_data + 0x48) = 140.0f;
+                if (frame_time * 20.0f < missile_data->unk34) {
+                    missile_data->unk48 = 140.0f;
                 }
             }
         }
-        *(float *)(missile_data + 0x2C) = guidance_yaw;
-        *(float *)(missile_data + 0x30) = guidance_pitch;
-        *(int *)(missile_data + 0x14) = FUN_001f96f8_2afc70(300);
+        missile_data->unk2C = guidance_yaw;
+        missile_data->unk30 = guidance_pitch;
+        missile_data->unk14 = FUN_001f96f8_2afc70(300);
         if (target_moby != 0) {
-            qcopy(missile_data, target_moby + 0x10);
-            *(float *)(missile_data + 0x1C) = target_height_offset;
-            *(float *)(missile_data + 8) += target_height_offset;
+            qcopy(missile_data, &MOBY(target_moby)->pos);
+            missile_data->unk1C = target_height_offset;
+            missile_data->unk8 += target_height_offset;
         }
         x = FUN_001f9af0_2afc70(D_0013F490_lui);
         turn_period = FUN_001f96f8_2afc70(frame_time * 0.1f < x ? 0x3C : 0xF);
-        *(short *)(missile_data + 0x3E) = turn_period;
-        *(short *)(missile_data + 0x3C) = turn_period;
-        if (missile_source_moby != 0 && missile_source_moby[0x20] != 0xFE &&
-            missile_source_moby[0x20] != 0xFD) {
-            collision_start.q = ((V_2afc70 *)(missile_source_moby + 0x10))->q;
+        missile_data->unk3E = turn_period;
+        missile_data->unk3C = turn_period;
+        if (missile_source_moby != 0 && MOBY(missile_source_moby)->state != 0xFE &&
+            MOBY(missile_source_moby)->state != 0xFD) {
+            collision_start.q = ((V_2afc70 *)&MOBY(missile_source_moby)->pos)->q;
         } else {
             qcopy(&collision_start, &hero_pos);
             collision_start.f[2] += 0.6f;
         }
         collision_start.f[2] = spawn_position->f[2];
         if (FUN_001efa68_2afc70(&collision_start, spawn_position, 0, D_001413D0_lui, 0)) {
-            missile_moby[0xBC] = 1;
-            qcopy(missile_moby + 0x10, D_L00_00173E60_2afc70);
+            MOBY(missile_moby)->command = 1;
+            qcopy(&MOBY(missile_moby)->pos, D_L00_00173E60_2afc70);
         }
         FUN_L00_00250df8_2afc70(missile_moby);
         append_unique_moby_index(missile_moby, D_L00_001B0770_lui, 0x1F);
@@ -486,8 +507,8 @@ void select_gold_devastator_missile_target(char *gold_missile_moby,
 
     i = 0;
     best = 10000.0f;
-    yaw = *(f32 *)(gold_missile_moby + 0x48);
-    pitch = *(f32 *)(gold_missile_moby + 0x44);
+    yaw = MOBY(gold_missile_moby)->rot.z;
+    pitch = MOBY(gold_missile_moby)->rot.y;
     candidate_moby = active_mobies[i];
     if (candidate_moby == 0)
         return;
@@ -497,9 +518,9 @@ void select_gold_devastator_missile_target(char *gold_missile_moby,
             goto next;
         if (candidate_moby == skip)
             goto next;
-        qcopy(&candidate_aim_position, candidate_moby + 0x10);
-        spos = gold_missile_moby + 0x10;
-        opos = candidate_moby + 0x10;
+        qcopy(&candidate_aim_position, &MOBY(candidate_moby)->pos);
+        spos = &MOBY(gold_missile_moby)->pos;
+        opos = &MOBY(candidate_moby)->pos;
         if (40.0f < fast_vec_dist(&candidate_aim_position, spos))
             goto next;
         candidate_aim_record_address = get_moby_target_info(candidate_moby);
@@ -525,10 +546,10 @@ void select_gold_devastator_missile_target(char *gold_missile_moby,
             goto next;
         if (*(s16 *)(((char *)MOBY(candidate_moby)->pclass) + 0x46) != 5)
             goto next;
-        angh = fast_arc_tan(candidate_aim_position.f[0] - *(f32 *)(gold_missile_moby + 0x10),
-                            candidate_aim_position.f[1] - *(f32 *)(gold_missile_moby + 0x14));
+        angh = fast_arc_tan(candidate_aim_position.f[0] - MOBY(gold_missile_moby)->pos.x,
+                            candidate_aim_position.f[1] - MOBY(gold_missile_moby)->pos.y);
         angv = fast_arc_tan(vector_distance_xy(spos, &candidate_aim_position),
-                            candidate_aim_position.f[2] - *(f32 *)(gold_missile_moby + 0x18));
+                            candidate_aim_position.f[2] - MOBY(gold_missile_moby)->pos.z);
         candidate_aim_distance = fast_vec_dist(spos, &candidate_aim_position);
         if (candidate_aim_distance < 2.5f) {
             char *hero_moby = *(char **)&hero_context->moby;
@@ -913,7 +934,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
                     if (fast_vec_length(&predicted) > 1.0f)
                         fast_vec_normalize(&predicted, &predicted, D_0015ED6C * 8.0f);
                     particle_scale = size * 40000.0f;
-                    life = FUN_L00_00257b90(scale_game_frames(60), scale_game_frames(120)) -
+                    life = random_int_between(scale_game_frames(60), scale_game_frames(120)) -
                            particle_reduction * 35;
                     spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
                         (&missile_moby->pos),
@@ -945,7 +966,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         clamp_vector_length(&predicted, &predicted, D_0015ED6C * 10.0f);
         FUN_L00_002af450((char *)(&missile_moby->pos),
                          (char *)&predicted,
-                         FUN_L00_00257b90(scale_game_frames(60), scale_game_frames(90)),
+                         random_int_between(scale_game_frames(60), scale_game_frames(90)),
                          0,
                          0);
         if (distance < 6.0f)
@@ -965,16 +986,16 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             int        c =
                 swap_packed_color_channels(color.colors[random_integer_below(6)], D_0013E520.bB);
             int f = swap_packed_color_channels(fade.colors[random_integer_below(6)], D_0013E520.bB);
-            int life = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20)) -
+            int life = random_int_between(scale_game_frames(15), scale_game_frames(20)) -
                        particle_reduction * 7;
-            int end = FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30)) -
+            int end = random_int_between(scale_game_frames(25), scale_game_frames(30)) -
                       particle_reduction * 10;
             int white_life, white_end;
             FUN_L00_0026a9f0(
                 (&missile_moby->pos), &blast_velocity, c, f, 400000.0f, life, end, 0, 0, speed);
-            white_life = FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(10)) -
+            white_life = random_int_between(scale_game_frames(5), scale_game_frames(10)) -
                          particle_reduction * 5;
-            white_end = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20)) -
+            white_end = random_int_between(scale_game_frames(15), scale_game_frames(20)) -
                         particle_reduction * 7;
             FUN_L00_0026a9f0((&missile_moby->pos),
                              &blast_velocity,
@@ -1005,7 +1026,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             c = swap_packed_color_channels(color.colors[random_integer_below(6)], D_0013E520.bB);
             f = swap_packed_color_channels(fade.colors[random_integer_below(6)], D_0013E520.bB);
             debris_scale = size * 200000.0f;
-            life = FUN_L00_00257b90(scale_game_frames(20), scale_game_frames(35)) -
+            life = random_int_between(scale_game_frames(20), scale_game_frames(35)) -
                    particle_reduction * 10;
             FUN_L00_0026a4c8_c((&missile_moby->pos), &v, c, f, debris_scale, life);
         }

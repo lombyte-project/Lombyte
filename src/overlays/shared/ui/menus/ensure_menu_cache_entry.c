@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 /* Stores v in D_L00_001791B8 at i plus this level's base from D_L00_001C44B8. */
 void store_current_level_table_value(s32 stored_value, s32 i) __asm__("FUN_L00_0024a798");

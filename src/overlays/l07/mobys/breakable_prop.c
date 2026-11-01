@@ -6,11 +6,12 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/overlay/shared/props/rock.h"
+#include "rnc/mobys/moby_spawn.h"
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float D_0015ED6C;
@@ -35,7 +36,6 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32  D_0015ED6C;
 extern void spawn_explosion(void *,
                             void *,

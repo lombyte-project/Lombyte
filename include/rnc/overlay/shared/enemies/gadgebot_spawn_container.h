@@ -5,4 +5,6 @@
 
 char *spawn_gadgebot_spawn_container(char *owner) __asm__("FUN_L06_002d8510");
 
+void gadgebot_spawn_container_update(unsigned char *) __asm__("FUN_L06_002d85a0");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_GADGEBOT_SPAWN_CONTAINER_H */

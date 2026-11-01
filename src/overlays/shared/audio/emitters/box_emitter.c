@@ -1,7 +1,7 @@
 /* Sound emitter type 1: plays a voice at the point of the emitter box nearest the listener. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -9,13 +9,13 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/audio/voices/play_voice.h"
 #include "rnc/overlay/shared/vendor/vendor_volume.h"
+#include "rnc/math/random.h"
 
 extern char D_L01_00167240[];
 
 extern char *D_L00_0015F5F4;
 extern char  D_0013E550[];
 extern int   calculate_voice_distance_volume(float, float, float, void *) __asm__("FUN_0022c6f8");
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 
 void update_box_emitter(char *moby) __asm__("FUN_L01_00319928");
 
@@ -77,7 +77,7 @@ void update_box_emitter(char *moby) {
         }
         if (sound_data[4] != -1) {
             vendor_volume(sound_data[4], volume);
-            transform_vector_by_basis(&delta, &box_size, moby + 0x10);
+            transform_vector_by_basis(&delta, &box_size, &MOBY(moby)->pos);
             fast_vec_add(&delta, &delta, moby + 0x40);
             qcopy(voice_positions + sound_data[4] * 0x70, &delta);
         }

@@ -1,7 +1,7 @@
 /* Level 13 Blarg gunner moby class (0x24), its hits and the spawn helper the turret uses. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -16,8 +16,7 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 #include "qcopy.h"
-
-extern int FUN_L00_00257b90(int, int);
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern void FUN_L00_00257470(void *, int, int);
 
@@ -101,7 +100,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *m, int a, int b, int c) __asm__("FUN_00212f90");
 
 void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) __asm__("FUN_L13_002b4a58");
 
@@ -231,19 +230,19 @@ void blarg_gunner_update(struct Moby *moby) {
     case BLARG_GUNNER_STATE_ACTIVE:
         if ((*(unsigned char **)(moby_vars + 0x70))[0x20] == 3) {
             if (moby->prev_seq != 2) {
-                int x = FUN_L00_00257b90(0, 3);
-                int y = FUN_L00_00257b90(7, 0xC);
+                int x = random_int_between(0, 3);
+                int y = random_int_between(7, 0xC);
                 blend_moby_animation(moby, 2, x, y);
             }
         } else {
             if (moby->prev_seq >= 2 || (moby->anim_flags & 2)) {
                 if (!random_integer_below(7)) {
                     if (moby->prev_seq != 1) {
-                        blend_moby_animation(moby, 1, 0, FUN_L00_00257b90(7, 0xD));
+                        blend_moby_animation(moby, 1, 0, random_int_between(7, 0xD));
                     }
                 } else {
                     if (moby->prev_seq != 0) {
-                        blend_moby_animation(moby, 0, 0, FUN_L00_00257b90(7, 0xD));
+                        blend_moby_animation(moby, 0, 0, random_int_between(7, 0xD));
                     }
                 }
                 moby->anim_speed = random_float_between(0.8f, 1.2f);

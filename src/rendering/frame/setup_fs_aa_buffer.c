@@ -3,17 +3,16 @@
 #include "rnc/globals.h"
 
 #include "sda.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/fs_aa_packets.h"
+#include "rnc/sdk/graph/sce_gs_set_def_disp_env.h"
+#include "rnc/sdk/graph/sce_gs_set_def_draw_env.h"
 
 extern struct FsAaBuf *active_fs_aa_buffer __asm__("D_0015EEB8") MACRO_ADDR;
 extern s32             display_buffer_address_macro __asm__("D_0015EE80") MACRO_ADDR;
 extern s32             draw_buffer_address_macro __asm__("D_0015EE84") MACRO_ADDR;
 extern s32             depth_buffer_address_macro __asm__("D_0015EE88") MACRO_ADDR;
-
-extern void sceGsSetDefDispEnv(void *, s16, s16, s16, s16, s16);
-extern s32  sceGsSetDefDrawEnv(void *, s16, s16, s16, s16, s16);
 
 #define FA ((struct FsAaBuf *)active_fs_aa_buffer)
 

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_PAUSE_PAGE_ENTER_NOOP_H
+#define LOMBYTE_RNC_UI_MENUS_PAUSE_PAUSE_PAGE_ENTER_NOOP_H
+
+#include "types.h"
+
+int pause_page_enter_noop(void) __asm__("FUN_002217f8");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_PAUSE_PAGE_ENTER_NOOP_H */

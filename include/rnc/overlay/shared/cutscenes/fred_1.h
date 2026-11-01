@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_CUTSCENES_FRED_1_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_CUTSCENES_FRED_1_H
+
+#include "types.h"
+
+void fred_1_update(char *) __asm__("FUN_L03_002dc310");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_CUTSCENES_FRED_1_H */

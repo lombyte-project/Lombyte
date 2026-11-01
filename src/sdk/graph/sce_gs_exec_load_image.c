@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/deci2/sce_printf.h"
 
-extern u8  gs_load_image_dma_timeout_message[] __asm__("D_001531D0");
-extern s32 scePrintf();
+extern u8 gs_load_image_dma_timeout_message[] __asm__("D_001531D0");
 
 s32 sceGsExecLoadImage(u8 *lp, u8 *image_payload) {
     u32 count;

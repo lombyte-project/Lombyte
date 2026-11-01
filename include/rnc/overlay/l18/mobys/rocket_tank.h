@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_ROCKET_TANK_H
+#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_ROCKET_TANK_H
+
+#include "types.h"
+
+void rocket_tank_update() __asm__("FUN_L18_002f7c40");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_ROCKET_TANK_H */

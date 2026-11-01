@@ -19,6 +19,7 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/libc/stdio/std.h"
 
 struct Reent {
     u8  pad_0[0x38];
@@ -29,8 +30,6 @@ struct Reent {
     s32 unk1DC;
     s32 unk1E0;
 };
-
-extern void std();
 
 void __sinit(struct Reent *reent_context) {
     s32 *std_streams;

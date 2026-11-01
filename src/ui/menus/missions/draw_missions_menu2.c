@@ -1,5 +1,7 @@
 #include "types.h"
 #include "rnc/ui/map/map_state.h"
+#include "rnc/ui/text/font/disable_font_color_codes.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 
 struct MissionsMenu {
     u8  pad_0[0x20];
@@ -26,8 +28,6 @@ struct Rect {
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
-extern void enable_font_color_codes() __asm__("func_001F61E8");
-extern void disable_font_color_codes() __asm__("func_001F61F8");
 extern void font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
 extern s32  font_print_wrapped_small(s32, s32, s32, s32, s32, s32, s32) __asm__("func_001F6FD0");
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");

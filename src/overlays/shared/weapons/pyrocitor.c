@@ -1,7 +1,7 @@
 /* Shared moby class pyrocitor: the flamethrower held by the hero, and its flame effect slots. */
 
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/audio/voice_alloc.h"
@@ -15,7 +15,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/weapons/devastator.h"
 
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002B8AE8.c: func_L00_002B8AE8). */

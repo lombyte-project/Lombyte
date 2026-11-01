@@ -1,7 +1,7 @@
 #include "asm.h"
 
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
 #include "rnc/sdk/libcdvd.h"
 
 extern s32 CreateSema(struct SemaParam *);

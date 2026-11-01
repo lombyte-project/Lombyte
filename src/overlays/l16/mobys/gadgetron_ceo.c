@@ -1,6 +1,6 @@
 /* Level 16 gadgetron_ceo and the challenge layout parameter. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -18,9 +18,9 @@
 #include "rnc/audio/voice_pool.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -393,15 +393,22 @@ extern f32  D_L16_0015F638;
 extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
 extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 
+typedef struct GadgetronCeoVars {
+    u8  pad_0[0x60];
+    s32 unk60;
+    u8  pad_64[0x3C];
+    s32 unkA0;
+} GadgetronCeoVars;
+
 void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
-    char *ceo_environment_group_data = (char *)moby->pvars;
-    int  *group_index_entry = (int *)(ceo_environment_group_data + 0x60);
-    int   i;
+    GadgetronCeoVars *ceo_environment_group_data = (GadgetronCeoVars *)moby->pvars;
+    int              *group_index_entry = &ceo_environment_group_data->unk60;
+    int               i;
     for (i = 15; i >= 0; i--) {
         jet_group_state(*group_index_entry, 1, 1, 1);
         group_index_entry++;
     }
-    group_index_entry = (int *)(ceo_environment_group_data + 0xA0);
+    group_index_entry = &ceo_environment_group_data->unkA0;
     for (i = 7; i >= 0; i--) {
         jet_group_state(*group_index_entry, 0, 0, 0);
         group_index_entry++;
@@ -413,15 +420,15 @@ void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E85E0), where it is exact; names translated to the US level program. */
 
 void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
-    char *ceo_environment_data = (char *)moby->pvars;
-    int  *group_index_entry;
-    int   i;
-    group_index_entry = (int *)(ceo_environment_data + 0x60);
+    GadgetronCeoVars *ceo_environment_data = (GadgetronCeoVars *)moby->pvars;
+    int              *group_index_entry;
+    int               i;
+    group_index_entry = &ceo_environment_data->unk60;
     for (i = 15; i >= 0; i--) {
         jet_group_state(group_index_entry[0], 0, 0, 0);
         group_index_entry++;
     }
-    group_index_entry = (int *)(ceo_environment_data + 0xA0);
+    group_index_entry = &ceo_environment_data->unkA0;
     for (i = 7; i >= 0; i--) {
         jet_group_state(group_index_entry[0], 1, 1, 0);
         group_index_entry++;

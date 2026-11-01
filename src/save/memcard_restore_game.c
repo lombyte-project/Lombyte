@@ -2,19 +2,21 @@
 #include "rnc/data_labels.h"
 #include "rnc/save/mc_data.h"
 #include "rnc/save/memcard_get_data_size.h"
+#include "rnc/save/memory_card_state.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 extern char out_of_date_save_message[] __asm__("D_001E81D0");
-extern void DebugPrint(char *, ...);
 extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
 void        memcard_restore_game(u8 *p) __asm__("FUN_00209298");
 
 void memcard_restore_game(u8 *save_buffer) {
     s32 size0 = memcard_get_data_size(mc_gamedata);
     s32 size1 = memcard_get_data_size(mc_leveldata);
-    s32 saved_game_span_bytes = ((s32 *)save_buffer)[0];
+    s32 saved_game_span_bytes = ((struct MemoryCardSaveSizes *)save_buffer)->main_size;
     s32 i;
 
-    if (saved_game_span_bytes != size0 || ((s32 *)save_buffer)[1] != size1) {
+    if (saved_game_span_bytes != size0 ||
+        ((struct MemoryCardSaveSizes *)save_buffer)->record_size != size1) {
         DebugPrint(out_of_date_save_message);
         return;
     }

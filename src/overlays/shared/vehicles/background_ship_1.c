@@ -20,6 +20,23 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/vehicles/background_ship_1_globals.h"
 
+typedef struct BackgroundShip1Vars {
+    u8   pad0[0x2b];
+    u8   unk2B;
+    u8   unk2C;
+    u8   pad2D[0x33];
+    s32  unk60;
+    f32  unk64;
+    f32  unk68;
+    s32  unk6C;
+    f32  unk70;
+    f32  unk74;
+    u8   pad78[0x8];
+    u8   unk80[0x30];
+    s32  unkB0;
+    int *unkB4;
+} BackgroundShip1Vars;
+
 extern int  get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int  get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
@@ -107,7 +124,7 @@ void draw_background_ship_1_joint_billboards(char *reference_moby) {
     while (current_moby != 0) {
         if (current_moby->visible != 0) {
             char *joint_billboard_data = ((char *)current_moby->pvars);
-            if (current_moby->oclass == *(short *)(reference_moby + 0xA6)) {
+            if (current_moby->oclass == MOBY(reference_moby)->oclass) {
                 if ((*(int *)(joint_billboard_data + 0xB0) & 0xFF) > 0x80) {
                     char *joint_position = joint_billboard_data + 0x80;
                     int   i;
@@ -128,18 +145,18 @@ void draw_background_ship_1_joint_billboards(char *reference_moby) {
 void prepare_background_ship_1_joint_billboards(char *moby) __asm__("FUN_L02_002ec3f0");
 
 void prepare_background_ship_1_joint_billboards(char *moby) {
-    int   i;
-    char *background_ship_data;
-    char *joint_position_out;
-    int   current_global_value;
-    int   r, g, b, packed_color;
-    int  *cached_global_value_ptr;
+    int                  i;
+    BackgroundShip1Vars *background_ship_data;
+    char                *joint_position_out;
+    int                  current_global_value;
+    int                  r, g, b, packed_color;
+    int                 *cached_global_value_ptr;
 
     if (MOBY(moby)->group == 0xFF) {
         return;
     }
-    background_ship_data = ((char *)MOBY(moby)->pvars);
-    joint_position_out = background_ship_data + 0x80;
+    background_ship_data = (BackgroundShip1Vars *)MOBY(moby)->pvars;
+    joint_position_out = &background_ship_data->unk80;
     for (i = 0; i < 3; i++) {
         moby_point_position(moby, i + 3, joint_position_out);
         joint_position_out += 0x10;
@@ -151,9 +168,9 @@ void prepare_background_ship_1_joint_billboards(char *moby) {
     packed_color = (r << 16) | 0x30000000;
     packed_color |= g << 8;
     packed_color |= b;
-    *(int *)(background_ship_data + 0xB0) = packed_color;
+    background_ship_data->unkB0 = packed_color;
     if (current_global_value != 0) {
-        cached_global_value_ptr = *(int **)(background_ship_data + 0xB4);
+        cached_global_value_ptr = background_ship_data->unkB4;
         if (current_global_value != *cached_global_value_ptr) {
             *cached_global_value_ptr = current_global_value;
             add_draw_callback(draw_background_ship_1_joint_billboards, moby);
@@ -172,19 +189,19 @@ void background_ship_1_update(char *moby) {
         BACKGROUND_SHIP_1_FOLLOW_PATH = 1,
         BACKGROUND_SHIP_1_REMOVE = 2
     };
-    char *moby_data;
-    char *path;
-    int   hit_record;
-    int   flag = 0;
-    float tv[4];
-    float first_path_segment_length;
-    float path_travel_distance;
-    float x;
-    int   first_effect_frame_count;
-    int   second_effect_frame_count;
-    int   third_effect_frame_count;
-    moby_data = ((char *)MOBY(moby)->pvars);
-    path = D_L02_001B0AB0[*(int *)(moby_data + 0x60)];
+    BackgroundShip1Vars *moby_data;
+    char                *path;
+    int                  hit_record;
+    int                  flag = 0;
+    float                tv[4];
+    float                first_path_segment_length;
+    float                path_travel_distance;
+    float                x;
+    int                  first_effect_frame_count;
+    int                  second_effect_frame_count;
+    int                  third_effect_frame_count;
+    moby_data = (BackgroundShip1Vars *)MOBY(moby)->pvars;
+    path = D_L02_001B0AB0[moby_data->unk60];
     hit_record = (int)find_moby_hit(moby, 0x10000, 0);
     switch (MOBY(moby)->state) {
     case BACKGROUND_SHIP_1_INITIALIZE: {
@@ -192,55 +209,45 @@ void background_ship_1_update(char *moby) {
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         invalid_index = -1;
-        if (*(int *)(moby_data + 0x60) == invalid_index) {
+        if (moby_data->unk60 == invalid_index) {
             debug_print(background_ship_1_missing_path_message, ((short)MOBY(moby)->save_id));
             mark_moby_for_removal(moby);
             return;
         }
-        if (*(int *)D_L02_001B0AB0[*(int *)(moby_data + 0x60)] == 0) {
+        if (*(int *)D_L02_001B0AB0[moby_data->unk60] == 0) {
             debug_print(background_ship_1_empty_path_message, ((short)MOBY(moby)->save_id));
             mark_moby_for_removal(moby);
             return;
         }
-        first_path_segment_length =
-            fast_vec_dist(D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10,
-                          D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x20);
-        *(unsigned char *)(moby_data + 0x2C) = 0x28;
-        *(float *)(moby_data + 0x70) = first_path_segment_length;
-        *(unsigned char *)(moby_data + 0x2B) = 1;
-        qcopy(moby + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10);
-        *(float *)(moby_data + 0x68) = random_angle_radians();
-        *(int *)(moby_data + 0x6C) = invalid_index;
+        first_path_segment_length = fast_vec_dist(D_L02_001B0AB0[moby_data->unk60] + 0x10,
+                                                  D_L02_001B0AB0[moby_data->unk60] + 0x20);
+        moby_data->unk2C = 0x28;
+        moby_data->unk70 = first_path_segment_length;
+        moby_data->unk2B = 1;
+        qcopy(&MOBY(moby)->pos, D_L02_001B0AB0[moby_data->unk60] + 0x10);
+        moby_data->unk68 = random_angle_radians();
+        moby_data->unk6C = invalid_index;
         MOBY(moby)->state = 1;
         MOBY(moby)->flags |= 0x10;
-        *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x74) * (float)*(int *)path;
+        moby_data->unk64 = moby_data->unk74 * (float)*(int *)path;
         break;
     }
     case BACKGROUND_SHIP_1_FOLLOW_PATH:
-        qcopy(tv, moby + 0x10);
-        if (voice_is_playing(moby, *(int *)(moby_data + 0x6C)) == 0) {
-            *(int *)(moby_data + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
+        qcopy(tv, &MOBY(moby)->pos);
+        if (voice_is_playing(moby, moby_data->unk6C) == 0) {
+            moby_data->unk6C = func_0022ED80_r(1, 4, (int)moby);
         }
         path_travel_distance = *(float *)&background_ship_1_path_travel_speed_gp * frame_time;
-        *(float *)(moby_data + 0x64) =
-            *(float *)(moby_data + 0x64) + path_travel_distance / *(float *)(moby_data + 0x70);
-        if ((float)*(int *)path < *(float *)(moby_data + 0x64)) {
-            *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) - (float)*(int *)path;
+        moby_data->unk64 = moby_data->unk64 + path_travel_distance / moby_data->unk70;
+        if ((float)*(int *)path < moby_data->unk64) {
+            moby_data->unk64 = moby_data->unk64 - (float)*(int *)path;
         }
         if (current_level_index == 9) {
-            sample_camera_path((int *)path,
-                               1,
-                               moby + 0x10,
-                               (float *)&MOBY(moby)->rot,
-                               0,
-                               *(float *)(moby_data + 0x64));
+            sample_camera_path(
+                (int *)path, 1, &MOBY(moby)->pos, (float *)&MOBY(moby)->rot, 0, moby_data->unk64);
         } else {
-            sample_camera_path((int *)path,
-                               0,
-                               moby + 0x10,
-                               (float *)&MOBY(moby)->rot,
-                               0,
-                               *(float *)(moby_data + 0x64));
+            sample_camera_path(
+                (int *)path, 0, &MOBY(moby)->pos, (float *)&MOBY(moby)->rot, 0, moby_data->unk64);
         }
         if (MOBY(moby)->pos.x < 8.0f) {
             MOBY(moby)->collision = 0;
@@ -327,7 +334,7 @@ void background_ship_1_update(char *moby) {
         break;
     }
     if (MOBY(moby)->visible != 0) {
-        x = fast_sin(*(float *)(moby_data + 0x68)) * 4.0f - 3.0f;
+        x = fast_sin(moby_data->unk68) * 4.0f - 3.0f;
         if (1.0f < x) {
             x = 1.0f;
         } else if (x < 0.0f) {
@@ -342,7 +349,7 @@ void background_ship_1_update(char *moby) {
             k = *(float *)&background_ship_1_color_phase_rate_degrees_gp * 0.017453292f *
                 frame_time;
             MOBY(moby)->glow_color = tweened_color;
-            *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
+            moby_data->unk68 = fast_add_rotations(moby_data->unk68, k);
         }
         prepare_background_ship_1_joint_billboards(moby);
     }
@@ -354,7 +361,7 @@ void spawn_background_ship_1_joint_sparks(char *moby, void *previous_position) {
     float first_spark_vector[4], second_spark_vector[4], position_delta[4], random_offset[4],
         emission_position[4];
     int i;
-    fast_vec_sub(position_delta, moby + 0x10, previous_position);
+    fast_vec_sub(position_delta, &MOBY(moby)->pos, previous_position);
     for (i = 0; i < 3; i++) {
         int first_spark_color, second_spark_color, frame_count, second_frame_count,
             third_frame_count;

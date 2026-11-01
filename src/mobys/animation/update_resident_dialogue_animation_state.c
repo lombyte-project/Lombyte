@@ -7,6 +7,7 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 #include "rnc/mobys/detach_manipulator.h"
+#include "rnc/mobys/animation/is_value_within_interpolated_window.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -46,8 +47,6 @@ extern s32 D_001610B4 MACRO_ADDR;
 extern BossVars       D_001E63C0;
 s32 D_001E63FC        NOT_SDA = 0;
 extern Cam            D_001E65E0;
-
-extern s32 is_value_within_interpolated_window(Moby *, f32) __asm__("FUN_00214cc8");
 
 void update_resident_dialogue_animation_state(Moby *m) __asm__("FUN_00237ed0");
 

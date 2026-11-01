@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_MINE_H
 
 #include "types.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef union {
     OvlQuad q;
@@ -97,5 +97,7 @@ typedef struct {
     char  p30[0x10];
     U910  nrm;
 } H910;
+
+void mine_update(M910 *) __asm__("FUN_L00_002aa670");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_MINE_H */

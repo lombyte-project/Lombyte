@@ -1,5 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/input/sce_pad2_get_side.h"
+#include "rnc/sdk/input/sce_pad2_link_driver.h"
+#include "rnc/sdk/input/sce_pad2_set_button_order.h"
 
 struct Pad2Data {
     u8  pad_0[0x2];
@@ -8,11 +11,8 @@ struct Pad2Data {
     s32 unk4;
 };
 
-extern u8               D_0015B540[];
-extern void            *memcpy();
-extern struct Pad2Data *scePad2GetSide();
-extern s32              scePad2LinkDriver();
-extern s32              scePad2SetButtonOrder();
+extern u8    D_0015B540[];
+extern void *memcpy();
 
 s32 scePad2Read(s32 port, u8 *pad_input_destination) {
     struct Pad2Data *side;

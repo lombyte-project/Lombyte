@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L04_MOBYS_HELP_HINTS_H
+#define LOMBYTE_RNC_OVERLAY_L04_MOBYS_HELP_HINTS_H
+
+#include "types.h"
+
+void help_hints_update() __asm__("FUN_L04_002e4418");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L04_MOBYS_HELP_HINTS_H */

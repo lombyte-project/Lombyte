@@ -6,11 +6,11 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/water_grid.h"
+#include "rnc/overlay/shared/world/water_grid.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/random.h"
@@ -22,6 +22,7 @@
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/rendering/view/project_to_screen.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -437,7 +438,7 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
         truncate_float_to_s32((projected_point[1] - (float)screen_extent_data[5]) * 0.0625f) + yoff;
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 
@@ -643,7 +644,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
         }
         skip = 1;
         trail_moby = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
-        other_class = *(short *)(trail_moby + 0xA6);
+        other_class = MOBY(trail_moby)->oclass;
         own_class = moby->oclass;
         visible = *(unsigned char *)(trail_moby + 0x31);
         if ((other_class ^ own_class) == 0) {
@@ -703,8 +704,9 @@ void update_moby_trail_points(char *moby) {
     first_trail_offset[0] = -1.2f;
     first_trail_offset[2] = 0.3f;
     transform_vector_by_basis(first_trail_offset, first_trail_offset, moby + 0xC0);
-    fast_vec_add(
-        trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), first_trail_offset, moby + 0x10);
+    fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0),
+                 first_trail_offset,
+                 &MOBY(moby)->pos);
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0xCC) = 1.0f;
     *(OvlQuad *)second_trail_offset = 0;
     second_trail_offset[0] = -1.2f;
@@ -713,7 +715,7 @@ void update_moby_trail_points(char *moby) {
     transform_vector_by_basis(second_trail_offset, second_trail_offset, moby + 0xC0);
     fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0),
                  second_trail_offset,
-                 moby + 0x10);
+                 &MOBY(moby)->pos);
     current_frame = level_frame;
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0x1CC) = 1.0f;
     if (current_frame != 0) {
@@ -776,7 +778,7 @@ void update_moby_hit_stats_and_state(char *moby) {
             next_moby_state = 2;
         }
         if (current_moby_state != next_moby_state) {
-            moby[0x20] = next_moby_state;
+            MOBY(moby)->state = next_moby_state;
             if (((unsigned char *)moby)[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -784,12 +786,12 @@ void update_moby_hit_stats_and_state(char *moby) {
     } else if (((unsigned char *)moby)[0x20] == 5) {
         struct Hero *hero_for_state_check = &hero;
         if (hero_for_state_check->state.current != 0x32) {
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags |= 1;
         }
-        if (coll_sphere(1.0f, moby + 0x10, 0, moby)) {
-            moby[0x20] = 6;
+        if (coll_sphere(1.0f, &MOBY(moby)->pos, 0, moby)) {
+            MOBY(moby)->state = 6;
             if (((unsigned char *)moby)[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -857,9 +859,6 @@ void append_scaled_screen_triangle_strip(short             *pts,
     }
     l11_gif_packet_cursor += ((point_count + 1) / 2) * 16;
 }
-
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
 void update_moby_path_transform(char *moby) __asm__("FUN_L11_0031a438");
 

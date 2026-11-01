@@ -1,7 +1,7 @@
 /* Shared moby class underwater_ring: a group of rings to swim through before the timer runs out. */
 
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"

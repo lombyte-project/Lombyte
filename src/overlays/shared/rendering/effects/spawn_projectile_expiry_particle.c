@@ -11,6 +11,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */
 
@@ -40,7 +41,6 @@ unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position,
     return particle;
 }
 
-extern int            rand(void);
 extern unsigned char *l07_projectile_expiry_particle_lookup __asm__("D_L07_001B21F4") NOT_SDA;
 extern float          debris_far_point[] __asm__("D_L07_00166E40");
 
@@ -67,11 +67,11 @@ spawn_moby_point_offset_particle(void *moby, short index, float amount, float fa
         *(float *)(particle_payload + 8) =
             random_float_between(*(float *)(particle_payload + 4), 1.0f);
         {
-            int random_index = rand() & 15;
+            int random_index = RandomNext() & 15;
             *(float *)(particle_payload + 0x14) = factor;
             *(short *)(particle_payload + 0xc) = random_index;
         }
-        particle[8] = rand();
+        particle[8] = RandomNext();
         *(int *)(particle + 4) = 0x7f7f7f;
         *(volatile unsigned char *)(particle + 9) = truncate_float_to_s32(4.0f) + 0x40;
         *(volatile unsigned char *)(particle + 3) = 0x48;

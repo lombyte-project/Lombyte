@@ -1,6 +1,12 @@
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_call_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
+#include "rnc/sdk/storage/cdvd/cmd_sem_init.h"
+#include "rnc/sdk/storage/cdvd/sceCdSyncS.h"
 
 extern s32                     D_00131304[];
 extern struct sceSifClientData cd_disk_ready_rpc_client __asm__("D_00159990");
@@ -10,13 +16,7 @@ extern u8                      cd_disk_ready_bind_error_message[] __asm__("D_001
 extern u8                      cd_disk_ready_completion_message[] __asm__("D_00152FB0");
 extern s32                     PollSema();
 extern void                    SignalSema();
-extern void                    cmd_sem_init();
-extern s32                     sceCdSyncS();
-extern void                    scePrintf();
-extern s32                     sceSifBindRpc();
-extern void                    sceSifInitRpc();
 extern void                    sceSifWriteBackDCache();
-extern s32                     sceSifCallRpc();
 
 /* libcdvd disk-ready query (the sceCdDiskReady pattern): take the S-command
    semaphore, bind the 0x8000059A server once, send mode and return the

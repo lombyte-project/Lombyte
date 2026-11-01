@@ -1,46 +1,43 @@
 /* Level 18 classes 0x375-0x3a8: scenery that bursts into sparks or flies off and explodes when its group is hit. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 
 #include "qcopy.h"
 #include "rnc/overlay/shared/math/interpolation/set_moby_list_state.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/mobys/moby_spawn.h"
+#include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern int scale_game_frames(int);
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 
 extern float fast_add_rotations(float, float);
 extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-
-extern int   FUN_L00_0025a420(void *, int, int);
-void         set_moby_group_state_two(int group) __asm__("FUN_L18_002e9e50");
-extern void  cart_burst(float, float, void *, void *, int) __asm__("FUN_L00_0025f090");
-extern float FUN_L00_00257c48(float, float);
-extern void  subtract_vector_9768(float *, float *, float *) __asm__("FUN_001f9a28");
-extern void  scale_vector_9768(float *, float *, float) __asm__("FUN_001f9bf8");
-extern void  add_vector_9768(float *, float *, float *) __asm__("FUN_001f9a10");
-extern void  random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern int   coll_sphere(float, float *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void  spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__("FUN_L00_0026a9f0");
+extern int  FUN_L00_0025a420(void *, int, int);
+void        set_moby_group_state_two(int group) __asm__("FUN_L18_002e9e50");
+extern void cart_burst(float, float, void *, void *, int) __asm__("FUN_L00_0025f090");
+extern void subtract_vector_9768(float *, float *, float *) __asm__("FUN_001f9a28");
+extern void scale_vector_9768(float *, float *, float) __asm__("FUN_001f9bf8");
+extern void add_vector_9768(float *, float *, float *) __asm__("FUN_001f9a10");
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
+extern int  coll_sphere(float, float *, int, void *) __asm__("FUN_L00_001f0d60");
+extern void spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__("FUN_L00_0026a9f0");
 extern void
 spawn_particle_alt_9768(float, void *, void *, int, int, int) __asm__("FUN_L00_0026a4c8");
 extern int   D_L18_0015F580;
@@ -181,9 +178,9 @@ void destructible_scenery_update(struct Moby *moby) {
             moby->collision = 0;
             moby->state = 3;
             hit_response_and_flight_private_vars[2] =
-                FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
+                randf_sym(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
             hit_response_and_flight_private_vars[3] =
-                FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
+                randf_sym(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
             subtract_vector_9768(
                 hit_response_and_flight_private_vars + 4, &moby->pos.x, D_0013F3D0);
             hit_response_and_flight_private_vars[6] = 0.0f;

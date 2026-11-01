@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/vu1_registers.h"
 

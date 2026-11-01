@@ -2,11 +2,11 @@
  * -fno-schedule-insns entry in configure.py (SDK_COMPILER_FLAG_UNITS). */
 
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
 
 extern u8                      D_0012FCAC[];
 extern struct sceSifClientData D_00158040;
-extern s32                     sceSifBindRpc();
 
 s32 sceSifInitIopHeap(void) {
     s32 delay;

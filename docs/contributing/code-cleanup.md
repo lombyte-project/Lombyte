@@ -45,7 +45,7 @@ make it clearer, add a comment that explains why it looks odd.
 
 - add inline assembly (other than the name label or a marked fakematch, see
   below); for `ei`, `di`, `sync`, `mfc0` or `syscall` use the macros in
-  `include/kernel.h`;
+  `include/rnc/sdk/kernel.h`;
 - use `#ifdef` tricks;
 - change which compiler a unit uses;
 - edit files in `asm/`;
@@ -122,7 +122,12 @@ register that nothing set on that path (to keep it live) as
 
 **Enums**
 
-- Reuse the shared definitions in [enum scope and shared definitions](../game/enum-layout.md).
+- Shared enums live in their subsystem's header: hero states, vehicle and
+  gravity modes in `rnc/hero/hero_state.h`, moby class IDs in
+  `rnc/mobys/moby_class_id.h`, camera modes in `rnc/camera/camera_modes.h`,
+  GS pixel formats in `rnc/rendering/pixel_format.h`, memory card operations
+  in `rnc/save/memory_card_state.h`, text layout flags in
+  `rnc/ui/text/text_region.h`.
 - Constants used by several C files belong in the owning subsystem's header.
   Constants shared only by functions in one C file stay at file scope; a private
   callback's selector stays local.
@@ -163,7 +168,7 @@ edit fails at once.
 - **Where it lives:** data that only one file reads is defined after that
   file's functions and listed in `DATA_OVERLAYS` (`BSS_OVERLAYS` when
   uninitialised) in `configure.py`; level data is a row in
-  `config/overlays/us/data.tsv`. `data-refs.py --emit ADDR --into FILE`
+  `config/us/levels/data.tsv`. `data-refs.py --emit ADDR --into FILE`
   (`--level N` for level data) writes both. Shared data and raw bytes stay in
   assembly, with their type in a header.
 - **Never guess a size.** When `--emit` stops (no declaration, `T x[]` with no
@@ -197,7 +202,7 @@ preserves a source-owned small-data placement entry.
 - Folders follow what the code is in the game ([src/README.md](../../src/README.md)),
   for example `ui/menus/<screen>`, `overlays/shared/enemies` or `lNN/mobys`.
 - In the same commit, update the unit path in `config/us/rnc1.us.yaml`, or in
-  `config/overlays/us/functions.tsv` for level code.
+  `config/us/levels/functions.tsv` for level code.
 - The config decides the link order, so a correct move can't change the
   output.
 

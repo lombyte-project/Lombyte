@@ -14,8 +14,9 @@
 #include "qcopy.h"
 #include "rnc/camera/update_cam.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/camera/path_flythrough_camera.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
 extern char *D_L10_0015EF50;
 
@@ -193,9 +194,7 @@ extern s32                  D_L10_0015F404;
 extern char                 D_L10_00167450[];
 extern float D_L10_00167358 NOT_SDA;
 extern float                D_0013F5E0_5f18[] __asm__("D_0013F5E0");
-extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
-extern void FUN_L00_002223f8(s32, s32);
-extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
+extern void                 debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 
 void FUN_L10_002f5f18(struct UpdateCam *cam) {
     float                dir[4];
@@ -262,7 +261,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             cam->transition_state = 4;
             D_L10_0015F404 = 0;
             if (*(int *)(rec + 0x4C) == 0)
-                FUN_L00_002223f8(0, 1);
+                hero_set_state(0, 1);
         }
         if (*(int *)(rec + 0x40) == 0)
             return;
@@ -275,8 +274,8 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     }
     path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
     qcopy(dir, &cam->pos);
-    done =
-        sample_path(path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    done = FUN_L00_0025d808(
+        path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (run->timer != 0) {
         if (fast_dec_timer_s16(&run->timer) != 0)
             done = 1;
@@ -326,12 +325,12 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         char *look = ((char *)l10_paths[*(int *)(rec + 0x24)]);
         look_seg = 0;
         look_t = 0.0f;
-        sample_path(look,
-                    point,
-                    &look_seg,
-                    &look_t,
-                    0,
-                    run->dist / run->path_length * run->look_path_length);
+        FUN_L00_0025d808(look,
+                         point,
+                         &look_seg,
+                         &look_t,
+                         0,
+                         run->dist / run->path_length * run->look_path_length);
         debug_point_5f18(point, 0.2f);
         noop_main_callback(look + 0x10, look + *(int *)look * 16);
         fast_vec_sub(offset, point, &cam->pos);

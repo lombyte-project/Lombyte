@@ -4,6 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/camera/update_cam.h"
 
 typedef struct {
     char unk_00[0x10];
@@ -12,42 +13,39 @@ typedef struct {
     int  unk1C;
 } CamRec20;
 
+/* UpdateCam from its activation rule on, as this check reads it: the rule as
+   a word, then the priority (UpdateCam.active) and the handoff byte. */
+struct CameraActivation {
+    s32 rule; /* UpdateCam 0x74 */
+    u8  pad_04[0x4];
+    u8  priority;      /* UpdateCam 0x7C: 0 = inactive */
+    u8  handoff_ready; /* UpdateCam 0x7D */
+};
+
 extern CamRec20 *D_0015EF90 MACRO_ADDR;
 extern CamRec20 *D_0015EF40 MACRO_ADDR;
 
-typedef struct {
-    char unk_00[4];
-    int (*fn_04)(void *, void *);
-    char unk_08[0xC];
-} CamPrioHook;
+/* Each case ends in `if (x) return 1;` falling out to the one shared
+   `return 0;`, which is what lets cross-jumping and reorg give retail's
+   branches; the listener group case's final test shares its `return 1`
+   with the negative index exit so its `$v0 = 1` is not hoisted above the
+   load. */
+int camera_activation_check_priority(struct UpdateCam *candidate,
+                                     struct UpdateCam *current) __asm__("FUN_001ec210");
 
-extern CamPrioHook D_001E8C00[];
-/* Camera_ActivationCheckPriority(cur, other): whether camera `cur` should
-   take over from `other`. An inactive camera (+0x7C) never does; the camera
-   type's +4 hook (D_001E8C00) may decide first (-1 no, 1 yes); otherwise
-   the mode at +0x74 decides: 0 (and 1/2 once +0x7D is set) by priority
-   byte, 4 through is_point_inside_clip_volume on the target record, 7 by the level's
-   mode and target. Each case ends in `if (x) return 1;` falling out to the
-   one shared `return 0;`, which is what lets cross-jumping and reorg give
-   retail's branches; case 7's final test shares its `return 1` with the
-   g < 0 exit so its `$v0 = 1` is not hoisted above the load. */
-int camera_activation_check_priority(void *cur, void *other) __asm__("FUN_001ec210");
-
-int camera_activation_check_priority(void *candidate_camera, void *current_camera) {
+int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateCam *current) {
     enum {
         CAMERA_COMPARE_ACCEPT = 1
     };
-    char          *candidate_camera_bytes = (char *)candidate_camera;
-    char          *current_camera_bytes = (char *)current_camera;
-    unsigned char *state = (unsigned char *)(candidate_camera_bytes + 0x74);
+    struct CameraActivation *activation = (struct CameraActivation *)&candidate->state;
 
-    if (*(unsigned char *)(candidate_camera_bytes + 0x7C) == 0) {
+    if (candidate->active == 0) {
         return 0;
     }
     {
-        int (*fn)(void *, void *) = D_001E8C00[*(short *)(candidate_camera_bytes + 0x8C)].fn_04;
-        if (fn != 0) {
-            switch (fn(candidate_camera, current_camera)) {
+        int (*check_priority)(void *, void *) = camera_types[candidate->type].check_priority;
+        if (check_priority != 0) {
+            switch (check_priority(candidate, current)) {
             case -1:
                 return 0;
             case CAMERA_COMPARE_ACCEPT:
@@ -55,30 +53,29 @@ int camera_activation_check_priority(void *candidate_camera, void *current_camer
             }
         }
     }
-    switch (*(int *)state) {
+    switch (activation->rule) {
     case CAMERA_ACTIVATION_HANDOFF_GATED_PRIORITY:
     case CAMERA_ACTIVATION_REQUIRE_HANDOFF_PRIORITY:
-        if (state[9] == 0) {
+        if (activation->handoff_ready == 0) {
             return 0;
         }
         /* fallthrough */
     case CAMERA_ACTIVATION_BY_PRIORITY:
-        if (current_camera_bytes == 0) {
+        if (current == 0) {
             return 1;
         }
-        if (*(short *)(current_camera_bytes + 0x7E) != 0) {
+        if (current->transition_state != 0) {
             return 1;
         }
-        if (state[8] > *(unsigned char *)(current_camera_bytes + 0x7C)) {
+        if (activation->priority > current->active) {
             return 1;
         }
         break;
     case CAMERA_ACTIVATION_IN_CLIP_VOLUME: {
-        char *camera_descriptor_bytes =
-            (char *)D_0015EF90[*(short *)(candidate_camera_bytes + 0x84)].unk1C;
+        char *camera_descriptor_bytes = (char *)D_0015EF90[candidate->descriptor_index].unk1C;
 
-        if (current_camera_bytes != 0 && *(short *)(current_camera_bytes + 0x7E) == 0 &&
-            !(state[8] > *(unsigned char *)(current_camera_bytes + 0x7C))) {
+        if (current != 0 && current->transition_state == 0 &&
+            !(activation->priority > current->active)) {
             return 0;
         }
         if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(camera_descriptor_bytes + 0xC))) {
@@ -88,20 +85,19 @@ int camera_activation_check_priority(void *candidate_camera, void *current_camer
     }
     case CAMERA_ACTIVATION_MATCH_LISTENER_GROUP: {
         struct Hero *hero_state = &hero;
-        short        e = *(short *)(candidate_camera_bytes + 0x86);
+        short        listener_group = candidate->unk86;
 
-        if (e != hero_state->unk2284) {
+        if (listener_group != hero_state->unk2284) {
             return 0;
         }
-        if (*(short *)(current_camera_bytes + 0x7E) == 0 &&
-            !(state[8] > *(unsigned char *)(current_camera_bytes + 0x7C))) {
+        if (current->transition_state == 0 && !(activation->priority > current->active)) {
             return 0;
         }
-        if (e != 3) {
+        if (listener_group != 3) {
             return 1;
         }
         {
-            CamRec20 *rec = &D_0015EF90[*(short *)(candidate_camera_bytes + 0x84)];
+            CamRec20 *rec = &D_0015EF90[candidate->descriptor_index];
             int       secondary_descriptor_index = *(int *)((char *)rec->unk1C + 0x24);
 
             if (secondary_descriptor_index < 0 ||

@@ -8,9 +8,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
+#include "rnc/audio/voice_alloc.h"
 
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern char D_0013E550[];
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 

@@ -1,14 +1,12 @@
-/* INTENTIONAL_LOW_LEVEL_ASM
- * 18 handwritten MMI/COP2 motion-compensation kernels (qfsrv, pextlb/ub,
+/* 18 hand-written MMI/COP2 motion-compensation kernels (qfsrv, pextlb/ub,
  * paddh, psrlh, psrah, pminh, pmaxh, pnor, por, pcpyld, pcgth, ppacb,
  * mtsab, lq/sq) plus the D_00127220 word. Not expressible in generic
- * EE-GCC C; the assembly oracle remains authoritative.
+ * EE-GCC C.
  */
 
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc_mmi/func_00126488.s", func_00126488);
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc_mmi/func_00126500.s", func_00126500);
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc_mmi/func_00126598.s", func_00126598);
@@ -27,8 +25,3 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc_mmi/func_00126F40.
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc_mmi/func_00127060.s", func_00127060);
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc_mmi/func_00127178.s", func_00127178);
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc_mmi/func_001271D8.s", func_001271D8);
-#else
-/* No C body on purpose: this unit is intentional low-level assembly
-   (config/us/unit_categories.json), so it has no C goal and no public
-   fuzzy score. The assembly oracle above is the whole unit. */
-#endif /* NON_MATCHING */

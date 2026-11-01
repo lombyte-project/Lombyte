@@ -5,14 +5,15 @@
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/enemies/trooper_play_sound.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "qcopy.h"
-#include "rnc/overlay/item_defs.h"
+#include "rnc/overlay/shared/hero/item_defs.h"
 #include "rnc/globals.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 
 typedef struct {
     float x;
@@ -35,7 +36,6 @@ typedef struct {
 
 int          FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
 extern int   add_ammo(int, int) __asm__("FUN_L00_00233e40");
-extern void  queue_formatted_dialogue_message(int, int, int) __asm__("FUN_L00_00263db0");
 extern void  clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int   f99a8_2c5be8(int) __asm__("FUN_001f99a8");
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -99,13 +99,13 @@ unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_am
     }
     if (spawned_moby) {
         int *moby_vars;
-        spawned_moby[0x30] = 0xff;
-        *(short *)(spawned_moby + 0x32) = 0xff;
+        MOBY(spawned_moby)->update_dist = 0xff;
+        MOBY(spawned_moby)->draw_dist = 0xff;
         moby_vars = *(int **)(spawned_moby + 0x78);
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 1;
-        spawned_moby[0xbc] = 0;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 1;
+        MOBY(spawned_moby)->command = 0;
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         if (ammo_amount == -1)
             moby_vars[0] = ((VendorItemInfo *)(weapon_index * 0x18 + (u8 *)D_L00_001C40B0))->hC;
         else
@@ -113,7 +113,7 @@ unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_am
         moby_vars[2] = weapon_index;
         *(float *)(moby_vars + 3) = (float)d;
         moby_vars[8] = FUN_001f96f8_002c52a8(0x10);
-        *(float *)(moby_vars + 10) = *(float *)(spawned_moby + 0x18);
+        *(float *)(moby_vars + 10) = MOBY(spawned_moby)->pos.z;
         update_entity(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);
     }

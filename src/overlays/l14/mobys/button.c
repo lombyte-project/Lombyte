@@ -8,8 +8,8 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 extern LevelSaveState D_L14_001BB930;
 

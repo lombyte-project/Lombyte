@@ -1,10 +1,10 @@
+#include "rnc/sdk/libc/mprec/dcmp.h"
 /* newlib dtoa.c (libc.a), built by the SDK compiler. Identified by
    rac1-decomp (src/core/00112468.c, quorem). */
 /* newlib dtoa.c quorem(b,S): one digit of b/S for dtoa's digit-generation
  * loop -- estimate the digit q from the top limbs, subtract q*S from b
  * (trimming b's leading zero limbs), then bump q by one more if b is
  * still >= S (the estimate can undershoot by 1), subtracting S again. */
-extern int Dcmp(void *, void *);
 
 typedef struct Bigint {
     struct Bigint *next;

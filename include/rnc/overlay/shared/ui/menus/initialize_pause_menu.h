@@ -5,4 +5,6 @@
 
 void draw_pause_menu_pages(s32) __asm__("FUN_L00_002772c0");
 
+void update_pause_menu(void) __asm__("FUN_L00_00276bd0");
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_MENUS_INITIALIZE_PAUSE_MENU_H */

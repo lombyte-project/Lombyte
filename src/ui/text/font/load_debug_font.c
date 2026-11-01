@@ -11,12 +11,12 @@ extern s32  read_disc_sectors_and_wait() __asm__("func_00216828");
 void load_debug_font(void) __asm__("FUN_001e9338");
 
 void load_debug_font(void) {
-    u8 sp_slot[32];
+    u8 pif_header[32];
 
     read_disc_sectors_and_wait(
         debug_font_buffer, disc_table.debug_font.sector, disc_table.debug_font.size);
-    load_pif_as_psmt8_h(debug_font_buffer, sp_slot, *(s32 *)0x15EE88 + 0xC0000, 0x3FFC00);
-    debug_font_pif_header = *(u64 *)(void *)sp_slot;
+    load_pif_as_psmt8_h(debug_font_buffer, pif_header, *(s32 *)0x15EE88 + 0xC0000, 0x3FFC00);
+    debug_font_pif_header = *(u64 *)(void *)pif_header;
 }
 
 /* Defined below its only writer, so retail reaches it with lui. */

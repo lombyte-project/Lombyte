@@ -5,7 +5,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "sda.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"

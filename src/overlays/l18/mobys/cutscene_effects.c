@@ -1,7 +1,7 @@
 /* Level 18 moby class cutscene_effects (0x61b): the deplanetizer gun cutscene sequence, with its camera-facing quads, glows and trails. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -12,6 +12,7 @@
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/l18/mobys/cutscene_effects_globals.h"
+#include "rnc/math/random.h"
 
 extern int D_L18_0015F5C4;
 
@@ -25,13 +26,12 @@ typedef struct {
 
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int              D_L18_0015F5C4;
-extern s32              random_integer_below(s32) __asm__("FUN_00213260");
 extern void             enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002020c8");
 void                    spawn_deplanetizer_gun_trail_effects(void *first_position_source,
                                                              void *second_position_source,
                                                              void *effect_velocity_source,
-                                                             float f0,
-                                                             float f1) __asm__("FUN_L18_002fa250");
+                                                             float first_effect_size,
+                                                             float second_effect_size) __asm__("FUN_L18_002fa250");
 
 extern void spawn_deplanetizer_gun_trail_effects(void *, void *, void *, float, float) __asm__("FUN_L18_002fa250");
 void draw_three_scaled_camera_facing_quads(void) __asm__("FUN_L18_002f9780");

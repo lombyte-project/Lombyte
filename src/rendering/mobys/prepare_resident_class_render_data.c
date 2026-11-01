@@ -5,7 +5,8 @@
 
 #include "types.h"
 #include "qcopy.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
+#include "rnc/rendering/packets/set_up_vis_gif_viewer.h"
 
 typedef struct {
     s32 draw_high;
@@ -61,12 +62,6 @@ typedef struct {
 
 extern void build_indexed_resident_render_packet(
     ResidentRenderPacket *, void *, s32, s32, s32, s32, s32) __asm__("func_00202D78");
-extern void set_up_vis_gif_viewer(ResidentRenderPacket *packet,
-                                  s32                   draw_high,
-                                  s32                   draw_shift,
-                                  s32                   material_base,
-                                  s32                   material_shift,
-                                  s32                   material_index) __asm__("FUN_00202fd0");
 
 void prepare_resident_class_render_data(ResidentClassRenderHeader *header,
                                         u8                        *textures,

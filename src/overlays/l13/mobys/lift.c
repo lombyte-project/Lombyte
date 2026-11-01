@@ -12,6 +12,8 @@
 #include "rnc/overlay/shared/camera/scripted_camera.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
+#include "rnc/math/random.h"
 
 extern float D_0015ED6C;
 
@@ -35,11 +37,6 @@ typedef struct {
 } LiftVarsA6D8;
 
 extern float D_0015ED70;
-
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
 void compute_lift_mount_transform(struct Moby *moby,
                                   float       *mount_position,

@@ -4,7 +4,7 @@
 
 #include "rnc/math/asm_helpers.h"
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 #include "rnc/mobys/moby.h"
 

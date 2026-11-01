@@ -15,8 +15,8 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/math/normalize_vector_triplet.h"
 #include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
 
@@ -25,15 +25,20 @@ void blend_big_axebot_and_axe_animation(char *moby,
                                         void *frame_index,
                                         void *blend_frames) __asm__("FUN_L04_002ba3e0");
 
+typedef struct BigAxebotVars {
+    u8    pad_0[0x424];
+    char *unk424;
+} BigAxebotVars;
+
 void blend_big_axebot_and_axe_animation(char *moby,
                                         void *new_seq,
                                         void *frame_index,
 
                                         void *blend_frames) {
-    char *axebot_pvars = ((char *)MOBY(moby)->pvars);
-    void *linked_axe_moby;
+    BigAxebotVars *axebot_pvars = (BigAxebotVars *)MOBY(moby)->pvars;
+    void          *linked_axe_moby;
     blend_moby_animation(moby, new_seq, frame_index, blend_frames);
-    linked_axe_moby = *(void **)(axebot_pvars + 0x424);
+    linked_axe_moby = (void *)axebot_pvars->unk424;
     if (linked_axe_moby != 0) {
         blend_moby_animation(linked_axe_moby, new_seq, frame_index, blend_frames);
     }
@@ -45,10 +50,10 @@ void set_big_axebot_and_axe_animation_speed(struct Moby *moby,
                                             float animation_speed) __asm__("FUN_L04_002ba448");
 
 void set_big_axebot_and_axe_animation_speed(struct Moby *moby, float animation_speed) {
-    char *big_axebot_pvars = ((char *)moby->pvars);
+    BigAxebotVars *big_axebot_pvars = (BigAxebotVars *)moby->pvars;
     moby->anim_speed = animation_speed;
-    if (*(char **)(big_axebot_pvars + 0x424) != 0) {
-        *(float *)(*(char **)(big_axebot_pvars + 0x424) + 0x58) = animation_speed;
+    if (big_axebot_pvars->unk424 != 0) {
+        *(float *)(big_axebot_pvars->unk424 + 0x58) = animation_speed;
     }
 }
 /* Spawns an effect on the moby at its marker vector. */
@@ -240,7 +245,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int   point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int   D_L04_0015F5C4;
 extern int   FUN_L00_001fefc8(void *);
-extern int   is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int   is_point_inside_clip_volume(void *point, int volume_index) __asm__("FUN_00214720");
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L04_00295de8_cf(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");

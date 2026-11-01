@@ -1,5 +1,6 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
+#include "rnc/sdk/graph/sce_gszbufaddr.h"
 
 struct sceGsDrawEnv1 {
     unsigned long frame1;
@@ -19,8 +20,6 @@ struct sceGsDrawEnv1 {
     unsigned long test1;
     unsigned long test1addr;
 };
-
-extern s16 sceGszbufaddr(s16 psm, s16 w, s16 h);
 
 s32 sceGsSetDefDrawEnv(
 

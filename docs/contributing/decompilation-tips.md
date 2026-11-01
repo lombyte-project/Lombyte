@@ -1,7 +1,7 @@
 # Matching tips
 
-[CONTRIBUTING.md](../../CONTRIBUTING.md) has the step-by-step loop and the
-commands. This page is the "why" behind it. Read it before you promote a unit.
+All code matches today. This page is for when a cleanup breaks the match, or
+you rewrite a function: how to get the bytes back.
 
 ## The basics
 
@@ -9,11 +9,9 @@ commands. This page is the "why" behind it. Read it before you promote a unit.
   at an address, a byte range or a hash.
 - Two separate goals: the rebuilt image matches byte for byte (always true),
   and the code is readable C (the work in progress). Keep them apart.
-- Every byte range has one owner. A unit that is not in C yet is built from
+- Every byte range has one owner. Hand-written assembly units are built from
   assembly made from your own executable at build time (`INCLUDE_ASM`, in
-  `config/us/expected/asm/`, not in Git), so the image always matches.
-- A unit becomes C only when its whole range matches. The assembly goes away
-  only after every check passes.
+  `config/us/expected/asm/`, not in Git).
 
 ## Which compiler
 
@@ -70,16 +68,7 @@ justifies changing what the code does.
   matches byte for byte.
 - A high objdiff score is not exact: objdiff ignores relocations. The bytes
   must match at the retail address, and then `make elf` must pass.
-- Run `make elf` once per batch of promotions. If it fails, bisect the batch.
-
-## Promoting a unit
-
-- Put it in the folder of its subsystem. Units still in assembly stay under
-  `assembly/<subsystem>/`.
-- Keep the linker symbol (`FUN_<address>`) as an `__asm__` label on the
-  declaration and give the C function a real name only when the evidence
-  supports it ([code-cleanup.md](code-cleanup.md#names)).
-- Progress numbers come from the tree; never edit them by hand.
+- Run `make elf` once per batch of changes. If it fails, bisect the batch.
 
 ## Small things worth knowing
 

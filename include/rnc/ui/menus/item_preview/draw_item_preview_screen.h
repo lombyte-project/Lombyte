@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_DRAW_ITEM_PREVIEW_SCREEN_H
+#define LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_DRAW_ITEM_PREVIEW_SCREEN_H
+
+#include "types.h"
+
+struct MenuScreen;
+
+s32 draw_item_preview_screen(struct MenuScreen *) __asm__("FUN_0021e110");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_DRAW_ITEM_PREVIEW_SCREEN_H */

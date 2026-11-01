@@ -10,20 +10,16 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "sda.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/l14/mobys/puff.h"
 #include "rnc/overlay/l14/mobys/flying_debris_globals.h"
-
-extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
-
-extern void FUN_0020c828(void *);
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 void remove_flying_debris(u8 *self) __asm__("FUN_L14_002bb4d8");
 
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-
-extern char *
-spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 
 extern char D_L14_0015F580[] MACRO_ADDR;
 
@@ -68,49 +64,61 @@ extern void e450_b78(void *,
                      int,
                      int) __asm__("FUN_L00_0025e450");
 
-extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
 void flying_debris_update(struct Moby *moby) __asm__("FUN_L14_002bac78");
 
+typedef struct FlyingDebrisVars {
+    f32          unk0;
+    f32          unk4;
+    f32          unk8;
+    u8           pad_C[0x4];
+    u8           timer_10;
+    u8           pad_11[0x1];
+    s16          unk12;
+    f32          unk14;
+    f32          unk18;
+    f32          unk1C;
+    struct Moby *unk20;
+} FlyingDebrisVars;
+
 /* Moby class 81 */
 void flying_debris_update(struct Moby *moby) {
-    char  *debris_vars = (char *)moby->pvars;
-    float  joint[4];
-    float  ofs[4];
-    float  at[4];
-    float  moby_to_joint_direction[4];
-    float  push[4];
-    int    i;
-    int    signed_puff_random_value;
-    int    puff_rgb_component;
-    float  size;
-    float  bright;
-    u8    *puff_particle;
-    u8    *puff_tail;
-    float *light_record;
-    float  range = 3.0f;
-    float  green = 0.8f;
-    float  blue = 0.2f;
+    FlyingDebrisVars *debris_vars = (FlyingDebrisVars *)moby->pvars;
+    float             joint[4];
+    float             ofs[4];
+    float             at[4];
+    float             moby_to_joint_direction[4];
+    float             push[4];
+    int               i;
+    int               signed_puff_random_value;
+    int               puff_rgb_component;
+    float             size;
+    float             bright;
+    u8               *puff_particle;
+    u8               *puff_tail;
+    float            *light_record;
+    float             range = 3.0f;
+    float             green = 0.8f;
+    float             blue = 0.2f;
 
-    if (fast_dec_timer_s16(debris_vars + 0x10) != 0) {
+    if (fast_dec_timer_s16(&debris_vars->timer_10) != 0) {
         remove_flying_debris((u8 *)moby);
         return;
     }
     fast_vec_add(&moby->pos, &moby->pos, debris_vars);
-    if (absolute_float(*(float *)(debris_vars + 0x0)) >
+    if (absolute_float(debris_vars->unk0) >
         flying_debris_horizontal_drag_speed_threshold_gp * frame_scale)
-        *(float *)(debris_vars + 0x0) *=
+        debris_vars->unk0 *=
             (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
-    if (absolute_float(*(float *)(debris_vars + 0x4)) >
+    if (absolute_float(debris_vars->unk4) >
         flying_debris_horizontal_drag_speed_threshold_gp * frame_scale)
-        *(float *)(debris_vars + 0x4) *=
+        debris_vars->unk4 *=
             (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
-    if (*(float *)(debris_vars + 0x8) > 0.0f)
-        *(float *)(debris_vars + 0x8) *=
+    if (debris_vars->unk8 > 0.0f)
+        debris_vars->unk8 *=
             (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
-    *(float *)(debris_vars + 0x8) -= flying_debris_gravity_gp * frame_scale_sq;
+    debris_vars->unk8 -= flying_debris_gravity_gp * frame_scale_sq;
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f ||
         moby->pos.y > 1021.0f || moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
         remove_flying_debris((u8 *)moby);
@@ -120,7 +128,7 @@ void flying_debris_update(struct Moby *moby) {
         (absolute_float(moby->pos.x - hero.motion.pos.f[0]) < 10.0f &&
          absolute_float(moby->pos.y - hero.motion.pos.f[1]) < 10.0f)) {
         clear_u64_value(joint);
-        trooper_play_sound(1, 0, moby, (*(struct Moby **)(debris_vars + 0x20))->oclass);
+        trooper_play_sound(1, 0, moby, debris_vars->unk20->oclass);
         e450_b78(moby,
                  joint,
                  &moby->pos,
@@ -142,22 +150,22 @@ void flying_debris_update(struct Moby *moby) {
         remove_flying_debris((u8 *)moby);
         return;
     }
-    moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(debris_vars + 0x14));
-    moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(debris_vars + 0x18));
-    moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(debris_vars + 0x1C));
+    moby->rot.x = fast_add_rotations(moby->rot.x, debris_vars->unk14);
+    moby->rot.y = fast_add_rotations(moby->rot.y, debris_vars->unk18);
+    moby->rot.z = fast_add_rotations(moby->rot.z, debris_vars->unk1C);
     moby_point_position(moby, 0, joint);
     size = randf_sym(0.01f, 0.5f);
     fast_vec_scale(ofs, (char *)moby + 0xC0, size);
     fast_vec_add(at, joint, ofs);
     fast_vec_sub(moby_to_joint_direction, joint, &moby->pos);
     normalize_d(moby_to_joint_direction, moby_to_joint_direction, 0.05f);
-    spawn_burst(at,
-                moby_to_joint_direction,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                random_int_between(scale_game_frames(10), scale_game_frames(20)),
-                1,
-                40000.0f);
+    FUN_L00_0026cbb0(at,
+                     moby_to_joint_direction,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     random_int_between(scale_game_frames(10), scale_game_frames(20)),
+                     1,
+                     40000.0f);
     for (i = 0; i < 3; i++) {
         if (i != 2) {
             fast_vec_scale(ofs, (char *)moby + 0xC0, randf_sym(0.01f, 0.5f));
@@ -198,11 +206,10 @@ void flying_debris_update(struct Moby *moby) {
     else
         qcopy(push, (char *)moby + 0xE0);
     fast_vec_add(at, at, push);
-    if (*(short *)(debris_vars + 0x12) == -1) {
-        *(short *)(debris_vars + 0x12) =
-            allocate_colored_effect_slot(at, range, 0.0f, bright, green, blue);
+    if (debris_vars->unk12 == -1) {
+        debris_vars->unk12 = allocate_colored_effect_slot(at, range, 0.0f, bright, green, blue);
     } else {
-        light_record = (float *)(D_L14_001809C0 + *(short *)(debris_vars + 0x12) * 32);
+        light_record = (float *)(D_L14_001809C0 + debris_vars->unk12 * 32);
         qcopy(light_record + 4, at);
         light_record[7] = range;
         light_record[0] = bright;
@@ -212,9 +219,6 @@ void flying_debris_update(struct Moby *moby) {
 }
 
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 
 unsigned char *
 spawn_flying_debris(struct Moby *owner, float angle, char *posp) __asm__("FUN_L14_002bb310");
@@ -260,12 +264,12 @@ unsigned char *spawn_flying_debris(struct Moby *debris_source_moby, float angle,
 }
 
 void remove_flying_debris(u8 *debris_moby) {
-    u8 *debris_vars = *(u8 **)(debris_moby + 0x78);
-    s16 light_index = *(s16 *)(debris_vars + 0x12);
+    FlyingDebrisVars *debris_vars = *(u8 **)(debris_moby + 0x78);
+    s16               light_index = debris_vars->unk12;
 
     if (light_index != -1) {
         release_point_light_slot(light_index);
-        *(s16 *)(debris_vars + 0x12) = -1;
+        debris_vars->unk12 = -1;
     }
-    FUN_0020c828(debris_moby);
+    mark_moby_for_removal(debris_moby);
 }

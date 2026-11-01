@@ -1,6 +1,5 @@
 #include "types.h"
-
-extern void decode_map_rle_row(u8 *dst, s32 arg1, s32 arg2, s16 *arg3) __asm__("FUN_00206860");
+#include "rnc/ui/map/coverage/decode_map_rle_row.h"
 
 void decode_map_mask(u8  *mask_dst,
                      s32  compressed_data_base,

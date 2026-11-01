@@ -5,7 +5,7 @@
 
 #include "qcopy.h"
 #include "qzero.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"

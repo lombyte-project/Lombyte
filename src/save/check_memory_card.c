@@ -1,4 +1,8 @@
 #include "types.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_get_dir.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_get_info.h"
+#include "rnc/sdk/storage/memory_card/sce_mc_sync.h"
 
 struct McDirBlk {
     u8  pad_0[0x4];
@@ -11,10 +15,6 @@ struct McDirBlk {
 
 extern char D_0013D1D0[];
 extern u8   memory_card_info_sync_outputs[] __asm__("D_0013D348");
-extern s32  sceMcGetInfo(s32, s32, s32, s32, s32);
-extern s32  sceMcSync(s32, s32 *, s32 *);
-extern s32  sceMcGetDir(s32, s32, s8 *, s32, s32, s32);
-extern s32  sceGsSyncV(s32);
 
 s32 check_memory_card(void) __asm__("FUN_00209168");
 

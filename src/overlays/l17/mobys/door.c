@@ -1,6 +1,6 @@
 /* Level 17 door (classes 0x54f-0x55d). */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/mobys/moby_class_id.h"
 
@@ -11,9 +11,9 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
@@ -35,6 +35,7 @@
 #include "rnc/overlay/l17/hero/hero_set_state.h"
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/ui/help/force_help_message.h"
+#include "rnc/mobys/moby_spawn.h"
 
 /* Moves a level-17 platform moby between its stops along its heading, with a looping sound. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
@@ -42,11 +43,10 @@
 extern char          D_L17_001676C0[];
 extern int           D_L17_0015F5C4;
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
-void                 mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void door_update(struct Moby *m) __asm__("FUN_L17_002e87d8");
 
-/* Moby classes 1359-1364, 1367, 1369, 1372, 1373 */
+/* Moby classes 647, 1359-1364, 1367, 1369, 1372, 1373 */
 void door_update(struct Moby *door_moby) {
     enum {
         DOOR_STATE_INITIALIZE = 0,

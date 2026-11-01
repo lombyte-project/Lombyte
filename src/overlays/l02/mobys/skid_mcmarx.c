@@ -38,7 +38,7 @@ extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern void
 update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern f32 frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
 /* Watcher NPC update (twin of qwarks_bouncer_update): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */

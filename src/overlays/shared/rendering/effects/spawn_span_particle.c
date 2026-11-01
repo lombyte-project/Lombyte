@@ -1,7 +1,7 @@
 /* Particles: spawns a particle spanning two points; also a VU0 vector helper. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"

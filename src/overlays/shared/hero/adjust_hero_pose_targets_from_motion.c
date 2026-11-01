@@ -1,3 +1,4 @@
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
 /* FUN_L00_00215340 split out of 00214658.c so it builds with the SN
    compiler on its own. */
 #include "types.h"
@@ -8,8 +9,6 @@
 #include "rnc/overlay/shared/hero/set_second_hero_easing_parameters.h"
 
 extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
-extern void            set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
-extern void            set_third_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a210");
 
 void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 

@@ -3,6 +3,9 @@
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/frame/reset_graphics.h"
+#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/dma/sce_dma_get_chan.h"
+#include "rnc/sdk/dma/sce_dma_send.h"
 
 /* The SDK DMA channel registers; only CHCR (offset 0) is touched here. */
 struct DmaChannel {
@@ -16,12 +19,9 @@ volatile s32 vif_chain_flags __asm__("D_00160EE0") = 0;
 
 #include "rnc/rendering/vu1_chain_globals.h"
 
-extern char               vu1_chain_sync_timeout_message[] __asm__("D_001E89E0");
-extern u8                 vu1_chain_overflow_message[] __asm__("D_001E89C8");
-extern void               DebugPrint(char *, ...);
-extern void               FlushCache(s32);
-extern struct DmaChannel *sceDmaGetChan(s32);
-extern void               sceDmaSend(struct DmaChannel *, s32);
+extern char vu1_chain_sync_timeout_message[] __asm__("D_001E89E0");
+extern u8   vu1_chain_overflow_message[] __asm__("D_001E89C8");
+extern void FlushCache(s32);
 
 void vu1_send_chain(void) __asm__("FUN_002336a0");
 
@@ -47,7 +47,7 @@ void vu1_send_chain(void) {
         render_packet_cursor.tag->addr = 0;
         render_packet_cursor.tag->vif0 = 0;
         render_packet_cursor.tag->vif1 = 0;
-        channel = sceDmaGetChan(1);
+        channel = GetDmaChannel(1);
         channel->chcr |= 0xC0;
         FlushCache(0);
         sceDmaSend(channel, D_00160EF8[D_00160F10]);

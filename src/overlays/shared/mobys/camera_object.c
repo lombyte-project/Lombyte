@@ -7,8 +7,8 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/world/collision.h"
 
 typedef struct {
     char  p0[0x98];
@@ -37,9 +37,9 @@ unsigned char *create_camera_collision_moby(u128 *spawn_position) __asm__("FUN_L
 unsigned char *create_camera_collision_moby(u128 *spawn_position) {
     unsigned char *spawned_moby = create_moby(0x3ef);
     if (spawned_moby) {
-        spawned_moby[0x30] = 0xff;
+        MOBY(spawned_moby)->update_dist = 0xff;
         MOBY(spawned_moby)->flags |= 0x41;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         update_entity(spawned_moby);
     }
     return spawned_moby;

@@ -7,9 +7,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-
 #include "qcopy.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
@@ -43,7 +42,7 @@ unsigned char *spawn_fading_ring_effect(int   a,
                                         float f0,
                                         float f1,
                                         float f2,
-                                        float f3,
+                                        float spawn_speed,
                                         float f4) __asm__("FUN_L07_0030dbb0");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F0D0), where it is exact; names translated to the US level program. */
@@ -73,9 +72,9 @@ unsigned char *spawn_fading_ring_effect(int   spawning_moby,
         char *distance_reference_position;
         char *distance_response_state;
         spawned_moby_vars = ((char *)MOBY(moby)->pvars);
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
+        MOBY(moby)->visible = 1;
         qcopy(moby + 0x10, spawn_position);
         *(int *)(spawned_moby_vars + 0x14) = spawning_moby;
         *(float *)(spawned_moby_vars + 4) = f1;
@@ -221,11 +220,11 @@ void fading_ring_effect_update(unsigned char *moby) {
     radius_progress = (*(float *)(moby_data + 8) - *(float *)moby_data) /
                       (*(float *)(moby_data + 4) - *(float *)moby_data);
     if (radius_progress < 0.2f) {
-        moby[0x23] = truncate_float_to_s32(radius_progress * 5.0f * 127.0f);
+        MOBY(moby)->alpha = truncate_float_to_s32(radius_progress * 5.0f * 127.0f);
     } else if (radius_progress > 0.8f) {
-        moby[0x23] = truncate_float_to_s32((1.0f - radius_progress) * 5.0f * 127.0f);
+        MOBY(moby)->alpha = truncate_float_to_s32((1.0f - radius_progress) * 5.0f * 127.0f);
     } else {
-        moby[0x23] = 0x80;
+        MOBY(moby)->alpha = 0x80;
     }
     if (radius_progress >= 1.0f) {
         mark_moby_for_removal(moby);

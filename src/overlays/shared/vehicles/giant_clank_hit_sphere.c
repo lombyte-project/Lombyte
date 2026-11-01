@@ -28,7 +28,7 @@ void *spawn_giant_clank_hit_sphere(int   unused,
     if (spawned_moby != 0) {
         char *moby_vars;
         float doubled_scale;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         set_moby_color(spawned_moby, 0x80, 0x80, 0x70);
         moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         doubled_scale = scale + scale;

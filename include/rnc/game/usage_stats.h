@@ -14,7 +14,7 @@
 struct UsageStat {
     u16 count;              /* saturating counter */
     u16 latest_time_bucket; /* max of scale_game_frames(D_0015EEA4) / 600 */
-    s32 level_mask;         /* bit per level seen; bit 31 = marked (help records can clear it) */
+    s32 level_mask;         /* bit per level seen; bit 31 = ever used */
 };
 
 struct UsageStats {

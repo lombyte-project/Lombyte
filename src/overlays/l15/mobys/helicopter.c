@@ -1,6 +1,6 @@
 /* Level 15 helicopter moby class: sphere-collision movement, steering, flocking and hits. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
@@ -14,12 +14,12 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/math/vector.h"
-#include "eetypes.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/sdk/eetypes.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l15/mobys/helicopter_globals.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern char D_L15_001673C0[];
 

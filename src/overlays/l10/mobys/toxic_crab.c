@@ -25,7 +25,7 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l10/mobys/screamer.h"
 #include "rnc/overlay/l10/mobys/aligned_vector.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
@@ -46,7 +46,7 @@ activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L
 extern float  scale_time(float) __asm__("FUN_001f96b0");
 extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern float FUN_L04_001f1978(float);
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -167,7 +167,7 @@ typedef struct Moby2E30F8 {
 
 extern char D_L10_00167240[];
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L10_002e4840");
 

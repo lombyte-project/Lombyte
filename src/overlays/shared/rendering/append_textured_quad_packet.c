@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 
 extern int *D_L02_001611B8[] MACRO_ADDR;

@@ -9,7 +9,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/streaming/disc_table.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 
@@ -22,6 +22,8 @@
 #include "rnc/ui/menus/stream_buffers/get_menu_stream_buffer_size.h"
 #include "rnc/ui/menus/item_preview/clear_preview_resource_bindings.h"
 #include "rnc/ui/menus/stream_buffers/clear_menu_stream_buffer_read_active.h"
+#include "rnc/ui/menus/item_preview/advance_preview_animation_queue.h"
+#include "rnc/ui/menus/item_preview/load_preview_resource_bindings.h"
 
 typedef struct {
     u8    pad0[0x10];
@@ -61,8 +63,6 @@ extern void relocate_asset_entry_pointers() __asm__("FUN_002032e0");
 extern s32  start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 extern void RaiseKernelTrap(void);
 extern s32  mark_menu_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
-extern s32  advance_preview_animation_queue(void) __asm__("FUN_00226670");
-extern void load_preview_resource_bindings(s32, s32) __asm__("FUN_00226848");
 extern void blend_moby_animation_ex(Moby *, s32, s32, s32, s32) __asm__("FUN_002130d8");
 extern void refresh_moby_spatial_bounds() __asm__("func_0020DEF8");
 

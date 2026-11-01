@@ -1,6 +1,6 @@
 /* Level 15 sliding gate moby class. */
 #include "types.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"

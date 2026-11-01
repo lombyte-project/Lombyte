@@ -1,15 +1,15 @@
 /* Level 05 moby class amoeboid. */
 #include "types.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/asm_helpers.h"
 #include "qcopy.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/math/random.h"
 
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern float fast_cos(float);
 extern float fast_sin(float);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
@@ -24,6 +24,23 @@ void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 void                amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
 typedef struct Moby Moby;
 
+typedef struct AmoeboidVars {
+    u8  pad_0[0x40];
+    u8  unk40;
+    u8  pad_41[0x1F];
+    s32 unk60;
+    u8  pad_64[0x4];
+    f32 unk68;
+    f32 unk6C;
+    u8  pad_70[0x14];
+    f32 unk84;
+    u8  pad_88[0x28];
+    s32 path_B0;
+    s32 unkB4;
+    s32 timer_B8;
+    f32 unkBC;
+} AmoeboidVars;
+
 /* Moby class 133 */
 void amoeboid_update(struct Moby *moby) {
     enum {
@@ -31,8 +48,8 @@ void amoeboid_update(struct Moby *moby) {
         AMOEBOID_FOLLOW_PATH = 1,
         AMOEBOID_WAIT_FOR_HERO_TO_LEAVE = 2
     };
-    char *moby_data = (char *)moby->pvars;
-    float facing_direction[4];
+    AmoeboidVars *moby_data = (AmoeboidVars *)moby->pvars;
+    float         facing_direction[4];
     handle_amoeboid_hits(moby);
     switch (moby->state) {
     case AMOEBOID_INITIALIZE:
@@ -40,28 +57,26 @@ void amoeboid_update(struct Moby *moby) {
         moby->update_dist = 0x40;
         if (moby->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, 0);
-        if (*(int *)(moby_data + 0xB0) == -1 ||
-            *(int *)l05_paths[*(int *)(moby_data + 0xB0)] == 0) {
+        if (moby_data->path_B0 == -1 || *(int *)l05_paths[moby_data->path_B0] == 0) {
             mark_moby_for_removal(moby);
             return;
         }
-        FUN_L01_0026d930(moby_data + 0x60);
-        *(float *)(moby_data + 0x6C) = 1.0f;
-        *(float *)(moby_data + 0x68) = 1.0f;
+        FUN_L01_0026d930(&moby_data->unk60);
+        moby_data->unk6C = 1.0f;
+        moby_data->unk68 = 1.0f;
         {
             int   r = truncate_float_to_s32(409.6f);
             float movement_speed_limit = frame_time * 4.0f;
-            *(int *)(moby_data + 0x60) = r;
-            *(float *)(moby_data + 0x84) = movement_speed_limit;
+            moby_data->unk60 = r;
+            moby_data->unk84 = movement_speed_limit;
         }
         break;
     case AMOEBOID_FOLLOW_PATH: {
-        char *path_node_base =
-            ((char *)l05_paths[*(int *)(moby_data + 0xB0)]) + *(int *)(moby_data + 0xB4) * 16;
+        char *path_node_base = ((char *)l05_paths[moby_data->path_B0]) + moby_data->unkB4 * 16;
         float yaw = fast_arc_tan(*(float *)(path_node_base + 0x10) - moby->pos.x,
                                  *(float *)(path_node_base + 0x14) - moby->pos.y);
         FUN_L00_0025be00(&moby->rot.z,
-                         (float *)(moby_data + 0xBC),
+                         &moby_data->unkBC,
                          yaw,
                          frame_time_sq * 1.0471976f,
                          frame_time_sq * 1.0471976f,
@@ -69,15 +84,14 @@ void amoeboid_update(struct Moby *moby) {
         facing_direction[0] = fast_cos(moby->rot.z);
         facing_direction[1] = fast_sin(moby->rot.z);
         facing_direction[2] = 0.0f;
-        FUN_L00_00258b50(moby, moby_data + 0x60, facing_direction, moby_data + 0x40, 1.0f);
-        if (fast_dec_timer(moby_data + 0xB8) != 0 ||
+        FUN_L00_00258b50(moby, &moby_data->unk60, facing_direction, &moby_data->unk40, 1.0f);
+        if (fast_dec_timer(&moby_data->timer_B8) != 0 ||
             vector_distance_xy(&moby->pos,
-                               ((char *)l05_paths[*(int *)(moby_data + 0xB0)]) +
-                                   (*(int *)(moby_data + 0xB4) * 16 + 0x10)) < 1.0f) {
-            int r = random_integer_below(*(int *)l05_paths[*(int *)(moby_data + 0xB0)]);
-            *(int *)(moby_data + 0xB4) =
-                (*(int *)(moby_data + 0xB4) + r) % *(int *)l05_paths[*(int *)(moby_data + 0xB0)];
-            *(int *)(moby_data + 0xB8) = scale_game_frames(600);
+                               ((char *)l05_paths[moby_data->path_B0]) +
+                                   (moby_data->unkB4 * 16 + 0x10)) < 1.0f) {
+            int r = random_integer_below(*(int *)l05_paths[moby_data->path_B0]);
+            moby_data->unkB4 = (moby_data->unkB4 + r) % *(int *)l05_paths[moby_data->path_B0];
+            moby_data->timer_B8 = scale_game_frames(600);
         }
         spawn_amoeboid_particles(moby);
         break;
@@ -124,7 +138,6 @@ void handle_amoeboid_hits(unsigned char *moby) {
 
 extern void  fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 /* Emits up to two particle effects around the moby, each in a random direction. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC2A8), where it is exact; names translated to the US level program. */
 

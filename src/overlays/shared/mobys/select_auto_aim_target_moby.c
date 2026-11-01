@@ -111,7 +111,7 @@ struct Moby *select_auto_aim_target_moby(
     return best;
 }
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 extern int            D_L00_0015FC98;
 extern unsigned char *D_L00_0015FCA8;
@@ -144,7 +144,7 @@ typedef struct {
 extern float D_L00_0015FCA0_002634f8 __asm__("D_L00_0015FCA0");
 extern float D_L00_0015FCA4_002634f8 __asm__("D_L00_0015FCA4");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
@@ -174,7 +174,7 @@ void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) {
     }
 }
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 typedef struct {
     float m[4][4];
@@ -508,7 +508,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
             for (i = 0; i < consecutive_class_fragment_count; i++) {
                 FUN_L00_00263fd8_263e30(source_moby,
                                         first_fragment_class + i,
-                                        source_moby + 0x10,
+                                        &MOBY(source_moby)->pos,
                                         source_moby + 0x40,
                                         0,
                                         mode,
@@ -615,12 +615,12 @@ void *FUN_L00_00263fd8(char  *source_moby,
             MOBY(source_moby)->scale / *(float *)(((char *)MOBY(source_moby)->pclass) + 0x24);
         MOBY(fragment_moby)->scale =
             *(float *)(((char *)MOBY(fragment_moby)->pclass) + 0x24) * source_class_ratio;
-        fragment_moby[0x31] = 1;
+        MOBY(fragment_moby)->visible = 1;
         MOBY(fragment_moby)->flags |= 0x100;
         fragment_pvars = ((char *)MOBY(fragment_moby)->pvars);
         MOBY(fragment_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
-        fragment_moby[0x20] = 1;
-        qcopy(fragment_moby + 0x10, fragment_spawn_position);
+        MOBY(fragment_moby)->state = 1;
+        qcopy(&MOBY(fragment_moby)->pos, fragment_spawn_position);
         euler_rotation_basis(fragment_moby + 0xC0, fragment_euler_rotation);
         MOBY(fragment_moby)->update_dist = 0xFF;
         MOBY(fragment_moby)->draw_dist = 0x80;

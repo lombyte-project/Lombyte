@@ -1,34 +1,32 @@
 #include "types.h"
 
-#include "rnc/ui/help/window_state.h"
+#include "rnc/ui/help/help_state.h"
 
-extern HelpWindowState help_window_state __asm__("D_001996D0");
-extern u64             get_effect_texture() __asm__("func_001F44B8");
-extern s32             draw_textured_quad() __asm__("func_001F5450");
-extern s32             draw_ui_frame() __asm__("func_001F5F18");
-void                   help_draw_prompt(void) __asm__("FUN_001fe898");
+extern u64 get_effect_texture() __asm__("func_001F44B8");
+extern s32 draw_textured_quad() __asm__("func_001F5450");
+extern s32 draw_ui_frame() __asm__("func_001F5F18");
+void       help_draw_prompt(void) __asm__("FUN_001fe898");
 
 void help_draw_prompt(void) {
     s32 alpha;
 
-    help_window_state.frame_half_width = 0x20;
-    help_window_state.frame_half_height = 0x20;
-    draw_ui_frame(help_window_state.center_y - 0x20,
-                  help_window_state.center_y + 0x20,
-                  help_window_state.center_x - 0x20,
-                  help_window_state.center_x + 0x20,
+    help_state.frame_half_width = 0x20;
+    help_state.frame_half_height = 0x20;
+    draw_ui_frame(help_state.center_y - 0x20,
+                  help_state.center_y + 0x20,
+                  help_state.center_x - 0x20,
+                  help_state.center_x + 0x20,
                   0x60);
-    if (help_window_state.state == HELP_WINDOW_OPENING ||
-        help_window_state.state == HELP_WINDOW_CLOSING) {
-        alpha = help_window_state.state_timer * 21;
+    if (help_state.state == 1 || help_state.state == 7) {
+        alpha = help_state.timer * 21;
     } else {
         alpha = 0x7E;
     }
     if (alpha > 0x80) {
         alpha = 0x80;
     }
-    draw_textured_quad(help_window_state.center_x - 0x20,
-                       help_window_state.center_y - 0x20,
+    draw_textured_quad(help_state.center_x - 0x20,
+                       help_state.center_y - 0x20,
                        0x40,
                        0x40,
                        0,

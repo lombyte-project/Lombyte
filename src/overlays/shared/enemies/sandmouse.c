@@ -16,8 +16,8 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/mobys/detach_manipulator.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
-#include "rnc/overlay/collision.h"
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -30,13 +30,13 @@ void compute_sandmouse_follow_goal(void  *unused,
                                    float *destination_position) __asm__("FUN_L01_0030d260");
 
 void compute_sandmouse_follow_goal(void *unused, float *destination_position) {
-    float normalized_offset[4];
-    float unit_offset[4];
-    char *hero_bytes = D_0013E533 + 0xE1D;
-    fast_vec_normalize(normalized_offset, *(char **)(hero_bytes + 0x2080) + 0xD0, 1.1f);
-    fast_vec_normalize(unit_offset, *(char **)(hero_bytes + 0x2080) + 0xE0, 1.0f);
+    float        normalized_offset[4];
+    float        unit_offset[4];
+    struct Hero *hero_bytes = (struct Hero *)(D_0013E533 + 0xE1D);
+    fast_vec_normalize(normalized_offset, ((char *)hero_bytes->moby) + 0xD0, 1.1f);
+    fast_vec_normalize(unit_offset, ((char *)hero_bytes->moby) + 0xE0, 1.0f);
     fast_vec_add(destination_position, normalized_offset, unit_offset);
-    fast_vec_add(destination_position, destination_position, hero_bytes + 0x80);
+    fast_vec_add(destination_position, destination_position, &hero_bytes->motion.pos);
     destination_position[2] = destination_position[2] + 1.0f;
 }
 
@@ -190,7 +190,7 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
                 0.5235988f) {
                 if (cutscene_mode_gp != 2) {
                     char *target_aim_height_data;
-                    qcopy(&target_aim_position, target_moby + 0x10);
+                    qcopy(&target_aim_position, &MOBY(target_moby)->pos);
                     target_aim_height_data = get_moby_target_info(target_moby);
                     if (target_aim_height_data != 0)
                         target_aim_position.f[2] =

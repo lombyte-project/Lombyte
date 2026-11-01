@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_AUDIO_MOVIE_SND_UPDATE_MOVIE_ADPCM_H
+#define LOMBYTE_RNC_AUDIO_MOVIE_SND_UPDATE_MOVIE_ADPCM_H
+
+#include "types.h"
+
+void snd_update_movie_adpcm(s32, s32) __asm__("FUN_0012f148");
+
+#endif /* LOMBYTE_RNC_AUDIO_MOVIE_SND_UPDATE_MOVIE_ADPCM_H */

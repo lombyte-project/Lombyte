@@ -7,18 +7,17 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
-#include "rnc/overlay/level_camera.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 typedef union {
     OvlQuad q;
     float   f[4];
 } V_2ec4a8;
 
-f32 rope_spring_turn(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_001eb328");
-extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+f32         rope_spring_turn(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_001eb328");
 extern void resolve_camera_movement_collisions(void *, float) __asm__("FUN_L00_001ed6a8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_0025b868(float, float, float *);
@@ -336,14 +335,14 @@ void update_target_tracking_camera(char *camera_object) {
         y = ((int)b->grapple_target);
     }
     if (x != y) {
-        char *g = (char *)&l00_camera;
-        char *r = *(char **)(g + 0x184);
+        LevelCamera *g = &l00_camera;
+        char        *r = g->unk184;
         qcopy(r + 0x30, camera_position);
         qcopy(r, camera_object);
         qcopy(r + 0x10, camera_object + 0x10);
         qcopy(r + 0x20, camera_object + 0x20);
         initialize_target_tracking_camera(camera_object);
-        *(int *)(g + 0x2F4) = scale_game_frames(0x2D);
+        g->unk2F4 = scale_game_frames(0x2D);
     }
 done:
     refresh_point_light((int)camera_object);

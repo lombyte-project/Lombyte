@@ -1,6 +1,6 @@
 /* Level 11 moby class cleared_group_dialogue_trigger (class 1350): plays a dialogue once its moby group is empty. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -9,9 +9,8 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
-
-extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
 void cleared_group_dialogue_update(struct Moby *moby) __asm__("FUN_L11_0031aa80");
 

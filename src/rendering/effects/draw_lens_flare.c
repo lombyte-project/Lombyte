@@ -4,6 +4,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/texture/draw_textured_quad.h"
 
 /* Lens flare: 16 sprites along the line from the flare source's screen
    position through the screen centre, faded by distance and by how far
@@ -12,10 +14,6 @@
 #include "rnc/rendering/effects/draw_lens_flare.h"
 
 #include "rnc/rendering/screen.h"
-
-extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void
-    draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("FUN_001f5450");
 
 void draw_lens_flare(void) __asm__("FUN_001edc50");
 

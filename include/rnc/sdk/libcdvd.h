@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "sda.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 
 /* Read mode passed to sceCdRead: retry count, spindle control and the
    sector data pattern. */

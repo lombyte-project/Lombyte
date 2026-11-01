@@ -1,7 +1,7 @@
 /* Shared moby class blaster: the blaster held by the hero, with its auto-aim target selection. */
 
 #include "types.h"
-#include "rnc/overlay/point_light.h"
+#include "rnc/overlay/shared/rendering/point_light.h"
 #include "rnc/globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/input/pad_state.h"
@@ -13,8 +13,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/item_state.h"
-#include "rnc/overlay/level_camera.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
 typedef union {
@@ -146,10 +146,10 @@ unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *ya
     bestd = 20.0f;
     for (candidate_moby = D_L00_0015FFE4_2b46a8; candidate_moby != 0;
          candidate_moby = ((unsigned char *)MOBY(candidate_moby)->next)) {
-        if ((signed char)candidate_moby[0x20] < 0) {
+        if ((signed char)MOBY(candidate_moby)->state < 0) {
             continue;
         }
-        qcopy(&tp, candidate_moby + 0x10);
+        qcopy(&tp, &MOBY(candidate_moby)->pos);
         r = get_moby_target_info(candidate_moby);
         if (r != 0) {
             tp.f[2] += *(float *)(r + 0x10);

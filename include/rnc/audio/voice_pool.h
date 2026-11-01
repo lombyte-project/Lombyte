@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_AUDIO_VOICE_POOL_H
 
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/audio/voice_state.h"
 
 /* The pool: a 0x70-byte header, thirty 0x70-byte voices, then the level

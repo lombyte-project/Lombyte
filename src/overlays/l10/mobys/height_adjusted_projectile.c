@@ -12,7 +12,7 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern float D_0015ED6C;
 
@@ -43,6 +43,17 @@ extern struct Moby *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
 void height_adjusted_projectile_update(struct Moby *moby) __asm__("FUN_L10_002d7b80");
 
+typedef struct HeightAdjustedProjectileVars {
+    u8           pad_0[0x10];
+    u8           timer_10;
+    u8           pad_11[0x1];
+    s16          unk12;
+    char        *unk14;
+    f32          unk18;
+    f32          unk1C;
+    struct Moby *unk20;
+} HeightAdjustedProjectileVars;
+
 /* Moby class 859 */
 void height_adjusted_projectile_update(struct Moby *moby) {
     enum {
@@ -51,38 +62,37 @@ void height_adjusted_projectile_update(struct Moby *moby) {
         HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT = 2,
         HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT = 3
     };
-    char *projectile_vars = (char *)moby->pvars;
-    float movement_start_position[4] __attribute__((aligned(16)));
-    float found[20] __attribute__((aligned(16)));
-    float check[4] __attribute__((aligned(16)));
-    float raised[4] __attribute__((aligned(16)));
-    float hit[12] __attribute__((aligned(16)));
-    float rand_dir[4] __attribute__((aligned(16)));
-    int   i;
+    HeightAdjustedProjectileVars *projectile_vars = (HeightAdjustedProjectileVars *)moby->pvars;
+    float                         movement_start_position[4] __attribute__((aligned(16)));
+    float                         found[20] __attribute__((aligned(16)));
+    float                         check[4] __attribute__((aligned(16)));
+    float                         raised[4] __attribute__((aligned(16)));
+    float                         hit[12] __attribute__((aligned(16)));
+    float                         rand_dir[4] __attribute__((aligned(16)));
+    int                           i;
 
     qcopy(movement_start_position, &moby->pos);
     fast_vec_add(&moby->pos, &moby->pos, projectile_vars);
     find_point_ahead(20.0f, moby, found);
-    switch (*(short *)(projectile_vars + 0x12)) {
+    switch (projectile_vars->unk12) {
     case HEIGHT_MODE_SKIP_ADJUSTMENT:
         break;
     case HEIGHT_MODE_APPROACH_FIXED_HEIGHT:
-        approach_moby_height(moby, *(float *)(projectile_vars + 0x1c));
+        approach_moby_height(moby, projectile_vars->unk1C);
         break;
     case HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT:
         qcopy(check, &moby->pos);
         qcopy(raised, &moby->pos);
         check[2] += 0.1f;
-        raised[2] -= *(float *)(projectile_vars + 0x1c) + *(float *)(projectile_vars + 0x1c);
+        raised[2] -= projectile_vars->unk1C + projectile_vars->unk1C;
         if (collision_line(check, raised, 2, (int)moby, 0))
-            approach_moby_height(
-                moby, *(float *)(D_L10_001742C0 + 0x28) + *(float *)(projectile_vars + 0x1c));
+            approach_moby_height(moby, *(float *)(D_L10_001742C0 + 0x28) + projectile_vars->unk1C);
         else
             approach_moby_height(moby, moby->pos.z - 0.1f);
         break;
     case HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT:
         if (*(int *)((char *)found + 0x40) != 0)
-            approach_moby_height(moby, found[2] + *(float *)(projectile_vars + 0x1c));
+            approach_moby_height(moby, found[2] + projectile_vars->unk1C);
         break;
     case 4:
         break;
@@ -91,24 +101,23 @@ void height_adjusted_projectile_update(struct Moby *moby) {
     check[2] = 0.0f;
     set_vector_length_xy(check, check, 1.0f);
     check[2] = 1.0f;
-    make_hit_descriptor(hit, moby, 0x10001, *(float *)(projectile_vars + 0x18), check);
-    if (fast_dec_timer_s16(projectile_vars + 0x10)) {
+    make_hit_descriptor(hit, moby, 0x10001, projectile_vars->unk18, check);
+    if (fast_dec_timer_s16(&projectile_vars->timer_10)) {
         mark_moby_for_removal(moby);
         return;
     }
     if (collision_line(
-            movement_start_position, &moby->pos, 0, *(int *)(projectile_vars + 0x20), (int)hit)) {
+            movement_start_position, &moby->pos, 0, *(int *)&projectile_vars->unk20, (int)hit)) {
         char        *collision = D_L10_001742C0;
         struct Moby *impacted_moby = *(struct Moby **)(collision + 0x18);
         if (impacted_moby == 0 || impacted_moby->oclass != 0x359) {
             qcopy(&moby->pos, collision + 0x20);
-            if (*(char **)(projectile_vars + 0x14) != 0) {
+            if (projectile_vars->unk14 != 0) {
                 if (impacted_moby != 0) {
-                    if (impacted_moby == D_001413D0_lui &&
-                        *(struct Moby **)(projectile_vars + 0x20) != 0 &&
-                        (*(struct Moby **)(projectile_vars + 0x20))->state != 0xfe &&
-                        (*(struct Moby **)(projectile_vars + 0x20))->state != 0xfd)
-                        **(char **)(projectile_vars + 0x14) = 1;
+                    if (impacted_moby == D_001413D0_lui && projectile_vars->unk20 != 0 &&
+                        projectile_vars->unk20->state != 0xfe &&
+                        projectile_vars->unk20->state != 0xfd)
+                        *projectile_vars->unk14 = 1;
                 }
             }
             for (i = 0; i < 5; i++) {

@@ -1,15 +1,15 @@
 #include "types.h"
 #include "rnc/ui/help/find_help_entry_globals.h"
 
-s32 find_help_entry(s16 message_id, s32 id_column, u16 *other) __asm__("FUN_001fecc8");
+s32 find_help_entry(s16 id, s32 which, u16 *other) __asm__("FUN_001fecc8");
 
-s32 find_help_entry(s16 message_id, s32 id_column, u16 *paired_column_output) {
+s32 find_help_entry(s16 id, s32 which, u16 *paired_column_output) {
     s32 i;
 
-    for (i = 0; i < HELP_ENTRY_COUNT; i++) {
-        if (message_id_code_table[i][id_column] == message_id) {
+    for (i = 0; i < 150; i++) {
+        if (message_id_code_table[i][which] == id) {
             if (paired_column_output != 0) {
-                *paired_column_output = message_id_code_table[i][id_column ? 0 : 1];
+                *paired_column_output = message_id_code_table[i][which ? 0 : 1];
             }
             return i;
         }
@@ -19,7 +19,7 @@ s32 find_help_entry(s16 message_id, s32 id_column, u16 *paired_column_output) {
 
 extern __typeof__(find_help_entry) func_001FECC8 __attribute__((alias("FUN_001fecc8")));
 
-s16 message_id_code_table[HELP_ENTRY_COUNT][2] = {
+s16 message_id_code_table[150][2] = {
     {     3, 0x5272},
     {     0, 0x526f},
     {     1, 0x5270},

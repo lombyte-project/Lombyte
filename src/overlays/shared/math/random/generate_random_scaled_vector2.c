@@ -4,10 +4,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/random/scale_by_one_minus_random_squared.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_002785C0.c: func_L09_00278690), where it is exact; names translated to the US level program. */
-
-extern float scale_by_one_minus_random_squared(float) __asm__("FUN_L09_00277688");
 
 void generate_random_scaled_vector2(float *out, float scale) __asm__("FUN_L09_00277758");
 

@@ -13,12 +13,12 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern char D_L11_00174880[];
 
-extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
-extern int   projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
+extern int projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
 int projectile_trail_color_end_gp __asm__("D_L11_00161DC4") = 0x80808020; /* RGBA, 0xAABBGGRR */
 extern int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute__((sda));
 extern int l11_projectile_trail_initial_particle_scalar __asm__("D_L11_00161DCC")
@@ -52,7 +52,7 @@ char *spawn_blarg_ship_shot(int    firing_moby,
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(size);
         *(int *)(spawned_moby + 0x40) = 0;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->rot.y =
             -fast_arc_tan(vector_length_xy(launch_direction), launch_direction[2]);
         MOBY(spawned_moby)->rot.z = fast_arc_tan(launch_direction[0], launch_direction[1]);
@@ -63,7 +63,7 @@ char *spawn_blarg_ship_shot(int    firing_moby,
             qcopy(moby_vars, launch_direction);
             step_length = fast_vec_length(launch_direction);
         }
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         size_length_ratio = truncate_float_to_s32(size / step_length);
         *(int *)(moby_vars + 0x14) = size_length_ratio;
         *(float *)(moby_vars + 0x20) = z;
@@ -98,7 +98,7 @@ void blarg_ship_shot_update(char *moby) {
     projectile_vars = ((char *)MOBY(moby)->pvars);
     if (projectile_vars == 0)
         return;
-    moby_position = moby + 0x10;
+    moby_position = &MOBY(moby)->pos;
     qcopy(previous_moby_position, moby_position);
     trail_color = fast_tween_color(projectile_trail_color_start_gp,
                                    projectile_trail_color_end_gp,
@@ -129,7 +129,7 @@ void blarg_ship_shot_update(char *moby) {
             fast_vec_normalize(spark_velocity,
                                spark_velocity,
                                random_float_between(frame_time * 5.0f, frame_time * 9.0f));
-            FUN_L00_0026dd20(moby + 0x10,
+            FUN_L00_0026dd20(&MOBY(moby)->pos,
                              (char *)spark_velocity,
                              0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)),

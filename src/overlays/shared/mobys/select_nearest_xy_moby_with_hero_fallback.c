@@ -5,7 +5,7 @@
 
 #include "qcopy.h"
 #include "qzero.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
@@ -47,7 +47,8 @@ int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
             continue;
         if (MOBY(candidate_moby)->state != 3)
             continue;
-        candidate_metric = vector_distance_xy(comparison_reference + 0x10, candidate_moby + 0x10);
+        candidate_metric =
+            vector_distance_xy(comparison_reference + 0x10, &MOBY(candidate_moby)->pos);
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
@@ -66,7 +67,8 @@ int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
             continue;
         if (MOBY(candidate_moby)->command == 0)
             continue;
-        candidate_metric = vector_distance_xy(comparison_reference + 0x10, candidate_moby + 0x10);
+        candidate_metric =
+            vector_distance_xy(comparison_reference + 0x10, &MOBY(candidate_moby)->pos);
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
@@ -75,7 +77,7 @@ int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
     }
     if (selected_moby != 0) {
         *(char **)(selection_output + 0x40) = selected_moby;
-        qcopy(selection_output, selected_moby + 0x10);
+        qcopy(selection_output, &MOBY(selected_moby)->pos);
         qcopy(selection_output + 0x10, selected_moby + 0x40);
         hero = &hero_lui;
         if (selected_moby == ((char *)hero->moby)) {

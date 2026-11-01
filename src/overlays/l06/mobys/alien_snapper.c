@@ -11,6 +11,10 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/math/random.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern int D_L06_001ABFC0[];
 
@@ -36,13 +40,11 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002EB140), where it is exact; names translated to the US level program. */
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 /* Sparks thrown off the swinging hazard while the camera is near it. */
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -155,7 +157,6 @@ extern int
 func_L00_00259B88_91A8(Moby *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern void  func_L00_00262DF0_91A8(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern void  func_L00_00262DF0_b91A8(int, void *, void *, float) __asm__("FUN_L00_00261d78");
-extern int   func_L00_00262BC0_91A8(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 extern float compute_interpolated_record_value(Moby *) __asm__("FUN_0020c9e0");
 extern void  func_L00_00250800_91A8(Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int   func_L00_001F2BE8_91A8(float, void *, int, Moby *, void *) __asm__("FUN_L00_001f2868");
@@ -163,7 +164,6 @@ extern int   point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern void  func_L00_00260460_91A8(Moby *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern float
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
-extern void mark_moby_for_removal(Moby *) __asm__("FUN_0020c828");
 extern char D_L06_00167540_macro[] __asm__("D_L06_00167540");
 extern int *D_L06_001B0C30_macro[] __asm__("D_L06_001B0C30");
 void        alien_snapper_update(Moby *moby) __asm__("FUN_L06_002f7d78");
@@ -450,8 +450,7 @@ void alien_snapper_update(Moby *moby) {
         func_L00_00259B88_91A8(moby, &vars->movement, scratch.m.dir, scratch.m.out, 1.0f);
         moby->rot.z = saved_rot;
         func_L00_00262DF0_91A8(0.5f, vars->path, &moby->pos, &moby->pos);
-        if (func_L00_00262BC0_91A8(vars->path, &moby->pos, &target->pos, scratch.m.path_point) !=
-                0 &&
+        if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, scratch.m.path_point) != 0 &&
             fast_vec_dist(&moby->pos, scratch.m.path_point) < vars->reach_distance) {
             near = 1;
         }

@@ -3,7 +3,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -17,12 +17,11 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/game/game_globals.h"
-
-extern int FUN_L00_00257b90(int, int);
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
 
 /* spawns a moby of the given class at a source moby's position */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
-extern s32   rand();
 char        *spawn_breakable_stack_replacement(char *source_moby,
                                                int   spawned_moby_class) __asm__("FUN_L09_002edb60");
 extern float D_L09_00166F40_edc30[] __asm__("D_L09_00166F40");
@@ -76,7 +75,7 @@ char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_clas
         copy_hero_moby_field_38(moby);
         MOBY(moby)->flags = MOBY(source_moby)->flags;
         if (spawned_moby_class == 0x514) {
-            if (rand() & 1) {
+            if (RandomNext() & 1) {
                 MOBY(moby)->flags |= 0x8000;
             }
         }
@@ -227,7 +226,7 @@ struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 k
         debris_vars->spin = random_float_between(-(frame_time * 9.075712f), frame_time * 9.075712f);
         debris_vars->tumble =
             random_float_between(-(frame_time * 6.2831855f), frame_time * 6.2831855f);
-        debris_vars->life = scale_game_frames(FUN_L00_00257b90(0x5A, 0x6E));
+        debris_vars->life = scale_game_frames(random_int_between(0x5A, 0x6E));
         update_entity(spawned_moby);
     }
     return spawned_moby;

@@ -1,9 +1,11 @@
 /* HUD: decompresses and relocates the selected groups. */
 #include "types.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/game/overlay_game_state.h"
 #include "asm.h"
 #include "sda.h"
+#include "rnc/streaming/stash/stash_receive_data.h"
+#include "rnc/ui/hud/banks/link_hud_bank.h"
 
 typedef struct {
     char  pad[0x50];
@@ -18,9 +20,7 @@ typedef struct {
 } G_234fd0;
 
 extern G_234fd0           D_L00_0017E4D8_lui __asm__("D_L00_0017E4D8") NOT_SDA;
-void                      stash_receive_data(void *, void *, int, int, int) __asm__("FUN_00232f20");
 void                      fast_decompress(void *, int) __asm__("FUN_L00_0024d8d0");
-void                      link_hud_bank(int, int) __asm__("FUN_001fefc0");
 extern int D_L00_0017E510 NOT_SDA;
 extern int D_L00_0017E518 NOT_SDA;
 extern int D_L00_0017E51C NOT_SDA;
@@ -145,7 +145,7 @@ extern volatile int l00_inactive_loaded_moby_end __asm__("D_L00_0015FA74");
 extern volatile int l00_inactive_moby_pool_last_slot __asm__("D_L00_0015FA78");
 extern volatile int l00_inactive_moby_pool_end __asm__("D_L00_0015FA7C");
 
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern volatile int D_L00_0015FFE0;
 extern volatile int l00_active_moby_pool_end __asm__("D_L00_0015FFE8");

@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -95,6 +95,14 @@ extern char forcefield_missing_trigger_format[] __asm__("D_L13_001F4FB0");
 
 void forcefield_update(struct Moby *m) __asm__("FUN_L13_002ed4a8");
 
+typedef struct ForcefieldVars {
+    u8  pad_0[0x4];
+    f32 unk4;
+    u8  pad_8[0x4];
+    s16 unkC;
+    s16 unkE;
+} ForcefieldVars;
+
 /* Moby classes 404, 405 */
 void forcefield_update(struct Moby *moby) {
     enum {
@@ -103,15 +111,15 @@ void forcefield_update(struct Moby *moby) {
         FORCEFIELD_STATE_FADE_OUT = 2,
         FORCEFIELD_STATE_REMOVE = 3
     };
-    char *forcefield_data = ((char *)moby->pvars);
-    int   wrap_adjusted_step;
+    ForcefieldVars *forcefield_data = (ForcefieldVars *)moby->pvars;
+    int             wrap_adjusted_step;
     switch (moby->state) {
     case FORCEFIELD_STATE_INITIALIZE:
         moby->state = 1;
         moby->alpha = 0x14;
         moby->flags |= 0xA08;
-        *(short *)(forcefield_data + 0xE) = -1;
-        *(float *)(forcefield_data + 4) = 1.0f;
+        forcefield_data->unkE = -1;
+        forcefield_data->unk4 = 1.0f;
         set_moby_color(moby, 0x80, 0x80, 0x80);
         break;
     case FORCEFIELD_STATE_MONITOR_LINKED_MOBY:
@@ -122,38 +130,38 @@ void forcefield_update(struct Moby *moby) {
                 (D_0014C190_257218[current_level_index][((short)MOBY(linked_moby)->save_id) >> 5] >>
                  (MOBY(linked_moby)->save_id & 0x1F)) &
                     1) {
-                *(float *)(forcefield_data + 4) = 1.0f;
+                forcefield_data->unk4 = 1.0f;
                 moby->state = 2;
             }
         } else {
-            *(float *)(forcefield_data + 4) = 1.0f;
+            forcefield_data->unk4 = 1.0f;
             moby->state = 2;
             stub_printf(forcefield_missing_trigger_format, moby->oclass, ((short)moby->save_id));
         }
         spawn_forcefield_contact_effects(moby, forcefield_data);
         break;
     case FORCEFIELD_STATE_FADE_OUT:
-        *(float *)(forcefield_data + 4) -= frame_scale * 0.05f;
-        if (*(float *)(forcefield_data + 4) < 0.0f)
+        forcefield_data->unk4 -= frame_scale * 0.05f;
+        if (forcefield_data->unk4 < 0.0f)
             moby->state = 3;
         else
-            moby->alpha = truncate_float_to_s32(*(float *)(forcefield_data + 4) * 20.0f);
+            moby->alpha = truncate_float_to_s32(forcefield_data->unk4 * 20.0f);
         break;
     case FORCEFIELD_STATE_REMOVE:
-        if (*(short *)(forcefield_data + 0xE) != -1) {
-            release_point_light_slot(*(short *)(forcefield_data + 0xE));
-            *(short *)(forcefield_data + 0xE) = -1;
+        if (forcefield_data->unkE != -1) {
+            release_point_light_slot(forcefield_data->unkE);
+            forcefield_data->unkE = -1;
         }
         mark_moby_for_removal(moby);
         return;
     }
     wrap_adjusted_step = 0xC0;
-    *(short *)(forcefield_data + 0xC) += 0xC0;
-    if (*(short *)(forcefield_data + 0xC) > 0x1000) {
-        *(short *)(forcefield_data + 0xC) -= 0x1000;
+    forcefield_data->unkC += 0xC0;
+    if (forcefield_data->unkC > 0x1000) {
+        forcefield_data->unkC -= 0x1000;
         wrap_adjusted_step = -0xF40;
-    } else if (*(short *)(forcefield_data + 0xC) < 0) {
-        *(short *)(forcefield_data + 0xC) += 0x1000;
+    } else if (forcefield_data->unkC < 0) {
+        forcefield_data->unkC += 0x1000;
         wrap_adjusted_step = 0x10C0;
     }
     offset_moby_class_point_pairs(((void *)moby->pclass), wrap_adjusted_step, 0);

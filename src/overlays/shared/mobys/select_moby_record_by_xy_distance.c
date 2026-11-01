@@ -5,7 +5,7 @@
 
 #include "qcopy.h"
 #include "qzero.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
@@ -43,7 +43,7 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
         if (MOBY(candidate_moby)->state != 3)
             continue;
         candidate_comparison_value =
-            vector_distance_xy(reference_object + 0x10, candidate_moby + 0x10);
+            vector_distance_xy(reference_object + 0x10, &MOBY(candidate_moby)->pos);
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
@@ -63,7 +63,7 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
         if (MOBY(candidate_moby)->command == 0)
             continue;
         candidate_comparison_value =
-            vector_distance_xy(reference_object + 0x10, candidate_moby + 0x10);
+            vector_distance_xy(reference_object + 0x10, &MOBY(candidate_moby)->pos);
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
@@ -72,7 +72,7 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
     }
     if (selected_moby != 0) {
         *(char **)(output_record + 0x40) = selected_moby;
-        qcopy(output_record, selected_moby + 0x10);
+        qcopy(output_record, &MOBY(selected_moby)->pos);
         qcopy(output_record + 0x10, selected_moby + 0x40);
         hero = &hero_lui;
         if (selected_moby == ((char *)hero->moby)) {

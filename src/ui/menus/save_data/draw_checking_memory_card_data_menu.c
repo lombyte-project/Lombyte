@@ -2,6 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/text/text_region.h"
+#include "rnc/rendering/texture/draw_textured_quad.h"
 
 typedef struct TextRegion FontWindow;
 
@@ -21,8 +22,6 @@ extern char                   *get_help_message_text(s32) __asm__("func_001FDD10
 extern void                   *memset(void *, s32, u32) __asm__("func_001153FC");
 extern void font_print_window_small(FontWindow *, u64, char *, s32) __asm__("func_001F75F0");
 extern u64  load_texture_file(s32) __asm__("func_00204CF0");
-extern void
-    draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64) __asm__("FUN_001f5450");
 
 s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) __asm__("FUN_00220348");
 

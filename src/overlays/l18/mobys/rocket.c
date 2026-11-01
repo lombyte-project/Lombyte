@@ -1,21 +1,23 @@
 /* Level 18 rocket (class 0x234): flight, trail, explosion and target pulse. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/level_labels.h"
-#include "rnc/overlay/level_spline.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/world/level_spline.h"
 
 #include "rnc/overlay/l18/mobys/rocket_globals.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
+#include "rnc/rendering/effect_texture.h"
 
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 void        mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -168,8 +170,6 @@ char *create_rocket_moby(float *rocket_spawn_position,
 
 #include "sda.h"
 
-extern char *
-spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern float          random_float_between(float, float) __asm__("FUN_002132a8");
 extern unsigned char *FUN_L00_002712b8(void  *pos,
                                        float *vec,
@@ -225,19 +225,19 @@ void spawn_rocket_trail_effects(void *mobyp, void *movement_step) {
     world_effect_direction.q = 0;
     world_effect_direction.v[2] = 0.02f;
     transform_vector_by_basis(&world_effect_direction, &world_effect_direction, moby + 0xC0);
-    spawn_burst(effect_spawn_position,
-                &world_effect_direction,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                scale_game_frames(0x14),
-                1,
-                20000.0f);
+    FUN_L00_0026cbb0(effect_spawn_position,
+                     &world_effect_direction,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     scale_game_frames(0x14),
+                     1,
+                     20000.0f);
 }
 
 extern void
 play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 extern void func_L00_0025F4A8_alt(void *,
                                   void *,
@@ -316,9 +316,8 @@ float sparkle_quad_corners[4][4] __asm__("D_L18_001D3630") = {
 float sparkle_quad_uvs[8] __asm__("D_L18_001D3670") = {
     1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
-extern unsigned int       fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
-extern unsigned long long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void               draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
+extern void         draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 #include "rnc/overlay/l18/mobys/rocket_data/draw_rocket_target_pulse_quad.h"
 

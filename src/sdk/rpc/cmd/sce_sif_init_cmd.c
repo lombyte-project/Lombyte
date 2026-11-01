@@ -1,6 +1,9 @@
 /* Ported from rac1-decomp (src/core/00119D88.c: func_0011A780). */
 #include "types.h"
-#include "eeregs.h"
+#include "rnc/sdk/eeregs.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
+#include "rnc/sdk/rpc/cmd/sce_sif_cmd_intr_hdlr.h"
+#include "rnc/sdk/rpc/cmd/sce_sif_send_cmd_public.h"
 
 typedef void (*SifCmdHandler)(void *packet, void *argument);
 
@@ -46,16 +49,12 @@ extern SifCmdHandlerEntry sif_system_handlers[] __asm__("D_00154E80");
 extern SifCmdInitPacket   sif_init_packet __asm__("D_00154E40");
 
 extern int  DIntr(void);
-extern void EnableInterrupts(void);
 extern void FlushCache(int);
 extern void sceSifSetDChain(void);
 extern int  AddDmacHandler(int, void *, int);
 extern s32  enable_dmac(s32 channel) __asm__("func_00119160");
-extern void _sceSifCmdIntrHdlr(void);
 extern u32  sceSifGetReg(u32 reg);
 extern u32  sceSifSetReg(s32 reg, u32 value);
-extern u32
-sceSifSendCmd(s32 command, void *packet, s32 size, void *source, void *destination, s32 data_size);
 extern s32  handle_sif_initialize_command(s32 *packet, s32 *command_state) __asm__("func_0011A448");
 extern void handle_sif_set_system_register(s32 *packet,
                                            s32 *command_state) __asm__("func_0011A428");

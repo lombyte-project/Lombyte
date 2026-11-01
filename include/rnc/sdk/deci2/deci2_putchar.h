@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_DECI2_DECI2_PUTCHAR_H
+#define LOMBYTE_RNC_SDK_DECI2_DECI2_PUTCHAR_H
+
+#include "types.h"
+
+void deci2Putchar(s32);
+
+#endif /* LOMBYTE_RNC_SDK_DECI2_DECI2_PUTCHAR_H */

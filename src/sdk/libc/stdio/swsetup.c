@@ -17,6 +17,9 @@
 
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
+#include "rnc/sdk/libc/malloc/free_r.h"
+#include "rnc/sdk/libc/stdio/sinit.h"
+#include "rnc/sdk/libc/stdio/smakebuf.h"
 
 /* FILE with the SDK's signed flags word. */
 struct SwFile {
@@ -52,9 +55,6 @@ struct SwFile {
 #define EOF    (-1)
 
 #define _REENT _impure_ptr
-extern void __sinit(RncReent *);
-extern void __smakebuf(struct SwFile *);
-extern void _free_r(RncReent *, void *);
 
 /* Called by the main entry point fns to ensure stdio has been initialized. */
 #define CHECK_INIT(fp)                \

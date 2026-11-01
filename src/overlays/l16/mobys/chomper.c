@@ -10,9 +10,9 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -52,11 +52,42 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 void update_chomper_hit_reaction_and_target(void *chomper_instance) __asm__("FUN_L16_002e6208");
 
 void update_chomper_hit_reaction_and_target(void *arg) __asm__("FUN_L16_002e6208");
-s32  is_value_within_interpolated_window(struct InterpolatedStateEntry *arg0,
+s32  is_value_within_interpolated_window(struct InterpolatedStateEntry *anim,
                                          f32 fparg0) __asm__("FUN_00214cc8");
 
 short D_L16_00161E48 = 0;
 void  chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
+
+typedef struct ChomperVars {
+    u8  pad_0[0x20];
+    f32 unk20;
+    u16 unk24;
+    u8  pad_26[0x2];
+    u8  unk28;
+    u8  pad_29[0x2F];
+    u8  unk58;
+    u8  pad_59[0x1];
+    u8  unk5A;
+    u8  pad_5B[0x6D];
+    u16 unkC8;
+    u8  pad_CA[0x6];
+    s32 unkD0;
+    u8  pad_D4[0x4C];
+    u8  unk120;
+    u8  pad_121[0x5F];
+    f32 unk180[4];
+    u8  pad_190[0x34];
+    s32 unk1C4;
+    u8  pad_1C8[0x8];
+    f32 unk1D0[4];
+    u8  pad_1E0[0x10];
+    f32 unk1F0[4];
+    u8  pad_200[0x4];
+    f32 unk204;
+    f32 unk208;
+    u8  pad_20C[0x14];
+    u8  unk220;
+} ChomperVars;
 
 /* Moby class 1445 */
 void chomper_update(struct Moby *chomper_moby) {
@@ -68,34 +99,34 @@ void chomper_update(struct Moby *chomper_moby) {
         CHOMPER_RETURN_HOME = 6,
         CHOMPER_KNOCKBACK = 8
     };
-    char *chomper_data = (char *)chomper_moby->pvars;
+    ChomperVars *chomper_data = (ChomperVars *)chomper_moby->pvars;
     update_chomper_hit_reaction_and_target(chomper_moby);
-    FUN_L00_00263ac8(2.1f, (int)chomper_moby, 1, (unsigned char *)(chomper_data + 0x220));
+    FUN_L00_00263ac8(2.1f, (int)chomper_moby, 1, &chomper_data->unk220);
     if (chomper_moby->visible != 0 && fast_vec_dist(&chomper_moby->pos, D_L16_001671C0) < 29.0f) {
         FUN_L00_0025a120(chomper_moby);
         chomper_moby->shadow_range = 23;
     }
     switch (chomper_moby->state) {
     case CHOMPER_INITIALIZE:
-        if (*(int *)(chomper_data + 0x1F0) == -1) {
+        if (*(int *)&chomper_data->unk1F0[0] == -1) {
             mark_moby_for_removal(chomper_moby);
             return;
         }
-        *(unsigned short *)(chomper_data + 0x24) = 1;
-        *(unsigned char *)(chomper_data + 0x28) = 0;
-        *(float *)(chomper_data + 0x20) = 1.0f;
-        *(int *)(chomper_data + 0xD0) = (int)&D_L16_00161E48;
+        chomper_data->unk24 = 1;
+        chomper_data->unk28 = 0;
+        chomper_data->unk20 = 1.0f;
+        chomper_data->unkD0 = (int)&D_L16_00161E48;
         if (rand() & 1)
             chomper_moby->flags |= 0x8000;
-        qcopy(chomper_data + 0x1D0, &chomper_moby->pos);
+        qcopy(chomper_data->unk1D0, &chomper_moby->pos);
         chomper_moby->state = 1;
         if (chomper_moby->prev_seq != 2)
             blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
-        *(unsigned char *)(chomper_data + 0x58) = truncate_float_to_s32(8.0f);
-        *(unsigned char *)(chomper_data + 0x5A) = truncate_float_to_s32(3.2f);
+        chomper_data->unk58 = truncate_float_to_s32(8.0f);
+        chomper_data->unk5A = truncate_float_to_s32(3.2f);
         break;
     case CHOMPER_WAIT_TO_APPROACH_TARGET:
-        if (*(int *)(chomper_data + 0x1C4) != 2) {
+        if (chomper_data->unk1C4 != 2) {
             chomper_moby->state = 4;
             if (chomper_moby->prev_seq != 0)
                 blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
@@ -105,19 +136,19 @@ void chomper_update(struct Moby *chomper_moby) {
     case 3:
         break;
     case CHOMPER_APPROACH_TARGET:
-        if (move_chomper_toward_position(chomper_moby, chomper_data + 0x180) < 1.25f) {
+        if (move_chomper_toward_position(chomper_moby, chomper_data->unk180) < 1.25f) {
             chomper_moby->state = 5;
             if (chomper_moby->prev_seq != 1)
                 blend_moby_animation(chomper_moby, 1, 0, scale_game_frames(20));
-        } else if (*(int *)(chomper_data + 0x1C4) == 2)
+        } else if (chomper_data->unk1C4 == 2)
             chomper_moby->state = 6;
         break;
     case CHOMPER_FACE_TARGET: {
         float *yaw = &chomper_moby->rot.z;
-        float  angle = fast_arc_tan(*(float *)(chomper_data + 0x180) - chomper_moby->pos.x,
-                                   *(float *)(chomper_data + 0x184) - chomper_moby->pos.y);
+        float  angle = fast_arc_tan(chomper_data->unk180[0] - chomper_moby->pos.x,
+                                   chomper_data->unk180[1] - chomper_moby->pos.y);
         approach_angle(yaw,
-                       (float *)(chomper_data + 0x1F4),
+                       &chomper_data->unk1F0[1],
                        angle,
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
@@ -125,7 +156,7 @@ void chomper_update(struct Moby *chomper_moby) {
         if (is_value_within_interpolated_window(chomper_moby, 13.0f)) {
             collect_mobies_in_sphere_at_moby_point(chomper_moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
         } else if ((chomper_moby->anim_flags & 2) &&
-                   fast_vec_dist(&chomper_moby->pos, chomper_data + 0x180) > 1.5f) {
+                   fast_vec_dist(&chomper_moby->pos, chomper_data->unk180) > 1.5f) {
             chomper_moby->state = 4;
             if (chomper_moby->prev_seq != 0)
                 blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
@@ -133,21 +164,21 @@ void chomper_update(struct Moby *chomper_moby) {
         break;
     }
     case CHOMPER_RETURN_HOME:
-        if (move_chomper_toward_position(chomper_moby, chomper_data + 0x1D0) < 1.0f) {
+        if (move_chomper_toward_position(chomper_moby, chomper_data->unk1D0) < 1.0f) {
             chomper_moby->state = 1;
             if (chomper_moby->prev_seq != 2)
                 blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
-        } else if (*(int *)(chomper_data + 0x1C4) != 2)
+        } else if (chomper_data->unk1C4 != 2)
             chomper_moby->state = 4;
         break;
     case 7:
-        if (FUN_L00_002dc9f0(chomper_moby, chomper_data + 0x120)) {
+        if (FUN_L00_002dc9f0(chomper_moby, &chomper_data->unk120)) {
             chomper_moby->state = 1;
-            *(unsigned short *)(chomper_data + 0xC8) = 0;
+            chomper_data->unkC8 = 0;
         }
         break;
     case CHOMPER_KNOCKBACK:
-        if (step_moby_motion(chomper_moby, chomper_data + 0x120) & 0x140) {
+        if (step_moby_motion(chomper_moby, &chomper_data->unk120) & 0x140) {
             cart_burst(chomper_moby, &chomper_moby->pos, 6, 0.5f, 13.0f);
             FUN_L00_00257470(chomper_moby, 0, -1);
             mark_moby_for_removal(chomper_moby);
@@ -161,7 +192,7 @@ extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Start the knock-back when the moby is hit, then steer it along its path and note when it strays. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7670), where it is exact; names translated to the US level program. */
@@ -295,21 +326,21 @@ extern float
 advance_accelerated_scalar(float *, float, float, float, float, float *) __asm__("FUN_00213f38");
 
 float move_chomper_toward_position(void *m_v, void *t_v) {
-    char  *moby = m_v;
-    float *target_position = t_v;
-    char  *moby_data = ((char *)MOBY(moby)->pvars);
-    float  interpolated_travel_distance;
-    float  movement_delta[4];
-    float  distance_to_target;
-    float  oldz;
-    float  target_yaw = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
+    char        *moby = m_v;
+    float       *target_position = t_v;
+    ChomperVars *moby_data = (ChomperVars *)MOBY(moby)->pvars;
+    float        interpolated_travel_distance;
+    float        movement_delta[4];
+    float        distance_to_target;
+    float        oldz;
+    float        target_yaw = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                     target_position[1] - MOBY(moby)->pos.y);
-    target_yaw = fast_add_rotations(target_yaw, *(float *)(moby_data + 0x1F8));
+    target_yaw = fast_add_rotations(target_yaw, moby_data->unk1F0[2]);
     oldz = MOBY(moby)->pos.z;
     interpolated_travel_distance = 0.0f;
     distance_to_target = fast_vec_dist(moby + 0x10, target_position);
     approach_angle((float *)&MOBY(moby)->rot.z,
-                   (float *)(moby_data + 0x1F4),
+                   &moby_data->unk1F0[1],
                    target_yaw,
                    frame_time_sq * 12.566371f,
                    frame_time_sq * 12.566371f,
@@ -319,12 +350,12 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
                                frame_time_sq * 8.0f,
                                frame_time_sq * 12.0f,
                                frame_time * 4.0f,
-                               (float *)(moby_data + 0x204));
-    fast_vec_normalize(movement_delta, moby + 0xC0, *(float *)(moby_data + 0x204));
-    movement_delta[2] = *(float *)(moby_data + 0x208) - frame_time_sq * 10.0f;
+                               &moby_data->unk204);
+    fast_vec_normalize(movement_delta, moby + 0xC0, moby_data->unk204);
+    movement_delta[2] = moby_data->unk208 - frame_time_sq * 10.0f;
     FUN_L00_00258830(moby, movement_delta, 0.5f, 0.5f, 0.0f, 0x10);
     resolve_point_path_segment_xy_clearance(
-        0.333f, *(void **)(moby_data + 0x1F0), moby + 0x10, moby + 0x10);
-    *(float *)(moby_data + 0x208) = oldz - MOBY(moby)->pos.z;
+        0.333f, *(void **)&moby_data->unk1F0[0], moby + 0x10, moby + 0x10);
+    moby_data->unk208 = oldz - MOBY(moby)->pos.z;
     return distance_to_target;
 }

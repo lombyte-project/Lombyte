@@ -1,10 +1,10 @@
 /* Shared moby class bot_door_lock: its update, glow and the targets it activates. */
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 #include "rnc/rendering/geometry_quad.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
@@ -13,10 +13,11 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/math/random.h"
 
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 
 extern OvlVec4 D_L06_001fe8d0[];
 extern float   D_L06_001fe960[][2];
@@ -178,20 +179,20 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
     switch (MOBY(target_moby)->oclass) {
     case 0x3F7:
     case 0x502:
-        if (target_moby[0x20] == 2) {
-            target_moby[0x20] = 3;
+        if (MOBY(target_moby)->state == 2) {
+            MOBY(target_moby)->state = 3;
             allocate_voice_for_target_entry(0, 0, (int)target_moby);
         }
         break;
     case 0x404:
-        if (target_moby[0x20] == 1)
-            target_moby[0x20] = 2;
+        if (MOBY(target_moby)->state == 1)
+            MOBY(target_moby)->state = 2;
         break;
     case 0x542:
-        target_moby[0x20] = 2;
+        MOBY(target_moby)->state = 2;
         trooper_play_sound(0, 0, (int)target_moby, 0x434);
-        target_moby[0x30] = 0xFF;
-        jet_clear_persistent(lock_moby[0xB0]);
+        MOBY(target_moby)->update_dist = 0xFF;
+        jet_clear_persistent(MOBY(lock_moby)->mission);
         break;
     }
 }
@@ -209,7 +210,6 @@ extern unsigned char D_001413F4 NOT_SDA;
 extern unsigned char            D_0015EDB4;
 extern unsigned char            D_0014C050[];
 extern unsigned int             fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
-extern float                    random_angle_radians(void) __asm__("FUN_00213308");
 extern void
 draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
 
@@ -241,22 +241,22 @@ void bot_door_lock_update(char *moby) {
                                                     0.017453292f * frame_time);
     MOBY(moby)->glow_color =
         fast_tween_color((fast_cos(bot_door_lock_data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case BOT_DOOR_LOCK_STATE_INITIALIZE:
         idata[5] = idata[4];
         bot_door_lock_data[6] = random_angle_radians();
         bot_door_lock_data[10] = random_angle_radians();
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         bot_door_lock_data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
         *(OvlQuad *)number_anchor_position = *(OvlQuad *)&MOBY(moby)->pos;
         number_anchor_position[2] += 2.75f;
-        if (fast_vec_dist(D_L06_00167540, moby + 0x10) < 32.0f) {
+        if (fast_vec_dist(D_L06_00167540, &MOBY(moby)->pos) < 32.0f) {
             bot_door_lock_data[9] += frame_time + frame_time;
             if (bot_door_lock_max_effect_horizontal_scale_gp < bot_door_lock_data[9])
                 bot_door_lock_data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
-        } else if (36.0f < fast_vec_dist(D_L06_00167540, moby + 0x10)) {
+        } else if (36.0f < fast_vec_dist(D_L06_00167540, &MOBY(moby)->pos)) {
             bot_door_lock_data[9] -= frame_time + frame_time;
             if (bot_door_lock_data[9] < 0.0f)
                 bot_door_lock_data[9] = 0.0f;
@@ -313,13 +313,13 @@ void bot_door_lock_update(char *moby) {
             }
         }
         if (idata[5] < 1 ||
-            D_0014C050[(unsigned char)moby[0xb0] + current_level_index * 16] == 0xff) {
+            D_0014C050[(unsigned char)MOBY(moby)->mission + current_level_index * 16] == 0xff) {
             for (i = 0; i < 4; i++) {
                 if (idata[i] != -1)
                     activate_bot_door_lock_target(
                         (unsigned char *)moby, (unsigned char *)(level_mobys_q + idata[i] * 0x100));
             }
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
         }
         break;
     case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:

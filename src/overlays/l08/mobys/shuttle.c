@@ -11,10 +11,12 @@
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 #include "qcopy.h"
+#include "rnc/camera/sample_camera_path.h"
+#include "rnc/math/interpolation/advance_accelerated_scalar.h"
 
 extern float D_0015ED70;
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int   D_L08_0015F5CC;
 extern void  attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
@@ -87,8 +89,6 @@ extern int D_L08_0015F5CC;
 
 /* Per-frame update: ease the angle and position fields toward their targets. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD9C0), where it is exact; names translated to the US level program. */
-extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 
 /* Moby class 424 */
 void shuttle_update(struct Moby *moby) {

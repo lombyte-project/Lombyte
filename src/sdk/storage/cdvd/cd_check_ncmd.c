@@ -1,6 +1,11 @@
 #include "types.h"
-#include "sifrpc.h"
+#include "rnc/sdk/sifrpc.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/sdk/deci2/sce_printf.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_bind_rpc.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_init_rpc.h"
+#include "rnc/sdk/storage/cdvd/cmd_sem_init.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
 extern s32  D_001312F8[];
 const u8    D_00152EB0[] = "Ncmd fail sema cur_cmd:%d keep_cmd:%d\n";
@@ -10,11 +15,6 @@ extern u8   D_00159758[];
 extern s32  PollSema();
 extern void ReferThreadStatus();
 extern void SignalSema();
-extern void cmd_sem_init();
-extern s32  sceCdSync();
-extern void scePrintf();
-extern s32  sceSifBindRpc();
-extern void sceSifInitRpc();
 
 s32 cd_check_ncmd(s32 cmd) __asm__("FUN_00120a28");
 

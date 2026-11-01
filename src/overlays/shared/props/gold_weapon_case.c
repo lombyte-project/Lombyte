@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/game/item_state.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/save/memcard_save_data.h"

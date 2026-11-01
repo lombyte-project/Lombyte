@@ -5,7 +5,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
@@ -28,6 +28,29 @@ extern unsigned char l05_volume_blended_color_low_byte __asm__("D_L05_00161200")
 
 void fog_zone_update(struct Moby *moby) __asm__("FUN_L05_0030e1f8");
 
+typedef struct FogZoneVars {
+    f32 saved_fog_448;
+    f32 saved_fog_450;
+    f32 saved_fog_44C;
+    f32 saved_fog_454;
+    s32 preset_fog_448;
+    f32 preset_fog_450;
+    f32 preset_fog_44C;
+    s32 preset_fog_454;
+    u8  saved_fog_444;
+    u8  saved_fog_445;
+    u8  saved_fog_446;
+    u8  preset_fog_444;
+    u8  preset_fog_445;
+    u8  preset_fog_446;
+    u8  pad_26[0x2];
+    s32 clip_volume_28;
+    s32 clip_volume_2C;
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
+} FogZoneVars;
+
 /* Moby class 841 */
 void fog_zone_update(struct Moby *moby) {
     enum {
@@ -35,94 +58,93 @@ void fog_zone_update(struct Moby *moby) {
         FOG_ZONE_WAIT_TO_APPLY_PRESET = 1,
         FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS = 2
     };
-    char *fog_zone_vars = ((char *)moby->pvars);
-    float hero_offset_from_volume_origin[4];
-    float hero_position_in_volume_space[4];
-    char *hero_position = (char *)&hero.motion.pos;
-    if (is_point_inside_clip_volume(hero_position, *(int *)(fog_zone_vars + 0x28))) {
+    FogZoneVars *fog_zone_vars = (FogZoneVars *)moby->pvars;
+    float        hero_offset_from_volume_origin[4];
+    float        hero_position_in_volume_space[4];
+    char        *hero_position = (char *)&hero.motion.pos;
+    if (is_point_inside_clip_volume(hero_position, fog_zone_vars->clip_volume_28)) {
         *(float *)(hero_position + 0x270) = 500.0f;
     }
     switch (((unsigned char *)moby)[0x20]) {
     case FOG_ZONE_INITIALIZE:
-        fog_zone_vars[0x20] = D_L05_0015F444;
-        fog_zone_vars[0x21] = D_L05_0015F445;
-        fog_zone_vars[0x22] = D_L05_0015F446;
+        fog_zone_vars->saved_fog_444 = D_L05_0015F444;
+        fog_zone_vars->saved_fog_445 = D_L05_0015F445;
+        fog_zone_vars->saved_fog_446 = D_L05_0015F446;
         {
-            float f0 = D_L05_0015F448;
-            float f1 = D_L05_0015F44C;
-            float f2 = D_L05_0015F450;
-            float f3 = D_L05_0015F454;
-            *(float *)(fog_zone_vars + 0) = f0;
-            *(float *)(fog_zone_vars + 8) = f1;
-            *(float *)(fog_zone_vars + 4) = f2;
-            *(float *)(fog_zone_vars + 0xC) = f3;
+            float fog_448 = D_L05_0015F448;
+            float fog_44C = D_L05_0015F44C;
+            float fog_450 = D_L05_0015F450;
+            float fog_454 = D_L05_0015F454;
+            fog_zone_vars->saved_fog_448 = fog_448;
+            fog_zone_vars->saved_fog_44C = fog_44C;
+            fog_zone_vars->saved_fog_450 = fog_450;
+            fog_zone_vars->saved_fog_454 = fog_454;
         }
-        fog_zone_vars[0x23] = 0x49;
-        fog_zone_vars[0x24] = 0x53;
-        fog_zone_vars[0x25] = 0xC;
-        *(float *)(fog_zone_vars + 0x18) = 33792.0f;
-        *(float *)(fog_zone_vars + 0x14) = 255.0f;
-        *(int *)(fog_zone_vars + 0x10) = 0;
-        *(int *)(fog_zone_vars + 0x1C) = 0;
+        fog_zone_vars->preset_fog_444 = 0x49;
+        fog_zone_vars->preset_fog_445 = 0x53;
+        fog_zone_vars->preset_fog_446 = 0xC;
+        fog_zone_vars->preset_fog_44C = 33792.0f;
+        fog_zone_vars->preset_fog_450 = 255.0f;
+        fog_zone_vars->preset_fog_448 = 0;
+        fog_zone_vars->preset_fog_454 = 0;
         {
             int c = l05_volume_blended_color_low_byte +
                     (l05_volume_blended_color_lower_middle_byte << 8) +
                     (l05_volume_blended_color_upper_middle_byte << 16) +
                     (l05_volume_blended_color_high_byte << 24);
-            *(int *)(fog_zone_vars + 0x34) = 0x40408070;
-            *(int *)(fog_zone_vars + 0x30) = c;
+            fog_zone_vars->unk34 = 0x40408070;
+            fog_zone_vars->unk30 = c;
         }
         moby->state = 1;
         break;
     case FOG_ZONE_WAIT_TO_APPLY_PRESET:
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(fog_zone_vars + 0x2C))) {
-            D_L05_0015F444 = fog_zone_vars[0x23];
-            D_L05_0015F445 = fog_zone_vars[0x24];
-            D_L05_0015F446 = fog_zone_vars[0x25];
+        if (is_point_inside_clip_volume(&hero.motion.pos, fog_zone_vars->clip_volume_2C)) {
+            D_L05_0015F444 = fog_zone_vars->preset_fog_444;
+            D_L05_0015F445 = fog_zone_vars->preset_fog_445;
+            D_L05_0015F446 = fog_zone_vars->preset_fog_446;
             {
-                float f0 = *(float *)(fog_zone_vars + 0x10);
-                float f1 = *(float *)(fog_zone_vars + 0x18);
-                float f2 = *(float *)(fog_zone_vars + 0x14);
-                float f3 = *(float *)(fog_zone_vars + 0x1C);
-                D_L05_0015F448 = f0;
-                D_L05_0015F44C = f1;
-                D_L05_0015F450 = f2;
-                D_L05_0015F454 = f3;
+                float fog_448 = *(float *)&fog_zone_vars->preset_fog_448;
+                float fog_44C = fog_zone_vars->preset_fog_44C;
+                float fog_450 = fog_zone_vars->preset_fog_450;
+                float fog_454 = *(float *)&fog_zone_vars->preset_fog_454;
+                D_L05_0015F448 = fog_448;
+                D_L05_0015F44C = fog_44C;
+                D_L05_0015F450 = fog_450;
+                D_L05_0015F454 = fog_454;
             }
             moby->state = 2;
         }
         break;
     case FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS:
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(fog_zone_vars + 0x28))) {
-            D_L05_0015F444 = fog_zone_vars[0x20];
-            D_L05_0015F445 = fog_zone_vars[0x21];
-            D_L05_0015F446 = fog_zone_vars[0x22];
+        if (is_point_inside_clip_volume(&hero.motion.pos, fog_zone_vars->clip_volume_28)) {
+            D_L05_0015F444 = fog_zone_vars->saved_fog_444;
+            D_L05_0015F445 = fog_zone_vars->saved_fog_445;
+            D_L05_0015F446 = fog_zone_vars->saved_fog_446;
             {
-                float f0 = *(float *)(fog_zone_vars + 0);
-                float f1 = *(float *)(fog_zone_vars + 8);
-                float f2 = *(float *)(fog_zone_vars + 4);
-                float f3 = *(float *)(fog_zone_vars + 0xC);
-                D_L05_0015F448 = f0;
-                D_L05_0015F44C = f1;
-                D_L05_0015F450 = f2;
-                D_L05_0015F454 = f3;
+                float fog_448 = fog_zone_vars->saved_fog_448;
+                float fog_44C = fog_zone_vars->saved_fog_44C;
+                float fog_450 = fog_zone_vars->saved_fog_450;
+                float fog_454 = fog_zone_vars->saved_fog_454;
+                D_L05_0015F448 = fog_448;
+                D_L05_0015F44C = fog_44C;
+                D_L05_0015F450 = fog_450;
+                D_L05_0015F454 = fog_454;
             }
             moby->state = 1;
         }
         break;
     }
     hero_position = (char *)&hero.motion.pos;
-    if (is_point_inside_clip_volume(hero_position, *(int *)(fog_zone_vars + 0x38))) {
+    if (is_point_inside_clip_volume(hero_position, fog_zone_vars->unk38)) {
         int c;
-        fast_vec_sub(hero_offset_from_volume_origin,
-                     hero_position,
-                     &l05_cuboids[*(int *)(fog_zone_vars + 0x38)].pos);
+        fast_vec_sub(
+            hero_offset_from_volume_origin, hero_position, &l05_cuboids[fog_zone_vars->unk38].pos);
         hero_offset_from_volume_origin[3] = 0.0f;
         transform_vector_by_basis(hero_position_in_volume_space,
                                   hero_offset_from_volume_origin,
-                                  l05_cuboids[*(int *)(fog_zone_vars + 0x38)].to_local);
-        c = fast_tween_color(*(int *)(fog_zone_vars + 0x30),
-                             *(int *)(fog_zone_vars + 0x34),
+                                  l05_cuboids[fog_zone_vars->unk38].to_local);
+        c = fast_tween_color(fog_zone_vars->unk30,
+                             fog_zone_vars->unk34,
                              (hero_position_in_volume_space[0] + 1.0f) * 0.5f);
         l05_volume_blended_color_lower_middle_byte = c >> 8;
         l05_volume_blended_color_upper_middle_byte = c >> 16;

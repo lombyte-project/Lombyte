@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "qcopy.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -37,10 +37,10 @@ void *spawn_giant_clank_charged_blast(int unused, float *spawn_position) {
     char *spawned_moby = create_moby(0x5F3);
     if (spawned_moby != 0 && *(int *)&D_L00_001613C8_gp == 0) {
         char *moby_vars;
-        spawned_moby[0x20] = 0;
+        MOBY(spawned_moby)->state = 0;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(OvlQuad *)&MOBY(spawned_moby)->pos = *(OvlQuad *)spawn_position;
         D_L00_0015F324 = 0xFF;

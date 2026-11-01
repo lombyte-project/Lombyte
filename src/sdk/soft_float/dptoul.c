@@ -1,3 +1,4 @@
+#include "rnc/sdk/soft_float/unpack_d.h"
 /* This is a software floating point library which can be used instead of
    the floating point routines in libgcc1.c for targets without hardware
    floating point. 
@@ -44,8 +45,6 @@ typedef union {
     f64 value;
     u64 value_raw;
 } FLOUnion;
-
-void __unpack_d(FLOUnion *src, FpNumber *dst);
 
 u32 dptoul(u64 arg_a) {
     FpNumber unpacked_value;

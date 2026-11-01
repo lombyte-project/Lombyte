@@ -88,4 +88,11 @@ typedef struct TargetReport {
     char            pad48[8];
 } TargetReport;
 
+struct Moby;
+
+int  cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *) __asm__("FUN_L12_002e17f8");
+void hoven_anklebiter_update(AnklebiterMoby *) __asm__("FUN_L12_002e1be0");
+int  process_hoven_anklebiter_suck_cannon_suction(struct Moby *) __asm__("FUN_L12_002e16b8");
+int  store_hoven_anklebiter_in_suck_cannon(struct Moby *) __asm__("FUN_L12_002e1758");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_H */

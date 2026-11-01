@@ -14,43 +14,53 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void child_carrier_update(char *moby) __asm__("FUN_L18_002fa728");
 
+typedef struct ChildCarrierVars {
+    u8    pad_0[0x20];
+    f32   unk20[4];
+    u8    pad_30[0x30];
+    f32   unk60[4];
+    u8    unk70;
+    u8    pad_71[0xF];
+    s32   unk80;
+    char *unk84;
+} ChildCarrierVars;
+
 /* Moby class 1584 */
 void child_carrier_update(char *moby) {
     enum {
         INITIALIZE_TRANSFORM_HISTORY = 0,
         UPDATE_TRANSFORM_FROM_HISTORY = 1
     };
-    char *transform_and_child_vars = ((char *)MOBY(moby)->pvars);
-    char  position_delta[16];
-    char *child;
+    ChildCarrierVars *transform_and_child_vars = (ChildCarrierVars *)MOBY(moby)->pvars;
+    char              position_delta[16];
+    char             *child;
     switch (MOBY(moby)->state) {
     case INITIALIZE_TRANSFORM_HISTORY:
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     case UPDATE_TRANSFORM_FROM_HISTORY:
-        fast_vec_sub(position_delta, moby + 0x10, transform_and_child_vars + 0x60);
-        update_entity_matrix(transform_and_child_vars + 0x20,
+        fast_vec_sub(position_delta, moby + 0x10, transform_and_child_vars->unk60);
+        update_entity_matrix(transform_and_child_vars->unk20,
                              position_delta,
-                             transform_and_child_vars + 0x70,
+                             &transform_and_child_vars->unk70,
                              moby + 0x40);
         break;
     }
-    if (MOBY(moby)->command != 0 && *(int *)(transform_and_child_vars + 0x80) != 0 &&
-        *(int *)(transform_and_child_vars + 0x84) == 0) {
+    if (MOBY(moby)->command != 0 && transform_and_child_vars->unk80 != 0 &&
+        *(int *)&transform_and_child_vars->unk84 == 0) {
         char *new_child = create_moby(0x764);
-        *(char **)(transform_and_child_vars + 0x84) = new_child;
+        transform_and_child_vars->unk84 = new_child;
         if (new_child != 0) {
             *(unsigned short *)(new_child + 0x32) = ((unsigned short)MOBY(moby)->draw_dist);
-            (*(char **)(transform_and_child_vars + 0x84))[0x31] = 1;
-            *(long *)(*(char **)(transform_and_child_vars + 0x84) + 0x38) =
-                ((long)MOBY(moby)->spawn_frame);
-            *(float *)(*(char **)(transform_and_child_vars + 0x84) + 0x2C) *=
-                MOBY(moby)->scale / *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
+            (transform_and_child_vars->unk84)[0x31] = 1;
+            *(long *)(transform_and_child_vars->unk84 + 0x38) = ((long)MOBY(moby)->spawn_frame);
+            *(float *)(transform_and_child_vars->unk84 + 0x2C) *=
+                MOBY(moby)->scale / MOBY(moby)->pclass->scale;
         }
     }
-    qcopy(transform_and_child_vars + 0x60, moby + 0x10);
-    qcopy(transform_and_child_vars + 0x70, moby + 0x40);
-    child = *(char **)(transform_and_child_vars + 0x84);
+    qcopy(transform_and_child_vars->unk60, moby + 0x10);
+    qcopy(&transform_and_child_vars->unk70, moby + 0x40);
+    child = transform_and_child_vars->unk84;
     if (child != 0) {
         qcopy(child + 0x10, moby + 0x10);
         qcopy(child + 0x40, moby + 0x40);
@@ -76,7 +86,7 @@ void set_group_child_carrier_byte_bc(int group_index, int moby_byte_bc_value) {
                 (unsigned char *)(((group_moby_entry[0] & 0x7FFF) << 8) + D_L18_0015FFD8);
 
             if (MOBY(moby)->oclass == 0x630) {
-                moby[0xBC] = moby_byte_bc_value;
+                MOBY(moby)->command = moby_byte_bc_value;
             }
         } while ((short)*group_moby_entry++ >= 0);
     }

@@ -1,9 +1,9 @@
 #include "sda.h"
+#include "rnc/sdk/deci2/deci2_putchar.h"
 
 typedef char *va_list;
 
 extern int              _printf(const char *format, va_list arguments);
-extern void             deci2Putchar(int character);
 extern void *D_0012FC00 NOT_SDA;
 
 int scePrintf(const char *format, ...) {

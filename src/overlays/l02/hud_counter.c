@@ -7,6 +7,7 @@
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/hud_0023D600.c: func_L02_0023D600), where it is exact; names translated to the US level program. */
 
@@ -33,9 +34,8 @@ void update_hud_counter_transition(char *transition_state) {
     *(int *)(transition_state + 0x74) = **(int **)(transition_state + 0xC);
 }
 
-#include "rnc/overlay/hud.h"
+#include "rnc/overlay/shared/ui/hud.h"
 
-extern int  hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
 extern int  sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");

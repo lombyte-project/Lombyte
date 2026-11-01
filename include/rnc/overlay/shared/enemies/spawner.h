@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SPAWNER_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SPAWNER_H
+
+#include "types.h"
+
+void spawner_update(char *) __asm__("FUN_L09_0030ab80");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SPAWNER_H */

@@ -1,9 +1,9 @@
 #include "types.h"
-#include "kernel.h"
+#include "rnc/sdk/kernel.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 extern s32 _sceSDC();
 extern s32 DIntr();
-extern s32 EnableInterrupts();
 
 void SyncDCache(s32 range_start_address, s32 range_end_address) __asm__("FUN_00118f88");
 

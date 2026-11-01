@@ -9,9 +9,14 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/game/level_state.h"
 
-#include "rnc/ui/help/window_state.h"
+/* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
+struct L01HelpState {
+    s32 state;
+    u8  pad4[0x20];
+    s32 cur;
+};
 
-extern HelpWindowState help_state __asm__("D_L01_00179890");
+extern struct L01HelpState help_state __asm__("D_L01_00179890");
 
 extern struct UsageStat   help_records[] __asm__("D_00141968");
 extern s32                cutscene_mode_macro __asm__("D_L01_0015F5C4") MACRO_ADDR;
@@ -68,21 +73,21 @@ void help_hints_update(struct Moby *moby) {
         }
         if (cutscene_mode_macro == 0) {
             if (level_available[3] != 0 && level_available[2] == 0 && help_state.state == 0 &&
-                help_state.pending_message_id == -1 && help_records[4].count == 0) {
+                help_state.cur == -1 && help_records[4].count == 0) {
                 help_request(0x3E8, 4);
             } else if (level_available[3] == 0 && level_available[2] != 0 &&
-                       help_state.state == 0 && help_state.pending_message_id == -1 &&
+                       help_state.state == 0 && help_state.cur == -1 &&
                        help_records[5].count == 0) {
                 help_request(0x3E9, 5);
             } else if (level_available[3] != 0 && level_available[2] != 0 &&
-                       help_state.state == 0 && help_state.pending_message_id == -1 &&
+                       help_state.state == 0 && help_state.cur == -1 &&
                        help_records[6].count == 0 && help_records[4].count == 0) {
                 help_request(0x3EA, 6);
             }
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[15]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
-            help_state.state == 0 && help_state.pending_message_id == -1) {
+            help_state.state == 0 && help_state.cur == -1) {
             usage_time_value =
                 scale_game_frames(D_0015EEA4_macro) - usage_stats.stat[9].latest_time_bucket * 600;
             /* "< 1" rather than "!": cc1 would otherwise test the bit as (v >> level) & 1 */
@@ -93,14 +98,14 @@ void help_hints_update(struct Moby *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
-            D_L01_0015F68C < 3 && help_state.state == 0 && help_state.pending_message_id == -1 &&
+            D_L01_0015F68C < 3 && help_state.state == 0 && help_state.cur == -1 &&
             help_records[0x40].count == 0) {
             help_request(0x3EC, 0x40);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
             hero.state.current == 1 && D_L01_0015F688 == -1 && help_state.state == 0 &&
-            help_state.pending_message_id == -1 && help_records[0x40].count != 0 &&
+            help_state.cur == -1 && help_records[0x40].count != 0 &&
             help_records[0x41].count == 0) {
             help_request(0x3ED, 0x41);
         }
@@ -120,7 +125,7 @@ void help_hints_update(struct Moby *moby) {
             }
         }
         if (hero.state.control_mode == 0x12 && tutorial_hint_vars[10] == 0 &&
-            help_state.state == 0 && help_state.pending_message_id == -1 &&
+            help_state.state == 0 && help_state.cur == -1 &&
             (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[8]) ||
              is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[9]))) {
             tutorial_hint_vars[11]++;
@@ -162,9 +167,8 @@ void help_hints_update(struct Moby *moby) {
              health_hint_candidate_moby = health_hint_candidate_moby->next) {
             if (health_hint_candidate_moby->oclass == 0x326 &&
                 fast_vec_dist(&health_hint_candidate_moby->pos, &hero.motion.pos) < 10.0f &&
-                help_state.state == 0 && help_state.pending_message_id == -1 &&
-                help_records[1].count == 0 && help_records[2].count == 0 &&
-                usage_stats.stat[13].count == 0 &&
+                help_state.state == 0 && help_state.cur == -1 && help_records[1].count == 0 &&
+                help_records[2].count == 0 && usage_stats.stat[13].count == 0 &&
                 is_moby_in_state_one(health_hint_candidate_moby) == 0) {
                 if (hero.health.hp < hero_max_health) {
                     if (usage_stats.stat[13].count < 0xFFFF) {

@@ -29,11 +29,14 @@ void parent_following_effect_update(char *moby) {
     }
     MOBY(moby)->rot.y = *(float *)(*(char **)moby_pvars + 0x44);
     MOBY(moby)->rot.z = *(float *)(*(char **)moby_pvars + 0x48);
-    qcopy(moby + 0x10, *(char **)(*(char **)moby_pvars + 0x78) + 0xF0);
+    qcopy(&MOBY(moby)->pos, *(char **)(*(char **)moby_pvars + 0x78) + 0xF0);
     accumulated_offset = *(float *)(moby_pvars + 0x10) + *(float *)(moby_pvars + 0x14);
     *(float *)(moby_pvars + 0x10) = accumulated_offset;
-    FUN_L00_00262cf0(
-        moby + 0x10, moby + 0x10, -accumulated_offset, MOBY(moby)->rot.z, MOBY(moby)->rot.y);
+    FUN_L00_00262cf0(&MOBY(moby)->pos,
+                     &MOBY(moby)->pos,
+                     -accumulated_offset,
+                     MOBY(moby)->rot.z,
+                     MOBY(moby)->rot.y);
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, frame_time * 5.235987663269043f);
     ratio = convert_integer_to_float(*(short *)(moby_pvars + 0xE));
     ratio = ratio / convert_integer_to_float(*(short *)(moby_pvars + 0xC));
@@ -41,6 +44,6 @@ void parent_following_effect_update(char *moby) {
     b = (blended_color >> 16) & 0xFF;
     g = (blended_color >> 8) & 0xFF;
     set_moby_color(moby, blended_color & 0xFF, g, b);
-    moby[0x23] = truncate_float_to_s32(ratio * 128.0f);
+    MOBY(moby)->alpha = truncate_float_to_s32(ratio * 128.0f);
     MOBY(moby)->scale = MOBY(moby)->scale * (frame_scale * 0.019999981f + 1.0f);
 }

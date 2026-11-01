@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_AUDIO_RPC_SND_SEND_IOP_COMMAND_AND_WAIT_H
+#define LOMBYTE_RNC_AUDIO_RPC_SND_SEND_IOP_COMMAND_AND_WAIT_H
+
+#include "types.h"
+
+s32 snd_send_iop_command_and_wait(s32, s32, u8 *) __asm__("FUN_0012e548");
+
+#endif /* LOMBYTE_RNC_AUDIO_RPC_SND_SEND_IOP_COMMAND_AND_WAIT_H */

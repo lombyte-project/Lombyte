@@ -37,25 +37,26 @@ void sentrybot_projectile_update(unsigned char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (moby[0x20] != 0)
+    if (MOBY(moby)->state != 0)
         return;
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, frame_time * 6.2831855f);
-    fast_vec_add(next_position, moby + 0x10, moby_vars);
+    fast_vec_add(next_position, &MOBY(moby)->pos, moby_vars);
     make_hit_descriptor(col, moby, 1, 2.0f, moby_vars);
     *(short *)(col + 0x1A) = MOBY(moby)->oclass;
-    if (collision_line(moby + 0x10, next_position, 0, moby, col) != 0 ||
-        coll_sphere(moby + 0x10, 0, moby, 0.3f) != 0 || fast_dec_timer(moby_vars + 0x38) != 0) {
+    if (collision_line(&MOBY(moby)->pos, next_position, 0, moby, col) != 0 ||
+        coll_sphere(&MOBY(moby)->pos, 0, moby, 0.3f) != 0 ||
+        fast_dec_timer(moby_vars + 0x38) != 0) {
         hit = (char *)D_L15_00174458[0];
         if (hit != 0 && (int)hit != *(int *)(moby_vars + 0x3C)) {
             if (*(short *)(hit + 0xA6) != 0x4E)
-                play_entity_sound(moby, 0.5f, moby + 0x10, 1, 2.0f, 0.0f, 0, 1, 0);
-            cart_burst(moby, moby + 0x10, 0.5f, 13.0f, -1);
+                play_entity_sound(moby, 0.5f, &MOBY(moby)->pos, 1, 2.0f, 0.0f, 0, 1, 0);
+            cart_burst(moby, &MOBY(moby)->pos, 0.5f, 13.0f, -1);
             allocate_voice_for_target_entry(0, 0, moby);
             mark_moby_for_removal(moby);
             return;
         }
     }
-    qcopy(moby + 0x10, next_position);
+    qcopy(&MOBY(moby)->pos, next_position);
     if (D_L15_0015F5CC_s % 3 == 0)
         spawn_moby_point_offset_particle(moby, 30000.0f, 0, 0.1f);
 }
@@ -72,16 +73,16 @@ char *spawn_sentrybot_projectile(char *source_moby, float *direction_vector, cha
         char *moby_vars;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 0;
+        MOBY(spawned_moby)->visible = 1;
+        MOBY(spawned_moby)->state = 0;
         MOBY(spawned_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 20.0f;
-        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         FUN_001f9a68(moby_vars, direction_vector, 5.0f);
         *(int *)(moby_vars + 0x38) = scale_game_frames(0xF0);
         *(char **)(moby_vars + 0x3C) = source_moby;
-        spawned_moby[0x23] = 0x30;
+        MOBY(spawned_moby)->alpha = 0x30;
         MOBY(spawned_moby)->flags |= 0x200;
         MOBY(spawned_moby)->rot.z = fast_arc_tan(direction_vector[0], direction_vector[1]);
         MOBY(spawned_moby)->rot.y =

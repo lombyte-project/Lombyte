@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
+#include "rnc/sdk/libc/stdio/printf.h"
+#include "rnc/sdk/rpc/rpc/sce_sif_check_stat_rpc.h"
 
 /* The IOP return buffer this file owns: both functions below reach these
    gp-relative, which needs their definitions ahead of them. */
@@ -8,8 +10,6 @@ s32        *snd_current_buffer __asm__("D_0015EC80") = 0;
 s32         snd_current_buffer_index __asm__("D_0015EC84") = 0;
 extern u8   snd_no_return_error_string[] __asm__("D_00153C98");
 extern void FlushCache();
-extern s32  SceSifCheckStatRpc();
-extern s32  printf();
 
 s32 snd_got_returns(void) __asm__("FUN_0012de70");
 
@@ -25,11 +25,11 @@ s32 snd_got_returns(void) {
     }
     p = snd_current_buffer;
     if (p[0] != 0xFFFFFFFF) {
-        printf(snd_no_return_error_string);
+        Printf(snd_no_return_error_string);
         return 0;
     }
     if (p[snd_current_buffer_index + 1] != 0xFFFFFFFF) {
-        printf(snd_no_return_error_string);
+        Printf(snd_no_return_error_string);
         return 0;
     }
     snd_current_buffer = 0;

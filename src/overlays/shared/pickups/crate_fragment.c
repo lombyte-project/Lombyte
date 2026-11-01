@@ -9,7 +9,8 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 typedef struct {
     void         *o;
@@ -45,7 +46,6 @@ typedef struct {
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern void  reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 int          FUN_001f96f8_2af8b0(int) __asm__("FUN_001f96f8");
-float        randf_sym(float, float) __asm__("FUN_L00_00257c48");
 void         FUN_L00_00250df8_2af8b0(void *) __asm__("FUN_L00_00250df8");
 extern s32   coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern void  vscl_2afa48(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -149,15 +149,15 @@ unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
         V_2af8b0 *debris_data = ((V_2af8b0 *)MOBY(debris_moby)->pvars);
         float     scale_multiplier;
         debris_data->o = debris_source_moby;
-        debris_moby[0x30] = 0xFF;
+        MOBY(debris_moby)->update_dist = 0xFF;
         MOBY(debris_moby)->draw_dist = 0x7E;
-        debris_moby[0x31] = 1;
+        MOBY(debris_moby)->visible = 1;
         MOBY(debris_moby)->spawn_frame = *(long *)(debris_source_moby + 0x38);
-        debris_moby[0x20] = 0;
+        MOBY(debris_moby)->state = 0;
         MOBY(debris_moby)->rot.x = random_angle_radians();
         MOBY(debris_moby)->rot.y = random_angle_radians();
         MOBY(debris_moby)->rot.z = random_angle_radians();
-        qcopy(debris_moby + 0x10, spawn_position);
+        qcopy(&MOBY(debris_moby)->pos, spawn_position);
         qcopy(debris_moby + 0x40, initial_rotation);
         qcopy(debris_data->p10, initial_velocity);
         debris_data->f4 = MOBY(debris_moby)->pos.z;

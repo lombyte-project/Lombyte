@@ -3,6 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/ui/hud/remove_hud_item.h"
 #include "rnc/ui/menus/weapons/count_unspent_gold_bolts.h"
+#include "rnc/sdk/libc/string/find_substring.h"
 
 typedef struct {
     s32 unk0;
@@ -53,7 +54,6 @@ extern void  noop_callback_n(s32) __asm__("func_001E9458");
 extern void  noop_callback_o(s32) __asm__("func_001E9460");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char *strcpy(char *, const char *);
-extern char *FindSubstring(char *, char *);
 extern s32   sprintf(char *, const char *, ...);
 extern void  copy_text_to_shared_buffer(char *) __asm__("func_001FF658");
 

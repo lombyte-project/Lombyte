@@ -7,7 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
 typedef struct {
@@ -51,7 +51,6 @@ extern short      D_L00_001618F4 __attribute__((sda));
 extern short      D_L00_001618DC __attribute__((sda));
 extern short      D_L00_001618E4 __attribute__((sda));
 extern void       draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-float             absolute_float(float input) __asm__("func_001F99C0");
 
 extern s32 D_L00_0015F5C4;
 extern s32 veldin_ship_visibility_selector[] __asm__("D_L00_0016C890");

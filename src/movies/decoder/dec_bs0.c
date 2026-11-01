@@ -2,17 +2,17 @@
 #ifndef COMMON_H
 #include "sda.h"
 #endif /* STRUCTS_H */
-extern int DebugPrint();
 
 #include "types.h"
 #include "rnc/movies/decoder/video_dec.h"
 #include "rnc/movies/player/movie_player.h"
+#include "rnc/sdk/debug/debug_print.h"
+#include "rnc/sdk/mpeg/api/sce_mpeg_get_picture.h"
+#include "rnc/sdk/mpeg/api/sce_mpeg_is_end.h"
+#include "rnc/sdk/mpeg/api/sce_mpeg_reset.h"
 
 extern struct MoviePlayer *movie_player_macro __asm__("D_0016120C") MACRO_ADDR;
 #define voBuf (movie_player_macro->vo_buf)
-extern s32  sceMpegIsEnd(struct sceMpeg *mpeg) __asm__("func_0012BA48");
-extern int  sceMpegGetPicture(struct sceMpeg *, void *, int);
-extern void sceMpegReset(struct sceMpeg *);
 extern void set_image_tag(void *, int, int, int) __asm__("func_0023B210"); /* setImageTag */
 extern void switch_thread(void) __asm__("func_0023A770");                  /* switchThread */
 extern void err_message(char *) __asm__("func_0023AB78");                  /* ErrMessage */

@@ -3,8 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/l14/cutscene_state.h"
-
-extern void emit_moby_particle_pairs(void *) __asm__("FUN_L00_0023e008");
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 
 extern void func_L00_0023E4C8(void *) __asm__("FUN_L14_002459c0");
 

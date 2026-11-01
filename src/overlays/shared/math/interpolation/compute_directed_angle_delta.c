@@ -4,6 +4,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/interpolation.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
 
@@ -43,8 +44,6 @@ void step_angle_toward_target(float *current_angle,
 }
 
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
-extern void
-advance_damped_scalar_velocity(float *, float, float, float, float) __asm__("FUN_L00_0025b798");
 
 float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 float spring_angle(float *current_angle,

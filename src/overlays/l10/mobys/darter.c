@@ -1,6 +1,6 @@
 /* Level 10 moby class 1199, the darter (the bat-like Orxon flyer): rises from its spawn, wanders, chases and dives at its target. */
 #include "types.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -19,7 +19,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/l10/mobys/aligned_vector.h"
 
 typedef struct Moby Moby;
@@ -566,7 +566,7 @@ void darter_update(Moby *moby) {
 }
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E2B80), where it is exact; names translated to the US level program. */
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 
 /* Level 10 moby update: tracks the owner's height and fires a shot, then sets the moby's display state. */
 

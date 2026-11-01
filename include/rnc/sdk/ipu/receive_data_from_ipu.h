@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_IPU_RECEIVE_DATA_FROM_IPU_H
+#define LOMBYTE_RNC_SDK_IPU_RECEIVE_DATA_FROM_IPU_H
+
+#include "types.h"
+
+void receiveDataFromIPU(s32, s32);
+
+#endif /* LOMBYTE_RNC_SDK_IPU_RECEIVE_DATA_FROM_IPU_H */

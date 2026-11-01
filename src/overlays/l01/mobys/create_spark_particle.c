@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"

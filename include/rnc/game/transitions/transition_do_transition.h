@@ -15,4 +15,6 @@ typedef struct {
 /* Five cues and the start == -1 entry that ends the loop over them. */
 extern SoundCue transition_sound_cues[6] __asm__("D_001862B0");
 
+void transition_do_transition(void) __asm__("FUN_001eb798");
+
 #endif /* LOMBYTE_RNC_GAME_TRANSITIONS_TRANSITION_DO_TRANSITION_H */

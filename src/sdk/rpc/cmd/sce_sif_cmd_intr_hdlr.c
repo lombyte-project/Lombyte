@@ -1,6 +1,7 @@
 #include "types.h"
-#include "eetypes.h"
-#include "kernel.h"
+#include "rnc/sdk/eetypes.h"
+#include "rnc/sdk/kernel.h"
+#include "rnc/sdk/interrupts/enable_interrupts.h"
 
 typedef void (*SifCmdHandler)(void *packet, void *argument);
 
@@ -30,7 +31,6 @@ typedef struct SifCmdData {
     s32                *sregs;
 } SifCmdData;
 
-extern s32        EnableInterrupts(void);
 extern s32        isceSifSetDChain(void);
 extern SifCmdData sif_cmd_data __asm__("D_00154E58");
 

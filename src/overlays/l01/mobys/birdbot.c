@@ -16,7 +16,7 @@
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
 
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 typedef struct {
     u32 c[6];
@@ -422,7 +422,7 @@ typedef struct {
     struct PeMoby *f2080;
 } PeHero;
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 #include "rnc/overlay/l01/mobys/birdbot_projectile.h"
 

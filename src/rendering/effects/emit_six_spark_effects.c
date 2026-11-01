@@ -2,7 +2,7 @@
 #include "rnc/rendering/effects/space_effect_tables.h"
 #include "rnc/rendering/level_render_state.h"
 #include "sda.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"

@@ -2,18 +2,16 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "qcopy.h"
-
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/overlay/shared/mobys/compute_advanced_moby_path_position.h"
 
 extern float fast_vec_dist(void *, void *);
 
 extern char *D_L13_001B07B0[];
 
 extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
-
-extern int compute_advanced_moby_path_position(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
 
 void moby_path_follower_update(struct Moby *moby) __asm__("FUN_L13_0030bb70");
 

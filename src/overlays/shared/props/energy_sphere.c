@@ -7,7 +7,8 @@
 #include "rnc/math_consts.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
 typedef struct {
     char           pad0[0x10];
@@ -34,7 +35,6 @@ extern void  random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern float fast_add_rotations(float, float);
 extern void  spawn_moving_hero_relative_alpha_fade_particle(
      void *, float, void *, int, int, int, int) __asm__("FUN_L00_002730e0");
-extern int  voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_energy_sphere_destruction_particles(char *m) __asm__("FUN_L06_002f7c68");
 
@@ -171,7 +171,7 @@ void spawn_energy_sphere_destruction_particles(char *moby) {
         }
         particle_lifetime = l06_energy_sphere_destruction_particle_lifetime;
         random_particle_byte = random_integer_below(0xFF);
-        spawn_moving_hero_relative_alpha_fade_particle(moby + 0x10,
+        spawn_moving_hero_relative_alpha_fade_particle(&MOBY(moby)->pos,
                                                        particle_scale,
                                                        particle_velocity,
                                                        particle_color,

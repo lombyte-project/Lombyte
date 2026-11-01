@@ -4,7 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -18,6 +18,7 @@
 #include "rnc/world/collision/collision_line.h"
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/overlay/l17/mobys/blarg_ship.h"
 
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
@@ -60,7 +61,6 @@ extern char *spawn_class_558_moby_toward_target(char  *src,
                                                 char  *pos,
                                                 float *v,
                                                 float  f) __asm__("FUN_L17_002e94d8");
-extern char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
 extern float vector_length_xy(void *);
 extern char  fleet_turret_aim_vertex_indices[4] __asm__("D_L17_00161980") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char  *src,
@@ -78,9 +78,11 @@ extern void  process_dreks_fleet_turret_hits(struct Moby *m) __asm__("FUN_L17_00
 void distribute_group_blarg_ships_along_path(struct Moby *turret_moby) __asm__("FUN_L17_002cbd38");
 
 extern void distribute_group_blarg_ships_along_path(struct Moby *m) __asm__("FUN_L17_002cbd38");
-extern void
-transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3) __asm__("FUN_0020cd48");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern void transform_scaled_vertex_batch(char *object,
+                                          int   count,
+                                          void *point_indices,
+                                          char *cursor) __asm__("FUN_0020cd48");
+extern int  func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
 
@@ -202,7 +204,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
     case FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP: {
         struct Hero *g = &hero;
         if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
-            *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
+            g->ship_moby->oclass != 0x563) {
             turret_moby->state = 1;
         } else {
             Aim347 aim;

@@ -10,7 +10,7 @@
 #include "qcopy.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern int D_L13_00174158_lui __asm__("D_L13_00174158") NOT_SDA;
 
@@ -29,12 +29,12 @@ unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L1
 unsigned char *spawn_ship_pickup(char *position, int moby_class) {
     unsigned char *moby = create_moby(moby_class);
     if (moby != 0) {
-        moby[0x30] = 0xFF;
+        MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
-        moby[0x20] = 0;
-        moby[0xBC] = 0;
-        qcopy(moby + 0x10, position);
+        MOBY(moby)->visible = 1;
+        MOBY(moby)->state = 0;
+        MOBY(moby)->command = 0;
+        qcopy(&MOBY(moby)->pos, position);
         update_entity(moby);
         copy_hero_moby_field_38(moby);
     }
@@ -63,26 +63,26 @@ void ammocrate_update(char *moby) {
     float start_size, activated_size;
     short moby_class;
     float speed;
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case SHIP_PICKUP_INITIALIZE:
         if (*((unsigned char *)pickup_private_state + 0xc) != 0) {
             MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
             break;
         }
         MOBY(moby)->collision = 0;
-        moby[0x31] = 0;
+        MOBY(moby)->visible = 0;
         MOBY(moby)->flags |= 1;
         start_size = *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         MOBY(moby)->scale = start_size * 0.1f;
         break;
     case SHIP_PICKUP_SELECT_ACTIVATION_GATE:
         if (pickup_private_state[0] != -1) {
-            moby[0x20] = 2;
+            MOBY(moby)->state = 2;
             break;
         }
-        moby[0x20] = 3;
+        MOBY(moby)->state = 3;
         break;
     case SHIP_PICKUP_WAIT_FOR_TARGET_STATE: {
         int          target_index = pickup_private_state[0];
@@ -92,17 +92,17 @@ void ammocrate_update(char *moby) {
             pickup_private_state[1] != -1 && target->state != pickup_private_state[1]) {
             goto frame_tail;
         }
-        moby[0x20] = 3;
+        MOBY(moby)->state = 3;
         break;
     }
     case SHIP_PICKUP_WAIT_FOR_ACTIVATION_TIMER:
         if (pickup_private_state[2] == -1 || fast_dec_timer(pickup_private_state + 4)) {
-            moby[0x20] = 4;
+            MOBY(moby)->state = 4;
         }
-        if ((unsigned char)moby[0x20] != 4)
+        if ((unsigned char)MOBY(moby)->state != 4)
             goto frame_tail;
         MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
-        moby[0x31] = 1;
+        MOBY(moby)->visible = 1;
         MOBY(moby)->flags &= 0xfffe;
         activated_size = *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
         MOBY(moby)->scale = activated_size * 0.1f;
@@ -133,7 +133,7 @@ void ammocrate_update(char *moby) {
             MOBY(hero_moby)->state != 0xfd) {
             short moby_class = MOBY(hero_moby)->oclass;
             if (moby_class == 0x4da || moby_class == 0x45 || moby_class == 0x563)
-                distance = fast_vec_dist((void *)&MOBY(hero_moby)->pos, moby + 0x10);
+                distance = fast_vec_dist((void *)&MOBY(hero_moby)->pos, &MOBY(moby)->pos);
         }
         if (hit || distance < 4.0f) {
             moby_class = MOBY(moby)->oclass;
@@ -161,13 +161,13 @@ void ammocrate_update(char *moby) {
             if (hero.ship_hp_max < hero.ship_hp)
                 hero.ship_hp = hero.ship_hp_max;
         collected:
-            moby[0x20] = 5;
+            MOBY(moby)->state = 5;
             break;
         } else if (distance < 40.0f && (MOBY(moby)->visible) != 0) {
             float step = 0.8f / square_root(distance);
-            fast_vec_sub(direction, (void *)&MOBY(hero_moby)->pos, moby + 0x10);
+            fast_vec_sub(direction, (void *)&MOBY(hero_moby)->pos, &MOBY(moby)->pos);
             fast_vec_normalize(direction, direction, step);
-            fast_vec_add(moby + 0x10, moby + 0x10, direction);
+            fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
         }
         goto frame_tail;
     case SHIP_PICKUP_COLLECTED_SHRINKING: {
@@ -176,7 +176,7 @@ void ammocrate_update(char *moby) {
         MOBY(moby)->scale +=
             (*(float *)(((char *)MOBY(moby)->pclass) + 0x24) * 0.01f - MOBY(moby)->scale) * 0.3f;
         if (MOBY(moby)->scale < *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * 0.05f)
-            moby[0x20] = 6;
+            MOBY(moby)->state = 6;
         break;
     }
     case SHIP_PICKUP_REMOVE_OR_RESET:
@@ -185,11 +185,11 @@ void ammocrate_update(char *moby) {
             return;
         }
         MOBY(moby)->collision = 0;
-        moby[0x31] = 0;
+        MOBY(moby)->visible = 0;
         MOBY(moby)->flags |= 1;
         MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * 0.1f;
         pickup_private_state[4] = pickup_private_state[2];
-        moby[0x20] = 1;
+        MOBY(moby)->state = 1;
         break;
     }
 frame_tail:

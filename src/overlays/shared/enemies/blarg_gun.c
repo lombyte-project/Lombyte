@@ -28,11 +28,11 @@ void blarg_gun_update(char *moby) {
     int   joint_index;
     float fade_decrement;
 
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)MOBY(moby)->state) {
     case BLARG_GUN_STATE_INITIALIZE:
         if (((unsigned short)MOBY(moby)->draw_dist) & 1)
             MOBY(moby)->flags |= 0x8000;
-        moby[0x20] = 2;
+        MOBY(moby)->state = 2;
         break;
     case BLARG_GUN_STATE_MOVING:
         joint_index = *(int *)(launch_motion_vars + 4);
@@ -66,7 +66,7 @@ void blarg_gun_update(char *moby) {
                 rotation_workspace + 0x50, launch_motion_vars + 0x10, moby + 0xC0);
             fast_vec_sub(
                 rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
-            fast_vec_add(rotation_workspace + 0x50, rotation_workspace + 0x50, moby + 0x10);
+            fast_vec_add(rotation_workspace + 0x50, rotation_workspace + 0x50, &MOBY(moby)->pos);
         }
 
         if (coll_sphere(convert_integer_to_float(*(int *)(launch_motion_vars + 0xC)) *
@@ -95,8 +95,8 @@ void blarg_gun_update(char *moby) {
         }
         *(float *)(launch_motion_vars + 0x38) =
             *(float *)(launch_motion_vars + 0x38) - frame_time_sq * 10.8f;
-        fast_vec_add(moby + 0x10, moby + 0x10, launch_motion_vars + 0x30);
-        fast_vec_add(moby + 0x10, moby + 0x10, rotation_workspace + 0x60);
+        fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, launch_motion_vars + 0x30);
+        fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, rotation_workspace + 0x60);
         if (MOBY(moby)->pos.z < 5.0f)
             mark_moby_for_removal(moby);
         break;

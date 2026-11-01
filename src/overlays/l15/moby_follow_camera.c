@@ -1,15 +1,16 @@
 /* Level 15 moby follow camera type: region and angle checks, update and dispatch. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/math_consts.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/camera/follow_cam.h"
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
+#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/camera/set_nonzero_follow_camera_parameters.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern char *D_L15_001600EC;
-
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 extern char D_0013E533[];
 
@@ -130,12 +131,8 @@ extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
 
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
 
-extern void set_nonzero_follow_camera_parameters(float, float, float) __asm__("FUN_L02_002f6598");
-
 extern void
 set_follow_camera_angle_blend_from_position(void *, float, float) __asm__("FUN_L00_002e8970");
-
-extern void FUN_L00_002e8620(void);
 
 void update_moby_follow_camera(char *moby) __asm__("FUN_L15_002f88e8");
 

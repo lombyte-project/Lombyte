@@ -1,7 +1,7 @@
 /* Shared moby class helipack. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 

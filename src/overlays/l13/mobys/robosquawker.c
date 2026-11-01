@@ -24,7 +24,7 @@
 #ifndef MACRO_ADDR
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"

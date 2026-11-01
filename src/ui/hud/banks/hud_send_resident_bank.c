@@ -1,9 +1,8 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/ui/hud/hud_state.h"
-
-extern void link_hud_bank(s32 bank, s32 base) __asm__("FUN_001fefc0");
-extern void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immediate) __asm__("FUN_00200b10");
+#include "rnc/ui/hud/banks/hud_send_texture.h"
+#include "rnc/ui/hud/banks/link_hud_bank.h"
 
 void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) __asm__("FUN_001ff128");
 

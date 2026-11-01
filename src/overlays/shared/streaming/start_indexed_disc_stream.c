@@ -4,8 +4,8 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/shared/cutscenes/update_cutscene_playback.h"
 
-void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 void hero_respawn() __asm__("FUN_L00_00211250");
 /* Picks a disc table entry pair by D_0015ED80 and passes it with the language to FUN_L00_002995d0. */
 void start_indexed_disc_stream(s32 i) __asm__("FUN_L02_00298c68");

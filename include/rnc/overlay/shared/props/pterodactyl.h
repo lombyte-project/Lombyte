@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_PTERODACTYL_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_PTERODACTYL_H
+
+#include "types.h"
+
+void pterodactyl_update(unsigned char *) __asm__("FUN_L00_002e3a88");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_PTERODACTYL_H */

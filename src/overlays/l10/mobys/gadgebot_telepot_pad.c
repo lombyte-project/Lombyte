@@ -14,6 +14,8 @@
 #include "rnc/overlay/l10/mobys/gadgebot_telepot_pad_globals.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/shared/camera/follow_camera_set_distance.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
@@ -32,22 +34,19 @@ extern int          gadgebot_telepot_camera_effect_duration_frames_gp __asm__("D
     __attribute__((sda));
 extern int gadgebot_telepot_camera_spring_decay_frames_gp __asm__("D_L10_001618A4")
     __attribute__((sda));
-extern int   FUN_L00_00257b90(int, int);
 extern int   tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32   func_001FA6E0(s32, s32, f32);
 extern void *spawn_moving_resizing_height_snapped_alpha_fade_particle(
     void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void *FUN_L00_00272060(void *, int, float, float, int, int, int, void *, float);
 extern void  add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void  set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
-extern void  set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 
 #define func_001F9850_2BFBB8     ((int (*)(int))scale_game_frames)
 #define func_001F9D48_2BFBB8     ((float (*)(void *, void *))vector_distance_xy_alt)
 #define func_002140F8_2BFBB8     ((float (*)(float, float))random_float_between)
 #define func_00214158_2BFBB8     ((float (*)(void))random_angle_radians)
 #define func_002140B0_2BFBB8     ((int (*)(int))random_integer_below)
-#define func_L00_00258BC8_2BFBB8 ((int (*)(int, int))FUN_L00_00257b90)
+#define func_L00_00258BC8_2BFBB8 ((int (*)(int, int))random_int_between)
 #define func_001F9F90_2BFBB8     ((float (*)(float))fast_cos)
 #define func_001F9FA8_2BFBB8     ((float (*)(float))fast_sin)
 #define func_L00_001FF4B0_2BFBB8 ((void (*)(void *, void *, float))fast_vec_normalize)

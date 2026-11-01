@@ -1,6 +1,6 @@
 /* Level 08 moby class 0x1b3: rocket. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
@@ -14,7 +14,7 @@
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 #include "qcopy.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 extern int  FUN_L08_002025d0(void *, int, int, void *, int);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
@@ -545,16 +545,26 @@ struct Moby *spawn_rocket(void        *pos,
                           float        pitch,
                           float        yaw) __asm__("FUN_L08_002de3e0");
 
+typedef struct RocketVars {
+    u8           pad_0[0x20];
+    u8           unk20;
+    u8           pad_21[0x1F];
+    f32          unk40;
+    f32          unk44;
+    f32          unk48;
+    struct Moby *unk4C;
+} RocketVars;
+
 struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
     struct Moby *moby = create_moby(0x1B3);
-    char        *projectile_vars;
+    RocketVars  *projectile_vars;
     float       *reference;
     float        distance;
     float        scale;
     struct Moby *target_copy = target;
     void        *velocity_copy = velocity;
     if (moby != 0) {
-        projectile_vars = (char *)moby->pvars;
+        projectile_vars = (RocketVars *)moby->pvars;
         qcopy(&moby->pos, pos);
         reference = D_L08_001675C0;
         distance = vector_distance_xy(reference, &moby->pos);
@@ -570,26 +580,26 @@ struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float 
         moby->draw_dist = 0xFF;
         moby->scale = scale;
         set_moby_color(moby, rocket_color_red_gp, rocket_color_green_gp, rocket_color_blue_gp);
-        *(float *)(projectile_vars + 0x40) = pitch;
-        *(float *)(projectile_vars + 0x48) = 70.0f;
-        *(float *)(projectile_vars + 0x44) = yaw;
-        *(struct Moby **)(projectile_vars + 0x4C) = target_copy;
-        qcopy(projectile_vars + 0x20, velocity_copy);
+        projectile_vars->unk40 = pitch;
+        projectile_vars->unk48 = 70.0f;
+        projectile_vars->unk44 = yaw;
+        projectile_vars->unk4C = target_copy;
+        qcopy(&projectile_vars->unk20, velocity_copy);
         update_entity(moby);
     }
     return moby;
 }
 
 void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spawn_count, int flag) {
-    float spawn_position[4];
-    float local_rotation_offset[4];
-    float launch_velocity[4];
-    char *rocket_vars = ((char *)MOBY(moby)->pvars);
-    int   i;
+    float       spawn_position[4];
+    float       local_rotation_offset[4];
+    float       launch_velocity[4];
+    RocketVars *rocket_vars = (RocketVars *)MOBY(moby)->pvars;
+    int         i;
 
     if (flag) {
         spawn_explosion(moby,
-                        rocket_vars + 0x20,
+                        &rocket_vars->unk20,
                         moby + 0x10,
                         0.0f,
                         0.0f,
@@ -608,7 +618,7 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
                         0);
     } else {
         spawn_explosion(moby,
-                        rocket_vars + 0x20,
+                        &rocket_vars->unk20,
                         moby + 0x10,
                         0.0f,
                         0.0f,

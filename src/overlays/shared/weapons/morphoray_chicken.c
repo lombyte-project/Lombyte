@@ -4,7 +4,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
@@ -51,9 +51,9 @@ typedef struct {
 
 typedef struct {
     V4  v;
-    f32 t1;
-    f32 t2;
-    f32 t3;
+    f32 yaw_local_x;
+    f32 yaw_local_y;
+    f32 yaw_local_z;
 } Loc;
 
 typedef struct {
@@ -272,15 +272,16 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
             qcopy(&loc.v, (u8 *)&D_L00_00173E40 + 0x40);
             yaw_cosine_scratch = fast_cos(spawned_moby->rot.z);
             sn = fast_sin(spawned_moby->rot.z);
-            loc.t1 = loc.v.f[0] * yaw_cosine_scratch + loc.v.f[1] * sn;
+            loc.yaw_local_x = loc.v.f[0] * yaw_cosine_scratch + loc.v.f[1] * sn;
             yaw_cosine_scratch = fast_cos(spawned_moby->rot.z);
             sn = fast_sin(spawned_moby->rot.z);
-            loc.t2 = loc.v.f[1] * yaw_cosine_scratch - loc.v.f[0] * sn;
-            loc.t3 = loc.v.f[2];
-            ground_height_pitch_and_variant_scratch =
-                fast_arc_tan(square_root(loc.t1 * loc.t1 + loc.t3 * loc.t3), loc.t2);
+            loc.yaw_local_y = loc.v.f[1] * yaw_cosine_scratch - loc.v.f[0] * sn;
+            loc.yaw_local_z = loc.v.f[2];
+            ground_height_pitch_and_variant_scratch = fast_arc_tan(
+                square_root(loc.yaw_local_x * loc.yaw_local_x + loc.yaw_local_z * loc.yaw_local_z),
+                loc.yaw_local_y);
             spawned_moby->rot.x = -ground_height_pitch_and_variant_scratch;
-            spawned_moby->rot.y = fast_arc_tan(loc.t3, loc.t1);
+            spawned_moby->rot.y = fast_arc_tan(loc.yaw_local_z, loc.yaw_local_x);
         }
         spawned_moby->collision = ((Part *)spawned_moby->pclass)->unk10;
         allocate_voice_for_target_entry(1, 0, spawned_moby);
@@ -882,20 +883,20 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
     if (spawned_moby) {
         unsigned char *moby_vars;
         int            lifetime_lower_bound, lifetime_upper_bound;
-        spawned_moby[0x30] = 0x40;
-        *(unsigned short *)(spawned_moby + 0x34) |= 0x1000;
-        *(short *)(spawned_moby + 0x32) = 0x20;
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->update_dist = 0x40;
+        MOBY(spawned_moby)->flags |= 0x1000;
+        MOBY(spawned_moby)->draw_dist = 0x20;
+        MOBY(spawned_moby)->visible = 1;
         moby_vars = *(unsigned char **)(spawned_moby + 0x78);
-        spawned_moby[0x20] = 0;
-        spawned_moby[0xBC] = 0;
-        qcopy(spawned_moby + 0x10, spawn_position);
-        *(float *)(spawned_moby + 0x18) += random_float_between(0.2f, 0.7f);
-        *(float *)(spawned_moby + 0x10) += initial_velocity[0] * 3.0f;
-        *(float *)(spawned_moby + 0x14) += initial_velocity[1] * 3.0f;
+        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->command = 0;
+        qcopy(&MOBY(spawned_moby)->pos, spawn_position);
+        MOBY(spawned_moby)->pos.z += random_float_between(0.2f, 0.7f);
+        MOBY(spawned_moby)->pos.x += initial_velocity[0] * 3.0f;
+        MOBY(spawned_moby)->pos.y += initial_velocity[1] * 3.0f;
         qcopy(moby_vars, initial_velocity);
-        *(float *)(spawned_moby + 0x44) = randf_sym(0.17453292f, 0.5235988f);
-        *(float *)(spawned_moby + 0x40) = random_float_between(0.17453292f, 0.7853982f);
+        MOBY(spawned_moby)->rot.y = randf_sym(0.17453292f, 0.5235988f);
+        MOBY(spawned_moby)->rot.x = random_float_between(0.17453292f, 0.7853982f);
         {
             float x_rotation_step =
                 random_float_between(200.0f, 370.0f) * DEG_TO_RAD * D_0015ED6C_lui;
@@ -904,9 +905,9 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
         }
         if (FUN_001160d8_2cbf68() & 1) {
             *(int *)(moby_vars + 0x24) = 1;
-            *(float *)(spawned_moby + 0x44) = -*(float *)(spawned_moby + 0x44);
+            MOBY(spawned_moby)->rot.y = -MOBY(spawned_moby)->rot.y;
         }
-        *(float *)(spawned_moby + 0x48) = random_angle_radians();
+        MOBY(spawned_moby)->rot.z = random_angle_radians();
         *(float *)(moby_vars + 0x28) =
             -(random_float_between(200.0f, 550.0f) * DEG_TO_RAD * D_0015ED6C_lui);
         *(float *)(moby_vars + 0x10) = random_angle_radians();
@@ -921,10 +922,10 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
             scale_game_frames(random_int_between(lifetime_lower_bound, lifetime_upper_bound));
         {
             float k = feather_scale_multiplier_gp;
-            *(float *)(spawned_moby + 0x2C) *= k;
+            MOBY(spawned_moby)->scale *= k;
         }
         if (D_0013E535_lui)
-            *(float *)(spawned_moby + 0x2C) *= 2.0f;
+            MOBY(spawned_moby)->scale *= 2.0f;
         *(float *)(moby_vars + 0x20) = random_float_between(-1.2f, -0.4f) * D_0015ED6C_lui;
         update_entity(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);

@@ -5,7 +5,7 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 
 #include "rnc/mobys/moby.h"
 

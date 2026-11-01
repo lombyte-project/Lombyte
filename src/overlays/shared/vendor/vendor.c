@@ -12,9 +12,10 @@
 #include "rnc/overlay/shared/vendor/vendor_menu.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "qcopy.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/overlay/shared/vendor/vendor_data/vendor_update.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/rendering/effect_texture.h"
 
 typedef unsigned int Q_2A62D0 __attribute__((mode(TI), aligned(16)));
 
@@ -92,7 +93,6 @@ extern float l00_vendor_sparkle_local_vertices[][4] __asm__("D_L00_001D7360");
 extern float l00_vendor_sparkle_base_uvs[][2] __asm__("D_L00_001D73F0");
 extern int   vendor_sparkle_colors[] __asm__("D_L00_001D7438") NOT_SDA;
 extern int   vendor_sparkle_quad_corners[][4] __asm__("D_L00_001D7460");
-extern s64   get_effect_texture(s32) __asm__("FUN_001f44b8");
 float        vendor_sparkle_uv_scroll __asm__("D_L00_00161394") = 0;
 float        vendor_glow_phase __asm__("D_L00_00161398") = 0;
 void        draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");

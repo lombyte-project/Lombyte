@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
+#include "rnc/ui/text/font/font_print.h"
 
 typedef struct TextRegion FontWindow;
 
@@ -17,7 +18,6 @@ struct Glyph {
 
 extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
 extern s32  measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
-extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("FUN_001f62b0");
 extern void process_bgm_display_text_event(
     s32, u8 *, s32, s64, struct Glyph *, f32, f32, f32) __asm__("func_001F6638");
 

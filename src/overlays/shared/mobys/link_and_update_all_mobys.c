@@ -5,7 +5,7 @@
 #include "rnc/mobys/moby.h"
 #include "moby_update.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 
 extern struct Moby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern void        *active_mobies[] __asm__("D_L00_001ABA00");

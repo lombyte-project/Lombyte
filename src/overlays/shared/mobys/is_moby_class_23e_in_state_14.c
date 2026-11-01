@@ -20,5 +20,5 @@ int is_moby_class_23e_in_state_14(char *moby) {
 void set_moby_state_14(unsigned char *moby) __asm__("FUN_L03_002c6c90");
 
 void set_moby_state_14(unsigned char *moby) {
-    moby[0x20] = 14;
+    MOBY(moby)->state = 14;
 }

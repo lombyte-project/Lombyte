@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SANDMOUSE_HOUSE_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SANDMOUSE_HOUSE_H
+
+#include "types.h"
+
+void sandmouse_house_update(unsigned char *) __asm__("FUN_L01_002f2b68");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_SANDMOUSE_HOUSE_H */

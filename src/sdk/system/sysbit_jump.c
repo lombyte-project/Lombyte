@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/system/sysbit_flush.h"
 
 typedef struct SysbitState {
     s64 bits;
@@ -11,8 +12,6 @@ typedef struct SysbitState {
     u32 limit;
     u32 wrap_base;
 } SysbitState;
-
-extern void _sysbitFlush(SysbitState *ctx, s32 amount);
 
 void _sysbitJump(SysbitState *ctx, s32 bits) {
     s64 total;

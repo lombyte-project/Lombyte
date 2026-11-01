@@ -1,13 +1,13 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
+#include "rnc/mobys/init_moby_class_dists.h"
+#include "rnc/rendering/mobys/draw_mobys_clean_up.h"
+#include "rnc/sdk/debug/debug_print.h"
 
 extern u8   vu_chain_overflow_message[] __asm__("D_001E8400");
 extern s32  D_0018A2D8[];
-extern s32  DebugPrint();
-extern s32  init_moby_class_dists() __asm__("FUN_0020d1f0");
 extern void draw_mobys_setup() __asm__("func_0020D278");
-extern s32  draw_mobys_clean_up() __asm__("FUN_0020d3b0");
 extern s32  moby_proc() __asm__("func_00211808");
 void        draw_mobys(void) __asm__("FUN_0020d460");
 

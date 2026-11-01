@@ -13,7 +13,8 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* pvars of the debris moby spawn_debris_chunk spawns */
 typedef struct {
@@ -30,7 +31,6 @@ typedef struct {
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
-extern s32 FUN_L00_00257b90(s32, s32);
 
 extern f32          D_0015ED6C_2f8530 __asm__("D_0015ED6C");
 extern CollisionHit collision_hit __asm__("D_L01_001742C0");
@@ -184,7 +184,7 @@ void rock_update(struct Moby *debris_moby) {
                                                      0x1F0C1820,
                                                      0x81020,
                                                      random_float_between(70000.0f, 140000.0f),
-                                                     scale_game_frames(FUN_L00_00257b90(20, 60)));
+                                                     scale_game_frames(random_int_between(20, 60)));
         }
         mark_moby_for_removal(debris_moby);
     } else if (fast_dec_timer(&debris_vars->unk10) != 0) {

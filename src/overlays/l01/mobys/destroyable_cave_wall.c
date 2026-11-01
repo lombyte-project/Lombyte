@@ -10,15 +10,15 @@
 
 #include "rnc/math/vector.h"
 #include "rnc/overlay/l01/mobys/debris_class_choices.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern s32  FUN_0022da68(s32, s32, void *);
-extern int  FUN_L00_00257b90(int lo, int hi);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern struct Moby *
 spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 
-#include "rnc/overlay/level_save_state.h"
+#include "rnc/overlay/shared/game/level_save_state.h"
 
 DebrisClassChoices l01_cave_wall_debris_oclass_choices __asm__("D_L01_00161C70") = {
     {0x2b8, 0x2b9, 0x2ba}
@@ -74,7 +74,7 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
                     0x5F787878,
                     0x181818,
                     offset_component_or_smoke_scale,
-                    scale_game_frames(FUN_L00_00257b90(120, 240)));
+                    scale_game_frames(random_int_between(120, 240)));
             }
         }
         for (j = 0; j < 100; j++) {
@@ -104,7 +104,7 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
                                &vel,
                                oclass_choices.oclass[random_integer_below(3)],
                                random_float_between(0.05f, 0.15f),
-                               FUN_L00_00257b90(60, 180),
+                               random_int_between(60, 180),
                                1.0f,
                                1.0f,
                                0.75f,

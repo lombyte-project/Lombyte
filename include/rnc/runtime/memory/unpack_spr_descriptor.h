@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RUNTIME_MEMORY_UNPACK_SPR_DESCRIPTOR_H
+#define LOMBYTE_RNC_RUNTIME_MEMORY_UNPACK_SPR_DESCRIPTOR_H
+
+#include "types.h"
+
+void unpack_spr_descriptor(void *) __asm__("FUN_001238a0");
+
+#endif /* LOMBYTE_RNC_RUNTIME_MEMORY_UNPACK_SPR_DESCRIPTOR_H */

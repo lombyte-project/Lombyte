@@ -11,6 +11,15 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/props/grindrail_barrier_data/draw_grindrail_barrier_effect.h"
 
+typedef struct GrindrailBarrierVars {
+    u8  pad0[0x8];
+    f32 unk8;
+    f32 unkC;
+    u8  unk10[0x10];
+    s32 unk20;
+    s32 unk24;
+} GrindrailBarrierVars;
+
 typedef struct {
     float         position[4][4];
     int           color[4];
@@ -71,28 +80,27 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED = 1,
         GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED = 2
     };
-    char  *barrier_data = (char *)barrier_moby->pvars;
-    float  cycle;
-    int    i;
-    float *cardinal_angles;
+    GrindrailBarrierVars *barrier_data = (GrindrailBarrierVars *)barrier_moby->pvars;
+    float                 cycle;
+    int                   i;
+    float                *cardinal_angles;
     switch (barrier_moby->state) {
     case GRINDRAIL_BARRIER_STATE_INITIALIZE:
         barrier_moby->state = 1;
         barrier_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED:
-        cycle = *(float *)(barrier_data + 0xC) +
-                *(float *)&grindrail_barrier_ring_phase_speed * frame_time;
-        *(float *)(barrier_data + 0xC) = cycle;
+        cycle = barrier_data->unkC + *(float *)&grindrail_barrier_ring_phase_speed * frame_time;
+        barrier_data->unkC = cycle;
         if (cycle > 1.0f)
-            *(float *)(barrier_data + 0xC) = cycle - 1.0f;
-        if (voice_is_playing(barrier_moby, *(int *)(barrier_data + 0x24)) == 0) {
-            *(int *)(barrier_data + 0x24) = allocate_voice_for_target_entry(0, 4, barrier_moby);
+            barrier_data->unkC = cycle - 1.0f;
+        if (voice_is_playing(barrier_moby, barrier_data->unk24) == 0) {
+            barrier_data->unk24 = allocate_voice_for_target_entry(0, 4, barrier_moby);
         }
-        *(float *)(barrier_data + 8) = fast_add_rotations(
-            *(float *)(barrier_data + 8),
-            *(float *)&grindrail_barrier_ring_rotation_speed * DEG_TO_RAD * frame_time);
-        cardinal_angles = (float *)(barrier_data + 0x10);
+        barrier_data->unk8 = fast_add_rotations(barrier_data->unk8,
+                                                *(float *)&grindrail_barrier_ring_rotation_speed *
+                                                    DEG_TO_RAD * frame_time);
+        cardinal_angles = (float *)(&barrier_data->unk10);
         for (i = 0; i < 4; i++) {
             cardinal_angles[i] = fast_add_rotations(
                 cardinal_angles[i],
@@ -100,15 +108,15 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         }
         if (barrier_moby->visible)
             add_draw_callback(FUN_L16_002e58d8_u, barrier_moby);
-        if (*(int *)(barrier_data + 0x20) != -1 &&
-            check_grindrail_barrier_release_condition(*(int *)(barrier_data + 0x20))) {
+        if (barrier_data->unk20 != -1 &&
+            check_grindrail_barrier_release_condition(barrier_data->unk20)) {
             barrier_moby->collision = 0;
             barrier_moby->state = 2;
-            group_trigger_nearest(*(int *)(barrier_data + 0x20));
+            group_trigger_nearest(barrier_data->unk20);
         }
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED:
-        if (!check_grindrail_barrier_release_condition(*(int *)(barrier_data + 0x20))) {
+        if (!check_grindrail_barrier_release_condition(barrier_data->unk20)) {
             barrier_moby->state = 1;
             barrier_moby->collision = barrier_moby->pclass->collision;
         }
@@ -133,7 +141,7 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
     float  phase, angle_step, phase_step;
     int    i;
     qcopy(rotation, barrier_moby + 0x40);
-    qcopy(transform[3], barrier_moby + 0x10);
+    qcopy(transform[3], &MOBY(barrier_moby)->pos);
     quad.texture = get_effect_texture(*(int *)&grindrail_barrier_ring_texture_id);
     u = &quad.uv[0][0];
     v = &quad.uv[0][1];
@@ -236,7 +244,8 @@ void group_trigger_nearest(int moby_list_index) {
             char *candidate_moby =
                 D_L16_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8);
             if (MOBY(candidate_moby)->oclass != 0x5A3) {
-                float candidate_distance = fast_vec_dist(D_0013E533 + 0xE9D, candidate_moby + 0x10);
+                float candidate_distance =
+                    fast_vec_dist(D_0013E533 + 0xE9D, &MOBY(candidate_moby)->pos);
                 if (candidate_distance < bestd) {
                     bestd = candidate_distance;
                     best = candidate_moby;

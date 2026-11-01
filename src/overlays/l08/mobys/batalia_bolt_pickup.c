@@ -129,7 +129,7 @@ queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("F
 extern s32            level_bolts[] __asm__("D_0013DF38");
 extern unsigned char *FUN_L00_002603d0(int);
 extern unsigned char *FUN_L00_00272060(
-    float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
+    float *pos, int a, float x, float y, int col, int mode, int b, float *vel, float z);
 extern unsigned char D_0014BEC0[][4];
 extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") MACRO_ADDR;
 extern void          FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");

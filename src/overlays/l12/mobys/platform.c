@@ -1,6 +1,6 @@
 /* Level 12 moby class platform: the Hoven flying platform, its exhaust, steering and tilt. */
 #include "types.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -9,25 +9,24 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/level_path.h"
+#include "rnc/overlay/shared/world/level_path.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
 extern int          scale_game_frames(int);
 typedef struct Moby Moby;
 extern float        D_0015ED6C;
 extern float        D_0015ED70;
-int                 FUN_L00_00257b90(int lo, int hi);
 
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 
-extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 /* Hoven engine exhaust: emits a flame and a smoke puff from each of the moby's two nozzles (the second one
  * mirrored across its local Y axis), with random jitter. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E4C58), where it is exact; names translated to the US level program. */
 
-extern char *
-spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
 float D_L12_00161920[4] __attribute__((section(".sdata"))) = {-1.5f, 0.8f, -0.5f, 0.0f};
@@ -59,13 +58,13 @@ void emit_platform_exhaust_effects(struct Moby *moby) {
     transform_vector_by_basis(
         mirrored_emission_position, mirrored_emission_position, &moby->rot_row0);
     fast_vec_add(mirrored_emission_position, mirrored_emission_position, &moby->pos);
-    spawn_burst(emission_position,
-                emission_direction,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)),
-                1,
-                10000.0f);
+    FUN_L00_0026cbb0(emission_position,
+                     emission_direction,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     random_int_between(scale_game_frames(8), scale_game_frames(0x11)),
+                     1,
+                     10000.0f);
     func_L00_0026DEA0_x(emission_position,
                         0.05f,
                         1.01f,
@@ -74,13 +73,13 @@ void emit_platform_exhaust_effects(struct Moby *moby) {
                         secondary_emission_direction,
                         30000.0f,
                         0x404040);
-    spawn_burst(mirrored_emission_position,
-                emission_direction,
-                0x4F007FFF,
-                0x1FFFFFFF,
-                FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)),
-                1,
-                10000.0f);
+    FUN_L00_0026cbb0(mirrored_emission_position,
+                     emission_direction,
+                     0x4F007FFF,
+                     0x1FFFFFFF,
+                     random_int_between(scale_game_frames(8), scale_game_frames(0x11)),
+                     1,
+                     10000.0f);
     func_L00_0026DEA0_x(mirrored_emission_position,
                         0.05f,
                         1.01f,
@@ -108,33 +107,43 @@ void  steer_platform_toward_target(char  *moby,
                                    int    unused,
                                    int    brake) __asm__("FUN_L12_002e3c08");
 
+typedef struct PlatformVars {
+    u8  pad_0[0x40];
+    f32 unk40[4];
+    u8  pad_50[0x80];
+    f32 unkD0;
+    f32 unkD4;
+    u8  pad_D8[0x20];
+    f32 unkF8;
+} PlatformVars;
+
 void steer_platform_toward_target(
 
     char *moby, float *target_angles, void *target, int unused, int brake) {
-    char *moby_vars = ((char *)MOBY(moby)->pvars);
-    float target_offset[4];
-    float target_distance;
-    float speed;
-    float acc;
-    float yaw_angular_velocity_limit = 1.9198622f;
+    PlatformVars *moby_vars = (PlatformVars *)MOBY(moby)->pvars;
+    float         target_offset[4];
+    float         target_distance;
+    float         speed;
+    float         acc;
+    float         yaw_angular_velocity_limit = 1.9198622f;
     fast_vec_sub(target_offset, target, moby + 0x10);
     target_distance = fast_vec_length(target_offset);
-    speed = fast_vec_length(moby_vars + 0x40);
+    speed = fast_vec_length(moby_vars->unk40);
     if (brake) {
         if (speed == 0.0f)
             speed = D_0015ED6C_k * 0.01f;
-        acc = *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
+        acc = moby_vars->unkD4 * D_0015ED70_k;
         if (acc < speed * speed / (target_distance + target_distance))
             speed -= acc;
-        else if (speed < *(float *)(moby_vars + 0xD0) * D_0015ED6C_k)
+        else if (speed < moby_vars->unkD0 * D_0015ED6C_k)
             speed += acc;
     } else {
-        if (speed < *(float *)(moby_vars + 0xD0) * D_0015ED6C_k)
-            speed += *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
-        else if (*(float *)(moby_vars + 0xD0) * D_0015ED6C_k < speed)
-            speed -= *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
+        if (speed < moby_vars->unkD0 * D_0015ED6C_k)
+            speed += moby_vars->unkD4 * D_0015ED70_k;
+        else if (moby_vars->unkD0 * D_0015ED6C_k < speed)
+            speed -= moby_vars->unkD4 * D_0015ED70_k;
     }
-    fast_vec_normalize(moby_vars + 0x40, target_offset, speed);
+    fast_vec_normalize(moby_vars->unk40, target_offset, speed);
     appr_k(moby + 0x40,
            target_angles[0],
            fast_difference_between_rotations(target_angles[0], MOBY(moby)->rot.x) /
@@ -145,12 +154,12 @@ void steer_platform_toward_target(
                platform_tilt_approach_divisor_gp);
     spring_angle((float *)&MOBY(moby)->rot.z,
                  target_angles[2],
-                 (float *)(moby_vars + 0xF8),
+                 &moby_vars->unkF8,
                  0,
                  D_0015ED64_k * 0.005f,
                  D_0015ED64_k * 0.3f,
                  D_0015ED6C_k * yaw_angular_velocity_limit);
-    fast_vec_add(moby + 0x10, moby + 0x10, moby_vars + 0x40);
+    fast_vec_add(moby + 0x10, moby + 0x10, moby_vars->unk40);
 }
 /* Projects a moby's offset from a reference point into a 2D pair, or zeroes it. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E5138), where it is exact; names translated to the US level program. */
@@ -255,7 +264,7 @@ extern void func_L12_002E4F18_2E51E8(void *, void *, void *, int, int) __asm__("
 
 void platform_update(Moby *moby) __asm__("FUN_L12_002e3ed8");
 
-/* Moby class 240 */
+/* Moby classes 240, 664 */
 void platform_update(Moby *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,

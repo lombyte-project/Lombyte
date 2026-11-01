@@ -11,17 +11,16 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/l14/mobys/wind_control_globals.h"
-#include "rnc/overlay/level_camera.h"
+#include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/mobys/moby_spawn.h"
 
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
-
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 typedef struct {
     s32  clip_push; /* 0x0: clip volume that pushes the hero */
@@ -373,8 +372,6 @@ void draw_wind_sparks(struct Moby *m) {
 }
 
 extern float fast_sin(float);
-
-float absolute_float(float input) __asm__("func_001F99C0");
 
 s32 D_L14_00162238 = 0;
 

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_DECI2_SCE_TTY_WRITE_H
+#define LOMBYTE_RNC_SDK_DECI2_SCE_TTY_WRITE_H
+
+#include "types.h"
+
+s32 sceTtyWrite(s8 *, s32);
+
+#endif /* LOMBYTE_RNC_SDK_DECI2_SCE_TTY_WRITE_H */

@@ -149,6 +149,17 @@ void handle_refueling_station_damage(struct Moby *moby,
     trooper_anim_finish(moby, refueling_station_vars->anim);
 }
 
+typedef struct RefuelingStationVars {
+    u8  pad_0[0x20];
+    u8  unk20;
+    u8  pad_21[0x4F];
+    s32 unk70;
+    s16 timer_74;
+    s16 unk76;
+    s32 unk78;
+    s32 voice;
+} RefuelingStationVars;
+
 /* Moby class 1172 */
 void refueling_station_update(struct Moby *moby) {
     enum {
@@ -157,54 +168,52 @@ void refueling_station_update(struct Moby *moby) {
         REFUELING_STATION_STATE_EXPLOSION_DELAY = 2,
         REFUELING_STATION_STATE_EXPLODE = 3
     };
-    char          *station_vars = (char *)moby->pvars;
-    float          explosion_offset[4];
-    unsigned char *removal_check_base;
-    handle_refueling_station_damage(moby, station_vars, station_vars + 0x20);
+    RefuelingStationVars *station_vars = (RefuelingStationVars *)moby->pvars;
+    float                 explosion_offset[4];
+    unsigned char        *removal_check_base;
+    handle_refueling_station_damage(moby, station_vars, &station_vars->unk20);
     switch (moby->state) {
     case REFUELING_STATION_STATE_INITIALIZE:
-        if (*(short *)(station_vars + 0x76) != -1 &&
-            (removal_check_base =
-                 (unsigned char *)D_0013D388 + *(short *)(station_vars + 0x76))[0x39] != 0) {
+        if (station_vars->unk76 != -1 &&
+            (removal_check_base = (unsigned char *)D_0013D388 + station_vars->unk76)[0x39] != 0) {
             mark_moby_for_removal(moby);
             return;
         }
-        *(int *)(station_vars + 0x7C) = -1;
+        station_vars->voice = -1;
         moby->state = 1;
         break;
     case REFUELING_STATION_STATE_WAIT_COMMAND:
         if ((D_L09_0015F5CC & 7) == (((int)moby >> 8) & 7)) {
-            if (*(int *)(station_vars + 0x7C) == -1 ||
-                (voice_is_playing(moby, *(int *)(station_vars + 0x7C)) == 0 &&
-                 *(int *)(station_vars + 0x7C) == -1)) {
-                *(int *)(station_vars + 0x7C) = allocate_voice_for_target_entry(1, 4, moby);
+            if (station_vars->voice == -1 ||
+                (voice_is_playing(moby, station_vars->voice) == 0 && station_vars->voice == -1)) {
+                station_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
         }
         if (moby->command == 1) {
-            if (*(int *)(station_vars + 0x78) != -1) {
+            if (station_vars->unk78 != -1) {
                 unsigned char *o =
-                    (unsigned char *)((char *)moby_list + (*(int *)(station_vars + 0x78) << 8));
+                    (unsigned char *)((char *)moby_list + (station_vars->unk78 << 8));
                 if (o[0x20] == 1)
                     o[0xBC] = o[0x20];
             }
-            *(short *)(station_vars + 0x74) = scale_game_frames(0xA);
-            if (*(int *)(station_vars + 0x7C) != -1) {
-                char *voice_entry = (char *)&voice_pool + *(int *)(station_vars + 0x7C) * 0x70;
+            station_vars->timer_74 = scale_game_frames(0xA);
+            if (station_vars->voice != -1) {
+                char *voice_entry = (char *)&voice_pool + station_vars->voice * 0x70;
                 if (*(char **)(voice_entry + 0x88) == moby &&
                     ((unsigned char *)voice_entry)[0x74] != 0) {
-                    release_voice_slot(*(int *)(station_vars + 0x7C));
+                    release_voice_slot(station_vars->voice);
                 }
             }
-            *(int *)(station_vars + 0x7C) = -1;
+            station_vars->voice = -1;
             moby->update_dist = 0xFF;
             moby->state = 2;
         }
         break;
     case REFUELING_STATION_STATE_EXPLOSION_DELAY:
-        if (fast_dec_timer_s16(station_vars + 0x74)) {
-            if (*(int *)(station_vars + 0x70) != -1) {
+        if (fast_dec_timer_s16(&station_vars->timer_74)) {
+            if (station_vars->unk70 != -1) {
                 unsigned char *o =
-                    (unsigned char *)((char *)moby_list + (*(int *)(station_vars + 0x70) << 8));
+                    (unsigned char *)((char *)moby_list + (station_vars->unk70 << 8));
                 if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD &&
                     (*(short *)(o + 0xA6) == 0x494 || *(short *)(o + 0xA6) == 0x49D ||
                      *(short *)(o + 0xA6) == 0x4A0)) {

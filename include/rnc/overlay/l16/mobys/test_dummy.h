@@ -7,4 +7,6 @@
 // For each listed moby of class 0x21D: sets its state bytes and clears bit 0 of its flags.
 void activate_test_dummy_group(int moby_group_index) __asm__("FUN_L16_002ceca8");
 
+void test_dummy_update(unsigned char *) __asm__("FUN_L16_002cddb8");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_H */

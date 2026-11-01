@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/rendering/vu1_registers.h"
 
 extern void  setup_gif_paging(int) __asm__("func_001F4280");
@@ -10,14 +11,12 @@ extern void *get_help_message_text(int) __asm__("func_001FDD10");
 extern char  fallback_prompt_text[] __asm__("D_001602E8");
 extern void
 font_print_window_small(struct TextRegion *, long, char *, int) __asm__("func_001F75F0");
-/* Draws the two-line prompt box (text 0x4FB3 for menu_system.unkD4 in 0..2,
-   0x4FB5 for 3, else D_001602E8) sized from arg0's +0x20/+0x24. The box
-   is an aggregate initializer: this compiler clears it with a memset
+/* The box is an aggregate initializer: this compiler clears it with a memset
    libcall, fills a temporary and copies that into the local with
    ldl/ldr/sdl/sdr pairs, exactly retail's sequence. */
-int draw_prompt_box(char *prompt_dimensions) __asm__("FUN_00221b50");
+int draw_prompt_box(struct MenuScreen *prompt) __asm__("FUN_00221b50");
 
-int draw_prompt_box(char *prompt_dimensions) {
+int draw_prompt_box(struct MenuScreen *prompt) {
     char *text;
     int   prompt_text_selector;
 
@@ -37,19 +36,11 @@ int draw_prompt_box(char *prompt_dimensions) {
         break;
     }
     {
-        struct TextRegion c = {1,
-                               *(int *)(prompt_dimensions + 0x24) + 1,
-                               1,
-                               *(int *)(prompt_dimensions + 0x20) + 1,
-                               *(int *)(prompt_dimensions + 0x20) >> 1,
-                               5,
-                               0,
-                               0,
-                               0x10,
-                               5};
+        struct TextRegion c = {
+            1, prompt->height + 1, 1, prompt->width + 1, prompt->width >> 1, 5, 0, 0, 0x10, 5};
 
         font_print_window_small(&c, 0x80000000L, text, -1);
-        c.anchor_y = (*(int *)(prompt_dimensions + 0x24) - c.rendered_height) >> 1;
+        c.anchor_y = (prompt->height - c.rendered_height) >> 1;
         c.flags ^= 4;
         font_print_window_small(&c, 0x80000000L, text, -1);
         c.top--;

@@ -13,6 +13,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/overlay/shared/ui/hud/draw_hud_item_selector_panel.h"
+#include "rnc/mobys/animation/queue_animation_update.h"
+#include "rnc/overlay/shared/ui/hud/initialize_numeric_hud_element.h"
+#include "rnc/ui/hud/remove_hud_item.h"
+#include "rnc/ui/menus/system/process_menu_entry.h"
 
 /*
  * Scene trigger attached to a moby: when the hero comes close enough (and,
@@ -58,15 +62,10 @@ extern s32 D_0013CAE4[]; /* bit 0x10 lifts the facing check */
 extern s32 bolt_hud_item __asm__("D_L00_00160130") __attribute__((sda));
 
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
-extern void process_menu_entry(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
 extern s32  FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
-extern void remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern s32  hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
-extern s32
-queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
-extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 
 s32 update_npc_dialogue(struct Moby         *moby,

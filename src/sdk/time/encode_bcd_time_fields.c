@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/time/time_to_bcd.h"
 
 struct BcdClockTime {
     u8 pad_0;
@@ -11,8 +12,7 @@ struct BcdClockTime {
     u8 unk7;
 };
 
-extern s32 TimeToBcd(u8 value);
-void       encode_bcd_time_fields(struct BcdClockTime *time) __asm__("FUN_0012d428");
+void encode_bcd_time_fields(struct BcdClockTime *time) __asm__("FUN_0012d428");
 
 void encode_bcd_time_fields(struct BcdClockTime *time) {
     time->unk7 = TimeToBcd(time->unk7);

@@ -2,7 +2,7 @@
 #define LOMBYTE_RNC_MOVIES_DECODER_VI_BUF_H
 
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 /* One PTS/DTS entry of a ViBuf timestamp ring (vi_buf_reset clears them). */
 struct ViBufTimeStamp {

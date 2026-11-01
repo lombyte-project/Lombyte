@@ -4,15 +4,15 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/world/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/rendering/packets/pack_render_command_fields.h"
 
 /* Finds the table entry nearest the object's position (within 8 units) and applies its fields to the object and globals. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */
 
 extern char no_environment_sample_message[] __asm__("D_L00_001E8ED8");
 extern void debug_print() __asm__("FUN_001e93b0");
-extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
 void apply_nearest_environment_sample(char *object) __asm__("FUN_L00_002500b8");
 

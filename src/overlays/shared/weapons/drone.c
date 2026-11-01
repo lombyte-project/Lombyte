@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
-#include "rnc/overlay/collision.h"
+#include "rnc/overlay/shared/world/collision.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -247,20 +247,20 @@ char *select_nearest_drone_target(char *search_position, int *excl) {
             if (found)
                 continue;
         }
-        if (class_category == 5 && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000) == 0)
+        if (class_category == 5 && (MOBY(candidate_moby)->flags & 0x1000) == 0)
             continue;
         if (*(unsigned char *)(candidate_moby + 0x31) == 0) {
-            short c = *(short *)(candidate_moby + 0xA6);
+            short c = MOBY(candidate_moby)->oclass;
             if (c != 0x350 && c != 0x31)
                 continue;
         }
-        search_to_candidate_distance = fast_vec_dist(search_position, candidate_moby + 0x10);
-        if (*(short *)(candidate_moby + 0xA6) == 0x4D6) {
+        search_to_candidate_distance = fast_vec_dist(search_position, &MOBY(candidate_moby)->pos);
+        if (MOBY(candidate_moby)->oclass == 0x4D6) {
             fast_vec_normalize(candidate_position_scratch,
                                *(char **)(candidate_moby + 0x78),
                                search_to_candidate_distance);
             add_vector_xyz(
-                candidate_position_scratch, candidate_position_scratch, candidate_moby + 0x10);
+                candidate_position_scratch, candidate_position_scratch, &MOBY(candidate_moby)->pos);
             if (search_to_candidate_distance <
                 fast_vec_dist(search_position, candidate_position_scratch))
                 continue;
@@ -289,7 +289,7 @@ char *select_nearest_drone_target(char *search_position, int *excl) {
         if (class_callback_data != 0 && *(short *)(class_callback_data + 0x68) > 0)
             continue;
         x = (char *)get_moby_target_info(candidate_moby);
-        qcopy(candidate_position_scratch, candidate_moby + 0x10);
+        qcopy(candidate_position_scratch, &MOBY(candidate_moby)->pos);
         if (x != 0)
             candidate_position_scratch[2] =
                 candidate_position_scratch[2] + (*(float *)(x + 0x10) + 0.05f);
@@ -314,24 +314,25 @@ char *spawn_hero_drone(int previous_spawn_result, void *pos) {
 
     if (spawned_moby != 0) {
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         *(unsigned char *)(spawned_moby + 0x31) = 1;
         *(unsigned char *)(spawned_moby + 0x20) = 2;
         moby_vars = *(char **)(spawned_moby + 0x78);
         *(unsigned char *)(spawned_moby + 0xBC) = 0;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(&MOBY(spawned_moby)->pos, pos);
         *(int *)(moby_vars + 0x44) = previous_spawn_result;
         player = &hero;
         player->ammo_used++;
         update_entity(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);
         *(float *)(moby_vars + 0x28) =
-            fast_arc_tan(*(float *)(spawned_moby + 0x10) - player->motion.pos.f[0],
-                         *(float *)(spawned_moby + 0x14) - player->motion.pos.f[1]);
+            fast_arc_tan(MOBY(spawned_moby)->pos.x - player->motion.pos.f[0],
+                         MOBY(spawned_moby)->pos.y - player->motion.pos.f[1]);
         *(float *)(moby_vars + 0x24) =
-            fast_arc_tan(vector_distance_xy(&player->motion.pos, spawned_moby + 0x10),
-                         *(float *)(spawned_moby + 0x18) - player->motion.pos.f[2]);
-        *(float *)(moby_vars + 0x20) = vector_distance_xy(spawned_moby + 0x10, &player->motion.pos);
+            fast_arc_tan(vector_distance_xy(&player->motion.pos, &MOBY(spawned_moby)->pos),
+                         MOBY(spawned_moby)->pos.z - player->motion.pos.f[2]);
+        *(float *)(moby_vars + 0x20) =
+            vector_distance_xy(&MOBY(spawned_moby)->pos, &player->motion.pos);
         *(float *)(moby_vars + 0x3C) = player->motion.pos.f[2];
         for (*(short *)(moby_vars + 0x54) = 0; *(short *)(moby_vars + 0x54) < 6;
              (*(short *)(moby_vars + 0x54))++) {

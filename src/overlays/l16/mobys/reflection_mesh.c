@@ -11,9 +11,9 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
-#include "rnc/overlay/watch.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
+#include "rnc/overlay/shared/mobys/watch.h"
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
@@ -38,8 +38,8 @@
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 
 #include "sda.h"
-
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/vu1_registers.h"
 
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 /* Sets up the draw state, then draws the one entry of the level's table; same source as env_map_a_draw. */
@@ -49,7 +49,6 @@ typedef struct {
 } L16SingleSphere;
 
 extern L16SingleSphere l16_single_reflection_mesh_bounds[] __asm__("D_L16_00161F80") MACRO_ADDR;
-extern void            vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 extern char D_L16_001DDC80[] NOT_SDA;
 int         single_reflection_mesh_vertex_counts[2] __asm__("D_L16_00161F40") = {125, 0};

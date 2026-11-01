@@ -1,16 +1,16 @@
 /* Level 14 tilting platform moby class and its tilt basis. */
 #include "types.h"
-#include "rnc/overlay/level_spline.h"
-#include "rnc/overlay/level_path.h"
-#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/shared/world/level_spline.h"
+#include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/world/level_globals.h"
 #include "rnc/math/vector.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "rnc/overlay/entities.h"
+#include "rnc/overlay/shared/mobys/moby_anim.h"
+#include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -28,6 +28,7 @@
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/world/collision/collision_line.h"
 #include "qzero.h"
+#include "rnc/audio/voices/allocate_voice_slot.h"
 
 extern float D_L14_0015F580[] MACRO_ADDR;
 
@@ -39,11 +40,23 @@ extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002d
 
 void tilting_platform_update(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
+typedef struct TiltingPlatformVars {
+    u8  pad_0[0x20];
+    f32 unk20[4];
+    u8  pad_30[0x2C];
+    s32 unk5C;
+    f32 unk60;
+    f32 unk64;
+    f32 unk68;
+    u8  pad_6C[0x4];
+    s32 timer_70;
+} TiltingPlatformVars;
+
 /* Moby class 309 */
 void tilting_platform_update(struct Moby *moby) {
-    char *tilting_platform_state = (char *)moby->pvars;
-    void *rotation;
-    u128  old_rotation;
+    TiltingPlatformVars *tilting_platform_state = (TiltingPlatformVars *)moby->pvars;
+    void                *rotation;
+    u128                 old_rotation;
     qcopy(&old_rotation, &moby->rot);
 
     if (moby->state == 0) {
@@ -51,24 +64,22 @@ void tilting_platform_update(struct Moby *moby) {
         moby->command = 0;
         moby->flags |= 0x100;
         moby->pos.z += 0.35f;
-        *(int *)(tilting_platform_state + 0x5C) = 1;
-        *(int *)(tilting_platform_state + 0x70) = 0;
-        qzero(tilting_platform_state + 0x60);
+        tilting_platform_state->unk5C = 1;
+        tilting_platform_state->timer_70 = 0;
+        qzero(&tilting_platform_state->unk60);
         qzero(&moby->rot);
         rotation = &moby->rot;
     } else {
         rotation = &moby->rot;
     }
     FUN_L14_002de2b8_call(moby, unused_platform_tilt_argument, 8.0f);
-    update_entity_matrix(tilting_platform_state + 0x20, D_L14_0015F580, &old_rotation, rotation);
+    update_entity_matrix(tilting_platform_state->unk20, D_L14_0015F580, &old_rotation, rotation);
 }
 
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 
 typedef int u128_s07 __attribute__((mode(TI)));
-
-extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
 #include "rnc/overlay/l14/mobys/platform_data/update_platform_tilt_basis.h"
 
@@ -80,16 +91,16 @@ void update_platform_tilt_basis(char *moby,
                                 f32   unused_arg2) __asm__("FUN_L14_002de2b8");
 
 void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
-    char *platform_tilt_state = ((char *)MOBY(moby)->pvars);
-    char *hero_state = (char *)((char *)((char *)&hero));
-    float target_up_vector[4];
-    float up[4];
-    float direction_scratch[4];
-    float ax[4];
-    float direction_length;
-    float dt;
-    float tilt_angle;
-    float max_tilt_angle;
+    TiltingPlatformVars *platform_tilt_state = (TiltingPlatformVars *)MOBY(moby)->pvars;
+    char                *hero_state = (char *)((char *)((char *)&hero));
+    float                target_up_vector[4];
+    float                up[4];
+    float                direction_scratch[4];
+    float                ax[4];
+    float                direction_length;
+    float                dt;
+    float                tilt_angle;
+    float                max_tilt_angle;
 
     *(u128_s07 *)up = 0;
     up[2] = 1.0f;
@@ -125,11 +136,11 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
         MOBY(moby)->command = 0;
     }
 
-    if (fast_dec_timer(platform_tilt_state + 0x70)) {
+    if (fast_dec_timer(&platform_tilt_state->timer_70)) {
         if (0.1f < absolute_float(MOBY(moby)->rot_row2.x - target_up_vector[0]) ||
             0.1f < absolute_float(MOBY(moby)->rot_row2.y - target_up_vector[1]) ||
             0.1f < absolute_float(MOBY(moby)->rot_row2.z - target_up_vector[2])) {
-            *(int *)(platform_tilt_state + 0x70) = scale_game_frames(60);
+            platform_tilt_state->timer_70 = scale_game_frames(60);
             MOBY(moby)->pos.z = MOBY(moby)->pos.z + 2.0f;
             allocate_voice_slot(*(void **)(((char *)MOBY(moby)->pclass) + 0x28),
                                 8,
@@ -141,19 +152,19 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
     }
 
     vendor_spring((float *)&MOBY(moby)->rot_row2,
-                  (float *)(platform_tilt_state + 0x60),
+                  &platform_tilt_state->unk60,
                   target_up_vector[0],
                   0.005f,
                   0.2f,
                   0.0f);
     vendor_spring((float *)&MOBY(moby)->rot_row2.y,
-                  (float *)(platform_tilt_state + 0x64),
+                  &platform_tilt_state->unk64,
                   target_up_vector[1],
                   0.005f,
                   0.2f,
                   0.0f);
     vendor_spring((float *)&MOBY(moby)->rot_row2.z,
-                  (float *)(platform_tilt_state + 0x68),
+                  &platform_tilt_state->unk68,
                   target_up_vector[2],
                   0.005f,
                   0.2f,

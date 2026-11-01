@@ -12,11 +12,15 @@
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/banks/snd_bank_load_from_ee_cb.h"
 #include "rnc/rendering/frame/reset_draw_globals.h"
+#include "rnc/rendering/texture/parse_particle_textures.h"
+#include "rnc/sdk/graph/sce_gs_sync_v.h"
+#include "rnc/sdk/libc/stdlib/rand.h"
+#include "rnc/sdk/storage/cdvd/scecdsync.h"
 
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 
 #include "types.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/streaming/disc_table.h"
@@ -131,7 +135,6 @@ extern u32       sound_bank_handle __asm__("D_0015ED5C");
 extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
 extern void update_view_context(void) __asm__("func_001F2D98");
 extern s32  scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32  sceCdSync(s32);
 extern void FlushCache(s32);
 extern s32  decompress_wad(void *, void *) __asm__("func_0020B618");
 extern void upload_texture_images(s32 arg0, s32 count, s32 p) __asm__("FUN_00203120");
@@ -140,12 +143,9 @@ extern void fast_mem_copy(void *, void *, s32) __asm__("func_001F98D0");
 extern void relocate_sky_definition(s32 f) __asm__("FUN_002028e0");
 extern void register_moby_class(s32 moby, s32 arg1, s32 arg2, s32 oclass) __asm__("FUN_00203640");
 extern void unpack_point_records(s32 src, s32 count) __asm__("FUN_00202800");
-extern void parse_particle_textures(s32 hdr, s32 base, s32 src, s32 count) __asm__("FUN_002026c8");
 extern s32  upload_mip_texture(s32, void *) __asm__("func_00202270");
 extern void clear_blocks_16(void *, s32) __asm__("func_001F9810");
-extern s32  rand(void);
 extern void store_sound_bank_handle_callback() __asm__("func_0022DD78");
-extern s32  sceGsSyncV(s32);
 extern s32  snd_flush_sound_commands(void) __asm__("func_0012DC80");
 
 void initialize_level_runtime(void) {
@@ -269,7 +269,7 @@ void initialize_level_runtime(void) {
     reset_draw_globals();
     occl_fog_count = 0x1F4;
     part_clip_dist = 0x1F4000;
-    scene_variant = (rand() >> 16) & 3;
+    scene_variant = (RandomNext() >> 16) & 3;
     level_render_state.scene_state = 0;
     level_render_state.scene_mode = scene_variant;
     level_render_state.history_index = 0;

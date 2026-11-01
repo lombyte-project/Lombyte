@@ -2,10 +2,10 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "eetypes.h"
+#include "rnc/sdk/eetypes.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
@@ -17,13 +17,12 @@
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/overlay/l04/spawn_smoke_puff_trail_with_endpoint_bursts.h"
 
 /* Builds two direction vectors from a table and relative to a moby, then hands them to the L04 effect spawner. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
 extern char moby_segment_puff_local_endpoint_table[] __asm__("D_L04_001D2C90");
-extern void spawn_smoke_puff_trail_with_endpoint_bursts(
-    void *, void *, void *, int, float, float) __asm__("FUN_L04_002c41e0");
 
 extern short moby_segment_puff_scale_multiplier __asm__("D_L04_001618B0") __attribute__((sda));
 void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) __asm__("FUN_L04_002c45b8");
@@ -35,12 +34,12 @@ void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) {
     qcopy(first_world_position, pi);
     first_world_position[3] = 1.0f;
     transform_vector_by_basis(first_world_position, first_world_position, moby + 0xC0);
-    fast_vec_add(first_world_position, first_world_position, moby + 0x10);
+    fast_vec_add(first_world_position, first_world_position, &MOBY(moby)->pos);
     pj = moby_segment_puff_local_endpoint_table + j * 16;
     qcopy(second_world_position, pj);
     second_world_position[3] = 1.0f;
     transform_vector_by_basis(second_world_position, second_world_position, moby + 0xC0);
-    fast_vec_add(second_world_position, second_world_position, moby + 0x10);
+    fast_vec_add(second_world_position, second_world_position, &MOBY(moby)->pos);
     spawn_smoke_puff_trail_with_endpoint_bursts(
         moby,
         first_world_position,
@@ -289,12 +288,12 @@ void *spawn_moby_attachment(char *source_moby, char *spawn_position) {
     if (spawned_moby != 0) {
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = ((unsigned short)MOBY(source_moby)->draw_dist);
-        spawned_moby[0x31] = 1;
+        MOBY(spawned_moby)->visible = 1;
         *(int *)(spawned_moby + 0x40) = 0;
         *(int *)(spawned_moby + 0x44) = 0;
         MOBY(spawned_moby)->rot.z = MOBY(source_moby)->rot.z;
         MOBY(spawned_moby)->spawn_frame = MOBY(source_moby)->spawn_frame;
-        qcopy(spawned_moby + 0x10, position_copy_ptr);
+        qcopy(&MOBY(spawned_moby)->pos, position_copy_ptr);
         update_entity(spawned_moby);
     }
     return spawned_moby;

@@ -2,16 +2,16 @@
 #include "types.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/cuboid.h"
+#include "rnc/overlay/shared/world/cuboid.h"
 #include "sda.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
-#include "rnc/overlay/scroll_layer.h"
+#include "rnc/overlay/l01/scroll_layer.h"
+#include "rnc/overlay/l01/scroll_layers.h"
 
 extern s32 level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
 
 s32        rippling_scroll_layers_vertices_rippled __asm__("D_L01_00161CE0") = 0;
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
-void       update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
 
 void draw_rippling_scroll_layers(void) __asm__("FUN_L01_002feb28");
 

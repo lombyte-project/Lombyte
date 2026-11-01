@@ -13,7 +13,8 @@
 #include "rnc/mobys/moby_spawn.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/quad.h"
+#include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/math/rotations/step_rotation_toward_target.h"
 
 extern float D_0015ED6C;
 extern float D_0015ED70;
@@ -28,7 +29,6 @@ extern f32 D_L10_00161BEC_gp __asm__("D_L10_00161BEC") __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l10_orxon/vendor_00296BD8.c (func_L10_002D9530) */
 
 extern float FUN_001f9e90_u(float, float) __asm__("FUN_001f9e90");
-extern float step_rotation_toward_target(float, float, float) __asm__("FUN_L00_00200510");
 
 int resolve_bouncing_projectile_collision(char  *moby,
                                           char  *motion_data,
@@ -185,7 +185,9 @@ extern int   get_moby_color() __asm__("FUN_L00_00250320");
 extern int   FUN_L00_0025a9f8(float, void *, int, void *, void *);
 extern void  FUN_L00_0025a420(void *, void *, void *);
 extern void  FUN_L00_0025f090(void *, void *, void *, int, int, int, int, int, float, float, float);
-int resolve_bouncing_projectile_collision(char *m, char *c, float *a2) __asm__("FUN_L10_002d8170");
+int          resolve_bouncing_projectile_collision(char  *m,
+                                                   char  *c,
+                                                   float *previous_position) __asm__("FUN_L10_002d8170");
 extern int
 resolve_bouncing_projectile_collision(char *, char *, float *) __asm__("FUN_L10_002d8170");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
