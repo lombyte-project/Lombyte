@@ -275,79 +275,79 @@ void frog_update(unsigned char *moby) {
     }
     mode = D_L06_0015F5C4;
     if (mode == 2 && ((MOBY(moby)->flags ^ 1) & 1)) {
-        data->unk1EA = 1;
+        frog_instance_vars->unk1EA = 1;
         MOBY(moby)->flags |= 0x41;
-    } else if (mode == 0 && data->unk1EA != 0) {
-        data->unk1EA = 0;
+    } else if (mode == 0 && frog_instance_vars->unk1EA != 0) {
+        frog_instance_vars->unk1EA = 0;
         MOBY(moby)->flags &= 0xFFBE;
     }
     if (MOBY(moby)->state != 0x10) {
         if (*(int *)&D_L06_0015FDF8 != 0) {
-            if (data->unk242 == 0)
+            if (frog_instance_vars->unk242 == 0)
                 return;
         } else {
-            if (data->unk242 != 0)
+            if (frog_instance_vars->unk242 != 0)
                 return;
         }
     }
-    FUN_L00_00263ac8(2.1f, (int)moby, 1, (unsigned char *)(&data->unk250));
+    FUN_L00_00263ac8(2.1f, (int)moby, 1, (unsigned char *)(&frog_instance_vars->unk250));
     update_frog_health_respawn_and_target(moby);
     if (MOBY(moby)->visible != 0 && fast_vec_dist(&MOBY(moby)->pos, D_L06_00167540) < 14.0f) {
         FUN_L00_0025a120(moby);
         MOBY(moby)->shadow_range = 0xB;
     }
-    target = data->unk1C0;
+    target = frog_instance_vars->unk1C0;
     switch (MOBY(moby)->state) {
     case FROG_STATE_INITIALIZE: {
         float wait;
         int   spawn_count = l06_frog_frame_slot_assignment_count;
-        int   divisor = data->unk240;
-        data->unk20A = spawn_count % 8;
+        int   divisor = frog_instance_vars->unk240;
+        frog_instance_vars->unk20A = spawn_count % 8;
         l06_frog_frame_slot_assignment_count = spawn_count + 1;
         if (divisor != 0) {
             MOBY(moby)->unkB4 = MOBY(moby)->unkB4 / divisor;
         }
         MOBY(moby)->flags |= 0x100;
-        data->unk58 = truncate_float_to_s32(8.0f);
-        data->unk5A = truncate_float_to_s32(3.2f);
-        qcopy(&data->unk210, &MOBY(moby)->pos);
-        qcopy(&data->unk230, &MOBY(moby)->pos);
-        qcopy(&data->unk220, moby + 0x40);
-        data->path_point = 0;
+        frog_instance_vars->unk58 = truncate_float_to_s32(8.0f);
+        frog_instance_vars->unk5A = truncate_float_to_s32(3.2f);
+        qcopy(&frog_instance_vars->unk210, &MOBY(moby)->pos);
+        qcopy(&frog_instance_vars->unk230, &MOBY(moby)->pos);
+        qcopy(&frog_instance_vars->unk220, moby + 0x40);
+        frog_instance_vars->path_point = 0;
         wait = random_float_between(0.5f, 3.0f);
-        data->unk130 = D_0015ED70 * 20.0f;
-        data->unk148 = 0;
-        data->unk134 = 0;
-        data->unk140 = 0x200;
-        data->unk244 = wait;
-        data->unk248 = random_angle_radians();
-        data->unkD0 = D_L06_00161BF0;
-        data->unk29 = 1;
-        if (data->unk200 != 0) {
+        frog_instance_vars->unk130 = D_0015ED70 * 20.0f;
+        frog_instance_vars->unk148 = 0;
+        frog_instance_vars->unk134 = 0;
+        frog_instance_vars->unk140 = 0x200;
+        frog_instance_vars->unk244 = wait;
+        frog_instance_vars->unk248 = random_angle_radians();
+        frog_instance_vars->unkD0 = D_L06_00161BF0;
+        frog_instance_vars->unk29 = 1;
+        if (frog_instance_vars->unk200 != 0) {
             char *child;
             MOBY(moby)->state = 1;
             child = create_moby(0x1F4);
-            data->child = child;
+            frog_instance_vars->child = child;
             if (child == 0) {
                 mark_moby_for_removal(moby);
                 return;
             }
             *(long *)(child + 0x38) = ((long)MOBY(moby)->spawn_frame);
-            *(unsigned short *)(data->child + 0x34) |= 0x4002;
+            *(unsigned short *)(frog_instance_vars->child + 0x34) |= 0x4002;
             {
-                char *child = data->child;
+                char *child = frog_instance_vars->child;
                 qcopy(child + 0x10, &MOBY(moby)->pos);
                 qcopy(child + 0x40, moby + 0x40);
                 *(short *)(child + 0x32) = 0x40;
             }
-            (data->child)[0x31] = 1;
-            update_entity(data->child);
+            (frog_instance_vars->child)[0x31] = 1;
+            update_entity(frog_instance_vars->child);
             MOBY(moby)->flags |= 0x41;
-        } else if (data->unk202 != 0) {
+        } else if (frog_instance_vars->unk202 != 0) {
             MOBY(moby)->state = 0xF;
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags = (MOBY(moby)->flags | 0x41) & 0xEFFF;
-        } else if (data->path_index >= 0) {
+        } else if (frog_instance_vars->path_index >= 0) {
             MOBY(moby)->state = 3;
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 0);
@@ -376,7 +376,8 @@ void frog_update(unsigned char *moby) {
         fast_vec_sub(A, target + 0x10, &MOBY(moby)->pos);
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, A);
-        if (vector_distance_xy(((char *)&D_0013F3D0), &MOBY(moby)->pos) < data->unk24C) {
+        if (vector_distance_xy(((char *)&D_0013F3D0), &MOBY(moby)->pos) <
+            frog_instance_vars->unk24C) {
             MOBY(moby)->state = 4;
             if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(5));
@@ -385,46 +386,53 @@ void frog_update(unsigned char *moby) {
     case FROG_STATE_FOLLOW_PATH: {
         int *path;
         int  point_count;
-        qcopy(B, (char *)D_L06_001B0C30[data->path_index] + data->path_point * 16 + 0x10);
+        qcopy(B,
+              (char *)D_L06_001B0C30[frog_instance_vars->path_index] +
+                  frog_instance_vars->path_point * 16 + 0x10);
         fast_vec_sub(A, B, &MOBY(moby)->pos);
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, A);
-        fast_vec_normalize(C, moby + 0xC0, data->unk1E4 * D_0015ED6C_gp);
+        fast_vec_normalize(C, moby + 0xC0, frog_instance_vars->unk1E4 * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, C, 0, 0.3f, 0.3f);
         transform_vector_by_basis(A, A, moby + 0xC0);
         if (vector_length_xy(A) < 0.5f) {
             float return_speed;
             float home_distance_xy;
-            path = D_L06_001B0C30[data->path_index];
+            path = D_L06_001B0C30[frog_instance_vars->path_index];
             point_count = *path;
-            if (data->path_point < point_count - 2) {
-                data->path_point = data->path_point + 1;
+            if (frog_instance_vars->path_point < point_count - 2) {
+                frog_instance_vars->path_point = frog_instance_vars->path_point + 1;
                 return;
             }
-            qcopy(&data->unk210, (char *)path + point_count * 16);
-            qcopy(&data->unk230, &data->unk210);
-            home_distance_xy = vector_distance_xy(&MOBY(moby)->pos, &data->unk210);
+            qcopy(&frog_instance_vars->unk210, (char *)path + point_count * 16);
+            qcopy(&frog_instance_vars->unk230, &frog_instance_vars->unk210);
+            home_distance_xy = vector_distance_xy(&MOBY(moby)->pos, &frog_instance_vars->unk210);
             return_speed = home_distance_xy / (float)scale_game_frames(30);
-            data->unk138 = return_speed;
-            data->unk13C =
-                FUN_L00_0025abf0(&MOBY(moby)->pos, &data->unk210, 0, return_speed, -data->unk130);
-            data->unk15D = 3;
-            data->unk144 = 5;
-            trooper_start_knockback(moby,
-                                    &data->motion,
-                                    2,
-                                    1,
-                                    0,
-                                    fast_arc_tan(data->unk210[0] - MOBY(moby)->pos.x,
-                                                 data->unk210[1] - MOBY(moby)->pos.y));
+            frog_instance_vars->unk138 = return_speed;
+            frog_instance_vars->unk13C = FUN_L00_0025abf0(&MOBY(moby)->pos,
+                                                          &frog_instance_vars->unk210,
+                                                          0,
+                                                          return_speed,
+                                                          -frog_instance_vars->unk130);
+            frog_instance_vars->unk15D = 3;
+            frog_instance_vars->unk144 = 5;
+            trooper_start_knockback(
+                moby,
+                &frog_instance_vars->motion,
+                2,
+                1,
+                0,
+                fast_arc_tan(frog_instance_vars->unk210[0] - MOBY(moby)->pos.x,
+                             frog_instance_vars->unk210[1] - MOBY(moby)->pos.y));
             MOBY(moby)->state = 5;
         }
         break;
     }
     case FROG_STATE_JUMP_TO_HOME:
         set_vector_unit_z(A);
-        blend_frog_rotation_to_facing_frame((char *)moby, A, (float *)(&data->motion));
-        if (step_moby_motion(moby, &data->motion) & 1) {
+        blend_frog_rotation_to_facing_frame(
+            (char *)moby, A, (float *)(&frog_instance_vars->motion));
+        if (step_moby_motion(moby, &frog_instance_vars->motion) & 1) {
             MOBY(moby)->state = 7;
             if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, 1);
@@ -433,7 +441,7 @@ void frog_update(unsigned char *moby) {
         }
         break;
     case FROG_STATE_AIRBORNE_MOTION: {
-        int hit = step_moby_motion(moby, &data->motion);
+        int hit = step_moby_motion(moby, &frog_instance_vars->motion);
         if (hit & 1) {
             MOBY(moby)->state = 7;
             if (MOBY(moby)->prev_seq != 3)
@@ -456,33 +464,35 @@ void frog_update(unsigned char *moby) {
         break;
     case FROG_STATE_WANDER:
         if (MOBY(moby)->visible != 0) {
-            if (fast_vec_dist(&MOBY(moby)->pos, &data->unk230) < 0.05f ||
-                fast_dec_timer((int *)(&data->unk1FC)) != 0) {
+            if (fast_vec_dist(&MOBY(moby)->pos, &frog_instance_vars->unk230) < 0.05f ||
+                fast_dec_timer((int *)(&frog_instance_vars->unk1FC)) != 0) {
                 float angle = random_angle_radians();
                 float radius = random_float_between(0.5f, 2.0f);
                 A[0] = fast_cos(angle) * radius;
                 A[1] = fast_sin(angle) * radius;
                 A[2] = 0.0f;
-                fast_vec_add(&data->unk230, &data->unk210, A);
-                data->unk1FC =
+                fast_vec_add(&frog_instance_vars->unk230, &frog_instance_vars->unk210, A);
+                frog_instance_vars->unk1FC =
                     scale_game_frames(truncate_float_to_s32(random_float_between(45.0f, 75.0f)));
             }
-            fast_vec_sub(C, &data->unk230, &MOBY(moby)->pos);
+            fast_vec_sub(C, &frog_instance_vars->unk230, &MOBY(moby)->pos);
             probe_frog_local_z_collision((char *)moby);
             blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, C);
-            fast_vec_normalize(B, moby + 0xC0, data->unk1E4 * D_0015ED6C_gp);
+            fast_vec_normalize(B, moby + 0xC0, frog_instance_vars->unk1E4 * D_0015ED6C_gp);
             FUN_L06_002e9b60_c(moby, B, 1, 0.3f, 0.3f);
         }
-        if (data->unk1C4 != 2 && random_integer_below(9) == 0) {
-            data->turn_angle =
-                random_float_between(-data->turn_range_degrees, data->turn_range_degrees) *
+        if (frog_instance_vars->unk1C4 != 2 && random_integer_below(9) == 0) {
+            frog_instance_vars->turn_angle =
+                random_float_between(-frog_instance_vars->turn_range_degrees,
+                                     frog_instance_vars->turn_range_degrees) *
                 0.017453292f;
             MOBY(moby)->state = 9;
             if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, 0);
-        } else if (data->unk1E8 != 0) {
-            data->turn_angle =
-                random_float_between(-data->turn_range_degrees, data->turn_range_degrees) *
+        } else if (frog_instance_vars->unk1E8 != 0) {
+            frog_instance_vars->turn_angle =
+                random_float_between(-frog_instance_vars->turn_range_degrees,
+                                     frog_instance_vars->turn_range_degrees) *
                 0.017453292f;
             MOBY(moby)->state = 10;
             if (MOBY(moby)->prev_seq != 4)
@@ -493,19 +503,19 @@ void frog_update(unsigned char *moby) {
         float angle =
             fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                             *(float *)(target + 0x14) - MOBY(moby)->pos.y),
-                               data->turn_angle);
+                               frog_instance_vars->turn_angle);
         B[0] = fast_cos(angle);
         B[1] = fast_sin(angle);
         B[2] = 0.0f;
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
-        fast_vec_normalize(A, moby + 0xC0, data->unk1E4 * D_0015ED6C_gp);
+        fast_vec_normalize(A, moby + 0xC0, frog_instance_vars->unk1E4 * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
         if (vector_distance_xy(&MOBY(moby)->pos, target + 0x10) < 2.0f) {
             MOBY(moby)->state = 0xC;
             if (MOBY(moby)->prev_seq != 5)
                 blend_moby_animation(moby, 5, 4, scale_game_frames(10));
-        } else if (data->unk1C4 == 2) {
+        } else if (frog_instance_vars->unk1C4 == 2) {
             MOBY(moby)->state = 0xD;
         }
         break;
@@ -515,7 +525,7 @@ void frog_update(unsigned char *moby) {
         float angle =
             fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                             *(float *)(target + 0x14) - MOBY(moby)->pos.y),
-                               data->turn_angle);
+                               frog_instance_vars->turn_angle);
         qcopy(C, &MOBY(moby)->pos);
         B[0] = fast_cos(angle);
         B[1] = fast_sin(angle);
@@ -523,13 +533,13 @@ void frog_update(unsigned char *moby) {
         near = 0;
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
-        fast_vec_normalize(A, moby + 0xC0, data->unk1E4 * D_0015ED6C_gp);
+        fast_vec_normalize(A, moby + 0xC0, frog_instance_vars->unk1E4 * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
-        if (FUN_L00_00261b48(data->unk1EC, &MOBY(moby)->pos, target + 0x10, D) != 0 &&
-            fast_vec_dist(&MOBY(moby)->pos, D) < data->unk244) {
+        if (FUN_L00_00261b48(frog_instance_vars->unk1EC, &MOBY(moby)->pos, target + 0x10, D) != 0 &&
+            fast_vec_dist(&MOBY(moby)->pos, D) < frog_instance_vars->unk244) {
             near = 1;
         }
-        if (data->unk1E8 == 0) {
+        if (frog_instance_vars->unk1E8 == 0) {
             MOBY(moby)->state = 0xD;
         } else if (near) {
             MOBY(moby)->state = 0xB;
@@ -560,7 +570,10 @@ void frog_update(unsigned char *moby) {
         wait = compute_interpolated_record_value(moby);
         if (MOBY(moby)->seq == MOBY(moby)->prev_seq && wait >= 10.0f && wait <= 15.0f &&
             *(int *)(((char *)&camera_secondary_mode)) != 0x51) {
-            fast_vec_normalize(A, moby + 0xC0, (data->unk1E4 + data->unk1E4) * D_0015ED6C_gp);
+            fast_vec_normalize(A,
+                               moby + 0xC0,
+                               (frog_instance_vars->unk1E4 + frog_instance_vars->unk1E4) *
+                                   D_0015ED6C_gp);
             FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
             collect_mobies_in_sphere_at_moby_point(moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
             return;
@@ -574,27 +587,27 @@ void frog_update(unsigned char *moby) {
         break;
     }
     case FROG_STATE_RETURN_HOME:
-        fast_vec_sub(B, &data->unk210, &MOBY(moby)->pos);
+        fast_vec_sub(B, &frog_instance_vars->unk210, &MOBY(moby)->pos);
         probe_frog_local_z_collision((char *)moby);
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
-        fast_vec_normalize(A, moby + 0xC0, data->unk1E4 * D_0015ED6C_gp);
+        fast_vec_normalize(A, moby + 0xC0, frog_instance_vars->unk1E4 * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
-        if (vector_distance_xy(&MOBY(moby)->pos, &data->unk210) < 2.0f) {
+        if (vector_distance_xy(&MOBY(moby)->pos, &frog_instance_vars->unk210) < 2.0f) {
             MOBY(moby)->state = 8;
             if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
-        } else if (data->unk1C4 != 2) {
+        } else if (frog_instance_vars->unk1C4 != 2) {
             MOBY(moby)->state = 9;
-        } else if (data->unk1E8 != 0) {
+        } else if (frog_instance_vars->unk1E8 != 0) {
             MOBY(moby)->state = 0xA;
         }
         break;
     case FROG_STATE_SUCK_CANNON_HELD:
-        if (FUN_L00_002dc9f0(moby, &data->motion) != 0) {
+        if (FUN_L00_002dc9f0(moby, &frog_instance_vars->motion) != 0) {
             MOBY(moby)->state = 8;
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
-            data->unkC8 = 0;
+            frog_instance_vars->unkC8 = 0;
         }
         break;
     }

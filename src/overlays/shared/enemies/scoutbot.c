@@ -484,9 +484,10 @@ void draw_target_beam(struct Moby *moby) {
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
     moby_point_position(moby, 2, &beam_origin_position);
-    fast_vec_sub(&delta, data->unk218 + 0x10, &beam_origin_position);
+    fast_vec_sub(&delta, scoutbot_private_vars->unk218 + 0x10, &beam_origin_position);
     scale_vector_002d3878(3.0f, &delta);
-    delta.v[2] = (*(float *)(data->unk218 + 0x18) + 0.25f) - beam_origin_position.v[2];
+    delta.v[2] =
+        (*(float *)(scoutbot_private_vars->unk218 + 0x18) + 0.25f) - beam_origin_position.v[2];
     delta.v[3] = 1.0f;
     length = fast_vec_length(&delta);
     clear_u64_value(&angles);
@@ -499,15 +500,15 @@ void draw_target_beam(struct Moby *moby) {
     clear_u64_value(&pk.vertices[0]);
     pk.vertices[0].v[2] = D_L08_00161894_lui;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], &data->unk1D0);
-    pk.vertices[1].v[0] = length * data->unk1D0[3];
+    qcopy(&pk.vertices[1], &scoutbot_private_vars->unk1D0);
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1D0[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[2]);
     pk.vertices[2].v[2] = 0.0f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], &data->unk1D0);
-    pk.vertices[3].v[0] = length * data->unk1D0[3];
+    qcopy(&pk.vertices[3], &scoutbot_private_vars->unk1D0);
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1D0[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -524,20 +525,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], &data->unk1D0);
-    pk.vertices[0].v[0] = length * data->unk1D0[3];
+    qcopy(&pk.vertices[0], &scoutbot_private_vars->unk1D0);
+    pk.vertices[0].v[0] = length * scoutbot_private_vars->unk1D0[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], &data->unk1E0);
-    pk.vertices[1].v[0] = length * data->unk1E0[3];
+    qcopy(&pk.vertices[1], &scoutbot_private_vars->unk1E0);
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1E0[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], &data->unk1D0);
-    pk.vertices[2].v[0] = length * data->unk1D0[3];
+    qcopy(&pk.vertices[2], &scoutbot_private_vars->unk1D0);
+    pk.vertices[2].v[0] = length * scoutbot_private_vars->unk1D0[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], &data->unk1E0);
-    pk.vertices[3].v[0] = length * data->unk1E0[3];
+    qcopy(&pk.vertices[3], &scoutbot_private_vars->unk1E0);
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1E0[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -555,20 +556,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], &data->unk1E0);
-    pk.vertices[0].v[0] = length * data->unk1E0[3];
+    qcopy(&pk.vertices[0], &scoutbot_private_vars->unk1E0);
+    pk.vertices[0].v[0] = length * scoutbot_private_vars->unk1E0[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[1]);
-    pk.vertices[1].v[0] = length * data->unk1D0[3] * 3.0f;
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1D0[3] * 3.0f;
     pk.vertices[1].v[2] += D_L08_00161894_lui;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], &data->unk1E0);
-    pk.vertices[2].v[0] = length * data->unk1E0[3];
+    qcopy(&pk.vertices[2], &scoutbot_private_vars->unk1E0);
+    pk.vertices[2].v[0] = length * scoutbot_private_vars->unk1E0[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[3]);
-    pk.vertices[3].v[0] = length * data->unk1D0[3] * 3.0f;
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1D0[3] * 3.0f;
     pk.vertices[3].v[2] = 0.0f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
