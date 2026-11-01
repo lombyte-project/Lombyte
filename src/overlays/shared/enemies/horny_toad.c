@@ -654,8 +654,11 @@ extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) __asm__("FUN_L00_002d57d0");
 
 int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) {
+    enum {
+        MOBY_STATE_SUCK_CANNON_ACTIVE = 0x9
+    };
     int helper_result = cancel_suck_cannon_suction(moby);
-    MOBY(moby)->state = 0x9;
+    MOBY(moby)->state = MOBY_STATE_SUCK_CANNON_ACTIVE;
     return helper_result;
 }
 
