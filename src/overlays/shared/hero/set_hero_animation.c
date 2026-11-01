@@ -935,9 +935,9 @@ typedef struct {
     f32 v[4];
 } V002334d0 __attribute__((aligned(16)));
 
-void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
+void add_hero_gravity_offset(f32 *out, f32 *in, f32 k) __asm__("FUN_L00_002334d0");
 
-void FUN_L00_002334d0(f32 *gravity_adjusted_vector, f32 *in, f32 k) {
+void add_hero_gravity_offset(f32 *gravity_adjusted_vector, f32 *in, f32 k) {
     struct Hero *hero_base = &hero;
     V002334d0    offset_vector;
     switch (hero_base->gravity_mode) {

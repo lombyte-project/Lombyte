@@ -3653,7 +3653,7 @@ typedef union {
 
 extern void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
 extern void add_hero_up_offset(void *, void *, f32) __asm__("FUN_L00_00233810");
-extern void FUN_L00_002334d0(void *, void *, f32);
+extern void add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32  FUN_L00_001f3170(void *, f32);
@@ -3684,7 +3684,7 @@ s32 resolve_hero_current_position_collisions(s32 mode) {
             if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
                 add_hero_up_offset(&collision_probe_offset, &collision_probe_offset, 0.6f);
             } else {
-                FUN_L00_002334d0(
+                add_hero_gravity_offset(
                     &collision_probe_offset, &collision_probe_offset, -hero.capsule_bottom);
             }
         } else {
@@ -4285,9 +4285,9 @@ tail:
     }
     if (hero.state_timer < hero.takeoff_frame) {
         gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-        FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 48.0f);
+        add_hero_gravity_offset(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 48.0f);
     } else {
-        FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, hero.jump_gravity);
+        add_hero_gravity_offset(&hero.motion.velocity, &hero.motion.velocity, hero.jump_gravity);
         z = gravity_z(&hero.motion.velocity);
         movement_gravity_axis_velocity = gravity_z(&hero.motion.resolved_velocity);
         floor = movement_gravity_axis_velocity - 0.1f;

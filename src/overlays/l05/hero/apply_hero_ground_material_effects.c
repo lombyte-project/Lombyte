@@ -157,7 +157,7 @@ void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
-void FUN_L00_002334d0(void *, void *, f32);
+void add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 
 extern CollisionHit HH __asm__("D_L05_00174240") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L05_00174240 + (o)))
@@ -262,7 +262,7 @@ void update_hero_ground_contact(void) {
         if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.on_flagged_ground_moby = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
-                FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
+                add_hero_gravity_offset((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
             }
         }
         hit_moby_record = get_moby_target_info(HH.moby);
@@ -384,7 +384,7 @@ typedef union {
 extern void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void add_hero_up_offset(void *, void *, f32) __asm__("FUN_L00_00233810");
-extern void FUN_L00_002334d0(void *, void *, f32);
+extern void add_hero_gravity_offset(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32  FUN_L00_001f3170(void *, f32);
@@ -417,7 +417,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
                 (unsigned)(hero.state.control_mode - 0x15) < 2) {
                 add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
-                FUN_L00_002334d0(
+                add_hero_gravity_offset(
                     &collision_query_offset, &collision_query_offset, -hero.capsule_bottom);
             }
         } else {
