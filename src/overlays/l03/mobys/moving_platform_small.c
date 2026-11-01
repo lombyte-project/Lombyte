@@ -110,7 +110,7 @@ void moving_platform_small_update(char *moby) {
                 platform_pvars->unk110 * 4.0f /
                 convert_integer_to_float(easing_frame_count * scale_game_frames(240));
             platform_pvars->easing_frames = 0;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = PLATFORM_EASED_ENDPOINT_TRAVEL;
         }
         break;
     case PLATFORM_EASED_ENDPOINT_TRAVEL:
@@ -149,14 +149,14 @@ void moving_platform_small_update(char *moby) {
                 }
             }
             platform_pvars->voice = -1;
-            MOBY(moby)->state = 2;
+            MOBY(moby)->state = PLATFORM_PAUSE_BEFORE_EASED_TRAVEL;
             platform_pvars->wait_timer = scale_game_frames(platform_pvars->wait_frames);
         }
         break;
     case PLATFORM_PAUSE_BEFORE_EASED_TRAVEL:
         if (fast_dec_timer(&platform_pvars->wait_timer)) {
             platform_pvars->easing_frames = 0;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = PLATFORM_EASED_ENDPOINT_TRAVEL;
         }
         break;
     case PLATFORM_FOLLOW_PATH_NODES:
@@ -206,14 +206,14 @@ void moving_platform_small_update(char *moby) {
                     }
                 }
                 platform_pvars->voice = -1;
-                MOBY(moby)->state = 4;
+                MOBY(moby)->state = PLATFORM_PAUSE_BEFORE_NODE_TRAVEL;
                 platform_pvars->wait_timer = scale_game_frames(platform_pvars->wait_frames);
             }
         }
         break;
     case PLATFORM_PAUSE_BEFORE_NODE_TRAVEL:
         if (fast_dec_timer(&platform_pvars->wait_timer)) {
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = PLATFORM_FOLLOW_PATH_NODES;
         }
         break;
     }
