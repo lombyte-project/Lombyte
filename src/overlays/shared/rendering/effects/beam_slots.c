@@ -51,7 +51,7 @@ void beam_slots_update(unsigned char *moby) {
             D_L14_00162148[j] = 0;
             D_L14_001621D8[j] = 0;
         }
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = SLOT_UPDATE_STATE_PROCESS_SLOTS;
         MOBY(moby)->update_dist = 0xFF;
         break;
     case SLOT_UPDATE_STATE_PROCESS_SLOTS:
