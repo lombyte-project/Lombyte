@@ -511,7 +511,7 @@ extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 extern s32 D_0015EEA4;
 extern u8  D_0013D4DC[];
 extern s32 D_L12_0015F688 __attribute__((sda));
-s32        D_L12_0015F68C = 0;
+s32        l12_look_usage_event_count __asm__("D_L12_0015F68C") = 0;
 extern u8  D_L12_00167258[];
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
@@ -711,7 +711,7 @@ void update_hero_motion_for_current_state(void) {
                     D_L12_0015F688 = -1;
                     usage_stats.stat[18].level_mask =
                         usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
-                    D_L12_0015F68C++;
+                    l12_look_usage_event_count++;
                 }
             }
         }
