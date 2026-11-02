@@ -211,7 +211,7 @@ typedef struct SuckHero {
     u8         pad2090[0x17];
     u8         item_select_blocked;
     u8         pad20A8[0x4];
-    u8         unk20AC;
+    u8         suck_cannon_use_blocked;
 } SuckHero;
 
 typedef struct SuckInput {
@@ -1471,7 +1471,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             break;
         }
         if ((controller_state.held & ((SuckHero *)&hero)->fire_buttons) && cannon->cooldown == 0 &&
-            ((SuckHero *)&hero)->item_select_blocked == 0 && ((SuckHero *)&hero)->unk20AC == 0 &&
+            ((SuckHero *)&hero)->item_select_blocked == 0 && ((SuckHero *)&hero)->suck_cannon_use_blocked == 0 &&
             scale_game_frames(15) < ((SuckHero *)&hero)->ready_frames &&
             is_suck_cannon_suction_blocked_by_hero_state() == 0) {
             start_equipped_item_animation();
@@ -1489,7 +1489,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
     case SUCKCANNON_STATE_SUCTION_STARTUP:
         if (suck_cannon_moby->anim_flags & 2)
             blend_moby_animation(suck_cannon_moby, 3, 0, scale_game_frames(5));
-        if (is_suck_cannon_suction_blocked_by_hero_state() != 0 || ((SuckHero *)&hero)->unk20AC ||
+        if (is_suck_cannon_suction_blocked_by_hero_state() != 0 || ((SuckHero *)&hero)->suck_cannon_use_blocked ||
             ((SuckHero *)&hero)->item_select_blocked) {
             sound = cannon->sound;
             if (sound != -1) {
@@ -1525,7 +1525,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
               (((SuckHero *)&hero)->count < (item_text_variant[9] == 0 ? 5 : 10) &&
                is_suck_cannon_suction_blocked_by_hero_state() == 0 &&
                ((controller_state.held & ((SuckHero *)&hero)->fire_buttons) || cannon->cooldown) &&
-               !((SuckHero *)&hero)->unk20AC && !((SuckHero *)&hero)->item_select_blocked))) {
+               !((SuckHero *)&hero)->suck_cannon_use_blocked && !((SuckHero *)&hero)->item_select_blocked))) {
             cancel_hero_item_animation();
             sound = cannon->sound;
             if (sound != -1) {
@@ -1570,7 +1570,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
         if (((SuckHero *)&hero)->state == 1)
             hero_set_state(30, 1);
         if (((SuckHero *)&hero)->state == 30 && (((SuckHero *)&hero)->moby->flags & 1) &&
-            !((SuckHero *)&hero)->unk20AC) {
+            !((SuckHero *)&hero)->suck_cannon_use_blocked) {
             LevelCamera *camera = &l00_camera;
             SuckVec     *eye;
             SuckHit     *hit;
@@ -1612,7 +1612,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             (controller_state.held & ((SuckHero *)&hero)->fire_buttons) &&
             ((SuckHero *)&hero)->control_mode != 7 && ((SuckHero *)&hero)->control_mode != 3 &&
             ((SuckHero *)&hero)->control_mode != 18 && ((SuckHero *)&hero)->control_mode != 17 &&
-            !((SuckHero *)&hero)->unk20AC && !((SuckHero *)&hero)->item_select_blocked &&
+            !((SuckHero *)&hero)->suck_cannon_use_blocked && !((SuckHero *)&hero)->item_select_blocked &&
             scale_game_frames(22) < ((SuckHero *)&hero)->ready_frames) {
             start_equipped_item_animation();
             blend_moby_animation(suck_cannon_moby, 5, 0, scale_game_frames(2));
