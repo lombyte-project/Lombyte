@@ -16,7 +16,7 @@ typedef struct {
     u8      pad3[0x78 - 0x50];
     void   *p78;
     u8      pad4[0xA6 - 0x7C];
-    s16     hA6;
+    s16     moby_class;
 } O_002d7f88;
 
 typedef struct {
@@ -72,7 +72,7 @@ void morphoray_target_effect_update(S_002d7f88 *follower_moby) {
     if (fast_dec_timer(moby_data->removal_timer) != 0 || D_L00_001616DC * 1.1f <= moby_data->f4)
         goto kill;
     o = moby_data->o;
-    if (o == 0 || o->hA6 != 0xB9 || o->moby_state == 0xFE || o->moby_state == 0xFD) {
+    if (o == 0 || o->moby_class != 0xB9 || o->moby_state == 0xFE || o->moby_state == 0xFD) {
     kill:
         mark_moby_for_removal(follower_moby);
         return;
