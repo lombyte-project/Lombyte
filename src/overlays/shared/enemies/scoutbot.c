@@ -55,7 +55,7 @@ typedef struct ScoutbotVars {
     f32   vertical_bob_phase_increment;
     u8    pad210[0x6];
     s16   ground_hover_offset_enabled;
-    char *unk218;
+    char *beam_target_moby;
     s32   target_path_index;
     u8    glow_quad_anchor_position[0x4];
 } ScoutbotVars;
@@ -482,10 +482,10 @@ void draw_target_beam(struct Moby *moby) {
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
     moby_point_position(moby, 2, &beam_origin_position);
-    fast_vec_sub(&delta, scoutbot_private_vars->unk218 + 0x10, &beam_origin_position);
+    fast_vec_sub(&delta, scoutbot_private_vars->beam_target_moby + 0x10, &beam_origin_position);
     scale_vector_002d3878(3.0f, &delta);
     delta.v[2] =
-        (*(float *)(scoutbot_private_vars->unk218 + 0x18) + 0.25f) - beam_origin_position.v[2];
+        (*(float *)(scoutbot_private_vars->beam_target_moby + 0x18) + 0.25f) - beam_origin_position.v[2];
     delta.v[3] = 1.0f;
     length = fast_vec_length(&delta);
     clear_u64_value(&angles);
