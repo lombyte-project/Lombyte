@@ -84,7 +84,7 @@ s32        l02_view_gated_smoke_burst_second_color_tween_start __asm__("D_L02_00
 s32        l02_view_gated_smoke_burst_second_color_tween_end __asm__("D_L02_00162108") = 0x80204080;
 extern s32 view_gated_smoke_burst_interval_min_gp __asm__("D_L02_0016210C") __attribute__((sda));
 extern s32 view_gated_smoke_burst_interval_max_gp __asm__("D_L02_00162110") __attribute__((sda));
-s32        D_L02_00162114 = 0x10019;
+s32        l02_view_gated_smoke_burst_spawn_options __asm__("D_L02_00162114") = 0x10019;
 
 #include "rnc/overlay/l02/mobys/smoke_vent_data/update_smoke_vent_2.h"
 
@@ -109,7 +109,7 @@ s32        l02_alternating_smoke_burst_second_color_tween_start __asm__("D_L02_0
 s32        l02_alternating_smoke_burst_second_color_tween_end __asm__("D_L02_00162158") = 0x80204080;
 extern s32 alternating_smoke_burst_interval_min_gp __asm__("D_L02_0016215C") __attribute__((sda));
 extern s32 alternating_smoke_burst_interval_max_gp __asm__("D_L02_00162160") __attribute__((sda));
-s32        D_L02_00162164 = 0x10019;
+s32        l02_alternating_smoke_burst_spawn_options __asm__("D_L02_00162164") = 0x10019;
 
 /* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)
  * on a timer plus occasional single puffs (D_L02_00162088 / D_L02_00162048); state 2 alternates its puff life.
@@ -232,7 +232,7 @@ void smoke_vent_update(struct Moby *moby) {
                         (random_float_between(-view_gated_smoke_burst_timing_variation_fraction_gp,
                                               view_gated_smoke_burst_timing_variation_fraction_gp) +
                          1.0f))),
-                    D_L02_00162114);
+                    l02_view_gated_smoke_burst_spawn_options);
             }
         }
         if (random_integer_below(4) != 0) {
@@ -369,7 +369,7 @@ void smoke_vent_update(struct Moby *moby) {
                                      -alternating_smoke_burst_timing_variation_fraction_gp,
                                      alternating_smoke_burst_timing_variation_fraction_gp) +
                                  1.0f))),
-                            D_L02_00162164);
+                            l02_alternating_smoke_burst_spawn_options);
             }
         }
         fast_vec_normalize_scale_first(
