@@ -57,7 +57,7 @@ typedef struct Hero_2B94B0 {
     float bolt_collection_probe_b[4];
     float bolt_collection_probe_c[4];
     char  pad540[0x1B4C];
-    int   f208C;
+    int   bolt_collection_test_selector;
     char  pad2090[0x1F8];
     float collection_radius_xy;
     float collection_height_tolerance;
@@ -183,7 +183,7 @@ void bolt_pickup_update(Moby_2B94B0 *moby) {
     case MOBY_STATE_CHECK_COLLECTION:
         hit = 0;
         moby->spin_angle = fast_add_rotations(moby->spin_angle, moby_data->fC);
-        if (((Hero_2B94B0 *)((char *)&hero))->f208C == 15) {
+        if (((Hero_2B94B0 *)((char *)&hero))->bolt_collection_test_selector == 15) {
             if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_a,
                                    moby->pos) < 0.5f)
                 hit = 1;
