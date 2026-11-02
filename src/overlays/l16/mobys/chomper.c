@@ -255,6 +255,9 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 void update_chomper_hit_reaction_and_target(void *chomper_instance) {
+    enum {
+        CHOMPER_TARGET_SELECTION_REJECTED = 2
+    };
     L16PursuitMoby *chomper_moby = chomper_instance;
     L16PursuitData *pursuit_data = chomper_moby->data;
     char           *hit;
@@ -308,7 +311,7 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
                          *(int *)reaction_kind_or_path_address) != 2) {
         if (vector_distance_xy(pursuit_data->home, pursuit_data->target) > 16.0f ||
             absolute_float(chomper_moby->position[2] - pursuit_data->target[2]) > 3.0f) {
-            pursuit_data->target_selection_status = 2;
+            pursuit_data->target_selection_status = CHOMPER_TARGET_SELECTION_REJECTED;
         }
     }
     if (pursuit_data->target_moby == 0) {
