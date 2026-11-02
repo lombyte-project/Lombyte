@@ -3302,7 +3302,7 @@ typedef struct Moby_26ff10 {
     u8   f08;
     char pad09;
     s16  split_countdown;
-    f32  f0C;
+    f32  split_position_spread_scale;
     VV   posv;
     PV   pv;
 } Moby_26ff10;
@@ -3348,10 +3348,10 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         f32 sp, lo, hi, sc, zero, nsp;
         pv->f18 |= 0x88;
         lo = 0.5f;
-        sp = particle->f0C / 900000.0f;
+        sp = particle->split_position_spread_scale / 900000.0f;
         hi = 0.7f;
         sc = 0.2f;
-        particle->f0C = particle->f0C * 0.8f;
+        particle->split_position_spread_scale = particle->split_position_spread_scale * 0.8f;
         zero = 0.0f;
         f = random_float_between(lo, hi);
         nsp = -sp;
@@ -3365,7 +3365,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         spawned_particle = FUN_L00_0026fd28_26ff10(v1u.f, v0u.f, 0x88, pv->f1C);
         if (spawned_particle != 0) {
             spawned_particle->split_countdown = scale_game_frames(2);
-            spawned_particle->f0C = particle->f0C;
+            spawned_particle->split_position_spread_scale = particle->split_position_spread_scale;
         }
         fast_vec_scale(pv, pv, random_float_between(lo, hi));
         particle->pv.x =
@@ -3417,8 +3417,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         fast_vec_scale(pv, pv, 0.02f);
         fast_vec_normalize(collision_offset, coll_hit_normal.f, 0.055f);
         fast_vec_add(particle->posv.f, coll_hit_normal.f - 8, collision_offset);
-        if (particle->f0C < 200000.0f && (pv->f18 & 8) == 0) {
-            particle->f0C = particle->f0C + particle->f0C;
+        if (particle->split_position_spread_scale < 200000.0f && (pv->f18 & 8) == 0) {
+            particle->split_position_spread_scale = particle->split_position_spread_scale + particle->split_position_spread_scale;
         }
         pv->f18 |= 8;
     } else {
@@ -3429,8 +3429,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         f32 decayed_particle_scalar;
         kk2 = 8.0f / (d * 0.443f);
         pv->f16++;
-        decayed_particle_scalar = particle->f0C - 260000.0f / (f32)kk2 * d * 1.25f;
-        particle->f0C = decayed_particle_scalar;
+        decayed_particle_scalar = particle->split_position_spread_scale - 260000.0f / (f32)kk2 * d * 1.25f;
+        particle->split_position_spread_scale = decayed_particle_scalar;
         if (decayed_particle_scalar <= 0.0f) {
         kill:
             FUN_L00_00267a08_26ff10(particle);
@@ -3439,7 +3439,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     } else {
         f32 d = frame_scale;
         kk2 = 8.0f / (d * 0.443f);
-        particle->f0C = particle->f0C + 260000.0f / (f32)kk2 * d;
+        particle->split_position_spread_scale = particle->split_position_spread_scale + 260000.0f / (f32)kk2 * d;
     }
     f = convert_integer_to_float(pv->f14);
     {
