@@ -1400,7 +1400,7 @@ typedef struct Hero_234800 {
     char          p100[0x50];
     Vec_234800    v150;
     char          p160[0x24];
-    float         f184;
+    float         rotation_anchor_inhibit;
     char          p188[0x6E];
     short         path_clearance_position_anchor_inhibit;
     char          p1F8[0x104];
@@ -1569,7 +1569,7 @@ void update_hero_attachment(void) {
         ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
     }
     if ((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) &&
-        ((Hero_234800 *)hero_233f80)->f184 == 0.0f && ((Hero_234800 *)hero_233f80)->h30E == 0) {
+        ((Hero_234800 *)hero_233f80)->rotation_anchor_inhibit == 0.0f && ((Hero_234800 *)hero_233f80)->h30E == 0) {
         if (!(((Hero_234800 *)hero_233f80)->attachment_anchor_flags & 2)) {
             convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->hero_moby,
                                             ((Hero_234800 *)hero_233f80)->attachment_reference_object,
