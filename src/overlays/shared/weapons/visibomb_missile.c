@@ -89,12 +89,12 @@ typedef struct D_2b6140 {
     float f18;
     float f1C;
     char  p20[4];
-    Part *f24;
+    Part *steering_manipulator;
     Part *f28;
-    int   f2C;
+    int   engine_voice_slot;
     char  p30[0x14];
-    float f44;
-    float f48;
+    float launch_ground_clearance;
+    float smoothed_speed_target;
 } D_2b6140;
 
 typedef struct Hit_2b6140 {
@@ -870,17 +870,17 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         float t = visibomb_missile_default_speed_gp * frame_time_macro;
         if (controller_state.held & 0x40)
             t = visibomb_missile_max_speed_gp * frame_time_macro;
-        missile_vars->f48 +=
-            (t - missile_vars->f48) * visibomb_missile_speed_target_blend_factor_gp;
+        missile_vars->smoothed_speed_target +=
+            (t - missile_vars->smoothed_speed_target) * visibomb_missile_speed_target_blend_factor_gp;
         missile_vars->f4 +=
-            (missile_vars->f48 - missile_vars->f4) * visibomb_missile_speed_blend_factor_gp;
+            (missile_vars->smoothed_speed_target - missile_vars->f4) * visibomb_missile_speed_blend_factor_gp;
         if (visibomb_missile_max_speed_gp * frame_time_macro < missile_vars->f4)
             missile_vars->f4 = visibomb_missile_max_speed_gp * frame_time_macro;
     }
     engine_voice_set_pitch(
-        missile_vars->f2C,
+        missile_vars->engine_voice_slot,
         truncate_float_to_s32(
-            (missile_vars->f48 - visibomb_missile_default_speed_gp * frame_time_macro /
+            (missile_vars->smoothed_speed_target - visibomb_missile_default_speed_gp * frame_time_macro /
                                      (visibomb_missile_max_speed_gp * frame_time_macro -
                                       visibomb_missile_default_speed_gp * frame_time_macro)) *
             visibomb_missile_speed_voice_control_scale_gp));
@@ -911,7 +911,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     qcopy(&v20, &missile_moby->pos);
     fast_vec_add(&missile_moby->pos, &missile_moby->pos, &v50);
     if (scale_game_frames(0xBB8) - scale_game_frames(0x3C) < missile_vars->f10) {
-        float t = probe_ground_height(&missile_moby->pos, 0, 0.5f) + missile_vars->f44;
+        float t = probe_ground_height(&missile_moby->pos, 0, 0.5f) + missile_vars->launch_ground_clearance;
         if (missile_moby->pos.z < t) {
             if (coll_hit_moby == 0 ||
                 (coll_hit_moby->pclass != 0 && coll_hit_moby->pclass->type == 5)) {
@@ -933,7 +933,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     func_L00_002B6E90_2b6140(missile_moby, missile_vars);
     {
         struct Moby *skip = missile_moby;
-        build_axis_rotation_quaternion(&missile_vars->f24->pos,
+        build_axis_rotation_quaternion(&missile_vars->steering_manipulator->pos,
                                        1,
                                        -(missile_vars->f1C * 0.5f +
                                          absolute_float(missile_vars->f18 / 3.0f) +
@@ -972,14 +972,14 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 reflect_vector(&k30, &v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40);
                 fast_vec_normalize(&k30, &k30, frame_time_macro + frame_time_macro);
                 fast_vec_normalize(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
-                if (missile_vars->f2C != -1) {
-                    u8 *e = (u8 *)&voice_pool + missile_vars->f2C * 0x70;
+                if (missile_vars->engine_voice_slot != -1) {
+                    u8 *e = (u8 *)&voice_pool + missile_vars->engine_voice_slot * 0x70;
                     if (*(struct Moby **)(e + 0x88) == missile_moby) {
                         if (e[0x74] != 0)
-                            release_voice_slot(missile_vars->f2C);
+                            release_voice_slot(missile_vars->engine_voice_slot);
                     }
                 }
-                missile_vars->f2C = -1;
+                missile_vars->engine_voice_slot = -1;
             } else if (((Hit_2b6140 *)D_L00_00173E40_2b6140)->f1C > 0) {
                 missile_moby->command = 1;
                 qcopy(&missile_moby->pos, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v20);
@@ -990,14 +990,14 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 reflect_vector(&k30, &v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40);
                 fast_vec_normalize(&k30, &k30, frame_time_macro + frame_time_macro);
                 fast_vec_normalize(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
-                if (missile_vars->f2C != -1) {
-                    u8 *e = (u8 *)&voice_pool + missile_vars->f2C * 0x70;
+                if (missile_vars->engine_voice_slot != -1) {
+                    u8 *e = (u8 *)&voice_pool + missile_vars->engine_voice_slot * 0x70;
                     if (*(struct Moby **)(e + 0x88) == missile_moby) {
                         if (e[0x74] != 0)
-                            release_voice_slot(missile_vars->f2C);
+                            release_voice_slot(missile_vars->engine_voice_slot);
                     }
                 }
-                missile_vars->f2C = -1;
+                missile_vars->engine_voice_slot = -1;
             }
         } else if (missile_vars->f10 == 0) {
             func_L00_002B6E10_2b6140(missile_moby, missile_vars);
@@ -1007,14 +1007,14 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     if (missile_vars->f10 < scale_game_frames(0xBB8) - scale_game_frames(0x3C)) {
         if (controller_state.pressed & 0x20) {
             missile_moby->command = 1;
-            if (missile_vars->f2C != -1) {
-                u8 *e = (u8 *)&voice_pool + missile_vars->f2C * 0x70;
+            if (missile_vars->engine_voice_slot != -1) {
+                u8 *e = (u8 *)&voice_pool + missile_vars->engine_voice_slot * 0x70;
                 if (*(struct Moby **)(e + 0x88) == missile_moby) {
                     if (e[0x74] != 0)
-                        release_voice_slot(missile_vars->f2C);
+                        release_voice_slot(missile_vars->engine_voice_slot);
                 }
             }
-            missile_vars->f2C = -1;
+            missile_vars->engine_voice_slot = -1;
         }
     }
     if (missile_moby->command != 0) {
