@@ -9,7 +9,7 @@ struct HudMenuState {
     u8  pad_50[0x8];
     s32 unk58;
     u8  pad_5C[0x1B4];
-    s32 unk210;
+    s32 selection_entry_count;
 };
 
 struct HudItemEntry {
@@ -40,7 +40,7 @@ void render_vendor_item_icon_strip_pass(void) {
     s32  fill_color;
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    if (D_001E63C0.unk210 < 8) {
+    if (D_001E63C0.selection_entry_count < 8) {
         sprite_x = 0xC;
         item_index = 0;
         slot_x = D_001E63C0.unk58 * 0x38;
@@ -49,7 +49,7 @@ void render_vendor_item_icon_strip_pass(void) {
             0x80000000;
         draw_framebuffer_rect(slot_x + 8, 2, slot_x + 0x40, 0x3A, 0x200, 0x80, fill_color);
         draw_framebuffer_rect(slot_x + 0xA, 4, slot_x + 0x3E, 0x38, 0x200, 0x80, 0x80000000);
-        if (D_001E63C0.unk210 > 0) {
+        if (D_001E63C0.selection_entry_count > 0) {
             do {
                 selection_purchase_kind_ptr =
                     (s32 *)(void *)((u8 *)&D_001E63C0 + 0xD4 + item_index * 0x14);
@@ -65,7 +65,7 @@ void render_vendor_item_icon_strip_pass(void) {
                 draw_hud_sprite(frame_index, sprite_x, 6, 0x30, 0x30, 0x80);
                 sprite_x += 0x38;
                 item_index += 1;
-            } while (item_index < D_001E63C0.unk210);
+            } while (item_index < D_001E63C0.selection_entry_count);
         }
     } else {
         if (D_001E63C0.unk4C < 0) {
@@ -90,7 +90,7 @@ void render_vendor_item_icon_strip_pass(void) {
         do {
             first_slot = D_001E63C0.unk58 - 3;
             entry_offset =
-                ((s32)((D_001E63C0.unk210 * 2) + slot + first_slot) % (s32)D_001E63C0.unk210) *
+                ((s32)((D_001E63C0.selection_entry_count * 2) + slot + first_slot) % (s32)D_001E63C0.selection_entry_count) *
                 0x14;
             icon = ((struct HudItemEntry *)(void *)((u8 *)((u8 *)menu_item_info) +
                                                     *(s32 *)(void *)(entry_offset +
