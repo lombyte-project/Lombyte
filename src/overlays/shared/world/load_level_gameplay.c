@@ -191,9 +191,9 @@ typedef struct {
 
 typedef struct {
     char pad0[0x23C];
-    int  f23C;
-    int  f240;
-    int  f244;
+    int  background_red;
+    int  background_green;
+    int  background_blue;
 } LevelState16CB40;
 
 typedef struct {
@@ -230,7 +230,7 @@ typedef struct TieInst {
 
 typedef struct {
     char           pad0[0x26];
-    unsigned short f26;
+    unsigned short tie_instance_count;
     TieInst       *f28;
     char           pad2C[4];
     float          f30[3];
@@ -266,7 +266,7 @@ typedef struct {
     char           pad0[0xC];
     float          fC;
     char           pad10[6];
-    unsigned short f16;
+    unsigned short shrub_instance_count;
     ShrubInst     *f18;
     float         *f1C;
     float          f20;
@@ -357,7 +357,7 @@ typedef struct {
 
 typedef struct {
     char      pad0[0x2080];
-    MobyInst *f2080;
+    MobyInst *hero_moby;
     char      pad2084[0x28C];
 } HeroSpawn;
 
@@ -553,9 +553,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int *p = (int *)((char *)hdr + hdr->f0);
         int *ship_spawn_settings;
 
-        D_L00_0016CA40.f23C = *p++;
-        D_L00_0016CA40.f240 = *p++;
-        D_L00_0016CA40.f244 = *p++;
+        D_L00_0016CA40.background_red = *p++;
+        D_L00_0016CA40.background_green = *p++;
+        D_L00_0016CA40.background_blue = *p++;
         *(unsigned char *)&D_L00_0015F444 = *p++;
         *(unsigned char *)&D_L00_0015F445 = *p++;
         *(unsigned char *)&D_L00_0015F446 = *p++;
@@ -577,7 +577,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_001604A4 = 500.0f;
     D_L00_0015FFF0 = 500;
     D_L00_0016017C = 0x1F4000;
-    set_background_color(D_L00_0016CA40.f23C, D_L00_0016CA40.f240, D_L00_0016CA40.f244);
+    set_background_color(D_L00_0016CA40.background_red, D_L00_0016CA40.background_green, D_L00_0016CA40.background_blue);
     vu0_load_micro_program(D_00100AE0);
     fast_mem_zero16(point_lights, 0x100);
     fast_mem_zero16(D_L00_001804C0, 0x180);
@@ -695,10 +695,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
             inst->f1A = D_L00_001C5B00[*(int *)p];
             if (inst->f1A != last) {
                 D_L00_001C5800[inst->f1A]->f28 = inst;
-                D_L00_001C5800[inst->f1A]->f26 = 0;
+                D_L00_001C5800[inst->f1A]->tie_instance_count = 0;
                 last = inst->f1A;
             }
-            D_L00_001C5800[inst->f1A]->f26++;
+            D_L00_001C5800[inst->f1A]->tie_instance_count++;
             inst->f10 = mtx;
             inst->f14 = (float)*(int *)(p + 4);
             inst->f1E = 0xFFFF;
@@ -775,9 +775,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (shrub_class_index != last) {
                 last = shrub_class_index;
                 D_L00_001BC030[shrub_class_index]->f18 = inst;
-                D_L00_001BC030[shrub_class_index]->f16 = 0;
+                D_L00_001BC030[shrub_class_index]->shrub_instance_count = 0;
             }
-            D_L00_001BC030[shrub_class_index]->f16++;
+            D_L00_001BC030[shrub_class_index]->shrub_instance_count++;
             inst->f18 = i;
             inst->f10 = *(float *)(p + 4);
             if (inst->f10 < 16.0f) {
@@ -1653,7 +1653,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_0015F5CC = 0;
     D_L00_0015F63C = 0;
     if (level_render_state.player != 0) {
-        *(long *)&((MobyInst *)level_render_state.player)->f38 = *(long *)&D_0013F350.f2080->f38;
+        *(long *)&((MobyInst *)level_render_state.player)->f38 = *(long *)&D_0013F350.hero_moby->f38;
     }
     switch (D_0015ED84) {
     case 2:
