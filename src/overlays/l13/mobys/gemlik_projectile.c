@@ -75,13 +75,13 @@ typedef struct {
 
 struct L13Ent00178480 {
     char           pad0[0x24];
-    int            i24;
+    int            hit_flags;
     unsigned char  b28;
     unsigned char  b29;
-    unsigned short s2A;
-    float          f2C;
+    unsigned short source_oclass;
+    float          damage;
     int            pad30;
-    char          *p34;
+    char          *owner_moby;
     char           pad38[8];
 };
 
@@ -145,19 +145,19 @@ void gemlik_projectile_update(struct Moby *moby) {
                 *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
                 work.hit[0x19] = 1;
                 if ((unsigned char)ent[0xA4] == 0xFF ||
-                    (target_hit_entry = &l13_moby_hit_entries[(unsigned char)ent[0xA4]])->p34 !=
+                    (target_hit_entry = &l13_moby_hit_entries[(unsigned char)ent[0xA4]])->owner_moby !=
                         ent) {
                     record_moby_hit(ent, work.hit);
                 } else {
-                    target_hit_entry->f2C += 1.0f;
+                    target_hit_entry->damage += 1.0f;
                     l13_moby_hit_entries[(unsigned char)ent[0xA4]].b28 = 1;
                     l13_moby_hit_entries[(unsigned char)ent[0xA4]].b29 = 1;
-                    l13_moby_hit_entries[(unsigned char)ent[0xA4]].s2A =
+                    l13_moby_hit_entries[(unsigned char)ent[0xA4]].source_oclass =
                         *(unsigned short *)((char *)moby + 0xA6);
                     {
                         struct L13Ent00178480 *matched_target_hit_entry =
                             &l13_moby_hit_entries[(unsigned char)ent[0xA4]];
-                        matched_target_hit_entry->i24 = hit_mask;
+                        matched_target_hit_entry->hit_flags = hit_mask;
                     }
                 }
                 break;
