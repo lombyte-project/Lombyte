@@ -58,7 +58,7 @@ typedef struct Data_2C0330 {
 
 typedef struct {
     char  pad0[0x2C];
-    float f2C;
+    float hit_damage;
 } Hit_2C0330;
 
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -265,7 +265,7 @@ void bomb_spawner_update(struct Moby *moby) {
     r = (Hit_2C0330 *)find_moby_hit(moby, 0xC30000, 0);
     resolve_moby_hit_response(moby, r, &spawner_data->hp, 0, &damage_query_status, 0, 0, 4);
     if (damage_query_status >= HIT_STATUS_DAMAGE_PROCESSING_THRESHOLD) {
-        float remaining_health = spawner_data->hp - r->f2C;
+        float remaining_health = spawner_data->hp - r->hit_damage;
         spawner_data->hp = remaining_health;
         if (remaining_health > 0.0f) {
             spawner_data->b67 = 0x5A;
