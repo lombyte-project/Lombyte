@@ -47,7 +47,7 @@ typedef struct {
     u8       pad[0x30];
     f32      f70;
     u8       pad2[4];
-    s16      h78;
+    s16      cached_swing_animation;
 } R_2a7780;
 
 typedef struct {
@@ -314,20 +314,20 @@ void draw_wrench_swing_effect(O_2a7780 *effect_owner) {
     color = 0x808080;
     alpha = scale;
     if (!((u32)(P_2a7780_G.p2080[0x52] - 0x17) < 3 || P_2a7780_G.p2080[0x52] == 0x2B))
-        k = r->h78;
+        k = r->cached_swing_animation;
     else
         k = P_2a7780_G.p2080[0x52];
     if (k == 0x17) {
-        r->h78 = k;
+        r->cached_swing_animation = k;
         idx = 0;
     } else if (k == 0x18) {
-        r->h78 = k;
+        r->cached_swing_animation = k;
         idx = 1;
     } else if (k == 0x19) {
-        r->h78 = k;
+        r->cached_swing_animation = k;
         idx = 2;
     } else {
-        r->h78 = 0x2B;
+        r->cached_swing_animation = 0x2B;
         alpha = 0.7f;
         idx = 3;
         scale = 1.25f;
