@@ -120,7 +120,7 @@ void register_part_types(void) {
  */
 typedef struct {
     u8   pad_00[0xA];
-    s16  unk0A; /* 2 skips the ground test (a timer in sibling kinds) */
+    s16  ground_test_mode; /* 2 skips the ground test (a timer in sibling kinds) */
     u8   pad_0C[4];
     Vec4 pos;   /* 0x10: drawn position */
     Vec4 probe; /* 0x20: point tested against the ground */
@@ -156,7 +156,7 @@ void update_falling_effect_particle(FallingParticle *particle) {
     fast_vec_add(&step, vel, &particle_drift);
     fast_vec_add(&particle->probe, &particle->probe, &step);
     fast_vec_add(&particle->pos, &particle->pos, &step);
-    if (particle->unk0A != 2) {
+    if (particle->ground_test_mode != 2) {
         if (cell_x != (s32)particle->probe.f[0] || cell_y != (s32)particle->probe.f[1]) {
             ground_test_probe.q = particle->probe.q;
             if (ground_height_at(&ground_test_probe) < particle_min_ground) {
