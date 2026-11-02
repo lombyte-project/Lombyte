@@ -83,12 +83,12 @@ void prepare_scaled_float_table_with_target_byte(char *value_target,
                                                  int   val,
                                                  float scale) __asm__("FUN_L02_002a4058");
 
-void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) {
+void prepare_scaled_float_table_with_target_byte(char *value_target, int target_byte, float scale) {
     int    i;
     float *destination;
     float *source;
     float *source_table_start;
-    value_target[0x3F] = val;
+    value_target[0x3F] = target_byte;
     *(s32 *)(scaled_table_output + 0x0) = scaled_table_header_leading_word_gp;
     *(s32 *)(scaled_table_output + 0x4) = scaled_table_header_second_word;
     *(s32 *)(scaled_table_output + 0x8) = scaled_table_header_third_word;
