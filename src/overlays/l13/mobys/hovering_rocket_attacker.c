@@ -87,7 +87,7 @@ typedef struct HoveringRocketAttackerVars {
     u8  pad_5B[0x5];
     u8  anim_state;
     u8  pad_61[0x6];
-    u8  unk67;
+    u8  hit_reaction_interpolation_target;
     u8  pad_68[0x8];
     f32 unk70[4];
     u8  pad_80[0x30];
@@ -107,7 +107,7 @@ typedef struct HoveringRocketAttackerVars {
     u8 *rocket1;
     u8 *rocket0;
     f32 unk100[4];
-    s32 unk110;
+    s32 voice_handle;
 } HoveringRocketAttackerVars;
 
 /* Moby class 101 */
@@ -154,7 +154,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         moby_data->unk100[0] = random_angle_radians();
         moby_data->unk100[2] = random_angle_radians();
         moby_data->unk100[3] = random_angle_radians();
-        moby_data->unk110 = -1;
+        moby_data->voice_handle = -1;
         break;
     case WAIT_TO_MOVE_TO_TABLE_POINT:
         if (moby_data->unkB4 == 2)
@@ -403,9 +403,9 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     moby_data = ((unsigned char *)MOBY(moby)->pvars);
     if (MOBY(moby)->state == UPDATE_INITIALIZE)
         return;
-    if (moby_data->unk110 == -1 || voice_is_playing(moby, moby_data->unk110) == 0) {
-        moby_data->unk110 = -1;
-        moby_data->unk110 = FUN_L13_002c2d30_allocate(1, 4, moby);
+    if (moby_data->voice_handle == -1 || voice_is_playing(moby, moby_data->voice_handle) == 0) {
+        moby_data->voice_handle = -1;
+        moby_data->voice_handle = FUN_L13_002c2d30_allocate(1, 4, moby);
     }
     update_moby_vertical_oscillation(
         0.5f, frame_time * 1.39626336f, moby, moby_data->unk100, &moby_data->unk100[1]);
@@ -505,7 +505,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         switch (hit_reaction_code) {
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
-            moby_data->unk67 = 0xFA;
+            moby_data->hit_reaction_interpolation_target = 0xFA;
             break;
         case HIT_REACTION_LOW_INTERPOLATION_TARGET:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE:
@@ -513,13 +513,13 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_FOURTH_ALTERNATE:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_FIFTH_ALTERNATE:
-            moby_data->unk67 = 0x78;
+            moby_data->hit_reaction_interpolation_target = 0x78;
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             FUN_L00_00257470(moby, 0, -1);
             MOBY(moby)->state = EMIT_EFFECT_AND_REMOVE;
-            moby_data->unk67 = 0xF0;
+            moby_data->hit_reaction_interpolation_target = 0xF0;
             break;
         case HIT_REACTION_NONE:
         case HIT_REACTION_NO_HIT:
