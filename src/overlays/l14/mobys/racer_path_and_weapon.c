@@ -268,7 +268,7 @@ typedef struct {
     int           pad[3];
 } Ray_67e8;
 
-int D_L14_00161A3C = 0x8c;
+int l14_racer_weapon_aim_duration_frames __asm__("D_L14_00161A3C") = 0x8c;
 
 #include "rnc/overlay/l14/mobys/racer_path_and_weapon_data/update_racer_path_and_weapon.h"
 
@@ -343,7 +343,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         racer_moby->command = 1;
     }
     if (racer_moby->command == 1) {
-        moby_data->aim_timer = scale_game_frames(D_L14_00161A3C);
+        moby_data->aim_timer = scale_game_frames(l14_racer_weapon_aim_duration_frames);
         moby_data->unk1C4 = 0;
         racer_moby->command = 2;
         build_moby_bone_transform(racer_moby, 4, joint_transform_and_aim_vectors);
@@ -365,7 +365,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         build_moby_bone_transform(racer_moby, 0, moby_data->bone_transform);
         blend = 1.0f;
         aim_timer_fraction = convert_integer_to_float(moby_data->aim_timer) /
-                             convert_integer_to_float(scale_game_frames(D_L14_00161A3C));
+                             convert_integer_to_float(scale_game_frames(l14_racer_weapon_aim_duration_frames));
         k = weapon_aim_final_path_step;
         ti = ((RacerSeg_67e8 *)moby_data)->seg;
         tf = ((RacerSeg_67e8 *)moby_data)->frac;
