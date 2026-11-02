@@ -218,9 +218,9 @@ typedef struct {
     float            yaw0;
     float            pitch0;
     float            speed_end;
-    int              f38;
-    short            f3C;
-    short            f3E;
+    int              target_leading_enabled;
+    short            velocity_inheritance_timer;
+    short            velocity_inheritance_duration_frames;
 } D_29E8A0;
 
 typedef struct M_29E8A0 {
@@ -323,10 +323,10 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
     target_moby = missile_data->target;
     missile_data->speed =
         missile_data->speed + (missile_data->speed_end - missile_data->speed) / 10.0f * D_0015ED64;
-    fast_dec_timer_s16(&missile_data->f3C);
+    fast_dec_timer_s16(&missile_data->velocity_inheritance_timer);
     {
-        float velocity_inheritance_frames_remaining = convert_integer_to_float(missile_data->f3C);
-        float velocity_inheritance_frames_total = convert_integer_to_float(missile_data->f3E);
+        float velocity_inheritance_frames_remaining = convert_integer_to_float(missile_data->velocity_inheritance_timer);
+        float velocity_inheritance_frames_total = convert_integer_to_float(missile_data->velocity_inheritance_duration_frames);
         fast_vec_scale(up,
                        ((char *)&D_0013F490),
                        velocity_inheritance_frames_remaining / velocity_inheritance_frames_total);
@@ -357,7 +357,7 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
             qcopy(tp, target_moby->pos);
             tp[2] = tp[2] + missile_data->zoff;
             fast_vec_sub(delta, tp, missile_moby->pos);
-            if (missile_data->f38 != 0) {
+            if (missile_data->target_leading_enabled != 0) {
                 float intercept_quadratic_coefficient, intercept_linear_coefficient, c,
                     intercept_time_plus_root, intercept_time_minus_root, discriminant_sqrt;
                 fast_vec_sub(dv, tp, missile_data->v);
