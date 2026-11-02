@@ -19,7 +19,7 @@ typedef struct {
 
 typedef struct {
     u8    p[0x74];
-    u8    b74;
+    u8    is_active;
     u8    p2[0x8C - 0x75];
     void *o;
 } E_2ed950;
@@ -67,7 +67,7 @@ void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
         s32       four = 4;
         if (D_L00_0015F5F4_2ed950[playback_state->id].b18)
             fl = four;
-        if (e->o == sound_emitter && e->b74)
+        if (e->o == sound_emitter && e->is_active)
             return;
         if (!fast_dec_timer(&playback_state->wC))
             return;
@@ -82,7 +82,7 @@ void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
         s32 voice_slot_index = playback_state->snd;
         if (voice_slot_index != -1) {
             E_2ed950 *e = ENT_2ed950(voice_slot_index);
-            if (e->o == sound_emitter && e->b74)
+            if (e->o == sound_emitter && e->is_active)
                 release_voice_slot(voice_slot_index);
         }
         playback_state->snd = -1;
