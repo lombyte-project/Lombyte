@@ -29,7 +29,7 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 
 typedef struct {
     char  pad0[0x24];
-    float f24;
+    float configured_movement_rotation_z;
     float f28;
     int   c;
     int   lim;
@@ -79,7 +79,7 @@ void rocket_moby_update(struct Moby *moby) {
         euler_rotation_basis(target_heading_basis, rotation_angles);
         transpose_rotation_matrix(aA0, target_heading_basis);
         clear_u64_value(rotation_angles);
-        rotation_angles[2] = moby_vars->f24;
+        rotation_angles[2] = moby_vars->configured_movement_rotation_z;
         rotation_angles[1] = moby_vars->f28;
         euler_rotation_basis(configured_rotation_basis, rotation_angles);
         transform_vector_by_basis(target_movement_step, target_movement_step, aA0);
