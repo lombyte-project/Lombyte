@@ -208,7 +208,7 @@ typedef struct {
     u8        pad20[0x58];
     DropVars *vars;
     u8        pad7C[0x2A];
-    u16       hA6;
+    u16       collision_probe_id;
 } DropMoby;
 
 typedef struct {
@@ -269,7 +269,7 @@ void birdbot_projectile_update(DropMoby *projectile) {
     ((f32 *)&probe.dir)[3] = 5627.9248f;
     probe.b28 = 1;
     probe.b29 = 1;
-    probe.id = projectile->hA6;
+    probe.id = projectile->collision_probe_id;
     if (fast_dec_timer(projectile_vars->sound) != 0) {
         burst_position = projectile->pos.q;
         spawn_explosion_effects(projectile, &burst_position, 0, 0.5f, zero);
