@@ -3152,8 +3152,8 @@ typedef struct {
     u8  p10E4[0x12A0 - 0x10E4];
     f32 f12A0, f12A4;
     s32 point_effect_emission_updates_remaining;
-    s16 h12AC;
-    u16 h12AE;
+    s16 point_effect_particles_per_point;
+    u16 point_effect_emission_flags;
     u8  p12B0[0x2080 - 0x12B0];
     u8 *p2080;
     s32 i2084;
@@ -3205,27 +3205,27 @@ void update_hero_easing_targets_and_point_effects(void) {
         hero_eases[4].scale = 0.01f;
         hero_eases[5].scale = 0.01f;
     }
-    if (!(P.h12AE & 0x80)) {
+    if (!(P.point_effect_emission_flags & 0x80)) {
         if (P.i2084 == 3)
             configure_hero_point_effect_emission(1, 2, 1, 0, 0.021f, 0.002f);
         if (P.i208C == 4 && P.i418 > 0 && P.i418 < scale_game_frames(12))
             configure_hero_point_effect_emission(1, 2, 0, 1, 0.016f, 0.002f);
         if (P.point_effect_emission_updates_remaining <= 0)
             return;
-        if (P.h12AC == 0)
+        if (P.point_effect_particles_per_point == 0)
             return;
         optional_moby_basis = 0;
-        if (P.h12AE & 1)
+        if (P.point_effect_emission_flags & 1)
             optional_moby_basis = P.p2080 + 0xC0;
         P.point_effect_emission_updates_remaining--;
         moby_point_position(P.p2080, 0x16, emission_point_world_position);
-        for (i = 0; i < P.h12AC; i++)
+        for (i = 0; i < P.point_effect_particles_per_point; i++)
             spawn_jittered_effect_particle_with_optional_basis(
                 emission_point_world_position,
                 optional_moby_basis,
                 P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
         moby_point_position(P.p2080, 0x17, emission_point_world_position);
-        for (i = 0; i < P.h12AC; i++)
+        for (i = 0; i < P.point_effect_particles_per_point; i++)
             spawn_jittered_effect_particle_with_optional_basis(
                 emission_point_world_position,
                 optional_moby_basis,
