@@ -158,8 +158,8 @@ typedef struct {
     char           pad90[8];
     float          tilt_x_phase;
     float          tilt_y_phase;
-    float          fA0;
-    float          fA4;
+    float          tilt_x_phase_increment;
+    float          tilt_y_phase_increment;
     int            sound;
     DrainCoverLid *lid;
 } DrainCoverData;
@@ -234,8 +234,8 @@ void drain_cover_update(DrainCoverMoby *moby) {
         qcopy(drain_cover_data->home, moby->pos);
         drain_cover_data->tilt_x_phase = random_angle_radians();
         drain_cover_data->tilt_y_phase = random_angle_radians();
-        drain_cover_data->fA0 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
-        drain_cover_data->fA4 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+        drain_cover_data->tilt_x_phase_increment = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+        drain_cover_data->tilt_y_phase_increment = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
         minimum_rise_height = drain_cover_data->hover_height_above_home + 1.0f;
         if (drain_cover_data->rise_height <= minimum_rise_height) {
             drain_cover_data->rise_height = minimum_rise_height;
@@ -359,8 +359,8 @@ void drain_cover_update(DrainCoverMoby *moby) {
             qcopy(moby->pos, drain_cover_data->home);
             drain_cover_data->tilt_x_phase = random_angle_radians();
             drain_cover_data->tilt_y_phase = random_angle_radians();
-            drain_cover_data->fA0 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
-            drain_cover_data->fA4 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+            drain_cover_data->tilt_x_phase_increment = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+            drain_cover_data->tilt_y_phase_increment = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
         }
         break;
     }
