@@ -93,13 +93,13 @@ typedef struct {
     u8    f5A; /* 0x5A */
     u8    pad5B[0x15];
     u8    f70[0x10];    /* 0x70 */
-    f32   f80;          /* 0x80 */
-    f32   f84;          /* 0x84 */
+    f32   gravity_step;          /* 0x80 */
+    f32   motion_speed_adjustment_step;          /* 0x84 */
     f32   return_speed; /* 0x88 */
     f32   f8C;          /* 0x8C */
-    s32   f90;          /* 0x90 */
-    s32   f94;          /* 0x94 */
-    f32   f98;          /* 0x98 */
+    s32   collision_radius_fixed;          /* 0x90 */
+    s32   motion_flags;          /* 0x94 */
+    f32   collision_height_offset;          /* 0x98 */
     u8    pad9C[0x11];
     u8    fAD; /* 0xAD */
     u8    padAE[0x22];
@@ -127,7 +127,7 @@ typedef struct {
     s32   timer;          /* 0x1A8 */
     s32   f1AC;           /* 0x1AC */
     s32   path;           /* 0x1B0 */
-    s32   f1B4;           /* 0x1B4 */
+    s32   activate_on_initialize;           /* 0x1B4 */
     s32   timer_max;      /* 0x1B8 */
     s32   node;           /* 0x1BC */
     s32   clip_volume;    /* 0x1C0 */
@@ -317,12 +317,12 @@ void alien_snapper_update(Moby *moby) {
         snapper_behavior->movement = truncate_float_to_s32(D_L06_00161EB0 * 1024.0f);
         snapper_behavior->fD4 = D_L06_00161EB0;
         snapper_behavior->speed = snapper_behavior->base_speed * frame_time;
-        snapper_behavior->f90 = truncate_float_to_s32(768.0f);
-        snapper_behavior->f98 = 0.75f;
-        snapper_behavior->f80 = l06_alien_snapper_gravity * D_0015ED70;
+        snapper_behavior->collision_radius_fixed = truncate_float_to_s32(768.0f);
+        snapper_behavior->collision_height_offset = 0.75f;
+        snapper_behavior->gravity_step = l06_alien_snapper_gravity * D_0015ED70;
         snapper_behavior->fAD = 0;
-        snapper_behavior->f84 = 0.0005f;
-        snapper_behavior->f94 = 9;
+        snapper_behavior->motion_speed_adjustment_step = 0.0005f;
+        snapper_behavior->motion_flags = 9;
         snapper_behavior->f1C8 = random_angle_radians();
         if (snapper_behavior->f1CC != 0) {
             moby->state = ALIEN_SNAPPER_STATE_FACE_HERO;
@@ -331,7 +331,7 @@ void alien_snapper_update(Moby *moby) {
             }
         } else if (snapper_behavior->clip_volume >= 0) {
             moby->state = ALIEN_SNAPPER_STATE_WAIT_FOR_CLIP_TRIGGER;
-        } else if (snapper_behavior->f1B4 != 0) {
+        } else if (snapper_behavior->activate_on_initialize != 0) {
             moby->state = ALIEN_SNAPPER_STATE_ACTIVATION_SEQUENCE;
             snapper_behavior->timer = scale_game_frames(1);
             if (moby->prev_seq != 0) {
@@ -415,8 +415,8 @@ void alien_snapper_update(Moby *moby) {
                                                                &snapper_behavior->home,
                                                                0,
                                                                snapper_behavior->return_speed,
-                                                               -snapper_behavior->f80);
-                snapper_behavior->f94 = 5;
+                                                               -snapper_behavior->gravity_step);
+                snapper_behavior->motion_flags = 5;
                 snapper_behavior->fAD = 3;
                 func_L00_0025D5B0_91A8(moby,
                                        snapper_behavior->f70,
