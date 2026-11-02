@@ -693,7 +693,7 @@ typedef struct {
     char           pad0[0x20];
     Moby_2EAE80   *target;
     char           pad24[6];
-    unsigned short h2A;
+    unsigned short damage_adjustment_selector;
     float          damage_amount;
 } Hit_2EAE80;
 
@@ -771,7 +771,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                  r->target->oclass == 0xD4)) {
                 moby_data->first->bA4 = 0xFF;
             } else if (hit >= 2) {
-                if (0.0f < r->damage_amount && r->h2A == 0x3F1) {
+                if (0.0f < r->damage_amount && r->damage_adjustment_selector == 0x3F1) {
                     r->damage_amount = 0.3f;
                 }
                 if (r != 0 && moby->bBC == 7) {
@@ -860,7 +860,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 continue;
             }
             if (0.0f < r->damage_amount) {
-                switch (r->h2A) {
+                switch (r->damage_adjustment_selector) {
                 case CHILD_HIT_FIXED_DAMAGE:
                     r->damage_amount = 0.1f;
                     break;
