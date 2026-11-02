@@ -127,7 +127,7 @@ typedef struct {
     u8  pad0[0xB0];
     f32 tan_half_fov;
     u8  padB4[0x164];
-    s32 unk218;
+    s32 fog_start_distance;
     f32 unk21C;
     u8  pad220[8];
     f32 unk228;
@@ -294,7 +294,7 @@ void initialize_pause_menu(void) {
         ((ViewSettings *)D_L00_0016CA40)->unk21C = unk21C;
         ((ViewSettings *)D_L00_0016CA40)->unk228 = unk228;
         ((ViewSettings *)D_L00_0016CA40)->unk22C = 0;
-        ((ViewSettings *)D_L00_0016CA40)->unk218 = 0;
+        ((ViewSettings *)D_L00_0016CA40)->fog_start_distance = 0;
     }
     update_view_context();
     reset_active_camera_position_and_basis();
