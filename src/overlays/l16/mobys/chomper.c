@@ -104,6 +104,9 @@ typedef struct ChomperVars {
 
 /* Moby class 1445 */
 void chomper_update(struct Moby *chomper_moby) {
+    enum {
+        CHOMPER_TARGET_SELECTION_REJECTED = 2
+    };
     ChomperVars *chomper_data = (ChomperVars *)chomper_moby->pvars;
     update_chomper_hit_reaction_and_target(chomper_moby);
     FUN_L00_00263ac8(2.1f, (int)chomper_moby, 1, &chomper_data->big_head_manipulator);
@@ -131,7 +134,7 @@ void chomper_update(struct Moby *chomper_moby) {
         chomper_data->look_height = truncate_float_to_s32(3.2f);
         break;
     case CHOMPER_WAIT_TO_APPROACH_TARGET:
-        if (chomper_data->pursuit_target_selection_status != 2) {
+        if (chomper_data->pursuit_target_selection_status != CHOMPER_TARGET_SELECTION_REJECTED) {
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 0)
                 blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
@@ -145,7 +148,7 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_FACE_TARGET;
             if (chomper_moby->prev_seq != 1)
                 blend_moby_animation(chomper_moby, 1, 0, scale_game_frames(20));
-        } else if (chomper_data->pursuit_target_selection_status == 2)
+        } else if (chomper_data->pursuit_target_selection_status == CHOMPER_TARGET_SELECTION_REJECTED)
             chomper_moby->state = CHOMPER_RETURN_HOME;
         break;
     case CHOMPER_FACE_TARGET: {
@@ -173,7 +176,7 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 2)
                 blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
-        } else if (chomper_data->pursuit_target_selection_status != 2)
+        } else if (chomper_data->pursuit_target_selection_status != CHOMPER_TARGET_SELECTION_REJECTED)
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
         break;
     case 7:
