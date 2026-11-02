@@ -614,7 +614,7 @@ extern f32           D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((
 extern unsigned char D_0013A4E0[];
 
 extern short ship_shot_direction_base_scale_gp __asm__("D_L11_0016205C") __attribute__((sda));
-int          D_L11_00162060 = 4;
+int          l11_ship_shot_cooldown_frames __asm__("D_L11_00162060") = 4;
 void         update_ship_shot_firing_and_reticle(struct Moby *moby,
                                                  char        *ship_vars,
                                                  float        aim_azimuth,
@@ -642,7 +642,7 @@ void update_ship_shot_firing_and_reticle(struct Moby *moby,
         moby_point_position(moby, 3 + (ship_vars[0x61] & 1), projectile_spawn_position);
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, muzzle_forward_offset);
         spawn_fighter_jet_missile(moby, shot_direction, projectile_spawn_position, 200.0f, -1.0f);
-        *(int *)(ship_vars + 0x80) = D_L11_00162060;
+        *(int *)(ship_vars + 0x80) = l11_ship_shot_cooldown_frames;
         ship_vars[0x61] ^= 1;
         allocate_voice_for_target_entry(3, 0, (int)moby);
     }
