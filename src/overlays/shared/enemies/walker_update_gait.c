@@ -127,7 +127,7 @@ typedef struct WalkAnim {
     float f40;
     float f44;
     float f48;
-    float f4C;
+    float alternate_run_transition_position;
 } WalkAnim;
 
 typedef struct WalkData {
@@ -267,7 +267,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                                current_animation_position +
                                                gait_data->anim[gait_animation_index]->f10) %
                          truncate_float_to_s32(gait_data->anim[gait_animation_index]->f10);
-                int r2 = truncate_float_to_s32(gait_data->anim[gait_animation_index]->f4C -
+                int r2 = truncate_float_to_s32(gait_data->anim[gait_animation_index]->alternate_run_transition_position -
                                                current_animation_position +
                                                gait_data->anim[gait_animation_index]->f10) %
                          truncate_float_to_s32(gait_data->anim[gait_animation_index]->f10);
@@ -276,7 +276,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                 if (r1 < r2) {
                     x = truncate_float_to_s32(gait_data->anim[7]->f48 - gait_data->anim[7]->animation_position_origin);
                 } else {
-                    x = truncate_float_to_s32(gait_data->anim[7]->f4C - gait_data->anim[7]->animation_position_origin);
+                    x = truncate_float_to_s32(gait_data->anim[7]->alternate_run_transition_position - gait_data->anim[7]->animation_position_origin);
                 }
                 x = (x + truncate_float_to_s32(gait_data->anim[7]->f10)) %
                     truncate_float_to_s32(gait_data->anim[7]->f10);
