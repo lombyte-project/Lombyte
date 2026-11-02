@@ -68,8 +68,8 @@ typedef struct {
 typedef struct {
     u8 pad00[4];
     u8 f4;
-    u8 f5;
-    u8 f6;
+    u8 green;
+    u8 blue;
 } Opt;
 
 typedef struct {
@@ -267,7 +267,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
             color_options = source_state->unk78->unk0C;
             if (color_options != NULL) {
                 set_moby_color(
-                    spawned_moby, color_options->f4, color_options->f5, color_options->f6);
+                    spawned_moby, color_options->f4, color_options->green, color_options->blue);
             } else {
                 spawned_moby->spawn_frame = source_state->unk38;
             }
