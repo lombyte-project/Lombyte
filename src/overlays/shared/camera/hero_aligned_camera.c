@@ -93,7 +93,7 @@ typedef struct {
 
 typedef struct {
     unsigned char pad0[0x7E];
-    short         s7E;
+    short         selected_camera_mode;
 } A_2ea810;
 
 extern void  FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -551,7 +551,7 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
     }
     if (Q.unk270 == 0) {
         Q.unk273 = 0;
-        camera_object->s7E = 2;
+        camera_object->selected_camera_mode = 2;
         Q.unk294 = 0.018f;
         Q.unk288 = 0.018f;
         return;
@@ -572,13 +572,13 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
                              residual_length_product);
             if (1.5707964f - dot_product_or_asin_result >= 1.3962634f) {
                 Q.unk270 = 0;
-                camera_object->s7E = 4;
+                camera_object->selected_camera_mode = 4;
                 return;
             }
         }
     }
     Q.unk273 = 0;
-    camera_object->s7E = 2;
+    camera_object->selected_camera_mode = 2;
     Q.unk294 = 0.018f;
     Q.unk288 = 0.018f;
 }
