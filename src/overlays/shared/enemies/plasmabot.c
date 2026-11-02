@@ -122,6 +122,9 @@ extern int  FUN_L00_0025ff38(char *, char *, float, int, int, int *, int);
 void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
 
 void update_plasmabot_target(char *moby) {
+    enum {
+        PLASMABOT_TARGET_STATUS_REJECTED = 2
+    };
     PlasmabotVars *plasmabot_private_vars = (PlasmabotVars *)MOBY(moby)->pvars;
     int *target_filter_record = ((int *)l14_paths[plasmabot_private_vars->target_path_index]);
     if (FUN_L00_0025ff38(moby,
@@ -133,7 +136,7 @@ void update_plasmabot_target(char *moby) {
                          *target_filter_record) != 2) {
         if (plasmabot_private_vars->target_range <
             vector_distance_xy(&MOBY(moby)->pos, &plasmabot_private_vars->unkD0)) {
-            plasmabot_private_vars->target_selection_status = 2;
+            plasmabot_private_vars->target_selection_status = PLASMABOT_TARGET_STATUS_REJECTED;
         }
     }
     if (plasmabot_private_vars->target == 0) {
