@@ -1398,7 +1398,7 @@ typedef struct Hero_234800 {
     char          pA0[0x5C];
     float         attachment_yaw_delta;
     char          p100[0x50];
-    Vec_234800    v150;
+    Vec_234800    position_anchor_inhibit;
     char          p160[0x24];
     float         rotation_anchor_inhibit;
     char          p188[0x6E];
@@ -1505,7 +1505,7 @@ void update_hero_attachment(void) {
         return;
     }
     if (((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) &&
-         fast_vec_length(&((Hero_234800 *)hero_233f80)->v150) == 0.0f &&
+         fast_vec_length(&((Hero_234800 *)hero_233f80)->position_anchor_inhibit) == 0.0f &&
          ((Hero_234800 *)hero_233f80)->h30E == 0 && ((Hero_234800 *)hero_233f80)->path_clearance_position_anchor_inhibit == 0) ||
         (unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
         if ((((Hero_234800 *)hero_233f80)->attachment_anchor_flags ^ 1) & 1) {
