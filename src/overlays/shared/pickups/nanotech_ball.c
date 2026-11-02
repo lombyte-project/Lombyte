@@ -104,7 +104,7 @@ typedef struct {
     u8        p0[0x10];
     V_2d8510  v10;
     u8        p20[0x58];
-    O_2d8510 *p78;
+    O_2d8510 *collection_effect_state;
 } M_2d8510;
 
 typedef struct {
@@ -1144,7 +1144,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
     s32       i, any_effect_timer_above_threshold, c, hi, al;
     f32       z, color_progress_or_size_factor, unwrapped_effect_value;
     u8       *effect_record;
-    effect_data = moby->p78;
+    effect_data = moby->collection_effect_state;
     fast_vec_sub(&effect_position, &(*(V_2d8510 *)g_debug_camera), &moby->v10);
     any_effect_timer_above_threshold = 0;
     fast_vec_normalize(&effect_position, &effect_position, -0.3f);
