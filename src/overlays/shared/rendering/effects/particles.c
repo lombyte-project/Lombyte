@@ -805,7 +805,7 @@ typedef struct {
     char  p0[0x88];
     float unk88;
     char  p1[0x2080 - 0x8C];
-    int   i2080;
+    int   hit_recipient_moby;
 } P_272bc0;
 
 extern char           D_0013F3D0[] NOT_SDA;
@@ -881,7 +881,7 @@ void update_color_tween_emitter_particle(struct EffectParticle *particle) {
                 fast_vec_sub(particle_vector_scratch, reference_position, particle->pos.f);
                 fast_vec_normalize(particle_vector_scratch, particle_vector_scratch, 1.0f);
                 particle_vector_scratch[2] = 1.0f;
-                spawn_nearby_effect(reference_position_owner->i2080,
+                spawn_nearby_effect(reference_position_owner->hit_recipient_moby,
                                     *(int *)(particle_data + 0x18),
                                     1,
                                     particle->pos.f,
