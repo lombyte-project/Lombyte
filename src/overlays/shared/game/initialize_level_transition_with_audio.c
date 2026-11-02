@@ -253,6 +253,9 @@ void prepare_target_level_transition(s32 target_level_index) {
     enum {
         TRANSITION_MODE_CHANGE_LEVEL = 3
     };
+    enum {
+        AUDIO_SELECTION_MODE_ALWAYS_FADE = 0
+    };
     A_0028ed58 *shared_state_record = &level_render_state_lui;
     C_0028ed58 *shared_result_record;
     s32         shared_table_offset;
@@ -260,7 +263,7 @@ void prepare_target_level_transition(s32 target_level_index) {
     D_L00_0015F5C4 = 6;
     fade_level = 1.0f;
     D_L00_0015F400 = 0;
-    shared_state_record->transition_mode = 0;
+    shared_state_record->transition_mode = AUDIO_SELECTION_MODE_ALWAYS_FADE;
     shared_state_record->h24 = -1;
     select_level_vu_chain();
     shared_table_offset = D_L00_001611CC - 0x60000;
