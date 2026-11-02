@@ -681,9 +681,9 @@ typedef struct Wing {
     char          pad5[0x4];
     float         knockback_xy_magnitude;
     float         knockback_z_magnitude;
-    int           f90;
-    int           f94;
-    float         f98;
+    int           knockback_collision_radius_fixed_point;
+    int           knockback_motion_flags;
+    float         knockback_collision_z_offset;
     char          pad6[0x11];
     unsigned char bAD;
     char          pad7[0x12];
@@ -764,6 +764,9 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
         EXTERMIBOT_HIT_FLASH_ONLY = 10,
         EXTERMIBOT_HIT_NO_REACTION = 11
     };
+    enum {
+        EXTERMIBOT_GROUP_TARGET_SELECTED = 1
+    };
     Vec_3047E8  working_vector;
     Vec_3047E8  hit_test_endpoint;
     int         collision_hit_status;
@@ -809,10 +812,10 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             hit_response = 1;
         }
         k = truncate_float_to_s32(D_L05_00161A98_gp * 409.6f);
-        moby_data->f98 = D_L05_00161A98_gp * 0.4f;
+        moby_data->knockback_collision_z_offset = D_L05_00161A98_gp * 0.4f;
         moby_data->knockback_gravity = extermibot_knockback_gravity_gp * D_0015ED70;
-        moby_data->f90 = k;
-        moby_data->f94 = 9;
+        moby_data->knockback_collision_radius_fixed_point = k;
+        moby_data->knockback_motion_flags = 9;
         moby_data->bAD = 0;
         switch (hit_response) {
         case EXTERMIBOT_HIT_NO_RESPONSE:
@@ -888,17 +891,17 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
                             ((Path_3047E8 *)l05_paths[moby_data->targeting_path_index])->n) != 2) {
         if (moby_data->effective_targeting_range < vector_distance_xy(moby_data->start_position, moby_data->selected_target_position_xy) ||
             3.0f < func_001F9B88_3047E8(moby->pos.z - moby_data->selected_target_position_z)) {
-            moby_data->target_selection_status = 2;
+            moby_data->target_selection_status = EXTERMIBOT_TARGET_PATH_UNAVAILABLE;
         }
     }
     if (moby_data->target_group_index >= 0) {
         Moby *candidate_target = func_L05_003053D8_3047E8(moby, moby_data->target_group_index);
         if (candidate_target != 0) {
-            if (moby_data->target_selection_status == 2 ||
+            if (moby_data->target_selection_status == EXTERMIBOT_TARGET_PATH_UNAVAILABLE ||
                 vector_distance_xy(((float *)&moby->pos), ((float *)&candidate_target->pos)) <
                     vector_distance_xy(((float *)&moby->pos), ((float *)&moby_data->target->pos))) {
                 moby_data->target = candidate_target;
-                moby_data->target_selection_status = 1;
+                moby_data->target_selection_status = EXTERMIBOT_GROUP_TARGET_SELECTED;
             }
         }
     }
