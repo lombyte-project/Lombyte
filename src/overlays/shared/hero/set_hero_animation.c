@@ -165,8 +165,8 @@ void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend
 
 typedef struct {
     s16 h0;
-    u8  b2;
-    u8  b3;
+    u8  primary_animation_id;
+    u8  secondary_animation_id;
 } E_231ff8;
 
 extern E_231ff8 D_L00_0017BBF0_00231ff8[] __asm__("D_L00_0017BBF0")
@@ -203,8 +203,8 @@ int             select_hero_slot3_animation_pair(int  input_animation_id,
     }
     if (match_count != 0) {
         int k = matching_animation_entry_indices[random_int_between(0, match_count - 1)];
-        *out_primary_animation_id = animation_table[k].b2;
-        *out_secondary_animation_id = animation_table[k].b3;
+        *out_primary_animation_id = animation_table[k].primary_animation_id;
+        *out_secondary_animation_id = animation_table[k].secondary_animation_id;
         return 1;
     } else {
         *out_primary_animation_id = 1;
