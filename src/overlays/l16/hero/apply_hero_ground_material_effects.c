@@ -36,6 +36,9 @@ extern int  hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 void apply_hero_ground_material_effects(void) __asm__("FUN_L16_002097a0");
 
 void apply_hero_ground_material_effects(void) {
+    enum {
+        GROUND_MATERIAL_SLIP = 0x8
+    };
     struct Hero *hero_data = &hero;
     int          keep = hero_data->ground_sound_class;
     int          saved_ground_type = hero_data->ground_type;
@@ -112,7 +115,7 @@ void apply_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
-    if (saved_ground_type == 0x8) {
+    if (saved_ground_type == GROUND_MATERIAL_SLIP) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
