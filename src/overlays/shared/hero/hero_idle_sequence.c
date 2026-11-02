@@ -2740,7 +2740,7 @@ typedef struct V0020a240 {
 
 typedef struct G0020a240 {
     u8  pad[0x80];
-    u8  v80[0x1b4];
+    u8  hero_position_storage[0x1b4];
     f32 f234;
 } G0020a240;
 
@@ -2764,7 +2764,7 @@ s32 probe_hero_forward_collision(f32 *hit_distance_xy_out,
     transform_hero_polar_offset_to_world(&probe_end, probe_end_radius, 0.0f, probe_z_offset);
     if (collision_line(&probe_start, &probe_end, 2, 0, 0)) {
         if (hit_distance_xy_out != 0)
-            *hit_distance_xy_out = vector_distance_xy(hero_state->v80, D_L00_00173E60);
+            *hit_distance_xy_out = vector_distance_xy(hero_state->hero_position_storage, D_L00_00173E60);
         return 1;
     }
     return 0;
