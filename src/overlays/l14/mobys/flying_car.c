@@ -140,7 +140,7 @@ void flying_car_update(struct Moby *flying_car_moby) {
         }
         if (flying_car_data->sound != -1) {
             Snd_6ee0 *voice_entry = (Snd_6ee0 *)((u8 *)&voice_pool + flying_car_data->sound * 0x70);
-            if (voice_entry->f88 == flying_car_moby && voice_entry->voice_state != 0) {
+            if (voice_entry->f88 == flying_car_moby && voice_entry->voice_state != VOICE_SLOT_FREE) {
                 release_voice_slot(flying_car_data->sound);
             }
         }
