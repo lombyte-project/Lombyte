@@ -248,10 +248,10 @@ extern int   timed_spark_base_third_frame_count_gp __asm__("D_L10_00161FE0") __a
 extern float timed_spark_frame_count_scale_spread_gp __asm__("D_L10_00161FE4") __attribute__((sda));
 extern int   timed_spark_timer_reset_min_gp __asm__("D_L10_00161FF8") __attribute__((sda));
 extern int   timed_spark_timer_reset_max_gp __asm__("D_L10_00161FFC") __attribute__((sda));
-int          D_L10_00161FE8 = 0x400080ff;
-int          D_L10_00161FEC = 0x4010ffff;
-int          D_L10_00161FF0 = 0x2000c0ff;
-int          D_L10_00161FF4 = 0x200080ff;
+int          l10_timed_spark_initial_color_from __asm__("D_L10_00161FE8") = 0x400080ff;
+int          l10_timed_spark_initial_color_to __asm__("D_L10_00161FEC") = 0x4010ffff;
+int          l10_timed_spark_second_color_from __asm__("D_L10_00161FF0") = 0x2000c0ff;
+int          l10_timed_spark_second_color_to __asm__("D_L10_00161FF4") = 0x200080ff;
 extern void  clear_u64_value(void *);
 
 void emit_timed_spark_particle(void *emission_position, short *timer) {
@@ -286,12 +286,12 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
     third_frame_count =
         truncate_float_to_s32((float)timed_spark_base_third_frame_count_gp * frame_count_scale);
     initial_spark_color =
-        fast_tween_color(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
+        fast_tween_color(l10_timed_spark_initial_color_from, l10_timed_spark_initial_color_to, random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position,
                 spark_vertical_vector,
                 acc,
                 initial_spark_color,
-                fast_tween_color(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)),
+                fast_tween_color(l10_timed_spark_second_color_from, l10_timed_spark_second_color_to, random_float_between(0.0f, 1.0f)),
                 frame_count,
                 second_frame_count,
                 third_frame_count,
