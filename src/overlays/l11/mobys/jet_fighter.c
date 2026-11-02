@@ -721,8 +721,8 @@ typedef struct {
     float         f6C;
     float         f70;
     char          pad74[0xC];
-    int           i80;
-    int           i84;
+    int           shot_cooldown_frames;
+    int           rocket_cooldown_frames;
     char          pad88[8];
     float         f90, f94, f98, f9C;
     float         fA0, fA4, fA8, fAC;
@@ -740,9 +740,9 @@ typedef struct {
     int           exit_path;
     int           exit_path2;
     char          pad104[8];
-    int           i10C;
+    int           blarg_ship_list_index;
     char          pad110[4];
-    int           i114;
+    int           blarg_ship_activation_timer_frames;
     int           i118;
     char          pad11C[0x10];
     short         voice;
@@ -1406,7 +1406,7 @@ void jet_fighter_update(struct Moby *moby) {
                 clear_u64_value(&ship_vars->f30);
                 clear_u64_value(&ship_vars->f20);
                 ship_vars->f38 = ship_vars->f28 = moby->rot.z;
-                ship_vars->i114 = scale_game_frames(0x708);
+                ship_vars->blarg_ship_activation_timer_frames = scale_game_frames(0x708);
                 if (help_records[0x55].count == 0) {
                     help_request(0x2AFC, 0x55);
                 }
@@ -1432,8 +1432,8 @@ void jet_fighter_update(struct Moby *moby) {
                 ship_vars->speed = jet_fighter_initial_flight_speed_gp;
                 ship_vars->f6C = 0.0f;
                 ship_vars->f70 = 0.0f;
-                ship_vars->i84 = 0;
-                ship_vars->i80 = 0;
+                ship_vars->rocket_cooldown_frames = 0;
+                ship_vars->shot_cooldown_frames = 0;
                 ship_vars->fD4 = 0.0f;
                 ship_vars->fD8 = 0.0f;
                 moby->draw_dist = 0xFF;
@@ -1454,11 +1454,11 @@ void jet_fighter_update(struct Moby *moby) {
             D_L11_0015F608 = 2;
             update_player_ship_flight(moby, ship_vars);
             {
-                int alive = count_listed_blarg_ships_in_state_5(ship_vars->i10C);
+                int alive = count_listed_blarg_ships_in_state_5(ship_vars->blarg_ship_list_index);
                 if (ship_vars->sEA != 0 && alive < 5 - ship_vars->sE8 &&
-                    fast_dec_timer(&ship_vars->i114) &&
-                    activate_listed_blarg_ship(ship_vars->i10C)) {
-                    ship_vars->i114 = scale_game_frames(0xF0);
+                    fast_dec_timer(&ship_vars->blarg_ship_activation_timer_frames) &&
+                    activate_listed_blarg_ship(ship_vars->blarg_ship_list_index)) {
+                    ship_vars->blarg_ship_activation_timer_frames = scale_game_frames(0xF0);
                 }
             }
             if (ship_vars->sE8 <= 0) {
