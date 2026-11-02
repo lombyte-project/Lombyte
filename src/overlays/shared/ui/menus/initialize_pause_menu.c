@@ -116,7 +116,7 @@ struct Ent {
 
 typedef struct {
     u8  pad0[0x224];
-    s32 w224;
+    s32 transition_target_level;
     u8  pad228[0x18];
     s32 unk240;
     s32 unk244;
@@ -269,7 +269,7 @@ void initialize_pause_menu(void) {
         D_L00_001B9CF0.state = pending_state;
         if (pending_state == PAUSE_MENU_STATE_CLOSE_ON_ACTION || pending_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
             small_buffers = 1;
-            D_L00_001841F0.w224 = (s32)D_L00_001B9CF0.unkE4;
+            D_L00_001841F0.transition_target_level = (s32)D_L00_001B9CF0.unkE4;
         }
         D_L00_001B9CF0.pending_owner = 0;
         D_L00_001B9CF0.pending_state = PAUSE_MENU_PENDING_STATE_CLEARED;
@@ -558,8 +558,8 @@ void update_pause_menu(void) {
         D_L00_001B9CF0.unk104 = 0;
         D_L00_001B9CF0.unk10 = 0;
         if (D_L00_001B9CF0.unkC == 2) {
-            debug_print(level_transition_debug_format, D_L00_001841F0.w224);
-            prepare_target_level_transition(D_L00_001841F0.w224);
+            debug_print(level_transition_debug_format, D_L00_001841F0.transition_target_level);
+            prepare_target_level_transition(D_L00_001841F0.transition_target_level);
         } else if (D_L00_001B9CF0.unkC == 3) {
             previous_decode_mode = decode_mode;
             decode_mode = 2;
