@@ -1588,7 +1588,7 @@ typedef struct {
 typedef struct {
     u8       p0[4];
     u8       b4[3];
-    s8       b7;
+    s8       particle_alpha;
     u8       p8[2];
     s16      hA;
     u8       pC[4];
@@ -1631,7 +1631,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
     }
     if (r->h1C == 1) {
         z = 0.0f;
-        FUN_L00_002743a8_274518(0, particle->v10, scale_game_frames(10), z, z, 0, particle->b7, 0);
+        FUN_L00_002743a8_274518(0, particle->v10, scale_game_frames(10), z, z, 0, particle->particle_alpha, 0);
     } else {
         position_offset_scratch.x = r->unk0;
         position_offset_scratch.y = r->unk4;
@@ -1643,7 +1643,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
                                                    z,
                                                    z,
                                                    0,
-                                                   particle->b7,
+                                                   particle->particle_alpha,
                                                    &position_offset_scratch);
         if (spawned_particle)
             *(s16 *)(spawned_particle + 0x38) = r->h18;
