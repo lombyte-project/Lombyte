@@ -1450,20 +1450,20 @@ out:
 extern short D_00140986 NOT_SDA;
 int                     draw_hud_cropped_gauge_panel(char *rec) __asm__("FUN_L00_0023a640");
 
-int draw_hud_cropped_gauge_panel(char *rec) {
+int draw_hud_cropped_gauge_panel(char *cropped_gauge_element) {
     int x, y;
     int sprite_width;
-    x = *(int *)(rec + 0x50);
-    y = *(int *)(rec + 0x54);
-    *(int *)(rec + 0x58) = 0x100;
-    *(int *)(rec + 0x5C) = 0x40;
-    hud_screen_position(rec, &x, &y);
-    apply_hud_slide_offset(rec, &x, &y, *(int *)(rec + 0x6C), 0);
-    sprite_width = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
+    x = *(int *)(cropped_gauge_element + 0x50);
+    y = *(int *)(cropped_gauge_element + 0x54);
+    *(int *)(cropped_gauge_element + 0x58) = 0x100;
+    *(int *)(cropped_gauge_element + 0x5C) = 0x40;
+    hud_screen_position(cropped_gauge_element, &x, &y);
+    apply_hud_slide_offset(cropped_gauge_element, &x, &y, *(int *)(cropped_gauge_element + 0x6C), 0);
+    sprite_width = *(int *)(cropped_gauge_element + 0x74) * 0xDD / *(int *)(cropped_gauge_element + 0x8) + 0x1B;
     draw_cropped_hud_sprite(get_icon_frame(0x7558, 1), x, y, sprite_width, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 2), x, y, 0x20, 0x20, D_00140986 ? 0x80 : 0);
-    return *(int *)(rec + 0x58);
+    return *(int *)(cropped_gauge_element + 0x58);
 }
 /* func_L00_00236750 without the offsets: a 32 x 32 element with a timer
    of 30 + func_001F9850(120). */
