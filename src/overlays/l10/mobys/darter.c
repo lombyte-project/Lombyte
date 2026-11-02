@@ -92,7 +92,7 @@ typedef struct Vars_2e01a8 {
     unsigned char b5A;
     char          p5B[5];
     char          a60[0x80];
-    AlignedVec4f  vE0;
+    AlignedVec4f  dive_attack_aim_position;
     char          pF0[0x10];
     Moby         *target;
     int           f104;
@@ -374,8 +374,8 @@ void darter_update(Moby *moby) {
                    frame_time * 6.2831855f);
         func_L00_0025CC58_2E0630(&moby->rot.y,
                                  0,
-                                 -fast_arc_tan(vector_distance_xy(&moby->pos, &darter_vars->vE0),
-                                               darter_vars->vE0.z - moby->pos.z),
+                                 -fast_arc_tan(vector_distance_xy(&moby->pos, &darter_vars->dive_attack_aim_position),
+                                               darter_vars->dive_attack_aim_position.z - moby->pos.z),
                                  frame_time * 12.566371f);
         if (is_value_within_interpolated_window((char *)moby, 20.0f)) {
             float one = 1.0f;
