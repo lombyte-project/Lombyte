@@ -1505,7 +1505,7 @@ typedef struct {
     char          *cls;
     int            pad28;
     float          scale;
-    unsigned char  b30;
+    unsigned char  update_distance;
     unsigned char  b31;
     short          s32;
     unsigned short flags;
@@ -1676,7 +1676,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
         qcopy(moby->pos, walker_paths[starfighter_vars->paths[0]] + 0x10);
         starfighter_vars->path_previous_node_index = 0;
         starfighter_vars->path_target_node_index = 1;
-        moby->b30 = 0xFF;
+        moby->update_distance = 0xFF;
         moby->s32 = 0xFF;
         starfighter_vars->path_traversal_direction = 1;
         starfighter_vars->bFE = 0;
