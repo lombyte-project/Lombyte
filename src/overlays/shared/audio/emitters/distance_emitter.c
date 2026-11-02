@@ -26,7 +26,7 @@ typedef struct {
 
 typedef struct {
     u8 p[0x18];
-    u8 b18;
+    u8 use_voice_flag_4;
     u8 p2[7];
 } T_2ed950;
 
@@ -65,7 +65,7 @@ void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
         E_2ed950 *e = ENT_2ed950(playback_state->snd);
         s32       fl = 0;
         s32       four = 4;
-        if (D_L00_0015F5F4_2ed950[playback_state->id].b18)
+        if (D_L00_0015F5F4_2ed950[playback_state->id].use_voice_flag_4)
             fl = four;
         if (e->o == sound_emitter && e->is_active)
             return;
