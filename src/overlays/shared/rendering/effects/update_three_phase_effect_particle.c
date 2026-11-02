@@ -2528,8 +2528,8 @@ typedef struct {
 
 struct O_26e670_26e670 {
     u8              p0[4];
-    u32             i04;
-    u8              b08;
+    u32             packed_rgba_color;
+    u8              projected_link_rotation;
     u8              p9[7];
     V_26e670_26e670 pos;
     P_26e670_26e670 p;
@@ -2616,7 +2616,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
                        &projected_next_position,
                        1.0f / projected_next_position.f[3]);
         fast_vec_sub(&acc, &acc, &projected_next_position);
-        particle->b08 =
+        particle->projected_link_rotation =
             truncate_float_to_s32(fast_arc_tan(acc.f[0], acc.f[1]) * 128.0f / 3.1415927f) - 0x20;
         if (P->sphere_collision_active) {
             FUN_L00_001ff660_x(P, P, &coll_hit_normal);
@@ -2632,9 +2632,9 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
     }
     qcopy(&particle->pos, &next_position);
     if (P->motion_and_fade_flags & 2) {
-        s32 faded_alpha = (particle->i04 >> 24) - 2;
+        s32 faded_alpha = (particle->packed_rgba_color >> 24) - 2;
         if (faded_alpha > 0) {
-            particle->i04 = (particle->i04 & 0xFFFFFF) | (faded_alpha << 24);
+            particle->packed_rgba_color = (particle->packed_rgba_color & 0xFFFFFF) | (faded_alpha << 24);
         } else if (P->link == 0) {
             if (P->tgt)
                 P->tgt->p.link = 0;
