@@ -87,7 +87,7 @@ typedef struct {
 
 extern ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *) __asm__("FUN_L01_00302328");
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
-s32         D_L01_00161E90 = 5;
+s32         l01_beehive_spawn_attempt_limit __asm__("D_L01_00161E90") = 5;
 
 void beehive_update(SpawnerMoby *m) __asm__("FUN_L01_003021b8");
 
@@ -113,7 +113,7 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         if (count_active_moby_group_members(beehive_vars->src_id, 0xC) != 0) {
             break;
         }
-        if (beehive_vars->count >= D_L01_00161E90) {
+        if (beehive_vars->count >= l01_beehive_spawn_attempt_limit) {
             break;
         }
         beehive_vars->count++;
