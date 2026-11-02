@@ -18,7 +18,7 @@
 
 typedef struct {
     char pad[0x57];
-    char f57;
+    char motion_triggered;
 } Rec57;
 
 extern float fast_add_rotations(float, float);
@@ -79,7 +79,7 @@ void link_triggered_moby_motion_update(struct Moby *moving_moby) {
         if (linked_moby->oclass == 0x33E && linked_moby->command != 0) {
         go:
             moving_moby->state = LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS;
-            ((Rec57 *)(private_data->unk14 + (int)(alternate_item_available)))->f57 = 1;
+            ((Rec57 *)(private_data->unk14 + (int)(alternate_item_available)))->motion_triggered = 1;
             allocate_voice_for_target_entry(0, 0, moving_moby);
         }
         break;
