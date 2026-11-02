@@ -798,7 +798,7 @@ typedef struct {
     unsigned char pad20[4];
     float         arc_entry_record_value_threshold;
     float         f28;
-    unsigned char b2C;
+    unsigned char arc_entry_animation;
     unsigned char arc_motion_animation;
     unsigned char b2E;
     unsigned char state;
@@ -843,7 +843,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
 
     switch (arc_motion_state->state) {
     case CHECK_ARC_ENTRY_GATES:
-        if (moving_object->b52 != arc_motion_state->b2C) {
+        if (moving_object->b52 != arc_motion_state->arc_entry_animation) {
             break;
         }
         if (compute_interpolated_record_value(moving_object) <= arc_motion_state->arc_entry_record_value_threshold) {
