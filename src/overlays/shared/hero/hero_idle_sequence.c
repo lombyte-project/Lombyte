@@ -3404,7 +3404,7 @@ typedef struct {
     s16 h12E0;
     u8  b12E2;
     u8  idle_exit_transition_selected;
-    u8  b12E4;
+    u8  height_difference_selected;
     u8  death_descent_transition_selected;
     u8  jump_or_respawn_wait_transition_selected;
     u8  b12E7;
@@ -3451,7 +3451,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
         }
     }
     if (saved_flag_selector == 14) {
-        P.b12E4 = 1;
+        P.height_difference_selected = 1;
         P.selected_height_difference = 0.2f;
         P.f2F0 = P.f2D8 + 0.2f;
     }
@@ -3460,7 +3460,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
         P.selected_height_difference = height_difference;
         if (height_difference < 0.85f && 0.25f < height_difference)
             P.b20A9 = 1;
-        P.b12E4 = 1;
+        P.height_difference_selected = 1;
     }
     if (saved_flag_selector == 3)
         P.jump_or_respawn_wait_transition_selected = 1;
