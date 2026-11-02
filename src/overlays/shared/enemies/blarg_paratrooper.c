@@ -163,6 +163,9 @@ void blarg_paratrooper_update(char *moby) {
     enum {
         PARATROOPER_TARGET_UNAVAILABLE = 2
     };
+    enum {
+        PARATROOPER_REMOVAL_REQUESTED = 2
+    };
     Paratrooper302618 *paratrooper_private_state =
         (Paratrooper302618 *)(*(char **)((char *)(moby) + 0x78));
     char       *path;
@@ -199,7 +202,7 @@ void blarg_paratrooper_update(char *moby) {
         (*(unsigned char *)((char *)(moby) + 0x20)) = 8;
     }
     if ((*(unsigned char *)((char *)(moby) + 0x20)) != 0 &&
-        paratrooper_private_state->removal_status == 2) {
+        paratrooper_private_state->removal_status == PARATROOPER_REMOVAL_REQUESTED) {
         mark_moby_for_removal(moby);
         if (paratrooper_private_state->bone_attachment_moby)
             mark_moby_for_removal(paratrooper_private_state->bone_attachment_moby);
