@@ -158,7 +158,7 @@ typedef struct {
 typedef struct {
     Vec577 pos;
     u8     pad10[0x30];
-    void  *p40;
+    void  *combat_target_moby;
     u8     pad44[0xC];
 } Mob577Target;
 
@@ -265,7 +265,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
     peckbot_moby->id = peckbot_moby->ref->id;
     peckbot_moby->flags &= ~0x41;
     select_moby_combat_target(peckbot_moby, &target, peckbot_vars->range + 4.0f);
-    target_moby = target.p40;
+    target_moby = target.combat_target_moby;
     qcopy(&oldpos, &peckbot_moby->pos);
     if (peckbot_vars->x38 != 0) {
         peckbot_vars->x214 = scale_game_frames(0xF0);
