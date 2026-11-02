@@ -2419,7 +2419,7 @@ void update_moving_fade_in_out_effect_particle(M_26e150 *particle) {
 
 typedef struct {
     u8 pad0[0x20];
-    s8 b20;
+    s8 attachment_source_status;
 } T_26e3a8;
 
 typedef struct {
@@ -2456,7 +2456,7 @@ void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *parti
         return;
     }
     e = &particle->e;
-    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->b20 < 0) {
+    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->attachment_source_status < 0) {
         goto kill;
     }
     e->hC = (e->hC + 1) & 0xF;
