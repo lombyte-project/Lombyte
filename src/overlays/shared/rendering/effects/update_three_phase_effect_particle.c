@@ -3296,7 +3296,7 @@ typedef struct PV {
 typedef struct Moby_26ff10 {
     u8   b00_26ff10;
     char pad01;
-    u8   b02;
+    u8   animated_texture_id;
     char pad03;
     u32  f04;
     u8   f08;
@@ -3377,7 +3377,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         particle->posv.f[2] = particle->posv.f[2] + random_float_between(nsp, sp);
     }
     tab = effect_texture_ids;
-    particle->b02 = tab[(particle->h0A + pv->f16 + (particle->b02 - tab[0])) & 7];
+    particle->animated_texture_id = tab[(particle->h0A + pv->f16 + (particle->animated_texture_id - tab[0])) & 7];
     fast_vec_add(v0u.f, particle->posv.f, pv);
     k = pv->f14;
     if (scale_game_frames(3) < k) {
