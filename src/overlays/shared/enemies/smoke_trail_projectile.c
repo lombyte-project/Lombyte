@@ -14,12 +14,12 @@
 
 typedef struct {
     float v[2];
-    float f8;
+    float direction_z;
     float fC;
     char  pad10[8];
     char  b18;
     char  b19;
-    short s1A;
+    short source_moby_class;
     char  pad1C[0x14];
 } Hit_2eedd8;
 
@@ -82,10 +82,10 @@ void smoke_trail_projectile_update(char *moby) {
             if (*(int *)(collision_result + 0x18) != 0) {
                 make_hit_descriptor(&hit_descriptor, moby, 0x10001, 1.0f, moby_vars);
                 set_vector_length_xy(&hit_descriptor, &hit_descriptor, 1.0f);
-                hit_descriptor.f8 = 1.0f;
+                hit_descriptor.direction_z = 1.0f;
                 hit_descriptor.fC = 5627.9248f;
                 hit_descriptor.b19 = 1;
-                hit_descriptor.s1A = ((unsigned short)MOBY(moby)->oclass);
+                hit_descriptor.source_moby_class = ((unsigned short)MOBY(moby)->oclass);
                 hit_descriptor.b18 = 0;
                 record_moby_hit(*(void **)(collision_result + 0x18), &hit_descriptor);
             }
