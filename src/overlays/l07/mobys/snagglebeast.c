@@ -96,7 +96,7 @@ typedef struct SnagglebeastVars {
     f32 turn_target[4];
     u8  pad_D0[0x30];
     f32 unk100[4];
-    f32 unk110[4];
+    f32 rope_start_position[4];
     f32 unk120[4];
     f32 unk130[4];
     f32 unk140[4];
@@ -104,7 +104,7 @@ typedef struct SnagglebeastVars {
     s32 timer;
     s32 unk164;
     s32 turn_controller_state;
-    f32 unk16C;
+    f32 rope_extension_length;
     s32 navigation_ids[6];
     s32 nav_path;
     s32 measured_path;
@@ -330,7 +330,7 @@ void draw_snagglebeast_rope_attack_layer(
         quad.texture_coordinates[2][1] = half;
         quad.texture_coordinates[3][1] = half;
     }
-    qcopy(&quad.positions[1], rope_layer_moby_vars->unk110);
+    qcopy(&quad.positions[1], rope_layer_moby_vars->rope_start_position);
     qcopy(&quad.positions[3], rope_layer_moby_vars->unk140);
     inner = quad;
     qcopy(&inner.positions[0], rope_layer_moby_vars->unk120);
@@ -381,18 +381,18 @@ void draw_and_probe_snagglebeast_rope_attack(char *moby) {
     qzero(&rope_offset);
     one = 1.0f;
     fast_vec_normalize(
-        &rope_offset, rope_attack_moby_vars->unk130, rope_attack_moby_vars->unk16C * 0.8f);
-    fast_vec_add(rope_attack_moby_vars->unk140, &rope_offset, rope_attack_moby_vars->unk110);
-    fast_vec_normalize(&rope_offset, &rope_offset, rope_attack_moby_vars->unk16C);
-    fast_vec_add(rope_attack_moby_vars->unk120, &rope_offset, rope_attack_moby_vars->unk110);
+        &rope_offset, rope_attack_moby_vars->unk130, rope_attack_moby_vars->rope_extension_length * 0.8f);
+    fast_vec_add(rope_attack_moby_vars->unk140, &rope_offset, rope_attack_moby_vars->rope_start_position);
+    fast_vec_normalize(&rope_offset, &rope_offset, rope_attack_moby_vars->rope_extension_length);
+    fast_vec_add(rope_attack_moby_vars->unk120, &rope_offset, rope_attack_moby_vars->rope_start_position);
     draw_snagglebeast_rope_attack_layer(moby, one, 0, one, 0x20000080);
     draw_snagglebeast_rope_attack_layer(moby, 0.7f, 10, 2.0f, 0x28008080);
     draw_snagglebeast_rope_attack_layer(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
-    fast_vec_sub(rope_direction, rope_attack_moby_vars->unk120, rope_attack_moby_vars->unk110);
+    fast_vec_sub(rope_direction, rope_attack_moby_vars->unk120, rope_attack_moby_vars->rope_start_position);
     fast_vec_normalize(rope_direction, rope_direction, one);
     make_hit_descriptor(blk, moby, 0x30000, 1.00012302f, rope_direction);
     if (collision_line(
-            rope_attack_moby_vars->unk110, rope_attack_moby_vars->unk120, 0, moby, blk) == 0) {
+            rope_attack_moby_vars->rope_start_position, rope_attack_moby_vars->unk120, 0, moby, blk) == 0) {
         collect_mobies_in_sphere(0.5f, rope_attack_moby_vars->unk120, 0, moby, blk);
     }
 }
@@ -1286,7 +1286,7 @@ void snagglebeast_update(unsigned char *moby) {
                     FUN_00212f90(moby, 6, r, random_int_between(0xF, 0x19));
                 }
                 snagglebeast_instance_state->unk164 = 0;
-                snagglebeast_instance_state->unk16C = 0.0f;
+                snagglebeast_instance_state->rope_extension_length = 0.0f;
                 snagglebeast_instance_state->unk1C4 = 0;
                 MOBY(moby)->state = SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO;
                 snagglebeast_instance_state->unk294 = 0;
@@ -1462,7 +1462,7 @@ void snagglebeast_update(unsigned char *moby) {
                 fast_vec_sub(&velocity, &offset, &velocity);
                 fast_vec_add(&start, &start, &velocity);
                 fast_vec_add(&direction, &direction, &velocity);
-                qcopy(snagglebeast_instance_state->unk110, &start);
+                qcopy(snagglebeast_instance_state->rope_start_position, &start);
                 qcopy(snagglebeast_instance_state->unk120, &direction);
                 qcopy(snagglebeast_instance_state->unk140, &start);
                 fast_vec_sub(snagglebeast_instance_state->unk130, &direction, &start);
@@ -1635,7 +1635,7 @@ void snagglebeast_update(unsigned char *moby) {
                         FUN_00212f90(moby, 6, r, random_int_between(0x14, 0x19));
                     }
                     snagglebeast_instance_state->unk164 = 0;
-                    snagglebeast_instance_state->unk16C = 0.0f;
+                    snagglebeast_instance_state->rope_extension_length = 0.0f;
                     snagglebeast_instance_state->unk1C4 = 0;
                     snagglebeast_instance_state->unk294 = 0;
                     MOBY(moby)->state = SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO;
@@ -1961,10 +1961,10 @@ void snagglebeast_update(unsigned char *moby) {
             break;
         qcopy(snagglebeast_instance_state->unk140, ((char *)&hero) + 0x80);
         snagglebeast_instance_state->unk140[2] += 0.6f;
-        if (snagglebeast_instance_state->unk16C < hero_distance) {
+        if (snagglebeast_instance_state->rope_extension_length < hero_distance) {
             float step_time = frame_time * 15.0f;
             snagglebeast_instance_state->timer = 0;
-            snagglebeast_instance_state->unk16C += step_time;
+            snagglebeast_instance_state->rope_extension_length += step_time;
         } else {
             if (snagglebeast_instance_state->unk1C4 != 0 ||
                 (fast_dec_timer(&snagglebeast_instance_state->timer) && fr < 0.6f)) {
@@ -1972,7 +1972,7 @@ void snagglebeast_update(unsigned char *moby) {
                 char *g = ((char *)&hero);
                 snagglebeast_instance_state->unk1C4 = 1;
                 if (*(int *)(g + 0x2084) != 0x78) {
-                    qcopy(snagglebeast_instance_state->unk110, ((char *)&hero) + 0x80);
+                    qcopy(snagglebeast_instance_state->rope_start_position, ((char *)&hero) + 0x80);
                     qcopy(snagglebeast_instance_state->unk120, ((char *)&hero) + 0x80);
                     if (MOBY(moby)->pos.z < *(float *)(g + 0x88)) {
                         snagglebeast_instance_state->unk120[2] = *(float *)(g + 0x88) + 2.0f;
@@ -1986,13 +1986,13 @@ void snagglebeast_update(unsigned char *moby) {
                 }
                 fast_vec_sub(&velocity,
                              snagglebeast_instance_state->unk120,
-                             snagglebeast_instance_state->unk110);
+                             snagglebeast_instance_state->rope_start_position);
                 fast_vec_scale(&velocity, &velocity, frame_scale * 0.1f);
-                fast_vec_add(snagglebeast_instance_state->unk110,
-                             snagglebeast_instance_state->unk110,
+                fast_vec_add(snagglebeast_instance_state->rope_start_position,
+                             snagglebeast_instance_state->rope_start_position,
                              &velocity);
-                qcopy(((char *)&hero) + 0x1D30, snagglebeast_instance_state->unk110);
-                qcopy(((char *)&hero) + 0x80, snagglebeast_instance_state->unk110);
+                qcopy(((char *)&hero) + 0x1D30, snagglebeast_instance_state->rope_start_position);
+                qcopy(((char *)&hero) + 0x80, snagglebeast_instance_state->rope_start_position);
                 {
                     char *captured_hero = ((char *)&hero);
                     *(float *)(captured_hero + 0x1D48) = fast_add_rotations(
@@ -2000,7 +2000,7 @@ void snagglebeast_update(unsigned char *moby) {
                     *(float *)(captured_hero + 0x98) = fast_add_rotations(
                         *(float *)(captured_hero + 0x1D48), frame_time * 25.132742f);
                 }
-                snagglebeast_instance_state->unk16C = hero_distance;
+                snagglebeast_instance_state->rope_extension_length = hero_distance;
                 slot = snagglebeast_ammo_drain_entries[snagglebeast_instance_state->unk164][0];
                 if (slot == -1) {
                     snagglebeast_instance_state->unk164 = 0;
@@ -2177,10 +2177,10 @@ void snagglebeast_update(unsigned char *moby) {
                     FUN_L00_0024f7c8(moby, 1, &direction);
                     fast_vec_add(&position, &velocity, &direction);
                     fast_vec_scale(&position, &position, 0.5f);
-                    qcopy(snagglebeast_instance_state->unk110, &position);
+                    qcopy(snagglebeast_instance_state->rope_start_position, &position);
                     fast_vec_sub(snagglebeast_instance_state->unk130,
                                  snagglebeast_instance_state->unk150,
-                                 snagglebeast_instance_state->unk110);
+                                 snagglebeast_instance_state->rope_start_position);
                     fast_vec_normalize(snagglebeast_instance_state->unk130,
                                        snagglebeast_instance_state->unk130,
                                        frame_scale);
@@ -2198,15 +2198,15 @@ void snagglebeast_update(unsigned char *moby) {
                 spawn_moby_point_offset_particle((char *)moby, 1, 800000.0f, 5.0f);
             }
             if (compute_interpolated_record_value(moby) >= 31.5f) {
-                snagglebeast_instance_state->unk16C = 0.0f;
+                snagglebeast_instance_state->rope_extension_length = 0.0f;
                 snagglebeast_instance_state->unk164 = 3;
-                *(int *)&snagglebeast_instance_state->unk110[3] = 0;
+                *(int *)&snagglebeast_instance_state->rope_start_position[3] = 0;
             }
             break;
         case SNAGGLEBEAST_ROPE_EXTEND: {
             float r = vector_distance_xy(moby + 0x10, &sight.position30);
-            snagglebeast_instance_state->unk16C += frame_scale;
-            if (r <= snagglebeast_instance_state->unk16C)
+            snagglebeast_instance_state->rope_extension_length += frame_scale;
+            if (r <= snagglebeast_instance_state->rope_extension_length)
                 snagglebeast_instance_state->unk164 = 4;
             if (fast_dec_timer(&snagglebeast_instance_state->timer))
                 snagglebeast_instance_state->timer = scale_game_frames(0x14);
@@ -2216,15 +2216,15 @@ void snagglebeast_update(unsigned char *moby) {
         case SNAGGLEBEAST_ROPE_RETRACT:
             fast_vec_sub(&position,
                          snagglebeast_instance_state->unk120,
-                         snagglebeast_instance_state->unk110);
+                         snagglebeast_instance_state->rope_start_position);
             fast_vec_normalize(&position, &position, frame_scale);
-            fast_vec_add(snagglebeast_instance_state->unk110,
-                         snagglebeast_instance_state->unk110,
+            fast_vec_add(snagglebeast_instance_state->rope_start_position,
+                         snagglebeast_instance_state->rope_start_position,
                          &position);
             configure_timed_point_light(moby,
                                         snagglebeast_instance_state,
                                         3,
-                                        snagglebeast_instance_state->unk110,
+                                        snagglebeast_instance_state->rope_start_position,
                                         scale_game_frames(0x1E),
                                         0x800060FF,
                                         0,
