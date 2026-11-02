@@ -3192,6 +3192,9 @@ void            approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 
 void update_hero_water_height_and_bobbing(void) {
+    enum {
+        WATER_HEIGHT_CONTROL_ALTERNATE_TARGET = 0x16
+    };
     if (G.i198 > scale_game_frames(10) || G.water_bob_offset < 0.0f || G.i2094 == 0x11 || G.i20A0 == 0x11) {
         if (G.i2084 == 0x36) {
             vendor_spring(&G.water_bob_offset,
@@ -3215,7 +3218,7 @@ void update_hero_water_height_and_bobbing(void) {
     }
     if (G.i2084 != 0x7F) {
         f32 target_height = G.water_surface_height_target;
-        if (G.water_height_control_mode == 0x16)
+        if (G.water_height_control_mode == WATER_HEIGHT_CONTROL_ALTERNATE_TARGET)
             target_height = G.alternate_water_height_target;
         vendor_spring(
             &G.smoothed_water_height, &G.water_height_spring_velocity, target_height, frame_scale_sq * 0.027f, frame_scale_sq * 0.3f, 0.0f);
