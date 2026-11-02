@@ -2522,8 +2522,8 @@ typedef struct {
     O_26e670_26e670 *tgt;
     O_26e670_26e670 *link;
     u32              x18;
-    s16              h1C;
-    u16              h1E;
+    s16              sphere_collision_active;
+    u16              motion_and_fade_flags;
 } P_26e670_26e670;
 
 struct O_26e670_26e670 {
@@ -2548,7 +2548,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
     V_26e670_26e670  next_position, position_displacement, acc, projected_next_position;
     P_26e670_26e670 *P = &particle->p;
 
-    if ((P->h1E ^ 1) & 1) {
+    if ((P->motion_and_fade_flags ^ 1) & 1) {
         O_26e670_26e670 *linked_particle = P->link;
         P_26e670_26e670 *linked_particle_data = 0;
         f32              k = 2.0f, linked_velocity_scale_scratch;
@@ -2556,7 +2556,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
             linked_particle_data = &linked_particle->p;
         clear_u64_value(&acc);
         linked_velocity_scale_scratch = 0.15f;
-        if (P->h1C == 0 && linked_particle != 0 &&
+        if (P->sphere_collision_active == 0 && linked_particle != 0 &&
             !(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL)) {
             f32 kk;
             f32 linked_displacement_strength = 0.2f, link_rank_step = 1.0f,
@@ -2577,7 +2577,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
             } while (!(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL));
         }
         linked_velocity_scale_scratch = (0.15f - linked_velocity_scale_scratch) + 1.07f;
-        if (linked_particle_data == 0 || linked_particle_data->h1C == 0)
+        if (linked_particle_data == 0 || linked_particle_data->sphere_collision_active == 0)
             fast_vec_add(P, P, &acc);
         else
             fast_vec_scale(P, P, 0.5f);
@@ -2597,13 +2597,13 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
             fast_vec_add(&next_position, &acc, &P->tgt->pos);
         }
         if (FUN_L00_001f0d60_x(&next_position, 0, 0, 0.15f)) {
-            if (P->h1C == 0)
+            if (P->sphere_collision_active == 0)
                 qcopy(&next_position, &coll_hit_position);
             else
                 qcopy(&next_position, &particle->pos);
-            P->h1C = 1;
+            P->sphere_collision_active = 1;
         } else {
-            P->h1C = 0;
+            P->sphere_collision_active = 0;
         }
         fast_vec_sub(&acc, &P->tgt->pos, &D_L00_00166DC0_26e670);
         transform_vector(&acc, &acc, (u8 *)&D_L00_00166DC0_26e670 - 0x80);
@@ -2618,7 +2618,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
         fast_vec_sub(&acc, &acc, &projected_next_position);
         particle->b08 =
             truncate_float_to_s32(fast_arc_tan(acc.f[0], acc.f[1]) * 128.0f / 3.1415927f) - 0x20;
-        if (P->h1C) {
+        if (P->sphere_collision_active) {
             FUN_L00_001ff660_x(P, P, &coll_hit_normal);
             fast_vec_scale(P, P, 0.95f);
         } else {
@@ -2631,7 +2631,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
         fast_vec_scale(P, P, 0.5f);
     }
     qcopy(&particle->pos, &next_position);
-    if (P->h1E & 2) {
+    if (P->motion_and_fade_flags & 2) {
         s32 faded_alpha = (particle->i04 >> 24) - 2;
         if (faded_alpha > 0) {
             particle->i04 = (particle->i04 & 0xFFFFFF) | (faded_alpha << 24);
