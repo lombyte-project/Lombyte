@@ -1604,13 +1604,17 @@ u8 *FUN_L00_002743a8_274518(s32, void *, s32, f32, f32, s32, s32, void *) __asm_
 void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) __asm__("FUN_L00_00274518");
 
 void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
+    enum {
+        TRAIL_PARTICLE_MODE_ALPHA_FADE = 0,
+        TRAIL_PARTICLE_MODE_ORBITING_EMITTER = 1
+    };
     R_274518 *r = &particle->r;
     V_274518  position_offset_scratch, secondary_position_offset, rotation_angles;
     V_274518  secondary_offset_rotation_matrix[4];
     u8       *spawned_particle;
     f32       k1, k2, z;
 
-    if (r->trail_particle_mode == 0) {
+    if (r->trail_particle_mode == TRAIL_PARTICLE_MODE_ALPHA_FADE) {
         if (decrement_packed_countdown(particle->b4, r->alpha_fade_decrement))
             goto kill;
         if (r->iC == 0)
@@ -1632,7 +1636,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
             return;
         }
     }
-    if (r->trail_particle_mode == 1) {
+    if (r->trail_particle_mode == TRAIL_PARTICLE_MODE_ORBITING_EMITTER) {
         z = 0.0f;
         FUN_L00_002743a8_274518(0, particle->v10, scale_game_frames(10), z, z, 0, particle->particle_alpha, 0);
     } else {
@@ -1651,7 +1655,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
         if (spawned_particle)
             *(s16 *)(spawned_particle + 0x38) = r->position_offset_multiplier;
     }
-    if (r->trail_particle_mode != 1)
+    if (r->trail_particle_mode != TRAIL_PARTICLE_MODE_ORBITING_EMITTER)
         return;
     qcopy(particle->v10, r->iC + 0x10);
     k1 = 2.25f;
