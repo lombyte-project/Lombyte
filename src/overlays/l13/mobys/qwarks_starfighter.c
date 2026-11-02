@@ -1563,7 +1563,7 @@ extern int D_0015EEA4;
 
 int l13_starfighter_owner_unavailable_voice_line_index __asm__("D_L13_00161950") = 0;
 
-int D_L13_00161954 = -1;
+int l13_starfighter_boss_start_counter __asm__("D_L13_00161954") = -1;
 
 extern int qwarks_starfighter_command_path_slots[] __asm__("D_L13_001D3448");
 
@@ -1709,14 +1709,14 @@ void qwarks_starfighter_update(Moby388 *moby) {
             if (*(Moby388 **)(hero + 0x15F0) != 0) {
                 char *ship = (char *)(*(Moby388 **)(hero + 0x15F0))->d;
                 int   elapsed;
-                if (D_L13_00161954 == -1) {
-                    D_L13_00161954 = D_0015EEA4;
+                if (l13_starfighter_boss_start_counter == -1) {
+                    l13_starfighter_boss_start_counter = D_0015EEA4;
                     DebugPrint_alt(qwarks_starfighter_boss_start_time_format,
                                    D_0015EEA4,
                                    D_0015EEA4 / 60,
                                    D_0015EEA4 / 360);
                 }
-                elapsed = (unsigned int)(D_0015EEA4 - D_L13_00161954) / 360;
+                elapsed = (unsigned int)(D_0015EEA4 - l13_starfighter_boss_start_counter) / 360;
                 if (elapsed >= 0x29) {
                     DebugPrint_alt(qwarks_starfighter_high_elapsed_time_adjustment_message);
                     starfighter_vars->s24 = 0x66;
