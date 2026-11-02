@@ -102,7 +102,7 @@ typedef struct PlasmabotVars {
     u8  pad24A[0x2];
     s32 path_segment_index;
     f32 path_offset_and_spring_velocities[4];
-    s16 unk260;
+    s16 beam_cooldown_timer;
     s16 unk262;
     s32 unk264;
     f32 unk268;
@@ -252,7 +252,7 @@ void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
                              ((*(unsigned short *)listed_moby_entry_cursor & 0x7FFF) << 8);
                 PlasmabotVars *listed_moby_private_vars = (PlasmabotVars *)MOBY(moby)->pvars;
                 if (MOBY(moby)->oclass == 0x1C) {
-                    listed_moby_private_vars->unk260 =
+                    listed_moby_private_vars->beam_cooldown_timer =
                         scale_game_frames(plasmabot_beam_cooldown_frames);
                 }
             } while (*listed_moby_entry_cursor++ >= 0);
@@ -461,7 +461,7 @@ void plasmabot_update(char *moby) {
         plasmabot_update_private_vars->path_traversal_direction = 1.0f;
         plasmabot_update_private_vars->unk248 = 0;
         plasmabot_update_private_vars->heading_angular_velocity = 0;
-        plasmabot_update_private_vars->unk260 = 0;
+        plasmabot_update_private_vars->beam_cooldown_timer = 0;
         *(int *)&plasmabot_update_private_vars->unk268 = 0;
         plasmabot_update_private_vars->unk26C = 0;
         plasmabot_update_private_vars->unk280 = 0;
@@ -635,7 +635,7 @@ void plasmabot_update(char *moby) {
             release_beam_slot_by_id(moby);
             break;
         }
-        if (fast_dec_timer_s16(&plasmabot_update_private_vars->unk260) == 0)
+        if (fast_dec_timer_s16(&plasmabot_update_private_vars->beam_cooldown_timer) == 0)
             break;
         if (count_listed_plasmabots_preparing_or_sweeping_beam(((unsigned char *)moby)[0x21]) >= 2)
             break;
