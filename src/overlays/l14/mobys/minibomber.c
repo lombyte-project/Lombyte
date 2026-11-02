@@ -85,7 +85,7 @@ typedef struct Moby_2B5938 {
     char           pad7C[3];
     unsigned char  f7F; /* 0x7F */
     char           pad80[0x14];
-    int            f94; /* 0x94 */
+    int            active_collision; /* 0x94 */
     char           pad98[0x1A];
     short          fB2; /* 0xB2 */
 } Moby_2B5938;
@@ -383,7 +383,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (d->fB4 != 2) {
             moby->state = MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH;
             moby->f34 &= 0xFFBE;
-            moby->f94 = moby->cls->f10;
+            moby->active_collision = moby->cls->f10;
             FUN_L14_002b5d18_c((char *)moby);
         }
         break;
