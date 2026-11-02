@@ -129,13 +129,13 @@ extern float D_L06_00161F60 __attribute__((sda));
 extern float height_cycle_max_speed_gp __asm__("D_L06_00161F64") __attribute__((sda));
 extern float height_cycle_acceleration_gp __asm__("D_L06_00161F68") __attribute__((sda));
 
-int D_L06_00161F6C = 0x80202020;
+int l06_elevator_pulse_dim_color __asm__("D_L06_00161F6C") = 0x80202020;
 
-int D_L06_00161F70 = 0x80808080;
+int l06_elevator_pulse_bright_color __asm__("D_L06_00161F70") = 0x80808080;
 
-int D_L06_00161F74 = 0x80208020;
+int l06_elevator_move_and_clearance_color __asm__("D_L06_00161F74") = 0x80208020;
 
-int D_L06_00161F78 = -1;
+int l06_elevator_scene_3_latch __asm__("D_L06_00161F78") = -1;
 
 extern void          start_scene(int) __asm__("FUN_L00_00298840");
 extern void          request_music_track(int, int) __asm__("FUN_L01_0027a248");
@@ -196,11 +196,11 @@ void elevator_update(Moby_2FDA70 *moby) {
     moby->f2C = moby->cls->f24 * D_L06_00161F60;
     switch (moby->state) {
     case INITIALIZE_POSITION_AND_LINKED_MOBYS:
-        if (D_L06_00161F78 == -1) {
+        if (l06_elevator_scene_3_latch == -1) {
             if (D_0013D5DD_2FDA70[0x10] != 0) {
-                D_L06_00161F78 = 1;
+                l06_elevator_scene_3_latch = 1;
             } else {
-                D_L06_00161F78 = 0;
+                l06_elevator_scene_3_latch = 0;
             }
         }
         moby_data->f94 = 0;
@@ -275,8 +275,8 @@ void elevator_update(Moby_2FDA70 *moby) {
                     request_music_track(0, 10);
                     ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f34 |= 1;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f34 |= 2;
-                    if (D_0013D5DD_2FDA70[0x10] != 0 && D_L06_00161F78 == 0) {
-                        D_L06_00161F78 = 1;
+                    if (D_0013D5DD_2FDA70[0x10] != 0 && l06_elevator_scene_3_latch == 0) {
+                        l06_elevator_scene_3_latch = 1;
                         start_scene(3);
                         moby->state = WAIT_FOR_SCENE_GAME_MODE_CLEAR;
                         break;
@@ -407,7 +407,7 @@ void elevator_update(Moby_2FDA70 *moby) {
     if (moby->state >= MOVE_TO_NODE_BASE_HEIGHT &&
         moby->state <= WAIT_FOR_HERO_CLEARANCE_AT_NODE_BASE_HEIGHT) {
         moby_data->f9C = 0.0f;
-        moby->f90 = D_L06_00161F74;
+        moby->f90 = l06_elevator_move_and_clearance_color;
     } else {
         float color_blend;
         moby_data->f9C = fast_add_rotations(moby_data->f9C, D_0015ED6C * 5.2359877f);
@@ -417,7 +417,7 @@ void elevator_update(Moby_2FDA70 *moby) {
         } else if (color_blend < 0.0f) {
             color_blend = 0.0f;
         }
-        moby->f90 = fast_tween_color(D_L06_00161F6C, D_L06_00161F70, color_blend);
+        moby->f90 = fast_tween_color(l06_elevator_pulse_dim_color, l06_elevator_pulse_bright_color, color_blend);
     }
     fast_vec_add(&position_delta, &position_delta, &moby->pos);
     update_entity_matrix(moby_data->f20, &position_delta, &initial_rotation, &moby->rot);
