@@ -93,8 +93,8 @@ typedef struct {
     /* 0x32 */ unsigned short f32;
     /* 0x34 */ unsigned short flags;
     /* 0x36 */ char           pad36[0x1C];
-    /* 0x52 */ unsigned char  f52;
-    /* 0x53 */ unsigned char  f53;
+    /* 0x52 */ unsigned char  animation_sequence;
+    /* 0x53 */ unsigned char  requested_animation_sequence;
     /* 0x54 */ char           pad54[0x1C];
     /* 0x70 */ unsigned char  f70;
     /* 0x71 */ char           pad71[7];
@@ -194,7 +194,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         level_table_byte =
             *(unsigned char *)(moby->fB0 + (current_level_index_macro << 4) + visited52);
         if (level_table_byte == 0xFF) {
-            if (moby->f53 != 2) {
+            if (moby->requested_animation_sequence != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
             }
             moby->state = AGNOGG_SHIP_HOLD_TARGET_HEIGHT;
@@ -242,7 +242,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                 fast_arc_tan(moby->pos.x - l01_cuboids_macro[linked_moby_data->rec].pos.x,
                              moby->pos.y - l01_cuboids_macro[linked_moby_data->rec].pos.y);
         }
-        if (moby->f53 == 0) {
+        if (moby->requested_animation_sequence == 0) {
             if (moby->pos.z - data->fC <= 0.0f) {
                 set_moby_animation(moby, 1, 0);
             }
@@ -253,13 +253,13 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         }
         break;
     case AGNOGG_SHIP_WAIT_FOR_ANIMATION_1_GATE:
-        if (moby->f52 != 1) {
+        if (moby->animation_sequence != 1) {
             break;
         }
         if ((moby->f70 & 2) == 0) {
             break;
         }
-        if (moby->f53 != 2) {
+        if (moby->requested_animation_sequence != 2) {
             blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
         }
         if (moby->oclass == 0x2DA) {
