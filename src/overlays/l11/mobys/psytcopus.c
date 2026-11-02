@@ -268,6 +268,9 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         HIT_REACTION_HURT_WITHOUT_STATE_CHANGE = 10,
         HIT_REACTION_NO_RESPONSE = 11
     };
+    enum {
+        PSYTCOPUS_PROJECTILE_CREATION_BLOCKED = 2
+    };
     struct PokiPathVars *psytcopus_vars = (struct PokiPathVars *)psytcopus->pvars;
     Vec4f                projectile_and_hit_vector_scratch;
     int                  hits;
