@@ -221,8 +221,8 @@ typedef struct {
     char          pad178[8];
     float         target[4]; /* 0x180 */
     char          pad190[0x30];
-    int           i1C0;
-    int           i1C4;
+    int           target_moby;
+    int           target_selection_status;
     char          pad1C8[8];
     float         home[4]; /* 0x1D0 */
     char          pad1E0[0x10];
@@ -308,12 +308,12 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
                          *(int *)reaction_kind_or_path_address) != 2) {
         if (vector_distance_xy(pursuit_data->home, pursuit_data->target) > 16.0f ||
             absolute_float(chomper_moby->position[2] - pursuit_data->target[2]) > 3.0f) {
-            pursuit_data->i1C4 = 2;
+            pursuit_data->target_selection_status = 2;
         }
     }
-    if (pursuit_data->i1C0 == 0) {
+    if (pursuit_data->target_moby == 0) {
         struct Hero *player = &hero;
-        pursuit_data->i1C0 = (int)player->moby;
+        pursuit_data->target_moby = (int)player->moby;
         qcopy(pursuit_data->target, &player->motion.pos);
     }
 }
