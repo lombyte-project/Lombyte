@@ -82,8 +82,8 @@ typedef struct {
     char  knockback_motion_state[0x60];
     int   i180;
     char  p184[4];
-    float f188;
-    float f18C;
+    float movement_drop_limit;
+    float movement_rise_limit;
     char  p190[0x14];
     float max_movement_step;
     float movement_heading_error_limit;
@@ -187,7 +187,7 @@ void robot_dog_update(char *moby) {
         robot_dog_state->path_turn_spring_strength = frame_time_sq * 6.2831855f;
         robot_dog_state->path_turn_damping_factor = frame_time_sq * 12.566371f;
         robot_dog_state->path_turn_step_limit = frame_time * 3.1415927f;
-        robot_dog_state->f188 = robot_dog_state->f18C = 2.0f;
+        robot_dog_state->movement_drop_limit = robot_dog_state->movement_rise_limit = 2.0f;
         robot_dog_state->i180 = 0x38D;
         robot_dog_state->max_movement_step = robot_dog_state->movement_speed * frame_time;
         robot_dog_state->movement_control_flags |= 0x20;
