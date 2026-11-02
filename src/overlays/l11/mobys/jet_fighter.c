@@ -753,9 +753,9 @@ typedef struct {
 extern unsigned short D_00141C10 NOT_SDA;
 extern float D_L11_0016D4F0      NOT_SDA;
 extern char                      jet_fighter_collision_query_result[] __asm__("D_L11_00174840");
-int                              D_L11_00161FF0 = 120;
-int                              D_L11_00162004 = 5;
-int                              D_L11_0016214C = 10;
+int                              l11_jet_fighter_startup_acceleration_frame_threshold __asm__("D_L11_00161FF0") = 120;
+int                              l11_jet_fighter_steering_enable_frame_threshold __asm__("D_L11_00162004") = 5;
+int                              l11_jet_fighter_collision_damage_cooldown_frames __asm__("D_L11_0016214C") = 10;
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_15.h"
 
@@ -915,7 +915,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
             ship_vars->sel = 0;
         }
     }
-    if (D_L11_00161FF0 < ship_vars->count) {
+    if (l11_jet_fighter_startup_acceleration_frame_threshold < ship_vars->count) {
         pad = &controller_state;
         if (pad->raw_held & 0x40) {
             float accelerated_speed;
@@ -954,7 +954,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         ship_vars->count += 1;
     }
 
-    if (D_L11_00162004 < ship_vars->count) {
+    if (l11_jet_fighter_steering_enable_frame_threshold < ship_vars->count) {
         hero_input_source = &hero;
         x = hero_input_source->stick_x;
         y = hero_input_source->stick_y;
@@ -1183,7 +1183,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                                         0);
                         ship_moby->state = JET_FIGHTER_STATE_WAIT_FOR_RESPAWN;
                     }
-                    ship_vars->iDC = D_L11_0016214C;
+                    ship_vars->iDC = l11_jet_fighter_collision_damage_cooldown_frames;
                 }
             }
         }
