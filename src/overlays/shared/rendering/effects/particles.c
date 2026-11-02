@@ -602,7 +602,7 @@ typedef struct {
     u8       b8;
     u8       b9;
     u8       padA[2];
-    s32      wC;
+    s32      particle_size_bits;
     u8       v10[16];
     u8       v20[12];
     f32      unk2C;
@@ -631,7 +631,7 @@ P_2725d8 *spawn_moby_point_attached_particle(u8 *owner_moby,
     if (particle) {
         S_2725d8 *s;
         particle->w4 = color;
-        particle->wC = initial_size_bits;
+        particle->particle_size_bits = initial_size_bits;
         particle->b9 = truncate_float_to_s32(0.4f) + 0x20;
         particle->b3 = 0x48;
         particle->b1 = 3;
