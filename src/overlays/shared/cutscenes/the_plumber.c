@@ -64,11 +64,11 @@ typedef struct {
     short         h6;
     unsigned char b8;
     char          pad09[0x17];
-    void         *p20;
+    void         *dialogue_data;
     char          pad24[0x20];
     int           i44;
     char          pad48[4];
-    int           i4C;
+    int           camera_cuboid_index;
     char          body[0x64];
     float         pitch;
     float         yaw;
@@ -180,13 +180,13 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
                 mark_moby_for_removal(plumber_moby);
                 return;
             }
-            plumber_vars->p20 = (void *)plumber_level_one_dialogue_data;
+            plumber_vars->dialogue_data = (void *)plumber_level_one_dialogue_data;
             plumber_moby->state = PLUMBER_LEVEL_ONE_DIALOGUE;
         } else if (current_level_index == 8) {
-            plumber_vars->p20 = (void *)plumber_level_eight_dialogue_data;
+            plumber_vars->dialogue_data = (void *)plumber_level_eight_dialogue_data;
             plumber_moby->state = PLUMBER_LEVEL_EIGHT_DIALOGUE;
         } else {
-            plumber_vars->p20 = (void *)plumber_fallback_dialogue_data;
+            plumber_vars->dialogue_data = (void *)plumber_fallback_dialogue_data;
             plumber_moby->state = PLUMBER_FALLBACK_DIALOGUE_INITIALIZED;
         }
         initialize_npc_dialogue(plumber_moby, plumber_vars);
@@ -202,8 +202,8 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
             break;
         if (visited52[plumber_moby->bB0 + current_level_index * 16] != 0xFF) {
             jet_clear_persistent(plumber_moby->bB0);
-            if (plumber_vars->i4C != -1) {
-                LevelCuboid *camera_record = &l01_cuboids[plumber_vars->i4C];
+            if (plumber_vars->camera_cuboid_index != -1) {
+                LevelCuboid *camera_record = &l01_cuboids[plumber_vars->camera_cuboid_index];
                 jet_reset_camera(&camera_record->pos, &camera_record->rot);
             }
         }
