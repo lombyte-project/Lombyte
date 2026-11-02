@@ -670,17 +670,17 @@ typedef struct Wing {
     char          pad0[0x20];
     float         hp;
     char          pad1[0x14];
-    int           f38;
+    int           targeting_range_boost_pending;
     char          pad2[0x24];
     short         f60[3];
     char          pad3[0x1];
-    unsigned char b67;
+    unsigned char hit_flash_target;
     char          pad4[0x8];
     char          f70[16];
-    float         f80;
+    float         knockback_gravity;
     char          pad5[0x4];
-    float         f88;
-    float         f8C;
+    float         knockback_xy_magnitude;
+    float         knockback_z_magnitude;
     int           f90;
     int           f94;
     float         f98;
@@ -690,33 +690,33 @@ typedef struct Wing {
     float         fC0;
     float         fC4;
     char          pad8[0x58];
-    char          f120[8];
-    float         f128;
+    char          selected_target_position_xy[8];
+    float         selected_target_position_z;
     char          pad9[0x34];
     struct Moby  *target;
-    int           f164;
+    int           target_selection_status;
     char          pad10[0x8];
-    char          f170[16];
+    char          first_joint_animation[16];
     char          pad11[0x54];
-    float         f1D4;
-    float         f1D8;
+    float         first_joint_target_pitch;
+    float         first_joint_target_yaw;
     char          pad12[0x14];
-    char          f1F0[16];
+    char          second_joint_animation[16];
     char          pad13[0x58];
-    float         f258;
+    float         second_joint_target_yaw;
     char          pad14[0x14];
-    char          f270[16];
+    char          start_position[16];
     char          pad15[0x1C];
-    float         f29C;
-    float         f2A0;
+    float         base_targeting_range;
+    float         effective_targeting_range;
     char          pad16[0xC];
-    int           f2B0;
+    int           targeting_range_boost_timer;
     char          pad17[0x14];
-    int           f2C8;
-    int           f2CC;
+    int           target_group_index;
+    int           targeting_path_index;
     char          pad18[0x4];
-    int           f2D4;
-    float         f2D8;
+    int           path_stuck_timer;
+    float         glow_pulse_phase;
 } Wing;
 
 int l05_extermibot_glow_color_start __asm__("D_L05_00161A74") = 0x80004000;
@@ -776,7 +776,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
     int         k;
 
     moby_data = *(struct Wing **)&moby->pvars;
-    fast_dec_timer(&moby_data->f2D4);
+    fast_dec_timer(&moby_data->path_stuck_timer);
     dmg = 0.0f;
     hit_record = func_L00_0025B478_3047E8(moby, 0x330000, 0);
     if (hit_record != 0) {
@@ -810,7 +810,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
         }
         k = truncate_float_to_s32(D_L05_00161A98_gp * 409.6f);
         moby_data->f98 = D_L05_00161A98_gp * 0.4f;
-        moby_data->f80 = extermibot_knockback_gravity_gp * D_0015ED70;
+        moby_data->knockback_gravity = extermibot_knockback_gravity_gp * D_0015ED70;
         moby_data->f90 = k;
         moby_data->f94 = 9;
         moby_data->bAD = 0;
@@ -820,7 +820,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             break;
         case EXTERMIBOT_HIT_FLASH:
         case EXTERMIBOT_HIT_FLASH_ONLY:
-            moby_data->b67 = 0xFA;
+            moby_data->hit_flash_target = 0xFA;
             break;
         case EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK:
         case EXTERMIBOT_HIT_KNOCKBACK_AND_FLASH:
@@ -829,34 +829,34 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
         case EXTERMIBOT_HIT_START_NONLETHAL_KNOCKBACK_AND_FLASH:
         case EXTERMIBOT_HIT_START_KNOCKBACK_WITH_FLASH:
             moby_data->fC0 = 5.0f;
-            moby_data->f88 = extermibot_nonlethal_knockback_xy_scale_gp * D_0015ED6C;
-            moby_data->f8C = extermibot_nonlethal_knockback_z_scale_gp * D_0015ED6C;
+            moby_data->knockback_xy_magnitude = extermibot_nonlethal_knockback_xy_scale_gp * D_0015ED6C;
+            moby_data->knockback_z_magnitude = extermibot_nonlethal_knockback_z_scale_gp * D_0015ED6C;
             moby_data->fC4 = 10.0f;
             nonlethal_knockback_heading = fast_arc_tan(moby->pos.x - hit_record->who->pos.x,
                                                        moby->pos.y - hit_record->who->pos.y);
             *(u128_3047E8 *)working_vector = hit_record->dir;
             trooper_knockback_arc(
-                working_vector, &nonlethal_knockback_heading, &moby_data->f88, &moby_data->f8C);
+                working_vector, &nonlethal_knockback_heading, &moby_data->knockback_xy_magnitude, &moby_data->knockback_z_magnitude);
             trooper_start_knockback(moby, moby_data->f70, nonlethal_knockback_heading, 5, 1, 0);
             moby->state = EXTERMIBOT_NONLETHAL_KNOCKBACK;
-            moby_data->b67 = 0x78;
+            moby_data->hit_flash_target = 0x78;
             break;
         case EXTERMIBOT_HIT_LETHAL:
         case EXTERMIBOT_HIT_DEATH_KNOCKBACK:
             moby->flags &= 0xEFFF;
-            moby_data->f80 = extermibot_death_knockback_gravity_gp * D_0015ED70;
-            moby_data->f88 = extermibot_death_knockback_xy_scale_gp * D_0015ED6C;
-            moby_data->f8C = extermibot_death_knockback_z_scale_gp * D_0015ED6C;
+            moby_data->knockback_gravity = extermibot_death_knockback_gravity_gp * D_0015ED70;
+            moby_data->knockback_xy_magnitude = extermibot_death_knockback_xy_scale_gp * D_0015ED6C;
+            moby_data->knockback_z_magnitude = extermibot_death_knockback_z_scale_gp * D_0015ED6C;
             moby_data->fC0 = 5.5f;
             moby_data->fC4 = 11.0f;
             death_knockback_heading = fast_arc_tan(moby->pos.x - hit_record->who->pos.x,
                                                    moby->pos.y - hit_record->who->pos.y);
             *(u128_3047E8 *)working_vector = hit_record->dir;
             trooper_knockback_arc(
-                working_vector, &death_knockback_heading, &moby_data->f88, &moby_data->f8C);
+                working_vector, &death_knockback_heading, &moby_data->knockback_xy_magnitude, &moby_data->knockback_z_magnitude);
             trooper_start_knockback(moby, moby_data->f70, death_knockback_heading, 6, 1, 0);
             moby->state = EXTERMIBOT_DEATH_KNOCKBACK;
-            moby_data->b67 = 0xF0;
+            moby_data->hit_flash_target = 0xF0;
             if (hit_record->who != 0 && *(struct Moby **)&hit_record->who->pclass != 0 &&
                 *(short *)((u8 *)((struct Moby *)hit_record->who->pclass) + 0x46) == 5) {
                 stop_animation_l08(moby, 0x800, -1);
@@ -869,45 +869,45 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
     }
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, moby_data->f60);
-    if (moby_data->f38 != 0) {
-        moby_data->f2B0 = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
-        moby_data->f38 = 0;
+    if (moby_data->targeting_range_boost_pending != 0) {
+        moby_data->targeting_range_boost_timer = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
+        moby_data->targeting_range_boost_pending = 0;
     }
-    fast_dec_timer(&moby_data->f2B0);
-    if (moby_data->f2B0 != 0) {
-        moby_data->f2A0 = moby_data->f29C + 20.0f;
+    fast_dec_timer(&moby_data->targeting_range_boost_timer);
+    if (moby_data->targeting_range_boost_timer != 0) {
+        moby_data->effective_targeting_range = moby_data->base_targeting_range + 20.0f;
     } else {
-        moby_data->f2A0 = moby_data->f29C;
+        moby_data->effective_targeting_range = moby_data->base_targeting_range;
     }
-    if (activate_effect_l08(moby_data->f2A0,
+    if (activate_effect_l08(moby_data->effective_targeting_range,
                             moby,
-                            moby_data->f120,
+                            moby_data->selected_target_position_xy,
                             0,
                             0,
-                            ((Path_3047E8 *)l05_paths[moby_data->f2CC])->pts,
-                            ((Path_3047E8 *)l05_paths[moby_data->f2CC])->n) != 2) {
-        if (moby_data->f2A0 < vector_distance_xy(moby_data->f270, moby_data->f120) ||
-            3.0f < func_001F9B88_3047E8(moby->pos.z - moby_data->f128)) {
-            moby_data->f164 = 2;
+                            ((Path_3047E8 *)l05_paths[moby_data->targeting_path_index])->pts,
+                            ((Path_3047E8 *)l05_paths[moby_data->targeting_path_index])->n) != 2) {
+        if (moby_data->effective_targeting_range < vector_distance_xy(moby_data->start_position, moby_data->selected_target_position_xy) ||
+            3.0f < func_001F9B88_3047E8(moby->pos.z - moby_data->selected_target_position_z)) {
+            moby_data->target_selection_status = 2;
         }
     }
-    if (moby_data->f2C8 >= 0) {
-        Moby *candidate_target = func_L05_003053D8_3047E8(moby, moby_data->f2C8);
+    if (moby_data->target_group_index >= 0) {
+        Moby *candidate_target = func_L05_003053D8_3047E8(moby, moby_data->target_group_index);
         if (candidate_target != 0) {
-            if (moby_data->f164 == 2 ||
+            if (moby_data->target_selection_status == 2 ||
                 vector_distance_xy(((float *)&moby->pos), ((float *)&candidate_target->pos)) <
                     vector_distance_xy(((float *)&moby->pos), ((float *)&moby_data->target->pos))) {
                 moby_data->target = candidate_target;
-                moby_data->f164 = 1;
+                moby_data->target_selection_status = 1;
             }
         }
     }
     if (moby_data->target == 0) {
         moby_data->target = (*(Moby **)D_001413D0_lui);
     }
-    moby_data->f2D8 = fast_add_rotations(moby_data->f2D8, D_0015ED6C * 9.424778f);
+    moby_data->glow_pulse_phase = fast_add_rotations(moby_data->glow_pulse_phase, D_0015ED6C * 9.424778f);
     moby->glow_color = fast_tween_color(
-        l05_extermibot_glow_color_start, l05_extermibot_glow_color_end, (func_001F9FA8_3047E8(moby_data->f2D8) + 1.0f) * 0.5f);
+        l05_extermibot_glow_color_start, l05_extermibot_glow_color_end, (func_001F9FA8_3047E8(moby_data->glow_pulse_phase) + 1.0f) * 0.5f);
     k = moby->state;
     if (k < 10) {
         if (k >= 4 && moby_data->target == (*(Moby **)D_001413D0_lui)) {
@@ -930,13 +930,13 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             } else if (pitch < -0.5235988f) {
                 pitch = -0.5235988f;
             }
-            moby_data->f1D4 = pitch;
-            moby_data->f1D8 = yaw * 0.7f;
-            moby_data->f258 = yaw * 0.3f;
+            moby_data->first_joint_target_pitch = pitch;
+            moby_data->first_joint_target_yaw = yaw * 0.7f;
+            moby_data->second_joint_target_yaw = yaw * 0.3f;
         }
     }
-    update_joint_animation(moby, moby_data->f170, 1, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
-    update_joint_animation(moby, moby_data->f1F0, 2, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
+    update_joint_animation(moby, moby_data->first_joint_animation, 1, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
+    update_joint_animation(moby, moby_data->second_joint_animation, 2, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
 }
 
 extern int frame_number __asm__("D_L05_0015F5CC");
