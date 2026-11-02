@@ -238,7 +238,7 @@ typedef struct BlargHeavyInterceptorVars {
     f32 unk170[4];
     f32 unk180[4];
     f32 unk190[4];
-    f32 unk1A0[4];
+    f32 oscillation_state[4];
     f32 unk1B0[4];
     f32 unk1C0[4];
     f32 unk1D0[4];
@@ -336,10 +336,10 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         moby_vars->unk160[0] = 0.0f;
         moby_vars->flags = 0;
         moby_vars->unk160[1] = 0.0f;
-        moby_vars->unk1A0[0] = 0.0f;
-        moby_vars->unk1A0[1] = 0.0f;
-        moby_vars->unk1A0[2] = 0.0f;
-        moby_vars->unk1A0[3] = 0.0f;
+        moby_vars->oscillation_state[0] = 0.0f;
+        moby_vars->oscillation_state[1] = 0.0f;
+        moby_vars->oscillation_state[2] = 0.0f;
+        moby_vars->oscillation_state[3] = 0.0f;
         moby_vars->unk1B0[0] = moby->rot.z;
         *(s16 *)&moby_vars->unk1B0[1] = 0;
         moby_vars->unk1B0[2] = 0.0f;
@@ -1720,12 +1720,12 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *
         blarg_heavy_interceptor_vertical_oscillation_amplitude_gp,
         blarg_heavy_interceptor_vertical_oscillation_phase_increment_gp,
         moby,
-        interceptor_private_vars->unk1A0,
-        &interceptor_private_vars->unk1A0[1]);
+        interceptor_private_vars->oscillation_state,
+        &interceptor_private_vars->oscillation_state[1]);
     update_moby_rotation_oscillation(
         moby,
-        &interceptor_private_vars->unk1A0[2],
-        &interceptor_private_vars->unk1A0[3],
+        &interceptor_private_vars->oscillation_state[2],
+        &interceptor_private_vars->oscillation_state[3],
         blarg_heavy_interceptor_rotation_oscillation_amplitude_gp,
         blarg_heavy_interceptor_rotation_oscillation_first_phase_increment_gp,
         blarg_heavy_interceptor_rotation_oscillation_second_phase_increment_gp);
