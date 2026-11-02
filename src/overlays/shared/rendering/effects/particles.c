@@ -1676,7 +1676,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
 typedef struct {
     void *o;
     u8    b4;
-    u8    b5;
+    u8    offset_length_jitter_percent;
     s16   h6;
     float unk8;
     float unkC;
@@ -1702,7 +1702,7 @@ void update_randomized_moby_point_attached_particle(struct EffectParticle *parti
     save = *(float *)(particle->data + 0xC);
     moby_point_position(attachment_data->o, attachment_data->b4, attachment_position);
     build_moby_bone_transform(attachment_data->o, attachment_data->b4, attachment_vector_scratch);
-    x = convert_integer_to_float(attachment_data->b5);
+    x = convert_integer_to_float(attachment_data->offset_length_jitter_percent);
     x = random_float_between(-x, x);
     fast_vec_normalize(
         &attachment_offset, attachment_vector_scratch, (x / 100.0f - one) * attachment_data->unkC);
