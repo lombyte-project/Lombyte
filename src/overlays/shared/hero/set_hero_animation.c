@@ -1396,7 +1396,7 @@ typedef struct Hero_234800 {
     Vec_234800    pos;
     Vec_234800    v90;
     char          pA0[0x5C];
-    float         fFC;
+    float         attachment_yaw_delta;
     char          p100[0x50];
     Vec_234800    v150;
     char          p160[0x24];
@@ -1683,7 +1683,7 @@ void update_hero_attachment(void) {
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     }
     fast_vec_add(hero_233f80 + 0xF0, hero_233f80 + 0xF0, &attachment_motion_scratch);
-    ((Hero_234800 *)hero_233f80)->fFC =
+    ((Hero_234800 *)hero_233f80)->attachment_yaw_delta =
         fast_subtract_rotations(((Hero_234800 *)hero_233f80)->v90.z, saved_hero_yaw);
 }
 
