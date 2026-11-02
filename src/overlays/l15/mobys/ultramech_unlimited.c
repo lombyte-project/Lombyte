@@ -258,7 +258,7 @@ extern short ultramech_death_effect_basis_scale_gp __asm__("D_L15_00161B38") __a
 extern short ultramech_death_effect_vertical_offset_gp __asm__("D_L15_00161B3C")
     __attribute__((sda));
 
-int D_L15_00161B1C = 180;
+int l15_ultramech_projectile_duration_frames __asm__("D_L15_00161B1C") = 180;
 
 extern void
 collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
@@ -552,7 +552,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                                     &vector_or_hit_descriptor,
                                     (int)ultramech_moby,
                                     (int)combat_target,
-                                    scale_game_frames(D_L15_00161B1C));
+                                    scale_game_frames(l15_ultramech_projectile_duration_frames));
                 normalize_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, 3.0f);
                 add_vectors(&vector_arithmetic_result,
                             &vector_or_hit_descriptor,
