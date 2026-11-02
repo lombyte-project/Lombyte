@@ -1580,9 +1580,9 @@ typedef struct {
     u8 *iC;
     f32 unk10;
     f32 unk14;
-    s16 h18;
-    s16 h1A;
-    s16 h1C;
+    s16 position_offset_multiplier;
+    s16 alpha_fade_decrement;
+    s16 trail_particle_mode;
 } R_274518;
 
 typedef struct {
@@ -1607,8 +1607,8 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
     u8       *spawned_particle;
     f32       k1, k2, z;
 
-    if (r->h1C == 0) {
-        if (decrement_packed_countdown(particle->b4, r->h1A))
+    if (r->trail_particle_mode == 0) {
+        if (decrement_packed_countdown(particle->b4, r->alpha_fade_decrement))
             goto kill;
         if (r->iC == 0)
             return;
@@ -1616,7 +1616,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
         position_offset_scratch.y = r->unk4;
         position_offset_scratch.z = r->unk8;
         fast_vec_scale(
-            &position_offset_scratch, &position_offset_scratch, convert_integer_to_float(r->h18));
+            &position_offset_scratch, &position_offset_scratch, convert_integer_to_float(r->position_offset_multiplier));
         fast_vec_add(particle->v10, r->iC + 0x10, &position_offset_scratch);
         return;
     }
@@ -1629,7 +1629,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
             return;
         }
     }
-    if (r->h1C == 1) {
+    if (r->trail_particle_mode == 1) {
         z = 0.0f;
         FUN_L00_002743a8_274518(0, particle->v10, scale_game_frames(10), z, z, 0, particle->particle_alpha, 0);
     } else {
@@ -1646,9 +1646,9 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
                                                    particle->particle_alpha,
                                                    &position_offset_scratch);
         if (spawned_particle)
-            *(s16 *)(spawned_particle + 0x38) = r->h18;
+            *(s16 *)(spawned_particle + 0x38) = r->position_offset_multiplier;
     }
-    if (r->h1C != 1)
+    if (r->trail_particle_mode != 1)
         return;
     qcopy(particle->v10, r->iC + 0x10);
     k1 = 2.25f;
