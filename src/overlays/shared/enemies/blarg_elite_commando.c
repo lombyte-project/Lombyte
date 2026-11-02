@@ -98,7 +98,7 @@ typedef struct L16DamageData {
     f32           unk2C0;
     f32           unk2C4;
     f32           unk2C8;
-    f32           unk2CC;
+    f32           parent_heading_offset;
     char         *unk2D0;
     f32           unk2D4;
     u8            unk2D8[0x4];
@@ -293,7 +293,7 @@ void blarg_elite_commando_update(char *commando_moby) {
                 movement, &commando_data->unk2C0, commando_data->unk2D0 + 0xC0);
             fast_vec_add(&MOBY(commando_moby)->pos, movement, commando_data->unk2D0 + 0x10);
             MOBY(commando_moby)->rot.z =
-                fast_add_rotations(*(float *)(commando_data->unk2D0 + 0x48), commando_data->unk2CC);
+                fast_add_rotations(*(float *)(commando_data->unk2D0 + 0x48), commando_data->parent_heading_offset);
         }
         break;
     case COMMANDO_STATE_RETURN_TO_INITIAL_POSITION:
@@ -676,7 +676,7 @@ void set_blarg_elite_commando_parent_transform(char *moby,
     L16DamageData *commando_data = (L16DamageData *)MOBY(moby)->pvars;
     commando_data->unk2D0 = parent_moby;
     qcopy(&commando_data->unk2C0, position);
-    commando_data->unk2CC = *(float *)(vector + 8);
+    commando_data->parent_heading_offset = *(float *)(vector + 8);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
