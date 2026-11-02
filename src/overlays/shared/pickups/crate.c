@@ -203,7 +203,7 @@ struct M2d1428 {
     u8       pa8[0x14];
     u8       bBC;
     u8       pbd[3];
-    u8       vC0[0x10];
+    u8       transform_basis_x[0x10];
 };
 
 typedef struct P2d1428 {
@@ -1280,7 +1280,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (moby->state == CRATE_STATE_INITIALIZE)
             continue;
         fast_vec_sub(&hero_local_offset, &hero.motion.pos, &moby->pos);
-        transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->vC0);
+        transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->transform_basis_x);
         if (absolute_float(hero_local_offset.x) < 0.55f &&
             absolute_float(hero_local_offset.y) < 0.55f && hero_local_offset.z < 0.0f &&
             -(hero.capsule_top + hero.capsule_radius) < hero_local_offset.z) {
