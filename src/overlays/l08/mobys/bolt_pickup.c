@@ -52,9 +52,9 @@ typedef struct Hero_2B94B0 {
     char  pad0[0x80];
     float pos[4];
     char  pad90[0x480];
-    float v510[4];
-    float v520[4];
-    float v530[4];
+    float bolt_collection_probe_a[4];
+    float bolt_collection_probe_b[4];
+    float bolt_collection_probe_c[4];
     char  pad540[0x1B4C];
     int   f208C;
     char  pad2090[0x1F8];
@@ -184,11 +184,11 @@ void bolt_pickup_update(Moby_2B94B0 *moby) {
         hit = 0;
         moby->spin_angle = fast_add_rotations(moby->spin_angle, moby_data->fC);
         if (((Hero_2B94B0 *)((char *)&hero))->f208C == 15) {
-            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->v510, moby->pos) < 0.5f)
+            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_a, moby->pos) < 0.5f)
                 hit = 1;
-            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->v520, moby->pos) < 0.5f)
+            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_b, moby->pos) < 0.5f)
                 hit = 1;
-            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->v530, moby->pos) < 0.5f)
+            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_c, moby->pos) < 0.5f)
                 hit = 1;
         } else if (vector_distance_xy(moby->pos, ((Hero_2B94B0 *)((char *)&hero))->pos) <
                    ((Hero_2B94B0 *)((char *)&hero))->collection_radius_xy) {
