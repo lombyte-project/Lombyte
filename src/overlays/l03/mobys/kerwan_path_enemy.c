@@ -204,31 +204,31 @@ typedef struct Data2C8398 {
     char          p138[0x18];
     Look2C8398    look0;
     Look2C8398    look1;
-    short         s250;
+    short         projectile_attack_cooldown_frames;
     short         target_range_boost_timer;
-    unsigned char b254;
-    unsigned char b255;
-    short         s256;
-    float         f258;
+    unsigned char projectile_launch_count;
+    unsigned char death_knockback_update_counter;
+    short         follow_path_to_end_override;
+    float         heading_angular_velocity;
     char          p25C[6];
     unsigned char b262;
-    unsigned char b263;
-    int           i264;
+    unsigned char heading_turn_cooldown;
+    int           heading_turn_gate_moby_index;
     char          p268[4];
     float         base_target_selection_range;
     float         target_selection_range;
-    int           i274;
-    float         f278;
-    float         f27C;
-    int           i280;
-    int           i284;
+    int           use_sequential_path_nodes;
+    float         path_reposition_range;
+    float         path_follow_activation_range;
+    int           supporting_moby_index;
+    int           activation_linked_moby_index;
     short         s288;
-    short         s28A;
-    float         f28C;
-    int           i290;
-    float         f294;
-    int           i298;
-    int           i29C;
+    short         path_height_check_schedule_slot;
+    float         desired_turn_heading;
+    int           alternate_path_id;
+    float         alternate_path_activation_range;
+    int           alternate_path_node_index;
+    int           target_activation_clip_volume_id;
 } Data2C8398;
 
 typedef struct Moby2C8398 {
@@ -249,7 +249,7 @@ typedef struct Moby2C8398 {
     unsigned char  b52;
     unsigned char  anim;
     char           p54[4];
-    float          f58;
+    float          animation_playback_speed;
     char           p5C[0x14];
     unsigned char  b70;
     char           p71[7];
@@ -263,7 +263,7 @@ typedef struct Moby2C8398 {
     char           pA5;
     unsigned short cls;
     char           pA8[8];
-    unsigned char  bB0;
+    unsigned char  mission_index;
     char           pB1[0xB];
     unsigned char  bBC;
     char           pBD[0x43];
@@ -403,7 +403,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     target_distance = vector_distance_xy(m->pos, &selected_target);
     manipulator_set_scale(&moby_data->look0, 2.5f);
     if (moby_data->b262 == 1) {
-        if ((visited52)[m->bB0 + (current_level_index << 4)] == 0xFF) {
+        if ((visited52)[m->mission_index + (current_level_index << 4)] == 0xFF) {
             m->flags |= 0x41;
             m->i94 = 0;
         }
@@ -421,13 +421,13 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         return;
     }
     FUN_L00_001fefc8_cf(m);
-    fast_subtract_rotations_cf(&moby_data->b263);
+    fast_subtract_rotations_cf(&moby_data->heading_turn_cooldown);
     if (m->b31 != 0 || target_distance < 24.0f) {
         if (m->state == ENEMY_TURN_TO_HEADING) {
             moby_data->look0.target_yaw_offset =
-                fast_subtract_rotations(moby_data->f28C, m->rot[2]) * 0.25f;
+                fast_subtract_rotations(moby_data->desired_turn_heading, m->rot[2]) * 0.25f;
             moby_data->look1.target_yaw_offset =
-                fast_subtract_rotations(moby_data->f28C, m->rot[2]) * 0.75f;
+                fast_subtract_rotations(moby_data->desired_turn_heading, m->rot[2]) * 0.75f;
         } else if (m->state < ENEMY_MOVE_TO_PATH_NODE &&
                    target_distance < moby_data->target_selection_range) {
             moby_data->look1.target_yaw_offset =
@@ -478,7 +478,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         moby_data->b5A = 0xC;
         clear_u64_value(moby_data->v40);
         m->flags |= 0x1000;
-        moby_data->s250 = 0;
+        moby_data->projectile_attack_cooldown_frames = 0;
         {
             char *np = ((char *)l03_paths[moby_data->pf.id]);
             moby_data->pf.idx = 0;
@@ -487,9 +487,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         }
         m->state = ENEMY_WAIT_FOR_ACTIVATION;
         moby_data->s288 = m->s32;
-        moby_data->s28A = D_L03_001618F4 & 7;
+        moby_data->path_height_check_schedule_slot = D_L03_001618F4 & 7;
         D_L03_001618F4_i++;
-        moby_data->b263 = 0;
+        moby_data->heading_turn_cooldown = 0;
         {
             char *path = moby_data->pf.path;
             if (path != 0) {
@@ -500,7 +500,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                 }
             }
         }
-        if (moby_data->i284 != -1 && moby_data->i290 == -1) {
+        if (moby_data->activation_linked_moby_index != -1 && moby_data->alternate_path_id == -1) {
             blend_moby_animation(m, 0, 0, scale_game_frames(10));
             m->state = ENEMY_WAIT_FOR_LINKED_MOBY;
         }
@@ -509,28 +509,28 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         if ((m->b70 & 2) && m->b52 != 0) {
             blend_moby_animation(m, 0, 0, scale_game_frames(10));
         }
-        if (moby_data->i290 != -1) {
-            char *np = ((char *)l03_paths[moby_data->i290]);
+        if (moby_data->alternate_path_id != -1) {
+            char *np = ((char *)l03_paths[moby_data->alternate_path_id]);
             *(OvlQuad *)m->pos = *(OvlQuad *)(np + 0x10);
             m->rot[2] = fast_arc_tan(*(float *)(np + 0x20) - *(float *)(np + 0x10),
                                      *(float *)(np + 0x24) - *(float *)(np + 0x14));
             if (is_point_inside_clip_volume_cf(m->b21) ||
-                is_point_inside_clip_volume(&selected_target, moby_data->i29C) ||
-                (visited52)[m->bB0 + (current_level_index << 4)] == 0xFF ||
-                (target_distance < moby_data->f294 &&
+                is_point_inside_clip_volume(&selected_target, moby_data->target_activation_clip_volume_id) ||
+                (visited52)[m->mission_index + (current_level_index << 4)] == 0xFF ||
+                (target_distance < moby_data->alternate_path_activation_range &&
                  absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f)) {
-                moby_data->i298 = 0;
+                moby_data->alternate_path_node_index = 0;
                 m->state = ENEMY_FOLLOW_ALTERNATE_PATH;
                 if (m->anim != 1) {
                     blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
             }
-        } else if (moby_data->i284 != -1) {
+        } else if (moby_data->activation_linked_moby_index != -1) {
             blend_moby_animation(m, 0, 0, scale_game_frames(10));
             m->state = ENEMY_WAIT_FOR_LINKED_MOBY;
         } else {
             if (target_distance < moby_data->target_selection_range ||
-                target_distance < moby_data->f27C) {
+                target_distance < moby_data->path_follow_activation_range) {
                 if (try_start_kerwan_path_enemy_heading_turn(
                         fast_arc_tan(selected_target.pos[0] - m->pos[0],
                                      selected_target.pos[1] - m->pos[1]),
@@ -539,10 +539,10 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                     break;
                 }
             }
-            if (target_distance < moby_data->f27C &&
+            if (target_distance < moby_data->path_follow_activation_range &&
                 absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f) {
-                moby_data->f27C = 0.0f;
-                moby_data->s256 = 1;
+                moby_data->path_follow_activation_range = 0.0f;
+                moby_data->follow_path_to_end_override = 1;
                 m->state = ENEMY_FOLLOW_PATH_TO_END;
                 if (m->anim != 1) {
                     blend_moby_animation(m, 1, 0, scale_game_frames(10));
@@ -556,7 +556,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                 }
             } else if (target_distance < moby_data->target_selection_range &&
                        absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f &&
-                       fast_dec_timer_s16(&moby_data->s250)) {
+                       fast_dec_timer_s16(&moby_data->projectile_attack_cooldown_frames)) {
                 if (fast_difference_between_rotations(
                         m->rot[2],
                         fast_arc_tan(selected_target.pos[0] - m->pos[0],
@@ -578,12 +578,12 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             break;
         }
         {
-            Moby2C8398 *o = &D_L03_0015FFD8_m[moby_data->i284];
+            Moby2C8398 *o = &D_L03_0015FFD8_m[moby_data->activation_linked_moby_index];
             if (o == 0 || o->state == 0xFE || o->state == 0xFD || (m->b52 == 0xA && (m->b70 & 2))) {
                 m->state = ENEMY_WAIT_FOR_ACTIVATION;
                 blend_moby_animation(m, 0, 0, scale_game_frames(10));
-                moby_data->s250 = scale_game_frames(0x3C);
-                moby_data->i284 = -1;
+                moby_data->projectile_attack_cooldown_frames = scale_game_frames(0x3C);
+                moby_data->activation_linked_moby_index = -1;
             } else {
                 try_start_kerwan_path_enemy_heading_turn(
                     fast_arc_tan(selected_target.pos[0] - m->pos[0],
@@ -596,7 +596,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     case ENEMY_PROJECTILE_ATTACK_WINDUP:
         if (m->b70 & 2) {
             m->state = ENEMY_PROJECTILE_ATTACK;
-            moby_data->b254 = 0;
+            moby_data->projectile_launch_count = 0;
             if (m->anim != 4) {
                 blend_moby_animation(m, 4, 0, 0);
             }
@@ -606,9 +606,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             if (m->anim != 2) {
                 blend_moby_animation(m, 2, 0, scale_game_frames(10));
             }
-        } else if (target_distance < moby_data->f278 &&
+        } else if (target_distance < moby_data->path_reposition_range &&
                    absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f) {
-            if (moby_data->i274 != 0) {
+            if (moby_data->use_sequential_path_nodes != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
                     d2->pf.idx++;
@@ -634,7 +634,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             float launch_endpoint[4];
             float ang;
             float df;
-            moby_data->b254++;
+            moby_data->projectile_launch_count++;
             moby_point_position(m, 0, a);
             fast_vec_sub(b, selected_target.dir, a);
             fast_vec_normalize(b, b, frame_time * 6.0f);
@@ -659,12 +659,12 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                 b, a, (struct Moby *)m, scale_game_frames(0x82), ang, frame_time * 6.0f, 0.75f);
         }
         if (m->b70 & 2) {
-            if (moby_data->b254 == 0) {
+            if (moby_data->projectile_launch_count == 0) {
                 break;
             }
-            if (target_distance < moby_data->f27C &&
+            if (target_distance < moby_data->path_follow_activation_range &&
                 absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f) {
-                moby_data->f27C = 0.0f;
+                moby_data->path_follow_activation_range = 0.0f;
                 m->state = ENEMY_FOLLOW_PATH_TO_END;
                 if (m->anim != 1) {
                     blend_moby_animation(m, 1, 0, scale_game_frames(10));
@@ -679,7 +679,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             }
             if (target_distance < moby_data->target_selection_range &&
                 absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f &&
-                fast_dec_timer_s16(&moby_data->s250) &&
+                fast_dec_timer_s16(&moby_data->projectile_attack_cooldown_frames) &&
                 fast_difference_between_rotations(
                     m->rot[2],
                     fast_arc_tan(selected_target.pos[0] - m->pos[0],
@@ -707,9 +707,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             if (m->anim != 2) {
                 blend_moby_animation(m, 2, 0, scale_game_frames(10));
             }
-        } else if (target_distance < moby_data->f278 &&
+        } else if (target_distance < moby_data->path_reposition_range &&
                    absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f) {
-            if (moby_data->i274 != 0) {
+            if (moby_data->use_sequential_path_nodes != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
                     d2->pf.idx++;
@@ -737,7 +737,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             fr = compute_interpolated_record_value(m);
             ang = fast_arc_tan(selected_target.pos[0] - m->pos[0],
                                selected_target.pos[1] - m->pos[1]);
-            FUN_001f9c48_cf((char *)m, &moby_data->f258, ang, 0.03f, 0.3f, 0.3f);
+            FUN_001f9c48_cf((char *)m, &moby_data->heading_angular_velocity, ang, 0.03f, 0.3f, 0.3f);
             moby_point_position(m, 0, v);
             if (25.0f <= fr && fr <= 31.0f &&
                 absolute_float(m->pos[2] - selected_target.pos[2]) < 2.0f &&
@@ -761,7 +761,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                     record_moby_hit(selected_target.obj, &hit);
                 }
             } else if (m->b70 & 2) {
-                if (moby_data->i274 != 0) {
+                if (moby_data->use_sequential_path_nodes != 0) {
                     Data2C8398 *d2 = m->data;
                     if (d2->pf.idx < *(int *)d2->pf.path - 1) {
                         d2->pf.idx++;
@@ -793,7 +793,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     }
     case ENEMY_MOVE_TO_PATH_NODE: {
         PathF2C8398 *pf = &moby_data->pf;
-        if (moby_data->s256 != 0) {
+        if (moby_data->follow_path_to_end_override != 0) {
             m->state = ENEMY_FOLLOW_PATH_TO_END;
             break;
         }
@@ -814,9 +814,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
               0x14)) {
             break;
         }
-        if (target_distance < moby_data->f278 &&
+        if (target_distance < moby_data->path_reposition_range &&
             absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f) {
-            if (moby_data->i274 != 0) {
+            if (moby_data->use_sequential_path_nodes != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
                     d2->pf.idx++;
@@ -890,30 +890,30 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     }
     case ENEMY_FOLLOW_ALTERNATE_PATH: {
         {
-            char *path = ((char *)l03_paths[moby_data->i290]);
+            char *path = ((char *)l03_paths[moby_data->alternate_path_id]);
             float v[4];
             int   seg;
             float frac;
             FUN_L00_0025c698_cf(path, m->pos, v, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
-            if (moby_data->i298 < seg) {
-                moby_data->i298 = seg;
+            if (moby_data->alternate_path_node_index < seg) {
+                moby_data->alternate_path_node_index = seg;
             }
             if (!(step_mover_2e3f20((char *)m,
                                     (char *)&moby_data->mv,
-                                    (float *)(path + 0x10 + moby_data->i298 * 0x10),
+                                    (float *)(path + 0x10 + moby_data->alternate_path_node_index * 0x10),
                                     (char *)moby_data->v40) &
                   0x14)) {
                 break;
             }
-            if (moby_data->i298 < *(int *)path - 1) {
-                moby_data->i298++;
+            if (moby_data->alternate_path_node_index < *(int *)path - 1) {
+                moby_data->alternate_path_node_index++;
             } else {
-                moby_data->i290 = -1;
+                moby_data->alternate_path_id = -1;
                 m->state = ENEMY_WAIT_FOR_ACTIVATION;
                 if (m->anim != 0) {
                     blend_moby_animation(m, 0, 0, scale_game_frames(10));
                 }
-                if (moby_data->i284 != -1) {
+                if (moby_data->activation_linked_moby_index != -1) {
                     blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     m->state = ENEMY_WAIT_FOR_LINKED_MOBY;
                 } else {
@@ -933,12 +933,12 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         if (moby_data->q.jump_phase != 2) {
             fl = step_moby_motion(m, &moby_data->q);
         } else {
-            m->f58 = 1.0f;
+            m->animation_playback_speed = 1.0f;
             fl = (m->b70 << 5) & 0x40;
         }
-        moby_data->i290 = -1;
+        moby_data->alternate_path_id = -1;
         if (fl & 0x40) {
-            if (moby_data->i274 != 0) {
+            if (moby_data->use_sequential_path_nodes != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
                     d2->pf.idx++;
@@ -1018,7 +1018,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                                     D_L03_0015F580_macro,
                                     D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0, -1);
-                if (moby_data->i264 == -1) {
+                if (moby_data->heading_turn_gate_moby_index == -1) {
                     mark_moby_for_removal(m);
                     return;
                 }
@@ -1126,7 +1126,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                                         D_L03_0015F580_macro,
                                         D_L03_0015F580_macro);
                     FUN_L00_00259710_cf(m, 0x200, -1);
-                    if (moby_data->i264 == -1) {
+                    if (moby_data->heading_turn_gate_moby_index == -1) {
                         mark_moby_for_removal(m);
                         return;
                     }
@@ -1144,9 +1144,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     case ENEMY_TURN_TO_HEADING:
         switch (m->anim) {
         case ENEMY_ANIM_LOCOMOTION:
-            FUN_001f9c48_cf((char *)m, &moby_data->f258, moby_data->f28C, 0.09f, 0.27f, 0.15f);
-            if (fast_difference_between_rotations(m->rot[2], moby_data->f28C) < 0.034906585f) {
-                moby_data->b263 = scale_game_frames(0x3C);
+            FUN_001f9c48_cf((char *)m, &moby_data->heading_angular_velocity, moby_data->desired_turn_heading, 0.09f, 0.27f, 0.15f);
+            if (fast_difference_between_rotations(m->rot[2], moby_data->desired_turn_heading) < 0.034906585f) {
+                moby_data->heading_turn_cooldown = scale_game_frames(0x3C);
                 if (m->bBC >= 7 && m->bBC <= 8) {
                     if (m->bBC == 7) {
                         is_value_within_interpolated_window_cf(m);
@@ -1155,20 +1155,20 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                     if (m->anim != 1) {
                         blend_moby_animation(m, 1, 0, scale_game_frames(10));
                     }
-                    m->f58 = 1.0f;
+                    m->animation_playback_speed = 1.0f;
                 } else {
                     m->state = ENEMY_WAIT_FOR_ACTIVATION;
                     if (m->anim != 0) {
                         blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     }
-                    moby_data->s250 = scale_game_frames(10);
+                    moby_data->projectile_attack_cooldown_frames = scale_game_frames(10);
                 }
             }
             break;
         case ENEMY_ANIM_HEADING_TURN:
-            FUN_001f9c48_cf((char *)m, &moby_data->f258, moby_data->f28C, 0.01f, 0.3f, 0.2f);
-            if (fast_difference_between_rotations(m->rot[2], moby_data->f28C) < 0.034906585f) {
-                moby_data->b263 = scale_game_frames(0x3C);
+            FUN_001f9c48_cf((char *)m, &moby_data->heading_angular_velocity, moby_data->desired_turn_heading, 0.01f, 0.3f, 0.2f);
+            if (fast_difference_between_rotations(m->rot[2], moby_data->desired_turn_heading) < 0.034906585f) {
+                moby_data->heading_turn_cooldown = scale_game_frames(0x3C);
                 if (m->bBC >= 7 && m->bBC <= 8) {
                     if (m->bBC == 7) {
                         is_value_within_interpolated_window_cf(m);
@@ -1182,7 +1182,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                     if (m->anim != 0) {
                         blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     }
-                    moby_data->s250 = scale_game_frames(10);
+                    moby_data->projectile_attack_cooldown_frames = scale_game_frames(10);
                 }
             }
             break;
@@ -1191,7 +1191,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     case ENEMY_DEATH_KNOCKBACK: {
         int   fl = step_moby_motion(m, &moby_data->q);
         float g;
-        moby_data->b255++;
+        moby_data->death_knockback_update_counter++;
         g = allocate_voice_for_target_entry_cf(m->pos);
         if ((fl & 0x60) && g + 5.0f < m->pos[2] && m->bBC != 0xB) {
             allocate_voice_for_target_entry(0xA, 0, (int)m);
@@ -1199,7 +1199,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         }
         m->flags &= 0xEFFF;
         if (fl & 1) {
-            moby_data->b255 = 0;
+            moby_data->death_knockback_update_counter = 0;
         }
         if (fl & 0x60) {
             {
@@ -1255,7 +1255,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                                     D_L03_0015F580_macro,
                                     D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0, -1);
-                if (moby_data->i264 == -1) {
+                if (moby_data->heading_turn_gate_moby_index == -1) {
                     mark_moby_for_removal(m);
                     return;
                 }
@@ -1270,7 +1270,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         }
         if (m->pos[2] < 5.0f) {
             FUN_L00_00259710_cf(m, 0, -1);
-            if (moby_data->i264 == -1) {
+            if (moby_data->heading_turn_gate_moby_index == -1) {
                 mark_moby_for_removal(m);
                 return;
             }
@@ -1296,7 +1296,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         break;
     }
     case ENEMY_RESPAWN_AT_PATH_START:
-        if ((visited52)[m->bB0 + (current_level_index << 4)] == 0xFF) {
+        if ((visited52)[m->mission_index + (current_level_index << 4)] == 0xFF) {
             mark_moby_for_removal(m);
             return;
         }
@@ -1313,14 +1313,14 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         }
     }
     {
-        int         idx = moby_data->i280;
+        int         idx = moby_data->supporting_moby_index;
         Moby2C8398 *o;
         if (idx == -1 || (o = &D_L03_0015FFD8_m[idx]) == 0 || o->state == 0xFE ||
             o->state == 0xFD) {
-            moby_data->i280 = -1;
+            moby_data->supporting_moby_index = -1;
         }
     }
-    if (moby_data->i280 != -1) {
+    if (moby_data->supporting_moby_index != -1) {
         {
             float        transformed_rotation[4];
             Moby2C8398  *moby_instances;
@@ -1329,7 +1329,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             int          i;
             *(OvlQuad *)transformed_rotation = 0;
             moby_instances = D_L03_0015FFD8_m;
-            supporting_moby = &moby_instances[moby_data->i280];
+            supporting_moby = &moby_instances[moby_data->supporting_moby_index];
             pf = &moby_data->pf;
             if ((short)supporting_moby->cls == 0x335 || (short)supporting_moby->cls == 0x4BA) {
                 for (i = 0; i < *(int *)pf->path; i++) {
@@ -1365,16 +1365,16 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         if (m->pos[2] < g) {
             CollisionHit *hit = &D_L03_00173F40;
             if (hit->moby != 0 && FUN_L03_0024fba8_cf(hit->moby) != 0) {
-                moby_data->i280 = (Moby2C8398 *)hit->moby - D_L03_0015FFD8_m;
-            } else if (moby_data->i280 != -1) {
-                short cls = D_L03_0015FFD8_m[moby_data->i280].cls;
+                moby_data->supporting_moby_index = (Moby2C8398 *)hit->moby - D_L03_0015FFD8_m;
+            } else if (moby_data->supporting_moby_index != -1) {
+                short cls = D_L03_0015FFD8_m[moby_data->supporting_moby_index].cls;
                 if (cls != 0x335 && cls != 0x4BA) {
-                    moby_data->i280 = -1;
+                    moby_data->supporting_moby_index = -1;
                 }
             }
             m->pos[2] = g;
             moby_data->mv.f18 = 0.0f;
-            if (moby_data->i280 != -1) {
+            if (moby_data->supporting_moby_index != -1) {
                 float a[4];
                 float b[4];
                 *(OvlQuad *)a = *(OvlQuad *)D_L03_00173F80;
@@ -1391,7 +1391,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     }
     if (moby_data->b262 == 0) {
         if (vector_distance_xy(m->pos, D_L03_00166EC0) < 70.0f &&
-            (D_L03_0015F5CC & 7) == moby_data->s28A) {
+            (D_L03_0015F5CC & 7) == moby_data->path_height_check_schedule_slot) {
             PathF2C8398 *pf = &moby_data->pf;
             float        v[4];
             int          seg;
@@ -1450,7 +1450,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                                     D_L03_0015F580_macro,
                                     D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0x200, -1);
-                if (moby_data->i264 == -1) {
+                if (moby_data->heading_turn_gate_moby_index == -1) {
                     mark_moby_for_removal(m);
                     return;
                 }
@@ -1638,7 +1638,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             moby_data->q.f50 = 10.0f;
             moby_data->q.f54 = 20.0f;
             moby_data->q.target_horizontal_speed = 2.0f * frame_time;
-            moby_data->b255 = 0;
+            moby_data->death_knockback_update_counter = 0;
             moby->flags &= 0xEFFF;
             moby_data->b67 = 0xFA;
             moby->state = ENEMY_DEATH_KNOCKBACK;
