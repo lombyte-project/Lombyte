@@ -58,7 +58,7 @@ typedef struct PlasmabotVars {
     u8  pad0[0x20];
     f32 health;
     s16 unk24;
-    s16 unk26;
+    s16 stagger_reaction_duration_frames;
     s8  unk28;
     s8  unk29;
     u8  pad2A[0x6];
@@ -1136,7 +1136,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
             frame_duration = frame_time;
             stagger_motion_z = plasmabot_stagger_motion_z_scale_gp * frame_duration;
             k = frame_duration * 8.0f;
-            state->unk26 = stagger_duration_frames;
+            state->stagger_reaction_duration_frames = stagger_duration_frames;
             state->unk78 = k;
             state->unk7C = stagger_motion_z;
             state->unkB0 = 11.0f;
