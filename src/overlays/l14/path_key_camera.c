@@ -130,12 +130,12 @@ void initialize_path_key_camera(struct UpdateCam *path_key_camera_object) {
 
 typedef struct {
     char  pad0[0x24];
-    int   m24;
-    int   m28;
-    int   m2C;
+    int   first_linked_moby_index;
+    int   second_linked_moby_index;
+    int   third_linked_moby_index;
     short n30;
     short n32;
-    int   p34;
+    int   side_zero_rail_spline_index;
     int   p38;
 } CamRec5d48;
 
@@ -260,7 +260,7 @@ void update_path_key_camera(char *path_key_camera) {
 
     D_L14_001624B4 = data->st.count;
     D_L14_001624B8 = st->idx;
-    if (hero.rail_spline == (s32)l14_splines_macro[rec->p34].path) {
+    if (hero.rail_spline == (s32)l14_splines_macro[rec->side_zero_rail_spline_index].path) {
         side = 0;
     } else if (hero.rail_spline == (s32)l14_splines_macro[rec->p38].path) {
         side = 1;
@@ -280,9 +280,9 @@ void update_path_key_camera(char *path_key_camera) {
     }
     if (rec->n30 < 3 &&
         path_key_camera_linked_moby_event_progress_thresholds[rec->n30][side] <= D_L14_001624C0) {
-        struct Moby *first_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m24 << 8));
-        struct Moby *second_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m28 << 8));
-        struct Moby *third_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m2C << 8));
+        struct Moby *first_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->first_linked_moby_index << 8));
+        struct Moby *second_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->second_linked_moby_index << 8));
+        struct Moby *third_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->third_linked_moby_index << 8));
 
         if (hero.rail_spline ==
             (s32)l14_splines_macro[MOBYDATA_5d48(first_linked_moby)->zone].path) {
