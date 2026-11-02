@@ -211,7 +211,7 @@ typedef struct BlargHeavyInterceptorVars {
     u8  pad_5B[0x5];
     s16 anim_state;
     u8  pad_62[0x5];
-    u8  unk67;
+    u8  hit_flash_target_red;
     u8  pad_68[0x8];
     s32 turret_group;
     s32 spawn_path;
@@ -831,7 +831,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         switch (hit_reaction_result) {
         case HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH:
         case HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION:
-            blarg_heavy_interceptor_vars->unk67 = 0x64;
+            blarg_heavy_interceptor_vars->hit_flash_target_red = 0x64;
             blend_moby_animation(moby, 1, 0, 5);
             break;
         case HIT_REACTION_PLAY_HIT_ANIMATION:
