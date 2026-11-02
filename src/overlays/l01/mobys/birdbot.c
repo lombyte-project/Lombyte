@@ -300,7 +300,7 @@ typedef struct {
     float          f20;
     short          h24;
     short          h26;
-    unsigned char  b28;
+    unsigned char  hit_response_profile_index;
     unsigned char  b29;
     char           pad2A[0xE];
     int            w38;
@@ -701,7 +701,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->f20 = 2.0f;
         birdbot_vars->h24 = truncate_float_to_s32(birdbot_vars->f20);
         birdbot_vars->b29 = 0;
-        birdbot_vars->b28 = 1;
+        birdbot_vars->hit_response_profile_index = 1;
         clear_u64_value(&birdbot_vars->v40);
         birdbot_vars->w1C8 = -1;
         if (birdbot_moby->b53 != 0) {
