@@ -254,7 +254,7 @@ typedef struct BlargHeavyInterceptorVars {
     s16 return_path_complete;
     s16 group_member_count;
     s32 flags;
-    f32 unk210;
+    f32 initial_path_distance_fraction;
     f32 aim_point_glow_quad_scale;
     f32 glow_camera_pull_distance_limit;
     f32 unk21C;
@@ -1504,7 +1504,7 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
         *(float *)((char *)path + (i << 4) + 0x1C) = fast_vec_dist(
             (char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
     }
-    if (moby_vars->unk210 != 0.0f) {
+    if (moby_vars->initial_path_distance_fraction != 0.0f) {
         int *sampling_path = ((int *)l14_paths[moby_vars->unk78]);
         moby_vars->path_segment = 0;
         moby_vars->unk1C0[3] = 0.0f;
@@ -1513,7 +1513,7 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
                                 &moby_vars->path_segment,
                                 &moby_vars->unk1C0[3],
                                 moby_vars->rejoin_path_loop,
-                                moby_vars->unk210 * moby_vars->beam_rotation_blink_and_aim_path_state[3]);
+                                moby_vars->initial_path_distance_fraction * moby_vars->beam_rotation_blink_and_aim_path_state[3]);
         moby_vars->path_point_segment_distance = 0.0f;
         moby_vars->path_point = 0;
         FUN_L00_0025d808_2af688(sampling_path,
@@ -1521,7 +1521,7 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
                                 &moby_vars->path_point,
                                 &moby_vars->path_point_segment_distance,
                                 moby_vars->rejoin_path_loop,
-                                moby_vars->unk210 * moby_vars->unk190[0]);
+                                moby_vars->initial_path_distance_fraction * moby_vars->unk190[0]);
     } else {
         moby_vars->path_point = 0;
         moby_vars->path_segment = 0;
