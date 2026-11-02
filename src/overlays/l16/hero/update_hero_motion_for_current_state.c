@@ -274,7 +274,7 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L16_00214598");
 
 void update_hero_motion_for_current_state(void) {
     struct MobyView *moby = (struct MobyView *)hero.moby;
-    s32              sub = hero.state.step;
+    s32              state_step_at_entry = hero.state.step;
     s32              anim = moby->b53;
     struct Hero     *pl0;
     f32              speed;
@@ -3215,7 +3215,7 @@ void update_hero_motion_for_current_state(void) {
         clear_u64_value(&hero.motion.velocity);
         break;
     }
-    if (sub != hero.state.step) {
+    if (state_step_at_entry != hero.state.step) {
         hero.step_frames = 0;
     }
     if (anim != moby->b53) {
