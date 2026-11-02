@@ -109,7 +109,7 @@ typedef struct {
     s32 w8;
     u8  padc[0x14 - 0xC];
     s32 debug_camera_mode;
-    s32 w18;
+    s32 frame_end_callback_selector;
     u8  pad1c[0xA0 - 0x1C];
     s32 previous_step_held_buttons;
     u8  padA4[0xEC - 0xA4];
@@ -194,6 +194,9 @@ extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70"
 void handle_pause_input(void) __asm__("FUN_L00_00297f78");
 
 void handle_pause_input(void) {
+    enum {
+        DEBUG_CAMERA_MODE_UPDATE_HERO = 2
+    };
     s32 lvl, area, noctl, special;
     if (D_L00_0016C058.single_step_mode_countdown) {
         if (--D_L00_0016C058.single_step_mode_countdown == 0)
@@ -316,7 +319,7 @@ void handle_pause_input(void) {
         update_camera();
     } else if (D_L00_0016C058.debug_camera_mode) {
         update_debug_camera();
-        if (D_L00_0016C058.debug_camera_mode == 2)
+        if (D_L00_0016C058.debug_camera_mode == DEBUG_CAMERA_MODE_UPDATE_HERO)
             update_hero_from_debug_camera();
     }
     noop_main_callback(D_L00_00161028, 8);
@@ -328,15 +331,15 @@ void handle_pause_input(void) {
     update_help_state();
     if (DBG(2))
         update_game_frame_and_idle_counters();
-    if (D_L00_0016C058.w18 == 2)
+    if (D_L00_0016C058.frame_end_callback_selector == 2)
         no_op_main_callback_alt();
-    if (D_L00_0016C058.w18 == 3)
+    if (D_L00_0016C058.frame_end_callback_selector == 3)
         no_op_main_callback_alt();
-    if (D_L00_0016C058.w18 == 4)
+    if (D_L00_0016C058.frame_end_callback_selector == 4)
         no_op_main_callback_alt();
-    if (D_L00_0016C058.w18 == 5)
+    if (D_L00_0016C058.frame_end_callback_selector == 5)
         no_op_main_callback_alt();
-    if (D_L00_0016C058.w18 == 6)
+    if (D_L00_0016C058.frame_end_callback_selector == 6)
         no_op_main_callback_alt();
 }
 
