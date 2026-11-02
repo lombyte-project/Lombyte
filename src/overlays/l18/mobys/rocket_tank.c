@@ -54,7 +54,7 @@ typedef struct {
     float pad114;
     float firing_pitch;
     char  pad11C[4];
-    int   w120;
+    int   path_target_node_index;
     int   w124;
     char  pad128[8];
     float aim_vector_length_limit;
@@ -105,7 +105,7 @@ void rocket_tank_update(M1454 *moby) {
         *(unsigned char *)((char *)tank_data + 0x28) = 3;
         *(float *)((char *)tank_data + 0x20) = 6.0f;
         tank_data->w124 = scale_game_frames(240);
-        tank_data->w120 = 0;
+        tank_data->path_target_node_index = 0;
         if (tank_data->c138 == 0) {
             char *c = create_moby(0x14B);
             tank_data->c138 = c;
