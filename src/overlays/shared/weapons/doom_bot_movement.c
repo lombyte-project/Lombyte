@@ -57,7 +57,7 @@ typedef struct {
     f32  f10;
     f32  f14;
     u8   pad18[0x30];
-    f32  f48;
+    f32  current_heading;
     u8   pad4C[0x2C];
     Ext *p78;
 } Mob;
@@ -500,8 +500,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                                                (horizontal_probe_distance * 3.0f));
         }
     }
-    if (2.5132742f < fast_difference_between_rotations(best, moby->f48)) {
-        best = fast_add_rotations(moby->f48, fast_subtract_rotations(best, moby->f48) * 0.5f);
+    if (2.5132742f < fast_difference_between_rotations(best, moby->current_heading)) {
+        best = fast_add_rotations(moby->current_heading, fast_subtract_rotations(best, moby->current_heading) * 0.5f);
     }
     return best;
 }
