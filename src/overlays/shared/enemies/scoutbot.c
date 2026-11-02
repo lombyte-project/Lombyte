@@ -80,22 +80,22 @@ typedef struct Data_3DF8 {
     float         target_pos[4];
     char          pad180[0x30];
     Moby         *target;
-    int           f1B4;
+    int           path_target_selection_status;
     char          pad1B8[8];
     float         home[4];
     float         glow_a[4];
     float         glow_b[4];
     float         wander_goal[4];
-    float         f200;
-    float         f204;
-    float         f208;
-    float         f20C;
+    float         ground_hover_height_offset;
+    float         hover_bob_phase;
+    float         hover_bob_amplitude;
+    float         hover_bob_phase_increment;
     float         yaw_speed;
     short         voice;
     short         near_ground;
     Moby         *current_target;
-    int           f21C;
-    char          f220[0x10];
+    int           tracked_target_path_index;
+    char          glow_point_position[0x10];
     char          sound_state[0x10];
 } Data_3DF8;
 
@@ -202,17 +202,17 @@ void scoutbot_update(Moby *moby) {
     qcopy(target_pos, scoutbot_instance_vars->target_pos);
     switch (moby->state) {
     case SCOUTBOT_STATE_INITIALIZE:
-        if (scoutbot_instance_vars->f21C == -1) {
+        if (scoutbot_instance_vars->tracked_target_path_index == -1) {
             mark_moby_for_removal(moby);
             return;
         }
         moby->flags |= 0x1000;
         moby->rot.z = random_angle_radians();
-        scoutbot_instance_vars->f200 = 4.0f;
-        scoutbot_instance_vars->f204 = random_angle_radians();
-        scoutbot_instance_vars->f208 = 0.5f;
+        scoutbot_instance_vars->ground_hover_height_offset = 4.0f;
+        scoutbot_instance_vars->hover_bob_phase = random_angle_radians();
+        scoutbot_instance_vars->hover_bob_amplitude = 0.5f;
         clear_u64_value(scoutbot_instance_vars->vel);
-        scoutbot_instance_vars->f20C = frame_time * 2.0943952f;
+        scoutbot_instance_vars->hover_bob_phase_increment = frame_time * 2.0943952f;
         scoutbot_instance_vars->b58 = truncate_float_to_s32(15.0f);
         scoutbot_instance_vars->b5A = truncate_float_to_s32(9.6f);
         scoutbot_instance_vars->pD0 = &D_L08_00161888;
@@ -232,9 +232,9 @@ void scoutbot_update(Moby *moby) {
         scoutbot_instance_vars->b29 = 0;
         break;
     case SCOUTBOT_STATE_IDLE:
-        if (scoutbot_instance_vars->f1B4 != 2) {
-            scoutbot_instance_vars->f200 = 0.0f;
-            scoutbot_instance_vars->f208 = 0.1f;
+        if (scoutbot_instance_vars->path_target_selection_status != 2) {
+            scoutbot_instance_vars->ground_hover_height_offset = 0.0f;
+            scoutbot_instance_vars->hover_bob_amplitude = 0.1f;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
@@ -284,8 +284,8 @@ void scoutbot_update(Moby *moby) {
             moby->state = SCOUTBOT_STATE_WAIT_FOR_VOICE;
         } else if (vector_distance_xy(target_pos, scoutbot_instance_vars->home) > 15.0f ||
                    absolute_float(scoutbot_instance_vars->home[2] - target_pos[2]) > 4.0f) {
-            scoutbot_instance_vars->f200 = 4.0f;
-            scoutbot_instance_vars->f208 = 0.5f;
+            scoutbot_instance_vars->ground_hover_height_offset = 4.0f;
+            scoutbot_instance_vars->hover_bob_amplitude = 0.5f;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
@@ -297,8 +297,8 @@ void scoutbot_update(Moby *moby) {
         float heading = fast_arc_tan(scoutbot_instance_vars->home[0] - moby->pos.x,
                                      scoutbot_instance_vars->home[1] - moby->pos.y);
 
-        scoutbot_instance_vars->f200 = 4.0f;
-        scoutbot_instance_vars->f208 = 0.5f;
+        scoutbot_instance_vars->ground_hover_height_offset = 4.0f;
+        scoutbot_instance_vars->hover_bob_amplitude = 0.5f;
         turn_3DF8(moby, heading, &scoutbot_instance_vars->yaw_speed, 0.01f, 0.3f, 0.05f);
         if (fast_difference_between_rotations(moby->rot.z, heading) < 0.7853982f) {
             scoutbot_instance_vars->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
@@ -344,8 +344,8 @@ void scoutbot_update(Moby *moby) {
                 spawn_nearby_effect(
                     scoutbot_instance_vars->current_target, moby, 1, shot_pos, offset, 1.0f);
             }
-            scoutbot_instance_vars->f200 = 4.0f;
-            scoutbot_instance_vars->f208 = 0.5f;
+            scoutbot_instance_vars->ground_hover_height_offset = 4.0f;
+            scoutbot_instance_vars->hover_bob_amplitude = 0.5f;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 3);
             }
@@ -367,8 +367,8 @@ void scoutbot_update(Moby *moby) {
     }
     case 5:
         if (FUN_L00_002dc9f0(moby, scoutbot_instance_vars->react)) {
-            scoutbot_instance_vars->f200 = 4.0f;
-            scoutbot_instance_vars->f208 = 0.5f;
+            scoutbot_instance_vars->ground_hover_height_offset = 4.0f;
+            scoutbot_instance_vars->hover_bob_amplitude = 0.5f;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 3);
             }
@@ -408,7 +408,7 @@ void scoutbot_update(Moby *moby) {
             col = 0x7F2828A0;
         }
         moby->glow_color = colorlerp_3DF8(moby->glow_color, col, 0.1f);
-        moby_point_position(moby, 3, scoutbot_instance_vars->f220);
+        moby_point_position(moby, 3, scoutbot_instance_vars->glow_point_position);
         add_draw_callback(draw_scoutbot_glow_quad, moby);
     }
 }
