@@ -52,9 +52,9 @@ typedef struct {
     int   path;
     char  pad88[8];
     char  a90[0x44];
-    float fD4;
+    float current_joint_pitch;
     char  padD8[0x1C];
-    float fF4;
+    float target_joint_pitch;
 } Vars347;
 
 typedef struct {
@@ -169,12 +169,12 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             ang = fast_arc_tan(targeting_vector_scratch[0], targeting_vector_scratch[1]);
             turn = frame_time_sq * 0.5235988f;
             approach_angle(yaw, &turret_vars->yawvel, ang, turn, turn, frame_time * 1.0471976f);
-            turret_vars->fF4 = -fast_arc_tan(vector_length_xy(targeting_vector_scratch),
+            turret_vars->target_joint_pitch = -fast_arc_tan(vector_length_xy(targeting_vector_scratch),
                                              targeting_vector_scratch[2]);
             update_joint_animation(
                 turret_moby, turret_vars->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
             off = fast_difference_between_rotations(
-                turret_vars->fD4,
+                turret_vars->current_joint_pitch,
                 -fast_arc_tan(vector_length_xy(targeting_vector_scratch),
                               targeting_vector_scratch[2]));
             if (D_L17_0015F5CC % scale_game_frames(0x5A) == turret_vars->timer &&
@@ -228,12 +228,12 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             ang = fast_arc_tan(targeting_vector_scratch[0], targeting_vector_scratch[1]);
             turn = frame_time_sq * 0.5235988f;
             approach_angle(yaw, &turret_vars->yawvel, ang, turn, turn, frame_time * 1.0471976f);
-            turret_vars->fF4 = -fast_arc_tan(vector_length_xy(targeting_vector_scratch),
+            turret_vars->target_joint_pitch = -fast_arc_tan(vector_length_xy(targeting_vector_scratch),
                                              targeting_vector_scratch[2]);
             update_joint_animation(
                 turret_moby, turret_vars->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
             off = fast_difference_between_rotations(
-                turret_vars->fD4,
+                turret_vars->current_joint_pitch,
                 -fast_arc_tan(vector_length_xy(targeting_vector_scratch),
                               targeting_vector_scratch[2]));
             if (fast_dec_timer(&turret_vars->timer) && off < 0.034906585f) {
