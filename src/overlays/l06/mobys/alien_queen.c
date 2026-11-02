@@ -197,9 +197,9 @@ extern int D_L06_001413D0   NOT_SDA;
 
 #include "rnc/overlay/l06/mobys/alien_queen_data/update_alien_queen_hit_response_and_recovery.h"
 
-int D_L06_00161F10 = 0x80808080;
+int l06_alien_queen_glow_tween_start_color __asm__("D_L06_00161F10") = 0x80808080;
 
-int D_L06_00161F14 = 0x80804080;
+int l06_alien_queen_glow_tween_end_color __asm__("D_L06_00161F14") = 0x80804080;
 
 /* Updates the object's health, hit response, recovery timer and path motion. */
 void update_alien_queen_hit_response_and_recovery(char *moby) __asm__("FUN_L06_002fa9c0");
@@ -966,8 +966,8 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         fast_add_rotations(alien_queen_hit_recovery_vars->unk128,
                            alien_queen_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
     MOBY(moby)->glow_color =
-        fast_tween_color(D_L06_00161F10,
-                         D_L06_00161F14,
+        fast_tween_color(l06_alien_queen_glow_tween_start_color,
+                         l06_alien_queen_glow_tween_end_color,
                          (fast_sin(alien_queen_hit_recovery_vars->unk128) + 1.0f) * 0.5f);
     path = D_L06_001B0C30[alien_queen_hit_recovery_vars->path];
     FUN_L00_0025ff38(moby, &alien_queen_hit_recovery_vars->unk70, 0, 0, path + 4, *path, 255.0f);
