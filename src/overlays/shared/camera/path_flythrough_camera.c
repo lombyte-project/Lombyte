@@ -93,14 +93,14 @@ extern VendorView_5f18 l10_camera_view __asm__("D_L10_0016CEC0");
 void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f5b58");
 
 void initialize_path_camera(struct UpdateCam *path_camera) {
-    char *rec = *(char **)(l10_descriptor_table + path_camera->descriptor_index * 32 + 0x1C);
+    char *path_camera_descriptor = *(char **)(l10_descriptor_table + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5f18   *run;
     VendorCamStops_5f18 *stops;
     f32                 *fov;
     Vec4f               *m1, *m2, *pos;
     char                *saved;
 
-    rec[0x38] = 1;
+    path_camera_descriptor[0x38] = 1;
     run = (VendorCamRun_5f18 *)((char *)path_camera->saved_state + 0x40);
     run->seg = 0;
     run->t = 0.0f;
@@ -108,7 +108,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     run->look_path_length = 0.0f;
     run->dist = 0.0f;
     run->started = 0;
-    run->timer = scale_game_frames(*(s16 *)(rec + 0x3A));
+    run->timer = scale_game_frames(*(s16 *)(path_camera_descriptor + 0x3A));
     stops = (VendorCamStops_5f18 *)((char *)path_camera->saved_state + 0x58);
     fov = stops->fov;
     {
@@ -122,8 +122,8 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     m1 = (Vec4f *)&path_camera->m1;
     m2 = (Vec4f *)&path_camera->m2;
     stops->fov_end = fast_arc_tan(1.0f, l10_camera_view.tan_half_fov) * 2.0f;
-    if (*(int *)(rec + 0x20) >= 0) {
-        char *path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
+    if (*(int *)(path_camera_descriptor + 0x20) >= 0) {
+        char *path = ((char *)l10_paths[*(int *)(path_camera_descriptor + 0x20)]);
         int   i = 0;
         if (i < *(int *)path) {
             f32 *stop_fov = fov;
@@ -156,13 +156,13 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
         }
     }
     {
-        s16 frames = *(s16 *)(rec + 0x3A);
+        s16 frames = *(s16 *)(path_camera_descriptor + 0x3A);
         if (frames > 0)
-            *(f32 *)(rec + 0x3C) =
+            *(f32 *)(path_camera_descriptor + 0x3C) =
                 run->path_length / convert_integer_to_float(scale_game_frames(frames)) * 60.0f;
     }
-    if (*(int *)(rec + 0x24) >= 0) {
-        char *path = ((char *)l10_paths[*(int *)(rec + 0x24)]);
+    if (*(int *)(path_camera_descriptor + 0x24) >= 0) {
+        char *path = ((char *)l10_paths[*(int *)(path_camera_descriptor + 0x24)]);
         int   i;
         for (i = 0; i < *(int *)path; i++) {
             int offset = i * 16;
@@ -188,7 +188,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
         qcopy(m1, source + 0x10);
         qcopy(m2, source + 0x20);
     }
-    if (*(int *)(rec + 0x4C) == 0)
+    if (*(int *)(path_camera_descriptor + 0x4C) == 0)
         hero_set_state(0x72, 1);
 }
 
