@@ -13,15 +13,15 @@ struct MissionsMenu {
 
 struct Rect {
     u16 unk00;
-    u16 unk02;
+    u16 bottom;
     u16 unk04;
-    u16 unk06;
+    u16 right;
     s16 unk08;
-    s16 unk0A;
+    s16 anchor_y;
     s16 unk0C;
     s16 unk0E;
     u16 unk10;
-    u16 unk12;
+    u16 flags;
     s16 unk14;
     s16 unk16;
 };
@@ -94,12 +94,12 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
     }
     if (mask < 0) {
         memset(&text_region_settings, 0, 0x18);
-        text_region_settings.unk02 = menu->unk24;
-        text_region_settings.unk06 = menu->unk20;
+        text_region_settings.bottom = menu->unk24;
+        text_region_settings.right = menu->unk20;
         text_region_settings.unk08 = menu->unk24 >> 1;
-        text_region_settings.unk0A = mission_text_y + 8;
+        text_region_settings.anchor_y = mission_text_y + 8;
         text_region_settings.unk10 = 0x10;
-        text_region_settings.unk12 = 1;
+        text_region_settings.flags = 1;
         trailing_text_region = text_region_settings;
         font_print_window_small(
             &trailing_text_region, 0x8020FFFF, get_help_message_text(0x523D), -1);
