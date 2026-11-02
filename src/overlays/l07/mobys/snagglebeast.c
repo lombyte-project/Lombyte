@@ -786,11 +786,14 @@ int start_snagglebeast_turn_toward_target(unsigned char    *moby,
                                           int               resume_animation,
 
                                           int use_fixed_target_position) {
+    enum {
+        SNAGGLEBEAST_TURN_CONTROLLER_RESET = 0
+    };
     float target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                         target_position[1] - MOBY(moby)->pos.y);
     if (moby_vars->turn_start_angle <
         fast_difference_between_rotations(MOBY(moby)->rot.z, target_heading)) {
-        moby_vars->turn_controller_state = 0;
+        moby_vars->turn_controller_state = SNAGGLEBEAST_TURN_CONTROLLER_RESET;
         MOBY(moby)->anim_speed = 1.0f;
         moby_vars->turn_saved_state = MOBY(moby)->state;
         moby_vars->turn_resume_animation = resume_animation;
