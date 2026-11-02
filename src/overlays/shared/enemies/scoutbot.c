@@ -51,7 +51,7 @@ typedef struct ScoutbotVars {
     u8    pad1F0[0x10];
     f32   unk200;
     f32   unk204;
-    f32   unk208;
+    f32   vertical_bob_amplitude;
     f32   unk20C;
     u8    pad210[0x6];
     s16   unk216;
@@ -609,7 +609,7 @@ void update_scoutbot_movement(struct Moby *moby) {
     scoutbot_instance_state->unk204 =
         fast_add_rotations(scoutbot_instance_state->unk204, scoutbot_instance_state->unk20C);
     target_height = scoutbot_instance_state->unk1C0[2] +
-                    scoutbot_instance_state->unk208 * fast_sin(scoutbot_instance_state->unk204);
+                    scoutbot_instance_state->vertical_bob_amplitude * fast_sin(scoutbot_instance_state->unk204);
     if (scoutbot_instance_state->unk216)
         target_height += scoutbot_instance_state->unk200;
     vertical_step = target_height - moby->pos.z;
@@ -650,7 +650,7 @@ void *enter_scoutbot_return_home_state(struct Moby *moby) {
     ScoutbotVars *scoutbot_data = (ScoutbotVars *)moby->pvars;
     moby->state = SCOUTBOT_STATE_RETURN_HOME;
     scoutbot_data->unk200 = 4.0f;
-    scoutbot_data->unk208 = 0.5f;
+    scoutbot_data->vertical_bob_amplitude = 0.5f;
     if ((unsigned char)((char)moby->prev_seq) != 2) {
         blend_moby_animation(moby, 2, 0, 3);
     }
