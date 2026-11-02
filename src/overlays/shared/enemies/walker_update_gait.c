@@ -132,8 +132,8 @@ typedef struct WalkAnim {
 
 typedef struct WalkData {
     char           pad00[0x10];
-    float          m10[8]; /* 0x10 */
-    float          m30[8]; /* 0x30 */
+    float          ground_probe_anchor_record[8]; /* 0x10 */
+    float          alternate_ground_probe_anchor_record[8]; /* 0x30 */
     char           pad50[0x10];
     float          jump_target_position[3]; /* 0x60 */
     float          f6C;
@@ -329,9 +329,9 @@ void walker_update_gait(WalkMoby *walker_moby,
                                                gait_data->anim[gait_animation_index]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
                     if (flags & 1) {
-                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m10);
+                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->ground_probe_anchor_record);
                     } else {
-                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m30);
+                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->alternate_ground_probe_anchor_record);
                     }
                     ground_height = probe_ground_height(ground_probe_position, 0, 0.5f);
                     gait_data->fE4 = ground_height;
@@ -916,9 +916,9 @@ void walker_update_gait(WalkMoby *walker_moby,
                         fast_sin(movement_heading) * gait_data->anim[0]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
                     if (flags & 1) {
-                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m10);
+                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->ground_probe_anchor_record);
                     } else {
-                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m30);
+                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->alternate_ground_probe_anchor_record);
                     }
                     ground_probe_position[2] += 1.0f;
                     gait_data->fE4 = probe_ground_height(ground_probe_position, 0, 0.5f);
@@ -1090,7 +1090,7 @@ void walker_update_gait(WalkMoby *walker_moby,
             ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[2] = 0.0f;
-            fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m10);
+            fast_vec_add(ground_probe_position, ground_probe_position, gait_data->ground_probe_anchor_record);
             ground_probe_position[2] += 1.0f;
             gait_data->fE4 = probe_ground_height(ground_probe_position, 0, 0.5f);
         }
@@ -1115,7 +1115,7 @@ void walker_update_gait(WalkMoby *walker_moby,
             ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[2] = 0.0f;
-            fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m10);
+            fast_vec_add(ground_probe_position, ground_probe_position, gait_data->ground_probe_anchor_record);
             ground_probe_position[2] += 1.0f;
             gait_data->fE4 = probe_ground_height(ground_probe_position, 0, 0.5f);
         }
