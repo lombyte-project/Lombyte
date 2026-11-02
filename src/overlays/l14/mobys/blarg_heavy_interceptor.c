@@ -201,7 +201,7 @@ typedef struct BlargHeavyInterceptorVars {
     u8  pad_26[0x2];
     u8  unk28;
     u8  pad_29[0x5];
-    u8  unk2E;
+    u8  removal_status;
     u8  pad_2F[0x11];
     f32 unk40[4];
     u8  pad_50[0x8];
@@ -273,7 +273,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
     int                        path_seg;
     float                      path_t;
 
-    if ((u8)moby_vars->unk2E == 2) {
+    if ((u8)moby_vars->removal_status == 2) {
         moby_vars->flags = 0;
         FUN_0020c828(moby);
         return;
