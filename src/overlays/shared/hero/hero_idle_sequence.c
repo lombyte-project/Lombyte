@@ -1616,26 +1616,26 @@ typedef struct {
 
 typedef struct {
     u8       p0[0x162C];
-    f32      f162C;
+    f32      clank_glow_quad_scale;
     u8       p1[0x1D50 - 0x1630];
-    V_207d40 v1D50[3];
-    V_207d40 v1D80;
+    V_207d40 three_point_glow_positions[3];
+    V_207d40 single_point_glow_position;
     V_207d40 v1D90[4];
-    V_207d40 v1DD0[8];
-    s32      i1E50[8];
-    f32      f1E70[8];
-    f32      f1E90[8];
+    V_207d40 queued_glow_positions[8];
+    s32      queued_glow_colors[8];
+    f32      queued_glow_quad_scales[8];
+    f32      queued_glow_position_offset_scales[8];
     s16      h1EB0;
     u8       p2[0x20A4 - 0x1EB2];
     u8       b20A4;
     u8       p3[0x22D8 - 0x20A5];
     s16      h22D8;
     u8       p4[0x22E4 - 0x22DA];
-    s32      i22E4;
+    s32      three_point_glow_color;
     u8       p5[0x22FC - 0x22E8];
     s16      h22FC;
     u8       p6[2];
-    s32      i2300;
+    s32      clank_glow_color;
 } P_207d40;
 
 extern P_207d40 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
@@ -1653,14 +1653,14 @@ void draw_hero_glow_quads(void) {
     mode = D_L00_0015F5C4;
     if (mode == 2 || mode == 6) {
         for (i = 0; i < P.h1EB0; i++)
-            draw_offset_textured_effect_quad(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
+            draw_offset_textured_effect_quad(&P.queued_glow_positions[i], P.queued_glow_colors[i], P.queued_glow_quad_scales[i], P.queued_glow_position_offset_scales[i]);
         return;
     }
     vehicle_mode = P.b20A4;
     if (vehicle_mode == 3) {
         int j;
-        glow_color = P.i22E4;
-        glow_position_cursor = P.v1D50;
+        glow_color = P.three_point_glow_color;
+        glow_position_cursor = P.three_point_glow_positions;
         for (j = 2; j >= 0; j--) {
             draw_offset_textured_effect_quad(glow_position_cursor, glow_color, 0.2f, 0.08f);
             glow_position_cursor++;
@@ -1669,18 +1669,18 @@ void draw_hero_glow_quads(void) {
     }
     if (vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         if ((hero_slot_item_id(3) == 3 || hero_slot_item_id(3) == 2) && P.h22D8 == 0) {
-            P.v1D80.f[2] += 0.015f;
-            draw_offset_textured_effect_quad(&P.v1D80, 0x280000C0, 0.057f, 0.08f);
-            P.v1D80.f[2] -= 0.015f;
+            P.single_point_glow_position.f[2] += 0.015f;
+            draw_offset_textured_effect_quad(&P.single_point_glow_position, 0x280000C0, 0.057f, 0.08f);
+            P.single_point_glow_position.f[2] -= 0.015f;
         }
         for (i = 0; i < P.h1EB0; i++)
-            draw_offset_textured_effect_quad(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
+            draw_offset_textured_effect_quad(&P.queued_glow_positions[i], P.queued_glow_colors[i], P.queued_glow_quad_scales[i], P.queued_glow_position_offset_scales[i]);
         return;
     }
     if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
-        P.v1D80.f[2] -= 0.07f;
-        draw_offset_textured_effect_quad(&P.v1D80, 0x300000C0, 0.25f, 0.08f);
-        P.v1D80.f[2] += 0.07f;
+        P.single_point_glow_position.f[2] -= 0.07f;
+        draw_offset_textured_effect_quad(&P.single_point_glow_position, 0x300000C0, 0.25f, 0.08f);
+        P.single_point_glow_position.f[2] += 0.07f;
         return;
     }
     if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
@@ -1688,13 +1688,13 @@ void draw_hero_glow_quads(void) {
         if (P.h22FC)
             k = 0.101500004529953f;
         if (*(u8 *)0x15EDB3) {
-            P.v1D80.f[2] -= 0.01f;
+            P.single_point_glow_position.f[2] -= 0.01f;
             k *= 1.7f;
         } else {
-            P.v1D80.f[2] -= 0.02f;
+            P.single_point_glow_position.f[2] -= 0.02f;
         }
-        approach_value(&P.f162C, k, frame_scale * 0.003f);
-        draw_offset_textured_effect_quad(&P.v1D80, P.i2300, P.f162C, 0.08f);
+        approach_value(&P.clank_glow_quad_scale, k, frame_scale * 0.003f);
+        draw_offset_textured_effect_quad(&P.single_point_glow_position, P.clank_glow_color, P.clank_glow_quad_scale, 0.08f);
     }
 }
 
