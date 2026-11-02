@@ -33,19 +33,19 @@ typedef struct Data_2C0330 {
     unsigned char b67;
     char          pad68[8];
     char          f70[0x12];
-    unsigned char b82;
-    unsigned char b83;
-    unsigned char b84;
-    unsigned char b85;
+    unsigned char spawn_trigger_mode;
+    unsigned char bomb_spawn_options;
+    unsigned char proximity_activation_mode;
+    unsigned char spawn_target_mode;
     unsigned char count;
     unsigned char max;
     short         timer;
     short         h8A;
     short         h8C;
     char          pad8E[2];
-    float         f90;
+    float         spawn_distance_limit;
     char          pad94[8];
-    float         f9C;
+    float         activation_distance_threshold;
     int           pts[4];
     char          padB0[0x20];
     int           fD0;
@@ -239,8 +239,8 @@ void bomb_spawner_update(struct Moby *moby) {
         }
     }
     reference_distance_xy = vector_distance_xy(&moby->pos, D_0013E533_2bef68 + 0xE9D);
-    near1 = reference_distance_xy < spawner_data->f9C;
-    near2 = reference_distance_xy < spawner_data->f90;
+    near1 = reference_distance_xy < spawner_data->activation_distance_threshold;
+    near2 = reference_distance_xy < spawner_data->spawn_distance_limit;
     spawn = 0;
     timerDone = fast_dec_timer_s16(&spawner_data->timer) != 0;
     inVol = 0;
@@ -249,7 +249,7 @@ void bomb_spawner_update(struct Moby *moby) {
         inVol = is_point_inside_clip_volume(D_0013E533_2bef68 + 0xE9D, spawner_data->fD0) != 0;
     }
     cond = inVol | near2;
-    switch (spawner_data->b82) {
+    switch (spawner_data->spawn_trigger_mode) {
     case SPAWNER_TRIGGER_DISTANCE_ONLY:
         cond = near1;
         break;
@@ -301,7 +301,7 @@ void bomb_spawner_update(struct Moby *moby) {
     }
     case SPAWNER_WAIT_FOR_PROXIMITY:
         if (near1) {
-            switch (spawner_data->b84) {
+            switch (spawner_data->proximity_activation_mode) {
             case SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED:
                 moby->state = SPAWNER_SPAWN_ENABLED;
                 break;
@@ -387,7 +387,7 @@ void bomb_spawner_update(struct Moby *moby) {
         while (spawner_data->h8A == 0 ? spawner_data->count < spawner_data->max
                                       : spawner_data->timer == 0) {
             moby_point_position(moby, 0, &launch_origin);
-            switch (spawner_data->b85) {
+            switch (spawner_data->spawn_target_mode) {
             case SPAWNER_TARGET_COUNT_ANGULAR_SPREAD: {
                 float target_spread_angle;
                 float rad;
@@ -396,7 +396,7 @@ void bomb_spawner_update(struct Moby *moby) {
                         convert_integer_to_float(spawner_data->max + 1) -
                     3.1415927f);
                 rad = vector_distance_xy(&moby->pos, D_0013E533_2bef68 + 0xE9D) * 0.5f;
-                if (spawner_data->b83 & 8) {
+                if (spawner_data->bomb_spawn_options & 8) {
                     rad = random_float_between(rad, 3.0f);
                 }
                 if (rad < 3.0f) {
@@ -405,7 +405,7 @@ void bomb_spawner_update(struct Moby *moby) {
                 launch_velocity.x = fast_cos(target_spread_angle) * rad;
                 launch_velocity.y = fast_sin(target_spread_angle) * rad;
                 launch_velocity.z = 0.0f;
-                clamp_vector_length(&launch_velocity, &launch_velocity, spawner_data->f90);
+                clamp_vector_length(&launch_velocity, &launch_velocity, spawner_data->spawn_distance_limit);
                 fast_vec_add(&target_position, &launch_origin, &launch_velocity);
                 target_ground_height = probe_ground_height(&target_position, 0, 0.5f);
                 if (target_ground_height != 0.0f) {
@@ -419,14 +419,14 @@ void bomb_spawner_update(struct Moby *moby) {
                 launch_velocity.z = 0.0f;
                 fast_vec_scale(&launch_velocity, &launch_velocity, 0.5f);
                 len = fast_vec_length(&launch_velocity);
-                if (spawner_data->b83 & 8) {
+                if (spawner_data->bomb_spawn_options & 8) {
                     fast_vec_normalize(
                         &launch_velocity, &launch_velocity, random_float_between(len, 3.0f));
                 }
                 if (fast_vec_length(&launch_velocity) < 3.0f) {
                     fast_vec_normalize(&launch_velocity, &launch_velocity, 3.0f);
                 }
-                clamp_vector_length(&launch_velocity, &launch_velocity, spawner_data->f90);
+                clamp_vector_length(&launch_velocity, &launch_velocity, spawner_data->spawn_distance_limit);
                 fast_vec_add(&target_position, &launch_origin, &launch_velocity);
                 target_ground_height = probe_ground_height(&target_position, 0, 0.5f);
                 if (target_ground_height != 0.0f) {
@@ -458,7 +458,7 @@ void bomb_spawner_update(struct Moby *moby) {
                 }
                 fast_vec_sub(&launch_velocity, &spawn_position, &launch_origin);
                 len = fast_vec_length(&launch_velocity);
-                if (spawner_data->b83 & 8) {
+                if (spawner_data->bomb_spawn_options & 8) {
                     fast_vec_normalize(
                         &launch_velocity, &launch_velocity, random_float_between(len, 3.0f));
                 }
@@ -488,7 +488,7 @@ void bomb_spawner_update(struct Moby *moby) {
                 }
                 fast_vec_sub(&launch_velocity, &spawn_position, &launch_origin);
                 len = fast_vec_length(&launch_velocity);
-                if (spawner_data->b83 & 8) {
+                if (spawner_data->bomb_spawn_options & 8) {
                     fast_vec_normalize(
                         &launch_velocity, &launch_velocity, random_float_between(len, 3.0f));
                 }
@@ -519,7 +519,7 @@ void bomb_spawner_update(struct Moby *moby) {
                 }
                 fast_vec_sub(&launch_velocity, &spawn_position, &launch_origin);
                 len = fast_vec_length(&launch_velocity);
-                if (spawner_data->b83 & 8) {
+                if (spawner_data->bomb_spawn_options & 8) {
                     fast_vec_normalize(
                         &launch_velocity, &launch_velocity, random_float_between(len, 3.0f));
                 }
@@ -548,7 +548,7 @@ void bomb_spawner_update(struct Moby *moby) {
                                                     (float *)&spawn_position,
                                                     (float *)&launch_velocity,
                                                     spawner_data->h8C,
-                                                    spawner_data->b83);
+                                                    spawner_data->bomb_spawn_options);
                 if (spawned_moby != 0) {
                     MOBY(spawned_moby)->update_dist = 0xFF;
                 }
