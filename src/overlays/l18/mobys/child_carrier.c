@@ -22,7 +22,7 @@ typedef struct ChildCarrierVars {
     u8    unk70;
     u8    pad_71[0xF];
     s32   unk80;
-    char *unk84;
+    char *carried_child_moby;
 } ChildCarrierVars;
 
 /* Moby class 1584 */
@@ -47,20 +47,20 @@ void child_carrier_update(char *moby) {
         break;
     }
     if (MOBY(moby)->command != 0 && transform_and_child_vars->unk80 != 0 &&
-        *(int *)&transform_and_child_vars->unk84 == 0) {
+        *(int *)&transform_and_child_vars->carried_child_moby == 0) {
         char *new_child = create_moby(0x764);
-        transform_and_child_vars->unk84 = new_child;
+        transform_and_child_vars->carried_child_moby = new_child;
         if (new_child != 0) {
             *(unsigned short *)(new_child + 0x32) = ((unsigned short)MOBY(moby)->draw_dist);
-            (transform_and_child_vars->unk84)[0x31] = 1;
-            *(long *)(transform_and_child_vars->unk84 + 0x38) = ((long)MOBY(moby)->spawn_frame);
-            *(float *)(transform_and_child_vars->unk84 + 0x2C) *=
+            (transform_and_child_vars->carried_child_moby)[0x31] = 1;
+            *(long *)(transform_and_child_vars->carried_child_moby + 0x38) = ((long)MOBY(moby)->spawn_frame);
+            *(float *)(transform_and_child_vars->carried_child_moby + 0x2C) *=
                 MOBY(moby)->scale / MOBY(moby)->pclass->scale;
         }
     }
     qcopy(transform_and_child_vars->unk60, moby + 0x10);
     qcopy(&transform_and_child_vars->unk70, moby + 0x40);
-    child = transform_and_child_vars->unk84;
+    child = transform_and_child_vars->carried_child_moby;
     if (child != 0) {
         qcopy(child + 0x10, moby + 0x10);
         qcopy(child + 0x40, moby + 0x40);
