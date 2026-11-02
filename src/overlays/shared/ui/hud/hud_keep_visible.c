@@ -186,7 +186,7 @@ void reset_numeric_hud_element_32x32_base(HudElem *hud_element) {
 
 s32 hud_keep_visible(s32 key, s32 val) __asm__("FUN_L00_00235e18");
 
-s32 hud_keep_visible(s32 key, s32 val) {
+s32 hud_keep_visible(s32 key, s32 minimum_visible_frames) {
     s32      i;
     s32      r;
     HudElem *hud_element;
@@ -197,7 +197,7 @@ s32 hud_keep_visible(s32 key, s32 val) {
     }
     if (i < 13 && hud_elements[i].unk68 == 0) {
         hud_element = hud_elements + i;
-        hud_element->unk7C = (val < hud_element->unk7C) ? hud_element->unk7C : val;
+        hud_element->unk7C = (minimum_visible_frames < hud_element->unk7C) ? hud_element->unk7C : minimum_visible_frames;
         return 0;
     }
     return 1;
