@@ -190,7 +190,7 @@ extern int spark_scatter_third_frame_count_range_end_gp __asm__("D_L12_001618C0"
     __attribute__((sda));
 int         l12_spark_scatter_start_color __asm__("D_L12_001618C4") = 0xa0f0e8e0;
 int         l12_spark_scatter_end_color __asm__("D_L12_001618C8") = 0x20f0e8e0;
-int         D_L12_001618CC = 0x10017;
+int         l12_spark_scatter_table_index_and_mode __asm__("D_L12_001618CC") = 0x10017;
 void        spawn_spark_scatter(void *spark_scatter_origin) __asm__("FUN_L12_002e19a8");
 void        spawn_spark_scatter(void *pos) __asm__("FUN_L12_002e19a8");
 extern void spawn_spark_scatter(void *) __asm__("FUN_L12_002e19a8");
@@ -246,7 +246,7 @@ void spawn_spark_scatter(void *spark_scatter_origin) {
                     frame_count,
                     second_frame_count,
                     third_frame_count,
-                    D_L12_001618CC);
+                    l12_spark_scatter_table_index_and_mode);
     } while (--i >= 0);
 }
 
