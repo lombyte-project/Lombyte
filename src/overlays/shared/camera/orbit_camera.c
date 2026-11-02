@@ -26,10 +26,10 @@ typedef struct {
     f32 view_yaw_offset_spring_damping;
     u8  pad50[0x4C];
     s32 orbit_origin_snap_enabled;
-    f32 fA0;
-    f32 fA4;
+    f32 orbit_origin_spring_stiffness;
+    f32 orbit_origin_spring_damping;
     s32 fA8;
-    s32 fAC;
+    s32 view_roll_offset;
     u8  padB0[0x40];
     s32 fF0;
 } Moby002eb3b0;
@@ -137,9 +137,9 @@ void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
     m = camera_object->m;
     m->orbit_origin_snap_enabled = 0;
     m->fA8 = 0;
-    m->fAC = 0;
-    m->fA0 = 0.3f;
-    m->fA4 = 0.3f;
+    m->view_roll_offset = 0;
+    m->orbit_origin_spring_stiffness = 0.3f;
+    m->orbit_origin_spring_damping = 0.3f;
     m->view_pitch_offset_spring_damping = 0.99f;
     m->orbit_yaw_spring_damping = 0.04f;
     m->f40 = 0.04f;
