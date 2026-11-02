@@ -53,7 +53,7 @@ typedef struct {
     char           pad7C[3];
     unsigned char  flag7F;
     char           pad80[0x30];
-    unsigned char  bB0;
+    unsigned char  persistent_state_slot;
     char           padB1;
     unsigned short hB2;
 } L01WatchMoby;
@@ -203,8 +203,8 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
     case PLUMBER_LEVEL_ONE_POST_DIALOGUE:
         if (cutscene_mode == CUTSCENE_MODE_ACTIVE)
             break;
-        if (visited52[plumber_moby->bB0 + current_level_index * 16] != 0xFF) {
-            jet_clear_persistent(plumber_moby->bB0);
+        if (visited52[plumber_moby->persistent_state_slot + current_level_index * 16] != 0xFF) {
+            jet_clear_persistent(plumber_moby->persistent_state_slot);
             if (plumber_vars->camera_cuboid_index != -1) {
                 LevelCuboid *camera_record = &l01_cuboids[plumber_vars->camera_cuboid_index];
                 jet_reset_camera(&camera_record->pos, &camera_record->rot);
