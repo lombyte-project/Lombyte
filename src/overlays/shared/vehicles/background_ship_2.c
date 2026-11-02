@@ -26,7 +26,7 @@ typedef struct BackgroundShip2Vars {
     u8   unk2C;
     u8   pad2D[0x33];
     s32  unk60;
-    f32  unk64;
+    f32  path_progress;
     f32  unk68;
     s32  unk6C;
     f32  unk70;
@@ -255,7 +255,7 @@ void background_ship_2_update(char *moby) {
         moby_data->unk6C = invalid_index;
         MOBY(moby)->state = BACKGROUND_SHIP_2_FOLLOW_PATH;
         MOBY(moby)->flags |= 0x10;
-        moby_data->unk64 = moby_data->unk74 * (float)*(int *)path;
+        moby_data->path_progress = moby_data->unk74 * (float)*(int *)path;
         break;
     }
     case BACKGROUND_SHIP_2_FOLLOW_PATH:
@@ -271,16 +271,16 @@ void background_ship_2_update(char *moby) {
         if (current_level_index == 10) {
             path_travel_distance = path_travel_distance * 0.25f;
         }
-        moby_data->unk64 = moby_data->unk64 + path_travel_distance / moby_data->unk70;
-        if ((float)*(int *)path < moby_data->unk64) {
-            moby_data->unk64 = moby_data->unk64 - (float)*(int *)path;
+        moby_data->path_progress = moby_data->path_progress + path_travel_distance / moby_data->unk70;
+        if ((float)*(int *)path < moby_data->path_progress) {
+            moby_data->path_progress = moby_data->path_progress - (float)*(int *)path;
         }
         if ((unsigned int)(current_level_index - 9) < 2) {
             sample_camera_path(
-                (int *)path, 1, &MOBY(moby)->pos, (float *)&MOBY(moby)->rot, 0, moby_data->unk64);
+                (int *)path, 1, &MOBY(moby)->pos, (float *)&MOBY(moby)->rot, 0, moby_data->path_progress);
         } else {
             sample_camera_path(
-                (int *)path, 0, &MOBY(moby)->pos, (float *)&MOBY(moby)->rot, 0, moby_data->unk64);
+                (int *)path, 0, &MOBY(moby)->pos, (float *)&MOBY(moby)->rot, 0, moby_data->path_progress);
         }
         if (MOBY(moby)->pos.x < 8.0f) {
             MOBY(moby)->collision = 0;
