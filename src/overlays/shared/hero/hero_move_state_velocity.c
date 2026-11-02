@@ -572,7 +572,7 @@ typedef struct {
     unsigned char pad0[0x80];
     V_2163f0      hero_position;
     unsigned char pad90[0x1F8 - 0x90];
-    short         s1F8;
+    short         reference_tilt_override;
     unsigned char pad1FA[0x270 - 0x1FA];
     V_2163f0      primary_tilt_reference_vector;
     unsigned char pad280[0x10];
@@ -620,7 +620,7 @@ void apply_hero_reference_tilt(void) {
             reference_vector.q = P.primary_tilt_reference_vector.q;
         }
     }
-    if (P.s30E != 0 && P.s1F8 != 0) {
+    if (P.s30E != 0 && P.reference_tilt_override != 0) {
         pitch_smoothing_parameter = frame_scale_sq * 0.001f;
     }
     FUN_L00_00216130_2163f0(&reference_vector,
