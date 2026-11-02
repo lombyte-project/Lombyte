@@ -285,8 +285,8 @@ unsigned char D_L02_00161900 = 0xa;
 #include "rnc/overlay/l02/mobys/sand_shark_data/sand_shark_update.h"
 
 int D_L02_001619B0 = 0xa000000;
-int D_L02_001619E4 = 0x40306058;
-int D_L02_001619E8 = 0x306058;
+int l02_sand_shark_ballistic_particle_initial_color __asm__("D_L02_001619E4") = 0x40306058;
+int l02_sand_shark_ballistic_particle_secondary_color __asm__("D_L02_001619E8") = 0x306058;
 /* Aridia burrowing enemy: profiled with EE timer 0 around its state machine. */
 void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 
@@ -852,8 +852,8 @@ void sand_shark_update(struct Moby *moby) {
         life = scale_game_frames(random_int_between(0x14, 0x28));
         spawn_effect(&moby->pos,
                      &target_or_particle_vector,
-                     D_L02_001619E4,
-                     D_L02_001619E8,
+                     l02_sand_shark_ballistic_particle_initial_color,
+                     l02_sand_shark_ballistic_particle_secondary_color,
                      life,
                      0x64,
                      random_int_between(0x78, 0x96),
