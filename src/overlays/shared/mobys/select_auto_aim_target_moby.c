@@ -241,7 +241,7 @@ typedef struct {
     s32 w24;
     u8  pad28[2];
     u8  b2A;
-    u8  b2B;
+    u8  initial_frame_count;
 } EffectTail;
 
 typedef struct {
@@ -298,7 +298,7 @@ void cutscene_set_camera_target(u8 *moby) {
                     effect->hA = scale_game_frames(6);
                     tail->w24 = w24;
                     tail->b2A = b2A;
-                    tail->b2B = effect->hA;
+                    tail->initial_frame_count = effect->hA;
                 }
                 count--;
             } while (count >= 0);
@@ -328,7 +328,7 @@ void cutscene_set_camera_target(u8 *moby) {
                     effect->b8 = random_integer_below(0xff);
                     tail->w24 = w24;
                     tail->b2A = b2A;
-                    tail->b2B = effect->hA;
+                    tail->initial_frame_count = effect->hA;
                 }
                 count--;
             } while (count >= 0);
