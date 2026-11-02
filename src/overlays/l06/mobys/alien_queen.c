@@ -373,7 +373,7 @@ typedef struct AlienQueenVars {
     u8    pad_5B[0x5];
     u8    anim_state;
     u8    pad_61[0x6];
-    u8    unk67;
+    u8    hit_reaction_tween_target;
     u8    pad_68[0x8];
     u8    unk70;
     u8    pad_71[0x3F];
@@ -886,7 +886,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         case HIT_RESPONSE_NONLETHAL_ANIMATION_MAINTENANCE:
         case HIT_RESPONSE_NONLETHAL_ANIMATION_FEEDBACK:
         case HIT_RESPONSE_NONLETHAL_ANIMATION_RESPONSE:
-            alien_queen_hit_recovery_vars->unk67 = 200;
+            alien_queen_hit_recovery_vars->hit_reaction_tween_target = 200;
             break;
         case HIT_RESPONSE_DEATH:
         case HIT_RESPONSE_DEATH_SEQUENCE: {
@@ -902,7 +902,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
             MOBY(moby)->flags &= 0xEFFF;
             if ((unsigned char)moby[0x53] != 10)
                 FUN_00212f90(moby, 10, 0, scale_game_frames(10));
-            alien_queen_hit_recovery_vars->unk67 = 0xFA;
+            alien_queen_hit_recovery_vars->hit_reaction_tween_target = 0xFA;
             break;
         }
         }
