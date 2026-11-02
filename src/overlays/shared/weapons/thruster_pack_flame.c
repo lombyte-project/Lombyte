@@ -346,7 +346,7 @@ typedef struct {
     s32  beam_transition_timer;
     char pad4[4];
     s32  thruster_pack_moby;
-    s32  iC;
+    s32  has_previous_emission_position;
     char pad10[0x10];
     f32  f20;
     f32  f24;
@@ -941,7 +941,7 @@ void thruster_pack_flame_update(void *moby) {
             v->f20 = 0.0125f;
             v->f24 = 0.2f;
             v->f28 = 0.05f;
-            v->iC = 0;
+            v->has_previous_emission_position = 0;
             v->f2C = 0.025f;
         }
         break;
