@@ -71,7 +71,7 @@ typedef struct {
     u8        b31;
     s16       h32;
     u8        pad34[0xC];
-    s32       w40;
+    s32       rotation_vector_x_bits;
     f32       rot_x;
     f32       rot_z;
     u8        pad4c[0x2C];
@@ -103,7 +103,7 @@ BeamMoby *spawn_bomber_jet_beam(void *owner, u128 *pos, u128 *dir, u128 *color, 
     if (created_moby != NULL) {
         beam_vars = created_moby->vars;
         beam_vars->owner = owner;
-        created_moby->w40 = 0;
+        created_moby->rotation_vector_x_bits = 0;
         created_moby->b30 = 0xFF;
         created_moby->h32 = 0xFF;
         created_moby->b31 = 1;
