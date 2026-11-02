@@ -3296,7 +3296,7 @@ typedef struct {
     char          p9A0[0xC0];
     int           active_attack_record_index;
     char          pA64[0x38];
-    int           fA9C;
+    int           wrench_combo_input_lockout;
     char          pAA0[0x8];
     float         hero_animation_frame;
     char          pAAC[0x5E4];
@@ -3326,7 +3326,7 @@ typedef struct {
     char          p22CB[0xD];
     short         f22D8;
     char          p22DA[0x2];
-    short         f22DC;
+    short         mode3_toggle_requested;
     short         mode3_toggle_delay_frames;
 } Hero_228770;
 
@@ -3469,7 +3469,7 @@ int process_hero_equipped_item_input(void) {
 
             if (D_0013F450_h228770.hero_current_state == HERO_STATE_CROUCH_SWING) {
                 if (D_0013F450_h228770.current_state_elapsed_frames > scale_game_frames(0x1E)) {
-                    if (D_0013F450_h228770.fA9C != 0) {
+                    if (D_0013F450_h228770.wrench_combo_input_lockout != 0) {
                         break;
                     }
                     if (D_0013F450_h228770.hero_animation_frame >= (float)wrench_attack_record->f10 &&
@@ -3480,7 +3480,7 @@ int process_hero_equipped_item_input(void) {
                     }
                 }
             }
-            if (D_0013F450_h228770.fA9C != 0) {
+            if (D_0013F450_h228770.wrench_combo_input_lockout != 0) {
                 break;
             }
             if (!(D_0013F450_h228770.hero_animation_frame >= (float)wrench_attack_record->f10)) {
@@ -3571,7 +3571,7 @@ int process_hero_equipped_item_input(void) {
         }
         allocate_hero_voice_for_entry(0x18, 0);
         D_0013F450_h228770.mode3_toggle_delay_frames = 0x12;
-        D_0013F450_h228770.f22DC = 1;
+        D_0013F450_h228770.mode3_toggle_requested = 1;
         break;
     case ITEM_REMOTE_VENDOR:
         if (D_0013F450_h228770.hero_control_mode < 3U ||
