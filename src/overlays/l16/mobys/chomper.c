@@ -216,8 +216,8 @@ typedef struct {
     unsigned char pending; /* 0x15D */
     char          pad15E[0xE];
     float         timer; /* 0x16C */
-    float         f170;
-    float         f174;
+    float         knockback_ascent_animation_target;
+    float         knockback_descent_animation_target;
     char          pad178[8];
     float         target[4]; /* 0x180 */
     char          pad190[0x30];
@@ -291,8 +291,8 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
                               &pursuit_data->turn_speed);
         trooper_start_knockback(
             chomper_moby, pursuit_data->knock, 5, 1, 0, knockback_vector_and_heading[4]);
-        pursuit_data->f170 = 8.0f;
-        pursuit_data->f174 = 16.0f;
+        pursuit_data->knockback_ascent_animation_target = 8.0f;
+        pursuit_data->knockback_descent_animation_target = 16.0f;
         chomper_moby->state = CHOMPER_KNOCKBACK;
         chomper_moby->i94 = 0;
         pursuit_data->reaction_time = 0x78;
