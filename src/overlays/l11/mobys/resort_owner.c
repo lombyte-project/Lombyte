@@ -86,7 +86,7 @@ typedef struct ResortOwnerVars {
     f32   unk130[4];
     f32   unk140[4];
     f32   unk150;
-    f32   unk154;
+    f32   horizontal_step_distance;
     u32   current_path_leg;
     s32   unk15C;
 } ResortOwnerVars;
@@ -185,11 +185,11 @@ void update_resort_owner_state_actions(void *mp) {
                        D_0015ED70 * 12.566371f,
                        D_0015ED70 * 25.132742f,
                        D_0015ED6C * 12.566371f);
-        pvars->unk130[0] = fast_cos(*(float *)(yaw_ptr)) * pvars->unk154;
+        pvars->unk130[0] = fast_cos(*(float *)(yaw_ptr)) * pvars->horizontal_step_distance;
         motion_scalar = fast_sin(*(float *)(yaw_ptr));
         vertical_motion = pvars->unk140[2];
         vertical_motion_decrement = D_0015ED70 * 20.0f;
-        horizontal_speed = pvars->unk154;
+        horizontal_speed = pvars->horizontal_step_distance;
         pvars->unk130[1] = motion_scalar * horizontal_speed;
         vertical_motion = vertical_motion - vertical_motion_decrement;
         pvars->unk130[2] = vertical_motion;
@@ -199,7 +199,7 @@ void update_resort_owner_state_actions(void *mp) {
              * deletes, but it keeps f3 live into this branch, so the
              * first scheduling pass hoists the 0x154 load and the
              * allocator gives it $f4 as in retail. */
-            pvars->unk154 = horizontal_speed;
+            pvars->horizontal_step_distance = horizontal_speed;
         }
         break;
     }
@@ -621,13 +621,13 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
     case RESORT_OWNER_FOLLOW_HERO:
         if (moby->prev_seq != 2)
             FUN_00212f90(moby, 2, 0, scale_game_frames(0x14));
-        moby_vars->unk154 = resort_owner_follow_hero_speed_gp * frame_time;
+        moby_vars->horizontal_step_distance = resort_owner_follow_hero_speed_gp * frame_time;
         break;
     case RESORT_OWNER_FOLLOW_DISTANT_HERO:
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
-        moby_vars->unk154 = resort_owner_distant_follow_and_path_speed_gp * frame_time;
+        moby_vars->horizontal_step_distance = resort_owner_distant_follow_and_path_speed_gp * frame_time;
         break;
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->prev_seq != 4)
