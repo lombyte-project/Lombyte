@@ -464,7 +464,7 @@ extern float fighter_jet_target_selection_offset_vector[] __asm__("D_L13_001672E
 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
-short D_L13_001613C8 = 2;
+short l13_fighter_jet_offscreen_arrow_vertices __asm__("D_L13_001613C8") = 2;
 
 extern unsigned char D_0013E500[];
 
@@ -669,7 +669,7 @@ int select_fighter_jet_target_and_draw_indicators(int   source_moby,
                                 tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                         }
                     } else {
-                        emit_transformed_2d_vertex_packet(&D_L13_001613C8,
+                        emit_transformed_2d_vertex_packet(&l13_fighter_jet_offscreen_arrow_vertices,
                                                           3,
                                                           0xFFFFF3,
                                                           (arrow_alpha << 24) | 0x8000,
