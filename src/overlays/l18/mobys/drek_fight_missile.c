@@ -111,8 +111,8 @@ typedef struct DrekFightMissileVars {
     u8    pad_148[0x4];
     s32   dive_motion_blend_factor;
     f32   unk150;
-    f32   unk154;
-    f32   unk158;
+    f32   wander_yaw_approach_scale;
+    f32   wander_vertical_approach_scale;
     f32   unk15C;
     s32   timer_160;
     s16   unk164;
@@ -140,8 +140,8 @@ void drek_fight_missile_update(struct Moby *moby) {
     case DREK_MISSILE_INITIALIZE: {
         float wander_acceleration_scale = frame_time_macro[1];
         float initialization_frame_time = frame_time;
-        missile_vars->unk158 = wander_acceleration_scale * 10.0f;
-        missile_vars->unk154 = initialization_frame_time * 12.566371f;
+        missile_vars->wander_vertical_approach_scale = wander_acceleration_scale * 10.0f;
+        missile_vars->wander_yaw_approach_scale = initialization_frame_time * 12.566371f;
         missile_vars->unk150 = wander_acceleration_scale * 3.1415927f;
         missile_vars->unk15C = initialization_frame_time * 10.0f;
         missile_vars->effect_color_phase = random_angle_radians();
