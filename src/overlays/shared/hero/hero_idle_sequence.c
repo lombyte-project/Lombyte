@@ -1629,11 +1629,11 @@ typedef struct {
     u8       p2[0x20A4 - 0x1EB2];
     u8       b20A4;
     u8       p3[0x22D8 - 0x20A5];
-    s16      h22D8;
+    s16      on_foot_single_glow_suppressed;
     u8       p4[0x22E4 - 0x22DA];
     s32      three_point_glow_color;
     u8       p5[0x22FC - 0x22E8];
-    s16      h22FC;
+    s16      clank_glow_scale_boost;
     u8       p6[2];
     s32      clank_glow_color;
 } P_207d40;
@@ -1668,7 +1668,7 @@ void draw_hero_glow_quads(void) {
         return;
     }
     if (vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
-        if ((hero_slot_item_id(3) == 3 || hero_slot_item_id(3) == 2) && P.h22D8 == 0) {
+        if ((hero_slot_item_id(3) == 3 || hero_slot_item_id(3) == 2) && P.on_foot_single_glow_suppressed == 0) {
             P.single_point_glow_position.f[2] += 0.015f;
             draw_offset_textured_effect_quad(&P.single_point_glow_position, 0x280000C0, 0.057f, 0.08f);
             P.single_point_glow_position.f[2] -= 0.015f;
@@ -1685,7 +1685,7 @@ void draw_hero_glow_quads(void) {
     }
     if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         k = 0.07f;
-        if (P.h22FC)
+        if (P.clank_glow_scale_boost)
             k = 0.101500004529953f;
         if (*(u8 *)0x15EDB3) {
             P.single_point_glow_position.f[2] -= 0.01f;
