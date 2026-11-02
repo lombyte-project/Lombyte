@@ -49,12 +49,12 @@ extern u8                D_001413F4 __asm__("D_001413F4") NOT_SDA;
 s32 volume_camera_aim_active(struct UpdateCam *cam) __asm__("FUN_L00_002ed348");
 
 s32 volume_camera_aim_active(struct UpdateCam *aim_camera_record) {
-    struct UpdateCam *rec = current_follow_cam;
+    struct UpdateCam *current_follow_camera_record = current_follow_cam;
     AimCameraParams  *params = camera_descriptors[aim_camera_record->descriptor_index].params;
-    FollowCamState   *state = FOLLOW_CAM_STATE(rec);
+    FollowCamState   *state = FOLLOW_CAM_STATE(current_follow_camera_record);
     FollowCamTail    *tail = &state->tail;
     FollowCamFlags   *ctl = &state->tail.ctl;
-    if (rec->unk86 != 0)
+    if (current_follow_camera_record->unk86 != 0)
         return 0;
     if (params->only_in_mode_1 != 0 && D_001413F4 != 1)
         return 0;
