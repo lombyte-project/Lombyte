@@ -44,7 +44,7 @@ typedef struct {
     char          pad0[0x60];
     unsigned char effect[0x10]; /* 0x60 */
     int           f70;
-    int           f74;
+    int           path_sampling_state;
     int           path;  /* 0x78 */
     int           sound; /* 0x7C */
     float         position_x_spring_state;
@@ -259,7 +259,7 @@ void flying_car_update(struct Moby *flying_car_moby) {
             flying_car_data->timer = scale_game_frames(flying_car_path_reset_delay_frames_gp);
             flying_car_moby->state = FLYING_CAR_FOLLOW_PATH;
             flying_car_data->f70 = 0;
-            flying_car_data->f74 = 0;
+            flying_car_data->path_sampling_state = 0;
             qcopy(&flying_car_moby->pos, &path->a);
             flying_car_moby->rot.z = fast_arc_tan(path->b.x - path->a.x, path->b.y - path->a.y);
             flying_car_data->position_x_spring_state = flying_car_data->position_y_spring_state = flying_car_data->f88 = 0.0f;
