@@ -173,8 +173,8 @@ typedef struct D_2D9EA0 {
     V_2D9EA0     v20;
     Part        *slots[8];
     int          f50;
-    short        h54;
-    short        h56;
+    short        collection_frames_remaining;
+    short        collection_reward_processed;
     short        h58[4];
     float        f60[4];
     char         p70[0xC];
@@ -1276,7 +1276,7 @@ void nanotech_ball_update(Moby *moby) {
         nanotech_ball_state->pos.z += 0.5f;
         nanotech_ball_state->bob_phase =
             random_float_between(nanotech_ball_state->bob_offset, 3.1415927f);
-        nanotech_ball_state->h56 = 0;
+        nanotech_ball_state->collection_reward_processed = 0;
         nanotech_ball_state->hA = 0;
         for (i = 0; i < 4; i++)
             nanotech_ball_state->f60[i] = (float)random_integer_below(0xFF);
@@ -1363,7 +1363,7 @@ void nanotech_ball_update(Moby *moby) {
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->pending_collection_count++;
                 if (nanotech_ball_invulnerability_pickup_enabled != 0)
                     player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
-                nanotech_ball_state->h54 =
+                nanotech_ball_state->collection_frames_remaining =
                     func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames_gp);
                 func_001F9C30_2D9EA0(&collection_target_or_end_tangent,
                                      &player->gravity_dir,
@@ -1477,7 +1477,7 @@ void nanotech_ball_update(Moby *moby) {
     case NANOTECH_BALL_STATE_COLLECTING:
         if (D_L00_0015F63C == moby)
             update_nanotech_ball_slot_offsets();
-        if (nanotech_ball_state->h56 != 0) {
+        if (nanotech_ball_state->collection_reward_processed != 0) {
             func_001F9C30_2D9EA0(
                 &moby->pos, D_0013F5E0, -nanotech_ball_collection_target_gravity_offset_gp);
             func_001F9BD8_2D9EA0(&moby->pos, D_0013F5E0 - 0x210, &moby->pos);
@@ -1494,15 +1494,15 @@ void nanotech_ball_update(Moby *moby) {
                 nanotech_ball_invulnerability_pickup_enabled != 0) {
                 int duration = func_001F9850_2D9EA0(
                     nanotech_ball_full_health_invulnerable_collection_min_frames_gp);
-                if (nanotech_ball_state->h54 < duration) {
+                if (nanotech_ball_state->collection_frames_remaining < duration) {
                     int i;
-                    nanotech_ball_state->h54 = duration;
+                    nanotech_ball_state->collection_frames_remaining = duration;
                     for (i = 0; i < 4; i++)
                         nanotech_ball_state->h58[i]++;
                 }
             }
         }
-        if (fast_dec_timer_s16(&nanotech_ball_state->h54)) {
+        if (fast_dec_timer_s16(&nanotech_ball_state->collection_frames_remaining)) {
             int i;
             for (i = 0; i < 8; i++) {
                 if (nanotech_ball_state->slots[i] != 0) {
@@ -1526,7 +1526,7 @@ void nanotech_ball_update(Moby *moby) {
                     continue;
                 ext = (Ext *)(part + 1);
                 if (fast_dec_timer_s16(&ext->h1E)) {
-                    if (nanotech_ball_state->h56 == 0) {
+                    if (nanotech_ball_state->collection_reward_processed == 0) {
                         Hero *player = &hero;
                         int   max_hp = hero_max_health;
                         if (player->vehicle_mode == HERO_VEHICLE_MODE_CLANK)
@@ -1542,7 +1542,7 @@ void nanotech_ball_update(Moby *moby) {
                                 leader_data->pending_collection_count = 0;
                         }
                         func_L00_0028EF68_2D9EA0(1, 0, moby, 0x1F5);
-                        nanotech_ball_state->h56 = 1;
+                        nanotech_ball_state->collection_reward_processed = 1;
                     }
                     func_L00_002688A8_2D9EA0(part);
                     nanotech_ball_state->slots[i] = 0;
