@@ -117,7 +117,7 @@ typedef struct {
     u8  pad_5C[0xC];
     f32 start_z; /* 0x68 */
     s16 unk6C;
-    s16 unk6E; /* random 0 .. 600 frames */
+    s16 glint_delay_frames; /* random 0 .. 600 frames */
 } BoltVars_u;
 
 extern float D_0015ED6C;
@@ -787,7 +787,7 @@ struct Moby *spawn_bolt_by_value(
             set_moby_color(spawned_bolt, color[4], color[5], color[6]);
         else
             spawned_bolt->spawn_frame = bolt_source->spawn_frame;
-        bolt_vars->unk6E = random_int_between(0, scale_game_frames(600));
+        bolt_vars->glint_delay_frames = random_int_between(0, scale_game_frames(600));
         bolt_vars->unk6C = -1;
         qcopy(&spawned_bolt->pos, pos);
         qcopy(bolt_vars->vel, vel);
