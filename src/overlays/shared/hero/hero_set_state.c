@@ -3177,7 +3177,7 @@ typedef struct {
     u8  p0[0x88];
     f32 water_adjusted_position_z;
     u8  p1[0x198 - 0x8C];
-    s32 i198;
+    s32 hero_state_elapsed_frames;
     u8  p2[0x2F0 - 0x19C];
     f32 water_surface_height_target;
     u8  p3[0x690 - 0x2F4];
@@ -3209,7 +3209,7 @@ void update_hero_water_height_and_bobbing(void) {
     enum {
         WATER_HEIGHT_CONTROL_ALTERNATE_TARGET = 0x16
     };
-    if (G.i198 > scale_game_frames(10) || G.water_bob_offset < 0.0f || G.i2094 == 0x11 ||
+    if (G.hero_state_elapsed_frames > scale_game_frames(10) || G.water_bob_offset < 0.0f || G.i2094 == 0x11 ||
         G.i20A0 == 0x11) {
         if (G.i2084 == 0x36) {
             vendor_spring(&G.water_bob_offset,
