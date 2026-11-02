@@ -422,7 +422,7 @@ typedef struct M_221ee0 {
     u8               p4[0x78 - 0x36];
     Q_221ee0        *q;
     u8               p5[0xA6 - 0x7C];
-    s16              hA6;
+    s16              moby_class_id;
 } M_221ee0;
 
 extern G_221ee0  D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
@@ -449,7 +449,7 @@ void select_hero_grapple_swing_target(void) {
     bestd = 1e8f;
     for (candidate_moby = D_L00_0015FFE4_221ee0; candidate_moby != 0;
          candidate_moby = candidate_moby->next) {
-        if (candidate_moby->hA6 != 0x323)
+        if (candidate_moby->moby_class_id != 0x323)
             continue;
         q = candidate_moby->q;
         if (q->swing_target_enabled == 0)
