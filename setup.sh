@@ -124,6 +124,12 @@ replace_dir() { # target staged
     mv -- "$staged" "$target"
 }
 
+fetch() { # url path
+    curl --fail --location --retry 3 --retry-delay 2 --show-error --progress-bar "$1" --output "$2"
+}
+
+# The optional mirror-file is the file's name in the toolchain mirror, tried
+# when the url fails.
 download() { # url sha path [mirror-file]
     local url=$1 sha=$2 path=$3
     mkdir -p "$(dirname -- "$path")"
@@ -132,11 +138,10 @@ download() { # url sha path [mirror-file]
     fi
     say "downloading $(basename -- "$path")"
     rm -f -- "$path"
-    if ! curl --fail --location --retry 3 --retry-delay 2 --show-error --progress-bar \
-        "$url" --output "$path.part" && [[ -n "${4:-}" ]]; then
+    if ! fetch "$url" "$path.part"; then
+        [[ -n "${4:-}" ]] || die "could not download $url"
         warn "$url failed; trying the toolchain mirror"
-        curl --fail --location --retry 3 --retry-delay 2 --show-error --progress-bar \
-            "$MIRROR_URL/$4" --output "$path.part"
+        fetch "$MIRROR_URL/$4" "$path.part" || die "could not download $(basename -- "$path") from the toolchain mirror either"
     fi
     if ! sha_ok "$path.part" "$sha"; then
         rm -f -- "$path.part"
@@ -329,6 +334,19 @@ install_sdk_compiler() {
     replace_dir "$target" "$STAGE/sdk"
 }
 
+# Sparse checkout of the pinned header folder; fails on any network error
+# (the checkout fetches blobs lazily, so it is a network step too).
+sdk_headers_from_git() { # dir
+    local mirror=$1
+    if [[ ! -d "$mirror/.git" ]]; then
+        say "fetching GCC 2.95.2 headers from the SDK mirror"
+        rm -rf -- "$mirror"
+        git clone --quiet --filter=blob:none --no-checkout "$SDK_MIRROR_URL" "$mirror" || return 1
+    fi
+    git -C "$mirror" sparse-checkout set --no-cone "$SDK_MIRROR_INCLUDE/*" &&
+        git -C "$mirror" checkout --quiet --detach "$SDK_MIRROR_COMMIT"
+}
+
 install_sn_compiler() {
     local target="$COMPILERS/sn-compiler"
     local include="$target/lib/gcc-lib/ee/2.95.2/include"
@@ -348,20 +366,12 @@ install_sn_compiler() {
     python3 "$ROOT/scripts/patch-ps2eeas.py" "$assembler" "$STAGE/sn/ee/bin/Ps2EeAs.exe"
     # GCC 2.95.2 headers (stdarg.h, ...) from the Sony SDK mirror, pinned.
     local mirror="$DOWNLOADS/sce_ps2_sdk_24"
-    if [[ ! -d "$mirror/.git" ]]; then
-        say "fetching GCC 2.95.2 headers from the SDK mirror"
-        rm -rf -- "$mirror"
-        if ! git clone --quiet --filter=blob:none --no-checkout "$SDK_MIRROR_URL" "$mirror"; then
-            # Same folder at the same commit, from the toolchain mirror.
-            warn "$SDK_MIRROR_URL failed; trying the toolchain mirror"
-            rm -rf -- "$mirror"; mkdir -p "$mirror"
-            download "$MIRROR_URL/$SDK_HEADERS_FILE" "$SDK_HEADERS_SHA" "$DOWNLOADS/$SDK_HEADERS_FILE"
-            tar -xJf "$DOWNLOADS/$SDK_HEADERS_FILE" -C "$mirror"
-        fi
-    fi
-    if [[ -d "$mirror/.git" ]]; then
-        git -C "$mirror" sparse-checkout set --no-cone "$SDK_MIRROR_INCLUDE/*"
-        git -C "$mirror" checkout --quiet --detach "$SDK_MIRROR_COMMIT"
+    if ! sdk_headers_from_git "$mirror"; then
+        # Same folder at the same commit, from the toolchain mirror.
+        warn "$SDK_MIRROR_URL failed; trying the toolchain mirror"
+        rm -rf -- "$mirror"; mkdir -p "$mirror"
+        download "$MIRROR_URL/$SDK_HEADERS_FILE" "$SDK_HEADERS_SHA" "$DOWNLOADS/$SDK_HEADERS_FILE"
+        tar -xJf "$DOWNLOADS/$SDK_HEADERS_FILE" -C "$mirror"
     fi
     assert_sha "$mirror/$SDK_MIRROR_INCLUDE/stdarg.h" "$SDK_MIRROR_STDARG_SHA"
     assert_sha "$mirror/$SDK_MIRROR_INCLUDE/va-mips.h" "$SDK_MIRROR_VA_MIPS_SHA"

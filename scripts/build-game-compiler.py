@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PATCH_DIR = ROOT / "patches" / "sce-991111b"
 
 ARCHIVE_NAME = "gnu-ee-binutils-gcc-1.1.tar.gz"
-# Our copy of every download (github.com/lombyte-project/toolchain-mirror),
+# Our copy of the open-source downloads (github.com/lombyte-project/toolchain-mirror),
 # pinned to a commit; tried after the upstream URLs.
 MIRROR = (
     "https://raw.githubusercontent.com/lombyte-project/toolchain-mirror/"
