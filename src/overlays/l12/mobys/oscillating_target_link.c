@@ -227,10 +227,10 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
 
 typedef struct Data_304310 {
     char  pad0[0x2300];
-    int   f2300;
-    int   f2304;
-    int   f2308;
-    int   f230C;
+    int   first_strip_reset_countdown;
+    int   second_strip_reset_countdown;
+    int   third_strip_reset_countdown;
+    int   fourth_strip_reset_countdown;
     int   row;    /* 0x2310 */
     int   target; /* 0x2314 */
     float angle;  /* 0x2318 */
@@ -285,10 +285,10 @@ void oscillating_target_link_update(Moby *moby) {
         oscillating_link_strip_fade_pivot_ticks = 0x16;
         oscillating_link_strip_reset_ticks = 0x2D;
         oscillating_target_link_state->f231C = -1;
-        oscillating_target_link_state->f2304 = 0xB;
-        oscillating_target_link_state->f2308 = 0x17;
-        oscillating_target_link_state->f230C = 0x22;
-        oscillating_target_link_state->f2300 = 0;
+        oscillating_target_link_state->second_strip_reset_countdown = 0xB;
+        oscillating_target_link_state->third_strip_reset_countdown = 0x17;
+        oscillating_target_link_state->fourth_strip_reset_countdown = 0x22;
+        oscillating_target_link_state->first_strip_reset_countdown = 0;
         moby->state = TARGET_TRACKING_STATE_ACTIVE;
         break;
     case TARGET_TRACKING_STATE_ACTIVE:
