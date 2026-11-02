@@ -257,6 +257,9 @@ void frog_update(unsigned char *moby) {
     enum {
         FROG_STATE_RESPAWN = 0xF
     };
+    enum {
+        FROG_TARGET_MODE_NO_PURSUIT_TARGET = 2
+    };
     float          A[4] __attribute__((aligned(16)));
     float          B[4] __attribute__((aligned(16)));
     float          C[4] __attribute__((aligned(16)));
@@ -481,7 +484,7 @@ void frog_update(unsigned char *moby) {
             fast_vec_normalize(B, moby + 0xC0, frog_instance_vars->movement_speed * D_0015ED6C_gp);
             FUN_L06_002e9b60_c(moby, B, 1, 0.3f, 0.3f);
         }
-        if (frog_instance_vars->pursuit_target_mode != 2 && random_integer_below(9) == 0) {
+        if (frog_instance_vars->pursuit_target_mode != FROG_TARGET_MODE_NO_PURSUIT_TARGET && random_integer_below(9) == 0) {
             frog_instance_vars->turn_angle =
                 random_float_between(-frog_instance_vars->turn_range_degrees,
                                      frog_instance_vars->turn_range_degrees) *
@@ -515,7 +518,7 @@ void frog_update(unsigned char *moby) {
             MOBY(moby)->state = FROG_STATE_ATTACK;
             if (MOBY(moby)->prev_seq != 5)
                 blend_moby_animation(moby, 5, 4, scale_game_frames(10));
-        } else if (frog_instance_vars->pursuit_target_mode == 2) {
+        } else if (frog_instance_vars->pursuit_target_mode == FROG_TARGET_MODE_NO_PURSUIT_TARGET) {
             MOBY(moby)->state = FROG_STATE_RETURN_HOME;
         }
         break;
@@ -597,7 +600,7 @@ void frog_update(unsigned char *moby) {
             MOBY(moby)->state = FROG_STATE_WANDER;
             if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
-        } else if (frog_instance_vars->pursuit_target_mode != 2) {
+        } else if (frog_instance_vars->pursuit_target_mode != FROG_TARGET_MODE_NO_PURSUIT_TARGET) {
             MOBY(moby)->state = FROG_STATE_APPROACH_TARGET;
         } else if (frog_instance_vars->blink_countdown != 0) {
             MOBY(moby)->state = FROG_STATE_BLINKING_APPROACH_TARGET;
