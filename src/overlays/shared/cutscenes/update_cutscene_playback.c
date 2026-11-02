@@ -107,17 +107,17 @@ typedef struct {
     u8  pad0[8];
     s32 w8;
     u8  padc[0x14 - 0xC];
-    s32 w14;
+    s32 debug_camera_mode;
     s32 w18;
     u8  pad1c[0xA0 - 0x1C];
-    s32 wA0;
+    s32 previous_step_held_buttons;
     u8  padA4[0xEC - 0xA4];
-    s32 wEC;
+    s32 single_step_mode_countdown;
 } S_297f78;
 
 typedef struct {
     u8  pad0[0xA6];
-    s16 hA6;
+    s16 moby_class_id;
 } A_297f78;
 
 typedef struct {
@@ -194,14 +194,14 @@ void handle_pause_input(void) __asm__("FUN_L00_00297f78");
 
 void handle_pause_input(void) {
     s32 lvl, area, noctl, special;
-    if (D_L00_0016C058.wEC) {
-        if (--D_L00_0016C058.wEC == 0)
+    if (D_L00_0016C058.single_step_mode_countdown) {
+        if (--D_L00_0016C058.single_step_mode_countdown == 0)
             D_L00_0016C058.w8 = 0x10;
     }
     if ((D_L00_0016C058.w8 & 0x10) && (controller_state.pressed & 0x200)) {
-        controller_state.pressed = ~D_L00_0016C058.wA0 & controller_state.held;
-        controller_state.released = ~controller_state.held & D_L00_0016C058.wA0;
-        D_L00_0016C058.wA0 = controller_state.held & ~0x200;
+        controller_state.pressed = ~D_L00_0016C058.previous_step_held_buttons & controller_state.held;
+        controller_state.released = ~controller_state.held & D_L00_0016C058.previous_step_held_buttons;
+        D_L00_0016C058.previous_step_held_buttons = controller_state.held & ~0x200;
     }
     lvl = D_L00_0015F5C0_macro[1];
     if (lvl == 0 && (mode_freeze_flags & 1) && level_timer >= 8) {
@@ -223,7 +223,7 @@ void handle_pause_input(void) {
     }
     special = 0;
     if (hero.state.control_mode == 9 && hero.state.current == 0x32 && hero.ship_moby) {
-        s32 k = ((A_297f78 *)hero.ship_moby)->hA6;
+        s32 k = ((A_297f78 *)hero.ship_moby)->moby_class_id;
         if (k == 0x45 || k == 0x563 || k == 0x4DA)
             special = 1;
     }
@@ -249,7 +249,7 @@ void handle_pause_input(void) {
     if (!(D_L00_0016C058.w8 & 0x10) && level_timer >= 8 && (controller_state.pressed & 0x500) &&
         hero.state.control_mode != 0x16 && hero.state.current != 0x72 &&
         hero.state.current != 0x32 && hero.state.current != 0x1D && !hero.fall_fade_pending &&
-        hero.health.hp && lvl == 0 && !special && !D_L00_0016C058.wEC) {
+        hero.health.hp && lvl == 0 && !special && !D_L00_0016C058.single_step_mode_countdown) {
         pause_all_sounds(10);
         return;
     }
@@ -311,9 +311,9 @@ void handle_pause_input(void) {
     noop_main_callback(D_L00_00161018, 5);
     if (DBG(8)) {
         update_camera();
-    } else if (D_L00_0016C058.w14) {
+    } else if (D_L00_0016C058.debug_camera_mode) {
         update_debug_camera();
-        if (D_L00_0016C058.w14 == 2)
+        if (D_L00_0016C058.debug_camera_mode == 2)
             update_hero_from_debug_camera();
     }
     noop_main_callback(D_L00_00161028, 8);
