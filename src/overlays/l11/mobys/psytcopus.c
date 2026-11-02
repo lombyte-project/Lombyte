@@ -106,6 +106,9 @@ void psytcopus_update(struct Moby *m) __asm__("FUN_L11_00310180");
 
 /* Moby class 1231 */
 void psytcopus_update(struct Moby *psytcopus) {
+    enum {
+        PSYTCOPUS_PROJECTILE_CREATION_BLOCKED = 2
+    };
     struct PokiPathVars *psytcopus_vars = (struct PokiPathVars *)psytcopus->pvars;
     struct Moby         *target;
     Vec4f                projectile_vector_scratch;
