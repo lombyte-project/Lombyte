@@ -180,13 +180,13 @@ typedef struct O2d1428 {
     struct M2d1428 *parent;
     u8              pa8[4];
     s32             flags;
-    f32             fB0;
-    s32             iB4;
+    f32             crate_height;
+    s32             last_motion_update_frame;
     u8              pb8[0x18];
-    V2d1428         vD0;
-    u8              vE0[0x10];
+    V2d1428         attachment_position;
+    u8              attachment_rotation[0x10];
     void           *path;
-    f32             fF4;
+    f32             attachment_stack_z_offset;
 } O2d1428;
 
 struct M2d1428 {
@@ -1257,7 +1257,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
     s32 hit;
 
     vars = moby->vars;
-    if (vars->iB4 == D_L00_0015F5CC)
+    if (vars->last_motion_update_frame == D_L00_0015F5CC)
         return;
     chain_cursor = moby;
     do {
@@ -1276,7 +1276,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
             return;
         if (vars->flags & 2)
             return;
-        vars->iB4 = D_L00_0015F5CC;
+        vars->last_motion_update_frame = D_L00_0015F5CC;
         if (moby->state == CRATE_STATE_INITIALIZE)
             continue;
         fast_vec_sub(&hero_local_offset, &hero.motion.pos, &moby->pos);
@@ -1299,26 +1299,26 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (vars->path) {
             if (vars->parent == 0) {
                 vars->vel.w -= acceleration_scale_or_speed * 10.0f;
-                if (approach_value(&vars->fF4, 0.0f, absolute_float(vars->vel.w)) == 0.0f)
+                if (approach_value(&vars->attachment_stack_z_offset, 0.0f, absolute_float(vars->vel.w)) == 0.0f)
                     vars->vel.w = 0.0f;
             } else {
                 vars->vel.w -= acceleration_scale_or_speed * 10.0f;
-                if (approach_value(&vars->fF4,
-                                   vars->parent->vars->fF4 + 1.0f,
+                if (approach_value(&vars->attachment_stack_z_offset,
+                                   vars->parent->vars->attachment_stack_z_offset + 1.0f,
                                    absolute_float(vars->vel.w)) == 0.0f)
                     *(s32 *)&vars->vel.w = 0;
             }
-            qcopy(&adjusted_link_position, &vars->vD0);
-            adjusted_link_position.z += vars->fF4;
+            qcopy(&adjusted_link_position, &vars->attachment_position);
+            adjusted_link_position.z += vars->attachment_stack_z_offset;
             if (moby)
                 moby->h36 = 0x7F80;
             qcopy(&previous_position, &moby->pos);
             qcopy(&previous_rotation, &moby->v40);
             transform_attachment_pose(
-                moby, vars->path, &adjusted_link_position, vars->vE0, &moby->pos, &moby->v40);
+                moby, vars->path, &adjusted_link_position, vars->attachment_rotation, &moby->pos, &moby->v40);
             if (FUN_L00_002603d0(vars->path)->flags & 4) {
-                qcopy(&vars->vD0, &adjusted_link_position);
-                vars->vD0.z -= vars->fF4;
+                qcopy(&vars->attachment_position, &adjusted_link_position);
+                vars->attachment_position.z -= vars->attachment_stack_z_offset;
             }
             fast_vec_sub(&position_delta, &moby->pos, &previous_position);
             position_delta.w = vars->vel.w;
@@ -1329,7 +1329,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (vars->parent == 0) {
             qcopy(&collision_start, &moby->pos);
             qcopy(&collision_end, &moby->pos);
-            collision_start.z += vars->fB0 * 0.75f;
+            collision_start.z += vars->crate_height * 0.75f;
             collision_end.z += vars->vel.z;
             hit = collision_line(&collision_start, &collision_end, 2, 0, 0);
             qcopy(&landing_position, &collision_hit_point);
