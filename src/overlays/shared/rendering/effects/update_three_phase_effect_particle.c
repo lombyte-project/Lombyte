@@ -1914,7 +1914,7 @@ typedef struct {
     u8   b4;
     u8   b5;
     u8   b6;
-    u8   b7;
+    u8   source_alpha;
     u8   b8;
     u8   b9;
     s16  hA;
@@ -1974,7 +1974,7 @@ void update_source_bound_effect_particle(Part_26d470 *particle) {
         particle_data->fC = 1.0f;
     packed_rgb = particle->w4 & 0xFFFFFF;
     particle->w4 =
-        packed_rgb | (truncate_float_to_s32((convert_integer_to_float(particle->body.e->b7) *
+        packed_rgb | (truncate_float_to_s32((convert_integer_to_float(particle->body.e->source_alpha) *
                                                  (particle_data->f10 * 0.00390625f) +
                                              particle_data->fC) *
                                             256.0f)
