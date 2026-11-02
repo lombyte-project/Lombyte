@@ -299,7 +299,7 @@ typedef struct {
     char           pad0[0x20];
     float          f20;
     short          h24;
-    short          h26;
+    short          hit_reaction_cooldown;
     unsigned char  hit_response_profile_index;
     unsigned char  b29;
     char           pad2A[0xE];
@@ -332,7 +332,7 @@ typedef struct {
     float          fD8;
     float          fDC;
     char           padE0[8];
-    float          fE8;
+    float          fall_motion_step;
     float          fEC;
     char           padF0[4];
     float          fF4;
@@ -346,31 +346,31 @@ typedef struct {
     PeCursor       main;
     char           pad168[0x18];
     Vec4           projectile_aim_point;
-    int            w190;
+    int            firing_retry_timer;
     float          yaw_turn_step;
     float          projectile_aim_distance;
     char           pad19C[4];
     float          combat_target_radius;
-    short          h1A4;
-    short          h1A6;
+    short          burst_shots_fired;
+    short          steering_path_node_index;
     float          deployment_trigger_radius;
-    short          h1AC;
-    short          h1AE;
+    short          ordered_path_traversal;
+    short          path_has_stop_nodes;
     char           pad1B0[4];
     int            w1B4;
     float          path_movement_step_length;
     float          pitch_turn_step;
-    int            w1C0;
-    int            w1C4;
-    int            w1C8;
+    int            deployment_trigger_volume_index;
+    int            deployment_mount_cuboid_index;
+    int            mount_release_timer;
     float          previous_animation_frame;
     Vec4           deployment_motion_delta;
     unsigned short h1E0;
     short          h1E2;
-    int            w1E4;
-    int            w1E8;
-    short          h1EC;
-    short          h1EE;
+    int            deployment_destination_cuboid_index;
+    int            deployment_trigger_override;
+    short          deployment_vertical_steering_timer;
+    short          skip_path_braking;
     char           pad1F0[0x10];
     unsigned char  x200[1];
 } PeVars;
@@ -543,8 +543,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
     }
     FUN_L00_00263ac8_u(2.5f, (int)birdbot_moby, 2, birdbot_vars->x200);
     qcopy(&birdbot_position_before_update, &birdbot_moby->pos);
-    if (birdbot_vars->w1C8 > 0) {
-        birdbot_vars->w1C8--;
+    if (birdbot_vars->mount_release_timer > 0) {
+        birdbot_vars->mount_release_timer--;
     }
     if (birdbot_moby->state != BIRDBOT_STATE_INITIALIZE) {
         path_reposition_requested = select_birdbot_path_node(birdbot_moby, &idx);
@@ -553,8 +553,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
     select_moby_combat_target(birdbot_moby, &selected_combat_target, target_search_radius);
     hit = find_moby_hit(birdbot_moby, 0x210000, 0);
     kind = FUN_L00_0025a478_u(birdbot_moby, hit, &birdbot_vars->f20, 0, &hits, &dmg, 0, 4);
-    fast_dec_timer_s16(&birdbot_vars->h26);
-    if (hit != 0 && birdbot_vars->h26 == 0) {
+    fast_dec_timer_s16(&birdbot_vars->hit_reaction_cooldown);
+    if (hit != 0 && birdbot_vars->hit_reaction_cooldown == 0) {
         if (hit->src != 0) {
             struct Hero *player = &hero;
 
@@ -603,7 +603,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_moby->state = BIRDBOT_STATE_FATAL_KNOCKBACK;
             birdbot_moby->h34 &= 0xEFFF;
             trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
-            birdbot_vars->h26 = scale_game_frames(0x3C);
+            birdbot_vars->hit_reaction_cooldown = scale_game_frames(0x3C);
             break;
         case BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_ANIMATED_NONFATAL_KNOCKBACK:
@@ -677,10 +677,10 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 birdbot_moby->pos.f[2] += 20.0f;
             }
         }
-        birdbot_vars->h1AE = 0;
+        birdbot_vars->path_has_stop_nodes = 0;
         for (i = 0; i < c->path->count; i++) {
             if (c->path->points[i].f[3] == 1.0f) {
-                birdbot_vars->h1AE = 1;
+                birdbot_vars->path_has_stop_nodes = 1;
             }
         }
         birdbot_moby->h34 |= 0x1000;
@@ -703,7 +703,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->b29 = 0;
         birdbot_vars->hit_response_profile_index = 1;
         clear_u64_value(&birdbot_vars->v40);
-        birdbot_vars->w1C8 = -1;
+        birdbot_vars->mount_release_timer = -1;
         if (birdbot_moby->target_animation_sequence != 0) {
             blend_moby_animation(birdbot_moby, 0, 0, scale_game_frames(5));
         }
@@ -724,12 +724,12 @@ void birdbot_update(PeMoby *birdbot_moby) {
         a = fast_arc_tan(selected_combat_target.pos.f[0] - birdbot_moby->pos.f[0],
                          selected_combat_target.pos.f[1] - birdbot_moby->pos.f[1]);
         FUN_L00_00258278_cf((char *)birdbot_moby, &birdbot_vars->yaw_turn_step, a, 0.02f, 0.3f, 0.1f);
-        fast_dec_timer(&birdbot_vars->w190);
+        fast_dec_timer(&birdbot_vars->firing_retry_timer);
         d = vector_distance_xy(&birdbot_moby->pos, &selected_combat_target);
         if ((flag ? d < birdbot_vars->combat_target_radius * 2.0f : d < birdbot_vars->combat_target_radius) &&
             absolute_float(birdbot_moby->pos.f[2] - selected_combat_target.pos.f[2]) < 2.0f &&
             birdbot_moby->b31 != 0 && (!flag || path_reposition_requested == 0) &&
-            birdbot_vars->w190 == 0 &&
+            birdbot_vars->firing_retry_timer == 0 &&
             fast_difference_between_rotations(
                 birdbot_moby->rot.f[2],
                 fast_arc_tan(selected_combat_target.pos.f[0] - birdbot_moby->pos.f[0],
@@ -739,15 +739,15 @@ void birdbot_update(PeMoby *birdbot_moby) {
             *(u128 *)&vb = *(u128 *)&birdbot_moby->pos;
             vb.f[2] = va.f[2];
             if (collision_line(&vb, &va, 0, birdbot_moby, 0) == 0) {
-                birdbot_vars->h1A4 = 0;
+                birdbot_vars->burst_shots_fired = 0;
                 birdbot_vars->projectile_aim_distance = 4.0f;
                 birdbot_moby->state = BIRDBOT_STATE_FIRE_BURST;
                 if (birdbot_moby->target_animation_sequence != 4) {
                     blend_moby_animation(birdbot_moby, 4, 0, scale_game_frames(6));
                 }
-                birdbot_vars->w190 = 0;
+                birdbot_vars->firing_retry_timer = 0;
             } else {
-                birdbot_vars->w190 = scale_game_frames(0x3C);
+                birdbot_vars->firing_retry_timer = scale_game_frames(0x3C);
             }
         } else if (flag ||
                    (vector_distance_xy(&birdbot_moby->pos, &selected_combat_target) < 4.0f &&
@@ -755,7 +755,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                         6.0f)) {
             if (path_reposition_requested != 0 &&
                 fast_vec_dist(&birdbot_moby->pos, (Vec4 *)c->path + (idx + 1)) > 0.25f) {
-                if (birdbot_vars->h1AC == 0 || c->idx < c->path->count - 1) {
+                if (birdbot_vars->ordered_path_traversal == 0 || c->idx < c->path->count - 1) {
                     int   i;
                     float f;
 
@@ -770,26 +770,26 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 }
             }
         }
-        if (birdbot_vars->w1C8 == 0 && birdbot_vars->w1C4 != -1) {
+        if (birdbot_vars->mount_release_timer == 0 && birdbot_vars->deployment_mount_cuboid_index != -1) {
             jet_end_mount(0);
             l01_hero_set_state(HERO_STATE_IDLE, 1);
             cutscene_active = 0;
-            birdbot_vars->w1C4 = -1;
+            birdbot_vars->deployment_mount_cuboid_index = -1;
         }
         break;
     }
     case BIRDBOT_STATE_WAIT_FOR_TRIGGER:
         if (vector_distance_xy(&birdbot_moby->pos, &selected_combat_target) < birdbot_vars->deployment_trigger_radius ||
-            is_point_inside_clip_volume(&hero.motion.pos, birdbot_vars->w1C0) != 0 ||
-            birdbot_vars->w1E8 != 0) {
-            if (birdbot_vars->w1C4 != -1) {
+            is_point_inside_clip_volume(&hero.motion.pos, birdbot_vars->deployment_trigger_volume_index) != 0 ||
+            birdbot_vars->deployment_trigger_override != 0) {
+            if (birdbot_vars->deployment_mount_cuboid_index != -1) {
                 LevelCuboid *p;
 
                 l01_hero_set_state(0x1F, 0);
-                p = &l01_cuboids[birdbot_vars->w1C4];
+                p = &l01_cuboids[birdbot_vars->deployment_mount_cuboid_index];
                 jet_mount(&p->pos, &p->rot, 0, 0, 0);
                 cutscene_active = 1;
-                birdbot_vars->w1C8 = scale_game_frames(0x168);
+                birdbot_vars->mount_release_timer = scale_game_frames(0x168);
             }
             birdbot_moby->w94 = *(int *)(birdbot_moby->w24 + 0x10);
             birdbot_moby->h34 &= 0xFFBE;
@@ -830,20 +830,20 @@ void birdbot_update(PeMoby *birdbot_moby) {
                     side_path_cursor->idx = side_path_next_node_index;
                 }
             }
-        } else if (birdbot_vars->w1E4 != -1) {
+        } else if (birdbot_vars->deployment_destination_cuboid_index != -1) {
             LevelCuboid *p;
             float        a;
             float        deployment_step_length;
             float        z;
 
-            p = (LevelCuboid *)((birdbot_vars->w1E4 << 7) + (int)l01_cuboids);
+            p = (LevelCuboid *)((birdbot_vars->deployment_destination_cuboid_index << 7) + (int)l01_cuboids);
             a = fast_arc_tan(p->pos.x - birdbot_moby->pos.f[0], p->pos.y - birdbot_moby->pos.f[1]);
             FUN_L00_00258278_cf((char *)birdbot_moby, &birdbot_vars->yaw_turn_step, a, 0.01f, 0.3f, 0.1f);
             deployment_step_length = fast_vec_length(&birdbot_vars->deployment_motion_delta);
             z = birdbot_vars->deployment_motion_delta.f[2];
             fast_vec_normalize(
                 &birdbot_vars->deployment_motion_delta, &birdbot_vars->deployment_motion_delta, deployment_step_length * 0.95f);
-            fast_vec_sub(&vb, &l01_cuboids[birdbot_vars->w1E4].pos, &birdbot_moby->pos);
+            fast_vec_sub(&vb, &l01_cuboids[birdbot_vars->deployment_destination_cuboid_index].pos, &birdbot_moby->pos);
             fast_vec_normalize(&vb, &vb, deployment_step_length * 0.05f);
             fast_vec_add(&birdbot_vars->deployment_motion_delta, &birdbot_vars->deployment_motion_delta, &vb);
             if (frame_time * 10.0f < deployment_step_length) {
@@ -853,11 +853,11 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 fast_vec_normalize(&vb, &birdbot_vars->deployment_motion_delta, frame_time_sq * 5.0f);
                 fast_vec_add(&birdbot_vars->deployment_motion_delta, &birdbot_vars->deployment_motion_delta, &vb);
             }
-            if (fast_dec_timer_s16(&birdbot_vars->h1EC) == 0) {
+            if (fast_dec_timer_s16(&birdbot_vars->deployment_vertical_steering_timer) == 0) {
                 birdbot_vars->deployment_motion_delta.f[2] = z;
             }
             fast_vec_add(&birdbot_moby->pos, &birdbot_moby->pos, &birdbot_vars->deployment_motion_delta);
-            if (fast_vec_dist(&birdbot_moby->pos, &l01_cuboids[birdbot_vars->w1E4].pos) <
+            if (fast_vec_dist(&birdbot_moby->pos, &l01_cuboids[birdbot_vars->deployment_destination_cuboid_index].pos) <
                 frame_time * 10.0f) {
                 if (birdbot_moby->target_animation_sequence != 0) {
                     blend_moby_animation(birdbot_moby, 0, 0, scale_game_frames(5));
@@ -913,7 +913,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                                          yaw,
                                          pitch,
                                          truncate_float_to_s32(FUN_L04_001f1978(10.0f)));
-                birdbot_vars->h1A4++;
+                birdbot_vars->burst_shots_fired++;
             } else {
                 if (birdbot_moby->target_animation_sequence != 0) {
                     blend_moby_animation(birdbot_moby, 0, 0, scale_game_frames(5));
@@ -923,7 +923,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             }
         }
         if (frame < 2.0f) {
-            if (birdbot_vars->h1A4 >= 4 ||
+            if (birdbot_vars->burst_shots_fired >= 4 ||
                 vector_distance_xy(&birdbot_moby->pos, &selected_combat_target) >
                     (flag ? birdbot_vars->combat_target_radius * 2.0f : birdbot_vars->combat_target_radius) ||
                 absolute_float(birdbot_moby->pos.f[2] - selected_combat_target.pos.f[2]) > 6.0f) {
@@ -942,7 +942,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                          selected_combat_target.pos.f[1] - birdbot_moby->pos.f[1]);
         FUN_L00_00258278_cf((char *)birdbot_moby, &birdbot_vars->yaw_turn_step, a, 0.02f, 0.3f, 0.1f);
         if (birdbot_moby->target_animation_sequence == 0) {
-            if (fast_dec_timer(&birdbot_vars->w190) != 0) {
+            if (fast_dec_timer(&birdbot_vars->firing_retry_timer) != 0) {
                 if (birdbot_moby->target_animation_sequence != 5) {
                     blend_moby_animation(birdbot_moby, 5, 0, scale_game_frames(0xF));
                 }
@@ -969,7 +969,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                     absolute_float(birdbot_moby->pos.f[2] - selected_combat_target.pos.f[2]) <
                         2.0f &&
                     birdbot_moby->b31 != 0 && (!flag || path_reposition_requested == 0) &&
-                    birdbot_vars->w190 == 0 &&
+                    birdbot_vars->firing_retry_timer == 0 &&
                     fast_difference_between_rotations(
                         birdbot_moby->rot.f[2],
                         fast_arc_tan(selected_combat_target.pos.f[0] - birdbot_moby->pos.f[0],
@@ -979,16 +979,16 @@ void birdbot_update(PeMoby *birdbot_moby) {
                     *(u128 *)&vb = *(u128 *)&birdbot_moby->pos;
                     vb.f[2] = va.f[2];
                     if (collision_line(&vb, &va, 0, birdbot_moby, 0) == 0) {
-                        birdbot_vars->h1A4 = 0;
+                        birdbot_vars->burst_shots_fired = 0;
                         birdbot_vars->projectile_aim_distance = 4.0f;
                         birdbot_moby->state = BIRDBOT_STATE_FIRE_BURST;
                         if (birdbot_moby->target_animation_sequence != 4) {
                             blend_moby_animation(birdbot_moby, 4, 0, scale_game_frames(6));
                         }
-                        birdbot_vars->w190 = 0;
+                        birdbot_vars->firing_retry_timer = 0;
                         break;
                     }
-                    birdbot_vars->w190 = scale_game_frames(0x3C);
+                    birdbot_vars->firing_retry_timer = scale_game_frames(0x3C);
                 }
                 if (birdbot_moby->target_animation_sequence != 0) {
                     blend_moby_animation(birdbot_moby, 0, 0, scale_game_frames(5));
@@ -1011,7 +1011,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         float     path_node_height_offset;
 
         c = &birdbot_vars->main;
-        if (birdbot_vars->h1AE != 0) {
+        if (birdbot_vars->path_has_stop_nodes != 0) {
             int   i;
             int   best;
             float bd;
@@ -1027,11 +1027,11 @@ void birdbot_update(PeMoby *birdbot_moby) {
                     best = i;
                 }
             }
-            birdbot_vars->h1A6 = c->idx < best ? best - 1 : best < c->idx ? best + 1 : c->idx;
+            birdbot_vars->steering_path_node_index = c->idx < best ? best - 1 : best < c->idx ? best + 1 : c->idx;
         } else {
-            birdbot_vars->h1A6 = c->idx;
+            birdbot_vars->steering_path_node_index = c->idx;
         }
-        qcopy(&va, &c->path->points[birdbot_vars->h1A6]);
+        qcopy(&va, &c->path->points[birdbot_vars->steering_path_node_index]);
         path_node_height_offset = 0.8f;
         va.f[2] += path_node_height_offset;
         FUN_L00_00258278_cf(
@@ -1074,7 +1074,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         break;
     }
     case BIRDBOT_STATE_BRAKE_AND_FACE_TARGET:
-        if (birdbot_vars->path_movement_step_length > 0.0f && birdbot_vars->h1EE == 0) {
+        if (birdbot_vars->path_movement_step_length > 0.0f && birdbot_vars->skip_path_braking == 0) {
             birdbot_vars->path_movement_step_length -= *(float *)&birdbot_path_speed_scale_gp * 3.0f * frame_time_sq;
             va.f[0] = fast_cos(birdbot_moby->rot.f[2]) * birdbot_vars->path_movement_step_length;
             va.f[1] = fast_sin(birdbot_moby->rot.f[2]) * birdbot_vars->path_movement_step_length;
@@ -1247,13 +1247,13 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_moby->state == 5 || birdbot_moby->state == BIRDBOT_STATE_FIRE_BURST ||
         birdbot_moby->state == BIRDBOT_STATE_RECOVER_FROM_BURST ||
         birdbot_moby->state == BIRDBOT_STATE_BRAKE_AND_FACE_TARGET) {
-        birdbot_vars->fE8 += frame_time_sq * 9.8f;
-        birdbot_moby->pos.f[2] -= birdbot_vars->fE8 - 2.0f;
+        birdbot_vars->fall_motion_step += frame_time_sq * 9.8f;
+        birdbot_moby->pos.f[2] -= birdbot_vars->fall_motion_step - 2.0f;
         ground = probe_ground_height(&birdbot_moby->pos, 0, 0.5f);
         birdbot_moby->pos.f[2] -= 2.0f;
         if (birdbot_moby->pos.f[2] < ground) {
             birdbot_moby->pos.f[2] = ground;
-            birdbot_vars->fE8 = 0.0f;
+            birdbot_vars->fall_motion_step = 0.0f;
         }
     } else {
         ground = probe_ground_height(&birdbot_moby->pos, 0, 0.5f);
