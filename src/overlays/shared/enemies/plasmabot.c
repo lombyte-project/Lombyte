@@ -86,7 +86,7 @@ typedef struct PlasmabotVars {
     u8  pad118[0x8];
     u8  unk120[0x10];
     u8  unk130[0x30];
-    u8  unk160[0x10];
+    u8  manipulator_attachment_header[0x10];
     u8  aim_quaternion_storage[0x70];
     u8  unk1E0[0x10];
     u8  unk1F0[0x10];
@@ -98,18 +98,18 @@ typedef struct PlasmabotVars {
     s32 heading_angular_velocity;
     s32 path_index; /* 0x240: into l14_paths, -1: none */
     s32 target_path_index;
-    s16 unk248;
+    s16 path_traversal_delay_timer;
     u8  pad24A[0x2];
     s32 path_segment_index;
     f32 path_offset_and_spring_velocities[4];
     s16 beam_cooldown_timer;
-    s16 unk262;
-    s32 unk264;
+    s16 aim_sweep_timer;
+    s32 hatch_index;
     f32 aim_yaw_offset;
     s32 aim_yaw_angular_velocity;
     s32 unk270;
     s32 aim_joint_angular_velocity;
-    f32 unk278;
+    f32 aim_sweep_center_angle;
     f32 path_traversal_direction;
     s32 aim_pitch_angle;
     s32 aim_pitch_angular_velocity;
@@ -436,7 +436,7 @@ void plasmabot_update(char *moby) {
             }
         }
         if (((unsigned char *)plasmabot_update_private_vars)[0x24A] != 0 &&
-            plasmabot_update_private_vars->unk264 < 0) {
+            plasmabot_update_private_vars->hatch_index < 0) {
             DebugPrint(plasmabot_missing_hatch_index_format, ((short)MOBY(moby)->save_id));
             {
                 call_D678(moby);
@@ -459,7 +459,7 @@ void plasmabot_update(char *moby) {
         plasmabot_update_private_vars->unk58 = truncate_float_to_s32(15.0f);
         plasmabot_update_private_vars->unk5A = truncate_float_to_s32(16.0f);
         plasmabot_update_private_vars->path_traversal_direction = 1.0f;
-        plasmabot_update_private_vars->unk248 = 0;
+        plasmabot_update_private_vars->path_traversal_delay_timer = 0;
         plasmabot_update_private_vars->heading_angular_velocity = 0;
         plasmabot_update_private_vars->beam_cooldown_timer = 0;
         *(int *)&plasmabot_update_private_vars->aim_yaw_offset = 0;
@@ -472,7 +472,7 @@ void plasmabot_update(char *moby) {
             attach_manipulator(moby, 2, &plasmabot_update_private_vars->unk120);
         }
         if (((unsigned char *)plasmabot_update_private_vars)[0x161] == 0) {
-            attach_manipulator(moby, 3, &plasmabot_update_private_vars->unk160);
+            attach_manipulator(moby, 3, &plasmabot_update_private_vars->manipulator_attachment_header);
         }
         if (((unsigned char *)plasmabot_update_private_vars)[0x24A] != 0) {
             deactivate_plasmabot(moby);
@@ -491,13 +491,13 @@ void plasmabot_update(char *moby) {
         float *path;
         if (plasmabot_update_private_vars->target_selection_status == 2)
             return;
-        if (fast_dec_timer_s16(&plasmabot_update_private_vars->unk248) == 0)
+        if (fast_dec_timer_s16(&plasmabot_update_private_vars->path_traversal_delay_timer) == 0)
             return;
-        if (refresh_plasmabot_hatch_reset_delay(plasmabot_update_private_vars->unk264) == 0)
+        if (refresh_plasmabot_hatch_reset_delay(plasmabot_update_private_vars->hatch_index) == 0)
             return;
         if (call_4BF0(moby) == 0)
             return;
-        plasmabot_update_private_vars->unk248 =
+        plasmabot_update_private_vars->path_traversal_delay_timer =
             scale_game_frames(plasmabot_path_traversal_delay_frames);
         activate_plasmabot(moby);
         ((unsigned char *)moby)[0x20] = 2;
@@ -565,7 +565,7 @@ void plasmabot_update(char *moby) {
                   frame_time * 6.2831855f);
         if (plasmabot_update_private_vars->target_selection_status == 2)
             break;
-        if (fast_dec_timer_s16(&plasmabot_update_private_vars->unk248) == 0)
+        if (fast_dec_timer_s16(&plasmabot_update_private_vars->path_traversal_delay_timer) == 0)
             break;
         ((unsigned char *)moby)[0x20] = 3;
         blend_moby_animation(moby, 3, 0, scale_game_frames(10));
@@ -586,14 +586,14 @@ void plasmabot_update(char *moby) {
         break;
     case PLASMABOT_FOLLOW_PATH_BACKWARD:
         if (((unsigned char *)plasmabot_update_private_vars)[0x24A] != 0) {
-            refresh_plasmabot_hatch_reset_delay(plasmabot_update_private_vars->unk264);
+            refresh_plasmabot_hatch_reset_delay(plasmabot_update_private_vars->hatch_index);
         }
         if (follow_plasmabot_path(moby) != 0) {
             if (((unsigned char *)plasmabot_update_private_vars)[0x24A] != 0) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
                 ((unsigned char *)moby)[0x20] = 9;
             } else {
-                plasmabot_update_private_vars->unk248 =
+                plasmabot_update_private_vars->path_traversal_delay_timer =
                     scale_game_frames(plasmabot_path_traversal_delay_frames);
                 ((unsigned char *)moby)[0x20] = 0xD;
             }
@@ -652,10 +652,10 @@ void plasmabot_update(char *moby) {
                                               &MOBY(plasmabot_aim_target_moby)->pos) != 0)
             break;
         reset_listed_plasmabot_beam_cooldowns(((unsigned char *)moby)[0x21]);
-        plasmabot_update_private_vars->unk278 = ang;
+        plasmabot_update_private_vars->aim_sweep_center_angle = ang;
         ((unsigned char *)moby)[0x20] = 5;
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
-        plasmabot_update_private_vars->unk262 =
+        plasmabot_update_private_vars->aim_sweep_timer =
             scale_game_frames(l14_plasmabot_aim_sweep_duration_frames);
         break;
     }
@@ -682,11 +682,11 @@ void plasmabot_update(char *moby) {
         flag = 0;
         ang = fast_arc_tan(MOBY(plasmabot_aim_target_moby)->pos.x - MOBY(moby)->pos.x,
                            MOBY(plasmabot_aim_target_moby)->pos.y - MOBY(moby)->pos.y);
-        progress = convert_integer_to_float(plasmabot_update_private_vars->unk262);
+        progress = convert_integer_to_float(plasmabot_update_private_vars->aim_sweep_timer);
         progress = progress / convert_integer_to_float(
                                   scale_game_frames(l14_plasmabot_aim_sweep_duration_frames));
         sweep = l14_plasmabot_aim_sweep_half_angle;
-        angle = fast_subtract_rotations(plasmabot_update_private_vars->unk278,
+        angle = fast_subtract_rotations(plasmabot_update_private_vars->aim_sweep_center_angle,
                                         -sweep + (sweep + sweep) * progress);
         if (((unsigned char *)plasmabot_update_private_vars)[0x24B] != 0) {
             if (MOBY(plasmabot_aim_target_moby)->pos.z + 0.1f - MOBY(moby)->pos.z < 0.0f) {
@@ -720,7 +720,7 @@ void plasmabot_update(char *moby) {
             qcopy(end, D_L14_00174560);
         }
         set_beam_origin_transform_and_endpoint(moby, bone_transform_scratch, end);
-        if (fast_dec_timer_s16(&plasmabot_update_private_vars->unk262) != 0) {
+        if (fast_dec_timer_s16(&plasmabot_update_private_vars->aim_sweep_timer) != 0) {
             blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 7;
             release_beam_slot_by_id(moby);
