@@ -71,7 +71,7 @@ typedef struct Obj_301070 {
 typedef struct Busy {
     int  f0;
     char pad4[0x20];
-    int  f24;
+    int  current_help_message_id;
 } Busy;
 
 extern void  attach_shared_manipulator_to_matching_class_moby(char *) __asm__("FUN_L03_002db480");
@@ -114,6 +114,9 @@ void fred_update(struct Moby *moby) {
         RAMP_FRED_POST_CUTSCENE_SCALAR_TO_ZERO = 4,
         WAIT_FOR_FRED_REMOVAL_TRIGGER = 5
     };
+    enum {
+        NPC_DIALOGUE_ACTIVATION_AUTOMATIC = 1
+    };
     Data_301070 *fred_vars = *(struct Data_301070 **)&moby->pvars;
     float        rate, head_rate;
     int          tracking;
@@ -149,7 +152,7 @@ void fred_update(struct Moby *moby) {
         initialize_npc_dialogue(moby, fred_vars);
         break;
     case UPDATE_FRED_DIALOGUE:
-        if (fred_vars->dialogue_activation_mode == 1 &&
+        if (fred_vars->dialogue_activation_mode == NPC_DIALOGUE_ACTIVATION_AUTOMATIC &&
             is_point_inside_clip_volume(&hero.motion.pos, fred_vars->f168) != 0) {
             fred_vars->fC = 16.0f;
         } else {
@@ -266,7 +269,7 @@ void fred_update(struct Moby *moby) {
             set_camera_position(pos);
             set_camera_rotation(rot);
             if (fred_vars->f178 >= 1.0f ||
-                (((Busy *)D_L06_00179B90)->f0 == 0 && ((Busy *)D_L06_00179B90)->f24 == -1 &&
+                (((Busy *)D_L06_00179B90)->f0 == 0 && ((Busy *)D_L06_00179B90)->current_help_message_id == -1 &&
                  fred_vars->f178 > 0.2f)) {
                 approach_value(&D_L06_0015F3FC_macro, 1.0f, frame_time_macro * 4.0f);
             } else {
