@@ -30,6 +30,10 @@ extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 void       apply_hero_ground_material_effects(void) __asm__("FUN_L05_00239fc0");
 
 void apply_hero_ground_material_effects(void) {
+    enum {
+        GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH = 3,
+        GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS = 11
+    };
     u8  save = hero.ground_sound_class;
     s16 saved_ground_type = hero.ground_type;
     f32 water_depth;
@@ -61,7 +65,7 @@ void apply_hero_ground_material_effects(void) {
             hero.wading = 1;
         hero.base_condition = 1;
     }
-    if (saved_ground_type == 3)
+    if (saved_ground_type == GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH)
         hero.selector_3 = 1;
     if (current_level_index == 13 && hero.state.current != 0x7B &&
         FUN_L00_001f0d60_239fc0(
@@ -69,7 +73,7 @@ void apply_hero_ground_material_effects(void) {
         collision_hit_material() == 11) {
         goto s7B;
     }
-    if (saved_ground_type == 11)
+    if (saved_ground_type == GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS)
         hero.selector_11 = 1;
     if (saved_ground_type == 5)
         hero.selector_5 = 1;
