@@ -128,7 +128,7 @@ typedef struct SnagglebeastVars {
     u8  unk1C4;
     u8  sphere_fade_direction;
     u8  sphere_shade;
-    u8  unk1C7;
+    u8  hero_capture_attack_enabled;
     f32 sphere_fade;
     s32 unk1CC;
     s32 unk1D0;
@@ -565,7 +565,7 @@ void process_snagglebeast_damage(char             *moby,
                 }
                 if ((wide < original_health && *health <= wide) ||
                     (narrow < original_health && *health <= narrow))
-                    snagglebeast_instance_vars->unk1C7 = 1;
+                    snagglebeast_instance_vars->hero_capture_attack_enabled = 1;
             }
         }
         goto decay_hit;
@@ -1054,7 +1054,7 @@ void snagglebeast_update(unsigned char *moby) {
     if (fast_dec_timer_s16(&snagglebeast_instance_state->timer_19A) && target_distance > 9.0f)
         timer19a = 1;
     sight_ready = 0;
-    if (snagglebeast_instance_state->unk1C7 != 0) {
+    if (snagglebeast_instance_state->hero_capture_attack_enabled != 0) {
         char *g = ((char *)&hero);
         if (sight.moby == *(void **)(g + 0x2080) && target_distance < 30.0f &&
             absolute_float(fast_subtract_rotations(target_angle, MOBY(moby)->rot.z)) < 1.3962634f) {
@@ -1245,7 +1245,7 @@ void snagglebeast_update(unsigned char *moby) {
             moby + 0x10, D_L07_001B0530[snagglebeast_instance_state->nav_path], 0.0f);
         suck_reset(moby);
         MOBY(moby)->scale *= 1.75f;
-        snagglebeast_instance_state->unk1C7 = 0;
+        snagglebeast_instance_state->hero_capture_attack_enabled = 0;
         snagglebeast_instance_state->turn_start_angle = 1.7453293f;
         snagglebeast_instance_state->unk29 = 1;
         snagglebeast_instance_state->unk58 = truncate_float_to_s32(30.0f);
@@ -2012,7 +2012,7 @@ void snagglebeast_update(unsigned char *moby) {
                         if (*(int *)(g3 + 0x2084) == 0x78)
                             hero_set_state(0, 1);
                     }
-                    snagglebeast_instance_state->unk1C7 = 0;
+                    snagglebeast_instance_state->hero_capture_attack_enabled = 0;
                     if (snagglebeast_instance_state->voice != -1) {
                         char *sl = (voice_slot_state_base - 0x74) +
                                    snagglebeast_instance_state->voice * 0x70;
@@ -2112,7 +2112,7 @@ void snagglebeast_update(unsigned char *moby) {
                     hero_set_state(0, 1);
             }
             snagglebeast_instance_state->timer = scale_game_frames(0x46);
-            snagglebeast_instance_state->unk1C7 = 0;
+            snagglebeast_instance_state->hero_capture_attack_enabled = 0;
             if (snagglebeast_instance_state->voice != -1) {
                 char *sl =
                     (voice_slot_state_base - 0x74) + snagglebeast_instance_state->voice * 0x70;
