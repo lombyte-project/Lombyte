@@ -71,7 +71,7 @@ typedef struct Ship_5E48 {
     char               p21[3];
     char              *p24;
     char               p28[4];
-    float              f2C;
+    float              scale;
     char               p30;
     unsigned char      b31;
     short              s32;
@@ -394,10 +394,10 @@ void blarg_ship_update(Ship_5E48 *ship) {
         break;
     case BLARG_SHIP_STATE_FLY_AWAY:
         ship->pos.z += D_0015ED6C * 10.0f;
-        ship->f2C *= frame_scale * -0.015299976f + 1.0f;
+        ship->scale *= frame_scale * -0.015299976f + 1.0f;
         if (250.0f < ship->pos.z)
             goto del;
-        if (!(ship->f2C < 0.01f))
+        if (!(ship->scale < 0.01f))
             break;
         goto del;
     case BLARG_SHIP_STATE_HIT_REACTION: {
