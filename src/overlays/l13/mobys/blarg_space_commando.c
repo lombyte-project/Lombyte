@@ -1073,7 +1073,7 @@ extern short point_spark_xy_multiplier_range_end __asm__("D_L13_00161EDC") __att
 extern short point_spark_z_range_start __asm__("D_L13_00161EE0") __attribute__((sda));
 extern short point_spark_z_range_end __asm__("D_L13_00161EE4") __attribute__((sda));
 extern short point_spark_spawn_random_threshold __asm__("D_L13_00161EE8") __attribute__((sda));
-int          D_L13_00161EEC = 24;
+int          l13_point_spark_table_index_and_flags __asm__("D_L13_00161EEC") = 24;
 
 void spawn_point_table_sparks(struct Moby *moby) __asm__("FUN_L13_00309bc8");
 
@@ -1141,6 +1141,6 @@ void spawn_point_table_sparks(struct Moby *moby) {
                     frame_count,
                     second_frame_count,
                     third_frame_count,
-                    D_L13_00161EEC);
+                    l13_point_spark_table_index_and_flags);
     }
 }
