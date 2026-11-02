@@ -1224,9 +1224,9 @@ typedef struct {
     f32 unk60;    /* 0x60: speed */
     s32 unk64;
     u8  pad68[0xE];
-    s16 unk76;
+    s16 near_wall_launch_flag;
     u8  pad78[6];
-    s16 unk7E;
+    s16 has_aim_target_position;
 } ThrowPvars;
 
 #include "rnc/overlay/shared/camera/level_camera.h"
@@ -1272,7 +1272,7 @@ void launch_hero_wrench(void) {
         has_target = 0;
         if (target != NULL && is_wrench_moby(target)) {
             tpv = (ThrowPvars *)target->pvars;
-            if (tpv->unk7E) {
+            if (tpv->has_aim_target_position) {
                 has_target = 1;
                 transform_hero_local_offset_to_world(aim_origin_or_euler_angles, 0.5f, 0.0f, 0.5f);
                 fast_vec_sub(delta, tpv->unk50, aim_origin_or_euler_angles);
@@ -1297,7 +1297,7 @@ void launch_hero_wrench(void) {
     launched_item_vars = (ThrowPvars *)equipped_wrench_moby->pvars;
     if (hero.wall_probe_distance < 1.2f && 0.6632251f < hero.wall_normal_pitch &&
         !hero.wall_probe_moby_in_class_range) {
-        launched_item_vars->unk76 = 1;
+        launched_item_vars->near_wall_launch_flag = 1;
     }
     clear_u64_value(launched_item_vars->unk40);
     if (!aimed) {
