@@ -20,12 +20,12 @@ int update_item_preview_moby(struct MenuScreen *menu) {
     struct MenuScreen *grid = menu_system.current->focus;
     int                selected_item_id = grid->data.grid.cells[grid->data.grid.selected_cell].id;
     short              current_preview_class;
-    MenuItemInfo      *rec;
+    MenuItemInfo      *selected_item_info;
     short              want;
 
     current_preview_class = menu->data.preview.moby != 0 ? menu->data.preview.moby->oclass : -1;
-    rec = &menu_item_info[selected_item_id];
-    want = rec->preview_class;
+    selected_item_info = &menu_item_info[selected_item_id];
+    want = selected_item_info->preview_class;
     if (want != -1 && current_preview_class == -1) {
         struct Moby *spawned_moby = create_menu_preview_moby(want);
 
