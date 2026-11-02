@@ -336,7 +336,7 @@ extern short height_adjusted_spark_pause_duration_max_gp __asm__("D_L10_00162048
     __attribute__((sda));
 extern short height_adjusted_spark_pause_duration_min_gp __asm__("D_L10_00162044")
     __attribute__((sda));
-int          D_L10_0016204C = 24;
+int          l10_height_adjusted_spark_lookup_index_and_flags __asm__("D_L10_0016204C") = 24;
 extern short height_adjusted_spark_height_derived_frame_count_scale_gp __asm__("D_L10_00162050")
     __attribute__((sda));
 
@@ -409,7 +409,7 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
                 frame_count,
                 second_frame_count,
                 third_frame_count,
-                D_L10_0016204C);
+                l10_height_adjusted_spark_lookup_index_and_flags);
     *timer = truncate_float_to_s32(
         random_float_between((float)*(int *)&height_adjusted_spark_timer_reset_min_gp,
                              (float)*(int *)&height_adjusted_spark_timer_reset_max_gp));
