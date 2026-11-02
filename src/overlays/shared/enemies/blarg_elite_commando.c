@@ -91,30 +91,30 @@ typedef struct L16DamageData {
     f32           unk294;
     f32           joint_3_target_yaw;
     u8            pad29C[0x14];
-    f32           unk2B0;
-    f32           unk2B4;
+    f32           initial_position_x;
+    f32           initial_position_y;
     u8            pad2B8[0x4];
     f32           cached_position_z;
     f32           unk2C0;
-    f32           unk2C4;
+    f32           base_position_y;
     f32           unk2C8;
     f32           parent_heading_offset;
     char         *unk2D0;
     f32           movement_step_length;
-    u8            unk2D8[0x4];
+    u8            heading_angular_step[0x4];
     s16           state_countdown_ticks;
-    u16           unk2DE;
+    u16           rocket_fire_cycle_count;
     int           pursuit_timer;
-    f32           unk2E4;
+    f32           bobbing_z_phase_step;
     f32           unk2E8;
-    f32           unk2EC;
-    f32           unk2F0;
+    f32           bobbing_amplitude;
+    f32           bobbing_x_phase_step;
     f32           unk2F4;
     f32           unk2F8;
-    f32           unk2FC;
+    f32           bobbing_y_phase;
     s16           selected_path_node_index;
-    s16           unk302;
-    s32           unk304;
+    s16           patrol_countdown_ticks;
+    s32           voice_playback_handle;
     int           reward_hits;
 } L16DamageData;
 
@@ -243,19 +243,19 @@ void blarg_elite_commando_update(char *commando_moby) {
         manipulator_set_scale(&commando_data->unk130, 2.5f);
     switch (((unsigned char *)commando_moby)[0x20]) {
     case COMMANDO_STATE_INITIALIZE:
-        *(int *)&commando_data->unk2EC = 0;
+        *(int *)&commando_data->bobbing_amplitude = 0;
         commando_data->unk29 = 1;
         commando_data->unk24 = 3;
         commando_data->unk28 = 2;
         commando_data->unk30 = 1.5f;
         commando_data->health = 3.0f;
         commando_data->unk2F4 = random_angle_radians();
-        commando_data->unk2FC = random_angle_radians();
+        commando_data->bobbing_y_phase = random_angle_radians();
         commando_data->unk2E8 = random_angle_radians();
-        commando_data->unk2F0 = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
+        commando_data->bobbing_x_phase_step = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
         commando_data->unk2F8 = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
-        commando_data->unk2E4 = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
-        commando_data->unk302 =
+        commando_data->bobbing_z_phase_step = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
+        commando_data->patrol_countdown_ticks =
             truncate_float_to_s32(scale_time(random_float_between(180.0f, 360.0f)));
         if (random_integer_below(2))
             MOBY(commando_moby)->flags |= 0x8000;
@@ -271,7 +271,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             }
             commando_data->reward_hits = 1;
             qcopy(&commando_data->unk2C0, position);
-            qcopy(&commando_data->unk2B0, position);
+            qcopy(&commando_data->initial_position_x, position);
         }
         if (commando_data->unk128) {
             MOBY(commando_moby)->state = COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM;
@@ -303,15 +303,15 @@ void blarg_elite_commando_update(char *commando_moby) {
             func_L16_002D5280_update(commando_moby, scratch_vector, 1);
         } else {
             heading = (float *)&MOBY(commando_moby)->rot.z;
-            angle = fast_arc_tan(commando_data->unk2B0 - MOBY(commando_moby)->pos.x,
-                                 commando_data->unk2B4 - MOBY(commando_moby)->pos.y);
+            angle = fast_arc_tan(commando_data->initial_position_x - MOBY(commando_moby)->pos.x,
+                                 commando_data->initial_position_y - MOBY(commando_moby)->pos.y);
             approach_angle(heading,
-                           (float *)(&commando_data->unk2D8),
+                           (float *)(&commando_data->heading_angular_step),
                            angle,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
                            frame_time * 12.566371f);
-            distance = func_L16_002D5280_update(commando_moby, &commando_data->unk2B0, 1);
+            distance = func_L16_002D5280_update(commando_moby, &commando_data->initial_position_x, 1);
             if (((unsigned char *)commando_moby)[0x53] != 0)
                 blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
             if (distance < 1.0f)
@@ -335,11 +335,11 @@ void blarg_elite_commando_update(char *commando_moby) {
                     }
                 }
             }
-        } else if (fast_dec_timer_s16(&commando_data->unk302)) {
+        } else if (fast_dec_timer_s16(&commando_data->patrol_countdown_ticks)) {
             if (commando_data->unk120 >= 0) {
                 commando_data->selected_path_node_index = (commando_data->selected_path_node_index + 1) % 2;
                 MOBY(commando_moby)->state = COMMANDO_STATE_MOVE_TO_PATROL_NODE;
-                commando_data->unk302 = scale_game_frames(180);
+                commando_data->patrol_countdown_ticks = scale_game_frames(180);
                 select_blarg_elite_commando_movement_animation(commando_moby);
             }
         }
@@ -353,13 +353,13 @@ void blarg_elite_commando_update(char *commando_moby) {
             MOBY(commando_moby)->state = COMMANDO_STATE_IDLE;
             if (((unsigned char *)commando_moby)[0x53] != 0)
                 blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
-            commando_data->unk302 =
+            commando_data->patrol_countdown_ticks =
                 truncate_float_to_s32(scale_time(random_float_between(180.0f, 360.0f)));
-        } else if (fast_dec_timer_s16(&commando_data->unk302)) {
+        } else if (fast_dec_timer_s16(&commando_data->patrol_countdown_ticks)) {
             MOBY(commando_moby)->state = COMMANDO_STATE_IDLE;
             if (((unsigned char *)commando_moby)[0x53] != 0)
                 blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
-            commando_data->unk302 =
+            commando_data->patrol_countdown_ticks =
                 truncate_float_to_s32(scale_time(random_float_between(180.0f, 360.0f)));
         }
         if (commando_data->movement_step_length < 2.0f * frame_time && path_distance < 0.5f) {
@@ -375,7 +375,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         angle = fast_arc_tan(target[0] - MOBY(commando_moby)->pos.x,
                              target[1] - MOBY(commando_moby)->pos.y);
         approach_angle(heading,
-                       (float *)(&commando_data->unk2D8),
+                       (float *)(&commando_data->heading_angular_step),
                        angle,
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
@@ -392,7 +392,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         angle = fast_arc_tan(target[0] - MOBY(commando_moby)->pos.x,
                              target[1] - MOBY(commando_moby)->pos.y);
         approach_angle(heading,
-                       (float *)(&commando_data->unk2D8),
+                       (float *)(&commando_data->heading_angular_step),
                        angle,
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
@@ -405,14 +405,14 @@ void blarg_elite_commando_update(char *commando_moby) {
             fast_vec_normalize(delta, delta, frame_time * 20.0f);
             spawn_blarg_elite_commando_rocket(commando_moby, delta, (char *)scratch_vector);
         } else if (is_value_within_interpolated_window(commando_moby, 10.0f)) {
-            int count = commando_data->unk2DE + 1;
-            commando_data->unk2DE = count;
+            int count = commando_data->rocket_fire_cycle_count + 1;
+            commando_data->rocket_fire_cycle_count = count;
             if ((short)count >= 3) {
                 MOBY(commando_moby)->state = COMMANDO_STATE_IDLE;
                 if (((unsigned char *)commando_moby)[0x53] != 0)
                     blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
                 commando_data->state_countdown_ticks = scale_game_frames(60);
-                commando_data->unk2DE = 0;
+                commando_data->rocket_fire_cycle_count = 0;
             }
         }
         break;
@@ -469,23 +469,23 @@ void blarg_elite_commando_update(char *commando_moby) {
         commando_data->cached_position_z = MOBY(commando_moby)->pos.z;
         if (((unsigned char *)commando_moby)[0x20] != 0 &&
             ((unsigned char *)commando_moby)[0x20] != 10) {
-            approach_value((float *)(&commando_data->unk2EC), 0.25f, frame_time * 0.25f);
+            approach_value((float *)(&commando_data->bobbing_amplitude), 0.25f, frame_time * 0.25f);
             commando_data->unk2F4 =
-                fast_add_rotations(commando_data->unk2F4, commando_data->unk2F0);
-            commando_data->unk2FC =
-                fast_add_rotations(commando_data->unk2FC, commando_data->unk2F8);
+                fast_add_rotations(commando_data->unk2F4, commando_data->bobbing_x_phase_step);
+            commando_data->bobbing_y_phase =
+                fast_add_rotations(commando_data->bobbing_y_phase, commando_data->unk2F8);
             commando_data->unk2E8 =
-                fast_add_rotations(commando_data->unk2E8, commando_data->unk2E4);
+                fast_add_rotations(commando_data->unk2E8, commando_data->bobbing_z_phase_step);
             MOBY(commando_moby)->pos.x =
-                commando_data->unk2C0 + commando_data->unk2EC * fast_sin(commando_data->unk2F4);
+                commando_data->unk2C0 + commando_data->bobbing_amplitude * fast_sin(commando_data->unk2F4);
             MOBY(commando_moby)->pos.y =
-                commando_data->unk2C4 + commando_data->unk2EC * fast_sin(commando_data->unk2FC);
+                commando_data->base_position_y + commando_data->bobbing_amplitude * fast_sin(commando_data->bobbing_y_phase);
             MOBY(commando_moby)->pos.z =
-                commando_data->unk2C8 + commando_data->unk2EC * fast_sin(commando_data->unk2E8);
+                commando_data->unk2C8 + commando_data->bobbing_amplitude * fast_sin(commando_data->unk2E8);
         }
         if (fast_vec_dist(&MOBY(commando_moby)->pos, D_L16_001671C0) < 32.0f &&
-            !voice_is_playing(commando_moby, commando_data->unk304))
-            commando_data->unk304 = func_0022ED80_update(7, 4, commando_moby);
+            !voice_is_playing(commando_moby, commando_data->voice_playback_handle))
+            commando_data->voice_playback_handle = func_0022ED80_update(7, 4, commando_moby);
     }
     if (blarg_elite_commando_joint_aim_enabled_gp)
         update_blarg_elite_commando_joint_aim(commando_moby);
