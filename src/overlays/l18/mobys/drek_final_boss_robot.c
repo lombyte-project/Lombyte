@@ -1781,7 +1781,7 @@ typedef struct {
     char  pad0[0x204];
     int   f204[3];
     char  pad210[0x18];
-    int   f228[2];
+    int   phase_transition_ground_node_indices[2];
     int   f230[4];
     char  pad240[0x10];
     int   f250[4];
@@ -2034,7 +2034,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                 qcopy(
                     V90,
                     ((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)
-                                                            ->f228[*(int *)(boss_data + 0x34C) - 1]]
+                                                            ->phase_transition_ground_node_indices[*(int *)(boss_data + 0x34C) - 1]]
                         .pos);
                 V90[2] += health_floor_or_transition_offset;
                 V90[2] = probe_ground_height(V90, 0, 0.5f);
