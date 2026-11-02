@@ -24,7 +24,7 @@ typedef struct UnfoldingColumnMoby {
     char                        pad7C[0x44];
     float                       rot[4]; /* 0xC0 */
     char                        padD0[0x10];
-    float                       fE0[4]; /* 0xE0 */
+    float                       piece_offset_direction[4]; /* 0xE0 */
     char                        padF0[0x10];
 } UnfoldingColumnMoby;
 
@@ -155,7 +155,7 @@ void unfolding_column_update(UnfoldingColumnMoby *moby) {
                                       remaining_timer_fraction);
         for (i = 0; i < 6; i++) {
             fast_vec_scale(position_offset,
-                           pivot->fE0,
+                           pivot->piece_offset_direction,
                            unfolding_column_piece_spacing * (float)i +
                                unfolding_column_first_piece_offset);
             fast_vec_add(pieces[i]->pos, pivot->pos, position_offset);
