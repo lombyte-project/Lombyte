@@ -37,6 +37,7 @@ GCC_URLS = (
     "https://ftp.gnu.org/gnu/gcc/gcc-2.95.2.tar.gz",
     "https://mirrors.kernel.org/gnu/gcc/gcc-2.95.2.tar.gz",
     "https://ftpmirror.gnu.org/gnu/gcc/gcc-2.95.2.tar.gz",
+    f"{game.MIRROR}/gcc-2.95.2.tar.gz",
 )
 GCC_SHA256 = "064e1cb06ea5d2f4a07ec46c1c64d771f74d04f404b6a6766bca2477f7d72482"
 GCC_TOP = "gcc-2.95.2"

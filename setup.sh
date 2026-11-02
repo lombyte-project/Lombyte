@@ -28,6 +28,9 @@ ELF_TARGET="$ROOT/config/us/SCUS_971.99"
 ELF_SHA=e050581032e4bb3f20341307da5b69b76f1574910519155380ea771e55c3c0c9
 
 # Pinned public downloads (SHA-256 checked before anything is installed).
+# A dead upstream link falls back to our copy of the open-source files
+# (github.com/lombyte-project/toolchain-mirror), pinned to a commit.
+MIRROR_URL=https://raw.githubusercontent.com/lombyte-project/toolchain-mirror/915a96d32d1b23d58558b82e4b2ba7a4f2820f51
 BINUTILS_URL=https://github.com/decompals/binutils-mips-ps2-decompals/releases/download/v0.10/binutils-mips-ps2-decompals-linux-x86-64.tar.gz
 BINUTILS_SHA=9fe31ea3ee1a37536f9f0e2e12c668e7c3cb99e59f5154bd2f1fc4762473094c
 OBJDIFF_URL=https://github.com/encounter/objdiff/releases/download/v3.8.0/objdiff-cli-linux-x86_64
@@ -51,6 +54,8 @@ SDK_MIRROR_COMMIT=5c8bdf31f6bdd82ba4456413594198b5bd469f43
 SDK_MIRROR_INCLUDE=local/sce/ee/gcc/lib/gcc-lib/ee/2.95.2/include
 SDK_MIRROR_STDARG_SHA=84945e1a49c2c9aeee025705c53d94f1b91999bd30e2cafa639d800cad852966
 SDK_MIRROR_VA_MIPS_SHA=af46841480f84b4620ca62c3f955cce20aac166928db5cdf17109ed71de41ce6
+SDK_HEADERS_FILE=gcc-2.95.2-ee-include.tar.xz
+SDK_HEADERS_SHA=237d1e6ba8bf9c40272f235ad062cba5ebe3d9677895b64efbdc6942a72860b6
 
 DOCKER_IMAGE=lombyte-dev
 DOCKER_BASE=ubuntu:24.04
@@ -119,7 +124,13 @@ replace_dir() { # target staged
     mv -- "$staged" "$target"
 }
 
-download() { # url sha path
+fetch() { # url path
+    curl --fail --location --retry 3 --retry-delay 2 --show-error --progress-bar "$1" --output "$2"
+}
+
+# The optional mirror-file is the file's name in the toolchain mirror, tried
+# when the url fails.
+download() { # url sha path [mirror-file]
     local url=$1 sha=$2 path=$3
     mkdir -p "$(dirname -- "$path")"
     if [[ -f "$path" ]] && sha_ok "$path" "$sha"; then
@@ -127,8 +138,11 @@ download() { # url sha path
     fi
     say "downloading $(basename -- "$path")"
     rm -f -- "$path"
-    curl --fail --location --retry 3 --retry-delay 2 --show-error --progress-bar \
-        "$url" --output "$path.part"
+    if ! fetch "$url" "$path.part"; then
+        [[ -n "${4:-}" ]] || die "could not download $url"
+        warn "$url failed; trying the toolchain mirror"
+        fetch "$MIRROR_URL/$4" "$path.part" || die "could not download $(basename -- "$path") from the toolchain mirror either"
+    fi
     if ! sha_ok "$path.part" "$sha"; then
         rm -f -- "$path.part"
         die "$(basename -- "$path") failed its SHA-256 check; the download is corrupt or the mirror changed"
@@ -291,7 +305,7 @@ install_binutils() {
     local target="$TOOLS/binutils-mips-ps2-decompals"
     [[ -x "$target/mips-ps2-decompals-ld" ]] && return
     local archive="$DOWNLOADS/binutils-mips-ps2-decompals-v0.10.tar.gz"
-    download "$BINUTILS_URL" "$BINUTILS_SHA" "$archive"
+    download "$BINUTILS_URL" "$BINUTILS_SHA" "$archive" binutils-mips-ps2-decompals-v0.10.tar.gz
     rm -rf -- "$STAGE/binutils"; mkdir -p "$STAGE/binutils"
     tar -xzf "$archive" -C "$STAGE/binutils"
     chmod 0755 "$STAGE/binutils"/mips-ps2-decompals-*
@@ -303,7 +317,7 @@ install_objdiff() {
     local target="$TOOLS/objdiff/objdiff-cli"
     [[ -x "$target" ]] && sha_ok "$target" "$OBJDIFF_SHA" && return
     local file="$DOWNLOADS/objdiff-cli-v3.8.0-linux-x86_64"
-    download "$OBJDIFF_URL" "$OBJDIFF_SHA" "$file"
+    download "$OBJDIFF_URL" "$OBJDIFF_SHA" "$file" objdiff-cli-v3.8.0-linux-x86_64
     mkdir -p "$(dirname -- "$target")"
     install -m 0755 "$file" "$target"
 }
@@ -318,6 +332,19 @@ install_sdk_compiler() {
     assert_sha "$STAGE/sdk/bin/ee-gcc" 64d0a50fef499da0b98177eb5e79e41dfb066ad44246b137c78a266ef97ee265
     assert_sha "$STAGE/sdk/lib/gcc-lib/ee/2.9-ee-991111-01/cc1" b9aef69f93efb949f15ea58189e8eef4a002b9fe4de5d3fcf89c34e1244ec026
     replace_dir "$target" "$STAGE/sdk"
+}
+
+# Sparse checkout of the pinned header folder; fails on any network error
+# (the checkout fetches blobs lazily, so it is a network step too).
+sdk_headers_from_git() { # dir
+    local mirror=$1
+    if [[ ! -d "$mirror/.git" ]]; then
+        say "fetching GCC 2.95.2 headers from the SDK mirror"
+        rm -rf -- "$mirror"
+        git clone --quiet --filter=blob:none --no-checkout "$SDK_MIRROR_URL" "$mirror" || return 1
+    fi
+    git -C "$mirror" sparse-checkout set --no-cone "$SDK_MIRROR_INCLUDE/*" &&
+        git -C "$mirror" checkout --quiet --detach "$SDK_MIRROR_COMMIT"
 }
 
 install_sn_compiler() {
@@ -339,13 +366,13 @@ install_sn_compiler() {
     python3 "$ROOT/scripts/patch-ps2eeas.py" "$assembler" "$STAGE/sn/ee/bin/Ps2EeAs.exe"
     # GCC 2.95.2 headers (stdarg.h, ...) from the Sony SDK mirror, pinned.
     local mirror="$DOWNLOADS/sce_ps2_sdk_24"
-    if [[ ! -d "$mirror/.git" ]]; then
-        say "fetching GCC 2.95.2 headers from the SDK mirror"
-        rm -rf -- "$mirror"
-        git clone --quiet --filter=blob:none --no-checkout "$SDK_MIRROR_URL" "$mirror"
+    if ! sdk_headers_from_git "$mirror"; then
+        # Same folder at the same commit, from the toolchain mirror.
+        warn "$SDK_MIRROR_URL failed; trying the toolchain mirror"
+        rm -rf -- "$mirror"; mkdir -p "$mirror"
+        download "$MIRROR_URL/$SDK_HEADERS_FILE" "$SDK_HEADERS_SHA" "$DOWNLOADS/$SDK_HEADERS_FILE"
+        tar -xJf "$DOWNLOADS/$SDK_HEADERS_FILE" -C "$mirror"
     fi
-    git -C "$mirror" sparse-checkout set --no-cone "$SDK_MIRROR_INCLUDE/*"
-    git -C "$mirror" checkout --quiet --detach "$SDK_MIRROR_COMMIT"
     assert_sha "$mirror/$SDK_MIRROR_INCLUDE/stdarg.h" "$SDK_MIRROR_STDARG_SHA"
     assert_sha "$mirror/$SDK_MIRROR_INCLUDE/va-mips.h" "$SDK_MIRROR_VA_MIPS_SHA"
     mkdir -p "$(dirname -- "$STAGE/sn/lib/gcc-lib/ee/2.95.2/include")"

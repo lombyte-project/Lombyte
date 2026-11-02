@@ -30,6 +30,9 @@ Other options:
 
 - Downloads the public toolchain into `tools/` and checks every file against a
   pinned SHA-256. The layout is in [tools/README.md](../../tools/README.md).
+  If an upstream link is gone, it takes the same file from
+  [toolchain-mirror](https://github.com/lombyte-project/toolchain-mirror),
+  which also explains why the toolchain looks the way it does.
 - Builds the game compiler from its GPL source and our
   [patches](../../patches/sce-991111b/README.md).
 - Creates `.venv` with the Python packages from `requirements.txt`.
