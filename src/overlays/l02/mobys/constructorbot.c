@@ -576,13 +576,13 @@ typedef struct {
     int           i94;
     float         knockback_collision_center_z_offset;
     char          pad9C[4];
-    float         fA0; /* 0xA0 */
+    float         knockback_collision_restitution; /* 0xA0 */
     char          padA4[9];
     unsigned char bAD; /* 0xAD */
     char          padAE[0xE];
-    float         fBC; /* 0xBC */
-    float         fC0;
-    float         fC4;
+    float         knockback_horizontal_target_speed; /* 0xBC */
+    float         knockback_ascent_animation_target_frame;
+    float         knockback_descent_animation_target_frame;
     char          padC8[0x158];
     char         *target; /* 0x220 */
 } Vars85b8;
@@ -618,8 +618,8 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
                     constructorbot_hit_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
                 moby_vars->knockback_initial_horizontal_speed = constructorbot_hit_knockback_horizontal_speed_gp * D_0015ED6C;
                 moby_vars->knockback_initial_vertical_speed = constructorbot_hit_knockback_vertical_speed_gp * D_0015ED6C;
-                moby_vars->fBC = constructorbot_knockback_horizontal_target_speed_gp * D_0015ED6C;
-                moby_vars->fA0 = 0.5f;
+                moby_vars->knockback_horizontal_target_speed = constructorbot_knockback_horizontal_target_speed_gp * D_0015ED6C;
+                moby_vars->knockback_collision_restitution = 0.5f;
                 moby_vars->i94 = 25;
                 moby_vars->bAD = 0;
                 trooper_start_knockback(fast_arc_tan(MOBY(moby)->pos.x - hero.motion.pos.f[0],
@@ -629,8 +629,8 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
                                         0xB,
                                         1,
                                         0);
-                moby_vars->fC0 = 6.5f;
-                moby_vars->fC4 = 11.0f;
+                moby_vars->knockback_ascent_animation_target_frame = 6.5f;
+                moby_vars->knockback_descent_animation_target_frame = 11.0f;
                 moby[0x20] = 0x10;
             }
         } else {
@@ -640,7 +640,7 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
                 constructorbot_death_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
             moby_vars->knockback_initial_horizontal_speed = constructorbot_death_knockback_horizontal_speed_gp * D_0015ED6C;
             moby_vars->knockback_initial_vertical_speed = constructorbot_death_knockback_vertical_speed_gp * D_0015ED6C;
-            moby_vars->fBC = constructorbot_knockback_horizontal_target_speed_gp * D_0015ED6C;
+            moby_vars->knockback_horizontal_target_speed = constructorbot_knockback_horizontal_target_speed_gp * D_0015ED6C;
             moby_vars->i94 = 9;
             moby_vars->bAD = 0;
             trooper_start_knockback(fast_arc_tan(MOBY(moby)->pos.x - hero.motion.pos.f[0],
@@ -650,8 +650,8 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
                                     0xE,
                                     1,
                                     0);
-            moby_vars->fC0 = 6.5f;
-            moby_vars->fC4 = 13.0f;
+            moby_vars->knockback_ascent_animation_target_frame = 6.5f;
+            moby_vars->knockback_descent_animation_target_frame = 13.0f;
             MOBY(moby)->flags &= 0xEFFF;
             moby_vars->flash = 0xFA;
             moby[0x20] = 0x11;
