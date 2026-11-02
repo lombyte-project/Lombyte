@@ -263,11 +263,11 @@ typedef struct {
     char          pad0[0x20];
     float         f20;
     short         h24;
-    short         h26;
+    short         damage_cooldown_frames;
     unsigned char b28;
     unsigned char b29;
     char          pad2A[0xE];
-    int           w38;
+    int           alert_refresh_requested;
     char          pad3C[4];
     RsVec         v40;
     char          pad50[8];
@@ -303,7 +303,7 @@ typedef struct {
     char          pad19C[8];
     float         ground_movement_step_length;
     char          pad1A8[0x10];
-    int           w1B8;
+    int           ground_movement_flags;
     char          pad1BC[0x14];
     RsVec         home_position;
     RsVec         flight_destination;
@@ -314,17 +314,17 @@ typedef struct {
     float         default_target_engagement_radius;
     float         walking_speed;
     short         h208;
-    short         h20A;
-    int           w20C;
-    int           w210;
-    short         h214;
-    short         h216;
+    short         ground_idle_preference;
+    int           random_flight_timer_frames;
+    int           chase_yaw_flip_timer_frames;
+    short         alert_timer_frames;
+    short         walk_range_radius;
     char         *walk_range_anchor;
-    int           w21C;
-    int           w220;
-    int           w224;
+    int           ground_navigation_path_index;
+    int           flight_path_index;
+    int           flight_waypoint_index;
     void         *p228;
-    int           w22C;
+    int           target_clip_volume_index;
     unsigned char x230[1];
 } RsVars;
 
@@ -502,20 +502,20 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         (char *)robosquawker_moby, (char *)&selected_target_record, robosquawker_vars->target_engagement_radius + 4.0f);
     tm = selected_target_record.moby;
     if (tm == 0 ||
-        (robosquawker_vars->h214 == 0 && robosquawker_vars->w22C != -1 &&
-         is_point_inside_clip_volume(&selected_target_record, robosquawker_vars->w22C) == 0)) {
+        (robosquawker_vars->alert_timer_frames == 0 && robosquawker_vars->target_clip_volume_index != -1 &&
+         is_point_inside_clip_volume(&selected_target_record, robosquawker_vars->target_clip_volume_index) == 0)) {
         selected_target_record.moby = 0;
         tm = 0;
         qzero(&selected_target_record);
     }
     qcopy(&previous_position, &robosquawker_moby->pos);
-    if (robosquawker_vars->w38 != 0) {
-        robosquawker_vars->h214 = scale_game_frames(0xF0);
+    if (robosquawker_vars->alert_refresh_requested != 0) {
+        robosquawker_vars->alert_timer_frames = scale_game_frames(0xF0);
     }
-    robosquawker_vars->w38 = 0;
+    robosquawker_vars->alert_refresh_requested = 0;
     fast_dec_timer_s16(&robosquawker_vars->h208);
     if (robosquawker_moby->state != ROBOSQUAWKER_STATE_INITIALIZE) {
-        if (fast_dec_timer_s16(&robosquawker_vars->h214) != 0) {
+        if (fast_dec_timer_s16(&robosquawker_vars->alert_timer_frames) != 0) {
             robosquawker_vars->target_engagement_radius = robosquawker_vars->home_position.f[3];
         } else {
             robosquawker_vars->target_engagement_radius = robosquawker_vars->default_target_engagement_radius;
@@ -525,10 +525,10 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     hit = FUN_L00_0025a420(robosquawker_moby, 0x330000, 0);
     resolve_moby_hit_response(
         robosquawker_moby, hit, &robosquawker_vars->f20, 0, &hits, &dmg, 0, 4);
-    fast_dec_timer_s16(&robosquawker_vars->h26);
-    if (robosquawker_vars->h26 < scale_game_frames(0x2D) && hit != 0 &&
+    fast_dec_timer_s16(&robosquawker_vars->damage_cooldown_frames);
+    if (robosquawker_vars->damage_cooldown_frames < scale_game_frames(0x2D) && hit != 0 &&
         robosquawker_moby->state != ROBOSQUAWKER_STATE_DEATH_KNOCKBACK) {
-        if (hit->src->hA6 >= 0xB0 && hit->src->hA6 <= 0xB1 && robosquawker_vars->h26 != 0) {
+        if (hit->src->hA6 >= 0xB0 && hit->src->hA6 <= 0xB1 && robosquawker_vars->damage_cooldown_frames != 0) {
             hit->damage_amount = 0.0f;
         }
         if (robosquawker_moby->command_recipient_list_index != 0xFF) {
@@ -583,7 +583,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_moby->state = ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK;
                 release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
                 *(unsigned char *)&robosquawker_vars->x110[7] = 0xFA;
-                robosquawker_vars->h26 = scale_game_frames(0x3C);
+                robosquawker_vars->damage_cooldown_frames = scale_game_frames(0x3C);
                 trooper_anim_update(robosquawker_moby, (short *)robosquawker_vars->x110);
             }
         }
@@ -593,7 +593,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     case ROBOSQUAWKER_STATE_INITIALIZE:
         qcopy(&robosquawker_vars->home_position, &robosquawker_moby->pos);
         robosquawker_vars->home_position.f[3] = robosquawker_vars->target_engagement_radius;
-        if (robosquawker_vars->h20A != 0) {
+        if (robosquawker_vars->ground_idle_preference != 0) {
             robosquawker_moby->state = ROBOSQUAWKER_STATE_GROUND_IDLE;
             if (robosquawker_moby->animation_index != 3) {
                 blend_moby_animation(robosquawker_moby, 3, 0, 0);
@@ -605,7 +605,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation(robosquawker_moby, 0, 0, 0);
             }
         }
-        robosquawker_vars->h214 = 0;
+        robosquawker_vars->alert_timer_frames = 0;
         robosquawker_vars->h208 = 0;
         robosquawker_vars->b29 = 0;
         robosquawker_vars->f20 = 1.0f;
@@ -617,14 +617,14 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         robosquawker_vars->ground_max_rise_height = 2.0f;
         robosquawker_vars->ground_max_drop_height = 2.0f;
         robosquawker_vars->ground_movement_step_length = robosquawker_vars->walking_speed * frame_time;
-        robosquawker_vars->w1B8 |= 0x30;
+        robosquawker_vars->ground_movement_flags |= 0x30;
         if (rand() & 1) {
             robosquawker_moby->h34 |= 0x8000;
         }
         robosquawker_vars->pD0 = &D_L13_001613A0;
-        if (robosquawker_vars->w220 != -1) {
-            robosquawker_vars->w224 = select_point_index_by_distance(
-                &robosquawker_moby->pos, walker_paths[robosquawker_vars->w220], 0.0f);
+        if (robosquawker_vars->flight_path_index != -1) {
+            robosquawker_vars->flight_waypoint_index = select_point_index_by_distance(
+                &robosquawker_moby->pos, walker_paths[robosquawker_vars->flight_path_index], 0.0f);
         }
         break;
     case ROBOSQUAWKER_STATE_FLIGHT_IDLE: {
@@ -646,7 +646,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->chase_yaw_offset_degrees = -robosquawker_vars->chase_yaw_offset_degrees;
             }
             robosquawker_vars->chase_yaw_offset_radians = robosquawker_vars->chase_yaw_offset_degrees * 0.017453292f;
-            robosquawker_vars->w210 = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->chase_yaw_flip_timer_frames = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             if (robosquawker_moby->animation_index != 0) {
                 blend_moby_animation(robosquawker_moby, 0, 0, scale_game_frames(3));
             }
@@ -654,23 +654,23 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             robosquawker_moby->state = ROBOSQUAWKER_STATE_LAND;
             clear_u64_value(&robosquawker_vars->v40);
             robosquawker_moby->bBC = 0;
-        } else if (robosquawker_vars->w220 != -1) {
+        } else if (robosquawker_vars->flight_path_index != -1) {
             char *path;
 
-            path = walker_paths[robosquawker_vars->w220];
-            if (fast_vec_dist(&robosquawker_moby->pos, path + (robosquawker_vars->w224 * 16 + 16)) <
+            path = walker_paths[robosquawker_vars->flight_path_index];
+            if (fast_vec_dist(&robosquawker_moby->pos, path + (robosquawker_vars->flight_waypoint_index * 16 + 16)) <
                 0.25f) {
-                robosquawker_vars->w224 += 1;
-                if (robosquawker_vars->w224 >= *(int *)path) {
-                    robosquawker_vars->w224 = 0;
+                robosquawker_vars->flight_waypoint_index += 1;
+                if (robosquawker_vars->flight_waypoint_index >= *(int *)path) {
+                    robosquawker_vars->flight_waypoint_index = 0;
                 }
             }
-            qcopy(&robosquawker_vars->flight_destination, path + robosquawker_vars->w224 * 16 + 16);
+            qcopy(&robosquawker_vars->flight_destination, path + robosquawker_vars->flight_waypoint_index * 16 + 16);
             robosquawker_moby->state = ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH;
-        } else if (fast_dec_timer(&robosquawker_vars->w20C) != 0) {
+        } else if (fast_dec_timer(&robosquawker_vars->random_flight_timer_frames) != 0) {
             int i;
 
-            robosquawker_vars->w20C = scale_game_frames(FUN_L00_00257b90(0x28, 0x78));
+            robosquawker_vars->random_flight_timer_frames = scale_game_frames(FUN_L00_00257b90(0x28, 0x78));
             for (i = 0; i < 10; i++) {
                 float r;
                 float a;
@@ -734,7 +734,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         float a;
         float d;
 
-        path = walker_paths[robosquawker_vars->w220];
+        path = walker_paths[robosquawker_vars->flight_path_index];
         a = fast_arc_tan(robosquawker_vars->flight_destination.f[0] - robosquawker_moby->pos.f[0],
                          robosquawker_vars->flight_destination.f[1] - robosquawker_moby->pos.f[1]);
         FUN_L00_00258278(
@@ -746,7 +746,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         if (coll_sphere(1.2f, &va, 0, robosquawker_moby) != 0) {
             int i;
 
-            robosquawker_vars->w20C = scale_game_frames(0x78);
+            robosquawker_vars->random_flight_timer_frames = scale_game_frames(0x78);
             for (i = 0; i < 10; i++) {
                 float r;
                 float an;
@@ -773,11 +773,11 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         if (d < fast_vec_length(&robosquawker_vars->v40)) {
             float g;
 
-            robosquawker_vars->w224 += 1;
-            if (robosquawker_vars->w224 >= *(int *)path) {
-                robosquawker_vars->w224 = 0;
+            robosquawker_vars->flight_waypoint_index += 1;
+            if (robosquawker_vars->flight_waypoint_index >= *(int *)path) {
+                robosquawker_vars->flight_waypoint_index = 0;
             }
-            qcopy(&robosquawker_vars->flight_destination, path + robosquawker_vars->w224 * 16 + 16);
+            qcopy(&robosquawker_vars->flight_destination, path + robosquawker_vars->flight_waypoint_index * 16 + 16);
             robosquawker_vars->flight_destination.f[2] =
                 robosquawker_vars->flight_destination.f[2] + random_float_between(-0.2f, 0.2f);
             g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
@@ -796,7 +796,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                     robosquawker_vars->chase_yaw_offset_degrees = -robosquawker_vars->chase_yaw_offset_degrees;
                 }
                 robosquawker_vars->chase_yaw_offset_radians = robosquawker_vars->chase_yaw_offset_degrees * 0.017453292f;
-                robosquawker_vars->w210 =
+                robosquawker_vars->chase_yaw_flip_timer_frames =
                     scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 if (robosquawker_moby->animation_index != 0) {
                     blend_moby_animation(robosquawker_moby, 0, 0, scale_game_frames(3));
@@ -828,7 +828,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->chase_yaw_offset_degrees = -robosquawker_vars->chase_yaw_offset_degrees;
             }
             robosquawker_vars->chase_yaw_offset_radians = robosquawker_vars->chase_yaw_offset_degrees * 0.017453292f;
-            robosquawker_vars->w210 = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->chase_yaw_flip_timer_frames = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             robosquawker_moby->state = ROBOSQUAWKER_STATE_CHASE_TARGET;
             clear_u64_value(&robosquawker_vars->v40);
             if (robosquawker_moby->animation_index != 5) {
@@ -873,14 +873,14 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->chase_yaw_offset_degrees = -robosquawker_vars->chase_yaw_offset_degrees;
             }
             robosquawker_vars->chase_yaw_offset_radians = robosquawker_vars->chase_yaw_offset_degrees * 0.017453292f;
-            robosquawker_vars->w210 = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->chase_yaw_flip_timer_frames = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             robosquawker_moby->state = ROBOSQUAWKER_STATE_CHASE_TARGET;
             if (robosquawker_moby->animation_index != 5) {
                 blend_moby_animation(robosquawker_moby, 5, 0, scale_game_frames(3));
             }
             robosquawker_moby->bBC = 0;
         } else if (fast_vec_length(&va) > robosquawker_vars->target_engagement_radius + 6.0f &&
-                   robosquawker_vars->h20A == 0) {
+                   robosquawker_vars->ground_idle_preference == 0) {
             qzero(&robosquawker_vars->v40);
             robosquawker_moby->state = ROBOSQUAWKER_STATE_TAKEOFF;
             if (robosquawker_moby->animation_index != 0) {
@@ -952,7 +952,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->chase_yaw_offset_degrees = -robosquawker_vars->chase_yaw_offset_degrees;
             }
             robosquawker_vars->chase_yaw_offset_radians = robosquawker_vars->chase_yaw_offset_degrees * 0.017453292f;
-            robosquawker_vars->w210 = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->chase_yaw_flip_timer_frames = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             if (robosquawker_moby->animation_index != 5) {
                 blend_moby_animation(robosquawker_moby, 5, 8, scale_game_frames(3));
             }
@@ -980,7 +980,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->chase_yaw_offset_degrees = -robosquawker_vars->chase_yaw_offset_degrees;
             }
             robosquawker_vars->chase_yaw_offset_radians = robosquawker_vars->chase_yaw_offset_degrees * 0.017453292f;
-            robosquawker_vars->w210 = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->chase_yaw_flip_timer_frames = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             robosquawker_moby->state = ROBOSQUAWKER_STATE_CHASE_TARGET;
             if (robosquawker_moby->animation_index != 5) {
                 blend_moby_animation(robosquawker_moby, 5, 0, scale_game_frames(3));
@@ -991,7 +991,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->chase_yaw_offset_degrees = -robosquawker_vars->chase_yaw_offset_degrees;
             }
             robosquawker_vars->chase_yaw_offset_radians = robosquawker_vars->chase_yaw_offset_degrees * 0.017453292f;
-            robosquawker_vars->w210 = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->chase_yaw_flip_timer_frames = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             robosquawker_moby->state = ROBOSQUAWKER_STATE_CHASE_TARGET;
             if (robosquawker_moby->animation_index != 5) {
                 blend_moby_animation(robosquawker_moby, 5, 0, scale_game_frames(3));
@@ -1012,9 +1012,9 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
 
         r = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
         r = r / vector_distance_xy(&robosquawker_moby->pos, &selected_target_record);
-        if (robosquawker_vars->w21C != -1) {
+        if (robosquawker_vars->ground_navigation_path_index != -1) {
             select_list_point_toward_target(robosquawker_moby,
-                                            walker_paths[robosquawker_vars->w21C],
+                                            walker_paths[robosquawker_vars->ground_navigation_path_index],
                                             &selected_target_record,
                                             &vb);
         } else {
@@ -1029,8 +1029,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         va.f[2] = 0.0f;
         res = move_moby_with_ground_and_collision_checks(
             robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
-        if (fast_dec_timer(&robosquawker_vars->w210) != 0) {
-            robosquawker_vars->w210 = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+        if (fast_dec_timer(&robosquawker_vars->chase_yaw_flip_timer_frames) != 0) {
+            robosquawker_vars->chase_yaw_flip_timer_frames = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             robosquawker_vars->chase_yaw_offset_radians = -robosquawker_vars->chase_yaw_offset_radians;
         }
         fast_vec_sub(&vc, &selected_target_record, &robosquawker_vars->home_position);
@@ -1119,9 +1119,9 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         int   res;
         float a;
 
-        if (robosquawker_vars->w21C != -1) {
+        if (robosquawker_vars->ground_navigation_path_index != -1) {
             select_list_point_toward_target(robosquawker_moby,
-                                            walker_paths[robosquawker_vars->w21C],
+                                            walker_paths[robosquawker_vars->ground_navigation_path_index],
                                             &robosquawker_vars->home_position,
                                             &vb);
         } else {
@@ -1216,9 +1216,9 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
 
         r = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
         r = r / vector_distance_xy(&robosquawker_moby->pos, &selected_target_record);
-        if (robosquawker_vars->w21C != -1) {
+        if (robosquawker_vars->ground_navigation_path_index != -1) {
             select_list_point_toward_target(robosquawker_moby,
-                                            walker_paths[robosquawker_vars->w21C],
+                                            walker_paths[robosquawker_vars->ground_navigation_path_index],
                                             &robosquawker_vars->home_position,
                                             &vb);
         } else {
@@ -1318,7 +1318,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         }
         if (robosquawker_vars->walk_range_anchor == 0 ||
             vector_distance_xy(&robosquawker_moby->pos, robosquawker_vars->walk_range_anchor + 0x10) >
-                convert_integer_to_float(robosquawker_vars->h216)) {
+                convert_integer_to_float(robosquawker_vars->walk_range_radius)) {
             robosquawker_moby->state = ROBOSQUAWKER_STATE_RETURN_HOME;
             if (robosquawker_moby->animation_index != 5) {
                 blend_moby_animation(robosquawker_moby, 5, 0, scale_game_frames(3));
