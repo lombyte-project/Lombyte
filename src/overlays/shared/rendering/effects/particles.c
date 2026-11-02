@@ -1840,18 +1840,18 @@ typedef struct {
 
 typedef struct {
     u8   p0[8];
-    s32  i8;
+    s32  far_distance_color;
     s32  iC;
     s16  h10;
     s16  h12;
     s16  h14;
     u8   p16[2];
-    f32 *p18;
+    f32 *motion_target_position;
 } R_274e48;
 
 typedef struct {
     u8       p0[4];
-    s32      i4;
+    s32      packed_particle_color;
     u8       b8;
     u8       p9;
     s16      hA;
@@ -1873,8 +1873,8 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
     if (D_L00_0015F5CC & 1)
         particle->b8++;
     distance_or_blend_factor = fast_vec_dist(&particle->v10, &(*(V_274e48 *)D_0013F420));
-    if (distance_or_blend_factor < 5.0f && 0.0f < r->p18[2]) {
-        fast_vec_sub(&motion_vector_scratch, r->p18, &particle->v10);
+    if (distance_or_blend_factor < 5.0f && 0.0f < r->motion_target_position[2]) {
+        fast_vec_sub(&motion_vector_scratch, r->motion_target_position, &particle->v10);
         if (0.5f < fast_vec_length(&motion_vector_scratch)) {
             fast_vec_normalize(
                 &motion_vector_scratch, &motion_vector_scratch, 0.1f / distance_or_blend_factor);
@@ -1889,15 +1889,15 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
         distance_or_blend_factor = 1.0f;
     else if (distance_or_blend_factor < 0.0f)
         distance_or_blend_factor = 0.0f;
-    particle->i4 = FUN_001fa6e0_274e48(r->i8, r->iC, distance_or_blend_factor);
+    particle->packed_particle_color = FUN_001fa6e0_274e48(r->far_distance_color, r->iC, distance_or_blend_factor);
     if (r->h10) {
         *(volatile s32 *)0x10000000 = 0;
         load_display_text_resource_entry(&applied_motion_delta, r);
         fast_vec_add(&particle->v10, &particle->v10, &applied_motion_delta);
         distance_or_blend_factor =
             convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h10);
-        particle->i4 = FUN_001fa6e0_274e48(
-            particle->i4 & 0xFFFFFF, particle->i4, 1.0f - distance_or_blend_factor);
+        particle->packed_particle_color = FUN_001fa6e0_274e48(
+            particle->packed_particle_color & 0xFFFFFF, particle->packed_particle_color, 1.0f - distance_or_blend_factor);
         if (fast_dec_timer_s16(&particle->hA)) {
             r->h10 = 0;
             particle->hA = r->h12;
@@ -1917,9 +1917,9 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
     } else {
         load_display_text_resource_entry(&applied_motion_delta, (u8 *)r + 4);
         fast_vec_add(&particle->v10, &particle->v10, &applied_motion_delta);
-        color_without_alpha = particle->i4 & 0xFFFFFF;
-        particle->i4 = FUN_001fa6e0_274e48(color_without_alpha,
-                                           particle->i4,
+        color_without_alpha = particle->packed_particle_color & 0xFFFFFF;
+        particle->packed_particle_color = FUN_001fa6e0_274e48(color_without_alpha,
+                                           particle->packed_particle_color,
                                            convert_integer_to_float(particle->hA) /
                                                convert_integer_to_float(r->h14));
         if (fast_dec_timer_s16(&particle->hA))
