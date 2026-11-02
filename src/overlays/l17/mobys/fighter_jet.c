@@ -1118,11 +1118,11 @@ extern float vector_length_xy(void *);
 
 #include "rnc/overlay/l17/mobys/fighter_jet_data/update_fighter_jet_flight_8.h"
 
-int D_L17_00162000 = 120;
+int l17_fighter_jet_startup_speed_ramp_count_limit __asm__("D_L17_00162000") = 120;
 
 #include "rnc/overlay/l17/mobys/fighter_jet_data/update_fighter_jet_flight_7.h"
 
-int D_L17_00162014 = 5;
+int l17_fighter_jet_steering_startup_count_threshold __asm__("D_L17_00162014") = 5;
 
 #include "rnc/overlay/l17/mobys/fighter_jet_data/update_fighter_jet_flight_6.h"
 
@@ -1159,7 +1159,7 @@ extern float D_L17_00162160 __attribute__((sda));
 extern float D_L17_00162164 __attribute__((sda));
 extern float D_L17_00162168 __attribute__((sda));
 extern int   coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-int          D_L17_0016215C = 10;
+int          l17_fighter_jet_collision_damage_cooldown_reload __asm__("D_L17_0016215C") = 10;
 float        D_L17_001621F0[2] = {512.0f, 512.0f};
 
 unsigned short l17_fighter_jet_collision_death_respawn_delay __asm__("D_L17_0016217C") = 0x1e;
@@ -1240,7 +1240,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
     ship_moby->flags &= 0xFEFF;
     *(Q_c4 *)death_explosion_velocity = movement_delta.q;
     if (ship_moby->bc == 0) {
-        if (D_L17_00162000 < ship_vars->count) {
+        if (l17_fighter_jet_startup_speed_ramp_count_limit < ship_vars->count) {
             pad = &controller_state;
             if (pad->raw_pressed & 0x40) {
                 voice_slot_index = ship_vars->i10C;
@@ -1295,7 +1295,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         ship_vars->speed = 0.0001f;
     }
 
-    if (D_L17_00162014 < ship_vars->count) {
+    if (l17_fighter_jet_steering_startup_count_threshold < ship_vars->count) {
         steering_input_hero = &hero;
         x = steering_input_hero->stick_x;
         y = steering_input_hero->stick_y;
@@ -1554,7 +1554,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                               0);
                         ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                     }
-                    ship_vars->iDC = D_L17_0016215C;
+                    ship_vars->iDC = l17_fighter_jet_collision_damage_cooldown_reload;
                 }
             } else {
                 *(int *)&hero.ship_hp = 0;
