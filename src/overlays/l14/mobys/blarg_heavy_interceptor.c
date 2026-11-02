@@ -221,7 +221,7 @@ typedef struct BlargHeavyInterceptorVars {
     s32 path_segment;
     s16 unk88;
     s16 rejoin_path_loop;
-    f32 unk8C;
+    f32 path_point_segment_distance;
     f32 unk90[4];
     f32 unkA0[4];
     f32 unkB0[4];
@@ -251,7 +251,7 @@ typedef struct BlargHeavyInterceptorVars {
     s16 unk200;
     s16 unk202;
     s32 patrol_path;
-    s16 unk208;
+    s16 return_path_complete;
     s16 group_member_count;
     s32 flags;
     f32 unk210;
@@ -443,15 +443,15 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             update_blarg_heavy_interceptor_patrol_path_position(moby);
             if ((s8)(*(struct Moby **)(&moby_vars->unk180[3]))->state < 0 ||
                 fast_dec_timer_s16(&moby_vars->timer_1F2)) {
-                moby_vars->unk8C = 0.0f;
+                moby_vars->path_point_segment_distance = 0.0f;
                 moby_vars->path_point = 0;
-                moby_vars->unk208 = 0;
+                moby_vars->return_path_complete = 0;
                 moby->state = INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY;
             }
         } else {
             moby_vars->path_point = 0;
-            moby_vars->unk8C = 0.0f;
-            moby_vars->unk208 = 0;
+            moby_vars->path_point_segment_distance = 0.0f;
+            moby_vars->return_path_complete = 0;
             moby->state = INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY;
         }
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
@@ -499,8 +499,8 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
 
                 moby->state = INTERCEPTOR_STATE_FOLLOW_RETURN_PATH;
                 moby_vars->path_point = p->count - 2;
-                moby_vars->unk8C = p->points[moby_vars->path_point].f[3];
-                moby_vars->unk208 = 0;
+                moby_vars->path_point_segment_distance = p->points[moby_vars->path_point].f[3];
+                moby_vars->return_path_complete = 0;
                 update_blarg_heavy_interceptor_return_path_position(moby, 0.01f, 5.0f, -1.0f);
                 blend_moby_animation_c618(moby, 0, 0, scale_game_frames(10));
             }
@@ -509,7 +509,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
     case INTERCEPTOR_STATE_FOLLOW_RETURN_PATH:
         FUN_L14_002aea08_c618(moby);
         update_blarg_heavy_interceptor_return_path_position(moby, 0.01f, 5.0f, -1.0f);
-        if (moby_vars->unk208 != 0) {
+        if (moby_vars->return_path_complete != 0) {
             int *tab = ((int *)l14_paths[moby_vars->unk78]);
 
             near_seg = 0;
@@ -1514,18 +1514,18 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
                                 &moby_vars->unk1C0[3],
                                 moby_vars->rejoin_path_loop,
                                 moby_vars->unk210 * moby_vars->beam_rotation_blink_and_aim_path_state[3]);
-        moby_vars->unk8C = 0.0f;
+        moby_vars->path_point_segment_distance = 0.0f;
         moby_vars->path_point = 0;
         FUN_L00_0025d808_2af688(sampling_path,
                                 &moby->pos,
                                 &moby_vars->path_point,
-                                &moby_vars->unk8C,
+                                &moby_vars->path_point_segment_distance,
                                 moby_vars->rejoin_path_loop,
                                 moby_vars->unk210 * moby_vars->unk190[0]);
     } else {
         moby_vars->path_point = 0;
         moby_vars->path_segment = 0;
-        moby_vars->unk8C = 0.0f;
+        moby_vars->path_point_segment_distance = 0.0f;
         moby_vars->unk1C0[3] = 0.0f;
     }
 }
@@ -1636,17 +1636,17 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby,
     BlargHeavyInterceptorVars *return_path_moby_vars = (BlargHeavyInterceptorVars *)moby->pvars;
     int                       *list = ((int *)l14_paths[return_path_moby_vars->patrol_path]);
     float                      target_position[4];
-    if (return_path_moby_vars->unk208 != 0) {
+    if (return_path_moby_vars->return_path_complete != 0) {
         qcopy(target_position, (char *)list + list[0] * 16);
     } else {
         if (FUN_L00_0025d808_2afb40(list,
                                     target_position,
                                     &return_path_moby_vars->path_point,
-                                    &return_path_moby_vars->unk8C,
+                                    &return_path_moby_vars->path_point_segment_distance,
                                     0,
                                     path_traversal_speed * frame_time *
                                         path_direction_multiplier) != 0) {
-            return_path_moby_vars->unk208 = 1;
+            return_path_moby_vars->return_path_complete = 1;
         }
     }
     FUN_L00_0025b8c0_c(
