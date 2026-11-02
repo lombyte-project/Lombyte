@@ -265,6 +265,9 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
     enum {
         INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER = 8
     };
+    enum {
+        INTERCEPTOR_REMOVAL_STATUS_MARK_FOR_REMOVAL = 2
+    };
     BlargHeavyInterceptorVars *moby_vars = (BlargHeavyInterceptorVars *)moby->pvars;
     float                      vector_scratch[4];
     float                      secondary_vector_scratch[4];
@@ -273,7 +276,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
     int                        path_seg;
     float                      path_t;
 
-    if ((u8)moby_vars->removal_status == 2) {
+    if ((u8)moby_vars->removal_status == INTERCEPTOR_REMOVAL_STATUS_MARK_FOR_REMOVAL) {
         moby_vars->flags = 0;
         FUN_0020c828(moby);
         return;
