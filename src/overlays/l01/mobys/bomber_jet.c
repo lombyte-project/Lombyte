@@ -199,7 +199,7 @@ typedef struct {
     s32 f0;
     s16 f4;
     s16 pad6;
-    s32 f8;
+    s32 clip_volume_index;
 } GunshipGuardVars;
 
 typedef struct {
@@ -526,8 +526,8 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                                     if (guard_vars->f4 == 0 && guard_vars->f0 == 0 &&
                                         random_integer_below(0x64) < 0x64 &&
                                         is_point_inside_clip_volume(&hero.motion.pos,
-                                                                    guard_vars->f8) &&
-                                        is_point_inside_clip_volume(camera_pos, guard_vars->f8)) {
+                                                                    guard_vars->clip_volume_index) &&
+                                        is_point_inside_clip_volume(camera_pos, guard_vars->clip_volume_index)) {
                                         beam_guard_moby_indices[k] = gunship_vars->guards[i];
                                         k++;
                                     }
