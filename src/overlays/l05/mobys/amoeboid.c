@@ -35,7 +35,7 @@ typedef struct AmoeboidVars {
     f32 unk68;
     f32 unk6C;
     u8  pad_70[0x14];
-    f32 unk84;
+    f32 movement_speed_cap;
     u8  pad_88[0x28];
     s32 path_B0;
     s32 unkB4;
@@ -70,7 +70,7 @@ void amoeboid_update(struct Moby *moby) {
             int   r = truncate_float_to_s32(409.6f);
             float movement_speed_limit = frame_time * 4.0f;
             moby_data->unk60 = r;
-            moby_data->unk84 = movement_speed_limit;
+            moby_data->movement_speed_cap = movement_speed_limit;
         }
         break;
     case AMOEBOID_FOLLOW_PATH: {
