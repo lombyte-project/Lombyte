@@ -36,9 +36,17 @@ ROOT = Path(__file__).resolve().parents[1]
 PATCH_DIR = ROOT / "patches" / "sce-991111b"
 
 ARCHIVE_NAME = "gnu-ee-binutils-gcc-1.1.tar.gz"
+# Our copy of every download (github.com/lombyte-project/toolchain-mirror),
+# pinned to a commit; tried after the upstream URLs.
+MIRROR = (
+    "https://raw.githubusercontent.com/lombyte-project/toolchain-mirror/"
+    "51d9a4db241f3f7fe5e8ae137561245964f333c1"
+)
+
 ARCHIVE_URLS = (
     "https://web.archive.org/web/20060518234647id_/"
     "http://ps2dev.sourceforge.net:80/downloads/ee/gnu-ee-binutils-gcc-1.1.tar.gz",
+    f"{MIRROR}/gnu-ee-binutils-gcc-1.1.tar.gz",
 )
 ARCHIVE_SHA256 = "1f518043e252d6eda726386971d52eda26541ab936ea73a9783d73712b595f92"
 ARCHIVE_TOP = "gnu-ee-binutils-gcc"
@@ -59,6 +67,7 @@ BISON_URLS = (
     "https://ftp.gnu.org/gnu/bison/bison-1.28.tar.gz",
     "https://mirrors.kernel.org/gnu/bison/bison-1.28.tar.gz",
     "https://ftpmirror.gnu.org/gnu/bison/bison-1.28.tar.gz",
+    f"{MIRROR}/bison-1.28.tar.gz",
 )
 BISON_SHA256 = "c5d3e4858e17cb440cee9de7837f07277bcfb03507e9d2f0c506cab5efe36c3a"
 
