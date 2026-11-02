@@ -390,11 +390,11 @@ typedef struct {
 int                  l05_scenery_ship_trail_callback_disabled __asm__("D_L05_001613F0") = 0;
 int                  l05_scenery_ship_trail_ribbon_draw_disabled __asm__("D_L05_001613F4") = 0;
 int                  l05_scenery_ship_trail_blend_a_selector __asm__("D_L05_001613F8") = 0;
-int                  D_L05_001613FC = 2;
+int                  l05_scenery_ship_trail_blend_b_selector __asm__("D_L05_001613FC") = 2;
 int                  l05_scenery_ship_trail_blend_c_selector __asm__("D_L05_00161400") = 0;
-int                  D_L05_00161404 = 1;
-int                  D_L05_00161408 = 0x40806060;
-int                  D_L05_0016140C = 0x802020;
+int                  l05_scenery_ship_trail_blend_d_selector __asm__("D_L05_00161404") = 1;
+int                  l05_scenery_ship_trail_fade_start_color __asm__("D_L05_00161408") = 0x40806060;
+int                  l05_scenery_ship_trail_fade_end_color __asm__("D_L05_0016140C") = 0x802020;
 extern unsigned char l05_scenery_ship_extended_trail_selector __asm__("D_L05_0015EDB2");
 extern struct Moby  *D_L05_0015FFD8 __asm__("D_L05_0015FFD8");
 extern short        *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
@@ -438,8 +438,8 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
         glow_packet->effect_texture = texture;
         glow_packet->texture = 0xff9000000260ULL;
         glow_packet->zero = 0;
-        glow_packet->flags = (u64)l05_scenery_ship_trail_blend_a_selector | ((u64)D_L05_001613FC << 2) |
-                             ((u64)l05_scenery_ship_trail_blend_c_selector << 4) | ((u64)D_L05_00161404 << 6) |
+        glow_packet->flags = (u64)l05_scenery_ship_trail_blend_a_selector | ((u64)l05_scenery_ship_trail_blend_b_selector << 2) |
+                             ((u64)l05_scenery_ship_trail_blend_c_selector << 4) | ((u64)l05_scenery_ship_trail_blend_d_selector << 6) |
                              0x8000000000ULL;
         phase = convert_integer_to_float((frame_number + 3) & 3) / (l05_scenery_ship_trail_segment_limit * 4.0f);
         for (j = 0; j < 4; j++) {
@@ -450,7 +450,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
                 ratio = 1.0f;
             else if (ratio < 0.0f)
                 ratio = 0.0f;
-            packet[i].color[j] = interpolate_color_7920(ratio, D_L05_00161408, D_L05_0016140C);
+            packet[i].color[j] = interpolate_color_7920(ratio, l05_scenery_ship_trail_fade_start_color, l05_scenery_ship_trail_fade_end_color);
         }
     }
     memset(matrix, 0, 0x20);
