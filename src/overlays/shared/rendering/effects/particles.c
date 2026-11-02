@@ -1053,10 +1053,13 @@ u32  FUN_001fa6e0_273298(u32, u32, f32) __asm__("FUN_001fa6e0");
 void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) __asm__("FUN_L00_00273298");
 
 void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) {
+    enum {
+        MOVING_PARTICLE_POSITION_HERO_RELATIVE = 1
+    };
     V_273298 *particle_data = (V_273298 *)((u8 *)particle + 0x20);
     float     remaining_frames_minus_one;
     u32       color_without_alpha;
-    if (particle_data->hero_relative_position_mode == 1) {
+    if (particle_data->hero_relative_position_mode == MOVING_PARTICLE_POSITION_HERO_RELATIVE) {
         struct Hero *hero_reference = &hero;
         particle->x = hero_reference->motion.pos.f[0] + particle_data->x;
         particle->y = hero_reference->motion.pos.f[1] + particle_data->y;
