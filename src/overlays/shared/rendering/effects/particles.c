@@ -1677,7 +1677,7 @@ typedef struct {
     void *o;
     u8    b4;
     u8    offset_length_jitter_percent;
-    s16   h6;
+    s16   expected_owner_identity;
     float unk8;
     float unkC;
 } S_274818;
@@ -1691,7 +1691,7 @@ void update_randomized_moby_point_attached_particle(struct EffectParticle *parti
     u128      attachment_offset;
     float     one, randomized_primary_position_w, save, x;
     char     *attachment_position;
-    if (o == 0 || *(s16 *)(o + 0xA6) != attachment_data->h6 || (u8)o[0x20] == 0xFE ||
+    if (o == 0 || *(s16 *)(o + 0xA6) != attachment_data->expected_owner_identity || (u8)o[0x20] == 0xFE ||
         (u8)o[0x20] == 0xFD) {
         free_effect_particle(particle);
         return;
