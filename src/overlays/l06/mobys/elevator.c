@@ -62,7 +62,7 @@ typedef struct {
     int   height_cuboid_index;
     int   vehicle_exit_placement_cuboid_index;
     int   vehicle_entry_placement_cuboid_index;
-    int   f84;
+    int   vehicle_entry_configuration_active;
     int   f88;
     float height_velocity;
     int   f90;
@@ -104,7 +104,7 @@ typedef struct {
     short         f30E;
     char          pad310[0x1D70];
     Moby_2FDA70  *moby;
-    int           f2084;
+    int           hero_state;
     char          pad2088[0x1C];
     unsigned char vehicle_mode;
     char          pad20A5[0x226];
@@ -231,7 +231,7 @@ void elevator_update(Moby_2FDA70 *moby) {
             moby_data->f90 = 0;
         } else if (((Hero_2FDA70 *)(D_0013F350))->moby->fA6 == 0x57) {
             moby->state = WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT;
-            moby_data->f84 = 1;
+            moby_data->vehicle_entry_configuration_active = 1;
         }
         break;
     case WAIT_FOR_SCENE_GAME_MODE_CLEAR:
@@ -248,12 +248,12 @@ void elevator_update(Moby_2FDA70 *moby) {
                 ok = try_set_help_message(9, 0x1781) != 0;
             } else if (D_0013D5CA_2FDA70[0] == 0) {
                 ok = try_set_help_message(9, 0x177E) != 0;
-            } else if (moby_data->f84 != 0) {
+            } else if (moby_data->vehicle_entry_configuration_active != 0) {
                 ok = try_set_help_message(9, 0x1785) != 0;
             } else {
                 ok = try_set_help_message(9, 0x1789) != 0;
             }
-            if ((pad_pressed_words[0] & 0x10) && ((Hero_2FDA70 *)(D_0013F350))->f2084 != 100 &&
+            if ((pad_pressed_words[0] & 0x10) && ((Hero_2FDA70 *)(D_0013F350))->hero_state != 100 &&
                 ok) {
                 ((Hero_2FDA70 *)(D_0013F350))->f1F2 = scale_game_frames(0x3C);
                 moby_data->f90 = scale_game_frames(0x78);
@@ -265,7 +265,7 @@ void elevator_update(Moby_2FDA70 *moby) {
                                                          (moby_data->base_height_linked_moby_index << 8));
                     set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro +
                                                          (moby_data->f60 << 8));
-                    moby_data->f84 = 0;
+                    moby_data->vehicle_entry_configuration_active = 0;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f94 = 0;
                     restore_hero_from_vehicle_mode();
                     {
@@ -289,7 +289,7 @@ void elevator_update(Moby_2FDA70 *moby) {
                                                          (moby_data->base_height_linked_moby_index << 8));
                     set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_macro +
                                                          (moby_data->f60 << 8));
-                    moby_data->f84 = 1;
+                    moby_data->vehicle_entry_configuration_active = 1;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f94 =
                         ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].cls->f10;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f34 &= 0xFFFE;
@@ -300,7 +300,7 @@ void elevator_update(Moby_2FDA70 *moby) {
                     enter_hero_vehicle_mode_and_set_moby(
                         1, 0x43, (int)(D_L06_0015FFD8_macro + (moby_data->f6C << 8)));
                     request_music_track(2, 7);
-                } else if (moby_data->f84 == 0) {
+                } else if (moby_data->vehicle_entry_configuration_active == 0) {
                     fade_to_black(scale_game_frames(0x10));
                     set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro +
                                                          (moby_data->f64 << 8));
@@ -308,7 +308,7 @@ void elevator_update(Moby_2FDA70 *moby) {
                                                          (moby_data->base_height_linked_moby_index << 8));
                     set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_macro +
                                                          (moby_data->f60 << 8));
-                    moby_data->f84 = 1;
+                    moby_data->vehicle_entry_configuration_active = 1;
                     moby_data->f94 = 1;
                     {
                         LevelCuboid *b = &l06_cuboids_macro[moby_data->vehicle_entry_placement_cuboid_index];
@@ -322,7 +322,7 @@ void elevator_update(Moby_2FDA70 *moby) {
                                                          (moby_data->base_height_linked_moby_index << 8));
                     set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro +
                                                          (moby_data->f60 << 8));
-                    moby_data->f84 = 0;
+                    moby_data->vehicle_entry_configuration_active = 0;
                     moby_data->f94 = 0;
                     {
                         LevelCuboid *b = &l06_cuboids_macro[moby_data->vehicle_exit_placement_cuboid_index];
@@ -348,7 +348,7 @@ void elevator_update(Moby_2FDA70 *moby) {
         } else if (vector_distance_xy(&moby->pos, &((Hero_2FDA70 *)(D_0013F350))->pos) < 24.0f &&
                    moby->state == WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT &&
                    ((Hero_2FDA70 *)(D_0013F350))->pos.z + 5.0f < moby->pos.z) {
-            moby_data->f84 = 1;
+            moby_data->vehicle_entry_configuration_active = 1;
             moby_data->f94 = 1;
             moby->state = MOVE_TO_NODE_BASE_HEIGHT;
             set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro + (moby_data->f64 << 8));
