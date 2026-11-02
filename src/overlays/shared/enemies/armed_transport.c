@@ -37,7 +37,7 @@ typedef struct ArmedTransportVars {
     s8  unk28;
     u8  pad29[0x37];
     u8  unk60[0x7];
-    u8  unk67;
+    u8  hit_animation_secondary_red;
     u8  pad68[0x8];
     f32 unk70[4];
     u8  pad80[0x30];
@@ -52,7 +52,7 @@ typedef struct ArmedTransportVars {
     u8  unkE0[0x64];
     f32 unk144;
     u8  pad148[0x18];
-    s32 unk160;
+    s32 death_timer_frames;
     s32 unk164;
     s32 path_point;
     s32 path_segment_fraction;
@@ -376,7 +376,7 @@ void armed_transport_update(char *transport_moby) {
 
         transport_data->base_height -= dt + dt;
         MOBY(transport_moby)->rot.x += dt * 0.2617994f;
-        if (fast_dec_timer((int *)(&transport_data->unk160)) ||
+        if (fast_dec_timer((int *)(&transport_data->death_timer_frames)) ||
             hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             spawn_explosion(transport_moby,
                             D_L16_0015F580,
@@ -481,7 +481,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
             if (response >= 3) {
                 if (response < 9) {
                     FUN_0022da68_i(3, 0, transport_moby);
-                    transport_data->unk67 = 120;
+                    transport_data->hit_animation_secondary_red = 120;
                     transport_data->unk188 = randf_sym(30.0f, 50.0f) * DEG_TO_RAD * frame_time;
                 }
             } else {
@@ -498,8 +498,8 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
                     } while (--count >= 0);
                 }
                 transport_moby->state = ARMED_TRANSPORT_STATE_DYING;
-                transport_data->unk160 = scale_game_frames(90);
-                transport_data->unk67 = 120;
+                transport_data->death_timer_frames = scale_game_frames(90);
+                transport_data->hit_animation_secondary_red = 120;
             }
         }
         trooper_anim_update(transport_moby, &transport_data->unk60);
