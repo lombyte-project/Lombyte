@@ -9,9 +9,9 @@
 
 typedef struct {
     int            w0;
-    int            w4;
-    int            w8;
-    int            wC;
+    int            linked_moby_selection_timer;
+    int            remaining_owned_record_events;
+    int            owned_record_cooldown_timer;
     int            idx[4];
     unsigned char *p[4];
 } V_2b3458;
@@ -71,8 +71,8 @@ void linked_moby_states_update(unsigned char *source_moby) {
     switch (MOBY(source_moby)->state) {
     case STATE_INITIALIZE:
         MOBY(source_moby)->state = STATE_ACTIVE;
-        moby_vars->w4 = linked_moby_selection_delay_gp;
-        moby_vars->w8 = 3;
+        moby_vars->linked_moby_selection_timer = linked_moby_selection_delay_gp;
+        moby_vars->remaining_owned_record_events = 3;
         moby_vars->p[0] = moby_table + (moby_vars->idx[0] << 8);
         moby_vars->p[1] = moby_table + (moby_vars->idx[1] << 8);
         moby_vars->p[2] = moby_table + (moby_vars->idx[2] << 8);
@@ -80,11 +80,11 @@ void linked_moby_states_update(unsigned char *source_moby) {
         break;
     case STATE_ACTIVE:
         matching_owned_record = find_moby_hit(source_moby, 0x10000, 0);
-        fast_dec_timer(&moby_vars->wC);
-        if (matching_owned_record && moby_vars->wC == 0) {
+        fast_dec_timer(&moby_vars->owned_record_cooldown_timer);
+        if (matching_owned_record && moby_vars->owned_record_cooldown_timer == 0) {
             MOBY(source_moby)->hit_slot = 0xFF;
-            moby_vars->wC = owned_record_cooldown_gp;
-            if (--moby_vars->w8 <= 0) {
+            moby_vars->owned_record_cooldown_timer = owned_record_cooldown_gp;
+            if (--moby_vars->remaining_owned_record_events <= 0) {
                 mark_moby_for_removal(source_moby);
                 return;
             }
@@ -101,8 +101,8 @@ void linked_moby_states_update(unsigned char *source_moby) {
     test:
         if (moby_vars->p[0][0x20] == 0x50 || moby_vars->p[1][0x20] == 0x50 ||
             moby_vars->p[2][0x20] == 0x50 || moby_vars->p[3][0x20] == 0x50) {
-            if (fast_dec_timer(&moby_vars->w4)) {
-                moby_vars->w4 = linked_moby_selection_delay_gp;
+            if (fast_dec_timer(&moby_vars->linked_moby_selection_timer)) {
+                moby_vars->linked_moby_selection_timer = linked_moby_selection_delay_gp;
                 for (i = 0; i < 4; i++) {
                     if (moby_vars->p[i][0x20] == 0x50)
                         goto found;
