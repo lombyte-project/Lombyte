@@ -1108,7 +1108,7 @@ void bomb_update(BombMoby *bomb_moby) {
         BOMB_STATE_THROWN = 1,
         BOMB_STATE_EXPANDING_BLAST = 2
     };
-    B910       rec = l00_bomb_camera_blast_parameters;
+    B910       camera_blast_parameters = l00_bomb_camera_blast_parameters;
     Vec_2adb30 delta;
     Vec_2adb30 bomb_pre_motion_position;
     Vec_2adb30 blast_velocity;
@@ -1639,7 +1639,7 @@ void bomb_update(BombMoby *bomb_moby) {
                                                                   : 0.4f - 20.0f * 0.0175f;
                 l00_camera.shake_frames = FUN_001f96f8_2adb30(0x19);
                 fast_vec_dist(&bomb_moby->pos, ((G910 *)&hero)->pos);
-                mine_camera_blast((char *)&rec, (char *)&bomb_moby->pos, 0, 0);
+                mine_camera_blast((char *)&camera_blast_parameters, (char *)&bomb_moby->pos, 0, 0);
                 if (bomb_moby->state != BOMB_STATE_EXPANDING_BLAST) {
                     mark_moby_for_removal(bomb_moby);
                     return;
