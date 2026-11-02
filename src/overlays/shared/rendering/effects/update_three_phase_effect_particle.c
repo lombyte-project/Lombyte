@@ -1069,7 +1069,7 @@ typedef struct {
     u8  p9[3];
     f32 fC;
     f32 f10;
-    u32 w14;
+    u32 packed_rgb_color;
 } Body;
 
 typedef struct {
@@ -1098,14 +1098,14 @@ void update_spinning_fade_in_out_effect_particle(Part_26b910 *particle) {
         if (fast_dec_timer_s16(&particle->hA)) {
             particle_data->w4 = 1;
             particle->hA = FUN_001f96f8_0026b910(30);
-            particle->w4 = particle_data->w14 | 0x7F000000;
+            particle->w4 = particle_data->packed_rgb_color | 0x7F000000;
         } else {
             int   fade_in_duration = FUN_001f96f8_0026b910(10);
             float k = 96.0f / (float)FUN_001f96f8_0026b910(10);
             particle->w4 =
                 ((truncate_float_to_s32((float)(fade_in_duration - particle->hA) * k) + 0x20)
                  << 24) |
-                particle_data->w14;
+                particle_data->packed_rgb_color;
         }
     } else {
         if (fast_dec_timer_s16(&particle->hA)) {
@@ -1115,7 +1115,7 @@ void update_spinning_fade_in_out_effect_particle(Part_26b910 *particle) {
         particle->w4 = (truncate_float_to_s32((float)particle->hA *
                                               (127.0f / (float)FUN_001f96f8_0026b910(30)))
                         << 24) |
-                       particle_data->w14;
+                       particle_data->packed_rgb_color;
     }
 }
 
