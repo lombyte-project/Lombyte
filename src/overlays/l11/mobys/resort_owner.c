@@ -349,9 +349,9 @@ struct PokKeeperVars {
     s32   unk104;
     s32   unk108;
     s32   unk10C;
-    s32   unk110;
-    s32   unk114;
-    s32   unk118;
+    s32   second_gate_arrival_cuboid_index;
+    s32   final_path_arrival_cuboid_index;
+    s32   post_path_dialogue_condition_index;
     u8    pad11C[4];
     Vec4f target; /* 0x120 */
     Vec4f unk130;
@@ -423,12 +423,12 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             qcopy_nc(&moby->pos, &l11_cuboids[moby_vars->points[1]].pos);
             qcopy_nc(&moby->rot, &l11_cuboids[moby_vars->points[1]].rot);
             FUN_L11_002d2088_c(moby, 6);
-            l11_cuboids[moby_vars->unk114].pos.z -= 500.0f;
+            l11_cuboids[moby_vars->final_path_arrival_cuboid_index].pos.z -= 500.0f;
             FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8)));
             break;
         }
-        l11_cuboids[moby_vars->unk110].pos.z -= 500.0f;
-        l11_cuboids[moby_vars->unk114].pos.z -= 500.0f;
+        l11_cuboids[moby_vars->second_gate_arrival_cuboid_index].pos.z -= 500.0f;
+        l11_cuboids[moby_vars->final_path_arrival_cuboid_index].pos.z -= 500.0f;
         moby_vars->leg = 0;
         moby_vars->talk_range = 5.0f;
         FUN_L11_002d2088_c(moby, 1);
@@ -505,7 +505,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                                    &o->rot_row2,
                                    resort_owner_gate_jump_target_local_z_offset_gp);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                l11_cuboids[moby_vars->unk110].pos.z += 500.0f;
+                l11_cuboids[moby_vars->second_gate_arrival_cuboid_index].pos.z += 500.0f;
                 moby_vars->next_state = RESORT_OWNER_MOVE_TO_GATE_TARGET;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
@@ -514,7 +514,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                 FUN_L11_002d2088_c(moby, 0xB);
                 break;
             case RESORT_OWNER_FINAL_PATH_LEG:
-                l11_cuboids[moby_vars->unk114].pos.z += 500.0f;
+                l11_cuboids[moby_vars->final_path_arrival_cuboid_index].pos.z += 500.0f;
                 FUN_L11_002d2088_c(moby, 0xC);
                 break;
             }
@@ -575,7 +575,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         }
         break;
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
-        if (D_0014C050[moby_vars->unk118 + D_0015ED84 * 16] == 0xFF &&
+        if (D_0014C050[moby_vars->post_path_dialogue_condition_index + D_0015ED84 * 16] == 0xFF &&
             camera_secondary_mode[0] != 0x32 && update_npc_dialogue(moby, moby_vars->talk)) {
             begin_dialogue_camera_transition(moby, 2.5f);
             FUN_L11_002d2088_c(moby, 0xF);
