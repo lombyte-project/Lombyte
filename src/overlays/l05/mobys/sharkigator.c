@@ -41,7 +41,7 @@ typedef struct Hero Hero;
 typedef struct SharkigatorVars {
     u8  pad_0[0x60];
     s32 path_60;
-    s32 unk64;
+    s32 start_in_leap_wait;
     s32 unk68;
     s32 timer_6C;
     f32 unk70;
@@ -86,7 +86,7 @@ void sharkigator_update(char *moby) {
     }
 state_zero: {
     float height;
-    if (sharkigator_instance_vars->unk64 != 0) {
+    if (sharkigator_instance_vars->start_in_leap_wait != 0) {
         MOBY(moby)->state = SHARKIGATOR_WAIT_TO_LEAP;
         MOBY(moby)->flags |= 1;
         MOBY(moby)->update_dist = 0xff;
