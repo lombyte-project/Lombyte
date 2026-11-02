@@ -39,7 +39,7 @@ typedef struct HeroFallingPlatformVars {
     f32 unk60[4];
     u8  pad_70[0x30];
     s16 timer_A0;
-    s16 unkA2;
+    s16 contact_sound_entry_index;
     f32 unkA4;
     f32 unkA8;
     f32 unkAC;
@@ -81,8 +81,8 @@ void hero_falling_platform_update(char *moby) {
             moby_data->unkA8 = MOBY(moby)->rot.x;
             moby_data->unkAC = MOBY(moby)->rot.y;
             moby_data->timer_A0 = scale_game_frames(0x1E);
-            if (moby_data->unkA2 != -1)
-                allocate_voice_for_target_entry(moby_data->unkA2, 0, (int)moby);
+            if (moby_data->contact_sound_entry_index != -1)
+                allocate_voice_for_target_entry(moby_data->contact_sound_entry_index, 0, (int)moby);
             MOBY(moby)->state = LEAF_TIMED_SWAY_AND_DESCENT;
         }
         break;
