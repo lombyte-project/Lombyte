@@ -167,18 +167,18 @@ void emit_sand_shark_dust_segment(struct Moby *moby,
 extern void
 emit_sand_shark_dust_segment(struct Moby *moby, int a, int b, int d) __asm__("FUN_L02_002d3c98");
 
-int  D_L02_001619EC = 0xa;
-int  D_L02_001619F0 = 0xa;
-int  D_L02_001619F4 = 8;
-int  D_L02_001619F8 = 8;
+int  l02_sand_shark_dust_segment_2_3_puff_count __asm__("D_L02_001619EC") = 0xa;
+int  l02_sand_shark_dust_segment_0_1_puff_count __asm__("D_L02_001619F0") = 0xa;
+int  l02_sand_shark_dust_segments_4_5_and_6_7_puff_count __asm__("D_L02_001619F4") = 8;
+int  l02_sand_shark_dust_segment_8_9_puff_count __asm__("D_L02_001619F8") = 8;
 void emit_sand_shark_dust_burst(void *moby) __asm__("FUN_L02_002d3dd0");
 
 void emit_sand_shark_dust_burst(void *moby) {
-    emit_sand_shark_dust_segment(moby, 0, 1, D_L02_001619F0);
-    emit_sand_shark_dust_segment(moby, 2, 3, D_L02_001619EC);
-    emit_sand_shark_dust_segment(moby, 4, 5, D_L02_001619F4);
-    emit_sand_shark_dust_segment(moby, 6, 7, D_L02_001619F4);
-    emit_sand_shark_dust_segment(moby, 8, 9, D_L02_001619F8);
+    emit_sand_shark_dust_segment(moby, 0, 1, l02_sand_shark_dust_segment_0_1_puff_count);
+    emit_sand_shark_dust_segment(moby, 2, 3, l02_sand_shark_dust_segment_2_3_puff_count);
+    emit_sand_shark_dust_segment(moby, 4, 5, l02_sand_shark_dust_segments_4_5_and_6_7_puff_count);
+    emit_sand_shark_dust_segment(moby, 6, 7, l02_sand_shark_dust_segments_4_5_and_6_7_puff_count);
+    emit_sand_shark_dust_segment(moby, 8, 9, l02_sand_shark_dust_segment_8_9_puff_count);
 }
 
 /* pvars of the Aridia enemy sand_shark_update updates (it leaves its burrow, walks, jumps and digs back in). */
