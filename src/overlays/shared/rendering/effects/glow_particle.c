@@ -34,9 +34,9 @@ typedef struct {
 
 typedef struct {
     char      pad[0x23];
-    u8        b23;
+    u8        particle_alpha;
     char      pad2[0x2C - 0x24];
-    float     f2c;
+    float     particle_scale;
     char      pad3[0x40 - 0x30];
     float     r[3];
     char      pad4[0x78 - 0x4C];
@@ -130,7 +130,7 @@ void glow_particle_update(M_2acad8 *particle_moby) {
     int       n;
     elapsed_lifetime_frames = convert_integer_to_float(v->n - v->h1c);
     total_lifetime_frames = convert_integer_to_float(v->n);
-    particle_moby->f2c = elapsed_lifetime_frames * v->f18 / total_lifetime_frames;
+    particle_moby->particle_scale = elapsed_lifetime_frames * v->f18 / total_lifetime_frames;
     particle_moby->r[0] = fast_add_rotations(particle_moby->r[0], frame_time * 3.1415927f);
     particle_moby->r[1] = fast_add_rotations(particle_moby->r[1], frame_time * 3.1415927f);
     particle_moby->r[2] = fast_add_rotations(particle_moby->r[2], frame_time * 3.1415927f);
@@ -140,7 +140,7 @@ void glow_particle_update(M_2acad8 *particle_moby) {
     }
     n = v->n / 2;
     if (v->h1c < n) {
-        particle_moby->b23 = v->h1c * v->h1e / n;
+        particle_moby->particle_alpha = v->h1c * v->h1e / n;
     }
 }
 
