@@ -1084,7 +1084,7 @@ void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) {
 
 typedef struct {
     u8 pad0[0x20];
-    s8 b20;
+    s8 attachment_owner_status;
 } T_273448;
 
 typedef struct {
@@ -1120,7 +1120,7 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
         return;
     }
     e = &particle->e;
-    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->b20 < 0) {
+    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->attachment_owner_status < 0) {
         goto kill;
     }
     e->hC = (e->hC + 1) & 0xF;
