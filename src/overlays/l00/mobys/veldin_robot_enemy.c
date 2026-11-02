@@ -112,7 +112,7 @@ struct ElectroidMoby {
     u8             pad36[0x40 - 0x36];
     ElectroidVec   unk40;
     u8             pad50[2];
-    u8             unk52;
+    u8             blend_source_animation;
     u8             anim;
     u8             pad54[0x70 - 0x54];
     u8             unk70;
@@ -330,7 +330,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         query.unk8A = moby->unkA6;
         query.dir[2] = 1.0f;
         query.unk88 = 0;
-        if (moby->unk52 == moby->anim && compute_interpolated_record_value(moby) > 1.0f) {
+        if (moby->blend_source_animation == moby->anim && compute_interpolated_record_value(moby) > 1.0f) {
             hit = 1;
             query.flags |= 1;
         }
