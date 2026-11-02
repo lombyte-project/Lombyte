@@ -314,7 +314,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         (((s32)(fast_sin(vendor_color_pulse_phase) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
     switch (vendor_moby->vendor_state) {
     case VENDOR_INITIALIZE:
-        vendor_moby->vendor_state = 1;
+        vendor_moby->vendor_state = VENDOR_WAIT_FOR_HERO;
         q->i0 = 0;
         q->i4 = 0;
         q->mC = create_moby(0x477);
@@ -338,7 +338,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         if (!(D_L00_0015F5CC_2a57a8 & 7) &&
             vector_distance_xy(&vendor_moby->f10, &hero_pos) <= 16.0f &&
             absolute_float(vendor_moby->f18 - hero_pos.f[2]) <= 8.0f) {
-            vendor_moby->vendor_state = 2;
+            vendor_moby->vendor_state = VENDOR_HERO_NEARBY;
             if (vendor_moby->b53 != 1)
                 blend_moby_animation(vendor_moby, 1, 0, 10);
             q->mC->h34 &= 0xFFFE;
@@ -360,7 +360,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         hero_distance = vector_distance_xy(&vendor_moby->f10, &hero_pos);
         z = absolute_float(vendor_moby->f18 - hero_pos.f[2]);
         if (!(D_L00_0015F5CC_2a57a8 & 7) && (hero_distance > 18.0f || z > 10.0f)) {
-            vendor_moby->vendor_state = 1;
+            vendor_moby->vendor_state = VENDOR_WAIT_FOR_HERO;
             if (vendor_moby->b53)
                 blend_moby_animation(vendor_moby, 0, 0, 10);
             break;
@@ -408,7 +408,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             help_message_succeeded = try_set_help_message(1, 0x53E3) != 0;
         if ((pad_pressed_lui & 0x10) && interaction_allowed && help_message_succeeded) {
             open_vendor_menu(vendor_moby);
-            vendor_moby->vendor_state = 3;
+            vendor_moby->vendor_state = VENDOR_ZERO_AUXILIARY_SCALE;
         }
         break;
     case VENDOR_ZERO_AUXILIARY_SCALE:
