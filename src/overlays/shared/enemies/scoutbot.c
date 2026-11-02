@@ -417,6 +417,9 @@ void scoutbot_update(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_health_and_target(struct Moby *moby) {
+    enum {
+        SCOUTBOT_TARGET_SELECTION_UNAVAILABLE = 2
+    };
     ScoutbotVars *scoutbot_pvars = (ScoutbotVars *)moby->pvars;
     int           hit;
     float         dmg;
@@ -441,10 +444,10 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
         if (func_L00_00260FB0_f(
                 moby, &scoutbot_pvars->tracked_target_position, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
             if (14.0f < vector_distance_xy(&scoutbot_pvars->unk1C0, &scoutbot_pvars->tracked_target_position)) {
-                scoutbot_pvars->target_selection_status = 2;
+                scoutbot_pvars->target_selection_status = SCOUTBOT_TARGET_SELECTION_UNAVAILABLE;
             } else if (3.0f <
                        absolute_float(scoutbot_pvars->unk1C0[2] - scoutbot_pvars->tracked_target_position[2])) {
-                scoutbot_pvars->target_selection_status = 2;
+                scoutbot_pvars->target_selection_status = SCOUTBOT_TARGET_SELECTION_UNAVAILABLE;
             }
         }
     }
