@@ -47,7 +47,7 @@ typedef struct HeightAdjustedProjectileVars {
     u8           pad_0[0x10];
     u8           timer_10;
     u8           pad_11[0x1];
-    s16          unk12;
+    s16          height_adjustment_mode;
     char        *unk14;
     f32          unk18;
     f32          unk1C;
@@ -74,7 +74,7 @@ void height_adjusted_projectile_update(struct Moby *moby) {
     qcopy(movement_start_position, &moby->pos);
     fast_vec_add(&moby->pos, &moby->pos, projectile_vars);
     find_point_ahead(20.0f, moby, found);
-    switch (projectile_vars->unk12) {
+    switch (projectile_vars->height_adjustment_mode) {
     case HEIGHT_MODE_SKIP_ADJUSTMENT:
         break;
     case HEIGHT_MODE_APPROACH_FIXED_HEIGHT:
