@@ -425,7 +425,7 @@ typedef struct {
     u8       p3[0x308 - 0x244];
     s16      h308;
     u8       p4[0x2080 - 0x30A];
-    void    *p2080;
+    void    *collision_probe_moby;
     u8       p5[0x208C - 0x2084];
     s32      i208C;
     u8       p6[0x20A4 - 0x2090];
@@ -497,10 +497,10 @@ void adjust_hero_velocity_from_collision_probes(int force) {
     fast_vec_add(&primary_vector_endpoint, &primary_vector_endpoint, &primary_vector_origin);
     fast_vec_add(&secondary_vector_endpoint, &secondary_vector_endpoint, &b);
     r = -1;
-    if (collision_line(&b, &secondary_vector_endpoint, 4, P.p2080, 0) && D_L06_001745DC > 0)
+    if (collision_line(&b, &secondary_vector_endpoint, 4, P.collision_probe_moby, 0) && D_L06_001745DC > 0)
         r = collision_hit_material();
     primary_probe_result_angle = 0.0f;
-    if (collision_line(&primary_vector_origin, &primary_vector_endpoint, 4, P.p2080, 0) &&
+    if (collision_line(&primary_vector_origin, &primary_vector_endpoint, 4, P.collision_probe_moby, 0) &&
         X.i1C > 0)
         primary_probe_result_angle = fast_arc_tan(X.v40.f[2], vector_length_xy(&X.v40));
     if (0.8726646304130554f <= primary_probe_result_angle || r == 8 || r == 12) {
