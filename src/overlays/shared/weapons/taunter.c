@@ -465,6 +465,9 @@ void taunter_update(Moby *taunter_moby) {
     enum {
         TAUNTER_STATE_ACTIVATION_DISABLED = 3
     };
+    enum {
+        TAUNTER_TYPE_ACTIVATION_DISABLED = 2
+    };
     Vars *taunter_vars;
     s32   taunter_state;
     s32   voice_slot_index;
@@ -482,7 +485,7 @@ void taunter_update(Moby *taunter_moby) {
         return;
     if (taunter_vars->radius == 0.0f)
         taunter_vars->radius = 30.0f;
-    if (taunter_moby->type == 2)
+    if (taunter_moby->type == TAUNTER_TYPE_ACTIVATION_DISABLED)
         taunter_moby->state = TAUNTER_STATE_ACTIVATION_DISABLED;
     taunter_effect_emission_disabled = 1;
     if (taunter_moby->state == TAUNTER_STATE_INITIALIZE) {
