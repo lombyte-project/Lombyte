@@ -157,6 +157,9 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
     enum {
         PLUMBER_FALLBACK_DIALOGUE_INITIALIZED = 7
     };
+    enum {
+        CUTSCENE_MODE_ACTIVE = 2
+    };
     L01WatchScratch look_tracking_vectors;
     L01WatchData   *plumber_vars = (L01WatchData *)plumber_moby->data;
     float           rate;
@@ -198,7 +201,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         }
         break;
     case PLUMBER_LEVEL_ONE_POST_DIALOGUE:
-        if (cutscene_mode == 2)
+        if (cutscene_mode == CUTSCENE_MODE_ACTIVE)
             break;
         if (visited52[plumber_moby->bB0 + current_level_index * 16] != 0xFF) {
             jet_clear_persistent(plumber_moby->bB0);
@@ -227,7 +230,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         }
         break;
     case PLUMBER_LEVEL_EIGHT_POST_DIALOGUE:
-        if (cutscene_mode == 2)
+        if (cutscene_mode == CUTSCENE_MODE_ACTIVE)
             break;
         if (plumber_vars->h6 == 2) {
             D_0013F350_w.f80 = 130.5f;
