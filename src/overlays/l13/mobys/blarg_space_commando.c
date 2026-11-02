@@ -802,7 +802,7 @@ extern char gemlik_trail_direction_source[] __asm__("D_L13_00174180");
 
 extern float gemlik_trail_spread_degrees_gp __asm__("D_L13_00161E80") __attribute__((sda));
 
-int D_L13_00161E84 = 150;
+int l13_gemlik_trail_lifetime_frames __asm__("D_L13_00161E84") = 150;
 
 void initialize_gemlik_trail(struct Moby *moby) __asm__("FUN_L13_00309370");
 
@@ -826,7 +826,7 @@ void initialize_gemlik_trail(struct Moby *moby) {
             *(float *)(moby_vars + 0x21C + i * 16) = 1.0f;
         }
     }
-    *(float *)(moby_vars + 0x1FC) = scale_game_frames(D_L13_00161E84);
+    *(float *)(moby_vars + 0x1FC) = scale_game_frames(l13_gemlik_trail_lifetime_frames);
 }
 
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
