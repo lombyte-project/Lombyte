@@ -207,29 +207,29 @@ typedef struct BlargVars {
     char          pad00[0x20];
     float         health; /* 0x20 */
     char          pad24[0x14];
-    int           f38; /* 0x38 */
+    int           targeting_boost_refresh_pending; /* 0x38 */
     char          pad3C[0x24];
     char          f60[0x7]; /* 0x60 */
     unsigned char f67;      /* 0x67 */
     char          pad68[0x8];
     char          f70[0x18]; /* 0x70 */
-    float         f88;       /* 0x88 */
+    float         horizontal_motion_speed;       /* 0x88 */
     float         f8C;       /* 0x8C */
     char          pad90[0x30];
     float         fC0; /* 0xC0 */
     float         fC4; /* 0xC4 */
     char          padC8[0x58];
-    char          f120[0x8]; /* 0x120 */
-    float         f128;      /* 0x128 */
+    char          selected_target_xy[0x8]; /* 0x120 */
+    float         selected_target_z;      /* 0x128 */
     char          pad12C[0x34];
-    int           f160; /* 0x160 */
+    int           selected_target_moby; /* 0x160 */
     int           f164; /* 0x164 */
     char          pad168[0x8];
-    char          f170[0x30]; /* 0x170 */
+    char          home_position[0x30]; /* 0x170 */
     float         f1A0;       /* 0x1A0 */
     char          pad1A4[0x8];
     int           f1AC; /* 0x1AC */
-    int           f1B0; /* 0x1B0 */
+    int           movement_path_index; /* 0x1B0 */
     char          pad1B4[0x14];
     float         f1C8; /* 0x1C8 */
     int           f1CC; /* 0x1CC */
@@ -788,10 +788,10 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     Target    *target;
     int        reaction;
 
-    if (snapper_vars->f38 != 0) {
+    if (snapper_vars->targeting_boost_refresh_pending != 0) {
         snapper_vars->f1AC =
             truncate_float_to_s32(func_001F9878_2FA618(random_float_between(180.0f, 240.0f)));
-        snapper_vars->f38 = 0;
+        snapper_vars->targeting_boost_refresh_pending = 0;
     }
     fast_dec_timer(&snapper_vars->f1AC);
     damage = 0.0f;
@@ -827,7 +827,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         case HIT_RESPONSE_NONLETHAL_ANIMATION_FEEDBACK:
         case HIT_RESPONSE_NONLETHAL_KNOCKBACK:
             moby->state = ALIEN_SNAPPER_STATE_HIT_KNOCKBACK;
-            snapper_vars->f88 = frame_time + frame_time;
+            snapper_vars->horizontal_motion_speed = frame_time + frame_time;
             snapper_vars->f8C = frame_time;
             snapper_vars->fC0 = 5.0f;
             snapper_vars->fC4 = 8.5f;
@@ -839,7 +839,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         case HIT_RESPONSE_DEATH_SEQUENCE:
             moby->state = ALIEN_SNAPPER_STATE_DEATH_MOTION;
             moby->flags &= 0xEFFF;
-            snapper_vars->f88 = frame_time * 8.0f;
+            snapper_vars->horizontal_motion_speed = frame_time * 8.0f;
             snapper_vars->f8C = frame_time * 5.0f;
             snapper_vars->fC0 = 7.5f;
             snapper_vars->fC4 = 14.5f;
@@ -885,18 +885,18 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
 
     if (activate_effect_l08(snapper_vars->f1A0,
                             moby,
-                            snapper_vars->f120,
+                            snapper_vars->selected_target_xy,
                             0,
                             0,
-                            D_L06_001B0FB0_2FA618[snapper_vars->f1B0] + 4,
-                            *D_L06_001B0FB0_2FA618[snapper_vars->f1B0]) != 2) {
-        if (snapper_vars->f1A0 < vector_distance_xy(snapper_vars->f170, snapper_vars->f120) ||
-            3.0f < absolute_float(moby->pos.z - snapper_vars->f128)) {
+                            D_L06_001B0FB0_2FA618[snapper_vars->movement_path_index] + 4,
+                            *D_L06_001B0FB0_2FA618[snapper_vars->movement_path_index]) != 2) {
+        if (snapper_vars->f1A0 < vector_distance_xy(snapper_vars->home_position, snapper_vars->selected_target_xy) ||
+            3.0f < absolute_float(moby->pos.z - snapper_vars->selected_target_z)) {
             snapper_vars->f164 = 2;
         }
     }
-    if (snapper_vars->f160 == 0) {
-        snapper_vars->f160 = D_001413D0[0];
+    if (snapper_vars->selected_target_moby == 0) {
+        snapper_vars->selected_target_moby = D_001413D0[0];
     }
 }
 
