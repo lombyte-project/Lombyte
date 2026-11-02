@@ -55,14 +55,14 @@ typedef struct ArmedTransportVars {
     s32 unk160;
     s32 unk164;
     s32 path_point;
-    s32 unk16C;
+    s32 path_segment_fraction;
     f32 path_and_pose_state[4];
     u8  unk180[0x4];
     s32 unk184;
     f32 unk188;
     f32 unk18C;
     s32 voice;
-    f32 unk194;
+    f32 base_height;
 } ArmedTransportVars;
 
 typedef union {
@@ -191,10 +191,10 @@ void armed_transport_update(char *transport_moby) {
         if (transport_data->unkDC != -1)
             compute_armed_transport_path_headings(D_L16_001B0930[transport_data->unkDC]);
         speed = *(float *)&D_L16_00161D80 * frame_time;
-        transport_data->unk16C = 0;
+        transport_data->path_segment_fraction = 0;
         transport_data->path_point = 0;
         transport_data->path_and_pose_state[0] = speed;
-        transport_data->unk194 = MOBY(transport_moby)->pos.z;
+        transport_data->base_height = MOBY(transport_moby)->pos.z;
         if (transport_data->path_index == -1) {
             MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_TRACK_TARGET;
             break;
@@ -309,7 +309,7 @@ void armed_transport_update(char *transport_moby) {
         if (fast_difference_between_rotations(MOBY(transport_moby)->rot.z, heading) < 0.01f) {
             MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH;
             transport_data->path_point = 0;
-            transport_data->unk16C = 0;
+            transport_data->path_segment_fraction = 0;
         }
         break;
     }
@@ -374,7 +374,7 @@ void armed_transport_update(char *transport_moby) {
     case ARMED_TRANSPORT_STATE_DYING: {
         float dt = frame_time;
 
-        transport_data->unk194 -= dt + dt;
+        transport_data->base_height -= dt + dt;
         MOBY(transport_moby)->rot.x += dt * 0.2617994f;
         if (fast_dec_timer((int *)(&transport_data->unk160)) ||
             hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
@@ -437,7 +437,7 @@ void armed_transport_update(char *transport_moby) {
                                                 *(float *)&armed_transport_bob_phase_speed_degrees *
                                                     DEG_TO_RAD * frame_time);
     MOBY(transport_moby)->pos.z =
-        transport_data->unk194 +
+        transport_data->base_height +
         *(float *)&armed_transport_bob_amplitude * fast_sin(transport_data->unk18C);
     update_armed_transport_joint_animation(transport_moby);
 }
@@ -524,18 +524,18 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
 
 int advance_armed_transport_along_path(char *transport_moby, char *path) {
     ArmedTransportVars *transport_data = (ArmedTransportVars *)MOBY(transport_moby)->pvars;
-    float progress = (float)transport_data->path_point + *(float *)&transport_data->unk16C +
+    float progress = (float)transport_data->path_point + *(float *)&transport_data->path_segment_fraction +
                      transport_data->path_and_pose_state[0] / transport_data->path_and_pose_state[1];
     int   index = truncate_float_to_s32(progress);
     float speed;
     float distance, rate;
     char *position;
     transport_data->path_point = index;
-    *(float *)&transport_data->unk16C = progress - (float)index;
+    *(float *)&transport_data->path_segment_fraction = progress - (float)index;
     if (index < *(int *)path - 1) {
         position = &MOBY(transport_moby)->pos;
         func_00215CA8_path42_q(progress, path, 0, position, transport_moby + 0x40, 0);
-        transport_data->unk194 = MOBY(transport_moby)->pos.z;
+        transport_data->base_height = MOBY(transport_moby)->pos.z;
         speed = 0.0f;
         distance = fast_vec_dist(position, path + (*(int *)path << 4));
         rate = armed_transport_path_acceleration_coefficient_gp * *(float *)&frame_time_sq;
