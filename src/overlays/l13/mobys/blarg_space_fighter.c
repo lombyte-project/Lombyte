@@ -452,7 +452,7 @@ typedef struct Veh {
 typedef struct Boss {
     char          pad0[0x10E];
     unsigned char b10E;
-    unsigned char b10F;
+    unsigned char firing_fighter_update_count;
 } Boss;
 
 typedef struct Moby_2C56B0 {
@@ -485,7 +485,7 @@ typedef struct Data_2C56B0 {
     char        pad26[0x4A];
     V4_2C56B0   vel;
     char        pad80[0x10];
-    V4_2C56B0   v90;
+    V4_2C56B0   path_join_position;
     int         fA0;
     int         fA4;
     int         fA8;
@@ -589,8 +589,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             fighter_data->hB4 = 1;
             fighter_data->hB6 = *(unsigned short *)D_L13_001B07B0[path_table_index] - 1;
         }
-        qcopy(&fighter_data->v90, path + 0x20);
-        qcopy(&moby->pos, &fighter_data->v90);
+        qcopy(&fighter_data->path_join_position, path + 0x20);
+        qcopy(&moby->pos, &fighter_data->path_join_position);
         fighter_data->fA8 = scale_game_frames(0x14) + 5;
         moby->b30 = 0xFF;
         moby->h32 = 0xFF;
@@ -611,8 +611,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             fast_vec_sub(scratch_vector, D_L13_001670C0, scratch_vector);
             fighter_data->hB6 = fighter_data->hB4 =
                 select_point_index_by_distance(scratch_vector, path, 0.0f);
-            qcopy(&fighter_data->v90, path + (fighter_data->hB6 * 16 + 0x10));
-            qcopy(&moby->pos, &fighter_data->v90);
+            qcopy(&fighter_data->path_join_position, path + (fighter_data->hB6 * 16 + 0x10));
+            qcopy(&moby->pos, &fighter_data->path_join_position);
             moby->f94 = moby->cls->f10;
             moby->b31 = 1;
             moby->flags = (moby->flags & 0xFFFE) | 0x1000;
@@ -677,7 +677,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         switch (moby->bBC) {
         case FIGHTER_ATTACK_WAIT_TO_FIRE:
             if (vehd != 0 && veh->state == 4 && moby->b31 != 0 && close != 0 && boss != 0 &&
-                bossd->b10F < 3) {
+                bossd->firing_fighter_update_count < 3) {
                 fighter_data->fB8 = scale_game_frames(0x258);
                 fighter_data->fAC = 1.0f;
                 fighter_data->fA8 = 0;
@@ -686,9 +686,9 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             break;
         case FIGHTER_ATTACK_FIRE:
             if (boss != 0) {
-                bossd->b10F++;
+                bossd->firing_fighter_update_count++;
             }
-            if (bossd->b10F < 4) {
+            if (bossd->firing_fighter_update_count < 4) {
                 if (moby->b31 == 0) {
                     fighter_data->fA8++;
                 }
