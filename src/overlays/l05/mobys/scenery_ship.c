@@ -115,17 +115,17 @@ typedef union {
 typedef struct {
     /* 0x000 */ int            path;
     /* 0x004 */ float          f4;
-    /* 0x008 */ float          f8;
+    /* 0x008 */ float          path_sample_position;
     /* 0x00C */ float          fC;
     /* 0x010 */ int            pad10[3];
     /* 0x01C */ float          f1C;
     /* 0x020 */ Vec4f_2d7140   trail[3][16];
-    /* 0x320 */ short          f320;
-    /* 0x322 */ unsigned short f322;
-    /* 0x324 */ int           *f324;
-    /* 0x328 */ int            f328;
+    /* 0x320 */ short          trail_segment_count;
+    /* 0x322 */ unsigned short trail_write_index;
+    /* 0x324 */ int           *trail_last_queued_frame_ptr;
+    /* 0x328 */ int            voice_slot_index;
     /* 0x32C */ int            pad32C[15];
-    /* 0x368 */ float          f368;
+    /* 0x368 */ float          glow_quad_pulse_phase;
 } Data_2D8388;
 
 extern float D_0015ED6C;
@@ -199,8 +199,8 @@ void scenery_ship_update(char *moby) {
         MOBY(moby)->scale =
             MOBY(moby)->pclass->scale * scenery_ship_initialization_scale_multiplier_gp;
         scenery_ship_instance_vars->f1C = random_angle_radians();
-        scenery_ship_instance_vars->f328 = -1;
-        scenery_ship_instance_vars->f368 = random_angle_radians();
+        scenery_ship_instance_vars->voice_slot_index = -1;
+        scenery_ship_instance_vars->glow_quad_pulse_phase = random_angle_radians();
         path = ((char *)l05_paths[scenery_ship_instance_vars->path]);
         if (*(float *)(path + 0x1C) == -1.0f) {
             max_turn = 0.0f;
@@ -244,7 +244,7 @@ void scenery_ship_update(char *moby) {
         scenery_ship_instance_vars->fC =
             fast_vec_dist((float *)(path + 0x10), (float *)(path + 0x20));
         MOBY(moby)->state = SCENERY_SHIP_FOLLOW_PATH;
-        scenery_ship_instance_vars->f8 = (float)*(int *)path * scenery_ship_instance_vars->f4;
+        scenery_ship_instance_vars->path_sample_position = (float)*(int *)path * scenery_ship_instance_vars->f4;
         break;
     }
     case SCENERY_SHIP_FOLLOW_PATH: {
@@ -256,13 +256,13 @@ void scenery_ship_update(char *moby) {
         MOBY(moby)->glow_color =
             func_001FA8A8_2D8388(l05_scenery_ship_glow_pulse_start_color, l05_scenery_ship_glow_pulse_end_color, (wave + 1.0f) * 0.5f);
         advance_scenery_ship_along_path(moby, (int *)l05_paths[scenery_ship_instance_vars->path]);
-        if (voice_is_playing(moby, scenery_ship_instance_vars->f328) == 0) {
-            scenery_ship_instance_vars->f328 = allocate_voice_for_target_entry(1, 4, (int)moby);
+        if (voice_is_playing(moby, scenery_ship_instance_vars->voice_slot_index) == 0) {
+            scenery_ship_instance_vars->voice_slot_index = allocate_voice_for_target_entry(1, 4, (int)moby);
         }
         if ((frame_number & 3) == 0) {
-            scenery_ship_instance_vars->f322 = (scenery_ship_instance_vars->f322 + 1) & 0xF;
-            if ((float)scenery_ship_instance_vars->f320 < l05_scenery_ship_trail_segment_limit) {
-                scenery_ship_instance_vars->f320++;
+            scenery_ship_instance_vars->trail_write_index = (scenery_ship_instance_vars->trail_write_index + 1) & 0xF;
+            if ((float)scenery_ship_instance_vars->trail_segment_count < l05_scenery_ship_trail_segment_limit) {
+                scenery_ship_instance_vars->trail_segment_count++;
             }
         }
         left_offset.q = 0;
@@ -271,31 +271,31 @@ void scenery_ship_update(char *moby) {
         left_offset.f[2] = 0.45f;
         transform_vector_by_basis(&left_offset, &left_offset, moby + 0xC0);
         func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->f322],
+            (float *)&scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->trail_write_index],
             left_offset.f,
             (float *)&MOBY(moby)->pos);
-        scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->f322].w = 1.0f;
+        scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->trail_write_index].w = 1.0f;
         tail_offset.q = 0;
         tail_offset.f[0] = -1.5f;
         tail_offset.f[2] = -0.3f;
         transform_vector_by_basis(&tail_offset, &tail_offset, moby + 0xC0);
         func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->f322],
+            (float *)&scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->trail_write_index],
             tail_offset.f,
             (float *)&MOBY(moby)->pos);
-        scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->f322].w = 1.0f;
+        scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->trail_write_index].w = 1.0f;
         right_offset.q = 0;
         right_offset.f[0] = -1.2f;
         right_offset.f[1] = -0.4f;
         right_offset.f[2] = 0.45f;
         transform_vector_by_basis(&right_offset, &right_offset, moby + 0xC0);
         func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->f322],
+            (float *)&scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->trail_write_index],
             right_offset.f,
             (float *)&MOBY(moby)->pos);
-        scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->f322].w = 1.0f;
-        if (frame_number != *scenery_ship_instance_vars->f324) {
-            *scenery_ship_instance_vars->f324 = frame_number;
+        scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->trail_write_index].w = 1.0f;
+        if (frame_number != *scenery_ship_instance_vars->trail_last_queued_frame_ptr) {
+            *scenery_ship_instance_vars->trail_last_queued_frame_ptr = frame_number;
             add_draw_callback(func_L05_002D8B68_2D8388, moby);
         }
         if (MOBY(moby)->pos.x < 8.0f) {
