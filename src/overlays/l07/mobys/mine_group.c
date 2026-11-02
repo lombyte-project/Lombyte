@@ -200,7 +200,7 @@ typedef struct MineGroupVars {
     s32 unk78;
     f32 unk7C;
     f32 unk80;
-    s32 unk84;
+    s32 child_reset_gate;
     u8  pad_88[0x8];
     s32 child_reset_segment_index;
     u8  unk94;
@@ -378,7 +378,7 @@ void mine_group_update(struct Moby *moby) {
             *(int *)(child + 0x94) = *(int *)(child + 0x90) + 1;
             if (cursor == 0 || *(unsigned char *)(cursor + 0x20) == 0xfe ||
                 *(unsigned char *)(cursor + 0x20) == 0xfd) {
-                if (boltcrate_pvars->unk84 != -1) {
+                if (boltcrate_pvars->child_reset_gate != -1) {
                     fast_vec_sub((char *)child + 0x60, (char *)child + 0x80, (char *)cursor + 0x10);
                     qcopy((void *)(cursor + 0x10), (void *)(child + 0x80));
                     if (fast_dec_timer((int *)(child + 0x98)) &&
