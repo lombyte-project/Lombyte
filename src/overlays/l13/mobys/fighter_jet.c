@@ -1732,7 +1732,7 @@ int hp_bar_saved __asm__("D_L13_001613C4") = 0;
 
 extern short fighter_jet_hidden_moby_classes[] __asm__("D_L13_001CBDE8");
 
-short D_L13_00161440 = 0x7f;
+short l13_fighter_jet_mount_flag_moby_classes __asm__("D_L13_00161440") = 0x7f;
 
 extern float D_L13_0015F3FC;
 
@@ -1891,7 +1891,7 @@ void fighter_jet_update(Jet *jet_moby) {
         if (jet_data->group_b > 0)
             jet_group_state(jet_data->group_b, 0, 0, 0);
         jet_group_switch(fighter_jet_hidden_moby_classes, 1, 1, -1);
-        jet_group_switch(&D_L13_00161440, 1, -1, -1);
+        jet_group_switch(&l13_fighter_jet_mount_flag_moby_classes, 1, -1, -1);
         jet_group_flag(0x102, 0);
         jet_data->lock_index = -1;
         jet_data->start_timer = scale_game_frames(575);
@@ -1993,7 +1993,7 @@ void fighter_jet_update(Jet *jet_moby) {
             if (jet_data->group_b > 0)
                 jet_group_state(jet_data->group_b, 1, 1, 1);
             jet_group_switch(fighter_jet_hidden_moby_classes, 0, 0, -1);
-            jet_group_switch(&D_L13_00161440, 0, -1, -1);
+            jet_group_switch(&l13_fighter_jet_mount_flag_moby_classes, 0, -1, -1);
             jet_group_flag(0x102, 0);
             jet_moby->position[2] += 3.0f;
             jet_moby->scale = jet_moby->model->scale * 0.25f;
@@ -2044,7 +2044,7 @@ void fighter_jet_update(Jet *jet_moby) {
         if (jet_data->group_b > 0)
             jet_group_state(jet_data->group_b, 0, 0, 0);
         jet_group_switch(fighter_jet_hidden_moby_classes, 1, 1, -1);
-        jet_group_switch(&D_L13_00161440, 1, -1, -1);
+        jet_group_switch(&l13_fighter_jet_mount_flag_moby_classes, 1, -1, -1);
         jet_group_flag(0x102, 0);
         if (jet_data->exit_path != -1) {
             LevelCuboid *path = &l13_cuboids[jet_data->exit_path];
@@ -2158,7 +2158,7 @@ void fighter_jet_update(Jet *jet_moby) {
             if (jet_data->group_b > 0)
                 jet_group_state(jet_data->group_b, 0, 0, 0);
             jet_group_switch(fighter_jet_hidden_moby_classes, 1, 1, -1);
-            jet_group_switch(&D_L13_00161440, 1, -1, -1);
+            jet_group_switch(&l13_fighter_jet_mount_flag_moby_classes, 1, -1, -1);
             jet_group_flag(0x102, 0);
             path = &l13_cuboids[jet_data->destination_path];
             set_race_camera(&path->pos, &path->rot, 0, 1);
