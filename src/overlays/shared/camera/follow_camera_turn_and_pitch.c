@@ -18,7 +18,7 @@ typedef struct {
     unsigned char pad18[4];
     float         f1C;
     unsigned char pad20[4];
-    float         f24;
+    float         fallback_pitch_angle;
 } S_2e89b0;
 
 extern float D_0013CA40_lui[] __asm__("D_0013CA40") NOT_SDA;
@@ -65,7 +65,7 @@ void follow_camera_read_stick(char *camera_object, float *turn_input_out, float 
     }
     if (turn_pitch_state->flags & 2) {
         *pitch_input_out = 0.0f;
-        *pitch_input_out = turn_pitch_state->f24 / 0.6981317f;
+        *pitch_input_out = turn_pitch_state->fallback_pitch_angle / 0.6981317f;
     } else {
         float raw_pitch_input = D_0013CA40_lui[1];
         *pitch_input_out = -raw_pitch_input;
@@ -73,7 +73,7 @@ void follow_camera_read_stick(char *camera_object, float *turn_input_out, float 
             *pitch_input_out = raw_pitch_input;
         }
         if (*pitch_input_out == 0.0f) {
-            *pitch_input_out = turn_pitch_state->f24 / 0.6981317f;
+            *pitch_input_out = turn_pitch_state->fallback_pitch_angle / 0.6981317f;
         }
     }
 }
