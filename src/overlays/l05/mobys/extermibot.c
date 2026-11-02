@@ -687,8 +687,8 @@ typedef struct Wing {
     char          pad6[0x11];
     unsigned char bAD;
     char          pad7[0x12];
-    float         fC0;
-    float         fC4;
+    float         knockback_apex_animation_target;
+    float         knockback_landing_animation_target;
     char          pad8[0x58];
     char          selected_target_position_xy[8];
     float         selected_target_position_z;
@@ -831,10 +831,10 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
         case EXTERMIBOT_HIT_START_NONLETHAL_KNOCKBACK:
         case EXTERMIBOT_HIT_START_NONLETHAL_KNOCKBACK_AND_FLASH:
         case EXTERMIBOT_HIT_START_KNOCKBACK_WITH_FLASH:
-            moby_data->fC0 = 5.0f;
+            moby_data->knockback_apex_animation_target = 5.0f;
             moby_data->knockback_xy_magnitude = extermibot_nonlethal_knockback_xy_scale_gp * D_0015ED6C;
             moby_data->knockback_z_magnitude = extermibot_nonlethal_knockback_z_scale_gp * D_0015ED6C;
-            moby_data->fC4 = 10.0f;
+            moby_data->knockback_landing_animation_target = 10.0f;
             nonlethal_knockback_heading = fast_arc_tan(moby->pos.x - hit_record->who->pos.x,
                                                        moby->pos.y - hit_record->who->pos.y);
             *(u128_3047E8 *)working_vector = hit_record->dir;
@@ -850,8 +850,8 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             moby_data->knockback_gravity = extermibot_death_knockback_gravity_gp * D_0015ED70;
             moby_data->knockback_xy_magnitude = extermibot_death_knockback_xy_scale_gp * D_0015ED6C;
             moby_data->knockback_z_magnitude = extermibot_death_knockback_z_scale_gp * D_0015ED6C;
-            moby_data->fC0 = 5.5f;
-            moby_data->fC4 = 11.0f;
+            moby_data->knockback_apex_animation_target = 5.5f;
+            moby_data->knockback_landing_animation_target = 11.0f;
             death_knockback_heading = fast_arc_tan(moby->pos.x - hit_record->who->pos.x,
                                                    moby->pos.y - hit_record->who->pos.y);
             *(u128_3047E8 *)working_vector = hit_record->dir;
