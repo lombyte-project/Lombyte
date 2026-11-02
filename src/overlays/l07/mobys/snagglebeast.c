@@ -1003,6 +1003,9 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_PHASE_AFTER_THIRD_HEALTH_THRESHOLD = 7,
         SNAGGLEBEAST_PHASE_FINAL_TIMED_DAMAGE_SEQUENCE = 8
     };
+    enum {
+        SNAGGLEBEAST_TURN_CONTROLLER_RESET = 0
+    };
     Vec4              oldpos;
     ChaserSight       sight;
     Vec4              position;
@@ -1379,7 +1382,7 @@ void snagglebeast_update(unsigned char *moby) {
             snagglebeast_instance_state->substate += 1;
             qcopy(&position, moby + 0x10);
             speed = frame_time * 8.0f;
-            snagglebeast_instance_state->turn_controller_state = 0;
+            snagglebeast_instance_state->turn_controller_state = SNAGGLEBEAST_TURN_CONTROLLER_RESET;
             spawn_fading_ring_effect((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, speed, 1.0f);
             FUN_L00_0024f7c8(moby, (snagglebeast_instance_state->substate & 1) + 5, &position);
             configure_timed_point_light(moby,
