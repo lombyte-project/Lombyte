@@ -109,7 +109,7 @@ typedef struct {
 
 typedef struct {
     u8  p0[0xF8];
-    u8 *pF8;
+    u8 *collection_particle_byte_source;
 } T_2d8510;
 
 typedef union {
@@ -1188,7 +1188,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
             1,
             nanotech_ball_collection_particle_scale_factors[i] * color_progress_or_size_factor);
         if (effect_record)
-            effect_record[2] = *D_L00_001B2080_lui.pF8;
+            effect_record[2] = *D_L00_001B2080_lui.collection_particle_byte_source;
         effect_record = spawn_timed_hero_relative_particle(
             &effect_position,
             al | 0xFFFFFF,
@@ -1200,7 +1200,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
             nanotech_ball_collection_particle_scale_factors[i] *
                 (color_progress_or_size_factor * 0.7f));
         if (effect_record)
-            effect_record[2] = *D_L00_001B2080_lui.pF8;
+            effect_record[2] = *D_L00_001B2080_lui.collection_particle_byte_source;
         fast_vec_add(&effect_position, &effect_position, &effect_position_step);
     }
     return any_effect_timer_above_threshold;
