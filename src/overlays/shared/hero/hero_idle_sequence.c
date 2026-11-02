@@ -2849,11 +2849,11 @@ void clear_hero_idle_rotation_targets(void) {
 
 typedef struct {
     char  p000[0x248];
-    f32   f248;
+    f32   forward_collision_distance_xy;
     char  p24c[0x258 - 0x24C];
-    f32   f258;
-    f32   f25c;
-    s32   i260;
+    f32   forward_drop_probe_distance;
+    f32   forward_drop_probe_clearance_offset;
+    s32   forward_drop_detected;
     char  p264[0x1004 - 0x264];
     f32   idle_pitch_target_radians;
     f32   idle_yaw_target_radians;
@@ -2896,13 +2896,13 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
     } else {
         approach_value(&D_0015EE14, 0.92f, 0.05f);
     }
-    if (G.i260 != 0 && 1.4f < G.f258 && 1.0f < G.f248) {
+    if (G.forward_drop_detected != 0 && 1.4f < G.forward_drop_probe_distance && 1.0f < G.forward_collision_distance_xy) {
         set_fourth_hero_easing_parameters(frame_scale_sq * 0.015f, frame_scale_sq * 0.3f);
-        pitch_target_radians = G.f258 * 1.5f * DEG_TO_RAD + 0.19198622f;
+        pitch_target_radians = G.forward_drop_probe_distance * 1.5f * DEG_TO_RAD + 0.19198622f;
         if (0.47123888f < pitch_target_radians)
             pitch_target_radians = 0.47123888f;
-        if ((1.0f - G.f25c) * 35.0f * DEG_TO_RAD < pitch_target_radians)
-            pitch_target_radians = (1.0f - G.f25c) * 35.0f * DEG_TO_RAD;
+        if ((1.0f - G.forward_drop_probe_clearance_offset) * 35.0f * DEG_TO_RAD < pitch_target_radians)
+            pitch_target_radians = (1.0f - G.forward_drop_probe_clearance_offset) * 35.0f * DEG_TO_RAD;
         hero_eases[3].rot_target.f[1] = pitch_target_radians;
         set_second_hero_easing_parameters(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
         hero_eases[1].rot_target.f[1] = hero_eases[3].rot_target.f[1] * 0.7f;
