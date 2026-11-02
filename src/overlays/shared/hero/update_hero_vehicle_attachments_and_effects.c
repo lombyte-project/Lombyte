@@ -467,7 +467,7 @@ void adjust_hero_velocity_from_collision_probes(int force) {
     if ((u32)(P.i208C - 0x11) < 2) {
         primary_origin_z_offset = 0.0f;
         k = 0.7f;
-    } else if (P.hero_vehicle_mode == 1) {
+    } else if (P.hero_vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         primary_origin_z_offset = 0.35f;
         k = 0.27000001072883606f;
     }
