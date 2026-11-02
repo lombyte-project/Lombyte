@@ -453,7 +453,7 @@ typedef struct {
     char    pad00[0x20];
     M_35F0 *att;
     char    pad24[8];
-    float   f2C;
+    float   damage_amount;
 } Hit_35F0;
 
 typedef struct {
@@ -582,7 +582,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             data->fE4 = 9;
             data->fFD = 0;
             if ((unsigned int)(hit->att->cls.u - 0xB0) < 2) {
-                hit->f2C = 1.0f;
+                hit->damage_amount = 1.0f;
                 dmg = 1.0f;
             }
             data->hp -= dmg;
