@@ -100,8 +100,8 @@ typedef struct {
     unsigned char  mode;
     unsigned char  b1E5;
     char           pad1E6[2];
-    int            i1E8;
-    float          f1EC;
+    int            saved_path_index;
+    float          approach_movement_speed;
     OvlQuad        home;
     char           pad200[0x230 - 0x200];
     char           a230[0x2B0 - 0x230];
@@ -207,7 +207,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         robot_dog_vars->s24 = 1;
         robot_dog_vars->f20 = 1.0f;
         robot_dog_vars->pD0 = &D_L17_00162200;
-        robot_dog_vars->f1EC = random_float_between(frame_time * 7.2f, frame_time * 8.7f);
+        robot_dog_vars->approach_movement_speed = random_float_between(frame_time * 7.2f, frame_time * 8.7f);
         robot_dog_moby[0x20] = 1;
         blend_moby_animation(
             robot_dog_moby,
@@ -215,8 +215,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             random_integer_below(
                 *(unsigned char *)(*(char **)(MOBY(robot_dog_moby)->pclass->seqs) + 0x10)),
             0);
-        if (robot_dog_vars->i1E8 == -1) {
-            robot_dog_vars->i1E8 = robot_dog_vars->path;
+        if (robot_dog_vars->saved_path_index == -1) {
+            robot_dog_vars->saved_path_index = robot_dog_vars->path;
         }
         break;
     case ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE:
@@ -411,7 +411,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         break;
     }
     case ROBOT_DOG_STATE_APPROACH_TARGET:
-        FUN_L17_002efd48_c((char *)robot_dog_moby, robot_dog_vars->v180, robot_dog_vars->f1EC);
+        FUN_L17_002efd48_c((char *)robot_dog_moby, robot_dog_vars->v180, robot_dog_vars->approach_movement_speed);
         MOBY(robot_dog_moby)->anim_speed = 1.8f;
         if (point_in_path_xy((&hero.motion.pos),
                              ((int **)D_L17_001B0DB0)[robot_dog_vars->path] + 4,
