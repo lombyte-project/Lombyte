@@ -93,10 +93,10 @@ typedef struct Ship_5E48 {
     char               p80[0x14];
     int                i94;
     char               p98[0xE];
-    short              sA6;
-    unsigned short     hA8;
+    short              moby_class_id;
+    unsigned short     maya_instance_id;
     char               pAA[6];
-    unsigned char      bB0;
+    unsigned char      mission_index;
     char               pB1[0xB];
     unsigned char      bBC;
 } Ship_5E48;
@@ -110,7 +110,7 @@ typedef struct ShipD_5E48 {
     unsigned char b29;
     char          p2A[0x16];
     char          a40[0xB0];
-    AlignedVec4f  vF0;
+    AlignedVec4f  target_aim_position;
     char          p100[0x10];
     Ship_5E48    *tgt;
     int           targeting_status;
@@ -209,7 +209,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
 
     FUN_L00_00263ac8(2.5f, (int)ship, 2, d->a1D0);
     if (d->entry_path_index == -1) {
-        DebugPrint(blarg_ship_missing_path_error_format, ship->sA6, ship->hA8);
+        DebugPrint(blarg_ship_missing_path_error_format, ship->moby_class_id, ship->maya_instance_id);
         goto del;
     }
     FUN_L10_002e5968_c((char *)ship);
@@ -230,7 +230,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         if (ship->requested_animation_sequence != 0)
             blend_moby_animation(ship, 0, 0, 0);
         ship->state = BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME;
-        if (visited52[ship->bB0 + (D_0015ED84 << 4)] != 0xFF)
+        if (visited52[ship->mission_index + (D_0015ED84 << 4)] != 0xFF)
             break;
         goto del;
     case BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME:
@@ -293,7 +293,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
         if ((&hero)->vehicle_mode != 1) {
-            *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&d->vF0;
+            *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&d->target_aim_position;
             collision_line(&ship->pos, &A, 0, ship, 0);
         } else {
             if ((Ship_5E48 *)(&hero)->moby == tgt) {
@@ -358,7 +358,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
         if ((&hero)->vehicle_mode != 1) {
-            *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&d->vF0;
+            *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&d->target_aim_position;
             collision_line(&ship->pos, &A, 0, ship, 0);
         } else {
             if ((Ship_5E48 *)(&hero)->moby == tgt) {
