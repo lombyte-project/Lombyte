@@ -103,7 +103,7 @@ typedef struct SnagglebeastVars {
     f32 unk150[4];
     s32 timer;
     s32 unk164;
-    s32 unk168;
+    s32 turn_controller_state;
     f32 unk16C;
     s32 navigation_ids[6];
     s32 nav_path;
@@ -790,7 +790,7 @@ int start_snagglebeast_turn_toward_target(unsigned char    *moby,
                                         target_position[1] - MOBY(moby)->pos.y);
     if (moby_vars->turn_start_angle <
         fast_difference_between_rotations(MOBY(moby)->rot.z, target_heading)) {
-        moby_vars->unk168 = 0;
+        moby_vars->turn_controller_state = 0;
         MOBY(moby)->anim_speed = 1.0f;
         moby_vars->turn_saved_state = MOBY(moby)->state;
         moby_vars->turn_resume_animation = resume_animation;
@@ -1322,7 +1322,7 @@ void snagglebeast_update(unsigned char *moby) {
             break;
         FUN_L00_00258278((struct Moby *)moby,
                          target_angle,
-                         (float *)&snagglebeast_instance_state->unk168,
+                         (float *)&snagglebeast_instance_state->turn_controller_state,
                          frame_time_sq * 2.0943952f,
                          frame_time_sq * 0.6981317f,
                          frame_time * 2.0943952f);
@@ -1351,7 +1351,7 @@ void snagglebeast_update(unsigned char *moby) {
     case SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK:
         FUN_L00_00258278((struct Moby *)moby,
                          target_angle,
-                         (float *)&snagglebeast_instance_state->unk168,
+                         (float *)&snagglebeast_instance_state->turn_controller_state,
                          frame_time_sq * 1.5707964f,
                          frame_time_sq * 0.6981317f,
                          frame_time * 1.0471976f);
@@ -1362,7 +1362,7 @@ void snagglebeast_update(unsigned char *moby) {
             snagglebeast_instance_state->unk164 += 1;
             qcopy(&position, moby + 0x10);
             speed = frame_time * 8.0f;
-            snagglebeast_instance_state->unk168 = 0;
+            snagglebeast_instance_state->turn_controller_state = 0;
             spawn_fading_ring_effect((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, speed, 1.0f);
             FUN_L00_0024f7c8(moby, (snagglebeast_instance_state->unk164 & 1) + 5, &position);
             configure_timed_point_light(moby,
@@ -1687,7 +1687,7 @@ void snagglebeast_update(unsigned char *moby) {
                     (struct Moby *)moby,
                     fast_arc_tan(snagglebeast_instance_state->turn_target[0] - MOBY(moby)->pos.x,
                                  snagglebeast_instance_state->turn_target[1] - MOBY(moby)->pos.y),
-                    (float *)&snagglebeast_instance_state->unk168,
+                    (float *)&snagglebeast_instance_state->turn_controller_state,
                     frame_time_sq * 2.0943952f,
                     frame_time_sq * 0.6981317f,
                     frame_time * 2.0943952f);
@@ -1951,7 +1951,7 @@ void snagglebeast_update(unsigned char *moby) {
         ((int *)snagglebeast_instance_state)[0xA5] = 1;
         FUN_L00_00258278((struct Moby *)moby,
                          hero_angle,
-                         (float *)&snagglebeast_instance_state->unk168,
+                         (float *)&snagglebeast_instance_state->turn_controller_state,
                          frame_time_sq * 2.0943952f,
                          frame_time_sq * 0.6981317f,
                          frame_time * 2.0943952f);
@@ -2156,7 +2156,7 @@ void snagglebeast_update(unsigned char *moby) {
         FUN_L00_00258278((struct Moby *)moby,
                          fast_arc_tan(snagglebeast_instance_state->unk150[0] - MOBY(moby)->pos.x,
                                       snagglebeast_instance_state->unk150[1] - MOBY(moby)->pos.y),
-                         (float *)&snagglebeast_instance_state->unk168,
+                         (float *)&snagglebeast_instance_state->turn_controller_state,
                          frame_time_sq * 2.0943952f,
                          frame_time_sq * 0.6981317f,
                          frame_time * 2.0943952f);
