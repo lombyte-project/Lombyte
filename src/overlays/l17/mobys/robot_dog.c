@@ -588,7 +588,7 @@ typedef struct {
     char          pad7C[0x28];
     unsigned char bA4;
     char          padA5;
-    short         hA6;
+    short         moby_class_id;
 } Moby_2F1558;
 
 typedef struct {
@@ -645,7 +645,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
         *(OvlQuad *)position_buffer = *(OvlQuad *)hit_record->pos;
         trooper_knockback_arc(
             position_buffer, &knockback_heading, &moby_vars->f138, &moby_vars->f13C);
-        if (hit_record != 0 && hit_record->moby != 0 && hit_record->moby->hA6 == 0x63) {
+        if (hit_record != 0 && hit_record->moby != 0 && hit_record->moby->moby_class_id == 0x63) {
             knockback_heading =
                 fast_arc_tan(moby_vars->f1F0 - moby->pos[0], moby_vars->f1F4 - moby->pos[1]);
         }
