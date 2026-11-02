@@ -93,6 +93,9 @@ void rocket_tank_update(M1454 *moby) {
         ROCKET_TANK_PATROLLING = 1,
         ROCKET_TANK_FIRING = 2
     };
+    enum {
+        ROCKET_TANK_AIM_YAW_OSCILLATION_INITIAL_PHASE = 0
+    };
     D1454 *tank_data = moby->data;
     update_rocket_tank_damage_and_aim(moby);
     switch (moby->state) {
@@ -151,7 +154,7 @@ void rocket_tank_update(M1454 *moby) {
     case ROCKET_TANK_PATROLLING:
         func_L18_002F9AB8_v(moby);
         if (*(int *)((char *)tank_data + 0xB4) != 2) {
-            tank_data->aim_yaw_oscillation_phase = 0;
+            tank_data->aim_yaw_oscillation_phase = ROCKET_TANK_AIM_YAW_OSCILLATION_INITIAL_PHASE;
             tank_data->aim_vector_length_limit = 10.0f;
             if (moby->current_animation_index != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(20));
