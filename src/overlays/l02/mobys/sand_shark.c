@@ -1118,7 +1118,7 @@ extern s32 sand_shark_single_particle_third_frame_count_range_end_gp __asm__("D_
     __attribute__((sda));
 s32 l02_sand_shark_single_particle_initial_color __asm__("D_L02_0016199C") = 0x40306058;
 s32 l02_sand_shark_single_particle_secondary_color __asm__("D_L02_001619A0") = 0x10306058;
-s32 D_L02_001619A4 = -1;
+s32 l02_sand_shark_single_particle_header_selector __asm__("D_L02_001619A4") = -1;
 
 void emit_sand_shark_single_particle(Vec4 *from) __asm__("FUN_L02_002d5a68");
 
@@ -1180,7 +1180,7 @@ void emit_sand_shark_single_particle(Vec4 *from) {
                 frame_count,
                 second_frame_count,
                 third_frame_count,
-                D_L02_001619A4);
+                l02_sand_shark_single_particle_header_selector);
 }
 
 /* pvars of the class FUN_L02_002d5c88 updates (only the fields it touches). */
