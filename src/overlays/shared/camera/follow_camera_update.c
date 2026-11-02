@@ -12,7 +12,7 @@ typedef struct {
     char  p0[0x80];
     float pull_back_alignment_vector[4];
     char  p1[0xA4 - 0x90];
-    float fA4;
+    float pull_back_blend_input;
 } C_2e9518;
 
 typedef struct {
@@ -452,14 +452,14 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     float     k, pull_back_target, interpolated_pull_back_value;
 
     if (pull_back_state->h6 == 0) {
-        if (pull_back_state->h4 != 0 && C->fA4 == 0.0f &&
+        if (pull_back_state->h4 != 0 && C->pull_back_blend_input == 0.0f &&
             fast_vec_dot(D_001413D0_lui + 0xC0, camera_object) <= -0.3f) {
             goto on;
         }
-        if (0.0001f < absolute_float(C->fA4) && fast_vec_dot(C->pull_back_alignment_vector, camera_object) <= -0.3f) {
+        if (0.0001f < absolute_float(C->pull_back_blend_input) && fast_vec_dot(C->pull_back_alignment_vector, camera_object) <= -0.3f) {
         on:
             pull_back_state->h4 = scale_game_frames(0x78);
-            k = C->fA4 * 14.2857f;
+            k = C->pull_back_blend_input * 14.2857f;
             if (1.0f < k)
                 k = 1.0f;
             pull_back_target = D_001413F4_lui == 1 ? 4.0f : pull_back_state->fC;
