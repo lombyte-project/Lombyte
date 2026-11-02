@@ -29,7 +29,7 @@ typedef struct {
 
 typedef struct {
     u8  pad0[0x2C];
-    f32 f2c;
+    f32 destruction_trigger;
 } SparkHit;
 
 extern s32   D_L01_0015F580;
@@ -60,7 +60,7 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
         mushroom_moby->state = GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT;
         break;
     case GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT:
-        if (hit != 0 && hit->f2c > 0.0f) {
+        if (hit != 0 && hit->destruction_trigger > 0.0f) {
             flag = 1;
         }
         if (flag) {
