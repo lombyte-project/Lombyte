@@ -324,15 +324,15 @@ typedef struct {
     int   iD8;
     float fDC;
     int   ids[8];
-    int   i100;
+    int   boarding_turret_moby_index;
     int   i104;
     int   i108;
-    int   i10C;
+    int   fall_check_airborne_frames;
 } Engine292e98;
 
 typedef struct {
     char  p00[0x60];
-    int   i60;
+    int   path_node_index;
     char  p64[0xC];
     char *path;
     int   i74;
@@ -347,7 +347,7 @@ typedef struct {
     float f14;
     float f18;
     char  p1C[0xC];
-    int   i28;
+    int   cuboid_index;
     int   i2C;
 } Turret292e98;
 
@@ -508,7 +508,7 @@ void metropolis_train_locomotive_update(char *moby) {
         MOBY(moby)->command = 3;
         cdata->i74 = train_engine_pvars->iA4;
         cdata->path = ((char *)l03_paths[cdata->i74]);
-        cdata->i60 = 1;
+        cdata->path_node_index = 1;
         train_engine_pvars->fC8 = 0.0f;
         break;
     case TRAIN_WAIT_FOR_BOARDING:
@@ -516,7 +516,7 @@ void metropolis_train_locomotive_update(char *moby) {
         if (!is_point_inside_clip_volume(&hero.motion, train_engine_pvars->iB4)) {
             break;
         }
-        if (train_engine_pvars->i100 == -1) {
+        if (train_engine_pvars->boarding_turret_moby_index == -1) {
             break;
         }
         mode = hero.state.control_mode;
@@ -525,8 +525,8 @@ void metropolis_train_locomotive_update(char *moby) {
             D_L03_0015FDFC = 1;
             request_music_track(4, 7);
             set_moby_dialogue_record_value(moby, 1);
-            ((char *)&D_L03_0015FFD8_m292[train_engine_pvars->i100])[0xBC] = 1;
-            td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[train_engine_pvars->i100] + 0x78);
+            ((char *)&D_L03_0015FFD8_m292[train_engine_pvars->boarding_turret_moby_index])[0xBC] = 1;
+            td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[train_engine_pvars->boarding_turret_moby_index] + 0x78);
             AIM_AT_HERO(td);
             td->i2C = scale_game_frames(860);
             train_engine_pvars->i104 = scale_game_frames(30);
@@ -544,8 +544,8 @@ void metropolis_train_locomotive_update(char *moby) {
         if (hero.air_frames.s != 0 && hero.state.control_mode != 3) {
             FUN_L00_0025df68(
                 cdata->path, hero.motion.pos.f, start, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
-            train_engine_pvars->i10C += 1;
-            if (scale_game_frames(60) < train_engine_pvars->i10C &&
+            train_engine_pvars->fall_check_airborne_frames += 1;
+            if (scale_game_frames(60) < train_engine_pvars->fall_check_airborne_frames &&
                 hero.motion.pos.f[2] < start[2] - 10.0f) {
                 RELEASE_VOICE(train_engine_pvars->i108);
                 train_engine_pvars->i108 = -1;
@@ -554,10 +554,10 @@ void metropolis_train_locomotive_update(char *moby) {
                 break;
             }
         } else {
-            train_engine_pvars->i10C = 0;
+            train_engine_pvars->fall_check_airborne_frames = 0;
         }
-        if (((unsigned char *)(char *)&D_L03_0015FFD8_m292[train_engine_pvars->i100])[0xBC] != 0) {
-            td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[train_engine_pvars->i100] + 0x78);
+        if (((unsigned char *)(char *)&D_L03_0015FFD8_m292[train_engine_pvars->boarding_turret_moby_index])[0xBC] != 0) {
+            td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[train_engine_pvars->boarding_turret_moby_index] + 0x78);
             AIM_AT_HERO(td);
         }
         if (hero.ground_moby != 0 &&
@@ -573,7 +573,7 @@ void metropolis_train_locomotive_update(char *moby) {
         if (train_engine_pvars->iD8 == -1) {
             break;
         }
-        if (((unsigned char *)(char *)&D_L03_0015FFD8_m292[train_engine_pvars->i100])[0xBC] != 0) {
+        if (((unsigned char *)(char *)&D_L03_0015FFD8_m292[train_engine_pvars->boarding_turret_moby_index])[0xBC] != 0) {
             break;
         }
         for (i = 0; i < 8; i++) {
@@ -598,25 +598,25 @@ void metropolis_train_locomotive_update(char *moby) {
             vector_distance_xy(l03_camera.pos.f,
                                ((char *)l03_paths[train_engine_pvars->iAC]) + 0x10),
             *(float *)(((char *)l03_paths[train_engine_pvars->iAC]) + 0x18) - l03_camera.pos.f[2]);
-        l03_cuboids[tdb->i28].pos.x =
+        l03_cuboids[tdb->cuboid_index].pos.x =
             fast_cos(PATH_HEADING(((char *)l03_paths[train_engine_pvars->iAC]))) *
             -(train_engine_pvars->fDC + 4.0f);
-        l03_cuboids[tdb->i28].pos.y =
+        l03_cuboids[tdb->cuboid_index].pos.y =
             fast_sin(PATH_HEADING(((char *)l03_paths[train_engine_pvars->iAC]))) *
             -(train_engine_pvars->fDC + 4.0f);
-        l03_cuboids[tdb->i28].pos.z = 0.0f;
-        fast_vec_add(&l03_cuboids[tdb->i28].pos,
-                     &l03_cuboids[tdb->i28].pos,
+        l03_cuboids[tdb->cuboid_index].pos.z = 0.0f;
+        fast_vec_add(&l03_cuboids[tdb->cuboid_index].pos,
+                     &l03_cuboids[tdb->cuboid_index].pos,
                      ((char *)l03_paths[train_engine_pvars->iAC]) + 0x10);
-        l03_cuboids[tdb->i28].pos.z += 2.7f;
-        clear_u64_value(&l03_cuboids[tdb->i28].rot);
-        l03_cuboids[tdb->i28].rot.z = PATH_HEADING(((char *)l03_paths[train_engine_pvars->iAC]));
+        l03_cuboids[tdb->cuboid_index].pos.z += 2.7f;
+        clear_u64_value(&l03_cuboids[tdb->cuboid_index].rot);
+        l03_cuboids[tdb->cuboid_index].rot.z = PATH_HEADING(((char *)l03_paths[train_engine_pvars->iAC]));
         tdb->i2C = scale_game_frames(10000);
         *(OvlQuad *)start = *(OvlQuad *)(((char *)l03_paths[train_engine_pvars->iAC]) + 0x10);
         place_metropolis_train(
             moby, start, PATH_HEADING(((char *)l03_paths[train_engine_pvars->iAC])));
         cdata->i74 = train_engine_pvars->iAC;
-        cdata->i60 = 1;
+        cdata->path_node_index = 1;
         cdata->fF0 = 1.0f;
         train_engine_pvars->fC0 = 2.0f * train_engine_pvars->fC0;
         cdata->fFC = train_engine_pvars->fC0;
@@ -629,7 +629,7 @@ void metropolis_train_locomotive_update(char *moby) {
         update_metropolis_train_motion(moby);
         D_L03_0015FDFC = 1;
         ENGINE_SOUND();
-        if (cdata->i60 >= train_engine_pvars->iD4) {
+        if (cdata->path_node_index >= train_engine_pvars->iD4) {
             train_engine_pvars->fDC = 0.0f;
             braking_speed_floor = train_engine_pvars->fDC;
             train_engine_pvars->fC8 -= train_engine_pvars->fC0 / 1.9f * frame_time;
