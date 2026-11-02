@@ -444,6 +444,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_PHASE_WAIT_TO_QUEUE_ENDING_MOVIE = 10,
         DREK_BOSS_PHASE_WAIT_FOR_ENDING_CLEANUP = 0xB
     };
+    enum {
+        DREK_BOSS_GROUND_TARGET_CENTER_HERO_POSITION = 2
+    };
     BossData *boss_data = (BossData *)moby->boss_private_data;
     BossMoby *aim_target_moby;
     float     position_and_displacement_scratch[4];
@@ -1193,11 +1196,11 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
             is_value_within_interpolated_window((char *)moby, 16.0f) != 0) {
-            if (random_integer_below(5) != 0 || boss_data->ground_target_center_mode == 2) {
+            if (random_integer_below(5) != 0 || boss_data->ground_target_center_mode == DREK_BOSS_GROUND_TARGET_CENTER_HERO_POSITION) {
                 float a;
                 float r;
 
-                if (boss_data->ground_target_center_mode != 2) {
+                if (boss_data->ground_target_center_mode != DREK_BOSS_GROUND_TARGET_CENTER_HERO_POSITION) {
                     qcopy(position_displacement_direction_and_rotation_scratch, boss_data->f70);
                 } else {
                     qcopy(position_displacement_direction_and_rotation_scratch, hero.motion.pos.f);
