@@ -134,13 +134,13 @@ typedef struct {
     float         f18;
     float         f1C;
     int           i20;
-    int           i24;
+    int           knockback_flags;
     float         f28;
     char          p2C[0x11];
     unsigned char b3D;
     short         s3E;
     char          p40[0xC];
-    float         f4C;
+    float         target_horizontal_speed;
     float         f50;
     float         f54;
     char          p58[8];
@@ -469,7 +469,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         moby_data->f30 = 1.75f;
         moby_data->q.f28 = 0.7f;
         moby_data->q.i20 = truncate_float_to_s32(716.8f);
-        moby_data->q.f4C = 0.0f;
+        moby_data->q.target_horizontal_speed = 0.0f;
         moby_data->b58 = 0xA;
         moby_data->b5A = 0xC;
         clear_u64_value(moby_data->v40);
@@ -1047,7 +1047,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             speed = vector_length_xy(q);
             want = 0.0f;
             if (q->s3E != 2) {
-                want = q->f4C;
+                want = q->target_horizontal_speed;
             }
             approach_value(&speed, want, q->f14);
             set_vector_length_xy(q, q, speed);
@@ -1550,7 +1550,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
                      (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f))) *
                 0.5f;
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
-            moby_data->q.i24 = 9;
+            moby_data->q.knockback_flags = 9;
             moby_data->q.b3D = 0;
             *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
             trooper_knockback_arc(
@@ -1578,7 +1578,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
                 kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                     (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f));
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
-            moby_data->q.i24 = 9;
+            moby_data->q.knockback_flags = 9;
             moby_data->q.b3D = 0;
             *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
             trooper_knockback_arc(
@@ -1601,7 +1601,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
                 kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                     (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f));
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
-            moby_data->q.i24 = 9;
+            moby_data->q.knockback_flags = 9;
             moby_data->q.b3D = 0;
             *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
             trooper_knockback_arc(
@@ -1621,7 +1621,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
                 kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                     (2.0f * JUMP_SPEED(2.0f, 40.0f) / (frame_time_sq * 40.0f));
             moby_data->q.f1C = JUMP_SPEED(2.0f, 40.0f);
-            moby_data->q.i24 = 9;
+            moby_data->q.knockback_flags = 9;
             moby_data->q.b3D = 0;
             *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
             trooper_knockback_arc(
@@ -1629,7 +1629,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 7, 5, 2);
             moby_data->q.f50 = 10.0f;
             moby_data->q.f54 = 20.0f;
-            moby_data->q.f4C = 2.0f * frame_time;
+            moby_data->q.target_horizontal_speed = 2.0f * frame_time;
             moby_data->b255 = 0;
             moby->flags &= 0xEFFF;
             moby_data->b67 = 0xFA;
