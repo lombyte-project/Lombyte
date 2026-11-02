@@ -530,7 +530,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void  finish_motion_305178(void *, void *) __asm__("FUN_L00_0025d538");
 
-int          D_L05_00161B74 = 5;
+int          l05_extermitank_removal_base_frames __asm__("D_L05_00161B74") = 5;
 extern float extermitank_child_animation_speed_divisor_gp __asm__("D_L05_00161AF0")
     __attribute__((sda));
 extern float extermitank_child_animation_speed_offset_scale_gp __asm__("D_L05_00161AF4")
@@ -650,7 +650,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
                             1,
                             -1,
                             0);
-            extermitank_hit_sync_vars->unk19E = scale_game_frames(D_L05_00161B74);
+            extermitank_hit_sync_vars->unk19E = scale_game_frames(l05_extermitank_removal_base_frames);
             MOBY(moby)->state = EXTERMITANK_REMOVE;
             clear_u64_value(effect_data);
             *(float *)(effect_data + 8) = extermitank_hit_sync_vars->unk194;
