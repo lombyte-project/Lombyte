@@ -1633,7 +1633,7 @@ typedef struct {
     char           padA5;
     unsigned short oclass;
     char           padA8[8];
-    unsigned char  bB0;
+    unsigned char  persistent_state_index;
 } ShipMoby;
 
 typedef struct {
@@ -1867,7 +1867,7 @@ void fighter_jet_update(ShipMoby *moby) {
             hp_bar_saved = 1;
             ship_vars->timerF8 = 1;
             ship_vars->iE8 = 1;
-            if (moby->bB0 != 0xFF && visited52[moby->bB0 + current_level_index * 16] == 0xFF) {
+            if (moby->persistent_state_index != 0xFF && visited52[moby->persistent_state_index + current_level_index * 16] == 0xFF) {
                 moby->state = FIGHTER_JET_STATE_FADE_THEN_REMOVE;
             }
             if (ship_vars->i11C > 0) {
@@ -2088,8 +2088,8 @@ void fighter_jet_update(ShipMoby *moby) {
                     p = D_L17_001600EC + (ship_vars->exit_path << 7);
                     set_race_camera(p + 0x30, p + 0x70, 0, 1);
                 }
-                if (moby->bB0 != 0xFF) {
-                    jet_clear_persistent(moby->bB0);
+                if (moby->persistent_state_index != 0xFF) {
+                    jet_clear_persistent(moby->persistent_state_index);
                 }
                 idx = ship_vars->voice;
                 if (idx != -1) {
