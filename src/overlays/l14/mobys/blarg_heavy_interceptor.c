@@ -222,7 +222,7 @@ typedef struct BlargHeavyInterceptorVars {
     s16 unk88;
     s16 rejoin_path_loop;
     f32 path_point_segment_distance;
-    f32 unk90[4];
+    f32 cached_aim_point_position[4];
     f32 unkA0[4];
     f32 unkB0[4];
     f32 unkC0[4];
@@ -372,8 +372,8 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         update_blarg_heavy_interceptor_patrol_path_position(moby);
         FUN_L14_002aea08_c618(moby);
         if (hit) {
-            lerp_vector(vector_scratch, moby_vars->unk90, moby_vars->unkD0, 0.5f);
-            qcopy(secondary_vector_scratch, moby_vars->unk90);
+            lerp_vector(vector_scratch, moby_vars->cached_aim_point_position, moby_vars->unkD0, 0.5f);
+            qcopy(secondary_vector_scratch, moby_vars->cached_aim_point_position);
             noop_main_callback(secondary_vector_scratch, moby_vars->unk214 * 0.8f);
             noop_main_callback(vector_scratch, moby_vars->unk214 * 0.48f);
             if (FUN_L00_001f2868_c618(moby_vars->unk214 * 0.48f, vector_scratch, 0, 0, 0) ||
@@ -1419,7 +1419,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
     float                      glow_to_camera_distance;
     u32                        col;
     int                        j;
-    qcopy(glow_quad_position, d->unk90);
+    qcopy(glow_quad_position, d->cached_aim_point_position);
     glow_quad_position[2] += 0.01f;
     glow_quad_position[3] = 1.0f;
     pk.b = get_effect_texture_alt(0xB);
@@ -1805,7 +1805,7 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
         build_axis_rotation_quaternion(
             blarg_heavy_interceptor_private_vars->unk130, 1, rotation_angle);
         blarg_heavy_interceptor_private_vars->unk1C0[0] = rotation_angle;
-        qcopy(blarg_heavy_interceptor_private_vars->unk90,
+        qcopy(blarg_heavy_interceptor_private_vars->cached_aim_point_position,
               blarg_heavy_interceptor_private_vars->aim_point_position);
         if (flag != 0) {
             add_draw_callback(FUN_L14_002ae260_u, moby);
