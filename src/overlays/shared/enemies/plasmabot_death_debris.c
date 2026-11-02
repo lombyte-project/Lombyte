@@ -214,7 +214,7 @@ typedef struct {
     u32          color[4];
     s32          unk50, unk54, unk58;
     f32          unk5C, unk60;
-    s32          unk64;
+    s32          corner_2_texture_t;
     f32          unk68, unk6C;
     s64          unk70, tex, unk80, unk88;
 } GlowQuad_bfa8;
@@ -264,7 +264,7 @@ void draw_moby_offset_textured_quad(char *moby) {
     local.quad.unk58 = 0;
     local.quad.unk5C = one;
     local.quad.unk60 = one;
-    local.quad.unk64 = 0;
+    local.quad.corner_2_texture_t = 0;
     local.quad.unk68 = one;
     local.quad.unk6C = one;
 
