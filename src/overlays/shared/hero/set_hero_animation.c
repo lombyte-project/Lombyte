@@ -1431,7 +1431,7 @@ typedef struct Hero_234800 {
 
 typedef struct {
     char p0[0x3C];
-    int  i3C;
+    int  attachment_behavior_flags;
 } Plat;
 
 extern char  hero_233f80[] __asm__("D_0013F350");
@@ -1542,7 +1542,7 @@ void update_hero_attachment(void) {
                                                 &((Hero_234800 *)hero_233f80)->v90,
                                                 &((Hero_234800 *)hero_233f80)->v330,
                                                 &probe_transform_scratch);
-            } else if (plat->i3C & 4) {
+            } else if (plat->attachment_behavior_flags & 4) {
                 convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->i2080,
                                                 ((Hero_234800 *)hero_233f80)->p360,
                                                 &((Hero_234800 *)hero_233f80)->pos,
@@ -1590,7 +1590,7 @@ void update_hero_attachment(void) {
     if (amt != 0.0f) {
         sB4 = vector_length_xy(&((Hero_234800 *)hero_233f80)->v350);
         sB0 = ((Hero_234800 *)hero_233f80)->v350.z;
-        if (!(plat->i3C & 2)) {
+        if (!(plat->attachment_behavior_flags & 2)) {
             approach_value(&sB0, 0.0f, frame_time_sq_macro * 25.0f * amt);
             approach_value(&sB4, 0.0f, (frame_time_sq_macro + frame_time_sq_macro) * amt);
             set_vector_length_xy(
