@@ -139,9 +139,9 @@ typedef struct SnagglebeastVars {
     u8  turn_resume_animation;
     u8  timer_1F7;
     s32 voice;
-    f32 unk1FC;
+    f32 damage_reaction_amount;
     u8  joint_animation[0x64];
-    f32 unk264;
+    f32 joint_damage_reaction_target;
     f32 target_yaw_offset;
     u8  pad_26C[0x14];
     s16 point_light;
@@ -531,7 +531,7 @@ void process_snagglebeast_damage(char             *moby,
                 remaining = -2.0f;
                 if (!(2.0f < damage + damage))
                     remaining = -(damage + damage);
-                snagglebeast_instance_vars->unk1FC = remaining;
+                snagglebeast_instance_vars->damage_reaction_amount = remaining;
                 FUN_L00_00200228(original_health / frame, (void *)((unsigned)&scratch | 4));
                 if ((float)snagglebeast_instance_vars->max_health - 1.0f < original_health)
                     scratch.threshold = 5.0f;
@@ -580,10 +580,10 @@ void process_snagglebeast_damage(char             *moby,
         MOBY(moby)->hit_slot = 0xff;
     }
     trooper_anim_finish(moby, &snagglebeast_instance_vars->unk60);
-    output = snagglebeast_instance_vars->unk1FC + 0.3f;
-    snagglebeast_instance_vars->unk1FC = output;
+    output = snagglebeast_instance_vars->damage_reaction_amount + 0.3f;
+    snagglebeast_instance_vars->damage_reaction_amount = output;
     if (output > 0.0f)
-        snagglebeast_instance_vars->unk1FC = 0.0f;
+        snagglebeast_instance_vars->damage_reaction_amount = 0.0f;
 }
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -838,7 +838,7 @@ void update_snagglebeast_target_joint_animation(char             *moby,
         moby_vars->target_yaw_offset = -1.3962634f;
     }
     k = frame_scale_sq;
-    moby_vars->unk264 = moby_vars->unk1FC;
+    moby_vars->joint_damage_reaction_target = moby_vars->damage_reaction_amount;
     update_joint_animation(moby, moby_vars->joint_animation, 0xB, k * 0.030f, k * 0.3f);
 }
 
