@@ -49,7 +49,7 @@ typedef struct {
     char          padB8[0x1E];
     unsigned char unkD6;
     char          padD7[3];
-    short         unkDA;
+    short         target_height_override_pending;
     float         unkDC;
     float         unkE0;
     float         unkE4;
@@ -154,7 +154,7 @@ void follow_camera_approach(unsigned char *moby) {
     ((CamOrbit *)orbit)->unk40 = 0;
     ((CamOrbit *)orbit)->unk4C = 0;
     ((CamOrbit *)orbit)->unk58 = ((CamOrbit *)default_orbit)->unk2C;
-    ((CamTarget *)target)->unkDA = 0;
+    ((CamTarget *)target)->target_height_override_pending = 0;
     ((CamTarget *)target)->unkB4 = 0;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk10 = 1;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk22 = 0;
