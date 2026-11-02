@@ -1201,7 +1201,7 @@ typedef struct {
     float         knockback_horizontal_speed_approach_step;
     float         knockback_horizontal_speed;
     float         knockback_initial_vertical_speed;
-    int           i140; /* 0x140 */
+    int           knockback_collision_radius; /* 0x140 */
     int           knockback_flags;
     float         knockback_collision_z_offset;
     int           spawner_active_shark_count; /* 0x14C: count kept by the spawner moby */
@@ -1209,8 +1209,8 @@ typedef struct {
     unsigned char b15D; /* 0x15D */
     char          pad15E[0xE];
     float         knockback_target_horizontal_speed; /* 0x16C */
-    float         f170;
-    float         f174;
+    float         knockback_ascent_animation_target;
+    float         knockback_descent_animation_target;
     char          pad178[0x58];
     float         tgt[4]; /* 0x1D0: point followed along the path */
     char          pad1E0[0x30];
@@ -1306,7 +1306,7 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
         moby_vars->hp -= dmg;
         if (moby_vars->hp <= 0.0f) {
             moby_vars->hp -= dmg;
-            moby_vars->i140 = 0x200;
+            moby_vars->knockback_collision_radius = 0x200;
             moby_vars->knockback_gravity_per_update = sand_shark_death_knockback_gravity_gp * frame_time_sq;
             moby_vars->knockback_horizontal_speed_approach_step =
                 sand_shark_death_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
@@ -1335,8 +1335,8 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
             trooper_knockback_arc(&hit_knockback_vector, &k, &moby_vars->knockback_horizontal_speed, &moby_vars->knockback_initial_vertical_speed);
             trooper_start_knockback(k, moby, moby_vars->knock, 6, 1, 0);
             moby_vars->knockback_collision_z_offset = 0.85f;
-            moby_vars->f170 = 7.0f;
-            moby_vars->f174 = 14.0f;
+            moby_vars->knockback_ascent_animation_target = 7.0f;
+            moby_vars->knockback_descent_animation_target = 14.0f;
             moby[0x20] = 0x18;
             MOBY(moby)->collision = 0;
             moby_vars->hit_flash_target_red = 0x78;
