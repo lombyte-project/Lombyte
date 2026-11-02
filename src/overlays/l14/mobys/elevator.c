@@ -73,7 +73,7 @@ typedef struct {
     s32 motor;        /* 0x12C */
     s32 motor_volume; /* 0x130 */
     s32 hum_volume;   /* 0x134 */
-    s32 i138;         /* 0x138 */
+    s32 idle_glow_phase;         /* 0x138 */
 } L14VendorVars;
 
 void elevator_update(struct Moby *m) __asm__("FUN_L14_002ee8d8");
@@ -123,7 +123,7 @@ void elevator_update(struct Moby *elevator_moby) {
         elevator_vars->motor = -1;
         elevator_vars->motor_volume = -1;
         elevator_vars->hum_volume = -1;
-        elevator_vars->i138 = 0;
+        elevator_vars->idle_glow_phase = 0;
         break;
     }
     case ELEVATOR_STATE_WAIT_FOR_RIDER:
