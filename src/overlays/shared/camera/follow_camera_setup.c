@@ -209,14 +209,14 @@ typedef struct {
     u8 pad0[0x10];
     void (*fn)(void);
     u8  pad1[0x25C - 0x14];
-    u8 *p25C;
-    s32 i260;
+    u8 *angle_blend_target;
+    s32 angle_blend_ramp_frames;
     u8  pad2[0x380 - 0x264];
 } A_2e6000;
 
 typedef struct {
     u8  pad[0x2000];
-    s32 i2000;
+    s32 hero_moby;
 } L_2e6000;
 
 #include "rnc/overlay/shared/camera/level_camera.h"
@@ -327,27 +327,27 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     if (x->fn != 0)
         x->fn();
     player_camera_state = (A_2e6000 *)&l00_camera;
-    if (player_camera_state->p25C != 0 && camera_override_state->i10 < 2) {
-        if ((s8)player_camera_state->p25C[0x20] < 0) {
-            player_camera_state->p25C = 0;
+    if (player_camera_state->angle_blend_target != 0 && camera_override_state->i10 < 2) {
+        if ((s8)player_camera_state->angle_blend_target[0x20] < 0) {
+            player_camera_state->angle_blend_target = 0;
         } else {
             if (0.3f <= absolute_float(controller_state.analog[0]) ||
                 0.3f <= absolute_float(controller_state.analog[1])) {
-                player_camera_state->i260 = 0;
+                player_camera_state->angle_blend_ramp_frames = 0;
             }
             x = (A_2e6000 *)&l00_camera;
-            x->i260++;
-            if (scale_game_frames(400) < x->i260)
-                x->i260 = scale_game_frames(400);
-            rotation_or_blend_value = convert_integer_to_float(x->i260) /
+            x->angle_blend_ramp_frames++;
+            if (scale_game_frames(400) < x->angle_blend_ramp_frames)
+                x->angle_blend_ramp_frames = scale_game_frames(400);
+            rotation_or_blend_value = convert_integer_to_float(x->angle_blend_ramp_frames) /
                                       convert_integer_to_float(scale_game_frames(400));
             set_follow_camera_angle_blend_from_position(
-                x->p25C + 0x10, rotation_or_blend_value * 0.20943952f, 0.0f);
+                x->angle_blend_target + 0x10, rotation_or_blend_value * 0.20943952f, 0.0f);
         }
     }
     camera_override_state->i10 = 0;
     nearby_moby_count =
-        collect_mobies_in_sphere(&D_0013F3D0_2e6000, 1, D_0013F3D0_2e6000.i2000, 0, 15.0f);
+        collect_mobies_in_sphere(&D_0013F3D0_2e6000, 1, D_0013F3D0_2e6000.hero_moby, 0, 15.0f);
     if (nearby_moby_count > 0) {
         lp = D_L00_00177F00;
         for (i = 0; i < nearby_moby_count; lp++, i++) {
