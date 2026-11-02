@@ -249,7 +249,7 @@ typedef struct BlargHeavyInterceptorVars {
     f32 unk1F8;
     f32 yaw_drift;
     s16 unk200;
-    s16 unk202;
+    s16 red_light_tint_enabled;
     s32 patrol_path;
     s16 return_path_complete;
     s16 group_member_count;
@@ -364,7 +364,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             moby_vars->timer_1F2 =
                 scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         }
-        moby_vars->unk202 = 0;
+        moby_vars->red_light_tint_enabled = 0;
         moby_vars->unk200 = 1;
         found = 0;
         hit = update_blarg_heavy_interceptor_aim_transforms(moby, 1);
@@ -416,7 +416,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                            blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp;
         if (*(struct Moby **)(&moby_vars->unk180[3]) != 0) {
             moby_vars->unk200 = 1;
-            moby_vars->unk202 = 1;
+            moby_vars->red_light_tint_enabled = 1;
             update_blarg_heavy_interceptor_aim_transforms(moby, 1);
             qcopy(vector_scratch, &(*(struct Moby **)(&moby_vars->unk180[3]))->pos);
             vector_scratch[2] += 0.5f;
@@ -1105,11 +1105,11 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         o[0] = ring_vertex_scratch[0];
         o[1] = ring_vertex_scratch[1];
         o[2] = ring_vertex_scratch[2];
-        if (moby_vars->unk202 != 0) {
+        if (moby_vars->red_light_tint_enabled != 0) {
             cols[i] = blarg_heavy_interceptor_light_ring_vertex_colors[i] & 0xFF0000FF;
         }
     }
-    if (moby_vars->unk202 != 0) {
+    if (moby_vars->red_light_tint_enabled != 0) {
         FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp,
                          f.verts,
                          cols,
@@ -1136,7 +1136,7 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         o[1] = ring_vertex_scratch[1];
         o[2] = ring_vertex_scratch[2];
     }
-    if (moby_vars->unk202 != 0) {
+    if (moby_vars->red_light_tint_enabled != 0) {
         FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp,
                          f.verts,
                          cols,
@@ -1360,7 +1360,7 @@ void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    if (d->unk202 != 0) {
+    if (d->red_light_tint_enabled != 0) {
         col = 0x7F40407F;
         pk.col[3] = col;
         pk.col[2] = col;
@@ -1451,7 +1451,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    if (d->unk202 != 0) {
+    if (d->red_light_tint_enabled != 0) {
         col = 0x7F40407F;
         pk.col[3] = col;
         pk.col[2] = col;
