@@ -457,7 +457,7 @@ typedef struct {
 typedef struct {
     u8        pad[0x10];
     u8        v10[0x10];
-    u8        b20;
+    u8        pickup_moby_state;
     u8        pad2[3];
     T_2df1e0 *p24;
 } O_2df1e0;
@@ -3247,9 +3247,9 @@ void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
     f32 beam_segment_collection_radius;
     if (pickup_moby == 0)
         return;
-    if (pickup_moby->b20 == 0xFE)
+    if (pickup_moby->pickup_moby_state == 0xFE)
         return;
-    if (pickup_moby->b20 == 0xFD)
+    if (pickup_moby->pickup_moby_state == 0xFD)
         return;
     if (random_integer_below(10))
         return;
