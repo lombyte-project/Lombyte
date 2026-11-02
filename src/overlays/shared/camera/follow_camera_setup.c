@@ -1368,7 +1368,7 @@ typedef struct {
     u8  pad0[0x18];
     u8  b18;
     u8  b19;
-    u16 h1A;
+    u16 source_moby_type_id;
     u8  pad1C[0x14];
 } W_2e7d20;
 
@@ -1575,7 +1575,7 @@ move:
         make_hit_descriptor(&hit_descriptor, D_0013F350_lui.hero_moby, 0x800000, &v20, 20.0f);
         hit_descriptor.b18 = 3;
         hit_descriptor.b19 = 3;
-        hit_descriptor.h1A = *(u16 *)(D_0013F350_lui.hero_moby + 0xA6);
+        hit_descriptor.source_moby_type_id = *(u16 *)(D_0013F350_lui.hero_moby + 0xA6);
         record_moby_hit((*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby, &hit_descriptor);
     }
     BI_2e7d20(0x4C)++;
