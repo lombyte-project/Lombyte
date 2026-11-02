@@ -141,14 +141,14 @@ typedef struct BlargHelicopterVars {
     u8  pad_5B[0x5];
     u8  anim_state;
     u8  pad_61[0x6];
-    u8  unk67;
+    u8  hit_flash_target_red;
     u8  pad_68[0x8];
     f32 unk70[4];
     s32 unk80;
     u8  pad_84[0x4];
     f32 yaw_turn_velocity;
     s16 unk8C;
-    s16 unk8E;
+    s16 knockback_timer_frames;
     f32 bob_angle;
     f32 unk94;
     f32 unk98;
@@ -449,7 +449,7 @@ update_state:
         update_blarg_helicopter_motion_tilt(moby);
         break;
     case BLARG_HELICOPTER_KNOCKBACK:
-        if (fast_dec_timer_s16(&blarg_helicopter_vars->unk8E)) {
+        if (fast_dec_timer_s16(&blarg_helicopter_vars->knockback_timer_frames)) {
             moby->state = moby->command;
         } else {
             value = blarg_helicopter_vars->unk94 - frame_time_sq * 4.0f;
@@ -662,7 +662,7 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
             allocate_voice_for_target_entry(2, 0, moby);
             moby->state = BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET;
         } else if (hit_reaction_code != 0xB) {
-            blarg_helicopter_hit_vars->unk67 = 0xB4;
+            blarg_helicopter_hit_vars->hit_flash_target_red = 0xB4;
             trooper_anim_update(moby, (short *)&blarg_helicopter_hit_vars->anim_state);
             if (*(float *)(hit_record + 0x1C) == 5627.925f &&
                 moby->state != BLARG_HELICOPTER_KNOCKBACK) {
@@ -680,7 +680,7 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
                     blarg_helicopter_hit_vars->unk9C = 0.0f;
                 }
                 blarg_helicopter_hit_vars->unk94 = frame_time * 4.0f;
-                blarg_helicopter_hit_vars->unk8E = scale_game_frames(0x3C);
+                blarg_helicopter_hit_vars->knockback_timer_frames = scale_game_frames(0x3C);
                 moby->command = moby->state;
                 moby->state = BLARG_HELICOPTER_KNOCKBACK;
                 allocate_voice_for_target_entry(1, 0, moby);
