@@ -1402,7 +1402,7 @@ typedef struct Hero_234800 {
     char          p160[0x24];
     float         f184;
     char          p188[0x6E];
-    short         h1F6;
+    short         path_clearance_position_anchor_inhibit;
     char          p1F8[0x104];
     void         *p2FC;
     char          p300[0xE];
@@ -1506,7 +1506,7 @@ void update_hero_attachment(void) {
     }
     if (((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) &&
          fast_vec_length(&((Hero_234800 *)hero_233f80)->v150) == 0.0f &&
-         ((Hero_234800 *)hero_233f80)->h30E == 0 && ((Hero_234800 *)hero_233f80)->h1F6 == 0) ||
+         ((Hero_234800 *)hero_233f80)->h30E == 0 && ((Hero_234800 *)hero_233f80)->path_clearance_position_anchor_inhibit == 0) ||
         (unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
         if ((((Hero_234800 *)hero_233f80)->attachment_anchor_flags ^ 1) & 1) {
             if ((unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
