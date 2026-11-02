@@ -152,6 +152,9 @@ void sand_shark_nest_update(unsigned char *moby) __asm__("FUN_L02_002dcb38");
 
 /* Moby class 668 */
 void sand_shark_nest_update(unsigned char *moby) {
+    enum {
+        SAND_SHARK_NEST_REMOVAL_REQUEST_IDLE = 1
+    };
     Varscb38 *nest_vars = ((Varscb38 *)MOBY(moby)->pvars);
     char     *launched_shark;
     int       spawn_delay_factor;
@@ -175,7 +178,7 @@ void sand_shark_nest_update(unsigned char *moby) {
         MOBY(moby)->state = SAND_SHARK_NEST_WAIT_FOR_SPAWN;
         nest_vars->f20 = 3.0f;
         nest_vars->s24 = 3;
-        nest_vars->removal_request_state = 1;
+        nest_vars->removal_request_state = SAND_SHARK_NEST_REMOVAL_REQUEST_IDLE;
         nest_vars->timer = scale_game_frames(nest_vars->delay);
         if (nest_vars->spawner >= 0) {
             (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->active_nest_count += 1;
