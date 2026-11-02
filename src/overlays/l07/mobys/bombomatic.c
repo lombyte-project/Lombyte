@@ -407,7 +407,8 @@ eb20:
             debris_velocity[2] = FUN_L00_0025abf0(
                 vA0, launch_work_vector, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
             fast_vec_add(vA0, vA0, debris_velocity);
-            spawn_bombomatic_projectile(vA0, debris_velocity, (int)moby, moby_data->launch_burst_index);
+            spawn_bombomatic_projectile(
+                vA0, debris_velocity, (int)moby, moby_data->launch_burst_index);
             moby_data->launch_burst_index = moby_data->launch_burst_index + 1;
         }
     eeE4:

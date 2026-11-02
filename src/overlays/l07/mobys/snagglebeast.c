@@ -380,19 +380,26 @@ void draw_and_probe_snagglebeast_rope_attack(char *moby) {
     rope_attack_moby_vars = (SnagglebeastVars *)MOBY(moby)->pvars;
     qzero(&rope_offset);
     one = 1.0f;
-    fast_vec_normalize(
-        &rope_offset, rope_attack_moby_vars->unk130, rope_attack_moby_vars->rope_extension_length * 0.8f);
-    fast_vec_add(rope_attack_moby_vars->unk140, &rope_offset, rope_attack_moby_vars->rope_start_position);
+    fast_vec_normalize(&rope_offset,
+                       rope_attack_moby_vars->unk130,
+                       rope_attack_moby_vars->rope_extension_length * 0.8f);
+    fast_vec_add(
+        rope_attack_moby_vars->unk140, &rope_offset, rope_attack_moby_vars->rope_start_position);
     fast_vec_normalize(&rope_offset, &rope_offset, rope_attack_moby_vars->rope_extension_length);
-    fast_vec_add(rope_attack_moby_vars->unk120, &rope_offset, rope_attack_moby_vars->rope_start_position);
+    fast_vec_add(
+        rope_attack_moby_vars->unk120, &rope_offset, rope_attack_moby_vars->rope_start_position);
     draw_snagglebeast_rope_attack_layer(moby, one, 0, one, 0x20000080);
     draw_snagglebeast_rope_attack_layer(moby, 0.7f, 10, 2.0f, 0x28008080);
     draw_snagglebeast_rope_attack_layer(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
-    fast_vec_sub(rope_direction, rope_attack_moby_vars->unk120, rope_attack_moby_vars->rope_start_position);
+    fast_vec_sub(
+        rope_direction, rope_attack_moby_vars->unk120, rope_attack_moby_vars->rope_start_position);
     fast_vec_normalize(rope_direction, rope_direction, one);
     make_hit_descriptor(blk, moby, 0x30000, 1.00012302f, rope_direction);
-    if (collision_line(
-            rope_attack_moby_vars->rope_start_position, rope_attack_moby_vars->unk120, 0, moby, blk) == 0) {
+    if (collision_line(rope_attack_moby_vars->rope_start_position,
+                       rope_attack_moby_vars->unk120,
+                       0,
+                       moby,
+                       blk) == 0) {
         collect_mobies_in_sphere(0.5f, rope_attack_moby_vars->unk120, 0, moby, blk);
     }
 }
@@ -1146,7 +1153,8 @@ void snagglebeast_update(unsigned char *moby) {
     }
     if (MOBY(moby)->command % 3U == 2)
         snagglebeast_instance_state->health_display += 0xF;
-    if (MOBY(moby)->state != SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO && MOBY(moby)->state != SNAGGLEBEAST_INITIALIZE)
+    if (MOBY(moby)->state != SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO &&
+        MOBY(moby)->state != SNAGGLEBEAST_INITIALIZE)
         suck_beam_queue_draw((int)moby);
     if ((int)snagglebeast_instance_state->sphere_fade_direction - 1 == 0) {
         if (snagglebeast_instance_state->voice == -1)
@@ -1179,7 +1187,9 @@ void snagglebeast_update(unsigned char *moby) {
         add_draw_callback(draw_snagglebeast_sphere_effect, moby);
     update_snagglebeast_target_joint_animation(
         (char *)moby, snagglebeast_instance_state, hero.motion.pos.f);
-    if (MOBY(moby)->state != SNAGGLEBEAST_INITIALIZE && MOBY(moby)->state != SNAGGLEBEAST_DEATH_EXPLOSION && MOBY(moby)->state != SNAGGLEBEAST_POST_DEATH_CLEANUP) {
+    if (MOBY(moby)->state != SNAGGLEBEAST_INITIALIZE &&
+        MOBY(moby)->state != SNAGGLEBEAST_DEATH_EXPLOSION &&
+        MOBY(moby)->state != SNAGGLEBEAST_POST_DEATH_CLEANUP) {
         snagglebeast_instance_state->unk1B0 =
             queue_animation_update(0x16,
                                    0xFFFF,

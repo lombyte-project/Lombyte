@@ -224,7 +224,9 @@ void skids_agent_update(struct Moby *moby) {
                     (char *)l02_cuboids + (skids_agent_vars->camera_start_cuboid_index << 7) + 0x30,
                     (char *)l02_cuboids + (skids_agent_vars->unk15C << 7) + 0x30,
                     skids_agent_vars->unk180);
-        qcopy_nc(&from, (char *)((skids_agent_vars->camera_start_cuboid_index << 7) + (s32)l02_cuboids) + 0x70);
+        qcopy_nc(&from,
+                 (char *)((skids_agent_vars->camera_start_cuboid_index << 7) + (s32)l02_cuboids) +
+                     0x70);
         qcopy_nc(&to, (char *)((skids_agent_vars->unk15C << 7) + (s32)l02_cuboids) + 0x70);
         rot.f[2] = fast_add_rotations(
             fast_subtract_rotations(to.f[2], from.f[2]) * skids_agent_vars->unk180, from.f[2]);
@@ -272,7 +274,9 @@ void skids_agent_update(struct Moby *moby) {
             copy_matrix3x4(&skids_agent_vars->carried_prop->rot_row0, mtx);
             transform_vector_by_basis(
                 &offset, skids_agent_prop_local_offset, &skids_agent_vars->carried_prop->rot_row0);
-            fast_vec_add(&skids_agent_vars->carried_prop->pos, &skids_agent_vars->carried_prop->pos, &offset);
+            fast_vec_add(&skids_agent_vars->carried_prop->pos,
+                         &skids_agent_vars->carried_prop->pos,
+                         &offset);
             update_entity(skids_agent_vars->carried_prop);
         }
     });
@@ -314,8 +318,11 @@ void skids_agent_update(struct Moby *moby) {
                 heading = fast_add_rotations(moby->rot.z,
                                              random_float_between(-90.0f, 90.0f) * 0.017453292f);
                 pitch = random_float_between(0.0f, 30.0f) * 0.017453292f;
-                build_spherical_offset(&skids_agent_vars->idle_look_target_position, 6.0f, heading, pitch);
-                fast_vec_add(&skids_agent_vars->idle_look_target_position, &skids_agent_vars->idle_look_target_position, &moby->pos);
+                build_spherical_offset(
+                    &skids_agent_vars->idle_look_target_position, 6.0f, heading, pitch);
+                fast_vec_add(&skids_agent_vars->idle_look_target_position,
+                             &skids_agent_vars->idle_look_target_position,
+                             &moby->pos);
             }
             if (skids_agent_vars->timer_174 != 0) {
                 qcopy(&target, &hero.motion.body_center);

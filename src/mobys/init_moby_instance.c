@@ -66,8 +66,8 @@ typedef struct {
     unsigned char  unkA4; /* 0xA4 */
     char           padA5;
     short          original_class_id; /* 0xA6 */
-    int            unkA8; /* 0xA8 */
-    int            unkAC; /* 0xAC */
+    int            unkA8;             /* 0xA8 */
+    int            unkAC;             /* 0xAC */
     char           padB0[0xD];
     unsigned char  unkBD; /* 0xBD */
     char           padBE[0x42];

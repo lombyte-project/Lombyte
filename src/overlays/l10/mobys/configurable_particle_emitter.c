@@ -211,13 +211,16 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
         truncate_float_to_s32((float)burst_spark_base_second_frame_count_gp * frame_count_scale);
     third_frame_count =
         truncate_float_to_s32((float)burst_spark_base_third_frame_count_gp * frame_count_scale);
-    initial_spark_color =
-        fast_tween_color(l10_burst_spark_initial_color_from, l10_burst_spark_initial_color_to, random_float_between(0.0f, 1.0f));
+    initial_spark_color = fast_tween_color(l10_burst_spark_initial_color_from,
+                                           l10_burst_spark_initial_color_to,
+                                           random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position,
                 burst_spark_vertical_vector,
                 acc,
                 initial_spark_color,
-                fast_tween_color(l10_burst_spark_second_color_from, l10_burst_spark_second_color_to, random_float_between(0.0f, 1.0f)),
+                fast_tween_color(l10_burst_spark_second_color_from,
+                                 l10_burst_spark_second_color_to,
+                                 random_float_between(0.0f, 1.0f)),
                 frame_count,
                 second_frame_count,
                 third_frame_count,
@@ -285,13 +288,16 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
         truncate_float_to_s32((float)timed_spark_base_second_frame_count_gp * frame_count_scale);
     third_frame_count =
         truncate_float_to_s32((float)timed_spark_base_third_frame_count_gp * frame_count_scale);
-    initial_spark_color =
-        fast_tween_color(l10_timed_spark_initial_color_from, l10_timed_spark_initial_color_to, random_float_between(0.0f, 1.0f));
+    initial_spark_color = fast_tween_color(l10_timed_spark_initial_color_from,
+                                           l10_timed_spark_initial_color_to,
+                                           random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position,
                 spark_vertical_vector,
                 acc,
                 initial_spark_color,
-                fast_tween_color(l10_timed_spark_second_color_from, l10_timed_spark_second_color_to, random_float_between(0.0f, 1.0f)),
+                fast_tween_color(l10_timed_spark_second_color_from,
+                                 l10_timed_spark_second_color_to,
+                                 random_float_between(0.0f, 1.0f)),
                 frame_count,
                 second_frame_count,
                 third_frame_count,
@@ -399,13 +405,16 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
     acc[3] = random_float_between(
         *(float *)&height_adjusted_spark_random_vector_fourth_component_min_gp,
         *(float *)&height_adjusted_spark_random_vector_fourth_component_max_gp);
-    initial_spark_color =
-        fast_tween_color(l10_height_adjusted_spark_initial_color_from, l10_height_adjusted_spark_initial_color_to, random_float_between(0.0f, 1.0f));
+    initial_spark_color = fast_tween_color(l10_height_adjusted_spark_initial_color_from,
+                                           l10_height_adjusted_spark_initial_color_to,
+                                           random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position,
                 spark_first_vector,
                 acc,
                 initial_spark_color,
-                fast_tween_color(l10_height_adjusted_spark_second_color_from, l10_height_adjusted_spark_second_color_to, random_float_between(0.0f, 1.0f)),
+                fast_tween_color(l10_height_adjusted_spark_second_color_from,
+                                 l10_height_adjusted_spark_second_color_to,
+                                 random_float_between(0.0f, 1.0f)),
                 frame_count,
                 second_frame_count,
                 third_frame_count,

@@ -95,8 +95,16 @@ int try_select_follow_camera_volume(int candidate_object, int unused) {
         return 1;
     }
     tab = (u32)D_L00_0015EF50;
-    x = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)camera_state->selected_volume_object)->camera_descriptor_index * 0x20 + 0x1C) + 0x1C);
-    y = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)candidate_object)->camera_descriptor_index * 0x20 + 0x1C) + 0x1C);
+    x = *(u8 *)(*(u32 *)(tab +
+                         ((O842e83c0 *)(u32)camera_state->selected_volume_object)
+                                 ->camera_descriptor_index *
+                             0x20 +
+                         0x1C) +
+                0x1C);
+    y = *(u8 *)(*(u32 *)(tab +
+                         ((O842e83c0 *)(u32)candidate_object)->camera_descriptor_index * 0x20 +
+                         0x1C) +
+                0x1C);
     if (x < y) {
         camera_state->selected_volume_object = candidate_object;
         return 1;

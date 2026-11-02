@@ -493,7 +493,8 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
             if (scanned_moby->moby_state != 0xFD)
                 if (scanned_moby->moby_class == initialized_moby->moby_class)
                     if (scanned_moby != initialized_moby) {
-                        if (best == 0 || ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C < bestv) {
+                        if (best == 0 ||
+                            ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C < bestv) {
                             bestv = ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C;
                             best = scanned_moby;
                         }

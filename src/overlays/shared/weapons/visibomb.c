@@ -119,7 +119,8 @@ void visibomb_update(O_b3058 *visibomb_moby) {
             fast_vec_add(launch_position, launch_position, u);
             fast_vec_add(launch_position, launch_position, &camera->pos);
         } else if (hero.unk22C8 == 1) {
-            b = fast_arc_tan(vector_length_xy(visibomb_moby->launch_direction_xy), visibomb_moby->launch_direction_z);
+            b = fast_arc_tan(vector_length_xy(visibomb_moby->launch_direction_xy),
+                             visibomb_moby->launch_direction_z);
             build_spherical_offset(launch_position, 0.6f, launch_yaw, -b);
             fast_vec_add(launch_position, launch_position, visibomb_moby->v10);
         } else {
@@ -130,7 +131,8 @@ void visibomb_update(O_b3058 *visibomb_moby) {
             blend_moby_animation(visibomb_moby, 3, 0, 0);
         }
         jet_camera_mode();
-        v->active_missile_moby = spawn_visibomb_missile(visibomb_moby, launch_position, launch_yaw, b);
+        v->active_missile_moby =
+            spawn_visibomb_missile(visibomb_moby, launch_position, launch_yaw, b);
         r = (R_b3058 *)item_usage;
         if (r->visibomb_use_count < 0xFFFF) {
             r->visibomb_use_count++;

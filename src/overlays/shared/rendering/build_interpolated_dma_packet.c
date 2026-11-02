@@ -139,10 +139,14 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     long         blend_mode;
     unsigned int alpha_limit;
 
-    textured_grid_saved_fog_near_distance = ((QuadCamera *)level02_camera_view_state)->fog_near_distance;
-    textured_grid_saved_fog_far_distance = ((QuadCamera *)level02_camera_view_state)->fog_far_distance;
-    textured_grid_saved_fog_near_intensity = ((QuadCamera *)level02_camera_view_state)->fog_near_intensity;
-    textured_grid_saved_fog_far_intensity = ((QuadCamera *)level02_camera_view_state)->fog_far_intensity;
+    textured_grid_saved_fog_near_distance =
+        ((QuadCamera *)level02_camera_view_state)->fog_near_distance;
+    textured_grid_saved_fog_far_distance =
+        ((QuadCamera *)level02_camera_view_state)->fog_far_distance;
+    textured_grid_saved_fog_near_intensity =
+        ((QuadCamera *)level02_camera_view_state)->fog_near_intensity;
+    textured_grid_saved_fog_far_intensity =
+        ((QuadCamera *)level02_camera_view_state)->fog_far_intensity;
     if (textured_grid_fog_source_mode != TEXTURED_GRID_FOG_SOURCE_CAMERA) {
         ((QuadCamera *)level02_camera_view_state)->fog_near_distance = draw_parameters->f20;
         ((QuadCamera *)level02_camera_view_state)->fog_far_distance = draw_parameters->f24;
@@ -171,13 +175,16 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     view_setup_dma_packet[0x28] = 0x8000;
     view_setup_dma_packet[0x29] = 0x303EC000;
     view_setup_dma_packet[0x2A] = 0x412;
-    *(float *)(view_setup_dma_packet + 0x2B) = ((QuadCamera *)level02_camera_view_state)->fog_depth_coefficient;
+    *(float *)(view_setup_dma_packet + 0x2B) =
+        ((QuadCamera *)level02_camera_view_state)->fog_depth_coefficient;
     cursor = view_setup_dma_packet + 0x2C;
     qcopy(cursor, ((QuadCamera *)level02_camera_view_state)->projection_and_fog_scale);
     cursor = view_setup_dma_packet + 0x30;
     qcopy(cursor, ((QuadCamera *)level02_camera_view_state)->projection_and_fog_offset);
-    *(float *)(view_setup_dma_packet + 0x34) = ((QuadCamera *)level02_camera_view_state)->fog_far_intensity;
-    *(float *)(view_setup_dma_packet + 0x35) = ((QuadCamera *)level02_camera_view_state)->fog_near_intensity;
+    *(float *)(view_setup_dma_packet + 0x34) =
+        ((QuadCamera *)level02_camera_view_state)->fog_far_intensity;
+    *(float *)(view_setup_dma_packet + 0x35) =
+        ((QuadCamera *)level02_camera_view_state)->fog_near_intensity;
     view_setup_dma_packet[0x36] = 0;
     view_setup_dma_packet[0x37] = 0;
     view_setup_dma_packet[0x38] = 0x03000000;

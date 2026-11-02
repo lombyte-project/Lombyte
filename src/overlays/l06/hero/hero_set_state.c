@@ -83,10 +83,12 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 &&
-            (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || entry_animation_mode != HERO_ENTRY_ANIMATION_BYPASS_DYING_AND_GLOBAL_LOCKS))
+            (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE ||
+             entry_animation_mode != HERO_ENTRY_ANIMATION_BYPASS_DYING_AND_GLOBAL_LOCKS))
             return 0;
     }
-    if ((D_L06_0015F5C4 == 2 || D_L06_0015F5C4 == 6) && entry_animation_mode != HERO_ENTRY_ANIMATION_BYPASS_DYING_AND_GLOBAL_LOCKS)
+    if ((D_L06_0015F5C4 == 2 || D_L06_0015F5C4 == 6) &&
+        entry_animation_mode != HERO_ENTRY_ANIMATION_BYPASS_DYING_AND_GLOBAL_LOCKS)
         return 0;
     {
         struct Hero *p = &hero;

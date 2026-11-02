@@ -63,11 +63,11 @@ typedef struct Bolt {
     u8         pad21[3];
     BoltClass *pclass; /* 0x24 */
     u8         pad28[4];
-    f32        scale; /* 0x2C */
-    u8         unk30; /* 0x30 */
-    u8         is_visible; /* 0x31 */
+    f32        scale;         /* 0x2C */
+    u8         unk30;         /* 0x30 */
+    u8         is_visible;    /* 0x31 */
     u16        draw_distance; /* 0x32 */
-    u16        flags; /* 0x34 */
+    u16        flags;         /* 0x34 */
     u8         pad36[0x3D];
     u8         unk73; /* 0x73 */
     u8         pad74[4];

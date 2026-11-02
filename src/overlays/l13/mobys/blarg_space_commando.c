@@ -363,14 +363,15 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         break;
     case BLARG_SPACE_COMMANDO_APPROACH_TARGET_WITH_TURN_OFFSET:
-        func_L00_002592B0_309330(moby,
-                                 fast_add_rotations(fast_arc_tan(target->pos.x - moby->pos.x,
-                                                                 target->pos.y - moby->pos.y),
-                                                    blarg_space_commando_vars->approach_heading_offset),
-                                 &blarg_space_commando_vars->turn,
-                                 0.05f,
-                                 0.3f,
-                                 frame_time * 6.2831855f);
+        func_L00_002592B0_309330(
+            moby,
+            fast_add_rotations(
+                fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
+                blarg_space_commando_vars->approach_heading_offset),
+            &blarg_space_commando_vars->turn,
+            0.05f,
+            0.3f,
+            frame_time * 6.2831855f);
         point.f[0] = 2.0f * fast_cos(moby->rot.z);
         point.f[1] = 2.0f * fast_sin(moby->rot.z);
         point.f[2] = 0.0f;
@@ -378,7 +379,8 @@ void blarg_space_commando_update(struct Moby *moby) {
                 moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f) &
             2) {
             rand();
-            blarg_space_commando_vars->approach_heading_offset = convert_integer_to_float(-1) * 1.0995574f;
+            blarg_space_commando_vars->approach_heading_offset =
+                convert_integer_to_float(-1) * 1.0995574f;
         } else {
             blarg_space_commando_vars->approach_heading_offset = 0.0f;
         }

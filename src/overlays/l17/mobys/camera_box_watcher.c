@@ -118,7 +118,8 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
         if (hero_current_state == HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY ||
             hero_current_state == HERO_STATE_OPTIONAL_IDLE_ANIMATION) {
             pvars->unk6C = 0;
-        } else if (is_point_inside_clip_volume(&h->motion.pos, pvars->first_followup_clip_volume_index) ||
+        } else if (is_point_inside_clip_volume(&h->motion.pos,
+                                               pvars->first_followup_clip_volume_index) ||
                    is_point_inside_clip_volume(&h->motion.pos, pvars->unk68)) {
             if (D_0013D408[0x1C] == 0) {
                 D_0013D408[0x1C] = 1;

@@ -174,10 +174,13 @@ void draw_water_reservoir(struct Moby *moby) {
     quad.g[1] = get_effect_texture(0x10);
     quad.g[0] = 0;
     quad.g[2] = 0xFF9000000260UL;
-    quad.g[3] = (long)l12_water_reservoir_alpha_a_selector | ((long)l12_water_reservoir_alpha_b_selector << 2) | ((long)l12_water_reservoir_alpha_c_selector << 4) |
+    quad.g[3] = (long)l12_water_reservoir_alpha_a_selector |
+                ((long)l12_water_reservoir_alpha_b_selector << 2) |
+                ((long)l12_water_reservoir_alpha_c_selector << 4) |
                 ((long)l12_water_reservoir_alpha_d_selector << 6) | (0x8000L << 24);
-    col = fast_tween_color(
-        l12_water_reservoir_tween_start_color, l12_water_reservoir_tween_end_color, (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
+    col = fast_tween_color(l12_water_reservoir_tween_start_color,
+                           l12_water_reservoir_tween_end_color,
+                           (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         quad.uv[i * 2] = 0.5f;
         *(&quad.uv[i * 2] + 1) = 0.5f;

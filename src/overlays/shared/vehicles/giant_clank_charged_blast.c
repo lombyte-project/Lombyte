@@ -361,8 +361,10 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
             D_L15_0015F320.on = 0;
             D_L15_0015F330.on = 0;
             moby_data->f10 = 0;
-            moby_data->vel[0] = fast_cos(((Hero29FF90 *)&hero)->blast_heading_angle) * (D_0015ED6C * 40.0f);
-            moby_data->vel[1] = fast_sin(((Hero29FF90 *)&hero)->blast_heading_angle) * (D_0015ED6C * 40.0f);
+            moby_data->vel[0] =
+                fast_cos(((Hero29FF90 *)&hero)->blast_heading_angle) * (D_0015ED6C * 40.0f);
+            moby_data->vel[1] =
+                fast_sin(((Hero29FF90 *)&hero)->blast_heading_angle) * (D_0015ED6C * 40.0f);
             moby_data->vel[2] = 0.0f;
             moby->state = EXPANDING_BLAST;
             moby_data->f14 = 0;
@@ -455,7 +457,8 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
                     blast_center_particle->fC = blast_center_particle->fC * r;
                     blast_center_particle->particle_frame_count = scale_game_frames(2);
                     particle_subrecord->f10 =
-                        1.0f / convert_integer_to_float(blast_center_particle->particle_frame_count);
+                        1.0f /
+                        convert_integer_to_float(blast_center_particle->particle_frame_count);
                     particle_subrecord->f18 = 0x7F7F7F;
                     particle_subrecord->f16 = 3;
                 }

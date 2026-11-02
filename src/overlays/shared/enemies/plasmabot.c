@@ -181,9 +181,12 @@ void initialize_plasmabot_path_state(char *moby) {
     int            i;
     *(int *)&moby_vars->path_offset_and_spring_velocities = 0;
     moby_vars->path_segment_index = 0;
-    moby_vars->path_offset_and_spring_velocities[3] = moby_vars->path_offset_and_spring_velocities[0];
-    moby_vars->path_offset_and_spring_velocities[2] = moby_vars->path_offset_and_spring_velocities[0];
-    moby_vars->path_offset_and_spring_velocities[1] = moby_vars->path_offset_and_spring_velocities[0];
+    moby_vars->path_offset_and_spring_velocities[3] =
+        moby_vars->path_offset_and_spring_velocities[0];
+    moby_vars->path_offset_and_spring_velocities[2] =
+        moby_vars->path_offset_and_spring_velocities[0];
+    moby_vars->path_offset_and_spring_velocities[1] =
+        moby_vars->path_offset_and_spring_velocities[0];
     if (moby_vars->path_index == -1)
         return;
     path = (char *)l14_paths[moby_vars->path_index];
@@ -204,8 +207,10 @@ void scale_and_apply_plasmabot_planar_velocity(char *moby) {
     float planar_velocity_scale =
         (plasmabot_planar_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
     PlasmabotVars *moby_vars = (PlasmabotVars *)MOBY(moby)->pvars;
-    moby_vars->path_offset_and_spring_velocities[1] = moby_vars->path_offset_and_spring_velocities[1] * planar_velocity_scale;
-    moby_vars->path_offset_and_spring_velocities[2] = moby_vars->path_offset_and_spring_velocities[2] * planar_velocity_scale;
+    moby_vars->path_offset_and_spring_velocities[1] =
+        moby_vars->path_offset_and_spring_velocities[1] * planar_velocity_scale;
+    moby_vars->path_offset_and_spring_velocities[2] =
+        moby_vars->path_offset_and_spring_velocities[2] * planar_velocity_scale;
     MOBY(moby)->pos.x = MOBY(moby)->pos.x + moby_vars->path_offset_and_spring_velocities[1];
     MOBY(moby)->pos.y = MOBY(moby)->pos.y + moby_vars->path_offset_and_spring_velocities[2];
 }
@@ -475,7 +480,8 @@ void plasmabot_update(char *moby) {
             attach_manipulator(moby, 2, &plasmabot_update_private_vars->unk120);
         }
         if (((unsigned char *)plasmabot_update_private_vars)[0x161] == 0) {
-            attach_manipulator(moby, 3, &plasmabot_update_private_vars->manipulator_attachment_header);
+            attach_manipulator(
+                moby, 3, &plasmabot_update_private_vars->manipulator_attachment_header);
         }
         if (((unsigned char *)plasmabot_update_private_vars)[0x24A] != 0) {
             deactivate_plasmabot(moby);
@@ -514,9 +520,12 @@ void plasmabot_update(char *moby) {
         plasmabot_update_private_vars->aim_joint_angular_velocity = 0;
         plasmabot_update_private_vars->path_segment_index = 0;
         *(int *)&plasmabot_update_private_vars->path_offset_and_spring_velocities = 0;
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[3] = plasmabot_update_private_vars->aim_yaw_offset;
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[2] = plasmabot_update_private_vars->aim_yaw_offset;
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[1] = plasmabot_update_private_vars->aim_yaw_offset;
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[3] =
+            plasmabot_update_private_vars->aim_yaw_offset;
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[2] =
+            plasmabot_update_private_vars->aim_yaw_offset;
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[1] =
+            plasmabot_update_private_vars->aim_yaw_offset;
         return;
     }
     case PLASMABOT_START_PATH_TRAVERSAL:
@@ -532,18 +541,20 @@ void plasmabot_update(char *moby) {
         break;
     case PLASMABOT_RETURN_TO_PATH_START: {
         float *path = (float *)l14_paths[plasmabot_update_private_vars->path_index];
-        vendor_spring((float *)&MOBY(moby)->pos,
-                      (float *)(&plasmabot_update_private_vars->path_offset_and_spring_velocities[1]),
-                      path[4],
-                      0.01f,
-                      0.2f,
-                      0.0f);
-        vendor_spring((float *)&MOBY(moby)->pos.y,
-                      (float *)(&plasmabot_update_private_vars->path_offset_and_spring_velocities[2]),
-                      path[5],
-                      0.01f,
-                      0.2f,
-                      0.0f);
+        vendor_spring(
+            (float *)&MOBY(moby)->pos,
+            (float *)(&plasmabot_update_private_vars->path_offset_and_spring_velocities[1]),
+            path[4],
+            0.01f,
+            0.2f,
+            0.0f);
+        vendor_spring(
+            (float *)&MOBY(moby)->pos.y,
+            (float *)(&plasmabot_update_private_vars->path_offset_and_spring_velocities[2]),
+            path[5],
+            0.01f,
+            0.2f,
+            0.0f);
         if ((MOBY(moby)->anim_flags & 2) &&
             ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
@@ -576,9 +587,12 @@ void plasmabot_update(char *moby) {
         *(int *)&plasmabot_update_private_vars->path_offset_and_spring_velocities = 0;
         plasmabot_update_private_vars->path_traversal_direction = 1.0f;
         plasmabot_update_private_vars->path_segment_index = 0;
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[3] = plasmabot_update_private_vars->path_offset_and_spring_velocities[0];
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[2] = plasmabot_update_private_vars->path_offset_and_spring_velocities[0];
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[1] = plasmabot_update_private_vars->path_offset_and_spring_velocities[0];
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[3] =
+            plasmabot_update_private_vars->path_offset_and_spring_velocities[0];
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[2] =
+            plasmabot_update_private_vars->path_offset_and_spring_velocities[0];
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[1] =
+            plasmabot_update_private_vars->path_offset_and_spring_velocities[0];
         break;
     }
     case PLASMABOT_FOLLOW_PATH_FORWARD:
@@ -630,11 +644,13 @@ void plasmabot_update(char *moby) {
                 char *path;
                 plasmabot_update_private_vars->path_segment_index = index;
                 path = (char *)l14_paths[plasmabot_update_private_vars->path_index];
-                plasmabot_update_private_vars->path_offset_and_spring_velocities[0] = *(float *)(path + (index << 4) + 0x1C);
+                plasmabot_update_private_vars->path_offset_and_spring_velocities[0] =
+                    *(float *)(path + (index << 4) + 0x1C);
             }
             plasmabot_update_private_vars->path_traversal_direction = -1.0f;
-            plasmabot_update_private_vars->path_offset_and_spring_velocities[1] = plasmabot_update_private_vars->path_offset_and_spring_velocities[2] =
-                plasmabot_update_private_vars->path_offset_and_spring_velocities[3] = 0.0f;
+            plasmabot_update_private_vars->path_offset_and_spring_velocities[1] =
+                plasmabot_update_private_vars->path_offset_and_spring_velocities[2] =
+                    plasmabot_update_private_vars->path_offset_and_spring_velocities[3] = 0.0f;
             release_beam_slot_by_id(moby);
             break;
         }

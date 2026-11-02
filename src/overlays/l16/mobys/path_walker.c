@@ -237,8 +237,12 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     fast_vec_add(velocity, velocity, movement_velocity);
     final_size = path_walker_particle_target_scalar_scale_gp;
     final_size *= 210000.0f;
-    func_L00_0026DD70_emit(
-        offset, velocity, l16_path_walker_particle_initial_color, D_L16_00161E9C, final_size, scale_game_frames(0x23));
+    func_L00_0026DD70_emit(offset,
+                           velocity,
+                           l16_path_walker_particle_initial_color,
+                           D_L16_00161E9C,
+                           final_size,
+                           scale_game_frames(0x23));
 }
 
 /* Start of a walker group: lists the group's mobys and spaces them along the path in random order. */

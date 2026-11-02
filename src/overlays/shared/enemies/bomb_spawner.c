@@ -246,7 +246,8 @@ void bomb_spawner_update(struct Moby *moby) {
     inVol = 0;
     room = spawner_data->count < spawner_data->max;
     if (spawner_data->spawn_trigger_volume_index != -1) {
-        inVol = is_point_inside_clip_volume(D_0013E533_2bef68 + 0xE9D, spawner_data->spawn_trigger_volume_index) != 0;
+        inVol = is_point_inside_clip_volume(D_0013E533_2bef68 + 0xE9D,
+                                            spawner_data->spawn_trigger_volume_index) != 0;
     }
     cond = inVol | near2;
     switch (spawner_data->spawn_trigger_mode) {
@@ -385,7 +386,7 @@ void bomb_spawner_update(struct Moby *moby) {
         int *used_point_flags = used;
         memset(used_point_flags, 0, 0x10);
         while (spawner_data->spawn_interval_frames == 0 ? spawner_data->count < spawner_data->max
-                                      : spawner_data->timer == 0) {
+                                                        : spawner_data->timer == 0) {
             moby_point_position(moby, 0, &launch_origin);
             switch (spawner_data->spawn_target_mode) {
             case SPAWNER_TARGET_COUNT_ANGULAR_SPREAD: {
@@ -405,7 +406,8 @@ void bomb_spawner_update(struct Moby *moby) {
                 launch_velocity.x = fast_cos(target_spread_angle) * rad;
                 launch_velocity.y = fast_sin(target_spread_angle) * rad;
                 launch_velocity.z = 0.0f;
-                clamp_vector_length(&launch_velocity, &launch_velocity, spawner_data->spawn_distance_limit);
+                clamp_vector_length(
+                    &launch_velocity, &launch_velocity, spawner_data->spawn_distance_limit);
                 fast_vec_add(&target_position, &launch_origin, &launch_velocity);
                 target_ground_height = probe_ground_height(&target_position, 0, 0.5f);
                 if (target_ground_height != 0.0f) {
@@ -426,7 +428,8 @@ void bomb_spawner_update(struct Moby *moby) {
                 if (fast_vec_length(&launch_velocity) < 3.0f) {
                     fast_vec_normalize(&launch_velocity, &launch_velocity, 3.0f);
                 }
-                clamp_vector_length(&launch_velocity, &launch_velocity, spawner_data->spawn_distance_limit);
+                clamp_vector_length(
+                    &launch_velocity, &launch_velocity, spawner_data->spawn_distance_limit);
                 fast_vec_add(&target_position, &launch_origin, &launch_velocity);
                 target_ground_height = probe_ground_height(&target_position, 0, 0.5f);
                 if (target_ground_height != 0.0f) {
@@ -532,18 +535,19 @@ void bomb_spawner_update(struct Moby *moby) {
             {
                 float speed;
                 char *spawned_moby;
-                speed = fast_vec_length(&launch_velocity) * (spawner_data->launch_speed_distance_factor * frame_scale_macro);
+                speed = fast_vec_length(&launch_velocity) *
+                        (spawner_data->launch_speed_distance_factor * frame_scale_macro);
                 launch_velocity.z = 0.0f;
                 fast_vec_normalize(&launch_velocity, &launch_velocity, speed);
                 fast_vec_normalize(&spawn_position, &launch_velocity, 0.05f);
                 add_random_offset_to_vector_xyz((float *)&spawn_position, 0.025f);
                 add_vectors(&sampled_point_scratch, &spawn_position, &launch_origin);
-                launch_velocity.z =
-                    FUN_L00_0025abf0_2bef68(&spawn_position,
-                                            &target_position,
-                                            0,
-                                            speed,
-                                            -(spawner_data->trajectory_gravity * frame_time_sq_macro));
+                launch_velocity.z = FUN_L00_0025abf0_2bef68(
+                    &spawn_position,
+                    &target_position,
+                    0,
+                    speed,
+                    -(spawner_data->trajectory_gravity * frame_time_sq_macro));
                 spawned_moby = spawn_class_221_moby((char *)moby,
                                                     (float *)&spawn_position,
                                                     (float *)&launch_velocity,

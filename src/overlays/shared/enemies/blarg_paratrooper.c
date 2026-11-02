@@ -224,7 +224,8 @@ void blarg_paratrooper_update(char *moby) {
             blend_moby_animation(moby, 14, 0, scale_game_frames(11));
         (*(unsigned char *)((char *)(moby) + 0x20)) = 8;
     }
-    if ((*(unsigned char *)((char *)(moby) + 0x20)) != 0 && paratrooper_private_state->removal_status == 2) {
+    if ((*(unsigned char *)((char *)(moby) + 0x20)) != 0 &&
+        paratrooper_private_state->removal_status == 2) {
         mark_moby_for_removal(moby);
         if (paratrooper_private_state->bone_attachment_moby)
             mark_moby_for_removal(paratrooper_private_state->bone_attachment_moby);
@@ -259,7 +260,8 @@ void blarg_paratrooper_update(char *moby) {
         paratrooper_private_state->fFC = 0.2f;
         if (random302618() & 1)
             (*(unsigned short *)((char *)(moby) + 0x34)) |= 0x8000;
-        qcopy(&MOBY(moby)->pos, ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10);
+        qcopy(&MOBY(moby)->pos,
+              ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10);
         if (path) {
             int   index;
             short direction;
@@ -270,7 +272,8 @@ void blarg_paratrooper_update(char *moby) {
             paratrooper_private_state->destination_waypoint_index = index;
             if (index >= (*(int *)((char *)(path) + 0)) || index < 0) {
                 paratrooper_private_state->patrol_waypoint_step = -direction;
-                paratrooper_private_state->destination_waypoint_index = index + 2 * paratrooper_private_state->patrol_waypoint_step;
+                paratrooper_private_state->destination_waypoint_index =
+                    index + 2 * paratrooper_private_state->patrol_waypoint_step;
             }
             if ((*(unsigned char *)((char *)(moby) + 0x53)) != 2)
                 blend_moby_animation(moby, 2, 0, random302618() % 4 + 7);
@@ -282,7 +285,8 @@ void blarg_paratrooper_update(char *moby) {
     }
     case PARATROOPER_STATE_PATROL_PATH:
         if (vector_distance_xy(&MOBY(moby)->pos,
-                               path + 0x10 + paratrooper_private_state->destination_waypoint_index * 16) <
+                               path + 0x10 +
+                                   paratrooper_private_state->destination_waypoint_index * 16) <
             paratrooper_private_state->fE0) {
             short direction = paratrooper_private_state->patrol_waypoint_step;
             int   index = paratrooper_private_state->destination_waypoint_index + direction;
@@ -290,35 +294,42 @@ void blarg_paratrooper_update(char *moby) {
             if (index >= (*(int *)((char *)(path) + 0)) || index < 0) {
                 paratrooper_private_state->fE0 = 0.0f;
                 paratrooper_private_state->patrol_waypoint_step = -direction;
-                paratrooper_private_state->destination_waypoint_index = index + 2 * paratrooper_private_state->patrol_waypoint_step;
+                paratrooper_private_state->destination_waypoint_index =
+                    index + 2 * paratrooper_private_state->patrol_waypoint_step;
             }
         }
         step_mover_2e3f20(moby,
                           (char *)paratrooper_private_state + 0xD0,
                           path + 0x10 + paratrooper_private_state->destination_waypoint_index * 16,
                           pos);
-        if (target && paratrooper_private_state->target_selection_status != PARATROOPER_TARGET_UNAVAILABLE &&
+        if (target &&
+            paratrooper_private_state->target_selection_status != PARATROOPER_TARGET_UNAVAILABLE &&
             fast_dec_timer((char *)paratrooper_private_state + 0x1F0)) {
             paratrooper_private_state->destination_waypoint_index = select_point_index_by_distance(
-                &MOBY(moby)->pos, ((char *)l08_paths[paratrooper_private_state->jump_path_index]), 0.0f);
+                &MOBY(moby)->pos,
+                ((char *)l08_paths[paratrooper_private_state->jump_path_index]),
+                0.0f);
             (*(unsigned char *)((char *)(moby) + 0x20)) = 2;
         }
         break;
     case PARATROOPER_STATE_APPROACH_WAYPOINT: {
         float distance;
         paratrooper_private_state->destination_waypoint_index = select_point_index_by_distance(
-            &MOBY(moby)->pos, ((char *)l08_paths[paratrooper_private_state->jump_path_index]), 0.0f);
-        distance = vector_distance_xy(&MOBY(moby)->pos,
-                                      ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10 +
-                                          paratrooper_private_state->destination_waypoint_index * 16);
+            &MOBY(moby)->pos,
+            ((char *)l08_paths[paratrooper_private_state->jump_path_index]),
+            0.0f);
+        distance = vector_distance_xy(
+            &MOBY(moby)->pos,
+            ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10 +
+                paratrooper_private_state->destination_waypoint_index * 16);
         if (distance < 1.0f || distance < paratrooper_private_state->fE0) {
             paratrooper_private_state->fE0 = 0.0f;
             (*(unsigned char *)((char *)(moby) + 0x20)) = 3;
         } else {
             step_mover_2e3f20(moby,
                               (char *)paratrooper_private_state + 0xD0,
-                              ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10 +
-                                  paratrooper_private_state->destination_waypoint_index * 16,
+                              ((char *)l08_paths[paratrooper_private_state->jump_path_index]) +
+                                  0x10 + paratrooper_private_state->destination_waypoint_index * 16,
                               pos);
             if ((*(unsigned char *)((char *)(moby) + 0x53)) != 2)
                 blend_moby_animation(moby, 2, 0, random302618() % 4 + 7);
@@ -355,14 +366,16 @@ void blarg_paratrooper_update(char *moby) {
             }
             (*(unsigned char *)((char *)(moby) + 0x20)) = 9;
         } else if (target) {
-            if (paratrooper_private_state->target_selection_status != PARATROOPER_TARGET_UNAVAILABLE &&
+            if (paratrooper_private_state->target_selection_status !=
+                    PARATROOPER_TARGET_UNAVAILABLE &&
                 fast_dec_timer((char *)paratrooper_private_state + 0x1F0)) {
                 qcopy((char *)paratrooper_private_state + 0x1C0, &MOBY(moby)->pos);
-                paratrooper_private_state->destination_waypoint_index = (paratrooper_private_state->destination_waypoint_index + 1) & 1;
+                paratrooper_private_state->destination_waypoint_index =
+                    (paratrooper_private_state->destination_waypoint_index + 1) & 1;
                 (*(unsigned char *)((char *)(moby) + 0x20)) = 4;
                 fast_vec_sub(pos,
-                             ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10 +
-                                 paratrooper_private_state->destination_waypoint_index * 16,
+                             ((char *)l08_paths[paratrooper_private_state->jump_path_index]) +
+                                 0x10 + paratrooper_private_state->destination_waypoint_index * 16,
                              &MOBY(moby)->pos);
                 if (fast_vec_dot(moby + 0xD0, pos) < 0.0f) {
                     if ((*(unsigned char *)((char *)(moby) + 0x53)) != 18)
@@ -460,13 +473,15 @@ void blarg_paratrooper_update(char *moby) {
                     fast_sin((*(float *)((char *)(moby) + 0x48))) * (speed302618 * D_0015ED6C);
                 attack_vector_or_ray_endpoint[2] = 0.0f;
                 attack_vector_or_ray_endpoint[2] =
-                    (-1.0f / paratrooper_private_state->projectile_pitch_divisor) * (speed302618 * D_0015ED6C);
-                shot = spawn_paratrooper_projectile(attack_vector_or_ray_endpoint,
-                                                    pos,
-                                                    moby,
-                                                    target,
-                                                    scale_game_frames(180),
-                                                    paratrooper_private_state->projectile_pattern_index);
+                    (-1.0f / paratrooper_private_state->projectile_pitch_divisor) *
+                    (speed302618 * D_0015ED6C);
+                shot = spawn_paratrooper_projectile(
+                    attack_vector_or_ray_endpoint,
+                    pos,
+                    moby,
+                    target,
+                    scale_game_frames(180),
+                    paratrooper_private_state->projectile_pattern_index);
                 if (shot)
                     (*(float *)((char *)(shot) + 0x2C)) *= 1.7f;
             }
@@ -477,11 +492,12 @@ void blarg_paratrooper_update(char *moby) {
             if (paratrooper_private_state->projectile_pitch_divisor > 20.0f) {
                 qcopy((char *)paratrooper_private_state + 0x1C0, &MOBY(moby)->pos);
                 (*(unsigned short *)&paratrooper_private_state->hop_count)++;
-                paratrooper_private_state->destination_waypoint_index = (paratrooper_private_state->destination_waypoint_index + 1) & 1;
+                paratrooper_private_state->destination_waypoint_index =
+                    (paratrooper_private_state->destination_waypoint_index + 1) & 1;
                 (*(unsigned char *)((char *)(moby) + 0x20)) = 4;
                 fast_vec_sub(pos,
-                             ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10 +
-                                 paratrooper_private_state->destination_waypoint_index * 16,
+                             ((char *)l08_paths[paratrooper_private_state->jump_path_index]) +
+                                 0x10 + paratrooper_private_state->destination_waypoint_index * 16,
                              &MOBY(moby)->pos);
                 if (fast_vec_dot(moby + 0xD0, pos) < 0.0f) {
                     if ((*(unsigned char *)((char *)(moby) + 0x53)) != 18)
@@ -506,8 +522,9 @@ void blarg_paratrooper_update(char *moby) {
                    D_0015ED6C * 12.566371f);
         frame = compute_interpolated_record_value(moby);
         if (frame > 12.0f && frame < 23.0f && (*(float *)((char *)(moby) + 0x54)) == 0.0f) {
-            fast_vec_sub(
-                pos, ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10, &MOBY(moby)->pos);
+            fast_vec_sub(pos,
+                         ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10,
+                         &MOBY(moby)->pos);
             FUN_L00_0025f730(pos, D_0015ED6C * 24.0f);
             FUN_L00_00258830_c(moby, pos, shove302618, shove_rate302618, 0.0f, 0);
         } else if ((*(unsigned char *)((char *)(moby) + 0x70)) & 2) {
@@ -666,7 +683,8 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     target = find_moby_hit(moby, 0x330000, 0);
     reaction = resolve_moby_hit_response(
         moby, target, &paratrooper_instance_state->health, 0, &hit_state, &damage, 0, 4);
-    if (hit_state != PARATROOPER_HIT_STATUS_NO_HIT_OR_SUPPRESSED && MOBY(moby)->state != PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE) {
+    if (hit_state != PARATROOPER_HIT_STATUS_NO_HIT_OR_SUPPRESSED &&
+        MOBY(moby)->state != PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE) {
         {
             float health = paratrooper_instance_state->health - damage;
             paratrooper_instance_state->health = health;
@@ -815,7 +833,9 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         paratrooper_instance_state->target_moby = (char *)hero.moby;
 
     state = MOBY(moby)->state;
-    if (state == PARATROOPER_STATE_INITIALIZE || state == PARATROOPER_STATE_FIRE_PROJECTILES || state == PARATROOPER_STATE_MELEE_ATTACK || state == PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS) {
+    if (state == PARATROOPER_STATE_INITIALIZE || state == PARATROOPER_STATE_FIRE_PROJECTILES ||
+        state == PARATROOPER_STATE_MELEE_ATTACK ||
+        state == PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS) {
         height = probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
         if (height < MOBY(moby)->pos.z)
             MOBY(moby)->pos.z = height;

@@ -198,8 +198,12 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
         break;
     case CHILD_SETS_STATE_UNFOLD_AND_BLEND_POSES:
         if (l11_child_set_fold_rotation_x_progress < 1.0f) {
-            advance_accelerated_scalar(
-                &l11_child_set_fold_rotation_x_progress, &l11_child_set_fold_rotation_x_progress_step, 1.0f, frame_time_sq, frame_time_sq, frame_time);
+            advance_accelerated_scalar(&l11_child_set_fold_rotation_x_progress,
+                                       &l11_child_set_fold_rotation_x_progress_step,
+                                       1.0f,
+                                       frame_time_sq,
+                                       frame_time_sq,
+                                       frame_time);
         }
         if (0.9f < l11_child_set_fold_rotation_x_progress && D_L11_00161EC8 == 0.0f) {
             allocate_voice_for_target_entry(1, 0, child_sets_controller);
@@ -231,7 +235,8 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
                                        frame_time_sq + frame_time_sq,
                                        frame_time + frame_time);
         }
-        if (1.0f <= l11_even_source_child_rotation_x_progress && l11_even_attached_child_rotation_y_progress < 1.0f) {
+        if (1.0f <= l11_even_source_child_rotation_x_progress &&
+            l11_even_attached_child_rotation_y_progress < 1.0f) {
             advance_accelerated_scalar(&l11_even_attached_child_rotation_y_progress,
                                        &l11_even_attached_child_rotation_y_progress_step,
                                        1.0f,
@@ -239,7 +244,8 @@ void child_sets_controller_update(struct Moby *child_sets_controller) {
                                        frame_time_sq + frame_time_sq,
                                        frame_time + frame_time);
         }
-        if (0.9f < l11_even_attached_child_rotation_y_progress && l11_final_child_axis0_spacing_progress < 1.0f) {
+        if (0.9f < l11_even_attached_child_rotation_y_progress &&
+            l11_final_child_axis0_spacing_progress < 1.0f) {
             advance_accelerated_scalar(&l11_final_child_axis0_spacing_progress,
                                        &l11_final_child_axis0_spacing_progress_step,
                                        1.0f,
@@ -329,8 +335,10 @@ void update_child_set_poses(struct Moby *parent_moby) {
     for (i = 0; i < 6; i++) {
         int   s = (i >= 3) ? 1 : -1;
         float ang =
-            (float)(i % 3) * 0.5235988f -
-            (child_set_fold_rotation_x_degrees_gp * (1.0f - l11_child_set_fold_rotation_x_progress) + 30.0f) * 0.017453292f;
+            (float)(i % 3) * 0.5235988f - (child_set_fold_rotation_x_degrees_gp *
+                                               (1.0f - l11_child_set_fold_rotation_x_progress) +
+                                           30.0f) *
+                                              0.017453292f;
         qcopy_nc(&l11_three_per_side_child_mobys[i]->rot, &parent_moby->rot);
         l11_three_per_side_child_mobys[i]->rot.z =
             fast_add_rotations(l11_three_per_side_child_mobys[i]->rot.z, (float)s * 1.5707964f);
@@ -358,8 +366,10 @@ void update_child_set_poses(struct Moby *parent_moby) {
         int   s = (j >= 2) ? 1 : -1;
         int   k = (j & 1) ? -1 : 1;
         float ang =
-            (float)(j % 2) * 0.5235988f -
-            (child_set_fold_rotation_x_degrees_gp * (1.0f - l11_child_set_fold_rotation_x_progress) + 15.0f) * 0.017453292f;
+            (float)(j % 2) * 0.5235988f - (child_set_fold_rotation_x_degrees_gp *
+                                               (1.0f - l11_child_set_fold_rotation_x_progress) +
+                                           15.0f) *
+                                              0.017453292f;
         float r;
         qcopy_nc(&D_L11_00161F20[j]->rot, &parent_moby->rot);
         D_L11_00161F20[j]->rot.z =
@@ -402,7 +412,9 @@ void update_child_set_poses(struct Moby *parent_moby) {
                      &child_placement_vector_scratch);
         qcopy(&D_L11_00161F30[attached_child_index]->rot,
               &D_L11_00161F20[attached_child_index]->rot);
-        rotation_y_progress = (attached_child_index & 1) ? D_L11_00161ED0 : l11_even_attached_child_rotation_y_progress;
+        rotation_y_progress = (attached_child_index & 1)
+                                  ? D_L11_00161ED0
+                                  : l11_even_attached_child_rotation_y_progress;
         D_L11_00161F30[attached_child_index]->rot.y = fast_add_rotations(
             D_L11_00161F30[attached_child_index]->rot.y,
             -(attached_child_rotation_y_degrees_gp * 0.017453292f) * rotation_y_progress);
@@ -415,8 +427,8 @@ void update_child_set_poses(struct Moby *parent_moby) {
         if (final_child_index >= 2) {
             sgn = 1.0f;
         }
-        signed_axis0_offset =
-            (float)(final_child_index & 1) * 7.5f + 3.75f + (1.0f - l11_final_child_axis0_spacing_progress) * 13.25f;
+        signed_axis0_offset = (float)(final_child_index & 1) * 7.5f + 3.75f +
+                              (1.0f - l11_final_child_axis0_spacing_progress) * 13.25f;
         if (20.0f < signed_axis0_offset) {
             signed_axis0_offset = 20.0f;
         }

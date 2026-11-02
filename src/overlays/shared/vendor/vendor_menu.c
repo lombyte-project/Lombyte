@@ -1353,7 +1353,8 @@ void update_vendor_menu(void) {
         position_contribution_scratch.f[1] =
             l00_vendor_item_display_transform_parameters[CUR_ITEM.item].f4;
         position_contribution_scratch.f[2] =
-            l00_vendor_item_display_transform_parameters[CUR_ITEM.item].item_local_position_offset_z;
+            l00_vendor_item_display_transform_parameters[CUR_ITEM.item]
+                .item_local_position_offset_z;
         euler_rotation_basis(vendor_menu.menu_mobys[3].mtx, &vendor_menu.menu_mobys[3].rot);
         transform_vector_by_basis(&position_contribution_scratch,
                                   &position_contribution_scratch,

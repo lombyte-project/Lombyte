@@ -37,7 +37,8 @@ int build_pause_item_list(void) {
             pause_item_entry->c = 0;
             pause_item_entry->id = id;
             pause_item_entry->idx = i;
-            pause_item_variant_values[item_count] = b ? menu_item_definition->unk42 : menu_item_definition->unk40;
+            pause_item_variant_values[item_count] =
+                b ? menu_item_definition->unk42 : menu_item_definition->unk40;
             item_count++;
         }
     }

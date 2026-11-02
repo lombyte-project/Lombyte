@@ -145,8 +145,8 @@ void gemlik_projectile_update(struct Moby *moby) {
                 *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
                 work.hit[0x19] = 1;
                 if ((unsigned char)ent[0xA4] == 0xFF ||
-                    (target_hit_entry = &l13_moby_hit_entries[(unsigned char)ent[0xA4]])->owner_moby !=
-                        ent) {
+                    (target_hit_entry = &l13_moby_hit_entries[(unsigned char)ent[0xA4]])
+                            ->owner_moby != ent) {
                     record_moby_hit(ent, work.hit);
                 } else {
                     target_hit_entry->damage += 1.0f;

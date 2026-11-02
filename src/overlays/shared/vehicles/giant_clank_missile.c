@@ -325,8 +325,10 @@ void giant_clank_missile_update(M_29E8A0 *missile_moby) {
         missile_data->speed + (missile_data->speed_end - missile_data->speed) / 10.0f * D_0015ED64;
     fast_dec_timer_s16(&missile_data->velocity_inheritance_timer);
     {
-        float velocity_inheritance_frames_remaining = convert_integer_to_float(missile_data->velocity_inheritance_timer);
-        float velocity_inheritance_frames_total = convert_integer_to_float(missile_data->velocity_inheritance_duration_frames);
+        float velocity_inheritance_frames_remaining =
+            convert_integer_to_float(missile_data->velocity_inheritance_timer);
+        float velocity_inheritance_frames_total =
+            convert_integer_to_float(missile_data->velocity_inheritance_duration_frames);
         fast_vec_scale(up,
                        ((char *)&D_0013F490),
                        velocity_inheritance_frames_remaining / velocity_inheritance_frames_total);

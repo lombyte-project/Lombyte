@@ -391,9 +391,10 @@ void draw_beam_barrier_segments(char *moby) {
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x42,
-                        (long)l06_beam_barrier_gs_alpha_a_selector | ((long)l06_beam_barrier_gs_alpha_b_selector << 2) |
-                            ((long)l06_beam_barrier_gs_alpha_c_selector << 4) | ((long)l06_beam_barrier_gs_alpha_d_selector << 6) |
-                            0x8000000000L);
+                        (long)l06_beam_barrier_gs_alpha_a_selector |
+                            ((long)l06_beam_barrier_gs_alpha_b_selector << 2) |
+                            ((long)l06_beam_barrier_gs_alpha_c_selector << 4) |
+                            ((long)l06_beam_barrier_gs_alpha_d_selector << 6) | 0x8000000000L);
     font_queue_vu_state();
     first_matrix = segment_matrix[0];
     segment_params = beam_segment_draw_params;
@@ -478,14 +479,21 @@ void animate_beam_barrier_strands(struct Moby *moby) {
                 y += step;
             }
             for (k = 1; k < 29; k++) {
-                fast_vec_add(&l06_beam_barrier_strand_point_drifts[i][k], &jitter[k - 1], &jitter[k]);
-                fast_vec_add(&l06_beam_barrier_strand_point_drifts[i][k], &l06_beam_barrier_strand_point_drifts[i][k], &jitter[k + 1]);
-                fast_vec_scale(&l06_beam_barrier_strand_point_drifts[i][k], &l06_beam_barrier_strand_point_drifts[i][k], 0.333f);
+                fast_vec_add(
+                    &l06_beam_barrier_strand_point_drifts[i][k], &jitter[k - 1], &jitter[k]);
+                fast_vec_add(&l06_beam_barrier_strand_point_drifts[i][k],
+                             &l06_beam_barrier_strand_point_drifts[i][k],
+                             &jitter[k + 1]);
+                fast_vec_scale(&l06_beam_barrier_strand_point_drifts[i][k],
+                               &l06_beam_barrier_strand_point_drifts[i][k],
+                               0.333f);
             }
             D_L06_00161E40[i] = D_L06_00161E50;
         } else {
             for (j = 1; j < 29; j++) {
-                fast_vec_add(&l06_beam_barrier_strand_local_points[i][j], &l06_beam_barrier_strand_local_points[i][j], &l06_beam_barrier_strand_point_drifts[i][j]);
+                fast_vec_add(&l06_beam_barrier_strand_local_points[i][j],
+                             &l06_beam_barrier_strand_local_points[i][j],
+                             &l06_beam_barrier_strand_point_drifts[i][j]);
             }
             D_L06_00161E40[i]--;
         }

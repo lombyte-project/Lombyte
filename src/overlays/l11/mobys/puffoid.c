@@ -87,12 +87,12 @@ typedef struct {
     u8           pad23C[8];
     s32          unk244; /* 0x244 */
     u8           pad248[4];
-    f32          chase_heading_offset_radians;    /* 0x24C: heading offset for FUN_L11_00315f58 */
-    f32          yaw_turn_velocity;    /* 0x250: turn speed */
-    s32          carrier;   /* 0x254: moby index of the carrier, or < 0 */
-    f32          carrier_jump_local_x_threshold;    /* 0x258 */
-    s32          point;     /* 0x25C: current path point */
-    f32          wander_destination[4]; /* 0x260 */
+    f32          chase_heading_offset_radians;   /* 0x24C: heading offset for FUN_L11_00315f58 */
+    f32          yaw_turn_velocity;              /* 0x250: turn speed */
+    s32          carrier;                        /* 0x254: moby index of the carrier, or < 0 */
+    f32          carrier_jump_local_x_threshold; /* 0x258 */
+    s32          point;                          /* 0x25C: current path point */
+    f32          wander_destination[4];          /* 0x260 */
     u8           pad270[0x10];
     u8           unk280[0x10]; /* 0x280 */
 } CreatureVars_4318;
@@ -268,7 +268,9 @@ void puffoid_update(struct Moby *moby) {
             puffoid_vars->wander_destination[0] = fast_cos(a) * wander_radius;
             puffoid_vars->wander_destination[1] = fast_sin(a) * wander_radius;
             puffoid_vars->wander_destination[2] = 0.0f;
-            fast_vec_add(puffoid_vars->wander_destination, puffoid_vars->wander_destination, puffoid_vars->home);
+            fast_vec_add(puffoid_vars->wander_destination,
+                         puffoid_vars->wander_destination,
+                         puffoid_vars->home);
             moby->state = PUFFOID_STATE_WANDER_NEAR_HOME;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -276,7 +278,8 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_WANDER_NEAR_HOME:
-        update_moby_target_heading_and_conditional_movement((char *)moby, puffoid_vars->wander_destination);
+        update_moby_target_heading_and_conditional_movement((char *)moby,
+                                                            puffoid_vars->wander_destination);
         if (puffoid_vars->unk214 != 2) {
             puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
@@ -691,20 +694,20 @@ struct L11PatrolVars {
     s32          retimer; /* 0x38: nonzero restarts the timer at 0x244 */
     u8           pad3C[0xD4];
     u8           move[7]; /* 0x110: movement state (trooper_anim_update / trooper_anim_finish) */
-    u8           hit_flash_red_target;  /* 0x117 */
+    u8           hit_flash_red_target; /* 0x117 */
     u8           pad118[8];
-    u8           unk120[0x10]; /* 0x120 */
-    f32          unk130;       /* 0x130 */
-    f32          unk134;       /* 0x134 */
-    f32          unk138;       /* 0x138 */
-    f32          unk13C;       /* 0x13C */
-    s32          unk140;       /* 0x140 */
-    s32          unk144;       /* 0x144 */
-    f32          knockback_collision_z_offset;       /* 0x148 */
+    u8           unk120[0x10];                 /* 0x120 */
+    f32          unk130;                       /* 0x130 */
+    f32          unk134;                       /* 0x134 */
+    f32          unk138;                       /* 0x138 */
+    f32          unk13C;                       /* 0x13C */
+    s32          unk140;                       /* 0x140 */
+    s32          unk144;                       /* 0x144 */
+    f32          knockback_collision_z_offset; /* 0x148 */
     u8           pad14C[0x11];
     u8           unk15D; /* 0x15D */
     u8           pad15E[0x12];
-    f32          knockback_apex_animation_frame; /* 0x170 */
+    f32          knockback_apex_animation_frame;    /* 0x170 */
     f32          knockback_landing_animation_frame; /* 0x174 */
     u8           pad178[0x2C];
     f32          horizontal_movement_step_limit; /* 0x1A4 */

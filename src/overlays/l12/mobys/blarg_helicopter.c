@@ -438,7 +438,8 @@ update_state:
             approach_value(&blarg_helicopter_vars->unk94, 0.0f, frame_time_sq * 9.0f);
             if (blarg_helicopter_vars->unk94 == 0.0f) {
                 blarg_helicopter_vars->rocket_fire_timer_frames = scale_game_frames(50);
-                blarg_helicopter_vars->target_first_path_endpoint = blarg_helicopter_vars->target_first_path_endpoint == 0;
+                blarg_helicopter_vars->target_first_path_endpoint =
+                    blarg_helicopter_vars->target_first_path_endpoint == 0;
                 moby->state = BLARG_HELICOPTER_AIM_AND_FIRE;
                 break;
             }

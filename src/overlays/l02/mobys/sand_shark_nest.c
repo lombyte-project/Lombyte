@@ -181,7 +181,8 @@ void sand_shark_nest_update(unsigned char *moby) {
         nest_vars->removal_request_state = SAND_SHARK_NEST_REMOVAL_REQUEST_IDLE;
         nest_vars->timer = scale_game_frames(nest_vars->delay);
         if (nest_vars->spawner >= 0) {
-            (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->active_nest_count += 1;
+            (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))
+                ->active_nest_count += 1;
         }
         break;
     case SAND_SHARK_NEST_WAIT_FOR_SPAWN:
@@ -213,8 +214,8 @@ void sand_shark_nest_update(unsigned char *moby) {
             if (launched_shark) {
                 char *od = *(char **)(launched_shark + 0x78);
                 if (nest_vars->spawner >= 0) {
-                    (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->launched_sand_shark_count +=
-                        1;
+                    (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))
+                        ->launched_sand_shark_count += 1;
                 }
                 qcopy(&launch_position, moby + 0x10);
                 launch_position.f[2] += 1.5f;
@@ -242,7 +243,8 @@ void sand_shark_nest_update(unsigned char *moby) {
         if (step_moby_motion(moby, nest_vars->anim) & 0x40) {
             if (nest_vars->spawner >= 0) {
                 extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
-                (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8_s + 0x78))->active_nest_count -= 1;
+                (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8_s + 0x78))
+                    ->active_nest_count -= 1;
             }
             qcopy(&launch_velocity_or_explosion_position, moby + 0x10);
             spawn_explosion(moby,

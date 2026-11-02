@@ -159,7 +159,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         }
     }
     hit_result = find_moby_hit(moby, 0x830000, 0);
-    if (hit_result != 0 && hit_result->owner != 0 && hit_result->owner->object_class != moby->object_class) {
+    if (hit_result != 0 && hit_result->owner != 0 &&
+        hit_result->owner->object_class != moby->object_class) {
         moby->bBC = 1;
     }
     moby->bA4 = 0xFF;

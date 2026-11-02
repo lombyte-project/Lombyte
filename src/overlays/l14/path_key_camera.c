@@ -280,9 +280,12 @@ void update_path_key_camera(char *path_key_camera) {
     }
     if (rec->n30 < 3 &&
         path_key_camera_linked_moby_event_progress_thresholds[rec->n30][side] <= D_L14_001624C0) {
-        struct Moby *first_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->first_linked_moby_index << 8));
-        struct Moby *second_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->second_linked_moby_index << 8));
-        struct Moby *third_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->third_linked_moby_index << 8));
+        struct Moby *first_linked_moby =
+            (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->first_linked_moby_index << 8));
+        struct Moby *second_linked_moby =
+            (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->second_linked_moby_index << 8));
+        struct Moby *third_linked_moby =
+            (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->third_linked_moby_index << 8));
 
         if (hero.rail_spline ==
             (s32)l14_splines_macro[MOBYDATA_5d48(first_linked_moby)->zone].path) {

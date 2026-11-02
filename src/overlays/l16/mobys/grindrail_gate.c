@@ -58,7 +58,8 @@ void grindrail_gate_update(struct Moby *gate_moby) {
                 hero_offset_from_gate[2] < grindrail_gate_local_trigger_bounds[5]) {
                 gate_moby->command = 1;
                 gate_moby->state = GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT;
-                *(int *)command_timer = scale_game_frames(l16_grindrail_gate_command_duration_frames);
+                *(int *)command_timer =
+                    scale_game_frames(l16_grindrail_gate_command_duration_frames);
                 func_0022ED80_6478(1, 0, gate_moby);
             }
         }

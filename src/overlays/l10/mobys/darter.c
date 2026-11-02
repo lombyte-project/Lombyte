@@ -372,11 +372,12 @@ void darter_update(Moby *moby) {
                    0.02f,
                    0.3f,
                    frame_time * 6.2831855f);
-        func_L00_0025CC58_2E0630(&moby->rot.y,
-                                 0,
-                                 -fast_arc_tan(vector_distance_xy(&moby->pos, &darter_vars->dive_attack_aim_position),
-                                               darter_vars->dive_attack_aim_position.z - moby->pos.z),
-                                 frame_time * 12.566371f);
+        func_L00_0025CC58_2E0630(
+            &moby->rot.y,
+            0,
+            -fast_arc_tan(vector_distance_xy(&moby->pos, &darter_vars->dive_attack_aim_position),
+                          darter_vars->dive_attack_aim_position.z - moby->pos.z),
+            frame_time * 12.566371f);
         if (is_value_within_interpolated_window((char *)moby, 20.0f)) {
             float one = 1.0f;
             *(int *)&vector_and_collision_scratch[13] = 1;

@@ -130,7 +130,8 @@ void moving_platform_small_update(char *moby) {
         eased_endpoint_distance +=
             speed * 0.5f * convert_integer_to_float(easing_frame_count * easing_frame_count);
         if (pb[4] < 0) {
-            eased_endpoint_distance = platform_pvars->path_endpoint_distance - eased_endpoint_distance;
+            eased_endpoint_distance =
+                platform_pvars->path_endpoint_distance - eased_endpoint_distance;
         }
         fast_vec_sub(endpoint_delta_or_position,
                      *(char **)(pb + 0x10) + **(int **)(pb + 0x10) * 0x10,

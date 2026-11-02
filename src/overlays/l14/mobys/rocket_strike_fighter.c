@@ -69,22 +69,22 @@ int advance_rocket_strike_fighter_along_flight_path(struct Moby *m) __asm__("FUN
 
 typedef struct {
     u8  pad0[0x60];
-    s32 segment;    /* 0x60 */
-    s32 along;      /* 0x64 */
-    s32 path;       /* 0x68 */
-    s32 sound;      /* 0x6C */
-    f32 f70;        /* 0x70 */
-    f32 position_y_spring_velocity;        /* 0x74 */
-    f32 position_z_spring_velocity;        /* 0x78 */
-    s32 timer;      /* 0x7C */
-    f32 rotation_x_spring_velocity;        /* 0x80 */
-    f32 rotation_y_spring_velocity;        /* 0x84 */
-    f32 rotation_z_spring_velocity;        /* 0x88 */
-    s32 rocket;     /* 0x8C: its class 922 rocket */
-    s32 flythrough; /* 0x90: the flythrough camera descriptor it starts */
-    s32 stage;      /* 0x94 */
-    s32 mission[3]; /* 0x98: the missions that must be complete */
-    s32 clip;       /* 0xA4 */
+    s32 segment;                    /* 0x60 */
+    s32 along;                      /* 0x64 */
+    s32 path;                       /* 0x68 */
+    s32 sound;                      /* 0x6C */
+    f32 f70;                        /* 0x70 */
+    f32 position_y_spring_velocity; /* 0x74 */
+    f32 position_z_spring_velocity; /* 0x78 */
+    s32 timer;                      /* 0x7C */
+    f32 rotation_x_spring_velocity; /* 0x80 */
+    f32 rotation_y_spring_velocity; /* 0x84 */
+    f32 rotation_z_spring_velocity; /* 0x88 */
+    s32 rocket;                     /* 0x8C: its class 922 rocket */
+    s32 flythrough;                 /* 0x90: the flythrough camera descriptor it starts */
+    s32 stage;                      /* 0x94 */
+    s32 mission[3];                 /* 0x98: the missions that must be complete */
+    s32 clip;                       /* 0xA4 */
 } RocketStrikeFighterVars;
 
 void rocket_strike_fighter_update(struct Moby *moby) __asm__("FUN_L14_002fcbb0");
@@ -245,8 +245,10 @@ void rocket_strike_fighter_update(struct Moby *moby) {
             qcopy(&moby->pos, path + 0x10);
             moby->rot.z = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                        *(float *)(path + 0x24) - *(float *)(path + 0x14));
-            moby_vars->rotation_x_spring_velocity = moby_vars->rotation_y_spring_velocity = moby_vars->rotation_z_spring_velocity = moby_vars->f70 = moby_vars->position_y_spring_velocity =
-                moby_vars->position_z_spring_velocity = 0.0f;
+            moby_vars->rotation_x_spring_velocity = moby_vars->rotation_y_spring_velocity =
+                moby_vars->rotation_z_spring_velocity = moby_vars->f70 =
+                    moby_vars->position_y_spring_velocity = moby_vars->position_z_spring_velocity =
+                        0.0f;
         }
         break;
     }

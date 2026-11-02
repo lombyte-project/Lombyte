@@ -207,7 +207,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         robot_dog_vars->s24 = 1;
         robot_dog_vars->f20 = 1.0f;
         robot_dog_vars->pD0 = &D_L17_00162200;
-        robot_dog_vars->approach_movement_speed = random_float_between(frame_time * 7.2f, frame_time * 8.7f);
+        robot_dog_vars->approach_movement_speed =
+            random_float_between(frame_time * 7.2f, frame_time * 8.7f);
         robot_dog_moby[0x20] = 1;
         blend_moby_animation(
             robot_dog_moby,
@@ -411,7 +412,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         break;
     }
     case ROBOT_DOG_STATE_APPROACH_TARGET:
-        FUN_L17_002efd48_c((char *)robot_dog_moby, robot_dog_vars->v180, robot_dog_vars->approach_movement_speed);
+        FUN_L17_002efd48_c(
+            (char *)robot_dog_moby, robot_dog_vars->v180, robot_dog_vars->approach_movement_speed);
         MOBY(robot_dog_moby)->anim_speed = 1.8f;
         if (point_in_path_xy((&hero.motion.pos),
                              ((int **)D_L17_001B0DB0)[robot_dog_vars->path] + 4,

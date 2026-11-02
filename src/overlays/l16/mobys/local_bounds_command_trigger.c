@@ -64,7 +64,8 @@ void local_bounds_command_trigger_update(struct Moby *trigger_moby) {
                 allocate_voice_for_target_entry(1, 0, trigger_moby);
                 trigger_moby->command = 1;
                 trigger_moby->state = GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT;
-                *(int *)command_timer = scale_game_frames(l16_local_bounds_trigger_command_timeout_frames);
+                *(int *)command_timer =
+                    scale_game_frames(l16_local_bounds_trigger_command_timeout_frames);
             }
         }
         break;

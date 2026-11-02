@@ -57,9 +57,9 @@ typedef struct {
 
 typedef struct {
     char           pad0[0x10];
-    float          pos[4]; /* 0x10 */
-    unsigned char  state;  /* 0x20 */
-    unsigned char  moby_list_id;    /* 0x21 */
+    float          pos[4];       /* 0x10 */
+    unsigned char  state;        /* 0x20 */
+    unsigned char  moby_list_id; /* 0x21 */
     char           pad22[0x12];
     unsigned short flags; /* 0x34 */
     char           pad36[0x42];

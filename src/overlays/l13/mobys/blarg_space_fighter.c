@@ -579,7 +579,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             return;
         }
         if (path == 0) {
-            func_001E9730_d(blarg_space_fighter_missing_path_debug_format, moby->diagnostic_moby_number);
+            func_001E9730_d(blarg_space_fighter_missing_path_debug_format,
+                            moby->diagnostic_moby_number);
             mark_moby_for_removal(moby);
             return;
         }
@@ -587,7 +588,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             int path_table_index = fighter_data->flight_path_index;
             qcopy(&moby->pos, D_L13_001B07B0[path_table_index] + 0x10);
             fighter_data->target_path_node_index = 1;
-            fighter_data->previous_path_node_index = *(unsigned short *)D_L13_001B07B0[path_table_index] - 1;
+            fighter_data->previous_path_node_index =
+                *(unsigned short *)D_L13_001B07B0[path_table_index] - 1;
         }
         qcopy(&fighter_data->path_join_position, path + 0x20);
         qcopy(&moby->pos, &fighter_data->path_join_position);
@@ -611,7 +613,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             fast_vec_sub(scratch_vector, D_L13_001670C0, scratch_vector);
             fighter_data->previous_path_node_index = fighter_data->target_path_node_index =
                 select_point_index_by_distance(scratch_vector, path, 0.0f);
-            qcopy(&fighter_data->path_join_position, path + (fighter_data->previous_path_node_index * 16 + 0x10));
+            qcopy(&fighter_data->path_join_position,
+                  path + (fighter_data->previous_path_node_index * 16 + 0x10));
             qcopy(&moby->pos, &fighter_data->path_join_position);
             moby->f94 = moby->cls->f10;
             moby->b31 = 1;
@@ -650,7 +653,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         boss = 0;
         bossd = 0;
         if (fighter_data->linked_boss_index != -1) {
-            Moby_2C56B0 *p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->linked_boss_index << 8));
+            Moby_2C56B0 *p =
+                (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->linked_boss_index << 8));
             if (p != 0 && p->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
                 p->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 boss = p;
@@ -667,7 +671,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         {
             Snd *e;
             if (fighter_data->fighter_voice_slot == -1 ||
-                (e = (Snd *)(((char *)&D_0013E550) + fighter_data->fighter_voice_slot * 0x70))->f88 != moby ||
+                (e = (Snd *)(((char *)&D_0013E550) + fighter_data->fighter_voice_slot * 0x70))
+                        ->f88 != moby ||
                 e->b74 == 0) {
                 fighter_data->fighter_voice_slot = -1;
                 fighter_data->fighter_voice_slot = allocate_voice_for_target_entry(1, 4, moby);
@@ -692,7 +697,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
                 if (moby->b31 == 0) {
                     fighter_data->fire_exit_frame_counter++;
                 }
-                if (moby->b31 == 0 || close == 0 || scale_game_frames(0x14) <= fighter_data->fire_exit_frame_counter) {
+                if (moby->b31 == 0 || close == 0 ||
+                    scale_game_frames(0x14) <= fighter_data->fire_exit_frame_counter) {
                     fighter_data->attack_phase_timer = scale_game_frames(0x1E);
                     moby->bBC = 2;
                 }
@@ -718,11 +724,14 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
 
                         fast_vec_cross(lateral_aim_offset, &vehd->vel, up);
                         fast_vec_cross(up, lateral_aim_offset, &vehd->vel);
-                        fast_vec_normalize(
-                            up, up, fighter_data->aim_offset_radius_scale * 5.0f * fast_sin(fighter_data->aim_offset_angle_radians));
+                        fast_vec_normalize(up,
+                                           up,
+                                           fighter_data->aim_offset_radius_scale * 5.0f *
+                                               fast_sin(fighter_data->aim_offset_angle_radians));
                         fast_vec_normalize(lateral_aim_offset,
                                            lateral_aim_offset,
-                                           fighter_data->aim_offset_radius_scale * 5.0f * fast_cos(fighter_data->aim_offset_angle_radians));
+                                           fighter_data->aim_offset_radius_scale * 5.0f *
+                                               fast_cos(fighter_data->aim_offset_angle_radians));
                         fast_vec_add(scratch_vector, hpos, up);
                         fast_vec_add(scratch_vector, scratch_vector, lateral_aim_offset);
                         add_random_offset_to_vector_xyz(scratch_vector, 0.6f);
@@ -746,11 +755,13 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
                         fighter_data->aim_offset_radius_scale *
                         ((random_float_between(0.92f, 0.94f) - 1.0f) * D_0015ED60 + 1.0f);
                     if (fighter_data->aim_offset_angle_radians > 1.5707964f) {
-                        fighter_data->aim_offset_angle_radians = fighter_data->aim_offset_angle_radians - random_float_between(20.0f, 40.0f) *
-                                                                    0.017453292f * D_0015ED6C;
+                        fighter_data->aim_offset_angle_radians =
+                            fighter_data->aim_offset_angle_radians -
+                            random_float_between(20.0f, 40.0f) * 0.017453292f * D_0015ED6C;
                     } else {
-                        fighter_data->aim_offset_angle_radians = fighter_data->aim_offset_angle_radians + random_float_between(20.0f, 40.0f) *
-                                                                    0.017453292f * D_0015ED6C;
+                        fighter_data->aim_offset_angle_radians =
+                            fighter_data->aim_offset_angle_radians +
+                            random_float_between(20.0f, 40.0f) * 0.017453292f * D_0015ED6C;
                     }
                 }
             }
@@ -816,7 +827,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         boss = 0;
         bossd = 0;
         if (fighter_data->linked_boss_index != -1) {
-            Moby_2C56B0 *p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->linked_boss_index << 8));
+            Moby_2C56B0 *p =
+                (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->linked_boss_index << 8));
             if (p != 0 && p->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
                 p->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 boss = p;

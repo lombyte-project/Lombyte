@@ -263,9 +263,11 @@ void turret_update(struct Moby *moby) {
                     spawn_turret_shot(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
                     l09_turret_shot_response_state.unk160 = 0.03f;
-                    l09_turret_shot_response_state.longer_shot_response_frame_count = scale_game_frames(10);
+                    l09_turret_shot_response_state.longer_shot_response_frame_count =
+                        scale_game_frames(10);
                     l09_turret_shot_response_state.unk170 = 0.03f;
-                    l09_turret_shot_response_state.shorter_shot_response_frame_count = scale_game_frames(7);
+                    l09_turret_shot_response_state.shorter_shot_response_frame_count =
+                        scale_game_frames(7);
                     turret_vars->barrel = 0;
                     for (i = 0; i < 5; i++) {
                         rnd.q = 0;
@@ -310,9 +312,11 @@ void turret_update(struct Moby *moby) {
                     spawn_turret_shot(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
                     l09_turret_shot_response_state.unk160 = 0.03f;
-                    l09_turret_shot_response_state.longer_shot_response_frame_count = scale_game_frames(10);
+                    l09_turret_shot_response_state.longer_shot_response_frame_count =
+                        scale_game_frames(10);
                     l09_turret_shot_response_state.unk170 = 0.03f;
-                    l09_turret_shot_response_state.shorter_shot_response_frame_count = scale_game_frames(7);
+                    l09_turret_shot_response_state.shorter_shot_response_frame_count =
+                        scale_game_frames(7);
                     turret_vars->barrel = 1;
                     for (i = 0; i < 5; i++) {
                         rnd.q = 0;

@@ -447,7 +447,8 @@ void alien_queen_update(unsigned char *moby) {
         alien_queen_update_vars->suppress_death_dialogue = 0;
         qcopy(alien_queen_update_vars->unkC0, moby + 0x10);
         alien_queen_update_vars->animation_update = -1;
-        alien_queen_update_vars->saved_path_point_count = *D_L06_001B0C30_q[alien_queen_update_vars->path];
+        alien_queen_update_vars->saved_path_point_count =
+            *D_L06_001B0C30_q[alien_queen_update_vars->path];
         path = D_L06_001B0C30_q[alien_queen_update_vars->path];
         lerp_vector(alien_queen_update_vars->path_midpoint,
                     path + 4,
@@ -911,7 +912,8 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     }
     MOBY(moby)->hit_slot = 0xFF;
     trooper_anim_finish(moby, &alien_queen_hit_recovery_vars->anim_state);
-    if ((alien_queen_hit_recovery_vars->death_control_flags & 2) && (unsigned char)moby[0x20] != 15) {
+    if ((alien_queen_hit_recovery_vars->death_control_flags & 2) &&
+        (unsigned char)moby[0x20] != 15) {
         if (alien_queen_hit_recovery_vars->animation_update != -1) {
             set_animation_parameter(alien_queen_hit_recovery_vars->animation_update, 0);
             alien_queen_hit_recovery_vars->animation_update = -1;
@@ -1041,8 +1043,10 @@ int update_alien_queen_intro_camera(char *moby) {
         fast_vec_add(hero_offset_position, hero_offset_position, &x->motion.pos);
         hero_offset_position[2] += 4.0f;
         pos = moby + 0x10;
-        lerp_vector(
-            output_position, moby_offset_position, hero_offset_position, alien_queen_state->camera_blend_fraction);
+        lerp_vector(output_position,
+                    moby_offset_position,
+                    hero_offset_position,
+                    alien_queen_state->camera_blend_fraction);
     }
     output_rotation[2] = fast_arc_tan(MOBY(moby)->pos.x - output_position[0],
                                       MOBY(moby)->pos.y - output_position[1]);

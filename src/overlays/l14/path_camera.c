@@ -37,8 +37,9 @@ typedef struct {
 void setup_path_camera(char *camera) __asm__("FUN_L14_00314f00");
 
 void setup_path_camera(char *camera) {
-    u128        stand;
-    char       *path_camera_setup_preset = *(char **)(l14_camera_preset_rows + *(short *)(camera + 0x84) * 32 + 0x1C);
+    u128  stand;
+    char *path_camera_setup_preset =
+        *(char **)(l14_camera_preset_rows + *(short *)(camera + 0x84) * 32 + 0x1C);
     char       *camera_saved_state;
     char       *fov_stops_state_base;
     char       *path;
@@ -62,7 +63,8 @@ void setup_path_camera(char *camera) {
     camera_run[3] = 0;
     camera_run[4] = 0;
     *(short *)(camera_run + 5) = 0;
-    *((short *)(camera_run + 5) + 1) = scale_game_frames(*(short *)(path_camera_setup_preset + 0x3A));
+    *((short *)(camera_run + 5) + 1) =
+        scale_game_frames(*(short *)(path_camera_setup_preset + 0x3A));
     fov_stops_state_base = *(char **)(camera + 0x70);
     fov_stops = (Stops_4f00 *)(fov_stops_state_base + 0x58);
     {
@@ -93,7 +95,9 @@ void setup_path_camera(char *camera) {
     if (*(short *)(path_camera_setup_preset + 0x3A) > 0) {
         *(float *)(path_camera_setup_preset + 0x3C) =
             *(float *)(camera_run + 2) /
-            convert_integer_to_float(scale_game_frames(*(short *)(path_camera_setup_preset + 0x3A))) * 60.0f;
+            convert_integer_to_float(
+                scale_game_frames(*(short *)(path_camera_setup_preset + 0x3A))) *
+            60.0f;
     }
     if (*(int *)(path_camera_setup_preset + 0x24) >= 0) {
         path = ((char *)l14_paths[*(int *)(path_camera_setup_preset + 0x24)]);
@@ -167,7 +171,8 @@ void update_path_camera(struct UpdateCam *path_camera) {
     s32   seg2;
     f32   tt2;
     char *camera_saved_state = (char *)path_camera->saved_state;
-    char *path_camera_preset = *(char **)(l14_camera_preset_rows + path_camera->descriptor_index * 32 + 0x1C);
+    char *path_camera_preset =
+        *(char **)(l14_camera_preset_rows + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5290   *camera_run = (VendorCamRun_5290 *)(camera_saved_state + 0x40);
     VendorCamStops_5290 *fov_stops = (VendorCamStops_5290 *)(camera_saved_state + 0x58);
     char                *path;
@@ -181,8 +186,9 @@ void update_path_camera(struct UpdateCam *path_camera) {
         camera_run->started = 1;
         qcopy(&path_camera->pos, pa + 0x10);
         if (*(int *)(path_camera_preset + 0x28) >= 0) {
-            struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(path_camera_preset + 0x28) * 256);
-            float       *ofs = (float *)(path_camera_preset + 0x2C);
+            struct Moby *o =
+                (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(path_camera_preset + 0x28) * 256);
+            float *ofs = (float *)(path_camera_preset + 0x2C);
             t[0] = ofs[0];
             t[1] = ofs[1];
             t[2] = ofs[2];
@@ -222,7 +228,8 @@ void update_path_camera(struct UpdateCam *path_camera) {
         path_camera->transition_state = PATH_CAMERA_TRANSITION_PATH_FINISHED;
         path_camera_active = 0;
         mb = D_L14_0015FFD8_5290;
-        reset_racer_group_to_hero_path_position((struct Moby *)(mb + *(int *)(path_camera_preset + 0x50) * 256));
+        reset_racer_group_to_hero_path_position(
+            (struct Moby *)(mb + *(int *)(path_camera_preset + 0x50) * 256));
         hp = (char *)hero.rail_spline;
         seg = hero.rail_segment;
         tt = hero.rail_seg_frac;
@@ -265,8 +272,9 @@ void update_path_camera(struct UpdateCam *path_camera) {
     camera_run->dist +=
         fast_vec_dist(initial_look_direction_or_previous_position, &path_camera->pos);
     if (*(int *)(path_camera_preset + 0x28) >= 0) {
-        struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(path_camera_preset + 0x28) * 256);
-        float       *ofs = (float *)(path_camera_preset + 0x2C);
+        struct Moby *o =
+            (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(path_camera_preset + 0x28) * 256);
+        float *ofs = (float *)(path_camera_preset + 0x2C);
         u[0] = ofs[0];
         u[1] = ofs[1];
         u[2] = ofs[2];
@@ -293,8 +301,9 @@ int check_path_camera_priority(char *camera,
                                char *control_mode_gate_object) __asm__("FUN_L14_00315920");
 
 int check_path_camera_priority(char *camera, char *control_mode_gate_object) {
-    char *path_camera_priority_preset = *(char **)(l14_camera_preset_rows + *(short *)(camera + 0x84) * 32 + 0x1C);
-    int   required_control_mode, required_hero_state;
+    char *path_camera_priority_preset =
+        *(char **)(l14_camera_preset_rows + *(short *)(camera + 0x84) * 32 + 0x1C);
+    int required_control_mode, required_hero_state;
     if (*(unsigned char *)(path_camera_priority_preset + 0x38) != 0)
         return -1;
     if (control_mode_gate_object != 0 && *(short *)(control_mode_gate_object + 0x7E) == 0) {

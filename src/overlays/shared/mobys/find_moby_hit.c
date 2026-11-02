@@ -846,7 +846,8 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         if (moving_object->b52 != arc_motion_state->arc_entry_animation) {
             break;
         }
-        if (compute_interpolated_record_value(moving_object) <= arc_motion_state->arc_entry_record_value_threshold) {
+        if (compute_interpolated_record_value(moving_object) <=
+            arc_motion_state->arc_entry_record_value_threshold) {
             break;
         }
         if (moving_object->b70 & 2) {

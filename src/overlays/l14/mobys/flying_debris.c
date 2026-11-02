@@ -207,7 +207,8 @@ void flying_debris_update(struct Moby *moby) {
         qcopy(push, (char *)moby + 0xE0);
     fast_vec_add(at, at, push);
     if (debris_vars->point_light_slot_index == -1) {
-        debris_vars->point_light_slot_index = allocate_colored_effect_slot(at, range, 0.0f, bright, green, blue);
+        debris_vars->point_light_slot_index =
+            allocate_colored_effect_slot(at, range, 0.0f, bright, green, blue);
     } else {
         light_record = (float *)(D_L14_001809C0 + debris_vars->point_light_slot_index * 32);
         qcopy(light_record + 4, at);

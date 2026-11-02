@@ -266,7 +266,8 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby) {
                                            1.0f,
                                            1.0f);
         if (moby_effect_data->previous_hit_valid != 0.0f) {
-            fast_vec_sub(effect_sample_step, line_endpoint, moby_effect_data->previous_hit_position);
+            fast_vec_sub(
+                effect_sample_step, line_endpoint, moby_effect_data->previous_hit_position);
             fast_vec_normalize(effect_sample_step, effect_sample_step, 0.2f);
             qcopy(effect_sample_position, moby_effect_data->previous_hit_position);
             for (k = 0; k < 4; k++) {

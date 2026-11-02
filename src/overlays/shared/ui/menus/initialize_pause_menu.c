@@ -267,7 +267,8 @@ void initialize_pause_menu(void) {
         D_L00_001B9CF0.unk8 = D_L00_001B9CF0.pending_owner;
         pending_state = D_L00_001B9CF0.pending_state;
         D_L00_001B9CF0.state = pending_state;
-        if (pending_state == PAUSE_MENU_STATE_CLOSE_ON_ACTION || pending_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
+        if (pending_state == PAUSE_MENU_STATE_CLOSE_ON_ACTION ||
+            pending_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ON_ACTION) {
             small_buffers = 1;
             D_L00_001841F0.transition_target_level = (s32)D_L00_001B9CF0.unkE4;
         }
@@ -606,7 +607,8 @@ void update_pause_menu(void) {
         return;
     }
     scene_state = D_L00_001B9CF0.state;
-    if (scene_state == PAUSE_MENU_STATE_DEFAULT_PAGE_ENTRY || scene_state == PAUSE_MENU_STATE_CLOSE_ON_ACTION_ENTRY ||
+    if (scene_state == PAUSE_MENU_STATE_DEFAULT_PAGE_ENTRY ||
+        scene_state == PAUSE_MENU_STATE_CLOSE_ON_ACTION_ENTRY ||
         scene_state == PAUSE_MENU_STATE_LEVEL_TRANSITION_ENTRY || scene_state == 0x11 ||
         scene_state == PAUSE_MENU_STATE_EXIT_GUARDED_ENTRY || scene_state == 0x2D ||
         scene_state == PAUSE_MENU_STATE_PRESERVE_STATE_ENTRY) {

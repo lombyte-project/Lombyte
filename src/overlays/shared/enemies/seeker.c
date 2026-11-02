@@ -576,7 +576,9 @@ void update_seeker_damage_and_target(Moby *moby) {
         }
     } else {
         Moby *target = seeker_vars->f160;
-        if (target != 0 && target->state != MOBY_STATE_REMOVAL_MARKED_AT_OR_ABOVE_ADDRESS_THRESHOLD && target->state != MOBY_STATE_REMOVAL_MARKED_BELOW_ADDRESS_THRESHOLD) {
+        if (target != 0 &&
+            target->state != MOBY_STATE_REMOVAL_MARKED_AT_OR_ABOVE_ADDRESS_THRESHOLD &&
+            target->state != MOBY_STATE_REMOVAL_MARKED_BELOW_ADDRESS_THRESHOLD) {
             qcopy(seeker_vars->target, &target->pos);
         } else {
             seeker_vars->f160 = 0;

@@ -165,7 +165,8 @@ void rocket_tank_update(M1454 *moby) {
     case ROCKET_TANK_FIRING:
         func_L18_002F9AB8_v(moby);
         approach_value(&tank_data->aim_vector_length_limit, 30.0f, frame_time * 6.0f);
-        tank_data->aim_yaw_oscillation_phase = fast_add_rotations(tank_data->aim_yaw_oscillation_phase, frame_time * 6.2831855f);
+        tank_data->aim_yaw_oscillation_phase =
+            fast_add_rotations(tank_data->aim_yaw_oscillation_phase, frame_time * 6.2831855f);
         if (is_value_within_interpolated_window((char *)moby, 4.0f) ||
             is_value_within_interpolated_window((char *)moby, 10.0f)) {
             float firing_vector[4];
@@ -179,10 +180,10 @@ void rocket_tank_update(M1454 *moby) {
                 firing_vector_scale = *(float *)&D_L18_0016247C;
             }
             firing_vector_scale *= frame_time;
-            firing_vector[0] =
-                fast_cos(tank_data->firing_yaw) * (fast_cos(tank_data->firing_pitch) * firing_vector_scale);
-            firing_vector[1] =
-                fast_sin(tank_data->firing_yaw) * (fast_cos(tank_data->firing_pitch) * firing_vector_scale);
+            firing_vector[0] = fast_cos(tank_data->firing_yaw) *
+                               (fast_cos(tank_data->firing_pitch) * firing_vector_scale);
+            firing_vector[1] = fast_sin(tank_data->firing_yaw) *
+                               (fast_cos(tank_data->firing_pitch) * firing_vector_scale);
             firing_vector[2] = 0;
             firing_vector[2] = -fast_sin(tank_data->firing_pitch) * firing_vector_scale;
             allocate_voice_for_target_entry(0, 0, (int)moby);
@@ -454,7 +455,8 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
         int k = random_integer_below(*D_L18_001B0EB0[moby_vars->unk100] - 1) + 1;
         moby_vars->unk120 = (moby_vars->unk120 + k) % *D_L18_001B0EB0[moby_vars->unk100];
     }
-    sc = moby_vars->path_movement_step_length / (*(float *)&rocket_tank_attached_moby_speed_reference_gp * frame_time);
+    sc = moby_vars->path_movement_step_length /
+         (*(float *)&rocket_tank_attached_moby_speed_reference_gp * frame_time);
     if (sc > 2.0f)
         sc = 2.0f;
     else if (sc < z)

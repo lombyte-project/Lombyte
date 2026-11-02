@@ -271,16 +271,25 @@ void background_ship_2_update(char *moby) {
         if (current_level_index == 10) {
             path_travel_distance = path_travel_distance * 0.25f;
         }
-        moby_data->path_progress = moby_data->path_progress + path_travel_distance / moby_data->unk70;
+        moby_data->path_progress =
+            moby_data->path_progress + path_travel_distance / moby_data->unk70;
         if ((float)*(int *)path < moby_data->path_progress) {
             moby_data->path_progress = moby_data->path_progress - (float)*(int *)path;
         }
         if ((unsigned int)(current_level_index - 9) < 2) {
-            sample_camera_path(
-                (int *)path, 1, &MOBY(moby)->pos, (float *)&MOBY(moby)->rot, 0, moby_data->path_progress);
+            sample_camera_path((int *)path,
+                               1,
+                               &MOBY(moby)->pos,
+                               (float *)&MOBY(moby)->rot,
+                               0,
+                               moby_data->path_progress);
         } else {
-            sample_camera_path(
-                (int *)path, 0, &MOBY(moby)->pos, (float *)&MOBY(moby)->rot, 0, moby_data->path_progress);
+            sample_camera_path((int *)path,
+                               0,
+                               &MOBY(moby)->pos,
+                               (float *)&MOBY(moby)->rot,
+                               0,
+                               moby_data->path_progress);
         }
         if (MOBY(moby)->pos.x < 8.0f) {
             MOBY(moby)->collision = 0;

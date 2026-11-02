@@ -132,7 +132,8 @@ void thruster_pack_lock_update(Lock *moby) {
             if (current_level_index == 0xB && moby->activation_group != 0xFF) {
                 int group;
                 int group_index;
-                l11_thruster_pack_lock_activation_state.collected[(short)moby->uid] = moby->activation_group + 2;
+                l11_thruster_pack_lock_activation_state.collected[(short)moby->uid] =
+                    moby->activation_group + 2;
                 group = moby->activation_group;
                 group_index = group & 0xFF;
                 if (group == 0xFF ||

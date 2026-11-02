@@ -134,7 +134,8 @@ s32 draw_hud_counter(HudElem *hud_element) {
     } else {
         hud_frame(hud_element, hud_element->icon, x - 0x16, y, 0, 0x80);
     }
-    bright = fast_tween_color(l02_hud_counter_text_fade_start_color, l02_hud_counter_text_fade_end_color, shade);
+    bright = fast_tween_color(
+        l02_hud_counter_text_fade_start_color, l02_hud_counter_text_fade_end_color, shade);
     dark = fast_tween_color(0, 0x80000000, shade);
     if (left) {
         font_print_right(x + 0x43, y + 9, dark, text, -1);

@@ -209,7 +209,8 @@ void blarg_ship_update(Ship_5E48 *ship) {
 
     FUN_L00_00263ac8(2.5f, (int)ship, 2, d->a1D0);
     if (d->entry_path_index == -1) {
-        DebugPrint(blarg_ship_missing_path_error_format, ship->moby_class_id, ship->maya_instance_id);
+        DebugPrint(
+            blarg_ship_missing_path_error_format, ship->moby_class_id, ship->maya_instance_id);
         goto del;
     }
     FUN_L10_002e5968_c((char *)ship);
@@ -248,12 +249,20 @@ void blarg_ship_update(Ship_5E48 *ship) {
         break;
     case BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH:
         desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
-        FUN_L00_00258278(
-            (char *)ship, &d->heading_turn_velocity, desired_heading, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        FUN_L00_00258278((char *)ship,
+                         &d->heading_turn_velocity,
+                         desired_heading,
+                         0.02f,
+                         0.3f,
+                         D_0015ED6C * 3.1415927f);
         aim_elevation =
             fast_arc_tan(vector_distance_xy(&ship->pos, &tgt->pos), tgt->pos.z - ship->pos.z);
-        ship->pitch =
-            spring_turn(&d->pitch_turn_velocity, ship->pitch, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        ship->pitch = spring_turn(&d->pitch_turn_velocity,
+                                  ship->pitch,
+                                  -aim_elevation,
+                                  0.02f,
+                                  0.3f,
+                                  D_0015ED6C * 3.1415927f);
         if ((ship->b70 & 2) && ship->requested_animation_sequence == 1)
             blend_moby_animation(ship, 2, 0, scale_game_frames(20));
         ship->pos.z += D_0015ED6C * 4.0f;
@@ -266,12 +275,20 @@ void blarg_ship_update(Ship_5E48 *ship) {
     case BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH:
         qcopy(&A, &l10_paths[d->entry_path_index]->points[d->path_point_index]);
         desired_heading = fast_arc_tan(A.x - ship->pos.x, A.y - ship->pos.y);
-        FUN_L00_00258278(
-            (char *)ship, &d->heading_turn_velocity, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
+        FUN_L00_00258278((char *)ship,
+                         &d->heading_turn_velocity,
+                         desired_heading,
+                         0.02f,
+                         0.3f,
+                         D_0015ED6C * 12.566371f);
         aim_elevation =
             fast_arc_tan(vector_distance_xy(&ship->pos, &tgt->pos), tgt->pos.z - ship->pos.z);
-        ship->pitch =
-            spring_turn(&d->pitch_turn_velocity, ship->pitch, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        ship->pitch = spring_turn(&d->pitch_turn_velocity,
+                                  ship->pitch,
+                                  -aim_elevation,
+                                  0.02f,
+                                  0.3f,
+                                  D_0015ED6C * 3.1415927f);
         fast_vec_sub(&B, &A, &ship->pos);
         fast_vec_normalize(&d->a120, &B, D_0015ED6C * 8.0f);
         fast_vec_add(&ship->pos, &ship->pos, &d->a120);
@@ -282,7 +299,8 @@ void blarg_ship_update(Ship_5E48 *ship) {
             } else {
                 d->path_point_index = 0;
                 ship->state = BLARG_SHIP_STATE_FIRE_AT_TARGET;
-                d->firing_phase_timer = truncate_float_to_s32(FUN_L04_001f1978(d->firing_duration_seconds * 60.0f));
+                d->firing_phase_timer =
+                    truncate_float_to_s32(FUN_L04_001f1978(d->firing_duration_seconds * 60.0f));
             }
         }
         break;
@@ -306,11 +324,19 @@ void blarg_ship_update(Ship_5E48 *ship) {
             D_L10_001742D8 = tgt;
         }
         desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
-        FUN_L00_00258278(
-            (char *)ship, &d->heading_turn_velocity, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
+        FUN_L00_00258278((char *)ship,
+                         &d->heading_turn_velocity,
+                         desired_heading,
+                         0.02f,
+                         0.3f,
+                         D_0015ED6C * 12.566371f);
         aim_elevation = fast_arc_tan(vector_distance_xy(&ship->pos, &A), A.z - ship->pos.z);
-        ship->pitch =
-            spring_turn(&d->pitch_turn_velocity, ship->pitch, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        ship->pitch = spring_turn(&d->pitch_turn_velocity,
+                                  ship->pitch,
+                                  -aim_elevation,
+                                  0.02f,
+                                  0.3f,
+                                  D_0015ED6C * 3.1415927f);
         if (fast_difference_between_rotations(
                 ship->heading, fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y)) <
             0.17453292f) {
@@ -318,7 +344,8 @@ void blarg_ship_update(Ship_5E48 *ship) {
                 blend_moby_animation(ship, 3, 0, scale_game_frames(6));
             ship->animation_speed = blarg_ship_firing_animation_speed_gp;
         }
-        if (ship->b52 == 3 && d->targeting_status != BLARG_SHIP_TARGETING_FIRE_BLOCKED && D_L10_001742D8 == tgt) {
+        if (ship->b52 == 3 && d->targeting_status != BLARG_SHIP_TARGETING_FIRE_BLOCKED &&
+            D_L10_001742D8 == tgt) {
             int near = is_value_within_interpolated_window((char *)ship, 1.0f);
             int far = is_value_within_interpolated_window((char *)ship, 16.0f);
             if (near || far) {
@@ -339,7 +366,8 @@ void blarg_ship_update(Ship_5E48 *ship) {
             if (ship->requested_animation_sequence != 2)
                 blend_moby_animation(ship, 2, 0, scale_game_frames(10));
             ship->state = BLARG_SHIP_STATE_FIRE_COOLDOWN;
-            d->firing_phase_timer = truncate_float_to_s32(FUN_L04_001f1978(d->cooldown_duration_seconds * 60.0f));
+            d->firing_phase_timer =
+                truncate_float_to_s32(FUN_L04_001f1978(d->cooldown_duration_seconds * 60.0f));
         }
         qcopy(&B, &l10_paths[d->firing_path_index]->points[d->path_point_index]);
         fast_vec_sub(&C, &B, &ship->pos);
@@ -371,16 +399,25 @@ void blarg_ship_update(Ship_5E48 *ship) {
             D_L10_001742D8 = tgt;
         }
         desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
-        FUN_L00_00258278(
-            (char *)ship, &d->heading_turn_velocity, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
+        FUN_L00_00258278((char *)ship,
+                         &d->heading_turn_velocity,
+                         desired_heading,
+                         0.02f,
+                         0.3f,
+                         D_0015ED6C * 12.566371f);
         aim_elevation = fast_arc_tan(vector_distance_xy(&ship->pos, &A), A.z - ship->pos.z);
-        ship->pitch =
-            spring_turn(&d->pitch_turn_velocity, ship->pitch, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        ship->pitch = spring_turn(&d->pitch_turn_velocity,
+                                  ship->pitch,
+                                  -aim_elevation,
+                                  0.02f,
+                                  0.3f,
+                                  D_0015ED6C * 3.1415927f);
         if (fast_dec_timer(&d->firing_phase_timer)) {
             blend_moby_animation(ship, 3, 0, scale_game_frames(10));
             ship->animation_speed = blarg_ship_firing_animation_speed_gp;
             ship->state = BLARG_SHIP_STATE_FIRE_AT_TARGET;
-            d->firing_phase_timer = truncate_float_to_s32(FUN_L04_001f1978(d->firing_duration_seconds * 60.0f));
+            d->firing_phase_timer =
+                truncate_float_to_s32(FUN_L04_001f1978(d->firing_duration_seconds * 60.0f));
         }
         qcopy(&B, &l10_paths[d->firing_path_index]->points[d->path_point_index]);
         fast_vec_sub(&C, &B, &ship->pos);
@@ -411,14 +448,16 @@ void blarg_ship_update(Ship_5E48 *ship) {
             blend_moby_animation(ship, 3, 0, scale_game_frames(10));
             ship->animation_speed = blarg_ship_firing_animation_speed_gp;
             ship->state = pre_hit_state;
-            d->firing_phase_timer = truncate_float_to_s32(FUN_L04_001f1978(d->firing_duration_seconds * 60.0f));
+            d->firing_phase_timer =
+                truncate_float_to_s32(FUN_L04_001f1978(d->firing_duration_seconds * 60.0f));
         } else if (pre_hit_state == BLARG_SHIP_STATE_FLY_AWAY) {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
             ship->state = pre_hit_state;
         } else {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
             ship->state = BLARG_SHIP_STATE_FIRE_COOLDOWN;
-            d->firing_phase_timer = truncate_float_to_s32(FUN_L04_001f1978(d->cooldown_duration_seconds * 60.0f));
+            d->firing_phase_timer =
+                truncate_float_to_s32(FUN_L04_001f1978(d->cooldown_duration_seconds * 60.0f));
         }
         break;
     }

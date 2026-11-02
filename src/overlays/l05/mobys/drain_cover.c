@@ -234,8 +234,10 @@ void drain_cover_update(DrainCoverMoby *moby) {
         qcopy(drain_cover_data->home, moby->pos);
         drain_cover_data->tilt_x_phase = random_angle_radians();
         drain_cover_data->tilt_y_phase = random_angle_radians();
-        drain_cover_data->tilt_x_phase_increment = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
-        drain_cover_data->tilt_y_phase_increment = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+        drain_cover_data->tilt_x_phase_increment =
+            randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+        drain_cover_data->tilt_y_phase_increment =
+            randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
         minimum_rise_height = drain_cover_data->hover_height_above_home + 1.0f;
         if (drain_cover_data->rise_height <= minimum_rise_height) {
             drain_cover_data->rise_height = minimum_rise_height;
@@ -316,7 +318,8 @@ void drain_cover_update(DrainCoverMoby *moby) {
         if (drain_cover_data->vel[2] <= 0.0f) {
             moby->state = DRAIN_COVER_HOVER;
             drain_cover_data->home[3] = drain_cover_data->hover_height_above_home - 0.5f;
-            drain_cover_data->timer = truncate_float_to_s32(scale_time(drain_cover_data->hover_duration));
+            drain_cover_data->timer =
+                truncate_float_to_s32(scale_time(drain_cover_data->hover_duration));
         }
         break;
     case DRAIN_COVER_HOVER:
@@ -359,8 +362,10 @@ void drain_cover_update(DrainCoverMoby *moby) {
             qcopy(moby->pos, drain_cover_data->home);
             drain_cover_data->tilt_x_phase = random_angle_radians();
             drain_cover_data->tilt_y_phase = random_angle_radians();
-            drain_cover_data->tilt_x_phase_increment = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
-            drain_cover_data->tilt_y_phase_increment = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+            drain_cover_data->tilt_x_phase_increment =
+                randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+            drain_cover_data->tilt_y_phase_increment =
+                randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
         }
         break;
     }
@@ -514,7 +519,8 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
     rate0 = drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
     rate1 = drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
     limit = drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time;
-    approach_angle(&MOBY(moby)->rot.x, target0, &drain_cover_vars->tilt_x_velocity, rate0, rate1, limit);
+    approach_angle(
+        &MOBY(moby)->rot.x, target0, &drain_cover_vars->tilt_x_velocity, rate0, rate1, limit);
     approach_angle(&MOBY(moby)->rot.y,
                    target1,
                    &drain_cover_vars->unk94,

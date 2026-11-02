@@ -165,7 +165,9 @@ void rocket_launcher_update(struct Moby *moby) {
         glow_blend_fraction = compute_interpolated_record_value(moby) / 10.0f;
         if (glow_blend_fraction > 1.0f)
             glow_blend_fraction = 1.0f;
-        moby->glow_color = turret_lerp_colour(glow_blend_fraction, l02_rocket_launcher_glow_blend_start_color, l02_rocket_launcher_glow_blend_end_color);
+        moby->glow_color = turret_lerp_colour(glow_blend_fraction,
+                                              l02_rocket_launcher_glow_blend_start_color,
+                                              l02_rocket_launcher_glow_blend_end_color);
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 1);

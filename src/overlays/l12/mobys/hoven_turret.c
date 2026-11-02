@@ -372,8 +372,10 @@ void hoven_turret_update(struct Moby *moby) {
             }
             joy[1] = y;
             target_yaw_step = hoven_turret_yaw_input_rate * 0.017453292f * D_0015ED6C_gp * -joy[0];
-            if ((hoven_turret_state->yaw_step >= 0.0f && hoven_turret_state->yaw_step < target_yaw_step) ||
-                (hoven_turret_state->yaw_step <= 0.0f && target_yaw_step < hoven_turret_state->yaw_step)) {
+            if ((hoven_turret_state->yaw_step >= 0.0f &&
+                 hoven_turret_state->yaw_step < target_yaw_step) ||
+                (hoven_turret_state->yaw_step <= 0.0f &&
+                 target_yaw_step < hoven_turret_state->yaw_step)) {
                 approach_value(&hoven_turret_state->yaw_step,
                                target_yaw_step,
                                hoven_turret_yaw_acceleration_rate * 0.017453292f *
@@ -386,8 +388,10 @@ void hoven_turret_update(struct Moby *moby) {
             moby->rot.z = fast_add_rotations(moby->rot.z, hoven_turret_state->yaw_step);
             target_pitch_step =
                 -(hoven_turret_pitch_input_rate * 0.017453292f * D_0015ED6C_gp) * -joy[1];
-            if ((hoven_turret_state->pitch_step >= 0.0f && hoven_turret_state->pitch_step < target_pitch_step) ||
-                (hoven_turret_state->pitch_step <= 0.0f && target_pitch_step < hoven_turret_state->pitch_step)) {
+            if ((hoven_turret_state->pitch_step >= 0.0f &&
+                 hoven_turret_state->pitch_step < target_pitch_step) ||
+                (hoven_turret_state->pitch_step <= 0.0f &&
+                 target_pitch_step < hoven_turret_state->pitch_step)) {
                 approach_value(&hoven_turret_state->pitch_step,
                                target_pitch_step,
                                hoven_turret_pitch_acceleration_rate * 0.017453292f *
@@ -417,7 +421,8 @@ void hoven_turret_update(struct Moby *moby) {
                 float      yaw;
                 int        i;
 
-                blend_moby_animation(moby, hoven_turret_state->muzzle_alternation_state == 1 ? 4 : 3, 0, 1);
+                blend_moby_animation(
+                    moby, hoven_turret_state->muzzle_alternation_state == 1 ? 4 : 3, 0, 1);
                 yaw = fast_add_rotations(moby->rot.z, 1.5707964f);
                 build_spherical_offset(firing_offset,
                                        hoven_turret_firing_offset_rate * D_0015ED6C_gp,

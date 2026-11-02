@@ -83,8 +83,8 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
 /* Pvars of a rail lift that carries the hero between the ends of two rail paths. */
 struct RailLiftVars {
     u8  pad0[0x20];
-    u8  coll[0x44]; /* 0x20: collision record moved with the lift */
-    s32 target_path_point_index;      /* 0x64: set to 1 when a ride starts */
+    u8  coll[0x44];              /* 0x20: collision record moved with the lift */
+    s32 target_path_point_index; /* 0x64: set to 1 when a ride starts */
     u8  pad68[0x10];
     s32 snd;       /* 0x78: travel sound voice (FUN_L03_002d3918) */
     s32 started;   /* 0x7C: set once the first ride starts */

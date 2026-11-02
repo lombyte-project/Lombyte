@@ -1252,7 +1252,8 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                     }
                 }
                 ship_vars->boost_voice_slot_index = -1;
-                ship_vars->boost_voice_slot_index = allocate_voice_for_target_entry(1, 4, (int)ship_moby);
+                ship_vars->boost_voice_slot_index =
+                    allocate_voice_for_target_entry(1, 4, (int)ship_moby);
             } else if (pad->raw_released & 0x40) {
                 voice_slot_index = ship_vars->boost_voice_slot_index;
                 if (voice_slot_index != -1) {
@@ -1349,7 +1350,8 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
     if (ship_vars->flight_target_record_index != -1) {
         int   target_record_byte_offset = ship_vars->flight_target_record_index << 7;
         char *target_record_array = D_L17_001600EC;
-        qcopy(target, ((char(*)[128])target_record_array)[ship_vars->flight_target_record_index] + 0x30);
+        qcopy(target,
+              ((char(*)[128])target_record_array)[ship_vars->flight_target_record_index] + 0x30);
         lenA = fast_vec_length(target_record_array + target_record_byte_offset + 0x20);
         fast_vec_add(target_record_sum_or_camera_local_offset,
                      (ship_vars->flight_target_record_index << 7) + D_L17_001600EC,
@@ -1554,7 +1556,8 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                               0);
                         ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                     }
-                    ship_vars->collision_damage_cooldown = l17_fighter_jet_collision_damage_cooldown_reload;
+                    ship_vars->collision_damage_cooldown =
+                        l17_fighter_jet_collision_damage_cooldown_reload;
                 }
             } else {
                 *(int *)&hero.ship_hp = 0;
@@ -1867,7 +1870,8 @@ void fighter_jet_update(ShipMoby *moby) {
             hp_bar_saved = 1;
             ship_vars->timerF8 = 1;
             ship_vars->iE8 = 1;
-            if (moby->persistent_state_index != 0xFF && visited52[moby->persistent_state_index + current_level_index * 16] == 0xFF) {
+            if (moby->persistent_state_index != 0xFF &&
+                visited52[moby->persistent_state_index + current_level_index * 16] == 0xFF) {
                 moby->state = FIGHTER_JET_STATE_FADE_THEN_REMOVE;
             }
             if (ship_vars->i11C > 0) {

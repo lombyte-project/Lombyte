@@ -454,7 +454,8 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         screamer_vars->current_target_range = screamer_vars->default_target_range;
 
     if (screamer_vars->f174 == 2) {
-        target_selection_status = ahead_f(screamer_vars->current_target_range, moby, screamer_vars->selected_target_vectors);
+        target_selection_status = ahead_f(
+            screamer_vars->current_target_range, moby, screamer_vars->selected_target_vectors);
         if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
             LevelCuboid *bp = &l10_cuboids[screamer_vars->target_bounds_cuboid_index];
             fast_vec_sub(relative_offset, D_0013F3D0, &bp->pos);
@@ -465,19 +466,34 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                 transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2])
                 screamer_vars->f104 = 2;
         }
-    } else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION && screamer_vars->activation_wait_target_path_index >= 0) {
+    } else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION &&
+               screamer_vars->activation_wait_target_path_index >= 0) {
         LevelPath *path = l10_paths[screamer_vars->activation_wait_target_path_index];
-        target_selection_status = activate_effect_l08(
-            screamer_vars->current_target_range, moby, screamer_vars->selected_target_vectors, 0, 0, path->points, path->count);
-    } else if (moby->state != SCREAMER_STATE_WAIT_FOR_ACTIVATION && screamer_vars->active_target_path_index >= 0) {
+        target_selection_status = activate_effect_l08(screamer_vars->current_target_range,
+                                                      moby,
+                                                      screamer_vars->selected_target_vectors,
+                                                      0,
+                                                      0,
+                                                      path->points,
+                                                      path->count);
+    } else if (moby->state != SCREAMER_STATE_WAIT_FOR_ACTIVATION &&
+               screamer_vars->active_target_path_index >= 0) {
         LevelPath *path = l10_paths[screamer_vars->active_target_path_index];
-        target_selection_status = activate_effect_l08(
-            screamer_vars->current_target_range, moby, screamer_vars->selected_target_vectors, 0, 0, path->points, path->count);
+        target_selection_status = activate_effect_l08(screamer_vars->current_target_range,
+                                                      moby,
+                                                      screamer_vars->selected_target_vectors,
+                                                      0,
+                                                      0,
+                                                      path->points,
+                                                      path->count);
     } else {
-        target_selection_status = ahead_f(screamer_vars->current_target_range, moby, screamer_vars->selected_target_vectors);
+        target_selection_status = ahead_f(
+            screamer_vars->current_target_range, moby, screamer_vars->selected_target_vectors);
     }
     if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
-        if (screamer_vars->current_target_range < vector_distance_xy(screamer_vars->navigation_state, screamer_vars->selected_target_vectors))
+        if (screamer_vars->current_target_range <
+            vector_distance_xy(screamer_vars->navigation_state,
+                               screamer_vars->selected_target_vectors))
             screamer_vars->f104 = 2;
         else if (moby->visible == 0)
             screamer_vars->f104 = 2;

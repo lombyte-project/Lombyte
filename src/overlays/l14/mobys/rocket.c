@@ -184,7 +184,14 @@ void spawn_rocket_exhaust_puffs(struct Moby *source_moby) {
     for (i = 1; i >= 0; i--) {
         puff_signed_amount = random_integer_below(0x10);
         k = random_integer_below(2) == 0 ? puff_signed_amount : -puff_signed_amount;
-        puff = spawn_puff(B, 0.2f, 1.0f, 0.9f, k, &D_L14_0015F580, 200000.0f, l14_rocket_initial_exhaust_puff_color);
+        puff = spawn_puff(B,
+                          0.2f,
+                          1.0f,
+                          0.9f,
+                          k,
+                          &D_L14_0015F580,
+                          200000.0f,
+                          l14_rocket_initial_exhaust_puff_color);
         if (puff != 0) {
             L14PuffTail *f = &puff->tail;
 

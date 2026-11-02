@@ -631,24 +631,24 @@ typedef struct CamA {
 } CamA;
 
 typedef struct CamB {
-    float v0[4];  /* 0x00 */
-    float v10[4]; /* 0x10 */
-    int   i20;    /* 0x20 */
-    int   i24;    /* 0x24 */
-    int   i28;    /* 0x28 */
-    float target_orbit_distance;    /* 0x2C */
-    float f30;    /* 0x30 */
-    int   i34;    /* 0x34 */
-    int   i38;    /* 0x38 */
-    short h3C;    /* 0x3C */
-    short h3E;    /* 0x3E */
+    float v0[4];                 /* 0x00 */
+    float v10[4];                /* 0x10 */
+    int   i20;                   /* 0x20 */
+    int   i24;                   /* 0x24 */
+    int   i28;                   /* 0x28 */
+    float target_orbit_distance; /* 0x2C */
+    float f30;                   /* 0x30 */
+    int   i34;                   /* 0x34 */
+    int   i38;                   /* 0x38 */
+    short h3C;                   /* 0x3C */
+    short h3E;                   /* 0x3E */
     char  pad40[4];
     int   orbit_distance_interpolation_state; /* 0x44 */
-    float f48; /* 0x48 */
+    float f48;                                /* 0x48 */
     char  pad4C[4];
     int   orbit_height_interpolation_state; /* 0x50 */
-    float f54; /* 0x54 */
-    float default_orbit_distance; /* 0x58 */
+    float f54;                              /* 0x54 */
+    float default_orbit_distance;           /* 0x58 */
     char  pad5C[4];
 } CamB;
 
@@ -676,18 +676,18 @@ typedef struct Cam1A8 {
 
 typedef struct CamG {
     char  pad0[0x10];
-    float v10[4]; /* 0x10 */
-    float v20[4]; /* 0x20 */
-    float f30;    /* 0x30 */
-    short h34;    /* 0x34 */
-    short h36;    /* 0x36 */
-    short h38;    /* 0x38 */
-    short h3A;    /* 0x3A */
-    float f3C;    /* 0x3C */
-    float f40;    /* 0x40 */
-    float f44;    /* 0x44 */
-    int   i48;    /* 0x48 */
-    int   consecutive_camera_obstruction_frames;    /* 0x4C */
+    float v10[4];                                /* 0x10 */
+    float v20[4];                                /* 0x20 */
+    float f30;                                   /* 0x30 */
+    short h34;                                   /* 0x34 */
+    short h36;                                   /* 0x36 */
+    short h38;                                   /* 0x38 */
+    short h3A;                                   /* 0x3A */
+    float f3C;                                   /* 0x3C */
+    float f40;                                   /* 0x40 */
+    float f44;                                   /* 0x44 */
+    int   i48;                                   /* 0x48 */
+    int   consecutive_camera_obstruction_frames; /* 0x4C */
 } CamG;
 
 typedef struct Cam220 {
@@ -1566,9 +1566,11 @@ move:
         goto clear;
     }
     if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby != 0 &&
-        is_moby_in_class_range_500_to_540((*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby)) {
-        fast_vec_sub(
-            &v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby + 0x10, g_debug_camera_lui);
+        is_moby_in_class_range_500_to_540(
+            (*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby)) {
+        fast_vec_sub(&v20,
+                     (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby + 0x10,
+                     g_debug_camera_lui);
         v20.i[2] = 0;
         fast_vec_normalize(&v20, &v20, 1.0f);
         v20.f[3] = 5627.9248046875f;

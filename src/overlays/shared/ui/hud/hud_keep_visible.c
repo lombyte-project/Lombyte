@@ -197,7 +197,8 @@ s32 hud_keep_visible(s32 key, s32 minimum_visible_frames) {
     }
     if (i < 13 && hud_elements[i].unk68 == 0) {
         hud_element = hud_elements + i;
-        hud_element->unk7C = (minimum_visible_frames < hud_element->unk7C) ? hud_element->unk7C : minimum_visible_frames;
+        hud_element->unk7C = (minimum_visible_frames < hud_element->unk7C) ? hud_element->unk7C
+                                                                           : minimum_visible_frames;
         return 0;
     }
     return 1;

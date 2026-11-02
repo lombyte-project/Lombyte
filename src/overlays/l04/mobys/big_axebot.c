@@ -335,7 +335,8 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->f7F = 0x15;
         }
     }
-    select_moby_combat_target((char *)moby, (float *)&tg, flag ? data->detection_range * 2.0f : data->detection_range);
+    select_moby_combat_target(
+        (char *)moby, (float *)&tg, flag ? data->detection_range * 2.0f : data->detection_range);
     target_moby = tg.f40;
     rot = moby->rot[2];
     target_distance = vector_distance_xy(moby->pos, (float *)&tg);
@@ -468,8 +469,10 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->fE0 = 0x400;
                     trooper_set_knockback(data->fC0, 5.7f, 4.0f);
                     *(OvlQuad *)vector_quaternion_scratch = *(OvlQuad *)hit->pos;
-                    trooper_knockback_arc(
-                        vector_quaternion_scratch, &knockback_yaw, &data->knockback_initial_horizontal_displacement, &data->knockback_initial_vertical_displacement);
+                    trooper_knockback_arc(vector_quaternion_scratch,
+                                          &knockback_yaw,
+                                          &data->knockback_initial_horizontal_displacement,
+                                          &data->knockback_initial_vertical_displacement);
                     trooper_start_knockback(knockback_yaw, moby, data->fC0, 7, 1, 0);
                     data->knockback_ascent_target_frame = 12.0f;
                     data->knockback_descent_target_frame = 25.0f;
@@ -530,11 +533,12 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     case BIG_AXEBOT_STATE_IDLE: {
-        if (moby->animation_target_sequence == 6 && data->idle_action_delay_timer == scale_game_frames(0x25)) {
+        if (moby->animation_target_sequence == 6 &&
+            data->idle_action_delay_timer == scale_game_frames(0x25)) {
             allocate_voice_for_target_entry(2, 0, (char *)moby);
         }
-        if ((moby->f70 & 2) &&
-            (flag ? data->detection_range * 2.0f < target_distance : data->detection_range < target_distance)) {
+        if ((moby->f70 & 2) && (flag ? data->detection_range * 2.0f < target_distance
+                                     : data->detection_range < target_distance)) {
             int arr[6];
 
             random_integer_below_cf(arr, 0, 0x18);
@@ -543,19 +547,24 @@ void big_axebot_update(M_B7B0 *moby) {
                                                (void *)arr[random_integer_below(6)],
                                                0,
                                                (void *)scale_game_frames(0x18));
-        } else if (moby->animation_target_sequence != 0xD && (moby->animation_target_sequence != 6 || (moby->f70 & 2))) {
-            if (flag ? target_distance < data->detection_range * 2.0f : target_distance < data->detection_range) {
+        } else if (moby->animation_target_sequence != 0xD &&
+                   (moby->animation_target_sequence != 6 || (moby->f70 & 2))) {
+            if (flag ? target_distance < data->detection_range * 2.0f
+                     : target_distance < data->detection_range) {
                 blend_big_axebot_and_axe_animation(
                     (char *)moby, (void *)0xD, 0, (void *)scale_game_frames(0x18));
             }
         }
-        if (data->path_trigger_volume_index != -1 && data->approach_path_index != -1 && data->path_follow_started == 0 &&
-            (flag || is_point_inside_clip_volume(&hero.motion.pos, data->path_trigger_volume_index) != 0)) {
+        if (data->path_trigger_volume_index != -1 && data->approach_path_index != -1 &&
+            data->path_follow_started == 0 &&
+            (flag ||
+             is_point_inside_clip_volume(&hero.motion.pos, data->path_trigger_volume_index) != 0)) {
             moby->state = BIG_AXEBOT_STATE_FOLLOW_PATH;
             moby->behavior_flags |= 1;
             data->path_follow_started = 1;
         } else {
-            if (moby->animation_source_sequence == 0xD && FUN_L00_001fefc8(&data->alert_voice_cooldown_timer) != 0) {
+            if (moby->animation_source_sequence == 0xD &&
+                FUN_L00_001fefc8(&data->alert_voice_cooldown_timer) != 0) {
                 allocate_voice_for_target_entry(0xA, 0, (char *)moby);
                 data->alert_voice_cooldown_timer = scale_game_frames(0xB4);
             }
@@ -582,7 +591,8 @@ void big_axebot_update(M_B7B0 *moby) {
         if (moby->animation_source_sequence == 2 && (moby->f70 & 2)) {
             blend_big_axebot_and_axe_animation(
                 (char *)moby,
-                (void *)((flag ? target_distance < data->detection_range * 2.0f : target_distance < data->detection_range)
+                (void *)((flag ? target_distance < data->detection_range * 2.0f
+                               : target_distance < data->detection_range)
                              ? 0xD
                              : 0),
                 0,
@@ -600,7 +610,8 @@ void big_axebot_update(M_B7B0 *moby) {
                 blend_big_axebot_and_axe_animation(
                     (char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
                 moby->state = BIG_AXEBOT_STATE_MELEE_ATTACK;
-            } else if (flag ? target_distance < data->detection_range * 2.0f : target_distance < data->detection_range) {
+            } else if (flag ? target_distance < data->detection_range * 2.0f
+                            : target_distance < data->detection_range) {
                 int nf = (moby->behavior_flags & 1) == 0;
                 if (nf) {
                     blend_big_axebot_and_axe_animation(
@@ -627,7 +638,8 @@ void big_axebot_update(M_B7B0 *moby) {
         if (vector_distance_xy(path->pts[data->path_waypoint_index], moby->pos) < 1.0f) {
             data->path_waypoint_index++;
             if (data->path_waypoint_index == path->count) {
-                if (flag ? data->detection_range * 2.0f < target_distance : data->detection_range < target_distance) {
+                if (flag ? data->detection_range * 2.0f < target_distance
+                         : data->detection_range < target_distance) {
                     blend_big_axebot_and_axe_animation(
                         (char *)moby, 0, 0, (void *)scale_game_frames(0x18));
                 } else {
@@ -660,12 +672,16 @@ void big_axebot_update(M_B7B0 *moby) {
             reset_leg_rig_from_animation(moby, data->leg_rig_state);
         }
         data->movement_yaw = spring_turn(moby->rot[2],
-                                 target_yaw,
-                                 &data->yaw_turn_velocity,
-                                 frame_time_sq * 6.2831855f,
-                                 frame_time_sq * 125.663704f,
-                                 frame_time * 12.566371f);
-        leg_walker_update(moby, data->leg_rig_state, frame_time * 4.0f, data->movement_yaw, frame_time_sq * 20.0f);
+                                         target_yaw,
+                                         &data->yaw_turn_velocity,
+                                         frame_time_sq * 6.2831855f,
+                                         frame_time_sq * 125.663704f,
+                                         frame_time * 12.566371f);
+        leg_walker_update(moby,
+                          data->leg_rig_state,
+                          frame_time * 4.0f,
+                          data->movement_yaw,
+                          frame_time_sq * 20.0f);
         if (target_distance < 4.5f) {
             blend_big_axebot_and_axe_animation(
                 (char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
@@ -675,17 +691,19 @@ void big_axebot_update(M_B7B0 *moby) {
             vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * 2.0f;
             vector_quaternion_scratch[2] = 0.0f;
             fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
-            if (point_in_path_xy(vector_quaternion_scratch,
-                                 ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                 ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->count) == 0) {
+            if (point_in_path_xy(
+                    vector_quaternion_scratch,
+                    ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                    ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->count) == 0) {
                 data->yaw_turn_velocity = 0.0f;
                 blend_big_axebot_and_axe_animation(
                     (char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                 moby->state = BIG_AXEBOT_STATE_TURN;
             }
-            if (point_in_path_xy(tpos,
-                                 ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                 ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->count) == 0) {
+            if (point_in_path_xy(
+                    tpos,
+                    ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                    ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->count) == 0) {
                 moby->state = BIG_AXEBOT_STATE_RETURN_HOME;
             }
         }
@@ -704,13 +722,16 @@ void big_axebot_update(M_B7B0 *moby) {
             }
             a = fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]);
             data->movement_yaw = spring_turn(moby->rot[2],
-                                     a,
-                                     &data->yaw_turn_velocity,
-                                     frame_time_sq * 6.2831855f,
-                                     frame_time_sq * 125.663704f,
-                                     frame_time * 12.566371f);
-            leg_walker_update(
-                moby, data->leg_rig_state, frame_time * 4.0f, data->movement_yaw, frame_time_sq * 20.0f);
+                                             a,
+                                             &data->yaw_turn_velocity,
+                                             frame_time_sq * 6.2831855f,
+                                             frame_time_sq * 125.663704f,
+                                             frame_time * 12.566371f);
+            leg_walker_update(moby,
+                              data->leg_rig_state,
+                              frame_time * 4.0f,
+                              data->movement_yaw,
+                              frame_time_sq * 20.0f);
             if (vector_distance_xy(moby->pos, data->home) < 2.0f) {
                 moby->state = BIG_AXEBOT_STATE_IDLE;
             }
@@ -719,25 +740,28 @@ void big_axebot_update(M_B7B0 *moby) {
                 vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * 2.0f;
                 vector_quaternion_scratch[2] = 0.0f;
                 fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
-                if (point_in_path_xy(vector_quaternion_scratch,
-                                     ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                     ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->count) == 0) {
+                if (point_in_path_xy(
+                        vector_quaternion_scratch,
+                        ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                        ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->count) == 0) {
                     data->yaw_turn_velocity = 0.0f;
                     blend_big_axebot_and_axe_animation(
                         (char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                     moby->state = BIG_AXEBOT_STATE_TURN;
                     moby->behavior_flags |= 0x10;
                 }
-                if (point_in_path_xy(tpos,
-                                     ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                     ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
+                if (point_in_path_xy(
+                        tpos,
+                        ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                        ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
                     moby->state = BIG_AXEBOT_STATE_IDLE;
                 }
             }
         }
         break;
     case BIG_AXEBOT_STATE_MELEE_ATTACK:
-        if (moby->animation_source_sequence == moby->animation_target_sequence && compute_interpolated_record_value(moby) >= 17.0f &&
+        if (moby->animation_source_sequence == moby->animation_target_sequence &&
+            compute_interpolated_record_value(moby) >= 17.0f &&
             compute_interpolated_record_value(moby) < 20.0f &&
             absolute_float(moby->pos[2] - tg.pos[2]) < 2.0f &&
             vector_distance_xy(moby->pos, (float *)&tg) < 4.5f) {
@@ -766,7 +790,8 @@ void big_axebot_update(M_B7B0 *moby) {
             data->idle_action_delay_timer = scale_game_frames(0x5A);
             blend_big_axebot_and_axe_animation(
                 (char *)moby,
-                (void *)((flag ? target_distance < data->detection_range * 2.0f : target_distance < data->detection_range)
+                (void *)((flag ? target_distance < data->detection_range * 2.0f
+                               : target_distance < data->detection_range)
                              ? 0xD
                              : 0),
                 0,
@@ -775,14 +800,18 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     case BIG_AXEBOT_STATE_HIT_RECOVERY:
-        if (!(moby->animation_target_sequence == 5 && (moby->animation_source_sequence != moby->animation_target_sequence || hd <= 13.0f))) {
+        if (!(moby->animation_target_sequence == 5 &&
+              (moby->animation_source_sequence != moby->animation_target_sequence ||
+               hd <= 13.0f))) {
             if (moby->behavior_flags & 4) {
                 moby->behavior_flags &= ~4;
                 blend_big_axebot_and_axe_animation(
                     (char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(6));
                 set_big_axebot_and_axe_animation_speed(moby, 1.5f);
                 moby->state = BIG_AXEBOT_STATE_MELEE_ATTACK;
-            } else if (moby->animation_target_sequence == 8 && (hd < 28.0f || moby->animation_source_sequence != moby->animation_target_sequence)) {
+            } else if (moby->animation_target_sequence == 8 &&
+                       (hd < 28.0f ||
+                        moby->animation_source_sequence != moby->animation_target_sequence)) {
                 float hit_recovery_displacement_limit = frame_scale * 0.11111111f;
 
                 if (data->hit_recovery_displacement < hit_recovery_displacement_limit) {
@@ -790,8 +819,10 @@ void big_axebot_update(M_B7B0 *moby) {
                 } else {
                     data->hit_recovery_displacement = hit_recovery_displacement_limit;
                 }
-                build_spherical_offset(
-                    vector_quaternion_scratch, data->hit_recovery_displacement, data->movement_yaw, moby->rot[1]);
+                build_spherical_offset(vector_quaternion_scratch,
+                                       data->hit_recovery_displacement,
+                                       data->movement_yaw,
+                                       moby->rot[1]);
                 fast_vec_add(moby->pos, moby->pos, vector_quaternion_scratch);
                 moby->rot[2] = spring_turn(moby->rot[2],
                                            target_yaw,
@@ -801,8 +832,10 @@ void big_axebot_update(M_B7B0 *moby) {
                                            frame_time * 4.1887903f);
             } else if (data->hit_recovery_displacement > 0.0f) {
                 data->hit_recovery_displacement -= frame_time_sq * 200.0f;
-                build_spherical_offset(
-                    vector_quaternion_scratch, data->hit_recovery_displacement, data->movement_yaw, moby->rot[1]);
+                build_spherical_offset(vector_quaternion_scratch,
+                                       data->hit_recovery_displacement,
+                                       data->movement_yaw,
+                                       moby->rot[1]);
                 fast_vec_add(moby->pos, moby->pos, vector_quaternion_scratch);
                 moby->rot[2] = spring_turn(moby->rot[2],
                                            target_yaw,
@@ -904,7 +937,8 @@ void big_axebot_update(M_B7B0 *moby) {
     fast_dec_timer(&data->recoil_pose_cooldown_timer);
     build_axis_rotation_quaternion(vector_quaternion_scratch, 1, data->recoil_pitch_angle);
     build_axis_rotation_quaternion(data->recoil_manipulator.q, 2, 0.0f);
-    multiply_quaternions(data->recoil_manipulator.q, data->recoil_manipulator.q, vector_quaternion_scratch);
+    multiply_quaternions(
+        data->recoil_manipulator.q, data->recoil_manipulator.q, vector_quaternion_scratch);
     if (moby->state != BIG_AXEBOT_STATE_HIT_RECOVERY) {
         data->last_non_hit_recovery_state = moby->state;
     }
@@ -932,10 +966,12 @@ void big_axebot_update(M_B7B0 *moby) {
         float bone_transform[4][4];
         float bone_euler_angles[4];
         {
-            data->tracked_aim_yaw = fast_add_rotations(data->tracked_aim_yaw, fast_subtract_rotations(moby->rot[2], rot));
+            data->tracked_aim_yaw = fast_add_rotations(data->tracked_aim_yaw,
+                                                       fast_subtract_rotations(moby->rot[2], rot));
             build_moby_bone_transform((char *)moby, 0xC, (char *)bone_transform);
             matrix_to_euler(bone_transform, bone_euler_angles);
-            build_axis_rotation_quaternion(q, 2, fast_subtract_rotations(target_yaw, data->tracked_aim_yaw));
+            build_axis_rotation_quaternion(
+                q, 2, fast_subtract_rotations(target_yaw, data->tracked_aim_yaw));
             data->tracked_aim_yaw = target_yaw;
             multiply_quaternions(data->aim_manipulator.q, data->aim_manipulator.q, q);
         }

@@ -720,9 +720,13 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
             D_L00_001DA0B0[i].v += 7.0f;
         }
     }
-    func_L00_001FDE48_2b3628(0x94, l00_beam_ribbon_world_positions, D_L00_001DA6D0, D_L00_001DA0B0, 1);
     func_L00_001FDE48_2b3628(
-        0x32, &l00_beam_ribbon_world_positions[0x92], &D_L00_001DA6D0[0x92], &D_L00_001DA0B0[0x92], 1);
+        0x94, l00_beam_ribbon_world_positions, D_L00_001DA6D0, D_L00_001DA0B0, 1);
+    func_L00_001FDE48_2b3628(0x32,
+                             &l00_beam_ribbon_world_positions[0x92],
+                             &D_L00_001DA6D0[0x92],
+                             &D_L00_001DA0B0[0x92],
+                             1);
 }
 
 void emit_beam_trail_particles(X *x) __asm__("FUN_L00_002b3c50");

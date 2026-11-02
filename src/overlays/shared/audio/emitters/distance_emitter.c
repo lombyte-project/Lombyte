@@ -74,8 +74,10 @@ void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
         playback_state->snd = play_voice(playback_state->id, fl, sound_emitter, 0x400);
         if (playback_state->repeat_delay_upper_bound > 0) {
             playback_state->repeat_delay_countdown =
-                FUN_001f96f8_2ed950(playback_state->repeat_delay_lower_bound +
-                                    random_integer_below(playback_state->repeat_delay_upper_bound - playback_state->repeat_delay_lower_bound)) *
+                FUN_001f96f8_2ed950(
+                    playback_state->repeat_delay_lower_bound +
+                    random_integer_below(playback_state->repeat_delay_upper_bound -
+                                         playback_state->repeat_delay_lower_bound)) *
                 60.0f;
         }
     } else if (playback_radius + 1.0f < reference_distance) {

@@ -253,7 +253,8 @@ void linked_moby_hitbox_update(struct Moby *moby) {
                 target->alpha = FUN_001fa6d0_2c9c70(linked_hitbox_vars->unk44 * now / initial);
             }
         }
-        if ((linked_hitbox_vars->unk8 & 4) == 0 && target != 0 && linked_hitbox_vars->target_state_for_hitbox_removal != -1 &&
+        if ((linked_hitbox_vars->unk8 & 4) == 0 && target != 0 &&
+            linked_hitbox_vars->target_state_for_hitbox_removal != -1 &&
             target->state == linked_hitbox_vars->target_state_for_hitbox_removal)
             moby->state = LINKED_HITBOX_STATE_REMOVE;
         if ((linked_hitbox_vars->unk8 & 8) == 0 &&

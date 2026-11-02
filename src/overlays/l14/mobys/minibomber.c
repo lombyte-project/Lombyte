@@ -287,7 +287,8 @@ void minibomber_update(Moby_2B5938 *moby) {
     float  spd;
 
     if (moby->f70 & 2) {
-        if (moby->source_animation_id == moby->target_animation_id && moby->source_animation_id != 0) {
+        if (moby->source_animation_id == moby->target_animation_id &&
+            moby->source_animation_id != 0) {
             if (moby->source_animation_id == 2) {
                 blend_moby_animation(moby, 0, 0, 10);
             } else {

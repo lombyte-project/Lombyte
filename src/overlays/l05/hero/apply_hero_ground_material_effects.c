@@ -258,7 +258,8 @@ void update_hero_ground_contact(void) {
         hero.sink_surface_z = D_L05_00174268;
         goto d1;
     }
-    if (hero.ground_type == GROUND_MATERIAL_STATE_DEPENDENT_CONTACT_BYPASS && (u32)(hero.state.current - 0x7C) < 2) {
+    if (hero.ground_type == GROUND_MATERIAL_STATE_DEPENDENT_CONTACT_BYPASS &&
+        (u32)(hero.state.current - 0x7C) < 2) {
         goto d1;
     }
     if (HH.moby != 0) {

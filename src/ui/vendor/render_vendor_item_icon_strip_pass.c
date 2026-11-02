@@ -89,9 +89,9 @@ void render_vendor_item_icon_strip_pass(void) {
         slot = -2;
         do {
             first_slot = D_001E63C0.unk58 - 3;
-            entry_offset =
-                ((s32)((D_001E63C0.selection_entry_count * 2) + slot + first_slot) % (s32)D_001E63C0.selection_entry_count) *
-                0x14;
+            entry_offset = ((s32)((D_001E63C0.selection_entry_count * 2) + slot + first_slot) %
+                            (s32)D_001E63C0.selection_entry_count) *
+                           0x14;
             icon = ((struct HudItemEntry *)(void *)((u8 *)((u8 *)menu_item_info) +
                                                     *(s32 *)(void *)(entry_offset +
                                                                      ((u8 *)&D_001E63C0 + 0xD0)) *

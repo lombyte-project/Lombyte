@@ -456,7 +456,8 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
             fast_vec_dot(D_001413D0_lui + 0xC0, camera_object) <= -0.3f) {
             goto on;
         }
-        if (0.0001f < absolute_float(C->pull_back_blend_input) && fast_vec_dot(C->pull_back_alignment_vector, camera_object) <= -0.3f) {
+        if (0.0001f < absolute_float(C->pull_back_blend_input) &&
+            fast_vec_dot(C->pull_back_alignment_vector, camera_object) <= -0.3f) {
         on:
             pull_back_state->h4 = scale_game_frames(0x78);
             k = C->pull_back_blend_input * 14.2857f;

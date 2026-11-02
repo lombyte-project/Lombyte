@@ -484,7 +484,8 @@ int draw_hud_item_selector_panel(HudElem *selector_element) {
         icon_x =
             x + D_L00_0015F720_gp + (int)(D_L00_0015F78C_gp * fast_cos(angle) * D_L00_0015F7C4_gp);
         icon_y = y + D_L00_0015F724_gp + (int)(D_L00_0015F78C_gp * fast_sin(angle));
-        if (selector_element->unk74 == i && ((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0)
+        if (selector_element->unk74 == i &&
+            ((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0)
             draw_hud_sprite(
                 get_icon_frame(0xe99c, 0), icon_x - 0x13, icon_y - 0x13, 0x26, 0x26, marker_alpha);
         if (((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0) {
@@ -1458,8 +1459,11 @@ int draw_hud_cropped_gauge_panel(char *cropped_gauge_element) {
     *(int *)(cropped_gauge_element + 0x58) = 0x100;
     *(int *)(cropped_gauge_element + 0x5C) = 0x40;
     hud_screen_position(cropped_gauge_element, &x, &y);
-    apply_hud_slide_offset(cropped_gauge_element, &x, &y, *(int *)(cropped_gauge_element + 0x6C), 0);
-    sprite_width = *(int *)(cropped_gauge_element + 0x74) * 0xDD / *(int *)(cropped_gauge_element + 0x8) + 0x1B;
+    apply_hud_slide_offset(
+        cropped_gauge_element, &x, &y, *(int *)(cropped_gauge_element + 0x6C), 0);
+    sprite_width =
+        *(int *)(cropped_gauge_element + 0x74) * 0xDD / *(int *)(cropped_gauge_element + 0x8) +
+        0x1B;
     draw_cropped_hud_sprite(get_icon_frame(0x7558, 1), x, y, sprite_width, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 2), x, y, 0x20, 0x20, D_00140986 ? 0x80 : 0);

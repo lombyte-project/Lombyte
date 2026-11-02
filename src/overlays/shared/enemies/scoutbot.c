@@ -441,12 +441,18 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (((unsigned char *)moby)[0x20] != 0 && ((unsigned char *)moby)[0x20] != 4) {
         char *path = ((char *)l08_paths[scoutbot_pvars->target_path_index]);
-        if (func_L00_00260FB0_f(
-                moby, &scoutbot_pvars->tracked_target_position, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
-            if (14.0f < vector_distance_xy(&scoutbot_pvars->unk1C0, &scoutbot_pvars->tracked_target_position)) {
+        if (func_L00_00260FB0_f(moby,
+                                &scoutbot_pvars->tracked_target_position,
+                                14.0f,
+                                0,
+                                0,
+                                path + 0x10,
+                                *(int *)path) != 2) {
+            if (14.0f < vector_distance_xy(&scoutbot_pvars->unk1C0,
+                                           &scoutbot_pvars->tracked_target_position)) {
                 scoutbot_pvars->target_selection_status = SCOUTBOT_TARGET_SELECTION_UNAVAILABLE;
-            } else if (3.0f <
-                       absolute_float(scoutbot_pvars->unk1C0[2] - scoutbot_pvars->tracked_target_position[2])) {
+            } else if (3.0f < absolute_float(scoutbot_pvars->unk1C0[2] -
+                                             scoutbot_pvars->tracked_target_position[2])) {
                 scoutbot_pvars->target_selection_status = SCOUTBOT_TARGET_SELECTION_UNAVAILABLE;
             }
         }
@@ -487,8 +493,8 @@ void draw_target_beam(struct Moby *moby) {
     moby_point_position(moby, 2, &beam_origin_position);
     fast_vec_sub(&delta, scoutbot_private_vars->beam_target_moby + 0x10, &beam_origin_position);
     scale_vector_002d3878(3.0f, &delta);
-    delta.v[2] =
-        (*(float *)(scoutbot_private_vars->beam_target_moby + 0x18) + 0.25f) - beam_origin_position.v[2];
+    delta.v[2] = (*(float *)(scoutbot_private_vars->beam_target_moby + 0x18) + 0.25f) -
+                 beam_origin_position.v[2];
     delta.v[3] = 1.0f;
     length = fast_vec_length(&delta);
     clear_u64_value(&angles);
@@ -610,9 +616,11 @@ void update_scoutbot_movement(struct Moby *moby) {
     fast_vec_normalize(velocity_ptr, velocity_ptr, movement_length);
     fast_vec_add((float *)&moby->pos, (float *)&moby->pos, velocity_ptr);
     scoutbot_instance_state->vertical_bob_phase =
-        fast_add_rotations(scoutbot_instance_state->vertical_bob_phase, scoutbot_instance_state->vertical_bob_phase_increment);
+        fast_add_rotations(scoutbot_instance_state->vertical_bob_phase,
+                           scoutbot_instance_state->vertical_bob_phase_increment);
     target_height = scoutbot_instance_state->unk1C0[2] +
-                    scoutbot_instance_state->vertical_bob_amplitude * fast_sin(scoutbot_instance_state->vertical_bob_phase);
+                    scoutbot_instance_state->vertical_bob_amplitude *
+                        fast_sin(scoutbot_instance_state->vertical_bob_phase);
     if (scoutbot_instance_state->ground_hover_offset_enabled)
         target_height += scoutbot_instance_state->unk200;
     vertical_step = target_height - moby->pos.z;

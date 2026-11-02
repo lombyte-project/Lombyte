@@ -493,7 +493,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         boss_data->path_point_index = 1;
         boss_data->health_hud_animation_handle = -1;
         boss_data->boss_health = 350.0f;
-        boss_data->paired_transition_moby = D_L18_0015FFD8 + boss_data->paired_transition_moby_index * 0x100;
+        boss_data->paired_transition_moby =
+            D_L18_0015FFD8 + boss_data->paired_transition_moby_index * 0x100;
         boss_data->bob_amplitude = 0.75f;
         boss_data->movement_step_distance = 0.0f;
         for (i = 0; i < 3; i++) {
@@ -532,7 +533,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     case DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER:
-        if (is_point_inside_clip_volume(hero.motion.pos.f, boss_data->encounter_trigger_clip_volume_index) != 0 &&
+        if (is_point_inside_clip_volume(hero.motion.pos.f,
+                                        boss_data->encounter_trigger_clip_volume_index) != 0 &&
             hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             moby->f20 = 7;
             moby->f34 |= 0x41;
@@ -555,8 +557,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     boss_data->active_movement_path = b;
                     qcopy(boss_data->unbobbed_boss_position, b + 4);
                 }
-                moby->f40[2] = fast_arc_tan(hero.motion.pos.f[0] - boss_data->unbobbed_boss_position[0],
-                                            hero.motion.pos.f[1] - boss_data->unbobbed_boss_position[1]);
+                moby->f40[2] =
+                    fast_arc_tan(hero.motion.pos.f[0] - boss_data->unbobbed_boss_position[0],
+                                 hero.motion.pos.f[1] - boss_data->unbobbed_boss_position[1]);
                 show_drek_boss_moby_group((int)moby, boss_data->f204[0]);
                 boss_data->boss_health = boss_data->boss_health * 0.85714287f;
             } else if (fast_vec_dist(hero.motion.pos.f,
@@ -658,15 +661,18 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 boss_data->active_movement_path = b;
                 qcopy(boss_data->unbobbed_boss_position, b + 4);
             }
-            moby->f40[2] = fast_arc_tan(hero.motion.pos.f[0] - boss_data->unbobbed_boss_position[0],
-                                        hero.motion.pos.f[1] - boss_data->unbobbed_boss_position[1]);
+            moby->f40[2] =
+                fast_arc_tan(hero.motion.pos.f[0] - boss_data->unbobbed_boss_position[0],
+                             hero.motion.pos.f[1] - boss_data->unbobbed_boss_position[1]);
             boss_data->health_hud_animation_handle = -1;
             break;
         }
-        if (moby->animation_sequence_index == 10 && (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
-                                is_value_within_interpolated_window((char *)moby, 16.0f) != 0)) {
+        if (moby->animation_sequence_index == 10 &&
+            (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
+             is_value_within_interpolated_window((char *)moby, 16.0f) != 0)) {
             qcopy(position_and_displacement_scratch, hero.motion.near_ground_point.f);
-            if (absolute_float(position_and_displacement_scratch[2] - boss_data->unbobbed_boss_position[2]) < 5.0f) {
+            if (absolute_float(position_and_displacement_scratch[2] -
+                               boss_data->unbobbed_boss_position[2]) < 5.0f) {
                 if ((float)moby->f50 < 15.0f) {
                     moby_point_position(
                         moby, 2, position_displacement_direction_and_rotation_scratch);
@@ -747,7 +753,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 probe_ground_height(position_direction_and_rotation_scratch, 0, 0.5f);
             refresh_moby_position_and_activate(boss_data->pending_electric_ball_moby,
                                                position_displacement_direction_and_rotation_scratch,
-                                               D_L18_001600EC + boss_data->arena_center_node_index * 0x80 + 0x30,
+                                               D_L18_001600EC +
+                                                   boss_data->arena_center_node_index * 0x80 + 0x30,
                                                1,
                                                1.0f);
             boss_data->pending_electric_ball_moby = 0;
@@ -761,7 +768,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 moby->f20 = 10;
             }
             for (i = 0; i < 4; i++) {
-                int k = boss_data->encounter_phase == DREK_BOSS_PHASE_SECOND_ARENA_PATH ? boss_data->f230[i] : boss_data->alternate_platform_activation_moby_indices[i];
+                int k = boss_data->encounter_phase == DREK_BOSS_PHASE_SECOND_ARENA_PATH
+                            ? boss_data->f230[i]
+                            : boss_data->alternate_platform_activation_moby_indices[i];
 
                 activate_drek_boss_class_0565_moby(D_L18_0015FFD8 + k * 0x100);
             }
@@ -794,19 +803,24 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
-        approach_value(&boss_data->movement_step_distance, frame_time * 12.0f, frame_time_sq * 20.0f);
+        approach_value(
+            &boss_data->movement_step_distance, frame_time * 12.0f, frame_time_sq * 20.0f);
         if (boss_data->movement_step_distance != 0.0f) {
             fast_vec_sub(position_and_displacement_scratch,
-                         (char *)boss_data->active_movement_path + (boss_data->path_point_index * 0x10 + 0x10),
+                         (char *)boss_data->active_movement_path +
+                             (boss_data->path_point_index * 0x10 + 0x10),
                          boss_data->unbobbed_boss_position);
-            if (fast_vec_length(position_and_displacement_scratch) <= boss_data->movement_step_distance) {
+            if (fast_vec_length(position_and_displacement_scratch) <=
+                boss_data->movement_step_distance) {
                 boss_data->path_point_index = boss_data->path_point_index + 1;
             } else {
                 fast_vec_normalize(position_and_displacement_scratch,
                                    position_and_displacement_scratch,
                                    boss_data->movement_step_distance);
             }
-            fast_vec_add(boss_data->unbobbed_boss_position, boss_data->unbobbed_boss_position, position_and_displacement_scratch);
+            fast_vec_add(boss_data->unbobbed_boss_position,
+                         boss_data->unbobbed_boss_position,
+                         position_and_displacement_scratch);
         }
         firing_target_moby = select_drek_boss_platform_firing_target((char *)moby);
         if (firing_target_moby != 0 &&
@@ -842,22 +856,28 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     }
     case DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO:
         if (boss_data->path_point_index != *boss_data->active_movement_path) {
-            approach_value(&boss_data->movement_step_distance, frame_time * 10.0f, frame_time_sq * 20.0f);
+            approach_value(
+                &boss_data->movement_step_distance, frame_time * 10.0f, frame_time_sq * 20.0f);
             fast_vec_sub(position_and_displacement_scratch,
-                         (char *)boss_data->active_movement_path + (boss_data->path_point_index * 0x10 + 0x10),
+                         (char *)boss_data->active_movement_path +
+                             (boss_data->path_point_index * 0x10 + 0x10),
                          boss_data->unbobbed_boss_position);
-            if (fast_vec_length(position_and_displacement_scratch) <= boss_data->movement_step_distance) {
+            if (fast_vec_length(position_and_displacement_scratch) <=
+                boss_data->movement_step_distance) {
                 boss_data->path_point_index = boss_data->path_point_index + 1;
             } else {
                 fast_vec_normalize(position_and_displacement_scratch,
                                    position_and_displacement_scratch,
                                    boss_data->movement_step_distance);
             }
-            fast_vec_add(boss_data->unbobbed_boss_position, boss_data->unbobbed_boss_position, position_and_displacement_scratch);
+            fast_vec_add(boss_data->unbobbed_boss_position,
+                         boss_data->unbobbed_boss_position,
+                         position_and_displacement_scratch);
             break;
         }
         if (vector_distance_xy(moby->f10, hero.motion.pos.f) < 50.0f && hero.air_frames.s == 0 &&
-            (((BossMoby *)hero.ground_moby) == 0 || ((BossMoby *)hero.ground_moby)->moby_class_id != 0x24B)) {
+            (((BossMoby *)hero.ground_moby) == 0 ||
+             ((BossMoby *)hero.ground_moby)->moby_class_id != 0x24B)) {
             int *p = boss_data->active_movement_path;
 
             boss_data->movement_step_distance = 0.0f;
@@ -868,8 +888,11 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     moby->f20 = 4;
                 } else {
                     moby->f20 = 0x15;
-                    boss_data->selected_class_247_moby = find_class_247_moby_with_largest_xy_angle_in_list(
-                        boss_data->unbobbed_boss_position, hero.motion.pos.f, boss_data->class_247_group_index);
+                    boss_data->selected_class_247_moby =
+                        find_class_247_moby_with_largest_xy_angle_in_list(
+                            boss_data->unbobbed_boss_position,
+                            hero.motion.pos.f,
+                            boss_data->class_247_group_index);
                 }
                 break;
             }
@@ -877,15 +900,15 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     case DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE:
-        if (hero.air_frames.s == 0 &&
-            (((BossMoby *)hero.ground_moby) == 0 || ((BossMoby *)hero.ground_moby)->moby_class_id != 0x24B)) {
+        if (hero.air_frames.s == 0 && (((BossMoby *)hero.ground_moby) == 0 ||
+                                       ((BossMoby *)hero.ground_moby)->moby_class_id != 0x24B)) {
             int i;
 
             *(int *)&l18_drek_boss_scene_2_started_gp = 1;
             moby->f20 = 7;
             boss_data->post_scene_resume_state = DREK_BOSS_INITIALIZE_PAIRED_TRANSFORM_TRANSITION;
-            boss_data->selected_class_247_moby =
-                (BossMoby *)find_nearest_class_247_moby_in_list(hero.motion.pos.f, boss_data->class_247_group_index);
+            boss_data->selected_class_247_moby = (BossMoby *)find_nearest_class_247_moby_in_list(
+                hero.motion.pos.f, boss_data->class_247_group_index);
             moby->f34 |= 0x41;
             start_scene(2);
             for (i = 0; i < 3; i++) {
@@ -936,8 +959,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                                 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
-        request_thruster_pack_lock_red_wait(D_L18_0015FFD8 + boss_data->thruster_lock_moby_index * 0x100,
-                                            scale_game_frames(0x708));
+        request_thruster_pack_lock_red_wait(
+            D_L18_0015FFD8 + boss_data->thruster_lock_moby_index * 0x100, scale_game_frames(0x708));
         break;
     }
     case DREK_BOSS_WAIT_TO_RESTORE_SAVED_TRANSFORM:
@@ -970,8 +993,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             boss_data->action_event_timer_frames = scale_game_frames(0x14);
             qcopy(position_and_displacement_scratch, boss_data->unbobbed_boss_position);
             position_and_displacement_scratch[2] = position_and_displacement_scratch[2] + 4.0f;
-            if (activate_drek_fight_missiles_in_group(
-                    (char *)moby, boss_data->missile_group_index, position_and_displacement_scratch) != 0) {
+            if (activate_drek_fight_missiles_in_group((char *)moby,
+                                                      boss_data->missile_group_index,
+                                                      position_and_displacement_scratch) != 0) {
                 moby->f20 = 0xC;
             }
         }
@@ -1006,8 +1030,10 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
             }
             boss_data->action_event_timer_frames = 0;
-            boss_data->action_frame_counter = scale_game_frames(random_integer_below(3) * 0x5A + 0x14A);
-            boss_data->secondary_action_timer_frames = scale_game_frames((6 - boss_data->encounter_phase) * 0x1E);
+            boss_data->action_frame_counter =
+                scale_game_frames(random_integer_below(3) * 0x5A + 0x14A);
+            boss_data->secondary_action_timer_frames =
+                scale_game_frames((6 - boss_data->encounter_phase) * 0x1E);
             boss_data->ring_launch_lateral_coefficient = random_float_between(-0.333f, 0.333f);
             break;
         case DREK_BOSS_TARGET_SIDE_GROUND_POINTS:
@@ -1043,10 +1069,13 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     w = fast_difference_between_rotations(
                         fast_arc_tan(boss_data->unbobbed_boss_position[0] - hero.motion.pos.f[0],
                                      boss_data->unbobbed_boss_position[1] - hero.motion.pos.f[1]),
-                        fast_arc_tan(boss_data->unbobbed_boss_position[0] - position_and_displacement_scratch[0],
-                                     boss_data->unbobbed_boss_position[1] - position_and_displacement_scratch[1]));
+                        fast_arc_tan(boss_data->unbobbed_boss_position[0] -
+                                         position_and_displacement_scratch[0],
+                                     boss_data->unbobbed_boss_position[1] -
+                                         position_and_displacement_scratch[1]));
                     if (best < w) {
-                        boss_data->selected_aim_node_index = boss_data->aim_candidate_node_indices[i];
+                        boss_data->selected_aim_node_index =
+                            boss_data->aim_candidate_node_indices[i];
                         best = w;
                     }
                 }
@@ -1066,14 +1095,15 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
             boss_data->action_frame_counter = scale_game_frames(600);
             boss_data->secondary_action_timer_frames = scale_game_frames(600);
-            boss_data->hero_follow_ring_effect_moby = create_class_274_ring_effect(moby, boss_data->unbobbed_boss_position, 5.8f);
+            boss_data->hero_follow_ring_effect_moby =
+                create_class_274_ring_effect(moby, boss_data->unbobbed_boss_position, 5.8f);
             break;
         }
         break;
     case DREK_BOSS_ACTION_REPOSITION_AND_AIM:
         aim = &moby->f40[2];
-        desired_yaw =
-            fast_arc_tan(boss_data->stored_aim_target_position[0] - moby->f10[0], boss_data->stored_aim_target_position[1] - moby->f10[1]);
+        desired_yaw = fast_arc_tan(boss_data->stored_aim_target_position[0] - moby->f10[0],
+                                   boss_data->stored_aim_target_position[1] - moby->f10[1]);
         approach_angle(aim,
                        &boss_data->yaw_approach_state,
                        desired_yaw,
@@ -1094,10 +1124,12 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if (boss_data->action_event_timer_frames != 0) {
             if (boss_data->pending_electric_ball_moby == 0) {
                 moby_point_position(moby, 1, position_displacement_direction_and_rotation_scratch);
-                boss_data->pending_electric_ball_moby = (unsigned char *)spawn_drek_boss_electric_ball(
-                    moby,
-                    position_displacement_direction_and_rotation_scratch,
-                    scale_game_frames(*(int *)&l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp));
+                boss_data->pending_electric_ball_moby =
+                    (unsigned char *)spawn_drek_boss_electric_ball(
+                        moby,
+                        position_displacement_direction_and_rotation_scratch,
+                        scale_game_frames(
+                            *(int *)&l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp));
             } else if (fast_dec_timer(&boss_data->action_event_timer_frames) != 0) {
                 if (moby->animation_sequence_index != 9) {
                     blend_moby_animation(moby, 9, 0, 0);
@@ -1126,7 +1158,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     moby->f20 = 0xC;
                 }
             } else {
-                float f = 1.0f - convert_integer_to_float(boss_data->action_event_timer_frames) / scale_time(90.0f);
+                float f = 1.0f - convert_integer_to_float(boss_data->action_event_timer_frames) /
+                                     scale_time(90.0f);
 
                 if (f > 1.0f) {
                     f = 1.0f;
@@ -1197,7 +1230,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
             position_and_displacement_scratch[2] =
                 probe_ground_height(position_and_displacement_scratch, 0, 0.5f);
-            if (absolute_float(position_and_displacement_scratch[2] - boss_data->unbobbed_boss_position[2]) < 5.0f) {
+            if (absolute_float(position_and_displacement_scratch[2] -
+                               boss_data->unbobbed_boss_position[2]) < 5.0f) {
                 float a;
                 float c;
                 float e;
@@ -1231,7 +1265,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         if (fast_dec_timer(&boss_data->action_frame_counter) != 0 ||
-            (boss_data->rail_mode_damage_accumulated > 25.0f && (float)boss_data->encounter_phase < 4.0f)) {
+            (boss_data->rail_mode_damage_accumulated > 25.0f &&
+             (float)boss_data->encounter_phase < 4.0f)) {
             boss_data->previous_action_state = DREK_BOSS_TARGET_GROUND_POINTS;
             moby->f20 = 0xC;
         }
@@ -1247,15 +1282,17 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                        frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
-        if (boss_data->action_event_timer_frames < boss_data->action_frame_counter + boss_data->secondary_action_timer_frames) {
-            boss_data->lateral_launch_aim_angle = fast_arc_tan(1.0f, boss_data->ring_launch_lateral_coefficient);
+        if (boss_data->action_event_timer_frames <
+            boss_data->action_frame_counter + boss_data->secondary_action_timer_frames) {
+            boss_data->lateral_launch_aim_angle =
+                fast_arc_tan(1.0f, boss_data->ring_launch_lateral_coefficient);
         }
         if (moby->animation_sequence_index == 2) {
             if ((moby->f70 & 2) != 0) {
                 blend_moby_animation(moby, 4, 0, scale_game_frames(0x14));
             }
-        } else if (fast_dec_timer(&boss_data->action_event_timer_frames) != 0 && boss_data->action_frame_counter != 0 &&
-                   moby->animation_sequence_index != 4) {
+        } else if (fast_dec_timer(&boss_data->action_event_timer_frames) != 0 &&
+                   boss_data->action_frame_counter != 0 && moby->animation_sequence_index != 4) {
             blend_moby_animation(moby, 4, 0, scale_game_frames(0x14));
         }
         if (moby->animation_sequence_index == 4) {
@@ -1266,8 +1303,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 boss_data->ring_launch_cooldown_frames = scale_game_frames(300);
                 moby_point_position(moby, 0, position_and_displacement_scratch);
                 qcopy(position_displacement_direction_and_rotation_scratch, moby->fC0);
-                fast_vec_normalize(
-                    position_direction_and_rotation_scratch, moby->lateral_direction_vector, boss_data->ring_launch_lateral_coefficient);
+                fast_vec_normalize(position_direction_and_rotation_scratch,
+                                   moby->lateral_direction_vector,
+                                   boss_data->ring_launch_lateral_coefficient);
                 fast_vec_add(position_displacement_direction_and_rotation_scratch,
                              position_displacement_direction_and_rotation_scratch,
                              position_direction_and_rotation_scratch);
@@ -1293,7 +1331,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
             }
         }
-        if (fast_dec_timer(&boss_data->action_frame_counter) != 0 && fast_dec_timer(&boss_data->secondary_action_timer_frames) != 0) {
+        if (fast_dec_timer(&boss_data->action_frame_counter) != 0 &&
+            fast_dec_timer(&boss_data->secondary_action_timer_frames) != 0) {
             boss_data->previous_action_state = DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET;
             moby->f20 = 0xC;
             if (moby->animation_sequence_index != 5) {
@@ -1337,8 +1376,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 position_direction_and_rotation_scratch[2] + 5.0f;
             position_direction_and_rotation_scratch[2] =
                 probe_ground_height(position_direction_and_rotation_scratch, 0, 0.5f);
-            if (absolute_float(position_direction_and_rotation_scratch[2] - boss_data->unbobbed_boss_position[2]) <
-                5.0f) {
+            if (absolute_float(position_direction_and_rotation_scratch[2] -
+                               boss_data->unbobbed_boss_position[2]) < 5.0f) {
                 float speed =
                     vector_distance_xy(position_direction_and_rotation_scratch,
                                        position_displacement_direction_and_rotation_scratch) /
@@ -1376,17 +1415,20 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if ((moby->f70 & 2) != 0 && moby->animation_sequence_index != 12) {
             blend_moby_animation(moby, 0xC, 0, scale_game_frames(0x14));
         }
-        if ((moby->animation_sequence_index == 12 && fast_dec_timer(&boss_data->action_event_timer_frames) != 0) ||
+        if ((moby->animation_sequence_index == 12 &&
+             fast_dec_timer(&boss_data->action_event_timer_frames) != 0) ||
             boss_data->action_event_timer_frames == scale_game_frames(0x1E)) {
             float f = boss_data->action_event_timer_frames != 0 ? 4.3f : -4.3f;
 
-            fast_vec_normalize(position_and_displacement_scratch, moby->lateral_direction_vector, f);
+            fast_vec_normalize(
+                position_and_displacement_scratch, moby->lateral_direction_vector, f);
             fast_vec_add(position_and_displacement_scratch,
                          position_and_displacement_scratch,
                          boss_data->unbobbed_boss_position);
             position_and_displacement_scratch[2] =
                 probe_ground_height(position_and_displacement_scratch, 0, 0.5f);
-            if (absolute_float(position_and_displacement_scratch[2] - boss_data->unbobbed_boss_position[2]) < 1.0f) {
+            if (absolute_float(position_and_displacement_scratch[2] -
+                               boss_data->unbobbed_boss_position[2]) < 1.0f) {
                 /* v1 is not written in this state; retail passes it all the same. */
                 float speed =
                     vector_distance_xy(position_and_displacement_scratch,
@@ -1432,13 +1474,15 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if (fast_dec_timer(&boss_data->action_event_timer_frames) != 0) {
             update_drek_boss_hero_follow_movement((char *)moby);
         }
-        refresh_ring_effect(boss_data->hero_follow_ring_effect_moby, boss_data->unbobbed_boss_position, 5.8f);
+        refresh_ring_effect(
+            boss_data->hero_follow_ring_effect_moby, boss_data->unbobbed_boss_position, 5.8f);
         if (voice_is_playing(moby, boss_data->hero_follow_voice_slot) == 0) {
             boss_data->hero_follow_voice_slot = allocate_voice_for_target_entry(0xE, 4, (int)moby);
         }
         fire = 0;
         if (fast_dec_timer(&boss_data->action_frame_counter) != 0 &&
-            (hero.state.control_mode != 0xF || fast_dec_timer(&boss_data->secondary_action_timer_frames) != 0)) {
+            (hero.state.control_mode != 0xF ||
+             fast_dec_timer(&boss_data->secondary_action_timer_frames) != 0)) {
             fire = 1;
         }
         if (hero.state.control_mode == 0xF) {
@@ -1537,7 +1581,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 ticks = scale_game_frames(600);
                 break;
             }
-            request_thruster_pack_lock_red_wait(D_L18_0015FFD8 + boss_data->thruster_lock_moby_index * 0x100,
+            request_thruster_pack_lock_red_wait(D_L18_0015FFD8 +
+                                                    boss_data->thruster_lock_moby_index * 0x100,
                                                 scale_game_frames(ticks));
             boss_data->action_event_timer_frames = 0;
             if (boss_data->encounter_phase == DREK_BOSS_PHASE_BEFORE_MISSILE_GROUP) {
@@ -1629,7 +1674,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if (moby->f52 == moby->animation_sequence_index && moby->f52 == 14 &&
             is_value_within_interpolated_window((char *)moby, 30.0f) != 0) {
             moby->f20 = 0x1B;
-            end_thruster_pack_lock_red_wait(D_L18_0015FFD8 + boss_data->thruster_lock_moby_index * 0x100);
+            end_thruster_pack_lock_red_wait(D_L18_0015FFD8 +
+                                            boss_data->thruster_lock_moby_index * 0x100);
         }
         break;
     }
@@ -1653,7 +1699,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             boss_data->post_scene_resume_state = DREK_BOSS_RUN_ENDING_SEQUENCE;
         } else if (boss_data->encounter_phase == DREK_BOSS_PHASE_WAIT_FOR_ENDING_PLATFORM) {
             if (((BossMoby *)hero.ground_moby) != 0 && hero.air_frames.s == 0 &&
-                ((BossMoby *)hero.ground_moby)->moby_class_id == 0x247 && hero.state.current == 0x22) {
+                ((BossMoby *)hero.ground_moby)->moby_class_id == 0x247 &&
+                hero.state.current == 0x22) {
                 if (boss_data->ending_scene_4_delay_counter == 0) {
                     boss_data->ending_scene_4_delay_counter = 1;
                 }
@@ -1685,7 +1732,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                       0);
             start_scene(5);
             boss_data->encounter_phase = DREK_BOSS_PHASE_WAIT_TO_START_SLIDESHOW;
-        } else if (boss_data->encounter_phase == DREK_BOSS_PHASE_WAIT_TO_START_SLIDESHOW && D_L18_0015F5C4 == 0) {
+        } else if (boss_data->encounter_phase == DREK_BOSS_PHASE_WAIT_TO_START_SLIDESHOW &&
+                   D_L18_0015F5C4 == 0) {
             start_slideshow();
             boss_data->encounter_phase = DREK_BOSS_PHASE_WAIT_TO_QUEUE_ENDING_MOVIE;
         } else {
@@ -1729,8 +1777,10 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     qcopy(moby->f10, boss_data->unbobbed_boss_position);
     slow = 0.3f;
     fast = 0.03f;
-    boss_data->bob_cycle_angle = fast_add_rotations(boss_data->bob_cycle_angle, frame_time * 3.1415927f);
-    aas_c(boss_data->bob_amplitude * fast_sin(boss_data->bob_cycle_angle) + boss_data->bob_target_height_offset,
+    boss_data->bob_cycle_angle =
+        fast_add_rotations(boss_data->bob_cycle_angle, frame_time * 3.1415927f);
+    aas_c(boss_data->bob_amplitude * fast_sin(boss_data->bob_cycle_angle) +
+              boss_data->bob_target_height_offset,
           frame_time_sq * 4.0f,
           frame_time_sq * 4.0f,
           frame_time * 4.0f,
@@ -1740,11 +1790,16 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     boss_data->bob_target_height_offset = 0.0f;
     update_joint_animation(
         (char *)moby, boss_data->fC0, 7, frame_scale_sq * fast, frame_scale_sq * slow);
-    update_joint_animation(
-        (char *)moby, boss_data->joint_19_animation_state, 0x13, frame_scale_sq * fast, frame_scale_sq * slow);
-    boss_data->tint_cycle_angle = fast_add_rotations(boss_data->tint_cycle_angle, frame_time * 3.4906585f);
+    update_joint_animation((char *)moby,
+                           boss_data->joint_19_animation_state,
+                           0x13,
+                           frame_scale_sq * fast,
+                           frame_scale_sq * slow);
+    boss_data->tint_cycle_angle =
+        fast_add_rotations(boss_data->tint_cycle_angle, frame_time * 3.4906585f);
     {
-        int c = fast_tween_color(0x30C8C8C8, 0x1C393939, fast_sin(boss_data->tint_cycle_angle) * 0.5f + 0.5f);
+        int c = fast_tween_color(
+            0x30C8C8C8, 0x1C393939, fast_sin(boss_data->tint_cycle_angle) * 0.5f + 0.5f);
         int r = c & 0xFF;
         int g = (c >> 8) & 0xFF;
         int b = (c >> 16) & 0xFF;
@@ -2038,11 +2093,11 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                 V50[1] +=
                     fast_sin(*(float *)(boss_data + 0x318)) * health_floor_or_transition_offset;
                 V50[2] += 3.0f;
-                qcopy(
-                    V90,
-                    ((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)
-                                                            ->phase_transition_ground_node_indices[*(int *)(boss_data + 0x34C) - 1]]
-                        .pos);
+                qcopy(V90,
+                      ((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)
+                                                              ->phase_transition_ground_node_indices
+                                                                  [*(int *)(boss_data + 0x34C) - 1]]
+                          .pos);
                 V90[2] += health_floor_or_transition_offset;
                 V90[2] = probe_ground_height(V90, 0, 0.5f);
                 qcopy(V60, V90);
@@ -2858,7 +2913,8 @@ void render_drek_boss_joint_glows(struct Moby *moby) {
     }
     for (i = 0; i < 8; i++) {
         moby_point_position(moby, 11 + i, joint_world_position);
-        draw_offset_textured_effect_quad(joint_world_position, boss_vars->joint_glow_color, 0.7f, 0.5f);
+        draw_offset_textured_effect_quad(
+            joint_world_position, boss_vars->joint_glow_color, 0.7f, 0.5f);
     }
 }
 

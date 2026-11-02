@@ -363,14 +363,16 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 ultramech_moby->flags = (ultramech_moby->flags & 0xFFBE) | 0x1000;
             }
         }
-        if (ultramech_vars->target_range_status != ULTRAMECH_TARGET_OUTSIDE_SEARCH_RANGE && ultramech_vars->path != -1) {
+        if (ultramech_vars->target_range_status != ULTRAMECH_TARGET_OUTSIDE_SEARCH_RANGE &&
+            ultramech_vars->path != -1) {
             struct Hero *pl = &hero;
             if (pl->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
                 (ultramech_moby->flags & 0x1000)) {
                 if (ultramech_vars->target_constraint_path_index != -1 &&
-                    !point_in_path_xy(&pl->motion.pos,
-                                      D_L15_001B0AB0[ultramech_vars->target_constraint_path_index]->points,
-                                      D_L15_001B0AB0[ultramech_vars->target_constraint_path_index]->count)) {
+                    !point_in_path_xy(
+                        &pl->motion.pos,
+                        D_L15_001B0AB0[ultramech_vars->target_constraint_path_index]->points,
+                        D_L15_001B0AB0[ultramech_vars->target_constraint_path_index]->count)) {
                     ultramech_moby->collision_geometry = 0;
                     ultramech_moby->flags = (ultramech_moby->flags | 0x41) & 0xEFFF;
                 } else {
@@ -566,8 +568,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 ultramech_moby->state = ULTRAMECH_WAIT_BETWEEN_BURSTS;
                 if (ultramech_moby->anim != 0)
                     blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0xA));
-                ultramech_vars->timer =
-                    truncate_float_to_s32(FUN_L04_001f1978(ultramech_vars->burst_pause_duration * 60.0f));
+                ultramech_vars->timer = truncate_float_to_s32(
+                    FUN_L04_001f1978(ultramech_vars->burst_pause_duration * 60.0f));
             } else if (ultramech_vars->suppress_close_combat_and_knockback_motion == 0 &&
                        vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) <
                            *(float *)&ultramech_approach_target_range_gp) {
@@ -582,7 +584,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                     blend_moby_animation(ultramech_moby, 2, 0, scale_game_frames(0xA));
             } else if (ultramech_vars->suppress_close_combat_and_knockback_motion == 0 &&
                        vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) > 10.0f &&
-                       ultramech_vars->damage_reaction_this_update != 0 && ultramech_vars->combat_path_moves_disabled == 0) {
+                       ultramech_vars->damage_reaction_this_update != 0 &&
+                       ultramech_vars->combat_path_moves_disabled == 0) {
                 ultramech_moby->state = ULTRAMECH_BALLISTIC_PATH_MOVE;
                 ultramech_vars->timer = 0;
                 ultramech_vars->side = (ultramech_vars->side + 1) & 1;
@@ -665,7 +668,9 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                                              combat_target->pos.f[1] - ultramech_moby->pos.f[1]);
         if (ultramech_vars->target_range_status != ULTRAMECH_TARGET_OUTSIDE_SEARCH_RANGE) {
             desired_heading = compute_ultramech_flocking_steering_point(
-                ultramech_moby, &position_or_motion_vector, ultramech_vars->current_target_search_range);
+                ultramech_moby,
+                &position_or_motion_vector,
+                ultramech_vars->current_target_search_range);
             if (vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) <
                 *(float *)&ultramech_melee_range_gp) {
                 ultramech_moby->state = ULTRAMECH_MELEE_ATTACK;
@@ -786,7 +791,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         } else {
             ultramech_moby->animSpeed = 1.0f;
         }
-        if ((r & 0x40) || (ultramech_vars->suppress_close_combat_and_knockback_motion != 0 && (ultramech_moby->animFlags & 2))) {
+        if ((r & 0x40) || (ultramech_vars->suppress_close_combat_and_knockback_motion != 0 &&
+                           (ultramech_moby->animFlags & 2))) {
             if (ultramech_vars->combat_path_moves_disabled == 0) {
                 ultramech_moby->state = ULTRAMECH_BALLISTIC_PATH_MOVE;
                 ultramech_vars->timer = 0;
@@ -1135,9 +1141,12 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
             goto follow_path;
         ultramech_vars->current_target_search_range = *(float *)((char *)ultramech_vars + 0x178);
     } else {
-        ultramech_vars->current_target_search_range = ultramech_vars->activation_target_search_range;
+        ultramech_vars->current_target_search_range =
+            ultramech_vars->activation_target_search_range;
     }
-    FUN_0024f560(ultramech_vars->current_target_search_range, ultramech_moby, (char *)ultramech_vars + 0x120);
+    FUN_0024f560(ultramech_vars->current_target_search_range,
+                 ultramech_moby,
+                 (char *)ultramech_vars + 0x120);
     goto check_path;
 follow_path: {
     LevelPath *path;
@@ -1152,7 +1161,8 @@ follow_path: {
                         path->count);
 }
 check_path:
-    if (ultramech_vars->current_target_search_range < fast_vec_dist(&ultramech_moby->pos, (char *)ultramech_vars + 0x120))
+    if (ultramech_vars->current_target_search_range <
+        fast_vec_dist(&ultramech_moby->pos, (char *)ultramech_vars + 0x120))
         ultramech_vars->target_range_status = 2;
     if (ultramech_vars->target == 0)
         ultramech_vars->target = (UMoby *)D_001413D0;

@@ -587,7 +587,8 @@ void large_amoeboid_update(unsigned char *moby) {
             move_moby_with_ground_and_collision_checks(
                 moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
         }
-        if (large_amoeboid_vars->target_selection_status != 2 && (MOBY(moby)->state = 4, MOBY(moby)->prev_seq != 1))
+        if (large_amoeboid_vars->target_selection_status != 2 &&
+            (MOBY(moby)->state = 4, MOBY(moby)->prev_seq != 1))
             blend_moby_animation(moby, 1, 0, scale_game_frames(3));
         spawn_amoeboid_movement_particles(moby);
         return;

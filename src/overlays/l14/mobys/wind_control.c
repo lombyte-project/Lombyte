@@ -226,7 +226,8 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
     spark_vars->spark_step_distance[i] =
         random_float_between(wind_spark_speed_range_start_gp, wind_spark_speed_range_end_gp) *
         frame_time;
-    lifetime_frames = scale_game_frames(ftoi_k(spark_vars->f14 * 2.0f / spark_vars->spark_step_distance[i]));
+    lifetime_frames =
+        scale_game_frames(ftoi_k(spark_vars->f14 * 2.0f / spark_vars->spark_step_distance[i]));
     spark_vars->n320[i] = lifetime_frames;
     spark_vars->n380[i] = lifetime_frames;
     spark_vars->n3E0[i] = 0;
@@ -289,7 +290,8 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
                     *shade = spark_alpha;
                 }
             }
-            fast_vec_scale(spark_position_delta, spark_travel_direction, spark_vars->spark_step_distance[i]);
+            fast_vec_scale(
+                spark_position_delta, spark_travel_direction, spark_vars->spark_step_distance[i]);
             fast_vec_add(pos, pos, spark_position_delta);
             if (in_clip != 0 && absolute_float(pos[0] - l14_camera.pos.f[0]) < 8.0f &&
                 absolute_float(pos[1] - l14_camera.pos.f[1]) < 8.0f &&

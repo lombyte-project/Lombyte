@@ -82,7 +82,8 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
              entry_animation_mode != HERO_ENTRY_ANIMATION_MODE_BYPASS_ENTRY_LOCKS))
             return 0;
     }
-    if ((D_L03_0015F5C4 == 2 || D_L03_0015F5C4 == 6) && entry_animation_mode != HERO_ENTRY_ANIMATION_MODE_BYPASS_ENTRY_LOCKS)
+    if ((D_L03_0015F5C4 == 2 || D_L03_0015F5C4 == 6) &&
+        entry_animation_mode != HERO_ENTRY_ANIMATION_MODE_BYPASS_ENTRY_LOCKS)
         return 0;
     {
         struct Hero *p = &hero;

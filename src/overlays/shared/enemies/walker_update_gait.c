@@ -111,7 +111,7 @@ typedef struct WalkMoby {
     unsigned char b52; /* 0x52 */
     unsigned char b53;
     float         animation_interpolation_fraction; /* 0x54 */
-    float         animation_playback_rate; /* 0x58 */
+    float         animation_playback_rate;          /* 0x58 */
 } WalkMoby;
 
 typedef struct WalkAnim {
@@ -132,7 +132,7 @@ typedef struct WalkAnim {
 
 typedef struct WalkData {
     char           pad00[0x10];
-    float          ground_probe_anchor_record[8]; /* 0x10 */
+    float          ground_probe_anchor_record[8];           /* 0x10 */
     float          alternate_ground_probe_anchor_record[8]; /* 0x30 */
     char           pad50[0x10];
     float          jump_target_position[3]; /* 0x60 */
@@ -217,7 +217,8 @@ void walker_update_gait(WalkMoby *walker_moby,
                 reset_walker_gait_helpers((char *)gait_data);
             }
             gait_data->gait_state = 0xD;
-            gait_data->gait_phase_mask = walker_gait_mask(gait_data->anim[7], (float)gait_data->anim[7]->initial_animation_position);
+            gait_data->gait_phase_mask = walker_gait_mask(
+                gait_data->anim[7], (float)gait_data->anim[7]->initial_animation_position);
             gait_data->walk_start_counter = 0;
         } else if (speed > frame_time * 0.21f ||
                    fast_difference_between_rotations(walker_moby->f48, movement_heading) >
@@ -226,14 +227,14 @@ void walker_update_gait(WalkMoby *walker_moby,
             if (gait_data->walk_start_counter >= 4) {
                 {
                     WalkAnim *a = gait_data->anim[0];
-                    int f = find_nearest_animation_sequence_entry(walker_moby->pClass->seqs[a->id],
-                                                                  (float)a->initial_animation_position);
+                    int       f = find_nearest_animation_sequence_entry(
+                        walker_moby->pClass->seqs[a->id], (float)a->initial_animation_position);
                     blend_moby_animation(walker_moby, a->id, f, 10);
                     reset_walker_gait_helpers((char *)gait_data);
                 }
                 gait_data->gait_state = 1;
-                gait_data->gait_phase_mask =
-                    walker_gait_mask(gait_data->anim[0], (float)gait_data->anim[0]->initial_animation_position);
+                gait_data->gait_phase_mask = walker_gait_mask(
+                    gait_data->anim[0], (float)gait_data->anim[0]->initial_animation_position);
                 gait_data->walk_start_counter = 0;
             }
         }
@@ -261,22 +262,27 @@ void walker_update_gait(WalkMoby *walker_moby,
             gait_data->gait_state = 0;
         } else if (walker_moby->b52 == gait_data->anim[gait_animation_index]->id) {
             float t = (gait_data->anim[7]->f08 + gait_data->anim[0]->f08) * 0.375f;
-            if (speed > t && gait_data->gait_speed_reference > t && !(gait_data->gait_phase_mask & 0x3A)) {
+            if (speed > t && gait_data->gait_speed_reference > t &&
+                !(gait_data->gait_phase_mask & 0x3A)) {
                 float current_animation_position = compute_interpolated_record_value(walker_moby);
                 int   r1 = truncate_float_to_s32(gait_data->anim[gait_animation_index]->f48 -
                                                current_animation_position +
                                                gait_data->anim[gait_animation_index]->f10) %
                          truncate_float_to_s32(gait_data->anim[gait_animation_index]->f10);
-                int r2 = truncate_float_to_s32(gait_data->anim[gait_animation_index]->alternate_run_transition_position -
-                                               current_animation_position +
-                                               gait_data->anim[gait_animation_index]->f10) %
-                         truncate_float_to_s32(gait_data->anim[gait_animation_index]->f10);
+                int r2 =
+                    truncate_float_to_s32(
+                        gait_data->anim[gait_animation_index]->alternate_run_transition_position -
+                        current_animation_position + gait_data->anim[gait_animation_index]->f10) %
+                    truncate_float_to_s32(gait_data->anim[gait_animation_index]->f10);
                 int x;
                 int bl;
                 if (r1 < r2) {
-                    x = truncate_float_to_s32(gait_data->anim[7]->f48 - gait_data->anim[7]->animation_position_origin);
+                    x = truncate_float_to_s32(gait_data->anim[7]->f48 -
+                                              gait_data->anim[7]->animation_position_origin);
                 } else {
-                    x = truncate_float_to_s32(gait_data->anim[7]->alternate_run_transition_position - gait_data->anim[7]->animation_position_origin);
+                    x = truncate_float_to_s32(
+                        gait_data->anim[7]->alternate_run_transition_position -
+                        gait_data->anim[7]->animation_position_origin);
                 }
                 x = (x + truncate_float_to_s32(gait_data->anim[7]->f10)) %
                     truncate_float_to_s32(gait_data->anim[7]->f10);
@@ -295,11 +301,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                     gait_data->gait_status_flags = (gait_data->gait_status_flags & 0xFFFE) | 2;
                     gait_data->gait_ground_height_reference = walker_moby->pos[2];
                     if (flags & 1) {
-                        int bl = truncate_float_to_s32(gait_data->anim[11]->transition_position_span * 0.25f /
-                                                       (speed / gait_data->anim[11]->f08));
-                        int fr = truncate_float_to_s32(gait_data->anim[11]->f40 +
-                                                       gait_data->anim[11]->transition_position_span * 0.125f -
-                                                       gait_data->anim[11]->animation_position_origin) %
+                        int bl =
+                            truncate_float_to_s32(gait_data->anim[11]->transition_position_span *
+                                                  0.25f / (speed / gait_data->anim[11]->f08));
+                        int fr = truncate_float_to_s32(
+                                     gait_data->anim[11]->f40 +
+                                     gait_data->anim[11]->transition_position_span * 0.125f -
+                                     gait_data->anim[11]->animation_position_origin) %
                                  truncate_float_to_s32(gait_data->anim[11]->f10);
                         WalkAnim *a = gait_data->anim[11];
                         int       f = find_nearest_animation_sequence_entry(
@@ -308,12 +316,15 @@ void walker_update_gait(WalkMoby *walker_moby,
                         reset_walker_gait_helpers((char *)gait_data);
                         gait_data->gait_state = 0xF;
                     } else {
-                        int bl = truncate_float_to_s32(gait_data->anim[9]->alternate_transition_position_span * 0.25f /
-                                                       (speed / gait_data->anim[9]->f08));
-                        int fr = truncate_float_to_s32(gait_data->anim[9]->alternate_phase_anchor_position +
-                                                       gait_data->anim[9]->alternate_transition_position_span * 0.125f -
-                                                       gait_data->anim[9]->animation_position_origin) %
-                                 truncate_float_to_s32(gait_data->anim[9]->f10);
+                        int bl = truncate_float_to_s32(
+                            gait_data->anim[9]->alternate_transition_position_span * 0.25f /
+                            (speed / gait_data->anim[9]->f08));
+                        int fr =
+                            truncate_float_to_s32(
+                                gait_data->anim[9]->alternate_phase_anchor_position +
+                                gait_data->anim[9]->alternate_transition_position_span * 0.125f -
+                                gait_data->anim[9]->animation_position_origin) %
+                            truncate_float_to_s32(gait_data->anim[9]->f10);
                         WalkAnim *a = gait_data->anim[9];
                         int       f = find_nearest_animation_sequence_entry(
                             walker_moby->pClass->seqs[a->id], (float)fr);
@@ -329,9 +340,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                                gait_data->anim[gait_animation_index]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
                     if (flags & 1) {
-                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->ground_probe_anchor_record);
+                        fast_vec_add(ground_probe_position,
+                                     ground_probe_position,
+                                     gait_data->ground_probe_anchor_record);
                     } else {
-                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->alternate_ground_probe_anchor_record);
+                        fast_vec_add(ground_probe_position,
+                                     ground_probe_position,
+                                     gait_data->alternate_ground_probe_anchor_record);
                     }
                     ground_height = probe_ground_height(ground_probe_position, 0, 0.5f);
                     gait_data->gait_ground_height_reference = ground_height;
@@ -342,11 +357,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     fast_sin(gait_data->ground_probe_correction_angle) >
                             gait_data->terrain_transition_height_scale * 0.75f) {
                             if (flags & 1) {
-                                int bl = truncate_float_to_s32(gait_data->anim[2]->transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[2]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[2]->f40 +
-                                                               gait_data->anim[2]->transition_position_span * 0.125f -
-                                                               gait_data->anim[2]->animation_position_origin) %
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[2]->transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[2]->f08));
+                                int fr = truncate_float_to_s32(
+                                             gait_data->anim[2]->f40 +
+                                             gait_data->anim[2]->transition_position_span * 0.125f -
+                                             gait_data->anim[2]->animation_position_origin) %
                                          truncate_float_to_s32(gait_data->anim[2]->f10);
                                 WalkAnim *a = gait_data->anim[2];
                                 int       f = find_nearest_animation_sequence_entry(
@@ -355,12 +372,16 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 reset_walker_gait_helpers((char *)gait_data);
                                 gait_data->gait_state = 3;
                             } else {
-                                int bl = truncate_float_to_s32(gait_data->anim[1]->alternate_transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[1]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[1]->alternate_phase_anchor_position +
-                                                               gait_data->anim[1]->alternate_transition_position_span * 0.125f -
-                                                               gait_data->anim[1]->animation_position_origin) %
-                                         truncate_float_to_s32(gait_data->anim[1]->f10);
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[1]->alternate_transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[1]->f08));
+                                int fr =
+                                    truncate_float_to_s32(
+                                        gait_data->anim[1]->alternate_phase_anchor_position +
+                                        gait_data->anim[1]->alternate_transition_position_span *
+                                            0.125f -
+                                        gait_data->anim[1]->animation_position_origin) %
+                                    truncate_float_to_s32(gait_data->anim[1]->f10);
                                 WalkAnim *a = gait_data->anim[1];
                                 int       f = find_nearest_animation_sequence_entry(
                                     walker_moby->pClass->seqs[a->id], (float)fr);
@@ -374,11 +395,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_status_flags |= 8;
                             if (flags & 1) {
-                                int bl = truncate_float_to_s32(gait_data->anim[5]->transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[5]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[5]->f40 +
-                                                               gait_data->anim[5]->transition_position_span * 0.125f -
-                                                               gait_data->anim[5]->animation_position_origin) %
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[5]->transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[5]->f08));
+                                int fr = truncate_float_to_s32(
+                                             gait_data->anim[5]->f40 +
+                                             gait_data->anim[5]->transition_position_span * 0.125f -
+                                             gait_data->anim[5]->animation_position_origin) %
                                          truncate_float_to_s32(gait_data->anim[5]->f10);
                                 WalkAnim *a = gait_data->anim[5];
                                 int       f = find_nearest_animation_sequence_entry(
@@ -387,12 +410,16 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 reset_walker_gait_helpers((char *)gait_data);
                                 gait_data->gait_state = 8;
                             } else {
-                                int bl = truncate_float_to_s32(gait_data->anim[4]->alternate_transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[4]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[4]->alternate_phase_anchor_position +
-                                                               gait_data->anim[4]->alternate_transition_position_span * 0.125f -
-                                                               gait_data->anim[4]->animation_position_origin) %
-                                         truncate_float_to_s32(gait_data->anim[4]->f10);
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[4]->alternate_transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[4]->f08));
+                                int fr =
+                                    truncate_float_to_s32(
+                                        gait_data->anim[4]->alternate_phase_anchor_position +
+                                        gait_data->anim[4]->alternate_transition_position_span *
+                                            0.125f -
+                                        gait_data->anim[4]->animation_position_origin) %
+                                    truncate_float_to_s32(gait_data->anim[4]->f10);
                                 WalkAnim *a = gait_data->anim[4];
                                 int       f = find_nearest_animation_sequence_entry(
                                     walker_moby->pClass->seqs[a->id], (float)fr);
@@ -412,11 +439,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                             WalkAnim *a;
                             int       f;
                             gait_data->gait_status_flags |= 8;
-                            bl = truncate_float_to_s32(gait_data->anim[5]->transition_position_span * 0.25f /
-                                                       (speed / gait_data->anim[5]->f08));
-                            fr = truncate_float_to_s32(gait_data->anim[5]->f40 +
-                                                       gait_data->anim[5]->transition_position_span * 0.125f -
-                                                       gait_data->anim[5]->animation_position_origin) %
+                            bl =
+                                truncate_float_to_s32(gait_data->anim[5]->transition_position_span *
+                                                      0.25f / (speed / gait_data->anim[5]->f08));
+                            fr = truncate_float_to_s32(
+                                     gait_data->anim[5]->f40 +
+                                     gait_data->anim[5]->transition_position_span * 0.125f -
+                                     gait_data->anim[5]->animation_position_origin) %
                                  truncate_float_to_s32(gait_data->anim[5]->f10);
                             a = gait_data->anim[5];
                             f = find_nearest_animation_sequence_entry(
@@ -430,11 +459,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_state = 5;
                         } else {
-                            int bl = truncate_float_to_s32(gait_data->anim[3]->transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[3]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[3]->f40 +
-                                                           gait_data->anim[3]->transition_position_span * 0.125f -
-                                                           gait_data->anim[3]->animation_position_origin) %
+                            int bl =
+                                truncate_float_to_s32(gait_data->anim[3]->transition_position_span *
+                                                      0.25f / (speed / gait_data->anim[3]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[3]->f40 +
+                                         gait_data->anim[3]->transition_position_span * 0.125f -
+                                         gait_data->anim[3]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[3]->f10);
                             WalkAnim *a = gait_data->anim[3];
                             int       f = find_nearest_animation_sequence_entry(
@@ -454,11 +485,14 @@ void walker_update_gait(WalkMoby *walker_moby,
                             WalkAnim *a;
                             int       f;
                             gait_data->gait_status_flags |= 8;
-                            bl = truncate_float_to_s32(gait_data->anim[4]->alternate_transition_position_span * 0.25f /
-                                                       (speed / gait_data->anim[4]->f08));
-                            fr = truncate_float_to_s32(gait_data->anim[4]->alternate_phase_anchor_position +
-                                                       gait_data->anim[4]->alternate_transition_position_span * 0.125f -
-                                                       gait_data->anim[4]->animation_position_origin) %
+                            bl = truncate_float_to_s32(
+                                gait_data->anim[4]->alternate_transition_position_span * 0.25f /
+                                (speed / gait_data->anim[4]->f08));
+                            fr = truncate_float_to_s32(
+                                     gait_data->anim[4]->alternate_phase_anchor_position +
+                                     gait_data->anim[4]->alternate_transition_position_span *
+                                         0.125f -
+                                     gait_data->anim[4]->animation_position_origin) %
                                  truncate_float_to_s32(gait_data->anim[4]->f10);
                             a = gait_data->anim[4];
                             f = find_nearest_animation_sequence_entry(
@@ -472,11 +506,14 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_state = 6;
                         } else {
-                            int bl = truncate_float_to_s32(gait_data->anim[3]->alternate_transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[3]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[3]->alternate_phase_anchor_position +
-                                                           gait_data->anim[3]->alternate_transition_position_span * 0.125f -
-                                                           gait_data->anim[3]->animation_position_origin) %
+                            int bl = truncate_float_to_s32(
+                                gait_data->anim[3]->alternate_transition_position_span * 0.25f /
+                                (speed / gait_data->anim[3]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[3]->alternate_phase_anchor_position +
+                                         gait_data->anim[3]->alternate_transition_position_span *
+                                             0.125f -
+                                         gait_data->anim[3]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[3]->f10);
                             WalkAnim *a = gait_data->anim[3];
                             int       f = find_nearest_animation_sequence_entry(
@@ -493,11 +530,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                             -gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_status_flags |= 8;
                             if (flags & 1) {
-                                int bl = truncate_float_to_s32(gait_data->anim[5]->transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[5]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[5]->f40 +
-                                                               gait_data->anim[5]->transition_position_span * 0.125f -
-                                                               gait_data->anim[5]->animation_position_origin) %
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[5]->transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[5]->f08));
+                                int fr = truncate_float_to_s32(
+                                             gait_data->anim[5]->f40 +
+                                             gait_data->anim[5]->transition_position_span * 0.125f -
+                                             gait_data->anim[5]->animation_position_origin) %
                                          truncate_float_to_s32(gait_data->anim[5]->f10);
                                 WalkAnim *a = gait_data->anim[5];
                                 int       f = find_nearest_animation_sequence_entry(
@@ -506,12 +545,16 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 reset_walker_gait_helpers((char *)gait_data);
                                 gait_data->gait_state = 8;
                             } else {
-                                int bl = truncate_float_to_s32(gait_data->anim[4]->alternate_transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[4]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[4]->alternate_phase_anchor_position +
-                                                               gait_data->anim[4]->alternate_transition_position_span * 0.125f -
-                                                               gait_data->anim[4]->animation_position_origin) %
-                                         truncate_float_to_s32(gait_data->anim[4]->f10);
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[4]->alternate_transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[4]->f08));
+                                int fr =
+                                    truncate_float_to_s32(
+                                        gait_data->anim[4]->alternate_phase_anchor_position +
+                                        gait_data->anim[4]->alternate_transition_position_span *
+                                            0.125f -
+                                        gait_data->anim[4]->animation_position_origin) %
+                                    truncate_float_to_s32(gait_data->anim[4]->f10);
                                 WalkAnim *a = gait_data->anim[4];
                                 int       f = find_nearest_animation_sequence_entry(
                                     walker_moby->pClass->seqs[a->id], (float)fr);
@@ -524,11 +567,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                            fast_sin(gait_data->ground_probe_correction_angle) <
                                    gait_data->terrain_transition_height_scale * 0.75f) {
                             if (flags & 1) {
-                                int bl = truncate_float_to_s32(gait_data->anim[1]->transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[1]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[1]->f40 +
-                                                               gait_data->anim[1]->transition_position_span * 0.125f -
-                                                               gait_data->anim[1]->animation_position_origin) %
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[1]->transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[1]->f08));
+                                int fr = truncate_float_to_s32(
+                                             gait_data->anim[1]->f40 +
+                                             gait_data->anim[1]->transition_position_span * 0.125f -
+                                             gait_data->anim[1]->animation_position_origin) %
                                          truncate_float_to_s32(gait_data->anim[1]->f10);
                                 WalkAnim *a = gait_data->anim[1];
                                 int       f = find_nearest_animation_sequence_entry(
@@ -537,12 +582,16 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 reset_walker_gait_helpers((char *)gait_data);
                                 gait_data->gait_state = 5;
                             } else {
-                                int bl = truncate_float_to_s32(gait_data->anim[2]->alternate_transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[2]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[2]->alternate_phase_anchor_position +
-                                                               gait_data->anim[2]->alternate_transition_position_span * 0.125f -
-                                                               gait_data->anim[2]->animation_position_origin) %
-                                         truncate_float_to_s32(gait_data->anim[2]->f10);
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[2]->alternate_transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[2]->f08));
+                                int fr =
+                                    truncate_float_to_s32(
+                                        gait_data->anim[2]->alternate_phase_anchor_position +
+                                        gait_data->anim[2]->alternate_transition_position_span *
+                                            0.125f -
+                                        gait_data->anim[2]->animation_position_origin) %
+                                    truncate_float_to_s32(gait_data->anim[2]->f10);
                                 WalkAnim *a = gait_data->anim[2];
                                 int       f = find_nearest_animation_sequence_entry(
                                     walker_moby->pClass->seqs[a->id], (float)fr);
@@ -562,11 +611,14 @@ void walker_update_gait(WalkMoby *walker_moby,
                             WalkAnim *a;
                             int       f;
                             gait_data->gait_status_flags |= 8;
-                            bl = truncate_float_to_s32(gait_data->anim[4]->alternate_transition_position_span * 0.25f /
-                                                       (speed / gait_data->anim[4]->f08));
-                            fr = truncate_float_to_s32(gait_data->anim[4]->alternate_phase_anchor_position +
-                                                       gait_data->anim[4]->alternate_transition_position_span * 0.125f -
-                                                       gait_data->anim[4]->animation_position_origin) %
+                            bl = truncate_float_to_s32(
+                                gait_data->anim[4]->alternate_transition_position_span * 0.25f /
+                                (speed / gait_data->anim[4]->f08));
+                            fr = truncate_float_to_s32(
+                                     gait_data->anim[4]->alternate_phase_anchor_position +
+                                     gait_data->anim[4]->alternate_transition_position_span *
+                                         0.125f -
+                                     gait_data->anim[4]->animation_position_origin) %
                                  truncate_float_to_s32(gait_data->anim[4]->f10);
                             a = gait_data->anim[4];
                             f = find_nearest_animation_sequence_entry(
@@ -580,11 +632,14 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_state = 2;
                         } else {
-                            int bl = truncate_float_to_s32(gait_data->anim[0]->alternate_transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[0]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[0]->alternate_phase_anchor_position +
-                                                           gait_data->anim[0]->alternate_transition_position_span * 0.125f -
-                                                           gait_data->anim[0]->animation_position_origin) %
+                            int bl = truncate_float_to_s32(
+                                gait_data->anim[0]->alternate_transition_position_span * 0.25f /
+                                (speed / gait_data->anim[0]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[0]->alternate_phase_anchor_position +
+                                         gait_data->anim[0]->alternate_transition_position_span *
+                                             0.125f -
+                                         gait_data->anim[0]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[0]->f10);
                             WalkAnim *a = gait_data->anim[0];
                             int       f = find_nearest_animation_sequence_entry(
@@ -604,11 +659,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                             WalkAnim *a;
                             int       f;
                             gait_data->gait_status_flags |= 8;
-                            bl = truncate_float_to_s32(gait_data->anim[5]->transition_position_span * 0.25f /
-                                                       (speed / gait_data->anim[5]->f08));
-                            fr = truncate_float_to_s32(gait_data->anim[5]->f40 +
-                                                       gait_data->anim[5]->transition_position_span * 0.125f -
-                                                       gait_data->anim[5]->animation_position_origin) %
+                            bl =
+                                truncate_float_to_s32(gait_data->anim[5]->transition_position_span *
+                                                      0.25f / (speed / gait_data->anim[5]->f08));
+                            fr = truncate_float_to_s32(
+                                     gait_data->anim[5]->f40 +
+                                     gait_data->anim[5]->transition_position_span * 0.125f -
+                                     gait_data->anim[5]->animation_position_origin) %
                                  truncate_float_to_s32(gait_data->anim[5]->f10);
                             a = gait_data->anim[5];
                             f = find_nearest_animation_sequence_entry(
@@ -622,11 +679,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_state = 3;
                         } else {
-                            int bl = truncate_float_to_s32(gait_data->anim[0]->transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[0]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[0]->f40 +
-                                                           gait_data->anim[0]->transition_position_span * 0.125f -
-                                                           gait_data->anim[0]->animation_position_origin) %
+                            int bl =
+                                truncate_float_to_s32(gait_data->anim[0]->transition_position_span *
+                                                      0.25f / (speed / gait_data->anim[0]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[0]->f40 +
+                                         gait_data->anim[0]->transition_position_span * 0.125f -
+                                         gait_data->anim[0]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[0]->f10);
                             WalkAnim *a = gait_data->anim[0];
                             int       f = find_nearest_animation_sequence_entry(
@@ -641,11 +700,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                     fast_sin(gait_data->ground_probe_correction_angle) >
                             gait_data->terrain_transition_height_scale * 0.75f) {
-                            int bl = truncate_float_to_s32(gait_data->anim[2]->transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[2]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[2]->f40 +
-                                                           gait_data->anim[2]->transition_position_span * 0.125f -
-                                                           gait_data->anim[2]->animation_position_origin) %
+                            int bl =
+                                truncate_float_to_s32(gait_data->anim[2]->transition_position_span *
+                                                      0.25f / (speed / gait_data->anim[2]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[2]->f40 +
+                                         gait_data->anim[2]->transition_position_span * 0.125f -
+                                         gait_data->anim[2]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[2]->f10);
                             WalkAnim *a = gait_data->anim[2];
                             int       f = find_nearest_animation_sequence_entry(
@@ -659,11 +720,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_state = 10;
                         } else {
-                            int bl = truncate_float_to_s32(gait_data->anim[6]->transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[6]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[6]->f40 +
-                                                           gait_data->anim[6]->transition_position_span * 0.125f -
-                                                           gait_data->anim[6]->animation_position_origin) %
+                            int bl =
+                                truncate_float_to_s32(gait_data->anim[6]->transition_position_span *
+                                                      0.25f / (speed / gait_data->anim[6]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[6]->f40 +
+                                         gait_data->anim[6]->transition_position_span * 0.125f -
+                                         gait_data->anim[6]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[6]->f10);
                             WalkAnim *a = gait_data->anim[6];
                             int       f = find_nearest_animation_sequence_entry(
@@ -678,11 +741,14 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                     fast_sin(gait_data->ground_probe_correction_angle) >
                             gait_data->terrain_transition_height_scale * 0.75f) {
-                            int bl = truncate_float_to_s32(gait_data->anim[1]->alternate_transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[1]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[1]->alternate_phase_anchor_position +
-                                                           gait_data->anim[1]->alternate_transition_position_span * 0.125f -
-                                                           gait_data->anim[1]->animation_position_origin) %
+                            int bl = truncate_float_to_s32(
+                                gait_data->anim[1]->alternate_transition_position_span * 0.25f /
+                                (speed / gait_data->anim[1]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[1]->alternate_phase_anchor_position +
+                                         gait_data->anim[1]->alternate_transition_position_span *
+                                             0.125f -
+                                         gait_data->anim[1]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[1]->f10);
                             WalkAnim *a = gait_data->anim[1];
                             int       f = find_nearest_animation_sequence_entry(
@@ -696,11 +762,14 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_state = 11;
                         } else {
-                            int bl = truncate_float_to_s32(gait_data->anim[6]->alternate_transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[6]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[6]->alternate_phase_anchor_position +
-                                                           gait_data->anim[6]->alternate_transition_position_span * 0.125f -
-                                                           gait_data->anim[6]->animation_position_origin) %
+                            int bl = truncate_float_to_s32(
+                                gait_data->anim[6]->alternate_transition_position_span * 0.25f /
+                                (speed / gait_data->anim[6]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[6]->alternate_phase_anchor_position +
+                                         gait_data->anim[6]->alternate_transition_position_span *
+                                             0.125f -
+                                         gait_data->anim[6]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[6]->f10);
                             WalkAnim *a = gait_data->anim[6];
                             int       f = find_nearest_animation_sequence_entry(
@@ -716,11 +785,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     fast_sin(gait_data->ground_probe_correction_angle) >
                             gait_data->terrain_transition_height_scale * 0.75f) {
                             if (flags & 1) {
-                                int bl = truncate_float_to_s32(gait_data->anim[2]->transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[2]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[2]->f40 +
-                                                               gait_data->anim[2]->transition_position_span * 0.125f -
-                                                               gait_data->anim[2]->animation_position_origin) %
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[2]->transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[2]->f08));
+                                int fr = truncate_float_to_s32(
+                                             gait_data->anim[2]->f40 +
+                                             gait_data->anim[2]->transition_position_span * 0.125f -
+                                             gait_data->anim[2]->animation_position_origin) %
                                          truncate_float_to_s32(gait_data->anim[2]->f10);
                                 WalkAnim *a = gait_data->anim[2];
                                 int       f = find_nearest_animation_sequence_entry(
@@ -729,12 +800,16 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 reset_walker_gait_helpers((char *)gait_data);
                                 gait_data->gait_state = 3;
                             } else {
-                                int bl = truncate_float_to_s32(gait_data->anim[1]->alternate_transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[1]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[1]->alternate_phase_anchor_position +
-                                                               gait_data->anim[1]->alternate_transition_position_span * 0.125f -
-                                                               gait_data->anim[1]->animation_position_origin) %
-                                         truncate_float_to_s32(gait_data->anim[1]->f10);
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[1]->alternate_transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[1]->f08));
+                                int fr =
+                                    truncate_float_to_s32(
+                                        gait_data->anim[1]->alternate_phase_anchor_position +
+                                        gait_data->anim[1]->alternate_transition_position_span *
+                                            0.125f -
+                                        gait_data->anim[1]->animation_position_origin) %
+                                    truncate_float_to_s32(gait_data->anim[1]->f10);
                                 WalkAnim *a = gait_data->anim[1];
                                 int       f = find_nearest_animation_sequence_entry(
                                     walker_moby->pClass->seqs[a->id], (float)fr);
@@ -747,11 +822,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                            fast_sin(gait_data->ground_probe_correction_angle) >
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
                             if (flags & 1) {
-                                int bl = truncate_float_to_s32(gait_data->anim[4]->transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[4]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[4]->f40 +
-                                                               gait_data->anim[4]->transition_position_span * 0.125f -
-                                                               gait_data->anim[4]->animation_position_origin) %
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[4]->transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[4]->f08));
+                                int fr = truncate_float_to_s32(
+                                             gait_data->anim[4]->f40 +
+                                             gait_data->anim[4]->transition_position_span * 0.125f -
+                                             gait_data->anim[4]->animation_position_origin) %
                                          truncate_float_to_s32(gait_data->anim[4]->f10);
                                 WalkAnim *a = gait_data->anim[4];
                                 int       f = find_nearest_animation_sequence_entry(
@@ -760,12 +837,16 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 reset_walker_gait_helpers((char *)gait_data);
                                 gait_data->gait_state = 10;
                             } else {
-                                int bl = truncate_float_to_s32(gait_data->anim[5]->alternate_transition_position_span * 0.25f /
-                                                               (speed / gait_data->anim[5]->f08));
-                                int fr = truncate_float_to_s32(gait_data->anim[5]->alternate_phase_anchor_position +
-                                                               gait_data->anim[5]->alternate_transition_position_span * 0.125f -
-                                                               gait_data->anim[5]->animation_position_origin) %
-                                         truncate_float_to_s32(gait_data->anim[5]->f10);
+                                int bl = truncate_float_to_s32(
+                                    gait_data->anim[5]->alternate_transition_position_span * 0.25f /
+                                    (speed / gait_data->anim[5]->f08));
+                                int fr =
+                                    truncate_float_to_s32(
+                                        gait_data->anim[5]->alternate_phase_anchor_position +
+                                        gait_data->anim[5]->alternate_transition_position_span *
+                                            0.125f -
+                                        gait_data->anim[5]->animation_position_origin) %
+                                    truncate_float_to_s32(gait_data->anim[5]->f10);
                                 WalkAnim *a = gait_data->anim[5];
                                 int       f = find_nearest_animation_sequence_entry(
                                     walker_moby->pClass->seqs[a->id], (float)fr);
@@ -780,11 +861,14 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                     fast_sin(gait_data->ground_probe_correction_angle) >
                             gait_data->terrain_transition_height_scale * 0.75f) {
-                            int bl = truncate_float_to_s32(gait_data->anim[1]->alternate_transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[1]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[1]->alternate_phase_anchor_position +
-                                                           gait_data->anim[1]->alternate_transition_position_span * 0.125f -
-                                                           gait_data->anim[1]->animation_position_origin) %
+                            int bl = truncate_float_to_s32(
+                                gait_data->anim[1]->alternate_transition_position_span * 0.25f /
+                                (speed / gait_data->anim[1]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[1]->alternate_phase_anchor_position +
+                                         gait_data->anim[1]->alternate_transition_position_span *
+                                             0.125f -
+                                         gait_data->anim[1]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[1]->f10);
                             WalkAnim *a = gait_data->anim[1];
                             int       f = find_nearest_animation_sequence_entry(
@@ -798,12 +882,15 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_state = 7;
                         } else {
-                            int bl = truncate_float_to_s32(gait_data->anim[0]->alternate_transition_position_span /
-                                                           (speed / gait_data->anim[0]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[0]->alternate_phase_anchor_position +
-                                                           gait_data->anim[0]->alternate_transition_position_span * 0.5f -
-                                                           gait_data->anim[0]->animation_position_origin) %
-                                     truncate_float_to_s32(gait_data->anim[0]->f10);
+                            int bl = truncate_float_to_s32(
+                                gait_data->anim[0]->alternate_transition_position_span /
+                                (speed / gait_data->anim[0]->f08));
+                            int fr =
+                                truncate_float_to_s32(
+                                    gait_data->anim[0]->alternate_phase_anchor_position +
+                                    gait_data->anim[0]->alternate_transition_position_span * 0.5f -
+                                    gait_data->anim[0]->animation_position_origin) %
+                                truncate_float_to_s32(gait_data->anim[0]->f10);
                             WalkAnim *a = gait_data->anim[0];
                             int       f = find_nearest_animation_sequence_entry(
                                 walker_moby->pClass->seqs[a->id], (float)fr);
@@ -817,11 +904,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                     fast_sin(gait_data->ground_probe_correction_angle) >
                             gait_data->terrain_transition_height_scale * 0.75f) {
-                            int bl = truncate_float_to_s32(gait_data->anim[2]->transition_position_span * 0.25f /
-                                                           (speed / gait_data->anim[2]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[2]->f40 +
-                                                           gait_data->anim[2]->transition_position_span * 0.125f -
-                                                           gait_data->anim[2]->animation_position_origin) %
+                            int bl =
+                                truncate_float_to_s32(gait_data->anim[2]->transition_position_span *
+                                                      0.25f / (speed / gait_data->anim[2]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[2]->f40 +
+                                         gait_data->anim[2]->transition_position_span * 0.125f -
+                                         gait_data->anim[2]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[2]->f10);
                             WalkAnim *a = gait_data->anim[2];
                             int       f = find_nearest_animation_sequence_entry(
@@ -835,11 +924,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_state = 8;
                         } else {
-                            int bl = truncate_float_to_s32(gait_data->anim[0]->transition_position_span /
-                                                           (speed / gait_data->anim[0]->f08));
-                            int fr = truncate_float_to_s32(gait_data->anim[0]->f40 +
-                                                           gait_data->anim[0]->transition_position_span * 0.5f -
-                                                           gait_data->anim[0]->animation_position_origin) %
+                            int bl =
+                                truncate_float_to_s32(gait_data->anim[0]->transition_position_span /
+                                                      (speed / gait_data->anim[0]->f08));
+                            int fr = truncate_float_to_s32(
+                                         gait_data->anim[0]->f40 +
+                                         gait_data->anim[0]->transition_position_span * 0.5f -
+                                         gait_data->anim[0]->animation_position_origin) %
                                      truncate_float_to_s32(gait_data->anim[0]->f10);
                             WalkAnim *a = gait_data->anim[0];
                             int       f = find_nearest_animation_sequence_entry(
@@ -861,12 +952,16 @@ void walker_update_gait(WalkMoby *walker_moby,
             if (speed < t && gait_data->gait_speed_reference <= t) {
                 int fr;
                 if (gait_data->gait_phase_mask & 3) {
-                    fr = truncate_float_to_s32(gait_data->anim[0]->transition_position_span * 2.0f / 3.0f +
-                                               gait_data->anim[0]->f40 - gait_data->anim[0]->animation_position_origin) %
+                    fr = truncate_float_to_s32(gait_data->anim[0]->transition_position_span * 2.0f /
+                                                   3.0f +
+                                               gait_data->anim[0]->f40 -
+                                               gait_data->anim[0]->animation_position_origin) %
                          truncate_float_to_s32(gait_data->anim[0]->f10);
                 } else {
-                    fr = truncate_float_to_s32(gait_data->anim[0]->alternate_transition_position_span * 2.0f / 3.0f +
-                                               gait_data->anim[0]->alternate_phase_anchor_position - gait_data->anim[0]->animation_position_origin) %
+                    fr = truncate_float_to_s32(
+                             gait_data->anim[0]->alternate_transition_position_span * 2.0f / 3.0f +
+                             gait_data->anim[0]->alternate_phase_anchor_position -
+                             gait_data->anim[0]->animation_position_origin) %
                          truncate_float_to_s32(gait_data->anim[0]->f10);
                 }
                 {
@@ -883,11 +978,13 @@ void walker_update_gait(WalkMoby *walker_moby,
                     gait_data->gait_status_flags = (gait_data->gait_status_flags & 0xFFFE) | 2;
                     gait_data->gait_ground_height_reference = walker_moby->pos[2];
                     if (flags & 1) {
-                        int bl = truncate_float_to_s32(gait_data->anim[11]->transition_position_span * 0.25f /
-                                                       (speed / gait_data->anim[11]->f08));
-                        int fr = truncate_float_to_s32(gait_data->anim[11]->f40 +
-                                                       gait_data->anim[11]->transition_position_span * 0.125f -
-                                                       gait_data->anim[11]->animation_position_origin) %
+                        int bl =
+                            truncate_float_to_s32(gait_data->anim[11]->transition_position_span *
+                                                  0.25f / (speed / gait_data->anim[11]->f08));
+                        int fr = truncate_float_to_s32(
+                                     gait_data->anim[11]->f40 +
+                                     gait_data->anim[11]->transition_position_span * 0.125f -
+                                     gait_data->anim[11]->animation_position_origin) %
                                  truncate_float_to_s32(gait_data->anim[11]->f10);
                         WalkAnim *a = gait_data->anim[11];
                         int       f = find_nearest_animation_sequence_entry(
@@ -896,12 +993,15 @@ void walker_update_gait(WalkMoby *walker_moby,
                         reset_walker_gait_helpers((char *)gait_data);
                         gait_data->gait_state = 0xF;
                     } else {
-                        int bl = truncate_float_to_s32(gait_data->anim[9]->alternate_transition_position_span * 0.25f /
-                                                       (speed / gait_data->anim[9]->f08));
-                        int fr = truncate_float_to_s32(gait_data->anim[9]->alternate_phase_anchor_position +
-                                                       gait_data->anim[9]->alternate_transition_position_span * 0.125f -
-                                                       gait_data->anim[9]->animation_position_origin) %
-                                 truncate_float_to_s32(gait_data->anim[9]->f10);
+                        int bl = truncate_float_to_s32(
+                            gait_data->anim[9]->alternate_transition_position_span * 0.25f /
+                            (speed / gait_data->anim[9]->f08));
+                        int fr =
+                            truncate_float_to_s32(
+                                gait_data->anim[9]->alternate_phase_anchor_position +
+                                gait_data->anim[9]->alternate_transition_position_span * 0.125f -
+                                gait_data->anim[9]->animation_position_origin) %
+                            truncate_float_to_s32(gait_data->anim[9]->f10);
                         WalkAnim *a = gait_data->anim[9];
                         int       f = find_nearest_animation_sequence_entry(
                             walker_moby->pClass->seqs[a->id], (float)fr);
@@ -916,12 +1016,17 @@ void walker_update_gait(WalkMoby *walker_moby,
                         fast_sin(movement_heading) * gait_data->anim[0]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
                     if (flags & 1) {
-                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->ground_probe_anchor_record);
+                        fast_vec_add(ground_probe_position,
+                                     ground_probe_position,
+                                     gait_data->ground_probe_anchor_record);
                     } else {
-                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->alternate_ground_probe_anchor_record);
+                        fast_vec_add(ground_probe_position,
+                                     ground_probe_position,
+                                     gait_data->alternate_ground_probe_anchor_record);
                     }
                     ground_probe_position[2] += 1.0f;
-                    gait_data->gait_ground_height_reference = probe_ground_height(ground_probe_position, 0, 0.5f);
+                    gait_data->gait_ground_height_reference =
+                        probe_ground_height(ground_probe_position, 0, 0.5f);
                 }
             }
         }
@@ -939,20 +1044,27 @@ void walker_update_gait(WalkMoby *walker_moby,
         if (flags & 0x30) {
             float dist = vector_distance_xy(walker_moby->pos, gait_data->jump_target_position);
             debug_print(walker_jump_distance_debug_format, dist);
-            gait_data->jump_vertical_velocity = FUN_L00_0025abf0(
-                walker_moby->pos, gait_data->jump_target_position, 0, gait_data->gait_speed_reference, -gait_data->downward_vertical_acceleration);
+            gait_data->jump_vertical_velocity =
+                FUN_L00_0025abf0(walker_moby->pos,
+                                 gait_data->jump_target_position,
+                                 0,
+                                 gait_data->gait_speed_reference,
+                                 -gait_data->downward_vertical_acceleration);
             gait_data->gait_status_flags |= 4;
             gait_data->f6C = fast_arc_tan(gait_data->jump_target_position[0] - walker_moby->pos[0],
                                           gait_data->jump_target_position[1] - walker_moby->pos[1]);
         }
         if (compute_interpolated_record_value(walker_moby) >=
-            gait_data->anim[11]->animation_position_origin + gait_data->anim[11]->f10 - walker_moby->animation_playback_rate) {
+            gait_data->anim[11]->animation_position_origin + gait_data->anim[11]->f10 -
+                walker_moby->animation_playback_rate) {
             blend_moby_animation(walker_moby, gait_data->airborne_wait_animation_id, 0, 10);
             reset_walker_gait_helpers((char *)gait_data);
             gait_data->gait_state = 0x10;
         } else if ((gait_data->gait_status_flags & 4) && gait_data->jump_vertical_velocity < 0.0f) {
             float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
-            float len = (gait_data->anim[12]->alternate_phase_anchor_position - gait_data->anim[12]->animation_position_origin) * 2.0f;
+            float len = (gait_data->anim[12]->alternate_phase_anchor_position -
+                         gait_data->anim[12]->animation_position_origin) *
+                        2.0f;
             if (t < len + 15.0f) {
                 int       bl = truncate_float_to_s32(t - len) >> 1;
                 WalkAnim *a;
@@ -972,20 +1084,27 @@ void walker_update_gait(WalkMoby *walker_moby,
         if (flags & 0x30) {
             float dist = fast_vec_dist(walker_moby->pos, gait_data->jump_target_position);
             debug_print(walker_jump_distance_debug_format, dist);
-            gait_data->jump_vertical_velocity = FUN_L00_0025abf0(
-                walker_moby->pos, gait_data->jump_target_position, 0, gait_data->gait_speed_reference, -gait_data->downward_vertical_acceleration);
+            gait_data->jump_vertical_velocity =
+                FUN_L00_0025abf0(walker_moby->pos,
+                                 gait_data->jump_target_position,
+                                 0,
+                                 gait_data->gait_speed_reference,
+                                 -gait_data->downward_vertical_acceleration);
             gait_data->gait_status_flags |= 4;
             gait_data->f6C = fast_arc_tan(gait_data->jump_target_position[0] - walker_moby->pos[0],
                                           gait_data->jump_target_position[1] - walker_moby->pos[1]);
         }
         if (compute_interpolated_record_value(walker_moby) >=
-            gait_data->anim[9]->animation_position_origin + gait_data->anim[9]->f10 - walker_moby->animation_playback_rate) {
+            gait_data->anim[9]->animation_position_origin + gait_data->anim[9]->f10 -
+                walker_moby->animation_playback_rate) {
             blend_moby_animation(walker_moby, gait_data->airborne_wait_animation_id, 0, 10);
             reset_walker_gait_helpers((char *)gait_data);
             gait_data->gait_state = 0x10;
         } else if ((gait_data->gait_status_flags & 4) && gait_data->jump_vertical_velocity < 0.0f) {
             float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
-            float len = (gait_data->anim[10]->alternate_phase_anchor_position - gait_data->anim[10]->animation_position_origin) * 2.0f;
+            float len = (gait_data->anim[10]->alternate_phase_anchor_position -
+                         gait_data->anim[10]->animation_position_origin) *
+                        2.0f;
             if (t < len + 15.0f) {
                 int       bl = truncate_float_to_s32(t - len) >> 1;
                 WalkAnim *a;
@@ -1004,7 +1123,9 @@ void walker_update_gait(WalkMoby *walker_moby,
     case WALKER_GAIT_WAIT_FOR_LANDING:
         if (walker_moby->b52 == gait_data->airborne_wait_animation_id) {
             float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
-            float len = (gait_data->anim[12]->alternate_phase_anchor_position - gait_data->anim[12]->animation_position_origin) * 2.0f;
+            float len = (gait_data->anim[12]->alternate_phase_anchor_position -
+                         gait_data->anim[12]->animation_position_origin) *
+                        2.0f;
             if (t < len + 15.0f) {
                 int       bl = truncate_float_to_s32(t - len) >> 1;
                 WalkAnim *a = gait_data->anim[12];
@@ -1020,15 +1141,19 @@ void walker_update_gait(WalkMoby *walker_moby,
         if (walker_moby->b52 == gait_data->anim[12]->id) {
             float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             if (t > 1.0f) {
-                float base = convert_integer_to_float(walker_moby->animation_entry_index) + walker_moby->animation_interpolation_fraction;
-                t = gait_data->anim[12]->alternate_phase_anchor_position + 2.0f - t * 0.5f - gait_data->anim[12]->animation_position_origin;
+                float base = convert_integer_to_float(walker_moby->animation_entry_index) +
+                             walker_moby->animation_interpolation_fraction;
+                t = gait_data->anim[12]->alternate_phase_anchor_position + 2.0f - t * 0.5f -
+                    gait_data->anim[12]->animation_position_origin;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
                 }
                 walker_moby->animation_playback_rate = frame_scale_inv * (t - base);
             } else {
-                float base = convert_integer_to_float(walker_moby->animation_entry_index) + walker_moby->animation_interpolation_fraction;
-                t = gait_data->anim[12]->alternate_phase_anchor_position - gait_data->anim[12]->animation_position_origin;
+                float base = convert_integer_to_float(walker_moby->animation_entry_index) +
+                             walker_moby->animation_interpolation_fraction;
+                t = gait_data->anim[12]->alternate_phase_anchor_position -
+                    gait_data->anim[12]->animation_position_origin;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
                 }
@@ -1047,15 +1172,19 @@ void walker_update_gait(WalkMoby *walker_moby,
         if (walker_moby->b52 == gait_data->anim[10]->id) {
             float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             if (t > 1.0f) {
-                float base = convert_integer_to_float(walker_moby->animation_entry_index) + walker_moby->animation_interpolation_fraction;
-                t = gait_data->anim[10]->alternate_phase_anchor_position + 2.0f - t * 0.5f - gait_data->anim[10]->animation_position_origin;
+                float base = convert_integer_to_float(walker_moby->animation_entry_index) +
+                             walker_moby->animation_interpolation_fraction;
+                t = gait_data->anim[10]->alternate_phase_anchor_position + 2.0f - t * 0.5f -
+                    gait_data->anim[10]->animation_position_origin;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
                 }
                 walker_moby->animation_playback_rate = frame_scale_inv * (t - base);
             } else {
-                float base = convert_integer_to_float(walker_moby->animation_entry_index) + walker_moby->animation_interpolation_fraction;
-                t = gait_data->anim[10]->alternate_phase_anchor_position - gait_data->anim[10]->animation_position_origin;
+                float base = convert_integer_to_float(walker_moby->animation_entry_index) +
+                             walker_moby->animation_interpolation_fraction;
+                t = gait_data->anim[10]->alternate_phase_anchor_position -
+                    gait_data->anim[10]->animation_position_origin;
                 if (t < base + 0.1f) {
                     t = base + 0.1f;
                 }
@@ -1072,12 +1201,13 @@ void walker_update_gait(WalkMoby *walker_moby,
         break;
     case WALKER_GAIT_RESUME_RUN_AFTER_LANDING:
         if (flags & 1) {
-            int bl = truncate_float_to_s32((gait_data->anim[7]->transition_position_span * 0.25f + 2.0f) /
-                                           (speed / gait_data->anim[7]->f08));
-            int fr =
-                truncate_float_to_s32(gait_data->anim[7]->f40 + 1.0f +
-                                      gait_data->anim[7]->transition_position_span * 0.125f - gait_data->anim[7]->animation_position_origin) %
-                truncate_float_to_s32(gait_data->anim[7]->f10);
+            int bl = truncate_float_to_s32(
+                (gait_data->anim[7]->transition_position_span * 0.25f + 2.0f) /
+                (speed / gait_data->anim[7]->f08));
+            int fr = truncate_float_to_s32(gait_data->anim[7]->f40 + 1.0f +
+                                           gait_data->anim[7]->transition_position_span * 0.125f -
+                                           gait_data->anim[7]->animation_position_origin) %
+                     truncate_float_to_s32(gait_data->anim[7]->f10);
             WalkAnim *a = gait_data->anim[7];
             int       f =
                 find_nearest_animation_sequence_entry(walker_moby->pClass->seqs[a->id], (float)fr);
@@ -1090,18 +1220,23 @@ void walker_update_gait(WalkMoby *walker_moby,
             ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[2] = 0.0f;
-            fast_vec_add(ground_probe_position, ground_probe_position, gait_data->ground_probe_anchor_record);
+            fast_vec_add(ground_probe_position,
+                         ground_probe_position,
+                         gait_data->ground_probe_anchor_record);
             ground_probe_position[2] += 1.0f;
-            gait_data->gait_ground_height_reference = probe_ground_height(ground_probe_position, 0, 0.5f);
+            gait_data->gait_ground_height_reference =
+                probe_ground_height(ground_probe_position, 0, 0.5f);
         }
         break;
     case WALKER_GAIT_RESUME_RUN_AFTER_ALTERNATE_LANDING:
         if (flags & 1) {
-            int bl = truncate_float_to_s32((gait_data->anim[7]->alternate_transition_position_span * 0.25f + 2.0f) /
-                                           (speed / gait_data->anim[7]->f08));
+            int bl = truncate_float_to_s32(
+                (gait_data->anim[7]->alternate_transition_position_span * 0.25f + 2.0f) /
+                (speed / gait_data->anim[7]->f08));
             int fr =
                 truncate_float_to_s32(gait_data->anim[7]->alternate_phase_anchor_position + 1.0f +
-                                      gait_data->anim[7]->transition_position_span * 0.125f - gait_data->anim[7]->animation_position_origin) %
+                                      gait_data->anim[7]->transition_position_span * 0.125f -
+                                      gait_data->anim[7]->animation_position_origin) %
                 truncate_float_to_s32(gait_data->anim[7]->f10);
             WalkAnim *a = gait_data->anim[7];
             int       f =
@@ -1115,9 +1250,12 @@ void walker_update_gait(WalkMoby *walker_moby,
             ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[2] = 0.0f;
-            fast_vec_add(ground_probe_position, ground_probe_position, gait_data->ground_probe_anchor_record);
+            fast_vec_add(ground_probe_position,
+                         ground_probe_position,
+                         gait_data->ground_probe_anchor_record);
             ground_probe_position[2] += 1.0f;
-            gait_data->gait_ground_height_reference = probe_ground_height(ground_probe_position, 0, 0.5f);
+            gait_data->gait_ground_height_reference =
+                probe_ground_height(ground_probe_position, 0, 0.5f);
         }
         break;
     }

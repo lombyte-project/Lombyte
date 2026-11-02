@@ -793,15 +793,17 @@ int process_hero_primary_item_input(void) {
             }
         }
         if ((*(Hero *)((char *)&hero)).state.control_mode == 6) {
-            HeroTableRow2C *wrench_attack_timing_record = &D_L05_0017C088[(*(Hero *)((char *)&hero)).attack_record];
-            int             window;
+            HeroTableRow2C *wrench_attack_timing_record =
+                &D_L05_0017C088[(*(Hero *)((char *)&hero)).attack_record];
+            int window;
 
             if ((*(Hero *)((char *)&hero)).state.current == 0x15) {
                 if ((*(Hero *)((char *)&hero)).state_timer > scale_game_frames(0x1E)) {
                     if ((*(Hero *)((char *)&hero)).anim_changing != 0) {
                         break;
                     }
-                    if ((*(Hero *)((char *)&hero)).anim_frame >= (float)wrench_attack_timing_record->f10 &&
+                    if ((*(Hero *)((char *)&hero)).anim_frame >=
+                            (float)wrench_attack_timing_record->f10 &&
                         (controller_state.held & 0xA) &&
                         pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
                         hero_set_state(0x15, 1);
@@ -812,10 +814,13 @@ int process_hero_primary_item_input(void) {
             if ((*(Hero *)((char *)&hero)).anim_changing != 0) {
                 break;
             }
-            if (!((*(Hero *)((char *)&hero)).anim_frame >= (float)wrench_attack_timing_record->f10)) {
+            if (!((*(Hero *)((char *)&hero)).anim_frame >=
+                  (float)wrench_attack_timing_record->f10)) {
                 break;
             }
-            window = (truncate_float_to_s32((*(Hero *)((char *)&hero)).anim_frame) - wrench_attack_timing_record->fC) * 2;
+            window = (truncate_float_to_s32((*(Hero *)((char *)&hero)).anim_frame) -
+                      wrench_attack_timing_record->fC) *
+                     2;
             if (window <= 0) {
                 window = 1;
             }

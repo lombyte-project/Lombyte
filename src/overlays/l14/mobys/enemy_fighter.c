@@ -51,17 +51,17 @@ char D_L14_001FCE48[] =
 
 typedef struct {
     u8  pad0[0x60];
-    s32 segment; /* 0x60 */
-    s32 along;   /* 0x64 */
-    s32 path;    /* 0x68 */
-    s32 sound;   /* 0x6C */
-    f32 f70;     /* 0x70 */
-    f32 position_y_spring_state;     /* 0x74 */
-    f32 position_z_spring_state;     /* 0x78 */
-    s32 timer;   /* 0x7C */
-    f32 bank_spring_state;     /* 0x80 */
-    f32 pitch_spring_state;     /* 0x84 */
-    f32 yaw_spring_state;     /* 0x88 */
+    s32 segment;                 /* 0x60 */
+    s32 along;                   /* 0x64 */
+    s32 path;                    /* 0x68 */
+    s32 sound;                   /* 0x6C */
+    f32 f70;                     /* 0x70 */
+    f32 position_y_spring_state; /* 0x74 */
+    f32 position_z_spring_state; /* 0x78 */
+    s32 timer;                   /* 0x7C */
+    f32 bank_spring_state;       /* 0x80 */
+    f32 pitch_spring_state;      /* 0x84 */
+    f32 yaw_spring_state;        /* 0x88 */
 } EnemyFighterVars;
 
 void enemy_fighter_update(struct Moby *moby) __asm__("FUN_L14_002fc0f0");
@@ -131,8 +131,10 @@ void enemy_fighter_update(struct Moby *moby) {
             qcopy(&moby->pos, path + 0x10);
             moby->rot.z = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                        *(float *)(path + 0x24) - *(float *)(path + 0x14));
-            enemy_fighter_vars->bank_spring_state = enemy_fighter_vars->pitch_spring_state = enemy_fighter_vars->yaw_spring_state =
-                enemy_fighter_vars->f70 = enemy_fighter_vars->position_y_spring_state = enemy_fighter_vars->position_z_spring_state = 0.0f;
+            enemy_fighter_vars->bank_spring_state = enemy_fighter_vars->pitch_spring_state =
+                enemy_fighter_vars->yaw_spring_state = enemy_fighter_vars->f70 =
+                    enemy_fighter_vars->position_y_spring_state =
+                        enemy_fighter_vars->position_z_spring_state = 0.0f;
         }
         break;
     }

@@ -482,8 +482,10 @@ void adjust_hero_velocity_from_collision_probes(int force) {
         primary_vector_endpoint.f[0] = fast_cos(g->probe_heading_angle) * k;
         primary_vector_endpoint.f[1] = fast_sin(g->probe_heading_angle) * k;
         *(s32 *)&primary_vector_endpoint.f[2] = 0;
-        secondary_vector_endpoint.f[0] = fast_cos(g->probe_heading_angle) * k * secondary_vector_scale;
-        secondary_vector_endpoint.f[1] = fast_sin(g->probe_heading_angle) * k * secondary_vector_scale;
+        secondary_vector_endpoint.f[0] =
+            fast_cos(g->probe_heading_angle) * k * secondary_vector_scale;
+        secondary_vector_endpoint.f[1] =
+            fast_sin(g->probe_heading_angle) * k * secondary_vector_scale;
         *(s32 *)&secondary_vector_endpoint.f[2] = 0;
     } else {
         qcopy(&primary_vector_endpoint, vector_origin_base + 0x60);
@@ -497,17 +499,20 @@ void adjust_hero_velocity_from_collision_probes(int force) {
     fast_vec_add(&primary_vector_endpoint, &primary_vector_endpoint, &primary_vector_origin);
     fast_vec_add(&secondary_vector_endpoint, &secondary_vector_endpoint, &b);
     r = -1;
-    if (collision_line(&b, &secondary_vector_endpoint, 4, P.collision_probe_moby, 0) && D_L06_001745DC > 0)
+    if (collision_line(&b, &secondary_vector_endpoint, 4, P.collision_probe_moby, 0) &&
+        D_L06_001745DC > 0)
         r = collision_hit_material();
     primary_probe_result_angle = 0.0f;
-    if (collision_line(&primary_vector_origin, &primary_vector_endpoint, 4, P.collision_probe_moby, 0) &&
+    if (collision_line(
+            &primary_vector_origin, &primary_vector_endpoint, 4, P.collision_probe_moby, 0) &&
         X.i1C > 0)
         primary_probe_result_angle = fast_arc_tan(X.v40.f[2], vector_length_xy(&X.v40));
     if (0.8726646304130554f <= primary_probe_result_angle || r == 8 || r == 12) {
         P.velocity_probe_hit_moby = X.probe_collision_hit_moby;
         *(s32 *)&X.v40.f[2] = 0;
         sceVu0Normalize(&X.v40, &X.v40);
-        negative_horizontal_dot = -P.hero_velocity.f[0] * X.v40.f[0] - P.hero_velocity.f[1] * X.v40.f[1];
+        negative_horizontal_dot =
+            -P.hero_velocity.f[0] * X.v40.f[0] - P.hero_velocity.f[1] * X.v40.f[1];
         if (0.0f < negative_horizontal_dot) {
             fast_vec_scale(&X.v40, &X.v40, negative_horizontal_dot);
             fast_vec_add(&P.hero_velocity, &P.hero_velocity, &X.v40);

@@ -118,7 +118,8 @@ void barrier_update(Moby *moby) {
         int row = current_level_index * 16;
         if (visited52[moby->mission + row] == 0xFF) {
             if (barrier_vars->idx != -1)
-                ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->barrier_cleared = 1;
+                ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->barrier_cleared =
+                    1;
             mark_moby_for_removal(moby);
             return;
         }

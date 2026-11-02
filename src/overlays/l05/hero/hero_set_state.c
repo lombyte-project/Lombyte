@@ -91,10 +91,12 @@ int hero_set_state(int requested_state, int animation_request_mode) {
     {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 &&
-            (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || animation_request_mode != HERO_ANIMATION_REQUEST_ADMISSION_OVERRIDE))
+            (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE ||
+             animation_request_mode != HERO_ANIMATION_REQUEST_ADMISSION_OVERRIDE))
             return 0;
     }
-    if ((D_L05_0015F5C4 == 2 || D_L05_0015F5C4 == 6) && animation_request_mode != HERO_ANIMATION_REQUEST_ADMISSION_OVERRIDE)
+    if ((D_L05_0015F5C4 == 2 || D_L05_0015F5C4 == 6) &&
+        animation_request_mode != HERO_ANIMATION_REQUEST_ADMISSION_OVERRIDE)
         return 0;
     {
         struct Hero *p = &hero;

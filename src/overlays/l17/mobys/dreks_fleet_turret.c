@@ -169,8 +169,8 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             ang = fast_arc_tan(targeting_vector_scratch[0], targeting_vector_scratch[1]);
             turn = frame_time_sq * 0.5235988f;
             approach_angle(yaw, &turret_vars->yawvel, ang, turn, turn, frame_time * 1.0471976f);
-            turret_vars->target_joint_pitch = -fast_arc_tan(vector_length_xy(targeting_vector_scratch),
-                                             targeting_vector_scratch[2]);
+            turret_vars->target_joint_pitch = -fast_arc_tan(
+                vector_length_xy(targeting_vector_scratch), targeting_vector_scratch[2]);
             update_joint_animation(
                 turret_moby, turret_vars->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
             off = fast_difference_between_rotations(
@@ -228,8 +228,8 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             ang = fast_arc_tan(targeting_vector_scratch[0], targeting_vector_scratch[1]);
             turn = frame_time_sq * 0.5235988f;
             approach_angle(yaw, &turret_vars->yawvel, ang, turn, turn, frame_time * 1.0471976f);
-            turret_vars->target_joint_pitch = -fast_arc_tan(vector_length_xy(targeting_vector_scratch),
-                                             targeting_vector_scratch[2]);
+            turret_vars->target_joint_pitch = -fast_arc_tan(
+                vector_length_xy(targeting_vector_scratch), targeting_vector_scratch[2]);
             update_joint_animation(
                 turret_moby, turret_vars->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
             off = fast_difference_between_rotations(

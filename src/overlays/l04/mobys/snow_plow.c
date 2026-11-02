@@ -204,13 +204,17 @@ void snow_plow_update(struct Moby *moby) {
                              frame_time_sq * 1.0471976f,
                              frame_time_sq * 3.1415927f,
                              frame_time * 3.1415927f);
-            if (vector_distance_xy(&moby->pos, &l04_cuboids[snow_plow_vars->selected_clip_volume_index].pos) < 1.0f &&
+            if (vector_distance_xy(&moby->pos,
+                                   &l04_cuboids[snow_plow_vars->selected_clip_volume_index].pos) <
+                    1.0f &&
                 fast_difference_between_rotations(
-                    moby->rot.z, l04_cuboids[snow_plow_vars->selected_clip_volume_index].rot.z) < 0.17453292f) {
+                    moby->rot.z, l04_cuboids[snow_plow_vars->selected_clip_volume_index].rot.z) <
+                    0.17453292f) {
                 snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_WAIT_BEFORE_RETURN;
                 snow_plow_vars->clip_volume_movement_timer = scale_game_frames(300);
             }
-            fast_vec_sub(&delta, &l04_cuboids[snow_plow_vars->selected_clip_volume_index].pos, &moby->pos);
+            fast_vec_sub(
+                &delta, &l04_cuboids[snow_plow_vars->selected_clip_volume_index].pos, &moby->pos);
             fast_vec_normalize(&delta, &delta, frame_time * 3.0f);
             fast_vec_add(&moby->pos, &moby->pos, &delta);
             break;
@@ -228,8 +232,8 @@ void snow_plow_update(struct Moby *moby) {
                              frame_time_sq * 3.1415927f,
                              frame_time * 3.1415927f);
             if (vector_distance_xy(&moby->pos, snow_plow_vars->saved_return_position) < 1.0f &&
-                fast_difference_between_rotations(moby->rot.z, snow_plow_vars->saved_return_heading) <
-                    0.034906585f) {
+                fast_difference_between_rotations(
+                    moby->rot.z, snow_plow_vars->saved_return_heading) < 0.034906585f) {
                 snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_SCAN_CLIP_VOLUMES;
                 snow_plow_vars->clip_volume_movement_timer = scale_game_frames(600);
                 snow_plow_vars->unkFC = amount;
@@ -302,7 +306,8 @@ void snow_plow_update(struct Moby *moby) {
         }
     }
     if (snow_plow_vars->linked_moby_index != -1) {
-        struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (snow_plow_vars->linked_moby_index << 8));
+        struct Moby *other =
+            (struct Moby *)(D_L04_0015FFD8 + (snow_plow_vars->linked_moby_index << 8));
         other->draw_dist = 0x7f;
         switch (moby->oclass) {
         case SNOW_PLOW_CLASS_WITH_QUARTER_TURN_LINKED_MOBY:
@@ -741,7 +746,8 @@ hit:
     moby->collision = 0;
     moby->flags |= 0x41;
     if (snow_plow_vars->linked_moby_index != -1) {
-        struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (snow_plow_vars->linked_moby_index << 8));
+        struct Moby *other =
+            (struct Moby *)(D_L04_0015FFD8 + (snow_plow_vars->linked_moby_index << 8));
         other->flags |= 0x41;
     }
     moby->flags &= 0xefff;

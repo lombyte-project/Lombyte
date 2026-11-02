@@ -296,7 +296,9 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     matrix.position[3] = 1.0f;
     packet.texture = get_effect_texture(14);
     packet.flags = 0xFF9000000260L;
-    packet.mode = (long)level02_elevator_ring_blend_color_a_selector | ((long)level02_elevator_ring_blend_color_b_selector << 2) | ((long)level02_elevator_ring_blend_alpha_selector << 4) |
+    packet.mode = (long)level02_elevator_ring_blend_color_a_selector |
+                  ((long)level02_elevator_ring_blend_color_b_selector << 2) |
+                  ((long)level02_elevator_ring_blend_alpha_selector << 4) |
                   ((long)level02_elevator_ring_blend_color_d_selector << 6) | 0x8000000000L;
     packet.zero = 0;
     uv = level02_elevator_ring_segment_uvs;

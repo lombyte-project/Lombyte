@@ -318,20 +318,29 @@ void spawn_fighter_jet_joint_particles(void *moby, char *flight_data) {
             -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
               frame_time) *
             particle_velocity_scale;
-        spawn_type_74_particle(
-            moby, first_particle_spawn_position, initial_particle_velocity, &l13_fighter_jet_first_spawn_particle_definition, 1);
+        spawn_type_74_particle(moby,
+                               first_particle_spawn_position,
+                               initial_particle_velocity,
+                               &l13_fighter_jet_first_spawn_particle_definition,
+                               1);
         initial_particle_velocity[0] =
             -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
               frame_time) *
             particle_velocity_scale;
-        spawn_type_74_particle(
-            moby, second_particle_spawn_position, initial_particle_velocity, &l13_fighter_jet_second_spawn_particle_definition, 1);
+        spawn_type_74_particle(moby,
+                               second_particle_spawn_position,
+                               initial_particle_velocity,
+                               &l13_fighter_jet_second_spawn_particle_definition,
+                               1);
         initial_particle_velocity[0] =
             -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 4.0f) *
               frame_time) *
             particle_velocity_scale;
-        spawn_type_74_particle(
-            moby, third_particle_spawn_position, initial_particle_velocity, &l13_fighter_jet_third_spawn_particle_definition, 1);
+        spawn_type_74_particle(moby,
+                               third_particle_spawn_position,
+                               initial_particle_velocity,
+                               &l13_fighter_jet_third_spawn_particle_definition,
+                               1);
         if (*(float *)(flight_data + 0xC4) > 0.5f) {
             add_random_offset_to_vector_xyz(first_particle_spawn_position,
                                             *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
@@ -343,8 +352,11 @@ void spawn_fighter_jet_joint_particles(void *moby, char *flight_data) {
                 -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
                   frame_time) *
                 particle_velocity_scale;
-            spawn_type_74_particle(
-                moby, first_particle_spawn_position, initial_particle_velocity, &l13_fighter_jet_first_spawn_particle_definition, 1);
+            spawn_type_74_particle(moby,
+                                   first_particle_spawn_position,
+                                   initial_particle_velocity,
+                                   &l13_fighter_jet_first_spawn_particle_definition,
+                                   1);
             initial_particle_velocity[0] =
                 -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
                   frame_time) *
@@ -358,20 +370,29 @@ void spawn_fighter_jet_joint_particles(void *moby, char *flight_data) {
                 -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 4.0f) *
                   frame_time) *
                 particle_velocity_scale;
-            spawn_type_74_particle(
-                moby, third_particle_spawn_position, initial_particle_velocity, &l13_fighter_jet_third_spawn_particle_definition, 1);
+            spawn_type_74_particle(moby,
+                                   third_particle_spawn_position,
+                                   initial_particle_velocity,
+                                   &l13_fighter_jet_third_spawn_particle_definition,
+                                   1);
             initial_particle_velocity[0] =
                 -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
                   frame_time) *
                 particle_velocity_scale;
-            spawn_type_74_particle(
-                moby, first_particle_spawn_position, initial_particle_velocity, &l13_fighter_jet_extra_offset_particle_definition, 1);
+            spawn_type_74_particle(moby,
+                                   first_particle_spawn_position,
+                                   initial_particle_velocity,
+                                   &l13_fighter_jet_extra_offset_particle_definition,
+                                   1);
             initial_particle_velocity[0] =
                 -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
                   frame_time) *
                 particle_velocity_scale;
-            spawn_type_74_particle(
-                moby, joint_world_position, initial_particle_velocity, &l13_fighter_jet_extra_joint_particle_definition, 1);
+            spawn_type_74_particle(moby,
+                                   joint_world_position,
+                                   initial_particle_velocity,
+                                   &l13_fighter_jet_extra_joint_particle_definition,
+                                   1);
         }
     }
 }

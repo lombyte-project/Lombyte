@@ -865,8 +865,8 @@ void draw_walloper_arc_and_quad_effects(void *moby) {
     s32 arc_alpha;
     for (i = 0; i < 10; i++) {
         if (l00_walloper_arc_update_countdowns[i] != 0) {
-            arc_alpha = truncate_float_to_s32(convert_integer_to_float(l00_walloper_arc_base_alphas[i]) *
-                                              D_L00_00161660_f[29]);
+            arc_alpha = truncate_float_to_s32(
+                convert_integer_to_float(l00_walloper_arc_base_alphas[i]) * D_L00_00161660_f[29]);
             draw_walloper_arc_two_pass_quads(&l00_walloper_arcs[i],
                                              arc_alpha,
                                              arc_alpha,

@@ -221,8 +221,9 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         char *od = *(char **)(o + 0x78);
         char *path = (char *)l14_splines[*(int *)(od + 0x60)].path;
         o[0x20] = 6;
-        ((M_6570 *)o)->group_anchor_to_hero_heading = fast_arc_tan(hero.motion.pos.f[0] - group_anchor_moby->pos.x,
-                                          hero.motion.pos.f[1] - group_anchor_moby->pos.y);
+        ((M_6570 *)o)->group_anchor_to_hero_heading =
+            fast_arc_tan(hero.motion.pos.f[0] - group_anchor_moby->pos.x,
+                         hero.motion.pos.f[1] - group_anchor_moby->pos.y);
         path_step_distance = -racer_path_lead_distance_gp;
         *(int *)(od + 0x64) = hero.rail_segment;
         *(float *)(od + 0x68) = hero.rail_seg_frac;
@@ -309,7 +310,9 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
     if (moby_data->current_path_segment_index >= moby_data->lead_distance_blend_start_segment) {
         float sum = 0.0f;
         int   k;
-        for (k = moby_data->lead_distance_blend_start_segment; k < moby_data->current_path_segment_index; k++) {
+        for (k = moby_data->lead_distance_blend_start_segment;
+             k < moby_data->current_path_segment_index;
+             k++) {
             sum += *(float *)(path + k * 16 + 0x1C);
         }
         sum += moby_data->unk68;
@@ -323,9 +326,21 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
     *(int *)&moby_data->unk68 = 0;
     moby_data->current_path_segment_index = 0;
     z = moby_data->unk68;
-    FUN_L00_0025df68(
-        path, &D_0013F3D0_67e8, &near.x, &moby_data->current_path_segment_index, &moby_data->unk68, 0, 20.0f, 5.0f, z);
-    FUN_L00_0025d808(path, &near, &moby_data->current_path_segment_index, &moby_data->unk68, 0, -moby_data->unk70[1]);
+    FUN_L00_0025df68(path,
+                     &D_0013F3D0_67e8,
+                     &near.x,
+                     &moby_data->current_path_segment_index,
+                     &moby_data->unk68,
+                     0,
+                     20.0f,
+                     5.0f,
+                     z);
+    FUN_L00_0025d808(path,
+                     &near,
+                     &moby_data->current_path_segment_index,
+                     &moby_data->unk68,
+                     0,
+                     -moby_data->unk70[1]);
     vendor_spring(&racer_moby->pos.x, moby_data->position_spring_velocity, near.x, 0.01f, 0.2f, z);
     vendor_spring(
         &racer_moby->pos.y, &moby_data->position_spring_velocity[1], near.y, 0.01f, 0.2f, z);
@@ -364,8 +379,9 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         float k;
         build_moby_bone_transform(racer_moby, 0, moby_data->bone_transform);
         blend = 1.0f;
-        aim_timer_fraction = convert_integer_to_float(moby_data->aim_timer) /
-                             convert_integer_to_float(scale_game_frames(l14_racer_weapon_aim_duration_frames));
+        aim_timer_fraction =
+            convert_integer_to_float(moby_data->aim_timer) /
+            convert_integer_to_float(scale_game_frames(l14_racer_weapon_aim_duration_frames));
         k = weapon_aim_final_path_step;
         ti = ((RacerSeg_67e8 *)moby_data)->seg;
         tf = ((RacerSeg_67e8 *)moby_data)->frac;

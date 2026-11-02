@@ -249,13 +249,21 @@ void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_s
         target_yaw_or_movement_yaw_offset =
             fast_arc_tan(path->a[path_segment_index + 1].f[0] - moby->v[0],
                          path->a[path_segment_index + 1].f[1] - moby->v[1]);
-        moby->f48 =
-            turn_f(&st->rotation_z_turn_step, moby->f48, target_yaw_or_movement_yaw_offset, 0.01f, 0.3f, 0.1f);
+        moby->f48 = turn_f(&st->rotation_z_turn_step,
+                           moby->f48,
+                           target_yaw_or_movement_yaw_offset,
+                           0.01f,
+                           0.3f,
+                           0.1f);
     } else {
         target_yaw_or_movement_yaw_offset =
             fast_arc_tan(hero.motion.pos.f[0] - moby->v[0], hero.motion.pos.f[1] - moby->v[1]);
-        moby->f48 =
-            turn_f(&st->rotation_z_turn_step, moby->f48, target_yaw_or_movement_yaw_offset, 0.01f, 0.3f, 0.1f);
+        moby->f48 = turn_f(&st->rotation_z_turn_step,
+                           moby->f48,
+                           target_yaw_or_movement_yaw_offset,
+                           0.01f,
+                           0.3f,
+                           0.1f);
     }
     fast_vec_sub(&v, &path_target_point, &moby->v[0]);
     endpoint_distance_or_step_length = FUN_001f9af0_2d5988(&v);
@@ -267,10 +275,10 @@ void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_s
         fast_subtract_rotations(fast_arc_tan(v.f[0], v.f[1]), moby->f48);
     {
         f32 xa, xb;
-        xa = st->slot_path_speed * 0.34906584f * FUN_001f9dc8_2d5988(target_yaw_or_movement_yaw_offset) /
-             (frame_time * 16.0f);
-        xb = st->slot_path_speed * -0.34906584f * FUN_001f9de0_2d5988(target_yaw_or_movement_yaw_offset) /
-             (frame_time * 16.0f);
+        xa = st->slot_path_speed * 0.34906584f *
+             FUN_001f9dc8_2d5988(target_yaw_or_movement_yaw_offset) / (frame_time * 16.0f);
+        xb = st->slot_path_speed * -0.34906584f *
+             FUN_001f9de0_2d5988(target_yaw_or_movement_yaw_offset) / (frame_time * 16.0f);
         {
             f32 updated_rotation_y, k70;
             updated_rotation_y = turn_f(&st->rotation_y_turn_step,

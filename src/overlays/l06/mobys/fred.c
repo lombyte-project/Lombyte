@@ -328,7 +328,9 @@ void fred_update(struct Moby *moby) {
                                        6.0f,
                                        heading,
                                        random_float_between(0.0f, 30.0f) * 0.017453292f);
-                fast_vec_add(fred_vars->idle_look_target_position, fred_vars->idle_look_target_position, ((float *)&moby->pos));
+                fast_vec_add(fred_vars->idle_look_target_position,
+                             fred_vars->idle_look_target_position,
+                             ((float *)&moby->pos));
             }
             if (fred_vars->f158) {
                 qcopy(target, &hero.motion.body_center);

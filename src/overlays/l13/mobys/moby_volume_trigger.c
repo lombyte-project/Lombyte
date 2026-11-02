@@ -96,8 +96,10 @@ void moby_volume_trigger_update(char *moby) {
                     }
                 }
             }
-            if (volume_trigger_vars->unk18 != -1 && volume_trigger_vars->second_list_entry_state != -1)
-                set_moby_list_state(volume_trigger_vars->unk18, volume_trigger_vars->second_list_entry_state);
+            if (volume_trigger_vars->unk18 != -1 &&
+                volume_trigger_vars->second_list_entry_state != -1)
+                set_moby_list_state(volume_trigger_vars->unk18,
+                                    volume_trigger_vars->second_list_entry_state);
             {
                 int uid = volume_trigger_vars->unkC;
                 if (uid != -1) {
@@ -113,8 +115,10 @@ void moby_volume_trigger_update(char *moby) {
                     }
                 }
             }
-            if (volume_trigger_vars->unk1C != -1 && volume_trigger_vars->third_list_entry_state != -1)
-                set_moby_list_state(volume_trigger_vars->unk1C, volume_trigger_vars->third_list_entry_state);
+            if (volume_trigger_vars->unk1C != -1 &&
+                volume_trigger_vars->third_list_entry_state != -1)
+                set_moby_list_state(volume_trigger_vars->unk1C,
+                                    volume_trigger_vars->third_list_entry_state);
             {
                 int uid = volume_trigger_vars->unk10;
                 if (uid != -1) {
@@ -130,8 +134,10 @@ void moby_volume_trigger_update(char *moby) {
                     }
                 }
             }
-            if (volume_trigger_vars->unk20 != -1 && volume_trigger_vars->fourth_list_entry_state != -1)
-                set_moby_list_state(volume_trigger_vars->unk20, volume_trigger_vars->fourth_list_entry_state);
+            if (volume_trigger_vars->unk20 != -1 &&
+                volume_trigger_vars->fourth_list_entry_state != -1)
+                set_moby_list_state(volume_trigger_vars->unk20,
+                                    volume_trigger_vars->fourth_list_entry_state);
             if (volume_trigger_vars->unk34 != -1)
                 MOBY(moby)->state = volume_trigger_vars->unk34;
             if (volume_trigger_vars->unk36 != -1)
@@ -172,8 +178,10 @@ void moby_volume_trigger_update(char *moby) {
                     }
                 }
             }
-            if (volume_trigger_vars->unk18 != -1 && volume_trigger_vars->second_list_exit_state != -1)
-                set_moby_list_state(volume_trigger_vars->unk18, volume_trigger_vars->second_list_exit_state);
+            if (volume_trigger_vars->unk18 != -1 &&
+                volume_trigger_vars->second_list_exit_state != -1)
+                set_moby_list_state(volume_trigger_vars->unk18,
+                                    volume_trigger_vars->second_list_exit_state);
             {
                 int uid = volume_trigger_vars->unkC;
                 if (uid != -1) {
@@ -189,8 +197,10 @@ void moby_volume_trigger_update(char *moby) {
                     }
                 }
             }
-            if (volume_trigger_vars->unk1C != -1 && volume_trigger_vars->third_list_exit_state != -1)
-                set_moby_list_state(volume_trigger_vars->unk1C, volume_trigger_vars->third_list_exit_state);
+            if (volume_trigger_vars->unk1C != -1 &&
+                volume_trigger_vars->third_list_exit_state != -1)
+                set_moby_list_state(volume_trigger_vars->unk1C,
+                                    volume_trigger_vars->third_list_exit_state);
             {
                 int uid = volume_trigger_vars->unk10;
                 if (uid != -1) {
@@ -206,8 +216,10 @@ void moby_volume_trigger_update(char *moby) {
                     }
                 }
             }
-            if (volume_trigger_vars->unk20 != -1 && volume_trigger_vars->fourth_list_exit_state != -1)
-                set_moby_list_state(volume_trigger_vars->unk20, volume_trigger_vars->fourth_list_exit_state);
+            if (volume_trigger_vars->unk20 != -1 &&
+                volume_trigger_vars->fourth_list_exit_state != -1)
+                set_moby_list_state(volume_trigger_vars->unk20,
+                                    volume_trigger_vars->fourth_list_exit_state);
             if (volume_trigger_vars->trigger_exit_state != -1)
                 MOBY(moby)->state = volume_trigger_vars->trigger_exit_state;
             if (volume_trigger_vars->trigger_exit_command != -1)

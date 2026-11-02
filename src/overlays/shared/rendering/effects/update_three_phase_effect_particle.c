@@ -43,8 +43,9 @@ void update_three_phase_effect_particle(struct EffectParticle *particle) {
         fast_vec_add(particle->pos.f, particle->pos.f, position_step);
         phase_remaining_ratio =
             convert_integer_to_float(particle->life) / convert_integer_to_float(particle_data->h10);
-        particle->color = fast_tween_color(
-            particle_data->initial_phase_packed_color & 0xFFFFFF, particle_data->initial_phase_packed_color, 1.0f - phase_remaining_ratio);
+        particle->color = fast_tween_color(particle_data->initial_phase_packed_color & 0xFFFFFF,
+                                           particle_data->initial_phase_packed_color,
+                                           1.0f - phase_remaining_ratio);
         particle->size = (float)(particle_data->h16 * 1000);
         if (fast_dec_timer_s16(&particle->life)) {
             particle_data->h10 = 0;
@@ -60,8 +61,9 @@ void update_three_phase_effect_particle(struct EffectParticle *particle) {
         particle->size = ((float)(particle_data->h16 - particle_data->h18) * phase_remaining_ratio +
                           (float)particle_data->h18) *
                          1000.0f;
-        particle->color =
-            fast_tween_color(particle_data->final_phase_packed_color, particle_data->initial_phase_packed_color, phase_remaining_ratio);
+        particle->color = fast_tween_color(particle_data->final_phase_packed_color,
+                                           particle_data->initial_phase_packed_color,
+                                           phase_remaining_ratio);
         if (fast_dec_timer_s16(&particle->life)) {
             particle_data->h12 = 0;
             particle->life = particle_data->h14;
@@ -1974,11 +1976,12 @@ void update_source_bound_effect_particle(Part_26d470 *particle) {
         particle_data->fC = 1.0f;
     packed_rgb = particle->w4 & 0xFFFFFF;
     particle->w4 =
-        packed_rgb | (truncate_float_to_s32((convert_integer_to_float(particle->body.e->source_alpha) *
-                                                 (particle_data->f10 * 0.00390625f) +
-                                             particle_data->fC) *
-                                            256.0f)
-                      << 24);
+        packed_rgb |
+        (truncate_float_to_s32((convert_integer_to_float(particle->body.e->source_alpha) *
+                                    (particle_data->f10 * 0.00390625f) +
+                                particle_data->fC) *
+                               256.0f)
+         << 24);
 }
 
 extern unsigned char *FUN_L00_002678b8_26d598(int) __asm__("FUN_L00_002678b8");
@@ -2634,7 +2637,8 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
     if (P->motion_and_fade_flags & 2) {
         s32 faded_alpha = (particle->packed_rgba_color >> 24) - 2;
         if (faded_alpha > 0) {
-            particle->packed_rgba_color = (particle->packed_rgba_color & 0xFFFFFF) | (faded_alpha << 24);
+            particle->packed_rgba_color =
+                (particle->packed_rgba_color & 0xFFFFFF) | (faded_alpha << 24);
         } else if (P->link == 0) {
             if (P->tgt)
                 P->tgt->p.link = 0;
@@ -3377,7 +3381,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         particle->posv.f[2] = particle->posv.f[2] + random_float_between(nsp, sp);
     }
     tab = effect_texture_ids;
-    particle->animated_texture_id = tab[(particle->split_countdown + pv->f16 + (particle->animated_texture_id - tab[0])) & 7];
+    particle->animated_texture_id =
+        tab[(particle->split_countdown + pv->f16 + (particle->animated_texture_id - tab[0])) & 7];
     fast_vec_add(v0u.f, particle->posv.f, pv);
     k = pv->f14;
     if (scale_game_frames(3) < k) {
@@ -3418,7 +3423,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         fast_vec_normalize(collision_offset, coll_hit_normal.f, 0.055f);
         fast_vec_add(particle->posv.f, coll_hit_normal.f - 8, collision_offset);
         if (particle->split_position_spread_scale < 200000.0f && (pv->f18 & 8) == 0) {
-            particle->split_position_spread_scale = particle->split_position_spread_scale + particle->split_position_spread_scale;
+            particle->split_position_spread_scale =
+                particle->split_position_spread_scale + particle->split_position_spread_scale;
         }
         pv->f18 |= 8;
     } else {
@@ -3429,7 +3435,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         f32 decayed_particle_scalar;
         kk2 = 8.0f / (d * 0.443f);
         pv->f16++;
-        decayed_particle_scalar = particle->split_position_spread_scale - 260000.0f / (f32)kk2 * d * 1.25f;
+        decayed_particle_scalar =
+            particle->split_position_spread_scale - 260000.0f / (f32)kk2 * d * 1.25f;
         particle->split_position_spread_scale = decayed_particle_scalar;
         if (decayed_particle_scalar <= 0.0f) {
         kill:
@@ -3439,7 +3446,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     } else {
         f32 d = frame_scale;
         kk2 = 8.0f / (d * 0.443f);
-        particle->split_position_spread_scale = particle->split_position_spread_scale + 260000.0f / (f32)kk2 * d;
+        particle->split_position_spread_scale =
+            particle->split_position_spread_scale + 260000.0f / (f32)kk2 * d;
     }
     f = convert_integer_to_float(pv->f14);
     {

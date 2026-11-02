@@ -184,11 +184,14 @@ void bolt_pickup_update(Moby_2B94B0 *moby) {
         hit = 0;
         moby->spin_angle = fast_add_rotations(moby->spin_angle, moby_data->fC);
         if (((Hero_2B94B0 *)((char *)&hero))->f208C == 15) {
-            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_a, moby->pos) < 0.5f)
+            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_a,
+                                   moby->pos) < 0.5f)
                 hit = 1;
-            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_b, moby->pos) < 0.5f)
+            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_b,
+                                   moby->pos) < 0.5f)
                 hit = 1;
-            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_c, moby->pos) < 0.5f)
+            if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->bolt_collection_probe_c,
+                                   moby->pos) < 0.5f)
                 hit = 1;
         } else if (vector_distance_xy(moby->pos, ((Hero_2B94B0 *)((char *)&hero))->pos) <
                    ((Hero_2B94B0 *)((char *)&hero))->collection_radius_xy) {

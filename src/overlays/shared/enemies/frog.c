@@ -410,7 +410,8 @@ void frog_update(unsigned char *moby) {
             }
             qcopy(&frog_instance_vars->home_position, (char *)path + point_count * 16);
             qcopy(&frog_instance_vars->unk230, &frog_instance_vars->home_position);
-            home_distance_xy = vector_distance_xy(&MOBY(moby)->pos, &frog_instance_vars->home_position);
+            home_distance_xy =
+                vector_distance_xy(&MOBY(moby)->pos, &frog_instance_vars->home_position);
             return_speed = home_distance_xy / (float)scale_game_frames(30);
             frog_instance_vars->unk138 = return_speed;
             frog_instance_vars->unk13C = FUN_L00_0025abf0(&MOBY(moby)->pos,
@@ -574,10 +575,11 @@ void frog_update(unsigned char *moby) {
         wait = compute_interpolated_record_value(moby);
         if (MOBY(moby)->seq == MOBY(moby)->prev_seq && wait >= 10.0f && wait <= 15.0f &&
             *(int *)(((char *)&camera_secondary_mode)) != 0x51) {
-            fast_vec_normalize(A,
-                               moby + 0xC0,
-                               (frog_instance_vars->movement_speed + frog_instance_vars->movement_speed) *
-                                   D_0015ED6C_gp);
+            fast_vec_normalize(
+                A,
+                moby + 0xC0,
+                (frog_instance_vars->movement_speed + frog_instance_vars->movement_speed) *
+                    D_0015ED6C_gp);
             FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
             collect_mobies_in_sphere_at_moby_point(moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
             return;

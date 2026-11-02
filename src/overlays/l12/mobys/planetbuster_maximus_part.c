@@ -149,7 +149,8 @@ void update_planetbuster_maximus_guns(char *moby) {
                     }
                 }
             } else {
-                float sweep_target_yaw = fast_add_rotations(yaw, md->yaw_sweep_direction * 0.55850536f);
+                float sweep_target_yaw =
+                    fast_add_rotations(yaw, md->yaw_sweep_direction * 0.55850536f);
                 if (absolute_float(spring_angle(ent + 0x18,
                                                 sweep_target_yaw,
                                                 (char *)md + 0x94,
@@ -194,7 +195,8 @@ void update_planetbuster_maximus_guns(char *moby) {
                             float rz;
                             float pitch;
                             int   n;
-                            moby_point_position(gun_moby, md->firing_point_selector + 1, position_buffer);
+                            moby_point_position(
+                                gun_moby, md->firing_point_selector + 1, position_buffer);
                             md->firing_point_selector = md->firing_point_selector == 0;
                             rz = fast_add_rotations(MOBY(gun_moby)->rot.z, 1.5707964f);
                             if (D_L12_00161F00_gp != 0) {
@@ -744,7 +746,8 @@ void planetbuster_maximus_part_update(char *moby) {
     case PLANETBUSTER_WAIT_FOR_PATH_TRIGGER: {
         char *clip_test_position;
         int   r;
-        if (is_point_inside_clip_volume(D_L12_00167240, moby_data->linked_parts_flags_clip_volume)) {
+        if (is_point_inside_clip_volume(D_L12_00167240,
+                                        moby_data->linked_parts_flags_clip_volume)) {
             int   i;
             char *base = (char *)D_L12_0015FFD8_gp;
             MOBY(moby)->flags |= 0x41;
@@ -772,7 +775,8 @@ void planetbuster_maximus_part_update(char *moby) {
             float add = 3.0f;
             if (r)
                 add = 10.0f;
-            if (is_point_inside_clip_volume(D_0013F3D0, moby_data->height_timer_refresh_clip_volume)) {
+            if (is_point_inside_clip_volume(D_0013F3D0,
+                                            moby_data->height_timer_refresh_clip_volume)) {
                 moby_data->timer = scale_game_frames(0x5A);
             }
             if (!fast_dec_timer(&moby_data->timer))
@@ -784,8 +788,11 @@ void planetbuster_maximus_part_update(char *moby) {
                           frame_scale_sq_macro * 0.3f,
                           D_0015ED6C_gp * 2.7f);
         }
-        update_moby_vertical_oscillation(
-            0.7f, D_0015ED6C_gp * 1.2217305f, moby, &moby_data->unk5CC, &moby_data->vertical_oscillation_previous_offset);
+        update_moby_vertical_oscillation(0.7f,
+                                         D_0015ED6C_gp * 1.2217305f,
+                                         moby,
+                                         &moby_data->unk5CC,
+                                         &moby_data->vertical_oscillation_previous_offset);
         update_moby_rotation_oscillation(
             moby,
             &moby_data->rotation_common_factor_phase,
@@ -796,7 +803,8 @@ void planetbuster_maximus_part_update(char *moby) {
             planetbuster_maximus_rotation_oscillation_component_mix_phase_rate_degrees *
                 0.017453292f * D_0015ED6C_gp);
         apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
-        if (is_point_inside_clip_volume(D_0013F3D0, moby_data->path_start_clip_volume) || D_L12_00161F00_gp) {
+        if (is_point_inside_clip_volume(D_0013F3D0, moby_data->path_start_clip_volume) ||
+            D_L12_00161F00_gp) {
             int i;
             D_L12_001619B4 = 1;
             for (i = 0; i < 5; i++) {
@@ -812,8 +820,11 @@ void planetbuster_maximus_part_update(char *moby) {
         P_7DB0 *path;
         int     nx;
         float   target_yaw;
-        update_moby_vertical_oscillation(
-            0.7f, D_0015ED6C_gp * 1.2217305f, moby, &moby_data->unk5CC, &moby_data->vertical_oscillation_previous_offset);
+        update_moby_vertical_oscillation(0.7f,
+                                         D_0015ED6C_gp * 1.2217305f,
+                                         moby,
+                                         &moby_data->unk5CC,
+                                         &moby_data->vertical_oscillation_previous_offset);
         update_moby_rotation_oscillation(
             moby,
             &moby_data->rotation_common_factor_phase,
@@ -825,7 +836,8 @@ void planetbuster_maximus_part_update(char *moby) {
                 0.017453292f * D_0015ED6C_gp);
         path = ((P_7DB0 **)&(*(int *)l12_paths))[moby_data->path];
         if (moby_data->path_node < *(int *)path - 11) {
-            approach_value(&moby_data->path_movement_step, D_0015ED6C_gp * 8.0f, frame_time_sq_macro * 10.0f);
+            approach_value(
+                &moby_data->path_movement_step, D_0015ED6C_gp * 8.0f, frame_time_sq_macro * 10.0f);
         } else {
             approach_value(&moby_data->path_movement_step, 0.0f, frame_time_sq_macro * 8.0f);
             if (moby_data->path_movement_step == 0.0f) {
@@ -872,8 +884,11 @@ void planetbuster_maximus_part_update(char *moby) {
                      frame_scale_sq_macro * 0.0015f,
                      frame_scale_sq_macro * 0.3f,
                      D_0015ED6C_gp * 0.17453292f);
-        update_moby_vertical_oscillation(
-            0.7f, D_0015ED6C_gp * 1.2217305f, moby, &moby_data->unk5CC, &moby_data->vertical_oscillation_previous_offset);
+        update_moby_vertical_oscillation(0.7f,
+                                         D_0015ED6C_gp * 1.2217305f,
+                                         moby,
+                                         &moby_data->unk5CC,
+                                         &moby_data->vertical_oscillation_previous_offset);
         update_moby_rotation_oscillation(
             moby,
             &moby_data->rotation_common_factor_phase,
@@ -906,12 +921,14 @@ void planetbuster_maximus_part_update(char *moby) {
                                                D_0015ED6C_gp * 0.4f);
                     lerp_vector(v,
                                 D_L12_001600EC + moby_data->camera_point * 128 + 0x30,
-                                D_L12_001600EC + moby_data->transition_target_camera_point * 128 + 0x30,
+                                D_L12_001600EC + moby_data->transition_target_camera_point * 128 +
+                                    0x30,
                                 moby_data->camera_transition_fraction);
                     clear_u64_value(transition_rotation);
                     transition_rotation[0] =
                         fast_subtract_rotations(
-                            *(float *)(D_L12_001600EC + moby_data->transition_target_camera_point * 128 + 0x70),
+                            *(float *)(D_L12_001600EC +
+                                       moby_data->transition_target_camera_point * 128 + 0x70),
                             *(float *)(D_L12_001600EC + moby_data->camera_point * 128 + 0x70)) *
                         moby_data->camera_transition_fraction;
                     transition_rotation[0] = fast_add_rotations(
@@ -919,7 +936,8 @@ void planetbuster_maximus_part_update(char *moby) {
                         transition_rotation[1]);
                     transition_rotation[1] =
                         fast_subtract_rotations(
-                            *(float *)(D_L12_001600EC + moby_data->transition_target_camera_point * 128 + 0x74),
+                            *(float *)(D_L12_001600EC +
+                                       moby_data->transition_target_camera_point * 128 + 0x74),
                             *(float *)(D_L12_001600EC + moby_data->camera_point * 128 + 0x74)) *
                         moby_data->camera_transition_fraction;
                     transition_rotation[1] = fast_add_rotations(
@@ -927,7 +945,8 @@ void planetbuster_maximus_part_update(char *moby) {
                         transition_rotation[1]);
                     transition_rotation[2] =
                         fast_subtract_rotations(
-                            *(float *)(D_L12_001600EC + moby_data->transition_target_camera_point * 128 + 0x78),
+                            *(float *)(D_L12_001600EC +
+                                       moby_data->transition_target_camera_point * 128 + 0x78),
                             *(float *)(D_L12_001600EC + moby_data->camera_point * 128 + 0x78)) *
                         moby_data->camera_transition_fraction;
                     transition_rotation[2] = fast_add_rotations(

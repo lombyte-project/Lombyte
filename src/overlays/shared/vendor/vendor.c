@@ -351,7 +351,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
             fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
-        q->auxiliary_moby->auxiliary_scale = q->effect_scale_factor * q->auxiliary_moby->p24->auxiliary_scale_multiplier * 2.5f;
+        q->auxiliary_moby->auxiliary_scale =
+            q->effect_scale_factor * q->auxiliary_moby->p24->auxiliary_scale_multiplier * 2.5f;
         update_entity(q->auxiliary_moby);
         break;
     case VENDOR_HERO_NEARBY:
@@ -375,7 +376,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
             fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
-        q->auxiliary_moby->auxiliary_scale = q->effect_scale_factor * q->auxiliary_moby->p24->auxiliary_scale_multiplier * 2.5f;
+        q->auxiliary_moby->auxiliary_scale =
+            q->effect_scale_factor * q->auxiliary_moby->p24->auxiliary_scale_multiplier * 2.5f;
         update_entity(q->auxiliary_moby);
         if (hero.state.control_mode != 0 && hero.state.current != 3 &&
             hero.state.control_mode != 1) {
@@ -414,7 +416,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
     case VENDOR_ZERO_AUXILIARY_SCALE:
         if (q->auxiliary_moby) {
             q->effect_scale_factor = 0.0f;
-            q->auxiliary_moby->auxiliary_scale = q->auxiliary_moby->p24->auxiliary_scale_multiplier * q->effect_scale_factor * 2.5f;
+            q->auxiliary_moby->auxiliary_scale =
+                q->auxiliary_moby->p24->auxiliary_scale_multiplier * q->effect_scale_factor * 2.5f;
             update_entity(q->auxiliary_moby);
         }
         break;

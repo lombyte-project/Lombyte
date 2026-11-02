@@ -506,7 +506,8 @@ void taunter_update(Moby *taunter_moby) {
     }
     if ((u8)taunter_state != TAUNTER_STATE_ACTIVE)
         goto end;
-    if (taunter_moby->type == TAUNTER_TYPE_CONTINUOUS_EFFECT_EMISSION && hero.item_use_locked == 0) {
+    if (taunter_moby->type == TAUNTER_TYPE_CONTINUOUS_EFFECT_EMISSION &&
+        hero.item_use_locked == 0) {
         taunter_effect_emission_disabled = 0;
         taunter_vars->cnt18++;
     } else {

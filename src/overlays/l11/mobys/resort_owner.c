@@ -627,7 +627,8 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
-        moby_vars->horizontal_step_distance = resort_owner_distant_follow_and_path_speed_gp * frame_time;
+        moby_vars->horizontal_step_distance =
+            resort_owner_distant_follow_and_path_speed_gp * frame_time;
         break;
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->prev_seq != 4)
@@ -647,7 +648,8 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
             qcopy(moby_vars->unk120, o + 0x10);
-            transform_vector_by_basis(gate_target_offset, &l11_resort_owner_gate_attachment_local_x_offset, o + 0xC0);
+            transform_vector_by_basis(
+                gate_target_offset, &l11_resort_owner_gate_attachment_local_x_offset, o + 0xC0);
             fast_vec_add(moby_vars->unk120, moby_vars->unk120, gate_target_offset);
         }
         break;
@@ -670,7 +672,9 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
             qcopy(moby_vars->unk120, o + 0x10);
-            transform_vector_by_basis(gate_target_offset, &l11_resort_owner_gate_departure_target_local_x_offset, o + 0xC0);
+            transform_vector_by_basis(gate_target_offset,
+                                      &l11_resort_owner_gate_departure_target_local_x_offset,
+                                      o + 0xC0);
             fast_vec_add(moby_vars->unk120, moby_vars->unk120, gate_target_offset);
         }
         break;
@@ -806,8 +810,8 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *jump_target_posi
             fast_vec_normalize(candidate_position, candidate_position, 4.0f);
         fast_vec_add(candidate_position, candidate_position, pos);
         {
-            int *path_entry =
-                (int *)l11_paths[*(int *)((u8 *)pvars - (-(*(int *)&pvars->current_path_leg * 4)) + 0x60)];
+            int *path_entry = (int *)
+                l11_paths[*(int *)((u8 *)pvars - (-(*(int *)&pvars->current_path_leg * 4)) + 0x60)];
             if (point_in_path_xy(candidate_position, path_entry + 4, *path_entry)) {
                 candidate_position[2] += 5.0f;
                 landing_ground_height = func_L00_0025A748_f(candidate_position);

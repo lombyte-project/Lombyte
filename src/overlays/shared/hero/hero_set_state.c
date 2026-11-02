@@ -3195,7 +3195,8 @@ void update_hero_water_height_and_bobbing(void) {
     enum {
         WATER_HEIGHT_CONTROL_ALTERNATE_TARGET = 0x16
     };
-    if (G.i198 > scale_game_frames(10) || G.water_bob_offset < 0.0f || G.i2094 == 0x11 || G.i20A0 == 0x11) {
+    if (G.i198 > scale_game_frames(10) || G.water_bob_offset < 0.0f || G.i2094 == 0x11 ||
+        G.i20A0 == 0x11) {
         if (G.i2084 == 0x36) {
             vendor_spring(&G.water_bob_offset,
                           &G.water_bob_spring_velocity,
@@ -3220,8 +3221,12 @@ void update_hero_water_height_and_bobbing(void) {
         f32 target_height = G.water_surface_height_target;
         if (G.water_height_control_mode == WATER_HEIGHT_CONTROL_ALTERNATE_TARGET)
             target_height = G.alternate_water_height_target;
-        vendor_spring(
-            &G.smoothed_water_height, &G.water_height_spring_velocity, target_height, frame_scale_sq * 0.027f, frame_scale_sq * 0.3f, 0.0f);
+        vendor_spring(&G.smoothed_water_height,
+                      &G.water_height_spring_velocity,
+                      target_height,
+                      frame_scale_sq * 0.027f,
+                      frame_scale_sq * 0.3f,
+                      0.0f);
     }
     G.water_adjusted_position_z = G.smoothed_water_height + -0.12f + G.water_bob_offset;
 }
@@ -3376,9 +3381,11 @@ int process_hero_equipped_item_input(void) {
                 break;
             }
             if ((controller_state.held & 0xA) ||
-                ((D_0013F450_h228770.hero_current_state == 1 || D_0013F450_h228770.hero_current_state == 0x1E) &&
+                ((D_0013F450_h228770.hero_current_state == 1 ||
+                  D_0013F450_h228770.hero_current_state == 0x1E) &&
                  D_0013F450_h228770.current_state_elapsed_frames > scale_game_frames(0x14))) {
-                if ((D_0013F450_h228770.hero_current_state == 1 || D_0013F450_h228770.hero_current_state == 0x1E) &&
+                if ((D_0013F450_h228770.hero_current_state == 1 ||
+                     D_0013F450_h228770.hero_current_state == 0x1E) &&
                     D_0013F450_h228770.current_state_elapsed_frames > scale_game_frames(0x14)) {
                     launch_hero_wrench();
                     break;
@@ -3393,18 +3400,22 @@ int process_hero_equipped_item_input(void) {
             }
             break;
         }
-        if (D_0013F450_h228770.hero_current_state == 7 || D_0013F450_h228770.hero_current_state == 9 ||
-            D_0013F450_h228770.hero_current_state == 8 || D_0013F450_h228770.hero_current_state == 6 ||
+        if (D_0013F450_h228770.hero_current_state == 7 ||
+            D_0013F450_h228770.hero_current_state == 9 ||
+            D_0013F450_h228770.hero_current_state == 8 ||
+            D_0013F450_h228770.hero_current_state == 6 ||
             (D_0013F450_h228770.hero_current_state == 0xE && D_0013F450_h228770.fAA8 > 32.0f) ||
             (D_0013F450_h228770.hero_current_state == 0xB && D_0013F450_h228770.f450 != 3 &&
              D_0013F450_h228770.fAA8 > 18.0f) ||
             (D_0013F450_h228770.hero_current_state == 0xB && D_0013F450_h228770.f450 == 3 &&
              D_0013F450_h228770.fAA8 > 20.0f) ||
-            D_0013F450_h228770.hero_current_state == 0x2D || D_0013F450_h228770.hero_current_state == 0x11) {
+            D_0013F450_h228770.hero_current_state == 0x2D ||
+            D_0013F450_h228770.hero_current_state == 0x11) {
             if (D_0013F450_h228770.current_state_elapsed_frames > scale_game_frames(0xA)) {
                 int t = scale_game_frames(0xA);
 
-                if (D_0013F450_h228770.hero_current_state == 0xB || D_0013F450_h228770.hero_current_state == 0xE) {
+                if (D_0013F450_h228770.hero_current_state == 0xB ||
+                    D_0013F450_h228770.hero_current_state == 0xE) {
                     t = scale_game_frames(0x12);
                 }
                 if (!pad_pressed_within(mask, t, 0)) {
@@ -3412,7 +3423,8 @@ int process_hero_equipped_item_input(void) {
                 }
                 if ((D_0013F450_h228770.f41E == 0 && D_0013F450_h228770.f2DC > 0.1f) ||
                     (D_0013F450_h228770.f41E != 0 && D_0013F450_h228770.f2DC > 0.57f) ||
-                    (D_0013F450_h228770.hero_current_state == 8 && D_0013F450_h228770.f2DC > 0.57f)) {
+                    (D_0013F450_h228770.hero_current_state == 8 &&
+                     D_0013F450_h228770.f2DC > 0.57f)) {
                     if (D_0013F450_h228770.f5FC != 0) {
                         break;
                     }
@@ -3482,9 +3494,12 @@ int process_hero_equipped_item_input(void) {
         if (D_0013F450_h228770.f30E != 0) {
             t = scale_game_frames(8);
         }
-        if (D_0013F450_h228770.hero_control_mode < 2U || D_0013F450_h228770.hero_control_mode == 4 ||
-            D_0013F450_h228770.hero_control_mode == 2 || D_0013F450_h228770.hero_control_mode == 0xF ||
-            D_0013F450_h228770.hero_control_mode == 5 || D_0013F450_h228770.hero_current_state == 0x1E) {
+        if (D_0013F450_h228770.hero_control_mode < 2U ||
+            D_0013F450_h228770.hero_control_mode == 4 ||
+            D_0013F450_h228770.hero_control_mode == 2 ||
+            D_0013F450_h228770.hero_control_mode == 0xF ||
+            D_0013F450_h228770.hero_control_mode == 5 ||
+            D_0013F450_h228770.hero_current_state == 0x1E) {
             if (pad_pressed_within(mask, t, 0) ||
                 ((controller_state.held & mask) &&
                  D_0013F450_h228770.f10B0 > scale_game_frames(0xF))) {
@@ -3496,13 +3511,15 @@ int process_hero_equipped_item_input(void) {
                             D_0013F450_h228770.swing_target_valid = 0;
                         }
                     }
-                    if (D_0013F450_h228770.swing_target_valid != 0 && D_0013F450_h228770.grapple_entry_lockout == 0 &&
+                    if (D_0013F450_h228770.swing_target_valid != 0 &&
+                        D_0013F450_h228770.grapple_entry_lockout == 0 &&
                         D_0013F450_h228770.hero_current_state != 0x2C) {
                         hero_set_state(0x2C, 1);
                         break;
                     }
                 }
-                if (D_0013F450_h228770.grapple_target_valid != 0 && D_0013F450_h228770.grapple_entry_lockout == 0) {
+                if (D_0013F450_h228770.grapple_target_valid != 0 &&
+                    D_0013F450_h228770.grapple_entry_lockout == 0) {
                     hero_set_state(0x24, 1);
                 }
             }
@@ -3532,7 +3549,8 @@ int process_hero_equipped_item_input(void) {
         D_0013F450_h228770.f22DC = 1;
         break;
     case ITEM_REMOTE_VENDOR:
-        if (D_0013F450_h228770.hero_control_mode < 3U || D_0013F450_h228770.hero_control_mode == 4 ||
+        if (D_0013F450_h228770.hero_control_mode < 3U ||
+            D_0013F450_h228770.hero_control_mode == 4 ||
             D_0013F450_h228770.hero_control_mode == 5) {
             if (pad_pressed_within(mask, scale_game_frames(8), 0)) {
                 open_vendor_menu(0);
@@ -3540,9 +3558,12 @@ int process_hero_equipped_item_input(void) {
         }
         break;
     case 15:
-        if (D_0013F450_h228770.hero_control_mode < 2U || D_0013F450_h228770.hero_control_mode == 0xC ||
-            D_0013F450_h228770.hero_control_mode == 2 || D_0013F450_h228770.hero_control_mode == 4 ||
-            D_0013F450_h228770.hero_control_mode == 5 || D_0013F450_h228770.hero_control_mode == 0xF ||
+        if (D_0013F450_h228770.hero_control_mode < 2U ||
+            D_0013F450_h228770.hero_control_mode == 0xC ||
+            D_0013F450_h228770.hero_control_mode == 2 ||
+            D_0013F450_h228770.hero_control_mode == 4 ||
+            D_0013F450_h228770.hero_control_mode == 5 ||
+            D_0013F450_h228770.hero_control_mode == 0xF ||
             D_0013F450_h228770.hero_current_state == 0x1E) {
             PVar *equipped_item_vars;
 
@@ -3562,9 +3583,10 @@ int process_hero_equipped_item_input(void) {
             }
             if (controller_state.held & mask) {
                 if (!get_ammo(-1)) {
-                    if (!voice_is_playing(D_0013F450_h228770.slot0_item_moby, equipped_item_vars->fC)) {
-                        equipped_item_vars->fC =
-                            allocate_voice_for_target_entry(0, 0, (int)D_0013F450_h228770.slot0_item_moby);
+                    if (!voice_is_playing(D_0013F450_h228770.slot0_item_moby,
+                                          equipped_item_vars->fC)) {
+                        equipped_item_vars->fC = allocate_voice_for_target_entry(
+                            0, 0, (int)D_0013F450_h228770.slot0_item_moby);
                     }
                 }
             }
@@ -3575,9 +3597,12 @@ int process_hero_equipped_item_input(void) {
     case 20:
     case 24:
     case 25:
-        if ((D_0013F450_h228770.hero_control_mode == 0 && D_0013F450_h228770.hero_current_state != 0x1E) ||
-            D_0013F450_h228770.hero_control_mode == 1 || D_0013F450_h228770.hero_control_mode == 0xC ||
-            D_0013F450_h228770.hero_control_mode == 5 || D_0013F450_h228770.hero_control_mode == 0xF ||
+        if ((D_0013F450_h228770.hero_control_mode == 0 &&
+             D_0013F450_h228770.hero_current_state != 0x1E) ||
+            D_0013F450_h228770.hero_control_mode == 1 ||
+            D_0013F450_h228770.hero_control_mode == 0xC ||
+            D_0013F450_h228770.hero_control_mode == 5 ||
+            D_0013F450_h228770.hero_control_mode == 0xF ||
             (D_0013F450_h228770.hero_control_mode == 4 && D_0013F450_h228770.f4AC != 0) ||
             (D_0013F450_h228770.hero_current_state == 0x23 && D_0013F450_h228770.fAA8 > 25.0f)) {
             int t;
@@ -3592,9 +3617,11 @@ int process_hero_equipped_item_input(void) {
                 ((controller_state.held & 0x20) && n > scale_game_frames(8) &&
                  n < scale_game_frames(0x11))) {
                 if (get_ammo(-1)) {
-                    if (D_0013F450_h228770.hero_control_mode == 0xC || D_0013F450_h228770.hero_control_mode == 0 ||
+                    if (D_0013F450_h228770.hero_control_mode == 0xC ||
+                        D_0013F450_h228770.hero_control_mode == 0 ||
                         D_0013F450_h228770.hero_current_state == 3 ||
-                        (D_0013F450_h228770.hero_control_mode == 1 && D_0013F450_h228770.f229C < 0.7f)) {
+                        (D_0013F450_h228770.hero_control_mode == 1 &&
+                         D_0013F450_h228770.f229C < 0.7f)) {
                         hero_set_state(0x23, 1);
                     } else {
                         start_equipped_item_animation();
@@ -3618,7 +3645,8 @@ int process_hero_equipped_item_input(void) {
                     if (D_0013F450_h228770.slot0_item_moby != 0) {
                         hero_set_state(0x20, 1);
                         if (D_0013F450_h228770.slot0_item_moby != 0) {
-                            allocate_voice_for_target_entry(0, 0, (int)D_0013F450_h228770.slot0_item_moby);
+                            allocate_voice_for_target_entry(
+                                0, 0, (int)D_0013F450_h228770.slot0_item_moby);
                         }
                     }
                 }
@@ -3639,8 +3667,10 @@ int process_hero_equipped_item_input(void) {
             D_0013F450_h228770.f22D8 == 0) {
             f_fun_001f9740_227fa0(&hero_repeat_press_window_frames);
             if (hero_repeat_press_window_frames != 0) {
-                if (D_0013F450_h228770.hero_control_mode < 2U || D_0013F450_h228770.hero_control_mode == 0xC ||
-                    ((D_0013F450_h228770.hero_control_mode == 2 || D_0013F450_h228770.hero_control_mode == 4) &&
+                if (D_0013F450_h228770.hero_control_mode < 2U ||
+                    D_0013F450_h228770.hero_control_mode == 0xC ||
+                    ((D_0013F450_h228770.hero_control_mode == 2 ||
+                      D_0013F450_h228770.hero_control_mode == 4) &&
                      D_0013F450_h228770.f300 != 0)) {
                     if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);
@@ -3650,8 +3680,10 @@ int process_hero_equipped_item_input(void) {
             if ((controller_state.pressed & 8) && D_0013F450_h228770.hero_current_state != 0x81) {
                 hero_repeat_press_window_frames = scale_game_frames(0x1E);
             }
-        } else if (D_0013F450_h228770.hero_current_state != 0x13 && D_0013F450_h228770.hero_current_state != 0x81 &&
-                   D_0013F450_h228770.hero_current_state != 0x15 && D_0013F450_h228770.hero_current_state != 0x16) {
+        } else if (D_0013F450_h228770.hero_current_state != 0x13 &&
+                   D_0013F450_h228770.hero_current_state != 0x81 &&
+                   D_0013F450_h228770.hero_current_state != 0x15 &&
+                   D_0013F450_h228770.hero_current_state != 0x16) {
             D_0013F450_h228770.f22CA = 0;
         }
     }

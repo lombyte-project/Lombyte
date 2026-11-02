@@ -577,7 +577,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_001604A4 = 500.0f;
     D_L00_0015FFF0 = 500;
     D_L00_0016017C = 0x1F4000;
-    set_background_color(D_L00_0016CA40.background_red, D_L00_0016CA40.background_green, D_L00_0016CA40.background_blue);
+    set_background_color(D_L00_0016CA40.background_red,
+                         D_L00_0016CA40.background_green,
+                         D_L00_0016CA40.background_blue);
     vu0_load_micro_program(D_00100AE0);
     fast_mem_zero16(point_lights, 0x100);
     fast_mem_zero16(D_L00_001804C0, 0x180);
@@ -788,8 +790,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (D_L00_001BC030[shrub_class_index]->f1C != 0) {
                 float shrub_class_lower_bound;
 
-                inst->class_lower_bound_base = truncate_float_to_s32(*D_L00_001BC030[shrub_class_index]->f1C);
-                shrub_class_lower_bound = convert_integer_to_float(inst->class_lower_bound_base) + 24.0f;
+                inst->class_lower_bound_base =
+                    truncate_float_to_s32(*D_L00_001BC030[shrub_class_index]->f1C);
+                shrub_class_lower_bound =
+                    convert_integer_to_float(inst->class_lower_bound_base) + 24.0f;
                 if (inst->f10 < shrub_class_lower_bound) {
                     inst->f10 = shrub_class_lower_bound;
                 }
@@ -1653,7 +1657,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_0015F5CC = 0;
     D_L00_0015F63C = 0;
     if (level_render_state.player != 0) {
-        *(long *)&((MobyInst *)level_render_state.player)->f38 = *(long *)&D_0013F350.hero_moby->f38;
+        *(long *)&((MobyInst *)level_render_state.player)->f38 =
+            *(long *)&D_0013F350.hero_moby->f38;
     }
     switch (D_0015ED84) {
     case 2:

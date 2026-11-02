@@ -414,7 +414,8 @@ void crate_update(struct Moby *moby) {
             burst.unk20 = 0;
             fast_vec_normalize(&at, &moby->rot_row2, 0.5f);
             add_vector_xyz(&at, &at, &moby->pos);
-            burst_radius_scale = convert_integer_to_float(crate_vars->burst_frame) / scale_time(20.0f);
+            burst_radius_scale =
+                convert_integer_to_float(crate_vars->burst_frame) / scale_time(20.0f);
             burst.unk14 = 1;
             collect_mobies_in_sphere(
                 burst_radius_scale + burst_radius_scale, &at, 0x10, moby, &burst);
@@ -1299,7 +1300,9 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (vars->path) {
             if (vars->parent == 0) {
                 vars->vel.w -= acceleration_scale_or_speed * 10.0f;
-                if (approach_value(&vars->attachment_stack_z_offset, 0.0f, absolute_float(vars->vel.w)) == 0.0f)
+                if (approach_value(&vars->attachment_stack_z_offset,
+                                   0.0f,
+                                   absolute_float(vars->vel.w)) == 0.0f)
                     vars->vel.w = 0.0f;
             } else {
                 vars->vel.w -= acceleration_scale_or_speed * 10.0f;
@@ -1314,8 +1317,12 @@ void update_crate_stack_motion(M2d1428 *moby) {
                 moby->h36 = 0x7F80;
             qcopy(&previous_position, &moby->pos);
             qcopy(&previous_rotation, &moby->v40);
-            transform_attachment_pose(
-                moby, vars->path, &adjusted_link_position, vars->attachment_rotation, &moby->pos, &moby->v40);
+            transform_attachment_pose(moby,
+                                      vars->path,
+                                      &adjusted_link_position,
+                                      vars->attachment_rotation,
+                                      &moby->pos,
+                                      &moby->v40);
             if (FUN_L00_002603d0(vars->path)->flags & 4) {
                 qcopy(&vars->attachment_position, &adjusted_link_position);
                 vars->attachment_position.z -= vars->attachment_stack_z_offset;

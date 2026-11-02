@@ -424,7 +424,8 @@ void adjust_hero_planar_velocity_from_probes(int force) {
         P.i240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         sceVu0Normalize(&X.v40, &X.v40);
-        negative_xy_dot_product = -P.hero_velocity.f[0] * X.v40.f[0] - P.hero_velocity.f[1] * X.v40.f[1];
+        negative_xy_dot_product =
+            -P.hero_velocity.f[0] * X.v40.f[0] - P.hero_velocity.f[1] * X.v40.f[1];
         if (0.0f < negative_xy_dot_product) {
             fast_vec_scale(&X.v40, &X.v40, negative_xy_dot_product);
             FUN_001f9a10_20a328(&P.hero_velocity, &P.hero_velocity, &X.v40);

@@ -182,7 +182,8 @@ void refueling_station_update(struct Moby *moby) {
     switch (moby->state) {
     case REFUELING_STATION_STATE_INITIALIZE:
         if (station_vars->removal_check_index != -1 &&
-            (removal_check_base = (unsigned char *)D_0013D388 + station_vars->removal_check_index)[0x39] != 0) {
+            (removal_check_base =
+                 (unsigned char *)D_0013D388 + station_vars->removal_check_index)[0x39] != 0) {
             mark_moby_for_removal(moby);
             return;
         }

@@ -434,8 +434,8 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
         set_camera_rotation(camera_rotation);
     }
     MOBY(moby)->scale =
-        MOBY(moby)->pclass->scale *
-        (shuttle_vars->f9C - (shuttle_vars->f9C - shuttle_vars->fA0) * shuttle_vars->travel_fraction);
+        MOBY(moby)->pclass->scale * (shuttle_vars->f9C - (shuttle_vars->f9C - shuttle_vars->fA0) *
+                                                             shuttle_vars->travel_fraction);
     if (shuttle_vars->travel_fraction > 0.8f) {
         turn = frame_time_sq * 12.566371f;
         approach_angle(&shuttle_vars->travel_yaw_offset,

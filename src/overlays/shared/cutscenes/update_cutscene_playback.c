@@ -199,8 +199,10 @@ void handle_pause_input(void) {
             D_L00_0016C058.w8 = 0x10;
     }
     if ((D_L00_0016C058.w8 & 0x10) && (controller_state.pressed & 0x200)) {
-        controller_state.pressed = ~D_L00_0016C058.previous_step_held_buttons & controller_state.held;
-        controller_state.released = ~controller_state.held & D_L00_0016C058.previous_step_held_buttons;
+        controller_state.pressed =
+            ~D_L00_0016C058.previous_step_held_buttons & controller_state.held;
+        controller_state.released =
+            ~controller_state.held & D_L00_0016C058.previous_step_held_buttons;
         D_L00_0016C058.previous_step_held_buttons = controller_state.held & ~0x200;
     }
     lvl = D_L00_0015F5C0_macro[1];
@@ -583,13 +585,13 @@ extern void        sceVu0RotMatrixZ(void *, void *, float) __asm__("FUN_001252b8
 int                apply_cutscene_camera_key(void) __asm__("FUN_L00_00298de8");
 
 int apply_cutscene_camera_key(void) {
-    float        camera_key_rotation_matrix[16] __attribute__((aligned(16)));
-    OvlQuad      camera_offset[1];
-    char        *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.camera_key_index * 32;
-    float       *camera_key_values = (float *)(camera_key + 0x10);
-    int          camera_key_flag = *(unsigned char *)(camera_key + 0xC);
-    char        *x = D_L00_0016CA40_lui;
-    char        *camera_position;
+    float   camera_key_rotation_matrix[16] __attribute__((aligned(16)));
+    OvlQuad camera_offset[1];
+    char   *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.camera_key_index * 32;
+    float  *camera_key_values = (float *)(camera_key + 0x10);
+    int     camera_key_flag = *(unsigned char *)(camera_key + 0xC);
+    char   *x = D_L00_0016CA40_lui;
+    char   *camera_position;
     LevelCamera *camera_state;
     float        k;
     float        unscaled_camera_value = camera_key_values[3];

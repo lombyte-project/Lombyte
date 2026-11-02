@@ -753,9 +753,9 @@ typedef struct {
 extern unsigned short D_00141C10 NOT_SDA;
 extern float D_L11_0016D4F0      NOT_SDA;
 extern char                      jet_fighter_collision_query_result[] __asm__("D_L11_00174840");
-int                              l11_jet_fighter_startup_acceleration_frame_threshold __asm__("D_L11_00161FF0") = 120;
-int                              l11_jet_fighter_steering_enable_frame_threshold __asm__("D_L11_00162004") = 5;
-int                              l11_jet_fighter_collision_damage_cooldown_frames __asm__("D_L11_0016214C") = 10;
+int l11_jet_fighter_startup_acceleration_frame_threshold __asm__("D_L11_00161FF0") = 120;
+int l11_jet_fighter_steering_enable_frame_threshold __asm__("D_L11_00162004") = 5;
+int l11_jet_fighter_collision_damage_cooldown_frames __asm__("D_L11_0016214C") = 10;
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_15.h"
 
@@ -797,23 +797,31 @@ extern float l11_jet_fighter_vertical_steering_spring_damping_coefficient __asm_
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_9.h"
 
-extern float l11_jet_fighter_rotation_x_spring_error_gain __asm__("D_L11_001620BC") __attribute__((sda));
-extern float l11_jet_fighter_rotation_x_spring_damping_coefficient __asm__("D_L11_001620C0") __attribute__((sda));
+extern float l11_jet_fighter_rotation_x_spring_error_gain __asm__("D_L11_001620BC")
+    __attribute__((sda));
+extern float l11_jet_fighter_rotation_x_spring_damping_coefficient __asm__("D_L11_001620C0")
+    __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_8.h"
 
-extern float l11_jet_fighter_camera_rotation_x_spring_error_gain __asm__("D_L11_001620E0") __attribute__((sda));
-extern float l11_jet_fighter_camera_rotation_x_spring_damping_coefficient __asm__("D_L11_001620E4") __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_x_spring_error_gain __asm__("D_L11_001620E0")
+    __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_x_spring_damping_coefficient __asm__("D_L11_001620E4")
+    __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_7.h"
 
-extern float l11_jet_fighter_camera_rotation_y_spring_error_gain __asm__("D_L11_001620EC") __attribute__((sda));
-extern float l11_jet_fighter_camera_rotation_y_spring_damping_coefficient __asm__("D_L11_001620F0") __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_y_spring_error_gain __asm__("D_L11_001620EC")
+    __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_y_spring_damping_coefficient __asm__("D_L11_001620F0")
+    __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_6.h"
 
-extern float l11_jet_fighter_camera_rotation_z_spring_error_gain __asm__("D_L11_001620F8") __attribute__((sda));
-extern float l11_jet_fighter_camera_rotation_z_spring_damping_coefficient __asm__("D_L11_001620FC") __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_z_spring_error_gain __asm__("D_L11_001620F8")
+    __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_z_spring_damping_coefficient __asm__("D_L11_001620FC")
+    __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_5.h"
 
@@ -1183,7 +1191,8 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                                         0);
                         ship_moby->state = JET_FIGHTER_STATE_WAIT_FOR_RESPAWN;
                     }
-                    ship_vars->collision_damage_cooldown_timer_frames = l11_jet_fighter_collision_damage_cooldown_frames;
+                    ship_vars->collision_damage_cooldown_timer_frames =
+                        l11_jet_fighter_collision_damage_cooldown_frames;
                 }
             }
         }
@@ -1455,7 +1464,8 @@ void jet_fighter_update(struct Moby *moby) {
             update_player_ship_flight(moby, ship_vars);
             {
                 int alive = count_listed_blarg_ships_in_state_5(ship_vars->blarg_ship_list_index);
-                if (ship_vars->visible_listed_moby_count != 0 && alive < 5 - ship_vars->active_listed_moby_count &&
+                if (ship_vars->visible_listed_moby_count != 0 &&
+                    alive < 5 - ship_vars->active_listed_moby_count &&
                     fast_dec_timer(&ship_vars->blarg_ship_activation_timer_frames) &&
                     activate_listed_blarg_ship(ship_vars->blarg_ship_list_index)) {
                     ship_vars->blarg_ship_activation_timer_frames = scale_game_frames(0xF0);

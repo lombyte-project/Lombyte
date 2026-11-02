@@ -417,12 +417,14 @@ void gadgebot_update(GbMoby *moby) {
         gadgebot_vars->unk308 = 1.0f;
         moby->pos[2] = probe_ground_height(moby->pos, 0, 0.5f);
         spawn_gadgebot_pad((char *)moby);
-        gadgebot_vars->position_history_previous.q = gadgebot_vars->position_history_latest.q = *(OvlQuad *)moby->pos;
+        gadgebot_vars->position_history_previous.q = gadgebot_vars->position_history_latest.q =
+            *(OvlQuad *)moby->pos;
         if (visited52[moby->unkB0 + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
         }
-        gadgebot_vars->spawn_container_moby = (GbMoby *)spawn_gadgebot_spawn_container((char *)moby);
+        gadgebot_vars->spawn_container_moby =
+            (GbMoby *)spawn_gadgebot_spawn_container((char *)moby);
         moby->pos[2] = probe_ground_height(moby->pos, 0, 0.5f);
         qcopy(gadgebot_vars->unk0, moby->pos);
         qcopy(gadgebot_vars->unkE0, moby->pos);
@@ -454,8 +456,10 @@ void gadgebot_update(GbMoby *moby) {
         break;
     }
     case GADGEBOT_WAIT_FOR_SPAWN_PAD:
-        if (gadgebot_vars->spawn_container_moby == 0 || gadgebot_vars->spawn_container_moby->state == 0xFE ||
-            gadgebot_vars->spawn_container_moby->state == 0xFD || gadgebot_vars->spawn_container_moby->state >= 2) {
+        if (gadgebot_vars->spawn_container_moby == 0 ||
+            gadgebot_vars->spawn_container_moby->state == 0xFE ||
+            gadgebot_vars->spawn_container_moby->state == 0xFD ||
+            gadgebot_vars->spawn_container_moby->state >= 2) {
             if (gadgebot_vars->configured_path_count > 0) {
                 int i;
 
@@ -495,7 +499,8 @@ void gadgebot_update(GbMoby *moby) {
                 gadgebot_vars->spawn_container_moby->flags &= 0xFFBE;
                 moby->flags |= 0x1000;
                 gadgebot_vars->spawn_container_moby->flags |= 0x1000;
-                gadgebot_vars->spawn_container_moby->unk94 = gadgebot_vars->spawn_container_moby->cls->unk10;
+                gadgebot_vars->spawn_container_moby->unk94 =
+                    gadgebot_vars->spawn_container_moby->cls->unk10;
             }
             if (moby->unk31 != 0) {
                 update_gadgebot_glow_effects((char *)moby);
@@ -923,11 +928,14 @@ void gadgebot_update(GbMoby *moby) {
     case GADGEBOT_ABSORB_INTO_OWNER: {
         float rr;
 
-        owner_radial_angle = fast_arc_tan(moby->pos[0] - gadgebot_vars->absorption_owner_moby->pos[0],
-                                          moby->pos[1] - gadgebot_vars->absorption_owner_moby->pos[1]);
+        owner_radial_angle =
+            fast_arc_tan(moby->pos[0] - gadgebot_vars->absorption_owner_moby->pos[0],
+                         moby->pos[1] - gadgebot_vars->absorption_owner_moby->pos[1]);
         rr = vector_distance_xy(gadgebot_vars->absorption_owner_moby->pos, moby->pos);
-        step_angle_toward_target(
-            &owner_radial_angle, 0, gadgebot_vars->absorption_owner_moby->rot, frame_time * 6.2831855f);
+        step_angle_toward_target(&owner_radial_angle,
+                                 0,
+                                 gadgebot_vars->absorption_owner_moby->rot,
+                                 frame_time * 6.2831855f);
         rr -= frame_time * 4.0f;
         if (rr <= 0.0f) {
             GbOwnerVars *ov = gadgebot_vars->absorption_owner_moby->vars;
@@ -1071,11 +1079,12 @@ void gadgebot_update(GbMoby *moby) {
                 do {
                     qcopy(position_and_displacement_scratch, moby->pos);
                     position_and_displacement_scratch[2] += gadgebot_vars->ctl.unk04;
-                    if (coll_sphere(position_and_displacement_scratch,
-                                    convert_integer_to_float(gadgebot_vars->ctl.collision_radius_1024ths) *
-                                        0.0009765625f,
-                                    6,
-                                    moby) == 0) {
+                    if (coll_sphere(
+                            position_and_displacement_scratch,
+                            convert_integer_to_float(gadgebot_vars->ctl.collision_radius_1024ths) *
+                                0.0009765625f,
+                            6,
+                            moby) == 0) {
                         break;
                     }
                     if (fast_arc_tan(D_L06_001745C0.unk48, vector_length_xy(D_L06_001745C0.unk40)) >

@@ -263,7 +263,9 @@ extern short lift_camera_height_offset_gp __asm__("D_L05_00161EC0") __attribute_
 extern short lift_camera_pitch_degrees_gp __asm__("D_L05_00161EC4") __attribute__((sda));
 extern short lift_camera_distance_along_facing_gp __asm__("D_L05_00161EC8") __attribute__((sda));
 
-void compute_lift_camera_view(char *lift_moby, char *camera_position, char *camera_rotation) __asm__("FUN_L05_00315ee0");
+void compute_lift_camera_view(char *lift_moby,
+                              char *camera_position,
+                              char *camera_rotation) __asm__("FUN_L05_00315ee0");
 
 void compute_lift_camera_view(char *lift_moby, char *camera_position, char *camera_rotation) {
     float pitch_degrees;

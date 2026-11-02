@@ -285,7 +285,8 @@ void draw_teleporter_ring(struct Moby *moby) {
     copy_matrix_rotation(matrix, &moby->rot_row0);
     qcopy(matrix + 12, &moby->pos);
     quad.tag[1] = get_effect_texture(l11_teleporter_ring_effect_texture_index);
-    quad.tag[3] = (unsigned long long)l11_teleporter_ring_blend_a_selector | (unsigned long long)l11_teleporter_ring_blend_b_selector << 2 |
+    quad.tag[3] = (unsigned long long)l11_teleporter_ring_blend_a_selector |
+                  (unsigned long long)l11_teleporter_ring_blend_b_selector << 2 |
                   (unsigned long long)l11_teleporter_ring_blend_c_selector << 4 |
                   (unsigned long long)l11_teleporter_ring_blend_d_selector << 6 | 0x8000000000ULL;
     quad.tag[2] = 0xff9000000260ULL;

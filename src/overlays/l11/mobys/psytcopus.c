@@ -41,16 +41,16 @@ struct PokiPathVars {
     u8           unk5A; /* 0x5A */
     u8           pad_5B[5];
     u8           unk60[7]; /* 0x60: passed to trooper_anim_update / trooper_anim_finish */
-    u8           hit_reaction_channel_target;    /* 0x67 */
+    u8           hit_reaction_channel_target; /* 0x67 */
     u8           pad_68[8];
     u8           unk70[0x10]; /* 0x70: passed to trooper_start_knockback / step_moby_motion */
     f32          unk80;       /* 0x80 */
-    f32          knockback_speed_approach_step;       /* 0x84 */
-    f32          unk88;       /* 0x88 */
-    f32          knockback_vertical_speed;       /* 0x8C */
-    s32          knockback_collision_radius;       /* 0x90 */
-    s32          unk94;       /* 0x94 */
-    f32          unk98;       /* 0x98 */
+    f32          knockback_speed_approach_step; /* 0x84 */
+    f32          unk88;                         /* 0x88 */
+    f32          knockback_vertical_speed;      /* 0x8C */
+    s32          knockback_collision_radius;    /* 0x90 */
+    s32          unk94;                         /* 0x94 */
+    f32          unk98;                         /* 0x98 */
     u8           pad_9C[0x11];
     u8           unkAD; /* 0xAD */
     u8           pad_AE[0x12];
@@ -214,7 +214,8 @@ void psytcopus_update(struct Moby *psytcopus) {
             is_value_within_interpolated_window(psytcopus, 33.0f) != 0) {
             fast_vec_normalize(
                 &projectile_vector_scratch, &psytcopus->rot_row0, frame_time * 30.0f);
-            set_moby_state_two_data_and_timer(psytcopus_vars->held_projectile, &projectile_vector_scratch);
+            set_moby_state_two_data_and_timer(psytcopus_vars->held_projectile,
+                                              &projectile_vector_scratch);
             psytcopus_vars->held_projectile = 0;
         }
         if (psytcopus->anim_flags & 2) {
@@ -331,7 +332,8 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         case HIT_REACTION_KNOCKBACK_WITH_SOURCE_RELATIVE_HEADING:
         case HIT_REACTION_KNOCKBACK_WITH_SOURCE_RELATIVE_HEADING_AND_TIMER_EXTENSION:
             psytcopus_vars->unk88 = psytcopus_hurt_knockback_base_horizontal_speed_gp * frame_time;
-            psytcopus_vars->knockback_vertical_speed = psytcopus_hurt_knockback_base_vertical_speed_gp * frame_time;
+            psytcopus_vars->knockback_vertical_speed =
+                psytcopus_hurt_knockback_base_vertical_speed_gp * frame_time;
             psytcopus_vars->unkC0 = 3.0f;
             psytcopus_vars->unkC4 = 6.0f;
             source_to_psytcopus_heading = fast_arc_tan(
@@ -357,7 +359,8 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             psytcopus->flags &= 0xEFFF;
             psytcopus_vars->unk80 = psytcopus_knockback_base_gravity_gp * frame_time_sq;
             psytcopus_vars->unk88 = psytcopus_death_knockback_base_horizontal_speed_gp * frame_time;
-            psytcopus_vars->knockback_vertical_speed = psytcopus_death_knockback_base_vertical_speed_gp * frame_time;
+            psytcopus_vars->knockback_vertical_speed =
+                psytcopus_death_knockback_base_vertical_speed_gp * frame_time;
             psytcopus_vars->unkC0 = 4.0f;
             psytcopus_vars->unkC4 = 10.0f;
             source_to_psytcopus_heading = fast_arc_tan(

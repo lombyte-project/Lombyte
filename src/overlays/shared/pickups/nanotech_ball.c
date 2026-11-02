@@ -1353,7 +1353,8 @@ void nanotech_ball_update(Moby *moby) {
                 max_hp = 4;
             if (moby->state != NANOTECH_BALL_STATE_FOLLOW_OWNER && D_L00_0015F63C != 0 &&
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && player->health.hp != 0 &&
-                (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->pending_collection_count < max_hp ||
+                (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->pending_collection_count <
+                     max_hp ||
                  (nanotech_ball_invulnerability_pickup_enabled != 0 &&
                   player->invulnerable_frames == 0)) &&
                 fast_vec_dist(&moby->pos, &player->motion.pos) < 10.0f &&

@@ -400,7 +400,8 @@ void test_dummy_update(unsigned char *moby) {
         break;
     case TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE: /* turn back to the node, then resume the saved state and animation */
         position_or_delta.quad = *(u128 *)(path + dummy_data->node * 16 + 16);
-        move_test_dummy_toward_position_and_heading(moby, position_or_delta.f, dummy_data->hit_reaction_heading);
+        move_test_dummy_toward_position_and_heading(
+            moby, position_or_delta.f, dummy_data->hit_reaction_heading);
         if (moby[0x70] & 2) {
             moby[0x20] = dummy_data->next_state;
             if (moby[0x53] != dummy_data->next_anim) {

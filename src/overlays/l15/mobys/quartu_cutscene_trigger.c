@@ -141,7 +141,8 @@ void draw_quartu_cutscene_messages(void) {
                 sprintf(formatted_message_text,
                         quartu_cutscene_message_format,
                         get_help_message_text(0x526A));
-                message_reveal_count = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0xB5)) >> 2;
+                message_reveal_count =
+                    (*(int *)(message_timing_state + 0x34) - scale_game_frames(0xB5)) >> 2;
             }
         }
         second_message_timing_state = D_L15_0016CE60;
@@ -162,7 +163,8 @@ void draw_quartu_cutscene_messages(void) {
                 sprintf(formatted_message_text,
                         quartu_cutscene_message_format,
                         get_help_message_text(0x526C));
-                message_reveal_count = (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
+                message_reveal_count =
+                    (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
             }
         }
     } else if (*(int *)(message_timing_state + 0x30) == 4) {
@@ -172,7 +174,8 @@ void draw_quartu_cutscene_messages(void) {
                 sprintf(formatted_message_text,
                         quartu_cutscene_message_format,
                         get_help_message_text(0x526E));
-                message_reveal_count = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0x8FC)) >> 2;
+                message_reveal_count =
+                    (*(int *)(message_timing_state + 0x34) - scale_game_frames(0x8FC)) >> 2;
             }
         }
     }

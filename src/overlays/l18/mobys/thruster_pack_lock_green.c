@@ -144,7 +144,8 @@ void thruster_pack_lock_green_update(char *moby) {
             }
         }
         if (moby_vars->f24 != 0.0f) {
-            if ((moby_vars->target_reset_timer_disabled == 0 && fast_dec_timer((int *)&moby_vars->target_reset_timer) == 2) ||
+            if ((moby_vars->target_reset_timer_disabled == 0 &&
+                 fast_dec_timer((int *)&moby_vars->target_reset_timer) == 2) ||
                 (D_L18_0015F5C4_d == 2 && D_L18_0016D290_lui >= 4)) {
                 allocate_voice_for_target_entry(0, 0, (int)moby);
                 moby_vars->f24 = 0;
@@ -191,17 +192,29 @@ void thruster_pack_lock_green_update(char *moby) {
                                        frame_time * 4.0f);
         }
         if (moby_vars->aligned_lock_component != 0) {
-            FUN_001f9bf8_q(moby_vars->aligned_lock_component + 0x10, moby_vars->aligned_lock_component + 0xD0, -moby_vars->f20);
+            FUN_001f9bf8_q(moby_vars->aligned_lock_component + 0x10,
+                           moby_vars->aligned_lock_component + 0xD0,
+                           -moby_vars->f20);
             FUN_001f9bf8_q(v, moby_vars->aligned_lock_component + 0xE0, -moby_vars->f20 * 0.2f);
-            fast_vec_add(moby_vars->aligned_lock_component + 0x10, moby_vars->aligned_lock_component + 0x10, v);
-            fast_vec_add(moby_vars->aligned_lock_component + 0x10, moby_vars->aligned_lock_component + 0x10, moby_vars);
+            fast_vec_add(moby_vars->aligned_lock_component + 0x10,
+                         moby_vars->aligned_lock_component + 0x10,
+                         v);
+            fast_vec_add(moby_vars->aligned_lock_component + 0x10,
+                         moby_vars->aligned_lock_component + 0x10,
+                         moby_vars);
             update_entity(moby_vars->aligned_lock_component);
         }
         if (moby_vars->opposed_lock_component != 0) {
-            FUN_001f9bf8_q(moby_vars->opposed_lock_component + 0x10, moby_vars->opposed_lock_component + 0xD0, -moby_vars->f20);
+            FUN_001f9bf8_q(moby_vars->opposed_lock_component + 0x10,
+                           moby_vars->opposed_lock_component + 0xD0,
+                           -moby_vars->f20);
             FUN_001f9bf8_q(v, moby_vars->opposed_lock_component + 0xE0, -moby_vars->f20 * 0.2f);
-            fast_vec_add(moby_vars->opposed_lock_component + 0x10, moby_vars->opposed_lock_component + 0x10, v);
-            fast_vec_add(moby_vars->opposed_lock_component + 0x10, moby_vars->opposed_lock_component + 0x10, moby_vars);
+            fast_vec_add(moby_vars->opposed_lock_component + 0x10,
+                         moby_vars->opposed_lock_component + 0x10,
+                         v);
+            fast_vec_add(moby_vars->opposed_lock_component + 0x10,
+                         moby_vars->opposed_lock_component + 0x10,
+                         moby_vars);
             update_entity(moby_vars->opposed_lock_component);
         }
         MOBY(moby)->pos.z = moby_vars->f10 + moby_vars->f34;

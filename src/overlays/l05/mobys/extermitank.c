@@ -299,7 +299,8 @@ void extermitank_update(unsigned char *moby) {
             char *g = ((char *)&D_0013F350);
             float a = fast_arc_tan(*(float *)(g + 0x80) - MOBY(moby)->pos.x,
                                    *(float *)(g + 0x84) - MOBY(moby)->pos.y);
-            step_angle_toward_target(&extermitank_vars->turret_yaw, 0, a, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target(
+                &extermitank_vars->turret_yaw, 0, a, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
                 &extermitank_vars->turret_pitch, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         } else {
@@ -478,7 +479,8 @@ void extermitank_update(unsigned char *moby) {
             char *g = ((char *)&D_0013F350);
             float a = fast_arc_tan(*(float *)(g + 0x80) - MOBY(moby)->pos.x,
                                    *(float *)(g + 0x84) - MOBY(moby)->pos.y);
-            step_angle_toward_target(&extermitank_vars->turret_yaw, 0, a, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target(
+                &extermitank_vars->turret_yaw, 0, a, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
                 &extermitank_vars->turret_pitch, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         }
@@ -650,7 +652,8 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
                             1,
                             -1,
                             0);
-            extermitank_hit_sync_vars->removal_scaled_frames = scale_game_frames(l05_extermitank_removal_base_frames);
+            extermitank_hit_sync_vars->removal_scaled_frames =
+                scale_game_frames(l05_extermitank_removal_base_frames);
             MOBY(moby)->state = EXTERMITANK_REMOVE;
             clear_u64_value(effect_data);
             *(float *)(effect_data + 8) = extermitank_hit_sync_vars->turret_yaw;
@@ -745,7 +748,8 @@ mark_children:
         ((unsigned char *)extermitank_hit_sync_vars->unk184)[0xa4] = 0xff;
     if (extermitank_hit_sync_vars->unk188 != 0)
         ((unsigned char *)extermitank_hit_sync_vars->unk188)[0xa4] = 0xff;
-    if (extermitank_hit_sync_vars->unk38 != 0 && extermitank_hit_sync_vars->firing_range_timer == 0) {
+    if (extermitank_hit_sync_vars->unk38 != 0 &&
+        extermitank_hit_sync_vars->firing_range_timer == 0) {
         extermitank_hit_sync_vars->firing_range_timer = scale_game_frames(0xf0);
         extermitank_hit_sync_vars->unk38 = 0;
         hero_turn_reference = &hero;

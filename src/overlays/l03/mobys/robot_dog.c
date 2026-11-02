@@ -169,7 +169,8 @@ void robot_dog_update(char *moby) {
     float       initialization_multiplier_or_desired_heading;
 
     robot_dog_state = ((Data2c5bb8 *)MOBY(moby)->pvars);
-    select_moby_target_with_hero_fallback(moby, (char *)&selected_target, robot_dog_state->target_engagement_radius);
+    select_moby_target_with_hero_fallback(
+        moby, (char *)&selected_target, robot_dog_state->target_engagement_radius);
     FUN_L00_00263ac8_c5bb8(moby, 0, robot_dog_state->m280, 2.1f);
     update_robot_dog_hit_reaction((struct Moby *)moby);
     fast_dec_timer(&robot_dog_state->melee_cooldown_timer);
@@ -205,7 +206,8 @@ void robot_dog_update(char *moby) {
             MOBY(moby)->flags |= 0x8000;
         }
         robot_dog_state->pD0 = &D_L03_001618D0;
-        if (robot_dog_state->linked_partner_index != -1 && robot_dog_state->activation_path_index == -1) {
+        if (robot_dog_state->linked_partner_index != -1 &&
+            robot_dog_state->activation_path_index == -1) {
             if (((unsigned char *)moby)[0x53] != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
             }
@@ -223,8 +225,10 @@ void robot_dog_update(char *moby) {
                 *(float *)(activation_path + 0x24) - *(float *)(activation_path + 0x14));
             if ((random_integer_below(14) == 0 &&
                  is_point_inside_clip_volume_cf(((unsigned char *)moby)[0x21])) ||
-                is_point_inside_clip_volume(&selected_target, robot_dog_state->activation_clip_volume_id) ||
-                (fast_vec_dist(&selected_target, moby + 0x10) < robot_dog_state->path_activation_distance &&
+                is_point_inside_clip_volume(&selected_target,
+                                            robot_dog_state->activation_clip_volume_id) ||
+                (fast_vec_dist(&selected_target, moby + 0x10) <
+                     robot_dog_state->path_activation_distance &&
                  absolute_float(selected_target.pos[2] - MOBY(moby)->pos.z) < 4.0f)) {
                 robot_dog_state->path_target_node_index = 0;
                 MOBY(moby)->state = ROBOT_DOG_FOLLOW_PATH;
@@ -233,7 +237,8 @@ void robot_dog_update(char *moby) {
                 }
             }
         } else if (random_integer_below(14) == 0 &&
-                   fast_vec_dist(&selected_target, robot_dog_state->home) < robot_dog_state->target_engagement_radius &&
+                   fast_vec_dist(&selected_target, robot_dog_state->home) <
+                       robot_dog_state->target_engagement_radius &&
                    absolute_float(selected_target.pos[2] - MOBY(moby)->pos.z) < 3.0f) {
             MOBY(moby)->state = ROBOT_DOG_TURN_TO_TARGET;
             if (((unsigned char *)moby)[0x53] != 2) {
@@ -250,7 +255,8 @@ void robot_dog_update(char *moby) {
                 ((unsigned char *)partner_moby)[0x20] == 0xFE ||
                 ((unsigned char *)partner_moby)[0x20] == 0xFD ||
                 can_release_linked_robot_dog((struct Moby *)partner_moby)) {
-                robot_dog_state->chase_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+                robot_dog_state->chase_timer =
+                    scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 MOBY(moby)->state = ROBOT_DOG_CHASE_TARGET;
                 if (((unsigned char *)moby)[0x53] != 3) {
                     blend_moby_animation(moby, 3, 0, scale_game_frames(10));
@@ -268,7 +274,8 @@ void robot_dog_update(char *moby) {
                          0.3f,
                          0.1f);
         if (((unsigned char *)moby)[0x70] & 2) {
-            robot_dog_state->chase_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            robot_dog_state->chase_timer =
+                scale_game_frames((int)random_float_between(30.0f, 90.0f));
             MOBY(moby)->state = ROBOT_DOG_CHASE_TARGET;
             if (((unsigned char *)moby)[0x53] != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
@@ -290,17 +297,19 @@ void robot_dog_update(char *moby) {
         move_moby_with_ground_and_collision_checks(
             moby, &robot_dog_state->i180, forward_vector_or_path_point, push, 1.0f);
         if (fast_dec_timer(&robot_dog_state->chase_timer)) {
-            robot_dog_state->chase_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            robot_dog_state->chase_timer =
+                scale_game_frames((int)random_float_between(30.0f, 90.0f));
         }
         target_distance = vector_distance_xy(moby + 0x10, &selected_target);
-        if (target_distance < robot_dog_state->movement_speed * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
-                                  robot_dog_state->movement_speed * frame_time * FUN_L04_001f1978(10.0f) +
-                                  1.5f) {
+        if (target_distance <
+            robot_dog_state->movement_speed * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
+                robot_dog_state->movement_speed * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
             MOBY(moby)->state = ROBOT_DOG_MELEE_ATTACK;
             if (((unsigned char *)moby)[0x53] != 5) {
                 blend_moby_animation(moby, 5, 0, truncate_float_to_s32(FUN_L04_001f1978(10.0f)));
             }
-        } else if (robot_dog_state->target_engagement_radius < fast_vec_dist(&selected_target, robot_dog_state->home) ||
+        } else if (robot_dog_state->target_engagement_radius <
+                       fast_vec_dist(&selected_target, robot_dog_state->home) ||
                    absolute_float(selected_target.pos[2] - MOBY(moby)->pos.z) > 3.0f) {
             MOBY(moby)->state = ROBOT_DOG_RETURN_HOME;
         }
@@ -314,7 +323,8 @@ void robot_dog_update(char *moby) {
         }
         if (step_mover_2e3f20(moby,
                               (char *)&robot_dog_state->i180,
-                              (char *)path + (robot_dog_state->path_target_node_index * 0x10 + 0x10),
+                              (char *)path +
+                                  (robot_dog_state->path_target_node_index * 0x10 + 0x10),
                               (char *)robot_dog_state->v40) &
             0x14) {
             if (robot_dog_state->path_target_node_index < *path - 1) {
@@ -341,7 +351,8 @@ void robot_dog_update(char *moby) {
                 ((unsigned char *)partner_moby)[0x20] == 0xFD ||
                 can_release_linked_robot_dog((struct Moby *)partner_moby)) {
                 robot_dog_state->activation_path_index = -1;
-                robot_dog_state->chase_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+                robot_dog_state->chase_timer =
+                    scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 MOBY(moby)->state = ROBOT_DOG_CHASE_TARGET;
                 if (((unsigned char *)moby)[0x53] != 3) {
                     blend_moby_animation(moby, 3, 0, scale_game_frames(10));

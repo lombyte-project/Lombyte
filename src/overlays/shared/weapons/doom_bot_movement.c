@@ -501,7 +501,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
         }
     }
     if (2.5132742f < fast_difference_between_rotations(best, moby->current_heading)) {
-        best = fast_add_rotations(moby->current_heading, fast_subtract_rotations(best, moby->current_heading) * 0.5f);
+        best = fast_add_rotations(moby->current_heading,
+                                  fast_subtract_rotations(best, moby->current_heading) * 0.5f);
     }
     return best;
 }

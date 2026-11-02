@@ -245,9 +245,9 @@ void armed_transport_update(char *transport_moby) {
                 loaded = 1;
         }
         path = D_L16_001B0930[transport_data->path_index];
-        if (loaded &&
-            (float)(*(int *)path - transport_data->path_point) * transport_data->path_and_pose_state[1] <
-                16.0f) {
+        if (loaded && (float)(*(int *)path - transport_data->path_point) *
+                              transport_data->path_and_pose_state[1] <
+                          16.0f) {
             advance_accelerated_scalar((float *)(&transport_data->path_and_pose_state[3]),
                                        (float *)(&transport_data->unk180),
                                        1.5707964f,
@@ -433,9 +433,9 @@ void armed_transport_update(char *transport_moby) {
         break;
     }
     }
-    transport_data->bob_phase_radians = fast_add_rotations(transport_data->bob_phase_radians,
-                                                *(float *)&armed_transport_bob_phase_speed_degrees *
-                                                    DEG_TO_RAD * frame_time);
+    transport_data->bob_phase_radians = fast_add_rotations(
+        transport_data->bob_phase_radians,
+        *(float *)&armed_transport_bob_phase_speed_degrees * DEG_TO_RAD * frame_time);
     MOBY(transport_moby)->pos.z =
         transport_data->base_height +
         *(float *)&armed_transport_bob_amplitude * fast_sin(transport_data->bob_phase_radians);
@@ -524,8 +524,9 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
 
 int advance_armed_transport_along_path(char *transport_moby, char *path) {
     ArmedTransportVars *transport_data = (ArmedTransportVars *)MOBY(transport_moby)->pvars;
-    float progress = (float)transport_data->path_point + *(float *)&transport_data->path_segment_fraction +
-                     transport_data->path_and_pose_state[0] / transport_data->path_and_pose_state[1];
+    float               progress =
+        (float)transport_data->path_point + *(float *)&transport_data->path_segment_fraction +
+        transport_data->path_and_pose_state[0] / transport_data->path_and_pose_state[1];
     int   index = truncate_float_to_s32(progress);
     float speed;
     float distance, rate;

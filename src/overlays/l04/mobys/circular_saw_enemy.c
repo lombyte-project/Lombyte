@@ -534,7 +534,10 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             moby->f7F = 0x15;
         }
     }
-    select_moby_combat_target((char *)moby, (float *)&tg, flag ? data->target_detection_range * 2.0f : data->target_detection_range);
+    select_moby_combat_target((char *)moby,
+                              (float *)&tg,
+                              flag ? data->target_detection_range * 2.0f
+                                   : data->target_detection_range);
     target_moby = tg.f40;
     hd = compute_interpolated_record_value(moby);
     target_distance = vector_distance_xy(moby->pos, (float *)&tg);
@@ -561,7 +564,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         dmg = 0.0f;
         hit = find_moby_hit(moby, 0x210000, 0);
         r = hit_reaction(moby, hit, &data->hp, 0, &unused_hit_reaction_output, &dmg, 0, 4);
-        if (hit != 0 && moby->state != CIRCULAR_SAW_STATE_INITIALIZE && data->hit_reaction_cooldown_timer == 0) {
+        if (hit != 0 && moby->state != CIRCULAR_SAW_STATE_INITIALIZE &&
+            data->hit_reaction_cooldown_timer == 0) {
             if (hit->att != 0) {
                 struct Hero *h = &hero;
                 if (hit->att != h->items[0].moby) {
@@ -650,8 +654,9 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 melee_hit_parameters.f20 = 1;
                 collect_mobies_in_sphere(jp, 0x10, moby, &melee_hit_parameters, 0.5f);
                 if (coll_hit.moby == target_moby) {
-                    data->action_timer =
-                        data->action_timer < scale_game_frames(0x3C) ? data->action_timer : scale_game_frames(0x3C);
+                    data->action_timer = data->action_timer < scale_game_frames(0x3C)
+                                             ? data->action_timer
+                                             : scale_game_frames(0x3C);
                 }
             }
         }
@@ -712,20 +717,23 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             qcopy(save, moby->pos);
             update_object_wander_movement((char *)moby, (char *)data->f240, 0.35f, 0.25f);
             if (data->movement_boundary_path_index != -1) {
-                if (point_in_path_xy(moby->pos,
-                                     ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                     ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) == 0) {
+                if (point_in_path_xy(
+                        moby->pos,
+                        ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                        ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) == 0) {
                     qcopy(moby->pos, save);
                 }
             }
             if (moby->f52 != 0 && (moby->f70 & 2)) {
                 blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(5));
             }
-            if (flag ? target_distance < data->target_detection_range * 2.0f : target_distance < data->target_detection_range) {
+            if (flag ? target_distance < data->target_detection_range * 2.0f
+                     : target_distance < data->target_detection_range) {
                 if (flag || data->movement_boundary_path_index == -1 ||
-                    point_in_path_xy(&tg,
-                                     ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                     ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
+                    point_in_path_xy(
+                        &tg,
+                        ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                        ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
                     int nf = (data->combat_history_flags & 1) == 0;
                     if (nf) {
                         data->combat_history_flags |= 1;
@@ -761,13 +769,17 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     case CIRCULAR_SAW_STATE_CHASE_TARGET:
-        if ((flag ? target_distance < data->target_detection_range * 2.0f : target_distance < data->target_detection_range) &&
+        if ((flag ? target_distance < data->target_detection_range * 2.0f
+                  : target_distance < data->target_detection_range) &&
             (flag || data->movement_boundary_path_index == -1 ||
              point_in_path_xy(&tg,
                               ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                              ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0)) {
-            rot = compute_circular_saw_flock_steering(
-                moby, dest, flag ? data->target_detection_range * 2.0f : data->target_detection_range);
+                              ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) !=
+                 0)) {
+            rot = compute_circular_saw_flock_steering(moby,
+                                                      dest,
+                                                      flag ? data->target_detection_range * 2.0f
+                                                           : data->target_detection_range);
             if (target_distance < 2.0f && data->action_timer == 0 &&
                 check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
@@ -793,11 +805,13 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         int     i;
         float  *yaw_velocity;
 
-        if (flag ? target_distance < data->target_detection_range * 2.0f : target_distance < data->target_detection_range) {
+        if (flag ? target_distance < data->target_detection_range * 2.0f
+                 : target_distance < data->target_detection_range) {
             if (flag || data->movement_boundary_path_index == -1 ||
-                point_in_path_xy(&tg,
-                                 ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                 ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
+                point_in_path_xy(
+                    &tg,
+                    ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                    ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
                 int nf = (data->combat_history_flags & 1) == 0;
                 if (nf) {
                     data->combat_history_flags |= 1;
@@ -857,11 +871,13 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     case CIRCULAR_SAW_STATE_POINT_ATTACK: {
         P_35F0 *path = ((P_35F0 *)l04_paths[data->patrol_path_index]);
 
-        if (flag ? target_distance < data->target_detection_range * 2.0f : target_distance < data->target_detection_range) {
+        if (flag ? target_distance < data->target_detection_range * 2.0f
+                 : target_distance < data->target_detection_range) {
             if (flag || data->movement_boundary_path_index == -1 ||
-                point_in_path_xy(&tg,
-                                 ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                 ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
+                point_in_path_xy(
+                    &tg,
+                    ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                    ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
                 int nf = (data->combat_history_flags & 1) == 0;
                 if (nf) {
                     data->combat_history_flags |= 1;
@@ -940,8 +956,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         break;
     }
     case CIRCULAR_SAW_STATE_MELEE_ATTACK:
-        rot =
-            compute_circular_saw_flock_steering(moby, dest, flag ? data->target_detection_range * 2.0f : data->target_detection_range);
+        rot = compute_circular_saw_flock_steering(
+            moby, dest, flag ? data->target_detection_range * 2.0f : data->target_detection_range);
         if (data->action_timer == 0 && (hd > 44.0f || (moby->f70 & 2))) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(5));
             data->action_timer = scale_game_frames(0x78);
@@ -1006,9 +1022,10 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             qcopy(np, moby->pos);
             move_moby_xy_with_collision_constraints(moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
             if (data->movement_boundary_path_index == -1 ||
-                point_in_path_xy(np,
-                                 ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                 ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
+                point_in_path_xy(
+                    np,
+                    ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                    ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
                 qcopy(moby->pos, np);
             }
         }
@@ -1031,11 +1048,12 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                         fast_normalize_angle(fast_normalize_angle(
                             convert_integer_to_float(data->movement_direction_index) * 1.5707964f)),
                         rel) > 1.7453293f) {
-                    data->movement_direction_index = truncate_float_to_s32(biased_relative_yaw * 1.999f / 3.1415927f);
+                    data->movement_direction_index =
+                        truncate_float_to_s32(biased_relative_yaw * 1.999f / 3.1415927f);
                     anim = movement_animation_by_direction.v[data->movement_direction_index];
                 }
-                movement_relative_yaw =
-                    fast_normalize_angle(convert_integer_to_float(data->movement_direction_index) * 1.5707964f);
+                movement_relative_yaw = fast_normalize_angle(
+                    convert_integer_to_float(data->movement_direction_index) * 1.5707964f);
                 v[0] = fast_cos(fast_add_rotations(moby->rot, movement_relative_yaw)) *
                        (frame_time * 3.0f);
                 v[1] = fast_sin(fast_add_rotations(moby->rot, movement_relative_yaw)) *
@@ -1050,9 +1068,10 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             moved = move_moby_xy_with_collision_constraints(
                 moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
             if (data->movement_boundary_path_index == -1 ||
-                point_in_path_xy(np,
-                                 ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                 ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
+                point_in_path_xy(
+                    np,
+                    ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                    ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
                 qcopy(moby->pos, np);
                 if (moved == 0) {
                     anim = 0;
@@ -1060,7 +1079,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             } else {
                 anim = 0;
             }
-            if (fast_dec_timer_s16(&data->movement_animation_change_timer) != 0 && anim != moby->f53) {
+            if (fast_dec_timer_s16(&data->movement_animation_change_timer) != 0 &&
+                anim != moby->f53) {
                 blend_moby_animation(moby, (void *)anim, 0, (void *)scale_game_frames(10));
                 data->movement_animation_change_timer = scale_game_frames(0xF);
             }
@@ -1081,9 +1101,10 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 move_moby_xy_with_collision_constraints(
                     moby, np, v, 0, 0.25f, 1.25f, 0.5f, 0.5235988f);
                 if (data->movement_boundary_path_index == -1 ||
-                    point_in_path_xy(np,
-                                     ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
-                                     ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
+                    point_in_path_xy(
+                        np,
+                        ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->pts,
+                        ((P_35F0 *)l04_paths[data->movement_boundary_path_index])->count) != 0) {
                     qcopy(moby->pos, np);
                 }
             }

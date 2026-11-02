@@ -442,7 +442,8 @@ void ground_melee_enemy_update(Moby *moby) {
             moby->state = GROUND_ENEMY_STATE_MELEE_ATTACK;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
-        } else if (ground_enemy_vars->horizontal_movement_step < frame_time || 1.0f < steep || (flags & 2)) {
+        } else if (ground_enemy_vars->horizontal_movement_step < frame_time || 1.0f < steep ||
+                   (flags & 2)) {
             ground_enemy_vars->home_timer = scale_game_frames(50);
             moby->state = GROUND_ENEMY_STATE_RETURN_HOME;
         } else if (fast_vec_length(&away) < ground_enemy_vars->range + 4.0f &&

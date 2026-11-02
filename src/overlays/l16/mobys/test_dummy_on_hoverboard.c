@@ -243,7 +243,9 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
         while (group_candidate_moby) {
             if (MOBY(group_candidate_moby)->oclass == 0x474) {
                 float m[16];
-                fast_vec_sub(displacement_vector, group_candidate_moby + 0x10, moby_pvars->movement_position);
+                fast_vec_sub(displacement_vector,
+                             group_candidate_moby + 0x10,
+                             moby_pvars->movement_position);
                 if (!(8.0f < fast_vec_length(displacement_vector))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, group_candidate_moby + 0xC0);
@@ -738,13 +740,16 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                      frame_scale_sq * 0.035f,
                      frame_scale_sq * 0.3f,
                      D_0015ED6C * 6.981317f);
-        if (hoverboard_dummy_data->movement_position[2] < path_node_or_explosion_position[2] - 5.0f) {
+        if (hoverboard_dummy_data->movement_position[2] <
+            path_node_or_explosion_position[2] - 5.0f) {
             hoverboard_dummy_data->movement_position[2] = path_node_or_explosion_position[2];
         }
         delta[0] = fast_cos(MOBY(moby)->rot.z) * hoverboard_dummy_data->forward_speed;
         delta[1] = fast_sin(MOBY(moby)->rot.z) * hoverboard_dummy_data->forward_speed;
         delta[2] = 0.0f;
-        fast_vec_add(hoverboard_dummy_data->movement_position, hoverboard_dummy_data->movement_position, delta);
+        fast_vec_add(hoverboard_dummy_data->movement_position,
+                     hoverboard_dummy_data->movement_position,
+                     delta);
         fast_vec_scale(ahead, delta, 3.0f);
         fast_vec_add(ahead, ahead, hoverboard_dummy_data->movement_position);
         ahead[2] += 0.7f;
@@ -781,8 +786,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             if (*(int *)(hero_base + 0x894) < scale_game_frames(700)) {
                 speed += D_0015ED6C * 3.0f;
             }
-            if (*(short *)(hero_base - (-(hoverboard_dummy_data->race_competitor_index * 2)) + 0x7C0) <
-                *(int *)(hero_base + 0x8C0)) {
+            if (*(short *)(hero_base - (-(hoverboard_dummy_data->race_competitor_index * 2)) +
+                           0x7C0) < *(int *)(hero_base + 0x8C0)) {
                 speed -= D_0015ED6C;
             } else {
                 speed += D_0015ED6C;

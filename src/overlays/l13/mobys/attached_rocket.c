@@ -150,7 +150,8 @@ void attached_rocket_update(struct Moby *moby) {
         *(OvlQuad *)&moby->rot_row0 = *(OvlQuad *)&source->rot_row0;
         *(OvlQuad *)&moby->rot_row1 = *(OvlQuad *)&source->rot_row1;
         *(OvlQuad *)&moby->rot_row2 = *(OvlQuad *)&source->rot_row2;
-        moby_point_position(attached_rocket_vars->unk20, attached_rocket_vars->attachment_joint_index, &moby->pos);
+        moby_point_position(
+            attached_rocket_vars->unk20, attached_rocket_vars->attachment_joint_index, &moby->pos);
         qcopy(&attached_rocket_vars->unk10, &moby->pos);
         {
             struct Moby *source = attached_rocket_vars->unk20;

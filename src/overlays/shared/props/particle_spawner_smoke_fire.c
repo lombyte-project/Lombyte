@@ -325,7 +325,8 @@ void draw_smoke_fire_spawner(P *spawner) {
             if (l00_smoke_fire_particle_fade_in_timers[i]) {
                 fast_dec_timer_s16(&l00_smoke_fire_particle_fade_in_timers[i]);
                 alpha = truncate_float_to_s32(
-                    (1.0f - convert_integer_to_float(l00_smoke_fire_particle_fade_in_timers[i]) * D_L00_00161384) *
+                    (1.0f - convert_integer_to_float(l00_smoke_fire_particle_fade_in_timers[i]) *
+                                D_L00_00161384) *
                     D_L00_0016199C);
             } else if (D_L00_001D60A0[i]) {
                 if (fast_dec_timer_s16(&D_L00_001D60A0[i])) {

@@ -411,7 +411,8 @@ void initialize_level_map_archive(void) {
         for (i = 0; i < 20; i++) {
             D_L00_001841F0.unk104[i] = map_parameter_pair_defaults[i * 2];
             D_L00_001841F0.unkB4[i] = 0.65f;
-            D_L00_001841F0.map_parameter_pair_second_values[i] = map_parameter_pair_defaults[i * 2 + 1];
+            D_L00_001841F0.map_parameter_pair_second_values[i] =
+                map_parameter_pair_defaults[i * 2 + 1];
         }
     }
     level = current_level_index;

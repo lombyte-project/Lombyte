@@ -246,7 +246,8 @@ void spawn_drek_boss_ring_projectile(
         spawned_moby->projectile_glow_color = initial_glow_color;
         moby_vars = spawned_moby->child;
         qcopy(spawned_moby->pos, pos);
-        spawned_moby->movement_heading = fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
+        spawned_moby->movement_heading =
+            fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
         qcopy(moby_vars->v, initial_movement_step);
         moby_vars->f34 = collision_filter_moby;
         moby_vars->f28 = fa;

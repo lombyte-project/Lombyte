@@ -210,8 +210,8 @@ void elevator_update(Moby_2FDA70 *moby) {
         } else {
             moby->state = WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT;
         }
-        moby->pos.z =
-            l06_cuboids_macro[moby_data->height_cuboid_index].pos.z + l06_cuboids_macro[moby_data->height_cuboid_index].axes[2].z;
+        moby->pos.z = l06_cuboids_macro[moby_data->height_cuboid_index].pos.z +
+                      l06_cuboids_macro[moby_data->height_cuboid_index].axes[2].z;
         if (((Hero_2FDA70 *)(D_0013F350))->vehicle_mode == 0) {
             ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f34 |= 1;
             ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f34 |= 2;
@@ -220,7 +220,8 @@ void elevator_update(Moby_2FDA70 *moby) {
             set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro + (moby_data->f60 << 8));
         }
         set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro + (moby_data->f64 << 8));
-        set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
+        set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro +
+                                             (moby_data->base_height_linked_moby_index << 8));
         break;
     case WAIT_FOR_INITIAL_HERO_ACTIVATION:
         if (is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, moby_data->f70) != 0) {
@@ -261,15 +262,16 @@ void elevator_update(Moby_2FDA70 *moby) {
                     fade_to_black(scale_game_frames(0x10));
                     set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_macro +
                                                          (moby_data->f64 << 8));
-                    set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_macro +
-                                                         (moby_data->base_height_linked_moby_index << 8));
+                    set_moby_and_links_to_states_2_and_3(
+                        D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
                     set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro +
                                                          (moby_data->f60 << 8));
                     moby_data->vehicle_entry_configuration_active = 0;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f94 = 0;
                     restore_hero_from_vehicle_mode();
                     {
-                        LevelCuboid *b = &l06_cuboids_macro[moby_data->vehicle_exit_placement_cuboid_index];
+                        LevelCuboid *b =
+                            &l06_cuboids_macro[moby_data->vehicle_exit_placement_cuboid_index];
                         set_race_camera(&b->pos, &b->rot, 0, 1);
                     }
                     request_music_track(0, 10);
@@ -285,8 +287,8 @@ void elevator_update(Moby_2FDA70 *moby) {
                     fade_to_black(scale_game_frames(0x10));
                     set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro +
                                                          (moby_data->f64 << 8));
-                    set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro +
-                                                         (moby_data->base_height_linked_moby_index << 8));
+                    set_moby_and_links_to_states_8_and_9(
+                        D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
                     set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_macro +
                                                          (moby_data->f60 << 8));
                     moby_data->vehicle_entry_configuration_active = 1;
@@ -294,7 +296,8 @@ void elevator_update(Moby_2FDA70 *moby) {
                         ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].cls->f10;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_macro)[moby_data->f6C].f34 &= 0xFFFE;
                     {
-                        LevelCuboid *b = &l06_cuboids_macro[moby_data->vehicle_entry_placement_cuboid_index];
+                        LevelCuboid *b =
+                            &l06_cuboids_macro[moby_data->vehicle_entry_placement_cuboid_index];
                         set_race_camera(&b->pos, &b->rot, 0, 1);
                     }
                     enter_hero_vehicle_mode_and_set_moby(
@@ -304,28 +307,30 @@ void elevator_update(Moby_2FDA70 *moby) {
                     fade_to_black(scale_game_frames(0x10));
                     set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro +
                                                          (moby_data->f64 << 8));
-                    set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro +
-                                                         (moby_data->base_height_linked_moby_index << 8));
+                    set_moby_and_links_to_states_8_and_9(
+                        D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
                     set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_macro +
                                                          (moby_data->f60 << 8));
                     moby_data->vehicle_entry_configuration_active = 1;
                     moby_data->f94 = 1;
                     {
-                        LevelCuboid *b = &l06_cuboids_macro[moby_data->vehicle_entry_placement_cuboid_index];
+                        LevelCuboid *b =
+                            &l06_cuboids_macro[moby_data->vehicle_entry_placement_cuboid_index];
                         set_race_camera(&b->pos, &b->rot, 0, 1);
                     }
                 } else {
                     fade_to_black(scale_game_frames(0x10));
                     set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_macro +
                                                          (moby_data->f64 << 8));
-                    set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro +
-                                                         (moby_data->base_height_linked_moby_index << 8));
+                    set_moby_and_links_to_states_8_and_9(
+                        D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
                     set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro +
                                                          (moby_data->f60 << 8));
                     moby_data->vehicle_entry_configuration_active = 0;
                     moby_data->f94 = 0;
                     {
-                        LevelCuboid *b = &l06_cuboids_macro[moby_data->vehicle_exit_placement_cuboid_index];
+                        LevelCuboid *b =
+                            &l06_cuboids_macro[moby_data->vehicle_exit_placement_cuboid_index];
                         set_race_camera(&b->pos, &b->rot, 0, 1);
                     }
                 }
@@ -342,7 +347,8 @@ void elevator_update(Moby_2FDA70 *moby) {
                 moby_data->f90 = scale_game_frames(0x78);
             } else {
                 moby->state = MOVE_TO_NODE_OFFSET_HEIGHT;
-                set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
+                set_moby_and_links_to_states_8_and_9(
+                    D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
                 moby_data->f90 = scale_game_frames(0x78);
             }
         } else if (vector_distance_xy(&moby->pos, &((Hero_2FDA70 *)(D_0013F350))->pos) < 24.0f &&
@@ -358,7 +364,8 @@ void elevator_update(Moby_2FDA70 *moby) {
                    moby->state == WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT &&
                    moby->pos.z < ((Hero_2FDA70 *)(D_0013F350))->pos.z - 5.0f) {
             moby->state = MOVE_TO_NODE_OFFSET_HEIGHT;
-            set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
+            set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_macro +
+                                                 (moby_data->base_height_linked_moby_index << 8));
             moby_data->f90 = scale_game_frames(0x78);
         }
         break;
@@ -382,7 +389,8 @@ void elevator_update(Moby_2FDA70 *moby) {
                 moby->state = WAIT_FOR_HERO_CLEARANCE_AT_NODE_OFFSET_HEIGHT;
                 set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro + (moby_data->f64 << 8));
             } else {
-                set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
+                set_moby_and_links_to_states_4_and_5(
+                    D_L06_0015FFD8_macro + (moby_data->base_height_linked_moby_index << 8));
                 moby->state = WAIT_FOR_HERO_CLEARANCE_AT_NODE_BASE_HEIGHT;
             }
         }
@@ -410,14 +418,16 @@ void elevator_update(Moby_2FDA70 *moby) {
         moby->f90 = l06_elevator_move_and_clearance_color;
     } else {
         float color_blend;
-        moby_data->color_pulse_phase = fast_add_rotations(moby_data->color_pulse_phase, D_0015ED6C * 5.2359877f);
+        moby_data->color_pulse_phase =
+            fast_add_rotations(moby_data->color_pulse_phase, D_0015ED6C * 5.2359877f);
         color_blend = fast_sin(moby_data->color_pulse_phase) * 4.0f - 3.0f;
         if (color_blend > 1.0f) {
             color_blend = 1.0f;
         } else if (color_blend < 0.0f) {
             color_blend = 0.0f;
         }
-        moby->f90 = fast_tween_color(l06_elevator_pulse_dim_color, l06_elevator_pulse_bright_color, color_blend);
+        moby->f90 = fast_tween_color(
+            l06_elevator_pulse_dim_color, l06_elevator_pulse_bright_color, color_blend);
     }
     fast_vec_add(&position_delta, &position_delta, &moby->pos);
     update_entity_matrix(moby_data->f20, &position_delta, &initial_rotation, &moby->rot);

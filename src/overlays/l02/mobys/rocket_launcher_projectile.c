@@ -22,8 +22,8 @@ typedef struct {
 
 extern f32 rocket_launcher_projectile_vertical_velocity_approach_scale_gp __asm__("D_L02_00161F58")
     __attribute__((sda));
-s32            l02_rocket_projectile_particle_color_argb __asm__("D_L02_00161F5C") = 0x30704020;
-s32            l02_rocket_projectile_position_particle_alpha_source __asm__("D_L02_00161F60") = 0x50e0e0e0;
+s32 l02_rocket_projectile_particle_color_argb __asm__("D_L02_00161F5C") = 0x30704020;
+s32 l02_rocket_projectile_position_particle_alpha_source __asm__("D_L02_00161F60") = 0x50e0e0e0;
 extern LevelFx l02_projectile_trail_particle_tint_source __asm__("D_L02_001B2680");
 extern void    fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void    fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");

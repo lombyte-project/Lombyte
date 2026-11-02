@@ -140,7 +140,8 @@ void flying_car_update(struct Moby *flying_car_moby) {
         }
         if (flying_car_data->sound != -1) {
             Snd_6ee0 *voice_entry = (Snd_6ee0 *)((u8 *)&voice_pool + flying_car_data->sound * 0x70);
-            if (voice_entry->f88 == flying_car_moby && voice_entry->voice_state != VOICE_SLOT_FREE) {
+            if (voice_entry->f88 == flying_car_moby &&
+                voice_entry->voice_state != VOICE_SLOT_FREE) {
                 release_voice_slot(flying_car_data->sound);
             }
         }
@@ -262,8 +263,10 @@ void flying_car_update(struct Moby *flying_car_moby) {
             flying_car_data->path_sampling_state = 0;
             qcopy(&flying_car_moby->pos, &path->a);
             flying_car_moby->rot.z = fast_arc_tan(path->b.x - path->a.x, path->b.y - path->a.y);
-            flying_car_data->position_x_spring_state = flying_car_data->position_y_spring_state = flying_car_data->f88 = 0.0f;
-            flying_car_data->bank_spring_state = flying_car_data->pitch_spring_state = flying_car_data->yaw_spring_state = 0.0f;
+            flying_car_data->position_x_spring_state = flying_car_data->position_y_spring_state =
+                flying_car_data->f88 = 0.0f;
+            flying_car_data->bank_spring_state = flying_car_data->pitch_spring_state =
+                flying_car_data->yaw_spring_state = 0.0f;
             if (flying_car_data->part >= 0) {
                 struct Moby *o =
                     (struct Moby *)(D_L14_0015FFD8_macro + (flying_car_data->part << 8));

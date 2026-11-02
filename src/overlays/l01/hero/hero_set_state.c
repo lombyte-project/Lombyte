@@ -82,7 +82,8 @@ int l01_hero_set_state(int requested_state, int animation_setup_mode) {
              animation_setup_mode != HERO_ANIMATION_SETUP_OVERRIDE_TRANSITION_GUARDS))
             return 0;
     }
-    if ((cutscene_mode == 2 || cutscene_mode == 6) && animation_setup_mode != HERO_ANIMATION_SETUP_OVERRIDE_TRANSITION_GUARDS)
+    if ((cutscene_mode == 2 || cutscene_mode == 6) &&
+        animation_setup_mode != HERO_ANIMATION_SETUP_OVERRIDE_TRANSITION_GUARDS)
         return 0;
     {
         struct Hero *p = &hero;

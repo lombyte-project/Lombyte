@@ -731,7 +731,8 @@ void red_ship_1_update(char *moby) {
         if (spline_moby_pvars->unk100 >= 1.0f) {
             spline_moby_pvars->unk100 -= 1.0f;
             advanced_path_node_index = advance_path_node_index(pm);
-            *(OvlQuad *)&spline_moby_pvars->segment_start_tangent[0] = *(OvlQuad *)&spline_moby_pvars->unkA0;
+            *(OvlQuad *)&spline_moby_pvars->segment_start_tangent[0] =
+                *(OvlQuad *)&spline_moby_pvars->unkA0;
             compute_path_node_tangent(path_tangent_or_moby_position,
                                       (int *)pm,
                                       1,

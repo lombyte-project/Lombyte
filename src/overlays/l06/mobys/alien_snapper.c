@@ -92,21 +92,21 @@ typedef struct {
     u8    pad59;
     u8    f5A; /* 0x5A */
     u8    pad5B[0x15];
-    u8    f70[0x10];    /* 0x70 */
-    f32   gravity_step;          /* 0x80 */
-    f32   motion_speed_adjustment_step;          /* 0x84 */
-    f32   return_speed; /* 0x88 */
-    f32   f8C;          /* 0x8C */
-    s32   collision_radius_fixed;          /* 0x90 */
-    s32   motion_flags;          /* 0x94 */
-    f32   collision_height_offset;          /* 0x98 */
+    u8    f70[0x10];                    /* 0x70 */
+    f32   gravity_step;                 /* 0x80 */
+    f32   motion_speed_adjustment_step; /* 0x84 */
+    f32   return_speed;                 /* 0x88 */
+    f32   f8C;                          /* 0x8C */
+    s32   collision_radius_fixed;       /* 0x90 */
+    s32   motion_flags;                 /* 0x94 */
+    f32   collision_height_offset;      /* 0x98 */
     u8    pad9C[0x11];
     u8    fAD; /* 0xAD */
     u8    padAE[0x22];
-    s32   movement; /* 0xD0 */
-    f32   fD4;      /* 0xD4 */
-    f32   max_ground_drop_distance;      /* 0xD8 */
-    f32   max_ground_rise_distance;      /* 0xDC */
+    s32   movement;                 /* 0xD0 */
+    f32   fD4;                      /* 0xD4 */
+    f32   max_ground_drop_distance; /* 0xD8 */
+    f32   max_ground_rise_distance; /* 0xDC */
     u8    padE0[0x14];
     f32   speed; /* 0xF4 */
     u8    padF8[0x28];
@@ -122,18 +122,18 @@ typedef struct {
     f32   angle_jitter;   /* 0x194 */
     f32   jitter_degrees; /* 0x198 */
     u8    pad19C[4];
-    f32   f1A0;           /* 0x1A0 */
-    f32   base_speed;     /* 0x1A4 */
-    s32   timer;          /* 0x1A8 */
-    s32   f1AC;           /* 0x1AC */
-    s32   path;           /* 0x1B0 */
-    s32   activate_on_initialize;           /* 0x1B4 */
-    s32   timer_max;      /* 0x1B8 */
-    s32   node;           /* 0x1BC */
-    s32   clip_volume;    /* 0x1C0 */
-    f32   reach_distance; /* 0x1C4 */
-    f32   f1C8;           /* 0x1C8 */
-    s32   f1CC;           /* 0x1CC */
+    f32   f1A0;                   /* 0x1A0 */
+    f32   base_speed;             /* 0x1A4 */
+    s32   timer;                  /* 0x1A8 */
+    s32   f1AC;                   /* 0x1AC */
+    s32   path;                   /* 0x1B0 */
+    s32   activate_on_initialize; /* 0x1B4 */
+    s32   timer_max;              /* 0x1B8 */
+    s32   node;                   /* 0x1BC */
+    s32   clip_volume;            /* 0x1C0 */
+    f32   reach_distance;         /* 0x1C4 */
+    f32   f1C8;                   /* 0x1C8 */
+    s32   f1CC;                   /* 0x1CC */
     u8    pad1D0[0x10];
     u8    f1E0[0x10]; /* 0x1E0 */
 } SnapperVars_91A8;
@@ -212,23 +212,23 @@ typedef struct BlargVars {
     char          f60[0x7]; /* 0x60 */
     unsigned char f67;      /* 0x67 */
     char          pad68[0x8];
-    char          f70[0x18]; /* 0x70 */
-    float         horizontal_motion_speed;       /* 0x88 */
-    float         f8C;       /* 0x8C */
+    char          f70[0x18];               /* 0x70 */
+    float         horizontal_motion_speed; /* 0x88 */
+    float         f8C;                     /* 0x8C */
     char          pad90[0x30];
-    float         motion_apex_animation_frame; /* 0xC0 */
+    float         motion_apex_animation_frame;    /* 0xC0 */
     float         motion_landing_animation_frame; /* 0xC4 */
     char          padC8[0x58];
     char          selected_target_xy[0x8]; /* 0x120 */
-    float         selected_target_z;      /* 0x128 */
+    float         selected_target_z;       /* 0x128 */
     char          pad12C[0x34];
     int           selected_target_moby; /* 0x160 */
-    int           f164; /* 0x164 */
+    int           f164;                 /* 0x164 */
     char          pad168[0x8];
     char          home_position[0x30]; /* 0x170 */
-    float         f1A0;       /* 0x1A0 */
+    float         f1A0;                /* 0x1A0 */
     char          pad1A4[0x8];
-    int           f1AC; /* 0x1AC */
+    int           f1AC;                /* 0x1AC */
     int           movement_path_index; /* 0x1B0 */
     char          pad1B4[0x14];
     float         f1C8; /* 0x1C8 */
@@ -868,8 +868,9 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     }
     snapper_vars->f1C8 = fast_add_rotations(
         snapper_vars->f1C8, alien_snapper_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
-    moby->glow_color = func_001FA8A8_2FA618(
-        l06_alien_snapper_glow_gray_color, l06_alien_snapper_glow_tinted_color, (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
+    moby->glow_color = func_001FA8A8_2FA618(l06_alien_snapper_glow_gray_color,
+                                            l06_alien_snapper_glow_tinted_color,
+                                            (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
 
     if (snapper_vars->f1AC != 0) {
         snapper_vars->f1A0 = l06_alien_snapper_base_targeting_radius + 6.0f;
@@ -890,7 +891,8 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
                             0,
                             D_L06_001B0FB0_2FA618[snapper_vars->movement_path_index] + 4,
                             *D_L06_001B0FB0_2FA618[snapper_vars->movement_path_index]) != 2) {
-        if (snapper_vars->f1A0 < vector_distance_xy(snapper_vars->home_position, snapper_vars->selected_target_xy) ||
+        if (snapper_vars->f1A0 <
+                vector_distance_xy(snapper_vars->home_position, snapper_vars->selected_target_xy) ||
             3.0f < absolute_float(moby->pos.z - snapper_vars->selected_target_z)) {
             snapper_vars->f164 = 2;
         }

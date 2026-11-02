@@ -143,9 +143,11 @@ void toxic_gas_vent_update(char *vent_moby) {
         }
         emit_toxic_gas_vent_sparks(vent_moby);
         check_oscillating_toxic_gas_vent_collisions(vent_moby);
-        heading_offset_radians = vent_data->oscillation_amplitude_degrees * DEG_TO_RAD * fast_sin(vent_data->unk7C);
+        heading_offset_radians =
+            vent_data->oscillation_amplitude_degrees * DEG_TO_RAD * fast_sin(vent_data->unk7C);
         vent_data->unk7C = fast_add_rotations(vent_data->unk7C, vent_data->unk80);
-        MOBY(vent_moby)->rot.z = fast_add_rotations(vent_data->initial_heading_radians, heading_offset_radians);
+        MOBY(vent_moby)->rot.z =
+            fast_add_rotations(vent_data->initial_heading_radians, heading_offset_radians);
         break;
     case VENT_TIMED_ACTIVE:
         if (voice_is_playing(vent_moby, vent_data->voice) == 0) {

@@ -269,7 +269,8 @@ void prepare_target_level_transition(s32 target_level_index) {
     shared_table_offset = D_L00_001611CC - 0x60000;
     shared_result_record = &D_L00_0016C860_0028ed58;
     shared_result_record->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;
-    shared_result_record->i5C = D_L00_00173E00_0028ed58.default_scene_chunk_offset + shared_table_offset;
+    shared_result_record->i5C =
+        D_L00_00173E00_0028ed58.default_scene_chunk_offset + shared_table_offset;
     D_L00_001611CC = shared_table_offset;
     if (current_level_index == target_level_index) {
         s32 divisor;
@@ -277,9 +278,11 @@ void prepare_target_level_transition(s32 target_level_index) {
         divisor = pal_mode ? 0x50 : 0x60;
         shared_result_record->scaled_sequence_position =
             scale_game_frames(transition_sequence_positions[shared_state_record->h26]);
-        shared_result_record->sequence_entry_index = shared_result_record->scaled_sequence_position / divisor;
+        shared_result_record->sequence_entry_index =
+            shared_result_record->scaled_sequence_position / divisor;
         parse_space_scene_chunk(shared_result_record->sequence_entry_index);
-        shared_result_record->sequence_position_remainder = shared_result_record->scaled_sequence_position % divisor;
+        shared_result_record->sequence_position_remainder =
+            shared_result_record->scaled_sequence_position % divisor;
     } else {
         memcard_save_data(0, target_level_index);
         D_L00_0015F5C0 = target_level_index;

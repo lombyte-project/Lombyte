@@ -179,9 +179,11 @@ void replenish_hero_drones(void) {
             if (FUN_001f96f8_2cdcc0(D_0015EEA4) / 600 > usage_stats->hC2) {
                 usage_stats->hC2 = FUN_001f96f8_2cdcc0(D_0015EEA4) / 600;
             }
-            usage_stats->drone_usage_level_flags = usage_stats->drone_usage_level_flags | (1 << current_level_index) | 0x80000000;
+            usage_stats->drone_usage_level_flags =
+                usage_stats->drone_usage_level_flags | (1 << current_level_index) | 0x80000000;
 
-            FUN_001f9a10_2cdcc0(drone_spawn_position, hero_state->hero_position, hero_state->hero_moby + 0xE0);
+            FUN_001f9a10_2cdcc0(
+                drone_spawn_position, hero_state->hero_position, hero_state->hero_moby + 0xE0);
             FUN_001f9a10_2cdcc0(
                 drone_spawn_position, drone_spawn_position, hero_state->hero_moby + 0xC0);
             for (i = hero_state->active_drone_count; i < 6; i++) {

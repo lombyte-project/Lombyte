@@ -161,9 +161,11 @@ void falling_moby_group_update(struct Moby *moby) {
                                                &moby_vars->transform_progress_step);
                 }
             }
-            if (moby_vars->transform_progress > group_transform_debris_start_progress_threshold_gp &&
+            if (moby_vars->transform_progress >
+                    group_transform_debris_start_progress_threshold_gp &&
                 moby_vars->debris_spawn_random_bound == 0.0f) {
-                moby_vars->debris_spawn_random_bound = *(int *)&group_transform_debris_initial_random_bound_gp;
+                moby_vars->debris_spawn_random_bound =
+                    *(int *)&group_transform_debris_initial_random_bound_gp;
             }
             if (moby_vars->transform_progress > group_transform_fall_progress_threshold_gp &&
                 moby_vars->fall_at_progress_threshold_enabled != 0) {
@@ -223,7 +225,8 @@ void falling_moby_group_update(struct Moby *moby) {
                 float s, z, debris_spawn_angle;
                 int   debris_spawn_frames;
                 moby_vars->debris_spawn_random_bound = moby_vars->debris_spawn_random_bound + 0.25f;
-                if (random_integer_below(truncate_float_to_s32(moby_vars->debris_spawn_random_bound)) == 0) {
+                if (random_integer_below(
+                        truncate_float_to_s32(moby_vars->debris_spawn_random_bound)) == 0) {
                     s = random_float_between(-1.0471976f, 1.0471976f);
                     debris_spawn_angle = fast_add_rotations(s, D_L18_001677D8);
                     z = random_float_between(0.0f, 20.0f);

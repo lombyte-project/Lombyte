@@ -1470,10 +1470,12 @@ void update_hero_attachment(void) {
     if (((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0) {
         if (((Hero_234800 *)hero_233f80)->p2FC != 0) {
             mode = HERO_ATTACHMENT_MODE_PROBE;
-            if (((Hero_234800 *)hero_233f80)->attachment_reference_object != ((Hero_234800 *)hero_233f80)->p2FC) {
+            if (((Hero_234800 *)hero_233f80)->attachment_reference_object !=
+                ((Hero_234800 *)hero_233f80)->p2FC) {
                 ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
             }
-            ((Hero_234800 *)hero_233f80)->attachment_reference_object = ((Hero_234800 *)hero_233f80)->p2FC;
+            ((Hero_234800 *)hero_233f80)->attachment_reference_object =
+                ((Hero_234800 *)hero_233f80)->p2FC;
         } else {
             ((Hero_234800 *)hero_233f80)->attachment_reference_object = 0;
             ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
@@ -1481,15 +1483,18 @@ void update_hero_attachment(void) {
         }
     } else if (((Hero_234800 *)hero_233f80)->i2084 == 0x1C &&
                ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
-        ((Hero_234800 *)hero_233f80)->attachment_reference_object = ((Hero_234800 *)hero_233f80)->p4F8;
+        ((Hero_234800 *)hero_233f80)->attachment_reference_object =
+            ((Hero_234800 *)hero_233f80)->p4F8;
         mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->i208C == 3 &&
                ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
-        ((Hero_234800 *)hero_233f80)->attachment_reference_object = ((Hero_234800 *)hero_233f80)->p4F8;
+        ((Hero_234800 *)hero_233f80)->attachment_reference_object =
+            ((Hero_234800 *)hero_233f80)->p4F8;
         mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->attachment_reference_object != 0) {
         mode = HERO_ATTACHMENT_MODE_PROBE;
-        convert_integer_to_float(scale_game_frames(120) - ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale);
+        convert_integer_to_float(scale_game_frames(120) -
+                                 ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale);
         scale_game_frames_v_233f80(120);
         amt = ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale;
     } else {
@@ -1506,16 +1511,20 @@ void update_hero_attachment(void) {
     }
     if (((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) &&
          fast_vec_length(&((Hero_234800 *)hero_233f80)->position_anchor_inhibit) == 0.0f &&
-         ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0 && ((Hero_234800 *)hero_233f80)->path_clearance_position_anchor_inhibit == 0) ||
+         ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0 &&
+         ((Hero_234800 *)hero_233f80)->path_clearance_position_anchor_inhibit == 0) ||
         (unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
         if ((((Hero_234800 *)hero_233f80)->attachment_anchor_flags ^ 1) & 1) {
             if ((unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
-                qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->ledge_grab_position);
+                qcopy(&attachment_motion_scratch,
+                      &((Hero_234800 *)hero_233f80)->ledge_grab_position);
                 attachment_motion_scratch.x +=
-                    fast_cos(fast_add_rotations(((Hero_234800 *)hero_233f80)->ledge_attachment_heading, 3.1415925f)) *
+                    fast_cos(fast_add_rotations(
+                        ((Hero_234800 *)hero_233f80)->ledge_attachment_heading, 3.1415925f)) *
                     0.45f;
                 attachment_motion_scratch.y +=
-                    fast_sin(fast_add_rotations(((Hero_234800 *)hero_233f80)->ledge_attachment_heading, 3.1415925f)) *
+                    fast_sin(fast_add_rotations(
+                        ((Hero_234800 *)hero_233f80)->ledge_attachment_heading, 3.1415925f)) *
                     0.45f;
                 attachment_motion_scratch.z -= -1.43f;
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->hero_moby,
@@ -1530,25 +1539,28 @@ void update_hero_attachment(void) {
                                        &((Hero_234800 *)hero_233f80)->v90,
                                        &attachment_motion_scratch,
                                        &probe_transform_scratch);
-                convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->hero_moby,
-                                                ((Hero_234800 *)hero_233f80)->attachment_reference_object,
-                                                &((Hero_234800 *)hero_233f80)->ledge_grab_position,
-                                                &((Hero_234800 *)hero_233f80)->v90,
-                                                &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
-                                                &probe_transform_scratch);
-                convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->hero_moby,
-                                                ((Hero_234800 *)hero_233f80)->attachment_reference_object,
-                                                &attachment_motion_scratch,
-                                                &((Hero_234800 *)hero_233f80)->v90,
-                                                &((Hero_234800 *)hero_233f80)->secondary_attachment_local_position,
-                                                &probe_transform_scratch);
+                convert_pose_to_reference_local(
+                    ((Hero_234800 *)hero_233f80)->hero_moby,
+                    ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                    &((Hero_234800 *)hero_233f80)->ledge_grab_position,
+                    &((Hero_234800 *)hero_233f80)->v90,
+                    &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
+                    &probe_transform_scratch);
+                convert_pose_to_reference_local(
+                    ((Hero_234800 *)hero_233f80)->hero_moby,
+                    ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                    &attachment_motion_scratch,
+                    &((Hero_234800 *)hero_233f80)->v90,
+                    &((Hero_234800 *)hero_233f80)->secondary_attachment_local_position,
+                    &probe_transform_scratch);
             } else if (plat->attachment_behavior_flags & 4) {
-                convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->hero_moby,
-                                                ((Hero_234800 *)hero_233f80)->attachment_reference_object,
-                                                &((Hero_234800 *)hero_233f80)->pos,
-                                                &((Hero_234800 *)hero_233f80)->v90,
-                                                &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
-                                                &attachment_motion_scratch);
+                convert_pose_to_reference_local(
+                    ((Hero_234800 *)hero_233f80)->hero_moby,
+                    ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                    &((Hero_234800 *)hero_233f80)->pos,
+                    &((Hero_234800 *)hero_233f80)->v90,
+                    &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
+                    &attachment_motion_scratch);
             } else {
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->hero_moby,
                                        ((Hero_234800 *)hero_233f80)->attachment_reference_object,
@@ -1556,12 +1568,13 @@ void update_hero_attachment(void) {
                                        &((Hero_234800 *)hero_233f80)->v90,
                                        &attachment_position_motion_scratch,
                                        &probe_transform_scratch);
-                convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->hero_moby,
-                                                ((Hero_234800 *)hero_233f80)->attachment_reference_object,
-                                                &attachment_position_motion_scratch,
-                                                &probe_transform_scratch,
-                                                &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
-                                                &attachment_motion_scratch);
+                convert_pose_to_reference_local(
+                    ((Hero_234800 *)hero_233f80)->hero_moby,
+                    ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                    &attachment_position_motion_scratch,
+                    &probe_transform_scratch,
+                    &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
+                    &attachment_motion_scratch);
             }
             ((Hero_234800 *)hero_233f80)->attachment_anchor_flags |= 1;
         }
@@ -1569,14 +1582,16 @@ void update_hero_attachment(void) {
         ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
     }
     if ((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) &&
-        ((Hero_234800 *)hero_233f80)->rotation_anchor_inhibit == 0.0f && ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0) {
+        ((Hero_234800 *)hero_233f80)->rotation_anchor_inhibit == 0.0f &&
+        ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0) {
         if (!(((Hero_234800 *)hero_233f80)->attachment_anchor_flags & 2)) {
-            convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->hero_moby,
-                                            ((Hero_234800 *)hero_233f80)->attachment_reference_object,
-                                            &((Hero_234800 *)hero_233f80)->pos,
-                                            &((Hero_234800 *)hero_233f80)->v90,
-                                            &attachment_motion_scratch,
-                                            &((Hero_234800 *)hero_233f80)->attachment_local_rotation);
+            convert_pose_to_reference_local(
+                ((Hero_234800 *)hero_233f80)->hero_moby,
+                ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                &((Hero_234800 *)hero_233f80)->pos,
+                &((Hero_234800 *)hero_233f80)->v90,
+                &attachment_motion_scratch,
+                &((Hero_234800 *)hero_233f80)->attachment_local_rotation);
             ((Hero_234800 *)hero_233f80)->attachment_anchor_flags |= 2;
         }
     } else {
@@ -1593,11 +1608,13 @@ void update_hero_attachment(void) {
         if (!(plat->attachment_behavior_flags & 2)) {
             approach_value(&sB0, 0.0f, frame_time_sq_macro * 25.0f * amt);
             approach_value(&sB4, 0.0f, (frame_time_sq_macro + frame_time_sq_macro) * amt);
-            set_vector_length_xy(
-                &attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->saved_attachment_displacement, sB4);
+            set_vector_length_xy(&attachment_motion_scratch,
+                                 &((Hero_234800 *)hero_233f80)->saved_attachment_displacement,
+                                 sB4);
             attachment_motion_scratch.z = sB0;
         } else {
-            qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->saved_attachment_displacement);
+            qcopy(&attachment_motion_scratch,
+                  &((Hero_234800 *)hero_233f80)->saved_attachment_displacement);
         }
         qcopy(&attachment_position_motion_scratch, &attachment_motion_scratch);
     } else if (mode == HERO_ATTACHMENT_MODE_PROBE) {
@@ -1624,12 +1641,13 @@ void update_hero_attachment(void) {
                                   &((Hero_234800 *)hero_233f80)->attachment_local_rotation,
                                   &primary_attachment_position,
                                   &primary_attachment_rotation);
-        transform_attachment_pose(((Hero_234800 *)hero_233f80)->hero_moby,
-                                  ((Hero_234800 *)hero_233f80)->attachment_reference_object,
-                                  &((Hero_234800 *)hero_233f80)->secondary_attachment_local_position,
-                                  &((Hero_234800 *)hero_233f80)->attachment_local_rotation,
-                                  &secondary_attachment_position,
-                                  &v90);
+        transform_attachment_pose(
+            ((Hero_234800 *)hero_233f80)->hero_moby,
+            ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+            &((Hero_234800 *)hero_233f80)->secondary_attachment_local_position,
+            &((Hero_234800 *)hero_233f80)->attachment_local_rotation,
+            &secondary_attachment_position,
+            &v90);
         if ((((Hero_234800 *)hero_233f80)->i2084 == 1 ||
              ((Hero_234800 *)hero_233f80)->i2084 == 0x1E) &&
             ((Hero_234800 *)hero_233f80)->probe_yaw_override_enabled != 0) {

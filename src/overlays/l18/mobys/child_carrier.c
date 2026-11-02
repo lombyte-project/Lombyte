@@ -53,7 +53,8 @@ void child_carrier_update(char *moby) {
         if (new_child != 0) {
             *(unsigned short *)(new_child + 0x32) = ((unsigned short)MOBY(moby)->draw_dist);
             (transform_and_child_vars->carried_child_moby)[0x31] = 1;
-            *(long *)(transform_and_child_vars->carried_child_moby + 0x38) = ((long)MOBY(moby)->spawn_frame);
+            *(long *)(transform_and_child_vars->carried_child_moby + 0x38) =
+                ((long)MOBY(moby)->spawn_frame);
             *(float *)(transform_and_child_vars->carried_child_moby + 0x2C) *=
                 MOBY(moby)->scale / MOBY(moby)->pclass->scale;
         }

@@ -51,8 +51,10 @@ void pterodactyl_update(unsigned char *moby) {
         {
             float first_segment_length = fast_vec_dist(path + 4, path + 8);
             float first_to_last_distance = fast_vec_dist(path + 4, path + *path * 4);
-            moby_data->path_progress_increment = pterodactyl_path_speed_gp * frame_time / first_segment_length;
-            moby_data->path_loop_enabled = absolute_float(first_segment_length - first_to_last_distance) < 0.1f;
+            moby_data->path_progress_increment =
+                pterodactyl_path_speed_gp * frame_time / first_segment_length;
+            moby_data->path_loop_enabled =
+                absolute_float(first_segment_length - first_to_last_distance) < 0.1f;
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
         MOBY(moby)->state = PTERODACTYL_FOLLOW_PATH;
@@ -60,7 +62,8 @@ void pterodactyl_update(unsigned char *moby) {
         MOBY(moby)->update_dist = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:
         y = MOBY(moby)->pos.z;
-        sample_camera_path(path, moby_data->f6C, moby_data->path_loop_enabled, &MOBY(moby)->pos, moby + 0x40, 0);
+        sample_camera_path(
+            path, moby_data->f6C, moby_data->path_loop_enabled, &MOBY(moby)->pos, moby + 0x40, 0);
         MOBY(moby)->rot.y *= 0.5f;
         MOBY(moby)->pos.z += moby_data->f64;
         moby_data->f6C += moby_data->path_progress_increment;

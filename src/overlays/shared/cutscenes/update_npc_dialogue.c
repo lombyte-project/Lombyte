@@ -253,7 +253,10 @@ s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
         dialogue_trigger->current_dialogue_entry_index = dialogue_entries->f06;
     }
     dialogue_trigger->f08 =
-        ((u8 *)dialogue_trigger->dialogue_entry_list_address)[dialogue_trigger->current_dialogue_entry_index * 0x1C + (k = 0x10)] & 1;
+        ((u8 *)dialogue_trigger
+             ->dialogue_entry_list_address)[dialogue_trigger->current_dialogue_entry_index * 0x1C +
+                                            (k = 0x10)] &
+        1;
     return i;
 }
 

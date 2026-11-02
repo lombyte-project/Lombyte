@@ -556,8 +556,12 @@ void update_timed_sphere_probed_particle(struct EffectParticle *particle) {
     int                  sphere_probe_result;
     previous_particle_position = *particle_position;
     particle_data->unk4 += particle_data->unk8;
-    path_sample_at_distance(
-        particle_data->particle_path_reference, &x, &y, particle_position, particle_data->unk4, particle_data->fc);
+    path_sample_at_distance(particle_data->particle_path_reference,
+                            &x,
+                            &y,
+                            particle_position,
+                            particle_data->unk4,
+                            particle_data->fc);
     if (fast_dec_timer_s16(&particle->life)) {
         free_effect_particle(particle);
         return;
@@ -570,8 +574,8 @@ void update_timed_sphere_probed_particle(struct EffectParticle *particle) {
                                                   remaining_lifetime_frames * 0.08f /
                                                       ((float)scale_game_frames(0x1E) * 0.25f));
     }
-    sphere_probe_result =
-        collect_mobies_in_sphere(0.15f, particle_position, 0x10, particle_data->blast_source_moby, 0);
+    sphere_probe_result = collect_mobies_in_sphere(
+        0.15f, particle_position, 0x10, particle_data->blast_source_moby, 0);
     position_copy = *particle_position;
     send_blast_hits(particle_data->blast_source_moby,
                     (void *)&position_copy,
@@ -1622,8 +1626,9 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
         position_offset_scratch.x = particle->r.unk0;
         position_offset_scratch.y = r->unk4;
         position_offset_scratch.z = r->unk8;
-        fast_vec_scale(
-            &position_offset_scratch, &position_offset_scratch, convert_integer_to_float(r->position_offset_multiplier));
+        fast_vec_scale(&position_offset_scratch,
+                       &position_offset_scratch,
+                       convert_integer_to_float(r->position_offset_multiplier));
         fast_vec_add(particle->v10, r->iC + 0x10, &position_offset_scratch);
         return;
     }
@@ -1638,7 +1643,8 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
     }
     if (r->trail_particle_mode == TRAIL_PARTICLE_MODE_ORBITING_EMITTER) {
         z = 0.0f;
-        FUN_L00_002743a8_274518(0, particle->v10, scale_game_frames(10), z, z, 0, particle->particle_alpha, 0);
+        FUN_L00_002743a8_274518(
+            0, particle->v10, scale_game_frames(10), z, z, 0, particle->particle_alpha, 0);
     } else {
         position_offset_scratch.x = r->unk0;
         position_offset_scratch.y = r->unk4;
@@ -1698,8 +1704,8 @@ void update_randomized_moby_point_attached_particle(struct EffectParticle *parti
     u128      attachment_offset;
     float     one, randomized_primary_position_w, save, x;
     char     *attachment_position;
-    if (o == 0 || *(s16 *)(o + 0xA6) != attachment_data->expected_owner_identity || (u8)o[0x20] == 0xFE ||
-        (u8)o[0x20] == 0xFD) {
+    if (o == 0 || *(s16 *)(o + 0xA6) != attachment_data->expected_owner_identity ||
+        (u8)o[0x20] == 0xFE || (u8)o[0x20] == 0xFD) {
         free_effect_particle(particle);
         return;
     }
@@ -1896,15 +1902,18 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
         distance_or_blend_factor = 1.0f;
     else if (distance_or_blend_factor < 0.0f)
         distance_or_blend_factor = 0.0f;
-    particle->packed_particle_color = FUN_001fa6e0_274e48(r->far_distance_color, r->iC, distance_or_blend_factor);
+    particle->packed_particle_color =
+        FUN_001fa6e0_274e48(r->far_distance_color, r->iC, distance_or_blend_factor);
     if (r->h10) {
         *(volatile s32 *)0x10000000 = 0;
         load_display_text_resource_entry(&applied_motion_delta, r);
         fast_vec_add(&particle->v10, &particle->v10, &applied_motion_delta);
         distance_or_blend_factor =
             convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h10);
-        particle->packed_particle_color = FUN_001fa6e0_274e48(
-            particle->packed_particle_color & 0xFFFFFF, particle->packed_particle_color, 1.0f - distance_or_blend_factor);
+        particle->packed_particle_color =
+            FUN_001fa6e0_274e48(particle->packed_particle_color & 0xFFFFFF,
+                                particle->packed_particle_color,
+                                1.0f - distance_or_blend_factor);
         if (fast_dec_timer_s16(&particle->hA)) {
             r->h10 = 0;
             particle->hA = r->h12;
@@ -1925,10 +1934,11 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
         load_display_text_resource_entry(&applied_motion_delta, (u8 *)r + 4);
         fast_vec_add(&particle->v10, &particle->v10, &applied_motion_delta);
         color_without_alpha = particle->packed_particle_color & 0xFFFFFF;
-        particle->packed_particle_color = FUN_001fa6e0_274e48(color_without_alpha,
-                                           particle->packed_particle_color,
-                                           convert_integer_to_float(particle->hA) /
-                                               convert_integer_to_float(r->final_phase_duration_frames));
+        particle->packed_particle_color =
+            FUN_001fa6e0_274e48(color_without_alpha,
+                                particle->packed_particle_color,
+                                convert_integer_to_float(particle->hA) /
+                                    convert_integer_to_float(r->final_phase_duration_frames));
         if (fast_dec_timer_s16(&particle->hA))
             free_effect_particle(particle);
     }

@@ -283,7 +283,8 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         } else if (moby->unk70 & 2) {
             ELECTROID_ANIM(moby, random_integer_below(2) + 1, scale_game_frames_s32(20));
         }
-        if (vars->target_selection_status != VELDIN_ROBOT_TARGET_SELECTION_UNAVAILABLE && register_beam_slot(moby, 0, 0) != 0) {
+        if (vars->target_selection_status != VELDIN_ROBOT_TARGET_SELECTION_UNAVAILABLE &&
+            register_beam_slot(moby, 0, 0) != 0) {
             moby->state = VELDIN_ROBOT_STATE_WAIT_TO_START_COLLISION_PROBES;
             ELECTROID_ANIM(moby, 5, scale_game_frames_s32(10));
         }
@@ -330,7 +331,8 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         query.unk8A = moby->unkA6;
         query.dir[2] = 1.0f;
         query.unk88 = 0;
-        if (moby->blend_source_animation == moby->anim && compute_interpolated_record_value(moby) > 1.0f) {
+        if (moby->blend_source_animation == moby->anim &&
+            compute_interpolated_record_value(moby) > 1.0f) {
             hit = 1;
             query.flags |= 1;
         }

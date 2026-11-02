@@ -327,7 +327,8 @@ void horny_toad_update(Moby *moby) {
         }
         update_object_wander_movement((char *)moby, (char *)horny_toad_vars->unk240, 0.5f, 0.5f);
         if (horny_toad_vars->unk1C4 != 2) {
-            horny_toad_vars->movement_yaw_offset = random_float_between(-20.0f, 20.0f) * 0.017453292f;
+            horny_toad_vars->movement_yaw_offset =
+                random_float_between(-20.0f, 20.0f) * 0.017453292f;
             moby->state = HORNY_TOAD_APPROACH_AND_FACE_TARGET;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
@@ -580,7 +581,8 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
             truncate_float_to_s32(scale_time(FUN_L00_00257be8_2d5160(180.0f, 240.0f)));
     }
     *(s32 *)(toad_vars + 0x38) = 0;
-    if ((MOBY(toad_moby)->state == HORNY_TOAD_ROAM || MOBY(toad_moby)->state == HORNY_TOAD_RETURN_HOME) &&
+    if ((MOBY(toad_moby)->state == HORNY_TOAD_ROAM ||
+         MOBY(toad_moby)->state == HORNY_TOAD_RETURN_HOME) &&
         *(s16 *)(toad_vars + 0x276) != 0) {
         MOBY(toad_moby)->state = HORNY_TOAD_MOVE_TO_POINT_OR_FACE_TARGET;
         if (MOBY(toad_moby)->prev_seq != 4)

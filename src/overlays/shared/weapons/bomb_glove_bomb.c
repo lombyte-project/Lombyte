@@ -1130,13 +1130,16 @@ void bomb_update(BombMoby *bomb_moby) {
         mark_moby_for_removal(bomb_moby);
         return;
     }
-    if ((((G910 *)&hero)->b20A5 != 0 || ((G910 *)&hero)->b20AF != 0) && bomb_moby->state == BOMB_STATE_HELD) {
+    if ((((G910 *)&hero)->b20A5 != 0 || ((G910 *)&hero)->b20AF != 0) &&
+        bomb_moby->state == BOMB_STATE_HELD) {
         bomb_moby->flags |= 0x41;
     } else {
         bomb_moby->flags &= ~0x41;
     }
-    if (d->owner->cls == 0xC0 && d->landing_prediction_disabled == 0 && FUN_001f9af0_2adb30(d) > 0.0f) {
-        if (((G910 *)&hero)->ground_support_moby == 0 || FUN_L00_002603d0_2adb30(((G910 *)&hero)->ground_support_moby) == 0) {
+    if (d->owner->cls == 0xC0 && d->landing_prediction_disabled == 0 &&
+        FUN_001f9af0_2adb30(d) > 0.0f) {
+        if (((G910 *)&hero)->ground_support_moby == 0 ||
+            FUN_L00_002603d0_2adb30(((G910 *)&hero)->ground_support_moby) == 0) {
             FUN_L00_002ad410_2adb30(d, bomb_moby, 1);
         } else if (FUN_L00_002ad410_2adb30(d, bomb_moby, 0) == 0) {
             FUN_L00_002ad410_2adb30(d, bomb_moby, 2);
@@ -1154,7 +1157,8 @@ void bomb_update(BombMoby *bomb_moby) {
         c.f[2] = 128.0f;
         c.f[3] = 255.0f;
         fast_dec_timer_s16(&d->color_animation_counter);
-        t = convert_integer_to_float(d->color_animation_counter) / convert_integer_to_float(FUN_001f96f8_2adb30(0x1E));
+        t = convert_integer_to_float(d->color_animation_counter) /
+            convert_integer_to_float(FUN_001f96f8_2adb30(0x1E));
         cr = truncate_float_to_s32((c.f[0] - 255.0f) * t + 255.0f);
         cg = truncate_float_to_s32((c.f[1] - 64.0f) * t + 64.0f);
         cb = truncate_float_to_s32((c.f[2] - 64.0f) * t + 64.0f);
@@ -1252,7 +1256,8 @@ void bomb_update(BombMoby *bomb_moby) {
             }
             if (collision_line(
                     &bomb_pre_motion_position, &bomb_moby->pos, 0x10, (int)bomb_moby, (int)&q)) {
-                if (d->splash_frame_counter == 0 && collision_hit_material() == 0 && d->v.f[2] < 0.0f) {
+                if (d->splash_frame_counter == 0 && collision_hit_material() == 0 &&
+                    d->v.f[2] < 0.0f) {
                     Vec_2adb30 p;
                     Vec_2adb30 splash_particle_velocity;
                     char      *s;
@@ -1649,8 +1654,9 @@ void bomb_update(BombMoby *bomb_moby) {
     } else if (bomb_moby->state != BOMB_STATE_EXPANDING_BLAST) {
         int v;
         d->color_animation_counter++;
-        v = truncate_float_to_s32(FUN_001f9de0_2adb30(normalize_angle((float)d->color_animation_counter * 0.068f)) *
-                                  96.0f) +
+        v = truncate_float_to_s32(
+                FUN_001f9de0_2adb30(normalize_angle((float)d->color_animation_counter * 0.068f)) *
+                96.0f) +
             0x9F;
         bomb_moby->color = (v << 16) | (0xFF << 24) | (v << 8) | v;
     }
