@@ -47,9 +47,9 @@ typedef struct CommandFallingPlatformVars {
     f32 unkB4;
     f32 unkB8;
     u8  unkBC;
-    u8  unkBD;
-    u8  unkBE;
-    u8  unkBF;
+    u8  pre_fall_delay;
+    u8  fall_signaling_enabled;
+    u8  parent_fall_signal;
     f32 unkC0;
     f32 unkC4;
     s32 unkC8;
@@ -94,7 +94,7 @@ void command_falling_platform_update(char *moby) {
     if (((unsigned char *)moby)[0xBC] == 2) {
         MOBY(moby)->state = PLATFORM_TIMED_SWAY_BEFORE_FALL;
         MOBY(moby)->command = 3;
-        falling_platform_vars->unkAC = falling_platform_vars->unkBD;
+        falling_platform_vars->unkAC = falling_platform_vars->pre_fall_delay;
     }
     switch (((unsigned char *)moby)[0x20]) {
     case PLATFORM_INITIALIZE:
@@ -126,7 +126,7 @@ void command_falling_platform_update(char *moby) {
             break;
         if (falling_platform_vars->unkAC == 0)
             falling_platform_vars->unkAC = rand() % 10;
-        if (falling_platform_vars->unkBE != 0)
+        if (falling_platform_vars->fall_signaling_enabled != 0)
             FUN_L01_0026e090(((unsigned char *)moby)[0x21], 2);
         MOBY(moby)->rot.x = fast_add_rotations(
             falling_platform_vars->saved_rot_x,
@@ -152,8 +152,8 @@ void command_falling_platform_update(char *moby) {
                 0.017453292f);
         if (!fast_dec_timer(&falling_platform_vars->unkAC))
             break;
-        if (falling_platform_vars->unkBE != 0) {
-            parent_data[0x19D] = falling_platform_vars->unkBF;
+        if (falling_platform_vars->fall_signaling_enabled != 0) {
+            parent_data[0x19D] = falling_platform_vars->parent_fall_signal;
             parent[0x20] = 12;
         }
         MOBY(moby)->state = PLATFORM_TILT_AND_FALL;
