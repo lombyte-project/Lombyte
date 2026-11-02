@@ -100,7 +100,7 @@ typedef struct L16DamageData {
     f32           unk2C8;
     f32           parent_heading_offset;
     char         *unk2D0;
-    f32           unk2D4;
+    f32           movement_step_length;
     u8            unk2D8[0x4];
     s16           unk2DC;
     u16           unk2DE;
@@ -362,7 +362,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             commando_data->unk302 =
                 truncate_float_to_s32(scale_time(random_float_between(180.0f, 360.0f)));
         }
-        if (commando_data->unk2D4 < 2.0f * frame_time && path_distance < 0.5f) {
+        if (commando_data->movement_step_length < 2.0f * frame_time && path_distance < 0.5f) {
             if (((unsigned char *)commando_moby)[0x53] != 0) {
                 ticks = 30;
                 goto animate_idle;
@@ -427,7 +427,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             if (((unsigned char *)commando_moby)[0x53] != 2)
                 blend_moby_animation(commando_moby, 2, 0, scale_game_frames(30));
         }
-        if (distance < 0.5f && commando_data->unk2D4 < 2.0f * frame_time) {
+        if (distance < 0.5f && commando_data->movement_step_length < 2.0f * frame_time) {
             if (((unsigned char *)commando_moby)[0x53] != 2) {
                 blend_moby_animation(commando_moby, 2, 0, scale_game_frames(30));
             }
@@ -699,7 +699,7 @@ void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
         commando_data->unk2DC = return_countdown_ticks;
         commando_data->unk2BC = moby->pos.z;
         qcopy(&commando_data->unk2C0, &moby->pos);
-        commando_data->unk2D4 = frame_time * 5.0f;
+        commando_data->movement_step_length = frame_time * 5.0f;
     }
 }
 
@@ -717,13 +717,13 @@ float advance_blarg_elite_commando_base_position(char *moby, float *target) {
     float          movement_step[4];
     zero[0] = 0;
     advance_accelerated_scalar((float *)zero,
-                               (float *)(&commando_motion_data->unk2D4),
+                               (float *)(&commando_motion_data->movement_step_length),
                                distance,
                                acceleration_braking_step,
                                acceleration_braking_step,
                                frame_time * 5.0f);
     fast_vec_sub(movement_step, target, base_position);
-    fast_vec_normalize(movement_step, movement_step, commando_motion_data->unk2D4);
+    fast_vec_normalize(movement_step, movement_step, commando_motion_data->movement_step_length);
     fast_vec_add(base_position, base_position, movement_step);
     return distance;
 }
