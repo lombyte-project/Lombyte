@@ -116,7 +116,7 @@ typedef struct M_2cfcb8 {
     struct Vars *vars;
     u8           p7c[0xA6 - 0x7C];
     s16          oclass;
-    u16          hA8;
+    u16          drop_inheritance_tag;
     u8           pAA[0xB0 - 0xAA];
     u8           mission;
 } M_2cfcb8;
@@ -685,7 +685,7 @@ void ground_attached_update(M_2cfcb8 *moby) {
             return;
         }
         flags_before = vars->flags;
-        vars->hC4 = moby->hA8;
+        vars->hC4 = moby->drop_inheritance_tag;
         vars->height = 1.0f;
         vars->flags = flags_before | 1;
         ungrouped_crate_position = &moby->pos;
@@ -734,7 +734,7 @@ void ground_attached_update(M_2cfcb8 *moby) {
                 mark_moby_for_removal(moby);
             } else {
                 member_flags = vars->flags;
-                vars->hC4 = moby->hA8;
+                vars->hC4 = moby->drop_inheritance_tag;
                 vars->height = 1.0f;
                 vars->flags = member_flags | 1;
                 group_crate_probe_position = &moby->pos;
