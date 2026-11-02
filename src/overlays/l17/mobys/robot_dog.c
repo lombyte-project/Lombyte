@@ -582,7 +582,7 @@ typedef struct {
     float         pos[4];
     unsigned char state;
     char          pad21[0x27];
-    float         f48;
+    float         facing_yaw;
     char          pad4C[0x2C];
     Data         *data;
     char          pad7C[0x28];
@@ -664,7 +664,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
     if (fast_vec_dist(moby->pos, moby_vars->v1B0) < 64.0f) {
         target_heading =
             fast_arc_tan(moby_vars->v180[0] - moby->pos[0], moby_vars->v180[1] - moby->pos[1]);
-        yaw = fast_difference_between_rotations(moby->f48, target_heading);
+        yaw = fast_difference_between_rotations(moby->facing_yaw, target_heading);
         qcopy(position_buffer, moby->pos);
         position_buffer[2] += 1.0f;
         line_query_clear =
