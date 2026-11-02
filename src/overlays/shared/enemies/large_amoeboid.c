@@ -82,7 +82,7 @@ typedef struct LargeAmoeboidVars {
     u8    pad208[0x8];
     f32   home_pos[4]; /* 0x210: position at spawn */
     u8    unk220[0x4];
-    f32   unk224;
+    f32   base_target_search_radius;
     f32   unk228;
     s32   unk22C;
     s32   unk230;
@@ -303,8 +303,8 @@ void large_amoeboid_update(unsigned char *moby) {
         } else {
             large_amoeboid_vars->health = 3.0f;
         }
-        if (large_amoeboid_vars->unk224 == 0.0f)
-            large_amoeboid_vars->unk224 = 15.0f;
+        if (large_amoeboid_vars->base_target_search_radius == 0.0f)
+            large_amoeboid_vars->base_target_search_radius = 15.0f;
         FUN_L01_0026d930(&large_amoeboid_vars->unk170);
         large_amoeboid_vars->unk17C = 2.0f;
         large_amoeboid_vars->unk178 = 2.0f;
@@ -815,9 +815,9 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         moby_vars->unk38 = 0;
     }
     if (fast_dec_timer(&moby_vars->unk22C) != 0) {
-        moby_vars->unk228 = moby_vars->unk224;
+        moby_vars->unk228 = moby_vars->base_target_search_radius;
     } else {
-        moby_vars->unk228 = moby_vars->unk224 + 20.0f;
+        moby_vars->unk228 = moby_vars->base_target_search_radius + 20.0f;
     }
     path_search_gate_moby_index = moby_vars->unk260;
     if (path_search_gate_moby_index <= 0 ||
@@ -921,7 +921,7 @@ char *activate_smaller_amoeboid(void *source_moby) {
             qcopy(&smaller_amoeboid->pos, &source_amoeboid->pos);
             qcopy(&smaller_amoeboid->rot, &source_amoeboid->rot);
             other_vars->health = self_vars->health;
-            other_vars->unk224 = self_vars->unk224;
+            other_vars->base_target_search_radius = self_vars->base_target_search_radius;
             update_entity(smaller_amoeboid);
             return (char *)smaller_amoeboid;
         }
