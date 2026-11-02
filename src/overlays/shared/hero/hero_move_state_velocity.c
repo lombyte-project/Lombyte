@@ -612,10 +612,10 @@ void apply_hero_reference_tilt(void) {
     pitch_smoothing_parameter = frame_scale_sq * 0.3f;
     FUN_001f9d20_2163f0(&original_position_offset, &original_position_offset, &P);
     reference_vector.q = P.primary_tilt_reference_vector.q;
-    if (P.reference_tilt_mode == 2) {
+    if (P.reference_tilt_mode == HERO_GRAVITY_TOWARD_REFERENCE_POINT) {
         FUN_001f9a68_2163f0(&reference_vector, &P.alternate_tilt_reference_vector, -1.0f);
     }
-    if (P.reference_tilt_mode == 1) {
+    if (P.reference_tilt_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL) {
         if (P.s30E < FUN_001f96f8_2163f0(10) || P.f2DC < 1.0f) {
             reference_vector.q = P.primary_tilt_reference_vector.q;
         }
@@ -629,7 +629,7 @@ void apply_hero_reference_tilt(void) {
                             pitch_smoothing_parameter,
                             0.0f,
                             0);
-    if (P.reference_tilt_mode == 1 && P.s30E != 0) {
+    if (P.reference_tilt_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL && P.s30E != 0) {
         FUN_001f9d20_2163f0(
             &transformed_position_offset, &transformed_position_offset, working_matrix);
         fast_vec_sub(&P.hero_position, &P.hero_position, &transformed_position_offset);
