@@ -320,10 +320,10 @@ extern short height_adjusted_spark_base_third_frame_count_gp __asm__("D_L10_0016
     __attribute__((sda));
 extern short height_adjusted_spark_frame_count_scale_spread_gp __asm__("D_L10_00162020")
     __attribute__((sda));
-int          D_L10_00162024 = 0x80002040;
-int          D_L10_00162028 = 0x80104040;
-int          D_L10_0016202C = 0x30002040;
-int          D_L10_00162030 = 0x30004020;
+int          l10_height_adjusted_spark_initial_color_from __asm__("D_L10_00162024") = 0x80002040;
+int          l10_height_adjusted_spark_initial_color_to __asm__("D_L10_00162028") = 0x80104040;
+int          l10_height_adjusted_spark_second_color_from __asm__("D_L10_0016202C") = 0x30002040;
+int          l10_height_adjusted_spark_second_color_to __asm__("D_L10_00162030") = 0x30004020;
 extern short height_adjusted_spark_timer_reset_max_gp __asm__("D_L10_00162038")
     __attribute__((sda));
 extern short height_adjusted_spark_timer_reset_min_gp __asm__("D_L10_00162034")
@@ -400,12 +400,12 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
         *(float *)&height_adjusted_spark_random_vector_fourth_component_min_gp,
         *(float *)&height_adjusted_spark_random_vector_fourth_component_max_gp);
     initial_spark_color =
-        fast_tween_color(D_L10_00162024, D_L10_00162028, random_float_between(0.0f, 1.0f));
+        fast_tween_color(l10_height_adjusted_spark_initial_color_from, l10_height_adjusted_spark_initial_color_to, random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position,
                 spark_first_vector,
                 acc,
                 initial_spark_color,
-                fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)),
+                fast_tween_color(l10_height_adjusted_spark_second_color_from, l10_height_adjusted_spark_second_color_to, random_float_between(0.0f, 1.0f)),
                 frame_count,
                 second_frame_count,
                 third_frame_count,
