@@ -325,8 +325,8 @@ typedef struct {
     char           pad9C[0x11];
     unsigned char  bAD;
     char           padAE[0x12];
-    float          fC0;
-    float          fC4;
+    float          knockback_animation_target_frame;
+    float          knockback_animation_stop_frame;
     char           padC8[8];
     char           xD0[8];
     float          fD8;
@@ -591,8 +591,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_vars->knockback_gravity_step = frame_time_sq * 40.0f;
             birdbot_vars->knockback_horizontal_launch_step = square_root(birdbot_vars->f84 * 2.0f * 10.0f);
             birdbot_vars->knockback_vertical_launch_step = frame_time * 15.0f;
-            birdbot_vars->fC0 = 5.0f;
-            birdbot_vars->fC4 = 10.0f;
+            birdbot_vars->knockback_animation_target_frame = 5.0f;
+            birdbot_vars->knockback_animation_stop_frame = 10.0f;
             birdbot_vars->w94 = 1;
             birdbot_vars->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
@@ -613,9 +613,9 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_vars->knockback_gravity_step = 0.008f;
             birdbot_vars->knockback_horizontal_launch_step = square_root(birdbot_vars->f84 * 2.0f * 1.5f);
             birdbot_vars->w94 = 1;
-            birdbot_vars->fC0 = 5.0f;
+            birdbot_vars->knockback_animation_target_frame = 5.0f;
             birdbot_vars->knockback_vertical_launch_step = frame_time * 8.5f;
-            birdbot_vars->fC4 = 10.0f;
+            birdbot_vars->knockback_animation_stop_frame = 10.0f;
             birdbot_vars->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
             trooper_knockback_arc(&va, &knockback_heading, &birdbot_vars->knockback_horizontal_launch_step, &birdbot_vars->knockback_vertical_launch_step);
@@ -634,8 +634,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_vars->knockback_horizontal_launch_step = square_root(birdbot_vars->f84 * 2.0f * 1.5f);
             birdbot_vars->w94 = 1;
             birdbot_vars->knockback_vertical_launch_step = frame_time * 5.0f;
-            birdbot_vars->fC0 = 7.0f;
-            birdbot_vars->fC4 = 13.5f;
+            birdbot_vars->knockback_animation_target_frame = 7.0f;
+            birdbot_vars->knockback_animation_stop_frame = 13.5f;
             birdbot_vars->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
             trooper_knockback_arc(&va, &knockback_heading, &birdbot_vars->knockback_horizontal_launch_step, &birdbot_vars->knockback_vertical_launch_step);
