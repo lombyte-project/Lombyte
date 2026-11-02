@@ -109,11 +109,11 @@ typedef struct {
     Vec_2adb30 v;
     char       pad10[0x40];
     M910      *owner;
-    short      h54;
+    short      fuse_timer;
     short      h56;
     char       pad58[0x10];
-    short      h68;
-    short      h6a;
+    short      splash_frame_counter;
+    short      color_animation_counter;
 } BombData;
 
 struct BombMoby {
@@ -1153,13 +1153,13 @@ void bomb_update(BombMoby *bomb_moby) {
         c.f[1] = 128.0f;
         c.f[2] = 128.0f;
         c.f[3] = 255.0f;
-        fast_dec_timer_s16(&d->h6a);
-        t = convert_integer_to_float(d->h6a) / convert_integer_to_float(FUN_001f96f8_2adb30(0x1E));
+        fast_dec_timer_s16(&d->color_animation_counter);
+        t = convert_integer_to_float(d->color_animation_counter) / convert_integer_to_float(FUN_001f96f8_2adb30(0x1E));
         cr = truncate_float_to_s32((c.f[0] - 255.0f) * t + 255.0f);
         cg = truncate_float_to_s32((c.f[1] - 64.0f) * t + 64.0f);
         cb = truncate_float_to_s32((c.f[2] - 64.0f) * t + 64.0f);
         bomb_moby->color = (cb << 16) | (0xFF << 24) | (cg << 8) | cr;
-        if (d->h68 == 0) {
+        if (d->splash_frame_counter == 0) {
             if ((D_L00_0015F5CC_2adb30 & 7) == 0) {
                 int i;
                 for (i = 0; i < *(int *)&bomb_sparks_per_emission; i++) {
@@ -1222,7 +1222,7 @@ void bomb_update(BombMoby *bomb_moby) {
             bomb_moby->ry = fast_add_rotations(bomb_moby->ry, frame_time_macro * 7.8539815f);
             qcopy_nc(&bomb_pre_motion_position, &bomb_moby->pos);
             fast_vec_add(&bomb_moby->pos, &bomb_moby->pos, d);
-            if (d->h68 == 0) {
+            if (d->splash_frame_counter == 0) {
                 d->v.f[2] -= frame_time_sq_macro * 11.0f;
             } else {
                 d->v.f[2] -= frame_time_sq_macro * 11.0f / 10.0f;
@@ -1235,7 +1235,7 @@ void bomb_update(BombMoby *bomb_moby) {
             }
             q.moby = bomb_moby;
             q.flags = 0x830000;
-            if (d->h54 < FUN_001f96f8_2adb30(0x12C) - FUN_001f96f8_2adb30(0xA)) {
+            if (d->fuse_timer < FUN_001f96f8_2adb30(0x12C) - FUN_001f96f8_2adb30(0xA)) {
                 q.flags |= 1;
             }
             q.iE0 = 1;
@@ -1247,12 +1247,12 @@ void bomb_update(BombMoby *bomb_moby) {
             q.kind = 2;
             q.cls = bomb_moby->cls;
             q.on = 1;
-            if (d->h68 != 0) {
-                d->h68++;
+            if (d->splash_frame_counter != 0) {
+                d->splash_frame_counter++;
             }
             if (collision_line(
                     &bomb_pre_motion_position, &bomb_moby->pos, 0x10, (int)bomb_moby, (int)&q)) {
-                if (d->h68 == 0 && collision_hit_material() == 0 && d->v.f[2] < 0.0f) {
+                if (d->splash_frame_counter == 0 && collision_hit_material() == 0 && d->v.f[2] < 0.0f) {
                     Vec_2adb30 p;
                     Vec_2adb30 splash_particle_velocity;
                     char      *s;
@@ -1264,7 +1264,7 @@ void bomb_update(BombMoby *bomb_moby) {
                                 bomb_moby->pos.f[1],
                                 0.5f,
                                 -0.35f);
-                    d->h68 = 1;
+                    d->splash_frame_counter = 1;
                     clear_u64_value(d->v.f);
                     d->v.f[2] = frame_time_macro * -1.5f;
                     p.f[0] = bomb_moby->pos.f[0];
@@ -1287,10 +1287,10 @@ void bomb_update(BombMoby *bomb_moby) {
                         spawn_debris_chunk(
                             &p, &splash_particle_velocity, random_integer_below(2), n);
                     }
-                } else if (d->h68 != 0 || collision_hit_material() != 0) {
+                } else if (d->splash_frame_counter != 0 || collision_hit_material() != 0) {
                     if (coll_hit.moby != 0) {
                         if ((coll_hit.moby != ((G910 *)&hero)->cam && coll_hit.moby != d->owner) ||
-                            d->h54 < FUN_001f96f8_2adb30(0x12C) - FUN_001f96f8_2adb30(0xA)) {
+                            d->fuse_timer < FUN_001f96f8_2adb30(0x12C) - FUN_001f96f8_2adb30(0xA)) {
                             if (((BombMoby *)coll_hit.moby)->f74 != D_L00_00160770 ||
                                 coll_hit.moby->cls == 0x336) {
                                 H910 *h = &coll_hit;
@@ -1312,7 +1312,7 @@ void bomb_update(BombMoby *bomb_moby) {
                         FUN_001f9bf8_2adb30(&b, &h->nrm, 1.0f);
                     }
                 }
-            } else if (fast_dec_timer_s16(&d->h54)) {
+            } else if (fast_dec_timer_s16(&d->fuse_timer)) {
                 bomb_moby->bBC = 1;
                 fast_vec_add(&blast_velocity, &blast_velocity, d);
             }
@@ -1324,7 +1324,7 @@ void bomb_update(BombMoby *bomb_moby) {
                 FUN_001f9a68_2adb30(&blast_velocity, &blast_velocity, s);
                 FUN_001f9a28_2adb30(&delta, &g_debug_camera, &bomb_moby->pos);
                 camera_distance = FUN_001f9af0_2adb30(&delta);
-                if (d->h68 < FUN_001f96f8_2adb30(0x14)) {
+                if (d->splash_frame_counter < FUN_001f96f8_2adb30(0x14)) {
                     int n;
                     n = collect_mobies_in_sphere(&bomb_moby->pos, 0x10, bomb_moby, 0, s * 0.5f);
                     v.q = bomb_moby->pos.q;
@@ -1366,7 +1366,7 @@ void bomb_update(BombMoby *bomb_moby) {
                                                 (unsigned char)item_text_variant[0xA]);
                     }
                 }
-                if (d->h68 < FUN_001f96f8_2adb30(0x14)) {
+                if (d->splash_frame_counter < FUN_001f96f8_2adb30(0x14)) {
                     Vec_2adb30 t;
                     float      g;
                     int        r2;
@@ -1514,7 +1514,7 @@ void bomb_update(BombMoby *bomb_moby) {
                                                         b2,
                                                         0x20);
                 }
-                if (d->h68 >= FUN_001f96f8_2adb30(0x14)) {
+                if (d->splash_frame_counter >= FUN_001f96f8_2adb30(0x14)) {
                     float h;
                     bomb_moby->pos.f[2] += 1.0f;
                     h = resolve_camera_surface_height((float *)&bomb_moby->pos, &v);
@@ -1542,14 +1542,14 @@ void bomb_update(BombMoby *bomb_moby) {
                 }
                 d->v.f[0] = 0.0f;
                 bomb_moby->bBC = 0;
-                if (d->h68 >= FUN_001f96f8_2adb30(0x14)) {
+                if (d->splash_frame_counter >= FUN_001f96f8_2adb30(0x14)) {
                     trooper_play_sound(0x16, 0, (int)bomb_moby, 0);
                 } else if ((unsigned char)item_text_variant[0xA] != 0) {
                     allocate_voice_for_target_entry(1, 0, (int)bomb_moby);
                 } else {
                     allocate_voice_for_target_entry(0, 0, (int)bomb_moby);
                 }
-                if (d->h68 != 0) {
+                if (d->splash_frame_counter != 0) {
                     float gz;
                     float wz;
                     int   cr = 0x60;
@@ -1648,8 +1648,8 @@ void bomb_update(BombMoby *bomb_moby) {
         }
     } else if (bomb_moby->state != BOMB_STATE_EXPANDING_BLAST) {
         int v;
-        d->h6a++;
-        v = truncate_float_to_s32(FUN_001f9de0_2adb30(normalize_angle((float)d->h6a * 0.068f)) *
+        d->color_animation_counter++;
+        v = truncate_float_to_s32(FUN_001f9de0_2adb30(normalize_angle((float)d->color_animation_counter * 0.068f)) *
                                   96.0f) +
             0x9F;
         bomb_moby->color = (v << 16) | (0xFF << 24) | (v << 8) | v;
