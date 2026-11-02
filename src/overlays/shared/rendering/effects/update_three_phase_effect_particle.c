@@ -1569,7 +1569,7 @@ typedef struct {
     f32 fC;
     f32 f10;
     f32 f14;
-    u8 *p18;
+    u8 *spiral_target_moby;
     f32 f1C;
 } R_26c860;
 
@@ -1606,7 +1606,7 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
             &transformed_position_offset, &position_offset_scratch, &position_offset_matrix);
         fast_vec_sub(&particle->v10, &particle->v10, &transformed_position_offset);
         r->f1C += frame_scale * 0.06001f;
-        moby_point_position(r->p18, 0, &reference_position);
+        moby_point_position(r->spiral_target_moby, 0, &reference_position);
         fast_vec_sub(&position_offset_scratch, &reference_position, &particle->v10);
         FUN_L00_001ff500_26c860(&position_offset_scratch, &position_offset_scratch, r->f1C);
         fast_vec_add(&particle->v10, &particle->v10, &position_offset_scratch);
@@ -1620,7 +1620,7 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
             &transformed_position_offset, &position_offset_scratch, &position_offset_matrix);
         fast_vec_add(&particle->v10, &particle->v10, &transformed_position_offset);
         if (zero < compute_transformed_delta_component(
-                       &reference_position, r->p18 + 0xC0, &particle->v10, 1)) {
+                       &reference_position, r->spiral_target_moby + 0xC0, &particle->v10, 1)) {
             FUN_L00_00267a08_26c860(particle);
             return;
         }
