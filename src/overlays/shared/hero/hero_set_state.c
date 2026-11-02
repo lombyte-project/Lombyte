@@ -404,7 +404,7 @@ typedef struct {
 } G_221ee0;
 
 typedef struct {
-    s32 i0;
+    s32 swing_target_enabled;
     u8  p0[0x18];
     s32 i1C;
     f32 f20;
@@ -452,7 +452,7 @@ void select_hero_grapple_swing_target(void) {
         if (candidate_moby->hA6 != 0x323)
             continue;
         q = candidate_moby->q;
-        if (q->i0 == 0)
+        if (q->swing_target_enabled == 0)
             continue;
         if (candidate_moby->h34 & 1)
             continue;
