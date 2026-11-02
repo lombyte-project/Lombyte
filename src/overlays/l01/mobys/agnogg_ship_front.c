@@ -104,9 +104,9 @@ typedef struct {
     /* 0x98 */ char           pad98[0xE];
     /* 0xA6 */ short          oclass;
     /* 0xA8 */ char           padA8[8];
-    /* 0xB0 */ unsigned char  fB0;
+    /* 0xB0 */ unsigned char  persistent_slot_index;
     /* 0xB1 */ char           padB1;
-    /* 0xB2 */ short          fB2;
+    /* 0xB2 */ short          collected_state_index;
     /* 0xB4 */ char           padB4[8];
     /* 0xBC */ unsigned char  fBC;
     /* 0xBD */ char           padBD[0x43];
@@ -192,7 +192,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         break;
     case AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER:
         level_table_byte =
-            *(unsigned char *)(moby->fB0 + (current_level_index_macro << 4) + visited52);
+            *(unsigned char *)(moby->persistent_slot_index + (current_level_index_macro << 4) + visited52);
         if (level_table_byte == 0xFF) {
             if (moby->requested_animation_sequence != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
@@ -326,13 +326,13 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         queue_planet_unlock_message(3);
         moby->flags = moby->flags & 0xFFBE;
         if (data->link != -1) {
-            ((Lv *)D_L01_001BAD60_2FC140)->collected[ents_macro[data->link].fB2] =
-                ents_macro[data->link].fB0 + 2;
-            if (ents_macro[data->link].fB0 == 0xFF ||
-                (D_L01_0015FC88[ents_macro[data->link].fB0] != 0xFF &&
-                 visited52[ents_macro[data->link].fB0 + (current_level_index_macro << 4)] ==
+            ((Lv *)D_L01_001BAD60_2FC140)->collected[ents_macro[data->link].collected_state_index] =
+                ents_macro[data->link].persistent_slot_index + 2;
+            if (ents_macro[data->link].persistent_slot_index == 0xFF ||
+                (D_L01_0015FC88[ents_macro[data->link].persistent_slot_index] != 0xFF &&
+                 visited52[ents_macro[data->link].persistent_slot_index + (current_level_index_macro << 4)] ==
                      0xFF)) {
-                l01_save_state.cleared[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
+                l01_save_state.cleared[ents_macro[data->link].collected_state_index] = ents_macro[data->link].persistent_slot_index + 2;
             }
         }
         if (data->f3C != -1) {
@@ -348,7 +348,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                     &ents_macro[data->f38].fBC, 1, &ents_macro[data->f38], 1, D_L01_001BAAA0);
             }
         }
-        jet_clear_persistent(moby->fB0);
+        jet_clear_persistent(moby->persistent_slot_index);
         if (data->rec != -1) {
             jet_reset_camera(&l01_cuboids_macro[data->rec].pos, &l01_cuboids_macro[data->rec].rot);
         }
