@@ -205,7 +205,7 @@ typedef struct Data2C8398 {
     Look2C8398    look0;
     Look2C8398    look1;
     short         s250;
-    short         s252;
+    short         target_range_boost_timer;
     unsigned char b254;
     unsigned char b255;
     short         s256;
@@ -215,7 +215,7 @@ typedef struct Data2C8398 {
     unsigned char b263;
     int           i264;
     char          p268[4];
-    float         f26C;
+    float         base_target_selection_range;
     float         target_selection_range;
     int           i274;
     float         f278;
@@ -1506,12 +1506,12 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     moby_data = moby->data;
     if (moby_data->i38 != 0) {
         moby_data->i38 = 0;
-        moby_data->s252 = scale_game_frames(240);
+        moby_data->target_range_boost_timer = scale_game_frames(240);
     }
-    if (fast_dec_timer_s16(&moby_data->s252)) {
-        moby_data->target_selection_range = moby_data->f26C;
+    if (fast_dec_timer_s16(&moby_data->target_range_boost_timer)) {
+        moby_data->target_selection_range = moby_data->base_target_selection_range;
     } else {
-        moby_data->target_selection_range = moby_data->f26C + 5.0f;
+        moby_data->target_selection_range = moby_data->base_target_selection_range + 5.0f;
     }
     hit = find_moby_hit(moby, 0x330000, 0);
     hit_response_code =
