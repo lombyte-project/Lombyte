@@ -85,12 +85,12 @@ typedef struct {
     ElectroidVec   targetPos;
     u8             padE0[0x110 - 0xE0];
     ElectroidMoby *target;
-    s32            unk114;
+    s32            target_selection_status;
     u8             pad118[0x120 - 0x118];
     u8             unk120[0x1A0 - 0x120];
     u128           spawnPos;
     u8             pad1B0[4];
-    s32            unk1B4;
+    s32            targeting_path_index;
     s32            pathIdx;
     s32            unk1BC;
     u8             pad1C0[0x1D0 - 0x1C0];
@@ -219,7 +219,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
             moby->flags |= 0x8000;
         }
         if (vars->pathIdx >= 0) {
-            if (vars->unk1B4 == -1) {
+            if (vars->targeting_path_index == -1) {
                 mark_moby_for_removal(moby);
                 return;
             }
@@ -239,7 +239,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
                 ELECTROID_ANIM(moby, 1, scale_game_frames_s32(20));
             }
         }
-        if (vars->unk114 != 2) {
+        if (vars->target_selection_status != 2) {
             moby->state = VELDIN_ROBOT_STATE_FOLLOW_PATH;
             ELECTROID_ANIM(moby, 9, scale_game_frames_s32(10));
         }
@@ -280,7 +280,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         } else if (moby->unk70 & 2) {
             ELECTROID_ANIM(moby, random_integer_below(2) + 1, scale_game_frames_s32(20));
         }
-        if (vars->unk114 != 2 && register_beam_slot(moby, 0, 0) != 0) {
+        if (vars->target_selection_status != 2 && register_beam_slot(moby, 0, 0) != 0) {
             moby->state = VELDIN_ROBOT_STATE_WAIT_TO_START_COLLISION_PROBES;
             ELECTROID_ANIM(moby, 5, scale_game_frames_s32(10));
         }
@@ -505,7 +505,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     moby->unkA4 = 0xFF;
     trooper_anim_finish(moby, anim);
     if (moby->state == VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH) {
-        path = toad_paths[vars->unk1B4];
+        path = toad_paths[vars->targeting_path_index];
         FUN_L00_0025ff38(moby, &vars->targetPos, 0, 0, path->pts, path->count, 64.0f);
     } else if (moby->state != VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES) {
         range = veldin_robot_default_target_range_gp;
@@ -514,7 +514,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         }
         if (select_moby_combat_target(moby, range, &vars->targetPos) != 2 &&
             range < vector_distance_xy(&moby->pos, &vars->targetPos)) {
-            vars->unk114 = 2;
+            vars->target_selection_status = 2;
         }
     }
     if (vars->target == 0) {
@@ -532,7 +532,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             if (range < vector_distance_xy(&moby->pos, &vars->target->pos)) {
                 vars->target = candidate_target;
                 qcopy(&vars->targetPos, &candidate_target->pos);
-                vars->unk114 = 1;
+                vars->target_selection_status = 1;
             }
         }
     }
