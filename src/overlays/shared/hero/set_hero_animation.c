@@ -1805,10 +1805,10 @@ extern f32 D_0015EE14 __asm__("D_0015EE14");
 
 typedef struct {
     u8  b0;
-    u8  b1;
+    u8  manipulator_attached;
     u8  p[0x1E];
     f32 f20;
-    f32 f24;
+    f32 scale_component;
     f32 f28;
 } A_00234b38;
 
@@ -1833,10 +1833,10 @@ void apply_hero_moby_scale(void *scale_owner_moby) {
     if (D_L00_0015F5C4_00234b38[0] == 6 && 1.33f < scale_factor)
         scale_factor = 1.33f;
     scale_state = &D_L00_0017C340_00234b38;
-    if (scale_state->b1 == 0) {
+    if (scale_state->manipulator_attached == 0) {
         attach_manipulator(scale_owner_moby, 0x18, scale_state);
         scale_state->f20 = scale_factor;
-        scale_state->f24 = scale_factor;
+        scale_state->scale_component = scale_factor;
         scale_state->f28 = scale_factor;
     }
     level_index = current_level_index;
