@@ -187,6 +187,9 @@ void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
 
 /* Moby class 252 */
 void scoutbot_update(Moby *moby) {
+    enum {
+        SCOUTBOT_TARGET_SELECTION_UNAVAILABLE = 2
+    };
     Data_3DF8 *scoutbot_instance_vars = (struct Data_3DF8 *)moby->pvars;
     float      target_pos[4];
     float      offset[4];
@@ -232,7 +235,7 @@ void scoutbot_update(Moby *moby) {
         scoutbot_instance_vars->b29 = 0;
         break;
     case SCOUTBOT_STATE_IDLE:
-        if (scoutbot_instance_vars->path_target_selection_status != 2) {
+        if (scoutbot_instance_vars->path_target_selection_status != SCOUTBOT_TARGET_SELECTION_UNAVAILABLE) {
             scoutbot_instance_vars->ground_hover_height_offset = 0.0f;
             scoutbot_instance_vars->hover_bob_amplitude = 0.1f;
             if (moby->prev_seq != 2) {
