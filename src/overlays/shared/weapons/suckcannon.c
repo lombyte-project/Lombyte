@@ -339,7 +339,7 @@ typedef struct {
     int            i84, i88;
     float          f8C, f90;
     int            i94;
-    float          f98;
+    float          suction_step_distance;
     short          h9C, h9E;
 } R_2DDEA0;
 
@@ -2320,6 +2320,11 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
         SUCK_UPDATE_FALLING_AFTER_CANCEL = 6,
         SUCK_UPDATE_DEATH = 7
     };
+    enum {
+        SUCK_RECORD_STATE_RISING_FOR_SUCTION = 2,
+        SUCK_RECORD_STATE_STORED = 4,
+        SUCK_RECORD_STATE_ROLLING_PROJECTILE = 6
+    };
     Frame_2DDEA0 suction_and_projectile_scratch;
     R_2DDEA0    *suction_and_projectile_record;
 
@@ -2343,7 +2348,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                        frame_scale * 0.3927f);
             if (fast_subtract_rotations(yaw, tolerance) < moby->rot.z &&
                 moby->rot.z < fast_add_rotations(yaw, tolerance)) {
-                suction_and_projectile_record->state = 2;
+                suction_and_projectile_record->state = SUCK_RECORD_STATE_RISING_FOR_SUCTION;
                 suction_and_projectile_record->f6C = 0.0f;
             }
             clear_u64_value(&suction_and_projectile_record->vel);
@@ -2401,11 +2406,11 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                 ((Cls *)moby->pclass)->f24 * (distance / (suction_and_projectile_record->f64 +
                                                           suction_and_projectile_record->f64) +
                                               half);
-            suction_and_projectile_record->f98 =
-                suction_and_projectile_record->f98 + frame_scale_sq_macro * 0.11f;
-            if (frame_scale * 0.75f < suction_and_projectile_record->f98)
-                suction_and_projectile_record->f98 = frame_scale * 0.75f;
-            if (distance < suction_and_projectile_record->f98 * 70.0f) {
+            suction_and_projectile_record->suction_step_distance =
+                suction_and_projectile_record->suction_step_distance + frame_scale_sq_macro * 0.11f;
+            if (frame_scale * 0.75f < suction_and_projectile_record->suction_step_distance)
+                suction_and_projectile_record->suction_step_distance = frame_scale * 0.75f;
+            if (distance < suction_and_projectile_record->suction_step_distance * 70.0f) {
                 blend_moby_animation(
                     suction_and_projectile_record->owner, 4, 0, func_001F9850_2DDEA0(2));
             }
@@ -2413,7 +2418,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                 D_001404FC_2DDEA0[0] = 2;
                 moby->collision = 0;
             }
-            if (distance < suction_and_projectile_record->f98) {
+            if (distance < suction_and_projectile_record->suction_step_distance) {
                 hero.suck_cannon_incoming--;
                 hero.sucked_moby_count++;
                 func_L00_002DB6C8_2DDEA0(moby, &suction_and_projectile_scratch.v[0]);
@@ -2470,7 +2475,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                                      &moby->pos);
                 func_L00_001FF4B0_2DDEA0(&suction_and_projectile_scratch.v[1],
                                          &suction_and_projectile_scratch.v[1],
-                                         suction_and_projectile_record->f98);
+                                         suction_and_projectile_record->suction_step_distance);
                 func_001F9BD8_2DDEA0(&moby->pos, &moby->pos, &suction_and_projectile_scratch.v[1]);
                 func_0020EEE8_2DDEA0(moby);
             }
@@ -2606,7 +2611,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
             if (((Coll *)D_L00_00173E40_lui)->hit != 0 &&
                 ((Coll *)D_L00_00173E40_lui)->hit->oclass == 0)
                 hit_wall = 0;
-            if (suction_and_projectile_record->state == 6) {
+            if (suction_and_projectile_record->state == SUCK_RECORD_STATE_ROLLING_PROJECTILE) {
                 moby->flags &= 0x7FFF;
                 moby->collision = ((Cls *)moby->pclass)->i10;
                 moby->flags |= 4;
@@ -2658,7 +2663,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                     blend_moby_animation(moby, anim, 0, func_001F9850_2DDEA0(0x14));
                 }
                 moby->collision_disable = suction_and_projectile_record->i88;
-                suction_and_projectile_record->state = 6;
+                suction_and_projectile_record->state = SUCK_RECORD_STATE_ROLLING_PROJECTILE;
                 if (0.87266463f <
                     fast_arc_tan(((Coll *)D_L00_00173E40_lui)->v40.z,
                                  vector_length_xy(&((Coll *)D_L00_00173E40_lui)->v40))) {
@@ -2734,7 +2739,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
     }
     if (moby->flags & 4)
         func_0020EEE8_2DDEA0(moby);
-    if (suction_and_projectile_record->state < 4) {
+    if (suction_and_projectile_record->state < SUCK_RECORD_STATE_STORED) {
         if (suction_and_projectile_record->timer <= 0.0f) {
             if (((Cls *)moby->pclass)->f2C->fC != 0)
                 ((Cls *)moby->pclass)->f2C->fC(moby);
