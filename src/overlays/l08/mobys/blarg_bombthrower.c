@@ -52,7 +52,7 @@ typedef struct {
     char          pad24[5];
     unsigned char b29;
     char          pad2A[0xE];
-    int           i38;
+    int           alternate_throw_trigger;
     char          pad3C[4];
     float         v40[4];
     char          pad50[8];
@@ -409,7 +409,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
                 goto attack;
             }
         }
-        if (bombthrower_vars->i38 == 0 || !(0.5f < target_distance_xy)) {
+        if (bombthrower_vars->alternate_throw_trigger == 0 || !(0.5f < target_distance_xy)) {
             break;
         }
     attack:
@@ -553,5 +553,5 @@ void blarg_bombthrower_update(struct Moby *moby) {
         break;
     }
     trooper_anim_finish(moby, bombthrower_vars->anim);
-    bombthrower_vars->i38 = 0;
+    bombthrower_vars->alternate_throw_trigger = 0;
 }
