@@ -2325,10 +2325,13 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
         SUCK_RECORD_STATE_STORED = 4,
         SUCK_RECORD_STATE_ROLLING_PROJECTILE = 6
     };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     Frame_2DDEA0 suction_and_projectile_scratch;
     R_2DDEA0    *suction_and_projectile_record;
 
-    if (moby == 0 || moby->state == 0xFE || moby->state == 0xFD)
+    if (moby == 0 || moby->state == MOBY_STATE_MARKED_FOR_REMOVAL || moby->state == 0xFD)
         return 0;
     suction_and_projectile_record = func_L00_002DCD40_2DDEA0(moby);
     if (suction_and_projectile_record != 0) {
