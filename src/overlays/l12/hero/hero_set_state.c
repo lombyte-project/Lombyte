@@ -67,16 +67,19 @@ extern char level12_transform_trail_jump_velocity_key_profile[] __asm__("D_L12_0
 extern char level12_water_surface_jump_velocity_key_profile[] __asm__("D_L12_0017C3E0");
 
 int hero_set_state(int requested_state, int entry_animation_mode) {
+    enum {
+        HERO_ENTRY_ANIMATION_MODE_GUARD_OVERRIDE = 2
+    };
     int   previous_state_step;
     char *moby;
     int   old20A7;
     {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 &&
-            (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || entry_animation_mode != 2))
+            (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE || entry_animation_mode != HERO_ENTRY_ANIMATION_MODE_GUARD_OVERRIDE))
             return 0;
     }
-    if ((D_L12_0015F5C4 == 2 || D_L12_0015F5C4 == 6) && entry_animation_mode != 2)
+    if ((D_L12_0015F5C4 == 2 || D_L12_0015F5C4 == 6) && entry_animation_mode != HERO_ENTRY_ANIMATION_MODE_GUARD_OVERRIDE)
         return 0;
     {
         struct Hero *p = &hero;
