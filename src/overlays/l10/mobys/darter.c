@@ -619,7 +619,7 @@ typedef struct Hit_2E2B80 {
     float        f10[4];
     struct Moby *moby;
     char         pad24[8];
-    float        f2C;
+    float        damage;
     int          f30;
 } Hit_2E2B80;
 
@@ -690,7 +690,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
         resolve_moby_hit_response(
             moby, hit_record, &class_1199_vars->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0 && hit_record->moby->oclass != moby->oclass) {
-            if (class_1199_vars->f20 <= hit_record->f2C) {
+            if (class_1199_vars->f20 <= hit_record->damage) {
                 class_1199_vars->f20 = 0.0f;
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 4)
@@ -717,7 +717,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
                 trooper_anim_update(moby, class_1199_vars->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                class_1199_vars->f20 = class_1199_vars->f20 - hit_record->f2C;
+                class_1199_vars->f20 = class_1199_vars->f20 - hit_record->damage;
                 class_1199_vars->f117 = 0xFA;
                 class_1199_vars->f26 = scale_game_frames(60);
                 trooper_anim_update(moby, class_1199_vars->f110);
