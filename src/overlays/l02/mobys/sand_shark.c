@@ -1116,8 +1116,8 @@ extern s32 sand_shark_single_particle_third_frame_count_range_start_gp __asm__("
     __attribute__((sda));
 extern s32 sand_shark_single_particle_third_frame_count_range_end_gp __asm__("D_L02_00161998")
     __attribute__((sda));
-s32 D_L02_0016199C = 0x40306058;
-s32 D_L02_001619A0 = 0x10306058;
+s32 l02_sand_shark_single_particle_initial_color __asm__("D_L02_0016199C") = 0x40306058;
+s32 l02_sand_shark_single_particle_secondary_color __asm__("D_L02_001619A0") = 0x10306058;
 s32 D_L02_001619A4 = -1;
 
 void emit_sand_shark_single_particle(Vec4 *from) __asm__("FUN_L02_002d5a68");
@@ -1175,8 +1175,8 @@ void emit_sand_shark_single_particle(Vec4 *from) {
     spawn_spark(&at,
                 &vertical_motion,
                 &radial_motion,
-                D_L02_0016199C,
-                D_L02_001619A0,
+                l02_sand_shark_single_particle_initial_color,
+                l02_sand_shark_single_particle_secondary_color,
                 frame_count,
                 second_frame_count,
                 third_frame_count,
