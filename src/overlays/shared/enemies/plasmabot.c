@@ -82,7 +82,7 @@ typedef struct PlasmabotVars {
     u8  unkC0[0x10];
     u8  unkD0[0x40];
     s32 target; /* 0x110: target moby */
-    s32 unk114;
+    s32 target_selection_status;
     u8  pad118[0x8];
     u8  unk120[0x10];
     u8  unk130[0x30];
@@ -133,7 +133,7 @@ void update_plasmabot_target(char *moby) {
                          *target_filter_record) != 2) {
         if (plasmabot_private_vars->target_range <
             vector_distance_xy(&MOBY(moby)->pos, &plasmabot_private_vars->unkD0)) {
-            plasmabot_private_vars->unk114 = 2;
+            plasmabot_private_vars->target_selection_status = 2;
         }
     }
     if (plasmabot_private_vars->target == 0) {
@@ -489,7 +489,7 @@ void plasmabot_update(char *moby) {
     }
     case PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL: {
         float *path;
-        if (plasmabot_update_private_vars->unk114 == 2)
+        if (plasmabot_update_private_vars->target_selection_status == 2)
             return;
         if (fast_dec_timer_s16(&plasmabot_update_private_vars->unk248) == 0)
             return;
@@ -563,7 +563,7 @@ void plasmabot_update(char *moby) {
                   k,
                   k,
                   frame_time * 6.2831855f);
-        if (plasmabot_update_private_vars->unk114 == 2)
+        if (plasmabot_update_private_vars->target_selection_status == 2)
             break;
         if (fast_dec_timer_s16(&plasmabot_update_private_vars->unk248) == 0)
             break;
@@ -615,7 +615,7 @@ void plasmabot_update(char *moby) {
                   frame_time * 6.2831855f);
         aim = update_plasmabot_aim_quaternion(moby, 0, MOBY(moby)->rot.z);
         update_plasmabot_aim_joint_rotation(moby, ang);
-        if (plasmabot_update_private_vars->unk114 == 2) {
+        if (plasmabot_update_private_vars->target_selection_status == 2) {
             if (plasmabot_update_private_vars->path_index == -1)
                 break;
             ((unsigned char *)moby)[0x20] = 8;
