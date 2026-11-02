@@ -197,7 +197,7 @@ typedef struct {
     s16 h14;
     s16 h16;
     u8  pad1[0xF0 - 0x18];
-    f32 fF0;
+    f32 target_offset_scale;
 } M_2e6000;
 
 typedef struct {
@@ -278,7 +278,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         follow_camera_start_slide();
     }
     if (hero.state.control_mode == 0x11) {
-        camera_moby->m->fF0 = 0.25f;
+        camera_moby->m->target_offset_scale = 0.25f;
         follow_camera_set_height(0.5f, 0.003f);
     }
     if (hero.state.control_mode == 5) {
@@ -295,7 +295,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         }
     }
     if (hero.state.control_mode == 0x10)
-        camera_moby->m->fF0 = 0.25f;
+        camera_moby->m->target_offset_scale = 0.25f;
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         if (camera_override_state->i0 == 0) {
             q = (S40 *)((u8 *)camera_moby->m + 0x40);
