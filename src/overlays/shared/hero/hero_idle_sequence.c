@@ -3401,7 +3401,7 @@ typedef struct {
     u8  pad420[0xCC0];
     u8 *slot_one_item_moby;
     u8  pad10E4[0x1FC];
-    s16 h12E0;
+    s16 pending_flag_selector;
     u8  b12E2;
     u8  idle_exit_transition_selected;
     u8  height_difference_selected;
@@ -3433,12 +3433,12 @@ int            FUN_001f0b58_20b960(void) __asm__("FUN_001f0b58");
 #define P D_0013F350_20b960
 void apply_hero_selected_flags_and_state_transitions(void) {
     u8  save = P.b12ED;
-    s16 saved_flag_selector = P.h12E0;
+    s16 saved_flag_selector = P.pending_flag_selector;
     f32 height_difference;
     int target_state;
-    fast_mem_zero16(&P.h12E0, 0x10);
+    fast_mem_zero16(&P.pending_flag_selector, 0x10);
     P.b12ED = save;
-    P.h12E0 = -1;
+    P.pending_flag_selector = -1;
     P.selected_height_difference_in_band = 0;
     P.h308 = 0;
     if (saved_flag_selector == -1)
