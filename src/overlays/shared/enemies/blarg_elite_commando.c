@@ -94,7 +94,7 @@ typedef struct L16DamageData {
     f32           unk2B0;
     f32           unk2B4;
     u8            pad2B8[0x4];
-    f32           unk2BC;
+    f32           cached_position_z;
     f32           unk2C0;
     f32           unk2C4;
     f32           unk2C8;
@@ -102,7 +102,7 @@ typedef struct L16DamageData {
     char         *unk2D0;
     f32           movement_step_length;
     u8            unk2D8[0x4];
-    s16           unk2DC;
+    s16           state_countdown_ticks;
     u16           unk2DE;
     int           pursuit_timer;
     f32           unk2E4;
@@ -297,8 +297,8 @@ void blarg_elite_commando_update(char *commando_moby) {
         }
         break;
     case COMMANDO_STATE_RETURN_TO_INITIAL_POSITION:
-        if (!fast_dec_timer_s16(&commando_data->unk2DC)) {
-            fast_vec_normalize(scratch_vector, commando_moby + 0xC0, commando_data->unk2DC * 0.1f);
+        if (!fast_dec_timer_s16(&commando_data->state_countdown_ticks)) {
+            fast_vec_normalize(scratch_vector, commando_moby + 0xC0, commando_data->state_countdown_ticks * 0.1f);
             fast_vec_add(scratch_vector, scratch_vector, &MOBY(commando_moby)->pos);
             func_L16_002D5280_update(commando_moby, scratch_vector, 1);
         } else {
@@ -319,12 +319,12 @@ void blarg_elite_commando_update(char *commando_moby) {
         }
         break;
     case COMMANDO_STATE_IDLE:
-        fast_dec_timer_s16(&commando_data->unk2DC);
+        fast_dec_timer_s16(&commando_data->state_countdown_ticks);
         if (commando_data->pursuit_mode != COMMANDO_PURSUIT_MODE_DISABLED) {
-            if (commando_data->unk2DC == 0) {
+            if (commando_data->state_countdown_ticks == 0) {
                 if (commando_data->unk120 >= 0) {
                     MOBY(commando_moby)->state = COMMANDO_STATE_MOVE_TO_ATTACK_NODE;
-                    commando_data->unk2DC =
+                    commando_data->state_countdown_ticks =
                         truncate_float_to_s32(scale_time(random_float_between(30.0f, 90.0f)));
                     commando_data->unk300 = (commando_data->unk300 + 1) % 2;
                     select_blarg_elite_commando_movement_animation(commando_moby);
@@ -411,7 +411,7 @@ void blarg_elite_commando_update(char *commando_moby) {
                 MOBY(commando_moby)->state = COMMANDO_STATE_IDLE;
                 if (((unsigned char *)commando_moby)[0x53] != 0)
                     blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
-                commando_data->unk2DC = scale_game_frames(60);
+                commando_data->state_countdown_ticks = scale_game_frames(60);
                 commando_data->unk2DE = 0;
             }
         }
@@ -421,8 +421,8 @@ void blarg_elite_commando_update(char *commando_moby) {
                                             D_L16_001B0930[commando_data->unk120] +
                                                 (commando_data->unk300 * 16 + 0x10),
                                             1);
-        fast_dec_timer_s16(&commando_data->unk2DC);
-        if (distance < 0.01f || commando_data->unk2DC == 0) {
+        fast_dec_timer_s16(&commando_data->state_countdown_ticks);
+        if (distance < 0.01f || commando_data->state_countdown_ticks == 0) {
             MOBY(commando_moby)->state = COMMANDO_STATE_PREPARE_ROCKET_FIRE;
             if (((unsigned char *)commando_moby)[0x53] != 2)
                 blend_moby_animation(commando_moby, 2, 0, scale_game_frames(30));
@@ -466,7 +466,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         break;
     }
     if (blarg_elite_commando_bobbing_and_voice_enabled_gp) {
-        commando_data->unk2BC = MOBY(commando_moby)->pos.z;
+        commando_data->cached_position_z = MOBY(commando_moby)->pos.z;
         if (((unsigned char *)commando_moby)[0x20] != 0 &&
             ((unsigned char *)commando_moby)[0x20] != 10) {
             approach_value((float *)(&commando_data->unk2EC), 0.25f, frame_time * 0.25f);
@@ -696,8 +696,8 @@ void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
         moby->flags &= 0xFFFE;
         moby->collision = moby->pclass->collision;
         moby->flags |= 0x1000;
-        commando_data->unk2DC = return_countdown_ticks;
-        commando_data->unk2BC = moby->pos.z;
+        commando_data->state_countdown_ticks = return_countdown_ticks;
+        commando_data->cached_position_z = moby->pos.z;
         qcopy(&commando_data->unk2C0, &moby->pos);
         commando_data->movement_step_length = frame_time * 5.0f;
     }
