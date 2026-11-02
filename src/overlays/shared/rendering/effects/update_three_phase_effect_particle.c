@@ -3301,7 +3301,7 @@ typedef struct Moby_26ff10 {
     u32  f04;
     u8   f08;
     char pad09;
-    s16  h0A;
+    s16  split_countdown;
     f32  f0C;
     VV   posv;
     PV   pv;
@@ -3344,7 +3344,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     f32          f, rotation_direction_sign, alpha_factor;
 
     pv = &particle->pv;
-    if (particle->h0A != 0 && fast_dec_timer_s16(&particle->h0A) != 0) {
+    if (particle->split_countdown != 0 && fast_dec_timer_s16(&particle->split_countdown) != 0) {
         f32 sp, lo, hi, sc, zero, nsp;
         pv->f18 |= 0x88;
         lo = 0.5f;
@@ -3364,7 +3364,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         v0u.f[2] = v0u.f[2] + random_float_between(-pv->z * sc, zero);
         spawned_particle = FUN_L00_0026fd28_26ff10(v1u.f, v0u.f, 0x88, pv->f1C);
         if (spawned_particle != 0) {
-            spawned_particle->h0A = scale_game_frames(2);
+            spawned_particle->split_countdown = scale_game_frames(2);
             spawned_particle->f0C = particle->f0C;
         }
         fast_vec_scale(pv, pv, random_float_between(lo, hi));
@@ -3377,7 +3377,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         particle->posv.f[2] = particle->posv.f[2] + random_float_between(nsp, sp);
     }
     tab = effect_texture_ids;
-    particle->animated_texture_id = tab[(particle->h0A + pv->f16 + (particle->animated_texture_id - tab[0])) & 7];
+    particle->animated_texture_id = tab[(particle->split_countdown + pv->f16 + (particle->animated_texture_id - tab[0])) & 7];
     fast_vec_add(v0u.f, particle->posv.f, pv);
     k = pv->f14;
     if (scale_game_frames(3) < k) {
