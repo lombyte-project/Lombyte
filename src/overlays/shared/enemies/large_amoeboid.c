@@ -671,6 +671,10 @@ void large_amoeboid_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0040), where it is exact; names translated to the US level program. */
 
 void process_amoeboid_hits_and_update_targeting(char *moby) {
+    enum {
+        AMOEBOID_TARGET_STATUS_ALTERNATE_MOBY = 1,
+        AMOEBOID_TARGET_STATUS_UNAVAILABLE = 2
+    };
     V_2F0040           scratch_vector;
     V_2F0040           line_test_endpoint;
     int                flag;
@@ -855,11 +859,11 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         if (cand != 0) {
             candidate_distance = vector_distance_xy(&MOBY(moby)->pos, cand + 0x10);
             if (candidate_distance < moby_vars->effective_target_search_radius) {
-                if (moby_vars->target_selection_status == 2 ||
+                if (moby_vars->target_selection_status == AMOEBOID_TARGET_STATUS_UNAVAILABLE ||
                     candidate_distance <
                         vector_distance_xy(&MOBY(moby)->pos, moby_vars->target + 0x10)) {
                     moby_vars->target = cand;
-                    moby_vars->target_selection_status = 1;
+                    moby_vars->target_selection_status = AMOEBOID_TARGET_STATUS_ALTERNATE_MOBY;
                 }
             }
         }
