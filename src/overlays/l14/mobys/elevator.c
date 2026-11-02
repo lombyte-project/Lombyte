@@ -87,6 +87,9 @@ void elevator_update(struct Moby *elevator_moby) {
         ELEVATOR_STATE_SETTLE_AT_ENDPOINT = 3,
         ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT = 4
     };
+    enum {
+        ELEVATOR_IDLE_GLOW_INITIAL_PHASE = 0
+    };
     L14VendorVars *elevator_vars = (L14VendorVars *)elevator_moby->pvars;
     Vec4           previous_elevator_position;
     Vec4           rot;
@@ -123,7 +126,7 @@ void elevator_update(struct Moby *elevator_moby) {
         elevator_vars->motor = -1;
         elevator_vars->motor_volume = -1;
         elevator_vars->hum_volume = -1;
-        elevator_vars->idle_glow_phase = 0;
+        elevator_vars->idle_glow_phase = ELEVATOR_IDLE_GLOW_INITIAL_PHASE;
         break;
     }
     case ELEVATOR_STATE_WAIT_FOR_RIDER:
