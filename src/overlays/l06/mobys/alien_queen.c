@@ -363,7 +363,7 @@ typedef struct AlienQueenVars {
     u8    unk28;
     u8    unk29;
     u8    pad_2A[0x4];
-    u8    unk2E;
+    u8    death_control_flags;
     u8    pad_2F[0x19];
     f32   z_velocity;
     u8    pad_4C[0xC];
@@ -395,7 +395,7 @@ typedef struct AlienQueenVars {
     s32   unk108;
     s32   animation_update;
     s32   health_sixteenths;
-    s32   unk114;
+    s32   saved_path_point_count;
     f32   camera_blend_fraction;
     u8    unk11C;
     u8    pad_11D[0x3];
@@ -440,14 +440,14 @@ void alien_queen_update(unsigned char *moby) {
         alien_queen_update_vars->max_health = 0x1E;
         alien_queen_update_vars->unk29 = 1;
         alien_queen_update_vars->unk28 = 3;
-        alien_queen_update_vars->unk2E = 1;
+        alien_queen_update_vars->death_control_flags = 1;
         alien_queen_update_vars->unk58 = truncate_float_to_s32(14.0f);
         alien_queen_update_vars->unk5A = truncate_float_to_s32(18.4f);
         alien_queen_update_vars->timer_120 = scale_game_frames(0x4B0);
         alien_queen_update_vars->suppress_death_dialogue = 0;
         qcopy(alien_queen_update_vars->unkC0, moby + 0x10);
         alien_queen_update_vars->animation_update = -1;
-        alien_queen_update_vars->unk114 = *D_L06_001B0C30_q[alien_queen_update_vars->path];
+        alien_queen_update_vars->saved_path_point_count = *D_L06_001B0C30_q[alien_queen_update_vars->path];
         path = D_L06_001B0C30_q[alien_queen_update_vars->path];
         lerp_vector(alien_queen_update_vars->path_midpoint,
                     path + 4,
@@ -729,7 +729,7 @@ void alien_queen_update(unsigned char *moby) {
         menu_item_enabled_19_lui[4] = 1;
         alien_queen_update_vars->health_sixteenths = 0;
         moby[0x30] = 0xFF;
-        if (alien_queen_update_vars->unk2E == 2) {
+        if (alien_queen_update_vars->death_control_flags == 2) {
             func_L06_002F6790_q(level_mobys_q + (alien_queen_update_vars->unk100 << 8));
             set_listed_alien_queen_sliders_state_2_and_clear_data_28(
                 alien_queen_update_vars->slider_list);
@@ -911,7 +911,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     }
     MOBY(moby)->hit_slot = 0xFF;
     trooper_anim_finish(moby, &alien_queen_hit_recovery_vars->anim_state);
-    if ((alien_queen_hit_recovery_vars->unk2E & 2) && (unsigned char)moby[0x20] != 15) {
+    if ((alien_queen_hit_recovery_vars->death_control_flags & 2) && (unsigned char)moby[0x20] != 15) {
         if (alien_queen_hit_recovery_vars->animation_update != -1) {
             set_animation_parameter(alien_queen_hit_recovery_vars->animation_update, 0);
             alien_queen_hit_recovery_vars->animation_update = -1;
