@@ -222,7 +222,7 @@ int         timer_frame_top __asm__("D_L18_00161A2C") = -5;
 int         timer_frame_bottom __asm__("D_L18_00161A30") = 20;
 int         timer_frame_left __asm__("D_L18_00161A34") = -50;
 int         timer_frame_right __asm__("D_L18_00161A38") = 52;
-int         D_L18_00161A3C = 96;
+int         l18_timer_frame_alpha __asm__("D_L18_00161A3C") = 96;
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
@@ -240,7 +240,7 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
                   timer_frame_bottom + timer_text_y,
                   timer_frame_left + timer_text_x,
                   timer_frame_right + timer_text_x,
-                  D_L18_00161A3C);
+                  l18_timer_frame_alpha);
     color_blend_factor =
         fast_sin(convert_integer_to_float(game_frame % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (color_blend_factor > 1.0f) {
