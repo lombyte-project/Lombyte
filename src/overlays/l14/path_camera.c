@@ -38,7 +38,7 @@ void setup_path_camera(char *camera) __asm__("FUN_L14_00314f00");
 
 void setup_path_camera(char *camera) {
     u128        stand;
-    char       *rec = *(char **)(l14_camera_preset_rows + *(short *)(camera + 0x84) * 32 + 0x1C);
+    char       *path_camera_setup_preset = *(char **)(l14_camera_preset_rows + *(short *)(camera + 0x84) * 32 + 0x1C);
     char       *camera_saved_state;
     char       *fov_stops_state_base;
     char       *path;
@@ -53,7 +53,7 @@ void setup_path_camera(char *camera) {
     int         i;
     int         fov_stop_count;
 
-    (*&rec)[0x38] = 3;
+    (*&path_camera_setup_preset)[0x38] = 3;
     camera_saved_state = *(char **)(camera + 0x70);
     *(int *)(camera_saved_state + 0x40) = 0;
     camera_run = (int *)(camera_saved_state + 0x40);
@@ -62,7 +62,7 @@ void setup_path_camera(char *camera) {
     camera_run[3] = 0;
     camera_run[4] = 0;
     *(short *)(camera_run + 5) = 0;
-    *((short *)(camera_run + 5) + 1) = scale_game_frames(*(short *)(rec + 0x3A));
+    *((short *)(camera_run + 5) + 1) = scale_game_frames(*(short *)(path_camera_setup_preset + 0x3A));
     fov_stops_state_base = *(char **)(camera + 0x70);
     fov_stops = (Stops_4f00 *)(fov_stops_state_base + 0x58);
     {
@@ -73,8 +73,8 @@ void setup_path_camera(char *camera) {
         }
     }
     fov_stops->fov_end = fast_arc_tan(1.0f, l14_camera_projection_state.fB0) * 2.0f;
-    if (*(int *)(rec + 0x20) >= 0) {
-        path = ((char *)l14_paths[*(int *)(rec + 0x20)]);
+    if (*(int *)(path_camera_setup_preset + 0x20) >= 0) {
+        path = ((char *)l14_paths[*(int *)(path_camera_setup_preset + 0x20)]);
         fov_stop_count = 0;
         for (i = 0; i < *(int *)path; i++) {
             char *seg = path + i * 16;
@@ -90,13 +90,13 @@ void setup_path_camera(char *camera) {
                 *(float *)(camera_run + 2) += segment_length;
         }
     }
-    if (*(short *)(rec + 0x3A) > 0) {
-        *(float *)(rec + 0x3C) =
+    if (*(short *)(path_camera_setup_preset + 0x3A) > 0) {
+        *(float *)(path_camera_setup_preset + 0x3C) =
             *(float *)(camera_run + 2) /
-            convert_integer_to_float(scale_game_frames(*(short *)(rec + 0x3A))) * 60.0f;
+            convert_integer_to_float(scale_game_frames(*(short *)(path_camera_setup_preset + 0x3A))) * 60.0f;
     }
-    if (*(int *)(rec + 0x24) >= 0) {
-        path = ((char *)l14_paths[*(int *)(rec + 0x24)]);
+    if (*(int *)(path_camera_setup_preset + 0x24) >= 0) {
+        path = ((char *)l14_paths[*(int *)(path_camera_setup_preset + 0x24)]);
         for (i = 0; i < *(int *)path; i++) {
             char *seg;
             segment_length = fast_vec_dist(path + (i * 16 + 0x10),
@@ -120,7 +120,7 @@ void setup_path_camera(char *camera) {
     qcopy(camera, initial_camera_transform);
     qcopy(camera + 0x10, initial_camera_transform + 0x10);
     qcopy(camera + 0x20, initial_camera_transform + 0x20);
-    path = (char *)l14_cuboids + *(int *)(rec + 0x54) * 128 + 0x30;
+    path = (char *)l14_cuboids + *(int *)(path_camera_setup_preset + 0x54) * 128 + 0x30;
     stand = 0;
     ((float *)&stand)[3] = 1.0f;
     set_race_camera(path, &stand, 0x72, 0);
