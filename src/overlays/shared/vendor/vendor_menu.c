@@ -855,7 +855,7 @@ typedef struct {
 typedef struct {
     f32  f0;
     f32  f4;
-    f32  f8;
+    f32  item_local_position_offset_z;
     char padC[4];
     f32  f10;
     f32  f14;
@@ -1353,7 +1353,7 @@ void update_vendor_menu(void) {
         position_contribution_scratch.f[1] =
             l00_vendor_item_display_transform_parameters[CUR_ITEM.item].f4;
         position_contribution_scratch.f[2] =
-            l00_vendor_item_display_transform_parameters[CUR_ITEM.item].f8;
+            l00_vendor_item_display_transform_parameters[CUR_ITEM.item].item_local_position_offset_z;
         euler_rotation_basis(vendor_menu.menu_mobys[3].mtx, &vendor_menu.menu_mobys[3].rot);
         transform_vector_by_basis(&position_contribution_scratch,
                                   &position_contribution_scratch,
