@@ -140,6 +140,9 @@ void trooper_start_knockback(u8                     *moby,
                              int                     animation_frame_index,
 
                              float knockback_angle) {
+    enum {
+        MOTION_RISING = 0
+    };
     float *moby_vars_record;
     knockback_state->velocity[0] = fast_cos(knockback_angle) * knockback_state->speed;
     knockback_state->velocity[1] = fast_sin(knockback_angle) * knockback_state->speed;
