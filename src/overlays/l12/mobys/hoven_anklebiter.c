@@ -253,7 +253,7 @@ void spawn_spark_scatter(void *spark_scatter_origin) {
 #include "rnc/math/vector.h"
 
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
-int                  D_L12_001618E8 = 0xa030303;
+int                  l12_anklebiter_tuning_preset __asm__("D_L12_001618E8") = 0xa030303;
 extern float         D_0015ED64;
 extern float         D_0015ED6C;
 extern float         D_0015ED70;
@@ -363,7 +363,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             moby->pos[2] = probe_ground_height(target_report_or_vector_scratch.v0, 0, 0.5f);
             if (rand() & 1)
                 moby->flags |= 0x8000;
-            data->tuning = &D_L12_001618E8;
+            data->tuning = &l12_anklebiter_tuning_preset;
         }
         break;
     case ANKLEBITER_IDLE: {
