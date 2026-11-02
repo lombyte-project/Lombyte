@@ -78,12 +78,12 @@ typedef struct LargeAmoeboidVars {
     f32   unk1C0[4];
     u8    pad1D0[0x30];
     char *target;
-    s32   unk204;
+    s32   target_selection_status;
     u8    pad208[0x8];
     f32   home_pos[4]; /* 0x210: position at spawn */
     u8    unk220[0x4];
     f32   base_target_search_radius;
-    f32   unk228;
+    f32   effective_target_search_radius;
     s32   unk22C;
     s32   unk230;
     f32   unk234;
@@ -91,13 +91,13 @@ typedef struct LargeAmoeboidVars {
     f32   unk23C;
     s32   unk240;
     s32   unk244;
-    s32   unk248;
-    s32   unk24C;
+    s32   alternate_target_list_index;
+    s32   target_region_path_index;
     f32   size_scale; /* 0x250: 1, 0.7 or 0.49 by amoeboid size */
     f32   unk254;
-    s32   unk258;
+    s32   removal_height_table_index;
     s32   unk25C;
-    s32   unk260;
+    s32   target_search_gate_moby_index;
     u8    pad264[0xc];
     u8    unk270[0x4];
 } LargeAmoeboidVars;
@@ -297,7 +297,7 @@ void large_amoeboid_update(unsigned char *moby) {
         else
             large_amoeboid_vars->unk130 = &D_L01_00161A40;
         large_amoeboid_vars->unk29 = 1;
-        if (large_amoeboid_vars->unk258 != 0) {
+        if (large_amoeboid_vars->removal_height_table_index != 0) {
             large_amoeboid_vars->health = 1.0f;
             large_amoeboid_vars->unk230 = 1;
         } else {
@@ -329,7 +329,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         break;
     case LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH:
-        if (large_amoeboid_vars->unk204 != 2) {
+        if (large_amoeboid_vars->target_selection_status != 2) {
             if (FUN_00213260(4) == 0) {
                 path_hit = follow_path((int *)(&large_amoeboid_vars->unk240),
                                        1,
@@ -345,11 +345,11 @@ void large_amoeboid_update(unsigned char *moby) {
                     clear_u64_value(&large_amoeboid_vars->unk40);
                     large_amoeboid_vars->unk234 = random_float_between(-0.34906584f, 0.34906584f);
                 } else {
-                    large_amoeboid_vars->unk204 = 2;
+                    large_amoeboid_vars->target_selection_status = 2;
                 }
             }
         }
-        if (large_amoeboid_vars->unk22C != 0 && large_amoeboid_vars->unk204 == 2) {
+        if (large_amoeboid_vars->unk22C != 0 && large_amoeboid_vars->target_selection_status == 2) {
             MOBY(moby)->state = LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET;
             if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, 5);
@@ -374,7 +374,7 @@ void large_amoeboid_update(unsigned char *moby) {
         move[2] = 0.0f;
         move_moby_with_ground_and_collision_checks(
             moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
-        result = large_amoeboid_vars->unk204;
+        result = large_amoeboid_vars->target_selection_status;
         if (result != 2 && FUN_00213260(4) == 0) {
             path_hit = follow_path((int *)(&large_amoeboid_vars->unk240),
                                    1,
@@ -393,10 +393,10 @@ void large_amoeboid_update(unsigned char *moby) {
                 large_amoeboid_vars->unk234 = angle;
                 large_amoeboid_vars->unk194 = distance;
             } else {
-                large_amoeboid_vars->unk204 = 2;
+                large_amoeboid_vars->target_selection_status = 2;
             }
         }
-        if (large_amoeboid_vars->unk22C != 0 && large_amoeboid_vars->unk204 == 2) {
+        if (large_amoeboid_vars->unk22C != 0 && large_amoeboid_vars->target_selection_status == 2) {
             MOBY(moby)->state = LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET;
             if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, 5);
@@ -487,9 +487,9 @@ void large_amoeboid_update(unsigned char *moby) {
                 move_moby_with_ground_and_collision_checks(
                     moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
             } else {
-                large_amoeboid_vars->unk204 = 2;
+                large_amoeboid_vars->target_selection_status = 2;
             }
-            if (large_amoeboid_vars->unk204 == 2)
+            if (large_amoeboid_vars->target_selection_status == 2)
                 MOBY(moby)->state = LARGE_AMOEBOID_RETURN_TO_STORED_POSITION;
             spawn_amoeboid_movement_particles(moby);
             return;
@@ -587,7 +587,7 @@ void large_amoeboid_update(unsigned char *moby) {
             move_moby_with_ground_and_collision_checks(
                 moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
         }
-        if (large_amoeboid_vars->unk204 != 2 && (MOBY(moby)->state = 4, MOBY(moby)->prev_seq != 1))
+        if (large_amoeboid_vars->target_selection_status != 2 && (MOBY(moby)->state = 4, MOBY(moby)->prev_seq != 1))
             blend_moby_animation(moby, 1, 0, scale_game_frames(3));
         spawn_amoeboid_movement_particles(moby);
         return;
@@ -802,7 +802,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         return;
     }
     MOBY(moby)->hit_slot = 0xFF;
-    removal_height_entry_index = moby_vars->unk258;
+    removal_height_entry_index = moby_vars->removal_height_table_index;
     if (removal_height_entry_index != 0 && MOBY(moby)->state != LARGE_AMOEBOID_INITIALIZE &&
         MOBY(moby)->pos.z < *(float *)(removal_height_entry_index * 0x1190 + pool_draw_tiles + 8)) {
         clear_u64_value(&scratch_vector);
@@ -815,41 +815,41 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         moby_vars->unk38 = 0;
     }
     if (fast_dec_timer(&moby_vars->unk22C) != 0) {
-        moby_vars->unk228 = moby_vars->base_target_search_radius;
+        moby_vars->effective_target_search_radius = moby_vars->base_target_search_radius;
     } else {
-        moby_vars->unk228 = moby_vars->base_target_search_radius + 20.0f;
+        moby_vars->effective_target_search_radius = moby_vars->base_target_search_radius + 20.0f;
     }
-    path_search_gate_moby_index = moby_vars->unk260;
+    path_search_gate_moby_index = moby_vars->target_search_gate_moby_index;
     if (path_search_gate_moby_index <= 0 ||
         *(unsigned char *)((path_search_gate_moby_index << 8) + (*(int *)&D_L01_0015FFD8) + 0xBC) !=
             0) {
-        search_path = ((char *)l01_paths[moby_vars->unk24C]);
+        search_path = ((char *)l01_paths[moby_vars->target_region_path_index]);
         path_search_position = &moby_vars->unk1C0;
-        if (FUN_L00_0025ff38(moby_vars->unk228,
+        if (FUN_L00_0025ff38(moby_vars->effective_target_search_radius,
                              moby,
                              path_search_position,
                              0,
                              0,
                              search_path + 0x10,
                              *(int *)search_path) != 2) {
-            if (moby_vars->unk228 <
+            if (moby_vars->effective_target_search_radius <
                     vector_distance_xy(&moby_vars->home_pos, path_search_position) ||
                 3.0f < absolute_float(MOBY(moby)->pos.z - moby_vars->unk1C0[2])) {
-                moby_vars->unk204 = 2;
+                moby_vars->target_selection_status = 2;
             }
         }
     }
-    candidate_list_index = moby_vars->unk248;
+    candidate_list_index = moby_vars->alternate_target_list_index;
     if (candidate_list_index >= 0) {
         cand = find_nearest_class_26f_moby_in_list(moby, candidate_list_index);
         if (cand != 0) {
             candidate_distance = vector_distance_xy(&MOBY(moby)->pos, cand + 0x10);
-            if (candidate_distance < moby_vars->unk228) {
-                if (moby_vars->unk204 == 2 ||
+            if (candidate_distance < moby_vars->effective_target_search_radius) {
+                if (moby_vars->target_selection_status == 2 ||
                     candidate_distance <
                         vector_distance_xy(&MOBY(moby)->pos, moby_vars->target + 0x10)) {
                     moby_vars->target = cand;
-                    moby_vars->unk204 = 1;
+                    moby_vars->target_selection_status = 1;
                 }
             }
         }
