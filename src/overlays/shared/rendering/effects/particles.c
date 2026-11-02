@@ -1041,7 +1041,7 @@ typedef struct {
 typedef struct {
     u8  p0[0x10];
     f32 x, y, z;
-    int w1C;
+    int hero_relative_position_mode;
 } V_273298;
 
 typedef struct {
@@ -1056,7 +1056,7 @@ void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) {
     V_273298 *particle_data = (V_273298 *)((u8 *)particle + 0x20);
     float     remaining_frames_minus_one;
     u32       color_without_alpha;
-    if (particle_data->w1C == 1) {
+    if (particle_data->hero_relative_position_mode == 1) {
         struct Hero *hero_reference = &hero;
         particle->x = hero_reference->motion.pos.f[0] + particle_data->x;
         particle->y = hero_reference->motion.pos.f[1] + particle_data->y;
