@@ -193,7 +193,7 @@ typedef struct {
 
 typedef struct {
     char          pad0[0xA];
-    short         fA;
+    short         particle_frame_count;
     float         fC;
     char          pad10[0x10];
     PartSub29FF90 sub;
@@ -453,9 +453,9 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
                         blast_center_particle->fC = random_float_between(80000.0f, 120000.0f);
                     }
                     blast_center_particle->fC = blast_center_particle->fC * r;
-                    blast_center_particle->fA = scale_game_frames(2);
+                    blast_center_particle->particle_frame_count = scale_game_frames(2);
                     particle_subrecord->f10 =
-                        1.0f / convert_integer_to_float(blast_center_particle->fA);
+                        1.0f / convert_integer_to_float(blast_center_particle->particle_frame_count);
                     particle_subrecord->f18 = 0x7F7F7F;
                     particle_subrecord->f16 = 3;
                 }
