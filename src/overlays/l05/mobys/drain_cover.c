@@ -151,13 +151,13 @@ typedef struct {
     char           f20[0x40];
     float          vel[4];
     float          home[4];
-    float          f80;
-    float          f84;
-    float          f88;
+    float          rise_height;
+    float          hover_height_above_home;
+    float          hover_duration;
     int            timer;
     char           pad90[8];
-    float          f98;
-    float          f9C;
+    float          tilt_x_phase;
+    float          tilt_y_phase;
     float          fA0;
     float          fA4;
     int            sound;
@@ -178,7 +178,7 @@ typedef struct {
     char  pad00[0x80];
     float pos[4];
     char  pad90[0x1FF0];
-    int   f2080;
+    int   nearby_effect_owner;
 } DrainCoverHero;
 
 void       drain_cover_update(DrainCoverMoby *moby) __asm__("FUN_L05_0030e7f8");
@@ -232,13 +232,13 @@ void drain_cover_update(DrainCoverMoby *moby) {
         drain_cover_data->timer = scale_game_frames(0x78);
         drain_cover_data->sound = 0xFF;
         qcopy(drain_cover_data->home, moby->pos);
-        drain_cover_data->f98 = random_angle_radians();
-        drain_cover_data->f9C = random_angle_radians();
+        drain_cover_data->tilt_x_phase = random_angle_radians();
+        drain_cover_data->tilt_y_phase = random_angle_radians();
         drain_cover_data->fA0 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
         drain_cover_data->fA4 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
-        minimum_rise_height = drain_cover_data->f84 + 1.0f;
-        if (drain_cover_data->f80 <= minimum_rise_height) {
-            drain_cover_data->f80 = minimum_rise_height;
+        minimum_rise_height = drain_cover_data->hover_height_above_home + 1.0f;
+        if (drain_cover_data->rise_height <= minimum_rise_height) {
+            drain_cover_data->rise_height = minimum_rise_height;
         }
         break;
     case DRAIN_COVER_WAIT_TO_RISE:
@@ -247,7 +247,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             fast_dec_timer(&drain_cover_data->timer) != 0) {
             moby->state = DRAIN_COVER_RISE;
             clear_u64_value(drain_cover_data->vel);
-            drain_cover_data->vel[2] = square_root(drain_cover_data->f80 * 2.0f *
+            drain_cover_data->vel[2] = square_root(drain_cover_data->rise_height * 2.0f *
                                                    (l05_drain_cover_gravity * frame_time_sq));
         } else if ((float)drain_cover_data->timer <
                    (float)scale_game_frames(*(int *)&D_L05_00161DB8) * 0.5f) {
@@ -315,8 +315,8 @@ void drain_cover_update(DrainCoverMoby *moby) {
             drain_cover_data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
         if (drain_cover_data->vel[2] <= 0.0f) {
             moby->state = DRAIN_COVER_HOVER;
-            drain_cover_data->home[3] = drain_cover_data->f84 - 0.5f;
-            drain_cover_data->timer = truncate_float_to_s32(scale_time(drain_cover_data->f88));
+            drain_cover_data->home[3] = drain_cover_data->hover_height_above_home - 0.5f;
+            drain_cover_data->timer = truncate_float_to_s32(scale_time(drain_cover_data->hover_duration));
         }
         break;
     case DRAIN_COVER_HOVER:
@@ -329,10 +329,10 @@ void drain_cover_update(DrainCoverMoby *moby) {
                                    &moby->pos[2],
                                    &drain_cover_data->vel[2]);
         if (drain_cover_data->vel[2] == 0.0f) {
-            if (drain_cover_data->home[3] > drain_cover_data->f84) {
-                drain_cover_data->home[3] = drain_cover_data->f84 - 0.5f;
+            if (drain_cover_data->home[3] > drain_cover_data->hover_height_above_home) {
+                drain_cover_data->home[3] = drain_cover_data->hover_height_above_home - 0.5f;
             } else {
-                drain_cover_data->home[3] = drain_cover_data->f84 + 0.5f;
+                drain_cover_data->home[3] = drain_cover_data->hover_height_above_home + 0.5f;
             }
         }
         if (fast_dec_timer(&drain_cover_data->timer) != 0) {
@@ -357,8 +357,8 @@ void drain_cover_update(DrainCoverMoby *moby) {
             moby->state = DRAIN_COVER_WAIT_TO_RISE;
             drain_cover_data->timer = scale_game_frames(0x78);
             qcopy(moby->pos, drain_cover_data->home);
-            drain_cover_data->f98 = random_angle_radians();
-            drain_cover_data->f9C = random_angle_radians();
+            drain_cover_data->tilt_x_phase = random_angle_radians();
+            drain_cover_data->tilt_y_phase = random_angle_radians();
             drain_cover_data->fA0 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
             drain_cover_data->fA4 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
         }
@@ -374,7 +374,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         effect_velocity[2] = 0.0f;
         qcopy(effect_position, hero->pos);
         effect_position[2] += 0.75f;
-        spawn_nearby_effect((void *)hero->f2080,
+        spawn_nearby_effect((void *)hero->nearby_effect_owner,
                             (int)moby,
                             1,
                             effect_position,
