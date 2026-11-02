@@ -92,8 +92,8 @@ typedef struct ChomperVars {
     u8  pad_1E0[0x10];
     f32 unk1F0[4];
     u8  pad_200[0x4];
-    f32 unk204;
-    f32 unk208;
+    f32 travel_distance_velocity;
+    f32 previous_height_drop;
     u8  pad_20C[0x14];
     u8  unk220;
 } ChomperVars;
@@ -354,12 +354,12 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
                                frame_time_sq * 8.0f,
                                frame_time_sq * 12.0f,
                                frame_time * 4.0f,
-                               &moby_data->unk204);
-    fast_vec_normalize(movement_delta, moby + 0xC0, moby_data->unk204);
-    movement_delta[2] = moby_data->unk208 - frame_time_sq * 10.0f;
+                               &moby_data->travel_distance_velocity);
+    fast_vec_normalize(movement_delta, moby + 0xC0, moby_data->travel_distance_velocity);
+    movement_delta[2] = moby_data->previous_height_drop - frame_time_sq * 10.0f;
     FUN_L00_00258830(moby, movement_delta, 0.5f, 0.5f, 0.0f, 0x10);
     resolve_point_path_segment_xy_clearance(
         0.333f, *(void **)&moby_data->unk1F0[0], moby + 0x10, moby + 0x10);
-    moby_data->unk208 = oldz - MOBY(moby)->pos.z;
+    moby_data->previous_height_drop = oldz - MOBY(moby)->pos.z;
     return distance_to_target;
 }
