@@ -1713,7 +1713,7 @@ unsigned char l17_fighter_jet_starting_ammo_gp __asm__("D_L17_00162064") = 0xa;
 unsigned char l17_fighter_jet_ammo_capacity_gp __asm__("D_L17_00162068") = 0x14;
 extern float  fighter_jet_max_hp_gp __asm__("D_L17_00162084") __attribute__((sda));
 extern float  D_L17_00162088 __attribute__((sda));
-int           D_L17_00162178 = 180;
+int           l17_fighter_jet_victory_fade_delay_reload __asm__("D_L17_00162178") = 180;
 char         *hp_bar_clut __asm__("D_L17_00162180") = 0;
 int           hp_bar_saved __asm__("D_L17_00162184") = 0;
 
@@ -1967,7 +1967,7 @@ void fighter_jet_update(ShipMoby *moby) {
             }
             update_fighter_jet_flight((FighterJetMoby *)moby, (FighterJetVars *)ship_vars);
             if (ship_vars->iE8 <= 0) {
-                ship_vars->timerF8 = D_L17_00162178;
+                ship_vars->timerF8 = l17_fighter_jet_victory_fade_delay_reload;
                 moby->state = FIGHTER_JET_STATE_VICTORY_EXIT;
             }
             if (ship_vars->fade != 0.0f) {
