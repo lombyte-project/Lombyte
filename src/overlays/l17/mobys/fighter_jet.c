@@ -1089,7 +1089,7 @@ typedef struct {
     float         fB0, fB4, fB8, fBC;
     float         fC0, fC4, fC8, fCC;
     float         fD0, fD4, fD8;
-    int           iDC;
+    int           collision_damage_cooldown;
     char          padE0[0x2C];
     int           boost_voice_slot_index;
     int           flight_target_record_index;
@@ -1523,7 +1523,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
             ship_vars->speed = k;
             if (*(char **)(collision_result + 0x18) != 0 &&
                 *(short *)(*(char **)(collision_result + 0x18) + 0xA6) != 0x15B) {
-                if (ship_vars->iDC == 0) {
+                if (ship_vars->collision_damage_cooldown == 0) {
                     hero.ship_hp = hero.ship_hp - fighter_jet_collision_damage_gp;
                     if (hero.ship_hp < 0.0f) {
                         fast_vec_sub(side, collision_result + 0x50, collision_result + 0x60);
@@ -1554,7 +1554,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                               0);
                         ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                     }
-                    ship_vars->iDC = l17_fighter_jet_collision_damage_cooldown_reload;
+                    ship_vars->collision_damage_cooldown = l17_fighter_jet_collision_damage_cooldown_reload;
                 }
             } else {
                 *(int *)&hero.ship_hp = 0;
