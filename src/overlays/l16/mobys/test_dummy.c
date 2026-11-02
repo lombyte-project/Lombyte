@@ -75,7 +75,7 @@ typedef struct {
     int           kind;
     int           path;
     int           lives;
-    int           iCC;
+    int           door_moby_group_index;
     int           aim[2];
     int           sound_path;
     int           node;
@@ -150,6 +150,9 @@ void test_dummy_update(unsigned char *moby) {
     enum {
         TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET = 2
     };
+    enum {
+        TEST_DUMMY_RESPAWN_REQUEST_ACKNOWLEDGED = 1
+    };
     L16QuadVector    position_or_delta, position_or_direction, launch_velocity;
     L16HitDescriptor fx;
     L16DummyData    *dummy_data = ((L16DummyData *)MOBY(moby)->pvars);
@@ -163,7 +166,7 @@ void test_dummy_update(unsigned char *moby) {
     FUN_L00_00263ac8(2.5f, (int)moby, 2, (unsigned char *)dummy_data->block140);
     switch (moby[0x20]) {
     case TEST_DUMMY_STATE_INITIALIZE: /* set up: lives, home position, the held child for the variant */
-        dummy_data->respawn_request_state = 1;
+        dummy_data->respawn_request_state = TEST_DUMMY_RESPAWN_REQUEST_ACKNOWLEDGED;
         if (dummy_data->lives > 0) {
             MOBY(moby)->bolts /= dummy_data->lives;
         }
@@ -177,7 +180,7 @@ void test_dummy_update(unsigned char *moby) {
         dummy_data->max_health = 2;
         dummy_data->health = 2.0f;
         dummy_data->glow_pulse_phase = random_angle_radians();
-        dummy_data->route = find_nearest_test_dummy_door(dummy_data->iCC, moby + 0x10);
+        dummy_data->route = find_nearest_test_dummy_door(dummy_data->door_moby_group_index, moby + 0x10);
         qcopy(dummy_data->spawn, moby + 0x10);
         switch (dummy_data->kind) {
         case TEST_DUMMY_KIND_THROWER:
