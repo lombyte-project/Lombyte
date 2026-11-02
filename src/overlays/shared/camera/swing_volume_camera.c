@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/camera/swing_volume_camera.h"
 #include "rnc/overlay/shared/camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
+void set_follow_camera_angle_parameter(float) __asm__("FUN_L00_002e8540");
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 #include "rnc/rendering/clip_volume.h"
 
