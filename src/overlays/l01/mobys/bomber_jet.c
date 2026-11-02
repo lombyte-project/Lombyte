@@ -264,6 +264,9 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
     enum {
         BOMBER_JET_STATE_INITIALIZE = 0
     };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     GunshipVars   *gunship_vars = bomber_jet_moby->vars;
     GunshipFollow *sub = &gunship_vars->sub;
     float          distance_scale;
@@ -382,7 +385,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                         if (gunship_vars->turrets[j] != -1) {
                             GunshipMoby *o =
                                 (GunshipMoby *)(ents_macro + (gunship_vars->turrets[j] << 8));
-                            if (o != 0 && o->oclass == 0x1CB && o->state != 0xFE &&
+                            if (o != 0 && o->oclass == 0x1CB && o->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
                                 o->state != 0xFD) {
                                 GunshipTurretVars *t = o->vars;
                                 t->activated = 1;
