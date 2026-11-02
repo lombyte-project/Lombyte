@@ -87,7 +87,7 @@ typedef struct PlasmabotVars {
     u8  unk120[0x10];
     u8  unk130[0x30];
     u8  unk160[0x10];
-    u8  unk170[0x70];
+    u8  aim_quaternion_storage[0x70];
     u8  unk1E0[0x10];
     u8  unk1F0[0x10];
     u8  unk200[0x10];
@@ -106,13 +106,13 @@ typedef struct PlasmabotVars {
     s16 unk262;
     s32 unk264;
     f32 aim_yaw_offset;
-    s32 unk26C;
+    s32 aim_yaw_angular_velocity;
     s32 unk270;
     s32 aim_joint_angular_velocity;
     f32 unk278;
     f32 path_traversal_direction;
-    s32 unk280;
-    s32 unk284;
+    s32 aim_pitch_angle;
+    s32 aim_pitch_angular_velocity;
     s32 unk288;
 } PlasmabotVars;
 
@@ -463,9 +463,9 @@ void plasmabot_update(char *moby) {
         plasmabot_update_private_vars->heading_angular_velocity = 0;
         plasmabot_update_private_vars->beam_cooldown_timer = 0;
         *(int *)&plasmabot_update_private_vars->aim_yaw_offset = 0;
-        plasmabot_update_private_vars->unk26C = 0;
-        plasmabot_update_private_vars->unk280 = 0;
-        plasmabot_update_private_vars->unk284 = 0;
+        plasmabot_update_private_vars->aim_yaw_angular_velocity = 0;
+        plasmabot_update_private_vars->aim_pitch_angle = 0;
+        plasmabot_update_private_vars->aim_pitch_angular_velocity = 0;
         plasmabot_update_private_vars->unk270 = 0;
         plasmabot_update_private_vars->aim_joint_angular_velocity = 0;
         if (((unsigned char *)plasmabot_update_private_vars)[0x121] == 0) {
@@ -506,7 +506,7 @@ void plasmabot_update(char *moby) {
         MOBY(moby)->rot.z = fast_arc_tan(path[8] - path[4], path[9] - path[5]);
         *(int *)&plasmabot_update_private_vars->aim_yaw_offset = 0;
         plasmabot_update_private_vars->path_traversal_direction = 1.0f;
-        plasmabot_update_private_vars->unk26C = 0;
+        plasmabot_update_private_vars->aim_yaw_angular_velocity = 0;
         plasmabot_update_private_vars->unk270 = 0;
         plasmabot_update_private_vars->aim_joint_angular_velocity = 0;
         plasmabot_update_private_vars->path_segment_index = 0;
@@ -1258,12 +1258,12 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
         float yaw_easing_coefficient = frame_time_sq * 12.566370964050293f;
         func_L00_0025CE58_2B4828((float *)(&state->aim_yaw_offset),
                                  turn,
-                                 (float *)(&state->unk26C),
+                                 (float *)(&state->aim_yaw_angular_velocity),
                                  yaw_easing_coefficient,
                                  yaw_easing_coefficient,
                                  frame_time * 6.2831854820251465f);
     }
-    build_axis_rotation_quaternion(&state->unk170, 2, state->aim_yaw_offset);
+    build_axis_rotation_quaternion(&state->aim_quaternion_storage, 2, state->aim_yaw_offset);
     if (flag) {
         float        owner_aim_position[4];
         float        owner_aim_offset[4];
@@ -1280,15 +1280,15 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
         fast_vec_sub(bp, owner_aim_position, &MOBY(moby)->pos);
         owner_aim_offset[2] = owner_aim_offset[2] + 1.5f;
         target_pitch_angle = -fast_arc_tan(vector_length_xy(bp), owner_aim_offset[2]);
-        func_L00_0025CE58_2B4828((float *)(&state->unk280),
+        func_L00_0025CE58_2B4828((float *)(&state->aim_pitch_angle),
                                  target_pitch_angle,
-                                 (float *)(&state->unk284),
+                                 (float *)(&state->aim_pitch_angular_velocity),
                                  frame_time_sq * 12.566370964050293f,
                                  frame_time_sq * 12.566370964050293f,
                                  frame_time * 6.2831854820251465f);
         cp = pitch_quaternion;
-        build_axis_rotation_quaternion(cp, 1, *(float *)&state->unk280);
-        multiply_quaternions(&state->unk170, &state->unk170, cp);
+        build_axis_rotation_quaternion(cp, 1, *(float *)&state->aim_pitch_angle);
+        multiply_quaternions(&state->aim_quaternion_storage, &state->aim_quaternion_storage, cp);
     }
     return fast_difference_between_rotations(turn, state->aim_yaw_offset);
 }
