@@ -417,11 +417,11 @@ typedef struct {
 
 typedef struct {
     u8       p0[0x98];
-    f32      f98;
+    f32      probe_heading_angle;
     u8       p1[0xE0 - 0x9C];
     V_2291d0 vE0;
     u8       p2[0x240 - 0xF0];
-    s32      i240;
+    s32      velocity_probe_hit_moby;
     u8       p3[0x308 - 0x244];
     s16      h308;
     u8       p4[0x2080 - 0x30A];
@@ -429,12 +429,12 @@ typedef struct {
     u8       p5[0x208C - 0x2084];
     s32      i208C;
     u8       p6[0x20A4 - 0x2090];
-    u8       b20A4;
+    u8       hero_vehicle_mode;
 } P_2291d0;
 
 typedef struct {
     u8       p0[0x18];
-    s32      i18;
+    s32      probe_collision_hit_moby;
     s32      i1C;
     u8       p1[0x40 - 0x20];
     V_2291d0 v40;
@@ -467,7 +467,7 @@ void adjust_hero_velocity_from_collision_probes(int force) {
     if ((u32)(P.i208C - 0x11) < 2) {
         primary_origin_z_offset = 0.0f;
         k = 0.7f;
-    } else if (P.b20A4 == 1) {
+    } else if (P.hero_vehicle_mode == 1) {
         primary_origin_z_offset = 0.35f;
         k = 0.27000001072883606f;
     }
@@ -479,11 +479,11 @@ void adjust_hero_velocity_from_collision_probes(int force) {
     if (force || vector_length_xy(vector_origin_base + 0x60) < 0.01f) {
         g = (P_2291d0 *)(vector_origin_base - 0x80);
         secondary_vector_scale = 1.4f;
-        primary_vector_endpoint.f[0] = fast_cos(g->f98) * k;
-        primary_vector_endpoint.f[1] = fast_sin(g->f98) * k;
+        primary_vector_endpoint.f[0] = fast_cos(g->probe_heading_angle) * k;
+        primary_vector_endpoint.f[1] = fast_sin(g->probe_heading_angle) * k;
         *(s32 *)&primary_vector_endpoint.f[2] = 0;
-        secondary_vector_endpoint.f[0] = fast_cos(g->f98) * k * secondary_vector_scale;
-        secondary_vector_endpoint.f[1] = fast_sin(g->f98) * k * secondary_vector_scale;
+        secondary_vector_endpoint.f[0] = fast_cos(g->probe_heading_angle) * k * secondary_vector_scale;
+        secondary_vector_endpoint.f[1] = fast_sin(g->probe_heading_angle) * k * secondary_vector_scale;
         *(s32 *)&secondary_vector_endpoint.f[2] = 0;
     } else {
         qcopy(&primary_vector_endpoint, vector_origin_base + 0x60);
@@ -504,7 +504,7 @@ void adjust_hero_velocity_from_collision_probes(int force) {
         X.i1C > 0)
         primary_probe_result_angle = fast_arc_tan(X.v40.f[2], vector_length_xy(&X.v40));
     if (0.8726646304130554f <= primary_probe_result_angle || r == 8 || r == 12) {
-        P.i240 = X.i18;
+        P.velocity_probe_hit_moby = X.probe_collision_hit_moby;
         *(s32 *)&X.v40.f[2] = 0;
         sceVu0Normalize(&X.v40, &X.v40);
         negative_horizontal_dot = -P.vE0.f[0] * X.v40.f[0] - P.vE0.f[1] * X.v40.f[1];
