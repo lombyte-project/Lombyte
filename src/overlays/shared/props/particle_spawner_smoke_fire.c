@@ -48,7 +48,7 @@ typedef struct {
     u8  pad0[4];
     int x04;
     u8  pad08[2];
-    u8  b0A;
+    u8  emitted_particle_alpha;
     u8  b0B;
 } E2;
 
@@ -227,7 +227,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
                     sub = &ent->sub;
                     ent->h0A = FUN_001f96f8_c(random_int_between(q->x30, q->x34));
                     sub->x04 = 3;
-                    sub->b0A = col >> 24;
+                    sub->emitted_particle_alpha = col >> 24;
                     sub->b0B = ent->h0A;
                     if (random_integer_below(2))
                         ent->b03 = 0x44;
