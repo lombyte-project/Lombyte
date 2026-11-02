@@ -77,8 +77,8 @@ typedef struct {
     u8           padC0[0xC6 - 0xC0];
     s16          unkC6;
     u8           unkC8;
-    u8           unkC9;
-    u8           unkCA;
+    u8           respawn_delay_timer;
+    u8           burst_frame;
     u8           padCB[0xFC - 0xCB];
     s32          frameFC;
 } CrateVars;
@@ -405,7 +405,7 @@ void crate_update(struct Moby *moby) {
         break;
 
     case CRATE_STATE_BROKEN:
-        if (moby->oclass == 0x1F9 && crate_vars->unkCA <= scale_game_frames(20)) {
+        if (moby->oclass == 0x1F9 && crate_vars->burst_frame <= scale_game_frames(20)) {
             f32 burst_radius_scale;
 
             burst.moby = moby;
@@ -414,13 +414,13 @@ void crate_update(struct Moby *moby) {
             burst.unk20 = 0;
             fast_vec_normalize(&at, &moby->rot_row2, 0.5f);
             add_vector_xyz(&at, &at, &moby->pos);
-            burst_radius_scale = convert_integer_to_float(crate_vars->unkCA) / scale_time(20.0f);
+            burst_radius_scale = convert_integer_to_float(crate_vars->burst_frame) / scale_time(20.0f);
             burst.unk14 = 1;
             collect_mobies_in_sphere(
                 burst_radius_scale + burst_radius_scale, &at, 0x10, moby, &burst);
             burst.unk14 = 0x30000;
             collect_mobies_in_sphere(burst_radius_scale * 3.0f, &at, 0x10, D_001413D0_lui, &burst);
-            crate_vars->unkCA++;
+            crate_vars->burst_frame++;
             break;
         }
         if (crate_vars->unkC8 != 0) {
@@ -433,9 +433,9 @@ void crate_update(struct Moby *moby) {
             }
             moby->state = CRATE_STATE_WAIT_RESPAWN;
             if (D_0015ED84 == 0x12) {
-                crate_vars->unkC9 = FUN_L00_00257b90(300, 720);
+                crate_vars->respawn_delay_timer = FUN_L00_00257b90(300, 720);
             } else {
-                crate_vars->unkC9 = FUN_L00_00257b90(30, 60);
+                crate_vars->respawn_delay_timer = FUN_L00_00257b90(30, 60);
             }
             break;
         }
@@ -449,7 +449,7 @@ void crate_update(struct Moby *moby) {
         if (fast_bsphere_check(&burst.pos, moby->draw_dist) != -1) {
             break;
         }
-        if (!FUN_L00_001fefc8(&crate_vars->unkC9)) {
+        if (!FUN_L00_001fefc8(&crate_vars->respawn_delay_timer)) {
             break;
         }
         if (moby->group == 0xFF) {
