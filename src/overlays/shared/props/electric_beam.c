@@ -25,7 +25,7 @@ typedef struct {
     char  pad14[8];
     float radius; /* 0x1C: beam half width */
     char  pad20[0x604];
-    float f624;
+    float culling_sphere_radius;
     char  pad628[8];
     Vec4  end_a; /* 0x630: end of the line along +axis 1 */
     Vec4  end_b; /* 0x640: end of the line along -axis 1 */
@@ -66,7 +66,7 @@ void electric_beam_update(unsigned char *moby) {
     int    phase_duration_frames;
     if (MOBY(moby)->state != BEAM_STATE_INITIALIZE) {
         qcopy(beam_culling_sphere, &MOBY(moby)->pos);
-        beam_culling_sphere[3] = beam_vars->f624;
+        beam_culling_sphere[3] = beam_vars->culling_sphere_radius;
         if (fast_bsphere_check(beam_culling_sphere, 52.0f) < 0) {
             return;
         }
@@ -80,7 +80,7 @@ void electric_beam_update(unsigned char *moby) {
         start_electric_beam_pulse((char *)moby);
         beam_vars->s10 = scale_game_frames(beam_vars->wC);
         MOBY(moby)->state = BEAM_STATE_WAIT_FOR_TIMED_PULSE;
-        beam_vars->f624 = fast_vec_length(&l14_cuboids[beam_vars->w0].axes[1]);
+        beam_vars->culling_sphere_radius = fast_vec_length(&l14_cuboids[beam_vars->w0].axes[1]);
         beam_vars->s8 = 1;
         beam_vars->sA = 1;
         break;
