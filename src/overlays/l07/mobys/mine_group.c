@@ -189,7 +189,7 @@ typedef struct MineGroupVars {
     u8  pad_0[0x20];
     f32 unk20;
     u8  pad_24[0x2];
-    s16 unk26;
+    s16 surviving_hit_frame_count;
     u8  pad_28[0x38];
     s16 anim_state;
     u8  pad_62[0x5];
@@ -296,7 +296,7 @@ void mine_group_update(struct Moby *moby) {
             }
             *remaining -= step;
             boltcrate_pvars->unk67 = 0xfa;
-            boltcrate_pvars->unk26 = scale_game_frames(0x3c);
+            boltcrate_pvars->surviving_hit_frame_count = scale_game_frames(0x3c);
             trooper_anim_update(moby, &boltcrate_pvars->anim_state);
         }
         moby->hit_slot = 0xff;
