@@ -65,11 +65,11 @@ typedef struct {
     u8             unk5A;
     u8             pad5B[0x60 - 0x5B];
     u8             unk60[7];
-    u8             unk67;
+    u8             damage_secondary_red;
     u8             pad68[8];
     u8             unk70[0x10];
     f32            unk80;
-    f32            unk84;
+    f32            knockback_xy_speed_step;
     f32            unk88;
     f32            unk8C;
     s32            unk90;
@@ -92,7 +92,7 @@ typedef struct {
     u8             pad1B0[4];
     s32            targeting_path_index;
     s32            pathIdx;
-    s32            unk1BC;
+    s32            candidate_target_moby_index;
     u8             pad1C0[0x1D0 - 0x1C0];
     f32            turnVel;
     f32            speed;
@@ -437,6 +437,10 @@ f32         veldin_robot_knockback_xy_scale_gp __asm__("D_L00_00161BDC") = 1e+01
 f32         veldin_robot_knockback_z_scale_gp __asm__("D_L00_00161BE0") = 9.5f;
 
 void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
+    enum {
+        VELDIN_ROBOT_TARGET_SELECTION_ALTERNATE_MOBY = 1,
+        VELDIN_ROBOT_TARGET_SELECTION_UNAVAILABLE = 2
+    };
     ElectroidVars *vars;
     void          *anim;
     ElectroidHit  *coll;
@@ -467,7 +471,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         vars->health -= dmg;
         vars->unk90 = 0x200;
         vars->unk80 = veldin_robot_knockback_gravity_gp * frame_time_sq;
-        vars->unk84 = veldin_robot_knockback_xy_speed_step_gp * frame_time_sq;
+        vars->knockback_xy_speed_step = veldin_robot_knockback_xy_speed_step_gp * frame_time_sq;
         vars->unk88 = veldin_robot_knockback_xy_scale_gp * frame_time;
         vars->unk8C = veldin_robot_knockback_z_scale_gp * frame_time;
         vars->unkAD = 0;
@@ -484,7 +488,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             vars->unkC4 = 16.0f;
             moby->state = VELDIN_ROBOT_STATE_DEATH_KNOCKBACK;
             moby->unk94 = 0;
-            vars->unk67 = 0x78;
+            vars->damage_secondary_red = 0x78;
             trooper_anim_update(moby, anim);
             FUN_L00_00257470(moby, 0, -1);
         } else {
@@ -496,7 +500,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
                 moby, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
             vars->unkC4 = vars->unkC0 = -1.0f;
             moby->state = VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK;
-            vars->unk67 = 0xFA;
+            vars->damage_secondary_red = 0xFA;
             vars->unk26 = scale_game_frames(0x3C);
             trooper_anim_update(moby, anim);
         }
@@ -514,7 +518,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         }
         if (select_moby_combat_target(moby, range, &vars->targetPos) != 2 &&
             range < vector_distance_xy(&moby->pos, &vars->targetPos)) {
-            vars->target_selection_status = 2;
+            vars->target_selection_status = VELDIN_ROBOT_TARGET_SELECTION_UNAVAILABLE;
         }
     }
     if (vars->target == 0) {
@@ -522,17 +526,17 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         vars->target = ((ElectroidMoby *)hero_ptr->moby);
         qcopy(&vars->targetPos, &hero_ptr->motion.pos);
     }
-    if (vars->unk1BC >= 0) {
-        candidate_target = (ElectroidMoby *)(moby_table + (vars->unk1BC << 8));
+    if (vars->candidate_target_moby_index >= 0) {
+        candidate_target = (ElectroidMoby *)(moby_table + (vars->candidate_target_moby_index << 8));
         if (candidate_target == 0 || candidate_target->state == 0xFE ||
             candidate_target->state == 0xFD) {
-            vars->unk1BC = -1;
+            vars->candidate_target_moby_index = -1;
         } else {
             range = vector_distance_xy(&moby->pos, &candidate_target->pos);
             if (range < vector_distance_xy(&moby->pos, &vars->target->pos)) {
                 vars->target = candidate_target;
                 qcopy(&vars->targetPos, &candidate_target->pos);
-                vars->target_selection_status = 1;
+                vars->target_selection_status = VELDIN_ROBOT_TARGET_SELECTION_ALTERNATE_MOBY;
             }
         }
     }
