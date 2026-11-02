@@ -343,9 +343,9 @@ typedef struct X {
    0x30..0x3C are f32 rates (the case-1/3 bodies divide five constants by
    scale_game_frames(2) / scale_game_frames(8) and store the results there). */
 typedef struct {
-    s32  i0;
+    s32  beam_transition_timer;
     char pad4[4];
-    s32  i8;
+    s32  thruster_pack_moby;
     s32  iC;
     char pad10[0x10];
     f32  f20;
@@ -355,7 +355,7 @@ typedef struct {
     f32  f30;
     f32  f34;
     f32  f38;
-    f32  f3C;
+    f32  beam_quad_scale_step;
 } V_4198;
 
 typedef struct {
@@ -364,7 +364,7 @@ typedef struct {
     char    pad1C[4];
     u8      state;
     char    pad21[0xF];
-    u8      u30;
+    u8      update_distance;
     char    pad31[3];
     u16     u34;
     char    pad36[0x42];
@@ -910,7 +910,7 @@ void thruster_pack_flame_update(void *moby) {
     case STATE_INITIALIZE:
         beam_moby->f18 += 0.5f;
         beam_moby->state = STATE_WAIT_FOR_BEAM;
-        beam_moby->u30 = 0xFF;
+        beam_moby->update_distance = 0xFF;
         beam_moby->u34 |= 1;
         break;
     case STATE_WAIT_FOR_BEAM:
@@ -918,11 +918,11 @@ void thruster_pack_flame_update(void *moby) {
             mark_moby_for_removal(beam_moby);
         } else if (flag != 0) {
             beam_moby->state = STATE_BEAM_GROW;
-            v->i0 = scale_game_frames(2);
+            v->beam_transition_timer = scale_game_frames(2);
             v->f30 = 0.0125f / scale_game_frames(2);
             v->f34 = 0.2f / scale_game_frames(2);
             v->f38 = 0.05f / scale_game_frames(2);
-            v->f3C = 0.025f / scale_game_frames(2);
+            v->beam_quad_scale_step = 0.025f / scale_game_frames(2);
             v->f20 = 0.0f;
             v->f24 = 0.0f;
             v->f28 = 0.0f;
@@ -933,8 +933,8 @@ void thruster_pack_flame_update(void *moby) {
         v->f20 += v->f30;
         v->f24 += v->f34;
         v->f28 += v->f38;
-        v->f2C += v->f3C;
-        v->i8 = ((s32)hero.items[3].moby);
+        v->f2C += v->beam_quad_scale_step;
+        v->thruster_pack_moby = ((s32)hero.items[3].moby);
         add_draw_callback(FUN_L00_002b3628_4198, beam_moby);
         if (fast_dec_timer(v) != 0) {
             beam_moby->state = STATE_BEAM_ACTIVE;
@@ -946,15 +946,15 @@ void thruster_pack_flame_update(void *moby) {
         }
         break;
     case STATE_BEAM_ACTIVE:
-        v->i8 = ((s32)hero.items[3].moby);
+        v->thruster_pack_moby = ((s32)hero.items[3].moby);
         add_draw_callback(FUN_L00_002b3628_4198, beam_moby);
         if (flag == 0) {
             beam_moby->state = STATE_BEAM_SHRINK;
-            v->i0 = scale_game_frames(8);
+            v->beam_transition_timer = scale_game_frames(8);
             v->f30 = 0.0125f / scale_game_frames(8);
             v->f34 = 0.2f / scale_game_frames(8);
             v->f38 = 0.05f / scale_game_frames(8);
-            v->f3C = 0.025f / scale_game_frames(8);
+            v->beam_quad_scale_step = 0.025f / scale_game_frames(8);
         } else {
             v->f20 = 0.0125f;
             FUN_L00_002b3c50_4198(beam_moby);
@@ -967,8 +967,8 @@ void thruster_pack_flame_update(void *moby) {
             v->f20 -= v->f30;
             v->f24 -= v->f34;
             v->f28 -= v->f38;
-            v->f2C -= v->f3C;
-            v->i8 = ((s32)hero.items[3].moby);
+            v->f2C -= v->beam_quad_scale_step;
+            v->thruster_pack_moby = ((s32)hero.items[3].moby);
             add_draw_callback(FUN_L00_002b3628_4198, beam_moby);
         }
         break;
