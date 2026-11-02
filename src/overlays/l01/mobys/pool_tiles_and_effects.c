@@ -456,7 +456,7 @@ typedef struct {
     u128     pos;
     u8       pad20[0xC];
     f32      scale;
-    u8       b30;
+    u8       update_distance;
     u8       b31;
     s16      h32;
     u8       pad34[0xC];
@@ -479,7 +479,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         copy_hero_moby_field_38(spawned_moby);
         spawned_moby->w40 = 0;
         spawned_moby->h32 = 0x40;
-        spawned_moby->b30 = 0xFF;
+        spawned_moby->update_distance = 0xFF;
         spawned_moby->scale = spawned_moby->scale * scale;
         spawned_moby->rotz = random_angle_radians();
         qcopy(&spawned_moby->pos, pos);
