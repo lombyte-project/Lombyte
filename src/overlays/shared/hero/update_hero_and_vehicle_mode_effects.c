@@ -386,7 +386,7 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     if ((u32)(P.i208C - 0x11) < 2) {
         position_z_offset = 0.0f;
         k = 0.7f;
-    } else if (P.hero_vehicle_mode == 2) {
+    } else if (P.hero_vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         position_z_offset = 1.5f;
         k = 5.0f;
     }
