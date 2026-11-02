@@ -1844,7 +1844,7 @@ typedef struct {
     s32  iC;
     s16  h10;
     s16  h12;
-    s16  h14;
+    s16  final_phase_duration_frames;
     u8   p16[2];
     f32 *motion_target_position;
 } R_274e48;
@@ -1912,7 +1912,7 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
         fast_vec_add(&particle->v10, &particle->v10, &applied_motion_delta);
         if (fast_dec_timer_s16(&particle->hA)) {
             r->h12 = 0;
-            particle->hA = r->h14;
+            particle->hA = r->final_phase_duration_frames;
         }
     } else {
         load_display_text_resource_entry(&applied_motion_delta, (u8 *)r + 4);
@@ -1921,7 +1921,7 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
         particle->packed_particle_color = FUN_001fa6e0_274e48(color_without_alpha,
                                            particle->packed_particle_color,
                                            convert_integer_to_float(particle->hA) /
-                                               convert_integer_to_float(r->h14));
+                                               convert_integer_to_float(r->final_phase_duration_frames));
         if (fast_dec_timer_s16(&particle->hA))
             free_effect_particle(particle);
     }
