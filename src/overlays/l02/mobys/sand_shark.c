@@ -1021,8 +1021,8 @@ extern int sand_shark_particle_third_frame_count_range_start_gp __asm__("D_L02_0
     __attribute__((sda));
 extern int sand_shark_particle_third_frame_count_range_end_gp __asm__("D_L02_00161954")
     __attribute__((sda));
-int D_L02_00161958 = 0x60306058;
-int D_L02_0016195C = 0x20306058;
+int l02_sand_shark_radial_particle_initial_color __asm__("D_L02_00161958") = 0x60306058;
+int l02_sand_shark_radial_particle_secondary_color __asm__("D_L02_0016195C") = 0x20306058;
 int D_L02_00161960 = -1;
 
 /* Same routine as FUN_L12_002e19a8: spawns n particles around pos, fewer when D_L02_00160178 is high. */
@@ -1078,8 +1078,8 @@ void emit_sand_shark_radial_particles(void *particle_origin, int particle_count)
         spawn_spark(particle_position,
                     vertical_motion,
                     radial_motion,
-                    D_L02_00161958,
-                    D_L02_0016195C,
+                    l02_sand_shark_radial_particle_initial_color,
+                    l02_sand_shark_radial_particle_secondary_color,
                     frame_count,
                     second_frame_count,
                     third_frame_count,
