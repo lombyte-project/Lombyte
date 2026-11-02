@@ -99,7 +99,7 @@ void drek_fight_missile_update(struct Moby *moby) __asm__("FUN_L18_002efb88");
 
 typedef struct DrekFightMissileVars {
     u8    pad_0[0x110];
-    u8    unk110;
+    u8    wander_destination_position;
     u8    pad_111[0xF];
     u8    unk120;
     u8    pad_121[0x7];
@@ -109,7 +109,7 @@ typedef struct DrekFightMissileVars {
     u8    pad_140[0x4];
     f32   unk144;
     u8    pad_148[0x4];
-    s32   unk14C;
+    s32   dive_motion_blend_factor;
     f32   unk150;
     f32   unk154;
     f32   unk158;
@@ -117,8 +117,8 @@ typedef struct DrekFightMissileVars {
     s32   timer_160;
     s16   unk164;
     u8    pad_166[0x2];
-    f32   unk168;
-    void *unk16C;
+    f32   effect_color_phase;
+    void *activating_moby;
 } DrekFightMissileVars;
 
 /* Moby class 1355 */
@@ -144,12 +144,12 @@ void drek_fight_missile_update(struct Moby *moby) {
         missile_vars->unk154 = initialization_frame_time * 12.566371f;
         missile_vars->unk150 = wander_acceleration_scale * 3.1415927f;
         missile_vars->unk15C = initialization_frame_time * 10.0f;
-        missile_vars->unk168 = random_angle_radians();
+        missile_vars->effect_color_phase = random_angle_radians();
         moby->draw_dist = 0xFF;
         qcopy(&missile_vars->unk120, &moby->pos);
         missile_vars->unk128 += 5.0f;
         missile_vars->unk128 = probe_ground_height(&missile_vars->unk120, 0, 0.5f);
-        select_drek_fight_missile_wander_target(moby, &missile_vars->unk110);
+        select_drek_fight_missile_wander_target(moby, &missile_vars->wander_destination_position);
         moby->state = DREK_MISSILE_WAIT_FOR_ACTIVATION;
         moby->flags |= 1;
         moby->visible = 0;
@@ -157,7 +157,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         break;
     }
     case DREK_MISSILE_WANDER: {
-        char *wander_target_position = &missile_vars->unk110;
+        char *wander_target_position = &missile_vars->wander_destination_position;
         if (update_drek_fight_missile_wander_movement(moby, (float *)wander_target_position)) {
             select_drek_fight_missile_wander_target(moby, wander_target_position);
         }
@@ -173,7 +173,7 @@ void drek_fight_missile_update(struct Moby *moby) {
             fast_sin(moby->rot.z) *
             (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
         missile_vars->unk130[2] = missile_vars->unk144;
-        missile_vars->unk14C = 0;
+        missile_vars->dive_motion_blend_factor = 0;
         break;
     }
     case DREK_MISSILE_DIVE: {
@@ -183,11 +183,11 @@ void drek_fight_missile_update(struct Moby *moby) {
         fast_vec_normalize(dive_movement_step,
                            dive_movement_step,
                            *(float *)&l18_drek_missile_dive_speed_gp * frame_time);
-        approach_value((float *)&missile_vars->unk14C, 1.0f, frame_time);
+        approach_value((float *)&missile_vars->dive_motion_blend_factor, 1.0f, frame_time);
         lerp_vector(dive_movement_step,
                     missile_vars->unk130,
                     dive_movement_step,
-                    *(float *)&missile_vars->unk14C);
+                    *(float *)&missile_vars->dive_motion_blend_factor);
         fast_vec_add(&moby->pos, &moby->pos, dive_movement_step);
         moby->rot.z = fast_arc_tan(dive_movement_step[0], dive_movement_step[1]);
         moby->rot.y = -fast_arc_tan(vector_length_xy(dive_movement_step), dive_movement_step[2]);
@@ -217,7 +217,7 @@ void drek_fight_missile_update(struct Moby *moby) {
             char *pos = &moby->pos;
             moby->state = DREK_MISSILE_WANDER;
             missile_vars->unk164 = 0;
-            spawn_explosion(missile_vars->unk16C,
+            spawn_explosion(missile_vars->activating_moby,
                             D_L18_0015F580,
                             pos,
                             1.0f,
