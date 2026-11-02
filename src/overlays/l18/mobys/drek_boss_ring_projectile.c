@@ -229,13 +229,16 @@ void         spawn_drek_boss_ring_projectile(char  *pos,
 void spawn_drek_boss_ring_projectile(
 
     char *pos, float *initial_movement_step, int collision_filter_moby, float fa, float fb) {
+    enum {
+        STATE_BALLISTIC_FLIGHT = 0
+    };
     BallisticRingProjectileMoby *spawned_moby = (BallisticRingProjectileMoby *)create_moby(0x270);
     if (spawned_moby != 0) {
         Child *moby_vars;
         int    initial_glow_color;
         spawned_moby->b30 = 0xFF;
         spawned_moby->b31 = 1;
-        spawned_moby->projectile_state = 0;
+        spawned_moby->projectile_state = STATE_BALLISTIC_FLIGHT;
         initial_glow_color = *(int *)&D_L18_00161BFC_gp;
         spawned_moby->f2C = spawned_moby->f2C * D_L18_00161BF8;
         spawned_moby->s32 = 0xFF;
