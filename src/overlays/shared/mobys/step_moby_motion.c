@@ -132,7 +132,7 @@ void spawn_particles_at_shape_points(void *source_object,
 typedef struct {
     f32 f0;
     f32 f4;
-    f32 f8;
+    f32 vertical_motion_step;
     f32 fC;
     u8  p10[8];
     f32 f18;
@@ -161,7 +161,7 @@ void trooper_start_knockback(u8       *moby,
     float *moby_vars_record;
     knockback_state->f0 = fast_cos(knockback_angle) * knockback_state->f18;
     knockback_state->f4 = fast_sin(knockback_angle) * knockback_state->f18;
-    knockback_state->f8 = knockback_state->f1C;
+    knockback_state->vertical_motion_step = knockback_state->f1C;
     knockback_state->fC = 1.0f;
     knockback_state->f40 = fast_add_rotations(knockback_angle, 3.1415927f);
     knockback_state->w44 = 0;
