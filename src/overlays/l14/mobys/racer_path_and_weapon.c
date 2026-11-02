@@ -51,7 +51,7 @@ typedef struct RacerVars {
     s32 timer;
     f32 unk70[4];
     u8  pad_80[0x4];
-    s32 unk84;
+    s32 initial_position_path_index;
     s32 unk88;
     s16 nearest_segment;
     s16 lead_distance_blend_start_segment;
@@ -140,7 +140,7 @@ int interpolate_racer_to_path_start(struct Moby *racer_moby) {
     remaining_frames = convert_integer_to_float(moby_data->timer);
     lerp_vector(&racer_moby->pos,
                 ent + 0x10,
-                ((char *)l14_paths[moby_data->unk84]) + 0x10,
+                ((char *)l14_paths[moby_data->initial_position_path_index]) + 0x10,
                 remaining_frames * moby_data->unk70[0]);
     return ok;
 }
