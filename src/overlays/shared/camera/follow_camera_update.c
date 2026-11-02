@@ -10,7 +10,7 @@
 
 typedef struct {
     char  p0[0x80];
-    float v80[4];
+    float pull_back_alignment_vector[4];
     char  p1[0xA4 - 0x90];
     float fA4;
 } C_2e9518;
@@ -456,7 +456,7 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
             fast_vec_dot(D_001413D0_lui + 0xC0, camera_object) <= -0.3f) {
             goto on;
         }
-        if (0.0001f < absolute_float(C->fA4) && fast_vec_dot(C->v80, camera_object) <= -0.3f) {
+        if (0.0001f < absolute_float(C->fA4) && fast_vec_dot(C->pull_back_alignment_vector, camera_object) <= -0.3f) {
         on:
             pull_back_state->h4 = scale_game_frames(0x78);
             k = C->fA4 * 14.2857f;
