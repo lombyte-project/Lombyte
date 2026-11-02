@@ -178,7 +178,7 @@ typedef struct D_2D9EA0 {
     short        h58[4];
     float        f60[4];
     char         p70[0xC];
-    int          f7C;
+    int          pending_collection_count;
 } D_2D9EA0;
 
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002DACC0.c: func_L00_002DACC0), a near miss there; names translated to the US level program. */
@@ -1288,7 +1288,7 @@ void nanotech_ball_update(Moby *moby) {
             euler_rotation_basis(&moby->rot_row0, &moby->rot);
             D_L00_0015F63C = moby;
             moby->update_dist = 0xFF;
-            nanotech_ball_state->f7C = 0;
+            nanotech_ball_state->pending_collection_count = 0;
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0[0], &moby->rot_row0, D_L00_00161A14_gp);
             qcopy(&D_L00_001E4070_2D9EA0[0], &moby->rot_row2);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0[1], &moby->rot_row1, D_L00_00161A14_gp);
@@ -1353,14 +1353,14 @@ void nanotech_ball_update(Moby *moby) {
                 max_hp = 4;
             if (moby->state != NANOTECH_BALL_STATE_FOLLOW_OWNER && D_L00_0015F63C != 0 &&
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && player->health.hp != 0 &&
-                (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < max_hp ||
+                (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->pending_collection_count < max_hp ||
                  (nanotech_ball_invulnerability_pickup_enabled != 0 &&
                   player->invulnerable_frames == 0)) &&
                 fast_vec_dist(&moby->pos, &player->motion.pos) < 10.0f &&
                 func_L00_002D9E30_2D9EA0(moby)) {
                 int i;
                 moby->state = NANOTECH_BALL_STATE_COLLECTING;
-                ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
+                ((D_2D9EA0 *)D_L00_0015F63C->pvars)->pending_collection_count++;
                 if (nanotech_ball_invulnerability_pickup_enabled != 0)
                     player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
                 nanotech_ball_state->h54 =
@@ -1537,9 +1537,9 @@ void nanotech_ball_update(Moby *moby) {
                         }
                         {
                             D_2D9EA0 *leader_data = (D_2D9EA0 *)D_L00_0015F63C->pvars;
-                            leader_data->f7C--;
-                            if (leader_data->f7C < 0)
-                                leader_data->f7C = 0;
+                            leader_data->pending_collection_count--;
+                            if (leader_data->pending_collection_count < 0)
+                                leader_data->pending_collection_count = 0;
                         }
                         func_L00_0028EF68_2D9EA0(1, 0, moby, 0x1F5);
                         nanotech_ball_state->h56 = 1;
