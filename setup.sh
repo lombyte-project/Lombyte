@@ -30,7 +30,7 @@ ELF_SHA=e050581032e4bb3f20341307da5b69b76f1574910519155380ea771e55c3c0c9
 # Pinned public downloads (SHA-256 checked before anything is installed).
 # A dead upstream link falls back to our copy of the open-source files
 # (github.com/lombyte-project/toolchain-mirror), pinned to a commit.
-MIRROR_URL=https://raw.githubusercontent.com/lombyte-project/toolchain-mirror/51d9a4db241f3f7fe5e8ae137561245964f333c1
+MIRROR_URL=https://raw.githubusercontent.com/lombyte-project/toolchain-mirror/915a96d32d1b23d58558b82e4b2ba7a4f2820f51
 BINUTILS_URL=https://github.com/decompals/binutils-mips-ps2-decompals/releases/download/v0.10/binutils-mips-ps2-decompals-linux-x86-64.tar.gz
 BINUTILS_SHA=9fe31ea3ee1a37536f9f0e2e12c668e7c3cb99e59f5154bd2f1fc4762473094c
 OBJDIFF_URL=https://github.com/encounter/objdiff/releases/download/v3.8.0/objdiff-cli-linux-x86_64

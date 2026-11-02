@@ -40,7 +40,7 @@ ARCHIVE_NAME = "gnu-ee-binutils-gcc-1.1.tar.gz"
 # pinned to a commit; tried after the upstream URLs.
 MIRROR = (
     "https://raw.githubusercontent.com/lombyte-project/toolchain-mirror/"
-    "51d9a4db241f3f7fe5e8ae137561245964f333c1"
+    "915a96d32d1b23d58558b82e4b2ba7a4f2820f51"
 )
 
 ARCHIVE_URLS = (
