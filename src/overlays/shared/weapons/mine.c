@@ -391,7 +391,7 @@ typedef struct N_2aa008 {
     u8               pad3[0x78 - 0x30];
     void            *moby_private_vars;
     u8               pad4[0xA6 - 0x7C];
-    s16              hA6;
+    s16              moby_class;
 } N_2aa008;
 
 typedef struct {
@@ -491,7 +491,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     for (scanned_moby = D_L00_0015FFE4_2aa008; scanned_moby; scanned_moby = scanned_moby->p28) {
         if (scanned_moby->moby_state != 0xFE)
             if (scanned_moby->moby_state != 0xFD)
-                if (scanned_moby->hA6 == initialized_moby->hA6)
+                if (scanned_moby->moby_class == initialized_moby->moby_class)
                     if (scanned_moby != initialized_moby) {
                         if (best == 0 || ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C < bestv) {
                             bestv = ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C;
