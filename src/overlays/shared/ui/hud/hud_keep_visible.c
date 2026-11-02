@@ -42,18 +42,18 @@ void reset_hud_animation_channels(void) {
 /* Offsets x/y for the element's anchor flags (centre or right/bottom alignment). */
 int hud_screen_position(HudElem *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
-int hud_screen_position(HudElem *rec, int *x, int *y) {
-    int w = rec->w;
-    int h = rec->h;
-    int flags = rec->flags;
+int hud_screen_position(HudElem *hud_element, int *x, int *y) {
+    int w = hud_element->w;
+    int h = hud_element->h;
+    int flags = hud_element->flags;
 
     if ((flags ^ 1) & 1) {
         if (!(flags & 2)) {
             *y -= h >> 1;
         }
     }
-    if (!(rec->flags & 4)) {
-        if (rec->flags & 8) {
+    if (!(hud_element->flags & 4)) {
+        if (hud_element->flags & 8) {
             *x -= w;
         } else {
             *x -= w >> 1;
