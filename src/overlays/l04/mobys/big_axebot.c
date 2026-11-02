@@ -188,7 +188,7 @@ typedef struct M_B7B0 {
     V4_B7B0        pos;
     unsigned char  state;
     char           pad21[0x10];
-    unsigned char  f31;
+    unsigned char  proximity_ground_probe_enabled;
     char           pad32[2];
     unsigned short f34;
     char           pad36[0xA];
@@ -329,7 +329,7 @@ void big_axebot_update(M_B7B0 *moby) {
         flag = 1;
     }
     FUN_L00_00263ac8(2.5f, (int)moby, 0, (unsigned char *)&data->recoil_manipulator);
-    if (moby->f31 != 0) {
+    if (moby->proximity_ground_probe_enabled != 0) {
         if (fast_vec_dist(moby->pos, D_L04_00166F40) < 27.0f) {
             FUN_L00_0025a120(moby);
             moby->f7F = 0x15;
@@ -355,7 +355,7 @@ void big_axebot_update(M_B7B0 *moby) {
     qcopy(initial_position_snapshot, moby->pos);
     qcopy(dest, moby->pos);
     qcopy(tpos, tg.pos);
-    if (moby->f31 != 0) {
+    if (moby->proximity_ground_probe_enabled != 0) {
         if (fast_vec_dist(moby->pos, D_L04_00166F40) < 32.0f) {
             FUN_L00_0025a120(moby);
             moby->f7F = 0x1A;
