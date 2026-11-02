@@ -225,7 +225,7 @@ typedef struct WBData {
     /* 0x122 */ char          pad122[0xE];
     /* 0x130 */ char          recoil_rotation[0x30];
     /* 0x160 */ char          leg_rig_movement_data[0xB7];
-    /* 0x217 */ unsigned char f217;
+    /* 0x217 */ unsigned char leg_rig_animation_mode;
     /* 0x218 */ char          pad218[0x198];
     /* 0x3B0 */ float         initial_position[4];
     /* 0x3C0 */ unsigned char initial_debris_animation_enabled;
@@ -795,7 +795,7 @@ void woodcut_bot_update(WBMoby *m) {
             m->state = WOODCUT_BOT_MELEE_ATTACK;
         } else {
             leg_walker_update(m, d->leg_rig_movement_data, frame_time * 0.0f, m->rot[2], frame_time_sq * 20.0f);
-            if (d->f217 == 0) {
+            if (d->leg_rig_animation_mode == 0) {
                 if (excited) {
                     m->state = WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED;
                 } else {
