@@ -562,7 +562,7 @@ void finish_cutscene(void) {
 
 typedef struct {
     char  pad[0x38];
-    int   i38;
+    int   camera_key_index;
     char  pad2[0x54 - 0x3C];
     char *p54;
 } H_298de8;
@@ -585,7 +585,7 @@ int                apply_cutscene_camera_key(void) __asm__("FUN_L00_00298de8");
 int apply_cutscene_camera_key(void) {
     float        camera_key_rotation_matrix[16] __attribute__((aligned(16)));
     OvlQuad      camera_offset[1];
-    char        *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
+    char        *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.camera_key_index * 32;
     float       *camera_key_values = (float *)(camera_key + 0x10);
     int          camera_key_flag = *(unsigned char *)(camera_key + 0xC);
     char        *x = D_L00_0016CA40_lui;
