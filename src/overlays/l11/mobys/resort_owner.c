@@ -73,7 +73,7 @@ typedef struct ResortOwnerVars {
     s16   unk56;
     u8    pad_58[0x28];
     void *unk80;
-    void *unk84;
+    void *supplemental_clearance_path;
     void *unk88;
     u8    pad_8C[0x64];
     s32   unkF0;
@@ -87,7 +87,7 @@ typedef struct ResortOwnerVars {
     f32   unk140[4];
     f32   unk150;
     f32   unk154;
-    u32   unk158;
+    u32   current_path_leg;
     s32   unk15C;
 } ResortOwnerVars;
 
@@ -223,7 +223,7 @@ void update_resort_owner_state_actions(void *mp) {
         break;
     case RESORT_OWNER_WAIT_AT_GATE: {
         int         *gate_moby_index_ptr = &pvars->unkF0;
-        unsigned int gate_slot_index = 0U < pvars->unk158;
+        unsigned int gate_slot_index = 0U < pvars->current_path_leg;
         char        *gate_moby;
         gate_moby_index_ptr += gate_slot_index;
         gate_moby = (char *)D_L11_0015FFD8;
@@ -272,15 +272,15 @@ void apply_resort_owner_movement(void *mp) {
         (MOBY(moby)->state == RESORT_OWNER_JUMP_TO_TARGET && moby_vars->unk15C == 3)) {
         resolve_point_path_segment_xy_clearance(
             0.3f,
-            *(void **)((u8 *)moby_vars + 0x60 - -(*(int *)&moby_vars->unk158 * 4)),
+            *(void **)((u8 *)moby_vars + 0x60 - -(*(int *)&moby_vars->current_path_leg * 4)),
             moby + 0x10,
             moby + 0x10);
-        switch (*(int *)&moby_vars->unk158) {
+        switch (*(int *)&moby_vars->current_path_leg) {
         case RESORT_OWNER_PENULTIMATE_PATH_LEG:
             resolve_point_path_segment_xy_clearance(
                 0.3f, moby_vars->unk80, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
-                0.3f, moby_vars->unk84, moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->supplemental_clearance_path, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
                 0.3f, moby_vars->unk88, moby + 0x10, moby + 0x10);
             break;
@@ -288,7 +288,7 @@ void apply_resort_owner_movement(void *mp) {
             resolve_point_path_segment_xy_clearance(
                 0.3f, moby_vars->unk80, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
-                0.3f, moby_vars->unk84, moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->supplemental_clearance_path, moby + 0x10, moby + 0x10);
             break;
         }
     }
@@ -639,7 +639,7 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
             int         *tbl = &moby_vars->unkF0;
-            unsigned int idx = 0U < moby_vars->unk158;
+            unsigned int idx = 0U < moby_vars->current_path_leg;
             int          p;
             char        *o;
             tbl += idx;
@@ -662,7 +662,7 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
             int         *tbl = &moby_vars->unkF0;
-            unsigned int idx = 0U < moby_vars->unk158;
+            unsigned int idx = 0U < moby_vars->current_path_leg;
             int          p;
             char        *o;
             tbl += idx;
@@ -807,7 +807,7 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *jump_target_posi
         fast_vec_add(candidate_position, candidate_position, pos);
         {
             int *path_entry =
-                (int *)l11_paths[*(int *)((u8 *)pvars - (-(*(int *)&pvars->unk158 * 4)) + 0x60)];
+                (int *)l11_paths[*(int *)((u8 *)pvars - (-(*(int *)&pvars->current_path_leg * 4)) + 0x60)];
             if (point_in_path_xy(candidate_position, path_entry + 4, *path_entry)) {
                 candidate_position[2] += 5.0f;
                 landing_ground_height = func_L00_0025A748_f(candidate_position);
