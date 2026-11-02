@@ -570,19 +570,19 @@ typedef union {
 
 typedef struct {
     unsigned char pad0[0x80];
-    V_2163f0      v80;
+    V_2163f0      hero_position;
     unsigned char pad90[0x1F8 - 0x90];
     short         s1F8;
     unsigned char pad1FA[0x270 - 0x1FA];
-    V_2163f0      v270;
+    V_2163f0      primary_tilt_reference_vector;
     unsigned char pad280[0x10];
-    V_2163f0      v290;
+    V_2163f0      alternate_tilt_reference_vector;
     unsigned char pad2A0[0x2DC - 0x2A0];
     float         f2DC;
     unsigned char pad2E0[0x30E - 0x2E0];
     short         s30E;
     unsigned char pad310[0x20B3 - 0x310];
-    unsigned char b20B3;
+    unsigned char reference_tilt_mode;
 } P_2163f0;
 
 extern P_2163f0 D_0013F350_2163f0 __asm__("D_0013F350");
@@ -611,13 +611,13 @@ void apply_hero_reference_tilt(void) {
     transformed_position_offset.f[2] = 0.8f;
     pitch_smoothing_parameter = frame_scale_sq * 0.3f;
     FUN_001f9d20_2163f0(&original_position_offset, &original_position_offset, &P);
-    reference_vector.q = P.v270.q;
-    if (P.b20B3 == 2) {
-        FUN_001f9a68_2163f0(&reference_vector, &P.v290, -1.0f);
+    reference_vector.q = P.primary_tilt_reference_vector.q;
+    if (P.reference_tilt_mode == 2) {
+        FUN_001f9a68_2163f0(&reference_vector, &P.alternate_tilt_reference_vector, -1.0f);
     }
-    if (P.b20B3 == 1) {
+    if (P.reference_tilt_mode == 1) {
         if (P.s30E < FUN_001f96f8_2163f0(10) || P.f2DC < 1.0f) {
-            reference_vector.q = P.v270.q;
+            reference_vector.q = P.primary_tilt_reference_vector.q;
         }
     }
     if (P.s30E != 0 && P.s1F8 != 0) {
@@ -629,11 +629,11 @@ void apply_hero_reference_tilt(void) {
                             pitch_smoothing_parameter,
                             0.0f,
                             0);
-    if (P.b20B3 == 1 && P.s30E != 0) {
+    if (P.reference_tilt_mode == 1 && P.s30E != 0) {
         FUN_001f9d20_2163f0(
             &transformed_position_offset, &transformed_position_offset, working_matrix);
-        fast_vec_sub(&P.v80, &P.v80, &transformed_position_offset);
-        FUN_001f9a10_2163f0(&P.v80, &P.v80, &original_position_offset);
+        fast_vec_sub(&P.hero_position, &P.hero_position, &transformed_position_offset);
+        FUN_001f9a10_2163f0(&P.hero_position, &P.hero_position, &original_position_offset);
     }
 }
 
