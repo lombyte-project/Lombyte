@@ -57,10 +57,10 @@ typedef struct {
 typedef struct {
     u8  pad0[0x60];
     u8  path[0x18];
-    s32 w78;
-    s32 w7C;
+    s32 knockback_horizontal_magnitude;
+    s32 knockback_initial_vertical_step;
     s32 w80;
-    s32 w84;
+    s32 knockback_motion_flags;
     f32 f88;
     u8  pad8C[0x24];
     f32 fB0;
@@ -121,13 +121,13 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         if (spawned_clone != 0) {
             nv = spawned_clone->pvars;
             k = 0.8f;
-            nv->w84 = 8;
+            nv->knockback_motion_flags = 8;
             nv->w80 = truncate_float_to_s32(nv->f250 * k * 1024.0f);
             nv->f88 = nv->f250 * k;
             nv->fB0 = 7.0f;
             nv->fB4 = 13.0f;
-            nv->w78 = 0;
-            nv->w7C = 0;
+            nv->knockback_horizontal_magnitude = 0;
+            nv->knockback_initial_vertical_step = 0;
             trooper_start_knockback(
                 spawned_clone,
                 nv->path,
