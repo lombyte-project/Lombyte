@@ -719,8 +719,8 @@ typedef struct Wing {
     float         f2D8;
 } Wing;
 
-int D_L05_00161A74 = 0x80004000;
-int D_L05_00161A78 = 0x80008000;
+int l05_extermibot_glow_color_start __asm__("D_L05_00161A74") = 0x80004000;
+int l05_extermibot_glow_color_end __asm__("D_L05_00161A78") = 0x80008000;
 
 #include "rnc/overlay/l05/mobys/extermibot_data/handle_extermibot_hits_and_update_targeting_2.h"
 
@@ -907,7 +907,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
     }
     moby_data->f2D8 = fast_add_rotations(moby_data->f2D8, D_0015ED6C * 9.424778f);
     moby->glow_color = fast_tween_color(
-        D_L05_00161A74, D_L05_00161A78, (func_001F9FA8_3047E8(moby_data->f2D8) + 1.0f) * 0.5f);
+        l05_extermibot_glow_color_start, l05_extermibot_glow_color_end, (func_001F9FA8_3047E8(moby_data->f2D8) + 1.0f) * 0.5f);
     k = moby->state;
     if (k < 10) {
         if (k >= 4 && moby_data->target == (*(Moby **)D_001413D0_lui)) {
