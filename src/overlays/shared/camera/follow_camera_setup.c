@@ -1375,7 +1375,7 @@ typedef struct {
 typedef struct {
     u8  pad0[0x80];
     u8  pad80[0x2080 - 0x80];
-    u8 *p2080;
+    u8 *hero_moby;
     s32 i2084;
     u8  pad2088[0x20A4 - 0x2088];
     u8  b20A4;
@@ -1391,7 +1391,7 @@ extern f32       follow_camera_minimum_retracted_orbit_distance_gp __asm__("D_L0
 
 typedef struct {
     u8  pad[0x18];
-    s32 p18;
+    s32 collision_hit_moby;
     s32 p1C;
     u8  v20[0x10];
 } E40_2e7d20_t;
@@ -1451,7 +1451,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     }
     lerp_vector(&probe_center, x + 0x90, camera_tracking_state - 0x50, 0.5f);
     nearby_moby_count =
-        probe_world_sphere(&probe_center, 1, D_0013F350_lui.p2080, 0, probe_diameter * 0.5f);
+        probe_world_sphere(&probe_center, 1, D_0013F350_lui.hero_moby, 0, probe_diameter * 0.5f);
     if (nearby_moby_count > 0) {
         i = nearby_moby_count;
         j = 0;
@@ -1558,25 +1558,25 @@ move:
     if (!collision_line((x + 0x90),
                         &moby_offset_or_camera_endpoint,
                         camera_collision_mask,
-                        D_0013F350_lui.p2080,
+                        D_0013F350_lui.hero_moby,
                         0)) {
         goto clear;
     }
     if (test_follow_camera_point_in_collision_volume((*(E40_2e7d20_t *)&D_L00_00173E40_lui).v20)) {
         goto clear;
     }
-    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 &&
-        is_moby_in_class_range_500_to_540((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {
+    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby != 0 &&
+        is_moby_in_class_range_500_to_540((*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby)) {
         fast_vec_sub(
-            &v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 + 0x10, g_debug_camera_lui);
+            &v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby + 0x10, g_debug_camera_lui);
         v20.i[2] = 0;
         fast_vec_normalize(&v20, &v20, 1.0f);
         v20.f[3] = 5627.9248046875f;
-        make_hit_descriptor(&hit_descriptor, D_0013F350_lui.p2080, 0x800000, &v20, 20.0f);
+        make_hit_descriptor(&hit_descriptor, D_0013F350_lui.hero_moby, 0x800000, &v20, 20.0f);
         hit_descriptor.b18 = 3;
         hit_descriptor.b19 = 3;
-        hit_descriptor.h1A = *(u16 *)(D_0013F350_lui.p2080 + 0xA6);
-        record_moby_hit((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &hit_descriptor);
+        hit_descriptor.h1A = *(u16 *)(D_0013F350_lui.hero_moby + 0xA6);
+        record_moby_hit((*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby, &hit_descriptor);
     }
     BI_2e7d20(0x4C)++;
     if (BI_2e7d20(0x4C) >= scale_game_frames(0x1E)) {
