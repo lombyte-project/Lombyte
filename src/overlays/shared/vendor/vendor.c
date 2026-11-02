@@ -46,7 +46,7 @@ typedef struct {
     u8        p1C[0x24 - 0x1C];
     N_2a57a8 *p24;
     u8        p28[4];
-    f32       f2C;
+    f32       auxiliary_scale;
     u8        p30[2];
     u16       h32;
     u16       h34;
@@ -59,20 +59,20 @@ typedef struct {
     u8        p8[4];
     M_2a57a8 *mC;
     u8        p10[0x90 - 0x10];
-    f32       f90;
+    f32       effect_scale_factor;
 } Q_2a57a8;
 
 typedef struct {
     u8        p0[0x10];
     f32       f10, f14, f18;
     u8        p1C[4];
-    u8        b20;
+    u8        vendor_state;
     u8        p21[0x52 - 0x21];
     u8        b52, b53;
     u8        p54[0x78 - 0x54];
     Q_2a57a8 *q;
     u8        p7C[0x90 - 0x7C];
-    s32       i90;
+    s32       pulse_color;
 } P_2a57a8;
 
 typedef struct {
@@ -310,11 +310,11 @@ void vendor_update(P_2a57a8 *vendor_moby) {
     vendor_color_pulse_phase += 0.05f;
     if (vendor_color_pulse_phase > 3.14f)
         vendor_color_pulse_phase = -3.14f;
-    vendor_moby->i90 =
+    vendor_moby->pulse_color =
         (((s32)(fast_sin(vendor_color_pulse_phase) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
-    switch (vendor_moby->b20) {
+    switch (vendor_moby->vendor_state) {
     case VENDOR_INITIALIZE:
-        vendor_moby->b20 = 1;
+        vendor_moby->vendor_state = 1;
         q->i0 = 0;
         q->i4 = 0;
         q->mC = create_moby(0x477);
@@ -324,21 +324,21 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         q->mC->f14 = vendor_moby->f14;
         q->mC->f18 = vendor_moby->f18 + 2.95f;
         q->mC->b73 = 0x20;
-        q->f90 = 0.0f;
+        q->effect_scale_factor = 0.0f;
         for (i = 0; i < 2; i++) {
             attach_manipulator(q->mC, i, (u8 *)q + 0x10 + i * 0x40);
         }
         update_entity(q->mC);
         break;
     case VENDOR_WAIT_FOR_HERO:
-        if (q->f90 > 0.0f)
-            q->f90 -= 0.1f;
-        if (q->f90 <= 0.0f)
+        if (q->effect_scale_factor > 0.0f)
+            q->effect_scale_factor -= 0.1f;
+        if (q->effect_scale_factor <= 0.0f)
             q->mC->h34 |= 1;
         if (!(D_L00_0015F5CC_2a57a8 & 7) &&
             vector_distance_xy(&vendor_moby->f10, &hero_pos) <= 16.0f &&
             absolute_float(vendor_moby->f18 - hero_pos.f[2]) <= 8.0f) {
-            vendor_moby->b20 = 2;
+            vendor_moby->vendor_state = 2;
             if (vendor_moby->b53 != 1)
                 blend_moby_animation(vendor_moby, 1, 0, 10);
             q->mC->h34 &= 0xFFFE;
@@ -351,16 +351,16 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
             fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
-        q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
+        q->mC->auxiliary_scale = q->effect_scale_factor * q->mC->p24->f24 * 2.5f;
         update_entity(q->mC);
         break;
     case VENDOR_HERO_NEARBY:
-        if (q->f90 < 1.0f)
-            q->f90 += 0.1f;
+        if (q->effect_scale_factor < 1.0f)
+            q->effect_scale_factor += 0.1f;
         hero_distance = vector_distance_xy(&vendor_moby->f10, &hero_pos);
         z = absolute_float(vendor_moby->f18 - hero_pos.f[2]);
         if (!(D_L00_0015F5CC_2a57a8 & 7) && (hero_distance > 18.0f || z > 10.0f)) {
-            vendor_moby->b20 = 1;
+            vendor_moby->vendor_state = 1;
             if (vendor_moby->b53)
                 blend_moby_animation(vendor_moby, 0, 0, 10);
             break;
@@ -375,7 +375,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
             fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
-        q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
+        q->mC->auxiliary_scale = q->effect_scale_factor * q->mC->p24->f24 * 2.5f;
         update_entity(q->mC);
         if (hero.state.control_mode != 0 && hero.state.current != 3 &&
             hero.state.control_mode != 1) {
@@ -408,13 +408,13 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             help_message_succeeded = try_set_help_message(1, 0x53E3) != 0;
         if ((pad_pressed_lui & 0x10) && interaction_allowed && help_message_succeeded) {
             open_vendor_menu(vendor_moby);
-            vendor_moby->b20 = 3;
+            vendor_moby->vendor_state = 3;
         }
         break;
     case VENDOR_ZERO_AUXILIARY_SCALE:
         if (q->mC) {
-            q->f90 = 0.0f;
-            q->mC->f2C = q->mC->p24->f24 * q->f90 * 2.5f;
+            q->effect_scale_factor = 0.0f;
+            q->mC->auxiliary_scale = q->mC->p24->f24 * q->effect_scale_factor * 2.5f;
             update_entity(q->mC);
         }
         break;
