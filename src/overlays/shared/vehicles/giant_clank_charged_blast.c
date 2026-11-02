@@ -168,7 +168,7 @@ typedef struct {
 
 typedef struct {
     char          pad0[0x98];
-    float         f98;
+    float         blast_heading_angle;
     char          pad9C[0x2008];
     unsigned char f20A4;
 } Hero29FF90;
@@ -361,8 +361,8 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
             D_L15_0015F320.on = 0;
             D_L15_0015F330.on = 0;
             moby_data->f10 = 0;
-            moby_data->vel[0] = fast_cos(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
-            moby_data->vel[1] = fast_sin(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
+            moby_data->vel[0] = fast_cos(((Hero29FF90 *)&hero)->blast_heading_angle) * (D_0015ED6C * 40.0f);
+            moby_data->vel[1] = fast_sin(((Hero29FF90 *)&hero)->blast_heading_angle) * (D_0015ED6C * 40.0f);
             moby_data->vel[2] = 0.0f;
             moby->state = EXPANDING_BLAST;
             moby_data->f14 = 0;
