@@ -227,7 +227,7 @@ extern A_0028ed58 level_render_state_lui __asm__("D_0013E030") NOT_SDA;
 typedef struct {
     s32 i0;
     s32 i4;
-    s32 i8;
+    s32 default_scene_chunk_offset;
 } B_0028ed58;
 
 extern B_0028ed58 D_L00_00173E00_0028ed58 __asm__("D_L00_00173E00")
@@ -250,6 +250,9 @@ extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribut
 void       prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
 
 void prepare_target_level_transition(s32 target_level_index) {
+    enum {
+        TRANSITION_MODE_CHANGE_LEVEL = 3
+    };
     A_0028ed58 *shared_state_record = &level_render_state_lui;
     C_0028ed58 *shared_result_record;
     s32         shared_table_offset;
@@ -263,7 +266,7 @@ void prepare_target_level_transition(s32 target_level_index) {
     shared_table_offset = D_L00_001611CC - 0x60000;
     shared_result_record = &D_L00_0016C860_0028ed58;
     shared_result_record->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;
-    shared_result_record->i5C = D_L00_00173E00_0028ed58.i8 + shared_table_offset;
+    shared_result_record->i5C = D_L00_00173E00_0028ed58.default_scene_chunk_offset + shared_table_offset;
     D_L00_001611CC = shared_table_offset;
     if (current_level_index == target_level_index) {
         s32 divisor;
@@ -277,7 +280,7 @@ void prepare_target_level_transition(s32 target_level_index) {
     } else {
         memcard_save_data(0, target_level_index);
         D_L00_0015F5C0 = target_level_index;
-        shared_state_record->transition_mode = 3;
+        shared_state_record->transition_mode = TRANSITION_MODE_CHANGE_LEVEL;
         shared_state_record->h24 = -1;
     }
 }
