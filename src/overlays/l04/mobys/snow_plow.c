@@ -186,7 +186,7 @@ void snow_plow_update(struct Moby *moby) {
                     is_point_inside_clip_volume(&moby->pos, p[i])) {
                     qcopy(snow_plow_vars->saved_return_position, &moby->pos);
                     snow_plow_vars->selected_clip_volume_index = *(unsigned char *)&p[i];
-                    snow_plow_vars->clip_volume_movement_state = 1;
+                    snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_MOVE_TO_CLIP_VOLUME;
                     snow_plow_vars->saved_return_heading = moby->rot.z;
                     *(int *)&snow_plow_vars->unk7C = 0;
                     moby->state = SNOW_PLOW_WAIT_TO_RESUME_PATH;
@@ -207,7 +207,7 @@ void snow_plow_update(struct Moby *moby) {
             if (vector_distance_xy(&moby->pos, &l04_cuboids[snow_plow_vars->selected_clip_volume_index].pos) < 1.0f &&
                 fast_difference_between_rotations(
                     moby->rot.z, l04_cuboids[snow_plow_vars->selected_clip_volume_index].rot.z) < 0.17453292f) {
-                snow_plow_vars->clip_volume_movement_state = 2;
+                snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_WAIT_BEFORE_RETURN;
                 snow_plow_vars->clip_volume_movement_timer = scale_game_frames(300);
             }
             fast_vec_sub(&delta, &l04_cuboids[snow_plow_vars->selected_clip_volume_index].pos, &moby->pos);
@@ -217,7 +217,7 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_WAIT_BEFORE_RETURN:
             if (snow_plow_vars->clip_volume_movement_timer == 0) {
                 snow_plow_vars->unk7C = amount;
-                snow_plow_vars->clip_volume_movement_state = 3;
+                snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM;
             }
             break;
         case SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM:
@@ -230,7 +230,7 @@ void snow_plow_update(struct Moby *moby) {
             if (vector_distance_xy(&moby->pos, snow_plow_vars->saved_return_position) < 1.0f &&
                 fast_difference_between_rotations(moby->rot.z, snow_plow_vars->saved_return_heading) <
                     0.034906585f) {
-                snow_plow_vars->clip_volume_movement_state = 0;
+                snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_SCAN_CLIP_VOLUMES;
                 snow_plow_vars->clip_volume_movement_timer = scale_game_frames(600);
                 snow_plow_vars->unkFC = amount;
                 snow_plow_vars->unk7C = amount;
