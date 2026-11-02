@@ -731,8 +731,8 @@ typedef struct {
     float         fD0, fD4, fD8;
     int           collision_damage_cooldown_timer_frames;
     char          padE0[8];
-    short         sE8;
-    short         sEA;
+    short         active_listed_moby_count;
+    short         visible_listed_moby_count;
     char          padEC[4];
     float         shown_hp;
     int           hp_bar_fill;
@@ -1356,7 +1356,7 @@ void jet_fighter_update(struct Moby *moby) {
             }
             hp_bar_saved = 1;
             ship_vars->respawn_or_exit_delay_timer_frames = 1;
-            ship_vars->sE8 = 1;
+            ship_vars->active_listed_moby_count = 1;
             ship_vars->fade = 0.0f;
             if (moby->mission != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF) {
                 moby->state = JET_FIGHTER_STATE_INACTIVE;
@@ -1455,13 +1455,13 @@ void jet_fighter_update(struct Moby *moby) {
             update_player_ship_flight(moby, ship_vars);
             {
                 int alive = count_listed_blarg_ships_in_state_5(ship_vars->blarg_ship_list_index);
-                if (ship_vars->sEA != 0 && alive < 5 - ship_vars->sE8 &&
+                if (ship_vars->visible_listed_moby_count != 0 && alive < 5 - ship_vars->active_listed_moby_count &&
                     fast_dec_timer(&ship_vars->blarg_ship_activation_timer_frames) &&
                     activate_listed_blarg_ship(ship_vars->blarg_ship_list_index)) {
                     ship_vars->blarg_ship_activation_timer_frames = scale_game_frames(0xF0);
                 }
             }
-            if (ship_vars->sE8 <= 0) {
+            if (ship_vars->active_listed_moby_count <= 0) {
                 ship_vars->respawn_or_exit_delay_timer_frames = l11_jet_fighter_exit_delay_frames;
                 moby->state = JET_FIGHTER_STATE_DELAYED_EXIT;
             }
