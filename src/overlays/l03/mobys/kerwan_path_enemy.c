@@ -51,10 +51,10 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
 
 typedef struct KerwanPathEnemyVars {
     u8  pad_0[0x263];
-    u8  unk263;
-    s32 unk264;
+    u8  heading_turn_cooldown_frames;
+    s32 turn_gate_moby_index;
     u8  pad_268[0x24];
-    f32 unk28C;
+    f32 turn_destination_heading;
 } KerwanPathEnemyVars;
 
 int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
@@ -66,7 +66,7 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
     float                heading_delta;
     unsigned char        previous_state;
     if (*(int *)&target->rot != 0) {
-        linked_moby_index = enemy_pvars->unk264;
+        linked_moby_index = enemy_pvars->turn_gate_moby_index;
         if (linked_moby_index != -1) {
             char *linked_moby = (char *)(linked_moby_index << 8) + (int)*(char **)&D_L03_0015FFD8_u;
             if (MOBY(linked_moby)->oclass == 0x336) {
@@ -75,7 +75,7 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
             }
         }
         heading_delta = fast_subtract_rotations(desired_heading, moby->rot.z);
-        if (absolute_float(heading_delta) >= 0.7853982f && enemy_pvars->unk263 == 0 &&
+        if (absolute_float(heading_delta) >= 0.7853982f && enemy_pvars->heading_turn_cooldown_frames == 0 &&
             moby->prev_seq != 1) {
             goto go;
         }
@@ -88,7 +88,7 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                 } else {
                     blend_moby_animation(moby, 9, 0, scale_game_frames(10));
                 }
-                enemy_pvars->unk28C = desired_heading;
+                enemy_pvars->turn_destination_heading = desired_heading;
                 previous_state = moby->state;
                 moby->state = ENEMY_TURN_TO_HEADING;
                 moby->command = previous_state;
