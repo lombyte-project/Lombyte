@@ -1,6 +1,7 @@
 /* Shared moby class spawner: lobs spawner_egg bubbles towards target regions. */
 
 #include "types.h"
+#include "rnc/mobys/moby_state.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
@@ -123,9 +124,6 @@ int refresh_spawner_population_and_find_free_slot(int   unused,
                                                   char *spawner_vars) __asm__("FUN_L09_0030aae0");
 
 int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars) {
-    enum {
-        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
-    };
     int    last = -1;
     int    i;
     char **slot;
@@ -133,7 +131,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
     for (i = 0, slot = (char **)(spawner_vars + 0xB0); i < 20; i++, slot++) {
         char *slot_moby = *slot;
         if (slot_moby != 0 && MOBY(slot_moby)->oclass == 0x75E &&
-            (unsigned char)MOBY(slot_moby)->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
+            (unsigned char)MOBY(slot_moby)->state != MOBY_STATE_REMOVAL_MARKER &&
             (unsigned char)MOBY(slot_moby)->state != 0xFD) {
             spawner_vars[0x91]++;
         } else {
@@ -150,9 +148,6 @@ void spawner_update(char *moby) __asm__("FUN_L09_0030ab80");
 
 /* Moby class 1885 */
 void spawner_update(char *moby) {
-    enum {
-        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
-    };
     SpawnerVars *spawner_vars = (SpawnerVars *)MOBY(moby)->pvars;
     float        target[4];
     float        launch_velocity[4];
@@ -197,7 +192,7 @@ void spawner_update(char *moby) {
         } else {
             char *target_moby = *(char **)((char *)spawner_vars + 0x140);
             if (target_moby != 0 &&
-                (unsigned char)MOBY(target_moby)->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
+                (unsigned char)MOBY(target_moby)->state != MOBY_STATE_REMOVAL_MARKER &&
                 (unsigned char)MOBY(target_moby)->state != 0xFD) {
                 qcopy((char *)spawner_vars + 0x100, &MOBY(target_moby)->pos);
             } else {

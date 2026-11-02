@@ -83,9 +83,6 @@ extern char level16_hero_jump_velocity_keys[] __asm__("D_L16_0017C380");
 extern char level16_hero_water_surface_jump_velocity_keys[] __asm__("D_L16_0017C3C0");
 
 int hero_set_state(int requested_state, int animation_update_mode) {
-    enum {
-        HERO_ANIMATION_UPDATE_GUARD_OVERRIDE = 2
-    };
     int   saved_state_step;
     char *moby;
     int   old20A7;
@@ -94,11 +91,11 @@ int hero_set_state(int requested_state, int animation_update_mode) {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 &&
             (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE ||
-             animation_update_mode != HERO_ANIMATION_UPDATE_GUARD_OVERRIDE))
+             animation_update_mode != HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS))
             return 0;
     }
     if ((D_L16_0015F5C4 == 2 || D_L16_0015F5C4 == 6) &&
-        animation_update_mode != HERO_ANIMATION_UPDATE_GUARD_OVERRIDE)
+        animation_update_mode != HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS)
         return 0;
     {
         struct Hero *p = &hero;

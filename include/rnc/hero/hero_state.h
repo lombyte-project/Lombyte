@@ -135,6 +135,10 @@ enum HeroStateId {
     HERO_STATE_DYING_ZERO_HEALTH = 0x82
 };
 
+enum HeroAnimationEntryMode {
+    HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS = 0x2
+};
+
 enum HeroVehicleMode {
     HERO_VEHICLE_MODE_ON_FOOT = 0x0,
     HERO_VEHICLE_MODE_CLANK = 0x1,

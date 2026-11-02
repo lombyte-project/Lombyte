@@ -1,5 +1,6 @@
 /* Level 03 moby class robot_dog. */
 #include "types.h"
+#include "rnc/mobys/moby_state.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
@@ -560,9 +561,6 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
 
 int can_release_linked_robot_dog(struct Moby *moby) {
-    enum {
-        MOBY_STATE_ALTERNATE_PENDING_REMOVAL = 0xFD
-    };
     unsigned char state;
     char         *partner_pvars;
     partner_pvars = (char *)moby->pvars;
@@ -571,7 +569,7 @@ int can_release_linked_robot_dog(struct Moby *moby) {
     state = moby->state;
     if (state == MOBY_STATE_PENDING_REMOVAL)
         return 0;
-    if (state == MOBY_STATE_ALTERNATE_PENDING_REMOVAL)
+    if (state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER)
         return 0;
     if (moby->oclass != 0x23E)
         return 0;

@@ -1,6 +1,7 @@
 /* Shared moby class suckcannon: the suck cannon, its suction of mobys, the shots it fires and its beam. */
 
 #include "types.h"
+#include "rnc/mobys/moby_state.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/world/level_globals.h"
@@ -2329,13 +2330,11 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
         SUCK_RECORD_STATE_STORED = 4,
         SUCK_RECORD_STATE_ROLLING_PROJECTILE = 6
     };
-    enum {
-        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
-    };
+
     Frame_2DDEA0 suction_and_projectile_scratch;
     R_2DDEA0    *suction_and_projectile_record;
 
-    if (moby == 0 || moby->state == MOBY_STATE_MARKED_FOR_REMOVAL || moby->state == 0xFD)
+    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER || moby->state == 0xFD)
         return 0;
     suction_and_projectile_record = func_L00_002DCD40_2DDEA0(moby);
     if (suction_and_projectile_record != 0) {
@@ -3255,14 +3254,11 @@ void stop_suck_cannon_suction_effect(int callback_context) {
 void scatter_moby_from_hazards(O_2df1e0 *p) __asm__("FUN_L00_002df1e0");
 
 void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
-    enum {
-        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
-    };
     s32 i;
     f32 beam_segment_collection_radius;
     if (pickup_moby == 0)
         return;
-    if (pickup_moby->pickup_moby_state == MOBY_STATE_MARKED_FOR_REMOVAL)
+    if (pickup_moby->pickup_moby_state == MOBY_STATE_REMOVAL_MARKER)
         return;
     if (pickup_moby->pickup_moby_state == 0xFD)
         return;

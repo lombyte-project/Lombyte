@@ -1,5 +1,6 @@
 /* Level 15 ultramech scientist moby class. */
 #include "types.h"
+#include "rnc/mobys/moby_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -118,10 +119,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     enum {
         ULTRAMECH_SCIENTIST_DISABLED = 9
     };
-    enum {
-        MOBY_REMOVAL_BELOW_ADDRESS_BOUNDARY = 0xFD,
-        MOBY_REMOVAL_AT_OR_ABOVE_ADDRESS_BOUNDARY = 0xFE
-    };
+
     UltramechScientistVars *ultramech_scientist_private_data;
     char                   *hero_pos;
     struct Moby            *moby_list_cursor;
@@ -178,8 +176,8 @@ void ultramech_scientist_update(struct Moby *moby) {
             break;
         }
         {
-            int dead_state = MOBY_REMOVAL_AT_OR_ABOVE_ADDRESS_BOUNDARY;
-            int gone_state = MOBY_REMOVAL_BELOW_ADDRESS_BOUNDARY;
+            int dead_state = MOBY_STATE_REMOVAL_MARKER;
+            int gone_state = MOBY_STATE_ALTERNATE_REMOVAL_MARKER;
             for (; moby_list_cursor != 0; moby_list_cursor = moby_list_cursor->next) {
                 if (moby_list_cursor->mission !=
                     ultramech_scientist_private_data->dialogue_mission_id) {
@@ -222,8 +220,8 @@ void ultramech_scientist_update(struct Moby *moby) {
             break;
         }
         {
-            int dead_state = MOBY_REMOVAL_AT_OR_ABOVE_ADDRESS_BOUNDARY;
-            int gone_state = MOBY_REMOVAL_BELOW_ADDRESS_BOUNDARY;
+            int dead_state = MOBY_STATE_REMOVAL_MARKER;
+            int gone_state = MOBY_STATE_ALTERNATE_REMOVAL_MARKER;
             for (; moby_list_cursor != 0; moby_list_cursor = moby_list_cursor->next) {
                 if (moby_list_cursor->mission !=
                     ultramech_scientist_private_data->dialogue_mission_id) {
@@ -272,8 +270,8 @@ void ultramech_scientist_update(struct Moby *moby) {
                             (ultramech_scientist_private_data->moby_to_remove_index << 8);
             if (spawned != 0) {
                 int state = *(unsigned char *)(spawned + 0x20);
-                if (state != MOBY_REMOVAL_AT_OR_ABOVE_ADDRESS_BOUNDARY) {
-                    if (state != MOBY_REMOVAL_BELOW_ADDRESS_BOUNDARY) {
+                if (state != MOBY_STATE_REMOVAL_MARKER) {
+                    if (state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER) {
                         mark_moby_for_removal(spawned);
                         ultramech_scientist_private_data->moby_to_remove_index = -1;
                     }

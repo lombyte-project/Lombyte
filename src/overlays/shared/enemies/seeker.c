@@ -1,5 +1,6 @@
 /* Shared moby class seeker: its update and its damage and target handling. */
 #include "types.h"
+#include "rnc/mobys/moby_state.h"
 #include "rnc/globals.h"
 #include "qzero.h"
 #include "rnc/mobys/moby.h"
@@ -440,10 +441,7 @@ void update_seeker_damage_and_target(Moby *moby) {
     enum {
         SEEKER_TARGET_STATUS_LOST = 2
     };
-    enum {
-        MOBY_STATE_REMOVAL_MARKED_BELOW_ADDRESS_THRESHOLD = 0xFD,
-        MOBY_STATE_REMOVAL_MARKED_AT_OR_ABOVE_ADDRESS_THRESHOLD = 0xFE
-    };
+
     char        hit_pos[16];
     int         hit;
     float       damage;
@@ -576,9 +574,8 @@ void update_seeker_damage_and_target(Moby *moby) {
         }
     } else {
         Moby *target = seeker_vars->f160;
-        if (target != 0 &&
-            target->state != MOBY_STATE_REMOVAL_MARKED_AT_OR_ABOVE_ADDRESS_THRESHOLD &&
-            target->state != MOBY_STATE_REMOVAL_MARKED_BELOW_ADDRESS_THRESHOLD) {
+        if (target != 0 && target->state != MOBY_STATE_REMOVAL_MARKER &&
+            target->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER) {
             qcopy(seeker_vars->target, &target->pos);
         } else {
             seeker_vars->f160 = 0;
