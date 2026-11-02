@@ -182,6 +182,9 @@ void       veldin_robot_enemy_update(ElectroidMoby *moby) __asm__("FUN_L00_002e0
 
 /* Moby class 1440 */
 void veldin_robot_enemy_update(ElectroidMoby *moby) {
+    enum {
+        VELDIN_ROBOT_TARGET_SELECTION_UNAVAILABLE = 2
+    };
     ElectroidVars *vars;
     ElectroidMoby *target;
     Path          *path;
@@ -239,7 +242,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
                 ELECTROID_ANIM(moby, 1, scale_game_frames_s32(20));
             }
         }
-        if (vars->target_selection_status != 2) {
+        if (vars->target_selection_status != VELDIN_ROBOT_TARGET_SELECTION_UNAVAILABLE) {
             moby->state = VELDIN_ROBOT_STATE_FOLLOW_PATH;
             ELECTROID_ANIM(moby, 9, scale_game_frames_s32(10));
         }
@@ -280,7 +283,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         } else if (moby->unk70 & 2) {
             ELECTROID_ANIM(moby, random_integer_below(2) + 1, scale_game_frames_s32(20));
         }
-        if (vars->target_selection_status != 2 && register_beam_slot(moby, 0, 0) != 0) {
+        if (vars->target_selection_status != VELDIN_ROBOT_TARGET_SELECTION_UNAVAILABLE && register_beam_slot(moby, 0, 0) != 0) {
             moby->state = VELDIN_ROBOT_STATE_WAIT_TO_START_COLLISION_PROBES;
             ELECTROID_ANIM(moby, 5, scale_game_frames_s32(10));
         }
