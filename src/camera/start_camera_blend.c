@@ -25,14 +25,14 @@ void start_camera_blend(struct UpdateCam *source) {
     char                     orbit_reference_direction[16];
     char                     orbit_yaw_side_direction[16];
     char                     orbit_axis[16];
-    unsigned char            sub;
+    unsigned char            requested_transition_kind;
 
     if (transition->mode == CAMERA_TRANSITION_PHASE_SEED_FROM_SOURCE) {
-        sub = transition->requested_kind;
-        if (sub == 0) {
+        requested_transition_kind = transition->requested_kind;
+        if (requested_transition_kind == 0) {
             qcopy(transition->blend.position, &source->pos);
             extract_matrix_rotation_quaternion(transition->blend.rotation, source);
-        } else if (sub == 2) {
+        } else if (requested_transition_kind == 2) {
             qcopy(transition->orbit.saved_position, &source->pos);
             extract_matrix_rotation_quaternion(transition->orbit.saved_rotation, source);
             capture_camera_orientation();
@@ -55,14 +55,14 @@ void start_camera_blend(struct UpdateCam *source) {
             qcopy(transition->orbit.saved_rotation, transition->orbit.rotation);
         }
     } else {
-        sub = transition->requested_kind;
-        if (sub == 2) {
+        requested_transition_kind = transition->requested_kind;
+        if (requested_transition_kind == 2) {
             save_camera_vectors();
             capture_camera_orientation();
-        } else if (sub == 1) {
+        } else if (requested_transition_kind == 1) {
             save_camera_vectors();
             qcopy(transition->orbit.rotation, transition->orbit.saved_rotation);
-        } else if (sub == 0) {
+        } else if (requested_transition_kind == 0) {
             restore_camera_vectors();
         }
     }
