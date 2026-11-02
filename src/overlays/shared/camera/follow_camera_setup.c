@@ -978,7 +978,7 @@ typedef struct X002e7318 {
     u8        pad[0x20];
     V002e7318 m;
     u8        pad30[8];
-    s16       s38;
+    s16       endpoint_collision_direction_class;
     u8        pad3a[0xe];
     s32       i48;
 } X002e7318;
@@ -992,14 +992,14 @@ typedef struct P002e7318 {
 
 typedef struct O002e7318 {
     u8  pad[0x70];
-    u8 *p70;
+    u8 *follow_camera_rig_state;
 } O002e7318;
 
 typedef struct G002e7318 {
     u8        pad[0x30];
     V002e7318 v40;
     u8        pad50[0x84];
-    s32       i114;
+    s32       sphere_collision_excluded_moby;
 } G002e7318;
 
 extern G002e7318 D_L00_00166E10_c __asm__("D_L00_00166E10");
@@ -1012,7 +1012,7 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) __asm__("F
 s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
     V002e7318  candidate_camera_position;
     V002e7318  normalized_position_delta;
-    u8        *b = camera_moby->p70;
+    u8        *b = camera_moby->follow_camera_rig_state;
     X002e7318 *x = (X002e7318 *)(b + 0x1D0);
     u8        *camera_target_state = b + 0x40;
     u8        *camera_orbit_state = b + 0x130;
@@ -1027,8 +1027,8 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
     G002e7318 *g = &D_L00_00166E10_c;
 
     fast_vec_add(&candidate_camera_position, b + 0x90, camera_orbit_state);
-    x->s38 = 2;
-    active_camera_state = (P002e7318 *)((O002e7318 **)g)[-4]->p70;
+    x->endpoint_collision_direction_class = 2;
+    active_camera_state = (P002e7318 *)((O002e7318 **)g)[-4]->follow_camera_rig_state;
     sphere_collision_flags = x->i48;
     collision_probe_radius = follow_cam_min_distance_gp + active_camera_state->c *
                                                               active_camera_state->a *
@@ -1042,30 +1042,30 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
             if (!coll_sphere(&candidate_camera_position,
                              collision_probe_radius,
                              sphere_collision_flags,
-                             g->i114))
+                             g->sphere_collision_excluded_moby))
                 break;
             hb = 1;
         }
-        if (x->s38 != 0) {
+        if (x->endpoint_collision_direction_class != 0) {
             fast_vec_sub(&normalized_position_delta,
                          &(*(V002e7318 *)&D_L00_00173E60),
                          &candidate_camera_position);
             fast_vec_normalize(&normalized_position_delta, &normalized_position_delta, 1.0f);
             direction_alignment = fast_vec_dot(&g->v40, &normalized_position_delta);
             if (direction_alignment > 0.75f)
-                x->s38 = 1;
+                x->endpoint_collision_direction_class = 1;
             else if (direction_alignment < -0.75f)
-                x->s38 = -1;
+                x->endpoint_collision_direction_class = -1;
             else
-                x->s38 = 0;
+                x->endpoint_collision_direction_class = 0;
         }
         qcopy(&candidate_camera_position, &coll_hit_position);
         i++;
     }
     r = update_follow_camera_orbit_after_collision(camera_moby, &candidate_camera_position, ha, hb);
     fast_vec_add(&x->m, camera_target_state + 0x50, camera_orbit_state);
-    if (x->s38 == 2)
-        x->s38 = 0;
+    if (x->endpoint_collision_direction_class == 2)
+        x->endpoint_collision_direction_class = 0;
     return r;
 }
 
