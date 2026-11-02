@@ -255,8 +255,8 @@ typedef struct BlargHeavyInterceptorVars {
     s16 group_member_count;
     s32 flags;
     f32 unk210;
-    f32 unk214;
-    f32 unk218;
+    f32 aim_point_glow_quad_scale;
+    f32 glow_camera_pull_distance_limit;
     f32 unk21C;
 } BlargHeavyInterceptorVars;
 
@@ -374,11 +374,11 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         if (hit) {
             lerp_vector(vector_scratch, moby_vars->cached_aim_point_position, moby_vars->unkD0, 0.5f);
             qcopy(secondary_vector_scratch, moby_vars->cached_aim_point_position);
-            noop_main_callback(secondary_vector_scratch, moby_vars->unk214 * 0.8f);
-            noop_main_callback(vector_scratch, moby_vars->unk214 * 0.48f);
-            if (FUN_L00_001f2868_c618(moby_vars->unk214 * 0.48f, vector_scratch, 0, 0, 0) ||
+            noop_main_callback(secondary_vector_scratch, moby_vars->aim_point_glow_quad_scale * 0.8f);
+            noop_main_callback(vector_scratch, moby_vars->aim_point_glow_quad_scale * 0.48f);
+            if (FUN_L00_001f2868_c618(moby_vars->aim_point_glow_quad_scale * 0.48f, vector_scratch, 0, 0, 0) ||
                 FUN_L00_001f2868_c618(
-                    moby_vars->unk214 * 0.9f, secondary_vector_scratch, 0, 0, 0)) {
+                    moby_vars->aim_point_glow_quad_scale * 0.9f, secondary_vector_scratch, 0, 0, 0)) {
                 struct Moby *t = D_L14_00174540.target;
 
                 if ((char *)t == D_001413D0_lui ||
@@ -1431,7 +1431,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
     fast_vec_sub(glow_to_camera_vector, D_L14_001674C0_lui, glow_quad_position);
     glow_to_camera_distance = fast_vec_length(glow_to_camera_vector);
     if (0.0f < glow_to_camera_distance) {
-        float camera_pull_distance = d->unk218;
+        float camera_pull_distance = d->glow_camera_pull_distance_limit;
         float camera_distance_margin =
             glow_to_camera_distance -
             *(float *)&blarg_heavy_interceptor_glow_minimum_camera_separation_gp;
@@ -1465,7 +1465,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
         pk.col[0] = col;
     }
     for (j = 0; j < 4; j++) {
-        fast_vec_scale(pk.m[j], D_L14_001D8640[j], d->unk214);
+        fast_vec_scale(pk.m[j], D_L14_001D8640[j], d->aim_point_glow_quad_scale);
         fast_vec_add(pk.m[j], pk.m[j], glow_quad_position);
     }
     draw_geometry_quad(&pk, 0, 0);
