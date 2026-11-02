@@ -16,8 +16,8 @@
 
 typedef struct {
     char  p0[8];
-    int   w8;
-    int   wC;
+    int   initial_phase_packed_color;
+    int   final_phase_packed_color;
     short h10, h12, h14, h16, h18;
 } S_269290;
 
@@ -44,7 +44,7 @@ void update_three_phase_effect_particle(struct EffectParticle *particle) {
         phase_remaining_ratio =
             convert_integer_to_float(particle->life) / convert_integer_to_float(particle_data->h10);
         particle->color = fast_tween_color(
-            particle_data->w8 & 0xFFFFFF, particle_data->w8, 1.0f - phase_remaining_ratio);
+            particle_data->initial_phase_packed_color & 0xFFFFFF, particle_data->initial_phase_packed_color, 1.0f - phase_remaining_ratio);
         particle->size = (float)(particle_data->h16 * 1000);
         if (fast_dec_timer_s16(&particle->life)) {
             particle_data->h10 = 0;
@@ -61,7 +61,7 @@ void update_three_phase_effect_particle(struct EffectParticle *particle) {
                           (float)particle_data->h18) *
                          1000.0f;
         particle->color =
-            fast_tween_color(particle_data->wC, particle_data->w8, phase_remaining_ratio);
+            fast_tween_color(particle_data->final_phase_packed_color, particle_data->initial_phase_packed_color, phase_remaining_ratio);
         if (fast_dec_timer_s16(&particle->life)) {
             particle_data->h12 = 0;
             particle->life = particle_data->h14;
@@ -70,9 +70,9 @@ void update_three_phase_effect_particle(struct EffectParticle *particle) {
         int packed_rgb;
         load_display_text_resource_entry(position_step, particle->data + 0x4);
         fast_vec_add(particle->pos.f, particle->pos.f, position_step);
-        packed_rgb = particle_data->wC & 0xFFFFFF;
+        packed_rgb = particle_data->final_phase_packed_color & 0xFFFFFF;
         particle->color = fast_tween_color(packed_rgb,
-                                           particle_data->wC,
+                                           particle_data->final_phase_packed_color,
                                            convert_integer_to_float(particle->life) /
                                                convert_integer_to_float(particle_data->h14));
         particle->size = (float)(particle_data->h18 * 1000);
