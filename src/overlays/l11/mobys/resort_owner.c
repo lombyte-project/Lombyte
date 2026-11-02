@@ -147,7 +147,7 @@ extern void  transform_attachment_pose(void *, void *, void *, void *, void *, v
 extern void  FUN_00212f90(void *, int, int, int);
 extern float D_0015ED70;
 extern float D_0015ED6C;
-float        D_L11_001613E0 = 3.2f;
+float        l11_resort_owner_gate_attachment_local_x_offset __asm__("D_L11_001613E0") = 3.2f;
 int          l11_resort_owner_gate_attachment_rotation __asm__("D_L11_001613F0") = 0;
 extern int   resort_owner_completion_rotation_trigger_state[] __asm__("D_L11_0016D260");
 extern int   D_L11_0015FFD8;
@@ -230,7 +230,7 @@ void update_resort_owner_state_actions(void *mp) {
         gate_moby += *gate_moby_index_ptr << 8;
         transform_attachment_pose(moby,
                                   gate_moby,
-                                  &D_L11_001613E0,
+                                  &l11_resort_owner_gate_attachment_local_x_offset,
                                   &l11_resort_owner_gate_attachment_rotation,
                                   (char *)moby + 0x10,
                                   (char *)moby + 0x40);
@@ -595,7 +595,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
 extern float resort_owner_follow_hero_speed_gp __asm__("D_L11_001613D0") __attribute__((sda));
 extern float resort_owner_distant_follow_and_path_speed_gp __asm__("D_L11_001613D4")
     __attribute__((sda));
-float D_L11_00161400 = -3.0f;
+float l11_resort_owner_gate_departure_target_local_x_offset __asm__("D_L11_00161400") = -3.0f;
 
 void set_resort_owner_state(struct Moby *moby, unsigned char state) __asm__("FUN_L11_002d2088");
 
@@ -647,7 +647,7 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
             qcopy(moby_vars->unk120, o + 0x10);
-            transform_vector_by_basis(gate_target_offset, &D_L11_001613E0, o + 0xC0);
+            transform_vector_by_basis(gate_target_offset, &l11_resort_owner_gate_attachment_local_x_offset, o + 0xC0);
             fast_vec_add(moby_vars->unk120, moby_vars->unk120, gate_target_offset);
         }
         break;
@@ -670,7 +670,7 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
             qcopy(moby_vars->unk120, o + 0x10);
-            transform_vector_by_basis(gate_target_offset, &D_L11_00161400, o + 0xC0);
+            transform_vector_by_basis(gate_target_offset, &l11_resort_owner_gate_departure_target_local_x_offset, o + 0xC0);
             fast_vec_add(moby_vars->unk120, moby_vars->unk120, gate_target_offset);
         }
         break;
