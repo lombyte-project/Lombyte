@@ -1023,7 +1023,7 @@ extern int sand_shark_particle_third_frame_count_range_end_gp __asm__("D_L02_001
     __attribute__((sda));
 int l02_sand_shark_radial_particle_initial_color __asm__("D_L02_00161958") = 0x60306058;
 int l02_sand_shark_radial_particle_secondary_color __asm__("D_L02_0016195C") = 0x20306058;
-int D_L02_00161960 = -1;
+int l02_sand_shark_radial_particle_header_selector __asm__("D_L02_00161960") = -1;
 
 /* Same routine as FUN_L12_002e19a8: spawns n particles around pos, fewer when D_L02_00160178 is high. */
 void emit_sand_shark_radial_particles(void *particle_origin, int particle_count) {
@@ -1083,7 +1083,7 @@ void emit_sand_shark_radial_particles(void *particle_origin, int particle_count)
                     frame_count,
                     second_frame_count,
                     third_frame_count,
-                    D_L02_00161960);
+                    l02_sand_shark_radial_particle_header_selector);
     }
 }
 
