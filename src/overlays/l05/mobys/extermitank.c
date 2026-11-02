@@ -151,7 +151,7 @@ typedef struct ExtermitankVars {
     u8    pad_18C[0x4];
     s32   path_190;
     f32   turret_yaw;
-    f32   unk198;
+    f32   turret_pitch;
     u8    pad_19C[0x2];
     s16   removal_scaled_frames;
     f32   particle_slots[4];
@@ -244,7 +244,7 @@ void extermitank_update(unsigned char *moby) {
         extermitank_vars->unk28 = 3;
         extermitank_vars->health = 6.0f;
         extermitank_vars->unk180 = scale_game_frames(0x3C);
-        *(int *)&extermitank_vars->unk198 = 0;
+        *(int *)&extermitank_vars->turret_pitch = 0;
         {
             float t = *(volatile float *)&D_L05_00161B78;
             extermitank_vars->turret_yaw = *(volatile float *)(moby + 0x48);
@@ -301,14 +301,14 @@ void extermitank_update(unsigned char *moby) {
                                    *(float *)(g + 0x84) - MOBY(moby)->pos.y);
             step_angle_toward_target(&extermitank_vars->turret_yaw, 0, a, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
-                &extermitank_vars->unk198, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
+                &extermitank_vars->turret_pitch, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         } else {
             step_angle_toward_target(
                 &extermitank_vars->turret_yaw, 0, MOBY(moby)->rot.z, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
-                &extermitank_vars->unk198, 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
+                &extermitank_vars->turret_pitch, 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
         }
-        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
+        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->turret_pitch);
         build_axis_rotation_quaternion(
             extermitank_vars->unk100,
             2,
@@ -480,9 +480,9 @@ void extermitank_update(unsigned char *moby) {
                                    *(float *)(g + 0x84) - MOBY(moby)->pos.y);
             step_angle_toward_target(&extermitank_vars->turret_yaw, 0, a, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
-                &extermitank_vars->unk198, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
+                &extermitank_vars->turret_pitch, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         }
-        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
+        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->turret_pitch);
         build_axis_rotation_quaternion(
             extermitank_vars->unk100,
             2,
