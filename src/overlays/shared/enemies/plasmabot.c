@@ -91,8 +91,8 @@ typedef struct PlasmabotVars {
     u8  unk1E0[0x10];
     u8  unk1F0[0x10];
     u8  unk200[0x10];
-    u8  unk210[0x10];
-    u8  unk220[0x14];
+    u8  beam_start_position_storage[0x10];
+    u8  beam_end_position_storage[0x14];
     f32 target_range;
     u8  pad238[0x4];
     s32 heading_angular_velocity;
@@ -972,9 +972,9 @@ void draw_plasmabot_effect_quads(struct Moby *moby) {
     fast_draw_quad_real(&pk, 0, 0);
 
     qcopy(&quad_transform[3], &plasmabot_effect_private_vars->unk200);
-    pp = &plasmabot_effect_private_vars->unk220;
+    pp = &plasmabot_effect_private_vars->beam_end_position_storage;
     fast_vec_sub(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
-    beam_start_position = &plasmabot_effect_private_vars->unk210;
+    beam_start_position = &plasmabot_effect_private_vars->beam_start_position_storage;
     nozzle_position = &plasmabot_effect_private_vars->unk1F0;
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
     fast_vec_cross(&quad_transform[1], &quad_transform[0], D_0013F5E0);
