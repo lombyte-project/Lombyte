@@ -236,6 +236,9 @@ void large_amoeboid_update(unsigned char *moby) {
     enum {
         LARGE_AMOEBOID_DORMANT = 12
     };
+    enum {
+        AMOEBOID_TARGET_STATUS_UNAVAILABLE = 2
+    };
     LargeAmoeboidVars *large_amoeboid_vars = (LargeAmoeboidVars *)MOBY(moby)->pvars;
     char              *target;
     char              *target_position;
@@ -317,7 +320,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         break;
     case LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH:
-        if (large_amoeboid_vars->target_selection_status != 2) {
+        if (large_amoeboid_vars->target_selection_status != AMOEBOID_TARGET_STATUS_UNAVAILABLE) {
             if (FUN_00213260(4) == 0) {
                 path_hit = follow_path((int *)(&large_amoeboid_vars->path_ids),
                                        1,
@@ -334,7 +337,7 @@ void large_amoeboid_update(unsigned char *moby) {
                     large_amoeboid_vars->path_heading_offset =
                         random_float_between(-0.34906584f, 0.34906584f);
                 } else {
-                    large_amoeboid_vars->target_selection_status = 2;
+                    large_amoeboid_vars->target_selection_status = AMOEBOID_TARGET_STATUS_UNAVAILABLE;
                 }
             }
         }
@@ -387,7 +390,7 @@ void large_amoeboid_update(unsigned char *moby) {
                 large_amoeboid_vars->path_heading_offset = angle;
                 large_amoeboid_vars->move_control.max_speed = distance;
             } else {
-                large_amoeboid_vars->target_selection_status = 2;
+                large_amoeboid_vars->target_selection_status = AMOEBOID_TARGET_STATUS_UNAVAILABLE;
             }
         }
         if (large_amoeboid_vars->pursuit_timer != 0 &&
@@ -488,9 +491,9 @@ void large_amoeboid_update(unsigned char *moby) {
                                                            &large_amoeboid_vars->move_displacement,
                                                            1.0f);
             } else {
-                large_amoeboid_vars->target_selection_status = 2;
+                large_amoeboid_vars->target_selection_status = AMOEBOID_TARGET_STATUS_UNAVAILABLE;
             }
-            if (large_amoeboid_vars->target_selection_status == 2)
+            if (large_amoeboid_vars->target_selection_status == AMOEBOID_TARGET_STATUS_UNAVAILABLE)
                 MOBY(moby)->state = LARGE_AMOEBOID_RETURN_TO_STORED_POSITION;
             spawn_amoeboid_movement_particles(moby);
             return;
@@ -595,7 +598,7 @@ void large_amoeboid_update(unsigned char *moby) {
                                                        &large_amoeboid_vars->move_displacement,
                                                        1.0f);
         }
-        if (large_amoeboid_vars->target_selection_status != 2 &&
+        if (large_amoeboid_vars->target_selection_status != AMOEBOID_TARGET_STATUS_UNAVAILABLE &&
             (MOBY(moby)->state = 4, MOBY(moby)->prev_seq != 1))
             blend_moby_animation(moby, 1, 0, scale_game_frames(3));
         spawn_amoeboid_movement_particles(moby);
