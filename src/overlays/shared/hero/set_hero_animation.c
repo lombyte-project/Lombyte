@@ -347,9 +347,9 @@ typedef struct {
     char          pad28[0x28];
     unsigned char seq[2];
     unsigned char bank[2];
-    float         f54;
+    float         animation_time;
     float         f58;
-    float         f5C;
+    float         animation_frame_rate;
     char          pad60[8];
     int           id[2];
 } AnimState;
@@ -363,8 +363,8 @@ void sync_hero_mapped_moby_animation_frames(void) {
     if (animation_sync_target == 0) {
         return;
     }
-    animation_sync_target->f5C = hero_animation_sync_state->anim_frame_rate;
-    animation_sync_target->f54 = hero_animation_sync_state->moby->anim_time;
+    animation_sync_target->animation_frame_rate = hero_animation_sync_state->anim_frame_rate;
+    animation_sync_target->animation_time = hero_animation_sync_state->moby->anim_time;
     animation_sync_target->seq[0] = hero_animation_sync_state->moby->prev_frame;
     animation_sync_target->seq[1] = hero_animation_sync_state->moby->prev_frame;
     animation_sync_target->id[0] =
