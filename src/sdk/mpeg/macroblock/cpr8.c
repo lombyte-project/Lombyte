@@ -14,7 +14,7 @@ struct MpegDecoderFrame {
     s32 unkE0;
     s32 unkE4;
     u8  pad_E8[0x8C];
-    s32 unk174;
+    s32 transfer_layout_mode;
 };
 
 extern s32 DIntr();
@@ -38,7 +38,7 @@ void _cpr8(struct MpegDecoder *decoder, struct MpegCopyParams *copy_params) {
     decoder_transfer_layout = (struct MpegDecoderFrame *)decoder;
     source_addr = copy_params->unk0 & 0x0FFFFFFF;
     destination_pass_base = decoder->unkD8 & 0x0FFFFFFF;
-    if (decoder_transfer_layout->unk174 == 3) {
+    if (decoder_transfer_layout->transfer_layout_mode == 3) {
         goto block_3;
     }
     layout_width = decoder_transfer_layout->unkE0;
