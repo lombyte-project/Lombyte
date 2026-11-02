@@ -194,6 +194,9 @@ void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
 
 /* Moby class 1229 */
 void blarg_ship_update(Ship_5E48 *ship) {
+    enum {
+        BLARG_SHIP_TARGETING_FIRE_BLOCKED = 2
+    };
     ShipD_5E48  *d = ship->d;
     Ship_5E48   *tgt;
     AlignedVec4f A;
@@ -315,7 +318,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
                 blend_moby_animation(ship, 3, 0, scale_game_frames(6));
             ship->animation_speed = blarg_ship_firing_animation_speed_gp;
         }
-        if (ship->b52 == 3 && d->targeting_status != 2 && D_L10_001742D8 == tgt) {
+        if (ship->b52 == 3 && d->targeting_status != BLARG_SHIP_TARGETING_FIRE_BLOCKED && D_L10_001742D8 == tgt) {
             int near = is_value_within_interpolated_window((char *)ship, 1.0f);
             int far = is_value_within_interpolated_window((char *)ship, 16.0f);
             if (near || far) {
