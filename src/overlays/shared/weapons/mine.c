@@ -473,7 +473,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     vector_scratch.f[0] = random_float_between(-1.0f, 1.0f);
     vector_scratch.f[1] = random_float_between(-1.0f, 1.0f);
     vector_scratch.f[2] = random_float_between(-1.0f, 1.0f);
-    initialized_moby->moby_state = 1;
+    initialized_moby->moby_state = MINE_STATE_FREE_MOTION;
     initialized_moby->f2C = initialized_moby->f2C / 0.65f;
     random_offset.q = vector_scratch.q;
     fast_vec_normalize(&random_offset,
