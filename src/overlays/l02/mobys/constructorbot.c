@@ -572,9 +572,9 @@ typedef struct {
     float         knockback_horizontal_speed_approach_step;
     float         knockback_initial_horizontal_speed;
     float         knockback_initial_vertical_speed;
-    int           i90; /* 0x90 */
+    int           knockback_collision_radius_fixed; /* 0x90 */
     int           i94;
-    float         f98;
+    float         knockback_collision_center_z_offset;
     char          pad9C[4];
     float         fA0; /* 0xA0 */
     char          padA4[9];
@@ -605,8 +605,8 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
     resolve_moby_hit_response(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x11) {
         moby_vars->hp -= dmg;
-        moby_vars->i90 = truncate_float_to_s32(614.4f);
-        moby_vars->f98 = 0.6f;
+        moby_vars->knockback_collision_radius_fixed = truncate_float_to_s32(614.4f);
+        moby_vars->knockback_collision_center_z_offset = 0.6f;
         if (0.0f < moby_vars->hp) {
             if (dmg < 1.0f) {
                 moby_vars->flash = 100;
