@@ -202,7 +202,7 @@ typedef struct MineGroupVars {
     f32 unk80;
     s32 unk84;
     u8  pad_88[0x8];
-    s32 unk90;
+    s32 child_reset_segment_index;
     u8  unk94;
     u8  unk95;
 } MineGroupVars;
@@ -321,7 +321,7 @@ void mine_group_update(struct Moby *moby) {
             debug_print(mine_group_not_found_message, boltcrate_pvars->unk74);
             return;
         }
-        child_placement_segment_index = boltcrate_pvars->unk90 =
+        child_placement_segment_index = boltcrate_pvars->child_reset_segment_index =
             select_point_index_by_distance(&moby->pos, path, 0.0f);
         placed = 0;
         if (0 < ((MineGroupView *)boltcrate_pvars)->child_count)
@@ -382,7 +382,7 @@ void mine_group_update(struct Moby *moby) {
                     fast_vec_sub((char *)child + 0x60, (char *)child + 0x80, (char *)cursor + 0x10);
                     qcopy((void *)(cursor + 0x10), (void *)(child + 0x80));
                     if (fast_dec_timer((int *)(child + 0x98)) &&
-                        *(int *)(child + 0x90) == boltcrate_pvars->unk90)
+                        *(int *)(child + 0x90) == boltcrate_pvars->child_reset_segment_index)
                         reset_moby_from_class_defaults((struct Moby *)cursor);
                 }
             }
