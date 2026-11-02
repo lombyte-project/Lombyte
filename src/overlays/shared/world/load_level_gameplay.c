@@ -307,13 +307,13 @@ typedef struct MobyInst {
     char           pad7C[4];
     int            f80;
     char           pad84[0x22];
-    short          fA6;
+    short          moby_class_id;
     char           padA8[8];
-    unsigned char  fB0;
-    unsigned char  fB1;
-    short          fB2;
-    short          fB4;
-    short          fB6;
+    unsigned char  mission_index;
+    unsigned char  bolt_source_slot;
+    short          gameplay_uid;
+    short          loaded_adjusted_bolt_count;
+    short          loaded_selected_bolt_count;
     char           padB8[0x48];
 } MobyInst;
 
@@ -1023,11 +1023,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 m = moby_table + count;
                 init_moby_instance(m, *(int *)p);
                 p += 4;
-                m->fB1 = vis;
-                m->fB2 = uid;
-                m->fB0 = mission;
-                m->fB4 = adjusted_bolt_count;
-                m->fB6 = selected_bolt_count;
+                m->bolt_source_slot = vis;
+                m->gameplay_uid = uid;
+                m->mission_index = mission;
+                m->loaded_adjusted_bolt_count = adjusted_bolt_count;
+                m->loaded_selected_bolt_count = selected_bolt_count;
                 if (m->f24 != 0) {
                     m->f2C = m->f24->f24 * *(float *)p;
                 }
@@ -1465,7 +1465,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         if (D_0015ED84 == 13 && level_render_state.content_variant == 2) {
             if (D_L00_00160540 != 0) {
                 for (m = moby_table; m->f20 != 0xFF; m++) {
-                    if (m->fA6 == first_class_ids[level_render_state.content_variant]) {
+                    if (m->moby_class_id == first_class_ids[level_render_state.content_variant]) {
                         initialize_moby_state_record((char *)m);
                         set_moby_animation(m, 1, 0);
                         break;
@@ -1543,7 +1543,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
             for (m = moby_table; m->f20 != 0xFF; m++) {
                 if (m->f36 != 0x7F80) {
-                    int uid = m->fB2;
+                    int uid = m->gameplay_uid;
                     int j;
 
                     k++;
