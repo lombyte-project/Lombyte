@@ -48,7 +48,7 @@ struct PokiPathVars {
     f32          knockback_speed_approach_step;       /* 0x84 */
     f32          unk88;       /* 0x88 */
     f32          knockback_vertical_speed;       /* 0x8C */
-    s32          unk90;       /* 0x90 */
+    s32          knockback_collision_radius;       /* 0x90 */
     s32          unk94;       /* 0x94 */
     f32          unk98;       /* 0x98 */
     u8           pad_9C[0x11];
@@ -310,7 +310,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         if (psytcopus_vars->health <= 0.0f) {
             hit_reaction = 1;
         }
-        psytcopus_vars->unk90 = truncate_float_to_s32(512.0f);
+        psytcopus_vars->knockback_collision_radius = truncate_float_to_s32(512.0f);
         psytcopus_vars->unk98 = 0.5f;
         psytcopus_vars->unk80 = psytcopus_knockback_base_gravity_gp * frame_time_sq;
         psytcopus_vars->knockback_speed_approach_step = 0.0005f;
