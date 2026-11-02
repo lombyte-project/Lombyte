@@ -175,7 +175,7 @@ typedef struct O2d1428 {
     u8              p0[0x40];
     V2d1428         vel;
     u8              p50[0x10];
-    u8              v60[0x40];
+    u8              pose_delta[0x40];
     struct M2d1428 *next;
     struct M2d1428 *parent;
     u8              pa8[4];
@@ -1323,7 +1323,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
             fast_vec_sub(&position_delta, &moby->pos, &previous_position);
             position_delta.w = vars->vel.w;
             qcopy(&vars->vel, &position_delta);
-            update_entity_matrix(vars->v60, &vars->vel, &previous_rotation, &moby->v40);
+            update_entity_matrix(vars->pose_delta, &vars->vel, &previous_rotation, &moby->v40);
             continue;
         }
         if (vars->parent == 0) {
