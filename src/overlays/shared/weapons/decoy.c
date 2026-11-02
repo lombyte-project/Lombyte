@@ -53,8 +53,8 @@ typedef struct DecoyVars {
     s32   unk5C;
     u8    pad60[0xc];
     s16   unk6C;
-    s8    unk6E;
-    s8    unk6F;
+    s8    hit_cooldown_latched;
+    s8    collision_voice_cooldown;
 } DecoyVars;
 
 typedef struct {
@@ -602,7 +602,7 @@ void decoy_update(char *moby) {
         decoy_instance_vars->unk44 = 0;
         MOBY(moby)->collision_disable = -1;
         decoy_instance_vars->unk6C = 0;
-        decoy_instance_vars->unk6E = 0;
+        decoy_instance_vars->hit_cooldown_latched = 0;
         break;
     case DECOY_HELD: {
         char *target;
@@ -710,9 +710,9 @@ void decoy_update(char *moby) {
                     }
                 }
                 destroy_decoy_on_selected_materials(moby);
-                if (fast_subtract_rotations_cf(&decoy_instance_vars->unk6F))
+                if (fast_subtract_rotations_cf(&decoy_instance_vars->collision_voice_cooldown))
                     allocate_voice_for_target_entry(0, 0, moby),
-                        decoy_instance_vars->unk6F = FUN_001fef20_2c4380(20);
+                        decoy_instance_vars->collision_voice_cooldown = FUN_001fef20_2c4380(20);
                 else
                     add_random_offset_to_vector_xyz(frame_time, &decoy_instance_vars->unk10);
             }
@@ -750,9 +750,9 @@ void decoy_update(char *moby) {
                         ((*(u64 *)((char *)decoy_instance_vars + 0x68) & 0xffffff00000000ULL) ==
                          0)) {
                         decoy_instance_vars->unk6C = FUN_001fef20_2c4380(100);
-                        decoy_instance_vars->unk6E = 1;
+                        decoy_instance_vars->hit_cooldown_latched = 1;
                     } else
-                        decoy_instance_vars->unk6E = 0;
+                        decoy_instance_vars->hit_cooldown_latched = 0;
                     allocate_voice_for_target_entry(0, 0, moby);
                     {
                         float len = *(float *)(target + 0x2c);
