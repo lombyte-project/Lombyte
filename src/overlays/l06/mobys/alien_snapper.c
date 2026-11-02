@@ -242,9 +242,9 @@ extern int D_001413D0[];
 
 #include "rnc/overlay/l06/mobys/alien_snapper_data/update_alien_snapper_hit_response_and_targeting.h"
 
-int D_L06_00161EE8 = 0x80808080;
+int l06_alien_snapper_glow_gray_color __asm__("D_L06_00161EE8") = 0x80808080;
 
-int D_L06_00161EEC = 0x80604040;
+int l06_alien_snapper_glow_tinted_color __asm__("D_L06_00161EEC") = 0x80604040;
 
 extern int     resolve_moby_hit_response() __asm__("FUN_00213928");
 void           trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
@@ -869,7 +869,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     snapper_vars->f1C8 = fast_add_rotations(
         snapper_vars->f1C8, alien_snapper_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
     moby->glow_color = func_001FA8A8_2FA618(
-        D_L06_00161EE8, D_L06_00161EEC, (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
+        l06_alien_snapper_glow_gray_color, l06_alien_snapper_glow_tinted_color, (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
 
     if (snapper_vars->f1AC != 0) {
         snapper_vars->f1A0 = l06_alien_snapper_base_targeting_radius + 6.0f;
