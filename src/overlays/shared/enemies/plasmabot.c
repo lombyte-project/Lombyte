@@ -105,10 +105,10 @@ typedef struct PlasmabotVars {
     s16 beam_cooldown_timer;
     s16 unk262;
     s32 unk264;
-    f32 unk268;
+    f32 aim_yaw_offset;
     s32 unk26C;
     s32 unk270;
-    s32 unk274;
+    s32 aim_joint_angular_velocity;
     f32 unk278;
     f32 path_traversal_direction;
     s32 unk280;
@@ -215,7 +215,7 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) __asm__("FUN_L14_0
 
 void update_plasmabot_aim_joint_rotation(char *moby, float x) {
     PlasmabotVars *moby_vars = (PlasmabotVars *)MOBY(moby)->pvars;
-    float          target_joint_angle = -moby_vars->unk268;
+    float          target_joint_angle = -moby_vars->aim_yaw_offset;
     float          heading_angle_delta = fast_subtract_rotations(x, MOBY(moby)->rot.z);
     target_joint_angle = fast_add_rotations(target_joint_angle, -heading_angle_delta);
     if (target_joint_angle > 1.2217304706573486f)
@@ -225,7 +225,7 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
     {
         float k = frame_time_sq * 12.566370964050293f;
         approach_angle((float *)(&moby_vars->unk270),
-                       (float *)(&moby_vars->unk274),
+                       (float *)(&moby_vars->aim_joint_angular_velocity),
                        target_joint_angle,
                        k,
                        k,
@@ -462,12 +462,12 @@ void plasmabot_update(char *moby) {
         plasmabot_update_private_vars->unk248 = 0;
         plasmabot_update_private_vars->heading_angular_velocity = 0;
         plasmabot_update_private_vars->beam_cooldown_timer = 0;
-        *(int *)&plasmabot_update_private_vars->unk268 = 0;
+        *(int *)&plasmabot_update_private_vars->aim_yaw_offset = 0;
         plasmabot_update_private_vars->unk26C = 0;
         plasmabot_update_private_vars->unk280 = 0;
         plasmabot_update_private_vars->unk284 = 0;
         plasmabot_update_private_vars->unk270 = 0;
-        plasmabot_update_private_vars->unk274 = 0;
+        plasmabot_update_private_vars->aim_joint_angular_velocity = 0;
         if (((unsigned char *)plasmabot_update_private_vars)[0x121] == 0) {
             attach_manipulator(moby, 2, &plasmabot_update_private_vars->unk120);
         }
@@ -504,16 +504,16 @@ void plasmabot_update(char *moby) {
         set_moby_animation(moby, 1, 0);
         path = (float *)l14_paths[plasmabot_update_private_vars->path_index];
         MOBY(moby)->rot.z = fast_arc_tan(path[8] - path[4], path[9] - path[5]);
-        *(int *)&plasmabot_update_private_vars->unk268 = 0;
+        *(int *)&plasmabot_update_private_vars->aim_yaw_offset = 0;
         plasmabot_update_private_vars->path_traversal_direction = 1.0f;
         plasmabot_update_private_vars->unk26C = 0;
         plasmabot_update_private_vars->unk270 = 0;
-        plasmabot_update_private_vars->unk274 = 0;
+        plasmabot_update_private_vars->aim_joint_angular_velocity = 0;
         plasmabot_update_private_vars->path_segment_index = 0;
         *(int *)&plasmabot_update_private_vars->path_offset_and_spring_velocities = 0;
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[3] = plasmabot_update_private_vars->unk268;
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[2] = plasmabot_update_private_vars->unk268;
-        plasmabot_update_private_vars->path_offset_and_spring_velocities[1] = plasmabot_update_private_vars->unk268;
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[3] = plasmabot_update_private_vars->aim_yaw_offset;
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[2] = plasmabot_update_private_vars->aim_yaw_offset;
+        plasmabot_update_private_vars->path_offset_and_spring_velocities[1] = plasmabot_update_private_vars->aim_yaw_offset;
         return;
     }
     case PLASMABOT_START_PATH_TRAVERSAL:
@@ -1256,14 +1256,14 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
         turn = -1.2217304706573486f;
     {
         float yaw_easing_coefficient = frame_time_sq * 12.566370964050293f;
-        func_L00_0025CE58_2B4828((float *)(&state->unk268),
+        func_L00_0025CE58_2B4828((float *)(&state->aim_yaw_offset),
                                  turn,
                                  (float *)(&state->unk26C),
                                  yaw_easing_coefficient,
                                  yaw_easing_coefficient,
                                  frame_time * 6.2831854820251465f);
     }
-    build_axis_rotation_quaternion(&state->unk170, 2, state->unk268);
+    build_axis_rotation_quaternion(&state->unk170, 2, state->aim_yaw_offset);
     if (flag) {
         float        owner_aim_position[4];
         float        owner_aim_offset[4];
@@ -1290,7 +1290,7 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
         build_axis_rotation_quaternion(cp, 1, *(float *)&state->unk280);
         multiply_quaternions(&state->unk170, &state->unk170, cp);
     }
-    return fast_difference_between_rotations(turn, state->unk268);
+    return fast_difference_between_rotations(turn, state->aim_yaw_offset);
 }
 
 extern short *D_L14_001ABF40_3920[] __asm__("D_L14_001ABF40");
