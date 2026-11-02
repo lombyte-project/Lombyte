@@ -1,18 +1,18 @@
 #include "types.h"
 
-char *FindSubstring(char *search_string, char *sub) {
+char *FindSubstring(char *search_string, char *target_substring) {
     s32 i;
 
     if (*search_string == 0) {
-        return *sub == 0 ? search_string : 0;
+        return *target_substring == 0 ? search_string : 0;
     }
     do {
         i = 0;
         while (1) {
-            if (sub[i] == 0) {
+            if (target_substring[i] == 0) {
                 return search_string;
             }
-            if (sub[i] != search_string[i]) {
+            if (target_substring[i] != search_string[i]) {
                 break;
             }
             i++;
