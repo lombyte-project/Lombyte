@@ -112,7 +112,7 @@ typedef struct L16DamageData {
     f32           unk2F4;
     f32           unk2F8;
     f32           unk2FC;
-    s16           unk300;
+    s16           selected_path_node_index;
     s16           unk302;
     s32           unk304;
     int           reward_hits;
@@ -266,7 +266,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             if (commando_data->unk120 >= 0) {
                 int node = truncate_float_to_s32(random_float_between(
                     0.0f, (float)(*(int *)D_L16_001B0930[commando_data->unk120] - 1)));
-                commando_data->unk300 = node;
+                commando_data->selected_path_node_index = node;
                 qcopy(position, D_L16_001B0930[commando_data->unk120] + (short)node * 16 + 0x10);
             }
             commando_data->reward_hits = 1;
@@ -326,7 +326,7 @@ void blarg_elite_commando_update(char *commando_moby) {
                     MOBY(commando_moby)->state = COMMANDO_STATE_MOVE_TO_ATTACK_NODE;
                     commando_data->state_countdown_ticks =
                         truncate_float_to_s32(scale_time(random_float_between(30.0f, 90.0f)));
-                    commando_data->unk300 = (commando_data->unk300 + 1) % 2;
+                    commando_data->selected_path_node_index = (commando_data->selected_path_node_index + 1) % 2;
                     select_blarg_elite_commando_movement_animation(commando_moby);
                 } else if (!random_integer_below(20)) {
                     MOBY(commando_moby)->state = COMMANDO_STATE_PREPARE_ROCKET_FIRE;
@@ -337,7 +337,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             }
         } else if (fast_dec_timer_s16(&commando_data->unk302)) {
             if (commando_data->unk120 >= 0) {
-                commando_data->unk300 = (commando_data->unk300 + 1) % 2;
+                commando_data->selected_path_node_index = (commando_data->selected_path_node_index + 1) % 2;
                 MOBY(commando_moby)->state = COMMANDO_STATE_MOVE_TO_PATROL_NODE;
                 commando_data->unk302 = scale_game_frames(180);
                 select_blarg_elite_commando_movement_animation(commando_moby);
@@ -347,7 +347,7 @@ void blarg_elite_commando_update(char *commando_moby) {
     case COMMANDO_STATE_MOVE_TO_PATROL_NODE: {
         float path_distance = func_L16_002D5280_update(commando_moby,
                                                        D_L16_001B0930[commando_data->unk120] +
-                                                           (commando_data->unk300 * 16 + 0x10),
+                                                           (commando_data->selected_path_node_index * 16 + 0x10),
                                                        1);
         if (path_distance < 0.01f) {
             MOBY(commando_moby)->state = COMMANDO_STATE_IDLE;
@@ -419,7 +419,7 @@ void blarg_elite_commando_update(char *commando_moby) {
     case COMMANDO_STATE_MOVE_TO_ATTACK_NODE:
         distance = func_L16_002D5280_update(commando_moby,
                                             D_L16_001B0930[commando_data->unk120] +
-                                                (commando_data->unk300 * 16 + 0x10),
+                                                (commando_data->selected_path_node_index * 16 + 0x10),
                                             1);
         fast_dec_timer_s16(&commando_data->state_countdown_ticks);
         if (distance < 0.01f || commando_data->state_countdown_ticks == 0) {
@@ -760,7 +760,7 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 void select_blarg_elite_commando_movement_animation(char *moby) {
     L16DamageData *commando_path_state = (L16DamageData *)MOBY(moby)->pvars;
-    char *target = D_L16_001B0930[commando_path_state->unk120] + (commando_path_state->unk300 << 4);
+    char *target = D_L16_001B0930[commando_path_state->unk120] + (commando_path_state->selected_path_node_index << 4);
     float angle = fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                *(float *)(target + 0x14) - MOBY(moby)->pos.y);
     float delta = fast_subtract_rotations(angle, MOBY(moby)->rot.z);
