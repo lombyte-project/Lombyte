@@ -90,7 +90,7 @@ void volume_camera_aim(struct UpdateCam *aim_camera_record) {
     CameraVec         gravity_offset;
     CameraVec         level;
     AimCameraParams  *params;
-    struct UpdateCam *rec;
+    struct UpdateCam *current_follow_camera_record;
     Vec4f            *rec_pos;
     FollowCamState   *rig;
     FollowCamState   *state;
@@ -141,9 +141,9 @@ run:
             params->offset_scale =
                 params->height - params->distance * (fast_sin(angle) / fast_cos(angle));
         }
-        rec = current_follow_cam;
-        rig = FOLLOW_CAM_STATE(rec);
-        rec_pos = &rec->pos;
+        current_follow_camera_record = current_follow_cam;
+        rig = FOLLOW_CAM_STATE(current_follow_camera_record);
+        rec_pos = &current_follow_camera_record->pos;
         follow = &rig->follow;
         tail = &rig->tail;
         snap = &rig->tail.snap;
