@@ -45,7 +45,7 @@ typedef struct {
     int switch_b;
 } PickupVars;
 
-int          D_L10_00161388 = 1;
+int          l10_relocation_help_counter_reset_pending __asm__("D_L10_00161388") = 1;
 extern char *D_L10_0015FFD8_98b68 __asm__("D_L10_0015FFD8");
 extern int   D_L10_001BA950[];
 extern u8    D_001413F4_98b68[] __asm__("D_001413F4");
@@ -65,8 +65,8 @@ void hero_relocation_trigger_update(struct Moby *moby) {
     struct Moby *target;
     moby->update_dist = 0xFF;
     relocation_trigger_vars = (PickupVars *)moby->pvars;
-    if (D_L10_00161388 == 1) {
-        D_L10_00161388 = 0;
+    if (l10_relocation_help_counter_reset_pending == 1) {
+        l10_relocation_help_counter_reset_pending = 0;
         D_00141948 = 0;
     }
     if (relocation_trigger_vars->switch_a != -1 && relocation_trigger_vars->switch_b != -1) {
