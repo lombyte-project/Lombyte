@@ -348,15 +348,15 @@ extern void FUN_L06_00216b88(int *, float *);
 
 int l06_beam_barrier_gs_alpha_a_selector __asm__("D_L06_00161DD0") = 0;
 
-int D_L06_00161DD4 = 2;
+int l06_beam_barrier_gs_alpha_b_selector __asm__("D_L06_00161DD4") = 2;
 
 int l06_beam_barrier_gs_alpha_c_selector __asm__("D_L06_00161DD8") = 0;
 
-int D_L06_00161DDC = 1;
+int l06_beam_barrier_gs_alpha_d_selector __asm__("D_L06_00161DDC") = 1;
 
 int D_L06_00161DF0 = 0x80c04070;
 
-int D_L06_00161DF4 = 0xff0000;
+int l06_beam_barrier_strand_color_at_threshold __asm__("D_L06_00161DF4") = 0xff0000;
 
 float beam_barrier_texture_u_step_gp __asm__("D_L06_00161DF8") = 0.25f;
 
@@ -391,8 +391,8 @@ void draw_beam_barrier_segments(char *moby) {
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x42,
-                        (long)l06_beam_barrier_gs_alpha_a_selector | ((long)D_L06_00161DD4 << 2) |
-                            ((long)l06_beam_barrier_gs_alpha_c_selector << 4) | ((long)D_L06_00161DDC << 6) |
+                        (long)l06_beam_barrier_gs_alpha_a_selector | ((long)l06_beam_barrier_gs_alpha_b_selector << 2) |
+                            ((long)l06_beam_barrier_gs_alpha_c_selector << 4) | ((long)l06_beam_barrier_gs_alpha_d_selector << 6) |
                             0x8000000000L);
     font_queue_vu_state();
     first_matrix = segment_matrix[0];
@@ -417,7 +417,7 @@ void draw_beam_barrier_segments(char *moby) {
     strand_cycle_duration_frames = D_L06_00161E50;
     points = (int *)l06_beam_barrier_strand_local_points;
     strand_color_transition_threshold_frames = D_L06_00161E54;
-    fourth = D_L06_00161DF4;
+    fourth = l06_beam_barrier_strand_color_at_threshold;
     seventh = beam_barrier_texture_u_step_gp;
     eighth = l06_beam_barrier_texture_u_phase;
     sequence = D_L06_00161E40;
