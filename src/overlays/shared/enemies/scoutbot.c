@@ -50,11 +50,11 @@ typedef struct ScoutbotVars {
     f32   unk1E0[4];
     u8    pad1F0[0x10];
     f32   unk200;
-    f32   unk204;
+    f32   vertical_bob_phase;
     f32   vertical_bob_amplitude;
-    f32   unk20C;
+    f32   vertical_bob_phase_increment;
     u8    pad210[0x6];
-    s16   unk216;
+    s16   ground_hover_offset_enabled;
     char *unk218;
     s32   target_path_index;
     u8    glow_quad_anchor_position[0x4];
@@ -606,11 +606,11 @@ void update_scoutbot_movement(struct Moby *moby) {
     velocity_ptr = (float *)(&scoutbot_instance_state->unk40);
     fast_vec_normalize(velocity_ptr, velocity_ptr, movement_length);
     fast_vec_add((float *)&moby->pos, (float *)&moby->pos, velocity_ptr);
-    scoutbot_instance_state->unk204 =
-        fast_add_rotations(scoutbot_instance_state->unk204, scoutbot_instance_state->unk20C);
+    scoutbot_instance_state->vertical_bob_phase =
+        fast_add_rotations(scoutbot_instance_state->vertical_bob_phase, scoutbot_instance_state->vertical_bob_phase_increment);
     target_height = scoutbot_instance_state->unk1C0[2] +
-                    scoutbot_instance_state->vertical_bob_amplitude * fast_sin(scoutbot_instance_state->unk204);
-    if (scoutbot_instance_state->unk216)
+                    scoutbot_instance_state->vertical_bob_amplitude * fast_sin(scoutbot_instance_state->vertical_bob_phase);
+    if (scoutbot_instance_state->ground_hover_offset_enabled)
         target_height += scoutbot_instance_state->unk200;
     vertical_step = target_height - moby->pos.z;
     {
