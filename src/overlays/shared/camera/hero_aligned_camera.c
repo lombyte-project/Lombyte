@@ -40,8 +40,8 @@ typedef struct {
 
 typedef struct {
     u8  p0[0x20];
-    s16 h20;
-    s16 h22;
+    s16 transition_eligible_update_count;
+    s16 transition_steering_latched;
     s32 transition_angle_blend_timer;
 } Q_2ea488;
 
@@ -452,9 +452,9 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
         if (r && (*(s32 *)(r + 0x18) & 1))
             return 0;
         q->transition_angle_blend_timer = 0;
-        q->h22 = 1;
-        q->h20++;
-        if (q->h20 >= FUN_001f96f8_2ea488(7)) {
+        q->transition_steering_latched = 1;
+        q->transition_eligible_update_count++;
+        if (q->transition_eligible_update_count >= FUN_001f96f8_2ea488(7)) {
             if (*(s16 *)(active_transition_camera_record + 0x86) == 0)
                 transition_camera_record[0x7C] = 5;
             return 1;
@@ -466,14 +466,14 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
             &transition_vector_scratch, 0.06981316953897476f, transition_vector_scratch.f[2]);
         goto tail;
     off:
-        q->h20 = 0;
-        q->h22 = 0;
+        q->transition_eligible_update_count = 0;
+        q->transition_steering_latched = 0;
         goto tail;
     }
-    q->h20 = 0;
-    if (q->h22 == 0)
+    q->transition_eligible_update_count = 0;
+    if (q->transition_steering_latched == 0)
         goto tail;
-    q->h22 = 0;
+    q->transition_steering_latched = 0;
     b = D_L00_00166E10_2ea488;
     transition_camera_globals = b - 0x190;
     alignment_comparison_axis = b + 0x30;
