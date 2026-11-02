@@ -6,7 +6,7 @@
 
 typedef struct {
     u8  pad0[0x2C];
-    f32 f2c;
+    f32 removal_trigger_value;
 } TriggerHit;
 
 typedef struct {
@@ -41,7 +41,7 @@ void tall_shroom_update(TriggerMoby *shroom_moby) {
         shroom_moby->state = TALL_SHROOM_STATE_WAIT_FOR_HIT;
         break;
     case TALL_SHROOM_STATE_WAIT_FOR_HIT:
-        if (hit != 0 && hit->f2c > 0.0f) {
+        if (hit != 0 && hit->removal_trigger_value > 0.0f) {
             flag = 1;
         }
         if (flag) {
