@@ -608,7 +608,7 @@ typedef struct CamE {
 typedef struct CamA {
     float         pos[4]; /* 0x00 */
     char          pad10[0x40];
-    float         f50[4]; /* 0x50 */
+    float         orbit_origin_position[4]; /* 0x50 */
     char          pad60[0x50];
     float         fB0; /* 0xB0 */
     int           iB4; /* 0xB4 */
@@ -636,19 +636,19 @@ typedef struct CamB {
     int   i20;    /* 0x20 */
     int   i24;    /* 0x24 */
     int   i28;    /* 0x28 */
-    float f2C;    /* 0x2C */
+    float target_orbit_distance;    /* 0x2C */
     float f30;    /* 0x30 */
     int   i34;    /* 0x34 */
     int   i38;    /* 0x38 */
     short h3C;    /* 0x3C */
     short h3E;    /* 0x3E */
     char  pad40[4];
-    int   i44; /* 0x44 */
+    int   orbit_distance_interpolation_state; /* 0x44 */
     float f48; /* 0x48 */
     char  pad4C[4];
-    int   i50; /* 0x50 */
+    int   orbit_height_interpolation_state; /* 0x50 */
     float f54; /* 0x54 */
-    float f58; /* 0x58 */
+    float default_orbit_distance; /* 0x58 */
     char  pad5C[4];
 } CamB;
 
@@ -687,7 +687,7 @@ typedef struct CamG {
     float f40;    /* 0x40 */
     float f44;    /* 0x44 */
     int   i48;    /* 0x48 */
-    int   i4C;    /* 0x4C */
+    int   consecutive_camera_obstruction_frames;    /* 0x4C */
 } CamG;
 
 typedef struct Cam220 {
@@ -741,7 +741,7 @@ typedef struct Hero_2E8210 {
     char  pad0[0x30C];
     short h30C; /* 0x30C */
     char  pad30E[0x1D72];
-    int   i2080; /* 0x2080 */
+    int   followed_hero_moby; /* 0x2080 */
 } Hero_2E8210;
 
 extern int               D_L00_00161D90 __attribute__((sda));
@@ -781,7 +781,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     a = &camera_moby->cam->a;
     qcopy(a->pos, D_0013F4D0_2E8210);
     a->fB0 = 1.5f;
-    a->iC0 = D_0013F450_2E8210.i2080;
+    a->iC0 = D_0013F450_2E8210.followed_hero_moby;
     a->bC4 = 0;
     a->bD6 = 0;
     a->fE0 = 0.2f;
@@ -796,11 +796,11 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     a->iBC = 0;
 
     b = &camera_moby->cam->b;
-    b->f2C = 4.64f;
+    b->target_orbit_distance = 4.64f;
     b->f48 = 0.003f;
     b->f54 = 0.003f;
     b->f30 = 2.0f;
-    b->f58 = 4.64f;
+    b->default_orbit_distance = 4.64f;
     b->i34 = 0;
     b->i38 = 0;
     b->i28 = 0;
@@ -808,8 +808,8 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     b->i24 = 0;
     b->h3C = 0;
     b->h3E = 0;
-    b->i44 = 0;
-    b->i50 = 0;
+    b->orbit_distance_interpolation_state = 0;
+    b->orbit_height_interpolation_state = 0;
 
     camera_state = camera_moby->cam;
     camera_state->h10 = 1;
@@ -855,7 +855,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     ((Cam220 *)camera_override_state)->i10 = 0;
     ((Cam220 *)camera_override_state)->h4 = 0;
     ((Cam220 *)camera_override_state)->h6 = 0;
-    ((Cam220 *)camera_override_state)->f8 = b->f2C;
+    ((Cam220 *)camera_override_state)->f8 = b->target_orbit_distance;
     ((Cam220 *)camera_override_state)->fC = D_L00_00161D1C_gp;
 
     camera_state_base = camera_moby->cam;
@@ -865,7 +865,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     g->h3A = 0;
     g->h36 = 0;
     g->h38 = 0;
-    g->i4C = 0;
+    g->consecutive_camera_obstruction_frames = 0;
     g->h34 = r;
     g->f44 = l00_follow_camera_collision_probe_step_growth_factor;
     g->f3C = l00_follow_camera_collision_probe_scale;
@@ -891,13 +891,13 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
         follow_camera_reset(camera_moby);
         rebuild_follow_camera_pose(1);
     }
-    fast_vec_sub(b->v0, camera_moby->v30, a->f50);
+    fast_vec_sub(b->v0, camera_moby->v30, a->orbit_origin_position);
     qcopy(b->v10, b->v0);
     qcopy(camera_state->pos, camera_moby->v30);
     qcopy(g->v20, camera_moby->v30);
     fast_vec_scale(v0, D_0013F6E0_2E8210, fast_vec_dot(b->v0, D_0013F6E0_2E8210));
     fast_vec_sub(orbit_offset_remainder, b->v0, v0);
-    orbit_distance_shortfall = b->f2C - fast_vec_length(orbit_offset_remainder);
+    orbit_distance_shortfall = b->target_orbit_distance - fast_vec_length(orbit_offset_remainder);
     g->f30 = orbit_distance_shortfall;
     if (orbit_distance_shortfall < -0.1f) {
         g->h3A = 1;
