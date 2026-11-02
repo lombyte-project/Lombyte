@@ -87,7 +87,7 @@ typedef struct Moby_2B5938 {
     char           pad80[0x14];
     int            active_collision; /* 0x94 */
     char           pad98[0x1A];
-    short          fB2; /* 0xB2 */
+    short          unique_id; /* 0xB2 */
 } Moby_2B5938;
 
 typedef struct Data {
@@ -321,43 +321,43 @@ void minibomber_update(Moby_2B5938 *moby) {
     case MINIBOMBER_STATE_INITIALIZE: {
         PathNode *path;
         if (d->fD0 == -1) {
-            debug_print(D_L14_001FBDF0, moby->fB2);
+            debug_print(D_L14_001FBDF0, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         path = ((PathNode *)l14_paths[d->fD0]);
         if (path->n == 0) {
-            debug_print(D_L14_001FBE18, moby->fB2);
+            debug_print(D_L14_001FBE18, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->fD4 == -1) {
-            debug_print(D_L14_001FBE58, moby->fB2);
+            debug_print(D_L14_001FBE58, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (((PathNode *)l14_paths[d->fD4])->n == 0) {
-            debug_print(D_L14_001FBE80, moby->fB2);
+            debug_print(D_L14_001FBE80, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->fD8 == -1) {
-            debug_print(D_L14_001FBEC0, moby->fB2);
+            debug_print(D_L14_001FBEC0, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (((PathNode *)l14_paths[d->fD8])->n == 0) {
-            debug_print(D_L14_001FBEE8, moby->fB2);
+            debug_print(D_L14_001FBEE8, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->f150 == -1) {
-            debug_print(D_L14_001FBF20, moby->fB2);
+            debug_print(D_L14_001FBF20, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (((PathNode *)l14_paths[d->f150])->n == 0) {
-            debug_print(minibomber_empty_exit_path_diagnostic, moby->fB2);
+            debug_print(minibomber_empty_exit_path_diagnostic, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
