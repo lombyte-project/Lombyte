@@ -468,6 +468,9 @@ void taunter_update(Moby *taunter_moby) {
     enum {
         TAUNTER_TYPE_ACTIVATION_DISABLED = 2
     };
+    enum {
+        TAUNTER_TYPE_CONTINUOUS_EFFECT_EMISSION = 3
+    };
     Vars *taunter_vars;
     s32   taunter_state;
     s32   voice_slot_index;
@@ -503,7 +506,7 @@ void taunter_update(Moby *taunter_moby) {
     }
     if ((u8)taunter_state != TAUNTER_STATE_ACTIVE)
         goto end;
-    if (taunter_moby->type == 3 && hero.item_use_locked == 0) {
+    if (taunter_moby->type == TAUNTER_TYPE_CONTINUOUS_EFFECT_EMISSION && hero.item_use_locked == 0) {
         taunter_effect_emission_disabled = 0;
         taunter_vars->cnt18++;
     } else {
@@ -526,7 +529,7 @@ void taunter_update(Moby *taunter_moby) {
             }
             D_00141680.flags |= 1 << current_level_index;
             D_00141680.flags |= 0x80000000;
-            if (taunter_moby->type != 3)
+            if (taunter_moby->type != TAUNTER_TYPE_CONTINUOUS_EFFECT_EMISSION)
                 blend_moby_animation(taunter_moby, 3, 0, scale_game_frames(3));
             taunter_vars->anim =
                 allocate_voice_for_target_entry(taunter_vars->idx, 1, taunter_moby);
