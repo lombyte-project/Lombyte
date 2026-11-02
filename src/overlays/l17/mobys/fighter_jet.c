@@ -977,7 +977,7 @@ extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
 
 extern short fighter_jet_aim_direction_base_length_gp __asm__("D_L17_0016206C")
     __attribute__((sda));
-int  D_L17_00162070 = 4;
+int  l17_fighter_jet_projectile_cooldown_reload __asm__("D_L17_00162070") = 4;
 void update_fighter_jet_aim_and_fire_projectile(char *moby,
                                                 char *ship_vars,
                                                 float aim_azimuth,
@@ -1004,7 +1004,7 @@ void update_fighter_jet_aim_and_fire_projectile(char *moby,
         moby_point_position(moby, 3 + (ship_vars[0x61] & 1), projectile_spawn_position);
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
         spawn_fighter_jet_missile(moby, aim_direction, projectile_spawn_position, 200.0f, -1.0f);
-        *(int *)(ship_vars + 0x80) = D_L17_00162070;
+        *(int *)(ship_vars + 0x80) = l17_fighter_jet_projectile_cooldown_reload;
         ship_vars[0x61] ^= 1;
     }
     fast_vec_normalize(aim_direction, aim_direction, 23.0f);
