@@ -333,7 +333,7 @@ typedef struct MobyData_2DFC38 {
     char          pad0[0x20];
     float         f20;
     char          pad24[2];
-    short         f26;
+    short         nonlethal_hit_duration_frames;
     char          pad28[0x10];
     int           target_range_boost_requested;
     char          pad3C[0x24];
@@ -350,7 +350,7 @@ typedef struct MobyData_2DFC38 {
     char          color_reaction_state_header[7];
     unsigned char secondary_color_red;
     char          pad118[0x18];
-    char          f130[0x44];
+    char          navigation_state[0x44];
     int           f174;
     float         default_target_range;
     int           active_target_path_index;
@@ -437,7 +437,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
             } else {
                 screamer_vars->f20 = screamer_vars->f20 - hit_record->damage;
                 screamer_vars->secondary_color_red = 0xfa;
-                screamer_vars->f26 = scale_game_frames(60);
+                screamer_vars->nonlethal_hit_duration_frames = scale_game_frames(60);
                 trooper_anim_update(moby, screamer_vars->color_reaction_state_header);
             }
             moby->hit_slot = 0xff;
@@ -477,7 +477,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         target_selection_status = ahead_f(screamer_vars->current_target_range, moby, screamer_vars->fC0);
     }
     if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
-        if (screamer_vars->current_target_range < vector_distance_xy(screamer_vars->f130, screamer_vars->fC0))
+        if (screamer_vars->current_target_range < vector_distance_xy(screamer_vars->navigation_state, screamer_vars->fC0))
             screamer_vars->f104 = 2;
         else if (moby->visible == 0)
             screamer_vars->f104 = 2;
