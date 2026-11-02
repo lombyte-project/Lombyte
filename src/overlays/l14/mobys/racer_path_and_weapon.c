@@ -46,7 +46,7 @@ float      racer_path_lead_distance_gp __asm__("D_L14_00161A38") = 9.0f;
 typedef struct RacerVars {
     u8  pad_0[0x60];
     s32 spline;
-    s32 unk64;
+    s32 current_path_segment_index;
     f32 unk68;
     s32 timer;
     f32 unk70[4];
@@ -93,7 +93,7 @@ void initialize_racer_path_tracking(struct Moby *racer_moby) {
     unsigned short second_point_segment;
     moby_data->unk70[1] = racer_path_lead_distance_gp;
     *(int *)&moby_data->unk68 = 0;
-    moby_data->unk64 = 0;
+    moby_data->current_path_segment_index = 0;
     z = moby_data->unk68;
     tg = (char *)l14_paths[moby_data->unk88] + 0x30;
     nearest_path_position.t = z;
@@ -306,10 +306,10 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
     float      blend;
     float      target_yaw_offset;
 
-    if (moby_data->unk64 >= moby_data->unk8E) {
+    if (moby_data->current_path_segment_index >= moby_data->unk8E) {
         float sum = 0.0f;
         int   k;
-        for (k = moby_data->unk8E; k < moby_data->unk64; k++) {
+        for (k = moby_data->unk8E; k < moby_data->current_path_segment_index; k++) {
             sum += *(float *)(path + k * 16 + 0x1C);
         }
         sum += moby_data->unk68;
@@ -321,18 +321,18 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             racer_path_lead_distance_gp + (-3.0f - racer_path_lead_distance_gp) * sum;
     }
     *(int *)&moby_data->unk68 = 0;
-    moby_data->unk64 = 0;
+    moby_data->current_path_segment_index = 0;
     z = moby_data->unk68;
     FUN_L00_0025df68(
-        path, &D_0013F3D0_67e8, &near.x, &moby_data->unk64, &moby_data->unk68, 0, 20.0f, 5.0f, z);
-    FUN_L00_0025d808(path, &near, &moby_data->unk64, &moby_data->unk68, 0, -moby_data->unk70[1]);
+        path, &D_0013F3D0_67e8, &near.x, &moby_data->current_path_segment_index, &moby_data->unk68, 0, 20.0f, 5.0f, z);
+    FUN_L00_0025d808(path, &near, &moby_data->current_path_segment_index, &moby_data->unk68, 0, -moby_data->unk70[1]);
     vendor_spring(&racer_moby->pos.x, moby_data->position_spring_velocity, near.x, 0.01f, 0.2f, z);
     vendor_spring(
         &racer_moby->pos.y, &moby_data->position_spring_velocity[1], near.y, 0.01f, 0.2f, z);
     vendor_spring(
         &racer_moby->pos.z, &moby_data->position_spring_velocity[2], near.z, 0.01f, 0.2f, z);
     {
-        int   i = moby_data->unk64;
+        int   i = moby_data->current_path_segment_index;
         char *current_path_record = path + i * 16;
         char *lookahead_path_record = path + (i + 5) * 16;
         racer_moby->rot.z = fast_arc_tan(
@@ -534,7 +534,7 @@ void advance_moby_along_path(struct Moby *moby) {
     int        path_index = path_tracking_state->spline;
     FUN_L00_0025d808((int)l14_splines[path_index].path,
                      &moby->pos,
-                     &path_tracking_state->unk64,
+                     &path_tracking_state->current_path_segment_index,
                      &path_tracking_state->unk68,
                      0,
                      l14_racer_path_follow_speed * frame_time);
