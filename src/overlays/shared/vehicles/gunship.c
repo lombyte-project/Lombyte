@@ -200,6 +200,10 @@ void gunship_update(struct Moby *moby) {
         GUNSHIP_PATH_STATE_WAIT_FOR_PATH = 2,
         GUNSHIP_PATH_STATE_WAIT_FOR_RESUME_TIMER = 3
     };
+    enum {
+        PATH_CURSOR_STATE_NEEDS_POSITION_SETUP = 0,
+        PATH_CURSOR_STATE_POSITION_SETUP_COMPLETE = 2
+    };
     QVec         path_displacement;
     QVec         zero;
     QVec         previous_rotation;
@@ -307,7 +311,7 @@ void gunship_update(struct Moby *moby) {
         }
         v->unk121 = (moby - (struct Moby *)D_L01_0015FFD8) / 2 % 7;
         initialize_path_descriptor(path_cursor);
-        if (path_cursor->state == 0) {
+        if (path_cursor->state == PATH_CURSOR_STATE_NEEDS_POSITION_SETUP) {
             if (path_cursor->idx <= 0) {
                 s32 selected_node_index =
                     select_point_index_by_distance(&moby->pos, path_cursor->nodes, 0.0f);
@@ -322,7 +326,7 @@ void gunship_update(struct Moby *moby) {
             path_cursor->heading =
                 fast_arc_tan(path_cursor->nodes->node[path_cursor->idx].v.x - moby->pos.x,
                              path_cursor->nodes->node[path_cursor->idx].v.y - moby->pos.y);
-            path_cursor->state = 2;
+            path_cursor->state = PATH_CURSOR_STATE_POSITION_SETUP_COMPLETE;
             path_cursor->unk8 = 0;
             path_cursor->unk1C = 0;
         }
