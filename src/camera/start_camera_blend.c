@@ -29,7 +29,7 @@ void start_camera_blend(struct UpdateCam *source) {
 
     if (transition->mode == CAMERA_TRANSITION_PHASE_SEED_FROM_SOURCE) {
         requested_transition_kind = transition->requested_kind;
-        if (requested_transition_kind == 0) {
+        if (requested_transition_kind == CAMERA_TRANSITION_KIND_BLEND) {
             qcopy(transition->blend.position, &source->pos);
             extract_matrix_rotation_quaternion(transition->blend.rotation, source);
         } else if (requested_transition_kind == 2) {
@@ -62,7 +62,7 @@ void start_camera_blend(struct UpdateCam *source) {
         } else if (requested_transition_kind == 1) {
             save_camera_vectors();
             qcopy(transition->orbit.rotation, transition->orbit.saved_rotation);
-        } else if (requested_transition_kind == 0) {
+        } else if (requested_transition_kind == CAMERA_TRANSITION_KIND_BLEND) {
             restore_camera_vectors();
         }
     }
