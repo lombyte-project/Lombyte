@@ -77,7 +77,7 @@ typedef struct {
     u8  hero_position_xy[8];
     f32 hero_position_z;
     u8  pad2[0x1E2 - 0x8C];
-    s16 h1E2;
+    s16 decoy_proximity_response_gate;
 } P_2c40a0;
 
 typedef struct {
@@ -478,7 +478,7 @@ void update_decoy_proximity_motion(S_2c40a0 *self) __asm__("FUN_L00_002c40a0");
 void update_decoy_proximity_motion(S_2c40a0 *decoy_moby) {
     O_2c40a0 *moby_vars = decoy_moby->decoy_motion_vars;
     P_2c40a0 *P = (P_2c40a0 *)&hero;
-    s16       proximity_response_gate = P->h1E2;
+    s16       proximity_response_gate = P->decoy_proximity_response_gate;
     f32       horizontal_displacement[4];
     f32       horizontal_separation_error, horizontal_separation_distance, ground_height;
     if (moby_vars->i68 == 0) {
