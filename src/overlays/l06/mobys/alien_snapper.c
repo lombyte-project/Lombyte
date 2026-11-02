@@ -105,8 +105,8 @@ typedef struct {
     u8    padAE[0x22];
     s32   movement; /* 0xD0 */
     f32   fD4;      /* 0xD4 */
-    f32   fD8;      /* 0xD8 */
-    f32   fDC;      /* 0xDC */
+    f32   max_ground_drop_distance;      /* 0xD8 */
+    f32   max_ground_rise_distance;      /* 0xDC */
     u8    padE0[0x14];
     f32   speed; /* 0xF4 */
     u8    padF8[0x28];
@@ -312,8 +312,8 @@ void alien_snapper_update(Moby *moby) {
         qcopy(&snapper_behavior->home, &moby->pos);
         snapper_behavior->reach_distance = random_float_between(0.0f, 1.0f);
         func_L01_0026E8E0_91A8(&snapper_behavior->movement);
-        snapper_behavior->fDC = 2.0f;
-        snapper_behavior->fD8 = 2.0f;
+        snapper_behavior->max_ground_rise_distance = 2.0f;
+        snapper_behavior->max_ground_drop_distance = 2.0f;
         snapper_behavior->movement = truncate_float_to_s32(D_L06_00161EB0 * 1024.0f);
         snapper_behavior->fD4 = D_L06_00161EB0;
         snapper_behavior->speed = snapper_behavior->base_speed * frame_time;
