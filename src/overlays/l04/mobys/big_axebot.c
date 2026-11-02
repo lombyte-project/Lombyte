@@ -226,7 +226,7 @@ typedef struct {
     V4_B7B0 pos;
     M_B7B0 *att;
     char    pad24[8];
-    float   f2C;
+    float   damage_amount;
 } Hit_B7B0;
 
 typedef struct {
@@ -416,7 +416,7 @@ void big_axebot_update(M_B7B0 *moby) {
                         data->f408 = -0.5235988f;
                     }
                     data->f448 = scale_game_frames(0x1E);
-                    if ((hit->att->cls == 0 || hit->f2C > 1.0f) &&
+                    if ((hit->att->cls == 0 || hit->damage_amount > 1.0f) &&
                         (moby->f52 != 4 || hd < 17.0f || hd > 20.0f)) {
                         moby->fBC |= 5;
                         blend_big_axebot_and_axe_animation(
