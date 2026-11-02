@@ -122,7 +122,7 @@ typedef struct SentrybotVars {
     u8                 has_line_of_sight; /* 0x15A: to the hero */
     u8                 alert_engagement_suppressed;
     u8                 unk15C;
-    u8                 unk15D;
+    u8                 pending_animation;
     u8                 unk15E;
     u8                 unk15F;
     f32                home_pos[3]; /* 0x160: position at spawn */
@@ -401,7 +401,7 @@ void sentrybot_update(unsigned char *moby) {
                 sentrybot_instance_data->unk15F = 1;
                 MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                 sentrybot_instance_data->unk15C = 0x10;
-                sentrybot_instance_data->unk15D = 3;
+                sentrybot_instance_data->pending_animation = 3;
                 if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -430,7 +430,7 @@ void sentrybot_update(unsigned char *moby) {
                     sentrybot_instance_data->unk15F = 1;
                     MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                     sentrybot_instance_data->unk15C = 0xD;
-                    sentrybot_instance_data->unk15D = 0xE;
+                    sentrybot_instance_data->pending_animation = 0xE;
                     if (MOBY(moby)->prev_seq != 1)
                         blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                 }
@@ -465,7 +465,7 @@ void sentrybot_update(unsigned char *moby) {
                 if (sentrybot_instance_data->unk150 != -1 ||
                     sentrybot_instance_data->unk12C != -1 ||
                     (sentrybot_instance_data->unk154 == 0 && random_integer_below(0x78) == 0)) {
-                    sentrybot_instance_data->unk15D = 0;
+                    sentrybot_instance_data->pending_animation = 0;
                     sentrybot_instance_data->unk15C = 2;
                     MOBY(moby)->state = SENTRYBOT_DEACTIVATE_LINKED_MOBYS_AFTER_ANIMATION;
                     if (MOBY(moby)->prev_seq != 2)
@@ -504,7 +504,7 @@ void sentrybot_update(unsigned char *moby) {
                 sentrybot_instance_data->unk15F = 1;
                 MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                 sentrybot_instance_data->unk15C = 0x10;
-                sentrybot_instance_data->unk15D = 3;
+                sentrybot_instance_data->pending_animation = 3;
                 if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -559,7 +559,7 @@ void sentrybot_update(unsigned char *moby) {
                 sentrybot_instance_data->unk15F = 1;
                 MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                 sentrybot_instance_data->unk15C = 0x10;
-                sentrybot_instance_data->unk15D = 3;
+                sentrybot_instance_data->pending_animation = 3;
                 if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -585,9 +585,9 @@ void sentrybot_update(unsigned char *moby) {
                                            turn_heading_offsets_degrees[k] * DEG_TO_RAD);
                 }
                 MOBY(moby)->state = sentrybot_instance_data->unk15C;
-                if (MOBY(moby)->prev_seq != sentrybot_instance_data->unk15D)
+                if (MOBY(moby)->prev_seq != sentrybot_instance_data->pending_animation)
                     blend_moby_animation(
-                        moby, sentrybot_instance_data->unk15D, 0, scale_game_frames(10));
+                        moby, sentrybot_instance_data->pending_animation, 0, scale_game_frames(10));
             } else if (MOBY(moby)->seq == MOBY(moby)->prev_seq &&
                        turn_heading_offsets_degrees != 0) {
                 float t = compute_interpolated_record_value(moby);
@@ -622,7 +622,7 @@ void sentrybot_update(unsigned char *moby) {
                 sentrybot_instance_data->unk15F = 1;
                 MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                 sentrybot_instance_data->unk15C = 0x10;
-                sentrybot_instance_data->unk15D = 3;
+                sentrybot_instance_data->pending_animation = 3;
                 if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -645,7 +645,7 @@ void sentrybot_update(unsigned char *moby) {
                     sentrybot_instance_data->unk15F = 1;
                     MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                     sentrybot_instance_data->unk15C = 0xD;
-                    sentrybot_instance_data->unk15D = 0xE;
+                    sentrybot_instance_data->pending_animation = 0xE;
                     if (MOBY(moby)->prev_seq != 1)
                         blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                 }
@@ -661,7 +661,7 @@ void sentrybot_update(unsigned char *moby) {
             if (sentrybot_instance_data->unk150 != -1 || sentrybot_instance_data->unk12C != -1 ||
                 sentrybot_instance_data->unk154 == 0) {
                 sentrybot_instance_data->unk15C = MOBY(moby)->state;
-                sentrybot_instance_data->unk15D = 0xD;
+                sentrybot_instance_data->pending_animation = 0xD;
                 MOBY(moby)->state = SENTRYBOT_DEACTIVATE_LINKED_MOBYS_AFTER_ANIMATION;
                 if (MOBY(moby)->prev_seq != 2)
                     blend_moby_animation(moby, 2, 0, scale_game_frames(10));
@@ -701,7 +701,7 @@ void sentrybot_update(unsigned char *moby) {
                 sentrybot_instance_data->unk15F = 1;
                 MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                 sentrybot_instance_data->unk15C = 0x10;
-                sentrybot_instance_data->unk15D = 3;
+                sentrybot_instance_data->pending_animation = 3;
                 if (MOBY(moby)->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -809,10 +809,10 @@ void sentrybot_update(unsigned char *moby) {
                 } else {
                     if (sentrybot_instance_data->unk15C != 0xFF)
                         MOBY(moby)->state = sentrybot_instance_data->unk15C;
-                    if (sentrybot_instance_data->unk15D != 0xFF &&
-                        MOBY(moby)->prev_seq != sentrybot_instance_data->unk15D)
+                    if (sentrybot_instance_data->pending_animation != 0xFF &&
+                        MOBY(moby)->prev_seq != sentrybot_instance_data->pending_animation)
                         blend_moby_animation(
-                            moby, sentrybot_instance_data->unk15D, 0, scale_game_frames(10));
+                            moby, sentrybot_instance_data->pending_animation, 0, scale_game_frames(10));
                 }
             }
         }
@@ -1089,7 +1089,7 @@ void sentrybot_update(unsigned char *moby) {
                     sentrybot_instance_data->unk15F = 1;
                     MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                     sentrybot_instance_data->unk15C = 0xD;
-                    sentrybot_instance_data->unk15D = 0xE;
+                    sentrybot_instance_data->pending_animation = 0xE;
                     if (MOBY(moby)->prev_seq != 1)
                         blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                 }
@@ -1117,7 +1117,7 @@ void sentrybot_update(unsigned char *moby) {
                         sentrybot_instance_data->unk15F = 1;
                         MOBY(moby)->state = SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION;
                         sentrybot_instance_data->unk15C = 0x10;
-                        sentrybot_instance_data->unk15D = 3;
+                        sentrybot_instance_data->pending_animation = 3;
                         if (MOBY(moby)->prev_seq != 1)
                             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                     }
@@ -1236,7 +1236,7 @@ int begin_sentrybot_turn_toward_heading(
     moby_data->turn_target_yaw = angle;
     moby_data->turn_delta = heading_delta;
     moby_data->unk15C = next_state;
-    moby_data->unk15D = next_animation;
+    moby_data->pending_animation = next_animation;
     if (heading_delta > 2.0943952f || heading_delta < -2.0943952f) {
         MOBY(moby)->state = SENTRYBOT_TURN_AROUND;
         stored_heading_delta = moby_data->turn_delta;
