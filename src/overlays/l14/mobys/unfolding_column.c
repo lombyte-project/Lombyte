@@ -18,7 +18,7 @@ typedef struct UnfoldingColumnMoby {
     float                       pos[4]; /* 0x10 */
     unsigned char               state;  /* 0x20 */
     char                        pad21[0x23];
-    float                       f44; /* 0x44 */
+    float                       rotation_angle_radians; /* 0x44 */
     char                        pad48[0x30];
     struct UnfoldingColumnVars *data; /* 0x78 */
     char                        pad7C[0x44];
@@ -123,7 +123,7 @@ void unfolding_column_update(UnfoldingColumnMoby *moby) {
         UnfoldingColumnPieces *pieces = &data->pieces;
         UnfoldingColumnMoby   *current_piece = pieces->m[data->cur];
         fast_dec_timer_s16(&data->timer);
-        current_piece->f44 =
+        current_piece->rotation_angle_radians =
             interpolate_angle(1.5707964f, 0.0f, convert_integer_to_float(data->timer) * data->rate);
         if (data->timer == 0) {
             data->timer = scale_game_frames(unfolding_column_piece_unfold_frames);
@@ -149,7 +149,7 @@ void unfolding_column_update(UnfoldingColumnMoby *moby) {
         fast_dec_timer_s16(&data->timer);
         pieces = data->pieces.m;
         remaining_timer_fraction = convert_integer_to_float(data->timer) * data->rate;
-        pivot->f44 =
+        pivot->rotation_angle_radians =
             interpolate_scalar_linear(unfolding_column_pivot_final_angle_degrees * 0.017453292f,
                                       0.0f,
                                       remaining_timer_fraction);
