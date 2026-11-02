@@ -37,7 +37,7 @@ typedef struct {
 
 typedef struct {
     u8  p0[0x24];
-    f32 f24;
+    f32 auxiliary_scale_multiplier;
 } N_2a57a8;
 
 typedef struct {
@@ -351,7 +351,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
             fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
-        q->mC->auxiliary_scale = q->effect_scale_factor * q->mC->p24->f24 * 2.5f;
+        q->mC->auxiliary_scale = q->effect_scale_factor * q->mC->p24->auxiliary_scale_multiplier * 2.5f;
         update_entity(q->mC);
         break;
     case VENDOR_HERO_NEARBY:
@@ -375,7 +375,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
             fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
-        q->mC->auxiliary_scale = q->effect_scale_factor * q->mC->p24->f24 * 2.5f;
+        q->mC->auxiliary_scale = q->effect_scale_factor * q->mC->p24->auxiliary_scale_multiplier * 2.5f;
         update_entity(q->mC);
         if (hero.state.control_mode != 0 && hero.state.current != 3 &&
             hero.state.control_mode != 1) {
@@ -414,7 +414,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
     case VENDOR_ZERO_AUXILIARY_SCALE:
         if (q->mC) {
             q->effect_scale_factor = 0.0f;
-            q->mC->auxiliary_scale = q->mC->p24->f24 * q->effect_scale_factor * 2.5f;
+            q->mC->auxiliary_scale = q->mC->p24->auxiliary_scale_multiplier * q->effect_scale_factor * 2.5f;
             update_entity(q->mC);
         }
         break;
