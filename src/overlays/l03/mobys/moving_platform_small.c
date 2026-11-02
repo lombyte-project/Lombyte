@@ -38,7 +38,7 @@ typedef struct MovingPlatformSmallVars {
     s32   voice;
     s32   unk108;
     s32   easing_frames;
-    f32   unk110;
+    f32   path_endpoint_distance;
     f32   glide_speed;
 } MovingPlatformSmallVars;
 
@@ -103,11 +103,11 @@ void moving_platform_small_update(char *moby) {
         MOBY(moby)->scale = MOBY(moby)->pclass->scale * platform_pvars->unkFC;
         platform_pvars->voice = -1;
         if (fast_dec_timer(&platform_pvars->timer_100)) {
-            platform_pvars->unk110 = fast_vec_dist(
+            platform_pvars->path_endpoint_distance = fast_vec_dist(
                 *(char **)(pa + 0x10) + 0x10, *(char **)(pa + 0x10) + **(int **)(pa + 0x10) * 0x10);
             easing_frame_count = scale_game_frames(240);
             platform_pvars->glide_speed =
-                platform_pvars->unk110 * 4.0f /
+                platform_pvars->path_endpoint_distance * 4.0f /
                 convert_integer_to_float(easing_frame_count * scale_game_frames(240));
             platform_pvars->easing_frames = 0;
             MOBY(moby)->state = PLATFORM_EASED_ENDPOINT_TRAVEL;
@@ -125,12 +125,12 @@ void moving_platform_small_update(char *moby) {
         if (scale_game_frames(240) / 2 < platform_pvars->easing_frames) {
             speed = -speed;
             easing_frame_count = scale_game_frames(240) - platform_pvars->easing_frames;
-            eased_endpoint_distance = platform_pvars->unk110;
+            eased_endpoint_distance = platform_pvars->path_endpoint_distance;
         }
         eased_endpoint_distance +=
             speed * 0.5f * convert_integer_to_float(easing_frame_count * easing_frame_count);
         if (pb[4] < 0) {
-            eased_endpoint_distance = platform_pvars->unk110 - eased_endpoint_distance;
+            eased_endpoint_distance = platform_pvars->path_endpoint_distance - eased_endpoint_distance;
         }
         fast_vec_sub(endpoint_delta_or_position,
                      *(char **)(pb + 0x10) + **(int **)(pb + 0x10) * 0x10,
