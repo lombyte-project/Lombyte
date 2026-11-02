@@ -985,7 +985,7 @@ typedef struct D_2E52B0 {
     float         knockback_xy_scale;
     float         knockback_z_scale;
     int           f90;
-    int           f94;
+    int           knockback_motion_flags;
     float         f98;
     char          p9C[0x11];
     unsigned char bAD;
@@ -1144,7 +1144,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         func_L10_002E14F8_2E52B0(moby);
         moby_data->f90 = truncate_float_to_s32(768.0f);
         moby_data->f98 = 0.75f;
-        moby_data->f94 = 9;
+        moby_data->knockback_motion_flags = 9;
         moby_data->bAD = 0;
         fx = fast_arc_tan(hit_record->pos.x, hit_record->pos.y);
         switch (hit_response_code) {
