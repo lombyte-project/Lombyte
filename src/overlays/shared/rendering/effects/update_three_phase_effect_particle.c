@@ -3212,7 +3212,7 @@ typedef struct {
     s16  h16;
     u8   b18;
     u8   pad19[3];
-    s32  w1c;
+    s32  particle_collision_context;
 } E_26fd28;
 
 typedef struct {
@@ -3271,7 +3271,7 @@ P_26fd28 *spawn_splitting_effect_particle_with_collision_response_and_fade(u128 
             particle->fC = 10000.0f;
             particle->hA = (s32)(8.0f / (D_0015ED60 * 0.443f));
         }
-        e->w1c = collision_context;
+        e->particle_collision_context = collision_context;
     }
     return particle;
 }
