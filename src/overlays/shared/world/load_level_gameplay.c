@@ -213,7 +213,7 @@ typedef struct TieMatrix {
     float m3[3];
     float f3C;
     char  pad40[0x100];
-    char  f140[0x80];
+    char  packed_colors[0x80];
 } TieMatrix;
 
 typedef struct TieInst {
@@ -254,7 +254,7 @@ typedef struct ShrubInst {
     float          fC;
     float          f10;
     char           pad14[3];
-    unsigned char  f17;
+    unsigned char  class_lower_bound_base;
     short          f18;
     unsigned char  f1A;
     unsigned char  f1B;
@@ -721,7 +721,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             D_L00_00160FC8[i].fC = 1.0f / fast_vec_length(&D_L00_00160FC8[i]);
             D_L00_00160FC8[i].f1C = 1.0f / fast_vec_length(D_L00_00160FC8[i].m1);
             D_L00_00160FC8[i].f2C = 1.0f / fast_vec_length(D_L00_00160FC8[i].m2);
-            copy_memory_aligned(mtx->f140, p, 0x80);
+            copy_memory_aligned(mtx->packed_colors, p, 0x80);
             p += 0x80;
             inst->f1C = *(unsigned short *)p;
             p += 0x10;
@@ -788,8 +788,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (D_L00_001BC030[shrub_class_index]->f1C != 0) {
                 float shrub_class_lower_bound;
 
-                inst->f17 = truncate_float_to_s32(*D_L00_001BC030[shrub_class_index]->f1C);
-                shrub_class_lower_bound = convert_integer_to_float(inst->f17) + 24.0f;
+                inst->class_lower_bound_base = truncate_float_to_s32(*D_L00_001BC030[shrub_class_index]->f1C);
+                shrub_class_lower_bound = convert_integer_to_float(inst->class_lower_bound_base) + 24.0f;
                 if (inst->f10 < shrub_class_lower_bound) {
                     inst->f10 = shrub_class_lower_bound;
                 }
