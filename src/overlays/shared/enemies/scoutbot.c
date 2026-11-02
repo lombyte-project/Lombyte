@@ -57,7 +57,7 @@ typedef struct ScoutbotVars {
     s16   unk216;
     char *unk218;
     s32   target_path_index;
-    u8    unk220[0x4];
+    u8    glow_quad_anchor_position[0x4];
 } ScoutbotVars;
 
 typedef struct Moby Moby;
@@ -683,7 +683,7 @@ void draw_scoutbot_glow_quad(struct Moby *moby) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    qcopy(M[3], (float *)(&scoutbot_private_state->unk220));
+    qcopy(M[3], (float *)(&scoutbot_private_state->glow_quad_anchor_position));
     fast_vec_sub(M[0], D_L08_001675C0_lui, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);
     fast_vec_cross(M[1], M[0], up);
