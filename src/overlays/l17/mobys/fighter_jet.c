@@ -657,7 +657,7 @@ void draw_fighter_jet_lock_marker(float         x,
 /* picks the moby to home in on, keeping or dropping the current target */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002ED258), where it is exact; names translated to the US level program. */
 
-int        D_L17_0016216C = 600;
+int        l17_fighter_jet_lock_timer_reload __asm__("D_L17_0016216C") = 600;
 extern int select_fighter_jet_target_and_draw_contacts(
     int, char *, char *, char *, float, float, float, char *, char *) __asm__("FUN_L17_002eace8");
 #define W(p, o) (*(int *)((char *)(p) + (o)))
@@ -722,7 +722,7 @@ skip:
          (H(P(ship_vars, 0x88), 0xA6) != 0x3EB && H(candidate_target, 0xA6) == 0x3EB)) &&
         FLAG != 0) {
         P(ship_vars, 0x88) = candidate_target;
-        lock_timer_reload = D_L17_0016216C;
+        lock_timer_reload = l17_fighter_jet_lock_timer_reload;
         W(ship_vars, 0x128) = H(candidate_target, 0xA6);
         W(ship_vars, 0x8C) = lock_timer_reload;
     }
