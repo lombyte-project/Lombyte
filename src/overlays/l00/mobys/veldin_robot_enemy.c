@@ -441,6 +441,9 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         VELDIN_ROBOT_TARGET_SELECTION_ALTERNATE_MOBY = 1,
         VELDIN_ROBOT_TARGET_SELECTION_UNAVAILABLE = 2
     };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     ElectroidVars *vars;
     void          *anim;
     ElectroidHit  *coll;
@@ -528,7 +531,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     }
     if (vars->candidate_target_moby_index >= 0) {
         candidate_target = (ElectroidMoby *)(moby_table + (vars->candidate_target_moby_index << 8));
-        if (candidate_target == 0 || candidate_target->state == 0xFE ||
+        if (candidate_target == 0 || candidate_target->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
             candidate_target->state == 0xFD) {
             vars->candidate_target_moby_index = -1;
         } else {
