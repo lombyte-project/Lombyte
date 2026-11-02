@@ -15,7 +15,7 @@
     "bytes_total": 12433372,
     "bytes_matching_c": 7809078,
     "c_exact_percent": 62.8074,
-    "bytes_matching_c_zero": 4877299
+    "bytes_matching_c_zero": 4877291
   },
   "boot": {
     "units_total": 1425,
@@ -9124,7 +9124,7 @@
       "bytes_total": 11734236,
       "bytes_matching_c": 7620433,
       "c_exact_percent": 64.9419,
-      "bytes_matching_c_zero": 4877299
+      "bytes_matching_c_zero": 4877291
     }
   },
   "total": {
@@ -9142,7 +9142,7 @@
       "bytes_total": 12433372,
       "bytes_matching_c": 7809078,
       "c_exact_percent": 62.8074,
-      "bytes_matching_c_zero": 4877299
+      "bytes_matching_c_zero": 4877291
     }
   }
 }
