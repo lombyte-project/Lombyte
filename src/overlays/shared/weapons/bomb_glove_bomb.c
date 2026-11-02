@@ -110,7 +110,7 @@ typedef struct {
     char       pad10[0x40];
     M910      *owner;
     short      fuse_timer;
-    short      h56;
+    short      landing_prediction_disabled;
     char       pad58[0x10];
     short      splash_frame_counter;
     short      color_animation_counter;
@@ -1135,7 +1135,7 @@ void bomb_update(BombMoby *bomb_moby) {
     } else {
         bomb_moby->flags &= ~0x41;
     }
-    if (d->owner->cls == 0xC0 && d->h56 == 0 && FUN_001f9af0_2adb30(d) > 0.0f) {
+    if (d->owner->cls == 0xC0 && d->landing_prediction_disabled == 0 && FUN_001f9af0_2adb30(d) > 0.0f) {
         if (((G910 *)&hero)->ground_support_moby == 0 || FUN_L00_002603d0_2adb30(((G910 *)&hero)->ground_support_moby) == 0) {
             FUN_L00_002ad410_2adb30(d, bomb_moby, 1);
         } else if (FUN_L00_002ad410_2adb30(d, bomb_moby, 0) == 0) {
