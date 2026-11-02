@@ -892,7 +892,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
 /* Stores val in the first empty of 15 slots after the list head. */
 void register_pyrocitor_flame_effect(ListSlots8 *list, s32 val) __asm__("FUN_L00_002b8798");
 
-void register_pyrocitor_flame_effect(ListSlots8 *list, s32 val) {
+void register_pyrocitor_flame_effect(ListSlots8 *list, s32 flame_effect) {
     s32 *list_data = list->slots;
     s32  i = 0;
     s32 *first_slot;
@@ -902,7 +902,7 @@ void register_pyrocitor_flame_effect(ListSlots8 *list, s32 val) {
         slot_byte_offset = i * 4;
         first_slot = (s32 *)((u8 *)list_data + 4);
         if (*(s32 *)((u8 *)first_slot + slot_byte_offset) == 0) {
-            *(s32 *)((u8 *)first_slot + slot_byte_offset) = val;
+            *(s32 *)((u8 *)first_slot + slot_byte_offset) = flame_effect;
             break;
         }
         i++;
