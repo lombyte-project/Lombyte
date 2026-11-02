@@ -510,7 +510,7 @@ typedef struct RedShip1Vars {
     u8  pad_2D[0x33];
     u8  unk60;
     u8  pad_61[0x2F];
-    f32 unk90[4];
+    f32 segment_start_tangent[4];
     f32 unkA0;
     f32 unkA4;
     f32 unkA8;
@@ -525,7 +525,7 @@ typedef struct RedShip1Vars {
     f32 unk108;
     f32 unk10C;
     u8  pad_110[0x4];
-    f32 unk114;
+    f32 roll_spring_velocity;
     u8  pad_118[0x4];
     f32 unk11C;
     u8  pad_120[0xC];
@@ -539,7 +539,7 @@ typedef struct RedShip1Vars {
     f32 unk140;
     f32 unk144;
     u8  pad_148[0x2];
-    s16 unk14A;
+    s16 respawn_timer;
     u8  pad_14C[0x4];
     s32 unk150;
 } RedShip1Vars;
@@ -685,7 +685,7 @@ void red_ship_1_update(char *moby) {
             -fast_arc_tan(vector_length_xy(initial_path_tangent), spline_moby_pvars->unkA8);
         MOBY(moby)->rot.z =
             fast_arc_tan(spline_moby_pvars->unkA0 - zero[0], spline_moby_pvars->unkA4 - zero[1]);
-        spline_moby_pvars->unk114 = 0.0f;
+        spline_moby_pvars->roll_spring_velocity = 0.0f;
         spline_moby_pvars->unk11C = 0.0f;
         *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)&spline_moby_pvars->unkE0[0];
         add_moby_rotation_based_offsets(moby, moby_position);
@@ -702,7 +702,7 @@ void red_ship_1_update(char *moby) {
         if (spline_moby_pvars->timer_12C > 0) {
             MOBY(moby)->state = RED_SHIP_WAIT_FOR_MOVEMENT_TIMER;
         } else {
-            spline_moby_pvars->unk14A = 0;
+            spline_moby_pvars->respawn_timer = 0;
             MOBY(moby)->state = RED_SHIP_FOLLOW_PATH_SPLINE;
         }
         break;
@@ -731,7 +731,7 @@ void red_ship_1_update(char *moby) {
         if (spline_moby_pvars->unk100 >= 1.0f) {
             spline_moby_pvars->unk100 -= 1.0f;
             advanced_path_node_index = advance_path_node_index(pm);
-            *(OvlQuad *)&spline_moby_pvars->unk90[0] = *(OvlQuad *)&spline_moby_pvars->unkA0;
+            *(OvlQuad *)&spline_moby_pvars->segment_start_tangent[0] = *(OvlQuad *)&spline_moby_pvars->unkA0;
             compute_path_node_tangent(path_tangent_or_moby_position,
                                       (int *)pm,
                                       1,
@@ -752,7 +752,7 @@ void red_ship_1_update(char *moby) {
                                        spline_moby_pvars->unkD0,
                                        spline_moby_pvars->unkB0,
                                        spline_moby_pvars->unkC0,
-                                       spline_moby_pvars->unk90,
+                                       spline_moby_pvars->segment_start_tangent,
                                        path_tangent_or_moby_position);
         if (!flag) {
             update_spline_moby_orientation(moby);
