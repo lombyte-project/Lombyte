@@ -216,8 +216,8 @@ typedef struct BlargVars {
     float         horizontal_motion_speed;       /* 0x88 */
     float         f8C;       /* 0x8C */
     char          pad90[0x30];
-    float         fC0; /* 0xC0 */
-    float         fC4; /* 0xC4 */
+    float         motion_apex_animation_frame; /* 0xC0 */
+    float         motion_landing_animation_frame; /* 0xC4 */
     char          padC8[0x58];
     char          selected_target_xy[0x8]; /* 0x120 */
     float         selected_target_z;      /* 0x128 */
@@ -829,8 +829,8 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             moby->state = ALIEN_SNAPPER_STATE_HIT_KNOCKBACK;
             snapper_vars->horizontal_motion_speed = frame_time + frame_time;
             snapper_vars->f8C = frame_time;
-            snapper_vars->fC0 = 5.0f;
-            snapper_vars->fC4 = 8.5f;
+            snapper_vars->motion_apex_animation_frame = 5.0f;
+            snapper_vars->motion_landing_animation_frame = 8.5f;
             func_L00_0025D5B0_2FA618(
                 moby, snapper_vars->f70, 9, 1, 0, fast_arc_tan(target->x, target->y));
             snapper_vars->f67 = 0xFA;
@@ -841,8 +841,8 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             moby->flags &= 0xEFFF;
             snapper_vars->horizontal_motion_speed = frame_time * 8.0f;
             snapper_vars->f8C = frame_time * 5.0f;
-            snapper_vars->fC0 = 7.5f;
-            snapper_vars->fC4 = 14.5f;
+            snapper_vars->motion_apex_animation_frame = 7.5f;
+            snapper_vars->motion_landing_animation_frame = 14.5f;
             func_L00_0025D5B0_2FA618(
                 moby, snapper_vars->f70, 10, 1, 0, fast_arc_tan(target->x, target->y));
             snapper_vars->f67 = 0xFA;
