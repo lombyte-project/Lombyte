@@ -3148,7 +3148,7 @@ typedef struct {
     u8  p30A[0x418 - 0x30A];
     s32 i418;
     u8  p41C[0x10E0 - 0x41C];
-    s32 i10E0;
+    s32 slot_one_primary_item_moby;
     u8  p10E4[0x12A0 - 0x10E4];
     f32 f12A0, f12A4;
     s32 point_effect_emission_updates_remaining;
@@ -3201,7 +3201,7 @@ void update_hero_easing_targets_and_point_effects(void) {
                 -fast_subtract_rotations(P.f2D4, -secondary_clamped_rotation_angle);
         }
     }
-    if (P.i10E0) {
+    if (P.slot_one_primary_item_moby) {
         hero_eases[4].scale = 0.01f;
         hero_eases[5].scale = 0.01f;
     }
