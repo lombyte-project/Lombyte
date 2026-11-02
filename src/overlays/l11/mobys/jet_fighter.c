@@ -1235,7 +1235,7 @@ unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") = 0x14;
 #include "rnc/overlay/l11/mobys/jet_fighter_data/jet_fighter_update.h"
 
 extern float D_L11_00162078 __attribute__((sda));
-int          D_L11_00162168 = 180;
+int          l11_jet_fighter_exit_delay_frames __asm__("D_L11_00162168") = 180;
 extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
 extern void  print_3290(char *) __asm__("FUN_001e93b0");
 extern void  FUN_L11_0024db50(int, int);
@@ -1462,7 +1462,7 @@ void jet_fighter_update(struct Moby *moby) {
                 }
             }
             if (ship_vars->sE8 <= 0) {
-                ship_vars->iF8 = D_L11_00162168;
+                ship_vars->iF8 = l11_jet_fighter_exit_delay_frames;
                 moby->state = JET_FIGHTER_STATE_DELAYED_EXIT;
             }
             if (hero.ship_flags & 1) {
