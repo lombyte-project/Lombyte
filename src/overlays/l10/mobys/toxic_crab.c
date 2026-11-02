@@ -1043,6 +1043,9 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE = 10,
         SUPPRESSED_HIT_RESPONSE = 11
     };
+    enum {
+        POINT_AHEAD_NO_TARGET = 2
+    };
     Moby        *moby = mv;
     AlignedVec4f vA;
     AlignedVec4f vB;
@@ -1215,12 +1218,12 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         func_L00_00260D30_2E52B0(moby, &moby_data->a120, moby_data->f1A0);
         if (moby_data->f1A0 < vector_distance_xy(&moby_data->a170, &moby_data->a120) ||
             3.0f < absolute_float(moby->pos.z - moby_data->a120.z)) {
-            moby_data->target_selection_status = 2;
+            moby_data->target_selection_status = POINT_AHEAD_NO_TARGET;
         }
     } else if (moby_data->f1A0 < vector_distance_xy(&moby_data->a170, &moby_data->a120) ||
                3.0f < absolute_float(moby->pos.z - moby_data->a120.z)) {
         func_L00_00260D30_2E52B0(moby, &moby_data->a120, moby_data->f1A0);
-        moby_data->target_selection_status = 2;
+        moby_data->target_selection_status = POINT_AHEAD_NO_TARGET;
     } else {
         activate_effect_l08(moby_data->f1A0,
                             moby,
@@ -1230,7 +1233,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
                             l10_paths[moby_data->target_path_index]->points,
                             l10_paths[moby_data->target_path_index]->count);
     }
-    if (moby->state != TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION && moby_data->target_selection_status == 2) {
+    if (moby->state != TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION && moby_data->target_selection_status == POINT_AHEAD_NO_TARGET) {
         moby_data->target_loss_frames++;
         if (scale_game_frames(300) < moby_data->target_loss_frames) {
             if (1.0f < fast_vec_dist(&moby->pos, &moby_data->a170)) {
