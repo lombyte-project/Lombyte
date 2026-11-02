@@ -73,7 +73,7 @@ typedef struct {
     char           pad21[0x57];
     char          *vars; /* 0x78 */
     char           pad7C[0x34];
-    unsigned char  bB0; /* 0xB0 */
+    unsigned char  activation_group; /* 0xB0 */
     char           padB1;
     unsigned short uid; /* 0xB2 */
 } Lock;
@@ -111,7 +111,7 @@ void thruster_pack_lock_update(Lock *moby) {
         ((Stats *)(D_00141968_r))->count = 0;
         ((Stats *)(D_00141968_r))->best = 0;
         *(unsigned short *)(vars + 0x3E) |= 8;
-        if (level == 0xB && moby->bB0 != 0xFF) {
+        if (level == 0xB && moby->activation_group != 0xFF) {
             if (l11_thruster_pack_lock_restore_state.collected[(short)moby->uid] != 0 ||
                 ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >>
                   (moby->uid & 0x1F)) &
@@ -129,11 +129,11 @@ void thruster_pack_lock_update(Lock *moby) {
         if (((void *)((Hero *)(D_0013F350_r))->ground_moby) == moby && item_available[3] != 0 &&
             ((Hero *)(D_0013F350_r))->air_frames.s == 0 &&
             ((Hero *)(D_0013F350_r))->state.current == 0x22) {
-            if (current_level_index == 0xB && moby->bB0 != 0xFF) {
+            if (current_level_index == 0xB && moby->activation_group != 0xFF) {
                 int group;
                 int group_index;
-                l11_thruster_pack_lock_activation_state.collected[(short)moby->uid] = moby->bB0 + 2;
-                group = moby->bB0;
+                l11_thruster_pack_lock_activation_state.collected[(short)moby->uid] = moby->activation_group + 2;
+                group = moby->activation_group;
                 group_index = group & 0xFF;
                 if (group == 0xFF ||
                     (D_L11_0015FD08_3102C8[group_index] != 0xFF &&
@@ -145,7 +145,7 @@ void thruster_pack_lock_update(Lock *moby) {
             moby->z = moby->z - 1.5f;
             allocate_voice_for_target_entry(0, 0, moby);
         }
-        if (moby->bB0 == 0xFF) {
+        if (moby->activation_group == 0xFF) {
             return;
         }
         if (!(vector_distance_xy(moby->pos, D_0013F3D0_r) < 4.0f)) {
