@@ -123,7 +123,7 @@ typedef struct SentrybotVars {
     u8                 alert_engagement_suppressed;
     u8                 unk15C;
     u8                 pending_animation;
-    u8                 unk15E;
+    u8                 saved_alert_engagement_suppression_plus_one;
     u8                 command_alert_transition_started;
     f32                home_pos[3]; /* 0x160: position at spawn */
     f32                home_yaw;    /* 0x16C */
@@ -1570,6 +1570,9 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
     enum {
         HIT_STATUS_SKIP_REACTION = 1
     };
+    enum {
+        SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION = 2
+    };
     unsigned char *moby = sentrybot_moby;
     SentrybotVars *sentrybot_data = (SentrybotVars *)MOBY(moby)->pvars;
     char          *hit;
@@ -1737,28 +1740,28 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
             seen = sentrybot_data->has_line_of_sight;
         }
         if (sentrybot_data->target_mode == 1)
-            sentrybot_data->unk15E = sentrybot_data->alert_engagement_suppressed + 1;
+            sentrybot_data->saved_alert_engagement_suppression_plus_one = sentrybot_data->alert_engagement_suppressed + 1;
         else if ((unsigned char)D_001413F4[0] != 3)
-            sentrybot_data->unk15E = 0;
-        else if (sentrybot_data->unk15E >= 2)
+            sentrybot_data->saved_alert_engagement_suppression_plus_one = 0;
+        else if (sentrybot_data->saved_alert_engagement_suppression_plus_one >= 2)
             sentrybot_data->alert_engagement_suppressed = 1;
         sentrybot_data->target_in_view = 1;
         if (seen == 0) {
             if (sentrybot_data->has_line_of_sight == 0)
                 sentrybot_data->alert_engagement_suppressed = 1;
             sentrybot_data->target_in_view = 0;
-            sentrybot_data->target_mode = 2;
+            sentrybot_data->target_mode = SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION;
             sentrybot_data->target_detected_without_engagement = 0;
         } else if (((sentrybot_data->alert_timer == 0 || sentrybot_data->alert_engagement_suppressed != 0) &&
                     (unsigned char)D_001413F4[0] == 3) ||
-                   (sentrybot_data->unk15E != 0 && sentrybot_data->target_mode != 1)) {
-            sentrybot_data->target_mode = 2;
+                   (sentrybot_data->saved_alert_engagement_suppression_plus_one != 0 && sentrybot_data->target_mode != 1)) {
+            sentrybot_data->target_mode = SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION;
             sentrybot_data->target_detected_without_engagement = 1;
-        } else if ((unsigned char)D_001413F4[0] != 3 && sentrybot_data->target_mode != 2) {
+        } else if ((unsigned char)D_001413F4[0] != 3 && sentrybot_data->target_mode != SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION) {
             sentrybot_data->alert_engagement_suppressed = 0;
         }
         if (D_L15_0015F5C4 == 2)
-            sentrybot_data->target_mode = 2;
+            sentrybot_data->target_mode = SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION;
     } else {
         sentrybot_data->target_in_view = 0;
         sentrybot_data->alert_engagement_suppressed = 1;
