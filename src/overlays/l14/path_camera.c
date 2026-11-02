@@ -167,7 +167,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
     s32   seg2;
     f32   tt2;
     char *camera_saved_state = (char *)path_camera->saved_state;
-    char *rec = *(char **)(l14_camera_preset_rows + path_camera->descriptor_index * 32 + 0x1C);
+    char *path_camera_preset = *(char **)(l14_camera_preset_rows + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5290   *camera_run = (VendorCamRun_5290 *)(camera_saved_state + 0x40);
     VendorCamStops_5290 *fov_stops = (VendorCamStops_5290 *)(camera_saved_state + 0x58);
     char                *path;
@@ -175,14 +175,14 @@ void update_path_camera(struct UpdateCam *path_camera) {
     int                  i;
 
     if (camera_run->started == 0) {
-        char *pa = ((char *)l14_paths[*(int *)(rec + 0x20)]);
-        char *pb = ((char *)l14_paths[*(int *)(rec + 0x24)]);
+        char *pa = ((char *)l14_paths[*(int *)(path_camera_preset + 0x20)]);
+        char *pb = ((char *)l14_paths[*(int *)(path_camera_preset + 0x24)]);
         path_camera_active = 1;
         camera_run->started = 1;
         qcopy(&path_camera->pos, pa + 0x10);
-        if (*(int *)(rec + 0x28) >= 0) {
-            struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
-            float       *ofs = (float *)(rec + 0x2C);
+        if (*(int *)(path_camera_preset + 0x28) >= 0) {
+            struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(path_camera_preset + 0x28) * 256);
+            float       *ofs = (float *)(path_camera_preset + 0x2C);
             t[0] = ofs[0];
             t[1] = ofs[1];
             t[2] = ofs[2];
@@ -200,17 +200,17 @@ void update_path_camera(struct UpdateCam *path_camera) {
         fast_vec_cross(&path_camera->m2, &path_camera->m1, &path_camera->m0);
         return;
     }
-    path = ((char *)l14_paths[*(int *)(rec + 0x20)]);
+    path = ((char *)l14_paths[*(int *)(path_camera_preset + 0x20)]);
     qcopy(initial_look_direction_or_previous_position, &path_camera->pos);
     done = FUN_L00_0025d808(path,
                             &path_camera->pos.x,
                             &camera_run->seg,
                             &camera_run->t,
                             0,
-                            *(float *)(rec + 0x3C) * frame_time);
+                            *(float *)(path_camera_preset + 0x3C) * frame_time);
     if (camera_run->timer != 0 && fast_dec_timer_s16(&camera_run->timer) != 0)
         done = 1;
-    if (*(u8 *)(rec + 0x39) != 0)
+    if (*(u8 *)(path_camera_preset + 0x39) != 0)
         done = 1;
     if (done) {
         float ang = fov_stops->fov_end * 0.5f;
@@ -222,7 +222,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         path_camera->transition_state = PATH_CAMERA_TRANSITION_PATH_FINISHED;
         path_camera_active = 0;
         mb = D_L14_0015FFD8_5290;
-        reset_racer_group_to_hero_path_position((struct Moby *)(mb + *(int *)(rec + 0x50) * 256));
+        reset_racer_group_to_hero_path_position((struct Moby *)(mb + *(int *)(path_camera_preset + 0x50) * 256));
         hp = (char *)hero.rail_spline;
         seg = hero.rail_segment;
         tt = hero.rail_seg_frac;
@@ -264,9 +264,9 @@ void update_path_camera(struct UpdateCam *path_camera) {
     }
     camera_run->dist +=
         fast_vec_dist(initial_look_direction_or_previous_position, &path_camera->pos);
-    if (*(int *)(rec + 0x28) >= 0) {
-        struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
-        float       *ofs = (float *)(rec + 0x2C);
+    if (*(int *)(path_camera_preset + 0x28) >= 0) {
+        struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(path_camera_preset + 0x28) * 256);
+        float       *ofs = (float *)(path_camera_preset + 0x2C);
         u[0] = ofs[0];
         u[1] = ofs[1];
         u[2] = ofs[2];
@@ -275,7 +275,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         fast_vec_add(v, &o->pos, u);
         fast_vec_sub(t, v, &path_camera->pos);
     } else {
-        char *look = ((char *)l14_paths[*(int *)(rec + 0x24)]);
+        char *look = ((char *)l14_paths[*(int *)(path_camera_preset + 0x24)]);
         seg2 = 0;
         tt2 = 0.0f;
         FUN_L00_0025d808(
