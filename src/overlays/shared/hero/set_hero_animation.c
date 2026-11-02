@@ -1407,7 +1407,7 @@ typedef struct Hero_234800 {
     char          p188[0x6E];
     short         path_clearance_position_anchor_inhibit;
     char          p1F8[0x104];
-    void         *p2FC;
+    void         *nonresidual_attachment_reference_object;
     char          p300[0xE];
     short         attachment_residual_decay_scale;
     Vec_234800    primary_attachment_local_position;
@@ -1422,7 +1422,7 @@ typedef struct Hero_234800 {
     char          p4E0[0x4];
     float         ledge_attachment_heading;
     char          p4E8[0x10];
-    void         *p4F8;
+    void         *residual_attachment_reference_override;
     char          p4FC[0x1B84];
     int           hero_moby;
     int           i2084;
@@ -1471,28 +1471,28 @@ void update_hero_attachment(void) {
     amt = 0.0f;
     saved_hero_yaw = ((Hero_234800 *)hero_233f80)->v90.z;
     if (((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0) {
-        if (((Hero_234800 *)hero_233f80)->p2FC != 0) {
+        if (((Hero_234800 *)hero_233f80)->nonresidual_attachment_reference_object != 0) {
             mode = HERO_ATTACHMENT_MODE_PROBE;
             if (((Hero_234800 *)hero_233f80)->attachment_reference_object !=
-                ((Hero_234800 *)hero_233f80)->p2FC) {
+                ((Hero_234800 *)hero_233f80)->nonresidual_attachment_reference_object) {
                 ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
             }
             ((Hero_234800 *)hero_233f80)->attachment_reference_object =
-                ((Hero_234800 *)hero_233f80)->p2FC;
+                ((Hero_234800 *)hero_233f80)->nonresidual_attachment_reference_object;
         } else {
             ((Hero_234800 *)hero_233f80)->attachment_reference_object = 0;
             ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
             ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~2;
         }
     } else if (((Hero_234800 *)hero_233f80)->i2084 == 0x1C &&
-               ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
+               ((Hero_234800 *)hero_233f80)->residual_attachment_reference_override != 0) {
         ((Hero_234800 *)hero_233f80)->attachment_reference_object =
-            ((Hero_234800 *)hero_233f80)->p4F8;
+            ((Hero_234800 *)hero_233f80)->residual_attachment_reference_override;
         mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->i208C == 3 &&
-               ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
+               ((Hero_234800 *)hero_233f80)->residual_attachment_reference_override != 0) {
         ((Hero_234800 *)hero_233f80)->attachment_reference_object =
-            ((Hero_234800 *)hero_233f80)->p4F8;
+            ((Hero_234800 *)hero_233f80)->residual_attachment_reference_override;
         mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->attachment_reference_object != 0) {
         mode = HERO_ATTACHMENT_MODE_PROBE;
