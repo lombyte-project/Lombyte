@@ -84,11 +84,11 @@ typedef struct {
     char           pad184[4];
     float          f188;
     float          f18C;
-    float          f190;
+    float          horizontal_movement_step;
     char           pad194[4];
     float          fall;
     char           pad19C[8];
-    float          f1A4;
+    float          horizontal_step_limit;
     char           pad1A8[0x28];
     V_2E39E0       home;
     char           pad1E0[0x10];
@@ -346,7 +346,7 @@ void ground_melee_enemy_update(Moby *moby) {
         steer_init_2E39E0(&ground_enemy_vars->steer);
         ground_enemy_vars->steer = 0x38D;
         ground_enemy_vars->f188 = ground_enemy_vars->f18C = 2.0f;
-        ground_enemy_vars->f1A4 = ground_enemy_vars->speed * frame_time;
+        ground_enemy_vars->horizontal_step_limit = ground_enemy_vars->speed * frame_time;
         if (rand_2E39E0() & 1)
             moby->flags |= 0x8000;
         ground_enemy_vars->settings = &settings_2E39E0;
@@ -442,7 +442,7 @@ void ground_melee_enemy_update(Moby *moby) {
             moby->state = GROUND_ENEMY_STATE_MELEE_ATTACK;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
-        } else if (ground_enemy_vars->f190 < frame_time || 1.0f < steep || (flags & 2)) {
+        } else if (ground_enemy_vars->horizontal_movement_step < frame_time || 1.0f < steep || (flags & 2)) {
             ground_enemy_vars->home_timer = scale_game_frames(50);
             moby->state = GROUND_ENEMY_STATE_RETURN_HOME;
         } else if (fast_vec_length(&away) < ground_enemy_vars->range + 4.0f &&
