@@ -80,16 +80,16 @@ typedef struct L16DamageData {
     s32           unk128;
     int           path_index;
     u8            unk130[0x64];
-    f32           unk194;
-    f32           unk198;
+    f32           joint_1_target_pitch;
+    f32           joint_1_target_yaw;
     u8            pad19C[0x14];
     u8            unk1B0[0x64];
-    f32           unk214;
-    f32           unk218;
+    f32           joint_2_target_pitch;
+    f32           joint_2_target_yaw;
     u8            pad21C[0x14];
     u8            unk230[0x64];
     f32           unk294;
-    f32           unk298;
+    f32           joint_3_target_yaw;
     u8            pad29C[0x14];
     f32           unk2B0;
     f32           unk2B4;
@@ -881,10 +881,10 @@ void update_blarg_elite_commando_joint_aim(char *commando_moby) {
             pitch = -0.7853982f;
         {
             float halfYaw = yaw * 0.5f, halfPitch = pitch * 0.5f;
-            commando_data->unk198 = halfYaw;
-            commando_data->unk194 = halfPitch;
-            commando_data->unk218 = halfYaw;
-            commando_data->unk214 = halfPitch;
+            commando_data->joint_1_target_yaw = halfYaw;
+            commando_data->joint_1_target_pitch = halfPitch;
+            commando_data->joint_2_target_yaw = halfYaw;
+            commando_data->joint_2_target_pitch = halfPitch;
         }
         if ((unsigned int)(MOBY(commando_moby)->state - 4) < 2) {
             float yaw2, pitch2, bound;
@@ -905,7 +905,7 @@ void update_blarg_elite_commando_joint_aim(char *commando_moby) {
             else if (yaw2 < -0.34906584f)
                 yaw2 = -0.34906584f;
             commando_data->unk294 = pitch2;
-            commando_data->unk298 = yaw2;
+            commando_data->joint_3_target_yaw = yaw2;
         }
     }
     update_joint_animation(
