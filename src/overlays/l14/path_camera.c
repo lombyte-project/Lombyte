@@ -293,9 +293,9 @@ int check_path_camera_priority(char *camera,
                                char *control_mode_gate_object) __asm__("FUN_L14_00315920");
 
 int check_path_camera_priority(char *camera, char *control_mode_gate_object) {
-    char *rec = *(char **)(l14_camera_preset_rows + *(short *)(camera + 0x84) * 32 + 0x1C);
+    char *path_camera_priority_preset = *(char **)(l14_camera_preset_rows + *(short *)(camera + 0x84) * 32 + 0x1C);
     int   required_control_mode, required_hero_state;
-    if (*(unsigned char *)(rec + 0x38) != 0)
+    if (*(unsigned char *)(path_camera_priority_preset + 0x38) != 0)
         return -1;
     if (control_mode_gate_object != 0 && *(short *)(control_mode_gate_object + 0x7E) == 0) {
         if (hero.state.control_mode != 15)
@@ -303,10 +303,10 @@ int check_path_camera_priority(char *camera, char *control_mode_gate_object) {
     }
     if (check_descriptor_hero_trigger(camera) == 0)
         return 0;
-    required_control_mode = *(int *)(rec + 0x48);
+    required_control_mode = *(int *)(path_camera_priority_preset + 0x48);
     if (required_control_mode >= 0 && hero.state.control_mode != required_control_mode)
         return 0;
-    required_hero_state = *(int *)(rec + 0x44);
+    required_hero_state = *(int *)(path_camera_priority_preset + 0x44);
     if (required_hero_state >= HERO_STATE_IDLE && hero.state.current != required_hero_state)
         return 0;
     return 1;
