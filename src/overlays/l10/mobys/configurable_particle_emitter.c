@@ -160,10 +160,10 @@ extern int   burst_spark_base_frame_count_gp __asm__("D_L10_00161F84") __attribu
 extern int   burst_spark_base_second_frame_count_gp __asm__("D_L10_00161F88") __attribute__((sda));
 extern int   burst_spark_base_third_frame_count_gp __asm__("D_L10_00161F8C") __attribute__((sda));
 extern float burst_spark_frame_count_scale_spread_gp __asm__("D_L10_00161F90") __attribute__((sda));
-int          D_L10_00161F94 = 0x4000ff80;
-int          D_L10_00161F98 = 0x4010ffff;
-int          D_L10_00161F9C = 0x2000ff80;
-int          D_L10_00161FA0 = 0x200080ff;
+int          l10_burst_spark_initial_color_from __asm__("D_L10_00161F94") = 0x4000ff80;
+int          l10_burst_spark_initial_color_to __asm__("D_L10_00161F98") = 0x4010ffff;
+int          l10_burst_spark_second_color_from __asm__("D_L10_00161F9C") = 0x2000ff80;
+int          l10_burst_spark_second_color_to __asm__("D_L10_00161FA0") = 0x200080ff;
 extern int   burst_spark_timer_reset_min_gp __asm__("D_L10_00161FA4") __attribute__((sda));
 extern int   burst_spark_timer_reset_max_gp __asm__("D_L10_00161FA8") __attribute__((sda));
 extern int   burst_spark_active_duration_min_gp __asm__("D_L10_00161FAC") __attribute__((sda));
@@ -212,12 +212,12 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
     third_frame_count =
         truncate_float_to_s32((float)burst_spark_base_third_frame_count_gp * frame_count_scale);
     initial_spark_color =
-        fast_tween_color(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
+        fast_tween_color(l10_burst_spark_initial_color_from, l10_burst_spark_initial_color_to, random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position,
                 burst_spark_vertical_vector,
                 acc,
                 initial_spark_color,
-                fast_tween_color(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)),
+                fast_tween_color(l10_burst_spark_second_color_from, l10_burst_spark_second_color_to, random_float_between(0.0f, 1.0f)),
                 frame_count,
                 second_frame_count,
                 third_frame_count,
