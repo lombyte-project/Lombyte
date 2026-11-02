@@ -49,17 +49,17 @@ typedef struct {
     float f60;
     char  pad64[0x1C];
     float f80;
-    int   w84;
+    int   damage_cooldown_timer;
     char  pad88[4];
     float yaw_sweep_direction;
-    short h90;
+    short yaw_sweep_active;
     char  firing_voice_window_timer;
     char  firing_voice_repeat_timer;
     char  pad94[4];
-    short h98;
-    short h9A;
-    short h9C;
-    short h9E;
+    short firing_inhibit_timer;
+    short firing_point_selector;
+    short shot_cooldown_timer;
+    short aim_alignment_fire_holdoff_timer;
 } Gun;
 
 extern char  D_L12_00167240[];
@@ -135,14 +135,14 @@ void update_planetbuster_maximus_guns(char *moby) {
                                      MOBY(gun_moby)->pos.y),
                     -1.5707964f),
                 MOBY(moby)->rot.z);
-            if (md->h90 == 0) {
+            if (md->yaw_sweep_active == 0) {
                 if (step_angle_toward_target((float *)(ent + 0x18),
                                              yaw,
                                              0,
                                              D_0015ED6C_gp * 0.5235988f +
                                                  D_0015ED6C_gp * 0.17453292f * (float)i) <
                     0.08726646f) {
-                    md->h90 = 1;
+                    md->yaw_sweep_active = 1;
                     md->yaw_sweep_direction = 1.0f;
                     if (i & 1) {
                         md->yaw_sweep_direction = -1.0f;
@@ -175,27 +175,27 @@ void update_planetbuster_maximus_guns(char *moby) {
                 l12_planetbuster_maximus_proximity_fire_counter = 0;
             }
             if ((D_L12_00161F00_gp != 0 || flag) && md->f80 > 0.0f) {
-                fast_dec_timer_s16(&md->h98);
-                fast_dec_timer_s16(&md->h9C);
-                if (md->h98 == 0) {
+                fast_dec_timer_s16(&md->firing_inhibit_timer);
+                fast_dec_timer_s16(&md->shot_cooldown_timer);
+                if (md->firing_inhibit_timer == 0) {
                     if (fast_difference_between_rotations(
                             *(float *)(owner_data + gun_entry_index * 0x30 + 0x18), yaw) <
                         0.06981317f) {
-                        md->h9E = scale_game_frames(0x14);
+                        md->aim_alignment_fire_holdoff_timer = scale_game_frames(0x14);
                     }
-                    if (fast_dec_timer_s16(&md->h9E) == 0) {
+                    if (fast_dec_timer_s16(&md->aim_alignment_fire_holdoff_timer) == 0) {
                         if (FUN_L00_001fefc8(&md->firing_voice_window_timer) == 0) {
                             if (FUN_L00_001fefc8(&md->firing_voice_repeat_timer) != 0) {
                                 allocate_voice_for_target_entry(0, 0, gun_moby);
                                 md->firing_voice_repeat_timer = scale_game_frames(9);
                             }
                         }
-                        if (fast_dec_timer_s16(&md->h9C) != 0) {
+                        if (fast_dec_timer_s16(&md->shot_cooldown_timer) != 0) {
                             float rz;
                             float pitch;
                             int   n;
-                            moby_point_position(gun_moby, md->h9A + 1, position_buffer);
-                            md->h9A = md->h9A == 0;
+                            moby_point_position(gun_moby, md->firing_point_selector + 1, position_buffer);
+                            md->firing_point_selector = md->firing_point_selector == 0;
                             rz = fast_add_rotations(MOBY(gun_moby)->rot.z, 1.5707964f);
                             if (D_L12_00161F00_gp != 0) {
                                 qcopy(aim_target_position, D_L12_00167240);
@@ -251,7 +251,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                                                  1);
                                 }
                             }
-                            md->h9C = scale_game_frames(7);
+                            md->shot_cooldown_timer = scale_game_frames(7);
                             n = D_L12_00161F20;
                             if (scale_game_frames(0xB) < n) {
                                 n = scale_game_frames(0xB);
@@ -259,13 +259,13 @@ void update_planetbuster_maximus_guns(char *moby) {
                             if (n < 0) {
                                 n = 0;
                             }
-                            md->h9C += n;
+                            md->shot_cooldown_timer += n;
                         }
                     }
                 }
             }
             if (D_L12_00161F04_gp == 0 && md->f80 > 0.0f) {
-                if (fast_dec_timer(&md->w84) != 0) {
+                if (fast_dec_timer(&md->damage_cooldown_timer) != 0) {
                     float dmg = 1.0f;
                     char *r = find_moby_hit(gun_moby, 0x50000, 0);
                     if (r == 0) {
@@ -292,7 +292,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                         l12_planetbuster_maximus_proximity_fire_counter = scale_game_frames(0xFA0);
                         goto done;
                     }
-                    md->w84 = scale_game_frames(0x14);
+                    md->damage_cooldown_timer = scale_game_frames(0x14);
                     md->f80 -= dmg;
                     if (md->f80 <= 0.0f) {
                         int j;
