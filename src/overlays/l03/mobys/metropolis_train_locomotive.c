@@ -109,15 +109,15 @@ extern void gunship_update(char *) __asm__("FUN_L01_002f5168");
 typedef struct {
     char  p00[0x60];
     char  motion[0x40];
-    int   iA0;
+    int   first_car_moby_index;
     char  pA4[0x14];
     int   iB8;
     char  pBC[4];
     float fC0;
     int   iC4;
     float fC8;
-    float fCC;
-    float fD0;
+    float yaw_turn_step;
+    float pitch_turn_step;
     char  pD4[8];
     float fDC;
 } Train292890;
@@ -127,8 +127,8 @@ typedef struct {
     char  motion[0x80];
     float prev_pos[4];
     float prev_rot[4];
-    int   iC0;
-    float fC4;
+    int   next_car_moby_index;
+    float hitch_offset_distance;
 } Car292890;
 
 void update_metropolis_train_motion(char *moby) __asm__("FUN_L03_00292890");
@@ -157,7 +157,7 @@ void update_metropolis_train_motion(char *moby) {
     ((unsigned char *)moby)[0x72] = 0xFF;
     qcopy(old_pos, moby + 0x10);
     qcopy(old_rot, moby + 0x40);
-    next_id = locomotive_state->iA0;
+    next_id = locomotive_state->first_car_moby_index;
     if (next_id != -1) {
         /* Fakematch: writing the unchanged next car id back is a no-op, but the
          * test-and-store survives until after register allocation (reload's cse
@@ -165,7 +165,7 @@ void update_metropolis_train_motion(char *moby) {
          * then the branch's label stops reload from reusing the $4 copy of
          * `coupling` below, which gives retail's reload of it from the stack. */
         if (next_id != 0) {
-            locomotive_state->iA0 = next_id;
+            locomotive_state->first_car_moby_index = next_id;
         }
         id = next_id;
         target = coupling + 0x10;
@@ -187,7 +187,7 @@ void update_metropolis_train_motion(char *moby) {
                                             *(float *)(coupling + 0x14) - MOBY(moby)->pos.y),
                                3.1415927f);
         MOBY(moby)->rot.z =
-            spring_turn(&locomotive_state->fCC,
+            spring_turn(&locomotive_state->yaw_turn_step,
                         MOBY(moby)->rot.z,
                         distance_margin_or_target_angle,
                         (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * 0.25f *
@@ -199,7 +199,7 @@ void update_metropolis_train_motion(char *moby) {
             fast_arc_tan(vector_distance_xy(moby + 0x10, target),
                          *(float *)(coupling + 0x18) - MOBY(moby)->pos.z);
         MOBY(moby)->rot.y =
-            spring_turn(&locomotive_state->fD0,
+            spring_turn(&locomotive_state->pitch_turn_step,
                         MOBY(moby)->rot.y,
                         distance_margin_or_target_angle,
                         (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * 0.25f *
@@ -220,7 +220,7 @@ void update_metropolis_train_motion(char *moby) {
             fast_vec_sub(car_position_adjustment, hitch, car + 0x10);
             fast_vec_normalize(car_position_adjustment,
                                car_position_adjustment,
-                               fast_vec_length(car_position_adjustment) - car_data->fC4);
+                               fast_vec_length(car_position_adjustment) - car_data->hitch_offset_distance);
             fast_vec_add(car + 0x10, car_position_adjustment, car + 0x10);
             *(float *)(car + 0x48) = fast_add_rotations(
                 fast_arc_tan(hitch[0] - *(float *)(car + 0x10), hitch[1] - *(float *)(car + 0x14)),
@@ -235,7 +235,7 @@ void update_metropolis_train_motion(char *moby) {
             update_entity_matrix(car_data->motion, delta, car_data->prev_rot, car + 0x40);
             qcopy(car_data->prev_pos, car + 0x10);
             qcopy(car_data->prev_rot, car + 0x40);
-            id = car_data->iC0;
+            id = car_data->next_car_moby_index;
         } while (id != -1);
         fast_vec_sub(delta, moby + 0x10, old_pos);
         update_entity_matrix(locomotive_state->motion, delta, old_rot, moby + 0x40);
