@@ -235,7 +235,7 @@ typedef struct Moby2C8398 {
     char           p00[0x10];
     float          pos[4];
     unsigned char  state;
-    unsigned char  b21;
+    unsigned char  activation_moby_lookup_selector;
     char           p22[2];
     char          *p24;
     char           p28[9];
@@ -395,6 +395,9 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         ENEMY_ANIM_LOCOMOTION = 1,
         ENEMY_ANIM_HEADING_TURN = 9
     };
+    enum {
+        JUMP_PHASE_LANDED = 2
+    };
     Tgt2C8398   selected_target;
     Data2C8398 *moby_data = m->data;
     float       target_distance;
@@ -514,7 +517,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             *(OvlQuad *)m->pos = *(OvlQuad *)(np + 0x10);
             m->rot[2] = fast_arc_tan(*(float *)(np + 0x20) - *(float *)(np + 0x10),
                                      *(float *)(np + 0x24) - *(float *)(np + 0x14));
-            if (is_point_inside_clip_volume_cf(m->b21) ||
+            if (is_point_inside_clip_volume_cf(m->activation_moby_lookup_selector) ||
                 is_point_inside_clip_volume(&selected_target, moby_data->target_activation_clip_volume_id) ||
                 (visited52)[m->mission_index + (current_level_index << 4)] == 0xFF ||
                 (target_distance < moby_data->alternate_path_activation_range &&
@@ -1051,7 +1054,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             q->f8 = q->f8 - q->f10;
             speed = vector_length_xy(q);
             want = 0.0f;
-            if (q->jump_phase != 2) {
+            if (q->jump_phase != JUMP_PHASE_LANDED) {
                 want = q->target_horizontal_speed;
             }
             approach_value(&speed, want, q->f14);
