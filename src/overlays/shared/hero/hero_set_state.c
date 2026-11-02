@@ -3424,7 +3424,7 @@ int process_hero_equipped_item_input(void) {
             }
         }
         if (D_0013F450_h228770.f208C == 6) {
-            HeroTableRow2C *rec = &attack_records[D_0013F450_h228770.fA60];
+            HeroTableRow2C *wrench_attack_record = &attack_records[D_0013F450_h228770.fA60];
             int             t;
 
             if (D_0013F450_h228770.f2084 == 0x15) {
@@ -3432,7 +3432,7 @@ int process_hero_equipped_item_input(void) {
                     if (D_0013F450_h228770.fA9C != 0) {
                         break;
                     }
-                    if (D_0013F450_h228770.fAA8 >= (float)rec->f10 &&
+                    if (D_0013F450_h228770.fAA8 >= (float)wrench_attack_record->f10 &&
                         (controller_state.held & 0xA) &&
                         pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
                         hero_set_state(0x15, 1);
@@ -3443,10 +3443,10 @@ int process_hero_equipped_item_input(void) {
             if (D_0013F450_h228770.fA9C != 0) {
                 break;
             }
-            if (!(D_0013F450_h228770.fAA8 >= (float)rec->f10)) {
+            if (!(D_0013F450_h228770.fAA8 >= (float)wrench_attack_record->f10)) {
                 break;
             }
-            t = (truncate_float_to_s32(D_0013F450_h228770.fAA8) - rec->fC) * 2;
+            t = (truncate_float_to_s32(D_0013F450_h228770.fAA8) - wrench_attack_record->fC) * 2;
             if (t <= 0) {
                 t = 1;
             }
