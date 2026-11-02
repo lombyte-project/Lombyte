@@ -148,7 +148,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     };
     CameraVec          gravity_offset_or_yaw_direction;
     SwingCameraParams *params;
-    struct UpdateCam  *rec;
+    struct UpdateCam  *current_follow_camera_record;
     Vec4f             *pos;
     FollowCamState    *rig;
     FollowCamState    *state;
@@ -206,8 +206,8 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     /* One word over type and timer: type 5 on its first frame snaps the camera. */
     if (*(s32 *)&params->type == SWING_CAMERA_TYPE_SNAP_ON_ENTRY) {
         *(s32 *)&params->swing = 0;
-        rec = current_follow_cam;
-        rig = FOLLOW_CAM_STATE(rec);
+        current_follow_camera_record = current_follow_cam;
+        rig = FOLLOW_CAM_STATE(current_follow_camera_record);
         follow = &rig->follow;
         tail = &rig->tail;
         snap = &rig->tail.snap;
@@ -220,7 +220,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         follow->look_height = params->offset_scale;
         qcopy(state->tail.unk140, tail->unk130);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -tail->distance);
-        pos = &rec->pos;
+        pos = &current_follow_camera_record->pos;
         fast_vec_add(state->follow.eye, &hero.motion.pos, gravity_offset_or_yaw_direction);
         fast_vec_add(pos, state->follow.eye, tail->unk130);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -follow->look_height);
