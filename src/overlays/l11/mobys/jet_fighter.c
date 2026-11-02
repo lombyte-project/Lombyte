@@ -659,7 +659,7 @@ void update_ship_shot_firing_and_reticle(struct Moby *moby,
 extern int spawn_ship_rocket(void *, void *, int, void *, float, int) __asm__("FUN_L11_00309378");
 
 extern short ship_projectile_base_scale_gp __asm__("D_L11_00162064") __attribute__((sda));
-int          D_L11_00162068 = 30;
+int          l11_ship_projectile_cooldown_frames __asm__("D_L11_00162068") = 30;
 void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) __asm__("FUN_L11_003126f8");
 
 void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) {
@@ -685,7 +685,7 @@ void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) {
                                   scale_game_frames(300))) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
-                *(int *)(ship_vars + 0x84) = D_L11_00162068;
+                *(int *)(ship_vars + 0x84) = l11_ship_projectile_cooldown_frames;
             }
         }
     }
