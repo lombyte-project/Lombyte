@@ -3251,11 +3251,14 @@ void stop_suck_cannon_suction_effect(int callback_context) {
 void scatter_moby_from_hazards(O_2df1e0 *p) __asm__("FUN_L00_002df1e0");
 
 void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     s32 i;
     f32 beam_segment_collection_radius;
     if (pickup_moby == 0)
         return;
-    if (pickup_moby->pickup_moby_state == 0xFE)
+    if (pickup_moby->pickup_moby_state == MOBY_STATE_MARKED_FOR_REMOVAL)
         return;
     if (pickup_moby->pickup_moby_state == 0xFD)
         return;
