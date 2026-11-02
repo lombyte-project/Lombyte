@@ -102,8 +102,8 @@ typedef struct Veh_2C27B0 {
     char  pad0[0x64];
     float f64;
     char  pad68[0x28];
-    float f90;
-    float f94;
+    float lead_yaw_offset;
+    float lead_pitch_offset;
 } Veh_2C27B0;
 
 typedef struct Tex {
@@ -286,8 +286,8 @@ void level_13_homing_rocket_update(ProjectileMoby *rocket_moby) {
         if (hero_state->veh != 0 && hero_state->veh->cls_id == 0x45 &&
             rocket_data->owner->state != 5) {
             Veh_2C27B0 *vd = hero_state->veh->data;
-            float       vehicle_lead_yaw = fast_add_rotations(hero_state->veh->rot.z, vd->f90);
-            float       vehicle_lead_pitch = fast_add_rotations(hero_state->veh->rot.y, vd->f94);
+            float       vehicle_lead_yaw = fast_add_rotations(hero_state->veh->rot.z, vd->lead_yaw_offset);
+            float       vehicle_lead_pitch = fast_add_rotations(hero_state->veh->rot.y, vd->lead_pitch_offset);
             build_spherical_offset_c(&scratch_vector,
                                      fast_vec_dist(&rocket_moby->pos, &hero_state->veh->pos) /
                                          (rocket_data->speed + 24.0f) * vd->f64,
