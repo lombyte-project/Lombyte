@@ -6,7 +6,7 @@ typedef struct MobyAttachOwner {
     u8           pad0[0x24];
     void        *unk24;
     u8           pad28[0x3C];
-    Manipulator *unk64;
+    Manipulator *manipulator_head;
 } MobyAttachOwner;
 
 struct Manipulator {
@@ -43,8 +43,8 @@ void attach_manipulator(MobyAttachOwner *source_moby, s32 slot_index, Manipulato
             u8 record_byte_offset = *slot_record;
             manip->unk4 = (void *)((slot_record[record_byte_offset + 4] << 6) + 0x70000000);
         }
-        manip->unk8 = source_moby->unk64;
-        source_moby->unk64 = manip;
+        manip->unk8 = source_moby->manipulator_head;
+        source_moby->manipulator_head = manip;
     }
 }
 
