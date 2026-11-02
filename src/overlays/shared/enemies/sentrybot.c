@@ -1573,6 +1573,9 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
     enum {
         SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION = 2
     };
+    enum {
+        SENTRYBOT_TARGET_MODE_SNAPSHOT_ENGAGEMENT_SUPPRESSION = 1
+    };
     unsigned char *moby = sentrybot_moby;
     SentrybotVars *sentrybot_data = (SentrybotVars *)MOBY(moby)->pvars;
     char          *hit;
@@ -1739,7 +1742,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
             MOBY(moby)->state == SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM) {
             seen = sentrybot_data->has_line_of_sight;
         }
-        if (sentrybot_data->target_mode == 1)
+        if (sentrybot_data->target_mode == SENTRYBOT_TARGET_MODE_SNAPSHOT_ENGAGEMENT_SUPPRESSION)
             sentrybot_data->saved_alert_engagement_suppression_plus_one = sentrybot_data->alert_engagement_suppressed + 1;
         else if ((unsigned char)D_001413F4[0] != 3)
             sentrybot_data->saved_alert_engagement_suppression_plus_one = 0;
@@ -1754,7 +1757,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
             sentrybot_data->target_detected_without_engagement = 0;
         } else if (((sentrybot_data->alert_timer == 0 || sentrybot_data->alert_engagement_suppressed != 0) &&
                     (unsigned char)D_001413F4[0] == 3) ||
-                   (sentrybot_data->saved_alert_engagement_suppression_plus_one != 0 && sentrybot_data->target_mode != 1)) {
+                   (sentrybot_data->saved_alert_engagement_suppression_plus_one != 0 && sentrybot_data->target_mode != SENTRYBOT_TARGET_MODE_SNAPSHOT_ENGAGEMENT_SUPPRESSION)) {
             sentrybot_data->target_mode = SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION;
             sentrybot_data->target_detected_without_engagement = 1;
         } else if ((unsigned char)D_001413F4[0] != 3 && sentrybot_data->target_mode != SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION) {
