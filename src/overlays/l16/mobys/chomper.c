@@ -86,7 +86,7 @@ typedef struct ChomperVars {
     u8  pad_121[0x5F];
     f32 unk180[4];
     u8  pad_190[0x34];
-    s32 unk1C4;
+    s32 pursuit_target_selection_status;
     u8  pad_1C8[0x8];
     f32 unk1D0[4];
     u8  pad_1E0[0x10];
@@ -127,7 +127,7 @@ void chomper_update(struct Moby *chomper_moby) {
         chomper_data->unk5A = truncate_float_to_s32(3.2f);
         break;
     case CHOMPER_WAIT_TO_APPROACH_TARGET:
-        if (chomper_data->unk1C4 != 2) {
+        if (chomper_data->pursuit_target_selection_status != 2) {
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 0)
                 blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
@@ -141,7 +141,7 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_FACE_TARGET;
             if (chomper_moby->prev_seq != 1)
                 blend_moby_animation(chomper_moby, 1, 0, scale_game_frames(20));
-        } else if (chomper_data->unk1C4 == 2)
+        } else if (chomper_data->pursuit_target_selection_status == 2)
             chomper_moby->state = CHOMPER_RETURN_HOME;
         break;
     case CHOMPER_FACE_TARGET: {
@@ -169,7 +169,7 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 2)
                 blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
-        } else if (chomper_data->unk1C4 != 2)
+        } else if (chomper_data->pursuit_target_selection_status != 2)
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
         break;
     case 7:
