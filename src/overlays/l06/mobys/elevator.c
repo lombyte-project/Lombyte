@@ -89,7 +89,7 @@ typedef struct Moby_2FDA70 {
     int            f90;
     int            f94;
     char           pad98[0xE];
-    short          fA6;
+    short          class_id;
     char           padA8[0x58];
 } Moby_2FDA70;
 
@@ -229,7 +229,7 @@ void elevator_update(Moby_2FDA70 *moby) {
             }
             moby->state = WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT;
             moby_data->f90 = 0;
-        } else if (((Hero_2FDA70 *)(D_0013F350))->moby->fA6 == 0x57) {
+        } else if (((Hero_2FDA70 *)(D_0013F350))->moby->class_id == 0x57) {
             moby->state = WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT;
             moby_data->vehicle_entry_configuration_active = 1;
         }
