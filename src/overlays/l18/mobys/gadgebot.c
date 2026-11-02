@@ -269,7 +269,7 @@ typedef struct {
     float         death_fall_horizontal_speed_approach_step;
     float         unk88;
     float         death_fall_initial_vertical_speed;
-    int           unk90;
+    int           death_fall_collision_radius_fixed_point;
     int           unk94;
     float         unk98;
     char          pad9C[0x11];
@@ -356,7 +356,7 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 moby->state = GADGEBOT_EXPLODE;
             } else {
                 fall_setup_value_or_path_slot_address = 0x200;
-                sentry_vars->unk90 = fall_setup_value_or_path_slot_address;
+                sentry_vars->death_fall_collision_radius_fixed_point = fall_setup_value_or_path_slot_address;
                 sentry_vars->unk98 = 0.5f;
                 sentry_vars->unk80 = gadgebot_death_fall_gravity_gp * frame_time_sq;
                 sentry_vars->death_fall_horizontal_speed_approach_step =
