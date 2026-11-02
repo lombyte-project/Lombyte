@@ -469,7 +469,7 @@ extern float fast_add_rotations(float, float);
 
 typedef struct DrainCoverVars {
     u8  pad_0[0x90];
-    f32 unk90;
+    f32 tilt_x_velocity;
     f32 unk94;
     f32 unk98;
     f32 unk9C;
@@ -514,7 +514,7 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
     rate0 = drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
     rate1 = drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
     limit = drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time;
-    approach_angle(&MOBY(moby)->rot.x, target0, &drain_cover_vars->unk90, rate0, rate1, limit);
+    approach_angle(&MOBY(moby)->rot.x, target0, &drain_cover_vars->tilt_x_velocity, rate0, rate1, limit);
     approach_angle(&MOBY(moby)->rot.y,
                    target1,
                    &drain_cover_vars->unk94,
