@@ -162,20 +162,20 @@ typedef struct HoverboardDummyVars {
     u8    pad_1CC[0x14];
     u8    manipulator3;
     u8    pad_1E1[0x67];
-    f32   unk248;
+    f32   manipulator3_target_rotation_z;
     u8    pad_24C[0x14];
     f32   movement_position[4];
     f32   unk270[4];
-    f32   unk280[4];
+    f32   previous_render_position[4];
     u8    pad_290[0x20];
     s32   path;
-    f32   unk2B4;
-    f32   unk2B8;
-    f32   unk2BC;
+    f32   normal_speed_target;
+    f32   boost_speed_target;
+    f32   forward_speed;
     char *unk2C0;
-    s32   unk2C4;
+    s32   yaw_spring_velocity;
     f32   unk2C8;
-    s32   unk2CC;
+    s32   race_competitor_index;
     u8    pad_2D0[0xC];
     s32   timer_2DC;
     u8    pad_2E0[0x4];
@@ -183,7 +183,7 @@ typedef struct HoverboardDummyVars {
     f32   unk2E8;
     u8    pad_2EC[0x4];
     s16   jump_landing_node_index;
-    s16   unk2F2;
+    s16   reactivation_timer_frames;
     s16   unk2F4;
     u16   boost_timer_frames;
 } HoverboardDummyVars;
@@ -592,9 +592,9 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                                          *(float *)(path + 0x24) - *(float *)(path + 0x14));
         hoverboard_dummy_data->unk2B = 1;
         time = D_0015ED6C;
-        offset = (float)hoverboard_dummy_data->unk2CC * (time * 1.55f);
-        hoverboard_dummy_data->unk2B4 = time * 17.0f + offset;
-        hoverboard_dummy_data->unk2B8 = time * 24.0f + offset;
+        offset = (float)hoverboard_dummy_data->race_competitor_index * (time * 1.55f);
+        hoverboard_dummy_data->normal_speed_target = time * 17.0f + offset;
+        hoverboard_dummy_data->boost_speed_target = time * 24.0f + offset;
         if (D_0013D4DF == 0) {
             slow = (float)(D_0015EE3C_gp - 5);
             if (slow < 0.0f) {
@@ -604,8 +604,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             if (slow < 0.8f) {
                 slow = 0.8f;
             }
-            hoverboard_dummy_data->unk2B4 *= slow;
-            hoverboard_dummy_data->unk2B8 *= slow;
+            hoverboard_dummy_data->normal_speed_target *= slow;
+            hoverboard_dummy_data->boost_speed_target *= slow;
         }
         hoverboard_dummy_data->unk2E8 = random_angle_radians();
         hoverboard_dummy_data->unk29 = 0;
@@ -620,11 +620,11 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             hoverboard_dummy_data->unk2F4 = 0;
             *(short *)&hoverboard_dummy_data->boost_timer_frames = scale_game_frames(180);
             *(int *)&hoverboard_dummy_data->unk2C8 = 0;
-            hoverboard_dummy_data->unk2C4 = 0;
+            hoverboard_dummy_data->yaw_spring_velocity = 0;
             hoverboard_dummy_data->jump_timer = 0;
             hoverboard_dummy_data->timer_2DC = 0;
-            *(int *)&hoverboard_dummy_data->unk2BC = 0;
-            if (hoverboard_dummy_data->unk2CC % 2 == 1) {
+            *(int *)&hoverboard_dummy_data->forward_speed = 0;
+            if (hoverboard_dummy_data->race_competitor_index % 2 == 1) {
                 MOBY(moby)->flags |= 0x8000;
             }
             MOBY(moby)->hit_slot = 255;
@@ -635,10 +635,10 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         if (hero.state.control_mode != 22) {
             MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_INITIALIZE;
         } else {
-            int   count = *(unsigned short *)&hoverboard_dummy_data->unk2F2 + 1;
+            int   count = *(unsigned short *)&hoverboard_dummy_data->reactivation_timer_frames + 1;
             short timer = count;
 
-            hoverboard_dummy_data->unk2F2 = count;
+            hoverboard_dummy_data->reactivation_timer_frames = count;
             if (scale_game_frames(240) < timer) {
                 LevelCamera *player = &l16_camera;
 
@@ -683,7 +683,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                             0);
             spawn_moby_break_fragments(moby, 0x655, 1, 0x656, 2, 2, 0);
             spawn_moby_break_fragments(moby, 0x6FA, 1, 0x6FB, 1, 1, 0);
-            hoverboard_dummy_data->unk2F2 = 0;
+            hoverboard_dummy_data->reactivation_timer_frames = 0;
             *(int *)(hero_base + 0x8A8) += 250;
             MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION;
             MOBY(moby)->collision = 0;
@@ -716,7 +716,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                     float rise = *(float *)(path - (-(last * 16)) + 0x18) -
                                  *(float *)(path - (-(first * 16)) + 0x18);
 
-                    duration = distance / hoverboard_dummy_data->unk2BC;
+                    duration = distance / hoverboard_dummy_data->forward_speed;
                     target = rise / duration + frame_time_sq * 21.0f * duration * 0.5f;
                 }
                 if (hoverboard_dummy_data->unk2C8 < 0.0f) {
@@ -732,7 +732,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         angle = fast_arc_tan(path_node_or_explosion_position[0] - MOBY(moby)->pos.x,
                              path_node_or_explosion_position[1] - MOBY(moby)->pos.y);
         spring_angle(moby + 0x48,
-                     &hoverboard_dummy_data->unk2C4,
+                     &hoverboard_dummy_data->yaw_spring_velocity,
                      0,
                      angle,
                      frame_scale_sq * 0.035f,
@@ -741,8 +741,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         if (hoverboard_dummy_data->movement_position[2] < path_node_or_explosion_position[2] - 5.0f) {
             hoverboard_dummy_data->movement_position[2] = path_node_or_explosion_position[2];
         }
-        delta[0] = fast_cos(MOBY(moby)->rot.z) * hoverboard_dummy_data->unk2BC;
-        delta[1] = fast_sin(MOBY(moby)->rot.z) * hoverboard_dummy_data->unk2BC;
+        delta[0] = fast_cos(MOBY(moby)->rot.z) * hoverboard_dummy_data->forward_speed;
+        delta[1] = fast_sin(MOBY(moby)->rot.z) * hoverboard_dummy_data->forward_speed;
         delta[2] = 0.0f;
         fast_vec_add(hoverboard_dummy_data->movement_position, hoverboard_dummy_data->movement_position, delta);
         fast_vec_scale(ahead, delta, 3.0f);
@@ -773,7 +773,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         }
         hoverboard_dummy_data->movement_position[2] += hoverboard_dummy_data->unk2C8;
         if (fast_dec_timer_s16(&hoverboard_dummy_data->boost_timer_frames)) {
-            speed = hoverboard_dummy_data->unk2B4;
+            speed = hoverboard_dummy_data->normal_speed_target;
             if (z < hoverboard_dummy_data->movement_position[2]) {
                 speed = D_0015ED6C * 19.0f;
             }
@@ -781,27 +781,27 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             if (*(int *)(hero_base + 0x894) < scale_game_frames(700)) {
                 speed += D_0015ED6C * 3.0f;
             }
-            if (*(short *)(hero_base - (-(hoverboard_dummy_data->unk2CC * 2)) + 0x7C0) <
+            if (*(short *)(hero_base - (-(hoverboard_dummy_data->race_competitor_index * 2)) + 0x7C0) <
                 *(int *)(hero_base + 0x8C0)) {
                 speed -= D_0015ED6C;
             } else {
                 speed += D_0015ED6C;
             }
-            if (speed < hoverboard_dummy_data->unk2BC) {
-                approach_value(&hoverboard_dummy_data->unk2BC, speed, frame_time_sq * 7.0f);
+            if (speed < hoverboard_dummy_data->forward_speed) {
+                approach_value(&hoverboard_dummy_data->forward_speed, speed, frame_time_sq * 7.0f);
             } else {
-                approach_value(&hoverboard_dummy_data->unk2BC, speed, frame_time_sq * 15.0f);
+                approach_value(&hoverboard_dummy_data->forward_speed, speed, frame_time_sq * 15.0f);
             }
         } else {
-            approach_value(&hoverboard_dummy_data->unk2BC,
-                           hoverboard_dummy_data->unk2B8,
+            approach_value(&hoverboard_dummy_data->forward_speed,
+                           hoverboard_dummy_data->boost_speed_target,
                            frame_time_sq * 20.0f);
         }
         if (gap < 0.2f && hoverboard_dummy_data->unk2C8 < 0.0f) {
             hoverboard_dummy_data->movement_position[2] = z;
             hoverboard_dummy_data->jump_timer = 0;
         }
-        rate = *(float *)&hoverboard_dummy_data->unk2C4;
+        rate = *(float *)&hoverboard_dummy_data->yaw_spring_velocity;
         limit = D_0015ED6C * 2.6179938f;
         if (limit < rate) {
             rate = limit;
@@ -814,7 +814,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         {
             float coefficient = frame_scale_sq;
 
-            hoverboard_dummy_data->unk248 = rate * 30.0f;
+            hoverboard_dummy_data->manipulator3_target_rotation_z = rate * 30.0f;
             hoverboard_dummy_data->unkC8 = rate * 20.0f;
             hoverboard_dummy_data->unk1C8 = rate * 50.0f;
             hoverboard_dummy_data->unk144 = rate * 40.0f;
@@ -848,8 +848,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                 fast_add_rotations(hoverboard_dummy_data->unk2E8, bob_time * 6.108652f);
         }
         MOBY(moby)->pos.z += fast_sin(hoverboard_dummy_data->unk2E8) * 0.08f;
-        fast_vec_sub(ahead, moby + 0x10, hoverboard_dummy_data->unk280);
-        qcopy(hoverboard_dummy_data->unk280, moby + 0x10);
+        fast_vec_sub(ahead, moby + 0x10, hoverboard_dummy_data->previous_render_position);
+        qcopy(hoverboard_dummy_data->previous_render_position, moby + 0x10);
         moby_point_position(moby, (D_L16_0015F5CC & 1) | 4, impact);
         angle = random_angle_radians();
         scale = D_0015ED6C * 0.25f;
