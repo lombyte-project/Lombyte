@@ -40,10 +40,10 @@ typedef struct ScoutbotVars {
     u8    pad50[0x78];
     s16   unkC8;
     u8    padCA[0xa6];
-    f32   unk170[4];
+    f32   tracked_target_position[4];
     u8    pad180[0x30];
     s32   unk1B0;
-    s32   unk1B4;
+    s32   target_selection_status;
     u8    pad1B8[0x8];
     f32   unk1C0[4];
     f32   unk1D0[4];
@@ -56,7 +56,7 @@ typedef struct ScoutbotVars {
     u8    pad210[0x6];
     s16   unk216;
     char *unk218;
-    s32   unk21C;
+    s32   target_path_index;
     u8    unk220[0x4];
 } ScoutbotVars;
 
@@ -437,14 +437,14 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (((unsigned char *)moby)[0x20] != 0 && ((unsigned char *)moby)[0x20] != 4) {
-        char *path = ((char *)l08_paths[scoutbot_pvars->unk21C]);
+        char *path = ((char *)l08_paths[scoutbot_pvars->target_path_index]);
         if (func_L00_00260FB0_f(
-                moby, &scoutbot_pvars->unk170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
-            if (14.0f < vector_distance_xy(&scoutbot_pvars->unk1C0, &scoutbot_pvars->unk170)) {
-                scoutbot_pvars->unk1B4 = 2;
+                moby, &scoutbot_pvars->tracked_target_position, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
+            if (14.0f < vector_distance_xy(&scoutbot_pvars->unk1C0, &scoutbot_pvars->tracked_target_position)) {
+                scoutbot_pvars->target_selection_status = 2;
             } else if (3.0f <
-                       absolute_float(scoutbot_pvars->unk1C0[2] - scoutbot_pvars->unk170[2])) {
-                scoutbot_pvars->unk1B4 = 2;
+                       absolute_float(scoutbot_pvars->unk1C0[2] - scoutbot_pvars->tracked_target_position[2])) {
+                scoutbot_pvars->target_selection_status = 2;
             }
         }
     }
