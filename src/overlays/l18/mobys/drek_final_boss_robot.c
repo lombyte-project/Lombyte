@@ -2775,9 +2775,9 @@ extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__(
 
 typedef struct {
     char  pad0[0x3A0];
-    void *p3A0;
+    void *attached_joint_glow_moby;
     char  pad3A4[0x14];
-    int   p3B8;
+    int   joint_glow_color;
 } L18Q;
 
 extern f32 D_L18_00162450_gp __asm__("D_L18_00162450") __attribute__((sda));
@@ -2812,12 +2812,12 @@ void render_drek_boss_joint_glows(struct Moby *moby) {
     attached_glow_color = fast_tween_color(*(int *)&D_L18_00162458_gp,
                                            *(int *)&D_L18_0016245C_gp,
                                            attached_glow_cycle_value * 0.5f + 0.5f);
-    moby_point_position(boss_vars->p3A0, 1, joint_world_position);
+    moby_point_position(boss_vars->attached_joint_glow_moby, 1, joint_world_position);
     draw_offset_textured_effect_quad(joint_world_position,
                                      attached_glow_color,
                                      *(float *)&D_L18_00162450_gp,
                                      *(float *)&D_L18_00162454_gp);
-    moby_point_position(boss_vars->p3A0, 2, joint_world_position);
+    moby_point_position(boss_vars->attached_joint_glow_moby, 2, joint_world_position);
     draw_offset_textured_effect_quad(joint_world_position,
                                      attached_glow_color,
                                      *(float *)&D_L18_00162450_gp,
@@ -2851,7 +2851,7 @@ void render_drek_boss_joint_glows(struct Moby *moby) {
     }
     for (i = 0; i < 8; i++) {
         moby_point_position(moby, 11 + i, joint_world_position);
-        draw_offset_textured_effect_quad(joint_world_position, boss_vars->p3B8, 0.7f, 0.5f);
+        draw_offset_textured_effect_quad(joint_world_position, boss_vars->joint_glow_color, 0.7f, 0.5f);
     }
 }
 
