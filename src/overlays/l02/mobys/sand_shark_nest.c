@@ -101,7 +101,7 @@ typedef struct {
     float         f20; /* 0x20 */
     short         s24; /* 0x24 */
     char          pad26[8];
-    unsigned char b2E; /* 0x2E */
+    unsigned char removal_request_state; /* 0x2E */
     char          pad2F[0x11];
     float         vel[4]; /* 0x40: passed to spawn_explosion */
     char          pad50[0x20];
@@ -115,8 +115,8 @@ typedef struct {
 /* Counters kept in the spawner moby's pvars. */
 typedef struct {
     char pad0[0x14C];
-    int  i14C;
-    int  i150;
+    int  launched_sand_shark_count;
+    int  active_nest_count;
 } Spawnercb38;
 
 extern BoltSourceStats bolt_source_stats_lui[][64] __asm__("D_0014D590") NOT_SDA;
@@ -175,10 +175,10 @@ void sand_shark_nest_update(unsigned char *moby) {
         MOBY(moby)->state = SAND_SHARK_NEST_WAIT_FOR_SPAWN;
         nest_vars->f20 = 3.0f;
         nest_vars->s24 = 3;
-        nest_vars->b2E = 1;
+        nest_vars->removal_request_state = 1;
         nest_vars->timer = scale_game_frames(nest_vars->delay);
         if (nest_vars->spawner >= 0) {
-            (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->i150 += 1;
+            (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->active_nest_count += 1;
         }
         break;
     case SAND_SHARK_NEST_WAIT_FOR_SPAWN:
@@ -210,7 +210,7 @@ void sand_shark_nest_update(unsigned char *moby) {
             if (launched_shark) {
                 char *od = *(char **)(launched_shark + 0x78);
                 if (nest_vars->spawner >= 0) {
-                    (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->i14C +=
+                    (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->launched_sand_shark_count +=
                         1;
                 }
                 qcopy(&launch_position, moby + 0x10);
@@ -239,7 +239,7 @@ void sand_shark_nest_update(unsigned char *moby) {
         if (step_moby_motion(moby, nest_vars->anim) & 0x40) {
             if (nest_vars->spawner >= 0) {
                 extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
-                (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8_s + 0x78))->i150 -= 1;
+                (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8_s + 0x78))->active_nest_count -= 1;
             }
             qcopy(&launch_velocity_or_explosion_position, moby + 0x10);
             spawn_explosion(moby,
