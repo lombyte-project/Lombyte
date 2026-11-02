@@ -43,7 +43,7 @@ typedef struct Moby_2B94B0 {
     float         pos[4];
     unsigned char state;
     char          pad21[0x27];
-    float         f48;
+    float         spin_angle;
     char          pad4C[0x2C];
     MobyData     *data;
 } Moby_2B94B0;
@@ -58,8 +58,8 @@ typedef struct Hero_2B94B0 {
     char  pad540[0x1B4C];
     int   f208C;
     char  pad2090[0x1F8];
-    float f2288;
-    float f228C;
+    float collection_radius_xy;
+    float collection_height_tolerance;
 } Hero_2B94B0;
 
 extern float D_0015ED70;
@@ -182,7 +182,7 @@ void bolt_pickup_update(Moby_2B94B0 *moby) {
         qcopy(moby->pos, P);
     case MOBY_STATE_CHECK_COLLECTION:
         hit = 0;
-        moby->f48 = fast_add_rotations(moby->f48, moby_data->fC);
+        moby->spin_angle = fast_add_rotations(moby->spin_angle, moby_data->fC);
         if (((Hero_2B94B0 *)((char *)&hero))->f208C == 15) {
             if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->v510, moby->pos) < 0.5f)
                 hit = 1;
@@ -191,9 +191,9 @@ void bolt_pickup_update(Moby_2B94B0 *moby) {
             if (vector_distance_xy(((Hero_2B94B0 *)((char *)&hero))->v530, moby->pos) < 0.5f)
                 hit = 1;
         } else if (vector_distance_xy(moby->pos, ((Hero_2B94B0 *)((char *)&hero))->pos) <
-                   ((Hero_2B94B0 *)((char *)&hero))->f2288) {
+                   ((Hero_2B94B0 *)((char *)&hero))->collection_radius_xy) {
             if (absolute_float(moby->pos[2] - ((Hero_2B94B0 *)((char *)&hero))->pos[2]) <
-                ((Hero_2B94B0 *)((char *)&hero))->f228C)
+                ((Hero_2B94B0 *)((char *)&hero))->collection_height_tolerance)
                 hit = 1;
         }
         if (hit == 0)
