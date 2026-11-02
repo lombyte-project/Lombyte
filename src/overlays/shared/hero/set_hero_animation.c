@@ -164,7 +164,7 @@ void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend
 }
 
 typedef struct {
-    s16 h0;
+    s16 animation_key;
     u8  primary_animation_id;
     u8  secondary_animation_id;
 } E_231ff8;
@@ -193,8 +193,8 @@ int             select_hero_slot3_animation_pair(int  input_animation_id,
     }
     if (animation_table) {
         int j = 0;
-        while (animation_table[j].h0 != -1) {
-            if (animation_lookup_key == animation_table[j].h0) {
+        while (animation_table[j].animation_key != -1) {
+            if (animation_lookup_key == animation_table[j].animation_key) {
                 matching_animation_entry_indices[match_count] = j;
                 match_count++;
             }
