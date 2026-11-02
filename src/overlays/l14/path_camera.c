@@ -17,7 +17,7 @@
 
 typedef struct {
     char  pad0[0xB0];
-    float fB0; /* tan of half the field of view */
+    float tan_half_fov; /* tan of half the field of view */
 } VendorView_5290;
 
 extern VendorView_5290 l14_camera_projection_state __asm__("D_L14_0016D140");
@@ -72,7 +72,7 @@ void setup_path_camera(char *camera) {
             fov_stops->seg[k] = -1;
         }
     }
-    fov_stops->fov_end = fast_arc_tan(1.0f, l14_camera_projection_state.fB0) * 2.0f;
+    fov_stops->fov_end = fast_arc_tan(1.0f, l14_camera_projection_state.tan_half_fov) * 2.0f;
     if (*(int *)(path_camera_setup_preset + 0x20) >= 0) {
         path = ((char *)l14_paths[*(int *)(path_camera_setup_preset + 0x20)]);
         fov_stop_count = 0;
@@ -216,7 +216,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         float ang = fov_stops->fov_end * 0.5f;
         char *hp;
         char *mb;
-        l14_camera_projection_state.fB0 = fast_sin(ang) / fast_cos(ang);
+        l14_camera_projection_state.tan_half_fov = fast_sin(ang) / fast_cos(ang);
         update_view_context();
         D_L14_001675D8 = 0.25f;
         path_camera->transition_state = PATH_CAMERA_TRANSITION_PATH_FINISHED;
@@ -258,7 +258,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
                 total += *(float *)(path + (remaining_segment_index * 16 + 0x1C));
             ang = cosine_interpolate(fov_stops->fov[i], fov_stops->fov[i + 1], sum / total) *
                   0.017453292f * 0.5f;
-            l14_camera_projection_state.fB0 = fast_sin(ang) / fast_cos(ang);
+            l14_camera_projection_state.tan_half_fov = fast_sin(ang) / fast_cos(ang);
             update_view_context();
         }
     }
