@@ -975,7 +975,7 @@ typedef struct D_2E52B0 {
     char          p14[0xC];
     float         f20;
     char          p24[2];
-    short         h26;
+    short         hit_reaction_suppression_timer_frames;
     char          p28[0x10];
     int           target_range_boost_pending;
     char          p3C[0x24];
@@ -1018,7 +1018,7 @@ typedef struct Hit_2E52B0 {
     char           p24[4];
     unsigned char  b28;
     char           p29;
-    unsigned short h2A;
+    unsigned short hit_source_class;
 } Hit_2E52B0;
 
 #include "rnc/overlay/l10/mobys/toxic_crab_globals.h"
@@ -1082,7 +1082,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     hit_record = find_moby_hit(moby, 0xB30000, 0);
     hit_response_code =
         resolve_moby_hit_response(moby, hit_record, &moby_data->f20, 0, &A, &B, 0, 4);
-    fast_dec_timer_s16(&moby_data->h26);
+    fast_dec_timer_s16(&moby_data->hit_reaction_suppression_timer_frames);
     if ((unsigned int)A >= 2 && moby->state != TOXIC_CRAB_STATE_DEATH_EFFECTS &&
         moby->state != TOXIC_CRAB_STATE_FALL_TO_DEATH) {
         if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 &&
@@ -1093,7 +1093,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
                 queue_dialogue_message(0x53D6, -1);
             }
         }
-        if (moby_data->h26 != 0 && hit_record->b28 == 0) {
+        if (moby_data->hit_reaction_suppression_timer_frames != 0 && hit_record->b28 == 0) {
             hit_response_code = 11;
             if (B < 3.0f)
                 B = 0.0f;
@@ -1104,7 +1104,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
             if (2.0f < B)
                 B = 2.0f;
         }
-        if (hit_record->h2A == moby->oclass) {
+        if (hit_record->hit_source_class == moby->oclass) {
             B = 0.0f;
             hit_response_code = 11;
         }
@@ -1115,7 +1115,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
                 hit_response_code = 11;
             }
         }
-        if (hit_record->h2A == 0x47) {
+        if (hit_record->hit_source_class == 0x47) {
             *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)(((char *)&hero) + 0x80);
             *(u128_2E52B0 *)&vB = *(u128_2E52B0 *)((AlignedVec4f *)&moby->pos);
             vA.z += 1.0f;
@@ -1158,7 +1158,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         case HIT_DIRECTED_KNOCKBACK_HIT_RESPONSE:
         case ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE:
             moby->state = TOXIC_CRAB_STATE_HIT_KNOCKBACK;
-            moby_data->h26 = scale_game_frames(60);
+            moby_data->hit_reaction_suppression_timer_frames = scale_game_frames(60);
             moby_data->f80 = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
             trooper_set_knockback(moby_data->a70, 0.5f, 0.5f);
             moby_data->fC0 = 8.0f;
@@ -1173,7 +1173,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         case VEHICLE_DEPENDENT_KNOCKBACK_HIT_RESPONSE: {
             float knockback_strength;
             moby->state = TOXIC_CRAB_STATE_HIT_KNOCKBACK;
-            moby_data->h26 = scale_game_frames(60);
+            moby_data->hit_reaction_suppression_timer_frames = scale_game_frames(60);
             moby_data->f80 = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
             knockback_strength = ((Hero *)(((char *)&hero)))->vehicle_mode == 1 ? 1.0f : 3.0f;
             trooper_set_knockback(moby_data->a70, knockback_strength, 0.5f);
