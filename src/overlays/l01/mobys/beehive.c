@@ -43,7 +43,7 @@ typedef struct {
     u8         pad50[0x28];
     void      *pvars;
     u8         pad7C[0x18];
-    s32        w94;
+    s32        spatial_cell_update_gate;
 } ClonedMoby;
 
 extern void get_first_moby_in_group(ClonedMoby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
@@ -157,7 +157,7 @@ ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *clone_spawner_moby) {
     destination_moby->h32 = 0x80;
     destination_moby->d38 = clone_spawner_moby->d38;
     destination_moby->b31 = 1;
-    destination_moby->w94 = destination_moby->mclass->w10;
+    destination_moby->spatial_cell_update_gate = destination_moby->mclass->w10;
     destination_moby->flags |= 0x1020;
     destination_moby->scale = destination_moby->mclass->f24;
     {
