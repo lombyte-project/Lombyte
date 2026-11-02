@@ -3161,25 +3161,25 @@ int try_enter_hero_water_state(void) {
 
 typedef struct {
     u8  p0[0x88];
-    f32 f88;
+    f32 water_adjusted_position_z;
     u8  p1[0x198 - 0x8C];
     s32 i198;
     u8  p2[0x2F0 - 0x19C];
-    f32 f2F0;
+    f32 water_surface_height_target;
     u8  p3[0x690 - 0x2F4];
-    f32 f690;
+    f32 water_bob_offset;
     f32 f694;
     u8  p4[0x69C - 0x698];
-    f32 f69C;
-    f32 f6A0;
+    f32 smoothed_water_height;
+    f32 water_height_spring_velocity;
     u8  p5[0x8A0 - 0x6A4];
-    f32 f8A0;
+    f32 alternate_water_height_target;
     u8  p6[0x8FC - 0x8A4];
-    f32 f8FC;
+    f32 water_bob_spring_velocity;
     u8  p7[0x2084 - 0x900];
     s32 i2084;
     u8  p8[4];
-    s32 i208C;
+    s32 water_height_control_mode;
     u8  p9[4];
     s32 i2094;
     u8  pa[0x20A0 - 0x2098];
@@ -3192,35 +3192,35 @@ void            approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 
 void update_hero_water_height_and_bobbing(void) {
-    if (G.i198 > scale_game_frames(10) || G.f690 < 0.0f || G.i2094 == 0x11 || G.i20A0 == 0x11) {
+    if (G.i198 > scale_game_frames(10) || G.water_bob_offset < 0.0f || G.i2094 == 0x11 || G.i20A0 == 0x11) {
         if (G.i2084 == 0x36) {
-            vendor_spring(&G.f690,
-                          &G.f8FC,
+            vendor_spring(&G.water_bob_offset,
+                          &G.water_bob_spring_velocity,
                           0.0f,
                           frame_scale_sq * 0.03f,
                           frame_scale_sq * 0.3f,
                           frame_time * 1.5f);
             G.f694 = 0.0f;
         } else {
-            G.f694 -= frame_scale_sq * 0.005f * G.f690 + frame_scale * 0.045f * G.f694;
-            if (absolute_float(G.f690) < 0.001f && G.f694 < 0.0001f)
+            G.f694 -= frame_scale_sq * 0.005f * G.water_bob_offset + frame_scale * 0.045f * G.f694;
+            if (absolute_float(G.water_bob_offset) < 0.001f && G.f694 < 0.0001f)
                 G.f694 = 0.0f;
         }
     }
-    G.f690 += G.f694;
-    if (G.i2084 == 0x36 && 0.0f < G.f690) {
+    G.water_bob_offset += G.f694;
+    if (G.i2084 == 0x36 && 0.0f < G.water_bob_offset) {
         if (0.0f < G.f694)
             G.f694 = 0.0f;
-        approach_value(&G.f690, 0.0f, frame_time * 0.7f);
+        approach_value(&G.water_bob_offset, 0.0f, frame_time * 0.7f);
     }
     if (G.i2084 != 0x7F) {
-        f32 target_height = G.f2F0;
-        if (G.i208C == 0x16)
-            target_height = G.f8A0;
+        f32 target_height = G.water_surface_height_target;
+        if (G.water_height_control_mode == 0x16)
+            target_height = G.alternate_water_height_target;
         vendor_spring(
-            &G.f69C, &G.f6A0, target_height, frame_scale_sq * 0.027f, frame_scale_sq * 0.3f, 0.0f);
+            &G.smoothed_water_height, &G.water_height_spring_velocity, target_height, frame_scale_sq * 0.027f, frame_scale_sq * 0.3f, 0.0f);
     }
-    G.f88 = G.f69C + -0.12f + G.f690;
+    G.water_adjusted_position_z = G.smoothed_water_height + -0.12f + G.water_bob_offset;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00228770), where it is exact; names translated to the US level program. */
