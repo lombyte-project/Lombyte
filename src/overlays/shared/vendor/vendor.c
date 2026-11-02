@@ -57,7 +57,7 @@ typedef struct {
 typedef struct {
     s32       i0, i4;
     u8        p8[4];
-    M_2a57a8 *mC;
+    M_2a57a8 *auxiliary_moby;
     u8        p10[0x90 - 0x10];
     f32       effect_scale_factor;
 } Q_2a57a8;
@@ -317,31 +317,31 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         vendor_moby->vendor_state = VENDOR_WAIT_FOR_HERO;
         q->i0 = 0;
         q->i4 = 0;
-        q->mC = create_moby(0x477);
-        q->mC->h34 |= 2;
-        q->mC->h32 = 0x40;
-        q->mC->f10 = vendor_moby->f10;
-        q->mC->f14 = vendor_moby->f14;
-        q->mC->f18 = vendor_moby->f18 + 2.95f;
-        q->mC->b73 = 0x20;
+        q->auxiliary_moby = create_moby(0x477);
+        q->auxiliary_moby->h34 |= 2;
+        q->auxiliary_moby->h32 = 0x40;
+        q->auxiliary_moby->f10 = vendor_moby->f10;
+        q->auxiliary_moby->f14 = vendor_moby->f14;
+        q->auxiliary_moby->f18 = vendor_moby->f18 + 2.95f;
+        q->auxiliary_moby->b73 = 0x20;
         q->effect_scale_factor = 0.0f;
         for (i = 0; i < 2; i++) {
-            attach_manipulator(q->mC, i, (u8 *)q + 0x10 + i * 0x40);
+            attach_manipulator(q->auxiliary_moby, i, (u8 *)q + 0x10 + i * 0x40);
         }
-        update_entity(q->mC);
+        update_entity(q->auxiliary_moby);
         break;
     case VENDOR_WAIT_FOR_HERO:
         if (q->effect_scale_factor > 0.0f)
             q->effect_scale_factor -= 0.1f;
         if (q->effect_scale_factor <= 0.0f)
-            q->mC->h34 |= 1;
+            q->auxiliary_moby->h34 |= 1;
         if (!(D_L00_0015F5CC_2a57a8 & 7) &&
             vector_distance_xy(&vendor_moby->f10, &hero_pos) <= 16.0f &&
             absolute_float(vendor_moby->f18 - hero_pos.f[2]) <= 8.0f) {
             vendor_moby->vendor_state = VENDOR_HERO_NEARBY;
             if (vendor_moby->b53 != 1)
                 blend_moby_animation(vendor_moby, 1, 0, 10);
-            q->mC->h34 &= 0xFFFE;
+            q->auxiliary_moby->h34 &= 0xFFFE;
         }
         add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
         build_axis_rotation_quaternion((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
@@ -351,8 +351,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
             fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
-        q->mC->auxiliary_scale = q->effect_scale_factor * q->mC->p24->auxiliary_scale_multiplier * 2.5f;
-        update_entity(q->mC);
+        q->auxiliary_moby->auxiliary_scale = q->effect_scale_factor * q->auxiliary_moby->p24->auxiliary_scale_multiplier * 2.5f;
+        update_entity(q->auxiliary_moby);
         break;
     case VENDOR_HERO_NEARBY:
         if (q->effect_scale_factor < 1.0f)
@@ -375,8 +375,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase =
             fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
-        q->mC->auxiliary_scale = q->effect_scale_factor * q->mC->p24->auxiliary_scale_multiplier * 2.5f;
-        update_entity(q->mC);
+        q->auxiliary_moby->auxiliary_scale = q->effect_scale_factor * q->auxiliary_moby->p24->auxiliary_scale_multiplier * 2.5f;
+        update_entity(q->auxiliary_moby);
         if (hero.state.control_mode != 0 && hero.state.current != 3 &&
             hero.state.control_mode != 1) {
             interaction_allowed = 0;
@@ -412,10 +412,10 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         }
         break;
     case VENDOR_ZERO_AUXILIARY_SCALE:
-        if (q->mC) {
+        if (q->auxiliary_moby) {
             q->effect_scale_factor = 0.0f;
-            q->mC->auxiliary_scale = q->mC->p24->auxiliary_scale_multiplier * q->effect_scale_factor * 2.5f;
-            update_entity(q->mC);
+            q->auxiliary_moby->auxiliary_scale = q->auxiliary_moby->p24->auxiliary_scale_multiplier * q->effect_scale_factor * 2.5f;
+            update_entity(q->auxiliary_moby);
         }
         break;
     }
