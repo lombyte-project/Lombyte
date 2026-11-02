@@ -359,7 +359,7 @@ typedef struct {
 typedef struct {
     char  p00[0x64];
     float f64;
-    float f68;
+    float target_rotation_z;
     char  p6C[0x14];
 } Manip_308D68;
 
@@ -629,9 +629,9 @@ void skid_mcmarx_update(Moby *moby) {
             if (moby->flags & 0x8000) {
                 turn = -turn;
             }
-            racer_instance_vars->m[3].f68 = turn * 30.0f;
-            racer_instance_vars->m[0].f68 = turn * 20.0f;
-            racer_instance_vars->m[2].f68 = turn * 50.0f;
+            racer_instance_vars->m[3].target_rotation_z = turn * 30.0f;
+            racer_instance_vars->m[0].target_rotation_z = turn * 20.0f;
+            racer_instance_vars->m[2].target_rotation_z = turn * 50.0f;
             racer_instance_vars->m[1].f64 = turn * 40.0f;
             FUN_L00_002628d8((char *)moby,
                              (char *)&racer_instance_vars->m[3],
