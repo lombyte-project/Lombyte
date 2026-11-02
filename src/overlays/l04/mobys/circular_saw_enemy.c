@@ -482,7 +482,7 @@ extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__(
 extern int move_moby_xy_with_collision_constraints(
     void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 extern int  FUN_L00_002dc9f0(void *, void *);
-short       D_L04_00161878 = 0x101;
+short       l04_circular_saw_suck_cannon_config_header __asm__("D_L04_00161878") = 0x101;
 extern void FUN_L01_0026d930(char *p);
 extern void update_circular_saw_engine_sound(struct Moby *) __asm__("FUN_L04_002c1b80");
 extern void transform_vector_by_basis(void *, void *, void *);
@@ -696,7 +696,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         data->f258 = k * 2.9670596f;
         qcopy(data->f120, moby->pos);
         data->f146 = scale_game_frames(0x3C);
-        data->f1F0 = &D_L04_00161878;
+        data->f1F0 = &l04_circular_saw_suck_cannon_config_header;
         data->f136 = 0;
         data->f144 = 0;
         if (data->f150 == -1) {
