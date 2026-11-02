@@ -20,7 +20,7 @@
 typedef struct {
     int   w0;
     short s4, s6, s8, sA;
-    int   wC;
+    int   initial_timed_wait_frames;
     short s10, s12;
     char  pad14[8];
     float radius; /* 0x1C: beam half width */
@@ -78,7 +78,7 @@ void electric_beam_update(unsigned char *moby) {
     switch (beam_state) {
     case BEAM_STATE_INITIALIZE:
         start_electric_beam_pulse((char *)moby);
-        beam_vars->s10 = scale_game_frames(beam_vars->wC);
+        beam_vars->s10 = scale_game_frames(beam_vars->initial_timed_wait_frames);
         MOBY(moby)->state = BEAM_STATE_WAIT_FOR_TIMED_PULSE;
         beam_vars->culling_sphere_radius = fast_vec_length(&l14_cuboids[beam_vars->w0].axes[1]);
         beam_vars->s8 = 1;
