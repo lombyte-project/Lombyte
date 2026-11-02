@@ -42,7 +42,7 @@ typedef struct TieData {
 
 typedef struct ShrubData {
     IRow m[3];
-    FRow m3;
+    FRow translation_and_position_scale;
 } ShrubData;
 
 typedef struct LevelHeader {
@@ -373,9 +373,9 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         qcopy(&shrub_data->m[0], shrub_record + 0x10);
         qcopy(&shrub_data->m[1], shrub_record + 0x20);
         qcopy(&shrub_data->m[2], shrub_record + 0x30);
-        qcopy(&shrub_data->m3, shrub_record + 0x40);
+        qcopy(&shrub_data->translation_and_position_scale, shrub_record + 0x40);
         shrub_record += 0x50;
-        shrub_data->m3.w = shrub_render_classes[shrub_class]->unk20;
+        shrub_data->translation_and_position_scale.w = shrub_render_classes[shrub_class]->unk20;
         horizontal_scale =
             (fast_vec_length(&shrub_data->m[0]) + fast_vec_length(&shrub_data->m[1])) * 0.5f;
         vertical_scale = fast_vec_length(&shrub_data->m[2]);
@@ -403,8 +403,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         max_axis_length = max_float(max_axis_length, fast_vec_length(&shrub_data->m[1]));
         max_axis_length = max_float(max_axis_length, fast_vec_length(&shrub_data->m[2]));
         shrub->scale = shrub_render_classes[shrub_class]->bounding_sphere[3] * max_axis_length;
-        scale_vector(shrub, shrub, shrub_data->m3.w);
-        fast_vec_add(shrub, shrub, &shrub_data->m3);
+        scale_vector(shrub, shrub, shrub_data->translation_and_position_scale.w);
+        fast_vec_add(shrub, shrub, &shrub_data->translation_and_position_scale);
     }
     shrub_list = (u16 *)0x70000000;
     for (shrub_light_index = 0; shrub_light_index < shrub_count; shrub_light_index++) {
