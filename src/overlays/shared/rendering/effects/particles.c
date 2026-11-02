@@ -539,10 +539,10 @@ void send_blast_hits(void *,
                      float) __asm__("FUN_L00_0025a9f8");
 
 typedef struct {
-    int   i0;
+    int   particle_path_reference;
     float unk4, unk8, fc;
     int   i10;
-    void *p14;
+    void *blast_source_moby;
 } Q_272438;
 
 void update_timed_sphere_probed_particle(struct EffectParticle *) __asm__("FUN_L00_00272438");
@@ -557,7 +557,7 @@ void update_timed_sphere_probed_particle(struct EffectParticle *particle) {
     previous_particle_position = *particle_position;
     particle_data->unk4 += particle_data->unk8;
     path_sample_at_distance(
-        particle_data->i0, &x, &y, particle_position, particle_data->unk4, particle_data->fc);
+        particle_data->particle_path_reference, &x, &y, particle_position, particle_data->unk4, particle_data->fc);
     if (fast_dec_timer_s16(&particle->life)) {
         free_effect_particle(particle);
         return;
@@ -571,9 +571,9 @@ void update_timed_sphere_probed_particle(struct EffectParticle *particle) {
                                                       ((float)scale_game_frames(0x1E) * 0.25f));
     }
     sphere_probe_result =
-        collect_mobies_in_sphere(0.15f, particle_position, 0x10, particle_data->p14, 0);
+        collect_mobies_in_sphere(0.15f, particle_position, 0x10, particle_data->blast_source_moby, 0);
     position_copy = *particle_position;
-    send_blast_hits(particle_data->p14,
+    send_blast_hits(particle_data->blast_source_moby,
                     (void *)&position_copy,
                     D_L00_00177F00_272438,
                     sphere_probe_result,
