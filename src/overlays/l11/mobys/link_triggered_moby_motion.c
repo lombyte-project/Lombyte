@@ -68,7 +68,7 @@ void link_triggered_moby_motion_update(struct Moby *moving_moby) {
         source_moby_class = moving_moby->pclass;
         moving_moby->scale = source_moby_class->scale * private_data->unkC;
         spawned_moby->scale = source_moby_class->scale * private_data->unkC;
-        spawned_moby->state = 1;
+        spawned_moby->state = LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER;
         moving_moby->state = LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER;
         break;
     case LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER:
