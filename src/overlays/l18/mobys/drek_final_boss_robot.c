@@ -234,7 +234,7 @@ typedef struct BossData {
     int            class_238_launch_group_index;
     int            race_camera_node_index;
     char           p2A4[0xC];
-    int            f2B0;
+    int            persistent_jet_slot_index;
     char           p2B4[0x4C];
     float          f300[4];
     float          saved_transition_rotation[4];
@@ -641,7 +641,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 char *b = D_L18_001600EC + boss_data->race_camera_node_index * 0x80;
                 set_race_camera(b + 0x30, b + 0x70, 0, 1);
             }
-            jet_clear_persistent(boss_data->f2B0);
+            jet_clear_persistent(boss_data->persistent_jet_slot_index);
             jet_reset_camera(hero.motion.pos.f, hero.motion.rot.f);
             show_drek_boss_moby_group((int)moby, boss_data->f204[0]);
             start_scene(1);
