@@ -148,6 +148,10 @@ typedef struct ExtermitankVars {
 
 /* Moby class 625 */
 void extermitank_update(unsigned char *moby) {
+    enum {
+        EXTERMITANK_LIFECYCLE_INITIALIZED = 1,
+        EXTERMITANK_LIFECYCLE_REMOVE = 2
+    };
     ExtermitankVars *extermitank_vars = (ExtermitankVars *)MOBY(moby)->pvars;
     float            origin_position[4];
     float            particle_vector_a[4];
