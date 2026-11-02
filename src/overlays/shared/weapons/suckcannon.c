@@ -2280,7 +2280,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
     Frame_2DDEA0 suction_and_projectile_scratch;
     R_2DDEA0    *suction_and_projectile_record;
 
-    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER || moby->state == 0xFD)
+    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER || moby->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER)
         return 0;
     suction_and_projectile_record = func_L00_002DCD40_2DDEA0(moby);
     if (suction_and_projectile_record != 0) {
