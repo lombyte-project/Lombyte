@@ -22,7 +22,7 @@ typedef struct {
     float         f4, f8;
     short         hc, he;
     unsigned char p10[0x10];
-    int           i20;
+    int           rotation_step_x;
     float         f24, f28;
 } V_2af8b0;
 
@@ -168,7 +168,7 @@ unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
         debris_data->f4 = MOBY(debris_moby)->pos.z;
         {
             short t = FUN_001f96f8_2af8b0(0x14);
-            debris_data->i20 = 0;
+            debris_data->rotation_step_x = 0;
             debris_data->he = t;
         }
         debris_data->f24 =
