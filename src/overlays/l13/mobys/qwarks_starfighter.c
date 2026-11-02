@@ -680,9 +680,9 @@ typedef struct {
     Moby_2EAE80   *list[11];
     Moby_2EAE80   *first;
     char           padF4[0xC];
-    int            f100;
+    int            tractor_beam_timer_frames;
     char           pad104[0x18];
-    int            i11C;
+    int            tractor_beam_voice_slot_index;
     char           pad120[0x18];
     unsigned short h138;
     char           pad13A[0xE];
@@ -694,7 +694,7 @@ typedef struct {
     Moby_2EAE80   *target;
     char           pad24[6];
     unsigned short h2A;
-    float          f2C;
+    float          damage_amount;
 } Hit_2EAE80;
 
 typedef struct {
@@ -706,7 +706,7 @@ typedef struct {
 
 typedef struct {
     char         pad0[0x15F0];
-    Moby_2EAE80 *f15F0;
+    Moby_2EAE80 *piloted_ship_moby;
 } Hero_2EAE80;
 
 extern void begin_starfighter_death_sequence();
@@ -771,18 +771,18 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                  r->target->oclass == 0xD4)) {
                 moby_data->first->bA4 = 0xFF;
             } else if (hit >= 2) {
-                if (0.0f < r->f2C && r->h2A == 0x3F1) {
-                    r->f2C = 0.3f;
+                if (0.0f < r->damage_amount && r->h2A == 0x3F1) {
+                    r->damage_amount = 0.3f;
                 }
                 if (r != 0 && moby->bBC == 7) {
-                    r->f2C = r->f2C * 1.5f;
+                    r->damage_amount = r->damage_amount * 1.5f;
                 }
-                if (dd->health <= r->f2C) {
+                if (dd->health <= r->damage_amount) {
                     func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
                     mode = ATTACHMENT_DAMAGE_LETHAL;
                     moby_data->first->bA4 = 0xFF;
                 } else {
-                    dd->health = dd->health - r->f2C;
+                    dd->health = dd->health - r->damage_amount;
                     moby_data->b67 = 0xFA;
                     mode = ATTACHMENT_DAMAGE_APPLIED;
                     moby_data->sub.h6 = scale_game_frames(0);
@@ -811,12 +811,12 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                         moby->state = STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY;
                     }
                     moby->bBC++;
-                    if (moby_data->i11C != -1) {
-                        if (((Voice *)(D_0013E550 + moby_data->i11C * 0x70))->f88 == moby &&
-                            ((Voice *)(D_0013E550 + moby_data->i11C * 0x70))->b74 != 0) {
-                            release_voice_slot(moby_data->i11C);
+                    if (moby_data->tractor_beam_voice_slot_index != -1) {
+                        if (((Voice *)(D_0013E550 + moby_data->tractor_beam_voice_slot_index * 0x70))->f88 == moby &&
+                            ((Voice *)(D_0013E550 + moby_data->tractor_beam_voice_slot_index * 0x70))->b74 != 0) {
+                            release_voice_slot(moby_data->tractor_beam_voice_slot_index);
                         }
-                        moby_data->i11C = -1;
+                        moby_data->tractor_beam_voice_slot_index = -1;
                     }
                     rf = 1;
                     {
@@ -859,25 +859,25 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
             if (hit < 2) {
                 continue;
             }
-            if (0.0f < r->f2C) {
+            if (0.0f < r->damage_amount) {
                 switch (r->h2A) {
                 case CHILD_HIT_FIXED_DAMAGE:
-                    r->f2C = 0.1f;
+                    r->damage_amount = 0.1f;
                     break;
                 case CHILD_HIT_HALF_DAMAGE:
-                    r->f2C = r->f2C * 0.5f;
+                    r->damage_amount = r->damage_amount * 0.5f;
                     break;
                 }
             }
             if (r != 0 && moby->bBC == 7) {
-                r->f2C = r->f2C * 1.5f;
+                r->damage_amount = r->damage_amount * 1.5f;
             }
-            if (dd->health <= r->f2C) {
+            if (dd->health <= r->damage_amount) {
                 func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
                 mode = ATTACHMENT_DAMAGE_LETHAL;
                 moby_data->list[i]->bA4 = 0xFF;
             } else {
-                dd->health = dd->health - r->f2C;
+                dd->health = dd->health - r->damage_amount;
                 moby_data->b67 = 0xFA;
                 mode = ATTACHMENT_DAMAGE_APPLIED;
                 moby_data->sub.h6 = scale_game_frames(0);
@@ -888,7 +888,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 moby->bBC++;
                 rf = 1;
                 {
-                    Vars_2EAE80 *v = ((Hero_2EAE80 *)&hero)->f15F0->vars;
+                    Vars_2EAE80 *v = ((Hero_2EAE80 *)&hero)->piloted_ship_moby->vars;
 
                     v->f88 = 0;
                     v->fEC = 0;
@@ -906,16 +906,16 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     moby->state = STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY;
                 }
                 moby->bBC++;
-                if (moby_data->i11C != -1) {
-                    if (((Voice *)(D_0013E550 + moby_data->i11C * 0x70))->f88 == moby &&
-                        ((Voice *)(D_0013E550 + moby_data->i11C * 0x70))->b74 != 0) {
-                        release_voice_slot(moby_data->i11C);
+                if (moby_data->tractor_beam_voice_slot_index != -1) {
+                    if (((Voice *)(D_0013E550 + moby_data->tractor_beam_voice_slot_index * 0x70))->f88 == moby &&
+                        ((Voice *)(D_0013E550 + moby_data->tractor_beam_voice_slot_index * 0x70))->b74 != 0) {
+                        release_voice_slot(moby_data->tractor_beam_voice_slot_index);
                     }
-                    moby_data->i11C = -1;
+                    moby_data->tractor_beam_voice_slot_index = -1;
                 }
                 rf = 1;
                 {
-                    Vars_2EAE80 *v = ((Hero_2EAE80 *)&hero)->f15F0->vars;
+                    Vars_2EAE80 *v = ((Hero_2EAE80 *)&hero)->piloted_ship_moby->vars;
 
                     v->f88 = 0;
                     v->fEC = 0;
@@ -945,7 +945,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     func_L13_002E9B30_2EAE80(moby, moby_data, 0xC, 4);
                     break;
                 case DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE:
-                    moby_data->f100 = scale_game_frames(0x78);
+                    moby_data->tractor_beam_timer_frames = scale_game_frames(0x78);
                     func_L13_002E9B30_2EAE80(moby, moby_data, 0x10, 1);
                     break;
                 case DAMAGE_STAGE_QUEUE_SINGLE_LINE:
