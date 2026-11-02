@@ -232,7 +232,7 @@ void hero_update_movement(void) {
     };
 
     struct MobyView *moby = (struct MobyView *)hero.moby;
-    s32              sub = hero.state.step;
+    s32              state_step_before_update = hero.state.step;
     s32              anim = moby->b53;
     f32              speed;
     Vec4             movement_and_hit_descriptor_scratch;
@@ -3590,7 +3590,7 @@ void hero_update_movement(void) {
         clear_u64_value(&hero.motion.velocity);
         break;
     }
-    if (sub != hero.state.step) {
+    if (state_step_before_update != hero.state.step) {
         hero.step_frames = 0;
     }
     if (anim != moby->b53) {
