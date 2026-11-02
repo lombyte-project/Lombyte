@@ -285,8 +285,8 @@ typedef struct {
     float         motion_horizontal_speed_change_limit;
     float         motion_horizontal_launch_step;
     float         motion_vertical_launch_step;
-    int           w140;
-    int           w144;
+    int           motion_collision_radius_fixed_point;
+    int           motion_behavior_flags;
     float         motion_bounce_restitution;
     char          pad14C[0x11];
     unsigned char b15D;
@@ -539,14 +539,14 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 fast_arc_tan(robosquawker_moby->pos.f[0] - selected_target_record.pos.f[0],
                              robosquawker_moby->pos.f[1] - selected_target_record.pos.f[1]);
             robosquawker_vars->motion_bounce_restitution = 0.5f;
-            robosquawker_vars->w140 = 0x202;
+            robosquawker_vars->motion_collision_radius_fixed_point = 0x202;
             robosquawker_vars->f20 -= hit->damage_amount;
             robosquawker_vars->motion_gravity_step = 0.0055f;
             robosquawker_vars->motion_horizontal_speed_change_limit = 0.0011f;
             robosquawker_vars->motion_horizontal_launch_step =
                 robosquawker_damage_knockback_horizontal_speed_gp * frame_time;
             robosquawker_vars->motion_vertical_launch_step = robosquawker_damage_knockback_vertical_speed_gp * frame_time;
-            robosquawker_vars->w144 = 9;
+            robosquawker_vars->motion_behavior_flags = 9;
             robosquawker_vars->b15D = 0;
             if (robosquawker_vars->f20 <= 0.0f) {
                 robosquawker_moby->h34 &= 0xEFFF;
@@ -927,7 +927,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                                  &home_hop_travel_duration,
                                  robosquawker_home_hop_horizontal_speed_gp * frame_time,
                                  -robosquawker_home_hop_gravity_gp);
-            robosquawker_vars->w144 = 0xD;
+            robosquawker_vars->motion_behavior_flags = 0xD;
             robosquawker_vars->b15D = 0;
             trooper_start_knockback(robosquawker_moby,
                                     robosquawker_vars->x120,
