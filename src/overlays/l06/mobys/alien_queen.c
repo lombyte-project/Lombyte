@@ -394,7 +394,7 @@ typedef struct AlienQueenVars {
     s32   slider_list;
     s32   unk108;
     s32   animation_update;
-    s32   unk110;
+    s32   health_sixteenths;
     s32   unk114;
     f32   camera_blend_fraction;
     u8    unk11C;
@@ -405,9 +405,9 @@ typedef struct AlienQueenVars {
     s32   timer_12C;
     u8    unk130;
     u8    pad_131[0x3F];
-    s32   unk170;
+    s32   intro_or_recovery_delay_active;
     f32   recovery_health;
-    s32   unk178;
+    s32   suppress_death_dialogue;
 } AlienQueenVars;
 
 /* Moby class 1051 */
@@ -430,7 +430,7 @@ void alien_queen_update(unsigned char *moby) {
                                    func_L00_00236710_q,
                                    func_L00_00236830_q,
                                    func_L06_0024A080_q,
-                                   &alien_queen_update_vars->unk110,
+                                   &alien_queen_update_vars->health_sixteenths,
                                    0x1EF);
     }
     switch ((unsigned char)moby[0x20]) {
@@ -444,7 +444,7 @@ void alien_queen_update(unsigned char *moby) {
         alien_queen_update_vars->unk58 = truncate_float_to_s32(14.0f);
         alien_queen_update_vars->unk5A = truncate_float_to_s32(18.4f);
         alien_queen_update_vars->timer_120 = scale_game_frames(0x4B0);
-        alien_queen_update_vars->unk178 = 0;
+        alien_queen_update_vars->suppress_death_dialogue = 0;
         qcopy(alien_queen_update_vars->unkC0, moby + 0x10);
         alien_queen_update_vars->animation_update = -1;
         alien_queen_update_vars->unk114 = *D_L06_001B0C30_q[alien_queen_update_vars->path];
@@ -473,8 +473,8 @@ void alien_queen_update(unsigned char *moby) {
             return;
         if (*(short *)(target + 0xA6) != 0)
             return;
-        if (alien_queen_update_vars->unk170 == 0) {
-            alien_queen_update_vars->unk170 = 1;
+        if (alien_queen_update_vars->intro_or_recovery_delay_active == 0) {
+            alien_queen_update_vars->intro_or_recovery_delay_active = 1;
             alien_queen_update_vars->timer_12C = scale_game_frames(10);
             break;
         }
@@ -484,7 +484,7 @@ void alien_queen_update(unsigned char *moby) {
         func_L06_002F6818_q(level_mobys_q + (alien_queen_update_vars->unk100 << 8));
         set_listed_alien_queen_sliders_state_2_and_data_28_to_one(
             alien_queen_update_vars->slider_list);
-        alien_queen_update_vars->unk170 = 0;
+        alien_queen_update_vars->intro_or_recovery_delay_active = 0;
         moby[0x20] = 2;
         MOBY(moby)->collision = MOBY(moby)->pclass->collision;
         MOBY(moby)->flags = (MOBY(moby)->flags | 0x1000) & 0xFFFE;
@@ -727,7 +727,7 @@ void alien_queen_update(unsigned char *moby) {
     case ALIEN_QUEEN_STATE_DEATH: {
         unsigned char *flag;
         menu_item_enabled_19_lui[4] = 1;
-        alien_queen_update_vars->unk110 = 0;
+        alien_queen_update_vars->health_sixteenths = 0;
         moby[0x30] = 0xFF;
         if (alien_queen_update_vars->unk2E == 2) {
             func_L06_002F6790_q(level_mobys_q + (alien_queen_update_vars->unk100 << 8));
@@ -759,7 +759,7 @@ void alien_queen_update(unsigned char *moby) {
         MOBY(moby)->collision = 0;
         moby[0x31] = 0;
         MOBY(moby)->flags |= 1;
-        if (alien_queen_update_vars->unk178 != 0)
+        if (alien_queen_update_vars->suppress_death_dialogue != 0)
             return;
         flag = D_0013D407_q + 1;
         if (flag[0xA] != 0)
@@ -825,7 +825,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         return;
     if ((unsigned int)(MOBY(moby)->state - 4) < 10 && alien_queen_hit_recovery_vars->unk108 != -1)
         D_L06_0014162A = *(short *)&alien_queen_hit_recovery_vars->unk108;
-    alien_queen_hit_recovery_vars->unk110 =
+    alien_queen_hit_recovery_vars->health_sixteenths =
         truncate_float_to_s32(alien_queen_hit_recovery_vars->health * 16.0f);
     dmg = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
@@ -847,7 +847,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
             }
         }
         alien_queen_hit_recovery_vars->health -= dmg;
-        if (alien_queen_hit_recovery_vars->unk170 == 0) {
+        if (alien_queen_hit_recovery_vars->intro_or_recovery_delay_active == 0) {
             if (scale_game_frames(10) <= alien_queen_hit_recovery_vars->timer_12C) {
                 hp = alien_queen_hit_recovery_vars->health;
                 recovery_hp = 20.0f;
@@ -860,7 +860,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 if (hp <= recovery_hp && hp + dmg > recovery_hp) {
                 start_recovery:
                     alien_queen_hit_recovery_vars->health = recovery_hp;
-                    alien_queen_hit_recovery_vars->unk170 = 1;
+                    alien_queen_hit_recovery_vars->intro_or_recovery_delay_active = 1;
                     alien_queen_hit_recovery_vars->recovery_health = recovery_hp;
                     alien_queen_hit_recovery_vars->timer_12C = scale_game_frames(30);
                 }
@@ -920,9 +920,9 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         return;
     }
     if ((unsigned char)moby[0x20] >= 2 && D_L06_00140408 != 8 && (pad_held_lui & 0x20))
-        alien_queen_hit_recovery_vars->unk178 = 1;
+        alien_queen_hit_recovery_vars->suppress_death_dialogue = 1;
     timer = alien_queen_hit_recovery_vars->timer_12C;
-    if (timer != 0 && alien_queen_hit_recovery_vars->unk170 != 0) {
+    if (timer != 0 && alien_queen_hit_recovery_vars->intro_or_recovery_delay_active != 0) {
         --alien_queen_hit_recovery_vars->timer_12C;
         if (alien_queen_hit_recovery_vars->timer_12C < scale_game_frames(10))
             D_L06_0015F3FC =
@@ -932,7 +932,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
             if (alien_queen_hit_recovery_vars->health > 10.0f) {
                 alien_queen_hit_recovery_vars->health = 19.9f;
                 moby[0x20] = 3;
-                alien_queen_hit_recovery_vars->unk170 = 0;
+                alien_queen_hit_recovery_vars->intro_or_recovery_delay_active = 0;
                 qcopy(moby + 0x10, alien_queen_hit_recovery_vars->unkC0);
                 MOBY(moby)->rot.z = fast_arc_tan(hero.motion.pos.f[0] - MOBY(moby)->pos.x,
                                                  hero.motion.pos.f[1] - MOBY(moby)->pos.y);
@@ -944,7 +944,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 LevelCuboid *base;
                 alien_queen_hit_recovery_vars->health = 9.9f;
                 moby[0x20] = 5;
-                alien_queen_hit_recovery_vars->unk170 = 0;
+                alien_queen_hit_recovery_vars->intro_or_recovery_delay_active = 0;
                 base = &l06_cuboids[alien_queen_hit_recovery_vars->cuboid];
                 set_race_camera(&base->pos, &base->rot, 0x72, 1);
                 qcopy(moby + 0x10, alien_queen_hit_recovery_vars->unkC0);
@@ -956,7 +956,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 FUN_L06_002fb148_recovery_low(moby);
             }
         }
-    } else if (alien_queen_hit_recovery_vars->unk170 == 0) {
+    } else if (alien_queen_hit_recovery_vars->intro_or_recovery_delay_active == 0) {
         if (alien_queen_hit_recovery_vars->timer_12C < scale_game_frames(10)) {
             D_L06_0015F3FC =
                 1.0f - convert_integer_to_float(++alien_queen_hit_recovery_vars->timer_12C) / 10.0f;
