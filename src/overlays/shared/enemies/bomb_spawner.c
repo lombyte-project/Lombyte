@@ -40,7 +40,7 @@ typedef struct Data_2C0330 {
     unsigned char count;
     unsigned char max;
     short         timer;
-    short         h8A;
+    short         spawn_interval_frames;
     short         h8C;
     char          pad8E[2];
     float         spawn_distance_limit;
@@ -48,11 +48,11 @@ typedef struct Data_2C0330 {
     float         activation_distance_threshold;
     int           pts[4];
     char          padB0[0x20];
-    int           fD0;
+    int           spawn_trigger_volume_index;
     char          padD4[8];
-    float         fDC;
+    float         trajectory_gravity;
     char          padE0[4];
-    float         fE4;
+    float         launch_speed_distance_factor;
     int           ids[18];
 } Data_2C0330;
 
@@ -245,8 +245,8 @@ void bomb_spawner_update(struct Moby *moby) {
     timerDone = fast_dec_timer_s16(&spawner_data->timer) != 0;
     inVol = 0;
     room = spawner_data->count < spawner_data->max;
-    if (spawner_data->fD0 != -1) {
-        inVol = is_point_inside_clip_volume(D_0013E533_2bef68 + 0xE9D, spawner_data->fD0) != 0;
+    if (spawner_data->spawn_trigger_volume_index != -1) {
+        inVol = is_point_inside_clip_volume(D_0013E533_2bef68 + 0xE9D, spawner_data->spawn_trigger_volume_index) != 0;
     }
     cond = inVol | near2;
     switch (spawner_data->spawn_trigger_mode) {
@@ -259,7 +259,7 @@ void bomb_spawner_update(struct Moby *moby) {
     case SPAWNER_TRIGGER_VOLUME_OR_DISTANCE:
         break;
     }
-    if (spawner_data->h8A == 0 && spawner_data->count != 0) {
+    if (spawner_data->spawn_interval_frames == 0 && spawner_data->count != 0) {
         room = 0;
     }
     r = (Hit_2C0330 *)find_moby_hit(moby, 0xC30000, 0);
@@ -384,7 +384,7 @@ void bomb_spawner_update(struct Moby *moby) {
     if (spawn && cond && timerDone && room) {
         int *used_point_flags = used;
         memset(used_point_flags, 0, 0x10);
-        while (spawner_data->h8A == 0 ? spawner_data->count < spawner_data->max
+        while (spawner_data->spawn_interval_frames == 0 ? spawner_data->count < spawner_data->max
                                       : spawner_data->timer == 0) {
             moby_point_position(moby, 0, &launch_origin);
             switch (spawner_data->spawn_target_mode) {
@@ -532,7 +532,7 @@ void bomb_spawner_update(struct Moby *moby) {
             {
                 float speed;
                 char *spawned_moby;
-                speed = fast_vec_length(&launch_velocity) * (spawner_data->fE4 * frame_scale_macro);
+                speed = fast_vec_length(&launch_velocity) * (spawner_data->launch_speed_distance_factor * frame_scale_macro);
                 launch_velocity.z = 0.0f;
                 fast_vec_normalize(&launch_velocity, &launch_velocity, speed);
                 fast_vec_normalize(&spawn_position, &launch_velocity, 0.05f);
@@ -543,7 +543,7 @@ void bomb_spawner_update(struct Moby *moby) {
                                             &target_position,
                                             0,
                                             speed,
-                                            -(spawner_data->fDC * frame_time_sq_macro));
+                                            -(spawner_data->trajectory_gravity * frame_time_sq_macro));
                 spawned_moby = spawn_class_221_moby((char *)moby,
                                                     (float *)&spawn_position,
                                                     (float *)&launch_velocity,
@@ -552,7 +552,7 @@ void bomb_spawner_update(struct Moby *moby) {
                 if (spawned_moby != 0) {
                     MOBY(spawned_moby)->update_dist = 0xFF;
                 }
-                spawner_data->timer = scale_game_frames(spawner_data->h8A);
+                spawner_data->timer = scale_game_frames(spawner_data->spawn_interval_frames);
                 spawner_data->count++;
             }
         }
