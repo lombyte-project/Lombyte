@@ -729,14 +729,14 @@ typedef struct {
     float         fB0, fB4, fB8, fBC;
     float         fC0, fC4, fC8, fCC;
     float         fD0, fD4, fD8;
-    int           iDC;
+    int           collision_damage_cooldown_timer_frames;
     char          padE0[8];
     short         sE8;
     short         sEA;
     char          padEC[4];
     float         shown_hp;
     int           hp_bar_fill;
-    int           iF8;
+    int           respawn_or_exit_delay_timer_frames;
     int           exit_path;
     int           exit_path2;
     char          pad104[8];
@@ -1130,7 +1130,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
             ship_moby->visible = 0;
             ship_moby->state = JET_FIGHTER_STATE_WAIT_FOR_RESPAWN;
             ship_moby->flags |= 1;
-            ship_vars->iF8 = scale_game_frames(0x5A);
+            ship_vars->respawn_or_exit_delay_timer_frames = scale_game_frames(0x5A);
         } else {
             hc = *(short *)(*(char **)(collision_result + 0x18) + 0xA6);
             if (hc != 0 && hc != 0x192 && hc != 0x4C2 && hc != 0x4C3) {
@@ -1151,7 +1151,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                 k = ship_vars->speed * D_L11_0016204C;
                 ship_vars->f34 = collision_adjusted_pitch;
                 ship_vars->speed = k;
-                if (ship_vars->iDC == 0) {
+                if (ship_vars->collision_damage_cooldown_timer_frames == 0) {
                     hero.ship_hp = hero.ship_hp - jet_fighter_collision_damage_gp;
                     if (hero.ship_hp < 0.0f) {
                         fast_vec_sub(side, collision_result + 0x50, collision_result + 0x60);
@@ -1183,7 +1183,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                                         0);
                         ship_moby->state = JET_FIGHTER_STATE_WAIT_FOR_RESPAWN;
                     }
-                    ship_vars->iDC = l11_jet_fighter_collision_damage_cooldown_frames;
+                    ship_vars->collision_damage_cooldown_timer_frames = l11_jet_fighter_collision_damage_cooldown_frames;
                 }
             }
         }
@@ -1264,7 +1264,7 @@ void jet_fighter_update(struct Moby *moby) {
 
     if (moby != 0) {
         ship_vars = (ShipVars_2838 *)moby->pvars;
-        fast_dec_timer(&ship_vars->iDC);
+        fast_dec_timer(&ship_vars->collision_damage_cooldown_timer_frames);
         if (moby->state != JET_FIGHTER_STATE_WAIT_FOR_RESPAWN &&
             moby->state != JET_FIGHTER_STATE_WAIT_FOR_BOARDING &&
             moby->state != JET_FIGHTER_STATE_BOARD) {
@@ -1355,7 +1355,7 @@ void jet_fighter_update(struct Moby *moby) {
                 *(Block400_3290 *)ship_hp_bar_saved_palette = *(Block400_3290 *)hp_bar_palette.clut;
             }
             hp_bar_saved = 1;
-            ship_vars->iF8 = 1;
+            ship_vars->respawn_or_exit_delay_timer_frames = 1;
             ship_vars->sE8 = 1;
             ship_vars->fade = 0.0f;
             if (moby->mission != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF) {
@@ -1462,7 +1462,7 @@ void jet_fighter_update(struct Moby *moby) {
                 }
             }
             if (ship_vars->sE8 <= 0) {
-                ship_vars->iF8 = l11_jet_fighter_exit_delay_frames;
+                ship_vars->respawn_or_exit_delay_timer_frames = l11_jet_fighter_exit_delay_frames;
                 moby->state = JET_FIGHTER_STATE_DELAYED_EXIT;
             }
             if (hero.ship_flags & 1) {
@@ -1509,14 +1509,14 @@ void jet_fighter_update(struct Moby *moby) {
         }
         case JET_FIGHTER_STATE_WAIT_FOR_RESPAWN:
             D_L11_0015F608 = 2;
-            if (fast_dec_timer(&ship_vars->iF8)) {
+            if (fast_dec_timer(&ship_vars->respawn_or_exit_delay_timer_frames)) {
                 hero_respawn();
             }
             break;
         case JET_FIGHTER_STATE_DELAYED_EXIT:
             D_L11_0015F608 = 2;
             update_player_ship_flight(moby, ship_vars);
-            if (fast_dec_timer(&ship_vars->iF8)) {
+            if (fast_dec_timer(&ship_vars->respawn_or_exit_delay_timer_frames)) {
                 approach_value(&ship_vars->fade, 1.0f, frame_time * 4.0f);
                 D_L11_0015F3FC = ship_vars->fade;
                 if (ship_vars->fade >= 1.0f) {
