@@ -51,7 +51,7 @@ void hoverboard_update(unsigned char *moby) {
             if (*(int *)(hoverboard_vars + 0x50) == 0) {
                 qcopy(hoverboard_vars + 0x10, &MOBY(moby)->pos);
             }
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT;
             MOBY(moby)->update_dist = 0xff;
         }
         break;
@@ -68,7 +68,7 @@ void hoverboard_update(unsigned char *moby) {
             if (*(int *)(hoverboard_vars + 0x50) == 0) {
                 qcopy(&MOBY(moby)->pos, hoverboard_vars + 0x10);
             }
-            MOBY(moby)->state = 0;
+            MOBY(moby)->state = HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH;
         }
         break;
     case 2:
