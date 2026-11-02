@@ -65,7 +65,7 @@ typedef struct {
     int            flags;
     char           b18;
     char           b19;
-    unsigned short h1A;
+    unsigned short vent_moby_class;
     float          f1C;
     int            i20;
 } Sx;
@@ -281,7 +281,7 @@ void check_oscillating_toxic_gas_vent_collisions(char *m) {
     collision_params.fC = 5627.9248f;
     collision_params.b18 = 3;
     collision_params.b19 = one;
-    collision_params.h1A = *(unsigned short *)(m + 0xA6);
+    collision_params.vent_moby_class = *(unsigned short *)(m + 0xA6);
     for (i = 3; i >= 0; i--) {
         segment_start_radius = remaining_radius;
         ra = fast_add_rotations(*(float *)(moby_data + 0x84),
