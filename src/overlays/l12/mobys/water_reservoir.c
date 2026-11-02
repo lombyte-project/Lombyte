@@ -35,7 +35,7 @@ int D_L12_001619E8 = 1;
 
 int D_L12_001619F0 = 1;
 int D_L12_001619F4 = 0x40404040;
-int D_L12_001619F8 = 0x10022;
+int l12_water_reservoir_spark_table_selector __asm__("D_L12_001619F8") = 0x10022;
 
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update.h"
 
@@ -122,7 +122,7 @@ update:
                             D_L12_001619E8,
                             scale_game_frames(water_reservoir_effect_delta_scale_divisor_gp),
                             D_L12_001619F0,
-                            D_L12_001619F8);
+                            l12_water_reservoir_spark_table_selector);
             }
         }
         if ((moby->command & 1) && *(int *)&reservoir_state[1] == 0) {
