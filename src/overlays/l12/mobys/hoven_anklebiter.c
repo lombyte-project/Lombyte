@@ -844,7 +844,7 @@ typedef struct {
     s32 reset_alert; /* 0x38 */
     u8  pad3C[0xD4];
     u8  anim[7]; /* 0x110: animation blend state */
-    u8  unk117;  /* 0x117 */
+    u8  damage_blend_target;  /* 0x117 */
     u8  pad118[8];
     u8  fall[0x10]; /* 0x120 */
     f32 unk130;     /* 0x130 */
@@ -860,8 +860,8 @@ typedef struct {
     u8  pad15C;
     u8  unk15D; /* 0x15D */
     u8  pad15E[0x12];
-    f32 unk170; /* 0x170 */
-    f32 unk174; /* 0x174 */
+    f32 knockback_ascent_animation_target; /* 0x170 */
+    f32 knockback_descent_animation_target; /* 0x174 */
     u8  pad178[0x134];
     f32 speed; /* 0x2AC */
     u8  pad2B0[0x14];
@@ -959,10 +959,10 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                                       &anklebiter_vars->unk138,
                                       &anklebiter_vars->unk13C);
                 start_fall_e3528(moby, anklebiter_vars->fall, 6, 1, 0, angle);
-                anklebiter_vars->unk170 = 11.0f;
-                anklebiter_vars->unk174 = 18.0f;
+                anklebiter_vars->knockback_ascent_animation_target = 11.0f;
+                anklebiter_vars->knockback_descent_animation_target = 18.0f;
                 moby->state = ANKLEBITER_DEATH_FALL;
-                anklebiter_vars->unk117 = 0x78;
+                anklebiter_vars->damage_blend_target = 0x78;
                 anim_reset_e3528(moby, anklebiter_vars->anim);
             } else {
                 help_direction_or_hit_position.q = coll->pos.q;
@@ -971,9 +971,9 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                                       &anklebiter_vars->unk138,
                                       &anklebiter_vars->unk13C);
                 start_fall_e3528(moby, anklebiter_vars->fall, 0xE, 1, 0, unused);
-                anklebiter_vars->unk174 = anklebiter_vars->unk170 = -1.0f;
+                anklebiter_vars->knockback_descent_animation_target = anklebiter_vars->knockback_ascent_animation_target = -1.0f;
                 moby->state = ANKLEBITER_KNOCKBACK_FALL;
-                anklebiter_vars->unk117 = 0xFA;
+                anklebiter_vars->damage_blend_target = 0xFA;
                 anklebiter_vars->stun_timer = scale_game_frames(0x3C);
                 anim_reset_e3528(moby, anklebiter_vars->anim);
             }
