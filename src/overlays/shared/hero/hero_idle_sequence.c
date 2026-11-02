@@ -3421,7 +3421,7 @@ typedef struct {
     u8  pad2090[0x14];
     u8  b20A4;
     u8  pad20A5[0x4];
-    u8  b20A9;
+    u8  selected_height_difference_in_band;
     u8  pad20AA[0x1FA];
     f32 selected_height_difference;
     s32 i22A8;
@@ -3439,7 +3439,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
     fast_mem_zero16(&P.h12E0, 0x10);
     P.b12ED = save;
     P.h12E0 = -1;
-    P.b20A9 = 0;
+    P.selected_height_difference_in_band = 0;
     P.h308 = 0;
     if (saved_flag_selector == -1)
         return;
@@ -3459,7 +3459,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
         height_difference = P.f2F0 - P.f2D8;
         P.selected_height_difference = height_difference;
         if (height_difference < 0.85f && 0.25f < height_difference)
-            P.b20A9 = 1;
+            P.selected_height_difference_in_band = 1;
         P.height_difference_selected = 1;
     }
     if (saved_flag_selector == 3)
