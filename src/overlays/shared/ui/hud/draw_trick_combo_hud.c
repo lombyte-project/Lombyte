@@ -18,7 +18,7 @@ extern int D_L05_0015F97C;
 
 #include "rnc/overlay/shared/ui/hud/draw_trick_combo_hud_data/hud_release_held_element.h"
 
-extern short D_L05_0015F978 __attribute__((sda));
+extern short l05_hud_release_counter __asm__("D_L05_0015F978") __attribute__((sda));
 void         hud_release_held_element(void) __asm__("FUN_L05_00264298");
 
 void hud_release_held_element(void) {
@@ -27,7 +27,7 @@ void hud_release_held_element(void) {
         animation_parameter_target_id = -1;
     }
     D_L05_0015F97C = 0;
-    *(int *)&D_L05_0015F978 = *(int *)&D_L05_0015F978 + 1;
+    *(int *)&l05_hud_release_counter = *(int *)&l05_hud_release_counter + 1;
 }
 
 typedef struct {
