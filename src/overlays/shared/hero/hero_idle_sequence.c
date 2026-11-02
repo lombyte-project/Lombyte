@@ -2043,7 +2043,7 @@ typedef struct {
     u8        p2F8[0x30E - 0x2F8];
     s16       h30E;
     u8        p310[0xD20 - 0x310];
-    f32       fD20;
+    f32       height_probe_downward_angle_radians;
     u8        pD24[0x2080 - 0xD24];
     M_208b60 *height_probe_moby;
     s32       i2084;
@@ -2082,22 +2082,22 @@ void update_hero_moby_probed_height_bounds(void) {
     k = 0.97f;
     if (G.h30E != 0 || G.i208C == 4)
         k = 1.5f;
-    rotation_step = fast_subtract_rotations(k, G.fD20);
+    rotation_step = fast_subtract_rotations(k, G.height_probe_downward_angle_radians);
     if (0.052f < rotation_step)
         rotation_step = 0.052f;
     else if (rotation_step < -0.052f)
         rotation_step = -0.052f;
-    G.fD20 = fast_add_rotations(G.fD20, rotation_step);
+    G.height_probe_downward_angle_radians = fast_add_rotations(G.height_probe_downward_angle_radians, rotation_step);
     get_moby_light_direction(G.height_probe_moby, &v);
     planar_angle = fast_arc_tan(v.f[0], v.f[1]);
     planar_cosine = fast_cos(planar_angle);
     planar_sine = fast_sin(planar_angle);
     {
-        f32 direction_xy_scale = fast_cos(G.fD20);
+        f32 direction_xy_scale = fast_cos(G.height_probe_downward_angle_radians);
         v.f[0] = planar_cosine * direction_xy_scale;
         v.f[1] = planar_sine * direction_xy_scale;
     }
-    v.f[2] = -fast_sin(G.fD20);
+    v.f[2] = -fast_sin(G.height_probe_downward_angle_radians);
     qcopy(&l00_hero_height_probe_direction, &v);
     probe_reference_z = G.f2D8;
     if (probe_reference_z < 1.0f) {
