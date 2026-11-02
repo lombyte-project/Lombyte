@@ -298,7 +298,7 @@ typedef struct {
 typedef struct {
     char           pad0[0x20];
     float          f20;
-    short          h24;
+    short          initial_health;
     short          hit_reaction_cooldown;
     unsigned char  hit_response_profile_index;
     unsigned char  b29;
@@ -357,7 +357,7 @@ typedef struct {
     short          ordered_path_traversal;
     short          path_has_stop_nodes;
     char           pad1B0[4];
-    int            w1B4;
+    int            skip_initial_height_lift;
     float          path_movement_step_length;
     float          pitch_turn_step;
     int            deployment_trigger_volume_index;
@@ -380,7 +380,7 @@ typedef struct PeMoby {
     Vec4           pos;
     unsigned char  state;
     char           pad21[3];
-    char          *w24;
+    char          *moby_class_record;
     char           pad28[9];
     unsigned char  b31;
     unsigned short h32;
@@ -402,9 +402,9 @@ typedef struct PeMoby {
     char           pad98[0xC];
     unsigned char  bA4;
     char           padA5;
-    short          hA6;
+    short          moby_class_id;
     char           padA8[0xA];
-    short          hB2;
+    short          maya_instance_id;
 } PeMoby;
 
 typedef struct {
@@ -660,7 +660,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
 
         c = &birdbot_vars->main;
         if (birdbot_vars->main.path_id == -1) {
-            DebugPrint(birdbot_missing_path_format, birdbot_moby->hA6, birdbot_moby->hB2);
+            DebugPrint(birdbot_missing_path_format, birdbot_moby->moby_class_id, birdbot_moby->maya_instance_id);
             mark_moby_for_removal(birdbot_moby);
             return;
         }
@@ -672,7 +672,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             qcopy(&birdbot_moby->pos, &birdbot_vars->side.path->points[0]);
         } else {
             qcopy(&birdbot_moby->pos, &birdbot_vars->main.path->points[0]);
-            if (birdbot_vars->w1B4 == 0) {
+            if (birdbot_vars->skip_initial_height_lift == 0) {
                 birdbot_vars->side.path = 0;
                 birdbot_moby->pos.f[2] += 20.0f;
             }
@@ -699,7 +699,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->fDC = 2.0f;
         birdbot_vars->fD8 = 2.0f;
         birdbot_vars->f20 = 2.0f;
-        birdbot_vars->h24 = truncate_float_to_s32(birdbot_vars->f20);
+        birdbot_vars->initial_health = truncate_float_to_s32(birdbot_vars->f20);
         birdbot_vars->b29 = 0;
         birdbot_vars->hit_response_profile_index = 1;
         clear_u64_value(&birdbot_vars->v40);
@@ -791,7 +791,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 cutscene_active = 1;
                 birdbot_vars->mount_release_timer = scale_game_frames(0x168);
             }
-            birdbot_moby->w94 = *(int *)(birdbot_moby->w24 + 0x10);
+            birdbot_moby->w94 = *(int *)(birdbot_moby->moby_class_record + 0x10);
             birdbot_moby->h34 &= 0xFFBE;
             if (birdbot_moby->target_animation_sequence != 8) {
                 blend_moby_animation(birdbot_moby, 8, 0, scale_game_frames(10));
