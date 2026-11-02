@@ -2028,7 +2028,7 @@ typedef struct {
     u8  p10[0x34 - 0x10];
     u16 h34;
     u8  p36[0x84 - 0x36];
-    f32 f84;
+    f32 probed_height_lower_bound;
     f32 f88;
     u8  p8C[0xBD - 0x8C];
     u8  bBD;
@@ -2045,7 +2045,7 @@ typedef struct {
     u8        p310[0xD20 - 0x310];
     f32       fD20;
     u8        pD24[0x2080 - 0xD24];
-    M_208b60 *m2080;
+    M_208b60 *height_probe_moby;
     s32       i2084;
     u8        p2088[4];
     s32       i208C;
@@ -2074,11 +2074,11 @@ void update_hero_moby_probed_height_bounds(void) {
     V_208b60 *pw, *px;
     s32       i;
     if (G.i208C == 0x12 || G.i208C == 0x15 || G.i2084 == 0x7D || G.i208C == 0x16) {
-        G.m2080->h34 &= 0xFBFF;
+        G.height_probe_moby->h34 &= 0xFBFF;
         return;
     }
-    G.m2080->h34 |= 0x400;
-    G.m2080->bBD = 1;
+    G.height_probe_moby->h34 |= 0x400;
+    G.height_probe_moby->bBD = 1;
     k = 0.97f;
     if (G.h30E != 0 || G.i208C == 4)
         k = 1.5f;
@@ -2088,7 +2088,7 @@ void update_hero_moby_probed_height_bounds(void) {
     else if (rotation_step < -0.052f)
         rotation_step = -0.052f;
     G.fD20 = fast_add_rotations(G.fD20, rotation_step);
-    get_moby_light_direction(G.m2080, &v);
+    get_moby_light_direction(G.height_probe_moby, &v);
     planar_angle = fast_arc_tan(v.f[0], v.f[1]);
     planar_cosine = fast_cos(planar_angle);
     planar_sine = fast_sin(planar_angle);
@@ -2109,8 +2109,8 @@ void update_hero_moby_probed_height_bounds(void) {
             if (1.0f < t)
                 probe_reference_z = t;
             else {
-                G.m2080->f84 = 0.0f;
-                G.m2080->f88 = 0.0f;
+                G.height_probe_moby->probed_height_lower_bound = 0.0f;
+                G.height_probe_moby->f88 = 0.0f;
                 return;
             }
         }
@@ -2123,7 +2123,7 @@ void update_hero_moby_probed_height_bounds(void) {
     for (i = 3; i >= 0; i--, t++) {
         M_208b60 *m;
         U_208b60 *u = &(*(U_208b60 *)D_L00_00173E40);
-        m = G.m2080;
+        m = G.height_probe_moby;
         sc = m->fC * 0.0009765625f;
         fast_vec_scale(pw, m, 0.0009765625f);
         collision_probe_start.f[0] += planar_cosine * t->x * sc;
@@ -2137,11 +2137,11 @@ void update_hero_moby_probed_height_bounds(void) {
             hi = max_float(hi, u->hit_z);
         }
     }
-    G.m2080->f84 = lo - 0.12f;
-    G.m2080->f88 = hi + 0.24f;
+    G.height_probe_moby->probed_height_lower_bound = lo - 0.12f;
+    G.height_probe_moby->f88 = hi + 0.24f;
     {
-        M_208b60 *m = G.m2080;
-        f32       z = m->f84 + 3.0f;
+        M_208b60 *m = G.height_probe_moby;
+        f32       z = m->probed_height_lower_bound + 3.0f;
         if (z < m->f88)
             m->f88 = z;
     }
