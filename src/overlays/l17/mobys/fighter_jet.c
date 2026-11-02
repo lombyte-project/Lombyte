@@ -214,7 +214,7 @@ extern void emit_transformed_2d_vertex_packet(
 void draw_fighter_jet_radar_contact_icon(
     char *rot, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L17_002eaae0");
 
-short D_L17_00162188 = 2;
+short l17_fighter_jet_offscreen_arrow_vertices __asm__("D_L17_00162188") = 2;
 int   select_fighter_jet_target_and_draw_contacts(int   ship_moby,
                                                   char *ship_vars,
                                                   char *radar_origin,
@@ -544,7 +544,7 @@ int select_fighter_jet_target_and_draw_contacts(int   ship_moby,
                                                0.1f / (angular_error_magnitude / 3.1415927f));
         *(float *)(ship_vars + 0x114) = arrow_pulse_phase;
         emit_transformed_2d_vertex_packet(
-            &D_L17_00162188,
+            &l17_fighter_jet_offscreen_arrow_vertices,
             3,
             0xFFFFF3,
             (truncate_float_to_s32((fast_sin(arrow_pulse_phase) + 1.4f) * 53.0f) << 24) | 0x8000,
