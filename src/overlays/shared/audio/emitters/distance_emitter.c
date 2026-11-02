@@ -11,9 +11,9 @@
 
 typedef struct {
     s32 id;
-    s32 w4;
-    s32 w8;
-    s32 wC;
+    s32 repeat_delay_lower_bound;
+    s32 repeat_delay_upper_bound;
+    s32 repeat_delay_countdown;
     s32 snd;
 } S_2ed950;
 
@@ -69,13 +69,13 @@ void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
             fl = four;
         if (e->o == sound_emitter && e->is_active)
             return;
-        if (!fast_dec_timer(&playback_state->wC))
+        if (!fast_dec_timer(&playback_state->repeat_delay_countdown))
             return;
         playback_state->snd = play_voice(playback_state->id, fl, sound_emitter, 0x400);
-        if (playback_state->w8 > 0) {
-            playback_state->wC =
-                FUN_001f96f8_2ed950(playback_state->w4 +
-                                    random_integer_below(playback_state->w8 - playback_state->w4)) *
+        if (playback_state->repeat_delay_upper_bound > 0) {
+            playback_state->repeat_delay_countdown =
+                FUN_001f96f8_2ed950(playback_state->repeat_delay_lower_bound +
+                                    random_integer_below(playback_state->repeat_delay_upper_bound - playback_state->repeat_delay_lower_bound)) *
                 60.0f;
         }
     } else if (playback_radius + 1.0f < reference_distance) {
