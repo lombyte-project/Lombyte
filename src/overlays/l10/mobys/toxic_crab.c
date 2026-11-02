@@ -974,7 +974,7 @@ typedef struct D_2E52B0 {
     char          p24[2];
     short         h26;
     char          p28[0x10];
-    int           f38;
+    int           target_range_boost_pending;
     char          p3C[0x24];
     char          a60[7];
     unsigned char b67;
@@ -982,8 +982,8 @@ typedef struct D_2E52B0 {
     float         a70[4];
     float         f80;
     char          p84[4];
-    float         f88;
-    float         f8C;
+    float         knockback_xy_scale;
+    float         knockback_z_scale;
     int           f90;
     int           f94;
     float         f98;
@@ -995,17 +995,17 @@ typedef struct D_2E52B0 {
     char          pC8[0x58];
     AlignedVec4f  a120;
     char          p130[0x30];
-    struct Moby  *f160;
-    int           f164;
+    struct Moby  *selected_target_moby;
+    int           target_selection_status;
     char          p168[8];
     AlignedVec4f  a170;
     char          p180[0x20];
     float         f1A0;
     char          p1A4[8];
-    int           f1AC;
-    int           f1B0;
+    int           target_range_boost_timer_frames;
+    int           target_path_index;
     char          p1B4[0x20];
-    int           f1D4;
+    int           target_loss_frames;
 } D_2E52B0;
 
 typedef struct Hit_2E52B0 {
@@ -1064,13 +1064,13 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
                 moby->state = TOXIC_CRAB_STATE_ACTIVATE;
         }
     }
-    if (moby_data->f38 != 0) {
+    if (moby_data->target_range_boost_pending != 0) {
         func_L10_002E14F8_2E52B0(moby);
-        moby_data->f1AC =
+        moby_data->target_range_boost_timer_frames =
             truncate_float_to_s32(func_001F9878_2E52B0(random_float_between(180.0f, 240.0f)));
-        moby_data->f38 = 0;
+        moby_data->target_range_boost_pending = 0;
     }
-    fast_dec_timer(&moby_data->f1AC);
+    fast_dec_timer(&moby_data->target_range_boost_timer_frames);
     A = 1;
     B = 0.0f;
     hit_record = find_moby_hit(moby, 0xB30000, 0);
@@ -1081,7 +1081,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         moby->state != TOXIC_CRAB_STATE_FALL_TO_DEATH) {
         if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 &&
             hit_record->f20->oclass == 0x31A) {
-            if (moby_data->f1AC != 0 && item_unlocked[0x11] == 0) {
+            if (moby_data->target_range_boost_timer_frames != 0 && item_unlocked[0x11] == 0) {
                 item_unlocked[0x11] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
@@ -1158,7 +1158,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
             moby_data->fC0 = 8.0f;
             moby_data->fC4 = 10.0f;
             *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)&hit_record->pos;
-            trooper_knockback_arc(&vA, &fx, &moby_data->f88, &moby_data->f8C);
+            trooper_knockback_arc(&vA, &fx, &moby_data->knockback_xy_scale, &moby_data->knockback_z_scale);
             func_L00_0025D5B0_2E52B0(moby, moby_data->a70, 9, 1, 0, fx);
             moby_data->b67 = 0xFA;
             trooper_anim_update(moby, moby_data->a60);
@@ -1174,7 +1174,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
             moby_data->fC0 = 3.5f;
             moby_data->fC4 = 7.0f;
             *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)&hit_record->pos;
-            trooper_knockback_arc(&vA, &fx, &moby_data->f88, &moby_data->f8C);
+            trooper_knockback_arc(&vA, &fx, &moby_data->knockback_xy_scale, &moby_data->knockback_z_scale);
             func_L00_0025D5B0_2E52B0(
                 moby, moby_data->a70, 9, 1, 0, fast_arc_tan(hit_record->pos.x, hit_record->pos.y));
             moby_data->b67 = 0xFA;
@@ -1194,10 +1194,10 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, moby_data->a60);
     if ((unsigned char)(moby->state - 10) < 3) {
-        moby_data->f1D4 = 0;
+        moby_data->target_loss_frames = 0;
         return;
     }
-    if (moby_data->f1AC != 0) {
+    if (moby_data->target_range_boost_timer_frames != 0) {
         moby_data->f1A0 = D_L10_00161E40_gp + 6.0f;
     } else if (moby->state == TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION) {
         if (moby == ((Moby *)((Hero *)(((char *)&hero)))->unk240) ||
@@ -1211,28 +1211,28 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     } else {
         moby_data->f1A0 = D_L10_00161E40_gp;
     }
-    if (moby_data->f1AC != 0) {
+    if (moby_data->target_range_boost_timer_frames != 0) {
         func_L00_00260D30_2E52B0(moby, &moby_data->a120, moby_data->f1A0);
         if (moby_data->f1A0 < vector_distance_xy(&moby_data->a170, &moby_data->a120) ||
             3.0f < absolute_float(moby->pos.z - moby_data->a120.z)) {
-            moby_data->f164 = 2;
+            moby_data->target_selection_status = 2;
         }
     } else if (moby_data->f1A0 < vector_distance_xy(&moby_data->a170, &moby_data->a120) ||
                3.0f < absolute_float(moby->pos.z - moby_data->a120.z)) {
         func_L00_00260D30_2E52B0(moby, &moby_data->a120, moby_data->f1A0);
-        moby_data->f164 = 2;
+        moby_data->target_selection_status = 2;
     } else {
         activate_effect_l08(moby_data->f1A0,
                             moby,
                             &moby_data->a120,
                             0,
                             0,
-                            l10_paths[moby_data->f1B0]->points,
-                            l10_paths[moby_data->f1B0]->count);
+                            l10_paths[moby_data->target_path_index]->points,
+                            l10_paths[moby_data->target_path_index]->count);
     }
-    if (moby->state != TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION && moby_data->f164 == 2) {
-        moby_data->f1D4++;
-        if (scale_game_frames(300) < moby_data->f1D4) {
+    if (moby->state != TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION && moby_data->target_selection_status == 2) {
+        moby_data->target_loss_frames++;
+        if (scale_game_frames(300) < moby_data->target_loss_frames) {
             if (1.0f < fast_vec_dist(&moby->pos, &moby_data->a170)) {
                 moby->state = TOXIC_CRAB_STATE_RETURN_HOME;
                 if (moby->prev_seq != 4)
@@ -1244,10 +1244,10 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
             }
         }
     } else {
-        moby_data->f1D4 = 0;
+        moby_data->target_loss_frames = 0;
     }
-    if (moby_data->f160 == 0)
-        moby_data->f160 = ((Hero *)(((char *)&hero)))->moby;
+    if (moby_data->selected_target_moby == 0)
+        moby_data->selected_target_moby = ((Hero *)(((char *)&hero)))->moby;
 }
 
 extern float toxic_crab_group_approach_angle_limit_degrees_gp __asm__("D_L10_00161E48")
