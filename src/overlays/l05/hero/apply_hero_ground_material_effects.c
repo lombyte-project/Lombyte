@@ -176,6 +176,9 @@ void update_hero_ground_contact(void) {
         GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH = 3,
         GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS = 0xB
     };
+    enum {
+        GROUND_MATERIAL_STATE_DEPENDENT_CONTACT_BYPASS = 1
+    };
     V shared_probe_endpoint, ground_probe_endpoint, ground_vector_scratch, side_probe_endpoint,
         unused_probe_vector, hit_normal_angles, normalized_hit_normal;
     f32 f;
@@ -255,7 +258,7 @@ void update_hero_ground_contact(void) {
         hero.sink_surface_z = D_L05_00174268;
         goto d1;
     }
-    if (hero.ground_type == 1 && (u32)(hero.state.current - 0x7C) < 2) {
+    if (hero.ground_type == GROUND_MATERIAL_STATE_DEPENDENT_CONTACT_BYPASS && (u32)(hero.state.current - 0x7C) < 2) {
         goto d1;
     }
     if (HH.moby != 0) {
