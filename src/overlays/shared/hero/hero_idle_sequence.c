@@ -3399,19 +3399,19 @@ typedef struct {
     u8  pad30E[0x110];
     s16 h41E;
     u8  pad420[0xCC0];
-    u8 *p10E0;
+    u8 *slot_one_item_moby;
     u8  pad10E4[0x1FC];
     s16 h12E0;
     u8  b12E2;
-    u8  b12E3;
+    u8  idle_exit_transition_selected;
     u8  b12E4;
-    u8  b12E5;
-    u8  b12E6;
+    u8  death_descent_transition_selected;
+    u8  jump_or_respawn_wait_transition_selected;
     u8  b12E7;
     u8  pad12E8[0x2];
     u8  b12EA;
-    u8  b12EB;
-    u8  b12EC;
+    u8  respawn_wait_transition_selected;
+    u8  sink_transition_selected;
     u8  b12ED;
     u8  b12EE;
     u8  pad12EF[0xD95];
@@ -3423,7 +3423,7 @@ typedef struct {
     u8  pad20A5[0x4];
     u8  b20A9;
     u8  pad20AA[0x1FA];
-    f32 f22A4;
+    f32 selected_height_difference;
     s32 i22A8;
 } P20b960;
 
@@ -3446,68 +3446,68 @@ void apply_hero_selected_flags_and_state_transitions(void) {
     if (saved_flag_selector == 2) {
         if (P.h30C == 0 || P.f2DC < 0.3f) {
             P.b12E7 = 1;
-            if (P.b20A4 == 0 && P.p10E0 != 0 && *(s16 *)(P.p10E0 + 0xA6) == 0xAD)
+            if (P.b20A4 == 0 && P.slot_one_item_moby != 0 && *(s16 *)(P.slot_one_item_moby + 0xA6) == 0xAD)
                 P.h308 = 1;
         }
     }
     if (saved_flag_selector == 14) {
         P.b12E4 = 1;
-        P.f22A4 = 0.2f;
+        P.selected_height_difference = 0.2f;
         P.f2F0 = P.f2D8 + 0.2f;
     }
     if (saved_flag_selector == 0) {
         height_difference = P.f2F0 - P.f2D8;
-        P.f22A4 = height_difference;
+        P.selected_height_difference = height_difference;
         if (height_difference < 0.85f && 0.25f < height_difference)
             P.b20A9 = 1;
         P.b12E4 = 1;
     }
     if (saved_flag_selector == 3)
-        P.b12E6 = 1;
+        P.jump_or_respawn_wait_transition_selected = 1;
     if (current_level_index == 13 && P.i2084 != 0x7B &&
         coll_sphere((u8 *)&P + 0xD0, 2, 0, P.f234 + 0.03f) && FUN_001f0b58_20b960() == 11) {
         goto s7B;
     }
     if (saved_flag_selector == 11)
-        P.b12EB = 1;
+        P.respawn_wait_transition_selected = 1;
     if (saved_flag_selector == 2)
         P.b12E7 = 1;
     if (saved_flag_selector == 4)
-        P.b12E3 = 1;
+        P.idle_exit_transition_selected = 1;
     if (saved_flag_selector == 7)
         P.b12E2 = 1;
     if (saved_flag_selector == 13)
-        P.b12EC = 1;
+        P.sink_transition_selected = 1;
     if (saved_flag_selector == 1)
-        P.b12E5 = 1;
+        P.death_descent_transition_selected = 1;
     if (saved_flag_selector == 8)
         P.b12EA = 1;
     if (saved_flag_selector == 9)
         P.b12EE = 1;
     if (saved_flag_selector == 12)
         P.b12EA = 1;
-    if (P.b12E3 && P.i300 && P.i208C != 0x10 && P.i208C != 0x14 && P.i208C != 7) {
+    if (P.idle_exit_transition_selected && P.i300 && P.i208C != 0x10 && P.i208C != 0x14 && P.i208C != 7) {
         target_state = HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT;
         goto call;
     }
-    if (P.b12E5 && P.i300 && P.b20A4 == 1 && P.i2084 != 0x7D) {
+    if (P.death_descent_transition_selected && P.i300 && P.b20A4 == 1 && P.i2084 != 0x7D) {
         target_state = HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT;
         goto call;
     }
-    if (P.b12E5 && P.i300 && (P.i2084 != 0x3C || P.h41E != 0)) {
+    if (P.death_descent_transition_selected && P.i300 && (P.i2084 != 0x3C || P.h41E != 0)) {
         exit_hero_vehicle_mode_if_mode_three();
         if (P.i22A8)
             goto call3c;
         target_state = HERO_STATE_DEATH_DESCENT;
         goto call;
     }
-    if (P.b12EC && P.i2084 != 0x7F && absolute_float(P.f2F0 - (P.f88 + 0.25f)) < 1.0f &&
+    if (P.sink_transition_selected && P.i2084 != 0x7F && absolute_float(P.f2F0 - (P.f88 + 0.25f)) < 1.0f &&
         0.0f < P.f2F0 - P.f88 && P.f108 < 0.0f) {
         exit_hero_vehicle_mode_if_mode_three();
         target_state = HERO_STATE_SINK;
         goto call;
     }
-    if (P.b12E6 && P.i2084 != 0x68 && P.i2084 != 0x7B &&
+    if (P.jump_or_respawn_wait_transition_selected && P.i2084 != 0x68 && P.i2084 != 0x7B &&
         absolute_float(P.f2F4 - (P.f88 + 0.25f)) < 1.0f && 0.0f < P.f2F4 - P.f88 &&
         (P.i2084 != 0x69 || P.h41E != 0) && P.f108 < 0.0f) {
         exit_hero_vehicle_mode_if_mode_three();
@@ -3524,7 +3524,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
         target_state = HERO_STATE_JUMP_WITH_HEALTH_DAMAGE;
         goto call;
     }
-    if (P.b12EB && P.i2084 != 0x7B && absolute_float(P.f2F4 - (P.f88 + 0.25f)) < 1.0f &&
+    if (P.respawn_wait_transition_selected && P.i2084 != 0x7B && absolute_float(P.f2F4 - (P.f88 + 0.25f)) < 1.0f &&
         0.0f < P.f2F4 - P.f88 && P.f108 < 0.0f) {
         exit_hero_vehicle_mode_if_mode_three();
         hero_set_state(0x7B, 1);
