@@ -1426,7 +1426,7 @@ typedef struct Hero_234800 {
     char          p2088[0x4];
     int           i208C;
     char          p2090[0x15];
-    unsigned char b20A5;
+    unsigned char probe_yaw_override_enabled;
 } Hero_234800;
 
 typedef struct {
@@ -1632,7 +1632,7 @@ void update_hero_attachment(void) {
                                   &v90);
         if ((((Hero_234800 *)hero_233f80)->i2084 == 1 ||
              ((Hero_234800 *)hero_233f80)->i2084 == 0x1E) &&
-            ((Hero_234800 *)hero_233f80)->b20A5 != 0) {
+            ((Hero_234800 *)hero_233f80)->probe_yaw_override_enabled != 0) {
             ((Hero_234800 *)hero_233f80)->v90.z = anchored_probe_rotation.z;
         } else if (((Hero_234800 *)hero_233f80)->attachment_anchor_flags & 2) {
             ((Hero_234800 *)hero_233f80)->v90.z = primary_attachment_rotation.z;
