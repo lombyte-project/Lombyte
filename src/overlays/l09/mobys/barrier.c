@@ -40,7 +40,7 @@ typedef struct Hit_309688 {
 
 typedef struct Flags_309688 {
     char          pad0[0x43];
-    unsigned char f43;
+    unsigned char barrier_cleared;
 } Flags_309688;
 
 #include "rnc/overlay/l09/mobys/barrier_data/barrier_update.h"
@@ -111,14 +111,14 @@ void barrier_update(Moby *moby) {
 
     if (moby->state == BARRIER_STATE_UNINITIALIZED) {
         if (barrier_vars->idx != -1)
-            ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->f43 = 0;
+            ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->barrier_cleared = 0;
         moby->state = BARRIER_STATE_INITIALIZED;
     }
     if (moby->mission != 0xFF) {
         int row = current_level_index * 16;
         if (visited52[moby->mission + row] == 0xFF) {
             if (barrier_vars->idx != -1)
-                ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->f43 = 1;
+                ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->barrier_cleared = 1;
             mark_moby_for_removal(moby);
             return;
         }
@@ -195,7 +195,7 @@ void barrier_update(Moby *moby) {
                              0);
     if (moby->oclass == 0x508) {
         if (barrier_vars->idx != -1)
-            ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->f43 = 1;
+            ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->barrier_cleared = 1;
     }
     if (moby->oclass == 0x508 || has_next)
         mark_moby_for_removal(moby);
