@@ -60,7 +60,7 @@ typedef struct ArmedTransportVars {
     u8  unk180[0x4];
     s32 unk184;
     f32 unk188;
-    f32 unk18C;
+    f32 bob_phase_radians;
     s32 voice;
     f32 base_height;
 } ArmedTransportVars;
@@ -433,12 +433,12 @@ void armed_transport_update(char *transport_moby) {
         break;
     }
     }
-    transport_data->unk18C = fast_add_rotations(transport_data->unk18C,
+    transport_data->bob_phase_radians = fast_add_rotations(transport_data->bob_phase_radians,
                                                 *(float *)&armed_transport_bob_phase_speed_degrees *
                                                     DEG_TO_RAD * frame_time);
     MOBY(transport_moby)->pos.z =
         transport_data->base_height +
-        *(float *)&armed_transport_bob_amplitude * fast_sin(transport_data->unk18C);
+        *(float *)&armed_transport_bob_amplitude * fast_sin(transport_data->bob_phase_radians);
     update_armed_transport_joint_animation(transport_moby);
 }
 
