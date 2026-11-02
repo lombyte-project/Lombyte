@@ -151,7 +151,7 @@ extern char           *D_L14_0015FFD8_6570 __asm__("D_L14_0015FFD8");
 
 typedef struct {
     char  p[0x48];
-    float f48;
+    float group_anchor_to_hero_heading;
 } M_6570;
 
 typedef struct {
@@ -221,7 +221,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         char *od = *(char **)(o + 0x78);
         char *path = (char *)l14_splines[*(int *)(od + 0x60)].path;
         o[0x20] = 6;
-        ((M_6570 *)o)->f48 = fast_arc_tan(hero.motion.pos.f[0] - group_anchor_moby->pos.x,
+        ((M_6570 *)o)->group_anchor_to_hero_heading = fast_arc_tan(hero.motion.pos.f[0] - group_anchor_moby->pos.x,
                                           hero.motion.pos.f[1] - group_anchor_moby->pos.y);
         path_step_distance = -racer_path_lead_distance_gp;
         *(int *)(od + 0x64) = hero.rail_segment;
