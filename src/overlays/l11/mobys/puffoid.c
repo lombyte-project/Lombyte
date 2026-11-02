@@ -87,12 +87,12 @@ typedef struct {
     u8           pad23C[8];
     s32          unk244; /* 0x244 */
     u8           pad248[4];
-    f32          unk24C;    /* 0x24C: heading offset for FUN_L11_00315f58 */
-    f32          unk250;    /* 0x250: turn speed */
+    f32          chase_heading_offset_radians;    /* 0x24C: heading offset for FUN_L11_00315f58 */
+    f32          yaw_turn_velocity;    /* 0x250: turn speed */
     s32          carrier;   /* 0x254: moby index of the carrier, or < 0 */
-    f32          unk258;    /* 0x258 */
+    f32          carrier_jump_local_x_threshold;    /* 0x258 */
     s32          point;     /* 0x25C: current path point */
-    f32          unk260[4]; /* 0x260 */
+    f32          wander_destination[4]; /* 0x260 */
     u8           pad270[0x10];
     u8           unk280[0x10]; /* 0x280 */
 } CreatureVars_4318;
@@ -190,7 +190,7 @@ void puffoid_update(struct Moby *moby) {
             qcopy(puffoid_vars->home, (char *)l11_paths[puffoid_vars->path] + 0x20);
         } else if (puffoid_vars->carrier >= 0) {
             moby->state = PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP;
-            puffoid_vars->unk258 = random_float_between(-3.0f, 3.0f);
+            puffoid_vars->carrier_jump_local_x_threshold = random_float_between(-3.0f, 3.0f);
             moby->visible = 0;
             moby->collision = 0;
             moby->flags |= 1;
@@ -208,7 +208,7 @@ void puffoid_update(struct Moby *moby) {
         float home_jump_heading = fast_arc_tan(*(float *)(path + 0x20) - moby->pos.x,
                                                *(float *)(path + 0x24) - moby->pos.y);
         approach_angle(&moby->rot.z,
-                       &puffoid_vars->unk250,
+                       &puffoid_vars->yaw_turn_velocity,
                        home_jump_heading,
                        frame_time_sq * 8.726646f,
                        frame_time_sq * 8.726646f,
@@ -253,7 +253,7 @@ void puffoid_update(struct Moby *moby) {
         break;
     case PUFFOID_STATE_IDLE:
         if (puffoid_vars->unk214 != 2) {
-            puffoid_vars->unk24C =
+            puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
                 0.017453292f;
@@ -265,10 +265,10 @@ void puffoid_update(struct Moby *moby) {
                    fast_vec_dist(&moby->pos, D_L11_001677C0_4318) < 32.0f) {
             float a = random_angle_radians();
             float wander_radius = random_float_between(1.0f, 3.0f);
-            puffoid_vars->unk260[0] = fast_cos(a) * wander_radius;
-            puffoid_vars->unk260[1] = fast_sin(a) * wander_radius;
-            puffoid_vars->unk260[2] = 0.0f;
-            fast_vec_add(puffoid_vars->unk260, puffoid_vars->unk260, puffoid_vars->home);
+            puffoid_vars->wander_destination[0] = fast_cos(a) * wander_radius;
+            puffoid_vars->wander_destination[1] = fast_sin(a) * wander_radius;
+            puffoid_vars->wander_destination[2] = 0.0f;
+            fast_vec_add(puffoid_vars->wander_destination, puffoid_vars->wander_destination, puffoid_vars->home);
             moby->state = PUFFOID_STATE_WANDER_NEAR_HOME;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -276,9 +276,9 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_WANDER_NEAR_HOME:
-        update_moby_target_heading_and_conditional_movement((char *)moby, puffoid_vars->unk260);
+        update_moby_target_heading_and_conditional_movement((char *)moby, puffoid_vars->wander_destination);
         if (puffoid_vars->unk214 != 2) {
-            puffoid_vars->unk24C =
+            puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
                 0.017453292f;
@@ -318,7 +318,7 @@ void puffoid_update(struct Moby *moby) {
             float  target_facing_heading = fast_arc_tan(puffoid_vars->target->pos.x - moby->pos.x,
                                                        puffoid_vars->target->pos.y - moby->pos.y);
             approach_angle(rz,
-                           &puffoid_vars->unk250,
+                           &puffoid_vars->yaw_turn_velocity,
                            target_facing_heading,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
@@ -356,7 +356,7 @@ void puffoid_update(struct Moby *moby) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
         } else if (puffoid_vars->unk214 != 2) {
-            puffoid_vars->unk24C =
+            puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
                 0.017453292f;
@@ -413,7 +413,7 @@ void puffoid_update(struct Moby *moby) {
             transpose_rotation_matrix(basis, &carrier_moby->rot_row0);
             fast_vec_sub(pos, &moby->pos, &carrier_moby->pos);
             transform_vector(pos, pos, basis);
-            if (pos[0] < puffoid_vars->unk258 && pos[0] > -3.1f) {
+            if (pos[0] < puffoid_vars->carrier_jump_local_x_threshold && pos[0] > -3.1f) {
                 float lo;
                 float hi;
                 int   scaled_animation_frames;
@@ -473,7 +473,7 @@ void puffoid_update(struct Moby *moby) {
                             &moby->pos,
                             &moby->rot);
         if (puffoid_vars->unk214 != 2) {
-            puffoid_vars->unk24C =
+            puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
                 0.017453292f;
@@ -584,7 +584,7 @@ void puffoid_update(struct Moby *moby) {
             float *rz = &moby->rot.z;
             float  path_point_heading = fast_arc_tan(pos[0] - moby->pos.x, pos[1] - moby->pos.y);
             approach_angle(rz,
-                           &puffoid_vars->unk250,
+                           &puffoid_vars->yaw_turn_velocity,
                            path_point_heading,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
