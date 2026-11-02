@@ -2855,19 +2855,19 @@ typedef struct {
     f32   f25c;
     s32   i260;
     char  p264[0x1004 - 0x264];
-    f32   f1004;
-    f32   f1008;
+    f32   idle_pitch_target_radians;
+    f32   idle_yaw_target_radians;
     char  p100c[4];
-    s32   i1010;
-    f32   f1014;
-    f32   f1018;
+    s32   idle_rotation_target_delay_frames;
+    f32   idle_rotation_easing_acceleration;
+    f32   idle_rotation_easing_max_speed;
     char  p101c[0x1184 - 0x101C];
-    s32   i1184;
+    s32   slot_three_secondary_moby;
     char  p1188[0x2080 - 0x1188];
     void *p2080;
     s32   i2084;
     char  p2088[0x2274 - 0x2088];
-    void *p2274;
+    void *tracked_target_moby;
 } G_a540;
 
 extern G_a540          D_0013F350_a540 __asm__("D_0013F350");
@@ -2887,7 +2887,7 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
     s32     hero_animation_sequence_index;
     s32     min_delay_frames;
 
-    if (D_0015EDB3 != 0 && G.i1184 != 0) {
+    if (D_0015EDB3 != 0 && G.slot_three_secondary_moby != 0) {
         hero_eases[18].scale = D_0015EE18;
     }
     hero_eases[17].scale = D_0015EE14;
@@ -2913,35 +2913,35 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
     hero_animation_sequence_index = *(u8 *)((char *)G.p2080 + 0x53);
     if ((u8)hero_animation_sequence_index >= 3 && (u8)hero_animation_sequence_index != 0x3A)
         return;
-    if (G.p2274 != 0)
+    if (G.tracked_target_moby != 0)
         return;
     if ((u32)(hero_animation_sequence_index - 1) < 2) {
         min_delay_frames = scale_game_frames(40);
-        G.i1010 = random_int_between(min_delay_frames, scale_game_frames(70));
+        G.idle_rotation_target_delay_frames = random_int_between(min_delay_frames, scale_game_frames(70));
     }
-    if (fast_dec_timer(&G.i1010) != 0) {
-        G.f1004 = -random_float_between(-0.15707964f, 0.43633232f);
-        G.f1008 = randf_sym(0.34906584f, 0.99483764f);
+    if (fast_dec_timer(&G.idle_rotation_target_delay_frames) != 0) {
+        G.idle_pitch_target_radians = -random_float_between(-0.15707964f, 0.43633232f);
+        G.idle_yaw_target_radians = randf_sym(0.34906584f, 0.99483764f);
         random_blend_factor = random_float_between(0.0f, 1.0f);
-        G.f1014 = interpolate_scalar_linear(0.015f, 0.007f, random_blend_factor);
-        G.f1018 = interpolate_scalar_linear(0.29f, 0.3f, random_blend_factor);
+        G.idle_rotation_easing_acceleration = interpolate_scalar_linear(0.015f, 0.007f, random_blend_factor);
+        G.idle_rotation_easing_max_speed = interpolate_scalar_linear(0.29f, 0.3f, random_blend_factor);
         min_delay_frames = scale_game_frames(90);
-        G.i1010 = random_int_between(min_delay_frames, scale_game_frames(200));
-        G.i1010 += truncate_float_to_s32((f32)scale_game_frames(80) * random_blend_factor);
+        G.idle_rotation_target_delay_frames = random_int_between(min_delay_frames, scale_game_frames(200));
+        G.idle_rotation_target_delay_frames += truncate_float_to_s32((f32)scale_game_frames(80) * random_blend_factor);
     }
     if ((u32) * (u8 *)((char *)G.p2080 + 0x53) - 1 < 2) {
-        if (0.34906584f < G.f1008)
-            G.f1008 = 0.34906584f;
-        else if (G.f1008 < -0.34906584f)
-            G.f1008 = -0.34906584f;
-        if (0.2617994f < G.f1004)
-            G.f1004 = 0.2617994f;
-        if (G.f1004 < 0.0f)
-            G.f1004 = 0.0f;
+        if (0.34906584f < G.idle_yaw_target_radians)
+            G.idle_yaw_target_radians = 0.34906584f;
+        else if (G.idle_yaw_target_radians < -0.34906584f)
+            G.idle_yaw_target_radians = -0.34906584f;
+        if (0.2617994f < G.idle_pitch_target_radians)
+            G.idle_pitch_target_radians = 0.2617994f;
+        if (G.idle_pitch_target_radians < 0.0f)
+            G.idle_pitch_target_radians = 0.0f;
     }
-    set_fourth_hero_easing_parameters(G.f1014, G.f1018);
-    hero_eases[3].rot_target.f[2] = G.f1008;
-    hero_eases[3].rot_target.f[1] = G.f1004;
+    set_fourth_hero_easing_parameters(G.idle_rotation_easing_acceleration, G.idle_rotation_easing_max_speed);
+    hero_eases[3].rot_target.f[2] = G.idle_yaw_target_radians;
+    hero_eases[3].rot_target.f[1] = G.idle_pitch_target_radians;
     set_second_hero_easing_parameters(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
     hero_eases[1].rot_target.f[2] = hero_eases[3].rot_target.f[2] * 0.52f;
     hero_eases[1].rot_target.f[1] = hero_eases[3].rot_target.f[1] * 0.55f;
