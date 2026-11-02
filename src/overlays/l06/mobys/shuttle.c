@@ -81,9 +81,9 @@ typedef struct {
 
 typedef struct {
     char         pad0[0x2FC];
-    struct Moby *f2FC;
+    struct Moby *route_request_moby;
     char         pad300[0xE];
-    short        f30E;
+    short        route_request_inhibit;
 } Hero_302578;
 
 typedef struct {
@@ -319,8 +319,8 @@ void shuttle_update(struct Moby *moby) {
                 busy = 1;
             }
         }
-        if ((busy == 0 && ((Hero_302578 *)((char *)&hero))->f2FC == moby &&
-             ((Hero_302578 *)((char *)&hero))->f30E == 0) ||
+        if ((busy == 0 && ((Hero_302578 *)((char *)&hero))->route_request_moby == moby &&
+             ((Hero_302578 *)((char *)&hero))->route_request_inhibit == 0) ||
             shuttle_forced_return_requested_gp != 0) {
             update_shuttle_route_selection_and_prompt((char *)moby);
             now = shuttle_forced_return_requested_gp;
