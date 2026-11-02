@@ -1625,7 +1625,7 @@ typedef struct {
     s32      queued_glow_colors[8];
     f32      queued_glow_quad_scales[8];
     f32      queued_glow_position_offset_scales[8];
-    s16      h1EB0;
+    s16      queued_glow_count;
     u8       p2[0x20A4 - 0x1EB2];
     u8       b20A4;
     u8       p3[0x22D8 - 0x20A5];
@@ -1652,7 +1652,7 @@ void draw_hero_glow_quads(void) {
 
     mode = D_L00_0015F5C4;
     if (mode == 2 || mode == 6) {
-        for (i = 0; i < P.h1EB0; i++)
+        for (i = 0; i < P.queued_glow_count; i++)
             draw_offset_textured_effect_quad(&P.queued_glow_positions[i], P.queued_glow_colors[i], P.queued_glow_quad_scales[i], P.queued_glow_position_offset_scales[i]);
         return;
     }
@@ -1673,7 +1673,7 @@ void draw_hero_glow_quads(void) {
             draw_offset_textured_effect_quad(&P.single_point_glow_position, 0x280000C0, 0.057f, 0.08f);
             P.single_point_glow_position.f[2] -= 0.015f;
         }
-        for (i = 0; i < P.h1EB0; i++)
+        for (i = 0; i < P.queued_glow_count; i++)
             draw_offset_textured_effect_quad(&P.queued_glow_positions[i], P.queued_glow_colors[i], P.queued_glow_quad_scales[i], P.queued_glow_position_offset_scales[i]);
         return;
     }
