@@ -58,8 +58,8 @@ typedef struct {
     u8       pad71[0x78 - 0x71];
     V_b3058 *v;
     u8       pad7C[0xD0 - 0x7C];
-    f32      vD0[2];
-    f32      fD8;
+    f32      launch_direction_xy[2];
+    f32      launch_direction_z;
 } O_b3058;
 
 extern int D_0015EEA4;
@@ -119,7 +119,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
             fast_vec_add(launch_position, launch_position, u);
             fast_vec_add(launch_position, launch_position, &camera->pos);
         } else if (hero.unk22C8 == 1) {
-            b = fast_arc_tan(vector_length_xy(visibomb_moby->vD0), visibomb_moby->fD8);
+            b = fast_arc_tan(vector_length_xy(visibomb_moby->launch_direction_xy), visibomb_moby->launch_direction_z);
             build_spherical_offset(launch_position, 0.6f, launch_yaw, -b);
             fast_vec_add(launch_position, launch_position, visibomb_moby->v10);
         } else {
