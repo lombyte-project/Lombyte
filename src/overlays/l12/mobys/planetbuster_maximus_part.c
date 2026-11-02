@@ -51,10 +51,10 @@ typedef struct {
     float f80;
     int   w84;
     char  pad88[4];
-    float f8C;
+    float yaw_sweep_direction;
     short h90;
-    char  b92;
-    char  b93;
+    char  firing_voice_window_timer;
+    char  firing_voice_repeat_timer;
     char  pad94[4];
     short h98;
     short h9A;
@@ -143,13 +143,13 @@ void update_planetbuster_maximus_guns(char *moby) {
                                                  D_0015ED6C_gp * 0.17453292f * (float)i) <
                     0.08726646f) {
                     md->h90 = 1;
-                    md->f8C = 1.0f;
+                    md->yaw_sweep_direction = 1.0f;
                     if (i & 1) {
-                        md->f8C = -1.0f;
+                        md->yaw_sweep_direction = -1.0f;
                     }
                 }
             } else {
-                float sweep_target_yaw = fast_add_rotations(yaw, md->f8C * 0.55850536f);
+                float sweep_target_yaw = fast_add_rotations(yaw, md->yaw_sweep_direction * 0.55850536f);
                 if (absolute_float(spring_angle(ent + 0x18,
                                                 sweep_target_yaw,
                                                 (char *)md + 0x94,
@@ -159,7 +159,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                                                 D_0015ED6C_gp * 0.2617994f +
                                                     (float)i * (D_0015ED6C_gp * 0.05235988f))) <
                     0.017453292f) {
-                    md->f8C = -md->f8C;
+                    md->yaw_sweep_direction = -md->yaw_sweep_direction;
                 }
             }
             flag = 0;
@@ -184,10 +184,10 @@ void update_planetbuster_maximus_guns(char *moby) {
                         md->h9E = scale_game_frames(0x14);
                     }
                     if (fast_dec_timer_s16(&md->h9E) == 0) {
-                        if (FUN_L00_001fefc8(&md->b92) == 0) {
-                            if (FUN_L00_001fefc8(&md->b93) != 0) {
+                        if (FUN_L00_001fefc8(&md->firing_voice_window_timer) == 0) {
+                            if (FUN_L00_001fefc8(&md->firing_voice_repeat_timer) != 0) {
                                 allocate_voice_for_target_entry(0, 0, gun_moby);
-                                md->b93 = scale_game_frames(9);
+                                md->firing_voice_repeat_timer = scale_game_frames(9);
                             }
                         }
                         if (fast_dec_timer_s16(&md->h9C) != 0) {
@@ -224,7 +224,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                                                                scratch_vector,
                                                                scale_game_frames(0x96)) != 0) {
                                 int j;
-                                md->b92 = scale_game_frames(0x14);
+                                md->firing_voice_window_timer = scale_game_frames(0x14);
                                 for (j = 0; j < 9; j++) {
                                     int firing_particle_color_low_byte;
                                     int firing_particle_color;
