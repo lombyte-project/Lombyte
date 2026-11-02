@@ -267,7 +267,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
 extern float blarg_turret_launch_displacement_scale_gp __asm__("D_L13_00161388")
     __attribute__((sda));
 
-int D_L13_0016138C = 2;
+int l13_blarg_turret_fire_interval_frames __asm__("D_L13_0016138C") = 2;
 
 void fire_blarg_turret_projectile(struct Moby *moby) __asm__("FUN_L13_002b47a0");
 
@@ -277,7 +277,7 @@ void fire_blarg_turret_projectile(struct Moby *moby) {
     char *blarg_turret_vars;
     float target_distance, x, projectile_yaw;
     blarg_turret_vars = (char *)moby->pvars;
-    if (frame_count % D_L13_0016138C == 0) {
+    if (frame_count % l13_blarg_turret_fire_interval_frames == 0) {
         moby_point_position(moby, 0, projectile_spawn_position);
         target_distance =
             vector_distance_xy(&moby->pos, *(char **)(blarg_turret_vars + 0x40) + 0x10);
