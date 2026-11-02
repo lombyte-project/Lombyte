@@ -396,7 +396,7 @@ typedef struct AlienQueenVars {
     s32   animation_update;
     s32   unk110;
     s32   unk114;
-    f32   unk118;
+    f32   camera_blend_fraction;
     u8    unk11C;
     u8    pad_11D[0x3];
     s32   timer_120;
@@ -996,7 +996,7 @@ void start_alien_queen_intro(char *moby) {
     float           output_position[4], output_rotation[4], moby_offset_vector[4];
     AlienQueenVars *alien_queen_vars = (AlienQueenVars *)MOBY(moby)->pvars;
     LevelCuboid    *hero_placement_node = &l06_cuboids[alien_queen_vars->cuboid];
-    *(int *)&alien_queen_vars->unk118 = 0;
+    *(int *)&alien_queen_vars->camera_blend_fraction = 0;
     set_race_camera(&hero_placement_node->pos, &hero_placement_node->rot, 0x72, 0);
     qcopy(output_position, moby + 0x10);
     output_position[2] = hero.motion.pos.f[2] + 2.0f;
@@ -1027,7 +1027,7 @@ int update_alien_queen_intro_camera(char *moby) {
         pos = moby + 0x10;
     } else {
         blend_acceleration_step = *(float *)&frame_time_sq * 3.0f;
-        advance_accelerated_scalar(&alien_queen_state->unk118,
+        advance_accelerated_scalar(&alien_queen_state->camera_blend_fraction,
                                    (float *)&alien_queen_state->unk11C,
                                    1.0f,
                                    blend_acceleration_step,
@@ -1042,16 +1042,16 @@ int update_alien_queen_intro_camera(char *moby) {
         hero_offset_position[2] += 4.0f;
         pos = moby + 0x10;
         lerp_vector(
-            output_position, moby_offset_position, hero_offset_position, alien_queen_state->unk118);
+            output_position, moby_offset_position, hero_offset_position, alien_queen_state->camera_blend_fraction);
     }
     output_rotation[2] = fast_arc_tan(MOBY(moby)->pos.x - output_position[0],
                                       MOBY(moby)->pos.y - output_position[1]);
     output_rotation[1] = -fast_arc_tan(vector_distance_xy(output_position, pos),
                                        MOBY(moby)->pos.z - output_position[2]) -
-                         (1.0f - alien_queen_state->unk118) * 30.0f * DEG_TO_RAD;
+                         (1.0f - alien_queen_state->camera_blend_fraction) * 30.0f * DEG_TO_RAD;
     set_camera_position(output_position);
     set_camera_rotation(output_rotation);
-    if (alien_queen_state->unk118 >= 1.0f && MOBY(moby)->prev_seq == 1)
+    if (alien_queen_state->camera_blend_fraction >= 1.0f && MOBY(moby)->prev_seq == 1)
         return 1;
     return 0;
 }
