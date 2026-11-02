@@ -82,7 +82,7 @@ typedef struct ChickenRelocatorVars {
     s32 unk8;
     s32 timer_C;
     u8  pad_10[0x56];
-    s16 unk66;
+    s16 reposition_timer;
     u8  pad_68[0x10];
     f32 unk78;
 } ChickenRelocatorVars;
@@ -136,7 +136,7 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
         moby->flags = (moby->flags | 0x1000) & 0xFFBE;
         moby->collision = moby->pclass->collision;
         moby->state = 4;
-        moby_data->unk66 = scale_game_frames(0xB4);
+        moby_data->reposition_timer = scale_game_frames(0xB4);
     }
 }
 
