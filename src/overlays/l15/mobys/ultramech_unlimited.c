@@ -161,7 +161,7 @@ struct UMoby {
     char           pad71[7];
     UData         *data;
     char           pad7C[0x18];
-    int            w94;
+    int            collision_geometry;
     char           pad98[0x1A];
     unsigned short id;
     char           padB4[0xC];
@@ -307,7 +307,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     if (ultramech_moby->state != ULTRAMECH_INITIALIZE &&
         ultramech_moby->state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
         hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
-        ultramech_moby->w94 = 0;
+        ultramech_moby->collision_geometry = 0;
         ultramech_moby->flags |= 0x41;
         idx = ultramech_vars->snd;
         if (idx != -1) {
@@ -342,7 +342,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         ultramech_vars->activation_target_search_range = 90.0f;
         if (rand() & 1)
             ultramech_moby->flags |= 0x8000;
-        ultramech_moby->w94 = 0;
+        ultramech_moby->collision_geometry = 0;
         ultramech_moby->flags = (ultramech_moby->flags | 0x41) & 0xEFFF;
         if (ultramech_vars->paths[0] == -1 || ultramech_vars->paths[1] == -1)
             ultramech_vars->combat_path_moves_disabled = 1;
@@ -359,7 +359,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 count_active_moby_group_members(ultramech_vars->activation_wait_group_id, 0x40))
                 break;
             if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
-                ultramech_moby->w94 = *(int *)(ultramech_moby->cls + 0x10);
+                ultramech_moby->collision_geometry = *(int *)(ultramech_moby->cls + 0x10);
                 ultramech_moby->flags = (ultramech_moby->flags & 0xFFBE) | 0x1000;
             }
         }
@@ -371,7 +371,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                     !point_in_path_xy(&pl->motion.pos,
                                       D_L15_001B0AB0[ultramech_vars->target_constraint_path_index]->points,
                                       D_L15_001B0AB0[ultramech_vars->target_constraint_path_index]->count)) {
-                    ultramech_moby->w94 = 0;
+                    ultramech_moby->collision_geometry = 0;
                     ultramech_moby->flags = (ultramech_moby->flags | 0x41) & 0xEFFF;
                 } else {
                     LevelPath *path;
@@ -853,7 +853,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         ultramech_moby->state = ULTRAMECH_DEAD_WAIT_FOR_RESET;
         return;
     case ULTRAMECH_DEAD_WAIT_FOR_RESET:
-        ultramech_moby->w94 = 0;
+        ultramech_moby->collision_geometry = 0;
         ultramech_moby->flags = (ultramech_moby->flags | 0x41) & 0xEFFF;
         ultramech_vars->b58 = 0;
         D_L15_001BABD0.cleared[(short)ultramech_moby->id] = 0;
