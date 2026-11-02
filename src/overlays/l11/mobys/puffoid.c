@@ -700,12 +700,12 @@ struct L11PatrolVars {
     f32          unk13C;       /* 0x13C */
     s32          unk140;       /* 0x140 */
     s32          unk144;       /* 0x144 */
-    f32          unk148;       /* 0x148 */
+    f32          knockback_collision_z_offset;       /* 0x148 */
     u8           pad14C[0x11];
     u8           unk15D; /* 0x15D */
     u8           pad15E[0x12];
-    f32          unk170; /* 0x170 */
-    f32          unk174; /* 0x174 */
+    f32          knockback_apex_animation_frame; /* 0x170 */
+    f32          knockback_landing_animation_frame; /* 0x174 */
     u8           pad178[0x2C];
     f32          horizontal_movement_step_limit; /* 0x1A4 */
     u8           pad1A8[0x28];
@@ -811,7 +811,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 kind = HIT_RESPONSE_DEATH;
             }
             patrol_vars->unk140 = truncate_float_to_s32(512.0f);
-            patrol_vars->unk148 = 0.2f;
+            patrol_vars->knockback_collision_z_offset = 0.2f;
             patrol_vars->unk134 = 0.0f;
             patrol_vars->unk130 = puffoid_hit_motion_time_squared_scale_gp * frame_time_sq;
             patrol_vars->unk144 = 9;
@@ -832,8 +832,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 float yaw;
                 patrol_vars->unk138 = puffoid_hit_knockback_horizontal_scale_gp * frame_time;
                 patrol_vars->unk13C = puffoid_hit_knockback_vertical_scale_gp * frame_time;
-                patrol_vars->unk170 = 7.5f;
-                patrol_vars->unk174 = 11.0f;
+                patrol_vars->knockback_apex_animation_frame = 7.5f;
+                patrol_vars->knockback_landing_animation_frame = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
                 position_scratch.q = hit->pos.q;
                 trooper_knockback_arc(
@@ -854,8 +854,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 patrol_vars->unk130 = puffoid_hit_motion_time_squared_scale_gp * frame_time_sq;
                 patrol_vars->unk138 = puffoid_death_knockback_horizontal_scale_gp * frame_time;
                 patrol_vars->unk13C = puffoid_death_knockback_vertical_scale_gp * frame_time;
-                patrol_vars->unk170 = 7.5f;
-                patrol_vars->unk174 = 11.0f;
+                patrol_vars->knockback_apex_animation_frame = 7.5f;
+                patrol_vars->knockback_landing_animation_frame = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
                 position_scratch.q = hit->pos.q;
                 trooper_knockback_arc(
