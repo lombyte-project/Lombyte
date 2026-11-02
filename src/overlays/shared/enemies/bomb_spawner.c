@@ -30,7 +30,7 @@ typedef struct Data_2C0330 {
     char          pad5B[5];
     short         f60[3];
     char          b66;
-    unsigned char b67;
+    unsigned char hit_effect_blend_target;
     char          pad68[8];
     char          f70[0x12];
     unsigned char spawn_trigger_mode;
@@ -268,12 +268,12 @@ void bomb_spawner_update(struct Moby *moby) {
         float remaining_health = spawner_data->hp - r->hit_damage;
         spawner_data->hp = remaining_health;
         if (remaining_health > 0.0f) {
-            spawner_data->b67 = 0x5A;
+            spawner_data->hit_effect_blend_target = 0x5A;
             trooper_anim_update(moby, spawner_data->f60);
         } else {
             mark_moby_for_removal_cf(moby, 0, -1);
             moby->state = SPAWNER_DESTROY;
-            spawner_data->b67 = 0x78;
+            spawner_data->hit_effect_blend_target = 0x78;
             trooper_anim_update(moby, spawner_data->f60);
         }
     }
