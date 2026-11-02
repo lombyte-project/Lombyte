@@ -675,7 +675,7 @@ typedef struct {
     Sub            sub;
     char           pad28[0x38];
     char           q60[7];
-    unsigned char  b67;
+    unsigned char  damage_flash_red;
     char           pad68[0x5C];
     Moby_2EAE80   *list[11];
     Moby_2EAE80   *first;
@@ -783,7 +783,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     moby_data->first->bA4 = 0xFF;
                 } else {
                     dd->health = dd->health - r->damage_amount;
-                    moby_data->b67 = 0xFA;
+                    moby_data->damage_flash_red = 0xFA;
                     mode = ATTACHMENT_DAMAGE_APPLIED;
                     moby_data->sub.h6 = scale_game_frames(0);
                     func_L00_0025E4B0_2EAE80(moby, moby_data->q60);
@@ -878,7 +878,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 moby_data->list[i]->bA4 = 0xFF;
             } else {
                 dd->health = dd->health - r->damage_amount;
-                moby_data->b67 = 0xFA;
+                moby_data->damage_flash_red = 0xFA;
                 mode = ATTACHMENT_DAMAGE_APPLIED;
                 moby_data->sub.h6 = scale_game_frames(0);
                 func_L00_0025E4B0_2EAE80(moby, moby_data->q60);
