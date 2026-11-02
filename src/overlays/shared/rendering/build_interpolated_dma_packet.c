@@ -27,10 +27,10 @@ typedef struct QuadDrawArgs {
 
 typedef struct QuadCamera {
     char  pad0[0x190];
-    float v190[4];
-    float v1A0[4];
+    float projection_and_fog_scale[4];
+    float projection_and_fog_offset[4];
     char  pad1B0[0x60];
-    float f210;
+    float fog_depth_coefficient;
     char  pad214[4];
     float fog_near_distance;
     float fog_far_distance;
@@ -171,11 +171,11 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     view_setup_dma_packet[0x28] = 0x8000;
     view_setup_dma_packet[0x29] = 0x303EC000;
     view_setup_dma_packet[0x2A] = 0x412;
-    *(float *)(view_setup_dma_packet + 0x2B) = ((QuadCamera *)level02_camera_view_state)->f210;
+    *(float *)(view_setup_dma_packet + 0x2B) = ((QuadCamera *)level02_camera_view_state)->fog_depth_coefficient;
     cursor = view_setup_dma_packet + 0x2C;
-    qcopy(cursor, ((QuadCamera *)level02_camera_view_state)->v190);
+    qcopy(cursor, ((QuadCamera *)level02_camera_view_state)->projection_and_fog_scale);
     cursor = view_setup_dma_packet + 0x30;
-    qcopy(cursor, ((QuadCamera *)level02_camera_view_state)->v1A0);
+    qcopy(cursor, ((QuadCamera *)level02_camera_view_state)->projection_and_fog_offset);
     *(float *)(view_setup_dma_packet + 0x34) = ((QuadCamera *)level02_camera_view_state)->fog_far_intensity;
     *(float *)(view_setup_dma_packet + 0x35) = ((QuadCamera *)level02_camera_view_state)->fog_near_intensity;
     view_setup_dma_packet[0x36] = 0;
