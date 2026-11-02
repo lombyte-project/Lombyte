@@ -164,7 +164,7 @@ typedef struct BombomaticVars {
     u8  pad_28[0x38];
     s16 anim_state;
     u8  pad_62[0x5];
-    u8  unk67;
+    u8  hit_transition_target;
     u8  pad_68[0x8];
     u8  manipulator_70;
     u8  pad_71[0xF];
@@ -325,7 +325,7 @@ void bombomatic_update(char *moby) {
         }
         tv -= hit_damage;
         *(float *)health_ptr = tv;
-        moby_data->unk67 = 0xFA;
+        moby_data->hit_transition_target = 0xFA;
         moby_data->unk26 = scale_game_frames(60);
         trooper_anim_update(moby, &moby_data->anim_state);
     }
