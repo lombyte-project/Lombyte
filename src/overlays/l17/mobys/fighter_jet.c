@@ -1077,7 +1077,7 @@ typedef struct {
     char          pad40[0x20];
     unsigned char sel;
     unsigned char flip;
-    short         s62;
+    short         death_respawn_countdown;
     float         speed;
     short         count;
     short         s6A;
@@ -1091,8 +1091,8 @@ typedef struct {
     float         fD0, fD4, fD8;
     int           iDC;
     char          padE0[0x2C];
-    int           i10C;
-    int           i110;
+    int           boost_voice_slot_index;
+    int           flight_target_record_index;
 } FighterJetVars;
 
 typedef unsigned int Q_c4 __attribute__((mode(TI), aligned(16)));
@@ -1243,7 +1243,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         if (l17_fighter_jet_startup_speed_ramp_count_limit < ship_vars->count) {
             pad = &controller_state;
             if (pad->raw_pressed & 0x40) {
-                voice_slot_index = ship_vars->i10C;
+                voice_slot_index = ship_vars->boost_voice_slot_index;
                 if (voice_slot_index != -1) {
                     e = (char *)&voice_pool + voice_slot_index * 0x70;
                     if (*(char **)(e + 0x88) == (char *)ship_moby &&
@@ -1251,10 +1251,10 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                         release_voice_slot(voice_slot_index);
                     }
                 }
-                ship_vars->i10C = -1;
-                ship_vars->i10C = allocate_voice_for_target_entry(1, 4, (int)ship_moby);
+                ship_vars->boost_voice_slot_index = -1;
+                ship_vars->boost_voice_slot_index = allocate_voice_for_target_entry(1, 4, (int)ship_moby);
             } else if (pad->raw_released & 0x40) {
-                voice_slot_index = ship_vars->i10C;
+                voice_slot_index = ship_vars->boost_voice_slot_index;
                 if (voice_slot_index != -1) {
                     e = (char *)&voice_pool + voice_slot_index * 0x70;
                     if (*(char **)(e + 0x88) == (char *)ship_moby &&
@@ -1262,7 +1262,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                         release_voice_slot(voice_slot_index);
                     }
                 }
-                ship_vars->i10C = -1;
+                ship_vars->boost_voice_slot_index = -1;
             }
             pad = &controller_state;
             if (pad->raw_held & 0x40) {
@@ -1346,14 +1346,14 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
 
     lenA = 310.0f;
     lenB = 500.0f;
-    if (ship_vars->i110 != -1) {
-        int   target_record_byte_offset = ship_vars->i110 << 7;
+    if (ship_vars->flight_target_record_index != -1) {
+        int   target_record_byte_offset = ship_vars->flight_target_record_index << 7;
         char *target_record_array = D_L17_001600EC;
-        qcopy(target, ((char(*)[128])target_record_array)[ship_vars->i110] + 0x30);
+        qcopy(target, ((char(*)[128])target_record_array)[ship_vars->flight_target_record_index] + 0x30);
         lenA = fast_vec_length(target_record_array + target_record_byte_offset + 0x20);
         fast_vec_add(target_record_sum_or_camera_local_offset,
-                     (ship_vars->i110 << 7) + D_L17_001600EC,
-                     (ship_vars->i110 << 7) + D_L17_001600EC + 0x10);
+                     (ship_vars->flight_target_record_index << 7) + D_L17_001600EC,
+                     (ship_vars->flight_target_record_index << 7) + D_L17_001600EC + 0x10);
         lenB = fast_vec_length(target_record_sum_or_camera_local_offset);
     } else {
         qcopy(target, D_L17_001621F0);
@@ -1576,7 +1576,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                       1,
                                       -1,
                                       0);
-                ship_vars->s62 = l17_fighter_jet_collision_death_respawn_delay;
+                ship_vars->death_respawn_countdown = l17_fighter_jet_collision_death_respawn_delay;
                 ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                 ship_moby->flags |= 0x41;
             }
