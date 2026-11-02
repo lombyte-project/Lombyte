@@ -30,7 +30,7 @@ typedef struct {
 typedef struct {
     u8  pad0[0x88];
     u16 deliveries;
-    u16 unkA2;
+    u16 max_release_frame_bucket;
     u32 levels;
 } DeliveryStats_2c1ad0;
 
@@ -293,8 +293,8 @@ void mine_glove_update(struct Moby *moby) {
             {
                 s32 frames = scale_game_frames(D_0015EEA4_macro);
                 frames /= 600;
-                if (((DeliveryStats_2c1ad0 *)item_usage)->unkA2 < frames)
-                    ((DeliveryStats_2c1ad0 *)item_usage)->unkA2 =
+                if (((DeliveryStats_2c1ad0 *)item_usage)->max_release_frame_bucket < frames)
+                    ((DeliveryStats_2c1ad0 *)item_usage)->max_release_frame_bucket =
                         scale_game_frames(D_0015EEA4_macro) / 600;
             }
             ((DeliveryStats_2c1ad0 *)item_usage)->levels =

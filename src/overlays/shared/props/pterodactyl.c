@@ -14,8 +14,8 @@ typedef struct {
     char  p0[0x60];
     int   path;
     float f64, f68, f6C;
-    int   i70;
-    float f74;
+    int   path_loop_enabled;
+    float path_progress_increment;
 } D_2e3a88;
 
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
@@ -51,8 +51,10 @@ void pterodactyl_update(unsigned char *moby) {
         {
             float first_segment_length = fast_vec_dist(path + 4, path + 8);
             float first_to_last_distance = fast_vec_dist(path + 4, path + *path * 4);
-            moby_data->f74 = pterodactyl_path_speed_gp * frame_time / first_segment_length;
-            moby_data->i70 = absolute_float(first_segment_length - first_to_last_distance) < 0.1f;
+            moby_data->path_progress_increment =
+                pterodactyl_path_speed_gp * frame_time / first_segment_length;
+            moby_data->path_loop_enabled =
+                absolute_float(first_segment_length - first_to_last_distance) < 0.1f;
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
         MOBY(moby)->state = PTERODACTYL_FOLLOW_PATH;
@@ -60,10 +62,11 @@ void pterodactyl_update(unsigned char *moby) {
         MOBY(moby)->update_dist = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:
         y = MOBY(moby)->pos.z;
-        sample_camera_path(path, moby_data->f6C, moby_data->i70, &MOBY(moby)->pos, moby + 0x40, 0);
+        sample_camera_path(
+            path, moby_data->f6C, moby_data->path_loop_enabled, &MOBY(moby)->pos, moby + 0x40, 0);
         MOBY(moby)->rot.y *= 0.5f;
         MOBY(moby)->pos.z += moby_data->f64;
-        moby_data->f6C += moby_data->f74;
+        moby_data->f6C += moby_data->path_progress_increment;
         if ((float)*path < moby_data->f6C)
             moby_data->f6C -= (float)*path;
         if (MOBY(moby)->anim_flags & 2) {

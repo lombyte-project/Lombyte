@@ -64,7 +64,7 @@ typedef struct CameraBoxWatcherVars {
     s32 unk58;
     s32 unk5C;
     s32 unk60;
-    s32 unk64;
+    s32 first_followup_clip_volume_index;
     s32 unk68;
     s32 unk6C;
     s32 unk70;
@@ -118,7 +118,8 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
         if (hero_current_state == HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY ||
             hero_current_state == HERO_STATE_OPTIONAL_IDLE_ANIMATION) {
             pvars->unk6C = 0;
-        } else if (is_point_inside_clip_volume(&h->motion.pos, pvars->unk64) ||
+        } else if (is_point_inside_clip_volume(&h->motion.pos,
+                                               pvars->first_followup_clip_volume_index) ||
                    is_point_inside_clip_volume(&h->motion.pos, pvars->unk68)) {
             if (D_0013D408[0x1C] == 0) {
                 D_0013D408[0x1C] = 1;

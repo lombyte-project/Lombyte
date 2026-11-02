@@ -16,9 +16,9 @@ extern int D_L16_0015F5CC;
 extern int FUN_001fa6e0_q(float, int, int) __asm__("FUN_001fa6e0");
 
 extern float D_L16_001D9768[] NOT_SDA;
-int          D_L16_00161DE4 = 600;
-int          D_L16_00161DE8 = 0x80202020;
-int          D_L16_00161DEC = 0x80808080;
+int          l16_local_bounds_trigger_command_timeout_frames __asm__("D_L16_00161DE4") = 600;
+int          l16_local_bounds_trigger_dim_glow_color __asm__("D_L16_00161DE8") = 0x80202020;
+int          l16_local_bounds_trigger_bright_glow_color __asm__("D_L16_00161DEC") = 0x80808080;
 extern char  D_0013F3D0[] NOT_SDA;
 void local_bounds_command_trigger_update(struct Moby *trigger_moby) __asm__("FUN_L16_002e5258");
 
@@ -39,8 +39,8 @@ void local_bounds_command_trigger_update(struct Moby *trigger_moby) {
         convert_integer_to_float(D_L16_0015F5CC % period) / convert_integer_to_float(period);
     trigger_moby->glow_color =
         FUN_001fa6e0_q(fast_sin(glow_cycle_phase * 6.28318f - 3.14159f) * 0.5f + 0.5f,
-                       D_L16_00161DE8,
-                       D_L16_00161DEC);
+                       l16_local_bounds_trigger_dim_glow_color,
+                       l16_local_bounds_trigger_bright_glow_color);
     switch (trigger_moby->state) {
     case GRINDRAIL_TRIGGER_INITIALIZE:
         trigger_moby->state = GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS;
@@ -64,7 +64,8 @@ void local_bounds_command_trigger_update(struct Moby *trigger_moby) {
                 allocate_voice_for_target_entry(1, 0, trigger_moby);
                 trigger_moby->command = 1;
                 trigger_moby->state = GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT;
-                *(int *)command_timer = scale_game_frames(D_L16_00161DE4);
+                *(int *)command_timer =
+                    scale_game_frames(l16_local_bounds_trigger_command_timeout_frames);
             }
         }
         break;

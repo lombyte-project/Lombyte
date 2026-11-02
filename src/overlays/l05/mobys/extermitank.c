@@ -104,7 +104,7 @@ typedef struct ExtermitankVars {
     u8    unk28;
     u8    unk29;
     u8    pad_2A[0x4];
-    u8    unk2E;
+    u8    lifecycle_state;
     u8    pad_2F[0x9];
     s32   unk38;
     u8    pad_3C[0x2];
@@ -121,7 +121,7 @@ typedef struct ExtermitankVars {
     f32   unk78;
     f32   unk7C;
     u8    pad_80[0x4];
-    f32   unk84;
+    f32   child_animation_speed_bias;
     u8    pad_88[0xC];
     f32   unk94;
     u8    pad_98[0x14];
@@ -142,18 +142,18 @@ typedef struct ExtermitankVars {
     u8    pad_131[0xF];
     f32   unk140[4];
     u8    pad_150[0x24];
-    f32   unk174;
-    s32   unk178;
+    f32   firing_range_xy;
+    s32   firing_range_timer;
     u8    pad_17C[0x4];
     s32   unk180;
     char *unk184;
     char *unk188;
     u8    pad_18C[0x4];
     s32   path_190;
-    f32   unk194;
-    f32   unk198;
+    f32   turret_yaw;
+    f32   turret_pitch;
     u8    pad_19C[0x2];
-    s16   unk19E;
+    s16   removal_scaled_frames;
     f32   particle_slots[4];
 } ExtermitankVars;
 
@@ -167,7 +167,7 @@ void extermitank_update(unsigned char *moby) {
 
     handle_extermitank_hits_and_sync_children((char *)moby);
     process_extermitank_particle_hits((char *)moby);
-    if (extermitank_vars->unk2E == 2) {
+    if (extermitank_vars->lifecycle_state == 2) {
         if (extermitank_vars->unk184 != 0)
             mark_moby_for_removal_c3(extermitank_vars->unk184);
         if (extermitank_vars->unk188 != 0)
@@ -238,16 +238,16 @@ void extermitank_update(unsigned char *moby) {
         extermitank_vars->unk94 = D_L05_00161AF8 * D_0015ED6C_gp;
         clear_u64_value(extermitank_vars->unk40);
         extermitank_vars->unk3E |= 2;
-        extermitank_vars->unk2E = 1;
+        extermitank_vars->lifecycle_state = 1;
         extermitank_vars->unk29 = 0;
         extermitank_vars->max_health = 6;
         extermitank_vars->unk28 = 3;
         extermitank_vars->health = 6.0f;
         extermitank_vars->unk180 = scale_game_frames(0x3C);
-        *(int *)&extermitank_vars->unk198 = 0;
+        *(int *)&extermitank_vars->turret_pitch = 0;
         {
             float t = *(volatile float *)&D_L05_00161B78;
-            extermitank_vars->unk194 = *(volatile float *)(moby + 0x48);
+            extermitank_vars->turret_yaw = *(volatile float *)(moby + 0x48);
             extermitank_vars->unk58 = truncate_float_to_s32(t);
         }
         extermitank_vars->unk5A = truncate_float_to_s32(D_L05_00161B7C * 8.0f);
@@ -279,7 +279,7 @@ void extermitank_update(unsigned char *moby) {
             *(int *)pp = idx;
         }
         h = ((char *)&D_0013F350 + 0x80);
-        if (vector_distance_xy(moby + 0x10, h) < extermitank_vars->unk174) {
+        if (vector_distance_xy(moby + 0x10, h) < extermitank_vars->firing_range_xy) {
             if (absolute_float(MOBY(moby)->pos.z - *(float *)(h + 8)) < 4.0f) {
                 if (extermitank_vars->path_190 == -1 ||
                     FUN_L00_00259740(h,
@@ -299,20 +299,21 @@ void extermitank_update(unsigned char *moby) {
             char *g = ((char *)&D_0013F350);
             float a = fast_arc_tan(*(float *)(g + 0x80) - MOBY(moby)->pos.x,
                                    *(float *)(g + 0x84) - MOBY(moby)->pos.y);
-            step_angle_toward_target(&extermitank_vars->unk194, 0, a, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
-                &extermitank_vars->unk198, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
+                &extermitank_vars->turret_yaw, 0, a, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target(
+                &extermitank_vars->turret_pitch, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         } else {
             step_angle_toward_target(
-                &extermitank_vars->unk194, 0, MOBY(moby)->rot.z, D_0015ED6C_gp * 1.5707964f);
+                &extermitank_vars->turret_yaw, 0, MOBY(moby)->rot.z, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
-                &extermitank_vars->unk198, 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
+                &extermitank_vars->turret_pitch, 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
         }
-        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
+        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->turret_pitch);
         build_axis_rotation_quaternion(
             extermitank_vars->unk100,
             2,
-            fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
+            fast_subtract_rotations(extermitank_vars->turret_yaw, MOBY(moby)->rot.z));
         break;
     }
     case EXTERMITANK_FIRE_PARTICLES: {
@@ -354,10 +355,10 @@ void extermitank_update(unsigned char *moby) {
             working_position[1] += random_float_between(-0.065f, 0.065f);
             working_position[2] += random_float_between(-0.065f, 0.065f);
             particle_vector_a[0] =
-                fast_cos(extermitank_vars->unk194) *
+                fast_cos(extermitank_vars->turret_yaw) *
                 (extermitank_tracked_particle_vector_a_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_a[1] =
-                fast_sin(extermitank_vars->unk194) *
+                fast_sin(extermitank_vars->turret_yaw) *
                 (extermitank_tracked_particle_vector_a_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_a[2] = 0.0f;
             particle_vector_a[2] = random_float_between(
@@ -367,10 +368,10 @@ void extermitank_update(unsigned char *moby) {
                                        extermitank_tracked_particle_vector_b_spread_degrees_gp) *
                   0.017453292f;
             particle_vector_b[0] =
-                fast_cos(fast_add_rotations(extermitank_vars->unk194, ang)) *
+                fast_cos(fast_add_rotations(extermitank_vars->turret_yaw, ang)) *
                 (extermitank_tracked_particle_vector_b_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_b[1] =
-                fast_sin(fast_add_rotations(extermitank_vars->unk194, ang)) *
+                fast_sin(fast_add_rotations(extermitank_vars->turret_yaw, ang)) *
                 (extermitank_tracked_particle_vector_b_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_b[2] = 0.0f;
             particle_vector_b[2] = random_float_between(
@@ -419,10 +420,10 @@ void extermitank_update(unsigned char *moby) {
                                        extermitank_secondary_particle_vector_a_spread_degrees_gp) *
                   0.017453292f;
             particle_vector_a[0] =
-                fast_cos(fast_add_rotations(extermitank_vars->unk194, ang)) *
+                fast_cos(fast_add_rotations(extermitank_vars->turret_yaw, ang)) *
                 (extermitank_secondary_particle_vector_a_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_a[1] =
-                fast_sin(fast_add_rotations(extermitank_vars->unk194, ang)) *
+                fast_sin(fast_add_rotations(extermitank_vars->turret_yaw, ang)) *
                 (extermitank_secondary_particle_vector_a_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_a[2] = 0.0f;
             particle_vector_a[2] = random_float_between(
@@ -432,10 +433,10 @@ void extermitank_update(unsigned char *moby) {
                                        extermitank_secondary_particle_vector_b_spread_degrees_gp) *
                   0.017453292f;
             particle_vector_b[0] =
-                fast_cos(fast_add_rotations(extermitank_vars->unk194, ang)) *
+                fast_cos(fast_add_rotations(extermitank_vars->turret_yaw, ang)) *
                 (extermitank_secondary_particle_vector_b_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_b[1] =
-                fast_sin(fast_add_rotations(extermitank_vars->unk194, ang)) *
+                fast_sin(fast_add_rotations(extermitank_vars->turret_yaw, ang)) *
                 (extermitank_secondary_particle_vector_b_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_b[2] = 0.0f;
             particle_vector_b[2] = random_float_between(
@@ -463,7 +464,7 @@ void extermitank_update(unsigned char *moby) {
         qcopy(working_position, moby + 0x10);
         working_position[2] = working_position[2] + 3.0f;
         h = ((char *)&D_0013F350 + 0x80);
-        if (extermitank_vars->unk174 < vector_distance_xy(moby + 0x10, h) ||
+        if (extermitank_vars->firing_range_xy < vector_distance_xy(moby + 0x10, h) ||
             4.0f <= absolute_float(MOBY(moby)->pos.z - *(float *)(h + 8)) ||
             (extermitank_vars->path_190 != -1 &&
              FUN_L00_00259740(h,
@@ -478,15 +479,16 @@ void extermitank_update(unsigned char *moby) {
             char *g = ((char *)&D_0013F350);
             float a = fast_arc_tan(*(float *)(g + 0x80) - MOBY(moby)->pos.x,
                                    *(float *)(g + 0x84) - MOBY(moby)->pos.y);
-            step_angle_toward_target(&extermitank_vars->unk194, 0, a, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
-                &extermitank_vars->unk198, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
+                &extermitank_vars->turret_yaw, 0, a, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target(
+                &extermitank_vars->turret_pitch, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         }
-        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
+        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->turret_pitch);
         build_axis_rotation_quaternion(
             extermitank_vars->unk100,
             2,
-            fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
+            fast_subtract_rotations(extermitank_vars->turret_yaw, MOBY(moby)->rot.z));
         break;
     }
     case EXTERMITANK_REMOVE:
@@ -530,7 +532,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void  finish_motion_305178(void *, void *) __asm__("FUN_L00_0025d538");
 
-int          D_L05_00161B74 = 5;
+int          l05_extermitank_removal_base_frames __asm__("D_L05_00161B74") = 5;
 extern float extermitank_child_animation_speed_divisor_gp __asm__("D_L05_00161AF0")
     __attribute__((sda));
 extern float extermitank_child_animation_speed_offset_scale_gp __asm__("D_L05_00161AF4")
@@ -650,10 +652,11 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
                             1,
                             -1,
                             0);
-            extermitank_hit_sync_vars->unk19E = scale_game_frames(D_L05_00161B74);
+            extermitank_hit_sync_vars->removal_scaled_frames =
+                scale_game_frames(l05_extermitank_removal_base_frames);
             MOBY(moby)->state = EXTERMITANK_REMOVE;
             clear_u64_value(effect_data);
-            *(float *)(effect_data + 8) = extermitank_hit_sync_vars->unk194;
+            *(float *)(effect_data + 8) = extermitank_hit_sync_vars->turret_yaw;
             spawn_particle_305178(moby,
                                   0x6dd,
                                   moby + 0x10,
@@ -745,8 +748,9 @@ mark_children:
         ((unsigned char *)extermitank_hit_sync_vars->unk184)[0xa4] = 0xff;
     if (extermitank_hit_sync_vars->unk188 != 0)
         ((unsigned char *)extermitank_hit_sync_vars->unk188)[0xa4] = 0xff;
-    if (extermitank_hit_sync_vars->unk38 != 0 && extermitank_hit_sync_vars->unk178 == 0) {
-        extermitank_hit_sync_vars->unk178 = scale_game_frames(0xf0);
+    if (extermitank_hit_sync_vars->unk38 != 0 &&
+        extermitank_hit_sync_vars->firing_range_timer == 0) {
+        extermitank_hit_sync_vars->firing_range_timer = scale_game_frames(0xf0);
         extermitank_hit_sync_vars->unk38 = 0;
         hero_turn_reference = &hero;
         angle = fast_arc_tan(hero_turn_reference->motion.pos.f[0] - MOBY(moby)->pos.x,
@@ -754,10 +758,10 @@ mark_children:
         if (fast_difference_between_rotations(MOBY(moby)->rot.z, angle) > 1.5707964f)
             ((signed char *)extermitank_hit_sync_vars)[0xc4] *= -1;
     }
-    if (fast_dec_timer(&extermitank_hit_sync_vars->unk178) != 0)
-        extermitank_hit_sync_vars->unk174 = 20.0f;
+    if (fast_dec_timer(&extermitank_hit_sync_vars->firing_range_timer) != 0)
+        extermitank_hit_sync_vars->firing_range_xy = 20.0f;
     else
-        extermitank_hit_sync_vars->unk174 = 14.0f;
+        extermitank_hit_sync_vars->firing_range_xy = 14.0f;
     if (extermitank_hit_sync_vars->unk184 != 0) {
         char *first;
         float offset_scale;
@@ -766,7 +770,7 @@ mark_children:
         offset_scale = extermitank_child_animation_speed_offset_scale_gp;
         *(float *)(extermitank_hit_sync_vars->unk184 + 0x58) = speed;
         *(float *)(extermitank_hit_sync_vars->unk184 + 0x58) +=
-            extermitank_hit_sync_vars->unk84 * offset_scale;
+            extermitank_hit_sync_vars->child_animation_speed_bias * offset_scale;
         first = extermitank_hit_sync_vars->unk184;
         qcopy(first + 0x40, moby + 0x40);
         qcopy(first + 0x10, moby + 0x10);
@@ -779,7 +783,7 @@ mark_children:
         offset_scale = extermitank_child_animation_speed_offset_scale_gp;
         *(float *)(extermitank_hit_sync_vars->unk188 + 0x58) = speed;
         *(float *)(extermitank_hit_sync_vars->unk188 + 0x58) -=
-            extermitank_hit_sync_vars->unk84 * offset_scale;
+            extermitank_hit_sync_vars->child_animation_speed_bias * offset_scale;
         second = extermitank_hit_sync_vars->unk188;
         qcopy(second + 0x40, moby + 0x40);
         qcopy(second + 0x10, moby + 0x10);

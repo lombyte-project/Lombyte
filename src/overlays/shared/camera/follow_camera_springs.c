@@ -830,25 +830,30 @@ void compute_follow_camera_offset_target_up_projection(void *out_target_up_proje
 
 /* camera attach mode transitions: picks the next state from the player's state and arms its timers */
 /* Migrated from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5DE0). */
-void FUN_L00_002e4930(char *camera) {
+void update_follow_camera_attach_mode(char *camera) __asm__("FUN_L00_002e4930");
+
+void update_follow_camera_attach_mode(char *camera) {
+    enum {
+        CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY = 0
+    };
     char      *camera_state = *(char **)(camera + 0x70);
     CamAttach *attach_state = (CamAttach *)(camera_state + 0x40);
     char      *timer_camera_state;
     float      inv, x, y;
     int        camera_timer_base_frames;
 
-    if (attach_state->state == 0) {
+    if (attach_state->state == CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY) {
         struct Hero *player = &hero;
         if (player->state.control_mode == 2) {
             attach_state->prev = attach_state->state;
-            attach_state->state = 1;
+            attach_state->state = CAM_ATTACH_HERO_POSITION_BASE;
             attach_state->timer = l00_follow_camera_ground_focus_exit_transition_frames_gp;
             attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         } else {
             struct Hero *current_player = &hero;
             if (current_player->state.current == 0xF && D_L00_00166EEC == 0.0f) {
                 attach_state->prev = attach_state->state;
-                attach_state->state = 3;
+                attach_state->state = CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY;
                 attach_state->moveTimer = scale_game_frames(
                     *(int *)&follow_camera_project_hero_focus_blend_base_frames_gp);
                 attach_state->invMove = 1.0f / convert_integer_to_float(attach_state->moveTimer);
@@ -864,14 +869,14 @@ void FUN_L00_002e4930(char *camera) {
                 struct Hero *state_check_player = &hero;
                 if (state_check_player->state.current == 0xC && D_L00_00166EEC == 0.0f) {
                     attach_state->prev = attach_state->state;
-                    attach_state->state = 8;
+                    attach_state->state = CAM_ATTACH_HOLD_FOCUS_VELOCITY;
                     attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
                     attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
                 } else {
                     struct Hero *hero_state_player = &hero;
                     if (hero_state_player->state.current == 0xB && D_L00_00166EEC == 0.0f) {
                         attach_state->prev = attach_state->state;
-                        attach_state->state = 6;
+                        attach_state->state = CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY;
                         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
                         attach_state->invMove =
                             1.0f / convert_integer_to_float(attach_state->moveTimer);
@@ -889,7 +894,8 @@ void FUN_L00_002e4930(char *camera) {
                              state_transition_player->state.current == 0xE) &&
                             D_L00_00166EEC == 0.0f) {
                             attach_state->prev = attach_state->state;
-                            attach_state->state = 5;
+                            attach_state->state =
+                                CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION;
                             attach_state->moveTimer = scale_game_frames(
                                 *(int *)&follow_camera_hold_focus_blend_base_frames_gp);
                             attach_state->invMove =
@@ -908,7 +914,7 @@ void FUN_L00_002e4930(char *camera) {
                             if (control_mode_player->state.control_mode == 4 &&
                                 D_L00_00166EEC == 0.0f) {
                                 attach_state->prev = attach_state->state;
-                                attach_state->state = 2;
+                                attach_state->state = CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY;
                                 attach_state->timer =
                                     follow_camera_ground_aware_focus_transition_frames_gp;
                                 attach_state->invTimer =
@@ -921,10 +927,11 @@ void FUN_L00_002e4930(char *camera) {
         }
         return;
     }
-    if (attach_state->state != 9 && attach_state->state != 1 && camera_secondary_mode_lui == 0x14) {
+    if (attach_state->state != CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY &&
+        attach_state->state != CAM_ATTACH_HERO_POSITION_BASE && camera_secondary_mode_lui == 0x14) {
         float r;
         attach_state->prev = attach_state->state;
-        attach_state->state = 9;
+        attach_state->state = CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY;
         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D6C_gp);
         r = 1.0f / convert_integer_to_float(attach_state->moveTimer);
         y = *(float *)&follow_camera_projected_focus_blend_offset_gp;
@@ -938,18 +945,19 @@ void FUN_L00_002e4930(char *camera) {
         qcopy(attach_state->v20, attach_state->v10);
         return;
     }
-    if ((attach_state->state == 1 || attach_state->state == 2) && D_001413DC != 4 &&
-        D_001413DC != 2) {
+    if ((attach_state->state == CAM_ATTACH_HERO_POSITION_BASE ||
+         attach_state->state == CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY) &&
+        D_001413DC != 4 && D_001413DC != 2) {
         attach_state->timer = 0;
         attach_state->invTimer = 1.0f;
-        attach_state->state = 0;
+        attach_state->state = CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY;
         return;
     }
-    if (attach_state->state == 7) {
+    if (attach_state->state == CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY) {
         struct Hero *p = &hero;
         if (p->past_jump_apex == 0) {
             attach_state->prev = attach_state->state;
-            attach_state->state = 6;
+            attach_state->state = CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY;
             attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
             attach_state->invMove = 1.0f / convert_integer_to_float(attach_state->moveTimer);
             attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
@@ -964,32 +972,33 @@ void FUN_L00_002e4930(char *camera) {
         }
         if (p->state.control_mode == 2) {
             attach_state->prev = attach_state->state;
-            attach_state->state = 1;
+            attach_state->state = CAM_ATTACH_HERO_POSITION_BASE;
             attach_state->timer =
                 scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
             attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
             return;
         }
     }
-    if (attach_state->state == 4 && D_001413DC != 4) {
+    if (attach_state->state == CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY && D_001413DC != 4) {
         if (D_001413DC == 2) {
             attach_state->prev = 4;
-            attach_state->state = 1;
+            attach_state->state = CAM_ATTACH_HERO_POSITION_BASE;
             attach_state->timer =
                 scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
             attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         } else {
             attach_state->prev = 4;
-            attach_state->state = 0;
+            attach_state->state = CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY;
             attach_state->timer =
                 scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
             attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         }
         return;
     }
-    if (attach_state->state == 3 && camera_secondary_mode_lui == 0xB) {
+    if (attach_state->state == CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY &&
+        camera_secondary_mode_lui == 0xB) {
         attach_state->prev = attach_state->state;
-        attach_state->state = 6;
+        attach_state->state = CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY;
         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
         attach_state->invMove = 1.0f / convert_integer_to_float(attach_state->moveTimer);
         attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
@@ -1002,50 +1011,54 @@ void FUN_L00_002e4930(char *camera) {
         qcopy(attach_state->v20, attach_state->v10);
         return;
     }
-    if (attach_state->state == 5 && camera_secondary_mode_lui == 0xC) {
+    if (attach_state->state == CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION &&
+        camera_secondary_mode_lui == 0xC) {
         attach_state->prev = attach_state->state;
-        attach_state->state = 8;
+        attach_state->state = CAM_ATTACH_HOLD_FOCUS_VELOCITY;
         attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if (attach_state->state == 8 && camera_secondary_mode_lui != 0xC) {
+    if (attach_state->state == CAM_ATTACH_HOLD_FOCUS_VELOCITY && camera_secondary_mode_lui != 0xC) {
         attach_state->prev = attach_state->state;
-        attach_state->state = 0;
+        attach_state->state = CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY;
         attach_state->timer =
             scale_game_frames(*(int *)&follow_camera_hold_focus_exit_base_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if (attach_state->state == 6 && camera_secondary_mode_lui != 0xB) {
+    if (attach_state->state == CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY &&
+        camera_secondary_mode_lui != 0xB) {
         attach_state->prev = attach_state->state;
-        attach_state->state = 0;
+        attach_state->state = CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY;
         attach_state->timer =
             scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if ((attach_state->state == 3 || attach_state->state == 5) && D_001413DC != 4) {
+    if ((attach_state->state == CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY ||
+         attach_state->state == CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION) &&
+        D_001413DC != 4) {
         attach_state->prev = attach_state->state;
-        attach_state->state = 0;
+        attach_state->state = CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY;
         attach_state->timer =
             scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if (attach_state->state == 9) {
+    if (attach_state->state == CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY) {
         struct Hero *p = &hero;
         if (p->state.control_mode == 2 || p->frames_off_ground.s >= scale_game_frames(0x37)) {
             goto to_one;
         }
     }
-    if (attach_state->state == 0xA) {
+    if (attach_state->state == CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY) {
         struct Hero *p = &hero;
         if (p->state.control_mode == 2 || p->frames_off_ground.s >= scale_game_frames(0x37)) {
             float r;
         to_one:
             attach_state->prev = attach_state->state;
-            attach_state->state = 1;
+            attach_state->state = CAM_ATTACH_HERO_POSITION_BASE;
             attach_state->timer =
                 scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
             r = 1.0f / convert_integer_to_float(attach_state->timer);
@@ -1057,24 +1070,27 @@ void FUN_L00_002e4930(char *camera) {
             return;
         }
     }
-    if (attach_state->state == 9 && camera_secondary_mode_lui != 0x14) {
+    if (attach_state->state == CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY &&
+        camera_secondary_mode_lui != 0x14) {
         attach_state->prev = attach_state->state;
-        attach_state->state = 0xA;
+        attach_state->state = CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY;
         attach_state->timer = follow_camera_continue_projected_focus_transition_frames_gp;
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if (attach_state->state == 0xA && FUN_001f9770_c2(&attach_state->moveTimer)) {
+    if (attach_state->state == CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY &&
+        FUN_001f9770_c2(&attach_state->moveTimer)) {
         attach_state->prev = attach_state->state;
-        attach_state->state = 0;
+        attach_state->state = CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY;
         attach_state->timer =
             scale_game_frames(*(int *)&l00_follow_camera_post_blend_focus_transition_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if (attach_state->state == 5 && camera_secondary_mode_lui == 0x10) {
+    if (attach_state->state == CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION &&
+        camera_secondary_mode_lui == 0x10) {
         attach_state->prev = attach_state->state;
-        attach_state->state = 0;
+        attach_state->state = CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY;
         attach_state->timer =
             scale_game_frames(*(int *)&follow_camera_hold_focus_exit_base_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
@@ -1083,7 +1099,10 @@ void FUN_L00_002e4930(char *camera) {
 
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6498), where it is exact; names translated to the US level program. */
-void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
+void compute_follow_camera_focus_velocity(char  *camera,
+                                          float *out_focus_velocity) __asm__("FUN_L00_002e4fe8");
+
+void compute_follow_camera_focus_velocity(char *camera, float *out_focus_velocity) {
     float        hero_position[4];
     float        target_position_or_up_offset[4];
     char        *camera_state;

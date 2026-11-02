@@ -524,14 +524,14 @@ typedef struct SwarmPartVars {
     Vec4f *leader_pos;
     s32    unk58;
     s16    unk5C;
-    s16    unk5E;
+    s16    repulsion_class_count;
     s16    oclass;
-    s16    unk62;
+    s16    secondary_repulsion_class;
     u8     pad64[0xC];
     f32    unk70;
     f32    unk74;
     u8     pad78[0x18];
-    f32    unk90;
+    f32    same_class_repulsion_distance_scale;
     f32    unk94;
 } SwarmPartVars;
 
@@ -646,10 +646,10 @@ void butterfly_swarm_update(struct Moby *moby) {
                 part->unk48 = 1.056f;
                 part->unk5C = -1;
                 part->unk40 = 0.003f;
-                part->unk5E = 2;
+                part->repulsion_class_count = 2;
                 part->oclass = 0x55;
-                part->unk90 = 1.0f;
-                part->unk62 = 0x1ee;
+                part->same_class_repulsion_distance_scale = 1.0f;
+                part->secondary_repulsion_class = 0x1ee;
                 part->unk94 = 5.0f;
                 update_entity(child);
             }

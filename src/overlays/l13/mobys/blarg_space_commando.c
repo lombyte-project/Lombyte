@@ -124,16 +124,17 @@ typedef struct {
     s32          timer; /* 0x194 */
     s32          path;  /* 0x198 */
     u8           pad19C[0xC];
-    f32          unk1A8;
+    f32          approach_heading_offset;
     u8           pad1AC[0x34];
     Vec4         unk1E0;
     u8           pad1F0[0x210];
     u8           unk400[1];
 } Vars_309330;
 
-extern int FUN_L00_00258b50(struct Moby *, void *, void *, void *, float);
+extern int move_moby_with_ground_and_collision_checks(
+    struct Moby *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 
-extern int FUN_L00_00261b48(int, void *, void *, void *);
+extern int path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 
 extern s32 rand(void);
 
@@ -362,28 +363,31 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         break;
     case BLARG_SPACE_COMMANDO_APPROACH_TARGET_WITH_TURN_OFFSET:
-        func_L00_002592B0_309330(moby,
-                                 fast_add_rotations(fast_arc_tan(target->pos.x - moby->pos.x,
-                                                                 target->pos.y - moby->pos.y),
-                                                    blarg_space_commando_vars->unk1A8),
-                                 &blarg_space_commando_vars->turn,
-                                 0.05f,
-                                 0.3f,
-                                 frame_time * 6.2831855f);
+        func_L00_002592B0_309330(
+            moby,
+            fast_add_rotations(
+                fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
+                blarg_space_commando_vars->approach_heading_offset),
+            &blarg_space_commando_vars->turn,
+            0.05f,
+            0.3f,
+            frame_time * 6.2831855f);
         point.f[0] = 2.0f * fast_cos(moby->rot.z);
         point.f[1] = 2.0f * fast_sin(moby->rot.z);
         point.f[2] = 0.0f;
-        if (FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f) & 2) {
+        if (move_moby_with_ground_and_collision_checks(
+                moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f) &
+            2) {
             rand();
-            blarg_space_commando_vars->unk1A8 = convert_integer_to_float(-1) * 1.0995574f;
+            blarg_space_commando_vars->approach_heading_offset =
+                convert_integer_to_float(-1) * 1.0995574f;
         } else {
-            blarg_space_commando_vars->unk1A8 = 0.0f;
+            blarg_space_commando_vars->approach_heading_offset = 0.0f;
         }
         resolve_point_path_segment_xy_clearance(
             blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
         path_blocked = 0;
-        if (FUN_L00_00261b48(
-                blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
+        if (path_8808(blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             path_blocked = 1;
         }
@@ -419,11 +423,11 @@ void blarg_space_commando_update(struct Moby *moby) {
         point.f[0] = 2.0f * fast_cos(moby->rot.z);
         point.f[1] = 2.0f * fast_sin(moby->rot.z);
         point.f[2] = 0.0f;
-        FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
+        move_moby_with_ground_and_collision_checks(
+            moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
         resolve_point_path_segment_xy_clearance(
             blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
-        if (FUN_L00_00261b48(
-                blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
+        if (path_8808(blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             blocked = 1;
         }
@@ -485,7 +489,8 @@ void blarg_space_commando_update(struct Moby *moby) {
                 moby->rot.z,
                 fast_arc_tan(blarg_space_commando_vars->home.f[0] - moby->pos.x,
                              blarg_space_commando_vars->home.f[1] - moby->pos.y)) < 0.7853982f) {
-            FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
+            move_moby_with_ground_and_collision_checks(
+                moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
             resolve_point_path_segment_xy_clearance(
                 blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
         }
@@ -799,7 +804,7 @@ extern char gemlik_trail_direction_source[] __asm__("D_L13_00174180");
 
 extern float gemlik_trail_spread_degrees_gp __asm__("D_L13_00161E80") __attribute__((sda));
 
-int D_L13_00161E84 = 150;
+int l13_gemlik_trail_lifetime_frames __asm__("D_L13_00161E84") = 150;
 
 void initialize_gemlik_trail(struct Moby *moby) __asm__("FUN_L13_00309370");
 
@@ -823,7 +828,7 @@ void initialize_gemlik_trail(struct Moby *moby) {
             *(float *)(moby_vars + 0x21C + i * 16) = 1.0f;
         }
     }
-    *(float *)(moby_vars + 0x1FC) = scale_game_frames(D_L13_00161E84);
+    *(float *)(moby_vars + 0x1FC) = scale_game_frames(l13_gemlik_trail_lifetime_frames);
 }
 
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -951,16 +956,16 @@ typedef struct {
     u64 tag[4];
 } QuadPacket;
 
-s32 D_L13_00161E88 = 0;
-s32 D_L13_00161E8C = 2;
-s32 D_L13_00161E90 = 0;
-s32 D_L13_00161E94 = 1;
-s32 D_L13_00161E98 = 0x80;
-s32 D_L13_00161E9C = 0xb;
-s32 D_L13_00161EA0 = 0x40ff;
-s32 D_L13_00161EA4 = 0x600040ff;
-s32 D_L13_00161EA8 = 0xcccc;
-s32 D_L13_00161EAC = 0x6000cccc;
+s32 l13_point_table_quad_blend_color_a_selector __asm__("D_L13_00161E88") = 0;
+s32 l13_point_table_quad_blend_color_b_selector __asm__("D_L13_00161E8C") = 2;
+s32 l13_point_table_quad_blend_alpha_selector __asm__("D_L13_00161E90") = 0;
+s32 l13_point_table_quad_blend_color_d_selector __asm__("D_L13_00161E94") = 1;
+s32 l13_point_table_quad_blend_fixed_alpha __asm__("D_L13_00161E98") = 0x80;
+s32 l13_point_table_quad_effect_texture_index __asm__("D_L13_00161E9C") = 0xb;
+s32 l13_point_table_quad_even_corner_color_start __asm__("D_L13_00161EA0") = 0x40ff;
+s32 l13_point_table_quad_even_corner_color_end __asm__("D_L13_00161EA4") = 0x600040ff;
+s32 l13_point_table_quad_inset_corner_color_start __asm__("D_L13_00161EA8") = 0xcccc;
+s32 l13_point_table_quad_inset_corner_color_end __asm__("D_L13_00161EAC") = 0x6000cccc;
 
 /* Scrolling texture coordinates of the four corners. */
 f32 D_L13_001D9B70[4][2] = {
@@ -991,13 +996,13 @@ void draw_point_table_quads(struct Moby *moby) {
 
     vu1_add_g_sregister(0x47, 0x5380B);
     i = 0;
-    pk[0].tag[1] = get_effect_texture(D_L13_00161E9C);
-    pk[1].tag[1] = get_effect_texture(D_L13_00161E9C);
-    regs = D_L13_00161E88;
-    regs |= (u64)D_L13_00161E8C << 2;
-    regs |= (u64)D_L13_00161E90 << 4;
-    regs |= (u64)D_L13_00161E94 << 6;
-    regs |= (u64)D_L13_00161E98 << 32;
+    pk[0].tag[1] = get_effect_texture(l13_point_table_quad_effect_texture_index);
+    pk[1].tag[1] = get_effect_texture(l13_point_table_quad_effect_texture_index);
+    regs = l13_point_table_quad_blend_color_a_selector;
+    regs |= (u64)l13_point_table_quad_blend_color_b_selector << 2;
+    regs |= (u64)l13_point_table_quad_blend_alpha_selector << 4;
+    regs |= (u64)l13_point_table_quad_blend_color_d_selector << 6;
+    regs |= (u64)l13_point_table_quad_blend_fixed_alpha << 32;
     /* Store order is load-bearing: it sets which register keeps regs. */
     pk[1].tag[2] = 0x0000FF9000000260ULL;
     pk[0].tag[2] = 0x0000FF9000000260ULL;
@@ -1023,13 +1028,13 @@ void draw_point_table_quads(struct Moby *moby) {
                 corner_position[2] -= 0.125f;
                 pk[0].col[j] =
                     fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
-                                     D_L13_00161EA8,
-                                     D_L13_00161EAC);
+                                     l13_point_table_quad_inset_corner_color_start,
+                                     l13_point_table_quad_inset_corner_color_end);
             } else {
                 pk[0].col[j] =
                     fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
-                                     D_L13_00161EA0,
-                                     D_L13_00161EA4);
+                                     l13_point_table_quad_even_corner_color_start,
+                                     l13_point_table_quad_even_corner_color_end);
             }
             pk[0].uv[j][0] = D_L13_001D9B70[j][0];
             pk[0].uv[j][1] = D_L13_001D9B70[j][1];
@@ -1070,7 +1075,7 @@ extern short point_spark_xy_multiplier_range_end __asm__("D_L13_00161EDC") __att
 extern short point_spark_z_range_start __asm__("D_L13_00161EE0") __attribute__((sda));
 extern short point_spark_z_range_end __asm__("D_L13_00161EE4") __attribute__((sda));
 extern short point_spark_spawn_random_threshold __asm__("D_L13_00161EE8") __attribute__((sda));
-int          D_L13_00161EEC = 24;
+int          l13_point_spark_table_index_and_flags __asm__("D_L13_00161EEC") = 24;
 
 void spawn_point_table_sparks(struct Moby *moby) __asm__("FUN_L13_00309bc8");
 
@@ -1138,6 +1143,6 @@ void spawn_point_table_sparks(struct Moby *moby) {
                     frame_count,
                     second_frame_count,
                     third_frame_count,
-                    D_L13_00161EEC);
+                    l13_point_spark_table_index_and_flags);
     }
 }

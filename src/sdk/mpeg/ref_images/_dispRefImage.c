@@ -15,6 +15,9 @@ struct MpegDisplayState {
 extern u32 display_values_by_picture_flags[] __asm__("D_00132E98");
 
 void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *ref_image) {
+    enum {
+        MPEG_REF_IMAGE_STATUS_DISPLAYABLE = 1
+    };
     u64                      display_value;
     struct MpegDisplayState *ref_info;
     s32                     *mpeg_words;
@@ -38,7 +41,7 @@ void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *ref_image) 
     decoder->unkC4 = (s32)ref_image->unk54;
     decoder->unkC8 = (s32)ref_image->unk58;
     if (_isOutSizeOK(decoder, ref_image) != 0) {
-        if (ref_image->status == 1) {
+        if (ref_image->status == MPEG_REF_IMAGE_STATUS_DISPLAYABLE) {
             if (decoder->unkB0 != 0) {
                 _csc_storeRefImage(decoder, ref_image);
             } else {

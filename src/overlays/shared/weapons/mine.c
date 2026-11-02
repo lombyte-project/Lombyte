@@ -384,14 +384,14 @@ typedef struct {
 typedef struct N_2aa008 {
     u8               pad[0x10];
     V_2aa008         v10;
-    u8               b20;
+    u8               moby_state;
     u8               pad2[0x28 - 0x21];
     struct N_2aa008 *p28;
     f32              f2C;
     u8               pad3[0x78 - 0x30];
-    void            *p78;
+    void            *moby_private_vars;
     u8               pad4[0xA6 - 0x7C];
-    s16              hA6;
+    s16              moby_class;
 } N_2aa008;
 
 typedef struct {
@@ -469,11 +469,11 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     s32          bestv;
     V_2aa008    *k;
     vector_scratch.q = 0;
-    moby_vars = initialized_moby->p78;
+    moby_vars = initialized_moby->moby_private_vars;
     vector_scratch.f[0] = random_float_between(-1.0f, 1.0f);
     vector_scratch.f[1] = random_float_between(-1.0f, 1.0f);
     vector_scratch.f[2] = random_float_between(-1.0f, 1.0f);
-    initialized_moby->b20 = 1;
+    initialized_moby->moby_state = MINE_STATE_FREE_MOTION;
     initialized_moby->f2C = initialized_moby->f2C / 0.65f;
     random_offset.q = vector_scratch.q;
     fast_vec_normalize(&random_offset,
@@ -489,19 +489,20 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     best = 0;
     bestv = 0;
     for (scanned_moby = D_L00_0015FFE4_2aa008; scanned_moby; scanned_moby = scanned_moby->p28) {
-        if (scanned_moby->b20 != 0xFE)
-            if (scanned_moby->b20 != 0xFD)
-                if (scanned_moby->hA6 == initialized_moby->hA6)
+        if (scanned_moby->moby_state != 0xFE)
+            if (scanned_moby->moby_state != 0xFD)
+                if (scanned_moby->moby_class == initialized_moby->moby_class)
                     if (scanned_moby != initialized_moby) {
-                        if (best == 0 || ((D_2aa008 *)scanned_moby->p78)->i5C < bestv) {
-                            bestv = ((D_2aa008 *)scanned_moby->p78)->i5C;
+                        if (best == 0 ||
+                            ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C < bestv) {
+                            bestv = ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C;
                             best = scanned_moby;
                         }
                         count++;
                     }
     }
     if (count >= 8)
-        ((D_2aa008 *)best->p78)->i5C = -1;
+        ((D_2aa008 *)best->moby_private_vars)->i5C = -1;
     qcopy(&initialized_moby->v10, requested_position);
     vector_scratch.q = ((Q_2aa008 *)hero.moby)->v10.q;
     vector_scratch.f[2] = requested_position->f[2];

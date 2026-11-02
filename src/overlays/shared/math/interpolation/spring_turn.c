@@ -468,14 +468,14 @@ extern s32 FUN_L00_002583f0_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_00
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
-s32        FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);
+s32 move_moby_with_ground_and_collision_checks(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) __asm__("FUN_L00_00258b50");
 
-s32 FUN_L00_00258b50(Obj  *moby,
-                     Ctl  *movement_control,
-                     void *target_position,
-                     Vec4 *movement_displacement_vector_output,
+s32 move_moby_with_ground_and_collision_checks(Obj  *moby,
+                                               Ctl  *movement_control,
+                                               void *target_position,
+                                               Vec4 *movement_displacement_vector_output,
 
-                     f32 f) {
+                                               f32 f) {
     Vec4  save;
     Vec4  displacement;
     Vec4  probe_or_direction;

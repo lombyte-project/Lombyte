@@ -15,9 +15,9 @@ extern int   D_L16_0015F5CC;
 extern int   fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern int   func_0022ED80_6478(int, int, void *) __asm__("FUN_0022da68");
 
-int  D_L16_00161DD8 = 600;
-int  D_L16_00161DDC = 0x80808080;
-int  D_L16_00161DE0 = 0x80202020;
+int  l16_grindrail_gate_command_duration_frames __asm__("D_L16_00161DD8") = 600;
+int  l16_grindrail_gate_glow_bright_color __asm__("D_L16_00161DDC") = 0x80808080;
+int  l16_grindrail_gate_glow_dim_color __asm__("D_L16_00161DE0") = 0x80202020;
 void grindrail_gate_update(struct Moby *gate_moby) __asm__("FUN_L16_002e5010");
 
 /* Moby class 1439 */
@@ -37,8 +37,8 @@ void grindrail_gate_update(struct Moby *gate_moby) {
         convert_integer_to_float(D_L16_0015F5CC % period) / convert_integer_to_float(period);
     gate_moby->glow_color =
         fast_tween_color(fast_sin(glow_cycle_phase * 6.28318f - 3.14159f) * 0.5f + 0.5f,
-                         D_L16_00161DDC,
-                         D_L16_00161DE0);
+                         l16_grindrail_gate_glow_bright_color,
+                         l16_grindrail_gate_glow_dim_color);
     switch (gate_moby->state) {
     case GRINDRAIL_GATE_INITIALIZE:
         gate_moby->state = GRINDRAIL_GATE_CHECK_HERO_BOUNDS;
@@ -58,7 +58,8 @@ void grindrail_gate_update(struct Moby *gate_moby) {
                 hero_offset_from_gate[2] < grindrail_gate_local_trigger_bounds[5]) {
                 gate_moby->command = 1;
                 gate_moby->state = GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT;
-                *(int *)command_timer = scale_game_frames(D_L16_00161DD8);
+                *(int *)command_timer =
+                    scale_game_frames(l16_grindrail_gate_command_duration_frames);
                 func_0022ED80_6478(1, 0, gate_moby);
             }
         }

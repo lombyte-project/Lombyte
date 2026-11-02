@@ -333,19 +333,19 @@ typedef struct {
 
 typedef struct {
     u8       p0[0x98];
-    f32      f98;
+    f32      probe_heading_angle;
     u8       p1[0xE0 - 0x9C];
-    V_20a328 vE0;
+    V_20a328 hero_velocity;
     u8       p2[0x240 - 0xF0];
     s32      i240;
     u8       p3[0x308 - 0x244];
     s16      h308;
     u8       p4[0x2080 - 0x30A];
-    void    *p2080;
+    void    *current_hero_moby;
     u8       p5[0x208C - 0x2084];
     s32      i208C;
     u8       p6[0x20A4 - 0x2090];
-    u8       b20A4;
+    u8       hero_vehicle_mode;
 } P_20a328;
 
 typedef struct {
@@ -379,14 +379,14 @@ void adjust_hero_planar_velocity_from_probes(int force) {
 
     if (P.h308 != 0)
         return;
-    if (gravity_length_xy(&P.vE0) < frame_time * 0.1f)
+    if (gravity_length_xy(&P.hero_velocity) < frame_time * 0.1f)
         return;
     position_z_offset = 0.3700000047683716f;
     k = 0.5f;
     if ((u32)(P.i208C - 0x11) < 2) {
         position_z_offset = 0.0f;
         k = 0.7f;
-    } else if (P.b20A4 == 2) {
+    } else if (P.hero_vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         position_z_offset = 1.5f;
         k = 5.0f;
     }
@@ -398,11 +398,11 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     if (force || vector_length_xy(hero_position + 0x60) < 0.01f) {
         g = (P_20a328 *)(hero_position - 0x80);
         secondary_offset_scale = 1.4f;
-        primary_endpoint.f[0] = fast_cos(g->f98) * k;
-        primary_endpoint.f[1] = fast_sin(g->f98) * k;
+        primary_endpoint.f[0] = fast_cos(g->probe_heading_angle) * k;
+        primary_endpoint.f[1] = fast_sin(g->probe_heading_angle) * k;
         *(s32 *)&primary_endpoint.f[2] = 0;
-        secondary_endpoint.f[0] = fast_cos(g->f98) * k * secondary_offset_scale;
-        secondary_endpoint.f[1] = fast_sin(g->f98) * k * secondary_offset_scale;
+        secondary_endpoint.f[0] = fast_cos(g->probe_heading_angle) * k * secondary_offset_scale;
+        secondary_endpoint.f[1] = fast_sin(g->probe_heading_angle) * k * secondary_offset_scale;
         *(s32 *)&secondary_endpoint.f[2] = 0;
     } else {
         qcopy(&primary_endpoint, hero_position + 0x60);
@@ -415,19 +415,20 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     FUN_001f9a10_20a328(&primary_endpoint, &primary_endpoint, &offset_position);
     FUN_001f9a10_20a328(&secondary_endpoint, &secondary_endpoint, &b);
     r = -1;
-    if (collision_line(&b, &secondary_endpoint, 4, P.p2080, 0) && D_L15_0017445C > 0)
+    if (collision_line(&b, &secondary_endpoint, 4, P.current_hero_moby, 0) && D_L15_0017445C > 0)
         r = collision_hit_material();
     primary_probe_result_angle = 0.0f;
-    if (collision_line(&offset_position, &primary_endpoint, 4, P.p2080, 0) && X.i1C > 0)
+    if (collision_line(&offset_position, &primary_endpoint, 4, P.current_hero_moby, 0) && X.i1C > 0)
         primary_probe_result_angle = fast_arc_tan(X.v40.f[2], vector_length_xy(&X.v40));
     if (0.8726646304130554f <= primary_probe_result_angle || r == 8 || r == 12) {
         P.i240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         sceVu0Normalize(&X.v40, &X.v40);
-        negative_xy_dot_product = -P.vE0.f[0] * X.v40.f[0] - P.vE0.f[1] * X.v40.f[1];
+        negative_xy_dot_product =
+            -P.hero_velocity.f[0] * X.v40.f[0] - P.hero_velocity.f[1] * X.v40.f[1];
         if (0.0f < negative_xy_dot_product) {
             fast_vec_scale(&X.v40, &X.v40, negative_xy_dot_product);
-            FUN_001f9a10_20a328(&P.vE0, &P.vE0, &X.v40);
+            FUN_001f9a10_20a328(&P.hero_velocity, &P.hero_velocity, &X.v40);
         }
     }
 }

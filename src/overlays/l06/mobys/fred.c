@@ -40,7 +40,7 @@ typedef struct Data_301070 {
     char          pad00[4];
     short         f4;
     char          pad06[2];
-    unsigned char f8;
+    unsigned char dialogue_activation_mode;
     char          pad09[3];
     float         fC;
     char          pad10[0x10];
@@ -53,9 +53,9 @@ typedef struct Data_301070 {
     float         fB0;
     char          padB4[0xC];
     char          fC0[0x68];
-    float         f128;
+    float         look_yaw_target;
     char          pad12C[0x14];
-    float         f140[4];
+    float         idle_look_target_position[4];
     char          pad150[8];
     int           f158, f15C;
     int           f160, f164, f168, f16C, f170;
@@ -149,7 +149,7 @@ void fred_update(struct Moby *moby) {
         initialize_npc_dialogue(moby, fred_vars);
         break;
     case UPDATE_FRED_DIALOGUE:
-        if (fred_vars->f8 == 1 &&
+        if (fred_vars->dialogue_activation_mode == 1 &&
             is_point_inside_clip_volume(&hero.motion.pos, fred_vars->f168) != 0) {
             fred_vars->fC = 16.0f;
         } else {
@@ -316,7 +316,7 @@ void fred_update(struct Moby *moby) {
                     fast_dec_timer(&fred_vars->f158);
             } else if (fred_vars->f158) {
                 fred_vars->f158 = 0;
-                qcopy(fred_vars->f140, &hero.motion.body_center);
+                qcopy(fred_vars->idle_look_target_position, &hero.motion.body_center);
             }
             if (fast_dec_timer(&fred_vars->f15C)) {
                 float heading;
@@ -324,18 +324,20 @@ void fred_update(struct Moby *moby) {
                     truncate_float_to_s32(scale_time(random_float_between(180.0f, 300.0f)));
                 heading = fast_add_rotations(moby->rot.z,
                                              random_float_between(-90.0f, 90.0f) * 0.017453292f);
-                build_spherical_offset(fred_vars->f140,
+                build_spherical_offset(fred_vars->idle_look_target_position,
                                        6.0f,
                                        heading,
                                        random_float_between(0.0f, 30.0f) * 0.017453292f);
-                fast_vec_add(fred_vars->f140, fred_vars->f140, ((float *)&moby->pos));
+                fast_vec_add(fred_vars->idle_look_target_position,
+                             fred_vars->idle_look_target_position,
+                             ((float *)&moby->pos));
             }
             if (fred_vars->f158) {
                 qcopy(target, &hero.motion.body_center);
                 rate = 0.04f;
                 head_rate = 0.3f;
             } else {
-                qcopy(target, fred_vars->f140);
+                qcopy(target, fred_vars->idle_look_target_position);
             }
         }
         if (tracking) {
@@ -356,7 +358,7 @@ void fred_update(struct Moby *moby) {
                 pitch = -0.5235988f;
             fred_vars->fA4 = pitch;
             fred_vars->fA8 = yaw * 0.6f;
-            fred_vars->f128 = yaw * 0.4f;
+            fred_vars->look_yaw_target = yaw * 0.4f;
         }
     }
     if (big_head_cheat_enabled[0])

@@ -66,7 +66,7 @@ typedef struct {
     char          pad26[2];
     unsigned char b28;
     char          pad29[5];
-    unsigned char b2E;
+    unsigned char respawn_request_state;
     char          pad2F[0x41];
     float         target[4];
     char          pad80[0x34];
@@ -87,12 +87,12 @@ typedef struct {
     char          pad100[4];
     char         *child;
     int           step;
-    float         f10C;
+    float         hit_reaction_heading;
     unsigned char next_state;
     char          pad111[3];
     int           next_anim;
     char          pad118[4];
-    float         f11C;
+    float         glow_pulse_phase;
     char          slots[0x20];
     char          block140[1];
 } L16DummyData;
@@ -163,7 +163,7 @@ void test_dummy_update(unsigned char *moby) {
     FUN_L00_00263ac8(2.5f, (int)moby, 2, (unsigned char *)dummy_data->block140);
     switch (moby[0x20]) {
     case TEST_DUMMY_STATE_INITIALIZE: /* set up: lives, home position, the held child for the variant */
-        dummy_data->b2E = 1;
+        dummy_data->respawn_request_state = 1;
         if (dummy_data->lives > 0) {
             MOBY(moby)->unkB4 /= dummy_data->lives;
         }
@@ -176,7 +176,7 @@ void test_dummy_update(unsigned char *moby) {
         dummy_data->b28 = 1;
         dummy_data->h24 = 2;
         dummy_data->f20 = 2.0f;
-        dummy_data->f11C = random_angle_radians();
+        dummy_data->glow_pulse_phase = random_angle_radians();
         dummy_data->route = find_nearest_test_dummy_door(dummy_data->iCC, moby + 0x10);
         qcopy(dummy_data->spawn, moby + 0x10);
         switch (dummy_data->kind) {
@@ -400,7 +400,8 @@ void test_dummy_update(unsigned char *moby) {
         break;
     case TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE: /* turn back to the node, then resume the saved state and animation */
         position_or_delta.quad = *(u128 *)(path + dummy_data->node * 16 + 16);
-        move_test_dummy_toward_position_and_heading(moby, position_or_delta.f, dummy_data->f10C);
+        move_test_dummy_toward_position_and_heading(
+            moby, position_or_delta.f, dummy_data->hit_reaction_heading);
         if (moby[0x70] & 2) {
             moby[0x20] = dummy_data->next_state;
             if (moby[0x53] != dummy_data->next_anim) {

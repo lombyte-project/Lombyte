@@ -235,7 +235,7 @@ typedef struct {
 } T_0023e5e0;
 
 extern T_0023e5e0 D_L00_001804C0_0023e5e0[] __asm__("D_L00_001804C0");
-u8                D_L00_00180640[8][1024] = {0};
+u8                l00_point_light_slot_buffers[8][1024] __asm__("D_L00_00180640") = {0};
 
 u8 D_L01_00180AC0[8][1024] = {0};
 
@@ -299,7 +299,7 @@ int allocate_packed_color_point_light_slot(u128 *position, float radius, float b
     parameter_entry->unkC = b;
     fast_mem_zero16(slot_state, 0x30);
     slot_state->used = 1;
-    slot_state->buf = (char *)D_L00_00180640[i];
+    slot_state->buf = (char *)l00_point_light_slot_buffers[i];
     return i;
 }
 
@@ -340,7 +340,7 @@ int allocate_colored_effect_slot(u128 *position,
     parameter_entry->unkC = b_0023e738;
     fast_mem_zero16(slot_state, 0x30);
     slot_state->used = 1;
-    slot_state->buf = (char *)D_L00_00180640[i];
+    slot_state->buf = (char *)l00_point_light_slot_buffers[i];
     return i;
 }
 

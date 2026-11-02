@@ -108,13 +108,13 @@ typedef struct {
     OvlVec4_261b48 points[1];
 } SegmentPath_261d78_261b48;
 
-int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
+int path_8808(int idx, void *a, void *b, void *c) __asm__("FUN_L00_00261b48");
 
-int FUN_L00_00261b48(int   segment_path_index,
-                     void *segment_start,
-                     void *segment_end,
+int path_8808(int   segment_path_index,
+              void *segment_start,
+              void *segment_end,
 
-                     void *adjusted_endpoint) {
+              void *adjusted_endpoint) {
     float  v[4], perpendicular_xy_axis[4], z[4], previous_path_point_in_basis[4], u[4];
     float  best;
     float  zero;
@@ -580,12 +580,16 @@ void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb
 void update_joint_animation(
 
     void *moby, unsigned char *joint_animation_state, int joint_index, float fa, float fb) {
+    enum {
+        JOINT_ANIMATION_PREVIOUS_OWNER_DETACH_STATE_LIMIT = 0x7F
+    };
     unsigned char *previous_moby = *(unsigned char **)(joint_animation_state + 0x78);
     float          uniform_scale;
     if (!previous_moby) {
         *(void **)(joint_animation_state + 0x78) = moby;
     } else if (previous_moby != moby) {
-        if (joint_animation_state[1] && MOBY(previous_moby)->state < 0x7F)
+        if (joint_animation_state[1] &&
+            MOBY(previous_moby)->state < JOINT_ANIMATION_PREVIOUS_OWNER_DETACH_STATE_LIMIT)
             detach_manipulator(previous_moby, joint_animation_state);
         joint_animation_state[1] = 0;
         *(void **)(joint_animation_state + 0x78) = moby;

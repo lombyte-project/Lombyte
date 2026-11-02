@@ -24,7 +24,7 @@ extern unsigned char D_00141C48[];
 typedef struct EvData {
     int f0;
     int f4;
-    int f8;
+    int help_2715_volume_index;
     int fC;
     int f10;
     int f14;
@@ -41,14 +41,14 @@ typedef struct HeroPos {
 typedef struct Msg {
     int  f0;
     char pad4[0x20];
-    int  f24;
+    int  requested_help_message_id;
 } Msg;
 
 typedef struct Save_2E9978 {
     char           pad0[0x358];
-    unsigned short f358;
-    unsigned short f35A;
-    int            f35C;
+    unsigned short help_2718_condition_seen;
+    unsigned short help_2718_last_frame_bucket;
+    int            help_2718_level_flags;
 } Save_2E9978;
 
 typedef struct Flags_2E9978 {
@@ -99,13 +99,15 @@ void help_hints_update(Moby *moby) {
     case HELP_MESSAGE_STATE_CHECK_CONDITIONS:
         if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f0) != 0 &&
             (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9) &&
-            ((Msg *)D_L10_00179890)->f0 == 0 && ((Msg *)D_L10_00179890)->f24 == -1 &&
+            ((Msg *)D_L10_00179890)->f0 == 0 &&
+            ((Msg *)D_L10_00179890)->requested_help_message_id == -1 &&
             *(unsigned short *)(l10_help_message_2710_gate) == 0) {
             help_request(0x2710, 0x35);
         }
         if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f4) != 0 &&
             (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9) &&
-            ((Msg *)D_L10_00179890)->f0 == 0 && ((Msg *)D_L10_00179890)->f24 == -1) {
+            ((Msg *)D_L10_00179890)->f0 == 0 &&
+            ((Msg *)D_L10_00179890)->requested_help_message_id == -1) {
             if (((Flags_2E9978 *)(alternate_item_available))->f4 == 0) {
                 if (*(unsigned short *)(D_00141B20_r) == 0) {
                     help_request(0x2712, 0x37);
@@ -117,14 +119,17 @@ void help_hints_update(Moby *moby) {
             }
         }
         if (D_L10_0015F5C4_vendor == 0 && D_0013D504_r[0] != 0 &&
-            ((Msg *)D_L10_00179890)->f0 == 0 && ((Msg *)D_L10_00179890)->f24 == -1 &&
+            ((Msg *)D_L10_00179890)->f0 == 0 &&
+            ((Msg *)D_L10_00179890)->requested_help_message_id == -1 &&
             *(unsigned short *)(l10_help_message_2711_gate) == 0) {
             help_request(0x2711, 0x36);
         }
-        if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f8) != 0 &&
+        if (is_point_inside_clip_volume(D_0013F3D0_r,
+                                        conditional_help_config->help_2715_volume_index) != 0 &&
             (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9) &&
             D_0013D4CB[0] == 0 && ((Msg *)D_L10_00179890)->f0 == 0 &&
-            ((Msg *)D_L10_00179890)->f24 == -1 && *(unsigned short *)(D_00141C48) == 0) {
+            ((Msg *)D_L10_00179890)->requested_help_message_id == -1 &&
+            *(unsigned short *)(D_00141C48) == 0) {
             help_request(0x2715, 0x5C);
         }
         any_active = 0;
@@ -156,25 +161,30 @@ void help_hints_update(Moby *moby) {
             break;
         if (D_L10_0015FFD8_c2[conditional_help_config->f20].state == 4)
             break;
-        if (((Save_2E9978 *)(D_00141968_r))->f358 != 0) {
-            elapsed =
-                scale_game_frames(D_0015EEA4_gp) - ((Save_2E9978 *)(D_00141968_r))->f35A * 600;
+        if (((Save_2E9978 *)(D_00141968_r))->help_2718_condition_seen != 0) {
+            elapsed = scale_game_frames(D_0015EEA4_gp) -
+                      ((Save_2E9978 *)(D_00141968_r))->help_2718_last_frame_bucket * 600;
             if ((int)((float)scale_game_frames(0x12) * 60.0f) < elapsed ||
-                ((Save_2E9978 *)(D_00141968_r))->f35A * 600 == 0) {
+                ((Save_2E9978 *)(D_00141968_r))->help_2718_last_frame_bucket * 600 == 0) {
                 help_request(0x2718, 0x6B);
                 break;
             }
-            if (scale_game_frames(D_0015EEA4_gp) / 600 > ((Save_2E9978 *)(D_00141968_r))->f35A) {
-                ((Save_2E9978 *)(D_00141968_r))->f35A = scale_game_frames(D_0015EEA4_gp) / 600;
+            if (scale_game_frames(D_0015EEA4_gp) / 600 >
+                ((Save_2E9978 *)(D_00141968_r))->help_2718_last_frame_bucket) {
+                ((Save_2E9978 *)(D_00141968_r))->help_2718_last_frame_bucket =
+                    scale_game_frames(D_0015EEA4_gp) / 600;
             }
             break;
         }
-        ((Save_2E9978 *)(D_00141968_r))->f358++;
-        if (scale_game_frames(D_0015EEA4_gp) / 600 > ((Save_2E9978 *)(D_00141968_r))->f35A) {
-            ((Save_2E9978 *)(D_00141968_r))->f35A = scale_game_frames(D_0015EEA4_gp) / 600;
+        ((Save_2E9978 *)(D_00141968_r))->help_2718_condition_seen++;
+        if (scale_game_frames(D_0015EEA4_gp) / 600 >
+            ((Save_2E9978 *)(D_00141968_r))->help_2718_last_frame_bucket) {
+            ((Save_2E9978 *)(D_00141968_r))->help_2718_last_frame_bucket =
+                scale_game_frames(D_0015EEA4_gp) / 600;
         }
-        ((Save_2E9978 *)(D_00141968_r))->f35C =
-            ((Save_2E9978 *)(D_00141968_r))->f35C | (1 << current_level_index) | 0x80000000;
+        ((Save_2E9978 *)(D_00141968_r))->help_2718_level_flags =
+            ((Save_2E9978 *)(D_00141968_r))->help_2718_level_flags | (1 << current_level_index) |
+            0x80000000;
         break;
     }
 }

@@ -124,13 +124,13 @@ struct Path5BD0 {
 struct Shot5BD0 {
     float f0;
     float f4;
-    float f8;
+    float hit_direction_z;
     float fC;
     void *p10;
     int   v14;
     char  c18;
     char  c19;
-    short h1A;
+    short hit_source_class;
     float f1C;
     int   pad[4];
 };
@@ -711,15 +711,15 @@ void blarg_trooper_update(struct Moby *moby) {
                                               moby->rot.z) < 0.2617994f) {
             update_scratch.w.p.blk.f0 = fast_cos(moby->rot.z) * 0.2f;
             update_scratch.w.p.blk.f4 = fast_sin(moby->rot.z) * 0.2f;
-            update_scratch.w.p.blk.f8 = 0.0f;
+            update_scratch.w.p.blk.hit_direction_z = 0.0f;
             update_scratch.w.p.blk.p10 = moby;
             update_scratch.w.p.blk.v14 = 1;
             update_scratch.w.p.blk.f1C = 1.0f;
             set_vector_length_xy(&update_scratch.w.p.blk, &update_scratch.w.p.blk, 1.0f);
-            update_scratch.w.p.blk.f8 = 1.0f;
+            update_scratch.w.p.blk.hit_direction_z = 1.0f;
             update_scratch.w.p.blk.fC = 5627.925f;
             update_scratch.w.p.blk.c19 = 1;
-            update_scratch.w.p.blk.h1A = (u16)moby->oclass;
+            update_scratch.w.p.blk.hit_source_class = (u16)moby->oclass;
             update_scratch.w.p.blk.c18 = 0;
             qcopy(update_scratch.w.p.v70, update_scratch.v50);
             update_scratch.w.p.v70[2] = update_scratch.w.p.v70[2] + 0.75f;

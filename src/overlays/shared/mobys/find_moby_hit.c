@@ -789,23 +789,23 @@ int generate_random_points_from_shape_entries(
 
 typedef struct {
     unsigned char pad0[8];
-    float         f8;
+    float         descent_transition_height;
     unsigned char padC[4];
     float         f10;
     float         f14;
     float         f18;
     float         f1C;
     unsigned char pad20[4];
-    float         f24;
+    float         arc_entry_record_value_threshold;
     float         f28;
-    unsigned char b2C;
-    unsigned char b2D;
+    unsigned char arc_entry_animation;
+    unsigned char arc_motion_animation;
     unsigned char b2E;
     unsigned char state;
     float         f30;
     float         f34;
-    float         f38;
-    float         f3C;
+    float         turn_damping_factor;
+    float         turn_step_limit;
 } S_25b440;
 
 typedef struct {
@@ -843,14 +843,15 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
 
     switch (arc_motion_state->state) {
     case CHECK_ARC_ENTRY_GATES:
-        if (moving_object->b52 != arc_motion_state->b2C) {
+        if (moving_object->b52 != arc_motion_state->arc_entry_animation) {
             break;
         }
-        if (compute_interpolated_record_value(moving_object) <= arc_motion_state->f24) {
+        if (compute_interpolated_record_value(moving_object) <=
+            arc_motion_state->arc_entry_record_value_threshold) {
             break;
         }
         if (moving_object->b70 & 2) {
-            blend_moby_animation(moving_object, arc_motion_state->b2D, 0, 10);
+            blend_moby_animation(moving_object, arc_motion_state->arc_motion_animation, 0, 10);
             arc_motion_state->state = INTEGRATE_ARC_MOTION;
         }
     case INTEGRATE_ARC_MOTION:
@@ -858,8 +859,8 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
                    &arc_motion_state->f30,
                    arc_motion_state->f18,
                    arc_motion_state->f34,
-                   arc_motion_state->f38,
-                   arc_motion_state->f3C);
+                   arc_motion_state->turn_damping_factor,
+                   arc_motion_state->turn_step_limit);
         motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
         motion_displacement[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
         motion_displacement[2] = arc_motion_state->f10;
@@ -868,7 +869,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         if (arc_motion_state->f10 < 0.0f) {
             prediction_time = scale_time(arc_motion_state->f28 + arc_motion_state->f28 + 10.0f);
             if (moving_object->z <=
-                arc_motion_state->f8 -
+                arc_motion_state->descent_transition_height -
                     (arc_motion_state->f10 * prediction_time -
                      arc_motion_state->f1C * 0.5f * prediction_time * prediction_time)) {
                 blend_moby_animation(moving_object, arc_motion_state->b2E, 0, 10);

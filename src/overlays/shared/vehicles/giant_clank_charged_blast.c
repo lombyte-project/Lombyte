@@ -168,7 +168,7 @@ typedef struct {
 
 typedef struct {
     char          pad0[0x98];
-    float         f98;
+    float         blast_heading_angle;
     char          pad9C[0x2008];
     unsigned char f20A4;
 } Hero29FF90;
@@ -193,7 +193,7 @@ typedef struct {
 
 typedef struct {
     char          pad0[0xA];
-    short         fA;
+    short         particle_frame_count;
     float         fC;
     char          pad10[0x10];
     PartSub29FF90 sub;
@@ -361,8 +361,10 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
             D_L15_0015F320.on = 0;
             D_L15_0015F330.on = 0;
             moby_data->f10 = 0;
-            moby_data->vel[0] = fast_cos(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
-            moby_data->vel[1] = fast_sin(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
+            moby_data->vel[0] =
+                fast_cos(((Hero29FF90 *)&hero)->blast_heading_angle) * (D_0015ED6C * 40.0f);
+            moby_data->vel[1] =
+                fast_sin(((Hero29FF90 *)&hero)->blast_heading_angle) * (D_0015ED6C * 40.0f);
             moby_data->vel[2] = 0.0f;
             moby->state = EXPANDING_BLAST;
             moby_data->f14 = 0;
@@ -453,9 +455,10 @@ void giant_clank_charged_blast_update(Moby29FF90 *moby) {
                         blast_center_particle->fC = random_float_between(80000.0f, 120000.0f);
                     }
                     blast_center_particle->fC = blast_center_particle->fC * r;
-                    blast_center_particle->fA = scale_game_frames(2);
+                    blast_center_particle->particle_frame_count = scale_game_frames(2);
                     particle_subrecord->f10 =
-                        1.0f / convert_integer_to_float(blast_center_particle->fA);
+                        1.0f /
+                        convert_integer_to_float(blast_center_particle->particle_frame_count);
                     particle_subrecord->f18 = 0x7F7F7F;
                     particle_subrecord->f16 = 3;
                 }

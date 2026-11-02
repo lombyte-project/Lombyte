@@ -75,7 +75,7 @@ typedef struct FlyingDebrisVars {
     u8           pad_C[0x4];
     u8           timer_10;
     u8           pad_11[0x1];
-    s16          unk12;
+    s16          point_light_slot_index;
     f32          unk14;
     f32          unk18;
     f32          unk1C;
@@ -206,10 +206,11 @@ void flying_debris_update(struct Moby *moby) {
     else
         qcopy(push, (char *)moby + 0xE0);
     fast_vec_add(at, at, push);
-    if (debris_vars->unk12 == -1) {
-        debris_vars->unk12 = allocate_colored_effect_slot(at, range, 0.0f, bright, green, blue);
+    if (debris_vars->point_light_slot_index == -1) {
+        debris_vars->point_light_slot_index =
+            allocate_colored_effect_slot(at, range, 0.0f, bright, green, blue);
     } else {
-        light_record = (float *)(D_L14_001809C0 + debris_vars->unk12 * 32);
+        light_record = (float *)(D_L14_001809C0 + debris_vars->point_light_slot_index * 32);
         qcopy(light_record + 4, at);
         light_record[7] = range;
         light_record[0] = bright;
@@ -265,11 +266,11 @@ unsigned char *spawn_flying_debris(struct Moby *debris_source_moby, float angle,
 
 void remove_flying_debris(u8 *debris_moby) {
     FlyingDebrisVars *debris_vars = *(u8 **)(debris_moby + 0x78);
-    s16               light_index = debris_vars->unk12;
+    s16               light_index = debris_vars->point_light_slot_index;
 
     if (light_index != -1) {
         release_point_light_slot(light_index);
-        debris_vars->unk12 = -1;
+        debris_vars->point_light_slot_index = -1;
     }
     mark_moby_for_removal(debris_moby);
 }

@@ -49,7 +49,7 @@ typedef struct {
     char          padB8[0x1E];
     unsigned char unkD6;
     char          padD7[3];
-    short         unkDA;
+    short         target_height_override_pending;
     float         unkDC;
     float         unkE0;
     float         unkE4;
@@ -154,7 +154,7 @@ void follow_camera_approach(unsigned char *moby) {
     ((CamOrbit *)orbit)->unk40 = 0;
     ((CamOrbit *)orbit)->unk4C = 0;
     ((CamOrbit *)orbit)->unk58 = ((CamOrbit *)default_orbit)->unk2C;
-    ((CamTarget *)target)->unkDA = 0;
+    ((CamTarget *)target)->target_height_override_pending = 0;
     ((CamTarget *)target)->unkB4 = 0;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk10 = 1;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk22 = 0;
@@ -197,7 +197,7 @@ typedef struct {
     s16 h14;
     s16 h16;
     u8  pad1[0xF0 - 0x18];
-    f32 fF0;
+    f32 target_offset_scale;
 } M_2e6000;
 
 typedef struct {
@@ -209,14 +209,14 @@ typedef struct {
     u8 pad0[0x10];
     void (*fn)(void);
     u8  pad1[0x25C - 0x14];
-    u8 *p25C;
-    s32 i260;
+    u8 *angle_blend_target;
+    s32 angle_blend_ramp_frames;
     u8  pad2[0x380 - 0x264];
 } A_2e6000;
 
 typedef struct {
     u8  pad[0x2000];
-    s32 i2000;
+    s32 hero_moby;
 } L_2e6000;
 
 #include "rnc/overlay/shared/camera/level_camera.h"
@@ -278,7 +278,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         follow_camera_start_slide();
     }
     if (hero.state.control_mode == 0x11) {
-        camera_moby->m->fF0 = 0.25f;
+        camera_moby->m->target_offset_scale = 0.25f;
         follow_camera_set_height(0.5f, 0.003f);
     }
     if (hero.state.control_mode == 5) {
@@ -295,7 +295,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         }
     }
     if (hero.state.control_mode == 0x10)
-        camera_moby->m->fF0 = 0.25f;
+        camera_moby->m->target_offset_scale = 0.25f;
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         if (camera_override_state->i0 == 0) {
             q = (S40 *)((u8 *)camera_moby->m + 0x40);
@@ -327,27 +327,27 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     if (x->fn != 0)
         x->fn();
     player_camera_state = (A_2e6000 *)&l00_camera;
-    if (player_camera_state->p25C != 0 && camera_override_state->i10 < 2) {
-        if ((s8)player_camera_state->p25C[0x20] < 0) {
-            player_camera_state->p25C = 0;
+    if (player_camera_state->angle_blend_target != 0 && camera_override_state->i10 < 2) {
+        if ((s8)player_camera_state->angle_blend_target[0x20] < 0) {
+            player_camera_state->angle_blend_target = 0;
         } else {
             if (0.3f <= absolute_float(controller_state.analog[0]) ||
                 0.3f <= absolute_float(controller_state.analog[1])) {
-                player_camera_state->i260 = 0;
+                player_camera_state->angle_blend_ramp_frames = 0;
             }
             x = (A_2e6000 *)&l00_camera;
-            x->i260++;
-            if (scale_game_frames(400) < x->i260)
-                x->i260 = scale_game_frames(400);
-            rotation_or_blend_value = convert_integer_to_float(x->i260) /
+            x->angle_blend_ramp_frames++;
+            if (scale_game_frames(400) < x->angle_blend_ramp_frames)
+                x->angle_blend_ramp_frames = scale_game_frames(400);
+            rotation_or_blend_value = convert_integer_to_float(x->angle_blend_ramp_frames) /
                                       convert_integer_to_float(scale_game_frames(400));
             set_follow_camera_angle_blend_from_position(
-                x->p25C + 0x10, rotation_or_blend_value * 0.20943952f, 0.0f);
+                x->angle_blend_target + 0x10, rotation_or_blend_value * 0.20943952f, 0.0f);
         }
     }
     camera_override_state->i10 = 0;
     nearby_moby_count =
-        collect_mobies_in_sphere(&D_0013F3D0_2e6000, 1, D_0013F3D0_2e6000.i2000, 0, 15.0f);
+        collect_mobies_in_sphere(&D_0013F3D0_2e6000, 1, D_0013F3D0_2e6000.hero_moby, 0, 15.0f);
     if (nearby_moby_count > 0) {
         lp = D_L00_00177F00;
         for (i = 0; i < nearby_moby_count; lp++, i++) {
@@ -608,7 +608,7 @@ typedef struct CamE {
 typedef struct CamA {
     float         pos[4]; /* 0x00 */
     char          pad10[0x40];
-    float         f50[4]; /* 0x50 */
+    float         orbit_origin_position[4]; /* 0x50 */
     char          pad60[0x50];
     float         fB0; /* 0xB0 */
     int           iB4; /* 0xB4 */
@@ -631,24 +631,24 @@ typedef struct CamA {
 } CamA;
 
 typedef struct CamB {
-    float v0[4];  /* 0x00 */
-    float v10[4]; /* 0x10 */
-    int   i20;    /* 0x20 */
-    int   i24;    /* 0x24 */
-    int   i28;    /* 0x28 */
-    float f2C;    /* 0x2C */
-    float f30;    /* 0x30 */
-    int   i34;    /* 0x34 */
-    int   i38;    /* 0x38 */
-    short h3C;    /* 0x3C */
-    short h3E;    /* 0x3E */
+    float v0[4];                 /* 0x00 */
+    float v10[4];                /* 0x10 */
+    int   i20;                   /* 0x20 */
+    int   i24;                   /* 0x24 */
+    int   i28;                   /* 0x28 */
+    float target_orbit_distance; /* 0x2C */
+    float f30;                   /* 0x30 */
+    int   i34;                   /* 0x34 */
+    int   i38;                   /* 0x38 */
+    short h3C;                   /* 0x3C */
+    short h3E;                   /* 0x3E */
     char  pad40[4];
-    int   i44; /* 0x44 */
-    float f48; /* 0x48 */
+    int   orbit_distance_interpolation_state; /* 0x44 */
+    float f48;                                /* 0x48 */
     char  pad4C[4];
-    int   i50; /* 0x50 */
-    float f54; /* 0x54 */
-    float f58; /* 0x58 */
+    int   orbit_height_interpolation_state; /* 0x50 */
+    float f54;                              /* 0x54 */
+    float default_orbit_distance;           /* 0x58 */
     char  pad5C[4];
 } CamB;
 
@@ -676,18 +676,18 @@ typedef struct Cam1A8 {
 
 typedef struct CamG {
     char  pad0[0x10];
-    float v10[4]; /* 0x10 */
-    float v20[4]; /* 0x20 */
-    float f30;    /* 0x30 */
-    short h34;    /* 0x34 */
-    short h36;    /* 0x36 */
-    short h38;    /* 0x38 */
-    short h3A;    /* 0x3A */
-    float f3C;    /* 0x3C */
-    float f40;    /* 0x40 */
-    float f44;    /* 0x44 */
-    int   i48;    /* 0x48 */
-    int   i4C;    /* 0x4C */
+    float v10[4];                                /* 0x10 */
+    float v20[4];                                /* 0x20 */
+    float f30;                                   /* 0x30 */
+    short h34;                                   /* 0x34 */
+    short h36;                                   /* 0x36 */
+    short h38;                                   /* 0x38 */
+    short h3A;                                   /* 0x3A */
+    float f3C;                                   /* 0x3C */
+    float f40;                                   /* 0x40 */
+    float f44;                                   /* 0x44 */
+    int   i48;                                   /* 0x48 */
+    int   consecutive_camera_obstruction_frames; /* 0x4C */
 } CamG;
 
 typedef struct Cam220 {
@@ -741,7 +741,7 @@ typedef struct Hero_2E8210 {
     char  pad0[0x30C];
     short h30C; /* 0x30C */
     char  pad30E[0x1D72];
-    int   i2080; /* 0x2080 */
+    int   followed_hero_moby; /* 0x2080 */
 } Hero_2E8210;
 
 extern int               D_L00_00161D90 __attribute__((sda));
@@ -781,7 +781,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     a = &camera_moby->cam->a;
     qcopy(a->pos, D_0013F4D0_2E8210);
     a->fB0 = 1.5f;
-    a->iC0 = D_0013F450_2E8210.i2080;
+    a->iC0 = D_0013F450_2E8210.followed_hero_moby;
     a->bC4 = 0;
     a->bD6 = 0;
     a->fE0 = 0.2f;
@@ -796,11 +796,11 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     a->iBC = 0;
 
     b = &camera_moby->cam->b;
-    b->f2C = 4.64f;
+    b->target_orbit_distance = 4.64f;
     b->f48 = 0.003f;
     b->f54 = 0.003f;
     b->f30 = 2.0f;
-    b->f58 = 4.64f;
+    b->default_orbit_distance = 4.64f;
     b->i34 = 0;
     b->i38 = 0;
     b->i28 = 0;
@@ -808,8 +808,8 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     b->i24 = 0;
     b->h3C = 0;
     b->h3E = 0;
-    b->i44 = 0;
-    b->i50 = 0;
+    b->orbit_distance_interpolation_state = 0;
+    b->orbit_height_interpolation_state = 0;
 
     camera_state = camera_moby->cam;
     camera_state->h10 = 1;
@@ -855,7 +855,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     ((Cam220 *)camera_override_state)->i10 = 0;
     ((Cam220 *)camera_override_state)->h4 = 0;
     ((Cam220 *)camera_override_state)->h6 = 0;
-    ((Cam220 *)camera_override_state)->f8 = b->f2C;
+    ((Cam220 *)camera_override_state)->f8 = b->target_orbit_distance;
     ((Cam220 *)camera_override_state)->fC = D_L00_00161D1C_gp;
 
     camera_state_base = camera_moby->cam;
@@ -865,7 +865,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     g->h3A = 0;
     g->h36 = 0;
     g->h38 = 0;
-    g->i4C = 0;
+    g->consecutive_camera_obstruction_frames = 0;
     g->h34 = r;
     g->f44 = l00_follow_camera_collision_probe_step_growth_factor;
     g->f3C = l00_follow_camera_collision_probe_scale;
@@ -891,13 +891,13 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
         follow_camera_reset(camera_moby);
         rebuild_follow_camera_pose(1);
     }
-    fast_vec_sub(b->v0, camera_moby->v30, a->f50);
+    fast_vec_sub(b->v0, camera_moby->v30, a->orbit_origin_position);
     qcopy(b->v10, b->v0);
     qcopy(camera_state->pos, camera_moby->v30);
     qcopy(g->v20, camera_moby->v30);
     fast_vec_scale(v0, D_0013F6E0_2E8210, fast_vec_dot(b->v0, D_0013F6E0_2E8210));
     fast_vec_sub(orbit_offset_remainder, b->v0, v0);
-    orbit_distance_shortfall = b->f2C - fast_vec_length(orbit_offset_remainder);
+    orbit_distance_shortfall = b->target_orbit_distance - fast_vec_length(orbit_offset_remainder);
     g->f30 = orbit_distance_shortfall;
     if (orbit_distance_shortfall < -0.1f) {
         g->h3A = 1;
@@ -978,7 +978,7 @@ typedef struct X002e7318 {
     u8        pad[0x20];
     V002e7318 m;
     u8        pad30[8];
-    s16       s38;
+    s16       endpoint_collision_direction_class;
     u8        pad3a[0xe];
     s32       i48;
 } X002e7318;
@@ -992,14 +992,14 @@ typedef struct P002e7318 {
 
 typedef struct O002e7318 {
     u8  pad[0x70];
-    u8 *p70;
+    u8 *follow_camera_rig_state;
 } O002e7318;
 
 typedef struct G002e7318 {
     u8        pad[0x30];
     V002e7318 v40;
     u8        pad50[0x84];
-    s32       i114;
+    s32       sphere_collision_excluded_moby;
 } G002e7318;
 
 extern G002e7318 D_L00_00166E10_c __asm__("D_L00_00166E10");
@@ -1012,7 +1012,7 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) __asm__("F
 s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
     V002e7318  candidate_camera_position;
     V002e7318  normalized_position_delta;
-    u8        *b = camera_moby->p70;
+    u8        *b = camera_moby->follow_camera_rig_state;
     X002e7318 *x = (X002e7318 *)(b + 0x1D0);
     u8        *camera_target_state = b + 0x40;
     u8        *camera_orbit_state = b + 0x130;
@@ -1027,8 +1027,8 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
     G002e7318 *g = &D_L00_00166E10_c;
 
     fast_vec_add(&candidate_camera_position, b + 0x90, camera_orbit_state);
-    x->s38 = 2;
-    active_camera_state = (P002e7318 *)((O002e7318 **)g)[-4]->p70;
+    x->endpoint_collision_direction_class = 2;
+    active_camera_state = (P002e7318 *)((O002e7318 **)g)[-4]->follow_camera_rig_state;
     sphere_collision_flags = x->i48;
     collision_probe_radius = follow_cam_min_distance_gp + active_camera_state->c *
                                                               active_camera_state->a *
@@ -1042,30 +1042,30 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
             if (!coll_sphere(&candidate_camera_position,
                              collision_probe_radius,
                              sphere_collision_flags,
-                             g->i114))
+                             g->sphere_collision_excluded_moby))
                 break;
             hb = 1;
         }
-        if (x->s38 != 0) {
+        if (x->endpoint_collision_direction_class != 0) {
             fast_vec_sub(&normalized_position_delta,
                          &(*(V002e7318 *)&D_L00_00173E60),
                          &candidate_camera_position);
             fast_vec_normalize(&normalized_position_delta, &normalized_position_delta, 1.0f);
             direction_alignment = fast_vec_dot(&g->v40, &normalized_position_delta);
             if (direction_alignment > 0.75f)
-                x->s38 = 1;
+                x->endpoint_collision_direction_class = 1;
             else if (direction_alignment < -0.75f)
-                x->s38 = -1;
+                x->endpoint_collision_direction_class = -1;
             else
-                x->s38 = 0;
+                x->endpoint_collision_direction_class = 0;
         }
         qcopy(&candidate_camera_position, &coll_hit_position);
         i++;
     }
     r = update_follow_camera_orbit_after_collision(camera_moby, &candidate_camera_position, ha, hb);
     fast_vec_add(&x->m, camera_target_state + 0x50, camera_orbit_state);
-    if (x->s38 == 2)
-        x->s38 = 0;
+    if (x->endpoint_collision_direction_class == 2)
+        x->endpoint_collision_direction_class = 0;
     return r;
 }
 
@@ -1368,14 +1368,14 @@ typedef struct {
     u8  pad0[0x18];
     u8  b18;
     u8  b19;
-    u16 h1A;
+    u16 source_moby_type_id;
     u8  pad1C[0x14];
 } W_2e7d20;
 
 typedef struct {
     u8  pad0[0x80];
     u8  pad80[0x2080 - 0x80];
-    u8 *p2080;
+    u8 *hero_moby;
     s32 i2084;
     u8  pad2088[0x20A4 - 0x2088];
     u8  b20A4;
@@ -1391,7 +1391,7 @@ extern f32       follow_camera_minimum_retracted_orbit_distance_gp __asm__("D_L0
 
 typedef struct {
     u8  pad[0x18];
-    s32 p18;
+    s32 collision_hit_moby;
     s32 p1C;
     u8  v20[0x10];
 } E40_2e7d20_t;
@@ -1451,7 +1451,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     }
     lerp_vector(&probe_center, x + 0x90, camera_tracking_state - 0x50, 0.5f);
     nearby_moby_count =
-        probe_world_sphere(&probe_center, 1, D_0013F350_lui.p2080, 0, probe_diameter * 0.5f);
+        probe_world_sphere(&probe_center, 1, D_0013F350_lui.hero_moby, 0, probe_diameter * 0.5f);
     if (nearby_moby_count > 0) {
         i = nearby_moby_count;
         j = 0;
@@ -1558,25 +1558,27 @@ move:
     if (!collision_line((x + 0x90),
                         &moby_offset_or_camera_endpoint,
                         camera_collision_mask,
-                        D_0013F350_lui.p2080,
+                        D_0013F350_lui.hero_moby,
                         0)) {
         goto clear;
     }
     if (test_follow_camera_point_in_collision_volume((*(E40_2e7d20_t *)&D_L00_00173E40_lui).v20)) {
         goto clear;
     }
-    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 &&
-        is_moby_in_class_range_500_to_540((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {
-        fast_vec_sub(
-            &v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 + 0x10, g_debug_camera_lui);
+    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby != 0 &&
+        is_moby_in_class_range_500_to_540(
+            (*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby)) {
+        fast_vec_sub(&v20,
+                     (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby + 0x10,
+                     g_debug_camera_lui);
         v20.i[2] = 0;
         fast_vec_normalize(&v20, &v20, 1.0f);
         v20.f[3] = 5627.9248046875f;
-        make_hit_descriptor(&hit_descriptor, D_0013F350_lui.p2080, 0x800000, &v20, 20.0f);
+        make_hit_descriptor(&hit_descriptor, D_0013F350_lui.hero_moby, 0x800000, &v20, 20.0f);
         hit_descriptor.b18 = 3;
         hit_descriptor.b19 = 3;
-        hit_descriptor.h1A = *(u16 *)(D_0013F350_lui.p2080 + 0xA6);
-        record_moby_hit((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &hit_descriptor);
+        hit_descriptor.source_moby_type_id = *(u16 *)(D_0013F350_lui.hero_moby + 0xA6);
+        record_moby_hit((*(E40_2e7d20_t *)&D_L00_00173E40_lui).collision_hit_moby, &hit_descriptor);
     }
     BI_2e7d20(0x4C)++;
     if (BI_2e7d20(0x4C) >= scale_game_frames(0x1E)) {

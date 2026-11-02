@@ -5,7 +5,7 @@ struct MobyRecord {
     u8 pad_0[0x20];
     u8 unk20;
     u8 pad_21[0x31];
-    u8 unk52;
+    u8 primary_binding_selector;
 };
 
 void prune_moby_references(void) __asm__("FUN_0020cc60");
@@ -21,7 +21,7 @@ void prune_moby_references(void) {
     do {
         moby = *slot;
         remaining -= 1;
-        if ((moby != NULL) && ((moby->unk20 & 0x80) || (moby->unk52 != mask))) {
+        if ((moby != NULL) && ((moby->unk20 & 0x80) || (moby->primary_binding_selector != mask))) {
             *slot = NULL;
         }
         slot += 1;

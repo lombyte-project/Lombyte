@@ -77,10 +77,11 @@ int hero_set_state(int requested_state, int animation_request_mode) {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 &&
             (requested_state != HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE ||
-             animation_request_mode != 2))
+             animation_request_mode != HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS))
             return 0;
     }
-    if ((level_game_mode == 2 || level_game_mode == 6) && animation_request_mode != 2)
+    if ((level_game_mode == 2 || level_game_mode == 6) &&
+        animation_request_mode != HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS)
         return 0;
     {
         struct Hero *p = &hero;

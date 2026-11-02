@@ -45,27 +45,27 @@ typedef struct WoodcutBotVars {
     u8  unk211;
     u8  unk212;
     u8  unk213;
-    u8  unk214;
-    u8  unk215;
+    u8  auxiliary_joint_a;
+    u8  auxiliary_joint_b;
     u8  pad_216[0xE];
-    f32 unk224;
+    f32 movement_acceleration_step_limit;
     u8  pad_228[0x4];
     f32 unk22C;
     f32 unk230;
     f32 unk234;
     u8  pad_238[0x4];
-    f32 unk23C;
+    f32 movement_gravity_step;
     f32 unk240;
     u8  pad_244[0xC];
-    u8  unk250;
-    u8  unk251;
-    u8  unk252;
-    u8  unk253;
+    u8  leg_a_joint;
+    u8  leg_a_secondary_joint;
+    u8  leg_a_manipulator_slot_a;
+    u8  leg_a_manipulator_slot_b;
     u8  pad_254[0xAC];
-    u8  unk300;
-    u8  unk301;
-    u8  unk302;
-    u8  unk303;
+    u8  leg_b_joint;
+    u8  leg_b_secondary_joint;
+    u8  leg_b_manipulator_slot_a;
+    u8  leg_b_manipulator_slot_b;
 } WoodcutBotVars;
 
 void initialize_woodcut_bot_movement_data(void *moby) {
@@ -99,25 +99,25 @@ void initialize_woodcut_bot_movement_data(void *moby) {
     speed = frameScale * 9.8f;
     angleHalf = frameScale * 3.1415927f;
     amount = frameScale * 10.0f;
-    moby_vars->unk214 = 7;
+    moby_vars->auxiliary_joint_a = 7;
     moby_vars->unk210 = 0;
     moby_vars->unk211 = 0;
-    moby_vars->unk23C = speed;
+    moby_vars->movement_gravity_step = speed;
     moby_vars->unk22C = angleHalf;
     moby_vars->unk230 = angleFull;
     moby_vars->unk234 = angleOther;
-    moby_vars->unk224 = amount;
+    moby_vars->movement_acceleration_step_limit = amount;
     moby_vars->unk212 = 0xff;
     moby_vars->unk213 = 0x10;
-    moby_vars->unk215 = 7;
-    moby_vars->unk250 = 10;
-    moby_vars->unk251 = 8;
-    moby_vars->unk253 = 12;
-    moby_vars->unk252 = 14;
-    moby_vars->unk300 = 11;
-    moby_vars->unk301 = 9;
-    moby_vars->unk303 = 13;
-    moby_vars->unk302 = 15;
+    moby_vars->auxiliary_joint_b = 7;
+    moby_vars->leg_a_joint = 10;
+    moby_vars->leg_a_secondary_joint = 8;
+    moby_vars->leg_a_manipulator_slot_b = 12;
+    moby_vars->leg_a_manipulator_slot_a = 14;
+    moby_vars->leg_b_joint = 11;
+    moby_vars->leg_b_secondary_joint = 9;
+    moby_vars->leg_b_manipulator_slot_b = 13;
+    moby_vars->leg_b_manipulator_slot_a = 15;
     moby_vars->unk240 = 0.5f;
     initialize_leg_rig(moby, movement_data);
 }
@@ -197,7 +197,7 @@ typedef struct WBData {
     /* 0x02A */ char          pad02A[6];
     /* 0x030 */ float         f30;
     /* 0x034 */ char          pad034[4];
-    /* 0x038 */ int           f38;
+    /* 0x038 */ int           pending_excitement;
     /* 0x03C */ char          pad03C[0x1C];
     /* 0x058 */ unsigned char f58;
     /* 0x059 */ char          pad059;
@@ -217,31 +217,31 @@ typedef struct WBData {
     /* 0x0EC */ char          pad0EC[0x11];
     /* 0x0FD */ unsigned char fFD;
     /* 0x0FE */ char          pad0FE[0x12];
-    /* 0x110 */ float         f110;
-    /* 0x114 */ float         f114;
+    /* 0x110 */ float         knockback_ascent_target_frame;
+    /* 0x114 */ float         knockback_descent_target_frame;
     /* 0x118 */ char          pad118[8];
-    /* 0x120 */ unsigned char f120;
-    /* 0x121 */ unsigned char f121;
+    /* 0x120 */ unsigned char manipulator_slot_index;
+    /* 0x121 */ unsigned char manipulator_attached;
     /* 0x122 */ char          pad122[0xE];
-    /* 0x130 */ char          f130[0x30];
-    /* 0x160 */ char          f160[0xB7];
-    /* 0x217 */ unsigned char f217;
+    /* 0x130 */ char          recoil_rotation[0x30];
+    /* 0x160 */ char          leg_rig_movement_data[0xB7];
+    /* 0x217 */ unsigned char leg_rig_animation_mode;
     /* 0x218 */ char          pad218[0x198];
-    /* 0x3B0 */ float         f3B0[4];
-    /* 0x3C0 */ unsigned char f3C0;
-    /* 0x3C1 */ unsigned char f3C1;
+    /* 0x3B0 */ float         initial_position[4];
+    /* 0x3C0 */ unsigned char initial_debris_animation_enabled;
+    /* 0x3C1 */ unsigned char saved_non_recovery_state;
     /* 0x3C2 */ short         t3C2;
     /* 0x3C4 */ short         t3C4;
     /* 0x3C6 */ short         t3C6;
-    /* 0x3C8 */ float         f3C8;
+    /* 0x3C8 */ float         recoil_tilt_angle;
     /* 0x3CC */ char          pad3CC[4];
-    /* 0x3D0 */ float         f3D0;
-    /* 0x3D4 */ float         f3D4;
-    /* 0x3D8 */ float         f3D8;
-    /* 0x3DC */ int           f3DC;
-    /* 0x3E0 */ float         f3E0;
-    /* 0x3E4 */ float         f3E4;
-    /* 0x3E8 */ float         f3E8;
+    /* 0x3D0 */ float         yaw_turn_spring_state;
+    /* 0x3D4 */ float         reposition_bearing;
+    /* 0x3D8 */ float         reposition_step;
+    /* 0x3DC */ int           movement_path_index;
+    /* 0x3E0 */ float         vertical_fall_step;
+    /* 0x3E4 */ float         recoil_horizontal_step;
+    /* 0x3E8 */ float         target_engagement_range;
 } WBData;
 
 typedef struct WBMoby {
@@ -361,10 +361,13 @@ void woodcut_bot_update(WBMoby *m) {
     float          target_distance;
     float          hd;
 
-    if (d->f38 != 0 || d->t3C6 != 0)
+    if (d->pending_excitement != 0 || d->t3C6 != 0)
         excited = 1;
-    select_moby_combat_target(m, selected_target_position, excited ? d->f3E8 * 2.0f : d->f3E8);
-    p = &d->f120;
+    select_moby_combat_target(m,
+                              selected_target_position,
+                              excited ? d->target_engagement_range * 2.0f
+                                      : d->target_engagement_range);
+    p = &d->manipulator_slot_index;
     FUN_L00_00263ac8(2.5f, m, 6, p);
     manipulator = p;
     pos = m->pos;
@@ -439,32 +442,32 @@ void woodcut_bot_update(WBMoby *m) {
                 *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
                 trooper_knockback_arc(v, &angle, &d->fD8, &d->fDC);
                 trooper_start_knockback(angle, m, d->fC0, 8, 1, 0);
-                d->f110 = 14.0f;
-                d->f114 = 24.0f;
+                d->knockback_ascent_target_frame = 14.0f;
+                d->knockback_descent_target_frame = 24.0f;
                 m->state = WOODCUT_BOT_DEATH_KNOCKBACK;
                 FUN_L00_00257470(m, 0, -1);
                 d->fB7 = 0x78;
                 trooper_anim_update(m, d->fB0);
-                d->f3E4 = (2.0f / scale_time(15.0f)) * 2.0f;
+                d->recoil_horizontal_step = (2.0f / scale_time(15.0f)) * 2.0f;
                 break;
             case WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION:
             case WOODCUT_BOT_REACTION_HIT_RECOVERY_WITH_MELEE_WINDOW_GUARD:
-                d->f3C8 = -0.5235988f;
+                d->recoil_tilt_angle = -0.5235988f;
                 if (m->anim != 4 || hd < 16.0f || hd > 27.0f) {
                     short hit_source_moby_class;
 
                     m->fBC |= 5;
                     blend_moby_animation(m, 5, 0, scale_game_frames(3));
-                    reset_walker_gait_helpers(d->f160);
+                    reset_walker_gait_helpers(d->leg_rig_movement_data);
                     m->state = WOODCUT_BOT_HIT_RECOVERY_AND_REPOSITION;
                     hit_source_moby_class = *(short *)(*(char **)(p + 0x20) + 0xA6);
                     if (hit_source_moby_class == 0x131 || hit_source_moby_class == 0xB0) {
-                        d->f3E4 = (2.0f / scale_time(15.0f)) * 0.5f;
+                        d->recoil_horizontal_step = (2.0f / scale_time(15.0f)) * 0.5f;
                     } else {
-                        d->f3E4 = 2.0f / scale_time(15.0f);
+                        d->recoil_horizontal_step = 2.0f / scale_time(15.0f);
                     }
                     *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
-                    trooper_knockback_arc(v, &angle, &d->f3E4, &one);
+                    trooper_knockback_arc(v, &angle, &d->recoil_horizontal_step, &one);
                     d->fB7 = 0x78;
                     trooper_anim_update(m, d->fB0);
                     d->t3C4 = scale_game_frames(0xF);
@@ -474,11 +477,11 @@ void woodcut_bot_update(WBMoby *m) {
             case WOODCUT_BOT_REACTION_RECOIL_TO_IDLE:
             case WOODCUT_BOT_REACTION_RECOIL_TO_IDLE_WITH_COOLDOWNS:
                 blend_moby_animation(m, 6, 0, scale_game_frames(10));
-                reset_walker_gait_helpers(d->f160);
+                reset_walker_gait_helpers(d->leg_rig_movement_data);
                 m->state = WOODCUT_BOT_IDLE;
-                d->f3E4 = 2.0f / scale_time(15.0f);
+                d->recoil_horizontal_step = 2.0f / scale_time(15.0f);
                 *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
-                trooper_knockback_arc(v, &angle, &d->f3E4, &one);
+                trooper_knockback_arc(v, &angle, &d->recoil_horizontal_step, &one);
                 m->rot[2] = fast_add_rotations(3.1415927f, angle);
                 d->fB7 = 0x78;
                 trooper_anim_update(m, d->fB0);
@@ -496,10 +499,10 @@ void woodcut_bot_update(WBMoby *m) {
         }
     }
     m->fA4 = 0xFF;
-    if (d->f38 != 0)
+    if (d->pending_excitement != 0)
         d->t3C6 = scale_game_frames(0xF0);
     tm = &d->t3C2;
-    d->f38 = 0;
+    d->pending_excitement = 0;
     fast_dec_timer_s16(&d->t3C6);
 
     if (m->state == WOODCUT_BOT_MELEE_ATTACK) {
@@ -537,15 +540,15 @@ void woodcut_bot_update(WBMoby *m) {
         d->f28 = 1;
         d->f29 = 0;
         m->fBC = 0;
-        d->f3E0 = 0.0f;
+        d->vertical_fall_step = 0.0f;
         d->t3C6 = 0;
         d->f58 = 8;
         d->f5A = 8;
-        qcopy(d->f3B0, pos);
-        if (d->f121 == 0)
+        qcopy(d->initial_position, pos);
+        if (d->manipulator_attached == 0)
             attach_manipulator(m, 6, manipulator);
         initialize_woodcut_bot_movement_data(m);
-        if (d->f3C0 != 0) {
+        if (d->initial_debris_animation_enabled != 0) {
             m->state = WOODCUT_BOT_PLAY_ANIMATION_AND_EMIT_DEBRIS;
             blend_moby_animation(m, 0xB, 0, scale_game_frames(10));
         } else {
@@ -554,7 +557,8 @@ void woodcut_bot_update(WBMoby *m) {
         break;
     case WOODCUT_BOT_IDLE:
         if (m->f70 & 2) {
-            if (excited ? (d->f3E8 * 2.0f < target_distance) : (d->f3E8 < target_distance)) {
+            if (excited ? (d->target_engagement_range * 2.0f < target_distance)
+                        : (d->target_engagement_range < target_distance)) {
                 int anims[6];
 
                 memset(anims, 0, 0x18);
@@ -568,29 +572,31 @@ void woodcut_bot_update(WBMoby *m) {
             if (target_distance < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
                 m->state = WOODCUT_BOT_MELEE_ATTACK;
-            } else if (excited ? (target_distance < d->f3E8 * 2.0f) : (target_distance < d->f3E8)) {
+            } else if (excited ? (target_distance < d->target_engagement_range * 2.0f)
+                               : (target_distance < d->target_engagement_range)) {
                 if (m->fBC & 1) {
-                    if (excited || d->f3DC == -1 ||
+                    if (excited || d->movement_path_index == -1 ||
                         point_in_path_xy(selected_target_position,
-                                         ((int *)l04_paths[d->f3DC]) + 4,
-                                         *((int *)l04_paths[d->f3DC])) != 0) {
+                                         ((int *)l04_paths[d->movement_path_index]) + 4,
+                                         *((int *)l04_paths[d->movement_path_index])) != 0) {
                         m->state = WOODCUT_BOT_MOVE_TOWARD_TARGET;
                         m->fBC |= 8;
                     }
                 } else {
-                    d->f3D0 = 0.0f;
+                    d->yaw_turn_spring_state = 0.0f;
                     blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                    reset_walker_gait_helpers(d->f160);
+                    reset_walker_gait_helpers(d->leg_rig_movement_data);
                     m->state = WOODCUT_BOT_TURN_BEFORE_MOVEMENT;
                     m->fBC |= 1;
                 }
             }
             if (!excited) {
-                if (vector_distance_xy(pos, d->f3B0) > 2.0f) {
-                    if (d->f3E8 < target_distance ||
-                        (d->f3DC != -1 && point_in_path_xy(selected_target_position,
-                                                           ((int *)l04_paths[d->f3DC]) + 4,
-                                                           *((int *)l04_paths[d->f3DC])) == 0)) {
+                if (vector_distance_xy(pos, d->initial_position) > 2.0f) {
+                    if (d->target_engagement_range < target_distance ||
+                        (d->movement_path_index != -1 &&
+                         point_in_path_xy(selected_target_position,
+                                          ((int *)l04_paths[d->movement_path_index]) + 4,
+                                          *((int *)l04_paths[d->movement_path_index])) == 0)) {
                         m->state = WOODCUT_BOT_RETURN_TO_SAVED_POSITION;
                         m->fBC |= 8;
                     }
@@ -600,10 +606,10 @@ void woodcut_bot_update(WBMoby *m) {
         break;
     case WOODCUT_BOT_WAIT_FOR_ANIMATION_BEFORE_PURSUIT:
         if (m->anim == 2 && (m->f70 & 2)) {
-            if (excited || d->f3DC == -1 ||
+            if (excited || d->movement_path_index == -1 ||
                 point_in_path_xy(selected_target_position,
-                                 ((int *)l04_paths[d->f3DC]) + 4,
-                                 *((int *)l04_paths[d->f3DC])) != 0) {
+                                 ((int *)l04_paths[d->movement_path_index]) + 4,
+                                 *((int *)l04_paths[d->movement_path_index])) != 0) {
                 m->state = WOODCUT_BOT_MOVE_TOWARD_TARGET;
                 m->fBC |= 8;
             } else {
@@ -653,19 +659,20 @@ void woodcut_bot_update(WBMoby *m) {
             if (target_distance < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
                 m->state = WOODCUT_BOT_MELEE_ATTACK;
-            } else if (excited ? (target_distance < d->f3E8 * 2.0f) : (target_distance < d->f3E8)) {
+            } else if (excited ? (target_distance < d->target_engagement_range * 2.0f)
+                               : (target_distance < d->target_engagement_range)) {
                 if (m->fBC & 1) {
-                    if (excited || d->f3DC == -1 ||
+                    if (excited || d->movement_path_index == -1 ||
                         point_in_path_xy(selected_target_position,
-                                         ((int *)l04_paths[d->f3DC]) + 4,
-                                         *((int *)l04_paths[d->f3DC])) != 0) {
+                                         ((int *)l04_paths[d->movement_path_index]) + 4,
+                                         *((int *)l04_paths[d->movement_path_index])) != 0) {
                         m->state = WOODCUT_BOT_MOVE_TOWARD_TARGET;
                         m->fBC |= 8;
                     }
                 } else {
-                    d->f3D0 = 0.0f;
+                    d->yaw_turn_spring_state = 0.0f;
                     blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                    reset_walker_gait_helpers(d->f160);
+                    reset_walker_gait_helpers(d->leg_rig_movement_data);
                     m->state = WOODCUT_BOT_TURN_BEFORE_MOVEMENT;
                     m->fBC |= 1;
                 }
@@ -677,17 +684,18 @@ void woodcut_bot_update(WBMoby *m) {
         if (excited) {
             if (target_distance < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
-                reset_walker_gait_helpers(d->f160);
+                reset_walker_gait_helpers(d->leg_rig_movement_data);
                 m->state = WOODCUT_BOT_MELEE_ATTACK;
-            } else if (d->f3DC == -1 || point_in_path_xy(selected_target_position,
-                                                         ((int *)l04_paths[d->f3DC]) + 4,
-                                                         *((int *)l04_paths[d->f3DC])) != 0) {
+            } else if (d->movement_path_index == -1 ||
+                       point_in_path_xy(selected_target_position,
+                                        ((int *)l04_paths[d->movement_path_index]) + 4,
+                                        *((int *)l04_paths[d->movement_path_index])) != 0) {
                 m->state = WOODCUT_BOT_MOVE_TOWARD_TARGET;
                 m->fBC |= 8;
             } else if (adiff > 1.5707964f) {
-                d->f3D0 = 0.0f;
+                d->yaw_turn_spring_state = 0.0f;
                 blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                reset_walker_gait_helpers(d->f160);
+                reset_walker_gait_helpers(d->leg_rig_movement_data);
                 m->state = WOODCUT_BOT_TURN_BEFORE_MOVEMENT;
             }
         } else {
@@ -697,19 +705,19 @@ void woodcut_bot_update(WBMoby *m) {
     case WOODCUT_BOT_MOVE_TOWARD_TARGET: {
         if (m->fBC & 8) {
             m->fBC &= ~8;
-            reset_leg_rig_from_animation(m, d->f160);
+            reset_leg_rig_from_animation(m, d->leg_rig_movement_data);
         }
         leg_walker_update(m,
-                          d->f160,
+                          d->leg_rig_movement_data,
                           frame_time * 4.0f,
                           fast_arc_tan(selected_target_position[0] - m->pos[0],
                                        selected_target_position[1] - m->pos[1]),
                           frame_time_sq * 20.0f);
         if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            reset_walker_gait_helpers(d->f160);
+            reset_walker_gait_helpers(d->leg_rig_movement_data);
             m->state = WOODCUT_BOT_MELEE_ATTACK;
-        } else if (d->f3DC != -1) {
+        } else if (d->movement_path_index != -1) {
             float v[4];
 
             v[0] = fast_cos(m->rot[2]) * 2.0f;
@@ -717,25 +725,26 @@ void woodcut_bot_update(WBMoby *m) {
             v[2] = 0.0f;
             p = (unsigned char *)v;
             fast_vec_add(p, p, pos);
-            if (point_in_path_xy(
-                    p, ((int *)l04_paths[d->f3DC]) + 4, *((int *)l04_paths[d->f3DC])) == 0) {
+            if (point_in_path_xy(p,
+                                 ((int *)l04_paths[d->movement_path_index]) + 4,
+                                 *((int *)l04_paths[d->movement_path_index])) == 0) {
                 if (excited && point_in_path_xy(selected_target_position,
-                                                ((int *)l04_paths[d->f3DC]) + 4,
-                                                *((int *)l04_paths[d->f3DC])) == 0) {
+                                                ((int *)l04_paths[d->movement_path_index]) + 4,
+                                                *((int *)l04_paths[d->movement_path_index])) == 0) {
                     m->state = WOODCUT_BOT_STOP_MOVEMENT;
                 } else if (point_in_path_xy(selected_target_position,
-                                            ((int *)l04_paths[d->f3DC]) + 4,
-                                            *((int *)l04_paths[d->f3DC])) != 0) {
-                    d->f3D0 = 0.0f;
+                                            ((int *)l04_paths[d->movement_path_index]) + 4,
+                                            *((int *)l04_paths[d->movement_path_index])) != 0) {
+                    d->yaw_turn_spring_state = 0.0f;
                     blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                    reset_walker_gait_helpers(d->f160);
+                    reset_walker_gait_helpers(d->leg_rig_movement_data);
                     m->state = WOODCUT_BOT_TURN_BEFORE_MOVEMENT;
                 }
             }
             if (!excited) {
                 if (point_in_path_xy(selected_target_position,
-                                     ((int *)l04_paths[d->f3DC]) + 4,
-                                     *((int *)l04_paths[d->f3DC])) == 0) {
+                                     ((int *)l04_paths[d->movement_path_index]) + 4,
+                                     *((int *)l04_paths[d->movement_path_index])) == 0) {
                     m->state = WOODCUT_BOT_RETURN_TO_SAVED_POSITION;
                 }
             }
@@ -745,26 +754,27 @@ void woodcut_bot_update(WBMoby *m) {
     case WOODCUT_BOT_RETURN_TO_SAVED_POSITION:
         if (m->fBC & 8) {
             m->fBC &= ~8;
-            reset_leg_rig_from_animation(m, d->f160);
+            reset_leg_rig_from_animation(m, d->leg_rig_movement_data);
         }
         if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            reset_walker_gait_helpers(d->f160);
+            reset_walker_gait_helpers(d->leg_rig_movement_data);
             m->state = WOODCUT_BOT_MELEE_ATTACK;
         } else {
             if (m->fBC & 8) {
                 m->fBC &= ~8;
-                reset_leg_rig_from_animation(m, d->f160);
+                reset_leg_rig_from_animation(m, d->leg_rig_movement_data);
             }
-            if (vector_distance_xy(pos, d->f3B0) < 2.0f) {
+            if (vector_distance_xy(pos, d->initial_position) < 2.0f) {
                 m->state = WOODCUT_BOT_STOP_MOVEMENT;
             } else {
                 leg_walker_update(m,
-                                  d->f160,
+                                  d->leg_rig_movement_data,
                                   frame_time * 4.0f,
-                                  fast_arc_tan(d->f3B0[0] - m->pos[0], d->f3B0[1] - m->pos[1]),
+                                  fast_arc_tan(d->initial_position[0] - m->pos[0],
+                                               d->initial_position[1] - m->pos[1]),
                                   frame_time_sq * 20.0f);
-                if (d->f3DC != -1) {
+                if (d->movement_path_index != -1) {
                     float v[4];
 
                     v[0] = fast_cos(m->rot[2]) * 2.0f;
@@ -772,16 +782,16 @@ void woodcut_bot_update(WBMoby *m) {
                     v[2] = 0.0f;
                     fast_vec_add(v, v, pos);
                     if (point_in_path_xy(v,
-                                         ((int *)l04_paths[d->f3DC]) + 4,
-                                         *((int *)l04_paths[d->f3DC])) == 0) {
-                        d->f3D0 = 0.0f;
+                                         ((int *)l04_paths[d->movement_path_index]) + 4,
+                                         *((int *)l04_paths[d->movement_path_index])) == 0) {
+                        d->yaw_turn_spring_state = 0.0f;
                         blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                        reset_walker_gait_helpers(d->f160);
+                        reset_walker_gait_helpers(d->leg_rig_movement_data);
                         m->state = WOODCUT_BOT_TURN_BEFORE_MOVEMENT;
                         m->fBC |= 0x10;
                     } else if (point_in_path_xy(selected_target_position,
-                                                ((int *)l04_paths[d->f3DC]) + 4,
-                                                *((int *)l04_paths[d->f3DC])) != 0) {
+                                                ((int *)l04_paths[d->movement_path_index]) + 4,
+                                                *((int *)l04_paths[d->movement_path_index])) != 0) {
                         m->state = WOODCUT_BOT_STOP_MOVEMENT;
                     }
                 }
@@ -791,11 +801,12 @@ void woodcut_bot_update(WBMoby *m) {
     case WOODCUT_BOT_STOP_MOVEMENT:
         if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            reset_walker_gait_helpers(d->f160);
+            reset_walker_gait_helpers(d->leg_rig_movement_data);
             m->state = WOODCUT_BOT_MELEE_ATTACK;
         } else {
-            leg_walker_update(m, d->f160, frame_time * 0.0f, m->rot[2], frame_time_sq * 20.0f);
-            if (d->f217 == 0) {
+            leg_walker_update(
+                m, d->leg_rig_movement_data, frame_time * 0.0f, m->rot[2], frame_time_sq * 20.0f);
+            if (d->leg_rig_animation_mode == 0) {
                 if (excited) {
                     m->state = WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED;
                 } else {
@@ -815,7 +826,7 @@ void woodcut_bot_update(WBMoby *m) {
         if (m->anim2 != 5 || (m->anim == 5 && (m->f70 & 2))) {
             if (m->fBC & 4) {
                 m->fBC &= ~4;
-                if (d->f3DC == -1) {
+                if (d->movement_path_index == -1) {
                     blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     m->state = WOODCUT_BOT_IDLE;
                     d->t3C2 = 0;
@@ -844,12 +855,12 @@ void woodcut_bot_update(WBMoby *m) {
                         build_spherical_offset(v, 6.0f, candidate_reposition_bearing, m->rot[1]);
                         fast_vec_add(v, v, pos);
                         if (point_in_path_xy(v,
-                                             ((int *)l04_paths[d->f3DC]) + 4,
-                                             *((int *)l04_paths[d->f3DC])) != 0) {
+                                             ((int *)l04_paths[d->movement_path_index]) + 4,
+                                             *((int *)l04_paths[d->movement_path_index])) != 0) {
                             found = 1;
                             blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                            d->f3D4 = candidate_reposition_bearing;
-                            d->f3D8 = 0.0f;
+                            d->reposition_bearing = candidate_reposition_bearing;
+                            d->reposition_step = 0.0f;
                             break;
                         }
                     }
@@ -875,28 +886,28 @@ void woodcut_bot_update(WBMoby *m) {
                 if (hd < 28.0f && m->anim == 0x10) {
                     float reposition_step_limit = frame_scale * 0.11111111f;
 
-                    if (d->f3D8 < reposition_step_limit) {
-                        d->f3D8 = d->f3D8 + frame_time_sq * 20.0f;
+                    if (d->reposition_step < reposition_step_limit) {
+                        d->reposition_step = d->reposition_step + frame_time_sq * 20.0f;
                     } else {
-                        d->f3D8 = reposition_step_limit;
+                        d->reposition_step = reposition_step_limit;
                     }
-                    build_spherical_offset(v, d->f3D8, d->f3D4, m->rot[1]);
+                    build_spherical_offset(v, d->reposition_step, d->reposition_bearing, m->rot[1]);
                     fast_vec_add(pos, pos, v);
                     m->rot[2] = spring_turn(m->rot[2],
                                             fast_arc_tan(selected_target_position[0] - m->pos[0],
                                                          selected_target_position[1] - m->pos[1]),
-                                            &d->f3D0,
+                                            &d->yaw_turn_spring_state,
                                             frame_time_sq * 3.1415927f,
                                             frame_time_sq * 6.2831855f,
                                             frame_time * 4.1887903f);
-                } else if (d->f3D8 > 0.0f) {
-                    d->f3D8 -= frame_time_sq * 200.0f;
-                    build_spherical_offset(v, d->f3D8, d->f3D4, m->rot[1]);
+                } else if (d->reposition_step > 0.0f) {
+                    d->reposition_step -= frame_time_sq * 200.0f;
+                    build_spherical_offset(v, d->reposition_step, d->reposition_bearing, m->rot[1]);
                     fast_vec_add(pos, pos, v);
                     m->rot[2] = spring_turn(m->rot[2],
                                             fast_arc_tan(selected_target_position[0] - m->pos[0],
                                                          selected_target_position[1] - m->pos[1]),
-                                            &d->f3D0,
+                                            &d->yaw_turn_spring_state,
                                             frame_time_sq * 3.1415927f,
                                             frame_time_sq * 6.2831855f,
                                             frame_time * 4.1887903f);
@@ -909,9 +920,10 @@ void woodcut_bot_update(WBMoby *m) {
         break;
     case WOODCUT_BOT_TURN_BEFORE_MOVEMENT:
         if (m->anim == 0x10 && (m->f70 & 2)) {
-            if ((m->fBC & 0x10) || point_in_path_xy(selected_target_position,
-                                                    ((int *)l04_paths[d->f3DC]) + 4,
-                                                    *((int *)l04_paths[d->f3DC])) == 0) {
+            if ((m->fBC & 0x10) ||
+                point_in_path_xy(selected_target_position,
+                                 ((int *)l04_paths[d->movement_path_index]) + 4,
+                                 *((int *)l04_paths[d->movement_path_index])) == 0) {
                 m->state = WOODCUT_BOT_RETURN_TO_SAVED_POSITION;
                 blend_moby_animation(m, 0, 0, scale_game_frames(10));
             } else {
@@ -921,8 +933,9 @@ void woodcut_bot_update(WBMoby *m) {
             m->fBC = (m->fBC | 8) & ~0x10;
         } else if (m->fBC & 0x10) {
             m->rot[2] = spring_turn(m->rot[2],
-                                    fast_arc_tan(d->f3B0[0] - m->pos[0], d->f3B0[1] - m->pos[1]),
-                                    &d->f3D0,
+                                    fast_arc_tan(d->initial_position[0] - m->pos[0],
+                                                 d->initial_position[1] - m->pos[1]),
+                                    &d->yaw_turn_spring_state,
                                     frame_time_sq * 3.1415927f,
                                     frame_time_sq * 6.2831855f,
                                     frame_time * 4.1887903f);
@@ -930,7 +943,7 @@ void woodcut_bot_update(WBMoby *m) {
             m->rot[2] = spring_turn(m->rot[2],
                                     fast_arc_tan(selected_target_position[0] - m->pos[0],
                                                  selected_target_position[1] - m->pos[1]),
-                                    &d->f3D0,
+                                    &d->yaw_turn_spring_state,
                                     0.03f,
                                     0.3f,
                                     frame_time * 6.4577184f);
@@ -955,37 +968,37 @@ void woodcut_bot_update(WBMoby *m) {
         float recoil_scratch[16];
 
         trooper_anim_finish(m, d->fB0);
-        if (d->f3E4 > 0.0f) {
+        if (d->recoil_horizontal_step > 0.0f) {
             struct Hero *h = &hero;
 
             recoil_scratch[0] = fast_cos(fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
                                                       m->pos[1] - h->motion.pos.f[1])) *
-                                d->f3E4;
+                                d->recoil_horizontal_step;
             recoil_scratch[1] = fast_sin(fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
                                                       m->pos[1] - h->motion.pos.f[1])) *
-                                d->f3E4;
+                                d->recoil_horizontal_step;
             recoil_scratch[2] = 0.0f;
             fast_vec_add(recoil_scratch, recoil_scratch, pos);
-            d->f3E4 += -2.0f / (scale_time(15.0f) * scale_time(15.0f));
+            d->recoil_horizontal_step += -2.0f / (scale_time(15.0f) * scale_time(15.0f));
             move_moby_xy_with_collision_constraints(
                 m, pos, recoil_scratch, 1, 0.25f, 1.0f, 0.75f, 0.87266463f);
         }
-        d->f3C8 *= 0.96f;
-        build_axis_rotation_quaternion(recoil_scratch, 1, d->f3C8);
-        build_axis_rotation_quaternion(d->f130, 2, 0.0f);
-        multiply_quaternions(d->f130, d->f130, recoil_scratch);
+        d->recoil_tilt_angle *= 0.96f;
+        build_axis_rotation_quaternion(recoil_scratch, 1, d->recoil_tilt_angle);
+        build_axis_rotation_quaternion(d->recoil_rotation, 2, 0.0f);
+        multiply_quaternions(d->recoil_rotation, d->recoil_rotation, recoil_scratch);
         if (m->state != WOODCUT_BOT_HIT_RECOVERY_AND_REPOSITION)
-            d->f3C1 = m->state;
+            d->saved_non_recovery_state = m->state;
         if (m->state != WOODCUT_BOT_MOVE_TOWARD_TARGET && m->fBC != 6) {
             float g;
 
-            d->f3E0 += frame_time_sq * 9.8f;
-            m->pos[2] -= d->f3E0 - 2.0f;
+            d->vertical_fall_step += frame_time_sq * 9.8f;
+            m->pos[2] -= d->vertical_fall_step - 2.0f;
             g = probe_ground_height(pos, 0, 0.5f);
             m->pos[2] -= 2.0f;
             if (m->pos[2] < g) {
                 m->pos[2] = g;
-                d->f3E0 = 0.0f;
+                d->vertical_fall_step = 0.0f;
             }
             if (m->pos[2] < 2.0f) {
                 FUN_L00_00257470(m, 0, -1);

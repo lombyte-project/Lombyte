@@ -53,7 +53,7 @@ typedef struct Moby_2B5368 {
     char          pad30[0x10];
     V4_2B5368     rot;
     char          pad50[3];
-    unsigned char b53;
+    unsigned char animation_sequence_index;
     char          pad54[0x24];
     void         *data;
     char          pad7C[0x2A];
@@ -131,7 +131,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         turret_moby->scale = turret_moby->cls->scale * 1.5f;
         data->gun = FUN_L13_002b4958_2b0e80(turret_moby);
         data->f54 = turret_moby->rot.z;
-        if (turret_moby->b53 != 0) {
+        if (turret_moby->animation_sequence_index != 0) {
             blend_moby_animation(turret_moby, 0, 0, 10);
         }
         turret_moby->state = BLARG_TURRET_STATE_WAIT_FOR_TARGET;
@@ -146,7 +146,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             (data->volume == -1 ||
              is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) != 0)) {
             data->f68 = 8.0f;
-            if (turret_moby->b53 != 1) {
+            if (turret_moby->animation_sequence_index != 1) {
                 int animation_start_frame = random_int_between(0, 3);
                 blend_moby_animation(
                     turret_moby, 1, animation_start_frame, random_int_between(7, 13));
@@ -162,7 +162,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         if (data->gun == 0 || data->gun->cls_id != 0x24 ||
             (unsigned char)data->gun->state == 0xFE || (unsigned char)data->gun->state == 0xFD ||
             (unsigned char)data->gun->state == 2) {
-            if (turret_moby->b53 != 0) {
+            if (turret_moby->animation_sequence_index != 0) {
                 blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
             }
             data->f64 = 1.0f;
@@ -178,7 +178,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             vector_distance_xy(&turret_moby->pos, &target_moby->pos) > 22.0f ||
             (data->volume != -1 &&
              is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) == 0)) {
-            if (turret_moby->b53 != 0) {
+            if (turret_moby->animation_sequence_index != 0) {
                 blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
             }
             turret_moby->state = BLARG_TURRET_STATE_WAIT_FOR_TARGET;
@@ -206,7 +206,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             if (data->gun == 0 || data->gun->cls_id != 0x24 ||
                 (unsigned char)data->gun->state == 0xFE ||
                 (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
-                if (turret_moby->b53 != 0) {
+                if (turret_moby->animation_sequence_index != 0) {
                     blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
                 }
                 data->f64 = 1.0f;
@@ -267,7 +267,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
 extern float blarg_turret_launch_displacement_scale_gp __asm__("D_L13_00161388")
     __attribute__((sda));
 
-int D_L13_0016138C = 2;
+int l13_blarg_turret_fire_interval_frames __asm__("D_L13_0016138C") = 2;
 
 void fire_blarg_turret_projectile(struct Moby *moby) __asm__("FUN_L13_002b47a0");
 
@@ -277,7 +277,7 @@ void fire_blarg_turret_projectile(struct Moby *moby) {
     char *blarg_turret_vars;
     float target_distance, x, projectile_yaw;
     blarg_turret_vars = (char *)moby->pvars;
-    if (frame_count % D_L13_0016138C == 0) {
+    if (frame_count % l13_blarg_turret_fire_interval_frames == 0) {
         moby_point_position(moby, 0, projectile_spawn_position);
         target_distance =
             vector_distance_xy(&moby->pos, *(char **)(blarg_turret_vars + 0x40) + 0x10);

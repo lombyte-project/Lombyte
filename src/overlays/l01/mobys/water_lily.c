@@ -18,13 +18,21 @@ void move_moby_xy_with_collision_constraints(
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
-f32 FUN_L01_002f81c8(f32 *spring_axis_position,
-                     f32 *spring_axis_velocity,
-                     f32  target,
-                     f32  velocity_adjustment_scale,
-                     f32  damp,
+f32 advance_spring_axis_toward_target(f32 *spring_axis_position,
+                                      f32 *spring_axis_velocity,
+                                      f32  target,
+                                      f32  velocity_adjustment_scale,
+                                      f32  damp,
 
-                     f32 range) {
+                                      f32 range) __asm__("FUN_L01_002f81c8");
+
+f32 advance_spring_axis_toward_target(f32 *spring_axis_position,
+                                      f32 *spring_axis_velocity,
+                                      f32  target,
+                                      f32  velocity_adjustment_scale,
+                                      f32  damp,
+
+                                      f32 range) {
     f32 velocity_adjustment;
     f32 f;
 

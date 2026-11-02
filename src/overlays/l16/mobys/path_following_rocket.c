@@ -39,7 +39,7 @@ typedef struct PathFollowingRocketVars {
     f32 unkC;
     f32 unk10;
     s16 voice;
-    s16 unk16;
+    s16 proximity_voice_requested;
 } PathFollowingRocketVars;
 
 /* Moby class 257 */
@@ -70,7 +70,7 @@ void path_following_rocket_update(struct Moby *moby) {
             break;
         if (is_point_inside_clip_volume(&player->motion.body_center, *(int *)rocket_path_data)) {
             moby->state = ROCKET_STATE_FOLLOW_PATH;
-            rocket_path_data->unk16 = 0;
+            rocket_path_data->proximity_voice_requested = 0;
         }
         break;
     }
@@ -88,9 +88,9 @@ void path_following_rocket_update(struct Moby *moby) {
         if (!voice_is_playing(moby, rocket_path_data->voice)) {
             rocket_path_data->voice = allocate_voice_for_target_entry(0, 4, moby);
         }
-        if (rocket_path_data->unk16 == 0 &&
+        if (rocket_path_data->proximity_voice_requested == 0 &&
             vector_distance_xy(&moby->pos, (char *)(&hero.motion.pos)) < 7.0f) {
-            rocket_path_data->unk16 = 1;
+            rocket_path_data->proximity_voice_requested = 1;
             allocate_voice_for_target_entry_u(1, 0, moby);
         }
         break;
@@ -112,7 +112,7 @@ void path_following_rocket_update(struct Moby *moby) {
                 moby->visible = 1;
                 moby->flags &= ~1;
                 moby->collision = moby->pclass->collision;
-                rocket_path_data->unk16 = 0;
+                rocket_path_data->proximity_voice_requested = 0;
                 moby->state = ROCKET_STATE_WAIT_FOR_TRIGGER;
             }
         }

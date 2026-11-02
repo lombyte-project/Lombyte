@@ -44,7 +44,7 @@ typedef struct {
     unsigned int color[4];
     int          unk50, unk54, unk58;
     float        unk5C, unk60;
-    int          unk64;
+    int          corner_2_texture_v;
     float        unk68, unk6C;
     long         unk70, tex, unk80, unk88;
 } Q_2bc1a0;
@@ -104,7 +104,7 @@ extern unsigned int l00_walloper_quad_rare_base_vertex_color __asm__("D_L00_0016
     __attribute__((sda));
 extern V_2bc1a0 D_L00_001DBB60[] NOT_SDA;
 
-SparkleArc D_L00_001DBBA0[10] = {0};
+SparkleArc l00_walloper_arcs[10] __asm__("D_L00_001DBBA0") = {0};
 
 SparkleArc D_L01_001DC020[10] = {0};
 
@@ -142,7 +142,7 @@ SparkleArc D_L17_001D0D20[10] = {0};
 
 SparkleArc D_L18_001D0A20[10] = {0};
 
-short D_L00_001DBED8[10] = {0};
+short l00_walloper_arc_base_alphas[10] __asm__("D_L00_001DBED8") = {0};
 
 short D_L01_001DC358[10] = {0};
 
@@ -180,7 +180,7 @@ short D_L17_001D1058[10] = {0};
 
 short D_L18_001D0D58[10] = {0};
 
-short D_L00_001DBEC0[10] = {0};
+short l00_walloper_arc_update_countdowns[10] __asm__("D_L00_001DBEC0") = {0};
 
 short D_L01_001DC340[10] = {0};
 
@@ -750,7 +750,7 @@ void walloper_update(char *walloper_moby) {
     case WALLOPER_STATE_INITIALIZE:
         MOBY(walloper_moby)->state = WALLOPER_STATE_ANIMATION_DRIVEN_EFFECTS;
         for (arc_init_index = 0; arc_init_index < 10; arc_init_index++) {
-            D_L00_001DBEC0[arc_init_index] = 0;
+            l00_walloper_arc_update_countdowns[arc_init_index] = 0;
             D_L00_001DBEF0[arc_init_index] = 2;
             D_L00_001DBF08[arc_init_index] = 1;
         }
@@ -792,7 +792,7 @@ void walloper_update(char *walloper_moby) {
     fast_vec_add(arc_origin, arc_origin, &MOBY(walloper_moby)->pos);
     any = 0;
     for (j = 0; j < 10; j++) {
-        if (D_L00_001DBEC0[j] != 0) {
+        if (l00_walloper_arc_update_countdowns[j] != 0) {
             any = 1;
             break;
         }
@@ -800,19 +800,19 @@ void walloper_update(char *walloper_moby) {
     if (!flag && !any)
         return;
     for (i = 0; i < 10; i = next_arc_index) {
-        D_L00_001DBEC0[i]--;
-        if (D_L00_001DBEC0[i] < 0)
-            D_L00_001DBEC0[i] = 0;
-        if (D_L00_001DBEC0[i] == 0) {
+        l00_walloper_arc_update_countdowns[i]--;
+        if (l00_walloper_arc_update_countdowns[i] < 0)
+            l00_walloper_arc_update_countdowns[i] = 0;
+        if (l00_walloper_arc_update_countdowns[i] == 0) {
             if (flag) {
                 float sign;
                 int   k;
-                D_L00_001DBEC0[i] = 2;
-                D_L00_001DBED8[i] = 0x40;
+                l00_walloper_arc_update_countdowns[i] = 2;
+                l00_walloper_arc_base_alphas[i] = 0x40;
                 random_spherical_offset(arc_step,
                                         l00_walloper_arc_step_sample_bound,
                                         l00_walloper_arc_step_sample_bound);
-                qcopy(D_L00_001DBBA0[i].point[0], arc_origin);
+                qcopy(l00_walloper_arcs[i].point[0], arc_origin);
                 next_arc_index = i + 1;
                 sign = 1.0f;
                 for (k = 1; k < 5; k++) {
@@ -823,7 +823,7 @@ void walloper_update(char *walloper_moby) {
                     bend_angle = random_float_between(0.17453292f, 0.7853982f) * sign;
                     sign = -sign;
                     build_look_at_matrix(arc_step, arc_step, arc_point_camera_offset, bend_angle);
-                    fast_vec_add(D_L00_001DBBA0[i].point[k],
+                    fast_vec_add(l00_walloper_arcs[i].point[k],
                                  l00_walloper_arc_predecessor_rows[i].point[k - 1],
                                  arc_step);
                 }
@@ -836,23 +836,23 @@ void walloper_update(char *walloper_moby) {
             for (k = 1; k < 5; k++) {
                 float *point_offset = workspace[k];
                 fast_vec_sub(point_offset,
-                             D_L00_001DBBA0[i].point[k],
+                             l00_walloper_arcs[i].point[k],
                              l00_walloper_arc_predecessor_rows[i].point[k - 1]);
                 point_offset[0] += randf_sym(0.0f, 0.1f);
                 point_offset[1] += randf_sym(0.0f, 0.1f);
                 point_offset[2] += randf_sym(0.0f, 0.1f);
             }
             next_arc_index = i + 1;
-            qcopy(D_L00_001DBBA0[i].point[0], arc_origin);
+            qcopy(l00_walloper_arcs[i].point[0], arc_origin);
             for (k = 1; k < 5; k++) {
-                fast_vec_add(D_L00_001DBBA0[i].point[k],
+                fast_vec_add(l00_walloper_arcs[i].point[k],
                              l00_walloper_arc_predecessor_rows[i].point[k - 1],
                              workspace[k]);
             }
-            if (D_L00_001DBEC0[i] > 0)
-                D_L00_001DBED8[i] = 0x20;
+            if (l00_walloper_arc_update_countdowns[i] > 0)
+                l00_walloper_arc_base_alphas[i] = 0x20;
             else
-                D_L00_001DBED8[i] = 0;
+                l00_walloper_arc_base_alphas[i] = 0;
         }
     }
     add_draw_callback(FUN_L00_002bbb00_c, walloper_moby);
@@ -864,10 +864,10 @@ void draw_walloper_arc_and_quad_effects(void *moby) {
     s32 i;
     s32 arc_alpha;
     for (i = 0; i < 10; i++) {
-        if (D_L00_001DBEC0[i] != 0) {
-            arc_alpha = truncate_float_to_s32(convert_integer_to_float(D_L00_001DBED8[i]) *
-                                              D_L00_00161660_f[29]);
-            draw_walloper_arc_two_pass_quads(&D_L00_001DBBA0[i],
+        if (l00_walloper_arc_update_countdowns[i] != 0) {
+            arc_alpha = truncate_float_to_s32(
+                convert_integer_to_float(l00_walloper_arc_base_alphas[i]) * D_L00_00161660_f[29]);
+            draw_walloper_arc_two_pass_quads(&l00_walloper_arcs[i],
                                              arc_alpha,
                                              arc_alpha,
                                              5,
@@ -1055,7 +1055,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     quad.unk58 = 0;
     quad.unk5C = 1.0f;
     quad.unk60 = 1.0f;
-    quad.unk64 = 0;
+    quad.corner_2_texture_v = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     if (!random_integer_below(4))

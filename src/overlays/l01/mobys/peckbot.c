@@ -158,7 +158,7 @@ typedef struct {
 typedef struct {
     Vec577 pos;
     u8     pad10[0x30];
-    void  *p40;
+    void  *combat_target_moby;
     u8     pad44[0xC];
 } Mob577Target;
 
@@ -178,7 +178,7 @@ extern s32  FUN_L00_001f35d8_cf(void) __asm__("FUN_001f0b58");
 extern void FUN_L00_001ff500_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00257470(void *, s32, s32);
 extern void FUN_L00_00258278(void *, void *, f32, f32, f32, f32);
-extern s32  FUN_L00_00258b50(void *, void *, void *, void *, f32);
+extern s32  move_moby_with_ground_and_collision_checks(void *, void *, void *, void *, f32) __asm__("FUN_L00_00258b50");
 extern void FUN_L00_0025a120(void *);
 extern void
 hit_reaction(void *, void *, void *, s32, void *, void *, s32, s32) __asm__("FUN_L00_0025a478");
@@ -265,7 +265,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
     peckbot_moby->id = peckbot_moby->ref->id;
     peckbot_moby->flags &= ~0x41;
     select_moby_combat_target(peckbot_moby, &target, peckbot_vars->range + 4.0f);
-    target_moby = target.p40;
+    target_moby = target.combat_target_moby;
     qcopy(&oldpos, &peckbot_moby->pos);
     if (peckbot_vars->x38 != 0) {
         peckbot_vars->x214 = scale_game_frames(0xF0);
@@ -566,7 +566,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         vector_scratch.f[0] = fast_cos(peckbot_moby->rot.f[2]) * 2.0f;
         vector_scratch.f[1] = fast_sin(peckbot_moby->rot.f[2]) * 2.0f;
         vector_scratch.f[2] = 0.0f;
-        movement_result_flags = FUN_L00_00258b50(
+        movement_result_flags = move_moby_with_ground_and_collision_checks(
             peckbot_moby, &peckbot_vars->x180, &vector_scratch, &position_scratch, 1.0f);
         if (fast_dec_timer(&peckbot_vars->turn_timer) != 0) {
             peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
@@ -646,7 +646,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         vector_scratch.f[0] = fast_cos(peckbot_moby->rot.f[2]) * 2.0f;
         vector_scratch.f[1] = fast_sin(peckbot_moby->rot.f[2]) * 2.0f;
         vector_scratch.f[2] = 0.0f;
-        movement_result_flags = FUN_L00_00258b50(
+        movement_result_flags = move_moby_with_ground_and_collision_checks(
             peckbot_moby, &peckbot_vars->x180, &vector_scratch, &position_scratch, 1.0f);
         if (vector_distance_xy(&peckbot_moby->pos, &peckbot_vars->home) < 2.0f) {
             peckbot_moby->state = PECKBOT_STATE_GROUNDED_IDLE;
@@ -788,7 +788,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         vector_scratch.f[0] = fast_cos(peckbot_moby->rot.f[2]) * 2.0f;
         vector_scratch.f[1] = fast_sin(peckbot_moby->rot.f[2]) * 2.0f;
         vector_scratch.f[2] = 0.0f;
-        recovery_movement_result_flags = FUN_L00_00258b50(
+        recovery_movement_result_flags = move_moby_with_ground_and_collision_checks(
             peckbot_moby, &peckbot_vars->x180, &vector_scratch, &position_scratch, 1.0f);
         fast_vec_sub(&home_to_target, &target.pos, &peckbot_vars->home);
         if (vector_distance_xy(&peckbot_moby->pos, &target.pos) < 1.5f &&

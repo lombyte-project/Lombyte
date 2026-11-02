@@ -109,20 +109,20 @@ typedef float Vec_304920[4] __attribute__((aligned(16)));
 
 typedef struct {
     char          pad0;
-    unsigned char b1;
+    unsigned char manipulator_attached;
     char          pad2[0xE];
     char          f10[0x60];
     short         f70;
     short         f72;
     float         f74;
-    float         f78;
-    float         f7C;
-    int           f80;
+    float         pitch_step;
+    float         yaw_step;
+    int           muzzle_alternation_state;
     int           f84;
     int           f88;
     float         f8C;
-    int           f90;
-    int           f94;
+    int           damage_cooldown_frames;
+    int           completion_trigger_moby_index;
     int           f98;
     int           f9C;
     float         fA0;
@@ -139,7 +139,7 @@ typedef struct {
 
 typedef struct {
     char  pad0[0x2C];
-    float f2C;
+    float damage_amount;
 } Hit_304920;
 
 extern char *FUN_L00_0025a420(void *, int, int);
@@ -182,7 +182,7 @@ extern void  spawn_explosion(void *,
                              int,
                              int,
                              int) __asm__("FUN_L00_0025e450");
-extern void  FUN_L00_00262cf0(void *, void *, float, float, float);
+extern void  fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern void  start_scene(int) __asm__("FUN_L00_00298840");
 extern void  queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void  spawn_turret_rocket(void *, void *, void *, int) __asm__("FUN_L08_002e7eb0");
@@ -230,8 +230,8 @@ void hoven_turret_update(struct Moby *moby) {
             moby->rot.y = 0.0f;
             hoven_turret_state->f70 = scale_game_frames(0x1E);
             hoven_turret_state->f72 = 0;
-            hoven_turret_state->f78 = 0.0f;
-            hoven_turret_state->f7C = 0.0f;
+            hoven_turret_state->pitch_step = 0.0f;
+            hoven_turret_state->yaw_step = 0.0f;
             hoven_turret_state->fA0 = moby->pos.z;
             hoven_turret_state->f98 = -1;
             moby->rot.z = 3.1415927f;
@@ -298,11 +298,11 @@ void hoven_turret_update(struct Moby *moby) {
             add_draw_callback(draw_hoven_turret_hud, moby);
         }
         update_hoven_turret_target_alignment_timer(moby);
-        if (fast_dec_timer(&hoven_turret_state->f90)) {
+        if (fast_dec_timer(&hoven_turret_state->damage_cooldown_frames)) {
             Hit_304920 *hit = (Hit_304920 *)FUN_L00_0025a420(moby, 0x10000, 0);
             if (hit != 0) {
-                hoven_turret_state->f90 = scale_game_frames(4);
-                hoven_turret_state->f8C = hoven_turret_state->f8C - hit->f2C;
+                hoven_turret_state->damage_cooldown_frames = scale_game_frames(4);
+                hoven_turret_state->f8C = hoven_turret_state->f8C - hit->damage_amount;
             }
             moby->hit_slot = 0xFF;
         }
@@ -321,12 +321,12 @@ void hoven_turret_update(struct Moby *moby) {
                 break;
             }
         }
-        if (hoven_turret_state->f94 != -1 &&
-            (signed char)((struct Moby *)((hoven_turret_state->f94 << 8) +
+        if (hoven_turret_state->completion_trigger_moby_index != -1 &&
+            (signed char)((struct Moby *)((hoven_turret_state->completion_trigger_moby_index << 8) +
                                           (*(int *)&D_L12_0015FFD8_gp)))
                     ->state < 0) {
             if (D_L12_0015F5C4_macro == 2) {
-                if (hoven_turret_state->b1 != 0) {
+                if (hoven_turret_state->manipulator_attached != 0) {
                     detach_manipulator(moby, hoven_turret_state);
                 }
                 if (moby->prev_seq != 0) {
@@ -372,34 +372,38 @@ void hoven_turret_update(struct Moby *moby) {
             }
             joy[1] = y;
             target_yaw_step = hoven_turret_yaw_input_rate * 0.017453292f * D_0015ED6C_gp * -joy[0];
-            if ((hoven_turret_state->f7C >= 0.0f && hoven_turret_state->f7C < target_yaw_step) ||
-                (hoven_turret_state->f7C <= 0.0f && target_yaw_step < hoven_turret_state->f7C)) {
-                approach_value(&hoven_turret_state->f7C,
+            if ((hoven_turret_state->yaw_step >= 0.0f &&
+                 hoven_turret_state->yaw_step < target_yaw_step) ||
+                (hoven_turret_state->yaw_step <= 0.0f &&
+                 target_yaw_step < hoven_turret_state->yaw_step)) {
+                approach_value(&hoven_turret_state->yaw_step,
                                target_yaw_step,
                                hoven_turret_yaw_acceleration_rate * 0.017453292f *
                                    frame_time_sq_macro);
             } else {
-                approach_value(&hoven_turret_state->f7C,
+                approach_value(&hoven_turret_state->yaw_step,
                                target_yaw_step,
                                hoven_turret_yaw_braking_rate * 0.017453292f * frame_time_sq_macro);
             }
-            moby->rot.z = fast_add_rotations(moby->rot.z, hoven_turret_state->f7C);
+            moby->rot.z = fast_add_rotations(moby->rot.z, hoven_turret_state->yaw_step);
             target_pitch_step =
                 -(hoven_turret_pitch_input_rate * 0.017453292f * D_0015ED6C_gp) * -joy[1];
-            if ((hoven_turret_state->f78 >= 0.0f && hoven_turret_state->f78 < target_pitch_step) ||
-                (hoven_turret_state->f78 <= 0.0f && target_pitch_step < hoven_turret_state->f78)) {
-                approach_value(&hoven_turret_state->f78,
+            if ((hoven_turret_state->pitch_step >= 0.0f &&
+                 hoven_turret_state->pitch_step < target_pitch_step) ||
+                (hoven_turret_state->pitch_step <= 0.0f &&
+                 target_pitch_step < hoven_turret_state->pitch_step)) {
+                approach_value(&hoven_turret_state->pitch_step,
                                target_pitch_step,
                                hoven_turret_pitch_acceleration_rate * 0.017453292f *
                                    frame_time_sq_macro);
             } else {
-                approach_value(&hoven_turret_state->f78,
+                approach_value(&hoven_turret_state->pitch_step,
                                target_pitch_step,
                                hoven_turret_pitch_braking_rate * 0.017453292f *
                                    frame_time_sq_macro);
             }
             hoven_turret_state->f74 =
-                fast_add_rotations(hoven_turret_state->f74, hoven_turret_state->f78);
+                fast_add_rotations(hoven_turret_state->f74, hoven_turret_state->pitch_step);
             if (hoven_turret_state->f74 > hoven_turret_pitch_max) {
                 hoven_turret_state->f74 = hoven_turret_pitch_max;
             }
@@ -417,18 +421,19 @@ void hoven_turret_update(struct Moby *moby) {
                 float      yaw;
                 int        i;
 
-                blend_moby_animation(moby, hoven_turret_state->f80 == 1 ? 4 : 3, 0, 1);
+                blend_moby_animation(
+                    moby, hoven_turret_state->muzzle_alternation_state == 1 ? 4 : 3, 0, 1);
                 yaw = fast_add_rotations(moby->rot.z, 1.5707964f);
                 build_spherical_offset(firing_offset,
                                        hoven_turret_firing_offset_rate * D_0015ED6C_gp,
                                        yaw,
                                        hoven_turret_state->f74);
-                if (hoven_turret_state->f80 == 1) {
-                    hoven_turret_state->f80 = 0;
+                if (hoven_turret_state->muzzle_alternation_state == 1) {
+                    hoven_turret_state->muzzle_alternation_state = 0;
                     moby_point_position(moby, 2, muz);
                 } else {
                     moby_point_position(moby, 1, muz);
-                    hoven_turret_state->f80 = 1;
+                    hoven_turret_state->muzzle_alternation_state = 1;
                 }
                 fast_vec_add(muz, muz, firing_offset);
                 fast_vec_add(muz, muz, firing_offset);
@@ -494,11 +499,11 @@ void hoven_turret_update(struct Moby *moby) {
             randomized_view_pitch =
                 fast_add_rotations(l12_camera.pitch, randf_sym(0.0f, 0.5235988f));
             qcopy(explosion_position, &l12_camera.pos);
-            FUN_L00_00262cf0(explosion_position,
-                             explosion_position,
-                             randomized_view_offset_distance,
-                             randomized_view_yaw,
-                             randomized_view_pitch);
+            fast_add_rotations_cf(explosion_position,
+                                  explosion_position,
+                                  randomized_view_offset_distance,
+                                  randomized_view_yaw,
+                                  randomized_view_pitch);
             t = random_float_between(0.5f, 1.3f);
             spawn_explosion(moby,
                             D_L12_0015F580_macro,

@@ -168,7 +168,7 @@ typedef struct RefuelingStationVars {
     u8  pad_21[0x4F];
     s32 unk70;
     s16 timer_74;
-    s16 unk76;
+    s16 removal_check_index;
     s32 unk78;
     s32 voice;
 } RefuelingStationVars;
@@ -181,8 +181,9 @@ void refueling_station_update(struct Moby *moby) {
     handle_refueling_station_damage(moby, station_vars, &station_vars->unk20);
     switch (moby->state) {
     case REFUELING_STATION_STATE_INITIALIZE:
-        if (station_vars->unk76 != -1 &&
-            (removal_check_base = (unsigned char *)D_0013D388 + station_vars->unk76)[0x39] != 0) {
+        if (station_vars->removal_check_index != -1 &&
+            (removal_check_base =
+                 (unsigned char *)D_0013D388 + station_vars->removal_check_index)[0x39] != 0) {
             mark_moby_for_removal(moby);
             return;
         }

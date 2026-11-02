@@ -65,9 +65,9 @@ typedef struct {
     unsigned char  unkA3; /* 0xA3 */
     unsigned char  unkA4; /* 0xA4 */
     char           padA5;
-    short          unkA6; /* 0xA6 */
-    int            unkA8; /* 0xA8 */
-    int            unkAC; /* 0xAC */
+    short          original_class_id; /* 0xA6 */
+    int            unkA8;             /* 0xA8 */
+    int            unkAC;             /* 0xAC */
     char           padB0[0xD];
     unsigned char  unkBD; /* 0xBD */
     char           padBE[0x42];
@@ -102,7 +102,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
     moby_instance->unk21 = 0xFF;
     moby_instance->unk71 = 0xFF;
     moby_instance->unk72 = 0xFF;
-    moby_instance->unkA6 = oClass;
+    moby_instance->original_class_id = oClass;
     moby_instance->unk38 = 0x40404000000000L;
     moby_instance->unk36 = 0x7F80;
     resident_pool_slot_index = ((char *)moby_instance - (char *)resident_object_pool) >> 8;

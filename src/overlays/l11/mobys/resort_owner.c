@@ -73,7 +73,7 @@ typedef struct ResortOwnerVars {
     s16   unk56;
     u8    pad_58[0x28];
     void *unk80;
-    void *unk84;
+    void *supplemental_clearance_path;
     void *unk88;
     u8    pad_8C[0x64];
     s32   unkF0;
@@ -86,8 +86,8 @@ typedef struct ResortOwnerVars {
     f32   unk130[4];
     f32   unk140[4];
     f32   unk150;
-    f32   unk154;
-    u32   unk158;
+    f32   horizontal_step_distance;
+    u32   current_path_leg;
     s32   unk15C;
 } ResortOwnerVars;
 
@@ -147,8 +147,8 @@ extern void  transform_attachment_pose(void *, void *, void *, void *, void *, v
 extern void  FUN_00212f90(void *, int, int, int);
 extern float D_0015ED70;
 extern float D_0015ED6C;
-float        D_L11_001613E0 = 3.2f;
-int          D_L11_001613F0 = 0;
+float        l11_resort_owner_gate_attachment_local_x_offset __asm__("D_L11_001613E0") = 3.2f;
+int          l11_resort_owner_gate_attachment_rotation __asm__("D_L11_001613F0") = 0;
 extern int   resort_owner_completion_rotation_trigger_state[] __asm__("D_L11_0016D260");
 extern int   D_L11_0015FFD8;
 
@@ -185,11 +185,11 @@ void update_resort_owner_state_actions(void *mp) {
                        D_0015ED70 * 12.566371f,
                        D_0015ED70 * 25.132742f,
                        D_0015ED6C * 12.566371f);
-        pvars->unk130[0] = fast_cos(*(float *)(yaw_ptr)) * pvars->unk154;
+        pvars->unk130[0] = fast_cos(*(float *)(yaw_ptr)) * pvars->horizontal_step_distance;
         motion_scalar = fast_sin(*(float *)(yaw_ptr));
         vertical_motion = pvars->unk140[2];
         vertical_motion_decrement = D_0015ED70 * 20.0f;
-        horizontal_speed = pvars->unk154;
+        horizontal_speed = pvars->horizontal_step_distance;
         pvars->unk130[1] = motion_scalar * horizontal_speed;
         vertical_motion = vertical_motion - vertical_motion_decrement;
         pvars->unk130[2] = vertical_motion;
@@ -199,7 +199,7 @@ void update_resort_owner_state_actions(void *mp) {
              * deletes, but it keeps f3 live into this branch, so the
              * first scheduling pass hoists the 0x154 load and the
              * allocator gives it $f4 as in retail. */
-            pvars->unk154 = horizontal_speed;
+            pvars->horizontal_step_distance = horizontal_speed;
         }
         break;
     }
@@ -223,15 +223,15 @@ void update_resort_owner_state_actions(void *mp) {
         break;
     case RESORT_OWNER_WAIT_AT_GATE: {
         int         *gate_moby_index_ptr = &pvars->unkF0;
-        unsigned int gate_slot_index = 0U < pvars->unk158;
+        unsigned int gate_slot_index = 0U < pvars->current_path_leg;
         char        *gate_moby;
         gate_moby_index_ptr += gate_slot_index;
         gate_moby = (char *)D_L11_0015FFD8;
         gate_moby += *gate_moby_index_ptr << 8;
         transform_attachment_pose(moby,
                                   gate_moby,
-                                  &D_L11_001613E0,
-                                  &D_L11_001613F0,
+                                  &l11_resort_owner_gate_attachment_local_x_offset,
+                                  &l11_resort_owner_gate_attachment_rotation,
                                   (char *)moby + 0x10,
                                   (char *)moby + 0x40);
         if (try_activate_pokitaru_gate((struct Moby *)gate_moby) == 0)
@@ -272,15 +272,15 @@ void apply_resort_owner_movement(void *mp) {
         (MOBY(moby)->state == RESORT_OWNER_JUMP_TO_TARGET && moby_vars->unk15C == 3)) {
         resolve_point_path_segment_xy_clearance(
             0.3f,
-            *(void **)((u8 *)moby_vars + 0x60 - -(*(int *)&moby_vars->unk158 * 4)),
+            *(void **)((u8 *)moby_vars + 0x60 - -(*(int *)&moby_vars->current_path_leg * 4)),
             moby + 0x10,
             moby + 0x10);
-        switch (*(int *)&moby_vars->unk158) {
+        switch (*(int *)&moby_vars->current_path_leg) {
         case RESORT_OWNER_PENULTIMATE_PATH_LEG:
             resolve_point_path_segment_xy_clearance(
                 0.3f, moby_vars->unk80, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
-                0.3f, moby_vars->unk84, moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->supplemental_clearance_path, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
                 0.3f, moby_vars->unk88, moby + 0x10, moby + 0x10);
             break;
@@ -288,7 +288,7 @@ void apply_resort_owner_movement(void *mp) {
             resolve_point_path_segment_xy_clearance(
                 0.3f, moby_vars->unk80, moby + 0x10, moby + 0x10);
             resolve_point_path_segment_xy_clearance(
-                0.3f, moby_vars->unk84, moby + 0x10, moby + 0x10);
+                0.3f, moby_vars->supplemental_clearance_path, moby + 0x10, moby + 0x10);
             break;
         }
     }
@@ -349,9 +349,9 @@ struct PokKeeperVars {
     s32   unk104;
     s32   unk108;
     s32   unk10C;
-    s32   unk110;
-    s32   unk114;
-    s32   unk118;
+    s32   second_gate_arrival_cuboid_index;
+    s32   final_path_arrival_cuboid_index;
+    s32   post_path_dialogue_condition_index;
     u8    pad11C[4];
     Vec4f target; /* 0x120 */
     Vec4f unk130;
@@ -423,12 +423,12 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             qcopy_nc(&moby->pos, &l11_cuboids[moby_vars->points[1]].pos);
             qcopy_nc(&moby->rot, &l11_cuboids[moby_vars->points[1]].rot);
             FUN_L11_002d2088_c(moby, 6);
-            l11_cuboids[moby_vars->unk114].pos.z -= 500.0f;
+            l11_cuboids[moby_vars->final_path_arrival_cuboid_index].pos.z -= 500.0f;
             FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8)));
             break;
         }
-        l11_cuboids[moby_vars->unk110].pos.z -= 500.0f;
-        l11_cuboids[moby_vars->unk114].pos.z -= 500.0f;
+        l11_cuboids[moby_vars->second_gate_arrival_cuboid_index].pos.z -= 500.0f;
+        l11_cuboids[moby_vars->final_path_arrival_cuboid_index].pos.z -= 500.0f;
         moby_vars->leg = 0;
         moby_vars->talk_range = 5.0f;
         FUN_L11_002d2088_c(moby, 1);
@@ -505,7 +505,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                                    &o->rot_row2,
                                    resort_owner_gate_jump_target_local_z_offset_gp);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                l11_cuboids[moby_vars->unk110].pos.z += 500.0f;
+                l11_cuboids[moby_vars->second_gate_arrival_cuboid_index].pos.z += 500.0f;
                 moby_vars->next_state = RESORT_OWNER_MOVE_TO_GATE_TARGET;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
@@ -514,7 +514,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                 FUN_L11_002d2088_c(moby, 0xB);
                 break;
             case RESORT_OWNER_FINAL_PATH_LEG:
-                l11_cuboids[moby_vars->unk114].pos.z += 500.0f;
+                l11_cuboids[moby_vars->final_path_arrival_cuboid_index].pos.z += 500.0f;
                 FUN_L11_002d2088_c(moby, 0xC);
                 break;
             }
@@ -575,7 +575,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         }
         break;
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
-        if (D_0014C050[moby_vars->unk118 + D_0015ED84 * 16] == 0xFF &&
+        if (D_0014C050[moby_vars->post_path_dialogue_condition_index + D_0015ED84 * 16] == 0xFF &&
             camera_secondary_mode[0] != 0x32 && update_npc_dialogue(moby, moby_vars->talk)) {
             begin_dialogue_camera_transition(moby, 2.5f);
             FUN_L11_002d2088_c(moby, 0xF);
@@ -595,7 +595,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
 extern float resort_owner_follow_hero_speed_gp __asm__("D_L11_001613D0") __attribute__((sda));
 extern float resort_owner_distant_follow_and_path_speed_gp __asm__("D_L11_001613D4")
     __attribute__((sda));
-float D_L11_00161400 = -3.0f;
+float l11_resort_owner_gate_departure_target_local_x_offset __asm__("D_L11_00161400") = -3.0f;
 
 void set_resort_owner_state(struct Moby *moby, unsigned char state) __asm__("FUN_L11_002d2088");
 
@@ -621,13 +621,14 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
     case RESORT_OWNER_FOLLOW_HERO:
         if (moby->prev_seq != 2)
             FUN_00212f90(moby, 2, 0, scale_game_frames(0x14));
-        moby_vars->unk154 = resort_owner_follow_hero_speed_gp * frame_time;
+        moby_vars->horizontal_step_distance = resort_owner_follow_hero_speed_gp * frame_time;
         break;
     case RESORT_OWNER_FOLLOW_DISTANT_HERO:
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
-        moby_vars->unk154 = resort_owner_distant_follow_and_path_speed_gp * frame_time;
+        moby_vars->horizontal_step_distance =
+            resort_owner_distant_follow_and_path_speed_gp * frame_time;
         break;
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->prev_seq != 4)
@@ -639,7 +640,7 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
             int         *tbl = &moby_vars->unkF0;
-            unsigned int idx = 0U < moby_vars->unk158;
+            unsigned int idx = 0U < moby_vars->current_path_leg;
             int          p;
             char        *o;
             tbl += idx;
@@ -647,7 +648,8 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
             qcopy(moby_vars->unk120, o + 0x10);
-            transform_vector_by_basis(gate_target_offset, &D_L11_001613E0, o + 0xC0);
+            transform_vector_by_basis(
+                gate_target_offset, &l11_resort_owner_gate_attachment_local_x_offset, o + 0xC0);
             fast_vec_add(moby_vars->unk120, moby_vars->unk120, gate_target_offset);
         }
         break;
@@ -662,7 +664,7 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
             int         *tbl = &moby_vars->unkF0;
-            unsigned int idx = 0U < moby_vars->unk158;
+            unsigned int idx = 0U < moby_vars->current_path_leg;
             int          p;
             char        *o;
             tbl += idx;
@@ -670,7 +672,9 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
             qcopy(moby_vars->unk120, o + 0x10);
-            transform_vector_by_basis(gate_target_offset, &D_L11_00161400, o + 0xC0);
+            transform_vector_by_basis(gate_target_offset,
+                                      &l11_resort_owner_gate_departure_target_local_x_offset,
+                                      o + 0xC0);
             fast_vec_add(moby_vars->unk120, moby_vars->unk120, gate_target_offset);
         }
         break;
@@ -806,8 +810,8 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *jump_target_posi
             fast_vec_normalize(candidate_position, candidate_position, 4.0f);
         fast_vec_add(candidate_position, candidate_position, pos);
         {
-            int *path_entry =
-                (int *)l11_paths[*(int *)((u8 *)pvars - (-(*(int *)&pvars->unk158 * 4)) + 0x60)];
+            int *path_entry = (int *)
+                l11_paths[*(int *)((u8 *)pvars - (-(*(int *)&pvars->current_path_leg * 4)) + 0x60)];
             if (point_in_path_xy(candidate_position, path_entry + 4, *path_entry)) {
                 candidate_position[2] += 5.0f;
                 landing_ground_height = func_L00_0025A748_f(candidate_position);

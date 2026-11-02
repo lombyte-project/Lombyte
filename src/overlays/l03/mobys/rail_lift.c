@@ -83,8 +83,8 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
 /* Pvars of a rail lift that carries the hero between the ends of two rail paths. */
 struct RailLiftVars {
     u8  pad0[0x20];
-    u8  coll[0x44]; /* 0x20: collision record moved with the lift */
-    s32 unk64;      /* 0x64: set to 1 when a ride starts */
+    u8  coll[0x44];              /* 0x20: collision record moved with the lift */
+    s32 target_path_point_index; /* 0x64: set to 1 when a ride starts */
     u8  pad68[0x10];
     s32 snd;       /* 0x78: travel sound voice (FUN_L03_002d3918) */
     s32 started;   /* 0x7C: set once the first ride starts */
@@ -145,7 +145,7 @@ void rail_lift_update(struct Moby *lift_moby) {
                 *(u128 *)&lift_moby->pos =
                     *(u128 *)&(l03_paths[lift_vars->path[hero_end]])->points[0];
                 lift_moby->state = LIFT_FOLLOW_PATH;
-                lift_vars->unk64 = 1;
+                lift_vars->target_path_point_index = 1;
                 lift_vars->started = 1;
                 lift_vars->ready = 0;
                 break;
@@ -160,14 +160,14 @@ void rail_lift_update(struct Moby *lift_moby) {
             if ((((u32)pad_pressed_lui) & 0x10) && D_L03_0015F594 == 8) {
                 request_hero_target_pose(&lift_moby->pos, lift_moby->rot.z, 0);
                 lift_moby->command ^= 1;
-                lift_vars->unk64 = 1;
+                lift_vars->target_path_point_index = 1;
                 lift_vars->ready = 0;
                 lift_moby->state = LIFT_WAIT_FOR_HERO_ANIMATION;
             }
         } else if (hero_end != lift_end) {
             lift_moby->state = LIFT_FOLLOW_PATH;
             lift_moby->command ^= 1;
-            lift_vars->unk64 = 1;
+            lift_vars->target_path_point_index = 1;
             lift_vars->ready = 0;
         }
         break;

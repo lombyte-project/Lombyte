@@ -12,7 +12,7 @@
 
 typedef struct {
     char  p0[0x98];
-    float f98;
+    float hero_yaw;
     char  p1[0x164 - 0x9C];
     float f164;
     char  p2[0x2080 - 0x168];
@@ -69,7 +69,7 @@ void camera_object_update(char *camera_object) {
         if (absolute_float(dot_product_or_threshold) < 2.5f) {
             dot_product_or_threshold = 0.1f;
             if (fast_vec_length(difference_vector) < dot_product_or_threshold ||
-                fast_difference_between_rotations(P->f98, C->yaw) < 2.3561945f ||
+                fast_difference_between_rotations(P->hero_yaw, C->yaw) < 2.3561945f ||
                 P->f164 < frame_time * dot_product_or_threshold) {
                 *(float *)(camera_object + 0x18) = 15.0f;
                 *(float *)(camera_object + 0x14) = 15.0f;

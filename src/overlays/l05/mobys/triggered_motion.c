@@ -31,7 +31,7 @@ typedef struct TriggeredMotionVars {
     s32 unk58;
     f32 unk5C;
     f32 unk60;
-    f32 unk64;
+    f32 manipulator_angular_velocity;
 } TriggeredMotionVars;
 
 /* Moby class 893 */
@@ -104,7 +104,7 @@ void triggered_motion_update(char *moby) {
             approach = -0.5934119f;
         }
         approach_angle(&motion_and_manipulator_vars->unk60,
-                       &motion_and_manipulator_vars->unk64,
+                       &motion_and_manipulator_vars->manipulator_angular_velocity,
                        approach,
                        frame_time_sq * 4.1887903f,
                        frame_time_sq * 4.1887903f,
@@ -117,7 +117,7 @@ void triggered_motion_update(char *moby) {
                 motion_and_manipulator_vars->unk60 = 0.0f;
             if (MOBY(moby)->command == 0) {
                 MOBY(moby)->command = 1;
-                motion_and_manipulator_vars->unk64 *= -0.33f;
+                motion_and_manipulator_vars->manipulator_angular_velocity *= -0.33f;
             } else if (motion_and_manipulator_vars->unk60 == end) {
                 if (MOBY(moby)->state == MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE)
                     MOBY(moby)->state = MOBY_MOTION_SEQUENCE_COMPLETE;

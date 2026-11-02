@@ -28,12 +28,12 @@ typedef struct {
 
 typedef struct {
     char pad00[0x220];
-    u32  f220;
+    u32  selected_volume_object;
 } C842e83c0;
 
 typedef struct {
     char  pad00[0x84];
-    short f84;
+    short camera_descriptor_index;
 } O842e83c0;
 
 typedef struct {
@@ -87,18 +87,26 @@ int try_select_follow_camera_volume(int candidate_object, int unused) {
         return -1;
     }
     camera_state = (C842e83c0 *)(u32)((B2842e83c0 *)current_camera)->f70;
-    if (camera_state->f220 == 0) {
-        camera_state->f220 = candidate_object;
+    if (camera_state->selected_volume_object == 0) {
+        camera_state->selected_volume_object = candidate_object;
         return 1;
     }
-    if (camera_state->f220 == candidate_object) {
+    if (camera_state->selected_volume_object == candidate_object) {
         return 1;
     }
     tab = (u32)D_L00_0015EF50;
-    x = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)camera_state->f220)->f84 * 0x20 + 0x1C) + 0x1C);
-    y = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)candidate_object)->f84 * 0x20 + 0x1C) + 0x1C);
+    x = *(u8 *)(*(u32 *)(tab +
+                         ((O842e83c0 *)(u32)camera_state->selected_volume_object)
+                                 ->camera_descriptor_index *
+                             0x20 +
+                         0x1C) +
+                0x1C);
+    y = *(u8 *)(*(u32 *)(tab +
+                         ((O842e83c0 *)(u32)candidate_object)->camera_descriptor_index * 0x20 +
+                         0x1C) +
+                0x1C);
     if (x < y) {
-        camera_state->f220 = candidate_object;
+        camera_state->selected_volume_object = candidate_object;
         return 1;
     }
     return 0;

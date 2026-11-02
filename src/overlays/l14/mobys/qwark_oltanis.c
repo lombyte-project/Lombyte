@@ -54,7 +54,10 @@ extern int D_L14_001BABD0[];
 void mark_elevator_collected(Level14VendorMoby *vendor_moby) __asm__("FUN_L14_002ef5a8");
 
 void mark_elevator_collected(Level14VendorMoby *vendor_moby) {
-    vendor_moby->state = 0;
+    enum {
+        ELEVATOR_STATE_COLLECTED = 0
+    };
+    vendor_moby->state = ELEVATOR_STATE_COLLECTED;
     vendor_moby->data->field124 = 0;
     D_0014C190_257218[current_level_index]
                      [(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |=

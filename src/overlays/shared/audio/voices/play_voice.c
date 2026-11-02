@@ -61,9 +61,9 @@ int request_grouped_voice(int voice_group_index,
     voice_slot_index = allocate_voice_slot(
         D_L00_0015F5F4 + voice_definition_index * 32, voice_flags, voice_moby, 0, 0x400);
     if (voice_slot_index >= 0) {
-        char *rec = voice_pool + voice_slot_index * 0x70;
-        *(int *)(rec + 0x88) = voice_moby;
-        *(short *)(rec + 0x7E) = voice_definition_index;
+        char *allocated_voice_slot = voice_pool + voice_slot_index * 0x70;
+        *(int *)(allocated_voice_slot + 0x88) = voice_moby;
+        *(short *)(allocated_voice_slot + 0x7E) = voice_definition_index;
     }
     return voice_slot_index;
 }

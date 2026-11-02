@@ -25,7 +25,7 @@ typedef struct {
     char  pad00[4];
     short h04;
     char  pad06[6];
-    float f0C;
+    float dialogue_activation_threshold;
     char  pad10[0x30];
     int   region;
     char  pad44[0x2C];
@@ -77,7 +77,7 @@ void bob_update(WatcherMoby *moby) {
             moby->state = BOB_CHECK_DIALOGUE;
         }
         initialize_npc_dialogue(moby, moby_vars);
-        moby_vars->f0C = 3.7f;
+        moby_vars->dialogue_activation_threshold = 3.7f;
         break;
     case BOB_CHECK_DIALOGUE:
         if (is_point_inside_clip_volume(hero.motion.pos.f, moby_vars->region)) {

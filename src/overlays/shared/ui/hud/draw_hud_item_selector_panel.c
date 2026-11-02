@@ -429,7 +429,7 @@ extern void  FUN_L00_0023b120(char *, int, int, int, int, int);
 
 int draw_hud_item_selector_panel(HudElem *rec) __asm__("FUN_L00_002382a0");
 
-int draw_hud_item_selector_panel(HudElem *rec) {
+int draw_hud_item_selector_panel(HudElem *selector_element) {
     char          *weapon_entry;
     int            x, y, half_w, half_h, alpha;
     int            marker_alpha;
@@ -437,7 +437,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
     int            color, shadow, text_y, id, item, prefix_length, text_length, j;
     float          open, fade, angle;
     const char    *text, *suffix;
-    unsigned char *counters = rec->cnt;
+    unsigned char *counters = selector_element->cnt;
     char           formatted[80];
 
     open = convert_integer_to_float(counters[0]) /
@@ -464,9 +464,9 @@ int draw_hud_item_selector_panel(HudElem *rec) {
         angle += 0.875f;
         marker_alpha = truncate_float_to_s32(radius * angle);
     }
-    x = rec->unk50;
-    y = rec->unk54;
-    hud_screen_position(rec, &x, &y);
+    x = selector_element->unk50;
+    y = selector_element->unk54;
+    hud_screen_position(selector_element, &x, &y);
     half_w = D_L00_0015F718_gp / 2;
     half_h = D_L00_0015F71C_gp / 2;
     draw_hud_sprite(get_icon_frame(0xe934, 0), x, y, half_w, half_h, alpha);
@@ -484,17 +484,18 @@ int draw_hud_item_selector_panel(HudElem *rec) {
         icon_x =
             x + D_L00_0015F720_gp + (int)(D_L00_0015F78C_gp * fast_cos(angle) * D_L00_0015F7C4_gp);
         icon_y = y + D_L00_0015F724_gp + (int)(D_L00_0015F78C_gp * fast_sin(angle));
-        if (rec->unk74 == i && ((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0)
+        if (selector_element->unk74 == i &&
+            ((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0)
             draw_hud_sprite(
                 get_icon_frame(0xe99c, 0), icon_x - 0x13, icon_y - 0x13, 0x26, 0x26, marker_alpha);
         if (((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0) {
             int icon_alpha;
-            if (i != rec->unk74)
+            if (i != selector_element->unk74)
                 icon_alpha = truncate_float_to_s32((float)alpha * D_L00_0015F7C0);
             else
                 icon_alpha = alpha;
             FUN_L00_0023b120(
-                (char *)rec,
+                (char *)selector_element,
                 get_icon_frame(((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id,
                                ((unsigned char *)((unsigned char *)item_text_variant))
                                        [((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].item]
@@ -506,7 +507,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
                 icon_alpha);
         }
     }
-    selected = rec->unk74;
+    selected = selector_element->unk74;
     if (selected >= 0 &&
         *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C) != 0) {
         color = fast_tween_color(l00_hud_item_selector_text_shadow_color_from,
@@ -548,9 +549,9 @@ int draw_hud_item_selector_panel(HudElem *rec) {
             text = get_help_message_text(id);
         }
         if (text == 0)
-            return rec->w;
+            return selector_element->w;
         if (strlen((char *)text) == 0)
-            return rec->w;
+            return selector_element->w;
         text_length = strlen((char *)text);
         suffix = text;
         for (j = 0; j < text_length; j++) {
@@ -600,7 +601,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
             font_print_center(x + D_L00_0015F720_gp, text_y, shadow, (void *)text, -1);
         }
     }
-    return rec->w;
+    return selector_element->w;
 }
 
 extern int D_L00_0015F72C __attribute__((sda));
@@ -1450,20 +1451,23 @@ out:
 extern short D_00140986 NOT_SDA;
 int                     draw_hud_cropped_gauge_panel(char *rec) __asm__("FUN_L00_0023a640");
 
-int draw_hud_cropped_gauge_panel(char *rec) {
+int draw_hud_cropped_gauge_panel(char *cropped_gauge_element) {
     int x, y;
     int sprite_width;
-    x = *(int *)(rec + 0x50);
-    y = *(int *)(rec + 0x54);
-    *(int *)(rec + 0x58) = 0x100;
-    *(int *)(rec + 0x5C) = 0x40;
-    hud_screen_position(rec, &x, &y);
-    apply_hud_slide_offset(rec, &x, &y, *(int *)(rec + 0x6C), 0);
-    sprite_width = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
+    x = *(int *)(cropped_gauge_element + 0x50);
+    y = *(int *)(cropped_gauge_element + 0x54);
+    *(int *)(cropped_gauge_element + 0x58) = 0x100;
+    *(int *)(cropped_gauge_element + 0x5C) = 0x40;
+    hud_screen_position(cropped_gauge_element, &x, &y);
+    apply_hud_slide_offset(
+        cropped_gauge_element, &x, &y, *(int *)(cropped_gauge_element + 0x6C), 0);
+    sprite_width =
+        *(int *)(cropped_gauge_element + 0x74) * 0xDD / *(int *)(cropped_gauge_element + 0x8) +
+        0x1B;
     draw_cropped_hud_sprite(get_icon_frame(0x7558, 1), x, y, sprite_width, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 2), x, y, 0x20, 0x20, D_00140986 ? 0x80 : 0);
-    return *(int *)(rec + 0x58);
+    return *(int *)(cropped_gauge_element + 0x58);
 }
 /* func_L00_00236750 without the offsets: a 32 x 32 element with a timer
    of 30 + func_001F9850(120). */

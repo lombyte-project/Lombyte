@@ -26,7 +26,7 @@ void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
     f32 total_frames_float;
     f32 remaining_frame_ratio;
     f32 oscillation_cosine;
-    f32 val;
+    f32 applied_shake_offset;
     s32 remaining_frames;
 
     if (cur_cam[0] != 0 && cur_cam[0]->unk86 == 6) {
@@ -44,12 +44,13 @@ void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
             remaining_frame_ratio = remaining_frames_float / total_frames_float;
             oscillation_cosine =
                 fast_cos(fast_normalize_angle(2.0f * convert_integer_to_float(shake->unk8)));
-            val = shake->unk0 * oscillation_cosine * remaining_frame_ratio * remaining_frame_ratio;
-            shake->unk4 = val;
+            applied_shake_offset =
+                shake->unk0 * oscillation_cosine * remaining_frame_ratio * remaining_frame_ratio;
+            shake->unk4 = applied_shake_offset;
             if (axis_index == 0) {
-                fast_vec_normalize(shake_offset, D_001872B0, val);
+                fast_vec_normalize(shake_offset, D_001872B0, applied_shake_offset);
             } else {
-                fast_vec_normalize(shake_offset, camera_rows, val);
+                fast_vec_normalize(shake_offset, camera_rows, applied_shake_offset);
             }
             fast_vec_add(camera_position, camera_position, shake_offset);
         } else {

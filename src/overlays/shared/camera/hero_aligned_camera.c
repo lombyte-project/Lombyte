@@ -40,9 +40,9 @@ typedef struct {
 
 typedef struct {
     u8  p0[0x20];
-    s16 h20;
-    s16 h22;
-    s32 i24;
+    s16 transition_eligible_update_count;
+    s16 transition_steering_latched;
+    s32 transition_angle_blend_timer;
 } Q_2ea488;
 
 typedef struct {
@@ -52,11 +52,11 @@ typedef struct {
 
 typedef struct {
     u8    p0[0x98];
-    f32   f98;
+    f32   transition_heading_angle;
     u8    p1[0x2080 - 0x9C];
-    char *p2080;
+    char *hero_moby;
     u8    p2[0x2284 - 0x2084];
-    s32   i2284;
+    s32   camera_mode_request;
 } P_2ea488;
 
 typedef struct {
@@ -93,7 +93,7 @@ typedef struct {
 
 typedef struct {
     unsigned char pad0[0x7E];
-    short         s7E;
+    short         selected_camera_mode;
 } A_2ea810;
 
 extern void  FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -435,7 +435,7 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
 
     q = D_L00_0015EF50_2ea488[*(s16 *)(transition_camera_record + 0x84)].q;
     g = &P;
-    requested_camera_mode = g->i2284;
+    requested_camera_mode = g->camera_mode_request;
     if (requested_camera_mode == *(s16 *)(transition_camera_record + 0x86) ||
         requested_camera_mode == CAMERA_REQUEST_BYPASS_MODE_MATCH) {
         active_transition_camera_record = D_L00_00166E00_lui;
@@ -451,29 +451,29 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
         r = find_camera_collision_volume_for_point(&transition_vector_scratch, 0.25f);
         if (r && (*(s32 *)(r + 0x18) & 1))
             return 0;
-        q->i24 = 0;
-        q->h22 = 1;
-        q->h20++;
-        if (q->h20 >= FUN_001f96f8_2ea488(7)) {
+        q->transition_angle_blend_timer = 0;
+        q->transition_steering_latched = 1;
+        q->transition_eligible_update_count++;
+        if (q->transition_eligible_update_count >= FUN_001f96f8_2ea488(7)) {
             if (*(s16 *)(active_transition_camera_record + 0x86) == 0)
                 transition_camera_record[0x7C] = 5;
             return 1;
         }
-        transition_vector_scratch.f[0] = fast_cos(P.f98);
-        transition_vector_scratch.f[1] = fast_sin(P.f98);
+        transition_vector_scratch.f[0] = fast_cos(P.transition_heading_angle);
+        transition_vector_scratch.f[1] = fast_sin(P.transition_heading_angle);
         *(s32 *)&transition_vector_scratch.f[2] = 0;
         set_follow_camera_angle_blend_from_direction(
             &transition_vector_scratch, 0.06981316953897476f, transition_vector_scratch.f[2]);
         goto tail;
     off:
-        q->h20 = 0;
-        q->h22 = 0;
+        q->transition_eligible_update_count = 0;
+        q->transition_steering_latched = 0;
         goto tail;
     }
-    q->h20 = 0;
-    if (q->h22 == 0)
+    q->transition_eligible_update_count = 0;
+    if (q->transition_steering_latched == 0)
         goto tail;
-    q->h22 = 0;
+    q->transition_steering_latched = 0;
     b = D_L00_00166E10_2ea488;
     transition_camera_globals = b - 0x190;
     alignment_comparison_axis = b + 0x30;
@@ -486,9 +486,9 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
                         &transition_vector_scratch);
     FUN_001f9a68_2ea488(&transition_vector_scratch,
                         alignment_comparison_axis,
-                        FUN_001f9ab0_2ea488(alignment_comparison_axis, g->p2080 + 0xC0));
+                        FUN_001f9ab0_2ea488(alignment_comparison_axis, g->hero_moby + 0xC0));
     FUN_001f9a28_2ea488(
-        &transition_hero_vector_residual, g->p2080 + 0xC0, &transition_vector_scratch);
+        &transition_hero_vector_residual, g->hero_moby + 0xC0, &transition_vector_scratch);
     transition_residual_length_product = FUN_001f9af0_2ea488(&transition_hero_vector_residual);
     if (transition_residual_length_product != 0.0f) {
         transition_residual_length_product *=
@@ -503,12 +503,12 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
             return 0;
         }
     }
-    q->i24 = FUN_001f96f8_2ea488(30);
+    q->transition_angle_blend_timer = FUN_001f96f8_2ea488(30);
 tail:
-    if (q->i24) {
-        fast_dec_timer(&q->i24);
-        transition_vector_scratch.f[0] = fast_cos(P.f98);
-        transition_vector_scratch.f[1] = fast_sin(P.f98);
+    if (q->transition_angle_blend_timer) {
+        fast_dec_timer(&q->transition_angle_blend_timer);
+        transition_vector_scratch.f[0] = fast_cos(P.transition_heading_angle);
+        transition_vector_scratch.f[1] = fast_sin(P.transition_heading_angle);
         *(s32 *)&transition_vector_scratch.f[2] = 0;
         set_follow_camera_angle_blend_from_direction(
             &transition_vector_scratch, 0.13962633907794952f, transition_vector_scratch.f[2]);
@@ -551,7 +551,7 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
     }
     if (Q.unk270 == 0) {
         Q.unk273 = 0;
-        camera_object->s7E = 2;
+        camera_object->selected_camera_mode = 2;
         Q.unk294 = 0.018f;
         Q.unk288 = 0.018f;
         return;
@@ -572,13 +572,13 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
                              residual_length_product);
             if (1.5707964f - dot_product_or_asin_result >= 1.3962634f) {
                 Q.unk270 = 0;
-                camera_object->s7E = 4;
+                camera_object->selected_camera_mode = 4;
                 return;
             }
         }
     }
     Q.unk273 = 0;
-    camera_object->s7E = 2;
+    camera_object->selected_camera_mode = 2;
     Q.unk294 = 0.018f;
     Q.unk288 = 0.018f;
 }

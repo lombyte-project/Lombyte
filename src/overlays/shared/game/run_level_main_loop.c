@@ -347,7 +347,7 @@ typedef struct {
     u8           padB0[4];
     f32          unkB4[20];
     s32          unk104[20];
-    s32          unk154[20];
+    s32          map_parameter_pair_second_values[20];
     u8           pad1a4[0x80];
     s32          archive_index;
     s32          load_state;
@@ -411,7 +411,8 @@ void initialize_level_map_archive(void) {
         for (i = 0; i < 20; i++) {
             D_L00_001841F0.unk104[i] = map_parameter_pair_defaults[i * 2];
             D_L00_001841F0.unkB4[i] = 0.65f;
-            D_L00_001841F0.unk154[i] = map_parameter_pair_defaults[i * 2 + 1];
+            D_L00_001841F0.map_parameter_pair_second_values[i] =
+                map_parameter_pair_defaults[i * 2 + 1];
         }
     }
     level = current_level_index;

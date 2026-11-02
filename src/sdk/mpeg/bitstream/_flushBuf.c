@@ -24,10 +24,10 @@
 
 typedef struct FlushBufContext {
     u8  pad_0[0x818];
-    s32 unk818;
+    s32 ipu_command_class;
     u8  pad_81C[0x1C];
-    s32 unk838;
-    s32 unk83C;
+    s32 bit_window;
+    s32 available_bit_count;
     u8  pad_840[0x18];
     s32 unk858;
 } FlushBufContext;
@@ -58,8 +58,8 @@ void _flushBuf(FlushBufContext *decoder_state, s32 bit_count) {
     *(volatile u32 *)0x10002000 = command;
     index = command >> 0x1C;
     table_value = IpuCommandTable[index];
-    decoder_state->unk818 = table_value;
+    decoder_state->ipu_command_class = table_value;
     idle_result = _waitIpuIdle64(decoder_state, &IpuCommandTable[index]);
-    decoder_state->unk838 = (s32)idle_result;
-    decoder_state->unk83C = 0x20;
+    decoder_state->bit_window = (s32)idle_result;
+    decoder_state->available_bit_count = 0x20;
 }

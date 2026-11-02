@@ -111,7 +111,7 @@ typedef struct {
     char  pad0[0x10];
     float f10;
     short f14;
-    short f16;
+    short beam_endpoint_tag;
     int   f18;
 } PartSub;
 
@@ -445,7 +445,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
                 sub->f10 = one / func_001FA888_2E3700(spark->fA);
                 sub->f18 = 0x7F7F7F;
                 if (beam_endpoint_spark_tag_mode[beam] == 1)
-                    sub->f16 = 1;
+                    sub->beam_endpoint_tag = 1;
             }
         }
         random_float_between(0.01f, 0.05f);
@@ -464,7 +464,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
                 sub->f10 = 1.0f / func_001FA888_2E3700(spark->fA);
                 sub->f18 = 0x7F7F7F;
                 if (beam_endpoint_spark_tag_mode[beam] == 1)
-                    sub->f16 = 2;
+                    sub->beam_endpoint_tag = 2;
             }
         }
     }

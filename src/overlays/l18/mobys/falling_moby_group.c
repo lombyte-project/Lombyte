@@ -60,22 +60,22 @@ typedef struct {
 
 typedef struct {
     int   pad0;
-    int   i4;
-    int   i8;
+    int   target_transform_record_index;
+    int   fall_at_progress_threshold_enabled;
     char  padC[4];
     char  v10[0x10];
     char  v20[0x10];
     char  pad30[0x20];
     VEnt  ent[15];
     char  pad320[0x10];
-    float f330;
-    float f334;
+    float transform_progress;
+    float transform_progress_step;
     int   cnt;
     char  pad33C[4];
-    float f340;
-    float f344;
-    int   f348;
-    int   f34C;
+    float fall_vertical_step;
+    float debris_spawn_random_bound;
+    int   hero_has_stood_on_group;
+    int   fall_countdown_frames;
     int   f350;
 } VData;
 
@@ -133,8 +133,8 @@ void falling_moby_group_update(struct Moby *moby) {
                 if (*t++ < 0)
                     break;
             }
-            moby_vars->f348 = 0;
-            moby_vars->f34C = scale_game_frames(30);
+            moby_vars->hero_has_stood_on_group = 0;
+            moby_vars->fall_countdown_frames = scale_game_frames(30);
             moby_vars->cnt = j;
             capture_linked_moby_relative_transforms(moby, (char *)moby_vars + 0x30, j);
             moby->state = FALLING_MOBY_GROUP_AWAIT_ACTIVATION;
@@ -145,35 +145,37 @@ void falling_moby_group_update(struct Moby *moby) {
             int            i;
             unsigned char *hero_ground_moby;
             if (group_transform_advance_enabled_gp != 0) {
-                if (moby_vars->f330 < 1.5f) {
+                if (moby_vars->transform_progress < 1.5f) {
                     advance_accelerated_scalar(1.5f,
                                                initial_acceleration_step,
                                                initial_braking_step,
                                                initial_maximum_speed,
-                                               &moby_vars->f330,
-                                               &moby_vars->f334);
+                                               &moby_vars->transform_progress,
+                                               &moby_vars->transform_progress_step);
                 } else {
                     advance_accelerated_scalar(2.0f,
                                                later_acceleration_step,
                                                later_braking_step,
                                                later_maximum_speed,
-                                               &moby_vars->f330,
-                                               &moby_vars->f334);
+                                               &moby_vars->transform_progress,
+                                               &moby_vars->transform_progress_step);
                 }
             }
-            if (moby_vars->f330 > group_transform_debris_start_progress_threshold_gp &&
-                moby_vars->f344 == 0.0f) {
-                moby_vars->f344 = *(int *)&group_transform_debris_initial_random_bound_gp;
+            if (moby_vars->transform_progress >
+                    group_transform_debris_start_progress_threshold_gp &&
+                moby_vars->debris_spawn_random_bound == 0.0f) {
+                moby_vars->debris_spawn_random_bound =
+                    *(int *)&group_transform_debris_initial_random_bound_gp;
             }
-            if (moby_vars->f330 > group_transform_fall_progress_threshold_gp &&
-                moby_vars->i8 != 0) {
+            if (moby_vars->transform_progress > group_transform_fall_progress_threshold_gp &&
+                moby_vars->fall_at_progress_threshold_enabled != 0) {
                 moby->state = MOBY_FALL_AND_REMOVE;
             }
             hero_on_group_or_class_764_moby = 0;
             for (i = 0; i < moby_vars->cnt; i++) {
                 unsigned char *group_moby = D_L18_0015FFD8 + (moby_vars->ent[i].idx << 8);
                 if (hero.ground_moby == group_moby) {
-                    moby_vars->f348 = 1;
+                    moby_vars->hero_has_stood_on_group = 1;
                     hero_on_group_or_class_764_moby = 1;
                     break;
                 }
@@ -184,17 +186,17 @@ void falling_moby_group_update(struct Moby *moby) {
                 if (s == 0x764)
                     hero_on_group_or_class_764_moby = 1;
             }
-            if (moby_vars->f348 != 0 && hero_on_group_or_class_764_moby == 0 &&
+            if (moby_vars->hero_has_stood_on_group != 0 && hero_on_group_or_class_764_moby == 0 &&
                 hero.air_frames.s == 0) {
-                if (fast_dec_timer(&moby_vars->f34C))
+                if (fast_dec_timer(&moby_vars->fall_countdown_frames))
                     moby->state = MOBY_FALL_AND_REMOVE;
             }
             break;
         }
         case MOBY_FALL_AND_REMOVE: {
             float t = frame_time_sq * 5.0f;
-            moby->pos.z += moby_vars->f340;
-            moby_vars->f340 = moby_vars->f340 - t;
+            moby->pos.z += moby_vars->fall_vertical_step;
+            moby_vars->fall_vertical_step = moby_vars->fall_vertical_step - t;
             if (moby->pos.z < 20.0f) {
                 int i;
                 for (i = 0; i < moby_vars->cnt; i++) {
@@ -209,21 +211,22 @@ void falling_moby_group_update(struct Moby *moby) {
         if ((unsigned char)(moby->state - 1) < 2) {
             lerp_vector(&moby->pos,
                         moby_vars->v10,
-                        D_L18_001600EC + (moby_vars->i4 << 7) + 0x30,
-                        moby_vars->f330 * 0.5f);
+                        D_L18_001600EC + (moby_vars->target_transform_record_index << 7) + 0x30,
+                        moby_vars->transform_progress * 0.5f);
             lerp_vector(&moby->rot,
                         moby_vars->v20,
-                        D_L18_001600EC + (moby_vars->i4 << 7) + 0x70,
-                        moby_vars->f330 * 0.5f);
+                        D_L18_001600EC + (moby_vars->target_transform_record_index << 7) + 0x70,
+                        moby_vars->transform_progress * 0.5f);
         }
         apply_linked_moby_relative_transforms(moby, (char *)moby_vars + 0x30, moby_vars->cnt);
-        if (moby_vars->f344 != 0.0f) {
+        if (moby_vars->debris_spawn_random_bound != 0.0f) {
             if (moby->state != MOBY_FALL_AND_REMOVE) {
                 float debris_spawn_position[4];
                 float s, z, debris_spawn_angle;
                 int   debris_spawn_frames;
-                moby_vars->f344 = moby_vars->f344 + 0.25f;
-                if (random_integer_below(truncate_float_to_s32(moby_vars->f344)) == 0) {
+                moby_vars->debris_spawn_random_bound = moby_vars->debris_spawn_random_bound + 0.25f;
+                if (random_integer_below(
+                        truncate_float_to_s32(moby_vars->debris_spawn_random_bound)) == 0) {
                     s = random_float_between(-1.0471976f, 1.0471976f);
                     debris_spawn_angle = fast_add_rotations(s, D_L18_001677D8);
                     z = random_float_between(0.0f, 20.0f);

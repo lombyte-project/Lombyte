@@ -46,7 +46,7 @@ typedef struct TiltingPlatformVars {
     u8  pad_30[0x2C];
     s32 unk5C;
     f32 unk60;
-    f32 unk64;
+    f32 up_vector_y_velocity;
     f32 unk68;
     u8  pad_6C[0x4];
     s32 timer_70;
@@ -162,7 +162,7 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
                   0.2f,
                   0.0f);
     vendor_spring((float *)&MOBY(moby)->rot_row2.y,
-                  &platform_tilt_state->unk64,
+                  &platform_tilt_state->up_vector_y_velocity,
                   target_up_vector[1],
                   0.005f,
                   0.2f,

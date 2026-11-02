@@ -86,14 +86,14 @@ typedef struct ChomperVars {
     u8  pad_121[0x5F];
     f32 unk180[4];
     u8  pad_190[0x34];
-    s32 unk1C4;
+    s32 pursuit_target_selection_status;
     u8  pad_1C8[0x8];
     f32 unk1D0[4];
     u8  pad_1E0[0x10];
     f32 unk1F0[4];
     u8  pad_200[0x4];
-    f32 unk204;
-    f32 unk208;
+    f32 travel_distance_velocity;
+    f32 previous_height_drop;
     u8  pad_20C[0x14];
     u8  unk220;
 } ChomperVars;
@@ -127,7 +127,7 @@ void chomper_update(struct Moby *chomper_moby) {
         chomper_data->unk5A = truncate_float_to_s32(3.2f);
         break;
     case CHOMPER_WAIT_TO_APPROACH_TARGET:
-        if (chomper_data->unk1C4 != 2) {
+        if (chomper_data->pursuit_target_selection_status != 2) {
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 0)
                 blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
@@ -141,7 +141,7 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_FACE_TARGET;
             if (chomper_moby->prev_seq != 1)
                 blend_moby_animation(chomper_moby, 1, 0, scale_game_frames(20));
-        } else if (chomper_data->unk1C4 == 2)
+        } else if (chomper_data->pursuit_target_selection_status == 2)
             chomper_moby->state = CHOMPER_RETURN_HOME;
         break;
     case CHOMPER_FACE_TARGET: {
@@ -169,7 +169,7 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 2)
                 blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
-        } else if (chomper_data->unk1C4 != 2)
+        } else if (chomper_data->pursuit_target_selection_status != 2)
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
         break;
     case 7:
@@ -216,13 +216,13 @@ typedef struct {
     unsigned char pending; /* 0x15D */
     char          pad15E[0xE];
     float         timer; /* 0x16C */
-    float         f170;
-    float         f174;
+    float         knockback_ascent_animation_target;
+    float         knockback_descent_animation_target;
     char          pad178[8];
     float         target[4]; /* 0x180 */
     char          pad190[0x30];
-    int           i1C0;
-    int           i1C4;
+    int           target_moby;
+    int           target_selection_status;
     char          pad1C8[8];
     float         home[4]; /* 0x1D0 */
     char          pad1E0[0x10];
@@ -255,6 +255,9 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 void update_chomper_hit_reaction_and_target(void *chomper_instance) {
+    enum {
+        CHOMPER_TARGET_SELECTION_REJECTED = 2
+    };
     L16PursuitMoby *chomper_moby = chomper_instance;
     L16PursuitData *pursuit_data = chomper_moby->data;
     char           *hit;
@@ -288,8 +291,8 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
                               &pursuit_data->turn_speed);
         trooper_start_knockback(
             chomper_moby, pursuit_data->knock, 5, 1, 0, knockback_vector_and_heading[4]);
-        pursuit_data->f170 = 8.0f;
-        pursuit_data->f174 = 16.0f;
+        pursuit_data->knockback_ascent_animation_target = 8.0f;
+        pursuit_data->knockback_descent_animation_target = 16.0f;
         chomper_moby->state = CHOMPER_KNOCKBACK;
         chomper_moby->i94 = 0;
         pursuit_data->reaction_time = 0x78;
@@ -308,12 +311,12 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
                          *(int *)reaction_kind_or_path_address) != 2) {
         if (vector_distance_xy(pursuit_data->home, pursuit_data->target) > 16.0f ||
             absolute_float(chomper_moby->position[2] - pursuit_data->target[2]) > 3.0f) {
-            pursuit_data->i1C4 = 2;
+            pursuit_data->target_selection_status = CHOMPER_TARGET_SELECTION_REJECTED;
         }
     }
-    if (pursuit_data->i1C0 == 0) {
+    if (pursuit_data->target_moby == 0) {
         struct Hero *player = &hero;
-        pursuit_data->i1C0 = (int)player->moby;
+        pursuit_data->target_moby = (int)player->moby;
         qcopy(pursuit_data->target, &player->motion.pos);
     }
 }
@@ -351,12 +354,12 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
                                frame_time_sq * 8.0f,
                                frame_time_sq * 12.0f,
                                frame_time * 4.0f,
-                               &moby_data->unk204);
-    fast_vec_normalize(movement_delta, moby + 0xC0, moby_data->unk204);
-    movement_delta[2] = moby_data->unk208 - frame_time_sq * 10.0f;
+                               &moby_data->travel_distance_velocity);
+    fast_vec_normalize(movement_delta, moby + 0xC0, moby_data->travel_distance_velocity);
+    movement_delta[2] = moby_data->previous_height_drop - frame_time_sq * 10.0f;
     FUN_L00_00258830(moby, movement_delta, 0.5f, 0.5f, 0.0f, 0x10);
     resolve_point_path_segment_xy_clearance(
         0.333f, *(void **)&moby_data->unk1F0[0], moby + 0x10, moby + 0x10);
-    moby_data->unk208 = oldz - MOBY(moby)->pos.z;
+    moby_data->previous_height_drop = oldz - MOBY(moby)->pos.z;
     return distance_to_target;
 }

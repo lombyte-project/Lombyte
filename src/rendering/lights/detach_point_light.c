@@ -12,7 +12,7 @@ struct ShrubLightLink {
 
 struct TfragLightLink {
     u8  pad_0[0x35];
-    u8  unk35;
+    u8  refresh_pending;
     u16 packed_lights;
 };
 
@@ -115,7 +115,7 @@ void detach_point_light(s32 light_index) {
             }
             tfrag_index_cursor += 1;
             if (tfrag_packed_lights == 0xFFFF) {
-                tfrag_link->unk35 = 1;
+                tfrag_link->refresh_pending = 1;
             }
             tfrag_link->packed_lights = tfrag_packed_lights;
         } while (tfrag_index_cursor != tfrag_indices_end_address);

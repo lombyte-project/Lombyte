@@ -32,6 +32,9 @@ extern float FUN_001fa580_2bb400(float, float) __asm__("FUN_001fa580");
 u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) __asm__("FUN_L00_002bb360");
 
 u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
+    enum {
+        TRAILING_FLAME_STATE_INITIAL = 0
+    };
     u8 *spawned_moby = create_moby(0xB3);
     if (spawned_moby) {
         u8 *spawned_moby_vars = ((u8 *)MOBY(spawned_moby)->pvars);
@@ -40,7 +43,7 @@ u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
         MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->flags = 0x204;
         MOBY(spawned_moby)->alpha = 0x50;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = TRAILING_FLAME_STATE_INITIAL;
         *(u8 **)(spawned_moby_vars + 8) = basis_source_moby;
         clear_u64_value(spawned_moby + 0x40);
         *(OvlQuad *)&MOBY(spawned_moby)->rot_row0 = *(OvlQuad *)&MOBY(basis_source_moby)->rot_row0;

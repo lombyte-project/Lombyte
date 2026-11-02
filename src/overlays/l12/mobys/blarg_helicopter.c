@@ -141,14 +141,14 @@ typedef struct BlargHelicopterVars {
     u8  pad_5B[0x5];
     u8  anim_state;
     u8  pad_61[0x6];
-    u8  unk67;
+    u8  hit_flash_target_red;
     u8  pad_68[0x8];
     f32 unk70[4];
     s32 unk80;
     u8  pad_84[0x4];
     f32 yaw_turn_velocity;
-    s16 unk8C;
-    s16 unk8E;
+    s16 rocket_fire_timer_frames;
+    s16 knockback_timer_frames;
     f32 bob_angle;
     f32 unk94;
     f32 unk98;
@@ -162,7 +162,7 @@ typedef struct BlargHelicopterVars {
     s32 unkB4;
     s32 unkB8;
     s16 unkBC;
-    s16 unkBE;
+    s16 target_first_path_endpoint;
     s32 unkC0;
     s32 unkC4;
     u8  pad_C8[0x8];
@@ -322,14 +322,14 @@ update_state:
             l12_camera.focus_time = 0;
         }
         if (blarg_helicopter_vars->unkC0) {
-            count = blarg_helicopter_vars->unk8C;
+            count = blarg_helicopter_vars->rocket_fire_timer_frames;
             limit = D_L12_00161F20 - 3;
             if (limit > 5)
                 limit = 5;
             if (limit < 0)
                 limit = 0;
             if (count < limit * scale_game_frames(15))
-                blarg_helicopter_vars->unk8C = limit * scale_game_frames(15);
+                blarg_helicopter_vars->rocket_fire_timer_frames = limit * scale_game_frames(15);
         }
         if (follow_blarg_helicopter_path(moby, blarg_helicopter_vars->unkA0))
             moby->state = BLARG_HELICOPTER_AIM_AND_FIRE;
@@ -368,7 +368,7 @@ update_state:
                                       frame_time * 0.7853982f);
             clear_u64_value(blarg_helicopter_vars->unk70);
             update_blarg_helicopter_motion_tilt(moby);
-            if (fast_dec_timer_s16(&blarg_helicopter_vars->unk8C)) {
+            if (fast_dec_timer_s16(&blarg_helicopter_vars->rocket_fire_timer_frames)) {
                 ++blarg_helicopter_vars->unkBC;
                 moby_point_position(moby, blarg_helicopter_vars->unkB8, &position);
                 blarg_helicopter_vars->unkB8 = blarg_helicopter_vars->unkB8 == 0;
@@ -413,7 +413,7 @@ update_state:
                     blarg_helicopter_vars->unkBC = 0;
                     moby->state = BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS;
                 } else
-                    blarg_helicopter_vars->unk8C = scale_game_frames(40);
+                    blarg_helicopter_vars->rocket_fire_timer_frames = scale_game_frames(40);
             }
         }
         break;
@@ -428,7 +428,7 @@ update_state:
                                   frame_time * 0.7853982f);
         {
             char *path = ((char *)l12_paths[blarg_helicopter_vars->unkA4]);
-            if (blarg_helicopter_vars->unkBE != 0)
+            if (blarg_helicopter_vars->target_first_path_endpoint != 0)
                 fast_vec_sub(&position, path + 16, &moby->pos);
             else
                 fast_vec_sub(&position, path + *(int *)path * 16, &moby->pos);
@@ -437,8 +437,9 @@ update_state:
         if (!(distance > 5.5f)) {
             approach_value(&blarg_helicopter_vars->unk94, 0.0f, frame_time_sq * 9.0f);
             if (blarg_helicopter_vars->unk94 == 0.0f) {
-                blarg_helicopter_vars->unk8C = scale_game_frames(50);
-                blarg_helicopter_vars->unkBE = blarg_helicopter_vars->unkBE == 0;
+                blarg_helicopter_vars->rocket_fire_timer_frames = scale_game_frames(50);
+                blarg_helicopter_vars->target_first_path_endpoint =
+                    blarg_helicopter_vars->target_first_path_endpoint == 0;
                 moby->state = BLARG_HELICOPTER_AIM_AND_FIRE;
                 break;
             }
@@ -449,7 +450,7 @@ update_state:
         update_blarg_helicopter_motion_tilt(moby);
         break;
     case BLARG_HELICOPTER_KNOCKBACK:
-        if (fast_dec_timer_s16(&blarg_helicopter_vars->unk8E)) {
+        if (fast_dec_timer_s16(&blarg_helicopter_vars->knockback_timer_frames)) {
             moby->state = moby->command;
         } else {
             value = blarg_helicopter_vars->unk94 - frame_time_sq * 4.0f;
@@ -662,7 +663,7 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
             allocate_voice_for_target_entry(2, 0, moby);
             moby->state = BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET;
         } else if (hit_reaction_code != 0xB) {
-            blarg_helicopter_hit_vars->unk67 = 0xB4;
+            blarg_helicopter_hit_vars->hit_flash_target_red = 0xB4;
             trooper_anim_update(moby, (short *)&blarg_helicopter_hit_vars->anim_state);
             if (*(float *)(hit_record + 0x1C) == 5627.925f &&
                 moby->state != BLARG_HELICOPTER_KNOCKBACK) {
@@ -680,7 +681,7 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
                     blarg_helicopter_hit_vars->unk9C = 0.0f;
                 }
                 blarg_helicopter_hit_vars->unk94 = frame_time * 4.0f;
-                blarg_helicopter_hit_vars->unk8E = scale_game_frames(0x3C);
+                blarg_helicopter_hit_vars->knockback_timer_frames = scale_game_frames(0x3C);
                 moby->command = moby->state;
                 moby->state = BLARG_HELICOPTER_KNOCKBACK;
                 allocate_voice_for_target_entry(1, 0, moby);

@@ -35,10 +35,10 @@ typedef union {
 
 typedef struct {
     u8    p0[0x60];
-    float v60;
-    float v64;
-    float v68;
-    float v6C;
+    float slot_path_speed;
+    float rotation_x_turn_step;
+    float rotation_y_turn_step;
+    float rotation_z_turn_step;
 } St;
 
 typedef struct {
@@ -213,20 +213,20 @@ void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_s
     endpoint_distance_or_step_length =
         fast_vec_dist(&moby->v[0], (void *)((char *)path + path->n * 16));
     speed_increment = frame_time_sq * 16.0f;
-    current_speed = st->v60;
+    current_speed = st->slot_path_speed;
     if (endpoint_distance_or_step_length <=
         (current_speed * current_speed) / (speed_increment + speed_increment)) {
         f32 low = current_speed - speed_increment;
         f32 minimum_path_speed = infobot_slot_path_minimum_speed_gp * frame_time;
-        st->v60 = low;
+        st->slot_path_speed = low;
         if (low < minimum_path_speed)
-            st->v60 = minimum_path_speed;
+            st->slot_path_speed = minimum_path_speed;
     } else {
         f32 high = current_speed + speed_increment;
         f32 maximum_path_speed = frame_time * 16.0f;
-        st->v60 = high;
+        st->slot_path_speed = high;
         if (maximum_path_speed < high)
-            st->v60 = maximum_path_speed;
+            st->slot_path_speed = maximum_path_speed;
     }
     path_segment_index = truncate_float_to_s32(w_ / path->a[0].f[3]);
     segment_offset_or_fraction =
@@ -241,7 +241,7 @@ void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_s
     endpoint_distance_or_step_length =
         vector_distance_xy((void *)((char *)path + path->n * 16), &moby->v[0]);
     if (endpoint_distance_or_step_length < 1.0f) {
-        if (st->v60 <= infobot_slot_path_minimum_speed_gp * frame_time) {
+        if (st->slot_path_speed <= infobot_slot_path_minimum_speed_gp * frame_time) {
             moby->flag = arrival_state;
         }
     }
@@ -249,31 +249,39 @@ void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_s
         target_yaw_or_movement_yaw_offset =
             fast_arc_tan(path->a[path_segment_index + 1].f[0] - moby->v[0],
                          path->a[path_segment_index + 1].f[1] - moby->v[1]);
-        moby->f48 =
-            turn_f(&st->v6C, moby->f48, target_yaw_or_movement_yaw_offset, 0.01f, 0.3f, 0.1f);
+        moby->f48 = turn_f(&st->rotation_z_turn_step,
+                           moby->f48,
+                           target_yaw_or_movement_yaw_offset,
+                           0.01f,
+                           0.3f,
+                           0.1f);
     } else {
         target_yaw_or_movement_yaw_offset =
             fast_arc_tan(hero.motion.pos.f[0] - moby->v[0], hero.motion.pos.f[1] - moby->v[1]);
-        moby->f48 =
-            turn_f(&st->v6C, moby->f48, target_yaw_or_movement_yaw_offset, 0.01f, 0.3f, 0.1f);
+        moby->f48 = turn_f(&st->rotation_z_turn_step,
+                           moby->f48,
+                           target_yaw_or_movement_yaw_offset,
+                           0.01f,
+                           0.3f,
+                           0.1f);
     }
     fast_vec_sub(&v, &path_target_point, &moby->v[0]);
     endpoint_distance_or_step_length = FUN_001f9af0_2d5988(&v);
-    if (st->v60 < endpoint_distance_or_step_length)
-        endpoint_distance_or_step_length = st->v60;
+    if (st->slot_path_speed < endpoint_distance_or_step_length)
+        endpoint_distance_or_step_length = st->slot_path_speed;
     FUN_001f9bf8_2d5988(&v, &v, endpoint_distance_or_step_length);
     fast_vec_add(&moby->v[0], &moby->v[0], &v);
     target_yaw_or_movement_yaw_offset =
         fast_subtract_rotations(fast_arc_tan(v.f[0], v.f[1]), moby->f48);
     {
         f32 xa, xb;
-        xa = st->v60 * 0.34906584f * FUN_001f9dc8_2d5988(target_yaw_or_movement_yaw_offset) /
-             (frame_time * 16.0f);
-        xb = st->v60 * -0.34906584f * FUN_001f9de0_2d5988(target_yaw_or_movement_yaw_offset) /
-             (frame_time * 16.0f);
+        xa = st->slot_path_speed * 0.34906584f *
+             FUN_001f9dc8_2d5988(target_yaw_or_movement_yaw_offset) / (frame_time * 16.0f);
+        xb = st->slot_path_speed * -0.34906584f *
+             FUN_001f9de0_2d5988(target_yaw_or_movement_yaw_offset) / (frame_time * 16.0f);
         {
             f32 updated_rotation_y, k70;
-            updated_rotation_y = turn_f(&st->v68,
+            updated_rotation_y = turn_f(&st->rotation_y_turn_step,
                                         moby->f44,
                                         xa,
                                         frame_time_sq * 0.52359879f,
@@ -281,7 +289,7 @@ void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_s
                                         frame_time * 0.785398185f);
             k70 = frame_time_sq;
             moby->f44 = updated_rotation_y;
-            moby->f40 = turn_f(&st->v64,
+            moby->f40 = turn_f(&st->rotation_x_turn_step,
                                moby->f40,
                                xb,
                                k70 * 1.04719758f,

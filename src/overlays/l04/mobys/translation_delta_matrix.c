@@ -17,6 +17,9 @@ void translation_delta_matrix_update(char *moby) {
     enum {
         MOBY_TRANSLATION_DELTA_STATE_INITIALIZE = 0
     };
+    enum {
+        MOBY_TRANSLATION_DELTA_STATE_INITIALIZED = 1
+    };
     char *moby_vars = ((char *)MOBY(moby)->pvars);
     float position_delta[4];
     fast_vec_sub(position_delta, moby + 0x10, moby_vars + 0xA0);
@@ -28,6 +31,6 @@ void translation_delta_matrix_update(char *moby) {
         moby_vars[0x28] = 4;
         *(short *)(moby_vars + 0x3E) = 0xD;
         copy_hero_moby_field_38(moby);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = MOBY_TRANSLATION_DELTA_STATE_INITIALIZED;
     }
 }

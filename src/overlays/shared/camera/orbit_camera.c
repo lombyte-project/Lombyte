@@ -15,21 +15,21 @@
 typedef struct {
     u8  pad[0x28];
     f32 f28;
-    f32 f2C;
+    f32 orbit_pitch_spring_stiffness;
     f32 f30;
     f32 f34;
-    f32 f38;
-    f32 f3C;
+    f32 view_yaw_offset_spring_stiffness;
+    f32 orbit_yaw_spring_damping;
     f32 f40;
-    f32 f44;
-    f32 f48;
-    f32 f4C;
+    f32 orbit_distance_spring_damping;
+    f32 view_pitch_offset_spring_damping;
+    f32 view_yaw_offset_spring_damping;
     u8  pad50[0x4C];
-    s32 f9C;
-    f32 fA0;
-    f32 fA4;
+    s32 orbit_origin_snap_enabled;
+    f32 orbit_origin_spring_stiffness;
+    f32 orbit_origin_spring_damping;
     s32 fA8;
-    s32 fAC;
+    s32 view_roll_offset;
     u8  padB0[0x40];
     s32 fF0;
 } Moby002eb3b0;
@@ -38,7 +38,7 @@ typedef struct {
     u8            pad[0x70];
     Moby002eb3b0 *m;
     u8            pad78[0xA];
-    s16           f7E;
+    s16           camera_selection_mode;
 } S002eb3b0;
 
 typedef struct {
@@ -135,26 +135,26 @@ void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
     Moby002eb3b0 *m;
     camera_object->m->fF0 = 0;
     m = camera_object->m;
-    m->f9C = 0;
+    m->orbit_origin_snap_enabled = 0;
     m->fA8 = 0;
-    m->fAC = 0;
-    m->fA0 = 0.3f;
-    m->fA4 = 0.3f;
-    m->f48 = 0.99f;
-    m->f3C = 0.04f;
+    m->view_roll_offset = 0;
+    m->orbit_origin_spring_stiffness = 0.3f;
+    m->orbit_origin_spring_damping = 0.3f;
+    m->view_pitch_offset_spring_damping = 0.99f;
+    m->orbit_yaw_spring_damping = 0.04f;
     m->f40 = 0.04f;
-    m->f44 = 0.04f;
-    m->f4C = 0.04f;
+    m->orbit_distance_spring_damping = 0.04f;
+    m->view_yaw_offset_spring_damping = 0.04f;
     m->f28 = 0.07f;
-    m->f2C = 1.0f;
+    m->orbit_pitch_spring_stiffness = 1.0f;
     m->f30 = 0.07f;
     m->f34 = 1.0f;
-    m->f38 = 0.07f;
+    m->view_yaw_offset_spring_stiffness = 0.07f;
     zero_five_words((u8 *)m + 0x50);
     zero_five_words(m);
     clear_twelve_bytes((u8 *)m + 0x90);
     initialize_orbit_camera_pose(camera_object);
-    camera_object->f7E = 0;
+    camera_object->camera_selection_mode = 0;
 }
 
 void update_orbit_camera_pose(char *camera_object) __asm__("FUN_L00_002eb480");

@@ -249,12 +249,12 @@ extern float level02_elevator_ring_segment_half_height_gp __asm__("D_L02_00161BF
     __attribute__((sda));
 extern float level02_elevator_ring_segment_angle_degrees_gp __asm__("D_L02_00161C10")
     __attribute__((sda));
-int         D_L02_00161BF4 = 0;
-int         D_L02_00161BF8 = 2;
-int         D_L02_00161BFC = 0;
-int         D_L02_00161C00 = 1;
-int         D_L02_00161C04 = 0x206068;
-int         D_L02_00161C08 = 0x40107020;
+int         level02_elevator_ring_blend_color_a_selector __asm__("D_L02_00161BF4") = 0;
+int         level02_elevator_ring_blend_color_b_selector __asm__("D_L02_00161BF8") = 2;
+int         level02_elevator_ring_blend_alpha_selector __asm__("D_L02_00161BFC") = 0;
+int         level02_elevator_ring_blend_color_d_selector __asm__("D_L02_00161C00") = 1;
+int         level02_elevator_ring_zero_speed_color __asm__("D_L02_00161C04") = 0x206068;
+int         level02_elevator_ring_max_speed_color __asm__("D_L02_00161C08") = 0x40107020;
 extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void draw_geometry_quad(void *, void *, int);
 
@@ -286,8 +286,8 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     int            i, j, sign, period;
     lower = lower - half;
     lower += translation;
-    color = fast_tween_color(D_L02_00161C04,
-                             D_L02_00161C08,
+    color = fast_tween_color(level02_elevator_ring_zero_speed_color,
+                             level02_elevator_ring_max_speed_color,
                              absolute_float((moby_vars->unkB0)) /
                                  (level02_elevator_max_vertical_speed_gp * D_0015ED6C));
     copy_matrix_rotation(&matrix, &moby->rot_row0);
@@ -296,8 +296,10 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     matrix.position[3] = 1.0f;
     packet.texture = get_effect_texture(14);
     packet.flags = 0xFF9000000260L;
-    packet.mode = (long)D_L02_00161BF4 | ((long)D_L02_00161BF8 << 2) | ((long)D_L02_00161BFC << 4) |
-                  ((long)D_L02_00161C00 << 6) | 0x8000000000L;
+    packet.mode = (long)level02_elevator_ring_blend_color_a_selector |
+                  ((long)level02_elevator_ring_blend_color_b_selector << 2) |
+                  ((long)level02_elevator_ring_blend_alpha_selector << 4) |
+                  ((long)level02_elevator_ring_blend_color_d_selector << 6) | 0x8000000000L;
     packet.zero = 0;
     uv = level02_elevator_ring_segment_uvs;
     point = packet.position;

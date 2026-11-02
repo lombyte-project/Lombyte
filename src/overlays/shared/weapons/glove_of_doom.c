@@ -54,9 +54,9 @@ typedef float Mat3_2c7548[3][4] __attribute__((aligned(16)));
 /* Counters kept at D_00141680 for the carrier's deliveries. */
 typedef struct {
     u8  pad0[0xA0];
-    u16 deliveries; /* 0xA0: counts up to 0xFFFF */
-    u16 unkA2;      /* 0xA2: raised to scale_game_frames(D_0015EEA4) / 600 */
-    u32 levels;     /* 0xA4: bit per level index, plus 0x80000000 */
+    u16 deliveries;                /* 0xA0: counts up to 0xFFFF */
+    u16 max_delivery_frame_bucket; /* 0xA2: raised to scale_game_frames(D_0015EEA4) / 600 */
+    u32 levels;                    /* 0xA4: bit per level index, plus 0x80000000 */
 } DeliveryStats;
 
 unsigned char *spawn_glove_of_doom_held_moby(int   spawning_moby,
@@ -345,8 +345,8 @@ void glove_of_doom_update(struct Moby *moby) {
             if (D_00141680.deliveries < 0xFFFF) {
                 D_00141680.deliveries++;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > D_00141680.unkA2) {
-                D_00141680.unkA2 = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > D_00141680.max_delivery_frame_bucket) {
+                D_00141680.max_delivery_frame_bucket = scale_game_frames(D_0015EEA4) / 600;
             }
             D_00141680.levels = D_00141680.levels | (1 << current_level_index) | 0x80000000;
             release_glove_of_doom_held_moby((void *)&glove_carrier_vars->grip,

@@ -77,6 +77,9 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
 struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) __asm__("FUN_L09_0030a778");
 
 struct Moby *respawn_spawner_child(struct Moby *parent_spawner_moby, Vec4 *pos) {
+    enum {
+        SPAWNER_CHILD_STATE_INITIAL = 0
+    };
     struct Moby *spawned_moby;
     struct Moby *child_suck_cannon_record;
     u8          *owner_vars;
@@ -98,7 +101,7 @@ struct Moby *respawn_spawner_child(struct Moby *parent_spawner_moby, Vec4 *pos) 
         owner_vars[0x91] = owner_vars[0x91] + 1;
         qcopy_nc(&spawned_moby->pos, pos_ptr);
         spawned_moby->pos.w = 0.0f;
-        spawned_moby->state = 0;
+        spawned_moby->state = SPAWNER_CHILD_STATE_INITIAL;
         spawned_moby->command = 0;
         spawned_moby->flags = spawned_moby->pclass->flags;
         spawned_moby->scale = spawned_moby->pclass->scale;

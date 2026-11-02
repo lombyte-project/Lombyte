@@ -101,8 +101,9 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
             return 1;
         }
         {
-            CamRec20 *rec = &D_0015EF90[candidate->descriptor_index];
-            int       secondary_descriptor_index = *(int *)((char *)rec->unk1C + 0x24);
+            CamRec20 *candidate_descriptor_entry = &D_0015EF90[candidate->descriptor_index];
+            int       secondary_descriptor_index =
+                *(int *)((char *)candidate_descriptor_entry->unk1C + 0x24);
 
             if (secondary_descriptor_index < 0 ||
                 (hero_state->rail_spline == D_0015EF40[secondary_descriptor_index].unk10 &&

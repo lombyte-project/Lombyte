@@ -53,7 +53,7 @@ typedef struct {
     char           pad7C[3];
     unsigned char  flag7F;
     char           pad80[0x30];
-    unsigned char  bB0;
+    unsigned char  persistent_state_slot;
     char           padB1;
     unsigned short hB2;
 } L01WatchMoby;
@@ -64,11 +64,11 @@ typedef struct {
     short         h6;
     unsigned char b8;
     char          pad09[0x17];
-    void         *p20;
+    void         *dialogue_data;
     char          pad24[0x20];
     int           i44;
     char          pad48[4];
-    int           i4C;
+    int           camera_cuboid_index;
     char          body[0x64];
     float         pitch;
     float         yaw;
@@ -119,7 +119,10 @@ float D_L08_00161FB0 = 2.1f;
 void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) __asm__("FUN_L01_002ff028");
 
 void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) {
-    if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
+    enum {
+        CUTSCENE_MODE_ACTIVE = 2
+    };
+    if (cutscene_mode == CUTSCENE_MODE_ACTIVE && big_head_cheat_enabled != 0) {
         int i;
         for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
             char *moby = D_L01_0016CCE0_q.m[i];
@@ -154,6 +157,9 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
     enum {
         PLUMBER_FALLBACK_DIALOGUE_INITIALIZED = 7
     };
+    enum {
+        CUTSCENE_MODE_ACTIVE = 2
+    };
     L01WatchScratch look_tracking_vectors;
     L01WatchData   *plumber_vars = (L01WatchData *)plumber_moby->data;
     float           rate;
@@ -177,13 +183,13 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
                 mark_moby_for_removal(plumber_moby);
                 return;
             }
-            plumber_vars->p20 = (void *)plumber_level_one_dialogue_data;
+            plumber_vars->dialogue_data = (void *)plumber_level_one_dialogue_data;
             plumber_moby->state = PLUMBER_LEVEL_ONE_DIALOGUE;
         } else if (current_level_index == 8) {
-            plumber_vars->p20 = (void *)plumber_level_eight_dialogue_data;
+            plumber_vars->dialogue_data = (void *)plumber_level_eight_dialogue_data;
             plumber_moby->state = PLUMBER_LEVEL_EIGHT_DIALOGUE;
         } else {
-            plumber_vars->p20 = (void *)plumber_fallback_dialogue_data;
+            plumber_vars->dialogue_data = (void *)plumber_fallback_dialogue_data;
             plumber_moby->state = PLUMBER_FALLBACK_DIALOGUE_INITIALIZED;
         }
         initialize_npc_dialogue(plumber_moby, plumber_vars);
@@ -195,12 +201,12 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         }
         break;
     case PLUMBER_LEVEL_ONE_POST_DIALOGUE:
-        if (cutscene_mode == 2)
+        if (cutscene_mode == CUTSCENE_MODE_ACTIVE)
             break;
-        if (visited52[plumber_moby->bB0 + current_level_index * 16] != 0xFF) {
-            jet_clear_persistent(plumber_moby->bB0);
-            if (plumber_vars->i4C != -1) {
-                LevelCuboid *camera_record = &l01_cuboids[plumber_vars->i4C];
+        if (visited52[plumber_moby->persistent_state_slot + current_level_index * 16] != 0xFF) {
+            jet_clear_persistent(plumber_moby->persistent_state_slot);
+            if (plumber_vars->camera_cuboid_index != -1) {
+                LevelCuboid *camera_record = &l01_cuboids[plumber_vars->camera_cuboid_index];
                 jet_reset_camera(&camera_record->pos, &camera_record->rot);
             }
         }
@@ -224,7 +230,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         }
         break;
     case PLUMBER_LEVEL_EIGHT_POST_DIALOGUE:
-        if (cutscene_mode == 2)
+        if (cutscene_mode == CUTSCENE_MODE_ACTIVE)
             break;
         if (plumber_vars->h6 == 2) {
             D_0013F350_w.f80 = 130.5f;

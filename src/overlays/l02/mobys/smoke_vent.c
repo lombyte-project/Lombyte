@@ -34,10 +34,10 @@ extern f32 alternating_smoke_puff_acceleration_w_random_range_start_gp __asm__("
     __attribute__((sda));
 extern f32 alternating_smoke_puff_acceleration_w_random_range_end_gp __asm__("D_L02_00162074")
     __attribute__((sda));
-s32 D_L02_00162078 = 0x404080ff;
-s32 D_L02_0016207C = 0x404080c0;
-s32 D_L02_00162080 = 0x20804050;
-s32 D_L02_00162084 = 0x20603038;
+s32 l02_alternating_smoke_puff_first_color_tween_start __asm__("D_L02_00162078") = 0x404080ff;
+s32 l02_alternating_smoke_puff_first_color_tween_end __asm__("D_L02_0016207C") = 0x404080c0;
+s32 l02_alternating_smoke_puff_second_color_tween_start __asm__("D_L02_00162080") = 0x20804050;
+s32 l02_alternating_smoke_puff_second_color_tween_end __asm__("D_L02_00162084") = 0x20603038;
 
 #include "rnc/overlay/l02/mobys/smoke_vent_data/update_smoke_vent_6.h"
 
@@ -56,10 +56,10 @@ extern f32 view_gated_smoke_puff_acceleration_w_random_range_start_gp __asm__("D
     __attribute__((sda));
 extern f32 view_gated_smoke_puff_acceleration_w_random_range_end_gp __asm__("D_L02_001620B4")
     __attribute__((sda));
-s32 D_L02_001620B8 = 0x6000ff80;
-s32 D_L02_001620BC = 0x6020ff40;
-s32 D_L02_001620C0 = 0x20408040;
-s32 D_L02_001620C4 = 0x20206020;
+s32 l02_view_gated_smoke_puff_first_color_tween_start __asm__("D_L02_001620B8") = 0x6000ff80;
+s32 l02_view_gated_smoke_puff_first_color_tween_end __asm__("D_L02_001620BC") = 0x6020ff40;
+s32 l02_view_gated_smoke_puff_second_color_tween_start __asm__("D_L02_001620C0") = 0x20408040;
+s32 l02_view_gated_smoke_puff_second_color_tween_end __asm__("D_L02_001620C4") = 0x20206020;
 
 #include "rnc/overlay/l02/mobys/smoke_vent_data/update_smoke_vent_4.h"
 
@@ -78,13 +78,13 @@ extern f32 view_gated_smoke_burst_acceleration_w_random_range_start_gp __asm__("
     __attribute__((sda));
 extern f32 view_gated_smoke_burst_acceleration_w_random_range_end_gp __asm__("D_L02_001620F8")
     __attribute__((sda));
-s32        D_L02_001620FC = 0x804080ff;
-s32        D_L02_00162100 = 0x8040ffff;
-s32        D_L02_00162104 = 0x80204040;
-s32        D_L02_00162108 = 0x80204080;
+s32 l02_view_gated_smoke_burst_first_color_tween_start __asm__("D_L02_001620FC") = 0x804080ff;
+s32 l02_view_gated_smoke_burst_first_color_tween_end __asm__("D_L02_00162100") = 0x8040ffff;
+s32 l02_view_gated_smoke_burst_second_color_tween_start __asm__("D_L02_00162104") = 0x80204040;
+s32 l02_view_gated_smoke_burst_second_color_tween_end __asm__("D_L02_00162108") = 0x80204080;
 extern s32 view_gated_smoke_burst_interval_min_gp __asm__("D_L02_0016210C") __attribute__((sda));
 extern s32 view_gated_smoke_burst_interval_max_gp __asm__("D_L02_00162110") __attribute__((sda));
-s32        D_L02_00162114 = 0x10019;
+s32        l02_view_gated_smoke_burst_spawn_options __asm__("D_L02_00162114") = 0x10019;
 
 #include "rnc/overlay/l02/mobys/smoke_vent_data/update_smoke_vent_2.h"
 
@@ -103,13 +103,13 @@ extern f32 alternating_smoke_burst_acceleration_w_random_range_start_gp __asm__(
     __attribute__((sda));
 extern f32 alternating_smoke_burst_acceleration_w_random_range_end_gp __asm__("D_L02_00162148")
     __attribute__((sda));
-s32        D_L02_0016214C = 0x804080ff;
-s32        D_L02_00162150 = 0x8040ffff;
-s32        D_L02_00162154 = 0x80204040;
-s32        D_L02_00162158 = 0x80204080;
+s32 l02_alternating_smoke_burst_first_color_tween_start __asm__("D_L02_0016214C") = 0x804080ff;
+s32 l02_alternating_smoke_burst_first_color_tween_end __asm__("D_L02_00162150") = 0x8040ffff;
+s32 l02_alternating_smoke_burst_second_color_tween_start __asm__("D_L02_00162154") = 0x80204040;
+s32 l02_alternating_smoke_burst_second_color_tween_end __asm__("D_L02_00162158") = 0x80204080;
 extern s32 alternating_smoke_burst_interval_min_gp __asm__("D_L02_0016215C") __attribute__((sda));
 extern s32 alternating_smoke_burst_interval_max_gp __asm__("D_L02_00162160") __attribute__((sda));
-s32        D_L02_00162164 = 0x10019;
+s32        l02_alternating_smoke_burst_spawn_options __asm__("D_L02_00162164") = 0x10019;
 
 /* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)
  * on a timer plus occasional single puffs (D_L02_00162088 / D_L02_00162048); state 2 alternates its puff life.
@@ -206,10 +206,14 @@ void smoke_vent_update(struct Moby *moby) {
                 acc.f[3] = random_float_between(
                     view_gated_smoke_burst_acceleration_w_random_range_start_gp,
                     view_gated_smoke_burst_acceleration_w_random_range_end_gp);
-                color_a1_burst = fast_tween_color(
-                    D_L02_001620FC, D_L02_00162100, random_float_between(0.0f, 1.0f));
-                color_b1_burst = fast_tween_color(
-                    D_L02_00162104, D_L02_00162108, random_float_between(0.0f, 1.0f));
+                color_a1_burst =
+                    fast_tween_color(l02_view_gated_smoke_burst_first_color_tween_start,
+                                     l02_view_gated_smoke_burst_first_color_tween_end,
+                                     random_float_between(0.0f, 1.0f));
+                color_b1_burst =
+                    fast_tween_color(l02_view_gated_smoke_burst_second_color_tween_start,
+                                     l02_view_gated_smoke_burst_second_color_tween_end,
+                                     random_float_between(0.0f, 1.0f));
                 time_a1_burst = truncate_float_to_s32(
                     scale_time((f32)view_gated_smoke_burst_timing_random_span_gp *
                                    random_float_between(0.0f, 1.0f) +
@@ -232,7 +236,7 @@ void smoke_vent_update(struct Moby *moby) {
                         (random_float_between(-view_gated_smoke_burst_timing_variation_fraction_gp,
                                               view_gated_smoke_burst_timing_variation_fraction_gp) +
                          1.0f))),
-                    D_L02_00162114);
+                    l02_view_gated_smoke_burst_spawn_options);
             }
         }
         if (random_integer_below(4) != 0) {
@@ -265,10 +269,12 @@ void smoke_vent_update(struct Moby *moby) {
                                  view_gated_smoke_puff_velocity_w_random_range_end_gp);
         acc.f[3] = random_float_between(view_gated_smoke_puff_acceleration_w_random_range_start_gp,
                                         view_gated_smoke_puff_acceleration_w_random_range_end_gp);
-        color_a1_puff =
-            fast_tween_color(D_L02_001620B8, D_L02_001620BC, random_float_between(0.0f, 1.0f));
-        color_b1_puff =
-            fast_tween_color(D_L02_001620C0, D_L02_001620C4, random_float_between(0.0f, 1.0f));
+        color_a1_puff = fast_tween_color(l02_view_gated_smoke_puff_first_color_tween_start,
+                                         l02_view_gated_smoke_puff_first_color_tween_end,
+                                         random_float_between(0.0f, 1.0f));
+        color_b1_puff = fast_tween_color(l02_view_gated_smoke_puff_second_color_tween_start,
+                                         l02_view_gated_smoke_puff_second_color_tween_end,
+                                         random_float_between(0.0f, 1.0f));
         time_a1_puff = truncate_float_to_s32(scale_time(
             (f32)view_gated_smoke_puff_timing_random_span_gp * random_float_between(0.0f, 1.0f) +
             1.0f));
@@ -343,10 +349,14 @@ void smoke_vent_update(struct Moby *moby) {
                 acc.f[3] = random_float_between(
                     alternating_smoke_burst_acceleration_w_random_range_start_gp,
                     alternating_smoke_burst_acceleration_w_random_range_end_gp);
-                color_a2_burst = fast_tween_color(
-                    D_L02_0016214C, D_L02_00162150, random_float_between(0.0f, 1.0f));
-                color_b2_burst = fast_tween_color(
-                    D_L02_00162154, D_L02_00162158, random_float_between(0.0f, 1.0f));
+                color_a2_burst =
+                    fast_tween_color(l02_alternating_smoke_burst_first_color_tween_start,
+                                     l02_alternating_smoke_burst_first_color_tween_end,
+                                     random_float_between(0.0f, 1.0f));
+                color_b2_burst =
+                    fast_tween_color(l02_alternating_smoke_burst_second_color_tween_start,
+                                     l02_alternating_smoke_burst_second_color_tween_end,
+                                     random_float_between(0.0f, 1.0f));
                 time_a2_burst = truncate_float_to_s32(
                     scale_time((f32)alternating_smoke_burst_timing_random_span_gp *
                                    random_float_between(0.0f, 1.0f) +
@@ -369,7 +379,7 @@ void smoke_vent_update(struct Moby *moby) {
                                      -alternating_smoke_burst_timing_variation_fraction_gp,
                                      alternating_smoke_burst_timing_variation_fraction_gp) +
                                  1.0f))),
-                            D_L02_00162164);
+                            l02_alternating_smoke_burst_spawn_options);
             }
         }
         fast_vec_normalize_scale_first(
@@ -399,10 +409,12 @@ void smoke_vent_update(struct Moby *moby) {
                                  alternating_smoke_puff_velocity_w_random_range_end_gp);
         acc.f[3] = random_float_between(alternating_smoke_puff_acceleration_w_random_range_start_gp,
                                         alternating_smoke_puff_acceleration_w_random_range_end_gp);
-        color_a2_puff =
-            fast_tween_color(D_L02_00162078, D_L02_0016207C, random_float_between(0.0f, 1.0f));
-        color_b2_puff =
-            fast_tween_color(D_L02_00162080, D_L02_00162084, random_float_between(0.0f, 1.0f));
+        color_a2_puff = fast_tween_color(l02_alternating_smoke_puff_first_color_tween_start,
+                                         l02_alternating_smoke_puff_first_color_tween_end,
+                                         random_float_between(0.0f, 1.0f));
+        color_b2_puff = fast_tween_color(l02_alternating_smoke_puff_second_color_tween_start,
+                                         l02_alternating_smoke_puff_second_color_tween_end,
+                                         random_float_between(0.0f, 1.0f));
         time_a2_puff = truncate_float_to_s32(
             scale_time((f32) * &smoke_vent_vars->unkC8 * random_float_between(0.0f, 1.0f) + 1.0f));
         time_b2_puff = truncate_float_to_s32(

@@ -50,15 +50,15 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 typedef struct {
     char  pad0[0xC0];
     char  buf[0x50];
-    float f110;
+    float firing_yaw;
     float pad114;
-    float f118;
+    float firing_pitch;
     char  pad11C[4];
-    int   w120;
+    int   path_target_node_index;
     int   w124;
     char  pad128[8];
-    float f130;
-    float f134;
+    float aim_vector_length_limit;
+    float aim_yaw_oscillation_phase;
     char *c138;
     char *c13c;
 } D1454;
@@ -67,7 +67,7 @@ typedef struct {
     char          pad0[0x20];
     unsigned char state;
     char          pad21[0x32];
-    unsigned char b53;
+    unsigned char current_animation_index;
     char          pad54[0x24];
     D1454        *data;
 } M1454;
@@ -93,6 +93,9 @@ void rocket_tank_update(M1454 *moby) {
         ROCKET_TANK_PATROLLING = 1,
         ROCKET_TANK_FIRING = 2
     };
+    enum {
+        ROCKET_TANK_AIM_YAW_OSCILLATION_INITIAL_PHASE = 0
+    };
     D1454 *tank_data = moby->data;
     update_rocket_tank_damage_and_aim(moby);
     switch (moby->state) {
@@ -102,7 +105,7 @@ void rocket_tank_update(M1454 *moby) {
         *(unsigned char *)((char *)tank_data + 0x28) = 3;
         *(float *)((char *)tank_data + 0x20) = 6.0f;
         tank_data->w124 = scale_game_frames(240);
-        tank_data->w120 = 0;
+        tank_data->path_target_node_index = 0;
         if (tank_data->c138 == 0) {
             char *c = create_moby(0x14B);
             tank_data->c138 = c;
@@ -143,7 +146,7 @@ void rocket_tank_update(M1454 *moby) {
             blend_moby_animation(tank_data->c13c, 0, 0, 0);
             update_entity(tank_data->c13c);
         }
-        if (moby->b53 != 1) {
+        if (moby->current_animation_index != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
         moby->state = ROCKET_TANK_PATROLLING;
@@ -151,9 +154,9 @@ void rocket_tank_update(M1454 *moby) {
     case ROCKET_TANK_PATROLLING:
         func_L18_002F9AB8_v(moby);
         if (*(int *)((char *)tank_data + 0xB4) != 2) {
-            tank_data->f134 = 0;
-            tank_data->f130 = 10.0f;
-            if (moby->b53 != 2) {
+            tank_data->aim_yaw_oscillation_phase = ROCKET_TANK_AIM_YAW_OSCILLATION_INITIAL_PHASE;
+            tank_data->aim_vector_length_limit = 10.0f;
+            if (moby->current_animation_index != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(20));
             }
             moby->state = ROCKET_TANK_FIRING;
@@ -161,8 +164,9 @@ void rocket_tank_update(M1454 *moby) {
         break;
     case ROCKET_TANK_FIRING:
         func_L18_002F9AB8_v(moby);
-        approach_value(&tank_data->f130, 30.0f, frame_time * 6.0f);
-        tank_data->f134 = fast_add_rotations(tank_data->f134, frame_time * 6.2831855f);
+        approach_value(&tank_data->aim_vector_length_limit, 30.0f, frame_time * 6.0f);
+        tank_data->aim_yaw_oscillation_phase =
+            fast_add_rotations(tank_data->aim_yaw_oscillation_phase, frame_time * 6.2831855f);
         if (is_value_within_interpolated_window((char *)moby, 4.0f) ||
             is_value_within_interpolated_window((char *)moby, 10.0f)) {
             float firing_vector[4];
@@ -176,12 +180,12 @@ void rocket_tank_update(M1454 *moby) {
                 firing_vector_scale = *(float *)&D_L18_0016247C;
             }
             firing_vector_scale *= frame_time;
-            firing_vector[0] =
-                fast_cos(tank_data->f110) * (fast_cos(tank_data->f118) * firing_vector_scale);
-            firing_vector[1] =
-                fast_sin(tank_data->f110) * (fast_cos(tank_data->f118) * firing_vector_scale);
+            firing_vector[0] = fast_cos(tank_data->firing_yaw) *
+                               (fast_cos(tank_data->firing_pitch) * firing_vector_scale);
+            firing_vector[1] = fast_sin(tank_data->firing_yaw) *
+                               (fast_cos(tank_data->firing_pitch) * firing_vector_scale);
             firing_vector[2] = 0;
-            firing_vector[2] = -fast_sin(tank_data->f118) * firing_vector_scale;
+            firing_vector[2] = -fast_sin(tank_data->firing_pitch) * firing_vector_scale;
             allocate_voice_for_target_entry(0, 0, (int)moby);
             emit_radial_particle_burst(moby, projectile_spawn_position, 0);
             if (vector_distance_xy((char *)moby + 0x10, &hero.motion.pos) > 10.0f) {
@@ -191,7 +195,7 @@ void rocket_tank_update(M1454 *moby) {
             }
         }
         if (*(int *)((char *)tank_data + 0xB4) == 2) {
-            if (moby->b53 != 1) {
+            if (moby->current_animation_index != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
             moby->state = ROCKET_TANK_PATROLLING;
@@ -417,7 +421,7 @@ typedef struct RocketTankVars {
     s32   unk120;
     u8    pad_124[0x4];
     f32   unk128;
-    f32   unk12C;
+    f32   path_movement_step_length;
     u8    pad_130[0x8];
     char *unk138;
     char *unk13C;
@@ -443,15 +447,16 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
     if (fast_difference_between_rotations(path_target_yaw, moby->rot.z) > 0.2617994f) {
         target_movement_step = frame_time;
     }
-    approach_value(&moby_vars->unk12C, target_movement_step, frame_time_sq);
+    approach_value(&moby_vars->path_movement_step_length, target_movement_step, frame_time_sq);
     z = 0.0f;
-    fast_vec_normalize(movement_step, &moby->rot_row0, moby_vars->unk12C);
+    fast_vec_normalize(movement_step, &moby->rot_row0, moby_vars->path_movement_step_length);
     FUN_L00_00258830((int)moby, (int)movement_step, 0.5f, 0.5f, z, 0);
     if (fast_vec_dist(&moby->pos, path_target_position) < 1.0f) {
         int k = random_integer_below(*D_L18_001B0EB0[moby_vars->unk100] - 1) + 1;
         moby_vars->unk120 = (moby_vars->unk120 + k) % *D_L18_001B0EB0[moby_vars->unk100];
     }
-    sc = moby_vars->unk12C / (*(float *)&rocket_tank_attached_moby_speed_reference_gp * frame_time);
+    sc = moby_vars->path_movement_step_length /
+         (*(float *)&rocket_tank_attached_moby_speed_reference_gp * frame_time);
     if (sc > 2.0f)
         sc = 2.0f;
     else if (sc < z)

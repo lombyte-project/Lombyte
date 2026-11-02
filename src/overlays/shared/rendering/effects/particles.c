@@ -539,10 +539,10 @@ void send_blast_hits(void *,
                      float) __asm__("FUN_L00_0025a9f8");
 
 typedef struct {
-    int   i0;
+    int   particle_path_reference;
     float unk4, unk8, fc;
     int   i10;
-    void *p14;
+    void *blast_source_moby;
 } Q_272438;
 
 void update_timed_sphere_probed_particle(struct EffectParticle *) __asm__("FUN_L00_00272438");
@@ -556,8 +556,12 @@ void update_timed_sphere_probed_particle(struct EffectParticle *particle) {
     int                  sphere_probe_result;
     previous_particle_position = *particle_position;
     particle_data->unk4 += particle_data->unk8;
-    path_sample_at_distance(
-        particle_data->i0, &x, &y, particle_position, particle_data->unk4, particle_data->fc);
+    path_sample_at_distance(particle_data->particle_path_reference,
+                            &x,
+                            &y,
+                            particle_position,
+                            particle_data->unk4,
+                            particle_data->fc);
     if (fast_dec_timer_s16(&particle->life)) {
         free_effect_particle(particle);
         return;
@@ -570,10 +574,10 @@ void update_timed_sphere_probed_particle(struct EffectParticle *particle) {
                                                   remaining_lifetime_frames * 0.08f /
                                                       ((float)scale_game_frames(0x1E) * 0.25f));
     }
-    sphere_probe_result =
-        collect_mobies_in_sphere(0.15f, particle_position, 0x10, particle_data->p14, 0);
+    sphere_probe_result = collect_mobies_in_sphere(
+        0.15f, particle_position, 0x10, particle_data->blast_source_moby, 0);
     position_copy = *particle_position;
-    send_blast_hits(particle_data->p14,
+    send_blast_hits(particle_data->blast_source_moby,
                     (void *)&position_copy,
                     D_L00_00177F00_272438,
                     sphere_probe_result,
@@ -602,7 +606,7 @@ typedef struct {
     u8       b8;
     u8       b9;
     u8       padA[2];
-    s32      wC;
+    s32      particle_size_bits;
     u8       v10[16];
     u8       v20[12];
     f32      unk2C;
@@ -631,7 +635,7 @@ P_2725d8 *spawn_moby_point_attached_particle(u8 *owner_moby,
     if (particle) {
         S_2725d8 *s;
         particle->w4 = color;
-        particle->wC = initial_size_bits;
+        particle->particle_size_bits = initial_size_bits;
         particle->b9 = truncate_float_to_s32(0.4f) + 0x20;
         particle->b3 = 0x48;
         particle->b1 = 3;
@@ -805,7 +809,7 @@ typedef struct {
     char  p0[0x88];
     float unk88;
     char  p1[0x2080 - 0x8C];
-    int   i2080;
+    int   hit_recipient_moby;
 } P_272bc0;
 
 extern char           D_0013F3D0[] NOT_SDA;
@@ -881,7 +885,7 @@ void update_color_tween_emitter_particle(struct EffectParticle *particle) {
                 fast_vec_sub(particle_vector_scratch, reference_position, particle->pos.f);
                 fast_vec_normalize(particle_vector_scratch, particle_vector_scratch, 1.0f);
                 particle_vector_scratch[2] = 1.0f;
-                spawn_nearby_effect(reference_position_owner->i2080,
+                spawn_nearby_effect(reference_position_owner->hit_recipient_moby,
                                     *(int *)(particle_data + 0x18),
                                     1,
                                     particle->pos.f,
@@ -1041,7 +1045,7 @@ typedef struct {
 typedef struct {
     u8  p0[0x10];
     f32 x, y, z;
-    int w1C;
+    int hero_relative_position_mode;
 } V_273298;
 
 typedef struct {
@@ -1053,10 +1057,13 @@ u32  FUN_001fa6e0_273298(u32, u32, f32) __asm__("FUN_001fa6e0");
 void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) __asm__("FUN_L00_00273298");
 
 void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) {
+    enum {
+        MOVING_PARTICLE_POSITION_HERO_RELATIVE = 1
+    };
     V_273298 *particle_data = (V_273298 *)((u8 *)particle + 0x20);
     float     remaining_frames_minus_one;
     u32       color_without_alpha;
-    if (particle_data->w1C == 1) {
+    if (particle_data->hero_relative_position_mode == MOVING_PARTICLE_POSITION_HERO_RELATIVE) {
         struct Hero *hero_reference = &hero;
         particle->x = hero_reference->motion.pos.f[0] + particle_data->x;
         particle->y = hero_reference->motion.pos.f[1] + particle_data->y;
@@ -1084,7 +1091,7 @@ void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) {
 
 typedef struct {
     u8 pad0[0x20];
-    s8 b20;
+    s8 attachment_owner_status;
 } T_273448;
 
 typedef struct {
@@ -1120,7 +1127,7 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
         return;
     }
     e = &particle->e;
-    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->b20 < 0) {
+    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->attachment_owner_status < 0) {
         goto kill;
     }
     e->hC = (e->hC + 1) & 0xF;
@@ -1580,15 +1587,15 @@ typedef struct {
     u8 *iC;
     f32 unk10;
     f32 unk14;
-    s16 h18;
-    s16 h1A;
-    s16 h1C;
+    s16 position_offset_multiplier;
+    s16 alpha_fade_decrement;
+    s16 trail_particle_mode;
 } R_274518;
 
 typedef struct {
     u8       p0[4];
     u8       b4[3];
-    s8       b7;
+    s8       particle_alpha;
     u8       p8[2];
     s16      hA;
     u8       pC[4];
@@ -1601,22 +1608,27 @@ u8 *FUN_L00_002743a8_274518(s32, void *, s32, f32, f32, s32, s32, void *) __asm_
 void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) __asm__("FUN_L00_00274518");
 
 void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
+    enum {
+        TRAIL_PARTICLE_MODE_ALPHA_FADE = 0,
+        TRAIL_PARTICLE_MODE_ORBITING_EMITTER = 1
+    };
     R_274518 *r = &particle->r;
     V_274518  position_offset_scratch, secondary_position_offset, rotation_angles;
     V_274518  secondary_offset_rotation_matrix[4];
     u8       *spawned_particle;
     f32       k1, k2, z;
 
-    if (r->h1C == 0) {
-        if (decrement_packed_countdown(particle->b4, r->h1A))
+    if (r->trail_particle_mode == TRAIL_PARTICLE_MODE_ALPHA_FADE) {
+        if (decrement_packed_countdown(particle->b4, r->alpha_fade_decrement))
             goto kill;
         if (r->iC == 0)
             return;
         position_offset_scratch.x = particle->r.unk0;
         position_offset_scratch.y = r->unk4;
         position_offset_scratch.z = r->unk8;
-        fast_vec_scale(
-            &position_offset_scratch, &position_offset_scratch, convert_integer_to_float(r->h18));
+        fast_vec_scale(&position_offset_scratch,
+                       &position_offset_scratch,
+                       convert_integer_to_float(r->position_offset_multiplier));
         fast_vec_add(particle->v10, r->iC + 0x10, &position_offset_scratch);
         return;
     }
@@ -1629,9 +1641,10 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
             return;
         }
     }
-    if (r->h1C == 1) {
+    if (r->trail_particle_mode == TRAIL_PARTICLE_MODE_ORBITING_EMITTER) {
         z = 0.0f;
-        FUN_L00_002743a8_274518(0, particle->v10, scale_game_frames(10), z, z, 0, particle->b7, 0);
+        FUN_L00_002743a8_274518(
+            0, particle->v10, scale_game_frames(10), z, z, 0, particle->particle_alpha, 0);
     } else {
         position_offset_scratch.x = r->unk0;
         position_offset_scratch.y = r->unk4;
@@ -1643,12 +1656,12 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
                                                    z,
                                                    z,
                                                    0,
-                                                   particle->b7,
+                                                   particle->particle_alpha,
                                                    &position_offset_scratch);
         if (spawned_particle)
-            *(s16 *)(spawned_particle + 0x38) = r->h18;
+            *(s16 *)(spawned_particle + 0x38) = r->position_offset_multiplier;
     }
-    if (r->h1C != 1)
+    if (r->trail_particle_mode != TRAIL_PARTICLE_MODE_ORBITING_EMITTER)
         return;
     qcopy(particle->v10, r->iC + 0x10);
     k1 = 2.25f;
@@ -1676,8 +1689,8 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
 typedef struct {
     void *o;
     u8    b4;
-    u8    b5;
-    s16   h6;
+    u8    offset_length_jitter_percent;
+    s16   expected_owner_identity;
     float unk8;
     float unkC;
 } S_274818;
@@ -1691,8 +1704,8 @@ void update_randomized_moby_point_attached_particle(struct EffectParticle *parti
     u128      attachment_offset;
     float     one, randomized_primary_position_w, save, x;
     char     *attachment_position;
-    if (o == 0 || *(s16 *)(o + 0xA6) != attachment_data->h6 || (u8)o[0x20] == 0xFE ||
-        (u8)o[0x20] == 0xFD) {
+    if (o == 0 || *(s16 *)(o + 0xA6) != attachment_data->expected_owner_identity ||
+        (u8)o[0x20] == 0xFE || (u8)o[0x20] == 0xFD) {
         free_effect_particle(particle);
         return;
     }
@@ -1702,7 +1715,7 @@ void update_randomized_moby_point_attached_particle(struct EffectParticle *parti
     save = *(float *)(particle->data + 0xC);
     moby_point_position(attachment_data->o, attachment_data->b4, attachment_position);
     build_moby_bone_transform(attachment_data->o, attachment_data->b4, attachment_vector_scratch);
-    x = convert_integer_to_float(attachment_data->b5);
+    x = convert_integer_to_float(attachment_data->offset_length_jitter_percent);
     x = random_float_between(-x, x);
     fast_vec_normalize(
         &attachment_offset, attachment_vector_scratch, (x / 100.0f - one) * attachment_data->unkC);
@@ -1840,18 +1853,18 @@ typedef struct {
 
 typedef struct {
     u8   p0[8];
-    s32  i8;
+    s32  far_distance_color;
     s32  iC;
     s16  h10;
     s16  h12;
-    s16  h14;
+    s16  final_phase_duration_frames;
     u8   p16[2];
-    f32 *p18;
+    f32 *motion_target_position;
 } R_274e48;
 
 typedef struct {
     u8       p0[4];
-    s32      i4;
+    s32      packed_particle_color;
     u8       b8;
     u8       p9;
     s16      hA;
@@ -1873,8 +1886,8 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
     if (D_L00_0015F5CC & 1)
         particle->b8++;
     distance_or_blend_factor = fast_vec_dist(&particle->v10, &(*(V_274e48 *)D_0013F420));
-    if (distance_or_blend_factor < 5.0f && 0.0f < r->p18[2]) {
-        fast_vec_sub(&motion_vector_scratch, r->p18, &particle->v10);
+    if (distance_or_blend_factor < 5.0f && 0.0f < r->motion_target_position[2]) {
+        fast_vec_sub(&motion_vector_scratch, r->motion_target_position, &particle->v10);
         if (0.5f < fast_vec_length(&motion_vector_scratch)) {
             fast_vec_normalize(
                 &motion_vector_scratch, &motion_vector_scratch, 0.1f / distance_or_blend_factor);
@@ -1889,15 +1902,18 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
         distance_or_blend_factor = 1.0f;
     else if (distance_or_blend_factor < 0.0f)
         distance_or_blend_factor = 0.0f;
-    particle->i4 = FUN_001fa6e0_274e48(r->i8, r->iC, distance_or_blend_factor);
+    particle->packed_particle_color =
+        FUN_001fa6e0_274e48(r->far_distance_color, r->iC, distance_or_blend_factor);
     if (r->h10) {
         *(volatile s32 *)0x10000000 = 0;
         load_display_text_resource_entry(&applied_motion_delta, r);
         fast_vec_add(&particle->v10, &particle->v10, &applied_motion_delta);
         distance_or_blend_factor =
             convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h10);
-        particle->i4 = FUN_001fa6e0_274e48(
-            particle->i4 & 0xFFFFFF, particle->i4, 1.0f - distance_or_blend_factor);
+        particle->packed_particle_color =
+            FUN_001fa6e0_274e48(particle->packed_particle_color & 0xFFFFFF,
+                                particle->packed_particle_color,
+                                1.0f - distance_or_blend_factor);
         if (fast_dec_timer_s16(&particle->hA)) {
             r->h10 = 0;
             particle->hA = r->h12;
@@ -1912,16 +1928,17 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
         fast_vec_add(&particle->v10, &particle->v10, &applied_motion_delta);
         if (fast_dec_timer_s16(&particle->hA)) {
             r->h12 = 0;
-            particle->hA = r->h14;
+            particle->hA = r->final_phase_duration_frames;
         }
     } else {
         load_display_text_resource_entry(&applied_motion_delta, (u8 *)r + 4);
         fast_vec_add(&particle->v10, &particle->v10, &applied_motion_delta);
-        color_without_alpha = particle->i4 & 0xFFFFFF;
-        particle->i4 = FUN_001fa6e0_274e48(color_without_alpha,
-                                           particle->i4,
-                                           convert_integer_to_float(particle->hA) /
-                                               convert_integer_to_float(r->h14));
+        color_without_alpha = particle->packed_particle_color & 0xFFFFFF;
+        particle->packed_particle_color =
+            FUN_001fa6e0_274e48(color_without_alpha,
+                                particle->packed_particle_color,
+                                convert_integer_to_float(particle->hA) /
+                                    convert_integer_to_float(r->final_phase_duration_frames));
         if (fast_dec_timer_s16(&particle->hA))
             free_effect_particle(particle);
     }

@@ -22,8 +22,8 @@ typedef struct {
 
 extern f32 rocket_launcher_projectile_vertical_velocity_approach_scale_gp __asm__("D_L02_00161F58")
     __attribute__((sda));
-s32            D_L02_00161F5C = 0x30704020;
-s32            D_L02_00161F60 = 0x50e0e0e0;
+s32 l02_rocket_projectile_particle_color_argb __asm__("D_L02_00161F5C") = 0x30704020;
+s32 l02_rocket_projectile_position_particle_alpha_source __asm__("D_L02_00161F60") = 0x50e0e0e0;
 extern LevelFx l02_projectile_trail_particle_tint_source __asm__("D_L02_001B2680");
 extern void    fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void    fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -69,8 +69,8 @@ void rocket_launcher_projectile_update(struct Moby *moby) {
         particle = spawn_particle(&trail_position,
                                   &back,
                                   particle_frame_count,
-                                  D_L02_00161F5C >> 24,
-                                  D_L02_00161F5C & 0xFFFFFF,
+                                  l02_rocket_projectile_particle_color_argb >> 24,
+                                  l02_rocket_projectile_particle_color_argb & 0xFFFFFF,
                                   3,
                                   random_float_between(300000.0f, 500000.0f),
                                   10000.0f,
@@ -88,8 +88,8 @@ void rocket_launcher_projectile_update(struct Moby *moby) {
     particle = spawn_particle(&moby->pos,
                               &back,
                               scale_game_frames(6),
-                              D_L02_00161F60 >> 24,
-                              D_L02_00161F5C & 0xFFFFFF,
+                              l02_rocket_projectile_position_particle_alpha_source >> 24,
+                              l02_rocket_projectile_particle_color_argb & 0xFFFFFF,
                               3,
                               250000.0f,
                               5000.0f,

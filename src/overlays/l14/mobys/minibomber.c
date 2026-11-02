@@ -76,8 +76,8 @@ typedef struct Moby_2B5938 {
     char           pad36[0x12];
     float          rot; /* 0x48 */
     char           pad4C[6];
-    unsigned char  f52; /* 0x52 */
-    unsigned char  f53; /* 0x53 */
+    unsigned char  source_animation_id; /* 0x52 */
+    unsigned char  target_animation_id; /* 0x53 */
     char           pad54[0x1C];
     unsigned char  f70; /* 0x70 */
     char           pad71[7];
@@ -85,9 +85,9 @@ typedef struct Moby_2B5938 {
     char           pad7C[3];
     unsigned char  f7F; /* 0x7F */
     char           pad80[0x14];
-    int            f94; /* 0x94 */
+    int            active_collision; /* 0x94 */
     char           pad98[0x1A];
-    short          fB2; /* 0xB2 */
+    short          unique_id; /* 0xB2 */
 } Moby_2B5938;
 
 typedef struct Data {
@@ -287,8 +287,9 @@ void minibomber_update(Moby_2B5938 *moby) {
     float  spd;
 
     if (moby->f70 & 2) {
-        if (moby->f52 == moby->f53 && moby->f52 != 0) {
-            if (moby->f52 == 2) {
+        if (moby->source_animation_id == moby->target_animation_id &&
+            moby->source_animation_id != 0) {
+            if (moby->source_animation_id == 2) {
                 blend_moby_animation(moby, 0, 0, 10);
             } else {
                 set_moby_animation_c(moby, 0, 0);
@@ -321,43 +322,43 @@ void minibomber_update(Moby_2B5938 *moby) {
     case MINIBOMBER_STATE_INITIALIZE: {
         PathNode *path;
         if (d->fD0 == -1) {
-            debug_print(D_L14_001FBDF0, moby->fB2);
+            debug_print(D_L14_001FBDF0, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         path = ((PathNode *)l14_paths[d->fD0]);
         if (path->n == 0) {
-            debug_print(D_L14_001FBE18, moby->fB2);
+            debug_print(D_L14_001FBE18, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->fD4 == -1) {
-            debug_print(D_L14_001FBE58, moby->fB2);
+            debug_print(D_L14_001FBE58, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (((PathNode *)l14_paths[d->fD4])->n == 0) {
-            debug_print(D_L14_001FBE80, moby->fB2);
+            debug_print(D_L14_001FBE80, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->fD8 == -1) {
-            debug_print(D_L14_001FBEC0, moby->fB2);
+            debug_print(D_L14_001FBEC0, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (((PathNode *)l14_paths[d->fD8])->n == 0) {
-            debug_print(D_L14_001FBEE8, moby->fB2);
+            debug_print(D_L14_001FBEE8, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (d->f150 == -1) {
-            debug_print(D_L14_001FBF20, moby->fB2);
+            debug_print(D_L14_001FBF20, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
         if (((PathNode *)l14_paths[d->f150])->n == 0) {
-            debug_print(minibomber_empty_exit_path_diagnostic, moby->fB2);
+            debug_print(minibomber_empty_exit_path_diagnostic, moby->unique_id);
             mark_moby_for_removal(moby);
             return;
         }
@@ -383,7 +384,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (d->fB4 != 2) {
             moby->state = MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH;
             moby->f34 &= 0xFFBE;
-            moby->f94 = moby->cls->f10;
+            moby->active_collision = moby->cls->f10;
             FUN_L14_002b5d18_c((char *)moby);
         }
         break;
@@ -487,7 +488,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             moby->state = MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH;
             FUN_L14_002b5c30_c((char *)moby);
         } else if (fast_dec_timer_s16(&d->f102) != 0) {
-            if (moby->f53 != 2) {
+            if (moby->target_animation_id != 2) {
                 moby->state = MINIBOMBER_STATE_AIM_AT_BOMB_POINT;
                 d->f102 = scale_game_frames(minibomber_bomb_aim_duration_frames);
                 d->f104 = 0.0f;
@@ -549,7 +550,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             (float)d->f102 /
                 convert_integer_to_float(scale_game_frames(minibomber_bomb_aim_duration_frames)));
         build_axis_rotation_quaternion(d->f120, 2, blended_aim_angle);
-        if (moby->f53 == 2) {
+        if (moby->target_animation_id == 2) {
             moby->state = MINIBOMBER_STATE_HOLD_AT_PATH_END;
             d->f102 = scale_game_frames(minibomber_aim_return_duration_frames);
         } else if (fast_dec_timer_s16(&d->f102) != 0) {

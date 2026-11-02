@@ -36,10 +36,10 @@ typedef struct {
     float      baseZ;     /* 0x84 */
     int        timer;     /* 0x88 */
     int        pad8C;
-    float      f90; /* 0x90 */
-    float      f94; /* 0x94 */
-    float      f98; /* 0x98 */
-    float      f9C; /* 0x9C */
+    float      rotation_amplitude_phase_angle;       /* 0x90 */
+    float      rotation_orientation_phase_angle;     /* 0x94 */
+    float      vertical_oscillation_phase_angle;     /* 0x98 */
+    float      previous_vertical_oscillation_offset; /* 0x9C */
 } PlatVars;
 
 extern float D_0015ED70;
@@ -153,11 +153,14 @@ void platform_update(Moby *moby) {
             allocate_voice_for_target_entry(2, 0, moby);
         }
     }
-    update_moby_vertical_oscillation(
-        0.14f, frame_time * 0.5235987901687622f, moby, &platform_vars->f98, &platform_vars->f9C);
+    update_moby_vertical_oscillation(0.14f,
+                                     frame_time * 0.5235987901687622f,
+                                     moby,
+                                     &platform_vars->vertical_oscillation_phase_angle,
+                                     &platform_vars->previous_vertical_oscillation_offset);
     update_moby_rotation_oscillation(moby,
-                                     &platform_vars->f90,
-                                     &platform_vars->f94,
+                                     &platform_vars->rotation_amplitude_phase_angle,
+                                     &platform_vars->rotation_orientation_phase_angle,
                                      0.0872664600610733f,
                                      frame_time * 0.3141592741012573f,
                                      frame_time * 0.48869219422340393f);

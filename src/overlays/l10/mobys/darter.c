@@ -92,7 +92,7 @@ typedef struct Vars_2e01a8 {
     unsigned char b5A;
     char          p5B[5];
     char          a60[0x80];
-    AlignedVec4f  vE0;
+    AlignedVec4f  dive_attack_aim_position;
     char          pF0[0x10];
     Moby         *target;
     int           f104;
@@ -372,11 +372,12 @@ void darter_update(Moby *moby) {
                    0.02f,
                    0.3f,
                    frame_time * 6.2831855f);
-        func_L00_0025CC58_2E0630(&moby->rot.y,
-                                 0,
-                                 -fast_arc_tan(vector_distance_xy(&moby->pos, &darter_vars->vE0),
-                                               darter_vars->vE0.z - moby->pos.z),
-                                 frame_time * 12.566371f);
+        func_L00_0025CC58_2E0630(
+            &moby->rot.y,
+            0,
+            -fast_arc_tan(vector_distance_xy(&moby->pos, &darter_vars->dive_attack_aim_position),
+                          darter_vars->dive_attack_aim_position.z - moby->pos.z),
+            frame_time * 12.566371f);
         if (is_value_within_interpolated_window((char *)moby, 20.0f)) {
             float one = 1.0f;
             *(int *)&vector_and_collision_scratch[13] = 1;
@@ -619,7 +620,7 @@ typedef struct Hit_2E2B80 {
     float        f10[4];
     struct Moby *moby;
     char         pad24[8];
-    float        f2C;
+    float        damage;
     int          f30;
 } Hit_2E2B80;
 
@@ -690,7 +691,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
         resolve_moby_hit_response(
             moby, hit_record, &class_1199_vars->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0 && hit_record->moby->oclass != moby->oclass) {
-            if (class_1199_vars->f20 <= hit_record->f2C) {
+            if (class_1199_vars->f20 <= hit_record->damage) {
                 class_1199_vars->f20 = 0.0f;
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 4)
@@ -717,7 +718,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
                 trooper_anim_update(moby, class_1199_vars->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                class_1199_vars->f20 = class_1199_vars->f20 - hit_record->f2C;
+                class_1199_vars->f20 = class_1199_vars->f20 - hit_record->damage;
                 class_1199_vars->f117 = 0xFA;
                 class_1199_vars->f26 = scale_game_frames(60);
                 trooper_anim_update(moby, class_1199_vars->f110);

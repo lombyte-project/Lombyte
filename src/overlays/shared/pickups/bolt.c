@@ -63,11 +63,11 @@ typedef struct Bolt {
     u8         pad21[3];
     BoltClass *pclass; /* 0x24 */
     u8         pad28[4];
-    f32        scale; /* 0x2C */
-    u8         unk30; /* 0x30 */
-    u8         unk31; /* 0x31 */
-    u16        unk32; /* 0x32 */
-    u16        flags; /* 0x34 */
+    f32        scale;         /* 0x2C */
+    u8         unk30;         /* 0x30 */
+    u8         is_visible;    /* 0x31 */
+    u16        draw_distance; /* 0x32 */
+    u16        flags;         /* 0x34 */
     u8         pad36[0x3D];
     u8         unk73; /* 0x73 */
     u8         pad74[4];
@@ -117,7 +117,7 @@ typedef struct {
     u8  pad_5C[0xC];
     f32 start_z; /* 0x68 */
     s16 unk6C;
-    s16 unk6E; /* random 0 .. 600 frames */
+    s16 glint_delay_frames; /* random 0 .. 600 frames */
 } BoltVars_u;
 
 extern float D_0015ED6C;
@@ -204,10 +204,10 @@ void bolt_update(Bolt *bolt_moby) {
     u8        i;
 
     if (D_L00_0015F5C4 == 2) {
-        bolt_moby->unk31 = 0;
+        bolt_moby->is_visible = 0;
         bolt_moby->flags |= 1;
     } else {
-        bolt_moby->unk31 = 1;
+        bolt_moby->is_visible = 1;
         bolt_moby->flags &= 0xFFFE;
     }
     switch (bolt_moby->state) {
@@ -216,7 +216,7 @@ void bolt_update(Bolt *bolt_moby) {
         bolt_moby->unk73 = 0x14;
         bolt_moby->flags |= 0x100;
         bolt_moby->unk30 = 0x20;
-        bolt_moby->unk32 = 0x20;
+        bolt_moby->draw_distance = 0x20;
         if (random_integer_below(2) == 0) {
             v->unk55 |= 1;
         }
@@ -354,11 +354,11 @@ void bolt_update(Bolt *bolt_moby) {
             return;
         }
         if ((u8 *)bolt_moby > D_L00_0015FFDC && D_L00_0015FFBC < 200 && 48.0f < hero_distance &&
-            bolt_moby->unk31 == 0) {
+            bolt_moby->is_visible == 0) {
             mark_moby_for_removal(bolt_moby);
             return;
         }
-        if (bolt_moby->unk31 != 0 || v->ground_moby != 0) {
+        if (bolt_moby->is_visible != 0 || v->ground_moby != 0) {
             FUN_L00_002a6de8_c(bolt_moby, 0, 0);
             if (v->hop_left != 0) {
                 u = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
@@ -787,7 +787,7 @@ struct Moby *spawn_bolt_by_value(
             set_moby_color(spawned_bolt, color[4], color[5], color[6]);
         else
             spawned_bolt->spawn_frame = bolt_source->spawn_frame;
-        bolt_vars->unk6E = random_int_between(0, scale_game_frames(600));
+        bolt_vars->glint_delay_frames = random_int_between(0, scale_game_frames(600));
         bolt_vars->unk6C = -1;
         qcopy(&spawned_bolt->pos, pos);
         qcopy(bolt_vars->vel, vel);

@@ -182,9 +182,9 @@ typedef struct {
     short n320[48];
     short n380[48];
     short n3E0[48];
-    float f440[48];
+    float spark_step_distance[48];
     int   pad500;
-    int   i504;
+    int   spark_area_cuboid_index;
 } Spk_k;
 
 int wind_spark_speed_range_start_gp __asm__("D_L14_00161C30") = 15;
@@ -210,7 +210,7 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
     up[1] = 0.0f;
     up[3] = 0.0f;
     fast_vec_cross(side, fwd, up);
-    qcopy(spark_vars->pos[i], &l14_cuboids[spark_vars->i504].pos);
+    qcopy(spark_vars->pos[i], &l14_cuboids[spark_vars->spark_area_cuboid_index].pos);
     x = -spark_vars->f14;
     y = randf_sym(0.0f, spark_vars->f18);
     z = randf_sym(0.0f, spark_vars->f1C);
@@ -223,10 +223,11 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
     fast_vec_add(spark_position, spark_position, position_offset);
     spark_vars->pos[i][3] =
         random_float_between(wind_spark_size_range_start_gp, wind_spark_size_range_end_gp);
-    spark_vars->f440[i] =
+    spark_vars->spark_step_distance[i] =
         random_float_between(wind_spark_speed_range_start_gp, wind_spark_speed_range_end_gp) *
         frame_time;
-    lifetime_frames = scale_game_frames(ftoi_k(spark_vars->f14 * 2.0f / spark_vars->f440[i]));
+    lifetime_frames =
+        scale_game_frames(ftoi_k(spark_vars->f14 * 2.0f / spark_vars->spark_step_distance[i]));
     spark_vars->n320[i] = lifetime_frames;
     spark_vars->n380[i] = lifetime_frames;
     spark_vars->n3E0[i] = 0;
@@ -257,7 +258,7 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
     spark_travel_direction[2] = 0.0f;
     qcopy(clip, &hero.motion.pos);
     clip[2] += 1.0f;
-    in_clip = is_point_inside_clip_volume(clip, spark_vars->i504);
+    in_clip = is_point_inside_clip_volume(clip, spark_vars->spark_area_cuboid_index);
     i = 0;
     pos = spark_vars->pos[0];
     shade = spark_vars->n3E0;
@@ -289,7 +290,8 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
                     *shade = spark_alpha;
                 }
             }
-            fast_vec_scale(spark_position_delta, spark_travel_direction, spark_vars->f440[i]);
+            fast_vec_scale(
+                spark_position_delta, spark_travel_direction, spark_vars->spark_step_distance[i]);
             fast_vec_add(pos, pos, spark_position_delta);
             if (in_clip != 0 && absolute_float(pos[0] - l14_camera.pos.f[0]) < 8.0f &&
                 absolute_float(pos[1] - l14_camera.pos.f[1]) < 8.0f &&

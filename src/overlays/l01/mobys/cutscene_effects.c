@@ -32,7 +32,7 @@ typedef struct {
     s32 unk4;
     u8  pad8[2];
     u8  unkA;
-    u8  unkB;
+    u8  initial_frame_count;
 } FxSparkTail;
 
 typedef struct {
@@ -192,7 +192,7 @@ void level01_cutscene_effects_update(struct Moby *moby) {
                                     spark->unk9 = truncate_float_to_s32(4.0f) + 0x40;
                                     spark_tail->unk4 = 2;
                                     spark_tail->unkA = color >> 24;
-                                    spark_tail->unkB = spark->unkA;
+                                    spark_tail->initial_frame_count = spark->unkA;
                                 }
                             }
                         }

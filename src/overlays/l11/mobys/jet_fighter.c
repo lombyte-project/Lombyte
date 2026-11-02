@@ -614,7 +614,7 @@ extern f32           D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((
 extern unsigned char D_0013A4E0[];
 
 extern short ship_shot_direction_base_scale_gp __asm__("D_L11_0016205C") __attribute__((sda));
-int          D_L11_00162060 = 4;
+int          l11_ship_shot_cooldown_frames __asm__("D_L11_00162060") = 4;
 void         update_ship_shot_firing_and_reticle(struct Moby *moby,
                                                  char        *ship_vars,
                                                  float        aim_azimuth,
@@ -642,7 +642,7 @@ void update_ship_shot_firing_and_reticle(struct Moby *moby,
         moby_point_position(moby, 3 + (ship_vars[0x61] & 1), projectile_spawn_position);
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, muzzle_forward_offset);
         spawn_fighter_jet_missile(moby, shot_direction, projectile_spawn_position, 200.0f, -1.0f);
-        *(int *)(ship_vars + 0x80) = D_L11_00162060;
+        *(int *)(ship_vars + 0x80) = l11_ship_shot_cooldown_frames;
         ship_vars[0x61] ^= 1;
         allocate_voice_for_target_entry(3, 0, (int)moby);
     }
@@ -659,7 +659,7 @@ void update_ship_shot_firing_and_reticle(struct Moby *moby,
 extern int spawn_ship_rocket(void *, void *, int, void *, float, int) __asm__("FUN_L11_00309378");
 
 extern short ship_projectile_base_scale_gp __asm__("D_L11_00162064") __attribute__((sda));
-int          D_L11_00162068 = 30;
+int          l11_ship_projectile_cooldown_frames __asm__("D_L11_00162068") = 30;
 void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) __asm__("FUN_L11_003126f8");
 
 void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) {
@@ -685,7 +685,7 @@ void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) {
                                   scale_game_frames(300))) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
-                *(int *)(ship_vars + 0x84) = D_L11_00162068;
+                *(int *)(ship_vars + 0x84) = l11_ship_projectile_cooldown_frames;
             }
         }
     }
@@ -721,28 +721,28 @@ typedef struct {
     float         f6C;
     float         f70;
     char          pad74[0xC];
-    int           i80;
-    int           i84;
+    int           shot_cooldown_frames;
+    int           rocket_cooldown_frames;
     char          pad88[8];
     float         f90, f94, f98, f9C;
     float         fA0, fA4, fA8, fAC;
     float         fB0, fB4, fB8, fBC;
     float         fC0, fC4, fC8, fCC;
     float         fD0, fD4, fD8;
-    int           iDC;
+    int           collision_damage_cooldown_timer_frames;
     char          padE0[8];
-    short         sE8;
-    short         sEA;
+    short         active_listed_moby_count;
+    short         visible_listed_moby_count;
     char          padEC[4];
     float         shown_hp;
     int           hp_bar_fill;
-    int           iF8;
+    int           respawn_or_exit_delay_timer_frames;
     int           exit_path;
     int           exit_path2;
     char          pad104[8];
-    int           i10C;
+    int           blarg_ship_list_index;
     char          pad110[4];
-    int           i114;
+    int           blarg_ship_activation_timer_frames;
     int           i118;
     char          pad11C[0x10];
     short         voice;
@@ -753,9 +753,9 @@ typedef struct {
 extern unsigned short D_00141C10 NOT_SDA;
 extern float D_L11_0016D4F0      NOT_SDA;
 extern char                      jet_fighter_collision_query_result[] __asm__("D_L11_00174840");
-int                              D_L11_00161FF0 = 120;
-int                              D_L11_00162004 = 5;
-int                              D_L11_0016214C = 10;
+int l11_jet_fighter_startup_acceleration_frame_threshold __asm__("D_L11_00161FF0") = 120;
+int l11_jet_fighter_steering_enable_frame_threshold __asm__("D_L11_00162004") = 5;
+int l11_jet_fighter_collision_damage_cooldown_frames __asm__("D_L11_0016214C") = 10;
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_15.h"
 
@@ -797,23 +797,31 @@ extern float l11_jet_fighter_vertical_steering_spring_damping_coefficient __asm_
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_9.h"
 
-extern float D_L11_001620BC __attribute__((sda));
-extern float D_L11_001620C0 __attribute__((sda));
+extern float l11_jet_fighter_rotation_x_spring_error_gain __asm__("D_L11_001620BC")
+    __attribute__((sda));
+extern float l11_jet_fighter_rotation_x_spring_damping_coefficient __asm__("D_L11_001620C0")
+    __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_8.h"
 
-extern float D_L11_001620E0 __attribute__((sda));
-extern float D_L11_001620E4 __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_x_spring_error_gain __asm__("D_L11_001620E0")
+    __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_x_spring_damping_coefficient __asm__("D_L11_001620E4")
+    __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_7.h"
 
-extern float D_L11_001620EC __attribute__((sda));
-extern float D_L11_001620F0 __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_y_spring_error_gain __asm__("D_L11_001620EC")
+    __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_y_spring_damping_coefficient __asm__("D_L11_001620F0")
+    __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_6.h"
 
-extern float D_L11_001620F8 __attribute__((sda));
-extern float D_L11_001620FC __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_z_spring_error_gain __asm__("D_L11_001620F8")
+    __attribute__((sda));
+extern float l11_jet_fighter_camera_rotation_z_spring_damping_coefficient __asm__("D_L11_001620FC")
+    __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/jet_fighter_data/update_player_ship_flight_5.h"
 
@@ -915,7 +923,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
             ship_vars->sel = 0;
         }
     }
-    if (D_L11_00161FF0 < ship_vars->count) {
+    if (l11_jet_fighter_startup_acceleration_frame_threshold < ship_vars->count) {
         pad = &controller_state;
         if (pad->raw_held & 0x40) {
             float accelerated_speed;
@@ -954,7 +962,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         ship_vars->count += 1;
     }
 
-    if (D_L11_00162004 < ship_vars->count) {
+    if (l11_jet_fighter_steering_enable_frame_threshold < ship_vars->count) {
         hero_input_source = &hero;
         x = hero_input_source->stick_x;
         y = hero_input_source->stick_y;
@@ -986,8 +994,8 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                      &ship_vars->f98,
                      0,
                      ship_vars->f6C * D_L11_0016207C,
-                     D_L11_001620BC,
-                     D_L11_001620C0,
+                     l11_jet_fighter_rotation_x_spring_error_gain,
+                     l11_jet_fighter_rotation_x_spring_damping_coefficient,
                      jet_fighter_rotation_x_snap_threshold_scale_gp);
         ship_vars->f34 = fast_subtract_rotations(ship_vars->f34, ship_vars->f70 * D_L11_00162014);
         if (ship_vars->f34 > 1.3962634f) {
@@ -1066,22 +1074,22 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                      &ship_vars->fA0,
                      0,
                      wr.e[1].v[0],
-                     D_L11_001620E0,
-                     D_L11_001620E4,
+                     l11_jet_fighter_camera_rotation_x_spring_error_gain,
+                     l11_jet_fighter_camera_rotation_x_spring_damping_coefficient,
                      jet_fighter_camera_rotation_x_snap_threshold_scale_gp);
         spring_angle(&ship_vars->f24,
                      &ship_vars->fA4,
                      0,
                      wr.e[1].v[1],
-                     D_L11_001620EC,
-                     D_L11_001620F0,
+                     l11_jet_fighter_camera_rotation_y_spring_error_gain,
+                     l11_jet_fighter_camera_rotation_y_spring_damping_coefficient,
                      jet_fighter_camera_rotation_y_snap_threshold_scale_gp);
         spring_angle(&ship_vars->f28,
                      &ship_vars->fA8,
                      0,
                      wr.e[1].v[2],
-                     D_L11_001620F8,
-                     D_L11_001620FC,
+                     l11_jet_fighter_camera_rotation_z_spring_error_gain,
+                     l11_jet_fighter_camera_rotation_z_spring_damping_coefficient,
                      jet_fighter_camera_rotation_z_snap_threshold_scale_gp);
     }
     camera_rotation[0] = ship_vars->f20;
@@ -1130,7 +1138,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
             ship_moby->visible = 0;
             ship_moby->state = JET_FIGHTER_STATE_WAIT_FOR_RESPAWN;
             ship_moby->flags |= 1;
-            ship_vars->iF8 = scale_game_frames(0x5A);
+            ship_vars->respawn_or_exit_delay_timer_frames = scale_game_frames(0x5A);
         } else {
             hc = *(short *)(*(char **)(collision_result + 0x18) + 0xA6);
             if (hc != 0 && hc != 0x192 && hc != 0x4C2 && hc != 0x4C3) {
@@ -1151,7 +1159,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                 k = ship_vars->speed * D_L11_0016204C;
                 ship_vars->f34 = collision_adjusted_pitch;
                 ship_vars->speed = k;
-                if (ship_vars->iDC == 0) {
+                if (ship_vars->collision_damage_cooldown_timer_frames == 0) {
                     hero.ship_hp = hero.ship_hp - jet_fighter_collision_damage_gp;
                     if (hero.ship_hp < 0.0f) {
                         fast_vec_sub(side, collision_result + 0x50, collision_result + 0x60);
@@ -1183,7 +1191,8 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                                         0);
                         ship_moby->state = JET_FIGHTER_STATE_WAIT_FOR_RESPAWN;
                     }
-                    ship_vars->iDC = D_L11_0016214C;
+                    ship_vars->collision_damage_cooldown_timer_frames =
+                        l11_jet_fighter_collision_damage_cooldown_frames;
                 }
             }
         }
@@ -1235,7 +1244,7 @@ unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") = 0x14;
 #include "rnc/overlay/l11/mobys/jet_fighter_data/jet_fighter_update.h"
 
 extern float D_L11_00162078 __attribute__((sda));
-int          D_L11_00162168 = 180;
+int          l11_jet_fighter_exit_delay_frames __asm__("D_L11_00162168") = 180;
 extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
 extern void  print_3290(char *) __asm__("FUN_001e93b0");
 extern void  FUN_L11_0024db50(int, int);
@@ -1264,7 +1273,7 @@ void jet_fighter_update(struct Moby *moby) {
 
     if (moby != 0) {
         ship_vars = (ShipVars_2838 *)moby->pvars;
-        fast_dec_timer(&ship_vars->iDC);
+        fast_dec_timer(&ship_vars->collision_damage_cooldown_timer_frames);
         if (moby->state != JET_FIGHTER_STATE_WAIT_FOR_RESPAWN &&
             moby->state != JET_FIGHTER_STATE_WAIT_FOR_BOARDING &&
             moby->state != JET_FIGHTER_STATE_BOARD) {
@@ -1355,8 +1364,8 @@ void jet_fighter_update(struct Moby *moby) {
                 *(Block400_3290 *)ship_hp_bar_saved_palette = *(Block400_3290 *)hp_bar_palette.clut;
             }
             hp_bar_saved = 1;
-            ship_vars->iF8 = 1;
-            ship_vars->sE8 = 1;
+            ship_vars->respawn_or_exit_delay_timer_frames = 1;
+            ship_vars->active_listed_moby_count = 1;
             ship_vars->fade = 0.0f;
             if (moby->mission != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF) {
                 moby->state = JET_FIGHTER_STATE_INACTIVE;
@@ -1406,7 +1415,7 @@ void jet_fighter_update(struct Moby *moby) {
                 clear_u64_value(&ship_vars->f30);
                 clear_u64_value(&ship_vars->f20);
                 ship_vars->f38 = ship_vars->f28 = moby->rot.z;
-                ship_vars->i114 = scale_game_frames(0x708);
+                ship_vars->blarg_ship_activation_timer_frames = scale_game_frames(0x708);
                 if (help_records[0x55].count == 0) {
                     help_request(0x2AFC, 0x55);
                 }
@@ -1432,8 +1441,8 @@ void jet_fighter_update(struct Moby *moby) {
                 ship_vars->speed = jet_fighter_initial_flight_speed_gp;
                 ship_vars->f6C = 0.0f;
                 ship_vars->f70 = 0.0f;
-                ship_vars->i84 = 0;
-                ship_vars->i80 = 0;
+                ship_vars->rocket_cooldown_frames = 0;
+                ship_vars->shot_cooldown_frames = 0;
                 ship_vars->fD4 = 0.0f;
                 ship_vars->fD8 = 0.0f;
                 moby->draw_dist = 0xFF;
@@ -1454,15 +1463,16 @@ void jet_fighter_update(struct Moby *moby) {
             D_L11_0015F608 = 2;
             update_player_ship_flight(moby, ship_vars);
             {
-                int alive = count_listed_blarg_ships_in_state_5(ship_vars->i10C);
-                if (ship_vars->sEA != 0 && alive < 5 - ship_vars->sE8 &&
-                    fast_dec_timer(&ship_vars->i114) &&
-                    activate_listed_blarg_ship(ship_vars->i10C)) {
-                    ship_vars->i114 = scale_game_frames(0xF0);
+                int alive = count_listed_blarg_ships_in_state_5(ship_vars->blarg_ship_list_index);
+                if (ship_vars->visible_listed_moby_count != 0 &&
+                    alive < 5 - ship_vars->active_listed_moby_count &&
+                    fast_dec_timer(&ship_vars->blarg_ship_activation_timer_frames) &&
+                    activate_listed_blarg_ship(ship_vars->blarg_ship_list_index)) {
+                    ship_vars->blarg_ship_activation_timer_frames = scale_game_frames(0xF0);
                 }
             }
-            if (ship_vars->sE8 <= 0) {
-                ship_vars->iF8 = D_L11_00162168;
+            if (ship_vars->active_listed_moby_count <= 0) {
+                ship_vars->respawn_or_exit_delay_timer_frames = l11_jet_fighter_exit_delay_frames;
                 moby->state = JET_FIGHTER_STATE_DELAYED_EXIT;
             }
             if (hero.ship_flags & 1) {
@@ -1509,14 +1519,14 @@ void jet_fighter_update(struct Moby *moby) {
         }
         case JET_FIGHTER_STATE_WAIT_FOR_RESPAWN:
             D_L11_0015F608 = 2;
-            if (fast_dec_timer(&ship_vars->iF8)) {
+            if (fast_dec_timer(&ship_vars->respawn_or_exit_delay_timer_frames)) {
                 hero_respawn();
             }
             break;
         case JET_FIGHTER_STATE_DELAYED_EXIT:
             D_L11_0015F608 = 2;
             update_player_ship_flight(moby, ship_vars);
-            if (fast_dec_timer(&ship_vars->iF8)) {
+            if (fast_dec_timer(&ship_vars->respawn_or_exit_delay_timer_frames)) {
                 approach_value(&ship_vars->fade, 1.0f, frame_time * 4.0f);
                 D_L11_0015F3FC = ship_vars->fade;
                 if (ship_vars->fade >= 1.0f) {

@@ -78,12 +78,12 @@ typedef struct LargeAmoeboidVars {
     f32   unk1C0[4];
     u8    pad1D0[0x30];
     char *target;
-    s32   unk204;
+    s32   target_selection_status;
     u8    pad208[0x8];
     f32   home_pos[4]; /* 0x210: position at spawn */
     u8    unk220[0x4];
-    f32   unk224;
-    f32   unk228;
+    f32   base_target_search_radius;
+    f32   effective_target_search_radius;
     s32   unk22C;
     s32   unk230;
     f32   unk234;
@@ -91,13 +91,13 @@ typedef struct LargeAmoeboidVars {
     f32   unk23C;
     s32   unk240;
     s32   unk244;
-    s32   unk248;
-    s32   unk24C;
+    s32   alternate_target_list_index;
+    s32   target_region_path_index;
     f32   size_scale; /* 0x250: 1, 0.7 or 0.49 by amoeboid size */
     f32   unk254;
-    s32   unk258;
+    s32   removal_height_table_index;
     s32   unk25C;
-    s32   unk260;
+    s32   target_search_gate_moby_index;
     u8    pad264[0xc];
     u8    unk270[0x4];
 } LargeAmoeboidVars;
@@ -138,14 +138,15 @@ void        spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) __asm__(
 extern void spawn_amoeboid_burst_sparks(unsigned char *, float *) __asm__("FUN_L01_002ef770");
 extern int  follow_path(int *, int, int, float, void *, void *, void *) __asm__("FUN_L01_00276fe8");
 extern void FUN_L01_0026d930(void *);
-extern void FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern int  FUN_L00_00261b48(int, void *, void *, void *);
-extern int  FUN_L00_002dc9f0(void *, void *);
-extern int  FUN_L00_00257470(void *, int, int);
-extern int  is_value_within_interpolated_window(float, void *) __asm__("FUN_00214cc8");
-extern int  FUN_00214720(void *, int);
-extern void FUN_0022da68(int, int, char *);
-extern int  FUN_00213260(int);
+extern void move_moby_with_ground_and_collision_checks(
+    void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
+extern int              path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
+extern int              FUN_L00_002dc9f0(void *, void *);
+extern int              FUN_L00_00257470(void *, int, int);
+extern int              is_value_within_interpolated_window(float, void *) __asm__("FUN_00214cc8");
+extern int              FUN_00214720(void *, int);
+extern void             FUN_0022da68(int, int, char *);
+extern int              FUN_00213260(int);
 extern float            FUN_00213308(void);
 extern float            frame_time_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70 MACRO_ADDR;
@@ -244,6 +245,9 @@ void large_amoeboid_update(unsigned char *moby) {
         LARGE_AMOEBOID_MEDIUM_VARIANT = 0x361,
         LARGE_AMOEBOID_SMALL_VARIANT = 0x362
     };
+    enum {
+        LARGE_AMOEBOID_DORMANT = 12
+    };
     LargeAmoeboidVars *large_amoeboid_vars = (LargeAmoeboidVars *)MOBY(moby)->pvars;
     char              *target;
     char              *target_position;
@@ -255,7 +259,7 @@ void large_amoeboid_update(unsigned char *moby) {
     int                blocked;
     int                result;
 
-    if (MOBY(moby)->state == 12) {
+    if (MOBY(moby)->state == LARGE_AMOEBOID_DORMANT) {
         MOBY(moby)->flags |= 1;
         return;
     }
@@ -293,14 +297,14 @@ void large_amoeboid_update(unsigned char *moby) {
         else
             large_amoeboid_vars->unk130 = &D_L01_00161A40;
         large_amoeboid_vars->unk29 = 1;
-        if (large_amoeboid_vars->unk258 != 0) {
+        if (large_amoeboid_vars->removal_height_table_index != 0) {
             large_amoeboid_vars->health = 1.0f;
             large_amoeboid_vars->unk230 = 1;
         } else {
             large_amoeboid_vars->health = 3.0f;
         }
-        if (large_amoeboid_vars->unk224 == 0.0f)
-            large_amoeboid_vars->unk224 = 15.0f;
+        if (large_amoeboid_vars->base_target_search_radius == 0.0f)
+            large_amoeboid_vars->base_target_search_radius = 15.0f;
         FUN_L01_0026d930(&large_amoeboid_vars->unk170);
         large_amoeboid_vars->unk17C = 2.0f;
         large_amoeboid_vars->unk178 = 2.0f;
@@ -309,13 +313,13 @@ void large_amoeboid_update(unsigned char *moby) {
         large_amoeboid_vars->unk170 = result;
         large_amoeboid_vars->unk194 = angle;
         if (large_amoeboid_vars->unk230 != 0) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
             MOBY(moby)->flags |= 0x1000;
         } else {
             if (large_amoeboid_vars->unk25C == -1)
-                MOBY(moby)->state = 12;
+                MOBY(moby)->state = LARGE_AMOEBOID_DORMANT;
             else
-                MOBY(moby)->state = 13;
+                MOBY(moby)->state = LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME;
             MOBY(moby)->collision = 0;
             *(int *)(moby + 0x58) = 0;
             MOBY(moby)->visible = 0;
@@ -325,7 +329,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         break;
     case LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH:
-        if (large_amoeboid_vars->unk204 != 2) {
+        if (large_amoeboid_vars->target_selection_status != 2) {
             if (FUN_00213260(4) == 0) {
                 path_hit = follow_path((int *)(&large_amoeboid_vars->unk240),
                                        1,
@@ -335,18 +339,18 @@ void large_amoeboid_update(unsigned char *moby) {
                                        target + 0x10,
                                        move);
                 if (path_hit != 0) {
-                    MOBY(moby)->state = 4;
+                    MOBY(moby)->state = LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET;
                     if (MOBY(moby)->prev_seq != 1)
                         blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                     clear_u64_value(&large_amoeboid_vars->unk40);
                     large_amoeboid_vars->unk234 = random_float_between(-0.34906584f, 0.34906584f);
                 } else {
-                    large_amoeboid_vars->unk204 = 2;
+                    large_amoeboid_vars->target_selection_status = 2;
                 }
             }
         }
-        if (large_amoeboid_vars->unk22C != 0 && large_amoeboid_vars->unk204 == 2) {
-            MOBY(moby)->state = 15;
+        if (large_amoeboid_vars->unk22C != 0 && large_amoeboid_vars->target_selection_status == 2) {
+            MOBY(moby)->state = LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET;
             if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, 5);
             return;
@@ -354,7 +358,7 @@ void large_amoeboid_update(unsigned char *moby) {
         large_amoeboid_vars->unk194 = large_amoeboid_vars->unk23C * 0.5f * frame_time_gp;
         if (MOBY(moby)->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, 5);
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION;
         break;
     case LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION:
         angle = fast_arc_tan(large_amoeboid_vars->home_pos[0] - MOBY(moby)->pos.x,
@@ -368,9 +372,9 @@ void large_amoeboid_update(unsigned char *moby) {
         move[0] = fast_cos(MOBY(moby)->rot.z);
         move[1] = fast_sin(MOBY(moby)->rot.z);
         move[2] = 0.0f;
-        FUN_L00_00258b50(
+        move_moby_with_ground_and_collision_checks(
             moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
-        result = large_amoeboid_vars->unk204;
+        result = large_amoeboid_vars->target_selection_status;
         if (result != 2 && FUN_00213260(4) == 0) {
             path_hit = follow_path((int *)(&large_amoeboid_vars->unk240),
                                    1,
@@ -380,7 +384,7 @@ void large_amoeboid_update(unsigned char *moby) {
                                    target + 0x10,
                                    hit);
             if (path_hit != 0) {
-                MOBY(moby)->state = 3;
+                MOBY(moby)->state = LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END;
                 if (MOBY(moby)->prev_seq != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                 clear_u64_value(&large_amoeboid_vars->unk40);
@@ -389,11 +393,11 @@ void large_amoeboid_update(unsigned char *moby) {
                 large_amoeboid_vars->unk234 = angle;
                 large_amoeboid_vars->unk194 = distance;
             } else {
-                large_amoeboid_vars->unk204 = 2;
+                large_amoeboid_vars->target_selection_status = 2;
             }
         }
-        if (large_amoeboid_vars->unk22C != 0 && large_amoeboid_vars->unk204 == 2) {
-            MOBY(moby)->state = 15;
+        if (large_amoeboid_vars->unk22C != 0 && large_amoeboid_vars->target_selection_status == 2) {
+            MOBY(moby)->state = LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET;
             if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, 5);
         }
@@ -412,20 +416,19 @@ void large_amoeboid_update(unsigned char *moby) {
         move[0] = fast_cos(MOBY(moby)->rot.z);
         move[1] = fast_sin(MOBY(moby)->rot.z);
         move[2] = 0.0f;
-        FUN_L00_00258b50(
+        move_moby_with_ground_and_collision_checks(
             moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
-        if (FUN_L00_00261b48(large_amoeboid_vars->unk240, &MOBY(moby)->pos, target + 0x10, hit) !=
-                0 &&
+        if (path_8808(large_amoeboid_vars->unk240, &MOBY(moby)->pos, target + 0x10, hit) != 0 &&
             fast_vec_dist(&MOBY(moby)->pos, hit) < 1.5f)
             blocked = 1;
         if (large_amoeboid_vars->unk22C == 0) {
-            MOBY(moby)->state = 5;
+            MOBY(moby)->state = LARGE_AMOEBOID_RETURN_TO_STORED_POSITION;
         } else if (blocked) {
-            MOBY(moby)->state = 16;
+            MOBY(moby)->state = LARGE_AMOEBOID_WAIT_WHILE_BLOCKED;
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         } else if (vector_distance_xy(&MOBY(moby)->pos, target + 0x10) < 2.0f) {
-            MOBY(moby)->state = 6;
+            MOBY(moby)->state = LARGE_AMOEBOID_LUNGE_AT_TARGET;
             if (MOBY(moby)->prev_seq != 2)
                 blend_moby_animation(moby, 2, 5, scale_game_frames(10));
             return;
@@ -434,7 +437,7 @@ void large_amoeboid_update(unsigned char *moby) {
     case LARGE_AMOEBOID_WAIT_WHILE_BLOCKED:
         if (!(MOBY(moby)->anim_flags & 2) || large_amoeboid_vars->unk22C != 0)
             return;
-        MOBY(moby)->state = 5;
+        MOBY(moby)->state = LARGE_AMOEBOID_RETURN_TO_STORED_POSITION;
         if (MOBY(moby)->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(20));
         return;
@@ -444,7 +447,7 @@ void large_amoeboid_update(unsigned char *moby) {
         target_position = target + 0x10;
         distance = vector_distance_xy(&MOBY(moby)->pos, target_position);
         if (distance < large_amoeboid_path_lunge_distance_threshold_gp) {
-            MOBY(moby)->state = 6;
+            MOBY(moby)->state = LARGE_AMOEBOID_LUNGE_AT_TARGET;
             large_amoeboid_vars->unk194 =
                 (large_amoeboid_vars->unk23C + large_amoeboid_vars->unk23C) * frame_time_gp;
             if (MOBY(moby)->prev_seq != 2)
@@ -481,13 +484,13 @@ void large_amoeboid_update(unsigned char *moby) {
                 move[1] = fast_sin(MOBY(moby)->rot.z);
                 move[1] += move[1];
                 move[2] = 0.0f;
-                FUN_L00_00258b50(
+                move_moby_with_ground_and_collision_checks(
                     moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
             } else {
-                large_amoeboid_vars->unk204 = 2;
+                large_amoeboid_vars->target_selection_status = 2;
             }
-            if (large_amoeboid_vars->unk204 == 2)
-                MOBY(moby)->state = 5;
+            if (large_amoeboid_vars->target_selection_status == 2)
+                MOBY(moby)->state = LARGE_AMOEBOID_RETURN_TO_STORED_POSITION;
             spawn_amoeboid_movement_particles(moby);
             return;
         }
@@ -510,7 +513,7 @@ void large_amoeboid_update(unsigned char *moby) {
             move[1] = fast_sin(*rotation);
             move[1] += move[1];
             move[2] = 0.0f;
-            FUN_L00_00258b50(
+            move_moby_with_ground_and_collision_checks(
                 moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
         }
         if (is_value_within_interpolated_window(15.5f, moby) != 0 &&
@@ -527,7 +530,7 @@ void large_amoeboid_update(unsigned char *moby) {
             return;
         }
         if (MOBY(moby)->anim_flags & 2) {
-            MOBY(moby)->state = 7;
+            MOBY(moby)->state = LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH;
             if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             large_amoeboid_vars->unk194 = large_amoeboid_vars->unk23C * frame_time_gp;
@@ -538,7 +541,7 @@ void large_amoeboid_update(unsigned char *moby) {
     case LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH:
         if (!(MOBY(moby)->anim_flags & 2))
             return;
-        MOBY(moby)->state = 4;
+        MOBY(moby)->state = LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET;
         if (MOBY(moby)->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         return;
@@ -548,7 +551,7 @@ void large_amoeboid_update(unsigned char *moby) {
         distance = vector_distance_xy(&MOBY(moby)->pos,
                                       (target_position = &large_amoeboid_vars->home_pos));
         if (distance < 1.0f) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
         } else {
             if (follow_path((int *)(&large_amoeboid_vars->unk240),
                             1,
@@ -581,10 +584,11 @@ void large_amoeboid_update(unsigned char *moby) {
             move[1] = fast_sin(MOBY(moby)->rot.z);
             move[1] += move[1];
             move[2] = 0.0f;
-            FUN_L00_00258b50(
+            move_moby_with_ground_and_collision_checks(
                 moby, &large_amoeboid_vars->unk170, move, &large_amoeboid_vars->unk40, 1.0f);
         }
-        if (large_amoeboid_vars->unk204 != 2 && (MOBY(moby)->state = 4, MOBY(moby)->prev_seq != 1))
+        if (large_amoeboid_vars->target_selection_status != 2 &&
+            (MOBY(moby)->state = 4, MOBY(moby)->prev_seq != 1))
             blend_moby_animation(moby, 1, 0, scale_game_frames(3));
         spawn_amoeboid_movement_particles(moby);
         return;
@@ -602,7 +606,7 @@ void large_amoeboid_update(unsigned char *moby) {
             if (path_hit != 0) {
                 FUN_0022da68(4, 0, (char *)moby);
                 large_amoeboid_vars->unk194 = large_amoeboid_vars->unk23C * frame_time_gp;
-                MOBY(moby)->state = 9;
+                MOBY(moby)->state = LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH;
                 if (MOBY(moby)->prev_seq != 5)
                     blend_moby_animation(moby, 5, 4, scale_game_frames(10));
                 qcopy(&large_amoeboid_vars->home_pos, &MOBY(moby)->pos);
@@ -617,7 +621,7 @@ void large_amoeboid_update(unsigned char *moby) {
         return;
     case LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH:
         if (MOBY(moby)->anim_flags & 2) {
-            MOBY(moby)->state = 4;
+            MOBY(moby)->state = LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET;
             if (MOBY(moby)->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             clear_u64_value(&large_amoeboid_vars->unk40);
@@ -635,7 +639,7 @@ void large_amoeboid_update(unsigned char *moby) {
             int   result;
             distance = MOBY(moby)->pos.z + 20.0f;
             flags = MOBY(moby)->flags | 0x1000;
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
             MOBY(moby)->flags = flags;
             MOBY(moby)->anim_speed = 1.0f;
             MOBY(moby)->pos.z = distance;
@@ -647,7 +651,7 @@ void large_amoeboid_update(unsigned char *moby) {
         return;
     case LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION:
         if (FUN_L00_002dc9f0(moby, &large_amoeboid_vars->unk60)) {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
             large_amoeboid_vars->unk128 = 0;
         }
         break;
@@ -799,7 +803,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         return;
     }
     MOBY(moby)->hit_slot = 0xFF;
-    removal_height_entry_index = moby_vars->unk258;
+    removal_height_entry_index = moby_vars->removal_height_table_index;
     if (removal_height_entry_index != 0 && MOBY(moby)->state != LARGE_AMOEBOID_INITIALIZE &&
         MOBY(moby)->pos.z < *(float *)(removal_height_entry_index * 0x1190 + pool_draw_tiles + 8)) {
         clear_u64_value(&scratch_vector);
@@ -812,41 +816,41 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         moby_vars->unk38 = 0;
     }
     if (fast_dec_timer(&moby_vars->unk22C) != 0) {
-        moby_vars->unk228 = moby_vars->unk224;
+        moby_vars->effective_target_search_radius = moby_vars->base_target_search_radius;
     } else {
-        moby_vars->unk228 = moby_vars->unk224 + 20.0f;
+        moby_vars->effective_target_search_radius = moby_vars->base_target_search_radius + 20.0f;
     }
-    path_search_gate_moby_index = moby_vars->unk260;
+    path_search_gate_moby_index = moby_vars->target_search_gate_moby_index;
     if (path_search_gate_moby_index <= 0 ||
         *(unsigned char *)((path_search_gate_moby_index << 8) + (*(int *)&D_L01_0015FFD8) + 0xBC) !=
             0) {
-        search_path = ((char *)l01_paths[moby_vars->unk24C]);
+        search_path = ((char *)l01_paths[moby_vars->target_region_path_index]);
         path_search_position = &moby_vars->unk1C0;
-        if (FUN_L00_0025ff38(moby_vars->unk228,
+        if (FUN_L00_0025ff38(moby_vars->effective_target_search_radius,
                              moby,
                              path_search_position,
                              0,
                              0,
                              search_path + 0x10,
                              *(int *)search_path) != 2) {
-            if (moby_vars->unk228 <
+            if (moby_vars->effective_target_search_radius <
                     vector_distance_xy(&moby_vars->home_pos, path_search_position) ||
                 3.0f < absolute_float(MOBY(moby)->pos.z - moby_vars->unk1C0[2])) {
-                moby_vars->unk204 = 2;
+                moby_vars->target_selection_status = 2;
             }
         }
     }
-    candidate_list_index = moby_vars->unk248;
+    candidate_list_index = moby_vars->alternate_target_list_index;
     if (candidate_list_index >= 0) {
         cand = find_nearest_class_26f_moby_in_list(moby, candidate_list_index);
         if (cand != 0) {
             candidate_distance = vector_distance_xy(&MOBY(moby)->pos, cand + 0x10);
-            if (candidate_distance < moby_vars->unk228) {
-                if (moby_vars->unk204 == 2 ||
+            if (candidate_distance < moby_vars->effective_target_search_radius) {
+                if (moby_vars->target_selection_status == 2 ||
                     candidate_distance <
                         vector_distance_xy(&MOBY(moby)->pos, moby_vars->target + 0x10)) {
                     moby_vars->target = cand;
-                    moby_vars->unk204 = 1;
+                    moby_vars->target_selection_status = 1;
                 }
             }
         }
@@ -918,7 +922,7 @@ char *activate_smaller_amoeboid(void *source_moby) {
             qcopy(&smaller_amoeboid->pos, &source_amoeboid->pos);
             qcopy(&smaller_amoeboid->rot, &source_amoeboid->rot);
             other_vars->health = self_vars->health;
-            other_vars->unk224 = self_vars->unk224;
+            other_vars->base_target_search_radius = self_vars->base_target_search_radius;
             update_entity(smaller_amoeboid);
             return (char *)smaller_amoeboid;
         }

@@ -1901,6 +1901,9 @@ s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 
 s32 can_select_hero_item_31(void) {
+    enum {
+        HERO_CONTROL_MODE_JUMP = 4
+    };
     struct Hero *hero_state;
     u32          control_mode;
     if (get_hero_target_pose_status())
@@ -1911,7 +1914,7 @@ s32 can_select_hero_item_31(void) {
     if (hero_state->vehicle_mode)
         return 0;
     control_mode = hero_state->state.control_mode;
-    if (control_mode < 3 || control_mode == 4)
+    if (control_mode < 3 || control_mode == HERO_CONTROL_MODE_JUMP)
         return hero_state->base_condition == 0;
     return 0;
 }
@@ -3187,7 +3190,7 @@ typedef struct {
 
 typedef struct {
     u8       p0[0x18];
-    s32      i18;
+    s32      hit_moby;
     s32      i1C;
     u8       p1[0x40 - 0x20];
     V_212318 v40;
@@ -3263,7 +3266,7 @@ void clip_hero_velocity_against_probed_surfaces(int force) {
         X.i1C > 0)
         primary_hit_normal_angle = fast_arc_tan(X.v40.f[2], vector_length_xy(&X.v40));
     if (0.8726646304130554f <= primary_hit_normal_angle || r == 8 || r == 12) {
-        hero.unk240 = X.i18;
+        hero.unk240 = X.hit_moby;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_212318(&X.v40, &X.v40);
         inward_velocity_component =

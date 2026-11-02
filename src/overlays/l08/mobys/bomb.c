@@ -87,7 +87,7 @@ blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868") = {
 
 typedef struct Moby248Vars {
     u8  pad_0[0x7];
-    u8  unk7;
+    u8  fuse_flash_target_red;
     u8  pad_8[0x8];
     u8  unk10;
     u8  pad_11[0x7];
@@ -242,7 +242,7 @@ void moby_248_update(char *moby) {
         } else if (bomb_vars->timer_20 == scale_game_frames(0x3C) ||
                    bomb_vars->timer_20 == scale_game_frames(0x28) ||
                    bomb_vars->timer_20 == scale_game_frames(0x14)) {
-            bomb_vars->unk7 = 0xFA;
+            bomb_vars->fuse_flash_target_red = 0xFA;
             trooper_anim_update(moby, (short *)bomb_vars);
         }
         trooper_anim_finish(moby, bomb_vars);

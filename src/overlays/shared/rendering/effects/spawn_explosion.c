@@ -1149,7 +1149,7 @@ typedef struct {
 
 typedef struct {
     u8       pad[0x78];
-    V25f878 *p78;
+    V25f878 *data_id_record;
     u8       pad7c[0x100 - 0x7C];
 } M25f878;
 
@@ -1161,7 +1161,7 @@ M25f878 *find_listed_moby_by_data_id(s32 id) {
     s32 i;
     for (i = 1; i <= D_L00_001B0770[0]; i++) {
         M25f878 *candidate_moby = (M25f878 *)(D_L00_001B0770[i] * 0x100 + (s32)moby_table);
-        if (candidate_moby->p78->id == id)
+        if (candidate_moby->data_id_record->id == id)
             return candidate_moby;
     }
     return 0;

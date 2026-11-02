@@ -131,7 +131,7 @@ typedef struct {
     int      color[4];
     int      unk50, unk54, unk58;
     float    unk5C, unk60;
-    int      unk64;
+    int      corner_2_texture_v;
     float    unk68, unk6C;
     long     unk70, tex, unk80, unk88;
 } Q_2be890;
@@ -2362,7 +2362,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     quad.unk58 = 0;
     quad.unk5C = 1.0f;
     quad.unk60 = 1.0f;
-    quad.unk64 = 0;
+    quad.corner_2_texture_v = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, beam_origin_quad_basis_offset_length_gp);

@@ -22,7 +22,7 @@ typedef struct {
     float         f4, f8;
     short         hc, he;
     unsigned char p10[0x10];
-    int           i20;
+    int           rotation_step_x;
     float         f24, f28;
 } V_2af8b0;
 
@@ -41,7 +41,7 @@ typedef struct {
     f32 pos[4] __attribute__((aligned(16)));
     u8  b20, b21, b22, b23;
     u8  pad24[8];
-    f32 f2c;
+    f32 fragment_scale;
     u8  pad30[0x10];
     f32 f40, f44, f48;
     u8  pad4c[0x2C];
@@ -168,7 +168,7 @@ unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
         debris_data->f4 = MOBY(debris_moby)->pos.z;
         {
             short t = FUN_001f96f8_2af8b0(0x14);
-            debris_data->i20 = 0;
+            debris_data->rotation_step_x = 0;
             debris_data->he = t;
         }
         debris_data->f24 =
@@ -222,7 +222,7 @@ void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
         }
         break;
     case NANOTECH_CRATE_FRAGMENT_FADING:
-        fragment_moby->f2c *= crate_fragment_shrink_factor_gp;
+        fragment_moby->fragment_scale *= crate_fragment_shrink_factor_gp;
         if (fragment_moby->b23 < crate_fragment_fade_step_gp) {
             mark_moby_for_removal(fragment_moby);
         } else {

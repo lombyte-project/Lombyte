@@ -57,7 +57,7 @@ typedef struct {
     f32  f10;
     f32  f14;
     u8   pad18[0x30];
-    f32  f48;
+    f32  current_heading;
     u8   pad4C[0x2C];
     Ext *p78;
 } Mob;
@@ -78,7 +78,7 @@ typedef struct Mob_2C0CF8 {
     char          pad20[4];
     Cls_2C0CF8   *p24; /* 0x24 */
     char          pad28[4];
-    float         f2C; /* 0x2C */
+    float         spatial_scale; /* 0x2C */
     char          pad30[0x8C];
     unsigned char bBC; /* 0xBC */
 } Mob_2C0CF8;
@@ -500,8 +500,9 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                                                (horizontal_probe_distance * 3.0f));
         }
     }
-    if (2.5132742f < fast_difference_between_rotations(best, moby->f48)) {
-        best = fast_add_rotations(moby->f48, fast_subtract_rotations(best, moby->f48) * 0.5f);
+    if (2.5132742f < fast_difference_between_rotations(best, moby->current_heading)) {
+        best = fast_add_rotations(moby->current_heading,
+                                  fast_subtract_rotations(best, moby->current_heading) * 0.5f);
     }
     return best;
 }
@@ -584,7 +585,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
 
     can_halve = 1;
     func_001F9BF0_2C0CF8(jump, target, moby->pos);
-    func_L00_001FF5B0_2C0CF8(moby->f2C * 5.2f / moby->p24->unk24, jump, jump);
+    func_L00_001FF5B0_2C0CF8(moby->spatial_scale * 5.2f / moby->p24->unk24, jump, jump);
     func_001F9BD8_2C0CF8(land, moby->pos, jump);
     func_001F9C30_2C0CF8(half, jump, 0.5f);
     half_length = func_001F9CE8_2C0CF8(half);
@@ -600,7 +601,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
         }
         return 0;
     }
-    if (moby->f2C * 3.0f / moby->p24->unk24 < jump[2]) {
+    if (moby->spatial_scale * 3.0f / moby->p24->unk24 < jump[2]) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
@@ -616,18 +617,18 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
         }
         return 0;
     }
-    land[2] = land[2] + moby->f2C * 0.025f / moby->p24->unk24;
+    land[2] = land[2] + moby->spatial_scale * 0.025f / moby->p24->unk24;
     if (probe_moby_raised_sphere_collision(moby, 6, land)) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
-    land[2] = land[2] - moby->f2C * 0.025f / moby->p24->unk24;
+    land[2] = land[2] - moby->spatial_scale * 0.025f / moby->p24->unk24;
     qcopy_nc(from, moby->pos);
-    from[2] = from[2] + moby->f2C * 0.2f / moby->p24->unk24;
+    from[2] = from[2] + moby->spatial_scale * 0.2f / moby->p24->unk24;
     qcopy_nc(to, land);
-    to[2] = to[2] + moby->f2C * 0.2f / moby->p24->unk24;
+    to[2] = to[2] + moby->spatial_scale * 0.2f / moby->p24->unk24;
     if (check_line) {
         if (func_L00_001EFFF0_2C0CF8(from, to, 6, moby, 0) == 0) {
             if (can_halve) {

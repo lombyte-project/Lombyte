@@ -2,7 +2,7 @@
 
 struct HudSlotArray {
     u8  pad_0[0x64];
-    s32 unk64;
+    s32 slot_item_id;
 };
 
 extern struct HudSlotArray hud_chan_slots __asm__("D_00199B60");
@@ -21,7 +21,7 @@ s32 remove_hud_item(s32 hud_item_id) {
     s32  index;
 
     index = 0;
-    if (hud_chan_slots.unk64 != hud_item_id) {
+    if (hud_chan_slots.slot_item_id != hud_item_id) {
         cursor = (s32 *)((u8 *)&hud_chan_slots + 0x64);
     loop_2:
         index += 1;

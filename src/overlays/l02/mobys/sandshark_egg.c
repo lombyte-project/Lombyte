@@ -17,8 +17,8 @@ extern int step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 
-int  D_L02_00161C9C = 0x6f707070;
-int  D_L02_00161CA0 = 0x707070;
+int  l02_sandshark_egg_effect_initial_color __asm__("D_L02_00161C9C") = 0x6f707070;
+int  l02_sandshark_egg_effect_color_endpoint __asm__("D_L02_00161CA0") = 0x707070;
 void sandshark_egg_update(struct Moby *moby) __asm__("FUN_L02_002e0280");
 
 typedef struct SandsharkEggVars {
@@ -57,8 +57,8 @@ void sandshark_egg_update(struct Moby *moby) {
             random_effect_value = random_int_between(0x14, 0x28);
             spawn_effect(vp,
                          u,
-                         D_L02_00161C9C,
-                         D_L02_00161CA0,
+                         l02_sandshark_egg_effect_initial_color,
+                         l02_sandshark_egg_effect_color_endpoint,
                          effect_frame_count,
                          0x28,
                          random_effect_value,

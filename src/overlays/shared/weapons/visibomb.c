@@ -18,7 +18,7 @@
 
 typedef struct {
     u8  pad0[0x1A4];
-    s32 i1A4;
+    s32 input_button_mask;
 } C_b3058;
 
 typedef struct {
@@ -36,30 +36,30 @@ typedef struct {
 
 typedef struct {
     u8  pad0[0x68];
-    u16 u68;
-    u16 u6A;
-    s32 i6C;
+    u16 visibomb_use_count;
+    u16 visibomb_max_use_time;
+    s32 visibomb_usage_flags;
 } R_b3058;
 
 typedef struct {
-    s32 i0;
-    s32 i4;
+    s32 launch_cooldown_frames;
+    s32 active_missile_moby;
 } V_b3058;
 
 typedef struct {
     u8       pad0[0x10];
     f32      v10[4];
     u8       pad20[0x34 - 0x20];
-    u16      u34;
+    u16      moby_flags;
     u8       pad36[0x53 - 0x36];
-    u8       b53;
+    u8       animation_index;
     u8       pad54[0x70 - 0x54];
     u8       b70;
     u8       pad71[0x78 - 0x71];
     V_b3058 *v;
     u8       pad7C[0xD0 - 0x7C];
-    f32      vD0[2];
-    f32      fD8;
+    f32      launch_direction_xy[2];
+    f32      launch_direction_z;
 } O_b3058;
 
 extern int D_0015EEA4;
@@ -86,11 +86,11 @@ void visibomb_update(O_b3058 *visibomb_moby) {
     fast_dec_timer(v);
     controller = (C_b3058 *)&controller_state;
     g = &hero;
-    if (!(controller->i1A4 & g->items[0].button_mask))
+    if (!(controller->input_button_mask & g->items[0].button_mask))
         goto tail;
-    if (v->i0 != 0)
+    if (v->launch_cooldown_frames != 0)
         goto tail;
-    if (v->i4 != 0)
+    if (v->active_missile_moby != 0)
         goto tail;
     if (g->item_use_locked != 0)
         goto tail;
@@ -119,33 +119,35 @@ void visibomb_update(O_b3058 *visibomb_moby) {
             fast_vec_add(launch_position, launch_position, u);
             fast_vec_add(launch_position, launch_position, &camera->pos);
         } else if (hero.unk22C8 == 1) {
-            b = fast_arc_tan(vector_length_xy(visibomb_moby->vD0), visibomb_moby->fD8);
+            b = fast_arc_tan(vector_length_xy(visibomb_moby->launch_direction_xy),
+                             visibomb_moby->launch_direction_z);
             build_spherical_offset(launch_position, 0.6f, launch_yaw, -b);
             fast_vec_add(launch_position, launch_position, visibomb_moby->v10);
         } else {
             build_spherical_offset(launch_position, 0.6f, launch_yaw, -b);
             fast_vec_add(launch_position, launch_position, visibomb_moby->v10);
         }
-        if (visibomb_moby->b53 != 3) {
+        if (visibomb_moby->animation_index != 3) {
             blend_moby_animation(visibomb_moby, 3, 0, 0);
         }
         jet_camera_mode();
-        v->i4 = spawn_visibomb_missile(visibomb_moby, launch_position, launch_yaw, b);
+        v->active_missile_moby =
+            spawn_visibomb_missile(visibomb_moby, launch_position, launch_yaw, b);
         r = (R_b3058 *)item_usage;
-        if (r->u68 < 0xFFFF) {
-            r->u68++;
+        if (r->visibomb_use_count < 0xFFFF) {
+            r->visibomb_use_count++;
         }
-        if (scale_game_frames(D_0015EEA4) / 600 > r->u6A) {
-            r->u6A = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / 600 > r->visibomb_max_use_time) {
+            r->visibomb_max_use_time = scale_game_frames(D_0015EEA4) / 600;
         }
-        r->i6C = r->i6C | (1 << current_level_index) | 0x80000000;
-        v->i0 = scale_game_frames(0x3C);
-    } else if (controller->i1A4 & g->items[0].button_mask) {
+        r->visibomb_usage_flags = r->visibomb_usage_flags | (1 << current_level_index) | 0x80000000;
+        v->launch_cooldown_frames = scale_game_frames(0x3C);
+    } else if (controller->input_button_mask & g->items[0].button_mask) {
         allocate_voice_for_target_entry(0, 0, visibomb_moby);
     }
 tail:
-    if ((visibomb_moby->b70 & 2) && visibomb_moby->b53 != 1) {
+    if ((visibomb_moby->b70 & 2) && visibomb_moby->animation_index != 1) {
         blend_moby_animation(visibomb_moby, 1, 0, 0);
     }
-    visibomb_moby->u34 |= 4;
+    visibomb_moby->moby_flags |= 4;
 }

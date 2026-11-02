@@ -28,7 +28,7 @@ typedef struct {
     s32 unk4;
     u8  pad8[2];
     u8  unkA;
-    u8  unkB;
+    u8  initial_duration_frames;
 } FlockTail;
 
 typedef struct {
@@ -114,7 +114,7 @@ void phase_effect_controller_update(FlockMoby *moby) {
                         part->unkA = scale_game_frames_s32(60);
                         tail->unk4 = 2;
                         tail->unkA = color >> 24;
-                        tail->unkB = part->unkA;
+                        tail->initial_duration_frames = part->unkA;
                     }
                 }
             }

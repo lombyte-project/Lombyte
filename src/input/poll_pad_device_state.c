@@ -41,9 +41,9 @@ void poll_pad_device_state(struct PadState *pad_state) {
                 for (i = 0; i < byte_count; i++) {
                     pad_state->button_profile[i] = pad_response_buffer[i];
                 }
-                pad_state->profile_state = 1;
+                pad_state->profile_state = PAD_INPUT_POLLING;
             } else {
-                pad_state->profile_state = 2;
+                pad_state->profile_state = PAD_BUTTON_PROFILE_TOO_LARGE;
                 byte_count = 0;
             }
             for (i = byte_count; i < 4; i++) {
@@ -73,7 +73,7 @@ void poll_pad_device_state(struct PadState *pad_state) {
         }
     } else {
         clear_pad_input(pad_state);
-        pad_state->profile_state = 0;
+        pad_state->profile_state = PAD_PROFILE_INITIALIZATION;
     }
     pad_state->unk188 = 0;
     pad_state->unk189 = 0;

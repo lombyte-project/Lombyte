@@ -37,12 +37,12 @@ typedef struct {
     short        target_timer;
     short        second_timer;
     short        unk44;
-    short        unk46;
+    short        second_target_hit_cooldown;
 } WalloperBeam;
 
 typedef struct {
     u8  pad[0x3E];
-    s16 h3E;
+    s16 beam_point_count;
 } S2ba970;
 
 typedef float RW_2baae0[4] __attribute__((aligned(16)));
@@ -1247,7 +1247,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
             aim = (char *)get_moby_target_info(beam_state->second_target);
             if (aim && *(short *)(aim + 4) == 1)
                 frames = 1;
-            beam_state->unk46 = scale_game_frames(frames);
+            beam_state->second_target_hit_cooldown = scale_game_frames(frames);
         }
     }
     for (i = 0; i < 4; i++) {
@@ -1396,14 +1396,14 @@ void draw_beam_and_arc_effects(struct Moby *moby) {
     draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0,
                                      primary_beam_first_pass_alpha_gp,
                                      primary_beam_second_pass_alpha_gp,
-                                     moby_vars->h3E,
+                                     moby_vars->beam_point_count,
                                      beam_and_arc_first_pass_half_width_gp,
                                      primary_beam_second_pass_half_width_gp,
                                      primary_beam_second_pass_segment_extension_factor_gp);
     draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140,
                                      secondary_beam_first_pass_alpha_gp,
                                      secondary_beam_second_pass_alpha_gp,
-                                     moby_vars->h3E,
+                                     moby_vars->beam_point_count,
                                      D_L00_0016160C,
                                      secondary_beam_and_arc_second_pass_half_width_gp,
                                      secondary_beam_second_pass_segment_extension_factor_gp);

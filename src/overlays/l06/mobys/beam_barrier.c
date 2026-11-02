@@ -346,23 +346,23 @@ extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void FUN_L06_00216b88(int *, float *);
 
-int D_L06_00161DD0 = 0;
+int l06_beam_barrier_gs_alpha_a_selector __asm__("D_L06_00161DD0") = 0;
 
-int D_L06_00161DD4 = 2;
+int l06_beam_barrier_gs_alpha_b_selector __asm__("D_L06_00161DD4") = 2;
 
-int D_L06_00161DD8 = 0;
+int l06_beam_barrier_gs_alpha_c_selector __asm__("D_L06_00161DD8") = 0;
 
-int D_L06_00161DDC = 1;
+int l06_beam_barrier_gs_alpha_d_selector __asm__("D_L06_00161DDC") = 1;
 
 int D_L06_00161DF0 = 0x80c04070;
 
-int D_L06_00161DF4 = 0xff0000;
+int l06_beam_barrier_strand_color_at_threshold __asm__("D_L06_00161DF4") = 0xff0000;
 
 float beam_barrier_texture_u_step_gp __asm__("D_L06_00161DF8") = 0.25f;
 
-float D_L06_00161DFC = 0;
+float l06_beam_barrier_texture_u_phase __asm__("D_L06_00161DFC") = 0;
 
-Vec4 D_L06_001DB0F0[4][30] = {0};
+Vec4 l06_beam_barrier_strand_local_points[4][30] __asm__("D_L06_001DB0F0") = {0};
 
 void draw_beam_barrier_segments(char *moby) {
     float        base_matrix[16];
@@ -391,9 +391,10 @@ void draw_beam_barrier_segments(char *moby) {
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x42,
-                        (long)D_L06_00161DD0 | ((long)D_L06_00161DD4 << 2) |
-                            ((long)D_L06_00161DD8 << 4) | ((long)D_L06_00161DDC << 6) |
-                            0x8000000000L);
+                        (long)l06_beam_barrier_gs_alpha_a_selector |
+                            ((long)l06_beam_barrier_gs_alpha_b_selector << 2) |
+                            ((long)l06_beam_barrier_gs_alpha_c_selector << 4) |
+                            ((long)l06_beam_barrier_gs_alpha_d_selector << 6) | 0x8000000000L);
     font_queue_vu_state();
     first_matrix = segment_matrix[0];
     segment_params = beam_segment_draw_params;
@@ -415,11 +416,11 @@ void draw_beam_barrier_segments(char *moby) {
     color = fast_tween_color(
         D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(beam_barrier_vars + 0x18));
     strand_cycle_duration_frames = D_L06_00161E50;
-    points = (int *)D_L06_001DB0F0;
+    points = (int *)l06_beam_barrier_strand_local_points;
     strand_color_transition_threshold_frames = D_L06_00161E54;
-    fourth = D_L06_00161DF4;
+    fourth = l06_beam_barrier_strand_color_at_threshold;
     seventh = beam_barrier_texture_u_step_gp;
-    eighth = D_L06_00161DFC;
+    eighth = l06_beam_barrier_texture_u_phase;
     sequence = D_L06_00161E40;
     beam_segment_draw_params[0] = strand_cycle_duration_frames;
     beam_segment_draw_params[2] = (int)sequence;
@@ -443,7 +444,7 @@ f32        beam_barrier_class_scale_multiplier_gp __asm__("D_L06_00161E14") = 1.
 f32        beam_barrier_strand_jitter_max_speed_gp __asm__("D_L06_00161E04") = 0.4f;
 extern int D_L06_00161E40[4] MACRO_ADDR;
 
-Vec4 D_L06_001DB870[4][30] = {0};
+Vec4 l06_beam_barrier_strand_point_drifts[4][30] __asm__("D_L06_001DB870") = {0};
 
 extern void FUN_L06_00217300(void *);
 
@@ -460,32 +461,39 @@ void animate_beam_barrier_strands(struct Moby *moby) {
 
     moby->rot.x = fast_add_rotations(
         moby->rot.x, beam_barrier_rotation_x_speed_degrees_gp * DEG_TO_RAD * frame_time);
-    phase = D_L06_00161DFC + beam_barrier_render_phase_speed_gp * frame_time;
+    phase = l06_beam_barrier_texture_u_phase + beam_barrier_render_phase_speed_gp * frame_time;
     moby->scale = moby->pclass->scale * beam_barrier_class_scale_multiplier_gp;
-    D_L06_00161DFC = phase;
+    l06_beam_barrier_texture_u_phase = phase;
     if (phase > 1.0f) {
-        D_L06_00161DFC = phase - 1.0f;
+        l06_beam_barrier_texture_u_phase = phase - 1.0f;
     }
     step = l06_beam_barrier_strand_length / 30.0f;
     y = -(l06_beam_barrier_strand_length * 0.5f);
     for (i = 0; i < 4; i++) {
         if (D_L06_00161E40[i] == 0) {
             for (k = 0; k < 30; k++) {
-                FUN_L06_00217300(&D_L06_001DB0F0[i][k]);
-                D_L06_001DB0F0[i][k].f[1] = y;
+                FUN_L06_00217300(&l06_beam_barrier_strand_local_points[i][k]);
+                l06_beam_barrier_strand_local_points[i][k].f[1] = y;
                 random_vector(
                     &jitter[k], 0.0f, beam_barrier_strand_jitter_max_speed_gp * frame_time);
                 y += step;
             }
             for (k = 1; k < 29; k++) {
-                fast_vec_add(&D_L06_001DB870[i][k], &jitter[k - 1], &jitter[k]);
-                fast_vec_add(&D_L06_001DB870[i][k], &D_L06_001DB870[i][k], &jitter[k + 1]);
-                fast_vec_scale(&D_L06_001DB870[i][k], &D_L06_001DB870[i][k], 0.333f);
+                fast_vec_add(
+                    &l06_beam_barrier_strand_point_drifts[i][k], &jitter[k - 1], &jitter[k]);
+                fast_vec_add(&l06_beam_barrier_strand_point_drifts[i][k],
+                             &l06_beam_barrier_strand_point_drifts[i][k],
+                             &jitter[k + 1]);
+                fast_vec_scale(&l06_beam_barrier_strand_point_drifts[i][k],
+                               &l06_beam_barrier_strand_point_drifts[i][k],
+                               0.333f);
             }
             D_L06_00161E40[i] = D_L06_00161E50;
         } else {
             for (j = 1; j < 29; j++) {
-                fast_vec_add(&D_L06_001DB0F0[i][j], &D_L06_001DB0F0[i][j], &D_L06_001DB870[i][j]);
+                fast_vec_add(&l06_beam_barrier_strand_local_points[i][j],
+                             &l06_beam_barrier_strand_local_points[i][j],
+                             &l06_beam_barrier_strand_point_drifts[i][j]);
             }
             D_L06_00161E40[i]--;
         }

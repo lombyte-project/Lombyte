@@ -118,18 +118,18 @@ extern int strlen_alt(char *) __asm__("FUN_001166cc");
 extern void
 print_text_with_texture_3(s32 x, s32 y, s32 color, s32 text, s32 len) __asm__("FUN_L00_001fb470");
 
-int D_L15_00162180 = 150;
+int l15_quartu_cutscene_message_x __asm__("D_L15_00162180") = 150;
 
-int D_L15_00162184 = 150;
+int l15_quartu_cutscene_message_y __asm__("D_L15_00162184") = 150;
 
-int D_L15_00162188 = 0x3800ffff;
+int l15_quartu_cutscene_message_color __asm__("D_L15_00162188") = 0x3800ffff;
 
-int D_L15_0016218C = 0x38800000;
+int l15_quartu_cutscene_message_shadow_color __asm__("D_L15_0016218C") = 0x38800000;
 
 void draw_quartu_cutscene_messages(void) {
     char  formatted_message_text[0x50];
     int   flag = 0;
-    int   val = 0;
+    int   message_reveal_count = 0;
     char *message_timing_state = D_L15_0016CE60;
     int   print_character_count;
     char *second_message_timing_state;
@@ -141,7 +141,8 @@ void draw_quartu_cutscene_messages(void) {
                 sprintf(formatted_message_text,
                         quartu_cutscene_message_format,
                         get_help_message_text(0x526A));
-                val = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0xB5)) >> 2;
+                message_reveal_count =
+                    (*(int *)(message_timing_state + 0x34) - scale_game_frames(0xB5)) >> 2;
             }
         }
         second_message_timing_state = D_L15_0016CE60;
@@ -151,7 +152,7 @@ void draw_quartu_cutscene_messages(void) {
                 sprintf(formatted_message_text,
                         quartu_cutscene_message_format,
                         get_help_message_text(0x526B));
-                val =
+                message_reveal_count =
                     (*(int *)(second_message_timing_state + 0x34) - scale_game_frames(0x1C2)) >> 2;
             }
         }
@@ -162,7 +163,8 @@ void draw_quartu_cutscene_messages(void) {
                 sprintf(formatted_message_text,
                         quartu_cutscene_message_format,
                         get_help_message_text(0x526C));
-                val = (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
+                message_reveal_count =
+                    (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
             }
         }
     } else if (*(int *)(message_timing_state + 0x30) == 4) {
@@ -172,27 +174,28 @@ void draw_quartu_cutscene_messages(void) {
                 sprintf(formatted_message_text,
                         quartu_cutscene_message_format,
                         get_help_message_text(0x526E));
-                val = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0x8FC)) >> 2;
+                message_reveal_count =
+                    (*(int *)(message_timing_state + 0x34) - scale_game_frames(0x8FC)) >> 2;
             }
         }
     }
     if (flag == 0)
         return;
     print_character_count = strlen_alt(formatted_message_text);
-    if (val < print_character_count) {
-        print_character_count = val;
-    } else if (print_character_count < val) {
-        if ((print_character_count - val) & 4)
+    if (message_reveal_count < print_character_count) {
+        print_character_count = message_reveal_count;
+    } else if (print_character_count < message_reveal_count) {
+        if ((print_character_count - message_reveal_count) & 4)
             print_character_count = print_character_count - 1;
     }
-    print_text_with_texture_3((void *)(D_L15_00162180 + 1),
-                              (void *)(D_L15_00162184 + 1),
-                              (void *)D_L15_0016218C,
+    print_text_with_texture_3((void *)(l15_quartu_cutscene_message_x + 1),
+                              (void *)(l15_quartu_cutscene_message_y + 1),
+                              (void *)l15_quartu_cutscene_message_shadow_color,
                               formatted_message_text,
                               (void *)print_character_count);
-    print_text_with_texture_3((void *)D_L15_00162180,
-                              (void *)D_L15_00162184,
-                              (void *)D_L15_00162188,
+    print_text_with_texture_3((void *)l15_quartu_cutscene_message_x,
+                              (void *)l15_quartu_cutscene_message_y,
+                              (void *)l15_quartu_cutscene_message_color,
                               formatted_message_text,
                               (void *)print_character_count);
 }

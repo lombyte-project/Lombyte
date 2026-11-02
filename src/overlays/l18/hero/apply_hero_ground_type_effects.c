@@ -26,6 +26,9 @@ void apply_hero_ground_type_effects(void) {
         GROUND_TYPE_MAGNETIC = 2,
         GROUND_TYPE_SHALLOW_WATER = 0xE
     };
+    enum {
+        GROUND_TYPE_SINKING = 3
+    };
     struct Hero *hero_state = &hero;
     int          keep = hero_state->ground_sound_class;
     int          saved_ground_type = hero_state->ground_type;
@@ -67,7 +70,7 @@ void apply_hero_ground_type_effects(void) {
     } else {
         collision_check_selector = current_level_index;
     }
-    if (saved_ground_type == 3) {
+    if (saved_ground_type == GROUND_TYPE_SINKING) {
         struct Hero *q = &hero;
         *(char *)&q->selector_3 = 1;
         collision_check_selector = D_0015ED84_d;

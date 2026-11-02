@@ -123,7 +123,7 @@ struct PlayerJointTable {
 /* second name for hero: gcc reloads the base through it (exactness) */
 extern struct Hero hero_b __asm__("D_0013F350");
 extern f32         D_0015ED6C_a __asm__("D_0015ED6C");
-s32                D_L18_0015F68C = 0;
+s32                l18_look_timer_expiration_count __asm__("D_L18_0015F68C") = 0;
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
@@ -165,7 +165,7 @@ extern f32  spring_angle(f32 *, f32, f32 *, s32, f32, f32, f32) __asm__("FUN_L00
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern u8  *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
+extern void fast_add_rotations_cf(void *, void *, f32, f32, f32) __asm__("FUN_L00_00262cf0");
 extern f32  vector_length_xyz_cf(void *, s32) __asm__("FUN_L00_00209018");
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
@@ -265,7 +265,7 @@ void update_hero_motion_for_current_state(void) {
     };
 
     struct MobyView *moby = (struct MobyView *)hero.moby;
-    s32              sub = hero.state.step;
+    s32              initial_state_step = hero.state.step;
     s32              anim = moby->b53;
     f32              speed;
     Vec4             general_vector_or_hit_descriptor_scratch;
@@ -319,7 +319,7 @@ void update_hero_motion_for_current_state(void) {
                     D_L18_0015F688 = -1;
                     usage_stats.stat[18].level_mask =
                         usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
-                    D_L18_0015F68C++;
+                    l18_look_timer_expiration_count++;
                 }
             }
         }
@@ -657,11 +657,11 @@ void update_hero_motion_for_current_state(void) {
                         general_vector_or_hit_descriptor_scratch.f[2] +=
                             random_float_between(0.0f, 0.03f);
                         qcopy(&v10, &hero.motion.displacement);
-                        FUN_L00_00262cf0(&v10,
-                                         &v10,
-                                         frame_time * -0.75f,
-                                         hero.motion.rot.f[2],
-                                         hero.motion.rot.f[1]);
+                        fast_add_rotations_cf(&v10,
+                                              &v10,
+                                              frame_time * -0.75f,
+                                              hero.motion.rot.f[2],
+                                              hero.motion.rot.f[1]);
                         hero.pack_particle_timer =
                             truncate_float_to_s32((frame_time * 7.0f - hero.ground_speed) /
                                                   (frame_time * 7.0f) * scale_game_frames(5));
@@ -3155,7 +3155,7 @@ void update_hero_motion_for_current_state(void) {
         clear_u64_value(&hero.motion.velocity);
         break;
     }
-    if (sub != hero.state.step) {
+    if (initial_state_step != hero.state.step) {
         hero.step_frames = 0;
     }
     if (anim != moby->b53) {

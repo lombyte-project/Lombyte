@@ -720,7 +720,7 @@ extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600"
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern short D_L02_0015F688 __attribute__((sda));
-s32          D_L02_0015F68C = 0;
+s32          l02_look_timer_expiration_count __asm__("D_L02_0015F68C") = 0;
 extern void  FUN_001efa68_cf(float *dst, float *src, float dz) __asm__("FUN_L00_00233810");
 extern void  rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void  hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
@@ -827,7 +827,7 @@ void update_hero_state_motion(void) {
                         usage_stats.stat[18].level_mask = usage_stats.stat[18].level_mask |
                                                           (1 << current_level_index) | 0x80000000;
                         *(int *)&D_L02_0015F688 = -1;
-                        D_L02_0015F68C++;
+                        l02_look_timer_expiration_count++;
                     }
                 }
             }

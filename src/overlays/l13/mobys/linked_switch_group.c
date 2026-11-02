@@ -109,14 +109,14 @@ typedef struct {
     short unk70;
     short unk72;
     short unk74;
-    short unk76;
+    short opened_color_flash_timer;
     u8    unk78;
-    u8    unk79;
-    u8    unk7A;
-    u8    unk7B;
+    u8    is_group_follower;
+    u8    reported_hit_count;
+    u8    enumerated_group_entry_count;
     int   unk7C;
     char *unk80;
-    short unk84;
+    short opened_state_duration;
 } SwitchVars;
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -140,11 +140,11 @@ void linked_switch_group_update(char *moby) {
     }
     switch ((unsigned char)MOBY(moby)->state) {
     case INITIALIZE_LINKED_GROUP:
-        if (switch_vars->unk79 == 0) {
+        if (switch_vars->is_group_follower == 0) {
             char *iter[4];
             char *linked;
 
-            switch_vars->unk7B = 0;
+            switch_vars->enumerated_group_entry_count = 0;
             switch_vars->unk80 = moby;
             get_first_moby_in_group(iter, (unsigned char)MOBY(moby)->group, 0, 0);
             while ((linked = *iter) != 0) {
@@ -153,17 +153,17 @@ void linked_switch_group_update(char *moby) {
                     SwitchVars *other_data = *(SwitchVars **)(linked + 0x78);
 
                     other_data->unk80 = moby;
-                    other_data->unk79 = 1;
+                    other_data->is_group_follower = 1;
                 }
-                switch_vars->unk7B++;
+                switch_vars->enumerated_group_entry_count++;
                 get_next_moby_in_group(iter, iter[0], 0, 0);
             }
         }
         switch_vars->unk70 = 0;
         switch_vars->unk72 = 0;
-        switch_vars->unk7A = 0;
+        switch_vars->reported_hit_count = 0;
         switch_vars->unk74 = 0;
-        switch_vars->unk76 = 0;
+        switch_vars->opened_color_flash_timer = 0;
 
         set_moby_color(moby, 0x80, 0x80, 0x80);
         MOBY(moby)->state = MONITOR_LINKED_GROUP_HITS;
@@ -176,29 +176,29 @@ void linked_switch_group_update(char *moby) {
             linked = switch_vars->unk80;
             linked_data = *(SwitchVars **)(linked + 0x78);
             if ((unsigned char)linked[0x20] == 1) {
-                switch_vars->unk7A = 0;
+                switch_vars->reported_hit_count = 0;
                 linked[0x20] = 2;
                 if (linked_data->unk7C > 0) {
                     linked_data->unk70 = scale_game_frames(switch_vars->unk7C);
                 }
             }
-            linked_data->unk7A++;
+            linked_data->reported_hit_count++;
             allocate_voice_for_target_entry(3, 0, moby);
             set_moby_color(moby, 0, 0xFF, 0);
             switch_vars->unk74 = 1;
         }
         if ((unsigned char)MOBY(moby)->state == WAIT_FOR_LINKED_GROUP_COMPLETION) {
-            if (switch_vars->unk7A >= switch_vars->unk7B) {
+            if (switch_vars->reported_hit_count >= switch_vars->enumerated_group_entry_count) {
                 set_moby_list_state((unsigned char)MOBY(moby)->group, 4);
                 allocate_voice_for_target_entry(1, 0, moby);
-                switch_vars->unk70 = switch_vars->unk84;
+                switch_vars->unk70 = switch_vars->opened_state_duration;
                 debug_print(
                     D_L13_001F4D90, ((short)MOBY(moby)->save_id), MOBY(moby)->oclass, frame_count);
                 MOBY(moby)->state = UPDATE_OPENED_STATE;
             } else {
                 if (switch_vars->unk7C >= 0) {
                     if (fast_dec_timer_s16(&switch_vars->unk70) != 0) {
-                        switch_vars->unk7A = 0;
+                        switch_vars->reported_hit_count = 0;
                         switch_vars->unk74 = 0;
 
                         allocate_voice_for_target_entry(2, 0, moby);
@@ -221,16 +221,16 @@ void linked_switch_group_update(char *moby) {
     case RESET_HIT_STATE:
         set_moby_color(moby, 0x80, 0x80, 0x80);
 
-        switch_vars->unk7A = 0;
+        switch_vars->reported_hit_count = 0;
         switch_vars->unk74 = 0;
         switch_vars->unk20 = (float)switch_vars->unk24;
         MOBY(moby)->state = MONITOR_LINKED_GROUP_HITS;
 
         break;
     case UPDATE_OPENED_STATE:
-        if (switch_vars->unk79 == 0 && switch_vars->unk70 != -1) {
+        if (switch_vars->is_group_follower == 0 && switch_vars->unk70 != -1) {
             if (fast_dec_timer_s16(&switch_vars->unk70) != 0) {
-                switch_vars->unk7A = 0;
+                switch_vars->reported_hit_count = 0;
                 switch_vars->unk74 = 0;
 
                 allocate_voice_for_target_entry(2, 0, moby);
@@ -247,8 +247,8 @@ void linked_switch_group_update(char *moby) {
                         scale_game_frames(5) + switch_vars->unk70 / scale_game_frames(0x28));
             }
         }
-        if (fast_dec_timer_s16(&switch_vars->unk76) != 0) {
-            switch_vars->unk76 = scale_game_frames(0x14);
+        if (fast_dec_timer_s16(&switch_vars->opened_color_flash_timer) != 0) {
+            switch_vars->opened_color_flash_timer = scale_game_frames(0x14);
             if (switch_vars->unk78 != 0) {
                 set_moby_color(moby, 0, 0xFF, 0);
                 switch_vars->unk78 = 0;

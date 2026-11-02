@@ -34,16 +34,16 @@ typedef struct {
 typedef struct {
     char  pad0[0x10];
     float f10;
-    char *p14;
-    char *p18;
-    char *p1C;
+    char *aligned_lock_component;
+    char *opposed_lock_component;
+    char *origin_lock_component;
     float f20;
     float f24;
     float f28;
-    float f2C;
-    int   i30;
+    float target_reset_timer;
+    int   target_reset_timer_disabled;
     float f34;
-    int   i38;
+    int   conditional_removal_enabled;
 } L18E_q;
 
 extern char *D_L18_00174858_lui __asm__("D_L18_00174858") NOT_SDA;
@@ -79,7 +79,7 @@ void thruster_pack_lock_green_update(char *moby) {
         MOBY(moby)->pos.z = probe_ground_height(moby + 0x10, 0, 0.5f);
         qcopy(moby_vars, moby + 0x10);
         if (D_L18_00174858_lui != 0) {
-            moby_vars->i38 = 1;
+            moby_vars->conditional_removal_enabled = 1;
         }
         {
             char *spawned_moby = create_moby(0x6EB);
@@ -92,31 +92,31 @@ void thruster_pack_lock_green_update(char *moby) {
             qcopy(spawned_moby + 0x10, moby_vars);
             qcopy(spawned_moby + 0x40, moby + 0x40);
             update_entity(spawned_moby);
-            moby_vars->p1C = spawned_moby;
+            moby_vars->origin_lock_component = spawned_moby;
         }
-        moby_vars->p14 = create_moby(0x6F0);
-        moby_vars->p14[0x30] = 0x40;
-        *(short *)(moby_vars->p14 + 0x32) = 0x56;
-        moby_vars->p14[0x31] = 1;
-        *(float *)(moby_vars->p14 + 0x2C) =
-            (*(L18Cls_q **)(moby_vars->p14 + 0x24))->f24 * D_L18_00161998;
+        moby_vars->aligned_lock_component = create_moby(0x6F0);
+        moby_vars->aligned_lock_component[0x30] = 0x40;
+        *(short *)(moby_vars->aligned_lock_component + 0x32) = 0x56;
+        moby_vars->aligned_lock_component[0x31] = 1;
+        *(float *)(moby_vars->aligned_lock_component + 0x2C) =
+            (*(L18Cls_q **)(moby_vars->aligned_lock_component + 0x24))->f24 * D_L18_00161998;
         {
-            char *q = moby_vars->p14;
+            char *q = moby_vars->aligned_lock_component;
             qcopy(q + 0x40, moby + 0x40);
             update_entity(q);
         }
-        moby_vars->p18 = create_moby(0x6F0);
-        moby_vars->p18[0x30] = 0x40;
-        *(short *)(moby_vars->p18 + 0x32) = 0x40;
-        moby_vars->p18[0x31] = 1;
-        *(float *)(moby_vars->p18 + 0x2C) =
-            (*(L18Cls_q **)(moby_vars->p18 + 0x24))->f24 * D_L18_00161998;
+        moby_vars->opposed_lock_component = create_moby(0x6F0);
+        moby_vars->opposed_lock_component[0x30] = 0x40;
+        *(short *)(moby_vars->opposed_lock_component + 0x32) = 0x40;
+        moby_vars->opposed_lock_component[0x31] = 1;
+        *(float *)(moby_vars->opposed_lock_component + 0x2C) =
+            (*(L18Cls_q **)(moby_vars->opposed_lock_component + 0x24))->f24 * D_L18_00161998;
         {
-            char *q = moby_vars->p18;
+            char *q = moby_vars->opposed_lock_component;
             qcopy(q + 0x40, moby + 0x40);
-            *(float *)(moby_vars->p18 + 0x48) =
+            *(float *)(moby_vars->opposed_lock_component + 0x48) =
                 fast_add_rotations(*(float *)(q + 0x48), 3.1415901f);
-            update_entity(moby_vars->p18);
+            update_entity(moby_vars->opposed_lock_component);
         }
         ((unsigned char *)moby)[0x20] = 1;
         {
@@ -131,20 +131,21 @@ void thruster_pack_lock_green_update(char *moby) {
     case STATE_UPDATE_LOCK_COMPONENTS: {
         float v[4];
         if (D_L18_0015F5C4_d == 2) {
-            if (moby_vars->i38 != 0) {
+            if (moby_vars->conditional_removal_enabled != 0) {
                 if (D_L18_0016D290_lui == 3) {
-                    if (moby_vars->p14 != 0)
-                        mark_moby_for_removal(moby_vars->p14);
-                    if (moby_vars->p18 != 0)
-                        mark_moby_for_removal(moby_vars->p18);
-                    if (moby_vars->p1C != 0)
-                        mark_moby_for_removal(moby_vars->p1C);
+                    if (moby_vars->aligned_lock_component != 0)
+                        mark_moby_for_removal(moby_vars->aligned_lock_component);
+                    if (moby_vars->opposed_lock_component != 0)
+                        mark_moby_for_removal(moby_vars->opposed_lock_component);
+                    if (moby_vars->origin_lock_component != 0)
+                        mark_moby_for_removal(moby_vars->origin_lock_component);
                     mark_moby_for_removal(moby);
                 }
             }
         }
         if (moby_vars->f24 != 0.0f) {
-            if ((moby_vars->i30 == 0 && fast_dec_timer((int *)&moby_vars->f2C) == 2) ||
+            if ((moby_vars->target_reset_timer_disabled == 0 &&
+                 fast_dec_timer((int *)&moby_vars->target_reset_timer) == 2) ||
                 (D_L18_0015F5C4_d == 2 && D_L18_0016D290_lui >= 4)) {
                 allocate_voice_for_target_entry(0, 0, (int)moby);
                 moby_vars->f24 = 0;
@@ -190,19 +191,31 @@ void thruster_pack_lock_green_update(char *moby) {
                                        frame_time_sq * 4.0f,
                                        frame_time * 4.0f);
         }
-        if (moby_vars->p14 != 0) {
-            FUN_001f9bf8_q(moby_vars->p14 + 0x10, moby_vars->p14 + 0xD0, -moby_vars->f20);
-            FUN_001f9bf8_q(v, moby_vars->p14 + 0xE0, -moby_vars->f20 * 0.2f);
-            fast_vec_add(moby_vars->p14 + 0x10, moby_vars->p14 + 0x10, v);
-            fast_vec_add(moby_vars->p14 + 0x10, moby_vars->p14 + 0x10, moby_vars);
-            update_entity(moby_vars->p14);
+        if (moby_vars->aligned_lock_component != 0) {
+            FUN_001f9bf8_q(moby_vars->aligned_lock_component + 0x10,
+                           moby_vars->aligned_lock_component + 0xD0,
+                           -moby_vars->f20);
+            FUN_001f9bf8_q(v, moby_vars->aligned_lock_component + 0xE0, -moby_vars->f20 * 0.2f);
+            fast_vec_add(moby_vars->aligned_lock_component + 0x10,
+                         moby_vars->aligned_lock_component + 0x10,
+                         v);
+            fast_vec_add(moby_vars->aligned_lock_component + 0x10,
+                         moby_vars->aligned_lock_component + 0x10,
+                         moby_vars);
+            update_entity(moby_vars->aligned_lock_component);
         }
-        if (moby_vars->p18 != 0) {
-            FUN_001f9bf8_q(moby_vars->p18 + 0x10, moby_vars->p18 + 0xD0, -moby_vars->f20);
-            FUN_001f9bf8_q(v, moby_vars->p18 + 0xE0, -moby_vars->f20 * 0.2f);
-            fast_vec_add(moby_vars->p18 + 0x10, moby_vars->p18 + 0x10, v);
-            fast_vec_add(moby_vars->p18 + 0x10, moby_vars->p18 + 0x10, moby_vars);
-            update_entity(moby_vars->p18);
+        if (moby_vars->opposed_lock_component != 0) {
+            FUN_001f9bf8_q(moby_vars->opposed_lock_component + 0x10,
+                           moby_vars->opposed_lock_component + 0xD0,
+                           -moby_vars->f20);
+            FUN_001f9bf8_q(v, moby_vars->opposed_lock_component + 0xE0, -moby_vars->f20 * 0.2f);
+            fast_vec_add(moby_vars->opposed_lock_component + 0x10,
+                         moby_vars->opposed_lock_component + 0x10,
+                         v);
+            fast_vec_add(moby_vars->opposed_lock_component + 0x10,
+                         moby_vars->opposed_lock_component + 0x10,
+                         moby_vars);
+            update_entity(moby_vars->opposed_lock_component);
         }
         MOBY(moby)->pos.z = moby_vars->f10 + moby_vars->f34;
     }

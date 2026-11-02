@@ -37,7 +37,7 @@ typedef struct ArmedTransportVars {
     s8  unk28;
     u8  pad29[0x37];
     u8  unk60[0x7];
-    u8  unk67;
+    u8  hit_animation_secondary_red;
     u8  pad68[0x8];
     f32 unk70[4];
     u8  pad80[0x30];
@@ -52,17 +52,17 @@ typedef struct ArmedTransportVars {
     u8  unkE0[0x64];
     f32 unk144;
     u8  pad148[0x18];
-    s32 unk160;
+    s32 death_timer_frames;
     s32 unk164;
     s32 path_point;
-    s32 unk16C;
-    f32 unk170[4];
+    s32 path_segment_fraction;
+    f32 path_and_pose_state[4];
     u8  unk180[0x4];
     s32 unk184;
     f32 unk188;
-    f32 unk18C;
+    f32 bob_phase_radians;
     s32 voice;
-    f32 unk194;
+    f32 base_height;
 } ArmedTransportVars;
 
 typedef union {
@@ -191,16 +191,16 @@ void armed_transport_update(char *transport_moby) {
         if (transport_data->unkDC != -1)
             compute_armed_transport_path_headings(D_L16_001B0930[transport_data->unkDC]);
         speed = *(float *)&D_L16_00161D80 * frame_time;
-        transport_data->unk16C = 0;
+        transport_data->path_segment_fraction = 0;
         transport_data->path_point = 0;
-        transport_data->unk170[0] = speed;
-        transport_data->unk194 = MOBY(transport_moby)->pos.z;
+        transport_data->path_and_pose_state[0] = speed;
+        transport_data->base_height = MOBY(transport_moby)->pos.z;
         if (transport_data->path_index == -1) {
             MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_TRACK_TARGET;
             break;
         }
         path = D_L16_001B0930[transport_data->path_index];
-        transport_data->unk170[1] = fast_vec_dist(path + 0x10, path + 0x20);
+        transport_data->path_and_pose_state[1] = fast_vec_dist(path + 0x10, path + 0x20);
         qcopy(&MOBY(transport_moby)->pos, path + 0x10);
         MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION;
         MOBY(transport_moby)->visible = 0;
@@ -245,10 +245,10 @@ void armed_transport_update(char *transport_moby) {
                 loaded = 1;
         }
         path = D_L16_001B0930[transport_data->path_index];
-        if (loaded &&
-            (float)(*(int *)path - transport_data->path_point) * transport_data->unk170[1] <
-                16.0f) {
-            advance_accelerated_scalar((float *)(&transport_data->unk170[3]),
+        if (loaded && (float)(*(int *)path - transport_data->path_point) *
+                              transport_data->path_and_pose_state[1] <
+                          16.0f) {
+            advance_accelerated_scalar((float *)(&transport_data->path_and_pose_state[3]),
                                        (float *)(&transport_data->unk180),
                                        1.5707964f,
                                        frame_time_sq * 12.566371f,
@@ -301,7 +301,7 @@ void armed_transport_update(char *transport_moby) {
         float heading = *(float *)(D_L16_001B0930[transport_data->unkDC] + 0x1C);
 
         advance_accelerated_scalar((float *)&MOBY(transport_moby)->rot.z,
-                                   (float *)(&transport_data->unk170[2]),
+                                   (float *)(&transport_data->path_and_pose_state[2]),
                                    heading,
                                    frame_time_sq * 6.2831855f,
                                    frame_time_sq * 6.2831855f,
@@ -309,12 +309,12 @@ void armed_transport_update(char *transport_moby) {
         if (fast_difference_between_rotations(MOBY(transport_moby)->rot.z, heading) < 0.01f) {
             MOBY(transport_moby)->state = ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH;
             transport_data->path_point = 0;
-            transport_data->unk16C = 0;
+            transport_data->path_segment_fraction = 0;
         }
         break;
     }
     case ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH:
-        advance_accelerated_scalar((float *)(&transport_data->unk170[3]),
+        advance_accelerated_scalar((float *)(&transport_data->path_and_pose_state[3]),
                                    (float *)(&transport_data->unk180),
                                    0.0f,
                                    frame_time_sq * 12.566371f,
@@ -333,7 +333,7 @@ void armed_transport_update(char *transport_moby) {
         float *yaw = (float *)&MOBY(transport_moby)->rot.z;
         float  bearing;
 
-        advance_accelerated_scalar((float *)(&transport_data->unk170[3]),
+        advance_accelerated_scalar((float *)(&transport_data->path_and_pose_state[3]),
                                    (float *)(&transport_data->unk180),
                                    0.0f,
                                    frame_time_sq * 12.566371f,
@@ -342,7 +342,7 @@ void armed_transport_update(char *transport_moby) {
         bearing = fast_arc_tan(transport_data->unk70[0] - MOBY(transport_moby)->pos.x,
                                transport_data->unk70[1] - MOBY(transport_moby)->pos.y);
         advance_accelerated_scalar(yaw,
-                                   (float *)(&transport_data->unk170[2]),
+                                   (float *)(&transport_data->path_and_pose_state[2]),
                                    bearing,
                                    frame_time_sq * 3.1415927f,
                                    frame_time_sq * 3.1415927f,
@@ -374,9 +374,9 @@ void armed_transport_update(char *transport_moby) {
     case ARMED_TRANSPORT_STATE_DYING: {
         float dt = frame_time;
 
-        transport_data->unk194 -= dt + dt;
+        transport_data->base_height -= dt + dt;
         MOBY(transport_moby)->rot.x += dt * 0.2617994f;
-        if (fast_dec_timer((int *)(&transport_data->unk160)) ||
+        if (fast_dec_timer((int *)(&transport_data->death_timer_frames)) ||
             hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             spawn_explosion(transport_moby,
                             D_L16_0015F580,
@@ -433,12 +433,12 @@ void armed_transport_update(char *transport_moby) {
         break;
     }
     }
-    transport_data->unk18C = fast_add_rotations(transport_data->unk18C,
-                                                *(float *)&armed_transport_bob_phase_speed_degrees *
-                                                    DEG_TO_RAD * frame_time);
+    transport_data->bob_phase_radians = fast_add_rotations(
+        transport_data->bob_phase_radians,
+        *(float *)&armed_transport_bob_phase_speed_degrees * DEG_TO_RAD * frame_time);
     MOBY(transport_moby)->pos.z =
-        transport_data->unk194 +
-        *(float *)&armed_transport_bob_amplitude * fast_sin(transport_data->unk18C);
+        transport_data->base_height +
+        *(float *)&armed_transport_bob_amplitude * fast_sin(transport_data->bob_phase_radians);
     update_armed_transport_joint_animation(transport_moby);
 }
 
@@ -481,7 +481,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
             if (response >= 3) {
                 if (response < 9) {
                     FUN_0022da68_i(3, 0, transport_moby);
-                    transport_data->unk67 = 120;
+                    transport_data->hit_animation_secondary_red = 120;
                     transport_data->unk188 = randf_sym(30.0f, 50.0f) * DEG_TO_RAD * frame_time;
                 }
             } else {
@@ -498,8 +498,8 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
                     } while (--count >= 0);
                 }
                 transport_moby->state = ARMED_TRANSPORT_STATE_DYING;
-                transport_data->unk160 = scale_game_frames(90);
-                transport_data->unk67 = 120;
+                transport_data->death_timer_frames = scale_game_frames(90);
+                transport_data->hit_animation_secondary_red = 120;
             }
         }
         trooper_anim_update(transport_moby, &transport_data->unk60);
@@ -524,18 +524,19 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
 
 int advance_armed_transport_along_path(char *transport_moby, char *path) {
     ArmedTransportVars *transport_data = (ArmedTransportVars *)MOBY(transport_moby)->pvars;
-    float progress = (float)transport_data->path_point + *(float *)&transport_data->unk16C +
-                     transport_data->unk170[0] / transport_data->unk170[1];
+    float               progress =
+        (float)transport_data->path_point + *(float *)&transport_data->path_segment_fraction +
+        transport_data->path_and_pose_state[0] / transport_data->path_and_pose_state[1];
     int   index = truncate_float_to_s32(progress);
     float speed;
     float distance, rate;
     char *position;
     transport_data->path_point = index;
-    *(float *)&transport_data->unk16C = progress - (float)index;
+    *(float *)&transport_data->path_segment_fraction = progress - (float)index;
     if (index < *(int *)path - 1) {
         position = &MOBY(transport_moby)->pos;
         func_00215CA8_path42_q(progress, path, 0, position, transport_moby + 0x40, 0);
-        transport_data->unk194 = MOBY(transport_moby)->pos.z;
+        transport_data->base_height = MOBY(transport_moby)->pos.z;
         speed = 0.0f;
         distance = fast_vec_dist(position, path + (*(int *)path << 4));
         rate = armed_transport_path_acceleration_coefficient_gp * *(float *)&frame_time_sq;
@@ -544,7 +545,7 @@ int advance_armed_transport_along_path(char *transport_moby, char *path) {
                                rate,
                                *(float *)&D_L16_00161D80_gp * frame_time,
                                &speed,
-                               (float *)(&transport_data->unk170));
+                               (float *)(&transport_data->path_and_pose_state));
         return 0;
     }
     return 1;
@@ -576,7 +577,7 @@ void update_armed_transport_joint_animation(char *moby) {
     float               joint_animation_smoothing_factor = ticks * 0.03f;
     float               joint_animation_secondary_control = ticks * 0.3f;
     ArmedTransportVars *transport_private_data = (ArmedTransportVars *)MOBY(moby)->pvars;
-    transport_private_data->unk144 = transport_private_data->unk170[3];
+    transport_private_data->unk144 = transport_private_data->path_and_pose_state[3];
     update_joint_animation(moby,
                            &transport_private_data->unkE0,
                            2,

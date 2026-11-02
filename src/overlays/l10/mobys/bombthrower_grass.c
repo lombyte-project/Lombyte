@@ -19,8 +19,8 @@
 
 extern int spawn_bombthrower_grass_projectile() __asm__("FUN_L10_002d8058");
 
-int D_L10_00161BF0 = 240;
-int D_L10_00161BF4 = 600;
+int l10_bombthrower_grass_launch_delay_min_frames __asm__("D_L10_00161BF0") = 240;
+int l10_bombthrower_grass_launch_delay_max_frames __asm__("D_L10_00161BF4") = 600;
 
 #include "rnc/overlay/l10/mobys/bombthrower_grass_globals.h"
 
@@ -86,7 +86,8 @@ void bombthrower_grass_update(struct Moby *moby) {
     float launch_position[4];
     if (moby->state == BOMBTHROWER_GRASS_STATE_LAUNCH_TIMER_UNINITIALIZED) {
         *(int *)launch_timer =
-            scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
+            scale_game_frames(random_int_between(l10_bombthrower_grass_launch_delay_min_frames,
+                                                 l10_bombthrower_grass_launch_delay_max_frames));
         moby->state = BOMBTHROWER_GRASS_STATE_LAUNCH_TIMER_INITIALIZED;
     }
     if (fast_dec_timer((int *)launch_timer)) {
@@ -106,6 +107,7 @@ void bombthrower_grass_update(struct Moby *moby) {
         spawn_bombthrower_grass_projectile(moby, launch_position, launch_offset);
         allocate_voice_for_target_entry(0, 0, (int)moby);
         *(int *)launch_timer =
-            scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
+            scale_game_frames(random_int_between(l10_bombthrower_grass_launch_delay_min_frames,
+                                                 l10_bombthrower_grass_launch_delay_max_frames));
     }
 }

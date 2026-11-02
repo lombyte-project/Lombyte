@@ -115,17 +115,17 @@ typedef union {
 typedef struct {
     /* 0x000 */ int            path;
     /* 0x004 */ float          f4;
-    /* 0x008 */ float          f8;
+    /* 0x008 */ float          path_sample_position;
     /* 0x00C */ float          fC;
     /* 0x010 */ int            pad10[3];
     /* 0x01C */ float          f1C;
     /* 0x020 */ Vec4f_2d7140   trail[3][16];
-    /* 0x320 */ short          f320;
-    /* 0x322 */ unsigned short f322;
-    /* 0x324 */ int           *f324;
-    /* 0x328 */ int            f328;
+    /* 0x320 */ short          trail_segment_count;
+    /* 0x322 */ unsigned short trail_write_index;
+    /* 0x324 */ int           *trail_last_queued_frame_ptr;
+    /* 0x328 */ int            voice_slot_index;
     /* 0x32C */ int            pad32C[15];
-    /* 0x368 */ float          f368;
+    /* 0x368 */ float          glow_quad_pulse_phase;
 } Data_2D8388;
 
 extern float D_0015ED6C;
@@ -133,10 +133,10 @@ extern float D_0015ED70;
 
 #include "rnc/overlay/l05/mobys/scenery_ship_data/scenery_ship_update.h"
 
-int          D_L05_001613D8 = 0x80000080;
-int          D_L05_001613DC = 0x80202020;
-float        D_L05_001613E0 = 5.0f;
-int          D_L05_001613E4 = 1;
+int          l05_scenery_ship_glow_pulse_start_color __asm__("D_L05_001613D8") = 0x80000080;
+int          l05_scenery_ship_glow_pulse_end_color __asm__("D_L05_001613DC") = 0x80202020;
+float        l05_scenery_ship_trail_segment_limit __asm__("D_L05_001613E0") = 5.0f;
+int          l05_scenery_ship_glow_update_enabled __asm__("D_L05_001613E4") = 1;
 extern float scenery_ship_removal_effect_basis_scale_gp __asm__("D_L05_001613E8")
     __attribute__((sda));
 extern float scenery_ship_removal_effect_z_addend_gp __asm__("D_L05_001613EC") __attribute__((sda));
@@ -199,8 +199,8 @@ void scenery_ship_update(char *moby) {
         MOBY(moby)->scale =
             MOBY(moby)->pclass->scale * scenery_ship_initialization_scale_multiplier_gp;
         scenery_ship_instance_vars->f1C = random_angle_radians();
-        scenery_ship_instance_vars->f328 = -1;
-        scenery_ship_instance_vars->f368 = random_angle_radians();
+        scenery_ship_instance_vars->voice_slot_index = -1;
+        scenery_ship_instance_vars->glow_quad_pulse_phase = random_angle_radians();
         path = ((char *)l05_paths[scenery_ship_instance_vars->path]);
         if (*(float *)(path + 0x1C) == -1.0f) {
             max_turn = 0.0f;
@@ -244,7 +244,8 @@ void scenery_ship_update(char *moby) {
         scenery_ship_instance_vars->fC =
             fast_vec_dist((float *)(path + 0x10), (float *)(path + 0x20));
         MOBY(moby)->state = SCENERY_SHIP_FOLLOW_PATH;
-        scenery_ship_instance_vars->f8 = (float)*(int *)path * scenery_ship_instance_vars->f4;
+        scenery_ship_instance_vars->path_sample_position =
+            (float)*(int *)path * scenery_ship_instance_vars->f4;
         break;
     }
     case SCENERY_SHIP_FOLLOW_PATH: {
@@ -253,16 +254,20 @@ void scenery_ship_update(char *moby) {
         float wave;
         scenery_ship_instance_vars->f1C = phase;
         wave = func_001F9FA8_2D8388(phase);
-        MOBY(moby)->glow_color =
-            func_001FA8A8_2D8388(D_L05_001613D8, D_L05_001613DC, (wave + 1.0f) * 0.5f);
+        MOBY(moby)->glow_color = func_001FA8A8_2D8388(l05_scenery_ship_glow_pulse_start_color,
+                                                      l05_scenery_ship_glow_pulse_end_color,
+                                                      (wave + 1.0f) * 0.5f);
         advance_scenery_ship_along_path(moby, (int *)l05_paths[scenery_ship_instance_vars->path]);
-        if (voice_is_playing(moby, scenery_ship_instance_vars->f328) == 0) {
-            scenery_ship_instance_vars->f328 = allocate_voice_for_target_entry(1, 4, (int)moby);
+        if (voice_is_playing(moby, scenery_ship_instance_vars->voice_slot_index) == 0) {
+            scenery_ship_instance_vars->voice_slot_index =
+                allocate_voice_for_target_entry(1, 4, (int)moby);
         }
         if ((frame_number & 3) == 0) {
-            scenery_ship_instance_vars->f322 = (scenery_ship_instance_vars->f322 + 1) & 0xF;
-            if ((float)scenery_ship_instance_vars->f320 < D_L05_001613E0) {
-                scenery_ship_instance_vars->f320++;
+            scenery_ship_instance_vars->trail_write_index =
+                (scenery_ship_instance_vars->trail_write_index + 1) & 0xF;
+            if ((float)scenery_ship_instance_vars->trail_segment_count <
+                l05_scenery_ship_trail_segment_limit) {
+                scenery_ship_instance_vars->trail_segment_count++;
             }
         }
         left_offset.q = 0;
@@ -270,32 +275,35 @@ void scenery_ship_update(char *moby) {
         left_offset.f[1] = 0.4f;
         left_offset.f[2] = 0.45f;
         transform_vector_by_basis(&left_offset, &left_offset, moby + 0xC0);
-        func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->f322],
-            left_offset.f,
-            (float *)&MOBY(moby)->pos);
-        scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->f322].w = 1.0f;
+        func_001F9BD8_2D8388((float *)&scenery_ship_instance_vars
+                                 ->trail[0][(short)scenery_ship_instance_vars->trail_write_index],
+                             left_offset.f,
+                             (float *)&MOBY(moby)->pos);
+        scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->trail_write_index]
+            .w = 1.0f;
         tail_offset.q = 0;
         tail_offset.f[0] = -1.5f;
         tail_offset.f[2] = -0.3f;
         transform_vector_by_basis(&tail_offset, &tail_offset, moby + 0xC0);
-        func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->f322],
-            tail_offset.f,
-            (float *)&MOBY(moby)->pos);
-        scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->f322].w = 1.0f;
+        func_001F9BD8_2D8388((float *)&scenery_ship_instance_vars
+                                 ->trail[1][(short)scenery_ship_instance_vars->trail_write_index],
+                             tail_offset.f,
+                             (float *)&MOBY(moby)->pos);
+        scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->trail_write_index]
+            .w = 1.0f;
         right_offset.q = 0;
         right_offset.f[0] = -1.2f;
         right_offset.f[1] = -0.4f;
         right_offset.f[2] = 0.45f;
         transform_vector_by_basis(&right_offset, &right_offset, moby + 0xC0);
-        func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->f322],
-            right_offset.f,
-            (float *)&MOBY(moby)->pos);
-        scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->f322].w = 1.0f;
-        if (frame_number != *scenery_ship_instance_vars->f324) {
-            *scenery_ship_instance_vars->f324 = frame_number;
+        func_001F9BD8_2D8388((float *)&scenery_ship_instance_vars
+                                 ->trail[2][(short)scenery_ship_instance_vars->trail_write_index],
+                             right_offset.f,
+                             (float *)&MOBY(moby)->pos);
+        scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->trail_write_index]
+            .w = 1.0f;
+        if (frame_number != *scenery_ship_instance_vars->trail_last_queued_frame_ptr) {
+            *scenery_ship_instance_vars->trail_last_queued_frame_ptr = frame_number;
             add_draw_callback(func_L05_002D8B68_2D8388, moby);
         }
         if (MOBY(moby)->pos.x < 8.0f) {
@@ -356,7 +364,7 @@ void scenery_ship_update(char *moby) {
         return;
     }
     }
-    if (D_L05_001613E4)
+    if (l05_scenery_ship_glow_update_enabled)
         update_moby_glow_and_queue_draw(moby);
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8AD8), where it is exact; names translated to the US level program. */
@@ -387,14 +395,14 @@ typedef struct {
     u64   flags;
 } L05GlowPacket;
 
-int                  D_L05_001613F0 = 0;
-int                  D_L05_001613F4 = 0;
-int                  D_L05_001613F8 = 0;
-int                  D_L05_001613FC = 2;
-int                  D_L05_00161400 = 0;
-int                  D_L05_00161404 = 1;
-int                  D_L05_00161408 = 0x40806060;
-int                  D_L05_0016140C = 0x802020;
+int                  l05_scenery_ship_trail_callback_disabled __asm__("D_L05_001613F0") = 0;
+int                  l05_scenery_ship_trail_ribbon_draw_disabled __asm__("D_L05_001613F4") = 0;
+int                  l05_scenery_ship_trail_blend_a_selector __asm__("D_L05_001613F8") = 0;
+int                  l05_scenery_ship_trail_blend_b_selector __asm__("D_L05_001613FC") = 2;
+int                  l05_scenery_ship_trail_blend_c_selector __asm__("D_L05_00161400") = 0;
+int                  l05_scenery_ship_trail_blend_d_selector __asm__("D_L05_00161404") = 1;
+int                  l05_scenery_ship_trail_fade_start_color __asm__("D_L05_00161408") = 0x40806060;
+int                  l05_scenery_ship_trail_fade_end_color __asm__("D_L05_0016140C") = 0x802020;
 extern unsigned char l05_scenery_ship_extended_trail_selector __asm__("D_L05_0015EDB2");
 extern struct Moby  *D_L05_0015FFD8 __asm__("D_L05_0015FFD8");
 extern short        *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
@@ -426,31 +434,36 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
     u64            texture;
     L05GlowPacket *glow_packet;
 
-    if (D_L05_001613F0 != 0)
+    if (l05_scenery_ship_trail_callback_disabled != 0)
         return;
     if (l05_scenery_ship_extended_trail_selector != 0)
-        D_L05_001613E0 = 16.0f;
+        l05_scenery_ship_trail_segment_limit = 16.0f;
     else
-        D_L05_001613E0 = 5.0f;
+        l05_scenery_ship_trail_segment_limit = 5.0f;
     for (i = 0; i < 16; i++) {
         texture = get_effect_texture(0x13);
         glow_packet = &packet[i];
         glow_packet->effect_texture = texture;
         glow_packet->texture = 0xff9000000260ULL;
         glow_packet->zero = 0;
-        glow_packet->flags = (u64)D_L05_001613F8 | ((u64)D_L05_001613FC << 2) |
-                             ((u64)D_L05_00161400 << 4) | ((u64)D_L05_00161404 << 6) |
-                             0x8000000000ULL;
-        phase = convert_integer_to_float((frame_number + 3) & 3) / (D_L05_001613E0 * 4.0f);
+        glow_packet->flags = (u64)l05_scenery_ship_trail_blend_a_selector |
+                             ((u64)l05_scenery_ship_trail_blend_b_selector << 2) |
+                             ((u64)l05_scenery_ship_trail_blend_c_selector << 4) |
+                             ((u64)l05_scenery_ship_trail_blend_d_selector << 6) | 0x8000000000ULL;
+        phase = convert_integer_to_float((frame_number + 3) & 3) /
+                (l05_scenery_ship_trail_segment_limit * 4.0f);
         for (j = 0; j < 4; j++) {
             packet[i].uv[j][0] = D_L05_001CDD70[j][0];
             packet[i].uv[j][1] = D_L05_001CDD70[j][1];
-            ratio = convert_integer_to_float(i + 1 - (j >> 1)) / (D_L05_001613E0 + phase);
+            ratio = convert_integer_to_float(i + 1 - (j >> 1)) /
+                    (l05_scenery_ship_trail_segment_limit + phase);
             if (ratio > 1.0f)
                 ratio = 1.0f;
             else if (ratio < 0.0f)
                 ratio = 0.0f;
-            packet[i].color[j] = interpolate_color_7920(ratio, D_L05_00161408, D_L05_0016140C);
+            packet[i].color[j] = interpolate_color_7920(ratio,
+                                                        l05_scenery_ship_trail_fade_start_color,
+                                                        l05_scenery_ship_trail_fade_end_color);
         }
     }
     memset(matrix, 0, 0x20);
@@ -474,7 +487,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
                     trail_segment_start_index =
                         (*(short *)(scenery_ship_vars + 0x322) - frame + 15) & 15;
                     for (ribbon = 0; ribbon < 3; ribbon++) {
-                        if (D_L05_001613F4 == 0) {
+                        if (l05_scenery_ship_trail_ribbon_draw_disabled == 0) {
                             points = scenery_ship_vars + (ribbon * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
                                 index = (trail_segment_start_index + (k >> 1)) & 15;

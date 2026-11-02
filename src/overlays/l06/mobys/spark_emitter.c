@@ -24,7 +24,7 @@ typedef struct SparkData {
     int  f4;
     char pad8[0x18];
     int  f20;
-    int  f24;
+    int  burst_timer;
     int  f28;
 } SparkData;
 
@@ -106,9 +106,9 @@ void spark_emitter_update(struct Moby *emitter) {
     case SPARK_EMITTER_TIMED_BURSTS: {
         int spark_count = 1;
         int k;
-        if (fast_dec_timer(&emitter_data->f24)) {
+        if (fast_dec_timer(&emitter_data->burst_timer)) {
             spark_count = 5;
-            emitter_data->f24 =
+            emitter_data->burst_timer =
                 truncate_float_to_s32(scale_time(random_float_between(60.0f, 120.0f)));
         }
         if (random_integer_below(4) != 0 && spark_count < 2) {

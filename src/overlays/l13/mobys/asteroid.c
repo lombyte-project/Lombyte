@@ -59,7 +59,7 @@ typedef struct AsteroidVars {
     u8    pad_44[0x4];
     char *unk48;
     s16   unk4C;
-    s16   unk4E;
+    s16   splits_remaining;
 } AsteroidVars;
 
 char *spawn_asteroid_fragment(char *parent_asteroid,
@@ -85,7 +85,7 @@ char *spawn_asteroid_fragment(char *parent_asteroid,
         moby_data->unk48 = parent_asteroid;
         moby_data->unk40 = 1;
         moby_data->unk4C = scale_game_frames(0x1E);
-        moby_data->unk4E = remaining_split_count;
+        moby_data->splits_remaining = remaining_split_count;
         MOBY(moby)->collision = 0;
         spin_increment = random_float_between(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (RandomNext() % 3) {

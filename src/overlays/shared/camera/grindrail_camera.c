@@ -620,7 +620,7 @@ void update_camera_mode_from_preset(CamUser *camera_user) {
             return;
         }
     }
-    if (camera_preset->kind == 3) {
+    if (camera_preset->kind == CAMERA_PRESET_KIND_GRINDRAIL_PATH) {
         camera_user->mode = 5;
     } else {
         camera_user->mode = 3;

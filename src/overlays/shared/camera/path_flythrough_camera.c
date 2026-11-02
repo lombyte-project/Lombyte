@@ -93,14 +93,15 @@ extern VendorView_5f18 l10_camera_view __asm__("D_L10_0016CEC0");
 void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f5b58");
 
 void initialize_path_camera(struct UpdateCam *path_camera) {
-    char *rec = *(char **)(l10_descriptor_table + path_camera->descriptor_index * 32 + 0x1C);
+    char *path_camera_descriptor =
+        *(char **)(l10_descriptor_table + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5f18   *run;
     VendorCamStops_5f18 *stops;
     f32                 *fov;
     Vec4f               *m1, *m2, *pos;
     char                *saved;
 
-    rec[0x38] = 1;
+    path_camera_descriptor[0x38] = 1;
     run = (VendorCamRun_5f18 *)((char *)path_camera->saved_state + 0x40);
     run->seg = 0;
     run->t = 0.0f;
@@ -108,7 +109,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     run->look_path_length = 0.0f;
     run->dist = 0.0f;
     run->started = 0;
-    run->timer = scale_game_frames(*(s16 *)(rec + 0x3A));
+    run->timer = scale_game_frames(*(s16 *)(path_camera_descriptor + 0x3A));
     stops = (VendorCamStops_5f18 *)((char *)path_camera->saved_state + 0x58);
     fov = stops->fov;
     {
@@ -122,8 +123,8 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     m1 = (Vec4f *)&path_camera->m1;
     m2 = (Vec4f *)&path_camera->m2;
     stops->fov_end = fast_arc_tan(1.0f, l10_camera_view.tan_half_fov) * 2.0f;
-    if (*(int *)(rec + 0x20) >= 0) {
-        char *path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
+    if (*(int *)(path_camera_descriptor + 0x20) >= 0) {
+        char *path = ((char *)l10_paths[*(int *)(path_camera_descriptor + 0x20)]);
         int   i = 0;
         if (i < *(int *)path) {
             f32 *stop_fov = fov;
@@ -156,13 +157,13 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
         }
     }
     {
-        s16 frames = *(s16 *)(rec + 0x3A);
+        s16 frames = *(s16 *)(path_camera_descriptor + 0x3A);
         if (frames > 0)
-            *(f32 *)(rec + 0x3C) =
+            *(f32 *)(path_camera_descriptor + 0x3C) =
                 run->path_length / convert_integer_to_float(scale_game_frames(frames)) * 60.0f;
     }
-    if (*(int *)(rec + 0x24) >= 0) {
-        char *path = ((char *)l10_paths[*(int *)(rec + 0x24)]);
+    if (*(int *)(path_camera_descriptor + 0x24) >= 0) {
+        char *path = ((char *)l10_paths[*(int *)(path_camera_descriptor + 0x24)]);
         int   i;
         for (i = 0; i < *(int *)path; i++) {
             int offset = i * 16;
@@ -188,7 +189,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
         qcopy(m1, source + 0x10);
         qcopy(m2, source + 0x20);
     }
-    if (*(int *)(rec + 0x4C) == 0)
+    if (*(int *)(path_camera_descriptor + 0x4C) == 0)
         hero_set_state(0x72, 1);
 }
 
@@ -211,30 +212,32 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
     f32                  look_t;
     char                *saved;
     VendorCamRun_5f18   *run;
-    char                *rec;
+    char                *flythrough_descriptor_record;
     VendorCamStops_5f18 *stops;
     char                *path;
     int                  done;
     int                  i;
 
     saved = (char *)cam->saved_state;
-    rec = *(char **)(l10_descriptor_table + cam->descriptor_index * 32 + 0x1C);
+    flythrough_descriptor_record =
+        *(char **)(l10_descriptor_table + cam->descriptor_index * 32 + 0x1C);
     run = (VendorCamRun_5f18 *)(saved + 0x40);
     stops = (VendorCamStops_5f18 *)(saved + 0x58);
 
     if (run->started == 0) {
         l10_path_camera_transition_amount += 0.05f;
         if (l10_path_camera_transition_amount >= 1.0f) {
-            char *start_path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
-            char *look_path = ((char *)l10_paths[*(int *)(rec + 0x24)]);
+            char *start_path = ((char *)l10_paths[*(int *)(flythrough_descriptor_record + 0x20)]);
+            char *look_path = ((char *)l10_paths[*(int *)(flythrough_descriptor_record + 0x24)]);
             l10_path_camera_transition_amount = 1.0f;
             l10_path_flythrough_active = 1;
             run->started = 1;
             qcopy(&cam->pos, start_path + 0x10);
-            if (*(int *)(rec + 0x28) >= 0) {
+            if (*(int *)(flythrough_descriptor_record + 0x28) >= 0) {
                 struct Moby *anchor =
-                    (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
-                float *ofs = (float *)(rec + 0x2C);
+                    (struct Moby *)(D_L10_0015FFD8_5f18 +
+                                    *(int *)(flythrough_descriptor_record + 0x28) * 256);
+                float *ofs = (float *)(flythrough_descriptor_record + 0x2C);
                 offset[0] = ofs[0];
                 offset[1] = ofs[1];
                 offset[2] = ofs[2];
@@ -262,14 +265,14 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
             ang = stops->fov_end * 0.5f;
             l10_camera_view.tan_half_fov = fast_sin(ang) / fast_cos(ang);
             update_view_context();
-            *(u8 *)(rec + 0x39) = 1;
+            *(u8 *)(flythrough_descriptor_record + 0x39) = 1;
             D_L10_00167358 = 0.05f;
             cam->transition_state = 4;
             l10_path_flythrough_active = 0;
-            if (*(int *)(rec + 0x4C) == 0)
+            if (*(int *)(flythrough_descriptor_record + 0x4C) == 0)
                 hero_set_state(0, 1);
         }
-        if (*(int *)(rec + 0x40) == 0)
+        if (*(int *)(flythrough_descriptor_record + 0x40) == 0)
             return;
     } else if (run->started == 3) {
         return;
@@ -278,22 +281,26 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
         if (l10_path_camera_transition_amount < 0.0f)
             l10_path_camera_transition_amount = 0.0f;
     }
-    path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
+    path = ((char *)l10_paths[*(int *)(flythrough_descriptor_record + 0x20)]);
     qcopy(initial_aim_or_previous_position, &cam->pos);
-    done = FUN_L00_0025d808(
-        path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    done = FUN_L00_0025d808(path,
+                            &cam->pos.x,
+                            &run->seg,
+                            &run->t,
+                            0,
+                            *(float *)(flythrough_descriptor_record + 0x3C) * frame_time);
     if (run->timer != 0) {
         if (fast_dec_timer_s16(&run->timer) != 0)
             done = 1;
-        else if (*(int *)(rec + 0x40) != 0 &&
+        else if (*(int *)(flythrough_descriptor_record + 0x40) != 0 &&
                  run->timer < scale_game_frames(truncate_float_to_s32(20.0f)))
             done = 1;
     }
-    if (*(u8 *)(rec + 0x39) != 0)
+    if (*(u8 *)(flythrough_descriptor_record + 0x39) != 0)
         done = 1;
     if (done) {
         run->started = 2;
-        if (*(int *)(rec + 0x40) == 0)
+        if (*(int *)(flythrough_descriptor_record + 0x40) == 0)
             return;
     }
     for (i = 0; i < 7 && stops->seg[i] >= 0 && stops->seg[i + 1] >= 0; i++) {
@@ -317,9 +324,10 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
         }
     }
     run->dist += fast_vec_dist(initial_aim_or_previous_position, &cam->pos);
-    if (*(int *)(rec + 0x28) >= 0) {
-        struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
-        float       *ofs = (float *)(rec + 0x2C);
+    if (*(int *)(flythrough_descriptor_record + 0x28) >= 0) {
+        struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 +
+                                              *(int *)(flythrough_descriptor_record + 0x28) * 256);
+        float       *ofs = (float *)(flythrough_descriptor_record + 0x2C);
         point[0] = ofs[0];
         point[1] = ofs[1];
         point[2] = ofs[2];
@@ -328,7 +336,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
         fast_vec_add(look_point, &anchor->pos, point);
         fast_vec_sub(offset, look_point, &cam->pos);
     } else {
-        char *look = ((char *)l10_paths[*(int *)(rec + 0x24)]);
+        char *look = ((char *)l10_paths[*(int *)(flythrough_descriptor_record + 0x24)]);
         look_seg = 0;
         look_t = 0.0f;
         FUN_L00_0025d808(look,

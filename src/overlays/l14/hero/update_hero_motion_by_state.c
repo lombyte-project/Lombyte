@@ -389,7 +389,7 @@ struct PlayerJointTable {
 };
 
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
-s32        D_L14_0015F68C = 0;
+s32        l14_look_usage_event_count __asm__("D_L14_0015F68C") = 0;
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
@@ -431,7 +431,7 @@ extern f32  spring_angle(f32 *, f32, f32 *, s32, f32, f32, f32) __asm__("FUN_L00
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern u8  *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
+extern void fast_add_rotations_cf(void *, void *, f32, f32, f32) __asm__("FUN_L00_00262cf0");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32  vector_length_xyz_cf(void *, s32) __asm__("FUN_L00_00209018");
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -526,7 +526,7 @@ void update_hero_motion_by_state(void) __asm__("FUN_L14_00228cd0");
 
 void update_hero_motion_by_state(void) {
     struct MobyView *moby = MV(hero.moby);
-    s32              sub = hero.state.step;
+    s32              state_step_before_update = hero.state.step;
     s32              anim = moby->b53;
     f32              speed;
     Vec4             vector_and_descriptor_scratch;
@@ -580,7 +580,7 @@ void update_hero_motion_by_state(void) {
                     D_L14_0015F688 = -1;
                     usage_stats.stat[18].level_mask =
                         usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
-                    D_L14_0015F68C++;
+                    l14_look_usage_event_count++;
                 }
             }
         }
@@ -2629,7 +2629,7 @@ void update_hero_motion_by_state(void) {
         clear_u64_value(&hero.motion.velocity);
         break;
     }
-    if (sub != hero.state.step) {
+    if (state_step_before_update != hero.state.step) {
         hero.step_frames = 0;
     }
     if (anim != moby->b53) {

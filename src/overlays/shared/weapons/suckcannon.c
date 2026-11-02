@@ -1,6 +1,7 @@
 /* Shared moby class suckcannon: the suck cannon, its suction of mobys, the shots it fires and its beam. */
 
 #include "types.h"
+#include "rnc/mobys/moby_state.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/world/level_globals.h"
@@ -209,9 +210,9 @@ typedef struct SuckHero {
     u8         pad2088[0x4];
     s32        control_mode;
     u8         pad2090[0x17];
-    u8         unk20A7;
+    u8         item_select_blocked;
     u8         pad20A8[0x4];
-    u8         unk20AC;
+    u8         suck_cannon_use_blocked;
 } SuckHero;
 
 typedef struct SuckInput {
@@ -339,7 +340,7 @@ typedef struct {
     int            i84, i88;
     float          f8C, f90;
     int            i94;
-    float          f98;
+    float          suction_step_distance;
     short          h9C, h9E;
 } R_2DDEA0;
 
@@ -457,7 +458,7 @@ typedef struct {
 typedef struct {
     u8        pad[0x10];
     u8        v10[0x10];
-    u8        b20;
+    u8        pickup_moby_state;
     u8        pad2[3];
     T_2df1e0 *p24;
 } O_2df1e0;
@@ -1471,7 +1472,8 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             break;
         }
         if ((controller_state.held & ((SuckHero *)&hero)->fire_buttons) && cannon->cooldown == 0 &&
-            ((SuckHero *)&hero)->unk20A7 == 0 && ((SuckHero *)&hero)->unk20AC == 0 &&
+            ((SuckHero *)&hero)->item_select_blocked == 0 &&
+            ((SuckHero *)&hero)->suck_cannon_use_blocked == 0 &&
             scale_game_frames(15) < ((SuckHero *)&hero)->ready_frames &&
             is_suck_cannon_suction_blocked_by_hero_state() == 0) {
             start_equipped_item_animation();
@@ -1489,8 +1491,9 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
     case SUCKCANNON_STATE_SUCTION_STARTUP:
         if (suck_cannon_moby->anim_flags & 2)
             blend_moby_animation(suck_cannon_moby, 3, 0, scale_game_frames(5));
-        if (is_suck_cannon_suction_blocked_by_hero_state() != 0 || ((SuckHero *)&hero)->unk20AC ||
-            ((SuckHero *)&hero)->unk20A7) {
+        if (is_suck_cannon_suction_blocked_by_hero_state() != 0 ||
+            ((SuckHero *)&hero)->suck_cannon_use_blocked ||
+            ((SuckHero *)&hero)->item_select_blocked) {
             sound = cannon->sound;
             if (sound != -1) {
                 SuckVoice *s = (SuckVoice *)(((char *)&voice_pool)) + sound;
@@ -1525,7 +1528,8 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
               (((SuckHero *)&hero)->count < (item_text_variant[9] == 0 ? 5 : 10) &&
                is_suck_cannon_suction_blocked_by_hero_state() == 0 &&
                ((controller_state.held & ((SuckHero *)&hero)->fire_buttons) || cannon->cooldown) &&
-               !((SuckHero *)&hero)->unk20AC && !((SuckHero *)&hero)->unk20A7))) {
+               !((SuckHero *)&hero)->suck_cannon_use_blocked &&
+               !((SuckHero *)&hero)->item_select_blocked))) {
             cancel_hero_item_animation();
             sound = cannon->sound;
             if (sound != -1) {
@@ -1570,7 +1574,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
         if (((SuckHero *)&hero)->state == 1)
             hero_set_state(30, 1);
         if (((SuckHero *)&hero)->state == 30 && (((SuckHero *)&hero)->moby->flags & 1) &&
-            !((SuckHero *)&hero)->unk20AC) {
+            !((SuckHero *)&hero)->suck_cannon_use_blocked) {
             LevelCamera *camera = &l00_camera;
             SuckVec     *eye;
             SuckHit     *hit;
@@ -1612,7 +1616,8 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             (controller_state.held & ((SuckHero *)&hero)->fire_buttons) &&
             ((SuckHero *)&hero)->control_mode != 7 && ((SuckHero *)&hero)->control_mode != 3 &&
             ((SuckHero *)&hero)->control_mode != 18 && ((SuckHero *)&hero)->control_mode != 17 &&
-            !((SuckHero *)&hero)->unk20AC && !((SuckHero *)&hero)->unk20A7 &&
+            !((SuckHero *)&hero)->suck_cannon_use_blocked &&
+            !((SuckHero *)&hero)->item_select_blocked &&
             scale_game_frames(22) < ((SuckHero *)&hero)->ready_frames) {
             start_equipped_item_animation();
             blend_moby_animation(suck_cannon_moby, 5, 0, scale_game_frames(2));
@@ -2320,10 +2325,16 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
         SUCK_UPDATE_FALLING_AFTER_CANCEL = 6,
         SUCK_UPDATE_DEATH = 7
     };
+    enum {
+        SUCK_RECORD_STATE_RISING_FOR_SUCTION = 2,
+        SUCK_RECORD_STATE_STORED = 4,
+        SUCK_RECORD_STATE_ROLLING_PROJECTILE = 6
+    };
+
     Frame_2DDEA0 suction_and_projectile_scratch;
     R_2DDEA0    *suction_and_projectile_record;
 
-    if (moby == 0 || moby->state == 0xFE || moby->state == 0xFD)
+    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER || moby->state == 0xFD)
         return 0;
     suction_and_projectile_record = func_L00_002DCD40_2DDEA0(moby);
     if (suction_and_projectile_record != 0) {
@@ -2343,7 +2354,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                        frame_scale * 0.3927f);
             if (fast_subtract_rotations(yaw, tolerance) < moby->rot.z &&
                 moby->rot.z < fast_add_rotations(yaw, tolerance)) {
-                suction_and_projectile_record->state = 2;
+                suction_and_projectile_record->state = SUCK_RECORD_STATE_RISING_FOR_SUCTION;
                 suction_and_projectile_record->f6C = 0.0f;
             }
             clear_u64_value(&suction_and_projectile_record->vel);
@@ -2401,11 +2412,11 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                 ((Cls *)moby->pclass)->f24 * (distance / (suction_and_projectile_record->f64 +
                                                           suction_and_projectile_record->f64) +
                                               half);
-            suction_and_projectile_record->f98 =
-                suction_and_projectile_record->f98 + frame_scale_sq_macro * 0.11f;
-            if (frame_scale * 0.75f < suction_and_projectile_record->f98)
-                suction_and_projectile_record->f98 = frame_scale * 0.75f;
-            if (distance < suction_and_projectile_record->f98 * 70.0f) {
+            suction_and_projectile_record->suction_step_distance =
+                suction_and_projectile_record->suction_step_distance + frame_scale_sq_macro * 0.11f;
+            if (frame_scale * 0.75f < suction_and_projectile_record->suction_step_distance)
+                suction_and_projectile_record->suction_step_distance = frame_scale * 0.75f;
+            if (distance < suction_and_projectile_record->suction_step_distance * 70.0f) {
                 blend_moby_animation(
                     suction_and_projectile_record->owner, 4, 0, func_001F9850_2DDEA0(2));
             }
@@ -2413,7 +2424,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                 D_001404FC_2DDEA0[0] = 2;
                 moby->collision = 0;
             }
-            if (distance < suction_and_projectile_record->f98) {
+            if (distance < suction_and_projectile_record->suction_step_distance) {
                 hero.suck_cannon_incoming--;
                 hero.sucked_moby_count++;
                 func_L00_002DB6C8_2DDEA0(moby, &suction_and_projectile_scratch.v[0]);
@@ -2470,7 +2481,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                                      &moby->pos);
                 func_L00_001FF4B0_2DDEA0(&suction_and_projectile_scratch.v[1],
                                          &suction_and_projectile_scratch.v[1],
-                                         suction_and_projectile_record->f98);
+                                         suction_and_projectile_record->suction_step_distance);
                 func_001F9BD8_2DDEA0(&moby->pos, &moby->pos, &suction_and_projectile_scratch.v[1]);
                 func_0020EEE8_2DDEA0(moby);
             }
@@ -2606,7 +2617,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
             if (((Coll *)D_L00_00173E40_lui)->hit != 0 &&
                 ((Coll *)D_L00_00173E40_lui)->hit->oclass == 0)
                 hit_wall = 0;
-            if (suction_and_projectile_record->state == 6) {
+            if (suction_and_projectile_record->state == SUCK_RECORD_STATE_ROLLING_PROJECTILE) {
                 moby->flags &= 0x7FFF;
                 moby->collision = ((Cls *)moby->pclass)->i10;
                 moby->flags |= 4;
@@ -2658,7 +2669,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                     blend_moby_animation(moby, anim, 0, func_001F9850_2DDEA0(0x14));
                 }
                 moby->collision_disable = suction_and_projectile_record->i88;
-                suction_and_projectile_record->state = 6;
+                suction_and_projectile_record->state = SUCK_RECORD_STATE_ROLLING_PROJECTILE;
                 if (0.87266463f <
                     fast_arc_tan(((Coll *)D_L00_00173E40_lui)->v40.z,
                                  vector_length_xy(&((Coll *)D_L00_00173E40_lui)->v40))) {
@@ -2734,7 +2745,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
     }
     if (moby->flags & 4)
         func_0020EEE8_2DDEA0(moby);
-    if (suction_and_projectile_record->state < 4) {
+    if (suction_and_projectile_record->state < SUCK_RECORD_STATE_STORED) {
         if (suction_and_projectile_record->timer <= 0.0f) {
             if (((Cls *)moby->pclass)->f2C->fC != 0)
                 ((Cls *)moby->pclass)->f2C->fC(moby);
@@ -3247,9 +3258,9 @@ void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
     f32 beam_segment_collection_radius;
     if (pickup_moby == 0)
         return;
-    if (pickup_moby->b20 == 0xFE)
+    if (pickup_moby->pickup_moby_state == MOBY_STATE_REMOVAL_MARKER)
         return;
-    if (pickup_moby->b20 == 0xFD)
+    if (pickup_moby->pickup_moby_state == 0xFD)
         return;
     if (random_integer_below(10))
         return;

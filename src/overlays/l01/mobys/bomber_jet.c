@@ -71,7 +71,7 @@ typedef struct {
     u8        b31;
     s16       h32;
     u8        pad34[0xC];
-    s32       w40;
+    s32       rotation_vector_x_bits;
     f32       rot_x;
     f32       rot_z;
     u8        pad4c[0x2C];
@@ -103,7 +103,7 @@ BeamMoby *spawn_bomber_jet_beam(void *owner, u128 *pos, u128 *dir, u128 *color, 
     if (created_moby != NULL) {
         beam_vars = created_moby->vars;
         beam_vars->owner = owner;
-        created_moby->w40 = 0;
+        created_moby->rotation_vector_x_bits = 0;
         created_moby->b30 = 0xFF;
         created_moby->h32 = 0xFF;
         created_moby->b31 = 1;
@@ -199,7 +199,7 @@ typedef struct {
     s32 f0;
     s16 f4;
     s16 pad6;
-    s32 f8;
+    s32 clip_volume_index;
 } GunshipGuardVars;
 
 typedef struct {
@@ -525,9 +525,10 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                                     GunshipGuardVars *guard_vars = o->vars;
                                     if (guard_vars->f4 == 0 && guard_vars->f0 == 0 &&
                                         random_integer_below(0x64) < 0x64 &&
-                                        is_point_inside_clip_volume(&hero.motion.pos,
-                                                                    guard_vars->f8) &&
-                                        is_point_inside_clip_volume(camera_pos, guard_vars->f8)) {
+                                        is_point_inside_clip_volume(
+                                            &hero.motion.pos, guard_vars->clip_volume_index) &&
+                                        is_point_inside_clip_volume(
+                                            camera_pos, guard_vars->clip_volume_index)) {
                                         beam_guard_moby_indices[k] = gunship_vars->guards[i];
                                         k++;
                                     }

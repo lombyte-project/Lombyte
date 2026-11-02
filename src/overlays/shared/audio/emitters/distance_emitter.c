@@ -11,22 +11,22 @@
 
 typedef struct {
     s32 id;
-    s32 w4;
-    s32 w8;
-    s32 wC;
+    s32 repeat_delay_lower_bound;
+    s32 repeat_delay_upper_bound;
+    s32 repeat_delay_countdown;
     s32 snd;
 } S_2ed950;
 
 typedef struct {
     u8    p[0x74];
-    u8    b74;
+    u8    is_active;
     u8    p2[0x8C - 0x75];
     void *o;
 } E_2ed950;
 
 typedef struct {
     u8 p[0x18];
-    u8 b18;
+    u8 use_voice_flag_4;
     u8 p2[7];
 } T_2ed950;
 
@@ -65,24 +65,26 @@ void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
         E_2ed950 *e = ENT_2ed950(playback_state->snd);
         s32       fl = 0;
         s32       four = 4;
-        if (D_L00_0015F5F4_2ed950[playback_state->id].b18)
+        if (D_L00_0015F5F4_2ed950[playback_state->id].use_voice_flag_4)
             fl = four;
-        if (e->o == sound_emitter && e->b74)
+        if (e->o == sound_emitter && e->is_active)
             return;
-        if (!fast_dec_timer(&playback_state->wC))
+        if (!fast_dec_timer(&playback_state->repeat_delay_countdown))
             return;
         playback_state->snd = play_voice(playback_state->id, fl, sound_emitter, 0x400);
-        if (playback_state->w8 > 0) {
-            playback_state->wC =
-                FUN_001f96f8_2ed950(playback_state->w4 +
-                                    random_integer_below(playback_state->w8 - playback_state->w4)) *
+        if (playback_state->repeat_delay_upper_bound > 0) {
+            playback_state->repeat_delay_countdown =
+                FUN_001f96f8_2ed950(
+                    playback_state->repeat_delay_lower_bound +
+                    random_integer_below(playback_state->repeat_delay_upper_bound -
+                                         playback_state->repeat_delay_lower_bound)) *
                 60.0f;
         }
     } else if (playback_radius + 1.0f < reference_distance) {
         s32 voice_slot_index = playback_state->snd;
         if (voice_slot_index != -1) {
             E_2ed950 *e = ENT_2ed950(voice_slot_index);
-            if (e->o == sound_emitter && e->b74)
+            if (e->o == sound_emitter && e->is_active)
                 release_voice_slot(voice_slot_index);
         }
         playback_state->snd = -1;

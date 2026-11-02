@@ -25,9 +25,9 @@ typedef struct {
 typedef struct {
     u8        b0;
     u8        b1;
-    u8        b2;
-    u8        b3;
-    s32       w4;
+    u8        texture_id;
+    u8        particle_mode;
+    s32       packed_color;
     u8        b8;
     u8        b9;
     s16       hA;
@@ -91,16 +91,16 @@ void create_spark_particle(s32   id,
     if (mode == SPARK_MODE_FROM_KIND) {
         spark->b9 = (kind >> 5) * 16 + truncate_float_to_s32(4.0f);
         if (kind & 1) {
-            spark->b3 = 0x48;
+            spark->particle_mode = 0x48;
         } else {
-            spark->b3 = 0x44;
+            spark->particle_mode = 0x44;
         }
     } else {
         spark->b9 = kind;
-        spark->b3 = mode;
+        spark->particle_mode = mode;
     }
     spark->b1 = 0;
-    spark->b2 = *spark_texture_table[texture_table_index];
+    spark->texture_id = *spark_texture_table[texture_table_index];
     spark_body->x = x;
     spark_body->y = y;
     spark_body->z = z;
@@ -114,5 +114,5 @@ void create_spark_particle(s32   id,
     spark->b8 = alpha * 255.0f;
     spark->hA = scale_game_frames(life);
     spark_body->b1B = 0;
-    spark->w4 = FUN_L00_0025bfe0(r, g, b, size);
+    spark->packed_color = FUN_L00_0025bfe0(r, g, b, size);
 }

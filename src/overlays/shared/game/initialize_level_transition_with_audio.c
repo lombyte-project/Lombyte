@@ -217,7 +217,7 @@ void prepare_level_transition_with_help_cleanup(void) {
 
 typedef struct {
     u8  p[0x20];
-    s32 i20;
+    s32 transition_mode;
     s16 h24;
     s16 h26;
 } A_0028ed58;
@@ -227,7 +227,7 @@ extern A_0028ed58 level_render_state_lui __asm__("D_0013E030") NOT_SDA;
 typedef struct {
     s32 i0;
     s32 i4;
-    s32 i8;
+    s32 default_scene_chunk_offset;
 } B_0028ed58;
 
 extern B_0028ed58 D_L00_00173E00_0028ed58 __asm__("D_L00_00173E00")
@@ -235,9 +235,9 @@ extern B_0028ed58 D_L00_00173E00_0028ed58 __asm__("D_L00_00173E00")
 
 typedef struct {
     u8  p[0x34];
-    s32 i34;
-    s32 i38;
-    s32 i3C;
+    s32 scaled_sequence_position;
+    s32 sequence_position_remainder;
+    s32 sequence_entry_index;
     u8  p2[0x18];
     s32 i58;
     s32 i5C;
@@ -250,6 +250,12 @@ extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribut
 void       prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
 
 void prepare_target_level_transition(s32 target_level_index) {
+    enum {
+        TRANSITION_MODE_CHANGE_LEVEL = 3
+    };
+    enum {
+        AUDIO_SELECTION_MODE_ALWAYS_FADE = 0
+    };
     A_0028ed58 *shared_state_record = &level_render_state_lui;
     C_0028ed58 *shared_result_record;
     s32         shared_table_offset;
@@ -257,27 +263,30 @@ void prepare_target_level_transition(s32 target_level_index) {
     D_L00_0015F5C4 = 6;
     fade_level = 1.0f;
     D_L00_0015F400 = 0;
-    shared_state_record->i20 = 0;
+    shared_state_record->transition_mode = AUDIO_SELECTION_MODE_ALWAYS_FADE;
     shared_state_record->h24 = -1;
     select_level_vu_chain();
     shared_table_offset = D_L00_001611CC - 0x60000;
     shared_result_record = &D_L00_0016C860_0028ed58;
     shared_result_record->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;
-    shared_result_record->i5C = D_L00_00173E00_0028ed58.i8 + shared_table_offset;
+    shared_result_record->i5C =
+        D_L00_00173E00_0028ed58.default_scene_chunk_offset + shared_table_offset;
     D_L00_001611CC = shared_table_offset;
     if (current_level_index == target_level_index) {
         s32 divisor;
         initialize_level_transition_with_audio(8);
         divisor = pal_mode ? 0x50 : 0x60;
-        shared_result_record->i34 =
+        shared_result_record->scaled_sequence_position =
             scale_game_frames(transition_sequence_positions[shared_state_record->h26]);
-        shared_result_record->i3C = shared_result_record->i34 / divisor;
-        parse_space_scene_chunk(shared_result_record->i3C);
-        shared_result_record->i38 = shared_result_record->i34 % divisor;
+        shared_result_record->sequence_entry_index =
+            shared_result_record->scaled_sequence_position / divisor;
+        parse_space_scene_chunk(shared_result_record->sequence_entry_index);
+        shared_result_record->sequence_position_remainder =
+            shared_result_record->scaled_sequence_position % divisor;
     } else {
         memcard_save_data(0, target_level_index);
         D_L00_0015F5C0 = target_level_index;
-        shared_state_record->i20 = 3;
+        shared_state_record->transition_mode = TRANSITION_MODE_CHANGE_LEVEL;
         shared_state_record->h24 = -1;
     }
 }

@@ -191,9 +191,9 @@ typedef struct {
 
 typedef struct {
     char pad0[0x23C];
-    int  f23C;
-    int  f240;
-    int  f244;
+    int  background_red;
+    int  background_green;
+    int  background_blue;
 } LevelState16CB40;
 
 typedef struct {
@@ -213,7 +213,7 @@ typedef struct TieMatrix {
     float m3[3];
     float f3C;
     char  pad40[0x100];
-    char  f140[0x80];
+    char  packed_colors[0x80];
 } TieMatrix;
 
 typedef struct TieInst {
@@ -230,7 +230,7 @@ typedef struct TieInst {
 
 typedef struct {
     char           pad0[0x26];
-    unsigned short f26;
+    unsigned short tie_instance_count;
     TieInst       *f28;
     char           pad2C[4];
     float          f30[3];
@@ -254,7 +254,7 @@ typedef struct ShrubInst {
     float          fC;
     float          f10;
     char           pad14[3];
-    unsigned char  f17;
+    unsigned char  class_lower_bound_base;
     short          f18;
     unsigned char  f1A;
     unsigned char  f1B;
@@ -266,7 +266,7 @@ typedef struct {
     char           pad0[0xC];
     float          fC;
     char           pad10[6];
-    unsigned short f16;
+    unsigned short shrub_instance_count;
     ShrubInst     *f18;
     float         *f1C;
     float          f20;
@@ -307,13 +307,13 @@ typedef struct MobyInst {
     char           pad7C[4];
     int            f80;
     char           pad84[0x22];
-    short          fA6;
+    short          moby_class_id;
     char           padA8[8];
-    unsigned char  fB0;
-    unsigned char  fB1;
-    short          fB2;
-    short          fB4;
-    short          fB6;
+    unsigned char  mission_index;
+    unsigned char  bolt_source_slot;
+    short          gameplay_uid;
+    short          loaded_adjusted_bolt_count;
+    short          loaded_selected_bolt_count;
     char           padB8[0x48];
 } MobyInst;
 
@@ -357,7 +357,7 @@ typedef struct {
 
 typedef struct {
     char      pad0[0x2080];
-    MobyInst *f2080;
+    MobyInst *hero_moby;
     char      pad2084[0x28C];
 } HeroSpawn;
 
@@ -553,9 +553,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int *p = (int *)((char *)hdr + hdr->f0);
         int *ship_spawn_settings;
 
-        D_L00_0016CA40.f23C = *p++;
-        D_L00_0016CA40.f240 = *p++;
-        D_L00_0016CA40.f244 = *p++;
+        D_L00_0016CA40.background_red = *p++;
+        D_L00_0016CA40.background_green = *p++;
+        D_L00_0016CA40.background_blue = *p++;
         *(unsigned char *)&D_L00_0015F444 = *p++;
         *(unsigned char *)&D_L00_0015F445 = *p++;
         *(unsigned char *)&D_L00_0015F446 = *p++;
@@ -577,7 +577,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_001604A4 = 500.0f;
     D_L00_0015FFF0 = 500;
     D_L00_0016017C = 0x1F4000;
-    set_background_color(D_L00_0016CA40.f23C, D_L00_0016CA40.f240, D_L00_0016CA40.f244);
+    set_background_color(D_L00_0016CA40.background_red,
+                         D_L00_0016CA40.background_green,
+                         D_L00_0016CA40.background_blue);
     vu0_load_micro_program(D_00100AE0);
     fast_mem_zero16(point_lights, 0x100);
     fast_mem_zero16(D_L00_001804C0, 0x180);
@@ -695,10 +697,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
             inst->f1A = D_L00_001C5B00[*(int *)p];
             if (inst->f1A != last) {
                 D_L00_001C5800[inst->f1A]->f28 = inst;
-                D_L00_001C5800[inst->f1A]->f26 = 0;
+                D_L00_001C5800[inst->f1A]->tie_instance_count = 0;
                 last = inst->f1A;
             }
-            D_L00_001C5800[inst->f1A]->f26++;
+            D_L00_001C5800[inst->f1A]->tie_instance_count++;
             inst->f10 = mtx;
             inst->f14 = (float)*(int *)(p + 4);
             inst->f1E = 0xFFFF;
@@ -721,7 +723,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             D_L00_00160FC8[i].fC = 1.0f / fast_vec_length(&D_L00_00160FC8[i]);
             D_L00_00160FC8[i].f1C = 1.0f / fast_vec_length(D_L00_00160FC8[i].m1);
             D_L00_00160FC8[i].f2C = 1.0f / fast_vec_length(D_L00_00160FC8[i].m2);
-            copy_memory_aligned(mtx->f140, p, 0x80);
+            copy_memory_aligned(mtx->packed_colors, p, 0x80);
             p += 0x80;
             inst->f1C = *(unsigned short *)p;
             p += 0x10;
@@ -775,9 +777,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (shrub_class_index != last) {
                 last = shrub_class_index;
                 D_L00_001BC030[shrub_class_index]->f18 = inst;
-                D_L00_001BC030[shrub_class_index]->f16 = 0;
+                D_L00_001BC030[shrub_class_index]->shrub_instance_count = 0;
             }
-            D_L00_001BC030[shrub_class_index]->f16++;
+            D_L00_001BC030[shrub_class_index]->shrub_instance_count++;
             inst->f18 = i;
             inst->f10 = *(float *)(p + 4);
             if (inst->f10 < 16.0f) {
@@ -788,8 +790,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (D_L00_001BC030[shrub_class_index]->f1C != 0) {
                 float shrub_class_lower_bound;
 
-                inst->f17 = truncate_float_to_s32(*D_L00_001BC030[shrub_class_index]->f1C);
-                shrub_class_lower_bound = convert_integer_to_float(inst->f17) + 24.0f;
+                inst->class_lower_bound_base =
+                    truncate_float_to_s32(*D_L00_001BC030[shrub_class_index]->f1C);
+                shrub_class_lower_bound =
+                    convert_integer_to_float(inst->class_lower_bound_base) + 24.0f;
                 if (inst->f10 < shrub_class_lower_bound) {
                     inst->f10 = shrub_class_lower_bound;
                 }
@@ -1023,11 +1027,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 m = moby_table + count;
                 init_moby_instance(m, *(int *)p);
                 p += 4;
-                m->fB1 = vis;
-                m->fB2 = uid;
-                m->fB0 = mission;
-                m->fB4 = adjusted_bolt_count;
-                m->fB6 = selected_bolt_count;
+                m->bolt_source_slot = vis;
+                m->gameplay_uid = uid;
+                m->mission_index = mission;
+                m->loaded_adjusted_bolt_count = adjusted_bolt_count;
+                m->loaded_selected_bolt_count = selected_bolt_count;
                 if (m->f24 != 0) {
                     m->f2C = m->f24->f24 * *(float *)p;
                 }
@@ -1465,7 +1469,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         if (D_0015ED84 == 13 && level_render_state.content_variant == 2) {
             if (D_L00_00160540 != 0) {
                 for (m = moby_table; m->f20 != 0xFF; m++) {
-                    if (m->fA6 == first_class_ids[level_render_state.content_variant]) {
+                    if (m->moby_class_id == first_class_ids[level_render_state.content_variant]) {
                         initialize_moby_state_record((char *)m);
                         set_moby_animation(m, 1, 0);
                         break;
@@ -1543,7 +1547,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
             for (m = moby_table; m->f20 != 0xFF; m++) {
                 if (m->f36 != 0x7F80) {
-                    int uid = m->fB2;
+                    int uid = m->gameplay_uid;
                     int j;
 
                     k++;
@@ -1653,7 +1657,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_0015F5CC = 0;
     D_L00_0015F63C = 0;
     if (level_render_state.player != 0) {
-        *(long *)&((MobyInst *)level_render_state.player)->f38 = *(long *)&D_0013F350.f2080->f38;
+        *(long *)&((MobyInst *)level_render_state.player)->f38 =
+            *(long *)&D_0013F350.hero_moby->f38;
     }
     switch (D_0015ED84) {
     case 2:

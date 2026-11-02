@@ -16,7 +16,8 @@ extern float fast_sin(float);
 
 extern float
            approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
+extern int move_moby_with_ground_and_collision_checks(
+    void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern void FUN_L01_0026d930(char *p);
 extern void handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
 extern void spawn_amoeboid_particles(unsigned char *moby) __asm__("FUN_L05_002db018");
@@ -34,7 +35,7 @@ typedef struct AmoeboidVars {
     f32 unk68;
     f32 unk6C;
     u8  pad_70[0x14];
-    f32 unk84;
+    f32 movement_speed_cap;
     u8  pad_88[0x28];
     s32 path_B0;
     s32 unkB4;
@@ -69,7 +70,7 @@ void amoeboid_update(struct Moby *moby) {
             int   r = truncate_float_to_s32(409.6f);
             float movement_speed_limit = frame_time * 4.0f;
             moby_data->unk60 = r;
-            moby_data->unk84 = movement_speed_limit;
+            moby_data->movement_speed_cap = movement_speed_limit;
         }
         break;
     case AMOEBOID_FOLLOW_PATH: {
@@ -85,7 +86,8 @@ void amoeboid_update(struct Moby *moby) {
         facing_direction[0] = fast_cos(moby->rot.z);
         facing_direction[1] = fast_sin(moby->rot.z);
         facing_direction[2] = 0.0f;
-        FUN_L00_00258b50(moby, &moby_data->unk60, facing_direction, &moby_data->unk40, 1.0f);
+        move_moby_with_ground_and_collision_checks(
+            moby, &moby_data->unk60, facing_direction, &moby_data->unk40, 1.0f);
         if (fast_dec_timer(&moby_data->timer_B8) != 0 ||
             vector_distance_xy(&moby->pos,
                                ((char *)l05_paths[moby_data->path_B0]) +

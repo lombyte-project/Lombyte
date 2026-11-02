@@ -442,7 +442,7 @@ struct PlayerJointTable {
 };
 
 extern s32 D_L15_0015F688 __attribute__((sda));
-s32        D_L15_0015F68C = 0;
+s32        l15_hero_look_timer_completion_count __asm__("D_L15_0015F68C") = 0;
 extern u8  D_L15_001673D8[];
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
@@ -488,7 +488,7 @@ extern f32  spring_angle(f32 *, f32, f32 *, s32, f32, f32, f32) __asm__("FUN_L00
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern u8  *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
+extern void fast_add_rotations_cf(void *, void *, f32, f32, f32) __asm__("FUN_L00_00262cf0");
 extern f32  vector_length_xyz_cf(void *, s32) __asm__("FUN_L00_00209018");
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
@@ -592,7 +592,7 @@ void update_hero_motion_for_current_state(void) {
     };
 
     struct MobyView *moby = (struct MobyView *)hero.moby;
-    s32              sub = hero.state.step;
+    s32              state_step_at_entry = hero.state.step;
     s32              anim = moby->b53;
     f32              speed;
     Vec4             spatial_or_hit_descriptor_work;
@@ -645,7 +645,7 @@ void update_hero_motion_for_current_state(void) {
                     D_L15_0015F688 = -1;
                     usage_stats.stat[18].level_mask =
                         usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
-                    D_L15_0015F68C++;
+                    l15_hero_look_timer_completion_count++;
                 }
             }
         }
@@ -981,11 +981,11 @@ void update_hero_motion_for_current_state(void) {
                         spatial_or_hit_descriptor_work.f[1] += random_float_between(0.0f, 0.03f);
                         spatial_or_hit_descriptor_work.f[2] += random_float_between(0.0f, 0.03f);
                         qcopy(&v10, &hero.motion.displacement);
-                        FUN_L00_00262cf0(&v10,
-                                         &v10,
-                                         frame_time * -0.75f,
-                                         hero.motion.rot.f[2],
-                                         hero.motion.rot.f[1]);
+                        fast_add_rotations_cf(&v10,
+                                              &v10,
+                                              frame_time * -0.75f,
+                                              hero.motion.rot.f[2],
+                                              hero.motion.rot.f[1]);
                         hero.pack_particle_timer =
                             truncate_float_to_s32((frame_time * 7.0f - hero.ground_speed) /
                                                   (frame_time * 7.0f) * scale_game_frames(5));
@@ -2722,7 +2722,7 @@ void update_hero_motion_for_current_state(void) {
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.6f);
         if (test_hero_animation_frame_window(4.0f) != 0) {
             s32 i;
-            f32 w = z;
+            f32 missile_pitch = z;
             z = 1.0f;
             for (i = 0; i < 2; i++) {
                 moby_point_position(
@@ -2732,11 +2732,11 @@ void update_hero_motion_for_current_state(void) {
                 spawn_giant_clank_missile((struct MobyView *)hero.moby,
                                           &spatial_or_hit_descriptor_work,
                                           hero.motion.rot.f[2],
-                                          w,
+                                          missile_pitch,
                                           0,
                                           0.5f,
                                           hero.motion.rot.f[2],
-                                          w);
+                                          missile_pitch);
             }
         }
         if (hero.air_frames.s != 0) {
@@ -2954,7 +2954,7 @@ void update_hero_motion_for_current_state(void) {
         clear_u64_value(&hero.motion.velocity);
         break;
     }
-    if (sub != hero.state.step) {
+    if (state_step_at_entry != hero.state.step) {
         hero.step_frames = 0;
     }
     if (anim != moby->b53) {

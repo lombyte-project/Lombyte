@@ -107,7 +107,7 @@ int evaluate_clip_volume_candidate(char *candidate_object,
 int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_object) {
     char *candidate_level_table_entry =
         (char *)(D_L03_0015EF50 + (*(short *)(candidate_object + 0x84) << 5));
-    char *sub = *(char **)(candidate_level_table_entry + 0x1C);
+    char *candidate_clip_volume_subrecord = *(char **)(candidate_level_table_entry + 0x1C);
     char *global_state_base;
     int   five;
     if (*(int *)(candidate_object + 0x74) != 4)
@@ -116,8 +116,10 @@ int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_obje
         !(*(unsigned char *)(candidate_object + 0x7C) >
           *(unsigned char *)(comparison_object + 0x7C)))
         return 0;
-    if (is_point_inside_clip_volume(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) != 0) {
-        if (is_point_inside_clip_volume(D_L03_00166EC0, *(int *)(sub + 0xC)) != 0)
+    if (is_point_inside_clip_volume(D_0013E533 + 0xE9D,
+                                    *(int *)(candidate_clip_volume_subrecord + 0xC)) != 0) {
+        if (is_point_inside_clip_volume(D_L03_00166EC0,
+                                        *(int *)(candidate_clip_volume_subrecord + 0xC)) != 0)
             return 1;
         global_state_base = D_L03_00166EC0 - 0x140;
         five = *(int *)(global_state_base + 0x180);
@@ -135,9 +137,10 @@ void set_transform_state_three_when_outside_clip_volume(char *moby) __asm__("FUN
 
 void set_transform_state_three_when_outside_clip_volume(char *moby) {
     char *level_table_entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
-    char *sub = *(char **)(level_table_entry + 0x1C);
+    char *clip_volume_subrecord = *(char **)(level_table_entry + 0x1C);
     if (*(int *)(moby + 0x74) == 4) {
-        if (is_point_inside_clip_volume(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) == 0) {
+        if (is_point_inside_clip_volume(D_0013E533 + 0xE9D,
+                                        *(int *)(clip_volume_subrecord + 0xC)) == 0) {
             *(short *)(moby + 0x7E) = 3;
         }
     }

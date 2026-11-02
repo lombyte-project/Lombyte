@@ -43,7 +43,7 @@ typedef struct {
     u8         pad50[0x28];
     void      *pvars;
     u8         pad7C[0x18];
-    s32        w94;
+    s32        spatial_cell_update_gate;
 } ClonedMoby;
 
 extern void get_first_moby_in_group(ClonedMoby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
@@ -57,10 +57,10 @@ typedef struct {
 typedef struct {
     u8  pad0[0x60];
     u8  path[0x18];
-    s32 w78;
-    s32 w7C;
+    s32 knockback_horizontal_magnitude;
+    s32 knockback_initial_vertical_step;
     s32 w80;
-    s32 w84;
+    s32 knockback_motion_flags;
     f32 f88;
     u8  pad8C[0x24];
     f32 fB0;
@@ -87,7 +87,7 @@ typedef struct {
 
 extern ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *) __asm__("FUN_L01_00302328");
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
-s32         D_L01_00161E90 = 5;
+s32         l01_beehive_spawn_attempt_limit __asm__("D_L01_00161E90") = 5;
 
 void beehive_update(SpawnerMoby *m) __asm__("FUN_L01_003021b8");
 
@@ -113,7 +113,7 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         if (count_active_moby_group_members(beehive_vars->src_id, 0xC) != 0) {
             break;
         }
-        if (beehive_vars->count >= D_L01_00161E90) {
+        if (beehive_vars->count >= l01_beehive_spawn_attempt_limit) {
             break;
         }
         beehive_vars->count++;
@@ -121,13 +121,13 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         if (spawned_clone != 0) {
             nv = spawned_clone->pvars;
             k = 0.8f;
-            nv->w84 = 8;
+            nv->knockback_motion_flags = 8;
             nv->w80 = truncate_float_to_s32(nv->f250 * k * 1024.0f);
             nv->f88 = nv->f250 * k;
             nv->fB0 = 7.0f;
             nv->fB4 = 13.0f;
-            nv->w78 = 0;
-            nv->w7C = 0;
+            nv->knockback_horizontal_magnitude = 0;
+            nv->knockback_initial_vertical_step = 0;
             trooper_start_knockback(
                 spawned_clone,
                 nv->path,
@@ -157,7 +157,7 @@ ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *clone_spawner_moby) {
     destination_moby->h32 = 0x80;
     destination_moby->d38 = clone_spawner_moby->d38;
     destination_moby->b31 = 1;
-    destination_moby->w94 = destination_moby->mclass->w10;
+    destination_moby->spatial_cell_update_gate = destination_moby->mclass->w10;
     destination_moby->flags |= 0x1020;
     destination_moby->scale = destination_moby->mclass->f24;
     {

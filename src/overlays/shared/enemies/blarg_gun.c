@@ -22,6 +22,9 @@ void blarg_gun_update(char *moby) {
         BLARG_GUN_STATE_INITIALIZE = 0,
         BLARG_GUN_STATE_MOVING = 1
     };
+    enum {
+        BLARG_GUN_STATE_INACTIVE = 2
+    };
     char *launch_motion_vars = ((char *)MOBY(moby)->pvars);
     char  rotation_workspace[0x70];
     char *hs;
@@ -32,7 +35,7 @@ void blarg_gun_update(char *moby) {
     case BLARG_GUN_STATE_INITIALIZE:
         if (((unsigned short)MOBY(moby)->draw_dist) & 1)
             MOBY(moby)->flags |= 0x8000;
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = BLARG_GUN_STATE_INACTIVE;
         break;
     case BLARG_GUN_STATE_MOVING:
         joint_index = *(int *)(launch_motion_vars + 4);

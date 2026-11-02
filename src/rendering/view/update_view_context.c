@@ -20,7 +20,7 @@ struct Clip {
     Vec4 constants[3];
 };
 
-Vec4 D_0018CFC0[4] = {0};
+Vec4 view_clip_constants[4] __asm__("D_0018CFC0") = {0};
 
 extern f32 view_projection_scale_bias_constants[4] __asm__("D_00160720");
 
@@ -104,10 +104,10 @@ void update_view_context(void) {
     near_clip = view->near_clip;
     view->clip_distances.f[1] = near_clip;
     view->clip_scale.f[2] = (horizontal_clip_scale + vertical_clip_scale) * 0.5f;
-    qcopy(&D_0018CFC0[0], &view->fov);
-    qcopy(&D_0018CFC0[1], &view->aspect_scale);
-    qcopy(&D_0018CFC0[2], &view->clip_scale);
-    qcopy(&D_0018CFC0[3], &view->clip_distances);
+    qcopy(&view_clip_constants[0], &view->fov);
+    qcopy(&view_clip_constants[1], &view->aspect_scale);
+    qcopy(&view_clip_constants[2], &view->clip_scale);
+    qcopy(&view_clip_constants[3], &view->clip_distances);
 
     /* Retail lw instructions carry the fog endpoint float bits into packet fields. */
     far_bits = *(s32 *)&view->fog_far_int;

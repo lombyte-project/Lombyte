@@ -325,7 +325,7 @@ typedef struct Hit_2DFC38 {
     float        f10[4];
     struct Moby *moby;
     char         pad24[8];
-    float        f2C;
+    float        damage;
     int          f30;
 } Hit_2DFC38;
 
@@ -333,33 +333,33 @@ typedef struct MobyData_2DFC38 {
     char          pad0[0x20];
     float         f20;
     char          pad24[2];
-    short         f26;
+    short         nonlethal_hit_duration_frames;
     char          pad28[0x10];
-    int           f38;
+    int           target_range_boost_requested;
     char          pad3C[0x24];
     char          f60[0x10];
     float         f70, f74, f78, f7C;
     char          pad80[4];
-    int           f84;
+    int           knockback_flags;
     char          pad88[0x15];
     unsigned char f9D;
     char          pad9E[0x22];
-    char          fC0[0x40];
+    char          selected_target_vectors[0x40];
     int           f100, f104;
     char          pad108[8];
-    char          f110[7];
-    unsigned char f117;
+    char          color_reaction_state_header[7];
+    unsigned char secondary_color_red;
     char          pad118[0x18];
-    char          f130[0x44];
+    char          navigation_state[0x44];
     int           f174;
-    float         f178;
-    int           f17C;
-    float         f180;
-    int           f184;
-    float         f188;
-    int           f18C;
+    float         default_target_range;
+    int           active_target_path_index;
+    float         current_target_range;
+    int           target_range_boost_timer;
+    float         activation_wait_target_range;
+    int           activation_wait_target_path_index;
     char          pad190[4];
-    int           f194;
+    int           target_bounds_cuboid_index;
 } MobyData_2DFC38;
 
 extern char D_0013F3D0[];
@@ -397,18 +397,18 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     int              target_selection_status;
     float            knockback_angle;
 
-    if (screamer_vars->f38 != 0) {
-        screamer_vars->f184 =
+    if (screamer_vars->target_range_boost_requested != 0) {
+        screamer_vars->target_range_boost_timer =
             truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
-        screamer_vars->f38 = 0;
+        screamer_vars->target_range_boost_requested = 0;
     }
-    fast_dec_timer(&screamer_vars->f184);
+    fast_dec_timer(&screamer_vars->target_range_boost_timer);
     if (moby->state != SCREAMER_STATE_DEATH_KNOCKBACK) {
         hit_record = (Hit_2DFC38 *)find_moby_hit(moby, 0x330000, 0);
         hit_update_2DFC38(
             moby, hit_record, &screamer_vars->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0) {
-            if (screamer_vars->f20 <= hit_record->f2C) {
+            if (screamer_vars->f20 <= hit_record->damage) {
                 if (screamer_death_message_gate != 0 && item_unlocked[0x10] == 0) {
                     item_unlocked[0x10] = 1;
                     allocate_voice_for_bank_entry_2DFC38(1, 0, 0);
@@ -422,7 +422,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                 screamer_vars->f70 = D_0015ED70 * 26.0f;
                 screamer_vars->f9D = 3;
                 screamer_vars->f74 = 0.0005f;
-                screamer_vars->f84 = 9;
+                screamer_vars->knockback_flags = 9;
                 screamer_vars->f78 = D_0015ED6C * 7.0f;
                 screamer_vars->f7C = D_0015ED6C * 10.0f;
                 if (hit_record->f30 & 1)
@@ -431,32 +431,33 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                     knockback_angle =
                         fast_arc_tan(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
                 trooper_start_knockback(moby, screamer_vars->f60, knockback_angle, 5, 1, 0);
-                screamer_vars->f117 = 0x78;
-                trooper_anim_update(moby, screamer_vars->f110);
+                screamer_vars->secondary_color_red = 0x78;
+                trooper_anim_update(moby, screamer_vars->color_reaction_state_header);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                screamer_vars->f20 = screamer_vars->f20 - hit_record->f2C;
-                screamer_vars->f117 = 0xfa;
-                screamer_vars->f26 = scale_game_frames(60);
-                trooper_anim_update(moby, screamer_vars->f110);
+                screamer_vars->f20 = screamer_vars->f20 - hit_record->damage;
+                screamer_vars->secondary_color_red = 0xfa;
+                screamer_vars->nonlethal_hit_duration_frames = scale_game_frames(60);
+                trooper_anim_update(moby, screamer_vars->color_reaction_state_header);
             }
             moby->hit_slot = 0xff;
         }
     }
-    trooper_anim_finish(moby, screamer_vars->f110);
+    trooper_anim_finish(moby, screamer_vars->color_reaction_state_header);
     if (screamer_vars->f174 == 2)
-        screamer_vars->f180 = 42.0f;
-    else if (screamer_vars->f184 != 0)
-        screamer_vars->f180 = screamer_vars->f178 + 6.0f;
+        screamer_vars->current_target_range = 42.0f;
+    else if (screamer_vars->target_range_boost_timer != 0)
+        screamer_vars->current_target_range = screamer_vars->default_target_range + 6.0f;
     else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION)
-        screamer_vars->f180 = screamer_vars->f188;
+        screamer_vars->current_target_range = screamer_vars->activation_wait_target_range;
     else
-        screamer_vars->f180 = screamer_vars->f178;
+        screamer_vars->current_target_range = screamer_vars->default_target_range;
 
     if (screamer_vars->f174 == 2) {
-        target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
+        target_selection_status = ahead_f(
+            screamer_vars->current_target_range, moby, screamer_vars->selected_target_vectors);
         if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
-            LevelCuboid *bp = &l10_cuboids[screamer_vars->f194];
+            LevelCuboid *bp = &l10_cuboids[screamer_vars->target_bounds_cuboid_index];
             fast_vec_sub(relative_offset, D_0013F3D0, &bp->pos);
             relative_offset[3] = 0.0f;
             transform_vector_by_basis(transformed_offset, relative_offset, bp->to_local);
@@ -465,19 +466,34 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                 transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2])
                 screamer_vars->f104 = 2;
         }
-    } else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION && screamer_vars->f18C >= 0) {
-        LevelPath *path = l10_paths[screamer_vars->f18C];
-        target_selection_status = activate_effect_l08(
-            screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
-    } else if (moby->state != SCREAMER_STATE_WAIT_FOR_ACTIVATION && screamer_vars->f17C >= 0) {
-        LevelPath *path = l10_paths[screamer_vars->f17C];
-        target_selection_status = activate_effect_l08(
-            screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
+    } else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION &&
+               screamer_vars->activation_wait_target_path_index >= 0) {
+        LevelPath *path = l10_paths[screamer_vars->activation_wait_target_path_index];
+        target_selection_status = activate_effect_l08(screamer_vars->current_target_range,
+                                                      moby,
+                                                      screamer_vars->selected_target_vectors,
+                                                      0,
+                                                      0,
+                                                      path->points,
+                                                      path->count);
+    } else if (moby->state != SCREAMER_STATE_WAIT_FOR_ACTIVATION &&
+               screamer_vars->active_target_path_index >= 0) {
+        LevelPath *path = l10_paths[screamer_vars->active_target_path_index];
+        target_selection_status = activate_effect_l08(screamer_vars->current_target_range,
+                                                      moby,
+                                                      screamer_vars->selected_target_vectors,
+                                                      0,
+                                                      0,
+                                                      path->points,
+                                                      path->count);
     } else {
-        target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
+        target_selection_status = ahead_f(
+            screamer_vars->current_target_range, moby, screamer_vars->selected_target_vectors);
     }
     if (target_selection_status != TARGET_SELECTION_DEFAULT_TARGET_EXCLUDED) {
-        if (screamer_vars->f180 < vector_distance_xy(screamer_vars->f130, screamer_vars->fC0))
+        if (screamer_vars->current_target_range <
+            vector_distance_xy(screamer_vars->navigation_state,
+                               screamer_vars->selected_target_vectors))
             screamer_vars->f104 = 2;
         else if (moby->visible == 0)
             screamer_vars->f104 = 2;

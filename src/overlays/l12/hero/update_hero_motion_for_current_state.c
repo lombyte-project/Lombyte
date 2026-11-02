@@ -38,6 +38,9 @@ float       absolute_float(float input) __asm__("func_001F99C0");
 void update_hero_ground_material_flags(void) __asm__("FUN_L12_0022de30");
 
 void update_hero_ground_material_flags(void) {
+    enum {
+        GROUND_MATERIAL_FIXED_WATER_DEPTH = 0xE
+    };
     struct Hero  *hero_for_ground_flags_update = &hero;
     unsigned char saved;
     int           state;
@@ -61,7 +64,7 @@ void update_hero_ground_material_flags(void) {
             }
         }
     }
-    if (state == 0xE) {
+    if (state == GROUND_MATERIAL_FIXED_WATER_DEPTH) {
         struct Hero *hero_for_surface_update = &hero;
         hero_for_surface_update->base_condition = 1;
         hero_for_surface_update->water_depth = 0.2f;
@@ -511,7 +514,7 @@ extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 extern s32 D_0015EEA4;
 extern u8  D_0013D4DC[];
 extern s32 D_L12_0015F688 __attribute__((sda));
-s32        D_L12_0015F68C = 0;
+s32        l12_look_usage_event_count __asm__("D_L12_0015F68C") = 0;
 extern u8  D_L12_00167258[];
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
@@ -559,7 +562,7 @@ extern f32  spring_angle(f32 *, f32, f32 *, s32, f32, f32, f32) __asm__("FUN_L00
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern u8  *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
+extern void fast_add_rotations_cf(void *, void *, f32, f32, f32) __asm__("FUN_L00_00262cf0");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32  vector_length_xyz_cf(void *, s32) __asm__("FUN_L00_00209018");
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -653,7 +656,7 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L12_00238900");
 
 void update_hero_motion_for_current_state(void) {
     struct MobyView *moby = MV(hero.moby);
-    s32              sub = hero.state.step;
+    s32              entry_state_step = hero.state.step;
     s32              anim = moby->b53;
     f32              speed;
     Vec4             geometry_and_hit_descriptor_scratch;
@@ -711,7 +714,7 @@ void update_hero_motion_for_current_state(void) {
                     D_L12_0015F688 = -1;
                     usage_stats.stat[18].level_mask =
                         usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
-                    D_L12_0015F68C++;
+                    l12_look_usage_event_count++;
                 }
             }
         }
@@ -1092,11 +1095,11 @@ void update_hero_motion_for_current_state(void) {
                         geometry_and_hit_descriptor_scratch.f[2] +=
                             random_float_between(0.0f, 0.03f);
                         qcopy(&v10, &hero.motion.displacement);
-                        FUN_L00_00262cf0(&v10,
-                                         &v10,
-                                         frame_time * -0.75f,
-                                         hero.motion.rot.f[2],
-                                         hero.motion.rot.f[1]);
+                        fast_add_rotations_cf(&v10,
+                                              &v10,
+                                              frame_time * -0.75f,
+                                              hero.motion.rot.f[2],
+                                              hero.motion.rot.f[1]);
                         hero.pack_particle_timer =
                             truncate_float_to_s32((frame_time * 7.0f - hero.ground_speed) /
                                                   (frame_time * 7.0f) * scale_game_frames(5));
@@ -2851,7 +2854,7 @@ void update_hero_motion_for_current_state(void) {
         clear_u64_value(&hero.motion.velocity);
         break;
     }
-    if (sub != hero.state.step) {
+    if (entry_state_step != hero.state.step) {
         hero.step_frames = 0;
     }
     if (anim != moby->b53) {

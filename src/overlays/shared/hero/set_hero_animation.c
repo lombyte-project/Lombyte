@@ -164,9 +164,9 @@ void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend
 }
 
 typedef struct {
-    s16 h0;
-    u8  b2;
-    u8  b3;
+    s16 animation_key;
+    u8  primary_animation_id;
+    u8  secondary_animation_id;
 } E_231ff8;
 
 extern E_231ff8 D_L00_0017BBF0_00231ff8[] __asm__("D_L00_0017BBF0")
@@ -193,8 +193,8 @@ int             select_hero_slot3_animation_pair(int  input_animation_id,
     }
     if (animation_table) {
         int j = 0;
-        while (animation_table[j].h0 != -1) {
-            if (animation_lookup_key == animation_table[j].h0) {
+        while (animation_table[j].animation_key != -1) {
+            if (animation_lookup_key == animation_table[j].animation_key) {
                 matching_animation_entry_indices[match_count] = j;
                 match_count++;
             }
@@ -203,8 +203,8 @@ int             select_hero_slot3_animation_pair(int  input_animation_id,
     }
     if (match_count != 0) {
         int k = matching_animation_entry_indices[random_int_between(0, match_count - 1)];
-        *out_primary_animation_id = animation_table[k].b2;
-        *out_secondary_animation_id = animation_table[k].b3;
+        *out_primary_animation_id = animation_table[k].primary_animation_id;
+        *out_secondary_animation_id = animation_table[k].secondary_animation_id;
         return 1;
     } else {
         *out_primary_animation_id = 1;
@@ -347,9 +347,9 @@ typedef struct {
     char          pad28[0x28];
     unsigned char seq[2];
     unsigned char bank[2];
-    float         f54;
+    float         animation_time;
     float         f58;
-    float         f5C;
+    float         animation_frame_rate;
     char          pad60[8];
     int           id[2];
 } AnimState;
@@ -363,8 +363,8 @@ void sync_hero_mapped_moby_animation_frames(void) {
     if (animation_sync_target == 0) {
         return;
     }
-    animation_sync_target->f5C = hero_animation_sync_state->anim_frame_rate;
-    animation_sync_target->f54 = hero_animation_sync_state->moby->anim_time;
+    animation_sync_target->animation_frame_rate = hero_animation_sync_state->anim_frame_rate;
+    animation_sync_target->animation_time = hero_animation_sync_state->moby->anim_time;
     animation_sync_target->seq[0] = hero_animation_sync_state->moby->prev_frame;
     animation_sync_target->seq[1] = hero_animation_sync_state->moby->prev_frame;
     animation_sync_target->id[0] =
@@ -1396,42 +1396,42 @@ typedef struct Hero_234800 {
     Vec_234800    pos;
     Vec_234800    v90;
     char          pA0[0x5C];
-    float         fFC;
+    float         attachment_yaw_delta;
     char          p100[0x50];
-    Vec_234800    v150;
+    Vec_234800    position_anchor_inhibit;
     char          p160[0x24];
-    float         f184;
+    float         rotation_anchor_inhibit;
     char          p188[0x6E];
-    short         h1F6;
+    short         path_clearance_position_anchor_inhibit;
     char          p1F8[0x104];
     void         *p2FC;
     char          p300[0xE];
-    short         h30E;
-    Vec_234800    v310;
-    Vec_234800    v320;
-    Vec_234800    v330;
+    short         attachment_residual_decay_scale;
+    Vec_234800    primary_attachment_local_position;
+    Vec_234800    attachment_local_rotation;
+    Vec_234800    secondary_attachment_local_position;
     char          p340[0x10];
-    Vec_234800    v350;
-    void         *p360;
-    int           i364;
+    Vec_234800    saved_attachment_displacement;
+    void         *attachment_reference_object;
+    int           attachment_anchor_flags;
     char          p368[0x168];
-    Vec_234800    v4D0;
+    Vec_234800    ledge_grab_position;
     char          p4E0[0x4];
-    float         f4E4;
+    float         ledge_attachment_heading;
     char          p4E8[0x10];
     void         *p4F8;
     char          p4FC[0x1B84];
-    int           i2080;
+    int           hero_moby;
     int           i2084;
     char          p2088[0x4];
     int           i208C;
     char          p2090[0x15];
-    unsigned char b20A5;
+    unsigned char probe_yaw_override_enabled;
 } Hero_234800;
 
 typedef struct {
     char p0[0x3C];
-    int  i3C;
+    int  attachment_behavior_flags;
 } Plat;
 
 extern char  hero_233f80[] __asm__("D_0013F350");
@@ -1467,142 +1467,159 @@ void update_hero_attachment(void) {
     mode = HERO_ATTACHMENT_MODE_INACTIVE;
     amt = 0.0f;
     saved_hero_yaw = ((Hero_234800 *)hero_233f80)->v90.z;
-    if (((Hero_234800 *)hero_233f80)->h30E == 0) {
+    if (((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0) {
         if (((Hero_234800 *)hero_233f80)->p2FC != 0) {
             mode = HERO_ATTACHMENT_MODE_PROBE;
-            if (((Hero_234800 *)hero_233f80)->p360 != ((Hero_234800 *)hero_233f80)->p2FC) {
-                ((Hero_234800 *)hero_233f80)->i364 &= ~1;
+            if (((Hero_234800 *)hero_233f80)->attachment_reference_object !=
+                ((Hero_234800 *)hero_233f80)->p2FC) {
+                ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
             }
-            ((Hero_234800 *)hero_233f80)->p360 = ((Hero_234800 *)hero_233f80)->p2FC;
+            ((Hero_234800 *)hero_233f80)->attachment_reference_object =
+                ((Hero_234800 *)hero_233f80)->p2FC;
         } else {
-            ((Hero_234800 *)hero_233f80)->p360 = 0;
-            ((Hero_234800 *)hero_233f80)->i364 &= ~1;
-            ((Hero_234800 *)hero_233f80)->i364 &= ~2;
+            ((Hero_234800 *)hero_233f80)->attachment_reference_object = 0;
+            ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
+            ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~2;
         }
     } else if (((Hero_234800 *)hero_233f80)->i2084 == 0x1C &&
                ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
-        ((Hero_234800 *)hero_233f80)->p360 = ((Hero_234800 *)hero_233f80)->p4F8;
+        ((Hero_234800 *)hero_233f80)->attachment_reference_object =
+            ((Hero_234800 *)hero_233f80)->p4F8;
         mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->i208C == 3 &&
                ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
-        ((Hero_234800 *)hero_233f80)->p360 = ((Hero_234800 *)hero_233f80)->p4F8;
+        ((Hero_234800 *)hero_233f80)->attachment_reference_object =
+            ((Hero_234800 *)hero_233f80)->p4F8;
         mode = HERO_ATTACHMENT_MODE_PROBE;
-    } else if (((Hero_234800 *)hero_233f80)->p360 != 0) {
+    } else if (((Hero_234800 *)hero_233f80)->attachment_reference_object != 0) {
         mode = HERO_ATTACHMENT_MODE_PROBE;
-        convert_integer_to_float(scale_game_frames(120) - ((Hero_234800 *)hero_233f80)->h30E);
+        convert_integer_to_float(scale_game_frames(120) -
+                                 ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale);
         scale_game_frames_v_233f80(120);
-        amt = ((Hero_234800 *)hero_233f80)->h30E;
+        amt = ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale;
     } else {
-        ((Hero_234800 *)hero_233f80)->p360 = 0;
-        ((Hero_234800 *)hero_233f80)->i364 &= ~1;
-        ((Hero_234800 *)hero_233f80)->i364 &= ~2;
+        ((Hero_234800 *)hero_233f80)->attachment_reference_object = 0;
+        ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
+        ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~2;
     }
     if (!mode) {
         return;
     }
-    plat = f_L00_002603d0(((Hero_234800 *)hero_233f80)->p360);
+    plat = f_L00_002603d0(((Hero_234800 *)hero_233f80)->attachment_reference_object);
     if (plat == 0) {
         return;
     }
     if (((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) &&
-         fast_vec_length(&((Hero_234800 *)hero_233f80)->v150) == 0.0f &&
-         ((Hero_234800 *)hero_233f80)->h30E == 0 && ((Hero_234800 *)hero_233f80)->h1F6 == 0) ||
+         fast_vec_length(&((Hero_234800 *)hero_233f80)->position_anchor_inhibit) == 0.0f &&
+         ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0 &&
+         ((Hero_234800 *)hero_233f80)->path_clearance_position_anchor_inhibit == 0) ||
         (unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
-        if ((((Hero_234800 *)hero_233f80)->i364 ^ 1) & 1) {
+        if ((((Hero_234800 *)hero_233f80)->attachment_anchor_flags ^ 1) & 1) {
             if ((unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
-                qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v4D0);
+                qcopy(&attachment_motion_scratch,
+                      &((Hero_234800 *)hero_233f80)->ledge_grab_position);
                 attachment_motion_scratch.x +=
-                    fast_cos(fast_add_rotations(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) *
+                    fast_cos(fast_add_rotations(
+                        ((Hero_234800 *)hero_233f80)->ledge_attachment_heading, 3.1415925f)) *
                     0.45f;
                 attachment_motion_scratch.y +=
-                    fast_sin(fast_add_rotations(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) *
+                    fast_sin(fast_add_rotations(
+                        ((Hero_234800 *)hero_233f80)->ledge_attachment_heading, 3.1415925f)) *
                     0.45f;
                 attachment_motion_scratch.z -= -1.43f;
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080,
-                                       ((Hero_234800 *)hero_233f80)->p360,
-                                       &((Hero_234800 *)hero_233f80)->v4D0,
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->hero_moby,
+                                       ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                                       &((Hero_234800 *)hero_233f80)->ledge_grab_position,
                                        &((Hero_234800 *)hero_233f80)->v90,
                                        &attachment_position_motion_scratch,
                                        &probe_transform_scratch);
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080,
-                                       ((Hero_234800 *)hero_233f80)->p360,
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->hero_moby,
+                                       ((Hero_234800 *)hero_233f80)->attachment_reference_object,
                                        &attachment_motion_scratch,
                                        &((Hero_234800 *)hero_233f80)->v90,
                                        &attachment_motion_scratch,
                                        &probe_transform_scratch);
-                convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->i2080,
-                                                ((Hero_234800 *)hero_233f80)->p360,
-                                                &((Hero_234800 *)hero_233f80)->v4D0,
-                                                &((Hero_234800 *)hero_233f80)->v90,
-                                                &((Hero_234800 *)hero_233f80)->v310,
-                                                &probe_transform_scratch);
-                convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->i2080,
-                                                ((Hero_234800 *)hero_233f80)->p360,
-                                                &attachment_motion_scratch,
-                                                &((Hero_234800 *)hero_233f80)->v90,
-                                                &((Hero_234800 *)hero_233f80)->v330,
-                                                &probe_transform_scratch);
-            } else if (plat->i3C & 4) {
-                convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->i2080,
-                                                ((Hero_234800 *)hero_233f80)->p360,
-                                                &((Hero_234800 *)hero_233f80)->pos,
-                                                &((Hero_234800 *)hero_233f80)->v90,
-                                                &((Hero_234800 *)hero_233f80)->v310,
-                                                &attachment_motion_scratch);
+                convert_pose_to_reference_local(
+                    ((Hero_234800 *)hero_233f80)->hero_moby,
+                    ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                    &((Hero_234800 *)hero_233f80)->ledge_grab_position,
+                    &((Hero_234800 *)hero_233f80)->v90,
+                    &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
+                    &probe_transform_scratch);
+                convert_pose_to_reference_local(
+                    ((Hero_234800 *)hero_233f80)->hero_moby,
+                    ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                    &attachment_motion_scratch,
+                    &((Hero_234800 *)hero_233f80)->v90,
+                    &((Hero_234800 *)hero_233f80)->secondary_attachment_local_position,
+                    &probe_transform_scratch);
+            } else if (plat->attachment_behavior_flags & 4) {
+                convert_pose_to_reference_local(
+                    ((Hero_234800 *)hero_233f80)->hero_moby,
+                    ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                    &((Hero_234800 *)hero_233f80)->pos,
+                    &((Hero_234800 *)hero_233f80)->v90,
+                    &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
+                    &attachment_motion_scratch);
             } else {
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080,
-                                       ((Hero_234800 *)hero_233f80)->p360,
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->hero_moby,
+                                       ((Hero_234800 *)hero_233f80)->attachment_reference_object,
                                        &((Hero_234800 *)hero_233f80)->pos,
                                        &((Hero_234800 *)hero_233f80)->v90,
                                        &attachment_position_motion_scratch,
                                        &probe_transform_scratch);
-                convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->i2080,
-                                                ((Hero_234800 *)hero_233f80)->p360,
-                                                &attachment_position_motion_scratch,
-                                                &probe_transform_scratch,
-                                                &((Hero_234800 *)hero_233f80)->v310,
-                                                &attachment_motion_scratch);
+                convert_pose_to_reference_local(
+                    ((Hero_234800 *)hero_233f80)->hero_moby,
+                    ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                    &attachment_position_motion_scratch,
+                    &probe_transform_scratch,
+                    &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
+                    &attachment_motion_scratch);
             }
-            ((Hero_234800 *)hero_233f80)->i364 |= 1;
+            ((Hero_234800 *)hero_233f80)->attachment_anchor_flags |= 1;
         }
     } else {
-        ((Hero_234800 *)hero_233f80)->i364 &= ~1;
+        ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
     }
     if ((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) &&
-        ((Hero_234800 *)hero_233f80)->f184 == 0.0f && ((Hero_234800 *)hero_233f80)->h30E == 0) {
-        if (!(((Hero_234800 *)hero_233f80)->i364 & 2)) {
-            convert_pose_to_reference_local(((Hero_234800 *)hero_233f80)->i2080,
-                                            ((Hero_234800 *)hero_233f80)->p360,
-                                            &((Hero_234800 *)hero_233f80)->pos,
-                                            &((Hero_234800 *)hero_233f80)->v90,
-                                            &attachment_motion_scratch,
-                                            &((Hero_234800 *)hero_233f80)->v320);
-            ((Hero_234800 *)hero_233f80)->i364 |= 2;
+        ((Hero_234800 *)hero_233f80)->rotation_anchor_inhibit == 0.0f &&
+        ((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0) {
+        if (!(((Hero_234800 *)hero_233f80)->attachment_anchor_flags & 2)) {
+            convert_pose_to_reference_local(
+                ((Hero_234800 *)hero_233f80)->hero_moby,
+                ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                &((Hero_234800 *)hero_233f80)->pos,
+                &((Hero_234800 *)hero_233f80)->v90,
+                &attachment_motion_scratch,
+                &((Hero_234800 *)hero_233f80)->attachment_local_rotation);
+            ((Hero_234800 *)hero_233f80)->attachment_anchor_flags |= 2;
         }
     } else {
-        ((Hero_234800 *)hero_233f80)->i364 &= ~2;
+        ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~2;
     }
-    if (((Hero_234800 *)hero_233f80)->i364 & 3) {
+    if (((Hero_234800 *)hero_233f80)->attachment_anchor_flags & 3) {
         mode = HERO_ATTACHMENT_MODE_ANCHORED;
     }
     clear_u64_value(&attachment_motion_scratch);
     clear_u64_value(&attachment_position_motion_scratch);
     if (amt != 0.0f) {
-        sB4 = vector_length_xy(&((Hero_234800 *)hero_233f80)->v350);
-        sB0 = ((Hero_234800 *)hero_233f80)->v350.z;
-        if (!(plat->i3C & 2)) {
+        sB4 = vector_length_xy(&((Hero_234800 *)hero_233f80)->saved_attachment_displacement);
+        sB0 = ((Hero_234800 *)hero_233f80)->saved_attachment_displacement.z;
+        if (!(plat->attachment_behavior_flags & 2)) {
             approach_value(&sB0, 0.0f, frame_time_sq_macro * 25.0f * amt);
             approach_value(&sB4, 0.0f, (frame_time_sq_macro + frame_time_sq_macro) * amt);
-            set_vector_length_xy(
-                &attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350, sB4);
+            set_vector_length_xy(&attachment_motion_scratch,
+                                 &((Hero_234800 *)hero_233f80)->saved_attachment_displacement,
+                                 sB4);
             attachment_motion_scratch.z = sB0;
         } else {
-            qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350);
+            qcopy(&attachment_motion_scratch,
+                  &((Hero_234800 *)hero_233f80)->saved_attachment_displacement);
         }
         qcopy(&attachment_position_motion_scratch, &attachment_motion_scratch);
     } else if (mode == HERO_ATTACHMENT_MODE_PROBE) {
-        probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080,
-                               ((Hero_234800 *)hero_233f80)->p360,
+        probe_ground_height_cf(((Hero_234800 *)hero_233f80)->hero_moby,
+                               ((Hero_234800 *)hero_233f80)->attachment_reference_object,
                                &((Hero_234800 *)hero_233f80)->pos,
                                &((Hero_234800 *)hero_233f80)->v90,
                                &probed_position,
@@ -1612,45 +1629,46 @@ void update_hero_attachment(void) {
             &attachment_motion_scratch, &probed_position, &((Hero_234800 *)hero_233f80)->pos);
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     } else if (mode == HERO_ATTACHMENT_MODE_ANCHORED) {
-        probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080,
-                               ((Hero_234800 *)hero_233f80)->p360,
+        probe_ground_height_cf(((Hero_234800 *)hero_233f80)->hero_moby,
+                               ((Hero_234800 *)hero_233f80)->attachment_reference_object,
                                &((Hero_234800 *)hero_233f80)->pos,
                                &((Hero_234800 *)hero_233f80)->v90,
                                &probe_transform_scratch,
                                &anchored_probe_rotation);
-        transform_attachment_pose(((Hero_234800 *)hero_233f80)->i2080,
-                                  ((Hero_234800 *)hero_233f80)->p360,
-                                  &((Hero_234800 *)hero_233f80)->v310,
-                                  &((Hero_234800 *)hero_233f80)->v320,
+        transform_attachment_pose(((Hero_234800 *)hero_233f80)->hero_moby,
+                                  ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+                                  &((Hero_234800 *)hero_233f80)->primary_attachment_local_position,
+                                  &((Hero_234800 *)hero_233f80)->attachment_local_rotation,
                                   &primary_attachment_position,
                                   &primary_attachment_rotation);
-        transform_attachment_pose(((Hero_234800 *)hero_233f80)->i2080,
-                                  ((Hero_234800 *)hero_233f80)->p360,
-                                  &((Hero_234800 *)hero_233f80)->v330,
-                                  &((Hero_234800 *)hero_233f80)->v320,
-                                  &secondary_attachment_position,
-                                  &v90);
+        transform_attachment_pose(
+            ((Hero_234800 *)hero_233f80)->hero_moby,
+            ((Hero_234800 *)hero_233f80)->attachment_reference_object,
+            &((Hero_234800 *)hero_233f80)->secondary_attachment_local_position,
+            &((Hero_234800 *)hero_233f80)->attachment_local_rotation,
+            &secondary_attachment_position,
+            &v90);
         if ((((Hero_234800 *)hero_233f80)->i2084 == 1 ||
              ((Hero_234800 *)hero_233f80)->i2084 == 0x1E) &&
-            ((Hero_234800 *)hero_233f80)->b20A5 != 0) {
+            ((Hero_234800 *)hero_233f80)->probe_yaw_override_enabled != 0) {
             ((Hero_234800 *)hero_233f80)->v90.z = anchored_probe_rotation.z;
-        } else if (((Hero_234800 *)hero_233f80)->i364 & 2) {
+        } else if (((Hero_234800 *)hero_233f80)->attachment_anchor_flags & 2) {
             ((Hero_234800 *)hero_233f80)->v90.z = primary_attachment_rotation.z;
         } else {
             ((Hero_234800 *)hero_233f80)->v90.z = anchored_probe_rotation.z;
         }
-        if (((Hero_234800 *)hero_233f80)->i364 & 1) {
+        if (((Hero_234800 *)hero_233f80)->attachment_anchor_flags & 1) {
             if ((unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
-                vA0.x = fast_cos(((Hero_234800 *)hero_233f80)->f4E4) * 0.45f;
-                vA0.y = fast_sin(((Hero_234800 *)hero_233f80)->f4E4) * 0.45f;
+                vA0.x = fast_cos(((Hero_234800 *)hero_233f80)->ledge_attachment_heading) * 0.45f;
+                vA0.y = fast_sin(((Hero_234800 *)hero_233f80)->ledge_attachment_heading) * 0.45f;
                 vA0.z = 0.0f;
                 fast_vec_add(&vA0, &vA0, &secondary_attachment_position);
                 vA0.z += -1.43f;
                 fast_vec_sub(&attachment_motion_scratch,
                              &probe_transform_scratch,
                              &((Hero_234800 *)hero_233f80)->pos);
-                qcopy(&((Hero_234800 *)hero_233f80)->v4D0, &vA0);
-                ((Hero_234800 *)hero_233f80)->f4E4 =
+                qcopy(&((Hero_234800 *)hero_233f80)->ledge_grab_position, &vA0);
+                ((Hero_234800 *)hero_233f80)->ledge_attachment_heading =
                     fast_arc_tan(primary_attachment_position.x - secondary_attachment_position.x,
                                  primary_attachment_position.y - secondary_attachment_position.y);
             } else {
@@ -1665,13 +1683,13 @@ void update_hero_attachment(void) {
                     qcopy(&((Hero_234800 *)hero_233f80)->pos, &primary_attachment_position);
                 } else if (2.0f < attachment_distance) {
                     clear_u64_value(&attachment_motion_scratch);
-                    ((Hero_234800 *)hero_233f80)->i364 &= ~2;
-                    ((Hero_234800 *)hero_233f80)->i364 &= ~1;
+                    ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~2;
+                    ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
                 }
                 fast_vec_add(hero_233f80 + 0x4D0, hero_233f80 + 0x4D0, &attachment_motion_scratch);
                 fast_vec_sub(&vA0, &attachment_motion_scratch, hero_233f80 + 0x140);
                 if (0.1f < fast_vec_length(&vA0)) {
-                    ((Hero_234800 *)hero_233f80)->i364 &= ~1;
+                    ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
                 }
             }
         } else {
@@ -1683,7 +1701,7 @@ void update_hero_attachment(void) {
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     }
     fast_vec_add(hero_233f80 + 0xF0, hero_233f80 + 0xF0, &attachment_motion_scratch);
-    ((Hero_234800 *)hero_233f80)->fFC =
+    ((Hero_234800 *)hero_233f80)->attachment_yaw_delta =
         fast_subtract_rotations(((Hero_234800 *)hero_233f80)->v90.z, saved_hero_yaw);
 }
 
@@ -1805,10 +1823,10 @@ extern f32 D_0015EE14 __asm__("D_0015EE14");
 
 typedef struct {
     u8  b0;
-    u8  b1;
+    u8  manipulator_attached;
     u8  p[0x1E];
     f32 f20;
-    f32 f24;
+    f32 scale_component;
     f32 f28;
 } A_00234b38;
 
@@ -1833,10 +1851,10 @@ void apply_hero_moby_scale(void *scale_owner_moby) {
     if (D_L00_0015F5C4_00234b38[0] == 6 && 1.33f < scale_factor)
         scale_factor = 1.33f;
     scale_state = &D_L00_0017C340_00234b38;
-    if (scale_state->b1 == 0) {
+    if (scale_state->manipulator_attached == 0) {
         attach_manipulator(scale_owner_moby, 0x18, scale_state);
         scale_state->f20 = scale_factor;
-        scale_state->f24 = scale_factor;
+        scale_state->scale_component = scale_factor;
         scale_state->f28 = scale_factor;
     }
     level_index = current_level_index;

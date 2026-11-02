@@ -146,7 +146,7 @@ typedef struct {
     s16         count;
     u8          pad46[0x132];
     VeldinMoby *mobys[1];
-    VeldinMoby *unk17C;
+    VeldinMoby *particle_pair_source_moby;
     u8          pad180[4];
     VeldinMoby *unk184;
     VeldinMoby *unk188;
@@ -226,7 +226,7 @@ void apply_level_specific_cutscene_moby_effects(void) {
         add_draw_callback((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.unk188);
     }
     if (current_level_index == 14 && D_L00_0016C860.state == 0) {
-        particle_source_moby = D_L00_0016C860.unk17C;
+        particle_source_moby = D_L00_0016C860.particle_pair_source_moby;
         if (particle_source_moby != 0 && (u32)(D_L00_0016C860.timer - 0x1C) < 6) {
             emit_moby_particle_pairs(particle_source_moby);
             add_draw_callback((s32)glow_quads_draw, (s32)particle_source_moby);

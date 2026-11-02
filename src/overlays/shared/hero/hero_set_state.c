@@ -404,7 +404,7 @@ typedef struct {
 } G_221ee0;
 
 typedef struct {
-    s32 i0;
+    s32 swing_target_enabled;
     u8  p0[0x18];
     s32 i1C;
     f32 f20;
@@ -422,7 +422,7 @@ typedef struct M_221ee0 {
     u8               p4[0x78 - 0x36];
     Q_221ee0        *q;
     u8               p5[0xA6 - 0x7C];
-    s16              hA6;
+    s16              moby_class_id;
 } M_221ee0;
 
 extern G_221ee0  D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
@@ -449,10 +449,10 @@ void select_hero_grapple_swing_target(void) {
     bestd = 1e8f;
     for (candidate_moby = D_L00_0015FFE4_221ee0; candidate_moby != 0;
          candidate_moby = candidate_moby->next) {
-        if (candidate_moby->hA6 != 0x323)
+        if (candidate_moby->moby_class_id != 0x323)
             continue;
         q = candidate_moby->q;
-        if (q->i0 == 0)
+        if (q->swing_target_enabled == 0)
             continue;
         if (candidate_moby->h34 & 1)
             continue;
@@ -3161,25 +3161,25 @@ int try_enter_hero_water_state(void) {
 
 typedef struct {
     u8  p0[0x88];
-    f32 f88;
+    f32 water_adjusted_position_z;
     u8  p1[0x198 - 0x8C];
     s32 i198;
     u8  p2[0x2F0 - 0x19C];
-    f32 f2F0;
+    f32 water_surface_height_target;
     u8  p3[0x690 - 0x2F4];
-    f32 f690;
+    f32 water_bob_offset;
     f32 f694;
     u8  p4[0x69C - 0x698];
-    f32 f69C;
-    f32 f6A0;
+    f32 smoothed_water_height;
+    f32 water_height_spring_velocity;
     u8  p5[0x8A0 - 0x6A4];
-    f32 f8A0;
+    f32 alternate_water_height_target;
     u8  p6[0x8FC - 0x8A4];
-    f32 f8FC;
+    f32 water_bob_spring_velocity;
     u8  p7[0x2084 - 0x900];
     s32 i2084;
     u8  p8[4];
-    s32 i208C;
+    s32 water_height_control_mode;
     u8  p9[4];
     s32 i2094;
     u8  pa[0x20A0 - 0x2098];
@@ -3192,35 +3192,43 @@ void            approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 
 void update_hero_water_height_and_bobbing(void) {
-    if (G.i198 > scale_game_frames(10) || G.f690 < 0.0f || G.i2094 == 0x11 || G.i20A0 == 0x11) {
+    enum {
+        WATER_HEIGHT_CONTROL_ALTERNATE_TARGET = 0x16
+    };
+    if (G.i198 > scale_game_frames(10) || G.water_bob_offset < 0.0f || G.i2094 == 0x11 ||
+        G.i20A0 == 0x11) {
         if (G.i2084 == 0x36) {
-            vendor_spring(&G.f690,
-                          &G.f8FC,
+            vendor_spring(&G.water_bob_offset,
+                          &G.water_bob_spring_velocity,
                           0.0f,
                           frame_scale_sq * 0.03f,
                           frame_scale_sq * 0.3f,
                           frame_time * 1.5f);
             G.f694 = 0.0f;
         } else {
-            G.f694 -= frame_scale_sq * 0.005f * G.f690 + frame_scale * 0.045f * G.f694;
-            if (absolute_float(G.f690) < 0.001f && G.f694 < 0.0001f)
+            G.f694 -= frame_scale_sq * 0.005f * G.water_bob_offset + frame_scale * 0.045f * G.f694;
+            if (absolute_float(G.water_bob_offset) < 0.001f && G.f694 < 0.0001f)
                 G.f694 = 0.0f;
         }
     }
-    G.f690 += G.f694;
-    if (G.i2084 == 0x36 && 0.0f < G.f690) {
+    G.water_bob_offset += G.f694;
+    if (G.i2084 == 0x36 && 0.0f < G.water_bob_offset) {
         if (0.0f < G.f694)
             G.f694 = 0.0f;
-        approach_value(&G.f690, 0.0f, frame_time * 0.7f);
+        approach_value(&G.water_bob_offset, 0.0f, frame_time * 0.7f);
     }
     if (G.i2084 != 0x7F) {
-        f32 target_height = G.f2F0;
-        if (G.i208C == 0x16)
-            target_height = G.f8A0;
-        vendor_spring(
-            &G.f69C, &G.f6A0, target_height, frame_scale_sq * 0.027f, frame_scale_sq * 0.3f, 0.0f);
+        f32 target_height = G.water_surface_height_target;
+        if (G.water_height_control_mode == WATER_HEIGHT_CONTROL_ALTERNATE_TARGET)
+            target_height = G.alternate_water_height_target;
+        vendor_spring(&G.smoothed_water_height,
+                      &G.water_height_spring_velocity,
+                      target_height,
+                      frame_scale_sq * 0.027f,
+                      frame_scale_sq * 0.3f,
+                      0.0f);
     }
-    G.f88 = G.f69C + -0.12f + G.f690;
+    G.water_adjusted_position_z = G.smoothed_water_height + -0.12f + G.water_bob_offset;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00228770), where it is exact; names translated to the US level program. */
@@ -3241,9 +3249,9 @@ typedef struct {
 typedef struct {
     char          p0[0x80] __attribute__((aligned(16)));
     char          p80[0x118];
-    int           f198;
+    int           current_state_elapsed_frames;
     char          p19C[0x4A];
-    short         f1E6;
+    short         grapple_entry_lockout;
     char          p1E8[0xF4];
     float         f2DC;
     char          p2E0[0x20];
@@ -3264,13 +3272,13 @@ typedef struct {
     char          p4AE[0x14E];
     int           f5FC;
     char          p600[0x368];
-    int           f968;
+    int           grapple_target_valid;
     char          p96C[0x18];
-    float         f984;
+    float         grapple_target_score;
     char          p988[0x10];
     float         f998;
     short         f99C;
-    short         f99E;
+    short         swing_target_valid;
     char          p9A0[0xC0];
     int           fA60;
     char          pA64[0x38];
@@ -3278,23 +3286,23 @@ typedef struct {
     char          pAA0[0x8];
     float         fAA8;
     char          pAAC[0x5E4];
-    Moby_227fa0  *f1090;
+    Moby_227fa0  *slot0_item_moby;
     char          p1094[0xC];
-    int           f10A0;
+    int           equipped_item_input_mask;
     char          p10A4[0xC];
     int           f10B0;
-    int           f10B4;
-    int           f10B8;
+    int           equipped_slot_state;
+    int           equipped_slot_item_id;
     char          p10BC[0x22E];
     unsigned char f12EA;
     char          p12EB[0xD99];
-    int           f2084;
+    int           hero_current_state;
     int           f2088;
-    int           f208C;
+    int           hero_control_mode;
     char          p2090[0x14];
-    unsigned char f20A4;
+    unsigned char equipped_item_input_locked;
     char          p20A5[0x3];
-    unsigned char f20A8;
+    unsigned char equipped_item_animation_active;
     char          p20A9[0x3];
     unsigned char f20AC;
     char          p20AD[0x1EF];
@@ -3305,7 +3313,7 @@ typedef struct {
     short         f22D8;
     char          p22DA[0x2];
     short         f22DC;
-    short         f22DE;
+    short         mode3_toggle_delay_frames;
 } Hero_228770;
 
 extern Hero_228770   D_0013F450_h228770 __asm__("D_0013F350");
@@ -3336,24 +3344,24 @@ int process_hero_equipped_item_input(void) {
     int mask;
 
     if (D_0013F450_h228770.f20AC != 0 &&
-        (D_0013F450_h228770.f10B8 != 8 || D_0013F450_h228770.f308 != 1)) {
+        (D_0013F450_h228770.equipped_slot_item_id != 8 || D_0013F450_h228770.f308 != 1)) {
         return 0;
     }
-    if (D_0013F450_h228770.f20A4 != 0) {
+    if (D_0013F450_h228770.equipped_item_input_locked != 0) {
         return 0;
     }
-    if (D_0013F450_h228770.f1090 == 0) {
+    if (D_0013F450_h228770.slot0_item_moby == 0) {
         return 0;
     }
-    if (D_0013F450_h228770.f10B4 != 2) {
+    if (D_0013F450_h228770.equipped_slot_state != 2) {
         return 0;
     }
-    start = D_0013F450_h228770.f198;
-    mask = D_0013F450_h228770.f10A0;
-    switch (D_0013F450_h228770.f10B8) {
+    start = D_0013F450_h228770.current_state_elapsed_frames;
+    mask = D_0013F450_h228770.equipped_item_input_mask;
+    switch (D_0013F450_h228770.equipped_slot_item_id) {
     case ITEM_WRENCH:
-        if (D_0013F450_h228770.f208C < 2U ||
-            (D_0013F450_h228770.f208C == 4 && D_0013F450_h228770.f418 != 0)) {
+        if (D_0013F450_h228770.hero_control_mode < 2U ||
+            (D_0013F450_h228770.hero_control_mode == 4 && D_0013F450_h228770.f418 != 0)) {
             Moby_227fa0 *equipped_item_moby;
 
             if (D_0013F450_h228770.f12EA != 0) {
@@ -3362,7 +3370,7 @@ int process_hero_equipped_item_input(void) {
             if (!pad_pressed_within(mask, scale_game_frames(7), &item_press_age_frames[0])) {
                 break;
             }
-            equipped_item_moby = D_0013F450_h228770.f1090;
+            equipped_item_moby = D_0013F450_h228770.slot0_item_moby;
             if (equipped_item_moby == 0) {
                 break;
             }
@@ -3373,10 +3381,12 @@ int process_hero_equipped_item_input(void) {
                 break;
             }
             if ((controller_state.held & 0xA) ||
-                ((D_0013F450_h228770.f2084 == 1 || D_0013F450_h228770.f2084 == 0x1E) &&
-                 D_0013F450_h228770.f198 > scale_game_frames(0x14))) {
-                if ((D_0013F450_h228770.f2084 == 1 || D_0013F450_h228770.f2084 == 0x1E) &&
-                    D_0013F450_h228770.f198 > scale_game_frames(0x14)) {
+                ((D_0013F450_h228770.hero_current_state == 1 ||
+                  D_0013F450_h228770.hero_current_state == 0x1E) &&
+                 D_0013F450_h228770.current_state_elapsed_frames > scale_game_frames(0x14))) {
+                if ((D_0013F450_h228770.hero_current_state == 1 ||
+                     D_0013F450_h228770.hero_current_state == 0x1E) &&
+                    D_0013F450_h228770.current_state_elapsed_frames > scale_game_frames(0x14)) {
                     launch_hero_wrench();
                     break;
                 }
@@ -3390,18 +3400,22 @@ int process_hero_equipped_item_input(void) {
             }
             break;
         }
-        if (D_0013F450_h228770.f2084 == 7 || D_0013F450_h228770.f2084 == 9 ||
-            D_0013F450_h228770.f2084 == 8 || D_0013F450_h228770.f2084 == 6 ||
-            (D_0013F450_h228770.f2084 == 0xE && D_0013F450_h228770.fAA8 > 32.0f) ||
-            (D_0013F450_h228770.f2084 == 0xB && D_0013F450_h228770.f450 != 3 &&
+        if (D_0013F450_h228770.hero_current_state == 7 ||
+            D_0013F450_h228770.hero_current_state == 9 ||
+            D_0013F450_h228770.hero_current_state == 8 ||
+            D_0013F450_h228770.hero_current_state == 6 ||
+            (D_0013F450_h228770.hero_current_state == 0xE && D_0013F450_h228770.fAA8 > 32.0f) ||
+            (D_0013F450_h228770.hero_current_state == 0xB && D_0013F450_h228770.f450 != 3 &&
              D_0013F450_h228770.fAA8 > 18.0f) ||
-            (D_0013F450_h228770.f2084 == 0xB && D_0013F450_h228770.f450 == 3 &&
+            (D_0013F450_h228770.hero_current_state == 0xB && D_0013F450_h228770.f450 == 3 &&
              D_0013F450_h228770.fAA8 > 20.0f) ||
-            D_0013F450_h228770.f2084 == 0x2D || D_0013F450_h228770.f2084 == 0x11) {
-            if (D_0013F450_h228770.f198 > scale_game_frames(0xA)) {
+            D_0013F450_h228770.hero_current_state == 0x2D ||
+            D_0013F450_h228770.hero_current_state == 0x11) {
+            if (D_0013F450_h228770.current_state_elapsed_frames > scale_game_frames(0xA)) {
                 int t = scale_game_frames(0xA);
 
-                if (D_0013F450_h228770.f2084 == 0xB || D_0013F450_h228770.f2084 == 0xE) {
+                if (D_0013F450_h228770.hero_current_state == 0xB ||
+                    D_0013F450_h228770.hero_current_state == 0xE) {
                     t = scale_game_frames(0x12);
                 }
                 if (!pad_pressed_within(mask, t, 0)) {
@@ -3409,7 +3423,8 @@ int process_hero_equipped_item_input(void) {
                 }
                 if ((D_0013F450_h228770.f41E == 0 && D_0013F450_h228770.f2DC > 0.1f) ||
                     (D_0013F450_h228770.f41E != 0 && D_0013F450_h228770.f2DC > 0.57f) ||
-                    (D_0013F450_h228770.f2084 == 8 && D_0013F450_h228770.f2DC > 0.57f)) {
+                    (D_0013F450_h228770.hero_current_state == 8 &&
+                     D_0013F450_h228770.f2DC > 0.57f)) {
                     if (D_0013F450_h228770.f5FC != 0) {
                         break;
                     }
@@ -3423,16 +3438,16 @@ int process_hero_equipped_item_input(void) {
                 break;
             }
         }
-        if (D_0013F450_h228770.f208C == 6) {
-            HeroTableRow2C *rec = &attack_records[D_0013F450_h228770.fA60];
+        if (D_0013F450_h228770.hero_control_mode == 6) {
+            HeroTableRow2C *wrench_attack_record = &attack_records[D_0013F450_h228770.fA60];
             int             t;
 
-            if (D_0013F450_h228770.f2084 == 0x15) {
-                if (D_0013F450_h228770.f198 > scale_game_frames(0x1E)) {
+            if (D_0013F450_h228770.hero_current_state == 0x15) {
+                if (D_0013F450_h228770.current_state_elapsed_frames > scale_game_frames(0x1E)) {
                     if (D_0013F450_h228770.fA9C != 0) {
                         break;
                     }
-                    if (D_0013F450_h228770.fAA8 >= (float)rec->f10 &&
+                    if (D_0013F450_h228770.fAA8 >= (float)wrench_attack_record->f10 &&
                         (controller_state.held & 0xA) &&
                         pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
                         hero_set_state(0x15, 1);
@@ -3443,10 +3458,10 @@ int process_hero_equipped_item_input(void) {
             if (D_0013F450_h228770.fA9C != 0) {
                 break;
             }
-            if (!(D_0013F450_h228770.fAA8 >= (float)rec->f10)) {
+            if (!(D_0013F450_h228770.fAA8 >= (float)wrench_attack_record->f10)) {
                 break;
             }
-            t = (truncate_float_to_s32(D_0013F450_h228770.fAA8) - rec->fC) * 2;
+            t = (truncate_float_to_s32(D_0013F450_h228770.fAA8) - wrench_attack_record->fC) * 2;
             if (t <= 0) {
                 t = 1;
             }
@@ -3479,34 +3494,39 @@ int process_hero_equipped_item_input(void) {
         if (D_0013F450_h228770.f30E != 0) {
             t = scale_game_frames(8);
         }
-        if (D_0013F450_h228770.f208C < 2U || D_0013F450_h228770.f208C == 4 ||
-            D_0013F450_h228770.f208C == 2 || D_0013F450_h228770.f208C == 0xF ||
-            D_0013F450_h228770.f208C == 5 || D_0013F450_h228770.f2084 == 0x1E) {
+        if (D_0013F450_h228770.hero_control_mode < 2U ||
+            D_0013F450_h228770.hero_control_mode == 4 ||
+            D_0013F450_h228770.hero_control_mode == 2 ||
+            D_0013F450_h228770.hero_control_mode == 0xF ||
+            D_0013F450_h228770.hero_control_mode == 5 ||
+            D_0013F450_h228770.hero_current_state == 0x1E) {
             if (pad_pressed_within(mask, t, 0) ||
                 ((controller_state.held & mask) &&
                  D_0013F450_h228770.f10B0 > scale_game_frames(0xF))) {
-                if (D_0013F450_h228770.f99E != 0) {
-                    if (D_0013F450_h228770.f968 != 0) {
-                        if (D_0013F450_h228770.f998 < D_0013F450_h228770.f984) {
-                            D_0013F450_h228770.f968 = 0;
+                if (D_0013F450_h228770.swing_target_valid != 0) {
+                    if (D_0013F450_h228770.grapple_target_valid != 0) {
+                        if (D_0013F450_h228770.f998 < D_0013F450_h228770.grapple_target_score) {
+                            D_0013F450_h228770.grapple_target_valid = 0;
                         } else {
-                            D_0013F450_h228770.f99E = 0;
+                            D_0013F450_h228770.swing_target_valid = 0;
                         }
                     }
-                    if (D_0013F450_h228770.f99E != 0 && D_0013F450_h228770.f1E6 == 0 &&
-                        D_0013F450_h228770.f2084 != 0x2C) {
+                    if (D_0013F450_h228770.swing_target_valid != 0 &&
+                        D_0013F450_h228770.grapple_entry_lockout == 0 &&
+                        D_0013F450_h228770.hero_current_state != 0x2C) {
                         hero_set_state(0x2C, 1);
                         break;
                     }
                 }
-                if (D_0013F450_h228770.f968 != 0 && D_0013F450_h228770.f1E6 == 0) {
+                if (D_0013F450_h228770.grapple_target_valid != 0 &&
+                    D_0013F450_h228770.grapple_entry_lockout == 0) {
                     hero_set_state(0x24, 1);
                 }
             }
         }
     } break;
     case ITEM_VEHICLE_MODE_TOGGLE:
-        if (D_0013F450_h228770.f20A4 != 0) {
+        if (D_0013F450_h228770.equipped_item_input_locked != 0) {
             break;
         }
         if (!can_select_hero_item_31()) {
@@ -3518,40 +3538,44 @@ int process_hero_equipped_item_input(void) {
         if (D_00141660 != 0x1F) {
             break;
         }
-        if (D_0013F450_h228770.f1090->oclass != 0x1E3) {
+        if (D_0013F450_h228770.slot0_item_moby->oclass != 0x1E3) {
             break;
         }
-        if (D_0013F450_h228770.f22DE != 0) {
+        if (D_0013F450_h228770.mode3_toggle_delay_frames != 0) {
             break;
         }
         allocate_hero_voice_for_entry(0x18, 0);
-        D_0013F450_h228770.f22DE = 0x12;
+        D_0013F450_h228770.mode3_toggle_delay_frames = 0x12;
         D_0013F450_h228770.f22DC = 1;
         break;
     case ITEM_REMOTE_VENDOR:
-        if (D_0013F450_h228770.f208C < 3U || D_0013F450_h228770.f208C == 4 ||
-            D_0013F450_h228770.f208C == 5) {
+        if (D_0013F450_h228770.hero_control_mode < 3U ||
+            D_0013F450_h228770.hero_control_mode == 4 ||
+            D_0013F450_h228770.hero_control_mode == 5) {
             if (pad_pressed_within(mask, scale_game_frames(8), 0)) {
                 open_vendor_menu(0);
             }
         }
         break;
     case 15:
-        if (D_0013F450_h228770.f208C < 2U || D_0013F450_h228770.f208C == 0xC ||
-            D_0013F450_h228770.f208C == 2 || D_0013F450_h228770.f208C == 4 ||
-            D_0013F450_h228770.f208C == 5 || D_0013F450_h228770.f208C == 0xF ||
-            D_0013F450_h228770.f2084 == 0x1E) {
+        if (D_0013F450_h228770.hero_control_mode < 2U ||
+            D_0013F450_h228770.hero_control_mode == 0xC ||
+            D_0013F450_h228770.hero_control_mode == 2 ||
+            D_0013F450_h228770.hero_control_mode == 4 ||
+            D_0013F450_h228770.hero_control_mode == 5 ||
+            D_0013F450_h228770.hero_control_mode == 0xF ||
+            D_0013F450_h228770.hero_current_state == 0x1E) {
             PVar *equipped_item_vars;
 
-            if (D_0013F450_h228770.f1090 == 0) {
+            if (D_0013F450_h228770.slot0_item_moby == 0) {
                 break;
             }
-            equipped_item_vars = *(PVar **)&D_0013F450_h228770.f1090->pvars;
+            equipped_item_vars = *(PVar **)&D_0013F450_h228770.slot0_item_moby->pvars;
             if (((controller_state.held & mask) &&
                  D_0013F450_h228770.f10B0 > scale_game_frames(5)) ||
                 (controller_state.pressed & mask)) {
                 if (get_ammo(-1)) {
-                    if (D_0013F450_h228770.f20A8 == 0) {
+                    if (D_0013F450_h228770.equipped_item_animation_active == 0) {
                         start_equipped_item_animation();
                     }
                     break;
@@ -3559,9 +3583,10 @@ int process_hero_equipped_item_input(void) {
             }
             if (controller_state.held & mask) {
                 if (!get_ammo(-1)) {
-                    if (!voice_is_playing(D_0013F450_h228770.f1090, equipped_item_vars->fC)) {
-                        equipped_item_vars->fC =
-                            allocate_voice_for_target_entry(0, 0, (int)D_0013F450_h228770.f1090);
+                    if (!voice_is_playing(D_0013F450_h228770.slot0_item_moby,
+                                          equipped_item_vars->fC)) {
+                        equipped_item_vars->fC = allocate_voice_for_target_entry(
+                            0, 0, (int)D_0013F450_h228770.slot0_item_moby);
                     }
                 }
             }
@@ -3572,15 +3597,18 @@ int process_hero_equipped_item_input(void) {
     case 20:
     case 24:
     case 25:
-        if ((D_0013F450_h228770.f208C == 0 && D_0013F450_h228770.f2084 != 0x1E) ||
-            D_0013F450_h228770.f208C == 1 || D_0013F450_h228770.f208C == 0xC ||
-            D_0013F450_h228770.f208C == 5 || D_0013F450_h228770.f208C == 0xF ||
-            (D_0013F450_h228770.f208C == 4 && D_0013F450_h228770.f4AC != 0) ||
-            (D_0013F450_h228770.f2084 == 0x23 && D_0013F450_h228770.fAA8 > 25.0f)) {
+        if ((D_0013F450_h228770.hero_control_mode == 0 &&
+             D_0013F450_h228770.hero_current_state != 0x1E) ||
+            D_0013F450_h228770.hero_control_mode == 1 ||
+            D_0013F450_h228770.hero_control_mode == 0xC ||
+            D_0013F450_h228770.hero_control_mode == 5 ||
+            D_0013F450_h228770.hero_control_mode == 0xF ||
+            (D_0013F450_h228770.hero_control_mode == 4 && D_0013F450_h228770.f4AC != 0) ||
+            (D_0013F450_h228770.hero_current_state == 0x23 && D_0013F450_h228770.fAA8 > 25.0f)) {
             int t;
             int n;
 
-            if (D_0013F450_h228770.f20A8 != 0) {
+            if (D_0013F450_h228770.equipped_item_animation_active != 0) {
                 break;
             }
             t = scale_game_frames(7);
@@ -3589,33 +3617,36 @@ int process_hero_equipped_item_input(void) {
                 ((controller_state.held & 0x20) && n > scale_game_frames(8) &&
                  n < scale_game_frames(0x11))) {
                 if (get_ammo(-1)) {
-                    if (D_0013F450_h228770.f208C == 0xC || D_0013F450_h228770.f208C == 0 ||
-                        D_0013F450_h228770.f2084 == 3 ||
-                        (D_0013F450_h228770.f208C == 1 && D_0013F450_h228770.f229C < 0.7f)) {
+                    if (D_0013F450_h228770.hero_control_mode == 0xC ||
+                        D_0013F450_h228770.hero_control_mode == 0 ||
+                        D_0013F450_h228770.hero_current_state == 3 ||
+                        (D_0013F450_h228770.hero_control_mode == 1 &&
+                         D_0013F450_h228770.f229C < 0.7f)) {
                         hero_set_state(0x23, 1);
                     } else {
                         start_equipped_item_animation();
                     }
                     break;
                 }
-                if (D_0013F450_h228770.f1090 != 0) {
-                    allocate_voice_for_target_entry(0, 0, (int)D_0013F450_h228770.f1090);
+                if (D_0013F450_h228770.slot0_item_moby != 0) {
+                    allocate_voice_for_target_entry(0, 0, (int)D_0013F450_h228770.slot0_item_moby);
                 }
             }
         }
         break;
     case 18:
-        if (D_0013F450_h228770.f208C < 2U ||
-            (D_0013F450_h228770.f208C == 4 && D_0013F450_h228770.f418 != 0)) {
-            if (D_0013F450_h228770.f2084 != 1) {
+        if (D_0013F450_h228770.hero_control_mode < 2U ||
+            (D_0013F450_h228770.hero_control_mode == 4 && D_0013F450_h228770.f418 != 0)) {
+            if (D_0013F450_h228770.hero_current_state != 1) {
                 int t = scale_game_frames(0xA);
                 int n = D_0013F450_h228770.f10B0;
 
                 if (pad_pressed_within(mask, t <= n ? t : n, &item_press_age_frames[2])) {
-                    if (D_0013F450_h228770.f1090 != 0) {
+                    if (D_0013F450_h228770.slot0_item_moby != 0) {
                         hero_set_state(0x20, 1);
-                        if (D_0013F450_h228770.f1090 != 0) {
-                            allocate_voice_for_target_entry(0, 0, (int)D_0013F450_h228770.f1090);
+                        if (D_0013F450_h228770.slot0_item_moby != 0) {
+                            allocate_voice_for_target_entry(
+                                0, 0, (int)D_0013F450_h228770.slot0_item_moby);
                         }
                     }
                 }
@@ -3623,36 +3654,40 @@ int process_hero_equipped_item_input(void) {
         }
         break;
     case 21:
-        if (D_0013F450_h228770.f1090 != 0) {
+        if (D_0013F450_h228770.slot0_item_moby != 0) {
             if (controller_state.pressed & mask) {
                 start_equipped_item_animation();
             }
         }
         break;
     }
-    if (D_0013F450_h228770.f198 == start) {
-        if (hero_slot_item_id(3) == 3 && D_0013F450_h228770.f2084 != 0x81 &&
+    if (D_0013F450_h228770.current_state_elapsed_frames == start) {
+        if (hero_slot_item_id(3) == 3 && D_0013F450_h228770.hero_current_state != 0x81 &&
             (D_0013F450_h228770.f308 == 0 || item_available[0x1C] == 0) &&
             D_0013F450_h228770.f22D8 == 0) {
             f_fun_001f9740_227fa0(&hero_repeat_press_window_frames);
             if (hero_repeat_press_window_frames != 0) {
-                if (D_0013F450_h228770.f208C < 2U || D_0013F450_h228770.f208C == 0xC ||
-                    ((D_0013F450_h228770.f208C == 2 || D_0013F450_h228770.f208C == 4) &&
+                if (D_0013F450_h228770.hero_control_mode < 2U ||
+                    D_0013F450_h228770.hero_control_mode == 0xC ||
+                    ((D_0013F450_h228770.hero_control_mode == 2 ||
+                      D_0013F450_h228770.hero_control_mode == 4) &&
                      D_0013F450_h228770.f300 != 0)) {
                     if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);
                     }
                 }
             }
-            if ((controller_state.pressed & 8) && D_0013F450_h228770.f2084 != 0x81) {
+            if ((controller_state.pressed & 8) && D_0013F450_h228770.hero_current_state != 0x81) {
                 hero_repeat_press_window_frames = scale_game_frames(0x1E);
             }
-        } else if (D_0013F450_h228770.f2084 != 0x13 && D_0013F450_h228770.f2084 != 0x81 &&
-                   D_0013F450_h228770.f2084 != 0x15 && D_0013F450_h228770.f2084 != 0x16) {
+        } else if (D_0013F450_h228770.hero_current_state != 0x13 &&
+                   D_0013F450_h228770.hero_current_state != 0x81 &&
+                   D_0013F450_h228770.hero_current_state != 0x15 &&
+                   D_0013F450_h228770.hero_current_state != 0x16) {
             D_0013F450_h228770.f22CA = 0;
         }
     }
-    return D_0013F450_h228770.f198 < start;
+    return D_0013F450_h228770.current_state_elapsed_frames < start;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00229348), where it is exact; names translated to the US level program. */

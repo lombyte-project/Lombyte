@@ -136,8 +136,8 @@ typedef struct LinkedMobyHitboxVars {
     s32 unkC;
     s32 unk10;
     s16 unk14;
-    s8  unk16;
-    s8  unk17;
+    s8  target_state_on_activation;
+    s8  target_state_for_hitbox_removal;
     s32 unk18;
     u8  pad_1C[0x24];
     s32 unk40;
@@ -238,8 +238,8 @@ void linked_moby_hitbox_update(struct Moby *moby) {
         break;
     case LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES:
         if (differences == 0) {
-            if (target != 0 && linked_hitbox_vars->unk16 != -1)
-                target->state = *(unsigned char *)&linked_hitbox_vars->unk16;
+            if (target != 0 && linked_hitbox_vars->target_state_on_activation != -1)
+                target->state = *(unsigned char *)&linked_hitbox_vars->target_state_on_activation;
             linked_hitbox_vars->unk40 = linked_hitbox_vars->unkC;
             moby->state = LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER;
         }
@@ -253,8 +253,9 @@ void linked_moby_hitbox_update(struct Moby *moby) {
                 target->alpha = FUN_001fa6d0_2c9c70(linked_hitbox_vars->unk44 * now / initial);
             }
         }
-        if ((linked_hitbox_vars->unk8 & 4) == 0 && target != 0 && linked_hitbox_vars->unk17 != -1 &&
-            target->state == linked_hitbox_vars->unk17)
+        if ((linked_hitbox_vars->unk8 & 4) == 0 && target != 0 &&
+            linked_hitbox_vars->target_state_for_hitbox_removal != -1 &&
+            target->state == linked_hitbox_vars->target_state_for_hitbox_removal)
             moby->state = LINKED_HITBOX_STATE_REMOVE;
         if ((linked_hitbox_vars->unk8 & 8) == 0 &&
             FUN_001f9740_2c9c70(&linked_hitbox_vars->unk40) != 0)

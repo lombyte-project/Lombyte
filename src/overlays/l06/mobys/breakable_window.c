@@ -67,7 +67,7 @@ typedef struct {
 
 typedef struct {
     char  pad[0x38];
-    float f38;
+    float translation_z;
     int   pad3c;
 } B3003f0;
 
@@ -792,7 +792,7 @@ void draw_backdrop_mesh(void) {
     quad.unk70 = 0;
     set_identity_matrix(&backdrop_draw_transform);
     shared_quad_vertex_color = l06_backdrop_mesh_vertex_color;
-    backdrop_draw_transform.f38 = moby_breakup_z_offset_gp;
+    backdrop_draw_transform.translation_z = moby_breakup_z_offset_gp;
     quad.color[3] = shared_quad_vertex_color;
     quad.color[2] = shared_quad_vertex_color;
     quad.color[1] = shared_quad_vertex_color;

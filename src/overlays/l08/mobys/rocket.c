@@ -159,7 +159,7 @@ extern int   D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") MACRO_ADDR;
 #include "rnc/overlay/l08/mobys/rocket_data/rocket_update.h"
 
 extern unsigned int D_L08_0015FFDC MACRO_ADDR;
-extern void                        FUN_L00_00262cf0(void *, void *, float, float, float);
+extern void  fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void  FUN_L08_002de528_u(void *, int, int, int) __asm__("FUN_L08_002de528");
 void         rocket_update(M46 *moby) __asm__("FUN_L08_002dd3c0");
@@ -225,7 +225,7 @@ void rocket_update(M46 *moby) {
         yaw = fast_arc_tan(moby->position[0] - target[0], moby->position[1] - target[1]);
         pitch =
             fast_arc_tan(vector_distance_xy(target, moby->position), moby->position[2] - target[2]);
-        FUN_L00_00262cf0(target, target, data->roll, data->yaw, data->pitch);
+        fast_add_rotations_cf(target, target, data->roll, data->yaw, data->pitch);
         fast_vec_sub(delta, target, moby->position);
         FUN_L00_0025f730(delta, target_data->speed * D_0015ED6C);
         fast_vec_sub(velocity_correction_or_effect_velocity, delta, data->velocity);

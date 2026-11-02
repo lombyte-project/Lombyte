@@ -77,8 +77,8 @@ typedef struct {
     u8           padC0[0xC6 - 0xC0];
     s16          unkC6;
     u8           unkC8;
-    u8           unkC9;
-    u8           unkCA;
+    u8           respawn_delay_timer;
+    u8           burst_frame;
     u8           padCB[0xFC - 0xCB];
     s32          frameFC;
 } CrateVars;
@@ -116,7 +116,7 @@ typedef struct M_2cfcb8 {
     struct Vars *vars;
     u8           p7c[0xA6 - 0x7C];
     s16          oclass;
-    u16          hA8;
+    u16          drop_inheritance_tag;
     u8           pAA[0xB0 - 0xAA];
     u8           mission;
 } M_2cfcb8;
@@ -175,18 +175,18 @@ typedef struct O2d1428 {
     u8              p0[0x40];
     V2d1428         vel;
     u8              p50[0x10];
-    u8              v60[0x40];
+    u8              pose_delta[0x40];
     struct M2d1428 *next;
     struct M2d1428 *parent;
     u8              pa8[4];
     s32             flags;
-    f32             fB0;
-    s32             iB4;
+    f32             crate_height;
+    s32             last_motion_update_frame;
     u8              pb8[0x18];
-    V2d1428         vD0;
-    u8              vE0[0x10];
+    V2d1428         attachment_position;
+    u8              attachment_rotation[0x10];
     void           *path;
-    f32             fF4;
+    f32             attachment_stack_z_offset;
 } O2d1428;
 
 struct M2d1428 {
@@ -203,7 +203,7 @@ struct M2d1428 {
     u8       pa8[0x14];
     u8       bBC;
     u8       pbd[3];
-    u8       vC0[0x10];
+    u8       transform_basis_x[0x10];
 };
 
 typedef struct P2d1428 {
@@ -405,7 +405,7 @@ void crate_update(struct Moby *moby) {
         break;
 
     case CRATE_STATE_BROKEN:
-        if (moby->oclass == 0x1F9 && crate_vars->unkCA <= scale_game_frames(20)) {
+        if (moby->oclass == 0x1F9 && crate_vars->burst_frame <= scale_game_frames(20)) {
             f32 burst_radius_scale;
 
             burst.moby = moby;
@@ -414,13 +414,14 @@ void crate_update(struct Moby *moby) {
             burst.unk20 = 0;
             fast_vec_normalize(&at, &moby->rot_row2, 0.5f);
             add_vector_xyz(&at, &at, &moby->pos);
-            burst_radius_scale = convert_integer_to_float(crate_vars->unkCA) / scale_time(20.0f);
+            burst_radius_scale =
+                convert_integer_to_float(crate_vars->burst_frame) / scale_time(20.0f);
             burst.unk14 = 1;
             collect_mobies_in_sphere(
                 burst_radius_scale + burst_radius_scale, &at, 0x10, moby, &burst);
             burst.unk14 = 0x30000;
             collect_mobies_in_sphere(burst_radius_scale * 3.0f, &at, 0x10, D_001413D0_lui, &burst);
-            crate_vars->unkCA++;
+            crate_vars->burst_frame++;
             break;
         }
         if (crate_vars->unkC8 != 0) {
@@ -433,9 +434,9 @@ void crate_update(struct Moby *moby) {
             }
             moby->state = CRATE_STATE_WAIT_RESPAWN;
             if (D_0015ED84 == 0x12) {
-                crate_vars->unkC9 = FUN_L00_00257b90(300, 720);
+                crate_vars->respawn_delay_timer = FUN_L00_00257b90(300, 720);
             } else {
-                crate_vars->unkC9 = FUN_L00_00257b90(30, 60);
+                crate_vars->respawn_delay_timer = FUN_L00_00257b90(30, 60);
             }
             break;
         }
@@ -449,7 +450,7 @@ void crate_update(struct Moby *moby) {
         if (fast_bsphere_check(&burst.pos, moby->draw_dist) != -1) {
             break;
         }
-        if (!FUN_L00_001fefc8(&crate_vars->unkC9)) {
+        if (!FUN_L00_001fefc8(&crate_vars->respawn_delay_timer)) {
             break;
         }
         if (moby->group == 0xFF) {
@@ -604,7 +605,7 @@ void mark_moby_for_removal_cf(u8 *, s32, s32) __asm__("FUN_L00_00257470");
 s32  FUN_L00_00257218_2d0538(u8 *, s32 *) __asm__("FUN_L00_00257218");
 f32  random_angle_radians(void) __asm__("FUN_00213308");
 s32  solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
-void FUN_L00_00261b48(s32, void *, void *, void *);
+void path_8808(s32, void *, void *, void *) __asm__("FUN_L00_00261b48");
 u8  *spawn_on_path(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
 void            crate_drop_bolts(u8 *a) __asm__("FUN_L00_002d0538");
@@ -685,7 +686,7 @@ void ground_attached_update(M_2cfcb8 *moby) {
             return;
         }
         flags_before = vars->flags;
-        vars->hC4 = moby->hA8;
+        vars->hC4 = moby->drop_inheritance_tag;
         vars->height = 1.0f;
         vars->flags = flags_before | 1;
         ungrouped_crate_position = &moby->pos;
@@ -734,7 +735,7 @@ void ground_attached_update(M_2cfcb8 *moby) {
                 mark_moby_for_removal(moby);
             } else {
                 member_flags = vars->flags;
-                vars->hC4 = moby->hA8;
+                vars->hC4 = moby->drop_inheritance_tag;
                 vars->height = 1.0f;
                 vars->flags = member_flags | 1;
                 group_crate_probe_position = &moby->pos;
@@ -989,10 +990,10 @@ void crate_drop_bolts(u8 *crate_moby) {
                     trajectory_time = larger_trajectory_time_root;
                 fast_vec_scale(&trajectory_vector, spawned_vars + 0x10, trajectory_time);
                 fast_vec_add(&trajectory_vector, &trajectory_vector, &MOBY(crate_moby)->pos);
-                FUN_L00_00261b48(*(s32 *)(crate_vars + 0xC0),
-                                 &MOBY(crate_moby)->pos,
-                                 &trajectory_vector,
-                                 &adjusted_position);
+                path_8808(*(s32 *)(crate_vars + 0xC0),
+                          &MOBY(crate_moby)->pos,
+                          &trajectory_vector,
+                          &adjusted_position);
                 fast_vec_sub(&trajectory_vector, &adjusted_position, &MOBY(spawned_moby)->pos);
                 trajectory_vector.f[2] = 0.0f;
                 fast_vec_normalize(&scratch_vector, &trajectory_vector, 0.25f);
@@ -1257,7 +1258,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
     s32 hit;
 
     vars = moby->vars;
-    if (vars->iB4 == D_L00_0015F5CC)
+    if (vars->last_motion_update_frame == D_L00_0015F5CC)
         return;
     chain_cursor = moby;
     do {
@@ -1276,11 +1277,11 @@ void update_crate_stack_motion(M2d1428 *moby) {
             return;
         if (vars->flags & 2)
             return;
-        vars->iB4 = D_L00_0015F5CC;
+        vars->last_motion_update_frame = D_L00_0015F5CC;
         if (moby->state == CRATE_STATE_INITIALIZE)
             continue;
         fast_vec_sub(&hero_local_offset, &hero.motion.pos, &moby->pos);
-        transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->vC0);
+        transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->transform_basis_x);
         if (absolute_float(hero_local_offset.x) < 0.55f &&
             absolute_float(hero_local_offset.y) < 0.55f && hero_local_offset.z < 0.0f &&
             -(hero.capsule_top + hero.capsule_radius) < hero_local_offset.z) {
@@ -1299,37 +1300,43 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (vars->path) {
             if (vars->parent == 0) {
                 vars->vel.w -= acceleration_scale_or_speed * 10.0f;
-                if (approach_value(&vars->fF4, 0.0f, absolute_float(vars->vel.w)) == 0.0f)
+                if (approach_value(&vars->attachment_stack_z_offset,
+                                   0.0f,
+                                   absolute_float(vars->vel.w)) == 0.0f)
                     vars->vel.w = 0.0f;
             } else {
                 vars->vel.w -= acceleration_scale_or_speed * 10.0f;
-                if (approach_value(&vars->fF4,
-                                   vars->parent->vars->fF4 + 1.0f,
+                if (approach_value(&vars->attachment_stack_z_offset,
+                                   vars->parent->vars->attachment_stack_z_offset + 1.0f,
                                    absolute_float(vars->vel.w)) == 0.0f)
                     *(s32 *)&vars->vel.w = 0;
             }
-            qcopy(&adjusted_link_position, &vars->vD0);
-            adjusted_link_position.z += vars->fF4;
+            qcopy(&adjusted_link_position, &vars->attachment_position);
+            adjusted_link_position.z += vars->attachment_stack_z_offset;
             if (moby)
                 moby->h36 = 0x7F80;
             qcopy(&previous_position, &moby->pos);
             qcopy(&previous_rotation, &moby->v40);
-            transform_attachment_pose(
-                moby, vars->path, &adjusted_link_position, vars->vE0, &moby->pos, &moby->v40);
+            transform_attachment_pose(moby,
+                                      vars->path,
+                                      &adjusted_link_position,
+                                      vars->attachment_rotation,
+                                      &moby->pos,
+                                      &moby->v40);
             if (FUN_L00_002603d0(vars->path)->flags & 4) {
-                qcopy(&vars->vD0, &adjusted_link_position);
-                vars->vD0.z -= vars->fF4;
+                qcopy(&vars->attachment_position, &adjusted_link_position);
+                vars->attachment_position.z -= vars->attachment_stack_z_offset;
             }
             fast_vec_sub(&position_delta, &moby->pos, &previous_position);
             position_delta.w = vars->vel.w;
             qcopy(&vars->vel, &position_delta);
-            update_entity_matrix(vars->v60, &vars->vel, &previous_rotation, &moby->v40);
+            update_entity_matrix(vars->pose_delta, &vars->vel, &previous_rotation, &moby->v40);
             continue;
         }
         if (vars->parent == 0) {
             qcopy(&collision_start, &moby->pos);
             qcopy(&collision_end, &moby->pos);
-            collision_start.z += vars->fB0 * 0.75f;
+            collision_start.z += vars->crate_height * 0.75f;
             collision_end.z += vars->vel.z;
             hit = collision_line(&collision_start, &collision_end, 2, 0, 0);
             qcopy(&landing_position, &collision_hit_point);

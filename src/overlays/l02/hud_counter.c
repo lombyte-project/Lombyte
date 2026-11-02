@@ -47,12 +47,12 @@ extern char hud_counter_decimal_format[] __asm__("D_L02_0015F850");
 
 extern s32 hud_counter_bar_growth_divisor_gp __asm__("D_L02_0015F91C") __attribute__((sda));
 extern s32 hud_counter_text_shade_divisor_gp __asm__("D_L02_0015F920") __attribute__((sda));
-s32        D_L02_0015F944 = 0x18;
-s32        D_L02_0015F948 = 0x1e0;
-s32        D_L02_0015F950 = 0xe08080;
-s32        D_L02_0015F954 = 0x80e08080;
-s32        D_L02_0015F958 = 0x30;
-s32        D_L02_0015F95C = 0x46;
+s32        l02_hud_counter_left_anchor_x __asm__("D_L02_0015F944") = 0x18;
+s32        l02_hud_counter_right_anchor_x __asm__("D_L02_0015F948") = 0x1e0;
+s32        l02_hud_counter_text_fade_start_color __asm__("D_L02_0015F950") = 0xe08080;
+s32        l02_hud_counter_text_fade_end_color __asm__("D_L02_0015F954") = 0x80e08080;
+s32        l02_hud_counter_narrow_bar_width __asm__("D_L02_0015F958") = 0x30;
+s32        l02_hud_counter_wide_bar_width __asm__("D_L02_0015F95C") = 0x46;
 
 /* Draws the counter: a stretched bar behind the icon and the count, on whichever side of the screen it sits. */
 s32 draw_hud_counter(HudElem *hud_element) __asm__("FUN_L02_0023cda8");
@@ -83,9 +83,9 @@ s32 draw_hud_counter(HudElem *hud_element) {
     hud_screen_position(hud_element, &x, &y);
     left = x < 0x101;
     if (left) {
-        x = D_L02_0015F944;
+        x = l02_hud_counter_left_anchor_x;
     } else {
-        x = D_L02_0015F948;
+        x = l02_hud_counter_right_anchor_x;
     }
     bottom = frame_size[0];
     y = pal_mode != FALSE ? bottom - 0x2A : bottom - 0x32;
@@ -106,9 +106,9 @@ s32 draw_hud_counter(HudElem *hud_element) {
     sprintf(text, hud_counter_decimal_format, hud_element->unk74);
     alpha = truncate_float_to_s32((f32)truncate_float_to_s32(grow * 128.0f) * 0.7f);
     if (hud_element->unk08 < 10) {
-        full_bar_width = D_L02_0015F958;
+        full_bar_width = l02_hud_counter_narrow_bar_width;
     } else {
-        full_bar_width = D_L02_0015F95C;
+        full_bar_width = l02_hud_counter_wide_bar_width;
     }
     px = x;
     bar = px + 4;
@@ -134,7 +134,8 @@ s32 draw_hud_counter(HudElem *hud_element) {
     } else {
         hud_frame(hud_element, hud_element->icon, x - 0x16, y, 0, 0x80);
     }
-    bright = fast_tween_color(D_L02_0015F950, D_L02_0015F954, shade);
+    bright = fast_tween_color(
+        l02_hud_counter_text_fade_start_color, l02_hud_counter_text_fade_end_color, shade);
     dark = fast_tween_color(0, 0x80000000, shade);
     if (left) {
         font_print_right(x + 0x43, y + 9, dark, text, -1);

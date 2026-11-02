@@ -16,8 +16,8 @@
 
 typedef struct {
     char  p0[8];
-    int   w8;
-    int   wC;
+    int   initial_phase_packed_color;
+    int   final_phase_packed_color;
     short h10, h12, h14, h16, h18;
 } S_269290;
 
@@ -43,8 +43,9 @@ void update_three_phase_effect_particle(struct EffectParticle *particle) {
         fast_vec_add(particle->pos.f, particle->pos.f, position_step);
         phase_remaining_ratio =
             convert_integer_to_float(particle->life) / convert_integer_to_float(particle_data->h10);
-        particle->color = fast_tween_color(
-            particle_data->w8 & 0xFFFFFF, particle_data->w8, 1.0f - phase_remaining_ratio);
+        particle->color = fast_tween_color(particle_data->initial_phase_packed_color & 0xFFFFFF,
+                                           particle_data->initial_phase_packed_color,
+                                           1.0f - phase_remaining_ratio);
         particle->size = (float)(particle_data->h16 * 1000);
         if (fast_dec_timer_s16(&particle->life)) {
             particle_data->h10 = 0;
@@ -60,8 +61,9 @@ void update_three_phase_effect_particle(struct EffectParticle *particle) {
         particle->size = ((float)(particle_data->h16 - particle_data->h18) * phase_remaining_ratio +
                           (float)particle_data->h18) *
                          1000.0f;
-        particle->color =
-            fast_tween_color(particle_data->wC, particle_data->w8, phase_remaining_ratio);
+        particle->color = fast_tween_color(particle_data->final_phase_packed_color,
+                                           particle_data->initial_phase_packed_color,
+                                           phase_remaining_ratio);
         if (fast_dec_timer_s16(&particle->life)) {
             particle_data->h12 = 0;
             particle->life = particle_data->h14;
@@ -70,9 +72,9 @@ void update_three_phase_effect_particle(struct EffectParticle *particle) {
         int packed_rgb;
         load_display_text_resource_entry(position_step, particle->data + 0x4);
         fast_vec_add(particle->pos.f, particle->pos.f, position_step);
-        packed_rgb = particle_data->wC & 0xFFFFFF;
+        packed_rgb = particle_data->final_phase_packed_color & 0xFFFFFF;
         particle->color = fast_tween_color(packed_rgb,
-                                           particle_data->wC,
+                                           particle_data->final_phase_packed_color,
                                            convert_integer_to_float(particle->life) /
                                                convert_integer_to_float(particle_data->h14));
         particle->size = (float)(particle_data->h18 * 1000);
@@ -1069,7 +1071,7 @@ typedef struct {
     u8  p9[3];
     f32 fC;
     f32 f10;
-    u32 w14;
+    u32 packed_rgb_color;
 } Body;
 
 typedef struct {
@@ -1098,14 +1100,14 @@ void update_spinning_fade_in_out_effect_particle(Part_26b910 *particle) {
         if (fast_dec_timer_s16(&particle->hA)) {
             particle_data->w4 = 1;
             particle->hA = FUN_001f96f8_0026b910(30);
-            particle->w4 = particle_data->w14 | 0x7F000000;
+            particle->w4 = particle_data->packed_rgb_color | 0x7F000000;
         } else {
             int   fade_in_duration = FUN_001f96f8_0026b910(10);
             float k = 96.0f / (float)FUN_001f96f8_0026b910(10);
             particle->w4 =
                 ((truncate_float_to_s32((float)(fade_in_duration - particle->hA) * k) + 0x20)
                  << 24) |
-                particle_data->w14;
+                particle_data->packed_rgb_color;
         }
     } else {
         if (fast_dec_timer_s16(&particle->hA)) {
@@ -1115,7 +1117,7 @@ void update_spinning_fade_in_out_effect_particle(Part_26b910 *particle) {
         particle->w4 = (truncate_float_to_s32((float)particle->hA *
                                               (127.0f / (float)FUN_001f96f8_0026b910(30)))
                         << 24) |
-                       particle_data->w14;
+                       particle_data->packed_rgb_color;
     }
 }
 
@@ -1569,7 +1571,7 @@ typedef struct {
     f32 fC;
     f32 f10;
     f32 f14;
-    u8 *p18;
+    u8 *spiral_target_moby;
     f32 f1C;
 } R_26c860;
 
@@ -1606,7 +1608,7 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
             &transformed_position_offset, &position_offset_scratch, &position_offset_matrix);
         fast_vec_sub(&particle->v10, &particle->v10, &transformed_position_offset);
         r->f1C += frame_scale * 0.06001f;
-        moby_point_position(r->p18, 0, &reference_position);
+        moby_point_position(r->spiral_target_moby, 0, &reference_position);
         fast_vec_sub(&position_offset_scratch, &reference_position, &particle->v10);
         FUN_L00_001ff500_26c860(&position_offset_scratch, &position_offset_scratch, r->f1C);
         fast_vec_add(&particle->v10, &particle->v10, &position_offset_scratch);
@@ -1620,7 +1622,7 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
             &transformed_position_offset, &position_offset_scratch, &position_offset_matrix);
         fast_vec_add(&particle->v10, &particle->v10, &transformed_position_offset);
         if (zero < compute_transformed_delta_component(
-                       &reference_position, r->p18 + 0xC0, &particle->v10, 1)) {
+                       &reference_position, r->spiral_target_moby + 0xC0, &particle->v10, 1)) {
             FUN_L00_00267a08_26c860(particle);
             return;
         }
@@ -1914,7 +1916,7 @@ typedef struct {
     u8   b4;
     u8   b5;
     u8   b6;
-    u8   b7;
+    u8   source_alpha;
     u8   b8;
     u8   b9;
     s16  hA;
@@ -1974,11 +1976,12 @@ void update_source_bound_effect_particle(Part_26d470 *particle) {
         particle_data->fC = 1.0f;
     packed_rgb = particle->w4 & 0xFFFFFF;
     particle->w4 =
-        packed_rgb | (truncate_float_to_s32((convert_integer_to_float(particle->body.e->b7) *
-                                                 (particle_data->f10 * 0.00390625f) +
-                                             particle_data->fC) *
-                                            256.0f)
-                      << 24);
+        packed_rgb |
+        (truncate_float_to_s32((convert_integer_to_float(particle->body.e->source_alpha) *
+                                    (particle_data->f10 * 0.00390625f) +
+                                particle_data->fC) *
+                               256.0f)
+         << 24);
 }
 
 extern unsigned char *FUN_L00_002678b8_26d598(int) __asm__("FUN_L00_002678b8");
@@ -2419,7 +2422,7 @@ void update_moving_fade_in_out_effect_particle(M_26e150 *particle) {
 
 typedef struct {
     u8 pad0[0x20];
-    s8 b20;
+    s8 attachment_source_status;
 } T_26e3a8;
 
 typedef struct {
@@ -2456,7 +2459,7 @@ void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *parti
         return;
     }
     e = &particle->e;
-    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->b20 < 0) {
+    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->attachment_source_status < 0) {
         goto kill;
     }
     e->hC = (e->hC + 1) & 0xF;
@@ -2522,14 +2525,14 @@ typedef struct {
     O_26e670_26e670 *tgt;
     O_26e670_26e670 *link;
     u32              x18;
-    s16              h1C;
-    u16              h1E;
+    s16              sphere_collision_active;
+    u16              motion_and_fade_flags;
 } P_26e670_26e670;
 
 struct O_26e670_26e670 {
     u8              p0[4];
-    u32             i04;
-    u8              b08;
+    u32             packed_rgba_color;
+    u8              projected_link_rotation;
     u8              p9[7];
     V_26e670_26e670 pos;
     P_26e670_26e670 p;
@@ -2548,7 +2551,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
     V_26e670_26e670  next_position, position_displacement, acc, projected_next_position;
     P_26e670_26e670 *P = &particle->p;
 
-    if ((P->h1E ^ 1) & 1) {
+    if ((P->motion_and_fade_flags ^ 1) & 1) {
         O_26e670_26e670 *linked_particle = P->link;
         P_26e670_26e670 *linked_particle_data = 0;
         f32              k = 2.0f, linked_velocity_scale_scratch;
@@ -2556,7 +2559,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
             linked_particle_data = &linked_particle->p;
         clear_u64_value(&acc);
         linked_velocity_scale_scratch = 0.15f;
-        if (P->h1C == 0 && linked_particle != 0 &&
+        if (P->sphere_collision_active == 0 && linked_particle != 0 &&
             !(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL)) {
             f32 kk;
             f32 linked_displacement_strength = 0.2f, link_rank_step = 1.0f,
@@ -2577,7 +2580,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
             } while (!(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL));
         }
         linked_velocity_scale_scratch = (0.15f - linked_velocity_scale_scratch) + 1.07f;
-        if (linked_particle_data == 0 || linked_particle_data->h1C == 0)
+        if (linked_particle_data == 0 || linked_particle_data->sphere_collision_active == 0)
             fast_vec_add(P, P, &acc);
         else
             fast_vec_scale(P, P, 0.5f);
@@ -2597,13 +2600,13 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
             fast_vec_add(&next_position, &acc, &P->tgt->pos);
         }
         if (FUN_L00_001f0d60_x(&next_position, 0, 0, 0.15f)) {
-            if (P->h1C == 0)
+            if (P->sphere_collision_active == 0)
                 qcopy(&next_position, &coll_hit_position);
             else
                 qcopy(&next_position, &particle->pos);
-            P->h1C = 1;
+            P->sphere_collision_active = 1;
         } else {
-            P->h1C = 0;
+            P->sphere_collision_active = 0;
         }
         fast_vec_sub(&acc, &P->tgt->pos, &D_L00_00166DC0_26e670);
         transform_vector(&acc, &acc, (u8 *)&D_L00_00166DC0_26e670 - 0x80);
@@ -2616,9 +2619,9 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
                        &projected_next_position,
                        1.0f / projected_next_position.f[3]);
         fast_vec_sub(&acc, &acc, &projected_next_position);
-        particle->b08 =
+        particle->projected_link_rotation =
             truncate_float_to_s32(fast_arc_tan(acc.f[0], acc.f[1]) * 128.0f / 3.1415927f) - 0x20;
-        if (P->h1C) {
+        if (P->sphere_collision_active) {
             FUN_L00_001ff660_x(P, P, &coll_hit_normal);
             fast_vec_scale(P, P, 0.95f);
         } else {
@@ -2631,10 +2634,11 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
         fast_vec_scale(P, P, 0.5f);
     }
     qcopy(&particle->pos, &next_position);
-    if (P->h1E & 2) {
-        s32 faded_alpha = (particle->i04 >> 24) - 2;
+    if (P->motion_and_fade_flags & 2) {
+        s32 faded_alpha = (particle->packed_rgba_color >> 24) - 2;
         if (faded_alpha > 0) {
-            particle->i04 = (particle->i04 & 0xFFFFFF) | (faded_alpha << 24);
+            particle->packed_rgba_color =
+                (particle->packed_rgba_color & 0xFFFFFF) | (faded_alpha << 24);
         } else if (P->link == 0) {
             if (P->tgt)
                 P->tgt->p.link = 0;
@@ -3212,7 +3216,7 @@ typedef struct {
     s16  h16;
     u8   b18;
     u8   pad19[3];
-    s32  w1c;
+    s32  particle_collision_context;
 } E_26fd28;
 
 typedef struct {
@@ -3271,7 +3275,7 @@ P_26fd28 *spawn_splitting_effect_particle_with_collision_response_and_fade(u128 
             particle->fC = 10000.0f;
             particle->hA = (s32)(8.0f / (D_0015ED60 * 0.443f));
         }
-        e->w1c = collision_context;
+        e->particle_collision_context = collision_context;
     }
     return particle;
 }
@@ -3296,13 +3300,13 @@ typedef struct PV {
 typedef struct Moby_26ff10 {
     u8   b00_26ff10;
     char pad01;
-    u8   b02;
+    u8   animated_texture_id;
     char pad03;
     u32  f04;
     u8   f08;
     char pad09;
-    s16  h0A;
-    f32  f0C;
+    s16  split_countdown;
+    f32  split_position_spread_scale;
     VV   posv;
     PV   pv;
 } Moby_26ff10;
@@ -3344,14 +3348,14 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     f32          f, rotation_direction_sign, alpha_factor;
 
     pv = &particle->pv;
-    if (particle->h0A != 0 && fast_dec_timer_s16(&particle->h0A) != 0) {
+    if (particle->split_countdown != 0 && fast_dec_timer_s16(&particle->split_countdown) != 0) {
         f32 sp, lo, hi, sc, zero, nsp;
         pv->f18 |= 0x88;
         lo = 0.5f;
-        sp = particle->f0C / 900000.0f;
+        sp = particle->split_position_spread_scale / 900000.0f;
         hi = 0.7f;
         sc = 0.2f;
-        particle->f0C = particle->f0C * 0.8f;
+        particle->split_position_spread_scale = particle->split_position_spread_scale * 0.8f;
         zero = 0.0f;
         f = random_float_between(lo, hi);
         nsp = -sp;
@@ -3364,8 +3368,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         v0u.f[2] = v0u.f[2] + random_float_between(-pv->z * sc, zero);
         spawned_particle = FUN_L00_0026fd28_26ff10(v1u.f, v0u.f, 0x88, pv->f1C);
         if (spawned_particle != 0) {
-            spawned_particle->h0A = scale_game_frames(2);
-            spawned_particle->f0C = particle->f0C;
+            spawned_particle->split_countdown = scale_game_frames(2);
+            spawned_particle->split_position_spread_scale = particle->split_position_spread_scale;
         }
         fast_vec_scale(pv, pv, random_float_between(lo, hi));
         particle->pv.x =
@@ -3377,7 +3381,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         particle->posv.f[2] = particle->posv.f[2] + random_float_between(nsp, sp);
     }
     tab = effect_texture_ids;
-    particle->b02 = tab[(particle->h0A + pv->f16 + (particle->b02 - tab[0])) & 7];
+    particle->animated_texture_id =
+        tab[(particle->split_countdown + pv->f16 + (particle->animated_texture_id - tab[0])) & 7];
     fast_vec_add(v0u.f, particle->posv.f, pv);
     k = pv->f14;
     if (scale_game_frames(3) < k) {
@@ -3417,8 +3422,9 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         fast_vec_scale(pv, pv, 0.02f);
         fast_vec_normalize(collision_offset, coll_hit_normal.f, 0.055f);
         fast_vec_add(particle->posv.f, coll_hit_normal.f - 8, collision_offset);
-        if (particle->f0C < 200000.0f && (pv->f18 & 8) == 0) {
-            particle->f0C = particle->f0C + particle->f0C;
+        if (particle->split_position_spread_scale < 200000.0f && (pv->f18 & 8) == 0) {
+            particle->split_position_spread_scale =
+                particle->split_position_spread_scale + particle->split_position_spread_scale;
         }
         pv->f18 |= 8;
     } else {
@@ -3429,8 +3435,9 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         f32 decayed_particle_scalar;
         kk2 = 8.0f / (d * 0.443f);
         pv->f16++;
-        decayed_particle_scalar = particle->f0C - 260000.0f / (f32)kk2 * d * 1.25f;
-        particle->f0C = decayed_particle_scalar;
+        decayed_particle_scalar =
+            particle->split_position_spread_scale - 260000.0f / (f32)kk2 * d * 1.25f;
+        particle->split_position_spread_scale = decayed_particle_scalar;
         if (decayed_particle_scalar <= 0.0f) {
         kill:
             FUN_L00_00267a08_26ff10(particle);
@@ -3439,7 +3446,8 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     } else {
         f32 d = frame_scale;
         kk2 = 8.0f / (d * 0.443f);
-        particle->f0C = particle->f0C + 260000.0f / (f32)kk2 * d;
+        particle->split_position_spread_scale =
+            particle->split_position_spread_scale + 260000.0f / (f32)kk2 * d;
     }
     f = convert_integer_to_float(pv->f14);
     {

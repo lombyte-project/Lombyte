@@ -164,7 +164,7 @@ typedef struct BombomaticVars {
     u8  pad_28[0x38];
     s16 anim_state;
     u8  pad_62[0x5];
-    u8  unk67;
+    u8  hit_transition_target;
     u8  pad_68[0x8];
     u8  manipulator_70;
     u8  pad_71[0xF];
@@ -173,7 +173,7 @@ typedef struct BombomaticVars {
     s32 unkB0;
     s32 unkB4;
     s16 timer_B8;
-    s16 unkBA;
+    s16 launch_burst_index;
     f32 unkBC;
     f32 unkC0;
     s32 unkC4;
@@ -325,7 +325,7 @@ void bombomatic_update(char *moby) {
         }
         tv -= hit_damage;
         *(float *)health_ptr = tv;
-        moby_data->unk67 = 0xFA;
+        moby_data->hit_transition_target = 0xFA;
         moby_data->unk26 = scale_game_frames(60);
         trooper_anim_update(moby, &moby_data->anim_state);
     }
@@ -354,7 +354,7 @@ eb20:
             moby_data->unkB4 = D_L07_0015F5CC + r9;
             moby_data->timer_B8 = 0;
             moby_data->unkBC = random_angle_radians();
-            moby_data->unkBA = 0;
+            moby_data->launch_burst_index = 0;
             MOBY(moby)->state = BOMBOMATIC_LAUNCH_BURST;
         }
         break;
@@ -407,8 +407,9 @@ eb20:
             debris_velocity[2] = FUN_L00_0025abf0(
                 vA0, launch_work_vector, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
             fast_vec_add(vA0, vA0, debris_velocity);
-            spawn_bombomatic_projectile(vA0, debris_velocity, (int)moby, moby_data->unkBA);
-            moby_data->unkBA = moby_data->unkBA + 1;
+            spawn_bombomatic_projectile(
+                vA0, debris_velocity, (int)moby, moby_data->launch_burst_index);
+            moby_data->launch_burst_index = moby_data->launch_burst_index + 1;
         }
     eeE4:
         if (moby_data->unkB4 <= D_L07_0015F5CC) {

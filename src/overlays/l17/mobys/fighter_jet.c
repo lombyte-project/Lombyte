@@ -214,7 +214,7 @@ extern void emit_transformed_2d_vertex_packet(
 void draw_fighter_jet_radar_contact_icon(
     char *rot, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L17_002eaae0");
 
-short D_L17_00162188 = 2;
+short l17_fighter_jet_offscreen_arrow_vertices __asm__("D_L17_00162188") = 2;
 int   select_fighter_jet_target_and_draw_contacts(int   ship_moby,
                                                   char *ship_vars,
                                                   char *radar_origin,
@@ -544,7 +544,7 @@ int select_fighter_jet_target_and_draw_contacts(int   ship_moby,
                                                0.1f / (angular_error_magnitude / 3.1415927f));
         *(float *)(ship_vars + 0x114) = arrow_pulse_phase;
         emit_transformed_2d_vertex_packet(
-            &D_L17_00162188,
+            &l17_fighter_jet_offscreen_arrow_vertices,
             3,
             0xFFFFF3,
             (truncate_float_to_s32((fast_sin(arrow_pulse_phase) + 1.4f) * 53.0f) << 24) | 0x8000,
@@ -657,7 +657,7 @@ void draw_fighter_jet_lock_marker(float         x,
 /* picks the moby to home in on, keeping or dropping the current target */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002ED258), where it is exact; names translated to the US level program. */
 
-int        D_L17_0016216C = 600;
+int        l17_fighter_jet_lock_timer_reload __asm__("D_L17_0016216C") = 600;
 extern int select_fighter_jet_target_and_draw_contacts(
     int, char *, char *, char *, float, float, float, char *, char *) __asm__("FUN_L17_002eace8");
 #define W(p, o) (*(int *)((char *)(p) + (o)))
@@ -722,7 +722,7 @@ skip:
          (H(P(ship_vars, 0x88), 0xA6) != 0x3EB && H(candidate_target, 0xA6) == 0x3EB)) &&
         FLAG != 0) {
         P(ship_vars, 0x88) = candidate_target;
-        lock_timer_reload = D_L17_0016216C;
+        lock_timer_reload = l17_fighter_jet_lock_timer_reload;
         W(ship_vars, 0x128) = H(candidate_target, 0xA6);
         W(ship_vars, 0x8C) = lock_timer_reload;
     }
@@ -977,7 +977,7 @@ extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
 
 extern short fighter_jet_aim_direction_base_length_gp __asm__("D_L17_0016206C")
     __attribute__((sda));
-int  D_L17_00162070 = 4;
+int  l17_fighter_jet_projectile_cooldown_reload __asm__("D_L17_00162070") = 4;
 void update_fighter_jet_aim_and_fire_projectile(char *moby,
                                                 char *ship_vars,
                                                 float aim_azimuth,
@@ -1004,7 +1004,7 @@ void update_fighter_jet_aim_and_fire_projectile(char *moby,
         moby_point_position(moby, 3 + (ship_vars[0x61] & 1), projectile_spawn_position);
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
         spawn_fighter_jet_missile(moby, aim_direction, projectile_spawn_position, 200.0f, -1.0f);
-        *(int *)(ship_vars + 0x80) = D_L17_00162070;
+        *(int *)(ship_vars + 0x80) = l17_fighter_jet_projectile_cooldown_reload;
         ship_vars[0x61] ^= 1;
     }
     fast_vec_normalize(aim_direction, aim_direction, 23.0f);
@@ -1018,7 +1018,7 @@ extern int
 spawn_fighter_jet_rocket(void *, void *, int, void *, float, int) __asm__("FUN_L13_002e6a58");
 
 extern short fighter_jet_rocket_base_scale_gp __asm__("D_L17_00162074") __attribute__((sda));
-int          D_L17_00162078 = 30;
+int          l17_fighter_jet_rocket_cooldown_reload __asm__("D_L17_00162078") = 30;
 void         try_fire_fighter_jet_rocket(char *moby, char *ship_vars) __asm__("FUN_L17_002ec150");
 
 void try_fire_fighter_jet_rocket(char *moby, char *ship_vars) {
@@ -1046,7 +1046,7 @@ void try_fire_fighter_jet_rocket(char *moby, char *ship_vars) {
                                          scaled_frame_count)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
-                *(int *)(ship_vars + 0x84) = D_L17_00162078;
+                *(int *)(ship_vars + 0x84) = l17_fighter_jet_rocket_cooldown_reload;
             }
         }
     }
@@ -1077,7 +1077,7 @@ typedef struct {
     char          pad40[0x20];
     unsigned char sel;
     unsigned char flip;
-    short         s62;
+    short         death_respawn_countdown;
     float         speed;
     short         count;
     short         s6A;
@@ -1089,10 +1089,10 @@ typedef struct {
     float         fB0, fB4, fB8, fBC;
     float         fC0, fC4, fC8, fCC;
     float         fD0, fD4, fD8;
-    int           iDC;
+    int           collision_damage_cooldown;
     char          padE0[0x2C];
-    int           i10C;
-    int           i110;
+    int           boost_voice_slot_index;
+    int           flight_target_record_index;
 } FighterJetVars;
 
 typedef unsigned int Q_c4 __attribute__((mode(TI), aligned(16)));
@@ -1118,11 +1118,11 @@ extern float vector_length_xy(void *);
 
 #include "rnc/overlay/l17/mobys/fighter_jet_data/update_fighter_jet_flight_8.h"
 
-int D_L17_00162000 = 120;
+int l17_fighter_jet_startup_speed_ramp_count_limit __asm__("D_L17_00162000") = 120;
 
 #include "rnc/overlay/l17/mobys/fighter_jet_data/update_fighter_jet_flight_7.h"
 
-int D_L17_00162014 = 5;
+int l17_fighter_jet_steering_startup_count_threshold __asm__("D_L17_00162014") = 5;
 
 #include "rnc/overlay/l17/mobys/fighter_jet_data/update_fighter_jet_flight_6.h"
 
@@ -1159,7 +1159,7 @@ extern float D_L17_00162160 __attribute__((sda));
 extern float D_L17_00162164 __attribute__((sda));
 extern float D_L17_00162168 __attribute__((sda));
 extern int   coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-int          D_L17_0016215C = 10;
+int          l17_fighter_jet_collision_damage_cooldown_reload __asm__("D_L17_0016215C") = 10;
 float        D_L17_001621F0[2] = {512.0f, 512.0f};
 
 unsigned short l17_fighter_jet_collision_death_respawn_delay __asm__("D_L17_0016217C") = 0x1e;
@@ -1240,10 +1240,10 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
     ship_moby->flags &= 0xFEFF;
     *(Q_c4 *)death_explosion_velocity = movement_delta.q;
     if (ship_moby->bc == 0) {
-        if (D_L17_00162000 < ship_vars->count) {
+        if (l17_fighter_jet_startup_speed_ramp_count_limit < ship_vars->count) {
             pad = &controller_state;
             if (pad->raw_pressed & 0x40) {
-                voice_slot_index = ship_vars->i10C;
+                voice_slot_index = ship_vars->boost_voice_slot_index;
                 if (voice_slot_index != -1) {
                     e = (char *)&voice_pool + voice_slot_index * 0x70;
                     if (*(char **)(e + 0x88) == (char *)ship_moby &&
@@ -1251,10 +1251,11 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                         release_voice_slot(voice_slot_index);
                     }
                 }
-                ship_vars->i10C = -1;
-                ship_vars->i10C = allocate_voice_for_target_entry(1, 4, (int)ship_moby);
+                ship_vars->boost_voice_slot_index = -1;
+                ship_vars->boost_voice_slot_index =
+                    allocate_voice_for_target_entry(1, 4, (int)ship_moby);
             } else if (pad->raw_released & 0x40) {
-                voice_slot_index = ship_vars->i10C;
+                voice_slot_index = ship_vars->boost_voice_slot_index;
                 if (voice_slot_index != -1) {
                     e = (char *)&voice_pool + voice_slot_index * 0x70;
                     if (*(char **)(e + 0x88) == (char *)ship_moby &&
@@ -1262,7 +1263,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                         release_voice_slot(voice_slot_index);
                     }
                 }
-                ship_vars->i10C = -1;
+                ship_vars->boost_voice_slot_index = -1;
             }
             pad = &controller_state;
             if (pad->raw_held & 0x40) {
@@ -1295,7 +1296,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         ship_vars->speed = 0.0001f;
     }
 
-    if (D_L17_00162014 < ship_vars->count) {
+    if (l17_fighter_jet_steering_startup_count_threshold < ship_vars->count) {
         steering_input_hero = &hero;
         x = steering_input_hero->stick_x;
         y = steering_input_hero->stick_y;
@@ -1346,14 +1347,15 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
 
     lenA = 310.0f;
     lenB = 500.0f;
-    if (ship_vars->i110 != -1) {
-        int   target_record_byte_offset = ship_vars->i110 << 7;
+    if (ship_vars->flight_target_record_index != -1) {
+        int   target_record_byte_offset = ship_vars->flight_target_record_index << 7;
         char *target_record_array = D_L17_001600EC;
-        qcopy(target, ((char(*)[128])target_record_array)[ship_vars->i110] + 0x30);
+        qcopy(target,
+              ((char(*)[128])target_record_array)[ship_vars->flight_target_record_index] + 0x30);
         lenA = fast_vec_length(target_record_array + target_record_byte_offset + 0x20);
         fast_vec_add(target_record_sum_or_camera_local_offset,
-                     (ship_vars->i110 << 7) + D_L17_001600EC,
-                     (ship_vars->i110 << 7) + D_L17_001600EC + 0x10);
+                     (ship_vars->flight_target_record_index << 7) + D_L17_001600EC,
+                     (ship_vars->flight_target_record_index << 7) + D_L17_001600EC + 0x10);
         lenB = fast_vec_length(target_record_sum_or_camera_local_offset);
     } else {
         qcopy(target, D_L17_001621F0);
@@ -1523,7 +1525,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
             ship_vars->speed = k;
             if (*(char **)(collision_result + 0x18) != 0 &&
                 *(short *)(*(char **)(collision_result + 0x18) + 0xA6) != 0x15B) {
-                if (ship_vars->iDC == 0) {
+                if (ship_vars->collision_damage_cooldown == 0) {
                     hero.ship_hp = hero.ship_hp - fighter_jet_collision_damage_gp;
                     if (hero.ship_hp < 0.0f) {
                         fast_vec_sub(side, collision_result + 0x50, collision_result + 0x60);
@@ -1554,7 +1556,8 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                               0);
                         ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                     }
-                    ship_vars->iDC = D_L17_0016215C;
+                    ship_vars->collision_damage_cooldown =
+                        l17_fighter_jet_collision_damage_cooldown_reload;
                 }
             } else {
                 *(int *)&hero.ship_hp = 0;
@@ -1576,7 +1579,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                       1,
                                       -1,
                                       0);
-                ship_vars->s62 = l17_fighter_jet_collision_death_respawn_delay;
+                ship_vars->death_respawn_countdown = l17_fighter_jet_collision_death_respawn_delay;
                 ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                 ship_moby->flags |= 0x41;
             }
@@ -1633,7 +1636,7 @@ typedef struct {
     char           padA5;
     unsigned short oclass;
     char           padA8[8];
-    unsigned char  bB0;
+    unsigned char  persistent_state_index;
 } ShipMoby;
 
 typedef struct {
@@ -1713,7 +1716,7 @@ unsigned char l17_fighter_jet_starting_ammo_gp __asm__("D_L17_00162064") = 0xa;
 unsigned char l17_fighter_jet_ammo_capacity_gp __asm__("D_L17_00162068") = 0x14;
 extern float  fighter_jet_max_hp_gp __asm__("D_L17_00162084") __attribute__((sda));
 extern float  D_L17_00162088 __attribute__((sda));
-int           D_L17_00162178 = 180;
+int           l17_fighter_jet_victory_fade_delay_reload __asm__("D_L17_00162178") = 180;
 char         *hp_bar_clut __asm__("D_L17_00162180") = 0;
 int           hp_bar_saved __asm__("D_L17_00162184") = 0;
 
@@ -1867,7 +1870,8 @@ void fighter_jet_update(ShipMoby *moby) {
             hp_bar_saved = 1;
             ship_vars->timerF8 = 1;
             ship_vars->iE8 = 1;
-            if (moby->bB0 != 0xFF && visited52[moby->bB0 + current_level_index * 16] == 0xFF) {
+            if (moby->persistent_state_index != 0xFF &&
+                visited52[moby->persistent_state_index + current_level_index * 16] == 0xFF) {
                 moby->state = FIGHTER_JET_STATE_FADE_THEN_REMOVE;
             }
             if (ship_vars->i11C > 0) {
@@ -1967,7 +1971,7 @@ void fighter_jet_update(ShipMoby *moby) {
             }
             update_fighter_jet_flight((FighterJetMoby *)moby, (FighterJetVars *)ship_vars);
             if (ship_vars->iE8 <= 0) {
-                ship_vars->timerF8 = D_L17_00162178;
+                ship_vars->timerF8 = l17_fighter_jet_victory_fade_delay_reload;
                 moby->state = FIGHTER_JET_STATE_VICTORY_EXIT;
             }
             if (ship_vars->fade != 0.0f) {
@@ -2088,8 +2092,8 @@ void fighter_jet_update(ShipMoby *moby) {
                     p = D_L17_001600EC + (ship_vars->exit_path << 7);
                     set_race_camera(p + 0x30, p + 0x70, 0, 1);
                 }
-                if (moby->bB0 != 0xFF) {
-                    jet_clear_persistent(moby->bB0);
+                if (moby->persistent_state_index != 0xFF) {
+                    jet_clear_persistent(moby->persistent_state_index);
                 }
                 idx = ship_vars->voice;
                 if (idx != -1) {

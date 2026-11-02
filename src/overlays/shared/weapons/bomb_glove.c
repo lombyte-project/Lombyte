@@ -38,7 +38,7 @@ typedef struct {
 typedef struct {
     u8  pad0[0x50];
     u16 deliveries; /* D_001416D0: saturates at 0xFFFF */
-    u16 unkA2;
+    u16 max_delivery_frame_bucket;
     u32 levels;
 } DeliveryStats_2c26c8;
 
@@ -359,8 +359,8 @@ void bomb_glove_update(struct Moby *moby) {
             {
                 s32 frames = scale_game_frames(D_0015EEA4);
                 frames /= 600;
-                if (((DeliveryStats_2c26c8 *)item_usage)->unkA2 < frames)
-                    ((DeliveryStats_2c26c8 *)item_usage)->unkA2 =
+                if (((DeliveryStats_2c26c8 *)item_usage)->max_delivery_frame_bucket < frames)
+                    ((DeliveryStats_2c26c8 *)item_usage)->max_delivery_frame_bucket =
                         scale_game_frames(D_0015EEA4) / 600;
             }
             ((DeliveryStats_2c26c8 *)item_usage)->levels =

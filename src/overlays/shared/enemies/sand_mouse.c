@@ -85,7 +85,7 @@ typedef struct {
     char          pad1134[0x24];
     int           i1158;
     char          pad115C[0xF24];
-    void         *p2080;
+    void         *hero_moby;
     char          pad2084[8];
     int           i208C;
     char          pad2090[0x14];
@@ -612,7 +612,7 @@ void sand_mouse_update(struct Moby *moby) {
                 vb[2] = vb[2] + 0.2f;
                 if (is_point_inside_clip_volume(hero_2e3f20->pos, sand_mouse_vars->vol)) {
                     if (!collision_line(va, vb, 0, moby, 0) ||
-                        D_L01_001742D8 == hero_2e3f20->p2080) {
+                        D_L01_001742D8 == hero_2e3f20->hero_moby) {
                         compute_sand_mouse_approach_target((int)moby, sand_mouse_vars);
                         if (hero_2e3f20->helper != 0 && hero_2e3f20->helper->oclass == 0x1B1 &&
                             hero_2e3f20->helper->state != 0xFE &&

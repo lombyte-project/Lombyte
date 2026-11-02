@@ -62,18 +62,18 @@ typedef struct {
     f32 vel[4];       /* 0xC0 */
     f32 rot[4];       /* 0xD0 */
     u8  padE0[0x30];
-    s32 item;         /* 0x110 */
-    s32 target;       /* 0x114 */
-    s32 clip_a;       /* 0x118 */
-    s32 clip_b;       /* 0x11C */
-    s32 clip_c;       /* 0x120 */
-    s16 bought;       /* 0x124 */
-    s16 level;        /* 0x126 */
-    f32 level_vel;    /* 0x128 */
-    s32 motor;        /* 0x12C */
-    s32 motor_volume; /* 0x130 */
-    s32 hum_volume;   /* 0x134 */
-    s32 i138;         /* 0x138 */
+    s32 item;            /* 0x110 */
+    s32 target;          /* 0x114 */
+    s32 clip_a;          /* 0x118 */
+    s32 clip_b;          /* 0x11C */
+    s32 clip_c;          /* 0x120 */
+    s16 bought;          /* 0x124 */
+    s16 level;           /* 0x126 */
+    f32 level_vel;       /* 0x128 */
+    s32 motor;           /* 0x12C */
+    s32 motor_volume;    /* 0x130 */
+    s32 hum_volume;      /* 0x134 */
+    s32 idle_glow_phase; /* 0x138 */
 } L14VendorVars;
 
 void elevator_update(struct Moby *m) __asm__("FUN_L14_002ee8d8");
@@ -86,6 +86,9 @@ void elevator_update(struct Moby *elevator_moby) {
         ELEVATOR_STATE_FOLLOW_PATH = 2,
         ELEVATOR_STATE_SETTLE_AT_ENDPOINT = 3,
         ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT = 4
+    };
+    enum {
+        ELEVATOR_IDLE_GLOW_INITIAL_PHASE = 0
     };
     L14VendorVars *elevator_vars = (L14VendorVars *)elevator_moby->pvars;
     Vec4           previous_elevator_position;
@@ -123,7 +126,7 @@ void elevator_update(struct Moby *elevator_moby) {
         elevator_vars->motor = -1;
         elevator_vars->motor_volume = -1;
         elevator_vars->hum_volume = -1;
-        elevator_vars->i138 = 0;
+        elevator_vars->idle_glow_phase = ELEVATOR_IDLE_GLOW_INITIAL_PHASE;
         break;
     }
     case ELEVATOR_STATE_WAIT_FOR_RIDER:

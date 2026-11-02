@@ -68,7 +68,7 @@ extern float vector_length_xy(void *);
 extern int   D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern void  update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void  build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern s32   FUN_L00_00258b50(void *, void *, void *, void *, f32);
+extern s32 move_moby_with_ground_and_collision_checks(void *, void *, void *, void *, f32) __asm__("FUN_L00_00258b50");
 
 /* Steers the moby toward a point 100 units ahead along its heading. */
 s32 move_moby_along_heading(struct Moby *moby, void *ctl) __asm__("FUN_L12_00271dd8");
@@ -80,7 +80,8 @@ s32 move_moby_along_heading(struct Moby *moby, void *ctl) {
     qcopy(&ahead, &moby->pos);
     ahead.f[0] += fast_cos(moby->rot.z) * 100.0f;
     ahead.f[1] += fast_sin(moby->rot.z) * 100.0f;
-    return FUN_L00_00258b50(moby, ctl, &ahead, &movement_displacement, 1.0f);
+    return move_moby_with_ground_and_collision_checks(
+        moby, ctl, &ahead, &movement_displacement, 1.0f);
 }
 
 /* Tests whether a point lies within height, distance and heading limits of a moby. */

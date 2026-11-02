@@ -14,6 +14,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
+
 #include "rnc/rendering/clip_volume.h"
 
 enum {
@@ -91,21 +92,21 @@ typedef struct {
     u8    pad59;
     u8    f5A; /* 0x5A */
     u8    pad5B[0x15];
-    u8    f70[0x10];    /* 0x70 */
-    f32   f80;          /* 0x80 */
-    f32   f84;          /* 0x84 */
-    f32   return_speed; /* 0x88 */
-    f32   f8C;          /* 0x8C */
-    s32   f90;          /* 0x90 */
-    s32   f94;          /* 0x94 */
-    f32   f98;          /* 0x98 */
+    u8    f70[0x10];                    /* 0x70 */
+    f32   gravity_step;                 /* 0x80 */
+    f32   motion_speed_adjustment_step; /* 0x84 */
+    f32   return_speed;                 /* 0x88 */
+    f32   f8C;                          /* 0x8C */
+    s32   collision_radius_fixed;       /* 0x90 */
+    s32   motion_flags;                 /* 0x94 */
+    f32   collision_height_offset;      /* 0x98 */
     u8    pad9C[0x11];
     u8    fAD; /* 0xAD */
     u8    padAE[0x22];
-    s32   movement; /* 0xD0 */
-    f32   fD4;      /* 0xD4 */
-    f32   fD8;      /* 0xD8 */
-    f32   fDC;      /* 0xDC */
+    s32   movement;                 /* 0xD0 */
+    f32   fD4;                      /* 0xD4 */
+    f32   max_ground_drop_distance; /* 0xD8 */
+    f32   max_ground_rise_distance; /* 0xDC */
     u8    padE0[0x14];
     f32   speed; /* 0xF4 */
     u8    padF8[0x28];
@@ -121,18 +122,18 @@ typedef struct {
     f32   angle_jitter;   /* 0x194 */
     f32   jitter_degrees; /* 0x198 */
     u8    pad19C[4];
-    f32   f1A0;           /* 0x1A0 */
-    f32   base_speed;     /* 0x1A4 */
-    s32   timer;          /* 0x1A8 */
-    s32   f1AC;           /* 0x1AC */
-    s32   path;           /* 0x1B0 */
-    s32   f1B4;           /* 0x1B4 */
-    s32   timer_max;      /* 0x1B8 */
-    s32   node;           /* 0x1BC */
-    s32   clip_volume;    /* 0x1C0 */
-    f32   reach_distance; /* 0x1C4 */
-    f32   f1C8;           /* 0x1C8 */
-    s32   f1CC;           /* 0x1CC */
+    f32   f1A0;                   /* 0x1A0 */
+    f32   base_speed;             /* 0x1A4 */
+    s32   timer;                  /* 0x1A8 */
+    s32   f1AC;                   /* 0x1AC */
+    s32   path;                   /* 0x1B0 */
+    s32   activate_on_initialize; /* 0x1B4 */
+    s32   timer_max;              /* 0x1B8 */
+    s32   node;                   /* 0x1BC */
+    s32   clip_volume;            /* 0x1C0 */
+    f32   reach_distance;         /* 0x1C4 */
+    f32   f1C8;                   /* 0x1C8 */
+    s32   f1CC;                   /* 0x1CC */
     u8    pad1D0[0x10];
     u8    f1E0[0x10]; /* 0x1E0 */
 } SnapperVars_91A8;
@@ -177,8 +178,8 @@ extern void
 func_L00_002592B0_91A8(Moby *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float func_L06_002FAB28_91A8(Moby *) __asm__("FUN_L06_002f96f8");
-extern int
-func_L00_00259B88_91A8(Moby *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
+extern int   move_moby_with_ground_and_collision_checks(
+      Moby *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern void  func_L00_00262DF0_91A8(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern void  func_L00_00262DF0_b91A8(int, void *, void *, float) __asm__("FUN_L00_00261d78");
 extern float compute_interpolated_record_value(Moby *) __asm__("FUN_0020c9e0");
@@ -206,29 +207,29 @@ typedef struct BlargVars {
     char          pad00[0x20];
     float         health; /* 0x20 */
     char          pad24[0x14];
-    int           f38; /* 0x38 */
+    int           targeting_boost_refresh_pending; /* 0x38 */
     char          pad3C[0x24];
     char          f60[0x7]; /* 0x60 */
     unsigned char f67;      /* 0x67 */
     char          pad68[0x8];
-    char          f70[0x18]; /* 0x70 */
-    float         f88;       /* 0x88 */
-    float         f8C;       /* 0x8C */
+    char          f70[0x18];               /* 0x70 */
+    float         horizontal_motion_speed; /* 0x88 */
+    float         f8C;                     /* 0x8C */
     char          pad90[0x30];
-    float         fC0; /* 0xC0 */
-    float         fC4; /* 0xC4 */
+    float         motion_apex_animation_frame;    /* 0xC0 */
+    float         motion_landing_animation_frame; /* 0xC4 */
     char          padC8[0x58];
-    char          f120[0x8]; /* 0x120 */
-    float         f128;      /* 0x128 */
+    char          selected_target_xy[0x8]; /* 0x120 */
+    float         selected_target_z;       /* 0x128 */
     char          pad12C[0x34];
-    int           f160; /* 0x160 */
-    int           f164; /* 0x164 */
+    int           selected_target_moby; /* 0x160 */
+    int           f164;                 /* 0x164 */
     char          pad168[0x8];
-    char          f170[0x30]; /* 0x170 */
-    float         f1A0;       /* 0x1A0 */
+    char          home_position[0x30]; /* 0x170 */
+    float         f1A0;                /* 0x1A0 */
     char          pad1A4[0x8];
-    int           f1AC; /* 0x1AC */
-    int           f1B0; /* 0x1B0 */
+    int           f1AC;                /* 0x1AC */
+    int           movement_path_index; /* 0x1B0 */
     char          pad1B4[0x14];
     float         f1C8; /* 0x1C8 */
     int           f1CC; /* 0x1CC */
@@ -241,9 +242,9 @@ extern int D_001413D0[];
 
 #include "rnc/overlay/l06/mobys/alien_snapper_data/update_alien_snapper_hit_response_and_targeting.h"
 
-int D_L06_00161EE8 = 0x80808080;
+int l06_alien_snapper_glow_gray_color __asm__("D_L06_00161EE8") = 0x80808080;
 
-int D_L06_00161EEC = 0x80604040;
+int l06_alien_snapper_glow_tinted_color __asm__("D_L06_00161EEC") = 0x80604040;
 
 extern int     resolve_moby_hit_response() __asm__("FUN_00213928");
 void           trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
@@ -311,27 +312,27 @@ void alien_snapper_update(Moby *moby) {
         qcopy(&snapper_behavior->home, &moby->pos);
         snapper_behavior->reach_distance = random_float_between(0.0f, 1.0f);
         func_L01_0026E8E0_91A8(&snapper_behavior->movement);
-        snapper_behavior->fDC = 2.0f;
-        snapper_behavior->fD8 = 2.0f;
+        snapper_behavior->max_ground_rise_distance = 2.0f;
+        snapper_behavior->max_ground_drop_distance = 2.0f;
         snapper_behavior->movement = truncate_float_to_s32(D_L06_00161EB0 * 1024.0f);
         snapper_behavior->fD4 = D_L06_00161EB0;
         snapper_behavior->speed = snapper_behavior->base_speed * frame_time;
-        snapper_behavior->f90 = truncate_float_to_s32(768.0f);
-        snapper_behavior->f98 = 0.75f;
-        snapper_behavior->f80 = l06_alien_snapper_gravity * D_0015ED70;
+        snapper_behavior->collision_radius_fixed = truncate_float_to_s32(768.0f);
+        snapper_behavior->collision_height_offset = 0.75f;
+        snapper_behavior->gravity_step = l06_alien_snapper_gravity * D_0015ED70;
         snapper_behavior->fAD = 0;
-        snapper_behavior->f84 = 0.0005f;
-        snapper_behavior->f94 = 9;
+        snapper_behavior->motion_speed_adjustment_step = 0.0005f;
+        snapper_behavior->motion_flags = 9;
         snapper_behavior->f1C8 = random_angle_radians();
         if (snapper_behavior->f1CC != 0) {
-            moby->state = 0xF;
+            moby->state = ALIEN_SNAPPER_STATE_FACE_HERO;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 0);
             }
         } else if (snapper_behavior->clip_volume >= 0) {
-            moby->state = 3;
-        } else if (snapper_behavior->f1B4 != 0) {
-            moby->state = 2;
+            moby->state = ALIEN_SNAPPER_STATE_WAIT_FOR_CLIP_TRIGGER;
+        } else if (snapper_behavior->activate_on_initialize != 0) {
+            moby->state = ALIEN_SNAPPER_STATE_ACTIVATION_SEQUENCE;
             snapper_behavior->timer = scale_game_frames(1);
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
@@ -340,7 +341,7 @@ void alien_snapper_update(Moby *moby) {
                 func_L06_002FAAC8_91A8(moby);
             }
         } else {
-            moby->state = 1;
+            moby->state = ALIEN_SNAPPER_STATE_WAIT_FOR_ACTIVATION;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
             }
@@ -349,7 +350,7 @@ void alien_snapper_update(Moby *moby) {
         break;
     case ALIEN_SNAPPER_STATE_WAIT_FOR_ACTIVATION:
         if (snapper_behavior->f164 != 2) {
-            moby->state = 2;
+            moby->state = ALIEN_SNAPPER_STATE_ACTIVATION_SEQUENCE;
             snapper_behavior->timer = scale_game_frames(1);
             if (moby->group != 0xFF) {
                 func_L06_002FAAC8_91A8(moby);
@@ -369,7 +370,7 @@ void alien_snapper_update(Moby *moby) {
         } else if (moby->anim_flags & 2) {
             if (vector_distance_xy(&moby->pos, ((char *)&D_0013F3D0)) <
                 l06_alien_snapper_base_targeting_radius) {
-                moby->state = 8;
+                moby->state = ALIEN_SNAPPER_STATE_APPROACH_TARGET;
                 snapper_behavior->angle_jitter =
                     random_float_between(snapper_behavior->jitter_degrees * 0.017453292f,
                                          -(snapper_behavior->jitter_degrees * 0.017453292f));
@@ -379,7 +380,7 @@ void alien_snapper_update(Moby *moby) {
             } else {
                 int frames = *((u8 *)moby->pclass->seqs[2] + 0x10);
 
-                moby->state = 6;
+                moby->state = ALIEN_SNAPPER_STATE_FACE_GOAL_AND_WAIT;
                 if (moby->prev_seq != 2) {
                     start_frame = random_float_between(0.0f, (float)frames - 1.0f);
                     blend_moby_animation(moby, 2, start_frame, scale_game_frames(30));
@@ -391,7 +392,7 @@ void alien_snapper_update(Moby *moby) {
         if (snapper_behavior->clip_volume >= 0) {
             if (is_point_inside_clip_volume(((char *)&D_0013F3D0), snapper_behavior->clip_volume) !=
                 0) {
-                moby->state = 4;
+                moby->state = ALIEN_SNAPPER_STATE_PREPARE_HOME_NODE_JUMP;
                 if (moby->prev_seq != 3) {
                     blend_moby_animation(moby, 3, 0, scale_game_frames(5));
                 }
@@ -405,7 +406,7 @@ void alien_snapper_update(Moby *moby) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(5));
                 break;
             case ALIEN_SNAPPER_ANIM_HOME_NODE_JUMP_WINDUP:
-                moby->state = 5;
+                moby->state = ALIEN_SNAPPER_STATE_JUMP_TO_HOME_NODE;
                 qcopy(&snapper_behavior->home, &l06_cuboids[snapper_behavior->node].pos);
                 snapper_behavior->return_speed =
                     vector_distance_xy(&moby->pos, &snapper_behavior->home) /
@@ -414,8 +415,8 @@ void alien_snapper_update(Moby *moby) {
                                                                &snapper_behavior->home,
                                                                0,
                                                                snapper_behavior->return_speed,
-                                                               -snapper_behavior->f80);
-                snapper_behavior->f94 = 5;
+                                                               -snapper_behavior->gravity_step);
+                snapper_behavior->motion_flags = 5;
                 snapper_behavior->fAD = 3;
                 func_L00_0025D5B0_91A8(moby,
                                        snapper_behavior->f70,
@@ -433,7 +434,7 @@ void alien_snapper_update(Moby *moby) {
         break;
     case ALIEN_SNAPPER_STATE_JUMP_TO_HOME_NODE:
         if (func_L00_0025D6F0_91A8(moby, snapper_behavior->f70) & 1) {
-            moby->state = 6;
+            moby->state = ALIEN_SNAPPER_STATE_FACE_GOAL_AND_WAIT;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 5);
             }
@@ -448,11 +449,11 @@ void alien_snapper_update(Moby *moby) {
                                0.3f,
                                frame_time * 6.2831855f);
         if (snapper_behavior->f164 != 2) {
-            moby->state = 7;
+            moby->state = ALIEN_SNAPPER_STATE_WAIT_TO_APPROACH;
             snapper_behavior->timer = truncate_float_to_s32(
                 random_float_between(0.0f, (float)snapper_behavior->timer_max));
         } else if (snapper_behavior->f1AC != 0) {
-            moby->state = 9;
+            moby->state = ALIEN_SNAPPER_STATE_REPOSITION_AROUND_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -486,25 +487,25 @@ void alien_snapper_update(Moby *moby) {
         scratch.m.dir[0] = fast_cos(moby->rot.z) * 2.0f;
         scratch.m.dir[1] = fast_sin(moby->rot.z) * 2.0f;
         scratch.m.dir[2] = 0.0f;
-        func_L00_00259B88_91A8(
+        move_moby_with_ground_and_collision_checks(
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         moby->rot.z = saved_rot;
         func_L00_00262DF0_91A8(0.5f, snapper_behavior->path, &moby->pos, &moby->pos);
-        if (FUN_L00_00261b48(
-                snapper_behavior->path, &moby->pos, &target->pos, scratch.m.path_point) != 0 &&
+        if (path_8808(snapper_behavior->path, &moby->pos, &target->pos, scratch.m.path_point) !=
+                0 &&
             fast_vec_dist(&moby->pos, scratch.m.path_point) < snapper_behavior->reach_distance) {
             near = 1;
         }
         if (snapper_behavior->f1AC == 0) {
-            moby->state = 0xC;
+            moby->state = ALIEN_SNAPPER_STATE_RETURN_HOME;
         } else if (near) {
-            moby->state = 0xA;
+            moby->state = ALIEN_SNAPPER_STATE_WAIT_FOR_REPOSITION_ANIMATION;
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(10));
             }
         } else if (vector_distance_xy(&moby->pos, &target->pos) <
                    l06_alien_snapper_bite_approach_radius) {
-            moby->state = 0xB;
+            moby->state = ALIEN_SNAPPER_STATE_BITE_TARGET;
             if (moby->prev_seq != 4) {
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             }
@@ -513,7 +514,7 @@ void alien_snapper_update(Moby *moby) {
     }
     case ALIEN_SNAPPER_STATE_WAIT_FOR_REPOSITION_ANIMATION:
         if (moby->anim_flags & 2) {
-            moby->state = 9;
+            moby->state = ALIEN_SNAPPER_STATE_REPOSITION_AROUND_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
@@ -521,7 +522,7 @@ void alien_snapper_update(Moby *moby) {
         break;
     case ALIEN_SNAPPER_STATE_WAIT_TO_APPROACH:
         if (fast_dec_timer(&snapper_behavior->timer) != 0) {
-            moby->state = 8;
+            moby->state = ALIEN_SNAPPER_STATE_APPROACH_TARGET;
             snapper_behavior->angle_jitter =
                 random_float_between(snapper_behavior->jitter_degrees * 0.017453292f,
                                      -(snapper_behavior->jitter_degrees * 0.017453292f));
@@ -560,21 +561,21 @@ void alien_snapper_update(Moby *moby) {
         scratch.m.dir[0] = fast_cos(moby->rot.z) * 2.0f;
         scratch.m.dir[1] = fast_sin(moby->rot.z) * 2.0f;
         scratch.m.dir[2] = 0.0f;
-        func_L00_00259B88_91A8(
+        move_moby_with_ground_and_collision_checks(
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         moby->rot.z = saved_rot;
         func_L00_00262DF0_91A8(0.5f, snapper_behavior->path, &moby->pos, &moby->pos);
         if (l06_alien_snapper_max_home_distance <
                 fast_vec_dist(&moby->pos, &snapper_behavior->home) ||
             snapper_behavior->f164 == 2) {
-            moby->state = 0xC;
+            moby->state = ALIEN_SNAPPER_STATE_RETURN_HOME;
         } else if (vector_distance_xy(&moby->pos, &target->pos) <
                    l06_alien_snapper_bite_approach_radius) {
             if (absolute_float(target->pos.z - moby->pos.z) < 1.0f) {
                 char *hero = ((char *)&D_0013F350);
 
                 if (*(int *)(hero + 0x1C0) < scale_game_frames(10)) {
-                    moby->state = 0xB;
+                    moby->state = ALIEN_SNAPPER_STATE_BITE_TARGET;
                     if (moby->prev_seq != 4) {
                         blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                     }
@@ -606,7 +607,7 @@ void alien_snapper_update(Moby *moby) {
             scratch.bite.dir[2] = 0.0f;
             func_L00_001F2BE8_91A8(0.5f, bite_query_position, 0, moby, &scratch.bite);
         } else if (moby->anim_flags & 2) {
-            moby->state = 8;
+            moby->state = ALIEN_SNAPPER_STATE_APPROACH_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
@@ -629,13 +630,13 @@ void alien_snapper_update(Moby *moby) {
         scratch.m.dir[0] = fast_cos(moby->rot.z) * 2.0f;
         scratch.m.dir[1] = fast_sin(moby->rot.z) * 2.0f;
         scratch.m.dir[2] = 0.0f;
-        func_L00_00259B88_91A8(
+        move_moby_with_ground_and_collision_checks(
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         moby->rot.z = saved_rot;
         func_L00_00262DF0_91A8(0.5f, snapper_behavior->path, &moby->pos, &moby->pos);
         if (fast_dec_timer(&snapper_behavior->timer) != 0 ||
             l06_alien_snapper_retreat_distance_limit < fast_vec_dist(&moby->pos, &target->pos)) {
-            moby->state = 0xB;
+            moby->state = ALIEN_SNAPPER_STATE_BITE_TARGET;
             snapper_behavior->speed = frame_time * 5.0f;
             if (l06_alien_snapper_retreat_bite_override_enabled != 0) {
                 if (moby->prev_seq != 4) {
@@ -663,16 +664,16 @@ void alien_snapper_update(Moby *moby) {
         scratch.m.dir[0] = fast_cos(moby->rot.z) * 2.0f;
         scratch.m.dir[1] = fast_sin(moby->rot.z) * 2.0f;
         scratch.m.dir[2] = 0.0f;
-        func_L00_00259B88_91A8(
+        move_moby_with_ground_and_collision_checks(
             moby, &snapper_behavior->movement, scratch.m.dir, scratch.m.out, 1.0f);
         func_L00_00262DF0_b91A8(snapper_behavior->path, &moby->pos, &moby->pos, 0.5f);
         if (fast_vec_dist(&moby->pos, &snapper_behavior->home) < 1.0f) {
-            moby->state = 6;
+            moby->state = ALIEN_SNAPPER_STATE_FACE_GOAL_AND_WAIT;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(20));
             }
         } else if (snapper_behavior->f164 != 2) {
-            moby->state = 8;
+            moby->state = ALIEN_SNAPPER_STATE_APPROACH_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
@@ -690,7 +691,7 @@ void alien_snapper_update(Moby *moby) {
                        D_0015ED70 * 6.2831855f,
                        frame_time * 12.566371f);
         if (vector_distance_xy(&moby->pos, hero + 0x80) < 4.0f) {
-            moby->state = 0x10;
+            moby->state = ALIEN_SNAPPER_STATE_BITE_HERO;
             if (moby->prev_seq != 4) {
                 blend_moby_animation(moby, 4, 0, scale_game_frames(20));
             }
@@ -723,7 +724,7 @@ void alien_snapper_update(Moby *moby) {
             func_L00_001F2BE8_91A8(0.5f, bite_query_position, 0, moby, &scratch.bite);
             collision_line(bite_query_position, &moby->pos, 0, moby, &scratch.bite);
         } else if (moby->anim_flags & 2) {
-            moby->state = 0xF;
+            moby->state = ALIEN_SNAPPER_STATE_FACE_HERO;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(20));
             }
@@ -738,7 +739,7 @@ void alien_snapper_update(Moby *moby) {
                 mark_moby_for_removal(moby);
                 break;
             }
-            moby->state = 0xD;
+            moby->state = ALIEN_SNAPPER_STATE_RETREAT_FROM_TARGET;
             moby->anim_speed = 1.0f;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -787,10 +788,10 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     Target    *target;
     int        reaction;
 
-    if (snapper_vars->f38 != 0) {
+    if (snapper_vars->targeting_boost_refresh_pending != 0) {
         snapper_vars->f1AC =
             truncate_float_to_s32(func_001F9878_2FA618(random_float_between(180.0f, 240.0f)));
-        snapper_vars->f38 = 0;
+        snapper_vars->targeting_boost_refresh_pending = 0;
     }
     fast_dec_timer(&snapper_vars->f1AC);
     damage = 0.0f;
@@ -826,10 +827,10 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         case HIT_RESPONSE_NONLETHAL_ANIMATION_FEEDBACK:
         case HIT_RESPONSE_NONLETHAL_KNOCKBACK:
             moby->state = ALIEN_SNAPPER_STATE_HIT_KNOCKBACK;
-            snapper_vars->f88 = frame_time + frame_time;
+            snapper_vars->horizontal_motion_speed = frame_time + frame_time;
             snapper_vars->f8C = frame_time;
-            snapper_vars->fC0 = 5.0f;
-            snapper_vars->fC4 = 8.5f;
+            snapper_vars->motion_apex_animation_frame = 5.0f;
+            snapper_vars->motion_landing_animation_frame = 8.5f;
             func_L00_0025D5B0_2FA618(
                 moby, snapper_vars->f70, 9, 1, 0, fast_arc_tan(target->x, target->y));
             snapper_vars->f67 = 0xFA;
@@ -838,10 +839,10 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         case HIT_RESPONSE_DEATH_SEQUENCE:
             moby->state = ALIEN_SNAPPER_STATE_DEATH_MOTION;
             moby->flags &= 0xEFFF;
-            snapper_vars->f88 = frame_time * 8.0f;
+            snapper_vars->horizontal_motion_speed = frame_time * 8.0f;
             snapper_vars->f8C = frame_time * 5.0f;
-            snapper_vars->fC0 = 7.5f;
-            snapper_vars->fC4 = 14.5f;
+            snapper_vars->motion_apex_animation_frame = 7.5f;
+            snapper_vars->motion_landing_animation_frame = 14.5f;
             func_L00_0025D5B0_2FA618(
                 moby, snapper_vars->f70, 10, 1, 0, fast_arc_tan(target->x, target->y));
             snapper_vars->f67 = 0xFA;
@@ -867,8 +868,9 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     }
     snapper_vars->f1C8 = fast_add_rotations(
         snapper_vars->f1C8, alien_snapper_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
-    moby->glow_color = func_001FA8A8_2FA618(
-        D_L06_00161EE8, D_L06_00161EEC, (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
+    moby->glow_color = func_001FA8A8_2FA618(l06_alien_snapper_glow_gray_color,
+                                            l06_alien_snapper_glow_tinted_color,
+                                            (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
 
     if (snapper_vars->f1AC != 0) {
         snapper_vars->f1A0 = l06_alien_snapper_base_targeting_radius + 6.0f;
@@ -884,18 +886,19 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
 
     if (activate_effect_l08(snapper_vars->f1A0,
                             moby,
-                            snapper_vars->f120,
+                            snapper_vars->selected_target_xy,
                             0,
                             0,
-                            D_L06_001B0FB0_2FA618[snapper_vars->f1B0] + 4,
-                            *D_L06_001B0FB0_2FA618[snapper_vars->f1B0]) != 2) {
-        if (snapper_vars->f1A0 < vector_distance_xy(snapper_vars->f170, snapper_vars->f120) ||
-            3.0f < absolute_float(moby->pos.z - snapper_vars->f128)) {
+                            D_L06_001B0FB0_2FA618[snapper_vars->movement_path_index] + 4,
+                            *D_L06_001B0FB0_2FA618[snapper_vars->movement_path_index]) != 2) {
+        if (snapper_vars->f1A0 <
+                vector_distance_xy(snapper_vars->home_position, snapper_vars->selected_target_xy) ||
+            3.0f < absolute_float(moby->pos.z - snapper_vars->selected_target_z)) {
             snapper_vars->f164 = 2;
         }
     }
-    if (snapper_vars->f160 == 0) {
-        snapper_vars->f160 = D_001413D0[0];
+    if (snapper_vars->selected_target_moby == 0) {
+        snapper_vars->selected_target_moby = D_001413D0[0];
     }
 }
 

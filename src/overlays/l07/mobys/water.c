@@ -33,9 +33,9 @@ typedef struct {
     int           i2C;
     float         f30; /* 0x30 */
     float         f34;
-    float         f38;
-    unsigned char b3C; /* 0x3C */
-    unsigned char b3D;
+    float         water_direction_z;
+    unsigned char grid_alpha_2_fix; /* 0x3C */
+    unsigned char grid_alpha_1_fix;
 } Cab;
 
 typedef struct {
@@ -57,9 +57,9 @@ typedef struct {
 
 typedef struct {
     char           pad0[0x10];
-    float          pos[4]; /* 0x10 */
-    unsigned char  state;  /* 0x20 */
-    unsigned char  f21;    /* 0x21 */
+    float          pos[4];       /* 0x10 */
+    unsigned char  state;        /* 0x20 */
+    unsigned char  moby_list_id; /* 0x21 */
     char           pad22[0x12];
     unsigned short flags; /* 0x34 */
     char           pad36[0x42];
@@ -190,7 +190,7 @@ void water_update(Moby_30D8E8 *water_moby) {
                 fast_arc_tan(water_direction_source->f10, water_direction_source->f14);
             cab->f30 = fast_cos(water_direction_xy_angle) * 0.57735f;
             cab->f34 = fast_sin(water_direction_xy_angle) * 0.57735f;
-            cab->f38 = -0.57735f;
+            cab->water_direction_z = -0.57735f;
             cab->i28 = 0x28;
             cab->i2C = 0x29;
             p = water_grid_geometry_descriptors;
@@ -198,8 +198,8 @@ void water_update(Moby_30D8E8 *water_moby) {
             D_L07_0016120C = 32768.0f;
             D_L07_00161210 = 255.0f;
             D_L07_00161214 = 48.0f;
-            cab->b3C = 0x40;
-            cab->b3D = 0x40;
+            cab->grid_alpha_2_fix = 0x40;
+            cab->grid_alpha_1_fix = 0x40;
             D_L07_001612D0 = l07_water_grids;
             l07_water_grid_geometry_descriptor_base = p;
             D_L07_00161208 = 0;
@@ -235,11 +235,11 @@ void water_update(Moby_30D8E8 *water_moby) {
         break;
     case WATER_APPROACH_LOW_HEIGHT:
         if (water_moby->sub & 4) {
-            set_moby_list_state(water_moby->f21, 1);
-        } else if (FUN_L07_00281ef8_2cd2b0(water_moby, water_moby->f21, 1, 0) &&
+            set_moby_list_state(water_moby->moby_list_id, 1);
+        } else if (FUN_L07_00281ef8_2cd2b0(water_moby, water_moby->moby_list_id, 1, 0) &&
                    water_moby->sub != 1) {
             approach_value(&water_moby->pos[2], water_data->lo, D_0015ED6C * 4.0f);
-            FUN_L01_0026e090_2cd2b0(water_moby->f21, 1);
+            FUN_L01_0026e090_2cd2b0(water_moby->moby_list_id, 1);
         } else if (water_moby->sub == 1) {
             approach_value(&water_moby->pos[2], water_data->lo, D_0015ED6C * 4.0f);
         }
@@ -252,11 +252,11 @@ void water_update(Moby_30D8E8 *water_moby) {
         break;
     case WATER_APPROACH_HIGH_HEIGHT:
         if (water_moby->sub & 8) {
-            set_moby_list_state(water_moby->f21, 2);
-        } else if (FUN_L07_00281ef8_2cd2b0(water_moby, water_moby->f21, 1, 0) &&
+            set_moby_list_state(water_moby->moby_list_id, 2);
+        } else if (FUN_L07_00281ef8_2cd2b0(water_moby, water_moby->moby_list_id, 1, 0) &&
                    water_moby->sub != 2) {
             approach_value(&water_moby->pos[2], water_data->hi, D_0015ED6C * 4.0f);
-            FUN_L01_0026e090_2cd2b0(water_moby->f21, 2);
+            FUN_L01_0026e090_2cd2b0(water_moby->moby_list_id, 2);
         } else if (water_moby->sub == 2) {
             approach_value(&water_moby->pos[2], water_data->hi, D_0015ED6C * 4.0f);
         }
@@ -271,7 +271,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         if (water_data->volume >= 0 &&
             is_point_inside_clip_volume(&hero.motion.pos, water_data->volume)) {
             water_data->f1C = 0;
-            set_moby_list_state(water_moby->f21, 4);
+            set_moby_list_state(water_moby->moby_list_id, 4);
         }
         break;
     case WATER_WAIT_BEFORE_RISING:
@@ -305,8 +305,8 @@ void water_update(Moby_30D8E8 *water_moby) {
     }
     {
         Cab *cab = &l07_water_grid_parameters;
-        l07_water_grids[water_data->idx].alpha_2_fix = cab->b3C;
-        l07_water_grids[water_data->idx].alpha_1_fix = cab->b3D;
+        l07_water_grids[water_data->idx].alpha_2_fix = cab->grid_alpha_2_fix;
+        l07_water_grids[water_data->idx].alpha_1_fix = cab->grid_alpha_1_fix;
     }
     l07_water_grids[water_data->idx].z = water_moby->pos[2];
     on = 0.0f;

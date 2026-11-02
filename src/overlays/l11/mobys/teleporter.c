@@ -264,11 +264,11 @@ extern void               draw_geometry_quad(void *, void *, int) __asm__("FUN_0
 
 extern float teleporter_ring_quad_uvs[] __asm__("D_L11_001D3530");
 
-int          D_L11_00161920 = 0;
-int          D_L11_00161924 = 2;
-int          D_L11_00161928 = 0;
-int          D_L11_0016192C = 1;
-int          D_L11_00161930 = 0x13;
+int          l11_teleporter_ring_blend_a_selector __asm__("D_L11_00161920") = 0;
+int          l11_teleporter_ring_blend_b_selector __asm__("D_L11_00161924") = 2;
+int          l11_teleporter_ring_blend_c_selector __asm__("D_L11_00161928") = 0;
+int          l11_teleporter_ring_blend_d_selector __asm__("D_L11_0016192C") = 1;
+int          l11_teleporter_ring_effect_texture_index __asm__("D_L11_00161930") = 0x13;
 unsigned int l11_teleporter_ring_vertex_color __asm__("D_L11_00161934") = 0x60408080;
 float        teleporter_ring_local_z_center_gp __asm__("D_L11_00161938") = 1.0f;
 /* Draws a ring of 32 textured quads around the moby; the band widens as the radius at pvars+0x3C shrinks below 1.15. */
@@ -284,10 +284,11 @@ void draw_teleporter_ring(struct Moby *moby) {
 
     copy_matrix_rotation(matrix, &moby->rot_row0);
     qcopy(matrix + 12, &moby->pos);
-    quad.tag[1] = get_effect_texture(D_L11_00161930);
-    quad.tag[3] = (unsigned long long)D_L11_00161920 | (unsigned long long)D_L11_00161924 << 2 |
-                  (unsigned long long)D_L11_00161928 << 4 |
-                  (unsigned long long)D_L11_0016192C << 6 | 0x8000000000ULL;
+    quad.tag[1] = get_effect_texture(l11_teleporter_ring_effect_texture_index);
+    quad.tag[3] = (unsigned long long)l11_teleporter_ring_blend_a_selector |
+                  (unsigned long long)l11_teleporter_ring_blend_b_selector << 2 |
+                  (unsigned long long)l11_teleporter_ring_blend_c_selector << 4 |
+                  (unsigned long long)l11_teleporter_ring_blend_d_selector << 6 | 0x8000000000ULL;
     quad.tag[2] = 0xff9000000260ULL;
     quad.tag[0] = 0;
     {

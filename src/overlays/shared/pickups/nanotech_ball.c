@@ -104,12 +104,12 @@ typedef struct {
     u8        p0[0x10];
     V_2d8510  v10;
     u8        p20[0x58];
-    O_2d8510 *p78;
+    O_2d8510 *collection_effect_state;
 } M_2d8510;
 
 typedef struct {
     u8  p0[0xF8];
-    u8 *pF8;
+    u8 *collection_particle_byte_source;
 } T_2d8510;
 
 typedef union {
@@ -173,12 +173,12 @@ typedef struct D_2D9EA0 {
     V_2D9EA0     v20;
     Part        *slots[8];
     int          f50;
-    short        h54;
-    short        h56;
+    short        collection_frames_remaining;
+    short        collection_reward_processed;
     short        h58[4];
     float        f60[4];
     char         p70[0xC];
-    int          f7C;
+    int          pending_collection_count;
 } D_2D9EA0;
 
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002DACC0.c: func_L00_002DACC0), a near miss there; names translated to the US level program. */
@@ -1144,7 +1144,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
     s32       i, any_effect_timer_above_threshold, c, hi, al;
     f32       z, color_progress_or_size_factor, unwrapped_effect_value;
     u8       *effect_record;
-    effect_data = moby->p78;
+    effect_data = moby->collection_effect_state;
     fast_vec_sub(&effect_position, &(*(V_2d8510 *)g_debug_camera), &moby->v10);
     any_effect_timer_above_threshold = 0;
     fast_vec_normalize(&effect_position, &effect_position, -0.3f);
@@ -1188,7 +1188,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
             1,
             nanotech_ball_collection_particle_scale_factors[i] * color_progress_or_size_factor);
         if (effect_record)
-            effect_record[2] = *D_L00_001B2080_lui.pF8;
+            effect_record[2] = *D_L00_001B2080_lui.collection_particle_byte_source;
         effect_record = spawn_timed_hero_relative_particle(
             &effect_position,
             al | 0xFFFFFF,
@@ -1200,7 +1200,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
             nanotech_ball_collection_particle_scale_factors[i] *
                 (color_progress_or_size_factor * 0.7f));
         if (effect_record)
-            effect_record[2] = *D_L00_001B2080_lui.pF8;
+            effect_record[2] = *D_L00_001B2080_lui.collection_particle_byte_source;
         fast_vec_add(&effect_position, &effect_position, &effect_position_step);
     }
     return any_effect_timer_above_threshold;
@@ -1276,7 +1276,7 @@ void nanotech_ball_update(Moby *moby) {
         nanotech_ball_state->pos.z += 0.5f;
         nanotech_ball_state->bob_phase =
             random_float_between(nanotech_ball_state->bob_offset, 3.1415927f);
-        nanotech_ball_state->h56 = 0;
+        nanotech_ball_state->collection_reward_processed = 0;
         nanotech_ball_state->hA = 0;
         for (i = 0; i < 4; i++)
             nanotech_ball_state->f60[i] = (float)random_integer_below(0xFF);
@@ -1288,7 +1288,7 @@ void nanotech_ball_update(Moby *moby) {
             euler_rotation_basis(&moby->rot_row0, &moby->rot);
             D_L00_0015F63C = moby;
             moby->update_dist = 0xFF;
-            nanotech_ball_state->f7C = 0;
+            nanotech_ball_state->pending_collection_count = 0;
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0[0], &moby->rot_row0, D_L00_00161A14_gp);
             qcopy(&D_L00_001E4070_2D9EA0[0], &moby->rot_row2);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3CA0[1], &moby->rot_row1, D_L00_00161A14_gp);
@@ -1353,17 +1353,18 @@ void nanotech_ball_update(Moby *moby) {
                 max_hp = 4;
             if (moby->state != NANOTECH_BALL_STATE_FOLLOW_OWNER && D_L00_0015F63C != 0 &&
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && player->health.hp != 0 &&
-                (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < max_hp ||
+                (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->pending_collection_count <
+                     max_hp ||
                  (nanotech_ball_invulnerability_pickup_enabled != 0 &&
                   player->invulnerable_frames == 0)) &&
                 fast_vec_dist(&moby->pos, &player->motion.pos) < 10.0f &&
                 func_L00_002D9E30_2D9EA0(moby)) {
                 int i;
                 moby->state = NANOTECH_BALL_STATE_COLLECTING;
-                ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
+                ((D_2D9EA0 *)D_L00_0015F63C->pvars)->pending_collection_count++;
                 if (nanotech_ball_invulnerability_pickup_enabled != 0)
                     player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
-                nanotech_ball_state->h54 =
+                nanotech_ball_state->collection_frames_remaining =
                     func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames_gp);
                 func_001F9C30_2D9EA0(&collection_target_or_end_tangent,
                                      &player->gravity_dir,
@@ -1477,7 +1478,7 @@ void nanotech_ball_update(Moby *moby) {
     case NANOTECH_BALL_STATE_COLLECTING:
         if (D_L00_0015F63C == moby)
             update_nanotech_ball_slot_offsets();
-        if (nanotech_ball_state->h56 != 0) {
+        if (nanotech_ball_state->collection_reward_processed != 0) {
             func_001F9C30_2D9EA0(
                 &moby->pos, D_0013F5E0, -nanotech_ball_collection_target_gravity_offset_gp);
             func_001F9BD8_2D9EA0(&moby->pos, D_0013F5E0 - 0x210, &moby->pos);
@@ -1494,15 +1495,15 @@ void nanotech_ball_update(Moby *moby) {
                 nanotech_ball_invulnerability_pickup_enabled != 0) {
                 int duration = func_001F9850_2D9EA0(
                     nanotech_ball_full_health_invulnerable_collection_min_frames_gp);
-                if (nanotech_ball_state->h54 < duration) {
+                if (nanotech_ball_state->collection_frames_remaining < duration) {
                     int i;
-                    nanotech_ball_state->h54 = duration;
+                    nanotech_ball_state->collection_frames_remaining = duration;
                     for (i = 0; i < 4; i++)
                         nanotech_ball_state->h58[i]++;
                 }
             }
         }
-        if (fast_dec_timer_s16(&nanotech_ball_state->h54)) {
+        if (fast_dec_timer_s16(&nanotech_ball_state->collection_frames_remaining)) {
             int i;
             for (i = 0; i < 8; i++) {
                 if (nanotech_ball_state->slots[i] != 0) {
@@ -1526,7 +1527,7 @@ void nanotech_ball_update(Moby *moby) {
                     continue;
                 ext = (Ext *)(part + 1);
                 if (fast_dec_timer_s16(&ext->h1E)) {
-                    if (nanotech_ball_state->h56 == 0) {
+                    if (nanotech_ball_state->collection_reward_processed == 0) {
                         Hero *player = &hero;
                         int   max_hp = hero_max_health;
                         if (player->vehicle_mode == HERO_VEHICLE_MODE_CLANK)
@@ -1537,12 +1538,12 @@ void nanotech_ball_update(Moby *moby) {
                         }
                         {
                             D_2D9EA0 *leader_data = (D_2D9EA0 *)D_L00_0015F63C->pvars;
-                            leader_data->f7C--;
-                            if (leader_data->f7C < 0)
-                                leader_data->f7C = 0;
+                            leader_data->pending_collection_count--;
+                            if (leader_data->pending_collection_count < 0)
+                                leader_data->pending_collection_count = 0;
                         }
                         func_L00_0028EF68_2D9EA0(1, 0, moby, 0x1F5);
-                        nanotech_ball_state->h56 = 1;
+                        nanotech_ball_state->collection_reward_processed = 1;
                     }
                     func_L00_002688A8_2D9EA0(part);
                     nanotech_ball_state->slots[i] = 0;

@@ -58,7 +58,7 @@ typedef struct {
     int            flags;
     unsigned char  b18;
     unsigned char  b19;
-    unsigned short h1A;
+    unsigned short source_moby_class;
     float          f1C;
     int            i20;
 } Hit_2D5B88;
@@ -139,7 +139,7 @@ void helicopter_spark_update(Moby *moby) {
         hit.dir.w = 5627.9248f;
         hit.b18 = state;
         hit.b19 = state;
-        hit.h1A = moby->oclass;
+        hit.source_moby_class = moby->oclass;
         qcopy(&start_pos, &moby->pos);
         homing_spark_pvars->vel.z = -(moby->pos.z - homing_spark_pvars->vel.w) / 10.0f;
         max_climb = frame_time_macro * 8.0f;

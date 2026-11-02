@@ -1,6 +1,7 @@
 /* Shared moby class spawner: lobs spawner_egg bubbles towards target regions. */
 
 #include "types.h"
+#include "rnc/mobys/moby_state.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
@@ -130,7 +131,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
     for (i = 0, slot = (char **)(spawner_vars + 0xB0); i < 20; i++, slot++) {
         char *slot_moby = *slot;
         if (slot_moby != 0 && MOBY(slot_moby)->oclass == 0x75E &&
-            (unsigned char)MOBY(slot_moby)->state != 0xFE &&
+            (unsigned char)MOBY(slot_moby)->state != MOBY_STATE_REMOVAL_MARKER &&
             (unsigned char)MOBY(slot_moby)->state != 0xFD) {
             spawner_vars[0x91]++;
         } else {
@@ -190,7 +191,8 @@ void spawner_update(char *moby) {
                                 region_count);
         } else {
             char *target_moby = *(char **)((char *)spawner_vars + 0x140);
-            if (target_moby != 0 && (unsigned char)MOBY(target_moby)->state != 0xFE &&
+            if (target_moby != 0 &&
+                (unsigned char)MOBY(target_moby)->state != MOBY_STATE_REMOVAL_MARKER &&
                 (unsigned char)MOBY(target_moby)->state != 0xFD) {
                 qcopy((char *)spawner_vars + 0x100, &MOBY(target_moby)->pos);
             } else {

@@ -52,8 +52,8 @@ extern f32 rocket_launcher_projectile_speed_gp __asm__("D_L02_00161C6C") __attri
 
 #include "rnc/overlay/l02/mobys/rocket_launcher_data/rocket_launcher_update_2.h"
 
-s32 D_L02_00161C78 = 0x800000ff;
-s32 D_L02_00161C7C = 0x80329600;
+s32 l02_rocket_launcher_glow_blend_start_color __asm__("D_L02_00161C78") = 0x800000ff;
+s32 l02_rocket_launcher_glow_blend_end_color __asm__("D_L02_00161C7C") = 0x80329600;
 
 #include "rnc/overlay/l02/mobys/rocket_launcher_data/rocket_launcher_update.h"
 
@@ -165,7 +165,9 @@ void rocket_launcher_update(struct Moby *moby) {
         glow_blend_fraction = compute_interpolated_record_value(moby) / 10.0f;
         if (glow_blend_fraction > 1.0f)
             glow_blend_fraction = 1.0f;
-        moby->glow_color = turret_lerp_colour(glow_blend_fraction, D_L02_00161C78, D_L02_00161C7C);
+        moby->glow_color = turret_lerp_colour(glow_blend_fraction,
+                                              l02_rocket_launcher_glow_blend_start_color,
+                                              l02_rocket_launcher_glow_blend_end_color);
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 1);

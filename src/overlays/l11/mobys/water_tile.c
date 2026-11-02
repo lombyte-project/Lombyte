@@ -45,7 +45,7 @@ typedef struct {
 } Light_e088;
 
 extern Light_e088 l11_water_tile_light __asm__("D_L11_001CB280");
-int               D_L11_00161F64 = 0;
+int               l11_water_tile_allocation_count __asm__("D_L11_00161F64") = 0;
 char              D_L11_0021B4C0[] =
     "I'm really sorry, but you can't have more than 128 water tiles in this level";
 /* One fixed-point bounds record (pool_bind_tile: x, y, z, two scale shorts) per water grid;
@@ -86,9 +86,9 @@ void water_tile_update(struct Moby *water_tile_moby) {
     switch (water_tile_moby->state) {
     case WATER_TILE_STATE_INITIALIZE:
         water_tile_moby->update_dist = 0xFF;
-        water_tile_vars[1] = D_L11_00161F64;
-        D_L11_00161F64 = D_L11_00161F64 + 1;
-        if (D_L11_00161F64 >= 0x80) {
+        water_tile_vars[1] = l11_water_tile_allocation_count;
+        l11_water_tile_allocation_count = l11_water_tile_allocation_count + 1;
+        if (l11_water_tile_allocation_count >= 0x80) {
             print_e088(D_L11_0021B4C0);
         }
         water_tile_moby->update_dist = 0xFF;
@@ -141,7 +141,7 @@ void water_tile_update(struct Moby *water_tile_moby) {
         water_tile_moby->state = WATER_TILE_STATE_FIND_NEIGHBORS;
         break;
     case WATER_TILE_STATE_FIND_NEIGHBORS:
-        D_L11_00161F64 = 0;
+        l11_water_tile_allocation_count = 0;
         populate_water_tile_neighbor_indices(water_tile_vars[1]);
         water_tile_moby->state = WATER_TILE_STATE_APPROACH_UPPER_HEIGHT;
         break;

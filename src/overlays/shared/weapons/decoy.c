@@ -53,8 +53,8 @@ typedef struct DecoyVars {
     s32   unk5C;
     u8    pad60[0xc];
     s16   unk6C;
-    s8    unk6E;
-    s8    unk6F;
+    s8    hit_cooldown_latched;
+    s8    collision_voice_cooldown;
 } DecoyVars;
 
 typedef struct {
@@ -69,15 +69,15 @@ typedef struct {
     u8        v10[8];
     f32       f18;
     u8        pad2[0x78 - 0x1C];
-    O_2c40a0 *p78;
+    O_2c40a0 *decoy_motion_vars;
 } S_2c40a0;
 
 typedef struct {
     u8  pad[0x80];
-    u8  v80[8];
-    f32 f88;
+    u8  hero_position_xy[8];
+    f32 hero_position_z;
     u8  pad2[0x1E2 - 0x8C];
-    s16 h1E2;
+    s16 decoy_proximity_response_gate;
 } P_2c40a0;
 
 typedef struct {
@@ -476,21 +476,21 @@ ret0:
 void update_decoy_proximity_motion(S_2c40a0 *self) __asm__("FUN_L00_002c40a0");
 
 void update_decoy_proximity_motion(S_2c40a0 *decoy_moby) {
-    O_2c40a0 *moby_vars = decoy_moby->p78;
+    O_2c40a0 *moby_vars = decoy_moby->decoy_motion_vars;
     P_2c40a0 *P = (P_2c40a0 *)&hero;
-    s16       proximity_response_gate = P->h1E2;
+    s16       proximity_response_gate = P->decoy_proximity_response_gate;
     f32       horizontal_displacement[4];
     f32       horizontal_separation_error, horizontal_separation_distance, ground_height;
     if (moby_vars->i68 == 0) {
         if (proximity_response_gate == 0)
             return;
-        if (!(FUN_001f9b80_2c40a0(P->v80, decoy_moby->v10) < 1.0f))
+        if (!(FUN_001f9b80_2c40a0(P->hero_position_xy, decoy_moby->v10) < 1.0f))
             return;
-        if (!(FUN_001f99c0_2c40a0(P->f88 - decoy_moby->f18) < 1.3f))
+        if (!(FUN_001f99c0_2c40a0(P->hero_position_z - decoy_moby->f18) < 1.3f))
             return;
         moby_vars->i68 = 1;
     }
-    FUN_001f9a28_2c40a0(horizontal_displacement, decoy_moby->v10, P->v80);
+    FUN_001f9a28_2c40a0(horizontal_displacement, decoy_moby->v10, P->hero_position_xy);
     horizontal_displacement[2] = 0.0f;
     horizontal_separation_error = FUN_001f9b20_2c40a0(horizontal_displacement) - 1.4f;
     if (horizontal_separation_error > 0.0f)
@@ -602,7 +602,7 @@ void decoy_update(char *moby) {
         decoy_instance_vars->unk44 = 0;
         MOBY(moby)->collision_disable = -1;
         decoy_instance_vars->unk6C = 0;
-        decoy_instance_vars->unk6E = 0;
+        decoy_instance_vars->hit_cooldown_latched = 0;
         break;
     case DECOY_HELD: {
         char *target;
@@ -710,9 +710,9 @@ void decoy_update(char *moby) {
                     }
                 }
                 destroy_decoy_on_selected_materials(moby);
-                if (fast_subtract_rotations_cf(&decoy_instance_vars->unk6F))
+                if (fast_subtract_rotations_cf(&decoy_instance_vars->collision_voice_cooldown))
                     allocate_voice_for_target_entry(0, 0, moby),
-                        decoy_instance_vars->unk6F = FUN_001fef20_2c4380(20);
+                        decoy_instance_vars->collision_voice_cooldown = FUN_001fef20_2c4380(20);
                 else
                     add_random_offset_to_vector_xyz(frame_time, &decoy_instance_vars->unk10);
             }
@@ -750,9 +750,9 @@ void decoy_update(char *moby) {
                         ((*(u64 *)((char *)decoy_instance_vars + 0x68) & 0xffffff00000000ULL) ==
                          0)) {
                         decoy_instance_vars->unk6C = FUN_001fef20_2c4380(100);
-                        decoy_instance_vars->unk6E = 1;
+                        decoy_instance_vars->hit_cooldown_latched = 1;
                     } else
-                        decoy_instance_vars->unk6E = 0;
+                        decoy_instance_vars->hit_cooldown_latched = 0;
                     allocate_voice_for_target_entry(0, 0, moby);
                     {
                         float len = *(float *)(target + 0x2c);

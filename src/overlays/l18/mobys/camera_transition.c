@@ -60,7 +60,7 @@ typedef struct BossCameraTransitionVars {
     f32 unk4C;
     u8  pad_50[0x10];
     f32 unk60;
-    s32 unk64;
+    s32 transition_progress_rate;
     f32 unk68;
     f32 unk6C;
     f32 unk70;
@@ -116,7 +116,7 @@ void boss_camera_transition_update(struct Moby *moby) {
         D_L18_0017EF08 = 1;
         if (fast_dec_timer(&transition_private_vars->timer_74)) {
             advance_accelerated_scalar(&transition_private_vars->unk60,
-                                       (float *)&transition_private_vars->unk64,
+                                       (float *)&transition_private_vars->transition_progress_rate,
                                        1.0f,
                                        transition_private_vars->unk68,
                                        transition_private_vars->unk68,
@@ -163,7 +163,7 @@ void boss_camera_transition_update(struct Moby *moby) {
     case STATE_INTERPOLATE_TRANSITION_WITH_RAMP_UP:
         if (fast_dec_timer(&transition_private_vars->timer_74)) {
             advance_accelerated_scalar(&transition_private_vars->unk60,
-                                       (float *)&transition_private_vars->unk64,
+                                       (float *)&transition_private_vars->transition_progress_rate,
                                        1.0f,
                                        transition_private_vars->unk68,
                                        transition_private_vars->unk68,
@@ -254,7 +254,7 @@ void start_camera_transition(struct Moby *moby,
     BossCameraTransitionVars *position_rotation_transition_vars =
         (BossCameraTransitionVars *)moby->pvars;
     *(int *)&position_rotation_transition_vars->unk60 = 0;
-    position_rotation_transition_vars->unk64 = 0;
+    position_rotation_transition_vars->transition_progress_rate = 0;
     qcopy(position_rotation_transition_vars, transition_start_position);
     qcopy(&position_rotation_transition_vars->unk10, transition_target_position);
     qcopy(&position_rotation_transition_vars->unk20, transition_start_rotation);

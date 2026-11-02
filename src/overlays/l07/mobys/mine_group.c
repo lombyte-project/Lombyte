@@ -158,10 +158,13 @@ char D_L07_00211580[] =
     "Moby 871 short on mines at %d in group %d compared to mine count in pVar %d\n";
 
 void reset_moby_from_class_defaults(struct Moby *moby) {
+    enum {
+        MOBY_RESET_STATE = 0
+    };
     struct SpawnClassView *class_defaults;
     struct AnimTimer      *animation_timer;
 
-    moby->state = 0;
+    moby->state = MOBY_RESET_STATE;
     class_defaults = (struct SpawnClassView *)moby->pclass;
     moby->command = 0;
     moby->flags = class_defaults->flags;
@@ -186,7 +189,7 @@ typedef struct MineGroupVars {
     u8  pad_0[0x20];
     f32 unk20;
     u8  pad_24[0x2];
-    s16 unk26;
+    s16 surviving_hit_frame_count;
     u8  pad_28[0x38];
     s16 anim_state;
     u8  pad_62[0x5];
@@ -197,9 +200,9 @@ typedef struct MineGroupVars {
     s32 unk78;
     f32 unk7C;
     f32 unk80;
-    s32 unk84;
+    s32 child_reset_gate;
     u8  pad_88[0x8];
-    s32 unk90;
+    s32 child_reset_segment_index;
     u8  unk94;
     u8  unk95;
 } MineGroupVars;
@@ -293,7 +296,7 @@ void mine_group_update(struct Moby *moby) {
             }
             *remaining -= step;
             boltcrate_pvars->unk67 = 0xfa;
-            boltcrate_pvars->unk26 = scale_game_frames(0x3c);
+            boltcrate_pvars->surviving_hit_frame_count = scale_game_frames(0x3c);
             trooper_anim_update(moby, &boltcrate_pvars->anim_state);
         }
         moby->hit_slot = 0xff;
@@ -318,7 +321,7 @@ void mine_group_update(struct Moby *moby) {
             debug_print(mine_group_not_found_message, boltcrate_pvars->unk74);
             return;
         }
-        child_placement_segment_index = boltcrate_pvars->unk90 =
+        child_placement_segment_index = boltcrate_pvars->child_reset_segment_index =
             select_point_index_by_distance(&moby->pos, path, 0.0f);
         placed = 0;
         if (0 < ((MineGroupView *)boltcrate_pvars)->child_count)
@@ -375,11 +378,11 @@ void mine_group_update(struct Moby *moby) {
             *(int *)(child + 0x94) = *(int *)(child + 0x90) + 1;
             if (cursor == 0 || *(unsigned char *)(cursor + 0x20) == 0xfe ||
                 *(unsigned char *)(cursor + 0x20) == 0xfd) {
-                if (boltcrate_pvars->unk84 != -1) {
+                if (boltcrate_pvars->child_reset_gate != -1) {
                     fast_vec_sub((char *)child + 0x60, (char *)child + 0x80, (char *)cursor + 0x10);
                     qcopy((void *)(cursor + 0x10), (void *)(child + 0x80));
                     if (fast_dec_timer((int *)(child + 0x98)) &&
-                        *(int *)(child + 0x90) == boltcrate_pvars->unk90)
+                        *(int *)(child + 0x90) == boltcrate_pvars->child_reset_segment_index)
                         reset_moby_from_class_defaults((struct Moby *)cursor);
                 }
             }

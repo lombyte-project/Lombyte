@@ -62,7 +62,7 @@ typedef struct Moby_2E9358 {
     char          pad7C[0x28];
     unsigned char bA4;
     char          padA5;
-    short         hA6;
+    short         object_class;
     char          padA8[0x14];
     unsigned char bBC;
 } Moby_2E9358;
@@ -159,7 +159,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         }
     }
     hit_result = find_moby_hit(moby, 0x830000, 0);
-    if (hit_result != 0 && hit_result->owner != 0 && hit_result->owner->hA6 != moby->hA6) {
+    if (hit_result != 0 && hit_result->owner != 0 &&
+        hit_result->owner->object_class != moby->object_class) {
         moby->bBC = 1;
     }
     moby->bA4 = 0xFF;

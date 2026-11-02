@@ -77,13 +77,13 @@ typedef struct {
     int   cam[2];
     int   dir;
     int   cut;
-    int   w88;
+    int   travel_turn_angle;
     char  pad8C[8];
     int   sel;
     int   side;
     float f9C;
     float fA0;
-    int   wA4;
+    int   travel_progress;
     int   go;
     int   sfx;
     int   timer;
@@ -202,7 +202,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
                 blend_moby_animation(shuttle_moby, 0, 0, 0);
             }
             fade_to_black(scale_game_frames(10));
-            shuttle_vars->w88 = 0;
+            shuttle_vars->travel_turn_angle = 0;
             route_index = shuttle_vars->side;
             qcopy(a, ((char **)D_L17_001B0DB0)[shuttle_vars->a[route_index]] + 0x10);
             qcopy(b, ((char **)D_L17_001B0DB0)[shuttle_vars->b[route_index]] + 0x10);
@@ -248,7 +248,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
             int ofs;
             int base;
             shuttle_moby->state = SHUTTLE_STATE_RESET_AFTER_TRAVEL;
-            shuttle_vars->wA4 = 0;
+            shuttle_vars->travel_progress = 0;
             ofs = shuttle_vars->cam[shuttle_vars->sel] << 7;
             base = (int)D_L17_001600EC;
             qcopy(&shuttle_moby->pos, (char *)(ofs + base + 0x30));
@@ -329,12 +329,12 @@ struct Dat_3CC0_f2180 {
     int   c[2];
     int   pad1[3];
     int   e84;
-    float f88;
-    float f8C;
+    float travel_yaw_offset;
+    float travel_yaw_step;
     char  pad2[0x0C];
     float f9C;
     float fA0;
-    float fA4;
+    float travel_fraction;
 };
 
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -352,18 +352,18 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
         camera_aim_blend, moby_path_blend, interpolation_start_angle, turn;
     int i1, i2, i3;
 
-    approach_value(&shuttle_vars->fA4, 1.0f, 1.0f / (float)scale_game_frames(0x384));
-    scaled_path_position = shuttle_vars->fA4 * (float)(camera_position_path->n - 1);
+    approach_value(&shuttle_vars->travel_fraction, 1.0f, 1.0f / (float)scale_game_frames(0x384));
+    scaled_path_position = shuttle_vars->travel_fraction * (float)(camera_position_path->n - 1);
     i1 = truncate_float_to_s32(scaled_path_position);
     camera_position_index_float = (float)i1;
     camera_position_blend = scaled_path_position - camera_position_index_float;
-    camera_aim_blend = shuttle_vars->fA4 * 1.02f;
+    camera_aim_blend = shuttle_vars->travel_fraction * 1.02f;
     if (camera_aim_blend > 1.0f)
         camera_aim_blend = 1.0f;
     scaled_path_position = camera_aim_blend * (float)(camera_aim_path->n - 1);
     i2 = truncate_float_to_s32(scaled_path_position);
     camera_aim_blend = scaled_path_position - (float)i2;
-    scaled_path_position = shuttle_vars->fA4 * (float)(shuttle_movement_path->n - 1);
+    scaled_path_position = shuttle_vars->travel_fraction * (float)(shuttle_movement_path->n - 1);
     moby_path_blend = scaled_path_position - camera_position_index_float;
     i3 = truncate_float_to_s32(scaled_path_position);
     lerp_vector(camera_position,
@@ -401,8 +401,8 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
                 interpolation_start_angle) *
                 moby_path_blend,
             interpolation_start_angle);
-        MOBY(moby)->rot.y = MOBY(moby)->rot.y * fast_cos(shuttle_vars->f88);
-        MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, shuttle_vars->f88);
+        MOBY(moby)->rot.y = MOBY(moby)->rot.y * fast_cos(shuttle_vars->travel_yaw_offset);
+        MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, shuttle_vars->travel_yaw_offset);
     } else {
         MOBY(moby)->rot.y = -fast_arc_tan(
             vector_distance_xy(&shuttle_movement_path->p[0], &shuttle_movement_path->p[1]),
@@ -434,16 +434,16 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
         set_camera_rotation(camera_rotation);
     }
     MOBY(moby)->scale =
-        MOBY(moby)->pclass->scale *
-        (shuttle_vars->f9C - (shuttle_vars->f9C - shuttle_vars->fA0) * shuttle_vars->fA4);
-    if (shuttle_vars->fA4 > 0.8f) {
+        MOBY(moby)->pclass->scale * (shuttle_vars->f9C - (shuttle_vars->f9C - shuttle_vars->fA0) *
+                                                             shuttle_vars->travel_fraction);
+    if (shuttle_vars->travel_fraction > 0.8f) {
         turn = frame_time_sq * 12.566371f;
-        approach_angle(&shuttle_vars->f88,
-                       &shuttle_vars->f8C,
+        approach_angle(&shuttle_vars->travel_yaw_offset,
+                       &shuttle_vars->travel_yaw_step,
                        3.1415927f,
                        turn,
                        turn,
                        frame_time * 6.2831855f);
     }
-    return shuttle_vars->fA4 == 1.0f;
+    return shuttle_vars->travel_fraction == 1.0f;
 }

@@ -41,9 +41,9 @@ extern unsigned char D_0014C050[];
 /* Pokitaru sentry pvars (class of fred_pokitaru_update). */
 struct PokSentryVars {
     char  pad00[4];
-    short h04;
+    short dialogue_result;
     char  pad06[6];
-    float f0C;
+    float dialogue_activation_threshold;
     char  pad10[0x38];
     int   slot;
     char  pad4C[4];
@@ -94,7 +94,7 @@ void fred_pokitaru_update(struct Moby *moby) {
             return;
         }
         initialize_npc_dialogue(moby, moby_vars);
-        moby_vars->f0C = 4.0f;
+        moby_vars->dialogue_activation_threshold = 4.0f;
         break;
     case FRED_POKITARU_CHECK_DIALOGUE:
         if (update_npc_dialogue(moby, moby_vars)) {
@@ -126,7 +126,7 @@ void fred_pokitaru_update(struct Moby *moby) {
     case FRED_POKITARU_WAIT_FOR_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
             moby->state = FRED_POKITARU_CHECK_DIALOGUE;
-            if (moby_vars->h04 == 2) {
+            if (moby_vars->dialogue_result == 2) {
                 alternate_item_available[1] = 0;
                 discount_purchase_pricing[0] = 1;
                 D_0013D50B = 1;

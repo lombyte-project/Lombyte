@@ -42,18 +42,18 @@ void reset_hud_animation_channels(void) {
 /* Offsets x/y for the element's anchor flags (centre or right/bottom alignment). */
 int hud_screen_position(HudElem *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
-int hud_screen_position(HudElem *rec, int *x, int *y) {
-    int w = rec->w;
-    int h = rec->h;
-    int flags = rec->flags;
+int hud_screen_position(HudElem *hud_element, int *x, int *y) {
+    int w = hud_element->w;
+    int h = hud_element->h;
+    int flags = hud_element->flags;
 
     if ((flags ^ 1) & 1) {
         if (!(flags & 2)) {
             *y -= h >> 1;
         }
     }
-    if (!(rec->flags & 4)) {
-        if (rec->flags & 8) {
+    if (!(hud_element->flags & 4)) {
+        if (hud_element->flags & 8) {
             *x -= w;
         } else {
             *x -= w >> 1;
@@ -186,7 +186,7 @@ void reset_numeric_hud_element_32x32_base(HudElem *hud_element) {
 
 s32 hud_keep_visible(s32 key, s32 val) __asm__("FUN_L00_00235e18");
 
-s32 hud_keep_visible(s32 key, s32 val) {
+s32 hud_keep_visible(s32 key, s32 minimum_visible_frames) {
     s32      i;
     s32      r;
     HudElem *hud_element;
@@ -197,7 +197,8 @@ s32 hud_keep_visible(s32 key, s32 val) {
     }
     if (i < 13 && hud_elements[i].unk68 == 0) {
         hud_element = hud_elements + i;
-        hud_element->unk7C = (val < hud_element->unk7C) ? hud_element->unk7C : val;
+        hud_element->unk7C = (minimum_visible_frames < hud_element->unk7C) ? hud_element->unk7C
+                                                                           : minimum_visible_frames;
         return 0;
     }
     return 1;

@@ -45,9 +45,9 @@ allocate_packed_color_point_light_slot(float *, float, float, int) __asm__("FUN_
 
 typedef struct EffData {
     char  pad0[0x140];
-    float f140[4];
-    float f150[3];
-    float f15C;
+    float beam_reference_position[4];
+    float previous_hit_position[3];
+    float previous_hit_valid;
 } EffData;
 
 typedef struct Packet {
@@ -235,7 +235,7 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby) {
     Packet   pkt;
 
     frame_phase_work_value = convert_integer_to_float(D_L07_0015F5CC_lui);
-    qcopy(oscillating_reference_position, moby_effect_data->f140);
+    qcopy(oscillating_reference_position, moby_effect_data->beam_reference_position);
     oscillation_work_value = fast_cos(normalize_angle(frame_phase_work_value / 11.0f));
     frame_phase_work_value = frame_phase_work_value / 10.0f;
     oscillation_work_value =
@@ -265,10 +265,11 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby) {
                                            effect_owner_moby,
                                            1.0f,
                                            1.0f);
-        if (moby_effect_data->f15C != 0.0f) {
-            fast_vec_sub(effect_sample_step, line_endpoint, moby_effect_data->f150);
+        if (moby_effect_data->previous_hit_valid != 0.0f) {
+            fast_vec_sub(
+                effect_sample_step, line_endpoint, moby_effect_data->previous_hit_position);
             fast_vec_normalize(effect_sample_step, effect_sample_step, 0.2f);
-            qcopy(effect_sample_position, moby_effect_data->f150);
+            qcopy(effect_sample_position, moby_effect_data->previous_hit_position);
             for (k = 0; k < 4; k++) {
                 fast_vec_add(effect_sample_position, effect_sample_position, effect_sample_step);
                 fast_vec_sub(sample_probe_offset, effect_sample_position, attachment_position);
@@ -301,10 +302,10 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby) {
                 }
             }
         }
-        qcopy(moby_effect_data->f150, line_endpoint);
-        moby_effect_data->f15C = 1.0f;
+        qcopy(moby_effect_data->previous_hit_position, line_endpoint);
+        moby_effect_data->previous_hit_valid = 1.0f;
     } else {
-        moby_effect_data->f15C = 0.0f;
+        moby_effect_data->previous_hit_valid = 0.0f;
     }
     pkt.x128 = get_effect_texture(0x3B);
     pkt.col[0] = pkt.col[1] = pkt.col[2] = pkt.col[3] = 0x80808080;

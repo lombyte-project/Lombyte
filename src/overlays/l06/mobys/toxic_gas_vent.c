@@ -65,7 +65,7 @@ typedef struct {
     int            flags;
     char           b18;
     char           b19;
-    unsigned short h1A;
+    unsigned short vent_moby_class;
     float          f1C;
     int            i20;
 } Sx;
@@ -87,7 +87,7 @@ typedef struct ToxicGasVentVars {
     f32 unk54;
     u8  pad_58[0x8];
     s32 unk60;
-    f32 unk64;
+    f32 oscillation_amplitude_degrees;
     f32 unk68;
     f32 unk6C;
     f32 unk70;
@@ -95,7 +95,7 @@ typedef struct ToxicGasVentVars {
     f32 unk78;
     f32 unk7C;
     f32 unk80;
-    f32 unk84;
+    f32 initial_heading_radians;
     s32 timer_88;
     u8  pad_8C[0x4];
     s32 clip_volume_90;
@@ -129,7 +129,7 @@ void toxic_gas_vent_update(char *vent_moby) {
             vent_moby[0x20] = 1;
             vent_data->unk80 = 360.0f / vent_data->unk68 * DEG_TO_RAD * frame_time;
             vent_data->unk7C = vent_data->unk6C * DEG_TO_RAD;
-            vent_data->unk84 = MOBY(vent_moby)->rot.z;
+            vent_data->initial_heading_radians = MOBY(vent_moby)->rot.z;
         } else {
             vent_moby[0x20] = 3;
             vent_data->timer_88 = scale_game_frames(
@@ -143,9 +143,11 @@ void toxic_gas_vent_update(char *vent_moby) {
         }
         emit_toxic_gas_vent_sparks(vent_moby);
         check_oscillating_toxic_gas_vent_collisions(vent_moby);
-        heading_offset_radians = vent_data->unk64 * DEG_TO_RAD * fast_sin(vent_data->unk7C);
+        heading_offset_radians =
+            vent_data->oscillation_amplitude_degrees * DEG_TO_RAD * fast_sin(vent_data->unk7C);
         vent_data->unk7C = fast_add_rotations(vent_data->unk7C, vent_data->unk80);
-        MOBY(vent_moby)->rot.z = fast_add_rotations(vent_data->unk84, heading_offset_radians);
+        MOBY(vent_moby)->rot.z =
+            fast_add_rotations(vent_data->initial_heading_radians, heading_offset_radians);
         break;
     case VENT_TIMED_ACTIVE:
         if (voice_is_playing(vent_moby, vent_data->voice) == 0) {
@@ -281,7 +283,7 @@ void check_oscillating_toxic_gas_vent_collisions(char *m) {
     collision_params.fC = 5627.9248f;
     collision_params.b18 = 3;
     collision_params.b19 = one;
-    collision_params.h1A = *(unsigned short *)(m + 0xA6);
+    collision_params.vent_moby_class = *(unsigned short *)(m + 0xA6);
     for (i = 3; i >= 0; i--) {
         segment_start_radius = remaining_radius;
         ra = fast_add_rotations(*(float *)(moby_data + 0x84),

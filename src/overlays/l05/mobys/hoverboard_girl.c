@@ -203,6 +203,12 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
         HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE = 1,
         HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE = 3
     };
+    enum {
+        HOVERBOARD_GIRL_DIALOGUE_ALTERNATE_ITEM_REWARD = 4
+    };
+    enum {
+        HOVERBOARD_GIRL_DIALOGUE_SETUP_RACE_CAMERA = 3
+    };
     HoverboardGirlState *state = moby->data;
     HoverboardGirlVector target_position;
     HoverboardGirlVector head_position;
@@ -238,7 +244,7 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
             begin_dialogue_camera_transition(2.0f, moby);
             moby->state = HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE;
         }
-        if (state->dialogue_state == 3) {
+        if (state->dialogue_state == HOVERBOARD_GIRL_DIALOGUE_SETUP_RACE_CAMERA) {
             state->previous_dialogue_state = state->dialogue_state;
             state->dialogue_state = 2;
             state->dialogue_state_frame = frame_number;
@@ -253,7 +259,7 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
             request_music_track(0, 8);
             if (alternate_item_available == 0) {
                 state->previous_dialogue_state = state->dialogue_state;
-                state->dialogue_state = 4;
+                state->dialogue_state = HOVERBOARD_GIRL_DIALOGUE_ALTERNATE_ITEM_REWARD;
                 state->dialogue_state_frame = frame_number;
                 state->race_return_pending = 1;
             }
@@ -287,7 +293,7 @@ void hoverboard_girl_update(HoverboardGirlMoby *moby) {
     case HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE:
         if (game_mode != GAME_MODE_CUTSCENE) {
             moby->state = HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE;
-            if (state->previous_dialogue_state == 4) {
+            if (state->previous_dialogue_state == HOVERBOARD_GIRL_DIALOGUE_ALTERNATE_ITEM_REWARD) {
                 alternate_item_available = 1;
                 queue_dialogue_message(0x1395, scale_game_frames(300));
                 memcard_save_data(0, -1);

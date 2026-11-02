@@ -35,7 +35,7 @@ int D_L12_001619E8 = 1;
 
 int D_L12_001619F0 = 1;
 int D_L12_001619F4 = 0x40404040;
-int D_L12_001619F8 = 0x10022;
+int l12_water_reservoir_spark_table_selector __asm__("D_L12_001619F8") = 0x10022;
 
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update.h"
 
@@ -122,7 +122,7 @@ update:
                             D_L12_001619E8,
                             scale_game_frames(water_reservoir_effect_delta_scale_divisor_gp),
                             D_L12_001619F0,
-                            D_L12_001619F8);
+                            l12_water_reservoir_spark_table_selector);
             }
         }
         if ((moby->command & 1) && *(int *)&reservoir_state[1] == 0) {
@@ -151,12 +151,12 @@ extern char  water_reservoir_quad_vertex_template[] __asm__("D_L12_001F5B20");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-int          D_L12_00161A10 = 1;
-int          D_L12_00161A14 = 0;
-int          D_L12_00161A0C = 0;
-int          D_L12_00161A18 = 1;
-int          D_L12_00161A1C = 0x40602020;
-int          D_L12_00161A20 = 0x40681818;
+int          l12_water_reservoir_alpha_b_selector __asm__("D_L12_00161A10") = 1;
+int          l12_water_reservoir_alpha_c_selector __asm__("D_L12_00161A14") = 0;
+int          l12_water_reservoir_alpha_a_selector __asm__("D_L12_00161A0C") = 0;
+int          l12_water_reservoir_alpha_d_selector __asm__("D_L12_00161A18") = 1;
+int          l12_water_reservoir_tween_start_color __asm__("D_L12_00161A1C") = 0x40602020;
+int          l12_water_reservoir_tween_end_color __asm__("D_L12_00161A20") = 0x40681818;
 extern short water_reservoir_segment_cosine_scale_gp __asm__("D_L12_00161A24") __attribute__((sda));
 extern void  draw_geometry_quad(void *, void *, int);
 
@@ -174,10 +174,13 @@ void draw_water_reservoir(struct Moby *moby) {
     quad.g[1] = get_effect_texture(0x10);
     quad.g[0] = 0;
     quad.g[2] = 0xFF9000000260UL;
-    quad.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) | ((long)D_L12_00161A14 << 4) |
-                ((long)D_L12_00161A18 << 6) | (0x8000L << 24);
-    col = fast_tween_color(
-        D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
+    quad.g[3] = (long)l12_water_reservoir_alpha_a_selector |
+                ((long)l12_water_reservoir_alpha_b_selector << 2) |
+                ((long)l12_water_reservoir_alpha_c_selector << 4) |
+                ((long)l12_water_reservoir_alpha_d_selector << 6) | (0x8000L << 24);
+    col = fast_tween_color(l12_water_reservoir_tween_start_color,
+                           l12_water_reservoir_tween_end_color,
+                           (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         quad.uv[i * 2] = 0.5f;
         *(&quad.uv[i * 2] + 1) = 0.5f;

@@ -199,7 +199,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 typedef struct {
     char           pad0[0x10];
     char           pos[0x10];
-    unsigned char  b20;
+    unsigned char  projectile_state;
     char           pad21[0xB];
     float          f2C;
     unsigned char  b30;
@@ -207,11 +207,11 @@ typedef struct {
     short          s32;
     unsigned short h34;
     char           pad36[0x12];
-    float          f48;
+    float          movement_heading;
     char           pad4C[0x2C];
     Child         *child;
     char           pad7C[0x14];
-    int            f90;
+    int            projectile_glow_color;
 } BallisticRingProjectileMoby;
 
 /* Allocate an object, init its fields and child record. */
@@ -229,21 +229,25 @@ void         spawn_drek_boss_ring_projectile(char  *pos,
 void spawn_drek_boss_ring_projectile(
 
     char *pos, float *initial_movement_step, int collision_filter_moby, float fa, float fb) {
+    enum {
+        STATE_BALLISTIC_FLIGHT = 0
+    };
     BallisticRingProjectileMoby *spawned_moby = (BallisticRingProjectileMoby *)create_moby(0x270);
     if (spawned_moby != 0) {
         Child *moby_vars;
         int    initial_glow_color;
         spawned_moby->b30 = 0xFF;
         spawned_moby->b31 = 1;
-        spawned_moby->b20 = 0;
+        spawned_moby->projectile_state = STATE_BALLISTIC_FLIGHT;
         initial_glow_color = *(int *)&D_L18_00161BFC_gp;
         spawned_moby->f2C = spawned_moby->f2C * D_L18_00161BF8;
         spawned_moby->s32 = 0xFF;
         spawned_moby->h34 |= 0x10;
-        spawned_moby->f90 = initial_glow_color;
+        spawned_moby->projectile_glow_color = initial_glow_color;
         moby_vars = spawned_moby->child;
         qcopy(spawned_moby->pos, pos);
-        spawned_moby->f48 = fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
+        spawned_moby->movement_heading =
+            fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
         qcopy(moby_vars->v, initial_movement_step);
         moby_vars->f34 = collision_filter_moby;
         moby_vars->f28 = fa;

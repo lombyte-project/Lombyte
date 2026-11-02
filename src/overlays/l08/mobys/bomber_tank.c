@@ -105,7 +105,7 @@ typedef struct {
     u8    unk29;
     u8    unk2A;
     u8    pad2B[3];
-    u8    unk2E; /* 0x2E: 2 removes the tank and its parts */
+    u8    removal_control; /* 0x2E: 2 removes the tank and its parts */
     u8    pad2F;
     f32   unk30;
     u8    pad34[0xA];
@@ -130,7 +130,7 @@ typedef struct {
     Moby *part_a; /* 0x160 */
     Moby *part_b; /* 0x164 */
     u8    pad168[4];
-    f32   unk16C;
+    f32   path_target_speed;
     f32   yaw; /* 0x170: added to rot.z for shots */
     u8    pad174[4];
     f32   pitch; /* 0x178 */
@@ -151,7 +151,7 @@ void bomber_tank_update(Moby *moby) {
 
     qcopy(old_pos, &moby->pos);
     qcopy(old_rot, &moby->rot);
-    if (bomber_tank_update_vars->unk2E == 2) {
+    if (bomber_tank_update_vars->removal_control == 2) {
         if (bomber_tank_update_vars->part_a != 0)
             mark_moby_for_removal(bomber_tank_update_vars->part_a);
         if (bomber_tank_update_vars->part_b != 0)
@@ -193,7 +193,7 @@ void bomber_tank_update(Moby *moby) {
         }
         attach_manipulator(moby, 0, bomber_tank_update_vars->manipulator);
         moby->flags |= 0x1000;
-        bomber_tank_update_vars->unk16C = frame_time + frame_time;
+        bomber_tank_update_vars->path_target_speed = frame_time + frame_time;
         if (bomber_tank_update_vars->trigger_moby > 0) {
             moby->state = BOMBER_TANK_STATE_WAIT_FOR_TRIGGER;
             moby->flags = (moby->flags & 0xEFFF) | 0x41;
@@ -234,7 +234,7 @@ void bomber_tank_update(Moby *moby) {
         bomber_tank_update_vars->unk30 = 3.0f;
         bomber_tank_update_vars->health = 9.0f;
         bomber_tank_update_vars->unk2A = 12;
-        bomber_tank_update_vars->unk2E = 1;
+        bomber_tank_update_vars->removal_control = 1;
         bomber_tank_update_vars->flags |= 2;
         clear_u64_value(&bomber_tank_update_vars->unk40);
         bomber_tank_update_vars->pitch = 0.0f;
@@ -336,7 +336,7 @@ void bomber_tank_update(Moby *moby) {
     case 12:
         /* Fakematch: a never-true test keeps case 12 a block of its own until gcse, which then puts the default path's copies where retail has them. */
         if (never)
-            bomber_tank_update_vars->unk2E = 0;
+            bomber_tank_update_vars->removal_control = 0;
         break;
     case BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH: {
         float frame;

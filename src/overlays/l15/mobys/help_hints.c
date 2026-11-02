@@ -42,8 +42,8 @@ typedef struct Stats {
 
 typedef struct Items {
     char          p0[0x6E];
-    unsigned char f6E;
-    unsigned char f6F;
+    unsigned char hint_clip_volume_visited;
+    unsigned char giant_clank_zone_hint_suppressed;
 } Items;
 
 extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
@@ -181,11 +181,11 @@ void help_hints_update(struct Moby *moby) {
             }
         }
         if (hero.moby->seq == 0xC && hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
-            ((Items *)alternate_item_available)->f6F = 1;
+            ((Items *)alternate_item_available)->giant_clank_zone_hint_suppressed = 1;
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol1C) != 0 &&
             hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
-            ((Items *)alternate_item_available)->f6F == 0 &&
+            ((Items *)alternate_item_available)->giant_clank_zone_hint_suppressed == 0 &&
             ((Help *)quartu_help_message_state)->busy == 0 &&
             ((Help *)quartu_help_message_state)->cur == -1 && *(int *)(item_usage + 0x6EC) >= 0) {
             help_request(0x3A9C, 0x80);
@@ -224,9 +224,9 @@ void help_hints_update(struct Moby *moby) {
             hint_dialogue_data->last = pick;
             hint_dialogue_data->hold38 = 0;
         }
-        if (((Items *)alternate_item_available)->f6E == 0 &&
+        if (((Items *)alternate_item_available)->hint_clip_volume_visited == 0 &&
             is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol2C) != 0) {
-            ((Items *)alternate_item_available)->f6E = 1;
+            ((Items *)alternate_item_available)->hint_clip_volume_visited = 1;
         }
         break;
     }

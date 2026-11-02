@@ -201,7 +201,7 @@ extern char D_L16_001671C0[];
 extern void
 func_L00_0026DD70_emit(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
-int          D_L16_00161E98 = 0x60d0d080;
+int          l16_path_walker_particle_initial_color __asm__("D_L16_00161E98") = 0x60d0d080;
 int          D_L16_00161E9C = 0x801000;
 extern float path_walker_particle_movement_velocity_scale_gp __asm__("D_L16_00161EA0")
     __attribute__((sda));
@@ -237,8 +237,12 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     fast_vec_add(velocity, velocity, movement_velocity);
     final_size = path_walker_particle_target_scalar_scale_gp;
     final_size *= 210000.0f;
-    func_L00_0026DD70_emit(
-        offset, velocity, D_L16_00161E98, D_L16_00161E9C, final_size, scale_game_frames(0x23));
+    func_L00_0026DD70_emit(offset,
+                           velocity,
+                           l16_path_walker_particle_initial_color,
+                           D_L16_00161E9C,
+                           final_size,
+                           scale_game_frames(0x23));
 }
 
 /* Start of a walker group: lists the group's mobys and spaces them along the path in random order. */

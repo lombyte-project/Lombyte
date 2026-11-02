@@ -33,21 +33,21 @@ typedef int q_2a7780 __attribute__((mode(TI)));
 typedef struct {
     s16       sel[4];
     u32       col[4][4];
-    f32       f48;
+    f32       progress_per_frame;
     q_2a7780 *verts;
     s16 (*idx)[4][2];
     f32 *uv;
     s16  n;
-    f32  f5C;
+    f32  uv_v_progress_scale;
 } E_2a7780;
 
 typedef struct {
     q_2a7780 m[3];
-    q_2a7780 m30;
+    q_2a7780 hero_position;
     u8       pad[0x30];
     f32      f70;
     u8       pad2[4];
-    s16      h78;
+    s16      cached_swing_animation;
 } R_2a7780;
 
 typedef struct {
@@ -314,20 +314,20 @@ void draw_wrench_swing_effect(O_2a7780 *effect_owner) {
     color = 0x808080;
     alpha = scale;
     if (!((u32)(P_2a7780_G.p2080[0x52] - 0x17) < 3 || P_2a7780_G.p2080[0x52] == 0x2B))
-        k = r->h78;
+        k = r->cached_swing_animation;
     else
         k = P_2a7780_G.p2080[0x52];
     if (k == 0x17) {
-        r->h78 = k;
+        r->cached_swing_animation = k;
         idx = 0;
     } else if (k == 0x18) {
-        r->h78 = k;
+        r->cached_swing_animation = k;
         idx = 1;
     } else if (k == 0x19) {
-        r->h78 = k;
+        r->cached_swing_animation = k;
         idx = 2;
     } else {
-        r->h78 = 0x2B;
+        r->cached_swing_animation = 0x2B;
         alpha = 0.7f;
         idx = 3;
         scale = 1.25f;
@@ -352,7 +352,7 @@ void draw_wrench_swing_effect(O_2a7780 *effect_owner) {
     elapsed_frames = current_frame - last_frame;
     if (elapsed_frames <= 0)
         elapsed_frames = 1;
-    r->f70 = effect_progress + (f32)elapsed_frames * effect_config->f48;
+    r->f70 = effect_progress + (f32)elapsed_frames * effect_config->progress_per_frame;
     last_frame = current_frame;
     if ((f32)(effect_config->n * 2) <= r->f70) {
         s32 k2 = P_2a7780_G.p2080[0x52];
@@ -366,7 +366,7 @@ void draw_wrench_swing_effect(O_2a7780 *effect_owner) {
     quad.tag[2] = 0xFF9000000260LL;
     quad.tag[0] = 5;
     quad.tag[3] = (nv << 2) | 0x8000000040LL;
-    qcopy(&r->m30, P_2a7780_G.p2080 + 0x10);
+    qcopy(&r->hero_position, P_2a7780_G.p2080 + 0x10);
     for (i = 0; i < effect_config->n; i++) {
         for (j = 0; j < 4; j++) {
             s32  vi = effect_config->idx[i][j][0];
@@ -384,7 +384,7 @@ void draw_wrench_swing_effect(O_2a7780 *effect_owner) {
             quad.col[j] = (truncate_float_to_s32(((s32)quad.col[j] >> 24) * alpha) << 24) | color;
             fast_vec_scale(&quad.pos[j], &effect_config->verts[vi], scale);
             uv = (f32 *)(effect_config->idx[i][j][1] * 8 + (s32)effect_config->uv);
-            uv_v_offset = 1.0f - r->f70 * effect_config->f5C;
+            uv_v_offset = 1.0f - r->f70 * effect_config->uv_v_progress_scale;
             quad.uv[j][0] = (uv[0] - 0.5f) * uv_scale + 0.5f;
             quad.uv[j][1] = (uv[1] - 0.5f) * uv_scale + 0.5f + uv_v_offset;
         }

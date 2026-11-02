@@ -71,8 +71,8 @@ typedef struct {
     f32           unkF4;
     u8            padF8[0x14];
     f32           unk10C;
-    f32           unk110;
-    f32           unk114;
+    f32           patrol_turn_damping_factor;
+    f32           patrol_turn_step_limit;
     u8            pad118[8];
     TrooperPatrol patrol; /* 0x120 */
     u8            pad138[0x18];
@@ -161,8 +161,8 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     case MINE_LAYER_INITIALIZE:
         FUN_L01_0026d930(mine_layer_vars->walk);
         mine_layer_vars->unk10C = frame_time_sq * 6.2831855f;
-        mine_layer_vars->unk114 = frame_time * 6.2831855f;
-        mine_layer_vars->unk110 = frame_time_sq * 18.849556f;
+        mine_layer_vars->patrol_turn_step_limit = frame_time * 6.2831855f;
+        mine_layer_vars->patrol_turn_damping_factor = frame_time_sq * 18.849556f;
         mine_layer_vars->unkF4 = frame_time * 5.0f;
         mine_layer_vars->unk58 = 8;
         mine_layer_vars->unk5A = 8;

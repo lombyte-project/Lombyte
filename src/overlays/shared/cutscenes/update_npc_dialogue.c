@@ -211,11 +211,11 @@ typedef struct {
     s16 f04;
     u8  pad6[2];
     u8  f08;
-    u8  f09;
+    u8  dialogue_initialized;
     u8  padA[0x2C];
-    s16 f36;
-    u32 f38;
-    u32 f3C;
+    s16 current_dialogue_entry_index;
+    u32 dialogue_start_frame;
+    u32 dialogue_entry_list_address;
 } Out002668a0;
 
 typedef struct {
@@ -243,17 +243,20 @@ s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
     if (l00_moby_dialogue_entry_lists[i] == 0) {
         return -1;
     }
-    dialogue_trigger->f09 = 1;
-    dialogue_trigger->f38 = D_L00_0015F5CC;
+    dialogue_trigger->dialogue_initialized = 1;
+    dialogue_trigger->dialogue_start_frame = D_L00_0015F5CC;
     dialogue_trigger->f04 = -1;
-    dialogue_trigger->f36 = 0;
+    dialogue_trigger->current_dialogue_entry_index = 0;
     dialogue_entries = l00_moby_dialogue_entry_lists[i];
-    dialogue_trigger->f3C = (u32)dialogue_entries;
+    dialogue_trigger->dialogue_entry_list_address = (u32)dialogue_entries;
     if (level_object_states[i].state != 0 && dialogue_entries->f08 == 0) {
-        dialogue_trigger->f36 = dialogue_entries->f06;
+        dialogue_trigger->current_dialogue_entry_index = dialogue_entries->f06;
     }
     dialogue_trigger->f08 =
-        ((u8 *)dialogue_trigger->f3C)[dialogue_trigger->f36 * 0x1C + (k = 0x10)] & 1;
+        ((u8 *)dialogue_trigger
+             ->dialogue_entry_list_address)[dialogue_trigger->current_dialogue_entry_index * 0x1C +
+                                            (k = 0x10)] &
+        1;
     return i;
 }
 

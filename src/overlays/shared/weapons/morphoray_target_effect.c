@@ -10,19 +10,19 @@
 
 typedef struct {
     u8      pad[0x20];
-    u8      b20;
+    u8      moby_state;
     u8      pad2[0x40 - 0x21];
     OvlQuad q40;
     u8      pad3[0x78 - 0x50];
     void   *p78;
     u8      pad4[0xA6 - 0x7C];
-    s16     hA6;
+    s16     moby_class;
 } O_002d7f88;
 
 typedef struct {
     O_002d7f88 *o;
     f32         f4;
-    u8          v8[4];
+    u8          removal_timer[4];
     f32         fC;
 } D_002d7f88;
 
@@ -31,7 +31,7 @@ typedef struct {
     u8          v10[4];
     f32         f14;
     u8          pad2[0x23 - 0x18];
-    u8          b23;
+    u8          fade_level;
     u8          pad3[0x2C - 0x24];
     f32         f2C;
     u8          pad4[0x40 - 0x30];
@@ -69,10 +69,10 @@ void morphoray_target_effect_update(S_002d7f88 *follower_moby) {
     void       *linked_moby_data;
     f32         scale_coefficient;
     moby_data->f4 += (D_L00_001616DC + D_L00_001616DC) * frame_time;
-    if (fast_dec_timer(moby_data->v8) != 0 || D_L00_001616DC * 1.1f <= moby_data->f4)
+    if (fast_dec_timer(moby_data->removal_timer) != 0 || D_L00_001616DC * 1.1f <= moby_data->f4)
         goto kill;
     o = moby_data->o;
-    if (o == 0 || o->hA6 != 0xB9 || o->b20 == 0xFE || o->b20 == 0xFD) {
+    if (o == 0 || o->moby_class != 0xB9 || o->moby_state == 0xFE || o->moby_state == 0xFD) {
     kill:
         mark_moby_for_removal(follower_moby);
         return;
@@ -84,7 +84,7 @@ void morphoray_target_effect_update(S_002d7f88 *follower_moby) {
     fast_vec_add(follower_moby->v10, follower_moby->v10, linked_moby_data);
     qcopy(&follower_moby->q40, &moby_data->o->q40);
     if (moby_data->f4 > D_L00_001616DC) {
-        follower_moby->b23 =
+        follower_moby->fade_level =
             truncate_float_to_s32((1.0f - (moby_data->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
     }
     scale_coefficient = moby_data->fC;

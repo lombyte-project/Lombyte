@@ -42,7 +42,7 @@ typedef struct M_2cc360 {
     struct M_2cc360 *next;
     char             p2c[5];
     unsigned char    b31;
-    short            h32;
+    short            draw_distance;
     unsigned short   h34;
 } M_2cc360;
 
@@ -146,7 +146,7 @@ M_2cc360 *select_ryno_target(
     int       i, found;
     for (candidate_moby = D_L00_0015FFE4_2cc360; candidate_moby;
          candidate_moby = candidate_moby->next) {
-        if (candidate_moby->h32 == 0)
+        if (candidate_moby->draw_distance == 0)
             continue;
         if (excl) {
             found = 0;

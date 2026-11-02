@@ -266,10 +266,10 @@ typedef struct {
     char          pad68[8];
     char          fall[0x10]; /* 0x70 */
     float         unk80;
-    float         unk84;
+    float         death_fall_horizontal_speed_approach_step;
     float         unk88;
-    float         unk8C;
-    int           unk90;
+    float         death_fall_initial_vertical_speed;
+    int           death_fall_collision_radius_fixed_point;
     int           unk94;
     float         unk98;
     char          pad9C[0x11];
@@ -356,20 +356,25 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 moby->state = GADGEBOT_EXPLODE;
             } else {
                 fall_setup_value_or_path_slot_address = 0x200;
-                sentry_vars->unk90 = fall_setup_value_or_path_slot_address;
+                sentry_vars->death_fall_collision_radius_fixed_point =
+                    fall_setup_value_or_path_slot_address;
                 sentry_vars->unk98 = 0.5f;
                 sentry_vars->unk80 = gadgebot_death_fall_gravity_gp * frame_time_sq;
-                sentry_vars->unk84 =
+                sentry_vars->death_fall_horizontal_speed_approach_step =
                     gadgebot_death_fall_horizontal_speed_approach_rate_gp * frame_time_sq;
                 sentry_vars->unk88 = gadgebot_death_fall_base_horizontal_speed_gp * frame_time;
-                sentry_vars->unk8C = gadgebot_death_fall_base_vertical_speed_gp * frame_time;
+                sentry_vars->death_fall_initial_vertical_speed =
+                    gadgebot_death_fall_base_vertical_speed_gp * frame_time;
                 reaction_value_or_path_address = 0x29;
                 sentry_vars->unk94 = reaction_value_or_path_address;
                 sentry_vars->unkAD = 0;
                 sentry_vars->unkBC = frame_time + frame_time;
                 moby->flags &= ~0x1000;
                 v.q = *(u128 *)(coll + 0x10);
-                trooper_knockback_arc(&v, &angle, &sentry_vars->unk88, &sentry_vars->unk8C);
+                trooper_knockback_arc(&v,
+                                      &angle,
+                                      &sentry_vars->unk88,
+                                      &sentry_vars->death_fall_initial_vertical_speed);
                 trooper_start_knockback(moby, sentry_vars->fall, 3, 1, 0, angle);
                 sentry_vars->unkC0 = 7.5f;
                 sentry_vars->unkC4 = 15.0f;

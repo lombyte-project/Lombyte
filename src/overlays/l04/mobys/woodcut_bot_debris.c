@@ -15,7 +15,7 @@
 typedef struct {
     u8  pad0[4];
     f32 f4;
-    f32 f8;
+    f32 collision_radius;
     s16 hC;
     s16 hE;
     f32 vel[4] __attribute__((aligned(16)));
@@ -27,7 +27,7 @@ typedef struct {
     f32       pos[4] __attribute__((aligned(16)));
     u8        b20, b21, b22, b23;
     u8        pad24[8];
-    f32       f2c;
+    f32       uniform_scale;
     u8        pad30[0x10];
     f32       f40, f44, f48;
     u8        pad4c[0x2C];
@@ -60,7 +60,7 @@ void woodcut_bot_debris_update(M2e5178 *entity) {
         if (entity->pos[2] < pv->f4 - 3.0f) {
             entity->b20 = 1;
         } else if (fast_dec_timer_s16(&pv->hE) && pv->hC != 0 &&
-                   coll_sphere(entity->pos, 2, 0, pv->f8)) {
+                   coll_sphere(entity->pos, 2, 0, pv->collision_radius)) {
             collision_normal = coll_hit_normal_lui;
             if (fast_vec_dot(pv->vel, collision_normal) < 0.0f) {
                 qcopy(entity->pos, collision_normal - 1);
@@ -78,7 +78,7 @@ void woodcut_bot_debris_update(M2e5178 *entity) {
         }
         break;
     case ENTITY_MOTION_STATE_DECAY_AND_REMOVE:
-        entity->f2c *= 0.9f;
+        entity->uniform_scale *= 0.9f;
         if (entity->b23 < 4) {
             mark_moby_for_removal(entity);
         } else {
