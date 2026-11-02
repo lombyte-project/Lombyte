@@ -85,20 +85,20 @@ typedef struct {
     float f188;
     float f18C;
     char  p190[0x14];
-    float f1A4;
-    float f1A8;
-    float f1AC;
+    float max_movement_step;
+    float movement_heading_error_limit;
+    float movement_arrival_distance;
     char  p1B0[8];
-    int   i1B8;
-    float f1BC;
-    float f1C0;
-    float f1C4;
+    int   movement_control_flags;
+    float path_turn_spring_strength;
+    float path_turn_damping_factor;
+    float path_turn_step_limit;
     char  p1C8[0x38];
     float home[4];
     char  p210[0x10];
     float v220[4];
     float target_engagement_radius;
-    float f234;
+    float movement_speed;
     char  p238[4];
     int   chase_timer;
     int   extended_engagement_radius_timer;
@@ -184,21 +184,21 @@ void robot_dog_update(char *moby) {
         robot_dog_state->extended_engagement_radius_timer = 0;
         robot_dog_state->s24 = 1;
         FUN_L01_0026d930((char *)&robot_dog_state->i180, robot_dog_state->home);
-        robot_dog_state->f1BC = frame_time_sq * 6.2831855f;
-        robot_dog_state->f1C0 = frame_time_sq * 12.566371f;
-        robot_dog_state->f1C4 = frame_time * 3.1415927f;
+        robot_dog_state->path_turn_spring_strength = frame_time_sq * 6.2831855f;
+        robot_dog_state->path_turn_damping_factor = frame_time_sq * 12.566371f;
+        robot_dog_state->path_turn_step_limit = frame_time * 3.1415927f;
         robot_dog_state->f188 = robot_dog_state->f18C = 2.0f;
         robot_dog_state->i180 = 0x38D;
-        robot_dog_state->f1A4 = robot_dog_state->f234 * frame_time;
-        robot_dog_state->i1B8 |= 0x20;
-        robot_dog_state->f1A8 = 2.0954423f;
+        robot_dog_state->max_movement_step = robot_dog_state->movement_speed * frame_time;
+        robot_dog_state->movement_control_flags |= 0x20;
+        robot_dog_state->movement_heading_error_limit = 2.0954423f;
         initialization_multiplier_or_desired_heading = FUN_L04_001f1978(6.0f);
         robot_dog_state->f264 = 1.0f;
         robot_dog_state->melee_cooldown_timer = 0;
         robot_dog_state->i26C = 0;
         robot_dog_state->i260 = 0;
-        robot_dog_state->f1AC =
-            robot_dog_state->f1A4 * initialization_multiplier_or_desired_heading;
+        robot_dog_state->movement_arrival_distance =
+            robot_dog_state->max_movement_step * initialization_multiplier_or_desired_heading;
         robot_dog_state->b58 = 8;
         robot_dog_state->b5A = 7;
         if (rand() & 1) {
@@ -293,8 +293,8 @@ void robot_dog_update(char *moby) {
             robot_dog_state->chase_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
         }
         target_distance = vector_distance_xy(moby + 0x10, &selected_target);
-        if (target_distance < robot_dog_state->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
-                                  robot_dog_state->f234 * frame_time * FUN_L04_001f1978(10.0f) +
+        if (target_distance < robot_dog_state->movement_speed * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
+                                  robot_dog_state->movement_speed * frame_time * FUN_L04_001f1978(10.0f) +
                                   1.5f) {
             MOBY(moby)->state = ROBOT_DOG_MELEE_ATTACK;
             if (((unsigned char *)moby)[0x53] != 5) {
@@ -364,9 +364,9 @@ void robot_dog_update(char *moby) {
         move_moby_with_ground_and_collision_checks(
             moby, &robot_dog_state->i180, forward_vector_or_path_point, robot_dog_state->v40, 1.0f);
         if (((unsigned char *)moby)[0x52] == 5) {
-            approach_value(&robot_dog_state->f1A4,
+            approach_value(&robot_dog_state->max_movement_step,
                            0.0f,
-                           robot_dog_state->f234 * frame_time / FUN_L04_001f1978(40.0f));
+                           robot_dog_state->movement_speed * frame_time / FUN_L04_001f1978(40.0f));
         }
         if (absolute_float(compute_interpolated_record_value(moby) - 25.0f) <= 0.25f &&
             absolute_float(selected_target.pos[2] - MOBY(moby)->pos.z) < 1.0f &&
@@ -382,7 +382,7 @@ void robot_dog_update(char *moby) {
             at[2] += 0.75f;
             spawn_nearby_effect(selected_target.obj, moby, 1, at, push, 1.0f);
         } else if (((unsigned char *)moby)[0x70] & 2) {
-            robot_dog_state->f1A4 = robot_dog_state->f234 * frame_time;
+            robot_dog_state->max_movement_step = robot_dog_state->movement_speed * frame_time;
             MOBY(moby)->state = ROBOT_DOG_RETURN_HOME;
             if (((unsigned char *)moby)[0x53] != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(3));
@@ -413,8 +413,8 @@ void robot_dog_update(char *moby) {
         } else if (robot_dog_state->melee_cooldown_timer == 0) {
             target_distance = vector_distance_xy(moby + 0x10, &selected_target);
             if (target_distance <
-                robot_dog_state->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
-                    robot_dog_state->f234 * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
+                robot_dog_state->movement_speed * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
+                    robot_dog_state->movement_speed * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
                 MOBY(moby)->state = ROBOT_DOG_MELEE_ATTACK;
                 if (((unsigned char *)moby)[0x53] != 5) {
                     blend_moby_animation(
