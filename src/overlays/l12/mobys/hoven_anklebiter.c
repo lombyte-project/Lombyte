@@ -722,8 +722,8 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
     return move_result;
 }
 
-int          D_L12_0016183C = 0xa;
-int          D_L12_00161840 = 8;
+int          l12_anklebiter_spark_burst_count __asm__("D_L12_0016183C") = 0xa;
+int          l12_anklebiter_sparks_per_burst __asm__("D_L12_00161840") = 8;
 extern float l12_anklebiter_spark_burst_origin_jitter __asm__("D_L12_00161844")
     __attribute__((sda));
 extern float l12_anklebiter_spark_position_jitter __asm__("D_L12_00161848") __attribute__((sda));
@@ -741,12 +741,12 @@ extern float l12_anklebiter_spark_downward_velocity_scale __asm__("D_L12_0016186
     __attribute__((sda));
 extern float D_L12_00161864 __attribute__((sda));
 extern float D_L12_00161868 __attribute__((sda));
-int          D_L12_0016186C = 0x8000eeee;
-int          D_L12_00161870 = 0xffee;
-int          D_L12_00161874 = 0x8000ff90;
-int          D_L12_00161878 = 0xffee;
-int          D_L12_0016187C = 0xa;
-int          D_L12_00161880 = 0x1e;
+int          l12_anklebiter_spark_start_color_range_start __asm__("D_L12_0016186C") = 0x8000eeee;
+int          l12_anklebiter_spark_end_color_range_start __asm__("D_L12_00161870") = 0xffee;
+int          l12_anklebiter_spark_start_color_range_end __asm__("D_L12_00161874") = 0x8000ff90;
+int          l12_anklebiter_spark_end_color_range_end __asm__("D_L12_00161878") = 0xffee;
+int          l12_anklebiter_spark_life_frames __asm__("D_L12_0016187C") = 0xa;
+int          l12_anklebiter_spark_fade_frames __asm__("D_L12_00161880") = 0x1e;
 extern int   l12_anklebiter_spark_random_time_base __asm__("D_L12_00161884") __attribute__((sda));
 extern void  add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -776,7 +776,7 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
     int    life;
     int    fade;
 
-    count = D_L12_0016183C;
+    count = l12_anklebiter_spark_burst_count;
     spark_moby_vars = (char *)moby->pvars;
     if (moby->state == ANKLEBITER_DEATH_EFFECTS_AND_REMOVE)
         count = truncate_float_to_s32((float)count * 1.5f);
@@ -804,8 +804,8 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
         fast_vec_add(spark_launch_velocity, spark_launch_velocity, push);
         qcopy(gravity_adjusted_spark_velocity, spark_launch_velocity);
         gravity_adjusted_spark_velocity[2] -= l12_anklebiter_spark_downward_velocity_scale *
-                                              D_0015ED70 * (float)scale_game_frames(D_L12_00161880);
-        for (j = 0; j < D_L12_00161840; j++) {
+                                              D_0015ED70 * (float)scale_game_frames(l12_anklebiter_spark_fade_frames);
+        for (j = 0; j < l12_anklebiter_sparks_per_burst; j++) {
             size = random_float_between(0.5f, 1.5f);
             spark_launch_velocity[3] = size * D_L12_00161864;
             gravity_adjusted_spark_velocity[3] = size * D_L12_00161868;
@@ -814,11 +814,11 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
                                             l12_anklebiter_spark_velocity_jitter_scale *
                                                 D_0015ED6C);
             start_color =
-                fast_tween_color(D_L12_0016186C, D_L12_00161874, random_float_between(0.0f, 1.0f));
+                fast_tween_color(l12_anklebiter_spark_start_color_range_start, l12_anklebiter_spark_start_color_range_end, random_float_between(0.0f, 1.0f));
             end_color =
-                fast_tween_color(D_L12_00161870, D_L12_00161878, random_float_between(0.0f, 1.0f));
-            life = scale_game_frames(D_L12_0016187C);
-            fade = scale_game_frames(D_L12_00161880);
+                fast_tween_color(l12_anklebiter_spark_end_color_range_start, l12_anklebiter_spark_end_color_range_end, random_float_between(0.0f, 1.0f));
+            life = scale_game_frames(l12_anklebiter_spark_life_frames);
+            fade = scale_game_frames(l12_anklebiter_spark_fade_frames);
             time_base = (float)l12_anklebiter_spark_random_time_base;
             spawn_spark(pos,
                         spark_launch_velocity,
