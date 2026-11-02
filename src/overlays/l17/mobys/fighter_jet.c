@@ -1018,7 +1018,7 @@ extern int
 spawn_fighter_jet_rocket(void *, void *, int, void *, float, int) __asm__("FUN_L13_002e6a58");
 
 extern short fighter_jet_rocket_base_scale_gp __asm__("D_L17_00162074") __attribute__((sda));
-int          D_L17_00162078 = 30;
+int          l17_fighter_jet_rocket_cooldown_reload __asm__("D_L17_00162078") = 30;
 void         try_fire_fighter_jet_rocket(char *moby, char *ship_vars) __asm__("FUN_L17_002ec150");
 
 void try_fire_fighter_jet_rocket(char *moby, char *ship_vars) {
@@ -1046,7 +1046,7 @@ void try_fire_fighter_jet_rocket(char *moby, char *ship_vars) {
                                          scaled_frame_count)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
-                *(int *)(ship_vars + 0x84) = D_L17_00162078;
+                *(int *)(ship_vars + 0x84) = l17_fighter_jet_rocket_cooldown_reload;
             }
         }
     }
