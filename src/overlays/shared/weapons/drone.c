@@ -19,14 +19,14 @@ typedef unsigned int u128_2cdcc0 __attribute__((mode(TI), aligned(16)));
 
 typedef struct {
     unsigned char  pad0[0x80];
-    float          v80[4];
+    float          hero_position[4];
     unsigned char  pad90[8];
-    float          f98;
+    float          drone_launch_yaw;
     unsigned char  pad9c[0x1FF5 - 0x9C];
-    unsigned char  b1FF5;
-    unsigned char  b1FF6;
+    unsigned char  pending_drone_replenishment;
+    unsigned char  active_drone_count;
     unsigned char  pad1ff7[0x2080 - 0x1FF7];
-    unsigned char *p2080;
+    unsigned char *hero_moby;
 } P_2cdcc0;
 
 typedef struct {
@@ -165,12 +165,12 @@ void replenish_hero_drones(void) {
     float        drone_spawn_position[4] __attribute__((aligned(16)));
     struct Moby *spawned_moby;
     int          i;
-    hero_state->b1FF5 = 0;
+    hero_state->pending_drone_replenishment = 0;
     if (get_ammo(0x18)) {
-        initial_drone_velocity[0] = FUN_001f9dc8_2cdcc0(hero_state->f98) * 0.25f;
-        initial_drone_velocity[1] = FUN_001f9de0_2cdcc0(hero_state->f98) * 0.25f;
+        initial_drone_velocity[0] = FUN_001f9dc8_2cdcc0(hero_state->drone_launch_yaw) * 0.25f;
+        initial_drone_velocity[1] = FUN_001f9de0_2cdcc0(hero_state->drone_launch_yaw) * 0.25f;
         initial_drone_velocity[2] = 0.25f;
-        if (hero_state->b1FF6 < 6) {
+        if (hero_state->active_drone_count < 6) {
             FUN_L00_00233db8_2cdcc0(0x18, 1);
             usage_stats = (S_2cdcc0 *)item_usage;
             if (usage_stats->hC0 < 0xFFFF) {
@@ -181,10 +181,10 @@ void replenish_hero_drones(void) {
             }
             usage_stats->wC4 = usage_stats->wC4 | (1 << current_level_index) | 0x80000000;
 
-            FUN_001f9a10_2cdcc0(drone_spawn_position, hero_state->v80, hero_state->p2080 + 0xE0);
+            FUN_001f9a10_2cdcc0(drone_spawn_position, hero_state->hero_position, hero_state->hero_moby + 0xE0);
             FUN_001f9a10_2cdcc0(
-                drone_spawn_position, drone_spawn_position, hero_state->p2080 + 0xC0);
-            for (i = hero_state->b1FF6; i < 6; i++) {
+                drone_spawn_position, drone_spawn_position, hero_state->hero_moby + 0xC0);
+            for (i = hero_state->active_drone_count; i < 6; i++) {
                 spawned_moby = FUN_L00_002ce1f0_2cdcc0(spawned_moby, drone_spawn_position);
                 if (spawned_moby) {
                     qcopy(((void *)spawned_moby->pvars), initial_drone_velocity);
