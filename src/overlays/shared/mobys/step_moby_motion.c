@@ -138,13 +138,13 @@ typedef struct {
     f32 f18;
     f32 f1C;
     u8  p20[4];
-    u32 w24;
+    u32 motion_flags;
     u8  p28[4];
     s16 h2C;
     u8  p2E[0xE];
     u8  b3C;
     u8  p3D;
-    s16 h3E;
+    s16 motion_phase;
     f32 f40;
     int w44;
 } B_25c558;
@@ -166,14 +166,14 @@ void trooper_start_knockback(u8       *moby,
     knockback_state->f40 = fast_add_rotations(knockback_angle, 3.1415927f);
     knockback_state->w44 = 0;
     knockback_state->h2C = scale_game_frames(300);
-    knockback_state->h3E = 0;
+    knockback_state->motion_phase = 0;
     knockback_state->b3C = 1;
     moby_vars_record = get_moby_target_info(moby);
     if (moby_vars_record && *moby_vars_record == 0.0f) {
-        knockback_state->w24 |= 0x20;
+        knockback_state->motion_flags |= 0x20;
         MOBY(moby)->collision = 0;
     }
-    if (knockback_state->w24 & 2)
+    if (knockback_state->motion_flags & 2)
         blend_moby_animation_ex(
             moby, animation_index, animation_frame_index, animation_timing_divisor, 1);
     else
