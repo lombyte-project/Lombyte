@@ -526,7 +526,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     if (vars->candidate_target_moby_index >= 0) {
         candidate_target = (ElectroidMoby *)(moby_table + (vars->candidate_target_moby_index << 8));
         if (candidate_target == 0 || candidate_target->state == MOBY_STATE_REMOVAL_MARKER ||
-            candidate_target->state == 0xFD) {
+            candidate_target->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER) {
             vars->candidate_target_moby_index = -1;
         } else {
             range = vector_distance_xy(&moby->pos, &candidate_target->pos);
