@@ -597,7 +597,7 @@ void reset_follow_camera_state_from_position(char *camera_moby) {
 /* Initialises the type-0 camera: fills its data blocks and seeds the first position. */
 
 typedef struct CamE {
-    short h0;  /* 0x00 */
+    short height_state_timer;  /* 0x00 */
     short h2;  /* 0x02 */
     float f4;  /* 0x04 */
     float f8;  /* 0x08 */
@@ -614,10 +614,10 @@ typedef struct CamA {
     float         orbit_origin_position[4]; /* 0x50 */
     char          pad60[0x50];
     float         fB0; /* 0xB0 */
-    int           iB4; /* 0xB4 */
+    int           requested_target_height; /* 0xB4 */
     float         fB8; /* 0xB8 */
-    int           iBC; /* 0xBC */
-    int           iC0; /* 0xC0 */
+    int           target_height_interpolation_state; /* 0xBC */
+    int           followed_moby; /* 0xC0 */
     unsigned char bC4; /* 0xC4 */
     char          padC5;
     short         hC6; /* 0xC6 */
@@ -625,7 +625,7 @@ typedef struct CamA {
     unsigned char bD6; /* 0xD6 */
     char          padD7;
     short         hD8; /* 0xD8 */
-    short         hDA; /* 0xDA */
+    short         target_height_override_requested; /* 0xDA */
     float         fDC; /* 0xDC */
     float         fE0; /* 0xE0 */
     float         fE4; /* 0xE4 */
@@ -643,8 +643,8 @@ typedef struct CamB {
     float f30;                   /* 0x30 */
     int   i34;                   /* 0x34 */
     int   i38;                   /* 0x38 */
-    short h3C;                   /* 0x3C */
-    short h3E;                   /* 0x3E */
+    short orbit_distance_override_pending;                   /* 0x3C */
+    short orbit_height_override_pending;                   /* 0x3E */
     char  pad40[4];
     int   orbit_distance_interpolation_state; /* 0x44 */
     float f48;                                /* 0x48 */
@@ -684,8 +684,8 @@ typedef struct CamG {
     float f30;                                   /* 0x30 */
     short h34;                                   /* 0x34 */
     short h36;                                   /* 0x36 */
-    short h38;                                   /* 0x38 */
-    short h3A;                                   /* 0x3A */
+    short orbit_endpoint_collision_direction_class;                                   /* 0x38 */
+    short force_orbit_retraction_decay;                                   /* 0x3A */
     float f3C;                                   /* 0x3C */
     float f40;                                   /* 0x40 */
     float f44;                                   /* 0x44 */
@@ -784,7 +784,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     a = &camera_moby->cam->a;
     qcopy(a->pos, D_0013F4D0_2E8210);
     a->fB0 = 1.5f;
-    a->iC0 = D_0013F450_2E8210.followed_hero_moby;
+    a->followed_moby = D_0013F450_2E8210.followed_hero_moby;
     a->bC4 = 0;
     a->bD6 = 0;
     a->fE0 = 0.2f;
@@ -794,9 +794,9 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     a->fB8 = 0.005f;
     a->hC6 = 0;
     a->hD8 = 0;
-    a->iB4 = 0;
-    a->hDA = 0;
-    a->iBC = 0;
+    a->requested_target_height = 0;
+    a->target_height_override_requested = 0;
+    a->target_height_interpolation_state = 0;
 
     b = &camera_moby->cam->b;
     b->target_orbit_distance = 4.64f;
@@ -809,8 +809,8 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     b->i28 = 0;
     b->i20 = 0;
     b->i24 = 0;
-    b->h3C = 0;
-    b->h3E = 0;
+    b->orbit_distance_override_pending = 0;
+    b->orbit_height_override_pending = 0;
     b->orbit_distance_interpolation_state = 0;
     b->orbit_height_interpolation_state = 0;
 
@@ -822,7 +822,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     D_L00_0015EF40 = 0.75f;
 
     e = camera_moby->cam;
-    e->e.h0 = 0;
+    e->e.height_state_timer = 0;
     camera_height_state = &e->e;
     camera_height_state->i10 = 0;
     camera_height_state->iC = 0;
@@ -865,9 +865,9 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     r = scale_game_frames(0x7D0);
     g = &camera_state_base->g;
     g->f30 = 0.0f;
-    g->h3A = 0;
+    g->force_orbit_retraction_decay = 0;
     g->h36 = 0;
-    g->h38 = 0;
+    g->orbit_endpoint_collision_direction_class = 0;
     g->consecutive_camera_obstruction_frames = 0;
     g->h34 = r;
     g->f44 = l00_follow_camera_collision_probe_step_growth_factor;
@@ -888,7 +888,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
         if (D_L00_00166E04->camera_class == 7 && D_0013F450_2E8210.h30C == 0) {
             e->e.h0 = 0;
         } else {
-            camera_height_state->h0 = scale_game_frames(D_L00_00161D24_gp);
+            camera_height_state->height_state_timer = scale_game_frames(D_L00_00161D24_gp);
         }
     } else {
         follow_camera_reset(camera_moby);
@@ -904,7 +904,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     orbit_distance_shortfall = b->target_orbit_distance - fast_vec_length(orbit_offset_remainder);
     g->f30 = orbit_distance_shortfall;
     if (orbit_distance_shortfall < -0.1f) {
-        g->h3A = 1;
+        g->force_orbit_retraction_decay = 1;
     }
     camera_height_state->f8 = b->f30;
     camera_height_state->f4 = a->fB0;
