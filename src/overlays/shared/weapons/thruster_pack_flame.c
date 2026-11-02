@@ -324,7 +324,7 @@ typedef struct {
 typedef struct N {
     s32 f00;
     u8  p04[8];
-    s32 f0C;
+    s32 has_previous_position;
     V4  v10;
 } N;
 
@@ -768,7 +768,7 @@ void emit_beam_trail_particles(X *x) {
                     1,
                     10000.0f);
     }
-    if (trail_state->f0C) {
+    if (trail_state->has_previous_position) {
         trail_sample_spacing = fast_vec_dist(&trail_state->v10, &emission_position) * 0.5f;
         fast_vec_sub(&previous_position_delta, &trail_state->v10, &emission_position);
         for (i = 1; i < 2; i++) {
@@ -821,7 +821,7 @@ void emit_beam_trail_particles(X *x) {
                                 col);
     if (spawned_effect)
         spawned_effect[3] = 0x44;
-    if (trail_state->f0C) {
+    if (trail_state->has_previous_position) {
         trail_sample_spacing = fast_vec_dist(&trail_state->v10, &emission_position) * 0.16667f;
         fast_vec_sub(&previous_position_delta, &trail_state->v10, &emission_position);
         hero_state = hero.state.current;
@@ -847,7 +847,7 @@ void emit_beam_trail_particles(X *x) {
         }
     }
     qcopy(&trail_state->v10, &emission_position);
-    trail_state->f0C = 1;
+    trail_state->has_previous_position = 1;
 }
 
 /* Creates a class 0xA7 moby carrying a in its data; sets bytes 0x30/0x31, 0x32 and state 0. */
