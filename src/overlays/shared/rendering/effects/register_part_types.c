@@ -139,6 +139,9 @@ extern ParticleClearance particle_clearance __asm__("D_L00_00160258");
 extern f32               particle_min_ground __asm__("D_L00_00160260");
 
 void update_falling_effect_particle(FallingParticle *particle) {
+    enum {
+        FALLING_PARTICLE_GROUND_TEST_SKIP_PROBE = 2
+    };
     Vec4  step;
     Vec4  ground_test_probe;
     Vec4  ground_sample_probe;
@@ -156,7 +159,7 @@ void update_falling_effect_particle(FallingParticle *particle) {
     fast_vec_add(&step, vel, &particle_drift);
     fast_vec_add(&particle->probe, &particle->probe, &step);
     fast_vec_add(&particle->pos, &particle->pos, &step);
-    if (particle->ground_test_mode != 2) {
+    if (particle->ground_test_mode != FALLING_PARTICLE_GROUND_TEST_SKIP_PROBE) {
         if (cell_x != (s32)particle->probe.f[0] || cell_y != (s32)particle->probe.f[1]) {
             ground_test_probe.q = particle->probe.q;
             if (ground_height_at(&ground_test_probe) < particle_min_ground) {
