@@ -44,7 +44,7 @@ typedef struct {
     unsigned int color[4];
     int          unk50, unk54, unk58;
     float        unk5C, unk60;
-    int          unk64;
+    int          corner_2_texture_v;
     float        unk68, unk6C;
     long         unk70, tex, unk80, unk88;
 } Q_2bc1a0;
@@ -1055,7 +1055,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     quad.unk58 = 0;
     quad.unk5C = 1.0f;
     quad.unk60 = 1.0f;
-    quad.unk64 = 0;
+    quad.corner_2_texture_v = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     if (!random_integer_below(4))
