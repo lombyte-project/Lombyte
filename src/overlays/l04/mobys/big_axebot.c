@@ -137,17 +137,17 @@ typedef struct D_B7B0 {
     char           pad59;
     unsigned char  f5A;
     char           pad5B[0x55];
-    char           fB0[7];
+    char           hit_transition_state[7];
     unsigned char  fB7;
     char           padB8[8];
     float          fC0[4];
-    float          fD0;
-    float          fD4;
-    float          fD8;
-    float          fDC;
+    float          knockback_gravity_step;
+    float          knockback_horizontal_deceleration;
+    float          knockback_initial_horizontal_displacement;
+    float          knockback_initial_vertical_displacement;
     int            fE0;
-    int            fE4;
-    float          fE8;
+    int            knockback_motion_flags;
+    float          knockback_collision_height_offset;
     char           padEC[0x11];
     unsigned char  fFD;
     char           padFE[0x12];
@@ -209,7 +209,7 @@ typedef struct M_B7B0 {
     char           padA5;
     short          cls;
     char           padA8[0x14];
-    unsigned char  fBC;
+    unsigned char  behavior_flags;
     char           padBD[3];
     V4_B7B0        fC0;
 } M_B7B0;
@@ -388,10 +388,10 @@ void big_axebot_update(M_B7B0 *moby) {
                 knockback_yaw = fast_arc_tan(moby->pos[0] - h->motion.pos.f[0],
                                              moby->pos[1] - h->motion.pos.f[1]);
             }
-            data->fD4 = frame_time_sq * 12.0f;
-            data->fD0 = frame_time_sq * 35.0f;
-            data->fD8 = frame_time * 7.0f;
-            data->fE4 = 9;
+            data->knockback_horizontal_deceleration = frame_time_sq * 12.0f;
+            data->knockback_gravity_step = frame_time_sq * 35.0f;
+            data->knockback_initial_horizontal_displacement = frame_time * 7.0f;
+            data->knockback_motion_flags = 9;
             data->fFD = 0;
             data->hp -= dmg;
             if (data->hp <= 0.0f) {
@@ -403,7 +403,7 @@ void big_axebot_update(M_B7B0 *moby) {
                 }
                 data->recoil_pose_cooldown_timer = scale_game_frames(0x1E);
                 data->fB7 = 0x78;
-                trooper_anim_update(moby, (short *)data->fB0);
+                trooper_anim_update(moby, (short *)data->hit_transition_state);
             } else {
                 switch (hit_reaction_result) {
                 case BIG_AXEBOT_HIT_REACTION_NONE:
@@ -418,7 +418,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->recoil_pose_cooldown_timer = scale_game_frames(0x1E);
                     if ((hit->att->cls == 0 || hit->damage_amount > 1.0f) &&
                         (moby->animation_source_sequence != 4 || hd < 17.0f || hd > 20.0f)) {
-                        moby->fBC |= 5;
+                        moby->behavior_flags |= 5;
                         blend_big_axebot_and_axe_animation(
                             (char *)moby, (void *)5, 0, (void *)scale_game_frames(6));
                         set_big_axebot_and_axe_animation_speed(moby, 2.0f);
@@ -426,7 +426,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     }
                     data->recoil_displacement = 3.4f / scale_time(7.0f) * 0.5f;
                     data->fB7 = 0x78;
-                    trooper_anim_update(moby, (short *)data->fB0);
+                    trooper_anim_update(moby, (short *)data->hit_transition_state);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
@@ -436,7 +436,7 @@ void big_axebot_update(M_B7B0 *moby) {
                         data->recoil_pitch_angle = -0.5235988f;
                     }
                     data->recoil_pose_cooldown_timer = scale_game_frames(0x1E);
-                    moby->fBC |= 5;
+                    moby->behavior_flags |= 5;
                     blend_big_axebot_and_axe_animation(
                         (char *)moby, (void *)5, 0, (void *)scale_game_frames(6));
                     set_big_axebot_and_axe_animation_speed(moby, 2.0f);
@@ -446,7 +446,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->knockback_descent_target_frame = 10.0f;
                     data->recoil_displacement = 3.4f / scale_time(7.0f);
                     data->fB7 = 0x78;
-                    trooper_anim_update(moby, (short *)data->fB0);
+                    trooper_anim_update(moby, (short *)data->hit_transition_state);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
@@ -459,23 +459,23 @@ void big_axebot_update(M_B7B0 *moby) {
                     moby->state = BIG_AXEBOT_STATE_IDLE;
                     data->recoil_displacement = 3.4f / scale_time(7.0f);
                     data->fB7 = 0x78;
-                    trooper_anim_update(moby, (short *)data->fB0);
+                    trooper_anim_update(moby, (short *)data->hit_transition_state);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
                 case BIG_AXEBOT_HIT_REACTION_FATAL:
-                    data->fE8 = 1.0f;
+                    data->knockback_collision_height_offset = 1.0f;
                     data->fE0 = 0x400;
                     trooper_set_knockback(data->fC0, 5.7f, 4.0f);
                     *(OvlQuad *)vector_quaternion_scratch = *(OvlQuad *)hit->pos;
                     trooper_knockback_arc(
-                        vector_quaternion_scratch, &knockback_yaw, &data->fD8, &data->fDC);
+                        vector_quaternion_scratch, &knockback_yaw, &data->knockback_initial_horizontal_displacement, &data->knockback_initial_vertical_displacement);
                     trooper_start_knockback(knockback_yaw, moby, data->fC0, 7, 1, 0);
                     data->knockback_ascent_target_frame = 12.0f;
                     data->knockback_descent_target_frame = 25.0f;
                     moby->state = BIG_AXEBOT_STATE_DYING;
                     data->fB7 = 0x78;
-                    trooper_anim_update(moby, (short *)data->fB0);
+                    trooper_anim_update(moby, (short *)data->hit_transition_state);
                     FUN_L00_00257470(moby, 0, -1);
                     break;
                 case BIG_AXEBOT_HIT_REACTION_SKIP_ADDITIONAL_RESPONSE:
@@ -509,7 +509,7 @@ void big_axebot_update(M_B7B0 *moby) {
         data->f2E = 1;
         data->f29 = 0;
         data->f30 = 1.5f;
-        moby->fBC = 0;
+        moby->behavior_flags = 0;
         data->fall_displacement = 0.0f;
         data->attached_axe_moby = 0;
         data->alert_voice_cooldown_timer = 0;
@@ -552,7 +552,7 @@ void big_axebot_update(M_B7B0 *moby) {
         if (data->path_trigger_volume_index != -1 && data->approach_path_index != -1 && data->path_follow_started == 0 &&
             (flag || is_point_inside_clip_volume(&hero.motion.pos, data->path_trigger_volume_index) != 0)) {
             moby->state = BIG_AXEBOT_STATE_FOLLOW_PATH;
-            moby->fBC |= 1;
+            moby->behavior_flags |= 1;
             data->path_follow_started = 1;
         } else {
             if (moby->animation_source_sequence == 0xD && FUN_L00_001fefc8(&data->alert_voice_cooldown_timer) != 0) {
@@ -566,12 +566,12 @@ void big_axebot_update(M_B7B0 *moby) {
                     moby->state = BIG_AXEBOT_STATE_MELEE_ATTACK;
                 } else if (flag ? target_distance < data->detection_range * 2.0f
                                 : target_distance < data->detection_range) {
-                    int nf = (moby->fBC & 1) == 0;
+                    int nf = (moby->behavior_flags & 1) == 0;
                     if (nf) {
                         blend_big_axebot_and_axe_animation(
                             (char *)moby, (void *)2, 0, (void *)scale_game_frames(0xC));
                         moby->state = BIG_AXEBOT_STATE_ALERT;
-                        moby->fBC |= 1;
+                        moby->behavior_flags |= 1;
                     }
                 }
             }
@@ -601,12 +601,12 @@ void big_axebot_update(M_B7B0 *moby) {
                     (char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
                 moby->state = BIG_AXEBOT_STATE_MELEE_ATTACK;
             } else if (flag ? target_distance < data->detection_range * 2.0f : target_distance < data->detection_range) {
-                int nf = (moby->fBC & 1) == 0;
+                int nf = (moby->behavior_flags & 1) == 0;
                 if (nf) {
                     blend_big_axebot_and_axe_animation(
                         (char *)moby, (void *)2, 0, (void *)scale_game_frames(0xC));
                     moby->state = BIG_AXEBOT_STATE_ALERT;
-                    moby->fBC |= 1;
+                    moby->behavior_flags |= 1;
                 }
             }
         }
@@ -655,8 +655,8 @@ void big_axebot_update(M_B7B0 *moby) {
         break;
     }
     case BIG_AXEBOT_STATE_CHASE_TARGET:
-        if (moby->fBC & 8) {
-            moby->fBC &= ~8;
+        if (moby->behavior_flags & 8) {
+            moby->behavior_flags &= ~8;
             reset_leg_rig_from_animation(moby, data->leg_rig_state);
         }
         data->movement_yaw = spring_turn(moby->rot[2],
@@ -698,8 +698,8 @@ void big_axebot_update(M_B7B0 *moby) {
         } else {
             float a;
 
-            if (moby->fBC & 8) {
-                moby->fBC &= ~8;
+            if (moby->behavior_flags & 8) {
+                moby->behavior_flags &= ~8;
                 reset_leg_rig_from_animation(moby, data->leg_rig_state);
             }
             a = fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]);
@@ -726,7 +726,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     blend_big_axebot_and_axe_animation(
                         (char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                     moby->state = BIG_AXEBOT_STATE_TURN;
-                    moby->fBC |= 0x10;
+                    moby->behavior_flags |= 0x10;
                 }
                 if (point_in_path_xy(tpos,
                                      ((P_B7B0 *)l04_paths[data->movement_boundary_path_index])->pts,
@@ -776,8 +776,8 @@ void big_axebot_update(M_B7B0 *moby) {
         break;
     case BIG_AXEBOT_STATE_HIT_RECOVERY:
         if (!(moby->animation_target_sequence == 5 && (moby->animation_source_sequence != moby->animation_target_sequence || hd <= 13.0f))) {
-            if (moby->fBC & 4) {
-                moby->fBC &= ~4;
+            if (moby->behavior_flags & 4) {
+                moby->behavior_flags &= ~4;
                 blend_big_axebot_and_axe_animation(
                     (char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(6));
                 set_big_axebot_and_axe_animation_speed(moby, 1.5f);
@@ -819,10 +819,10 @@ void big_axebot_update(M_B7B0 *moby) {
     case BIG_AXEBOT_STATE_TURN:
         if (moby->animation_source_sequence == 8 && (moby->f70 & 2)) {
             moby->state = BIG_AXEBOT_STATE_CHASE_TARGET;
-            moby->fBC = (moby->fBC | 8) & ~0x10;
+            moby->behavior_flags = (moby->behavior_flags | 8) & ~0x10;
             blend_big_axebot_and_axe_animation(
                 (char *)moby, (void *)9, 0, (void *)scale_game_frames(0xC));
-        } else if (moby->fBC & 0x10) {
+        } else if (moby->behavior_flags & 0x10) {
             float a = fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]);
 
             moby->rot[2] = spring_turn(moby->rot[2],
@@ -882,7 +882,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, data->fB0);
+    trooper_anim_finish(moby, data->hit_transition_state);
     if (data->recoil_displacement > 0.0f) {
         struct Hero *h = &hero;
 
