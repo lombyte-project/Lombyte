@@ -3540,7 +3540,7 @@ typedef struct Hero Hero;
 
 typedef struct {
     char  p0[0x18];
-    char *m18;
+    char *hit_moby;
     char  p1C[4];
     float v20[4];
     char  p30[0x10];
@@ -3658,10 +3658,10 @@ void check_ledge_grab(void) {
     if (!found)
         return;
 
-    if (((Hit_20C568 *)((char *)D_L00_00173E40))->m18 != 0) {
+    if (((Hit_20C568 *)((char *)D_L00_00173E40))->hit_moby != 0) {
         grabbable = 0;
-        moby_info = get_moby_target_info(((Hit_20C568 *)((char *)D_L00_00173E40))->m18);
-        moby_props = FUN_L00_002603d0(((Hit_20C568 *)((char *)D_L00_00173E40))->m18);
+        moby_info = get_moby_target_info(((Hit_20C568 *)((char *)D_L00_00173E40))->hit_moby);
+        moby_props = FUN_L00_002603d0(((Hit_20C568 *)((char *)D_L00_00173E40))->hit_moby);
         if (moby_info != 0 && (moby_info->h1E & 1)) {
             grabbable = 1;
         } else if (moby_props != 0) {
@@ -3670,7 +3670,7 @@ void check_ledge_grab(void) {
         if (!grabbable)
             return;
     }
-    ((Hero *)D_0013F450_20C568)->ledge_moby = (s32)(((Hit_20C568 *)((char *)D_L00_00173E40))->m18);
+    ((Hero *)D_0013F450_20C568)->ledge_moby = (s32)(((Hit_20C568 *)((char *)D_L00_00173E40))->hit_moby);
     if (((Hero *)D_0013F450_20C568)->motion.pos.f[2] + up <
         ((Hit_20C568 *)((char *)D_L00_00173E40))->v20[2])
         return;
