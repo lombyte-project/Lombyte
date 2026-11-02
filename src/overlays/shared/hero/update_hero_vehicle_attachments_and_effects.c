@@ -419,7 +419,7 @@ typedef struct {
     u8       p0[0x98];
     f32      probe_heading_angle;
     u8       p1[0xE0 - 0x9C];
-    V_2291d0 vE0;
+    V_2291d0 hero_velocity;
     u8       p2[0x240 - 0xF0];
     s32      velocity_probe_hit_moby;
     u8       p3[0x308 - 0x244];
@@ -460,7 +460,7 @@ void adjust_hero_velocity_from_collision_probes(int force) {
 
     if (P.h308 != 0)
         return;
-    if (gravity_length_xy(&P.vE0) < frame_time * 0.1f)
+    if (gravity_length_xy(&P.hero_velocity) < frame_time * 0.1f)
         return;
     primary_origin_z_offset = 0.3700000047683716f;
     k = 0.5f;
@@ -507,10 +507,10 @@ void adjust_hero_velocity_from_collision_probes(int force) {
         P.velocity_probe_hit_moby = X.probe_collision_hit_moby;
         *(s32 *)&X.v40.f[2] = 0;
         sceVu0Normalize(&X.v40, &X.v40);
-        negative_horizontal_dot = -P.vE0.f[0] * X.v40.f[0] - P.vE0.f[1] * X.v40.f[1];
+        negative_horizontal_dot = -P.hero_velocity.f[0] * X.v40.f[0] - P.hero_velocity.f[1] * X.v40.f[1];
         if (0.0f < negative_horizontal_dot) {
             fast_vec_scale(&X.v40, &X.v40, negative_horizontal_dot);
-            fast_vec_add(&P.vE0, &P.vE0, &X.v40);
+            fast_vec_add(&P.hero_velocity, &P.hero_velocity, &X.v40);
         }
     }
 }
