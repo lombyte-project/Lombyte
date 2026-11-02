@@ -150,6 +150,9 @@ void spawner_update(char *moby) __asm__("FUN_L09_0030ab80");
 
 /* Moby class 1885 */
 void spawner_update(char *moby) {
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     SpawnerVars *spawner_vars = (SpawnerVars *)MOBY(moby)->pvars;
     float        target[4];
     float        launch_velocity[4];
@@ -193,7 +196,7 @@ void spawner_update(char *moby) {
                                 region_count);
         } else {
             char *target_moby = *(char **)((char *)spawner_vars + 0x140);
-            if (target_moby != 0 && (unsigned char)MOBY(target_moby)->state != 0xFE &&
+            if (target_moby != 0 && (unsigned char)MOBY(target_moby)->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
                 (unsigned char)MOBY(target_moby)->state != 0xFD) {
                 qcopy((char *)spawner_vars + 0x100, &MOBY(target_moby)->pos);
             } else {
