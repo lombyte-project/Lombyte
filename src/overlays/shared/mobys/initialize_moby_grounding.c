@@ -9,7 +9,7 @@ void initialize_moby_grounding(char *moby) __asm__("FUN_L02_0025c758");
 
 void initialize_moby_grounding(char *moby) {
     float delta = 0.2f;
-    float val = MOBY(moby)->pos.z;
-    *(float *)(moby + 0x84) = val - delta;
-    *(float *)(moby + 0x88) = val + delta;
+    float moby_z = MOBY(moby)->pos.z;
+    *(float *)(moby + 0x84) = moby_z - delta;
+    *(float *)(moby + 0x88) = moby_z + delta;
 }
