@@ -955,15 +955,15 @@ typedef struct {
 } QuadPacket;
 
 s32 l13_point_table_quad_blend_color_a_selector __asm__("D_L13_00161E88") = 0;
-s32 D_L13_00161E8C = 2;
+s32 l13_point_table_quad_blend_color_b_selector __asm__("D_L13_00161E8C") = 2;
 s32 l13_point_table_quad_blend_alpha_selector __asm__("D_L13_00161E90") = 0;
-s32 D_L13_00161E94 = 1;
-s32 D_L13_00161E98 = 0x80;
-s32 D_L13_00161E9C = 0xb;
-s32 D_L13_00161EA0 = 0x40ff;
-s32 D_L13_00161EA4 = 0x600040ff;
-s32 D_L13_00161EA8 = 0xcccc;
-s32 D_L13_00161EAC = 0x6000cccc;
+s32 l13_point_table_quad_blend_color_d_selector __asm__("D_L13_00161E94") = 1;
+s32 l13_point_table_quad_blend_fixed_alpha __asm__("D_L13_00161E98") = 0x80;
+s32 l13_point_table_quad_effect_texture_index __asm__("D_L13_00161E9C") = 0xb;
+s32 l13_point_table_quad_even_corner_color_start __asm__("D_L13_00161EA0") = 0x40ff;
+s32 l13_point_table_quad_even_corner_color_end __asm__("D_L13_00161EA4") = 0x600040ff;
+s32 l13_point_table_quad_inset_corner_color_start __asm__("D_L13_00161EA8") = 0xcccc;
+s32 l13_point_table_quad_inset_corner_color_end __asm__("D_L13_00161EAC") = 0x6000cccc;
 
 /* Scrolling texture coordinates of the four corners. */
 f32 D_L13_001D9B70[4][2] = {
@@ -994,13 +994,13 @@ void draw_point_table_quads(struct Moby *moby) {
 
     vu1_add_g_sregister(0x47, 0x5380B);
     i = 0;
-    pk[0].tag[1] = get_effect_texture(D_L13_00161E9C);
-    pk[1].tag[1] = get_effect_texture(D_L13_00161E9C);
+    pk[0].tag[1] = get_effect_texture(l13_point_table_quad_effect_texture_index);
+    pk[1].tag[1] = get_effect_texture(l13_point_table_quad_effect_texture_index);
     regs = l13_point_table_quad_blend_color_a_selector;
-    regs |= (u64)D_L13_00161E8C << 2;
+    regs |= (u64)l13_point_table_quad_blend_color_b_selector << 2;
     regs |= (u64)l13_point_table_quad_blend_alpha_selector << 4;
-    regs |= (u64)D_L13_00161E94 << 6;
-    regs |= (u64)D_L13_00161E98 << 32;
+    regs |= (u64)l13_point_table_quad_blend_color_d_selector << 6;
+    regs |= (u64)l13_point_table_quad_blend_fixed_alpha << 32;
     /* Store order is load-bearing: it sets which register keeps regs. */
     pk[1].tag[2] = 0x0000FF9000000260ULL;
     pk[0].tag[2] = 0x0000FF9000000260ULL;
@@ -1026,13 +1026,13 @@ void draw_point_table_quads(struct Moby *moby) {
                 corner_position[2] -= 0.125f;
                 pk[0].col[j] =
                     fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
-                                     D_L13_00161EA8,
-                                     D_L13_00161EAC);
+                                     l13_point_table_quad_inset_corner_color_start,
+                                     l13_point_table_quad_inset_corner_color_end);
             } else {
                 pk[0].col[j] =
                     fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
-                                     D_L13_00161EA0,
-                                     D_L13_00161EA4);
+                                     l13_point_table_quad_even_corner_color_start,
+                                     l13_point_table_quad_even_corner_color_end);
             }
             pk[0].uv[j][0] = D_L13_001D9B70[j][0];
             pk[0].uv[j][1] = D_L13_001D9B70[j][1];
