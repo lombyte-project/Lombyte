@@ -216,7 +216,7 @@ typedef struct Data2C8398 {
     int           i264;
     char          p268[4];
     float         f26C;
-    float         f270;
+    float         target_selection_range;
     int           i274;
     float         f278;
     float         f27C;
@@ -399,7 +399,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     Data2C8398 *moby_data = m->data;
     float       target_distance;
 
-    select_moby_combat_target(m, &selected_target, moby_data->f270);
+    select_moby_combat_target(m, &selected_target, moby_data->target_selection_range);
     target_distance = vector_distance_xy(m->pos, &selected_target);
     manipulator_set_scale(&moby_data->look0, 2.5f);
     if (moby_data->b262 == 1) {
@@ -426,7 +426,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         if (m->state == ENEMY_TURN_TO_HEADING) {
             moby_data->look0.target_yaw_offset = fast_subtract_rotations(moby_data->f28C, m->rot[2]) * 0.25f;
             moby_data->look1.target_yaw_offset = fast_subtract_rotations(moby_data->f28C, m->rot[2]) * 0.75f;
-        } else if (m->state < ENEMY_MOVE_TO_PATH_NODE && target_distance < moby_data->f270) {
+        } else if (m->state < ENEMY_MOVE_TO_PATH_NODE && target_distance < moby_data->target_selection_range) {
             moby_data->look1.target_yaw_offset =
                 fast_subtract_rotations(fast_arc_tan(selected_target.pos[0] - m->pos[0],
                                                      selected_target.pos[1] - m->pos[1]),
@@ -525,7 +525,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             blend_moby_animation(m, 0, 0, scale_game_frames(10));
             m->state = ENEMY_WAIT_FOR_LINKED_MOBY;
         } else {
-            if (target_distance < moby_data->f270 || target_distance < moby_data->f27C) {
+            if (target_distance < moby_data->target_selection_range || target_distance < moby_data->f27C) {
                 if (try_start_kerwan_path_enemy_heading_turn(
                         fast_arc_tan(selected_target.pos[0] - m->pos[0],
                                      selected_target.pos[1] - m->pos[1]),
@@ -549,7 +549,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                 if (m->anim != 2) {
                     blend_moby_animation(m, 2, 0, scale_game_frames(10));
                 }
-            } else if (target_distance < moby_data->f270 &&
+            } else if (target_distance < moby_data->target_selection_range &&
                        absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f &&
                        fast_dec_timer_s16(&moby_data->s250)) {
                 if (fast_difference_between_rotations(
@@ -567,7 +567,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         }
         break;
     case ENEMY_WAIT_FOR_LINKED_MOBY:
-        if (target_distance < moby_data->f270 &&
+        if (target_distance < moby_data->target_selection_range &&
             absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f && m->anim != 0xA) {
             blend_moby_animation(m, 0xA, 0, scale_game_frames(10));
             break;
@@ -672,7 +672,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                     (char *)&selected_target)) {
                 break;
             }
-            if (target_distance < moby_data->f270 &&
+            if (target_distance < moby_data->target_selection_range &&
                 absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f &&
                 fast_dec_timer_s16(&moby_data->s250) &&
                 fast_difference_between_rotations(
@@ -1509,9 +1509,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         moby_data->s252 = scale_game_frames(240);
     }
     if (fast_dec_timer_s16(&moby_data->s252)) {
-        moby_data->f270 = moby_data->f26C;
+        moby_data->target_selection_range = moby_data->f26C;
     } else {
-        moby_data->f270 = moby_data->f26C + 5.0f;
+        moby_data->target_selection_range = moby_data->f26C + 5.0f;
     }
     hit = find_moby_hit(moby, 0x330000, 0);
     hit_response_code =
@@ -1671,7 +1671,7 @@ void select_kerwan_path_enemy_next_node(Moby2C8398 *moby) {
     best_ang = 0.0f;
     pf = &moby_data->pf;
     best_dist = best_ang;
-    select_moby_target_with_hero_fallback((char *)moby, (char *)&target, moby_data->f270);
+    select_moby_target_with_hero_fallback((char *)moby, (char *)&target, moby_data->target_selection_range);
     seg = pf->idx;
     FUN_L00_0025df68(pf->path,
                      moby->pos,
