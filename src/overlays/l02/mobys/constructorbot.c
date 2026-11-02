@@ -80,8 +80,8 @@ extern int   D_L02_0015F5CC_i __asm__("D_L02_0015F5CC");
 #include "rnc/overlay/l02/mobys/constructorbot_data/constructorbot_update.h"
 
 int          D_L02_00161A88 = 0x40808080;
-int          D_L02_00161A90 = 0x3c;
-int          D_L02_00161A94 = 0x78;
+int          l02_constructorbot_wake_spray_frame_count_min __asm__("D_L02_00161A90") = 0x3c;
+int          l02_constructorbot_wake_spray_frame_count_max __asm__("D_L02_00161A94") = 0x78;
 extern float constructorbot_wake_spray_planar_magnitude_max_gp __asm__("D_L02_00161A98")
     __attribute__((sda));
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -359,8 +359,8 @@ void constructorbot_update(struct Moby *moby) {
                         direction,
                         D_L02_00161A88,
                         D_L02_00161A88,
-                        random_int_between(scale_game_frames(D_L02_00161A90),
-                                           scale_game_frames(D_L02_00161A94)),
+                        random_int_between(scale_game_frames(l02_constructorbot_wake_spray_frame_count_min),
+                                           scale_game_frames(l02_constructorbot_wake_spray_frame_count_max)),
                         1,
                         40000.0f);
         }
