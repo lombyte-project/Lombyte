@@ -124,7 +124,7 @@ typedef struct {
     s32          timer; /* 0x194 */
     s32          path;  /* 0x198 */
     u8           pad19C[0xC];
-    f32          unk1A8;
+    f32          approach_heading_offset;
     u8           pad1AC[0x34];
     Vec4         unk1E0;
     u8           pad1F0[0x210];
@@ -366,7 +366,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         func_L00_002592B0_309330(moby,
                                  fast_add_rotations(fast_arc_tan(target->pos.x - moby->pos.x,
                                                                  target->pos.y - moby->pos.y),
-                                                    blarg_space_commando_vars->unk1A8),
+                                                    blarg_space_commando_vars->approach_heading_offset),
                                  &blarg_space_commando_vars->turn,
                                  0.05f,
                                  0.3f,
@@ -378,9 +378,9 @@ void blarg_space_commando_update(struct Moby *moby) {
                 moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f) &
             2) {
             rand();
-            blarg_space_commando_vars->unk1A8 = convert_integer_to_float(-1) * 1.0995574f;
+            blarg_space_commando_vars->approach_heading_offset = convert_integer_to_float(-1) * 1.0995574f;
         } else {
-            blarg_space_commando_vars->unk1A8 = 0.0f;
+            blarg_space_commando_vars->approach_heading_offset = 0.0f;
         }
         resolve_point_path_segment_xy_clearance(
             blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
