@@ -44,8 +44,8 @@ void reveal_map_around_position(f32 *position) {
     s32               y;
     s32               state;
     s32               level;
-    s32               mode15;
-    s32               mode16;
+    s32               hero_control_mode_is_15;
+    s32               hero_control_mode_is_16;
     s32               i;
     s32              *filter;
     s32               index;
@@ -132,19 +132,19 @@ void reveal_map_around_position(f32 *position) {
             *filter = 0;
             continue;
         }
-        if ((flags & 4) && !mode16) {
+        if ((flags & 4) && !hero_control_mode_is_16) {
             *filter = 0;
             continue;
         }
-        if ((flags & 8) && mode16) {
+        if ((flags & 8) && hero_control_mode_is_16) {
             *filter = 0;
             continue;
         }
-        if ((flags & 0x10) && !mode15) {
+        if ((flags & 0x10) && !hero_control_mode_is_15) {
             *filter = 0;
             continue;
         }
-        if ((flags & 0x20) && mode15) {
+        if ((flags & 0x20) && hero_control_mode_is_15) {
             *filter = 0;
             continue;
         }
