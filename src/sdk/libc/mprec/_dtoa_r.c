@@ -85,7 +85,11 @@ union double_union {
 #define Bcopy(x, y) memcpy(&(x)->_sign, &(y)->_sign, (y)->_wds * sizeof(u32) + 2 * sizeof(s32))
 extern const f64 tens[23], bigtens[5];
 extern const f64 dtoa_quick_overflow_divisor[] __asm__("D_001524B0");
-extern char      D_00152310[], D_00152320[], D_00152328[];
+/* The strings _dtoa_r returns for infinity, NaN and zero, in .rodata like
+   the literals they were (at 8 bytes or less they would go to .sdata). */
+const char D_00152310[] __attribute__((section(".rodata"))) = "Infinity";
+const char D_00152320[] __attribute__((section(".rodata"))) = "NaN";
+const char D_00152328[] __attribute__((section(".rodata"))) = "0";
 extern _Bigint  *Balloc(struct _reent *, s32);
 extern _Bigint  *d2b(struct _reent *, f64, s32 *, s32 *);
 extern _Bigint  *i2b(struct _reent *, s32) __asm__("func_00115808");

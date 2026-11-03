@@ -94,7 +94,8 @@ typedef struct _reent {
     _Bigint *_p5s;
 } _reent;
 
-extern s32      small_powers_of_five[] __asm__("D_001523B8");
+/* 5^1..5^3, indexed by (k & 3) - 1. */
+const s32       small_powers_of_five[3] __asm__("D_001523B8") = {5, 25, 125};
 extern _Bigint *__i2b(struct _reent *, s32) __asm__("func_00115808");
 extern _Bigint *_multiply(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint *_multadd(struct _reent *, _Bigint *, s32, s32);

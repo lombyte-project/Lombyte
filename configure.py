@@ -940,12 +940,15 @@ OVERLAY_SN_UNITS = {
 # link fails when the section is not SIZE bytes.  Both the assembly-backed and
 # the promoted (normalized) unit names resolve to the same retail bytes.
 RODATA_OVERLAYS = {
-    "_dtoa_r": (0x152330, 0x532B0, 56),
+    "sdk/libc/stdlib/_strtol_r": (0x152200, 0x53180, 257),  # newlib _ctype_
+    "_dtoa_r": (0x152310, 0x53290, 88),  # Infinity/NaN/0 strings, f64 literals, switch table
     # _getpic's switch emits a 5-entry jump table (0x14 bytes) that retail
     # stored at 0x153AA0 inside core_rdata; the expected object references it
     # as the splat symbol jtbl_00153AA0, so the compiled .rodata must land at
     # the same VMA/file offset for the relocations to resolve content-equal.
     "_getpic": (0x153AA0, 0x54A20, 20),
+    "sdk/libc/locale/_localeconv_r": (0x152370, 0x532F0, 58),  # the C locale lconv and its strings
+    "sdk/libc/mprec/pow5mult": (0x1523B8, 0x53338, 12),  # small_powers_of_five
     "sdk/deci2/printfloat": (0x152780, 0x53700, 48),  # its three formats and three f64 literals (0.1, 0.1, 1e6)
     "sdk/deci2/printf_impl": (0x1527B0, 0x53730, 292),  # _printf's format switch table (jtbl_001527B0)
     "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0, 26),  # its RPC-collision message
