@@ -3284,7 +3284,7 @@ typedef struct {
     char          p454[0x58];
     short         f4AC;
     char          p4AE[0x14E];
-    int           f5FC;
+    int           wrench_slam_input_lockout;
     char          p600[0x368];
     int           grapple_target_valid;
     char          p96C[0x18];
@@ -3324,7 +3324,7 @@ typedef struct {
     char          p22A0[0x2A];
     unsigned char f22CA;
     char          p22CB[0xD];
-    short         f22D8;
+    short         repeat_press_action_lockout;
     char          p22DA[0x2];
     short         mode3_toggle_requested;
     short         mode3_toggle_delay_frames;
@@ -3450,7 +3450,7 @@ int process_hero_equipped_item_input(void) {
                     (D_0013F450_h228770.f41E != 0 && D_0013F450_h228770.f2DC > 0.57f) ||
                     (D_0013F450_h228770.hero_current_state == HERO_STATE_LAND &&
                      D_0013F450_h228770.f2DC > 0.57f)) {
-                    if (D_0013F450_h228770.f5FC != 0) {
+                    if (D_0013F450_h228770.wrench_slam_input_lockout != 0) {
                         break;
                     }
                     hero_set_state(0x14, 1);
@@ -3689,7 +3689,7 @@ int process_hero_equipped_item_input(void) {
     if (D_0013F450_h228770.current_state_elapsed_frames == start) {
         if (hero_slot_item_id(3) == 3 && D_0013F450_h228770.hero_current_state != HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT &&
             (D_0013F450_h228770.f308 == 0 || item_available[0x1C] == 0) &&
-            D_0013F450_h228770.f22D8 == 0) {
+            D_0013F450_h228770.repeat_press_action_lockout == 0) {
             f_fun_001f9740_227fa0(&hero_repeat_press_window_frames);
             if (hero_repeat_press_window_frames != 0) {
                 if (D_0013F450_h228770.hero_control_mode < 2U ||
