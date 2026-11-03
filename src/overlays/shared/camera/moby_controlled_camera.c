@@ -197,7 +197,7 @@ void apply_moby_camera_control(char *moby) {
         char **)(l02_moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1c));
     char              *target;
     unsigned short    *group;
-    int                id;
+    int                encoded_group_target;
     int                index;
     int                duration;
     int                count;
@@ -232,7 +232,7 @@ void apply_moby_camera_control(char *moby) {
                 int e = *group;
                 moby_table_base = D_L02_0015FFD8;
                 first_group_target = (char *)(moby_table_base + ((e & 0x7fff) << 8));
-                id = e;
+                encoded_group_target = e;
             }
             if (*(signed char *)(first_group_target + 0x20) < 0) {
                 do {
@@ -246,7 +246,7 @@ void apply_moby_camera_control(char *moby) {
                         int e = *group;
                         moby_table_base = D_L02_0015FFD8;
                         group_target_candidate = (char *)(moby_table_base + ((e & 0x7fff) << 8));
-                        id = e;
+                        encoded_group_target = e;
                     }
                 } while (*(signed char *)(group_target_candidate + 0x20) < 0);
                 target = group_target_candidate;
