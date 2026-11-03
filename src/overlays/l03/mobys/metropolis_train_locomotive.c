@@ -263,7 +263,7 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
     char  *moby_position;
     char  *moby_rotation;
     int    next_id;
-    int    id;
+    int    car_moby_index;
     float *dp;
     char  *motion;
 
@@ -275,19 +275,19 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
     qcopy(old_rot, moby_rotation);
     next_id = *(int *)(locomotive_pvars + 0xA0);
     if (next_id != -1) {
-        id = next_id;
+        car_moby_index = next_id;
         dp = delta;
         motion = locomotive_pvars + 0x60;
         do {
-            car = D_L03_0015FFD8_292d10 + (id << 8);
+            car = D_L03_0015FFD8_292d10 + (car_moby_index << 8);
             car_data = *(char **)(car + 0x78);
             car[0x72] = 0x40;
             fast_vec_sub(delta, car + 0x10, car_data + 0xA0);
             update_entity_matrix(car_data + 0x20, delta, car_data + 0xB0, car + 0x40);
             qcopy(car_data + 0xA0, car + 0x10);
             qcopy(car_data + 0xB0, car + 0x40);
-            id = *(int *)(car_data + 0xC0);
-        } while (id != -1);
+            car_moby_index = *(int *)(car_data + 0xC0);
+        } while (car_moby_index != -1);
         fast_vec_sub(dp, &moby->pos, old_pos);
         update_entity_matrix(motion, dp, old_rot, &moby->rot);
     } else {
