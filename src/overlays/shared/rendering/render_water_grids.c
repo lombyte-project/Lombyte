@@ -238,7 +238,7 @@ void render_water_grids(f32 *water_record, s32 count) {
     f32  x_offset, y_offset, x_end, y_end, z;
     u32  near_bits, far_bits;
     s32  mask;
-    s32  i, j, mode;
+    s32  i, j, tile_clip_mode;
     s32  height_index, index;
     f32 *height;
     u32 *packet;
@@ -320,11 +320,11 @@ void render_water_grids(f32 *water_record, s32 count) {
                 for (height_index = 0x10; height_index >= 0; height_index--, height += 0x33)
                     *height = water_record[2];
             }
-            mode = (far_bits & 0x2f2f2f2f) != 0;
-            if (!mode) {
-                mode = WATER_GRID_MODE_TEST_NEAR_CLIP;
+            tile_clip_mode = (far_bits & 0x2f2f2f2f) != 0;
+            if (!tile_clip_mode) {
+                tile_clip_mode = WATER_GRID_MODE_TEST_NEAR_CLIP;
                 if (!(near_bits & 0x2f2f2f2f))
-                    mode = WATER_GRID_MODE_SKIP_CLIP_TESTS;
+                    tile_clip_mode = WATER_GRID_MODE_SKIP_CLIP_TESTS;
             }
             mask = *(u16 *)((u8 *)water_record + 0x1e);
             if (*(u32 *)(water_record + 5) != cached_water_texture_id_gp ||
@@ -360,7 +360,7 @@ void render_water_grids(f32 *water_record, s32 count) {
             }
             for (index = 0; index < 16; index++, mask = (s32)mask >> 1) {
                 if (mask & 1)
-                    cull_and_submit_water_grid_tile(water_record, index, mode);
+                    cull_and_submit_water_grid_tile(water_record, index, tile_clip_mode);
             }
         next_entity:
             i++;
