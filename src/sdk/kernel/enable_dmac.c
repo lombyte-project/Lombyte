@@ -11,17 +11,17 @@ s32 enable_dmac(s32 channel_index) {
     enum {
         INTERRUPT_ENABLE_BIT_CLEAR = 0
     };
-    u32 status;
+    u32 saved_interrupt_enable_bit;
     s32 dmac_enable_result;
 
-    status = CpuReadStatus();
-    status &= 0x10000;
-    if (status != INTERRUPT_ENABLE_BIT_CLEAR) {
+    saved_interrupt_enable_bit = CpuReadStatus();
+    saved_interrupt_enable_bit &= 0x10000;
+    if (saved_interrupt_enable_bit != INTERRUPT_ENABLE_BIT_CLEAR) {
         DIntr();
     }
     dmac_enable_result = _EnableDmac(channel_index);
     CpuSync();
-    if (status != INTERRUPT_ENABLE_BIT_CLEAR) {
+    if (saved_interrupt_enable_bit != INTERRUPT_ENABLE_BIT_CLEAR) {
         EnableInterrupts();
     }
     return dmac_enable_result;
