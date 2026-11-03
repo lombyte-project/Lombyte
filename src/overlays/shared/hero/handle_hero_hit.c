@@ -88,7 +88,7 @@ s32 handle_hero_hit(s32 apply_response) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         mob = (u8 *)G.damage_source_moby;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
-            hit_response_state = 0x80;
+            hit_response_state = HERO_STATE_DYING_SPEED_LIMITED;
         call_ret:
             hero_set_state(hit_response_state, 1);
             return 1;
@@ -101,14 +101,14 @@ s32 handle_hero_hit(s32 apply_response) {
         if (G.state.control_mode == HERO_MODE_WATER_SURFACE) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                hit_response_state = 0x82;
+                hit_response_state = HERO_STATE_DYING_ZERO_HEALTH;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
         } else if (G.state.control_mode == HERO_MODE_SWIM) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                hit_response_state = 0x82;
+                hit_response_state = HERO_STATE_DYING_ZERO_HEALTH;
                 goto call_ret;
             }
             if (current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) {
@@ -122,7 +122,7 @@ s32 handle_hero_hit(s32 apply_response) {
         } else if (G.state.control_mode == HERO_MODE_LEDGE) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0) {
-                hit_response_state = 0x82;
+                hit_response_state = HERO_STATE_DYING_ZERO_HEALTH;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
                     goto call_ret;
                 }
