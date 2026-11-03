@@ -35,7 +35,7 @@ void smoke_emitter_update(SmokeMoby *smoke_emitter_moby) {
     Vec4       pos;
     Vec4       particle_velocity;
     Vec4       local_velocity;
-    f32        size;
+    f32        target_particle_scalar;
     s32        i;
 
     smoke_vars = smoke_emitter_moby->vars;
@@ -52,12 +52,12 @@ void smoke_emitter_update(SmokeMoby *smoke_emitter_moby) {
         particle_velocity.q = local_velocity.q;
         transform_vector_by_basis(&particle_velocity, &particle_velocity, smoke_emitter_moby->mtx);
         fast_vec_add(&pos, &pos, &smoke_emitter_moby->pos);
-        size = random_float_between(125000.0f, 175000.0f);
+        target_particle_scalar = random_float_between(125000.0f, 175000.0f);
         spawn_effect_particle_with_target_scalar(&pos,
                                                  &particle_velocity,
                                                  0x207F7F7F,
                                                  0x272727,
-                                                 size,
+                                                 target_particle_scalar,
                                                  scale_game_frames(random_int_between(0x2D, 0x3C)));
     }
 }
