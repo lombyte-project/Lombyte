@@ -756,14 +756,14 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                     60000.0f);
         for (i = 0; i < 2; i++) {
             int            signed_puff_random_value = random_integer_below(6);
-            float          size;
+            float          puff_size;
             int            puff_rgb_component;
             unsigned char *p;
 
             if (random_integer_below(2)) {
                 signed_puff_random_value = -signed_puff_random_value;
             }
-            size = random_float_between(40000.0f, 100000.0f);
+            puff_size = random_float_between(40000.0f, 100000.0f);
             puff_rgb_component = random_int_between(0x30, 0xFF);
             p = FUN_L00_0026d000_c618(
                 &moby->pos,
@@ -772,7 +772,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 1.0f,
                 signed_puff_random_value,
                 D_L14_0015F580,
-                size,
+                puff_size,
                 puff_rgb_component |
                     (0x60000000 | (puff_rgb_component << 16) | (puff_rgb_component << 8)));
             if (p != 0) {
