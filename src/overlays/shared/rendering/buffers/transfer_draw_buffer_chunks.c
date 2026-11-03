@@ -13,9 +13,9 @@ void transfer_draw_buffer_chunks(int dst,
 void transfer_draw_buffer_chunks(int destination_byte_address,
                                  int draw_buffer_byte_address,
 
-                                 int size) {
+                                 int byte_count) {
     char chunk_transfer_descriptor[0x70] __attribute__((aligned(16)));
-    int  left = (size + 0x3FFF) & ~0x3FFF;
+    int  left = (byte_count + 0x3FFF) & ~0x3FFF;
     int  transfer_byte_offset = 0;
     while (left > 0) {
         FUN_00122518(chunk_transfer_descriptor,
