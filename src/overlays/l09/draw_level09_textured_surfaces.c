@@ -139,7 +139,7 @@ void        draw_level09_scrolling_textured_strips(char *list,
 
 void draw_level09_scrolling_textured_strips(
 
-    char *list, int count, float unused, long first_texture_index, long second_texture_index) {
+    char *list, int strip_entry_count, float unused, long first_texture_index, long second_texture_index) {
     int   i;
     int   j;
     int   strip_vertex_index;
@@ -160,7 +160,7 @@ void draw_level09_scrolling_textured_strips(
     for (i = 0; i < 256; i++) {
         sp[i] = ((i * 0x89) & 0xF) * 0x20200 + 0x80787070;
     }
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < strip_entry_count; i++) {
         char *strip_entry = list + i * 64;
         idx = fast_bsphere_check(strip_entry, 256.0f);
         if (idx == -1)
