@@ -1081,9 +1081,9 @@ void release_and_clear_hero_voice_slots(void) {
 
 typedef struct {
     u8  p[0x280];
-    u16 x280;
+    u16 qualifying_items_help_request_gate;
     u8  p282[0x13E];
-    u16 x3c0;
+    u16 special_state_item_help_request_gate;
 } G00206cf8;
 
 extern G00206cf8      help_records __asm__("D_00141968");
@@ -1094,14 +1094,14 @@ void                  check_hero_item_reward_conditions(void) __asm__("FUN_L00_0
 
 void check_hero_item_reward_conditions(void) {
     s32 i, qualifying_item_count;
-    if (help_records.x3c0 == 0 && item_available[4] != 0 && hero_is_in_special_state() != 0) {
+    if (help_records.special_state_item_help_request_gate == 0 && item_available[4] != 0 && hero_is_in_special_state() != 0) {
         help_request(0x4E2E, 0x78);
     }
     if (D_L00_0015F5CC_00206cf8 <= 0)
         return;
     if (D_L00_0015F5CC_00206cf8 & 0x7F)
         return;
-    if (help_records.x280 != 0)
+    if (help_records.qualifying_items_help_request_gate != 0)
         return;
     if (D_001418F0 != 0)
         return;
