@@ -493,10 +493,10 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
                                 int flag) {
     u128_263e30 fragment_spawn_positions[16];
     float       random_fragment_euler_rotation[4] __attribute__((aligned(16)));
-    int         mode = 0;
+    int         spawned_fragment_mode = 0;
     int         i, k;
     if (flag) {
-        mode = 2;
+        spawned_fragment_mode = 2;
     }
     if (first_fragment_class > 0) {
         if (consecutive_class_fragment_count > 0)
@@ -506,7 +506,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
                                         &MOBY(source_moby)->pos,
                                         source_moby + 0x40,
                                         0,
-                                        mode,
+                                        spawned_fragment_mode,
                                         &zero_vector,
                                         &zero_vector,
                                         0.0f,
@@ -527,7 +527,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
                                         &fragment_spawn_positions[i],
                                         random_fragment_euler_rotation,
                                         0,
-                                        mode,
+                                        spawned_fragment_mode,
                                         &zero_vector,
                                         &zero_vector,
                                         0.0f,
