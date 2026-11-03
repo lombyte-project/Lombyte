@@ -67,7 +67,7 @@ s32 read_mpeg(struct VideoDec *video_dec,
     s32 skipped;
     s32 started;
     s32 skip;
-    s32 mode;
+    s32 skip_mode;
     s32 decode_remaining;
     s32 read_remaining;
     s32 space;
@@ -83,9 +83,9 @@ s32 read_mpeg(struct VideoDec *video_dec,
     sceGsSyncV(0);
     while (decode_remaining >= 5 && video_dec_get_state(video_dec) != VD_STATE_END) {
         update_primary_pad_state();
-        mode = DECODE_MODE;
-        if (mode != -1) {
-            if ((mode == MOVIE_SKIP_MODE_ANY_BUTTON && pad_pressed(&controller_state, -1)) ||
+        skip_mode = DECODE_MODE;
+        if (skip_mode != -1) {
+            if ((skip_mode == MOVIE_SKIP_MODE_ANY_BUTTON && pad_pressed(&controller_state, -1)) ||
                 ((D_0015EEA0 != 0 || alternate_animation_sequence != 0 || DECODE_MODE != 0 ||
                   current_level_index <= 0) &&
                  pad_pressed(&controller_state, 0x800))) {
