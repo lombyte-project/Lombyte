@@ -193,13 +193,16 @@ void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259
 void update_hero_easing_record(struct HeroEase *ease_record) __asm__("FUN_L00_00205168");
 
 void update_hero_easing_record(struct HeroEase *ease_record) {
+    enum {
+        HERO_EASE_KIND_ON_FOOT_HERO_MOBY = 0
+    };
     s32 moby = get_hero_easing_moby_by_kind(ease_record->kind);
     if (moby == 0)
         return;
     if (D_001413F4 == 0) {
         if (ease_record->kind == 4 || ease_record->kind == 2 || ease_record->kind == 3)
             return;
-    } else if (ease_record->kind == 0) {
+    } else if (ease_record->kind == HERO_EASE_KIND_ON_FOOT_HERO_MOBY) {
         return;
     }
     if (ease_record->rot_target.f[0] == 0.0f && ease_record->rot_target.f[1] == 0.0f &&
