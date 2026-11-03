@@ -132,6 +132,9 @@ void initialize_orbit_camera_from_parameters(char *camera_object,
 void initialize_orbit_camera_state(S002eb3b0 *camera_object) __asm__("FUN_L00_002eb3b0");
 
 void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
+    enum {
+        CAMERA_SELECTION_MODE_USE_PRESET_TRANSITION = 0
+    };
     Moby002eb3b0 *m;
     camera_object->m->fF0 = 0;
     m = camera_object->m;
@@ -154,7 +157,7 @@ void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
     zero_five_words(m);
     clear_twelve_bytes((u8 *)m + 0x90);
     initialize_orbit_camera_pose(camera_object);
-    camera_object->camera_selection_mode = 0;
+    camera_object->camera_selection_mode = CAMERA_SELECTION_MODE_USE_PRESET_TRANSITION;
 }
 
 void update_orbit_camera_pose(char *camera_object) __asm__("FUN_L00_002eb480");
