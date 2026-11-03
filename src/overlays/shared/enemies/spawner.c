@@ -194,7 +194,7 @@ void spawner_update(char *moby) {
             char *target_moby = *(char **)((char *)spawner_vars + 0x140);
             if (target_moby != 0 &&
                 (unsigned char)MOBY(target_moby)->state != MOBY_STATE_REMOVAL_MARKER &&
-                (unsigned char)MOBY(target_moby)->state != 0xFD) {
+                (unsigned char)MOBY(target_moby)->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER) {
                 qcopy((char *)spawner_vars + 0x100, &MOBY(target_moby)->pos);
             } else {
                 *(int *)((char *)spawner_vars + 0x140) = 0;
