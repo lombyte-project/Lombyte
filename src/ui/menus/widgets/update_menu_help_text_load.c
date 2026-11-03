@@ -46,15 +46,15 @@ int update_menu_help_text_load(struct MenuScreen *menu) {
             int               *language_entries = (int *)((char *)archive + archive[game_language]);
             int                entry_count = *language_entries++;
             int                entry_bytes = *language_entries++;
-            HelpState         *state;
+            HelpState         *help_text_state;
             int               *text_entries;
             int                i;
 
             copy_memory_aligned(archive, language_entries, ((entry_bytes + 3) & ~3) - 8);
-            state = &help_state;
+            help_text_state = &help_state;
             menu->data.help.saved_text_table = help_msgs;
-            menu->data.help.saved_text_count = state->count;
-            state->count = entry_count;
+            menu->data.help.saved_text_count = help_text_state->count;
+            help_text_state->count = entry_count;
             text_entries = (int *)menu_system_state->help_text_buffer;
             help_msgs = (int)text_entries;
             for (i = 0; i < help_text_count(); i++) {
