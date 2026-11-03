@@ -40,13 +40,13 @@ s32 vi_buf_create(ViBuf *f, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 
 
 s32 vi_buf_create(
 
-    ViBuf *video_input_buffer, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 n_ts) {
+    ViBuf *video_input_buffer, u128 *data, u128 *tag, s32 buffer_element_count, TimeStamp *ts, s32 n_ts) {
     struct SemaParam param;
 
     video_input_buffer->data = data;
     video_input_buffer->tag = (u128 *)((((u32)tag) & UNCMASK) | UNCBASE);
-    video_input_buffer->n = size;
-    video_input_buffer->buffSize = size * VIBUF_ELM_SIZE;
+    video_input_buffer->n = buffer_element_count;
+    video_input_buffer->buffSize = buffer_element_count * VIBUF_ELM_SIZE;
 
     video_input_buffer->ts = ts;
     video_input_buffer->n_ts = n_ts;
