@@ -74,7 +74,7 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) {
                     message_id = 0x5234;
             } else {
                 int cost;
-                if (discount_purchase_pricing[0] != 0) {
+                if (item_available[ITEM_VENDOR_DISCOUNT] != 0) {
                     cost =
                         vendor_item_prices
                             [vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index]

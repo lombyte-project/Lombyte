@@ -1191,7 +1191,6 @@ DATA_OVERLAYS = {
     "audio/rpc/snd_send_iop_command_no_wait": (0x133100, 0x34080, 16),
     "rendering/frame/reset_gs_registers_pr": (0x151788, 0x52708, 24),
     "ui/help/find_help_entry": (0x199710, 0x9A690, 600),
-    "ui/menus/options/set_pause_sound_volume": (0x13E5A0, 0x3F520, 4),
     "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
     "ui/help/update_help_state": (0x141968, 0x428E8, 1184),
     "ui/help/push_help_history": (0x141E08, 0x42D88, 150),

@@ -26,7 +26,7 @@ struct MapEntry {
 
 extern u8 map_cross_destination_page[] __asm__("D_001CF678");
 extern u8 map_circle_destination_page[] __asm__("D_001CF418");
-extern u8 D_0013D4E1[];
+#include "rnc/game/item_state.h"
 
 #include "rnc/game/level_state.h"
 #include "rnc/ui/menus/menu_globals.h"
@@ -130,7 +130,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     }
 
     id = level_map_selection.level;
-    if (D_0013D4E1[0] != 0) {
+    if (item_available[ITEM_MAP_SHIFT] != 0) {
         id += 0x100;
     }
     slot = find_map_entry_slot(id);

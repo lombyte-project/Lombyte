@@ -5,9 +5,9 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/map/slots/find_map_entry_slot.h"
 
-extern unsigned char D_0013D4E1 NOT_SDA;
+#include "rnc/game/item_state.h"
 /* Picks the map to load next: the current map id (level_map_selection.level,
-   +0x100 when D_0013D4E1 is set) unless find_map_entry_slot finds it already
+   +0x100 when item_available[ITEM_MAP_SHIFT] is set) unless find_map_entry_slot finds it already
    in a slot, otherwise the nearest entry of the 20-id list D_001601E0
    around the current one (+1, -1, +2, -2, +3, -3) that is not loaded;
    -1 if none. The two bounds tests are nested so that fold does not
@@ -16,7 +16,7 @@ extern unsigned char D_0013D4E1 NOT_SDA;
 int pick_next_map(void) __asm__("FUN_002050e8");
 
 int pick_next_map(void) {
-    int map_id_offset = D_0013D4E1 ? 0x100 : 0;
+    int map_id_offset = item_available[ITEM_MAP_SHIFT] ? 0x100 : 0;
     int key;
     int i;
     int step;

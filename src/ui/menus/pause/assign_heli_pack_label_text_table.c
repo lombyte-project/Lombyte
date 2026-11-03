@@ -2,7 +2,7 @@
 #include "sda.h"
 #include "types.h"
 
-extern unsigned char D_0013D4C2 NOT_SDA;
+#include "rnc/game/item_state.h"
 extern s32                      heli_pack_label_text_ids[14] __asm__("D_001D06D0");
 extern s32                      no_heli_pack_label_text_ids[14] __asm__("D_001D0708");
 
@@ -10,7 +10,7 @@ int assign_heli_pack_label_text_table(void *destination) __asm__("FUN_0021ca98")
 
 int assign_heli_pack_label_text_table(void *destination) {
     *(s32 **)((char *)destination + 0x34) =
-        (D_0013D4C2 != 0) ? heli_pack_label_text_ids : no_heli_pack_label_text_ids;
+        (item_available[ITEM_HELI_PACK] != 0) ? heli_pack_label_text_ids : no_heli_pack_label_text_ids;
     return 0;
 }
 
