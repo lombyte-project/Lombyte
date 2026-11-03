@@ -94,7 +94,7 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
     float rotation_copy[4] __attribute__((aligned(16)));
     float matrix[4][4] __attribute__((aligned(16)));
     float velocity[4] __attribute__((aligned(16)));
-    float offset[4] __attribute__((aligned(16)));
+    float secondary_particle_motion[4] __attribute__((aligned(16)));
     float angle, magnitude;
     int   i, particle_frame_count, particle_second_frame_count, particle_third_frame_count;
     char *moby;
@@ -130,7 +130,7 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
             /* Retail intentionally uses the matrix third row as the particle input. */
             particle_position_ptr = matrix[2];
             velocity_ptr = velocity;
-            offset_ptr = offset;
+            offset_ptr = secondary_particle_motion;
             matrix_row_ptr = matrix[1];
             do {
                 angle = random_angle_radians();
@@ -144,7 +144,7 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
                 fast_vec_add(velocity_ptr, velocity_ptr, offset_ptr);
                 qcopy(offset_ptr, velocity_ptr);
                 velocity[3] = moby_creation_particle_primary_motion_w_gp;
-                offset[3] = moby_creation_particle_secondary_motion_w_gp;
+                secondary_particle_motion[3] = moby_creation_particle_secondary_motion_w_gp;
                 i++;
                 spawn_burst(&MOBY(moby)->pos,
                             velocity_ptr,
