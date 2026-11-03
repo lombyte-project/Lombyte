@@ -2580,7 +2580,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
     RopeVec             side;
     RopeVec             perpendicular;
     RopeVec             normal;
-    RopeVec             offset;
+    RopeVec             ring_radial_offset;
     RopeVec             previous;
     RopeVec             previous_cross;
     extern RopeParticle rope_particles[];
@@ -2692,13 +2692,13 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
             qcopy(tangent, step);
             if (absolute_float(step[2]) > 2.1f) {
                 qcopy(normal, up);
-                fast_vec_cross(offset, normal, step);
+                fast_vec_cross(ring_radial_offset, normal, step);
                 fast_vec_sub(previous_cross,
                              l07_rope_previous_segment_start_points[i],
                              rope_previous_points[i]);
                 fast_vec_cross(previous, normal, previous_cross);
                 {
-                    float facing = fast_vec_dot(offset, previous);
+                    float facing = fast_vec_dot(ring_radial_offset, previous);
                     if (facing > 0.0f) {
                         fast_vec_scale(normal, normal, -1.0f);
                     }
@@ -2719,9 +2719,9 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
                     radius += radius * 0.25f *
                               fast_sin(fast_add_rotations(
                                   (*(float *)&D_L07_00161B84_gp) + index * 0.7f, 0.0f));
-                    fast_vec_scale(offset, l07_rope_ring_profile_vectors[column], radius);
-                    transform_vector_by_basis(offset, offset, side);
-                    fast_vec_add(rope_grid[i][column], rope_points[i], offset);
+                    fast_vec_scale(ring_radial_offset, l07_rope_ring_profile_vectors[column], radius);
+                    transform_vector_by_basis(ring_radial_offset, ring_radial_offset, side);
+                    fast_vec_add(rope_grid[i][column], rope_points[i], ring_radial_offset);
                 }
             }
             fast_vec_normalize(step, extension, 2.8f);
