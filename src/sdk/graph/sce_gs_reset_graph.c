@@ -7,14 +7,14 @@ extern s32  RemoveIntcHandler();
 extern s32  disable_intc() __asm__("func_00119028");
 extern void SetGsCrt(s32, s32, s32);
 
-void sceGsResetGraph(s16 mode, s16 inter, s16 video_output_mode, s16 ff) {
+void sceGsResetGraph(s16 operation, s16 inter, s16 video_output_mode, s16 ff) {
     enum {
         GS_RESET_AND_CONFIGURE_VIDEO = 0,
         GS_UPDATE_VIDEO_MODE = 5
     };
     sceGsGParam *gp;
 
-    switch (mode) {
+    switch (operation) {
     case GS_RESET_AND_CONFIGURE_VIDEO:
         gp = sceGsGetGParam();
         *(volatile u64 *)0x12001000 = 0x200;
