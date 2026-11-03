@@ -161,7 +161,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     int      r;
     int      spin;
     int      life;
-    float    size;
+    float    ring_puff_size;
 
     if (emitter_moby->state == ENEMY_FIGHTER_STATE_INITIALIZE ||
         emitter_moby->state == ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN || emitter_moby->visible == 0)
@@ -193,12 +193,12 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
         }
     }
     spin = 16;
-    size = 100000.0f;
+    ring_puff_size = 100000.0f;
     fast_vec_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_ring_row0_offset_gp);
     fast_vec_add(&pos, &pos, &step);
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
-        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
+        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, ring_puff_size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
@@ -210,7 +210,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
         }
         spin = -spin;
         life *= 2;
-        size -= 20000.0f;
+        ring_puff_size -= 20000.0f;
     }
     fast_vec_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
     fast_vec_sub(&pos, &paired_exhaust_origin, &step);
@@ -234,12 +234,12 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
         }
     }
     spin = 16;
-    size = 100000.0f;
+    ring_puff_size = 100000.0f;
     fast_vec_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_ring_row0_offset_gp);
     fast_vec_add(&pos, &pos, &step);
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
-        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
+        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, ring_puff_size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
@@ -251,7 +251,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
         }
         spin = -spin;
         life *= 2;
-        size -= 20000.0f;
+        ring_puff_size -= 20000.0f;
     }
 }
 
