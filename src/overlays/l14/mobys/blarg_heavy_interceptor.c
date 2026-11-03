@@ -2070,7 +2070,7 @@ int is_turret_group_activated_or_empty(int index) {
         TURRET_STATE_LIVE_MINIMUM = 0
     };
     unsigned short *list = (unsigned short *)D_L14_001AC2C0_2B0168[index];
-    int             count = 0;
+    int             live_member_count = 0;
     char           *moby_pool_base;
     if (list)
         goto scan;
@@ -2084,12 +2084,12 @@ scan:
         int            state = ((signed char)MOBY(moby)->state);
         char          *group_member_vars = ((char *)MOBY(moby)->pvars);
         if (state >= TURRET_STATE_LIVE_MINIMUM)
-            count++;
+            live_member_count++;
         if (state >= TURRET_STATE_LIVE_MINIMUM && *(short *)(group_member_vars + 0x88))
             goto success;
         list++;
         if ((short)id < 0)
-            return count == 0;
+            return live_member_count == 0;
     } while (1);
 }
 
