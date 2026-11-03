@@ -375,7 +375,7 @@ void plasmabot_update(char *moby) {
     float          direction[4];
     float          end[4];
     LineInfo       beam_line_trace_descriptor;
-    int            status;
+    int            unused_debris_spawn_input;
 
     plasmabot_update_private_vars = (PlasmabotVars *)MOBY(moby)->pvars;
     plasmabot_aim_target_moby = 0;
@@ -815,8 +815,8 @@ void plasmabot_update(char *moby) {
     case PLASMABOT_SPAWN_DEBRIS_AND_REMOVE: {
         FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
         spawn_plasmabot_death_debris(moby, (char *)bone_transform_scratch);
-        status = 0;
-        ((void (*)(char *, int *, int))spawn_path_or_ballistic_debris)(moby, &status, 1);
+        unused_debris_spawn_input = 0;
+        ((void (*)(char *, int *, int))spawn_path_or_ballistic_debris)(moby, &unused_debris_spawn_input, 1);
         release_beam_slot_by_id(moby);
         call_D678(moby);
         return;
