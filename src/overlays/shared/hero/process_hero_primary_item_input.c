@@ -1069,15 +1069,15 @@ int process_hero_primary_item_input(void) {
 
             i = 0;
             while (i < 5) {
-                int   id = pv->f2C[i];
+                int   target_moby_index = pv->f2C[i];
                 Moby *candidate;
                 float yaw_error, pitch_error, distance, score;
 
-                if (id == -1) {
+                if (target_moby_index == -1) {
                     i++;
                     continue;
                 }
-                candidate = (Moby *)((char *)D_L05_0015FFD8_macro + (id << 8));
+                candidate = (Moby *)((char *)D_L05_0015FFD8_macro + (target_moby_index << 8));
                 yaw_error = fast_difference_between_rotations(
                     (*(Hero *)((char *)&hero)).motion.rot.f[2],
                     fast_arc_tan(candidate->pos.x - (*(Hero *)((char *)&hero)).motion.pos.f[0],
