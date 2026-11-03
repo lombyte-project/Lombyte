@@ -1437,8 +1437,8 @@ void update_hero_color_and_item_tint(void) {
     if (hero.state.current == 0x80 || hero.state.current == 0x82) {
         blink = hero.state_timer < scale_game_frames(0x1e);
     }
-    if ((current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) && hero.state.current == 0x76 &&
-        hero.state_timer < scale_game_frames(0x14)) {
+    if ((current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) &&
+        hero.state.current == 0x76 && hero.state_timer < scale_game_frames(0x14)) {
         blink = 1;
     }
     if (blink) {

@@ -255,8 +255,9 @@ void apply_hero_item_slot_selection(int i) {
         struct Hero *g = &hero;
         struct Hero *h;
         struct Hero *equipped_item_check_hero;
-        if (g->state.control_mode == HERO_MODE_SWIM || g->state.current == 0x76 || g->state.current == 0x6A ||
-            g->state.current == 0x82 || *(unsigned char *)((char *)g + 0x22CB) != 0) {
+        if (g->state.control_mode == HERO_MODE_SWIM || g->state.current == 0x76 ||
+            g->state.current == 0x6A || g->state.current == 0x82 ||
+            *(unsigned char *)((char *)g + 0x22CB) != 0) {
             if (((int *)(D_00141660))[i] != 6 ||
                 (equipped_item_check_hero = &hero,
                  *(int *)((char *)equipped_item_check_hero + i * 0x50 + 0x10B8) == 0)) {
@@ -568,14 +569,16 @@ int try_apply_hero_water_and_ground_transitions(void) {
                     }
                 }
             }
-        } else if (hero_ptr->state.control_mode != HERO_MODE_WATER_SURFACE && hero_ptr->state.control_mode != HERO_MODE_LEDGE) {
+        } else if (hero_ptr->state.control_mode != HERO_MODE_WATER_SURFACE &&
+                   hero_ptr->state.control_mode != HERO_MODE_LEDGE) {
             water_surface_tolerance = 0.2f;
             if (water_surface_tolerance < absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f) {
                 water_surface_tolerance = absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f;
             }
             if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.45f)) <
                 water_surface_tolerance) {
-                if (hero_ptr->state.control_mode != HERO_MODE_JUMP || hero_ptr->past_jump_apex != 0) {
+                if (hero_ptr->state.control_mode != HERO_MODE_JUMP ||
+                    hero_ptr->past_jump_apex != 0) {
                     if (0.8f < hero_ptr->water_depth && hero_ptr->motion.displacement.f[2] < 0.0f) {
                         water_state_requested = 1;
                     }
@@ -1963,8 +1966,8 @@ change_state:
     return 1;
 continue_fall:
     if (alternate_item_available_lui[0]) {
-        if (current_level_index == LEVEL_RILGAR && (&hero)->tricks_landed[4] == 4 && (&hero)->unk70C > 3 &&
-            item_unlocked_lui[7] == 0) {
+        if (current_level_index == LEVEL_RILGAR && (&hero)->tricks_landed[4] == 4 &&
+            (&hero)->unk70C > 3 && item_unlocked_lui[7] == 0) {
             item_unlocked_lui[7] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);

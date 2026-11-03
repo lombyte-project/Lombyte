@@ -280,12 +280,10 @@ void update_resident_gameplay_state(void) {
         view_tan_half_fov[0] = keyframe_angles[3];
         update_view_context();
         qcopy(&game_camera.position, &keyframe->position);
-        transform_vector_by_basis(&game_camera.position,
-                                  &game_camera.position,
-                                  level_render_state.player->transform);
-        fast_vec_add(&game_camera.position,
-                     &game_camera.position,
-                     &level_render_state.player->position);
+        transform_vector_by_basis(
+            &game_camera.position, &game_camera.position, level_render_state.player->transform);
+        fast_vec_add(
+            &game_camera.position, &game_camera.position, &level_render_state.player->position);
         segment_angle = fast_add_rotations(keyframe_angles[2],
                                            level_render_state.player->rotation.components[2]);
         sceVu0UnitMatrix(scratch_vectors);

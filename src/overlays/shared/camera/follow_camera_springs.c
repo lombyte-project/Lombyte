@@ -1048,13 +1048,15 @@ void update_follow_camera_attach_mode(char *camera) {
     }
     if (attach_state->state == CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY) {
         struct Hero *p = &hero;
-        if (p->state.control_mode == HERO_MODE_FALL || p->frames_off_ground.s >= scale_game_frames(0x37)) {
+        if (p->state.control_mode == HERO_MODE_FALL ||
+            p->frames_off_ground.s >= scale_game_frames(0x37)) {
             goto to_one;
         }
     }
     if (attach_state->state == CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY) {
         struct Hero *p = &hero;
-        if (p->state.control_mode == HERO_MODE_FALL || p->frames_off_ground.s >= scale_game_frames(0x37)) {
+        if (p->state.control_mode == HERO_MODE_FALL ||
+            p->frames_off_ground.s >= scale_game_frames(0x37)) {
             float r;
         to_one:
             attach_state->prev = attach_state->state;

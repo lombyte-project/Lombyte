@@ -77,7 +77,8 @@ void render_level_frame(void) {
     draw_mobys();
     append_dma_tag(0x02080000);
     setup_gif_paging(1);
-    if ((current_level_index != LEVEL_VELDIN1) && ((current_level_index != LEVEL_NOVALIS) || (level_available[3] != 0))) {
+    if ((current_level_index != LEVEL_VELDIN1) &&
+        ((current_level_index != LEVEL_NOVALIS) || (level_available[3] != 0))) {
         build_resident_indexed_texture_warp_meshes(D_0018CC98[0]);
     }
     if ((level_render_state.scene_mode == 4) && (D_0018CB54[0] >= 0x3D)) {
@@ -87,7 +88,8 @@ void render_level_frame(void) {
         }
         draw_resident_textured_banner(overlay_alpha);
     }
-    if ((current_level_index != LEVEL_VELDIN1) && ((current_level_index != LEVEL_NOVALIS) || (level_available[3] != 0))) {
+    if ((current_level_index != LEVEL_VELDIN1) &&
+        ((current_level_index != LEVEL_NOVALIS) || (level_available[3] != 0))) {
         render_environment_mapped_object(D_0018CC98[0]);
     }
     if ((memory_card_state.state >= MEMCARD_REQUEST_FORMAT) ||

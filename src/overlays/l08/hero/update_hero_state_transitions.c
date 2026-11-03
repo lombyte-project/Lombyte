@@ -632,7 +632,8 @@ void update_hero_state_transitions(void) {
                     break;
                 case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY:
                     if (hero.health.hp <= 0) {
-                        if (current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) {
+                        if (current_level_index == LEVEL_QUARTU ||
+                            current_level_index == LEVEL_VELDIN_ORBIT) {
                             hero_set_state(0x82, 1);
                             break;
                         }
@@ -810,7 +811,8 @@ void update_hero_state_transitions(void) {
                         break;
                     }
                     if (!(hero.air_frames.s < scale_game_frames(5)) &&
-                        !(hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE && hero.wading != 0) &&
+                        !(hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE &&
+                          hero.wading != 0) &&
                         hero.ground_distance > 1.35f) {
                         if (check_hero_forward_collision_height() == 0) {
                             hero_set_state(HERO_STATE_FALL, 1);
@@ -877,7 +879,8 @@ void update_hero_state_transitions(void) {
                         break;
                     }
                     if (hero.state_timer > scale_game_frames(0xF) ||
-                        (hero.state.prev_control_mode != HERO_MODE_IDLE && hero.state.prev_control_mode != HERO_MODE_RUN)) {
+                        (hero.state.prev_control_mode != HERO_MODE_IDLE &&
+                         hero.state.prev_control_mode != HERO_MODE_RUN)) {
                         if ((controller_state.pressed & 0x10000) && hero.unk20AA == 0) {
                             hero.unk3BE = 1;
                         }

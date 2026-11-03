@@ -12,8 +12,8 @@ typedef struct {
     s32 pad08[2];
 } GsVideoModeState;
 
-extern void InvokeKernelSyscall0080(
-    s32 mode, s32 *horizontal, s32 *vertical, s32 *display_width, s32 *display_height);
+extern void
+_GetGsDxDyOffset(s32 mode, s32 *horizontal, s32 *vertical, s32 *display_width, s32 *display_height);
 extern char unsupported_display_mode_format[] __asm__("D_00153040");
 
 /* The progressive arms spell this out three times: cc1 merges the divides but keeps
@@ -41,7 +41,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output,
 
     state = sceGsGetGParam();
     if (!((u32)(state->wMode - 2) < 2) && checkModelVersion() != 0) {
-        InvokeKernelSyscall0080(
+        _GetGsDxDyOffset(
             (s16)state->wMode, &kernel_horizontal, &kernel_vertical, &kernel_width, &kernel_height);
     } else {
         kernel_height = 0;

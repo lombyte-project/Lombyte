@@ -224,8 +224,8 @@ void update_level_gameplay_frame(void) {
                 mark_moby_for_removal(expired_object);
             }
         }
-        if (current_level_index != LEVEL_VELDIN1 && (current_level_index != LEVEL_NOVALIS || level_available[3] != 0) &&
-            D_0015EE48 < 3) {
+        if (current_level_index != LEVEL_VELDIN1 &&
+            (current_level_index != LEVEL_NOVALIS || level_available[3] != 0) && D_0015EE48 < 3) {
             level_render_state.state = LEVEL_RENDER_PHASE_SELECT_RANDOM_MODE;
         }
         if (level_render_state.state < LEVEL_RENDER_PHASE_REQUEST_LOAD) {

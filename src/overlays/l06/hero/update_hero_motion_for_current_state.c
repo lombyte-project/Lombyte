@@ -282,8 +282,8 @@ void update_hero_smoothed_parameters(void) {
     } else if (hero.state.current == HERO_STATE_SINK) {
         hero.capsule_radius_target = 0.8f;
     }
-    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE || hero.state.control_mode == HERO_MODE_SWIM ||
-        hero.base_condition ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE ||
+        hero.state.control_mode == HERO_MODE_SWIM || hero.base_condition ||
         vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) >
             hero.capsule_radius * 0.5f) {
         f32         *smoothing_state = D_0013F570;
@@ -561,8 +561,10 @@ d1:
     hero_lui.unk2C0.i[0] = 0;
     hero_lui.unk2C0.i[1] = 0;
     if (hero_lui.state.control_mode == HERO_MODE_GRIND || hero_lui.state.control_mode == 0x15 ||
-        hero_lui.state.control_mode == HERO_MODE_ATTACK || hero_lui.state.control_mode == HERO_MODE_JUMP ||
-        hero_lui.state.control_mode == HERO_MODE_LAND || hero_lui.state.control_mode == HERO_MODE_LEDGE) {
+        hero_lui.state.control_mode == HERO_MODE_ATTACK ||
+        hero_lui.state.control_mode == HERO_MODE_JUMP ||
+        hero_lui.state.control_mode == HERO_MODE_LAND ||
+        hero_lui.state.control_mode == HERO_MODE_LEDGE) {
         return;
     }
     if (!(hero_lui.ground_distance < 0.25f)) {

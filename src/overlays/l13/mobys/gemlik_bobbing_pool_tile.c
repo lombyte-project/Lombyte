@@ -307,7 +307,8 @@ void gemlik_bobbing_pool_tile_update(struct Moby *moby) {
                       (fast_cos(bobbing_platform_vars->angle) * height_half_span_or_tile_enabled +
                        height_half_span_or_tile_enabled);
         hero_context = &hero;
-        if (hero_context->state.control_mode != HERO_MODE_DYING && hero_context->state.control_mode != HERO_MODE_RESPAWN_WAIT &&
+        if (hero_context->state.control_mode != HERO_MODE_DYING &&
+            hero_context->state.control_mode != HERO_MODE_RESPAWN_WAIT &&
             hero_context->state.current != 0x3D && hero_context->state.current != 0x7B &&
             hero_context->state.current != 0x7C)
             bobbing_platform_vars->angle =

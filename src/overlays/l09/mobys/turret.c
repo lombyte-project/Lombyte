@@ -115,8 +115,8 @@ void turret_update(struct Moby *moby) {
     seat.f[2] += 0.4f;
     if (moby->state >= TURRET_STATE_IDLE) {
         if (fast_dec_timer_s16(&turret_vars->mount_delay) != 0 && moby->command == 1 &&
-            hero.state.control_mode != HERO_MODE_DYING && hero.state.control_mode != HERO_MODE_HURT &&
-            hero.state.current != 0x3D) {
+            hero.state.control_mode != HERO_MODE_DYING &&
+            hero.state.control_mode != HERO_MODE_HURT && hero.state.current != 0x3D) {
             qcopy(&hero.motion.pos, &seat);
             qcopy(&hero.motion.rot, &moby->rot);
             hero.motion.rot.f[2] = fast_add_rotations(1.5707964f, hero.motion.rot.f[2]);
@@ -146,9 +146,10 @@ void turret_update(struct Moby *moby) {
                 moby->command = 0;
                 turret_vars->mount_delay = scale_game_frames(60);
             }
-        } else if (hero.state.control_mode != HERO_MODE_DYING && hero.state.control_mode != HERO_MODE_HURT &&
-                   hero.state.current != 0x3D && hero.ground_moby == moby &&
-                   fast_vec_dist(&seat, &hero.moby->pos) < 1.2f && turret_vars->mount_delay == 0) {
+        } else if (hero.state.control_mode != HERO_MODE_DYING &&
+                   hero.state.control_mode != HERO_MODE_HURT && hero.state.current != 0x3D &&
+                   hero.ground_moby == moby && fast_vec_dist(&seat, &hero.moby->pos) < 1.2f &&
+                   turret_vars->mount_delay == 0) {
             moby->command = 1;
             hero_set_state(0x32, 1);
         }

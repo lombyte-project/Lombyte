@@ -15,9 +15,9 @@ extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
 void update_camera_underwater_flag(void) {
     struct GameCamera *camera = &game_camera;
-    float                 probe_start[4];
-    float                 probe_end[4];
-    int                   i;
+    float              probe_start[4];
+    float              probe_end[4];
+    int                i;
 
     if (camera->current_camera->unk86 == 6 || game_mode_macro != 0) {
         camera->underwater = 0;

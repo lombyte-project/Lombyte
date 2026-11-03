@@ -221,8 +221,8 @@ void apply_level_specific_cutscene_moby_effects(void) {
             }
         }
     }
-    if (current_level_index == LEVEL_UMBRIS && D_L00_0016C860.state == 4 && D_L00_0016C860.unk188 != 0 &&
-        D_L00_0016C860.unk188->oClass == 0x214) {
+    if (current_level_index == LEVEL_UMBRIS && D_L00_0016C860.state == 4 &&
+        D_L00_0016C860.unk188 != 0 && D_L00_0016C860.unk188->oClass == 0x214) {
         add_draw_callback((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.unk188);
     }
     if (current_level_index == LEVEL_OLTANIS && D_L00_0016C860.state == 0) {

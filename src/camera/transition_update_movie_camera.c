@@ -18,11 +18,11 @@ unsigned char transition_update_movie_camera(void) {
     char *camera_keyframe_state = render_sequence;
     char *key =
         *(char **)(camera_keyframe_state + 0x54) + *(int *)(camera_keyframe_state + 0x38) * 32;
-    unsigned char         flag = key[0xC];
-    float                *keyframe_rotation_angles = (float *)(key + 0x10);
-    char                 *active_camera_position;
+    unsigned char      flag = key[0xC];
+    float             *keyframe_rotation_angles = (float *)(key + 0x10);
+    char              *active_camera_position;
     struct GameCamera *camera_basis_write_base;
-    float                 camera_rotation_matrix[16];
+    float              camera_rotation_matrix[16];
 
     view_tan_half_fov = 0.63f;
     update_view_context();

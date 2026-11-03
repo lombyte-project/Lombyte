@@ -367,7 +367,8 @@ void update_hero_offset_rail_candidate(void) {
     if (P->rail_grab_cooldown != 0)
         return;
     compute_hero_fixed_offset_world_position(&rail_query_position);
-    if ((P->state.control_mode == HERO_MODE_JUMP && P->past_jump_apex == 0) || P->state.control_mode == HERO_MODE_FALL) {
+    if ((P->state.control_mode == HERO_MODE_JUMP && P->past_jump_apex == 0) ||
+        P->state.control_mode == HERO_MODE_FALL) {
         pb = &rail_point;
         if (nearest_rail_point(
                 &rail_query_position, &i20, pb, &i24, &rail_query_value, &i2C, 0, 0)) {
@@ -2050,8 +2051,8 @@ void hero_switch_item(int i) {
         struct Hero *g = &hero;
         struct Hero *h;
         struct Hero *hero_state;
-        if (g->state.control_mode == HERO_MODE_SWIM || g->state.current == 0x76 || g->state.current == 0x6A ||
-            g->state.current == 0x82 || g->vent_updraft != 0) {
+        if (g->state.control_mode == HERO_MODE_SWIM || g->state.current == 0x76 ||
+            g->state.current == 0x6A || g->state.current == 0x82 || g->vent_updraft != 0) {
             if (((int *)(D_00141660))[i] != 6 ||
                 (hero_state = &hero, *(int *)((char *)hero_state + i * 0x50 + 0x10B8) == 0)) {
                 h = &hero;
@@ -2710,8 +2711,8 @@ void update_hero_collision_capsule_dimensions(void) {
     } else if (hero.state.current == HERO_STATE_SINK) {
         hero.capsule_radius_target = 0.8f;
     }
-    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE || hero.state.control_mode == HERO_MODE_SWIM ||
-        hero.base_condition ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE ||
+        hero.state.control_mode == HERO_MODE_SWIM || hero.base_condition ||
         vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) >
             hero.capsule_radius * 0.5f) {
         f32         *capsule_top_ptr = &hero.capsule_top;

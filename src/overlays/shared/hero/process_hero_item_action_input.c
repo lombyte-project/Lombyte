@@ -511,9 +511,10 @@ s32 process_hero_item_action_input(void) {
             window = scale_game_frames(8);
         }
         if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
-            hero.state.control_mode == HERO_MODE_JUMP || hero.state.control_mode == HERO_MODE_FALL ||
-            hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == HERO_MODE_LAND ||
-            hero.state.current == 0x1E) {
+            hero.state.control_mode == HERO_MODE_JUMP ||
+            hero.state.control_mode == HERO_MODE_FALL ||
+            hero.state.control_mode == HERO_MODE_GRIND ||
+            hero.state.control_mode == HERO_MODE_LAND || hero.state.current == 0x1E) {
             if (pad_pressed_within(buttons, window, NULL) != 0 ||
                 ((controller_state.held & buttons) &&
                  hero.items[0].ready_frames > scale_game_frames(0xF))) {
@@ -549,8 +550,10 @@ s32 process_hero_item_action_input(void) {
         break;
 
     case HERO_ITEM_BUFFERED_ACTIVATE:
-        if ((hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
-             hero.state.control_mode == HERO_MODE_FALL || hero.state.control_mode == HERO_MODE_JUMP ||
+        if ((hero.state.control_mode == HERO_MODE_IDLE ||
+             hero.state.control_mode == HERO_MODE_RUN ||
+             hero.state.control_mode == HERO_MODE_FALL ||
+             hero.state.control_mode == HERO_MODE_JUMP ||
              hero.state.control_mode == HERO_MODE_LAND) &&
             pad_pressed_within(buttons, scale_game_frames(8), NULL) != 0) {
             open_vendor_menu(0);
@@ -559,8 +562,10 @@ s32 process_hero_item_action_input(void) {
 
     case HERO_ITEM_HOLD_TO_FIRE:
         if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
-            hero.state.control_mode == HERO_MODE_CROUCH || hero.state.control_mode == HERO_MODE_FALL ||
-            hero.state.control_mode == HERO_MODE_JUMP || hero.state.control_mode == HERO_MODE_LAND ||
+            hero.state.control_mode == HERO_MODE_CROUCH ||
+            hero.state.control_mode == HERO_MODE_FALL ||
+            hero.state.control_mode == HERO_MODE_JUMP ||
+            hero.state.control_mode == HERO_MODE_LAND ||
             hero.state.control_mode == HERO_MODE_GRIND || hero.state.current == 0x1E) {
             if (hero.items[0].moby != NULL) {
                 held_gadget_voice_state = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
@@ -587,8 +592,10 @@ s32 process_hero_item_action_input(void) {
     case HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
     case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_EMPTY_AMMO_VOICE:
         if ((hero.state.control_mode == HERO_MODE_IDLE && hero.state.current != 0x1E) ||
-            hero.state.control_mode == HERO_MODE_RUN || hero.state.control_mode == HERO_MODE_CROUCH ||
-            hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_GRIND ||
+            hero.state.control_mode == HERO_MODE_RUN ||
+            hero.state.control_mode == HERO_MODE_CROUCH ||
+            hero.state.control_mode == HERO_MODE_LAND ||
+            hero.state.control_mode == HERO_MODE_GRIND ||
             (hero.state.control_mode == HERO_MODE_JUMP && hero.unk4AC != 0) ||
             (hero.state.current == 0x23 && hero.anim_frame > 25.0f)) {
             if (hero.item_anim_active == 0) {
@@ -603,9 +610,11 @@ s32 process_hero_item_action_input(void) {
                     ((controller_state.held & 0x20) && scale_game_frames(8) < hold &&
                      hold < scale_game_frames(0x11))) {
                     if (get_ammo(-1) != 0) {
-                        if (hero.state.control_mode == HERO_MODE_CROUCH || hero.state.control_mode == HERO_MODE_IDLE ||
+                        if (hero.state.control_mode == HERO_MODE_CROUCH ||
+                            hero.state.control_mode == HERO_MODE_IDLE ||
                             hero.state.current == HERO_STATE_STOP ||
-                            (hero.state.control_mode == HERO_MODE_RUN && hero.stick_magnitude < 0.7f)) {
+                            (hero.state.control_mode == HERO_MODE_RUN &&
+                             hero.stick_magnitude < 0.7f)) {
                             hero_set_state(0x23, 1);
                         } else {
                             start_equipped_item_animation();
@@ -652,9 +661,11 @@ s32 process_hero_item_action_input(void) {
             (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.pack_disabled == 0) {
             fast_dec_timer(&hero_button_8_double_press_countdown_gp);
             if (hero_button_8_double_press_countdown_gp != 0) {
-                if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
+                if (hero.state.control_mode == HERO_MODE_IDLE ||
+                    hero.state.control_mode == HERO_MODE_RUN ||
                     hero.state.control_mode == HERO_MODE_CROUCH ||
-                    ((hero.state.control_mode == HERO_MODE_FALL || hero.state.control_mode == HERO_MODE_JUMP) &&
+                    ((hero.state.control_mode == HERO_MODE_FALL ||
+                      hero.state.control_mode == HERO_MODE_JUMP) &&
                      hero.grounded_frames != 0)) {
                     if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);

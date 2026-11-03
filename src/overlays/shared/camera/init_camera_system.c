@@ -130,7 +130,8 @@ void init_camera_system(void) {
     }
     camera_system_state->current_camera = find_camera_record_by_id(0);
     *(short *)(((char *)camera_system_state->current_camera) + 0x8E) = 1;
-    *(char **)(((char *)camera_system_state->current_camera) + 0x70) = active_camera_saved_state_storage;
+    *(char **)(((char *)camera_system_state->current_camera) + 0x70) =
+        active_camera_saved_state_storage;
     camera_system_state->transition_mode = 0;
     update_camera_tracking_state();
     camera_run_setup_to_new_cam(((char *)camera_system_state->current_camera));

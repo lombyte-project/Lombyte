@@ -38,9 +38,9 @@ void update_camera(void) {
         CAMERA_TRANSITION_PHASE_BLENDING = 3
     };
     struct GameCamera *camera;
-    struct UpdateCam     *target;
-    char                 *camera_shake_base;
-    float                 rotation_matrix[16];
+    struct UpdateCam  *target;
+    char              *camera_shake_base;
+    float              rotation_matrix[16];
 
     if (game_mode_macro == 5) {
         if (text_screen_active[0] != 0) {

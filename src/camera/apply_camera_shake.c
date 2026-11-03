@@ -37,8 +37,8 @@ void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
             remaining_frame_ratio = remaining_frames_float / total_frames_float;
             oscillation_cosine =
                 fast_cos(fast_normalize_angle(2.0f * convert_integer_to_float(shake->frames)));
-            applied_shake_offset =
-                shake->amplitude * oscillation_cosine * remaining_frame_ratio * remaining_frame_ratio;
+            applied_shake_offset = shake->amplitude * oscillation_cosine * remaining_frame_ratio *
+                                   remaining_frame_ratio;
             shake->offset = applied_shake_offset;
             if (axis_index == 0) {
                 fast_vec_normalize(shake_offset, D_001872B0, applied_shake_offset);

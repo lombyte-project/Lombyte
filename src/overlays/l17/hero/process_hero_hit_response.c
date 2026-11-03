@@ -248,8 +248,8 @@ void update_hero_smoothing(void) {
     } else if (hero.state.current == HERO_STATE_SINK) {
         hero.capsule_radius_target = 0.8f;
     }
-    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE || hero.state.control_mode == HERO_MODE_SWIM ||
-        hero.base_condition ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE ||
+        hero.state.control_mode == HERO_MODE_SWIM || hero.base_condition ||
         vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) >
             hero.capsule_radius * 0.5f) {
         f32         *smoothing_state = D_0013F570;

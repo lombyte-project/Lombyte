@@ -30,7 +30,8 @@ void refresh_camera_control_flags(void) {
     if ((u32)(hero.state.control_mode - 0x11) < 2U || hero.state.current == 0x73) {
         cam_coll_flag = 0x34;
     }
-    if (hero.state.control_mode != HERO_MODE_SWIM && hero.water_surface_z < *(f32 *)(camera_position + 8)) {
+    if (hero.state.control_mode != HERO_MODE_SWIM &&
+        hero.water_surface_z < *(f32 *)(camera_position + 8)) {
         cam_coll_flag = 0x14;
     }
     cam_coll_flag_prev = cam_coll_flag;

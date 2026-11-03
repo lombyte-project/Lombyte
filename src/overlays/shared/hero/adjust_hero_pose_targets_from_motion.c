@@ -131,7 +131,8 @@ void adjust_hero_pose_targets_from_motion(void) {
         hero_eases[14].rot_target.f[2] = -scaled_pose_input * 0.3f;
         hero_eases[15].rot_target.f[2] = -scaled_pose_input * 0.3f;
         hero_eases[16].rot_target.f[2] = -scaled_pose_input * 0.3f;
-    } else if (hero.state.control_mode == HERO_MODE_FALL || hero.state.control_mode == HERO_MODE_JUMP) {
+    } else if (hero.state.control_mode == HERO_MODE_FALL ||
+               hero.state.control_mode == HERO_MODE_JUMP) {
         set_first_hero_easing_parameters(0.04f, 0.2f);
         set_second_hero_easing_parameters(0.04f, 0.2f);
         set_third_hero_easing_parameters(0.04f, 0.2f);

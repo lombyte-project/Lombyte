@@ -470,8 +470,8 @@ void update_hero_ledge_probe(void) {
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         if ((hero.state.control_mode == HERO_MODE_JUMP &&
              (hero.past_jump_apex != 0 || hero.motion.velocity.f[2] < frame_time * 3.5f)) ||
-            hero.state.control_mode == HERO_MODE_FALL || hero.state.current == 8 || hero.state.current == 0x1A ||
-            hero.state.current == 0x1B)
+            hero.state.control_mode == HERO_MODE_FALL || hero.state.current == 8 ||
+            hero.state.current == 0x1A || hero.state.current == 0x1B)
             allowed = 1;
         if (hero.state.current == 0xE && hero.anim_frame < 37.0f)
             allowed = 0;
@@ -986,8 +986,8 @@ void update_hero_collision_dimensions(void) {
     } else if (hero.state.current == HERO_STATE_SINK) {
         hero.capsule_radius_target = 0.8f;
     }
-    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE || hero.state.control_mode == HERO_MODE_SWIM ||
-        hero.base_condition ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE ||
+        hero.state.control_mode == HERO_MODE_SWIM || hero.base_condition ||
         vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) >
             hero.capsule_radius * 0.5f) {
         f32         *smoothed_values = D_0013F570;

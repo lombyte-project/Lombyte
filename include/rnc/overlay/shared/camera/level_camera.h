@@ -11,29 +11,29 @@ struct UpdateCam;
    position, pitch and yaw. A shot sets the two amount/frames pairs (0.03 for
    a few frames), a hard landing sets the first one (0.2 for 40 frames). */
 typedef struct LevelCamera {
-    f32          unk0[12]; /* 0x000: a 3x4 basis; shots copy it as their launch rotation */
-    u8           pad30[0x110];
-    Vec4         pos; /* 0x140 */
-    f32          unk150;
-    f32          pitch; /* 0x154 */
-    f32          yaw;   /* 0x158 */
-    u8           pad15C[0x4];
-    f32          shake_amount;      /* 0x160: the same two channels as GameCamera.shake */
-    f32          shake_offset;      /* 0x164 */
-    s32          shake_frames;      /* 0x168 */
-    s32          shake_frames_max;  /* 0x16C */
-    f32          shake2_amount;     /* 0x170 */
-    f32          shake2_offset;     /* 0x174 */
-    s32          shake2_frames;     /* 0x178 */
-    s32          shake2_frames_max; /* 0x17C */
-    struct UpdateCam *current_camera;  /* 0x180: the record the view follows */
-    struct UpdateCam *previous_camera; /* 0x184 */
-    u8           pad188[0x8];
-    u8           unk190[0x30];
-    f32          unk1C0[4]; /* 0x1C0 */
-    u8           unk1D0[0x84];
-    s32          unk254; /* 0x254 */
-    u8           pad258[0x4];
+    f32               unk0[12]; /* 0x000: a 3x4 basis; shots copy it as their launch rotation */
+    u8                pad30[0x110];
+    Vec4              pos; /* 0x140 */
+    f32               unk150;
+    f32               pitch; /* 0x154 */
+    f32               yaw;   /* 0x158 */
+    u8                pad15C[0x4];
+    f32               shake_amount;      /* 0x160: the same two channels as GameCamera.shake */
+    f32               shake_offset;      /* 0x164 */
+    s32               shake_frames;      /* 0x168 */
+    s32               shake_frames_max;  /* 0x16C */
+    f32               shake2_amount;     /* 0x170 */
+    f32               shake2_offset;     /* 0x174 */
+    s32               shake2_frames;     /* 0x178 */
+    s32               shake2_frames_max; /* 0x17C */
+    struct UpdateCam *current_camera;    /* 0x180: the record the view follows */
+    struct UpdateCam *previous_camera;   /* 0x184 */
+    u8                pad188[0x8];
+    u8                unk190[0x30];
+    f32               unk1C0[4]; /* 0x1C0 */
+    u8                unk1D0[0x84];
+    s32               unk254; /* 0x254 */
+    u8                pad258[0x4];
     struct Moby *
         focus_moby; /* 0x25C: a moby that takes the camera's attention (blarg helicopter); 0: none */
     s32 focus_time; /* 0x260: reset to 0 when focus_moby is set */
@@ -51,8 +51,8 @@ typedef struct LevelCamera {
     f32 rows[12]; /* 0x350: forward, right and up; the hero's input direction is turned by them */
     u8  pad380[0x10];
     void (*unk390)(void); /* 0x390: called each frame by the follow camera when set */
-    s32 underwater;  /* 0x394 */
-    s32 frame_count; /* 0x398 */
+    s32 underwater;       /* 0x394 */
+    s32 frame_count;      /* 0x398 */
     u8  pad39C[0x4];
 } LevelCamera;
 

@@ -278,7 +278,8 @@ void initialize_level_runtime(void) {
     level_render_state.history_index = 0;
     level_render_state.history_count = 0;
     qcopy(&D_001604F0, &D_001604E0);
-    if (current_level_index == LEVEL_VELDIN1 || (current_level_index == LEVEL_NOVALIS && level_available[3] == 0)) {
+    if (current_level_index == LEVEL_VELDIN1 ||
+        (current_level_index == LEVEL_NOVALIS && level_available[3] == 0)) {
         level_render_state.scene_mode = LEVEL_SCENE_MODE_EARLY_PROGRESSION;
         level_render_state.scene_state = 2;
     }

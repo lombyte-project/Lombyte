@@ -502,7 +502,8 @@ void blarg_elite_commando_update(char *commando_moby) {
         update_blarg_elite_commando_joint_aim(commando_moby);
     if (blarg_elite_commando_joint_sparks_enabled_gp && D_001413DC != 22)
         emit_blarg_elite_commando_joint_sparks(commando_moby);
-    if (current_level_index == LEVEL_VELDIN2 && D_L16_0015F5C4 == 2 && (unsigned int)(D_L16_0016CC90 - 3) < 3U)
+    if (current_level_index == LEVEL_VELDIN2 && D_L16_0015F5C4 == 2 &&
+        (unsigned int)(D_L16_0016CC90 - 3) < 3U)
         mark_moby_for_removal(commando_moby);
 }
 

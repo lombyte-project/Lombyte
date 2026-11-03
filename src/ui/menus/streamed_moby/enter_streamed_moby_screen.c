@@ -19,7 +19,7 @@ int enter_streamed_moby_screen(struct MenuStreamedMobyScreen *screen) {
     preview_moby = create_menu_preview_moby(0x7A5);
     screen->state = 0;
     if (preview_moby != 0) {
-        char                 *moby_sidecar;
+        char              *moby_sidecar;
         struct GameCamera *camera = &game_camera;
         screen->mobys[0] = preview_moby;
         preview_moby->flags = 0;

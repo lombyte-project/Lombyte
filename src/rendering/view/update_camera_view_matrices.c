@@ -22,13 +22,13 @@ extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 
 void update_camera_view_matrices(void) {
-    Vec4                  camera_basis_matrix[4];
+    Vec4               camera_basis_matrix[4];
     struct GameCamera *camera_view_matrices;
-    u8                   *x;
-    f32                  *xf;
-    f32                   homogeneous_offset_x;
-    f32                   homogeneous_offset_y;
-    f32                   homogeneous_offset_z;
+    u8                *x;
+    f32               *xf;
+    f32                homogeneous_offset_x;
+    f32                homogeneous_offset_y;
+    f32                homogeneous_offset_z;
 
     if (camera_position_publication_suppressed[0] == 0) {
         qcopy(&camera_basis_matrix[0].q, camera_rows);

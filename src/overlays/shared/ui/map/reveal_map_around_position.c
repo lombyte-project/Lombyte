@@ -98,8 +98,8 @@ void reveal_map_around_position(f32 *position) {
         level = 0;
     }
     state = FALSE;
-    if (hero.state.control_mode == HERO_MODE_SWIM || hero.state.control_mode == HERO_MODE_WATER_SURFACE ||
-        hero.base_condition == 1) {
+    if (hero.state.control_mode == HERO_MODE_SWIM ||
+        hero.state.control_mode == HERO_MODE_WATER_SURFACE || hero.base_condition == 1) {
         state = TRUE;
     }
     mode16 = hero.state.control_mode == 16;

@@ -238,7 +238,8 @@ void swingshot_update(Moby *m) {
                 *(u128 *)&h->rot_row2 = *(u128 *)&m->rot_row2;
             }
         }
-        if (hero.state.current == 0x24 || (hero.state.control_mode == HERO_MODE_GRIND && hero.unk5B4)) {
+        if (hero.state.current == 0x24 ||
+            (hero.state.control_mode == HERO_MODE_GRIND && hero.unk5B4)) {
             if (hd) {
                 d->size = 0.280000001f;
                 d->scale = 1.0f;
@@ -275,7 +276,8 @@ void swingshot_update(Moby *m) {
         speed = hd->speed;
         if (hero.state.control_mode == HERO_MODE_GRIND) {
             speed = speed + hero.unk574;
-        } else if (hero.state.prev_control_mode == HERO_MODE_JUMP || hero.state.prev_control_mode == HERO_MODE_FALL) {
+        } else if (hero.state.prev_control_mode == HERO_MODE_JUMP ||
+                   hero.state.prev_control_mode == HERO_MODE_FALL) {
             if (2.0f < hero.ground_distance)
                 speed = frame_time * 48.0f;
         }
@@ -551,7 +553,8 @@ child_ready:;
             *(u128 *)(child + 0xd0) = *(u128 *)(m + 0xd0);
             *(u128 *)(child + 0xe0) = *(u128 *)(m + 0xe0);
         }
-        if ((hero.state.current == 36 || (hero.state.control_mode == HERO_MODE_GRIND && hero.unk5B4)) &&
+        if ((hero.state.current == 36 ||
+             (hero.state.control_mode == HERO_MODE_GRIND && hero.unk5B4)) &&
             motion) {
             *(float *)(vars + 0x18) = 0.0f;
             *(float *)(vars + 0x1c) = 1.0f;
@@ -588,7 +591,8 @@ child_ready:;
         speed = *(float *)(motion + 4);
         if (hero.state.control_mode == HERO_MODE_GRIND)
             speed += hero.unk574;
-        else if ((hero.state.prev_control_mode == HERO_MODE_JUMP || hero.state.prev_control_mode == HERO_MODE_FALL) &&
+        else if ((hero.state.prev_control_mode == HERO_MODE_JUMP ||
+                  hero.state.prev_control_mode == HERO_MODE_FALL) &&
                  hero.ground_distance > 2.0f)
             speed = frame_time * 48.0f;
         qcopy(&b, &hero.motion.pos);

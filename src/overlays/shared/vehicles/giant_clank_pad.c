@@ -76,7 +76,8 @@ void giant_clank_pad_update(struct Moby *moby) {
                 return;
             if (D_L15_0015F594 != 4)
                 return;
-            if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && current_level_index == LEVEL_QUARTU) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
+                current_level_index == LEVEL_QUARTU) {
                 pad = l15_moby_array;
                 pad += *(int *)((u8 *)linked + 0x60);
                 pad->flags |= 1;

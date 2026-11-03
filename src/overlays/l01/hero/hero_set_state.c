@@ -84,7 +84,8 @@ int l01_hero_set_state(int requested_state, int animation_setup_mode) {
         return 0;
     {
         struct Hero *p = &hero;
-        if (p->health.hp == 0 && (p->state.control_mode == HERO_MODE_FALL || p->state.control_mode == HERO_MODE_HURT) &&
+        if (p->health.hp == 0 &&
+            (p->state.control_mode == HERO_MODE_FALL || p->state.control_mode == HERO_MODE_HURT) &&
             requested_state != HERO_STATE_FALL && requested_state != HERO_STATE_DYING &&
             requested_state != HERO_STATE_VEHICLE_MODE_1_DYING &&
             requested_state != HERO_STATE_VEHICLE_MODE_3_DYING &&
@@ -501,7 +502,8 @@ int l01_hero_set_state(int requested_state, int animation_setup_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_RUN;
         p->unk2284 = 0;
-        if (p->state.prev_control_mode != HERO_MODE_JUMP && p->state.prev2_control_mode != HERO_MODE_JUMP) {
+        if (p->state.prev_control_mode != HERO_MODE_JUMP &&
+            p->state.prev2_control_mode != HERO_MODE_JUMP) {
             p->ground_speed = vector_length_xy(&p->motion.resolved_velocity);
         }
         {
@@ -512,7 +514,8 @@ int l01_hero_set_state(int requested_state, int animation_setup_mode) {
             stick_target(1.0f, 0);
             if (1.5707964f <
                 fast_difference_between_rotations(q->motion.rot.f[2], q->motion.move_yaw)) {
-                if (q->state.prev_control_mode == HERO_MODE_HURT || q->state.prev == 3 || q->state.prev2 == 3) {
+                if (q->state.prev_control_mode == HERO_MODE_HURT || q->state.prev == 3 ||
+                    q->state.prev2 == 3) {
                     struct Hero *r = &hero;
                     r->ground_speed = 0.0f;
                 }
@@ -1266,7 +1269,8 @@ int l01_hero_set_state(int requested_state, int animation_setup_mode) {
             e = &D_L01_0017C0A8[q->attack_record];
             q->saved_item[0] = 0;
             k = 0;
-            if (q->state.prev_control_mode == HERO_MODE_ATTACK && e->unk0 == 0 && q->anim_frame < (float)e->unk8) {
+            if (q->state.prev_control_mode == HERO_MODE_ATTACK && e->unk0 == 0 &&
+                q->anim_frame < (float)e->unk8) {
                 k = (e->kind + 1) % 3;
             }
             {
@@ -1576,7 +1580,8 @@ int l01_hero_set_state(int requested_state, int animation_setup_mode) {
     }
     {
         struct Hero *t = &hero;
-        if (t->state.control_mode != HERO_MODE_GRIND && t->items[1].item_id == 0x1D && t->saved_item[1] != 0) {
+        if (t->state.control_mode != HERO_MODE_GRIND && t->items[1].item_id == 0x1D &&
+            t->saved_item[1] != 0) {
             t->restore_item[1] = 1;
         }
     }
@@ -1727,7 +1732,8 @@ int handle_hero_gadget_button(void) {
         }
         break;
     case ITEM_REMOTE_VENDOR:
-        if ((unsigned int)hero.state.control_mode < 3 || hero.state.control_mode == HERO_MODE_JUMP ||
+        if ((unsigned int)hero.state.control_mode < 3 ||
+            hero.state.control_mode == HERO_MODE_JUMP ||
             hero.state.control_mode == HERO_MODE_LAND) {
             if (pad_pressed_within(buttons, scale_game_frames(8), 0) != 0)
                 open_vendor_menu(0);
@@ -1735,8 +1741,10 @@ int handle_hero_gadget_button(void) {
         break;
     case 0xf:
         if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
-            hero.state.control_mode == HERO_MODE_CROUCH || hero.state.control_mode == HERO_MODE_FALL ||
-            hero.state.control_mode == HERO_MODE_JUMP || hero.state.control_mode == HERO_MODE_LAND ||
+            hero.state.control_mode == HERO_MODE_CROUCH ||
+            hero.state.control_mode == HERO_MODE_FALL ||
+            hero.state.control_mode == HERO_MODE_JUMP ||
+            hero.state.control_mode == HERO_MODE_LAND ||
             hero.state.control_mode == HERO_MODE_GRIND || hero.state.current == 0x1e) {
             if (hero.items[0].moby != 0) {
                 equipped_gadget_vars = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
@@ -1760,8 +1768,10 @@ int handle_hero_gadget_button(void) {
     case 0x18:
     case 0x19:
         if ((hero.state.control_mode == HERO_MODE_IDLE && hero.state.current != 0x1e) ||
-            hero.state.control_mode == HERO_MODE_RUN || hero.state.control_mode == HERO_MODE_CROUCH ||
-            hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_GRIND ||
+            hero.state.control_mode == HERO_MODE_RUN ||
+            hero.state.control_mode == HERO_MODE_CROUCH ||
+            hero.state.control_mode == HERO_MODE_LAND ||
+            hero.state.control_mode == HERO_MODE_GRIND ||
             (hero.state.control_mode == HERO_MODE_JUMP && hero.unk4AC != 0) ||
             (hero.state.current == 0x23 && hero.anim_frame > 25.0f)) {
             if (hero.item_anim_active == 0) {
@@ -1774,9 +1784,10 @@ int handle_hero_gadget_button(void) {
                     ((controller_state.held & 0x20) != 0 && scale_game_frames(8) < hold &&
                      hold < scale_game_frames(0x11))) {
                     if (get_ammo(-1) != 0) {
-                        if (hero.state.control_mode == HERO_MODE_CROUCH || hero.state.control_mode == HERO_MODE_IDLE ||
-                            hero.state.current == 3 ||
-                            (hero.state.control_mode == HERO_MODE_RUN && hero.stick_magnitude < 0.7f))
+                        if (hero.state.control_mode == HERO_MODE_CROUCH ||
+                            hero.state.control_mode == HERO_MODE_IDLE || hero.state.current == 3 ||
+                            (hero.state.control_mode == HERO_MODE_RUN &&
+                             hero.stick_magnitude < 0.7f))
                             l01_hero_set_state(0x23, 1);
                         else
                             start_equipped_item_animation();
@@ -1814,8 +1825,10 @@ int handle_hero_gadget_button(void) {
             (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.pack_disabled == 0) {
             fast_dec_timer(&r1_double_tap_timer);
             if (r1_double_tap_timer != 0 &&
-                ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == HERO_MODE_CROUCH ||
-                 ((hero.state.control_mode == HERO_MODE_FALL || hero.state.control_mode == HERO_MODE_JUMP) &&
+                ((unsigned int)hero.state.control_mode < 2 ||
+                 hero.state.control_mode == HERO_MODE_CROUCH ||
+                 ((hero.state.control_mode == HERO_MODE_FALL ||
+                   hero.state.control_mode == HERO_MODE_JUMP) &&
                   hero.grounded_frames != 0)) &&
                 (controller_state.held & 8) != 0 && (controller_state.pressed & 8) != 0)
                 l01_hero_set_state(0x81, 1);

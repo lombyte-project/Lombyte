@@ -23,7 +23,7 @@ unsigned char build_object_rotation_matrix(void) {
     float        *keyframe_angles = (float *)(key + 0x10);
     char         *camera_position;
     struct GameCamera *camera_state;
-    float                 rotation_matrix[16];
+    float              rotation_matrix[16];
 
     view_tan_half_fov = keyframe_angles[3];
     update_view_context();

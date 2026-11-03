@@ -63,13 +63,13 @@ struct CameraShake {
 struct UpdateCam;
 
 struct GameCamera {
-    f32               view_matrices[0x50]; /* 0x000 */
-    Vec4              position;            /* 0x140 */
-    Vec4              rotation; /* 0x150: basis angles while the camera rows are not published */
-    struct CameraShake shake[2];       /* 0x160: apply_camera_shake, one per view row */
-    struct UpdateCam *current_camera;  /* 0x180: the record the view follows */
-    struct UpdateCam *previous_camera; /* 0x184: start_camera_blend's source */
-    u8                pad188[0x258 - 0x188];
+    f32                view_matrices[0x50]; /* 0x000 */
+    Vec4               position;            /* 0x140 */
+    Vec4               rotation; /* 0x150: basis angles while the camera rows are not published */
+    struct CameraShake shake[2]; /* 0x160: apply_camera_shake, one per view row */
+    struct UpdateCam  *current_camera;  /* 0x180: the record the view follows */
+    struct UpdateCam  *previous_camera; /* 0x184: start_camera_blend's source */
+    u8                 pad188[0x258 - 0x188];
     f32  timed_control_step; /* 0x258: advance_timed_camera_control subtracts it from sequence */
     u8   pad25C[0x270 - 0x25C];
     s16  transition_mode; /* 0x270: cam_trans_state's mode; 1/2 start a blend, 3 blends */

@@ -110,7 +110,8 @@ void bolt_thief_mine_update(struct Moby *moby) {
                           frame_scale_sq * 0.03f,
                           frame_scale_sq * 0.3f,
                           0.0f);
-            if ((char *)moby > floating_mine_respawn_address_limit && hero.state.control_mode != HERO_MODE_GRIND)
+            if ((char *)moby > floating_mine_respawn_address_limit &&
+                hero.state.control_mode != HERO_MODE_GRIND)
                 goto remove;
         }
         hit = find_moby_hit(moby, 0x230000, 0);
