@@ -11,11 +11,11 @@ struct AdjustTimeArg {
 extern void decode_bcd_time_fields() __asm__("func_0012D3C0");
 extern void encode_bcd_time_fields() __asm__("func_0012D428");
 
-void AdjustTime(struct AdjustTimeArg *time, s32 offset) {
+void AdjustTime(struct AdjustTimeArg *time, s32 minute_delta) {
     s32 hour;
 
     decode_bcd_time_fields();
-    hour = time->hour + offset;
+    hour = time->hour + minute_delta;
     if (hour >= 0) {
         if (hour >= 0x3D) {
             do {
