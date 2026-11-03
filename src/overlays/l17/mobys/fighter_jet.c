@@ -1062,9 +1062,9 @@ typedef struct {
     char           pad21[0x13];
     unsigned short flags;
     char           pad36[0xA];
-    float          r40;
-    float          r44;
-    float          r48;
+    float          roll;
+    float          pitch;
+    float          yaw;
     char           pad4C[0x70];
     unsigned char  bc;
 } FighterJetMoby;
@@ -1338,10 +1338,10 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         } else if (ship_vars->f34 < -1.3962634f) {
             ship_vars->f34 = -1.3962634f;
         }
-        if (ship_moby->r44 > 1.3962634f) {
-            ship_moby->r44 = 1.3962634f;
-        } else if (ship_moby->r44 < -1.3962634f) {
-            ship_moby->r44 = -1.3962634f;
+        if (ship_moby->pitch > 1.3962634f) {
+            ship_moby->pitch = 1.3962634f;
+        } else if (ship_moby->pitch < -1.3962634f) {
+            ship_moby->pitch = -1.3962634f;
         }
     }
 
@@ -1370,11 +1370,11 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         fast_arc_tan(target[0] - ship_moby->pos[0], target[1] - ship_moby->pos[1]),
         50.0f,
         lenB);
-    ship_moby->r48 = interpolate_value_with_repeated_squaring(
+    ship_moby->yaw = interpolate_value_with_repeated_squaring(
         1,
         5,
         distance_to_default_target,
-        ship_moby->r48,
+        ship_moby->yaw,
         fast_arc_tan(target[0] - ship_moby->pos[0], target[1] - ship_moby->pos[1]),
         50.0f,
         lenB);
@@ -1388,11 +1388,11 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         50.0f,
         lenA);
     target_height_distance_for_moby_pitch = absolute_float(target[2] - ship_moby->pos[2]);
-    ship_moby->r44 = interpolate_value_with_repeated_squaring(
+    ship_moby->pitch = interpolate_value_with_repeated_squaring(
         1,
         5,
         target_height_distance_for_moby_pitch,
-        ship_moby->r44,
+        ship_moby->pitch,
         -fast_arc_tan(vector_distance_xy(ship_moby->pos, target), target[2] - ship_moby->pos[2]),
         50.0f,
         lenA);
@@ -1499,9 +1499,9 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
     tn = fast_sin(half_fov) / fast_cos(half_fov);
     D_L17_0016D3F0 = tn;
     update_view_context();
-    ship_moby->r40 = fast_add_rotations(ship_vars->f30, ship_vars->f6C * D_L17_00162160);
-    ship_moby->r44 = fast_add_rotations(ship_vars->f34, -ship_vars->f70 * D_L17_00162164);
-    ship_moby->r48 = fast_add_rotations(ship_vars->f38, -ship_vars->f6C * D_L17_00162168);
+    ship_moby->roll = fast_add_rotations(ship_vars->f30, ship_vars->f6C * D_L17_00162160);
+    ship_moby->pitch = fast_add_rotations(ship_vars->f34, -ship_vars->f70 * D_L17_00162164);
+    ship_moby->yaw = fast_add_rotations(ship_vars->f38, -ship_vars->f6C * D_L17_00162168);
     if (coll_sphere(1.2f, ship_moby->pos, 0, ship_moby)) {
         collision_result = D_L17_00174740;
         if (*(char **)(collision_result + 0x18) == 0 ||
