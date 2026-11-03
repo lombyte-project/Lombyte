@@ -692,7 +692,7 @@ void spawn_shuttle_explosion_effect(
 
 void spawn_shuttle_explosion_effect(
 
-    float scale, char *moby, char *explosion_origin, char *push, int count) {
+    float scale, char *moby, char *explosion_origin, char *push, int particle_count) {
     float  position[4], direction[4], velocity[4], acceleration[4];
     Colors first_colors, second_colors;
     int    i;
@@ -702,7 +702,7 @@ void spawn_shuttle_explosion_effect(
     second_colors = D_L06_00201960;
     {
         int piece;
-        for (piece = 0; piece < count; piece++) {
+        for (piece = 0; piece < particle_count; piece++) {
             int *first_color = first_colors.v + random_integer_below(6);
             int *second_color;
             int  first_time, second_time;
@@ -732,8 +732,8 @@ void spawn_shuttle_explosion_effect(
                            frame_time * 10.0f * scale);
         }
     }
-    for (i = 0; i < count * D_L06_00162150;) {
-        int color1, color2, life, size, fade;
+    for (i = 0; i < particle_count * D_L06_00162150;) {
+        int color1, color2, life, spark_timing_frames, fade;
         i++;
         random_vector(position, 0.0f, 1.0f);
         fast_vec_add(position, position, explosion_origin);
@@ -769,7 +769,7 @@ void spawn_shuttle_explosion_effect(
         life = truncate_float_to_s32(scale_time(random_float_between(
             (float)l06_shuttle_explosion_spark_timing_random_min_frames,
             (float)(l06_shuttle_explosion_spark_timing_random_min_frames << 1))));
-        size = truncate_float_to_s32(scale_time(
+        spark_timing_frames = truncate_float_to_s32(scale_time(
             random_float_between((float)l06_shuttle_explosion_spark_timing_base_a_frames,
                                  (float)l06_shuttle_explosion_spark_timing_base_a_frames * 1.2f)));
         fade = truncate_float_to_s32(scale_time(
@@ -781,7 +781,7 @@ void spawn_shuttle_explosion_effect(
                     color1,
                     color2,
                     life,
-                    size,
+                    spark_timing_frames,
                     fade,
                     l06_shuttle_explosion_spark_table_index +
                         (l06_shuttle_explosion_spark_alternate_mode_flag << 16));
