@@ -234,7 +234,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         mob = (u8 *)G.damage_source_moby;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
-            hurt_response_state = 0x80;
+            hurt_response_state = HERO_STATE_DYING_SPEED_LIMITED;
         call_ret:
             hero_set_state(hurt_response_state, 1);
             return 1;
