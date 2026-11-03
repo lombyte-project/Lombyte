@@ -741,7 +741,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
     };
     int         hit;
     int         rf;
-    int         mode;
+    int         damage_outcome;
     int         i;
     int         k;
     int         j;
@@ -754,7 +754,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
 
     if (moby->state < STARFIGHTER_STATE_OWNER_UNAVAILABLE) {
         dd = &moby_data->sub;
-        mode = ATTACHMENT_DAMAGE_NONE;
+        damage_outcome = ATTACHMENT_DAMAGE_NONE;
         rf = 0;
         k6 = 6.0f;
         step = (float)dd->max_health / k6;
@@ -848,7 +848,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 }
             }
         }
-        for (i = 0; i < 11 && mode == ATTACHMENT_DAMAGE_NONE; i++) {
+        for (i = 0; i < 11 && damage_outcome == ATTACHMENT_DAMAGE_NONE; i++) {
             if (moby_data->list[i] == 0) {
                 continue;
             }
@@ -942,7 +942,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 moby_data->b148 = 1;
             }
         }
-        if (mode > ATTACHMENT_DAMAGE_NONE) {
+        if (damage_outcome > ATTACHMENT_DAMAGE_NONE) {
             if (rf != 0) {
                 switch (moby->command - 1) {
                 case DAMAGE_STAGE_SKIP_LINE_QUEUE:
