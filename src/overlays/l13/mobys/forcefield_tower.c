@@ -93,12 +93,12 @@ typedef struct {
 int set_voice_position(int index, const void *vector) __asm__("FUN_L13_002982e8");
 
 int set_voice_position(int index, const void *vector) {
-    int                       offset = index * 0x70;
+    int                       voice_slot_byte_offset = index * 0x70;
     char                     *voice_table = D_0013E533 + 0x1D;
     char                     *vector_base = voice_table + 0xA0;
-    Level13SoundEffectTarget *effect = (Level13SoundEffectTarget *)(voice_table + offset);
+    Level13SoundEffectTarget *effect = (Level13SoundEffectTarget *)(voice_table + voice_slot_byte_offset);
     effect->flags |= 0x40;
-    qcopy(vector_base + offset, vector);
+    qcopy(vector_base + voice_slot_byte_offset, vector);
     return 1;
 }
 
