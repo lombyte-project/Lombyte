@@ -134,15 +134,15 @@ int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
 
 typedef struct {
     u8  pad[0x48];
-    s16 x48;
-    s16 x4a;
+    s16 selector_x_offset;
+    s16 selector_y_offset;
     u8  p4c[0xC];
-    s32 x58;
-    s32 x5c;
+    s32 selector_width;
+    s32 selector_height;
     u8  p60[0x10];
-    s32 x70;
-    s32 x74;
-    s32 x78;
+    s32 selector_fade_counters;
+    s32 selector_selected_slot_index;
+    s32 selector_input_state;
 } O00237ae8;
 
 /* One slot of a HUD selector ring: its icon, the slot each pad direction moves to, and what
@@ -180,13 +180,13 @@ void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     ItemDef         *tab;
     D_L00_0015FA90 = 8;
     D_L00_0015FAC0 = &eight_slot_hud_selector_table_pointer_gp;
-    hud_element->x48 = 0;
-    hud_element->x4a = 0;
-    hud_element->x58 = D_L00_0015F718_gp;
-    hud_element->x5c = D_L00_0015F71C_gp;
-    hud_element->x74 = -2;
-    hud_element->x78 = scale_game_frames(0x1E);
-    hud_element->x70 = 0;
+    hud_element->selector_x_offset = 0;
+    hud_element->selector_y_offset = 0;
+    hud_element->selector_width = D_L00_0015F718_gp;
+    hud_element->selector_height = D_L00_0015F71C_gp;
+    hud_element->selector_selected_slot_index = -2;
+    hud_element->selector_input_state = scale_game_frames(0x1E);
+    hud_element->selector_fade_counters = 0;
     D_L00_0015F72C = 0;
     slot_entry = eight_slot_hud_selector_slots;
     tab = item_defs;
