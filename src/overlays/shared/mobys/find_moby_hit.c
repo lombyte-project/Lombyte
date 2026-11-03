@@ -603,7 +603,7 @@ int generate_random_points_from_shape_entries(
     Vec4_25aca0    shape_anchor, second, third, fourth, fifth;
     unsigned char *list;
     unsigned char *entry;
-    int            count, index, chosen, emitted, limit;
+    int            eligible_shape_entry_count, index, chosen, emitted, limit;
     unsigned int   shape_entry_flags;
     unsigned int   last;
     float          total, weight, radius, extent, random;
@@ -618,7 +618,7 @@ int generate_random_points_from_shape_entries(
             compute_moby_joint_matrices(entity, *(short *)(entry + 2), 0);
         if (*(int *)(entry + 4) <= 0)
             return 0;
-        count = 0;
+        eligible_shape_entry_count = 0;
         index = 0;
         total = 0.0f;
         entry += 0x10;
@@ -634,7 +634,7 @@ int generate_random_points_from_shape_entries(
                 type = shape_entry_flags & 0xff;
                 active = shape_entry_flags & 0x20000;
                 if (!(((mask >> index) ^ 1) & 1) && active) {
-                    entries[count] = entry;
+                    entries[eligible_shape_entry_count] = entry;
                     switch (type) {
                     case SHAPE_INLINE_CENTER_SPHERE:
                     case 1:
@@ -655,7 +655,7 @@ int generate_random_points_from_shape_entries(
                             radius = *(float *)(entity + 0x2c);
                             radius = *(float *)(list + 8) * radius * 0.0009765625f;
                         }
-                        weights[count] = radius * 4.1887903f * radius * radius;
+                        weights[eligible_shape_entry_count] = radius * 4.1887903f * radius * radius;
                         break;
                     }
                     case SHAPE_XY_DISK_WITH_Z_EXTENT: {
@@ -666,7 +666,7 @@ int generate_random_points_from_shape_entries(
                         radius = shape_anchor.f[3] * *(float *)(entity + 0x2c);
                         radius *= 0.0009765625f;
                         extent = *(float *)list * (*(float *)(entity + 0x2c) * 0.0009765625f);
-                        weights[count] = radius * 4.187743f * radius * radius +
+                        weights[eligible_shape_entry_count] = radius * 4.187743f * radius * radius +
                                          radius * 1.5707964f * radius * extent;
                         break;
                     }
@@ -680,12 +680,12 @@ int generate_random_points_from_shape_entries(
                         fast_vec_sub(&third, &shape_anchor, &second);
                         radius = FUN_001f9af0_25aca0(&third);
                         extent = *(float *)(list + 8) * *(float *)(entity + 0x2c) * 0.0009765625f;
-                        weights[count] = extent * 1.5707964f * extent * radius;
+                        weights[eligible_shape_entry_count] = extent * 1.5707964f * extent * radius;
                         break;
                     }
                     }
-                    total += weights[count];
-                    count++;
+                    total += weights[eligible_shape_entry_count];
+                    eligible_shape_entry_count++;
                 }
                 index++;
                 list += 0x20;
@@ -698,7 +698,7 @@ int generate_random_points_from_shape_entries(
         limit = maximum;
     for (emitted = 0; emitted < limit; emitted++) {
         random = random_float_between(0.0f, total);
-        for (chosen = 0; chosen < count; chosen++) {
+        for (chosen = 0; chosen < eligible_shape_entry_count; chosen++) {
             if (random < weights[chosen])
                 break;
             random -= weights[chosen];
