@@ -257,7 +257,7 @@ int          l10_timed_spark_second_color_from __asm__("D_L10_00161FF0") = 0x200
 int          l10_timed_spark_second_color_to __asm__("D_L10_00161FF4") = 0x200080ff;
 extern void  clear_u64_value(void *);
 
-void emit_timed_spark_particle(void *emission_position, short *timer) {
+void emit_timed_spark_particle(void *emission_position, short *emission_countdown) {
     float visibility_sphere[4];
     float spark_vertical_vector[4];
     float acc[4];
@@ -270,7 +270,7 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
     visibility_sphere[3] = 5.0f;
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
-    if (!fast_dec_timer_s16(timer))
+    if (!fast_dec_timer_s16(emission_countdown))
         return;
     clear_u64_value(spark_vertical_vector);
     spark_vertical_vector[2] = timed_spark_vertical_vector_z_scale_gp * frame_time;
@@ -302,7 +302,7 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
                 second_frame_count,
                 third_frame_count,
                 -1);
-    *timer = truncate_float_to_s32(random_float_between((float)timed_spark_timer_reset_min_gp,
+    *emission_countdown = truncate_float_to_s32(random_float_between((float)timed_spark_timer_reset_min_gp,
                                                         (float)timed_spark_timer_reset_max_gp));
 }
 
