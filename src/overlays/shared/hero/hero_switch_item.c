@@ -2752,14 +2752,14 @@ void hero_update(void) {
     s32          index;
     s32          buttons;
     s32          negative_x;
-    u8           mode;
+    u8           resolved_gravity_mode;
     struct Hero *hero_state;
     u8          *source;
     Vec4        *positions;
 
-    mode = resolve_hero_gravity_mode();
+    resolved_gravity_mode = resolve_hero_gravity_mode();
     hero_state = &hero;
-    hero_state->gravity_mode = mode;
+    hero_state->gravity_mode = resolved_gravity_mode;
     hero_state->stick_magnitude = get_capped_hero_stick_magnitude();
     hero_state->wall_moby = 0;
     source = (u8 *)&controller_state;
