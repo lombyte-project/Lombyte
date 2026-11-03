@@ -552,11 +552,11 @@ void clear_hero_queued_animation(void) {
 /* Stores id at &hero.queued_frame_request; -1 stands for 5 frames. */
 void hero_set_attack_ticks(int id) __asm__("FUN_L00_00232640");
 
-void hero_set_attack_ticks(int id) {
-    if (id == -1) {
-        id = scale_game_frames(5);
+void hero_set_attack_ticks(int attack_ticks) {
+    if (attack_ticks == -1) {
+        attack_ticks = scale_game_frames(5);
     }
-    hero.queued_frame_request = id;
+    hero.queued_frame_request = attack_ticks;
 }
 
 #include "rnc/sdk/eetypes.h"
