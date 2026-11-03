@@ -1148,7 +1148,7 @@ void update_vendor_menu(void) {
     s32                i;
     s32                j;
     s32                k;
-    s32                id;
+    s32                cutscene_animation_frame;
     f32                k1;
     f32                k2;
     f32                k3;
@@ -1592,9 +1592,9 @@ void update_vendor_menu(void) {
         l00_camera.rows[10] = camera_rotation_matrix[1][2];
         for (i = 0; i < D_L00_0016C860.h44; i++) {
             mb = D_L00_0016C860.f178[i];
-            id = D_L00_0016C860.f38 >> 1;
-            mb->next_frame = id + 1;
-            mb->frame = id;
+            cutscene_animation_frame = D_L00_0016C860.f38 >> 1;
+            mb->next_frame = cutscene_animation_frame + 1;
+            mb->frame = cutscene_animation_frame;
             update_moby_animation_state(mb);
             mb->blend = convert_integer_to_float(D_L00_0016C860.f38 & 1) * 0.5f;
             if (flag && (D_L00_0016C860.f38 & 1)) {
