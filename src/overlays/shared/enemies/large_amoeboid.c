@@ -1030,7 +1030,7 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
     }
 }
 
-void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
+void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *input_motion) {
     LargeAmoeboidVars *burst_amoeboid_vars = (LargeAmoeboidVars *)MOBY(moby)->pvars;
     f32                spawn_position[4], origin[4], velocity[4];
     u128              *dest;
@@ -1057,7 +1057,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
             lateral = random_float_between(amoeboid_burst_vertical_speed_min_gp,
                                            amoeboid_burst_vertical_speed_max_gp);
             vertical = random_float_between(0.0f, amoeboid_burst_input_motion_scale_max_gp);
-            fast_vec_scale(origin_copy, mode, vertical * frame_time_gp);
+            fast_vec_scale(origin_copy, input_motion, vertical * frame_time_gp);
             scale = fast_cos(angle);
             origin[0] += scale * (radius * frame_time_gp);
             scale = fast_sin(angle);
