@@ -394,7 +394,7 @@ extern char            D_001383A0[];
 
 void initialize_level_map_archive(void) {
     int                 i;
-    RenderArchiveState *state;
+    RenderArchiveState *map_archive_state;
     int                 level;
     struct DiscFile    *file;
     int                 heap_tag, first_size, second_size, archive_transfer_qwords;
@@ -402,7 +402,7 @@ void initialize_level_map_archive(void) {
     unsigned char      *level_data;
     int                 x, y, mask_buffer;
     float               radius_sq;
-    unsigned char      *flags;
+    unsigned char      *item_availability;
 
     D_L00_001841F0.initialized = 1;
     {
@@ -431,8 +431,8 @@ void initialize_level_map_archive(void) {
             map_coefficients[i * 4 + 2] = map_y0 - scale_y * world_y0;
         }
     }
-    flags = (unsigned char *)((unsigned char *)item_available);
-    if (flags[0x21] != 0) {
+    item_availability = (unsigned char *)((unsigned char *)item_available);
+    if (item_availability[0x21] != 0) {
         D_L00_001841F0.loaded = 1;
         file = (struct DiscFile *)D_00138438 + D_L00_001841F0.archive_index;
     } else {
@@ -447,16 +447,16 @@ void initialize_level_map_archive(void) {
         archive = (int *)((int)archive_base + 0x9A800);
         archive_transfer_qwords = file->size << 7;
         read_disc_sectors_and_wait(archive, file->sector, file->size);
-        state->file_handle = stash_send_data(
+        map_archive_state->file_handle = stash_send_data(
             (int)archive, archive_transfer_qwords, 0x4800, (int)map_archive_stash_tag);
-        state->transfer_bytes = archive_transfer_qwords;
+        map_archive_state->transfer_bytes = archive_transfer_qwords;
         fast_decompress((int)archive, (int)archive_base);
         archive = archive_base;
         first_size = archive[1] - archive[0];
-        state->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
-        fast_mem_copy((void *)state->first_data, (char *)archive + archive[0], first_size);
-        state->first_data += 8;
-        state->second_data = state->first_data;
+        map_archive_state->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
+        fast_mem_copy((void *)map_archive_state->first_data, (char *)archive + archive[0], first_size);
+        map_archive_state->first_data += 8;
+        map_archive_state->second_data = map_archive_state->first_data;
         second_size = archive[2] - archive[1];
         state->coverage_runs = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
         fast_mem_copy((void *)state->coverage_runs, (char *)archive + archive[1], second_size);
