@@ -1258,7 +1258,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
     FlightVec   vertical;
     FlightVec   camera_angles;
     FlightVec   target;
-    FlightVec   offset;
+    FlightVec   path_sum_or_camera_offset;
     float       steer_x;
     float       steer_y;
     float       steer_rate_x;
@@ -1392,10 +1392,10 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         char *paths = (char *)l13_cuboids_gp;
         qcopy(target, ((char(*)[128])paths)[jet_flight_state->target_path] + 0x30);
         pitch_limit = fast_vec_length(paths + path_offset + 0x20);
-        fast_vec_add(offset,
+        fast_vec_add(path_sum_or_camera_offset,
                      (jet_flight_state->target_path << 7) + (char *)l13_cuboids_gp,
                      (jet_flight_state->target_path << 7) + (char *)l13_cuboids_gp + 0x10);
-        yaw_limit = fast_vec_length(offset);
+        yaw_limit = fast_vec_length(path_sum_or_camera_offset);
     } else {
         qcopy(target, &fighter_jet_steering_reference_position);
     }
@@ -1498,12 +1498,12 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                           frame_scale_sq_gp * 0.8f,
                           frame_scale_gp);
         }
-        offset[0] = jet_flight_state->camera_offset_x;
-        offset[1] = jet_flight_state->camera_offset_y;
-        offset[2] = jet_flight_state->camera_offset_z;
-        offset[3] = 0.0f;
+        path_sum_or_camera_offset[0] = jet_flight_state->camera_offset_x;
+        path_sum_or_camera_offset[1] = jet_flight_state->camera_offset_y;
+        path_sum_or_camera_offset[2] = jet_flight_state->camera_offset_z;
+        path_sum_or_camera_offset[3] = 0.0f;
         euler_rotation_basis(basis, (char *)&jet_flight_state->roll);
-        transform_vector_by_basis(target, offset, basis);
+        transform_vector_by_basis(target, path_sum_or_camera_offset, basis);
         fast_vec_add(camera.v.pos, moby->pos, target);
         set_camera_position(camera.v.pos);
         camera.v.rot[0] =
