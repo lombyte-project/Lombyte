@@ -16,7 +16,7 @@ struct SyscallMidTable {
 
 extern u32                    D_00130308[];
 extern struct SyscallMidTable syscall_table_address_init_bindings __asm__("D_00130310");
-extern s32                    InvokeKernelSyscall0083_Rfu();
+extern s32                    FindAddress();
 extern s32                    Rfu116SetSyscallMid();
 extern void                   FindKernelAddress();
 extern void                   KernelCopyRdata();
@@ -31,20 +31,18 @@ void InitSystemCallTableAddress(void) {
                         syscall_table_address_init_bindings.unk4);
     Rfu116SetSyscallMid(syscall_table_address_init_bindings.unk8,
                         syscall_table_address_init_bindings.unkC);
-    find_cursor = InvokeKernelSyscall0083_Rfu(0x80000000, 0x80080000, &FindKernelAddress);
+    find_cursor = FindAddress(0x80000000, 0x80080000, &FindKernelAddress);
     find_addr = find_cursor - 0x20C;
-    copy_cursor = InvokeKernelSyscall0083_Rfu(0x80000000, 0x80080000, &KernelCopyRdata);
+    copy_cursor = FindAddress(0x80000000, 0x80080000, &KernelCopyRdata);
     copy_addr = copy_cursor - 0x168;
     if (find_addr != copy_addr) {
         ;
         do {
             if ((find_addr < copy_addr) != 0) {
-                find_cursor =
-                    InvokeKernelSyscall0083_Rfu(find_cursor + 4, 0x80080000, &FindKernelAddress);
+                find_cursor = FindAddress(find_cursor + 4, 0x80080000, &FindKernelAddress);
                 find_addr = find_cursor - 0x20C;
             } else {
-                copy_cursor =
-                    InvokeKernelSyscall0083_Rfu(copy_cursor + 4, 0x80080000, &KernelCopyRdata);
+                copy_cursor = FindAddress(copy_cursor + 4, 0x80080000, &KernelCopyRdata);
                 copy_addr = copy_cursor - 0x168;
             }
             found_before = find_addr < copy_addr;

@@ -193,7 +193,7 @@ void help_hints_update(struct Moby *moby) {
                 D_00141C5A = scale_game_frames(gameplay_event_frame_count) / 600;
             D_00141C5C = D_00141C5C | (1 << gameplay_event_level_index) | 0x80000000;
         }
-        if (hero.state.control_mode == 0x12) {
+        if (hero.state.control_mode == HERO_MODE_WATER_SURFACE) {
             if (is_point_inside_clip_volume(gameplay_event_pvars + 4, gameplay_event_pvars[13]) ||
                 is_point_inside_clip_volume(gameplay_event_pvars + 4, gameplay_event_pvars[14])) {
                 clear_u64_value(gameplay_event_pvars + 4);

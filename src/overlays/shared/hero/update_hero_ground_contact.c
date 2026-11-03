@@ -125,7 +125,7 @@ void update_hero_ground_contact(void) {
     if (hero.gravity_mode)
         k = 1;
     ground_ray_endpoint_offset = hero.capsule_radius * 2.2f;
-    if (hero.state.control_mode == 2) {
+    if (hero.state.control_mode == HERO_MODE_FALL) {
         ground_ray_endpoint_offset = hero.capsule_radius * 2.9f;
     }
     hero_get_collision_ray_endpoints(
@@ -149,7 +149,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
         collision_sound_class = coll_sound_class();
-        if (current_level_index == 1 || current_level_index == 0x12) {
+        if (current_level_index == LEVEL_NOVALIS || current_level_index == LEVEL_VELDIN2) {
             collision_sound_class = 3;
         }
         hero.ground_sound_class = collision_sound_class;
@@ -229,9 +229,9 @@ d1:
     hero.unk2C8.i[1] = 0;
     hero.unk2C0.i[0] = 0;
     hero.unk2C0.i[1] = 0;
-    if (hero.state.control_mode == 0xF || hero.state.control_mode == 0x15 ||
-        hero.state.control_mode == 6 || hero.state.control_mode == 4 ||
-        hero.state.control_mode == 5 || hero.state.control_mode == 3) {
+    if (hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == 0x15 ||
+        hero.state.control_mode == HERO_MODE_ATTACK || hero.state.control_mode == HERO_MODE_JUMP ||
+        hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_LEDGE) {
         return;
     }
     if (!(hero.ground_distance < 0.25f)) {

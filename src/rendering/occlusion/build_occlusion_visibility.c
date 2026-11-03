@@ -32,9 +32,9 @@ void build_occlusion_visibility(void) {
     f32 *octant_mask_data;
     s32  bx, by, bz;
 
-    x = truncate_float_to_s32(preview_camera.position.f[0] * scale);
-    y = truncate_float_to_s32(preview_camera.position.f[1] * scale);
-    z = truncate_float_to_s32(preview_camera.position.f[2] * scale);
+    x = truncate_float_to_s32(game_camera.position.f[0] * scale);
+    y = truncate_float_to_s32(game_camera.position.f[1] * scale);
+    z = truncate_float_to_s32(game_camera.position.f[2] * scale);
     vis = parse_occlusion_grid(x, y, z);
     if (vis != 0) {
         occl_invalid_grid = 0;
@@ -49,7 +49,7 @@ void build_occlusion_visibility(void) {
                                               x + 1,
                                               y,
                                               z,
-                                              preview_camera.position.f[0] * scale -
+                                              game_camera.position.f[0] * scale -
                                                   convert_integer_to_float(x));
             gy = get_occlusion_grid_from_pair(x,
                                               y - 1,
@@ -57,7 +57,7 @@ void build_occlusion_visibility(void) {
                                               x,
                                               y + 1,
                                               z,
-                                              preview_camera.position.f[1] * scale -
+                                              game_camera.position.f[1] * scale -
                                                   convert_integer_to_float(y));
             gz = get_occlusion_grid_from_pair(x,
                                               y,
@@ -65,7 +65,7 @@ void build_occlusion_visibility(void) {
                                               x,
                                               y,
                                               z + 1,
-                                              preview_camera.position.f[2] * scale -
+                                              game_camera.position.f[2] * scale -
                                                   convert_integer_to_float(z));
             if (gx != 0 || gy != 0 || gz != 0) {
                 fast_mem_zero16(occl_visibility_merged, 0x80);
@@ -98,9 +98,9 @@ void build_occlusion_visibility(void) {
             case OCCLUSION_FALLBACK_OCTANT_MASK:
                 octant_mask_data = occl_oct;
                 if (octant_mask_data != 0) {
-                    bx = 0.0f < preview_camera.position.f[0] - octant_mask_data[0];
-                    by = 0.0f < preview_camera.position.f[1] - octant_mask_data[1];
-                    bz = 0.0f < preview_camera.position.f[2] - octant_mask_data[2];
+                    bx = 0.0f < game_camera.position.f[0] - octant_mask_data[0];
+                    by = 0.0f < game_camera.position.f[1] - octant_mask_data[1];
+                    bz = 0.0f < game_camera.position.f[2] - octant_mask_data[2];
                     fast_mem_copy(occl_visibility,
                                   (u8 *)octant_mask_data + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
                                   0x80);

@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 
 /* Clears the 4 and 2 flag bits of mode_freeze_flags, then picks the next
-   state into mode_freeze_state from the 0x80/0x100/0x200 bits and the
+   state into save_card_state from the 0x80/0x100/0x200 bits and the
    D_0013D290 record. The cross-jumped `b` back into the 0x80 arm is
    one GNU as pads as a short loop and ps2eeas did not;
    tools/ps2eeas_nops.py writes it as a .word. */
@@ -19,28 +19,28 @@ void save_card_state_good_save(void) {
     nf = mode_freeze_flags & ~2;
     mode_freeze_flags = nf;
     if (card_state->unkF4 == 0) {
-        mode_freeze_state = 3;
+        save_card_state = CS_NOCARD;
         return;
     }
     if (flags & 0x80) {
-        mode_freeze_state = 0x15;
+        save_card_state = CS_SAVE_FAILED;
         mode_freeze_flags = (nf ^ 0x80) | 0x40;
         return;
     }
     if (flags & 0x100) {
-        mode_freeze_state = 0x14;
+        save_card_state = CS_LOAD_FAILED;
         mode_freeze_flags = (nf ^ 0x100) | 0x40;
         return;
     }
     if (card_state->card[0].sync_result != 0) {
         card_state->unkF4 = 0;
         mode_freeze_flags = nf | 1;
-        mode_freeze_state = 2;
+        save_card_state = CS_WARNING;
         return;
     }
     if (flags & 0x200) {
         mode_freeze_flags = nf ^ 0x200;
-        mode_freeze_state = 0x16;
+        save_card_state = CS_SAVING;
     }
 }
 

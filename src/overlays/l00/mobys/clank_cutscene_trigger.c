@@ -178,14 +178,14 @@ void apply_level_specific_cutscene_moby_effects(void) {
     VeldinVec   joint_world_position;
     VeldinVec   spherical_offset;
 
-    if (current_level_index == 0) {
+    if (current_level_index == LEVEL_VELDIN1) {
         for (i = 0; i < D_L00_0016C860.count; i++) {
             if (D_L00_0016C860.mobys[i]->oClass == 0x212) {
                 add_draw_callback((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.mobys[i]);
             }
         }
     }
-    if (current_level_index == 2) {
+    if (current_level_index == LEVEL_ARIDIA) {
         for (j = 0; j < D_L00_0016C860.count; j++) {
             mb = D_L00_0016C860.mobys[j];
             if (mb->oClass == 0x1B1) {
@@ -193,7 +193,7 @@ void apply_level_specific_cutscene_moby_effects(void) {
             }
         }
     }
-    if (current_level_index == 3 && D_L00_0016C860.state == 5 &&
+    if (current_level_index == LEVEL_KERWAN && D_L00_0016C860.state == 5 &&
         scale_game_frames(900) < D_L00_0016C860.timer &&
         D_L00_0016C860.timer < scale_game_frames(1100)) {
         joint_position_source_moby = (char *)D_L00_0016C860.unk184;
@@ -221,18 +221,18 @@ void apply_level_specific_cutscene_moby_effects(void) {
             }
         }
     }
-    if (current_level_index == 7 && D_L00_0016C860.state == 4 && D_L00_0016C860.unk188 != 0 &&
-        D_L00_0016C860.unk188->oClass == 0x214) {
+    if (current_level_index == LEVEL_UMBRIS && D_L00_0016C860.state == 4 &&
+        D_L00_0016C860.unk188 != 0 && D_L00_0016C860.unk188->oClass == 0x214) {
         add_draw_callback((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.unk188);
     }
-    if (current_level_index == 14 && D_L00_0016C860.state == 0) {
+    if (current_level_index == LEVEL_OLTANIS && D_L00_0016C860.state == 0) {
         particle_source_moby = D_L00_0016C860.particle_pair_source_moby;
         if (particle_source_moby != 0 && (u32)(D_L00_0016C860.timer - 0x1C) < 6) {
             emit_moby_particle_pairs(particle_source_moby);
             add_draw_callback((s32)glow_quads_draw, (s32)particle_source_moby);
         }
     }
-    if (current_level_index == 15 && (u32)(D_L00_0016C860.state - 3) < 2) {
+    if (current_level_index == LEVEL_QUARTU && (u32)(D_L00_0016C860.state - 3) < 2) {
         for (k = 0; k < D_L00_0016C860.count; k++) {
             FUN_L00_00257024(D_L00_0016C860.mobys[k]);
         }

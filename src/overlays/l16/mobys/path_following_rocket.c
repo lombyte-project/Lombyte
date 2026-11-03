@@ -66,7 +66,7 @@ void path_following_rocket_update(struct Moby *moby) {
         break;
     case ROCKET_STATE_WAIT_FOR_TRIGGER: {
         struct Hero *player = &hero;
-        if (player->state.control_mode != 15)
+        if (player->state.control_mode != HERO_MODE_GRIND)
             break;
         if (is_point_inside_clip_volume(&player->motion.body_center, *(int *)rocket_path_data)) {
             moby->state = ROCKET_STATE_FOLLOW_PATH;

@@ -11,7 +11,7 @@ void draw_sky_shells_with_gif_paging(void) __asm__("FUN_L12_00256748");
 
 void draw_sky_shells_with_gif_paging(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0xc) {
+    if (current_level_index == LEVEL_HOVEN) {
         draw_sky_shells_with_slow_medium_and_fast_rotation();
     } else {
         update_sky_shells_static();

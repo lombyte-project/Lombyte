@@ -346,7 +346,7 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
     float          path_sample_step = bolt_thief_default_path_sample_rate_gp * frame_time;
     int            path_sample_result;
     char          *path;
-    if (current_level_index == 0x10)
+    if (current_level_index == LEVEL_KALEBO3)
         path_sample_step = frame_time * 20.0f;
     if (bolt_thief_state->unkF8 != 0.0f)
         path_sample_step = bolt_thief_state->unkF8 * frame_time;

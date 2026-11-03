@@ -470,7 +470,7 @@ void draw_map_overlay(void) {
             image_index = get_icon_frame(0xE99A, 5);
             scale = ((map_state->zoom[map_state->loaded] * 4.0f + 10.0f) * 0.75f) / 13.0f;
             angle = hero.motion.rot.f[2];
-            flip = hero.state.control_mode == 0xF;
+            flip = hero.state.control_mode == HERO_MODE_GRIND;
             if (flip) {
                 angle = fast_add_rotations(angle, 1.5707964f);
             }

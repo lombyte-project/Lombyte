@@ -112,7 +112,7 @@ void rocket_strike_fighter_update(struct Moby *moby) {
         moby->hit_slot = 0xFF;
         if (hit != 0 && moby_vars->rocket == -1 &&
             moby->state != ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN) {
-            if (current_level_index == 14) {
+            if (current_level_index == LEVEL_OLTANIS) {
                 enemy_fighter_destruction_count = enemy_fighter_destruction_count + 1;
                 if (enemy_fighter_destruction_count >= 3 && item_unlocked[0x18] == 0) {
                     item_unlocked[0x18] = 1;

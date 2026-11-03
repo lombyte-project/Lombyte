@@ -79,7 +79,7 @@ void apply_hero_ground_type_effects(void) {
         q = &hero;
         q->base_condition = 1;
     }
-    if (current_level_index == 0xD) {
+    if (current_level_index == LEVEL_OLTANIS_ORBIT) {
         struct Hero *q = &hero;
         if (q->state.current != 0x7B) {
             if (coll_sphere(q->capsule_radius + 0.03f, &q->motion.body_center, 2, 0)) {
@@ -1860,12 +1860,12 @@ void update_hero_motion_for_current_state(void) {
         f32 f;
         f32 old;
         f32 d;
-        if (current_level_index == 0xF) {
+        if (current_level_index == LEVEL_QUARTU) {
             release_voice_slot_cf(2, MV(hero.moby), 0x1D);
         } else {
             release_voice_slot_cf(2, MV(hero.moby), 6);
         }
-        if (current_level_index != 0xF) {
+        if (current_level_index != LEVEL_QUARTU) {
             emit_hero_randomized_motion_effects(4, 2);
             vector_and_attack_descriptor_scratch.f[0] =
                 hero.motion.pos.f[0] + random_float_between(-0.25f, 0.25f);

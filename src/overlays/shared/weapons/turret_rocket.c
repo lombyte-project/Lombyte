@@ -175,7 +175,7 @@ char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int
                             -1);
             } while ((float)i < moby_creation_particle_count_limit_gp);
         }
-        if (current_level_index == 12)
+        if (current_level_index == LEVEL_HOVEN)
             *(int *)(created_moby_private_state + 0x18) = scale_game_frames(120);
         else
             *(int *)(created_moby_private_state + 0x18) =

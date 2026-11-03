@@ -226,8 +226,9 @@ void flying_car_update(struct Moby *flying_car_moby) {
                                &flying_car_moby->rot_row2,
                                flying_car_data->fAC);
                 fast_vec_add(&o->pos, &o->pos, &attached_part_offset_component);
-                if ((hero.state.control_mode == 13 && hero.grapple_target == o) ||
-                    (hero.state.control_mode == 14 && hero.swing_target_moby == o)) {
+                if ((hero.state.control_mode == HERO_MODE_GRAPPLE && hero.grapple_target == o) ||
+                    (hero.state.control_mode == HERO_MODE_GRAPPLE_SWING &&
+                     hero.swing_target_moby == o)) {
                     seed_linked_record_for_flying_car(flying_car_moby);
                     flying_car_data->fCC = scale_game_frames(0x1E);
                 } else {
@@ -381,7 +382,8 @@ int update_flying_car_path_motion(struct Moby *moby) {
     if (((unsigned)(hero.state.current - 0x25) < 2 && *(int *)(flying_car_data + 0xA0) >= 0 &&
          hero.grapple_target ==
              (struct Moby *)(D_L14_0015FFD8_7620 + *(int *)(flying_car_data + 0xA0) * 256)) ||
-        (hero.state.control_mode == 0xE && *(int *)(flying_car_data + 0xA0) >= 0 &&
+        (hero.state.control_mode == HERO_MODE_GRAPPLE_SWING &&
+         *(int *)(flying_car_data + 0xA0) >= 0 &&
          hero.swing_target_moby ==
              (struct Moby *)(D_L14_0015FFD8_7620 + *(int *)(flying_car_data + 0xA0) * 256))) {
         float lim;

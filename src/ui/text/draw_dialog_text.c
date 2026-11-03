@@ -77,26 +77,6 @@ void draw_dialog_text(void) {
         FREEZE_CHOICE_ALTERNATE_PAIRED_FOOTER_MESSAGE = 2,
         FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE = 3
     };
-    enum {
-        MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE = 2,
-        MODE_FREEZE_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 3,
-        MODE_FREEZE_SHARED_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 4,
-        MODE_FREEZE_FORMATTED_CENTERED_FOOTER_MESSAGE = 5,
-        MODE_FREEZE_ALTERNATE_LEFT_PAIRED_FOOTER_MESSAGE = 6,
-        MODE_FREEZE_BODY_ONLY_MESSAGE = 7,
-        MODE_FREEZE_SHARED_BODY_ONLY_MESSAGE = 8,
-        MODE_FREEZE_ALTERNATE_BODY_ONLY_MESSAGE = 10,
-        MODE_FREEZE_SHARED_ALTERNATE_BODY_ONLY_MESSAGE = 11,
-        MODE_FREEZE_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 12,
-        MODE_FREEZE_SHARED_ALTERNATE_LEFT_PAIRED_FOOTER_MESSAGE = 13,
-        MODE_FREEZE_FOOTERLESS_MESSAGE = 14,
-        MODE_FREEZE_SHARED_FOOTERLESS_MESSAGE = 15,
-        MODE_FREEZE_CENTERED_FOOTER_MESSAGE = 17,
-        MODE_FREEZE_ALTERNATE_CENTERED_FOOTER_MESSAGE = 18,
-        MODE_FREEZE_CONDITIONAL_FORMATTED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 19,
-        MODE_FREEZE_PAIRED_FOOTER_MESSAGE = 23,
-        MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE = 24
-    };
     char              formatted_dialog_text[0x200];
     struct TextRegion box;
 
@@ -172,51 +152,51 @@ void draw_dialog_text(void) {
         left = 0;
         mid = 0;
         right = 0;
-        switch (mode_freeze_state) {
-        case MODE_FREEZE_ALTERNATE_LEFT_PAIRED_FOOTER_MESSAGE:
+        switch (save_card_state) {
+        case CS_PROMPT_FORMAT:
             left = 0x524F;
             right = 0x524B;
             text = get_help_message_text(0x4FAF);
             break;
-        case MODE_FREEZE_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE:
+        case CS_NOSAVE:
             if (!(mode_freeze_flags & 2)) {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA7);
                 break;
             }
-        case MODE_FREEZE_SHARED_ALTERNATE_LEFT_PAIRED_FOOTER_MESSAGE:
+        case CS_PROMPT_CREATE_SAVE:
             left = 0x524F;
             right = 0x524B;
             text = get_help_message_text(0x4FAD);
             break;
-        case MODE_FREEZE_ALTERNATE_BODY_ONLY_MESSAGE:
-        case MODE_FREEZE_SHARED_ALTERNATE_BODY_ONLY_MESSAGE:
+        case CS_CHECK_SAVE:
+        case CS_CHECKING_SAVE:
             text = get_help_message_text(0x4FC1);
             break;
-        case MODE_FREEZE_BODY_ONLY_MESSAGE:
-        case MODE_FREEZE_SHARED_BODY_ONLY_MESSAGE:
+        case CS_FORMAT_PENDING:
+        case CS_FORMATTING:
             text = get_help_message_text(0x4FB7);
             break;
-        case MODE_FREEZE_FOOTERLESS_MESSAGE:
-        case MODE_FREEZE_SHARED_FOOTERLESS_MESSAGE:
+        case CS_CREATE_SAVE_PENDING:
+        case CS_CREATING_SAVE:
             text = get_help_message_text(0x4FB8);
             break;
-        case MODE_FREEZE_CENTERED_FOOTER_MESSAGE:
+        case CS_FORMAT_FAILED:
             mid = 0x524A;
             text = get_help_message_text(0x4FBA);
             break;
-        case MODE_FREEZE_ALTERNATE_CENTERED_FOOTER_MESSAGE:
+        case CS_CREATE_FAILED:
             mid = 0x524A;
             text = get_help_message_text(0x4FBC);
             break;
-        case MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE:
+        case CS_WARNING:
             mid = 0x524A;
             text = get_help_message_text(0x4FA6);
             if (freeze.timer != 0) {
                 mid = 0;
             }
             break;
-        case MODE_FREEZE_CONDITIONAL_FORMATTED_PAIRED_OR_CENTERED_FOOTER_MESSAGE:
+        case CS_NO_ROOM:
             if (mode_freeze_flags & 4) {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA7);
@@ -235,15 +215,15 @@ void draw_dialog_text(void) {
                 text = get_help_message_text(0x4FA9);
             }
             break;
-        case 21:
+        case CS_SAVE_FAILED:
             mid = 0x524A;
             text = get_help_message_text(0x4FBD);
             break;
-        case 20:
+        case CS_LOAD_FAILED:
             mid = 0x524A;
             text = get_help_message_text(0x4FBB);
             break;
-        case MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE:
+        case CS_PROMPT_BEGIN_NOSAVE:
             left = 0x524E;
             right = 0x524B;
             sprintf(formatted_dialog_text,
@@ -254,13 +234,13 @@ void draw_dialog_text(void) {
                     get_help_message_text(0x4FAA));
             text = formatted_dialog_text;
             break;
-        case MODE_FREEZE_PAIRED_FOOTER_MESSAGE:
+        case CS_PROMPT_BEGIN_UNFORMATTED:
             left = 0x524E;
             right = 0x524B;
             text = get_help_message_text(0x4FB1);
             break;
-        case MODE_FREEZE_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE:
-        case MODE_FREEZE_SHARED_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE:
+        case CS_NOCARD:
+        case CS_WAIT_FOR_CARD:
             if (boot_level_active != 0 && (mode_freeze_flags & 2)) {
                 left = 0x524E;
                 right = 0x524B;
@@ -270,7 +250,7 @@ void draw_dialog_text(void) {
                 text = get_help_message_text(0x4FAC);
             }
             break;
-        case MODE_FREEZE_FORMATTED_CENTERED_FOOTER_MESSAGE:
+        case CS_UNFORMATTED:
             mid = 0x4FA8;
             sprintf(formatted_dialog_text,
                     freeze_fmt_scsc,

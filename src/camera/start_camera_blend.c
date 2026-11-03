@@ -48,7 +48,7 @@ void start_camera_blend(struct UpdateCam *source) {
             fast_vec_normalize(
                 orbit_yaw_side_direction, &orbit_reference_hero->moby->rot_row1, 1.0f);
             fast_vec_normalize(orbit_axis, &orbit_reference_hero->moby->rot_row2, 1.0f);
-            /* PreviewCamera.current_camera, reached from this base. */
+            /* GameCamera.current_camera, reached from this base. */
             compute_camera_angles(transition->orbit.angles,
                                   &source->pos,
                                   *(char **)((char *)transition - 0xF0) + 0x30,

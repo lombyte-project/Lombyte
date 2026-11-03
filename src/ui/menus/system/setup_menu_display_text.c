@@ -21,10 +21,10 @@ extern void font_print_right(int, int, long, char *, int) __asm__("func_001F6940
 int         setup_menu_display_text(struct MenuScreen *menu) __asm__("FUN_0021ef78");
 
 int setup_menu_display_text(struct MenuScreen *menu) {
-    char                  formatted_menu_text[0x100];
-    struct PreviewCamera *camera = &preview_camera;
-    struct Moby          *preview_moby = menu->data.preview.moby;
-    int                   count;
+    char               formatted_menu_text[0x100];
+    struct GameCamera *camera = &game_camera;
+    struct Moby       *preview_moby = menu->data.preview.moby;
+    int                count;
 
     preview_moby->pos.x = camera->position.f[0] + 8.0f;
     preview_moby->pos.y = camera->position.f[1] + setup_menu_moby_camera_y_offset;

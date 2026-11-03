@@ -139,7 +139,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
     build_axis_rotation_quaternion(shuttle_vars->wobble, 0, shuttle_vars->angle);
     fast_vec_sub(&delta, &shuttle_moby->pos, &previous_shuttle_position);
     update_entity_matrix(shuttle_vars->spring, &delta, &rot, &shuttle_moby->rot);
-    if (hero.state.control_mode == 13 && hero.grapple_target == rider) {
+    if (hero.state.control_mode == HERO_MODE_GRAPPLE && hero.grapple_target == rider) {
         if (shuttle_vars->riding == 0) {
             shuttle_vars->riding = 1;
             shuttle_vars->timer = scale_game_frames(shuttle_enter_riding_transition_frames_gp);

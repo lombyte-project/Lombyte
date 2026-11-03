@@ -204,10 +204,10 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
     f32       horizontal_knockback_scale, vertical_knockback_scale, knockback_scale_factor;
     V_210ce8  knockback_vector;
 
-    if (hero.state.control_mode == 0x14) {
+    if (hero.state.control_mode == HERO_MODE_DYING) {
         return 0;
     }
-    if (hero.state.control_mode == 7) {
+    if (hero.state.control_mode == HERO_MODE_HURT) {
         return 0;
     }
     if (hero.state.current == 0x32) {
@@ -277,20 +277,20 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
             hero.motion.resolved_velocity_z.f[2] = frame_time * 7.0f;
             return 1;
         }
-        if (hero.state.control_mode == 0x12) {
+        if (hero.state.control_mode == HERO_MODE_WATER_SURFACE) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
-        } else if (hero.state.control_mode == 0x11) {
+        } else if (hero.state.control_mode == HERO_MODE_SWIM) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
-            if (current_level_index == 0xF || current_level_index == 0x11) {
+            if (current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) {
                 mob = ((u8 *)hero.damage_source_moby);
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
@@ -298,7 +298,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
                 }
             }
             hero_set_state(0x76, 1);
-        } else if (hero.state.control_mode == 3) {
+        } else if (hero.state.control_mode == HERO_MODE_LEDGE) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0) {
                 id = 0x82;
@@ -1993,12 +1993,12 @@ void update_hero_motion_for_current_state(void) {
         f32 f;
         f32 old;
         f32 d;
-        if (current_level_index == 0xF) {
+        if (current_level_index == LEVEL_QUARTU) {
             release_voice_slot_cf(2, (struct MobyView *)hero.moby, 0x1D);
         } else {
             release_voice_slot_cf(2, (struct MobyView *)hero.moby, 6);
         }
-        if (current_level_index != 0xF) {
+        if (current_level_index != LEVEL_QUARTU) {
             emit_hero_randomized_motion_effects(4, 2);
             spatial_or_hit_descriptor_work.f[0] =
                 hero.motion.pos.f[0] + random_float_between(-0.25f, 0.25f);

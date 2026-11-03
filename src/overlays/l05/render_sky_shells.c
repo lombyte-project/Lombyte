@@ -11,7 +11,7 @@ void render_sky_shells(void) __asm__("FUN_L05_00267520");
 
 void render_sky_shells(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0x5) {
+    if (current_level_index == LEVEL_RILGAR) {
         draw_sky_shells_with_particles_and_modulo_50000_rotation();
     } else {
         update_sky_shells_static();

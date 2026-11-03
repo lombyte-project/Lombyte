@@ -3,16 +3,16 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/save_data.h"
 
-/* One handler per memory card state; mode_freeze_state (0..0x18) picks it. */
+/* One handler per memory card state; save_card_state (0..0x18) picks it. */
 extern void (*save_card_state_handlers[25])(void) __asm__("D_001A0438");
 void run_state_handler(void) __asm__("FUN_00208840");
 
 void run_state_handler(void) {
-    s32 state = mode_freeze_state;
+    s32 state = save_card_state;
 
     save_card_state_handlers[state]();
     D_00161280++;
-    if (mode_freeze_state != state) {
+    if (save_card_state != state) {
         D_00161280 = 0;
     }
 }

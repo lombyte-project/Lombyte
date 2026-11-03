@@ -67,7 +67,7 @@ void apply_hero_ground_material_effects(void) {
     }
     if (saved_ground_type == GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH)
         hero.selector_3 = 1;
-    if (current_level_index == 13 && hero.state.current != 0x7B &&
+    if (current_level_index == LEVEL_OLTANIS_ORBIT && hero.state.current != 0x7B &&
         FUN_L00_001f0d60_239fc0(
             (u8 *)&hero.motion.body_center, 2, 0, hero.capsule_radius + 0.03f) &&
         collision_hit_material() == 11) {
@@ -92,7 +92,7 @@ void apply_hero_ground_material_effects(void) {
     if (saved_ground_type == 12)
         hero.on_slip_ground = 1;
     if (hero.selector_4 && hero.grounded_frames && hero.state.control_mode != 0x10 &&
-        hero.state.control_mode != 0x14 && hero.state.control_mode != 7) {
+        hero.state.control_mode != HERO_MODE_DYING && hero.state.control_mode != HERO_MODE_HURT) {
         s = 0x31;
         goto call;
     }
@@ -208,7 +208,7 @@ void update_hero_ground_contact(void) {
     if (hero.gravity_mode)
         k = 1;
     ground_probe_endpoint_offset = hero.capsule_radius * 2.2f;
-    if (hero.state.control_mode == 2) {
+    if (hero.state.control_mode == HERO_MODE_FALL) {
         ground_probe_endpoint_offset = hero.capsule_radius * 2.9f;
     }
     hero_get_collision_ray_endpoints(
@@ -233,7 +233,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
         ground_sound_class = coll_sound_class();
-        if (current_level_index == 1 || current_level_index == 0x12) {
+        if (current_level_index == LEVEL_NOVALIS || current_level_index == LEVEL_VELDIN2) {
             ground_sound_class = 3;
         }
         hero.ground_sound_class = ground_sound_class;
@@ -330,9 +330,9 @@ d1:
     hero.unk2C8.i[1] = 0;
     hero.unk2C0.i[0] = 0;
     hero.unk2C0.i[1] = 0;
-    if (hero.state.control_mode == 0xF || hero.state.control_mode == 0x15 ||
-        hero.state.control_mode == 6 || hero.state.control_mode == 4 ||
-        hero.state.control_mode == 5 || hero.state.control_mode == 3) {
+    if (hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == 0x15 ||
+        hero.state.control_mode == HERO_MODE_ATTACK || hero.state.control_mode == HERO_MODE_JUMP ||
+        hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_LEDGE) {
         return;
     }
     if (!(hero.ground_distance < 0.25f)) {
@@ -412,7 +412,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         resolve_hero_pending_path_clearance();
         hero.path_constrain_pending = 0;
     }
-    if (hero.state.control_mode != 0x11) {
+    if (hero.state.control_mode != HERO_MODE_SWIM) {
         if (hero.state.control_mode == 0x16) {
             transform_hero_local_offset_to_world(&collision_query_offset, 0.0f, 0.0f, 0.7f);
             fast_vec_sub(&collision_query_offset, &collision_query_offset, &hero.motion.pos.q);
@@ -437,7 +437,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll_sphere(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.4f))
                 break;
-        } else if (hero.state.control_mode == 0x11) {
+        } else if (hero.state.control_mode == HERO_MODE_SWIM) {
             if (!coll_sphere(&hero.motion.pos.q, mask, ((s32)hero.moby), 0.6f))
                 break;
         } else if (hero.state.control_mode == 0x16) {

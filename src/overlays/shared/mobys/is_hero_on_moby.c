@@ -18,7 +18,7 @@ s32 is_hero_on_moby(struct Moby *candidate_moby) __asm__("FUN_L01_00277fb8");
 s32 is_hero_on_moby(struct Moby *candidate_moby) {
     struct Hero *hero_ptr = &hero;
 
-    if (hero_ptr->state.control_mode == 3 || hero_ptr->state.current == 0x1C) {
+    if (hero_ptr->state.control_mode == HERO_MODE_LEDGE || hero_ptr->state.current == 0x1C) {
         if ((struct Moby *)hero_ptr->ledge_moby == candidate_moby) {
             return 1;
         }

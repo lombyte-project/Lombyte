@@ -188,7 +188,7 @@ void process_hero_state_transitions(void) {
     prevState = hero.state.step;
     prevAnim = MOBY(moby)->prev_seq;
     if (process_hero_hurt_response(1) == 0) {
-        if (hero.health.hp <= 0 && hero.state.control_mode != 0x14 &&
+        if (hero.health.hp <= 0 && hero.state.control_mode != HERO_MODE_DYING &&
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);
         } else if (process_hero_item_action_input() == 0 && try_enter_hero_water_state() == 0 &&
@@ -444,7 +444,7 @@ void process_hero_state_transitions(void) {
                             }
                         }
                         if (ok && 0.22f < hero.stick_magnitude) {
-                            if (current_level_index == 0xC) {
+                            if (current_level_index == LEVEL_HOVEN) {
                                 int slot = hero.ground_sound_class;
                                 request_hero_voice_if_enabled(slot, 0, 0);
                                 request_hero_voice_if_enabled(slot, 1, 0);
@@ -628,7 +628,8 @@ void process_hero_state_transitions(void) {
                     break;
                 case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY:
                     if (hero.health.hp <= 0) {
-                        if (current_level_index == 0xF || current_level_index == 0x11) {
+                        if (current_level_index == LEVEL_QUARTU ||
+                            current_level_index == LEVEL_VELDIN_ORBIT) {
                             hero_set_state(0x82, 1);
                             break;
                         }
@@ -814,7 +815,8 @@ void process_hero_state_transitions(void) {
                         break;
                     }
                     if (!(hero.air_frames.s < scale_game_frames(5)) &&
-                        !(hero.state.prev_control_mode == 0x12 && hero.wading != 0) &&
+                        !(hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE &&
+                          hero.wading != 0) &&
                         hero.ground_distance > 1.35f) {
                         if (check_hero_forward_collision_height() == 0) {
                             hero_set_state(HERO_STATE_FALL, 1);
@@ -881,7 +883,8 @@ void process_hero_state_transitions(void) {
                         break;
                     }
                     if (hero.state_timer > scale_game_frames(0xF) ||
-                        (hero.state.prev_control_mode != 0 && hero.state.prev_control_mode != 1)) {
+                        (hero.state.prev_control_mode != HERO_MODE_IDLE &&
+                         hero.state.prev_control_mode != HERO_MODE_RUN)) {
                         if ((controller_state.pressed & 0x10000) && hero.unk20AA == 0) {
                             hero.unk3BE = 1;
                         }
@@ -1264,7 +1267,7 @@ void process_hero_state_transitions(void) {
                     } else {
                         int ice = 0;
 
-                        if (current_level_index == 0x10 && hero.wall_hit != 0 &&
+                        if (current_level_index == LEVEL_KALEBO3 && hero.wall_hit != 0 &&
                             ((unsigned char *)hero.coll_hit_moby) != 0 &&
                             *(short *)(((unsigned char *)hero.coll_hit_moby) + 0xA6) == 0x101) {
                             ice = 1;
@@ -1275,7 +1278,7 @@ void process_hero_state_transitions(void) {
                             ice || hero.unk5BE != 0) {
                             int ok = 1;
 
-                            if (current_level_index != 0x10) {
+                            if (current_level_index != LEVEL_KALEBO3) {
                                 qcopy(temporary_position, hero.rail_point.f);
                                 temporary_position[2] += 2.0f;
                                 trajectory_and_probe_workspace[0] =
@@ -1333,7 +1336,7 @@ void process_hero_state_transitions(void) {
                     if (hero.state.current == HERO_STATE_GRIND) {
                         int can = 1;
 
-                        if (current_level_index == 8) {
+                        if (current_level_index == LEVEL_BATALIA) {
                             *(OvlQuad *)temporary_position = 0;
                             temporary_position[0] = 342.0f;
                             temporary_position[1] = 111.1f;
@@ -1843,9 +1846,9 @@ void process_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_FATAL_FALL:
-                    if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
-                        (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
-                        (current_level_index == 0x10 &&
+                    if ((current_level_index == LEVEL_KERWAN && 5.0f > hero.motion.pos.f[2]) ||
+                        (current_level_index == LEVEL_NEBULA_G34 && 50.0f > hero.motion.pos.f[2]) ||
+                        (current_level_index == LEVEL_KALEBO3 &&
                          (77.0f > hero.motion.pos.f[2] ||
                           (hero.state_timer > 0x14 && hero.wall_hit != 0 &&
                            hero.motion.displacement.f[2] >= 0.0f))) ||
@@ -2352,8 +2355,8 @@ void process_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         break;
                     }
-                    if (current_level_index == 0x10 && hero.motion.velocity.f[2] < 0.0f &&
-                        hero.health.hp == 0 && hero.state.prev_control_mode == 0xF) {
+                    if (current_level_index == LEVEL_KALEBO3 && hero.motion.velocity.f[2] < 0.0f &&
+                        hero.health.hp == 0 && hero.state.prev_control_mode == HERO_MODE_GRIND) {
                         hero_set_state(0x77, 1);
                         break;
                     }

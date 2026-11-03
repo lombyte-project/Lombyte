@@ -169,21 +169,24 @@ void update_target_tracking_camera_position(char *camera_object) {
         target = 4.64f;
         rate = 2.0f;
     }
-    FUN_L00_0025b868(
-        target, frame_time * 8.0f, (float *)(*(char **)((char *)l00_camera.unk180 + 0x70) + 0xa0));
-    FUN_L00_0025b868(
-        rate, frame_time * 4.0f, (float *)(*(char **)((char *)l00_camera.unk180 + 0x70) + 0xb0));
-    if (current_level_index == 14 && hero.state.current == 0x2c)
+    FUN_L00_0025b868(target,
+                     frame_time * 8.0f,
+                     (float *)(*(char **)((char *)l00_camera.current_camera + 0x70) + 0xa0));
+    FUN_L00_0025b868(rate,
+                     frame_time * 4.0f,
+                     (float *)(*(char **)((char *)l00_camera.current_camera + 0x70) + 0xb0));
+    if (current_level_index == LEVEL_OLTANIS && hero.state.current == 0x2c)
         FUN_L00_0025b868(rate + 0.25f,
                          frame_time * 8.0f,
-                         (float *)(*(char **)((char *)l00_camera.unk180 + 0x70) + 0x8c));
+                         (float *)(*(char **)((char *)l00_camera.current_camera + 0x70) + 0x8c));
     else
         FUN_L00_0025b868(rate - 0.5f,
                          frame_time * 8.0f,
-                         (float *)(*(char **)((char *)l00_camera.unk180 + 0x70) + 0x8c));
+                         (float *)(*(char **)((char *)l00_camera.current_camera + 0x70) + 0x8c));
 
     if (hero.state.current == 0x2c) {
-        if ((current_level_index != 14 && current_level_index != 7 && current_level_index != 9) ||
+        if ((current_level_index != LEVEL_OLTANIS && current_level_index != LEVEL_UMBRIS &&
+             current_level_index != LEVEL_GASPAR) ||
             (hero.swing_target_moby != 0 &&
              *(unsigned char *)((char *)hero.swing_target_moby + 0x21) == 255)) {
             *angle =
@@ -336,7 +339,7 @@ void update_target_tracking_camera(char *camera_object) {
     }
     if (x != y) {
         LevelCamera *g = &l00_camera;
-        char        *r = g->unk184;
+        char        *r = g->previous_camera;
         qcopy(r + 0x30, camera_position);
         qcopy(r, camera_object);
         qcopy(r + 0x10, camera_object + 0x10);

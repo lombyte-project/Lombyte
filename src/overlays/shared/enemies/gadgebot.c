@@ -518,7 +518,7 @@ void gadgebot_update(GbMoby *moby) {
         int j;
 
         qcopy(vector_and_hit_scratch, moby->pos);
-        if (current_level_index != 6) {
+        if (current_level_index != LEVEL_NEBULA_G34) {
             gadgebot_vars->selected_path_slot = -1;
             if (gadgebot_vars->configured_path_count >= 2) {
                 int i;
@@ -707,7 +707,7 @@ void gadgebot_update(GbMoby *moby) {
             frame_time * 3.4906585f);
         break;
     case GADGEBOT_SEEK_AND_ATTACK_TARGET:
-        if (current_level_index != 6) {
+        if (current_level_index != LEVEL_NEBULA_G34) {
             int i;
 
             gadgebot_vars->selected_path_slot = -1;

@@ -128,7 +128,7 @@ void help_hints_update(struct Moby *moby) {
                 }
             }
         }
-        if (hero.state.control_mode == 0x12 && tutorial_hint_vars[10] == 0 &&
+        if (hero.state.control_mode == HERO_MODE_WATER_SURFACE && tutorial_hint_vars[10] == 0 &&
             help_state.state == HELP_STATE_INACTIVE && help_state.cur == -1 &&
             (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[8]) ||
              is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[9]))) {
@@ -162,7 +162,7 @@ void help_hints_update(struct Moby *moby) {
                 usage_stats.stat[23].level_mask =
                     usage_stats.stat[23].level_mask | (1 << current_level_index_macro) | 0x80000000;
             }
-        } else if (hero.state.control_mode == 0x11) {
+        } else if (hero.state.control_mode == HERO_MODE_SWIM) {
             help_records[0x44].count = 0xFFFF;
         } else {
             tutorial_hint_vars[11] = 0;

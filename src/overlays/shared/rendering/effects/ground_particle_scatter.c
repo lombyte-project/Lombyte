@@ -130,7 +130,7 @@ void ground_particle_scatter_update(Moby *moby) {
     float    w;
     float    zero;
 
-    if (current_level_index == 0xC || current_level_index == 0x200) {
+    if (current_level_index == LEVEL_HOVEN || current_level_index == 0x200) {
         flag = 1;
     } else {
         flag = 0;

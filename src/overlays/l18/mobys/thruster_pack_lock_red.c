@@ -122,7 +122,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             moby->state = STATE_SETTLE_DEPRESSED_HEIGHT;
             moby->command = 1;
             moby->pos.z -= 1.5f;
-            if (current_level_index == 0x12)
+            if (current_level_index == LEVEL_VELDIN2)
                 menu_item_enabled_115 = 1;
         }
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 2.5f) {

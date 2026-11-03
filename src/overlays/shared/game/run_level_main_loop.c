@@ -141,7 +141,7 @@ void run_level_main_loop(void) {
     put_disp_buffer();
     music_start_track(music_stream_state.primary.track, 1, 0x400);
     if ((current_level_index == one && level_available[3] == 0) ||
-        (current_level_index == 0 && D_0013D390 != 0)) {
+        (current_level_index == LEVEL_VELDIN1 && D_0013D390 != 0)) {
         music_unpause();
     } else {
         music_pause(0);

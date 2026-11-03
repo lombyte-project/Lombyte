@@ -370,10 +370,10 @@ void draw_vendor_screen(void) {
             }
             qzero(camera_lateral_axis);
             qzero(D_L00_00166FF0);
-            l00_camera.unk350[0] = 1.0f;
-            l00_camera.unk350[5] = 1.0f;
-            l00_camera.unk350[10] = 1.0f;
-            l00_camera.unk350[11] = 1.0f;
+            l00_camera.rows[0] = 1.0f;
+            l00_camera.rows[5] = 1.0f;
+            l00_camera.rows[10] = 1.0f;
+            l00_camera.rows[11] = 1.0f;
             update_camera_view_matrices();
         } else {
             D_L00_00165F80[0] = D_L00_00166FD0[0];

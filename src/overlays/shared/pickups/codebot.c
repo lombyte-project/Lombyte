@@ -52,7 +52,7 @@ void codebot_update(struct Moby *moby) {
         CODEBOT_REMOVE = 3
     };
     unsigned char *collection_flags;
-    if (current_level_index != 0xF) {
+    if (current_level_index != LEVEL_QUARTU) {
         moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
         moby->scale = moby->pclass->scale * D_L15_001621A0;
         switch (moby->state) {

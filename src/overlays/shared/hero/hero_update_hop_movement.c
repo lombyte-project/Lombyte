@@ -172,7 +172,7 @@ void hero_update_hop_movement(void) {
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         velocity_change_step = ED70 * 20.0f;
         if (hero.target_speed < hop_deceleration_speed_reference[0] * ED6C * 0.2f) {
-            if (hero.state.control_mode == 2) {
+            if (hero.state.control_mode == HERO_MODE_FALL) {
                 speed_decay_step = hero.stickless_decel;
                 if (hero.on_ice_ground)
                     speed_decay_step = ED70 * 0.17f;

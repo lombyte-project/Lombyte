@@ -85,7 +85,7 @@ void spark_particle_emitter_update(EmitterMoby *emitter_moby) {
     s32 i;
 
     emitter_vars = emitter_moby->vars;
-    if (current_level_index == 1) {
+    if (current_level_index == LEVEL_NOVALIS) {
         position_scratch.q = emitter_moby->pos.q;
         position_scratch.f[3] = 20.0f;
         if (fast_bsphere_check(&position_scratch, 240.0f) == -1) {

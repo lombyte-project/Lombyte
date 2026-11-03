@@ -277,11 +277,11 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             direction_or_rotation_deltas, 0.20943952f, direction_or_rotation_deltas[2]);
         follow_camera_start_slide();
     }
-    if (hero.state.control_mode == 0x11) {
+    if (hero.state.control_mode == HERO_MODE_SWIM) {
         camera_moby->m->target_offset_scale = 0.25f;
         follow_camera_set_height(0.5f, 0.003f);
     }
-    if (hero.state.control_mode == 5) {
+    if (hero.state.control_mode == HERO_MODE_LAND) {
         flag = 1;
         {
             S40 *camera_target = (S40 *)((u8 *)camera_moby->m + 0x40);
@@ -318,7 +318,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         camera_spring_state->f3C = follow_camera_vehicle_collision_probe_scale_gp;
         camera_spring_state->f44 = follow_camera_vehicle_collision_probe_step_growth_factor_gp;
     }
-    if (hero.unk20AA != 0 && hero.state.control_mode != 0xF) {
+    if (hero.unk20AA != 0 && hero.state.control_mode != HERO_MODE_GRIND) {
         set_follow_camera_orbit_clamp_mode(0);
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);
@@ -444,7 +444,7 @@ void rebuild_follow_camera_pose(int snap) __asm__("FUN_L00_002e66b8");
 
 void rebuild_follow_camera_pose(int snap) {
     LevelCamera *cams = &l00_camera;
-    char        *camera_moby = ((char *)cams->unk180);
+    char        *camera_moby = ((char *)cams->current_camera);
     char        *track = &cams->unk190; /* the followed player: position at 0, up vector at 0x30 */
     char        *follow_camera_state = *(char **)(camera_moby + 0x70);
     char        *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
@@ -950,7 +950,7 @@ int update_follow_camera_orbit_after_collision(unsigned char *camera_moby,
         *(short *)(B + 0x34) = scale_game_frames(0x884);
     }
     k = D_L00_00161CC8_gp;
-    if (!skip_previous_length_clamp && hero.state.control_mode != 2 &&
+    if (!skip_previous_length_clamp && hero.state.control_mode != HERO_MODE_FALL &&
         previous_orbit_length < adjusted_orbit_length) {
         fast_vec_scale(A, A, previous_orbit_length / adjusted_orbit_length);
         *(float *)(B + 0x30) = *(float *)(A + 0x2C) - previous_orbit_length;

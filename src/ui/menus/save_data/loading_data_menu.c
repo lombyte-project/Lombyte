@@ -81,7 +81,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
             return -1;
         }
     }
-    if ((mode_freeze_state != 0x10) && (mode_freeze_state != 1)) {
+    if ((save_card_state != CS_NEWCARD) && (save_card_state != CS_GOOD_SAVE)) {
         menu_system.next = menu_system.current->back;
         return 0;
     }

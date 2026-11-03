@@ -1536,9 +1536,9 @@ void morphoray_update(Moby *moby) {
     }
     func_001F9938_2BDAF0(&morphoray_state->timer);
     if ((((unsigned int)((Hero *)((char *)&hero))->state.control_mode < 2 ||
-          ((Hero *)((char *)&hero))->state.control_mode == 12 ||
-          ((Hero *)((char *)&hero))->state.control_mode == 4 ||
-          ((Hero *)((char *)&hero))->state.control_mode == 5)) &&
+          ((Hero *)((char *)&hero))->state.control_mode == HERO_MODE_CROUCH ||
+          ((Hero *)((char *)&hero))->state.control_mode == HERO_MODE_JUMP ||
+          ((Hero *)((char *)&hero))->state.control_mode == HERO_MODE_LAND)) &&
         (pad_held_words[0] & ((Hero *)((char *)&hero))->items[0].button_mask) != 0 && !busy &&
         in_range) {
         if (((Hero *)((char *)&hero))->item_anim_active == 0) {
@@ -1625,7 +1625,7 @@ void morphoray_update(Moby *moby) {
                                                           morphoray_state->total);
         }
         if (morphoray_state->target != 0 && morphoray_state->left <= 0.0f) {
-            if (current_level_index == 5 && morphoray_state->target->oclass == 0x271 &&
+            if (current_level_index == LEVEL_RILGAR && morphoray_state->target->oclass == 0x271 &&
                 item_unlocked[8] == 0) {
                 item_unlocked[8] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);

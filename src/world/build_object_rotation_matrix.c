@@ -22,8 +22,8 @@ unsigned char build_object_rotation_matrix(void) {
     unsigned char flag = key[0xC];
     float        *keyframe_angles = (float *)(key + 0x10);
     char         *camera_position;
-    struct PreviewCamera *camera_state;
-    float                 rotation_matrix[16];
+    struct GameCamera *camera_state;
+    float              rotation_matrix[16];
 
     view_tan_half_fov = keyframe_angles[3];
     update_view_context();
@@ -33,7 +33,7 @@ unsigned char build_object_rotation_matrix(void) {
     SceVu0RotMatrixX(rotation_matrix, rotation_matrix, *(float *)(key + 0x10));
     SceVu0RotMatrixY(rotation_matrix, rotation_matrix, keyframe_angles[1]);
     sceVu0RotMatrixZ(rotation_matrix, rotation_matrix, keyframe_angles[2]);
-    camera_state = (struct PreviewCamera *)(camera_position - 0x140);
+    camera_state = (struct GameCamera *)(camera_position - 0x140);
     camera_state->forward.f[0] = -rotation_matrix[8];
     camera_state->right.f[0] = -rotation_matrix[0];
     camera_state->up.f[0] = rotation_matrix[4];

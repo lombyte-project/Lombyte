@@ -1582,15 +1582,15 @@ void update_vendor_menu(void) {
         sce_vu0_rot_matrix_x(camera_rotation_matrix, camera_rotation_matrix, rot[0]);
         sce_vu0_rot_matrix_y(camera_rotation_matrix, camera_rotation_matrix, rot[1]);
         sceVu0RotMatrixZ(camera_rotation_matrix, camera_rotation_matrix, camera_world_z_rotation);
-        l00_camera.unk350[0] = -camera_rotation_matrix[2][0];
-        l00_camera.unk350[4] = -camera_rotation_matrix[0][0];
-        l00_camera.unk350[8] = camera_rotation_matrix[1][0];
-        l00_camera.unk350[1] = -camera_rotation_matrix[2][1];
-        l00_camera.unk350[5] = -camera_rotation_matrix[0][1];
-        l00_camera.unk350[9] = camera_rotation_matrix[1][1];
-        l00_camera.unk350[2] = -camera_rotation_matrix[2][2];
-        l00_camera.unk350[6] = -camera_rotation_matrix[0][2];
-        l00_camera.unk350[10] = camera_rotation_matrix[1][2];
+        l00_camera.rows[0] = -camera_rotation_matrix[2][0];
+        l00_camera.rows[4] = -camera_rotation_matrix[0][0];
+        l00_camera.rows[8] = camera_rotation_matrix[1][0];
+        l00_camera.rows[1] = -camera_rotation_matrix[2][1];
+        l00_camera.rows[5] = -camera_rotation_matrix[0][1];
+        l00_camera.rows[9] = camera_rotation_matrix[1][1];
+        l00_camera.rows[2] = -camera_rotation_matrix[2][2];
+        l00_camera.rows[6] = -camera_rotation_matrix[0][2];
+        l00_camera.rows[10] = camera_rotation_matrix[1][2];
         for (i = 0; i < D_L00_0016C860.h44; i++) {
             mb = D_L00_0016C860.f178[i];
             id = D_L00_0016C860.f38 >> 1;

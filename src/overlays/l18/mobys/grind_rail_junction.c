@@ -90,7 +90,7 @@ void grind_rail_junction_update(struct Moby *moby) {
     case STATE_SELECT_NEARER_PATH:
         hero.rail_catch_grace = 5;
         for (k = 0; k < 4; k++) {
-            if (hero.state.control_mode == 0xF &&
+            if (hero.state.control_mode == HERO_MODE_GRIND &&
                 (hero.rail_spline == (s32)path_junction_vars->pair[k].first->path ||
                  hero.rail_spline == (s32)path_junction_vars->pair[k].second->path)) {
                 continue;

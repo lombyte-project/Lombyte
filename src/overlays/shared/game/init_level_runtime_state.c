@@ -53,7 +53,7 @@ void init_level_runtime_state(void) {
     register_part_types();
     dmac_vif1_enable();
     init_level_item_inventory();
-    if (current_level_index != 0) {
+    if (current_level_index != LEVEL_VELDIN1) {
         unlock_planet(current_level_index);
     }
     D_0015EE24 += 0xB4;

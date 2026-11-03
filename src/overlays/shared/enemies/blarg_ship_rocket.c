@@ -287,7 +287,7 @@ void blarg_ship_rocket_update(char *rocket) {
             rocket[0x20] = 2;
         break;
     case ROCKET_STATE_BURST:
-        if (current_level_index != 10)
+        if (current_level_index != LEVEL_ORXON)
             cart_burst(rocket, rocket + 0x10, -1, 0.25f, 13.0f);
         else
             cart_burst(rocket, rocket + 0x10, -1, 0.25f, 0.0f);

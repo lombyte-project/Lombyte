@@ -83,7 +83,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             break;
         case MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_FREEZE:
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
-            if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
+            if (save_card_state == CS_GOOD_SAVE || save_card_state == CS_NEWCARD) {
                 menu_system.next =
                     (struct MenuPage *)menu->data.list.items[menu->data.list.selected].param.value;
             } else {
@@ -93,7 +93,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             break;
         case MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_TIMED_FREEZE:
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
-            if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
+            if (save_card_state == CS_GOOD_SAVE || save_card_state == CS_NEWCARD) {
                 menu_system.next =
                     (struct MenuPage *)menu->data.list.items[menu->data.list.selected].param.value;
             } else {

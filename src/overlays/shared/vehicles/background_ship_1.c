@@ -243,7 +243,7 @@ void background_ship_1_update(char *moby) {
         if ((float)*(int *)path < moby_data->path_progress) {
             moby_data->path_progress = moby_data->path_progress - (float)*(int *)path;
         }
-        if (current_level_index == 9) {
+        if (current_level_index == LEVEL_GASPAR) {
             sample_camera_path((int *)path,
                                1,
                                &MOBY(moby)->pos,
@@ -276,7 +276,7 @@ void background_ship_1_update(char *moby) {
         }
         break;
     case BACKGROUND_SHIP_1_REMOVE:
-        if (current_level_index == 2) {
+        if (current_level_index == LEVEL_ARIDIA) {
             level_2_ship_removal_count = level_2_ship_removal_count + 1;
             if (level_2_ship_removal_count >= 3) {
                 unsigned char *p = item_unlocked;
@@ -287,7 +287,7 @@ void background_ship_1_update(char *moby) {
                 }
             }
         }
-        if (current_level_index == 9) {
+        if (current_level_index == LEVEL_GASPAR) {
             if (*(int *)(camera_secondary_mode) == 0x32) {
                 level_9_ship_removal_count = level_9_ship_removal_count + 1;
                 if (level_9_ship_removal_count >= 5) {

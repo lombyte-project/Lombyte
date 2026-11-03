@@ -91,9 +91,9 @@ void initialize_menu_preview_scene(void) {
                 s32 seq;
                 preview_moby->flags &= 0xFFFD;
                 ((struct Moby *)panel_slots[i])->update = (void (*)(struct Moby *))quad_moby_update;
-                ((struct Moby *)panel_slots[i])->pos.x = preview_camera.position.f[0];
-                ((struct Moby *)panel_slots[i])->pos.y = preview_camera.position.f[1];
-                ((struct Moby *)panel_slots[i])->pos.z = preview_camera.position.f[2];
+                ((struct Moby *)panel_slots[i])->pos.x = game_camera.position.f[0];
+                ((struct Moby *)panel_slots[i])->pos.y = game_camera.position.f[1];
+                ((struct Moby *)panel_slots[i])->pos.z = game_camera.position.f[2];
                 ((struct Moby *)panel_slots[i])->rot.x = 0;
                 ((struct Moby *)panel_slots[i])->rot.y = 0;
                 ((struct Moby *)panel_slots[i])->rot.z = 0;

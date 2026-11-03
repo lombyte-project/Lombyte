@@ -278,7 +278,7 @@ void water_update(struct Moby *moby) {
         if (vector_distance_xy(((float *)&moby->pos), hero.motion.pos.f) < 16.0f) {
             Hero *h = &hero;
             if (h->motion.pos.f[2] < moby->pos.z) {
-                if (h->state.control_mode == 0x11) {
+                if (h->state.control_mode == HERO_MODE_SWIM) {
                     if (h->water_surface_z < moby->pos.z) {
                         h->water_surface_z = moby->pos.z;
                     }

@@ -53,11 +53,11 @@ void pause_all_sounds(s32 mode) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        g->unk134 = *(volatile s32 *)&current_level_index == 0xD || D_0014161B != 0;
+        g->unk134 = *(volatile s32 *)&current_level_index == LEVEL_OLTANIS_ORBIT || D_0014161B != 0;
     }
     {
         struct MenuSystem *g = &menu_system;
-        g->unk138 = current_level_index == 0 || current_level_index == 0xE;
+        g->unk138 = current_level_index == LEVEL_VELDIN1 || current_level_index == LEVEL_OLTANIS;
     }
     {
         struct MenuSystem *g = &menu_system;

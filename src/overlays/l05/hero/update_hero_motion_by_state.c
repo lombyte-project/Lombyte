@@ -2029,12 +2029,12 @@ void update_hero_motion_by_state(void) {
         f32 f;
         f32 old;
         f32 d;
-        if (current_level_index == 0xF) {
+        if (current_level_index == LEVEL_QUARTU) {
             release_voice_slot_cf(2, (struct MobyView *)hero.moby, 0x1D);
         } else {
             release_voice_slot_cf(2, (struct MobyView *)hero.moby, 6);
         }
-        if (current_level_index != 0xF) {
+        if (current_level_index != LEVEL_QUARTU) {
             emit_hero_randomized_motion_effects(4, 2);
             vector_and_hit_scratch.f[0] =
                 hero.motion.pos.f[0] + random_float_between(-0.25f, 0.25f);

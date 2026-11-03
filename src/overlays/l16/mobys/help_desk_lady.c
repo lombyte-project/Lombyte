@@ -163,7 +163,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         is_point_inside_clip_volume((char *)&D_0013E533 + 0xE9D, watch_data->entry_region))
         flags->entered = 1;
     if (!((L16WatchFlags *)((char *)&D_0013D355_watch + 0x13B))->mission &&
-        hero.state.control_mode == 15)
+        hero.state.control_mode == HERO_MODE_GRIND)
         ((L16WatchFlags *)((char *)&D_0013D355_watch + 0x13B))->mission = 1;
     rate = 0.02f;
     head_rate = 0.3f;

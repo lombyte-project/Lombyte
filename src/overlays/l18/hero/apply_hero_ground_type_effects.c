@@ -193,10 +193,10 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     f32       horizontal_response_scale, vertical_response_scale, response_frame_time;
     V_210ce8  response_motion_delta;
 
-    if (hero.state.control_mode == 0x14) {
+    if (hero.state.control_mode == HERO_MODE_DYING) {
         return 0;
     }
-    if (hero.state.control_mode == 7) {
+    if (hero.state.control_mode == HERO_MODE_HURT) {
         return 0;
     }
     if (hero.state.current == 0x32) {
@@ -227,7 +227,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     D_0013DF88[current_level_index]++;
     hero.damage_source_moby = (struct Moby *)response_record->p20;
     D_0015EEA8++;
-    if (hero.state.control_mode == 0xF) {
+    if (hero.state.control_mode == HERO_MODE_GRIND) {
         hero.unk5BE = 1;
         return 0;
     }
@@ -268,20 +268,20 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
             hero.motion.resolved_velocity_z.f[2] = frame_time * 7.0f;
             return 1;
         }
-        if (hero.state.control_mode == 0x12) {
+        if (hero.state.control_mode == HERO_MODE_WATER_SURFACE) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
-        } else if (hero.state.control_mode == 0x11) {
+        } else if (hero.state.control_mode == HERO_MODE_SWIM) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
-            if (current_level_index == 0xF || current_level_index == 0x11) {
+            if (current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) {
                 mob = ((u8 *)hero.damage_source_moby);
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
@@ -289,7 +289,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
                 }
             }
             hero_set_state(0x76, 1);
-        } else if (hero.state.control_mode == 3) {
+        } else if (hero.state.control_mode == HERO_MODE_LEDGE) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0) {
                 id = 0x82;

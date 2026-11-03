@@ -139,7 +139,7 @@ state_one: {
                                            *(int *)l05_paths[sharkigator_instance_vars->path_60];
         sharkigator_instance_vars->timer_6C = scale_game_frames(600);
     }
-    if ((hero.state.control_mode == 0x12 || hero.state.current == 0x12) &&
+    if ((hero.state.control_mode == HERO_MODE_WATER_SURFACE || hero.state.current == 0x12) &&
         vector_distance_xy(moby + 0x10, &hero.motion.pos) < 8.0f) {
         speed = (D_L05_001612E0_macro[2] - l05_sharkigator_position_offset_distance) - 2.0f;
     } else {
@@ -158,7 +158,7 @@ state_two: {
     char *path;
     fast_dec_timer(&sharkigator_instance_vars->timer_7C);
     height = absolute_float(hero.water_surface_z - sharkigator_instance_vars->unk74);
-    if (height < 0.33f && hero.state.control_mode == 0x12) {
+    if (height < 0.33f && hero.state.control_mode == HERO_MODE_WATER_SURFACE) {
         char *point;
         if (sharkigator_instance_vars->timer_7C != 0)
             return;

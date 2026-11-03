@@ -52,7 +52,7 @@ void gate_update(unsigned char *gate_moby) {
                 l10_save_state.cleared[((short)MOBY(gate_moby)->save_id)] = gate_moby[0xB0] + 2;
             }
             gate_moby[0x20] = 2;
-            if (current_level_index == 10) {
+            if (current_level_index == LEVEL_ORXON) {
                 menu_item_enabled_68[0] = 1;
             }
         }

@@ -36,7 +36,7 @@ void initialize_moby_state_record(char *moby) {
     int  *moby_state_copy_source;
     D_L00_00160540_gp = 1;
     deactivate_recorded_moby();
-    if (current_level_index == 0xD) {
+    if (current_level_index == LEVEL_OLTANIS_ORBIT) {
         char *global_record = D_0013E030_c;
         *(float *)(global_record + 0x60) = 464.66f;
         *(float *)(global_record + 0x64) = 580.68f;
@@ -152,10 +152,11 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
         base_audio_selection_index = D_0013E030_28e9c8.x26;
         audio_stream_table_index = base_audio_selection_index + 1;
         secondary_track_index = base_audio_selection_index + 6;
-        if (current_level_index == 10 && base_audio_selection_index == 1 && D_0013D4C6_lui == 0) {
+        if (current_level_index == LEVEL_ORXON && base_audio_selection_index == 1 &&
+            D_0013D4C6_lui == 0) {
             audio_stream_table_index = 0;
             secondary_track_index = 11;
-        } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
+        } else if (current_level_index == LEVEL_OLTANIS && D_0013E030_28e9c8.x26 == 2) {
             audio_stream_table_index = 8;
             secondary_track_index = 14;
         }
@@ -168,12 +169,13 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
         if (k)
             secondary_track_index = base_audio_selection_index;
         alternate_audio_stream_table_index = base_audio_selection_index + 5;
-        if (current_level_index == 10 && base_audio_selection_index == 1 && D_0013D4C6_lui == 0) {
+        if (current_level_index == LEVEL_ORXON && base_audio_selection_index == 1 &&
+            D_0013D4C6_lui == 0) {
             secondary_track_index = 10;
             if (k)
                 secondary_track_index = 9;
             alternate_audio_stream_table_index = 4;
-        } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
+        } else if (current_level_index == LEVEL_OLTANIS && D_0013E030_28e9c8.x26 == 2) {
             secondary_track_index = 13;
             if (D_0013E030_28e9c8.x2c)
                 secondary_track_index = 12;

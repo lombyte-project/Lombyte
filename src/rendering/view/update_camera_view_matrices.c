@@ -22,13 +22,13 @@ extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 
 void update_camera_view_matrices(void) {
-    Vec4                  camera_basis_matrix[4];
-    struct PreviewCamera *camera_view_matrices;
-    u8                   *x;
-    f32                  *xf;
-    f32                   homogeneous_offset_x;
-    f32                   homogeneous_offset_y;
-    f32                   homogeneous_offset_z;
+    Vec4               camera_basis_matrix[4];
+    struct GameCamera *camera_view_matrices;
+    u8                *x;
+    f32               *xf;
+    f32                homogeneous_offset_x;
+    f32                homogeneous_offset_y;
+    f32                homogeneous_offset_z;
 
     if (camera_position_publication_suppressed[0] == 0) {
         qcopy(&camera_basis_matrix[0].q, camera_rows);
@@ -36,11 +36,11 @@ void update_camera_view_matrices(void) {
         qcopy(&camera_basis_matrix[2].q, camera_rows + 0x20);
     } else {
         sceVu0UnitMatrix(camera_basis_matrix);
-        SceVu0RotMatrixX(camera_basis_matrix, camera_basis_matrix, preview_camera.rotation.f[0]);
-        SceVu0RotMatrixY(camera_basis_matrix, camera_basis_matrix, preview_camera.rotation.f[1]);
-        sceVu0RotMatrixZ(camera_basis_matrix, camera_basis_matrix, preview_camera.rotation.f[2]);
+        SceVu0RotMatrixX(camera_basis_matrix, camera_basis_matrix, game_camera.rotation.f[0]);
+        SceVu0RotMatrixY(camera_basis_matrix, camera_basis_matrix, game_camera.rotation.f[1]);
+        sceVu0RotMatrixZ(camera_basis_matrix, camera_basis_matrix, game_camera.rotation.f[2]);
     }
-    camera_view_matrices = &preview_camera;
+    camera_view_matrices = &game_camera;
     x = D_0018CD00 + 0xC0;
     xf = (f32 *)D_0018CD00;
     camera_view_matrices->view_matrices[0] = -camera_basis_matrix[1].f[0];

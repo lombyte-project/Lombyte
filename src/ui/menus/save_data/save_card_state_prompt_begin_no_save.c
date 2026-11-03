@@ -9,10 +9,10 @@ void save_card_state_prompt_begin_no_save(void) __asm__("FUN_00208fe8");
 
 void save_card_state_prompt_begin_no_save(void) {
     if (*(s32 *)((u8 *)&memory_card_state + 0x1C)) {
-        mode_freeze_state = 3;
+        save_card_state = CS_NOCARD;
     } else if (mode_freeze_flags & 0x20) {
         mode_freeze_flags ^= 0x20;
-        mode_freeze_state = 0xC;
+        save_card_state = CS_NOSAVE;
     }
 }
 

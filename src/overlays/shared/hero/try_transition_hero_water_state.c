@@ -29,7 +29,7 @@ int try_transition_hero_water_state(void) {
     int  decrement;
     int  state;
 
-    if (hero.state.control_mode == 0x11) {
+    if (hero.state.control_mode == HERO_MODE_SWIM) {
         if (item_available[6] != 0) {
             decrement = 0;
         } else {
@@ -62,7 +62,7 @@ int try_transition_hero_water_state(void) {
         hero.underwater_air = 10000;
     }
 collision_mode:
-    if (hero.state.control_mode != 0x12)
+    if (hero.state.control_mode != HERO_MODE_WATER_SURFACE)
         return 0;
     qcopy(&start, &hero.motion.pos);
     start.f[2] = hero.water_surface_z + 0.01f;

@@ -48,7 +48,7 @@ void draw_red_orb_group_effect_quads(struct Moby *reference_moby) __asm__("FUN_L
 void draw_red_orb_group_effect_quads(struct Moby *reference_moby) {
     u8 *it[2] __attribute__((aligned(16)));
     f32 quad_scale = 1.2f;
-    if (current_level_index == 0 || current_level_index == 0x12) {
+    if (current_level_index == LEVEL_VELDIN1 || current_level_index == LEVEL_VELDIN2) {
         quad_scale = 1.0f;
     }
     get_first_moby_in_group(it, reference_moby->group, 0, 0);
@@ -115,7 +115,7 @@ void red_orb_update(struct Moby *moby) {
         g = (tweened_color >> 8) & 0xFF;
         r = tweened_color & 0xFF;
         hi = 0x38;
-        if (current_level_index == 0 || current_level_index == 0x12)
+        if (current_level_index == LEVEL_VELDIN1 || current_level_index == LEVEL_VELDIN2)
             hi = 0x20;
         packed_color_without_red = hi << 24 | b << 16;
         packed_color_without_red |= g << 8;

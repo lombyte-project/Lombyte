@@ -35,11 +35,11 @@ struct CameraOrbit {
     f32 saved_rotation[4]; /* 0x60: quaternion, the same for the blend rotation */
 }; /* size 0x70 */
 
-/* The camera transition at D_001871B0 (PreviewCamera 0x270). kind 0 runs
+/* The camera transition at D_001871B0 (GameCamera 0x270). kind 0 runs
    blend (step_camera_blend); any other kind runs orbit
    (advance_alternate_camera_transition). */
 struct CameraTransition {
-    s16                mode;           /* 0x00: PreviewCamera.transition_mode */
+    s16                mode;           /* 0x00: GameCamera.transition_mode */
     u8                 kind;           /* 0x02 */
     u8                 requested_kind; /* 0x03: becomes kind when a transition starts */
     u8                 pad_04[0xC];

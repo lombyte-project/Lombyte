@@ -1295,7 +1295,7 @@ void compute_suck_cannon_suction_aim_and_origin(struct Moby *cannon_moby,
         suction_origin_offset.z = 0;
         *out_suction_pitch = -suction_aim_camera->pitch;
         transform_vector_by_basis(
-            &suction_origin_offset, &suction_origin_offset, suction_aim_camera->unk350);
+            &suction_origin_offset, &suction_origin_offset, suction_aim_camera->rows);
         out_suction_origin[2] = suction_origin_offset.z + cannon_moby->pos.z;
         out_suction_origin[0] = suction_origin_offset.x + hero.motion.pos.f[0];
         out_suction_origin[1] = suction_origin_offset.y + hero.motion.pos.f[1];

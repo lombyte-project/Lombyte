@@ -65,7 +65,7 @@ void resolve_hero_surface_reactions(void) {
             }
         }
     }
-    if (current_level_index == 0xD) {
+    if (current_level_index == LEVEL_OLTANIS_ORBIT) {
         struct Hero *q = &hero;
         if (q->state.current != 0x7B) {
             if (coll_sphere(q->capsule_radius + 0.03f, &q->motion.body_center, 2, 0)) {
@@ -148,10 +148,10 @@ s32 process_hero_hit_reaction(s32 apply_hit_reaction) {
     f32             horizontal_knockback_scale, vertical_knockback_scale, knockback_scale;
     OvlVec4         knockback_impulse;
 
-    if (G.state.control_mode == 0x14) {
+    if (G.state.control_mode == HERO_MODE_DYING) {
         return 0;
     }
-    if (G.state.control_mode == 7) {
+    if (G.state.control_mode == HERO_MODE_HURT) {
         return 0;
     }
     if (G.state.current == 0x32) {
@@ -178,7 +178,7 @@ s32 process_hero_hit_reaction(s32 apply_hit_reaction) {
     D_0013DF88[current_level_index]++;
     G.damage_source_moby = (struct Moby *)hero_hit_entry->target;
     D_0015EEA8++;
-    if (G.state.control_mode == 0xF) {
+    if (G.state.control_mode == HERO_MODE_GRIND) {
         G.unk5BE = 1;
         return 0;
     }
@@ -257,7 +257,7 @@ void update_hero_smoothed_parameters(void) {
         hero.capsule_radius_target = 0.45f;
         break;
     }
-    if (hero.state.control_mode == 4) {
+    if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
             hero.capsule_bottom_target = hero.unk434;
     } else if (hero.state.current == HERO_STATE_FALL) {
@@ -270,8 +270,8 @@ void update_hero_smoothed_parameters(void) {
     } else if (hero.state.current == HERO_STATE_SINK) {
         hero.capsule_radius_target = 0.8f;
     }
-    if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 ||
-        hero.base_condition ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE ||
+        hero.state.control_mode == HERO_MODE_SWIM || hero.base_condition ||
         vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) >
             hero.capsule_radius * 0.5f) {
         f32         *smoothed_values = D_0013F570;

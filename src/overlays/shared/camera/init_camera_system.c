@@ -81,8 +81,8 @@ typedef struct {
 void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
 
 void initialize_camera_record_handoff_defaults(void) {
-    ((T001eb448 *)l00_camera.unk180)->h = 1;
-    ((T001eb448 *)l00_camera.unk180)->b = 0;
+    ((T001eb448 *)l00_camera.current_camera)->h = 1;
+    ((T001eb448 *)l00_camera.current_camera)->b = 0;
 }
 
 extern struct CameraType level_camera_types[] __asm__("D_L00_001EA880");
@@ -123,19 +123,20 @@ void init_camera_system(void) {
     float       *camera_vector_snapshot, *camera_record_vector_destination, *vector_copy_source,
         *vector_copy_destination;
     char *current_camera_record;
-    if (((char *)camera_system_state->unk180) != 0) {
-        *(short *)(((char *)camera_system_state->unk180) + 0x8E) = 0;
-        *(((char *)camera_system_state->unk180) + 0x7D) = 0;
-        *(short *)(((char *)camera_system_state->unk180) + 0x7E) = 0;
+    if (((char *)camera_system_state->current_camera) != 0) {
+        *(short *)(((char *)camera_system_state->current_camera) + 0x8E) = 0;
+        *(((char *)camera_system_state->current_camera) + 0x7D) = 0;
+        *(short *)(((char *)camera_system_state->current_camera) + 0x7E) = 0;
     }
-    camera_system_state->unk180 = find_camera_record_by_id(0);
-    *(short *)(((char *)camera_system_state->unk180) + 0x8E) = 1;
-    *(char **)(((char *)camera_system_state->unk180) + 0x70) = active_camera_saved_state_storage;
-    camera_system_state->unk270 = 0;
+    camera_system_state->current_camera = find_camera_record_by_id(0);
+    *(short *)(((char *)camera_system_state->current_camera) + 0x8E) = 1;
+    *(char **)(((char *)camera_system_state->current_camera) + 0x70) =
+        active_camera_saved_state_storage;
+    camera_system_state->transition_mode = 0;
     update_camera_tracking_state();
-    camera_run_setup_to_new_cam(((char *)camera_system_state->unk180));
+    camera_run_setup_to_new_cam(((char *)camera_system_state->current_camera));
     backup_current_cam();
-    current_camera_record = ((char *)camera_system_state->unk180);
+    current_camera_record = ((char *)camera_system_state->current_camera);
     camera_vector_snapshot = (float *)(&camera_system_state->pos);
     qcopy(camera_vector_snapshot, current_camera_record + 0x30);
     camera_record_vector_destination = (float *)(current_camera_record + 0x64);
@@ -193,8 +194,8 @@ void setup_level_cameras(void) {
     int          i;
     int          k;
 
-    camera_system_state->unk394 = 0;
-    camera_system_state->unk398 = 0;
+    camera_system_state->underwater = 0;
+    camera_system_state->frame_count = 0;
     D_L00_0015EF40_gp = 0.75f;
     D_L00_0015EF4C = 0;
     for (k = 0; k < 48; k++) {
@@ -205,8 +206,8 @@ void setup_level_cameras(void) {
     hero_state = &hero;
     q = &camera_system_state_alias->unk190;
     normalized_hero_vector = &camera_system_state_alias->unk190[32];
-    *(int *)&camera_system_state_alias->unk184 = 0;
-    camera_system_state_alias->unk270 = 0;
+    *(int *)&camera_system_state_alias->previous_camera = 0;
+    camera_system_state_alias->transition_mode = 0;
     fast_vec_normalize(normalized_hero_vector, (char *)(((int)hero_state->moby) + 0xE0), 1.0f);
     qcopy(&camera_system_state_alias->unk1C0, normalized_hero_vector);
     qcopy(&camera_system_state_alias->unk1D0, normalized_hero_vector);
@@ -336,7 +337,7 @@ void                      resolve_camera_movement_collisions(OvlQuad *camera_pos
 void resolve_camera_movement_collisions(OvlQuad *camera_position, float collision_radius) {
     OvlQuad step_delta[1];
     float   camera_movement_origin_snapshot[4] __attribute__((aligned(16)));
-    char   *camera_record_at_entry = (char *)l00_camera_lui.unk180;
+    char   *camera_record_at_entry = (char *)l00_camera_lui.current_camera;
     float  *camera_movement_origin = (float *)(camera_record_at_entry + 0x64);
     int     step_count, i, j;
 
@@ -363,7 +364,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
              j++) {
             qcopy(camera_position, &coll_hit_position);
             {
-                char *current_camera_record = (char *)l00_camera_lui.unk180;
+                char *current_camera_record = (char *)l00_camera_lui.current_camera;
                 if (*(unsigned char *)(current_camera_record + 0x89) == 0) {
                     *(unsigned char *)(current_camera_record + 0x89) = 1;
                 }

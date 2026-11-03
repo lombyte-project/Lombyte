@@ -613,7 +613,7 @@ void emit_hero_animation_voice_and_ground_particle(int   record_group_index,
         request_grouped_voice(
             record_group_index, joint_index_offset, item_moby_is_type_ad, 0, ((int)g->moby));
     }
-    if (current_level_index == 12) {
+    if (current_level_index == LEVEL_HOVEN) {
         struct Hero *g = &hero;
         if (g->ground_sound_class == 0 && ((int)g->ground_moby) == 0) {
             float k = 0.15f;
@@ -1117,7 +1117,7 @@ void scan_hero_input_sequences(void) {
     g = &hero;
     input_token = 0;
     if (g->state_timer == scale_game_frames(0xF)) {
-        if (g->state.control_mode == 4) {
+        if (g->state.control_mode == HERO_MODE_JUMP) {
             int b = g->state.current;
             if (b == 0xB) {
                 int token_variant_selector = g->unk450;
@@ -1139,7 +1139,7 @@ void scan_hero_input_sequences(void) {
             } else if (b == 0xE) {
                 input_token = 5;
             }
-        } else if (g->state.control_mode == 6) {
+        } else if (g->state.control_mode == HERO_MODE_ATTACK) {
             int b = g->state.current;
             if (b == 0x14) {
                 input_token = 6;
@@ -1437,8 +1437,8 @@ void update_hero_color_and_item_tint(void) {
     if (hero.state.current == 0x80 || hero.state.current == 0x82) {
         blink = hero.state_timer < scale_game_frames(0x1e);
     }
-    if ((current_level_index == 0xf || current_level_index == 0x11) && hero.state.current == 0x76 &&
-        hero.state_timer < scale_game_frames(0x14)) {
+    if ((current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) &&
+        hero.state.current == 0x76 && hero.state_timer < scale_game_frames(0x14)) {
         blink = 1;
     }
     if (blink) {
@@ -1960,7 +1960,7 @@ void update_hero_moby(void) {
         set_moby_local_table_entry(
             ((unsigned char *)hero.moby), 0, position_scratch, hero.capsule_radius, top_gap);
         second_position_offset = hero.capsule_radius + minimum_top_gap;
-        if (hero.state.control_mode == 4)
+        if (hero.state.control_mode == HERO_MODE_JUMP)
             second_position_offset += 0.15f;
         if (hero_is_in_special_state())
             second_position_offset = hero.capsule_bottom;
@@ -3364,8 +3364,8 @@ void probe_hero_airborne_wall_contact(void) {
         f = fast_arc_tan(collision_result->x, collision_result->y);
     }
     k2->unk460.f[3] = f;
-    if (k2->state.control_mode != 4 && k2->state.prev_control_mode != 4 &&
-        k2->state.prev2_control_mode != 4) {
+    if (k2->state.control_mode != HERO_MODE_JUMP && k2->state.prev_control_mode != HERO_MODE_JUMP &&
+        k2->state.prev2_control_mode != HERO_MODE_JUMP) {
         return;
     }
     hero_state = &hero;
@@ -3485,7 +3485,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
     }
     if (saved_flag_selector == 3)
         P.jump_or_respawn_wait_transition_selected = 1;
-    if (current_level_index == 13 && P.i2084 != 0x7B &&
+    if (current_level_index == LEVEL_OLTANIS_ORBIT && P.i2084 != 0x7B &&
         coll_sphere((u8 *)&P + 0xD0, 2, 0, P.f234 + 0.03f) && FUN_001f0b58_20b960() == 11) {
         goto s7B;
     }
@@ -3604,10 +3604,10 @@ void check_ledge_grab(void) {
         return;
     can_grab = 0;
     if (((Hero *)D_0013F450_20C568)->vehicle_mode == 0) {
-        if ((((Hero *)D_0013F450_20C568)->state.control_mode == 4 &&
+        if ((((Hero *)D_0013F450_20C568)->state.control_mode == HERO_MODE_JUMP &&
              (((Hero *)D_0013F450_20C568)->past_jump_apex != 0 ||
               ((Hero *)D_0013F450_20C568)->motion.velocity.f[2] < D_0015ED6C * 3.5f)) ||
-            ((Hero *)D_0013F450_20C568)->state.control_mode == 2 ||
+            ((Hero *)D_0013F450_20C568)->state.control_mode == HERO_MODE_FALL ||
             ((Hero *)D_0013F450_20C568)->state.current == 8 ||
             ((Hero *)D_0013F450_20C568)->state.current == 0x1A ||
             ((Hero *)D_0013F450_20C568)->state.current == 0x1B)
@@ -3617,10 +3617,10 @@ void check_ledge_grab(void) {
             can_grab = 0;
     }
     if (((Hero *)D_0013F450_20C568)->vehicle_mode == 1) {
-        if ((((Hero *)D_0013F450_20C568)->state.control_mode == 4 &&
+        if ((((Hero *)D_0013F450_20C568)->state.control_mode == HERO_MODE_JUMP &&
              (((Hero *)D_0013F450_20C568)->past_jump_apex != 0 ||
               ((Hero *)D_0013F450_20C568)->motion.velocity.f[2] < D_0015ED6C * 2.5f)) ||
-            ((Hero *)D_0013F450_20C568)->state.control_mode == 2 ||
+            ((Hero *)D_0013F450_20C568)->state.control_mode == HERO_MODE_FALL ||
             ((Hero *)D_0013F450_20C568)->state.current == 0x4F ||
             ((Hero *)D_0013F450_20C568)->state.current == 0x4D ||
             ((Hero *)D_0013F450_20C568)->state.current == 0x4E)
@@ -3646,7 +3646,7 @@ void check_ledge_grab(void) {
         back = 0.32f;
     }
     speed = ((Hero *)D_0013F450_20C568)->fall_state_gravity;
-    if (((Hero *)D_0013F450_20C568)->state.control_mode == 4)
+    if (((Hero *)D_0013F450_20C568)->state.control_mode == HERO_MODE_JUMP)
         speed = ((Hero *)D_0013F450_20C568)->jump_gravity;
     frames = scale_game_frames(2);
     predict_position_with_vertical_drop(probe,

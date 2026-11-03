@@ -35,7 +35,7 @@ void update_hero_follow_camera_focus(char *moby) {
     transform_vector(hero_focus_offset, hero_focus_offset, &hero);
     fast_vec_add(focus_position, &hero.motion.pos, hero_focus_offset);
     qcopy(orbit + 0x1D0, focus_position);
-    if (current_level_index == 5) {
+    if (current_level_index == LEVEL_RILGAR) {
         float height_reference_position[4];
         *(OvlQuad *)height_reference_position = 0;
         height_reference_position[0] = 286.16f;
@@ -51,7 +51,7 @@ void update_hero_follow_camera_focus(char *moby) {
                 focus_position[2] = 67.2f;
             }
         }
-    } else if (current_level_index == 0x10) {
+    } else if (current_level_index == LEVEL_KALEBO3) {
         if (focus_position[2] < 77.5f) {
             focus_position[2] = 77.5f;
         }

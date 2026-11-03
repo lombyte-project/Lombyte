@@ -135,6 +135,29 @@ enum HeroStateId {
     HERO_STATE_DYING_ZERO_HEALTH = 0x82
 };
 
+/* Values of HeroState.control_mode, named from the states hero_set_state pairs with each one.
+ * 0x9, 0xA, 0xB, 0x10, 0x13, 0x15, 0x16 and 0x18 stay numbers: what their states share is not clear. */
+enum HeroControlMode {
+    HERO_MODE_IDLE = 0x0,
+    HERO_MODE_RUN = 0x1,
+    HERO_MODE_FALL = 0x2,
+    HERO_MODE_LEDGE = 0x3,
+    HERO_MODE_JUMP = 0x4,
+    HERO_MODE_LAND = 0x5,
+    HERO_MODE_ATTACK = 0x6,
+    HERO_MODE_HURT = 0x7,
+    HERO_MODE_ITEM_RELEASE_WAIT = 0x8,
+    HERO_MODE_CROUCH = 0xC,
+    HERO_MODE_GRAPPLE = 0xD,
+    HERO_MODE_GRAPPLE_SWING = 0xE,
+    HERO_MODE_GRIND = 0xF,
+    HERO_MODE_SWIM = 0x11,
+    HERO_MODE_WATER_SURFACE = 0x12,
+    HERO_MODE_DYING = 0x14,
+    HERO_MODE_RESPAWN_WAIT = 0x19,
+    HERO_MODE_FOLLOW_PATH = 0x1A
+};
+
 enum HeroAnimationEntryMode {
     HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS = 0x2
 };

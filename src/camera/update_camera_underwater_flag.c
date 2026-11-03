@@ -14,10 +14,10 @@ void         update_camera_underwater_flag(void) __asm__("FUN_001ed7f0");
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
 void update_camera_underwater_flag(void) {
-    struct PreviewCamera *camera = &preview_camera;
-    float                 probe_start[4];
-    float                 probe_end[4];
-    int                   i;
+    struct GameCamera *camera = &game_camera;
+    float              probe_start[4];
+    float              probe_end[4];
+    int                i;
 
     if (camera->current_camera->unk86 == 6 || game_mode_macro != 0) {
         camera->underwater = 0;
@@ -32,7 +32,7 @@ void update_camera_underwater_flag(void) {
         if (collision_hit_material() == 0) {
             float submersion_height_threshold =
                 resolve_camera_surface_height(D_00194120, 0) + 0.04f;
-            struct PreviewCamera *focus_camera = &preview_camera;
+            struct GameCamera *focus_camera = &game_camera;
 
             if (focus_camera->position.f[2] < submersion_height_threshold) {
                 focus_camera->underwater = 1;

@@ -211,7 +211,7 @@ void blarg_helicopter_update(struct Moby *moby) {
         blarg_helicopter_vars->unkB0 = -1;
     }
     index = blarg_helicopter_vars->unkC0;
-    if (current_level_index == 12 && D_L12_00161F00 != 0) {
+    if (current_level_index == LEVEL_HOVEN && D_L12_00161F00 != 0) {
         if (index == 0) {
             if (l12_camera.focus_moby == moby)
                 l12_camera.focus_moby = 0;
@@ -337,7 +337,7 @@ update_state:
     case BLARG_HELICOPTER_AIM_AND_FIRE: {
         int   count, limit, a, b, color, life, size;
         float distance, angle, value, spread;
-        if (current_level_index == 12 && !D_0013D4CB && !D_00141C50)
+        if (current_level_index == LEVEL_HOVEN && !D_0013D4CB && !D_00141C50)
             help_request(0x2ee2, 0x5d);
         distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
         if (blarg_helicopter_vars->unkC0 == 0) {

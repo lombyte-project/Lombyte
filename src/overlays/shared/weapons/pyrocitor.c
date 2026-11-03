@@ -622,11 +622,11 @@ void pyrocitor_update(struct Moby *moby) {
         else
             gate = 0;
         if (hero.state.current == 1 && (moby->flags & 1)) {
-            fast_vec_normalize(&light_color_and_flame_origin, &l00_camera.unk350[8], -1.0f);
+            fast_vec_normalize(&light_color_and_flame_origin, &l00_camera.rows[8], -1.0f);
             fast_vec_add(
                 &light_color_and_flame_origin, &light_color_and_flame_origin, &l00_camera.pos);
             fast_vec_normalize(&light_offset_and_flame_velocity,
-                               l00_camera.unk350,
+                               l00_camera.rows,
                                pyrocitor_flame_base_range_gp + speed + 0.75f);
             fast_vec_add(
                 &endpoint, &light_offset_and_flame_velocity, &light_color_and_flame_origin);

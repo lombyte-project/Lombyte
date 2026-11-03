@@ -3,6 +3,7 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/camera/update_cam.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -339,7 +340,7 @@ void tresspasser_pad_update(Moby *moby) {
         set_camera_rotation(&camera_rot);
         D_L02_0017EB08_lui = 1;
         force_help_message(6, 0);
-        if (l02_camera.unk180 != 0 && l02_camera.unk180->unk86 != 5) {
+        if (l02_camera.current_camera != 0 && l02_camera.current_camera->unk86 != 5) {
             jet_mount(&l02_camera.pos, &l02_camera.unk150, 1, 0, 0);
         }
         i = 0;

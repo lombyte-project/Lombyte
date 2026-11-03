@@ -27,7 +27,7 @@ s32 process_global_state_flags(void) {
     s32 fade_duration_frames;
 
     if ((controller_state.pressed & PAD_CIRCLE) != 0) {
-        if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
+        if (save_card_state == CS_GOOD_SAVE || save_card_state == CS_NEWCARD) {
             menu_system.next = (struct MenuPage *)circle_target_menu_page;
         } else {
             load_level_zero_preserving_progress(-1);

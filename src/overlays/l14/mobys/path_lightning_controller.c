@@ -67,7 +67,7 @@ void path_lightning_controller_update(struct Moby *moby) {
     float visibility_test_point[4];
     int   moby_state;
     if (MOBY(moby)->state == PATH_LIGHTNING_STATE_INITIALIZE) {
-        if (current_level_index == 0xE)
+        if (current_level_index == LEVEL_OLTANIS)
             hero.pack_disabled = 1;
         MOBY(moby)->state = PATH_LIGHTNING_STATE_WAIT_SCENE_START;
         moby->update_dist = 0xFF;

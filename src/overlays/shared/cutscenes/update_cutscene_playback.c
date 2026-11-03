@@ -608,15 +608,15 @@ int apply_cutscene_camera_key(void) {
         camera_key_rotation_matrix, camera_key_rotation_matrix, camera_key_values[1]);
     sceVu0RotMatrixZ(camera_key_rotation_matrix, camera_key_rotation_matrix, camera_key_values[2]);
     camera_state = &l00_camera_lui;
-    camera_state->unk350[0] = -camera_key_rotation_matrix[8];
-    camera_state->unk350[4] = -camera_key_rotation_matrix[0];
-    camera_state->unk350[8] = camera_key_rotation_matrix[4];
-    camera_state->unk350[1] = -camera_key_rotation_matrix[9];
-    camera_state->unk350[5] = -camera_key_rotation_matrix[1];
-    camera_state->unk350[9] = camera_key_rotation_matrix[5];
-    camera_state->unk350[2] = -camera_key_rotation_matrix[10];
-    camera_state->unk350[6] = -camera_key_rotation_matrix[2];
-    camera_state->unk350[10] = camera_key_rotation_matrix[6];
+    camera_state->rows[0] = -camera_key_rotation_matrix[8];
+    camera_state->rows[4] = -camera_key_rotation_matrix[0];
+    camera_state->rows[8] = camera_key_rotation_matrix[4];
+    camera_state->rows[1] = -camera_key_rotation_matrix[9];
+    camera_state->rows[5] = -camera_key_rotation_matrix[1];
+    camera_state->rows[9] = camera_key_rotation_matrix[5];
+    camera_state->rows[2] = -camera_key_rotation_matrix[10];
+    camera_state->rows[6] = -camera_key_rotation_matrix[2];
+    camera_state->rows[10] = camera_key_rotation_matrix[6];
     if (D_0015EDB4_298de8)
         fast_vec_cross(camera_position + 0x220, camera_position + 0x230, camera_position + 0x210);
     k = D_L00_0015F5A0;

@@ -175,8 +175,8 @@ void level_draw_dialog_text(void) {
         left = 0;
         mid = 0;
         right = 0;
-        switch (mode_freeze_state) {
-        case 6:
+        switch (save_card_state) {
+        case CS_PROMPT_FORMAT:
             left = 0x524F;
             right = 0x524B;
             text = get_help_message_text(0x4FAF);
@@ -200,15 +200,15 @@ void level_draw_dialog_text(void) {
         case FREEZE_DIALOG_SHARED_PLAIN_BODY_ONLY:
             text = get_help_message_text(0x4FB7);
             break;
-        case 14:
-        case 15:
+        case CS_CREATE_SAVE_PENDING:
+        case CS_CREATING_SAVE:
             text = get_help_message_text(0x4FB8);
             break;
         case FREEZE_DIALOG_PLAIN_BODY_CENTERED_BUTTON:
             mid = 0x524A;
             text = get_help_message_text(0x4FBA);
             break;
-        case 18:
+        case CS_CREATE_FAILED:
             mid = 0x524A;
             text = get_help_message_text(0x4FBC);
             break;
@@ -238,11 +238,11 @@ void level_draw_dialog_text(void) {
                 text = get_help_message_text(0x4FA9);
             }
             break;
-        case 21:
+        case CS_SAVE_FAILED:
             mid = 0x524A;
             text = get_help_message_text(0x4FBD);
             break;
-        case 20:
+        case CS_LOAD_FAILED:
             mid = 0x524A;
             text = get_help_message_text(0x4FBB);
             break;

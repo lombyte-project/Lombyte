@@ -30,7 +30,7 @@ int update_item_preview_moby(struct MenuScreen *menu) {
         struct Moby *spawned_moby = create_menu_preview_moby(want);
 
         if (spawned_moby != 0) {
-            struct PreviewCamera *camera = &preview_camera;
+            struct GameCamera *camera = &game_camera;
 
             menu->data.preview.moby = spawned_moby;
             spawned_moby->flags = 0;

@@ -98,7 +98,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
         add_vector_xyz_2c8440(&simulated_position, &simulated_position, &hero.motion.pos);
         simulated_position.f[2] += 0.39081999659538269043f;
         qcopy(&simulated_velocity, &throw_vars->vel);
-        if (hero.state.control_mode == 15)
+        if (hero.state.control_mode == HERO_MODE_GRIND)
             add_vector_xyz_2c8440(
                 &simulated_velocity, &simulated_velocity, &hero.motion.displacement);
         if (hero.ground_moby && get_moby_pvars_link((int)hero.ground_moby) && mode)

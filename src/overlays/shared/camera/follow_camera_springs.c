@@ -844,7 +844,7 @@ void update_follow_camera_attach_mode(char *camera) {
 
     if (attach_state->state == CAM_ATTACH_DEFAULT_PROJECT_HERO_FOCUS_VELOCITY) {
         struct Hero *player = &hero;
-        if (player->state.control_mode == 2) {
+        if (player->state.control_mode == HERO_MODE_FALL) {
             attach_state->prev = attach_state->state;
             attach_state->state = CAM_ATTACH_HERO_POSITION_BASE;
             attach_state->timer = l00_follow_camera_ground_focus_exit_transition_frames_gp;
@@ -911,7 +911,7 @@ void update_follow_camera_attach_mode(char *camera) {
                             qcopy(attach_state->v20, attach_state->v10);
                         } else {
                             struct Hero *control_mode_player = &hero;
-                            if (control_mode_player->state.control_mode == 4 &&
+                            if (control_mode_player->state.control_mode == HERO_MODE_JUMP &&
                                 D_L00_00166EEC == 0.0f) {
                                 attach_state->prev = attach_state->state;
                                 attach_state->state = CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY;
@@ -970,7 +970,7 @@ void update_follow_camera_attach_mode(char *camera) {
             qcopy(attach_state->v20, attach_state->v10);
             return;
         }
-        if (p->state.control_mode == 2) {
+        if (p->state.control_mode == HERO_MODE_FALL) {
             attach_state->prev = attach_state->state;
             attach_state->state = CAM_ATTACH_HERO_POSITION_BASE;
             attach_state->timer =
@@ -1048,13 +1048,15 @@ void update_follow_camera_attach_mode(char *camera) {
     }
     if (attach_state->state == CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY) {
         struct Hero *p = &hero;
-        if (p->state.control_mode == 2 || p->frames_off_ground.s >= scale_game_frames(0x37)) {
+        if (p->state.control_mode == HERO_MODE_FALL ||
+            p->frames_off_ground.s >= scale_game_frames(0x37)) {
             goto to_one;
         }
     }
     if (attach_state->state == CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY) {
         struct Hero *p = &hero;
-        if (p->state.control_mode == 2 || p->frames_off_ground.s >= scale_game_frames(0x37)) {
+        if (p->state.control_mode == HERO_MODE_FALL ||
+            p->frames_off_ground.s >= scale_game_frames(0x37)) {
             float r;
         to_one:
             attach_state->prev = attach_state->state;

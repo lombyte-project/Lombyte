@@ -386,7 +386,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
         fast_vec_add(&predicted_position, &predicted_position, &hero.motion.pos);
         predicted_position.f[2] += 0.39081999659538269043f;
         qcopy(&predicted_velocity, &throw_vars->vel);
-        if (hero.state.control_mode == 15)
+        if (hero.state.control_mode == HERO_MODE_GRIND)
             fast_vec_add(&predicted_velocity, &predicted_velocity, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) && mode)
             fast_vec_add(&predicted_velocity, &predicted_velocity, &hero.motion.displacement);

@@ -230,7 +230,7 @@ void update_hero_ground_contact(void) {
     if (hero.gravity_mode)
         k = 1;
     ground_probe_start_offset = hero.capsule_radius * 2.2f;
-    if (hero.state.control_mode == 2) {
+    if (hero.state.control_mode == HERO_MODE_FALL) {
         ground_probe_start_offset = hero.capsule_radius * 2.9f;
     }
     hero_get_collision_ray_endpoints(
@@ -256,7 +256,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
         collision_sound_class = coll_sound_class();
-        if (current_level_index == 1 || current_level_index == 0x12) {
+        if (current_level_index == LEVEL_NOVALIS || current_level_index == LEVEL_VELDIN2) {
             collision_sound_class = 3;
         }
         hero.ground_sound_class = collision_sound_class;
@@ -341,9 +341,9 @@ d1:
     hero.unk2C8.i[1] = 0;
     hero.unk2C0.i[0] = 0;
     hero.unk2C0.i[1] = 0;
-    if (hero.state.control_mode == 0xF || hero.state.control_mode == 0x15 ||
-        hero.state.control_mode == 6 || hero.state.control_mode == 4 ||
-        hero.state.control_mode == 5 || hero.state.control_mode == 3) {
+    if (hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == 0x15 ||
+        hero.state.control_mode == HERO_MODE_ATTACK || hero.state.control_mode == HERO_MODE_JUMP ||
+        hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_LEDGE) {
         return;
     }
     if (!(hero.ground_distance < 0.25f)) {
@@ -424,7 +424,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         resolve_hero_pending_path_clearance();
         hero.path_constrain_pending = 0;
     }
-    if (hero.state.control_mode != 0x11) {
+    if (hero.state.control_mode != HERO_MODE_SWIM) {
         if (hero.state.control_mode == 0x16) {
             transform_hero_local_offset_to_world(&collision_position_offset, 0.0f, 0.0f, 0.7f);
             fast_vec_sub(
@@ -450,13 +450,13 @@ s32 resolve_hero_position_collisions(s32 mode) {
         if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll1_2133a8(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.4f))
                 break;
-        } else if (hero.state.control_mode == 0x11) {
+        } else if (hero.state.control_mode == HERO_MODE_SWIM) {
             if (!coll1_2133a8(&hero.motion.pos.q, mask, ((s32)hero.moby), 0.6f))
                 break;
         } else if (hero.state.control_mode == 0x16) {
             if (!coll1_2133a8(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.5f))
                 break;
-        } else if (hero.state.control_mode == 0xF) {
+        } else if (hero.state.control_mode == HERO_MODE_GRIND) {
             if (!coll1_2133a8(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.45f))
                 break;
         } else {

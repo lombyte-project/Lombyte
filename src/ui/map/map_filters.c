@@ -58,9 +58,9 @@ int map_filter_l01_3(void *unused_input,
                      float reveal_test_value) {
     struct Hero *hero_ptr = &hero;
     int          hero_state_blocks_high_range_reveal = hero_ptr->state.control_mode == 16;
-    int          hero_state_blocks_low_range_reveal = hero_ptr->state.control_mode == 17 ||
-                                             hero_ptr->state.control_mode == 18 ||
-                                             hero_ptr->base_condition == 1;
+    int          hero_state_blocks_low_range_reveal =
+        hero_ptr->state.control_mode == HERO_MODE_SWIM ||
+        hero_ptr->state.control_mode == HERO_MODE_WATER_SURFACE || hero_ptr->base_condition == 1;
 
     if (reveal_test_selector < 0xC8 && reveal_test_value >= 39.5f && reveal_test_value <= 42.5f &&
         !hero_state_blocks_low_range_reveal) {
@@ -115,7 +115,8 @@ int map_filter_l01_5(int   reveal_test_selector,
                      float reveal_test_value) {
     if (reveal_test_selector < 0x100) {
         struct Hero *hero_ptr = &hero;
-        return hero_ptr->state.control_mode == 17 || hero_ptr->state.control_mode == 18 ||
+        return hero_ptr->state.control_mode == HERO_MODE_SWIM ||
+               hero_ptr->state.control_mode == HERO_MODE_WATER_SURFACE ||
                hero_ptr->base_condition == 1;
     }
     return (reveal_test_value >= 95.0f) ? 1 : 0;
@@ -229,9 +230,9 @@ s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_v
 
 s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     struct Hero *hero_ptr = &hero;
-    s32          hero_state_allows_polygon_reveal = hero_ptr->state.control_mode == 17 ||
-                                           hero_ptr->state.control_mode == 18 ||
-                                           hero_ptr->base_condition == 1;
+    s32          hero_state_allows_polygon_reveal =
+        hero_ptr->state.control_mode == HERO_MODE_SWIM ||
+        hero_ptr->state.control_mode == HERO_MODE_WATER_SURFACE || hero_ptr->base_condition == 1;
 
     if (point_is_clockwise(px, py, 0x93, 0x168, 0x182, 0x168) != 0 && py >= 0x135 &&
         D_001A03A8[0] != 0 && reveal_test_value >= 47.7f) {
@@ -290,9 +291,10 @@ s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_v
 s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     if (py < 0xBB) {
         struct Hero *hero_ptr = &hero;
-        s32          hero_state_blocks_low_y_reveal = hero_ptr->state.control_mode == 17 ||
-                                             hero_ptr->state.control_mode == 18 ||
-                                             hero_ptr->base_condition == 1;
+        s32          hero_state_blocks_low_y_reveal =
+            hero_ptr->state.control_mode == HERO_MODE_SWIM ||
+            hero_ptr->state.control_mode == HERO_MODE_WATER_SURFACE ||
+            hero_ptr->base_condition == 1;
 
         if (!hero_state_blocks_low_y_reveal && D_001A03BC != 0) {
             return 1;
@@ -682,8 +684,8 @@ int map_filter_l11_3(int   reveal_test_selector,
 
                      float reveal_test_value) {
     struct Hero *hero_ptr = &hero;
-    int          hero_state_allows_reveal = hero_ptr->state.control_mode == 17 ||
-                                   hero_ptr->state.control_mode == 18 ||
+    int          hero_state_allows_reveal = hero_ptr->state.control_mode == HERO_MODE_SWIM ||
+                                   hero_ptr->state.control_mode == HERO_MODE_WATER_SURFACE ||
                                    hero_ptr->base_condition == 1;
 
     if (reveal_test_selector < 0x15F) {
