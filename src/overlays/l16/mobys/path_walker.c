@@ -288,7 +288,7 @@ void initialize_path_walker_group(struct Moby *moby) {
     for (i = 0; i < count; i++) {
         unsigned char *current;
         L16WalkerData *selected_walker_data;
-        unsigned short flags;
+        unsigned short draw_distance;
 
         if (i == count - 1) {
             /* the last one takes the slot the loop index is on */
@@ -306,11 +306,11 @@ void initialize_path_walker_group(struct Moby *moby) {
                 selected = (selected + 1) % (count - 1);
             }
         }
-        flags = path_walker_draw_distance_gp;
+        draw_distance = path_walker_draw_distance_gp;
         current[0x30] = 255;
         *(float *)(current + 0x2C) *= path_walker_initial_scale_multiplier;
         *(int *)(current + 0x94) = 0;
-        *(unsigned short *)(current + 0x32) = flags;
+        *(unsigned short *)(current + 0x32) = draw_distance;
         selected_walker_data = *(L16WalkerData **)(current + 0x78);
         selected_walker_data->parameter = (float)rank * (period / convert_integer_to_float(count));
         selected_walker_data->owner = previous;
