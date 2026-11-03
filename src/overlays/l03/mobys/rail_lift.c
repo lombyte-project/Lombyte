@@ -42,10 +42,10 @@ extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 
 void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) __asm__("FUN_L03_002dcbc8");
 
-void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) {
+void update_rail_lift_help_and_hud(struct Moby *lift_moby, int help_message_mode) {
     char *lift_vars = (char *)lift_moby->pvars;
     int   hud_key;
-    switch (mode) {
+    switch (help_message_mode) {
     case 1:
         try_set_help_message(8, 0xBCE);
         break;
