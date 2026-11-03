@@ -254,8 +254,8 @@ void cutscene_set_camera_target(u8 *moby) {
     Vec4_2634f8 vectors[4];
     Vec4_2634f8 effect_spawn_position;
     Vec4_2634f8 scaled;
-    f32         fraction, size, lifetime, scale;
-    s32         count;
+    f32         fraction, position_jitter_scale, lifetime, scale;
+    s32         spawn_attempt_countdown;
     s32         w24;
     Effect     *effect;
     if (MOBY(moby)->oclass == 0x2ee && moby != 0) {
@@ -267,19 +267,19 @@ void cutscene_set_camera_target(u8 *moby) {
             s32 b2A;
             scale = fraction * -0.025f + -0.025f;
             lifetime = fraction * 44000.0f + 6000.0f;
-            size = fraction * 0.02f + 0.01f;
+            position_jitter_scale = fraction * 0.02f + 0.01f;
             w24 = 2;
             fast_vec_normalize(&scaled, &vectors[2], scale);
             fast_vec_add(&effect_spawn_position, &vectors[3], &scaled);
             b2A = 0x50;
-            count = 1;
+            spawn_attempt_countdown = 1;
             do {
                 s32 signed_random_value;
                 signed_random_value = random_integer_below(0x10);
                 if (random_integer_below(2) != 0)
                     signed_random_value = -signed_random_value;
                 effect = spawn_puff(&effect_spawn_position,
-                                    size,
+                                    position_jitter_scale,
                                     1.0f,
                                     0.75f,
                                     signed_random_value,
@@ -293,22 +293,22 @@ void cutscene_set_camera_target(u8 *moby) {
                     tail->b2A = b2A;
                     tail->initial_frame_count = effect->hA;
                 }
-                count--;
-            } while (count >= 0);
+                spawn_attempt_countdown--;
+            } while (spawn_attempt_countdown >= 0);
         }
         {
             s32 b2A;
             scale = fraction * -0.015000001f + -0.01f;
             lifetime = fraction * 25000.0f + 5000.0f;
-            size = fraction * 0.015000001f + 0.01f;
+            position_jitter_scale = fraction * 0.015000001f + 0.01f;
             w24 = 2;
             b2A = 0x7f;
             fast_vec_normalize(&scaled, &vectors[2], scale);
             fast_vec_add(&effect_spawn_position, &vectors[3], &scaled);
-            count = 4;
+            spawn_attempt_countdown = 4;
             do {
                 effect = spawn_puff(&effect_spawn_position,
-                                    size,
+                                    position_jitter_scale,
                                     1.0f,
                                     1.0f,
                                     0x10,
@@ -323,8 +323,8 @@ void cutscene_set_camera_target(u8 *moby) {
                     tail->b2A = b2A;
                     tail->initial_frame_count = effect->hA;
                 }
-                count--;
-            } while (count >= 0);
+                spawn_attempt_countdown--;
+            } while (spawn_attempt_countdown >= 0);
         }
     }
 }
