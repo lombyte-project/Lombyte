@@ -368,7 +368,7 @@ void draw_beam_barrier_segments(char *moby) {
     float        base_matrix[16];
     float        yaw_matrix[16];
     float        segment_matrix[9][16];
-    float        offset[4];
+    float        transformed_segment_offset[4];
     int          beam_segment_draw_params[9];
     char        *beam_barrier_vars = ((char *)MOBY(moby)->pvars);
     float       *matrix;
@@ -406,9 +406,9 @@ void draw_beam_barrier_segments(char *moby) {
         euler_rotation_matrix(matrix, rotation);
         rotation += 4;
         multiply_matrix(matrix, base_matrix, matrix);
-        transform_vector(offset, offset_src, base_matrix);
+        transform_vector(transformed_segment_offset, offset_src, base_matrix);
         offset_src += 4;
-        fast_vec_add(translation, offset, moby + 0x10);
+        fast_vec_add(translation, transformed_segment_offset, moby + 0x10);
         matrix[15] = 1.0f;
         matrix += 16;
         translation += 16;
