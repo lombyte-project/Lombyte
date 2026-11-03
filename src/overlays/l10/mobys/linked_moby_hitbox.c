@@ -52,7 +52,7 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
     OvlVec4 inv[4];
     OvlVec4 point;
     f32     radius;
-    s32     count;
+    s32     hitbox_candidate_count;
     s32     i;
     s32     j;
     s32     point_moby_count;
@@ -70,12 +70,12 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
     center.f[2] = radius;
     transform_vector_by_basis(&center, &center, moby_rotation_basis);
     fast_vec_add(&center, &center, &moby->pos);
-    count = collect_mobies_in_sphere(&center, radius, 0x10, moby, 0);
-    if (count != 0) {
-        struct Moby *found[count];
+    hitbox_candidate_count = collect_mobies_in_sphere(&center, radius, 0x10, moby, 0);
+    if (hitbox_candidate_count != 0) {
+        struct Moby *found[hitbox_candidate_count];
 
-        memcpy(found, D_L10_00178380_u, count * 4);
-        for (i = 0; i < count; i++) {
+        memcpy(found, D_L10_00178380_u, hitbox_candidate_count * 4);
+        for (i = 0; i < hitbox_candidate_count; i++) {
             struct Moby *hitbox_candidate_moby = found[i];
 
             if (hitbox_candidate_moby == 0 ||
