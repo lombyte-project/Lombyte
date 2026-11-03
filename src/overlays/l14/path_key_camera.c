@@ -188,7 +188,7 @@ typedef struct {
     float a8;
     float aC;
     float a10;
-    int   n14;
+    int   interpolation_stop_marker;
     float side_zero_heading_override;
     float side_one_heading_override;
     float side_two_heading_override;
@@ -383,7 +383,7 @@ void update_path_key_camera(char *path_key_camera) {
     } else if (side == 2 && D_L14_001F6488[st->idx + 1].side_two_progress_threshold <= D_L14_001624C0) {
         st->idx++;
     }
-    if (D_L14_001F6488[st->idx + 1].n14 == 0x2710) {
+    if (D_L14_001F6488[st->idx + 1].interpolation_stop_marker == 0x2710) {
         key_interpolation_fraction = 1.0f;
         st->idx--;
     } else {
