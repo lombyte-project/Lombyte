@@ -68,7 +68,7 @@ typedef struct {
 extern void _sysbitInit(SysBit *bs, u8 *start, u8 *bufstart, s32 bufsize);
 extern u8  *GetSysbitPointer(SysBit *bs, s32 pos);
 
-int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufsize) {
+int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int available_bytes, u8 *bufstart, int bufsize) {
     enum {
         MPEG_CALLBACK_PES_PACKET = 6
     };
@@ -111,9 +111,9 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
             _pack_header(bitstream, &pss_header->pack);
         }
         while (peek_bits(bitstream, 24) == 1 && peek_bits(bitstream, 32) != 0x1BA &&
-               peek_bits(bitstream, 32) != 0x1B9 && bitstream->pos < size * 8 && cont) {
+               peek_bits(bitstream, 32) != 0x1B9 && bitstream->pos < available_bytes * 8 && cont) {
             _PES_packet(sys, bitstream, &pss_header->pes);
-            if (bitstream->pos > size * 8) {
+            if (bitstream->pos > available_bytes * 8) {
                 continue;
             }
             for (i = 0; i < sys->n; i++) {
@@ -143,7 +143,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
                 consumed_bytes = bitstream->pos >> 3;
             }
         }
-        if (bitstream->pos > size * 8 || peek_bits(bitstream, 32) != 0x1BA) {
+        if (bitstream->pos > available_bytes * 8 || peek_bits(bitstream, 32) != 0x1BA) {
             break;
         }
     }
