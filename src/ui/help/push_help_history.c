@@ -5,11 +5,11 @@
 extern s32 find_help_entry(s16, s32, u16 *) __asm__("func_001FECC8");
 void       push_help_history(s32 id) __asm__("FUN_001fed30");
 
-void push_help_history(s32 id) {
+void push_help_history(s32 help_entry_id) {
     s32 slot;
     s32 i;
 
-    slot = find_help_entry(id, 0, 0);
+    slot = find_help_entry(help_entry_id, 0, 0);
     if (slot == -1) {
         return;
     }
