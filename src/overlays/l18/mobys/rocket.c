@@ -267,14 +267,14 @@ void spawn_rocket_explosion(void *moby_object, void *movement_step) {
     char  *moby = moby_object;
     float  movement_step_copy[4];
     float *qp = movement_step_copy;
-    int    flags;
+    int    rocket_kind_flags;
     float  flag_selected_effect_scalar, flag_selected_effect_argument, effect_scale, hit_radius, e;
     *(OvlQuad *)qp = *(OvlQuad *)movement_step;
-    flags = *(int *)(((char *)MOBY(moby)->pvars) + 0x38);
-    effect_scale = (flags & 1) ? 2.0f : 0.75f;
-    flag_selected_effect_scalar = (flags & 1) ? 4.0f : 2.0f;
-    flag_selected_effect_argument = (flags & 1) ? 2.0f : 1.0f;
-    hit_radius = (flags & 4) ? 0.0f : 1.5f;
+    rocket_kind_flags = *(int *)(((char *)MOBY(moby)->pvars) + 0x38);
+    effect_scale = (rocket_kind_flags & 1) ? 2.0f : 0.75f;
+    flag_selected_effect_scalar = (rocket_kind_flags & 1) ? 4.0f : 2.0f;
+    flag_selected_effect_argument = (rocket_kind_flags & 1) ? 2.0f : 1.0f;
+    hit_radius = (rocket_kind_flags & 4) ? 0.0f : 1.5f;
     func_L00_0025F4A8_alt(moby,
                           qp,
                           moby + 0x10,
