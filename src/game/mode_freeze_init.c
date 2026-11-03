@@ -10,7 +10,7 @@ extern s32 push_help_history() __asm__("func_001FED30");
 
 void mode_freeze_init(u32 mode, s32 freeze_context) __asm__("FUN_001fbab8");
 
-void mode_freeze_init(u32 mode, s32 freeze_context) {
+void mode_freeze_init(u32 initial_state, s32 freeze_context) {
     enum {
         FREEZE_CONTROL_MODE_16_PAUSE = 0,
         FREEZE_HERO_STATE_32_PAUSE = 1,
@@ -31,8 +31,8 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
     freeze.return_game_mode = game_mode;
     freeze.context = freeze_context;
     game_mode = GAME_MODE_FREEZE;
-    freeze.state = mode;
-    switch (mode) {
+    freeze.state = initial_state;
+    switch (initial_state) {
     case FREEZE_CONTROL_MODE_16_PAUSE:
         freeze_state = &freeze;
         freeze_state->title = (char *)get_help_message_text(0x4F6E);
