@@ -96,7 +96,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
     int   j;
     int   signed_particle_variation;
     int   life;
-    float size;
+    float particle_spawn_size;
     fast_vec_scale(emission_position_offset, moby + 0xC0, particle_pair_moby_c0_offset_scale_gp);
     fast_vec_add(particle_spawn_position, &MOBY(moby)->pos, emission_position_offset);
     fast_vec_scale(emission_position_offset, moby + 0xE0, particle_pair_moby_e0_offset_scale_gp);
@@ -128,7 +128,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
     fast_vec_add(particle_spawn_position, particle_spawn_position, emission_position_offset);
     signed_particle_variation = 0x10;
     life = scale_game_frames(2);
-    size = 80000.0f;
+    particle_spawn_size = 80000.0f;
     for (j = 0; j < 3; j++) {
         P_eca8 *part;
         T_eca8 *tail;
@@ -138,7 +138,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
                           1.0f,
                           signed_particle_variation,
                           D_L14_0015F580_macro,
-                          size,
+                          particle_spawn_size,
                           0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
@@ -149,7 +149,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
             tail->bB = part->hA;
         }
         signed_particle_variation = -signed_particle_variation;
-        size -= 20000.0f;
+        particle_spawn_size -= 20000.0f;
         life *= 2;
     }
 }
