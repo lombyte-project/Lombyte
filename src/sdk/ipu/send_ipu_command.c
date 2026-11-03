@@ -8,13 +8,13 @@ typedef struct IpuCommandState {
 
 u32 SendIpuCommand(IpuCommandState *state, u32 command) __asm__("_sendIpuCommand");
 
-u32 SendIpuCommand(IpuCommandState *state, u32 command) {
+u32 SendIpuCommand(IpuCommandState *decoder_state, u32 command) {
     volatile u32 *ipu_command = (volatile u32 *)0x10002000;
     u32           command_class;
 
     *ipu_command = command;
     command_class = IpuCommandTable[command >> 28];
-    state->command_result = command_class;
+    decoder_state->command_result = command_class;
     return command_class;
 }
 
