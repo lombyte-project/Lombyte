@@ -121,7 +121,7 @@ int queue_starfighter_voice_line(void          *unused,
 
                                  int line_count) {
     int j = rand_q() % line_count;
-    int id = l13_starfighter_voice_line_ids[line_group_start_index + j];
+    int voice_line_id = l13_starfighter_voice_line_ids[line_group_start_index + j];
     int i;
     int lt;
     if (line_group_start_index < 0x1D) {
@@ -146,23 +146,23 @@ int queue_starfighter_voice_line(void          *unused,
     }
     if (line_group_start_index < 0x1D) {
         for (i = 0; i < line_count; i++) {
-            if ((*(int *)(moby_data + 0x13C) >> id) & 1) {
+            if ((*(int *)(moby_data + 0x13C) >> voice_line_id) & 1) {
                 if (line_group_start_index < 0xC && random_integer_below(4) == 0)
-                    *(int *)(moby_data + 0x13C) &= ~(1 << id);
+                    *(int *)(moby_data + 0x13C) &= ~(1 << voice_line_id);
                 j++;
                 j %= line_count;
-                id = l13_starfighter_voice_line_ids[line_group_start_index + j];
+                voice_line_id = l13_starfighter_voice_line_ids[line_group_start_index + j];
             } else {
-                music_stream_state.queued_secondary_track = id + 50000;
+                music_stream_state.queued_secondary_track = voice_line_id + 50000;
                 moby_data[0x13A] = 1;
-                *(int *)(moby_data + 0x13C) |= 1 << id;
+                *(int *)(moby_data + 0x13C) |= 1 << voice_line_id;
                 return 1;
             }
         }
         if (line_group_start_index < 0xC)
-            *(int *)(moby_data + 0x13C) &= ~(1 << id);
+            *(int *)(moby_data + 0x13C) &= ~(1 << voice_line_id);
     } else {
-        music_stream_state.queued_secondary_track = id + 50000;
+        music_stream_state.queued_secondary_track = voice_line_id + 50000;
         moby_data[0x13A] = 1;
         return 1;
     }
