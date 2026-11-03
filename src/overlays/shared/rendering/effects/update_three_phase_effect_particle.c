@@ -3343,7 +3343,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     u8           fl;
     s32          fm;
     s64          hit;
-    s32          k, mode, kk2, t;
+    s32          k, collision_query_mode, kk2, t;
     void        *aux, *col, *pa, *pb;
     f32          f, rotation_direction_sign, alpha_factor;
 
@@ -3399,7 +3399,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         col = pv->f1C;
         pa = v1u.f;
         pb = v0u.f;
-        mode = 4;
+        collision_query_mode = 4;
         aux = 0;
     } else {
         collision_parameters.f10 = pv->f1C;
@@ -3413,9 +3413,9 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         aux = &collision_parameters;
         pa = v1u.f;
         pb = v0u.f;
-        mode = 0;
+        collision_query_mode = 0;
     }
-    hit = FUN_001efa68_26ff10(pa, pb, mode, col, aux) != 0;
+    hit = FUN_001efa68_26ff10(pa, pb, collision_query_mode, col, aux) != 0;
     if (hit) {
         fast_vec_normalize(collision_offset, coll_hit_normal.f, 1.0f);
         reflect_vector(pv, pv, coll_hit_normal.f);
