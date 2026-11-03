@@ -17,7 +17,7 @@ extern s32 DeleteSema();
 extern s32 WaitSema();
 extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
 
-s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 mode) {
+s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 completion_mode) {
     s32                  sema_param[6];
     s32                  sema_id;
     struct SifRpcPacket *packet;
