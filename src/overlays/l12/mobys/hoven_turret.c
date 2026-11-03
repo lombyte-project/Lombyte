@@ -855,9 +855,9 @@ void draw_hoven_turret_destruction_fade(Level12VendorCounterMoby *moby) __asm__(
 
 void draw_hoven_turret_destruction_fade(Level12VendorCounterMoby *moby) {
     Level12VendorCounterData *data = moby->data;
-    int                       count = scale_game_frames(0x50);
+    int                       fade_duration_frames = scale_game_frames(0x50);
     int                       value = data->value;
-    if (value < count) {
-        emit_rgba_draw_packet(0xAA, 0, 0, (count - value) * 0x50 / count);
+    if (value < fade_duration_frames) {
+        emit_rgba_draw_packet(0xAA, 0, 0, (fade_duration_frames - value) * 0x50 / fade_duration_frames);
     }
 }
