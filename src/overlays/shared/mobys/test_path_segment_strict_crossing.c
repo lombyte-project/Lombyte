@@ -120,7 +120,7 @@ int path_8808(int   segment_path_index,
     float  zero;
     int    found = 0;
     int    i = 1;
-    int    offset;
+    int    path_vertex_byte_offset;
     float *previous_path_point_slot;
     float *current_path_point_slot;
     fast_vec_sub(v, segment_end, segment_start);
@@ -139,12 +139,12 @@ int path_8808(int   segment_path_index,
     previous_path_point_slot = previous_path_point_in_basis;
     current_path_point_slot = u;
     if (i < ((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index]->count) {
-        offset = 0x20;
+        path_vertex_byte_offset = 0x20;
         zero = 0.0f;
         do {
             fast_vec_sub(current_path_point_slot,
                          (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] +
-                             offset,
+                             path_vertex_byte_offset,
                          segment_start);
             transform_vector_by_basis(current_path_point_slot, current_path_point_slot, v);
             if (previous_path_point_in_basis[3] != zero || u[3] != zero) {
@@ -163,7 +163,7 @@ int path_8808(int   segment_path_index,
             qcopy(previous_path_point_slot, current_path_point_slot);
         next:
             i++;
-            offset += 0x10;
+            path_vertex_byte_offset += 0x10;
         } while (i < ((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index]->count);
     }
     lerp_vector(adjusted_endpoint, segment_start, segment_end, best);
