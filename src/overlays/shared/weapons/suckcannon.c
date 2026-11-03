@@ -2139,8 +2139,8 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
         } while (--color_effects_remaining);
     }
     if (camera_distance > 9.0f) {
-        float size = variant_effect_scale * 4.0f;
-        func_L00_002E0CB8_DD3D8(size,
+        float colored_moby_scale = variant_effect_scale * 4.0f;
+        func_L00_002E0CB8_DD3D8(colored_moby_scale,
                                 projectile_moby,
                                 &MOBY(projectile_moby)->pos,
                                 spray_bias_vector,
@@ -2153,7 +2153,7 @@ void spawn_suck_cannon_projectile_explosion(char *projectile_moby,
         g0 = 0x20;
         b0 = 0;
         swap_color_channel_words(&r0, &g0, &b0, (&D_0013E520)->b9);
-        func_L00_002E0CB8_DD3D8(size,
+        func_L00_002E0CB8_DD3D8(colored_moby_scale,
                                 projectile_moby,
                                 &MOBY(projectile_moby)->pos,
                                 spray_bias_vector,
