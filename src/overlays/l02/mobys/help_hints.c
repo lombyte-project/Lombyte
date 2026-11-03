@@ -52,16 +52,16 @@ void help_hints_update(struct Moby *moby) {
         ((unsigned int)hero.state.control_mode) < 2) {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x278) == 0 && D_001418E8 == 0) {
-            int count = 0;
+            int available_inactive_item_count = 0;
             int i;
             for (i = 0; i < 37; i++) {
                 if (D_L02_0017A0C0[i].active == 0 && i != 8 && i != 24) {
                     if ((item_available)[i] != 0) {
-                        count++;
+                        available_inactive_item_count++;
                     }
                 }
             }
-            if (count >= 2) {
+            if (available_inactive_item_count >= 2) {
                 help_request(0x4E25, 0x4F);
             }
         }
