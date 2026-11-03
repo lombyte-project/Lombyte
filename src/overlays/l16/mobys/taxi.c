@@ -364,7 +364,7 @@ extern char *D_L16_0015FFD8_gp __asm__("D_L16_0015FFD8") __attribute__((sda));
 char        *find_group_moby_by_data_id(struct Moby *group_source_moby,
                                         int          id) __asm__("FUN_L16_002e4be0");
 
-char *find_group_moby_by_data_id(struct Moby *group_source_moby, int id) {
+char *find_group_moby_by_data_id(struct Moby *group_source_moby, int requested_data_id) {
     unsigned short *moby_index_entry = D_L16_001ABCC0_4be0[group_source_moby->group];
     char           *pool;
     int             moby_pool_index;
@@ -372,7 +372,7 @@ char *find_group_moby_by_data_id(struct Moby *group_source_moby, int id) {
         pool = D_L16_0015FFD8_gp;
         do {
             moby_pool_index = *moby_index_entry & 0x7FFF;
-            if (*(short *)(((M_4be0 *)pool)[moby_pool_index].data + 0xAC) == id) {
+            if (*(short *)(((M_4be0 *)pool)[moby_pool_index].data + 0xAC) == requested_data_id) {
                 goto found;
             }
         } while ((short)*moby_index_entry++ >= 0);
