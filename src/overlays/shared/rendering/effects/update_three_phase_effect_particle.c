@@ -1034,7 +1034,7 @@ unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin,
                                                           float hi,
                                                           float vertical_position_step,
 
-                                                          float size) {
+                                                          float initial_spawn_size) {
     unsigned char *particle = FUN_L00_002678b8_26b790(0xD);
     if (particle) {
         unsigned char *particle_data;
@@ -1043,7 +1043,7 @@ unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin,
         *(int *)(particle + 4) = color;
         particle[9] = truncate_float_to_s32(4.0f) + 0x40;
         particle[3] = 0x48;
-        *(float *)(particle + 0xC) = size;
+        *(float *)(particle + 0xC) = initial_spawn_size;
         particle[1] = 0;
         particle[8] = 0;
         particle[2] = *D_L00_001B20B4;
