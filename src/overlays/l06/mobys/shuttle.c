@@ -800,7 +800,7 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     float        particle_acceleration[4];
     struct Moby *piece;
     short       *list;
-    short        count;
+    short        linked_moby_count;
     int          linked_moby_index;
     int          i;
     float        largest;
@@ -816,19 +816,19 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     largest = 0.0f;
     clear_u64_value(middle);
     list = D_L06_001ABFC0_03b68[*(int *)(shuttle_linkage_vars + 0xCC)];
-    count = 0;
+    linked_moby_count = 0;
     do {
         linked_moby_index = *list & 0x7FFF;
         random_vector(push, 1.0f, 2.0f);
         spawn_shuttle_explosion_effect(
             30.0f, moby, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos, push, 1);
         fast_vec_add(middle, middle, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos);
-        count++;
+        linked_moby_count++;
         if (largest < ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w) {
             largest = ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w;
         }
     } while (*list++ >= 0);
-    fast_vec_scale(middle, middle, 1.0f / convert_integer_to_float(count));
+    fast_vec_scale(middle, middle, 1.0f / convert_integer_to_float(linked_moby_count));
     list = D_L06_001ABFC0_03b68[*(int *)(shuttle_linkage_vars + 0xCC)];
     do {
         float speed;
