@@ -58,10 +58,10 @@ void novalis_elevator_update(unsigned char *moby) {
         }
     }
     if (*(int *)(elevator_vars + 0xC0) != -1) {
-        unsigned short id;
+        unsigned short save_id;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(elevator_vars + 0xC0)) ||
-            l01_save_state.cleared[(short)(id = MOBY(moby)->save_id)] != 0 ||
-            (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
+            l01_save_state.cleared[(short)(save_id = MOBY(moby)->save_id)] != 0 ||
+            (D_0014C190_257218[current_level_index][(short)save_id >> 5] >> (save_id & 0x1F)) & 1) {
             if (*(int *)(elevator_vars + 0xC0) != -1) {
                 D_0014C190_257218[current_level_index][(short)MOBY(moby)->save_id >> 5] |=
                     1 << (MOBY(moby)->save_id & 0x1F);
