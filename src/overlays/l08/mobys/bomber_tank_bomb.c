@@ -189,7 +189,7 @@ void bomber_tank_bomb_update(struct Moby *moby) {
             switch (axis) {
             case DETONATION_EFFECT_FIXED_COLORS: {
                 int   color, color2, alpha;
-                float size = random_float_between(200000.0f, 300000.0f);
+                float initial_particle_size = random_float_between(200000.0f, 300000.0f);
                 color = FUN_L08_002dc9a8_random_color(60);
                 color2 = FUN_L08_002dc9a8_random_color(120);
                 alpha = random_int_between(color, color2);
@@ -197,7 +197,7 @@ void bomber_tank_bomb_update(struct Moby *moby) {
                             position,
                             0x1f101820,
                             0x101010,
-                            size,
+                            initial_particle_size,
                             alpha,
                             0);
             } break;
