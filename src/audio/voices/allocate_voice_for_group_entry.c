@@ -17,7 +17,7 @@ s32 allocate_voice_for_group_entry(s32 group_entry_index,
                                    s32 flags,
                                    s32 owner) __asm__("FUN_0022dba0");
 
-s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) {
+s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 playback_flags, s32 owner) {
     s32                           entry_index;
     s32                           slot_index;
     struct VoiceGroupEntryWindow *slot;
@@ -26,7 +26,7 @@ s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) 
     if (entry_index >= level_sound_def_count) {
         return -1;
     }
-    slot_index = allocate_voice_slot(level_sound_defs + (entry_index << 5), flags, owner, 0, 0x400);
+    slot_index = allocate_voice_slot(level_sound_defs + (entry_index << 5), playback_flags, owner, 0, 0x400);
     if (slot_index >= 0) {
         slot = (struct VoiceGroupEntryWindow *)(slot_index * 0x70 + ((u8 *)&voice_pool));
         slot->owner = owner;
