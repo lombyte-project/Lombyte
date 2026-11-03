@@ -19,10 +19,10 @@ typedef struct {
 extern TtyQueue *tty_read_input_queues[] __asm__("D_00154A68");
 extern TtyState  D_00154A50;
 
-s32 sceTtyRead(s8 *destination, s32 size) {
+s32 sceTtyRead(s8 *destination, s32 max_bytes) {
     s32 i;
 
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < max_bytes; i++) {
         while (tty_read_input_queues[0]->avail == 0) {
         }
         destination[i] = *D_00154A50.rcv->data;
