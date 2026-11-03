@@ -81,7 +81,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     OvlMobyEntry40 *hero_moby_entry;
     u8             *mob;
     s32             flag;
-    s32             id;
+    s32             hit_response_state;
     f32             xy_scale, z_response, frame_duration;
     OvlVec4         motion_delta;
 
@@ -140,9 +140,9 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         mob = (u8 *)G.damage_source_moby;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
-            id = 0x80;
+            hit_response_state = 0x80;
         call_ret:
-            hero_set_state(id, 1);
+            hero_set_state(hit_response_state, 1);
             return 1;
         }
         if (G.state.control_mode == 0x16) {
@@ -153,14 +153,14 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         if (G.state.control_mode == HERO_MODE_WATER_SURFACE) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                id = 0x82;
+                hit_response_state = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
         } else if (G.state.control_mode == HERO_MODE_SWIM) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                id = 0x82;
+                hit_response_state = 0x82;
                 goto call_ret;
             }
             if (current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) {
@@ -174,7 +174,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         } else if (G.state.control_mode == HERO_MODE_LEDGE) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0) {
-                id = 0x82;
+                hit_response_state = 0x82;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
                     goto call_ret;
                 }
