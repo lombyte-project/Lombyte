@@ -1147,7 +1147,7 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
     float               start[4];
     float               direction[4];
     float               position[4];
-    float               offset[4];
+    float               beam_phase_offset[4];
     float               side[4];
     float               up[4];
     float               edge[4];
@@ -1189,8 +1189,8 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
     fast_vec_normalize(direction, direction, step);
     qcopy(position, start);
     distance = zero;
-    fast_vec_normalize(offset, direction, convert_integer_to_float(frame_count % 20) / 20.0f);
-    fast_vec_sub(position, position, offset);
+    fast_vec_normalize(beam_phase_offset, direction, convert_integer_to_float(frame_count % 20) / 20.0f);
+    fast_vec_sub(position, position, beam_phase_offset);
     while (distance < length) {
         width = (distance * 0.0f) / (length + length) + 0.5f;
         fast_vec_cross(side, direction, D_L13_00160680);
