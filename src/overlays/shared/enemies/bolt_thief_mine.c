@@ -74,6 +74,9 @@ void bolt_thief_mine_update(struct Moby *moby) __asm__("FUN_L14_002ff640");
 
 /* Moby class 933 */
 void bolt_thief_mine_update(struct Moby *moby) {
+    enum {
+        MINE_DETONATION_HIT_STATUS_MIN = 2
+    };
     FloatMineVars *floating_mine_private_vars = (FloatMineVars *)moby->pvars;
     union {
         HitInfo info;
@@ -122,7 +125,7 @@ void bolt_thief_mine_update(struct Moby *moby) {
         scratch.info.look_height = 7;
         scratch.info.unk3B = 0xFF;
         resolve_moby_hit_response(moby, hit, &scratch.info, 0, &hit_status, 0, 0, 4);
-        if ((hit_status >= 2 && hit != 0 && hit->moby->oclass != 0x283) ||
+        if ((hit_status >= MINE_DETONATION_HIT_STATUS_MIN && hit != 0 && hit->moby->oclass != 0x283) ||
             hero.coll_hit_moby == (u8 *)moby) {
             clear_u64_value(explosion_vector);
             allocate_voice_for_target_entry(0, 0, moby);
