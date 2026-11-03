@@ -15,7 +15,7 @@ void set_up_vis_gif_viewer(u64 *packet_destination,
                            s32  material_control_base,
                            s32  material_control_shift2,
 
-                           s32 mode) {
+                           s32 material_index) {
     enum {
         FIRST_REGULAR_MATERIAL_INDEX = 0
     };
@@ -24,21 +24,21 @@ void set_up_vis_gif_viewer(u64 *packet_destination,
     u64  template_texture_state1;
     u64 *selected_special_material_template;
 
-    template_texture_state0 = resident_material_templates[mode * 3];
-    template_draw_control_bits = resident_material_templates[mode * 3 + 1];
-    template_texture_state1 = resident_material_templates[mode * 3 + 2];
-    if (mode >= FIRST_REGULAR_MATERIAL_INDEX) {
+    template_texture_state0 = resident_material_templates[material_index * 3];
+    template_draw_control_bits = resident_material_templates[material_index * 3 + 1];
+    template_texture_state1 = resident_material_templates[material_index * 3 + 2];
+    if (material_index >= FIRST_REGULAR_MATERIAL_INDEX) {
         packet_destination[0] = (0x20 | (template_draw_control_bits & 0x1C)) | ((u64)prim << 6) |
                                 ((u64)(u32)draw_control_high_word << 32);
         packet_destination += 2;
         packet_destination[0] =
-            (material_control_base | ((u64)material_control_shift2 << 2)) | ((u64)mode << 24);
+            (material_control_base | ((u64)material_control_shift2 << 2)) | ((u64)material_index << 24);
         packet_destination += 2;
         packet_destination[0] = template_texture_state0;
         packet_destination[2] = template_texture_state1;
-    } else if (mode < -1) {
+    } else if (material_index < -1) {
         selected_special_material_template = special_material_template;
-        if (mode == -3) {
+        if (material_index == -3) {
             selected_special_material_template = alternate_special_material_template;
         }
         packet_destination[0] =
