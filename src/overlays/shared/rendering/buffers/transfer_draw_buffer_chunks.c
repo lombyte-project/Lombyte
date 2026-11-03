@@ -43,8 +43,8 @@ void       append_draw_buffer_upload_packets(int dst,
 void append_draw_buffer_upload_packets(int upload_source_byte_address,
                                        int draw_buffer_byte_address,
 
-                                       int size) {
-    int left = (size + 0x3FFF) & ~0x3FFF;
+                                       int upload_byte_count) {
+    int left = (upload_byte_count + 0x3FFF) & ~0x3FFF;
     int transfer_byte_offset = 0;
     while (left > 0) {
         *(int *)D_L00_001611C0_002a0fc8 = 0x10000006;
