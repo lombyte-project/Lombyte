@@ -426,7 +426,7 @@ void initialize_moby_transform_history(int source_moby, char *history_state) {
 
 typedef struct {
     u8  p0[0x23];
-    u8  x23;
+    u8  history_decay_value;
     u8  p24[0xC];
     u8  x30;
     u8  x31;
@@ -439,17 +439,17 @@ typedef struct {
     u8  p73[0x21];
     s32 x94;
     u8  p98[0xE];
-    s16 xa6;
+    s16 spawn_class_id;
 } E00262528;
 
 typedef struct {
     u8         p0[0x100];
-    s32        x100[4];
-    s32        x110[4];
-    E00262528 *x120[4];
+    s32        initial_decay_values[4];
+    s32        sample_delays[4];
+    E00262528 *history_mobys[4];
     u8         p130[4];
-    E00262528 *x134;
-    s32        x138;
+    E00262528 *history_source_moby;
+    s32        history_entry_count;
 } O00262528;
 
 void create_moby_transform_history_entry(O00262528 *history_state,
@@ -461,26 +461,26 @@ void create_moby_transform_history_entry(O00262528 *history_state,
 
                                          s32 sample_delay) {
     E00262528 *spawned_moby;
-    if (history_state->x138 == 4)
+    if (history_state->history_entry_count == 4)
         return;
     if (sample_delay >= 9)
         return;
-    spawned_moby = create_moby(history_state->x134->xa6);
+    spawned_moby = create_moby(history_state->history_source_moby->spawn_class_id);
     if (spawned_moby == 0)
         return;
-    spawned_moby->x32 = history_state->x134->x32;
-    spawned_moby->x38 = history_state->x134->x38;
+    spawned_moby->x32 = history_state->history_source_moby->x32;
+    spawned_moby->x38 = history_state->history_source_moby->x38;
     spawned_moby->x31 = 1;
     spawned_moby->x34 = 0x80A;
     spawned_moby->x30 = 0;
     spawned_moby->x94 = 0;
-    if (spawned_moby->xa6 == 0)
+    if (spawned_moby->spawn_class_id == 0)
         spawned_moby->x72 = 0;
-    spawned_moby->x23 = initial_decay_value;
-    history_state->x110[history_state->x138] = sample_delay;
-    history_state->x100[history_state->x138] = initial_decay_value;
-    history_state->x120[history_state->x138] = spawned_moby;
-    history_state->x138++;
+    spawned_moby->history_decay_value = initial_decay_value;
+    history_state->sample_delays[history_state->history_entry_count] = sample_delay;
+    history_state->initial_decay_values[history_state->history_entry_count] = initial_decay_value;
+    history_state->history_mobys[history_state->history_entry_count] = spawned_moby;
+    history_state->history_entry_count++;
 }
 
 typedef struct {
