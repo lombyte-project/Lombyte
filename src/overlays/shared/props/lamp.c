@@ -111,7 +111,7 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     float    *direction;
     float    *up;
     u64       texture;
-    u64       flags;
+    u64       blend_control;
     float     phase;
     float     sign;
     float     pass;
@@ -135,7 +135,7 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     qcopy(matrix + 12, position);
 
     texture = get_effect_texture(wobble_quad_texture_index_gp);
-    flags = (u64)(s64)wobble_quad_blend_a_selector_gp |
+    blend_control = (u64)(s64)wobble_quad_blend_a_selector_gp |
             ((u64)(s64)wobble_quad_blend_b_selector_gp << 2) |
             ((u64)(s64)wobble_quad_blend_c_selector_gp << 4) |
             ((u64)(s64)wobble_quad_blend_d_selector_gp << 6) | 0x8000000000ULL;
@@ -145,8 +145,8 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     quad_b.control[1] = texture;
     quad_a.control[1] = texture;
     quad_a.control[0] = 0;
-    quad_b.control[3] = flags;
-    quad_a.control[3] = flags;
+    quad_b.control[3] = blend_control;
+    quad_a.control[3] = blend_control;
     for (k = 0; k < 4; k++) {
         float u = wobble_quad_texcoords[k][0];
         float v = wobble_quad_texcoords[k][1];
