@@ -31,7 +31,7 @@ typedef struct {
     char  pad0[0xAC];
     float value;
     char  padB0[0x74];
-    short field124;
+    short item_gate_active;
 } Level14VendorData;
 
 typedef struct {
@@ -46,7 +46,7 @@ void enable_elevator_alternate_route(Level14VendorMoby *moby) __asm__("FUN_L14_0
 void enable_elevator_alternate_route(Level14VendorMoby *moby) {
     Level14VendorData *data = moby->data;
     moby->state = data->value < 0.0f ? 2 : 1;
-    data->field124 = 1;
+    data->item_gate_active = 1;
 }
 
 extern int D_L14_001BABD0[];
@@ -58,7 +58,7 @@ void mark_elevator_collected(Level14VendorMoby *vendor_moby) {
         ELEVATOR_STATE_COLLECTED = 0
     };
     vendor_moby->state = ELEVATOR_STATE_COLLECTED;
-    vendor_moby->data->field124 = 0;
+    vendor_moby->data->item_gate_active = 0;
     D_0014C190_257218[current_level_index]
                      [(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |=
         1 << (*(unsigned short *)((char *)vendor_moby + 0xB2) & 0x1F);
