@@ -740,9 +740,9 @@ int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper)
         if (group_candidate_moby) {
             do {
                 if (group_candidate_moby != moby) {
-                    int state = group_candidate_moby[0x20];
-                    if (state >= lower) {
-                        if (state <= upper) {
+                    int group_candidate_state = group_candidate_moby[0x20];
+                    if (group_candidate_state >= lower) {
+                        if (group_candidate_state <= upper) {
                             goto found;
                         }
                     }
