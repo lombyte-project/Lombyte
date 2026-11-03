@@ -47,8 +47,8 @@ void draw_vendor_purchase_text(void *moby, s32 x, s32 y) {
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     {
-        s32 size = sizeof(box);
-        memset((void *)&box, 0, size);
+        s32 box_byte_count = sizeof(box);
+        memset((void *)&box, 0, box_byte_count);
     }
     box.half_x = x / 2;
     box.half_y = y / 2;
