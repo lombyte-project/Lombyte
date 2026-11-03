@@ -333,7 +333,7 @@ void infobot_update(struct Moby *moby) {
         INFOBOT_WAIT_TO_START_FINAL_SCENE = 10,
         INFOBOT_SAVE_AND_REMOVE = 11
     };
-    Vec          offset;
+    Vec          orbit_offset;
     Vec          step;
     Vec          point;
     s32          segment;
@@ -354,7 +354,7 @@ void infobot_update(struct Moby *moby) {
     f32          tilt_x;
     f32          max_speed;
 
-    offset.q = 0;
+    orbit_offset.q = 0;
     infobot = (Infobot *)moby->pvars;
     switch (moby->state) {
     case INFOBOT_INITIALIZE:
@@ -466,9 +466,9 @@ void infobot_update(struct Moby *moby) {
             return;
         }
         infobot->bob = fast_add_rotations(infobot->bob, D_0015ED6C * 3.1415927f);
-        offset.v.x = fast_cos(infobot->bob);
-        offset.v.y = fast_sin(infobot->bob);
-        offset.v.z = 3.0f;
+        orbit_offset.v.x = fast_cos(infobot->bob);
+        orbit_offset.v.y = fast_sin(infobot->bob);
+        orbit_offset.v.z = 3.0f;
         moby->rot.z = fast_add_rotations(infobot->bob, 1.5707964f);
         if (infobot->carrier == -1) {
             break;
@@ -560,9 +560,9 @@ void infobot_update(struct Moby *moby) {
             infobot->sway = 1.0f;
         }
         infobot->bob = fast_add_rotations(infobot->bob, D_0015ED6C * 3.1415927f);
-        offset.v.x = fast_cos(infobot->bob) * infobot->sway;
-        offset.v.y = fast_sin(infobot->bob) * infobot->sway;
-        offset.v.z = 0.0f;
+        orbit_offset.v.x = fast_cos(infobot->bob) * infobot->sway;
+        orbit_offset.v.y = fast_sin(infobot->bob) * infobot->sway;
+        orbit_offset.v.z = 0.0f;
         heading = fast_add_rotations(infobot->bob, 1.5707964f);
         moby->rot.z = spring_turn(moby->rot.z,
                                   heading,
@@ -570,7 +570,7 @@ void infobot_update(struct Moby *moby) {
                                   D_0015ED6C * 25.132742f,
                                   D_0015ED6C * 12.566371f,
                                   &infobot->spin[2]);
-        fast_vec_add(&step, &offset, &orbit_path->pts[orbit_path->count - 1]);
+        fast_vec_add(&step, &orbit_offset, &orbit_path->pts[orbit_path->count - 1]);
         MPOS(moby)->q = step.q;
         if (fast_vec_dist(&D_0013F3D0, &orbit_path->pts[orbit_path->count - 1]) < 2.0f &&
             D_0013F3D0.active != 0) {
@@ -640,7 +640,7 @@ void infobot_update(struct Moby *moby) {
                              &step,
                              &D_L00_001600EC_2d5de8[infobot->attach].pos,
                              &step);
-            fast_vec_add(&point, &offset, &D_L00_001600EC_2d5de8[infobot->attach].pos);
+            fast_vec_add(&point, &orbit_offset, &D_L00_001600EC_2d5de8[infobot->attach].pos);
             MPOS(moby)->q = point.q;
         }
     }
