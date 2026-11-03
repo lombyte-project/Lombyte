@@ -244,11 +244,11 @@ void count_active_and_visible_listed_mobys(void *moby,
 
                                            void *visible_moby_count) {
     char  *moby_private_data = *(char **)((char *)moby + 0x78);
-    int    type = *(short *)(moby_private_data + 0x108);
+    int    target_moby_list_index = *(short *)(moby_private_data + 0x108);
     short *moby_list_entry;
     *(unsigned short *)active_moby_count = 0;
     *(unsigned short *)visible_moby_count = 0;
-    moby_list_entry = D_L11_001AC240[type];
+    moby_list_entry = D_L11_001AC240[target_moby_list_index];
     if (moby_list_entry == 0)
         return;
     do {
