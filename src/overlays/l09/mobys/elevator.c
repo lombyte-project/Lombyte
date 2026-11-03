@@ -52,10 +52,10 @@ void elevator_update(unsigned char *moby) {
     }
     path = ((char *)l09_paths[*(int *)(elevator_vars + 0xB4)]);
     if (*(int *)(elevator_vars + 0xC0) != -1) {
-        unsigned short id;
+        unsigned short save_id;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(elevator_vars + 0xC0)) ||
-            l09_moby_collection_state.collected[(short)(id = MOBY(moby)->save_id)] != 0 ||
-            (level_moby_killed[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
+            l09_moby_collection_state.collected[(short)(save_id = MOBY(moby)->save_id)] != 0 ||
+            (level_moby_killed[current_level_index][(short)save_id >> 5] >> (save_id & 0x1F)) & 1) {
             if (*(int *)(elevator_vars + 0xC0) != -1) {
                 level_moby_killed[current_level_index][(short)MOBY(moby)->save_id >> 5] |=
                     1 << (MOBY(moby)->save_id & 0x1F);
