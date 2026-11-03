@@ -171,7 +171,7 @@ extern int   burst_spark_active_duration_max_gp __asm__("D_L10_00161FB0") __attr
 extern int   burst_spark_pause_duration_min_gp __asm__("D_L10_00161FB4") __attribute__((sda));
 extern int   burst_spark_pause_duration_max_gp __asm__("D_L10_00161FB8") __attribute__((sda));
 
-void emit_burst_spark_particle(void *emission_position, short *timer, short *burst) {
+void emit_burst_spark_particle(void *emission_position, short *spark_emission_countdown, short *burst) {
     float visibility_sphere[4];
     float burst_spark_vertical_vector[4];
     float acc[4];
@@ -193,7 +193,7 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
     visibility_sphere[3] = 2.0f;
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
-    if (!fast_dec_timer_s16(timer))
+    if (!fast_dec_timer_s16(spark_emission_countdown))
         return;
     clear_u64_value(burst_spark_vertical_vector);
     burst_spark_vertical_vector[2] = burst_spark_vertical_vector_z_scale_gp * frame_time;
@@ -225,7 +225,7 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
                 second_frame_count,
                 third_frame_count,
                 -1);
-    *timer = truncate_float_to_s32(random_float_between((float)burst_spark_timer_reset_min_gp,
+    *spark_emission_countdown = truncate_float_to_s32(random_float_between((float)burst_spark_timer_reset_min_gp,
                                                         (float)burst_spark_timer_reset_max_gp));
 }
 
