@@ -138,7 +138,7 @@ unsigned char                       *spawn_moving_resizing_height_snapped_alpha_
 
 unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(
 
-    void *initial_position, int x, int color, float size, float size_increment) {
+    void *initial_position, int x, int color, float initial_size_scale, float size_increment) {
     unsigned char *particle = create_part(0x2D);
     if (particle) {
         unsigned char *particle_data;
@@ -158,7 +158,7 @@ unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(
         particle[2] = *D_L00_001B2134;
         particle[8] = rand();
         *(short *)(particle + 0xA) = 4;
-        *(float *)(particle + 0xC) = size * 210000.0f;
+        *(float *)(particle + 0xC) = initial_size_scale * 210000.0f;
         drift_angle_radians = random_angle_radians();
         horizontal_drift_speed = random_float_between(0.0015f, 0.0025f);
         *(float *)(particle_data + 0) = fast_cos(drift_angle_radians) * horizontal_drift_speed;
