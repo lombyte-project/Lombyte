@@ -1128,7 +1128,7 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
     int   j;
     int   signed_puff_value;
     int   life;
-    float size;
+    float exhaust_puff_size;
     if (moby->state < MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH ||
         moby->state == MINIBOMBER_STATE_DESTROY)
         return;
@@ -1158,12 +1158,12 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
     fast_vec_add(pos, &moby->pos, exhaust_position_offset);
     signed_puff_value = 0x10;
     life = scale_game_frames(2);
-    size = 100000.0f;
+    exhaust_puff_size = 100000.0f;
     for (j = 0; j < 3; j++) {
         L14Puff     *part;
         L14PuffTail *tail;
         part = spawn_puff(
-            pos, 0.05f, 1.0f, 1.0f, signed_puff_value, D_L14_0015F580_macro, size, 0x7FFFFFFF);
+            pos, 0.05f, 1.0f, 1.0f, signed_puff_value, D_L14_0015F580_macro, exhaust_puff_size, 0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
             part->life = life;
@@ -1174,7 +1174,7 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
         }
         signed_puff_value = -signed_puff_value;
         life *= 2;
-        size -= 20000.0f;
+        exhaust_puff_size -= 20000.0f;
     }
 }
 
