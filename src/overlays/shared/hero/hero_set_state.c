@@ -3278,7 +3278,7 @@ typedef struct {
     char          p310[0x108];
     int           jump_ground_item_input_enabled;
     short         f41C;
-    short         f41E;
+    short         jump_apex_passed;
     char          p420[0x30];
     int           high_jump_stick_direction;
     char          p454[0x58];
@@ -3446,8 +3446,8 @@ int process_hero_equipped_item_input(void) {
                 if (!pad_pressed_within(mask, t, 0)) {
                     break;
                 }
-                if ((D_0013F450_h228770.f41E == 0 && D_0013F450_h228770.f2DC > 0.1f) ||
-                    (D_0013F450_h228770.f41E != 0 && D_0013F450_h228770.f2DC > 0.57f) ||
+                if ((D_0013F450_h228770.jump_apex_passed == 0 && D_0013F450_h228770.f2DC > 0.1f) ||
+                    (D_0013F450_h228770.jump_apex_passed != 0 && D_0013F450_h228770.f2DC > 0.57f) ||
                     (D_0013F450_h228770.hero_current_state == HERO_STATE_LAND &&
                      D_0013F450_h228770.f2DC > 0.57f)) {
                     if (D_0013F450_h228770.wrench_slam_input_lockout != 0) {
