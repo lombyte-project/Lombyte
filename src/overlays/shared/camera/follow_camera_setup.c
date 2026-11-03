@@ -457,7 +457,7 @@ void rebuild_follow_camera_pose(int snap) {
     int    mask;
     float *from, *to;
     if (snap) {
-        float        offset[4], part[4], basis[12], delta[4], start[4];
+        float        target_to_camera_offset[4], part[4], basis[12], delta[4], start[4];
         float        length;
         struct Hero *player = &hero;
         struct Hero *hero2, *hero3;
@@ -467,8 +467,8 @@ void rebuild_follow_camera_pose(int snap) {
         part[3] = 0.0f;
         mask = 0x94;
         copy_matrix3x4(basis, player->rot_matrix);
-        transform_vector_by_basis(offset, part, *(char **)(target + 0xC0) + 0xC0);
-        fast_vec_add(camera_moby + 0x30, target, offset);
+        transform_vector_by_basis(target_to_camera_offset, part, *(char **)(target + 0xC0) + 0xC0);
+        fast_vec_add(camera_moby + 0x30, target, target_to_camera_offset);
         fast_vec_scale(rise, *(char **)(target + 0xC0) + 0xE0, *(float *)(target + 0xB0));
         fast_vec_add(eye, target, rise);
         if (FUN_001efa68(eye, camera_moby + 0x30, mask, (int)player->moby, 0)) {
@@ -522,11 +522,11 @@ void rebuild_follow_camera_pose(int snap) {
             }
         }
         /* straight above or below the target: nudge the camera sideways */
-        fast_vec_sub(offset, (float *)&MOBY(camera_moby)->update_dist, (float *)target);
-        length = fast_vec_dot(offset, track + 0x30);
+        fast_vec_sub(target_to_camera_offset, (float *)&MOBY(camera_moby)->update_dist, (float *)target);
+        length = fast_vec_dot(target_to_camera_offset, track + 0x30);
         fast_vec_scale(part, track + 0x30, length);
-        fast_vec_sub(offset, offset, part);
-        if (fast_vec_length(offset) < 0.05f) {
+        fast_vec_sub(target_to_camera_offset, target_to_camera_offset, part);
+        if (fast_vec_length(target_to_camera_offset) < 0.05f) {
             if (random_integer_below(2))
                 *(float *)(camera_moby + 0x30) += 0.5f;
             else
