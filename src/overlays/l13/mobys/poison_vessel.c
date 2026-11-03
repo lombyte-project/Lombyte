@@ -49,7 +49,7 @@ void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *poison_ves
     struct {
         OvlVec4 direction, velocity, axis, offset, pos, random_direction, random_vector;
     } work;
-    int   count;
+    int   particle_count;
     int   duration;
     int  *color, *second_color;
     float distance, twice_distance, extra, speed, amount;
@@ -137,12 +137,12 @@ void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *poison_ves
         duration = random_int_between(lo, hi);
     }
     spawn_poison_vessel_fragment(&work.pos, &work.random_direction, duration, 1);
-    count = distance < 6.0f ? truncate_float_to_s32(distance) + 1 : 4;
+    particle_count = distance < 6.0f ? truncate_float_to_s32(distance) + 1 : 4;
     extra = 0.0f;
     if (distance < 7.0f)
         extra = 7.0f - distance;
-    if (count > 0) {
-        int             i = count;
+    if (particle_count > 0) {
+        int             i = particle_count;
         L13EffectColors colors __attribute__((aligned(16)));
         L13EffectColors second_colors __attribute__((aligned(16)));
         float           magnitude = 400000.0f;
