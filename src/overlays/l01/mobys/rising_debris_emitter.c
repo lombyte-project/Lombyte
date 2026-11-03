@@ -66,7 +66,7 @@ void rising_debris_emitter_update(SteamMoby *steam_moby) {
     SteamParticle *debris_particle;
     f32            spawn_radius_or_vertical_velocity_increment;
     f32            spawn_offset_angle_radians;
-    f32            size;
+    f32            initial_particle_size;
     s32            life;
     s32            i;
 
@@ -123,13 +123,13 @@ void rising_debris_emitter_update(SteamMoby *steam_moby) {
         spawn_radius_or_vertical_velocity_increment *= 8.0f;
         puff.f[2] += steam_vars->height;
         particle_initial_velocity.f[2] += spawn_radius_or_vertical_velocity_increment;
-        size = random_float_between(70000.0f, 140000.0f);
+        initial_particle_size = random_float_between(70000.0f, 140000.0f);
         life = scale_game_frames(0xB4);
         debris_particle = mine_debris(&puff,
                                       &particle_initial_velocity,
                                       0x0F081020,
                                       0x00081020,
-                                      size,
+                                      initial_particle_size,
                                       life,
                                       colors.c[random_integer_below(3)]);
         if (debris_particle != 0) {
