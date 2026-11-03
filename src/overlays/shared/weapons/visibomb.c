@@ -101,7 +101,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
     if (g->state.current == 0x72 || g->state.current == 0x65)
         goto tail;
     camera = &l00_camera;
-    if (camera->unk180 != 0 && *(s16 *)((u8 *)camera->unk180 + 0x86) == 5)
+    if (camera->current_camera != 0 && *(s16 *)((u8 *)camera->current_camera + 0x86) == 5)
         goto tail;
     if (g->grounded_frames == 0)
         goto tail;
@@ -112,10 +112,10 @@ void visibomb_update(O_b3058 *visibomb_moby) {
         b = 0.0f;
         launch_yaw = g->held_pose_yaw;
         if (g->state.current == 1 && (g->moby->flags & 1)) {
-            launch_yaw = fast_arc_tan(camera->unk350[0], camera->unk350[1]);
-            b = -fast_arc_tan(vector_length_xy(camera->unk350), camera->unk350[2]);
-            fast_vec_normalize(launch_position, camera->unk350, 0.3f);
-            fast_vec_normalize(u, &camera->unk350[8], -0.35f);
+            launch_yaw = fast_arc_tan(camera->rows[0], camera->rows[1]);
+            b = -fast_arc_tan(vector_length_xy(camera->rows), camera->rows[2]);
+            fast_vec_normalize(launch_position, camera->rows, 0.3f);
+            fast_vec_normalize(u, &camera->rows[8], -0.35f);
             fast_vec_add(launch_position, launch_position, u);
             fast_vec_add(launch_position, launch_position, &camera->pos);
         } else if (hero.unk22C8 == 1) {

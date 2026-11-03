@@ -39,7 +39,7 @@ struct CameraTransitionState {
     s32               snapshot_pending;
 };
 
-extern struct CameraTransitionState preview_camera __asm__("D_00186F40");
+extern struct CameraTransitionState game_camera __asm__("D_00186F40");
 
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
 extern void fast_mem_copy(void *dst, void *src, s32 size) __asm__("func_001F98D0");
@@ -81,7 +81,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     s32                   previous_transition_state;
 
     descriptor = D_0015EF90[next_camera->descriptor_index].descriptor;
-    previous_camera = preview_camera.current;
+    previous_camera = game_camera.current;
     previous_transition_state = previous_camera->transition_state;
     if (descriptor != 0) {
         descriptor_kind = descriptor->descriptor_kind;
@@ -93,27 +93,27 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
                descriptor_kind == CAMERA_DESCRIPTOR_FRAME_COUNT_TRANSITION) {
         if (descriptor_kind == CAMERA_DESCRIPTOR_RATE_TRANSITION) {
             mode_one_duration = next_camera->transition_duration;
-            preview_camera.transition_mode = CAMERA_TRANSITION_RATE_BASED;
+            game_camera.transition_mode = CAMERA_TRANSITION_RATE_BASED;
             if (mode_one_duration > 0.0f) {
-                preview_camera.configured_position_rate = mode_one_duration;
-                preview_camera.configured_rotation_rate = mode_one_duration;
+                game_camera.configured_position_rate = mode_one_duration;
+                game_camera.configured_rotation_rate = mode_one_duration;
             } else {
-                preview_camera.configured_position_rate = 0.018f;
-                preview_camera.configured_rotation_rate = 0.018f;
+                game_camera.configured_position_rate = 0.018f;
+                game_camera.configured_rotation_rate = 0.018f;
             }
         } else if (descriptor_kind == CAMERA_DESCRIPTOR_FRAME_COUNT_TRANSITION) {
             transition_duration = next_camera->transition_duration;
-            preview_camera.transition_mode = CAMERA_TRANSITION_FRAME_COUNT_BASED;
+            game_camera.transition_mode = CAMERA_TRANSITION_FRAME_COUNT_BASED;
             if (transition_duration > 0.0f) {
-                preview_camera.configured_frames = truncate_float_to_s32(transition_duration);
+                game_camera.configured_frames = truncate_float_to_s32(transition_duration);
             } else {
-                preview_camera.configured_frames = 40;
+                game_camera.configured_frames = 40;
             }
         }
-        if (preview_camera.transition_phase == 0) {
-            preview_camera.transition_phase = 1;
+        if (game_camera.transition_phase == 0) {
+            game_camera.transition_phase = 1;
         } else {
-            preview_camera.transition_phase = 2;
+            game_camera.transition_phase = 2;
         }
     } else if (previous_transition_state == CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM ||
                previous_transition_state ==
@@ -129,22 +129,22 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
                 CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM_WITH_RATE_TRANSITION ||
             descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION) {
             handoff_duration = next_camera->transition_duration;
-            preview_camera.transition_mode = CAMERA_TRANSITION_RATE_BASED;
+            game_camera.transition_mode = CAMERA_TRANSITION_RATE_BASED;
             if (handoff_duration > 0.0f) {
-                preview_camera.configured_position_rate = handoff_duration;
-                preview_camera.configured_rotation_rate = handoff_duration;
+                game_camera.configured_position_rate = handoff_duration;
+                game_camera.configured_rotation_rate = handoff_duration;
             } else {
-                preview_camera.configured_position_rate = 0.018f;
-                preview_camera.configured_rotation_rate = 0.018f;
+                game_camera.configured_position_rate = 0.018f;
+                game_camera.configured_rotation_rate = 0.018f;
                 if (current_level_index == LEVEL_NOVALIS) {
-                    preview_camera.configured_position_rate = 0.01f;
-                    preview_camera.configured_rotation_rate = 0.01f;
+                    game_camera.configured_position_rate = 0.01f;
+                    game_camera.configured_rotation_rate = 0.01f;
                 }
             }
-            if (preview_camera.transition_phase == 0) {
-                preview_camera.transition_phase = 1;
+            if (game_camera.transition_phase == 0) {
+                game_camera.transition_phase = 1;
             } else {
-                preview_camera.transition_phase = 2;
+                game_camera.transition_phase = 2;
             }
         }
     } else {
@@ -155,17 +155,17 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     previous_camera->transition_state = CAMERA_TRANSITION_STATE_CLEARED;
     previous_camera->handoff_state = CAMERA_HANDOFF_NONE;
     previous_camera->activation_blocked = 0;
-    preview_camera.previous = previous_camera;
+    game_camera.previous = previous_camera;
     fast_mem_copy(&camera_saved_states[1], &camera_saved_states[0], 0x280);
-    preview_camera.previous->saved_state = &camera_saved_states[1];
-    preview_camera.current = next_camera;
+    game_camera.previous->saved_state = &camera_saved_states[1];
+    game_camera.current = next_camera;
     next_camera->saved_state = &camera_saved_states[0];
-    preview_camera.snapshot_pending = 0;
+    game_camera.snapshot_pending = 0;
     camera_run_setup_to_new_cam(next_camera);
     backup_current_cam();
     /* The callbacks run before this flag is read; previous_position is updated either way. */
     if (camera_position_publication_suppressed[0] == 0) {
-        qcopy(&preview_camera.published_position, &next_camera->pos);
+        qcopy(&game_camera.published_position, &next_camera->pos);
     }
     previous_position = &next_camera->prev_pos.x;
     previous_position[0] = next_camera->pos.x;

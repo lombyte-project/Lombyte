@@ -119,7 +119,7 @@ void setup_path_camera(char *camera) {
     *(float *)(camera_saved_state + 0x20) = 0.03f;
     *(float *)(camera_saved_state + 0x24) = 0.2f;
     clear_u64_value(camera_saved_state + 0x30);
-    initial_camera_transform = l14_camera.unk184;
+    initial_camera_transform = l14_camera.previous_camera;
     qcopy(camera + 0x30, initial_camera_transform + 0x30);
     qcopy(camera, initial_camera_transform);
     qcopy(camera + 0x10, initial_camera_transform + 0x10);

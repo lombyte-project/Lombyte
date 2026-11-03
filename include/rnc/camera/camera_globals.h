@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_CAMERA_CAMERA_GLOBALS_H
 
 #include "types.h"
+#include "rnc/math/vector.h"
 
 /* step_camera_blend's two eased blends: position and rotation each
    advance by their rate times frame_scale up to 1. start_camera_blend
@@ -35,17 +36,54 @@ struct CameraOrbit {
     f32 saved_rotation[4]; /* 0x60: quaternion, the same for the blend rotation */
 }; /* size 0x70 */
 
-/* The camera transition at D_001871B0 (PreviewCamera 0x270). kind 0 runs
+/* The camera transition at D_001871B0 (GameCamera 0x270). kind 0 runs
    blend (step_camera_blend); any other kind runs orbit
    (advance_alternate_camera_transition). */
 struct CameraTransition {
-    s16                mode;           /* 0x00: PreviewCamera.transition_mode */
+    s16                mode;           /* 0x00: GameCamera.transition_mode */
     u8                 kind;           /* 0x02 */
     u8                 requested_kind; /* 0x03: becomes kind when a transition starts */
     u8                 pad_04[0xC];
     struct CameraBlend blend; /* 0x10 */
     struct CameraOrbit orbit; /* 0x70 */
 }; /* size 0xE0, camera_rows follows */
+
+/* One camera shake channel. apply_camera_shake counts frames down and moves
+   the camera along a view row by amplitude, fading out over frames_max. */
+struct CameraShake {
+    f32 amplitude;  /* 0x0 */
+    f32 offset;     /* 0x4: this frame's move */
+    s32 frames;     /* 0x8: frames left */
+    s32 frames_max; /* 0xC: the longest count since the shake started */
+};
+
+/* The active camera (D_00186F40): the view matrices update_camera_view_matrices
+   builds, the camera position and basis, and the camera-switch state.
+   initialize_level_render_state clears all 0x3A0 bytes. */
+struct UpdateCam;
+
+struct GameCamera {
+    f32               view_matrices[0x50]; /* 0x000 */
+    Vec4              position;            /* 0x140 */
+    Vec4              rotation; /* 0x150: basis angles while the camera rows are not published */
+    struct CameraShake shake[2];       /* 0x160: apply_camera_shake, one per view row */
+    struct UpdateCam *current_camera;  /* 0x180: the record the view follows */
+    struct UpdateCam *previous_camera; /* 0x184: start_camera_blend's source */
+    u8                pad188[0x258 - 0x188];
+    f32  timed_control_step; /* 0x258: advance_timed_camera_control subtracts it from sequence */
+    u8   pad25C[0x270 - 0x25C];
+    s16  transition_mode; /* 0x270: cam_trans_state's mode; 1/2 start a blend, 3 blends */
+    u8   pad272[0x350 - 0x272];
+    Vec4 forward; /* 0x350 */
+    Vec4 right;   /* 0x360 */
+    Vec4 up;      /* 0x370 */
+    u8   pad380[0x394 - 0x380];
+    s32  underwater;  /* 0x394: camera focus below a water surface */
+    s32  frame_count; /* 0x398: update_camera counts its frames */
+    u8   pad39C[0x4];
+}; /* size 0x3A0 */
+
+extern struct GameCamera game_camera __asm__("D_00186F40");
 
 extern s32                     camera_secondary_mode[] __asm__("D_001413D4");
 extern u8                      camera_position[] __asm__("D_00187080");

@@ -279,12 +279,12 @@ void update_resident_gameplay_state(void) {
         keyframe_flags = keyframe->position.bytes[12];
         view_tan_half_fov[0] = keyframe_angles[3];
         update_view_context();
-        qcopy(&preview_camera.position, &keyframe->position);
-        transform_vector_by_basis(&preview_camera.position,
-                                  &preview_camera.position,
+        qcopy(&game_camera.position, &keyframe->position);
+        transform_vector_by_basis(&game_camera.position,
+                                  &game_camera.position,
                                   level_render_state.player->transform);
-        fast_vec_add(&preview_camera.position,
-                     &preview_camera.position,
+        fast_vec_add(&game_camera.position,
+                     &game_camera.position,
                      &level_render_state.player->position);
         segment_angle = fast_add_rotations(keyframe_angles[2],
                                            level_render_state.player->rotation.components[2]);
@@ -292,17 +292,17 @@ void update_resident_gameplay_state(void) {
         SceVu0RotMatrixX(scratch_vectors, scratch_vectors, keyframe->rotation[0]);
         SceVu0RotMatrixY(scratch_vectors, scratch_vectors, keyframe_angles[1]);
         sceVu0RotMatrixZ(scratch_vectors, scratch_vectors, segment_angle);
-        preview_camera.forward.f[0] = -scratch_vectors[2].components[0];
-        preview_camera.right.f[0] = -scratch_vectors[0].components[0];
-        preview_camera.up.f[0] = scratch_vectors[1].components[0];
-        preview_camera.forward.f[1] = -scratch_vectors[2].components[1];
-        preview_camera.right.f[1] = -scratch_vectors[0].components[1];
-        preview_camera.up.f[1] = scratch_vectors[1].components[1];
-        preview_camera.forward.f[2] = -scratch_vectors[2].components[2];
-        preview_camera.right.f[2] = -scratch_vectors[0].components[2];
-        preview_camera.up.f[2] = scratch_vectors[1].components[2];
+        game_camera.forward.f[0] = -scratch_vectors[2].components[0];
+        game_camera.right.f[0] = -scratch_vectors[0].components[0];
+        game_camera.up.f[0] = scratch_vectors[1].components[0];
+        game_camera.forward.f[1] = -scratch_vectors[2].components[1];
+        game_camera.right.f[1] = -scratch_vectors[0].components[1];
+        game_camera.up.f[1] = scratch_vectors[1].components[1];
+        game_camera.forward.f[2] = -scratch_vectors[2].components[2];
+        game_camera.right.f[2] = -scratch_vectors[0].components[2];
+        game_camera.up.f[2] = scratch_vectors[1].components[2];
         if (D_0015EDB4 != 0) {
-            fast_vec_cross(&preview_camera.right, &preview_camera.up, &preview_camera.forward);
+            fast_vec_cross(&game_camera.right, &game_camera.up, &game_camera.forward);
         }
         for (object_index = 0; object_index < render_sequence.count; object_index++) {
             playback_object = render_sequence.objects[object_index];
@@ -539,7 +539,7 @@ void update_resident_gameplay_state(void) {
                 level_render_state.companion_b->lifetime_stamp =
                     ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
             }
-            noop_callback_a(&preview_camera.position, &preview_camera.rotation, 1, 0, 0);
+            noop_callback_a(&game_camera.position, &game_camera.rotation, 1, 0, 0);
             level_render_state.blend = 0.0f;
             level_render_state.interpolation_velocity = 0.0f;
             if (level_render_state.path >= 0) {

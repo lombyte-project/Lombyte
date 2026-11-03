@@ -214,7 +214,7 @@ void update_debug_camera(void) {
         if ((pad->buttons.held_pressed & 3) != 3) {
             if (controller_words.buttons.w.held & 0x1000) {
                 if (free_look) {
-                    fast_vec_normalize(&step, l00_camera.unk350, g_debug_menu.movement_speed);
+                    fast_vec_normalize(&step, l00_camera.rows, g_debug_menu.movement_speed);
                     fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &step);
                 } else {
                     l00_camera.pos.f[0] += fast_cos(l00_camera.yaw) * g_debug_menu.movement_speed;
@@ -224,7 +224,7 @@ void update_debug_camera(void) {
             }
             if (controller_words.buttons.w.held & 0x4000) {
                 if (free_look) {
-                    fast_vec_normalize(&step, l00_camera.unk350, g_debug_menu.movement_speed);
+                    fast_vec_normalize(&step, l00_camera.rows, g_debug_menu.movement_speed);
                     fast_vec_sub(l00_camera.pos.f, l00_camera.pos.f, &step);
                 } else {
                     l00_camera.pos.f[0] -= fast_cos(l00_camera.yaw) * g_debug_menu.movement_speed;
@@ -234,7 +234,7 @@ void update_debug_camera(void) {
             }
             if (controller_words.buttons.w.held & 1) {
                 if (free_look) {
-                    fast_vec_normalize(&step, l00_camera.unk350 + 4, g_debug_menu.movement_speed);
+                    fast_vec_normalize(&step, l00_camera.rows + 4, g_debug_menu.movement_speed);
                     fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &step);
                 } else {
                     l00_camera.pos.f[0] -= fast_sin(l00_camera.yaw) * g_debug_menu.movement_speed;
@@ -244,7 +244,7 @@ void update_debug_camera(void) {
             }
             if (controller_words.buttons.w.held & 2) {
                 if (free_look) {
-                    fast_vec_normalize(&step, l00_camera.unk350 + 4, g_debug_menu.movement_speed);
+                    fast_vec_normalize(&step, l00_camera.rows + 4, g_debug_menu.movement_speed);
                     fast_vec_sub(l00_camera.pos.f, l00_camera.pos.f, &step);
                 } else {
                     l00_camera.pos.f[0] += fast_sin(l00_camera.yaw) * g_debug_menu.movement_speed;
@@ -283,9 +283,9 @@ void update_debug_camera(void) {
                 r[1].f[0] = sine;
                 r[0].f[0] = cosine;
                 r[1].f[1] = cosine;
-                copy_matrix_rotation(m, l00_camera.unk350);
+                copy_matrix_rotation(m, l00_camera.rows);
                 multiply_matrix(m, m, r);
-                copy_matrix3x4(l00_camera.unk350, m);
+                copy_matrix3x4(l00_camera.rows, m);
             } else {
                 l00_camera.yaw = fast_subtract_rotations(l00_camera.yaw, g_debug_menu.yaw_speed);
             }
@@ -315,9 +315,9 @@ void update_debug_camera(void) {
             r[0].f[2] = sine;
             r[2].f[0] = -sine;
             r[2].f[2] = cosine;
-            copy_matrix_rotation(m, l00_camera.unk350);
+            copy_matrix_rotation(m, l00_camera.rows);
             multiply_matrix(m, m, r);
-            copy_matrix3x4(l00_camera.unk350, m);
+            copy_matrix3x4(l00_camera.rows, m);
         } else {
             l00_camera.pitch = fast_subtract_rotations(l00_camera.pitch, g_debug_menu.pitch_speed);
         }
@@ -348,9 +348,9 @@ void update_debug_camera(void) {
             r[1].f[2] = -sine;
             r[2].f[1] = sine;
             r[2].f[2] = cosine;
-            copy_matrix_rotation(m, l00_camera.unk350);
+            copy_matrix_rotation(m, l00_camera.rows);
             multiply_matrix(rolled_basis, m, r);
-            copy_matrix3x4(l00_camera.unk350, rolled_basis);
+            copy_matrix3x4(l00_camera.rows, rolled_basis);
         }
     } else {
         g_debug_menu.roll_speed = g_debug_menu.roll_speed / 1.5f;
@@ -376,7 +376,7 @@ void update_debug_camera(void) {
     {
         Vec4 r[3];
         if (free_look) {
-            fast_vec_normalize(&r[0], l00_camera.unk350 + 8, g_debug_menu.vertical_speed);
+            fast_vec_normalize(&r[0], l00_camera.rows + 8, g_debug_menu.vertical_speed);
             fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &r[0]);
         } else {
             l00_camera.pos.f[2] += g_debug_menu.vertical_speed;
@@ -386,19 +386,19 @@ void update_debug_camera(void) {
             fast_vec_normalize(&r[0], &r[0], 1.0f);
             fast_vec_normalize(&r[1], &r[1], 1.0f);
             fast_vec_normalize(&r[2], &r[2], 1.0f);
-            copy_matrix3x4(l00_camera.unk350, r);
+            copy_matrix3x4(l00_camera.rows, r);
         }
     }
     if (g_debug_menu.control_mode == DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET &&
-        l00_camera.unk180 != 0) {
-        target = (DebugCameraTarget *)l00_camera.unk180;
+        l00_camera.current_camera != 0) {
+        target = (DebugCameraTarget *)l00_camera.current_camera;
         qcopy(target->position, l00_camera.pos.f);
-        qcopy(target->basis, l00_camera.unk350);
-        qcopy(target->basis + 4, l00_camera.unk350 + 4);
-        qcopy(target->basis + 8, l00_camera.unk350 + 8);
-        qcopy(target->previous_basis, l00_camera.unk350);
+        qcopy(target->basis, l00_camera.rows);
+        qcopy(target->basis + 4, l00_camera.rows + 4);
+        qcopy(target->basis + 8, l00_camera.rows + 8);
+        qcopy(target->previous_basis, l00_camera.rows);
         copy_vector3(target->camera_position, l00_camera.pos.f);
-        reset_follow_camera_state_from_position(l00_camera.unk180);
+        reset_follow_camera_state_from_position(l00_camera.current_camera);
     }
 }
 

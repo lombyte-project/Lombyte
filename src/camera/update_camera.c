@@ -37,7 +37,7 @@ void update_camera(void) {
         CAMERA_TRANSITION_KIND_PRIMARY = 0,
         CAMERA_TRANSITION_PHASE_BLENDING = 3
     };
-    struct PreviewCamera *camera;
+    struct GameCamera *camera;
     struct UpdateCam     *target;
     char                 *camera_shake_base;
     float                 rotation_matrix[16];
@@ -49,7 +49,7 @@ void update_camera(void) {
         cam_trans_state.mode = CAMERA_TRANSITION_PHASE_IDLE;
         cam_trans_state.kind = CAMERA_TRANSITION_KIND_PRIMARY;
     }
-    camera = &preview_camera;
+    camera = &game_camera;
     camera->frame_count++;
     advance_timed_camera_control();
     refresh_camera_control_flags();

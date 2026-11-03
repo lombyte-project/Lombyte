@@ -22,7 +22,7 @@ int         setup_menu_display_text(struct MenuScreen *menu) __asm__("FUN_0021ef
 
 int setup_menu_display_text(struct MenuScreen *menu) {
     char                  formatted_menu_text[0x100];
-    struct PreviewCamera *camera = &preview_camera;
+    struct GameCamera *camera = &game_camera;
     struct Moby          *preview_moby = menu->data.preview.moby;
     int                   count;
 

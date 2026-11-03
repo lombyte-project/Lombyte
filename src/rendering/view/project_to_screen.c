@@ -36,10 +36,10 @@ void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {
     f32           x;
 
     set_identity_matrix(&L);
-    L.v30 = -preview_camera.position.f[0] * 1024.0f;
-    L.v34 = -preview_camera.position.f[1] * 1024.0f;
-    L.v38 = -preview_camera.position.f[2] * 1024.0f;
-    multiply_matrix(&L.v40, (u8 *)&preview_camera + 0x40, &L);
+    L.v30 = -game_camera.position.f[0] * 1024.0f;
+    L.v34 = -game_camera.position.f[1] * 1024.0f;
+    L.v38 = -game_camera.position.f[2] * 1024.0f;
+    multiply_matrix(&L.v40, (u8 *)&game_camera + 0x40, &L);
     fast_vec_scale(&L.blk80, world_pos, 1024.0f);
     L.v8C = 1.0f;
     transform_vector(&L.v90, &L.blk80, &L.v40);

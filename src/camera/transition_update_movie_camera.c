@@ -21,7 +21,7 @@ unsigned char transition_update_movie_camera(void) {
     unsigned char         flag = key[0xC];
     float                *keyframe_rotation_angles = (float *)(key + 0x10);
     char                 *active_camera_position;
-    struct PreviewCamera *camera_basis_write_base;
+    struct GameCamera *camera_basis_write_base;
     float                 camera_rotation_matrix[16];
 
     view_tan_half_fov = 0.63f;
@@ -32,7 +32,7 @@ unsigned char transition_update_movie_camera(void) {
     SceVu0RotMatrixX(camera_rotation_matrix, camera_rotation_matrix, *(float *)(key + 0x10));
     SceVu0RotMatrixY(camera_rotation_matrix, camera_rotation_matrix, keyframe_rotation_angles[1]);
     sceVu0RotMatrixZ(camera_rotation_matrix, camera_rotation_matrix, keyframe_rotation_angles[2]);
-    camera_basis_write_base = (struct PreviewCamera *)(active_camera_position - 0x140);
+    camera_basis_write_base = (struct GameCamera *)(active_camera_position - 0x140);
     camera_basis_write_base->forward.f[0] = -camera_rotation_matrix[8];
     camera_basis_write_base->right.f[0] = -camera_rotation_matrix[0];
     camera_basis_write_base->up.f[0] = camera_rotation_matrix[4];

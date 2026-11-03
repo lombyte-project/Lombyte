@@ -34,9 +34,9 @@ s32 create_rotating_preview_moby(struct RotatingPreviewOwner *preview_owner) {
     if (moby != 0) {
         preview_owner->preview_moby = moby;
         moby->flags = 0;
-        moby->x = preview_camera.position.f[0] + 8.0f;
-        moby->y = preview_camera.position.f[1] + 0.5f;
-        moby->z = preview_camera.position.f[2] - 0.1f;
+        moby->x = game_camera.position.f[0] + 8.0f;
+        moby->y = game_camera.position.f[1] + 0.5f;
+        moby->z = game_camera.position.f[2] - 0.1f;
         moby->rotation_y = -1.9f;
         moby->update = rotate_preview_moby_x;
         *moby->preview_vars = preview_owner;

@@ -96,8 +96,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *mesh_object) {
     colors[0] = color;
     build_moby_bone_transform(mesh_object, 0, object_transform);
     if (game_mode != 0 ||
-        (absolute_float(preview_camera.position.f[0] - mesh_object->position_x) < 16.0f &&
-         absolute_float(preview_camera.position.f[1] - mesh_object->position_y) < 16.0f)) {
+        (absolute_float(game_camera.position.f[0] - mesh_object->position_x) < 16.0f &&
+         absolute_float(game_camera.position.f[1] - mesh_object->position_y) < 16.0f)) {
         mapping_enabled = 1;
     }
     if (game_mode == 6 && ship_substate[0] == 4) {

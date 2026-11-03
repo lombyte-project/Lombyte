@@ -59,7 +59,7 @@ int initialize_menu_preview_objects(struct MenuScreen *preview) {
         held_flag--;
     }
     if (preview_moby != 0) {
-        struct PreviewCamera *camera = &preview_camera;
+        struct GameCamera *camera = &game_camera;
         struct MenuSystem    *g;
 
         preview->data.preview.moby = preview_moby;

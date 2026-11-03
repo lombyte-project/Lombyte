@@ -57,9 +57,9 @@ void camera_object_update(char *camera_object) {
     G_2a4e48    *P;
     float        dot_product_or_threshold;
 
-    if (C->unk180 != 0) {
+    if (C->current_camera != 0) {
         object_position = camera_object + 0x10;
-        qcopy(object_position, (char *)C->unk180 + 0x30);
+        qcopy(object_position, (char *)C->current_camera + 0x30);
         pos = (char *)&hero.motion.pos;
         fast_vec_sub(difference_vector, object_position, pos);
         P = (G_2a4e48 *)(pos - 0x80);

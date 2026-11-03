@@ -134,7 +134,7 @@ void jet_end_mount(int mode) {
         JET_END_MOUNT_REPOSITION_BEHIND_HERO = 0
     };
     LevelCamera *camera_globals = &l00_camera_lui;
-    char        *current_follow_camera = ((char *)camera_globals->unk180);
+    char        *current_follow_camera = ((char *)camera_globals->current_camera);
     initialize_camera_record_handoff_defaults();
     if (mode == JET_END_MOUNT_REPOSITION_BEHIND_HERO) {
         float camera_up_offset[4] __attribute__((aligned(16)));
@@ -148,7 +148,7 @@ void jet_end_mount(int mode) {
         FUN_001f9bf8_2eac18(camera_up_offset, &hero_rotation_matrix[8], 1.2f);
         FUN_001f9a10_2eac18(camera_position, hero_rotation - 0x10, camera_up_offset);
         FUN_001f9a10_2eac18(camera_position, camera_position, camera_backward_offset);
-        *(short *)(((char *)camera_globals->unk180) + 0x8A) = 1;
+        *(short *)(((char *)camera_globals->current_camera) + 0x8A) = 1;
     } else if (mode == 2) {
         *(char *)&camera_globals->unk273 = 0;
         *(short *)(current_follow_camera + 0x7E) = 2;

@@ -312,7 +312,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
     camera_rotation_state = *(S_9f38 **)(camera_object + 0x70);
     update_hero_aligned_camera_position(camera_object);
     FUN_001f9bf8_c(&up, ((u8 *)hero.moby) + 0xE0, 1.0f);
-    if (l00_camera.unk270 == 0 && hero.unk20A5 == 0)
+    if (l00_camera.transition_mode == 0 && hero.unk20A5 == 0)
         hero.unk20A5 = 1;
     rotation_input_target = -controller_state.analog[2];
     if (rotation_input_target == 0.0f)
@@ -344,7 +344,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
         rotation_input_target = convert_integer_to_float((controller_state.held >> 12) & 1);
     if (rotation_input_target == 0.0f)
         rotation_input_target = -convert_integer_to_float((controller_state.held >> 14) & 1);
-    if (l00_camera.unk270 != 0 && hero.state.prev == 2)
+    if (l00_camera.transition_mode != 0 && hero.state.prev == 2)
         rotation_input_target = 0.0f;
     if (invert52 == 0)
         rotation_input_target = -rotation_input_target;
@@ -523,10 +523,10 @@ void initialize_hero_aligned_camera_mode(void) __asm__("FUN_L00_002ea7a0");
 void initialize_hero_aligned_camera_mode(void) {
     LevelCamera *shared_camera_globals = &l00_camera;
     LevelCamera *camera_globals;
-    if (shared_camera_globals->unk270 == 0)
-        shared_camera_globals->unk270 = 1;
+    if (shared_camera_globals->transition_mode == 0)
+        shared_camera_globals->transition_mode = 1;
     else
-        shared_camera_globals->unk270 = 2;
+        shared_camera_globals->transition_mode = 2;
     camera_globals = &l00_camera;
     camera_globals->unk273 = 0;
     camera_globals->unk294 = 0.05f;
@@ -549,7 +549,7 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
     if (hero.unk2284 == 0x51 || hero.unk2284 == 4) {
         return;
     }
-    if (Q.unk270 == 0) {
+    if (Q.transition_mode == 0) {
         Q.unk273 = 0;
         camera_object->selected_camera_mode = 2;
         Q.unk294 = 0.018f;
@@ -571,7 +571,7 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
                 fast_arc_sin(FUN_001f9ab0_2ea810(hero_vector_residual, camera_vector_residual) /
                              residual_length_product);
             if (1.5707964f - dot_product_or_asin_result >= 1.3962634f) {
-                Q.unk270 = 0;
+                Q.transition_mode = 0;
                 camera_object->selected_camera_mode = 4;
                 return;
             }

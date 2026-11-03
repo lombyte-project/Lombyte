@@ -5,8 +5,9 @@
 #include "rnc/math/vector.h"
 
 struct Moby;
+struct UpdateCam;
 
-/* The level's game camera. Turrets and cannons check targets against its
+/* The level's game camera, the level programs' copy of GameCamera (same layout). Turrets and cannons check targets against its
    position, pitch and yaw. A shot sets the two amount/frames pairs (0.03 for
    a few frames), a hard landing sets the first one (0.2 for 40 frames). */
 typedef struct LevelCamera {
@@ -17,16 +18,16 @@ typedef struct LevelCamera {
     f32          pitch; /* 0x154 */
     f32          yaw;   /* 0x158 */
     u8           pad15C[0x4];
-    f32          shake_amount; /* 0x160 */
-    u8           pad164[0x4];
-    s32          shake_frames; /* 0x168 */
-    u8           pad16C[0x4];
-    f32          shake2_amount; /* 0x170 */
-    u8           pad174[0x4];
-    s32          shake2_frames; /* 0x178 */
-    u8           pad17C[0x4];
-    struct Moby *unk180; /* 0x180: the camera moby (its pvars hold the follow camera state) */
-    char        *unk184; /* 0x184 */
+    f32          shake_amount;      /* 0x160: the same two channels as GameCamera.shake */
+    f32          shake_offset;      /* 0x164 */
+    s32          shake_frames;      /* 0x168 */
+    s32          shake_frames_max;  /* 0x16C */
+    f32          shake2_amount;     /* 0x170 */
+    f32          shake2_offset;     /* 0x174 */
+    s32          shake2_frames;     /* 0x178 */
+    s32          shake2_frames_max; /* 0x17C */
+    struct UpdateCam *current_camera;  /* 0x180: the record the view follows */
+    struct UpdateCam *previous_camera; /* 0x184 */
     u8           pad188[0x8];
     u8           unk190[0x30];
     f32          unk1C0[4]; /* 0x1C0 */
@@ -37,7 +38,7 @@ typedef struct LevelCamera {
         focus_moby; /* 0x25C: a moby that takes the camera's attention (blarg helicopter); 0: none */
     s32 focus_time; /* 0x260: reset to 0 when focus_moby is set */
     u8  pad264[0xc];
-    s16 unk270; /* 0x270 */
+    s16 transition_mode; /* 0x270: GameCamera.transition_mode */
     u8  pad272[0x1];
     u8  unk273; /* 0x273 */
     u8  pad274[0x14];
@@ -47,11 +48,11 @@ typedef struct LevelCamera {
     u8  pad298[0x5c];
     s32 unk2F4;
     u8  pad2F8[0x58];
-    f32 unk350[12]; /* 0x350: basis the hero's input direction is turned by */
+    f32 rows[12]; /* 0x350: forward, right and up; the hero's input direction is turned by them */
     u8  pad380[0x10];
     void (*unk390)(void); /* 0x390: called each frame by the follow camera when set */
-    s32 unk394;
-    s32 unk398;
+    s32 underwater;  /* 0x394 */
+    s32 frame_count; /* 0x398 */
     u8  pad39C[0x4];
 } LevelCamera;
 

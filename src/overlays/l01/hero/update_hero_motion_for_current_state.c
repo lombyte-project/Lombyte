@@ -489,7 +489,7 @@ void update_hero_motion_for_current_state(void) {
                 *(OvlQuad *)vector_and_hit_scratch[0] = 0;
                 vector_and_hit_scratch[0][0] = 1.0f;
                 transform_vector_by_basis(
-                    hero.motion.move_dir.f, vector_and_hit_scratch[0], l01_camera.unk350);
+                    hero.motion.move_dir.f, vector_and_hit_scratch[0], l01_camera.rows);
                 hero.motion.move_yaw = l01_camera.yaw;
                 turn_to(0, frame_scale_sq, frame_scale_sq * 0.0f, frame_time * 174.53293f);
                 if (*(int *)&D_L01_0015F688 > 0) {

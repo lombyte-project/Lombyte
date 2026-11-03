@@ -444,7 +444,7 @@ void rebuild_follow_camera_pose(int snap) __asm__("FUN_L00_002e66b8");
 
 void rebuild_follow_camera_pose(int snap) {
     LevelCamera *cams = &l00_camera;
-    char        *camera_moby = ((char *)cams->unk180);
+    char        *camera_moby = ((char *)cams->current_camera);
     char        *track = &cams->unk190; /* the followed player: position at 0, up vector at 0x30 */
     char        *follow_camera_state = *(char **)(camera_moby + 0x70);
     char        *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
