@@ -15,18 +15,18 @@ typedef struct SysbitState {
 
 void _sysbitJump(SysbitState *ctx, s32 bits) {
     s64 total;
-    u32 offset;
+    u32 byte_position;
     u32 unwrapped_byte_pointer;
 
     ctx->bits = 0;
     ctx->cnt = 0;
     total = (ctx->total = (bits * 8) + ctx->total);
-    offset = (u32)(total >> 3);
-    unwrapped_byte_pointer = ctx->field8 + offset;
-    offset = unwrapped_byte_pointer;
+    byte_position = (u32)(total >> 3);
+    unwrapped_byte_pointer = ctx->field8 + byte_position;
+    byte_position = unwrapped_byte_pointer;
     ctx->bit_pointer = unwrapped_byte_pointer;
     if (unwrapped_byte_pointer >= ctx->limit) {
-        ctx->bit_pointer = offset - ctx->wrap_base;
+        ctx->bit_pointer = byte_position - ctx->wrap_base;
     }
     _sysbitFlush(ctx, 0);
 }
