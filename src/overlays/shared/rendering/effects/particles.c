@@ -657,9 +657,9 @@ typedef unsigned int u128_2726d8 __attribute__((mode(TI), aligned(16)));
 
 typedef struct {
     u8 *owner;
-    s32 x4;
-    s32 x8;
-    f32 xC;
+    s32 moby_point_selector;
+    s32 attached_owner_identity;
+    f32 initial_primary_position_w;
 } Q_2726d8;
 
 typedef struct {
@@ -676,7 +676,7 @@ void update_moby_point_attached_particle(P_2726d8 *particle) {
     Q_2726d8   *q = &particle->q;
     u128_2726d8 position_delta;
     f32         save, sc, length_jitter, target_length;
-    if (particle->q.owner == 0 || *(s16 *)(particle->q.owner + 0xA6) != q->x8 ||
+    if (particle->q.owner == 0 || *(s16 *)(particle->q.owner + 0xA6) != q->attached_owner_identity ||
         particle->q.owner[0x20] == 0xFE || particle->q.owner[0x20] == 0xFD) {
         free_effect_particle(particle);
         return;
@@ -684,7 +684,7 @@ void update_moby_point_attached_particle(P_2726d8 *particle) {
     sc = q->xC * random_float_between(0.5f, 1.0f);
     save = particle->secondary_position_w;
     qcopy(&position_delta, &particle->pos);
-    moby_point_position(particle->q.owner, q->x4, &particle->pos);
+    moby_point_position(particle->q.owner, q->moby_point_selector, &particle->pos);
     fast_vec_sub(&position_delta, &position_delta, &particle->pos);
     length_jitter = random_float_between(-0.021f, 0.021f);
     if (fast_vec_length(&position_delta) < 0.0625f) {
