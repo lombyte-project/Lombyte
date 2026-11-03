@@ -3606,7 +3606,7 @@ void check_ledge_grab(void) {
     float probe[4], ledge[4], ray_end[4], hero_level[4], clearance[4], edge_start[4], edge_end[4],
         grab_point[4];
     float down, fwd, up, top, drop, rise, back;
-    float speed, ledge_yaw, offset;
+    float speed, ledge_yaw, ledge_normal_offset;
     int   can_grab, found, edge, i, j, surface, grabbable, frames;
     Obj  *moby_info;
     Obj  *moby_props;
@@ -3762,22 +3762,22 @@ void check_ledge_grab(void) {
         float max = 2.4f;
         float step = 0.03f;
 
-        for (offset = 0.0f; offset < max; offset += step) {
+        for (ledge_normal_offset = 0.0f; ledge_normal_offset < max; ledge_normal_offset += step) {
             qcopy(edge_end, ledge);
             edge_end[2] = ledge[2];
-            edge_end[0] += fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * offset;
-            edge_end[1] += fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * offset;
+            edge_end[0] += fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
+            edge_end[1] += fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
             qcopy(edge_start, edge_end);
             edge_end[2] += 0.5f;
             edge_start[2] -= 0.5f;
             if (!func_L00_001EFFF0_20C568(
                     edge_end, edge_start, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) {
                 qcopy(grab_point, edge_end);
-                offset = step * 0.5f;
-                offset = -offset;
+                ledge_normal_offset = step * 0.5f;
+                ledge_normal_offset = -ledge_normal_offset;
                 grab_point[2] = ledge[2];
-                grab_point[0] += fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * offset;
-                grab_point[1] += fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * offset;
+                grab_point[0] += fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
+                grab_point[1] += fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
                 qcopy(((Hero *)D_0013F450_20C568)->ledge_hang_pos.f, grab_point);
                 ((Hero *)D_0013F450_20C568)->ledge_hang_pos.f[0] +=
                     fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * back;
