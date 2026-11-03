@@ -1012,12 +1012,12 @@ void snagglebeast_update(unsigned char *moby) {
     Vec4              velocity;
     Vec4              direction;
     Vec4              start;
-    Vec4              offset;
+    Vec4              hero_motion_prediction_offset;
     Vec4              step;
     Vec4              projection;
     SnagglebeastVars *snagglebeast_instance_state = (SnagglebeastVars *)MOBY(moby)->pvars;
     int               follow_target;
-    int               timer194;
+    int               triple_spawn_attack_ready;
     int               timer19a;
     int               sight_ready;
     int               target_close;
@@ -1067,7 +1067,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
     }
     timer19a = 0;
-    timer194 = fast_dec_timer_s16(&snagglebeast_instance_state->timer_194) != 0;
+    triple_spawn_attack_ready = fast_dec_timer_s16(&snagglebeast_instance_state->timer_194) != 0;
     if (fast_dec_timer_s16(&snagglebeast_instance_state->timer_19A) && target_distance > 9.0f)
         timer19a = 1;
     sight_ready = 0;
@@ -1105,7 +1105,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (snagglebeast_instance_state->target_nav_point != -1) {
             follow_target = 1;
             path_point_ready = 1;
-            timer194 = 0;
+            triple_spawn_attack_ready = 0;
             target_close = 0;
         } else {
             follow_target = 0;
@@ -1116,7 +1116,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (snagglebeast_instance_state->target_nav_point != -1) {
             follow_target = 1;
             path_point_ready = 1;
-            timer194 = 0;
+            triple_spawn_attack_ready = 0;
             target_close = 0;
         } else {
             follow_target = 0;
@@ -1125,7 +1125,7 @@ void snagglebeast_update(unsigned char *moby) {
     case SNAGGLEBEAST_PHASE_AFTER_FIRST_HEALTH_THRESHOLD:
     case SNAGGLEBEAST_PHASE_AFTER_SECOND_HEALTH_THRESHOLD:
     case SNAGGLEBEAST_PHASE_AFTER_THIRD_HEALTH_THRESHOLD:
-        timer194 = 0;
+        triple_spawn_attack_ready = 0;
         sight_ready = 0;
         if (MOBY(moby)->state != SNAGGLEBEAST_IDLE)
             timer19a = 0;
@@ -1134,7 +1134,7 @@ void snagglebeast_update(unsigned char *moby) {
     case SNAGGLEBEAST_PHASE_SECOND_TIMED_DAMAGE_SEQUENCE:
     case SNAGGLEBEAST_PHASE_FINAL_TIMED_DAMAGE_SEQUENCE:
         target_close = 0;
-        timer194 = 0;
+        triple_spawn_attack_ready = 0;
         sight_ready = 0;
         timer19a = 0;
         break;
@@ -1289,7 +1289,7 @@ void snagglebeast_update(unsigned char *moby) {
                 }
                 MOBY(moby)->state = SNAGGLEBEAST_SWEEP_BEAM_ATTACK;
             }
-            if (timer194) {
+            if (triple_spawn_attack_ready) {
                 if (MOBY(moby)->state != SNAGGLEBEAST_CHASE_TARGET || FUN_00213260(4) == 0) {
                     snagglebeast_instance_state->substate = 0;
                     if (MOBY(moby)->prev_seq != 4) {
@@ -1473,13 +1473,13 @@ void snagglebeast_update(unsigned char *moby) {
                 fast_vec_sub(&direction, &direction, &velocity);
                 qcopy(&projection, ((char *)&hero) + 0x100);
                 projection.f[2] = 0.0f;
-                fast_vec_scale(&offset, &projection, (float)scale_game_frames(0x28));
+                fast_vec_scale(&hero_motion_prediction_offset, &projection, (float)scale_game_frames(0x28));
                 fast_vec_sub(&velocity, &direction, &start);
                 fast_vec_scale(&velocity, &velocity, 0.5f);
                 fast_vec_add(&velocity, &velocity, &start);
                 fast_vec_sub(&velocity, &velocity, &position);
                 fast_vec_sub(&velocity, &velocity, &step);
-                fast_vec_sub(&velocity, &offset, &velocity);
+                fast_vec_sub(&velocity, &hero_motion_prediction_offset, &velocity);
                 fast_vec_add(&start, &start, &velocity);
                 fast_vec_add(&direction, &direction, &velocity);
                 qcopy(snagglebeast_instance_state->rope_start_position, &start);
