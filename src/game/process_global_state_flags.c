@@ -35,6 +35,8 @@ s32 process_global_state_flags(void) {
             *(u16 *)D_0013E05A = 1;
         }
     } else if ((controller_state.pressed & PAD_CROSS) != 0) {
+        /* Load the save but keep item_unlocked[0x1D] and the four Veldin 2
+           gold bolts of the game in progress. */
         old_value = item_unlocked[0x1D];
         for (i = 0; i < 4; i++) {
             backup[i] = (&gold_bolts_collected[LEVEL_VELDIN2 * 4])[i];

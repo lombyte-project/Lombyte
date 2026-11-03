@@ -15,8 +15,6 @@
 /* Per-frame update of a pickup moby: waits for the player to come near, then grants the item. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC828), where it is exact; names translated to the US level program. */
 
-extern unsigned char D_0013D4E3[];
-
 void pokitaru_pickup_update(struct Moby *moby) __asm__("FUN_L11_002cb668");
 
 /* Moby class 23 */
@@ -28,7 +26,7 @@ void pokitaru_pickup_update(struct Moby *moby) {
     };
     switch (moby->state) {
     case PICKUP_INITIALIZE:
-        if (item_available[6] != 0) {
+        if (item_available[ITEM_O2_MASK] != 0) {
             mark_moby_for_removal(moby);
         } else {
             moby->pos.z += 0.75f;
@@ -41,8 +39,8 @@ void pokitaru_pickup_update(struct Moby *moby) {
     case PICKUP_CHECK_PROXIMITY:
         fast_add_rotations(moby->rot.z, frame_time * 4.7123890f);
         if (vector_distance_xy(&moby->pos, D_0013E533 + 0xE9D) < 2.0f) {
-            item_available[6] = 1;
-            D_0013D4E3[0xB] = 1;
+            item_available[ITEM_O2_MASK] = 1;
+            items_acquired[ITEM_O2_MASK] = 1;
             memcard_save_data(0, -1);
             help_request(0x2AF8, 0x3A);
             mark_moby_for_removal(moby);

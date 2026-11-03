@@ -15,11 +15,12 @@ struct SifClientDataStartSound {
 
 extern struct SifClientDataStartSound sound_command_client __asm__("D_0015EBC0");
 extern struct SifClientDataStartSound sound_stream_client __asm__("D_0015EBE8");
-extern s32 D_0015ECAC MACRO_ADDR; /* snd_batch_free_bytes[1], stored through the macro form */
-extern s32            snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
-extern s32            snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda));
-extern s64            snd_cd_callback_data __asm__("D_0015ECD8") MACRO_ADDR;
-extern u32            snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;
+extern s32
+    snd_batch1_free_bytes_macro __asm__("D_0015ECAC") MACRO_ADDR; /* snd_batch_free_bytes[1] */
+extern s32 snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
+extern s32 snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda));
+extern s64 snd_cd_callback_data __asm__("D_0015ECD8") MACRO_ADDR;
+extern u32 snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;
 
 extern s32 snd_send_iop_command_and_wait(s32, s32, void *) __asm__("func_0012E548");
 
@@ -93,7 +94,7 @@ s32 snd_start_sound_system(void) {
     snd_command_buffer2[0] = 0;
     sound_read_work.read_error = 0;
     snd_batch_free_bytes[0] = 0xFFC;
-    D_0015ECAC = 0xFFC;
+    snd_batch1_free_bytes_macro = 0xFFC;
     command_arg = (s32)(u32)&sound_read_work.read_active;
     return snd_send_iop_command_and_wait(0, 4, &command_arg);
 }

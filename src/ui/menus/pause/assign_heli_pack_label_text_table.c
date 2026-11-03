@@ -1,7 +1,6 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_0021DA98). */
 #include "sda.h"
 #include "types.h"
-
 #include "rnc/game/item_state.h"
 
 extern s32 heli_pack_label_text_ids[14] __asm__("D_001D06D0");

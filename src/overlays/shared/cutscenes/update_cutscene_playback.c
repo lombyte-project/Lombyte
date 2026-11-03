@@ -9,6 +9,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
+#include "rnc/save/memory_card_state.h"
 #include "asm.h"
 #include "rnc/streaming/disc_table.h"
 #include "rnc/math/vector.h"
@@ -1133,7 +1134,6 @@ void end_slideshow(void) {
 }
 
 extern s16  cd_read_active[] __asm__("D_001516D8");
-extern char D_0013D1D0[];
 extern s32  slideshow_frame_thresholds[] __asm__("D_L00_00173BF0");
 extern void FUN_0022ca50(void);
 
@@ -1156,7 +1156,7 @@ void update_slideshow(void) {
         fade_level_gp = 0.0f;
     }
     skip_check = 1;
-    if ((u8)D_0013D1D0[2] != 'A') {
+    if ((u8)save_directory_path[2] != 'A') {
         skip_check = 0;
     }
     if (slideshow.state == SLIDESHOW_STATE_WAIT_FOR_TRANSITION) {

@@ -570,6 +570,8 @@ struct MenuPage map_circle_destination_page = {
      SCREEN(map_legend_screen)}
 };
 
+/* BY_SELECTED_LEVEL steps 0xC bytes per (selected level - 1), so the text base
+   is entry 1 and the label shows level_select_texts[level]. */
 struct MenuLabelScreen map_location_label = {
     {                FUN_00219d80,                 render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT | MENU_LABEL_CENTER_Y |
@@ -619,6 +621,8 @@ struct MenuStreamScreen missions_picture_screen = {
     {              D_00138080, MENU_STREAM_UNPACK | MENU_STREAM_FIXED_ENTRY,                     219, 175}
 };
 
+/* BY_SELECTED_LEVEL steps 0xC bytes per (selected level - 1), so the text base
+   is entry 1 and the label shows level_select_texts[level]. */
 struct MenuLabelScreen missions_location_label = {
     {                FUN_00219d80,                 render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT | MENU_LABEL_CENTER_Y |

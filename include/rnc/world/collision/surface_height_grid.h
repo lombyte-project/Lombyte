@@ -11,6 +11,15 @@ typedef struct {
     f32 cell_height;
 } SurfaceHeightGrid;
 
+/* One occlusion zone's box, in 1/1024 units and 0x800 deep. */
+typedef struct {
+    int            x;
+    int            y;
+    int            z;
+    unsigned short w;
+    unsigned short h;
+} ZoneBox;
+
 typedef struct {
     f32 samples[16][16];
     f32 pad_400[0x20];
@@ -34,5 +43,9 @@ typedef struct {
 } SurfaceHeightTile;
 
 extern SurfaceHeightGrid surface_height_grid __asm__("D_001E66E0");
+/* The level's zones: occl_cell_count boxes and one height tile each. */
+extern SurfaceHeightTile *surface_height_tiles __asm__("D_00161190");
+extern ZoneBox           *occl_cell_table __asm__("D_00161194");
+extern s32                occl_cell_count __asm__("D_00161198");
 
 #endif /* LOMBYTE_RNC_WORLD_COLLISION_SURFACE_HEIGHT_GRID_H */

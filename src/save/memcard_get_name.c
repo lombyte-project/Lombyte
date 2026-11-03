@@ -12,38 +12,44 @@ void memcard_get_name(u8 *rom_configuration) {
     s32 i;
 
     if (rom_configuration[0x12] == 'E') {
-        D_0013D1D0[2] = rom_configuration[0x12];
+        save_directory_path[2] = rom_configuration[0x12];
     }
     for (i = 3; i < 7; i++) {
-        D_0013D1D0[i] = rom_configuration[i + 0xD];
+        save_directory_path[i] = rom_configuration[i + 0xD];
     }
     for (i = 8; i < 11; i++) {
-        D_0013D1D0[i] = rom_configuration[i + 0xD];
+        save_directory_path[i] = rom_configuration[i + 0xD];
     }
     for (i = 11; i < 13; i++) {
-        D_0013D1D0[i] = rom_configuration[i + 0xE];
+        save_directory_path[i] = rom_configuration[i + 0xE];
     }
-    strncpy(D_0013D1E8, D_0013D1D0, 13);
-    strncpy(D_0013D200, D_0013D1D0, 13);
-    strncpy(D_0013D220, D_0013D1D0, 13);
-    strncpy(D_0013D240, D_0013D1D0, 13);
-    strncpy(D_0013D240 + 0x14, D_0013D1D0, 13);
-    strncpy(D_0013D270, D_0013D1D0, 13);
+    strncpy(save_directory_pattern, save_directory_path, 13);
+    strncpy(save_icon_sys_path, save_directory_path, 13);
+    strncpy(save_icon_path, save_directory_path, 13);
+    strncpy(save_main_file_path, save_directory_path, 13);
+    strncpy(save_main_file_path + 0x14, save_directory_path, 13);
+    strncpy(save_slot_path_format, save_directory_path, 13);
 }
 
 extern __typeof__(memcard_get_name) func_00209030 __attribute__((alias("FUN_00209030")));
 
-/* The save directory and file paths; memcard_get_name writes the disc's
-   region and product code over the '*'s of each. */
-char D_0013D1D0[] = "/BA****-*****RATCHET";
-char D_0013D1E8[] = "/************RATCHET/*";
-char D_0013D200[] = "/************RATCHET/icon.sys";
-char D_0013D220[] = "/************RATCHET/static.ico";
-char D_0013D240[] = "/************RATCHET/************RATCHET";
-char D_0013D270[] = "/************RATCHET/save%d.bin";
+char save_directory_path[] __asm__("D_0013D1D0") = "/BA****-*****RATCHET";
+char save_directory_pattern[] __asm__("D_0013D1E8") = "/************RATCHET/*";
+char save_icon_sys_path[] __asm__("D_0013D200") = "/************RATCHET/icon.sys";
+char save_icon_path[] __asm__("D_0013D220") = "/************RATCHET/static.ico";
+char save_main_file_path[] __asm__("D_0013D240") = "/************RATCHET/************RATCHET";
+char save_slot_path_format[] __asm__("D_0013D270") = "/************RATCHET/save%d.bin";
 
 struct MemoryCardState memory_card_state = {
-    {{0, 0, 0, 0, 0, -3, 0, 0, {0}, 0, 0, 0}}, 0, 0, -1, 0, 0, 1, -1, 0, 0, -1, -1, 0, -1, 0, 0, 1};
+    .card = {{.save_index = -3}},
+    .active_card = -1,
+    .busy = 1,
+    .fd = -1,
+    .pending_state = -1,
+    .pending_card = -1,
+    .err_card = -1,
+    .unkF4 = 1,
+};
 
 u8 alternate_item_available[128] = {0};
 
@@ -61,9 +67,9 @@ s32 max_coverage_save_result_by_level[LEVEL_RECORD_COUNT] = {0};
 
 struct LevelObjectState level_object_states[LEVEL_OBJECT_STATE_COUNT] = {0};
 
-u8 level_available[20] = {0};
+u8 level_available[LEVEL_RECORD_COUNT] = {0};
 
-u8 level_visit_state[20] = {0};
+u8 level_visit_state[LEVEL_RECORD_COUNT] = {0};
 
 s32 ammo_bought_stats[37] __asm__("D_0013DD70") = {0};
 

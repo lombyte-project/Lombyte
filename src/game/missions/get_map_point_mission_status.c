@@ -1,7 +1,6 @@
 /* Ported from rac1-decomp (src/game/missionfunc.c, func_0020CCD0). */
 #include "sda.h"
 #include "rnc/game/level_object_states.h"
-
 #include "rnc/game/item_state.h"
 
 /* Two flat `&&` returns over level_object_states[20/24/22].state; retail's reuse of

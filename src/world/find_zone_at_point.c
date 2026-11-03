@@ -1,15 +1,5 @@
 /* Ported from rac1-decomp (src/game/vendor.c, func_0023B018). */
 #include "sda.h"
-#include "rnc/rendering/render_globals.h"
-
-typedef struct {
-    int            x;
-    int            y;
-    int            z;
-    unsigned short w;
-    unsigned short h;
-} ZoneBox;
-
 #include "rnc/world/collision/surface_height_grid.h"
 
 extern SurfaceHeightTile *surface_height_tiles_macro __asm__("D_00161190") MACRO_ADDR;
@@ -55,8 +45,8 @@ int find_zone_at_point(float x, float y, float z) {
 
 extern __typeof__(find_zone_at_point) func_00239D60 __attribute__((alias("FUN_00239d60")));
 
-s32 surface_height_tiles = 0;
+SurfaceHeightTile *surface_height_tiles = 0;
 
-s32 occl_cell_table = 0;
+ZoneBox *occl_cell_table = 0;
 
 s32 occl_cell_count = 0;

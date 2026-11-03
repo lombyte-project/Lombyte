@@ -5,6 +5,11 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 #include "rnc/world/data/find_id_in_terminated_table.h"
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
+#include "rnc/game/item_state.h"
+#include "rnc/game/level_state.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 struct MapHdr {
     s32 unk0;
@@ -21,16 +26,8 @@ struct MapEntry {
     s32 b;
 };
 
-#include "rnc/ui/menus/menu_system.h"
-#include "rnc/ui/menus/menu_screen.h"
-
 extern u8 map_cross_destination_page[] __asm__("D_001CF678");
 extern u8 map_circle_destination_page[] __asm__("D_001CF418");
-
-#include "rnc/game/item_state.h"
-
-#include "rnc/game/level_state.h"
-#include "rnc/ui/menus/menu_globals.h"
 
 extern struct MapEntry D_001383A0[];
 extern struct MapEntry D_00138438[];

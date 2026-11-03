@@ -2,7 +2,6 @@
 #include "rnc/world/collision/surface_height_grid.h"
 #include "rnc/math/asm_helpers.h"
 
-extern SurfaceHeightTile *surface_height_tiles __asm__("D_00161190");
 /* Small data, defined above the code so it is reached $gp-relative. */
 s32 surface_height_layer __asm__("D_001610E0") = 2;
 

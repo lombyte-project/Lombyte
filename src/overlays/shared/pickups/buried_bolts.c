@@ -52,7 +52,7 @@ void buried_bolts_update(struct Moby *moby) {
         moby->flags |= 0x41;
         moby->state = AREA_MOBY_STATE_INITIALIZED;
         if (moby->command == 0 && D_0015ED84 < 20) {
-            k = D_0014BF10[D_L01_00161AF0 / 2 + D_0015ED84 * 16];
+            k = buried_bolt_states[D_L01_00161AF0 / 2 + D_0015ED84 * 16];
             if (D_L01_00161AF0 & 1) {
                 k &= 0xF;
             } else {

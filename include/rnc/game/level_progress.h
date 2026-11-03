@@ -24,7 +24,7 @@ extern u8 map_coverage_pages[LEVEL_RECORD_COUNT * MAP_COVERAGE_PAGE_SIZE] __asm_
 /* Gold bolts collected, 4 per level, indexed level * 4 + bolt. */
 extern u8 gold_bolts_collected[LEVEL_RECORD_COUNT * 4] __asm__("D_0014BEC0");
 /* Buried bolt states dug up with the metal detector, 16 bytes per level. */
-extern u8 D_0014BF10[LEVEL_RECORD_COUNT * 16];
+extern u8 buried_bolt_states[LEVEL_RECORD_COUNT * 16] __asm__("D_0014BF10");
 /* Mission state per level slot (0xFF: done), indexed slot + level * 16. */
 extern unsigned char visited52[LEVEL_RECORD_COUNT * 16] __asm__("D_0014C050");
 /* One bit per moby save id, per level. */

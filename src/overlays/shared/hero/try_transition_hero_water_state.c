@@ -30,7 +30,7 @@ int try_transition_hero_water_state(void) {
     int  state;
 
     if (hero.state.control_mode == HERO_MODE_SWIM) {
-        if (item_available[6] != 0) {
+        if (item_available[ITEM_O2_MASK] != 0) {
             decrement = 0;
         } else {
             decrement = 10000 / (scale_game_frames(0x3C) * 15);

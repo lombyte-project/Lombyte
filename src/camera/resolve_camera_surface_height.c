@@ -2,6 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/world/collision/surface_height_grid.h"
 #include "rnc/math/fast_math.h"
 
 struct CameraProbePosition {

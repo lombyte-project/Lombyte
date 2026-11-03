@@ -10,10 +10,12 @@ extern u8  alternate_item_available[128] __asm__("D_0013D388");
 extern u8  item_unlocked[32] __asm__("D_0013D408");
 extern s32 weapon_ammo_counts[37] __asm__("D_0013D428");
 /* item_available and items_acquired hold 37 items: mc_gamedata saves 0x25 bytes of each.
-   Single items read by name: 2 the heli-pack (hero jump code), 33 shifts map ids by
-   0x100 (pick_next_map), 35 the vendor discount. */
+   Single items read by name: 2 the heli-pack (hero jump code), 6 the O2 mask (no air
+   loss when swimming, Fred gives it on Pokitaru), 33 shifts map ids by 0x100
+   (pick_next_map), 35 the vendor discount. */
 extern u8 item_available[37] __asm__("D_0013D4C0");
 #define ITEM_HELI_PACK       2
+#define ITEM_O2_MASK         6
 #define ITEM_MAP_SHIFT       33
 #define ITEM_VENDOR_DISCOUNT 35
 extern u8 item_text_variant[40] __asm__("D_0013E520");
