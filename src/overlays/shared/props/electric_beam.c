@@ -384,7 +384,7 @@ void draw_electric_beam(char *moby) {
     float                   inverse[16] __attribute__((aligned(16)));
     float                   camera[4] __attribute__((aligned(16)));
     float                   prev_offset[4] __attribute__((aligned(16)));
-    float                   offset[4] __attribute__((aligned(16)));
+    float                   strip_half_width_offset[4] __attribute__((aligned(16)));
     float                   view[4] __attribute__((aligned(16)));
     float                   tangent[4] __attribute__((aligned(16)));
     u64                     texture;
@@ -426,18 +426,18 @@ void draw_electric_beam(char *moby) {
         packet[1].colors[k] = color;
         packet[0].colors[k] = color;
     }
-    clear_u64_value(offset);
+    clear_u64_value(strip_half_width_offset);
     {
         int point;
         for (point = 0; point < 31; point++) {
-            qcopy(prev_offset, offset);
+            qcopy(prev_offset, strip_half_width_offset);
             if (point < 30) {
                 fast_vec_sub(tangent, &beam->points[point], &beam->points[point + 2]);
                 fast_vec_sub(view, &beam->points[point + 1], camera);
-                fast_vec_cross(offset, view, tangent);
-                fast_vec_normalize(offset, offset, 0.1f);
+                fast_vec_cross(strip_half_width_offset, view, tangent);
+                fast_vec_normalize(strip_half_width_offset, strip_half_width_offset, 0.1f);
             } else {
-                clear_u64_value(offset);
+                clear_u64_value(strip_half_width_offset);
             }
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
@@ -452,10 +452,10 @@ void draw_electric_beam(char *moby) {
                     qcopy(&packet[0].vertices[corner], &beam->points[point + 1]);
                     if (corner & 1)
                         fast_vec_add(
-                            &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], strip_half_width_offset);
                     else
                         fast_vec_sub(
-                            &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], strip_half_width_offset);
                 }
                 /* Fakematch: 34 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
@@ -469,26 +469,26 @@ void draw_electric_beam(char *moby) {
         }
     }
     for (branch = 0; branch < 4; branch++) {
-        clear_u64_value(offset);
+        clear_u64_value(strip_half_width_offset);
         start_point = beam->branch_start[branch];
         if (start_point >= 0x1F)
             continue;
         if (start_point <= -1)
             continue;
         for (branch_segment_index = 0; branch_segment_index < 3; branch_segment_index++) {
-            qcopy(prev_offset, offset);
+            qcopy(prev_offset, strip_half_width_offset);
             if (branch_segment_index < 2) {
                 fast_vec_sub(tangent,
                              &beam->branches[branch_segment_index][branch],
                              &beam->branches[branch_segment_index + 2][branch]);
                 fast_vec_sub(view, &beam->branches[branch_segment_index + 1][branch], camera);
-                fast_vec_cross(offset, view, tangent);
-                fast_vec_normalize(offset, offset, 0.1f);
+                fast_vec_cross(strip_half_width_offset, view, tangent);
+                fast_vec_normalize(strip_half_width_offset, strip_half_width_offset, 0.1f);
             } else {
-                clear_u64_value(offset);
+                clear_u64_value(strip_half_width_offset);
             }
             if (branch_segment_index == 0)
-                qcopy(prev_offset, offset);
+                qcopy(prev_offset, strip_half_width_offset);
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
                     qcopy(&packet[0].vertices[corner],
@@ -504,10 +504,10 @@ void draw_electric_beam(char *moby) {
                           &beam->branches[branch_segment_index + 1][branch]);
                     if (corner & 1)
                         fast_vec_add(
-                            &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], strip_half_width_offset);
                     else
                         fast_vec_sub(
-                            &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], strip_half_width_offset);
                 }
                 /* Fakematch: 32 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
