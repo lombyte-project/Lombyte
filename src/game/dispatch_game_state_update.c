@@ -14,16 +14,16 @@ void dispatch_game_state_update(void) {
     enum {
         LEVEL_FRAME_RENDER = 4
     };
-    s32 state;
+    s32 render_dispatch_state;
 
     if (space_load_in_progress != 0) {
         return;
     }
-    state = ship_substate[0];
-    if ((u32)state >= 9U) {
+    render_dispatch_state = ship_substate[0];
+    if ((u32)render_dispatch_state >= 9U) {
         return;
     }
-    switch (state) {
+    switch (render_dispatch_state) {
     case 0:
     case 8:
         prepare_debug_profiler_render();
