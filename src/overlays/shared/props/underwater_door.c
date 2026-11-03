@@ -36,7 +36,7 @@ void underwater_door_update(struct Moby *moby) {
         DOOR_HOLD_AWAY_FROM_ORIGIN = 3
     };
     MovingMobyVars *door_motion_data = (MovingMobyVars *)moby->pvars;
-    Vec4            offset;
+    Vec4            displacement_from_origin;
     Vec4            updated_door_position;
     f32             step;
     f32             magnitude;
@@ -78,10 +78,10 @@ void underwater_door_update(struct Moby *moby) {
         increment = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * frame_time;
         increment = reversed ? -increment : increment;
         door_motion_data->travel = travel + increment;
-        offset.f[0] = fast_cos(moby->rot.z) * door_motion_data->travel;
-        offset.f[1] = fast_sin(moby->rot.z) * door_motion_data->travel;
-        offset.f[2] = 0.0f;
-        fast_vec_add(&updated_door_position, &door_motion_data->origin, &offset);
+        displacement_from_origin.f[0] = fast_cos(moby->rot.z) * door_motion_data->travel;
+        displacement_from_origin.f[1] = fast_sin(moby->rot.z) * door_motion_data->travel;
+        displacement_from_origin.f[2] = 0.0f;
+        fast_vec_add(&updated_door_position, &door_motion_data->origin, &displacement_from_origin);
         *(u128 *)&moby->pos = updated_door_position.q;
         magnitude = absolute_float(door_motion_data->travel);
         scale = moby->scale;
@@ -129,10 +129,10 @@ void underwater_door_update(struct Moby *moby) {
         } else {
             door_motion_data->travel = 0.0f;
         }
-        offset.f[0] = fast_cos(moby->rot.z) * door_motion_data->travel;
-        offset.f[1] = fast_sin(moby->rot.z) * door_motion_data->travel;
-        offset.f[2] = 0.0f;
-        fast_vec_add(&updated_door_position, &door_motion_data->origin, &offset);
+        displacement_from_origin.f[0] = fast_cos(moby->rot.z) * door_motion_data->travel;
+        displacement_from_origin.f[1] = fast_sin(moby->rot.z) * door_motion_data->travel;
+        displacement_from_origin.f[2] = 0.0f;
+        fast_vec_add(&updated_door_position, &door_motion_data->origin, &displacement_from_origin);
         *(u128 *)&moby->pos = updated_door_position.q;
         if (door_motion_data->travel != 0.0f)
             return;
