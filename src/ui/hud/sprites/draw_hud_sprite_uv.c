@@ -9,14 +9,14 @@ void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 al
 
 void draw_hud_sprite_uv(
 
-    s32 id, s32 x, s32 y, s32 sprite_width, s32 sprite_height, s32 u, s32 v, s32 alpha) {
+    s32 frame_index, s32 x, s32 y, s32 sprite_width, s32 sprite_height, s32 u, s32 v, s32 alpha) {
     struct HudState   *hud = &hud_state;
     struct HudTexPage *image_page;
     s32                tw;
     s32                th;
     u64               *packet_words;
 
-    image_page = &hud->image_pages[hud->frame_refs[id].image_index];
+    image_page = &hud->image_pages[hud->frame_refs[frame_index].image_index];
     tw = 1 << (image_page->width_log2 + 4);
     th = 1 << (image_page->height_log2 + 4);
     render_packet_cursor.tag->tag = 0x10000005;
@@ -26,7 +26,7 @@ void draw_hud_sprite_uv(
     packet_words = (u64 *)++render_packet_cursor.tag;
     packet_words[0] = (u64)0xE800 << 47 | 0x8001;
     packet_words[1] = 0x5353106;
-    packet_words[2] = get_frame_texture(id);
+    packet_words[2] = get_frame_texture(frame_index);
     packet_words[3] = 0x156;
     packet_words[4] = (u64)alpha << 24 | 0x7F7F7F;
     packet_words[5] = u | ((u64)v << 16);
