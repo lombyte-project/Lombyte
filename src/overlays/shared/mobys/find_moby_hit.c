@@ -604,7 +604,7 @@ int generate_random_points_from_shape_entries(
     unsigned char *list;
     unsigned char *entry;
     int            count, index, chosen, emitted, limit;
-    unsigned int   flags;
+    unsigned int   shape_entry_flags;
     unsigned int   last;
     float          total, weight, radius, extent, random;
     int            type;
@@ -629,10 +629,10 @@ int generate_random_points_from_shape_entries(
                 float        radius, extent;
                 int          type;
                 unsigned int active;
-                flags = *(unsigned int *)(list - 4);
-                last = flags >> 31;
-                type = flags & 0xff;
-                active = flags & 0x20000;
+                shape_entry_flags = *(unsigned int *)(list - 4);
+                last = shape_entry_flags >> 31;
+                type = shape_entry_flags & 0xff;
+                active = shape_entry_flags & 0x20000;
                 if (!(((mask >> index) ^ 1) & 1) && active) {
                     entries[count] = entry;
                     switch (type) {
