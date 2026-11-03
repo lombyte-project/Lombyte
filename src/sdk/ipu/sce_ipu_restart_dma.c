@@ -16,7 +16,7 @@ struct sceIpuDmaEnv {
 void sceIpuRestartDMA(struct sceIpuDmaEnv *ctx) {
     u32 bits;
     u32 magic;
-    u32 count;
+    u32 buffered_quadword_count;
     s32 input_dma_quadword_count;
     s32 input_dma_address;
 
