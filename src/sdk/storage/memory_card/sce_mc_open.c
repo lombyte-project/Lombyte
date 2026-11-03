@@ -17,7 +17,7 @@ extern s32   PollSema();
 extern s32   SignalSema();
 extern char *strncpy();
 
-s32 sceMcOpen(s32 port, s32 slot, char *name, s32 mode) {
+s32 sceMcOpen(s32 port, s32 slot, char *name, s32 open_flags) {
     struct MemoryCardNameParam *request;
     s32                         rpc_result;
 
@@ -34,7 +34,7 @@ s32 sceMcOpen(s32 port, s32 slot, char *name, s32 mode) {
     strncpy(D_00159AC4, name, 0x3FF);
     request = (struct MemoryCardNameParam *)(D_00159AC4 - 0x14);
     request->port = port;
-    request->flags = mode;
+    request->flags = open_flags;
     request->slot = slot;
     request->name[0x3FF] = 0;
     rpc_result =
