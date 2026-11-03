@@ -715,7 +715,7 @@ void update_cutscene_playback(void) {
     s32             done;
     s32             last;
     s32             i;
-    s32             id;
+    s32             current_keyframe_index;
     s32             audio_chunk_frame_threshold;
     Vec4           *keys;
     f32             fade;
@@ -780,9 +780,9 @@ void update_cutscene_playback(void) {
         last = apply_cutscene_camera_key();
         for (i = 0; i < D_L00_0016C860.h44; i++) {
             cutscene_moby = D_L00_0016C860.f178[i];
-            id = D_L00_0016C860.f38 >> 1;
-            cutscene_moby->frame = id;
-            cutscene_moby->next_frame = id + 1;
+            current_keyframe_index = D_L00_0016C860.f38 >> 1;
+            cutscene_moby->frame = current_keyframe_index;
+            cutscene_moby->next_frame = current_keyframe_index + 1;
             update_moby_animation_state(cutscene_moby);
             cutscene_moby->blend = convert_integer_to_float(D_L00_0016C860.f38 & 1) * 0.5f;
             if (last && (D_L00_0016C860.f38 & 1)) {
