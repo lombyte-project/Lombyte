@@ -3282,7 +3282,7 @@ typedef struct {
     char          p420[0x30];
     int           high_jump_stick_direction;
     char          p454[0x58];
-    short         f4AC;
+    short         jump_weapon_input_enabled;
     char          p4AE[0x14E];
     int           wrench_slam_input_lockout;
     char          p600[0x368];
@@ -3308,7 +3308,7 @@ typedef struct {
     int           equipped_slot_state;
     int           equipped_slot_item_id;
     char          p10BC[0x22E];
-    unsigned char f12EA;
+    unsigned char wrench_combo_throw_input_lockout;
     char          p12EB[0xD99];
     int           hero_current_state;
     int           f2088;
@@ -3389,7 +3389,7 @@ int process_hero_equipped_item_input(void) {
             (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP && D_0013F450_h228770.f418 != 0)) {
             Moby_227fa0 *equipped_item_moby;
 
-            if (D_0013F450_h228770.f12EA != 0) {
+            if (D_0013F450_h228770.wrench_combo_throw_input_lockout != 0) {
                 break;
             }
             if (!pad_pressed_within(mask, scale_game_frames(7), &item_press_age_frames[0])) {
@@ -3456,7 +3456,7 @@ int process_hero_equipped_item_input(void) {
                     hero_set_state(0x14, 1);
                     break;
                 }
-                if (D_0013F450_h228770.f12EA != 0) {
+                if (D_0013F450_h228770.wrench_combo_throw_input_lockout != 0) {
                     break;
                 }
                 hero_set_state(0x13, 1);
@@ -3493,7 +3493,7 @@ int process_hero_equipped_item_input(void) {
             if (t > scale_game_frames(0xF)) {
                 t = scale_game_frames(0xF);
             }
-            if (D_0013F450_h228770.f12EA != 0) {
+            if (D_0013F450_h228770.wrench_combo_throw_input_lockout != 0) {
                 break;
             }
             if (!pad_pressed_within(mask, t, 0)) {
@@ -3628,7 +3628,7 @@ int process_hero_equipped_item_input(void) {
             D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_CROUCH ||
             D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_LAND ||
             D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_GRIND ||
-            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP && D_0013F450_h228770.f4AC != 0) ||
+            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP && D_0013F450_h228770.jump_weapon_input_enabled != 0) ||
             (D_0013F450_h228770.hero_current_state == HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL && D_0013F450_h228770.hero_animation_frame > 25.0f)) {
             int t;
             int n;
