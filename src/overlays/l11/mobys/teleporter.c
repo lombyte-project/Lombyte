@@ -359,7 +359,7 @@ void restore_teleporter_visibility_and_collision(struct Moby *moby) {
     moby->flags &= 0xFFFE;
     moby->collision = moby->pclass->collision;
     on = 1;
-    count = 2;
+    child_slot_countdown = 2;
     do {
         if (*child) {
             *(unsigned short *)(*child + 0x34) &= 0xFFFE;
@@ -367,6 +367,6 @@ void restore_teleporter_visibility_and_collision(struct Moby *moby) {
             *(int *)(*child + 0x94) = *(int *)(*(char **)(*child + 0x24) + 0x10);
         }
         child++;
-        count--;
-    } while (count >= 0);
+        child_slot_countdown--;
+    } while (child_slot_countdown >= 0);
 }
