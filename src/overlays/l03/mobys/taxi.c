@@ -36,8 +36,8 @@ s32 is_taxi_in_round_trip_phase(u8 *tested_moby) {
 
 void request_taxi_return_help_message(void *taxi_moby, int mode) __asm__("FUN_L03_002d3100");
 
-void request_taxi_return_help_message(void *taxi_moby, int mode) {
-    if (mode == 1) {
+void request_taxi_return_help_message(void *taxi_moby, int route_help_mode) {
+    if (route_help_mode == 1) {
         try_set_help_message(8, 0xBC9);
     } else {
         try_set_help_message(8, 0xBC9);
