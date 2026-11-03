@@ -42,9 +42,9 @@ extern void memset(void *, s32, s32);
 
 void pool_init_tiles(VuChainRecord *records, int count) __asm__("FUN_L01_002b7a48");
 
-void pool_init_tiles(VuChainRecord *records, int count) {
+void pool_init_tiles(VuChainRecord *records, int tile_count) {
     int i;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < tile_count; i++) {
         int j;
         for (j = 0; j < 3; j++) {
             memset(records[i].slots[j].data, 0, 0x400);
