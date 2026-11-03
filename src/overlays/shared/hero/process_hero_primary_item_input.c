@@ -1256,7 +1256,7 @@ void process_hero_race_object_interactions(void) {
     u8 *third;
     f32 delta[4];
     f32 matrix[16];
-    s32 count, red, green, blue;
+    s32 color_pulse_period_frames, red, green, blue;
     f32 period, wave, ratio;
 
     if (hero.hoverboard_moby == 0)
@@ -1284,9 +1284,9 @@ void process_hero_race_object_interactions(void) {
             } while (boost_trigger_moby != 0);
         }
     }
-    count = scale_game_frames(0x32);
-    period = convert_integer_to_float(count);
-    ratio = (f32)(D_L00_0015F5CC % count) / period;
+    color_pulse_period_frames = scale_game_frames(0x32);
+    period = convert_integer_to_float(color_pulse_period_frames);
+    ratio = (f32)(D_L00_0015F5CC % color_pulse_period_frames) / period;
     ratio += ratio;
     wave = fast_sin(ratio * 3.1415927f + -3.1415927f);
     red = truncate_float_to_s32(wave * 48.0f) + 0x68;
