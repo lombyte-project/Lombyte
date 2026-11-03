@@ -20,7 +20,7 @@ extern s32                    SignalSema();
 extern s32                    sceSifWriteBackDCache();
 extern s32                    strncpy(s8 *, s8 *, s32);
 
-s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
+s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 continue_search, s32 maxent, s32 table) {
     enum {
         RPC_SUBMISSION_SUCCESS = 0
     };
