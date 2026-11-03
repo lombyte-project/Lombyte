@@ -41,12 +41,12 @@ s32 vi_buf_restart_dma(struct ViBuf *video_buffer) {
         s32 block = get_fifo_index(video_buffer, madr);
         if (saved_block != block) {
             s32 tag_id;
-            s32 size = video_buffer->n << 11;
+            s32 ring_capacity_bytes = video_buffer->n << 11;
             qwc = ((u32)video_buffer->data + (saved_block << 11) - madr) >> 4;
             tadr = ((saved_block << 4) + (u32)video_buffer->tag) & 0x0FFFFFFF;
             tag_id =
                 ((u32)video_buffer->data +
-                     (video_buffer->d4_madr - (u32)video_buffer->data) % size ==
+                     (video_buffer->d4_madr - (u32)video_buffer->data) % ring_capacity_bytes ==
                  (u32)video_buffer->data +
                      (((video_buffer->dma_start + video_buffer->dma_n) % video_buffer->n) << 11))
                     ? 0
