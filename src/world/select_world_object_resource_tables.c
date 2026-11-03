@@ -142,3 +142,6 @@ extern void func_00204A40(s32 class_id, s32 buffer_index) __attribute__((alias("
 char class_material_maps[24][16] = {0};
 
 s16 class_runtime_indices[24][16] = {0};
+
+s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR = 0;
+s32 class_resource_count __asm__("D_0015FF48") MACRO_ADDR = 0;

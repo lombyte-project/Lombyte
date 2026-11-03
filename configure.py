@@ -1089,7 +1089,7 @@ SDATA_OVERLAYS = {
     "rendering/texture/dma_tfrag_textures": (0x160EC4, 0x61E44, 4),
     "rendering/frame/swap_render_buffer_chain": (0x160F04, 0x61E84, 4),
     "rendering/texture/dma_tie_textures": (0x160F74, 0x61EF4, 4),
-    "ui/hud/update_hud": (0x15F688, 0x60608, 4),
+    "ui/hud/update_hud": (0x15F680, 0x60600, 12),
     "movies/decoder/video_dec_flush": (0x161218, 0x62198, 4),  # the sequence end code it appends
     "movies/decoder/callbacks/mpeg_error": (0x161220, 0x621A0, 4),  # its "%s\n" format
     "runtime/startup/init_once": (0x15FA88, 0x60A08, 14),  # its reboot message
@@ -1124,6 +1124,11 @@ SDATA_OVERLAYS = {
     "ui/map/map_filters": (0x15FD64, 0x60CE4, 4),  # menu selection count
     "ui/menus/widgets/format_menu_item_text": (0x15FDA0, 0x60D20, 14),  # item text formats
     "ui/loading/append_scrolling_textured_quad": (0x160850, 0x617D0, 16),  # quad GIF tag
+    "game/update_mode_freeze": (0x15EE38, 0x5FDB8, 8),  # two counters
+    "game/startlevel": (0x15EF5C, 0x5FEDC, 4),  # boot image buffer
+    "mobys/update_visible_mobys": (0x15FF24, 0x60EA4, 4),  # visible moby list
+    "world/select_world_object_resource_tables": (0x15FF44, 0x60EC4, 8),  # resource tag and count
+    "ui/hud/init_hud": (0x15F6D8, 0x60658, 8),  # allocation tag
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
@@ -1228,6 +1233,8 @@ DATA_OVERLAYS = {
     "rendering/vu1/vu1_gs_regs_alt": (0x1DE3F0, 0xDF370, 48),  # its GS register packet
     "rendering/vu1/vu1_tex_flush": (0x1DEE00, 0xDFD80, 48),  # its GS register packet
     "ui/map/draw_map_overlay": (0x1E8068, 0xE8FE8, 17),  # no map text
+    "ui/map/update_map_icons": (0x1A2BC0, 0xA3B40, 76),  # icon list of each level
+    "ui/menus/item_preview/draw_menu_preview_objects": (0x1D5020, 0xD5FA0, 96),  # slot draw flags
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the

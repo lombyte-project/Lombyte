@@ -68,3 +68,6 @@ void init_hud(void) {
     clear_blocks_16(hud_bank_main, 0x2800);
     hud_bank_main->unk20 = 0xFF;
 }
+
+/* Small data reached with lui/addiu: the allocation tag. */
+u8 hud_file_str[] __asm__("D_0015F6D8") __attribute__((section(".sdata"))) = "hud.cpp";

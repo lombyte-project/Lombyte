@@ -396,3 +396,7 @@ void update_mode_freeze(void) {
 }
 
 extern __typeof__(update_mode_freeze) func_001FCE28 __attribute__((alias("FUN_001fce28")));
+
+/* Small data: two counters only this file reads and bumps. */
+s32 D_0015EE38 = 0;
+s32 D_0015EE3C = 0;
