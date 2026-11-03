@@ -321,6 +321,9 @@ void woodcut_bot_update(WBMoby *m) {
         WOODCUT_BOT_REACTION_RECOIL_TO_IDLE_WITH_COOLDOWNS = 5,
         WOODCUT_BOT_REACTION_HIT_RECOVERY_WITH_MELEE_WINDOW_GUARD = 6
     };
+    enum {
+        LEG_RIG_ANIMATION_STRIDE_SCALING_DISABLED = 0
+    };
     int            excited = 0;
     WBData        *d = m->d;
     unsigned char *manipulator;
@@ -780,7 +783,7 @@ void woodcut_bot_update(WBMoby *m) {
         } else {
             leg_walker_update(
                 m, d->leg_rig_movement_data, frame_time * 0.0f, m->rot[2], frame_time_sq * 20.0f);
-            if (d->leg_rig_animation_mode == 0) {
+            if (d->leg_rig_animation_mode == LEG_RIG_ANIMATION_STRIDE_SCALING_DISABLED) {
                 if (excited) {
                     m->state = WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED;
                 } else {
