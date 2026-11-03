@@ -157,7 +157,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
 unsigned char *spawn_randomly_rotated_colored_moby(int           source_moby_address,
                                                    V_2df808     *position,
                                                    V_2df808     *vector,
-                                                   int           flags,
+                                                   int           lifetime_frames,
                                                    unsigned char red,
                                                    unsigned char green,
                                                    unsigned char blue,
@@ -188,7 +188,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int           source_moby_add
         qcopy(spawned_moby_private_data, vector);
         qcopy(moby + 0x40, &rotation_copy);
         *(unsigned short *)(spawned_moby_private_data + 0x1e) = alpha;
-        *(int *)(spawned_moby_private_data + 0x14) = flags;
+        *(int *)(spawned_moby_private_data + 0x14) = lifetime_frames;
         *(unsigned short *)(spawned_moby_private_data + 0x1c) =
             *(unsigned short *)(spawned_moby_private_data + 0x14);
         update_entity(moby);
