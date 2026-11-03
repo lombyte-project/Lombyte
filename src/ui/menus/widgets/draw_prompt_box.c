@@ -56,3 +56,6 @@ int draw_prompt_box(struct MenuScreen *prompt) {
 }
 
 extern __typeof__(draw_prompt_box) func_00221B50 __attribute__((alias("FUN_00221b50")));
+
+/* Small data reached with lui/addiu. */
+char fallback_prompt_text[] __asm__("D_001602E8") __attribute__((section(".sdata"))) = "(error)";

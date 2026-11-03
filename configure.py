@@ -1102,6 +1102,17 @@ SDATA_OVERLAYS = {
     "rendering/effects/append_billboard_batch": (0x1608E0, 0x61860, 16),  # its GIF tag
     "rendering/sky/do_sky_gif_paging": (0x160474, 0x613F4, 4),  # its paging bypass tag
     "rendering/view/update_view_context": (0x160720, 0x616A0, 16),  # projection scale and bias
+    "ui/text/draw_dialog_text": (0x15F4E8, 0x60468, 187),  # layout values, colours, format strings
+    "ui/hud/banks/load_hud_banks": (0x15FBB0, 0x60B30, 75),  # allocation tag and stash labels
+    "ui/menus/system/process_menu_entry": (0x160070, 0x60FF0, 41),  # help hud item, separators and formats
+    "ui/menus/save_data/draw_save_slot_list": (0x160300, 0x61280, 47),  # save slot formats
+    "ui/menus/system/setup_menu_display_text": (0x1602A8, 0x61228, 12),  # display text format
+    "ui/menus/weapons/draw_selected_item_ammo": (0x1602B8, 0x61238, 17),  # ammo count formats
+    "ui/menus/pause/draw_pause_ring": (0x1602D8, 0x61258, 10),  # ring glyph labels
+    "ui/menus/widgets/draw_prompt_box": (0x1602E8, 0x61268, 8),  # fallback prompt
+    "ui/menus/widgets/draw_menu_side_indicator": (0x1602F0, 0x61270, 10),  # indicator glyphs
+    "ui/menus/system/emit_selected_graphics_dma_packets": (0x160360, 0x612E0, 8),  # payload words
+    "ui/menus/widgets/render_configured_text_label": (0x160270, 0x611F0, 31),  # label strings
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.

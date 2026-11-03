@@ -57,3 +57,6 @@ int setup_menu_display_text(struct MenuScreen *menu) {
 }
 
 extern __typeof__(setup_menu_display_text) func_0021EF78 __attribute__((alias("FUN_0021ef78")));
+
+/* Small data reached with lui/addiu. */
+char setup_menu_text_format[] __asm__("D_001602A8") __attribute__((section(".sdata"))) = "%s %d %s %d";

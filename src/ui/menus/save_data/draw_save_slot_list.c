@@ -128,3 +128,8 @@ s32 draw_save_slot_list(SaveMenu *menu) {
 }
 
 extern __typeof__(draw_save_slot_list) func_002239E0 __attribute__((alias("FUN_002239e0")));
+
+/* Small data reached with lui/addiu: the save slot formats. */
+char save_slot_play_time_format[] __asm__("D_00160300") __attribute__((section(".sdata"))) = "%02d:%02d";
+char save_slot_grouped_bolts_format[] __asm__("D_00160310") __attribute__((section(".sdata"))) = "%d,%03d,%03d";
+char save_slot_hex_triplet_format[] __asm__("D_00160320") __attribute__((section(".sdata"))) = "%02x/%02x/%02x";

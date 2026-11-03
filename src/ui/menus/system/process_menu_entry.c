@@ -40,7 +40,8 @@ typedef struct {
 
 #include "rnc/ui/menus/system/process_menu_entry_globals.h"
 
-extern s32      menu_help_hud_item_gp __asm__("D_00160070") __attribute__((sda));
+/* Small data, defined above the code so it is reached $gp-relative. */
+s32             menu_help_hud_item __asm__("D_00160070") = -1;
 extern s32      world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
 extern Suffixes menu_bolt_threshold_thousands_separators __asm__("D_001E8680");
 extern char     help_text_integer_placeholder[] __asm__("D_00160088");
@@ -103,8 +104,8 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
                 if (current_menu_entry->unk4 & 0x4000) {
                     noop_callback_n((s16)(current_menu_entry->unk4 ^ 0x4000));
                 } else {
-                    remove_hud_item(menu_help_hud_item_gp);
-                    menu_help_hud_item_gp = -1;
+                    remove_hud_item(menu_help_hud_item);
+                    menu_help_hud_item = -1;
                     noop_callback_o((s16)current_menu_entry->unk4);
                 }
             }
@@ -134,9 +135,9 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
     }
     if (menu_entry_context[5] != 0) {
         copy_text_to_shared_buffer(formatted_help_text);
-    } else if (menu_help_hud_item_gp != -1) {
-        remove_hud_item(menu_help_hud_item_gp);
-        menu_help_hud_item_gp = -1;
+    } else if (menu_help_hud_item != -1) {
+        remove_hud_item(menu_help_hud_item);
+        menu_help_hud_item = -1;
     }
     if (current_menu_entry->unk8 == 0) {
         return;
@@ -186,3 +187,10 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
 extern __typeof__(process_menu_entry) func_00216C48 __attribute__((alias("FUN_00216c48")));
 
 s32 menu_entry_context[6] = {0};
+
+/* Small data reached with lui/addiu: the thousands separators that
+ * menu_bolt_threshold_thousands_separators points to, and the formats. */
+char thousands_separator_comma[] __asm__("D_00160078") __attribute__((section(".sdata"))) = ",";
+char thousands_separator_period[] __asm__("D_00160080") __attribute__((section(".sdata"))) = ".";
+char help_text_integer_placeholder[] __asm__("D_00160088") __attribute__((section(".sdata"))) = "%d";
+char bolt_threshold_number_format[] __asm__("D_00160090") __attribute__((section(".sdata"))) = "%d%s%03d";
