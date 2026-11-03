@@ -54,11 +54,11 @@ typedef struct {
 
 typedef struct {
     u8  p0[0x90];
-    u8  x90[0x34];
-    u8  xc4;
-    u8  xc5;
-    s16 xc6;
-    f32 xc8;
+    u8  smoothed_target_position_storage[0x34];
+    u8  current_attach_mode;
+    u8  previous_attach_mode;
+    s16 transition_timer_remaining;
+    f32 inverse_transition_duration;
 } A002e5730;
 
 typedef struct {
@@ -1324,11 +1324,11 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
     f32        k, x, y;
     u8         attach_mode;
     if (fast_dec_timer_s16(m + 0x106))
-        attach_state->xc5 = attach_state->xc4;
-    k = (f32)attach_state->xc6 * attach_state->xc8;
+        attach_state->previous_attach_mode = attach_state->current_attach_mode;
+    k = (f32)attach_state->transition_timer_remaining * attach_state->inverse_transition_duration;
     compute_follow_camera_target_position(
-        camera, input_offset, &target_position, attach_state->xc4);
-    attach_mode = attach_state->xc4;
+        camera, input_offset, &target_position, attach_state->current_attach_mode);
+    attach_mode = attach_state->current_attach_mode;
     if (attach_mode == CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY ||
         attach_mode == CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION ||
         attach_mode == CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY ||
@@ -1346,7 +1346,7 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
         x = follow_camera_position_default_stiffness_gp;
         y = follow_camera_position_default_damping_gp;
     }
-    interpolate_follow_camera_position(camera, attach_state->x90, &target_position, x, y, 0.0f);
+    interpolate_follow_camera_position(camera, attach_state->smoothed_target_position_storage, &target_position, x, y, 0.0f);
 }
 
 /* Updates the follow camera: eases its focus and offset vectors, then places
