@@ -6,12 +6,12 @@ extern s32 wait_semaphore() __asm__("FUN_001189b0");
 s32        vi_buf_count(struct ViBuf *buf) __asm__("FUN_0023c610");
 
 s32 vi_buf_count(struct ViBuf *input_buffer) {
-    s32 count;
+    s32 byte_count;
 
     wait_semaphore(input_buffer->sema);
-    count = (input_buffer->dma_n << 0xB) + input_buffer->read_bytes;
+    byte_count = (input_buffer->dma_n << 0xB) + input_buffer->read_bytes;
     signal_semaphore(input_buffer->sema);
-    return count;
+    return byte_count;
 }
 
 extern s32 func_0023C610(struct ViBuf *buf) __attribute__((alias("FUN_0023c610")));
