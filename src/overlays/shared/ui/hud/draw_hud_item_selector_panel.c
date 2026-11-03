@@ -251,7 +251,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) __asm__
 
 void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
     float x, y, mag, stick_angle, a, slot_position, previous_slot_angle;
-    int   previous_selected_slot_index, slot_step, stick_slot_index, k, id;
+    int   previous_selected_slot_index, slot_step, stick_slot_index, k, selected_item_id;
     u8   *counters = &hud_element->b70;
 
     hud_element->w7C = scale_game_frames(0xB4);
@@ -359,8 +359,8 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
         int sel = hud_element->w74;
         if (sel >= 0 && (id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].command) != 0) {
             VendorItemInfo *rr;
-            int             ri = id;
-            if (hero_lui.items[0].item_id != id) {
+            int             ri = selected_item_id;
+            if (hero_lui.items[0].item_id != selected_item_id) {
                 if (usage_stats.stat[20].count < 0xFFFF)
                     usage_stats.stat[20].count++;
             }
@@ -371,10 +371,10 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
             if (id == 0x18)
                 hero_lui.launch_drones = 1;
             else
-                hero_lui.pending_item[0] = id;
+                hero_lui.pending_item[0] = selected_item_id;
             rr = &D_L00_001C40B0[ri];
-            if (rr->h8 && rr->hE < weapon_ammo_counts[id])
-                weapon_ammo_counts[id] = rr->hE;
+            if (rr->h8 && rr->hE < weapon_ammo_counts[selected_item_id])
+                weapon_ammo_counts[selected_item_id] = rr->hE;
         }
         if (counters[0])
             counters[0]--;
