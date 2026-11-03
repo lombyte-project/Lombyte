@@ -495,7 +495,7 @@ typedef struct {
     float     x18;
     char      pad1c[0x28];
     short     n;
-    short     x46;
+    short     apply_hero_return_transform;
     char      pad48[0x130];
     M_298b18 *m[1];
 } C_298b18;
@@ -541,7 +541,7 @@ void finish_cutscene(void) {
         hero.motion.pos.f[2] = hero_candidate_z;
     hero.hidden = 0;
     update_hero_item_moby_flags();
-    if (D_L00_0016C860_298b18.x46) {
+    if (D_L00_0016C860_298b18.apply_hero_return_transform) {
         f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
         if (2.0f < f && absolute_float(D_L00_0016C860_298b18.x18 - f) < 2.0f)
             D_L00_0016C860_298b18.x18 = f;
