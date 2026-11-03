@@ -267,10 +267,10 @@ s32_2e1f28 register_beam_slot(s32_2e1f28 id,
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E34F0), where it is exact; names translated to the US level program. */
 int release_beam_slot_by_id(int id) __asm__("FUN_L00_002e2040");
 
-int release_beam_slot_by_id(int id) {
+int release_beam_slot_by_id(int owner_moby_id) {
     unsigned int i;
     for (i = 0; (int)i < 3; i++) {
-        if (beam_slot_id[i] == id) {
+        if (beam_slot_id[i] == owner_moby_id) {
             beam_slot_state[i] = 0;
             beam_slot_id[i] = 0;
             if (beam_endpoint_light[i] != -1) {
