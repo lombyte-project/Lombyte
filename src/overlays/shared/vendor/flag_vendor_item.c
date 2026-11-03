@@ -10,7 +10,7 @@
 
 typedef struct {
     char          pad0[0x39];
-    unsigned char field39;
+    unsigned char flagged;
 } Level13VendorItem;
 
 typedef struct {
@@ -34,5 +34,5 @@ void flag_vendor_item(int slot) {
         (Level13VendorRecord *)(slot * 32 + (int)l13_vendor_item_records);
     Level13VendorItem *item = vendor_item_record->item;
     if (moby->class_id == VENDOR_CLASS_ID)
-        item->field39 = 1;
+        item->flagged = 1;
 }
