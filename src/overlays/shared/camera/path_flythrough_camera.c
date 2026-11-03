@@ -205,7 +205,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) __asm__("FUN_L10_002f5
 
 void update_path_flythrough_camera(struct UpdateCam *cam) {
     float                initial_aim_or_previous_position[4];
-    float                offset[4];
+    float                orientation_vector[4];
     float                point[4];
     float                look_point[4];
     s32                  look_seg;
@@ -238,12 +238,12 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
                     (struct Moby *)(D_L10_0015FFD8_5f18 +
                                     *(int *)(flythrough_descriptor_record + 0x28) * 256);
                 float *ofs = (float *)(flythrough_descriptor_record + 0x2C);
-                offset[0] = ofs[0];
-                offset[1] = ofs[1];
-                offset[2] = ofs[2];
-                offset[3] = 0.0f;
-                transform_vector_by_basis(offset, offset, l10_path_camera_anchor_offset_basis);
-                fast_vec_add(point, &anchor->pos, offset);
+                orientation_vector[0] = ofs[0];
+                orientation_vector[1] = ofs[1];
+                orientation_vector[2] = ofs[2];
+                orientation_vector[3] = 0.0f;
+                transform_vector_by_basis(orientation_vector, orientation_vector, l10_path_camera_anchor_offset_basis);
+                fast_vec_add(point, &anchor->pos, orientation_vector);
                 fast_vec_sub(initial_aim_or_previous_position, point, &cam->pos);
             } else {
                 fast_vec_sub(initial_aim_or_previous_position, look_path + 0x10, &cam->pos);
@@ -334,7 +334,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
         point[3] = 0.0f;
         transform_vector_by_basis(point, point, l10_path_camera_anchor_offset_basis);
         fast_vec_add(look_point, &anchor->pos, point);
-        fast_vec_sub(offset, look_point, &cam->pos);
+        fast_vec_sub(orientation_vector, look_point, &cam->pos);
     } else {
         char *look = ((char *)l10_paths[*(int *)(flythrough_descriptor_record + 0x24)]);
         look_seg = 0;
@@ -347,7 +347,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
                          run->dist / run->path_length * run->look_path_length);
         debug_point_5f18(point, 0.2f);
         noop_main_callback(look + 0x10, look + *(int *)look * 16);
-        fast_vec_sub(offset, point, &cam->pos);
+        fast_vec_sub(orientation_vector, point, &cam->pos);
     }
     fast_vec_scale(point, D_0013F5E0_5f18, -1.0f);
     fast_vec_normalize(&cam->forward, offset, 1.0f);
