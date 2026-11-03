@@ -909,7 +909,7 @@ void emit_moby_particles(struct Moby *moby) {
     float  adjusted_particle_velocity[4];
     float  push[4];
     char  *particle_moby_data;
-    int    count;
+    int    group_count;
     float *pos_ptr;
     void  *moby_position_source;
     int    i;
@@ -917,16 +917,16 @@ void emit_moby_particles(struct Moby *moby) {
     float  angle;
     float  speed;
     float  rise;
-    float  size;
+    float  random_particle_scale;
     float  time_base;
     int    start_color;
     int    end_color;
     int    life;
     int    fade;
 
-    count = l10_toxic_crab_particle_group_count;
+    group_count = l10_toxic_crab_particle_group_count;
     particle_moby_data = (char *)moby->pvars;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < group_count; i++) {
         pos_ptr = pos;
         moby_position_source = &moby->pos;
         qcopy_nc(pos, moby_position_source);
@@ -953,9 +953,9 @@ void emit_moby_particles(struct Moby *moby) {
             l10_toxic_crab_particle_vertical_velocity_drop_scale * D_0015ED70 *
             (float)scale_game_frames(l10_toxic_crab_particle_fade_frames);
         for (j = 0; j < l10_toxic_crab_particles_per_group; j++) {
-            size = random_float_between(0.5f, 1.5f);
-            particle_velocity[3] = size * D_L10_00161E9C;
-            adjusted_particle_velocity[3] = size * D_L10_00161EA0;
+            random_particle_scale = random_float_between(0.5f, 1.5f);
+            particle_velocity[3] = random_particle_scale * D_L10_00161E9C;
+            adjusted_particle_velocity[3] = random_particle_scale * D_L10_00161EA0;
             add_random_offset_to_vector_xyz(pos, l10_toxic_crab_particle_position_jitter);
             add_random_offset_to_vector_xyz(adjusted_particle_velocity,
                                             l10_toxic_crab_particle_adjusted_velocity_jitter *
