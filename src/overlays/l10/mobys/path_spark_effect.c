@@ -76,7 +76,7 @@ void path_spark_effect_update(char *moby) {
         send_blast_hits(effect_data->blast_source,
                         blast_hit_position,
                         nearby_mobys,
-                        count,
+                        nearby_moby_count,
                         0,
                         0x810001,
                         2,
