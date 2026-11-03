@@ -195,7 +195,7 @@ void turret_rocket_update(char *moby) {
     float position[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
     float velocity[4] __attribute__((aligned(16)));
-    float offset[4] __attribute__((aligned(16)));
+    float trail_secondary_motion[4] __attribute__((aligned(16)));
     float angle, magnitude, length, radius, spread;
     int   i, particle_frame_count, particle_second_frame_count, particle_third_frame_count;
     int  *timer_ptr;
@@ -220,11 +220,11 @@ void turret_rocket_update(char *moby) {
         spread = homing_projectile_trail_spread_speed_limit_gp;
         magnitude = random_float_between(0.0f, spread) * frame_time;
         fast_vec_normalize(velocity, moby + 0xe0, magnitude * fast_cos(angle));
-        fast_vec_normalize(offset, moby + 0xd0, magnitude * fast_sin(angle));
-        fast_vec_add(velocity, velocity, offset);
-        qcopy(offset, offset);
+        fast_vec_normalize(trail_secondary_motion, moby + 0xd0, magnitude * fast_sin(angle));
+        fast_vec_add(velocity, velocity, trail_secondary_motion);
+        qcopy(trail_secondary_motion, trail_secondary_motion);
         velocity[3] = homing_projectile_trail_primary_motion_w_gp;
-        offset[3] = homing_projectile_trail_secondary_motion_w_gp;
+        trail_secondary_motion[3] = homing_projectile_trail_secondary_motion_w_gp;
         i++;
         particle_frame_count = truncate_float_to_s32(scale_game_frames_002e8210(
             random_float_between((float)l08_turret_rocket_spark_first_frame_count_base,
@@ -237,7 +237,7 @@ void turret_rocket_update(char *moby) {
                                  (float)l08_turret_rocket_spark_third_frame_count_base * 1.5f)));
         spawn_spark(position,
                     velocity,
-                    offset,
+                    trail_secondary_motion,
                     homing_projectile_trail_initial_spark_word_gp,
                     homing_projectile_trail_second_spark_word_gp,
                     particle_frame_count,
