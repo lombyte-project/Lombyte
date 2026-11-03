@@ -50,7 +50,7 @@ void water_reservoir_update(struct Moby *moby) {
         WATER_RESERVOIR_STATE_ACTIVE = 1
     };
     float *reservoir_state = (float *)moby->pvars;
-    float  pos[4], offset0[4], offset1[4], pos_offset_delta[4], offset_pair_delta[4];
+    float  pos[4], shared_random_offset[4], pair_delta_reference_offset[4], pos_offset_delta[4], offset_pair_delta[4];
     float  fraction, frame_scale;
     int    scaled;
     if (moby->state != WATER_RESERVOIR_STATE_INITIALIZE) {
@@ -89,12 +89,12 @@ update:
             }
             if (random_float_between(0.0f, 1.0f) < fraction) {
                 random_vector(pos, 0.0f, water_reservoir_random_offset_radius_gp);
-                random_vector(offset0, 0.0f, water_reservoir_random_offset_radius_gp);
-                random_vector(offset1, 0.0f, water_reservoir_random_offset_radius_gp);
-                fast_vec_sub(pos_offset_delta, pos, offset0);
+                random_vector(shared_random_offset, 0.0f, water_reservoir_random_offset_radius_gp);
+                random_vector(pair_delta_reference_offset, 0.0f, water_reservoir_random_offset_radius_gp);
+                fast_vec_sub(pos_offset_delta, pos, shared_random_offset);
                 pos_offset_delta[2] += water_reservoir_effect_delta_z_reference_gp -
                                        water_reservoir_unmirrored_effect_spawn_z_offset_gp;
-                fast_vec_sub(offset_pair_delta, offset0, offset1);
+                fast_vec_sub(offset_pair_delta, shared_random_offset, pair_delta_reference_offset);
                 offset_pair_delta[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp -
                                         water_reservoir_effect_delta_z_reference_gp;
                 scaled = water_reservoir_effect_delta_scale_divisor_gp;
