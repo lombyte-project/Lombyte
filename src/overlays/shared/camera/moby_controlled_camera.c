@@ -200,7 +200,7 @@ void apply_moby_camera_control(char *moby) {
     int                encoded_group_target;
     int                index;
     int                duration;
-    int                count;
+    int                wait_or_elapsed_frames;
     int                end;
     int                frames;
     int                active;
@@ -301,12 +301,12 @@ void apply_moby_camera_control(char *moby) {
     moby_camera_control_record->active_frames += 1;
     if (moby_camera_control_record->mode == 1) {
         duration = scale_game_frames(300);
-        count = scale_game_frames(400);
+        wait_or_elapsed_frames = scale_game_frames(400);
         end = scale_game_frames(560);
         frames = scale_game_frames(200);
     } else {
         duration = scale_game_frames(300);
-        count = scale_game_frames(350);
+        wait_or_elapsed_frames = scale_game_frames(350);
         end = scale_game_frames(400);
         frames = scale_game_frames(200);
     }
