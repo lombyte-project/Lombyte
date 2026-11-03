@@ -2313,7 +2313,7 @@ void                      spawn_jittered_effect_particle_with_optional_basis(voi
 void spawn_jittered_effect_particle_with_optional_basis(void *spawn_origin,
                                                         void *optional_spawn_basis,
 
-                                                        f32 size) {
+                                                        f32 local_velocity_scale) {
     M_26de90 *particle;
     V_26de90  transformed_spawn_offset, spawn_offset, local_velocity;
     X_26de90  x;
@@ -2353,12 +2353,12 @@ void spawn_jittered_effect_particle_with_optional_basis(void *spawn_origin,
         q->fade_direction = 1.0f;
         qzero(&local_velocity);
         if (optional_spawn_basis) {
-            local_velocity.f[0] = size;
+            local_velocity.f[0] = local_velocity_scale;
             local_velocity.f[2] = -0.0025f;
             transform_vector_by_basis(&q->v30, &local_velocity, optional_spawn_basis);
         } else {
-            q->v30.f[0] = random_float_between(-size, size);
-            q->v30.f[1] = random_float_between(-size, size);
+            q->v30.f[0] = random_float_between(-local_velocity_scale, local_velocity_scale);
+            q->v30.f[1] = random_float_between(-local_velocity_scale, local_velocity_scale);
             q->v30.f[2] = -0.0025f;
         }
     }
