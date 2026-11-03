@@ -577,6 +577,9 @@ extern u128_222270 D_L02_00174470[] NOT_SDA;
 s32                resolve_hero_position_collisions(s32 mode) __asm__("FUN_L02_00222270");
 
 s32 resolve_hero_position_collisions(s32 excessive_correction_mode) {
+    enum {
+        EXCESSIVE_CORRECTION_LIMIT_TO_CAPSULE_RADIUS = 0xF
+    };
     V_222270     pre_collision_position;
     V_222270     collision_probe_offset;
     V_222270     corrected_displacement;
@@ -640,7 +643,7 @@ s32 resolve_hero_position_collisions(s32 excessive_correction_mode) {
     fast_vec_sub(&corrected_displacement, &hero.motion.pos.q, &pre_collision_position);
     probe_height_or_displacement_length = fast_vec_length(&corrected_displacement);
     if (hero.capsule_radius * 1.5f < probe_height_or_displacement_length) {
-        if (excessive_correction_mode == 0xF) {
+        if (excessive_correction_mode == EXCESSIVE_CORRECTION_LIMIT_TO_CAPSULE_RADIUS) {
             if (512.0f < corrected_displacement.f[0])
                 corrected_displacement.f[0] = 512.0f;
             else if (corrected_displacement.f[0] < -512.0f)
