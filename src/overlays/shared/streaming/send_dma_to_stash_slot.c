@@ -25,7 +25,7 @@ int send_dma_to_stash_slot(int          dma_source_address,
                            unsigned int slot,
                            int          slot_offset_quadwords,
 
-                           int size) {
+                           int transfer_quadwords) {
     int req[4];
     int slot_limit_quadwords;
     if (slot >= 0x40)
@@ -33,11 +33,11 @@ int send_dma_to_stash_slot(int          dma_source_address,
     slot_limit_quadwords = l00_stash_slots[slot].limit;
     if (slot_limit_quadwords == 0)
         return -3;
-    if (slot_limit_quadwords < slot_offset_quadwords + size)
+    if (slot_limit_quadwords < slot_offset_quadwords + transfer_quadwords)
         return -1;
     req[0] = dma_source_address;
     req[1] = (int)(l00_stash_slots[slot].base + slot_offset_quadwords * 16);
-    req[2] = size * 16;
+    req[2] = transfer_quadwords * 16;
     req[3] = 0;
     sceSifSetDma(req, 1);
     return 0;
