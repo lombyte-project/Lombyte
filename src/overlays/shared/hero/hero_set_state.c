@@ -413,7 +413,7 @@ typedef struct {
 
 typedef struct M_221ee0 {
     u8               p0[0x10];
-    OvlQuad          q10;
+    OvlQuad          moby_position;
     u8               p1[0x28 - 0x20];
     struct M_221ee0 *next;
     u8               p2[0x31 - 0x2C];
@@ -459,7 +459,7 @@ void select_hero_grapple_swing_target(void) {
             continue;
         if (3.0f < G.q80.f[2] - *(f32 *)((u8 *)candidate_moby + 0x18))
             continue;
-        if (q->f20 != 0.0f && q->f20 < fast_vec_dist(&G.q80, &candidate_moby->q10))
+        if (q->f20 != 0.0f && q->f20 < fast_vec_dist(&G.q80, &candidate_moby->moby_position))
             continue;
         k = G.i2084;
         target_angle_limit = 0.7853982f;
@@ -498,7 +498,7 @@ void select_hero_grapple_swing_target(void) {
     if (best != 0) {
         qcopy(&v, &G.q80);
         v.f[2] += 0.5f;
-        qcopy(&w, &best->q10);
+        qcopy(&w, &best->moby_position);
         if (FUN_001efa68_221ee0(&v, &w, 2, 0, 0) == 0) {
             G.f998 = bestd;
             G.h99E = 1;
