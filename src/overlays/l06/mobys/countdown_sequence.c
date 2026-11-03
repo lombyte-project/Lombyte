@@ -369,7 +369,7 @@ void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
         VOICE_KIND_LEAVING = 2
     };
     struct TauntVoiceVars *voice_vars = (struct TauntVoiceVars *)moby->pvars;
-    s32                    id = -1;
+    s32                    voice_line_id = -1;
     s32                    lang;
     s32                    chatter_index;
     s32                    i;
@@ -379,7 +379,7 @@ void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
         lang = game_language;
         if (lang != 0)
             lang--;
-        id = voice_vars->greet[lang];
+        voice_line_id = voice_vars->greet[lang];
         break;
     case VOICE_KIND_CHATTER:
         chatter_index = random_integer_below(3);
@@ -398,18 +398,18 @@ void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
         lang = game_language;
         if (lang != 0)
             lang--;
-        id = voice_vars->chatter[chatter_index][lang];
+        voice_line_id = voice_vars->chatter[chatter_index][lang];
         break;
     case VOICE_KIND_LEAVING:
         lang = game_language;
         if (lang != 0)
             lang--;
-        id = voice_vars->leave[lang];
+        voice_line_id = voice_vars->leave[lang];
         break;
     }
-    if (id != -1) {
-        id += 20000;
-        queued_dialogue_id[0] = id;
+    if (voice_line_id != -1) {
+        voice_line_id += 20000;
+        queued_dialogue_id[0] = voice_line_id;
     }
 }
 
