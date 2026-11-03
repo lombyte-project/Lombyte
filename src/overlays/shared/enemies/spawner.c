@@ -152,7 +152,7 @@ void spawner_update(char *moby) {
     float        target[4];
     float        launch_velocity[4];
     float        spawn_position[4];
-    float        offset[4];
+    float        spawn_position_offset[4];
 
     process_spawner_hit_record(moby, spawner_vars);
     switch ((unsigned char)MOBY(moby)->state) {
@@ -275,9 +275,9 @@ void spawner_update(char *moby) {
                 float speed = target_distance * (frame_time_macro * 0.6f);
                 fast_vec_normalize(launch_velocity, launch_velocity, speed);
                 moby_point_position(moby, 0, spawn_position);
-                fast_vec_normalize(offset, launch_velocity, 0.05f);
-                add_random_offset_to_vector_xyz(offset, 0.025f);
-                fast_vec_add(spawn_position, spawn_position, offset);
+                fast_vec_normalize(spawn_position_offset, launch_velocity, 0.05f);
+                add_random_offset_to_vector_xyz(spawn_position_offset, 0.025f);
+                fast_vec_add(spawn_position, spawn_position, spawn_position_offset);
                 launch_velocity[2] = FUN_L00_0025abf0_30ab80(
                     spawn_position, target, 0, speed, -(frame_time_sq_macro * 9.8f));
             }
