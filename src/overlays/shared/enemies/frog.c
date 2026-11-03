@@ -913,14 +913,14 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
             moby_spark_vertical_velocity_correction_scale_gp * frame_time_sq *
             (float)scale_game_frames(moby_spark_second_frame_count_base_gp);
         for (j = 0; j < moby_sparks_per_burst_gp; j++) {
-            float size = random_float_between(0.5f, 1.5f);
+            float spark_size_scale = random_float_between(0.5f, 1.5f);
             int   color0;
             int   color1;
             int   life;
             int   fade;
             float third_frame_count_base;
-            burst_spark_velocity.f[3] = size * D_L06_00161C40;
-            jittered_spark_velocity.f[3] = size * D_L06_00161C44;
+            burst_spark_velocity.f[3] = spark_size_scale * D_L06_00161C40;
+            jittered_spark_velocity.f[3] = spark_size_scale * D_L06_00161C44;
             add_random_offset_to_vector_xyz(&pos, moby_spark_position_jitter_bound_gp);
             add_random_offset_to_vector_xyz(&jittered_spark_velocity,
                                             moby_spark_velocity_jitter_bound_gp * frame_time);
