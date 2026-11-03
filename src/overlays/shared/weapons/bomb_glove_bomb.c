@@ -943,7 +943,7 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
 int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) __asm__("FUN_L00_002ad410");
 
 int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
-    U910 position, velocity, previous, hero_position, offset, start;
+    U910 position, velocity, previous, hero_position, ground_probe_position, start;
     int  timer;
     int  object_hit;
     int  found = 0, i;
@@ -990,8 +990,8 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
         if (coll_hit.moby && coll_hit.i1C <= 0) {
             if ((coll_hit.moby != hero.moby && coll_hit.moby != v->holder) ||
                 timer < scale_game_frames(300) - scale_game_frames(10)) {
-                offset.q = 0;
-                offset.f[2] = 0.5f;
+                ground_probe_position.q = 0;
+                ground_probe_position.f[2] = 0.5f;
                 {
                     H910 *h = &coll_hit;
                     if (v->last_hit != h->moby) {
@@ -1008,8 +1008,8 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
                 object_hit = 1;
                 qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
                 found = 1;
-                fast_vec_add(&offset, &offset, &v->landing);
-                probe_ground_height(&offset, 0, 0.5f);
+                fast_vec_add(&ground_probe_position, &ground_probe_position, &v->landing);
+                probe_ground_height(&ground_probe_position, 0, 0.5f);
             }
         } else if (coll_hit.i1C > 0) {
             qcopy(&v->landing, &coll_hit.pos);
@@ -1038,8 +1038,8 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
             if ((coll_hit.moby == hero.moby || coll_hit.moby == v->holder) &&
                 timer >= scale_game_frames(300) - scale_game_frames(10))
                 continue;
-            offset.q = 0;
-            offset.f[2] = 0.5f;
+            ground_probe_position.q = 0;
+            ground_probe_position.f[2] = 0.5f;
             {
                 H910 *h = &coll_hit;
                 if (v->last_hit != h->moby) {
@@ -1055,8 +1055,8 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
             }
             object_hit = 1;
             qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
-            fast_vec_add(&offset, &offset, &v->landing);
-            probe_ground_height(&offset, 0, 0.5f);
+            fast_vec_add(&ground_probe_position, &ground_probe_position, &v->landing);
+            probe_ground_height(&ground_probe_position, 0, 0.5f);
             break;
         }
     check_surface:
