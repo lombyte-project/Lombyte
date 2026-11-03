@@ -679,7 +679,7 @@ void handle_sharkigator_contact_attack(struct Moby *moby,
                                        int          seq,
                                        int          frame,
                                        int          state_after_target_hit,
-                                       int          id,
+                                       int          attack_target_moby,
                                        float        lo,
                                        float        hi,
                                        float        hit_direction_length,
@@ -713,7 +713,7 @@ void handle_sharkigator_contact_attack(struct Moby *moby,
     if (collect_mobies_in_sphere(probe_center, radius, 0x21, moby, hit_descriptor) == 0) {
         return;
     }
-    if (D_L07_00173ED8 != id) {
+    if (D_L07_00173ED8 != attack_target_moby) {
         return;
     }
     fast_vec_scale(moby_velocity, moby_velocity, -1.0f);
