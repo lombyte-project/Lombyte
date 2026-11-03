@@ -49,7 +49,7 @@ void      load_level_zero_preserving_progress(s32 slot) __asm__("FUN_00226b08");
 
 void load_level_zero_preserving_progress(s32 slot) {
     s32  saved;
-    u32  count;
+    u32  saved_alternate_animation_sequence;
     u8   flag4;
     u8   flag5;
     s32 *items = (s32 *)0x70000150;
@@ -65,7 +65,7 @@ void load_level_zero_preserving_progress(s32 slot) {
     copy_memory_aligned((void *)0x70000170, D_0015EDD0_macro, 0xC);
     copy_memory_aligned((void *)0x70000180, item_unlocked, 0x20);
     saved = current_bolt_count;
-    count = alternate_animation_sequence;
+    saved_alternate_animation_sequence = alternate_animation_sequence;
     flag4 = alternate_item_available[4] != 0;
     flag5 = alternate_item_available[5] != 0;
     bytes = (u8 *)0x70000030;
@@ -92,7 +92,7 @@ void load_level_zero_preserving_progress(s32 slot) {
         alternate_item_available[5] = 1;
         hero_max_health = 8;
     }
-    alternate_animation_sequence = count + 1;
+    alternate_animation_sequence = saved_alternate_animation_sequence + 1;
     D_0015EE1C = 0;
     D_0015EE1D = 0;
     sceCdReadClock(D_0015EE98);
