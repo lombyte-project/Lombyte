@@ -362,7 +362,7 @@ s32 predict_thrown_moby_landing(ThrowVars   *throw_vars,
                                 struct Moby *thrown_moby,
                                 s32          mode) __asm__("FUN_L00_002c3af8");
 
-s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode) {
+s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 linked_moby_policy) {
     Vec4 predicted_position, predicted_velocity, position_scratch, q, ground_probe_position;
     s32  prediction_countdown;
     s32  found = 0;
@@ -388,7 +388,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
         qcopy(&predicted_velocity, &throw_vars->vel);
         if (hero.state.control_mode == HERO_MODE_GRIND)
             fast_vec_add(&predicted_velocity, &predicted_velocity, &hero.motion.displacement);
-        if (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) && mode)
+        if (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) && linked_moby_policy)
             fast_vec_add(&predicted_velocity, &predicted_velocity, &hero.motion.displacement);
         prediction_countdown = scale_game_frames(300);
     } else {
@@ -454,13 +454,13 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
     }
     if (prediction_countdown == 0)
         return 0;
-    if (mode == LANDING_REQUIRE_MOBY_PVARS_LINK) {
+    if (linked_moby_policy == LANDING_REQUIRE_MOBY_PVARS_LINK) {
         if (coll_hit.moby == 0)
             return 0;
         if (FUN_L00_002603d0(coll_hit.moby) == 0)
             goto ret0;
     }
-    if (mode != LANDING_SKIP_LINKED_MOBY_DRAW || coll_hit.moby == 0 ||
+    if (linked_moby_policy != LANDING_SKIP_LINKED_MOBY_DRAW || coll_hit.moby == 0 ||
         !FUN_L00_002603d0(coll_hit.moby))
         add_draw_callback(draw_moby_oscillating_textured_quads, thrown_moby);
     throw_vars->normal.q = coll_hit_normal.q;
