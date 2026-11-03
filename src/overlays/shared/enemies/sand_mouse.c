@@ -534,13 +534,13 @@ void sand_mouse_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->draw_dist = 0xFF;
         if (sand_mouse_vars->parent != -1) {
-            unsigned short id;
+            unsigned short moby_save_id;
             qcopy(((float *)&moby->pos),
                   ((float *)&((struct Moby *)ents)[sand_mouse_vars->parent].pos));
             moby->pos.z = moby->pos.z + 0.02f;
-            if (l01_save_state.cleared[(short)(id = moby->save_id)] != 0 ||
-                (*(int *)((char *)D_0014C190_257218 + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >>
-                 (id & 0x1F)) &
+            if (l01_save_state.cleared[(short)(moby_save_id = moby->save_id)] != 0 ||
+                (*(int *)((char *)D_0014C190_257218 + (((short)moby_save_id >> 5) * 4 + (D_0015ED84 << 8))) >>
+                 (moby_save_id & 0x1F)) &
                     1) {
                 debug_print(sand_mouse_already_completed_message);
                 mark_moby_for_removal(moby);
