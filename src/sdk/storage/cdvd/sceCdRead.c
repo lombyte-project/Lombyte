@@ -32,7 +32,7 @@ s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
         CD_READ_PATTERN_2340_BYTES_PER_SECTOR = 2
     };
     struct CdReadCommand *command = &native_cd_read_request;
-    s32                   size;
+    s32                   transfer_byte_count;
 
     if (!(D_001312F4[0] & 1) && sceCdNcmdDiskReady() == 6) {
         return 0;
@@ -50,19 +50,19 @@ s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
     command->status = (s32 *)native_cd_read_response;
     switch (mode->datapattern) {
     case CD_READ_PATTERN_2328_BYTES_PER_SECTOR:
-        size = count * 2328;
+        transfer_byte_count = count * 2328;
         break;
     case CD_READ_PATTERN_2340_BYTES_PER_SECTOR:
-        size = count * 2340;
+        transfer_byte_count = count * 2340;
         break;
     case CD_READ_PATTERN_2048_BYTES_PER_SECTOR:
     default:
-        size = count * 2048;
+        transfer_byte_count = count * 2048;
         break;
     }
     *(s32 *)native_cd_read_response = 0;
     if (!(D_001312F4[0] & 2)) {
-        sceSifWriteBackDCache(buffer, size);
+        sceSifWriteBackDCache(buffer, transfer_byte_count);
     }
     sceSifWriteBackDCache(native_cd_read_completion_buffer, 0x90);
     sceSifWriteBackDCache(command, sizeof(*command));
