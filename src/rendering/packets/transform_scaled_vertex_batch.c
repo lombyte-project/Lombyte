@@ -16,7 +16,7 @@ void transform_scaled_vertex_batch(struct VertexBatch *object,
                                    u8                 *cursor) __asm__("FUN_0020cd48");
 
 void transform_scaled_vertex_batch(struct VertexBatch *render_instance,
-                                   s32                 count,
+                                   s32                 point_count,
                                    s32                 point_indices,
 
                                    u8 *cursor) {
@@ -24,14 +24,14 @@ void transform_scaled_vertex_batch(struct VertexBatch *render_instance,
 
     scale = *(f32 *)((u8 *)render_instance + 0x2C) * 0.0009765625f;
     func_002106F8();
-    if (count > 0) {
+    if (point_count > 0) {
         do {
             fast_vec_scale(cursor, cursor, scale);
-            count -= 1;
+            point_count -= 1;
             transform_vector_by_basis(cursor, cursor, (u8 *)render_instance + 0xC0);
             fast_vec_add(cursor, cursor, (u8 *)render_instance + 0x10);
             cursor += 0x10;
-        } while (count != 0);
+        } while (point_count != 0);
     }
 }
 
