@@ -382,10 +382,13 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
 s32 volume_camera_swing_check(struct UpdateCam *cam) __asm__("FUN_L00_002ed230");
 
 s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {
+    enum {
+        SWING_CAMERA_TYPE_FORCE_FOLLOW_MODE = 11
+    };
     SwingCameraParams *params = camera_descriptors[swing_camera_record->descriptor_index].params;
     if (params->l_buttons_end == 1 && params->done != 0)
         return 0;
-    if (params->type == 11 && D_001413F4 != 2)
+    if (params->type == SWING_CAMERA_TYPE_FORCE_FOLLOW_MODE && D_001413F4 != 2)
         return 0;
     if ((params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END ||
          params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) &&
