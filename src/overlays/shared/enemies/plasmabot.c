@@ -1271,8 +1271,8 @@ func_L00_0025CE58_2B4828(float *, float, float *, float, float, float) __asm__("
 /* Eases the moby's yaw offset toward target_angle (clamped to about 70 degrees); with `flag` also eases the pitch toward its owner.
    Returns the remaining difference between the target and the current yaw offset. */
 float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) {
-    PlasmabotVars *state = (PlasmabotVars *)MOBY(moby)->pvars;
-    char          *aim_target_moby = *(char **)(&state->target);
+    PlasmabotVars *plasmabot_aim_private_vars = (PlasmabotVars *)MOBY(moby)->pvars;
+    char          *aim_target_moby = *(char **)(&plasmabot_aim_private_vars->target);
     float          turn = fast_subtract_rotations(target_angle, MOBY(moby)->rot.z);
     if (turn > 1.2217304706573486f)
         turn = 1.2217304706573486f;
@@ -1280,14 +1280,14 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
         turn = -1.2217304706573486f;
     {
         float yaw_easing_coefficient = frame_time_sq * 12.566370964050293f;
-        func_L00_0025CE58_2B4828((float *)(&state->aim_yaw_offset),
+        func_L00_0025CE58_2B4828((float *)(&plasmabot_aim_private_vars->aim_yaw_offset),
                                  turn,
-                                 (float *)(&state->aim_yaw_angular_velocity),
+                                 (float *)(&plasmabot_aim_private_vars->aim_yaw_angular_velocity),
                                  yaw_easing_coefficient,
                                  yaw_easing_coefficient,
                                  frame_time * 6.2831854820251465f);
     }
-    build_axis_rotation_quaternion(&state->aim_quaternion_storage, 2, state->aim_yaw_offset);
+    build_axis_rotation_quaternion(&plasmabot_aim_private_vars->aim_quaternion_storage, 2, plasmabot_aim_private_vars->aim_yaw_offset);
     if (flag) {
         float        owner_aim_position[4];
         float        owner_aim_offset[4];
@@ -1304,17 +1304,17 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
         fast_vec_sub(bp, owner_aim_position, &MOBY(moby)->pos);
         owner_aim_offset[2] = owner_aim_offset[2] + 1.5f;
         target_pitch_angle = -fast_arc_tan(vector_length_xy(bp), owner_aim_offset[2]);
-        func_L00_0025CE58_2B4828((float *)(&state->aim_pitch_angle),
+        func_L00_0025CE58_2B4828((float *)(&plasmabot_aim_private_vars->aim_pitch_angle),
                                  target_pitch_angle,
-                                 (float *)(&state->aim_pitch_angular_velocity),
+                                 (float *)(&plasmabot_aim_private_vars->aim_pitch_angular_velocity),
                                  frame_time_sq * 12.566370964050293f,
                                  frame_time_sq * 12.566370964050293f,
                                  frame_time * 6.2831854820251465f);
         cp = pitch_quaternion;
-        build_axis_rotation_quaternion(cp, 1, *(float *)&state->aim_pitch_angle);
-        multiply_quaternions(&state->aim_quaternion_storage, &state->aim_quaternion_storage, cp);
+        build_axis_rotation_quaternion(cp, 1, *(float *)&plasmabot_aim_private_vars->aim_pitch_angle);
+        multiply_quaternions(&plasmabot_aim_private_vars->aim_quaternion_storage, &plasmabot_aim_private_vars->aim_quaternion_storage, cp);
     }
-    return fast_difference_between_rotations(turn, state->aim_yaw_offset);
+    return fast_difference_between_rotations(turn, plasmabot_aim_private_vars->aim_yaw_offset);
 }
 
 extern short *D_L14_001ABF40_3920[] __asm__("D_L14_001ABF40");
