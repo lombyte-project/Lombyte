@@ -312,7 +312,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                     color = (truncate_float_to_s32(alpha * 255.0f / duration) << 24) | 0xffffff;
                 }
                 vertex = 0;
-                offset = i * 0x40;
+                strip_transform_byte_offset = i * 0x40;
                 next_strip_index = i + 1;
                 *(unsigned int *)(buffers.packet.quad + 0x4c) = color;
                 *(unsigned int *)(buffers.packet.quad + 0x48) = color;
@@ -325,7 +325,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                                  linked_processor_vars + group_vertices +
                                      (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
                 }
-                draw_geometry_quad(buffers.packet.quad, strip_transforms + offset, 0);
+                draw_geometry_quad(buffers.packet.quad, strip_transforms + strip_transform_byte_offset, 0);
             }
             row = next_row;
         } while (row < 19);
