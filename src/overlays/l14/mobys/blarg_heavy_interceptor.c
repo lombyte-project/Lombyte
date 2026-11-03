@@ -1260,7 +1260,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
     float                      beam_to_camera_vector[4];
     float                      camera_facing_angles[4];
     float                      rm[3][4];
-    float                      size;
+    float                      quad_scale;
     float                      step;
     int                        r, g, b, a;
     u32                        col;
@@ -1301,7 +1301,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    size = blarg_heavy_interceptor_spinning_beam_initial_quad_scale_gp;
+    quad_scale = blarg_heavy_interceptor_spinning_beam_initial_quad_scale_gp;
     step = blarg_heavy_interceptor_spinning_beam_initial_offset_scale_gp;
     r = blarg_heavy_interceptor_spinning_beam_initial_red_gp;
     g = blarg_heavy_interceptor_spinning_beam_initial_green_gp;
@@ -1316,7 +1316,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
         pk.col[0] = col;
         fast_vec_scale(quad_translation_offset, beam_offset_direction, step);
         for (j = 0; j < 4; j++) {
-            fast_vec_scale(pk.m[j], D_L14_001D8600[j], size);
+            fast_vec_scale(pk.m[j], D_L14_001D8600[j], quad_scale);
             transform_vector(pk.m[j], pk.m[j], beam_quad_transform);
             fast_vec_add(pk.m[j], pk.m[j], quad_translation_offset);
         }
@@ -1330,7 +1330,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
         g -= blarg_heavy_interceptor_spinning_beam_green_decrement_per_pair_gp;
         b -= blarg_heavy_interceptor_spinning_beam_blue_decrement_per_pair_gp;
         a -= blarg_heavy_interceptor_spinning_beam_alpha_decrement_per_pair_gp;
-        size += blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair_gp;
+        quad_scale += blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair_gp;
         step += blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair_gp;
         if (r < 0)
             r = 0;
