@@ -1661,11 +1661,11 @@ void draw_hero_glow_quads(void) {
     int       i;
     int       vehicle_mode;
     int       glow_color;
-    int       mode;
+    int       glow_dispatch_mode;
     V_207d40 *glow_position_cursor;
 
-    mode = D_L00_0015F5C4;
-    if (mode == 2 || mode == 6) {
+    glow_dispatch_mode = D_L00_0015F5C4;
+    if (glow_dispatch_mode == 2 || glow_dispatch_mode == 6) {
         for (i = 0; i < P.queued_glow_count; i++)
             draw_offset_textured_effect_quad(&P.queued_glow_positions[i],
                                              P.queued_glow_colors[i],
