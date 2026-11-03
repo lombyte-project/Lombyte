@@ -1879,8 +1879,8 @@ void set_hero_condition_animation_timer_for_item(int id) {
 /* Sets the short at hero.item_swap_timer to scale_game_frames(0x46) for the listed ids. */
 void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
 
-void set_hero_item_switch_timer_for_item(int id) {
-    switch (id) {
+void set_hero_item_switch_timer_for_item(int selected_item_id) {
+    switch (selected_item_id) {
     case 9:
     case 11:
     case 13:
