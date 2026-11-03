@@ -8,11 +8,11 @@ typedef struct SysbitState {
     u32 wrap_base;
 } SysbitState;
 
-s32 GetSysbitPointer(SysbitState *state, s32 bit_offset) {
-    u32 bit_pointer = state->bit_pointer + (bit_offset >> 3);
+s32 GetSysbitPointer(SysbitState *bitstream, s32 bit_offset) {
+    u32 bit_pointer = bitstream->bit_pointer + (bit_offset >> 3);
 
-    if (bit_pointer >= state->limit) {
-        bit_pointer -= state->wrap_base;
+    if (bit_pointer >= bitstream->limit) {
+        bit_pointer -= bitstream->wrap_base;
     }
     return bit_pointer;
 }
