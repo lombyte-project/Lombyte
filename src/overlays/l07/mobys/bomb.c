@@ -111,7 +111,7 @@ void bombomatic_bomb_update(struct Moby *moby) {
     Vec4f      *pos = &moby->pos;
     DebrisVars *debris_vars = (DebrisVars *)moby->pvars;
     Vec4        previous_debris_position;
-    float       size;
+    float       explosion_effect_size;
 
     qcopy(&previous_debris_position, pos);
     fast_vec_add(pos, pos, debris_vars);
@@ -122,9 +122,9 @@ void bombomatic_bomb_update(struct Moby *moby) {
         coll_sphere(0.5f, pos, 0, debris_vars->ignore) != 0) {
         if (debris_target == NULL || (u16)(debris_target->oclass - 0x371) >= 2) {
             if (moby->visible != 0 || vector_distance_xy(pos, &hero.motion.pos) < 5.0f) {
-                size = 0.0f;
+                explosion_effect_size = 0.0f;
                 if (debris_vars->variant % 3 == 0) {
-                    size = 10.0f;
+                    explosion_effect_size = 10.0f;
                 }
                 if (vector_distance_xy(pos, debris_far_point) > 50.0f) {
                     if (debris_vars->variant & 1) {
@@ -141,7 +141,7 @@ void bombomatic_bomb_update(struct Moby *moby) {
                                         1000.0f,
                                         1.3f,
                                         -1,
-                                        size,
+                                        explosion_effect_size,
                                         0,
                                         1,
                                         -1,
@@ -160,7 +160,7 @@ void bombomatic_bomb_update(struct Moby *moby) {
                                         1000.0f,
                                         1.2f,
                                         0,
-                                        size,
+                                        explosion_effect_size,
                                         0,
                                         1,
                                         -1,
@@ -181,7 +181,7 @@ void bombomatic_bomb_update(struct Moby *moby) {
                                         1000.0f,
                                         1.0f,
                                         0,
-                                        size,
+                                        explosion_effect_size,
                                         0,
                                         1,
                                         -1,
@@ -200,7 +200,7 @@ void bombomatic_bomb_update(struct Moby *moby) {
                                         1000.0f,
                                         1.0f,
                                         0,
-                                        size,
+                                        explosion_effect_size,
                                         0,
                                         1,
                                         -1,
