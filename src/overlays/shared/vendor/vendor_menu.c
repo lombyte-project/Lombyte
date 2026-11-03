@@ -583,7 +583,7 @@ void start_vendor_exit_cutscene(void) {
     };
     VendorMenu              *vendor_state;
     VendorMoby_29a6b0       *moby;
-    s32                      index, exit_cutscene_id, offset;
+    s32                      index, exit_cutscene_id, cutscene_resource_base_address;
     f32                     *cutscene_world_origin;
     struct MusicStreamState *state;
     s32                     *selected;
@@ -614,11 +614,11 @@ void start_vendor_exit_cutscene(void) {
     vu1_sync_chain(1);
     select_level_vu_chain();
     selected = (s32 *)((char *)vendor_state + 0x48);
-    offset = D_L00_001611CC - 0x40000;
-    D_L00_001611CC = offset;
+    cutscene_resource_base_address = D_L00_001611CC - 0x40000;
+    D_L00_001611CC = cutscene_resource_base_address;
     index = vendor_menu.purchased_item;
-    D_L00_0016C860_lui.x58 = D_L00_00173E00[1] + offset;
-    D_L00_0016C860_lui.x5c = D_L00_00173E00[2] + offset;
+    D_L00_0016C860_lui.x58 = D_L00_00173E00[1] + cutscene_resource_base_address;
+    D_L00_0016C860_lui.x5c = D_L00_00173E00[2] + cutscene_resource_base_address;
     exit_cutscene_id = vendor_exit_cutscene_ids_by_item[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400 = 0;
