@@ -724,7 +724,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
     V6    A;
     V6    B;
     float view_origin_distance, extra, sc;
-    int   count, i, j;
+    int   particle_count, i, j;
 
     qcopy(elevated_spawn_position, &MOBY(source_moby)->pos);
     elevated_spawn_position[2] += 0.3f;
@@ -739,15 +739,15 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
         clear_u64_value(particle_velocity);
         view_origin_distance = fast_vec_length(view_origin_delta);
         if (view_origin_distance < 8.0f) {
-            count = truncate_float_to_s32(view_origin_distance) + 2;
+            particle_count = truncate_float_to_s32(view_origin_distance) + 2;
         } else {
-            count = 10;
+            particle_count = 10;
         }
         extra = 0.0f;
         if (view_origin_distance < 7.0f)
             extra = 7.0f - view_origin_distance;
-        if (count > 0) {
-            i = count;
+        if (particle_count > 0) {
+            i = particle_count;
             do {
                 int *pa, *pb;
                 int  particle_frame_count, particle_random_frame_value;
