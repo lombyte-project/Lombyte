@@ -134,8 +134,8 @@ typedef struct {
     int   first_linked_moby_index;
     int   second_linked_moby_index;
     int   third_linked_moby_index;
-    short n30;
-    short n32;
+    short linked_moby_event_stage;
+    short angle_override_stage;
     int   side_zero_rail_spline_index;
     int   p38;
 } CamRec5d48;
@@ -189,12 +189,12 @@ typedef struct {
     float aC;
     float a10;
     int   n14;
-    float t18;
-    float t1C;
-    float t20;
-    float t24;
-    float t28;
-    float t2C;
+    float side_zero_heading_override;
+    float side_one_heading_override;
+    float side_two_heading_override;
+    float side_zero_progress_threshold;
+    float side_one_progress_threshold;
+    float side_two_progress_threshold;
 } CamKey5d48;
 
 typedef struct {
@@ -271,16 +271,16 @@ void update_path_key_camera(char *path_key_camera) {
     D_L14_001624C0 =
         (path_key_camera_rail_distances[side][hero.rail_segment] + hero.rail_seg_frac) /
         path_key_camera_rail_distances[side][999];
-    if (rec->n32 < 2 &&
-        path_key_camera_angle_override_progress_thresholds[rec->n32][side] <= D_L14_001624C0) {
-        rec->n32++;
+    if (rec->angle_override_stage < 2 &&
+        path_key_camera_angle_override_progress_thresholds[rec->angle_override_stage][side] <= D_L14_001624C0) {
+        rec->angle_override_stage++;
     }
-    if (rec->n32 == 1) {
+    if (rec->angle_override_stage == 1) {
         ((CamBones5d48 *)D_L14_0017AD80)->f274 = D_L14_001624B0 * 0.017453292f;
         ((CamBones5d48 *)D_L14_0017AD80)->f278 = D_L14_001624AC * 0.017453292f;
     }
-    if (rec->n30 < 3 &&
-        path_key_camera_linked_moby_event_progress_thresholds[rec->n30][side] <= D_L14_001624C0) {
+    if (rec->linked_moby_event_stage < 3 &&
+        path_key_camera_linked_moby_event_progress_thresholds[rec->linked_moby_event_stage][side] <= D_L14_001624C0) {
         struct Moby *first_linked_moby =
             (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->first_linked_moby_index << 8));
         struct Moby *second_linked_moby =
@@ -291,19 +291,19 @@ void update_path_key_camera(char *path_key_camera) {
         if (hero.rail_spline ==
             (s32)l14_splines_macro[MOBYDATA_5d48(first_linked_moby)->zone].path) {
             first_linked_moby->command = 1;
-            if (rec->n30 > 0) {
+            if (rec->linked_moby_event_stage > 0) {
                 {
                     CamMobyData5d48 *d = MOBYDATA_5d48(second_linked_moby);
 
                     second_linked_moby->command = 5;
-                    if (rec->n30 == 2) {
+                    if (rec->linked_moby_event_stage == 2) {
                         CamMobyData5d48 *d2;
 
                         d->timer = scale_game_frames(0x2D);
                         third_linked_moby->command = 5;
                         d2 = MOBYDATA_5d48(third_linked_moby);
                         d2->timer = scale_game_frames(0x6E);
-                    } else if (rec->n30 == 3) {
+                    } else if (rec->linked_moby_event_stage == 3) {
                         d->timer = scale_game_frames(0x2D);
                     } else {
                         d->timer = scale_game_frames(0x50);
@@ -313,19 +313,19 @@ void update_path_key_camera(char *path_key_camera) {
         } else if (hero.rail_spline ==
                    (s32)l14_splines_macro[MOBYDATA_5d48(second_linked_moby)->zone].path) {
             second_linked_moby->command = 1;
-            if (rec->n30 > 0) {
+            if (rec->linked_moby_event_stage > 0) {
                 if (random_integer_below(2)) {
                     CamMobyData5d48 *d = MOBYDATA_5d48(first_linked_moby);
 
                     first_linked_moby->command = 5;
-                    if (rec->n30 == 2) {
+                    if (rec->linked_moby_event_stage == 2) {
                         CamMobyData5d48 *d2;
 
                         d->timer = scale_game_frames(0x2D);
                         third_linked_moby->command = 5;
                         d2 = MOBYDATA_5d48(third_linked_moby);
                         d2->timer = scale_game_frames(0x6E);
-                    } else if (rec->n30 == 3) {
+                    } else if (rec->linked_moby_event_stage == 3) {
                         d->timer = scale_game_frames(0x2D);
                     } else {
                         d->timer = scale_game_frames(0x50);
@@ -334,14 +334,14 @@ void update_path_key_camera(char *path_key_camera) {
                     CamMobyData5d48 *d = MOBYDATA_5d48(third_linked_moby);
 
                     third_linked_moby->command = 5;
-                    if (rec->n30 == 2) {
+                    if (rec->linked_moby_event_stage == 2) {
                         CamMobyData5d48 *d2;
 
                         d->timer = scale_game_frames(0x2D);
                         first_linked_moby->command = 5;
                         d2 = MOBYDATA_5d48(first_linked_moby);
                         d2->timer = scale_game_frames(0x6E);
-                    } else if (rec->n30 == 3) {
+                    } else if (rec->linked_moby_event_stage == 3) {
                         d->timer = scale_game_frames(0x2D);
                     } else {
                         d->timer = scale_game_frames(0x50);
@@ -350,19 +350,19 @@ void update_path_key_camera(char *path_key_camera) {
             }
         } else {
             third_linked_moby->command = 1;
-            if (rec->n30 > 0) {
+            if (rec->linked_moby_event_stage > 0) {
                 {
                     CamMobyData5d48 *d = MOBYDATA_5d48(second_linked_moby);
 
                     second_linked_moby->command = 5;
-                    if (rec->n30 == 2) {
+                    if (rec->linked_moby_event_stage == 2) {
                         CamMobyData5d48 *d2;
 
                         d->timer = scale_game_frames(0x2D);
                         first_linked_moby->command = 5;
                         d2 = MOBYDATA_5d48(first_linked_moby);
                         d2->timer = scale_game_frames(0x6E);
-                    } else if (rec->n30 == 3) {
+                    } else if (rec->linked_moby_event_stage == 3) {
                         d->timer = scale_game_frames(0x2D);
                     } else {
                         d->timer = scale_game_frames(0x50);
@@ -370,17 +370,17 @@ void update_path_key_camera(char *path_key_camera) {
                 }
             }
         }
-        rec->n30++;
+        rec->linked_moby_event_stage++;
     }
     /* Unused reads (not in rac1-decomp's SN build): with them the game compiler computes the key table's
      * high half and the next key index above the three side tests, as retail does. */
     keys = D_L14_001F6488;
     next_camera_key_index = st->idx + 1;
-    if (side == 0 && D_L14_001F6488[st->idx + 1].t24 <= D_L14_001624C0) {
+    if (side == 0 && D_L14_001F6488[st->idx + 1].side_zero_progress_threshold <= D_L14_001624C0) {
         st->idx++;
-    } else if (side == 1 && D_L14_001F6488[st->idx + 1].t28 <= D_L14_001624C0) {
+    } else if (side == 1 && D_L14_001F6488[st->idx + 1].side_one_progress_threshold <= D_L14_001624C0) {
         st->idx++;
-    } else if (side == 2 && D_L14_001F6488[st->idx + 1].t2C <= D_L14_001624C0) {
+    } else if (side == 2 && D_L14_001F6488[st->idx + 1].side_two_progress_threshold <= D_L14_001624C0) {
         st->idx++;
     }
     if (D_L14_001F6488[st->idx + 1].n14 == 0x2710) {
@@ -391,14 +391,14 @@ void update_path_key_camera(char *path_key_camera) {
         float den;
 
         if (side == 0) {
-            den = D_L14_001F6488[st->idx + 1].t24 - D_L14_001F6488[st->idx].t24;
-            num = D_L14_001624C0 - D_L14_001F6488[st->idx].t24;
+            den = D_L14_001F6488[st->idx + 1].side_zero_progress_threshold - D_L14_001F6488[st->idx].side_zero_progress_threshold;
+            num = D_L14_001624C0 - D_L14_001F6488[st->idx].side_zero_progress_threshold;
         } else if (side == 1) {
-            den = D_L14_001F6488[st->idx + 1].t28 - D_L14_001F6488[st->idx].t28;
-            num = D_L14_001624C0 - D_L14_001F6488[st->idx].t28;
+            den = D_L14_001F6488[st->idx + 1].side_one_progress_threshold - D_L14_001F6488[st->idx].side_one_progress_threshold;
+            num = D_L14_001624C0 - D_L14_001F6488[st->idx].side_one_progress_threshold;
         } else {
-            den = D_L14_001F6488[st->idx + 1].t2C - D_L14_001F6488[st->idx].t2C;
-            num = D_L14_001624C0 - D_L14_001F6488[st->idx].t2C;
+            den = D_L14_001F6488[st->idx + 1].side_two_progress_threshold - D_L14_001F6488[st->idx].side_two_progress_threshold;
+            num = D_L14_001624C0 - D_L14_001F6488[st->idx].side_two_progress_threshold;
         }
         key_interpolation_fraction = num / den;
     }
@@ -434,14 +434,14 @@ void update_path_key_camera(char *path_key_camera) {
         fast_add_rotations(fast_arc_tan(hero.moby->rot_row1.x, hero.moby->rot_row1.y), cur->f0);
     D_L14_001624BC = camera_placement_heading;
     if (side == 0) {
-        current_key_heading_override = D_L14_001F6488[st->idx].t18;
-        heading_blend_target = D_L14_001F6488[st->idx + 1].t18;
+        current_key_heading_override = D_L14_001F6488[st->idx].side_zero_heading_override;
+        heading_blend_target = D_L14_001F6488[st->idx + 1].side_zero_heading_override;
     } else if (side == 1) {
-        current_key_heading_override = D_L14_001F6488[st->idx].t1C;
-        heading_blend_target = D_L14_001F6488[st->idx + 1].t1C;
+        current_key_heading_override = D_L14_001F6488[st->idx].side_one_heading_override;
+        heading_blend_target = D_L14_001F6488[st->idx + 1].side_one_heading_override;
     } else {
-        current_key_heading_override = D_L14_001F6488[st->idx].t20;
-        heading_blend_target = D_L14_001F6488[st->idx + 1].t20;
+        current_key_heading_override = D_L14_001F6488[st->idx].side_two_heading_override;
+        heading_blend_target = D_L14_001F6488[st->idx + 1].side_two_heading_override;
     }
     if (heading_blend_target == 0.0f && current_key_heading_override == 0.0f) {
         heading_blend_target = (st->fC != 0.0f) ? st->fC : st->f8;
