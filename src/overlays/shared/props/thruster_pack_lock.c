@@ -877,7 +877,7 @@ void update_moby_path_transform(char *moby) {
     char *moby_vars = (char *)MOBY(moby)->pvars;
     int   i = *(int *)(moby_vars + 0x64);
     char *table = (char *)l11_paths[*(int *)(moby_vars + 0x60)];
-    int   count;
+    int   path_point_count;
     float matrix[16];
     float current_path_point[4], next_path_point[4], lookahead_path_point[4];
     float point[4], turn[4], direction[4];
@@ -886,9 +886,9 @@ void update_moby_path_transform(char *moby) {
     float speed;
 
     qcopy(current_path_point, table + i * 16 + 0x10);
-    count = *(int *)table;
-    qcopy(next_path_point, table + (i + 1) % count * 16 + 0x10);
-    qcopy(lookahead_path_point, table + (i + 2) % count * 16 + 0x10);
+    path_point_count = *(int *)table;
+    qcopy(next_path_point, table + (i + 1) % path_point_count * 16 + 0x10);
+    qcopy(lookahead_path_point, table + (i + 2) % path_point_count * 16 + 0x10);
     clear_u64_value(turn);
     angle_a = fast_arc_tan(current_path_point[0] - next_path_point[0],
                            current_path_point[1] - next_path_point[1]);
