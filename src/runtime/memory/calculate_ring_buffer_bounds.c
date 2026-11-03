@@ -10,8 +10,8 @@ struct RingBufferConfig {
 extern struct RingBufferConfig D_001940C0;
 s32 calculate_ring_buffer_bounds(u32 size, s32 *out_start, s32 *out_end) __asm__("FUN_001fd6e0");
 
-s32 calculate_ring_buffer_bounds(u32 size, s32 *out_start, s32 *out_end) {
-    if (size > 0x20000U) {
+s32 calculate_ring_buffer_bounds(u32 byte_count, s32 *out_start, s32 *out_end) {
+    if (byte_count > 0x20000U) {
         *out_start = 0;
         *out_end = 0;
         return -1;
