@@ -34,7 +34,7 @@ void process_bgm_display_text_event(u64           color,
                                     f32 scale) {
     u8           *text_cursor;
     s32           i;
-    f32           size;
+    f32           glyph_quad_size;
     f32           top;
     f32           dx;
     f32           dy;
@@ -45,7 +45,7 @@ void process_bgm_display_text_event(u64           color,
     if (font_window_active == 0) {
         font_palette_colors[0] = color;
     }
-    size = scale * 16.0f;
+    glyph_quad_size = scale * 16.0f;
     i = 0;
     if (byte_limit == 0 || *str == 0) {
         return;
@@ -66,8 +66,8 @@ void process_bgm_display_text_event(u64           color,
                 dy = convert_integer_to_float(additional_glyph->top) * scale;
                 emit_textured_rectangle(x + dx,
                                         y + dy,
-                                        size,
-                                        size,
+                                        glyph_quad_size,
+                                        glyph_quad_size,
                                         additional_glyph->u,
                                         additional_glyph->v,
                                         16,
@@ -94,8 +94,8 @@ void process_bgm_display_text_event(u64           color,
             } else if (*text_cursor > 0x20) {
                 emit_textured_rectangle(x,
                                         y + top,
-                                        size,
-                                        size,
+                                        glyph_quad_size,
+                                        glyph_quad_size,
                                         glyph_table[*text_cursor].u,
                                         glyph_table[*text_cursor].v,
                                         16,
