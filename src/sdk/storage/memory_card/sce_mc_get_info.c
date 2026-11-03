@@ -24,7 +24,7 @@ extern s32                     PollSema();
 extern s32                     SignalSema();
 extern s32                     sceSifWriteBackDCache();
 
-s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
+s32 sceMcGetInfo(s32 port, s32 slot, s32 card_type_output, s32 free_blocks, s32 format) {
     s32 rpc_dispatch_result;
 
     if (mc_rpc_client.serve == 0) {
@@ -51,7 +51,7 @@ s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
     } else {
         D_00159A80.want_format = 0;
     }
-    D_00159A28[0] = type;
+    D_00159A28[0] = card_type_output;
     D_00159A2C[0] = free_blocks;
     D_00159A30[0] = (u32)format;
     sceSifWriteBackDCache(D_00159F00, 0xC0);
