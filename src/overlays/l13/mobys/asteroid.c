@@ -248,7 +248,7 @@ void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
 void asteroid_update(struct Moby *moby) {
     struct BlobVars *asteroid_vars = (struct BlobVars *)moby->pvars;
     f32              distance = fast_vec_dist(&moby->pos, &hero_pos);
-    f32              size;
+    f32              class_scale_ratio;
     f32              spin;
     char            *hit;
 
@@ -283,26 +283,26 @@ void asteroid_update(struct Moby *moby) {
             }
             if (asteroid_vars->cooldown == 0) {
                 moby->collision = moby->pclass->collision;
-                size = moby->scale / moby->pclass->scale;
+                class_scale_ratio = moby->scale / moby->pclass->scale;
                 if ((frame_count & 1) == (((char *)moby - (char *)moby_base) >> 8 & 1) &&
-                    FUN_L00_001f0d60_1638(size * 6.2f, &moby->pos, 0, moby) != 0) {
+                    FUN_L00_001f0d60_1638(class_scale_ratio * 6.2f, &moby->pos, 0, moby) != 0) {
                     if ((struct Moby *)coll_hit_1638.moby != asteroid_vars->owner) {
                         reflect_vector(asteroid_vars, asteroid_vars, &coll_hit_1638.normal_x);
                         qcopy(&moby->pos, coll_hit_1638.pad30);
                         if (coll_hit_1638.moby == 0 ||
                             ((struct Moby *)coll_hit_1638.moby)->oclass != 0xD4) {
-                            FUN_L13_002e1348_1638(moby, asteroid_vars, size);
+                            FUN_L13_002e1348_1638(moby, asteroid_vars, class_scale_ratio);
                         }
                     }
                 } else {
                     hit = find_moby_hit_1638(moby, 0x330000, 0);
                     if (hit != 0 && (*(struct Moby **)(hit + 0x20))->oclass != 0xD4) {
                         hit += 0x10;
-                        size = moby->scale;
-                        size /= moby->pclass->scale;
+                        class_scale_ratio = moby->scale;
+                        class_scale_ratio /= moby->pclass->scale;
                         clamp_vector_length(hit, hit, frame_time * 20.0f);
                         fast_vec_add(asteroid_vars, asteroid_vars, hit);
-                        FUN_L13_002e1348_1638(moby, asteroid_vars, size);
+                        FUN_L13_002e1348_1638(moby, asteroid_vars, class_scale_ratio);
                     }
                     moby->hit_slot = 0xFF;
                 }
