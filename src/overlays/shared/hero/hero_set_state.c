@@ -3320,7 +3320,7 @@ typedef struct {
     char          p20A9[0x3];
     unsigned char f20AC;
     char          p20AD[0x1EF];
-    float         f229C;
+    float         hero_stick_magnitude;
     char          p22A0[0x2A];
     unsigned char f22CA;
     char          p22CB[0xD];
@@ -3646,7 +3646,7 @@ int process_hero_equipped_item_input(void) {
                         D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_IDLE ||
                         D_0013F450_h228770.hero_current_state == HERO_STATE_STOP ||
                         (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_GROUND_MOVE &&
-                         D_0013F450_h228770.f229C < 0.7f)) {
+                         D_0013F450_h228770.hero_stick_magnitude < 0.7f)) {
                         hero_set_state(0x23, 1);
                     } else {
                         start_equipped_item_animation();
