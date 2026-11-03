@@ -126,7 +126,7 @@ void gemlik_projectile_update(struct Moby *moby) {
     work.velocity.z = 0.0f;
     set_vector_length_xy(&work.velocity, &work.velocity, 1.0f);
     work.velocity.z = 1.0f;
-    flags = 0x10001;
+    hit_descriptor_flags = 0x10001;
     hero_bytes = (unsigned char *)((char *)((char *)&hero));
     if (hero_bytes[0x1FF6] != 0 && projectile_vars->deflected_marker != 31337.6015625f &&
         fast_vec_dist(&moby->pos, hero_bytes + 0x80) < 2.0f) {
@@ -139,7 +139,7 @@ void gemlik_projectile_update(struct Moby *moby) {
             unsigned char *hero_base = (unsigned char *)((char *)((char *)&hero));
             ent = ((char **)(hero_base + 0x2020))[i];
             if (ent != 0) {
-                int hit_mask = flags | 1;
+                int hit_mask = hit_descriptor_flags | 1;
                 make_hit_descriptor(work.hit, moby, hit_mask, 1.0f, &work.velocity);
                 work.hit[0x18] = 1;
                 *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
