@@ -1059,8 +1059,8 @@ void sentrybot_update(unsigned char *moby) {
                     set_sentrybot_alarm_duration(linked_alarm_moby, -1);
             }
         } else {
-            int mode = sentrybot_instance_data->target_mode;
-            if (mode != SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION &&
+            int target_mode = sentrybot_instance_data->target_mode;
+            if (target_mode != SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION &&
                 sentrybot_instance_data->alert_engagement_suppressed == 0) {
                 begin_sentrybot_turn_toward_point(
                     (char *)moby,
@@ -1080,7 +1080,7 @@ void sentrybot_update(unsigned char *moby) {
                         set_sentrybot_alarm_duration(linked_alarm_moby, scale_game_frames(0x1E));
                 }
             } else if (sentrybot_instance_data->has_line_of_sight != 0) {
-                if (mode != SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION &&
+                if (target_mode != SENTRYBOT_TARGET_MODE_SUPPRESS_DIRECT_EMISSION &&
                     sentrybot_instance_data->alert_engagement_suppressed == 0) {
                     begin_sentrybot_turn_toward_point((char *)moby,
                                                       sentrybot_instance_data,
