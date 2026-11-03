@@ -27,7 +27,7 @@ extern int D_L00_0017E51C NOT_SDA;
 extern int D_L00_0017E520 NOT_SDA;
 void decompress_and_relocate_selected_groups(int mode) __asm__("FUN_L00_00234fd0");
 
-void decompress_and_relocate_selected_groups(int mode) {
+void decompress_and_relocate_selected_groups(int optional_bank_selection) {
     enum {
         HUD_DECOMPRESS_OPTIONAL_BANK_3 = 0,
         HUD_DECOMPRESS_BOTH_OPTIONAL_BANKS = 2
@@ -61,7 +61,7 @@ void decompress_and_relocate_selected_groups(int mode) {
             decompression_destination += slot_3_size;
         }
     }
-    if (mode == HUD_DECOMPRESS_OPTIONAL_BANK_3 || mode == HUD_DECOMPRESS_BOTH_OPTIONAL_BANKS) {
+    if (optional_bank_selection == HUD_DECOMPRESS_OPTIONAL_BANK_3 || optional_bank_selection == HUD_DECOMPRESS_BOTH_OPTIONAL_BANKS) {
         {
             int slot_4_size;
             if ((slot_4_size = decompression_slot_state->t->sz[4])) {
@@ -76,7 +76,7 @@ void decompress_and_relocate_selected_groups(int mode) {
             }
         }
     }
-    if ((unsigned)(mode - 1) < 2) {
+    if ((unsigned)(optional_bank_selection - 1) < 2) {
         G_234fd0 *group_4_decompression_state = &D_L00_0017E4D8_lui;
         if (group_4_decompression_state->t->sz[5]) {
             stash_receive_data(compressed_data_buffer,
