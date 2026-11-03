@@ -2,14 +2,14 @@
 #include "rnc/sdk/scf.h"
 
 extern void  GetOsdConfigParam(int *config);
-extern short D_001330D0[] NOT_SDA;
+extern short t10k_time_zone __asm__("D_001330D0") NOT_SDA;
 
 int sceScfGetTimeZone(void) {
     int config;
     int timezone;
 
     if (IsT10K() != 0) {
-        timezone = D_001330D0[0];
+        timezone = t10k_time_zone;
     } else {
         GetOsdConfigParam(&config);
         timezone = config >> 21;
@@ -19,3 +19,6 @@ int sceScfGetTimeZone(void) {
     }
     return timezone;
 }
+
+/* The T10K's time zone, in minutes from UTC (540: UTC+9), like the fallback above. */
+short t10k_time_zone __asm__("D_001330D0") NOT_SDA = 0x21C;

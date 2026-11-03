@@ -12,7 +12,7 @@ struct MenuPreviewObjects {
     u8                        held[24];
 };
 
-extern s32  menu_preview_slot_draw_enabled[] __asm__("D_001D5020");
+extern s32  menu_preview_slot_draw_enabled[24] __asm__("D_001D5020");
 extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
 s32         draw_menu_preview_objects(struct MenuPreviewObjects *preview) __asm__("FUN_0021ddf8");
 
@@ -57,3 +57,7 @@ s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) {
 }
 
 extern __typeof__(draw_menu_preview_objects) func_0021DDF8 __attribute__((alias("FUN_0021ddf8")));
+
+/* Nonzero: the preview draws slot i (the loop above walks the 24 slots). */
+s32 menu_preview_slot_draw_enabled[24] __asm__("D_001D5020") = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

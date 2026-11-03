@@ -1,5 +1,6 @@
 /* Level 08 moby class 0x98: bolt pickup. */
 #include "types.h"
+#include "rnc/game/level_progress.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -85,7 +86,6 @@ extern void  draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern char  D_L08_001746D8_2B94B0[] __asm__("D_L08_00174658");
 extern int   D_L08_00174658_lui __asm__("D_L08_00174658") NOT_SDA;
 extern char  D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
-extern s32   level_bolts[] __asm__("D_0013DF38");
 void         bolt_pickup_update(Moby_2B94B0 *moby) __asm__("FUN_L08_002b82a0");
 
 extern int D_L08_0015F5CC;

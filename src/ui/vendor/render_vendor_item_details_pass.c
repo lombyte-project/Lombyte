@@ -33,8 +33,7 @@ extern Menu D_001E63C0;
 extern StatEntry D_001DFFB0[];
 
 #include "rnc/game/item_state.h"
-/* discount_purchase_pricing[0] (D_0013D4E3), read off the item_available base as retail does. */
-#define ITEM_DISCOUNT_FLAG item_available[0x23]
+#define ITEM_DISCOUNT_FLAG item_available[ITEM_VENDOR_DISCOUNT]
 
 extern void  draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, s32) __asm__("func_001FB8F0");
 extern void  draw_moby_list(s32, s32) __asm__("func_0020D330");

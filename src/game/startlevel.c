@@ -228,3 +228,5 @@ volatile SoundDef boot_sound_defs_b[5] = {
     {.unk4 = 128.0f, .near_volume = 0x400, .sound = 6},
     {.unk4 = 128.0f, .near_volume = 0x400, .sound = 7},
 };
+
+s32 boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR = 0;

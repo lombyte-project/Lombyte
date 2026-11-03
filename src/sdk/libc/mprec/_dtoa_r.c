@@ -85,17 +85,22 @@ union double_union {
 #define Bcopy(x, y) memcpy(&(x)->_sign, &(y)->_sign, (y)->_wds * sizeof(u32) + 2 * sizeof(s32))
 extern const f64 tens[23], bigtens[5];
 extern const f64 dtoa_quick_overflow_divisor[] __asm__("D_001524B0");
-extern char      D_00152310[], D_00152320[], D_00152328[];
-extern _Bigint  *Balloc(struct _reent *, s32);
-extern _Bigint  *d2b(struct _reent *, f64, s32 *, s32 *);
-extern _Bigint  *i2b(struct _reent *, s32) __asm__("func_00115808");
-extern _Bigint  *mult(struct _reent *, _Bigint *, _Bigint *);
-extern _Bigint  *pow5mult(struct _reent *, _Bigint *, s32);
-extern s32       cmp(_Bigint *, _Bigint *);
-extern _Bigint  *diff(struct _reent *, _Bigint *, _Bigint *);
-extern _Bigint  *multadd(struct _reent *, _Bigint *, s32, s32);
-extern s32       quorem(_Bigint *, _Bigint *);
-extern void     *memcpy(void *, const void *, u32);
+/* The strings _dtoa_r returns for infinity, NaN and zero, in .rodata like
+   the literals they were (at 8 bytes or less they would go to .sdata). */
+const char dtoa_infinity_text[] __asm__("D_00152310")
+    __attribute__((section(".rodata"))) = "Infinity";
+const char      dtoa_nan_text[] __asm__("D_00152320") __attribute__((section(".rodata"))) = "NaN";
+const char      dtoa_zero_text[] __asm__("D_00152328") __attribute__((section(".rodata"))) = "0";
+extern _Bigint *Balloc(struct _reent *, s32);
+extern _Bigint *d2b(struct _reent *, f64, s32 *, s32 *);
+extern _Bigint *i2b(struct _reent *, s32) __asm__("func_00115808");
+extern _Bigint *mult(struct _reent *, _Bigint *, _Bigint *);
+extern _Bigint *pow5mult(struct _reent *, _Bigint *, s32);
+extern s32      cmp(_Bigint *, _Bigint *);
+extern _Bigint *diff(struct _reent *, _Bigint *, _Bigint *);
+extern _Bigint *multadd(struct _reent *, _Bigint *, s32, s32);
+extern s32      quorem(_Bigint *, _Bigint *);
+extern void    *memcpy(void *, const void *, u32);
 
 /* dtoa for IEEE arithmetic (dmg): convert double to ASCII string.
  *
@@ -207,9 +212,9 @@ _dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits, s32 *decpt, s32 *sign
         *decpt = 9999;
         s =
 #ifdef IEEE_Arith
-            !word1(d) && !(word0(d) & 0xfffff) ? D_00152310 :
+            !word1(d) && !(word0(d) & 0xfffff) ? dtoa_infinity_text :
 #endif
-                                               D_00152320;
+                                               dtoa_nan_text;
         if (rve)
             *rve =
 #ifdef IEEE_Arith
@@ -224,7 +229,7 @@ _dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits, s32 *decpt, s32 *sign
 #endif
     if (!d.d) {
         *decpt = 1;
-        s = D_00152328;
+        s = dtoa_zero_text;
         if (rve)
             *rve = s + 1;
         return s;

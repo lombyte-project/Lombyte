@@ -105,7 +105,7 @@ message:
     font_print_window_small((void *)&box, 0x80F0F0F0L, get_help_message_text(message_id), -1);
     return;
 purchase:
-    cost = discount_purchase_pricing[0] ? SELECTED_ITEM.f4 : SELECTED_ITEM.f0;
+    cost = item_available[ITEM_VENDOR_DISCOUNT] ? SELECTED_ITEM.f4 : SELECTED_ITEM.f0;
     if (current_bolt_count_macro >= cost) {
         font_print_small(6, 6, 0x80F0F0F0L, get_help_message_text(0x5239), -1);
         font_print_small(2, 0x20, 0x80F0F0F0L, get_help_message_text(0x524E), -1);

@@ -27,8 +27,8 @@ struct PauseState {
 
 #include "rnc/game/item_state.h"
 
-extern u8   pause_ring_left_label_text[] __asm__("D_001602D8");
-extern u8   pause_ring_right_label_text[] __asm__("D_001602E0");
+extern char pause_ring_left_label_text[] __asm__("D_001602D8");
+extern char pause_ring_right_label_text[] __asm__("D_001602E0");
 extern u8   D_001863D0[];
 extern s32  SubtractIntegerWithClamp(s32);
 extern f32  fast_cos(f32) __asm__("func_001F9DC8");
@@ -103,3 +103,8 @@ s32 draw_pause_ring(struct PauseState *pause_state) {
 }
 
 extern __typeof__(draw_pause_ring) func_00220B20 __attribute__((alias("FUN_00220b20")));
+
+/* Small data reached with lui/addiu: one-glyph labels (font glyphs 0x14, 0x15). */
+char pause_ring_left_label_text[] __asm__("D_001602D8") __attribute__((section(".sdata"))) = "\x14";
+char pause_ring_right_label_text[] __asm__("D_001602E0")
+    __attribute__((section(".sdata"))) = "\x15";

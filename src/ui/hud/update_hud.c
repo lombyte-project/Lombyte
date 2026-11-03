@@ -125,4 +125,6 @@ block_28:
 
 __attribute__((alias("FUN_001ff780"))) extern void func_001FF780(void);
 
+s32 hud_msg_count __asm__("D_0015F680") = 0;
+s32 D_0015F684 = 0;
 s32 hud_msg_y = 0;

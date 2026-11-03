@@ -2,7 +2,7 @@
 #include "rnc/sdk/libmpeg.h"
 #include "rnc/sdk/mpeg/errors.h"
 
-extern u8   intra_skip_mb_error_message[] __asm__("D_00153770");
+const char  intra_skip_mb_error_message[] __asm__("D_00153770") = "intra && skip MB";
 extern void func_001271D8();
 extern void func_00127178();
 

@@ -15,14 +15,14 @@ struct Locals {
     f32 v3C;
 };
 
-extern u8   tfrag_textures_callback_label[] __asm__("D_00160E70");
-extern u8   tfrag_draw_callback_label[] __asm__("D_00160E80");
-extern void FlushCache(s32);
-extern void WriteDmaChannel(u32, u32, u32);
-extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
-extern void noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
-extern void dma_tfrag_textures(void) __asm__("func_002331C0");
-extern void tfrag_proc(void) __asm__("func_00233FB0");
+extern const char tfrag_textures_callback_label[] __asm__("D_00160E70");
+extern const char tfrag_draw_callback_label[] __asm__("D_00160E80");
+extern void       FlushCache(s32);
+extern void       WriteDmaChannel(u32, u32, u32);
+extern void       noop_core_callback(void *, s32) __asm__("func_001F21B0");
+extern void       noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
+extern void       dma_tfrag_textures(void) __asm__("func_002331C0");
+extern void       tfrag_proc(void) __asm__("func_00233FB0");
 /* Draws the level terrain (tfrags). Each tfrag has a 0x40-byte header:
  *   0x10  where its data starts
  *   0x16, 0x18, 0x1a  where its data lists start (shared, lower detail, full detail)
@@ -64,3 +64,6 @@ void draw_tfrag(void) {
 }
 
 extern __typeof__(draw_tfrag) func_002333A8 __attribute__((alias("FUN_002333a8")));
+
+const char tfrag_textures_callback_label[] __asm__("D_00160E70") = "tfrag texs";
+const char tfrag_draw_callback_label[] __asm__("D_00160E80") = "tfrag draw";

@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/world/collision/surface_height_grid.h"
 
 extern s32 D_0015F330;
 extern s32 D_0015F334;

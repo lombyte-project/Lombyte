@@ -8,8 +8,8 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/transitions.h"
+#include "rnc/world/level_id.h"
 
-extern u8   preserved_gold_bolt_flags[] __asm__("D_0014BF08");
 extern u8   circle_target_menu_page[] __asm__("D_001D4EC0");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32  scale_game_frames(s32) __asm__("func_001F96F8");
@@ -35,14 +35,16 @@ s32 process_global_state_flags(void) {
             *(u16 *)D_0013E05A = 1;
         }
     } else if ((controller_state.pressed & PAD_CROSS) != 0) {
+        /* Load the save but keep item_unlocked[0x1D] and the four Veldin 2
+           gold bolts of the game in progress. */
         old_value = item_unlocked[0x1D];
         for (i = 0; i < 4; i++) {
-            backup[i] = preserved_gold_bolt_flags[i];
+            backup[i] = (&gold_bolts_collected[LEVEL_VELDIN2 * 4])[i];
         }
         memcard_restore_game(menu_system.unkE0);
         item_unlocked[0x1D] = old_value;
         for (i = 0; i < 4; i++) {
-            preserved_gold_bolt_flags[i] = backup[i];
+            (&gold_bolts_collected[LEVEL_VELDIN2 * 4])[i] = backup[i];
         }
         D_0015EEA0 = 1;
         memcard_save_data(0, -1);

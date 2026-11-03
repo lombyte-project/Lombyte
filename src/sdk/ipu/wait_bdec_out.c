@@ -12,8 +12,8 @@ typedef struct {
     void *cbData;
 } MpegDec;
 
-extern char bdec_error_message[] __asm__("D_00153788");
-extern s32  DIntr(void);
+const char bdec_error_message[] __asm__("D_00153788") = "Error code detected(BDEC)";
+extern s32 DIntr(void);
 
 #define IPU_CTRL  ((volatile u32 *)0x10002010)
 #define IPU_BP    ((volatile u32 *)0x10002020)

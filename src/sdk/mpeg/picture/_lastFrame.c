@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
-extern u8  missing_second_field_message[] __asm__("D_00153AB8");
+const char missing_second_field_message[] __asm__("D_00153AB8") = "the second field is missing";
 extern s32 _Error(struct MpegDecoder *, u8 *, s32);
 extern s32 _dispRefImage(struct MpegDecoder *, struct MpegRefImage *, s32);
 extern s32

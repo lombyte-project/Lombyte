@@ -477,3 +477,5 @@ s32 shrub_count = 0;
 MobyGrids moby_grids = {0};
 
 u32 moby_grid_block_bitmap[24] = {0};
+
+ShrubInstance *shrubs = 0;

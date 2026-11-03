@@ -40,7 +40,7 @@ extern s32                      game_frame_counter_macro __asm__("D_0015F438") M
 extern s32                      space_load_in_progress __asm__("D_0015F618") MACRO_ADDR;
 extern struct Globals_0015F634 *level_sound_defs __asm__("D_0015F634");
 extern struct Globals_00194100  coll_output __asm__("D_00194100");
-extern u8                       unloaded_sound_bank_format[] __asm__("D_001E8988");
+extern const char               unloaded_sound_bank_format[] __asm__("D_001E8988");
 
 extern void FlushCache(s32);
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
@@ -239,3 +239,5 @@ void do_space_transition(void) {
 }
 
 extern __typeof__(do_space_transition) func_00231FF0 __attribute__((alias("FUN_00231ff0")));
+
+const char unloaded_sound_bank_format[] __asm__("D_001E8988") = "unloaded sound bank %#010x\n";

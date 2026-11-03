@@ -1,6 +1,7 @@
 /* Shared moby class gold_bolt: the gold bolt pickup, its glow rings, particles and pickup camera. */
 
 #include "types.h"
+#include "rnc/game/level_progress.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -30,7 +31,7 @@ enum {
 };
 
 typedef struct {
-    s32   id; /* collected flag index (D_0014BEC0 + level * 4), -1 none */
+    s32   id; /* collected flag index (gold_bolts_collected + level * 4), -1 none */
     u8    pad4[8];
     s16   unkC; /* nonzero: collect at once, no cutscene */
     u8    padE[2];
@@ -81,7 +82,6 @@ extern s32  D_0015ED84;
 extern char camera_pos[] __asm__("D_L01_00167240");
 extern int  D_0015ED84; /* no foreign declaration */
 extern int  cutscene_active __asm__("D_L01_0015F404");
-extern u8   D_0014BEC0[];
 /* MACRO_ADDR aliases: retail loads these with the one-register lui form */
 extern f32 frame_time_macro __asm__("D_0015ED6C");
 extern s32 current_level_index_macro __asm__("D_0015ED84");
@@ -487,7 +487,7 @@ void gold_bolt_update(struct Moby *moby) {
     switch (moby->state) {
     case GOLD_BOLT_INITIALIZE:
         if (gold_bolt_instance_vars->id == -1 ||
-            D_0014BEC0[gold_bolt_instance_vars->id + D_0015ED84 * 4] != 0) {
+            gold_bolts_collected[gold_bolt_instance_vars->id + D_0015ED84 * 4] != 0) {
             goto remove;
         }
         qcopy(&gold_bolt_instance_vars->home, &moby->pos);
@@ -537,7 +537,7 @@ void gold_bolt_update(struct Moby *moby) {
         if (gold_bolt_instance_vars->unkC != 0) {
             D_L01_0015F640 = scale_game_frames(180);
             queue_dialogue_message(0x53B3, -1);
-            D_0014BEC0[gold_bolt_instance_vars->id + current_level_index_macro * 4] = 1;
+            gold_bolts_collected[gold_bolt_instance_vars->id + current_level_index_macro * 4] = 1;
             memcard_save_data(0, -1);
         remove:
             mark_moby_for_removal(moby);
@@ -610,7 +610,7 @@ void gold_bolt_update(struct Moby *moby) {
         }
         D_L01_0015F640 = scale_game_frames(180);
         queue_dialogue_message(0x53B3, -1);
-        D_0014BEC0[gold_bolt_instance_vars->id + current_level_index_macro * 4] = 1;
+        gold_bolts_collected[gold_bolt_instance_vars->id + current_level_index_macro * 4] = 1;
         cutscene_active = 0;
         set_race_camera(&hero_ptr->motion.pos, &hero_ptr->motion.rot, 0, 0);
         jet_end_mount(0);

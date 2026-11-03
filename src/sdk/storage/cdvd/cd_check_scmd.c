@@ -5,14 +5,14 @@
 #include "rnc/sdk/rpc/rpc.h"
 #include "rnc/sdk/storage/cdvd.h"
 
-extern s32  D_00131308[];
-const u8    D_00152F10[] = "Scmd fail sema cur_cmd:%d keep_cmd:%d\n";
-extern u8   cd_s_command_bind_error_message[] __asm__("D_00152F38");
-extern s32  D_00159750[];
-extern u8   D_00159758[];
-extern s32  PollSema();
-extern void ReferThreadStatus();
-extern void SignalSema();
+extern s32        D_00131308[];
+const u8          D_00152F10[] = "Scmd fail sema cur_cmd:%d keep_cmd:%d\n";
+extern const char cd_s_command_bind_error_message[] __asm__("D_00152F38");
+extern s32        D_00159750[];
+extern u8         D_00159758[];
+extern s32        PollSema();
+extern void       ReferThreadStatus();
+extern void       SignalSema();
 
 s32 cd_check_scmd(s32 cmd) __asm__("FUN_00120d40");
 
@@ -56,3 +56,5 @@ s32 cd_check_scmd(s32 cmd) {
 }
 
 extern __typeof__(cd_check_scmd) func_00120D40 __attribute__((alias("FUN_00120d40")));
+
+const char cd_s_command_bind_error_message[] __asm__("D_00152F38") = "Libcdvd bind err S cmd\n";

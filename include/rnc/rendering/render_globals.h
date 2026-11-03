@@ -28,9 +28,6 @@ extern f32  fog_far_intensity __asm__("D_0015F494");
 extern s32  part_clip_dist __asm__("D_001600BC");
 extern char textured_quad_header[] __asm__("D_00160840");
 extern s32  current_vu_chain __asm__("D_00160F0C");
-extern s32  surface_height_tiles __asm__("D_00161190");
-extern s32  occl_cell_table __asm__("D_00161194");
-extern s32  occl_cell_count __asm__("D_00161198");
 /* Draw callbacks and their arguments: add_draw_callback and
    enqueue_callback_list_4 take at most 0x40 of each. */
 extern void (*draw_callback_funcs[0x40])(s32) __asm__("D_0018DB40");

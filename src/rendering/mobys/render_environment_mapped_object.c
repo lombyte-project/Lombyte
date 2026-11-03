@@ -20,14 +20,53 @@ typedef struct {
 #include "rnc/game/game_globals.h"
 #include "rnc/camera/camera_globals.h"
 
-extern s32          environment_mapping_was_active_gp __asm__("D_001604A8") __attribute__((sda));
-extern s32          D_001604AC __attribute__((sda));
-extern s32          environment_mesh_colors[2] __asm__("D_00160520") __attribute__((sda));
-extern s32          environment_mesh_vertex_counts[2] __asm__("D_00160530") __attribute__((sda));
-extern s32          environment_mesh_quad_counts[2] __asm__("D_00160540") __attribute__((sda));
-extern Vec4        *environment_mesh_normals[2] __asm__("D_00160550") __attribute__((sda));
-extern Vec4        *environment_mesh_positions[2] __asm__("D_00160560") __attribute__((sda));
-extern IndexedQuad *environment_mesh_quads[2] __asm__("D_00160570") __attribute__((sda));
+extern s32 environment_mapping_was_active_gp __asm__("D_001604A8") __attribute__((sda));
+extern s32 D_001604AC __attribute__((sda));
+
+/* One entry per environment-mapped class, 0x212 to 0x215 (the four meshes
+   defined below), indexed by class id - 0x212.  Small data in retail, defined
+   ahead of the function so it reaches them gp-relative. */
+s32 environment_mesh_colors[4] __asm__("D_00160520") __attribute__((section(".sdata"))) = {
+    0x50807060,
+    0x30807060,
+    0x30807060,
+    0x302080FF,
+};
+
+s32 environment_mesh_vertex_counts[4] __asm__("D_00160530") __attribute__((section(".sdata"))) = {
+    102,
+    39,
+    49,
+    42,
+};
+
+s32 environment_mesh_quad_counts[4] __asm__("D_00160540") __attribute__((section(".sdata"))) = {
+    74,
+    24,
+    48,
+    30,
+};
+
+Vec4 *environment_mesh_normals[4] __asm__("D_00160550") __attribute__((section(".sdata"))) = {
+    (Vec4 *)environment_mesh_0_normals,
+    (Vec4 *)environment_mesh_1_normals,
+    (Vec4 *)environment_mesh_2_normals,
+    (Vec4 *)environment_mesh_3_normals,
+};
+
+Vec4 *environment_mesh_positions[4] __asm__("D_00160560") __attribute__((section(".sdata"))) = {
+    (Vec4 *)environment_mesh_0_positions,
+    (Vec4 *)environment_mesh_1_positions,
+    (Vec4 *)environment_mesh_2_positions,
+    (Vec4 *)environment_mesh_3_positions,
+};
+
+IndexedQuad *environment_mesh_quads[4] __asm__("D_00160570") __attribute__((section(".sdata"))) = {
+    environment_mesh_0_quads,
+    environment_mesh_1_quads,
+    environment_mesh_2_quads,
+    environment_mesh_3_quads,
+};
 
 #include "rnc/ui/menus/menu_globals.h"
 

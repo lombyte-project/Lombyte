@@ -3,8 +3,9 @@
 #include "rnc/sdk/library/sdk_globals.h"
 #include "rnc/sdk/rpc/rpc.h"
 
-extern s32  D_0015B080[];
-extern u8   socket_create_rpc_error_message[] __asm__("D_00153578");
+extern s32 D_0015B080[];
+const char
+    socket_create_rpc_error_message[] __asm__("D_00153578") = "sceDbcCreateSocket: rpc error\n";
 extern void debug_print_stub(u8 *) __asm__("func_00124A20");
 
 /* The header words are copied as pointers: their alias set differs from

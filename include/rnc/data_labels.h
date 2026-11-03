@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_DATA_LABELS_H
 
 #include "types.h"
+#include "rnc/game/level_progress.h"
 
 /* Globals several files read whose meaning is not known yet, by address.
    Name one and move it to its subsystem header. */
@@ -20,24 +21,16 @@ extern s32           D_001312E4[];
 extern s32           D_00131314[];
 extern unsigned char D_0013A4E0[];
 extern s32           D_0013CB14[];
-extern char          D_0013D1D0[];
-extern char          D_0013D1E8[];
-extern char          D_0013D200[];
-extern char          D_0013D220[];
-extern char          D_0013D240[];
-extern char          D_0013D270[];
 extern s32           D_0013D384 __attribute__((section(".data")));
 extern unsigned char D_0013D3DD __attribute__((section(".data")));
 extern unsigned char D_0013D3E2[];
 extern unsigned char D_0013D3E9 __attribute__((section(".data")));
-extern u8            D_0013D4C2[];
 extern unsigned char D_0013D4C6[];
 extern unsigned char D_0013D4DA __attribute__((section(".data")));
 extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013D504[];
 extern int           D_0013D8AC __attribute__((section(".data")));
 extern unsigned char D_0013DD4A __attribute__((section(".data")));
-extern s32           D_0013DF88[];
 extern u8            D_0013E05A[];
 extern char          D_0013E533[];
 extern char          D_0013F3D0[];
@@ -47,9 +40,6 @@ extern s32           D_001413D0[];
 extern int           D_001413DC[];
 extern u8            D_001413F5[];
 extern unsigned char D_0014161B[];
-extern char          D_00141EC0[];
-extern u8            D_0014BEC0[];
-extern u8            D_0014BF10[];
 extern s32           D_0014EE90[16];
 extern short         D_001516F0 __attribute__((section(".data")));
 extern u8            D_00154A80[];
@@ -116,7 +106,6 @@ extern char          D_001B2C00[];
 extern s32           D_001CDF80[];
 extern s32           D_001D2640[];
 extern u8            D_001D8EB0[];
-extern u8            D_001DDD40[];
 extern u8            D_001E1300[];
 extern u8            D_002169C0[];
 extern u8            D_1FF8000[];

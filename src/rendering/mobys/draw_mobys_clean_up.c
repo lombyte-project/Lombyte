@@ -2,8 +2,8 @@
 #include "rnc/rendering/draw_config.h"
 #include "rnc/data_labels.h"
 
-extern u8 moby_draw_callback_label[] __asm__("D_0015FEE0");
-extern u8 moby_skin_callback_label[] __asm__("D_0015FEF0");
+extern const char moby_draw_callback_label[] __asm__("D_0015FEE0");
+extern const char moby_skin_callback_label[] __asm__("D_0015FEF0");
 
 #include "rnc/rendering/mobys/draw_mobys_clean_up_globals.h"
 
@@ -33,3 +33,6 @@ void draw_mobys_clean_up(void) {
         }
     }
 }
+
+const char moby_draw_callback_label[] __asm__("D_0015FEE0") = "moby draw";
+const char moby_skin_callback_label[] __asm__("D_0015FEF0") = "moby skin";

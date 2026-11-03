@@ -13,6 +13,7 @@
 #include "rnc/game/missions.h"
 #include "rnc/rendering/effects.h"
 #include "rnc/ui/map.h"
+#include "rnc/ui/map/level_map.h"
 #include "rnc/ui/menus/item_preview.h"
 #include "rnc/ui/menus/missions.h"
 #include "rnc/ui/menus/pause.h"
@@ -169,7 +170,6 @@ extern void FUN_0021d168(struct MenuScreen *, s32);
 
 extern struct MenuStreamEntry D_00138008[];
 extern struct MenuStreamEntry D_00138080[];
-extern u8                     D_001DDD4C[];
 extern u8                     D_001DDD50[];
 
 struct MenuScreen menu_placeholder_screen = {
@@ -570,10 +570,12 @@ struct MenuPage map_circle_destination_page = {
      SCREEN(map_legend_screen)}
 };
 
+/* BY_SELECTED_LEVEL steps 0xC bytes per (selected level - 1), so the text base
+   is entry 1 and the label shows level_select_texts[level]. */
 struct MenuLabelScreen map_location_label = {
-    {                FUN_00219d80, render_configured_text_label,clear_menu_selected_index},
+    {                FUN_00219d80,                 render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT | MENU_LABEL_CENTER_Y |
-MENU_LABEL_CENTER_X,              (s32)D_001DDD4C,
+MENU_LABEL_CENTER_X, (s32)&level_select_texts[1].description_text,
      0xC                  }
 };
 
@@ -619,10 +621,12 @@ struct MenuStreamScreen missions_picture_screen = {
     {              D_00138080, MENU_STREAM_UNPACK | MENU_STREAM_FIXED_ENTRY,                     219, 175}
 };
 
+/* BY_SELECTED_LEVEL steps 0xC bytes per (selected level - 1), so the text base
+   is entry 1 and the label shows level_select_texts[level]. */
 struct MenuLabelScreen missions_location_label = {
-    {                FUN_00219d80, render_configured_text_label,clear_menu_selected_index},
+    {                FUN_00219d80,                 render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT | MENU_LABEL_CENTER_Y |
-MENU_LABEL_CENTER_X,              (s32)D_001DDD4C,
+MENU_LABEL_CENTER_X, (s32)&level_select_texts[1].description_text,
      0xC                  }
 };
 

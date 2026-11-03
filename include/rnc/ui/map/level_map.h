@@ -10,12 +10,15 @@ typedef struct {
     s32 label_offset_y;
 } LevelMapMarker;
 
+/* One per level id: the level select menu prints description_text and
+   label_text (draw_menu_selection_text), the map prints label_text. */
 typedef struct {
+    s32 description_text;
     s32 label_text;
-    s32 pad4[2];
-} LevelMapMarkerText;
+    s32 unk8;
+} LevelSelectText;
 
-extern LevelMapMarkerText level_map_labels[19] __asm__("D_001DDD44");
-extern LevelMapMarker     level_map_markers[20] __asm__("D_001DDE28");
+extern LevelSelectText level_select_texts[19] __asm__("D_001DDD40");
+extern LevelMapMarker  level_map_markers[20] __asm__("D_001DDE28");
 
 #endif /* LOMBYTE_RNC_UI_MAP_LEVEL_MAP_H */

@@ -63,3 +63,9 @@ void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
 }
 
 extern __typeof__(matrix_to_quaternion) func_00214260 __attribute__((alias("FUN_00214260")));
+
+/* The axis after i, cyclically: 0 -> 1 -> 2 -> 0.  Small data in retail,
+   defined below its only user, so the function reaches it with lui. */
+QuatNext matrix_to_quaternion_next_axis_table __attribute__((section(".sdata"))) = {
+    {1, 2, 0}
+};

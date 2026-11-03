@@ -2,14 +2,14 @@
 #define LOMBYTE_RNC_GAME_GAME_GLOBALS_H
 
 #include "types.h"
+#include "rnc/game/level_progress.h"
 
-extern s32           ship_substate[] __asm__("D_0013E050");
-extern s16           ship_index[] __asm__("D_0013E056");
-extern char          item_usage[] __asm__("D_00141680");
-extern unsigned char visited52[] __asm__("D_0014C050");
-extern s16           cd_read_active[] __asm__("D_001516D8");
-extern s32           hero_max_health __asm__("D_0015EDA0");
-extern s32          *level_root __asm__("D_0015EE4C");
+extern s32   ship_substate[] __asm__("D_0013E050");
+extern s16   ship_index[] __asm__("D_0013E056");
+extern char  item_usage[] __asm__("D_00141680");
+extern s16   cd_read_active[] __asm__("D_001516D8");
+extern s32   hero_max_health __asm__("D_0015EDA0");
+extern s32  *level_root __asm__("D_0015EE4C");
 extern s32   freeze_stats_time_ref[] __asm__("D_0015EE58") __attribute__((section(".sdata")));
 extern s32   freeze_stats_score_ref_a[] __asm__("D_0015EE68") __attribute__((section(".sdata")));
 extern s32   intro_overlay_alpha __asm__("D_0015EF50");

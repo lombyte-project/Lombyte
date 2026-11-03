@@ -1,9 +1,9 @@
 #include "types.h"
+#include "rnc/game/level_progress.h"
 #include "rnc/globals.h"
 #include "rnc/ui/map/map_state.h"
 #include "rnc/runtime/callbacks.h"
 
-extern s32  max_coverage_save_result_by_level[] __asm__("D_0013D560");
 extern void fill_transfer_words() __asm__("func_001F97E8");
 extern s32  func_001FA860();
 extern void downsample_map_coverage() __asm__("func_00208030");

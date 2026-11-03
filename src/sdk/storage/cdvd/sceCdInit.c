@@ -15,18 +15,18 @@ typedef struct {
     u8    pad28[0x10];
 } sceSifClientData;
 
-extern s32              D_001312E4[];
-extern s32              D_001312F4[];
-extern s32              D_001312F8[];
-extern s32              D_001312FC[];
-extern s32              D_00131300[];
-extern s32              D_00131304[];
-extern s32              D_00131308[];
-extern s32              cd_init_rpc_bind_state[] __asm__("D_0013130C");
-extern s32              cd_initialization_count[] __asm__("D_00131310");
-extern char             cd_init_bind_error_format[] __asm__("D_00152F50");
-extern char             cd_exit_message[] __asm__("D_00152F70");
-extern s32              D_00159750[];
+extern s32 D_001312E4[];
+extern s32 D_001312F4[];
+extern s32 D_001312F8[];
+extern s32 D_001312FC[];
+extern s32 D_00131300[];
+extern s32 D_00131304[];
+extern s32 D_00131308[];
+extern s32 cd_init_rpc_bind_state[] __asm__("D_0013130C");
+extern s32 cd_initialization_count[] __asm__("D_00131310");
+const char cd_init_bind_error_format[] __asm__("D_00152F50") = "Libcdvd bind err %d CD_Init %d\n";
+const char cd_exit_message[] __asm__("D_00152F70") = "Libcdvd Exit\n";
+extern s32 D_00159750[];
 extern sceSifClientData cd_init_rpc_client __asm__("D_00159968");
 extern s32              cd_init_mode_request[] __asm__("D_001599C0");
 

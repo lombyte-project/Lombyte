@@ -3,6 +3,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
+#include "rnc/game/level_progress.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
@@ -95,8 +96,6 @@ extern int  metal_detector_trail_texture_selector_gp __asm__("D_L00_00161918") _
 extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void func_L00_001FF4B0_2D3F40(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_L00_001FD1D8_2D3F40(void *, void *, int) __asm__("FUN_001f7d30");
-
-extern unsigned char D_0014BF10[];
 
 extern u8                  voice_pool_lui[] __asm__("D_0013E550") NOT_SDA;
 extern u128 D_L00_001E1160 NOT_SDA;
@@ -195,14 +194,14 @@ void increment_metal_detector_collection_counter(unsigned char *moby) {
     if (row < 20) {
         int index = MOBY(moby)->command - 1;
         if (index & 1) {
-            unsigned char *p = D_0014BF10 + (index / 2 + row * 16);
+            unsigned char *p = buried_bolt_states + (index / 2 + row * 16);
             unsigned int   value = *p;
             int            n = (value & 15) + 1;
             if (n >= 16)
                 n = 15;
             *p = (value & 240) | n;
         } else {
-            unsigned char *p = D_0014BF10 + (index / 2 + row * 16);
+            unsigned char *p = buried_bolt_states + (index / 2 + row * 16);
             unsigned int   value = *p;
             int            n = (value >> 4) + 1;
             if (n >= 16)

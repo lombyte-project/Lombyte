@@ -37,7 +37,7 @@ int setup_menu_display_text(struct MenuScreen *menu) {
     {
         int k;
         for (k = 0; k < 4; k++) {
-            if (D_0014BEC0[level_map_selection.level * 4 + k] != 0) {
+            if (gold_bolts_collected[level_map_selection.level * 4 + k] != 0) {
                 count = count + 1;
             }
         }
@@ -57,3 +57,7 @@ int setup_menu_display_text(struct MenuScreen *menu) {
 }
 
 extern __typeof__(setup_menu_display_text) func_0021EF78 __attribute__((alias("FUN_0021ef78")));
+
+/* Small data reached with lui/addiu. */
+char setup_menu_text_format[] __asm__("D_001602A8")
+    __attribute__((section(".sdata"))) = "%s %d %s %d";

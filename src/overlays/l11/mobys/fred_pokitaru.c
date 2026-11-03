@@ -101,7 +101,7 @@ void fred_pokitaru_update(struct Moby *moby) {
             begin_dialogue_camera_transition(moby, 3.0f);
             moby->state = FRED_POKITARU_WAIT_FOR_DIALOGUE_END;
         }
-        if (alternate_item_available[1] == 0 && discount_purchase_pricing[0] == 0) {
+        if (alternate_item_available[1] == 0 && item_available[ITEM_VENDOR_DISCOUNT] == 0) {
             if (fast_vec_dist(&moby->pos, hero.motion.pos.f) < 4.0f) {
                 int help_frame_delta =
                     scale_game_frames(D_0015EEA4) - help_records[0x86].latest_time_bucket * 600;
@@ -128,7 +128,7 @@ void fred_pokitaru_update(struct Moby *moby) {
             moby->state = FRED_POKITARU_CHECK_DIALOGUE;
             if (moby_vars->dialogue_result == 2) {
                 alternate_item_available[1] = 0;
-                discount_purchase_pricing[0] = 1;
+                item_available[ITEM_VENDOR_DISCOUNT] = 1;
                 D_0013D50B = 1;
                 queue_dialogue_message(0x2B06, scale_game_frames(300));
                 memcard_save_data(0, -1);

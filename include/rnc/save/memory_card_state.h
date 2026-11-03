@@ -196,4 +196,13 @@ struct MemoryCardState {
 
 extern struct MemoryCardState memory_card_state __asm__("D_0013D290");
 
+/* The save directory and file paths; memcard_get_name writes the disc's
+   region and product code over the '*'s of each. */
+extern char save_directory_path[] __asm__("D_0013D1D0");
+extern char save_directory_pattern[] __asm__("D_0013D1E8");
+extern char save_icon_sys_path[] __asm__("D_0013D200");
+extern char save_icon_path[] __asm__("D_0013D220");
+extern char save_main_file_path[] __asm__("D_0013D240");
+extern char save_slot_path_format[] __asm__("D_0013D270");
+
 #endif /* LOMBYTE_RNC_SAVE_MEMORY_CARD_STATE_H */

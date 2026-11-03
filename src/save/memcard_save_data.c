@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/memcard.c, func_0020BFC8). */
 #include "sda.h"
 #include "types.h"
+#include "rnc/game/level_progress.h"
 #include "rnc/ui/map/copy_level_object_positions.h"
 #include "rnc/sdk/scf.h"
 #include "rnc/sdk/storage/cdvd.h"
@@ -8,7 +9,6 @@
 extern int  memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
 extern void save_map_coverage(void *) __asm__("func_00207B08");
 extern char D_0015EE98[] MACRO_ADDR;
-extern char D_00141EC0[];
 
 #include "rnc/game/level_state.h"
 #include "rnc/save/mc_data.h"
@@ -34,7 +34,7 @@ int memcard_save_data(int slot, int flags) {
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
     copy_level_object_positions();
-    save_map_coverage(D_00141EC0 + (current_level_index << 11));
+    save_map_coverage(map_coverage_pages + (current_level_index << 11));
     {
         struct MemoryCardState *card_state = &memory_card_state;
         int                     active = card_state->active_card;

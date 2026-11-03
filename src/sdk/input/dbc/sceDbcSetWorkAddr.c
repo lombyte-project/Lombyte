@@ -15,7 +15,8 @@ struct DbCState {
     s32 unk2C;
 };
 
-extern u8              dbc_set_work_address_rpc_error_message[] __asm__("D_00153558");
+const char dbc_set_work_address_rpc_error_message[] __asm__("D_00153558") =
+    "sceDbcSetWorkAddr: rpc error\n";
 extern s32             debug_print_stub() __asm__("func_00124A20");
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
 

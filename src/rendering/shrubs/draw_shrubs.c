@@ -3,8 +3,8 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
 
-extern u8 shrub_textures_label[] __asm__("D_001603B0");
-extern u8 shrub_draw_label[] __asm__("D_001603C0");
+extern const char shrub_textures_label[] __asm__("D_001603B0");
+extern const char shrub_draw_label[] __asm__("D_001603C0");
 
 struct ShrubDrawState {
     s32 unk0;
@@ -41,3 +41,6 @@ void draw_shrubs(void) {
 }
 
 extern __typeof__(draw_shrubs) func_00228B38 __attribute__((alias("FUN_00228b38")));
+
+const char shrub_textures_label[] __asm__("D_001603B0") = "shrub texs";
+const char shrub_draw_label[] __asm__("D_001603C0") = "shrub draw";

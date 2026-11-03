@@ -1,10 +1,11 @@
 #include "types.h"
 #include "rnc/sdk/debug.h"
 
-extern u8 dmac_bus_error_message[] __asm__("D_001E8A08");
-extern u8 dma1_register_values_format[] __asm__("D_001E8A20");
-extern u8 dma_halt_question_message[] __asm__("D_001E8A38");
-void      print_register_values_and_halt(void) __asm__("FUN_00233f00");
+void print_register_values_and_halt(void) __asm__("FUN_00233f00");
+
+const char dmac_bus_error_message[] __asm__("D_001E8A08") = "DMAC(15) - Bus Error\n";
+const char dma1_register_values_format[] __asm__("D_001E8A20") = "D1_CHCR=%X\nD1_TADR=%X";
+const char dma_halt_question_message[] __asm__("D_001E8A38") = "Why doesn't this work?";
 
 void print_register_values_and_halt(void) {
     volatile u32 *dma1_chcr_register = (volatile u32 *)0x10009000;

@@ -777,7 +777,7 @@ void initialize_vendor_selected_item_mobys(void) {
     if (vendor_menu_lui.rows[vendor_menu_lui.cursor].is_ammo == 0) {
         float item_z_offset = D_L00_001C8920[vendor_menu_lui.rows[vendor_menu_lui.cursor].item][3];
         item_local_position[2] += item_z_offset;
-        if (discount_purchase_pricing[0]) {
+        if (item_available[ITEM_VENDOR_DISCOUNT]) {
             item_local_position[2] += item_z_offset;
         }
     }
@@ -894,10 +894,8 @@ extern void FUN_002049f0(s32);
 
 /* FUN_L00_0029ba78 - Level-00 shared: per-frame state machine (states 0..4) that
  * drives advance_moby_animation/FUN_L00_00250df8 on g->f20+0x400 and updates the
- * progress tables D_L00_001C40B0 / weapon_ammo_counts / D_0013DD70 / D_0015ED98. */
+ * progress tables D_L00_001C40B0 / weapon_ammo_counts / ammo_bought_stats / D_0015ED98. */
 
-extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
-extern u8  D_0013D4E3[];
 extern s32 D_0015ED98;
 extern u8  vendor_item_0x18_purchased[] __asm__("D_00141345");
 extern s32 vendor_purchase_confirmed_gp __asm__("D_L00_00161E0C") __attribute__((sda));
@@ -948,7 +946,7 @@ void update_vendor_purchase(void) {
                 vendor_ammo_quantity_adjustment_enabled_gp = 1;
             }
         } else {
-            s32 nn = D_0013D4E3[0] ? CUR_TB.f4 : CUR_TB.f0;
+            s32 nn = item_available[ITEM_VENDOR_DISCOUNT] ? CUR_TB.f4 : CUR_TB.f0;
             if (D_0015ED98 < nn) {
                 allocate_voice_for_target_entry(2, 0, vendor_menu.vendor_moby);
             }
@@ -1051,7 +1049,7 @@ void update_vendor_purchase(void) {
 
             if (CUR_ITEM.is_ammo == vendor_purchase_confirmed_gp) {
                 need = vendor_menu.mode ? CUR_TB.hA * D_L00_00161E34 : CUR_TB.h8 * D_L00_00161E34;
-            } else if (D_0013D4E3[0]) {
+            } else if (item_available[ITEM_VENDOR_DISCOUNT]) {
                 need = CUR_TB.f4;
             } else {
                 need = CUR_TB.f0;
@@ -1089,7 +1087,7 @@ void update_vendor_purchase(void) {
                     allocate_voice_for_target_entry(0, 0, vendor_menu.vendor_moby);
                 }
             } else {
-                purchase_cost = D_0013D4E3[0] ? CUR_TB.f4 : CUR_TB.f0;
+                purchase_cost = item_available[ITEM_VENDOR_DISCOUNT] ? CUR_TB.f4 : CUR_TB.f0;
                 if (D_0015ED98 >= purchase_cost) {
                     handle_vendor_auxiliary_moby_event(2);
                     grant_inventory_item(CUR_ITEM.item, 1);

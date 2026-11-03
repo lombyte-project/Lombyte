@@ -23,7 +23,7 @@ void prepare_save_game(int save_data, int slot) {
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
     copy_level_object_positions();
-    save_map_coverage(D_00141EC0 + (current_level_index << 11));
+    save_map_coverage(map_coverage_pages + (current_level_index << 11));
     memcard_make_whole_save((char *)save_data);
     card_state->unkF4 = saving;
     card_state->buf = (void *)save_data;

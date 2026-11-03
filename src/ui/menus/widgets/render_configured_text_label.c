@@ -299,3 +299,9 @@ int render_configured_text_label(struct MenuScreen *label) {
 
 extern __typeof__(render_configured_text_label) func_0021A328
     __attribute__((alias("FUN_0021a328")));
+
+/* Small data reached with lui/addiu: the label strings. */
+char empty_label_text[] __asm__("D_00160270") __attribute__((section(".sdata"))) = "default";
+char unavailable_label_text[] __asm__("D_00160278") __attribute__((section(".sdata"))) = "";
+char label_format[] __asm__("D_00160280") __attribute__((section(".sdata"))) = "%s %s";
+char fallback_label_text[] __asm__("D_00160288") __attribute__((section(".sdata"))) = "(null)";

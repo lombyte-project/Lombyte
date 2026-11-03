@@ -26,19 +26,19 @@ extern u8             subtitles_enabled __asm__("D_0015EE40") MACRO_ADDR;
 extern s32            screen_overlay_enabled __asm__("D_0015F34C") __attribute__((sda));
 extern s32            screen_color_effect_now __asm__("D_0015F350") __attribute__((sda));
 extern s32            occl_debug_overlay_enabled[2] __asm__("D_0015F370") __attribute__((sda));
-extern u8             render_setup_label[] __asm__("D_0015F380");
-extern u8             sky_draw_label[] __asm__("D_0015F390");
-extern u8             pre_effects_label[] __asm__("D_0015F3A0");
-extern u8             vu_effects_label[] __asm__("D_0015F3B0");
-extern u8             moby_effects_label[] __asm__("D_0015F3C0");
-extern u8             part_draw_label[] __asm__("D_0015F3D0");
-extern u8             post_effects_label[] __asm__("D_0015F3E0");
-extern u8             aa_blur_label[] __asm__("D_0015F3F0");
-extern u8             hud_label[] __asm__("D_0015F3F8");
-extern u8             screen_overlays_label[] __asm__("D_0015F400");
-extern u8             dma_sync_empty_label[] __asm__("D_0015F410");
-extern u8             tie_patch_light_label[] __asm__("D_0015F418");
-extern u8             moby_patch_label[] __asm__("D_0015F428");
+extern const char     render_setup_label[] __asm__("D_0015F380");
+extern const char     sky_draw_label[] __asm__("D_0015F390");
+extern const char     pre_effects_label[] __asm__("D_0015F3A0");
+extern const char     vu_effects_label[] __asm__("D_0015F3B0");
+extern const char     moby_effects_label[] __asm__("D_0015F3C0");
+extern const char     part_draw_label[] __asm__("D_0015F3D0");
+extern const char     post_effects_label[] __asm__("D_0015F3E0");
+extern const char     aa_blur_label[] __asm__("D_0015F3F0");
+extern const char     hud_label[] __asm__("D_0015F3F8");
+extern const char     screen_overlays_label[] __asm__("D_0015F400");
+extern const char     dma_sync_empty_label[] __asm__("D_0015F410");
+extern const char     tie_patch_light_label[] __asm__("D_0015F418");
+extern const char     moby_patch_label[] __asm__("D_0015F428");
 extern s32            draw_enable_mask __asm__("D_0015F434") MACRO_ADDR;
 extern f32 D_0015F440 MACRO_ADDR;
 extern s32            draw_callback_count __asm__("D_0015F464") __attribute__((sda));
@@ -319,3 +319,18 @@ extern __typeof__(draw_debug_profiler) func_001F39D0 __attribute__((alias("FUN_0
 
 /* Defined below its only user, so retail reaches it with lui. */
 u8 subtitles_enabled __asm__("D_0015EE40") MACRO_ADDR = 0;
+
+/* Section names handed to the profiler callbacks above. */
+const char render_setup_label[] __asm__("D_0015F380") = "render setup";
+const char sky_draw_label[] __asm__("D_0015F390") = "sky draw";
+const char pre_effects_label[] __asm__("D_0015F3A0") = "pre effects";
+const char vu_effects_label[] __asm__("D_0015F3B0") = "vu effects";
+const char moby_effects_label[] __asm__("D_0015F3C0") = "moby effects";
+const char part_draw_label[] __asm__("D_0015F3D0") = "part draw";
+const char post_effects_label[] __asm__("D_0015F3E0") = "post effects";
+const char aa_blur_label[] __asm__("D_0015F3F0") __attribute__((section(".rodata"))) = "aa blur";
+const char hud_label[] __asm__("D_0015F3F8") __attribute__((section(".rodata"))) = "hud";
+const char screen_overlays_label[] __asm__("D_0015F400") = "screen overlays";
+const char dma_sync_empty_label[] __asm__("D_0015F410") __attribute__((section(".rodata"))) = "";
+const char tie_patch_light_label[] __asm__("D_0015F418") = "tie patch-light";
+const char moby_patch_label[] __asm__("D_0015F428") = "moby patch";

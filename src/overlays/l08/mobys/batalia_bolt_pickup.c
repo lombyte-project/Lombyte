@@ -1,5 +1,6 @@
 /* Level 08 batalia bolt pickup: update, surface pose and rotating quad (no caller or class table entry found). */
 #include "types.h"
+#include "rnc/game/level_progress.h"
 #include "rnc/game/bolt_sources.h"
 #include "rnc/mobys/moby_class_id.h"
 #include "rnc/globals.h"
@@ -126,11 +127,9 @@ extern int
 transform_attachment_pose(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern int
 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
-extern s32            level_bolts[] __asm__("D_0013DF38");
 extern unsigned char *FUN_L00_002603d0(int);
 extern unsigned char *FUN_L00_00272060(
     float *pos, int a, float x, float y, int col, int mode, int b, float *vel, float z);
-extern unsigned char D_0014BEC0[][4];
 extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") MACRO_ADDR;
 extern void          FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void convert_pose_to_reference_local(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
@@ -457,11 +456,11 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                     int j;
                     int n;
 
-                    D_0014BEC0[current_level_index][moby->command] = 1;
+                    gold_bolts_collected[moby->command + current_level_index * 4] = 1;
                     n = 0;
                     for (i = 0; i < 20; i++) {
                         for (j = 0; j < 4; j++) {
-                            if (D_0014BEC0[i][j] != 0) {
+                            if (gold_bolts_collected[j + i * 4] != 0) {
                                 n++;
                             }
                         }

@@ -25,3 +25,5 @@ s32 scePad2Init(void) {
     } while ((s32)pad2_socket_record < (s32)(D_0015B540 + 0x3300));
     return 1;
 }
+
+u32 pad2_initialized[1] __asm__("D_00132DD0") __attribute__((section(".data"))) = {0};

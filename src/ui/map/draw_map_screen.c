@@ -1,9 +1,15 @@
 #include "rnc/ui/map/map_state.h"
 #include "types.h"
+#include "rnc/game/level_progress.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 #include "rnc/world/data/find_id_in_terminated_table.h"
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
+#include "rnc/game/item_state.h"
+#include "rnc/game/level_state.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 struct MapHdr {
     s32 unk0;
@@ -20,17 +26,9 @@ struct MapEntry {
     s32 b;
 };
 
-#include "rnc/ui/menus/menu_system.h"
-#include "rnc/ui/menus/menu_screen.h"
-
 extern u8 map_cross_destination_page[] __asm__("D_001CF678");
 extern u8 map_circle_destination_page[] __asm__("D_001CF418");
-extern u8 D_0013D4E1[];
 
-#include "rnc/game/level_state.h"
-#include "rnc/ui/menus/menu_globals.h"
-
-extern char            D_00141EC0[];
 extern struct MapEntry D_001383A0[];
 extern struct MapEntry D_00138438[];
 
@@ -130,7 +128,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     }
 
     id = level_map_selection.level;
-    if (D_0013D4E1[0] != 0) {
+    if (item_available[ITEM_MAP_SHIFT] != 0) {
         id += 0x100;
     }
     slot = find_map_entry_slot(id);
@@ -155,7 +153,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             } else {
                 if (level_visit_state[level_map_selection.level] != 0) {
                     load_map_chunk(map_mask_buffer,
-                                   D_00141EC0 + (level_map_selection.level << 11),
+                                   map_coverage_pages + (level_map_selection.level << 11),
                                    map_header_base + hdr->unk4);
                 } else {
                     decode_map_mask(map_mask_buffer, a, a, map_header_base);

@@ -4,7 +4,8 @@
 #include "rnc/sdk/top_thread.h"
 #include "rnc/sdk/deci2.h"
 
-extern u8 thread_command_error_message[] __asm__("D_001526E8");
+const char
+    thread_command_error_message[] __asm__("D_001526E8") = "## internel error in libkernl.a!\n";
 
 extern s32 WaitSema(s32 sema);
 extern s32 WakeupThread(s32 id);

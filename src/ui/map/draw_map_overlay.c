@@ -21,17 +21,17 @@ typedef struct {
 
 #define SPR ((MapIconBounds *)0x70000000)
 
-extern u8  D_0013D5BC[];
-extern u16 occl_cam_param1[] __asm__("D_001518D2");
-extern u8  D_0015EDB4;
-extern s32 D_0015FD60 __attribute__((sda));
-extern f32 D_0015FD80 __attribute__((sda));
-extern f32 D_0015FD84 __attribute__((sda));
-extern f32 D_0015FD88 __attribute__((sda));
-extern f32 D_0015FD8C __attribute__((sda));
-extern f32 D_0015FD90 __attribute__((sda));
-extern f32 D_0015FD94 __attribute__((sda));
-extern u8  no_map_available_text[] __asm__("D_001E8068");
+extern u8   D_0013D5BC[];
+extern u16  occl_cam_param1[] __asm__("D_001518D2");
+extern u8   D_0015EDB4;
+extern s32  D_0015FD60 __attribute__((sda));
+extern f32  D_0015FD80 __attribute__((sda));
+extern f32  D_0015FD84 __attribute__((sda));
+extern f32  D_0015FD88 __attribute__((sda));
+extern f32  D_0015FD8C __attribute__((sda));
+extern f32  D_0015FD90 __attribute__((sda));
+extern f32  D_0015FD94 __attribute__((sda));
+extern char no_map_available_text[] __asm__("D_001E8068");
 
 extern void print_debug_text_centered(s32, s32, s32, u8 *) __asm__("func_001F0C50");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -88,10 +88,10 @@ void draw_map_overlay(void) {
     s32               tile_limit;
 
     if (level_map_selection.unk24 == 0) {
-        u8 *font = no_map_available_text;
+        char *text = no_map_available_text;
 
         setup_gif_paging(0);
-        print_debug_text_centered(0x100, (s16)occl_cam_param1[0] >> 1, 0x80909090, font);
+        print_debug_text_centered(0x100, (s16)occl_cam_param1[0] >> 1, 0x80909090, text);
         do_gif_paging();
         return;
     }
@@ -516,3 +516,5 @@ void draw_map_overlay(void) {
 }
 
 extern __typeof__(draw_map_overlay) func_00205640 __attribute__((alias("FUN_00205640")));
+
+char no_map_available_text[] __asm__("D_001E8068") = "No Map Available";

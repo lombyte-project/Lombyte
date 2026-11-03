@@ -6,6 +6,13 @@
 #include "rnc/sdk/debug.h"
 #include "rnc/sdk/libc/stdio.h"
 #include "rnc/sdk/storage/memory_card.h"
+#include "rnc/save/memory_card_state.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/save/mc_data.h"
+#include "rnc/game/item_state.h"
+#include "rnc/game/bolt_sources.h"
+#include "rnc/game/level_progress.h"
 
 typedef struct {
     s32 x0;
@@ -15,22 +22,11 @@ typedef struct {
     s32 x10;
 } McChunk;
 
-#include "rnc/save/memory_card_state.h"
-#include "rnc/game/game_globals.h"
-#include "rnc/ui/menus/menu_globals.h"
-#include "rnc/save/mc_data.h"
-
-extern char D_0013D1D0[];
-extern char D_0013D1E8[];
-extern char D_0013D200[];
-extern char D_0013D220[];
-extern char D_0013D240[];
-extern char D_0013D270[];
-extern char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
-extern char memcard_deleting_entry_message[] __asm__("D_0015FEA0");
-extern u8   D_001A0880[];
-extern char D_001A08A0[];
-extern char memcard_deleting_directory_message[] __asm__("D_001E81E8");
+extern const char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
+extern const char memcard_deleting_entry_message[] __asm__("D_0015FEA0");
+extern u8         D_001A0880[];
+extern char       D_001A08A0[];
+extern char       memcard_deleting_directory_message[] __asm__("D_001E81E8");
 
 extern void  RaiseKernelTrap();
 extern void  calculate_ring_buffer_bounds(s32, McChunk **, s32 *) __asm__("func_001FD6E0");
@@ -141,7 +137,7 @@ void memcard_update_state(void) {
         break;
 
     case MEMCARD_REQUEST_CHDIR:
-        if (sceMcChdir(CARD.port, CARD.slot, D_0013D1D0, 0) == 0) {
+        if (sceMcChdir(CARD.port, CARD.slot, save_directory_path, 0) == 0) {
             MC.sub = 0;
             MC.state = MEMCARD_PROBE_SAVE_HEADER;
         }
@@ -172,7 +168,7 @@ void memcard_update_state(void) {
             }
             break;
         case MEMCARD_PROBE_REQUEST_OPEN:
-            sprintf(name, D_0013D270, 0);
+            sprintf(name, save_slot_path_format, 0);
             if (sceMcOpen(CARD.port, CARD.slot, name, 1) == 0) {
                 MC.sub++;
             }
@@ -274,7 +270,7 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         case MEMCARD_CREATE_REQUEST_MKDIR:
-            if (sceMcMkdir(CARD.port, CARD.slot, D_0013D1D0) == 0) {
+            if (sceMcMkdir(CARD.port, CARD.slot, save_directory_path) == 0) {
                 MC.sub = 2;
             }
             break;
@@ -318,16 +314,16 @@ void memcard_update_state(void) {
         case MEMCARD_CREATE_REQUEST_AUXILIARY_FILE_OPEN:
             switch (MC.sub) {
             case MEMCARD_CREATE_REQUEST_ICON_SYS_OPEN:
-                strcpy(name, D_0013D200);
+                strcpy(name, save_icon_sys_path);
                 break;
             case MEMCARD_CREATE_REQUEST_STATIC_ICON_OPEN:
-                strcpy(name, D_0013D220);
+                strcpy(name, save_icon_path);
                 break;
             case MEMCARD_CREATE_REQUEST_AUXILIARY_FILE_OPEN:
-                strcpy(name, D_0013D240);
+                strcpy(name, save_main_file_path);
                 break;
             case MEMCARD_CREATE_REQUEST_SAVE_OPEN:
-                sprintf(name, D_0013D270, CARD.save_index);
+                sprintf(name, save_slot_path_format, CARD.save_index);
                 break;
             }
             if (sceMcOpen(CARD.port, CARD.slot, name, 0x203) == 0) {
@@ -453,13 +449,13 @@ void memcard_update_state(void) {
     case MEMCARD_DELETE_SAVE_DIRECTORY:
         switch (MC.sub) {
         case MEMCARD_DELETE_REQUEST_FIRST_DIRECTORY_ENTRY:
-            if (sceMcGetDir(CARD.port, CARD.slot, D_0013D1E8, 0, 1, D_001A0880) == 0) {
+            if (sceMcGetDir(CARD.port, CARD.slot, save_directory_pattern, 0, 1, D_001A0880) == 0) {
                 MC.sub = 1;
             }
             break;
         case MEMCARD_DELETE_PROCESS_ENTRY_AND_REQUEST_DELETE:
             if (MC.result == 1) {
-                sprintf(name, memcard_delete_entry_path_format, D_0013D1D0, D_001A08A0);
+                sprintf(name, memcard_delete_entry_path_format, save_directory_path, D_001A08A0);
                 DebugPrint(memcard_deleting_entry_message, name);
                 if (sceMcDelete(CARD.port, CARD.slot, name) == 0) {
                     MC.sub = 2;
@@ -485,13 +481,13 @@ void memcard_update_state(void) {
             }
             break;
         case MEMCARD_DELETE_REQUEST_NEXT_DIRECTORY_ENTRY:
-            if (sceMcGetDir(CARD.port, CARD.slot, D_0013D1E8, 1, 1, D_001A0880) == 0) {
+            if (sceMcGetDir(CARD.port, CARD.slot, save_directory_pattern, 1, 1, D_001A0880) == 0) {
                 MC.sub = 1;
             }
             break;
         case MEMCARD_DELETE_REQUEST_DIRECTORY_DELETE:
-            if (sceMcDelete(CARD.port, CARD.slot, D_0013D1D0) == 0) {
-                DebugPrint(memcard_deleting_directory_message, D_0013D1D0);
+            if (sceMcDelete(CARD.port, CARD.slot, save_directory_path) == 0) {
+                DebugPrint(memcard_deleting_directory_message, save_directory_path);
                 MC.sub = 4;
             }
             break;
@@ -550,9 +546,9 @@ void memcard_update_state(void) {
         switch (MC.sub) {
         case MEMCARD_READ_SAVE_REQUEST_OPEN:
             if (MC.state == MEMCARD_READ_SCANNED_SAVE_INFO) {
-                sprintf(name, D_0013D270, CARD.scan_save_index);
+                sprintf(name, save_slot_path_format, CARD.scan_save_index);
             } else {
-                sprintf(name, D_0013D270, CARD.save_index);
+                sprintf(name, save_slot_path_format, CARD.save_index);
             }
             if (sceMcOpen(CARD.port, CARD.slot, name, 1) == 0) {
                 MC.sub++;
@@ -745,7 +741,7 @@ void memcard_update_state(void) {
     case MEMCARD_UPDATE_SAVE:
         switch (MC.sub) {
         case MEMCARD_UPDATE_SAVE_REQUEST_OPEN:
-            sprintf(name, D_0013D270, CARD.save_index);
+            sprintf(name, save_slot_path_format, CARD.save_index);
             if (sceMcOpen(CARD.port, CARD.slot, name, 2) == 0) {
                 MC.sub = 1;
             }
@@ -932,7 +928,7 @@ void memcard_update_state(void) {
     case MEMCARD_WRITE_FULL_SAVE:
         switch (MC.sub) {
         case MEMCARD_WRITE_FULL_SAVE_REQUEST_OPEN:
-            sprintf(name, D_0013D270, CARD.save_index);
+            sprintf(name, save_slot_path_format, CARD.save_index);
             if (sceMcOpen(CARD.port, CARD.slot, name, 2) == 0) {
                 MC.sub = 1;
             }
@@ -1001,6 +997,29 @@ void memcard_update_state(void) {
 
 extern __typeof__(memcard_update_state) func_002093D8 __attribute__((alias("FUN_002093d8")));
 
+/* Defined in retail order, in front of the memory card buffers. */
+s32 pause_iop_sprite_lists[8] = {0};
+
+u8 map_coverage_pages[LEVEL_RECORD_COUNT * MAP_COVERAGE_PAGE_SIZE] = {0};
+
+u8 gold_bolts_collected[LEVEL_RECORD_COUNT * 4] = {0};
+
+u8 buried_bolt_states[LEVEL_RECORD_COUNT * 16] __asm__("D_0014BF10") = {0};
+
+unsigned char visited52[LEVEL_RECORD_COUNT * 16] = {0};
+
+s32 D_0014C190_257218[LEVEL_RECORD_COUNT][64] = {0};
+
+BoltSourceStats bolt_source_stats[LEVEL_RECORD_COUNT][64] = {0};
+
+s32 hero_respawn_counts_by_level_and_source_category[LEVEL_RECORD_COUNT][16] = {0};
+
+s32 D_0014EE90[16] = {0};
+
 u8 memcard_game_data_buffer[MEMCARD_GAME_DATA_SIZE] = {0};
 
 u8 memcard_level_data_buffer[MEMCARD_LEVEL_DATA_SIZE] = {0};
+
+const char memcard_delete_entry_path_format[] __asm__("D_0015FE98") = "%s/%s";
+const char memcard_deleting_entry_message[] __asm__("D_0015FEA0")
+    __attribute__((section(".sdata"))) = "deleting %s\n";

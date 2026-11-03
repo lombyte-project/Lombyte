@@ -63,7 +63,7 @@ void render_vendor_purchase_prompt_pass(void) {
             }
             id = 0x4EE0;
         } else {
-            if (discount_purchase_pricing[0] != 0) {
+            if (item_available[ITEM_VENDOR_DISCOUNT] != 0) {
                 cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].boltsHard;
             } else {
                 cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].bolts;

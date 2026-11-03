@@ -22,30 +22,31 @@
 #include "rnc/streaming.h"
 #include "rnc/ui/text/font.h"
 
-extern u8   vu0_micro_program[] __asm__("D_0010E4C0");
-extern u8   rebooted_iop_message[] __asm__("D_0015FA88");
-extern u8   iop_reboot_image_path[] __asm__("D_001E7AE0");
-extern u8   loaded_irx_modules_message[] __asm__("D_001E7AF8");
-extern u8   unsupported_lang_message[] __asm__("D_001E7B10");
-extern s32  DIntr();
-extern s32  EnableCache();
-extern s32  fill_transfer_words() __asm__("func_001F97E8");
-extern void FlushCache();
-extern s32  reset_vif1_gif() __asm__("FUN_001204b8");
-extern s32  load_disc_sectors_into_global_buffer() __asm__("func_0012F2B8");
-extern s32  init_view_context() __asm__("func_001F2C60");
-extern s32  set_pal_mode() __asm__("func_001F34E8");
-extern s32  initialize_alpha_lookup_table() __asm__("func_001F7A30");
-extern s32  load_irx_module() __asm__("func_00201520");
-extern s32  init_mem_slots() __asm__("func_002015D8");
-extern s32  memcard_get_name() __asm__("func_00209030");
-extern s32  memcard_initialize() __asm__("func_0020AC58");
-extern s32  init_dma() __asm__("func_0020B418");
-extern s32  decompress_wad() __asm__("FUN_0020b618");
-extern s32  init_pads() __asm__("func_00217048");
-extern s32  vu0_load_micro_program() __asm__("func_002334D8");
-extern s32  vu1_init_chain() __asm__("func_002335D0");
-void        init_once(void) __asm__("FUN_00201650");
+extern u8         vu0_micro_program[] __asm__("D_0010E4C0");
+extern const char rebooted_iop_message[] __asm__("D_0015FA88");
+extern s32        DIntr();
+extern s32        EnableCache();
+extern s32        fill_transfer_words() __asm__("func_001F97E8");
+extern void       FlushCache();
+extern s32        reset_vif1_gif() __asm__("FUN_001204b8");
+extern s32        load_disc_sectors_into_global_buffer() __asm__("func_0012F2B8");
+extern s32        init_view_context() __asm__("func_001F2C60");
+extern s32        set_pal_mode() __asm__("func_001F34E8");
+extern s32        initialize_alpha_lookup_table() __asm__("func_001F7A30");
+extern s32        load_irx_module() __asm__("func_00201520");
+extern s32        init_mem_slots() __asm__("func_002015D8");
+extern s32        memcard_get_name() __asm__("func_00209030");
+extern s32        memcard_initialize() __asm__("func_0020AC58");
+extern s32        init_dma() __asm__("func_0020B418");
+extern s32        decompress_wad() __asm__("FUN_0020b618");
+extern s32        init_pads() __asm__("func_00217048");
+extern s32        vu0_load_micro_program() __asm__("func_002334D8");
+extern s32        vu1_init_chain() __asm__("func_002335D0");
+void              init_once(void) __asm__("FUN_00201650");
+
+const char iop_reboot_image_path[] __asm__("D_001E7AE0") = "cdrom0:\\IOPRP243.IMG;1";
+const char loaded_irx_modules_message[] __asm__("D_001E7AF8") = "loaded irx modules\n";
+const char unsupported_lang_message[] __asm__("D_001E7B10") = "Unsupported language %d\n";
 
 /* The boot archive as decompress_wad unpacks it: the IRX modules to load,
    each as an offset from the archive start and a size. */
@@ -179,3 +180,7 @@ void init_once(void) {
 extern __typeof__(init_once) func_00201650 __attribute__((alias("FUN_00201650")));
 
 u8 image_clear_buffer[4096] = {0};
+
+/* Retail keeps this message in small data; init_once reaches it with lui/addiu. */
+const char rebooted_iop_message[] __asm__("D_0015FA88")
+    __attribute__((section(".sdata"))) = "Rebooted IOP\n";

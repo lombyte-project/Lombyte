@@ -51,8 +51,10 @@ typedef struct {
     f32 x, y;
 } O_25a478;
 
-extern u8  D_0013E533[];
-extern f32 hit_damage_override_table[2] __asm__("D_0015FFC8") __attribute__((sda));
+extern u8 D_0013E533[];
+/* Small data, defined above the code so it is reached $gp-relative. */
+f32 hit_damage_override_table[2] __asm__("D_0015FFC8") = {1.0f, 0.667f};
+
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");

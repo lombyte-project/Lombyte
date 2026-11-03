@@ -13,11 +13,13 @@ extern struct MoviePlayer *movie_player_macro __asm__("D_0016120C") MACRO_ADDR;
 #define voBuf (movie_player_macro->vo_buf)
 extern void set_image_tag(void *, int, int, int) __asm__("func_0023B210"); /* setImageTag */
 extern void switch_thread(void) __asm__("func_0023A770");                  /* switchThread */
-extern void err_message(char *) __asm__("func_0023AB78");                  /* ErrMessage */
-extern char decode_thread_aborted_message[] __asm__("D_001E8B38");
-extern char mpeg_get_picture_decode_error_message[] __asm__("D_001E8B50");
+extern void err_message(const char *) __asm__("func_0023AB78");            /* ErrMessage */
 /* decBs0(VideoDec *) */
 int dec_bs0(struct VideoDec *vd) __asm__("FUN_0023cec8");
+
+const char decode_thread_aborted_message[] __asm__("D_001E8B38") = "decode thread: aborted\n";
+const char mpeg_get_picture_decode_error_message[] __asm__("D_001E8B50") =
+    "sceMpegGetPicture() decode error";
 
 int dec_bs0(struct VideoDec *vd) {
     enum {

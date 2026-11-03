@@ -8,8 +8,8 @@
 #include "rnc/ui/text/text_region.h"
 
 extern char D_001602A0[];
-extern u8   ammo_count_decimal_format[] __asm__("D_001602B8");
-extern u8   ammo_count_grouped_decimal_format[] __asm__("D_001602C0");
+extern char ammo_count_decimal_format[] __asm__("D_001602B8");
+extern char ammo_count_grouped_decimal_format[] __asm__("D_001602C0");
 extern char D_001602D0[];
 
 struct ImageEntry {
@@ -75,3 +75,8 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     do_gif_paging();
     return 2;
 }
+
+/* Small data reached with lui/addiu: the ammo count formats. */
+char ammo_count_decimal_format[] __asm__("D_001602B8") __attribute__((section(".sdata"))) = "%d/";
+char ammo_count_grouped_decimal_format[] __asm__("D_001602C0")
+    __attribute__((section(".sdata"))) = "%d,%03d/";

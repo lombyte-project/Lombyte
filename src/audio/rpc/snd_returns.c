@@ -8,8 +8,10 @@
    gp-relative, which needs their definitions ahead of them. */
 s32        *snd_current_buffer __asm__("D_0015EC80") = 0;
 s32         snd_current_buffer_index __asm__("D_0015EC84") = 0;
-extern u8   snd_no_return_error_string[] __asm__("D_00153C98");
 extern void FlushCache();
+
+const char snd_no_return_error_string[] __asm__("D_00153C98") =
+    "989snd.c: Sif says RPC isn't busy, but we still don't have returns from the IOP!\n";
 
 s32 snd_got_returns(void) __asm__("FUN_0012de70");
 

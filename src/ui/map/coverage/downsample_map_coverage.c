@@ -4,9 +4,9 @@ struct Table16 {
     s32 v[16];
 };
 
-extern u8            *D_001A00FC[];
-extern struct Table16 map_coverage_nibble_contribution_table __asm__("D_001E8080");
-extern void           fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
+extern u8                  *D_001A00FC[];
+extern const struct Table16 map_coverage_nibble_contribution_table __asm__("D_001E8080");
+extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
 
 /* Builds a 1bpp mask from the 4bpp map at D_001A00FC[0]: each nibble is
    weighted through the 16-entry table D_001E8080, four source rows are summed
@@ -57,3 +57,8 @@ void downsample_map_coverage(u8 *coverage_mask) {
 }
 
 extern __typeof__(downsample_map_coverage) func_00208030 __attribute__((alias("FUN_00208030")));
+
+/* Entry n is the number of set bits in nibble n. */
+const struct Table16 map_coverage_nibble_contribution_table __asm__("D_001E8080") = {
+    {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4}
+};

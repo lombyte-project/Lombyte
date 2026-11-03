@@ -13,7 +13,6 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
 
-extern s32  freeze_wave_period __asm__("D_0015F520") __attribute__((sda));
 extern char freeze_default_text[] __asm__("D_0015F548");
 extern char freeze_fmt_scsc[] __asm__("D_0015F550");
 extern char freeze_fmt_indent[] __asm__("D_0015F560");
@@ -47,18 +46,39 @@ extern void draw_rotated_sprite(
 
 void draw_dialog_text(void) __asm__("FUN_001fbc50");
 
-extern s32 freeze_ans2 __asm__("D_0015F4E8") __attribute__((sda));
-extern s32 freeze_ans1 __asm__("D_0015F4EC") __attribute__((sda));
-
 #include "rnc/ui/text/draw_dialog_text_globals.h"
 
-extern s32        freeze_bevel_a_text __asm__("D_0015F508") __attribute__((sda));
-extern s32        freeze_stats_text __asm__("D_0015F51C") __attribute__((sda));
-extern char       freeze_fmt_race_first_place[] __asm__("D_0015F568");
-extern char       freeze_fmt_race_second_place[] __asm__("D_0015F570");
-extern char       freeze_fmt_race_third_place[] __asm__("D_0015F578");
-extern char       freeze_fmt_race_other_place[] __asm__("D_0015F580");
-extern char       freeze_fmt_record_label[] __asm__("D_0015F588");
+extern char freeze_fmt_race_first_place[] __asm__("D_0015F568");
+extern char freeze_fmt_race_second_place[] __asm__("D_0015F570");
+extern char freeze_fmt_race_third_place[] __asm__("D_0015F578");
+extern char freeze_fmt_race_other_place[] __asm__("D_0015F580");
+extern char freeze_fmt_record_label[] __asm__("D_0015F588");
+/* Small data, in retail order: layout values and RGBA colours (0xAABBGGRR).
+ * Defined above the code, so it reaches them $gp-relative. */
+s32 freeze_ans2 __asm__("D_0015F4E8") = 115;
+s32 freeze_ans1 __asm__("D_0015F4EC") = 130;
+s32 freeze_fading_dialog_text_base_color __asm__("D_0015F4F0") = 0x00FFA888;
+s32 freeze_fading_dialog_text_blend_target_color __asm__("D_0015F4F4") = (s32)0x80FFA888;
+s32 freeze_three_line_outline_center_x __asm__("D_0015F4F8") = 256;
+s32 freeze_three_line_outline_center_y __asm__("D_0015F4FC") = 185;
+s32 freeze_three_line_outline_half_width __asm__("D_0015F500") = 100;
+s32 freeze_three_line_outline_half_height __asm__("D_0015F504") = 50;
+s32 freeze_bevel_a_text __asm__("D_0015F508") = 150;
+s32 freeze_stats_outline_center_x __asm__("D_0015F50C") = 256;
+s32 freeze_stats_outline_center_y __asm__("D_0015F510") = 205;
+s32 freeze_stats_outline_half_width __asm__("D_0015F514") = 100;
+s32 freeze_stats_outline_half_height __asm__("D_0015F518") = 120;
+s32 freeze_stats_text __asm__("D_0015F51C") = 110;
+s32 freeze_wave_period __asm__("D_0015F520") = 180;
+s32 freeze_outline_pulse_base_color __asm__("D_0015F524") = (s32)0x80E08060;
+s32 freeze_outline_pulse_blend_target_color __asm__("D_0015F528") = (s32)0x80D06050;
+s32 freeze_shared_dialog_text_base_color __asm__("D_0015F52C") = 0x00FFC0C0;
+s32 freeze_shared_dialog_text_blend_target_color __asm__("D_0015F530") = (s32)0x80FFC0C0;
+s32 freeze_matched_record_text_base_color __asm__("D_0015F534") = 0x0060EF60;
+s32 freeze_matched_record_text_blend_target_color __asm__("D_0015F538") = (s32)0x8060EF60;
+s32 freeze_unmatched_record_text_base_color __asm__("D_0015F53C") = 0x006060EF;
+s32 freeze_unmatched_record_text_blend_target_color __asm__("D_0015F540") = (s32)0x806060EF;
+
 struct TextRegion D_001E78F0 = {0x50, 0x154, 0x60, 0x1a0, 0x100, 0x54, 0, 0, 0x10, 1, 0, 0};
 
 struct TextRegion D_001E7908 = {0x64, 0x12c, 0x60, 0x1a0, 0x100, 0x68, 0, 0, 0x10, 1, 0, 0};
@@ -529,3 +549,19 @@ void draw_dialog_text(void) {
 }
 
 extern __typeof__(draw_dialog_text) func_001FBC50 __attribute__((alias("FUN_001fbc50")));
+
+/* Format strings, small data reached with lui/addiu. */
+char freeze_default_text[] __asm__("D_0015F548") __attribute__((section(".sdata"))) = "";
+char freeze_fmt_scsc[] __asm__("D_0015F550") __attribute__((section(".sdata"))) = "%s%c%c%s";
+char freeze_fmt_indent[] __asm__("D_0015F560") __attribute__((section(".sdata"))) = "    %s";
+char freeze_fmt_race_first_place[] __asm__("D_0015F568")
+    __attribute__((section(".sdata"))) = "%dst";
+char freeze_fmt_race_second_place[] __asm__("D_0015F570")
+    __attribute__((section(".sdata"))) = "%dnd";
+char freeze_fmt_race_third_place[] __asm__("D_0015F578")
+    __attribute__((section(".sdata"))) = "%drd";
+char freeze_fmt_race_other_place[] __asm__("D_0015F580")
+    __attribute__((section(".sdata"))) = "%dth";
+char freeze_fmt_record_label[] __asm__("D_0015F588") __attribute__((section(".sdata"))) = "%s";
+char freeze_fmt_time[] __asm__("D_0015F590") __attribute__((section(".sdata"))) = "%d:%02d:%02d";
+char freeze_fmt_score[] __asm__("D_0015F5A0") __attribute__((section(".sdata"))) = "%d";

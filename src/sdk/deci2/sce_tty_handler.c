@@ -20,10 +20,11 @@ typedef struct {
     TtyQueue    *queue;
 } TtyState;
 
-extern u8   tty_packet_size_error_message[] __asm__("D_00152710");
-extern u8   tty_receive_error_message[] __asm__("D_00152738");
-extern u8   tty_send_error_format[] __asm__("D_00152750");
-extern u8   tty_pending_send_bytes_error_format[] __asm__("D_00152768");
+const char
+    tty_packet_size_error_message[] __asm__("D_00152710") = "TTY: packet size larger than expect\n";
+const char tty_receive_error_message[] __asm__("D_00152738") = "TTY: receive error";
+const char tty_send_error_format[] __asm__("D_00152750") = "TTY: send err %d\n";
+const char tty_pending_send_bytes_error_format[] __asm__("D_00152768") = "TTY: err ti->wlen=%08x\n";
 extern void QueuePeekWriteDone(TtyQueue *queue);
 
 void sceTtyHandler(s32 event, s32 param, TtyState *tty) {

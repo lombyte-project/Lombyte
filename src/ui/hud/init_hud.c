@@ -20,7 +20,7 @@ struct HudSlot {
 
 #include "rnc/ui/hud/hud_state.h"
 
-extern u8                       hud_file_str[] __asm__("D_0015F6D8");
+extern char                     hud_file_str[] __asm__("D_0015F6D8");
 extern struct Globals_0015FA00 *hud_bank_main __asm__("D_0015FA00");
 
 #include "rnc/ui/hud/init_hud_globals.h"
@@ -68,3 +68,6 @@ void init_hud(void) {
     clear_blocks_16(hud_bank_main, 0x2800);
     hud_bank_main->unk20 = 0xFF;
 }
+
+/* Small data reached with lui/addiu: the allocation tag. */
+char hud_file_str[] __asm__("D_0015F6D8") __attribute__((section(".sdata"))) = "hud.cpp";

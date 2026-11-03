@@ -5,7 +5,8 @@
 #include "rnc/rendering/screen.h"
 #include "rnc/math/asm_helpers.h"
 
-extern char textured_rectangle_packet_header_template[] __asm__("D_00160860");
+/* The GIF tag ahead of the rectangle's register list, copied as one quadword. */
+extern u64 textured_rectangle_packet_header_template[2] __asm__("D_00160860");
 
 void emit_textured_rectangle(f32 x,
                              f32 y,
@@ -75,3 +76,10 @@ void emit_textured_rectangle(f32 x,
 }
 
 extern __typeof__(emit_textured_rectangle) func_001F5808 __attribute__((alias("FUN_001f5808")));
+
+/* GIF tag: NLOOP 1, EOP, REGLIST, 13 registers.  Small data in retail,
+   defined below its only user, so the function reaches it with lui. */
+u64 textured_rectangle_packet_header_template[2] __attribute__((section(".sdata"), aligned(16))) = {
+    0xD400000000008001ULL,
+    0x0008535353531806ULL,
+};

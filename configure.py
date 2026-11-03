@@ -940,17 +940,24 @@ OVERLAY_SN_UNITS = {
 # link fails when the section is not SIZE bytes.  Both the assembly-backed and
 # the promoted (normalized) unit names resolve to the same retail bytes.
 RODATA_OVERLAYS = {
-    "_dtoa_r": (0x152330, 0x532B0, 56),
+    "_dtoa_r": (0x152310, 0x53290, 88),  # Infinity/NaN/0 strings, f64 literals, switch table
     # _getpic's switch emits a 5-entry jump table (0x14 bytes) that retail
     # stored at 0x153AA0 inside core_rdata; the expected object references it
     # as the splat symbol jtbl_00153AA0, so the compiled .rodata must land at
     # the same VMA/file offset for the relocations to resolve content-equal.
     "_getpic": (0x153AA0, 0x54A20, 20),
-    "sdk/deci2/printfloat": (0x152798, 0x53718, 24),  # its three f64 literals (0.1, 0.1, 1e6)
+    "sdk/libc/locale/_localeconv_r": (0x152370, 0x532F0, 58),  # the C locale lconv and its strings
+    "sdk/libc/mprec/pow5mult": (0x1523B8, 0x53338, 12),  # small_powers_of_five
+    "sdk/deci2/printfloat": (0x152780, 0x53700, 48),  # its three formats and three f64 literals (0.1, 0.1, 1e6)
     "sdk/deci2/printf_impl": (0x1527B0, 0x53730, 292),  # _printf's format switch table (jtbl_001527B0)
     "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0, 26),  # its RPC-collision message
-    "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
-    "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 96),  # its buffer-full message
+    "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 136),  # its three error messages
+    "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 141),  # its buffer-full and continuing messages
+    "audio/snd_start_sound_system": (0x153C50, 0x54BD0, 70),  # its bind error and source file name
+    "audio/rpc/snd_returns": (0x153C98, 0x54C18, 82),  # its no-returns message
+    "audio/banks/snd_bank_load_from_ee_cb": (0x153EC0, 0x54E40, 89),  # its two error messages
+    "runtime/debug/print_register_values_and_halt": (0x1E8A08, 0xE9988, 71),  # its three messages
+    "movies/decoder/dec_bs0": (0x1E8B38, 0xE9AB8, 57),  # its two messages
     "sdk/mpeg/errors/print_mpeg_error": (0x153AD8, 0x54A58, 16),  # its error message
     "sdk/graph/sce_gs_set_def_load_image": (0x1530B0, 0x54030, 284),  # its error message and switch table
     "update_menu_resource_stream": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
@@ -972,32 +979,81 @@ RODATA_OVERLAYS = {
     "mobys/animation/update_resident_dialogue_animation_state": (0x1E8A90, 0xE9A10, 52),  # switch table
     "update_help_state": (0x1E7A40, 0xE89C0, 36),  # switch table
     "memcard_update_state": (0x1E8200, 0xE9180, 348),  # switch table
-    "init_once": (0x1E7B30, 0xE8AB0, 20),  # switch table
+    "init_once": (0x1E7AE0, 0xE8A60, 100),  # its three strings and switch table
     "actuator_calc_power": (0x1E7640, 0xE85C0, 24),  # switch table
     "resolve_moby_hit_response": (0x1E84E0, 0xE9460, 128),  # switch table
     "service_level_archive_load": (0x1E7CE0, 0xE8C60, 32),  # switch table
     "mode_freeze_init": (0x1E78D0, 0xE8850, 28),  # switch table
     "update_menu_entry_actions": (0x1E8770, 0xE96F0, 48),  # menu action switch table
     "draw_dialog_text": (0x1E7920, 0xE88A0, 124),  # switch table
-    "sdk/rpc/iop/sce_sif_reboot_iop": (0x152960, 0x538E0, 11),
-    "sdk/storage/cdvd/cd_check_ncmd": (0x152EB0, 0x53E30, 39),
-    "sdk/storage/cdvd/cd_check_scmd": (0x152F10, 0x53E90, 39),
+    "sdk/rpc/iop/sce_sif_reboot_iop": (0x152960, 0x538E0, 41),
+    "sdk/storage/cdvd/cd_check_ncmd": (0x152EB0, 0x53E30, 64),
+    "sdk/storage/cdvd/cd_check_scmd": (0x152F10, 0x53E90, 64),
     "sdk/storage/cdvd/checkModelVersion": (0x153030, 0x53FB0, 12),
     "sdk/dma/wait_dma": (0x1533E0, 0x54360, 22),
-    "sdk/input/dbc/sceDbcInit": (0x153518, 0x54498, 57),
+    "sdk/dma/sce_dma_reset": (0x1533F8, 0x54378, 40),  # DmaChannelsUsed
+    "sdk/dma/sce_dma_put_env": (0x153420, 0x543A0, 42),  # its STS/STD/MFD channel codes
+    "sdk/input/dbc/sceDbcInit": (0x1534D8, 0x54458, 121),
     "sdk/mpeg/macroblock/mb_address_increment": (0x1537A8, 0x54728, 50),
-    "sdk/mpeg/macroblock/slicea0": (0x153800, 0x54780, 38),
-    "sdk/mpeg/headers/_quantMatrixExtension": (0x153910, 0x54890, 44),
+    "sdk/mpeg/macroblock/slicea0": (0x153800, 0x54780, 66),
+    "sdk/mpeg/headers/_quantMatrixExtension": (0x1538E8, 0x54868, 84),
     "sdk/mpeg/ref_images/is_out_size_ok": (0x153980, 0x54900, 41),
     "sdk/mpeg/errors/report_mpeg_sequence_scalable_unsupported": (0x153B48, 0x54AC8, 48),
     "sdk/mpeg/errors/report_unknown_mpeg_extension": (0x153B78, 0x54AF8, 18),
     "sdk/mpeg/errors/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
     "sdk/mpeg/errors/report_mpeg_picture_temporal_scalable_unsupported": (0x153BC8, 0x54B48, 51),
-    "sdk/scf/GetRomName": (0x153C00, 0x54B80, 12),
+    "sdk/scf/GetRomName": (0x153C00, 0x54B80, 62),
     "draw_scrolling_sky_shells": (0x1E88F0, 0xE9870, 20),  # switch table
     "update_streamed_moby_animation": (0x1E88B0, 0xE9830, 28),  # switch table
     "update_mode_freeze": (0x1E79A0, 0xE8920, 124),  # switch table
     "render_vendor_capture_pass_sequence": (0x1E8AD0, 0xE9A50, 24),  # switch table
+    "sdk/kernel/topThread": (0x1526E8, 0x53668, 34),  # its message
+    "sdk/deci2/sce_tty_handler": (0x152710, 0x53690, 112),  # its four messages
+    "sdk/storage/cdvd/scecdsync": (0x152EF0, 0x53E70, 12),  # its message
+    "sdk/storage/cdvd/sceCdSyncS": (0x152F00, 0x53E80, 12),  # its message
+    "sdk/storage/cdvd/sceCdInit": (0x152F50, 0x53ED0, 46),  # its two messages
+    "sdk/storage/cdvd/sceCdDiskReady": (0x152F80, 0x53F00, 65),  # its three messages
+    "sdk/storage/cdvd/sceCdRead": (0x152FC8, 0x53F48, 36),  # its two messages
+    "sdk/storage/cdvd/scecdreadclock": (0x152FF0, 0x53F70, 59),  # its two messages
+    "sdk/graph/sce_gs_set_def_disp_env": (0x153040, 0x53FC0, 52),  # its message
+    "sdk/graph/sce_gs_put_draw_env": (0x153078, 0x53FF8, 47),  # its DMA timeout message
+    "sdk/graph/sce_gs_exec_load_image": (0x1531D0, 0x54150, 50),  # its DMA timeout message
+    "sdk/storage/memory_card/sce_mc_init": (0x153450, 0x543D0, 101),  # its three messages
+    "sdk/input/dbc/sceDbcSetWorkAddr": (0x153558, 0x544D8, 30),  # its message
+    "sdk/input/dbc/sceDbcCreateSocket": (0x153578, 0x544F8, 31),  # its message
+    "sdk/input/dbc/sceDbcGetDepNumber": (0x1535B8, 0x54538, 31),  # its message
+    "sdk/input/dbc/scedbcreceivedata": (0x1536A0, 0x54620, 30),  # its message
+    "sdk/mpeg/ref_images/_getAllRefs": (0x153710, 0x54690, 94),  # its three messages
+    "sdk/mpeg/macroblock/domc": (0x153770, 0x546F0, 17),  # its message
+    "sdk/ipu/wait_bdec_out": (0x153788, 0x54708, 26),  # its message
+    "sdk/mpeg/picture/_pictureData0": (0x1537E0, 0x54760, 29),  # its message
+    "sdk/mpeg/macroblock/_slice0": (0x153848, 0x547C8, 32),  # its message
+    "sdk/mpeg/macroblock/skip_mb0": (0x153868, 0x547E8, 45),  # its message
+    "sdk/mpeg/macroblock/_decMB0": (0x153898, 0x54818, 32),  # its message
+    "sdk/mpeg/headers/_extensionAndUserData": (0x1538B8, 0x54838, 44),  # its extension parser table
+    "sdk/mpeg/picture/decpicture": (0x153940, 0x548C0, 59),  # its two messages
+    "sdk/mpeg/demux/_PES_packet": (0x1539C8, 0x54948, 62),  # its header skip table and message
+    "sdk/mpeg/api/sce_mpeg_create": (0x153A10, 0x54990, 35),  # its message
+    "sdk/mpeg/api/alloc_work_area": (0x153A38, 0x549B8, 28),  # its message
+    "sdk/mpeg/picture/_lastFrame": (0x153AB8, 0x54A38, 28),  # its message
+    "sdk/mpeg/headers/sequenceheader": (0x153AE8, 0x54A68, 21),  # its message
+    "sdk/mpeg/headers/sequence_extension": (0x153B00, 0x54A80, 66),  # its two messages
+    "save/memcard_restore_game": (0x1E81D0, 0xE9150, 19),  # its message
+    "save/memcard_initialize": (0x1E8360, 0xE92E0, 35),  # its message
+    "audio/streaming/start_audio_stream_read": (0x1E8650, 0xE95D0, 36),  # its message
+    "movies/decoder/callbacks/video_callback": (0x1E8B08, 0xE9A88, 21),  # its message
+    "movies/decoder/video_input/vi_buf_add_dma": (0x1E8B20, 0xE9AA0, 20),  # its message
+    "rendering/debug/draw_debug_profiler": (0x15F380, 0x60300, 179),  # profiler section names
+    "rendering/frame/configure_graphics_setup_dma_chain": (0x15FEC0, 0x60E40, 12),  # its profiler label
+    "rendering/mobys/draw_mobys_setup": (0x15FED0, 0x60E50, 10),  # its profiler label
+    "rendering/mobys/draw_mobys_clean_up": (0x15FEE0, 0x60E60, 26),  # its profiler labels
+    "rendering/shrubs/draw_shrubs": (0x1603B0, 0x61330, 27),  # its profiler labels
+    "rendering/sky/setup_sky_gif_paging": (0x160450, 0x613D0, 9),  # its profiler label
+    "rendering/tfrags/draw_tfrag": (0x160E70, 0x61DF0, 27),  # its profiler labels
+    "rendering/vu1/vu1_chain": (0x1E89C8, 0xE9948, 61),  # its two debug messages
+    "game/transitions/do_space_transition": (0x1E8988, 0xE9908, 28),  # unloaded sound bank message
+    "ui/text/set_scrolling_status_message": (0x1E8A70, 0xE99F0, 21),  # status message format
+    "ui/map/coverage/downsample_map_coverage": (0x1E8080, 0xE9000, 64),  # nibble bit-count table
 }
 
 # Recovered C units that define the small-data variables their original
@@ -1008,8 +1064,14 @@ RODATA_OVERLAYS = {
 # file offset, size) of the unit's `.sdata`, which retail kept inside the
 # preserved small-data blobs (core.lit / .lit).  Placed like RODATA_OVERLAYS.
 SDATA_OVERLAYS = {
+    "ui/menus/options/sound_options_menu": (0x15EDE8, 0x5FD68, 12),
+    "ui/help/push_help_history": (0x15EE30, 0x5FDB0, 4),
+    "game/transitions/transition_do_transition": (0x15F5B0, 0x60530, 4),
+    "mobys/animation/process_moby_anim_data": (0x15F63C, 0x605BC, 4),
+    "world/find_zone_at_point": (0x161190, 0x62110, 12),
     "audio/rpc/snd_returns": (0x15EC80, 0x5FC00, 8),
-    "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 8),
+    "audio/snd_start_sound_system": (0x15ECA0, 0x5FC20, 32),  # the batch buffer pointers it sets up
+    "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 11),
     "runtime/decrement_resource_counter": (0x15F8F8, 0x60878, 4),
     "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0, 24),
     "runtime/set_video_timing": (0x15ED60, 0x5FCE0, 32),
@@ -1025,14 +1087,54 @@ SDATA_OVERLAYS = {
     "rendering/texture/reset_gs_texture_allocation": (0x15EF20, 0x5FEA0, 4),
     "game/load_level_zero_preserving_progress": (0x15EDA0, 0x5FD20, 4),
     "game/transitions/tick_space_transition": (0x15F5EC, 0x6056C, 4),
-    "rendering/frame/initialize_level_render_state": (0x1603D0, 0x61350, 4),
+    "rendering/frame/initialize_level_render_state": (0x1603D0, 0x61350, 8),
     "camera/resolve_camera_surface_height": (0x1611A0, 0x62120, 4),
     "rendering/view/update_fog": (0x1610C4, 0x62044, 3),
     "rendering/texture/dma_shrub_textures": (0x1603F8, 0x61378, 4),
     "rendering/texture/dma_tfrag_textures": (0x160EC4, 0x61E44, 4),
     "rendering/frame/swap_render_buffer_chain": (0x160F04, 0x61E84, 4),
     "rendering/texture/dma_tie_textures": (0x160F74, 0x61EF4, 4),
-    "ui/hud/update_hud": (0x15F688, 0x60608, 4),
+    "ui/hud/update_hud": (0x15F680, 0x60600, 12),
+    "movies/decoder/video_dec_flush": (0x161218, 0x62198, 4),  # the sequence end code it appends
+    "movies/decoder/callbacks/mpeg_error": (0x161220, 0x621A0, 4),  # its "%s\n" format
+    "runtime/startup/init_once": (0x15FA88, 0x60A08, 14),  # its reboot message
+    "save/memcard_restore_data": (0x15FE90, 0x60E10, 4),  # its differing-block counter
+    "save/memcard_update_state": (0x15FE98, 0x60E18, 21),  # its delete path format and message
+    "audio/voices/set_sound_handle_id": (0x160068, 0x60FE8, 5),  # its handle-conflict diagnostic
+    "movies/player/err_message": (0x1611F8, 0x62178, 14),  # its error format
+    "rendering/mobys/render_environment_mapped_object": (0x160520, 0x614A0, 96),  # per-class mesh tables
+    "rendering/effects/build_variant_effect_quads": (0x1604C0, 0x61440, 12),  # quads per content variant
+    "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1604D0, 0x61450, 12),  # trail width per content variant
+    "math/rotations/matrix_to_quaternion": (0x15FFD8, 0x60F58, 12),  # next-axis table
+    "rendering/packets/emit_textured_rectangle": (0x160860, 0x617E0, 16),  # its GIF tag
+    "rendering/effects/append_billboard_batch": (0x1608E0, 0x61860, 16),  # its GIF tag
+    "rendering/sky/do_sky_gif_paging": (0x160474, 0x613F4, 4),  # its paging bypass tag
+    "rendering/view/update_view_context": (0x160720, 0x616A0, 16),  # projection scale and bias
+    "ui/text/draw_dialog_text": (0x15F4E8, 0x60468, 187),  # layout values, colours, format strings
+    "ui/hud/banks/load_hud_banks": (0x15FBB0, 0x60B30, 75),  # allocation tag and stash labels
+    "ui/menus/system/process_menu_entry": (0x160070, 0x60FF0, 41),  # help hud item, separators and formats
+    "ui/menus/save_data/draw_save_slot_list": (0x160300, 0x61280, 47),  # save slot formats
+    "ui/menus/system/setup_menu_display_text": (0x1602A8, 0x61228, 12),  # display text format
+    "ui/menus/weapons/draw_selected_item_ammo": (0x1602B8, 0x61238, 17),  # ammo count formats
+    "ui/menus/pause/draw_pause_ring": (0x1602D8, 0x61258, 10),  # ring glyph labels
+    "ui/menus/widgets/draw_prompt_box": (0x1602E8, 0x61268, 8),  # fallback prompt
+    "ui/menus/widgets/draw_menu_side_indicator": (0x1602F0, 0x61270, 10),  # indicator glyphs
+    "ui/menus/system/emit_selected_graphics_dma_packets": (0x160360, 0x612E0, 8),  # payload words
+    "ui/menus/widgets/render_configured_text_label": (0x160270, 0x611F0, 31),  # label strings
+    "mobys/resolve_moby_hit_response": (0x15FFC8, 0x60F48, 8),  # damage override table
+    "mobys/animation/update_resident_dialogue_animation_state": (0x161030, 0x61FB0, 24),  # wait thresholds
+    "camera/sample_surface_height_map": (0x1610E0, 0x62060, 4),  # surface height layer
+    "ui/map/level_selection/draw_level_selection_map": (0x15F690, 0x60610, 4),  # large font height
+    "ui/map/draw_map_markers": (0x15FDB0, 0x60D30, 4),  # marker half size
+    "ui/map/map_filters": (0x15FD64, 0x60CE4, 4),  # menu selection count
+    "ui/menus/widgets/format_menu_item_text": (0x15FDA0, 0x60D20, 14),  # item text formats
+    "ui/loading/append_scrolling_textured_quad": (0x160850, 0x617D0, 16),  # quad GIF tag
+    "game/update_mode_freeze": (0x15EE38, 0x5FDB8, 8),  # two counters
+    "game/startlevel": (0x15EF5C, 0x5FEDC, 4),  # boot image buffer
+    "mobys/update_visible_mobys": (0x15FF24, 0x60EA4, 4),  # visible moby list
+    "world/select_world_object_resource_tables": (0x15FF44, 0x60EC4, 8),  # resource tag and count
+    "ui/hud/init_hud": (0x15F6D8, 0x60658, 8),  # allocation tag
+    "ui/menus/widgets/format_scaled_display_value": (0x161078, 0x61FF8, 11),  # display value formats
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
@@ -1040,9 +1142,14 @@ SDATA_OVERLAYS = {
 DATA_OVERLAYS = {
     "sdk/kernel/supplement_crt0": (0x130320, 0x312A0, 8),
     "sdk/graph/sce_gs_get_gparam": (0x132D40, 0x33CC0, 16),
+    "sdk/input/sce_pad2_init": (0x132DD0, 0x33D50, 4),  # pad2_initialized
+    "sdk/input/sce_pad2_check_dma": (0x132DD8, 0x33D58, 8),  # last DMA sequence words
     "sdk/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
+    "sdk/storage/cdvd/sceCdRead": (0x1313C0, 0x32340, 24),  # native_cd_read_request
+    "sdk/scf/sce_scf_get_time_zone": (0x1330D0, 0x34050, 2),  # t10k_time_zone
     "sdk/scf/sce_scf_get_language": (0x1330D4, 0x34054, 1),
     "movies/display/set_pal_mode": (0x13D100, 0x3E080, 8),
+    "save/memcard_get_name": (0x13D1D0, 0x3E150, 3672),  # save paths, card state, saved globals
     "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0, 656),
     "rendering/effects/render_queued_rotated_sprites": (0x189300, 0x8A280, 196),
     "camera/backup_current_cam": (0x1893D0, 0x8A350, 2112),
@@ -1053,7 +1160,7 @@ DATA_OVERLAYS = {
     "rendering/effects/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "weapons/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
     "ui/menus/item_preview/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
-    "rendering/shrubs/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
+    "rendering/shrubs/register_shrub_render_class": (0x1D7F30, 0xD8EB0, 384),
     "rendering/effects/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 56),
     "rendering/effects/draw_light_flare": (0x1D97B0, 0xDA730, 224),
@@ -1064,7 +1171,7 @@ DATA_OVERLAYS = {
     "rendering/mobys/render_environment_mapped_object": (0x1D9CE0, 0xDAC60, 13504),
     "streaming/stash/init_stash": (0x1DD1A0, 0xDE120, 1080),
     "ui/text/update_scrolling_status_message": (0x1E5FB8, 0xE6F38, 96),
-    "ui/map/level_selection/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
+    "ui/map/level_selection/draw_level_selection_map": (0x1DDD40, 0xDECC0, 552),
     "rendering/ties/register_object_render_class": (0x1E1700, 0xE2680, 768),
     "rendering/texture/initialize_alpha_lookup_table": (0x18E740, 0x8F6C0, 1024),
     "mobys/resolve_moby_hit_response": (0x1CC080, 0xCD000, 200),
@@ -1089,11 +1196,10 @@ DATA_OVERLAYS = {
     "audio/rpc/snd_send_iop_command_no_wait": (0x133100, 0x34080, 16),
     "rendering/frame/reset_gs_registers_pr": (0x151788, 0x52708, 24),
     "ui/help/find_help_entry": (0x199710, 0x9A690, 600),
-    "ui/menus/options/set_pause_sound_volume": (0x13E5A0, 0x3F520, 4),
     "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
     "ui/help/update_help_state": (0x141968, 0x428E8, 1184),
     "ui/help/push_help_history": (0x141E08, 0x42D88, 150),
-    "save/memcard_update_state": (0x14EED0, 0x4FE50, 10240),
+    "save/memcard_update_state": (0x141EA0, 0x42E20, 63536),
     "rendering/frame/reset_gs_registers": (0x13CFC0, 0x3DF40, 304),
     "audio/snd_start_sound_system": (0x133280, 0x34200, 18504),
     "camera/update_all_cameras": (0x187410, 0x88390, 7680),
@@ -1107,6 +1213,7 @@ DATA_OVERLAYS = {
     "ui/menus/system/process_menu_entry": (0x1993C0, 0x9A340, 24),
     "rendering/occlusion/build_occlusion_visibility": (0x193FC0, 0x94F40, 256),
     "input/actuator_calc_power": (0x165480, 0x66400, 128),
+    "mobys/animation/process_moby_anim_data": (0x165500, 0x66480, 2048),
     "game/startlevel": (0x186100, 0x87080, 384),
     "game/transitions/transition_do_transition": (0x1862B0, 0x87230, 96),
     "rendering/effects/draw_lens_flare": (0x187300, 0x88280, 272),
@@ -1126,6 +1233,14 @@ DATA_OVERLAYS = {
     "ui/menus/selection/build_filtered_menu_item_list": (0x1D61B8, 0xD7138, 256),
     "ui/menus/item_preview/advance_preview_animation_queue": (0x1D5EC0, 0xD6E40, 448),
     "ui/menus/system/close_menu_system": (0x1D5D90, 0xD6D10, 56),
+    "rendering/vu1/select_level_vu_chain": (0x1DDFB8, 0xDEF38, 76),  # render buffer size per level
+    "rendering/packets/submit_graphics_setup_command_stream": (0x1D7E50, 0xD8DD0, 224),  # NTSC and PAL GS setup packets
+    "rendering/vu1/vu1_gs_regs_normal": (0x1DE3C0, 0xDF340, 48),  # its GS register packet
+    "rendering/vu1/vu1_gs_regs_alt": (0x1DE3F0, 0xDF370, 48),  # its GS register packet
+    "rendering/vu1/vu1_tex_flush": (0x1DEE00, 0xDFD80, 48),  # its GS register packet
+    "ui/map/draw_map_overlay": (0x1E8068, 0xE8FE8, 17),  # no map text
+    "ui/map/update_map_icons": (0x1A2BC0, 0xA3B40, 76),  # icon list of each level
+    "ui/menus/item_preview/draw_menu_preview_objects": (0x1D5020, 0xD5FA0, 96),  # slot draw flags
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the

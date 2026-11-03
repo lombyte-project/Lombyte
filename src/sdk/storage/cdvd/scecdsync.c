@@ -4,7 +4,7 @@
 #include "rnc/sdk/rpc/rpc.h"
 #include "rnc/sdk/storage/cdvd.h"
 
-extern u8 cd_sync_wait_debug_message[] __asm__("D_00152EF0");
+const char cd_sync_wait_debug_message[] __asm__("D_00152EF0") = "N cmd wait\n";
 
 s32 sceCdSync(s32 mode) {
     enum {

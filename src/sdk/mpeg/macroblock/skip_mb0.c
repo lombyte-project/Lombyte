@@ -15,13 +15,14 @@ struct MpegMotionRef {
     s32 unk4;
 };
 
-extern u8 skipped_macroblock_in_i_picture_error_message[] __asm__("D_00153868");
-s32       _skipMB0(struct MpegDecoder   *decoder,
-                   struct MpegSkipState *skip_state,
-                   s32                  *picture_structure_mode,
-                   struct MpegMotionRef *motion_reference,
+const char skipped_macroblock_in_i_picture_error_message[] __asm__("D_00153868") =
+    "skiped macroblock in I picure is not allowed";
+s32 _skipMB0(struct MpegDecoder   *decoder,
+             struct MpegSkipState *skip_state,
+             s32                  *picture_structure_mode,
+             struct MpegMotionRef *motion_reference,
 
-                   s32 *flags) {
+             s32 *flags) {
     enum {
         MPEG_PICTURE_CODING_TYPE_I = 1
     };

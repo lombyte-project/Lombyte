@@ -4,6 +4,7 @@
 #include "sda.h"
 #include "rnc/audio/mixer/snd_set_playback_mode.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/game/options.h"
 
 struct SoundMenu {
     u8  pad_0[0x14];
@@ -96,3 +97,9 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     }
     return 0;
 }
+
+s32 playback_mode = 1;
+
+s32 music_volume = 0x2cc;
+
+s32 sound_volume = 0x400;

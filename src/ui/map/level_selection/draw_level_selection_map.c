@@ -6,7 +6,8 @@
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
 
-extern s32  large_font_height __asm__("D_0015F690") __attribute__((sda));
+/* Small data, defined above the code so it is reached $gp-relative. */
+s32         large_font_height __asm__("D_0015F690") = 17;
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32  measure_text_width_regular(u8 *, s32) __asm__("func_001F6250");
@@ -96,7 +97,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
             line_fraction = direction_length - 8000;
             line_start_x = label_x + (marker_x - label_x) * line_fraction / direction_length;
             line_start_y = label_y + (marker_y - label_y) * line_fraction / direction_length;
-            label_text = get_help_message_text(level_map_labels[level_index].label_text);
+            label_text = get_help_message_text(level_select_texts[level_index].label_text);
             text_width = measure_text_width_regular(label_text, -1);
             if (level_map_markers[level_index].label_offset_x <= -1) {
                 line_end_x = label_x - text_width;
@@ -118,6 +119,28 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
     }
     do_gif_paging();
 }
+
+LevelSelectText level_select_texts[19] = {
+    {0x4eb9, 0x4ede,      0},
+    {0x4eba, 0x4ecd,      6},
+    {0x4ebb, 0x4ece,  0x3f1},
+    {0x4ebc, 0x4ecf,  0x3f2},
+    {0x4ebd, 0x4ed0,  0xbc6},
+    {0x4ebe, 0x4ed1, 0x177b},
+    {0x4ebf, 0x4ed2,  0xfa6},
+    {0x4ec0, 0x4ed3, 0x1394},
+    {0x4ec1, 0x4ed4, 0x1b58},
+    {0x4ec2, 0x4ed5, 0x1f47},
+    {0x4ec3, 0x4ed6, 0x1f48},
+    {0x4ec4, 0x4ed7, 0x2719},
+    {0x4ec5, 0x4ed8, 0x271a},
+    {0x4ec6, 0x4ed9, 0x2ee5},
+    {0x4ec7, 0x4eda, 0x32c9},
+    {0x4ec8, 0x4edb, 0x36b1},
+    {0x4ec9, 0x4edc, 0x3aa1},
+    {0x4eca, 0x4edd, 0x3aa2},
+    {0x4ecb, 0x4ede, 0x4269},
+};
 
 LevelMapMarker level_map_markers[20] = {
     {0},
