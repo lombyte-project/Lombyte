@@ -231,9 +231,9 @@ void linked_moby_hitbox_update(struct Moby *moby) {
             float initial = linked_hitbox_vars->min_scale;
             float now = *(float *)linked_hitbox_vars;
             float scale = moby->pclass->scale;
-            float size = (now < initial ? initial * scale : now * scale);
+            float moby_scale = (now < initial ? initial * scale : now * scale);
             moby->state = LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES;
-            moby->scale = size;
+            moby->scale = moby_scale;
         }
         break;
     case LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES:
