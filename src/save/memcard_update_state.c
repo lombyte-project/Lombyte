@@ -17,9 +17,9 @@
 typedef struct {
     s32 x0;
     s32 x4;
-    s32 x8;
-    s32 xC;
-    s32 x10;
+    s32 static_icon_offset;
+    s32 static_icon_size;
+    s32 save_data_offset;
 } McChunk;
 
 extern const char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
@@ -349,8 +349,8 @@ void memcard_update_state(void) {
                     MC.buf = (u8 *)chunk + chunk->x0;
                     break;
                 case MEMCARD_CREATE_PROCESS_STATIC_ICON_OPEN_RESULT_AND_REQUEST_WRITE:
-                    MC.size = chunk->xC;
-                    MC.buf = (u8 *)chunk + chunk->x8;
+                    MC.size = chunk->static_icon_size;
+                    MC.buf = (u8 *)chunk + chunk->static_icon_offset;
                     break;
                 case MEMCARD_CREATE_PROCESS_AUXILIARY_FILE_OPEN_RESULT_AND_REQUEST_WRITE:
                     if (pause_action_list_mode != 0) {
@@ -363,7 +363,7 @@ void memcard_update_state(void) {
                 case MEMCARD_CREATE_PROCESS_SAVE_OPEN_RESULT_AND_REQUEST_WRITE: {
                     s32 n = memcard_get_data_size(mc_gamedata);
                     MC.size = n + memcard_get_data_size(mc_leveldata) * 20 + 8;
-                    MC.buf = (u8 *)chunk + chunk->x10;
+                    MC.buf = (u8 *)chunk + chunk->save_data_offset;
                     break;
                 }
                 }
@@ -902,7 +902,7 @@ void memcard_update_state(void) {
 
             calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
             MC.sub = 19;
-            MC.buf = (u8 *)chunk + chunk->x10;
+            MC.buf = (u8 *)chunk + chunk->save_data_offset;
         }
         MC.busy = 0;
         break;
