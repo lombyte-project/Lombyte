@@ -72,7 +72,7 @@ void moving_platform_small_update(char *moby) {
     int                      easing_frame_count;
     int                      next_path_node_index;
     int                      end;
-    int                      count;
+    int                      path_node_count;
     int                      next_path_node_byte_offset;
     int                      node_off;
     signed char              path_node_step;
