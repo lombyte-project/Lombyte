@@ -40,7 +40,7 @@ void pause_all_sounds(s32 mode) __asm__("FUN_00218d78");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
-void pause_all_sounds(s32 mode) {
+void pause_all_sounds(s32 menu_state) {
     struct MenuSystem *g;
     snd_pause_all_sounds_in_group(0x1D);
     music_pause(0);
@@ -81,7 +81,7 @@ void pause_all_sounds(s32 mode) {
     {
         struct MenuSystem *g = &menu_system;
         game_mode_macro = 3;
-        g->state = mode;
+        g->state = menu_state;
         g->close_request = 0;
         g->graphics_workspace = 0;
         g->update_count = 0;
