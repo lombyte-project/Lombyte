@@ -3070,8 +3070,8 @@ void update_hero_target_tracking(void) {
     char            *selected_moby;
     struct HeroEase *manipulator_table;
     float            yaw_delta, pitch, s;
-    int              mode = *(int *)(hero_control_mode_owner + 0x208C);
-    if (mode != 1 && mode != 4 && mode != 2 && mode != 7 && mode != 0) {
+    int              control_mode = *(int *)(hero_control_mode_owner + 0x208C);
+    if (control_mode != 1 && control_mode != 4 && control_mode != 2 && control_mode != 7 && control_mode != 0) {
         *(int *)(hero_control_mode_owner + 0x2274) = 0;
         return;
     }
