@@ -36,13 +36,13 @@ void nanotech_upgrade_vendor_update(struct Moby *moby) {
         NANOTECH_VENDOR_STATE_READY = 0,
         NANOTECH_VENDOR_STATE_FINALIZE_PURCHASE = 1
     };
-    int  *timer;
+    int  *purchase_cooldown_base;
     float angle;
     int   purchase;
     int   upgrade_level;
 
-    timer = (int *)moby->pvars;
-    fast_dec_timer(timer + 1);
+    purchase_cooldown_base = (int *)moby->pvars;
+    fast_dec_timer(purchase_cooldown_base + 1);
     if (moby->state != NANOTECH_VENDOR_STATE_READY) {
         if (moby->state == NANOTECH_VENDOR_STATE_FINALIZE_PURCHASE)
             goto state_one;
@@ -52,7 +52,7 @@ void nanotech_upgrade_vendor_update(struct Moby *moby) {
         angle =
             fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
         if (fast_difference_between_rotations(moby->rot.z, angle) < 1.5707964f &&
-            vector_distance_xy(&moby->pos, hero.motion.pos.f) < 4.0f && timer[1] == 0 &&
+            vector_distance_xy(&moby->pos, hero.motion.pos.f) < 4.0f && purchase_cooldown_base[1] == 0 &&
             D_L10_0015F5C4_vendor != 2) {
             set_moby_dialogue_record_value(moby, 1);
             if (alternate_item_available[4] == 0) {
@@ -74,7 +74,7 @@ void nanotech_upgrade_vendor_update(struct Moby *moby) {
                     return;
                 }
             } else {
-                if (alternate_item_available[5] != 0 || timer[1] != 0)
+                if (alternate_item_available[5] != 0 || purchase_cooldown_base[1] != 0)
                     return;
                 if (current_bolt_count >= 30001) {
                     int accepted = try_set_help_message(1, 0x271f) != 0;
@@ -113,7 +113,7 @@ state_one:
         }
         queue_dialogue_message(purchase, -1);
         D_L10_0013F640 = 0xb4;
-        timer[1] = scale_game_frames(0xf0);
+        purchase_cooldown_base[1] = scale_game_frames(0xf0);
         moby->state = NANOTECH_VENDOR_STATE_READY;
     }
 }
