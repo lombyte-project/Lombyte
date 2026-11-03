@@ -352,7 +352,7 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
                                                float  height) __asm__("FUN_L10_002eaa08");
 
 void emit_height_adjusted_burst_spark_particle(void  *emission_position,
-                                               short *timer,
+                                               short *particle_emission_countdown,
                                                short *burst,
 
                                                float height) {
@@ -380,7 +380,7 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
     visibility_sphere[2] -= 4.0f;
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1)
         return;
-    if (!fast_dec_timer_s16(timer))
+    if (!fast_dec_timer_s16(particle_emission_countdown))
         return;
     frame_count_scale =
         random_float_between(1.0f - *(float *)&height_adjusted_spark_frame_count_scale_spread_gp,
@@ -419,7 +419,7 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
                 second_frame_count,
                 third_frame_count,
                 l10_height_adjusted_spark_lookup_index_and_flags);
-    *timer = truncate_float_to_s32(
+    *particle_emission_countdown = truncate_float_to_s32(
         random_float_between((float)*(int *)&height_adjusted_spark_timer_reset_min_gp,
                              (float)*(int *)&height_adjusted_spark_timer_reset_max_gp));
 }
