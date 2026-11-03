@@ -86,12 +86,12 @@ void linked_spark_emitter_update(unsigned char *moby) {
 
     switch (MOBY(moby)->state) {
     case INITIALIZE_EFFECT: {
-        unsigned short id;
+        unsigned short emitter_save_id;
         MOBY(moby)->flags |= 1;
         MOBY(moby)->visible = 0;
-        id = MOBY(moby)->save_id;
-        if (l15_save_state.cleared[(short)id] == 0 &&
-            (((*(int *)(D_0014C190 + (((short)id >> 5) * 4) + (D_0015ED84 << 8)) >> (id & 0x1F)) ^
+        emitter_save_id = MOBY(moby)->save_id;
+        if (l15_save_state.cleared[(short)emitter_save_id] == 0 &&
+            (((*(int *)(D_0014C190 + (((short)emitter_save_id >> 5) * 4) + (D_0015ED84 << 8)) >> (emitter_save_id & 0x1F)) ^
               1) &
              1)) {
             MOBY(moby)->state = EMIT_SPARKS;
