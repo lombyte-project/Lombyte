@@ -322,7 +322,7 @@ typedef union {
 
 typedef struct {
     u8        pad[0xA];
-    s16       xa;
+    s16       lifetime_countdown;
     u8        pc[4];
     V00271d20 pos;
     V00271d20 vel;
@@ -344,11 +344,11 @@ void update_timed_line_collision_particle(O00271d20 *particle) {
     motion_delta_xyz.f[3] = 0.0f;
     fast_vec_add(pos, pos, &motion_delta_xyz);
     fast_vec_add(vel, vel, &motion_delta_xyz);
-    if (fast_dec_timer_s16(&particle->xa)) {
+    if (fast_dec_timer_s16(&particle->lifetime_countdown)) {
         free_effect_particle(particle);
     } else if (coll_line_fix(vel, pos, 0x10, acc->i[3], 0)) {
         particle->pos.q = D_L00_00173E60.q;
-        particle->xa = 0;
+        particle->lifetime_countdown = 0;
     }
 }
 
