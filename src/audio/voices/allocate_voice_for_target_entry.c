@@ -33,7 +33,7 @@ s32        allocate_voice_for_target_entry(s32                   entry_index,
 /* Queue a class sound entry for a moby; return its pool index or -1.
  * The caller supplies a nonnegative entry index: retail only checks the
  * upper bound. This does not allocate a hardware voice or play immediately. */
-s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct MobyAudioView *moby) {
+s32 allocate_voice_for_target_entry(s32 entry_index, s32 voice_slot_flags, struct MobyAudioView *moby) {
     struct MobyClassAudioView   *pclass;
     s32                          slot_index;
     s32                          sound_defs;
@@ -53,7 +53,7 @@ s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct MobyAudio
     if (entry_index >= (s32)pclass->sound_def_count) {
         return -1;
     }
-    slot_index = allocate_voice_slot(sound_defs + (entry_index << 5), flags, moby, 0, 0x400);
+    slot_index = allocate_voice_slot(sound_defs + (entry_index << 5), voice_slot_flags, moby, 0, 0x400);
     if (slot_index >= 0) {
         slot = (struct VoiceMobyEntryWindow *)((slot_index * 0x70) + (s32)((u8 *)&voice_pool));
         slot->owner = moby;
