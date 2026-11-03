@@ -559,7 +559,7 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) __asm__("FUN_L00_00236e50"
 int draw_uniform_size_hud_stars(HudElem *hud_element) {
     float origin[4], direction[4], first_step[4], second_step[4], third_step[4], star_position[4];
     int   x, y;
-    float offset;
+    float star_y_threshold;
     s32   image;
     int   star_width, i;
 
@@ -605,9 +605,9 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) {
         if (i == 0) {
             fast_vec_sub(direction, direction, first_step);
             star_width = (int)(star_init_limit0_gp * 32.0f);
-            offset += star_init_limit0_gp;
+            star_y_threshold += star_init_limit0_gp;
         }
-        if (offset < l00_hud_star_particles[i].y)
+        if (star_y_threshold < l00_hud_star_particles[i].y)
             continue;
         FUN_L00_001ff348(star_position, &l00_hud_star_particles[i], origin);
         fast_vec_add(star_position, star_position, direction);
