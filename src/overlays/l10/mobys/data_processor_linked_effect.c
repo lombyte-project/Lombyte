@@ -98,14 +98,14 @@ void data_processor_linked_effect_update(struct Moby *moby) {
             } while (copy_index < linked_effect_vars->strip_count);
         }
         {
-            float timer;
+            float fade_duration_frames;
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
             moby->update_dist = 0x60;
             moby->state = MOBY_STATE_ACTIVE_WITH_SOUND;
-            timer = data_processor_linked_effect_fade_duration_seconds_gp * 60.0f;
+            fade_duration_frames = data_processor_linked_effect_fade_duration_seconds_gp * 60.0f;
             moby->rot.z = new_rotation;
             linked_effect_vars->voice = -1;
-            linked_effect_vars->timer_34 = scale_game_frames(truncate_float_to_s32(timer));
+            linked_effect_vars->timer_34 = scale_game_frames(truncate_float_to_s32(fade_duration_frames));
         }
 
         moby->flags |= 0x41;
