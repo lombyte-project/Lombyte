@@ -590,7 +590,7 @@ int draw_linked_moby_trails(struct Moby *moby) __asm__("FUN_L11_003192c8");
 
 int draw_linked_moby_trails(struct Moby *moby) {
     TrailQuad quads[16];
-    float     offset[2][4];
+    float     trail_corner_z_offsets[2][4];
     short    *list, *next_list;
     int i, j, segment, side, slot, more, next_segment, next_side, own_class, other_class, visible,
         half, corner;
@@ -634,9 +634,9 @@ int draw_linked_moby_trails(struct Moby *moby) {
         }
     }
 
-    memset(offset, 0, 0x20);
-    offset[0][2] = 0.25f;
-    offset[1][2] = -0.25f;
+    memset(trail_corner_z_offsets, 0, 0x20);
+    trail_corner_z_offsets[0][2] = 0.25f;
+    trail_corner_z_offsets[1][2] = -0.25f;
 
     list = D_L11_001AC240[moby->group];
     do {
@@ -671,7 +671,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
                             int point = (slot + (corner >> 1)) % 16;
                             fast_vec_add(quads[segment].positions[corner],
                                          &((float(*)[16][4])(trail + 0xC0))[side][point][0],
-                                         offset[corner & 1]);
+                                         trail_corner_z_offsets[corner & 1]);
                         }
                         draw_geometry_quad(&quads[segment], 0, 0);
                         side = next_side;
