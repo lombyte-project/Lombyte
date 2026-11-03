@@ -1045,7 +1045,7 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     s16 *p;
     s32  sel;
     Pt  *tab;
-    s32  mode;
+    s32  icon_capacity;
     s32  first_panel_half_width;
     s32  second_panel_half_width;
     s32  x0;
@@ -1086,16 +1086,16 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     panel_alpha = truncate_float_to_s32((f32)health_hud_panel_max_alpha * ratio_x);
     p = hud_element->p;
     sel = p[0] >> 1;
-    mode = hero_max_health;
+    icon_capacity = hero_max_health;
     if (cnt == 0)
         sel = 0x1E;
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK)
-        mode = hero.health.vehicle_mode_hp;
-    if (mode == HEALTH_HUD_EIGHT_ICON_CAPACITY) {
+        icon_capacity = hero.health.vehicle_mode_hp;
+    if (icon_capacity == HEALTH_HUD_EIGHT_ICON_CAPACITY) {
         tab = l00_health_hud_eight_capacity_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
         second_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
-    } else if (mode == HEALTH_HUD_FIVE_ICON_CAPACITY) {
+    } else if (icon_capacity == HEALTH_HUD_FIVE_ICON_CAPACITY) {
         tab = l00_health_hud_five_capacity_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 32.0f);
         second_panel_half_width = truncate_float_to_s32(ratio_x * 16.0f);
@@ -1147,7 +1147,7 @@ s32 draw_health_hud_panel(Hud *hud_element) {
                         health_hud_panel_cap_size,
                         panel_alpha);
     }
-    for (i = 0; i < mode; i++) {
+    for (i = 0; i < icon_capacity; i++) {
         health_icon_frame_index = get_icon_frame(0x7536, sel);
         hud_frame(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
         if (sel != 0x1E) {
