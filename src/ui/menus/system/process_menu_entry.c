@@ -84,7 +84,7 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
     char     *substring_match;
     s32       ok;
     s32       condition_target_entry_index;
-    u16       flags;
+    u16       source_entry_flags;
     s16       linked_entry_index;
     s16       kind;
     s32       bolt_threshold;
