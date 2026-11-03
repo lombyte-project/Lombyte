@@ -1,5 +1,6 @@
 #include "rnc/ui/map/map_state.h"
 #include "types.h"
+#include "rnc/game/level_progress.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
@@ -30,7 +31,6 @@ extern u8 D_0013D4E1[];
 #include "rnc/game/level_state.h"
 #include "rnc/ui/menus/menu_globals.h"
 
-extern char            D_00141EC0[];
 extern struct MapEntry D_001383A0[];
 extern struct MapEntry D_00138438[];
 
@@ -155,7 +155,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             } else {
                 if (level_visit_state[level_map_selection.level] != 0) {
                     load_map_chunk(map_mask_buffer,
-                                   D_00141EC0 + (level_map_selection.level << 11),
+                                   map_coverage_pages + (level_map_selection.level << 11),
                                    map_header_base + hdr->unk4);
                 } else {
                     decode_map_mask(map_mask_buffer, a, a, map_header_base);

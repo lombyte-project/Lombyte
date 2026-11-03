@@ -9,6 +9,8 @@ typedef struct BoltSourceStats {
     s16 bolts; /* bolts collected from this source */
 } BoltSourceStats;
 
-extern BoltSourceStats bolt_source_stats[][64] __asm__("D_0014D590");
+/* One row per level record (20), see rnc/game/level_progress.h. */
+extern BoltSourceStats bolt_source_stats[20][64] __asm__("D_0014D590");
+
 
 #endif /* LOMBYTE_RNC_GAME_BOLT_SOURCES_H */

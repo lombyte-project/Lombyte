@@ -10,7 +10,7 @@ s32 count_gold_bolts(void) {
 
     for (row = 0; row < 0x14; row++) {
         for (k = 0; k < 4; k++) {
-            if (D_0014BEC0[row * 4 + k] != 0) {
+            if (gold_bolts_collected[row * 4 + k] != 0) {
                 count++;
             }
         }

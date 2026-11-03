@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_DATA_LABELS_H
 
 #include "types.h"
+#include "rnc/game/level_progress.h"
 
 /* Globals several files read whose meaning is not known yet, by address.
    Name one and move it to its subsystem header. */
@@ -47,9 +48,6 @@ extern s32           D_001413D0[];
 extern int           D_001413DC[];
 extern u8            D_001413F5[];
 extern unsigned char D_0014161B[];
-extern char          D_00141EC0[];
-extern u8            D_0014BEC0[];
-extern u8            D_0014BF10[];
 extern s32           D_0014EE90[16];
 extern short         D_001516F0 __attribute__((section(".data")));
 extern u8            D_00154A80[];

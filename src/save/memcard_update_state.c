@@ -19,6 +19,9 @@ typedef struct {
 #include "rnc/game/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/save/mc_data.h"
+#include "rnc/game/item_state.h"
+#include "rnc/game/bolt_sources.h"
+#include "rnc/game/level_progress.h"
 
 extern char D_0013D1D0[];
 extern char D_0013D1E8[];
@@ -1000,6 +1003,25 @@ void memcard_update_state(void) {
 }
 
 extern __typeof__(memcard_update_state) func_002093D8 __attribute__((alias("FUN_002093d8")));
+
+/* Defined in retail order, in front of the memory card buffers. */
+s32 pause_iop_sprite_lists[8] = {0};
+
+u8 map_coverage_pages[LEVEL_RECORD_COUNT * MAP_COVERAGE_PAGE_SIZE] = {0};
+
+u8 gold_bolts_collected[LEVEL_RECORD_COUNT * 4] = {0};
+
+u8 D_0014BF10[LEVEL_RECORD_COUNT * 16] = {0};
+
+unsigned char visited52[LEVEL_RECORD_COUNT * 16] = {0};
+
+s32 D_0014C190_257218[LEVEL_RECORD_COUNT][64] = {0};
+
+BoltSourceStats bolt_source_stats[LEVEL_RECORD_COUNT][64] = {0};
+
+s32 hero_respawn_counts_by_level_and_source_category[LEVEL_RECORD_COUNT][16] = {0};
+
+s32 D_0014EE90[16] = {0};
 
 u8 memcard_game_data_buffer[MEMCARD_GAME_DATA_SIZE] = {0};
 

@@ -60,7 +60,7 @@ void load_level_zero_preserving_progress(s32 slot) {
     copy_memory_aligned((void *)0x70000000, item_text_variant, 0x28);
     copy_memory_aligned((void *)0x70000030, item_available, 0x25);
     copy_memory_aligned((void *)0x70000060, weapon_ammo_counts, 0x94);
-    copy_memory_aligned((void *)0x70000100, D_0014BEC0, 0x50);
+    copy_memory_aligned((void *)0x70000100, gold_bolts_collected, 0x50);
     copy_memory_aligned((void *)0x70000150, pause_iop_sprite_lists, 0x20);
     copy_memory_aligned((void *)0x70000170, D_0015EDD0_macro, 0xC);
     copy_memory_aligned((void *)0x70000180, item_unlocked, 0x20);
@@ -76,7 +76,7 @@ void load_level_zero_preserving_progress(s32 slot) {
             bytes[item_availability_restore_indices[j]];
     }
     copy_memory_aligned(weapon_ammo_counts, (void *)0x70000060, 0x94);
-    copy_memory_aligned(D_0014BEC0, (void *)0x70000100, 0x50);
+    copy_memory_aligned(gold_bolts_collected, (void *)0x70000100, 0x50);
     for (i = 0; i < 8; i++) {
         s32 saved_item_index = items[i];
         pause_iop_sprite_lists[i] = item_available[saved_item_index] ? saved_item_index : 0;

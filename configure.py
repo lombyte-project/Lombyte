@@ -1195,7 +1195,7 @@ DATA_OVERLAYS = {
     "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
     "ui/help/update_help_state": (0x141968, 0x428E8, 1184),
     "ui/help/push_help_history": (0x141E08, 0x42D88, 150),
-    "save/memcard_update_state": (0x14EED0, 0x4FE50, 10240),
+    "save/memcard_update_state": (0x141EA0, 0x42E20, 63536),
     "rendering/frame/reset_gs_registers": (0x13CFC0, 0x3DF40, 304),
     "audio/snd_start_sound_system": (0x133280, 0x34200, 18504),
     "camera/update_all_cameras": (0x187410, 0x88390, 7680),

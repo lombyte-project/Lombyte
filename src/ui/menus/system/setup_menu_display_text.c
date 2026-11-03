@@ -37,7 +37,7 @@ int setup_menu_display_text(struct MenuScreen *menu) {
     {
         int k;
         for (k = 0; k < 4; k++) {
-            if (D_0014BEC0[level_map_selection.level * 4 + k] != 0) {
+            if (gold_bolts_collected[level_map_selection.level * 4 + k] != 0) {
                 count = count + 1;
             }
         }

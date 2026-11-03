@@ -43,7 +43,7 @@ s32 check_mission_condition(s16 kind, s32 condition_operand) {
     case MISSION_CONDITION_CALLBACK_NONZERO:
         return ((s32(*)(void))condition_operand)() != 0;
     case MISSION_CONDITION_GOLD_BOLT_COLLECTED:
-        return D_0014BEC0[(condition_operand & 0xFFFF) + (condition_operand >> 16) * 4] != 0;
+        return gold_bolts_collected[(condition_operand & 0xFFFF) + (condition_operand >> 16) * 4] != 0;
     case MISSION_CONDITION_ALWAYS_FALSE:
         return 0;
     }
