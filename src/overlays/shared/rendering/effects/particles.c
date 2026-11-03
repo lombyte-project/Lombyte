@@ -427,13 +427,17 @@ FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x
 unsigned char *FUN_L00_00272060(void  *initial_position,
                                 int    lifetime_frames,
                                 int    color,
-                                int    mode,
+                                int    initial_rotation_mode,
                                 int    rotation_increment,
                                 float *initial_velocity,
                                 float  x,
                                 float  y,
 
                                 float z) {
+    enum {
+        PARTICLE_INITIAL_ROTATION_MODE_ZERO = 0,
+        PARTICLE_INITIAL_ROTATION_MODE_EIGHTH_TURN_OFFSET = 1
+    };
     unsigned char *particle = create_part(0x35);
     if (particle) {
         unsigned char *particle_data = particle + 0x20;
@@ -446,9 +450,9 @@ unsigned char *FUN_L00_00272060(void  *initial_position,
         particle[2] = *D_L00_001B2154;
         *(short *)(particle + 0xA) = lifetime_frames;
         *(float *)(particle + 0xC) = x * 210000.0f;
-        if (mode == 0) {
+        if (initial_rotation_mode == PARTICLE_INITIAL_ROTATION_MODE_ZERO) {
             particle[8] = 0;
-        } else if (mode == 1) {
+        } else if (initial_rotation_mode == PARTICLE_INITIAL_ROTATION_MODE_EIGHTH_TURN_OFFSET) {
             particle[8] = 0x20;
         } else {
             particle[8] = random_integer_below(0xFF);
