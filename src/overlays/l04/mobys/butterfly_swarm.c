@@ -11,11 +11,11 @@
 
 int find_nearest_point_index_xy(char *moby, char *points, int count) __asm__("FUN_L04_001f3038");
 
-int find_nearest_point_index_xy(char *moby, char *points, int count) {
+int find_nearest_point_index_xy(char *moby, char *points, int point_count) {
     int   best = -1;
     int   i;
     float best_distance = 32767.0f;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < point_count; i++) {
         float distance = vector_distance_xy(moby + 0x10, points + i * 0x10);
         if (distance < best_distance) {
             best_distance = distance;
