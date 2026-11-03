@@ -371,7 +371,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         int   range_start = 0;
         int   range_end = 0;
         int   j = 0;
-        int   count;
+        int   hero_path_segment_count;
         int   hero_path_range_start_segment;
         int   camera_path_sample_segment;
         float node_fraction;
@@ -407,11 +407,11 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
             lead = pathB->nodes[j].x;
         }
         hero_path_range_start_segment = truncate_float_to_s32(pathB->nodes[j].w);
-        count = ((Hero *)(((char *)((char *)&hero))))->rail_segment - hero_path_range_start_segment;
-        if (count < 0) {
-            count += pathD->n;
+        hero_path_segment_count = ((Hero *)(((char *)((char *)&hero))))->rail_segment - hero_path_range_start_segment;
+        if (hero_path_segment_count < 0) {
+            hero_path_segment_count += pathD->n;
         }
-        for (i = 0; i < count; i++) {
+        for (i = 0; i < hero_path_segment_count; i++) {
             sum += pathD->nodes[(hero_path_range_start_segment + i) % pathD->n].w;
         }
         sum += ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
