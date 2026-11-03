@@ -280,16 +280,16 @@ void build_magnet_elevator_camera_pose(struct Moby *moby,
                                        char        *camera_position,
                                        char        *state) __asm__("FUN_L17_002ee9c0");
 
-void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position, char *state) {
+void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position, char *camera_rotation) {
     fast_vec_sub(camera_position, D_L17_001676C0, &moby->pos);
     set_vector_length_xy(camera_position, camera_position, 2.5f);
     *(float *)(camera_position + 8) = 1.5f;
     fast_vec_add(camera_position, camera_position, &moby->pos);
-    clear_u64_value(state);
-    *(float *)(state + 8) =
+    clear_u64_value(camera_rotation);
+    *(float *)(camera_rotation + 8) =
         fast_arc_tan(hero.motion.body_center.f[0] - *(float *)camera_position,
                      hero.motion.body_center.f[1] - *(float *)(camera_position + 4));
-    *(int *)(state + 4) = 0;
+    *(int *)(camera_rotation + 4) = 0;
 }
 
 extern void transform_vector_by_basis(void *, void *, void *);
