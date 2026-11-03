@@ -692,7 +692,7 @@ int update_snagglebeast_chase_movement(struct Moby       *chaser_moby,
 
 int update_snagglebeast_chase_movement(
 
-    struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) {
+    struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int waypoint_position, float range) {
     float        position_delta[4];
     char        *path;
     struct Moby *target_moby;
@@ -704,7 +704,7 @@ int update_snagglebeast_chase_movement(
     path = D_L07_001B0530[chaser_vars->path];
     if (range < goal_distance) {
         navigation_result =
-            step_mover_2e3f20(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
+            step_mover_2e3f20(chaser_moby, chaser_vars->nav, waypoint_position, chaser_vars->navOut);
         if (navigation_result == 2) {
             fast_vec_sub(
                 position_delta,
