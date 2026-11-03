@@ -50,14 +50,14 @@ void gadgetron_sign_update(struct Moby *moby) {
     };
     switch (moby->state) {
     case GADGETRON_SIGN_INITIALIZE: {
-        float size = moby->scale * 4.0f;
+        float initialized_scale = moby->scale * 4.0f;
         int   ff = 0xFF;
         int   twohundred = 0x200;
         moby->state = GADGETRON_SIGN_ROTATE;
         moby->update_dist = ff;
         moby->draw_dist = twohundred;
         moby->pos.z = 160.0f;
-        moby->scale = size;
+        moby->scale = initialized_scale;
     } break;
     case GADGETRON_SIGN_ROTATE:
         moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * -0.2617993950843811f);
