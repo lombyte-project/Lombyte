@@ -144,12 +144,12 @@ unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
                                   void          *initial_velocity,
                                   void          *spawn_position,
                                   void          *initial_rotation,
-                                  int            type,
+                                  int            debris_moby_type,
                                   int            initial_bounce_count,
                                   float          lo,
 
                                   float hi) {
-    unsigned char *debris_moby = create_moby(type);
+    unsigned char *debris_moby = create_moby(debris_moby_type);
     if (debris_moby) {
         V_2af8b0 *debris_data = ((V_2af8b0 *)MOBY(debris_moby)->pvars);
         float     scale_multiplier;
