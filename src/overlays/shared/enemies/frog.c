@@ -266,7 +266,7 @@ void frog_update(unsigned char *moby) {
     float          D[4] __attribute__((aligned(16)));
     FrogVars      *frog_instance_vars;
     unsigned char *target;
-    int            mode;
+    int            visibility_override_mode;
 
     frog_instance_vars = (FrogVars *)MOBY(moby)->pvars;
     if (l06_frog_updates_disabled != 0) {
