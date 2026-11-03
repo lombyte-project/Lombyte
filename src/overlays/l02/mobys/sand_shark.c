@@ -1300,7 +1300,7 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
         MOBY(moby)->pos.z -= 10.0f;
     }
     if (moby_vars->target_range_timer_refresh_request != 0 ||
-        (!fast_dec_timer_s16(&moby_vars->t25C) &&
+        (!fast_dec_timer_s16(&moby_vars->proximity_range_refresh_delay) &&
          vector_distance_xy(moby + 0x10, &hero.motion.pos) < 10.0f)) {
         moby_vars->range_boost_timer =
             truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
