@@ -204,9 +204,9 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
         }
     }
     {
-        int count;
-        for (count = 3; count >= 0; --count) {
-            rotation[0] = angles[3 - count];
+        int accent_draw_countdown;
+        for (accent_draw_countdown = 3; accent_draw_countdown >= 0; --accent_draw_countdown) {
+            rotation[0] = angles[3 - accent_draw_countdown];
             euler_rotation_basis(transform, rotation);
             draw_geometry_quad(&quad, transform, 0);
         }
