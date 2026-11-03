@@ -60,7 +60,7 @@ void create_spark_particle(s32   id,
                            s32   life,
                            u8    kind,
                            u8    texture_table_index,
-                           u8    mode,
+                           u8    particle_mode_override,
                            f32   x,
                            f32   y,
                            f32   z,
@@ -88,7 +88,7 @@ void create_spark_particle(s32   id,
     }
     spark_body = &spark->body;
     qcopy(&spark->pos, position_copy_source);
-    if (mode == SPARK_MODE_FROM_KIND) {
+    if (particle_mode_override == SPARK_MODE_FROM_KIND) {
         spark->b9 = (kind >> 5) * 16 + truncate_float_to_s32(4.0f);
         if (kind & 1) {
             spark->particle_mode = 0x48;
@@ -97,7 +97,7 @@ void create_spark_particle(s32   id,
         }
     } else {
         spark->b9 = kind;
-        spark->particle_mode = mode;
+        spark->particle_mode = particle_mode_override;
     }
     spark->b1 = 0;
     spark->texture_id = *spark_texture_table[texture_table_index];
