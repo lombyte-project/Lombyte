@@ -287,7 +287,7 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     int      spin;
     int      life;
     int      grey;
-    float    size;
+    float    puff_spawn_size;
 
     if (moby->state == ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE ||
         moby->state == ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN ||
@@ -318,13 +318,13 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
             tail->fade = puff->life;
         }
     }
-    size = 100000.0f;
+    puff_spawn_size = 100000.0f;
     fast_vec_scale(&step, &moby->rot_row0, rocket_strike_fighter_exhaust_ring_row0_offset_gp);
     fast_vec_add(&pos, &pos, &step);
     spin = 16;
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
-        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
+        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, puff_spawn_size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = life;
@@ -335,9 +335,9 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
         }
         spin = -spin;
         life *= 2;
-        size -= 20000.0f;
+        puff_spawn_size -= 20000.0f;
     }
-    size = 300000.0f;
+    puff_spawn_size = 300000.0f;
     fast_vec_scale(&step, &moby->rot_row0, rocket_strike_fighter_exhaust_grey_puff_row0_offset_gp);
     fast_vec_add(&pos, &common_exhaust_origin, &step);
     grey = random_int_between(0x40, 0x80);
@@ -351,7 +351,7 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
                                1.0f,
                                random_integer_below(2) == 0 ? spin : -spin,
                                D_L14_0015F580,
-                               size,
+                               puff_spawn_size,
                                grey);
         if (grey_puff != 0) {
             L14PuffTail *tail = &grey_puff->tail;
@@ -383,13 +383,13 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
             tail->fade = puff->life;
         }
     }
-    size = 100000.0f;
+    puff_spawn_size = 100000.0f;
     fast_vec_scale(&step, &moby->rot_row0, rocket_strike_fighter_exhaust_ring_row0_offset_gp);
     fast_vec_add(&pos, &pos, &step);
     spin = 16;
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
-        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
+        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, puff_spawn_size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = life;
@@ -400,7 +400,7 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
         }
         spin = -spin;
         life *= 2;
-        size -= 20000.0f;
+        puff_spawn_size -= 20000.0f;
     }
 }
 
