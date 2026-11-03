@@ -1575,18 +1575,18 @@ int process_gadgebot_interactions(char *moby, int flag) __asm__("FUN_L06_002f32f
 int process_gadgebot_interactions(char *moby, int flag) {
     char   **moby_ref;
     Iter32f0 iter;
-    char    *state;
+    char    *gadgebot_private_vars;
     int      list_id;
     int     *cursor;
     int      interaction_candidate_moby;
 
-    state = ((char *)MOBY(moby)->pvars);
+    gadgebot_private_vars = ((char *)MOBY(moby)->pvars);
     iter.out = 0;
-    list_id = *(int *)(state + 0x30C);
+    list_id = *(int *)(gadgebot_private_vars + 0x30C);
     if (list_id != -1) {
         get_first_moby_in_group(&iter.list, list_id, 0, 0);
         while (iter.list != 0) {
-            if (process_gadgebot_interaction_candidate(moby, state, iter.list, flag, &iter.out))
+            if (process_gadgebot_interaction_candidate(moby, gadgebot_private_vars, iter.list, flag, &iter.out))
                 return iter.out;
             get_next_moby_in_group(&iter.list, iter.list, 0, 0);
         }
@@ -1596,7 +1596,7 @@ int process_gadgebot_interactions(char *moby, int flag) {
         while (interaction_candidate_moby != 0) {
             moby_ref = &moby;
             if (process_gadgebot_interaction_candidate(
-                    *moby_ref, state, interaction_candidate_moby, flag, &iter.out))
+                    *moby_ref, gadgebot_private_vars, interaction_candidate_moby, flag, &iter.out))
                 return iter.out;
             cursor++;
             interaction_candidate_moby = *cursor;
