@@ -59,26 +59,26 @@ void giant_clank_hit_sphere_update(struct Moby *moby) __asm__("FUN_L15_0029ead0"
 /* Moby class 1427 */
 void giant_clank_hit_sphere_update(struct Moby *moby) {
     char        *moby_class = moby->pclass;
-    char        *state = (char *)moby->pvars;
+    char        *hit_sphere_vars = (char *)moby->pvars;
     float        half_relative_scale = moby->scale / *(float *)(moby_class + 0x24) * 0.5f;
     char        *pos;
     struct Hero *globals;
-    half_relative_scale = half_relative_scale + *(float *)state;
+    half_relative_scale = half_relative_scale + *(float *)hit_sphere_vars;
     moby->scale = half_relative_scale + half_relative_scale;
     moby->scale = moby->scale * *(float *)(moby_class + 0x24);
-    if (*(int *)(state + 8) < scale_game_frames(0x28))
-        moby->alpha = *(int *)(state + 8) * 127 / scale_game_frames(0x28);
+    if (*(int *)(hit_sphere_vars + 8) < scale_game_frames(0x28))
+        moby->alpha = *(int *)(hit_sphere_vars + 8) * 127 / scale_game_frames(0x28);
     globals = &hero;
     pos = &moby->pos;
     play_entity_sound(half_relative_scale,
                       ((char *)globals->moby),
                       pos,
-                      (float)truncate_float_to_s32(*(float *)(state + 0xC)),
+                      (float)truncate_float_to_s32(*(float *)(hit_sphere_vars + 0xC)),
                       1.0f,
                       0x30000,
                       0,
                       1,
                       0);
-    if (fast_dec_timer((int *)(state + 8)))
+    if (fast_dec_timer((int *)(hit_sphere_vars + 8)))
         mark_moby_for_removal(moby);
 }
