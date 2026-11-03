@@ -413,9 +413,9 @@ void blarg_elite_commando_update(char *commando_moby) {
             fast_vec_normalize(delta, delta, frame_time * 20.0f);
             spawn_blarg_elite_commando_rocket(commando_moby, delta, (char *)scratch_vector);
         } else if (is_value_within_interpolated_window(commando_moby, 10.0f)) {
-            int count = commando_data->rocket_fire_cycle_count + 1;
-            commando_data->rocket_fire_cycle_count = count;
-            if ((short)count >= 3) {
+            int updated_fire_cycle_count = commando_data->rocket_fire_cycle_count + 1;
+            commando_data->rocket_fire_cycle_count = updated_fire_cycle_count;
+            if ((short)updated_fire_cycle_count >= 3) {
                 MOBY(commando_moby)->state = COMMANDO_STATE_IDLE;
                 if (((unsigned char *)commando_moby)[0x53] != 0)
                     blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
