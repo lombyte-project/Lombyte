@@ -82,7 +82,7 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
     } base;       /* base for [diouxX] conversion */
     int   dprec;  /* a copy of prec if [diouxX], 0 otherwise */
     int   realsz; /* field size expanded by dprec */
-    int   size;   /* size of converted field or string */
+    int   converted_field_byte_count;   /* size of converted field or string */
     char *xdigs;  /* digits for [xX] conversion */
 #define NIOV 8
     RncStdioUio uio;                    /* output information: summary */
@@ -272,7 +272,7 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
             goto rflag;
         case 'c':
             *(cp = conversion_buffer) = va_arg(ap, int);
-            size = 1;
+            converted_field_byte_count = 1;
             sign = '\0';
             break;
         case 'D':
@@ -313,7 +313,7 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
 
                     cp = (char *)inf;
                 }
-                size = 3;
+                converted_field_byte_count = 3;
                 break;
             }
             if (isnan(_double)) {
@@ -322,7 +322,7 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
 
                     cp = (char *)nan;
                 }
-                size = 3;
+                converted_field_byte_count = 3;
                 break;
             }
 
@@ -337,22 +337,22 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
             if (ch <= 'e') { /* 'e' or 'E' fmt */
                 --expt;
                 expsize = exponent(expstr, expt, ch);
-                size = expsize + ndig;
+                converted_field_byte_count = expsize + ndig;
                 if (ndig > 1 || flags & ALT)
-                    ++size;
+                    ++converted_field_byte_count;
             } else if (ch == 'f') { /* f fmt */
                 if (expt > 0) {
-                    size = expt;
+                    converted_field_byte_count = expt;
                     if (prec || flags & ALT)
-                        size += prec + 1;
+                        converted_field_byte_count += prec + 1;
                 } else /* "0.X" */
-                    size = prec + 2;
+                    converted_field_byte_count = prec + 2;
             } else if (expt >= ndig) { /* fixed g fmt */
-                size = expt;
+                converted_field_byte_count = expt;
                 if (flags & ALT)
-                    ++size;
+                    ++converted_field_byte_count;
             } else
-                size = ndig + (expt > 0 ? 1 : 2 - expt);
+                converted_field_byte_count = ndig + (expt > 0 ? 1 : 2 - expt);
 
             if (softsign)
                 sign = '-';
@@ -402,13 +402,13 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
                 char *string_terminator = memchr(cp, 0, prec);
 
                 if (string_terminator != NULL) {
-                    size = string_terminator - cp;
-                    if (size > prec)
-                        size = prec;
+                    converted_field_byte_count = string_terminator - cp;
+                    if (converted_field_byte_count > prec)
+                        converted_field_byte_count = prec;
                 } else
-                    size = prec;
+                    converted_field_byte_count = prec;
             } else
-                size = strlen(cp);
+                converted_field_byte_count = strlen(cp);
             sign = '\0';
             break;
         case 'U':
@@ -483,11 +483,11 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
 
                 default:
                     cp = "bug in vfprintf: bad base";
-                    size = strlen(cp);
+                    converted_field_byte_count = strlen(cp);
                     goto skipsize;
                 }
             }
-            size = conversion_buffer + BUF - cp;
+            converted_field_byte_count = conversion_buffer + BUF - cp;
         skipsize:
             break;
         default: /* "%?" prints ?, unless ? is NUL */
@@ -496,7 +496,7 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
             /* pretend it was %c with argument ch */
             cp = conversion_buffer;
             *cp = ch;
-            size = 1;
+            converted_field_byte_count = 1;
             sign = '\0';
             break;
         }
@@ -515,7 +515,7 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
 		 * Compute actual size, so we know how much to pad.
 		 * size excludes decimal prec; realsz includes it.
 		 */
-        realsz = dprec > size ? dprec : size;
+        realsz = dprec > converted_field_byte_count ? dprec : converted_field_byte_count;
         if (sign)
             realsz++;
         else if (flags & HEXPREFIX)
@@ -539,11 +539,11 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
             PAD(width - realsz, zeroes);
 
         /* leading zeroes from decimal precision */
-        PAD(dprec - size, zeroes);
+        PAD(dprec - converted_field_byte_count, zeroes);
 
         /* the string or number proper */
         if ((flags & FPT) == 0) {
-            PRINT(cp, size);
+            PRINT(cp, converted_field_byte_count);
         } else { /* glue together f_p fragments */
             static _CONST char zero[] RODATA = "0";
             static _CONST char point[] RODATA = ".";
