@@ -72,12 +72,12 @@ void smooth_and_clamp_value_pair(float *clamped_values, float *smoothed_values, 
 
 int hero_anim_tilt_lookup(int id, float *out) __asm__("FUN_L05_0023b378");
 
-int hero_anim_tilt_lookup(int id, float *out_tilt_radians) {
+int hero_anim_tilt_lookup(int tilt_selector, float *out_tilt_radians) {
     *out_tilt_radians = 0.0f;
     if (hero.state.control_mode == 0x16 && hero.race_ammo &&
         (unsigned)(hero.moby->prev_seq - 0x69) < 4)
         return 1;
-    switch (id) {
+    switch (tilt_selector) {
     case 0x37:
         *out_tilt_radians = -0.95993108f; /* -55 degrees */
         return 1;
