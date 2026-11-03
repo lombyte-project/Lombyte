@@ -25,7 +25,7 @@ int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern s32 current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 
-int memcard_save_data(int slot, int flags) {
+int memcard_save_data(int slot, int level_index_override) {
     enum {
         LEVEL_VISIT_UNVISITED = 0
     };
@@ -59,11 +59,11 @@ int memcard_save_data(int slot, int flags) {
         }
         card_state->record_index = current_level_index;
         saved_visit_state = LEVEL_VISIT_UNVISITED;
-        if (flags >= 0) {
-            current_level_index = flags;
-            saved_visit_state = level_visit_state[flags];
+        if (level_index_override >= 0) {
+            current_level_index = level_index_override;
+            saved_visit_state = level_visit_state[level_index_override];
             if (saved_visit_state == LEVEL_VISIT_UNVISITED) {
-                level_visit_state[flags] = 1;
+                level_visit_state[level_index_override] = 1;
             }
         }
     }
@@ -83,7 +83,7 @@ int memcard_save_data(int slot, int flags) {
             alternate_animation_sequence_macro;
         memcard_prepare_data(memcard_game_data_buffer, 0, mc_gamedata);
         memcard_prepare_data(memcard_level_data_buffer, card_state->record_index, mc_leveldata);
-        if (flags >= 0) {
+        if (level_index_override >= 0) {
             level_visit_state[current_level_index] = saved_visit_state;
             current_level_index = card_state->record_index;
         }
