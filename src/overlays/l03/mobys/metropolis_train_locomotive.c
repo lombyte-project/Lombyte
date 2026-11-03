@@ -440,7 +440,7 @@ void metropolis_train_locomotive_update(char *moby) {
     struct Moby    *linked_moby;
     int             second_path_node_index;
     char           *second_path;
-    u32             mode;
+    u32             hero_control_mode;
     int             ident;
 
     train_engine_pvars = ((Engine292e98 *)MOBY(moby)->pvars);
@@ -526,8 +526,8 @@ void metropolis_train_locomotive_update(char *moby) {
         if (train_engine_pvars->boarding_turret_moby_index == -1) {
             break;
         }
-        mode = hero.state.control_mode;
-        if (mode < 2 || mode == 9 || mode == 12) {
+        hero_control_mode = hero.state.control_mode;
+        if (hero_control_mode < 2 || hero_control_mode == 9 || hero_control_mode == 12) {
             MOBY(moby)->command = 4;
             D_L03_0015FDFC = 1;
             request_music_track(4, 7);
