@@ -72,7 +72,7 @@ void PrepareMpegPictureFieldTransfers(
     struct MpegPictureBuffer      *first,
     struct MpegPictureBuffer      *second) __asm__("_dispRefImageField");
 
-void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
+void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *decoder,
                                       struct MpegPictureBuffer      *first_field_ref_image,
 
                                       struct MpegPictureBuffer *second_field_ref_image) {
@@ -88,56 +88,56 @@ void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
     struct MpegPictureTransfer *transfer;
     struct MpegPictureTransfer *second_transfer;
     struct MpegPictureTransfer *final_transfer;
-    s32                         flags;
-    flags = 0;
-    if (state->picture_structure == 2) {
+    s32                         picture_structure_flag_mask;
+    picture_structure_flag_mask = 0;
+    if (decoder->picture_structure == 2) {
         primary = first_field_ref_image;
         secondary = second_field_ref_image;
-        flags = 0x40;
+        picture_structure_flag_mask = 0x40;
     } else {
         primary = second_field_ref_image;
         secondary = first_field_ref_image;
     }
-    transfer = state->transfer;
-    GetMpegPictureTimestampsAndFlags(state,
+    transfer = decoder->transfer;
+    GetMpegPictureTimestampsAndFlags(decoder,
                                      primary,
                                      &transfer->first_timestamp.value,
                                      &transfer->first_decode_timestamp,
                                      &transfer->first_flags);
-    second_transfer = state->transfer;
+    second_transfer = decoder->transfer;
     timestamp = second_transfer->first_timestamp.words.low;
-    state->timestamp_step = 1;
-    state->last_timestamp = timestamp;
-    GetMpegPictureTimestampsAndFlags(state,
+    decoder->timestamp_step = 1;
+    decoder->last_timestamp = timestamp;
+    GetMpegPictureTimestampsAndFlags(decoder,
                                      secondary,
                                      &second_transfer->second_timestamp.value,
                                      &second_transfer->second_decode_timestamp,
                                      &second_transfer->second_flags);
-    final_transfer = state->transfer;
+    final_transfer = decoder->transfer;
     second_timestamp = final_transfer->second_timestamp.words.low;
-    state->timestamp_step = 1;
-    state->last_timestamp = second_timestamp;
-    first_flags = final_transfer->first_flags | flags;
-    state->display_width = primary->display_width;
+    decoder->timestamp_step = 1;
+    decoder->last_timestamp = second_timestamp;
+    first_flags = final_transfer->first_flags | picture_structure_flag_mask;
+    decoder->display_width = primary->display_width;
     second_flags = final_transfer->second_flags;
     final_transfer->first_flags = first_flags;
-    second_flags |= flags;
+    second_flags |= picture_structure_flag_mask;
     display_height = primary->display_height;
     final_transfer->second_flags = second_flags;
-    state->display_height = display_height;
-    state->horizontal_offset0 = primary->horizontal_offset0;
-    state->horizontal_offset1 = secondary->horizontal_offset1;
-    state->vertical_offset0 = primary->vertical_offset0;
-    state->vertical_offset1 = secondary->vertical_offset1;
-    if (_isOutSizeOK(state, first_field_ref_image) &&
+    decoder->display_height = display_height;
+    decoder->horizontal_offset0 = primary->horizontal_offset0;
+    decoder->horizontal_offset1 = secondary->horizontal_offset1;
+    decoder->vertical_offset0 = primary->vertical_offset0;
+    decoder->vertical_offset1 = secondary->vertical_offset1;
+    if (_isOutSizeOK(decoder, first_field_ref_image) &&
         first_field_ref_image->status == MPEG_PICTURE_STATUS_OUTPUT_READY &&
         second_field_ref_image->status == MPEG_PICTURE_STATUS_OUTPUT_READY) {
         first_field_ref_image->macroblock_height *= 2;
-        if (state->decoder_initialized)
-            _csc_storeRefImage(state, first_field_ref_image);
+        if (decoder->decoder_initialized)
+            _csc_storeRefImage(decoder, first_field_ref_image);
         else
-            _cpr8(state, first_field_ref_image);
+            _cpr8(decoder, first_field_ref_image);
         first_field_ref_image->macroblock_height >>= 1;
-        FinishMpegReferenceImage(state);
+        FinishMpegReferenceImage(decoder);
     }
 }
