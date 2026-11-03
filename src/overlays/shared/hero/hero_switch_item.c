@@ -1216,13 +1216,13 @@ void update_hero_held_items_and_orientation(void) {
         } else {
             char  *moby = (char *)pose_owner->moby;
             u128  *basis = (u128 *)pose_owner->basis;
-            float *offset = &pose_owner->facing_x;
+            float *facing_direction = &pose_owner->facing_x;
             basis[0] = *(u128 *)(moby + 0xC0);
             basis[1] = *(u128 *)(moby + 0xD0);
             basis[2] = *(u128 *)(moby + 0xE0);
-            clear_u64_value(offset);
+            clear_u64_value(facing_direction);
             pose_owner->facing_x = 1.0f;
-            transform_vector_by_basis(offset, offset, basis);
+            transform_vector_by_basis(facing_direction, facing_direction, basis);
             HERO_ROTATION(pose_owner) = pose_owner->motion.rot.q;
         }
     }
