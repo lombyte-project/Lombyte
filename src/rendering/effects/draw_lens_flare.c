@@ -33,7 +33,7 @@ void draw_lens_flare(void) {
     f32 fy;
     f32 half;
     s32 i;
-    s32 size;
+    s32 texture_size;
     s64 tex;
     s32 rgba;
     s32 quad_size;
@@ -57,7 +57,7 @@ void draw_lens_flare(void) {
     screen_center_delta[1] = ctr[1] - scr[1];
     for (i = 0; i < 16; i++) {
         tex = get_effect_texture(effect_ribbon.tex[i] + 6);
-        size = (i != 0) ? 0x20 : 0x40;
+        texture_size = (i != 0) ? 0x20 : 0x40;
         sprite_center_offset[0] = screen_center_delta[0] * effect_ribbon.dist[i];
         sprite_center_offset[1] = screen_center_delta[1] * effect_ribbon.dist[i];
         at[0] = ctr[0] + sprite_center_offset[0];
@@ -83,11 +83,11 @@ void draw_lens_flare(void) {
         fade = fade * (fx * fy);
         rgba = (truncate_float_to_s32(fade * effect_ribbon.alpha[i]) << 24) |
                (effect_ribbon.color[i] & 0xFFFFFF);
-        quad_size = truncate_float_to_s32(size * effect_ribbon.scale[i]);
+        quad_size = truncate_float_to_s32(texture_size * effect_ribbon.scale[i]);
         half = quad_size >> 1;
         x = truncate_float_to_s32(at[0] - half);
         y = truncate_float_to_s32(at[1] - half);
-        draw_textured_quad(x, y, quad_size, quad_size, 0, 0, size, size, rgba, tex);
+        draw_textured_quad(x, y, quad_size, quad_size, 0, 0, texture_size, texture_size, rgba, tex);
     }
     effect_ribbon.intensity = 0.0f;
 }
