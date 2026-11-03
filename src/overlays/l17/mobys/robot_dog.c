@@ -788,7 +788,7 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
     char *robot_dog_glow_vars;
     int   glow_pulse_period_frames;
     int   alpha;
-    int   mode;
+    int   glow_pulse_mode;
     int   i;
     int   x, y, z;
     int   r, g, b;
@@ -810,12 +810,12 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
     robot_dog_glow_vars = (char *)moby->pvars;
     glow_pulse_period_frames = scale_game_frames(glow_pulse_period_frames);
     alpha = 0x80;
-    mode = ROBOT_DOG_GLOW_MODE_SLOW_PULSE;
+    glow_pulse_mode = ROBOT_DOG_GLOW_MODE_SLOW_PULSE;
     switch (moby->state) {
     case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
     case ROBOT_DOG_STATE_TRACK_TARGET_FACING:
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
-        mode = ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE;
+        glow_pulse_mode = ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE;
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE:
     case ROBOT_DOG_STATE_TURN_TOWARD_TARGET:
@@ -825,16 +825,16 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
     case 13:
     case 14:
     case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
-        mode = ROBOT_DOG_GLOW_MODE_FAST_PULSE;
+        glow_pulse_mode = ROBOT_DOG_GLOW_MODE_FAST_PULSE;
         break;
     case ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE:
-        mode = -1;
+        glow_pulse_mode = -1;
         break;
     }
-    if (mode >= ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
-        if (mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
+    if (glow_pulse_mode >= ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
+        if (glow_pulse_mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
             glow_pulse_period_frames = scale_game_frames(0x32);
-        } else if (mode == ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE) {
+        } else if (glow_pulse_mode == ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE) {
             glow_pulse_period_frames = scale_game_frames(0x5A);
         }
         glow_pulse_sine = fast_sin(((float)(D_L17_0015F5CC % glow_pulse_period_frames) /
@@ -853,9 +853,9 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
         if (g > 255) {
             g = 255;
         }
-        if (mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
+        if (glow_pulse_mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
             color = (alpha << 24) | (b << 16) | ((r / 2) << 8) | g;
-        } else if (mode != ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
+        } else if (glow_pulse_mode != ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
             color = (alpha << 24) | (b << 16) | ((r / 2) << 8) | g;
         } else {
             color = (alpha << 24) | (b << 16) | (g << 8) | r;
