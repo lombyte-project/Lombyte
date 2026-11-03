@@ -60,7 +60,7 @@ void plasmabot_death_debris_update(struct Moby *moby) {
     s32  signed_particle_variation;
     s32  alpha;
     s32  color;
-    f32  size;
+    f32  particle_size;
     f32  absolute_velocity;
     u8  *particle;
     u8  *fade;
@@ -125,7 +125,7 @@ void plasmabot_death_debris_update(struct Moby *moby) {
         signed_particle_variation = random_integer_below(6);
         if (random_integer_below(2) != 0)
             signed_particle_variation = -signed_particle_variation;
-        size = random_float_between(40000.0f, 100000.0f);
+        particle_size = random_float_between(40000.0f, 100000.0f);
         color = random_int_between(0x30, 0xFF);
         alpha = 0x60000000;
         particle = FUN_L00_0026d000_de670(&moby->pos,
@@ -134,7 +134,7 @@ void plasmabot_death_debris_update(struct Moby *moby) {
                                           1.0f,
                                           signed_particle_variation,
                                           D_L14_0015F580,
-                                          size,
+                                          particle_size,
                                           color | ((color << 16) | ((color << 8) | alpha)));
         if (particle != 0) {
             particle[3] = 0x44;
