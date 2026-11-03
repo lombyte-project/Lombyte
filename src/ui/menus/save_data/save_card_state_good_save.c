@@ -11,10 +11,10 @@
 void save_card_state_good_save(void) __asm__("FUN_002088d0");
 
 void save_card_state_good_save(void) {
-    int                     flags = mode_freeze_flags;
+    int                     original_flags = mode_freeze_flags;
     struct MemoryCardState *card_state;
     int                     nf;
-    mode_freeze_flags = flags & ~4;
+    mode_freeze_flags = original_flags & ~4;
     card_state = &memory_card_state;
     nf = mode_freeze_flags & ~2;
     mode_freeze_flags = nf;
@@ -38,7 +38,7 @@ void save_card_state_good_save(void) {
         save_card_state = CS_WARNING;
         return;
     }
-    if (flags & 0x200) {
+    if (original_flags & 0x200) {
         mode_freeze_flags = nf ^ 0x200;
         save_card_state = CS_SAVING;
     }
