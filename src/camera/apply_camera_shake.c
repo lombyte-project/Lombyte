@@ -2,6 +2,7 @@
 
 #include "rnc/camera/update_cam.h"
 #include "rnc/camera/camera_globals.h"
+#include "rnc/camera/camera_shake.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 

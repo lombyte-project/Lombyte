@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "rnc/math/vector.h"
-#include "rnc/camera/camera_globals.h"
+#include "rnc/camera/camera_shake.h"
 
 extern unsigned char menu_item_enabled_0 __asm__("D_0013D394") __attribute__((section(".data")));
 extern unsigned char menu_item_enabled_9 __asm__("D_0013D39D") __attribute__((section(".data")));
@@ -36,6 +36,34 @@ typedef struct MenuItemInfo {
 } MenuItemInfo;
 
 extern MenuItemInfo menu_item_info[] __asm__("D_001863D0");
+
+/* The active camera (D_00186F40): the view matrices update_camera_view_matrices
+   builds, the camera position and basis, and the camera-switch state.
+   initialize_level_render_state clears all 0x3A0 bytes. */
+struct UpdateCam;
+
+struct GameCamera {
+    f32                view_matrices[0x50]; /* 0x000 */
+    Vec4               position;            /* 0x140 */
+    Vec4               rotation; /* 0x150: basis angles while the camera rows are not published */
+    struct CameraShake shake[2]; /* 0x160: apply_camera_shake, one per view row */
+    struct UpdateCam  *current_camera;  /* 0x180: the record the view follows */
+    struct UpdateCam  *previous_camera; /* 0x184: start_camera_blend's source */
+    u8                 pad188[0x258 - 0x188];
+    f32  timed_control_step; /* 0x258: advance_timed_camera_control subtracts it from sequence */
+    u8   pad25C[0x270 - 0x25C];
+    s16  transition_mode; /* 0x270: cam_trans_state's mode; 1/2 start a blend, 3 blends */
+    u8   pad272[0x350 - 0x272];
+    Vec4 forward; /* 0x350 */
+    Vec4 right;   /* 0x360 */
+    Vec4 up;      /* 0x370 */
+    u8   pad380[0x394 - 0x380];
+    s32  underwater;  /* 0x394: camera focus below a water surface */
+    s32  frame_count; /* 0x398: update_camera counts its frames */
+    u8   pad39C[0x4];
+}; /* size 0x3A0 */
+
+extern struct GameCamera game_camera __asm__("D_00186F40");
 
 /* Level object mobys, indexed by map icon id (copy_level_object_positions, update_map_icons). */
 struct Moby;
