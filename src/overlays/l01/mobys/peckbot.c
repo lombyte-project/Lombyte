@@ -73,7 +73,7 @@ typedef struct Mob577 {
     u8             pad7c[0x18];
     s32            id;
     u8             pad98[0xC];
-    u8             xA4;
+    u8             hit_record_index;
     u8             padA5;
     s16            oclass;
     u8             padA8[0x14];
@@ -323,7 +323,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
             }
         }
     }
-    peckbot_moby->xA4 = 0xFF;
+    peckbot_moby->hit_record_index = 0xFF;
     switch (peckbot_moby->state) {
     case PECKBOT_STATE_INITIALIZE:
         qcopy(&peckbot_vars->home, &peckbot_moby->pos);
