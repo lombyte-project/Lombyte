@@ -725,10 +725,10 @@ void handle_sharkigator_contact_attack(struct Moby *moby,
     moby->state = state_after_target_hit;
 }
 
-int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) {
+int test_sharkigator_target_sphere_collision(void *moby, int target_moby, float scale) {
     char collision_center[16];
     moby_point_position(moby, 0, collision_center);
-    if (coll_sphere(scale, collision_center, 0x21, moby) && D_L07_00173ED8 == id) {
+    if (coll_sphere(scale, collision_center, 0x21, moby) && D_L07_00173ED8 == target_moby) {
         return 1;
     }
     return 0;
