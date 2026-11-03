@@ -1426,6 +1426,21 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
+        "name": "sdk/system",
+        "logical_group": "sdk/system",
+        "category": "sdk",
+        "functions": 20,
+        "matching_c": 9,
+        "pending_c": 0,
+        "intentional_asm": 11,
+        "bytes_total": 812,
+        "bytes_matching_c": 636,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 176,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
+      },
+      {
         "name": "game/runtime/callbacks",
         "logical_group": "runtime/callbacks",
         "category": "game",
@@ -1437,21 +1452,6 @@
         "bytes_matching_c": 736,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
-        "name": "sdk/system",
-        "logical_group": "sdk/system",
-        "category": "sdk",
-        "functions": 15,
-        "matching_c": 9,
-        "pending_c": 0,
-        "intentional_asm": 6,
-        "bytes_total": 732,
-        "bytes_matching_c": 636,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 96,
         "c_exact_percent_of_recoverable": 100.0,
         "c_fuzzy_percent_of_recoverable": 100.0
       },
@@ -1482,21 +1482,6 @@
         "bytes_matching_c": 688,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
-        "name": "sdk/syscalls",
-        "logical_group": "sdk/syscalls",
-        "category": "sdk",
-        "functions": 39,
-        "matching_c": 4,
-        "pending_c": 0,
-        "intentional_asm": 35,
-        "bytes_total": 648,
-        "bytes_matching_c": 88,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 560,
         "c_exact_percent_of_recoverable": 100.0,
         "c_fuzzy_percent_of_recoverable": 100.0
       },
@@ -1636,6 +1621,36 @@
         "c_fuzzy_percent_of_recoverable": null
       },
       {
+        "name": "sdk/threads",
+        "logical_group": "sdk/threads",
+        "category": "sdk",
+        "functions": 24,
+        "matching_c": 0,
+        "pending_c": 0,
+        "intentional_asm": 24,
+        "bytes_total": 384,
+        "bytes_matching_c": 0,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 384,
+        "c_exact_percent_of_recoverable": null,
+        "c_fuzzy_percent_of_recoverable": null
+      },
+      {
+        "name": "sdk/syscalls",
+        "logical_group": "sdk/syscalls",
+        "category": "sdk",
+        "functions": 21,
+        "matching_c": 4,
+        "pending_c": 0,
+        "intentional_asm": 17,
+        "bytes_total": 360,
+        "bytes_matching_c": 88,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 272,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
+      },
+      {
         "name": "game/math/random",
         "logical_group": "math/random",
         "category": "game",
@@ -1681,19 +1696,19 @@
         "c_fuzzy_percent_of_recoverable": null
       },
       {
-        "name": "sdk/threads",
-        "logical_group": "sdk/threads",
+        "name": "sdk/interrupts",
+        "logical_group": "sdk/interrupts",
         "category": "sdk",
-        "functions": 18,
-        "matching_c": 0,
+        "functions": 17,
+        "matching_c": 1,
         "pending_c": 0,
-        "intentional_asm": 18,
-        "bytes_total": 288,
-        "bytes_matching_c": 0,
+        "intentional_asm": 16,
+        "bytes_total": 280,
+        "bytes_matching_c": 24,
         "bytes_pending_c": 0,
-        "bytes_intentional_asm": 288,
-        "c_exact_percent_of_recoverable": null,
-        "c_fuzzy_percent_of_recoverable": null
+        "bytes_intentional_asm": 256,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
         "name": "game/audio/movie",
@@ -1737,21 +1752,6 @@
         "bytes_matching_c": 220,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
-        "name": "sdk/interrupts",
-        "logical_group": "sdk/interrupts",
-        "category": "sdk",
-        "functions": 13,
-        "matching_c": 1,
-        "pending_c": 0,
-        "intentional_asm": 12,
-        "bytes_total": 216,
-        "bytes_matching_c": 24,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 192,
         "c_exact_percent_of_recoverable": 100.0,
         "c_fuzzy_percent_of_recoverable": 100.0
       },
@@ -1906,6 +1906,21 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
+        "name": "sdk/display",
+        "logical_group": "sdk/display",
+        "category": "sdk",
+        "functions": 5,
+        "matching_c": 0,
+        "pending_c": 0,
+        "intentional_asm": 5,
+        "bytes_total": 80,
+        "bytes_matching_c": 0,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 80,
+        "c_exact_percent_of_recoverable": null,
+        "c_fuzzy_percent_of_recoverable": null
+      },
+      {
         "name": "game/runtime/dma",
         "logical_group": "runtime/dma",
         "category": "game",
@@ -1951,8 +1966,8 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "sdk/display",
-        "logical_group": "sdk/display",
+        "name": "sdk/memory/cache",
+        "logical_group": "sdk/memory/cache",
         "category": "sdk",
         "functions": 3,
         "matching_c": 0,
@@ -1977,21 +1992,6 @@
         "bytes_matching_c": 0,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 40,
-        "c_exact_percent_of_recoverable": null,
-        "c_fuzzy_percent_of_recoverable": null
-      },
-      {
-        "name": "sdk/memory/cache",
-        "logical_group": "sdk/memory/cache",
-        "category": "sdk",
-        "functions": 2,
-        "matching_c": 0,
-        "pending_c": 0,
-        "intentional_asm": 2,
-        "bytes_total": 32,
-        "bytes_matching_c": 0,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 32,
         "c_exact_percent_of_recoverable": null,
         "c_fuzzy_percent_of_recoverable": null
       },
