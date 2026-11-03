@@ -2473,7 +2473,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
     MobyHit *hero_hit_entry;
     u8      *mob;
     s32      flag;
-    s32      id;
+    s32      damage_response_state;
     f32      horizontal_knockback_strength, vertical_knockback_strength, knockback_scale;
     V_210ce8 knockback_vector;
 
@@ -2542,9 +2542,9 @@ s32 hero_check_damage(s32 apply_damage_response) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         mob = ((u8 *)hero.damage_source_moby);
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
-            id = 0x80;
+            damage_response_state = 0x80;
         call_ret:
-            hero_set_state(id, 1);
+            hero_set_state(damage_response_state, 1);
             return 1;
         }
         if (hero.state.control_mode == 0x16) {
@@ -2555,14 +2555,14 @@ s32 hero_check_damage(s32 apply_damage_response) {
         if (hero.state.control_mode == HERO_MODE_WATER_SURFACE) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                id = 0x82;
+                damage_response_state = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
         } else if (hero.state.control_mode == HERO_MODE_SWIM) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                id = 0x82;
+                damage_response_state = 0x82;
                 goto call_ret;
             }
             if (current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) {
@@ -2576,7 +2576,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
         } else if (hero.state.control_mode == HERO_MODE_LEDGE) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0) {
-                id = 0x82;
+                damage_response_state = 0x82;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
                     goto call_ret;
                 }
