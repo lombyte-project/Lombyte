@@ -495,7 +495,7 @@ void spawn_randomized_bolt_drop(struct Moby *moby,
 
 void spawn_randomized_bolt_drop(
 
-    struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index) {
+    struct Moby *moby, int min_bolts, int max_bolts, int drop_behavior_mask, int path_index) {
     float base_velocity[4], position[4], velocity[4], spread[4], landing[4], path_point[4],
         quarter[4];
     float first_root, second_root;
@@ -512,24 +512,24 @@ void spawn_randomized_bolt_drop(
     twenties = 0;
     fifties = 0;
     clear_u64_value(base_velocity);
-    if (!(flags & 0x20)) {
+    if (!(drop_behavior_mask & 0x20)) {
         if (moby->mission != 0xFF && (unsigned)((unsigned short)moby->oclass - 0x1F4) >= 0x29) {
             D_L00_0015F598 = D_L00_0015FC88_macro[moby->mission] == 0xFF;
         }
     }
     counted = 0;
     if (D_L00_0015F598) {
-        if (!(flags & 0x20)) {
+        if (!(drop_behavior_mask & 0x20)) {
             counted = 1;
         }
     }
-    if (flags == 0) {
+    if (drop_behavior_mask == 0) {
         return;
     }
     if (min_bolts == 0 && max_bolts == 0) {
         return;
     }
-    if (flags & 4) {
+    if (drop_behavior_mask & 4) {
         aim = (unsigned char *)get_moby_target_info(moby);
         if (aim) {
             qcopy(base_velocity, aim + 0x20);
@@ -605,7 +605,7 @@ void spawn_randomized_bolt_drop(
     }
     ones = remaining;
     sum = fifties + twenties + fives + ones;
-    if (sum >= 4 && (flags & 8)) {
+    if (sum >= 4 && (drop_behavior_mask & 8)) {
         down_ones = 0;
         down_fives = 0;
         down_twenties = 0;
@@ -701,16 +701,16 @@ void spawn_randomized_bolt_drop(
         }
         fast_vec_add(velocity, velocity, base_velocity);
         if (fifties) {
-            spawn_bolt_by_value(moby, position, velocity, flags, 50, counted);
+            spawn_bolt_by_value(moby, position, velocity, drop_behavior_mask, 50, counted);
             fifties--;
         } else if (twenties) {
-            spawn_bolt_by_value(moby, position, velocity, flags, 20, counted);
+            spawn_bolt_by_value(moby, position, velocity, drop_behavior_mask, 20, counted);
             twenties--;
         } else if (fives) {
-            spawn_bolt_by_value(moby, position, velocity, flags, 5, counted);
+            spawn_bolt_by_value(moby, position, velocity, drop_behavior_mask, 5, counted);
             fives--;
         } else {
-            spawn_bolt_by_value(moby, position, velocity, flags, 1, counted);
+            spawn_bolt_by_value(moby, position, velocity, drop_behavior_mask, 1, counted);
             ones--;
         }
     }
