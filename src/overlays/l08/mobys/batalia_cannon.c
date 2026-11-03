@@ -734,7 +734,7 @@ void batalia_cannon_update(Moby *moby) {
         CANNON_THREE_INACTIVE_INDEXED_TARGETS = 3,
         CANNON_ALL_INDEXED_TARGETS_INACTIVE = 4
     };
-    float position[4], offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
+    float position[4], mounted_hero_position_offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
     CannonData52 *cannon_control_vars = (*(CannonData52 **)&moby->pvars);
     int           i, target, all_done, dead, best, min_life;
     Moby        **links;
@@ -744,10 +744,10 @@ void batalia_cannon_update(Moby *moby) {
     if (fast_dec_timer_s16(&cannon_control_vars->exit_timer) && moby->command == 1) {
         qcopy(hero.motion.pos.f, position);
         qcopy(hero.motion.rot.f, (*(float(*)[4]) & moby->rot));
-        offset[0] = fast_cos(hero.motion.rot.f[2]) * -0.7f;
-        offset[1] = fast_sin(hero.motion.rot.f[2]) * -0.7f;
-        offset[2] = 0.0f;
-        fast_vec_add(hero.motion.pos.f, hero.motion.pos.f, offset);
+        mounted_hero_position_offset[0] = fast_cos(hero.motion.rot.f[2]) * -0.7f;
+        mounted_hero_position_offset[1] = fast_sin(hero.motion.rot.f[2]) * -0.7f;
+        mounted_hero_position_offset[2] = 0.0f;
+        fast_vec_add(hero.motion.pos.f, hero.motion.pos.f, mounted_hero_position_offset);
         fast_mem_zero16((char *)hero.motion.pos.f + 0x60, 0x90);
         if (cannon_control_vars->health == 0) {
             Moby *node;
