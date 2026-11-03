@@ -867,17 +867,17 @@ void update_gemlik_trail(struct Moby *moby) {
         TrailHit_94f8 hit;
     } work;
     TrailPoint_94f8 upper, lower;
-    int             timer, i, j, clamp_count;
+    int             trail_frames_remaining, i, j, clamp_count;
     char           *clamp_cursor;
     float           prior_height, dot;
 
-    timer = truncate_float_to_s32(gemlik_trail_vars->anchor.w);
-    fast_dec_timer(&timer);
-    gemlik_trail_vars->anchor.w = (float)timer;
-    if (!timer)
+    trail_frames_remaining = truncate_float_to_s32(gemlik_trail_vars->anchor.w);
+    fast_dec_timer(&trail_frames_remaining);
+    gemlik_trail_vars->anchor.w = (float)trail_frames_remaining;
+    if (!trail_frames_remaining)
         return;
 
-    if (timer == 20) {
+    if (trail_frames_remaining == 20) {
         for (clamp_cursor = (char *)gemlik_trail_vars, clamp_count = 15; clamp_count >= 0;
              clamp_count--, clamp_cursor += 16) {
             if (*(float *)(clamp_cursor + 0x21c) >= 1.0f)
