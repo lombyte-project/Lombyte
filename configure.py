@@ -940,7 +940,6 @@ OVERLAY_SN_UNITS = {
 # link fails when the section is not SIZE bytes.  Both the assembly-backed and
 # the promoted (normalized) unit names resolve to the same retail bytes.
 RODATA_OVERLAYS = {
-    "sdk/libc/stdlib/_strtol_r": (0x152200, 0x53180, 257),  # newlib _ctype_
     "_dtoa_r": (0x152310, 0x53290, 88),  # Infinity/NaN/0 strings, f64 literals, switch table
     # _getpic's switch emits a 5-entry jump table (0x14 bytes) that retail
     # stored at 0x153AA0 inside core_rdata; the expected object references it
@@ -992,6 +991,8 @@ RODATA_OVERLAYS = {
     "sdk/storage/cdvd/cd_check_scmd": (0x152F10, 0x53E90, 64),
     "sdk/storage/cdvd/checkModelVersion": (0x153030, 0x53FB0, 12),
     "sdk/dma/wait_dma": (0x1533E0, 0x54360, 22),
+    "sdk/dma/sce_dma_reset": (0x1533F8, 0x54378, 40),  # DmaChannelsUsed
+    "sdk/dma/sce_dma_put_env": (0x153420, 0x543A0, 42),  # its STS/STD/MFD channel codes
     "sdk/input/dbc/sceDbcInit": (0x1534D8, 0x54458, 121),
     "sdk/mpeg/macroblock/mb_address_increment": (0x1537A8, 0x54728, 50),
     "sdk/mpeg/macroblock/slicea0": (0x153800, 0x54780, 66),
@@ -1027,8 +1028,9 @@ RODATA_OVERLAYS = {
     "sdk/mpeg/macroblock/_slice0": (0x153848, 0x547C8, 32),  # its message
     "sdk/mpeg/macroblock/skip_mb0": (0x153868, 0x547E8, 45),  # its message
     "sdk/mpeg/macroblock/_decMB0": (0x153898, 0x54818, 32),  # its message
+    "sdk/mpeg/headers/_extensionAndUserData": (0x1538B8, 0x54838, 44),  # its extension parser table
     "sdk/mpeg/picture/decpicture": (0x153940, 0x548C0, 59),  # its two messages
-    "sdk/mpeg/demux/_PES_packet": (0x1539D8, 0x54958, 46),  # its message
+    "sdk/mpeg/demux/_PES_packet": (0x1539C8, 0x54948, 62),  # its header skip table and message
     "sdk/mpeg/api/sce_mpeg_create": (0x153A10, 0x54990, 35),  # its message
     "sdk/mpeg/api/alloc_work_area": (0x153A38, 0x549B8, 28),  # its message
     "sdk/mpeg/picture/_lastFrame": (0x153AB8, 0x54A38, 28),  # its message

@@ -18,7 +18,7 @@
 /* Source: newlib (UC Berkeley). */
 
 /* _strtol_r: newlib-2000-02-17 strtol.c adapted to the game's 64-bit long and
- * ctype table _ctype_. */
+ * ctype table D_00152201 (= _ctype_ + 1). */
 
 #include "types.h"
 #include "rnc/sdk/soft_float.h"
@@ -27,41 +27,17 @@ typedef struct _reent {
     s32 _errno;
 } _reent;
 
-#define _U 01   /* upper case */
-#define _L 02   /* lower case */
-#define _D 04   /* digit */
-#define _S 0x08 /* white space */
-#define _P 0x10 /* punctuation */
-#define _C 0x20 /* control */
-#define _X 0x40 /* hex digit */
-#define _B 0x80 /* blank */
+extern u8 D_00152201[];
 
-/* newlib's _ctype_: entry c + 1 classifies character c (EOF is entry 0);
-   characters 128-255 are unclassified. */
-const char _ctype_[1 + 256] __asm__("D_00152200") = {
-    0,
-    _C, _C, _C, _C, _C, _C, _C, _C,
-    _C, _S|_C, _S|_C, _S|_C, _S|_C, _S|_C, _C, _C,
-    _C, _C, _C, _C, _C, _C, _C, _C,
-    _C, _C, _C, _C, _C, _C, _C, _C,
-    _S|_B, _P, _P, _P, _P, _P, _P, _P,
-    _P, _P, _P, _P, _P, _P, _P, _P,
-    _D, _D, _D, _D, _D, _D, _D, _D,
-    _D, _D, _P, _P, _P, _P, _P, _P,
-    _P, _U|_X, _U|_X, _U|_X, _U|_X, _U|_X, _U|_X, _U,
-    _U, _U, _U, _U, _U, _U, _U, _U,
-    _U, _U, _U, _U, _U, _U, _U, _U,
-    _U, _U, _U, _P, _P, _P, _P, _P,
-    _P, _L|_X, _L|_X, _L|_X, _L|_X, _L|_X, _L|_X, _L,
-    _L, _L, _L, _L, _L, _L, _L, _L,
-    _L, _L, _L, _L, _L, _L, _L, _L,
-    _L, _L, _L, _P, _P, _P, _P, _C,
-};
+#define _U 01
+#define _L 02
+#define _D 04
+#define _S 0x08
 
-#define isspace(c) (((_ctype_ + 1)[(c)] & _S) != 0)
-#define isdigit(c) (((_ctype_ + 1)[(c)] & _D) != 0)
-#define isalpha(c) (((_ctype_ + 1)[(c)] & (_U | _L)) != 0)
-#define isupper(c) (((_ctype_ + 1)[(c)] & _U) != 0)
+#define isspace(c) ((D_00152201[(c)] & _S) != 0)
+#define isdigit(c) ((D_00152201[(c)] & _D) != 0)
+#define isalpha(c) ((D_00152201[(c)] & (_U | _L)) != 0)
+#define isupper(c) ((D_00152201[(c)] & _U) != 0)
 
 s64 _strtol_r(_reent *rptr, const s8 *nptr, s8 **endptr, s32 radix) {
     register const s8 *s = nptr;

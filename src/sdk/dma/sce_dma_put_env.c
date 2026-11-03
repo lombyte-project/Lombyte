@@ -13,9 +13,14 @@ typedef struct {
     u32   rbmsk;
 } sceDmaEnv;
 
-extern u8        dma_sts_control_encodings[] __asm__("D_00153420");
-extern u8        dma_std_control_encodings[] __asm__("D_00153430");
-extern u8        dma_mfd_control_encodings[] __asm__("D_00153440");
+/* D_CTRL field codes by DMA channel (0 VIF0, 1 VIF1, 2 GIF, 3 fromIPU, 4 toIPU,
+   5 SIF0, 6 SIF1, 7 SIF2, 8 fromSPR, 9 toSPR); 0 = the channel cannot take that role. */
+/* STS (stall source): 1 SIF0, 2 fromSPR, 3 fromIPU. */
+const u8 dma_sts_control_encodings[10] __asm__("D_00153420") = {0, 0, 0, 3, 0, 1, 0, 0, 2, 0};
+/* STD (stall drain): 1 VIF1, 2 GIF, 3 SIF1. */
+const u8 dma_std_control_encodings[10] __asm__("D_00153430") = {0, 1, 2, 0, 0, 0, 3, 0, 0, 0};
+/* MFD (MFIFO drain): 2 VIF1, 3 GIF. */
+const u8 dma_mfd_control_encodings[10] __asm__("D_00153440") = {0, 2, 3, 0, 0, 0, 0, 0, 0, 0};
 extern sceDmaEnv dma_last_applied_environment __asm__("D_001599D8");
 
 s32 sceDmaPutEnv(sceDmaEnv *env) {

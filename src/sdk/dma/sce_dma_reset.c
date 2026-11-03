@@ -25,7 +25,9 @@
 #include "rnc/sdk/dma.h"
 #include "rnc/sdk/graph.h"
 
-extern s32 DmaChannelsUsed[] __asm__("D_001533F8");
+/* By DMA channel: 1 = sceDmaReset clears its registers (all but the SIF
+   channels 5-7). */
+const s32 DmaChannelsUsed[10] __asm__("D_001533F8") = {1, 1, 1, 1, 1, 0, 0, 0, 1, 1};
 
 s32 sceDmaReset(s32 enable_dma) {
     s32 dma_environment[5];
