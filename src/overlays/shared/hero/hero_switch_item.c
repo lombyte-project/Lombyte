@@ -1858,10 +1858,10 @@ void clear_hero_item_slot(int i, int respawn_threshold) {
 /* For the listed ids sets hero.face_expression to 3 and hero.face_expression_timer to scale_game_frames(0x46). */
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
 
-void set_hero_condition_animation_timer_for_item(int id) {
+void set_hero_condition_animation_timer_for_item(int switched_item_id) {
     struct Hero *hero_condition_animation_state;
 
-    switch (id) {
+    switch (switched_item_id) {
     case 9:
     case 11:
     case 13:
