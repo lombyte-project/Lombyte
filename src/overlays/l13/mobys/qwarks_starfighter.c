@@ -1635,7 +1635,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
         STARFIGHTER_SHIELD_STATE_DEACTIVATE_REQUESTED = 3
     };
     Ship388 *starfighter_vars = moby->d;
-    float    offset[4];
+    float    effect_position_or_beam_step[4];
     float    joint[4];
     float    ray_start[4];
     float    probe[4];
@@ -1882,13 +1882,13 @@ void qwarks_starfighter_update(Moby388 *moby) {
                 (frame_time * 30.0f - starfighter_vars->flight_speed) * 0.1f;
             if (frame_time * 40.0f < hero_distance) {
                 fast_vec_sub(
-                    offset, ((char *)&D_0013F3D0), starfighter_vars->tractor_beam_endpoint);
-                fast_vec_normalize(offset, offset, frame_time * 40.0f);
+                    effect_position_or_beam_step, ((char *)&D_0013F3D0), starfighter_vars->tractor_beam_endpoint);
+                fast_vec_normalize(effect_position_or_beam_step, effect_position_or_beam_step, frame_time * 40.0f);
                 fast_vec_add(starfighter_vars->tractor_beam_endpoint,
                              starfighter_vars->tractor_beam_endpoint,
-                             offset);
+                             effect_position_or_beam_step);
             } else {
-                qcopy(offset, ((char *)&D_0013F3D0));
+                qcopy(effect_position_or_beam_step, ((char *)&D_0013F3D0));
                 starfighter_vars->attack_and_death_timer_frames = scale_game_frames(0x78);
                 if (!(starfighter_vars->voice_line_flags & 4)) {
                     if (queue_starfighter_voice_line(moby, starfighter_vars, 0x17, 4) != 0) {
@@ -1965,15 +1965,15 @@ void qwarks_starfighter_update(Moby388 *moby) {
             fast_vec_sub(ray_start, starfighter_vars->tractor_beam_endpoint, probe);
             fast_vec_normalize(ray_start, ray_start, 30.0f);
             fast_vec_add(ray_start, ray_start, probe);
-            fast_vec_sub(offset, ray_start, starfighter_vars->tractor_beam_endpoint);
+            fast_vec_sub(effect_position_or_beam_step, ray_start, starfighter_vars->tractor_beam_endpoint);
             distance = fast_vec_dist(ray_start, ((char *)&D_0013F3D0));
             if (distance != 30.0f) {
-                fast_vec_normalize(offset,
-                                   offset,
+                fast_vec_normalize(effect_position_or_beam_step,
+                                   effect_position_or_beam_step,
                                    (frame_time * 15.0f < distance) ? frame_time * 15.0f : distance);
                 fast_vec_add(starfighter_vars->tractor_beam_endpoint,
                              starfighter_vars->tractor_beam_endpoint,
-                             offset);
+                             effect_position_or_beam_step);
             }
             {
                 char *hero = ((char *)&D_0013F350);
@@ -2113,12 +2113,12 @@ void qwarks_starfighter_update(Moby388 *moby) {
         if (random_integer_below(0x11) == 0) {
             float size_ratio = moby->scale / (*(float *)(moby->cls + 0x24) * 3.0f);
             fast_vec_normalize(joint, moby->mat[0], random_float_between(-5.0f, 5.0f) * size_ratio);
-            fast_vec_add(offset, moby->pos, joint);
+            fast_vec_add(effect_position_or_beam_step, moby->pos, joint);
             fast_vec_normalize(joint, moby->mat[1], random_float_between(-4.0f, 4.0f) * size_ratio);
-            fast_vec_add(offset, offset, joint);
+            fast_vec_add(effect_position_or_beam_step, effect_position_or_beam_step, joint);
             fast_vec_normalize(joint, moby->mat[2], random_float_between(-4.0f, 4.0f) * size_ratio);
-            fast_vec_add(offset, offset, joint);
-            cart_burst(moby, offset, -1, size_ratio * 1.6f, 13.0f);
+            fast_vec_add(effect_position_or_beam_step, effect_position_or_beam_step, joint);
+            cart_burst(moby, effect_position_or_beam_step, -1, size_ratio * 1.6f, 13.0f);
         }
         func_L13_002E9F90_2(moby, starfighter_vars);
         {
@@ -2334,16 +2334,16 @@ void qwarks_starfighter_update(Moby388 *moby) {
         starfighter_vars->snd114 = -1;
         starfighter_vars->snd114 = allocate_voice_for_target_entry(0, 4, (int)moby);
     have114:
-        transform_vector_by_basis(offset, D_L13_00160660, moby->mat[0]);
-        fast_vec_normalize(offset, offset, 7.0f);
-        fast_vec_sub(offset, moby->pos, offset);
-        offset[3] = 50.0f;
+        transform_vector_by_basis(effect_position_or_beam_step, D_L13_00160660, moby->mat[0]);
+        fast_vec_normalize(effect_position_or_beam_step, effect_position_or_beam_step, 7.0f);
+        fast_vec_sub(effect_position_or_beam_step, moby->pos, effect_position_or_beam_step);
+        effect_position_or_beam_step[3] = 50.0f;
         if (starfighter_vars->light120 == -1) {
             starfighter_vars->light120 =
-                allocate_colored_effect_slot(offset, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
+                allocate_colored_effect_slot(effect_position_or_beam_step, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
         } else {
             char *light = level13_point_light_slots + (starfighter_vars->light120 << 5);
-            qcopy(light + 0x10, offset);
+            qcopy(light + 0x10, effect_position_or_beam_step);
         }
     }
     starfighter_vars->b10F = 0;
