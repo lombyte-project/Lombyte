@@ -777,7 +777,7 @@ void initialize_vendor_selected_item_mobys(void) {
     if (vendor_menu_lui.rows[vendor_menu_lui.cursor].is_ammo == 0) {
         float item_z_offset = D_L00_001C8920[vendor_menu_lui.rows[vendor_menu_lui.cursor].item][3];
         item_local_position[2] += item_z_offset;
-        if (discount_purchase_pricing[0]) {
+        if (item_available[ITEM_VENDOR_DISCOUNT]) {
             item_local_position[2] += item_z_offset;
         }
     }

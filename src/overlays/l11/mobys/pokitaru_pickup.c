@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/data_labels.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/save/memcard_save_data.h"
@@ -27,7 +28,7 @@ void pokitaru_pickup_update(struct Moby *moby) {
     };
     switch (moby->state) {
     case PICKUP_INITIALIZE:
-        if (D_0013D4C2[4] != 0) {
+        if (item_available[6] != 0) {
             mark_moby_for_removal(moby);
         } else {
             moby->pos.z += 0.75f;
@@ -40,7 +41,7 @@ void pokitaru_pickup_update(struct Moby *moby) {
     case PICKUP_CHECK_PROXIMITY:
         fast_add_rotations(moby->rot.z, frame_time * 4.7123890f);
         if (vector_distance_xy(&moby->pos, D_0013E533 + 0xE9D) < 2.0f) {
-            D_0013D4C2[4] = 1;
+            item_available[6] = 1;
             D_0013D4E3[0xB] = 1;
             memcard_save_data(0, -1);
             help_request(0x2AF8, 0x3A);
