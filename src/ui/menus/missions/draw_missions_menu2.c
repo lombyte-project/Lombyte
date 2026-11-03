@@ -42,7 +42,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
     struct Rect trailing_text_region;
     struct Rect text_region_settings;
     s32         mask;
-    s32         count;
+    s32         mission_count;
     s32         i;
     s32         mission_text_y;
     s32         flag;
@@ -57,11 +57,11 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
     i = 0;
     mask = 0;
     setup_gif_paging(0);
-    count = collect_mission_ids(0x70000000, &mask, 0, 0);
+    mission_count = collect_mission_ids(0x70000000, &mask, 0, 0);
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0x10B);
     font_print_large(4, 4, 0x80FFA888, get_help_message_text(0x4F59), -1);
-    if (i < count) {
+    if (i < mission_count) {
         mission_id_cursor = (u32 *)0x70000000;
         do {
             y = mission_text_y + 0xA;
@@ -90,7 +90,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
             draw_menu_selection_marker(9, y, bit);
             mission_id_cursor++;
             mission_text_y += step * 16;
-        } while (i < count);
+        } while (i < mission_count);
     }
     if (mask < 0) {
         memset(&text_region_settings, 0, 0x18);
