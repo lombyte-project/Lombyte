@@ -343,6 +343,10 @@ extern int  l01_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 
 void update_hero_ground_material_effects(void) {
+    enum {
+        GROUND_MATERIAL_SLIP = 8,
+        GROUND_MATERIAL_SLIP_NO_LEDGE = 0xC
+    };
     struct Hero  *hero_ptr = &hero;
     int           saved_ground_type;
     int           x;
@@ -404,7 +408,7 @@ void update_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
-    if (saved_ground_type == 8) {
+    if (saved_ground_type == GROUND_MATERIAL_SLIP) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
@@ -412,7 +416,7 @@ void update_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->grind_jump_block = 1;
     }
-    if (saved_ground_type == 0xC) {
+    if (saved_ground_type == GROUND_MATERIAL_SLIP_NO_LEDGE) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
