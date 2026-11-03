@@ -3318,11 +3318,11 @@ typedef struct {
     char          p20A5[0x3];
     unsigned char equipped_item_animation_active;
     char          p20A9[0x3];
-    unsigned char f20AC;
+    unsigned char equipped_item_input_restricted;
     char          p20AD[0x1EF];
     float         hero_stick_magnitude;
     char          p22A0[0x2A];
-    unsigned char f22CA;
+    unsigned char repeat_press_action_latch;
     char          p22CB[0xD];
     short         repeat_press_action_lockout;
     char          p22DA[0x2];
@@ -3368,7 +3368,7 @@ int process_hero_equipped_item_input(void) {
     int start;
     int mask;
 
-    if (D_0013F450_h228770.f20AC != 0 &&
+    if (D_0013F450_h228770.equipped_item_input_restricted != 0 &&
         (D_0013F450_h228770.equipped_slot_item_id != 8 || D_0013F450_h228770.f308 != 1)) {
         return 0;
     }
@@ -3709,7 +3709,7 @@ int process_hero_equipped_item_input(void) {
                    D_0013F450_h228770.hero_current_state != HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT &&
                    D_0013F450_h228770.hero_current_state != HERO_STATE_CROUCH_SWING &&
                    D_0013F450_h228770.hero_current_state != HERO_STATE_HURT) {
-            D_0013F450_h228770.f22CA = 0;
+            D_0013F450_h228770.repeat_press_action_latch = 0;
         }
     }
     return D_0013F450_h228770.current_state_elapsed_frames < start;
