@@ -874,7 +874,7 @@ unsigned char                       *spawn_spinning_and_fading_effect_particle(v
 
 unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_position,
                                                          void         *initial_velocity,
-                                                         unsigned char flags,
+                                                         unsigned char variant_flags,
 
                                                          float size) {
     void          *source = spawn_position;
@@ -883,7 +883,7 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
         unsigned char *motion = particle + 0x20;
         qcopy(particle + 0x10, source);
         qcopy(motion, initial_velocity);
-        if (flags & 1) {
+        if (variant_flags & 1) {
             float one = 1.0f;
             float zero = 0.0f;
             float scale = D_L00_001601D8_gp;
@@ -925,7 +925,7 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
                 FUN_001fa6e0_26b230(spinning_particle_default_final_color_blend_source_gp,
                                     spinning_particle_default_final_color_blend_target_gp,
                                     random_float_between(zero, one));
-            if (flags & 4) {
+            if (variant_flags & 4) {
                 offset = 8;
                 if (!item_text_variant[0x10])
                     offset = 0;
@@ -938,8 +938,8 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
         particle[8] = random_integer_below(0xFF);
         motion[0x1E] = truncate_float_to_s32(randf_sym(1.0f, 4.0f));
         *(float *)(motion + 0x10) = size;
-        motion[0x1F] = flags;
-        if (flags & 4) {
+        motion[0x1F] = variant_flags;
+        if (variant_flags & 4) {
             *(short *)(particle + 0xA) =
                 *(short *)(particle + 0xA) * (item_text_variant[0x10] + 2) / 2;
             swap_packed_color_channels(*(int *)(particle + 4), item_text_variant[0x10]);
