@@ -76,10 +76,10 @@ char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class
     };
     char *moby = create_moby(spawned_moby_class);
     if (moby != 0) {
-        unsigned char state;
+        unsigned char draw_distance;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        state = BARRIER_REPLACEMENT_DRAW_DISTANCE;
-        MOBY(moby)->draw_dist = state;
+        draw_distance = BARRIER_REPLACEMENT_DRAW_DISTANCE;
+        MOBY(moby)->draw_dist = draw_distance;
         moby[0x31] = 1;
         moby[0x20] = 0;
         qcopy(moby + 0x10, &source_moby->pos);
