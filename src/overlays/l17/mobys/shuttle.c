@@ -286,13 +286,13 @@ void shuttle_update(struct Moby *shuttle_moby) {
 
 void update_shuttle_help_message(struct Moby *moby) {
     char *shuttle_private_vars = (char *)moby->pvars;
-    int   mode = *(int *)(shuttle_private_vars + 0x94);
-    switch (mode) {
+    int   selected_stop_index = *(int *)(shuttle_private_vars + 0x94);
+    switch (selected_stop_index) {
     case SHUTTLE_STOP_FIRST:
         *(int *)(shuttle_private_vars + 0x80) = 0;
         break;
     case SHUTTLE_STOP_SECOND:
-        *(int *)(shuttle_private_vars + 0x80) = mode;
+        *(int *)(shuttle_private_vars + 0x80) = selected_stop_index;
         break;
     }
     switch (*(int *)(shuttle_private_vars + 0x80)) {
