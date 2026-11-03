@@ -20,7 +20,7 @@ int collect_mission_ids(int *mission_ids, int *mask, int *nums, int use_selected
         MISSION_STATUS_ALL_CONDITIONS_MET = 2
     };
     MissionNode *mission_node_cursor = mission_id_collection_node_source[0];
-    int          count = 0;
+    int          collected_mission_count = 0;
     int          all = 1;
 
     *mission_ids = 0;
@@ -41,27 +41,27 @@ int collect_mission_ids(int *mission_ids, int *mask, int *nums, int use_selected
             all = 0;
         }
         if (!(f & 2) && t != 0 && !((f & 1) && t == 2)) {
-            mission_ids[count] = mission_node_cursor->id;
+            mission_ids[collected_mission_count] = mission_node_cursor->id;
             if (use_selected_ids != 0) {
-                mission_ids[count] =
+                mission_ids[collected_mission_count] =
                     (mission_node_cursor->status == MISSION_STATUS_ALL_CONDITIONS_MET)
                         ? 0x523E
                         : mission_node_cursor->ids[mission_node_cursor->sel];
             }
             if (mask != 0 && mission_node_cursor->status == MISSION_STATUS_ALL_CONDITIONS_MET) {
-                *mask |= 1 << count;
+                *mask |= 1 << collected_mission_count;
             }
             if (nums != 0) {
                 *nums++ = mission_node_cursor->base + mission_node_cursor->sel;
             }
-            count++;
+            collected_mission_count++;
         }
         mission_node_cursor++;
     }
     if (mask != 0 && all != 0) {
         *mask |= 0x80000000;
     }
-    return count;
+    return collected_mission_count;
 }
 
 extern __typeof__(collect_mission_ids) func_0020BC00 __attribute__((alias("FUN_0020bc00")));
