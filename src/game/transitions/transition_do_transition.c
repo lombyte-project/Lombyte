@@ -230,3 +230,5 @@ SoundCue transition_sound_cues[6] = {
     {0x114,    0x12c, 1, -1},
     {   -1,        0, 0,  0},
 };
+
+s32 space_load_pending = 0;

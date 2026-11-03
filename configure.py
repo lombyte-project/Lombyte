@@ -1064,6 +1064,11 @@ RODATA_OVERLAYS = {
 # file offset, size) of the unit's `.sdata`, which retail kept inside the
 # preserved small-data blobs (core.lit / .lit).  Placed like RODATA_OVERLAYS.
 SDATA_OVERLAYS = {
+    "ui/menus/options/sound_options_menu": (0x15EDE8, 0x5FD68, 12),
+    "ui/help/push_help_history": (0x15EE30, 0x5FDB0, 4),
+    "game/transitions/transition_do_transition": (0x15F5B0, 0x60530, 4),
+    "mobys/animation/process_moby_anim_data": (0x15F63C, 0x605BC, 4),
+    "world/find_zone_at_point": (0x161190, 0x62110, 12),
     "audio/rpc/snd_returns": (0x15EC80, 0x5FC00, 8),
     "audio/snd_start_sound_system": (0x15ECA0, 0x5FC20, 32),  # the batch buffer pointers it sets up
     "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 11),
@@ -1082,7 +1087,7 @@ SDATA_OVERLAYS = {
     "rendering/texture/reset_gs_texture_allocation": (0x15EF20, 0x5FEA0, 4),
     "game/load_level_zero_preserving_progress": (0x15EDA0, 0x5FD20, 4),
     "game/transitions/tick_space_transition": (0x15F5EC, 0x6056C, 4),
-    "rendering/frame/initialize_level_render_state": (0x1603D0, 0x61350, 4),
+    "rendering/frame/initialize_level_render_state": (0x1603D0, 0x61350, 8),
     "camera/resolve_camera_surface_height": (0x1611A0, 0x62120, 4),
     "rendering/view/update_fog": (0x1610C4, 0x62044, 3),
     "rendering/texture/dma_shrub_textures": (0x1603F8, 0x61378, 4),

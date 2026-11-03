@@ -54,3 +54,9 @@ int find_zone_at_point(float x, float y, float z) {
 }
 
 extern __typeof__(find_zone_at_point) func_00239D60 __attribute__((alias("FUN_00239d60")));
+
+s32 surface_height_tiles = 0;
+
+s32 occl_cell_table = 0;
+
+s32 occl_cell_count = 0;
