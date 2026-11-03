@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/save/memory_card_state.h"
+#include "rnc/game/item_state.h"
+#include "rnc/game/item_state.h"
 
 extern char *strncpy(char *, const char *, u32);
 void         memcard_get_name(u8 *src) __asm__("FUN_00209030");
@@ -40,3 +42,13 @@ char D_0013D240[] = "/************RATCHET/************RATCHET";
 char D_0013D270[] = "/************RATCHET/save%d.bin";
 
 struct MemoryCardState memory_card_state = {{{0, 0, 0, 0, 0, -3, 0, 0, {0}, 0, 0, 0}}, 0, 0, -1, 0, 0, 1, -1, 0, 0, -1, -1, 0, -1, 0, 0, 1};
+
+u8 alternate_item_available[128] = {0};
+
+u8 item_unlocked[32] = {0};
+
+s32 weapon_ammo_counts[37] = {0};
+
+u8 item_available[37] = {0};
+
+u8 items_acquired[37] = {0};
