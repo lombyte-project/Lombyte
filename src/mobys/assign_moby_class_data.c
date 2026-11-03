@@ -11,12 +11,12 @@ extern struct MobyClassUpdate resident_class_defaults[] __asm__("D_001E8B80");
 
 void assign_moby_class_data(s32 id) __asm__("FUN_00212d68");
 
-void assign_moby_class_data(s32 id) {
+void assign_moby_class_data(s32 class_id) {
     struct Obj *class_resource;
     s32         i;
 
     class_resource = moby_class_resources[D_0015FF00];
-    for (i = 0; resident_class_defaults[i].oclass != -1 && resident_class_defaults[i].oclass != id;
+    for (i = 0; resident_class_defaults[i].oclass != -1 && resident_class_defaults[i].oclass != class_id;
          i++) {
     }
     moby_class_updates[D_0015FF00] = (s32)resident_class_defaults[i].update;
