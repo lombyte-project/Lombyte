@@ -945,7 +945,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         FillTransferWords(mem, 0, (n + n2) << 8);
         for (i = 0; i < n; i++) {
             int           mission;
-            int           flags;
+            int           moby_load_flags;
             int           uid;
             int           bolts;
             int           bolts2;
@@ -958,7 +958,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             p += 4;
             mission = *(int *)p;
             p += 4;
-            flags = *(int *)p;
+            moby_load_flags = *(int *)p;
             p += 4;
             uid = *(int *)p;
             p += 4;
@@ -968,18 +968,18 @@ char *load_level_gameplay(int skip_gameplay_read) {
             p += 4;
             selected_bolt_count = bolts;
             adjusted_bolt_count = selected_bolt_count;
-            if (flags != 0) {
+            if (moby_load_flags != 0) {
                 level_or_group_scratch = D_0015ED84; /* read before the test: see the group loop */
-                if (flags & 0x10) {
+                if (moby_load_flags & 0x10) {
                     vis = find_or_assign_bolt_source_slot(level_or_group_scratch, uid);
                 } else {
                     vis = 0xFF;
                 }
                 if (l00_moby_load_exclusion_flags_by_uid[uid] != 0) {
                     skip = 1;
-                } else if (flags & 3) {
+                } else if (moby_load_flags & 3) {
                     if (mission_state[mission] == 0xFF) {
-                        if (flags & 2) {
+                        if (moby_load_flags & 2) {
                             selected_bolt_count = bolts2;
                             if ((D_L00_001BA4D0[uid >> 5] >> (uid & 0x1F)) & 1) {
                                 adjusted_bolt_count = (selected_bolt_count + 1) / 2;
@@ -990,7 +990,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                             skip = 1;
                         }
                     } else {
-                        if (flags & 1) {
+                        if (moby_load_flags & 1) {
                             if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                                 adjusted_bolt_count = (bolts + 1) / 2;
                             }
@@ -998,11 +998,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
                             skip = 1;
                         }
                     }
-                } else if (flags & 8) {
+                } else if (moby_load_flags & 8) {
                     if ((D_L00_001BA4D0[uid >> 5] >> (uid & 0x1F)) & 1) {
                         skip = 1;
                     }
-                } else if ((flags & 0xC) == 4) {
+                } else if ((moby_load_flags & 0xC) == 4) {
                     if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                         skip = 1;
                     }
