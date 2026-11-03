@@ -28,12 +28,12 @@ s32 pick_idle_fidget(s32 *index) {
     Vec4              start;
     HeroTableEntry70 *fidget_candidate;
     Vec4             *startp, *endp;
-    s32               i, slot_zero_item_id, count, j;
+    s32               i, slot_zero_item_id, eligible_fidget_count, j;
     s32              *choice_write_cursor;
     HeroTableEntry70 *table;
     f32               total, pick;
 
-    count = 0;
+    eligible_fidget_count = 0;
     if (hero.fidget_cooldown != 0)
         return 0;
     if (hero.health.hp == 1) {
@@ -81,19 +81,19 @@ s32 pick_idle_fidget(s32 *index) {
                 continue;
         }
         *choice_write_cursor = i;
-        count++;
+        eligible_fidget_count++;
         choice_write_cursor++;
     }
-    if (count == 0)
+    if (eligible_fidget_count == 0)
         return 0;
     total = 0.0f;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < eligible_fidget_count; i++) {
         HeroTableEntry70 *choice = &idle_fidgets[choices[i]];
         total += 1.0f / (f32)(s32)(scale_time(choice->interval) * 60.0f);
     }
     pick = random_float_between(0.0f, 1.0f);
     if (pick < total) {
-        for (j = 0; j < count; j++) {
+        for (j = 0; j < eligible_fidget_count; j++) {
             s32               picked = choices[j];
             HeroTableEntry70 *choice;
             *index = picked;
