@@ -24,16 +24,16 @@ typedef struct {
 
 typedef struct {
     char pad[0x224];
-    int  x224;
+    int  current_selection_value;
 } S_27f448;
 
 extern S_27f448 D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
 
 typedef struct {
     char pad0[0x30];
-    int  x30;
+    int  selection_flags;
     char pad34[0xC];
-    int  x40;
+    int  selected_index;
 } P_27f448;
 
 extern E_27f448 D_L00_001BA3B8[] NOT_SDA;
@@ -52,11 +52,11 @@ int initialize_selection_entries_and_index(P_27f448 *selection_state) {
         D_L00_001BA3B8[i].d = D_L00_001C1E40[D_0013D510_lui[i]].b;
     }
     D_L00_001BA3B8[i].a = 0;
-    selection_state->x40 = 0;
-    selection_state->x30 |= 0x8000;
+    selection_state->selected_index = 0;
+    selection_state->selection_flags |= 0x8000;
     for (i = 0; selection_values[i]; i++) {
-        if (D_L00_001841F0_lui.x224 == selection_values[i]) {
-            selection_state->x40 = i;
+        if (D_L00_001841F0_lui.current_selection_value == selection_values[i]) {
+            selection_state->selected_index = i;
             break;
         }
     }
