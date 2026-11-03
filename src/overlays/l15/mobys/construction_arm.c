@@ -78,12 +78,12 @@ void construction_arm_update(struct Moby *moby) {
     UpdateVars_2938 *arm_vars = (UpdateVars_2938 *)moby->pvars;
     int              hit = 0;
     char            *slot;
-    int              ready, count;
+    int              ready, nonwaiting_arm_count;
     unsigned short  *list;
     struct Moby     *group_member_moby;
     float            minimum, maximum, speed, spread, direction;
     int              animation, duration, minimum_effect_duration_frames;
-    Vec4             origin, velocity, offset, sum;
+    Vec4             origin, velocity, velocity_spread, sum;
 
     if (moby->state != CONSTRUCTION_ARM_DESTROY) {
         slot = find_moby_hit(moby, 0x10000, 0);
@@ -111,7 +111,7 @@ void construction_arm_update(struct Moby *moby) {
             ready = 1;
             if (moby->group != 0xff) {
                 slot = (char *)l15_moby_group_member_lists[moby->group];
-                count = 0;
+                nonwaiting_arm_count = 0;
                 if (slot == 0)
                     return;
                 list = (unsigned short *)slot;
@@ -121,9 +121,9 @@ void construction_arm_update(struct Moby *moby) {
                     if ((signed char)group_member_moby->state >= 0 &&
                         group_member_moby->oclass == moby->oclass &&
                         group_member_moby->state != CONSTRUCTION_ARM_WAIT_TO_TURN)
-                        count++;
+                        nonwaiting_arm_count++;
                 } while ((short)*list++ >= 0);
-                if (count != 0) {
+                if (nonwaiting_arm_count != 0) {
                     arm_vars->timer = scale_game_frames(60);
                     ready = 0;
                 }
@@ -171,11 +171,11 @@ void construction_arm_update(struct Moby *moby) {
             velocity.f[0] = fast_cos(arm_vars->direction) * speed;
             velocity.f[1] = fast_sin(arm_vars->direction) * speed;
             velocity.f[2] = 0.0f;
-            offset.f[0] = fast_cos(direction) * spread;
-            offset.f[1] = fast_sin(direction) * spread;
-            offset.f[2] = 0.0f;
+            velocity_spread.f[0] = fast_cos(direction) * spread;
+            velocity_spread.f[1] = fast_sin(direction) * spread;
+            velocity_spread.f[2] = 0.0f;
             /* Retail computes the sum but passes velocity to the effect helper. */
-            add_vectors(&sum, &velocity, &offset);
+            add_vectors(&sum, &velocity, &velocity_spread);
             moby_point_position(moby, 1, &origin);
             minimum_effect_duration_frames =
                 scale_game_frames(construction_arm_effect_duration_min_frames_gp);
