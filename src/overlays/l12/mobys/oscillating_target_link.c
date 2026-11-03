@@ -166,7 +166,7 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
     if (cycle > 1.0f)
         oscillating_link_strip_scroll_phase_gp = cycle - 1.0f;
     for (strip = 0; strip < 4; strip++) {
-        int    count;
+        int    interior_point_index;
         int    i;
         float *points;
         float *intermediate;
@@ -195,17 +195,17 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
                     i++;
                 } while (i < oscillating_link_strip_state->strip_point_count);
             }
-            count = 1;
-            if (count < oscillating_link_strip_state->strip_point_count - 1) {
+            interior_point_index = 1;
+            if (interior_point_index < oscillating_link_strip_state->strip_point_count - 1) {
                 points = (float *)((char *)oscillating_link_strip_state + strip * 0x460 + 0x1190);
                 do {
                     fast_vec_add(
-                        points, intermediate_storage[count - 1], intermediate_storage[count]);
-                    fast_vec_add(points, points, intermediate_storage[count + 1]);
+                        points, intermediate_storage[interior_point_index - 1], intermediate_storage[interior_point_index]);
+                    fast_vec_add(points, points, intermediate_storage[interior_point_index + 1]);
                     fast_vec_scale(points, points, 0.333f);
-                    count++;
+                    interior_point_index++;
                     points += 4;
-                } while (count < oscillating_link_strip_state->strip_point_count - 1);
+                } while (interior_point_index < oscillating_link_strip_state->strip_point_count - 1);
             }
             *(int *)(timers + (strip << 2)) = oscillating_link_strip_reset_ticks;
         } else {
