@@ -236,3 +236,7 @@ void update_view_context(void) {
 }
 
 extern __typeof__(update_view_context) func_001F2D98 __attribute__((alias("FUN_001f2d98")));
+
+/* Filled above each frame; part_proc loads it as one vector.  Small data in
+   retail, defined below the function, so it is reached with lui. */
+f32 view_projection_scale_bias_constants[4] __attribute__((section(".sdata"))) = {0};

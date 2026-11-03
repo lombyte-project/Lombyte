@@ -41,3 +41,5 @@ void do_sky_gif_paging(void) {
 }
 
 extern __typeof__(do_sky_gif_paging) func_0022B558 __attribute__((alias("FUN_0022b558")));
+
+struct TagPtr sky_gif_paging_bypass_tag = {0};

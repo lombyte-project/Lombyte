@@ -1100,6 +1100,8 @@ SDATA_OVERLAYS = {
     "math/rotations/matrix_to_quaternion": (0x15FFD8, 0x60F58, 12),  # next-axis table
     "rendering/packets/emit_textured_rectangle": (0x160860, 0x617E0, 16),  # its GIF tag
     "rendering/effects/append_billboard_batch": (0x1608E0, 0x61860, 16),  # its GIF tag
+    "rendering/sky/do_sky_gif_paging": (0x160474, 0x613F4, 4),  # its paging bypass tag
+    "rendering/view/update_view_context": (0x160720, 0x616A0, 16),  # projection scale and bias
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
