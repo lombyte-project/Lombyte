@@ -192,7 +192,7 @@ void scoutbot_update(Moby *moby) {
     };
     Data_3DF8 *scoutbot_instance_vars = (struct Data_3DF8 *)moby->pvars;
     float      target_pos[4];
-    float      offset[4];
+    float      wander_or_effect_vector[4];
     float      shot_pos[4];
 
     sound_3DF8(3.6f, moby, 2, scoutbot_instance_vars->sound_state);
@@ -246,10 +246,10 @@ void scoutbot_update(Moby *moby) {
             float heading = random_angle_radians();
             float radius = random_float_between(0.0f, 3.0f);
 
-            offset[0] = fast_cos(heading) * radius;
-            offset[1] = fast_sin(heading) * radius;
-            offset[2] = 0.0f;
-            fast_vec_add(scoutbot_instance_vars->wander_goal, scoutbot_instance_vars->home, offset);
+            wander_or_effect_vector[0] = fast_cos(heading) * radius;
+            wander_or_effect_vector[1] = fast_sin(heading) * radius;
+            wander_or_effect_vector[2] = 0.0f;
+            fast_vec_add(scoutbot_instance_vars->wander_goal, scoutbot_instance_vars->home, wander_or_effect_vector);
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
@@ -339,13 +339,13 @@ void scoutbot_update(Moby *moby) {
             if (vector_distance_xy(&scoutbot_instance_vars->target->pos, &moby->pos) < 3.0f &&
                 absolute_float(scoutbot_instance_vars->current_target->pos.z - moby->pos.z) <
                     1.0f) {
-                offset[0] = fast_cos(moby->rot.z) * 0.2f;
-                offset[1] = fast_sin(moby->rot.z) * 0.2f;
-                offset[2] = 0.0f;
+                wander_or_effect_vector[0] = fast_cos(moby->rot.z) * 0.2f;
+                wander_or_effect_vector[1] = fast_sin(moby->rot.z) * 0.2f;
+                wander_or_effect_vector[2] = 0.0f;
                 qcopy(shot_pos, target_pos);
                 shot_pos[2] += 0.75f;
                 spawn_nearby_effect(
-                    scoutbot_instance_vars->current_target, moby, 1, shot_pos, offset, 1.0f);
+                    scoutbot_instance_vars->current_target, moby, 1, shot_pos, wander_or_effect_vector, 1.0f);
             }
             scoutbot_instance_vars->ground_hover_height_offset = 4.0f;
             scoutbot_instance_vars->hover_bob_amplitude = 0.5f;
@@ -379,12 +379,12 @@ void scoutbot_update(Moby *moby) {
         }
         break;
     case SCOUTBOT_STATE_EXPLODE_AND_REMOVE:
-        qcopy(offset, &moby->pos);
-        offset[2] += 1.0f;
+        qcopy(wander_or_effect_vector, &moby->pos);
+        wander_or_effect_vector[2] += 1.0f;
         allocate_voice_for_target_entry(1, 0, moby);
         explode_3DF8(moby,
                      scoutbot_instance_vars->vel,
-                     offset,
+                     wander_or_effect_vector,
                      0.0f,
                      0.0f,
                      5,
