@@ -161,7 +161,10 @@ int get_hero_easing_moby_by_kind(int ease_kind) {
         HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY = 1,
         HERO_EASE_KIND_SLOT_ZERO_PRIMARY_MOBY = 5
     };
-    if (ease_kind == 0 || ease_kind == 2 || ease_kind == 3 || ease_kind == 4) {
+    enum {
+        HERO_EASE_KIND_ON_FOOT_HERO_MOBY = 0
+    };
+    if (ease_kind == HERO_EASE_KIND_ON_FOOT_HERO_MOBY || ease_kind == 2 || ease_kind == 3 || ease_kind == 4) {
         return D_001413D0[0];
     }
     if (ease_kind == HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY) {
