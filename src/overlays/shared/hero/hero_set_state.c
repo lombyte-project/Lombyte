@@ -3764,13 +3764,13 @@ void update_hero_animation_for_movement_speed(void) {
         HERO_SPEED_STEP_HIGH = 1
     };
     struct Hero *player = &hero;
-    int          mode = player->vehicle_mode;
-    if (mode == 3) {
+    int          vehicle_mode = player->vehicle_mode;
+    if (vehicle_mode == 3) {
         float speed = player->motion.speed_xy * 54.0f;
         player->anim_speed = speed;
         if (speed < 0.7f)
             player->anim_speed = 0.7f;
-    } else if (mode == HERO_VEHICLE_MODE_CLANK) {
+    } else if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         float speed = player->motion.speed_xy * 90.0f;
         player->anim_speed = speed;
         if (speed < 0.5f)
