@@ -1249,7 +1249,7 @@ extern s32  weapon_ammo_counts[37] __asm__("D_0013D428");
 void process_hero_race_object_interactions(void) __asm__("FUN_L05_00253b48");
 
 void process_hero_race_object_interactions(void) {
-    u8 *state;
+    u8 *hoverboard_pvars;
     u8 *moby;
     u8 *boost_trigger_moby;
     u8 *ground_boost_trigger_moby;
@@ -1261,9 +1261,9 @@ void process_hero_race_object_interactions(void) {
 
     if (hero.hoverboard_moby == 0)
         return;
-    state = *(u8 **)(hero.hoverboard_moby + 0x78);
-    if (*(s32 *)(state + 0x44) != -1) {
-        get_first_moby_in_group((void **)&boost_trigger_moby, *(s32 *)(state + 0x44), 0, 0);
+    hoverboard_pvars = *(u8 **)(hero.hoverboard_moby + 0x78);
+    if (*(s32 *)(hoverboard_pvars + 0x44) != -1) {
+        get_first_moby_in_group((void **)&boost_trigger_moby, *(s32 *)(hoverboard_pvars + 0x44), 0, 0);
         if (boost_trigger_moby != 0) {
             do {
                 if (*(s16 *)(boost_trigger_moby + 0xA6) == 0x473 &&
@@ -1294,10 +1294,10 @@ void process_hero_race_object_interactions(void) {
     blue = truncate_float_to_s32(wave * 24.0f) + 0x3C;
     if (green > 0xFF)
         green = 0xFF;
-    if (*(s32 *)(state + 0x48) != -1) {
+    if (*(s32 *)(hoverboard_pvars + 0x48) != -1) {
         if (hero.hoverboard_airborne == 0) {
             get_first_moby_in_group(
-                (void **)&ground_boost_trigger_moby, *(s32 *)(state + 0x48), 0, 0);
+                (void **)&ground_boost_trigger_moby, *(s32 *)(hoverboard_pvars + 0x48), 0, 0);
             if (ground_boost_trigger_moby != 0) {
                 u32 color = (blue << 16) | (0x80000000U | (green << 8)) | red;
                 do {
@@ -1326,8 +1326,8 @@ void process_hero_race_object_interactions(void) {
             }
         }
     }
-    if (*(s32 *)(state + 0x4C) != -1) {
-        get_first_moby_in_group((void **)&third, *(s32 *)(state + 0x4C), 0, 0);
+    if (*(s32 *)(hoverboard_pvars + 0x4C) != -1) {
+        get_first_moby_in_group((void **)&third, *(s32 *)(hoverboard_pvars + 0x4C), 0, 0);
         while (third != 0) {
             if (*(s16 *)(third + 0xA6) == 0x1D6 && fast_subtract_rotations_cf(third + 0xBC) != 0 &&
                 fast_vec_dist(&hero.motion.body_center, third + 0x10) < 1.5f) {
