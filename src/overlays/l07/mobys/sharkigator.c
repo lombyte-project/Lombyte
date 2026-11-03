@@ -272,7 +272,7 @@ int test_other_group_moby_state_range(unsigned char *moby,
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003109D0), where it is exact; names translated to the US level program. */
 struct WalkerTarget {
     float pos[4];
-    u128  q10;
+    u128  rotation;
     u128  q20;
     u128  q30;
     int   moby;
@@ -811,14 +811,14 @@ void sharkigator_update(unsigned char *moby) {
         if (vector_distance_xy(moby + 0x10, hero) < 30.0f) {
             target.moby = *(int *)(hero + 0x2000);
             qcopy(&target.pos, hero);
-            qcopy(&target.q10, hero + 0x10);
+            qcopy(&target.rotation, hero + 0x10);
             qcopy(&target.q20, hero + 0x40);
             qcopy(&target.q30, hero + 0x50);
             target.kind = WALKER_TARGET_HERO;
         } else {
             target.moby = 0;
             qzero(&target.pos);
-            qzero(&target.q10);
+            qzero(&target.rotation);
             qzero(&target.q30);
             qzero(&target.q20);
             target.kind = WALKER_TARGET_NONE;
