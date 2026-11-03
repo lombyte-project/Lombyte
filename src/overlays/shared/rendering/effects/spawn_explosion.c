@@ -141,7 +141,7 @@ void update_hit_color_flash(s32 id, struct HitColorFlash *animation_state) {
         else
             b = animation_state->original_blue;
     }
-    set_moby_color(id, r, g, b);
+    set_moby_color(color_target_moby, r, g, b);
 }
 
 s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) __asm__("FUN_L00_0025d7a0");
