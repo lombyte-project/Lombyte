@@ -62,7 +62,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
     float         end[4] __attribute__((aligned(16)));
     float         adjusted[4] __attribute__((aligned(16)));
     float         velocity[4] __attribute__((aligned(16)));
-    float         offset[4] __attribute__((aligned(16)));
+    float         randomized_particle_velocity[4] __attribute__((aligned(16)));
     float         travel_step = 0.0f;
     float         speed = 0.0f;
     float         travel;
@@ -102,20 +102,20 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
         first_count = 1;
     for (i = 0; i < default_particle_count + first_count; i++) {
         random_vector(
-            offset,
+            randomized_particle_velocity,
             0.0f,
             (((l02_effect_particle_full_travel_spread) - (l02_effect_particle_zero_travel_spread)) *
                  (travel / distance) +
              (l02_effect_particle_zero_travel_spread)) *
                 frame_time_macro);
-        fast_vec_add(offset, offset, adjusted);
+        fast_vec_add(randomized_particle_velocity, randomized_particle_velocity, adjusted);
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
         fast_vec_add(velocity, velocity, origin);
         if (i < first_count)
             fl = 1;
         else
             fl = 0;
-        shot = spawn_spinning_and_fading_effect_particle(velocity, offset, fl, travel);
+        shot = spawn_spinning_and_fading_effect_particle(velocity, randomized_particle_velocity, fl, travel);
         if (i == 2 && save_shot) {
             int j;
             for (j = 0; j < 7; j++) {
@@ -130,9 +130,9 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
         float color_particle_spawn_delay = random_float_between(10.0f, 30.0f);
         color_particle_spawn_delay = FUN_L04_001f1978(color_particle_spawn_delay);
         ((Slots *)slots)->timer = truncate_float_to_s32(color_particle_spawn_delay);
-        random_vector(offset, 0.0f, frame_time_macro + frame_time_macro);
+        random_vector(randomized_particle_velocity, 0.0f, frame_time_macro + frame_time_macro);
         fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));
-        fast_vec_add(velocity, velocity, offset);
+        fast_vec_add(velocity, velocity, randomized_particle_velocity);
         velocity[3] = 0.0f;
         spawn_color_decaying_effect_particle(position, velocity, 0);
     }
