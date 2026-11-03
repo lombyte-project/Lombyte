@@ -20,13 +20,13 @@ int count_live_mobys_in_list(int moby_list_index, int excluded_moby_state) {
         return 0;
     moby_id_cursor = moby_id_list;
     do {
-        int   id = *moby_id_cursor & 0x7FFF;
-        char *moby = (char *)(id << 8) + (int)moby_base;
+        int   moby_index = *moby_id_cursor & 0x7FFF;
+        char *moby = (char *)(moby_index << 8) + (int)moby_base;
         if (moby[0x20] >= 0) {
             char *moby_callback_record = get_moby_suck_cannon_record(moby);
             if (moby_callback_record == 0 || *(short *)(moby_callback_record + 0x68) < 4) {
                 if (excluded_moby_state == -1 ||
-                    *(unsigned char *)((char *)(id << 8) + (int)moby_base + 0x20) !=
+                    *(unsigned char *)((char *)(moby_index << 8) + (int)moby_base + 0x20) !=
                         excluded_moby_state) {
                     count++;
                 }
