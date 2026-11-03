@@ -36,7 +36,7 @@ extern s32   isatty() __asm__("func_00118EC0");
 extern s32   __sseek(void *, s32, s32);
 
 void __smakebuf(RncFile *fp) {
-    u32                  size, couldbetty;
+    u32                  buffer_bytes, couldbetty;
     void                *allocated_buffer;
     struct RncStatBuffer file_status;
 
@@ -47,11 +47,11 @@ void __smakebuf(RncFile *fp) {
     }
     if ((s16)fp->_file < 0 || _fstat_r(fp->_data, (s16)fp->_file, &file_status) < 0) {
         couldbetty = 0;
-        size = 0x400;
+        buffer_bytes = 0x400;
         fp->_flags |= 0x800;
     } else {
         couldbetty = (file_status.st_mode & 0xF000) == 0x2000;
-        size = 0x400;
+        buffer_bytes = 0x400;
         if ((file_status.st_mode & 0xF000) == 0x8000 && fp->_seek == __sseek) {
             fp->_flags |= 0x400;
             fp->_blksize = 1024;
@@ -59,7 +59,7 @@ void __smakebuf(RncFile *fp) {
             fp->_flags |= 0x800;
         }
     }
-    if ((allocated_buffer = _malloc_r(fp->_data, size)) == NULL) {
+    if ((allocated_buffer = _malloc_r(fp->_data, buffer_bytes)) == NULL) {
         fp->_flags |= 2;
         fp->_bf._base = fp->_p = fp->_nbuf;
         fp->_bf._size = 1;
@@ -67,7 +67,7 @@ void __smakebuf(RncFile *fp) {
         fp->_data->__cleanup = (void (*)(RncReent *))D_00113AC8;
         fp->_flags |= 0x80;
         fp->_bf._base = fp->_p = (u8 *)allocated_buffer;
-        fp->_bf._size = size;
+        fp->_bf._size = buffer_bytes;
         if (couldbetty && isatty((s16)fp->_file))
             fp->_flags |= 1;
     }
