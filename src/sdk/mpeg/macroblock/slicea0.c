@@ -14,7 +14,7 @@ struct MpegMotionState {
 };
 
 const u8   D_00153800[] = "slice_start_code(0x%08x) out of range";
-extern u8  slice_setup_error_message[] __asm__("D_00153828");
+extern const char slice_setup_error_message[] __asm__("D_00153828");
 extern s32 _Error();
 extern s32 _Error1();
 extern s32 _flushBuf();
@@ -64,3 +64,5 @@ s32 _sliceA0(struct MpegSliceDecoder *decoder,
     motion->values[3] = 0;
     return 0;
 }
+
+const char slice_setup_error_message[] __asm__("D_00153828") = "_sliceA0(): error happens";

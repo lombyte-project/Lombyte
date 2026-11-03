@@ -4,7 +4,7 @@
 #include "rnc/sdk/rpc/rpc.h"
 
 const char  D_00152960[] = "rom0:UDNL ";
-extern char iop_reboot_parameter_too_long_format[] __asm__("D_00152970");
+extern const char iop_reboot_parameter_too_long_format[] __asm__("D_00152970");
 
 s32 sceSifRebootIop(const char *img) {
     const char *prefix = D_00152960;
@@ -32,3 +32,6 @@ s32 sceSifRebootIop(const char *img) {
     *command_write_cursor = 0;
     return sceSifResetIop(param, 0);
 }
+
+const char iop_reboot_parameter_too_long_format[] __asm__("D_00152970") =
+    "too long parameter '%s'\n";

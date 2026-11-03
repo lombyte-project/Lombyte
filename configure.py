@@ -949,7 +949,7 @@ RODATA_OVERLAYS = {
     "sdk/deci2/printfloat": (0x152780, 0x53700, 48),  # its three formats and three f64 literals (0.1, 0.1, 1e6)
     "sdk/deci2/printf_impl": (0x1527B0, 0x53730, 292),  # _printf's format switch table (jtbl_001527B0)
     "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0, 26),  # its RPC-collision message
-    "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
+    "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 136),  # its three error messages
     "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 141),  # its buffer-full and continuing messages
     "audio/snd_start_sound_system": (0x153C50, 0x54BD0, 70),  # its bind error and source file name
     "audio/rpc/snd_returns": (0x153C98, 0x54C18, 82),  # its no-returns message
@@ -984,25 +984,58 @@ RODATA_OVERLAYS = {
     "mode_freeze_init": (0x1E78D0, 0xE8850, 28),  # switch table
     "update_menu_entry_actions": (0x1E8770, 0xE96F0, 48),  # menu action switch table
     "draw_dialog_text": (0x1E7920, 0xE88A0, 124),  # switch table
-    "sdk/rpc/iop/sce_sif_reboot_iop": (0x152960, 0x538E0, 11),
-    "sdk/storage/cdvd/cd_check_ncmd": (0x152EB0, 0x53E30, 39),
-    "sdk/storage/cdvd/cd_check_scmd": (0x152F10, 0x53E90, 39),
+    "sdk/rpc/iop/sce_sif_reboot_iop": (0x152960, 0x538E0, 41),
+    "sdk/storage/cdvd/cd_check_ncmd": (0x152EB0, 0x53E30, 64),
+    "sdk/storage/cdvd/cd_check_scmd": (0x152F10, 0x53E90, 64),
     "sdk/storage/cdvd/checkModelVersion": (0x153030, 0x53FB0, 12),
     "sdk/dma/wait_dma": (0x1533E0, 0x54360, 22),
-    "sdk/input/dbc/sceDbcInit": (0x153518, 0x54498, 57),
+    "sdk/input/dbc/sceDbcInit": (0x1534D8, 0x54458, 121),
     "sdk/mpeg/macroblock/mb_address_increment": (0x1537A8, 0x54728, 50),
-    "sdk/mpeg/macroblock/slicea0": (0x153800, 0x54780, 38),
-    "sdk/mpeg/headers/_quantMatrixExtension": (0x153910, 0x54890, 44),
+    "sdk/mpeg/macroblock/slicea0": (0x153800, 0x54780, 66),
+    "sdk/mpeg/headers/_quantMatrixExtension": (0x1538E8, 0x54868, 84),
     "sdk/mpeg/ref_images/is_out_size_ok": (0x153980, 0x54900, 41),
     "sdk/mpeg/errors/report_mpeg_sequence_scalable_unsupported": (0x153B48, 0x54AC8, 48),
     "sdk/mpeg/errors/report_unknown_mpeg_extension": (0x153B78, 0x54AF8, 18),
     "sdk/mpeg/errors/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
     "sdk/mpeg/errors/report_mpeg_picture_temporal_scalable_unsupported": (0x153BC8, 0x54B48, 51),
-    "sdk/scf/GetRomName": (0x153C00, 0x54B80, 12),
+    "sdk/scf/GetRomName": (0x153C00, 0x54B80, 62),
     "draw_scrolling_sky_shells": (0x1E88F0, 0xE9870, 20),  # switch table
     "update_streamed_moby_animation": (0x1E88B0, 0xE9830, 28),  # switch table
     "update_mode_freeze": (0x1E79A0, 0xE8920, 124),  # switch table
     "render_vendor_capture_pass_sequence": (0x1E8AD0, 0xE9A50, 24),  # switch table
+    "sdk/kernel/topThread": (0x1526E8, 0x53668, 34),  # its message
+    "sdk/deci2/sce_tty_handler": (0x152710, 0x53690, 112),  # its four messages
+    "sdk/storage/cdvd/scecdsync": (0x152EF0, 0x53E70, 12),  # its message
+    "sdk/storage/cdvd/sceCdSyncS": (0x152F00, 0x53E80, 12),  # its message
+    "sdk/storage/cdvd/sceCdInit": (0x152F50, 0x53ED0, 46),  # its two messages
+    "sdk/storage/cdvd/sceCdDiskReady": (0x152F80, 0x53F00, 65),  # its three messages
+    "sdk/storage/cdvd/sceCdRead": (0x152FC8, 0x53F48, 36),  # its two messages
+    "sdk/storage/cdvd/scecdreadclock": (0x152FF0, 0x53F70, 59),  # its two messages
+    "sdk/graph/sce_gs_set_def_disp_env": (0x153040, 0x53FC0, 52),  # its message
+    "sdk/storage/memory_card/sce_mc_init": (0x153450, 0x543D0, 101),  # its three messages
+    "sdk/input/dbc/sceDbcSetWorkAddr": (0x153558, 0x544D8, 30),  # its message
+    "sdk/input/dbc/sceDbcCreateSocket": (0x153578, 0x544F8, 31),  # its message
+    "sdk/input/dbc/sceDbcGetDepNumber": (0x1535B8, 0x54538, 31),  # its message
+    "sdk/input/dbc/scedbcreceivedata": (0x1536A0, 0x54620, 30),  # its message
+    "sdk/mpeg/ref_images/_getAllRefs": (0x153710, 0x54690, 94),  # its three messages
+    "sdk/mpeg/macroblock/domc": (0x153770, 0x546F0, 17),  # its message
+    "sdk/ipu/wait_bdec_out": (0x153788, 0x54708, 26),  # its message
+    "sdk/mpeg/picture/_pictureData0": (0x1537E0, 0x54760, 29),  # its message
+    "sdk/mpeg/macroblock/_slice0": (0x153848, 0x547C8, 32),  # its message
+    "sdk/mpeg/macroblock/skip_mb0": (0x153868, 0x547E8, 45),  # its message
+    "sdk/mpeg/macroblock/_decMB0": (0x153898, 0x54818, 32),  # its message
+    "sdk/mpeg/picture/decpicture": (0x153940, 0x548C0, 59),  # its two messages
+    "sdk/mpeg/demux/_PES_packet": (0x1539D8, 0x54958, 46),  # its message
+    "sdk/mpeg/api/sce_mpeg_create": (0x153A10, 0x54990, 35),  # its message
+    "sdk/mpeg/api/alloc_work_area": (0x153A38, 0x549B8, 28),  # its message
+    "sdk/mpeg/picture/_lastFrame": (0x153AB8, 0x54A38, 28),  # its message
+    "sdk/mpeg/headers/sequenceheader": (0x153AE8, 0x54A68, 21),  # its message
+    "sdk/mpeg/headers/sequence_extension": (0x153B00, 0x54A80, 66),  # its two messages
+    "save/memcard_restore_game": (0x1E81D0, 0xE9150, 19),  # its message
+    "save/memcard_initialize": (0x1E8360, 0xE92E0, 35),  # its message
+    "audio/streaming/start_audio_stream_read": (0x1E8650, 0xE95D0, 36),  # its message
+    "movies/decoder/callbacks/video_callback": (0x1E8B08, 0xE9A88, 21),  # its message
+    "movies/decoder/video_input/vi_buf_add_dma": (0x1E8B20, 0xE9AA0, 20),  # its message
 }
 
 # Recovered C units that define the small-data variables their original
@@ -1040,6 +1073,9 @@ SDATA_OVERLAYS = {
     "ui/hud/update_hud": (0x15F688, 0x60608, 4),
     "movies/decoder/callbacks/mpeg_error": (0x161220, 0x621A0, 4),  # its "%s\n" format
     "runtime/startup/init_once": (0x15FA88, 0x60A08, 14),  # its reboot message
+    "save/memcard_update_state": (0x15FE98, 0x60E18, 21),  # its delete path format and message
+    "audio/voices/set_sound_handle_id": (0x160068, 0x60FE8, 5),  # its handle-conflict diagnostic
+    "movies/player/err_message": (0x1611F8, 0x62178, 14),  # its error format
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.

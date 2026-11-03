@@ -14,7 +14,8 @@ typedef struct {
     s32 unk814;
 } MpegDec;
 
-extern char skip_to_next_picture_error_message[] __asm__("D_001537E0");
+const char skip_to_next_picture_error_message[] __asm__("D_001537E0") =
+    "= Skip to the next picture =";
 
 s32 _pictureData0(MpegDec *decoder) {
     enum {

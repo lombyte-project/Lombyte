@@ -16,7 +16,8 @@ struct MpegMbState {
     int unk1C;
 };
 
-extern u8 invalid_macroblock_type_error_message[] __asm__("D_00153898");
+const char invalid_macroblock_type_error_message[] __asm__("D_00153898") =
+    "Invalid macroblock_type code: 0";
 int       _decMB0(struct MpegDecoder *decoder,
                   int                *mb_type,
                   int                *motion_type,

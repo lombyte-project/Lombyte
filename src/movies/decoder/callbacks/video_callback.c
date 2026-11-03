@@ -12,7 +12,7 @@ struct VdecCb {
 #include "rnc/movies/decoder/decoder_globals.h"
 #include "rnc/movies/player/movie_player.h"
 
-extern u8   pts_buffer_overflow_message[] __asm__("D_001E8B08");
+const char pts_buffer_overflow_message[] __asm__("D_001E8B08") = "pts buffer overflow\n";
 extern void err_message(u8 *) __asm__("func_0023AB78");
 extern s32  cpy2area(u32, s32, u32, s32, u8 *, s32, struct ReadBuf *, s32) __asm__("func_0023B810");
 extern void

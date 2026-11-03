@@ -14,7 +14,8 @@ typedef struct {
 
 extern void
 _GetGsDxDyOffset(s32 mode, s32 *horizontal, s32 *vertical, s32 *display_width, s32 *display_height);
-extern char unsupported_display_mode_format[] __asm__("D_00153040");
+const char unsupported_display_mode_format[] __asm__("D_00153040") =
+    "sceGsDefDispEnv:Not support displaymode for 0x%x!!\n";
 
 /* The progressive arms spell this out three times: cc1 merges the divides but keeps
    each zero check, and retail's load order needs all three. */

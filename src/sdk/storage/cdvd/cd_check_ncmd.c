@@ -7,7 +7,7 @@
 
 extern s32  D_001312F8[];
 const u8    D_00152EB0[] = "Ncmd fail sema cur_cmd:%d keep_cmd:%d\n";
-extern u8   cd_ncmd_bind_error_message[] __asm__("D_00152ED8");
+extern const char cd_ncmd_bind_error_message[] __asm__("D_00152ED8");
 extern s32  D_00159750[];
 extern u8   D_00159758[];
 extern s32  PollSema();
@@ -56,3 +56,5 @@ s32 cd_check_ncmd(s32 cmd) {
 }
 
 extern __typeof__(cd_check_ncmd) func_00120A28 __attribute__((alias("FUN_00120a28")));
+
+const char cd_ncmd_bind_error_message[] __asm__("D_00152ED8") = "Libcdvd bind err N CMD\n";

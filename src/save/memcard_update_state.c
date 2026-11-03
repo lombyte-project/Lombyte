@@ -26,8 +26,8 @@ extern char D_0013D200[];
 extern char D_0013D220[];
 extern char D_0013D240[];
 extern char D_0013D270[];
-extern char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
-extern char memcard_deleting_entry_message[] __asm__("D_0015FEA0");
+extern const char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
+extern const char memcard_deleting_entry_message[] __asm__("D_0015FEA0");
 extern u8   D_001A0880[];
 extern char D_001A08A0[];
 extern char memcard_deleting_directory_message[] __asm__("D_001E81E8");
@@ -1004,3 +1004,7 @@ extern __typeof__(memcard_update_state) func_002093D8 __attribute__((alias("FUN_
 u8 memcard_game_data_buffer[MEMCARD_GAME_DATA_SIZE] = {0};
 
 u8 memcard_level_data_buffer[MEMCARD_LEVEL_DATA_SIZE] = {0};
+
+const char memcard_delete_entry_path_format[] __asm__("D_0015FE98") = "%s/%s";
+const char memcard_deleting_entry_message[] __asm__("D_0015FEA0") __attribute__((section(".sdata"))) =
+    "deleting %s\n";

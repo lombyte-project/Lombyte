@@ -2,7 +2,7 @@
 #include "rnc/sdk/debug.h"
 #include "rnc/sdk/storage/memory_card.h"
 
-extern u8 memcard_error_message[] __asm__("D_001E8360");
+const char memcard_error_message[] __asm__("D_001E8360") = "ERROR: could not init memcard lib\n";
 void      memcard_initialize(void) __asm__("FUN_0020ac58");
 
 void memcard_initialize(void) {

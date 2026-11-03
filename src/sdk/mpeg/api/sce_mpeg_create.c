@@ -1,7 +1,8 @@
 #include "types.h"
 #define W(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define L(p, o) (*(s64 *)((u8 *)(p) + (o)))
-extern u8    mpeg_work_area_too_small_message[] __asm__("D_00153A10");
+const char mpeg_work_area_too_small_message[] __asm__("D_00153A10") =
+    "The size of work area is too small";
 extern void  D_0012CB30();
 extern void  D_0012CB40();
 extern void *memset(void *, s32, u32);

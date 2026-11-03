@@ -8,9 +8,12 @@
 /* libmpeg motion compensation: builds the forward and backward
    predictions of one macroblock (the MPEG-2 reference decoder's
    form_predictions, on the library's decoder state). */
-extern char forward_frame_invalid_motion_type_format[] __asm__("D_00153710");
-extern char forward_field_invalid_motion_type_format[] __asm__("D_00153730");
-extern char backward_field_invalid_motion_type_format[] __asm__("D_00153750");
+const char forward_frame_invalid_motion_type_format[] __asm__("D_00153710") =
+    "(a) invalid motion_type(%d)-0";
+const char forward_field_invalid_motion_type_format[] __asm__("D_00153730") =
+    "(b) invalid motion_type(%d)-1";
+const char backward_field_invalid_motion_type_format[] __asm__("D_00153750") =
+    "(c) invalid motion_type(%d)-2";
 extern void _Error1(struct MpegDecoder *d, char *fmt, int code);
 extern void _dualPrimeVector(struct MpegDecoder *d, int dmv[2][2], int *dmvector, int mvx, int mvy);
 

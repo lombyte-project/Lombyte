@@ -7,7 +7,7 @@ struct Handle {
     s16 state;
 };
 
-extern char sound_handle_id_conflict_diagnostic[] __asm__("D_00160068");
+extern const char sound_handle_id_conflict_diagnostic[] __asm__("D_00160068");
 void        set_sound_handle_id(u32 id, s64 arg) __asm__("FUN_00216b68");
 
 void set_sound_handle_id(u32 id, s64 playback_record_address) {
@@ -26,3 +26,5 @@ void set_sound_handle_id(u32 id, s64 playback_record_address) {
 }
 
 extern __typeof__(set_sound_handle_id) func_00216B68 __attribute__((alias("FUN_00216b68")));
+
+const char sound_handle_id_conflict_diagnostic[] __asm__("D_00160068") = "wtf\n";

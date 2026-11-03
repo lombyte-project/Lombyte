@@ -19,7 +19,8 @@ struct DbCState {
     s32 unk2C;
 };
 
-extern u8              dbc_get_dep_number_rpc_error_message[] __asm__("D_001535B8");
+const char dbc_get_dep_number_rpc_error_message[] __asm__("D_001535B8") =
+    "sceDbcGetDepNumber: rpc error\n";
 extern u8              D_0015B480[];
 extern u8              D_0015B500[];
 extern s32             DIntr();

@@ -6,7 +6,8 @@
 #include "types.h"
 
 extern u8   pes_header_skip_bit_counts[] __asm__("D_001539C8");
-extern u8   invalid_pack_header_field_message[] __asm__("D_001539D8");
+const char invalid_pack_header_field_message[] __asm__("D_001539D8") =
+    "pack_header_field_flag needs to be '0' in PS\n";
 extern s32  _Error();
 extern s32  _sysbitGet();
 extern s32  _sysbitJump();
