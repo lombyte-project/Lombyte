@@ -502,7 +502,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                         float x = random_float_between(-1.0f, 1.0f) *
                                   flickering_mesh_vars->particle_range;
                         float fraction = random_float_between(0.0f, x);
-                        float size;
+                        float particle_size;
                         short life;
                         int   r, g, b, a;
                         Vec4 *particle_motion = &sv0;
@@ -522,7 +522,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                                    frame_scale;
                         sv0.f[2] = random_float_between(0.0f, flickering_mesh_vars->particle_z) *
                                    frame_scale;
-                        size = random_float_between(flickering_mesh_vars->particle_size0,
+                        particle_size = random_float_between(flickering_mesh_vars->particle_size0,
                                                     flickering_mesh_vars->particle_size1);
                         life = scale_game_frames(flickering_mesh_vars->particle_life);
                         r = flickering_mesh_vars->particle_r;
@@ -531,7 +531,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                         a = truncate_float_to_s32(
                             convert_integer_to_float(flickering_mesh_vars->particle_a) * fraction);
                         spawn_colored_effect_size_first(
-                            moby, &sv1, particle_motion, size, life, r, g, b, a);
+                            moby, &sv1, particle_motion, particle_size, life, r, g, b, a);
                     }
                 }
                 if (fast_dec_timer_s16(&flickering_mesh_vars->puff_timer)) {
@@ -547,7 +547,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                                                  (flickering_mesh_vars->puff_c1[1] << 8) |
                                                  flickering_mesh_vars->puff_c1[0];
                         float width = flickering_mesh_vars->size_x * 0.5f;
-                        float size = random_float_between(flickering_mesh_vars->puff_size0,
+                        float puff_size = random_float_between(flickering_mesh_vars->puff_size0,
                                                           flickering_mesh_vars->puff_size1);
                         int   life = scale_game_frames(random_int_between(
                             flickering_mesh_vars->puff_life0, flickering_mesh_vars->puff_life1));
@@ -576,7 +576,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                                        1.0f - flickering_mesh_vars->puff_blend +
                                            shape * flickering_mesh_vars->puff_blend);
                         spawn_effect_particle_with_target_scalar(
-                            &sv1, &sv0, puff_spawn_color, puff_payload_color, size, life);
+                            &sv1, &sv0, puff_spawn_color, puff_payload_color, puff_size, life);
                     }
                 }
                 if (flickering_mesh_vars->light != -1) {
