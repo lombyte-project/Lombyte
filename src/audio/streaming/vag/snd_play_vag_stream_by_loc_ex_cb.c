@@ -20,7 +20,7 @@ void       snd_play_vag_stream_by_loc_ex_cb(s32 loc,
                                             u64 cb_data) __asm__("FUN_0012ec08");
 
 void snd_play_vag_stream_by_loc_ex_cb(s32 loc,
-                                      s32 size,
+                                      s32 request_word_1,
                                       s32 vol_l,
                                       s32 vol_r,
                                       s32 pitch,
@@ -35,7 +35,7 @@ void snd_play_vag_stream_by_loc_ex_cb(s32 loc,
     s32 playback_request_payload[7];
     new_var = (pitch << 16) | (vol_l & 0xFFFF);
     playback_request_payload[0] = loc;
-    playback_request_payload[1] = size;
+    playback_request_payload[1] = request_word_1;
     playback_request_payload[2] = new_var;
     playback_request_payload[3] = (flags << 16) | (vol_r & 0xFFFF);
     playback_request_payload[4] = voice;
