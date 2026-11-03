@@ -3,7 +3,7 @@
 #include "rnc/sdk/graph/sce_gs_get_gparam.h"
 #include "rnc/sdk/kernel.h"
 
-s32 sceGsSyncV(s32 mode) {
+s32 sceGsSyncV(s32 unused_mode) {
     sceGsGParam *gp;
     s64          field;
 
