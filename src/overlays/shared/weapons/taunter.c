@@ -471,6 +471,9 @@ void taunter_update(Moby *taunter_moby) {
     enum {
         TAUNTER_TYPE_CONTINUOUS_EFFECT_EMISSION = 3
     };
+    enum {
+        TAUNTER_TYPE_NONACTIVATION_BLEND_DISABLED = 1
+    };
     Vars *taunter_vars;
     s32   taunter_state;
     s32   voice_slot_index;
@@ -551,7 +554,7 @@ void taunter_update(Moby *taunter_moby) {
                 taunter_vars->retry++;
             else
                 taunter_vars->retry = 0;
-            if (taunter_moby->type != 1)
+            if (taunter_moby->type != TAUNTER_TYPE_NONACTIVATION_BLEND_DISABLED)
                 blend_moby_animation(taunter_moby, 1, 0, scale_game_frames(5));
             goto end;
         }
@@ -563,7 +566,7 @@ void taunter_update(Moby *taunter_moby) {
                 goto L7340;
         }
     }
-    if (taunter_moby->type != 1)
+    if (taunter_moby->type != TAUNTER_TYPE_NONACTIVATION_BLEND_DISABLED)
         blend_moby_animation(taunter_moby, 1, 0, scale_game_frames(5));
     voice_slot_index = taunter_vars->anim;
     if (voice_slot_index != -1) {
