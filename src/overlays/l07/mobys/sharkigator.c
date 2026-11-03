@@ -768,7 +768,7 @@ void sharkigator_update(unsigned char *moby) {
     char               *sharkigator_instance_vars;
     struct WalkerTarget target;
     float               point[4];
-    float               offset[4];
+    float               attachment_point_offset[4];
     float               goal[4];
     float               delta[4];
     float               previous[4];
@@ -872,11 +872,11 @@ void sharkigator_update(unsigned char *moby) {
                 D_L07_001612D0, D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), scale, height);
         }
         if (D_L07_0015F5CC % ((rand() & 7) + 20) == 0) {
-            float size = random_float_between(1.5f, 2.4f);
+            float particle_size = random_float_between(1.5f, 2.4f);
             point[0] += random_float_between(-0.15f, 0.15f);
             point[1] += random_float_between(-0.15f, 0.15f);
             point[2] = resolve_camera_surface_height((Vec4 *)&D_L07_00173EE0, 0);
-            spawn_moving_resizing_height_snapped_alpha_fade_particle(point, 0, -1, size, 5250.0f);
+            spawn_moving_resizing_height_snapped_alpha_fade_particle(point, 0, -1, particle_size, 5250.0f);
         }
     }
     if (1.0f <= F(sharkigator_instance_vars, 0x14C)) {
@@ -1078,7 +1078,7 @@ void sharkigator_update(unsigned char *moby) {
         float one;
         FUN_L00_0024f7c8(moby, 0, point);
         mpos = (char *)moby + 0x10;
-        fast_vec_sub(offset, point, mpos);
+        fast_vec_sub(attachment_point_offset, point, mpos);
         angle = fast_arc_tan(target.pos[0] - point[0], target.pos[1] - point[1]);
         func_L00_002592B0_t((char *)moby,
                             angle,
@@ -1089,7 +1089,7 @@ void sharkigator_update(unsigned char *moby) {
         F(moby, 0x44) *= frame_scale * 0.7f;
         F(sharkigator_instance_vars, 0x14C) += 0.028f;
         qcopy(previous, mpos);
-        fast_vec_sub(goal, &target, offset);
+        fast_vec_sub(goal, &target, attachment_point_offset);
         start = sharkigator_instance_vars + 0x100;
         fast_vec_sub(delta, goal, start);
         one = 1.0f;
