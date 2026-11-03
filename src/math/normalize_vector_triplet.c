@@ -15,38 +15,38 @@ void normalize_vector_triplet(f32 *matrix) {
     f32              *component_read_cursor;
     f32              *component_write_cursor;
     f32               vector_component;
-    s32               offset;
+    s32               row_byte_offset;
     s32               i;
     s32               next_row_index;
-    s32               count;
+    s32               component_countdown;
 
     matrix_base = matrix;
     i = 0;
     do {
         next_row_index = i + 1;
-        offset = i * 4;
+        row_byte_offset = i * 4;
         row_vector.pad = 0;
         component_write_cursor = row_vector.values;
-        component_read_cursor = (f32 *)((u8 *)matrix_base + offset);
-        count = 2;
+        component_read_cursor = (f32 *)((u8 *)matrix_base + row_byte_offset);
+        component_countdown = 2;
         do {
             vector_component = *component_read_cursor;
-            count--;
+            component_countdown--;
             component_read_cursor += 4;
             *component_write_cursor = vector_component;
             component_write_cursor++;
-        } while (count >= 0);
+        } while (component_countdown >= 0);
         fast_vec_normalize(row_vector.values, row_vector.values, 1.0f);
-        component_write_cursor = (f32 *)((u8 *)matrix_base + offset);
+        component_write_cursor = (f32 *)((u8 *)matrix_base + row_byte_offset);
         component_read_cursor = row_vector.values;
-        count = 2;
+        component_countdown = 2;
         do {
             vector_component = *component_read_cursor;
-            count--;
+            component_countdown--;
             component_read_cursor++;
             *component_write_cursor = vector_component;
             component_write_cursor += 4;
-        } while (count >= 0);
+        } while (component_countdown >= 0);
         i = next_row_index;
     } while (i < 3);
 }
