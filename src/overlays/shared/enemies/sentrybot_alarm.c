@@ -115,15 +115,15 @@ void sentrybot_alarm_update(unsigned char *moby) {
     float position[4];
     float step;
     int   color;
-    int   mode;
+    int   configuration_mode;
     int  *alarm_state = ((int *)MOBY(moby)->pvars);
     switch (MOBY(moby)->state) {
     case SENTRYBOT_ALARM_STATE_INITIALIZE:
-        mode = alarm_state[0];
+        configuration_mode = alarm_state[0];
         l15_sentrybot_alarm_effect_update_stamp = 0;
         D_L15_00161AB8 = 0;
         *(int *)&D_L15_00161ABC_gp = 0;
-        if (mode == SENTRYBOT_ALARM_MODE_GROUP_RELEASE_ONLY) {
+        if (configuration_mode == SENTRYBOT_ALARM_MODE_GROUP_RELEASE_ONLY) {
             MOBY(moby)->state = SENTRYBOT_ALARM_STATE_WAIT_FOR_GROUP_RELEASE_TRIGGER;
             if (MOBY(moby)->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, 0);
