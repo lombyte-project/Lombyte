@@ -980,7 +980,7 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby,
                                           float        angle) __asm__("FUN_L14_002b5968");
 
 void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float angle) {
-    float        offset[4];
+    float        release_point_offset[4];
     float        effect_spawn_position[4];
     float        small_offset[4];
     float        direction[4];
@@ -999,10 +999,10 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
     int          high_color;
 
     effect_rotation_angle = fast_add_rotations(angle, moby->rot.z);
-    offset[0] = fast_cos(effect_rotation_angle) * 0.8f;
-    offset[1] = fast_sin(effect_rotation_angle) * 0.8f;
-    offset[2] = 0.0f;
-    fast_vec_add(effect_spawn_position, point, offset);
+    release_point_offset[0] = fast_cos(effect_rotation_angle) * 0.8f;
+    release_point_offset[1] = fast_sin(effect_rotation_angle) * 0.8f;
+    release_point_offset[2] = 0.0f;
+    fast_vec_add(effect_spawn_position, point, release_point_offset);
     for (i = 5; i >= 0; i--) {
         signed_puff_random_value = random_integer_below(2);
         if (random_integer_below(2))
@@ -1028,15 +1028,15 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
             tail->fade = part->life;
         }
     }
-    qcopy(small_offset, offset);
-    fast_vec_scale(offset, offset, 0.0625f);
-    offset[2] = random_float_between(0.025f, 0.06f);
+    qcopy(small_offset, release_point_offset);
+    fast_vec_scale(release_point_offset, release_point_offset, 0.0625f);
+    release_point_offset[2] = random_float_between(0.025f, 0.06f);
     qcopy(original_pos, effect_spawn_position);
     step = 0.6283f;
     for (j = 0; j < 16; j++) {
         effect_rotation_angle = randf_sym(0.0f, 0.5f);
         build_look_at_matrix(
-            direction, offset, small_offset, (float)j * step + effect_rotation_angle);
+            direction, release_point_offset, small_offset, (float)j * step + effect_rotation_angle);
         effect_spawn_position[0] = original_pos[0] + randf_sym(0.0f, 0.2f);
         effect_spawn_position[1] = original_pos[1] + randf_sym(0.0f, 0.2f);
         effect_spawn_position[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
