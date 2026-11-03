@@ -178,14 +178,14 @@ typedef struct WBData {
     /* 0x05A */ unsigned char f5A;
     /* 0x05B */ char          pad05B[0x55];
     /* 0x0B0 */ char          hit_response_interpolation_state[7];
-    /* 0x0B7 */ unsigned char fB7;
+    /* 0x0B7 */ unsigned char hit_response_first_channel_target;
     /* 0x0B8 */ char          pad0B8[8];
     /* 0x0C0 */ char          knockback_motion_vector[0x10];
     /* 0x0D0 */ float         knockback_gravity_decrement;
     /* 0x0D4 */ float         fD4;
     /* 0x0D8 */ float         knockback_horizontal_step;
     /* 0x0DC */ float         knockback_vertical_step_limit;
-    /* 0x0E0 */ int           fE0;
+    /* 0x0E0 */ int           knockback_collision_radius_scaled;
     /* 0x0E4 */ int           knockback_motion_flags;
     /* 0x0E8 */ float         knockback_ground_probe_z_offset;
     /* 0x0EC */ char          pad0EC[0x11];
@@ -370,7 +370,7 @@ void woodcut_bot_update(WBMoby *m) {
         damage = 0.0f;
         p = (unsigned char *)find_moby_hit(m, 0xA10000, 0);
         r = hit_reaction(m, p, &d->hp, 0, &htype, &damage, 0, 4);
-        d->fE0 = 0x15E;
+        d->knockback_collision_radius_scaled = 0x15E;
         d->knockback_ground_probe_z_offset = 0.35f;
         if (p != 0 && damage != 0.0f && m->state != WOODCUT_BOT_INITIALIZE && d->t3C4 == 0) {
             unsigned char *hit_source_moby;
