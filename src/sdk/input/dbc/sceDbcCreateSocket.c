@@ -10,14 +10,14 @@ extern void debug_print_stub(u8 *) __asm__("func_00124A20");
 
 /* The header words are copied as pointers: their alias set differs from
    the int port/mode stores, so the header loads need not wait for them. */
-s32 sceDbcCreateSocket(void *socket_configuration, s32 port, s32 mode) {
+s32 sceDbcCreateSocket(void *socket_configuration, s32 port, s32 send_address) {
     s32 *socket_rpc_buffer = D_0015B080;
     u8  *name_source = (u8 *)socket_configuration + 0x14;
     u8  *name_target = (u8 *)socket_rpc_buffer + 0x14;
     s32  i;
 
     socket_rpc_buffer[10] = port;
-    socket_rpc_buffer[11] = mode;
+    socket_rpc_buffer[11] = send_address;
     ((void **)socket_rpc_buffer)[0] = ((void **)socket_configuration)[0];
     ((void **)socket_rpc_buffer)[1] = ((void **)socket_configuration)[1];
     ((void **)socket_rpc_buffer)[2] = ((void **)socket_configuration)[2];
