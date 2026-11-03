@@ -848,7 +848,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             Vec4 vel = {0};
             int  fade_particle_color_low_byte, fade_particle_color_second_byte,
                 fade_particle_color_third_byte, color, life, spin;
-            f32 size;
+            f32 fade_particle_size;
             qcopy(&pos, &sandmouse_moby->pos);
             add_random_offset_to_vector_xyz(
                 &pos, *(f32 *)&sandmouse_fade_particle_position_offset_distance_gp);
@@ -863,11 +863,11 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 spin = -spin;
             life = FUN_L00_00257b90(*(int *)&sandmouse_fade_particle_min_lifetime_gp,
                                     *(int *)&sandmouse_fade_particle_max_lifetime_gp);
-            size = random_float_between(*(f32 *)&sandmouse_fade_particle_min_size_gp,
+            fade_particle_size = random_float_between(*(f32 *)&sandmouse_fade_particle_min_size_gp,
                                         *(f32 *)&sandmouse_fade_particle_max_size_gp);
             FUN_L00_00272060(&pos,
                              life,
-                             size,
+                             fade_particle_size,
                              0.001f,
                              color,
                              2,
