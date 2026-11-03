@@ -587,7 +587,7 @@ void start_vendor_exit_cutscene(void) {
     f32                     *cutscene_world_origin;
     struct MusicStreamState *state;
     s32                     *selected;
-    s16                      mode;
+    s16                      secondary_stream_state;
 
     jet_end_mount(2);
     if ((u16)(music_stream_state.secondary.state - 6) >= 2)
@@ -632,11 +632,11 @@ void start_vendor_exit_cutscene(void) {
     state = &music_stream_state;
     state->queued_secondary_track = 0x2734;
     FUN_L00_002455c0(0);
-    mode = music_stream_state.secondary.state;
-    while (mode != SECONDARY_MUSIC_STREAM_READY_TO_CONTINUE) {
+    secondary_stream_state = music_stream_state.secondary.state;
+    while (secondary_stream_state != SECONDARY_MUSIC_STREAM_READY_TO_CONTINUE) {
         sound_update();
         sce_gs_sync_v(0);
-        mode = music_stream_state.secondary.state;
+        secondary_stream_state = music_stream_state.secondary.state;
     }
     continue_audio_stream_if_ready();
 }
