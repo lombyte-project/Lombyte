@@ -735,7 +735,7 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
     float path_constrained_position[4] __attribute__((aligned(16)));
     float path_constraint_test_position[4] __attribute__((aligned(16)));
     float delta[4] __attribute__((aligned(16)));
-    int   count;
+    int   low_movement_frame_count;
 
     if (*(unsigned char *)(trooper_steering_vars + 0x242)) {
         float *rotation = &moby->rot.z;
@@ -793,8 +793,8 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
                 *(OvlQuad *)&moby->pos = *(OvlQuad *)path_constrained_position;
             if (fast_vec_dist(&moby->pos, trooper_pre_move_position) < frame_time * 0.5f) {
                 ++*(unsigned char *)(trooper_steering_vars + 0x243);
-                count = *(unsigned char *)(trooper_steering_vars + 0x243);
-                if (scale_game_frames(15) < count)
+                low_movement_frame_count = *(unsigned char *)(trooper_steering_vars + 0x243);
+                if (scale_game_frames(15) < low_movement_frame_count)
                     *(unsigned char *)(trooper_steering_vars + 0x242) = 1;
             } else {
                 *(unsigned char *)(trooper_steering_vars + 0x243) = 0;
