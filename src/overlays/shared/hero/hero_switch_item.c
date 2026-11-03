@@ -3334,6 +3334,11 @@ extern CollisionHit HH __asm__("D_L00_00173E40") NOT_SDA;
 void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 
 void update_hero_ground_contact_and_surface_slopes(void) {
+    enum {
+        GROUND_MATERIAL_SINK_SURFACE_REPROBE = 3,
+        GROUND_MATERIAL_SINK_SURFACE_SKIP_GROUND_CONTACT = 0xB,
+        GROUND_MATERIAL_WATER_SURFACE = 0xD
+    };
     V collision_ray_end, ground_ray_start, ground_offset_or_angles, side_ray_start,
         unused_side_probe_point, side_hit_angles, side_hit_normal;
     f32 f;
@@ -3395,21 +3400,21 @@ void update_hero_ground_contact_and_surface_slopes(void) {
         }
         hero.ground_sound_class = collision_sound_class;
     }
-    if (hero.ground_type == 0xD) {
+    if (hero.ground_type == GROUND_MATERIAL_WATER_SURFACE) {
         hero.water_surface_z = collision_hit_z;
         ground_ray_start.f[2] = collision_hit_z - 0.01f;
         if (collision_line(&ground_ray_start, &collision_ray_end, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
-    if (hero.ground_type == 3) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_SURFACE_REPROBE) {
         hero.sink_surface_z = collision_hit_z;
         ground_ray_start.f[2] = collision_hit_z - 0.01f;
         if (collision_line(&ground_ray_start, &collision_ray_end, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
-    if (hero.ground_type == 0xB) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_SURFACE_SKIP_GROUND_CONTACT) {
         hero.sink_surface_z = collision_hit_z;
         goto d1;
     }
