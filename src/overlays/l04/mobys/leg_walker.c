@@ -448,7 +448,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     if (!(rig->control_flags & 4)) {
         s32     active = mode | (rig->mode & 0x30);
         s32     bit = 1;
-        f32     count = 0.0f;
+        f32     active_point_count = 0.0f;
         RigVec *moved = transformed;
         RigVec *point = (RigVec *)rig->pts;
 
@@ -456,7 +456,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         pos = &moby->pos;
         for (i = 5; i >= 0; i--) {
             if (active & bit) {
-                count += 1.0f;
+                active_point_count += 1.0f;
                 fast_vec_add(&shift, &shift, point);
                 fast_vec_sub(&shift, &shift, moved);
             }
@@ -464,7 +464,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
             moved++;
             point++;
         }
-        divide_vector_xyz(&shift, &shift, count);
+        divide_vector_xyz(&shift, &shift, active_point_count);
     } else {
         pos = &moby->pos;
         shift.x = fast_cos(rig->heading) * rig->speed;
