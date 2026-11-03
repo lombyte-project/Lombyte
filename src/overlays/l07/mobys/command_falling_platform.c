@@ -82,7 +82,7 @@ void command_falling_platform_update(char *moby) {
     float sway;
     float roll;
     float speed;
-    int   timer;
+    int   random_bits_or_sink_hold_frames;
 
     qcopy(previous, moby + 0x10);
     fast_vec_scale(delta, moby + 0x10, -1.0f);
