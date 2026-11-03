@@ -1393,26 +1393,26 @@ int find_sentrybot_attention_target(char *moby) {
     line_start[2] += 1.0f;
     bd = 0.0f;
     do {
-        int   id = *(unsigned short *)group_moby_entry & 0x7FFF;
-        char *candidate_moby = (char *)((id << 8) + (int)l15_moby_array);
+        int   candidate_moby_index = *(unsigned short *)group_moby_entry & 0x7FFF;
+        char *candidate_moby = (char *)((candidate_moby_index << 8) + (int)l15_moby_array);
         if (MOBY(candidate_moby)->oclass == 0x27B && MOBY(candidate_moby)->state >= 6 &&
             MOBY(candidate_moby)->state < 0x10) {
             float f = fast_difference_between_rotations(
                 MOBY(moby)->rot.z,
                 fast_arc_tan(MOBY(candidate_moby)->pos.x - MOBY(moby)->pos.x,
                              MOBY(candidate_moby)->pos.y - MOBY(moby)->pos.y));
-            unsigned char candidate_state = ((char *)((id << 8) + (int)l15_moby_array))[0x20];
+            unsigned char candidate_state = ((char *)((candidate_moby_index << 8) + (int)l15_moby_array))[0x20];
             if (candidate_state == 7 || candidate_state == 0xF)
                 moby_data->priority_attention_active = 1;
             if (moby_data->priority_attention_active != 0 || f < 1.2217305f) {
-                qcopy(candidate_line_endpoint, (char *)((id << 8) + (int)l15_moby_array) + 0x10);
+                qcopy(candidate_line_endpoint, (char *)((candidate_moby_index << 8) + (int)l15_moby_array) + 0x10);
                 line_start[2] += 1.0f;
                 if (collision_line(line_start, candidate_line_endpoint, 2, 0, 0) == 0) {
                     float candidate_line_distance =
                         fast_vec_dist(line_start, candidate_line_endpoint);
                     if (best == 0 || candidate_line_distance < bd) {
                         bd = candidate_line_distance;
-                        best = (int)l15_moby_array + (id << 8);
+                        best = (int)l15_moby_array + (candidate_moby_index << 8);
                     }
                 }
             }
