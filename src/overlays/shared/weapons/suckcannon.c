@@ -1900,7 +1900,7 @@ s32 launch_suck_cannon_projectile(u8 *moby,
     u8 *d;
     if (projectile_record == 0)
         return 0;
-    if (moby == 0 || MOBY(moby)->state == 0xFE || MOBY(moby)->state == 0xFD ||
+    if (moby == 0 || MOBY(moby)->state == MOBY_STATE_REMOVAL_MARKER || MOBY(moby)->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER ||
         *(s16 *)(projectile_record + 0x68) == 8)
         goto fail;
     MOBY(moby)->visible = 1;
