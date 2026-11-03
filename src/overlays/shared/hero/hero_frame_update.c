@@ -1350,6 +1350,9 @@ extern u128_233940 D_L01_001742F0[] NOT_SDA;
 s32 resolve_hero_position_with_collision_queries(s32 mode) __asm__("FUN_L01_00233940");
 
 s32 resolve_hero_position_with_collision_queries(s32 large_correction_mode) {
+    enum {
+        HERO_LARGE_CORRECTION_LIMIT_TO_CAPSULE_RADIUS = 0xF
+    };
     V_233940     pre_collision_position;
     V_233940     collision_query_offset;
     V_233940     resolved_position_delta;
@@ -1416,7 +1419,7 @@ s32 resolve_hero_position_with_collision_queries(s32 large_correction_mode) {
     fast_vec_sub(&resolved_position_delta, &hero.motion.pos.q, &pre_collision_position);
     query_height_or_displacement_length = fast_vec_length(&resolved_position_delta);
     if (hero.capsule_radius * 1.5f < query_height_or_displacement_length) {
-        if (large_correction_mode == 0xF) {
+        if (large_correction_mode == HERO_LARGE_CORRECTION_LIMIT_TO_CAPSULE_RADIUS) {
             if (512.0f < resolved_position_delta.f[0])
                 resolved_position_delta.f[0] = 512.0f;
             else if (resolved_position_delta.f[0] < -512.0f)
