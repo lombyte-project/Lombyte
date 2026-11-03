@@ -36,7 +36,7 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     OvlVec4             *current;
     SegmentPath_261968 **path_slot;
     s32                  i;
-    s32                  offset;
+    s32                  current_path_point_byte_offset;
     f32                  crossing;
     f32                  zero;
 
@@ -55,10 +55,10 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     previous = &transformed_previous_point;
     current = &transformed_current_point;
     if (i < (*path_slot)->count) {
-        offset = 0x20;
+        current_path_point_byte_offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(current, (OvlVec4 *)((u8 *)*path_slot + offset), start);
+            fast_vec_sub(current, (OvlVec4 *)((u8 *)*path_slot + current_path_point_byte_offset), start);
             transform_vector_by_basis(current, current, &direction);
             if (transformed_previous_point.f[3] != zero || transformed_current_point.f[3] != zero) {
                 if (transformed_current_point.f[1] * transformed_previous_point.f[1] < 0.0f) {
@@ -73,7 +73,7 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
             }
             qcopy(previous, current);
             i++;
-            offset += 0x10;
+            current_path_point_byte_offset += 0x10;
         } while (i < (*path_slot)->count);
     }
     return 0;
