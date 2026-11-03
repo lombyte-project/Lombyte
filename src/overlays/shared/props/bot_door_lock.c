@@ -229,7 +229,7 @@ void bot_door_lock_update(char *moby) {
     float       *bot_door_lock_data = ((float *)MOBY(moby)->pvars);
     int         *idata = (int *)bot_door_lock_data;
     float        number_anchor_position[4];
-    float        offset[3];
+    float        digit_layout_offset[3];
     float        number_position_sum[4];
     float        angle;
     int          number_color_pulse_delta;
@@ -283,34 +283,34 @@ void bot_door_lock_update(char *moby) {
                 } else {
                     if (D_0015EDB4) {
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
-                        offset[0] = fast_cos(angle) * 0.15f;
+                        digit_layout_offset[0] = fast_cos(angle) * 0.15f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
-                        offset[1] = fast_sin(angle) * 0.15f;
-                        offset[2] = 0.0f;
-                        add_vectors(number_position_sum, offset, number_anchor_position);
-                        draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
+                        digit_layout_offset[1] = fast_sin(angle) * 0.15f;
+                        digit_layout_offset[2] = 0.0f;
+                        add_vectors(number_position_sum, digit_layout_offset, number_anchor_position);
+                        draw_number(digit_layout_offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
-                        offset[0] = fast_cos(angle) * -0.4f;
+                        digit_layout_offset[0] = fast_cos(angle) * -0.4f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
-                        offset[1] = fast_sin(angle) * -0.4f;
-                        offset[2] = 0.0f;
-                        add_vectors(number_position_sum, offset, number_anchor_position);
-                        draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
+                        digit_layout_offset[1] = fast_sin(angle) * -0.4f;
+                        digit_layout_offset[2] = 0.0f;
+                        add_vectors(number_position_sum, digit_layout_offset, number_anchor_position);
+                        draw_number(digit_layout_offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     } else {
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
-                        offset[0] = fast_cos(angle) * -0.4f;
+                        digit_layout_offset[0] = fast_cos(angle) * -0.4f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
-                        offset[1] = fast_sin(angle) * -0.4f;
-                        offset[2] = 0.0f;
-                        add_vectors(number_position_sum, offset, number_anchor_position);
-                        draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
+                        digit_layout_offset[1] = fast_sin(angle) * -0.4f;
+                        digit_layout_offset[2] = 0.0f;
+                        add_vectors(number_position_sum, digit_layout_offset, number_anchor_position);
+                        draw_number(digit_layout_offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
-                        offset[0] = fast_cos(angle) * 0.15f;
+                        digit_layout_offset[0] = fast_cos(angle) * 0.15f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
-                        offset[1] = fast_sin(angle) * 0.15f;
-                        offset[2] = 0.0f;
-                        add_vectors(number_position_sum, offset, number_anchor_position);
-                        draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
+                        digit_layout_offset[1] = fast_sin(angle) * 0.15f;
+                        digit_layout_offset[2] = 0.0f;
+                        add_vectors(number_position_sum, digit_layout_offset, number_anchor_position);
+                        draw_number(digit_layout_offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     }
                 }
             }
