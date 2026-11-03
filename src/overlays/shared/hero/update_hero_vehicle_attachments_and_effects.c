@@ -575,7 +575,7 @@ extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32  coll3_22a1d0(void *, f32) __asm__("FUN_L00_001f3170");
 s32         resolve_hero_position_collisions(s32 mode) __asm__("FUN_L06_0022a1d0");
 
-s32 resolve_hero_position_collisions(s32 mode) {
+s32 resolve_hero_position_collisions(s32 displacement_limit_mode) {
     V_22a1d0 pre_collision_position;
     V_22a1d0 collision_query_offset;
     V_22a1d0 position_displacement;
@@ -641,7 +641,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     fast_vec_sub(&position_displacement, &hero.motion.pos.q, &pre_collision_position);
     query_height_or_displacement_length = fast_vec_length(&position_displacement);
     if (hero.capsule_radius * 1.5f < query_height_or_displacement_length) {
-        if (mode == 0xF) {
+        if (displacement_limit_mode == 0xF) {
             if (512.0f < position_displacement.f[0])
                 position_displacement.f[0] = 512.0f;
             else if (position_displacement.f[0] < -512.0f)
