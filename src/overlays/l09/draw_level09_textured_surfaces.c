@@ -217,7 +217,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr,
                                           void *list_ptr,
                                           int   count) __asm__("FUN_L09_002c1978");
 
-void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int count) {
+void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int scaled_surface_entry_count) {
     enum {
         TEXTURED_GRID_USE_CURRENT_VIEW_SETTINGS = 1
     };
@@ -229,7 +229,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     int   *packet;
     u64   *words;
     float  matrix[12];
-    float  offset[4];
+    float  offset_vector[4];
     u64    color;
     int   *scratchpad_colors;
     int    scratch_color;
@@ -252,8 +252,8 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     update_view_context();
     update_camera_view_matrices();
     set_scale_matrix(matrix, 1024.0f);
-    setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
-    offset[3] = 1.0f;
+    setup_offset_vector(-1024.0f, offset_vector, D_L09_00166F40);
+    offset_vector[3] = 1.0f;
     vu1_add_data_ref(scaled_entries_vu1_setup_data, l09_scaled_entries_vu1_setup_qword_count[0]);
     {
         int *packet;
@@ -348,7 +348,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     for (i = 255; i >= 0; i--)
         scratchpad_colors[i] = scratch_color;
     i = 0;
-    if (count > 0)
+    if (scaled_surface_entry_count > 0)
         do {
             char *scaled_surface_entry;
             int   visible;
@@ -373,7 +373,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
                                  visible == 0);
             }
             i++;
-        } while (i < count);
+        } while (i < scaled_surface_entry_count);
     restore_view_after_textured_grid(surface_draw_settings);
 }
 
