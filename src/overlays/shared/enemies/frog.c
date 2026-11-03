@@ -834,7 +834,7 @@ void destroy_frog_child_moby(struct Moby *moby) {
     float     origin[4];
     float     debris_velocity[4];
     float     pos[4];
-    float     offset[4];
+    float     debris_spawn_offset[4];
     FrogVars *frog_vars;
     int       i;
     int       j;
@@ -845,11 +845,11 @@ void destroy_frog_child_moby(struct Moby *moby) {
     origin[2] = origin[2] + 0.5f;
     for (i = 3; i >= 0; i--) {
         float speed = random_float_between(1.0f, 4.0f) * frame_time;
-        *(u128 *)offset = 0;
-        offset[0] = random_float_between(-0.625f, 0.625f);
-        offset[1] = random_float_between(-0.625f, 0.625f);
-        offset[2] = random_float_between(0.0f, 1.25f);
-        *(u128 *)pos = *(u128 *)offset;
+        *(u128 *)debris_spawn_offset = 0;
+        debris_spawn_offset[0] = random_float_between(-0.625f, 0.625f);
+        debris_spawn_offset[1] = random_float_between(-0.625f, 0.625f);
+        debris_spawn_offset[2] = random_float_between(0.0f, 1.25f);
+        *(u128 *)pos = *(u128 *)debris_spawn_offset;
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
         spawn_crate_debris(
@@ -857,11 +857,11 @@ void destroy_frog_child_moby(struct Moby *moby) {
     }
     for (j = 7; j >= 0; j--) {
         float speed = random_float_between(1.0f, 4.0f) * frame_time;
-        *(u128 *)offset = 0;
-        offset[0] = random_float_between(-0.625f, 0.625f);
-        offset[1] = random_float_between(-0.625f, 0.625f);
-        offset[2] = random_float_between(0.0f, 1.25f);
-        *(u128 *)pos = *(u128 *)offset;
+        *(u128 *)debris_spawn_offset = 0;
+        debris_spawn_offset[0] = random_float_between(-0.625f, 0.625f);
+        debris_spawn_offset[1] = random_float_between(-0.625f, 0.625f);
+        debris_spawn_offset[2] = random_float_between(0.0f, 1.25f);
+        *(u128 *)pos = *(u128 *)debris_spawn_offset;
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
         spawn_crate_debris(((void *)frog_vars->child),
