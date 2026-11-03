@@ -61,7 +61,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     s32              previous_selected_level_id;
     s32              selected_level_table_index;
     s32              next_level_id;
-    s32              id;
+    s32              selected_map_id;
     s32              slot;
     s32              eviction_slot_index;
     struct MapHdr   *hdr;
@@ -131,7 +131,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     if (item_available[ITEM_MAP_SHIFT] != 0) {
         id += 0x100;
     }
-    slot = find_map_entry_slot(id);
+    slot = find_map_entry_slot(selected_map_id);
     if (level_map_selection.level != level_map_selection.loaded && slot != -1) {
         eviction_slot_index = pick_map_slot_to_evict();
         if (level_map_selection.slot[0] != 0 && eviction_slot_index > 0) {
@@ -234,7 +234,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             }
         }
     }
-    slot = find_map_entry_slot(id);
+    slot = find_map_entry_slot(selected_map_id);
     if (level_map_selection.level != level_map_selection.loaded) {
         if (music_stream_state.read_state == MUSIC_STREAM_READ_IDLE && slot == -1 && pick == slot) {
             pick_map_slot_to_evict(level_map_selection.loaded);
