@@ -89,9 +89,9 @@ int lookup_hero_slot3_animation_key(int key, int *out_animation_key) {
     } else if (hero_slot_item_id(3) == 3) {
         animation_lookup_table = D_L00_0017BBD0;
     } else {
-        int mode = hero_slot_item_id(3);
+        int slot3_item_id = hero_slot_item_id(3);
         animation_lookup_table = (SeqEntry *)&D_L00_0015F6B8;
-        if (mode != 4) {
+        if (slot3_item_id != 4) {
             animation_lookup_table = 0;
         }
     }
