@@ -175,7 +175,7 @@ void walker_update_gait(WalkMoby *m,
                         float     accel) __asm__("FUN_L00_002a1670");
 void walker_update_gait(WalkMoby *walker_moby,
                         WalkData *gait_data,
-                        int       flags,
+                        int       gait_update_trigger_mask,
                         float     speed,
                         float     movement_heading,
 
@@ -245,7 +245,7 @@ void walker_update_gait(WalkMoby *walker_moby,
     case WALKER_GAIT_WALK_UPHILL:
     case WALKER_GAIT_TRANSITION_FROM_UPHILL_TO_WALK:
     case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK:
-        if (flags & 5) {
+        if (gait_update_trigger_mask & 5) {
             gait_data->gait_status_flags &= 0xFFF7;
         }
     case WALKER_GAIT_TRANSITION_TO_DOWNHILL:
@@ -296,11 +296,11 @@ void walker_update_gait(WalkMoby *walker_moby,
                     reset_walker_gait_helpers((char *)gait_data);
                 }
                 gait_data->gait_state = WALKER_GAIT_RUN;
-            } else if (flags & 5) {
+            } else if (gait_update_trigger_mask & 5) {
                 if (gait_data->gait_status_flags & 1) {
                     gait_data->gait_status_flags = (gait_data->gait_status_flags & 0xFFFE) | 2;
                     gait_data->gait_ground_height_reference = walker_moby->pos[2];
-                    if (flags & 1) {
+                    if (gait_update_trigger_mask & 1) {
                         int bl =
                             truncate_float_to_s32(gait_data->anim[11]->transition_position_span *
                                                   0.25f / (speed / gait_data->anim[11]->f08));
@@ -339,7 +339,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                     ground_probe_position[1] = fast_sin(movement_heading) *
                                                gait_data->anim[gait_animation_index]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
-                    if (flags & 1) {
+                    if (gait_update_trigger_mask & 1) {
                         fast_vec_add(ground_probe_position,
                                      ground_probe_position,
                                      gait_data->ground_probe_anchor_record);
@@ -356,7 +356,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                     fast_sin(gait_data->ground_probe_correction_angle) >
                             gait_data->terrain_transition_height_scale * 0.75f) {
-                            if (flags & 1) {
+                            if (gait_update_trigger_mask & 1) {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[2]->transition_position_span * 0.25f /
                                     (speed / gait_data->anim[2]->f08));
@@ -394,7 +394,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                            fast_sin(gait_data->ground_probe_correction_angle) <
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_status_flags |= 8;
-                            if (flags & 1) {
+                            if (gait_update_trigger_mask & 1) {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[5]->transition_position_span * 0.25f /
                                     (speed / gait_data->anim[5]->f08));
@@ -529,7 +529,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     fast_sin(gait_data->ground_probe_correction_angle) <
                             -gait_data->terrain_transition_height_scale * 0.75f) {
                             gait_data->gait_status_flags |= 8;
-                            if (flags & 1) {
+                            if (gait_update_trigger_mask & 1) {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[5]->transition_position_span * 0.25f /
                                     (speed / gait_data->anim[5]->f08));
@@ -566,7 +566,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) <
                                    gait_data->terrain_transition_height_scale * 0.75f) {
-                            if (flags & 1) {
+                            if (gait_update_trigger_mask & 1) {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[1]->transition_position_span * 0.25f /
                                     (speed / gait_data->anim[1]->f08));
@@ -784,7 +784,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                     fast_sin(gait_data->ground_probe_correction_angle) >
                             gait_data->terrain_transition_height_scale * 0.75f) {
-                            if (flags & 1) {
+                            if (gait_update_trigger_mask & 1) {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[2]->transition_position_span * 0.25f /
                                     (speed / gait_data->anim[2]->f08));
@@ -821,7 +821,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) >
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
-                            if (flags & 1) {
+                            if (gait_update_trigger_mask & 1) {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[4]->transition_position_span * 0.25f /
                                     (speed / gait_data->anim[4]->f08));
@@ -973,11 +973,11 @@ void walker_update_gait(WalkMoby *walker_moby,
                     reset_walker_gait_helpers((char *)gait_data);
                 }
                 gait_data->gait_state = WALKER_GAIT_WALK;
-            } else if (flags & 5) {
+            } else if (gait_update_trigger_mask & 5) {
                 if (gait_data->gait_status_flags & 1) {
                     gait_data->gait_status_flags = (gait_data->gait_status_flags & 0xFFFE) | 2;
                     gait_data->gait_ground_height_reference = walker_moby->pos[2];
-                    if (flags & 1) {
+                    if (gait_update_trigger_mask & 1) {
                         int bl =
                             truncate_float_to_s32(gait_data->anim[11]->transition_position_span *
                                                   0.25f / (speed / gait_data->anim[11]->f08));
@@ -1015,7 +1015,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                     ground_probe_position[1] =
                         fast_sin(movement_heading) * gait_data->anim[0]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
-                    if (flags & 1) {
+                    if (gait_update_trigger_mask & 1) {
                         fast_vec_add(ground_probe_position,
                                      ground_probe_position,
                                      gait_data->ground_probe_anchor_record);
@@ -1041,7 +1041,7 @@ void walker_update_gait(WalkMoby *walker_moby,
         gait_data->gait_state = WALKER_GAIT_IDLE;
         break;
     case WALKER_GAIT_TAKEOFF_ANIMATION:
-        if (flags & 0x30) {
+        if (gait_update_trigger_mask & 0x30) {
             float dist = vector_distance_xy(walker_moby->pos, gait_data->jump_target_position);
             debug_print(walker_jump_distance_debug_format, dist);
             gait_data->jump_vertical_velocity =
@@ -1081,7 +1081,7 @@ void walker_update_gait(WalkMoby *walker_moby,
         }
         break;
     case WALKER_GAIT_ALTERNATE_TAKEOFF_ANIMATION:
-        if (flags & 0x30) {
+        if (gait_update_trigger_mask & 0x30) {
             float dist = fast_vec_dist(walker_moby->pos, gait_data->jump_target_position);
             debug_print(walker_jump_distance_debug_format, dist);
             gait_data->jump_vertical_velocity =
@@ -1200,7 +1200,7 @@ void walker_update_gait(WalkMoby *walker_moby,
         }
         break;
     case WALKER_GAIT_RESUME_RUN_AFTER_LANDING:
-        if (flags & 1) {
+        if (gait_update_trigger_mask & 1) {
             int bl = truncate_float_to_s32(
                 (gait_data->anim[7]->transition_position_span * 0.25f + 2.0f) /
                 (speed / gait_data->anim[7]->f08));
@@ -1229,7 +1229,7 @@ void walker_update_gait(WalkMoby *walker_moby,
         }
         break;
     case WALKER_GAIT_RESUME_RUN_AFTER_ALTERNATE_LANDING:
-        if (flags & 1) {
+        if (gait_update_trigger_mask & 1) {
             int bl = truncate_float_to_s32(
                 (gait_data->anim[7]->alternate_transition_position_span * 0.25f + 2.0f) /
                 (speed / gait_data->anim[7]->f08));
