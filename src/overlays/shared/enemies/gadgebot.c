@@ -1292,7 +1292,7 @@ void assign_gadgebot_attack_targets(void) {
         float max_spread = 1.7453293f;
         int   weight = 0;
         int   m;
-        int   count;
+        int   selected_moby_count;
         int   wanted;
         int   target;
         char *target_capacity_record;
@@ -1305,12 +1305,12 @@ void assign_gadgebot_attack_targets(void) {
         }
         weights[index] = -1;
         target = targets[index];
-        count = 0;
+        selected_moby_count = 0;
         wanted = 1;
         target_capacity_record = (char *)get_moby_target_info(target);
         if (target_capacity_record != 0)
             wanted = S16(target_capacity_record, 4);
-        while (count < wanted) {
+        while (selected_moby_count < wanted) {
             float best_score = 9999999.0f;
             char *best_moby = 0;
             for (i = 0; i < moby_count; i++) {
@@ -1329,21 +1329,21 @@ void assign_gadgebot_attack_targets(void) {
             if (best_moby == 0)
                 break;
             ((GbSlots *)PVARS(best_moby))->claimed_target = target;
-            selected[count] = best_moby;
-            count++;
+            selected[selected_moby_count] = best_moby;
+            selected_moby_count++;
         }
-        if (count != 0) {
-            float gaps = (float)(count - 1);
+        if (selected_moby_count != 0) {
+            float gaps = (float)(selected_moby_count - 1);
             float spread = gaps * spread_per_gap;
             float step;
             float first_angle;
             if (max_spread < spread)
                 spread = 1.7453293f;
             step = 0.0f;
-            if (count >= 2)
+            if (selected_moby_count >= 2)
                 step = spread / gaps;
             first_angle = spread * -0.5f;
-            for (i = 0; i < count; i++) {
+            for (i = 0; i < selected_moby_count; i++) {
                 char *vars = PVARS(selected[i]);
                 ((GbSlots *)vars)->spread_angle = fast_add_rotations(first_angle, (float)i * step);
             }
