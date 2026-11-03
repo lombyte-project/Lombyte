@@ -636,7 +636,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
     int              reduced = 0;
     Missile1688     *missile_data;
     M910            *target;
-    float            size, yaw, pitch;
+    float            impact_scale_multiplier, yaw, pitch;
     normal.q = 0;
     normal.f[2] = D_0015ED6C * 8.0f;
     blast_velocity.q = normal.q;
@@ -657,7 +657,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         hero_velocity.q = phase.vectors.direction.q;
         scale_vector_xyz(&hero_velocity, &hero_velocity, turn);
     }
-    size = convert_integer_to_float(D_0013E520.bB) + 1.0f;
+    impact_scale_multiplier = convert_integer_to_float(D_0013E520.bB) + 1.0f;
     if (target && missile_data->life < scale_game_frames(300) - scale_game_frames(5) &&
         (signed char)target->state >= 0) {
         float time = 0.0f;
@@ -873,7 +873,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         int   particle_reduction;
         int   i, j;
         int   hit =
-            collect_mobies_in_sphere((&missile_moby->pos), 16, missile_moby, 0, (size + size));
+            collect_mobies_in_sphere((&missile_moby->pos), 16, missile_moby, 0, (impact_scale_multiplier + impact_scale_multiplier));
         particles = 10;
         predicted.q = missile_moby->pos.q;
         FUN_L00_0025a9f8(missile_moby,
@@ -922,9 +922,9 @@ void gold_devastator_missile_update(M910 *missile_moby) {
                     transform_vector(&predicted, &surface_motion, rotation);
                     fast_vec_normalize(&predicted,
                                        &predicted,
-                                       random_float_between(8.5f, 16.5f) * D_0015ED6C * size);
+                                       random_float_between(8.5f, 16.5f) * D_0015ED6C * impact_scale_multiplier);
                 } else {
-                    float speed = random_float_between(8.5f, 16.5f) * D_0015ED6C * size;
+                    float speed = random_float_between(8.5f, 16.5f) * D_0015ED6C * impact_scale_multiplier;
                     float a = random_angle_radians();
                     build_spherical_offset(&predicted, speed, a, random_angle_radians());
                 }
@@ -937,7 +937,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
                     float particle_scale;
                     if (fast_vec_length(&predicted) > 1.0f)
                         fast_vec_normalize(&predicted, &predicted, D_0015ED6C * 8.0f);
-                    particle_scale = size * 40000.0f;
+                    particle_scale = impact_scale_multiplier * 40000.0f;
                     life = random_int_between(scale_game_frames(60), scale_game_frames(120)) -
                            particle_reduction * 35;
                     spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
@@ -964,7 +964,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         fast_vec_sub(&camera_delta, D_L00_00166DC0, (&missile_moby->pos));
         distance = fast_vec_length(&camera_delta);
         camera_delta.f[2] += distance * 0.5f;
-        fast_vec_normalize(&predicted, &predicted, distance / 5.0f * D_0015ED6C * size);
+        fast_vec_normalize(&predicted, &predicted, distance / 5.0f * D_0015ED6C * impact_scale_multiplier);
         fast_vec_normalize(&camera_delta, &camera_delta, (distance + distance) * D_0015ED6C);
         fast_vec_add(&predicted, &predicted, &camera_delta);
         clamp_vector_length(&predicted, &predicted, D_0015ED6C * 10.0f);
@@ -984,7 +984,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             j /= 2;
         for (i = 0; i < j; i++) {
             float speed =
-                random_float_between(8.0f, 10.0f) * size * D_0015ED6C - near_adjust * D_0015ED6C;
+                random_float_between(8.0f, 10.0f) * impact_scale_multiplier * D_0015ED6C - near_adjust * D_0015ED6C;
             Colors1688 color = l00_devastator_missile_impact_color_palette;
             Colors1688 fade = l00_devastator_missile_impact_fade_palette;
             int        c =
@@ -1026,10 +1026,10 @@ void gold_devastator_missile_update(M910 *missile_moby) {
                 random.f[2] = random_float_between(-1.0f, 1.0f);
                 v.q = random.q;
             }
-            fast_vec_normalize(&v, &v, random_float_between(0.0f, 3.0f) * D_0015ED6C * size);
+            fast_vec_normalize(&v, &v, random_float_between(0.0f, 3.0f) * D_0015ED6C * impact_scale_multiplier);
             c = swap_packed_color_channels(color.colors[random_integer_below(6)], D_0013E520.bB);
             f = swap_packed_color_channels(fade.colors[random_integer_below(6)], D_0013E520.bB);
-            debris_scale = size * 200000.0f;
+            debris_scale = impact_scale_multiplier * 200000.0f;
             life = random_int_between(scale_game_frames(20), scale_game_frames(35)) -
                    particle_reduction * 10;
             spawn_particle_alt_9768((&missile_moby->pos), &v, c, f, debris_scale, life);
@@ -1043,7 +1043,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             spawn_glow_particle_u8(missile_moby,
                                    (&missile_moby->pos),
                                    &blast_velocity,
-                                   size * 4.0f,
+                                   impact_scale_multiplier * 4.0f,
                                    scale_game_frames(15),
                                    c,
                                    127,
@@ -1052,7 +1052,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             spawn_glow_particle_u8(missile_moby,
                                    (&missile_moby->pos),
                                    &blast_velocity,
-                                   size * 4.0f,
+                                   impact_scale_multiplier * 4.0f,
                                    scale_game_frames(24),
                                    c,
                                    127,
@@ -1062,7 +1062,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         {
             unsigned char color = 127;
             int           life;
-            float         flash_scale = size * 4.0f;
+            float         flash_scale = impact_scale_multiplier * 4.0f;
             if (D_0013E520.bB)
                 color = 32;
             life = scale_game_frames(20);
@@ -1080,7 +1080,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             spawn_glow_particle_u8(missile_moby,
                                    (&missile_moby->pos),
                                    &blast_velocity,
-                                   (size + size),
+                                   (impact_scale_multiplier + impact_scale_multiplier),
                                    scale_game_frames(19),
                                    255,
                                    255,
