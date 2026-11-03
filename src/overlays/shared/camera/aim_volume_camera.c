@@ -94,7 +94,7 @@ void volume_camera_aim(struct UpdateCam *aim_camera_record) {
     struct UpdateCam *current_follow_camera_record;
     Vec4f            *rec_pos;
     FollowCamState   *rig;
-    FollowCamState   *state;
+    FollowCamState   *current_follow_camera_state;
     FollowCamBlock   *follow;
     FollowCamTail    *tail;
     FollowCamSnap    *snap;
@@ -149,8 +149,8 @@ run:
         tail = &rig->tail;
         snap = &rig->tail.snap;
         /* A second pointer to the same state: retail keeps both. */
-        state = rig;
-        reset = &state->reset;
+        current_follow_camera_state = rig;
+        reset = &current_follow_camera_state->reset;
         qcopy(rec_pos, pos);
         tail->distance = params->distance;
         tail->pivot_height = params->height;
