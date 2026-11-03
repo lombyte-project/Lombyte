@@ -503,10 +503,10 @@ s32 resolve_moby_animation_id(u8 *moby_bytes, s32 animation_id) {
 
 int hero_get_state_aim_pitch(int mode, float *out) __asm__("FUN_L00_0020d5d0");
 
-int hero_get_state_aim_pitch(int mode, float *aim_pitch_output) {
+int hero_get_state_aim_pitch(int animation_id, float *aim_pitch_output) {
     int i;
     *aim_pitch_output = 0.0f;
-    i = mode - 0x1C;
+    i = animation_id - 0x1C;
     switch (i) {
     case 27:
         *aim_pitch_output = -0.9599311f;
