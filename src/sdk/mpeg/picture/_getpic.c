@@ -19,12 +19,12 @@ s32 _getpic(struct sceMpeg *mpeg) {
         MPEG_DECODE_SCAN_NEXT_HEADER = 0
     };
     s32                 image_addr;
-    s32                 status;
+    s32                 decode_or_skip_result;
     u32                 start_code;
     struct MpegDecoder *decoder;
 
     start_code = 1;
-    status = MPEG_DECODE_SCAN_NEXT_HEADER;
+    decode_or_skip_result = MPEG_DECODE_SCAN_NEXT_HEADER;
     decoder = mpeg->sys;
     image_addr = decoder->unkD8;
     decoder->is_end = 0;
@@ -34,7 +34,7 @@ s32 _getpic(struct sceMpeg *mpeg) {
     }
     decoder->picture_ready = 0;
     do {
-        if (status == -1) {
+        if (decode_or_skip_result == -1) {
             goto dispatch;
         }
         do {
@@ -56,16 +56,16 @@ s32 _getpic(struct sceMpeg *mpeg) {
             decoder->picture_count_b = 0;
             decoder->picture_count_p = 0;
             decoder->picture_count_i = 0;
-            status = _decodeOrSkip(mpeg, 0, decoder->decode_count_i);
+            decode_or_skip_result = _decodeOrSkip(mpeg, 0, decoder->decode_count_i);
             decoder->picture_count_i = (s32)(decoder->picture_count_i + 1);
             break;
         case MPEG_PREDICTIVE_PICTURE:
-            status = _decodeOrSkip(mpeg, decoder->picture_count_p, decoder->decode_count_p);
+            decode_or_skip_result = _decodeOrSkip(mpeg, decoder->picture_count_p, decoder->decode_count_p);
             decoder->picture_count_p = (s32)(decoder->picture_count_p + 1);
             break;
         case MPEG_BIDIRECTIONAL_PICTURE:
         case MPEG_DC_INTRA_PICTURE:
-            status = _decodeOrSkip(mpeg, decoder->picture_count_b, decoder->decode_count_b);
+            decode_or_skip_result = _decodeOrSkip(mpeg, decoder->picture_count_b, decoder->decode_count_b);
             decoder->picture_count_b = (s32)(decoder->picture_count_b + 1);
             break;
         }
