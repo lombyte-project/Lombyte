@@ -427,7 +427,7 @@ int draw_hud_stars(HudElem *element) __asm__("FUN_L00_002365a8");
 int draw_hud_stars(HudElem *element) {
     int   x, y, i, previous, current, frames, image, star_width;
     float origin[4], direction[4], first_step[4], second_step[4], third_step[4], star_position[4];
-    float seconds, sixteen, offset, thirty_two;
+    float seconds, sixteen, star_visibility_y_threshold, thirty_two;
 
     {
         int width = D_L00_0015F760;
@@ -523,7 +523,7 @@ int draw_hud_stars(HudElem *element) {
             fast_vec_sub(direction, direction, first_step);
             limit = star_init_limit0_gp;
             star_width = (int)(limit * thirty_two);
-            offset = offset + limit;
+            star_visibility_y_threshold = star_visibility_y_threshold + limit;
         } else if (i == 10) {
             float limit, previous_limit, width;
             fast_vec_sub(direction, direction, second_step);
@@ -532,7 +532,7 @@ int draw_hud_stars(HudElem *element) {
             width = limit * thirty_two;
             limit = limit - previous_limit;
             star_width = (int)width;
-            offset = offset + limit;
+            star_visibility_y_threshold = star_visibility_y_threshold + limit;
         } else if (i == 30) {
             float limit, previous_limit, width;
             fast_vec_sub(direction, direction, third_step);
@@ -541,9 +541,9 @@ int draw_hud_stars(HudElem *element) {
             width = limit * thirty_two;
             limit = limit - previous_limit;
             star_width = (int)width;
-            offset = offset + limit;
+            star_visibility_y_threshold = star_visibility_y_threshold + limit;
         }
-        if (offset < l00_hud_star_particles[i].y)
+        if (star_visibility_y_threshold < l00_hud_star_particles[i].y)
             continue;
         FUN_L00_001ff348(star_position, &l00_hud_star_particles[i], origin);
         fast_vec_add(star_position, star_position, direction);
