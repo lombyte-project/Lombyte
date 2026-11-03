@@ -2161,19 +2161,19 @@ s32 start_cutscene_chunk_read(s32 i) __asm__("FUN_L00_002451b8");
 s32 start_cutscene_chunk_read(s32 i) {
     u8 *buf = D_L00_0016C860.buf;
     s32 start;
-    s32 size;
+    s32 sector_count;
 
     if (pal_mode != FALSE) {
-        size = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] -
+        sector_count = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] -
                disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
     } else {
-        size = disc_table.sector_lists[D_L00_0016C860.list].sectors[i + 1] -
+        sector_count = disc_table.sector_lists[D_L00_0016C860.list].sectors[i + 1] -
                disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
     }
-    if (size > 0) {
-        start_audio_stream_read(buf, start, size);
+    if (sector_count > 0) {
+        start_audio_stream_read(buf, start, sector_count);
         update_audio_stream_until_idle(0);
     }
     return 1;
