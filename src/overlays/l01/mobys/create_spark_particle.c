@@ -70,7 +70,7 @@ void create_spark_particle(s32   id,
                            f32   g,
                            f32   b,
 
-                           f32 size) {
+                           f32 packed_color_high_byte_component) {
     enum {
         SPARK_MODE_FROM_KIND = 0xFF
     };
@@ -108,11 +108,11 @@ void create_spark_particle(s32   id,
     spark_body->r = truncate_float_to_s32(r * 65535.0f);
     spark_body->g = truncate_float_to_s32(g * 65535.0f);
     spark_body->b = truncate_float_to_s32(b * 65535.0f);
-    spark_body->f10 = size;
+    spark_body->f10 = packed_color_high_byte_component;
     spark_body->id = id;
     spark->fC = w;
     spark->b8 = alpha * 255.0f;
     spark->hA = scale_game_frames(life);
     spark_body->b1B = 0;
-    spark->packed_color = FUN_L00_0025bfe0(r, g, b, size);
+    spark->packed_color = FUN_L00_0025bfe0(r, g, b, packed_color_high_byte_component);
 }
