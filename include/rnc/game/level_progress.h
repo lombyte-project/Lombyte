@@ -9,6 +9,15 @@
    mc_leveldata lists each array with its row size. */
 #define LEVEL_RECORD_COUNT 20
 
+/* Per-level counters of the main save (mc_gamedata saves 0x50 bytes of each). */
+extern s32 D_0013D510[LEVEL_RECORD_COUNT];
+/* Best coverage result save_map_coverage got per level (one slot per level record). */
+extern s32 max_coverage_save_result_by_level[LEVEL_RECORD_COUNT] __asm__("D_0013D560");
+/* Per-level counters the hero code bumps; mc_leveldata saves 4 bytes of each per level. */
+extern s32 D_0013DF38[LEVEL_RECORD_COUNT];
+extern s32 D_0013DF88[LEVEL_RECORD_COUNT];
+extern s32 hero_respawn_counts_by_level[LEVEL_RECORD_COUNT] __asm__("D_0013DFD8");
+
 /* Explored map pages: save_map_coverage packs one 0x800-byte page per level. */
 #define MAP_COVERAGE_PAGE_SIZE 0x800
 extern u8 map_coverage_pages[LEVEL_RECORD_COUNT * MAP_COVERAGE_PAGE_SIZE] __asm__("D_00141EC0");

@@ -1144,7 +1144,7 @@ DATA_OVERLAYS = {
     "sdk/scf/sce_scf_get_time_zone": (0x1330D0, 0x34050, 2),  # t10k_time_zone
     "sdk/scf/sce_scf_get_language": (0x1330D4, 0x34054, 1),
     "movies/display/set_pal_mode": (0x13D100, 0x3E080, 8),
-    "save/memcard_get_name": (0x13D1D0, 0x3E150, 829),  # save paths, card state, item tables
+    "save/memcard_get_name": (0x13D1D0, 0x3E150, 3672),  # save paths, card state, saved globals
     "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0, 656),
     "rendering/effects/render_queued_rotated_sprites": (0x189300, 0x8A280, 196),
     "camera/backup_current_cam": (0x1893D0, 0x8A350, 2112),

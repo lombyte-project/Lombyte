@@ -37,7 +37,6 @@ extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013D504[];
 extern int           D_0013D8AC __attribute__((section(".data")));
 extern unsigned char D_0013DD4A __attribute__((section(".data")));
-extern s32           D_0013DF88[];
 extern u8            D_0013E05A[];
 extern char          D_0013E533[];
 extern char          D_0013F3D0[];
