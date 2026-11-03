@@ -46,7 +46,7 @@ void process_unlock_code_input(void) {
     struct PadState *pad = &controller_state;
     int              staged_candidate_index_limit, candidate_index_limit;
     int              va, vb, vc;
-    int              pressed, direction, count, j, code, index, matched;
+    int              pressed, direction, recorded_input_count, j, code, index, matched;
     if ((*(long *)&pad->held_unmasked & 0xF) == 6) {
         pressed = *(s32 *)&pad->pressed_unmasked;
         if (!(pressed & 0xF0A0))
@@ -64,10 +64,10 @@ void process_unlock_code_input(void) {
             direction = 3;
         else
             direction = (pressed & 0x80) ? 4 : 5;
-        count = *(int *)&unlock_code_input_count;
-        unlock_code_input_sequence[count++] = direction;
-        *(int *)&unlock_code_input_count = count;
-        if (count != 20)
+        recorded_input_count = *(int *)&unlock_code_input_count;
+        unlock_code_input_sequence[recorded_input_count++] = direction;
+        *(int *)&unlock_code_input_count = recorded_input_count;
+        if (recorded_input_count != 20)
             return;
         code = -1;
         index = 2;
