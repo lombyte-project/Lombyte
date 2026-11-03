@@ -474,20 +474,20 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
 }
 
 void cache_path_segment_lengths(char *path_record) {
-    int i, count;
+    int i, point_count;
     if (path_record != 0) {
-        count = *(int *)path_record;
+        point_count = *(int *)path_record;
         i = 0;
-        if (count > 0) {
+        if (point_count > 0) {
             do {
                 int point_byte_offset = i * 16;
-                int next_point_index = (i + 1) % count;
+                int next_point_index = (i + 1) % point_count;
                 *(float *)(path_record + point_byte_offset + 0x1C) =
                     fast_vec_dist(path_record + (point_byte_offset + 0x10),
                                   path_record + (next_point_index * 16 + 0x10));
                 i++;
-                count = *(int *)path_record;
-            } while (i < count);
+                point_count = *(int *)path_record;
+            } while (i < point_count);
         }
     }
 }
