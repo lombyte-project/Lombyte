@@ -72,7 +72,7 @@ s32 read_mpeg(struct VideoDec *video_dec,
     s32 read_remaining;
     s32 space;
     s32 avail;
-    s32 count;
+    s32 transferred_bytes;
 
     skipped = 0;
     started = 0;
@@ -100,17 +100,17 @@ s32 read_mpeg(struct VideoDec *video_dec,
         }
         space = read_buf_begin_put(read_buf, &write_ptr);
         if (read_remaining > 0 && space > 0xFFFF) {
-            count = read_cd_stream_sectors(cd_stream, write_ptr, 0x10000, 0);
-            read_remaining -= count;
-            read_buf_end_put(read_buf, count);
+            transferred_bytes = read_cd_stream_sectors(cd_stream, write_ptr, 0x10000, 0);
+            read_remaining -= transferred_bytes;
+            read_buf_end_put(read_buf, transferred_bytes);
         }
         proceed_audio();
         switch_thread();
         avail = read_buf_begin_get(read_buf, &read_ptr);
         if (avail > 0) {
-            count = sceMpegDemuxPssRing(video_dec, read_ptr, avail, read_buf, read_buf->size);
-            decode_remaining -= count;
-            read_buf_end_get(read_buf, count);
+            transferred_bytes = sceMpegDemuxPssRing(video_dec, read_ptr, avail, read_buf, read_buf->size);
+            decode_remaining -= transferred_bytes;
+            read_buf_end_get(read_buf, transferred_bytes);
         }
         proceed_audio();
         if (!started && vo_buf_is_full(&movie_player->vo_buf) && is_audio_ok()) {
