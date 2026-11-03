@@ -38,7 +38,7 @@ void place_metropolis_train(struct Moby *moby,
 
 void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
     float start[4];
-    float offset[4];
+    float placement_offset_or_attachment_position[4];
     float delta[4];
     float old_pos[4];
     float old_rot[4];
@@ -54,20 +54,20 @@ void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
     *(OvlQuad *)old_pos = *(OvlQuad *)&moby->pos;
     *(OvlQuad *)old_rot = *(OvlQuad *)&moby->rot;
     qcopy(coupling + 0x10, start);
-    offset[0] = fast_cos(heading) * -*(float *)(locomotive_data + 0xDC);
-    offset[1] = fast_sin(heading) * -*(float *)(locomotive_data + 0xDC);
-    offset[2] = 0.0f;
-    fast_vec_add(&moby->pos, start, offset);
+    placement_offset_or_attachment_position[0] = fast_cos(heading) * -*(float *)(locomotive_data + 0xDC);
+    placement_offset_or_attachment_position[1] = fast_sin(heading) * -*(float *)(locomotive_data + 0xDC);
+    placement_offset_or_attachment_position[2] = 0.0f;
+    fast_vec_add(&moby->pos, start, placement_offset_or_attachment_position);
     moby->rot.z = fast_add_rotations(heading, 3.1415927f);
     moby->rot.y = 0.0f;
     fast_vec_sub(delta, &moby->pos, old_pos);
     update_entity_matrix(locomotive_data + 0x60, delta, old_rot, &moby->rot);
     *(int *)(locomotive_data + 0xCC) = 0;
     *(int *)(locomotive_data + 0xD0) = 0;
-    offset[0] = fast_cos(heading) * -*(float *)(locomotive_data + 0xBC);
-    offset[1] = fast_sin(heading) * -*(float *)(locomotive_data + 0xBC);
-    offset[2] = 0.0f;
-    fast_vec_add(offset, offset, &moby->pos);
+    placement_offset_or_attachment_position[0] = fast_cos(heading) * -*(float *)(locomotive_data + 0xBC);
+    placement_offset_or_attachment_position[1] = fast_sin(heading) * -*(float *)(locomotive_data + 0xBC);
+    placement_offset_or_attachment_position[2] = 0.0f;
+    fast_vec_add(placement_offset_or_attachment_position, placement_offset_or_attachment_position, &moby->pos);
     while (next_id != -1) {
         char *car = D_L03_0015FFD8 + (next_id << 8);
         char *car_data = *(char **)(car + 0x78);
@@ -76,7 +76,7 @@ void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
         car_pos[0] = fast_cos(heading) * -*(float *)&metropolis_train_carriage_spacing;
         car_pos[1] = fast_sin(heading) * -*(float *)&metropolis_train_carriage_spacing;
         car_pos[2] = 0.0f;
-        fast_vec_add(car_pos, car_pos, offset);
+        fast_vec_add(car_pos, car_pos, placement_offset_or_attachment_position);
         car_off[0] = fast_cos(heading) * -*(float *)(car_data + 0xC4);
         car_off[1] = fast_sin(heading) * -*(float *)(car_data + 0xC4);
         car_off[2] = 0.0f;
@@ -89,7 +89,7 @@ void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
         advance_moby_animation(car);
         update_entity(car);
         *(unsigned short *)(car + 0x34) |= 6;
-        moby_point_position(car, 1, offset);
+        moby_point_position(car, 1, placement_offset_or_attachment_position);
         fast_vec_sub(delta, car + 0x10, car_data + 0xA0);
         update_entity_matrix(car_data + 0x20, delta, car_data + 0xB0, car + 0x40);
         qcopy(car_data + 0xA0, car + 0x10);
