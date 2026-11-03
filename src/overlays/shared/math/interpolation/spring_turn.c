@@ -333,7 +333,7 @@ int move_moby_with_step_collision(char *moby,
                                   float height) __asm__("FUN_L00_00258830");
 int move_moby_with_step_collision(char *moby,
                                   char *velocity,
-                                  int   flags,
+                                  int   collision_query_flags,
                                   float step_height,
                                   float radius,
 
@@ -343,7 +343,7 @@ int move_moby_with_step_collision(char *moby,
     Vs    probe_end;
     Vs    scaled_displacement;
     int   movement_collision_result_flags = 0;
-    int   coll_flags = (flags * 2) & 0x20;
+    int   coll_flags = (collision_query_flags * 2) & 0x20;
     char *movement_position = &MOBY(moby)->pos;
     int   i;
     char *collision_position;
