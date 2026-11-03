@@ -51,9 +51,9 @@ void update_moby_bone_attachment(struct Moby   *parent,
                                  unsigned char *child,
                                  int            mode) __asm__("FUN_L12_0027b9c0");
 
-void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) {
+void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int bone_index) {
     char workspace[0x40];
-    build_moby_bone_transform(parent, mode, workspace);
+    build_moby_bone_transform(parent, bone_index, workspace);
     qcopy(child + 0x10, workspace + 0x30);
     advance_moby_animation(child);
     update_entity(child);
