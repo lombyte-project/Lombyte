@@ -306,13 +306,13 @@ void release_beam_slot(s32 i) {
 
 s32 set_beam_origin_transform_and_endpoint(s32 id, void *src, void *v) __asm__("FUN_L00_002e2190");
 
-s32 set_beam_origin_transform_and_endpoint(s32   id,
+s32 set_beam_origin_transform_and_endpoint(s32   beam_owner_moby_id,
                                            void *beam_origin_transform,
 
                                            void *endpoint_position) {
     s32 i;
     for (i = 0; i < 3; i++) {
-        if (id == beam_slot_id[i]) {
+        if (beam_owner_moby_id == beam_slot_id[i]) {
             if (beam_slot_state[i] == 1)
                 beam_slot_state[i] = 2;
             else if (beam_slot_state[i] == 4)
