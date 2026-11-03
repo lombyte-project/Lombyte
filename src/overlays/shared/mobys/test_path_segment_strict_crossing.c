@@ -273,7 +273,7 @@ s32 resolve_point_path_segment_clearance(f32      distance,
     OvlVec4            *current;
     s32                 next_point_index;
     s32                 i;
-    s32                 offset;
+    s32                 axis_address_or_point_byte_offset;
     OvlVec4            *saved_out;
     s32                 found;
     f32                 original_height;
@@ -284,19 +284,19 @@ s32 resolve_point_path_segment_clearance(f32      distance,
     saved_out = clearance_adjusted_point;
     qcopy(&working, point);
     segment_path = D_L00_001B04B0_262030[path_index];
-    offset = (s32) & (*(OvlVec4 *)D_0013F5E0);
-    original_height = fast_vec_dot(&working, (OvlVec4 *)offset);
+    axis_address_or_point_byte_offset = (s32) & (*(OvlVec4 *)D_0013F5E0);
+    original_height = fast_vec_dot(&working, (OvlVec4 *)axis_address_or_point_byte_offset);
     i = 0;
     if (segment_path->count - 1 > found) {
-        height_axis = (OvlVec4 *)offset;
+        height_axis = (OvlVec4 *)axis_address_or_point_byte_offset;
         do {
-            offset = i << 4;
+            axis_address_or_point_byte_offset = i << 4;
             next_point_index = i + 1;
-            if (((OvlVec4 *)((u8 *)segment_path + offset + 0x10))->f[3] != 0.0f ||
+            if (((OvlVec4 *)((u8 *)segment_path + axis_address_or_point_byte_offset + 0x10))->f[3] != 0.0f ||
                 segment_path->points[next_point_index].f[3] != 0.0f) {
-                current = (OvlVec4 *)((u8 *)segment_path + (offset + 0x10));
+                current = (OvlVec4 *)((u8 *)segment_path + (axis_address_or_point_byte_offset + 0x10));
                 fast_vec_sub(&difference, &working, current);
-                fast_vec_sub(&segment, (OvlVec4 *)((u8 *)segment_path + (offset + 0x20)), current);
+                fast_vec_sub(&segment, (OvlVec4 *)((u8 *)segment_path + (axis_address_or_point_byte_offset + 0x20)), current);
                 projection = fast_vec_dot(&difference, height_axis);
                 FUN_001ff500_262030(projection, &scaled_cross, height_axis);
                 fast_vec_sub(&difference, &difference, &scaled_cross);
