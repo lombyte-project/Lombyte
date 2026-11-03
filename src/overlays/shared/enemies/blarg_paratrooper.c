@@ -552,8 +552,8 @@ void blarg_paratrooper_update(char *moby) {
         }
         break;
     case PARATROOPER_STATE_KNOCKBACK_RECOVERY: {
-        int flags = step_moby_motion(moby, (char *)paratrooper_private_state + 0x70);
-        if (flags & 0x40) {
+        int motion_result_flags = step_moby_motion(moby, (char *)paratrooper_private_state + 0x70);
+        if (motion_result_flags & 0x40) {
             if (vector_distance_xy(&MOBY(moby)->pos, target + 0x10) < melee302618) {
             melee_state:
                 (*(unsigned char *)((char *)(moby) + 0x20)) = 7;
@@ -571,7 +571,7 @@ void blarg_paratrooper_update(char *moby) {
                         moby, 6, 0, ticks + random_int_between(0, scale_game_frames(7)));
                 }
             }
-        } else if (flags & 0x120) {
+        } else if (motion_result_flags & 0x120) {
         delete_moby:
             mark_moby_for_removal(moby);
         }
