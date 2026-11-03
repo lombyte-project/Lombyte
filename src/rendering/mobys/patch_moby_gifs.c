@@ -17,14 +17,14 @@ extern struct TexRemap moby_gs_loc_stash[] __asm__("D_001B5D80");
 void                   patch_moby_gifs(void) __asm__("FUN_0020cef8");
 
 void patch_moby_gifs(void) {
-    s32             *id;
+    s32             *moby_class_id_cursor;
     struct GifEntry *gif_entry;
     u8              *tex;
     u32             *gif;
     struct TexRemap *texture_remap;
 
-    for (id = moby_class_rectify; *id >= 0; id++) {
-        gif_entry = ((struct MobyClass *)moby_class_resources[*id])->gifs;
+    for (moby_class_id_cursor = moby_class_rectify; *moby_class_id_cursor >= 0; moby_class_id_cursor++) {
+        gif_entry = ((struct MobyClass *)moby_class_resources[*moby_class_id_cursor])->gifs;
         for (;; gif_entry++) {
             gif = (u32 *)(gif_entry->gif & 0x7FFFFFFF);
             tex = gif_entry->tex;
