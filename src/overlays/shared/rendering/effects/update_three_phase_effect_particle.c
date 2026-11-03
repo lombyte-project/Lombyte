@@ -2279,9 +2279,9 @@ typedef struct {
 
 typedef struct {
     f32      q0;
-    f32      q4;
-    f32      q8;
-    f32      qC;
+    f32      fade_alpha;
+    f32      spin_phase;
+    f32      fade_direction;
     V_26de90 v30;
 } Q_26de90;
 
@@ -2346,11 +2346,11 @@ void spawn_jittered_effect_particle_with_optional_basis(void *spawn_origin,
         particle->b1 = 0;
         particle->b8 = 0;
         particle->b2 = *D_L00_001B20F0;
-        q->q4 = random_float_between(0.0f, 0.0223456f) + 1e-05f;
+        q->fade_alpha = random_float_between(0.0f, 0.0223456f) + 1e-05f;
         particle->fC = random_float_between(10080.0f, 19950.0f);
-        q->q8 = 0.0f;
+        q->spin_phase = 0.0f;
         particle->hA = scale_game_frames(0xFC);
-        q->qC = 1.0f;
+        q->fade_direction = 1.0f;
         qzero(&local_velocity);
         if (optional_spawn_basis) {
             local_velocity.f[0] = size;
