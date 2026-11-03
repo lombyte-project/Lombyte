@@ -189,7 +189,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     T_210ce8 *response_record;
     u8       *mob;
     s32       flag;
-    s32       id;
+    s32       hurt_response_state;
     f32       horizontal_response_scale, vertical_response_scale, response_frame_time;
     V_210ce8  response_motion_delta;
 
@@ -258,9 +258,9 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         mob = ((u8 *)hero.damage_source_moby);
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
-            id = 0x80;
+            hurt_response_state = 0x80;
         call_ret:
-            hero_set_state(id, 1);
+            hero_set_state(hurt_response_state, 1);
             return 1;
         }
         if (hero.state.control_mode == 0x16) {
@@ -271,14 +271,14 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
         if (hero.state.control_mode == HERO_MODE_WATER_SURFACE) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                id = 0x82;
+                hurt_response_state = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
         } else if (hero.state.control_mode == HERO_MODE_SWIM) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                id = 0x82;
+                hurt_response_state = 0x82;
                 goto call_ret;
             }
             if (current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) {
@@ -292,7 +292,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
         } else if (hero.state.control_mode == HERO_MODE_LEDGE) {
             mob = ((u8 *)hero.damage_source_moby);
             if (mob != 0) {
-                id = 0x82;
+                hurt_response_state = 0x82;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
                     goto call_ret;
                 }
