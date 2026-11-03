@@ -470,7 +470,7 @@ void collect_bolt(struct Moby *bolt) {
     s32         bolt_value;
     s32         spin;
     f32         k;
-    f32         size;
+    f32         sparkle_size;
     BoltSource *bolt_source;
 
     switch (bolt->oclass) {
@@ -513,11 +513,11 @@ void collect_bolt(struct Moby *bolt) {
     spin = random_integer_below(2);
     if (spin == 0)
         spin--;
-    size = random_float_between(0.4f, 0.5f);
+    sparkle_size = random_float_between(0.4f, 0.5f);
     FUN_L00_00272060(&pos,
                      scale_game_frames(0x19),
-                     size * 0.2f,
-                     size,
+                     sparkle_size * 0.2f,
+                     sparkle_size,
                      0x7F207F7F,
                      0,
                      spin,
@@ -526,8 +526,8 @@ void collect_bolt(struct Moby *bolt) {
     spin = -spin;
     FUN_L00_00272060(&pos,
                      scale_game_frames(0x19),
-                     size * 0.14f,
-                     size * k,
+                     sparkle_size * 0.14f,
+                     sparkle_size * k,
                      0x7F7F7F7F,
                      1,
                      spin,
