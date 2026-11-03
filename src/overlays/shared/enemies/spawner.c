@@ -132,7 +132,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
         char *slot_moby = *slot;
         if (slot_moby != 0 && MOBY(slot_moby)->oclass == 0x75E &&
             (unsigned char)MOBY(slot_moby)->state != MOBY_STATE_REMOVAL_MARKER &&
-            (unsigned char)MOBY(slot_moby)->state != 0xFD) {
+            (unsigned char)MOBY(slot_moby)->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER) {
             spawner_vars[0x91]++;
         } else {
             last = i;
