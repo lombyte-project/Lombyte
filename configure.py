@@ -1129,6 +1129,7 @@ SDATA_OVERLAYS = {
     "mobys/update_visible_mobys": (0x15FF24, 0x60EA4, 4),  # visible moby list
     "world/select_world_object_resource_tables": (0x15FF44, 0x60EC4, 8),  # resource tag and count
     "ui/hud/init_hud": (0x15F6D8, 0x60658, 8),  # allocation tag
+    "ui/menus/widgets/format_scaled_display_value": (0x161078, 0x61FF8, 11),  # display value formats
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
