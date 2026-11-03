@@ -24,7 +24,7 @@ void            set_sonic_summoner_moby_flag_0800(void) __asm__("FUN_L02_002400c
 
 void set_sonic_summoner_moby_flag_0800(void) {
     int i;
-    if (current_level_index == 2) {
+    if (current_level_index == LEVEL_ARIDIA) {
         for (i = 0; i < talk_camera.count; i++) {
             Level02Moby *moby = talk_camera.mobys[i];
             if (moby->class_id == 0x1B1) {

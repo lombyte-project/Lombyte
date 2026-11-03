@@ -2,6 +2,8 @@
 #define LOMBYTE_RNC_GLOBALS_H
 
 #include "types.h"
+#include "rnc/world/level_id.h"
+#include "rnc/ui/menus/save_data/save_card_state.h"
 
 /*
  * Named game globals, one declaration each. The C name is ours; the label
@@ -39,8 +41,8 @@ extern f32 frame_time_cube __asm__("D_0015ED74");
 /* Bolts the player holds (the HUD prints it, vendors subtract prices). */
 extern s32 current_bolt_count __asm__("D_0015ED98");
 
-/* Pause/freeze state of the current game mode and its flags. */
-extern s32 mode_freeze_state __asm__("D_0015EEB0");
+/* Memory card state (enum CardState) and the flags of the dialog that shows it. */
+extern s32 card_state __asm__("D_0015EEB0");
 extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 
 /* GS address of the depth buffer (ZBUF_1 takes it >> 13). */

@@ -33,7 +33,7 @@ s32 draw_missions_menu(struct Menu *menu) {
     if (text_width >= w) {
         w = text_width;
     }
-    if (current_level_index != 0) {
+    if (current_level_index != LEVEL_VELDIN1) {
         text_width = measure_text_width_small(get_help_message_text(0x4EEF), -1);
         if (text_width >= w) {
             w = text_width;
@@ -55,11 +55,11 @@ s32 draw_missions_menu(struct Menu *menu) {
     if (x < 2) {
         x = 2;
     }
-    step = menu->h / (current_level_index != 0 ? 7 : 6);
+    step = menu->h / (current_level_index != LEVEL_VELDIN1 ? 7 : 6);
     disable_font_color_codes();
     y = step - 6;
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EEE), -1);
-    if (current_level_index != 0) {
+    if (current_level_index != LEVEL_VELDIN1) {
         y += step;
         font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EEF), -1);
     }

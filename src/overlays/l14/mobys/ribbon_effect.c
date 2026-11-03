@@ -56,7 +56,7 @@ void ribbon_effect_moby_update(struct Moby *moby) {
         break;
     case MOBY_STATE_UPDATE:
         x = &hero;
-        if (x->state.control_mode != 0xF ||
+        if (x->state.control_mode != HERO_MODE_GRIND ||
             (x->rail_spline != (int)l14_splines[*(int *)(ribbon_effect_state + 0x1F4)].path &&
              x->rail_spline != (int)l14_splines[*(int *)(ribbon_effect_state + 0x1F8)].path &&
              x->rail_spline != (int)l14_splines[*(int *)(ribbon_effect_state + 0x1FC)].path)) {

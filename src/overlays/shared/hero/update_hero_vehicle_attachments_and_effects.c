@@ -582,7 +582,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         resolve_hero_pending_path_clearance();
         hero.path_constrain_pending = 0;
     }
-    if (hero.state.control_mode != 0x11) {
+    if (hero.state.control_mode != HERO_MODE_SWIM) {
         if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
             if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
                 add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
@@ -602,7 +602,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll_sphere(&hero.motion.pos.q, mask, hero.moby, frame_scale * 0.4f))
                 break;
-        } else if (hero.state.control_mode == 0xF) {
+        } else if (hero.state.control_mode == HERO_MODE_GRIND) {
             if (!coll_sphere(&hero.motion.pos.q, mask, hero.moby, frame_scale * 0.45f))
                 break;
         } else {

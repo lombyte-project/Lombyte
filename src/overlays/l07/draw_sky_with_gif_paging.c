@@ -11,7 +11,7 @@ void draw_sky_with_gif_paging(void) __asm__("FUN_L07_00265b58");
 
 void draw_sky_with_gif_paging(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0x7) {
+    if (current_level_index == LEVEL_UMBRIS) {
         draw_three_sky_shells_with_particles_and_modulo_50000_rotation();
     } else {
         update_sky_shells_static();

@@ -141,7 +141,7 @@ void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend
     }
     blk2 = &hero;
     ok = 1;
-    if (blk2->state.control_mode == 0 &&
+    if (blk2->state.control_mode == HERO_MODE_IDLE &&
         lookup_hero_slot3_animation_key(MOBY(slot3_moby)->prev_seq, &id) != 0) {
         if (id == 0) {
             ok = 0;

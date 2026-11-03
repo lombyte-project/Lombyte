@@ -1372,7 +1372,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
                                                                           ember_particle->tex,
                                                                           ember_particle->blend);
     }
-    if (current_level_index == 10) {
+    if (current_level_index == LEVEL_ORXON) {
         if (!random_integer_below(0x13)) {
             emitted_position.q = ember_particle->pos.q;
             emitted_position.f[2] += 0.1f;

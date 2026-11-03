@@ -178,14 +178,14 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
     case PLUMBER_INITIALIZE:
         plumber_moby->opacity = 0xFF;
         plumber_vars->i44 = 0;
-        if (current_level_index == 1) {
+        if (current_level_index == LEVEL_NOVALIS) {
             if (D_0013DD42) {
                 mark_moby_for_removal(plumber_moby);
                 return;
             }
             plumber_vars->dialogue_data = (void *)plumber_level_one_dialogue_data;
             plumber_moby->state = PLUMBER_LEVEL_ONE_DIALOGUE;
-        } else if (current_level_index == 8) {
+        } else if (current_level_index == LEVEL_BATALIA) {
             plumber_vars->dialogue_data = (void *)plumber_level_eight_dialogue_data;
             plumber_moby->state = PLUMBER_LEVEL_EIGHT_DIALOGUE;
         } else {

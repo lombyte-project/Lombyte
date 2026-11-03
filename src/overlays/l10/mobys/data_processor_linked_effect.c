@@ -77,7 +77,7 @@ void data_processor_linked_effect_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
-        if (current_level_index == 10 && D_001413F4[0] == 1) {
+        if (current_level_index == LEVEL_ORXON && D_001413F4[0] == 1) {
             mark_moby_for_removal(moby);
             break;
         }

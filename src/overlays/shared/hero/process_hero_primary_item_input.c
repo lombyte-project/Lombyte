@@ -224,7 +224,7 @@ void apply_hero_item_slot_selection(int i) {
             }
         }
         g = &hero;
-        if (g->state.control_mode == 0xF && item_available_lui[0x1D] != 0) {
+        if (g->state.control_mode == HERO_MODE_GRIND && item_available_lui[0x1D] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1D || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
                 g->pending_item[1] = 0x1D;
@@ -255,7 +255,7 @@ void apply_hero_item_slot_selection(int i) {
         struct Hero *g = &hero;
         struct Hero *h;
         struct Hero *equipped_item_check_hero;
-        if (g->state.control_mode == 0x11 || g->state.current == 0x76 || g->state.current == 0x6A ||
+        if (g->state.control_mode == HERO_MODE_SWIM || g->state.current == 0x76 || g->state.current == 0x6A ||
             g->state.current == 0x82 || *(unsigned char *)((char *)g + 0x22CB) != 0) {
             if (((int *)(D_00141660))[i] != 6 ||
                 (equipped_item_check_hero = &hero,
@@ -560,7 +560,7 @@ int try_apply_hero_water_and_ground_transitions(void) {
     }
     water_state_requested = 0;
     if (hero_ptr->base_condition != 0) {
-        if (hero_ptr->state.control_mode == 0x11) {
+        if (hero_ptr->state.control_mode == HERO_MODE_SWIM) {
             if (hero_ptr->state.step != 1) {
                 if (0.0f < hero_ptr->motion.displacement.f[2]) {
                     if (hero_ptr->water_surface_z - 0.4f < hero_ptr->motion.pos.f[2]) {
@@ -568,14 +568,14 @@ int try_apply_hero_water_and_ground_transitions(void) {
                     }
                 }
             }
-        } else if (hero_ptr->state.control_mode != 0x12 && hero_ptr->state.control_mode != 3) {
+        } else if (hero_ptr->state.control_mode != HERO_MODE_WATER_SURFACE && hero_ptr->state.control_mode != HERO_MODE_LEDGE) {
             water_surface_tolerance = 0.2f;
             if (water_surface_tolerance < absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f) {
                 water_surface_tolerance = absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f;
             }
             if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.45f)) <
                 water_surface_tolerance) {
-                if (hero_ptr->state.control_mode != 4 || hero_ptr->past_jump_apex != 0) {
+                if (hero_ptr->state.control_mode != HERO_MODE_JUMP || hero_ptr->past_jump_apex != 0) {
                     if (0.8f < hero_ptr->water_depth && hero_ptr->motion.displacement.f[2] < 0.0f) {
                         water_state_requested = 1;
                     }
@@ -583,7 +583,7 @@ int try_apply_hero_water_and_ground_transitions(void) {
             }
             depth_check_hero = &hero;
             if (depth_check_hero->motion.pos.f[2] < depth_check_hero->water_surface_z - 0.8f) {
-                if (depth_check_hero->state.control_mode != 4 ||
+                if (depth_check_hero->state.control_mode != HERO_MODE_JUMP ||
                     depth_check_hero->past_jump_apex != 0) {
                     water_state_requested = 1;
                 }
@@ -604,8 +604,8 @@ int try_apply_hero_water_and_ground_transitions(void) {
     }
     collision_check_hero = &hero;
     if (collision_check_hero->state.control_mode - 0x11 >= 2u &&
-        collision_check_hero->state.control_mode != 7 &&
-        collision_check_hero->state.control_mode != 0x14 &&
+        collision_check_hero->state.control_mode != HERO_MODE_HURT &&
+        collision_check_hero->state.control_mode != HERO_MODE_DYING &&
         collision_check_hero->state.current != 0x12 && (frame_number & 0xF) == 0) {
         scale = 4.0f;
         if ((frame_number & 0x3F) == 0) {
@@ -712,7 +712,7 @@ int process_hero_primary_item_input(void) {
     switch ((*(Hero *)((char *)&hero)).items[0].item_id) {
     case ITEM_WRENCH:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 2U ||
-            ((*(Hero *)((char *)&hero)).state.control_mode == 4 &&
+            ((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP &&
              (*(Hero *)((char *)&hero)).rail_land_frames != 0)) {
             Moby *item;
 
@@ -792,7 +792,7 @@ int process_hero_primary_item_input(void) {
                 break;
             }
         }
-        if ((*(Hero *)((char *)&hero)).state.control_mode == 6) {
+        if ((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_ATTACK) {
             HeroTableRow2C *wrench_attack_timing_record =
                 &D_L05_0017C088[(*(Hero *)((char *)&hero)).attack_record];
             int window;
@@ -854,10 +854,10 @@ int process_hero_primary_item_input(void) {
             window = scale_game_frames(8);
         }
         if ((*(Hero *)((char *)&hero)).state.control_mode < 2U ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 4 ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 2 ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 0xF ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 5 ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_FALL ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_GRIND ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_LAND ||
             (*(Hero *)((char *)&hero)).state.current == 0x1E) {
             if (pad_pressed_within(mask, window, 0) ||
                 ((controller_state.held & mask) &&
@@ -910,8 +910,8 @@ int process_hero_primary_item_input(void) {
         break;
     case ITEM_AMMO_MENU_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 3U ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 4 ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 5) {
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_LAND) {
             if (pad_pressed_within(mask, scale_game_frames(8), 0)) {
                 open_vendor_menu(0);
             }
@@ -919,11 +919,11 @@ int process_hero_primary_item_input(void) {
         break;
     case ITEM_HELD_SOUND_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 2U ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 0xC ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 2 ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 4 ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 5 ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 0xF ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_CROUCH ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_FALL ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_LAND ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_GRIND ||
             (*(Hero *)((char *)&hero)).state.current == 0x1E) {
             PVar *pv;
 
@@ -957,13 +957,13 @@ int process_hero_primary_item_input(void) {
     case 20:
     case 24:
     case 25:
-        if (((*(Hero *)((char *)&hero)).state.control_mode == 0 &&
+        if (((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_IDLE &&
              (*(Hero *)((char *)&hero)).state.current != 0x1E) ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 1 ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 0xC ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 5 ||
-            (*(Hero *)((char *)&hero)).state.control_mode == 0xF ||
-            ((*(Hero *)((char *)&hero)).state.control_mode == 4 &&
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_RUN ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_CROUCH ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_LAND ||
+            (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_GRIND ||
+            ((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP &&
              (*(Hero *)((char *)&hero)).unk4AC != 0) ||
             ((*(Hero *)((char *)&hero)).state.current == 0x23 &&
              (*(Hero *)((char *)&hero)).anim_frame > 25.0f)) {
@@ -980,10 +980,10 @@ int process_hero_primary_item_input(void) {
                 ((controller_state.held & 0x20) && held_frames > scale_game_frames(8) &&
                  held_frames < scale_game_frames(0x11))) {
                 if (get_ammo(-1)) {
-                    if ((*(Hero *)((char *)&hero)).state.control_mode == 0xC ||
-                        (*(Hero *)((char *)&hero)).state.control_mode == 0 ||
+                    if ((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_CROUCH ||
+                        (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_IDLE ||
                         (*(Hero *)((char *)&hero)).state.current == 3 ||
-                        ((*(Hero *)((char *)&hero)).state.control_mode == 1 &&
+                        ((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_RUN &&
                          (*(Hero *)((char *)&hero)).stick_magnitude < 0.7f)) {
                         hero_set_state(0x23, 1);
                     } else {
@@ -1000,7 +1000,7 @@ int process_hero_primary_item_input(void) {
         break;
     case ITEM_STATE_CHANGING_SOUND_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 2U ||
-            ((*(Hero *)((char *)&hero)).state.control_mode == 4 &&
+            ((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP &&
              (*(Hero *)((char *)&hero)).rail_land_frames != 0)) {
             if ((*(Hero *)((char *)&hero)).state.current != 1) {
                 int window = scale_game_frames(0xA);
@@ -1127,9 +1127,9 @@ int process_hero_primary_item_input(void) {
             fast_dec_timer(&hero_item_input_r1_double_press_timer_gp);
             if (hero_item_input_r1_double_press_timer_gp != 0) {
                 if ((*(Hero *)((char *)&hero)).state.control_mode < 2U ||
-                    (*(Hero *)((char *)&hero)).state.control_mode == 0xC ||
-                    (((*(Hero *)((char *)&hero)).state.control_mode == 2 ||
-                      (*(Hero *)((char *)&hero)).state.control_mode == 4) &&
+                    (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_CROUCH ||
+                    (((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_FALL ||
+                      (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP) &&
                      (*(Hero *)((char *)&hero)).grounded_frames != 0)) {
                     if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);
@@ -1963,7 +1963,7 @@ change_state:
     return 1;
 continue_fall:
     if (alternate_item_available_lui[0]) {
-        if (current_level_index == 5 && (&hero)->tricks_landed[4] == 4 && (&hero)->unk70C > 3 &&
+        if (current_level_index == LEVEL_RILGAR && (&hero)->tricks_landed[4] == 4 && (&hero)->unk70C > 3 &&
             item_unlocked_lui[7] == 0) {
             item_unlocked_lui[7] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);

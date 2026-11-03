@@ -132,7 +132,7 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
     x -= measure_text_width_regular(formatted_hud_text, -1);
     print_text_with_texture_3(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
-    if (current_level_index == 0x10) {
+    if (current_level_index == LEVEL_KALEBO3) {
         int y2, x2;
         sprintf(small_buf, D_L05_0015F860, hero.race_ammo);
         /* Fakematch: the dead early copy of the default row gives retail's register order. */

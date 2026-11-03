@@ -75,7 +75,7 @@ void enemy_fighter_update(struct Moby *moby) {
     char             *path;
     moby->hit_slot = 0xff;
     if (hit && moby->state != ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN) {
-        if (current_level_index == 14) {
+        if (current_level_index == LEVEL_OLTANIS) {
             enemy_fighter_destruction_count = enemy_fighter_destruction_count + 1;
             if (enemy_fighter_destruction_count > 2 && D_0013D408.flag == 0) {
                 D_0013D408.flag = 1;

@@ -200,8 +200,8 @@ void update_level_gameplay_frame(void) {
     if (sequence_macro < 0.0f) {
         sequence_macro = 0.0f;
     }
-    if (render_sequence.time == 1 && current_level_index != 0 &&
-        (current_level_index != 1 || level_available[3] != 0)) {
+    if (render_sequence.time == 1 && current_level_index != LEVEL_VELDIN1 &&
+        (current_level_index != LEVEL_NOVALIS || level_available[3] != 0)) {
         snd_hold_command_batches();
         snd_play_sound_vol_pan_pmpb(sound_bank_handle,
                                     level_render_state.mode,
@@ -224,7 +224,7 @@ void update_level_gameplay_frame(void) {
                 mark_moby_for_removal(expired_object);
             }
         }
-        if (current_level_index != 0 && (current_level_index != 1 || level_available[3] != 0) &&
+        if (current_level_index != LEVEL_VELDIN1 && (current_level_index != LEVEL_NOVALIS || level_available[3] != 0) &&
             D_0015EE48 < 3) {
             level_render_state.state = LEVEL_RENDER_PHASE_SELECT_RANDOM_MODE;
         }
@@ -330,8 +330,8 @@ void update_level_gameplay_frame(void) {
             qcopy(&level_render_state.secondary_history_positions[history_slot],
                   &second_transform.rows[3]);
             if (level_render_state.mode == LEVEL_RENDER_MODE_FADE_OUT) {
-                if (current_level_index == 0 ||
-                    (current_level_index == 1 && level_available[3] == 0)) {
+                if (current_level_index == LEVEL_VELDIN1 ||
+                    (current_level_index == LEVEL_NOVALIS && level_available[3] == 0)) {
                     interpolated_object->flags |= 1;
                     level_render_state.history_count = 0;
                 }

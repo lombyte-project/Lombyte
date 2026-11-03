@@ -209,7 +209,7 @@ void help_hints_update(struct Moby *moby) {
                 usage_stats.stat[16].level_mask | (1 << current_level_index) | 0x80000000;
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_state[11]) &&
-            usage_stats.stat[16].count == 0 && hero.state.control_mode == 6 &&
+            usage_stats.stat[16].count == 0 && hero.state.control_mode == HERO_MODE_ATTACK &&
             hero.items[0].item_id == 8 &&
             l03_help_message_playback_state.state == HELP_PLAYBACK_IDLE &&
             l03_help_message_playback_state.cur == -1 && help_records[0x1B].count == 0) {

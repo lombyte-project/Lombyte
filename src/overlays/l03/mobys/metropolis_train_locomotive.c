@@ -551,7 +551,7 @@ void metropolis_train_locomotive_update(char *moby) {
         D_L03_0015FDFC = 1;
         update_metropolis_train_motion(moby);
         ENGINE_SOUND();
-        if (hero.air_frames.s != 0 && hero.state.control_mode != 3) {
+        if (hero.air_frames.s != 0 && hero.state.control_mode != HERO_MODE_LEDGE) {
             FUN_L00_0025df68(
                 cdata->path, hero.motion.pos.f, start, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
             train_engine_pvars->fall_check_airborne_frames += 1;

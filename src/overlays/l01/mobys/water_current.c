@@ -68,8 +68,8 @@ void water_current_update(struct Moby *water_current_moby) {
         water_current_moby->update_dist = 0xFF;
     }
 
-    if ((u32)(hero.state.control_mode - 0x11) >= 2 && hero.state.prev_control_mode != 0x11 &&
-        hero.state.prev_control_mode != 0x12 && hero.state.current != 0x12 &&
+    if ((u32)(hero.state.control_mode - 0x11) >= 2 && hero.state.prev_control_mode != HERO_MODE_SWIM &&
+        hero.state.prev_control_mode != HERO_MODE_WATER_SURFACE && hero.state.current != 0x12 &&
         hero.state.prev != 0x12) {
         return;
     }
@@ -114,7 +114,7 @@ void water_current_update(struct Moby *water_current_moby) {
                                    current_speed);
             qcopy(&hero.motion.platform_delta, water_current_vars);
         }
-        if (hero.state.control_mode == 0x12 && hero.state.prev == hero.state.control_mode) {
+        if (hero.state.control_mode == HERO_MODE_WATER_SURFACE && hero.state.prev == hero.state.control_mode) {
             if (hero.state_timer < scale_game_frames(3)) {
                 cap = frame_time * 1.5f;
                 if (cap < hero.ground_speed) {
@@ -123,7 +123,7 @@ void water_current_update(struct Moby *water_current_moby) {
                 clear_u64_value(&hero.motion.momentum);
             }
         }
-    } else if ((hero.state.prev_control_mode == 0x12 || hero.state.prev2_control_mode == 0x12) &&
+    } else if ((hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE || hero.state.prev2_control_mode == HERO_MODE_WATER_SURFACE) &&
                (u32)(hero.state.control_mode - 4) < 2) {
         current_speed = fast_vec_length(water_current_vars);
         fast_vec_normalize(water_current_vars,

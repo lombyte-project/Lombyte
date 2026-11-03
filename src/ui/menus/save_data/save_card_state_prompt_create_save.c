@@ -9,22 +9,22 @@ void save_card_state_prompt_create_save(void) {
     int flags;
 
     if (memory_card_state.card[0].sync_result != 0) {
-        mode_freeze_state = 3;
+        card_state = CS_NOCARD;
         return;
     }
     flags = mode_freeze_flags;
     if (flags & 0x20) {
         mode_freeze_flags = flags ^ 0x20;
         if (boot_level_active != 0) {
-            mode_freeze_state = 0x18;
+            card_state = CS_PROMPT_BEGIN_NOSAVE;
         } else {
-            mode_freeze_state = 0xC;
+            card_state = CS_NOSAVE;
         }
         return;
     }
     if (flags & 0x10) {
         mode_freeze_flags = flags ^ 0x10;
-        mode_freeze_state = 0xE;
+        card_state = CS_CREATE_SAVE_PENDING;
     }
 }
 

@@ -296,7 +296,7 @@ void update_hero_airborne_planar_motion(void) {
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         air_acceleration = frame_time_sq * 20.0f;
         if (hero.target_speed < hero_air_control_speed_reference[0] * frame_time * 0.2f) {
-            if (hero.state.control_mode == 2) {
+            if (hero.state.control_mode == HERO_MODE_FALL) {
                 speed_decay_step = hero.stickless_decel;
                 speed = vector_length_xy(&hero.motion.velocity);
                 approach_value(0.0f, speed_decay_step, &speed);
@@ -1699,12 +1699,12 @@ void update_hero_motion_for_current_state(void) {
         }
     } break;
     case HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT:
-        if (current_level_index == 0xF) {
+        if (current_level_index == LEVEL_QUARTU) {
             release_voice_slot_cf(2, (int)hero.moby, 0x1D);
         } else {
             release_voice_slot_cf(2, (int)hero.moby, 6);
         }
-        if (current_level_index != 0xF) {
+        if (current_level_index != LEVEL_QUARTU) {
             emit_hero_randomized_motion_effects(4, 2);
             vector_and_hit_scratch[0][0] =
                 hero.motion.pos.f[0] + random_float_between(-0.25f, 0.25f);

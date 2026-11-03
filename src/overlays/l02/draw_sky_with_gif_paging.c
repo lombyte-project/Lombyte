@@ -12,7 +12,7 @@ void draw_sky_with_gif_paging(void) __asm__("FUN_L02_00240048");
 
 void draw_sky_with_gif_paging(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0x2) {
+    if (current_level_index == LEVEL_ARIDIA) {
         draw_four_sky_shells_with_animated_particles();
     } else {
         update_sky_shells_static();

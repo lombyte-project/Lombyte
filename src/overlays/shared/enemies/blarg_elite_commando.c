@@ -502,7 +502,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         update_blarg_elite_commando_joint_aim(commando_moby);
     if (blarg_elite_commando_joint_sparks_enabled_gp && D_001413DC != 22)
         emit_blarg_elite_commando_joint_sparks(commando_moby);
-    if (current_level_index == 18 && D_L16_0015F5C4 == 2 && (unsigned int)(D_L16_0016CC90 - 3) < 3U)
+    if (current_level_index == LEVEL_VELDIN2 && D_L16_0015F5C4 == 2 && (unsigned int)(D_L16_0016CC90 - 3) < 3U)
         mark_moby_for_removal(commando_moby);
 }
 
@@ -597,7 +597,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         case HIT_RESPONSE_FATAL:
         case HIT_RESPONSE_FATAL_FALL: {
             char *source;
-            if (current_level_index == 18 && commando_data->reward_hits) {
+            if (current_level_index == LEVEL_VELDIN2 && commando_data->reward_hits) {
                 ++*(int *)&blarg_elite_commando_reward_kill_count_gp;
                 if (*(int *)&blarg_elite_commando_reward_kill_count_gp >= 10) {
                     if (item_unlocked[0x1D] == 0) {

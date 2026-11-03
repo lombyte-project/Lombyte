@@ -136,7 +136,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
             } else {
                 preview_camera.configured_position_rate = 0.018f;
                 preview_camera.configured_rotation_rate = 0.018f;
-                if (current_level_index == 1) {
+                if (current_level_index == LEVEL_NOVALIS) {
                     preview_camera.configured_position_rate = 0.01f;
                     preview_camera.configured_rotation_rate = 0.01f;
                 }

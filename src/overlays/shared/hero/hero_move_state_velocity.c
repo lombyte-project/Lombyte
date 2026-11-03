@@ -172,7 +172,7 @@ void hero_move_state_velocity(void) {
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         base_planar_velocity_step = ED70 * 20.0f;
         if (hero.target_speed < hero_deceleration_speed_reference[0] * ED6C * 0.2f) {
-            if (hero.state.control_mode == 2) {
+            if (hero.state.control_mode == HERO_MODE_FALL) {
                 planar_speed_reduction_step = hero.stickless_decel;
                 if (hero.on_ice_ground)
                     planar_speed_reduction_step = ED70 * 0.17f;
@@ -1193,7 +1193,7 @@ void spawn_hero_radial_particle_burst(void) {
         b = truncate_float_to_s32(random_float_between(21000.0f, 31500.002f) / 1000.0f);
         vector_magnitude = random_float_between(frame_time * 0.15f, frame_time * 0.7f);
         qcopy(randomized_position, position_source);
-        if (current_level_index != 6) {
+        if (current_level_index != LEVEL_NEBULA_G34) {
             randomized_position[0].f[2] = *(float *)(g + 0x2F4);
         }
         i--;

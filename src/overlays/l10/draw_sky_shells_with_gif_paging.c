@@ -11,7 +11,7 @@ void draw_sky_shells_with_gif_paging(void) __asm__("FUN_L10_00230fd0");
 
 void draw_sky_shells_with_gif_paging(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0xa) {
+    if (current_level_index == LEVEL_ORXON) {
         draw_sky_shells_with_scaled_phase_rotation();
     } else {
         update_sky_shells_static();

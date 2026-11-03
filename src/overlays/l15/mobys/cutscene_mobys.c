@@ -23,7 +23,7 @@ void                        update_level15_cutscene_mobys(void) __asm__("FUN_L15
 
 void update_level15_cutscene_mobys(void) {
     int i;
-    if (current_level_index == 15 && (unsigned)(cutscene_state.scene - 3) < 2) {
+    if (current_level_index == LEVEL_QUARTU && (unsigned)(cutscene_state.scene - 3) < 2) {
         for (i = 0; i < cutscene_state.moby_count; i++) {
             FUN_L00_00257024(cutscene_state.mobys[i]);
         }

@@ -9,11 +9,11 @@ void save_card_state_formatting(void) {
     struct MemoryCardState *card_state = &memory_card_state;
     if (card_state->state == MEMCARD_DISPATCH_PENDING_OPERATION && card_state->pending_state < 0) {
         if (card_state->err != 0) {
-            mode_freeze_state = 0x11;
+            card_state = CS_FORMAT_FAILED;
             mode_freeze_flags |= 0x40;
             return;
         }
-        mode_freeze_state = 0xE;
+        card_state = CS_CREATE_SAVE_PENDING;
     }
 }
 

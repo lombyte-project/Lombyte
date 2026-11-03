@@ -5,7 +5,7 @@
 void save_card_state_init(void) __asm__("FUN_002088a8");
 
 void save_card_state_init(void) {
-    mode_freeze_state = 3;
+    card_state = CS_NOCARD;
     memory_card_state.card[0].sync_result = memory_card_state.result;
     memory_card_state.unkF4 = 0;
 }

@@ -169,7 +169,7 @@ void fred_update(struct Moby *moby) {
                 begin_dialogue_camera_transition(2.2f, moby);
             }
         }
-        if (hero.state.control_mode == 15) {
+        if (hero.state.control_mode == HERO_MODE_GRIND) {
             set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
         }
         break;
@@ -287,7 +287,7 @@ void fred_update(struct Moby *moby) {
         }
         break;
     case WAIT_FOR_FRED_REMOVAL_TRIGGER:
-        if (hero.state.control_mode == 15) {
+        if (hero.state.control_mode == HERO_MODE_GRIND) {
             set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
         del:
             mark_moby_for_removal(moby);

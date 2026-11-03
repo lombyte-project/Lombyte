@@ -23,7 +23,7 @@ void emit_cutscene_sparks(void) {
     float world_position[4];
     float spherical_offset[4];
     int   i;
-    if (current_level_index != 3)
+    if (current_level_index != LEVEL_KERWAN)
         return;
     level_state = D_L03_0016C960;
     if (*(int *)(level_state + 0x30) != 5)

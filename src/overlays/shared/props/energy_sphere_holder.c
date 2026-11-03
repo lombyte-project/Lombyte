@@ -80,7 +80,7 @@ void energy_sphere_holder_update(char *holder_moby) {
                       (char *)D_0014C190_257218) >>
                  (MOBY(holder_moby)->save_id & 0x1F) &
              1) &&
-            (current_level_index != 10 ||
+            (current_level_index != LEVEL_ORXON ||
              (visited_table = (unsigned char *)((char *)visited52),
               (visited_table + ((unsigned char *)holder_moby)[0xB0]))[0xA0] == 0xFF)) {
             MOBY(holder_moby)->state = ENERGY_SPHERE_HOLDER_COMPLETED;

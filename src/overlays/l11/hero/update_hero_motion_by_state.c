@@ -78,7 +78,7 @@ void update_hero_surface_condition_flags(void) {
         base_condition_hero_ptr = &hero;
         base_condition_hero_ptr->base_condition = 1;
     }
-    if (current_level_index == 0xD) {
+    if (current_level_index == LEVEL_OLTANIS_ORBIT) {
         struct Hero *collision_hero_ptr = &hero;
         if (collision_hero_ptr->state.current != 0x7B) {
             if (coll_sphere(collision_hero_ptr->capsule_radius + 0.03f,

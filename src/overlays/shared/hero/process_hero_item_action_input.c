@@ -98,8 +98,8 @@ void integrate_hero_movement(void) {
             }
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, limit);
         }
-    } else if (hero.state.control_mode != 0xD) {
-        if (hero.state.control_mode != 0xE && hero.collision_off_frames == 0) {
+    } else if (hero.state.control_mode != HERO_MODE_GRAPPLE) {
+        if (hero.state.control_mode != HERO_MODE_GRAPPLE_SWING && hero.collision_off_frames == 0) {
             velocity_measure = fast_vec_length(&hero.motion.velocity);
             limit = hero.capsule_radius - 0.02f;
             if (limit < velocity_measure) {
@@ -329,7 +329,7 @@ void hero_update_hop_velocity(void) {
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         velocity_change_step = ED70 * 20.0f;
         if (hero.target_speed < hero_low_speed_threshold_basis[0] * ED6C * 0.2f) {
-            if (hero.state.control_mode == 2) {
+            if (hero.state.control_mode == HERO_MODE_FALL) {
                 speed_reduction_step = hero.stickless_decel;
                 speed = vector_length_xy(&hero.motion.velocity);
                 approach_value(0.0f, speed_reduction_step, &speed);
@@ -429,8 +429,8 @@ s32 process_hero_item_action_input(void) {
 
     switch (hero.items[0].item_id) {
     case HERO_ITEM_WRENCH:
-        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
-            (hero.state.control_mode == 4 && hero.rail_land_frames != 0)) {
+        if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
+            (hero.state.control_mode == HERO_MODE_JUMP && hero.rail_land_frames != 0)) {
             if (hero.on_slip_ground == 0 &&
                 pad_pressed_within(buttons, scale_game_frames(7), &wrench_press_age_frames) != 0) {
                 moby = hero.items[0].moby;
@@ -475,7 +475,7 @@ s32 process_hero_item_action_input(void) {
                     hero_set_state(HERO_STATE_WRENCH_COMBO, 1);
                 }
             }
-        } else if (hero.state.control_mode == 6) {
+        } else if (hero.state.control_mode == HERO_MODE_ATTACK) {
             row = &D_L02_0017C228[hero.attack_record];
             if (hero.state.current == HERO_STATE_CROUCH_SWING &&
                 scale_game_frames(0x1E) < hero.state_timer && hero.anim_changing == 0 &&
@@ -510,9 +510,9 @@ s32 process_hero_item_action_input(void) {
         if (hero.air_frames.s != 0) {
             window = scale_game_frames(8);
         }
-        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
-            hero.state.control_mode == 4 || hero.state.control_mode == 2 ||
-            hero.state.control_mode == 0xF || hero.state.control_mode == 5 ||
+        if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
+            hero.state.control_mode == HERO_MODE_JUMP || hero.state.control_mode == HERO_MODE_FALL ||
+            hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == HERO_MODE_LAND ||
             hero.state.current == 0x1E) {
             if (pad_pressed_within(buttons, window, NULL) != 0 ||
                 ((controller_state.held & buttons) &&
@@ -549,19 +549,19 @@ s32 process_hero_item_action_input(void) {
         break;
 
     case HERO_ITEM_BUFFERED_ACTIVATE:
-        if ((hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
-             hero.state.control_mode == 2 || hero.state.control_mode == 4 ||
-             hero.state.control_mode == 5) &&
+        if ((hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
+             hero.state.control_mode == HERO_MODE_FALL || hero.state.control_mode == HERO_MODE_JUMP ||
+             hero.state.control_mode == HERO_MODE_LAND) &&
             pad_pressed_within(buttons, scale_game_frames(8), NULL) != 0) {
             open_vendor_menu(0);
         }
         break;
 
     case HERO_ITEM_HOLD_TO_FIRE:
-        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
-            hero.state.control_mode == 0xC || hero.state.control_mode == 2 ||
-            hero.state.control_mode == 4 || hero.state.control_mode == 5 ||
-            hero.state.control_mode == 0xF || hero.state.current == 0x1E) {
+        if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
+            hero.state.control_mode == HERO_MODE_CROUCH || hero.state.control_mode == HERO_MODE_FALL ||
+            hero.state.control_mode == HERO_MODE_JUMP || hero.state.control_mode == HERO_MODE_LAND ||
+            hero.state.control_mode == HERO_MODE_GRIND || hero.state.current == 0x1E) {
             if (hero.items[0].moby != NULL) {
                 held_gadget_voice_state = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
                 if ((((controller_state.held & buttons) &&
@@ -586,10 +586,10 @@ s32 process_hero_item_action_input(void) {
     case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
     case HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
     case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_EMPTY_AMMO_VOICE:
-        if ((hero.state.control_mode == 0 && hero.state.current != 0x1E) ||
-            hero.state.control_mode == 1 || hero.state.control_mode == 0xC ||
-            hero.state.control_mode == 5 || hero.state.control_mode == 0xF ||
-            (hero.state.control_mode == 4 && hero.unk4AC != 0) ||
+        if ((hero.state.control_mode == HERO_MODE_IDLE && hero.state.current != 0x1E) ||
+            hero.state.control_mode == HERO_MODE_RUN || hero.state.control_mode == HERO_MODE_CROUCH ||
+            hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_GRIND ||
+            (hero.state.control_mode == HERO_MODE_JUMP && hero.unk4AC != 0) ||
             (hero.state.current == 0x23 && hero.anim_frame > 25.0f)) {
             if (hero.item_anim_active == 0) {
                 s32 hold;
@@ -603,9 +603,9 @@ s32 process_hero_item_action_input(void) {
                     ((controller_state.held & 0x20) && scale_game_frames(8) < hold &&
                      hold < scale_game_frames(0x11))) {
                     if (get_ammo(-1) != 0) {
-                        if (hero.state.control_mode == 0xC || hero.state.control_mode == 0 ||
+                        if (hero.state.control_mode == HERO_MODE_CROUCH || hero.state.control_mode == HERO_MODE_IDLE ||
                             hero.state.current == HERO_STATE_STOP ||
-                            (hero.state.control_mode == 1 && hero.stick_magnitude < 0.7f)) {
+                            (hero.state.control_mode == HERO_MODE_RUN && hero.stick_magnitude < 0.7f)) {
                             hero_set_state(0x23, 1);
                         } else {
                             start_equipped_item_animation();
@@ -619,8 +619,8 @@ s32 process_hero_item_action_input(void) {
         break;
 
     case HERO_ITEM_BUFFERED_ACTIVATE_WITH_VOICE:
-        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
-            (hero.state.control_mode == 4 && hero.rail_land_frames != 0)) {
+        if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
+            (hero.state.control_mode == HERO_MODE_JUMP && hero.rail_land_frames != 0)) {
             if (hero.state.current != HERO_STATE_LOOK) {
                 s32 limit;
                 s32 hold;
@@ -652,9 +652,9 @@ s32 process_hero_item_action_input(void) {
             (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.pack_disabled == 0) {
             fast_dec_timer(&hero_button_8_double_press_countdown_gp);
             if (hero_button_8_double_press_countdown_gp != 0) {
-                if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
-                    hero.state.control_mode == 0xC ||
-                    ((hero.state.control_mode == 2 || hero.state.control_mode == 4) &&
+                if (hero.state.control_mode == HERO_MODE_IDLE || hero.state.control_mode == HERO_MODE_RUN ||
+                    hero.state.control_mode == HERO_MODE_CROUCH ||
+                    ((hero.state.control_mode == HERO_MODE_FALL || hero.state.control_mode == HERO_MODE_JUMP) &&
                      hero.grounded_frames != 0)) {
                     if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);

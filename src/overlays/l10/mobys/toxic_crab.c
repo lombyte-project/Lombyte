@@ -1125,7 +1125,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     fast_dec_timer_s16(&moby_data->hit_reaction_suppression_timer_frames);
     if ((unsigned int)A >= 2 && moby->state != TOXIC_CRAB_STATE_DEATH_EFFECTS &&
         moby->state != TOXIC_CRAB_STATE_FALL_TO_DEATH) {
-        if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 &&
+        if (current_level_index == LEVEL_ORXON && hit_record != 0 && hit_record->f20 != 0 &&
             hit_record->f20->oclass == 0x31A) {
             if (moby_data->target_range_boost_timer_frames != 0 && item_unlocked[0x11] == 0) {
                 item_unlocked[0x11] = 1;

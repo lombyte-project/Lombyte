@@ -297,7 +297,7 @@ void update_hero_smoothing_parameters(void) {
         hero.capsule_radius_target = 0.45f;
         break;
     }
-    if (hero.state.control_mode == 4) {
+    if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
             hero.capsule_bottom_target = hero.unk434;
     } else if (hero.state.current == HERO_STATE_FALL) {
@@ -310,7 +310,7 @@ void update_hero_smoothing_parameters(void) {
     } else if (hero.state.current == HERO_STATE_SINK) {
         hero.capsule_radius_target = 0.8f;
     }
-    if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE || hero.state.control_mode == HERO_MODE_SWIM ||
         hero.base_condition ||
         vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) >
             hero.capsule_radius * 0.5f) {

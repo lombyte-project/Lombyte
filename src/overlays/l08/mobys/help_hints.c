@@ -41,7 +41,7 @@ void help_hints_update(struct Moby *moby) {
     switch (event_trigger_data->state) {
     case VENDOR_EVENT_WAIT_FOR_ARMING:
         if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->third) &&
-            hero.state.control_mode == 15)
+            hero.state.control_mode == HERO_MODE_GRIND)
             event_trigger_data->state = VENDOR_EVENT_ARMED;
         break;
     case VENDOR_EVENT_ARMED:
@@ -135,6 +135,6 @@ sample_volume:
     volume[2] = -1.0f;
     if (fast_vec_dot((char *)&hero + 0x290, volume) < 0.1f)
         help_records[112].count = -1;
-    if (alternate_item_available[47] == 0 && hero.state.control_mode == 15)
+    if (alternate_item_available[47] == 0 && hero.state.control_mode == HERO_MODE_GRIND)
         alternate_item_available[47] = 1;
 }

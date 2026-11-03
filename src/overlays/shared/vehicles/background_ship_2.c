@@ -231,7 +231,7 @@ void background_ship_2_update(char *moby) {
         int invalid_index;
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        if (current_level_index == 10) {
+        if (current_level_index == LEVEL_ORXON) {
             MOBY(moby)->scale = MOBY(moby)->scale * 0.5f;
         }
         invalid_index = -1;
@@ -259,7 +259,7 @@ void background_ship_2_update(char *moby) {
         break;
     }
     case BACKGROUND_SHIP_2_FOLLOW_PATH:
-        if (*(unsigned char *)D_001413F4 == 1 && current_level_index == 10) {
+        if (*(unsigned char *)D_001413F4 == 1 && current_level_index == LEVEL_ORXON) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -268,7 +268,7 @@ void background_ship_2_update(char *moby) {
             moby_data->unk6C = allocate_voice_for_target_entry(1, 4, (int)moby);
         }
         path_travel_distance = background_ship_2_path_travel_speed_gp * frame_time;
-        if (current_level_index == 10) {
+        if (current_level_index == LEVEL_ORXON) {
             path_travel_distance = path_travel_distance * 0.25f;
         }
         moby_data->path_progress =
@@ -299,7 +299,7 @@ void background_ship_2_update(char *moby) {
             MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
         }
         if (MOBY(moby)->visible != 0) {
-            if (current_level_index != 10) {
+            if (current_level_index != LEVEL_ORXON) {
                 spawn_background_ship_2_joint_sparks(moby, tv);
             } else {
                 spawn_background_ship_2_level_10_joint_sparks(moby, tv);
@@ -313,7 +313,7 @@ void background_ship_2_update(char *moby) {
         }
         break;
     case BACKGROUND_SHIP_2_REMOVE:
-        if (current_level_index == 2) {
+        if (current_level_index == LEVEL_ARIDIA) {
             level_2_ship_removal_count = level_2_ship_removal_count + 1;
             if (level_2_ship_removal_count >= 3) {
                 unsigned char *p = item_unlocked;
@@ -324,7 +324,7 @@ void background_ship_2_update(char *moby) {
                 }
             }
         }
-        if (current_level_index == 9) {
+        if (current_level_index == LEVEL_GASPAR) {
             if (*(int *)camera_secondary_mode == 0x32) {
                 level_9_ship_removal_count = level_9_ship_removal_count + 1;
                 if (level_9_ship_removal_count >= 5) {

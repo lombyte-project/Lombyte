@@ -867,7 +867,7 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
     *(short *)((char *)bomb_launch_data + 0x6a) = scale_game_frames(30);
     moby[0x20] = 1;
     qcopy(bomb_launch_data, velocity);
-    if (hero.state.control_mode == 15) {
+    if (hero.state.control_mode == HERO_MODE_GRIND) {
         fast_vec_add(bomb_launch_data, bomb_launch_data, &hero.motion.displacement);
     } else if (hero.ground_moby != 0 && FUN_002141f8_cf((unsigned char *)hero.ground_moby) != 0) {
         fast_vec_add(bomb_launch_data, bomb_launch_data, &hero.motion.displacement);
@@ -965,7 +965,7 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
         fast_vec_add(&position, &position, &hero.motion.pos);
         position.f[2] += 0.49082f;
         qcopy(&velocity, &v->vel);
-        if (hero.state.control_mode == 15)
+        if (hero.state.control_mode == HERO_MODE_GRIND)
             fast_vec_add(&velocity, &velocity, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0_2ad410((M910 *)hero.ground_moby) && mode)
             fast_vec_add(&velocity, &velocity, &hero.motion.displacement);

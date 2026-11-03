@@ -155,10 +155,10 @@ s32 process_hero_hit_response(s32 apply_hurt_response) {
     f32             horizontal_hurt_impulse_scale, vertical_hurt_impulse_scale, hurt_impulse_scale;
     OvlVec4         hurt_impulse;
 
-    if (G.state.control_mode == 0x14) {
+    if (G.state.control_mode == HERO_MODE_DYING) {
         return 0;
     }
-    if (G.state.control_mode == 7) {
+    if (G.state.control_mode == HERO_MODE_HURT) {
         return 0;
     }
     if (G.state.current == 0x32) {
@@ -185,7 +185,7 @@ s32 process_hero_hit_response(s32 apply_hurt_response) {
     D_0013DF88[current_level_index]++;
     G.damage_source_moby = (struct Moby *)hero_hit_entry->target;
     D_0015EEA8++;
-    if (G.state.control_mode == 0xF) {
+    if (G.state.control_mode == HERO_MODE_GRIND) {
         G.unk5BE = 1;
         return 0;
     }
@@ -272,7 +272,7 @@ void update_hero_smoothed_parameters(void) {
         hero.capsule_radius_target = 0.45f;
         break;
     }
-    if (hero.state.control_mode == 4) {
+    if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
             hero.capsule_bottom_target = hero.unk434;
     } else if (hero.state.current == HERO_STATE_FALL) {
@@ -282,7 +282,7 @@ void update_hero_smoothed_parameters(void) {
     } else if (hero.state.current == HERO_STATE_SINK) {
         hero.capsule_radius_target = 0.8f;
     }
-    if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 ||
+    if (!hero.wall_hit || hero.state.prev_control_mode == HERO_MODE_WATER_SURFACE || hero.state.control_mode == HERO_MODE_SWIM ||
         hero.base_condition ||
         vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) >
             hero.capsule_radius * 0.5f) {
@@ -455,7 +455,7 @@ void update_hero_ground_contact(void) {
     if (hero_lui.gravity_mode)
         k = 1;
     ground_ray_start_offset = hero_lui.capsule_radius * 2.2f;
-    if (hero_lui.state.control_mode == 2) {
+    if (hero_lui.state.control_mode == HERO_MODE_FALL) {
         ground_ray_start_offset = hero_lui.capsule_radius * 2.9f;
     }
     hero_get_collision_ray_endpoints(
@@ -479,7 +479,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
         ground_sound_class = coll_sound_class();
-        if (current_level_index == 1 || current_level_index == 0x12) {
+        if (current_level_index == LEVEL_NOVALIS || current_level_index == LEVEL_VELDIN2) {
             ground_sound_class = 3;
         }
         hero_lui.ground_sound_class = ground_sound_class;
@@ -560,9 +560,9 @@ d1:
     hero_lui.unk2C8.i[1] = 0;
     hero_lui.unk2C0.i[0] = 0;
     hero_lui.unk2C0.i[1] = 0;
-    if (hero_lui.state.control_mode == 0xF || hero_lui.state.control_mode == 0x15 ||
-        hero_lui.state.control_mode == 6 || hero_lui.state.control_mode == 4 ||
-        hero_lui.state.control_mode == 5 || hero_lui.state.control_mode == 3) {
+    if (hero_lui.state.control_mode == HERO_MODE_GRIND || hero_lui.state.control_mode == 0x15 ||
+        hero_lui.state.control_mode == HERO_MODE_ATTACK || hero_lui.state.control_mode == HERO_MODE_JUMP ||
+        hero_lui.state.control_mode == HERO_MODE_LAND || hero_lui.state.control_mode == HERO_MODE_LEDGE) {
         return;
     }
     if (!(hero_lui.ground_distance < 0.25f)) {
@@ -760,7 +760,7 @@ void update_hero_airborne_planar_velocity(void) {
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         velocity_adjustment_step = ED70 * 20.0f;
         if (hero.target_speed < hero_airborne_deceleration_speed_reference[0] * ED6C * 0.2f) {
-            if (hero.state.control_mode == 2) {
+            if (hero.state.control_mode == HERO_MODE_FALL) {
                 speed_decay_step = hero.stickless_decel;
                 speed = vector_length_xy(&hero.motion.velocity);
                 approach_value_2b438(0.0f, speed_decay_step, &speed);

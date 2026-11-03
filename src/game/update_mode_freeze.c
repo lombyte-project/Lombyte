@@ -51,16 +51,6 @@ void update_mode_freeze(void) {
         FREEZE_CHOICE_CANCEL_EXIT = 3
     };
     enum {
-        MODE_FREEZE_AWAIT_CROSS_RESUME = 2,
-        MODE_FREEZE_AWAIT_TRIANGLE_RESUME = 3,
-        MODE_FREEZE_BOOT_FLAGS_RELOAD_OR_RESUME = 4,
-        MODE_FREEZE_TRIANGLE_CLEAR_FLAGS_RESUME = 5,
-        MODE_FREEZE_BOOT_AWAIT_CLEAR_FLAGS_RESUME = 9,
-        MODE_FREEZE_FLAG_GATED_TRIANGLE_RESUME = 12,
-        MODE_FREEZE_RESUME_WITH_ACTION_LIST = 16,
-        MODE_FREEZE_BOOT_GATED_CROSS_RELOAD = 19
-    };
-    enum {
         GAME_MODE_CONTINUE = 0,
         VIDEO_MODE_REQUEST_PAL_DISABLED = 0,
         VIDEO_MODE_REQUEST_PAL_ENABLED = 1
@@ -84,7 +74,7 @@ void update_mode_freeze(void) {
         if (scale_game_frames(0x78) < state->unk20) {
             if (controller_state.pressed & PAD_CROSS) {
                 game_mode = GAME_MODE_CONTINUE;
-                if (current_level_index == 1) {
+                if (current_level_index == LEVEL_NOVALIS) {
                     memcard_save_data(0, -1);
                 }
             }
@@ -216,9 +206,9 @@ void update_mode_freeze(void) {
                     }
                     decrement_resource_counter();
                     if (scale_game_frames(0x1068) < hero.control_mode_timer) {
-                        if (current_level_index == 5) {
+                        if (current_level_index == LEVEL_RILGAR) {
                             D_0015EE38++;
-                        } else if (current_level_index == 0x10) {
+                        } else if (current_level_index == LEVEL_KALEBO3) {
                             D_0015EE3C++;
                         }
                     }
@@ -243,8 +233,8 @@ void update_mode_freeze(void) {
                 freeze.unk24--;
             }
         }
-        switch (mode_freeze_state) {
-        case MODE_FREEZE_AWAIT_CROSS_RESUME:
+        switch (card_state) {
+        case CS_WARNING:
             if (freeze.timer == 0) {
                 if (controller_state.pressed & PAD_CROSS) {
                     mode_freeze_flags &= ~1;
@@ -253,7 +243,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 6:
+        case CS_PROMPT_FORMAT:
             if (controller_state.pressed & PAD_CIRCLE) {
                 mode_freeze_flags |= 8;
             } else if (controller_state.pressed & PAD_TRIANGLE) {
@@ -266,7 +256,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 13:
+        case CS_PROMPT_CREATE_SAVE:
             if (controller_state.pressed & PAD_CIRCLE) {
                 mode_freeze_flags |= 0x10;
             } else if (controller_state.pressed & PAD_TRIANGLE) {
@@ -279,13 +269,13 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 17:
+        case CS_FORMAT_FAILED:
 
-        case 18:
+        case CS_CREATE_FAILED:
 
-        case 20:
+        case CS_LOAD_FAILED:
 
-        case 21:
+        case CS_SAVE_FAILED:
             if (controller_state.pressed & PAD_CROSS) {
                 mode_freeze_flags = mode_freeze_flags ^ 0x40;
                 mode_freeze_flags = mode_freeze_flags & (~2);
@@ -294,19 +284,19 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case MODE_FREEZE_RESUME_WITH_ACTION_LIST:
+        case CS_NEWCARD:
             game_mode = freeze.return_game_mode;
             pause_current_action_list[0] = freeze.context;
             break;
 
-        case MODE_FREEZE_FLAG_GATED_TRIANGLE_RESUME:
+        case CS_NOSAVE:
             if (mode_freeze_flags & 2) {
                 break;
             }
 
-        case MODE_FREEZE_AWAIT_TRIANGLE_RESUME:
+        case CS_NOCARD:
 
-        case MODE_FREEZE_TRIANGLE_CLEAR_FLAGS_RESUME:
+        case CS_UNFORMATTED:
             if (controller_state.pressed & PAD_TRIANGLE) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
@@ -314,7 +304,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case MODE_FREEZE_BOOT_GATED_CROSS_RELOAD:
+        case CS_NO_ROOM:
             if ((boot_level_active != 0) && (mode_freeze_flags & 2)) {
                 if (controller_state.pressed & PAD_CROSS) {
                     load_and_initialize_level_chunk();
@@ -335,9 +325,9 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 23:
+        case CS_PROMPT_BEGIN_UNFORMATTED:
 
-        case 24:
+        case CS_PROMPT_BEGIN_NOSAVE:
             if (controller_state.pressed & PAD_CROSS) {
                 load_and_initialize_level_chunk();
                 mode_freeze_flags = mode_freeze_flags & (~2);
@@ -351,7 +341,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case MODE_FREEZE_BOOT_FLAGS_RELOAD_OR_RESUME:
+        case CS_WAIT_FOR_CARD:
             if (boot_level_active != 0) {
                 if (mode_freeze_flags & 2) {
                     struct PadState *pad = &controller_state;
@@ -386,7 +376,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case MODE_FREEZE_BOOT_AWAIT_CLEAR_FLAGS_RESUME:
+        case CS_FORMATTED:
             if (boot_level_active != 0) {
                 if (!(mode_freeze_flags & 6)) {
                     game_mode = freeze.return_game_mode;

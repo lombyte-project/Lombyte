@@ -334,7 +334,7 @@ void update_resident_gameplay_state(void) {
             refresh_moby_spatial_bounds(playback_object);
             if (playback_object->class_id == 0) {
                 if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU) {
-                    if (current_level_index == 10 && item_available[6] == 0) {
+                    if (current_level_index == LEVEL_ORXON && item_available[6] == 0) {
                         playback_object->unk7F = 0;
                     } else if (render_sequence.time <= scale_game_frames(0x3E)) {
                         playback_object->unk7F = 0x18;
@@ -342,7 +342,7 @@ void update_resident_gameplay_state(void) {
                         playback_object->unk7F = 0;
                     }
                 } else if (scale_game_frames(360) < render_sequence.time) {
-                    if (current_level_index == 10 && item_available[6] == 0) {
+                    if (current_level_index == LEVEL_ORXON && item_available[6] == 0) {
                         playback_object->unk7F = 0;
                     } else {
                         playback_object->unk7F = 0x18;
@@ -371,8 +371,8 @@ void update_resident_gameplay_state(void) {
             }
             if (playback_object->class_id == 0) {
                 noop_callback_e(playback_object);
-                if ((current_level_index == 10 && item_available[6] != 0) ||
-                    current_level_index == 13) {
+                if ((current_level_index == LEVEL_ORXON && item_available[6] != 0) ||
+                    current_level_index == LEVEL_OLTANIS_ORBIT) {
                     if (level_render_state.attachment == 0) {
                         level_render_state.attachment = create_moby(0x509);
                         level_render_state.attachment->selected_index = 0x40;

@@ -7,7 +7,7 @@ void save_card_state_format_failed(void) {
     if (mode_freeze_flags & 0x40) {
         return;
     }
-    mode_freeze_state = 3;
+    card_state = CS_NOCARD;
 }
 
 extern __typeof__(save_card_state_format_failed) func_00208E68

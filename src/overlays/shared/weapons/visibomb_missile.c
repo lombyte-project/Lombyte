@@ -849,11 +849,11 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     force_help_message(6, 0);
     missile_vars->f10--;
     if (!(-scale_game_frames(100) < missile_vars->f10) || hero.state.current == 0x16 ||
-        hero.state.current == 0x3D || hero.state.current == 0x72 || hero.state.control_mode == 2 ||
-        hero.state.control_mode == 4 || hero.state.control_mode == 3 ||
-        hero.state.control_mode > 12 || hero.state.control_mode == 7 ||
+        hero.state.current == 0x3D || hero.state.current == 0x72 || hero.state.control_mode == HERO_MODE_FALL ||
+        hero.state.control_mode == HERO_MODE_JUMP || hero.state.control_mode == HERO_MODE_LEDGE ||
+        hero.state.control_mode > 12 || hero.state.control_mode == HERO_MODE_HURT ||
         hero.state.control_mode == 10 || hero.state.control_mode == 16 ||
-        hero.state.control_mode == 5 || hero.state.current == 0x65 || hero.grounded_frames == 0 ||
+        hero.state.control_mode == HERO_MODE_LAND || hero.state.current == 0x65 || hero.grounded_frames == 0 ||
         (((Tgt *)hero.ground_moby) != 0 &&
          (((Tgt *)hero.ground_moby)->hA6 == 0x13E || ((Tgt *)hero.ground_moby)->hA6 == 0x46F))) {
         func_L00_002B6E10_2b6140(missile_moby, missile_vars);

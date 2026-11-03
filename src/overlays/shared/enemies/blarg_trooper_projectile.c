@@ -203,7 +203,7 @@ void blarg_trooper_projectile_update(struct Moby *moby) {
     range = 64.0f;
     if (v->owner->oclass == 0xFF)
         range = 128.0f;
-    if (current_level_index == 12)
+    if (current_level_index == LEVEL_HOVEN)
         range = 100.0f;
     hero_distance = fast_vec_dist(&moby->pos, &hero.motion.pos);
     qcopy(&previous_position, &moby->pos);

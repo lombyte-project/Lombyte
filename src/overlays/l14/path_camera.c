@@ -307,7 +307,7 @@ int check_path_camera_priority(char *camera, char *control_mode_gate_object) {
     if (*(unsigned char *)(path_camera_priority_preset + 0x38) != 0)
         return -1;
     if (control_mode_gate_object != 0 && *(short *)(control_mode_gate_object + 0x7E) == 0) {
-        if (hero.state.control_mode != 15)
+        if (hero.state.control_mode != HERO_MODE_GRIND)
             return 0;
     }
     if (check_descriptor_hero_trigger(camera) == 0)

@@ -1213,7 +1213,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             } else {
                 qcopy(position_and_displacement_scratch, boss_data->f70);
             }
-            if (hero.state.control_mode == 0xF) {
+            if (hero.state.control_mode == HERO_MODE_GRIND) {
                 qcopy(position_displacement_direction_and_rotation_scratch,
                       D_L18_001600EC + boss_data->arena_center_node_index * 0x80 + 0x30);
                 fast_vec_sub(position_and_displacement_scratch,
@@ -1481,11 +1481,11 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         fire = 0;
         if (fast_dec_timer(&boss_data->action_frame_counter) != 0 &&
-            (hero.state.control_mode != 0xF ||
+            (hero.state.control_mode != HERO_MODE_GRIND ||
              fast_dec_timer(&boss_data->secondary_action_timer_frames) != 0)) {
             fire = 1;
         }
-        if (hero.state.control_mode == 0xF) {
+        if (hero.state.control_mode == HERO_MODE_GRIND) {
             int *list = ((int *)hero.rail_spline);
 
             if (vector_distance_xy(hero.motion.pos.f, (char *)list + *list * 16) < 3.0f) {
@@ -1928,7 +1928,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     step = step * 3.0f;
                 }
             }
-            if (hero.state.control_mode == 0xF) {
+            if (hero.state.control_mode == HERO_MODE_GRIND) {
                 *(float *)(boss_data + 0x390) = *(float *)(boss_data + 0x390) + step;
             } else {
                 *(float *)(boss_data + 0x394) = *(float *)(boss_data + 0x394) + step;
@@ -2307,7 +2307,7 @@ void update_drek_boss_arena_circling_movement(struct Moby *moby) {
                            &((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center) >
         drek_boss_default_circling_radius_gp + 1.0f) {
         speed = 10.0f;
-    } else if (hero.state.control_mode != 0xF) {
+    } else if (hero.state.control_mode != HERO_MODE_GRIND) {
         near = drek_boss_circling_base_near_hero_distance_gp;
         far = drek_boss_circling_base_far_hero_distance_gp;
         slow = drek_boss_circling_default_far_hero_speed_gp;

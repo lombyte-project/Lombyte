@@ -69,14 +69,14 @@ void giant_clank_pad_update(struct Moby *moby) {
             if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 try_set_help_message(4, 0x3aa4);
             } else if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
-                       current_level_index != 0x12) {
+                       current_level_index != LEVEL_VELDIN2) {
                 try_set_help_message(4, 0x3aa5);
             }
             if (!(((u32)pad_pressed_lui) & 0x10))
                 return;
             if (D_L15_0015F594 != 4)
                 return;
-            if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && current_level_index == 0xf) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && current_level_index == LEVEL_QUARTU) {
                 pad = l15_moby_array;
                 pad += *(int *)((u8 *)linked + 0x60);
                 pad->flags |= 1;
@@ -84,7 +84,7 @@ void giant_clank_pad_update(struct Moby *moby) {
                 pad->visible = 0;
                 restore_saved_hero_moby_and_clear_vehicle_mode();
                 set_moby_animation(pad, 0, 0);
-                if (current_level_index != 0xf)
+                if (current_level_index != LEVEL_QUARTU)
                     return;
                 start_scene(9);
                 request_music_track(0, 5);
@@ -101,14 +101,14 @@ void giant_clank_pad_update(struct Moby *moby) {
             pad->visible = 1;
             pad->flags &= ~1;
             enter_hero_vehicle_mode(2, 0x5a, pad);
-            if (current_level_index == 0xf) {
+            if (current_level_index == LEVEL_QUARTU) {
                 start_scene(8);
                 *(u128 *)hero.saved_pos_rot = *(u128 *)&hero.motion.pos;
                 *(u128 *)(hero.saved_pos_rot + 16) = *(u128 *)&hero.motion.rot;
                 request_music_track(2, 4);
                 return;
             }
-            if (current_level_index != 0x12)
+            if (current_level_index != LEVEL_VELDIN2)
                 return;
             start_scene(6);
             *(u128 *)hero.saved_pos_rot = *(u128 *)&hero.motion.pos;

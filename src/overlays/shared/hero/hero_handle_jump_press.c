@@ -61,7 +61,7 @@ s32 pick_idle_fidget(s32 *index) {
         if (fidget_candidate->use_state_40 != 0 && hero.ground_moby != 0)
             continue;
         if (i == 3) {
-            if (current_level_index != 12)
+            if (current_level_index != LEVEL_HOVEN)
                 continue;
             if (hero_slot_item_id(0) == 23)
                 continue;
@@ -73,7 +73,7 @@ s32 pick_idle_fidget(s32 *index) {
                 continue;
         }
         if (i == 4) {
-            if (hero.state.prev_control_mode != 1)
+            if (hero.state.prev_control_mode != HERO_MODE_RUN)
                 continue;
             if (scale_game_frames(50) < hero.state_timer)
                 continue;

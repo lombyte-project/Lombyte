@@ -87,7 +87,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         if (*(short *)(proximity_state_data + 0xC) != 0) {
             int help_message_accepted = try_set_help_message(2, 0x53E4) != 0;
             if ((pad_pressed_words[0] & 0x10) && help_message_accepted) {
-                if (current_level_index == 10 && hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
+                if (current_level_index == LEVEL_ORXON && hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
                     MOBY(moby)->state = PROXIMITY_MOBY_STATE_FOLLOWUP_SCENES;
                     MOBY(moby)->flags |= 0x41;
                     start_scene(9);

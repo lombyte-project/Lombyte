@@ -11,7 +11,7 @@ void update_level14_cutscene_effects(void) __asm__("FUN_L14_002460f8");
 
 void update_level14_cutscene_effects(void) {
     void *moby;
-    if (current_level_index != 14 || D_L14_0016CF60.scene != 0) {
+    if (current_level_index != LEVEL_OLTANIS || D_L14_0016CF60.scene != 0) {
         return;
     }
     moby = D_L14_0016CF60.scene_mobys[1];

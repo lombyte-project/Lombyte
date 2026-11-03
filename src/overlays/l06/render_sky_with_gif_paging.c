@@ -12,7 +12,7 @@ void render_sky_with_gif_paging(void) __asm__("FUN_L06_0024d218");
 
 void render_sky_with_gif_paging(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0x6) {
+    if (current_level_index == LEVEL_NEBULA_G34) {
         draw_three_sky_shells_with_three_particle_types();
     } else {
         update_sky_shells_static();

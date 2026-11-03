@@ -11,7 +11,7 @@ void render_sky_shells_with_gif_paging(void) __asm__("FUN_L14_00245940");
 
 void render_sky_shells_with_gif_paging(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0xe) {
+    if (current_level_index == LEVEL_OLTANIS) {
         draw_three_sky_shells_with_modulo_50000_and_100000_rotation();
     } else {
         update_sky_shells_static();

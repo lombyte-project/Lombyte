@@ -11,7 +11,7 @@ void draw_sky_shells_with_gif_paging(void) __asm__("FUN_L15_0022dad0");
 
 void draw_sky_shells_with_gif_paging(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0xf) {
+    if (current_level_index == LEVEL_QUARTU) {
         draw_two_sky_shells_with_particles();
     } else {
         update_sky_shells_static();

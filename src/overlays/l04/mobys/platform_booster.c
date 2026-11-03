@@ -76,7 +76,7 @@ void platform_booster_update(struct Moby *moby) {
         } else if (lv->travel != 1.0f ||
                    (door_vars->target != -1 && door_vars->locked == 0 &&
                     ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9 ||
-                     hero.state.control_mode == 12) &&
+                     hero.state.control_mode == HERO_MODE_CROUCH) &&
                     hero.ground_moby == &((struct Moby *)moby_array)[door_vars->target])) {
             moby->state = PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION;
         }

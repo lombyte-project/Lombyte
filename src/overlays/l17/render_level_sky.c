@@ -12,7 +12,7 @@ void render_level_sky(void) __asm__("FUN_L17_00238c50");
 
 void render_level_sky(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0x11) {
+    if (current_level_index == LEVEL_VELDIN_ORBIT) {
         render_three_shell_particle_sky();
     } else {
         update_sky_shells_static();

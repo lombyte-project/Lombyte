@@ -561,7 +561,7 @@ void devastator_update(struct Moby *devastator_moby) {
                                          yaw0,
                                          pitch0);
             }
-            if (hero.state.control_mode == 0 ||
+            if (hero.state.control_mode == HERO_MODE_IDLE ||
                 (hero.state.current == 2 && hero.stick_magnitude < 0.7f)) {
                 set_hero_animation(0x36, 1, (float)scale_game_frames(10));
             } else {

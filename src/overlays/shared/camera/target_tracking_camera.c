@@ -173,7 +173,7 @@ void update_target_tracking_camera_position(char *camera_object) {
         target, frame_time * 8.0f, (float *)(*(char **)((char *)l00_camera.unk180 + 0x70) + 0xa0));
     FUN_L00_0025b868(
         rate, frame_time * 4.0f, (float *)(*(char **)((char *)l00_camera.unk180 + 0x70) + 0xb0));
-    if (current_level_index == 14 && hero.state.current == 0x2c)
+    if (current_level_index == LEVEL_OLTANIS && hero.state.current == 0x2c)
         FUN_L00_0025b868(rate + 0.25f,
                          frame_time * 8.0f,
                          (float *)(*(char **)((char *)l00_camera.unk180 + 0x70) + 0x8c));
@@ -183,7 +183,7 @@ void update_target_tracking_camera_position(char *camera_object) {
                          (float *)(*(char **)((char *)l00_camera.unk180 + 0x70) + 0x8c));
 
     if (hero.state.current == 0x2c) {
-        if ((current_level_index != 14 && current_level_index != 7 && current_level_index != 9) ||
+        if ((current_level_index != LEVEL_OLTANIS && current_level_index != LEVEL_UMBRIS && current_level_index != LEVEL_GASPAR) ||
             (hero.swing_target_moby != 0 &&
              *(unsigned char *)((char *)hero.swing_target_moby + 0x21) == 255)) {
             *angle =

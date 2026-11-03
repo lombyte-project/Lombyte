@@ -11,7 +11,7 @@ void draw_paged_sky_shells(void) __asm__("FUN_L13_002497d8");
 
 void draw_paged_sky_shells(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0xd) {
+    if (current_level_index == LEVEL_OLTANIS_ORBIT) {
         draw_three_sky_shells_with_particles();
     } else {
         update_sky_shells_static();

@@ -100,7 +100,7 @@ void bolt_thief_mine_update(struct Moby *moby) {
         }
         break;
     case FLOAT_MINE_ACTIVE: {
-        if (current_level_index == 16) {
+        if (current_level_index == LEVEL_KALEBO3) {
             if (floating_mine_private_vars->rest_z < 0.0f)
                 floating_mine_private_vars->rest_z =
                     probe_ground_height(0.5f, &moby->pos, 0) + 0.7f;
@@ -110,7 +110,7 @@ void bolt_thief_mine_update(struct Moby *moby) {
                           frame_scale_sq * 0.03f,
                           frame_scale_sq * 0.3f,
                           0.0f);
-            if ((char *)moby > floating_mine_respawn_address_limit && hero.state.control_mode != 15)
+            if ((char *)moby > floating_mine_respawn_address_limit && hero.state.control_mode != HERO_MODE_GRIND)
                 goto remove;
         }
         hit = find_moby_hit(moby, 0x230000, 0);

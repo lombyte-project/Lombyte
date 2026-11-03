@@ -10,7 +10,7 @@ void save_card_state_create_save_pending(void) {
         card_state->pending_state < MEMCARD_QUERY_INFO) {
         card_state->pending_state = MEMCARD_BEGIN_CREATE_SAVE_DIRECTORY;
         card_state->pending_card = 0;
-        mode_freeze_state = 0xF;
+        card_state = CS_CREATING_SAVE;
     }
 }
 

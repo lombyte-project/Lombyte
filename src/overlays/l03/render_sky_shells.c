@@ -11,7 +11,7 @@ void render_sky_shells(void) __asm__("FUN_L03_0022c6a8");
 
 void render_sky_shells(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0x3) {
+    if (current_level_index == LEVEL_KERWAN) {
         sky_shells_rotate_two();
     } else {
         update_sky_shells_static();

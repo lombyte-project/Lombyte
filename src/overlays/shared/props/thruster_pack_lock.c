@@ -129,7 +129,7 @@ void thruster_pack_lock_update(Lock *moby) {
         if (((void *)((Hero *)(D_0013F350_r))->ground_moby) == moby && item_available[3] != 0 &&
             ((Hero *)(D_0013F350_r))->air_frames.s == 0 &&
             ((Hero *)(D_0013F350_r))->state.current == 0x22) {
-            if (current_level_index == 0xB && moby->activation_group != 0xFF) {
+            if (current_level_index == LEVEL_POKITARU && moby->activation_group != 0xFF) {
                 int group;
                 int group_index;
                 l11_thruster_pack_lock_activation_state.collected[(short)moby->uid] =
@@ -773,7 +773,7 @@ void update_moby_hit_stats_and_state(char *moby) {
         }
         *(int *)(collection_stats_base + 0x157EC) =
             *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
-        if (current_level_index == 0xB && *(char **)(hit_record + 0x20) != 0 &&
+        if (current_level_index == LEVEL_POKITARU && *(char **)(hit_record + 0x20) != 0 &&
             *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0xAC) {
             if (++level_11_class_ac_hit_count >= 3 && item_unlocked[0x12] == 0) {
                 item_unlocked[0x12] = 1;

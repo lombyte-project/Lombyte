@@ -48,7 +48,7 @@ void water_surface_update(struct Moby *moby) {
         prepare_scaled_table_with_byte_128(water_entry_plane_data, 0.6666667f);
     }
     add_draw_callback(FUN_L08_002da0d0, moby);
-    if (current_level_index != 8)
+    if (current_level_index != LEVEL_BATALIA)
         return;
     if (!(hero.motion.pos.f[2] < water_entry_plane_data[2]))
         return;

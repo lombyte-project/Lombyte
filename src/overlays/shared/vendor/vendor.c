@@ -379,8 +379,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         q->auxiliary_moby->auxiliary_scale =
             q->effect_scale_factor * q->auxiliary_moby->p24->auxiliary_scale_multiplier * 2.5f;
         update_entity(q->auxiliary_moby);
-        if (hero.state.control_mode != 0 && hero.state.current != 3 &&
-            hero.state.control_mode != 1) {
+        if (hero.state.control_mode != HERO_MODE_IDLE && hero.state.current != 3 &&
+            hero.state.control_mode != HERO_MODE_RUN) {
             interaction_allowed = 0;
             help_message_allowed = 0;
         }

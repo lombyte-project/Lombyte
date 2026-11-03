@@ -11,7 +11,7 @@ void render_sky_shells(void) __asm__("FUN_L08_00248148");
 
 void render_sky_shells(void) {
     setup_sky_gif_paging();
-    if (current_level_index == 0x8) {
+    if (current_level_index == LEVEL_BATALIA) {
         draw_sky_shells_with_modulo_40000_rotation();
     } else {
         update_sky_shells_static();

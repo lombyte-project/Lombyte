@@ -134,7 +134,7 @@ void rocket_update(struct Moby *moby) {
             moby->state = ROCKET_STATE_DETONATE;
             break;
         }
-        if (current_level_index == 12 && camera_secondary_mode[0] == 50 &&
+        if (current_level_index == LEVEL_HOVEN && camera_secondary_mode[0] == 50 &&
             rocket_state->owner != 0) {
             if ((signed char)rocket_state->owner->state < 0) {
                 mark_moby_for_removal(moby);
@@ -173,7 +173,7 @@ void rocket_update(struct Moby *moby) {
             if (D_L12_001742C0_lui.moby != 0 &&
                 D_L12_001742C0_lui.moby != (int)rocket_state->owner) {
                 damage = 1;
-                if (current_level_index == 12 && camera_secondary_mode[0] == 50) {
+                if (current_level_index == LEVEL_HOVEN && camera_secondary_mode[0] == 50) {
                     damage = D_L12_00161F20 >= 16 ? 2 : 3;
                 }
                 make_hit_descriptor(&hit, moby, 0x10003, damage, rocket_state);
@@ -197,7 +197,7 @@ void rocket_update(struct Moby *moby) {
         fast_vec_sub(old_pos, &moby->pos, D_L12_00167240);
         fast_vec_normalize(old_pos, old_pos, 0.4f);
         fast_vec_add(&moby->pos, &moby->pos, old_pos);
-        if (current_level_index == 12 && camera_secondary_mode[0] == 50) {
+        if (current_level_index == LEVEL_HOVEN && camera_secondary_mode[0] == 50) {
             char *camera = D_L12_00167240 - 0x140;
             spawn_explosion(moby,
                             &D_L12_0015F580,
