@@ -474,7 +474,7 @@ void update_hero_movement_and_collision_probes(void) {
     float start[4], end[4], probe[4];
     u128  moby_rotation[4], rotation[4], combined[4];
     float distance;
-    float offset;
+    float edge_probe_scan_offset;
     int   hit;
     if (hero.tilt_disabled == 0) {
         integrate_hero_motion_with_collisions();
@@ -505,15 +505,15 @@ void update_hero_movement_and_collision_probes(void) {
             distance = 20.0f;
             hit = collision_line(start, end, 2, hero.moby, 0);
             if (!hit || (distance = fast_vec_dist(start, D_L05_00174260), distance > 3.0f)) {
-                for (offset = -0.4f; offset < 0.5f; offset += 0.1f) {
-                    transform_hero_local_offset_to_world(probe, 1.1f + offset, 0.0f, 0.0f);
+                for (edge_probe_scan_offset = -0.4f; edge_probe_scan_offset < 0.5f; edge_probe_scan_offset += 0.1f) {
+                    transform_hero_local_offset_to_world(probe, 1.1f + edge_probe_scan_offset, 0.0f, 0.0f);
                     if (!coll_sphere(hero.capsule_radius, probe, 2, 0)) {
                         hero.edge_ahead = 1;
                         if (!hit)
                             hero.edge_drop_depth = 20.0f;
                         else
                             hero.edge_drop_depth = distance;
-                        hero.edge_probe_offset = hero.capsule_radius + offset;
+                        hero.edge_probe_offset = hero.capsule_radius + edge_probe_scan_offset;
                         if (hero.edge_probe_offset < 0.0f)
                             hero.edge_probe_offset = 0.0f;
                         break;
