@@ -1092,7 +1092,10 @@ SDATA_OVERLAYS = {
 DATA_OVERLAYS = {
     "sdk/kernel/supplement_crt0": (0x130320, 0x312A0, 8),
     "sdk/graph/sce_gs_get_gparam": (0x132D40, 0x33CC0, 16),
+    "sdk/input/sce_pad2_init": (0x132DD0, 0x33D50, 4),  # pad2_initialized
+    "sdk/input/sce_pad2_check_dma": (0x132DD8, 0x33D58, 8),  # last DMA sequence words
     "sdk/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
+    "sdk/storage/cdvd/sceCdRead": (0x1313C0, 0x32340, 24),  # native_cd_read_request
     "sdk/scf/sce_scf_get_time_zone": (0x1330D0, 0x34050, 2),  # t10k_time_zone
     "sdk/scf/sce_scf_get_language": (0x1330D4, 0x34054, 1),
     "movies/display/set_pal_mode": (0x13D100, 0x3E080, 8),

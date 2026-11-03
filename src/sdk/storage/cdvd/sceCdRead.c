@@ -91,3 +91,6 @@ s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
     }
     return 1;
 }
+
+/* The read request sceCdRead sends to the CD server (sizeof above is its size). */
+struct CdReadCommand native_cd_read_request __asm__("D_001313C0") = {0};

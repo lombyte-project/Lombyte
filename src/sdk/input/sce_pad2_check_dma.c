@@ -34,3 +34,6 @@ s32 scePad2CheckDma(s32 socket_index) {
     D_00132DD8.last1 = *(s32 *)(sides[1] + 0x7C);
     return 1;
 }
+
+/* The DMA sequence words both sides showed at the last new transfer. */
+DmaState D_00132DD8 __attribute__((section(".data"))) = {0, 0};
