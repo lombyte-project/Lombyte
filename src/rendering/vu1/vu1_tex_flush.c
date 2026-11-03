@@ -3,7 +3,8 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 
-extern u8 vu1_gs_regs_tex_flush[] __asm__("D_001DEE00");
+/* A GIF tag and two A+D register writes: the 3 quadwords the DMA tag below sends. */
+extern u64 vu1_gs_regs_tex_flush[3][2] __asm__("D_001DEE00");
 void      vu1_tex_flush(void) __asm__("FUN_00233b68");
 
 void vu1_tex_flush(void) {
@@ -15,3 +16,9 @@ void vu1_tex_flush(void) {
 }
 
 extern __typeof__(vu1_tex_flush) func_00233B68 __attribute__((alias("FUN_00233b68")));
+
+u64 vu1_gs_regs_tex_flush[3][2] = {
+    {0x2000000000008001ULL, 0xEEULL}, /* GIF tag: NLOOP 1, EOP, two A+D registers */
+    {0x0000000000000001ULL, 0x3FULL}, /* TEXFLUSH */
+    {0x8000000511304000ULL, 0x06ULL}, /* TEX0_1 */
+};

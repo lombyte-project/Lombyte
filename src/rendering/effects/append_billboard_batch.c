@@ -31,7 +31,7 @@ typedef struct {
 
 #include "rnc/rendering/dma_tag.h"
 
-extern char                 billboard_quad_header[] __asm__("D_001608E0");
+extern u64                  billboard_quad_header[2] __asm__("D_001608E0");
 extern BillboardViewContext view_context __asm__("D_0018CD00");
 extern s32                  clip_transform __asm__("D_0018CE80");
 extern void                 fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
@@ -138,3 +138,9 @@ void append_billboard_batch(void) {
 extern __typeof__(append_billboard_batch) func_001F92B0 __attribute__((alias("FUN_001f92b0")));
 
 BillboardRecord billboard_records[16] = {0};
+
+/* GIF tag of each billboard quad: NLOOP 1, EOP, REGLIST, 15 registers.  Small
+   data in retail, defined below its only user, so it is reached with lui. */
+u64 billboard_quad_header[2] __attribute__((section(".sdata"), aligned(16))) = {
+    0xF400000000008001ULL, 0x0531531531531068ULL,
+};

@@ -10,7 +10,9 @@
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
-extern f32 warp_trail_widths __asm__("D_001604D0") __attribute__((sda));
+/* Warp trail width per content variant (0, 1 or 2).  Small data in retail,
+   defined ahead of the function so it reaches the table gp-relative. */
+f32 warp_trail_widths[3] __asm__("D_001604D0") __attribute__((section(".sdata"))) = {0.8f, 0.8f, 0.8f};
 
 extern s64  get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, s32, s32) __asm__("func_001F7D30");
@@ -138,7 +140,7 @@ texture_ready:
                         fast_vec_normalize(
                             position,
                             &workspace.edge_normals[vertex],
-                            progress * (&warp_trail_widths)[level_render_state.content_variant]);
+                            progress * warp_trail_widths[level_render_state.content_variant]);
                         fast_vec_add(
                             position,
                             position,
@@ -160,7 +162,7 @@ texture_ready:
                             side_position,
                             side_normal,
                             (1.0f - progress * progress) *
-                                (&warp_trail_widths)[level_render_state.content_variant]);
+                                warp_trail_widths[level_render_state.content_variant]);
                         fast_vec_add(
                             side_position,
                             side_position,

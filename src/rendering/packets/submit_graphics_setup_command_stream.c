@@ -7,9 +7,11 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/vu1_registers.h"
 
-/* GIF packets that program the GS for the NTSC and PAL video modes. */
-extern u8 ntsc_graphics_setup_packet[0x70] __asm__("D_001D7E50");
-extern u8 pal_graphics_setup_packet[0x70] __asm__("D_001D7EC0");
+/* GIF packets that program the GS for the NTSC and PAL video modes: a GIF
+   tag and six A+D register writes, the 7 quadwords the DMA tag below sends. */
+#define GRAPHICS_SETUP_PACKET_QWC 7
+extern u64 ntsc_graphics_setup_packet[GRAPHICS_SETUP_PACKET_QWC][2] __asm__("D_001D7E50");
+extern u64 pal_graphics_setup_packet[GRAPHICS_SETUP_PACKET_QWC][2] __asm__("D_001D7EC0");
 
 struct GraphicsSetupRecord {
     s32  command_count;
@@ -81,3 +83,23 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
 
 extern __typeof__(submit_graphics_setup_command_stream) func_00227548
     __attribute__((alias("FUN_00227548")));
+
+u64 ntsc_graphics_setup_packet[GRAPHICS_SETUP_PACKET_QWC][2] = {
+    {0x1000000000008006ULL, 0xEEEEEEULL}, /* GIF tag: NLOOP 6, EOP, one A+D register */
+    {0x00FFFFFF00080070ULL,     0x4CULL}, /* FRAME_1: FBP 0x70, FBW 8 */
+    {0x0000000000000000ULL,     0x4AULL}, /* FBA_1 */
+    {0x0000000000000000ULL,     0x08ULL}, /* CLAMP_1 */
+    {0x0000000000000001ULL,     0x14ULL}, /* TEX1_1 */
+    {0x0000000664020E00ULL,     0x06ULL}, /* TEX0_1 */
+    {0x0000008000000044ULL,     0x42ULL}, /* ALPHA_1 */
+};
+
+u64 pal_graphics_setup_packet[GRAPHICS_SETUP_PACKET_QWC][2] = {
+    {0x1000000000008006ULL, 0xEEEEEEULL}, /* GIF tag: NLOOP 6, EOP, one A+D register */
+    {0x00FFFFFF00080080ULL,     0x4CULL}, /* FRAME_1: FBP 0x80, FBW 8 */
+    {0x0000000000000000ULL,     0x4AULL}, /* FBA_1 */
+    {0x0000000000000000ULL,     0x08ULL}, /* CLAMP_1 */
+    {0x0000000000000001ULL,     0x14ULL}, /* TEX1_1 */
+    {0x0000000664021000ULL,     0x06ULL}, /* TEX0_1 */
+    {0x0000008000000044ULL,     0x42ULL}, /* ALPHA_1 */
+};

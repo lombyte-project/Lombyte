@@ -1095,6 +1095,11 @@ SDATA_OVERLAYS = {
     "audio/voices/set_sound_handle_id": (0x160068, 0x60FE8, 5),  # its handle-conflict diagnostic
     "movies/player/err_message": (0x1611F8, 0x62178, 14),  # its error format
     "rendering/mobys/render_environment_mapped_object": (0x160520, 0x614A0, 96),  # per-class mesh tables
+    "rendering/effects/build_variant_effect_quads": (0x1604C0, 0x61440, 12),  # quads per content variant
+    "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1604D0, 0x61450, 12),  # trail width per content variant
+    "math/rotations/matrix_to_quaternion": (0x15FFD8, 0x60F58, 12),  # next-axis table
+    "rendering/packets/emit_textured_rectangle": (0x160860, 0x617E0, 16),  # its GIF tag
+    "rendering/effects/append_billboard_batch": (0x1608E0, 0x61860, 16),  # its GIF tag
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
@@ -1193,6 +1198,11 @@ DATA_OVERLAYS = {
     "ui/menus/selection/build_filtered_menu_item_list": (0x1D61B8, 0xD7138, 256),
     "ui/menus/item_preview/advance_preview_animation_queue": (0x1D5EC0, 0xD6E40, 448),
     "ui/menus/system/close_menu_system": (0x1D5D90, 0xD6D10, 56),
+    "rendering/vu1/select_level_vu_chain": (0x1DDFB8, 0xDEF38, 76),  # render buffer size per level
+    "rendering/packets/submit_graphics_setup_command_stream": (0x1D7E50, 0xD8DD0, 224),  # NTSC and PAL GS setup packets
+    "rendering/vu1/vu1_gs_regs_normal": (0x1DE3C0, 0xDF340, 48),  # its GS register packet
+    "rendering/vu1/vu1_gs_regs_alt": (0x1DE3F0, 0xDF370, 48),  # its GS register packet
+    "rendering/vu1/vu1_tex_flush": (0x1DEE00, 0xDFD80, 48),  # its GS register packet
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the

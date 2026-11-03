@@ -21,7 +21,9 @@ void       fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void       transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 float      convert_integer_to_float(int) __asm__("func_001FA6C0");
 void       draw_geometry_quad(void *, void *, int) __asm__("func_001F7D30");
-extern int variant_effect_quad_counts[1] __asm__("D_001604C0") __attribute__((sda));
+/* Quads per content variant (0, 1 or 2).  Small data in retail, defined ahead
+   of the function so it reaches the table gp-relative. */
+int variant_effect_quad_counts[3] __asm__("D_001604C0") __attribute__((section(".sdata"))) = {8, 2, 2};
 void build_variant_effect_quads(struct ResidentRenderObject *quad_source) __asm__("FUN_0022e1b0");
 
 void build_variant_effect_quads(struct ResidentRenderObject *quad_source) {
