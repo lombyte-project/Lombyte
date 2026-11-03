@@ -3702,11 +3702,11 @@ void update_splitting_effect_particle_with_collision_and_fade(M_270948 *particle
         e->v.f[1] *= 0.95f;
     }
     {
-        u8 flags = e->b18;
+        u8 rotation_and_motion_flags = e->b18;
         alpha_input_or_rotation_sign = -1.0f;
-        if (flags & 1)
+        if (rotation_and_motion_flags & 1)
             alpha_input_or_rotation_sign = 1.0f;
-        if (flags & 8) {
+        if (rotation_and_motion_flags & 8) {
             e->v.f[2] += frame_scale_sq * 0.008f;
             e->x10 += alpha_input_or_rotation_sign * (D_0015ED60 * -0.01f) /
                       convert_integer_to_float(e->h16);
