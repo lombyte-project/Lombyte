@@ -15,7 +15,7 @@ void              dma_shrub_textures(void) __asm__("FUN_002288f0");
 
 void dma_shrub_textures(void) {
     struct DmaTag *tag;
-    s32            size;
+    s32            shrub_texture_dma_size;
 
     tag = render_packet_cursor.tag;
     render_packet_cursor.tag = tag + 1;
@@ -24,13 +24,13 @@ void dma_shrub_textures(void) {
     D_001603F0.p->vif0 = 0;
     D_001603F0.p->vif1 = 0;
     if (draw_config.shrub.enabled != 0 && draw_config.shrub.count != 0) {
-        size = build_shrub_texture_dma(gs_texture_allocation_cursor);
+        shrub_texture_dma_size = build_shrub_texture_dma(gs_texture_allocation_cursor);
         vu1_tex_flush();
-        if (size > 0x400000) {
+        if (shrub_texture_dma_size > 0x400000) {
             DebugPrint(shrub_texture_overflow_message);
         }
-        if (max_shrub_texture_dma_size < size) {
-            max_shrub_texture_dma_size = size;
+        if (max_shrub_texture_dma_size < shrub_texture_dma_size) {
+            max_shrub_texture_dma_size = shrub_texture_dma_size;
         }
     }
     render_packet_cursor.tag->tag = 0x20000000;
