@@ -32,35 +32,35 @@ typedef struct {
 extern G0023b120 D_L00_0017E4D8;
 void             hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) __asm__("FUN_L00_0023b120");
 
-void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
+void hud_frame(O0023b120 *hud_element, s32 frame_id, s32 x, s32 y, u32 layout_flags, s32 extra) {
     s32        base_width, base_height, draw_width, draw_height;
     R0023b120 *image_page;
-    if (id < 0)
+    if (frame_id < 0)
         return;
     x += hud_element->x;
     y += hud_element->y;
-    image_page = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
+    image_page = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[frame_id].k];
     base_width = 1 << image_page->lw;
     base_height = 1 << image_page->lh;
     draw_width = base_width;
     draw_height = base_height;
-    if (flags & 1) {
+    if (layout_flags & 1) {
         x -= draw_width >> 1;
         y -= draw_height >> 1;
     }
-    if (flags & 2) {
+    if (layout_flags & 2) {
         x += draw_width >> 2;
         y += draw_height >> 2;
         draw_width >>= 1;
         draw_height >>= 1;
     }
-    if (flags & 4) {
+    if (layout_flags & 4) {
         x -= base_width >> 1;
         y -= base_height >> 1;
         draw_width <<= 1;
         draw_height <<= 1;
     }
-    draw_hud_sprite(id, x, y, draw_width, draw_height, extra);
+    draw_hud_sprite(frame_id, x, y, draw_width, draw_height, extra);
 }
 
 extern char *D_L00_001611C0_23b6c0 __asm__("D_L00_001611C0");
