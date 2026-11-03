@@ -10,7 +10,7 @@ void run_state_handler(void) __asm__("FUN_00208840");
 void run_state_handler(void) {
     s32 state = save_card_state;
 
-    save_card_state_handlers[state]();
+    save_card_state_handlers[state_before_handler]();
     D_00161280++;
     if (save_card_state != state) {
         D_00161280 = 0;
