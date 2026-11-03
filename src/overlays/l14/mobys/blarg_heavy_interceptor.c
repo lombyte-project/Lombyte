@@ -2066,6 +2066,9 @@ int try_retract_turret_group(int index) {
 extern char *D_L14_ffd0_e[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 
 int is_turret_group_activated_or_empty(int index) {
+    enum {
+        TURRET_STATE_LIVE_MINIMUM = 0
+    };
     unsigned short *list = (unsigned short *)D_L14_001AC2C0_2B0168[index];
     int             count = 0;
     char           *moby_pool_base;
@@ -2080,9 +2083,9 @@ scan:
         char          *moby = moby_pool_base + ((id & 0x7FFF) << 8);
         int            state = ((signed char)MOBY(moby)->state);
         char          *group_member_vars = ((char *)MOBY(moby)->pvars);
-        if (state >= 0)
+        if (state >= TURRET_STATE_LIVE_MINIMUM)
             count++;
-        if (state >= 0 && *(short *)(group_member_vars + 0x88))
+        if (state >= TURRET_STATE_LIVE_MINIMUM && *(short *)(group_member_vars + 0x88))
             goto success;
         list++;
         if ((short)id < 0)
