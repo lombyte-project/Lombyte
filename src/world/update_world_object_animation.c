@@ -90,7 +90,7 @@ void update_world_object_animation(void *unused_arg) {
     int              i;
     int              k;
     int              idx;
-    int              id;
+    int              moby_id;
     int              part_record_offset;
     int              endp;
     int              pc;
@@ -116,12 +116,12 @@ void update_world_object_animation(void *unused_arg) {
     for (i = 0; i < D_0018CB20_lui.num_parts; i++) {
         part_record_offset = *cp++;
         sp = (int *)((unsigned char *)rec + part_record_offset);
-        id = sp[0];
+        moby_id = sp[0];
         sp = (int *)((unsigned char *)sp + 0xC);
         endp = (int)rec + sp[0];
         sp = (int *)((unsigned char *)sp + 4);
-        if (game_mode_macro == 6 && i == 0 && id == 0x215) {
-            id = cutscene_moby_ids_by_content_variant[level_render_state.content_variant];
+        if (game_mode_macro == 6 && i == 0 && moby_id == 0x215) {
+            moby_id = cutscene_moby_ids_by_content_variant[level_render_state.content_variant];
         }
         mob = D_0018CB20_lui.slots[i];
         if (mob == 0) {
