@@ -34,6 +34,9 @@ void apply_hero_ground_material_effects(void) {
         GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH = 3,
         GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS = 11
     };
+    enum {
+        GROUND_MATERIAL_STATE_DEPENDENT_CONTACT_BYPASS = 1
+    };
     u8  save = hero.ground_sound_class;
     s16 saved_ground_type = hero.ground_type;
     f32 water_depth;
@@ -83,7 +86,7 @@ void apply_hero_ground_material_effects(void) {
         hero.selector_4 = 1;
     if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER)
         hero.selector_13 = 1;
-    if (saved_ground_type == 1)
+    if (saved_ground_type == GROUND_MATERIAL_STATE_DEPENDENT_CONTACT_BYPASS)
         hero.selector_1 = 1;
     if (saved_ground_type == 8)
         hero.on_slip_ground = 1;
