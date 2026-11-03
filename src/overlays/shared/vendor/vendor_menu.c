@@ -757,18 +757,18 @@ void         initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b6
 
 void initialize_vendor_selected_item_mobys(void) {
     V_29b680 item_local_position;
-    int      id;
+    int      selected_item_moby_class;
     int      k;
     int      x;
 
     k = vendor_menu_lui.rows[vendor_menu_lui.cursor].item;
-    id = item_defs_lui[k].cls;
+    selected_item_moby_class = item_defs_lui[k].cls;
     if (k == 0x18) {
-        id = 0x1DF;
+        selected_item_moby_class = 0x1DF;
     } else {
-        select_world_object_resource_tables(id, -1);
+        select_world_object_resource_tables(selected_item_moby_class, -1);
     }
-    init_moby_instance(((u8 *)vendor_menu_lui.menu_mobys) + 0x100, id);
+    init_moby_instance(((u8 *)vendor_menu_lui.menu_mobys) + 0x100, selected_item_moby_class);
     *(short *)(((u8 *)vendor_menu_lui.menu_mobys) + 0x132) = 0x40;
     *(int *)(((u8 *)vendor_menu_lui.menu_mobys) + 0x194) = 0;
     fast_vec_add(item_local_position,
@@ -819,7 +819,7 @@ void initialize_vendor_selected_item_mobys(void) {
         update_entity(((u8 *)vendor_menu_lui.menu_mobys) + 0x200);
         FUN_0020d4f0_29b680(((u8 *)vendor_menu_lui.menu_mobys) + 0x200, 0x202020, 0xE, 0xE, 0);
     }
-    init_moby_instance(((u8 *)vendor_menu_lui.menu_mobys) + 0x300, id);
+    init_moby_instance(((u8 *)vendor_menu_lui.menu_mobys) + 0x300, selected_item_moby_class);
     if ((*(unsigned char **)(((u8 *)vendor_menu_lui.menu_mobys) + 0x224))[6]) {
         ((u8 *)vendor_menu_lui.menu_mobys)[0x273] = 0x18;
     }
