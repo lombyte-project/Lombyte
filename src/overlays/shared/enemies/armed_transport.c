@@ -499,7 +499,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
                         if (*child >= 0)
                             mark_moby_for_removal(pool + (*child << 8));
                         child++;
-                    } while (--count >= 0);
+                    } while (--passenger_slot_countdown >= 0);
                 }
                 transport_moby->state = ARMED_TRANSPORT_STATE_DYING;
                 transport_data->death_timer_frames = scale_game_frames(90);
