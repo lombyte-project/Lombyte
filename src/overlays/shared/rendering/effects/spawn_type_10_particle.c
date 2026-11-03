@@ -484,7 +484,7 @@ float compute_sampled_spline_path_lengths(
     OvlVec4 nextNode;
     OvlVec4 point;
     OvlVec4 previousPoint;
-    int     count = *path->f10;
+    int     path_node_count = *path->f10;
     int     savedIndex = *(int *)path;
     int     index;
     float   total = 0.0f;
@@ -500,7 +500,7 @@ float compute_sampled_spline_path_lengths(
         &nextTangent, (int *)path, tangent_tension, tangent_bias, 0);
 
     index = 0;
-    while (index < count) {
+    while (index < path_node_count) {
         float segment_parameter;
         float step;
         float segmentLength;
