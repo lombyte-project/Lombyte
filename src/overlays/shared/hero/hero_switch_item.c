@@ -4206,7 +4206,7 @@ void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 void hero_integrate_velocity(void) {
     struct Curve *velocity_curve;
     f32           z;
-    Vec4          offset;
+    Vec4          reference_to_hero_displacement;
     f32           speed;
     f32           max_speed;
     s32           boost;
@@ -4221,8 +4221,8 @@ void hero_integrate_velocity(void) {
         if (D_0013D4C2 != 0 && hero.pack_disabled == 0) {
             boost = hero_slot_item_id(3) == 3;
         }
-        fast_vec_sub(&offset, hero_pos, hero_pos + 0x380);
-        gravity_axis_offset = gravity_z(&offset);
+        fast_vec_sub(&reference_to_hero_displacement, hero_pos, hero_pos + 0x380);
+        gravity_axis_offset = gravity_z(&reference_to_hero_displacement);
         if (boost) {
             if (2.7f < gravity_axis_offset) {
                 max_speed *= 0.47f;
