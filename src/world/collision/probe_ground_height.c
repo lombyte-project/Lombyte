@@ -8,7 +8,7 @@ extern int  collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68"
 extern char D_00194120[];
 f32         probe_ground_height(void *pos, s32 flags, f32 height_offset) __asm__("FUN_00213508");
 
-f32 probe_ground_height(void *probe_position, s32 flags, f32 height_offset) {
+f32 probe_ground_height(void *probe_position, s32 collision_mask, f32 height_offset) {
     f32 low_point[4];
     f32 raised_point[4];
 
@@ -16,7 +16,7 @@ f32 probe_ground_height(void *probe_position, s32 flags, f32 height_offset) {
     low_point[2] = 0.01f;
     qcopy(raised_point, probe_position);
     raised_point[2] = raised_point[2] + height_offset;
-    if (collision_line(raised_point, low_point, flags | 2, 0, 0) != 0) {
+    if (collision_line(raised_point, low_point, collision_mask | 2, 0, 0) != 0) {
         return *(f32 *)(D_00194120 + 8);
     }
     return 0.0f;
