@@ -19,9 +19,9 @@ s32 actuator_calc_power(s32 *output_power) {
     s32 *power_wave_counts;
     s32 *scale_wave_counts;
     s32  i;
-    s32  count;
+    s32  active_wave_count;
 
-    count = 0;
+    active_wave_count = 0;
     scale_wave_counts = aa[1];
     power_wave_counts = aa[2];
     for (i = 0; i < 2; i++) {
@@ -40,7 +40,7 @@ s32 actuator_calc_power(s32 *output_power) {
             continue;
         }
         wave_entry = &actuator_wave[i];
-        count++;
+        active_wave_count++;
         wave_countdown = actuator_wave[i].f06;
         actuator_wave[i].f06 = wave_countdown - 1;
         if ((s16)wave_countdown <= 0) {
@@ -130,7 +130,7 @@ s32 actuator_calc_power(s32 *output_power) {
             output_power[i] = (output_power[i] * aa[0][i]) / 255;
         }
     }
-    return count;
+    return active_wave_count;
 }
 
 extern __typeof__(actuator_calc_power) func_001E8D08 __attribute__((alias("FUN_001e8d08")));
