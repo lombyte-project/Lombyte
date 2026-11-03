@@ -384,7 +384,7 @@ void draw_ship_hud(struct Moby *moby) {
     u8        alpha;
     s32       blink;
     f32       step;
-    f32       size;
+    f32       hp_step_magnitude;
     s32       fill;
     s32       lo;
     s32       hi;
@@ -581,9 +581,9 @@ void draw_ship_hud(struct Moby *moby) {
 
     step = hero.ship_hp - ship_hud_vars->shown_hp;
     step *= 0.2f;
-    size = absolute_float(step);
-    if (size > 1.0f) {
-        step /= size;
+    hp_step_magnitude = absolute_float(step);
+    if (hp_step_magnitude > 1.0f) {
+        step /= hp_step_magnitude;
     }
     ship_hud_vars->shown_hp += step;
     fill = truncate_float_to_s32(ship_hud_vars->shown_hp * 251.0f / hero.ship_hp_max) + 2;
