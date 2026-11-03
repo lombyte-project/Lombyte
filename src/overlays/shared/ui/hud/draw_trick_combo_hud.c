@@ -338,12 +338,12 @@ s32 draw_trick_combo_hud(char *element) {
                 draw_framed_text(
                     trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp, color, text);
             } else if (D_L05_0015FAD8 > 0) {
-                s32 count = 0;
+                s32 collected_pose_count = 0;
                 s32 pose;
-                for (pose = 0; pose < 4 && count < D_L05_0015FAD8; pose++) {
+                for (pose = 0; pose < 4 && collected_pose_count < D_L05_0015FAD8; pose++) {
                     if (D_L05_0015FAE0[pose] != 0) {
-                        pose_ids[count] = pose;
-                        count++;
+                        pose_ids[collected_pose_count] = pose;
+                        collected_pose_count++;
                     }
                 }
                 if (D_L05_0015FAD8 == 1) {
