@@ -18,8 +18,8 @@ volatile s32 vif_chain_flags __asm__("D_00160EE0") = 0;
 
 #include "rnc/rendering/vu1_chain_globals.h"
 
-extern char vu1_chain_sync_timeout_message[] __asm__("D_001E89E0");
-extern u8   vu1_chain_overflow_message[] __asm__("D_001E89C8");
+extern const char vu1_chain_sync_timeout_message[] __asm__("D_001E89E0");
+extern const char vu1_chain_overflow_message[] __asm__("D_001E89C8");
 extern void FlushCache(s32);
 
 void vu1_send_chain(void) __asm__("FUN_002336a0");
@@ -74,3 +74,6 @@ void vu1_sync_chain(s32 mask) {
 }
 
 extern __typeof__(vu1_sync_chain) func_002337B0 __attribute__((alias("FUN_002337b0")));
+
+const char vu1_chain_overflow_message[] __asm__("D_001E89C8") = "vu1 chain overflow\n";
+const char vu1_chain_sync_timeout_message[] __asm__("D_001E89E0") = "vu1 syncChain sit-and-spin timeout.\n";

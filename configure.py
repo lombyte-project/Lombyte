@@ -1043,6 +1043,14 @@ RODATA_OVERLAYS = {
     "audio/streaming/start_audio_stream_read": (0x1E8650, 0xE95D0, 36),  # its message
     "movies/decoder/callbacks/video_callback": (0x1E8B08, 0xE9A88, 21),  # its message
     "movies/decoder/video_input/vi_buf_add_dma": (0x1E8B20, 0xE9AA0, 20),  # its message
+    "rendering/debug/draw_debug_profiler": (0x15F380, 0x60300, 179),  # profiler section names
+    "rendering/frame/configure_graphics_setup_dma_chain": (0x15FEC0, 0x60E40, 12),  # its profiler label
+    "rendering/mobys/draw_mobys_setup": (0x15FED0, 0x60E50, 10),  # its profiler label
+    "rendering/mobys/draw_mobys_clean_up": (0x15FEE0, 0x60E60, 26),  # its profiler labels
+    "rendering/shrubs/draw_shrubs": (0x1603B0, 0x61330, 27),  # its profiler labels
+    "rendering/sky/setup_sky_gif_paging": (0x160450, 0x613D0, 9),  # its profiler label
+    "rendering/tfrags/draw_tfrag": (0x160E70, 0x61DF0, 27),  # its profiler labels
+    "rendering/vu1/vu1_chain": (0x1E89C8, 0xE9948, 61),  # its two debug messages
 }
 
 # Recovered C units that define the small-data variables their original
@@ -1055,7 +1063,7 @@ RODATA_OVERLAYS = {
 SDATA_OVERLAYS = {
     "audio/rpc/snd_returns": (0x15EC80, 0x5FC00, 8),
     "audio/snd_start_sound_system": (0x15ECA0, 0x5FC20, 32),  # the batch buffer pointers it sets up
-    "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 8),
+    "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 11),
     "runtime/decrement_resource_counter": (0x15F8F8, 0x60878, 4),
     "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0, 24),
     "runtime/set_video_timing": (0x15ED60, 0x5FCE0, 32),
@@ -1086,6 +1094,7 @@ SDATA_OVERLAYS = {
     "save/memcard_update_state": (0x15FE98, 0x60E18, 21),  # its delete path format and message
     "audio/voices/set_sound_handle_id": (0x160068, 0x60FE8, 5),  # its handle-conflict diagnostic
     "movies/player/err_message": (0x1611F8, 0x62178, 14),  # its error format
+    "rendering/mobys/render_environment_mapped_object": (0x160520, 0x614A0, 96),  # per-class mesh tables
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.

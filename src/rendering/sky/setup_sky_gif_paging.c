@@ -18,7 +18,7 @@ struct SkyVisibilityList {
 };
 
 extern struct DmaTag            *D_00160470;
-extern u8                        sky_textures_label[] __asm__("D_00160450");
+extern const char                sky_textures_label[] __asm__("D_00160450");
 extern struct SkyVisibilityList *level_sky_effect_data __asm__("D_0016045C");
 extern void                      noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
 
@@ -43,3 +43,5 @@ void setup_sky_gif_paging(void) {
 }
 
 extern __typeof__(setup_sky_gif_paging) func_0022B4C8 __attribute__((alias("FUN_0022b4c8")));
+
+const char sky_textures_label[] __asm__("D_00160450") = "sky texs";

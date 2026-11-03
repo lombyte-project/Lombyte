@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libc/stdio.h"
+#include "sda.h"
 
 struct DebugText {
     s32   x;
@@ -26,3 +27,6 @@ void print_debug_text(s32 x, s32 y, s32 color, char *text) {
 }
 
 extern __typeof__(print_debug_text) func_001F0BD0 __attribute__((alias("FUN_001f0bd0")));
+
+/* Defined below its only user, so retail reaches it with lui. */
+char font_text_format[] __asm__("D_0015F008") MACRO_ADDR = "%s";
