@@ -5423,7 +5423,7 @@ void draw_dual_texture_50_quad_mesh(void) {
     float         y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * l06_camera.yaw;
     float         x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * l06_camera.pitch;
     void         *matrix_ptr;
-    long          flags;
+    long          packed_blend_settings;
     int           i, j;
 
     long tex = get_effect_texture(dual_texture_mesh_first_pass_texture_index_gp);
