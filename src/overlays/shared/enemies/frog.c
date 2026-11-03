@@ -260,6 +260,10 @@ void frog_update(unsigned char *moby) {
     enum {
         FROG_TARGET_MODE_NO_PURSUIT_TARGET = 2
     };
+    enum {
+        FROG_VISIBILITY_OVERRIDE_RESTORE = 0,
+        FROG_VISIBILITY_OVERRIDE_APPLY = 2
+    };
     float          A[4] __attribute__((aligned(16)));
     float          B[4] __attribute__((aligned(16)));
     float          C[4] __attribute__((aligned(16)));
