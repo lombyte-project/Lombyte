@@ -314,6 +314,6 @@ void rebuild_magnet_elevator_world_path(struct Moby *moby) {
             *(float *)(world_path_point + 0xC) = 1.0f;
             world_path_point += 0x10;
         }
-        hero.path_constrain_pending = *(unsigned short *)(state + 0x80);
+        hero.path_constrain_pending = *(unsigned short *)(elevator_private_state + 0x80);
     }
 }
