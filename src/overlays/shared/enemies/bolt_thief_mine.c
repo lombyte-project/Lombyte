@@ -80,7 +80,7 @@ void bolt_thief_mine_update(struct Moby *moby) {
         float   sphere[4];
     } scratch;
     float    explosion_vector[4];
-    int      count;
+    int      hit_status;
     MobyHit *hit;
     float    glow_pulse_sine;
     int      glow_red_intensity;
@@ -121,8 +121,8 @@ void bolt_thief_mine_update(struct Moby *moby) {
         scratch.info.aim_height = 0.5f;
         scratch.info.look_height = 7;
         scratch.info.unk3B = 0xFF;
-        resolve_moby_hit_response(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
-        if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) ||
+        resolve_moby_hit_response(moby, hit, &scratch.info, 0, &hit_status, 0, 0, 4);
+        if ((hit_status >= 2 && hit != 0 && hit->moby->oclass != 0x283) ||
             hero.coll_hit_moby == (u8 *)moby) {
             clear_u64_value(explosion_vector);
             allocate_voice_for_target_entry(0, 0, moby);
