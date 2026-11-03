@@ -2,6 +2,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/map/level_map.h"
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern s32  do_gif_paging() __asm__("func_001F4398");
@@ -46,7 +47,7 @@ block_4:
     font_print_center(mid_x,
                       upper_y,
                       0x80FFA888,
-                      get_help_message_text(*(s32 *)(void *)(entry_offset + D_001DDD40)),
+                      get_help_message_text(*(s32 *)(void *)(entry_offset + (u8 *)level_select_texts)),
                       -1);
     width2 = menu->width;
     center_x2 = (s32)(width2 + ((u32)width2 >> 0x1F)) >> 1;
@@ -54,7 +55,7 @@ block_4:
     font_print_center(center_x2,
                       lower_y,
                       0x80FFA888,
-                      get_help_message_text(*(s32 *)((u8 *)(D_001DDD40 + entry_offset) + 0x4)),
+                      get_help_message_text(*(s32 *)((u8 *)((u8 *)level_select_texts + entry_offset) + 0x4)),
                       -1);
 block_5:
     do_gif_paging();

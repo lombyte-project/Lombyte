@@ -228,4 +228,6 @@ void register_shrub_render_class(ShrubRenderClass                *render_class,
 
 extern __typeof__(register_shrub_render_class) func_00203B08 __attribute__((alias("FUN_00203b08")));
 
+ShrubRenderClass *shrub_render_classes[64] = {0};
+
 s16 shrub_render_class_ids[64] = {0};

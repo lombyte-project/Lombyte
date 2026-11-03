@@ -116,7 +116,6 @@ extern char          D_001B2C00[];
 extern s32           D_001CDF80[];
 extern s32           D_001D2640[];
 extern u8            D_001D8EB0[];
-extern u8            D_001DDD40[];
 extern u8            D_001E1300[];
 extern u8            D_002169C0[];
 extern u8            D_1FF8000[];

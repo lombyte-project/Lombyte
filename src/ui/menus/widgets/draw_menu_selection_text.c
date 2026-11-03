@@ -3,6 +3,7 @@
 #include "rnc/save/memory_card_state.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/map/level_map.h"
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern s32  do_gif_paging() __asm__("func_001F4398");
@@ -44,7 +45,7 @@ s32 draw_menu_selection_text(struct MenuScreen *menu) {
                 mid_x,
                 4,
                 0x80FFA888,
-                get_help_message_text(*((s32 *)((void *)(entry_offset + D_001DDD40)))),
+                get_help_message_text(*((s32 *)((void *)(entry_offset + (u8 *)level_select_texts)))),
                 -1);
             width2 = menu->width;
             if (1) {
@@ -53,7 +54,7 @@ s32 draw_menu_selection_text(struct MenuScreen *menu) {
                     center_x2,
                     0x14,
                     0x80FFA888,
-                    get_help_message_text(*((s32 *)(((u8 *)(D_001DDD40 + entry_offset)) + 0x4))),
+                    get_help_message_text(*((s32 *)(((u8 *)((u8 *)level_select_texts + entry_offset)) + 0x4))),
                     -1);
             }
         }
