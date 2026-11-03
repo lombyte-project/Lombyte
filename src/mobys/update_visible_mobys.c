@@ -8,7 +8,7 @@
 #define MOBY_SKIP_BOUNDS    0x4
 
 /* Small data, defined above the code so it is reached $gp-relative. */
-struct Moby *visible_moby_list __asm__("D_0015FF24") = 0;
+struct Moby        *visible_moby_list __asm__("D_0015FF24") = 0;
 extern struct Moby *build_resident_visibility_list(void) __asm__("FUN_0020d868");
 extern void         advance_moby_animation(struct Moby *) __asm__("FUN_0020d580");
 void                update_visible_mobys(void) __asm__("FUN_00212e28");

@@ -1,5 +1,6 @@
 /* Shared moby class bolt (and bolt_hexnut, bolt_starnut, bolt_circlenut): bolts dropped and collected. */
 #include "types.h"
+#include "rnc/game/level_progress.h"
 #include "rnc/game/bolt_sources.h"
 #include "rnc/mobys/moby_class_id.h"
 #include "rnc/hero/hero.h"
@@ -153,7 +154,6 @@ extern void FUN_L00_002a7210_c(Bolt *, void *, f32, f32) __asm__("FUN_L00_002a72
 
 extern s32 D_0015EE2C; /* bolts counted when the bolt's pvars[0x40] is set or it is an early moby */
 
-extern s32   level_bolts[] __asm__("D_0013DF38"); /* bolts collected per level */
 extern s32   D_L00_0015F598;
 extern void *D_L00_0015FFDC_u __asm__("D_L00_0015FFDC");
 extern void

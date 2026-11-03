@@ -6,7 +6,7 @@
 
 const char chroma_intra_matrix_error_message[] __asm__("D_001538E8") =
     "load_chroma_intra_quantizer_matrix == 1";
-const u8  D_00153910[] = "load_chroma_non_intra_quantizer_matrix == 1";
+const u8 D_00153910[] = "load_chroma_non_intra_quantizer_matrix == 1";
 
 void _quantMatrixExtension(struct MpegDecoder *mpeg) {
     s32 load_non_intra;

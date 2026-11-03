@@ -5,7 +5,7 @@
 
 /* A GIF tag and two A+D register writes: the 3 quadwords the DMA tag below sends. */
 extern u64 normal_gs_regs_dma_payload[3][2] __asm__("D_001DE3C0");
-void      vu1_gs_regs_normal(void) __asm__("FUN_00233bc8");
+void       vu1_gs_regs_normal(void) __asm__("FUN_00233bc8");
 
 void vu1_gs_regs_normal(void) {
     *render_packet_cursor.words = 0x30000003;

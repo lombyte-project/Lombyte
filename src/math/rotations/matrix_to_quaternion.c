@@ -66,4 +66,6 @@ extern __typeof__(matrix_to_quaternion) func_00214260 __attribute__((alias("FUN_
 
 /* The axis after i, cyclically: 0 -> 1 -> 2 -> 0.  Small data in retail,
    defined below its only user, so the function reaches it with lui. */
-QuatNext matrix_to_quaternion_next_axis_table __attribute__((section(".sdata"))) = {{1, 2, 0}};
+QuatNext matrix_to_quaternion_next_axis_table __attribute__((section(".sdata"))) = {
+    {1, 2, 0}
+};

@@ -44,19 +44,21 @@ block_4:
     menu_width = menu->width;
     mid_x = (s32)(menu_width + ((u32)menu_width >> 0x1F)) >> 1;
     upper_y = ((s32)menu->height / 3) - 8;
-    font_print_center(mid_x,
-                      upper_y,
-                      0x80FFA888,
-                      get_help_message_text(*(s32 *)(void *)(entry_offset + (u8 *)level_select_texts)),
-                      -1);
+    font_print_center(
+        mid_x,
+        upper_y,
+        0x80FFA888,
+        get_help_message_text(*(s32 *)(void *)(entry_offset + (u8 *)level_select_texts)),
+        -1);
     width2 = menu->width;
     center_x2 = (s32)(width2 + ((u32)width2 >> 0x1F)) >> 1;
     lower_y = ((s32)(menu->height * 2) / 3) - 8;
-    font_print_center(center_x2,
-                      lower_y,
-                      0x80FFA888,
-                      get_help_message_text(*(s32 *)((u8 *)((u8 *)level_select_texts + entry_offset) + 0x4)),
-                      -1);
+    font_print_center(
+        center_x2,
+        lower_y,
+        0x80FFA888,
+        get_help_message_text(*(s32 *)((u8 *)((u8 *)level_select_texts + entry_offset) + 0x4)),
+        -1);
 block_5:
     do_gif_paging();
     return 2;

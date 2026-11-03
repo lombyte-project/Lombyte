@@ -18,12 +18,12 @@ extern volatile u32         D_00131314[];
 extern struct CdReadCommand native_cd_read_request __asm__("D_001313C0");
 extern u8                   native_cd_read_completion_buffer[] __asm__("D_001323C0");
 extern u8                   native_cd_read_response[] __asm__("D_00132480");
-const char native_cd_read_submit_debug_message[] __asm__("D_00152FC8") = "call cdread cmd\n";
-const char native_cd_read_queued_debug_message[] __asm__("D_00152FE0") = "cdread end\n";
-extern void                 process_native_cd_read_completion(void *) __asm__("func_00120788");
-extern s32                  SignalSema(u32 semaphore);
-extern s32                  cd_check_ncmd() __asm__("func_00120A28");
-extern void                 sceSifWriteBackDCache(void *ptr, s32 size);
+const char  native_cd_read_submit_debug_message[] __asm__("D_00152FC8") = "call cdread cmd\n";
+const char  native_cd_read_queued_debug_message[] __asm__("D_00152FE0") = "cdread end\n";
+extern void process_native_cd_read_completion(void *) __asm__("func_00120788");
+extern s32  SignalSema(u32 semaphore);
+extern s32  cd_check_ncmd() __asm__("func_00120A28");
+extern void sceSifWriteBackDCache(void *ptr, s32 size);
 
 s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
     enum {

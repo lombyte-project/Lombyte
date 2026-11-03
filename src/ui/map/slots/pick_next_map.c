@@ -6,6 +6,7 @@
 #include "rnc/ui/map/slots/find_map_entry_slot.h"
 
 #include "rnc/game/item_state.h"
+
 /* Picks the map to load next: the current map id (level_map_selection.level,
    +0x100 when item_available[ITEM_MAP_SHIFT] is set) unless find_map_entry_slot finds it already
    in a slot, otherwise the nearest entry of the 20-id list D_001601E0

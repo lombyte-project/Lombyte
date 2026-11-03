@@ -391,7 +391,6 @@ extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
 extern struct DiscFile D_00138438[];
 extern char            D_001383A0[];
-extern char            D_00141EC0[];
 
 void initialize_level_map_archive(void) {
     int                 i;
@@ -469,7 +468,7 @@ void initialize_level_map_archive(void) {
             D_L00_001841F0.slots[i].buffer = D_L00_001841F0.scratch_data + i * 0x200;
         }
         mask_buffer = hud_heap_alloc(0x8000, 0, render_archive_source_file, 0x2FC);
-        level_data = ((char *)&D_00141EC0) + D_L00_001841F0.archive_index * 0x800;
+        level_data = ((char *)map_coverage_pages) + D_L00_001841F0.archive_index * 0x800;
         D_L00_001841F0.mask_data = mask_buffer;
         if (level_data[0] != 0) {
             load_map_chunk((void *)D_L00_001841F0.mask_data, level_data, D_L00_001841F0.second_raw);

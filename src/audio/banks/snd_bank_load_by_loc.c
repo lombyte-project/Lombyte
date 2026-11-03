@@ -3,15 +3,15 @@
 #include "rnc/sdk/libc/stdio.h"
 #include "rnc/sdk/rpc/rpc.h"
 
-extern s32  snd_cd_bank_load_request[] __asm__("D_00137B40");
-extern char snd_non_idle_error_string[] __asm__("D_00153D20");
+extern s32        snd_cd_bank_load_request[] __asm__("D_00137B40");
+extern char       snd_non_idle_error_string[] __asm__("D_00153D20");
 extern const char snd_bank_load_by_loc_rpc_error_string[] __asm__("D_00153DF8");
-extern u8   sound_stream_client[] __asm__("D_0015EBE8");
-extern s32  snd_cd_load_error __asm__("D_0015EC88") __attribute__((sda));
-extern u32  snd_cd_callback_arg __asm__("D_0015ED00");
-extern s32  snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
-extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
-extern void FlushCache(s32);
+extern u8         sound_stream_client[] __asm__("D_0015EBE8");
+extern s32        snd_cd_load_error __asm__("D_0015EC88") __attribute__((sda));
+extern u32        snd_cd_callback_arg __asm__("D_0015ED00");
+extern s32        snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
+extern void       snd_flush_sound_commands(void) __asm__("func_0012DC80");
+extern void       FlushCache(s32);
 
 s32 snd_bank_load_by_loc(s32 location, s32 byte_offset) __asm__("FUN_0012df20");
 

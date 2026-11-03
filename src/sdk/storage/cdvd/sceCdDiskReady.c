@@ -9,12 +9,12 @@ extern s32                     D_00131304[];
 extern struct sceSifClientData cd_disk_ready_rpc_client __asm__("D_00159990");
 extern s32                     D_001599D0[];
 const char cd_disk_ready_entry_message[] __asm__("D_00152F80") = "DiskReady 0\n";
-const char cd_disk_ready_bind_error_message[] __asm__("D_00152F90") =
-    "Libcdvd bind err CdDiskReady\n";
-const char cd_disk_ready_completion_message[] __asm__("D_00152FB0") = "DiskReady ended\n";
-extern s32                     PollSema();
-extern void                    SignalSema();
-extern void                    sceSifWriteBackDCache();
+const char
+    cd_disk_ready_bind_error_message[] __asm__("D_00152F90") = "Libcdvd bind err CdDiskReady\n";
+const char  cd_disk_ready_completion_message[] __asm__("D_00152FB0") = "DiskReady ended\n";
+extern s32  PollSema();
+extern void SignalSema();
+extern void sceSifWriteBackDCache();
 
 /* libcdvd disk-ready query (the sceCdDiskReady pattern): take the S-command
    semaphore, bind the 0x8000059A server once, send mode and return the

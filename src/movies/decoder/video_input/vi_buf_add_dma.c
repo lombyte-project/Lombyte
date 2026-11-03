@@ -29,7 +29,7 @@ typedef struct {
 
 extern s32  WaitSema(s32 semaphore);
 extern s32  SignalSema(s32 semaphore);
-const char dma_add_not_active_message[] __asm__("D_001E8B20") = "DMA ADD not active\n";
+const char  dma_add_not_active_message[] __asm__("D_001E8B20") = "DMA ADD not active\n";
 extern void set_d4_chcr(s32 control) __asm__("FUN_0023bbb0");
 
 s32 vi_buf_add_dma(ViBuf *f) __asm__("FUN_0023bf70");

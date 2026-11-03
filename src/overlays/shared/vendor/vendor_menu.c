@@ -894,9 +894,8 @@ extern void FUN_002049f0(s32);
 
 /* FUN_L00_0029ba78 - Level-00 shared: per-frame state machine (states 0..4) that
  * drives advance_moby_animation/FUN_L00_00250df8 on g->f20+0x400 and updates the
- * progress tables D_L00_001C40B0 / weapon_ammo_counts / D_0013DD70 / D_0015ED98. */
+ * progress tables D_L00_001C40B0 / weapon_ammo_counts / ammo_bought_stats / D_0015ED98. */
 
-extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
 extern u8  D_0013D4E3[];
 extern s32 D_0015ED98;
 extern u8  vendor_item_0x18_purchased[] __asm__("D_00141345");

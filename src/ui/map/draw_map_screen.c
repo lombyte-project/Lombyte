@@ -26,6 +26,7 @@ struct MapEntry {
 
 extern u8 map_cross_destination_page[] __asm__("D_001CF678");
 extern u8 map_circle_destination_page[] __asm__("D_001CF418");
+
 #include "rnc/game/item_state.h"
 
 #include "rnc/game/level_state.h"

@@ -192,5 +192,7 @@ s32 menu_entry_context[6] = {0};
  * menu_bolt_threshold_thousands_separators points to, and the formats. */
 char thousands_separator_comma[] __asm__("D_00160078") __attribute__((section(".sdata"))) = ",";
 char thousands_separator_period[] __asm__("D_00160080") __attribute__((section(".sdata"))) = ".";
-char help_text_integer_placeholder[] __asm__("D_00160088") __attribute__((section(".sdata"))) = "%d";
-char bolt_threshold_number_format[] __asm__("D_00160090") __attribute__((section(".sdata"))) = "%d%s%03d";
+char help_text_integer_placeholder[] __asm__("D_00160088")
+    __attribute__((section(".sdata"))) = "%d";
+char bolt_threshold_number_format[] __asm__("D_00160090")
+    __attribute__((section(".sdata"))) = "%d%s%03d";

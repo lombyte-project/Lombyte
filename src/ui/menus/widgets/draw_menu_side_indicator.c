@@ -54,5 +54,7 @@ int draw_menu_side_indicator(struct MenuScreen *menu) {
 extern __typeof__(draw_menu_side_indicator) func_00221F58 __attribute__((alias("FUN_00221f58")));
 
 /* Small data reached with lui/addiu: one-glyph strings (font glyphs 0x10, 0x11). */
-char menu_side_indicator_set_glyph_string[] __asm__("D_001602F0") __attribute__((section(".sdata"))) = "\x10";
-char menu_side_indicator_clear_glyph_string[] __asm__("D_001602F8") __attribute__((section(".sdata"))) = "\x11";
+char menu_side_indicator_set_glyph_string[] __asm__("D_001602F0")
+    __attribute__((section(".sdata"))) = "\x10";
+char menu_side_indicator_clear_glyph_string[] __asm__("D_001602F8")
+    __attribute__((section(".sdata"))) = "\x11";

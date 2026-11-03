@@ -41,12 +41,12 @@ s32 draw_menu_selection_text(struct MenuScreen *menu) {
             menu_width = menu->width;
             entry_offset = entry_index * 0xC;
             mid_x = ((s32)(menu_width + ((((u32)menu_width) >> 24) >> 7))) >> 1;
-            font_print_center(
-                mid_x,
-                4,
-                0x80FFA888,
-                get_help_message_text(*((s32 *)((void *)(entry_offset + (u8 *)level_select_texts)))),
-                -1);
+            font_print_center(mid_x,
+                              4,
+                              0x80FFA888,
+                              get_help_message_text(
+                                  *((s32 *)((void *)(entry_offset + (u8 *)level_select_texts)))),
+                              -1);
             width2 = menu->width;
             if (1) {
                 center_x2 = ((s32)(width2 + (((u32)width2) >> 0x1F))) >> 1;
@@ -54,7 +54,8 @@ s32 draw_menu_selection_text(struct MenuScreen *menu) {
                     center_x2,
                     0x14,
                     0x80FFA888,
-                    get_help_message_text(*((s32 *)(((u8 *)((u8 *)level_select_texts + entry_offset)) + 0x4))),
+                    get_help_message_text(
+                        *((s32 *)(((u8 *)((u8 *)level_select_texts + entry_offset)) + 0x4))),
                     -1);
             }
         }

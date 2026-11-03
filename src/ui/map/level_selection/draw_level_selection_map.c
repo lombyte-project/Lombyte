@@ -7,7 +7,7 @@
 #include "rnc/game/game_globals.h"
 
 /* Small data, defined above the code so it is reached $gp-relative. */
-s32 large_font_height __asm__("D_0015F690") = 17;
+s32         large_font_height __asm__("D_0015F690") = 17;
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32  measure_text_width_regular(u8 *, s32) __asm__("func_001F6250");
@@ -121,13 +121,13 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
 }
 
 LevelSelectText level_select_texts[19] = {
-    {0x4eb9, 0x4ede, 0},
-    {0x4eba, 0x4ecd, 6},
-    {0x4ebb, 0x4ece, 0x3f1},
-    {0x4ebc, 0x4ecf, 0x3f2},
-    {0x4ebd, 0x4ed0, 0xbc6},
+    {0x4eb9, 0x4ede,      0},
+    {0x4eba, 0x4ecd,      6},
+    {0x4ebb, 0x4ece,  0x3f1},
+    {0x4ebc, 0x4ecf,  0x3f2},
+    {0x4ebd, 0x4ed0,  0xbc6},
     {0x4ebe, 0x4ed1, 0x177b},
-    {0x4ebf, 0x4ed2, 0xfa6},
+    {0x4ebf, 0x4ed2,  0xfa6},
     {0x4ec0, 0x4ed3, 0x1394},
     {0x4ec1, 0x4ed4, 0x1b58},
     {0x4ec2, 0x4ed5, 0x1f47},
@@ -166,4 +166,3 @@ LevelMapMarker level_map_markers[20] = {
 };
 
 extern __typeof__(draw_level_selection_map) func_001FD748 __attribute__((alias("FUN_001fd748")));
-

@@ -13,7 +13,7 @@ extern struct MoviePlayer *movie_player_macro __asm__("D_0016120C") MACRO_ADDR;
 #define voBuf (movie_player_macro->vo_buf)
 extern void set_image_tag(void *, int, int, int) __asm__("func_0023B210"); /* setImageTag */
 extern void switch_thread(void) __asm__("func_0023A770");                  /* switchThread */
-extern void err_message(const char *) __asm__("func_0023AB78");                  /* ErrMessage */
+extern void err_message(const char *) __asm__("func_0023AB78");            /* ErrMessage */
 /* decBs0(VideoDec *) */
 int dec_bs0(struct VideoDec *vd) __asm__("FUN_0023cec8");
 

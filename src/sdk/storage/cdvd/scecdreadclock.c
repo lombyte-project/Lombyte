@@ -8,10 +8,10 @@ struct unaligned64 {
     u64 v;
 } __attribute__((packed));
 
-const char cd_read_clock_before_rpc_debug_message[] __asm__("D_00152FF0") =
-    "Libcdvd call Clock read 1\n";
-const char cd_read_clock_after_copy_debug_message[] __asm__("D_00153010") =
-    "Libcdvd call Clock read 2\n";
+const char
+    cd_read_clock_before_rpc_debug_message[] __asm__("D_00152FF0") = "Libcdvd call Clock read 1\n";
+const char
+    cd_read_clock_after_copy_debug_message[] __asm__("D_00153010") = "Libcdvd call Clock read 2\n";
 extern s32   SignalSema();
 extern s32   cd_check_scmd() __asm__("func_00120D40");
 extern void *memcpy();

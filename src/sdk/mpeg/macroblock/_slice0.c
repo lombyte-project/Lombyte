@@ -5,8 +5,8 @@
 #include "rnc/sdk/mpeg/errors.h"
 #include "rnc/sdk/mpeg/macroblock.h"
 
-const char too_many_macroblocks_error_message[] __asm__("D_00153848") =
-    "Too many macroblocks in picture";
+const char
+    too_many_macroblocks_error_message[] __asm__("D_00153848") = "Too many macroblocks in picture";
 extern s32 _motionComp0();
 
 s32 _slice0(struct MpegDecoder *mp, s32 nmb) {

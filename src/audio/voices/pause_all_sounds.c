@@ -571,9 +571,9 @@ struct MenuPage map_circle_destination_page = {
 };
 
 struct MenuLabelScreen map_location_label = {
-    {                FUN_00219d80, render_configured_text_label,clear_menu_selected_index},
+    {                FUN_00219d80,                 render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT | MENU_LABEL_CENTER_Y |
-MENU_LABEL_CENTER_X,              (s32)&level_select_texts[1].description_text,
+MENU_LABEL_CENTER_X, (s32)&level_select_texts[1].description_text,
      0xC                  }
 };
 
@@ -620,9 +620,9 @@ struct MenuStreamScreen missions_picture_screen = {
 };
 
 struct MenuLabelScreen missions_location_label = {
-    {                FUN_00219d80, render_configured_text_label,clear_menu_selected_index},
+    {                FUN_00219d80,                 render_configured_text_label,clear_menu_selected_index},
     {MENU_LABEL_BY_SELECTED_LEVEL | MENU_LABEL_LARGE_FONT | MENU_LABEL_CENTER_Y |
-MENU_LABEL_CENTER_X,              (s32)&level_select_texts[1].description_text,
+MENU_LABEL_CENTER_X, (s32)&level_select_texts[1].description_text,
      0xC                  }
 };
 

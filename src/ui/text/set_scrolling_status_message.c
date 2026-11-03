@@ -9,7 +9,7 @@ struct ScrollingStatus {
 };
 
 extern struct ScrollingStatus D_001E63C0;
-extern const char              scrolling_status_message_format[] __asm__("D_001E8A70");
+extern const char             scrolling_status_message_format[] __asm__("D_001E8A70");
 void                          set_scrolling_status_message(s32 message) __asm__("FUN_00237e90");
 
 void set_scrolling_status_message(s32 message) {

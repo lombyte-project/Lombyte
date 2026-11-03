@@ -18,14 +18,14 @@ struct MpegMbState {
 
 const char invalid_macroblock_type_error_message[] __asm__("D_00153898") =
     "Invalid macroblock_type code: 0";
-int       _decMB0(struct MpegDecoder *decoder,
-                  int                *mb_type,
-                  int                *motion_type,
-                  int                *dct_type_out,
-                  struct MpegMbState *motion_vector_state,
-                  int                *motion_field_select,
+int _decMB0(struct MpegDecoder *decoder,
+            int                *mb_type,
+            int                *motion_type,
+            int                *dct_type_out,
+            struct MpegMbState *motion_vector_state,
+            int                *motion_field_select,
 
-                  int differential_motion_vector) {
+            int differential_motion_vector) {
     enum {
         DCT_TYPE_FRAME = 0,
         MOTION_TYPE_FIELD = 1,

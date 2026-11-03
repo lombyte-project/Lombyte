@@ -26,8 +26,8 @@ typedef struct SeqExtContext {
 extern void _Error();
 extern s32  _nextBit();
 extern void _ipuSetMPEG1();
-const char unsupported_chroma_format_message[] __asm__("D_00153B00") =
-    "_chroma_format needs to be 1: 420";
+const char
+    unsupported_chroma_format_message[] __asm__("D_00153B00") = "_chroma_format needs to be 1: 420";
 const char unsupported_profile_level_message[] __asm__("D_00153B28") = "Unsupported profile/level";
 
 void _sequenceExtension(SeqExtContext *ctx) {

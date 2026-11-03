@@ -7,7 +7,7 @@ struct MpegErrorData {
 };
 
 extern const char video_error_message[] __asm__("D_00161220");
-s32       mpeg_error(s32 unused_mpeg, struct MpegErrorData *cb_data) __asm__("FUN_0023d080");
+s32 mpeg_error(s32 unused_mpeg, struct MpegErrorData *cb_data) __asm__("FUN_0023d080");
 
 s32 mpeg_error(s32 unused_mpeg, struct MpegErrorData *cb_data) {
     DebugPrint(video_error_message, cb_data->unk4);

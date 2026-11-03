@@ -36,7 +36,7 @@ extern CardState D_0013D290;
 
 /* Blocks whose restored bytes differed from memory; defined ahead of the
    function, which reaches it gp-relative. */
-s32 memcard_restore_differing_block_count __asm__("D_0015FE90") = 0;
+s32         memcard_restore_differing_block_count __asm__("D_0015FE90") = 0;
 extern s32  validate_data_crc(u8 *header) __asm__("func_0020AD38");
 extern s32  memcmp(const void *, const void *, s32);
 extern void copy_memory_aligned(void *, void *, s32) __asm__("func_001F9838");

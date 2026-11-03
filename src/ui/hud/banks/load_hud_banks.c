@@ -111,8 +111,13 @@ void load_hud_banks(void) {
 extern __typeof__(load_hud_banks) func_00202A98 __attribute__((alias("FUN_00202a98")));
 
 /* Small data reached with lui/addiu: the allocation tag and the stash labels. */
-char hud_allocation_source_file[] __asm__("D_0015FBB0") __attribute__((section(".sdata"))) = "loaders.cpp";
-char hud_bank_0_stash_label[] __asm__("D_0015FBC0") __attribute__((section(".sdata"))) = "hud bank 0";
-char hud_bank_2_stash_label[] __asm__("D_0015FBD0") __attribute__((section(".sdata"))) = "hud bank 2";
-char hud_bank_3_stash_label[] __asm__("D_0015FBE0") __attribute__((section(".sdata"))) = "hud bank 3";
-char hud_bank_4_stash_label[] __asm__("D_0015FBF0") __attribute__((section(".sdata"))) = "hud bank 4";
+char hud_allocation_source_file[] __asm__("D_0015FBB0")
+    __attribute__((section(".sdata"))) = "loaders.cpp";
+char hud_bank_0_stash_label[] __asm__("D_0015FBC0")
+    __attribute__((section(".sdata"))) = "hud bank 0";
+char hud_bank_2_stash_label[] __asm__("D_0015FBD0")
+    __attribute__((section(".sdata"))) = "hud bank 2";
+char hud_bank_3_stash_label[] __asm__("D_0015FBE0")
+    __attribute__((section(".sdata"))) = "hud bank 3";
+char hud_bank_4_stash_label[] __asm__("D_0015FBF0")
+    __attribute__((section(".sdata"))) = "hud bank 4";

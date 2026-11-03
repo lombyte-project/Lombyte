@@ -16,5 +16,6 @@ void format_scaled_display_value(u8 *destination, s32 value) {
 extern __typeof__(format_scaled_display_value) func_00238688 __attribute__((alias("FUN_00238688")));
 
 /* Small data reached with lui/addiu. */
-u8 thousands_grouped_integer_format[] __asm__("D_00161078") __attribute__((section(".sdata"))) = "%d,%03d";
+u8 thousands_grouped_integer_format[] __asm__("D_00161078")
+    __attribute__((section(".sdata"))) = "%d,%03d";
 u8 plain_integer_format[] __asm__("D_00161080") __attribute__((section(".sdata"))) = "%d";

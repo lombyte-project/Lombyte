@@ -19,6 +19,6 @@ typedef struct {
 } LevelSelectText;
 
 extern LevelSelectText level_select_texts[19] __asm__("D_001DDD40");
-extern LevelMapMarker     level_map_markers[20] __asm__("D_001DDE28");
+extern LevelMapMarker  level_map_markers[20] __asm__("D_001DDE28");
 
 #endif /* LOMBYTE_RNC_UI_MAP_LEVEL_MAP_H */

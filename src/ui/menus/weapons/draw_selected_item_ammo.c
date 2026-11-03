@@ -78,4 +78,5 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
 
 /* Small data reached with lui/addiu: the ammo count formats. */
 u8 ammo_count_decimal_format[] __asm__("D_001602B8") __attribute__((section(".sdata"))) = "%d/";
-u8 ammo_count_grouped_decimal_format[] __asm__("D_001602C0") __attribute__((section(".sdata"))) = "%d,%03d/";
+u8 ammo_count_grouped_decimal_format[] __asm__("D_001602C0")
+    __attribute__((section(".sdata"))) = "%d,%03d/";

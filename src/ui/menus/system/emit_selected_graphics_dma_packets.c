@@ -8,6 +8,7 @@ struct Mat {
 extern struct Mat graphics_dma_reference_records[] __asm__("D_001D7D90");
 /* Small data, defined above the code so it is reached $gp-relative. */
 s32 graphics_packet_payload_words_by_slot[2] __asm__("D_00160360") = {0x7F8080FF, (s32)0x8280FF80};
+
 extern void FUN_00228598(s32, s32);
 
 void emit_selected_graphics_dma_packets(s32 render_selector,

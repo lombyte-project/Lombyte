@@ -6,14 +6,14 @@
 #include "rnc/sdk/storage/memory_card.h"
 
 const char mc_rpc_bind_error_message[] __asm__("D_00153450") = "bind error libmc \n";
-const char mcserv_old_release_message[] __asm__("D_00153468") =
-    "libmc: too old release of mcserv.irx\n";
-const char mcman_old_release_message[] __asm__("D_00153490") =
-    "libmc: too old release of mcman.irx\n";
-extern u8   D_00159A80[];
-extern s32  CreateSema(struct SemaParam *);
-extern s32  WaitSema(s32);
-extern s32  SignalSema(s32);
+const char
+    mcserv_old_release_message[] __asm__("D_00153468") = "libmc: too old release of mcserv.irx\n";
+const char
+    mcman_old_release_message[] __asm__("D_00153490") = "libmc: too old release of mcman.irx\n";
+extern u8  D_00159A80[];
+extern s32 CreateSema(struct SemaParam *);
+extern s32 WaitSema(s32);
+extern s32 SignalSema(s32);
 
 s32 sceMcInit(void) {
     struct SemaParam param;

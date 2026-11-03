@@ -57,4 +57,5 @@ extern __typeof__(format_menu_item_text) func_00208280 __attribute__((alias("FUN
 
 /* Small data reached with lui/addiu. */
 char menu_item_decimal_format[] __asm__("D_0015FDA0") __attribute__((section(".sdata"))) = "%d";
-char menu_item_placeholder_error_text[] __asm__("D_0015FDA8") __attribute__((section(".sdata"))) = "error";
+char menu_item_placeholder_error_text[] __asm__("D_0015FDA8")
+    __attribute__((section(".sdata"))) = "error";

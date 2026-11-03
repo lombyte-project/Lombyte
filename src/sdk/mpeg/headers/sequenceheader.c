@@ -5,8 +5,8 @@
 #include "rnc/sdk/mpeg/errors.h"
 #include "rnc/sdk/mpeg/headers.h"
 
-extern u8 default_intra_quantiser_matrix[] __asm__("D_00132FC0");
-extern u8 default_non_intra_quantiser_matrix[] __asm__("D_00133000");
+extern u8  default_intra_quantiser_matrix[] __asm__("D_00132FC0");
+extern u8  default_non_intra_quantiser_matrix[] __asm__("D_00133000");
 const char vertical_size_limit_error_message[] __asm__("D_00153AE8") = "vertical size > 2800";
 
 void _sequenceHeader(struct MpegDecoder *decoder) {

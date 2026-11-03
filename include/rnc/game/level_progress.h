@@ -14,7 +14,7 @@ extern s32 D_0013D510[LEVEL_RECORD_COUNT];
 /* Best coverage result save_map_coverage got per level (one slot per level record). */
 extern s32 max_coverage_save_result_by_level[LEVEL_RECORD_COUNT] __asm__("D_0013D560");
 /* Per-level counters the hero code bumps; mc_leveldata saves 4 bytes of each per level. */
-extern s32 D_0013DF38[LEVEL_RECORD_COUNT];
+extern s32 level_bolts[LEVEL_RECORD_COUNT] __asm__("D_0013DF38"); /* bolts collected per level */
 extern s32 D_0013DF88[LEVEL_RECORD_COUNT];
 extern s32 hero_respawn_counts_by_level[LEVEL_RECORD_COUNT] __asm__("D_0013DFD8");
 
@@ -31,7 +31,8 @@ extern unsigned char visited52[LEVEL_RECORD_COUNT * 16] __asm__("D_0014C050");
 extern s32 D_0014C190_257218[LEVEL_RECORD_COUNT][64] __asm__("D_0014C190");
 /* bolt_source_stats (D_0014D590, rnc/game/bolt_sources.h) follows. */
 /* Hero respawns per level and damage source category; level code counts them. */
-extern s32 hero_respawn_counts_by_level_and_source_category[LEVEL_RECORD_COUNT][16] __asm__("D_0014E990");
+extern s32
+    hero_respawn_counts_by_level_and_source_category[LEVEL_RECORD_COUNT][16] __asm__("D_0014E990");
 /* Per-mission counters the level loader clears (16 slots). */
 extern s32 D_0014EE90[16];
 

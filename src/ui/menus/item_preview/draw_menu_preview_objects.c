@@ -59,5 +59,5 @@ s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) {
 extern __typeof__(draw_menu_preview_objects) func_0021DDF8 __attribute__((alias("FUN_0021ddf8")));
 
 /* Nonzero: the preview draws slot i (the loop above walks the 24 slots). */
-s32 menu_preview_slot_draw_enabled[24] __asm__("D_001D5020") = {
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+s32 menu_preview_slot_draw_enabled[24] __asm__("D_001D5020") = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

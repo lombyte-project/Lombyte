@@ -3,6 +3,7 @@
 #include "rnc/game/level_object_states.h"
 
 #include "rnc/game/item_state.h"
+
 /* Two flat `&&` returns over level_object_states[20/24/22].state; retail's reuse of
    the %hi register comes out by itself. */
 int get_map_point_mission_status(void) __asm__("FUN_0020be80");

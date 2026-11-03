@@ -42,7 +42,8 @@ char D_0013D220[] = "/************RATCHET/static.ico";
 char D_0013D240[] = "/************RATCHET/************RATCHET";
 char D_0013D270[] = "/************RATCHET/save%d.bin";
 
-struct MemoryCardState memory_card_state = {{{0, 0, 0, 0, 0, -3, 0, 0, {0}, 0, 0, 0}}, 0, 0, -1, 0, 0, 1, -1, 0, 0, -1, -1, 0, -1, 0, 0, 1};
+struct MemoryCardState memory_card_state = {
+    {{0, 0, 0, 0, 0, -3, 0, 0, {0}, 0, 0, 0}}, 0, 0, -1, 0, 0, 1, -1, 0, 0, -1, -1, 0, -1, 0, 0, 1};
 
 u8 alternate_item_available[128] = {0};
 
@@ -64,13 +65,13 @@ u8 level_available[20] = {0};
 
 u8 level_visit_state[20] = {0};
 
-s32 D_0013DD70[37] = {0};
+s32 ammo_bought_stats[37] __asm__("D_0013DD70") = {0};
 
 s32 weapon_ammo_pickup_totals[37] = {0};
 
 s32 weapon_ammo_used_counts[37] = {0};
 
-s32 D_0013DF38[LEVEL_RECORD_COUNT] = {0};
+s32 level_bolts[LEVEL_RECORD_COUNT] __asm__("D_0013DF38") = {0};
 
 s32 D_0013DF88[LEVEL_RECORD_COUNT] = {0};
 

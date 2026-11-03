@@ -19,19 +19,21 @@ extern void report_mpeg_picture_spatial_scalable_unsupported(void *) __asm__("FU
 extern void report_mpeg_picture_temporal_scalable_unsupported(void *) __asm__("FUN_0012cb20");
 
 /* Parser by extension_start_code_identifier (ISO 13818-2 table 6-2). */
-const ExtTable mpeg_extension_dispatch_table __asm__("D_001538B8") = {{
-    report_unknown_mpeg_extension,                     /* 0: reserved */
-    _sequenceExtension,                                /* 1: sequence */
-    _sequenceDisplayExtension,                         /* 2: sequence display */
-    _quantMatrixExtension,                             /* 3: quant matrix */
-    _copyrightExtension,                               /* 4: copyright */
-    report_mpeg_sequence_scalable_unsupported,         /* 5: sequence scalable */
-    report_unknown_mpeg_extension,                     /* 6: reserved */
-    _pictureDisplayExtension,                          /* 7: picture display */
-    _pictureCodingExtension,                           /* 8: picture coding */
-    report_mpeg_picture_spatial_scalable_unsupported,  /* 9: picture spatial scalable */
-    report_mpeg_picture_temporal_scalable_unsupported, /* 10: picture temporal scalable */
-}};
+const ExtTable mpeg_extension_dispatch_table __asm__("D_001538B8") = {
+    {
+     report_unknown_mpeg_extension,                     /* 0: reserved */
+        _sequenceExtension,                                /* 1: sequence */
+        _sequenceDisplayExtension,                         /* 2: sequence display */
+        _quantMatrixExtension,                             /* 3: quant matrix */
+        _copyrightExtension,                               /* 4: copyright */
+        report_mpeg_sequence_scalable_unsupported,         /* 5: sequence scalable */
+        report_unknown_mpeg_extension,                     /* 6: reserved */
+        _pictureDisplayExtension,                          /* 7: picture display */
+        _pictureCodingExtension,                           /* 8: picture coding */
+        report_mpeg_picture_spatial_scalable_unsupported,  /* 9: picture spatial scalable */
+        report_mpeg_picture_temporal_scalable_unsupported, /* 10: picture temporal scalable */
+    }
+};
 
 void _extensionAndUserData(void *decoder_state) {
     ExtTable extension_handlers = mpeg_extension_dispatch_table;

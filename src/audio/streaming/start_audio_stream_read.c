@@ -2,8 +2,8 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/sdk/debug.h"
 
-const char cd_read_start_failure_message[] __asm__("D_001E8650") =
-    "****Load file failed to start!****\n";
+const char
+    cd_read_start_failure_message[] __asm__("D_001E8650") = "****Load file failed to start!****\n";
 extern s32 RaiseKernelTrap();
 extern s32 snd_stream_safe_cd_read() __asm__("func_0012ED58");
 s32        start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216788");

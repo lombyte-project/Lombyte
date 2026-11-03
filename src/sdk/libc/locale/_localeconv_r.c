@@ -14,14 +14,14 @@ struct lconv {
     const char *mon_grouping;
     const char *positive_sign;
     const char *negative_sign;
-    char  int_frac_digits;
-    char  frac_digits;
-    char  p_cs_precedes;
-    char  p_sep_by_space;
-    char  n_cs_precedes;
-    char  n_sep_by_space;
-    char  p_sign_posn;
-    char  n_sign_posn;
+    char        int_frac_digits;
+    char        frac_digits;
+    char        p_cs_precedes;
+    char        p_sep_by_space;
+    char        n_cs_precedes;
+    char        n_sep_by_space;
+    char        p_sign_posn;
+    char        n_sign_posn;
 };
 
 int *_localeconv_r(void *state_resource) __asm__("func_001144D8");

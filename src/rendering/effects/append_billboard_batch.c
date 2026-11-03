@@ -142,5 +142,6 @@ BillboardRecord billboard_records[16] = {0};
 /* GIF tag of each billboard quad: NLOOP 1, EOP, REGLIST, 15 registers.  Small
    data in retail, defined below its only user, so it is reached with lui. */
 u64 billboard_quad_header[2] __attribute__((section(".sdata"), aligned(16))) = {
-    0xF400000000008001ULL, 0x0531531531531068ULL,
+    0xF400000000008001ULL,
+    0x0531531531531068ULL,
 };

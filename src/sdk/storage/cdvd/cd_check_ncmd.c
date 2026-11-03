@@ -5,14 +5,14 @@
 #include "rnc/sdk/rpc/rpc.h"
 #include "rnc/sdk/storage/cdvd.h"
 
-extern s32  D_001312F8[];
-const u8    D_00152EB0[] = "Ncmd fail sema cur_cmd:%d keep_cmd:%d\n";
+extern s32        D_001312F8[];
+const u8          D_00152EB0[] = "Ncmd fail sema cur_cmd:%d keep_cmd:%d\n";
 extern const char cd_ncmd_bind_error_message[] __asm__("D_00152ED8");
-extern s32  D_00159750[];
-extern u8   D_00159758[];
-extern s32  PollSema();
-extern void ReferThreadStatus();
-extern void SignalSema();
+extern s32        D_00159750[];
+extern u8         D_00159758[];
+extern s32        PollSema();
+extern void       ReferThreadStatus();
+extern void       SignalSema();
 
 s32 cd_check_ncmd(s32 cmd) __asm__("FUN_00120a28");
 

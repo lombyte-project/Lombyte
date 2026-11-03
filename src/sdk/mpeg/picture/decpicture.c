@@ -22,10 +22,10 @@ struct MpegReferenceImage {
     s32 decoded;
 };
 
-const char odd_field_picture_count_error_message[] __asm__("D_00153940") =
-    "odd number of field pictures";
-const char unknown_picture_structure_error_message[] __asm__("D_00153960") =
-    "unknown picture sutructure";
+const char
+    odd_field_picture_count_error_message[] __asm__("D_00153940") = "odd number of field pictures";
+const char
+    unknown_picture_structure_error_message[] __asm__("D_00153960") = "unknown picture sutructure";
 
 s32 _decPicture(struct MpegDecoderState *decoder) {
     enum {

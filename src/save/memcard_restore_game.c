@@ -5,7 +5,7 @@
 #include "rnc/save/memory_card_state.h"
 #include "rnc/sdk/debug.h"
 
-const char out_of_date_save_message[] __asm__("D_001E81D0") = "Out of date save!\n";
+const char  out_of_date_save_message[] __asm__("D_001E81D0") = "Out of date save!\n";
 extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
 void        memcard_restore_game(u8 *p) __asm__("FUN_00209298");
 

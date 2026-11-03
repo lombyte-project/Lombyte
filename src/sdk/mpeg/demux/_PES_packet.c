@@ -9,6 +9,7 @@
    index: bit 0 adds 16, bit 1 adds 8, bit 2 adds 8, bit 3 adds 24. */
 const u8 pes_header_skip_bit_counts[16] __asm__("D_001539C8") = {
     0, 16, 8, 24, 8, 24, 16, 32, 24, 40, 32, 48, 32, 48, 40, 56};
+
 const char invalid_pack_header_field_message[] __asm__("D_001539D8") =
     "pack_header_field_flag needs to be '0' in PS\n";
 extern s32  _Error();
