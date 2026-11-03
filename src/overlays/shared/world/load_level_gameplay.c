@@ -932,7 +932,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     {
         char *p = (char *)hdr + hdr->f44;
         int   n2;
-        int   count = 0;
+        int   loaded_moby_count = 0;
         int   n;
         char *next_moby_record;
         int   i;
@@ -1022,9 +1022,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
                 {
                     short *slot = moby_index_remap + i;
-                    *slot = count;
+                    *slot = loaded_moby_count;
                 }
-                m = moby_table + count;
+                m = moby_table + loaded_moby_count;
                 init_moby_instance(m, *(int *)p);
                 p += 4;
                 m->bolt_source_slot = vis;
@@ -1092,17 +1092,17 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 if (*(int *)p != -1) {
                     store_current_level_table_value((int)m, *(int *)p);
                 }
-                count++;
+                loaded_moby_count++;
             }
             p = next_moby_record;
         }
-        D_L00_0015FFDC = moby_table + count;
+        D_L00_0015FFDC = moby_table + loaded_moby_count;
         D_L00_0015FFDC->f20 = 0xFF;
-        mem += (count + n2) << 8;
+        mem += (loaded_moby_count + n2) << 8;
         D_L00_0015FFE8_macro = mem;
         mem += n2 << 7;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
-        D_L00_0015FFE0 = (MobyInst *)((int)moby_table + ((count + n2) << 8) - 0x100);
+        D_L00_0015FFE0 = (MobyInst *)((int)moby_table + ((loaded_moby_count + n2) << 8) - 0x100);
     }
     if (hdr->f58 != 0) {
         char      *pv = (char *)hdr + hdr->f58;
