@@ -155,7 +155,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     struct UpdateCam  *current_follow_camera_record;
     Vec4f             *pos;
     FollowCamState    *rig;
-    FollowCamState    *state;
+    FollowCamState    *snap_camera_state;
     FollowCamBlock    *follow;
     FollowCamTail     *tail;
     FollowCamSnap     *snap;
