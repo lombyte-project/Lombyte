@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/save/memory_card_state.h"
 
 extern char *strncpy(char *, const char *, u32);
 void         memcard_get_name(u8 *src) __asm__("FUN_00209030");
@@ -37,3 +38,5 @@ char D_0013D200[] = "/************RATCHET/icon.sys";
 char D_0013D220[] = "/************RATCHET/static.ico";
 char D_0013D240[] = "/************RATCHET/************RATCHET";
 char D_0013D270[] = "/************RATCHET/save%d.bin";
+
+struct MemoryCardState memory_card_state = {{{0, 0, 0, 0, 0, -3, 0, 0, {0}, 0, 0, 0}}, 0, 0, -1, 0, 0, 1, -1, 0, 0, -1, -1, 0, -1, 0, 0, 1};
