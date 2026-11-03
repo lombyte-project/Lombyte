@@ -3269,14 +3269,14 @@ typedef struct {
     char          p1E8[0xF4];
     float         f2DC;
     char          p2E0[0x20];
-    int           f300;
+    int           airborne_repeat_press_action_enabled;
     char          p304[0x4];
     short         f308;
     short         f30A;
     short         f30C;
-    short         f30E;
+    short         grapple_extended_press_window_enabled;
     char          p310[0x108];
-    int           f418;
+    int           jump_ground_item_input_enabled;
     short         f41C;
     short         f41E;
     char          p420[0x30];
@@ -3386,7 +3386,7 @@ int process_hero_equipped_item_input(void) {
     switch (D_0013F450_h228770.equipped_slot_item_id) {
     case ITEM_WRENCH:
         if (D_0013F450_h228770.hero_control_mode < 2U ||
-            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP && D_0013F450_h228770.f418 != 0)) {
+            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP && D_0013F450_h228770.jump_ground_item_input_enabled != 0)) {
             Moby_227fa0 *equipped_item_moby;
 
             if (D_0013F450_h228770.wrench_combo_throw_input_lockout != 0) {
@@ -3516,7 +3516,7 @@ int process_hero_equipped_item_input(void) {
         select_hero_grapple_swing_target();
         select_hero_grapple_target();
         t = scale_game_frames(5);
-        if (D_0013F450_h228770.f30E != 0) {
+        if (D_0013F450_h228770.grapple_extended_press_window_enabled != 0) {
             t = scale_game_frames(8);
         }
         if (D_0013F450_h228770.hero_control_mode < 2U ||
@@ -3661,7 +3661,7 @@ int process_hero_equipped_item_input(void) {
         break;
     case 18:
         if (D_0013F450_h228770.hero_control_mode < 2U ||
-            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP && D_0013F450_h228770.f418 != 0)) {
+            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP && D_0013F450_h228770.jump_ground_item_input_enabled != 0)) {
             if (D_0013F450_h228770.hero_current_state != HERO_STATE_LOOK) {
                 int t = scale_game_frames(0xA);
                 int n = D_0013F450_h228770.f10B0;
@@ -3696,7 +3696,7 @@ int process_hero_equipped_item_input(void) {
                     D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_CROUCH ||
                     ((D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_FALL ||
                       D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP) &&
-                     D_0013F450_h228770.f300 != 0)) {
+                     D_0013F450_h228770.airborne_repeat_press_action_enabled != 0)) {
                     if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);
                     }
