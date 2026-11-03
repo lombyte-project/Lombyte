@@ -151,7 +151,7 @@ s32 process_hero_hit_response(s32 apply_hurt_response) {
     OvlMobyEntry40 *hero_hit_entry;
     u8             *mob;
     s32             flag;
-    s32             id;
+    s32             hurt_response_state;
     f32             horizontal_hurt_impulse_scale, vertical_hurt_impulse_scale, hurt_impulse_scale;
     OvlVec4         hurt_impulse;
 
@@ -210,9 +210,9 @@ s32 process_hero_hit_response(s32 apply_hurt_response) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         mob = (u8 *)G.damage_source_moby;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
-            id = 0x80;
+            hurt_response_state = 0x80;
         call_ret:
-            hero_set_state(id, 1);
+            hero_set_state(hurt_response_state, 1);
             return 1;
         }
         if (G.state.control_mode == 0x16) {
