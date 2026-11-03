@@ -3205,7 +3205,7 @@ void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
         return;
     if (pickup_moby->pickup_moby_state == MOBY_STATE_REMOVAL_MARKER)
         return;
-    if (pickup_moby->pickup_moby_state == 0xFD)
+    if (pickup_moby->pickup_moby_state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER)
         return;
     if (random_integer_below(10))
         return;
