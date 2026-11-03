@@ -361,7 +361,7 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
     Vars        *vars;
     struct Hero *player;
     s32          limit;
-    s32          count = 0;
+    s32          taunter_assignment_count = 0;
     s32          i;
     f32          distance;
     f32          angle;
@@ -421,7 +421,7 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
                             distance < vector_distance_xy((u8 *)current + 0x10,
                                                           (u8 *)taunter_candidate_moby + 0x10)) {
                             *(Moby **)(state + 0x18) = taunter_moby;
-                            count++;
+                            taunter_assignment_count++;
                         }
                     }
                 }
@@ -443,12 +443,12 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
                         *(f32 *)((u8 *)taunter_candidate_moby + 0x14) - hero.motion.pos.f[1]));
                 if (angle < 0.9599311f) {
                     *(Moby **)((u8 *)vars + 0x78) = taunter_moby;
-                    count++;
+                    taunter_assignment_count++;
                 }
             }
         }
     }
-    return count;
+    return taunter_assignment_count;
 }
 
 void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
