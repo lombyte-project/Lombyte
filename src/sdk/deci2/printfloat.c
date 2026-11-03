@@ -2,13 +2,16 @@
 #include "rnc/data_labels.h"
 #include "rnc/sdk/soft_float.h"
 
-extern char significand_format[] __asm__("D_00152780");
-extern char nonnegative_exponent_format[] __asm__("D_00152788");
-extern char negative_exponent_format[] __asm__("D_00152790");
 extern f64  dpsub_f(f64 left, f64 right) __asm__("dpsub");
 extern f64  dpdiv_f(f64 left, f64 right) __asm__("dpdiv");
 extern s64  ftoi(s64 bits);
 extern s32  kprintf();
+
+/* Explicit .rodata: at 8 bytes or less they would go to .sdata. */
+const char significand_format[] __asm__("D_00152780") __attribute__((section(".rodata"))) = "0.%d";
+const char nonnegative_exponent_format[] __asm__("D_00152788") __attribute__((section(".rodata"))) =
+    "e+%d";
+const char negative_exponent_format[] __asm__("D_00152790") __attribute__((section(".rodata"))) = "e%d";
 
 void printfloat(f64 x) {
     s32 exponent;

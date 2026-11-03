@@ -946,11 +946,16 @@ RODATA_OVERLAYS = {
     # as the splat symbol jtbl_00153AA0, so the compiled .rodata must land at
     # the same VMA/file offset for the relocations to resolve content-equal.
     "_getpic": (0x153AA0, 0x54A20, 20),
-    "sdk/deci2/printfloat": (0x152798, 0x53718, 24),  # its three f64 literals (0.1, 0.1, 1e6)
+    "sdk/deci2/printfloat": (0x152780, 0x53700, 48),  # its three formats and three f64 literals (0.1, 0.1, 1e6)
     "sdk/deci2/printf_impl": (0x1527B0, 0x53730, 292),  # _printf's format switch table (jtbl_001527B0)
     "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0, 26),  # its RPC-collision message
     "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
-    "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 96),  # its buffer-full message
+    "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 141),  # its buffer-full and continuing messages
+    "audio/snd_start_sound_system": (0x153C50, 0x54BD0, 70),  # its bind error and source file name
+    "audio/rpc/snd_returns": (0x153C98, 0x54C18, 82),  # its no-returns message
+    "audio/banks/snd_bank_load_from_ee_cb": (0x153EC0, 0x54E40, 89),  # its two error messages
+    "runtime/debug/print_register_values_and_halt": (0x1E8A08, 0xE9988, 71),  # its three messages
+    "movies/decoder/dec_bs0": (0x1E8B38, 0xE9AB8, 57),  # its two messages
     "sdk/mpeg/errors/print_mpeg_error": (0x153AD8, 0x54A58, 16),  # its error message
     "sdk/graph/sce_gs_set_def_load_image": (0x1530B0, 0x54030, 284),  # its error message and switch table
     "update_menu_resource_stream": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
@@ -972,7 +977,7 @@ RODATA_OVERLAYS = {
     "mobys/animation/update_resident_dialogue_animation_state": (0x1E8A90, 0xE9A10, 52),  # switch table
     "update_help_state": (0x1E7A40, 0xE89C0, 36),  # switch table
     "memcard_update_state": (0x1E8200, 0xE9180, 348),  # switch table
-    "init_once": (0x1E7B30, 0xE8AB0, 20),  # switch table
+    "init_once": (0x1E7AE0, 0xE8A60, 100),  # its three strings and switch table
     "actuator_calc_power": (0x1E7640, 0xE85C0, 24),  # switch table
     "resolve_moby_hit_response": (0x1E84E0, 0xE9460, 128),  # switch table
     "service_level_archive_load": (0x1E7CE0, 0xE8C60, 32),  # switch table
@@ -1033,6 +1038,8 @@ SDATA_OVERLAYS = {
     "rendering/frame/swap_render_buffer_chain": (0x160F04, 0x61E84, 4),
     "rendering/texture/dma_tie_textures": (0x160F74, 0x61EF4, 4),
     "ui/hud/update_hud": (0x15F688, 0x60608, 4),
+    "movies/decoder/callbacks/mpeg_error": (0x161220, 0x621A0, 4),  # its "%s\n" format
+    "runtime/startup/init_once": (0x15FA88, 0x60A08, 14),  # its reboot message
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.

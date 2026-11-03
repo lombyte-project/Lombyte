@@ -13,8 +13,6 @@ struct SifClientDataStartSound {
     void *volatile server;
 };
 
-extern u8                             snd_sif_bind_rpc_error_string[] __asm__("D_00153C50");
-extern u8                             snd_989_snd_source_file[] __asm__("D_00153C78");
 extern struct SifClientDataStartSound sound_command_client __asm__("D_0015EBC0");
 extern struct SifClientDataStartSound sound_stream_client __asm__("D_0015EBE8");
 extern s32           *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
@@ -30,6 +28,11 @@ extern u32  snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;
 extern s32 snd_send_iop_command_and_wait(s32, s32, void *) __asm__("func_0012E548");
 
 s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
+
+const char snd_sif_bind_rpc_error_string[] __asm__("D_00153C50") =
+    "error: sceSifBindRpc in %s, at line %d\n";
+/* __FILE__ of the retail 989snd.c, which this function's messages name. */
+const char snd_989_snd_source_file[] __asm__("D_00153C78") = "/usr/local/989snd/ee/989snd.c";
 
 s32 snd_start_sound_system(void) {
     s32        bind_result;
@@ -48,7 +51,7 @@ s32 snd_start_sound_system(void) {
     for (;;) {
         bind_result = sceSifBindRpc(&sound_command_client, 0x123456, 0);
         if (bind_result < 0) {
-            Printf((const char *)snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x73);
+            Printf(snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x73);
             for (;;) {
             }
         }
@@ -68,7 +71,7 @@ s32 snd_start_sound_system(void) {
     do {
         bind_result = sceSifBindRpc(&sound_stream_client, 0x123457, 0);
         if (bind_result < 0) {
-            Printf((const char *)snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x88);
+            Printf(snd_sif_bind_rpc_error_string, snd_989_snd_source_file, 0x88);
             for (;;) {
             }
         }

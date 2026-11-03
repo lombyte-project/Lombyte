@@ -23,10 +23,7 @@
 #include "rnc/ui/text/font.h"
 
 extern u8   vu0_micro_program[] __asm__("D_0010E4C0");
-extern u8   rebooted_iop_message[] __asm__("D_0015FA88");
-extern u8   iop_reboot_image_path[] __asm__("D_001E7AE0");
-extern u8   loaded_irx_modules_message[] __asm__("D_001E7AF8");
-extern u8   unsupported_lang_message[] __asm__("D_001E7B10");
+extern const char rebooted_iop_message[] __asm__("D_0015FA88");
 extern s32  DIntr();
 extern s32  EnableCache();
 extern s32  fill_transfer_words() __asm__("func_001F97E8");
@@ -46,6 +43,10 @@ extern s32  init_pads() __asm__("func_00217048");
 extern s32  vu0_load_micro_program() __asm__("func_002334D8");
 extern s32  vu1_init_chain() __asm__("func_002335D0");
 void        init_once(void) __asm__("FUN_00201650");
+
+const char iop_reboot_image_path[] __asm__("D_001E7AE0") = "cdrom0:\\IOPRP243.IMG;1";
+const char loaded_irx_modules_message[] __asm__("D_001E7AF8") = "loaded irx modules\n";
+const char unsupported_lang_message[] __asm__("D_001E7B10") = "Unsupported language %d\n";
 
 /* The boot archive as decompress_wad unpacks it: the IRX modules to load,
    each as an offset from the archive start and a size. */
@@ -179,3 +180,7 @@ void init_once(void) {
 extern __typeof__(init_once) func_00201650 __attribute__((alias("FUN_00201650")));
 
 u8 image_clear_buffer[4096] = {0};
+
+/* Retail keeps this message in small data; init_once reaches it with lui/addiu. */
+const char rebooted_iop_message[] __asm__("D_0015FA88") __attribute__((section(".sdata"))) =
+    "Rebooted IOP\n";

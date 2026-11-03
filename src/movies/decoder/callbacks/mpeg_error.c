@@ -6,7 +6,7 @@ struct MpegErrorData {
     s32 unk4;
 };
 
-extern u8 video_error_message[] __asm__("D_00161220");
+extern const char video_error_message[] __asm__("D_00161220");
 s32       mpeg_error(s32 unused_mpeg, struct MpegErrorData *cb_data) __asm__("FUN_0023d080");
 
 s32 mpeg_error(s32 unused_mpeg, struct MpegErrorData *cb_data) {
@@ -21,3 +21,5 @@ extern __typeof__(mpeg_error) D_0023D080 __attribute__((alias("FUN_0023d080")));
 /* Recovered original symbol name. */
 extern __typeof__(mpeg_error) mpegError__FP7sceMpegP18sceMpegCbDataErrorPv
     __attribute__((alias("FUN_0023d080")));
+
+const char video_error_message[] __asm__("D_00161220") = "%s\n";
