@@ -49,13 +49,13 @@ unsigned char *create_drone_flight_trail_record(char *position_source,
                                                 int   mode,
                                                 int   step) __asm__("FUN_L17_0026fdd0");
 
-unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) {
+unsigned char *create_drone_flight_trail_record(char *position_source, int use_short_step_range, int step) {
     enum {
         DRONE_FLIGHT_TRAIL_MODE_EXTENDED_STEP_RANGE = 0
     };
     unsigned char *flight_trail_record;
     int            remaining_steps;
-    if (mode)
+    if (use_short_step_range)
         remaining_steps = 5 - step;
     else
         remaining_steps = 0xF - step;
@@ -64,8 +64,8 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
         if (flight_trail_record != 0) {
             qcopy(flight_trail_record + 0x10, position_source);
             flight_trail_record[9] = truncate_float_to_s32(1.0f) + 0x70;
-            *(int *)(flight_trail_record + 0x20) = mode;
-            if (mode == DRONE_FLIGHT_TRAIL_MODE_EXTENDED_STEP_RANGE) {
+            *(int *)(flight_trail_record + 0x20) = use_short_step_range;
+            if (use_short_step_range == DRONE_FLIGHT_TRAIL_MODE_EXTENDED_STEP_RANGE) {
                 int d = 0xF - step;
                 *(int *)(flight_trail_record + 4) = 0x60FF3020;
                 flight_trail_record[3] = 0x48;
