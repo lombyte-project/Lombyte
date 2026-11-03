@@ -89,10 +89,10 @@ state_one: {
     if (is_point_inside_clip_volume(D_0013F3D0, ammo_spawner_state[0]) == 0)
         return;
     for (i = 0; D_L07_00161CA0[i] != -1; i++) {
-        int   id = D_L07_00161CA0[i];
-        float current_ammo_count = convert_integer_to_float(weapon_ammo_counts[id]);
+        int   weapon_index = D_L07_00161CA0[i];
+        float current_ammo_count = convert_integer_to_float(weapon_ammo_counts[weapon_index]);
         float scale = convert_integer_to_float(
-            ((L07ScaleRow *)((char *)l07_ammo_spawner_scaling_rows + id * 0x18))->scale);
+            ((L07ScaleRow *)((char *)l07_ammo_spawner_scaling_rows + weapon_index * 0x18))->scale);
         float ratio = current_ammo_count / scale;
         float step = random_float_between(0.0f, *(float *)(ammo_spawner_state + 8));
         float min_ratio = *(float *)(ammo_spawner_state + 2) / 100.0f;
@@ -142,13 +142,13 @@ state_one: {
                     } while (accepted == 0);
                     total = remaining;
                     debug_print(D_L07_00211B78,
-                                id,
+                                weapon_index,
                                 batch,
                                 fptodp(position[0]),
                                 fptodp(position[1]),
                                 fptodp(position[2]),
                                 fptodp(step));
-                    spawn_on_path(position, id, batch, 0);
+                    spawn_on_path(position, weapon_index, batch, 0);
                     step +=
                         random_float_between(*(float *)(ammo_spawner_state + 8) / retry_step, 2.0f);
                     if (remaining < batch) {
