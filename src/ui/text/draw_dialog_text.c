@@ -311,7 +311,7 @@ void draw_dialog_text(void) {
     case FREEZE_CHOICE_MESSAGE_DIALOG: {
         s32 text_color;
         s32 button_color;
-        s32 id;
+        s32 body_message_id;
         f32 alpha;
 
         box = D_001E7908;
@@ -326,25 +326,25 @@ void draw_dialog_text(void) {
         case FREEZE_CHOICE_SHARED_PAIRED_FOOTER_MESSAGE:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
-            id = 0x522A;
+            body_message_id = 0x522A;
             break;
         case FREEZE_CHOICE_ALTERNATE_PAIRED_FOOTER_MESSAGE:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
-            id = 0x522B;
+            body_message_id = 0x522B;
             break;
         case FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE:
             font_print_center(0x100, 0x118, button_color, get_help_message_text(0x524A), -1);
-            id = 0x522C;
+            body_message_id = 0x522C;
             break;
         default:
-            id = 0;
+            body_message_id = 0;
             break;
         }
-        if (id != 0) {
+        if (body_message_id != 0) {
             font_print_window(&box,
                               text_color,
-                              get_help_message_text(id),
+                              get_help_message_text(body_message_id),
                               -1,
                               get_effect_texture(1),
                               normal_font_metrics);
