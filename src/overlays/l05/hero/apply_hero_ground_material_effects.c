@@ -399,6 +399,9 @@ extern u128_2133a8 D_L05_00174270[] NOT_SDA;
 s32                resolve_hero_position_collisions(s32 mode) __asm__("FUN_L05_00240ed0");
 
 s32 resolve_hero_position_collisions(s32 excess_displacement_mode) {
+    enum {
+        EXCESS_DISPLACEMENT_NORMALIZE_TO_CAPSULE_RADIUS = 0xF
+    };
     V_2133a8     initial_position;
     V_2133a8     collision_query_offset;
     V_2133a8     resolved_displacement;
@@ -472,7 +475,7 @@ s32 resolve_hero_position_collisions(s32 excess_displacement_mode) {
     fast_vec_sub(&resolved_displacement, &hero.motion.pos.q, &initial_position);
     query_height_or_displacement_length = fast_vec_length(&resolved_displacement);
     if (hero.capsule_radius * 1.5f < query_height_or_displacement_length) {
-        if (excess_displacement_mode == 0xF) {
+        if (excess_displacement_mode == EXCESS_DISPLACEMENT_NORMALIZE_TO_CAPSULE_RADIUS) {
             if (512.0f < resolved_displacement.f[0])
                 resolved_displacement.f[0] = 512.0f;
             else if (resolved_displacement.f[0] < -512.0f)
