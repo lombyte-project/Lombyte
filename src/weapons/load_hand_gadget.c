@@ -36,9 +36,9 @@ typedef struct HandGadgetState {
     Moby *class_pose_moby;
     Moby *first_attachment_moby;
     Moby *second_attachment_moby;
-    s32   x60;
-    s32   x64;
-    s32   x68;
+    s32   animation_attachment0_moby_address;
+    s32   animation_attachment1_moby_address;
+    s32   animation_attachment2_moby_address;
     Moby *class_0197_moby;
     Moby *class_0266_moby;
     Moby *class_026a_moby;
@@ -327,9 +327,9 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     update_preview_animation_and_attachments(hand->source_moby_address,
                                              hand->class_pose_moby,
                                              hand->animation_moby,
-                                             &hand->x60,
-                                             &hand->x64,
-                                             &hand->x68);
+                                             &hand->animation_attachment0_moby_address,
+                                             &hand->animation_attachment1_moby_address,
+                                             &hand->animation_attachment2_moby_address);
     return 0;
 }
 
