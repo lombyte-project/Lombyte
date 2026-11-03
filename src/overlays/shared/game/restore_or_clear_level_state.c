@@ -93,7 +93,7 @@ void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 void restore_or_clear_level_state(void) {
     char        *s = D_L00_001BB230;
     int          i;
-    short        id;
+    short        vehicle_moby_class_id;
     u8          *record_cursor;
     struct Hero *hero_state;
 
@@ -117,13 +117,13 @@ void restore_or_clear_level_state(void) {
         D_00151708 = *(unsigned short *)(s + 0xC54);
     }
     if (*(int *)(s + 0x44) != 0 && *(int *)(s + 0x44) != 3) {
-        id = 0;
+        vehicle_moby_class_id = 0;
         switch (*(int *)(s + 0x44)) {
         case HERO_VEHICLE_MODE_CLANK:
-            id = 0x57;
+            vehicle_moby_class_id = 0x57;
             break;
         case HERO_VEHICLE_MODE_GIANT_CLANK:
-            id = 0x1A3;
+            vehicle_moby_class_id = 0x1A3;
             break;
         default:
             raise_kernel_trap();
@@ -134,7 +134,7 @@ void restore_or_clear_level_state(void) {
             record_cursor = moby_table + i * 0x100;
             if (record_cursor >= D_L00_0015FFDC)
                 break;
-            if (*(short *)(record_cursor + 0xA6) == id) {
+            if (*(short *)(record_cursor + 0xA6) == vehicle_moby_class_id) {
                 char *s = D_L00_001BB230;
                 enter_hero_vehicle_mode(*(int *)(s + 0x44), *(int *)(s + 0x4C), record_cursor);
                 break;
