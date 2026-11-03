@@ -793,7 +793,7 @@ typedef struct {
     char         *owner;
     int           x14;
     unsigned char x18;
-    unsigned char x19;
+    unsigned char hit_response_tier;
     short         type;
     float         x1C;
     int           flags;
@@ -830,7 +830,7 @@ void process_extermitank_particle_hits(char *moby) {
     set_vector_length_xy(hit_info.v, hit_info.v, 1.5f);
     hit_info.v[2] = 1.0f;
     hit_info.v[3] = 5627.9248f;
-    hit_info.x19 = 1;
+    hit_info.hit_response_tier = 1;
     hit_info.type = MOBY(moby)->oclass;
     hit_info.x18 = 0;
     for (j = 0; j < 8; j++) {
