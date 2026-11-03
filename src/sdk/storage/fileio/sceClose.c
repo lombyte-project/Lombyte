@@ -28,7 +28,7 @@ s32 sceClose(s32 fd) {
     s32                  ok;
     s32                  sid;
     struct SifFileSlot  *io;
-    struct SifFileState *state = &D_00156880;
+    struct SifFileState *close_request = &D_00156880;
 
     io = get_iob(fd);
     _sceFsWaitS(1);
