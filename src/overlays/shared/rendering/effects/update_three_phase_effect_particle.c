@@ -876,7 +876,7 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
                                                          void         *initial_velocity,
                                                          unsigned char variant_flags,
 
-                                                         float size) {
+                                                         float initial_travel_distance) {
     void          *source = spawn_position;
     unsigned char *particle = create_part2(0xC, 0);
     if (particle) {
@@ -907,7 +907,7 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
                 particle[2] = texture;
             }
         } else {
-            int   offset = 0;
+            int   texture_bank_offset = 0;
             float one = 1.0f;
             float zero = 0.0f;
             float scale = D_L00_001601B8_gp;
@@ -926,18 +926,18 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
                                     spinning_particle_default_final_color_blend_target_gp,
                                     random_float_between(zero, one));
             if (variant_flags & 4) {
-                offset = 8;
+                texture_bank_offset = 8;
                 if (!item_text_variant[0x10])
-                    offset = 0;
+                    texture_bank_offset = 0;
             }
-            particle[2] = effect_texture_ids[random_integer_below(8) + offset];
+            particle[2] = effect_texture_ids[random_integer_below(8) + texture_bank_offset];
             particle[3] = 0x44;
         }
         particle[9] = truncate_float_to_s32(4.0f) + 0x40;
         particle[1] = 0;
         particle[8] = random_integer_below(0xFF);
         motion[0x1E] = truncate_float_to_s32(randf_sym(1.0f, 4.0f));
-        *(float *)(motion + 0x10) = size;
+        *(float *)(motion + 0x10) = initial_travel_distance;
         motion[0x1F] = variant_flags;
         if (variant_flags & 4) {
             *(short *)(particle + 0xA) =
