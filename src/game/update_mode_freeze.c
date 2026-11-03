@@ -233,7 +233,7 @@ void update_mode_freeze(void) {
                 freeze.unk24--;
             }
         }
-        switch (card_state) {
+        switch (save_card_state) {
         case CS_WARNING:
             if (freeze.timer == 0) {
                 if (controller_state.pressed & PAD_CROSS) {

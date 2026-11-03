@@ -12,7 +12,7 @@ void save_card_state_format_pending(void) {
         card_state->pending_card = 0;
         card_state->pending_state = MEMCARD_REQUEST_FORMAT;
     }
-    card_state = CS_FORMATTING;
+    save_card_state = CS_FORMATTING;
 }
 
 extern __typeof__(save_card_state_format_pending) func_00208AF8

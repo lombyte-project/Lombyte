@@ -175,7 +175,7 @@ void level_draw_dialog_text(void) {
         left = 0;
         mid = 0;
         right = 0;
-        switch (card_state) {
+        switch (save_card_state) {
         case CS_PROMPT_FORMAT:
             left = 0x524F;
             right = 0x524B;

@@ -42,7 +42,7 @@ extern f32 frame_time_cube __asm__("D_0015ED74");
 extern s32 current_bolt_count __asm__("D_0015ED98");
 
 /* Memory card state (enum CardState) and the flags of the dialog that shows it. */
-extern s32 card_state __asm__("D_0015EEB0");
+extern s32 save_card_state __asm__("D_0015EEB0");
 extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 
 /* GS address of the depth buffer (ZBUF_1 takes it >> 13). */

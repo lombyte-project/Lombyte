@@ -10,7 +10,7 @@ void save_card_state_check_save(void) {
     if (card_state->state == MEMCARD_DISPATCH_PENDING_OPERATION && card_state->pending_state < 0) {
         card_state->pending_state = MEMCARD_REQUEST_CHDIR;
         card_state->pending_card = 0;
-        card_state = CS_CHECKING_SAVE;
+        save_card_state = CS_CHECKING_SAVE;
     }
 }
 

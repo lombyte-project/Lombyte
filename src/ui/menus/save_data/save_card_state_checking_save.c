@@ -11,20 +11,20 @@ void save_card_state_checking_save(void) {
     struct MemoryCardState *card_state = &memory_card_state;
     int                     save_index;
     if (card_state->card[0].sync_result < -1) {
-        card_state = CS_NOCARD;
+        save_card_state = CS_NOCARD;
         return;
     }
     save_index = card_state->card[0].save_index;
     if (save_index == -2) {
         if (card_state->card[0].free < 0x15E) {
-            card_state = SAVE_CARD_STATE_INSUFFICIENT_FREE_SPACE;
+            save_card_state = SAVE_CARD_STATE_INSUFFICIENT_FREE_SPACE;
         } else {
-            card_state = CS_NOSAVE;
+            save_card_state = CS_NOSAVE;
         }
         return;
     }
     if (save_index >= -1)
-        card_state = CS_NEWCARD;
+        save_card_state = CS_NEWCARD;
 }
 
 extern __typeof__(save_card_state_checking_save) func_00208C00

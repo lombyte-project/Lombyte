@@ -5,7 +5,7 @@ void save_card_state_warning(void) __asm__("FUN_00208980");
 
 void save_card_state_warning(void) {
     if ((mode_freeze_flags ^ 1) & 1) {
-        card_state = CS_NOCARD;
+        save_card_state = CS_NOCARD;
     }
 }
 

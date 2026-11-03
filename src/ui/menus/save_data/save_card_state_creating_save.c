@@ -9,7 +9,7 @@ void save_card_state_creating_save(void) {
     struct MemoryCardState *card_state = &memory_card_state;
     if (card_state->state == MEMCARD_DISPATCH_PENDING_OPERATION && card_state->pending_state < 0) {
         if (card_state->err != 0) {
-            card_state = CS_CREATE_FAILED;
+            save_card_state = CS_CREATE_FAILED;
             mode_freeze_flags |= 0x40;
             return;
         }
@@ -17,7 +17,7 @@ void save_card_state_creating_save(void) {
         card_state->active_card = 0;
         card_state->card[0].save_index = 0;
         card_state->pending_card = 0;
-        card_state = CS_NEWCARD;
+        save_card_state = CS_NEWCARD;
     }
 }
 

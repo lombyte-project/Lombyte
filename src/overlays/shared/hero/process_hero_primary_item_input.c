@@ -1,5 +1,6 @@
 /* Hero: primary item input, item slot selection, water and ground transitions, and the hoverboard tricks, race progress and respawn. */
 #include "types.h"
+#include "rnc/world/level_id.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/hero/hero_tables.h"

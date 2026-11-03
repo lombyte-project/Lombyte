@@ -3,6 +3,7 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
+#include "rnc/camera/update_cam.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"

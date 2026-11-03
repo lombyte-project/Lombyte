@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Values of card_state. The names are the game's own: the levels keep a table of
+/* Values of save_card_state. The names are the game's own: the levels keep a table of
  * these names right after the handler table that run_state_handler indexes. */
 enum CardState {
     CS_INIT = 0,

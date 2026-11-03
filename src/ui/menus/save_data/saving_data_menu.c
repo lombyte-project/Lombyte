@@ -88,7 +88,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
 
     block_23:
     block_24:
-        if ((card_state != CS_NEWCARD) && (card_state != CS_GOOD_SAVE)) {
+        if ((save_card_state != CS_NEWCARD) && (save_card_state != CS_GOOD_SAVE)) {
             menu_system.next = (void *)menu_system.current->back;
             return 0;
         }

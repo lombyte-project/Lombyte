@@ -92,7 +92,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
             return -1;
         }
     }
-    if (card_state != CS_NEWCARD && card_state != CS_GOOD_SAVE) {
+    if (save_card_state != CS_NEWCARD && save_card_state != CS_GOOD_SAVE) {
         menu_system.next = menu_system.current->back;
         return 0;
     }

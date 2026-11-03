@@ -20,11 +20,11 @@ void save_card_state_saving(void) {
         (memory_card_state.pending_state < MEMCARD_QUERY_INFO)) {
         if (memory_card_state.err != 0) {
             mode_freeze_init(3, 0);
-            card_state = CS_SAVE_FAILED;
+            save_card_state = CS_SAVE_FAILED;
             flags = mode_freeze_flags | 0x40;
             mode_freeze_flags = flags;
         } else {
-            card_state = CS_GOOD_SAVE;
+            save_card_state = CS_GOOD_SAVE;
         }
     }
 }
