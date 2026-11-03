@@ -61,7 +61,7 @@ void ship_rocket_update(struct Moby *moby) {
     };
     Missile_94f8 *rocket_vars = (Missile_94f8 *)moby->pvars;
     Vec4f        *pos;
-    Vec4          previous_pos, spray, offset, velocity, random;
+    Vec4          previous_pos, spray, trail_particle_vector, velocity, random;
     float         fraction;
     struct Moby  *target;
     char         *texture;
@@ -75,8 +75,8 @@ void ship_rocket_update(struct Moby *moby) {
     velocity.q = random.q;
     fast_vec_normalize(&velocity, &velocity, random_float_between(0.1f, 0.2f) * frame_time);
     fast_vec_normalize(
-        &offset, &rocket_vars->step, -random_float_between(frame_time * 0.1f, frame_time));
-    fast_vec_add(&velocity, &velocity, &offset);
+        &trail_particle_vector, &rocket_vars->step, -random_float_between(frame_time * 0.1f, frame_time));
+    fast_vec_add(&velocity, &velocity, &trail_particle_vector);
     FUN_L00_002712b8(&moby->pos,
                      &velocity,
                      scale_game_frames(6),
@@ -91,12 +91,12 @@ void ship_rocket_update(struct Moby *moby) {
     texture = rocket_smoke_texture;
     for (fraction = 0.0f; fraction < 1.0f; fraction += 0.33333334f) {
         unsigned char *particle;
-        fast_vec_normalize(&offset,
+        fast_vec_normalize(&trail_particle_vector,
                            &rocket_vars->step,
                            random_float_between(fraction, fraction + 0.33333334f) *
                                rocket_vars->speed);
-        fast_vec_add(&offset, &offset, &moby->pos);
-        particle = FUN_L00_002712b8(&offset,
+        fast_vec_add(&trail_particle_vector, &trail_particle_vector, &moby->pos);
+        particle = FUN_L00_002712b8(&trail_particle_vector,
                                     &velocity,
                                     scale_game_frames(60),
                                     0x7f,
@@ -118,7 +118,7 @@ void ship_rocket_update(struct Moby *moby) {
         transform_vector_by_basis(&random, &random, &moby->rot_row0);
         build_look_at_matrix(&random, &random, &moby->rot_row0, random_angle_radians());
         FUN_L00_0026cbb0(
-            &offset, &random, 0x4f007fff, 0x1fffffff, scale_game_frames(5), 1, 20000.0f);
+            &trail_particle_vector, &random, 0x4f007fff, 0x1fffffff, scale_game_frames(5), 1, 20000.0f);
     }
     pos = &moby->pos;
     target = rocket_vars->target;
