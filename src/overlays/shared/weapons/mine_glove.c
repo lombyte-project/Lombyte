@@ -146,7 +146,7 @@ void mine_glove_update(struct Moby *moby) {
         MINE_GLOVE_IDLE = 2
     };
     GloveVars *mine_glove_vars;
-    Vec4       saved, offset, rotatedOffset;
+    Vec4       saved, grip_local_offset, rotatedOffset;
     Vec4       local[4];
     Vec4       pos, target;
     Vec4       basis[3];
@@ -172,7 +172,7 @@ void mine_glove_update(struct Moby *moby) {
         return;
     FUN_L00_0024f7c8(moby, 0, &saved);
     build_moby_bone_transform(moby, 0, local);
-    transform_vector(&rotatedOffset, &offset, local);
+    transform_vector(&rotatedOffset, &grip_local_offset, local);
     fast_vec_add(&mine_glove_vars->grip, &saved, &rotatedOffset);
     if (mine_glove_vars->held != 0)
         mine_glove_vars->held->collision_disable = 1;
