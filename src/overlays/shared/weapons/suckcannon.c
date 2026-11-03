@@ -1863,7 +1863,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
     struct Moby *sound_source_moby;
     if (suction_record == 0)
         return 0;
-    if (moby != 0 && MOBY(moby)->state != 0xFE && MOBY(moby)->state != 0xFD &&
+    if (moby != 0 && MOBY(moby)->state != MOBY_STATE_REMOVAL_MARKER && MOBY(moby)->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER &&
         *(s16 *)(suction_record + 0x68) != 8) {
         qcopy(&MOBY(moby)->pos, position);
         FUN_L00_002d9fd0_002dbb20(
