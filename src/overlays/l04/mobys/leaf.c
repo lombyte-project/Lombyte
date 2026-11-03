@@ -35,7 +35,7 @@ void leaf_update(struct Moby *moby) {
     char  *leaf_vars = (char *)moby->pvars;
     float  speed;
     float  amount;
-    int    timer;
+    int    activation_delay;
     float *motion;
 
     random_direction_or_collision_start_position.q = 0;
@@ -134,10 +134,10 @@ void leaf_update(struct Moby *moby) {
         if (*(int *)(leaf_vars + 0x44) > 0)
             return;
         qcopy(&moby->pos, leaf_vars + 0x30);
-        timer = random_int_between(120, 2400);
+        activation_delay = random_int_between(120, 2400);
         /* Preserve the retail ordering of the timer reload stores. */
-        *(volatile int *)(leaf_vars + 0x40) = timer;
-        *(volatile int *)(leaf_vars + 0x44) = timer;
+        *(volatile int *)(leaf_vars + 0x40) = activation_delay;
+        *(volatile int *)(leaf_vars + 0x44) = activation_delay;
         moby->state = LEAF_WAIT_FOR_ACTIVATION;
         break;
     default:
