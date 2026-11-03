@@ -57,6 +57,6 @@ s32 _skipMB0(struct MpegDecoder   *decoder,
         _Error(decoder, skipped_macroblock_in_i_picture_error_message);
         ok = 0;
     }
-    *flags &= ~1;
+    *macroblock_type_flags &= ~1;
     return ok;
 }
