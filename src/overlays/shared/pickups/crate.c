@@ -1037,7 +1037,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     V2d09b8  position, away, rotation, basis[3], launch, spawn_pos, spin;
     s32      kind;
     M2d1428 *broken_crate_moby;
-    s32      close, count, trail_count, particle, i, choice;
+    s32      close, debris_count, trail_count, particle, i, choice;
     s32      random_range_lower_bound, random_range_upper_bound, first_color, second_color;
     f32      angle, distance, height, speed, rise;
     u32      colors[6], other_colors[6];
@@ -1118,22 +1118,22 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             break;
         }
         if (D_L00_0015FFBC >= 201) {
-            count = 4;
+            debris_count = 4;
             trail_count = 4;
         } else if (D_L00_0015FFBC >= 151) {
-            count = 2;
+            debris_count = 2;
             trail_count = 2;
         } else if (D_L00_0015FFBC >= 101) {
-            count = 2;
+            debris_count = 2;
             trail_count = 1;
         } else {
             if (!angle) {
             }
             if (D_L00_0015FFBC >= 51) {
-                count = 1;
+                debris_count = 1;
                 trail_count = 0;
             } else {
-                count = 1;
+                debris_count = 1;
                 trail_count = 0;
             }
         }
@@ -1147,7 +1147,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         clear_u64_value(&rotation);
         rotation.f[2] = angle;
         euler_rotation_basis(&basis, &rotation);
-        for (i = 0; i < count; ++i) {
+        for (i = 0; i < debris_count; ++i) {
             transform_vector_by_basis(&spawn_pos, &D_L00_001DE6F0_2d09b8[i], &basis);
             fast_vec_add(&spawn_pos, &spawn_pos, &moby->pos);
             qcopy(&spin, &D_L00_001DE750_2d09b8[i]);
