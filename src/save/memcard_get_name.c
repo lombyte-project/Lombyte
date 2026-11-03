@@ -28,3 +28,12 @@ void memcard_get_name(u8 *rom_configuration) {
 }
 
 extern __typeof__(memcard_get_name) func_00209030 __attribute__((alias("FUN_00209030")));
+
+/* The save directory and file paths; memcard_get_name writes the disc's
+   region and product code over the '*'s of each. */
+char D_0013D1D0[] = "/BA****-*****RATCHET";
+char D_0013D1E8[] = "/************RATCHET/*";
+char D_0013D200[] = "/************RATCHET/icon.sys";
+char D_0013D220[] = "/************RATCHET/static.ico";
+char D_0013D240[] = "/************RATCHET/************RATCHET";
+char D_0013D270[] = "/************RATCHET/save%d.bin";
