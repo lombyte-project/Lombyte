@@ -902,7 +902,7 @@ extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern char mpeg_memory_alloc_error_format[] __asm__("D_L00_001E9480");
 
 /* Sets up a movie load, then uploads image data from the level buffer to GS memory in two runs of strips. */
-void prepare_movie_playback(s32 sector, s32 size, s32 language) {
+void prepare_movie_playback(s32 sector, s32 movie_file_size, s32 language) {
     s32 image[24];
     s32 large_count, small_count, gs_address, source, i, j;
 
@@ -911,7 +911,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
     sound_stop_all_sounds();
     music_stop();
     D_L00_00161048_macro = sector;
-    D_L00_0016104C_macro = size;
+    D_L00_0016104C_macro = movie_file_size;
     D_L00_00161050_macro = language;
     D_L00_0015F5D8 = 1;
     fade_to_black(4);
