@@ -321,7 +321,7 @@ typedef struct {
 typedef struct {
     float          x, y, f8, timer;
     Vec_2DDEA0     vel;
-    Vec_2DDEA0     q20;
+    Vec_2DDEA0     suction_start_rotation_quaternion;
     Vec_2DDEA0     v30;
     Vec_2DDEA0     v40;
     Vec_2DDEA0     v50;
@@ -2314,7 +2314,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
             if (1.0f < suction_and_projectile_record->f6C)
                 suction_and_projectile_record->f6C = 1.0f;
             moby->pos.z += suction_and_projectile_record->f6C / 100.0f * frame_scale;
-            extract_matrix_rotation_quaternion(&suction_and_projectile_record->q20,
+            extract_matrix_rotation_quaternion(&suction_and_projectile_record->suction_start_rotation_quaternion,
                                                &moby->rot_row0);
             clear_u64_value(&suction_and_projectile_record->vel);
             break;
@@ -2340,7 +2340,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                 matrix_to_quaternion(&suction_and_projectile_scratch.v[1],
                                      &suction_and_projectile_scratch.v[7]);
                 quaternion_nlerp(&suction_and_projectile_scratch.v[2],
-                                 &suction_and_projectile_record->q20,
+                                 &suction_and_projectile_record->suction_start_rotation_quaternion,
                                  &suction_and_projectile_scratch.v[1],
                                  suction_and_projectile_record->f6C);
                 func_001FA6C0_2DDEA0(&suction_and_projectile_scratch.v[2],
