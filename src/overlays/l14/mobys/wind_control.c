@@ -179,9 +179,9 @@ typedef struct {
     char  pad0[0x14];
     float f14, f18, f1C;
     float pos[48][4];
-    short n320[48];
-    short n380[48];
-    short n3E0[48];
+    short spark_lifetime_remaining_frames[48];
+    short spark_lifetime_initial_frames[48];
+    short spark_opacity[48];
     float spark_step_distance[48];
     int   pad500;
     int   spark_area_cuboid_index;
@@ -228,9 +228,9 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
         frame_time;
     lifetime_frames =
         scale_game_frames(ftoi_k(spark_vars->f14 * 2.0f / spark_vars->spark_step_distance[i]));
-    spark_vars->n320[i] = lifetime_frames;
-    spark_vars->n380[i] = lifetime_frames;
-    spark_vars->n3E0[i] = 0;
+    spark_vars->spark_lifetime_remaining_frames[i] = lifetime_frames;
+    spark_vars->spark_lifetime_initial_frames[i] = lifetime_frames;
+    spark_vars->spark_opacity[i] = 0;
 }
 
 extern int spark_float_to_integer(float) __asm__("FUN_001fa6d0");
@@ -261,24 +261,24 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
     in_clip = is_point_inside_clip_volume(clip, spark_vars->spark_area_cuboid_index);
     i = 0;
     pos = spark_vars->pos[0];
-    shade = spark_vars->n3E0;
+    shade = spark_vars->spark_opacity;
     do {
-        if (fast_dec_timer_s16(&spark_vars->n320[i]) != 0) {
+        if (fast_dec_timer_s16(&spark_vars->spark_lifetime_remaining_frames[i]) != 0) {
             if (in_clip == 0 || i < 24) {
                 initialize_wind_spark(wind_control_moby, i, spark_travel_direction);
             }
         } else {
             opacity = wind_spark_peak_alpha_gp;
-            if (spark_vars->n380[i] - wind_spark_fade_in_frames_gp < spark_vars->n320[i]) {
+            if (spark_vars->spark_lifetime_initial_frames[i] - wind_spark_fade_in_frames_gp < spark_vars->spark_lifetime_remaining_frames[i]) {
                 spark_fade_fraction =
-                    convert_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
+                    convert_integer_to_float(spark_vars->spark_lifetime_initial_frames[i] - spark_vars->spark_lifetime_remaining_frames[i]);
                 spark_fade_fraction =
                     spark_fade_fraction / convert_integer_to_float(wind_spark_fade_in_frames_gp);
             } else {
-                spark_fade_fraction = convert_integer_to_float(spark_vars->n320[i]);
+                spark_fade_fraction = convert_integer_to_float(spark_vars->spark_lifetime_remaining_frames[i]);
                 spark_fade_fraction =
                     spark_fade_fraction /
-                    convert_integer_to_float(spark_vars->n380[i] - wind_spark_fade_in_frames_gp);
+                    convert_integer_to_float(spark_vars->spark_lifetime_initial_frames[i] - wind_spark_fade_in_frames_gp);
             }
             {
                 int spark_alpha =
@@ -297,8 +297,8 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
                 absolute_float(pos[1] - l14_camera.pos.f[1]) < 8.0f &&
                 fast_difference_between_rotations(wind_control_moby->rot.z, l14_camera.yaw) >
                     2.3561945f) {
-                if (spark_vars->n320[i] > scale_game_frames(20)) {
-                    spark_vars->n320[i] = scale_game_frames(20);
+                if (spark_vars->spark_lifetime_remaining_frames[i] > scale_game_frames(20)) {
+                    spark_vars->spark_lifetime_remaining_frames[i] = scale_game_frames(20);
                 }
             }
         }
@@ -352,8 +352,8 @@ void draw_wind_sparks(struct Moby *m) {
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
     for (i = 0; i < 48; i++) {
-        if (d->n320[i] != 0) {
-            col = wind_spark_base_color_gp | (d->n3E0[i] << 24);
+        if (d->spark_lifetime_remaining_frames[i] != 0) {
+            col = wind_spark_base_color_gp | (d->spark_opacity[i] << 24);
             pk.col[3] = col;
             pk.col[2] = col;
             pk.col[1] = col;
