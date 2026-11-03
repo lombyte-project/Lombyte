@@ -89,7 +89,7 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
     RncStdioIov iov[NIOV];              /* ... and individual io vectors */
     char        conversion_buffer[BUF]; /* space for %c, %[diouxX], %[eEfgG] */
     char        ox[2];                  /* space for 0x hex-prefix */
-    int         state = 0;              /* mbtowc calls from library must not change state */
+    int         multibyte_conversion_state = 0;              /* mbtowc calls from library must not change state */
 
     /*
 	 * Choose PADSIZE to trade efficiency vs. size.  If larger printf
@@ -162,7 +162,7 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
 	 */
     for (;;) {
         cp = fmt;
-        while ((n = convert_multibyte_character(_REENT, &wc, fmt, MB_CUR_MAX, &state)) > 0) {
+        while ((n = convert_multibyte_character(_REENT, &wc, fmt, MB_CUR_MAX, &multibyte_conversion_state)) > 0) {
             fmt += n;
             if (wc == '%') {
                 fmt--;
