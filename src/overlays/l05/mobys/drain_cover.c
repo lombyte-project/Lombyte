@@ -36,7 +36,7 @@ unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particl
                                                           void *initial_position_source,
                                                           void *initial_velocity_source,
                                                           int   life,
-                                                          int   size,
+                                                          int   initial_particle_size,
 
                                                           int color) {
     unsigned char *allocated_object = create_part(0x30);
@@ -55,7 +55,7 @@ unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particl
         *(float *)(velocity_block + 0x10) = 2.0f / convert_integer_to_float(life);
         *(short *)(allocated_object + 0xa) = life;
         *(volatile int *)(velocity_block + 0x18) = color;
-        *(volatile short *)(velocity_block + 0x1c) = size;
+        *(volatile short *)(velocity_block + 0x1c) = initial_particle_size;
         *(volatile int *)(velocity_block + 0x14) = color & 0xffffff;
     }
     return allocated_object;
