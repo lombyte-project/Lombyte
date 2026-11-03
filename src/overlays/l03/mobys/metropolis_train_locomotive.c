@@ -148,7 +148,7 @@ void update_metropolis_train_motion(char *moby) {
     Car292890   *car_data;
     char        *target;
     int          next_id;
-    int          id;
+    int          current_car_moby_index;
     float        distance_margin_or_target_angle;
 
     locomotive_state = ((Train292890 *)MOBY(moby)->pvars);
@@ -167,7 +167,7 @@ void update_metropolis_train_motion(char *moby) {
         if (next_id != 0) {
             locomotive_state->first_car_moby_index = next_id;
         }
-        id = next_id;
+        current_car_moby_index = next_id;
         target = coupling + 0x10;
         distance_margin_or_target_angle =
             locomotive_state->fDC - vector_distance_xy(moby + 0x10, target);
@@ -209,7 +209,7 @@ void update_metropolis_train_motion(char *moby) {
                         (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * frame_time);
         moby_point_position(moby, 0, front);
         do {
-            car = D_L03_0015FFD8_292890 + (id << 8);
+            car = D_L03_0015FFD8_292890 + (current_car_moby_index << 8);
             ((unsigned char *)car)[0x72] = 0xFF;
             car_data = *(Car292890 **)(car + 0x78);
             moby_point_position(car, 0, rear);
@@ -236,8 +236,8 @@ void update_metropolis_train_motion(char *moby) {
             update_entity_matrix(car_data->motion, delta, car_data->prev_rot, car + 0x40);
             qcopy(car_data->prev_pos, car + 0x10);
             qcopy(car_data->prev_rot, car + 0x40);
-            id = car_data->next_car_moby_index;
-        } while (id != -1);
+            current_car_moby_index = car_data->next_car_moby_index;
+        } while (current_car_moby_index != -1);
         fast_vec_sub(delta, moby + 0x10, old_pos);
         update_entity_matrix(locomotive_state->motion, delta, old_rot, moby + 0x40);
     } else {
