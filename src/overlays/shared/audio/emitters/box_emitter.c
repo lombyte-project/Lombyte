@@ -23,7 +23,7 @@ void update_box_emitter(char *moby) {
     OvlVec4 delta, radius, box_size, listener;
     int    *sound_data = *(int **)(moby + 8);
     int     volume;
-    int     flags;
+    int     voice_playback_flags;
     float   box_length, listener_length;
 
     radius.f[2] = radius.f[1] = radius.f[0] = MOBY(moby)->bsphere.w;
@@ -34,7 +34,7 @@ void update_box_emitter(char *moby) {
     listener_length = fast_vec_length(&listener);
     box_length = fast_vec_length(&box_size);
     if (box_length < listener_length) {
-        flags = 0x10;
+        voice_playback_flags = 0x10;
         if (absolute_float(box_size.f[0]) <= 1.0f && absolute_float(box_size.f[1]) <= 1.0f &&
             absolute_float(box_size.f[2]) <= 1.0f) {
             volume = *(int *)(D_L00_0015F5F4 + sound_data[0] * 0x20 + 0xc);
@@ -57,12 +57,12 @@ void update_box_emitter(char *moby) {
                                                      D_L00_0015F5F4 + sound_data[0] * 0x20);
         }
         if (*(u8 *)(D_L00_0015F5F4 + sound_data[0] * 0x20 + 0x18))
-            flags = 0x14;
+            voice_playback_flags = 0x14;
         {
             char *slot = D_0013E550 + sound_data[4] * 0x70;
             if (*(char **)(slot + 0x8c) != moby || *(u8 *)(slot + 0x74) == 0) {
                 if (fast_dec_timer(&sound_data[3])) {
-                    sound_data[4] = play_voice(sound_data[0], flags, moby, volume);
+                    sound_data[4] = play_voice(sound_data[0], voice_playback_flags, moby, volume);
                     if (sound_data[2] > 0) {
                         sound_data[3] =
                             (int)((float)scale_game_frames(
