@@ -127,7 +127,7 @@ void draw_electric_gate_beams(struct Moby *moby) {
     float               angle, blend;
     unsigned short     *list;
     unsigned short     *next_moby_index_ptr;
-    short               id;
+    short               moby_list_entry;
 
     angle = convert_integer_to_float(frame_number & 0x3F) / 63.0f * 6.28318f;
     for (i = 0; i < 5; i++) {
@@ -183,9 +183,9 @@ void draw_electric_gate_beams(struct Moby *moby) {
                 draw_geometry_quad(&quads[1][k], matrix, 0);
             }
         }
-        id = *(short *)list;
+        moby_list_entry = *(short *)list;
         list = next_moby_index_ptr;
-    } while (id >= 0);
+    } while (moby_list_entry >= 0);
 }
 
 float D_L05_0020B740[4][2] = {
