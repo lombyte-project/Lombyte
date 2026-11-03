@@ -96,7 +96,7 @@ void bolt_crank_update(struct Moby *moby) {
     float          matrix[16];
     float          stick[4], step[4], facing[4];
     Vec4           rotation, target;
-    float          offset[4], spring_pos;
+    float          radial_correction[4], spring_pos;
     float          distance, yaw_diff, angle, old_angle, height_diff, max_speed, height, ground;
     int            save_id, area_clear;
     struct Moby   *clearance_candidate_moby;
@@ -313,9 +313,9 @@ void bolt_crank_update(struct Moby *moby) {
             step[1] = fast_sin(angle) * 1.05f;
             step[2] = 0.0f;
             fast_vec_add(&target, &moby->pos, step);
-            fast_vec_sub(offset, &target, &player->motion.pos);
-            offset[2] = 0.0f;
-            distance = vector_length_xy(offset);
+            fast_vec_sub(radial_correction, &target, &player->motion.pos);
+            radial_correction[2] = 0.0f;
+            distance = vector_length_xy(radial_correction);
             spring_pos = -distance;
             vendor_spring(&spring_pos,
                           &bolt_crank_radial_correction_step_gp,
@@ -323,8 +323,8 @@ void bolt_crank_update(struct Moby *moby) {
                           frame_scale_sq * 0.015f,
                           frame_scale_sq * 0.3f,
                           frame_time * 7.0f);
-            fast_vec_normalize(offset, offset, bolt_crank_radial_correction_step_gp);
-            fast_vec_add(&player->motion.pos, &player->motion.pos, offset);
+            fast_vec_normalize(radial_correction, radial_correction, bolt_crank_radial_correction_step_gp);
+            fast_vec_add(&player->motion.pos, &player->motion.pos, radial_correction);
             player->motion.pos.f[2] = height;
             if (opt_mirror_anim) {
                 player->motion.move_yaw = fast_add_rotations(-1.5707964f, angle);
