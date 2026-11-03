@@ -123,7 +123,7 @@ void draw_electric_gate_beams(struct Moby *moby) {
     struct GeometryQuad quads[2][5];
     char                matrix[0x40];
     u64                 texture;
-    int                 i, j, k, vertex_index, outer_color, inner_color, offset;
+    int                 i, j, k, vertex_index, outer_color, inner_color, moby_table_byte_offset;
     float               angle, blend;
     unsigned short     *list;
     unsigned short     *next_moby_index_ptr;
