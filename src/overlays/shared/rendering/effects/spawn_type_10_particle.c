@@ -94,7 +94,7 @@ char *draw_number(float         scale,
                   int           source_moby,
                   int           number_table_index,
                   int           particle_color,
-                  unsigned char flags,
+                  unsigned char frame_and_blend_flags,
                   short         particle_lifetime,
 
                   unsigned char kind) {
@@ -107,14 +107,14 @@ char *draw_number(float         scale,
         qcopy(particle + 0x10, particle_spawn_position);
         *(int *)(particle + 4) = particle_color;
         if (kind == DRAW_NUMBER_KIND_FROM_FLAGS) {
-            particle[9] = (flags >> 5) * 16 + truncate_float_to_s32(4.0f);
-            if (flags & 1) {
+            particle[9] = (frame_and_blend_flags >> 5) * 16 + truncate_float_to_s32(4.0f);
+            if (frame_and_blend_flags & 1) {
                 particle[3] = 0x48;
             } else {
                 particle[3] = 0x44;
             }
         } else {
-            particle[9] = flags;
+            particle[9] = frame_and_blend_flags;
             particle[3] = kind;
         }
         particle[1] = 0;
