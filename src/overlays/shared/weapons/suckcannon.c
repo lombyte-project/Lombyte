@@ -1958,7 +1958,7 @@ s32 cancel_suck_cannon_suction(struct Moby *moby) {
     s32 k;
     if (suction_record == 0)
         return 0;
-    if (moby == 0 || moby->state == 0xFE || moby->state == 0xFD)
+    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER || moby->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER)
         return 0;
     k = *(s16 *)(suction_record + 0x68);
     if (k == 8)
