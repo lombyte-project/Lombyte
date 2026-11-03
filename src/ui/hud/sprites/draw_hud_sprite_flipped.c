@@ -8,14 +8,14 @@ extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
 
-void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 sprite_width, s32 sprite_height, s32 alpha) {
+void draw_hud_sprite_flipped(s32 frame_index, s32 x, s32 y, s32 sprite_width, s32 sprite_height, s32 alpha) {
     struct HudTexPage *image_page;
     struct DmaTag     *tag;
     u64               *packet_words;
     s32                tw;
     s32                th;
 
-    image_page = &hud_state.image_pages[hud_state.frame_refs[id].image_index];
+    image_page = &hud_state.image_pages[hud_state.frame_refs[frame_index].image_index];
     tw = 1 << image_page->width_log2;
     th = 1 << image_page->height_log2;
     render_packet_cursor.tag->tag = 0x10000007;
@@ -27,7 +27,7 @@ void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 sprite_width, s32 sprite_
     render_packet_cursor.tag = tag + 1;
     packet_words[0] = 0xB400000000008001;
     packet_words[1] = 0x53535353106;
-    packet_words[2] = get_frame_texture(id);
+    packet_words[2] = get_frame_texture(frame_index);
     packet_words[3] = 0x154;
     packet_words[4] = ((u64)alpha << 24) | 0x7F7F7F;
     packet_words[5] = tw << 4;
