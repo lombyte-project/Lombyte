@@ -8,7 +8,7 @@ struct Code4 {
     u8 b[4];
 };
 
-extern struct Code4 video_dec_flush_code[] __asm__("D_00161218");
+extern const struct Code4 video_dec_flush_code[] __asm__("D_00161218");
 extern void
 video_dec_begin_put(struct VideoDec *, u32 *, s32 *, u32 *, s32 *) __asm__("func_0023CBF0");
 extern s32  cpy2area(u32, s32, u32, s32, void *, s32, s32, s32) __asm__("func_0023B810");
@@ -45,3 +45,6 @@ s32 video_dec_flush(struct VideoDec *vd) {
 }
 
 extern __typeof__(video_dec_flush) func_0023CD08 __attribute__((alias("FUN_0023cd08")));
+
+/* The MPEG sequence_end_code (00 00 01 B7) appended to flush the decoder. */
+const struct Code4 video_dec_flush_code[1] __asm__("D_00161218") = {{{0x00, 0x00, 0x01, 0xB7}}};

@@ -1016,6 +1016,8 @@ RODATA_OVERLAYS = {
     "sdk/storage/cdvd/sceCdRead": (0x152FC8, 0x53F48, 36),  # its two messages
     "sdk/storage/cdvd/scecdreadclock": (0x152FF0, 0x53F70, 59),  # its two messages
     "sdk/graph/sce_gs_set_def_disp_env": (0x153040, 0x53FC0, 52),  # its message
+    "sdk/graph/sce_gs_put_draw_env": (0x153078, 0x53FF8, 47),  # its DMA timeout message
+    "sdk/graph/sce_gs_exec_load_image": (0x1531D0, 0x54150, 50),  # its DMA timeout message
     "sdk/storage/memory_card/sce_mc_init": (0x153450, 0x543D0, 101),  # its three messages
     "sdk/input/dbc/sceDbcSetWorkAddr": (0x153558, 0x544D8, 30),  # its message
     "sdk/input/dbc/sceDbcCreateSocket": (0x153578, 0x544F8, 31),  # its message
@@ -1076,8 +1078,10 @@ SDATA_OVERLAYS = {
     "rendering/frame/swap_render_buffer_chain": (0x160F04, 0x61E84, 4),
     "rendering/texture/dma_tie_textures": (0x160F74, 0x61EF4, 4),
     "ui/hud/update_hud": (0x15F688, 0x60608, 4),
+    "movies/decoder/video_dec_flush": (0x161218, 0x62198, 4),  # the sequence end code it appends
     "movies/decoder/callbacks/mpeg_error": (0x161220, 0x621A0, 4),  # its "%s\n" format
     "runtime/startup/init_once": (0x15FA88, 0x60A08, 14),  # its reboot message
+    "save/memcard_restore_data": (0x15FE90, 0x60E10, 4),  # its differing-block counter
     "save/memcard_update_state": (0x15FE98, 0x60E18, 21),  # its delete path format and message
     "audio/voices/set_sound_handle_id": (0x160068, 0x60FE8, 5),  # its handle-conflict diagnostic
     "movies/player/err_message": (0x1611F8, 0x62178, 14),  # its error format
@@ -1089,6 +1093,7 @@ DATA_OVERLAYS = {
     "sdk/kernel/supplement_crt0": (0x130320, 0x312A0, 8),
     "sdk/graph/sce_gs_get_gparam": (0x132D40, 0x33CC0, 16),
     "sdk/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
+    "sdk/scf/sce_scf_get_time_zone": (0x1330D0, 0x34050, 2),  # t10k_time_zone
     "sdk/scf/sce_scf_get_language": (0x1330D4, 0x34054, 1),
     "movies/display/set_pal_mode": (0x13D100, 0x3E080, 8),
     "save/memcard_get_name": (0x13D1D0, 0x3E150, 192),  # the save directory and file paths

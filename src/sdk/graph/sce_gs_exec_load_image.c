@@ -1,7 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/deci2.h"
 
-extern u8 gs_load_image_dma_timeout_message[] __asm__("D_001531D0");
+const char gs_load_image_dma_timeout_message[] __asm__("D_001531D0") =
+    "sceGsExecLoadImage: DMA Ch.2 does not terminate\r\n";
 
 s32 sceGsExecLoadImage(u8 *lp, u8 *image_payload) {
     u32 count;
