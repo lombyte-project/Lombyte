@@ -7,7 +7,7 @@ extern s32          SignalSema(s32 semaId);
 extern s32          cd_check_scmd(s32 cmd) __asm__("func_00120D40");
 
 s32 sceCdBreak(void) {
-    s32 status;
+    s32 cd_break_response;
 
     if (cd_check_scmd(0x1E) == 0) {
         return 0;
@@ -20,10 +20,10 @@ s32 sceCdBreak(void) {
         return 0;
     }
     D_00131314[0] = 0;
-    status = *(u32 *)((u32)cd_scmd_result | 0x20000000);
+    cd_break_response = *(u32 *)((u32)cd_scmd_result | 0x20000000);
     {
         s32 sema2 = *(volatile u32 *)&cd_scmd_sema;
         SignalSema(sema2);
     }
-    return status;
+    return cd_break_response;
 }
