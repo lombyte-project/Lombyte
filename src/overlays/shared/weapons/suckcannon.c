@@ -1791,7 +1791,7 @@ s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
     s16 state;
     if (moby_suction_record == 0)
         goto missing;
-    if (moby == 0 || MOBY(moby)->state == 0xFE || MOBY(moby)->state == 0xFD ||
+    if (moby == 0 || MOBY(moby)->state == MOBY_STATE_REMOVAL_MARKER || MOBY(moby)->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER ||
         *(s16 *)(moby_suction_record + 0x68) == 8)
         goto fail;
     qcopy_nc(moby_suction_record, position);
