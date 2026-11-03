@@ -807,7 +807,7 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
     float              delta[4], velocity[4], position[4];
     L16ParticleChoices first_particle_choices, second_particle_choices;
     float              distance, range, delay;
-    int                count;
+    int                particle_count;
     void              *origin;
     float             *joint = position;
     void              *movement;
@@ -816,16 +816,16 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
     clear_u64_value(velocity);
     distance = fast_vec_length(delta);
     if (distance < 8.0f)
-        count = truncate_float_to_s32(distance) + 2;
+        particle_count = truncate_float_to_s32(distance) + 2;
     else
-        count = 10;
+        particle_count = 10;
     range = 0.0f;
     if (distance < 7.0f)
         range = 7.0f - distance;
     origin = position;
     movement = velocity;
-    if (count > 0) {
-        int remaining = count;
+    if (particle_count > 0) {
+        int remaining = particle_count;
         do {
             float sample;
             int  *first_choice, *second_choice, duration1, duration2;
