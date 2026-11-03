@@ -227,7 +227,7 @@ void build_water_render_setup_packet(void) {
 
 void render_water_grids(f32 *water_record, s32 count) __asm__("FUN_L01_002b91c8");
 
-void render_water_grids(f32 *water_record, s32 count) {
+void render_water_grids(f32 *water_record, s32 water_record_count) {
     enum {
         WATER_GRID_MODE_SKIP_CLIP_TESTS = 0,
         WATER_GRID_MODE_TEST_NEAR_CLIP = 2
@@ -246,7 +246,7 @@ void render_water_grids(f32 *water_record, s32 count) {
 
     build_water_render_setup_packet();
     i = 0;
-    if (count > 0)
+    if (water_record_count > 0)
         do {
             f32 *next_pos = water_record + 0x464;
             u16  active = *(u16 *)((u8 *)water_record + 0x1e);
@@ -365,7 +365,7 @@ void render_water_grids(f32 *water_record, s32 count) {
         next_entity:
             i++;
             water_record = next_pos;
-        } while (i < count);
+        } while (i < water_record_count);
     l01_packet.words[0] = 0x10000000;
     l01_packet.words[1] = 0;
     l01_packet.words[2] = 0x13000000;
