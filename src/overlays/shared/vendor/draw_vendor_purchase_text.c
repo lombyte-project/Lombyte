@@ -146,7 +146,7 @@ void pool_splash(HeightTile *tile,
 
 void pool_splash(
 
-    HeightTile *tile, int count, int add_to_existing_height, float x, float z, float radius, float amount) {
+    HeightTile *tile, int tile_count, int add_to_existing_height, float x, float z, float radius, float amount) {
     enum {
         POOL_SPLASH_KEEP_GREATER_MAGNITUDE = 0
     };
@@ -154,7 +154,7 @@ void pool_splash(
     int         row;
     int         i;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < tile_count; i++) {
         float tile_z = tile->z + l00_pool_height_grid_layout.origin_z;
         float cell_z = (z - tile_z) / l00_pool_height_grid_layout.cell_height;
         float cell_x = (x - (tile->x + l00_pool_height_grid_layout.origin_x)) /
