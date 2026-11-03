@@ -129,11 +129,11 @@ extern char *l13_moby_scan_inclusive_end __asm__("D_L13_0015FFE0");
 
 void jet_group_flag(int id, int state) __asm__("FUN_L13_00265170");
 
-void jet_group_flag(int id, int state) {
+void jet_group_flag(int moby_class_id, int state) {
     char *moby = (char *)moby_base;
     if ((unsigned long)l13_moby_scan_inclusive_end >= (unsigned long)moby) {
         do {
-            if (MOBY(moby)->oclass == id) {
+            if (MOBY(moby)->oclass == moby_class_id) {
                 if (moby[0x20] >= 0)
                     moby[0x20] = state;
             }
