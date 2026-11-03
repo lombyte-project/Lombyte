@@ -1054,6 +1054,7 @@ RODATA_OVERLAYS = {
 # preserved small-data blobs (core.lit / .lit).  Placed like RODATA_OVERLAYS.
 SDATA_OVERLAYS = {
     "audio/rpc/snd_returns": (0x15EC80, 0x5FC00, 8),
+    "audio/snd_start_sound_system": (0x15ECA0, 0x5FC20, 32),  # the batch buffer pointers it sets up
     "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 8),
     "runtime/decrement_resource_counter": (0x15F8F8, 0x60878, 4),
     "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0, 24),

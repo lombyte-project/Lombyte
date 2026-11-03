@@ -15,11 +15,7 @@ struct SifClientDataStartSound {
 
 extern struct SifClientDataStartSound sound_command_client __asm__("D_0015EBC0");
 extern struct SifClientDataStartSound sound_stream_client __asm__("D_0015EBE8");
-extern s32           *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
-extern s32            snd_batch_free_bytes __asm__("D_0015ECA8") __attribute__((sda));
-extern s32 D_0015ECAC MACRO_ADDR;
-extern struct SndCommandCallback *snd_stream_buffers[2] __asm__("D_0015ECB0") __attribute__((sda));
-extern s32 *snd_batch_return_buffers[2] __asm__("D_0015ECB8") __attribute__((sda));
+extern s32 D_0015ECAC MACRO_ADDR; /* snd_batch_free_bytes[1], stored through the macro form */
 extern s32  snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
 extern s32  snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda));
 extern s64  snd_cd_callback_data __asm__("D_0015ECD8") MACRO_ADDR;
@@ -28,6 +24,15 @@ extern u32  snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;
 extern s32 snd_send_iop_command_and_wait(s32, s32, void *) __asm__("func_0012E548");
 
 s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
+
+/* The two command batches: their buffers, free bytes, callback records and
+   reply buffers.  snd_start_sound_system stores the same values again. */
+s32                       *snd_batch_command_buffers[2] __asm__("D_0015ECA0") = {snd_command_buffer1,
+                                                                              snd_command_buffer2};
+s32                        snd_batch_free_bytes[2] __asm__("D_0015ECA8") = {0xFFC, 0xFFC};
+struct SndCommandCallback *snd_stream_buffers[2] __asm__("D_0015ECB0") = {snd_stream_buffer1,
+                                                                         snd_stream_buffer2};
+s32 *snd_batch_return_buffers[2] __asm__("D_0015ECB8") = {snd_return_buffer1, snd_return_buffer2};
 
 const char snd_sif_bind_rpc_error_string[] __asm__("D_00153C50") =
     "error: sceSifBindRpc in %s, at line %d\n";
@@ -84,7 +89,7 @@ s32 snd_start_sound_system(void) {
     sound_read_work.read_active = 0;
     snd_command_buffer2[0] = 0;
     sound_read_work.read_error = 0;
-    snd_batch_free_bytes = 0xFFC;
+    snd_batch_free_bytes[0] = 0xFFC;
     D_0015ECAC = 0xFFC;
     command_arg = (s32)(u32)&sound_read_work.read_active;
     return snd_send_iop_command_and_wait(0, 4, &command_arg);
