@@ -146,7 +146,7 @@ void update_target_tracking_camera_position(char *camera_object) {
     float          *distance = (float *)(state + 0xa0);
     float          *angle = (float *)(state + 0xb8);
     float           position[4] __attribute__((aligned(16)));
-    float           offset[4] __attribute__((aligned(16)));
+    float           position_delta[4] __attribute__((aligned(16)));
     float           direction[4] __attribute__((aligned(16)));
     float           aim[4] __attribute__((aligned(16)));
     float           target, rate, fraction, score, best, length;
@@ -206,14 +206,14 @@ void update_target_tracking_camera_position(char *camera_object) {
                     candidate = moby_table + (*neighbours & 0x7fff) * 0x100;
                     if (candidate != current_target && (*(short *)(candidate + 0xa6) == 0x323 ||
                                                         *(short *)(candidate + 0xa6) == 0x2f6)) {
-                        fast_vec_sub(offset, candidate + 0x10, current_target + 0x10);
-                        FUN_001ff500_2ebe70(1.0f, direction, offset);
+                        fast_vec_sub(position_delta, candidate + 0x10, current_target + 0x10);
+                        FUN_001ff500_2ebe70(1.0f, direction, position_delta);
                         aim[0] = fast_cos(hero.motion.rot.f[2]);
                         aim[1] = fast_sin(hero.motion.rot.f[2]);
                         aim[2] = 0.0f;
                         score = fast_vec_dot(direction, aim);
                         if (score > 0.0f) {
-                            target = fast_vec_length(offset) - score * 10.0f;
+                            target = fast_vec_length(position_delta) - score * 10.0f;
                             if (target < best) {
                                 chosen = candidate;
                                 best = target;
@@ -223,9 +223,9 @@ void update_target_tracking_camera_position(char *camera_object) {
                 } while ((short)*neighbours++ >= 0);
             }
             if (chosen != 0) {
-                fast_vec_sub(offset, chosen + 0x10, current_target + 0x10);
+                fast_vec_sub(position_delta, chosen + 0x10, current_target + 0x10);
                 *angle = rope_spring_turn(
-                    turn, *angle, fast_arc_tan(offset[0], offset[1]), 0.00125f, 0.175f, 0.0f);
+                    turn, *angle, fast_arc_tan(position_delta[0], position_delta[1]), 0.00125f, 0.175f, 0.0f);
             } else if (*(int *)(follow + 0x40) == 1)
                 *angle = rope_spring_turn(turn,
                                           *angle,
@@ -261,12 +261,12 @@ void update_target_tracking_camera_position(char *camera_object) {
     position[2] += distance[4];
     fast_vec_add(position, position, &hero.motion.pos);
     if (collision_line(camera_object + 0x30, position, 0x12, 0, 0) != 0) {
-        fast_vec_sub(offset, &D_L00_00173E60_2ebe70, camera_object + 0x30);
+        fast_vec_sub(position_delta, &D_L00_00173E60_2ebe70, camera_object + 0x30);
         collision_position = &D_L00_00173E60_2ebe70;
-        length = fast_vec_length(offset);
+        length = fast_vec_length(position_delta);
         if (length > 0.5f) {
-            FUN_001ff300_2ebe70((length - 0.5f) / length, offset, offset);
-            fast_vec_add(position, camera_object + 0x30, offset);
+            FUN_001ff300_2ebe70((length - 0.5f) / length, position_delta, position_delta);
+            fast_vec_add(position, camera_object + 0x30, position_delta);
             for (i = 0; i < 5; i++) {
                 if (FUN_001f0d60_2ebe70(0.75f, position, 0, 0) != 0)
                     qcopy(position, collision_position + 1);
@@ -275,8 +275,8 @@ void update_target_tracking_camera_position(char *camera_object) {
             }
         }
         qcopy(camera_object + 0x30, position);
-        fast_vec_sub(offset, &hero.motion.pos, camera_object + 0x30);
-        *angle = fast_arc_tan(offset[0], offset[1]);
+        fast_vec_sub(position_delta, &hero.motion.pos, camera_object + 0x30);
+        *angle = fast_arc_tan(position_delta[0], position_delta[1]);
         *(int *)(angle + 1) = 0;
     } else
         qcopy(camera_object + 0x30, position);
