@@ -2405,8 +2405,8 @@ extern char *create_moby(int);
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
-char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index, int id) {
-    char *moby = create_moby(id);
+char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index, int attachment_class_id) {
+    char *moby = create_moby(attachment_class_id);
     if (moby != 0) {
         char *attachment_vars;
         float f =
