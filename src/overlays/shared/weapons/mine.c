@@ -984,7 +984,7 @@ void mine_update(M910 *mine_moby) {
                     {
                         float sp;
                         float max_homing_step;
-                        int   mode;
+                        int   homing_phase;
 
                         *(OvlQuad *)n = mine_moby->pos.q;
                         if ((mine_moby->b70 & 2) && mine_moby->b52 == 1 && mine_moby->anim != 2) {
@@ -1006,7 +1006,7 @@ void mine_update(M910 *mine_moby) {
                                 v->homing_phase_timer = scale_game_frames(7);
                                 v->homing_phase = 2;
                             }
-                        } else if (mode == MINE_HOMING_FALL_PHASE) {
+                        } else if (homing_phase == MINE_HOMING_FALL_PHASE) {
                             mine_moby->pos.f[2] -= frame_scale * 0.05f;
                             if (fast_dec_timer(&v->homing_phase_timer) != 0) {
                                 v->homing_phase = 0;
