@@ -1247,7 +1247,7 @@ void spawn_hero_item_mobies(void) __asm__("FUN_L00_0020ea80");
 
 void spawn_hero_item_mobies(void) {
     struct Moby *created_moby;
-    s32          id;
+    s32          slot_zero_spawn_item_id;
     s32          slot;
     struct Hero *slot_owner;
     s32          i;
@@ -1255,25 +1255,25 @@ void spawn_hero_item_mobies(void) {
     struct Moby *slot_four_moby;
     struct Moby *slot_four_secondary_moby;
     struct Moby *slot_five_moby;
-    s32          id3;
+    s32          slot_three_spawn_item_id;
     s32          fallback_item_id;
 
     if (hero.items[0].moby == 0 && D_L00_0015F3F8_ea80 > hero.items[0].respawn_frame &&
         (hero.pending_item[0] == 0 || hero.pending_item[0] == 0x24)) {
-        id = hero.selected_item[0];
-        if (id == 0) {
+        slot_zero_spawn_item_id = hero.selected_item[0];
+        if (slot_zero_spawn_item_id == 0) {
             if (D_0015ED90 != 0 || (fallback_item_id = D_00141660_lui[0]) == 0)
-                id = 8;
+                slot_zero_spawn_item_id = 8;
             else
-                id = fallback_item_id;
+                slot_zero_spawn_item_id = fallback_item_id;
         }
-        select_world_object_resource_tables(item_defs_lui[id].cls, -1);
+        select_world_object_resource_tables(item_defs_lui[slot_zero_spawn_item_id].cls, -1);
         for (i = 0; i < 3; i++) {
             fill_transfer_words(&hero.item_eases[i], 0, sizeof(struct HeroEase));
             hero.item_eases[i].attach_joint = -1;
         }
-        hero.items[0].item_id = id;
-        slot = item_defs_lui[id].slot;
+        hero.items[0].item_id = slot_zero_spawn_item_id;
+        slot = item_defs_lui[slot_zero_spawn_item_id].slot;
         slot_owner = (struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot));
         created_moby = create_moby(item_defs_lui[slot_owner->items[0].item_id].cls);
         if (created_moby != 0) {
@@ -1284,7 +1284,7 @@ void spawn_hero_item_mobies(void) {
                 created_moby->metal_alpha = 0x18;
             slot_owner->items[0].moby = created_moby;
             slot_owner->items[0].state = 2;
-            if (id == 8) {
+            if (slot_zero_spawn_item_id == 8) {
                 slot_owner->items[0].button_mask = 0x80;
                 blend_moby_animation(created_moby, 1, 0, 1);
             } else {
@@ -1301,14 +1301,14 @@ void spawn_hero_item_mobies(void) {
     }
 
     if (hero.items[3].moby == 0) {
-        id3 = hero.selected_item[3];
-        if (id3 == 0) {
-            id3 = D_00141660_lui[3];
-            if (id3 == 0)
-                id3 = D_0015ED94 != 0 ? 3 : 2;
+        slot_three_spawn_item_id = hero.selected_item[3];
+        if (slot_three_spawn_item_id == 0) {
+            slot_three_spawn_item_id = D_00141660_lui[3];
+            if (slot_three_spawn_item_id == 0)
+                slot_three_spawn_item_id = D_0015ED94 != 0 ? 3 : 2;
         }
-        hero.items[3].item_id = id3;
-        created_moby = create_moby(item_defs_lui[id3].cls);
+        hero.items[3].item_id = slot_three_spawn_item_id;
+        created_moby = create_moby(item_defs_lui[slot_three_spawn_item_id].cls);
         if (created_moby != 0) {
             created_moby->draw_dist = 0x20;
             created_moby->visible = 1;
