@@ -186,7 +186,7 @@ void emit_toxic_gas_vent_sparks(char *vent_moby) {
     Vec4  at;
     Vec4  spark_emission_step;
     Vec4  drift;
-    Vec4  offset;
+    Vec4  spark_spawn_offset;
     Vec4  spark_spread_with_drift;
     Vec4  sphere;
     Vec4 *pos = (Vec4 *)&MOBY(vent_moby)->pos;
@@ -225,8 +225,8 @@ void emit_toxic_gas_vent_sparks(char *vent_moby) {
         fade = sampled_frame_count;
     frames = truncate_float_to_s32(scale_game_frames(spark_frames));
 
-    fast_vec_scale(&offset, &spark_emission_step, random_float_between(0.0f, 1.0f));
-    fast_vec_add(&at, pos, &offset);
+    fast_vec_scale(&spark_spawn_offset, &spark_emission_step, random_float_between(0.0f, 1.0f));
+    fast_vec_add(&at, pos, &spark_spawn_offset);
     random_vector(&spark_spread_with_drift, 0.0f, spark_spread * frame_time);
     fast_vec_add(&spark_spread_with_drift, &spark_spread_with_drift, &drift);
     spawn_spark(&at,
@@ -241,8 +241,8 @@ void emit_toxic_gas_vent_sparks(char *vent_moby) {
 
     life = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
     fade = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_fade_max)));
-    fast_vec_scale(&offset, &spark_emission_step, random_float_between(0.0f, 1.0f));
-    fast_vec_add(&at, pos, &offset);
+    fast_vec_scale(&spark_spawn_offset, &spark_emission_step, random_float_between(0.0f, 1.0f));
+    fast_vec_add(&at, pos, &spark_spawn_offset);
     random_vector(&spark_spread_with_drift, 0.0f, spark_spread * frame_time);
     fast_vec_add(&spark_spread_with_drift, &spark_spread_with_drift, &drift);
     spawn_spark(&at,
