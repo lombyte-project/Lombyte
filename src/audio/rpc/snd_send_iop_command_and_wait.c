@@ -17,11 +17,11 @@ s32         snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) __asm__("
 
 extern s32 snd_batches_held __asm__("D_0015ECC4") __attribute__((sda));
 
-s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *command_payload) {
+s32 snd_send_iop_command_and_wait(s32 cmd, s32 payload_byte_count, u8 *command_payload) {
     s32 i;
     s32 iop_command_result;
 
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < payload_byte_count; i++) {
         snd_sync_send_buffer[i] = command_payload[i];
     }
     goto check;
@@ -36,9 +36,9 @@ s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *command_payload) {
         snd_flush_sound_commands();
         FlushCache(0);
     }
-    if (size != 0) {
+    if (payload_byte_count != 0) {
         sceSifCallRpc(
-            sound_command_client, cmd, 1, snd_sync_send_buffer, size, snd_sync_buffer, 0xC, 0, 0);
+            sound_command_client, cmd, 1, snd_sync_send_buffer, payload_byte_count, snd_sync_buffer, 0xC, 0, 0);
     } else {
         sceSifCallRpc(sound_command_client, cmd, 1, 0, 0, snd_sync_buffer, 0xC, 0, 0);
     }
