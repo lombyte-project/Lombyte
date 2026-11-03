@@ -216,7 +216,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                 blend_moby_animation(walker_moby, a->id, f, 10);
                 reset_walker_gait_helpers((char *)gait_data);
             }
-            gait_data->gait_state = 0xD;
+            gait_data->gait_state = WALKER_GAIT_RUN;
             gait_data->gait_phase_mask = walker_gait_mask(
                 gait_data->anim[7], (float)gait_data->anim[7]->initial_animation_position);
             gait_data->walk_start_counter = 0;
@@ -232,7 +232,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                     blend_moby_animation(walker_moby, a->id, f, 10);
                     reset_walker_gait_helpers((char *)gait_data);
                 }
-                gait_data->gait_state = 1;
+                gait_data->gait_state = WALKER_GAIT_WALK;
                 gait_data->gait_phase_mask = walker_gait_mask(
                     gait_data->anim[0], (float)gait_data->anim[0]->initial_animation_position);
                 gait_data->walk_start_counter = 0;
@@ -259,7 +259,7 @@ void walker_update_gait(WalkMoby *walker_moby,
             speed < frame_time * 0.19f) {
             blend_moby_animation(walker_moby, gait_data->idle_animation_id, 0, 10);
             reset_walker_gait_helpers((char *)gait_data);
-            gait_data->gait_state = 0;
+            gait_data->gait_state = WALKER_GAIT_IDLE;
         } else if (walker_moby->b52 == gait_data->anim[gait_animation_index]->id) {
             float t = (gait_data->anim[7]->f08 + gait_data->anim[0]->f08) * 0.375f;
             if (speed > t && gait_data->gait_speed_reference > t &&
@@ -295,7 +295,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                     blend_moby_animation(walker_moby, a->id, f, bl);
                     reset_walker_gait_helpers((char *)gait_data);
                 }
-                gait_data->gait_state = 0xD;
+                gait_data->gait_state = WALKER_GAIT_RUN;
             } else if (flags & 5) {
                 if (gait_data->gait_status_flags & 1) {
                     gait_data->gait_status_flags = (gait_data->gait_status_flags & 0xFFFE) | 2;
@@ -314,7 +314,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                             walker_moby->pClass->seqs[a->id], (float)fr);
                         blend_moby_animation(walker_moby, a->id, f, bl);
                         reset_walker_gait_helpers((char *)gait_data);
-                        gait_data->gait_state = 0xF;
+                        gait_data->gait_state = WALKER_GAIT_TAKEOFF_ANIMATION;
                     } else {
                         int bl = truncate_float_to_s32(
                             gait_data->anim[9]->alternate_transition_position_span * 0.25f /
@@ -330,7 +330,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                             walker_moby->pClass->seqs[a->id], (float)fr);
                         blend_moby_animation(walker_moby, a->id, f, bl);
                         reset_walker_gait_helpers((char *)gait_data);
-                        gait_data->gait_state = 0xE;
+                        gait_data->gait_state = WALKER_GAIT_ALTERNATE_TAKEOFF_ANIMATION;
                     }
                 } else {
                     float ground_height;
@@ -370,7 +370,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 3;
+                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_UPHILL;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[1]->alternate_transition_position_span * 0.25f /
@@ -387,7 +387,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 2;
+                                gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_UPHILL;
                             }
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
@@ -408,7 +408,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 8;
+                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[4]->alternate_transition_position_span * 0.25f /
@@ -425,7 +425,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 7;
+                                gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_DOWNHILL;
                             }
                         }
                         break;
@@ -452,12 +452,12 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 8;
+                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) <
                                    gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = 5;
+                            gait_data->gait_state = WALKER_GAIT_TRANSITION_FROM_UPHILL_TO_WALK;
                         } else {
                             int bl =
                                 truncate_float_to_s32(gait_data->anim[3]->transition_position_span *
@@ -472,7 +472,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 4;
+                            gait_data->gait_state = WALKER_GAIT_WALK_UPHILL;
                         }
                         break;
                     case WALKER_GAIT_ALTERNATE_TRANSITION_TO_UPHILL:
@@ -499,12 +499,12 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 7;
+                            gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_DOWNHILL;
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) <
                                    gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = 6;
+                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK;
                         } else {
                             int bl = truncate_float_to_s32(
                                 gait_data->anim[3]->alternate_transition_position_span * 0.25f /
@@ -520,7 +520,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 4;
+                            gait_data->gait_state = WALKER_GAIT_WALK_UPHILL;
                         }
                         break;
                     case WALKER_GAIT_WALK_UPHILL:
@@ -543,7 +543,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 8;
+                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[4]->alternate_transition_position_span * 0.25f /
@@ -560,7 +560,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 7;
+                                gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_DOWNHILL;
                             }
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
@@ -580,7 +580,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 5;
+                                gait_data->gait_state = WALKER_GAIT_TRANSITION_FROM_UPHILL_TO_WALK;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[2]->alternate_transition_position_span * 0.25f /
@@ -597,7 +597,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 6;
+                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK;
                             }
                         }
                         break;
@@ -625,12 +625,12 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 7;
+                            gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_DOWNHILL;
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) >
                                    gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = 2;
+                            gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_UPHILL;
                         } else {
                             int bl = truncate_float_to_s32(
                                 gait_data->anim[0]->alternate_transition_position_span * 0.25f /
@@ -646,7 +646,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 1;
+                            gait_data->gait_state = WALKER_GAIT_WALK;
                         }
                         break;
                     case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK:
@@ -672,12 +672,12 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 8;
+                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) >
                                    gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = 3;
+                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_UPHILL;
                         } else {
                             int bl =
                                 truncate_float_to_s32(gait_data->anim[0]->transition_position_span *
@@ -692,7 +692,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 1;
+                            gait_data->gait_state = WALKER_GAIT_WALK;
                         }
                         break;
                     case WALKER_GAIT_TRANSITION_TO_DOWNHILL:
@@ -713,12 +713,12 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 3;
+                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_UPHILL;
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) >
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = 10;
+                            gait_data->gait_state = WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK;
                         } else {
                             int bl =
                                 truncate_float_to_s32(gait_data->anim[6]->transition_position_span *
@@ -733,7 +733,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 9;
+                            gait_data->gait_state = WALKER_GAIT_WALK_DOWNHILL;
                         }
                         break;
                     case WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL:
@@ -755,12 +755,12 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 2;
+                            gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_UPHILL;
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) >
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = 11;
+                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK;
                         } else {
                             int bl = truncate_float_to_s32(
                                 gait_data->anim[6]->alternate_transition_position_span * 0.25f /
@@ -776,7 +776,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 9;
+                            gait_data->gait_state = WALKER_GAIT_WALK_DOWNHILL;
                         }
                         break;
                     case WALKER_GAIT_WALK_DOWNHILL:
@@ -798,7 +798,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 3;
+                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_UPHILL;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[1]->alternate_transition_position_span * 0.25f /
@@ -815,7 +815,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 2;
+                                gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_UPHILL;
                             }
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
@@ -835,7 +835,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 10;
+                                gait_data->gait_state = WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[5]->alternate_transition_position_span * 0.25f /
@@ -852,7 +852,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = 11;
+                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK;
                             }
                         }
                         break;
@@ -875,12 +875,12 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 2;
+                            gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_UPHILL;
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) <
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = 7;
+                            gait_data->gait_state = WALKER_GAIT_TRANSITION_TO_DOWNHILL;
                         } else {
                             int bl = truncate_float_to_s32(
                                 gait_data->anim[0]->alternate_transition_position_span /
@@ -896,7 +896,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 1;
+                            gait_data->gait_state = WALKER_GAIT_WALK;
                         }
                         break;
                     case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK:
@@ -917,12 +917,12 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 3;
+                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_UPHILL;
                         } else if ((ground_height - ground_probe_position[2]) +
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) <
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = 8;
+                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
                         } else {
                             int bl =
                                 truncate_float_to_s32(gait_data->anim[0]->transition_position_span /
@@ -937,7 +937,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                                 walker_moby->pClass->seqs[a->id], (float)fr);
                             blend_moby_animation(walker_moby, a->id, f, bl);
                             reset_walker_gait_helpers((char *)gait_data);
-                            gait_data->gait_state = 1;
+                            gait_data->gait_state = WALKER_GAIT_WALK;
                         }
                         break;
                     }
@@ -972,7 +972,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                     blend_moby_animation(walker_moby, a->id, f, 10);
                     reset_walker_gait_helpers((char *)gait_data);
                 }
-                gait_data->gait_state = 1;
+                gait_data->gait_state = WALKER_GAIT_WALK;
             } else if (flags & 5) {
                 if (gait_data->gait_status_flags & 1) {
                     gait_data->gait_status_flags = (gait_data->gait_status_flags & 0xFFFE) | 2;
@@ -991,7 +991,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                             walker_moby->pClass->seqs[a->id], (float)fr);
                         blend_moby_animation(walker_moby, a->id, f, bl);
                         reset_walker_gait_helpers((char *)gait_data);
-                        gait_data->gait_state = 0xF;
+                        gait_data->gait_state = WALKER_GAIT_TAKEOFF_ANIMATION;
                     } else {
                         int bl = truncate_float_to_s32(
                             gait_data->anim[9]->alternate_transition_position_span * 0.25f /
@@ -1007,7 +1007,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                             walker_moby->pClass->seqs[a->id], (float)fr);
                         blend_moby_animation(walker_moby, a->id, f, bl);
                         reset_walker_gait_helpers((char *)gait_data);
-                        gait_data->gait_state = 0xE;
+                        gait_data->gait_state = WALKER_GAIT_ALTERNATE_TAKEOFF_ANIMATION;
                     }
                 } else {
                     ground_probe_position[0] =
@@ -1038,7 +1038,7 @@ void walker_update_gait(WalkMoby *walker_moby,
     case WALKER_GAIT_RESET_TO_IDLE:
         blend_moby_animation(walker_moby, gait_data->idle_animation_id, 0, 10);
         reset_walker_gait_helpers((char *)gait_data);
-        gait_data->gait_state = 0;
+        gait_data->gait_state = WALKER_GAIT_IDLE;
         break;
     case WALKER_GAIT_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
@@ -1059,7 +1059,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                 walker_moby->animation_playback_rate) {
             blend_moby_animation(walker_moby, gait_data->airborne_wait_animation_id, 0, 10);
             reset_walker_gait_helpers((char *)gait_data);
-            gait_data->gait_state = 0x10;
+            gait_data->gait_state = WALKER_GAIT_WAIT_FOR_LANDING;
         } else if ((gait_data->gait_status_flags & 4) && gait_data->jump_vertical_velocity < 0.0f) {
             float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             float len = (gait_data->anim[12]->alternate_phase_anchor_position -
@@ -1076,7 +1076,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                 f = find_nearest_animation_sequence_entry(walker_moby->pClass->seqs[a->id], 0.0f);
                 blend_moby_animation(walker_moby, a->id, f, bl);
                 reset_walker_gait_helpers((char *)gait_data);
-                gait_data->gait_state = 0x12;
+                gait_data->gait_state = WALKER_GAIT_SYNC_LANDING_ANIMATION;
             }
         }
         break;
@@ -1099,7 +1099,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                 walker_moby->animation_playback_rate) {
             blend_moby_animation(walker_moby, gait_data->airborne_wait_animation_id, 0, 10);
             reset_walker_gait_helpers((char *)gait_data);
-            gait_data->gait_state = 0x10;
+            gait_data->gait_state = WALKER_GAIT_WAIT_FOR_LANDING;
         } else if ((gait_data->gait_status_flags & 4) && gait_data->jump_vertical_velocity < 0.0f) {
             float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             float len = (gait_data->anim[10]->alternate_phase_anchor_position -
@@ -1116,7 +1116,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                 f = find_nearest_animation_sequence_entry(walker_moby->pClass->seqs[a->id], 0.0f);
                 blend_moby_animation(walker_moby, a->id, f, bl);
                 reset_walker_gait_helpers((char *)gait_data);
-                gait_data->gait_state = 0x11;
+                gait_data->gait_state = WALKER_GAIT_SYNC_ALTERNATE_LANDING_ANIMATION;
             }
         }
         break;
@@ -1133,7 +1133,7 @@ void walker_update_gait(WalkMoby *walker_moby,
                     find_nearest_animation_sequence_entry(walker_moby->pClass->seqs[a->id], 0.0f);
                 blend_moby_animation(walker_moby, a->id, f, bl);
                 reset_walker_gait_helpers((char *)gait_data);
-                gait_data->gait_state = 0x12;
+                gait_data->gait_state = WALKER_GAIT_SYNC_LANDING_ANIMATION;
             }
         }
         break;
@@ -1214,7 +1214,7 @@ void walker_update_gait(WalkMoby *walker_moby,
             blend_moby_animation(walker_moby, a->id, f, bl);
             reset_walker_gait_helpers((char *)gait_data);
             gait_data->jump_vertical_velocity = 0.0f;
-            gait_data->gait_state = 0xD;
+            gait_data->gait_state = WALKER_GAIT_RUN;
             gait_data->gait_phase_mask = 1;
             gait_data->gait_status_flags &= 0xFFFD;
             ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
@@ -1244,7 +1244,7 @@ void walker_update_gait(WalkMoby *walker_moby,
             blend_moby_animation(walker_moby, a->id, f, bl);
             reset_walker_gait_helpers((char *)gait_data);
             gait_data->jump_vertical_velocity = 0.0f;
-            gait_data->gait_state = 0xD;
+            gait_data->gait_state = WALKER_GAIT_RUN;
             gait_data->gait_phase_mask = 1;
             gait_data->gait_status_flags &= 0xFFFD;
             ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
