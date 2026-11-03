@@ -110,7 +110,7 @@ extern int           D_L00_001BA4D0_lui[] __asm__("D_L00_001BA4D0") NOT_SDA;
 extern struct Hero   hero_lui __asm__("D_0013F350") NOT_SDA;
 void                 FUN_L00_00257470(unsigned char *m, int flags, int arg);
 
-void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_index) {
+void FUN_L00_00257470(unsigned char *moby, int bolt_drop_flags, int trajectory_target_index) {
     float          amt;
     int            lvl;
     int            k;
@@ -161,7 +161,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
         debug_print(D_L00_001E8F28, truncate_float_to_s32(amt));
     }
     call_flags = 1;
-    if (flags & 0x100) {
+    if (bolt_drop_flags & 0x100) {
         call_flags = 5;
     }
     if (hero_lui.on_hoverboard || (flags & 0x200)) {
@@ -172,10 +172,10 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
         call_flags |= 2;
     }
     cnt = D_L00_0015FFBC;
-    if (flags & 0x400) {
+    if (bolt_drop_flags & 0x400) {
         call_flags |= 0x10;
     }
-    if (cnt < 100 || (flags & 0x800)) {
+    if (cnt < 100 || (bolt_drop_flags & 0x800)) {
         call_flags |= 8;
     }
     if (D_L00_0015FFBC < 50) {
