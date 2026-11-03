@@ -407,7 +407,7 @@ extern s32  FUN_L00_001f3170(void *, f32);
 extern u128_2133a8 D_L16_00174270[] NOT_SDA;
 s32                resolve_hero_position_collisions(s32 mode) __asm__("FUN_L16_00210b60");
 
-s32 resolve_hero_position_collisions(s32 mode) {
+s32 resolve_hero_position_collisions(s32 correction_limit_mode) {
     V_2133a8     pre_collision_position;
     V_2133a8     collision_position_offset;
     V_2133a8     resolved_position_delta;
@@ -484,7 +484,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     fast_vec_sub(&resolved_position_delta, &hero.motion.pos.q, &pre_collision_position);
     collision_extent_or_displacement_length = fast_vec_length(&resolved_position_delta);
     if (hero.capsule_radius * 1.5f < collision_extent_or_displacement_length) {
-        if (mode == 0xF) {
+        if (correction_limit_mode == 0xF) {
             if (512.0f < resolved_position_delta.f[0])
                 resolved_position_delta.f[0] = 512.0f;
             else if (resolved_position_delta.f[0] < -512.0f)
