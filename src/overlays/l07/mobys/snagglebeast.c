@@ -286,7 +286,7 @@ void draw_snagglebeast_rope_attack_layer(
     SnagglebeastVars   *rope_layer_moby_vars = (SnagglebeastVars *)MOBY(moby)->pvars;
     struct GeometryQuad quad;
     struct GeometryQuad inner;
-    float               offset[4];
+    float               rope_radial_offset[4];
     float               spin;
     float               step;
     float               angle;
