@@ -130,11 +130,11 @@ extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") NOT_SDA;
 void            draw_rotated_hud_sprite(
                int id, int x, int y, int draw_width, int draw_height, int alpha) __asm__("FUN_L00_0023bac0");
 
-void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_height, int alpha) {
+void draw_rotated_hud_sprite(int sprite_frame_id, int x, int y, int draw_width, int draw_height, int alpha) {
     u64_23bac0 *packet_words;
     int        *coordinate_offsets;
     G_23bac0   *sprite_render_data = &D_L00_0017E4D8_23bac0;
-    R_23bac0   *image_page = &sprite_render_data->rec[sprite_render_data->tab[id].k];
+    R_23bac0   *image_page = &sprite_render_data->rec[sprite_render_data->tab[sprite_frame_id].k];
     int         ww = 1 << image_page->lw;
     int         hh = 1 << image_page->lh;
     *(int *)(D_L00_001611C0_23bac0 + 0) = 0x10000007;
@@ -145,7 +145,7 @@ void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_heig
     packet_words = (u64_23bac0 *)D_L00_001611C0_23bac0;
     packet_words[0] = 0xB400000000008001UL;
     packet_words[1] = 0x53535353106UL;
-    packet_words[2] = get_frame_texture(id);
+    packet_words[2] = get_frame_texture(sprite_frame_id);
     packet_words[3] = 0x154;
     packet_words[4] = ((u64_23bac0)alpha << 24) | 0x7F7F7F;
     packet_words[5] = ww << 4;
