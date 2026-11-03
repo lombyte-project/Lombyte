@@ -560,7 +560,7 @@ void butterfly_swarm_update(struct Moby *moby) {
     f32           angle;
     f32           angle2;
     f32           speed;
-    f32           size;
+    f32           spawn_radius;
     f32           average;
     f32           effect[8];
 
@@ -634,10 +634,10 @@ void butterfly_swarm_update(struct Moby *moby) {
                 qcopy(&child->pos, &moby->pos);
                 angle = random_angle_radians();
                 angle2 = random_angle_radians();
-                size = random_float_between(0.6f, 0.9f);
-                child->pos.x += fast_cos(angle) * fast_sin(angle2) * size;
-                child->pos.y += fast_sin(angle) * fast_sin(angle2) * size;
-                child->pos.z += fast_cos(angle2) * size;
+                spawn_radius = random_float_between(0.6f, 0.9f);
+                child->pos.x += fast_cos(angle) * fast_sin(angle2) * spawn_radius;
+                child->pos.y += fast_sin(angle) * fast_sin(angle2) * spawn_radius;
+                child->pos.z += fast_cos(angle2) * spawn_radius;
                 part->unk50 = 0;
                 part->leader_pos = &moby->pos;
                 part->unk58 = 0;
