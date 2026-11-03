@@ -151,13 +151,13 @@ char *spawn_airship_part(struct Moby *rotation_source_moby,
     return spawned_moby;
 }
 
-char *find_nearest_moby_by_class(void *search_position, int type, float *nearest_distance_out) {
+char *find_nearest_moby_by_class(void *search_position, int target_moby_class, float *nearest_distance_out) {
     char *best = 0;
     float bestd = 100000.0f;
     char *candidate_moby;
     for (candidate_moby = D_L09_0015FFE4; candidate_moby != 0;
          candidate_moby = ((char *)MOBY(candidate_moby)->next)) {
-        if (MOBY(candidate_moby)->oclass == type) {
+        if (MOBY(candidate_moby)->oclass == target_moby_class) {
             float candidate_distance = fast_vec_dist(search_position, candidate_moby + 0x10);
             if (candidate_distance < bestd) {
                 bestd = candidate_distance;
