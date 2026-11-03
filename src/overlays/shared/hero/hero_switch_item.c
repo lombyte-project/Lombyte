@@ -3342,6 +3342,9 @@ void update_hero_ground_contact_and_surface_slopes(void) {
         GROUND_MATERIAL_SINK_SURFACE_SKIP_GROUND_CONTACT = 0xB,
         GROUND_MATERIAL_WATER_SURFACE = 0xD
     };
+    enum {
+        GROUND_MATERIAL_WATER_HEIGHT_QUERY_REPROBE = 0
+    };
     V collision_ray_end, ground_ray_start, ground_offset_or_angles, side_ray_start,
         unused_side_probe_point, side_hit_angles, side_hit_normal;
     f32 f;
@@ -3388,7 +3391,7 @@ void update_hero_ground_contact_and_surface_slopes(void) {
     }
     hero.ground_sound_class = collision_sound_class;
     hero.ground_type = collision_hit_material();
-    if (hero.ground_type == 0) {
+    if (hero.ground_type == GROUND_MATERIAL_WATER_HEIGHT_QUERY_REPROBE) {
         hero.water_surface_z =
             resolve_camera_surface_height(((u8 *)&D_L00_00173E60_lui), &hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
