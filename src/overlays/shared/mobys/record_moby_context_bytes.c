@@ -28,7 +28,7 @@ void record_moby_context_bytes(char  *source,
 
 void record_moby_context_bytes(
 
-    char *source, int byte_count, char *context_moby, int mode, Table *entry_table) {
+    char *source, int byte_count, char *context_moby, int key_base_mode, Table *entry_table) {
     enum {
         MOBY_CONTEXT_MODE_MOBY_RELATIVE = 1
     };
@@ -38,7 +38,7 @@ void record_moby_context_bytes(
     int    i;
     Entry *e;
     Entry *ne;
-    if (mode == MOBY_CONTEXT_MODE_MOBY_RELATIVE) {
+    if (key_base_mode == MOBY_CONTEXT_MODE_MOBY_RELATIVE) {
         key = source - context_moby;
     } else {
         key = (int)source - *(unsigned short *)(context_moby + 0x78);
@@ -46,8 +46,8 @@ void record_moby_context_bytes(
     for (i = 0; i < entry_table->n; i++) {
         e = &entry_table->e[i];
         if (e->key == key && e->a == byte_count && v20 == e->c && v19 == e->d) {
-            mode = e->flag;
-            if (mode) {
+            key_base_mode = e->flag;
+            if (key_base_mode) {
                 copy_memory_aligned((int)&e->pad4, source, byte_count);
                 return;
             }
@@ -58,7 +58,7 @@ void record_moby_context_bytes(
     ne->key = key;
     copy_memory_aligned((int)&ne->pad4, source, byte_count);
     ne->a = byte_count;
-    ne->flag = mode;
+    ne->flag = key_base_mode;
     ne->c = v20;
     ne->d = v19;
 }
