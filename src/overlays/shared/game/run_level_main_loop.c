@@ -235,12 +235,12 @@ void run_level_main_loop(void) {
             memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
             if (D_L00_001B9CF0.card_icon_hidden == 0) {
                 int   rotation_period_frames = 55;
-                float size;
+                float rotating_sprite_size;
                 float sprite_rotation_radians;
                 int   hud_sprite;
 
                 setup_gif_paging(0);
-                size = 272.0f;
+                rotating_sprite_size = 272.0f;
                 vu1_add_g_sregister(0x47, 0x3004B);
                 hud_sprite = get_icon_frame(0x755D, 0);
                 draw_hud_sprite(hud_sprite, 0x32, 0x12C, 0x40, 0x40, 0x80);
@@ -251,8 +251,8 @@ void run_level_main_loop(void) {
                                     0x40,
                                     0x40,
                                     get_frame_texture(get_icon_frame(0x755D, 1)),
-                                    size,
-                                    size,
+                                    rotating_sprite_size,
+                                    rotating_sprite_size,
                                     sprite_rotation_radians);
                 do_gif_paging();
             }
