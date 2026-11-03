@@ -3672,7 +3672,7 @@ extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32  FUN_L00_001f3170(void *, f32);
 s32         resolve_hero_current_position_collisions(s32 mode) __asm__("FUN_L00_002133a8");
 
-s32 resolve_hero_current_position_collisions(s32 mode) {
+s32 resolve_hero_current_position_collisions(s32 history_attempt_index) {
     enum {
         HERO_COLLISION_HISTORY_FINAL_ATTEMPT_INDEX = 0xF
     };
@@ -3746,7 +3746,7 @@ s32 resolve_hero_current_position_collisions(s32 mode) {
     fast_vec_sub(&collision_correction, &hero.motion.pos.q, &pre_collision_position);
     probe_height_or_correction_length = fast_vec_length(&collision_correction);
     if (hero.capsule_radius * 1.5f < probe_height_or_correction_length) {
-        if (mode == HERO_COLLISION_HISTORY_FINAL_ATTEMPT_INDEX) {
+        if (history_attempt_index == HERO_COLLISION_HISTORY_FINAL_ATTEMPT_INDEX) {
             if (512.0f < collision_correction.f[0])
                 collision_correction.f[0] = 512.0f;
             else if (collision_correction.f[0] < -512.0f)
