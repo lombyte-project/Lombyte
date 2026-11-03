@@ -270,9 +270,9 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         L16ChallengePlayer *player = (L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D);
         unsigned char       event;
         if (player->points >= 4500) {
-            unsigned char *flags = D_0013D408;
-            if (!flags[0x1A]) {
-                flags[0x1A] = 1;
+            unsigned char *challenge_score_announcement_flags = D_0013D408;
+            if (!challenge_score_announcement_flags[0x1A]) {
+                challenge_score_announcement_flags[0x1A] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 FUN_L00_00263d40(0x53D6, -1);
             }
