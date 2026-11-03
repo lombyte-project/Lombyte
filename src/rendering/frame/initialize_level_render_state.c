@@ -72,9 +72,9 @@ typedef struct Ent40 {
 
 typedef struct Display {
     u8  pad00[0x23C];
-    s32 x23C;
-    s32 x240;
-    s32 x244;
+    s32 background_color_red;
+    s32 background_color_green;
+    s32 background_color_blue;
 } Display;
 
 typedef struct Buf194100 {
@@ -198,11 +198,11 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     fast_mem_zero16(moby_grid_block_bitmap, 0x60);
 
     environment = (u8 *)header + header->x0;
-    D_0018CD00.x23C = *(s32 *)environment;
+    D_0018CD00.background_color_red = *(s32 *)environment;
     environment += 4;
-    D_0018CD00.x240 = *(s32 *)environment;
+    D_0018CD00.background_color_green = *(s32 *)environment;
     environment += 4;
-    D_0018CD00.x244 = *(s32 *)environment;
+    D_0018CD00.background_color_blue = *(s32 *)environment;
     environment += 4;
     fog_color_red = *environment;
     environment += 4;
@@ -220,7 +220,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     occl_fog_density_set = 500.0f;
     occl_fog_count = 500;
     part_clip_dist = 0x1F4000;
-    set_background_color(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
+    set_background_color(D_0018CD00.background_color_red, D_0018CD00.background_color_green, D_0018CD00.background_color_blue);
     vu0_load_micro_program(D_00100AE0);
     fast_mem_zero16(point_lights, 0x100);
     fast_mem_zero16(point_light_data, 0x180);
