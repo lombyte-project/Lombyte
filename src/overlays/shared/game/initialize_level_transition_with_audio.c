@@ -91,7 +91,7 @@ typedef struct {
     char      padc[0x14];
     int       x20;
     short     x24;
-    short     x26;
+    short     audio_selection_base_index;
     char      pad28[4];
     short     x2c;
 } E_28e9c8;
@@ -149,7 +149,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
             moby->flags |= 0x80;
     }
     if (audio_selection_mode == AUDIO_SELECTION_MODE_ALWAYS_FADE) {
-        base_audio_selection_index = D_0013E030_28e9c8.x26;
+        base_audio_selection_index = D_0013E030_28e9c8.audio_selection_base_index;
         audio_stream_table_index = base_audio_selection_index + 1;
         secondary_track_index = base_audio_selection_index + 6;
         if (current_level_index == LEVEL_ORXON && base_audio_selection_index == 1 &&
@@ -163,7 +163,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
         load_chunks_with_optional_fade(audio_stream_table_index, scale_game_frames(6));
     } else {
         int k, fade_frame_count;
-        base_audio_selection_index = D_0013E030_28e9c8.x26;
+        base_audio_selection_index = D_0013E030_28e9c8.audio_selection_base_index;
         k = D_0013E030_28e9c8.x2c;
         secondary_track_index = base_audio_selection_index + 3;
         if (k)
