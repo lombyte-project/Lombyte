@@ -542,7 +542,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     };
     L16HitMoby *hit_moby = moby;
     float       matrix[16];
-    int         status;
+    int         hit_reaction_status;
     float       amount;
     L16HitData *hit_data;
     char       *dummy_hit_record;
@@ -575,8 +575,8 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     }
     amount = 0.0f;
     dummy_hit_record = find_moby_hit(hit_moby, 0x330000, 0);
-    hit_reaction(hit_moby, dummy_hit_record, &hit_data->health, 0, &status, &amount, 0, 4);
-    if (status != HIT_REACTION_STATUS_NO_DAMAGE && hit_moby->state != TEST_DUMMY_STATE_BURST &&
+    hit_reaction(hit_moby, dummy_hit_record, &hit_data->health, 0, &hit_reaction_status, &amount, 0, 4);
+    if (hit_reaction_status != HIT_REACTION_STATUS_NO_DAMAGE && hit_moby->state != TEST_DUMMY_STATE_BURST &&
         hit_moby->state != TEST_DUMMY_STATE_RESPAWN) {
         hit_data->health -= amount;
         if (hit_data->health <= 0.0f) {
