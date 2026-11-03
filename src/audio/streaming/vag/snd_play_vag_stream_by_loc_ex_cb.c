@@ -28,7 +28,7 @@ void snd_play_vag_stream_by_loc_ex_cb(s32 loc,
                                       s32 voice,
                                       s32 channel,
                                       s32 request_word_6,
-                                      s32 id,
+                                      s32 callback_address,
 
                                       u64 cb_data) {
     int new_var;
@@ -41,7 +41,7 @@ void snd_play_vag_stream_by_loc_ex_cb(s32 loc,
     playback_request_payload[4] = voice;
     playback_request_payload[5] = channel;
     playback_request_payload[6] = request_word_6;
-    snd_send_iop_command_no_wait(0x2C, 0x1C, playback_request_payload, id, cb_data);
+    snd_send_iop_command_no_wait(0x2C, 0x1C, playback_request_payload, callback_address, cb_data);
 }
 
 extern __typeof__(snd_play_vag_stream_by_loc_ex_cb) func_0012EC08
