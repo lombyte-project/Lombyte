@@ -5,7 +5,7 @@
 
 #include "rnc/rendering/screen.h"
 
-extern char loading_quad_packet_header_template[] __asm__("D_00160850");
+extern u64 loading_quad_packet_header_template[2] __asm__("D_00160850");
 
 typedef union {
     struct {
@@ -82,3 +82,8 @@ void append_scrolling_textured_quad(int           x,
 
 extern __typeof__(append_scrolling_textured_quad) func_002316E8
     __attribute__((alias("FUN_002316e8")));
+
+/* GIF tag of the quad packet (NLOOP 1, EOP, REGLIST, NREG 11) and its
+ * register list. Small data reached with lui/addiu. */
+u64 loading_quad_packet_header_template[2] __asm__("D_00160850") __attribute__((section(".sdata"))) __attribute__((aligned(16))) = {
+    0xB400000000008001, 0x0000052525252106};

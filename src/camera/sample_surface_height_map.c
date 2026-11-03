@@ -3,7 +3,8 @@
 #include "rnc/math/asm_helpers.h"
 
 extern SurfaceHeightTile *surface_height_tiles __asm__("D_00161190");
-extern s32                surface_height_layer __asm__("D_001610E0") __attribute__((sda));
+/* Small data, defined above the code so it is reached $gp-relative. */
+s32 surface_height_layer __asm__("D_001610E0") = 2;
 
 extern s32  find_zone_at_point(f32, f32, f32) __asm__("func_00239D60");
 extern s32  truncate_float_to_s32(f32) __asm__("func_001FA6D0");

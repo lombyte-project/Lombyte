@@ -6,7 +6,8 @@
 #include "rnc/globals.h"
 #include "rnc/game/game_globals.h"
 
-extern s32  large_font_height __asm__("D_0015F690") __attribute__((sda));
+/* Small data, defined above the code so it is reached $gp-relative. */
+s32 large_font_height __asm__("D_0015F690") = 17;
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32  measure_text_width_regular(u8 *, s32) __asm__("func_001F6250");

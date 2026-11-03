@@ -36,12 +36,10 @@ typedef struct {
 
 extern s32 D_001516EC NOT_SDA;
 extern s16 D_0015172A NOT_SDA;
-extern s32            resident_dialogue_after_completion_wait_thresholds[2] __asm__("D_00161030")
-    __attribute__((sda));
-extern s32 resident_dialogue_after_start_wait_thresholds[2] __asm__("D_00161038")
-    __attribute__((sda));
-extern s32 resident_dialogue_before_timed_idle_restore_thresholds[2] __asm__("D_00161040")
-    __attribute__((sda));
+/* Small data, defined above the code so it is reached $gp-relative. */
+s32 resident_dialogue_after_completion_wait_thresholds[2] __asm__("D_00161030") = {100, 100};
+s32 resident_dialogue_after_start_wait_thresholds[2] __asm__("D_00161038") = {200, 100};
+s32 resident_dialogue_before_timed_idle_restore_thresholds[2] __asm__("D_00161040") = {44, 100};
 extern s32 D_001610B0 MACRO_ADDR;
 extern s32 D_001610B4 MACRO_ADDR;
 extern BossVars       D_001E63C0;

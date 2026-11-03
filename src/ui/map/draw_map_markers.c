@@ -64,3 +64,5 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
 }
 
 extern __typeof__(draw_map_markers) func_00208508 __attribute__((alias("FUN_00208508")));
+
+s32 marker_half_size __asm__("D_0015FDB0") MACRO_ADDR = 32;

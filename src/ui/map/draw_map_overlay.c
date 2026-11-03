@@ -516,3 +516,5 @@ void draw_map_overlay(void) {
 }
 
 extern __typeof__(draw_map_overlay) func_00205640 __attribute__((alias("FUN_00205640")));
+
+u8 no_map_available_text[] __asm__("D_001E8068") = "No Map Available";

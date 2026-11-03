@@ -122,7 +122,8 @@ int map_filter_l01_5(int   reveal_test_selector,
     return (reveal_test_value >= 95.0f) ? 1 : 0;
 }
 
-extern u32 menu_selection_count __asm__("D_0015FD64") __attribute__((sda));
+/* Small data, defined above the code so it is reached $gp-relative. */
+u32 menu_selection_count __asm__("D_0015FD64") = 0;
 
 s32 map_filter_l03_0(void) __asm__("func_00206B78");
 

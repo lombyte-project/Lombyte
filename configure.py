@@ -1051,6 +1051,9 @@ RODATA_OVERLAYS = {
     "rendering/sky/setup_sky_gif_paging": (0x160450, 0x613D0, 9),  # its profiler label
     "rendering/tfrags/draw_tfrag": (0x160E70, 0x61DF0, 27),  # its profiler labels
     "rendering/vu1/vu1_chain": (0x1E89C8, 0xE9948, 61),  # its two debug messages
+    "game/transitions/do_space_transition": (0x1E8988, 0xE9908, 28),  # unloaded sound bank message
+    "ui/text/set_scrolling_status_message": (0x1E8A70, 0xE99F0, 21),  # status message format
+    "ui/map/coverage/downsample_map_coverage": (0x1E8080, 0xE9000, 64),  # nibble bit-count table
 }
 
 # Recovered C units that define the small-data variables their original
@@ -1113,6 +1116,14 @@ SDATA_OVERLAYS = {
     "ui/menus/widgets/draw_menu_side_indicator": (0x1602F0, 0x61270, 10),  # indicator glyphs
     "ui/menus/system/emit_selected_graphics_dma_packets": (0x160360, 0x612E0, 8),  # payload words
     "ui/menus/widgets/render_configured_text_label": (0x160270, 0x611F0, 31),  # label strings
+    "mobys/resolve_moby_hit_response": (0x15FFC8, 0x60F48, 8),  # damage override table
+    "mobys/animation/update_resident_dialogue_animation_state": (0x161030, 0x61FB0, 24),  # wait thresholds
+    "camera/sample_surface_height_map": (0x1610E0, 0x62060, 4),  # surface height layer
+    "ui/map/level_selection/draw_level_selection_map": (0x15F690, 0x60610, 4),  # large font height
+    "ui/map/draw_map_markers": (0x15FDB0, 0x60D30, 4),  # marker half size
+    "ui/map/map_filters": (0x15FD64, 0x60CE4, 4),  # menu selection count
+    "ui/menus/widgets/format_menu_item_text": (0x15FDA0, 0x60D20, 14),  # item text formats
+    "ui/loading/append_scrolling_textured_quad": (0x160850, 0x617D0, 16),  # quad GIF tag
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
@@ -1216,6 +1227,7 @@ DATA_OVERLAYS = {
     "rendering/vu1/vu1_gs_regs_normal": (0x1DE3C0, 0xDF340, 48),  # its GS register packet
     "rendering/vu1/vu1_gs_regs_alt": (0x1DE3F0, 0xDF370, 48),  # its GS register packet
     "rendering/vu1/vu1_tex_flush": (0x1DEE00, 0xDFD80, 48),  # its GS register packet
+    "ui/map/draw_map_overlay": (0x1E8068, 0xE8FE8, 17),  # no map text
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
