@@ -238,7 +238,7 @@ typedef struct WBMoby {
     /* 0x7C */ char          pad7C[3];
     /* 0x7F */ unsigned char f7F;
     /* 0x80 */ char          pad80[0x24];
-    /* 0xA4 */ unsigned char fA4;
+    /* 0xA4 */ unsigned char hit_record_index;
     /* 0xA5 */ char          padA5[0x17];
     /* 0xBC */ unsigned char movement_recovery_flags;
 } WBMoby;
@@ -472,7 +472,7 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
     }
-    m->fA4 = 0xFF;
+    m->hit_record_index = 0xFF;
     if (d->pending_excitement != 0)
         d->t3C6 = scale_game_frames(0xF0);
     tm = &d->t3C2;
