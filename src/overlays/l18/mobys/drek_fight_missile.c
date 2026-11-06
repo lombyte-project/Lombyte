@@ -107,15 +107,15 @@ typedef struct DrekFightMissileVars {
     u8    pad_12C[0x4];
     f32   dive_start_velocity[4];
     u8    pad_140[0x4];
-    f32   unk144;
+    f32   vertical_velocity; /* advance_accelerated_scalar velocity of pos.z */
     u8    pad_148[0x4];
     s32   dive_motion_blend_factor;
-    f32   unk150;
+    f32   wander_yaw_acceleration;
     f32   wander_yaw_approach_scale;
     f32   wander_vertical_approach_scale;
-    f32   unk15C;
+    f32   wander_vertical_max_speed;
     s32   timer_160;
-    s16   unk164;
+    s16   trail_segment_count; /* trail quads drawn, head slot at 0x166 */
     u8    pad_166[0x2];
     f32   effect_color_phase;
     void *activating_moby;
@@ -142,8 +142,8 @@ void drek_fight_missile_update(struct Moby *moby) {
         float initialization_frame_time = frame_time;
         missile_vars->wander_vertical_approach_scale = wander_acceleration_scale * 10.0f;
         missile_vars->wander_yaw_approach_scale = initialization_frame_time * 12.566371f;
-        missile_vars->unk150 = wander_acceleration_scale * 3.1415927f;
-        missile_vars->unk15C = initialization_frame_time * 10.0f;
+        missile_vars->wander_yaw_acceleration = wander_acceleration_scale * 3.1415927f;
+        missile_vars->wander_vertical_max_speed = initialization_frame_time * 10.0f;
         missile_vars->effect_color_phase = random_angle_radians();
         moby->draw_dist = 0xFF;
         qcopy(&missile_vars->dive_target_position, &moby->pos);
@@ -173,7 +173,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         missile_vars->dive_start_velocity[1] =
             fast_sin(moby->rot.z) *
             (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
-        missile_vars->dive_start_velocity[2] = missile_vars->unk144;
+        missile_vars->dive_start_velocity[2] = missile_vars->vertical_velocity;
         missile_vars->dive_motion_blend_factor = 0;
         break;
     }
@@ -217,7 +217,7 @@ void drek_fight_missile_update(struct Moby *moby) {
             int   i;
             char *pos = &moby->pos;
             moby->state = DREK_MISSILE_WANDER;
-            missile_vars->unk164 = 0;
+            missile_vars->trail_segment_count = 0;
             spawn_explosion(missile_vars->activating_moby,
                             D_L18_0015F580,
                             pos,

@@ -21,7 +21,7 @@ typedef struct ChildCarrierVars {
     f32   previous_position[4];
     u8    previous_rotation;
     u8    pad_71[0xF];
-    s32   unk80;
+    s32   spawns_child; /* nonzero: creates the class 0x764 child to carry */
     char *carried_child_moby;
 } ChildCarrierVars;
 
@@ -46,7 +46,7 @@ void child_carrier_update(char *moby) {
                              moby + 0x40);
         break;
     }
-    if (MOBY(moby)->command != 0 && transform_and_child_vars->unk80 != 0 &&
+    if (MOBY(moby)->command != 0 && transform_and_child_vars->spawns_child != 0 &&
         *(int *)&transform_and_child_vars->carried_child_moby == 0) {
         char *new_child = create_moby(0x764);
         transform_and_child_vars->carried_child_moby = new_child;

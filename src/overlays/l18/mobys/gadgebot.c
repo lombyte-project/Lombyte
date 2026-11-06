@@ -456,7 +456,7 @@ typedef struct {
     u8  pad1E0[0xC];
     f32 spin; /* 0x1EC: random 15..45 degrees, in radians */
     u8  pad1F0[4];
-    f32 unk1F4; /* 0x1F4: set to 1.0 on launch */
+    f32 launch_effect; /* 0x1F4: 1.0 on launch, falls to 0: stretches the moby and fades the launch glow */
 } LaunchedMobyVars;
 
 extern float FUN_L00_0025abf0(void *, void *, float, float, int);
@@ -486,7 +486,7 @@ int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, flo
                 moby->flags |= 0x1000;
                 qcopy(&moby->pos, from);
                 moby->state = GADGEBOT_LAUNCH_FLIGHT;
-                launched_moby_vars->unk1F4 = 1.0f;
+                launched_moby_vars->launch_effect = 1.0f;
                 fast_vec_sub(launched_moby_vars->velocity, to, from);
                 launched_moby_vars->velocity[2] = 0.0f;
                 fast_vec_normalize(
