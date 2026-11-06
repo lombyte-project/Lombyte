@@ -31,14 +31,14 @@ struct MissionItem {
     s32 value1; /* 0x04 */
     s16 kind2;  /* 0x08: enum MissionCondition: the mission is done */
     u8  padA[2];
-    s32 value2;              /* 0x0C */
-    u16 flags;               /* 0x10: MISSION_FLAG_* */
-    s16 base;                /* 0x12: collect_mission_ids reports base + result */
-    s16 text_ids[4];         /* 0x14: help text by result (collect_mission_ids) */
+    s32 value2;        /* 0x0C */
+    u16 flags;         /* 0x10: MISSION_FLAG_* */
+    s16 base;          /* 0x12: collect_mission_ids reports base + result */
+    s16 text_ids[4];   /* 0x14: help text by result (collect_mission_ids) */
     int (*callback)(); /* 0x1C: picks result (an int (*)(void) or int (*)(int)), may be null */
-    void *arg;               /* 0x20 */
-    s16   state;             /* 0x24: 0 closed, 1 open, 2 done */
-    s16   result;            /* 0x26 */
+    void *arg;         /* 0x20 */
+    s16   state;       /* 0x24: 0 closed, 1 open, 2 done */
+    s16   result;      /* 0x26 */
 }; /* size 0x28 */
 
 /* The mission list of each level, read by update_mission_list. */
