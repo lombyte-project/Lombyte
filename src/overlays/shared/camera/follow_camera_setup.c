@@ -34,13 +34,13 @@ extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
 /* FollowCamTail (rnc/camera/follow_cam.h), from saved state + 0x130 */
 typedef struct {
     char  pad0[0x2C];
-    float eye_distance; /* 0x15C */
+    float distance; /* 0x15C: FollowCamState.tail.distance */
     char  pad30[0xC];
-    short eye_distance_override; /* 0x16C: eye_distance eases to eye_distance_target */
-    short distance_override;     /* 0x16E: distance eases to distance_target */
-    int   eye_distance_target;   /* 0x170 */
+    short distance_override;     /* 0x16C: distance eases to distance_target */
+    short pivot_height_override; /* 0x16E: pivot_height eases to pivot_height_target */
+    int   distance_target;       /* 0x170 */
     char  pad44[8];
-    int   distance_target; /* 0x17C */
+    int   pivot_height_target; /* 0x17C */
     char  pad50[8];
     float base_distance; /* 0x188 */
 } CamOrbit;
@@ -152,11 +152,11 @@ void follow_camera_approach(unsigned char *moby) {
                                                       0.2f,
                                                       0.0f);
     }
-    ((CamOrbit *)orbit)->eye_distance_override = 0;
     ((CamOrbit *)orbit)->distance_override = 0;
-    ((CamOrbit *)orbit)->eye_distance_target = 0;
+    ((CamOrbit *)orbit)->pivot_height_override = 0;
     ((CamOrbit *)orbit)->distance_target = 0;
-    ((CamOrbit *)orbit)->base_distance = ((CamOrbit *)default_orbit)->eye_distance;
+    ((CamOrbit *)orbit)->pivot_height_target = 0;
+    ((CamOrbit *)orbit)->base_distance = ((CamOrbit *)default_orbit)->distance;
     ((CamTarget *)target)->target_height_override_pending = 0;
     ((CamTarget *)target)->look_height_target = 0;
     (*(Cam_2e5e38 **)(moby + 0x70))->leash = 1;
@@ -245,7 +245,7 @@ set_follow_camera_angle_blend_from_direction(f32 *, f32, f32) __asm__("FUN_L00_0
 extern void
 set_follow_camera_angle_blend_from_position(void *, f32, f32) __asm__("FUN_L00_002e8970");
 extern void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
-extern void FUN_L00_002e8620(void);
+extern void lock_follow_camera_run_toward(void) __asm__("FUN_L00_002e8620");
 extern void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
 extern void follow_camera_set_distance(s32, f32, f32) __asm__("FUN_L00_002e8450");
 extern void follow_camera_set_offset_scale(s32, f32, f32) __asm__("FUN_L00_002e84f0");
@@ -316,7 +316,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             follow_camera_set_distance(1, follow_camera_vehicle_orbit_distance_gp, 0.003f);
             follow_camera_set_height(follow_camera_vehicle_orbit_height_gp, 0.003f);
         }
-        FUN_L00_002e8620();
+        lock_follow_camera_run_toward();
         camera_spring_state = (S1D0 *)((u8 *)camera_moby->m + 0x1D0);
         camera_spring_state->f3C = follow_camera_vehicle_collision_probe_scale_gp;
         camera_spring_state->f44 = follow_camera_vehicle_collision_probe_step_growth_factor_gp;

@@ -17,8 +17,9 @@ typedef struct {
     f32 focus[4];    /* 0x40: point the camera looks at, moved by velocity each frame */
     f32 velocity[4]; /* 0x50: focus displacement for this frame */
     u8  pad60[0x20];
-    f32 look_target[4];      /* 0x80: focus offset blended towards the hero */
-    f32 eye[4];              /* 0x90: resulting camera position */
+    f32 look_target[4]; /* 0x80: focus offset blended towards the hero */
+    f32 pivot
+        [4]; /* 0x90: point pivot_height above the hero; the camera sits at pivot + eye_offset */
     f32 offset[4];           /* 0xA0: eased offset, split into a lateral and an up part */
     f32 lateral_ease[4];     /* 0xB0: cam_interp_values state of the lateral part */
     f32 up_ease[4];          /* 0xC0: cam_interp_values state of the up part */
@@ -49,42 +50,42 @@ typedef struct {
 typedef struct {
     u8  pad1D0[0x20];
     f32 shot_pos[4];        /* 0x1F0: set to the record's position */
-    f32 eye_distance_error; /* 0x200: eye_distance minus the length of eye_offset */
-    u8  pad204[8];
+    f32 distance_reduction; /* 0x200: distance minus the length of eye_offset (walls pull the camera in) */
+    u8 pad204[8];
 } FollowCamSnap;
 
 typedef struct {
-    f32 eye_offset[4];       /* 0x130: eye offset; its length is the eye distance */
+    f32 eye_offset[4];       /* 0x130: camera offset from the pivot; its length is distance */
     f32 saved_eye_offset[4]; /* 0x140: copy of eye_offset */
     u8  pad150[0xC];
-    f32 eye_distance; /* 0x15C: eye distance, set with eye_offset by the shot cameras */
-    f32 distance;     /* 0x160: distance of the eye behind the hero */
+    f32 distance; /* 0x15C: distance of the camera from the pivot (4.64), length of eye_offset */
+    f32 pivot_height; /* 0x160: height of the pivot above the hero (2.0) */
     f32 yaw_step; /* 0x164: yaw step this frame; aim cameras start only while it is (nearly) 0 */
     u8  pad168[0x40];
     FollowCamFlags ctl; /* 0x1A8 */
     u8             pad1BC[0x10];
-    f32            script_pitch; /* 0x1CC: scripted pitch in radians, set by FUN_L00_002e8540 */
-    FollowCamSnap  snap;         /* 0x1D0 */
-    f32            zoom_scale;   /* 0x20C */
-    f32            zoom;         /* 0x210: 1.0 is no zoom */
-    f32            zoom_range;   /* 0x214 */
-    u8             pad218[0xE];
-    s16 run_toward_lock; /* 0x226: 1 (FUN_L00_002e8620) keeps the camera from pulling back while the hero runs toward it */
+    f32 script_pitch; /* 0x1CC: scripted pitch in radians, set by set_follow_camera_script_pitch */
+    FollowCamSnap snap;       /* 0x1D0 */
+    f32           zoom_scale; /* 0x20C */
+    f32           zoom;       /* 0x210: 1.0 is no zoom */
+    f32           zoom_range; /* 0x214 */
+    u8            pad218[0xE];
+    s16 run_toward_lock; /* 0x226: 1 (lock_follow_camera_run_toward) keeps the camera from pulling back while the hero runs toward it */
     u8 pad228[4];
-    f32 pull_back_max; /* 0x22C: farthest pull-back while the hero runs toward the camera (6.0), set by FUN_L00_002e8490 */
-    s32 mode; /* 0x230: 0 normal; shot cameras of type 10 and 11 set 0x14D and 2 */
+    f32 pull_back_max; /* 0x22C: farthest pull-back while the hero runs toward the camera (6.0), set by set_follow_camera_pull_back_max */
+    s32 mode;          /* 0x230: 0 normal; shot cameras of type 10 and 11 set 0x14D and 2 */
 } FollowCamTail;
 
 /* 0x20..0x3B: eased values reset when a shot camera snaps. */
 typedef struct {
     u8  pad20[2];
-    s16 unk22;           /* 0x22 */
-    f32 look_height;     /* 0x24: copy of follow.look_height */
-    f32 distance;        /* 0x28: copy of tail.distance */
-    f32 look_height_vel; /* 0x2C: cam_interp_values step of look_height */
-    f32 distance_vel;    /* 0x30: cam_interp_values step of distance */
-    f32 pitch_bias;      /* 0x34: springed pitch bias while the camera is low */
-    f32 pitch_bias_vel;  /* 0x38 */
+    s16 unk22;            /* 0x22 */
+    f32 look_height;      /* 0x24: copy of follow.look_height */
+    f32 pivot_height;     /* 0x28: eased copy of tail.pivot_height */
+    f32 look_height_vel;  /* 0x2C: cam_interp_values step of look_height */
+    f32 pivot_height_vel; /* 0x30: cam_interp_values step of pivot_height */
+    f32 pitch_bias;       /* 0x34: springed pitch bias while the camera is low */
+    f32 pitch_bias_vel;   /* 0x38 */
     u8  pad3C[4];
 } FollowCamReset;
 

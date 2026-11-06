@@ -392,7 +392,7 @@ void apply_moby_camera_control(char *moby) {
     }
     if (moby_camera_control_record->camera_distance != 0.0f) {
         follow_camera_set_distance(0, moby_camera_control_record->camera_distance, 0.003f);
-        FUN_L00_002e8620();
+        lock_follow_camera_run_toward();
     }
     if (moby_camera_control_record->camera_height != 0.0f)
         follow_camera_set_height(moby_camera_control_record->camera_height, 0.003f);
@@ -401,7 +401,7 @@ void apply_moby_camera_control(char *moby) {
     if (moby_camera_control_record->mode == 3) {
         float heading;
         set_follow_camera_orbit_clamp_mode(0);
-        FUN_L00_002e8620();
+        lock_follow_camera_run_toward();
         follow_camera_start_slide();
         follow_camera_set_up_spring(0.01f, 0.2f);
         if (moby_camera_control_record->active_frames >= scale_game_frames(120))
@@ -415,7 +415,7 @@ void apply_moby_camera_control(char *moby) {
     }
     if ((unsigned short)(moby_camera_control_record->mode - 4) < 2) {
         set_follow_camera_orbit_clamp_mode(0);
-        FUN_L00_002e8620();
+        lock_follow_camera_run_toward();
         follow_camera_start_slide();
         follow_camera_set_up_spring(0.02f, 0.2f);
         follow_camera_set_distance(0, 5.84f, 0.003f);
