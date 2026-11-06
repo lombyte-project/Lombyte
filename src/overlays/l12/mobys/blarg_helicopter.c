@@ -129,17 +129,17 @@ void cache_consecutive_point_distances(int point_data_index) {
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
 typedef struct BlargHelicopterVars {
-    u8                   pad_0[0x20];
-    f32                  health;
-    s16                  max_health;
-    u8                   pad_26[0x2];
-    u8                   hit_response_class;
-    u8                   unk29;
-    u8                   pad_2A[0x2E];
-    u8                   unk58;
-    u8                   unk59;
-    u8                   unk5A;
-    u8                   pad_5B[0x5];
+    u8  pad_0[0x20];
+    f32 health;
+    s16 max_health;
+    u8  pad_26[0x2];
+    u8  hit_response_class;
+    u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad_2A[0x2E];
+    u8  look_range;
+    u8  look_priority;
+    u8  look_height;
+    u8  pad_5B[0x5];
     struct HitColorFlash hit_flash;
     f32                  velocity[4];
     s32                  trigger_volume;
@@ -253,7 +253,7 @@ update_state:
         blarg_helicopter_vars->max_health = 6;
         blarg_helicopter_vars->health = 6.0f;
         blarg_helicopter_vars->hit_response_class = 2;
-        blarg_helicopter_vars->unk29 = 0;
+        blarg_helicopter_vars->wrench_hit_sound = 0;
         blarg_helicopter_vars->speed = 0.0f;
         blarg_helicopter_vars->roll_turn_velocity = 0.0f;
         blarg_helicopter_vars->pitch_turn_velocity = 0.0f;
@@ -298,9 +298,9 @@ update_state:
              is_point_inside_clip_volume(&hero.motion.pos,
                                          blarg_helicopter_vars->trigger_volume)) ||
             triggered) {
-            blarg_helicopter_vars->unk58 = 22;
-            blarg_helicopter_vars->unk59 = 1;
-            blarg_helicopter_vars->unk5A = 7;
+            blarg_helicopter_vars->look_range = 22;
+            blarg_helicopter_vars->look_priority = 1;
+            blarg_helicopter_vars->look_height = 7;
             moby->hit_slot = 255;
             moby->flags &= 0xffbe;
             child = blarg_helicopter_vars->commander;

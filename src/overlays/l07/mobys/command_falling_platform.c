@@ -34,7 +34,7 @@ typedef struct CommandFallingPlatformVars {
     s32 unk20;
     s16 unk24;
     u8  pad_26[0x2];
-    u8  unk28;
+    u8  hit_weight; /* 0x28: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad_29[0x15];
     s16 unk3E;
     u8  pad_40[0x20];
@@ -100,7 +100,7 @@ void command_falling_platform_update(char *moby) {
     case PLATFORM_INITIALIZE:
         falling_platform_vars->unk20 = 0;
         falling_platform_vars->unk24 = 0;
-        falling_platform_vars->unk28 = 4;
+        falling_platform_vars->hit_weight = 4;
         falling_platform_vars->unk3E = 13;
         timer = rand();
         if (timer & 1)

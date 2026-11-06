@@ -7,6 +7,7 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/mobys/get_moby_target_info.h"
+#include "rnc/overlay/shared/mobys/moby_target_info.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
@@ -58,11 +59,6 @@ typedef struct BlasterUsage {
     unsigned short longest;
     int            levels;
 } BlasterUsage;
-
-typedef struct AimTarget {
-    char  pad0[0x10];
-    float height;
-} AimTarget;
 
 typedef struct ShotSpawn {
     BlasterVec     pos;
@@ -296,13 +292,13 @@ void blaster_update(struct Moby *moby) {
     }
     if (target && blaster_vars->lock == 0) {
         if (get_ammo(-1)) {
-            AimTarget *aim = (AimTarget *)get_moby_target_info(target);
-            float      distance = fast_vec_dist(g_debug_camera.position, &target->pos) / 50.0f;
-            float      height;
+            MobyTargetInfo *aim = (MobyTargetInfo *)get_moby_target_info(target);
+            float           distance = fast_vec_dist(g_debug_camera.position, &target->pos) / 50.0f;
+            float           height;
             qcopy(&camera_aim_and_effect_scratch.point, &target->pos);
             height = 0.5f;
             if (aim)
-                height = aim->height;
+                height = aim->aim_height;
             camera_aim_and_effect_scratch.point.f.z += height;
             FUN_L00_001edf60_49a8((int)moby,
                                   0xFF0FFF0F,
@@ -321,12 +317,12 @@ void blaster_update(struct Moby *moby) {
             if (use_ammo(-1, 1) && !hero.item_use_locked) {
                 blaster_vars->cooldown = scale_game_frames(6);
                 if (target) {
-                    float      speed = frame_time * 40.0f;
-                    AimTarget *aim;
+                    float           speed = frame_time * 40.0f;
+                    MobyTargetInfo *aim;
                     qcopy(&aim_point, &target->pos);
-                    aim = (AimTarget *)get_moby_target_info(target);
+                    aim = (MobyTargetInfo *)get_moby_target_info(target);
                     if (aim)
-                        aim_point.f.z += aim->height;
+                        aim_point.f.z += aim->aim_height;
                     else
                         aim_point.f.z += 0.5f;
                     pitch = -fast_arc_tan(vector_distance_xy(&launch, &aim_point),

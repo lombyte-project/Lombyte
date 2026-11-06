@@ -56,30 +56,30 @@ enum {
 };
 
 typedef struct PlasmabotVars {
-    u8                   pad0[0x20];
-    f32                  health;
-    s16                  max_health;
-    s16                  stagger_reaction_duration_frames;
-    s8                   hit_response_class;
-    s8                   unk29;
-    u8                   pad2A[0x6];
-    f32                  unk30;
-    u8                   pad34[0xc];
-    u8                   unk40[0x18];
-    s8                   unk58;
-    u8                   pad59[0x1];
-    s8                   unk5A;
-    u8                   pad5B[0x5];
-    u8                   motion[0x18];
-    f32                  knockback_speed;
-    f32                  knockback_vertical_speed;
-    s32                  knockback_collision_radius;
-    u8                   pad84[0x4];
-    f32                  knockback_collision_z_offset;
-    u8                   pad8C[0x24];
-    f32                  knockback_apex_animation_frame;
-    f32                  knockback_landing_animation_frame;
-    u8                   padB8[0x8];
+    u8  pad0[0x20];
+    f32 health;
+    s16 max_health;
+    s16 stagger_reaction_duration_frames;
+    s8  hit_response_class;
+    s8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad2A[0x6];
+    f32 aim_height;
+    u8  pad34[0xc];
+    u8  unk40[0x18];
+    s8  look_range;
+    u8  pad59[0x1];
+    s8  look_height;
+    u8  pad5B[0x5];
+    u8  motion[0x18];
+    f32 knockback_speed;
+    f32 knockback_vertical_speed;
+    s32 knockback_collision_radius;
+    u8  pad84[0x4];
+    f32 knockback_collision_z_offset;
+    u8  pad8C[0x24];
+    f32 knockback_apex_animation_frame;
+    f32 knockback_landing_animation_frame;
+    u8  padB8[0x8];
     struct HitColorFlash hit_flash;
     u8                   path_search_point[0x40];
     s32                  target; /* 0x110: target moby */
@@ -462,12 +462,12 @@ void plasmabot_update(char *moby) {
                   (char *)l14_paths[plasmabot_update_private_vars->path_index] + 0x10);
         }
         plasmabot_update_private_vars->hit_response_class = 1;
-        plasmabot_update_private_vars->unk29 = 0;
+        plasmabot_update_private_vars->wrench_hit_sound = 0;
         plasmabot_update_private_vars->health = 2.0f;
-        plasmabot_update_private_vars->unk30 = 1.25f;
+        plasmabot_update_private_vars->aim_height = 1.25f;
         plasmabot_update_private_vars->max_health = 2;
-        plasmabot_update_private_vars->unk58 = truncate_float_to_s32(15.0f);
-        plasmabot_update_private_vars->unk5A = truncate_float_to_s32(16.0f);
+        plasmabot_update_private_vars->look_range = truncate_float_to_s32(15.0f);
+        plasmabot_update_private_vars->look_height = truncate_float_to_s32(16.0f);
         plasmabot_update_private_vars->path_traversal_direction = 1.0f;
         plasmabot_update_private_vars->path_traversal_delay_timer = 0;
         plasmabot_update_private_vars->heading_angular_velocity = 0;

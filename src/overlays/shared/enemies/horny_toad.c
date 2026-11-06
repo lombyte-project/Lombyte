@@ -52,11 +52,11 @@ typedef struct {
 
 typedef struct {
     u8      pad0[0x29];
-    u8      unk29;
+    u8      wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
     u8      pad2A[0x58 - 0x2A];
-    u8      unk58;
+    u8      look_range;
     u8      pad59;
-    u8      unk5A;
+    u8      look_height;
     u8      pad5B[0x70 - 0x5B];
     u8      motion[0x138 - 0x70];
     s16     unk138;
@@ -223,7 +223,7 @@ void horny_toad_update(Moby *moby) {
         qcopy(horny_toad_vars->home, (*(ToadVec *)&moby->pos));
         if (moby->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, 0);
-        horny_toad_vars->unk29 = 1;
+        horny_toad_vars->wrench_hit_sound = 1;
         horny_toad_vars->unk140 = &D_L00_00161960;
         qcopy(horny_toad_vars->wander_center, (*(ToadVec *)&moby->pos));
         k = frame_time;
@@ -239,8 +239,8 @@ void horny_toad_update(Moby *moby) {
                 horny_toad_vars->wander_radius = 0.75f;
             }
         }
-        horny_toad_vars->unk58 = truncate_float_to_s32(12.0f);
-        horny_toad_vars->unk5A = truncate_float_to_s32(2.0f);
+        horny_toad_vars->look_range = truncate_float_to_s32(12.0f);
+        horny_toad_vars->look_height = truncate_float_to_s32(2.0f);
         if (horny_toad_vars->path >= 0) {
             if (horny_toad_vars->wait_path_point_set_index >= 0) {
                 ToadPath *path = toad_paths[horny_toad_vars->path];

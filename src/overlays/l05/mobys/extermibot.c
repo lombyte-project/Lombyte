@@ -100,19 +100,19 @@ extern char  extermibot_strike_flags_selector[] __asm__("D_001404A8");
 void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
 
 typedef struct ExtermibotVars {
-    u8                       pad_0[0x20];
-    f32                      health;
-    s16                      max_health;
-    u8                       pad_26[0x2];
-    u8                       hit_response_class;
-    u8                       unk29;
-    u8                       pad_2A[0x6];
-    f32                      unk30;
-    u8                       pad_34[0x24];
-    u8                       unk58;
-    u8                       pad_59[0x1];
-    u8                       unk5A;
-    u8                       pad_5B[0x15];
+    u8  pad_0[0x20];
+    f32 health;
+    s16 max_health;
+    u8  pad_26[0x2];
+    u8  hit_response_class;
+    u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad_2A[0x6];
+    f32 aim_height;
+    u8  pad_34[0x24];
+    u8  look_range;
+    u8  pad_59[0x1];
+    u8  look_height;
+    u8  pad_5B[0x15];
     struct KnockbackMotion   motion;
     struct GroundMoveControl move;
     u8                       pad_120[0x40];
@@ -179,13 +179,13 @@ void extermibot_update(unsigned char *moby) {
         MOBY(moby)->flags |= 0x1000;
         qcopy(&moby_data->home_position, moby + 0x10);
         moby_data->health = 2.0f;
-        moby_data->unk29 = 0;
+        moby_data->wrench_hit_sound = 0;
         moby_data->target_pursuit_timer = 0;
         moby_data->hit_response_class = 1;
-        moby_data->unk30 = 1.0f;
+        moby_data->aim_height = 1.0f;
         moby_data->max_health = 2;
-        moby_data->unk58 = truncate_float_to_s32(14.0f);
-        moby_data->unk5A = truncate_float_to_s32(11.2f);
+        moby_data->look_range = truncate_float_to_s32(14.0f);
+        moby_data->look_height = truncate_float_to_s32(11.2f);
         init_ground_move_control(&moby_data->move);
         {
             float movement_scale = D_L05_00161A98;

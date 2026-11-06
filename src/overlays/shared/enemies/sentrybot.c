@@ -81,15 +81,15 @@ typedef struct SentrybotKnockback {
 } SentrybotKnockback;
 
 typedef struct SentrybotVars {
-    u8                   pad0[0x20];
-    f32                  health; /* 0x20: hit damage is taken from it */
-    s16                  max_health;
-    u8                   pad26[2];
-    u8                   hit_response_class;
-    u8                   unk29;
-    u8                   pad2A[0xE];
-    s32                  hurt; /* 0x38: set when the moby is hit; restarts target_countdown */
-    u8                   pad3C[0x24];
+    u8  pad0[0x20];
+    f32 health; /* 0x20: hit damage is taken from it */
+    s16 max_health;
+    u8  pad26[2];
+    u8  hit_response_class;
+    u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad2A[0xE];
+    s32 hurt; /* 0x38: set when the moby is hit; restarts target_countdown */
+    u8  pad3C[0x24];
     struct HitColorFlash hit_flash;
     SentrybotKnockback   knockback; /* 0x70 */
     u8                   padB0[0x10];
@@ -358,7 +358,7 @@ void sentrybot_update(unsigned char *moby) {
         sentrybot_instance_data->max_health = 3;
         sentrybot_instance_data->health = 3.0f;
         sentrybot_instance_data->hit_response_class = 2;
-        sentrybot_instance_data->unk29 = 0;
+        sentrybot_instance_data->wrench_hit_sound = 0;
         qcopy(&sentrybot_instance_data->home_pos, &MOBY(moby)->pos);
         sentrybot_instance_data->home_yaw = MOBY(moby)->rot.z;
         if (sentrybot_instance_data->patrol_pause_duration_frames < 5)

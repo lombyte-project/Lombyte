@@ -40,17 +40,17 @@ enum {
 };
 
 typedef struct FrogVars {
-    u8                     pad0[0x29];
-    s8                     unk29;
-    u8                     pad2A[0x2e];
-    s8                     unk58;
-    u8                     pad59[0x1];
-    s8                     unk5A;
-    u8                     pad5B[0x6d];
-    s16                    unkC8;
-    u8                     padCA[0x6];
-    short                 *unkD0;
-    u8                     padD4[0x4c];
+    u8     pad0[0x29];
+    s8     wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8     pad2A[0x2e];
+    s8     look_range;
+    u8     pad59[0x1];
+    s8     look_height;
+    u8     pad5B[0x6d];
+    s16    unkC8;
+    u8     padCA[0x6];
+    short *unkD0;
+    u8     padD4[0x4c];
     struct KnockbackMotion knockback; /* 0x120 */
     u8                     pad180[0x40];
     unsigned char         *target;
@@ -305,8 +305,8 @@ void frog_update(unsigned char *moby) {
             MOBY(moby)->bolts = MOBY(moby)->bolts / divisor;
         }
         MOBY(moby)->flags |= 0x100;
-        frog_instance_vars->unk58 = truncate_float_to_s32(8.0f);
-        frog_instance_vars->unk5A = truncate_float_to_s32(3.2f);
+        frog_instance_vars->look_range = truncate_float_to_s32(8.0f);
+        frog_instance_vars->look_height = truncate_float_to_s32(3.2f);
         qcopy(&frog_instance_vars->home_position, &MOBY(moby)->pos);
         qcopy(&frog_instance_vars->wander_destination, &MOBY(moby)->pos);
         qcopy(&frog_instance_vars->home_rotation, moby + 0x40);
@@ -319,7 +319,7 @@ void frog_update(unsigned char *moby) {
         frog_instance_vars->approach_stop_distance = wait;
         frog_instance_vars->glow_animation_phase = random_angle_radians();
         frog_instance_vars->unkD0 = D_L06_00161BF0;
-        frog_instance_vars->unk29 = 1;
+        frog_instance_vars->wrench_hit_sound = 1;
         if (frog_instance_vars->spawns_child != 0) {
             char *child;
             MOBY(moby)->state = FROG_STATE_WAIT_WITH_CHILD;

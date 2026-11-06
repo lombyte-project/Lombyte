@@ -19,7 +19,7 @@ typedef struct {
     s32 unk20;
     s16 unk24;
     u8  pad26[2];
-    u8  unk28;
+    u8  hit_weight; /* 0x28: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad29[0x15];
     s16 unk3E;
     u8  pad40[0x20];
@@ -120,7 +120,7 @@ void path_mover_update(struct Moby *moby) {
         f32   t;
         Vec4 *points;
 
-        path_mover_vars->unk28 = 4;
+        path_mover_vars->hit_weight = 4;
         path_mover_vars->unk3E = 5;
         path_mover_vars->unk20 = 0;
         path_mover_vars->unk24 = 0;

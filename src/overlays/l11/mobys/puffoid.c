@@ -55,15 +55,15 @@ typedef struct {
     s16   max_health; /* 0x24 */
     u8    pad26[2];
     u8    hit_response_class; /* 0x28 */
-    u8    unk29;              /* 0x29 */
+    u8    wrench_hit_sound;   /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
     u8    pad2A[6];
-    f32   unk30; /* 0x30 */
+    f32   aim_height; /* 0x30 */
     u8    pad34[0xC];
     f32   vel[4]; /* 0x40: jump velocity; [2] falls by D_L11_001622F0 * frame_time_sq */
     u8    pad50[8];
-    u8    unk58; /* 0x58 */
+    u8    look_range; /* 0x58 */
     u8    pad59;
-    u8    unk5A; /* 0x5A */
+    u8    look_height; /* 0x5A */
     u8    pad5B[0x6D];
     s16   unkC8; /* 0xC8 */
     u8    padCA[6];
@@ -157,10 +157,10 @@ void puffoid_update(struct Moby *moby) {
         puffoid_vars->hp = 2.0f;
         puffoid_vars->max_health = 2;
         puffoid_vars->hit_response_class = 1;
-        puffoid_vars->unk30 = 0.25f;
-        puffoid_vars->unk58 = truncate_float_to_s32(8.0f);
-        puffoid_vars->unk5A = truncate_float_to_s32(2.0f);
-        puffoid_vars->unk29 = 1;
+        puffoid_vars->aim_height = 0.25f;
+        puffoid_vars->look_range = truncate_float_to_s32(8.0f);
+        puffoid_vars->look_height = truncate_float_to_s32(2.0f);
+        puffoid_vars->wrench_hit_sound = 1;
         puffoid_vars->unkD0 = &D_L11_001622C0;
         init_ground_move_control(&puffoid_vars->move_control);
         puffoid_vars->move_control.max_climb = 0.5f;

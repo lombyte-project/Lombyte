@@ -79,10 +79,10 @@ typedef struct {
 
 /* pvars of a mine. */
 typedef struct {
-    u8           pad0[0x20];
-    u8           collision[9]; /* 0x20: contact state for resolve_moby_hit_response */
-    u8           unk29;        /* 0x29 */
-    u8           pad2A[0xE];
+    u8 pad0[0x20];
+    u8 collision[9];     /* 0x20: contact state for resolve_moby_hit_response */
+    u8 wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8 pad2A[0xE];
     struct Moby *perch; /* 0x38 */
     u8           pad3C[0x24];
     Vec4         velocity; /* 0x60 */
@@ -220,7 +220,7 @@ void diving_mine_update(struct Moby *moby) {
         moby->rot.y = 0.0f;
         moby->rot.z = fast_arc_tan(swooper_instance_vars->goal.f[0] - moby->pos.x,
                                    swooper_instance_vars->goal.f[1] - moby->pos.y);
-        swooper_instance_vars->unk29 = 0;
+        swooper_instance_vars->wrench_hit_sound = 0;
         moby->state = MINE_WAIT_AT_GOAL;
         moby->command = 0;
         break;

@@ -89,20 +89,20 @@ typedef struct {
 } Shot;
 
 typedef struct {
-    u8                       pad0[0x20];
-    f32                      health;
-    s16                      max_health;
-    u8                       pad26[2];
-    u8                       hit_response_class;
-    u8                       pad29[7];
-    f32                      unk30;
-    u8                       pad34[0x24];
-    u8                       unk58;
-    u8                       pad59;
-    u8                       unk5A;
-    u8                       pad5B[5];
-    Vec4                     vel; /* 0x60 */
-    u8                       pad70[0x50];
+    u8   pad0[0x20];
+    f32  health;
+    s16  max_health;
+    u8   pad26[2];
+    u8   hit_response_class;
+    u8   pad29[7];
+    f32  aim_height; /* 0x30: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8   pad34[0x24];
+    u8   look_range;
+    u8   pad59;
+    u8   look_height;
+    u8   pad5B[5];
+    Vec4 vel; /* 0x60 */
+    u8   pad70[0x50];
     struct GroundMoveControl ctl; /* 0xC0 */
     u8                       pad110[0x50];
     struct Moby             *target; /* 0x160 */
@@ -203,10 +203,10 @@ void blarg_space_commando_update(struct Moby *moby) {
     case BLARG_SPACE_COMMANDO_INITIALIZE:
         blarg_space_commando_vars->health = 2.0f;
         blarg_space_commando_vars->hit_response_class = 1;
-        blarg_space_commando_vars->unk58 = 12;
-        blarg_space_commando_vars->unk5A = 8;
+        blarg_space_commando_vars->look_range = 12;
+        blarg_space_commando_vars->look_height = 8;
         blarg_space_commando_vars->max_health = 2;
-        blarg_space_commando_vars->unk30 = 1.5f;
+        blarg_space_commando_vars->aim_height = 1.5f;
         init_ground_move_control(&blarg_space_commando_vars->ctl);
         blarg_space_commando_vars->ctl.max_drop = 2.0f;
         blarg_space_commando_vars->ctl.max_climb = 0.5f;

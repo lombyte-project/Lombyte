@@ -53,13 +53,13 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby,
 
 typedef struct HelicopterVars {
     u8  pad_0[0x28];
-    u8  unk28;
+    u8  hit_weight; /* 0x28: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad_29[0x1];
-    u8  unk2A;
+    u8  size;
     u8  unk2B;
     u8  unk2C;
     u8  pad_2D[0x3];
-    f32 unk30;
+    f32 aim_height;
     u8  pad_34[0x2C];
     s32 path_node; /* path cursor (initialize_path_descriptor): node, step at +4, nodes at +0x10 */
     u8  pad_64[0xC];
@@ -165,10 +165,10 @@ void helicopter_update(char *moby) {
                 if (last_node_index < initial_node_index)
                     initial_node_index = last_node_index;
                 qcopy((moby + 0x10), tbl + initial_node_index * 16 + 0x10);
-                moby_vars->unk2A = 0x10;
-                moby_vars->unk28 = 2;
+                moby_vars->size = 0x10;
+                moby_vars->hit_weight = 2;
                 moby_vars->unk2C = 0x2C;
-                moby_vars->unk30 = 1.4f;
+                moby_vars->aim_height = 1.4f;
                 moby_vars->unk2B = 1;
                 moby_vars->path_node = initial_node_index;
                 MOBY(moby)->state = HELICOPTER_FOLLOW_PATH;

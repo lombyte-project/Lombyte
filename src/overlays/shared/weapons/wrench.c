@@ -28,6 +28,7 @@
 #include "rnc/input/pad_globals.h"
 #include "rnc/overlay/shared/pickups/bolt.h"
 #include "rnc/math/vector.h"
+#include "rnc/overlay/shared/mobys/moby_target_info.h"
 
 typedef int q_2a7780 __attribute__((mode(TI)));
 
@@ -424,18 +425,18 @@ void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
 
-/* True when the record for coll_hit_moby (get_moby_target_info) has byte 9 equal to 1. */
+/* 1 when the moby the wrench hit asks for the second hit sound (MobyTargetInfo.wrench_hit_sound). */
 
 int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
 
 int get_wrench_hit_sound_variant(void) {
-    int   record_byte_9_is_one = 0;
-    char *x = 0;
+    int             second_sound = 0;
+    MobyTargetInfo *target_info = 0;
     if (coll_hit_moby != 0)
-        x = get_moby_target_info(coll_hit_moby);
-    if (x != 0)
-        record_byte_9_is_one = *(unsigned char *)(x + 9) == 1;
-    return record_byte_9_is_one;
+        target_info = (MobyTargetInfo *)get_moby_target_info(coll_hit_moby);
+    if (target_info != 0)
+        second_sound = target_info->wrench_hit_sound == 1;
+    return second_sound;
 }
 
 /* True when FUN_L00_0025c338((int)coll_hit_moby) is set and has flag 2 at 0x1E. */

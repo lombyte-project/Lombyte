@@ -19,21 +19,21 @@
 #include "rnc/overlay/shared/math/quad.h"
 
 typedef struct BlargTrooperVars {
-    u8                     pad_0[0x20];
-    f32                    health;
-    s16                    max_health;
-    u8                     pad_26[0x2];
-    u8                     hit_response_class;
-    u8                     unk29;
-    u8                     pad_2A[0x4];
-    u8                     unk2E;
-    u8                     pad_2F[0x9];
-    s32                    retimer;
-    u8                     pad_3C[0x1C];
-    u8                     unk58;
-    u8                     pad_59[0x1];
-    u8                     unk5A;
-    u8                     pad_5B[0x5];
+    u8  pad_0[0x20];
+    f32 health;
+    s16 max_health;
+    u8  pad_26[0x2];
+    u8  hit_response_class;
+    u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad_2A[0x4];
+    u8  unk2E;
+    u8  pad_2F[0x9];
+    s32 retimer;
+    u8  pad_3C[0x1C];
+    u8  look_range;
+    u8  pad_59[0x1];
+    u8  look_height;
+    u8  pad_5B[0x5];
     struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback;
     f32                    fall_speed;
@@ -394,16 +394,16 @@ void blarg_trooper_update(struct Moby *moby) {
         blarg_trooper_pvars->max_health = 2;
         blarg_trooper_pvars->hit_response_class = 1;
         blarg_trooper_pvars->unk2E = 1;
-        blarg_trooper_pvars->unk29 = 1;
+        blarg_trooper_pvars->wrench_hit_sound = 1;
         blarg_trooper_pvars->timer_F0 = 0;
         blarg_trooper_pvars->alert_timer = 0;
         blarg_trooper_pvars->idle_anim_timer = 0;
         blarg_trooper_pvars->fall_speed = 0.0f;
         {
             float z = moby->pos.z;
-            blarg_trooper_pvars->unk58 = 8;
+            blarg_trooper_pvars->look_range = 8;
             blarg_trooper_pvars->spawn_z = z;
-            blarg_trooper_pvars->unk5A = 0xA;
+            blarg_trooper_pvars->look_height = 0xA;
         }
         if (rand() & 1) {
             moby->flags |= 0x8000;

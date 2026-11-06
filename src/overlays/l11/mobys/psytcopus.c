@@ -36,11 +36,11 @@ struct PokiPathVars {
     u8                     pad_26[2];
     u8                     hit_response_class; /* 0x28 */
     u8                     pad_29;
-    u8                     unk2A; /* 0x2A */
+    u8                     size; /* 0x2A: enemy target info at pvars+0x20, see moby_target_info.h */
     u8                     pad_2B[0x2D];
-    u8                     unk58; /* 0x58 */
+    u8                     look_range; /* 0x58 */
     u8                     pad_59;
-    u8                     unk5A; /* 0x5A */
+    u8                     look_height; /* 0x5A */
     u8                     pad_5B[5];
     struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback; /* 0x70 */
@@ -125,9 +125,9 @@ void psytcopus_update(struct Moby *psytcopus) {
         psytcopus_vars->max_health = 3;
         psytcopus_vars->health = 3.0f;
         psytcopus_vars->hit_response_class = 2;
-        psytcopus_vars->unk2A = 6;
-        psytcopus_vars->unk58 = truncate_float_to_s32(8.0f);
-        psytcopus_vars->unk5A = truncate_float_to_s32(8.0f);
+        psytcopus_vars->size = 6;
+        psytcopus_vars->look_range = truncate_float_to_s32(8.0f);
+        psytcopus_vars->look_height = truncate_float_to_s32(8.0f);
         psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
         if (psytcopus->prev_seq != 0) {
             blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));

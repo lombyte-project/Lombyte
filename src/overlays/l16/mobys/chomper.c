@@ -75,9 +75,9 @@ typedef struct ChomperVars {
     u8  pad_26[0x2];
     u8  hit_response_class;
     u8  pad_29[0x2F];
-    u8  unk58;
+    u8  look_range; /* 0x58: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad_59[0x1];
-    u8  unk5A;
+    u8  look_height;
     u8  pad_5B[0x6D];
     u16 unkC8;
     u8  pad_CA[0x6];
@@ -127,8 +127,8 @@ void chomper_update(struct Moby *chomper_moby) {
         chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
         if (chomper_moby->prev_seq != 2)
             blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
-        chomper_data->unk58 = truncate_float_to_s32(8.0f);
-        chomper_data->unk5A = truncate_float_to_s32(3.2f);
+        chomper_data->look_range = truncate_float_to_s32(8.0f);
+        chomper_data->look_height = truncate_float_to_s32(3.2f);
         break;
     case CHOMPER_WAIT_TO_APPROACH_TARGET:
         if (chomper_data->pursuit_target_selection_status != 2) {

@@ -44,23 +44,23 @@ typedef struct {
 
 /* pvars of blarg_space_commando_update */
 typedef struct {
-    u8                       pad0[0x20];
-    f32                      health;
-    s16                      max_health;
-    u8                       pad26[2];
-    u8                       hit_response_class;
-    u8                       unk29;
-    u8                       pad2A[6];
-    f32                      unk30;
-    u8                       pad34[0xC];
-    Vec4                     unk40;
-    u8                       pad50[8];
-    u8                       unk58;
-    u8                       pad59;
-    u8                       unk5A;
-    u8                       pad5B[5];
-    Vec4                     vel; /* 0x60 */
-    u8                       pad70[0x50];
+    u8   pad0[0x20];
+    f32  health;
+    s16  max_health;
+    u8   pad26[2];
+    u8   hit_response_class;
+    u8   wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8   pad2A[6];
+    f32  aim_height;
+    u8   pad34[0xC];
+    Vec4 unk40;
+    u8   pad50[8];
+    u8   look_range;
+    u8   pad59;
+    u8   look_height;
+    u8   pad5B[5];
+    Vec4 vel; /* 0x60 */
+    u8   pad70[0x50];
     struct GroundMoveControl ctl; /* 0xC0 */
     u8                       pad110[0x50];
     struct Moby             *target; /* 0x160 */
@@ -161,11 +161,11 @@ void blarg_space_commando_update(struct Moby *moby) {
     case BLARG_COMMANDO_STATE_INITIALIZE:
         blarg_commando_state->hit_response_class = 1;
         blarg_commando_state->health = 2.0f;
-        blarg_commando_state->unk30 = 2.0f;
-        blarg_commando_state->unk29 = 1;
+        blarg_commando_state->aim_height = 2.0f;
+        blarg_commando_state->wrench_hit_sound = 1;
         blarg_commando_state->max_health = 2;
-        blarg_commando_state->unk58 = truncate_float_to_s32(12.0f);
-        blarg_commando_state->unk5A = truncate_float_to_s32(13.6f);
+        blarg_commando_state->look_range = truncate_float_to_s32(12.0f);
+        blarg_commando_state->look_height = truncate_float_to_s32(13.6f);
         init_ground_move_control(&blarg_commando_state->ctl);
         blarg_commando_state->ctl.max_drop = 2.0f;
         blarg_commando_state->ctl.max_climb = 0.5f;

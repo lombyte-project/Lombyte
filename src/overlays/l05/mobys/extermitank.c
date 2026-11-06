@@ -98,24 +98,24 @@ typedef char *(*Spawn_305778)(void *, void *, void *, int, int, long, long, long
 void extermitank_update(unsigned char *m) __asm__("FUN_L05_00304320");
 
 typedef struct ExtermitankVars {
-    u8                       pad_0[0x20];
-    f32                      health;
-    s16                      max_health;
-    u8                       pad_26[0x2];
-    u8                       hit_response_class;
-    u8                       unk29;
-    u8                       pad_2A[0x4];
-    u8                       lifecycle_state;
-    u8                       pad_2F[0x9];
-    s32                      retimer;
-    u8                       pad_3C[0x2];
-    u16                      unk3E;
-    f32                      velocity[4];
-    u8                       pad_50[0x8];
-    u8                       unk58;
-    u8                       pad_59[0x1];
-    u8                       unk5A;
-    u8                       pad_5B[0x5];
+    u8  pad_0[0x20];
+    f32 health;
+    s16 max_health;
+    u8  pad_26[0x2];
+    u8  hit_response_class;
+    u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad_2A[0x4];
+    u8  lifecycle_state;
+    u8  pad_2F[0x9];
+    s32 retimer;
+    u8  pad_3C[0x2];
+    u16 unk3E;
+    f32 velocity[4];
+    u8  pad_50[0x8];
+    u8  look_range;
+    u8  pad_59[0x1];
+    u8  look_height;
+    u8  pad_5B[0x5];
     struct HitColorFlash     hit_flash;
     struct GroundMoveControl mover;
     s32                      path_point;
@@ -228,7 +228,7 @@ void extermitank_update(unsigned char *moby) {
         clear_u64_value(extermitank_vars->velocity);
         extermitank_vars->unk3E |= 2;
         extermitank_vars->lifecycle_state = 1;
-        extermitank_vars->unk29 = 0;
+        extermitank_vars->wrench_hit_sound = 0;
         extermitank_vars->max_health = 6;
         extermitank_vars->hit_response_class = 3;
         extermitank_vars->health = 6.0f;
@@ -237,9 +237,9 @@ void extermitank_update(unsigned char *moby) {
         {
             float t = *(volatile float *)&D_L05_00161B78;
             extermitank_vars->turret_yaw = *(volatile float *)(moby + 0x48);
-            extermitank_vars->unk58 = truncate_float_to_s32(t);
+            extermitank_vars->look_range = truncate_float_to_s32(t);
         }
-        extermitank_vars->unk5A = truncate_float_to_s32(D_L05_00161B7C * 8.0f);
+        extermitank_vars->look_height = truncate_float_to_s32(D_L05_00161B7C * 8.0f);
         break;
     }
     case EXTERMITANK_FOLLOW_PATH: {
