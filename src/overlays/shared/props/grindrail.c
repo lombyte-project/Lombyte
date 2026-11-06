@@ -121,13 +121,13 @@ void rail_hero_motion_update(struct Moby *rail_moby) {
             fast_arc_tan(vector_length_xy(&rail_step_delta), rail_step_delta.f[2]);
         hero.rail_yaw = fast_arc_tan(rail_step_delta.f[0], rail_step_delta.f[1]);
         rail_step_delta.i[2] = 0;
-        if (hero.unk9DC < rail_vars->speed) {
-            approach_value(&hero.unk9DC, rail_vars->speed, frame_time_sq * 6.0f);
+        if (hero.rail_speed < rail_vars->speed) {
+            approach_value(&hero.rail_speed, rail_vars->speed, frame_time_sq * 6.0f);
         } else {
-            approach_value(&hero.unk9DC, rail_vars->speed, frame_time_sq * 6.0f);
+            approach_value(&hero.rail_speed, rail_vars->speed, frame_time_sq * 6.0f);
         }
         if (0.001f < fast_vec_length(&rail_step_delta)) {
-            fast_vec_normalize(&hero.motion.platform_delta, &rail_step_delta, hero.unk9DC);
+            fast_vec_normalize(&hero.motion.platform_delta, &rail_step_delta, hero.rail_speed);
         }
         fast_vec_sub(&pull, &best_pt, &hero.motion.pos);
         rate = frame_time * 5.0f;

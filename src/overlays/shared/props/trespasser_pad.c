@@ -341,7 +341,7 @@ void tresspasser_pad_update(Moby *moby) {
         D_L02_0017EB08_lui = 1;
         force_help_message(6, 0);
         if (l02_camera.current_camera != 0 && l02_camera.current_camera->unk86 != 5) {
-            jet_mount(&l02_camera.pos, &l02_camera.unk150, 1, 0, 0);
+            jet_mount(&l02_camera.pos, &l02_camera.rotation_x, 1, 0, 0);
         }
         i = 0;
         if (0.99f <= pad_puzzle_state->f110 &&

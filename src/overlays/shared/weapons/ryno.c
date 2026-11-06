@@ -231,7 +231,7 @@ void ryno_update(struct Moby *ryno_moby) {
     float        yaw, pitch;
     int          i;
 
-    copy_matrix3x4(&launch_direction_basis, l00_camera.unk0);
+    copy_matrix3x4(&launch_direction_basis, l00_camera.view_matrix);
     transpose_rotation_matrix(&view, &launch_direction_basis);
     if ((unsigned int)(ryno_moby->state - 2) < 2) {
         if (fast_dec_timer(&ryno_vars->lock_timer) || ryno_vars->target == 0 ||

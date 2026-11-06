@@ -1530,7 +1530,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             SuckHit     *hit;
             aim_and_fire_scratch.aim.velocity.q = 0;
             aim_and_fire_scratch.aim.velocity.f.z = 50.0f;
-            copy_matrix3x4(&aim_and_fire_scratch.aim.rotation, camera->unk0);
+            copy_matrix3x4(&aim_and_fire_scratch.aim.rotation, camera->view_matrix);
             eye = (SuckVec *)&camera->pos;
             transpose_rotation_matrix(&aim_and_fire_scratch.aim.inverse,
                                       &aim_and_fire_scratch.aim.rotation);
@@ -1599,7 +1599,7 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
             SuckMoby *best, *candidate_target;
             float     yaw, pitch, limit;
             aim_and_fire_scratch.fire.velocity.q = 0;
-            copy_matrix3x4(&aim_and_fire_scratch.fire.rotation, l00_camera.unk0);
+            copy_matrix3x4(&aim_and_fire_scratch.fire.rotation, l00_camera.view_matrix);
             transpose_rotation_matrix(&aim_and_fire_scratch.fire.inverse,
                                       &aim_and_fire_scratch.fire.rotation);
             if (((SuckHero *)&hero)->state == 30 && (((SuckHero *)&hero)->moby->flags & 1)) {

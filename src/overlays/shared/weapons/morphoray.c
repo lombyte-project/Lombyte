@@ -1566,7 +1566,7 @@ void morphoray_update(Moby *moby) {
         *(u128_2BDAF0 *)&direction = 0;
         if (((Hero *)((char *)&hero))->state.current == 30 &&
             (*(unsigned short *)((char *)((Hero *)((char *)&hero))->moby + 0x34) & 1)) {
-            copy_matrix3x4(points, l00_camera.unk0);
+            copy_matrix3x4(points, l00_camera.view_matrix);
             func_001FA4A0_2BDAF0(matrix, points);
             direction.z = 1.0f;
             func_001F9EE8_2BDAF0(&direction, &direction, matrix);

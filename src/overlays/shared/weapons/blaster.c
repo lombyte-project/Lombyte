@@ -248,7 +248,7 @@ void blaster_update(struct Moby *moby) {
     if (moby->prev_seq == 0 && moby->prev_frame < 3)
         blaster_vars->cooldown = scale_game_frames(7);
     if (hero.state.current == 30 && (hero.moby->flags & 1)) {
-        copy_matrix3x4(&camera_aim_and_effect_scratch.rotation, l00_camera.unk0);
+        copy_matrix3x4(&camera_aim_and_effect_scratch.rotation, l00_camera.view_matrix);
         transpose_rotation_matrix(&inverse, &camera_aim_and_effect_scratch.rotation);
         velocity.f.z = frame_time * 40.0f;
         transform_vector(&velocity, &velocity, &inverse);

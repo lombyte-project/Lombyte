@@ -166,7 +166,7 @@ void mine_glove_update(struct Moby *moby) {
     offset.q = 0;
     offset.f[1] = -0.09f;
     offset.f[2] = -0.02f;
-    copy_matrix3x4(basis, l00_camera.unk0);
+    copy_matrix3x4(basis, l00_camera.view_matrix);
     transpose_rotation_matrix(matrix, basis);
     if (mine_glove_vars == 0)
         return;

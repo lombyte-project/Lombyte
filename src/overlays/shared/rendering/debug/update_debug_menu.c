@@ -382,7 +382,7 @@ void update_debug_camera(void) {
             l00_camera.pos.f[2] += g_debug_menu.vertical_speed;
         }
         if (!free_look) {
-            euler_rotation_matrix(r, &l00_camera.unk150);
+            euler_rotation_matrix(r, &l00_camera.rotation_x);
             fast_vec_normalize(&r[0], &r[0], 1.0f);
             fast_vec_normalize(&r[1], &r[1], 1.0f);
             fast_vec_normalize(&r[2], &r[2], 1.0f);
