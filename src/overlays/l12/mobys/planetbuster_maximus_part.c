@@ -663,7 +663,7 @@ typedef struct PlanetbusterMaximusVars {
     s32 path;
     u8  pad_5C4[0x4];
     f32 vertical_oscillation_previous_offset;
-    f32 unk5CC;
+    f32 vertical_oscillation_phase;
     u8  pad_5D0[0x14];
     u8  rotation_common_factor_phase;
     u8  pad_5E5[0x3];
@@ -681,7 +681,7 @@ typedef struct PlanetbusterMaximusVars {
     s32 transition_target_camera_point;
     f32 camera_transition_fraction;
     f32 camera_transition_step;
-    f32 unk618;
+    f32 base_z;
     s32 height_timer_refresh_clip_volume;
     s32 timer;
     s32 linked_parts_flags_clip_volume;
@@ -723,7 +723,7 @@ void planetbuster_maximus_part_update(char *moby) {
             capture_linked_moby_relative_transforms(moby, moby_data, 0x11);
             path = ((P_7DB0 **)&(*(int *)l12_paths))[moby_data->path];
             qcopy(moby + 0x10, path + 1);
-            moby_data->unk618 = MOBY(moby)->pos.z;
+            moby_data->base_z = MOBY(moby)->pos.z;
             MOBY(moby)->rot.z =
                 fast_arc_tan(path[2].v[0] - path[1].v[0], path[2].v[1] - path[1].v[1]);
             if (*(float *)(D_0013F3D0 + 0x8) < 52.0f) {
@@ -770,7 +770,7 @@ void planetbuster_maximus_part_update(char *moby) {
         r = is_point_inside_clip_volume(clip_test_position, moby_data->height_raise_clip_volume);
         if (*(float *)(clip_test_position + 8) > 52.0f && r == 0) {
             approach_value(
-                (float *)&MOBY(moby)->pos.z, moby_data->unk618, D_0015ED6C_gp + D_0015ED6C_gp);
+                (float *)&MOBY(moby)->pos.z, moby_data->base_z, D_0015ED6C_gp + D_0015ED6C_gp);
         } else {
             float add = 3.0f;
             if (r)
@@ -783,7 +783,7 @@ void planetbuster_maximus_part_update(char *moby) {
                 add = 19.0f;
             vendor_spring((float *)&MOBY(moby)->pos.z,
                           &moby_data->height_spring_velocity,
-                          moby_data->unk618 + add,
+                          moby_data->base_z + add,
                           frame_scale_sq_macro * 0.03f,
                           frame_scale_sq_macro * 0.3f,
                           D_0015ED6C_gp * 2.7f);
@@ -791,7 +791,7 @@ void planetbuster_maximus_part_update(char *moby) {
         update_moby_vertical_oscillation(0.7f,
                                          D_0015ED6C_gp * 1.2217305f,
                                          moby,
-                                         &moby_data->unk5CC,
+                                         &moby_data->vertical_oscillation_phase,
                                          &moby_data->vertical_oscillation_previous_offset);
         update_moby_rotation_oscillation(
             moby,
@@ -823,7 +823,7 @@ void planetbuster_maximus_part_update(char *moby) {
         update_moby_vertical_oscillation(0.7f,
                                          D_0015ED6C_gp * 1.2217305f,
                                          moby,
-                                         &moby_data->unk5CC,
+                                         &moby_data->vertical_oscillation_phase,
                                          &moby_data->vertical_oscillation_previous_offset);
         update_moby_rotation_oscillation(
             moby,
@@ -887,7 +887,7 @@ void planetbuster_maximus_part_update(char *moby) {
         update_moby_vertical_oscillation(0.7f,
                                          D_0015ED6C_gp * 1.2217305f,
                                          moby,
-                                         &moby_data->unk5CC,
+                                         &moby_data->vertical_oscillation_phase,
                                          &moby_data->vertical_oscillation_previous_offset);
         update_moby_rotation_oscillation(
             moby,

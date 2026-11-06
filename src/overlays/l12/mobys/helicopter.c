@@ -52,21 +52,21 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby,
                                               int          flag) __asm__("FUN_L12_002ebca8");
 
 typedef struct HelicopterVars {
-    u8    pad_0[0x28];
-    u8    unk28;
-    u8    pad_29[0x1];
-    u8    unk2A;
-    u8    unk2B;
-    u8    unk2C;
-    u8    pad_2D[0x3];
-    f32   unk30;
-    u8    pad_34[0x2C];
-    s32   unk60;
-    u8    pad_64[0xC];
-    char *unk70;
+    u8  pad_0[0x28];
+    u8  unk28;
+    u8  pad_29[0x1];
+    u8  unk2A;
+    u8  unk2B;
+    u8  unk2C;
+    u8  pad_2D[0x3];
+    f32 unk30;
+    u8  pad_34[0x2C];
+    s32 path_node; /* path cursor (initialize_path_descriptor): node, step at +4, nodes at +0x10 */
+    u8  pad_64[0xC];
+    char *path_nodes;
     s32   path_74;
     u8    pad_78[0x28];
-    s32   unkA0;
+    s32   start_node;
     s32   timer_A4;
 } HelicopterVars;
 
@@ -157,10 +157,10 @@ void helicopter_update(char *moby) {
                 char *tbl;
                 int   initial_node_index;
                 int   last_node_index;
-                initialize_path_descriptor(&moby_vars->unk60);
+                initialize_path_descriptor(&moby_vars->path_node);
                 tbl = ((char *)l12_paths[moby_vars->path_74]);
-                moby_vars->unk70 = tbl;
-                initial_node_index = moby_vars->unkA0;
+                moby_vars->path_nodes = tbl;
+                initial_node_index = moby_vars->start_node;
                 last_node_index = *(int *)tbl - 1;
                 if (last_node_index < initial_node_index)
                     initial_node_index = last_node_index;
@@ -170,14 +170,14 @@ void helicopter_update(char *moby) {
                 moby_vars->unk2C = 0x2C;
                 moby_vars->unk30 = 1.4f;
                 moby_vars->unk2B = 1;
-                moby_vars->unk60 = initial_node_index;
+                moby_vars->path_node = initial_node_index;
                 MOBY(moby)->state = HELICOPTER_FOLLOW_PATH;
                 MOBY(moby)->draw_dist = 0xAA;
                 MOBY(moby)->flags |= 0x1000;
             }
             break;
         case HELICOPTER_FOLLOW_PATH: {
-            char *path_state = &moby_vars->unk60;
+            char *path_state = &moby_vars->path_node;
             int   current_node_index = *(int *)path_state;
             char *tbl = *(char **)(path_state + 0x10);
             int   step = *(char *)(path_state + 4);
@@ -202,7 +202,7 @@ void helicopter_update(char *moby) {
                     helicopter_rotation_smoothing_divisor_gp);
             if (fast_vec_dist(moby + 0x10, C) < helicopter_path_speed_gp * D_0015ED6C) {
                 char *path;
-                moby_vars->unk60 = next_node_index;
+                moby_vars->path_node = next_node_index;
                 path = *(char **)(path_state + 0x10);
                 if (next_node_index == *(int *)path - 1) {
                     qcopy((moby + 0x10), path + 0x10);
