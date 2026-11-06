@@ -27,8 +27,8 @@ void set_moby_animation(MobyAnim *moby, int seq, int frame) {
         moby->nextFrame = 0;
     }
     update_moby_animation_state(moby);
-    moby->unk5C = *moby->frameData;
-    moby->unk70 &= ~2;
+    moby->anim_rate = *moby->frameData;
+    moby->anim_flags &= ~2;
 }
 
 extern __typeof__(set_moby_animation) func_00212ED8 __attribute__((alias("FUN_00212ed8")));
