@@ -16,7 +16,7 @@
 
 typedef struct {
     u8  pad_0[4];
-    s16 unk4;
+    s16 clear_screen; /* 0x04: sky header frame-clear gate */
 } SpriteFile;
 
 extern u8             D_00100AE0[];
@@ -118,7 +118,7 @@ void draw_debug_profiler(void) {
     f32 rcnt1_count_float;
     f32 div;
 
-    if (level_sky_effect_data == NULL || level_sky_effect_data->unk4 != 0 ||
+    if (level_sky_effect_data == NULL || level_sky_effect_data->clear_screen != 0 ||
         ((draw_enable_mask ^ 1) & 1) || draw_config.sky == 0 || D_0018C34C[0] != 0) {
         append_gif_transfer_packet();
     }
