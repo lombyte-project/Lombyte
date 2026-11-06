@@ -25,9 +25,9 @@ typedef struct {
     char *line1; /* 0x0C */
     char *line2; /* 0x10 */
     u8    pad14[8];
-    s32   choice; /* 0x1C */
-    s32   unk20;  /* 0x20 */
-    s32   unk24;  /* 0x24 */
+    s32   choice;       /* 0x1C */
+    s32   grow_counter; /* 0x20: the results box scale is it / 8, 0.1..1 */
+    s32   fade_counter; /* 0x24: fades the frame over 30 frames, tweens the result colours over 8 */
 } MessageBox;
 
 extern MessageBox l00_message_box __asm__("D_L00_00173040");
@@ -142,8 +142,10 @@ void level_draw_dialog_text(void) {
         box.anchor_y = 0x136 - box.rendered_height;
         font_print_window(
             &box, color, text_cursor, -1, get_effect_texture(1), dialog_font_glyph_metrics);
-        tint = fast_tween_color(
-            0x20FFFF, 0x8020FFFF, 1.0f - (f32)l00_message_box.unk24 / (f32)scale_game_frames(30));
+        tint =
+            fast_tween_color(0x20FFFF,
+                             0x8020FFFF,
+                             1.0f - (f32)l00_message_box.fade_counter / (f32)scale_game_frames(30));
         font_print_center(0x100, 0x140, tint, get_help_message_text(0x524A), -1);
         mid = (y + box.anchor_y) >> 1;
         vu1_add_g_sregister(0x47, 0x3004B);
@@ -299,8 +301,10 @@ void level_draw_dialog_text(void) {
             fast_tween_color(dialog_text_tween_start_color, dialog_text_tween_end_color, alpha),
             text,
             -1);
-        tint = fast_tween_color(
-            0x20FFFF, 0x8020FFFF, 1.0f - (f32)l00_message_box.unk24 / (f32)scale_game_frames(30));
+        tint =
+            fast_tween_color(0x20FFFF,
+                             0x8020FFFF,
+                             1.0f - (f32)l00_message_box.fade_counter / (f32)scale_game_frames(30));
         if (left != 0) {
             font_print_center(0xCA, box.bottom - 0x14, tint, get_help_message_text(left), -1);
         }
@@ -379,7 +383,7 @@ void level_draw_dialog_text(void) {
                                           3.14159f) *
                                          0.5f +
                                      0.5f);
-        scale = (f32)l00_message_box.unk20 * 0.125f;
+        scale = (f32)l00_message_box.grow_counter * 0.125f;
         if (scale > 1.0f) {
             scale = 1.0f;
         } else if (scale < 0.1f) {
@@ -388,8 +392,8 @@ void level_draw_dialog_text(void) {
         results_label_color = results_label_tween_start_color;
         first_place_or_record_color = first_place_or_record_tween_start_color;
         other_place_or_no_record_color = other_place_or_no_record_tween_start_color;
-        if (l00_message_box.unk24 != 0) {
-            color_blend_factor = (f32)l00_message_box.unk24 * 0.125f;
+        if (l00_message_box.fade_counter != 0) {
+            color_blend_factor = (f32)l00_message_box.fade_counter * 0.125f;
             if (color_blend_factor > 1.0f) {
                 color_blend_factor = 1.0f;
             } else if (color_blend_factor < 0.0f) {
