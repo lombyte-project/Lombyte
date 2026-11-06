@@ -296,7 +296,7 @@ int allocate_packed_color_point_light_slot(u128 *position, float radius, float b
     parameter_entry->color[0] = convert_integer_to_float(col & 0xFF) * 0.0078125f;
     parameter_entry->color[1] = convert_integer_to_float((col >> 8) & 0xFF) * 0.0078125f;
     parameter_entry->color[2] = convert_integer_to_float((col >> 16) & 0xFF) * 0.0078125f;
-    parameter_entry->unkC = b;
+    parameter_entry->intensity = b;
     fast_mem_zero16(slot_state, 0x30);
     slot_state->used = 1;
     slot_state->buf = (char *)l00_point_light_slot_buffers[i];
@@ -337,7 +337,7 @@ int allocate_colored_effect_slot(u128 *position,
     parameter_entry->color[0] = color_component_x;
     parameter_entry->color[1] = color_component_y;
     parameter_entry->color[2] = color_component_z;
-    parameter_entry->unkC = b_0023e738;
+    parameter_entry->intensity = b_0023e738;
     fast_mem_zero16(slot_state, 0x30);
     slot_state->used = 1;
     slot_state->buf = (char *)l00_point_light_slot_buffers[i];

@@ -546,7 +546,7 @@ void explosion_light_update(unsigned char *moby) {
             point_light->color[0] = animated_point_light_vars->color[0];
             point_light->color[1] = animated_point_light_vars->color[1];
             point_light->color[2] = animated_point_light_vars->color[2];
-            point_light->unkC =
+            point_light->intensity =
                 convert_integer_to_float(animated_point_light_vars->intensity) / 100.0f;
         }
     } else {

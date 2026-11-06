@@ -7,7 +7,7 @@
    PointLight has the same layout. */
 struct PointLight {
     f32 color[3];
-    f32 unkC;
+    f32 intensity;
     f32 sphere[4]; /* 0x10: position, w: radius */
 };
 

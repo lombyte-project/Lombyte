@@ -10,7 +10,7 @@
    clears it. */
 typedef struct {
     f32     color[3];
-    f32     unkC;
+    f32     intensity;
     OvlVec4 position; /* w: radius */
 } PointLight;
 
