@@ -86,15 +86,15 @@ typedef struct ToxicGasVentVars {
     f32 unk50;
     f32 unk54;
     u8  pad_58[0x8];
-    s32 unk60;
+    s32 oscillates;
     f32 oscillation_amplitude_degrees;
-    f32 unk68;
-    f32 unk6C;
-    f32 unk70;
-    f32 unk74;
-    f32 unk78;
-    f32 unk7C;
-    f32 unk80;
+    f32 oscillation_period_seconds;
+    f32 oscillation_start_degrees;
+    f32 active_seconds;
+    f32 inactive_seconds;
+    f32 start_delay_seconds;
+    f32 oscillation_phase;
+    f32 oscillation_phase_step;
     f32 initial_heading_radians;
     s32 timer_88;
     u8  pad_8C[0x4];
@@ -125,15 +125,16 @@ void toxic_gas_vent_update(char *vent_moby) {
     }
     switch (((unsigned char *)vent_moby)[0x20]) {
     case VENT_INITIALIZE:
-        if (vent_data->unk60 != 0) {
+        if (vent_data->oscillates != 0) {
             vent_moby[0x20] = 1;
-            vent_data->unk80 = 360.0f / vent_data->unk68 * DEG_TO_RAD * frame_time;
-            vent_data->unk7C = vent_data->unk6C * DEG_TO_RAD;
+            vent_data->oscillation_phase_step =
+                360.0f / vent_data->oscillation_period_seconds * DEG_TO_RAD * frame_time;
+            vent_data->oscillation_phase = vent_data->oscillation_start_degrees * DEG_TO_RAD;
             vent_data->initial_heading_radians = MOBY(vent_moby)->rot.z;
         } else {
             vent_moby[0x20] = 3;
-            vent_data->timer_88 = scale_game_frames(
-                truncate_float_to_s32(vent_data->unk74 + vent_data->unk78 * 60.0f));
+            vent_data->timer_88 = scale_game_frames(truncate_float_to_s32(
+                vent_data->inactive_seconds + vent_data->start_delay_seconds * 60.0f));
         }
         vent_data->voice = -1;
         break;
@@ -143,9 +144,10 @@ void toxic_gas_vent_update(char *vent_moby) {
         }
         emit_toxic_gas_vent_sparks(vent_moby);
         check_oscillating_toxic_gas_vent_collisions(vent_moby);
-        heading_offset_radians =
-            vent_data->oscillation_amplitude_degrees * DEG_TO_RAD * fast_sin(vent_data->unk7C);
-        vent_data->unk7C = fast_add_rotations(vent_data->unk7C, vent_data->unk80);
+        heading_offset_radians = vent_data->oscillation_amplitude_degrees * DEG_TO_RAD *
+                                 fast_sin(vent_data->oscillation_phase);
+        vent_data->oscillation_phase =
+            fast_add_rotations(vent_data->oscillation_phase, vent_data->oscillation_phase_step);
         MOBY(vent_moby)->rot.z =
             fast_add_rotations(vent_data->initial_heading_radians, heading_offset_radians);
         break;
@@ -158,7 +160,7 @@ void toxic_gas_vent_update(char *vent_moby) {
         if (fast_dec_timer(&vent_data->timer_88) != 0) {
             vent_moby[0x20] = 3;
             vent_data->timer_88 =
-                scale_game_frames(truncate_float_to_s32(vent_data->unk74 * 60.0f));
+                scale_game_frames(truncate_float_to_s32(vent_data->inactive_seconds * 60.0f));
             if (vent_data->voice != -1) {
                 char *voice_slot = ((char *)&D_0013E550) + vent_data->voice * 0x70;
                 if (*(char **)(voice_slot + 0x88) == vent_moby &&
@@ -173,7 +175,7 @@ void toxic_gas_vent_update(char *vent_moby) {
         if (fast_dec_timer(&vent_data->timer_88) != 0) {
             vent_moby[0x20] = 2;
             vent_data->timer_88 =
-                scale_game_frames(truncate_float_to_s32(vent_data->unk70 * 60.0f));
+                scale_game_frames(truncate_float_to_s32(vent_data->active_seconds * 60.0f));
         }
         break;
     }
@@ -341,7 +343,7 @@ void check_timed_toxic_gas_vent_collisions(char *vent_moby) {
     q.b18 = 3;
     q.b19 = 1;
     q.s1A = ((unsigned short)MOBY(vent_moby)->oclass);
-    sp = (vent_data->unk70 * 60.0f - (float)vent_data->timer_88) *
+    sp = (vent_data->active_seconds * 60.0f - (float)vent_data->timer_88) *
          (*(float *)&spark_speed_gp * frame_time);
     if (*(float *)&toxic_gas_vent_max_collision_range_gp < sp)
         sp = *(float *)&toxic_gas_vent_max_collision_range_gp;

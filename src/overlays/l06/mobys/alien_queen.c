@@ -378,13 +378,13 @@ typedef struct AlienQueenVars {
     u8    unk70;
     u8    pad_71[0x3F];
     char *target;
-    s32   unkB4;
+    s32   target_selection_status;
     u8    pad_B8[0x8];
-    f32   unkC0[4];
+    f32   home_position[4];
     f32   path_midpoint[4];
-    u8    unkE0;
+    u8    turn_velocity;
     u8    pad_E1[0x7];
-    f32   unkE8;
+    f32   move_speed;
     s32   path;
     s32   frog_list;
     s32   state18_list;
@@ -445,7 +445,7 @@ void alien_queen_update(unsigned char *moby) {
         alien_queen_update_vars->unk5A = truncate_float_to_s32(18.4f);
         alien_queen_update_vars->timer_120 = scale_game_frames(0x4B0);
         alien_queen_update_vars->suppress_death_dialogue = 0;
-        qcopy(alien_queen_update_vars->unkC0, moby + 0x10);
+        qcopy(alien_queen_update_vars->home_position, moby + 0x10);
         alien_queen_update_vars->animation_update = -1;
         alien_queen_update_vars->saved_path_point_count =
             *D_L06_001B0C30_q[alien_queen_update_vars->path];
@@ -455,7 +455,7 @@ void alien_queen_update(unsigned char *moby) {
                     (char *)path + ((*path / 2) * 16 + 16),
                     0.5f);
         alien_queen_update_vars->path_midpoint[3] = vector_distance_xy(
-            alien_queen_update_vars->unkC0, alien_queen_update_vars->path_midpoint);
+            alien_queen_update_vars->home_position, alien_queen_update_vars->path_midpoint);
         alien_queen_update_vars->unk128 = random_angle_radians();
         alien_queen_update_vars->timer_12C = scale_game_frames(0x1E);
         MOBY(moby)->collision = 0;
@@ -470,7 +470,7 @@ void alien_queen_update(unsigned char *moby) {
         break;
     }
     case ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO:
-        if (alien_queen_update_vars->unkB4 == 2)
+        if (alien_queen_update_vars->target_selection_status == 2)
             return;
         if (*(short *)(target + 0xA6) != 0)
             return;
@@ -499,14 +499,14 @@ void alien_queen_update(unsigned char *moby) {
         MOBY(moby)->pos.z = MOBY(moby)->pos.z + alien_queen_update_vars->z_velocity;
         alien_queen_update_vars->z_velocity = alien_queen_update_vars->z_velocity - gravity;
         if ((unsigned char)moby[0x53] == 8) {
-            if (absolute_float((MOBY(moby)->pos.z - alien_queen_update_vars->unkC0[2]) /
+            if (absolute_float((MOBY(moby)->pos.z - alien_queen_update_vars->home_position[2]) /
                                alien_queen_update_vars->z_velocity) <= 6.0f &&
                 (unsigned char)moby[0x53] != 9) {
                 blend_moby_animation(moby, 9, 0, scale_game_frames(5));
             }
         } else {
-            if (MOBY(moby)->pos.z < alien_queen_update_vars->unkC0[2]) {
-                MOBY(moby)->pos.z = alien_queen_update_vars->unkC0[2];
+            if (MOBY(moby)->pos.z < alien_queen_update_vars->home_position[2]) {
+                MOBY(moby)->pos.z = alien_queen_update_vars->home_position[2];
             }
             if (MOBY(moby)->anim_time == 0.0f && (moby[0x70] & 2)) {
                 if ((unsigned char)moby[0x53] == 9) {
@@ -559,7 +559,7 @@ void alien_queen_update(unsigned char *moby) {
         }
         return;
     case ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET:
-        if (alien_queen_update_vars->unkB4 == 2)
+        if (alien_queen_update_vars->target_selection_status == 2)
             break;
         moby[0x20] = 8;
         if ((unsigned char)moby[0x53] == 3)
@@ -575,27 +575,27 @@ void alien_queen_update(unsigned char *moby) {
         approach_angle((float *)&MOBY(moby)->rot.z,
                        fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                     *(float *)(target + 0x14) - MOBY(moby)->pos.y),
-                       (float *)&alien_queen_update_vars->unkE0,
+                       (float *)&alien_queen_update_vars->turn_velocity,
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
         if (turn < 0.7853982f && *(float *)&l06_alien_queen_attack_distance < dist) {
-            approach_value(&alien_queen_update_vars->unkE8,
+            approach_value(&alien_queen_update_vars->move_speed,
                            *(float *)&l06_alien_queen_movement_speed * frame_time,
                            alien_queen_movement_acceleration_gp * frame_time_sq);
         } else if (dist < *(float *)&l06_alien_queen_retreat_distance) {
-            approach_value(&alien_queen_update_vars->unkE8,
+            approach_value(&alien_queen_update_vars->move_speed,
                            -(*(float *)&l06_alien_queen_movement_speed * frame_time),
                            alien_queen_movement_acceleration_gp * frame_time_sq);
         } else {
-            approach_value(&alien_queen_update_vars->unkE8, 0.0f, frame_time_sq * 8.0f);
+            approach_value(&alien_queen_update_vars->move_speed, 0.0f, frame_time_sq * 8.0f);
         }
         fast_vec_sub(step, target + 0x10, moby + 0x10);
         step[2] = 0.0f;
-        fast_vec_normalize(step, step, alien_queen_update_vars->unkE8);
+        fast_vec_normalize(step, step, alien_queen_update_vars->move_speed);
         fast_vec_add(moby + 0x10, moby + 0x10, step);
         func_L00_00262DF0_q(alien_queen_update_vars->path, moby + 0x10, 1.0f, moby + 0x10);
-        if (alien_queen_update_vars->unkB4 == 2) {
+        if (alien_queen_update_vars->target_selection_status == 2) {
             moby[0x20] = 0xD;
             break;
         }
@@ -630,7 +630,7 @@ void alien_queen_update(unsigned char *moby) {
         fast_dec_timer(&alien_queen_update_vars->timer_120);
         approach_angle((float *)&MOBY(moby)->rot.z,
                        MOBY(moby)->rot.z,
-                       (float *)&alien_queen_update_vars->unkE0,
+                       (float *)&alien_queen_update_vars->turn_velocity,
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
@@ -692,16 +692,16 @@ void alien_queen_update(unsigned char *moby) {
         return;
     case ALIEN_QUEEN_STATE_RETURN_HOME: {
         char *pos = (char *)moby + 0x10;
-        char *home = alien_queen_update_vars->unkC0;
+        char *home = alien_queen_update_vars->home_position;
         float dist = vector_distance_xy(pos, home);
         float turn = fast_difference_between_rotations(
             MOBY(moby)->rot.z,
-            fast_arc_tan(alien_queen_update_vars->unkC0[0] - MOBY(moby)->pos.x,
-                         alien_queen_update_vars->unkC0[1] - MOBY(moby)->pos.y));
+            fast_arc_tan(alien_queen_update_vars->home_position[0] - MOBY(moby)->pos.x,
+                         alien_queen_update_vars->home_position[1] - MOBY(moby)->pos.y));
         approach_angle((float *)&MOBY(moby)->rot.z,
-                       fast_arc_tan(alien_queen_update_vars->unkC0[0] - MOBY(moby)->pos.x,
-                                    alien_queen_update_vars->unkC0[1] - MOBY(moby)->pos.y),
-                       (float *)&alien_queen_update_vars->unkE0,
+                       fast_arc_tan(alien_queen_update_vars->home_position[0] - MOBY(moby)->pos.x,
+                                    alien_queen_update_vars->home_position[1] - MOBY(moby)->pos.y),
+                       (float *)&alien_queen_update_vars->turn_velocity,
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
@@ -712,7 +712,7 @@ void alien_queen_update(unsigned char *moby) {
             fast_vec_add(pos, pos, step);
             func_L00_00262DF0_q(alien_queen_update_vars->path, pos, 1.0f, pos);
         }
-        if (alien_queen_update_vars->unkB4 != 2) {
+        if (alien_queen_update_vars->target_selection_status != 2) {
             moby[0x20] = 7;
             break;
         }
@@ -935,7 +935,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 alien_queen_hit_recovery_vars->health = 19.9f;
                 moby[0x20] = 3;
                 alien_queen_hit_recovery_vars->intro_or_recovery_delay_active = 0;
-                qcopy(moby + 0x10, alien_queen_hit_recovery_vars->unkC0);
+                qcopy(moby + 0x10, alien_queen_hit_recovery_vars->home_position);
                 MOBY(moby)->rot.z = fast_arc_tan(hero.motion.pos.f[0] - MOBY(moby)->pos.x,
                                                  hero.motion.pos.f[1] - MOBY(moby)->pos.y);
                 euler_rotation_basis(moby + 0xC0, moby + 0x40);
@@ -949,7 +949,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 alien_queen_hit_recovery_vars->intro_or_recovery_delay_active = 0;
                 base = &l06_cuboids[alien_queen_hit_recovery_vars->cuboid];
                 set_race_camera(&base->pos, &base->rot, 0x72, 1);
-                qcopy(moby + 0x10, alien_queen_hit_recovery_vars->unkC0);
+                qcopy(moby + 0x10, alien_queen_hit_recovery_vars->home_position);
                 MOBY(moby)->rot.z = fast_arc_tan(hero.motion.pos.f[0] - MOBY(moby)->pos.x,
                                                  hero.motion.pos.f[1] - MOBY(moby)->pos.y);
                 euler_rotation_basis(moby + 0xC0, moby + 0x40);
