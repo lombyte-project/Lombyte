@@ -25,7 +25,7 @@ typedef struct {
 typedef struct {
     float        vel[4];
     float        size;
-    int          unk14;
+    int          initial_timer; /* timer's starting frame count */
     int          timer;
     struct Moby *owner;
     float        target_pos[3];

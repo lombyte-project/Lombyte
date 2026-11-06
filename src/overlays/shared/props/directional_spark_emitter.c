@@ -24,7 +24,7 @@ typedef struct DirectionalSparkEmitterVars {
     f32 vector_2_w;
     f32 side_spread_1;
     f32 side_spread_2;
-    s32 unk38;
+    s32 use_default_settings;
     s32 emit_timer;
 } DirectionalSparkEmitterVars;
 
@@ -65,7 +65,7 @@ void directional_spark_emitter_update(char *moby) {
     spark_data = (DirectionalSparkEmitterVars *)MOBY(moby)->pvars;
     if (fast_dec_timer((int *)(&spark_data->emit_timer)) == 0)
         return;
-    if (spark_data->unk38 != 0) {
+    if (spark_data->use_default_settings != 0) {
         spark_data->emit_timer = spark_emitter_default_timer_reset_gp;
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
         qcopy(spark_position, &MOBY(moby)->pos);

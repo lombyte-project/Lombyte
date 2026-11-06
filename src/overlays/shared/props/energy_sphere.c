@@ -10,24 +10,6 @@
 #include "rnc/overlay/shared/mobys/entities.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 
-typedef struct {
-    char           pad0[0x10];
-    char           pos[0x10];
-    unsigned char  b20;
-    char           pad21[0xB];
-    float          unk2C;
-    unsigned char  b30;
-    unsigned char  b31;
-    short          s32;
-    unsigned short h34;
-    char           pad36[0x12];
-    float          unk48;
-    char           pad4C[0x2C];
-    Child         *child;
-    char           pad7C[0x14];
-    int            unk90;
-} Obj;
-
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
