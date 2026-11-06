@@ -28,17 +28,17 @@ void update_hud(void) {
     s32   raised_alpha;
     s32   lowered_alpha;
     s32   remaining;
-    if (hud_state.unk30 == 0) {
+    if (hud_state.skip_update == 0) {
         goto block_2;
     }
-    hud_state.unk30 = 0;
+    hud_state.skip_update = 0;
     return;
 block_2:
     if (occl_chain_active == 0) {
         goto block_5;
     }
 
-    hud_state.unk30 = 0;
+    hud_state.skip_update = 0;
     return;
 block_5:
     slot = hud_chan_slots;

@@ -39,18 +39,18 @@ struct MapState {
     struct MapIcon   *icons;   /* 0x020: icon list of the shown level */
     s32 unk24; /* 0x024: zero: update_map_zoom_and_pan and draw_map_overlay return early */
     s32 coverage_enabled; /* 0x028: zero: the save page is cleared, not packed */
-    s32 unk2C; /* 0x02C: see unk8 */
+    s32 unk2C;            /* 0x02C: see unk8 */
     struct {
-        s32 unk0; /* draw_map_overlay draft: <0 skipped */
+        s32 cell; /* cell of a 16x16 grid over the map, <0 = unused */
         u8  pad4[0xC];
-    } unk30[8];                  /* 0x030 */
+    } highlighted_cells[8];      /* 0x030: drawn as dark rectangles by draw_map_overlay */
     s32            marker_count; /* 0x0B0: entries in markers */
     f32            zoom[20];     /* 0x0B4: per-map zoom, 0.65..4 */
     s32            pan_x[20];    /* 0x104 */
     s32            pan_y[20];    /* 0x154 */
     u8             pad1A4[0x80];
-    s32            level;  /* 0x224: selected level 0..19 */
-    s32            loaded; /* 0x228: index of the loaded map, -1 none */
+    s32            level;            /* 0x224: selected level 0..19 */
+    s32            loaded;           /* 0x228: index of the loaded map, -1 none */
     s32            current_map_data; /* 0x22C: stash_receive_data argument */
     s32            unk230; /* 0x230: compared with -current_level_index (draw_map_screen) */
     s32            current_map_size; /* 0x234: stash_receive_data byte count */

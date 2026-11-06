@@ -184,7 +184,7 @@ void draw_map_overlay(void) {
         dx = map_right - map_left;
         dy = map_bottom - map_top;
         for (i = 0; i < 8; i++) {
-            cell = level_map_selection.unk30[i].unk0;
+            cell = level_map_selection.highlighted_cells[i].cell;
             if (cell >= 0) {
                 cell_x = cell % 16;
                 cell_y = cell / 16;

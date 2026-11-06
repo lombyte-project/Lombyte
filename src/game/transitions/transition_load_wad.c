@@ -191,8 +191,9 @@ void transition_load_wad(void) {
     init_view_context();
     update_view_context();
     vu1_init_chain();
-    start_audio_stream_read(
-        D_001940C0.hdr + 0x1000000, disc_table.unk14E8.sector, disc_table.unk14E8.size);
+    start_audio_stream_read(D_001940C0.hdr + 0x1000000,
+                            disc_table.transition_archive.sector,
+                            disc_table.transition_archive.size);
     update_audio_stream_until_idle(1);
     FlushCache(0);
     size = decompress_wad(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);

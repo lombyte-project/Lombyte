@@ -76,7 +76,7 @@ struct HudState {
     struct HudTexPage  *image_pages;   /* 0x24 */
     struct HudTexPage  *palette_pages; /* 0x28 */
     s32                 unk2C;
-    s32                 unk30;
+    s32                 skip_update; /* 0x30: update_hud skips one frame and clears it */
 };
 
 /* Compile-time layout checks: a wrong offset makes the array size negative. */
@@ -90,7 +90,7 @@ HUD_STATE_OFFSET_CHECK(anim_defs, 0x1C);
 HUD_STATE_OFFSET_CHECK(frame_refs, 0x20);
 HUD_STATE_OFFSET_CHECK(image_pages, 0x24);
 HUD_STATE_OFFSET_CHECK(palette_pages, 0x28);
-HUD_STATE_OFFSET_CHECK(unk30, 0x30);
+HUD_STATE_OFFSET_CHECK(skip_update, 0x30);
 
 extern struct HudState hud_state __asm__("D_0019A3E8");
 
