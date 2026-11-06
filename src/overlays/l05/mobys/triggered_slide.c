@@ -1,5 +1,6 @@
-/* Level 05 moby class that slides and lowers when triggered. */
+/* Level 05 sliding block (class 843): slides out along its cuboid and lowers once its linked moby gets a command. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
@@ -7,16 +8,15 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 
-extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern short D_L05_0015FFD8;
+extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 
 /* Slides the moby out along its pose-table entry's direction: 0 places it,
-   1 waits for the trigger byte 0xBC of its D_L05_0015FFD8 record, 2 eases
+   1 waits for the trigger byte 0xBC (command) of its l05_moby_array record, 2 eases
    it toward the end point, 3 lowers it to 5.9 below the entry's height. */
-void triggered_slide_update(char *moby) __asm__("FUN_L05_0030e508");
+void sliding_block_update(char *moby) __asm__("FUN_L05_0030e508");
 
 typedef struct TriggeredSlideVars {
     u8  pad_0[0x8];
@@ -29,7 +29,7 @@ typedef struct TriggeredSlideVars {
 } TriggeredSlideVars;
 
 /* Moby class 843 */
-void triggered_slide_update(char *moby) {
+void sliding_block_update(char *moby) {
     enum {
         MOBY_PLACE_AT_POSE_OFFSET = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,
@@ -66,8 +66,8 @@ void triggered_slide_update(char *moby) {
         break;
     }
     case MOBY_WAIT_FOR_TRIGGER:
-        if ((*(unsigned char **)&D_L05_0015FFD8)[slide_and_lowering_vars->trigger_moby * 256 +
-                                                 0xBC] != 0) {
+        if (((unsigned char *)l05_moby_array)[slide_and_lowering_vars->trigger_moby * 256 + 0xBC] !=
+            0) {
             allocate_voice_for_target_entry(0, 0, moby);
             MOBY(moby)->state = MOBY_SLIDE_TO_END_POINT;
             clear_u64_value(slide_and_lowering_vars);

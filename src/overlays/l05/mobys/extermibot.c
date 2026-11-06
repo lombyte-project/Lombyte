@@ -1,5 +1,6 @@
 /* Level 05 moby class extermibot. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
@@ -61,7 +62,6 @@ extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float FUN_L04_001f1978(float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_vec_dist(void *, void *);
-extern int   D_L05_0015FFD8;
 extern int   D_L05_0015F5C4;
 extern int   step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 extern int   path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
@@ -369,8 +369,8 @@ void extermibot_update(unsigned char *moby) {
         break;
     case EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER:
         if ((moby_data->activation_moby_index != -1 &&
-             ((unsigned char *)*(
-                 int *)&D_L05_0015FFD8)[moby_data->activation_moby_index * 256 + 0xBC] != 0) ||
+             ((unsigned char *)l05_moby_array)[moby_data->activation_moby_index * 256 + 0xBC] !=
+                 0) ||
             (moby_data->activation_clip_volume_index != -1 &&
              is_point_inside_clip_volume(((char *)D_0013F3D0),
                                          moby_data->activation_clip_volume_index) != 0)) {
@@ -1068,10 +1068,7 @@ int test_extermibot_offset_path_clearance(char *moby, float *goal, float probe_o
                moby_data->path, probe_position, offset_probe_position) == 0;
 }
 
-extern struct Moby *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
-
 extern short *D_L05_001AC040_03f80[] __asm__("D_L05_001ABCC0");
-extern short  D_L05_00160098_03f80 __asm__("D_L05_0015FFD8");
 char *find_nearest_extermibot_group_target(char *self, int group_index) __asm__("FUN_L05_00303f80");
 
 char *find_nearest_extermibot_group_target(char *search_origin_moby, int group_index) {
@@ -1084,13 +1081,13 @@ char *find_nearest_extermibot_group_target(char *search_origin_moby, int group_i
     {
         do {
             int i = *(unsigned short *)list & 0x7FFF;
-            if (D_L05_0015FFD8_7920[i].flags & 0x1000) {
-                if (D_L05_0015FFD8_7920[i].state < 0x7F) {
+            if (l05_moby_array[i].flags & 0x1000) {
+                if (l05_moby_array[i].state < 0x7F) {
                     float candidate_distance =
-                        fast_vec_dist(&D_L05_0015FFD8_7920[i].pos, search_origin_moby + 0x10);
+                        fast_vec_dist(&l05_moby_array[i].pos, search_origin_moby + 0x10);
                     if (candidate_distance < best) {
                         best = candidate_distance;
-                        nearest_moby = *(char **)&D_L05_00160098_03f80 + (i << 8);
+                        nearest_moby = (char *)l05_moby_array + (i << 8);
                     }
                 }
             }

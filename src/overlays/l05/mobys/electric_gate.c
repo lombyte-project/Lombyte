@@ -1,5 +1,6 @@
 /* Level 05 moby class electric_gate and its beams. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/rendering/geometry_quad.h"
@@ -11,12 +12,11 @@
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F130), where it is exact; names translated to the US level program. */
 
-extern char  D_0013E550[];
-extern char  D_L05_001671C0[];
-extern int   D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
-extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8");
-extern void  draw_electric_gate_beams(struct Moby *moby) __asm__("FUN_L05_0030de90");
+extern char D_0013E550[];
+extern char D_L05_001671C0[];
+extern int  D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
+extern int  allocate_voice_for_target_entry() __asm__("FUN_0022da68");
+extern void draw_electric_gate_beams(struct Moby *moby) __asm__("FUN_L05_0030de90");
 
 extern short electric_gate_beam_callback_frame_gp __asm__("D_L05_00161D38") __attribute__((sda));
 void         electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
@@ -84,8 +84,7 @@ void electric_gate_update(char *gate_moby) {
         }
     after:
         if (*(int *)electric_gate_vars >= 0) {
-            if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)electric_gate_vars * 256 + 0xBC] !=
-                0) {
+            if (((unsigned char *)l05_moby_array)[*(int *)electric_gate_vars * 256 + 0xBC] != 0) {
                 allocate_voice_for_target_entry(1, 0, gate_moby);
                 MOBY(gate_moby)->collision = 0;
                 MOBY(gate_moby)->state = ELECTRIC_GATE_TRIGGERED;
@@ -172,12 +171,12 @@ void draw_electric_gate_beams(struct Moby *moby) {
     do {
         char *listed_moby;
         offset = (*list & 0x7FFF) << 8;
-        listed_moby = (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d);
+        listed_moby = (char *)(offset + (int)l05_moby_array);
         next_moby_index_ptr = list + 1;
         if (*(short *)(listed_moby + 0xA6) == 0x346 &&
             *(unsigned char *)(listed_moby + 0x20) == 1) {
             copy_matrix_rotation(matrix, listed_moby + 0xC0);
-            qcopy(matrix + 0x30, (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d) + 0x10);
+            qcopy(matrix + 0x30, (char *)(offset + (int)l05_moby_array) + 0x10);
             *(float *)(matrix + 0x3C) = 1.0f;
             for (k = 0; k < 5; k++) {
                 draw_geometry_quad(&quads[0][k], matrix, 0);

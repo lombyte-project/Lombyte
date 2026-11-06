@@ -1,5 +1,6 @@
 /* Level 05 moby class rising_gate (0x354, 0x355): once its trigger moby fires, rises to its top height and swings back to yaw 0, with a sound per class. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/overlay/l05/mobys/rising_gate_globals.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -9,7 +10,7 @@
 extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 
 struct GateVars {
-    s32 trigger; /* D_L05_0015FFD8 index of the moby whose byte 0xBC opens it */
+    s32 trigger; /* l05_moby_array index of the moby whose byte 0xBC opens it */
     s32 riseTimer;
     s32 swingTimer;
     f32 topZ;
@@ -17,13 +18,12 @@ struct GateVars {
     f32 swingSpeed;
 };
 
-float      gate_rise_acceleration_gp __asm__("D_L05_00161E80") = 5e+01f;
-float      gate_rise_deceleration_gp __asm__("D_L05_00161E84") = 1e+01f;
-float      gate_rise_max_speed_gp __asm__("D_L05_00161E88") = 18.0f;
-float      gate_swing_acceleration_gp __asm__("D_L05_00161E8C") = 3.6e+02f;
-float      gate_swing_deceleration_gp __asm__("D_L05_00161E90") = 3.6e+02f;
-float      gate_swing_max_speed_gp __asm__("D_L05_00161E94") = 1.44e+03f;
-extern int gate_mobys_314eb0 __asm__("D_L05_0015FFD8");
+float gate_rise_acceleration_gp __asm__("D_L05_00161E80") = 5e+01f;
+float gate_rise_deceleration_gp __asm__("D_L05_00161E84") = 1e+01f;
+float gate_rise_max_speed_gp __asm__("D_L05_00161E88") = 18.0f;
+float gate_swing_acceleration_gp __asm__("D_L05_00161E8C") = 3.6e+02f;
+float gate_swing_deceleration_gp __asm__("D_L05_00161E90") = 3.6e+02f;
+float gate_swing_max_speed_gp __asm__("D_L05_00161E94") = 1.44e+03f;
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern float
@@ -52,7 +52,7 @@ void rising_gate_update(struct Moby *gate_moby) {
         gate_moby->pos.z -= 8.0f;
         break;
     case GATE_WAIT_FOR_TRIGGER:
-        trigger_moby = (struct Moby *)((gate_vars->trigger << 8) + gate_mobys_314eb0);
+        trigger_moby = (struct Moby *)((gate_vars->trigger << 8) + (int)l05_moby_array);
         if (trigger_moby->command == 1) {
             gate_moby->state = GATE_RAISE_AND_SWING;
             break;

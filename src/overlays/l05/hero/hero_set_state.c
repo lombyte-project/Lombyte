@@ -1,5 +1,6 @@
 /* Level 05 hero state setter: hero_set_state, which leaves the current hero state and enters the new one. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -36,7 +37,6 @@ struct HeroVelocityKey level05_hero_transform_trail_jump_velocity_keys
     [HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L05_0017C380") =
         HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
 extern HeroTableRow2C D_L05_0017C088[];
-extern char          *moby_pool_4f60 __asm__("D_L05_0015FFD8");
 extern char          *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float          level05_hero_animation_blend_curves[][25] __asm__("D_L05_0017C250");
 extern float          get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
@@ -515,7 +515,7 @@ int hero_set_state(int requested_state, int animation_request_mode) {
                 m = (char *)q->hoverboard_moby;
                 fill_transfer_words(&q->smoothed_spin_stick, 0, 0x210);
                 q->hoverboard_moby = (u8 *)m;
-                q->unk890 = (u8 *)moby_pool_4f60 + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
+                q->unk890 = (u8 *)l05_moby_array + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
                 q->board_gravity = frame_time_sq * 22.0f;
                 q->board_spring_angle = 1.2217305f;
                 q->trick_hud_handle = -1;

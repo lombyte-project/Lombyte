@@ -1,5 +1,6 @@
 /* Level 05 moby class help_hints (0x543): plays the Rilgar help messages and records the usage stats they depend on. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/hero/hero.h"
@@ -16,7 +17,7 @@ extern char D_0013F3D0[];
 extern int  camera_secondary_mode_lui __asm__("D_001413D4") NOT_SDA, D_001413DC NOT_SDA,
     D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
-extern int           frame_number __asm__("D_L05_0015F5CC"), D_L05_0015FFD8;
+extern int           frame_number __asm__("D_L05_0015F5CC");
 extern int           D_001417E0[];
 extern int           D_0014EE90[];
 extern unsigned char D_0014C050[];
@@ -200,7 +201,7 @@ void help_hints_update(struct Moby *moby) {
         D_0014C050[gameplay_event_pvars[8] + gameplay_event_level_index * 16] == 0xff &&
         (frame_number < 5 || (D_0013F64C && (*(short *)(D_0013F64C + 0xa6) == 0x3e6 ||
                                              *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
-        collect_moby_and_clear_path_keys((void *)(D_L05_0015FFD8 + value * 256));
+        collect_moby_and_clear_path_keys((void *)((int)l05_moby_array + value * 256));
         gameplay_event_pvars[21] = -1;
     }
     qcopy(gameplay_event_pvars, D_0013F3D0);

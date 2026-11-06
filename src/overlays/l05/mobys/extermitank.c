@@ -109,7 +109,7 @@ typedef struct ExtermitankVars {
     u8  pad_2F[0x9];
     s32 retimer;
     u8  pad_3C[0x2];
-    u16 unk3E;
+    u16 target_flags; /* 0x3E: MobyTargetInfo.flags; target info at pvars+0x20 */
     f32 velocity[4];
     u8  pad_50[0x8];
     u8  look_range;
@@ -226,7 +226,7 @@ void extermitank_update(unsigned char *moby) {
             blend_moby_animation(moby, 0, 0, 0);
         extermitank_vars->mover.max_speed = D_L05_00161AF8 * D_0015ED6C_gp;
         clear_u64_value(extermitank_vars->velocity);
-        extermitank_vars->unk3E |= 2;
+        extermitank_vars->target_flags |= 2;
         extermitank_vars->lifecycle_state = 1;
         extermitank_vars->wrench_hit_sound = 0;
         extermitank_vars->max_health = 6;

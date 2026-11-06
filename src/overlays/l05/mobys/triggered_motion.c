@@ -1,5 +1,6 @@
-/* Level 05 moby class that moves and turns a manipulator when triggered. */
+/* Level 05 hinged hatch (class 893): a manipulator turns its lid, which falls shut or swings open and slides once its linked moby gets a command. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
@@ -8,8 +9,7 @@
 #include "sda.h"
 #include "rnc/mobys/attach_manipulator.h"
 
-extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern short D_L05_0015FFD8 __asm__("D_L05_0015FFD8");
+extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern float
@@ -18,7 +18,7 @@ approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_00
 extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
-void triggered_motion_update(char *moby) __asm__("FUN_L05_00316258");
+void hinged_hatch_update(char *moby) __asm__("FUN_L05_00316258");
 
 typedef struct TriggeredMotionVars {
     u8  pad_0[0x10];
@@ -35,7 +35,7 @@ typedef struct TriggeredMotionVars {
 } TriggeredMotionVars;
 
 /* Moby class 893 */
-void triggered_motion_update(char *moby) {
+void hinged_hatch_update(char *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,
@@ -79,8 +79,7 @@ void triggered_motion_update(char *moby) {
         break;
     case MOBY_WAIT_FOR_TRIGGER:
     case MOBY_WAIT_TO_RETURN_TO_SAVED_POSITION: {
-        u8 trigger =
-            ((u8 *)*(int *)&D_L05_0015FFD8)[motion_and_manipulator_vars->trigger_moby * 256 + 0xBC];
+        u8 trigger = ((u8 *)l05_moby_array)[motion_and_manipulator_vars->trigger_moby * 256 + 0xBC];
         if (trigger == 0)
             return;
         if (MOBY(moby)->state == MOBY_WAIT_TO_RETURN_TO_SAVED_POSITION && trigger != 2) {
