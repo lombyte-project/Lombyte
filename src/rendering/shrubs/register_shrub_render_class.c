@@ -35,7 +35,7 @@ void register_shrub_render_class(ShrubRenderClass                *render_class,
     shrub_render_class_ids[registered_shrub_render_class_count] = class_id;
     shrub_render_classes[registered_shrub_render_class_count] = render_class;
     render_class->class_slot = registered_shrub_render_class_count;
-    fixed_threshold = truncate_float_to_s32(render_class->scale * 1024.0f);
+    fixed_threshold = truncate_float_to_s32(render_class->mip_distance * 1024.0f);
     shrub_render_class_fixed_thresholds[registered_shrub_render_class_count] = fixed_threshold;
     registered_shrub_render_class_count++;
     render_class->first_instance = 0;

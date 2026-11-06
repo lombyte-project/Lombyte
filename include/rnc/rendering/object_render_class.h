@@ -48,10 +48,10 @@ typedef struct {
     struct TieInstance *first_instance; /* 0x28 */
     ObjectRenderRecord *records;
     f32                 bounding_sphere[4]; /* 0x30: center xyz, radius */
-    f32                 unk40;              /* 0x40 */
-    u8                  pad44[2];
-    u16                 class_slot;
-    f32                 scale;
+    f32 position_scale; /* 0x40: vertex dequantisation scale, the instance matrix w */
+    u8  pad44[2];
+    u16 class_slot;
+    f32 mip_distance; /* 0x48: texture paging distance (x 1024 per class) */
 } ObjectRenderClass;
 
 extern ObjectRenderClass *object_render_classes[128] __asm__("D_001E1700");

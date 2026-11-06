@@ -291,7 +291,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         qcopy(&tie_data->m[3], tie_record + 0x40);
         tie->x18 = tie_unk18;
         tie_record += 0x50;
-        tie_data->m[3].w = object_render_classes[tie->cls]->unk40;
+        tie_data->m[3].w = object_render_classes[tie->cls]->position_scale;
         transform_vector_by_basis(tie, object_render_classes[tie->cls]->bounding_sphere, tie_data);
         max_axis_length = fast_vec_length(&tie_data->m[0]);
         max_axis_length = max_float(max_axis_length, fast_vec_length(&tie_data->m[1]));
@@ -375,7 +375,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         qcopy(&shrub_data->m[2], shrub_record + 0x30);
         qcopy(&shrub_data->translation_and_position_scale, shrub_record + 0x40);
         shrub_record += 0x50;
-        shrub_data->translation_and_position_scale.w = shrub_render_classes[shrub_class]->unk20;
+        shrub_data->translation_and_position_scale.w =
+            shrub_render_classes[shrub_class]->position_scale;
         horizontal_scale =
             (fast_vec_length(&shrub_data->m[0]) + fast_vec_length(&shrub_data->m[1])) * 0.5f;
         vertical_scale = fast_vec_length(&shrub_data->m[2]);
