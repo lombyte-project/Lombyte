@@ -1257,6 +1257,7 @@ DATA_OVERLAYS = {
     "ui/menus/system/emit_selected_graphics_dma_packets": (0x1D7D90, 0xD8D10, 192),
     "ui/text/font/font_print": (0x1DF050, 0xDFFD0, 2784),  # glyph records of the three fonts
     "ui/vendor/render_vendor_buy_label_pass": (0x1DFFB0, 0xE0F30, 1032),  # vendor prices by item
+    "ui/map/draw_map_screen_layers": (0x1DDF68, 0xDEEE8, 76),  # map inset per level
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
