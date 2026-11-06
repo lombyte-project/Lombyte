@@ -120,8 +120,8 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
         }
     }
     pos = &path_camera->pos;
-    m1 = (Vec4f *)&path_camera->m1;
-    m2 = (Vec4f *)&path_camera->m2;
+    m1 = (Vec4f *)&path_camera->right;
+    m2 = (Vec4f *)&path_camera->up;
     stops->fov_end = fast_arc_tan(1.0f, l10_camera_view.tan_half_fov) * 2.0f;
     if (*(int *)(path_camera_descriptor + 0x20) >= 0) {
         char *path = ((char *)l10_paths[*(int *)(path_camera_descriptor + 0x20)]);
@@ -249,10 +249,10 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
                 fast_vec_sub(initial_aim_or_previous_position, look_path + 0x10, &cam->pos);
             }
             fast_vec_scale(offset, D_0013F5E0_5f18, -1.0f);
-            fast_vec_normalize(&cam->m0, initial_aim_or_previous_position, 1.0f);
-            fast_vec_cross(&cam->m1, &cam->m0, offset);
-            fast_vec_normalize(&cam->m1, &cam->m1, 1.0f);
-            fast_vec_cross(&cam->m2, &cam->m1, &cam->m0);
+            fast_vec_normalize(&cam->forward, initial_aim_or_previous_position, 1.0f);
+            fast_vec_cross(&cam->right, &cam->forward, offset);
+            fast_vec_normalize(&cam->right, &cam->right, 1.0f);
+            fast_vec_cross(&cam->up, &cam->right, &cam->forward);
         }
         return;
     }
@@ -350,10 +350,10 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
         fast_vec_sub(offset, point, &cam->pos);
     }
     fast_vec_scale(point, D_0013F5E0_5f18, -1.0f);
-    fast_vec_normalize(&cam->m0, offset, 1.0f);
-    fast_vec_cross(&cam->m1, &cam->m0, point);
-    fast_vec_normalize(&cam->m1, &cam->m1, 1.0f);
-    fast_vec_cross(&cam->m2, &cam->m1, &cam->m0);
+    fast_vec_normalize(&cam->forward, offset, 1.0f);
+    fast_vec_cross(&cam->right, &cam->forward, point);
+    fast_vec_normalize(&cam->right, &cam->right, 1.0f);
+    fast_vec_cross(&cam->up, &cam->right, &cam->forward);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */

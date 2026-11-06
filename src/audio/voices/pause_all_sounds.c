@@ -70,13 +70,13 @@ void pause_all_sounds(s32 mode) {
         struct MenuTextListScreen *head = &pause_menu_chain_head;
         g->unkDC = mode == 0x23;
         head->list.up = g->goodies_tab_shown ? (struct MenuScreen *)&pause_goodies_tab
-                                 : (struct MenuScreen *)&pause_menu_chain_tail;
+                                             : (struct MenuScreen *)&pause_menu_chain_tail;
     }
     {
         struct MenuSystem         *g = &menu_system;
         struct MenuTextListScreen *tail = &pause_menu_chain_tail;
         tail->list.down = g->goodies_tab_shown ? (struct MenuScreen *)&pause_goodies_tab
-                                   : (struct MenuScreen *)&pause_menu_chain_head;
+                                               : (struct MenuScreen *)&pause_menu_chain_head;
     }
     {
         struct MenuSystem *g = &menu_system;
@@ -99,7 +99,7 @@ void pause_all_sounds(s32 mode) {
     update_skill_point_and_gold_weapon_menu_entries();
     {
         struct MenuSystem *g = &menu_system;
-        g->unk13C = 1;
+        g->card_icon_hidden = 1;
         g->resource_table_class = 0;
     }
 }
