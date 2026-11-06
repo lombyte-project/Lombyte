@@ -76,7 +76,7 @@ struct HeroItemSlot {
     struct Moby *moby;  /* 0x00: item moby */
     struct Moby *moby2; /* 0x04: second item moby */
     u8           pad_08[0x4];
-    u8          *unk0C;           /* 0x0C */
+    u8          *moby3;           /* 0x0C: third item moby */
     s32          button_mask;     /* 0x10: pad buttons that hold the gadget states */
     s32          respawn_frame;   /* 0x14: set on release */
     s16          timer;           /* 0x18: counts down; a slot change waits for 0 */
@@ -89,12 +89,12 @@ struct HeroItemSlot {
     s32          state;        /* 0x24: 0 empty, 2 ready, 3 released */
     s32          item_id;      /* 0x28: item in the slot */
     f32          glow_phase;   /* 0x2C: phase of the item moby's colour pulse (FUN_L00_002080b0) */
-    f32          unk30;        /* 0x30 */
-    f32          unk34;        /* 0x34 */
-    s32          unk38;        /* 0x38 */
-    s16          unk3C;        /* 0x3C */
-    u16          unk3E;        /* 0x3E */
-    s32          locked_on;    /* 0x40: on slot 6, nonzero makes the Ryno aim along lock_yaw */
+    f32          effect_random_base;       /* 0x30: configure_hero_point_effect_emission */
+    f32          effect_random_half_range; /* 0x34 */
+    s32          effect_updates_left;      /* 0x38 */
+    s16          effect_count_per_point;   /* 0x3C */
+    u16          effect_flags;             /* 0x3E */
+    s32          locked_on; /* 0x40: on slot 6, nonzero makes the Ryno aim along lock_yaw */
     u8           pad_44[0x4];
     struct Moby
         *lock_target; /* 0x48: on slot 6, the moby the weapons lock on to while locked_on is set */
@@ -708,9 +708,10 @@ struct Hero {
     u8 ship_flags; /* 0x160F: 2 = being steered back from the edge or height limit of the space arena (FUN_L11_00313f60) */
     u8 pad_1610[0x4];
     s32 fidget_prop_moby; /* 0x1614: moby animated with HERO_STATE_FIDGET_ALT, removed when it ends */
-    u8    pad_1618[0x8];
-    void *unk1620;    /* 0x1620 */
-    void *unk1624;    /* 0x1624 */
+    u8 pad_1618[0x8];
+    void *
+        clank_rotor_moby; /* 0x1620: Clank's rotor moby (class 0x47A), made while hero.vehicle_mode is Clank */
+    void *clank_antenna_glow_moby; /* 0x1624: Clank's antenna glow moby (class 0x4B4) */
     f32   glow_phase; /* 0x1628: phase of the hero moby's colour pulse (FUN_L00_002080b0) */
     u8    pad_162C[0x4];
     s32   vehicle_hp;                /* 0x1630 */
@@ -723,7 +724,7 @@ struct Hero {
     s32   sink_jump_count; /* 0x1660 */
     u8    pad_1664[0xC];
     struct MobyTrail trail; /* 0x1670: trail of moby copies following hero.moby */
-    u8 unk17B0[0x140];      /* 0x17B0: buffer handed to FUN_L00_00262500 / FUN_L00_00262528 */
+    u8 wrench_trail[0x140]; /* 0x17B0: after-image trail of the thrown wrench (Comet-Strike) */
     struct HeroEase item_eases
         [3]; /* 0x18F0: eased records, kind 5 set when an item slot is ready (FUN_L00_00210748) */
     Vec4 pos_history[32];     /* 0x1B00: ring of 32 quads indexed by pos_history_index */
@@ -732,10 +733,10 @@ struct Hero {
     f32  stick_y;             /* 0x1D24 */
     u8   pad_1D28[0x68];
     struct HeroEase
-        unk1D90; /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
+        item5_manipulator; /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
     u8  pad_1E40[0x70];
-    s16 unk1EB0; /* 0x1EB0 */
-    s16 unk1EB2; /* 0x1EB2: once flag for queueing FUN_L00_00207d40 */
+    s16 unk1EB0;          /* 0x1EB0 */
+    s16 glow_draw_queued; /* 0x1EB2: draw_hero_glow_quads queued this frame */
     u8  pad_1EB4[0x1C];
     /* 0x1EC0..0x1F10: a struct GroundMoveControl (ground_move_control.h) that doom
        bots hand to step_mover; 0x1F10..0x1F50: the hop arc state update_arc_motion
@@ -784,17 +785,17 @@ struct Hero {
     u8               item_anim_active;     /* 0x20A8 */
     u8               wading;               /* 0x20A9 */
     u8               weapon_up;            /* 0x20AA */
-    u8  item_slot_anim_count; /* 0x20AB: item slot blends to play: 0 none, 1 slot 0, 2 both */
-    u8  item_use_locked;      /* 0x20AC */
-    u8  tilt_disabled;        /* 0x20AD */
-    u8  unk20AE;              /* 0x20AE */
-    u8  hand_item_hidden;     /* 0x20AF */
-    u8  hydro_tank_full;      /* 0x20B0 */
-    u8  fall_fade_pending;    /* 0x20B1 */
-    u8  on_hoverboard;        /* 0x20B2 */
-    u8  gravity_mode;         /* 0x20B3 */
-    u8  pyrocitor_tap_count;  /* 0x20B4 */
-    u8  wrench_combo_step;    /* 0x20B5 */
+    u8 item_slot_anim_count; /* 0x20AB: item slot blends to play: 0 none, 1 slot 0, 2 both */
+    u8 item_use_locked;      /* 0x20AC */
+    u8 tilt_disabled;        /* 0x20AD */
+    u8 wrench_hidden_by_state; /* 0x20AE: hides the wrench in slot 0 (ledge, special and water jump states) */
+    u8  hand_item_hidden;    /* 0x20AF */
+    u8  hydro_tank_full;     /* 0x20B0 */
+    u8  fall_fade_pending;   /* 0x20B1 */
+    u8  on_hoverboard;       /* 0x20B2 */
+    u8  gravity_mode;        /* 0x20B3 */
+    u8  pyrocitor_tap_count; /* 0x20B4 */
+    u8  wrench_combo_step;   /* 0x20B5 */
     u8  pad_20B6[0x2];
     s32 pending_item[7];   /* 0x20B8: per slot: item to switch to */
     s32 selected_item[7];  /* 0x20D4: per slot: item after a switch */
@@ -806,7 +807,8 @@ struct Hero {
     s32 pos_history_index; /* 0x21B0: pos_history ring index */
     s32 pos_history_count; /* 0x21B4: pos_history ring count */
     u8  pad_21B8[0x20];
-    s16 unk21D8[8][4]; /* 0x21D8: 8 slots of four s16 */
+    s16 delayed_voices
+        [8][4]; /* 0x21D8: delayed voice queue (help_queue_add): busy, entry, timer, argument */
     s32 grind_voice; /* 0x2218: voice of sound slot 0, -1 = none (slots 0-7 run to 0x2234, FUN_L00_00206c08) */
     s32          unk221C;           /* 0x221C: voice of sound slot 1 */
     s32          voice_slot2;       /* 0x2220 */

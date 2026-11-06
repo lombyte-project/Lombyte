@@ -2316,9 +2316,9 @@ void update_hero_equipped_items(void) {
     if (hero_is_in_special_state() || hero.state.control_mode == 0x15 ||
         hero.state.control_mode == 0x16 || hero.state.control_mode == HERO_MODE_LEDGE ||
         hero.state.current == 0x12) {
-        hero.unk20AE = 1;
+        hero.wrench_hidden_by_state = 1;
     } else {
-        hero.unk20AE = 0;
+        hero.wrench_hidden_by_state = 0;
     }
     spawn_hero_item_mobies();
     update_hero_item_mobys();
@@ -2386,13 +2386,13 @@ void exit_hero_vehicle_mode(void) {
     if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_state->health.vehicle_mode_hp = hero_state->health.hp;
         hero_state->health.hp = hero_state->health.saved_hp;
-        if (hero_state->unk1620) {
-            mark_moby_for_removal(hero_state->unk1620);
-            hero_state->unk1620 = 0;
+        if (hero_state->clank_rotor_moby) {
+            mark_moby_for_removal(hero_state->clank_rotor_moby);
+            hero_state->clank_rotor_moby = 0;
         }
-        if (hero_state->unk1624) {
-            mark_moby_for_removal(hero_state->unk1624);
-            hero_state->unk1624 = 0;
+        if (hero_state->clank_antenna_glow_moby) {
+            mark_moby_for_removal(hero_state->clank_antenna_glow_moby);
+            hero_state->clank_antenna_glow_moby = 0;
         }
     }
     {

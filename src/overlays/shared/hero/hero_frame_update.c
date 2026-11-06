@@ -253,7 +253,7 @@ void update_hero_frame(void) {
         q[0x20B1] = 1;
         return;
     }
-    hero_state_base->unk1EB2 = 0;
+    hero_state_base->glow_draw_queued = 0;
     hero_state_base->unk1EB0 = 0;
     if (hero_state_base->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         hero_frame_update();

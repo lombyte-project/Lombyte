@@ -948,7 +948,7 @@ void help_queue_add(s32 voice_entry_index, s32 voice_delay_timer, s32 voice_allo
     s16         *current_slot;
     s32          slots_examined = 0;
     hero_state = &hero;
-    current_slot = (s16 *)(&hero_state->unk21D8[0]);
+    current_slot = (s16 *)(&hero_state->delayed_voices[0]);
     do {
         slots_examined = slots_examined + 1;
         if (current_slot[0] == 0) {
@@ -971,8 +971,8 @@ extern int allocate_hero_voice_for_entry();
 void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 
 void update_hero_delayed_voice_requests(void) {
-    char  *slot_timer_base = (char *)&hero.unk21D8[0][2];
-    short *slot_voice_argument_base = (short *)(&hero.unk21D8[0][3]);
+    char  *slot_timer_base = (char *)&hero.delayed_voices[0][2];
+    short *slot_voice_argument_base = (short *)(&hero.delayed_voices[0][3]);
     int    i;
 
     for (i = 0; i < 8; i++) {
@@ -1321,9 +1321,9 @@ void launch_hero_wrench(void) {
     matrix_to_euler(out_mat, &equipped_wrench_moby->rot);
     launched_item_vars->unk64 = 0;
     launched_item_vars->unk60 = frame_time * 23.0f;
-    initialize_moby_transform_history(equipped_wrench_moby, hero.unk17B0);
-    create_moby_transform_history_entry(hero.unk17B0, 0x30, 3);
-    create_moby_transform_history_entry(hero.unk17B0, 0x17, 5);
+    initialize_moby_transform_history(equipped_wrench_moby, hero.wrench_trail);
+    create_moby_transform_history_entry(hero.wrench_trail, 0x30, 3);
+    create_moby_transform_history_entry(hero.wrench_trail, 0x17, 5);
     blend_moby_animation(equipped_wrench_moby, 6, 0, scale_game_frames(5));
 }
 
