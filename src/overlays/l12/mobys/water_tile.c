@@ -14,13 +14,7 @@
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
 #include "qcopy.h"
 #include "rnc/rendering/clip_volume.h"
-
-typedef struct {
-    float position[3];
-    char  unk0C[0x12];
-    u16   visibility;
-    char  unk20[0x1170];
-} L12Slot;
+#include "rnc/overlay/shared/world/water_grid.h"
 
 extern char D_L12_001CBF40_c[] __asm__("D_L12_001CBF40");
 extern char D_L12_001CAD00_c[] __asm__("D_L12_001CAD00");
@@ -85,7 +79,7 @@ void level_12_water_tile_update(struct Moby *moby) {
             {
                 int i = 16;
                 do {
-                    ((L12Slot *)D_L12_001CBF40_c)[i].visibility = 0;
+                    ((WaterGrid *)D_L12_001CBF40_c)[i].visible_subtiles = 0;
                 } while (--i >= 0);
             }
             pool_init_tiles(D_L12_001CBF40_c, 17);
@@ -121,7 +115,7 @@ void level_12_water_tile_update(struct Moby *moby) {
         *(int *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x18) = water_tile_vars[1] + 0x28;
         *(u8 *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x1c) = 0x1c;
         *(u8 *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x1d) = 0x44;
-        ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0xffff;
+        ((WaterGrid *)D_L12_001CBF40_c)[water_tile_vars[3]].visible_subtiles = 0xffff;
         pool_bind_tile(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190,
                        D_L12_001CBE00_c + water_tile_vars[3] * 16);
         moby->state = SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT;
@@ -180,9 +174,9 @@ update_slot:
             is_point_inside_clip_volume(D_L12_00167240, water_tile_vars[6]) == 0)
             visible = 0.0f;
         if (visible == 0.0f) {
-            ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0;
+            ((WaterGrid *)D_L12_001CBF40_c)[water_tile_vars[3]].visible_subtiles = 0;
         } else {
-            ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0xffff;
+            ((WaterGrid *)D_L12_001CBF40_c)[water_tile_vars[3]].visible_subtiles = 0xffff;
         }
         if (water_tile_vars[3] == 0) {
             pool_flush(D_L12_001CBF40_c, 17);

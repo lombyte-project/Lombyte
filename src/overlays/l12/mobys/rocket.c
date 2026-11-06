@@ -82,9 +82,10 @@ typedef struct {
 
 typedef struct {
     float dir[4];
-    float unk10[2];
-    char  unk18;
-    char  unk19;
+    void *owner;
+    int   flags;
+    char  kind; /* named as in L16HitDescriptor */
+    char  enabled;
     short oclass;
     int   pad1C;
     int   pad20[4];
@@ -181,8 +182,8 @@ void rocket_update(struct Moby *moby) {
                 hit.dir[1] = fast_sin(rocket_state->yaw);
                 hit.dir[2] = 1.0f;
                 hit.dir[3] = 5627.9248f;
-                hit.unk18 = 1;
-                hit.unk19 = 1;
+                hit.kind = 1;
+                hit.enabled = 1;
                 hit.oclass = moby->oclass;
                 record_moby_hit(D_L12_001742C0_lui.moby, &hit);
             }
